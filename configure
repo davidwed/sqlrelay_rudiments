@@ -20956,6 +20956,78 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
+#include <sys/param.h>
+#include <sys/mount.h>
+int
+main ()
+{
+struct statfs sfs;
+sfs.f_otype=0;
+sfs.f_oflags=0;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_type=0;
+sfs.f_flags=0;
+sfs.f_fstypename[0]=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_DARWIN_STATFS 1
+_ACEOF
+ STATFS_STYLE="darwin style"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
 #include <sys/types.h>
 #include <sys/statvfs.h>
 int

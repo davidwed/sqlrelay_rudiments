@@ -578,6 +578,33 @@ statfs("/",&sfs);]
 ,AC_DEFINE(HAVE_OPENBSD_STATFS,1,OpenBSD style statfs) STATFS_STYLE="openbsd style")
 fi
 
+dnl darwin is similar to the other bsd's but with a few extra and a few missing
+dnl fields
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_LINK([#include <sys/param.h>
+#include <sys/mount.h>],
+[struct statfs sfs;
+sfs.f_otype=0;
+sfs.f_oflags=0;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_type=0;
+sfs.f_flags=0;
+sfs.f_fstypename[0]=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);]
+,AC_DEFINE(HAVE_DARWIN_STATFS,1,Darwin style statfs) STATFS_STYLE="darwin style")
+fi
+
 dnl SCO and Solaris both have statvfs
 if ( test "$STATFS_STYLE" = "unknown" )
 then
