@@ -25,15 +25,15 @@ int main(int argc, const char **argv) {
 
 
 	// Replace the contents of the string and display it over and over.
-	// Note that the 2nd and 4th call to copyInto() only copy part of the
+	// Note that the 2nd and 4th call to copy() only copy part of the
 	// string passed into them.
-	s.copyInto("what's ");
+	s.copy("what's ");
 	printf("\"%s\"\n",s.getString());
-	s.copyInto("up !!!",2);
+	s.copy("up !!!",2);
 	printf("\"%s\"\n",s.getString());
-	s.copyInto(2," !!!");
+	s.copy(2," !!!");
 	printf("\"%s\"\n",s.getString());
-	s.copyInto(6,"!!!!!!",1);
+	s.copy(6,"!!!!!!",1);
 	printf("\"%s\"\n",s.getString());
 
 

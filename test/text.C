@@ -9,7 +9,7 @@ int main(int argc, const char **argv) {
 
 	// initialize a text buffer and print it out
 	char    buffer[100];
-	charstring::copyInto(buffer,"     hello there buddy     ");
+	charstring::copy(buffer,"     hello there buddy     ");
 	printf("!%s!\n",buffer);
 
 
@@ -24,13 +24,13 @@ int main(int argc, const char **argv) {
 
 
 	// strip the spaces out
-	charstring::copyInto(buffer,"   hello      there   buddy  ");
+	charstring::copy(buffer,"   hello      there   buddy  ");
 	charstring::strip(buffer,' ');
 	printf("!%s!\n",buffer);
 
 
 	// strip the "   " out
-	charstring::copyInto(buffer,"   hello       there  buddy  ");
+	charstring::copy(buffer,"   hello       there  buddy  ");
 	charstring::strip(buffer,"   ");
 	printf("!%s!\n",buffer);
 
@@ -71,7 +71,7 @@ int main(int argc, const char **argv) {
 
 	// create a new string containing text surrounded by spaces
 	char	hello[16];
-	charstring::copyInto(hello,"     hello     ");
+	charstring::copy(hello,"     hello     ");
 	printf("|%s|\n",hello);
 
 	// left justify the text
@@ -84,37 +84,37 @@ int main(int argc, const char **argv) {
 
 
 	// center the text over and over...
-	charstring::copyInto(hello,"hello          ");
+	charstring::copy(hello,"hello          ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello," hello         ");
+	charstring::copy(hello," hello         ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"  hello        ");
+	charstring::copy(hello,"  hello        ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"   hello       ");
+	charstring::copy(hello,"   hello       ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"    hello      ");
+	charstring::copy(hello,"    hello      ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"     hello     ");
+	charstring::copy(hello,"     hello     ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"      hello    ");
+	charstring::copy(hello,"      hello    ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"       hello   ");
+	charstring::copy(hello,"       hello   ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"        hello  ");
+	charstring::copy(hello,"        hello  ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"         hello ");
+	charstring::copy(hello,"         hello ");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
-	charstring::copyInto(hello,"          hello");
+	charstring::copy(hello,"          hello");
 	charstring::center(hello,15);
 	printf("|%s|\n",hello);
 
