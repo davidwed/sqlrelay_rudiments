@@ -20,7 +20,7 @@ clean:
 rebuild: clean all
 
 .C.lo:
-	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEBUGCXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
 
 svr: svr.C svr.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ svr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
