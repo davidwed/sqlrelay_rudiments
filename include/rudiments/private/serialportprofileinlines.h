@@ -676,8 +676,8 @@ void serialportprofile::mapCarriageReturnToNewLineOnOutput(bool truefalse) {
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::outputCarriageReturnAtColumnZero(bool truefalse) {
-	SET_FLAG((!truefalse),c_oflag,ONOCR)
+void serialportprofile::dontOutputCarriageReturnAtColumnZero(bool truefalse) {
+	SET_FLAG(truefalse,c_oflag,ONOCR)
 }
 
 RUDIMENTS_INLINE
@@ -794,7 +794,7 @@ bool serialportprofile::mapCarriageReturnToNewLineOnOutput() {
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::outputCarriageReturnAtColumnZero() {
+bool serialportprofile::dontOutputCarriageReturnAtColumnZero() {
 	return GET_FLAG(c_oflag,ONOCR);
 }
 
