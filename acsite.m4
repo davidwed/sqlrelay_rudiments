@@ -252,8 +252,8 @@ then
 	if ( test -n "$PTHREADSPATH" )
 	then
 		PTHREADSINCLUDES="-I$PTHREADSPATH/include"
-		HAVE_PTHREADS="yes"
 	fi
+	HAVE_PTHREADS="yes"
 
 else
 	AC_MSG_CHECKING(for /usr/include/$i.h)
