@@ -33,6 +33,12 @@ INSTALLSTRIP = @INSTALLSTRIP@
 # libtool command
 LIBTOOL = @LIBTOOL@
 
+# install command
+INSTALL = $(top_builddir)/install-sh -c
+
+# mkinstalldirs command
+MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
+
 # commands to erase files and directories
 RM = rm -f
 RMTREE = rm -rf

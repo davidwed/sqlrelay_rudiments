@@ -39,6 +39,9 @@
 /* Some systems don't define CMSG_SPACE */
 #undef HAVE_CMSG_SPACE
 
+/* Darwin style statfs */
+#undef HAVE_DARWIN_STATFS
+
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H

@@ -1,13 +1,12 @@
+top_builddir = ..
+
 include ../config.mk
 
-top_srcdir = ..
-INSTALL = $(top_srcdir)/install-sh -c
-
 install:
-	$(top_srcdir)/mkinstalldirs $(docdir)
-	$(top_srcdir)/mkinstalldirs $(docdir)/classes
-	$(top_srcdir)/mkinstalldirs $(docdir)/css
-	$(top_srcdir)/mkinstalldirs $(docdir)/programming
+	$(MKINSTALLDIRS) $(docdir)
+	$(MKINSTALLDIRS) $(docdir)/classes
+	$(MKINSTALLDIRS) $(docdir)/css
+	$(MKINSTALLDIRS) $(docdir)/programming
 	$(INSTALL) -m 644 guide.html $(docdir)
 	$(INSTALL) -m 644 index.html $(docdir)
 	$(INSTALL) -m 644 introduction.html $(docdir)
