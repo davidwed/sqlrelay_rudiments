@@ -1,16 +1,43 @@
-<?xml version="1.0" ?>
-<!DOCTYPE test SYSTEM "test.dtd" [ test [test [test [test]]]]>
-<test>start test text
-	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
-	<tag2 name21="value21" name22="value22"> start tag2 text
-		<tag3 name31="value31" name32="value32"> start tag3 text
-			<tag4 name41="value41" name42="value42" /> end tag4 end text
-		</tag3> end tag3 text
-<!-- test comment -->
-<?target test="test1"?>
-	</tag2> end tag2 text
-&amp;&lt;&gt;&apos;&quot;
-&amp&lt&gt&apos&quot
-&&&&&
-<![CDATA[ test [ test [ test [test]]]]]>
-</test>
+<!ELEMENT globalconfig (store,ids,clerks,operation,devices)>
+
+<!ELEMENT store EMPTY>
+	<!ATTLIST store merchantname CDATA "">
+	<!ATTLIST store address CDATA "">
+	<!ATTLIST store city CDATA "">
+	<!ATTLIST store state CDATA "">
+	<!ATTLIST store zip CDATA "">
+	<!ATTLIST store phone CDATA "">
+
+<!ELEMENT ids EMPTY>
+	<!ATTLIST ids merchant CDATA "">
+	<!ATTLIST ids processormerchant CDATA "">
+	<!ATTLIST ids store CDATA "">
+	<!ATTLIST ids lane CDATA "">
+
+<!ELEMENT clerks (clerk+)>
+<!ELEMENT clerk EMPTY>
+	<!ATTLIST clerks id CDATA "">
+	<!ATTLIST clerks pin CDATA "">
+
+<!ELEMENT operation EMPTY>
+	<!ATTLIST mode (demo|production) "production">
+
+<!ELEMENT devices (checkreader,msr,receiptprinter,voidprinter)>
+
+<!ELEMENT checkreader EMPTY>
+	<!ATTLIST checkreader type CDATA (demo|magtekencehck2500|magtekmicrimage|orion)>
+	<!ATTLIST checkreader imagerdevice CDATA "/dev/imager">
+	<!ATTLIST checkreader micrdevice CDATA "/dev/micr">
+
+<!ELEMENT msr EMPTY>
+	<!ATTLIST msr type CDATA (demo|amc31b)>
+	<!ATTLIST msr device CDATA "/dev/msr">
+
+<!ELEMENT receiptprinter EMPTY>
+	<!ATTLIST receiptprinter type CDATA (demo|apsepm205serial)>
+	<!ATTLIST receiptprinter device CDATA "/dev/receiptprinter">
+
+<!ELEMENT voidprinter EMPTY>
+	<!ATTLIST voidprinter type CDATA (demo)>
+	<!ATTLIST voidprinter mode (enable|disable) "enable">
+	<!ATTLIST voidprinter device CDATA "/dev/voidprinter">

@@ -186,8 +186,7 @@ void xmldomnode::set(char **variable, const char *value) {
 	if (!value) {
 		(*variable)=NULL;
 	}
-	(*variable)=new char[strlen(value)+1];
-	strcpy((*variable),value);
+	(*variable)=strdup(value);
 }
 
 xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,

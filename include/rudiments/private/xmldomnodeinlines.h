@@ -96,9 +96,25 @@ inline int xmldomnode::insertChild(xmldomnode *child, int position) {
 				&firstchild,&lastchild,&childcount);
 }
 
+inline int xmldomnode::appendChild(xmldomnode *child) {
+	return insertChild(child,getChildCount());
+}
+
+inline int xmldomnode::appendText(const char *value) {
+	return insertText(value,getChildCount());
+}
+
 inline int xmldomnode::insertAttribute(xmldomnode *attribute, int position) {
 	return insertNode(attribute,position,ATTRIBUTE_XMLDOMNODETYPE,
 			&firstattribute,&lastattribute,&attributecount);
+}
+
+inline int xmldomnode::appendAttribute(xmldomnode *attribute) {
+	return insertAttribute(attribute,getAttributeCount());
+}
+
+inline int xmldomnode::appendAttribute(const char *name, const char *value) {
+	return insertAttribute(name,value,getAttributeCount());
 }
 
 inline int xmldomnode::deleteChild(int position) {

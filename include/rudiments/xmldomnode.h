@@ -34,7 +34,7 @@
 // Here is a breakdown by node type:
 //
 // 	For the document root:
-// 		type - ROOT_XMLNODETYPE
+// 		type - ROOT_XMLDOMNODETYPE
 // 		name - "document"
 // 		value - unused
 // 		parent node - unused
@@ -45,7 +45,7 @@
 // 					and the top-level enclosing tag
 //
 // 	For a tag:
-// 		type - TAG_XMLNODETYPE
+// 		type - TAG_XMLDOMNODETYPE
 // 		name - the tag name
 // 		value - unused
 // 		parent node - the parent tag or document root
@@ -58,7 +58,7 @@
 // 					and/or cdata segments
 //
 // 	For a tag attribute:
-// 		type - ATTRIBUTE_XMLNODETYPE
+// 		type - ATTRIBUTE_XMLDOMNODETYPE
 // 		name - the attribute name
 // 		value - the attribute value
 // 		    (note that for tags with standalone
@@ -70,7 +70,7 @@
 // 		a list of child nodes - unused
 //
 // 	For a segment of text:
-// 		type - TEXT_XMLNODETYPE
+// 		type - TEXT_XMLDOMNODETYPE
 // 		name - "text"
 // 		value - the text itself
 // 		parent node - the tag containing the text
@@ -80,7 +80,7 @@
 // 		a list of child nodes - unused
 //
 // 	For a comment:
-// 		type - COMMENT_XMLNODETYPE
+// 		type - COMMENT_XMLDOMNODETYPE
 // 		name - "comment"
 // 		value - the comment itself
 // 		parent node - the tag containing the comment
@@ -92,7 +92,7 @@
 // 		a list of child nodes - unused
 //
 // 	For a segment of cdata:
-// 		type - CDATA_XMLNODETYPE
+// 		type - CDATA_XMLDOMNODETYPE
 // 		name - "cdata"
 // 		value - the cdata itself
 // 		parent node - the tag containing the cdata
@@ -244,6 +244,8 @@ class xmldomnode {
 			// Inserts "child" into the list of child nodes at
 			// "position".  The position of the next sibling
 			// (and all successive siblings) is incremented.
+		int	appendChild(xmldomnode *child);
+			// Appends "child" to the list of child nodes.
 		int	deleteChild(int position);
 			// Deletes the child node at "position".  The position
 			// of the next sibling (and all successive siblings)
@@ -258,17 +260,25 @@ class xmldomnode {
 			// value "value" into the list of child nodes at
 			// "position".  The position of the next sibling
 			// (and all successive siblings) is incremented.
+		int	appendText(const char *value);
+			// Appends a child node of type TEXT_XMLDOMNODE with
+			// value "value" to the list of child nodes.
 
 		int	insertAttribute(xmldomnode *attribute, int position);
 			// Inserts "attribute" into the list of attributes at
 			// "position".  The position of the next attribute
 			// (and all successive attributes) is incremented.
+		int	appendAttribute(xmldomnode *attribute);
+			// Appends "attribute" to the list of attributes.
 		int	insertAttribute(const char *name, const char *value,
 					int position);
 			// Creates an attribute node with "name" and "value"
 			// and inserts it into the list of attributes at
 			// "position".  The position of the next attribute
 			// (and all successive attributes) is incremented.
+		int	appendAttribute(const char *name, const char *value);
+			// Creates an attribute node with "name" and "value"
+			// and appends it to the list of attributes.
 		int	deleteAttribute(int position);
 			// Deletes the attribute at "position".  The position
 			// of the next attribute (and all successive attributes)

@@ -13,6 +13,7 @@ install:
 	$(INSTALL) -m 644 rudiments/datatransport.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datatransportfactory.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datetime.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/dtd.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filedescriptor.h $(incdir)/rudiments
@@ -53,6 +54,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/datatransportinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/datetime.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/datetimeinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/dtd.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/dtdinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandler.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandlerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedescriptornode.h $(incdir)/rudiments/private
