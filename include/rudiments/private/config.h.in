@@ -79,6 +79,12 @@
 /* Some systems have getpwuid_r */
 #undef HAVE_GETPWUID_R
 
+/* Some systems have getservbyname_r */
+#undef HAVE_GETSERVBYNAME_R
+
+/* Some systems have getservbyport_r */
+#undef HAVE_GETSERVBYPORT_R
+
 /* Some systems have getspnam_r */
 #undef HAVE_GETSPNAM_R
 

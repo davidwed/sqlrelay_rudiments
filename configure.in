@@ -264,6 +264,15 @@ AC_TRY_LINK([#include <shadow.h>
 #include <stdlib.h>],
 getspnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(getservbyname_r)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYNAME_R,1, Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getservbyport_r)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R,1, Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 LIBS="$OLDLIBS"
 

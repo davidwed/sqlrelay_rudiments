@@ -1,0 +1,15 @@
+// Copyright (c) 2002 David Muse
+// See the COPYING file for more information.
+
+	private:
+		servent		*se;
+		servent		sebuffer;
+		char		*buffer;
+
+		#if !defined(HAVE_GETSERVBYNAME_R) || \
+				!defined(HAVE_GETSERVBYPORT_R)
+			static	pthread_mutex_t	*semutex;
+		#endif
+
+		int	initialize(const char *servicename, int port,
+						const char *protocol);

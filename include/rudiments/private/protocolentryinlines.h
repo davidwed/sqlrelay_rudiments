@@ -99,3 +99,11 @@ RUDIMENTS_INLINE void protocolentry::setMutex(pthread_mutex_t *mutex) {
 		pemutex=mutex;
 	#endif
 }
+
+RUDIMENTS_INLINE int protocolentry::initialize(const char *protocolname) {
+	return initialize(protocolname,0);
+}
+
+RUDIMENTS_INLINE int protocolentry::initialize(int number) {
+	return initialize(NULL,number);
+}

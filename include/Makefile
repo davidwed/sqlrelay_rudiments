@@ -136,6 +136,11 @@ ifeq ($(INCLUDE_SERVER),1)
 	PRIVATEHEADERS += serverinlines.h serversocket.h serversocketinlines.h \
 				serverincludes.h serversocketincludes.h
 endif
+ifeq ($(INCLUDE_SERVICEENTRY),1)
+	HEADERS += serviceentry.h
+	PRIVATEHEADERS += serviceentry.h serviceentryinlines.h \
+				serviceentryincludes.h
+endif
 ifeq ($(INCLUDE_SHADOWENTRY),1)
 	HEADERS += shadowentry.h
 	PRIVATEHEADERS += shadowentry.h shadowentryinlines.h \

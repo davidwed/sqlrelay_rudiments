@@ -3,8 +3,8 @@
 
 #include <rudiments/private/config.h>
 
-#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+#include <sys/types.h>
+#include <shadow.h>
+#if !defined(HAVE_GETSPNAM_R)
 	#include <pthread.h>
 #endif
-
-#include <netdb.h>

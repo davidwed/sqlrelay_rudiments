@@ -117,6 +117,11 @@ ifeq ($(INCLUDE_SERVER),1)
 	NLOBJS += server.n.lo serversocket.n.lo
 	PLOBJS += server.p.lo serversocket.p.lo
 endif
+ifeq ($(INCLUDE_SERVICEENTRY),1)
+	SRCS += serviceentry.C
+	NLOBJS += serviceentry.n.lo
+	PLOBJS += serviceentry.p.lo
+endif
 ifeq ($(INCLUDE_SHADOWENTRY),1)
 	SRCS += shadowentry.C
 	NLOBJS += shadowentry.n.lo

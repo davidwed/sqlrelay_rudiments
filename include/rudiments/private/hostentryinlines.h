@@ -178,3 +178,12 @@ RUDIMENTS_INLINE void hostentry::setMutex(pthread_mutex_t *mutex) {
 		hemutex=mutex;
 	#endif
 }
+
+RUDIMENTS_INLINE int hostentry::initialize(const char *hostname) {
+	return initialize(hostname,NULL,0,0);
+}
+
+RUDIMENTS_INLINE int hostentry::initialize(const char *address,
+							int len, int type) {
+	return initialize(NULL,address,len,type);
+}

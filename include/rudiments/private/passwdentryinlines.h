@@ -179,3 +179,11 @@ RUDIMENTS_INLINE void passwdentry::setMutex(pthread_mutex_t *mutex) {
 		pemutex=mutex;
 	#endif
 }
+
+RUDIMENTS_INLINE int passwdentry::initialize(const char *username) {
+	return initialize(username,0);
+}
+
+RUDIMENTS_INLINE int passwdentry::initialize(uid_t userid) {
+	return initialize(NULL,userid);
+}

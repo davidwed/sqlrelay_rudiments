@@ -16,13 +16,14 @@
 pthread_mutex_t	*hostentry::hemutex;
 #endif
 
-int hostentry::initialize(const char *hostname) {
+int hostentry::initialize(const char *hostname, const char *address,
+							int len, int type) {
 	if (he) {
 		he=NULL;
 		delete[] buffer;
 		buffer=NULL;
 	}
-	#ifdef HAVE_GETHOSTBYNAME_R
+	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
 		// gethostbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -31,8 +32,11 @@ int hostentry::initialize(const char *hostname) {
 		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (!gethostbyname_r(hostname,&hebuffer,
-						buffer,size,&he,&errnop)) {
+			if (!((hostname)
+				?(gethostbyname_r(hostname,&hebuffer,
+						buffer,size,&he,&errnop))
+				:(gethostbyaddr_r(address,len,type,&hebuffer,
+						buffer,size,&he,&errnop)))) {
 				return he!=NULL;
 			}
 			delete[] buffer;
@@ -46,42 +50,9 @@ int hostentry::initialize(const char *hostname) {
 	#else
 		he=NULL;
 		return (((hemutex)?!pthread_mutex_lock(hemutex):1) &&
-			((he=gethostbyname(hostname))!=NULL) &&
-			((hemutex)?!pthread_mutex_unlock(hemutex):1));
-	#endif
-}
-
-int hostentry::initialize(const char *address, int len, int type) {
-	if (he) {
-		he=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
-	#ifdef HAVE_GETHOSTBYADDR_R
-		// gethostbyaddr_r is goofy.
-		// It will retrieve an arbitrarily large amount of data, but
-		// requires that you pass it a pre-allocated buffer.  If the
-		// buffer is too small, it returns an ENOMEM and you have to
-		// just make the buffer bigger and try again.
-		int	errnop;
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
-			if (!gethostbyaddr_r(address,len,type,&hebuffer,
-						buffer,size,&he,&errnop)) {
-				return he!=NULL;
-			}
-			delete[] buffer;
-			buffer=NULL;
-			he=NULL;
-			if (errnop!=ENOMEM) {
-				return 0;
-			}
-		}
-		return 0;
-	#else
-		he=NULL;
-		return (((hemutex)?!pthread_mutex_lock(hemutex):1) &&
-			((he=gethostbyaddr(address,len,type))!=NULL) &&
+			((he=((hostname)
+				?gethostbyname(hostname)
+				:gethostbyaddr(address,len,type)))!=NULL) &&
 			((hemutex)?!pthread_mutex_unlock(hemutex):1));
 	#endif
 }

@@ -9,3 +9,5 @@
 		#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
 			static	pthread_mutex_t	*pemutex;
 		#endif
+
+		int	initialize(const char *username, uid_t userid);

@@ -3,7 +3,7 @@
 
 #include <rudiments/private/config.h>
 
-#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
 	#include <pthread.h>
 #endif
 

@@ -121,3 +121,11 @@ RUDIMENTS_INLINE void groupentry::setMutex(pthread_mutex_t *mutex) {
 		gemutex=mutex;
 	#endif
 }
+
+RUDIMENTS_INLINE int groupentry::initialize(const char *groupname) {
+	return initialize(groupname,0);
+}
+
+RUDIMENTS_INLINE int groupentry::initialize(gid_t groupid) {
+	return initialize(NULL,groupid);
+}

@@ -16,54 +16,26 @@
 pthread_mutex_t	*groupentry::gemutex;
 #endif
 
-int groupentry::initialize(const char *groupname) {
-	if (grp) {
-		grp=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
-	#ifdef HAVE_GETGRNAM_R
-		// getgrnam_r is goofy.
-		// It will retrieve an arbitrarily large amount of data, but
-		// requires that you pass it a pre-allocated buffer.  If the
-		// buffer is too small, it returns an ENOMEM and you have to
-		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
-			if (!getgrnam_r(groupname,&grpbuffer,
-						buffer,size,&grp)) {
-				return grp!=NULL;
-			}
-			delete[] buffer;
-			buffer=NULL;
-			grp=NULL;
-			if (errno!=ENOMEM) {
-				return 0;
-			}
-		}
-		return 0;
-	#else
-		return (((gemutex)?!pthread_mutex_lock(gemutex):1) &&
-			((grp=getgrnam(groupname))!=NULL) &&
-			((gemutex)?!pthread_mutex_unlock(gemutex):1));
-	#endif
-}
+int groupentry::initialize(const char *groupname, gid_t groupid) {
 
-int groupentry::initialize(gid_t groupid) {
 	if (grp) {
 		grp=NULL;
 		delete[] buffer;
 		buffer=NULL;
 	}
-	#ifdef HAVE_GETGRGID_R
-		// getgrgid_r is goofy.
-		// It will retrieve an arbitrarily large amount of data, but
-		// requires that you pass it a pre-allocated buffer.  If the
-		// buffer is too small, it returns an ENOMEM and you have to
+	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+		// getgrnam_r and getgrgid_t are goofy.
+		// They will retrieve an arbitrarily large amount of data, but
+		// require that you pass them a pre-allocated buffer.  If the
+		// buffer is too small, they return an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (!getgrgid_r(groupid,&grpbuffer,buffer,size,&grp)) {
+			if (!((groupname)
+				?(getgrnam_r(groupname,&grpbuffer,
+							buffer,size,&grp))
+				:(getgrgid_r(groupid,&grpbuffer,
+							buffer,size,&grp)))) {
 				return grp!=NULL;
 			}
 			delete[] buffer;
@@ -75,9 +47,10 @@ int groupentry::initialize(gid_t groupid) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
 		return (((gemutex)?!pthread_mutex_lock(gemutex):1) &&
-			((grp=getgrgid(groupid))!=NULL) &&
+			((grp=((groupname)
+				?getgrnam(groupname)
+				:getgrgid(groupid)))!=NULL) &&
 			((gemutex)?!pthread_mutex_unlock(gemutex):1));
 	#endif
 }

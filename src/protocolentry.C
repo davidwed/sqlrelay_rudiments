@@ -16,13 +16,13 @@
 pthread_mutex_t	*protocolentry::pemutex;
 #endif
 
-int protocolentry::initialize(const char *protocolname) {
+int protocolentry::initialize(const char *protocolname, int number) {
 	if (pe) {
 		pe=NULL;
 		delete[] buffer;
 		buffer=NULL;
 	}
-	#ifdef HAVE_GETPROTOBYNAME_R
+	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
 		// getprotobyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -30,8 +30,11 @@ int protocolentry::initialize(const char *protocolname) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (!getprotobyname_r(protocolname,&pebuffer,
-							buffer,size,&pe)) {
+			if (!((protocolname)
+				?(getprotobyname_r(protocolname,&pebuffer,
+							buffer,size,&pe))
+				:(getprotobynumber_r(number,&pebuffer,
+							buffer,size,&pe)))) {
 				return pe!=NULL;
 			}
 			delete[] buffer;
@@ -45,42 +48,10 @@ int protocolentry::initialize(const char *protocolname) {
 	#else
 		pe=NULL;
 		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
-			((pe=getprotobyname(protocolname))!=NULL) &&
+			((pe=((protocolname)
+				?getprotobyname(protocolname)
+				:getprotobynumber(number)))!=NULL) &&
 			((pemutex)?!pthread_mutex_unlock(pemutex):1));
-	#endif
-}
-
-int protocolentry::initialize(int number) {
-	if (pe) {
-		pe=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
-	#ifdef HAVE_GETPROTOBYNUMBER_R
-		// getprotobynumber_r is goofy.
-		// It will retrieve an arbitrarily large amount of data, but
-		// requires that you pass it a pre-allocated buffer.  If the
-		// buffer is too small, it returns an ENOMEM and you have to
-		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
-			if (!getprotobynumber_r(number,&pebuffer,
-							buffer,size,&pe)) {
-				return pe!=NULL;
-			}
-			delete[] buffer;
-			buffer=NULL;
-			pe=NULL;
-			if (errno!=ENOMEM) {
-				return 0;
-			}
-		}
-		return 0;
-	#else
-		pe=NULL;
-		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
-			((pe=getprotobynumber(number))!=NULL) &&
-			((pemutex)?!pthread_mutex_lock(pemutex):1));
 	#endif
 }
 

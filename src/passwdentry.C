@@ -16,21 +16,25 @@
 pthread_mutex_t	*passwdentry::pemutex;
 #endif
 
-int passwdentry::initialize(const char *username) {
+int passwdentry::initialize(const char *username, uid_t userid) {
 	if (pwd) {
 		pwd=NULL;
 		delete[] buffer;
 		buffer=NULL;
 	}
-	#ifdef HAVE_GETPWNAM_R
-		// getpwnam_r is goofy.
-		// It will retrieve an arbitrarily large amount of data, but
-		// requires that you pass it a pre-allocated buffer.  If the
-		// buffer is too small, it returns an ENOMEM and you have to
+	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+		// getpwnam_r and getpwuid_r are goofy.
+		// They will retrieve an arbitrarily large amount of data, but
+		// require that you pass them a pre-allocated buffer.  If the
+		// buffer is too small, they returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (!getpwnam_r(username,&pwdbuffer,buffer,size,&pwd)) {
+			if (!((username)
+				?(getpwnam_r(username,&pwdbuffer,
+							buffer,size,&pwd))
+				:(getpwuid_r(userid,&pwdbuffer,
+							buffer,size,&pwd)))) {
 				return pwd!=NULL;
 			}
 			delete[] buffer;
@@ -43,40 +47,10 @@ int passwdentry::initialize(const char *username) {
 		return 0;
 	#else
 		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
-			((pwd=getpwnam(username))!=NULL) &&
-			((pemutex)?!pthread_mutex_unlock(pemutex):1));
-	#endif
-}
-
-int passwdentry::initialize(uid_t userid) {
-	if (pwd) {
-		pwd=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
-	#ifdef HAVE_GETPWUID_R
-		// getpwuid_r is goofy.
-		// It will retrieve an arbitrarily large amount of data, but
-		// requires that you pass it a pre-allocated buffer.  If the
-		// buffer is too small, it returns an ENOMEM and you have to
-		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
-			if (!getpwuid_r(userid,&pwdbuffer,buffer,size,&pwd)) {
-				return pwd!=NULL;
-			}
-			delete[] buffer;
-			buffer=NULL;
-			pwd=NULL;
-			if (errno!=ENOMEM) {
-				return 0;
-			}
-		}
-		return 0;
-	#else
-		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
-			((pwd=getpwuid(userid))!=NULL) &&
-			((pemutex)?!pthread_mutex_unlock(pemutex):1));
+				((pwd=((username)
+					?getpwnam(username)
+					:getpwuid(userid)))!=NULL) &&
+				((pemutex)?!pthread_mutex_unlock(pemutex):1));
 	#endif
 }
 

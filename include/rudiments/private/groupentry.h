@@ -9,3 +9,5 @@
 		#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
 			static	pthread_mutex_t	*gemutex;
 		#endif
+
+		int	initialize(const char *groupname, gid_t groupid);

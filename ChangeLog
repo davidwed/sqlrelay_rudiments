@@ -1,5 +1,6 @@
 0.25.1 - a couple of build fixes
-	added shadowentry class and test program
+	added shadowentry/serviceentry classes and test programs
+	reorganized *entry class code a bit to generate smaller code
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better

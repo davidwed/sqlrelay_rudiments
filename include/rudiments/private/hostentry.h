@@ -10,3 +10,7 @@
 				!defined(HAVE_GETHOSTBYADDR_R)
 			static	pthread_mutex_t	*hemutex;
 		#endif
+
+		int	initialize(const char *hostname,
+					const char *address,
+					int len, int type);
