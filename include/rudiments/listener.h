@@ -7,7 +7,7 @@
 #include <rudiments/private/config.h>
 #include <sys/types.h>
 
-#include <rudiments/private/filedescriptornode.h>
+#include <rudiments/list.h>
 
 // The listener class listens on a pool of file descriptors.
 

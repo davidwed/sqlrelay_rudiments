@@ -2,9 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		filedescriptornode	*first;
-		filedescriptornode	*last;
-		filedescriptornode	*current;
+		primitivelist<int>	filedescriptorlist;
 
 	protected:
 

@@ -13,64 +13,6 @@
 #endif
 #include <errno.h>
 
-void listener::addFileDescriptor(int fd) {
-	if (last) {
-		last->next=new filedescriptornode;
-		last->next->fd=fd;
-		last->next->previous=last;
-		last->next->next=NULL;
-		last=last->next;
-	} else {
-		first=new filedescriptornode;
-		first->fd=fd;
-		first->previous=NULL;
-		first->next=NULL;
-		last=first;
-	}
-}
-
-void listener::removeFileDescriptor(int fd) {
-	current=first;
-	while (current) {
-		if (current->fd==fd) {
-			if (current->next) {
-				current->next->previous=current->previous;
-			}
-			if (current->previous) {
-				current->previous->next=current->next;
-			}
-			if (current==first) {
-				first=current->next;
-			}
-			if (current==last) {
-				last=current->previous;
-			}
-			filedescriptornode	*temp=current;
-			current=current->next;
-			delete temp;
-		} else {
-			current=current->next;
-		}
-	}
-}
-
-void listener::removeAllFileDescriptors() {
-	current=first;
-	while (current) {
-		last=current->next;
-		delete current;
-		current=last;
-	}
-}
-
-int listener::waitForNonBlockingRead(long sec, long usec) {
-	return safeSelect(sec,usec,1,0);
-}
-
-int listener::waitForNonBlockingWrite(long sec, long usec) {
-	return safeSelect(sec,usec,0,1);
-}
-
 int listener::safeSelect(long sec, long usec, int read, int write) {
 
 	for (;;) {
@@ -80,13 +22,14 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 		fd_set	fdlist;
 		int	largest;
 		FD_ZERO(&fdlist);
-		current=first;
-		while (current) {
-			if (current->fd>largest) {
-				largest=current->fd;
+		primitivelistnode<int>	*current=
+				filedescriptorlist.getNodeByIndex(0);
+		while(current) {
+			if (current->getValue()>largest) {
+				largest=current->getValue();
 			}
-			FD_SET(current->fd,&fdlist);
-			current=current->next;
+			FD_SET(current->getValue(),&fdlist);
+			current=(primitivelistnode<int> *)current->getNext();
 		}
 
 		// set up the timeout
@@ -114,12 +57,13 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 	
 			// return the file descriptor that
 			// caused the select to fall through
-			current=first;
+			current=filedescriptorlist.getNodeByIndex(0);
 			while (current) {
-				if (FD_ISSET(current->fd,&fdlist)) {
-					return current->fd;
+				if (FD_ISSET(current->getValue(),&fdlist)) {
+					return current->getValue();
 				}
-				current=current->next;
+				current=(primitivelistnode<int> *)
+							current->getNext();
 			}
 			break;
 		}
