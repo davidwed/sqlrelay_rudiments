@@ -7,9 +7,9 @@
 #include <netdb.h>
 #include <netinet/in.h>
 
-#include <rudiments/transport.h>
+#include <rudiments/datatransport.h>
 
-class inetsocket : virtual public transport {
+class inetsocket : virtual public datatransport {
 	public:
 			inetsocket();
 			inetsocket(int filedescriptor);

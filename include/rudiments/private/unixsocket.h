@@ -6,9 +6,9 @@
 
 #include <sys/un.h>
 
-#include <rudiments/transport.h>
+#include <rudiments/datatransport.h>
 
-class unixsocket : virtual public transport {
+class unixsocket : virtual public datatransport {
 	public:
 			unixsocket();
 			unixsocket(int filedescriptor);

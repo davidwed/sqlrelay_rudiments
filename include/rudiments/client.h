@@ -4,13 +4,13 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <rudiments/transport.h>
+#include <rudiments/datatransport.h>
 #include <rudiments/connectiondata.h>
 
 // The client class provides a base class for classes that implement the client
 // side of a client-server communication model.
 
-class client : virtual public transport {
+class client : virtual public datatransport {
 	public:
 		virtual void	initialize(connectiondata *cd)=0;
 		virtual int	connect()=0;

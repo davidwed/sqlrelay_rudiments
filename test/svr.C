@@ -32,7 +32,7 @@ void	myserver::listen() {
 	listenOnSocket(NULL,8000,15);
 
 	for (;;) {
-		transport	*clientsock=acceptClientConnection();
+		datatransport	*clientsock=acceptClientConnection();
 		char	buffer[6];
 		buffer[5]=(char)NULL;
 		int	sizeread=clientsock->read((char *)buffer,5);

@@ -4,12 +4,12 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <rudiments/transport.h>
+#include <rudiments/datatransport.h>
 
 // The server class provides a base class for classes that implement the server
 // side of a client-server communication model.
 
-class server : virtual public transport {
+class server : virtual public datatransport {
 	public:
 		virtual	int	bind();
 		virtual	int	listen(int backlog);

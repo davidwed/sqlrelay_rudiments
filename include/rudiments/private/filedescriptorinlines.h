@@ -116,3 +116,11 @@ inline void	filedescriptor::retryInterruptedWrites() {
 inline void	filedescriptor::dontRetryInterruptedWrites() {
 	retryinterruptedwrites=0;
 }
+
+inline void	filedescriptor::retryInterruptedWaits() {
+	retryinterruptedwaits=1;
+}
+
+inline void	filedescriptor::dontRetryInterruptedWaits() {
+	retryinterruptedwaits=0;
+}

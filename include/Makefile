@@ -10,6 +10,8 @@ install:
 	$(INSTALL) -m 644 rudiments/commandline.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/connectiondata.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/daemonprocess.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/datatransport.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/datatransportfactory.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datetime.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
@@ -31,7 +33,6 @@ install:
 	$(INSTALL) -m 644 rudiments/signalclasses.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/stringbuffer.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/text.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/transport.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/unixclientsocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/unixserversocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/variablebuffer.h $(incdir)/rudiments
@@ -48,6 +49,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/connectiondatanodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/daemonprocess.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/daemonprocessinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/datatransport.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/datatransportinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/datetime.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/datetimeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandler.h $(incdir)/rudiments/private
@@ -94,8 +97,6 @@ install:
 	$(INSTALL) -m 644 rudiments/private/syslogdestination.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/text.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/textinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/transport.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/transportinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/unixclientsocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/unixserversocket.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/unixserversocketinlines.h $(incdir)/rudiments/private

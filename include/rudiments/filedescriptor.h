@@ -60,7 +60,7 @@ class filedescriptor {
 				// descriptor.
 
 
-		// Read methods - read data to the file descriptor.
+		// Read methods - read data from the file descriptor.
 		// These methods return the number of bytes that were
 		// successfully read.
 		virtual ssize_t	read(unsigned short *buffer);
@@ -90,6 +90,21 @@ class filedescriptor {
 				// that "buffer" is allocated internally and
 				// must be freed by the calling program.
 
+		// Wait methods.
+		virtual int	waitForNonBlockingRead(long sec, long usec);
+				// Causes the application to wait until a read()
+				// will proceed without blocking or until "sec"
+				// seconds and "usec" microseconds have elapsed.
+				// Returns -1 on error, 0 on timeout and 1
+				// otherwise.
+		virtual int	waitForNonBlockingWrite(long sec, long usec);
+				// Causes the application to wait until a
+				// write() will proceed without blocking or
+				// until "sec" seconds and "usec" microseconds
+				// have elapsed.
+				// Returns -1 on error, 0 on timeout and 1
+				// otherwise.
+
 
 		// By default, if a read or write is occurring and a signal
 		// interrupts it, the read or write returns with errno set to
@@ -102,10 +117,16 @@ class filedescriptor {
 			// Causes reads not to automatically retry if
 			// interrupted by a signal.  This is the default.
 		void	retryInterruptedWrites();
-			// Causes writes not to automatically retry if
+			// Causes writes to automatically retry if
 			// interrupted by a signal.  This is the default.
 		void	dontRetryInterruptedWrites();
 			// Causes writes not to automatically retry if
+			// interrupted by a signal.  This is the default.
+		void	retryInterruptedWaits();
+			// Causes waits to automatically retry if
+			// interrupted by a signal.  This is the default.
+		void	dontRetryInterruptedWaits();
+			// Causes waits not to automatically retry if
 			// interrupted by a signal.  This is the default.
 
 	#include <rudiments/private/filedescriptor.h>

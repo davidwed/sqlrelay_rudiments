@@ -25,7 +25,7 @@ int	main() {
 
 		int	fd=pool.waitForData(-1,-1);
 
-		transport	*sock;
+		datatransport	*sock;
 		if (fd==inetsock.getFileDescriptor()) {
 			sock=inetsock.acceptClientConnection();
 			printf("inetsock: ");

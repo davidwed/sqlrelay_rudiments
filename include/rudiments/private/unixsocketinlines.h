@@ -1,11 +1,12 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-inline unixsocket::unixsocket() : transport() {
+inline unixsocket::unixsocket() : datatransport() {
 	filename=NULL;
 }
 
-inline unixsocket::unixsocket(int filedescriptor) : transport(filedescriptor) {
+inline unixsocket::unixsocket(int filedescriptor) :
+				datatransport(filedescriptor) {
 	filename=NULL;
 }
 

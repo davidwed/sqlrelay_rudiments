@@ -14,7 +14,7 @@ int	main() {
 	for (;;) {
 		int		descriptor;
 		clnt.receiveFileDescriptor(&descriptor);
-		transport	*clientsock=new transport(descriptor);
+		datatransport	*clientsock=new datatransport(descriptor);
 		clientsock->write("hello");
 		clientsock->close();
 		delete clientsock;

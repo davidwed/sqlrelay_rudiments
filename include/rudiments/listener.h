@@ -15,11 +15,11 @@ class listener {
 			listener();
 			~listener();
 
-		void	addFileDescriptor(int fd);
+		virtual	void	addFileDescriptor(int fd);
                         // Adds the specified file descriptor to
 			// the pool that the listener is listening on.
 
-		int	waitForData(long timeoutsec, long timeoutusec);
+		virtual	int	waitForData(long timeoutsec, long timeoutusec);
 			// Waits for data to become available on any of the
 			// file descriptors in the pool for "timeoutsec"
 			// seconds and "timeoutusec" milliseconds before
@@ -35,10 +35,10 @@ class listener {
 			// Returns the file descriptor that data was available
 			// on or -1 on error.
 
-		void	removeFileDescriptor(int fd);
+		virtual	void	removeFileDescriptor(int fd);
                         // Removes the specified file descriptor from the pool.
 			
-		void	removeAllFileDescriptors();
+		virtual	void	removeAllFileDescriptors();
 			// Removes all file descriptors from the pool.
 
 	#include <rudiments/private/listener.h>
