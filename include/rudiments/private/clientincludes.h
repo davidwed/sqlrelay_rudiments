@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 #include <rudiments/resultcodes.h>
-#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+#include <rudiments/filedescriptor.h>
 #include <rudiments/dictionary.h>

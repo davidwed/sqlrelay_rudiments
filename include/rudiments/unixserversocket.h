@@ -24,14 +24,14 @@
 // unixserversocket class (and possibly the unixserversocket class) in
 // conjunction with the listener class.
 
-class unixserversocket : public server, public unixsocket {
+class unixserversocket : public serversocket, public unixsocketutil {
 	public:
 			unixserversocket();
 		virtual ~unixserversocket();
 
-		bool	listenOnSocket(const char *filename,
-						mode_t mask,
-						int backlog);
+		bool	listen(const char *filename,
+					mode_t mask,
+					int backlog);
 				// Listen on "filename" and allow "backlog"
 				// connections to pile up before refusing them.
 				// Set the permissions on "filename" using
@@ -58,9 +58,16 @@ class unixserversocket : public server, public unixsocket {
 			// Associates the socket with an address.
 			//
 			// Returns true on success and false on failure.
+		bool	listen(int backlog);
+			// Waits until a client connects then places
+			// that connection in queue.  Up to "backlog"
+			// connections may be queued before future
+			// conenctions are refused.
+			//
+			// Returns true on success and false on failure.
 
 
-		unixsocket	*acceptClientConnection();
+		filedescriptor	*accept();
 				// Removes the client connection from the queue
 				// and associates a new socket with that
 				// connection.  Communication with the client

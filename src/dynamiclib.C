@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 
 #include <dlfcn.h>
+#include <stdlib.h>
 
 #ifdef RUDIMENTS_HAS_THREADS
 pthread_mutex_t	*dynamiclib::errormutex;

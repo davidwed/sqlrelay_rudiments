@@ -9,12 +9,13 @@
 int main(int argc, const char **argv) {
 
 	unixclientsocket clnt;
-	clnt.connectToServer("/tmp/handoff.socket",-1,-1,0,1);
+	clnt.connect("/tmp/handoff.socket",-1,-1,0,1);
 
 	for (;;) {
 		int	descriptor;
 		clnt.receiveFileDescriptor(&descriptor);
-		datatransport	clientsock(descriptor);
+		filedescriptor	clientsock;
+		clientsock.setFileDescriptor(descriptor);
 		clientsock.write("hello");
 		clientsock.close();
 	}

@@ -12,14 +12,14 @@ int main(int argc, const char **argv) {
 
 	// listen on inet socket port 1800
 	inetserversocket	inetsock;
-	if (!inetsock.listenOnSocket(NULL,8000,15)) {
+	if (!inetsock.listen(NULL,8000,15)) {
 		printf("couldn't listen on inet socket\n");
 	}
 
 
 	// listen on unix socket "/tmp/lsnr.socket"
 	unixserversocket	unixsock;
-	if (!unixsock.listenOnSocket("/tmp/lsnr.socket",0000,15)) {
+	if (!unixsock.listen("/tmp/lsnr.socket",0000,15)) {
 		printf("couldn't listen on unix socket\n");
 	}
 
@@ -39,12 +39,12 @@ int main(int argc, const char **argv) {
 		pool.getReadyList()->getDataByIndex(0,&fd);
 
 		// figure out which socket the client connected to
-		datatransport	*clientsock;
+		filedescriptor	*clientsock;
 		if (fd==&inetsock) {
-			clientsock=inetsock.acceptClientConnection();
+			clientsock=inetsock.accept();
 			printf("inetsock: ");
 		} else if (fd==&unixsock) {
-			clientsock=unixsock.acceptClientConnection();
+			clientsock=unixsock.accept();
 			printf("unixsock: ");
 		} else {
 			printf("error or timeout waiting...\n");

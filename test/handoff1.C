@@ -4,23 +4,25 @@
 #include <rudiments/listener.h>
 #include <rudiments/inetserversocket.h>
 #include <rudiments/unixserversocket.h>
+#include <rudiments/inetclientsocket.h>
+#include <rudiments/unixclientsocket.h>
 #include <rudiments/permissions.h>
 #include <stdio.h>
 
 int main(int argc, const char **argv) {
 
 	inetserversocket	serversock;
-	serversock.listenOnSocket(NULL,10000,15);
+	serversock.listen(NULL,10000,15);
 
 	unixserversocket	handoffsock;
-	handoffsock.listenOnSocket("/tmp/handoff.socket",0000,15);
+	handoffsock.listen("/tmp/handoff.socket",0000,15);
 
 	listener	pool;
 	pool.addFileDescriptor(&serversock);
 	pool.addFileDescriptor(&handoffsock);
 
-	inetsocket	*clientsock=NULL;
-	unixsocket	*handoffclientsock=NULL;
+	inetclientsocket	*clientsock=NULL;
+	unixclientsocket	*handoffclientsock=NULL;
 
 	for (;;) {
 
@@ -29,9 +31,11 @@ int main(int argc, const char **argv) {
 		pool.getReadyList()->getDataByIndex(0,&fd);
 
 		if (fd==&serversock) {
-			clientsock=serversock.acceptClientConnection();
+			clientsock=(inetclientsocket *)
+					serversock.accept();
 		} else if (fd==&handoffsock) {
-			handoffclientsock=handoffsock.acceptClientConnection();
+			handoffclientsock=(unixclientsocket *)
+						handoffsock.accept();
 		} else {
 			printf("error or timeout waiting...\n");
 		}

@@ -467,7 +467,7 @@ then
 		if ( test -n "$PCRELIBS" )
 		then
 			FW_TRY_LINK([#include <stdlib.h>
-#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;],[$PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
+#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
 		else
 			AC_MSG_RESULT(no)
 		fi
@@ -853,7 +853,7 @@ AC_DEFUN([FW_CHECK_NANOSLEEP],
 	for i in "" "-lrt"
 	do
 		FW_TRY_LINK([#include <stdlib.h>
-#include <time.h>],[nanosleep(NULL,NULL);],[],[$i],[],[NANOSLEEPLIB="$i"; DONE="yes"],[])
+#include <time.h>],[nanosleep(NULL,NULL);],[$CPPFLAGS],[$i],[],[NANOSLEEPLIB="$i"; DONE="yes"],[])
 		if ( test -n "$DONE" )
 		then
 			break
@@ -882,7 +882,7 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 	DONE=""
 	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet"
 	do
-		FW_TRY_LINK([#include <stdlib.h>],[connect(0,NULL,0); listen(0,0); bind(0,NULL,0); accept(0,NULL,0); send(0,NULL,0,0); sendto(0,NULL,0,0,NULL,0); sendmsg(0,NULL,0); gethostbyname(NULL);],[],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
+		FW_TRY_LINK([#include <stdlib.h>],[connect(0,NULL,0); listen(0,0); bind(0,NULL,0); accept(0,NULL,0); send(0,NULL,0,0); sendto(0,NULL,0,0,NULL,0); sendmsg(0,NULL,0); gethostbyname(NULL);],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
 		if ( test -n "$DONE" )
 		then
 			break
@@ -939,7 +939,7 @@ AC_DEFUN([FW_CHECK_CRYPT_R],
 	for i in "" "-lcrypt"
 	do
 		FW_TRY_LINK([#include <stdlib.h>
-#include <crypt.h>],[crypt(NULL,NULL);],[],[$i],[],[HAVE_CRYPT="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT,1,Some systems have crypt)],[])
+#include <crypt.h>],[crypt(NULL,NULL);],[$CPPFLAGS],[$i],[],[HAVE_CRYPT="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT,1,Some systems have crypt)],[])
 		if ( test -n "$HAVE_CRYPT" )
 		then
 			break
@@ -957,7 +957,7 @@ AC_DEFUN([FW_CHECK_CRYPT_R],
 	for i in "" "-lcrypt"
 	do
 		FW_TRY_LINK([#include <stdlib.h>
-#include <crypt.h>],[crypt_data cd; crypt_r(NULL,NULL,NULL);],[],[$i],[],[HAVE_CRYPT_R="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT_R,1,Some systems have crypt_r)],[])
+#include <crypt.h>],[crypt_data cd; crypt_r(NULL,NULL,NULL);],[$CPPFLAGS],[$i],[],[HAVE_CRYPT_R="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT_R,1,Some systems have crypt_r)],[])
 		if ( test -n "$HAVE_CRYPT_R" )
 		then
 			break

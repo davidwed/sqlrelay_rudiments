@@ -27,7 +27,7 @@ BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
-CXXFLAGS = @CXXFLAGS@ @SMALLCODE@ @PIPE@
+CXXFLAGS = @CXXFLAGS@ @PIPE@
 
 # flag to strip during install
 INSTALLSTRIP = @INSTALLSTRIP@

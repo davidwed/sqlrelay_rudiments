@@ -22,11 +22,6 @@ ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	HEADERS += daemonprocess.h
 	PRIVATEHEADERS += daemonprocess.h daemonprocessincludes.h
 endif
-ifeq ($(INCLUDE_DATATRANSPORT),1)
-	HEADERS += datatransportfactory.h datatransport.h
-	PRIVATEHEADERS += datatransport.h datatransportincludes.h \
-					datatransportfactoryincludes.h
-endif
 ifeq ($(INCLUDE_DATETIME),1)
 	HEADERS += datetime.h
 	PRIVATEHEADERS += datetime.h datetimeincludes.h
@@ -83,7 +78,7 @@ ifeq ($(INCLUDE_HOSTENTRY),1)
 endif
 ifeq ($(INCLUDE_INETCLIENT),1)
 	HEADERS += inetclientsocket.h
-	PRIVATEHEADERS += inetclientsocketincludes.h
+	PRIVATEHEADERS += inetclientsocket.h inetclientsocketincludes.h
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
 	HEADERS += inetserversocket.h
@@ -172,12 +167,11 @@ ifeq ($(INCLUDE_CHARACTER),1)
 endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h
-	PRIVATEHEADERS += unixclientsocketincludes.h
+	PRIVATEHEADERS += unixclientsocket.h unixclientsocketincludes.h
 endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	HEADERS += unixserversocket.h
-	PRIVATEHEADERS += unixserversocket.h unixsocket.h \
-					unixserversocketincludes.h
+	PRIVATEHEADERS += unixserversocket.h unixserversocketincludes.h
 endif
 ifeq ($(INCLUDE_VARIABLEBUFFER),1)
 	HEADERS += variablebuffer.h
@@ -233,42 +227,70 @@ ifeq ($(INCLUDE_SERIALPORT),1)
 endif
 
 
-# if either inetserver or inetclient are defined, include inetsocket.h
+# if either inetserver or inetclient are defined, include inetsocketutil.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	HEADERS += inetsocket.h
-	PRIVATEHEADERS += inetsocket.h inetsocketincludes.h
+	HEADERS += inetsocketutil.h
+	PRIVATEHEADERS += inetsocketutil.h inetsocketutilincludes.h
 else
 	ifeq ($(INCLUDE_INETCLIENT),1)
-		HEADERS += inetsocket.h
-		PRIVATEHEADERS += inetsocket.h inetsocketincludes.h
+		HEADERS += inetsocketutil.h
+		PRIVATEHEADERS += inetsocketutil.h inetsocketutilincludes.h
 	endif
 endif
 
-# if either unixserver or unixclient are defined, include unixsocket.h
+# if either unixserver or unixclient are defined, include unixsocketutil.h
 ifeq ($(INCLUDE_UNIXSERVER),1)
-	PRIVATEHEADERS += unixsocket.h
+	HEADERS += unixsocketutil.h
+	PRIVATEHEADERS += unixsocketutil.h unixsocketutilincludes.h
 else
 	ifeq ($(INCLUDE_UNIXCLIENT),1)
-		PRIVATEHEADERS += unixsocket.h
+		HEADERS += unixsocketutil.h
+		PRIVATEHEADERS += unixsocketutil.h unixsocketutilincludes.h
 	endif
 endif
 
-# if inet/unix server/socket are defined, include socket.h
+# if inet/unix server are defined, include serversocket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	HEADERS += socket.h
-	PRIVATEHEADERS += socket.h socketincludes.h
+	HEADERS += serversocket.h
+	PRIVATEHEADERS += serversocket.h serversocketincludes.h
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
-		HEADERS += socket.h
-		PRIVATEHEADERS += socket.h socketincludes.h
+		HEADERS += serversocket.h
+		PRIVATEHEADERS += serversocket.h serversocketincludes.h
+	endif
+endif
+
+# if inet/unix client are defined, include clientsocket.h
+ifeq ($(INCLUDE_INETCLIENT),1)
+	HEADERS += clientsocket.h
+	PRIVATEHEADERS += clientsocket.h clientsocketincludes.h
+else
+	ifeq ($(INCLUDE_UNIXCLIENT),1)
+		HEADERS += clientsocket.h
+		PRIVATEHEADERS += clientsocket.h clientsocketincludes.h
+	endif
+endif
+
+# if any server and client are defined, include clientserverfactory
+ifeq ($(INCLUDE_INETSERVER),1)
+	ifeq ($(INCLUDE_INETCLIENT),1)
+		HEADERS += clientserverfactory.h
+		PRIVATEHEADERS += clientserverfactoryincludes.h
 	else
+		ifeq ($(INCLUDE_UNIXCLIENT),1)
+			HEADERS += clientserverfactory.h
+			PRIVATEHEADERS += clientserverfactoryincludes.h
+		endif
+	endif
+else
+	ifeq ($(INCLUDE_UNIXSERVER),1)
 		ifeq ($(INCLUDE_INETCLIENT),1)
-			HEADERS += socket.h
-			PRIVATEHEADERS += socket.h socketincludes.h
+			HEADERS += clientserverfactory.h
+			PRIVATEHEADERS += clientserverfactoryincludes.h
 		else
 			ifeq ($(INCLUDE_UNIXCLIENT),1)
-				HEADERS += socket.h
-				PRIVATEHEADERS += socket.h socketincludes.h
+				HEADERS += clientserverfactory.h
+				PRIVATEHEADERS += clientserverfactoryincludes.h
 			endif
 		endif
 	endif

@@ -17,12 +17,12 @@
 // inetserversocket class (and possibly the unixserversocket class) in
 // conjunction with the listener class.
 
-class inetserversocket : public server, public inetsocket {
+class inetserversocket : public serversocket, public inetsocketutil {
 	public:
 			inetserversocket();
 		virtual	~inetserversocket();
 
-		bool	listenOnSocket(const char *address,
+		bool	listen(const char *address,
 						unsigned short port,
 						int backlog);
 				// Listen on "address" and "port" and allow
@@ -53,8 +53,15 @@ class inetserversocket : public server, public inetsocket {
 			// Associates the socket with an address.
 			//
 			// Returns true on success and false on failure.
+		bool	listen(int backlog);
+			// Waits until a client connects then places
+			// that connection in queue.  Up to "backlog"
+			// connections may be queued before future
+			// conenctions are refused.
+			//
+			// Returns true on success and false on failure.
 
-		inetsocket	*acceptClientConnection();
+		filedescriptor	*accept();
 				// Removes the client connection from the queue
 				// and associates a new socket with that
 				// connection.  Communication with the client
@@ -66,8 +73,7 @@ class inetserversocket : public server, public inetsocket {
 		unsigned short	getPort();
 				// Returns the inet port number that
 				// the socket is listening on.  If the
-				// port has not been set or if the
-				// socket is a unix socket, 0 is 
+				// port has not been set, 0 is 
 				// returned instead.
 		char		*getClientAddress();
 				// Writes the address of the client at

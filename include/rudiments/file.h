@@ -22,10 +22,6 @@ class file : public filedescriptor {
 
 			file();
 			// Creates an uninitialized instance of the file class.
-			file(int fd);
-			// Creates an uninitialized instance of the file class
-			// and associates already open file descriptor "fd"
-			// with it.
 		virtual	~file();
 
 

@@ -1,13 +1,18 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
+#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/charstring.h>
 
 #include <stdlib.h>
 #include <unistd.h>
 
-int unixclientsocket::connectToServer(const char *filename,
+unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {}
+
+unixclientsocket::~unixclientsocket() {}
+
+int unixclientsocket::connect(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned int retrywait,
@@ -21,7 +26,7 @@ void unixclientsocket::initialize(const char *filename,
 						long timeoutusec,
 						unsigned int retrywait,
 						unsigned int retrycount) {
-	unixsocket::initialize(filename);
+	unixsocketutil::initialize(filename);
 	this->timeoutsec=timeoutsec;
 	this->timeoutusec=timeoutusec;
 	this->retrywait=retrywait;
@@ -71,7 +76,7 @@ int unixclientsocket::connect() {
 		}
 
 		// attempt to connect
-		if (socket::connect((struct sockaddr *)&sockaddrun,
+		if (clientsocket::connect((struct sockaddr *)&sockaddrun,
 				sizeof(sockaddrun),
 				timeoutsec,timeoutusec)==RESULT_SUCCESS) {
 			return RESULT_SUCCESS;

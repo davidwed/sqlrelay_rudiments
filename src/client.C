@@ -1,7 +1,9 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
+#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/client.h>
 
-client::client() {}
+client::client() : filedescriptor() {}
+
 client::~client() {}

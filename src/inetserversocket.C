@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetserversocket.h>
+#include <rudiments/inetclientsocket.h>
 #include <rudiments/charstring.h>
 
 #include <arpa/inet.h>
@@ -13,7 +14,9 @@
 	#include <strings.h>
 #endif
 
-inetserversocket::inetserversocket() : server(), inetsocket() {}
+inetserversocket::inetserversocket() : serversocket(), inetsocketutil() {
+	translateByteOrder();
+}
 
 inetserversocket::~inetserversocket() {}
 
@@ -21,7 +24,7 @@ unsigned short inetserversocket::getPort() {
 	return port;
 }
 
-bool inetserversocket::listenOnSocket(const char *address, unsigned short port,
+bool inetserversocket::listen(const char *address, unsigned short port,
 								int backlog) {
 	initialize(address,port);
 	return (bind() && listen(backlog));
@@ -29,7 +32,7 @@ bool inetserversocket::listenOnSocket(const char *address, unsigned short port,
 
 bool inetserversocket::initialize(const char *address, unsigned short port) {
 
-	inetsocket::initialize(address,port);
+	inetsocketutil::initialize(address,port);
 
 	// initialize a socket address structure
 	memset((void *)&sin,0,sizeof(sin));
@@ -71,7 +74,11 @@ bool inetserversocket::bind() {
 	return true;
 }
 
-inetsocket *inetserversocket::acceptClientConnection() {
+bool inetserversocket::listen(int backlog) {
+	return !::listen(fd,backlog);
+}
+
+filedescriptor *inetserversocket::accept() {
 
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
@@ -85,7 +92,8 @@ inetsocket *inetserversocket::acceptClientConnection() {
 		return NULL;
 	}
 
-	inetsocket	*returnsock=new inetsocket(clientsock);
+	inetclientsocket	*returnsock=new inetclientsocket;
+	returnsock->setFileDescriptor(clientsock);
 	#ifdef RUDIMENTS_HAS_SSL
 		if (!sslAccept(returnsock)) {
 			delete returnsock;

@@ -9,10 +9,14 @@
 // The server class provides a base class for classes that implement the server
 // side of a client-server communication model.
 
-class server {
+class server : public filedescriptor {
 	public:
 			server();
 		virtual	~server();
+
+		virtual	bool	bind()=0;
+		virtual	bool	listen(int backlog)=0;
+		virtual	filedescriptor	*accept()=0;
 };
 
 #endif

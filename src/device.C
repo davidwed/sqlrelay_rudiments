@@ -9,10 +9,6 @@ device::device() : file() {
 	dontGetCurrentPropertiesOnOpen();
 }
 
-device::device(int fd) : file(fd) {
-	dontGetCurrentPropertiesOnOpen();
-}
-
 device::~device() {}
 
 bool device::createDeviceNode(const char *filename, bool blockdevice,

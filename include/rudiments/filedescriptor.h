@@ -13,10 +13,6 @@ class filedescriptor {
 	public:
 			filedescriptor();
 				// Creates an uninitialized filedescriptor.
-			filedescriptor(int filedesc);
-				// Creates a filedescriptor and associates the
-				// already open file descriptor "filedesc"
-				// with it.
 		virtual	~filedescriptor();
 				// Calls close() if it hasn't already been
 				// called.
@@ -404,6 +400,12 @@ class filedescriptor {
 			// Returns the listener set previously by useListener() 
 			// or NULL if none has been set.
 
+
+		virtual bool	passFileDescriptor(int descriptor);
+		virtual bool	receiveFileDescriptor(int *descriptor);
+
+		void	translateByteOrder();
+		void	dontTranslateByteOrder();
 
 		int	fcntl(int command, long arg) const;
 		int	ioctl(int command, void *arg) const;

@@ -24,6 +24,7 @@
 		bool	retryinterruptedfcntl;
 		bool	retryinterruptedioctl;
 		bool	allowshortreads;
+		bool	translatebyteorder;
 
 		listener	*lstnr;
 

@@ -65,58 +65,159 @@ get a mingw port working
 
 --------------------------------------------------------------------------------
 
-filedescriptor/client/server heirarchy still needs revision:
-
-client (interface)
-	- initialize(namevaluepairs *cd)
-	- bool connectToServer(sec,usec) (returns true)
-server (interface)
-	- initialize(namevaluepairs *cd)
-	- bool bindToAddress() (returns true)
-	- bool listenForClientConnection(backlog) (returns true)
-	- filedescriptor *acceptClientConnection() (returns NULL)
+modemutil
+serialportutil
+inetsocketutil
+	- sockaddrin
+	- addr
+	- port
+rawsocketutil
+fileutil
+unixsocketutil
+	- sockaddrun
+	- file
+msgqueueutil
+shmutil
+fifoutil
+pipeutil
 
 filedescriptor
-	datatransport
-		- re-implements (host|net)To(Net|Host)
-		socket (will implement a seperate class for
-				inet/unix/ipx/appletalk/packet/etc.)
-			- implements non-blocking mode methods
-			- implements socket option methods
-			- implements connect with timeout (protected)
-			- implements socket-specific ssl stuff
-			- virtual bool connect() (returns true)
-			- virtual bool bind() (returns true)
-			- virtual bool listen(backlog) (returns true)
-			- virtual int accept() (returns 0)
-			( what to do about tcp/udp/etc. stream/dgram/etc.)
-			inetsocket
-				- initialize(addr,port)
-				- implements bool connect()
-				- implements bool bind()
-				- implements bool listen(backlog)
-				- implements int accept()
-				inetsocketclient (impl client)
-				inetsocketserver (impl server)
-				...
-			unixsocket
-				- initialize(filename)
-				- implements bool connect()
-				- implements bool bind()
-				- implements bool listen(backlog)
-				- implements int accept()
-				- re-implements passFileDescriptor()
-				- re-implements receiveFileDescriptor()
-				unixsocketclient (impl client)
-				unixsocketserver (impl server)
-		serialport
-			serialportclient (impl client)
-			serialportserver (impl server)
-		modem
-			modemclient (impl client)
-			modemserver (impl server)
-	file
-	...
+	- read()
+	- write()
+	- close()
+	file : filedescriptor
+		- open(filename,...)
+		device : file
+		serialport : file
+		fifo : file
+	pipe : filedescriptor
+	client : filedescriptor
+		- initialize(namevaluepairs *nvp)=0
+		- connect=0
+		modemclient : client, modemutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(device,initstring,dialstring,...)
+			- connect()
+			- connect(device,initstring,dialstring,...)
+		serialportclient : client, serialportutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(device,...)
+			- connect()
+			- connect(device,...)
+		socketclient : client
+			- nonblock()
+			protected:
+				- connect(...,timeout)
+			inetsocketclient : socketclient, inetsocketutil
+				- initialize(namevaluepairs *nvp)=0
+				- initialize(host,port,...)
+				- connect()
+				- connect(host,port,...)
+			unixsocketclient : socketclient, unixsocketutil
+				- initialize(namevaluepairs *nvp)=0
+				- initialize(filename,...)
+				- connect()
+				- connect(filename,...)
+			rawsocketclient : client, rawsocketutil
+				- initialize(namevaluepairs *nvp)=0
+				- initialize(???,...)
+				- connect()
+				- connect(???,...)
+		fileclient  : client, fileutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(filename,...)
+			- connect()
+			- connect(filename,...)
+		msgqueueclient : client, msgqueueutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(key,...)
+			- connect()
+			- connect(key,...)
+		shmclient : client, shmutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(key,...)
+			- connect()
+			- connect(key,...)
+		fifoclient : client, fifoutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(filename,...)
+			- connect()
+			- connect(filename,...)
+		pipeclient : client, pipeutil
+			- initialize(namevaluepairs *nvp)=0
+			- initialize(???,...)
+			- connect()
+			- connect(???,...)
+		...
+	server : filedescriptor
+		- bind()=0
+		- listen()=0
+		- filedescriptor *accept()=0
+		modemserver: server, modemutil
+			- initialize(device,initstring,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(device,initstring,...)
+		serialportserver: server, serialportutil
+			- initialize(device,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(device,...)
+		socketserver: server
+			- linger()
+			- reuseaddr()
+			- nonblock()
+			- listen()
+			protected:
+				- sslAccept()
+			inetsocketserver: socketserver, inetsocketutil
+				- initialize(addr,port,...)
+				- bind()
+				- filedescriptor *accept()
+				- listen(addr,port,...)
+			unixsocketserver: socketserver, unixsocketutil
+				- initialize(filename,...)
+				- bind()
+				- filedescriptor *accept()
+				- listen(filename,...)
+			rawsocketserver: server, rawsocketutil
+				- initialize(???,...)
+				- bind()
+				- filedescriptor *accept()
+				- listen(???,...)
+		fileserver: server, fileutil
+			- initialize(filename,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(filename,...)
+		msgqueueserver: server, msgqueueutil
+			- initialize(key,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(key,...)
+		shmserver: server, shmutil
+			- initialize(key,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(key,...)
+		fifoserver: server, fifoutil
+			- initialize(filename,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(filename,...)
+		pipeserver: server, pipeutil
+			- initialize(???,...)
+			- bind()
+			- listen()
+			- filedescriptor *accept()
+			- listen(???,...)
+		...
 
 --------------------------------------------------------------------------------
 

@@ -13,12 +13,12 @@
 // Its ultimate parent class: filedescriptor provides methods for reading and 
 // writing data and closing connections.
 
-class inetclientsocket : public client, public inetsocket  {
+class inetclientsocket : public clientsocket, public inetsocketutil  {
 	public:
 			inetclientsocket();
 		virtual	~inetclientsocket();
 
-		int	connectToServer(const char *host,
+		int	connect(const char *host,
 					unsigned short port,
 					long timeoutsec,
 					long timeoutusec,
@@ -81,6 +81,8 @@ class inetclientsocket : public client, public inetsocket  {
 			// in a multithreaded application, you may need to
 			// supply those classes with mutexes.  See hostentry.h
 			// and protocolentry.h for more detail.
+
+	#include <rudiments/private/inetclientsocket.h>
 };
 
 #endif

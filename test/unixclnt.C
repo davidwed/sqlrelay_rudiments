@@ -16,7 +16,7 @@ int main(int argc, const char **argv) {
 	unixclientsocket	clnt;
 
 	// connect to a server listening on /tmp/lsnr.socket
-	if (clnt.connectToServer("/tmp/lsnr.socket",-1,-1,1,1)<0) {
+	if (clnt.connect("/tmp/lsnr.socket",-1,-1,1,1)<0) {
 		printf("connect failed: %s\n",strerror(errno));
 		exit(0);
 	}

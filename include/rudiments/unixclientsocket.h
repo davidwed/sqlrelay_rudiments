@@ -17,10 +17,13 @@
 // Its ultimate parent class: filedescriptor provides methods for reading and 
 // writing data and closing connections.
 
-class unixclientsocket : public client, public unixsocket {
+class unixclientsocket : public clientsocket, public unixsocketutil {
 	public:
 
-		int	connectToServer(const char *filename,
+			unixclientsocket();
+		virtual	~unixclientsocket();
+
+		int	connect(const char *filename,
 					long timeoutsec,
 					long timeoutusec,
 					unsigned int retrywait,
@@ -68,6 +71,8 @@ class unixclientsocket : public client, public unixsocket {
 			//
 			// Returns RESULT_SUCCESS on success and RESULT_ERROR
 			// on failure.
+
+	#include <rudiments/private/unixclientsocket.h>
 };
 
 #endif

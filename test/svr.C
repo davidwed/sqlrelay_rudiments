@@ -37,7 +37,7 @@ void	myserver::listen() {
 
 
 	// listen on inet socket port 8000
-	if (!listenOnSocket(NULL,8000,15)) {
+	if (!inetserversocket::listen(NULL,8000,15)) {
 		printf("couldn't listen on port 8000\n");
 	}
 
@@ -46,7 +46,7 @@ void	myserver::listen() {
 	for (;;) {
 
 		// accept a client connection
-		datatransport	*clientsock=acceptClientConnection();
+		filedescriptor	*clientsock=accept();
 
 		// read 5 bytes from the client and display it
 		char	buffer[6];

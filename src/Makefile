@@ -151,10 +151,6 @@ ifeq ($(INCLUDE_STRINGBUFFER),1)
 	SRCS += stringbuffer.C
 	LOBJS += stringbuffer.lo
 endif
-ifeq ($(INCLUDE_DATATRANSPORT),1)
-	SRCS += datatransport.C datatransportfactory.C
-	LOBJS += datatransport.lo datatransportfactory.lo
-endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	SRCS += unixclientsocket.C
 	LOBJS += unixclientsocket.lo
@@ -214,42 +210,68 @@ endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += inetsocket.C
-	LOBJS += inetsocket.lo
+	SRCS += inetsocketutil.C
+	LOBJS += inetsocketutil.lo
 else
 	ifeq ($(INCLUDE_INETCLIENT),1)
-		SRCS += inetsocket.C
-		LOBJS += inetsocket.lo
+		SRCS += inetsocketutil.C
+		LOBJS += inetsocketutil.lo
 	endif
 endif
 
 # if either unixserver or unixclient are defined, include unixsocket.h
 ifeq ($(INCLUDE_UNIXSERVER),1)
-	SRCS += unixsocket.C
-	LOBJS += unixsocket.lo
+	SRCS += unixsocketutil.C
+	LOBJS += unixsocketutil.lo
 else
 	ifeq ($(INCLUDE_UNIXCLIENT),1)
-		SRCS += unixsocket.C
-		LOBJS += unixsocket.lo
+		SRCS += unixsocketutil.C
+		LOBJS += unixsocketutil.lo
 	endif
 endif
 
-# if inet/unix server/socket are defined, include socket.h
+# if inet/unix server are defined, include serversocket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += socket.C
-	LOBJS += socket.lo
+	SRCS += serversocket.C
+	LOBJS += serversocket.lo
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
-		SRCS += socket.C
-		LOBJS += socket.lo
+		SRCS += serversocket.C
+		LOBJS += serversocket.lo
+	endif
+endif
+
+# if inet/unix client are defined, include clientsocket.h
+ifeq ($(INCLUDE_INETCLIENT),1)
+	SRCS += clientsocket.C
+	LOBJS += clientsocket.lo
+else
+	ifeq ($(INCLUDE_UNIXCLIENT),1)
+		SRCS += clientsocket.C
+		LOBJS += clientsocket.lo
+	endif
+endif
+
+# if any server and client are defined, include clientserverfactory
+ifeq ($(INCLUDE_INETSERVER),1)
+	ifeq ($(INCLUDE_INETCLIENT),1)
+		SRCS += clientserverfactory.C
+		LOBJS += clientserverfactory.lo
 	else
+		ifeq ($(INCLUDE_UNIXCLIENT),1)
+			SRCS += clientserverfactory.C
+			LOBJS += clientserverfactory.lo
+		endif
+	endif
+else
+	ifeq ($(INCLUDE_UNIXSERVER),1)
 		ifeq ($(INCLUDE_INETCLIENT),1)
-			SRCS += socket.C
-			LOBJS += socket.lo
+			SRCS += clientserverfactory.C
+			LOBJS += clientserverfactory.lo
 		else
 			ifeq ($(INCLUDE_UNIXCLIENT),1)
-				SRCS += socket.C
-				LOBJS += socket.lo
+				SRCS += clientserverfactory.C
+				LOBJS += clientserverfactory.lo
 			endif
 		endif
 	endif

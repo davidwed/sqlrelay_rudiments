@@ -56,7 +56,7 @@ int main(int argc, const char **argv) {
 	clnt.setSSLContext(ctx);
 
 	// connect to a server on localhost, listening on port 8000
-	if (clnt.connectToServer("localhost",8000,-1,-1,1,1)<0) {
+	if (clnt.connect("localhost",8000,-1,-1,1,1)<0) {
 		if (errno) {
 			printf("connect failed: %s\n",strerror(errno));
 		} else {

@@ -1,6 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
+#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
@@ -17,11 +18,13 @@
 // need these for memset...
 #include <string.h>
 
-inetclientsocket::inetclientsocket() : client(), inetsocket() {}
+inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
+	translateByteOrder();
+}
 
 inetclientsocket::~inetclientsocket() {}
 
-int inetclientsocket::connectToServer(const char *host,
+int inetclientsocket::connect(const char *host,
 						unsigned short port,
 						long timeoutsec,
 						long timeoutusec,
@@ -37,7 +40,7 @@ void inetclientsocket::initialize(const char *host,
 						long timeoutusec,
 						unsigned int retrywait,
 						unsigned int retrycount) {
-	inetsocket::initialize(host,port);
+	inetsocketutil::initialize(host,port);
 	this->timeoutsec=timeoutsec;
 	this->timeoutusec=timeoutusec;
 	this->retrywait=retrywait;
@@ -148,7 +151,8 @@ int inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
-				if (socket::connect((struct sockaddr *)&sin,
+				if (clientsocket::connect(
+						(struct sockaddr *)&sin,
 						sizeof(sin),
 						timeoutsec,
 						timeoutusec)==RESULT_SUCCESS) {
@@ -170,7 +174,7 @@ int inetclientsocket::connect() {
 				}
 
 				// attempt to connect to the socket
-				if (socket::connect((struct sockaddr *)
+				if (clientsocket::connect((struct sockaddr *)
 						ainfo->ai_addr,
 						ainfo->ai_addrlen,
 						timeoutsec,

@@ -24,10 +24,6 @@ file::file() : filedescriptor() {
 	getcurrentpropertiesonopen=true;
 }
 
-file::file(int fd) : filedescriptor(fd) {
-	getcurrentpropertiesonopen=true;
-}
-
 file::~file() {}
 
 bool file::create(const char *name, mode_t perms) {

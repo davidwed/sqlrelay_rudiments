@@ -102,7 +102,7 @@ void	myserver::listen() {
 	SSL_CTX_set_tmp_dh(ctx,dh);
 
 	// listen on inet socket port 8000
-	if (!listenOnSocket(NULL,8000,15)) {
+	if (!inetserversocket::listen(NULL,8000,15)) {
 		printf("couldn't listen on port 8000\n");
 		exit(0);
 	}
@@ -114,7 +114,7 @@ void	myserver::listen() {
 		setSSLContext(ctx);
 
 		// accept a client connection
-		datatransport	*clientsock=acceptClientConnection();
+		filedescriptor	*clientsock=accept();
 
 		if (clientsock) {
 

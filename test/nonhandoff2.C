@@ -7,11 +7,11 @@
 int main(int argc, const char **argv) {
 
 	inetserversocket	svr;
-	svr.listenOnSocket(NULL,11000,15);
+	svr.listen(NULL,11000,15);
 
 	for (;;) {
 		svr.waitForNonBlockingRead(-1,-1);
-		inetsocket	*clientsock=svr.acceptClientConnection();
+		filedescriptor	*clientsock=svr.accept();
 		clientsock->write("hello");
 		clientsock->close();
 		delete clientsock;

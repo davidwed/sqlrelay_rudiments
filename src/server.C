@@ -3,5 +3,6 @@
 
 #include <rudiments/server.h>
 
-server::server() {}
+server::server() : filedescriptor() {}
+
 server::~server() {}

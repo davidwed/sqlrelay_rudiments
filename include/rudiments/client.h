@@ -9,15 +9,14 @@
 // The client class provides a base class for classes that implement the client
 // side of a client-server communication model.
 
-class client {
+class client : public filedescriptor {
 	public:
 
 			client();
 		virtual ~client();
 
 		virtual void	initialize(namevaluepairs *cd)=0;
-
-		//virtual int	connectToServer()=0;
+		virtual int	connect()=0;
 				// This method return an int instead of a bool
 				// because we want child classes that have non
 				// atomic connection procedures (such as a
