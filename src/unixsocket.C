@@ -11,12 +11,17 @@
 
 #include <unistd.h>
 
-#define DEBUG_UNIXSOCKET 1
+//#define DEBUG_UNIXSOCKET 1
 
 #ifdef NEED_XNET_PROTOTYPES
 extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
+
+union control_union {
+	struct cmsghdr	cm;
+	char		control[CMSG_SPACE(sizeof(int))];
+};
 
 unixsocket::unixsocket() : filedescriptor(), datatransport(), socket() {
 	filename=NULL;
@@ -36,7 +41,6 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
 	struct	msghdr	messageheader;
-	memset((void *)&messageheader,0,sizeof(messageheader));
 
 	// these must be null for stream sockets
 	messageheader.msg_name=NULL;
@@ -57,11 +61,7 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 
 		// new-style:
 		// The descriptor is passed in the msg_control
-		union {
-			struct cmsghdr	cm;
-			char		control[CMSG_SPACE(sizeof(int))];
-		} control;
-		memset((void *)&control,0,sizeof(control));
+		union control_union	control;
 		messageheader.msg_control=control.control;
 		messageheader.msg_controllen=sizeof(control);
 
@@ -90,7 +90,6 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr
 	struct msghdr	messageheader;
-	memset((void *)&messageheader,0,sizeof(messageheader));
 
 	// these must be null for stream sockets
 	messageheader.msg_name=NULL;
@@ -112,11 +111,7 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 		// new-style:
 		// The descriptor is received in the msg_control
-		union {
-			struct cmsghdr	cm;
-			char		control[CMSG_SPACE(sizeof(int))];
-		} control;
-		memset((void *)&control,0,sizeof(control));
+		union control_union	control;
 		messageheader.msg_control=control.control;
 		messageheader.msg_controllen=sizeof(control);
 	#else
