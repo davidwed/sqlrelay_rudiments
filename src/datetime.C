@@ -138,7 +138,11 @@ bool datetime::initialize(const struct tm *tmstruct) {
 			}
 		#endif
 		tzset();
-		gmtoff=-timezone;
+		#ifdef HAS_TIMEZONE
+			gmtoff=-timezone;
+		#else
+			gmtoff=-_timezone;
+		#endif
 		#ifdef RUDIMENTS_HAS_THREADS
 			if (timemutex && !releaseLock()) {
 				return false;
@@ -529,8 +533,10 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 			gmtoff=tms.tm_gmtoff;
 		#elif HAS_TM_TZADJ
 			gmtoff=-tms.tm_tzadj;
-		#else
+		#elif HAS_TIMEZONE
 			gmtoff=-timezone;
+		#else
+			gmtoff=-_timezone;
 		#endif
 	}
 

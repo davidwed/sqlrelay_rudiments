@@ -1,6 +1,11 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
+// cygwin currently has a bug where the rudiments dll can't be build because
+// of missing _getrpcbyname and _getrpcbynumber symbols.  I'll have to add
+// some kind of test for this.
+#ifndef __CYGWIN__
+
 #include <rudiments/rpcentry.h>
 
 #include <stdio.h>
@@ -169,3 +174,5 @@ void rpcentry::print() const {
 		printf("	%s\n",getAliasList()[i]);
 	}
 }
+
+#endif

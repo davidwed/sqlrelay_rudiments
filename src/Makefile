@@ -219,7 +219,7 @@ clean:
 rebuild: clean all
 
 librudiments.la: $(SRCS) $(LOBJS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ $(LOBJS) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO)
+	$(LIBTOOL) --mode=link $(CXX) -o $@ $(LOBJS) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined $(SSLLIBS) $(PCRELIBS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)

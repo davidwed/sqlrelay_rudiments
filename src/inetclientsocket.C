@@ -148,10 +148,10 @@ int inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
-				if (connect((struct sockaddr *)&sin,
+				if (socket::connect((struct sockaddr *)&sin,
 						sizeof(sin),
 						timeoutsec,
-						timeoutusec)==RESULT_SUCESS) {
+						timeoutusec)==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
 				}
 			}

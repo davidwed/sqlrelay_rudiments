@@ -1,6 +1,3 @@
-if a machine doesn't have pcre installed, the build still seems to want to
-	use it???
-
 add xnet/socket/nsl/etc. libs to rudiments-config --libs
 
 get epoch from string doesn't work right on solaris x86

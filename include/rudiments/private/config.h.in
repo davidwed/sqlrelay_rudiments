@@ -3,6 +3,9 @@
 /* Use inline functions or not */
 #undef ENABLE_RUDIMENTS_INLINES
 
+/* Some systems use _timezone instead of timezone */
+#undef HAS_TIMEZONE
+
 /* Some systems define tm_gmtoff in their struct tm */
 #undef HAS_TM_GMTOFF
 
@@ -38,6 +41,9 @@
 
 /* Some systems don't define CMSG_SPACE */
 #undef HAVE_CMSG_SPACE
+
+/* Cygwin style statfs */
+#undef HAVE_CYGWIN_STATFS
 
 /* Darwin style statfs */
 #undef HAVE_DARWIN_STATFS
@@ -187,6 +193,12 @@
 
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
+
+/* Some systems have setgid */
+#undef HAVE_SETGID
+
+/* Some systems have setuid */
+#undef HAVE_SETUID
 
 /* struct spwd has sp_expire */
 #undef HAVE_SP_EXPIRE

@@ -19993,16 +19993,19 @@ _ACEOF
 
 	else
 
+		echo "$as_me:$LINENO: checking openssl" >&5
+echo $ECHO_N "checking openssl... $ECHO_C" >&6
 		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
 		then
-			SSLLIBS=`pkg-config openssl --libs`
-			SSLINCLUDES=`pkg-config openssl --cflags`
+			SSLLIBS=`pkg-config openssl --libs 2> /dev/null`
+			if ( test -n "$SSLLIBS" )
+			then
+				SSLINCLUDES=`pkg-config openssl --cflags 2> /dev/null`
+			fi
+		fi
 
-cat >>confdefs.h <<\_ACEOF
-#define RUDIMENTS_HAS_SSL 1
-_ACEOF
-
-		else
+		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
+		then
 
 
 eval "SSLINCLUDES=\"\""
@@ -20384,14 +20387,20 @@ then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
-			if ( test -n "$SSLLIBS" )
-			then
+		fi
+
+		if ( test -n "$SSLLIBS" )
+		then
 
 cat >>confdefs.h <<\_ACEOF
 #define RUDIMENTS_HAS_SSL 1
 _ACEOF
 
-			fi
+			echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		else
+			echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 		fi
 	fi
 
@@ -20442,21 +20451,19 @@ _ACEOF
 
 	else
 
+		echo "$as_me:$LINENO: checking pcre" >&5
+echo $ECHO_N "checking pcre... $ECHO_C" >&6
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			echo "$as_me:$LINENO: checking pcre" >&5
-echo $ECHO_N "checking pcre... $ECHO_C" >&6
 			PCRELIBS=`pcre-config --libs 2> /dev/null`
 			if ( test -n "$PCRELIBS" )
 			then
 				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
-				echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-			else
-				echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
 			fi
-		else
+		fi
+
+		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+		then
 
 
 eval "PCREINCLUDES=\"\""
@@ -20839,6 +20846,7 @@ then
 fi
 
 		fi
+
 		if ( test -n "$PCRELIBS" )
 		then
 
@@ -20846,6 +20854,11 @@ cat >>confdefs.h <<\_ACEOF
 #define RUDIMENTS_HAS_PCRE 1
 _ACEOF
 
+			echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		else
+			echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 		fi
 	fi
 
@@ -21712,6 +21725,70 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/vfs.h>
+int
+main ()
+{
+struct statfs sfs;
+sfs.f_type=0;
+sfs.f_bsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid=0;
+sfs.f_namelen=0;
+statfs("/",&sfs);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_CYGWIN_STATFS 1
+_ACEOF
+ STATFS_STYLE="cygwin style"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
 
 if ( test "$STATFS_STYLE" = "unknown" )
 then
@@ -22625,6 +22702,61 @@ echo "${ECHO_T}no" >&6
 fi
 rm -f conftest*
 
+
+echo "$as_me:$LINENO: checking timezone" >&5
+echo $ECHO_N "checking timezone... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <time.h>
+int
+main ()
+{
+long	t=-timezone;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAS_TIMEZONE 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
 
 echo "$as_me:$LINENO: checking tm_name" >&5
 echo $ECHO_N "checking tm_name... $ECHO_C" >&6
@@ -24795,6 +24927,118 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_RAND 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+echo "$as_me:$LINENO: checking setuid" >&5
+echo $ECHO_N "checking setuid... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/types.h>
+#include <unistd.h>
+int
+main ()
+{
+setuid(0);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_SETUID 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+echo "$as_me:$LINENO: checking setgid" >&5
+echo $ECHO_N "checking setgid... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <sys/types.h>
+#include <unistd.h>
+int
+main ()
+{
+setgid(0);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_SETGID 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6

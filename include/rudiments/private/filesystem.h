@@ -3,7 +3,7 @@
 
 	private:
 		void	close();
-#ifdef HAVE_LINUX_STATFS
+#if defined(HAVE_LINUX_STATFS)
 		static	char	*getFsTypeName(long type);
 #endif
 

@@ -34,7 +34,9 @@ hostentry::~hostentry() {
 }
 
 char *hostentry::getName() const {
-	return he->h_name;
+	// On some platforms, this is a const char *,
+	// so we'll cast it, just in case.
+	return (char *)he->h_name;
 }
 
 char **hostentry::getAliasList() const {

@@ -378,17 +378,27 @@ then
 
 	else
 
+		AC_MSG_CHECKING(openssl)
 		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
 		then
-			SSLLIBS=`pkg-config openssl --libs`
-			SSLINCLUDES=`pkg-config openssl --cflags`
-			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
-		else
-			FW_CHECK_HEADERS_AND_LIBS([/usr],[ssl],[openssl/ssl.h],[ssl],[""],[""],[SSLINCLUDES],[SSLLIBS],[SSLLIBPATH],[SSLSTATIC])
+			SSLLIBS=`pkg-config openssl --libs 2> /dev/null`
 			if ( test -n "$SSLLIBS" )
 			then
-				AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
+				SSLINCLUDES=`pkg-config openssl --cflags 2> /dev/null`
 			fi
+		fi
+
+		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
+		then
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[ssl],[openssl/ssl.h],[ssl],[""],[""],[SSLINCLUDES],[SSLLIBS],[SSLLIBPATH],[SSLSTATIC])
+		fi
+
+		if ( test -n "$SSLLIBS" )
+		then
+			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
 		fi
 	fi
 
@@ -428,23 +438,27 @@ then
 
 	else
 
+		AC_MSG_CHECKING(pcre)
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			AC_MSG_CHECKING(pcre)
 			PCRELIBS=`pcre-config --libs 2> /dev/null`
 			if ( test -n "$PCRELIBS" )
 			then
 				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
-				AC_MSG_RESULT(yes)
-			else
-				AC_MSG_RESULT(no)
 			fi
-		else
+		fi
+
+		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+		then
 			FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre],[pcre/pcre.h],[pcre],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
 		fi
+
 		if ( test -n "$PCRELIBS" )
 		then
 			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
 		fi
 	fi
 
@@ -608,6 +622,24 @@ sfs.f_fsid.__val[0]=0;
 sfs.f_namelen=0;
 statfs("/",&sfs);]
 ,AC_DEFINE(HAVE_LINUX_STATFS,1,Linux style statfs) STATFS_STYLE="linux style")
+
+dnl cygwin is like linux but f_fsid is just a long
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_LINK([#include <sys/vfs.h>],
+[struct statfs sfs;
+sfs.f_type=0;
+sfs.f_bsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid=0;
+sfs.f_namelen=0;
+statfs("/",&sfs);]
+,AC_DEFINE(HAVE_CYGWIN_STATFS,1,Cygwin style statfs) STATFS_STYLE="cygwin style")
+fi
 
 dnl freebsd is very different from linux
 if ( test "$STATFS_STYLE" = "unknown" )

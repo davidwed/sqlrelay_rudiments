@@ -8,6 +8,10 @@
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 
 unixserversocket::unixserversocket() : serversocket(), unixsocket() {
 	mask=0;

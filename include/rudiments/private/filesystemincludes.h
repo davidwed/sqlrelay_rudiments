@@ -3,9 +3,13 @@
 
 #include <rudiments/private/config.h>
 
-#ifdef HAVE_LINUX_STATFS
+#if defined(HAVE_LINUX_STATFS) || \
+	defined(HAVE_CYGWIN_STATFS)
 	#include <sys/types.h>
 	#include <sys/vfs.h>
+#endif
+#ifdef HAVE_CYGWIN_STATFS
+	typedef	long	fsid_t;
 #endif
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \

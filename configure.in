@@ -217,6 +217,10 @@ AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(HAS___TM_ZONE,1, Some syste
 AC_MSG_CHECKING(__tm_gmtoff)
 AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS___TM_GMTOFF,1, Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(timezone)
+AC_TRY_LINK([#include <time.h>],
+long	t=-timezone;,AC_DEFINE(HAS_TIMEZONE,1,Some systems use _timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(tm_name)
 AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(HAS_TM_NAME,1, Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -268,6 +272,16 @@ srand(0);,AC_DEFINE(HAVE_SRAND,1, Some systems have srand) AC_MSG_RESULT(yes), A
 AC_MSG_CHECKING(rand)
 AC_TRY_LINK([#include <stdlib.h>],
 rand();,AC_DEFINE(HAVE_RAND,1, Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(setuid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setuid(0);,AC_DEFINE(HAVE_SETUID,1, Some systems have setuid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(setgid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setgid(0);,AC_DEFINE(HAVE_SETGID,1, Some systems have setgid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 #AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
 #AC_SUBST(SOCKETLIB)

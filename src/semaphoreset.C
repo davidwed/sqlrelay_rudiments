@@ -1,8 +1,6 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information
 
-#ifndef __CYGWIN__
-
 #include <rudiments/semaphoreset.h>
 
 #include <rudiments/passwdentry.h>
@@ -296,5 +294,3 @@ mode_t semaphoreset::getPermissions() {
 	}
 	return 0;
 }
-
-#endif

@@ -119,17 +119,17 @@ void daemonprocess::crash() {
 }
 
 int daemonprocess::runAsUserId(uid_t uid) const {
-	#ifdef __CYGWIN__
-		return 1;
-	#else
+	#ifdef HAVE_SETUID
 		return !setuid(uid);
+	#else
+		return 1;
 	#endif
 }
 
 int daemonprocess::runAsGroupId(gid_t gid) const {
-	#ifdef __CYGWIN__
-		return 1;
-	#else
+	#ifdef HAVE_SETGID
 		return !setgid(gid);
+	#else
+		return 1;
 	#endif
 }

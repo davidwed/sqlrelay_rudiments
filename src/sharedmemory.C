@@ -1,8 +1,6 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information
 
-#ifndef __CYGWIN__
-
 #include <rudiments/sharedmemory.h>
 
 #include <rudiments/passwdentry.h>
@@ -199,5 +197,3 @@ bool sharedmemory::setGroupName(const char *groupname) {
 	return (groupentry::getGroupId(groupname,&groupid) &&
 						setGroupId(groupid));
 }
-
-#endif
