@@ -24,14 +24,14 @@ endif
 ifeq ($(INCLUDE_DATATRANSPORT),1)
 	HEADERS += datatransportfactory.h datatransport.h
 	PRIVATEHEADERS += datatransport.h datatransportinlines.h \
-				datatransportincludes.h
+				datatransportincludes.h \
+					datatransportfactoryincludes.h
 endif
 ifeq ($(INCLUDE_DATETIME),1)
 	HEADERS += datetime.h timezonefile.h
 	PRIVATEHEADERS += datetime.h datetimeinlines.h \
 				datetimeincludes.h \
-				timezonefile.h timezonefileinlines.h \
-				timezonefileincludes.h
+				timezonefile.h timezonefileinlines.h
 endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h
@@ -80,7 +80,7 @@ ifeq ($(INCLUDE_INETSERVER),1)
 	HEADERS += inetserversocket.h
 	PRIVATEHEADERS += inetserversocketinlines.h \
 				inetsocket.h inetsocketinlines.h \
-					inetsocketincludes.h
+					inetserversocketincludes.h
 endif
 ifeq ($(INCLUDE_LISTENER),1)
 	HEADERS += listener.h
@@ -105,7 +105,8 @@ ifeq ($(INCLUDE_MEMORYPOOL),1)
 endif
 ifeq ($(INCLUDE_PASSWDENTRY),1)
 	HEADERS += passwdentry.h
-	PRIVATEHEADERS += passwdentry.h passwdentryinlines.h passwdincludes.h
+	PRIVATEHEADERS += passwdentry.h passwdentryinlines.h \
+				passwdentryincludes.h
 endif
 ifeq ($(INCLUDE_PERMISSIONS),1)
 	HEADERS += permissions.h
@@ -173,7 +174,7 @@ ifeq ($(INCLUDE_XMLDOM),1)
 	HEADERS += xmldom.h xmldomnode.h
 	PRIVATEHEADERS += xmldom.h xmldominlines.h \
 				xmldomnode.h xmldomnodeinlines.h \
-					xmldomincludes.h
+					xmldomincludes.h xmldomnodeincludes.h
 endif
 ifeq ($(INCLUDE_XMLSAX),1)
 	HEADERS += xmlsax.h
