@@ -1,3 +1,5 @@
+0.25.3 - updated spec file to work on suse 9.0
+
 0.25.2 - fixes for Mac OS 10.2 and Fedora Core 1 compatibility
 	timezonefile class build is now independent of datetime
 
