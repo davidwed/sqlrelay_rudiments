@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		passwd	*pwd;
-		char	buffer[1024];
+		protoent	*pe;
+		char		buffer[1024];

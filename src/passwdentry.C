@@ -13,7 +13,6 @@ int passwdentry::initialize(const char *username) {
 	}
 	#ifdef HAVE_GETPWNAM_R
 		pwd=new passwd;
-		char	buffer[1024];
 		return (getpwnam_r(username,pwd,buffer,1024,&pwd)==0);
 	#else
 		return ((pwd=getpwnam(username))!=NULL);
@@ -26,7 +25,6 @@ int passwdentry::initialize(uid_t userid) {
 	}
 	#ifdef HAVE_GETPWUID_R
 		pwd=new passwd;
-		char	buffer[1024];
 		return (getpwuid_r(userid,pwd,buffer,1024,&pwd)==0);
 	#else
 		return ((pwd=getpwuid(userid))!=NULL);

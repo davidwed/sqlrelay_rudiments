@@ -20,6 +20,7 @@ install:
 	$(INSTALL) -m 644 rudiments/fileproperties.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filesystem.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/groupentry.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/hostentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetclientsocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetserversocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/listener.h $(incdir)/rudiments
@@ -27,6 +28,7 @@ install:
 	$(INSTALL) -m 644 rudiments/memorypool.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/passwdentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/permissions.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/protocolentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/randomnumber.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/regularexpression.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/semaphoreset.h $(incdir)/rudiments
@@ -70,6 +72,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/filesysteminlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/groupentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/groupentryinlines.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/private/hostentry.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/private/hostentryinlines.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/inetsocket.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/inetsocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/inetclientsocketinlines.h $(incdir)/rudiments/private
@@ -86,6 +90,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/passwdentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/passwdentryinlines.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/permissionsinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/protocolentry.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/protocolentryinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/randomnumberinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/regularexpression.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/regularexpressioninlines.h $(incdir)/rudiments/private

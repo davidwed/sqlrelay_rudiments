@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions regexp sem2 shm2 text datetime dtd mem random sem1 shm1 signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem2 shm2 text datetime dtd mem random sem1 shm1 signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions regexp sem1 sem2 shm1 shm2 text datetime dtd mem random signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dtd mem random signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 
 rebuild: clean all
@@ -52,6 +52,9 @@ passwdgroup: passwdgroup.C passwdgroup.lo
 
 permissions: permissions.C permissions.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ permissions.lo -L../src -lrudiments_p
+
+protohost: protohost.C protohost.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ protohost.lo -L../src -lrudiments_p
 
 regexp: regexp.C regexp.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ regexp.lo -L../src -lrudiments_p

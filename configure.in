@@ -210,9 +210,17 @@ AC_MSG_CHECKING(gethostbyname_r)
 AC_TRY_COMPILE([#include <netdb.h>],
 gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1, Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(gethostbyaddr_r)
+AC_TRY_COMPILE([#include <netdb.h>],
+gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1, Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(getprotobyname_r)
 AC_TRY_COMPILE([#include <netdb.h>],
 getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R,1, Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getprotobynumber_r)
+AC_TRY_COMPILE([#include <netdb.h>],
+getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1, Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
 AC_SUBST(SOCKETLIB)

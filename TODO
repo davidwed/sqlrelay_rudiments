@@ -1,6 +1,11 @@
+connectiondata should just be generic name/value list class
+need generic parser/lexer classes, use them for xmlsax
+
 why does setting the user of a semaphore cause it to set it's queue to 0
 
-netdb class to abstract netdb.h
+print methods for passwdentry, groupentry
+
+document passwdentry/groupentry
 
 document/test program for filedescriptor
 

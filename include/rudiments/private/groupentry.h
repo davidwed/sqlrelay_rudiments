@@ -3,3 +3,4 @@
 
 	private:
 		group	*grp;
+		char	buffer[1024];

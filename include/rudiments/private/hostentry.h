@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		passwd	*pwd;
+		hostent	*he;
 		char	buffer[1024];

@@ -52,11 +52,17 @@
 /* Some systems have getgrnam_r */
 #undef HAVE_GETGRNAM_R
 
+/* Some systems have gethostbyaddr_r */
+#undef HAVE_GETHOSTBYADDR_R
+
 /* Some systems have gethostbyname_r */
 #undef HAVE_GETHOSTBYNAME_R
 
 /* Some systems have getprotobyname_r */
 #undef HAVE_GETPROTOBYNAME_R
+
+/* Some systems have getprotobynumber_r */
+#undef HAVE_GETPROTOBYNUMBER_R
 
 /* Some systems have getpwnam_r */
 #undef HAVE_GETPWNAM_R
