@@ -9,6 +9,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
+filedestination::filedestination() {
+}
+
+filedestination::~filedestination() {
+}
+
 bool filedestination::open(const char *filename) {
 	return logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,
 				permissions::ownerReadWrite());

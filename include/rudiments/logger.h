@@ -38,6 +38,8 @@ class syslogdestination : public logdestination {
 // The filedestination class writes log data to a file.
 class filedestination : public logdestination {
 	public:
+			filedestination();
+		virtual	~filedestination();
 		bool	open(const char *filename);
 		void	close();
 	#include <rudiments/private/filedestination.h>

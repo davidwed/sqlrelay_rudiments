@@ -1,13 +1,3 @@
-solaris:
-	can't find pcre or openssl
-
-if openssl/pcre libs are installed, but not includes, configure still tries
-	to include openssl/pcre support
-
-what does the logger.C warning mean
-
---------------------------------------------------------------------------------
-
 fix math class
 wrap shm_open/shm_unlink somewhere
 move sleep methods into another class
