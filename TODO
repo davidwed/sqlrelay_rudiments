@@ -1,4 +1,4 @@
-document shadowentry, serviceentry, rpcentry, timezonefile classes
+document timezonefile classes
 
 a termios class would be nice
 a thread class would be nice
@@ -15,6 +15,7 @@ test invalid xml
 handle CDATA/internal subsets better
 is xmldom really DOM compliant?
 xml classes need to support entities defined in the DOCTYPE declaration
+xml comment problem?
 
 support non-posix semaphores
 handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 

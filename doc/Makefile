@@ -39,10 +39,13 @@ install:
 	$(INSTALL) -m 644 classes/protocolentry.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/randomnumber.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/regularexpression.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/rpcentry.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/semaphoreset.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/server.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/serversocket.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/serviceentry.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/sharedmemory.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/shadowentry.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/signalclasses.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/stringbuffer.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/string.h.html $(docdir)/classes
