@@ -62,6 +62,10 @@ void daemonprocess::detach() const {
 
 	// fork and let the parent process exit
 	if (fork()) {
+		// cygwin needs a sleep or both processes will exit
+		#ifdef __CYGWIN__
+		sleep(1);
+		#endif
 		_exit(0);
 	}
 	
