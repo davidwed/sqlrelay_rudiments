@@ -13,6 +13,10 @@
 // Daemons typically perform "housecleaning" tasks or serve data to client
 // programs.  See the server class.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class daemonprocess {
 	public:
 				daemonprocess();
@@ -90,5 +94,9 @@ class daemonprocess {
 	#include <rudiments/private/daemonprocess.h>
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

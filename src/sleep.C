@@ -13,6 +13,10 @@
 	#include <unistd.h>
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 bool sleep::macrosleep(long seconds) {
 	timespec	nanotimetosleep;
 	nanotimetosleep.tv_sec=seconds;
@@ -161,3 +165,7 @@ bool sleep::nanosleep(timespec *timetosleep, timespec *timeremaining) {
 
 	#endif
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

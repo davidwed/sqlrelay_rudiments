@@ -8,6 +8,10 @@
 
 // The container class provides base class for classes which store related data.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class container {
 	public:
 			container();
@@ -52,5 +56,9 @@ class container {
 
 	#include <rudiments/private/container.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -8,6 +8,10 @@
 
 // The mutex class provides an interface to pthreads mutual exclusion locks.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class mutex {
 	public:
 			mutex();
@@ -35,5 +39,9 @@ class mutex {
 
 	#include <rudiments/private/mutex.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

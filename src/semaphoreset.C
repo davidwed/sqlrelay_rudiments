@@ -9,7 +9,10 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/ipc.h>
-#include <sys/sem.h>
+
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 #ifndef HAVE_SEMUN
 union semun {
@@ -301,3 +304,7 @@ mode_t semaphoreset::getPermissions() {
 	}
 	return 0;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

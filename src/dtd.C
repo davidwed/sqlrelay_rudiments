@@ -6,10 +6,14 @@
 
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 bool dtd::parseFile(const char *filename) {
 	if (!xmld.parseFile(filename)) {
-		clearError();
-		appendError(xmld.getError());
+		err.clear();
+		err.append(xmld.getError());
 		return false;
 	}
 	if (!parseDtd()) {
@@ -20,8 +24,8 @@ bool dtd::parseFile(const char *filename) {
 
 bool dtd::parseString(const char *string) {
 	if (!xmld.parseString(string)) {
-		clearError();
-		appendError(xmld.getError());
+		err.clear();
+		err.append(xmld.getError());
 		return false;
 	}
 	if (!parseDtd()) {
@@ -114,12 +118,12 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 	} else {
 
 		// parse the list, it should be "delimiter" seperated values
-		char	*ptr1=(char *)list;
-		char	*ptr2;
+		const char	*ptr1=list;
+		const char	*ptr2;
 		int	length;
 		char	*value;
 		char	count[2];
-		count[1]=(char)NULL;
+		count[1]='\0';
 		for (;;) {
 	
 			// look for the specified delimiter
@@ -128,13 +132,13 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			// if we don't find the delimiter,
 			// use the end of the string instead 
 			if (!ptr2) {
-				ptr2=(char *)(list+charstring::length(list));
+				ptr2=list+charstring::length(list);
 			}
 	
 			// parse out the value, including the * or +
 			length=ptr2-ptr1;
 			value=new char[length+1];
-			value[length]=(char)NULL;
+			value[length]='\0';
 			charstring::copy(value,ptr1,length);
 
 			// if specified, evaluate any trailing *'s or +'s and
@@ -144,8 +148,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 				if (count[0]!='*' && count[0]!='+') {
 					count[0]='1';
 				} else {
-					value[charstring::length(value)-1]=
-								(char)NULL;
+					value[charstring::length(value)-1]='\0';
 				}
 			}
 
@@ -246,9 +249,17 @@ xmldom *dtd::xml() {
 	return &xmldtd;
 }
 
+char *dtd::getError() {
+	return err.getString();
+}
+
 void dtd::nodeError(xmldomnode *node) {
 	stringbuffer	*xml=node->xml();
-	appendError("error processing:\n");
-	appendError(xml->getString());
+	err.append("error processing:\n");
+	err.append(xml->getString());
 	delete xml;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

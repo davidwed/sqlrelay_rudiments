@@ -14,6 +14,10 @@
 	extern	char	**environ;
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 
 environment::~environment() {
@@ -28,18 +32,18 @@ environment::~environment() {
 
 bool environment::setValue(const char *variable, const char *value) {
 	char	*pestr;
-	if (envstrings.getData((char *)variable,&pestr)) {
+	if (envstrings.getData(const_cast<char *>(variable),&pestr)) {
 		delete[] pestr;
 	}
 	pestr=new char[charstring::length(variable)+
 			charstring::length(value)+2];
 	sprintf(pestr,"%s=%s",variable,value);
 	if (putenv(pestr)!=-1) {
-		envstrings.setData((char *)variable,pestr);
+		envstrings.setData(const_cast<char *>(variable),pestr);
 		return true;
 	} else {
 		delete[] pestr;
-		envstrings.removeData((char *)variable);
+		envstrings.removeData(const_cast<char *>(variable));
 		return false;
 	}
 }
@@ -74,3 +78,7 @@ void environment::remove(const char *variable) {
 char **environment::variables() {
 	return environ;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

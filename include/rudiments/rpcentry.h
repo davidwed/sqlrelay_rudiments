@@ -8,6 +8,10 @@
 
 // The rpcentry class provides methods for retrieving entries from /etc/rpc
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class rpcentry {
 	public:
 
@@ -58,5 +62,9 @@ class rpcentry {
 
 	#include <rudiments/private/rpcentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

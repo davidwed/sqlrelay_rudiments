@@ -16,6 +16,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
 pthread_mutex_t	*rpcentry::remutex;
@@ -113,12 +117,12 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 #ifdef RUDIMENTS_HAS_THREADS
 		return (!(remutex && pthread_mutex_lock(remutex)) &&
 			((re=((rpcname)
-				?getrpcbyname((char *)rpcname)
+				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && pthread_mutex_unlock(remutex)));
 #else
 		return ((re=((rpcname)
-				?getrpcbyname((char *)rpcname)
+				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL);
 #endif
 	#endif
@@ -179,4 +183,8 @@ void rpcentry::print() const {
 	}
 }
 
+#endif
+
+#ifdef RUDIMENTS_NAMESPACE
+}
 #endif

@@ -9,6 +9,10 @@
 // The server class provides a base class for classes that implement the server
 // side of a client-server communication model.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class server : public filedescriptor {
 	public:
 			server();
@@ -18,5 +22,9 @@ class server : public filedescriptor {
 		virtual	bool	listen(int backlog)=0;
 		virtual	filedescriptor	*accept()=0;
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

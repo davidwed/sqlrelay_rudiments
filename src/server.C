@@ -3,6 +3,14 @@
 
 #include <rudiments/server.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 server::server() : filedescriptor() {}
 
 server::~server() {}
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

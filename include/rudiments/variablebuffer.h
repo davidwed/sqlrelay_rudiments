@@ -8,6 +8,10 @@
 
 // The variablebuffer class can be used to store raw data of arbitrary length.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class variablebuffer {
 	public:
 			variablebuffer(size_t initialsize, size_t increment);
@@ -100,5 +104,9 @@ class variablebuffer {
 
 	#include <rudiments/private/variablebuffer.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -16,6 +16,10 @@
 // for wait...
 #include <sys/wait.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #ifdef __GNUC__
 signalhandler	daemonprocess::deadchildhandler;
 signalhandler	daemonprocess::shutdownhandler;
@@ -28,6 +32,8 @@ daemonprocess::daemonprocess() {
 
 	// we want daemons to wait for children to die before shutting down,
 	// so register some default shutdown/crash handlers that only do that
+	// FIXME: it should be possible to use one of the C++ casting operators
+	// here (and elsewhere in this class), but I'm not really sure how...
 	shutdownhandler.setHandler((void *)defaultShutDown);
 	shutdownhandler.handleSignal(SIGINT);
 	shutdownhandler.handleSignal(SIGTERM);
@@ -168,3 +174,7 @@ int daemonprocess::runAsGroupId(gid_t gid) const {
 		return 1;
 	#endif
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

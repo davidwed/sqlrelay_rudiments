@@ -8,6 +8,10 @@
 
 // The device class provides methods for interacting with devices.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class device : public file {
 	public:
 
@@ -30,5 +34,9 @@ class device : public file {
 			//
 			// Returns true on success and false on failure.
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

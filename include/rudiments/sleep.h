@@ -8,6 +8,10 @@
 
 // The sleep class provides methods for suspending process execution.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class sleep {
 	public:
 
@@ -82,5 +86,9 @@ class sleep {
 				// of seconds and nanoseconds that were not
 				// slept.
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

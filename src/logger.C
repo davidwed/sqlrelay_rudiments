@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 filedestination::filedestination() {
 }
 
@@ -72,9 +76,9 @@ void logger::removeAllLogDestinations() {
 char *logger::logHeader(const char *name) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
-	char	*dtstring=dt.getString();
-	char	*retval=new char[charstring::length(dtstring)+
-					charstring::length(name)+16];
+	const char	*dtstring=dt.getString();
+	char		*retval=new char[charstring::length(dtstring)+
+						charstring::length(name)+16];
 	sprintf(retval,"%s %s [%d]",dtstring,name,getpid());
 	return retval;
 }
@@ -127,3 +131,7 @@ void logger::write(const char *logentry) {
 		current=(loggerlistnode *)current->getNext();
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

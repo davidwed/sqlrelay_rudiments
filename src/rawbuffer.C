@@ -10,6 +10,10 @@
 extern "C" void swab(const void *from, void *to, ssize_t n);
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 void *rawbuffer::copy(void *dest, const void *src, size_t size) {
 	return (dest && src)?memcpy(dest,src,size):NULL;
 }
@@ -26,7 +30,8 @@ void *rawbuffer::copyUntil(void *dest, const void *src,
 void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 	if (dest && src) {
 		#ifdef HAVE_SWAB_CHAR
-		swab((const char *)src,(char *)dest,size);
+		swab(static_cast<const char *>(src),
+			static_cast<char *>(dest),size);
 		#else
 		swab(src,dest,size);
 		#endif
@@ -35,7 +40,7 @@ void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 }
 
 void *rawbuffer::set(void *dest, unsigned char character, size_t size) {
-	return (dest)?memset(dest,(int)character,size):NULL;
+	return (dest)?memset(dest,static_cast<int>(character),size):NULL;
 }
 
 void *rawbuffer::zero(void *dest, size_t size) {
@@ -59,12 +64,14 @@ void *rawbuffer::findLast(const void *haystack,
 	#else
 		if (haystack && needle) {
 			unsigned char	realneedle=needle;
-			for (unsigned char *ptr=
-				((unsigned char *)haystack)+size;
-						ptr>=haystack; ptr--) {
+			for (const unsigned char *ptr=
+				(static_cast<const unsigned char *>(haystack))+
+				size;
+				ptr>=haystack; ptr--) {
 			
 				if (*ptr==realneedle) {
-					return (void *)ptr;
+					return const_cast<void *>(
+						static_cast<const void *>(ptr));
 				}
 			}
 		}
@@ -79,12 +86,19 @@ void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
 			memmem(haystack,haystacksize,needle,needlesize):NULL;
 	#else
 		if (haystack && needle) {
-			unsigned char	*endptr=(unsigned char *)haystack+
-							haystacksize-needlesize;
-			for (unsigned char *ptr=(unsigned char *)haystack;
-							ptr<endptr; ptr++) {
-				if (!memcmp((void *)ptr,needle,needlesize)) {
-					return (void *)ptr;
+
+			const unsigned char	*endptr=
+				static_cast<const unsigned char *>(haystack)+
+					haystacksize-needlesize;
+
+			for (const unsigned char *ptr=
+				static_cast<const unsigned char *>(haystack);
+				ptr<endptr; ptr++) {
+
+				if (!memcmp(static_cast<const void *>(ptr),
+							needle,needlesize)) {
+					return const_cast<void *>(
+						static_cast<const void *>(ptr));
 				}
 			}
 		}
@@ -96,13 +110,21 @@ void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
 				const void *needle, size_t needlesize) {
 
 	if (haystack && needle) {
-		for (unsigned char *ptr=((unsigned char *)haystack)+
+		for (const unsigned char *ptr=
+			static_cast<const unsigned char *>(haystack)+
 						haystacksize-needlesize;
-							ptr>=haystack; ptr--) {
-			if (!memcmp((void *)ptr,needle,needlesize)) {
-				return (void *)ptr;
+			ptr>=haystack; ptr--) {
+
+			if (!memcmp(static_cast<const void *>(ptr),
+						needle,needlesize)) {
+				return const_cast<void *>(
+					static_cast<const void *>(ptr));
 			}
 		}
 	}
 	return NULL;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

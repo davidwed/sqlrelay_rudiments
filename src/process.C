@@ -5,6 +5,10 @@
 
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 pid_t process::getProcessId() {
 	return getpid();
 }
@@ -80,3 +84,7 @@ bool process::setEffectiveGroupId(gid_t gid) {
 bool process::setRealAndEffectiveGroupId(gid_t gid, gid_t egid) {
 	return !setregid(gid,egid);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -46,6 +46,9 @@
 //		ucontext.h - user-level context switching
 //			getcontext(),setcontext(),swapcontext(),makecontext()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 class process {
 	public:
@@ -136,5 +139,9 @@ class process {
 				// set to the new effective group id.
 				// Returns true on success and false on failure.
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

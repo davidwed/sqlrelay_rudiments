@@ -8,6 +8,10 @@
 
 // The groupentry class provides methods for retrieving entries from /etc/group
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class groupentry {
 	public:
 
@@ -65,5 +69,9 @@ class groupentry {
 
 	#include <rudiments/private/groupentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

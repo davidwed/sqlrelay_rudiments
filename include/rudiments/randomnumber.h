@@ -25,6 +25,10 @@
 // same value before all numbers in the range have been returned because
 // it scales the result of generateNumber() which operates on a larger range.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class randomnumber {
 	public:
 		static	int	generateNumber(int seed);
@@ -73,5 +77,9 @@ class randomnumber {
 
 	#include <rudiments/private/randomnumber.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

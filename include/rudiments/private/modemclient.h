@@ -1,6 +1,6 @@
 	protected:
-		char		*connectscript;
-		char		*disconnectscript;
-		char		*phonenumber;
+		const char	*connectscript;
+		const char	*disconnectscript;
+		const char	*phonenumber;
 		unsigned int	retrywait;
 		unsigned int	retrycount;

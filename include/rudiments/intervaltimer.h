@@ -9,6 +9,10 @@
 // The intervaltimer class provides methods for interfacing with
 // interval timers.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class intervaltimer {
 	public:
 			intervaltimer(int which);
@@ -98,5 +102,9 @@ class intervaltimer {
 
 	#include <rudiments/private/intervaltimer.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

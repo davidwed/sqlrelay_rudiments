@@ -12,6 +12,10 @@
 // Regular expressions are complex, powerful, used in command line
 // programs like grep, sed and find, and extensively in Perl.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class regularexpression {
 	public:
 
@@ -74,5 +78,9 @@ class regularexpression {
 
 	#include <rudiments/private/regularexpression.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

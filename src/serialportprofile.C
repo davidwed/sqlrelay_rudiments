@@ -8,6 +8,10 @@
 
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 serialportprofile::serialportprofile() {
 	defaultOptions();
 }
@@ -32,11 +36,15 @@ void serialportprofile::setOutputOptions(tcflag_t flags) {
 }
 
 void serialportprofile::setControlCharacters(cc_t *c_cc) {
-	rawbuffer::copy((void *)&tio.c_cc,(void *)c_cc,sizeof(cc_t)*NCCS);
+	rawbuffer::copy(static_cast<void *>(&tio.c_cc),
+			static_cast<const void *>(c_cc),
+			sizeof(cc_t)*NCCS);
 }
 
 void serialportprofile::setOptions(termios *newtio) {
-	rawbuffer::copy((void *)&tio,(void *)newtio,sizeof(tio));
+	rawbuffer::copy(static_cast<void *>(&tio),
+			static_cast<const void *>(newtio),
+			sizeof(tio));
 }
 
 void serialportprofile::defaultControlOptions() {
@@ -56,11 +64,11 @@ void serialportprofile::defaultOutputOptions() {
 }
 
 void serialportprofile::defaultControlCharacters() {
-	rawbuffer::set((void *)&tio.c_cc,0,sizeof(tio.c_cc));
+	rawbuffer::zero(static_cast<void *>(&tio.c_cc),sizeof(tio.c_cc));
 }
 
 void serialportprofile::defaultOptions() {
-	rawbuffer::set((void *)&tio,0,sizeof(tio));
+	rawbuffer::zero(static_cast<void *>(&tio),sizeof(tio));
 }
 
 bool serialportprofile::inputBaud(serialportprofile::baudrate_t baudrate) {
@@ -1176,3 +1184,7 @@ serialportprofile::flowcontrol_t serialportprofile::flowControl() {
 		return fc_none;
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

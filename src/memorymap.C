@@ -12,6 +12,10 @@
 	#define ADDRCAST void *
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 memorymap::memorymap() {
 	data=NULL;
 	length=0;
@@ -44,8 +48,8 @@ bool memorymap::setProtection(int protection) {
 }
 
 bool memorymap::setProtection(off_t offset, size_t len, int protection) {
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !mprotect((ADDRCAST)ptr,len,protection);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !mprotect(reinterpret_cast<ADDRCAST>(ptr),len,protection);
 }
 
 void *memorymap::getData() {
@@ -62,15 +66,16 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 
 bool memorymap::sync(off_t offset, size_t len,
 			bool immediate, bool invalidate) {
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !msync((ADDRCAST)ptr,len,((immediate)?MS_SYNC:MS_ASYNC)|
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !msync(reinterpret_cast<ADDRCAST>(ptr),len,
+				((immediate)?MS_SYNC:MS_ASYNC)|
 					((invalidate)?MS_INVALIDATE:0));
 }
 
 bool memorymap::sequentialAccess(off_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((ADDRCAST)ptr,len,MADV_SEQUENTIAL);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !madvise(reinterpret_cast<ADDRCAST>(ptr),len,MADV_SEQUENTIAL);
 	#else
 	return true;
 	#endif
@@ -78,8 +83,8 @@ bool memorymap::sequentialAccess(off_t offset, size_t len) {
 
 bool memorymap::randomAccess(off_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((ADDRCAST)ptr,len,MADV_RANDOM);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !madvise(reinterpret_cast<ADDRCAST>(ptr),len,MADV_RANDOM);
 	#else
 	return true;
 	#endif
@@ -87,8 +92,8 @@ bool memorymap::randomAccess(off_t offset, size_t len) {
 
 bool memorymap::willNeed(off_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((ADDRCAST)ptr,len,MADV_WILLNEED);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !madvise(reinterpret_cast<ADDRCAST>(ptr),len,MADV_WILLNEED);
 	#else
 	return true;
 	#endif
@@ -96,8 +101,8 @@ bool memorymap::willNeed(off_t offset, size_t len) {
 
 bool memorymap::wontNeed(off_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((ADDRCAST)ptr,len,MADV_DONTNEED);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !madvise(reinterpret_cast<ADDRCAST>(ptr),len,MADV_DONTNEED);
 	#else
 	return true;
 	#endif
@@ -105,8 +110,8 @@ bool memorymap::wontNeed(off_t offset, size_t len) {
 
 bool memorymap::normalAccess(off_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((ADDRCAST)ptr,len,MADV_NORMAL);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !madvise(reinterpret_cast<ADDRCAST>(ptr),len,MADV_NORMAL);
 	#else
 	return true;
 	#endif
@@ -118,8 +123,8 @@ bool memorymap::lock() {
 }
 
 bool memorymap::lock(off_t offset, size_t len) {
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !mlock((ADDRCAST)ptr,len);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !mlock(reinterpret_cast<ADDRCAST>(ptr),len);
 }
 #endif
 
@@ -129,8 +134,8 @@ bool memorymap::unlock() {
 }
 
 bool memorymap::unlock(off_t offset, size_t len) {
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !munlock((ADDRCAST)ptr,len);
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	return !munlock(reinterpret_cast<ADDRCAST>(ptr),len);
 }
 #endif
 
@@ -151,8 +156,8 @@ bool memorymap::inMemory(off_t offset, size_t len) {
 	#endif
 
 	// call mincore to fill the array
-	unsigned char	*ptr=((unsigned char *)data)+offset;
-	if (mincore((ADDRCAST)ptr,len,tmp)) {
+	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	if (mincore(reinterpret_cast<ADDRCAST>(ptr),len,tmp)) {
 		return false;
 	}
 
@@ -184,5 +189,9 @@ bool memorymap::lockAllFuture() {
 #ifdef HAVE_MUNLOCKALL
 bool memorymap::unlockAll() {
 	return !munlockall();
+}
+#endif
+
+#ifdef RUDIMENTS_NAMESPACE
 }
 #endif

@@ -4,8 +4,14 @@
 #ifndef RUDIMENTS_TIMEZONEFILE_H
 #define RUDIMENTS_TIMEZONEFILE_H
 
+#include <rudiments/private/config.h>
+
 // The timezonefile class provides methods for parsing and accessing timezone
 // files such as are typically found in /usr/share/zoneinfo.
+
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 struct ttinfo {
 	long		tt_gmtoff;
@@ -89,5 +95,9 @@ class timezonefile {
 
 	#include <rudiments/private/timezonefile.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

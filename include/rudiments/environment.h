@@ -9,6 +9,10 @@
 // The environment class provides methods for accessing and manipulating
 // environment variables.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class environment {
 	public:
 			~environment();
@@ -31,5 +35,9 @@ class environment {
 	#include <rudiments/private/environment.h>
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

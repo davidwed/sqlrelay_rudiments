@@ -8,6 +8,10 @@
 
 #include <rudiments/private/networkinterfacesincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 typedef listnode< networkinterface * >	networkinterfacelistnode;
 typedef list< networkinterface *, networkinterfacelistnode >
 						networkinterfacelist;
@@ -34,13 +38,17 @@ class networkinterface {
 	#include <rudiments/private/networkinterface.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/networkinterfaceinlines.h>
-#endif
-
 class networkinterfaces {
 	public:
 		static	networkinterfacelist	*getList();
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
+
+#ifdef ENABLE_RUDIMENTS_INLINES
+	#include <rudiments/private/networkinterfaceinlines.h>
+#endif
 
 #endif

@@ -15,6 +15,10 @@
 // signals:
 
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 
 // A signalset it just a collection of signals.  Many signal-related functions
 // take signalsets for arguments.  The signalset class makes signalsets
@@ -141,5 +145,9 @@ class signalhandler {
 	#include <rudiments/private/signalhandler.h>
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

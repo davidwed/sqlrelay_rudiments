@@ -10,5 +10,5 @@
 		int	send(const char *string,
 					namevaluepairs *variables);
 		int	expect(const char *string, char **abort);
-		int	substituteVariables(char **ch,
+		int	substituteVariables(const char **ch,
 					namevaluepairs *variables);

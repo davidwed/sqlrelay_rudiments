@@ -3,6 +3,10 @@
 
 #include <rudiments/mutex.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 mutex::mutex() {
 	pthread_mutex_init(mut,NULL);
 }
@@ -30,3 +34,7 @@ bool mutex::unlock() {
 pthread_mutex_t *mutex::getMutex() {
 	return mut;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -12,6 +12,10 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 sharedmemory::sharedmemory() {
 	created=false;
 	shmptr=NULL;
@@ -93,13 +97,13 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 		// attach to the segment, remove the
 		// segment and return 0 on failure
 		shmptr=shmat(shmid,0,0);
-		if ((long)shmptr==-1) {
+		if (reinterpret_cast<long>(shmptr)==-1) {
 			forceRemove();
 			return false;
 		}
 
 		// init the segment to zero's
-		rawbuffer::zero((void *)shmptr,size);
+		rawbuffer::zero(static_cast<void *>(shmptr),size);
 		return true;
 	}
 
@@ -125,7 +129,7 @@ bool sharedmemory::attach(key_t key) {
 	// to see if it's not -1, but allow that it could very well be less
 	// than -1 and still be valid.
 	return ((shmid=shmget(key,0,0))!=-1 &&
-			(long)(shmptr=shmat(shmid,0,0))!=-1);
+			reinterpret_cast<long>(shmptr=shmat(shmid,0,0))!=-1);
 }
 
 bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
@@ -139,20 +143,20 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		// attach to the segment, remove the
 		// segment and return 0 on failure
 		shmptr=shmat(shmid,0,0);
-		if ((long)shmptr==-1) {
+		if (reinterpret_cast<long>(shmptr)==-1) {
 			forceRemove();
 			return false;
 		}
 
 		// init the segment to zero's
-		rawbuffer::zero((void *)shmptr,size);
+		rawbuffer::zero(static_cast<void *>(shmptr),size);
 		return true;
 		
 	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))!=-1) {
 
 		// attach to the segment, return 1 on success and 0 on failure
 		shmptr=shmat(shmid,0,0);
-		return ((long)shmptr!=-1);
+		return (reinterpret_cast<long>(shmptr)!=-1);
 
 	}
 
@@ -190,3 +194,7 @@ bool sharedmemory::setGroupName(const char *groupname) {
 	return (groupentry::getGroupId(groupname,&groupid) &&
 						setGroupId(groupid));
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -9,6 +9,10 @@
 // like filedescriptor class, but read() returns EOF when a timeout has occurred
 // also, wraps termios.h functions
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class serialport : public filedescriptor {
 	public:
 
@@ -46,5 +50,9 @@ class serialport : public filedescriptor {
 		bool	sendBreak(int duration);
 			// tcsendbreak()
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

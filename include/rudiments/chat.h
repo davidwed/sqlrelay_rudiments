@@ -9,6 +9,10 @@
 // The chat class implements methods for chatting with something (such as
 // a modem) over a file descriptor or set of file descriptors.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class chat {
 	public:
 			chat(filedescriptor *fd);
@@ -94,5 +98,9 @@ class chat {
 
 	#include <rudiments/private/chat.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

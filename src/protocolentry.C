@@ -10,6 +10,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
 pthread_mutex_t	*protocolentry::pemutex;
@@ -180,3 +184,7 @@ void protocolentry::print() const {
 	}
 	printf("Number: %d\n",getNumber());
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

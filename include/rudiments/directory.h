@@ -9,6 +9,10 @@
 // The directory class provides methods for opening/closing a directory and
 // traversing it's files and subdirectories.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class directory {
 	public:
 			directory();
@@ -76,5 +80,9 @@ class directory {
 
 	#include <rudiments/private/directory.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

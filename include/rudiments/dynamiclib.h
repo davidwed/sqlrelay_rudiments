@@ -9,6 +9,10 @@
 // The dynamiclib class provides methods for loading, unloading and calling
 // functions from dynamically linked libraries.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class dynamiclib {
 	public:
 			dynamiclib();
@@ -51,5 +55,9 @@ class dynamiclib {
 
 	#include <rudiments/private/dynamiclib.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

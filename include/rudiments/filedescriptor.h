@@ -9,6 +9,12 @@
 // The filedescriptor class is a base class for other classes that utilize
 // file descriptors.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class listener;
+
 class filedescriptor {
 	public:
 			filedescriptor();
@@ -420,5 +426,9 @@ class filedescriptor {
 
 	#include <rudiments/private/filedescriptor.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

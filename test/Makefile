@@ -7,7 +7,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: svr sslsvr lsnr inetclnt sslclnt unixclnt dir dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep server.pem
+all: svr sslsvr lsnr inetclnt sslclnt unixclnt dir dmn group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep server.pem
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -16,7 +16,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dir dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dir dmn group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -50,9 +50,6 @@ dir: dir.C dir.lo
 
 dmn: dmn.C dmn.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dmn.lo -all-static $(LIBS)
-
-err: err.C err.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ err.lo -all-static $(LIBS)
 
 cmdline: cmdline.C cmdline.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ cmdline.lo -all-static $(LIBS)

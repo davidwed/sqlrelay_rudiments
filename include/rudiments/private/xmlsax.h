@@ -20,11 +20,12 @@
 			char	skipWhitespace(char current);
 			char	getCharacter();
 
-			char		*string;
-			char		*ptr;
+			const char	*string;
+			const char	*ptr;
 			file		fl;
 			#ifdef HAVE_MMAP
 			memorymap	mm;
 			#endif
 			long		line;
 			bool		allowtrailingtext;
+			stringbuffer	err;

@@ -10,7 +10,11 @@
 // class, you should create a class that inherits from it and implements the
 // virtual methods.
 
-class xmlsax : public errorhandler {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class xmlsax {
 	public:
 
 			xmlsax();
@@ -24,6 +28,9 @@ class xmlsax : public errorhandler {
 			// parse file "filename"
 		bool	parseString(const char *string);
 			// parse string "string"
+		char	*getError();
+			// if parseFile() or parseString() fails, returns
+			// the error that caused the failure
 
 	protected:
 		// Callback methods.  These methods are called as the XML is
@@ -47,5 +54,9 @@ class xmlsax : public errorhandler {
 
 	#include <rudiments/private/xmlsax.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

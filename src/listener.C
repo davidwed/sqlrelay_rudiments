@@ -12,6 +12,10 @@
 #include <sys/select.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 listener::listener() {
 	retryinterruptedwaits=true;
 }
@@ -148,3 +152,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		return selectresult;
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -4,6 +4,10 @@
 #include <rudiments/character.h>
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 bool character::isAlphanumeric(int c) {
 	return isalnum(c)!=0;
 }
@@ -90,3 +94,7 @@ void character::safePrint(char c) {
 		printf("(0x%02x)",c);
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

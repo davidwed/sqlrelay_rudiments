@@ -20,10 +20,18 @@
 //			getutent(_r)(),setutent(),endutent(),
 //			getutid(_r)(),getutline(_r)(),pututline()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class loginrecord {
 	public:
 
 	#include <rudiments/private/loginrecord.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

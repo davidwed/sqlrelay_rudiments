@@ -5,6 +5,8 @@
 		xmldom	xmld;
 		xmldom	xmldtd;
 
+		stringbuffer	err;
+
 		bool	parseDtd();
 		bool	newElement(xmldomnode *node);
 		bool	parseList(const char *attributelist,

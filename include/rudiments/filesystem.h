@@ -16,6 +16,10 @@
 // call initialize(), then use the non-static methods to access the properties
 // that you need.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class filesystem {
 	public:
 			filesystem();
@@ -265,5 +269,9 @@ class filesystem {
 
 	#include <rudiments/private/filesystem.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -2,6 +2,10 @@ netbsd-2.0 CMSG_SIZE bug
 
 valgrind errors
 
+all constructors need to initialize all member variables
+implement copy constructors, =operators (private if necessary)
+
+
 --------------------------------------------------------------------------------
 
 container class paradigm:

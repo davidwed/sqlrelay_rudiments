@@ -13,6 +13,10 @@
 #include <errno.h>
 #include <sys/ioctl.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 modemclient::modemclient() : client(), modemutil() {
 	connectscript="";
 	disconnectscript="";
@@ -26,11 +30,16 @@ modemclient::~modemclient() {
 
 void modemclient::initialize(namevaluepairs *cd) {
 	if (cd) {
-		cd->getData("device",&devicename);
-		cd->getData("baud",&baud);
-		cd->getData("connectscript",&connectscript);
-		cd->getData("phonenumber",&phonenumber);
-		cd->getData("disconnectscript",&disconnectscript);
+		cd->getData("device",
+			const_cast<char **>(&devicename));
+		cd->getData("baud",
+			const_cast<char **>(&baud));
+		cd->getData("connectscript",
+			const_cast<char **>(&connectscript));
+		cd->getData("phonenumber",
+			const_cast<char **>(&phonenumber));
+		cd->getData("disconnectscript",
+			const_cast<char **>(&disconnectscript));
 		char	*rwstr;
 		cd->getData("retrywait",&rwstr);
 		retrywait=charstring::toLong(rwstr);
@@ -47,9 +56,9 @@ void modemclient::initialize(const char *devicename, const char *baud,
 				unsigned int retrywait,
 				unsigned int retrycount) {
 	modemutil::initialize(devicename,baud);
-	this->connectscript=(char *)connectscript;
-	this->phonenumber=(char *)phonenumber;
-	this->disconnectscript=(char *)disconnectscript;
+	this->connectscript=connectscript;
+	this->phonenumber=phonenumber;
+	this->disconnectscript=disconnectscript;
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;
 }
@@ -57,7 +66,7 @@ void modemclient::initialize(const char *devicename, const char *baud,
 int modemclient::connect() {
 
 	namevaluepairs	phnvp;
-	phnvp.setData("phonenumber",phonenumber);
+	phnvp.setData("phonenumber",const_cast<char *>(phonenumber));
 
 	unsigned int	whichtry=0;
 	for (;;) {
@@ -122,3 +131,7 @@ bool modemclient::close() {
 	}
 	return true;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

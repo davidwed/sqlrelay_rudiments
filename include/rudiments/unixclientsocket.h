@@ -17,7 +17,11 @@
 // Its ultimate parent class: filedescriptor provides methods for reading and 
 // writing data and closing connections.
 
-class unixclientsocket : public clientsocket, public unixsocketutil {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class unixclientsocket : public clientsocket, private unixsocketutil {
 	public:
 
 			unixclientsocket();
@@ -74,5 +78,9 @@ class unixclientsocket : public clientsocket, public unixsocketutil {
 
 	#include <rudiments/private/unixclientsocket.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

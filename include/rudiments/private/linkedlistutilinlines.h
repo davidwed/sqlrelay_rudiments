@@ -9,6 +9,10 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 int linkedlistutil<datatype>::
@@ -75,5 +79,9 @@ RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<datatype>::print(datatype data) const {
 	printf("%lx",(unsigned long)data);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

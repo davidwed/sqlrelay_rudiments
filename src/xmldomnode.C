@@ -7,9 +7,13 @@
 
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	init(nullnode);
-	type=(xmldomnodetype)NULL;
+	type=static_cast<xmldomnodetype>(NULL);
 	nodename=NULL;
 	nodevalue=NULL;
 }
@@ -18,8 +22,8 @@ xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 				const char *name, const char *value) {
 	init(nullnode);
 	this->type=type;
-	nodename=(name)?charstring::duplicate((char *)name):NULL;
-	nodevalue=(value)?charstring::duplicate((char *)value):NULL;
+	nodename=(name)?charstring::duplicate(name):NULL;
+	nodevalue=(value)?charstring::duplicate(value):NULL;
 }
 
 void xmldomnode::init(xmldomnode *nullnode) {
@@ -70,7 +74,7 @@ xmldomnode *xmldomnode::createNullNode() {
 }
 
 xmldomnode *xmldomnode::getPreviousTagSibling() const {
-	xmldomnode	*node=(xmldomnode *)getPreviousSibling();
+	xmldomnode	*node=getPreviousSibling();
 	while (!node->isNullNode() && node->getType()!=TAG_XMLDOMNODETYPE) {
 		node=node->getPreviousSibling();
 	}
@@ -110,7 +114,7 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 }
 
 xmldomnode *xmldomnode::getNextTagSibling() const {
-	xmldomnode	*node=(xmldomnode *)getNextSibling();
+	xmldomnode	*node=getNextSibling();
 	while (!node->isNullNode() && node->getType()!=TAG_XMLDOMNODETYPE) {
 		node=node->getNextSibling();
 	}
@@ -530,7 +534,7 @@ stringbuffer *xmldomnode::getPath() const {
 
 	// run up the tree, counting parent nodes
 	int	ancestors=0;
-	xmldomnode	*node=(xmldomnode *)this;
+	const xmldomnode	*node=this;
 	while (!node->isNullNode() && node->getType()!=ROOT_XMLDOMNODETYPE) {
 		ancestors++;
 		node=node->getParent();
@@ -539,7 +543,7 @@ stringbuffer *xmldomnode::getPath() const {
 	// create pointers to the names of each parent node
 	char		*names[ancestors];
 	unsigned long	indices[ancestors];
-	node=(xmldomnode *)this;
+	node=this;
 	for (int index=ancestors-1; index>=0; index--) {
 
 		// get the name
@@ -547,8 +551,8 @@ stringbuffer *xmldomnode::getPath() const {
 
 		// figure out which sibling this node is
 		indices[index]=0;
-		for (xmldomnode *siblingnode=(xmldomnode *)node->
-				getPreviousTagSibling(names[index]);
+		for (xmldomnode *siblingnode=
+				node->getPreviousTagSibling(names[index]);
 			(!siblingnode->isNullNode() &&
 				siblingnode->getType()!=ROOT_XMLDOMNODETYPE);
 			siblingnode=siblingnode->
@@ -573,11 +577,11 @@ stringbuffer *xmldomnode::getPath() const {
 xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 
 	// Path: /element[index]/...
-	xmldomnode	*node=(xmldomnode *)this;
-	stringbuffer	name;
-	stringbuffer	indexstring;
-	stringbuffer	*buffer=&name;
-	char		*ptr=(char *)path;
+	const xmldomnode	*node=this;
+	stringbuffer		name;
+	stringbuffer		indexstring;
+	stringbuffer		*buffer=&name;
+	const char		*ptr=path;
 	for (;;) {
 
 		if (!*ptr || *ptr=='@') {
@@ -610,7 +614,7 @@ xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 		ptr++;
 	}
 
-	return node;
+	return const_cast<xmldomnode *>(node);
 }
 
 xmldomnode *xmldomnode::getAttributeByPath(const char *path,
@@ -632,3 +636,7 @@ char *xmldomnode::getAttributeValueByPath(const char *path,
 						const char *name) const {
 	return getChildByPath(path)->getAttributeValue(name);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

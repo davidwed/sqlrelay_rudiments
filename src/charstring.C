@@ -13,6 +13,10 @@
 	#include <strings.h>
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
@@ -25,10 +29,10 @@ char *charstring::findLast(const char *haystack, const char *needle) {
 		return NULL;
 	}
 	
-	char	*ptr=(char *)haystack+haystacklen-needlelen;
+	const char	*ptr=haystack+haystacklen-needlelen;
 	while (ptr>haystack) {
 		if (!compare(ptr,needle)) {
-			return ptr;
+			return const_cast<char *>(ptr);
 		}
 		ptr--;
 	}
@@ -80,7 +84,7 @@ void charstring::rightTrim(char *str, char character) {
 		i++;
 
 		// terminate the string there
-		str[i]=(char)NULL;
+		str[i]='\0';
 	}
 }
 
@@ -103,7 +107,7 @@ void charstring::leftTrim(char *str, char character) {
 			i++;
 		}
 		// store a null to the new end of string
-		str[j]=(char)NULL;
+		str[j]='\0';
 	}
 }
 
@@ -126,7 +130,7 @@ void charstring::strip(char *str, char character) {
 		}
 		index++;
 	}
-	str[index-total]=(char)NULL;
+	str[index-total]='\0';
 }
 
 void charstring::strip(char *str1, char *str2) {
@@ -150,7 +154,7 @@ void charstring::strip(char *str1, char *str2) {
 			index++;
 		}
 	}
-	str1[index-total]=(char)NULL;
+	str1[index-total]='\0';
 }
 
 bool charstring::isInteger(const char *str) {
@@ -159,7 +163,7 @@ bool charstring::isInteger(const char *str) {
 		return false;
 	}
 
-	for (char *ptr=(char *)str; *ptr; ptr++) {
+	for (const char *ptr=str; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
 			return false;
@@ -174,7 +178,7 @@ bool charstring::isInteger(const char *str, int size) {
 		return false;
 	}
 
-	char	*ptr=(char *)str;
+	const char	*ptr=str;
 	for (int index=0; index<size; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
@@ -192,7 +196,7 @@ bool charstring::isNumber(const char *str) {
 	}
 
 	int	decimal=0;
-	for (char *ptr=(char *)str; *ptr; ptr++) {
+	for (const char *ptr=str; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
 			return false;
@@ -210,8 +214,8 @@ bool charstring::isNumber(const char *str, int size) {
 		return false;
 	}
 
-	int	decimal=0;
-	char	*ptr=(char *)str;
+	const char	*ptr=str;
+	int		decimal=0;
 	for (int index=0; index<size; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
@@ -231,9 +235,9 @@ char *charstring::httpEscape(const char *input) {
 		return NULL;
 	}
 
-	char	*output=new char[strlen(input)*3+1];
-	char	*outptr=output;
-	char	*ptr=(char *)input;
+	char		*output=new char[strlen(input)*3+1];
+	char		*outptr=output;
+	const char	*ptr=input;
 	
 	while (*ptr) {
 		if (*ptr==' ') {
@@ -249,7 +253,7 @@ char *charstring::httpEscape(const char *input) {
 		outptr++;
 		ptr++;
 	}
-	(*outptr)=(char)NULL;
+	(*outptr)='\0';
 
 	return output;
 }
@@ -535,8 +539,13 @@ size_t charstring::length(const char *string) {
 	return (string)?strlen(string):0;
 }
 
+size_t charstring::length(const unsigned char *string) {
+	// FIXME: I'd think a static_cast would work here...
+	return length(reinterpret_cast<const char *>(string));
+}
+
 void charstring::zero(char *str, size_t size) {
-	rawbuffer::set((void *)str,0,size);
+	rawbuffer::set(static_cast<void *>(str),0,size);
 }
 
 char *charstring::append(char *dest, const char *source) {
@@ -781,13 +790,13 @@ char *charstring::duplicate(const char *str, size_t length) {
 	}
 	char	*buffer=new char[length+1];
 	copy(buffer,str,length);
-	buffer[length]=(char)NULL;
+	buffer[length]='\0';
 	return buffer;
 }
 #endif
 
 void charstring::safePrint(const char *string, int length) {
-	char	*ch=(char *)string;
+	const char	*ch=string;
 	for (int i=0; i<length && *ch; i++) {
 		character::safePrint(*ch);
 		ch++;
@@ -839,14 +848,14 @@ void charstring::split(const char *string, ssize_t stringlength,
 	for (int pass=0; pass<2; pass++) {
 
 		// set pointers to the beginning and end of the string
-		char	*start=(char *)string;
-		char	*end=(char *)string+stringlength;
+		const char	*start=string;
+		const char	*end=string+stringlength;
 
 		// initialize the list length
 		(*listlength)=0;
 
 		// loop through the string...
-		char *current=start;
+		const char	*current=start;
 		for (;;) {
 
 			// if there's not enough room left in the string for
@@ -902,3 +911,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 		}
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

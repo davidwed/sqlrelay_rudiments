@@ -7,6 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 memorypoolnode::memorypoolnode(size_t size) {
 	buffer=new unsigned char[size];
 	position=0;
@@ -66,7 +70,7 @@ unsigned char *memorypool::malloc(size_t length) {
 
 unsigned char *memorypool::calloc(size_t length) {
 	unsigned char	*buffer=malloc(length);
-	rawbuffer::zero((void *)buffer,length);
+	rawbuffer::zero(static_cast<void *>(buffer),length);
 	return buffer;
 }
 
@@ -139,3 +143,7 @@ void memorypool::print() {
 		segmentindex++;
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

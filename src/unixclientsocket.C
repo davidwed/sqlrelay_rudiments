@@ -6,6 +6,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/sleep.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {}
 
 unixclientsocket::~unixclientsocket() {}
@@ -76,9 +80,10 @@ int unixclientsocket::connect() {
 		}
 
 		// attempt to connect
-		if (clientsocket::connect((struct sockaddr *)&sockaddrun,
-				sizeof(sockaddrun),
-				timeoutsec,timeoutusec)==RESULT_SUCCESS) {
+		if (clientsocket::connect(
+			reinterpret_cast<struct sockaddr *>(&sockaddrun),
+			sizeof(sockaddrun),
+			timeoutsec,timeoutusec)==RESULT_SUCCESS) {
 			return RESULT_SUCCESS;
 		}
 	}
@@ -87,3 +92,7 @@ int unixclientsocket::connect() {
 	close();
 	return RESULT_ERROR;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

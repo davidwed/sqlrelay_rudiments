@@ -17,7 +17,11 @@
 // inetserversocket class (and possibly the unixserversocket class) in
 // conjunction with the listener class.
 
-class inetserversocket : public serversocket, public inetsocketutil {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class inetserversocket : public serversocket, private inetsocketutil {
 	public:
 			inetserversocket();
 		virtual	~inetserversocket();
@@ -79,5 +83,9 @@ class inetserversocket : public serversocket, public inetsocketutil {
 				// Writes the address of the client at
 				// the other end of "sock" to "buffer".
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -10,13 +10,17 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 intervaltimer::intervaltimer(int which) {
 	this->which=which;
 	initialize();
 }
 
 void intervaltimer::initialize() {
-	rawbuffer::zero((void *)&values,sizeof(values));
+	rawbuffer::zero(static_cast<void *>(&values),sizeof(values));
 }
 
 void intervaltimer::setInitialInterval(long seconds, long microseconds) {
@@ -25,8 +29,9 @@ void intervaltimer::setInitialInterval(long seconds, long microseconds) {
 }
 
 void intervaltimer::setInitialInterval(timeval *tv) {
-	rawbuffer::copy((void *)&(values.it_value),
-		(void *)tv,sizeof(values.it_value));
+	rawbuffer::copy(static_cast<void *>(&(values.it_value)),
+			static_cast<const void *>(tv),
+			sizeof(values.it_value));
 }
 
 void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
@@ -35,8 +40,9 @@ void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
 }
 
 void intervaltimer::setPeriodicInterval(timeval *tv) {
-	rawbuffer::copy((void *)&(values.it_interval),
-		(void *)tv,sizeof(values.it_interval));
+	rawbuffer::copy(static_cast<void *>(&(values.it_interval)),
+			static_cast<const void *>(tv),
+			sizeof(values.it_interval));
 }
 
 void intervaltimer::setIntervals(long seconds, long microseconds) {
@@ -50,7 +56,9 @@ void intervaltimer::setIntervals(timeval *tv) {
 }
 
 void intervaltimer::setIntervals(itimerval *itv) {
-	rawbuffer::copy((void *)&values,(void *)itv,sizeof(values));
+	rawbuffer::copy(static_cast<void *>(&values),
+			static_cast<const void *>(itv),
+			sizeof(values));
 }
 
 void intervaltimer::getInitialInterval(long *seconds,
@@ -64,8 +72,9 @@ void intervaltimer::getInitialInterval(long *seconds,
 }
 
 void intervaltimer::getInitialInterval(timeval *tv) const {
-	rawbuffer::copy((void *)tv,(void *)&(values.it_value),
-				sizeof(values.it_value));
+	rawbuffer::copy(static_cast<void *>(tv),
+			static_cast<const void *>(&(values.it_value)),
+			sizeof(values.it_value));
 }
 
 void intervaltimer::getPeriodicInterval(long *seconds,
@@ -79,12 +88,15 @@ void intervaltimer::getPeriodicInterval(long *seconds,
 }
 
 void intervaltimer::getPeriodicInterval(timeval *tv) const {
-	rawbuffer::copy((void *)tv,(void *)&(values.it_interval),
-				sizeof(values.it_interval));
+	rawbuffer::copy(static_cast<void *>(tv),
+			static_cast<const void *>(&(values.it_interval)),
+			sizeof(values.it_interval));
 }
 
 void intervaltimer::getIntervals(itimerval *itv) const {
-	rawbuffer::copy((void *)itv,(void *)&values,sizeof(values));
+	rawbuffer::copy(static_cast<void *>(itv),
+			static_cast<const void *>(&values),
+			sizeof(values));
 }
 
 bool intervaltimer::start() const {
@@ -93,7 +105,7 @@ bool intervaltimer::start() const {
 
 bool intervaltimer::start(itimerval *itv) const {
 	// Solaris 8 complains if the 2nd argument isn't cast
-	return !setitimer(which,(itimerval *)&values,itv);
+	return !setitimer(which,const_cast<itimerval *>(&values),itv);
 }
 
 bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
@@ -119,6 +131,10 @@ bool intervaltimer::getTimeRemaining(timeval *tv) const {
 
 bool intervaltimer::stop() const {
 	itimerval	stopvals;
-	rawbuffer::zero((void *)&stopvals,sizeof(stopvals));
+	rawbuffer::zero(static_cast<void *>(&stopvals),sizeof(stopvals));
 	return start(&stopvals);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

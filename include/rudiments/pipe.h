@@ -13,10 +13,18 @@
 // wrap:
 //	unistd.h - pipe(), pathconf()/fpathconf(): __POSIX_PIPE_BUF()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class pipe : public filedescriptor {
 	public:
 
 	#include <rudiments/private/pipe.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

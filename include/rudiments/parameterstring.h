@@ -14,6 +14,10 @@
 // These are often used as parameterstrings for databases or other similar
 // uses.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class parameterstring {
 	public:
 
@@ -27,5 +31,9 @@ class parameterstring {
 
 	#include <rudiments/private/parameterstring.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

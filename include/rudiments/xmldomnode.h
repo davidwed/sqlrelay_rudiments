@@ -101,7 +101,9 @@
 // 		a list of attribute nodes - unused
 // 		a list of child nodes - unused
 
-
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 // node types
 enum xmldomnodetype {
@@ -437,5 +439,9 @@ class xmldomnode {
 
 	#include <rudiments/private/xmldomnode.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

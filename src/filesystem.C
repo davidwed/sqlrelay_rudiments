@@ -8,6 +8,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 filesystem::filesystem() {
 	fd=-1;
 	closeflag=false;
@@ -959,3 +963,6 @@ char *filesystem::getTypeName() const {
 	}
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -4,6 +4,10 @@
 #define DONT_INLINE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/dictionary.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 // explicitly intstantiate namevaluepairs templates
 template class stringdictionarynode< char * >;
 template class stringdictionarylistnode< char * >;
@@ -21,3 +25,7 @@ template class dictionary< char *, char *,
 template class linkedlistnode< dictionarynode< char *, char * > * >;
 template class linkedlist< dictionarynode< char *, char * > *,
 				dictionarylistnode< char *, char* > >;
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

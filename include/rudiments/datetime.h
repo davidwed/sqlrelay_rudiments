@@ -9,6 +9,10 @@
 // The datetime class provides methods for converting date/time formats and
 // accessing various date/time values.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class datetime {
 	public:
 
@@ -116,8 +120,8 @@ class datetime {
 		int	getMinutes() const;
 		int	getSeconds() const;
 		int	getMonth() const;
-		char	*getMonthName() const;
-		char	*getMonthAbbreviation() const;
+		const char	*getMonthName() const;
+		const char	*getMonthAbbreviation() const;
 		int	getDayOfMonth() const;
 		int	getDayOfWeek() const;
 		int	getDayOfYear() const;
@@ -127,7 +131,7 @@ class datetime {
 			// returns 1 if daylight savings time is currently
 			// in effect and 0 if it isn't
 
-		char	*getTimeZoneString() const;
+		const char	*getTimeZoneString() const;
 			// returns a 3 character string representing the
 			// time zone
 
@@ -171,7 +175,7 @@ class datetime {
 
 		// These methods output conversions to other date/time
 		// formats.
-		char	*getString();
+		const char	*getString();
 			// returns "mm/dd/yyyy hh:mm:ss TZN"
 			// (Note that this method returns a pointer to an
 			// internal string which will be deleted if the
@@ -209,5 +213,9 @@ class datetime {
 
 	#include <rudiments/private/datetime.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

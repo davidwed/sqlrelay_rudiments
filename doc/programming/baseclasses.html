@@ -9,7 +9,6 @@
 
 <ul>
 <li><a href="#daemon">Using the Daemon Class</a></li>
-<li><a href="#errorhandler">Using the Error Handler Class</a></li>
 <li><a href="#filedescriptor">Using the File Descriptor Class</a></li>
 <li><a href="#file">Using the File Class</a></li>
 <li><a href="#server">Using the Server Socket Classes</a></li>
@@ -64,107 +63,6 @@ main() {
 }
 </PRE>
 
-
-<a name="errorhandler"></a>
-<span class="heading">Using the Error Handler Class</span><br><br>
-
-<p>The errorhandler class provides simple error handling methods to any class.
-To use the errorhandler class, your class should inherit from it.  Whenever
-your class needs to generate an error, it can call the clearError() methods
-and set the value of the protected "errorstr" strstream.  When a program needs
-to get the error message, it can call the public getError() method.</p>
-
-<p>The following program implements a file-handler class that generates errors
-using methods from the errorhandler class.</p>
-
-<PRE>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/errorhandler.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/permissions.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;unistd.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/stat.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;fcntl.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;stdlib.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;string.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;iostream.h&gt;</font>
-
-<font color="#288850"><b>class</b></font> fileclass : <font color="#a02828"><b>public</b></font> errorhandler {
-        <font color="#a02828"><b>public</b></font>:
-                <font color="#288850"><b>int</b></font>     openFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                ssize_t writeToFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *data);
-                ssize_t readFromFile(<font color="#288850"><b>char</b></font> *data, <font color="#288850"><b>size_t</b></font> length);
-                <font color="#288850"><b>int</b></font>     closeFile();
-        <font color="#a02828"><b>private</b></font>:
-                <font color="#288850"><b>int</b></font>     fd;
-};
-
-<font color="#288850"><b>int</b></font>     fileclass::openFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename) {
-
-        <font color="#a02828"><b>if</b></font> (!(fd=open(filename,O_RDWR|O_CREAT,permissions::ownerReadWrite()))) {
-                clearError();
-                *errorstr &lt;&lt; <font color="#f800f8">&quot;error: open() failed&quot;</font> &lt;&lt; ends;
-                <font color="#a02828"><b>return</b></font> <font color="#f800f8">0</font>;
-        }
-        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
-}
-
-ssize_t fileclass::writeToFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *data) {
-
-        <font color="#288850"><b>size_t</b></font>  length=strlen(data);
-        ssize_t returnlength=<font color="#f800f8">0</font>;
-        <font color="#a02828"><b>if</b></font> ((returnlength=write(fd,(<font color="#288850"><b>const</b></font> <font color="#288850"><b>void</b></font> *)data,length))!=length) {
-                clearError();
-                *errorstr &lt;&lt; <font color="#f800f8">&quot;error: write() failed&quot;</font> &lt;&lt; ends;
-        }
-        <font color="#a02828"><b>return</b></font> returnlength;
-}
-
-ssize_t fileclass::readFromFile(<font color="#288850"><b>char</b></font> *data, <font color="#288850"><b>size_t</b></font> length) {
-
-        ssize_t returnlength=<font color="#f800f8">0</font>;
-        <font color="#a02828"><b>if</b></font> ((returnlength=read(fd,(<font color="#288850"><b>void</b></font> *)data,length))!=length) {
-                clearError();
-                *errorstr &lt;&lt; <font color="#f800f8">&quot;error: read() failed&quot;</font> &lt;&lt; ends;
-        }
-        <font color="#a02828"><b>return</b></font> returnlength;
-}
-
-<font color="#288850"><b>int</b></font>     fileclass::closeFile() {
-
-        <font color="#a02828"><b>if</b></font> (close(fd)==-<font color="#f800f8">1</font>) {
-                clearError();
-                *errorstr &lt;&lt; <font color="#f800f8">&quot;error: close() failed&quot;</font> &lt;&lt; ends;
-                <font color="#a02828"><b>return</b></font> <font color="#f800f8">0</font>;
-        }
-        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
-}
-
-main() {
-
-        fileclass       fc;
-        <font color="#a02828"><b>if</b></font> (!fc.openFile(<font color="#f800f8">&quot;myfile&quot;</font>)) {
-                cerr &lt;&lt; fc.getError() &lt;&lt; endl;
-        }
-        <font color="#a02828"><b>if</b></font> (fc.writeToFile(<font color="#f800f8">&quot;hello&quot;</font>)!=<font color="#f800f8">5</font>) {
-                cerr &lt;&lt; fc.getError() &lt;&lt; endl;
-        }
-        <font color="#a02828"><b>if</b></font> (!fc.closeFile()) {
-                cerr &lt;&lt; fc.getError() &lt;&lt; endl;
-        }
-        <font color="#a02828"><b>if</b></font> (!fc.openFile(<font color="#f800f8">&quot;myfile&quot;</font>)) {
-                cerr &lt;&lt; fc.getError() &lt;&lt; endl;
-        }
-        <font color="#288850"><b>char</b></font>    data[<font color="#f800f8">6</font>];
-        data[<font color="#f800f8">5</font>]=(<font color="#288850"><b>char</b></font>)<font color="#f800f8">NULL</font>;
-        <font color="#a02828"><b>if</b></font> (fc.readFromFile(data,<font color="#f800f8">5</font>)!=<font color="#f800f8">5</font>) {
-                cerr &lt;&lt; fc.getError() &lt;&lt; endl;
-        }
-        cout &lt;&lt; data &lt;&lt; endl;
-        <font color="#a02828"><b>if</b></font> (!fc.closeFile()) {
-                cerr &lt;&lt; fc.getError() &lt;&lt; endl;
-        }
-}
-</PRE>
 
 <a name="#filedescriptor">
 <span class="heading">Using the File Descriptor Class</span><br><br>

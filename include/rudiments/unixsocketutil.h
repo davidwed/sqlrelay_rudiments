@@ -6,6 +6,10 @@
 
 #include <rudiments/private/unixsocketutilincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class unixsocketutil {
 	public:
 			unixsocketutil();
@@ -14,5 +18,9 @@ class unixsocketutil {
 
 	#include <rudiments/private/unixsocketutil.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

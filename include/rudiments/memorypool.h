@@ -6,6 +6,10 @@
 
 #include <rudiments/private/memorypoolincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 typedef	linkedlist<memorypoolnode *>		memorypoollist;
 typedef	linkedlistnode<memorypoolnode *>	memorypoollistnode;
 
@@ -55,5 +59,9 @@ class memorypool {
 
 	#include <rudiments/private/memorypool.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

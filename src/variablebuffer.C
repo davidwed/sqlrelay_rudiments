@@ -7,6 +7,10 @@
 
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	init(new unsigned char[initialsize],initialsize,increment);
 }
@@ -39,7 +43,9 @@ ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 		bytestoread=endofbuffer-position;
 	}
 
-	rawbuffer::copy((void *)data,(void *)(buffer+position),bytestoread);
+	rawbuffer::copy(static_cast<void *>(data),
+			static_cast<const void *>(buffer+position),
+			bytestoread);
 	position=position+bytestoread;
 
 	return bytestoread;
@@ -55,7 +61,9 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 	}
 
 	// copy the data into the buffer
-	rawbuffer::copy((void *)(buffer+position),(void *)data,size);
+	rawbuffer::copy(static_cast<void *>(buffer+position),
+			static_cast<const void *>(data),
+			size);
 
 	// increment the position indices
 	position=position+size;
@@ -66,51 +74,62 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 }
 
 variablebuffer *variablebuffer::write(const char *string) {
-	return write((unsigned char *)string,charstring::length(string));
+	return write(reinterpret_cast<const unsigned char *>(string),
+					charstring::length(string));
 }
 
 variablebuffer *variablebuffer::write(const char *string, size_t size) {
-	return write((unsigned char *)string,size);
+	return write(reinterpret_cast<const unsigned char *>(string),size);
 }
 
 variablebuffer *variablebuffer::write(char character) {
-	return write((unsigned char *)&character,sizeof(char));
+	return write(reinterpret_cast<const unsigned char *>(&character),
+								sizeof(char));
 }
 
 variablebuffer *variablebuffer::write(short number) {
-	return write((unsigned char *)&number,sizeof(short));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(short));
 }
 
 variablebuffer *variablebuffer::write(long number) {
-	return write((unsigned char *)&number,sizeof(long));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(long));
 }
 
 variablebuffer *variablebuffer::write(long long number) {
-	return write((unsigned char *)&number,sizeof(long long));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+							sizeof(long long));
 }
 
 variablebuffer *variablebuffer::write(unsigned char character) {
-	return write((unsigned char *)&character,sizeof(unsigned char));
+	return write(reinterpret_cast<const unsigned char *>(&character),
+							sizeof(unsigned char));
 }
 
 variablebuffer *variablebuffer::write(unsigned short number) {
-	return write((unsigned char *)&number,sizeof(unsigned short));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+							sizeof(unsigned short));
 }
 
 variablebuffer *variablebuffer::write(unsigned long number) {
-	return write((unsigned char *)&number,sizeof(unsigned long));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+							sizeof(unsigned long));
 }
 
 variablebuffer *variablebuffer::write(unsigned long long number) {
-	return write((unsigned char *)&number,sizeof(unsigned long long));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+						sizeof(unsigned long long));
 }
 
 variablebuffer *variablebuffer::write(float number) {
-	return write((unsigned char *)&number,sizeof(float));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(float));
 }
 
 variablebuffer *variablebuffer::write(double number) {
-	return write((unsigned char *)&number,sizeof(double));
+	return write(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(double));
 }
 
 void variablebuffer::clear() {
@@ -125,7 +144,9 @@ void variablebuffer::extend(size_t size) {
 	size_t	newbuffersize=buffersize+((size/increment)*increment)+
 					(((size%increment)>0)*increment);
 	unsigned char	*newbuffer=new unsigned char[newbuffersize];
-	rawbuffer::copy((void *)newbuffer,(void *)buffer,buffersize);
+	rawbuffer::copy(static_cast<void *>(newbuffer),
+			static_cast<const void *>(buffer),
+			buffersize);
 	delete[] buffer;
 	buffer=newbuffer;
 	buffersize=newbuffersize;
@@ -170,49 +191,64 @@ variablebuffer *variablebuffer::append(const unsigned char *data, size_t size) {
 }
 
 variablebuffer *variablebuffer::append(const char *string) {
-	return append((unsigned char *)string,charstring::length(string));
+	return append(reinterpret_cast<const unsigned char *>(string),
+						charstring::length(string));
 }
 
 variablebuffer *variablebuffer::append(const char *string, size_t size) {
-	return append((unsigned char *)string,size);
+	return append(reinterpret_cast<const unsigned char *>(string),size);
 }
 
 variablebuffer *variablebuffer::append(char character) {
-	return append((unsigned char *)&character,sizeof(char));
+	return append(reinterpret_cast<const unsigned char *>(&character),
+								sizeof(char));
 }
 
 variablebuffer *variablebuffer::append(short number) {
-	return append((unsigned char *)&number,sizeof(short));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(short));
 }
 
 variablebuffer *variablebuffer::append(long number) {
-	return append((unsigned char *)&number,sizeof(long));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(long));
 }
 
 variablebuffer *variablebuffer::append(long long number) {
-	return append((unsigned char *)&number,sizeof(long long));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+							sizeof(long long));
 }
 
 variablebuffer *variablebuffer::append(unsigned char character) {
-	return append((unsigned char *)&character,sizeof(unsigned char));
+	return append(reinterpret_cast<const unsigned char *>(&character),
+							sizeof(unsigned char));
 }
 
 variablebuffer *variablebuffer::append(unsigned short number) {
-	return append((unsigned char *)&number,sizeof(unsigned short));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+							sizeof(unsigned short));
 }
 
 variablebuffer *variablebuffer::append(unsigned long number) {
-	return append((unsigned char *)&number,sizeof(unsigned long));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+							sizeof(unsigned long));
 }
 
 variablebuffer *variablebuffer::append(unsigned long long number) {
-	return append((unsigned char *)&number,sizeof(unsigned long long));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+						sizeof(unsigned long long));
 }
 
 variablebuffer *variablebuffer::append(float number) {
-	return append((unsigned char *)&number,sizeof(float));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(float));
 }
 
 variablebuffer *variablebuffer::append(double number) {
-	return append((unsigned char *)&number,sizeof(double));
+	return append(reinterpret_cast<const unsigned char *>(&number),
+								sizeof(double));
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

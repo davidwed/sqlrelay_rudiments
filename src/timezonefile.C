@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 timezonefile::timezonefile() {
 	rawtimezonestring=NULL;
 	timezonestrings=NULL;
@@ -45,7 +49,7 @@ bool timezonefile::parseFile(const char *filename) {
 		printf("read magic failed\n");
 		return false;
 	}
-	magic[4]=(char)NULL;
+	magic[4]='\0';
 	if (charstring::compare(magic,"TZif")) {
 		printf("magic not TZif\n");
 		return false;
@@ -136,7 +140,7 @@ bool timezonefile::parseFile(const char *filename) {
 		printf("read rawtimezonestring failed\n");
 		return false;
 	}
-	rawtimezonestring[charcnt]=(char)NULL;
+	rawtimezonestring[charcnt]='\0';
 
 	// set pointers to the timezones
 	timezonestrings=new unsigned char *[typecnt];
@@ -305,7 +309,7 @@ void timezonefile::print() {
 	}
 	printf("rawtimezonestring: ");
 	for (int i=0; i<charcnt; i++) {
-		if (rawtimezonestring[i]==(char)NULL) {
+		if (rawtimezonestring[i]=='\0') {
 			printf(" ");
 		}
 		printf("%c",rawtimezonestring[i]);
@@ -326,3 +330,7 @@ void timezonefile::print() {
 		printf("transutclocal[%d]: %d\n",i,transutclocal[i]);
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

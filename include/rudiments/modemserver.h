@@ -6,7 +6,11 @@
 
 #include <rudiments/private/modemserverincludes.h>
 
-class modemserver : public server, public modemutil {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class modemserver : public server, private modemutil {
 	public:
 			modemserver();
 		virtual	~modemserver();
@@ -40,5 +44,9 @@ class modemserver : public server, public modemutil {
 
 	#include <rudiments/private/modemserver.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

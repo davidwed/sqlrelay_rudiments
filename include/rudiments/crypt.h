@@ -8,6 +8,10 @@
 
 // The crypt class provides a method that is useful for password encryption.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class crypt {
 	public:
 		static char	*encrypt(const char *password,
@@ -39,5 +43,9 @@ class crypt {
 
 	#include <rudiments/private/crypt.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -10,5 +10,3 @@
 #ifdef RUDIMENTS_HAS_SSL
 	#include <openssl/ssl.h>
 #endif
-
-class listener;

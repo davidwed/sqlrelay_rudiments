@@ -9,6 +9,10 @@
 // The shadowentry class provides methods for retrieving
 // entries from /etc/shadow
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class shadowentry {
 	public:
 
@@ -77,5 +81,9 @@ class shadowentry {
 
 	#include <rudiments/private/shadowentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

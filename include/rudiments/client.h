@@ -9,6 +9,10 @@
 // The client class provides a base class for classes that implement the client
 // side of a client-server communication model.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class client : public filedescriptor {
 	public:
 
@@ -27,5 +31,9 @@ class client : public filedescriptor {
 
 	#include <rudiments/private/client.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

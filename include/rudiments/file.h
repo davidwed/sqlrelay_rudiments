@@ -17,6 +17,10 @@
 // create an instance of the class, call open(), then use the non-static
 // methods.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class file : public filedescriptor {
 	public:
 
@@ -742,5 +746,9 @@ class file : public filedescriptor {
 
 	#include <rudiments/private/file.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

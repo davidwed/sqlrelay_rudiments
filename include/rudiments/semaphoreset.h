@@ -20,7 +20,7 @@
 // }
 //
 // void	wait() {
-// 	while (!semaphore>0);	// wait until the semaphore>0
+// 	while (!(semaphore>0));	// wait until the semaphore>0
 // 	semaphore--;		// decrement the semaphore
 // }
 //
@@ -41,6 +41,10 @@
 //
 // A semaphoreset is owned by a user and group and has access permissions
 // just like a file.
+
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 class semaphoreset {
 	public:
@@ -197,5 +201,9 @@ class semaphoreset {
 	#include <rudiments/private/semaphoreset.h>
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

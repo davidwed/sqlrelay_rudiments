@@ -15,6 +15,10 @@
 	#error "Couldn't find a suitable replacement for rand/srand"
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_RAND_R)
 	pthread_mutex_t	*randomnumber::rnmutex;
 #endif
@@ -71,5 +75,9 @@ void randomnumber::setMutex(pthread_mutex_t *mutex) {
 	#if !defined(HAVE_RAND_R)
 		rnmutex=mutex;
 	#endif
+}
+#endif
+
+#ifdef RUDIMENTS_NAMESPACE
 }
 #endif

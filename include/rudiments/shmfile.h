@@ -13,6 +13,10 @@
 // For maximum portability, the name of a shmfile should begin with a slash (/)
 // and contain no embedded slashes.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class shmfile : public file {
 	public:
 
@@ -26,5 +30,9 @@ class shmfile : public file {
 
 	#include <rudiments/private/shmfile.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -6,6 +6,10 @@
 // for NULL
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 inetsocketutil::inetsocketutil() {
 	initialize(NULL,0);
 }
@@ -13,6 +17,10 @@ inetsocketutil::inetsocketutil() {
 inetsocketutil::~inetsocketutil() {}
 
 void inetsocketutil::initialize(const char *address, unsigned short port) {
-	this->address=(char *)address;
+	this->address=address;
 	this->port=port;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -4,6 +4,10 @@
 #include <rudiments/serialport.h>
 #include <rudiments/rawbuffer.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 serialport::serialport() : filedescriptor() {}
 serialport::~serialport() {}
 
@@ -63,3 +67,7 @@ bool serialport::getProfile(serialportprofile *profile) {
 	profile->setOptions(&tio);
 	return true;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -7,6 +7,10 @@
 // for NULL
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 parameterstring::parameterstring() {
 	delim=';';
 }
@@ -29,7 +33,7 @@ bool parameterstring::parse(const char *paramstring) {
 
 	int	paircount=countPairs(paramstring);
 
-	char	*ptr=(char *)paramstring;
+	const char	*ptr=paramstring;
 	for (int i=0; i<paircount; i++) {
 
 		char	*namebuffer;
@@ -62,7 +66,7 @@ bool parameterstring::parse(const char *paramstring) {
 
 char *parameterstring::getValue(const char *name) {
 	char	*retval;
-	return (nvp.getData((char *)name,&retval))?retval:NULL;
+	return (nvp.getData(const_cast<char *>(name),&retval))?retval:NULL;
 }
 
 void parameterstring::clear() {
@@ -72,10 +76,10 @@ void parameterstring::clear() {
 int parameterstring::countPairs(const char *paramstring) {
 
 	// count ;'s that are not inside of quotes
-	char	*ptr;
-	int	paircount=0;
-	int	inquotes=0;
-	for (ptr=(char *)paramstring; (*ptr); ptr++) {
+	const char	*ptr;
+	int		paircount=0;
+	int		inquotes=0;
+	for (ptr=paramstring; (*ptr); ptr++) {
 
 		// handle quotes
 		if (*ptr=='\'') {
@@ -102,14 +106,14 @@ int parameterstring::countPairs(const char *paramstring) {
 	return paircount;
 }
 
-char *parameterstring::parsePart(int len, char delimiter,
+const char *parameterstring::parsePart(int len, char delimiter,
 					const char *data, char **outbuffer,
 						int quotes, int escapedchars) {
 
-	char	*ptr=(char *)data;
+	const char	*ptr=data;
 
 	char	*buffer=new char[len+1];
-	buffer[len]=(char)NULL;
+	buffer[len]='\0';
 
 	int	inquotes=0;
 	int	index=0;
@@ -147,8 +151,8 @@ char *parameterstring::parsePart(int len, char delimiter,
 int parameterstring::parsePartLength(const char *data, char delimiter,
 					int quotes, int escapedchars) {
 
-	int	counter=0;
-	char	*ptr=(char *)data;
+	const char	*ptr=data;
+	int		counter=0;
 
 	int	inquotes=0;
 	while (*ptr && *ptr!=delimiter) {
@@ -178,11 +182,11 @@ int parameterstring::parsePartLength(const char *data, char delimiter,
 	return counter;
 }
 
-char *parameterstring::parseName(const char *data, char **outbuffer) {
+const char *parameterstring::parseName(const char *data, char **outbuffer) {
 	return parsePart(parseNameLength(data),'=',data,outbuffer,0,0);
 }
 
-char *parameterstring::parseValue(const char *data, char **outbuffer) {
+const char *parameterstring::parseValue(const char *data, char **outbuffer) {
 	return parsePart(parseValueLength(data),delim,data,outbuffer,1,1);
 }
 
@@ -193,3 +197,7 @@ int parameterstring::parseNameLength(const char *data) {
 int parameterstring::parseValueLength(const char *data) {
 	return parsePartLength(data,delim,1,1);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

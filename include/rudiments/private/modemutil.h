@@ -6,6 +6,10 @@
 
 #include <rudiments/listener.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class modemutil {
 	public:
 			modemutil();
@@ -14,11 +18,15 @@ class modemutil {
 		void	initialize(const char *device, const char *baud);
 
 	protected:
-		char	*devicename;
-		char	*baud;
+		const char	*devicename;
+		const char	*baud;
 
 		bool	configureSerialPort(int fd, const char *baud);
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

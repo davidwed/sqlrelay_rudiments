@@ -8,6 +8,10 @@
 #include <errno.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 clientsocket::clientsocket() : client() {}
 
 clientsocket::~clientsocket() {}
@@ -100,8 +104,8 @@ int clientsocket::connect(struct sockaddr *addr, socklen_t addrlen,
 				// connect was unsuccessful.
 				struct sockaddr	peeraddr;
 				socklen_t	size=sizeof(peeraddr);
-				rawbuffer::zero((void *)&peeraddr,
-						sizeof(peeraddr));
+				rawbuffer::zero(static_cast<void *>(&peeraddr),
+							sizeof(peeraddr));
 				if (getpeername(fd,&peeraddr,&size)==-1) {
 
 					// On some platforms, getpeername()
@@ -150,3 +154,7 @@ int clientsocket::connect(struct sockaddr *addr, socklen_t addrlen,
 
 	return retval;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

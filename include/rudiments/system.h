@@ -29,10 +29,18 @@
 //				get_nprocs_conf(),get_nprocs(),
 //				get_phys_pages,get_avphys_pages()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class system {
 	public:
 
 	#include <rudiments/private/system.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

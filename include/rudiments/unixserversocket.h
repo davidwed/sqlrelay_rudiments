@@ -24,7 +24,11 @@
 // unixserversocket class (and possibly the unixserversocket class) in
 // conjunction with the listener class.
 
-class unixserversocket : public serversocket, public unixsocketutil {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class unixserversocket : public serversocket, private unixsocketutil {
 	public:
 			unixserversocket();
 		virtual ~unixserversocket();
@@ -78,5 +82,9 @@ class unixserversocket : public serversocket, public unixsocketutil {
 
 	#include <rudiments/private/unixserversocket.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

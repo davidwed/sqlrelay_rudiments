@@ -12,6 +12,10 @@
 #include <errno.h>
 #include <string.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 modemutil::modemutil() {
 	devicename="";
 	baud="";
@@ -20,8 +24,8 @@ modemutil::modemutil() {
 modemutil::~modemutil() {}
 
 void modemutil::initialize(const char *device, const char *baud) {
-	this->devicename=(char *)device;
-	this->baud=(char *)baud;
+	this->devicename=device;
+	this->baud=baud;
 }
 
 bool modemutil::configureSerialPort(int fd, const char *baud) {
@@ -46,3 +50,7 @@ bool modemutil::configureSerialPort(int fd, const char *baud) {
 	sp.setFileDescriptor(-1);
 	return retval;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

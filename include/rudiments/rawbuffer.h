@@ -11,6 +11,10 @@
 // Unlike the functions in sys/string.h, these methods are NULL safe.  If any of
 // the pointer arguments are NULL, your application will not crash.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class rawbuffer {
 	public:
 
@@ -91,5 +95,9 @@ class rawbuffer {
 				// "haystack".
 				// Returns NULL if no match is found.
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 	return (!chmod(filename,perms));
@@ -162,7 +165,7 @@ mode_t permissions::evalPermString(const char *permstring) {
 char *permissions::evalPermOctal(mode_t permoctal) {
 
 	char	*permstring=new char[10];
-	permstring[9]=(char)NULL;
+	permstring[9]='\0';
 
 	mode_t	shift=permoctal;
 	for (int i=8; i>=0; i--) {
@@ -172,3 +175,7 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 	}
 	return permstring;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

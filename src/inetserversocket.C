@@ -9,6 +9,10 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 inetserversocket::inetserversocket() : serversocket(), inetsocketutil() {
 	translateByteOrder();
 }
@@ -30,7 +34,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	inetsocketutil::initialize(address,port);
 
 	// initialize a socket address structure
-	rawbuffer::zero((void *)&sin,sizeof(sin));
+	rawbuffer::zero(static_cast<void *>(&sin),sizeof(sin));
 	sin.sin_family=AF_INET;
 	sin.sin_port=htons(port);
 
@@ -49,7 +53,8 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 bool inetserversocket::bind() {
 
 	// bind the socket
-	if (::bind(fd,(struct sockaddr *)&sin,sizeof(sin))==-1) {
+	if (::bind(fd,reinterpret_cast<struct sockaddr *>(&sin),
+						sizeof(sin))==-1) {
 		return false;
 	}
 
@@ -59,10 +64,12 @@ bool inetserversocket::bind() {
 		// initialize a socket address structure
 		sockaddr_in	socknamesin;
 		socklen_t	size=sizeof(socknamesin);
-		rawbuffer::zero((void *)&socknamesin,sizeof(socknamesin));
+		rawbuffer::zero(static_cast<void *>(&socknamesin),
+						sizeof(socknamesin));
 
-		if (getsockname(fd,(struct sockaddr *)&socknamesin,
-					(socklen_t *)&size)>-1) {
+		if (getsockname(fd,
+			reinterpret_cast<struct sockaddr *>(&socknamesin),
+			&size)>-1) {
 			port=(unsigned short int)ntohs(socknamesin.sin_port);
 		}
 	}
@@ -78,12 +85,13 @@ filedescriptor *inetserversocket::accept() {
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
 	socklen_t	size=sizeof(clientsin);
-	rawbuffer::zero((void *)&clientsin,sizeof(clientsin));
+	rawbuffer::zero(static_cast<void *>(&clientsin),sizeof(clientsin));
 
 	// accept on the socket
 	int		clientsock;
-	if ((clientsock=::accept(fd,(struct sockaddr *)&clientsin,
-					(socklen_t *)&size))==-1) {
+	if ((clientsock=::accept(fd,
+				reinterpret_cast<struct sockaddr *>(&clientsin),
+				&size))==-1) {
 		return NULL;
 	}
 
@@ -102,15 +110,19 @@ char *inetserversocket::getClientAddress() {
 
 	// initialize a socket address structure
 	struct sockaddr_in	clientsin;
-	int			size=sizeof(clientsin);
-	rawbuffer::zero((void *)&clientsin,sizeof(clientsin));
+	socklen_t		size=sizeof(clientsin);
+	rawbuffer::zero(static_cast<void *>(&clientsin),sizeof(clientsin));
 
 	// get the peer address
-	if (getpeername(fd,(struct sockaddr *)&clientsin,
-				(socklen_t *)&size)==-1) {
+	if (getpeername(fd,reinterpret_cast<struct sockaddr *>(&clientsin),
+								&size)==-1) {
 		return NULL;
 	}
 
 	// convert the address to a string and return a copy of it
 	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -48,10 +48,6 @@ ifeq ($(INCLUDE_ENVIRONMENT),1)
 	HEADERS += environment.h
 	PRIVATEHEADERS += environment.h environmentincludes.h
 endif
-ifeq ($(INCLUDE_ERRORHANDLER),1)
-	HEADERS += errorhandler.h
-	PRIVATEHEADERS += errorhandler.h errorhandlerincludes.h
-endif
 ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
 	HEADERS += filedescriptor.h
 	PRIVATEHEADERS += filedescriptor.h filedescriptorincludes.h

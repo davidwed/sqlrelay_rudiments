@@ -4,6 +4,10 @@
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/client.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 client::client() : filedescriptor() {
 	connecterror=NULL;
 }
@@ -15,3 +19,7 @@ client::~client() {
 char *client::getVerboseConnectError() {
 	return connecterror;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

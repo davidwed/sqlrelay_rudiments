@@ -9,6 +9,10 @@
 // The passwdentry class provides methods for retrieving
 // entries from /etc/passwd
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class passwdentry {
 	public:
 
@@ -76,5 +80,9 @@ class passwdentry {
 
 	#include <rudiments/private/passwdentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

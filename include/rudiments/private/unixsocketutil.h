@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 	protected:
-		char		*filename;
+		const char	*filename;
 		sockaddr_un	sockaddrun;

@@ -13,6 +13,9 @@
 // Each dictionary is composed of a list of dictionarynode's.  Each
 // dictionarynode contains the key and value.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 template <class keytype, class datatype>
 class dictionarynode {
@@ -42,8 +45,6 @@ class dictionarynode {
 
 	#include <rudiments/private/dictionarynode.h>
 };
-
-#include <rudiments/private/dictionarynodeinlines.h>
 
 template <class keytype, class datatype>
 class dictionarylistnode :
@@ -167,6 +168,11 @@ typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
 typedef stringdictionarylist< char * >		namevaluepairslist;
 typedef stringdictionary< char * >		namevaluepairs;
 
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
+
+#include <rudiments/private/dictionarynodeinlines.h>
 #include <rudiments/private/dictionaryinlines.h>
 
 #endif

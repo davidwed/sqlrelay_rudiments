@@ -1,3 +1,7 @@
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 RUDIMENTS_INLINE int math::absoluteValue(int j) {
 	return abs(j);
 }
@@ -901,3 +905,7 @@ RUDIMENTS_INLINE double math::loadExponent(double x, int exp) {
 RUDIMENTS_INLINE long double math::loadExponent(long double x, int exp) {
 	return ldexpl(x,exp);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

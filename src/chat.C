@@ -10,6 +10,10 @@
 
 #define DEBUG_CHAT 1
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 chat::chat(filedescriptor *fd) {
 	readfd=fd;
 	writefd=fd;
@@ -103,7 +107,7 @@ void chat::appendAbortString(const char *string) {
 
 	// replace \\r and \\n
 	int	index=0;
-	for (char *ptr=(char *)string; *ptr; ptr++) {
+	for (const char *ptr=string; *ptr; ptr++) {
 		if (*ptr=='\\') {
 			ptr++;
 			if (*ptr=='n') {
@@ -120,7 +124,7 @@ void chat::appendAbortString(const char *string) {
 		}
 		index++;
 	}
-	newstring[index]=(char)NULL;
+	newstring[index]='\0';
 
 	aborts.append(newstring);
 }
@@ -180,7 +184,7 @@ int chat::expect(const char *string, char **abort) {
 		// modem is first initialized, there may be a few in it's
 		// send buffer from whatever it was doing before and we may
 		// accidentally get some)
-		if (ch!=(char)NULL) {
+		if (ch!='\0') {
 			response.append(ch);
 		}
 
@@ -232,102 +236,103 @@ int chat::send(const char *string, namevaluepairs *variables) {
 	// write the string, character at a time, processing special characters
 	int	result=RESULT_SUCCESS;
 	if (string) {
-		for (char *ch=(char *)string; *ch; ch++) {
+		for (const char *ptr=string; *ptr; ptr++) {
 
 			if (variables) {
-				result=substituteVariables(&ch,variables);
+				result=substituteVariables(&ptr,variables);
 				if (result!=RESULT_SUCCESS) {
 					break;
 				}
 			}
 
-			if (*ch=='\\') {
-				ch++;
-				if (!*ch) {
+			char	ch=*ptr;
+			if (ch=='\\') {
+				ptr++;
+				if (!ch) {
 					break;
-				} else if (*ch=='b') {
+				} else if (ch=='b') {
 					// backspace
-					*ch='\b';
+					ch='\b';
 					#ifdef DEBUG_CHAT
 					printf("\\b");
 					fflush(stdout);
 					#endif
-				/* } else if (*ch=='K') {
+				/* } else if (ch=='K') {
 					// FIXME: break
-					*ch=
+					ch=
 					#ifdef DEBUG_CHAT
 					printf("\\K");
 					fflush(stdout);
 					#endif
 				*/
-				} else if (*ch>='0' && *ch<='8') {
+				} else if (ch>='0' && ch<='8') {
 					// octal digits
 					#ifdef DEBUG_CHAT
-					printf("\\%c",*ch);
+					printf("\\%c",ch);
 					fflush(stdout);
 					#endif
-					char	val=(*ch-'0')*64;
-					ch++;
-					if (*ch>='0' && *ch<='8') {
+					char	val=(ch-'0')*64;
+					ptr++;
+					if (ch>='0' && ch<='8') {
 						#ifdef DEBUG_CHAT
-						printf("%c",*ch);
+						printf("%c",ch);
 						fflush(stdout);
 						#endif
-						val=val+(*ch-'0')*8;
-						ch++;
+						val=val+(ch-'0')*8;
+						ptr++;
 					}
-					if (*ch>='0' && *ch<='8') {
+					if (ch>='0' && ch<='8') {
 						#ifdef DEBUG_CHAT
-						printf("%c",*ch);
+						printf("%c",ch);
 						fflush(stdout);
 						#endif
-						val=val+(*ch-'0');
-						*ch=val;
+						val=val+(ch-'0');
+						ch=val;
 					}
-				} else if (*ch=='N') {
+				} else if (ch=='N') {
 					// null
 					#ifdef DEBUG_CHAT
 					printf("\\0");
 					fflush(stdout);
 					#endif
-					*ch='\0';
-				} else if (*ch=='r') {
+					ch='\0';
+				} else if (ch=='r') {
 					#ifdef DEBUG_CHAT
 					printf("\\r");
 					fflush(stdout);
 					#endif
-					*ch='\r';
-				} else if (*ch=='n') {
+					ch='\r';
+				} else if (ch=='n') {
 					#ifdef DEBUG_CHAT
 					printf("\\n");
 					fflush(stdout);
 					#endif
-					*ch='\n';
-				} else if (*ch=='p') {
+					ch='\n';
+				} else if (ch=='p') {
 					#ifdef DEBUG_CHAT
 					printf("\ndecisleep\n");
 					#endif
 					sleep::microsleep(0,100000);
-				} else if (*ch=='d') {
+				} else if (ch=='d') {
 					#ifdef DEBUG_CHAT
 					printf("\nsleep\n");
 					#endif
 					sleep::macrosleep(1);
 					continue;
 				}
-			/*} else if (ch=='^') {
-				ch++;
+			/*} else if (ptr=='^') {
+				ptr++;
 				// FIXME: control characters
 			*/
 			#ifdef DEBUG_CHAT
 			} else {
-				printf("%c",*ch);
+				printf("%c",ch);
 				fflush(stdout);
 			#endif
 			}
 
-			result=writefd->write(*ch);
-			if (result!=sizeof(*ch)) {
+			result=writefd->write(ch);
+			if (result!=sizeof(ch)) {
 				#ifdef DEBUG_CHAT
 				printf("\n");
 				#endif
@@ -343,10 +348,10 @@ int chat::send(const char *string, namevaluepairs *variables) {
 }
 
 
-int chat::substituteVariables(char **ch, namevaluepairs *variables) {
+int chat::substituteVariables(const char **ch, namevaluepairs *variables) {
 			
 	// look for $(variable), make sure we don't just have $(\0
-	char	*str=*ch;
+	const char	*str=*ch;
 	if (charstring::compare(str,"$(") && *(str+2)) {
 
 		for (namevaluepairslistnode *nln=
@@ -376,3 +381,7 @@ int chat::substituteVariables(char **ch, namevaluepairs *variables) {
 	}
 	return RESULT_SUCCESS;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

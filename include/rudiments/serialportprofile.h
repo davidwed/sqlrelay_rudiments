@@ -9,6 +9,10 @@
 // cfmakeraw, cfsetspeed???
 // wraps struct termios
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class serialportprofile {
 	public:
 
@@ -880,5 +884,9 @@ class serialportprofile {
 
 	#include <rudiments/private/serialportprofile.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

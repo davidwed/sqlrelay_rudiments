@@ -6,7 +6,11 @@
 
 #include <stdlib.h>
 
-xmlsax::xmlsax() : errorhandler() {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+xmlsax::xmlsax() {
 	reset();
 }
 
@@ -72,7 +76,7 @@ bool xmlsax::parseFile(const char *filename) {
 		// cause getCharacter() to read from the file.
 		if (mm.attach(fl.getFileDescriptor(),0,fl.getSize(),
 						PROT_READ,MAP_PRIVATE)) {
-			string=(char *)mm.getData();
+			string=static_cast<const char *>(mm.getData());
 			ptr=string;
 		}
 		retval=parse();
@@ -96,7 +100,7 @@ bool xmlsax::parseString(const char *string) {
 	reset();
 
 	// set string pointers
-	ptr=this->string=(char *)string;
+	ptr=this->string=string;
 
 	return parse();
 }
@@ -115,7 +119,7 @@ bool xmlsax::parse() {
 	char	ch;
 
 	// skip whitespace/check for an empty document
-	if (!(ch=skipWhitespace((char)NULL))) {
+	if (!(ch=skipWhitespace('\0'))) {
 		return true;
 	}
 
@@ -154,7 +158,7 @@ bool xmlsax::parseTag(char current, char *next) {
 
 	// is this a standalone tag or end-tag?
 	int	endtag=0;
-	char	standalone=(char)NULL;
+	char	standalone='\0';
 	if (ch=='!' || ch=='?') {
 		standalone=ch;
 	} else if (ch=='/') {
@@ -178,13 +182,13 @@ bool xmlsax::parseTag(char current, char *next) {
 			parseTagFailed();
 			return false;
 		}
-		return (*next=getCharacter())!=(char)NULL;
+		return (*next=getCharacter())!='\0';
 	} else if (!charstring::compare(name.getString(),"![CDATA[")) {
 		if (!(ch=parseCData(ch))) {
 			parseTagFailed();
 			return false;
 		}
-		return (*next=getCharacter())!=(char)NULL;
+		return (*next=getCharacter())!='\0';
 	}
 
 	if (endtag) {
@@ -265,9 +269,10 @@ bool xmlsax::parseTagName(char current, stringbuffer *name, char *next) {
 
 			// we should not run into a NULL or EOF here, if we
 			// do then it's an error
-			clearError();
-			appendError("error: parseTagName() failed at line ");
-			appendError(line);
+			err.clear();
+			err.append("error: parseTagName() ");
+			err.append("failed at line ");
+			err.append(line);
 			return false;
 
 		} else if (ch=='[') {
@@ -280,7 +285,7 @@ bool xmlsax::parseTagName(char current, stringbuffer *name, char *next) {
 			if (bracketcount==2) {
 				// return the character after
 				// the end of the name
-				return (*next=getCharacter())!=(char)NULL;
+				return (*next=getCharacter())!='\0';
 			}
 
 		} else if (ch==' ' || ch=='	' ||
@@ -300,7 +305,7 @@ bool xmlsax::parseTagName(char current, stringbuffer *name, char *next) {
 		if (name->getStringLength()==3 &&
 			!charstring::compare(name->getString(),"!--")) {
 			// return the character after the !--
-			return (*next=getCharacter())!=(char)NULL;
+			return (*next=getCharacter())!='\0';
 		}
 
 		// get the next character
@@ -319,10 +324,10 @@ char xmlsax::parseComment(char current) {
 		// handle potential terminators
 		if (ch=='-') {
 			if (!(ch=getCharacter())) {
-				return (char)NULL;
+				return '\0';
 			} else if (ch=='-') {
 				if (!(ch=getCharacter())) {
-					return (char)NULL;
+					return '\0';
 				} else if (ch=='>') {
 					// call the comment callback
 					comment(text.getString());
@@ -339,7 +344,7 @@ char xmlsax::parseComment(char current) {
 
 		// get the next character
 		if (!(ch=getCharacter())) {
-			return (char)NULL;
+			return '\0';
 		}
 	}
 }
@@ -359,7 +364,7 @@ char xmlsax::parseCData(char current) {
 		} else if (ch==']') {
 			if (nest==0) {
 				if (!(ch=getCharacter())) {
-					return (char)NULL;
+					return '\0';
 				} else if (ch==']') {
 					// call the cdata callback
 					cdata(text.getString());
@@ -376,14 +381,14 @@ char xmlsax::parseCData(char current) {
 
 		// get the next character
 		if (!(ch=getCharacter())) {
-			return (char)NULL;
+			return '\0';
 		}
 	}
 
 	// skip whitespace, get the next character and return it,
 	// it should be a >
 	if (!(ch=skipWhitespace(getCharacter())) || ch!='>') {
-		return (char)NULL;
+		return '\0';
 	}
 	return ch;
 }
@@ -406,14 +411,14 @@ char xmlsax::parseAttribute(char current, char standalone) {
 				// if we got whitespace, skip past it
 				if (!(ch=skipWhitespace(ch))) {
 					parseAttributeFailed();
-					return (char)NULL;
+					return '\0';
 				}
 	
 				if (standalone) {
 					// for standalone tags, return an
 					// attribute value,
 					if (!attributeValue(data.getString())) {
-						return (char)NULL;
+						return '\0';
 					}
 					return ch;
 				} else {
@@ -421,7 +426,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 					// an = after the whitespace
 					if (ch!='=') {
 						parseAttributeFailed();
-						return (char)NULL;
+						return '\0';
 					}
 				}
 	
@@ -437,14 +442,14 @@ char xmlsax::parseAttribute(char current, char standalone) {
 				// to the attribute name
 				data.append(ch);
 				if (!(ch=getCharacter())) {
-					return (char)NULL;
+					return '\0';
 				}
 			}
 		}
 
 		// call the attribute name callback
 		if (!attributeName(data.getString())) {
-			return (char)NULL;
+			return '\0';
 		}
 
 		// skip any whitespace after the =, then look for a " or ',
@@ -452,14 +457,14 @@ char xmlsax::parseAttribute(char current, char standalone) {
 		if (!(ch=skipWhitespace(getCharacter())) ||
 					(ch!='"' && ch!='\'')) {
 			parseAttributeFailed();
-			return (char)NULL;
+			return '\0';
 		}
 	}
 
 	// attribute values can be delimited by ' or "
 	char	delimiter=ch;
 	if (!(ch=getCharacter())) {
-		return (char)NULL;
+		return '\0';
 	}
 
 	// get the attribute value
@@ -509,7 +514,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 					// if we hit the end, that's
 					// an error
 					parseAttributeFailed();
-					return (char)NULL;
+					return '\0';
 
 				} else if (result<0) {
 
@@ -541,13 +546,13 @@ char xmlsax::parseAttribute(char current, char standalone) {
 
 		// get the next character
 		if (!(ch=getCharacter())) {
-			return (char)NULL;
+			return '\0';
 		}
 	}
 
 	// call the callback for attribute
 	if (!attributeValue(data.getString())) {
-		return (char)NULL;
+		return '\0';
 	}
 
 	// return the first character after the attribute
@@ -568,51 +573,51 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 
 		// jump out if we hit the end
 		if (!(*buffer)[i]) {
-			(*buffer)[i]=(char)NULL;
+			(*buffer)[i]='\0';
 			return 0;
 		}
 
 		// if we find a break character, don't add it to the buffer,
 		// just terminate and return the existing buffer
 		if ((*buffer)[i]==breakchar) {
-			(*buffer)[i]=(char)NULL;
+			(*buffer)[i]='\0';
 			return -1;
 		}
 
 		// if we find a & then treat it similarly to a break character
 		if ((*buffer)[i]=='&') {
-			(*buffer)[i]=(char)NULL;
+			(*buffer)[i]='\0';
 			return -2;
 		}
 
 		// if we find a ; then we're done
 		if ((*buffer)[i]==';') {
-			(*buffer)[i+1]=(char)NULL;
+			(*buffer)[i+1]='\0';
 			break;
 		}
 	}
 
 	// terminate the buffer if necessary
 	if (i==6) {
-		(*buffer)[6]=(char)NULL;
+		(*buffer)[6]='\0';
 	}
 
 	// handle some predefined general entities
 	if (!charstring::compare((*buffer),"&amp;")) {
 		(*buffer)[0]='&';
-		(*buffer)[1]=(char)NULL;
+		(*buffer)[1]='\0';
 	} else if (!charstring::compare((*buffer),"&lt;")) {
 		(*buffer)[0]='<';
-		(*buffer)[1]=(char)NULL;
+		(*buffer)[1]='\0';
 	} else if (!charstring::compare((*buffer),"&gt;")) {
 		(*buffer)[0]='>';
-		(*buffer)[1]=(char)NULL;
+		(*buffer)[1]='\0';
 	} else if (!charstring::compare((*buffer),"&apos;")) {
 		(*buffer)[0]='\'';
-		(*buffer)[1]=(char)NULL;
+		(*buffer)[1]='\0';
 	} else if (!charstring::compare((*buffer),"&quot;")) {
 		(*buffer)[0]='"';
-		(*buffer)[1]=(char)NULL;
+		(*buffer)[1]='\0';
 	} else {
 		// handle numeric general entities
 		if ((*buffer)[1]=='#') {
@@ -620,8 +625,8 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 			if (number>127) {
 				number=127;
 			}
-			(*buffer)[0]=(char)number;
-			(*buffer)[1]=(char)NULL;
+			(*buffer)[0]=static_cast<char>(number);
+			(*buffer)[1]='\0';
 		}
 	}
 
@@ -640,7 +645,7 @@ bool xmlsax::parseText(char current, char *next) {
 
 			// we should not run into a NULL or EOF here, if we do
 			// then return an error.
-			*next=(char)NULL;
+			*next='\0';
 			return false;
 
 		} else if (ch=='<') {
@@ -664,7 +669,7 @@ bool xmlsax::parseText(char current, char *next) {
 
 				// if we hit the end, that's an error
 				parseTextFailed();
-				*next=(char)NULL;
+				*next='\0';
 				return false;
 
 			} else if (result<0) {
@@ -748,7 +753,7 @@ char xmlsax::getCharacter() {
 		ptr++;
 	} else {
 		if (fl.read(&ch)!=sizeof(char)) {
-			ch=(char)NULL;
+			ch='\0';
 		}
 	}
 	if (ch=='\n') {
@@ -758,19 +763,23 @@ char xmlsax::getCharacter() {
 }
 
 void xmlsax::parseTagFailed() {
-	clearError();
-	appendError("error: parseTagFailed() failed at line ");
-	appendError(line);
+	err.clear();
+	err.append("error: parseTagFailed() failed at line ");
+	err.append(line);
 }
 
 void xmlsax::parseAttributeFailed() {
-	clearError();
-	appendError("error: parseAttributeFailed() failed at line ");
-	appendError(line);
+	err.clear();
+	err.append("error: parseAttributeFailed() failed at line ");
+	err.append(line);
 }
 
 void xmlsax::parseTextFailed() {
-	clearError();
-	appendError("error: parseText() failed at line ");
-	appendError(line);
+	err.clear();
+	err.append("error: parseText() failed at line ");
+	err.append(line);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

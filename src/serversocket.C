@@ -6,6 +6,10 @@
 #include <errno.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 serversocket::serversocket() : server() {}
 
 serversocket::~serversocket() {}
@@ -68,5 +72,9 @@ bool serversocket::sslAccept(filedescriptor *sock) {
 		}
 	}
 	return true;
+}
+#endif
+
+#ifdef RUDIMENTS_NAMESPACE
 }
 #endif

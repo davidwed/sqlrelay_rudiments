@@ -8,6 +8,10 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_READDIR_R)
 pthread_mutex_t	*directory::rdmutex;
 #endif
@@ -149,3 +153,7 @@ long directory::maxPathLength(const char *pathname) {
 bool directory::canAccessLongFileNames(const char *pathname) {
 	return !pathconf(pathname,_PC_NO_TRUNC);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

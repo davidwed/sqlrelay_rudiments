@@ -6,6 +6,10 @@
 
 #include <rudiments/private/clientsocketincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class clientsocket : public client {
 	public:
 			clientsocket();
@@ -24,5 +28,9 @@ class clientsocket : public client {
 
 	#include <rudiments/private/clientsocket.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

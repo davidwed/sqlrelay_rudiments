@@ -10,6 +10,10 @@
 // need for umask...
 #include <sys/stat.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 unixserversocket::unixserversocket() : serversocket(), unixsocketutil() {
 	mask=0;
 }
@@ -28,7 +32,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	file::remove(filename);
-	rawbuffer::zero((void *)&sockaddrun,sizeof(sockaddrun));
+	rawbuffer::zero(static_cast<void *>(&sockaddrun),sizeof(sockaddrun));
 	sockaddrun.sun_family=AF_UNIX;
 	charstring::copy(sockaddrun.sun_path,filename);
 
@@ -48,7 +52,8 @@ bool unixserversocket::bind() {
 
 	// bind the socket
 	bool	retval=true;
-	if (::bind(fd,(struct sockaddr *)&sockaddrun,sizeof(sockaddrun))==-1) {
+	if (::bind(fd,reinterpret_cast<struct sockaddr *>(&sockaddrun),
+						sizeof(sockaddrun))==-1) {
 		retval=false;
 	}
 
@@ -67,12 +72,13 @@ filedescriptor *unixserversocket::accept() {
 	// initialize a socket address structure
 	sockaddr_un	clientsun;
 	socklen_t	size=sizeof(clientsun);
-	rawbuffer::zero((void *)&clientsun,sizeof(clientsun));
+	rawbuffer::zero(static_cast<void *>(&clientsun),sizeof(clientsun));
 
 	// accept on the socket
 	int		clientsock;
-	if ((clientsock=::accept(fd,(struct sockaddr *)&clientsun,
-					(socklen_t *)&size))==-1) {
+	if ((clientsock=::accept(fd,
+				reinterpret_cast<struct sockaddr *>(&clientsun),
+				&size))==-1) {
 		return NULL;
 	}
 
@@ -86,3 +92,7 @@ filedescriptor *unixserversocket::accept() {
 	#endif
 	return returnsock;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

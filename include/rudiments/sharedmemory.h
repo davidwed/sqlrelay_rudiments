@@ -17,6 +17,10 @@
 // A shared memory segment is owned by a user and group and has access 
 // permissions just like a file.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class sharedmemory {
 	public:
 			sharedmemory();
@@ -120,5 +124,9 @@ class sharedmemory {
 	#include <rudiments/private/sharedmemory.h>
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -6,6 +6,10 @@
 // for NULL
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 unixsocketutil::unixsocketutil() {
 	initialize(NULL);
 }
@@ -13,5 +17,9 @@ unixsocketutil::unixsocketutil() {
 unixsocketutil::~unixsocketutil() {}
 
 void unixsocketutil::initialize(const char *filename) {
-	this->filename=(char *)filename;
+	this->filename=filename;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

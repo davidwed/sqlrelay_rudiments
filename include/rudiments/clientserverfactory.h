@@ -9,6 +9,10 @@
 // The clientserverfactory class provides factory methods for getting clients
 // and servers.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class clientserverfactory {
 	public:
 		static client	*getClient(const char *type);
@@ -29,5 +33,9 @@ class clientserverfactory {
 			// "unix"             unixserversocket
 			// anything else      NULL
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -13,6 +13,10 @@
 // Each linkedlist is composed of a series of linkedlistnode's.  Each
 // linkedlistnode contains the data.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 template <class datatype>
 class linkedlistnode {
 	public:
@@ -51,8 +55,6 @@ class linkedlistnode {
 
 	#include <rudiments/private/linkedlistnode.h>
 };
-
-#include <rudiments/private/linkedlistnodeinlines.h>
 
 template < class datatype, class linkedlistnodetype=linkedlistnode<datatype> >
 class linkedlist {
@@ -136,13 +138,16 @@ class linkedlist {
 	#include <rudiments/private/linkedlist.h>
 };
 
-#include <rudiments/private/linkedlistinlines.h>
-
-
-
 // A class for containing linkedlists of strings is defined here for
 // convenience.
 typedef linkedlistnode< char * >		stringlistnode;
 typedef linkedlist< char *, stringlistnode >	stringlist;
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
+
+#include <rudiments/private/linkedlistnodeinlines.h>
+#include <rudiments/private/linkedlistinlines.h>
 
 #endif

@@ -4,6 +4,10 @@
 #include <rudiments/commandline.h>
 #include <rudiments/charstring.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 commandline::commandline(int argc, const char **argv) {
 	this->argc=argc;
 	this->argv=(char **)argv;
@@ -34,3 +38,7 @@ bool commandline::found(const char *arg) const {
 	}
 	return false;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

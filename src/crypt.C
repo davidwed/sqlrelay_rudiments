@@ -15,6 +15,10 @@
 #endif
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
 pthread_mutex_t	*crypt::cryptmutex;
 #endif
@@ -22,7 +26,7 @@ pthread_mutex_t	*crypt::cryptmutex;
 char *crypt::encrypt(const char *password, const char *salt) {
 	#ifdef HAVE_CRYPT_R
 		crypt_data	cd;
-		rawbuffer::zero((void *)&cd,sizeof(cd));
+		rawbuffer::zero(static_cast<void *>(&cd),sizeof(cd));
 		char	*encryptedpassword=crypt_r(password,salt,&cd);
 		return (encryptedpassword)?
 			charstring::duplicate(encryptedpassword):NULL;
@@ -57,5 +61,9 @@ void crypt::setMutex(pthread_mutex_t *mutex) {
 	#if !defined(HAVE_CRYPT_R)
 		cryptmutex=mutex;
 	#endif
+}
+#endif
+
+#ifdef RUDIMENTS_NAMESPACE
 }
 #endif

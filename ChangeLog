@@ -24,6 +24,10 @@
 	#ifdef'ed out OCRNL, ONOCR, ONLRET in serialportprofile for mac os x
 	added process class
 	updated config.guess
+	uses c++ casting operators now
+	fixed a bunch of const-related messes
+	added rudiments namespace
+	retired errorhandler class
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

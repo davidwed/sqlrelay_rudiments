@@ -11,10 +11,17 @@
 // Unlike the functions in string.h, these methods are NULL safe.  If any of
 // the pointer arguments are NULL, your application will not crash.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class charstring {
 	public:
 
 		static	size_t	length(const char *string);
+			// Returns the length of "string".
+
+		static	size_t	length(const unsigned char *string);
 			// Returns the length of "string".
 
 		static	void	zero(char *str, size_t size);
@@ -109,27 +116,24 @@ class charstring {
 
 
 		static	bool	contains(const char *haystack,
-						const char *needle);
+							const char *needle);
 			// Returns true if "haystack" contains "needle" or
 			// false otherwise.
-		static	bool	contains(const char *haystack,
-						char needle);
+		static	bool	contains(const char *haystack, char needle);
 			// Returns true if "haystack" contains "needle" or
 			// false otherwise.
 		static	char	*findFirst(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*findFirst(const char *haystack,
-							char needle);
+		static	char	*findFirst(const char *haystack, char needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
 		static	char	*findLast(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*findLast(const char *haystack,
-							char needle);
+		static	char	*findLast(const char *haystack, char needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
 
@@ -399,5 +403,9 @@ class charstring {
 
 	#include <rudiments/private/charstring.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

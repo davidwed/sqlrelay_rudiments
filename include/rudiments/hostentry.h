@@ -8,6 +8,10 @@
 
 // The hostentry class provides methods for retrieving entries from /etc/hosts
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class hostentry {
 	public:
 
@@ -78,5 +82,9 @@ class hostentry {
 
 	#include <rudiments/private/hostentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

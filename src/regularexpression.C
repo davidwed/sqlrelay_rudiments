@@ -12,6 +12,10 @@
 	#include <rudiments/charstring.h>
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 regularexpression::regularexpression() {
 	init();
 }
@@ -83,13 +87,13 @@ bool regularexpression::match(const char *str) {
 	}
 
 	#ifdef RUDIMENTS_HAS_PCRE
-		this->str=(char *)str;
+		this->str=str;
 		return (expr && (matchcount=pcre_exec(expr,extra,
 						str,charstring::length(str),
 						0,0,matches,
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
 	#else
-		this->str=(char *)str;
+		this->str=str;
 		matchcount=-1;
 		return (!regexec(&expr,str,RUDIMENTS_REGEX_MATCHES,matches,0));
 	#endif
@@ -135,15 +139,19 @@ int regularexpression::getSubstringEndOffset(int index) {
 
 char *regularexpression::getSubstringStart(int index) {
 	int	offset=getSubstringStartOffset(index);
-	return (offset>-1)?(str+offset):NULL;
+	return (offset>-1)?(const_cast<char *>(str+offset)):NULL;
 }
 
 char *regularexpression::getSubstringEnd(int index) {
 	int	offset=getSubstringEndOffset(index);
-	return (offset>-1)?(str+offset):NULL;
+	return (offset>-1)?(const_cast<char *>(str+offset)):NULL;
 }
 
 bool regularexpression::match(const char *str, const char *pattern) {
 	regularexpression	re;
 	return (re.compile(pattern) && re.match(str));
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -8,7 +8,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 // signalset methods
 bool signalset::addSignal(int signum) {
@@ -122,13 +124,19 @@ int signalhandler::getFlags() const {
 }
 
 bool signalhandler::handleSignal(int signum) {
-	return !sigaction(signum,&handlerstruct,(struct sigaction *)NULL);
+	return !sigaction(signum,&handlerstruct,
+				static_cast<struct sigaction *>(NULL));
 }
 
 bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	struct sigaction	oldaction;
 	bool	retval=!sigaction(signum,&handlerstruct,&oldaction);
-	rawbuffer::copy((void *)&oldhandler->handlerstruct,
-			(void *)&oldaction,sizeof(struct sigaction));
+	rawbuffer::copy(static_cast<void *>(&oldhandler->handlerstruct),
+			static_cast<const void *>(&oldaction),
+			sizeof(struct sigaction));
 	return retval;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -3,6 +3,10 @@
 
 #include <rudiments/container.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 container::container() {
 	copyreferences=false;
 	cascadeondelete=false;
@@ -44,3 +48,7 @@ bool container::load(filedescriptor *fd) {
 bool container::load(unsigned char *buffer) {
 	return false;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 	protected:
-		char		*address;
+		const char	*address;
 		unsigned short	port;
 		sockaddr_in	sin;

@@ -437,6 +437,9 @@
 /* Rudiments supports threads */
 #undef RUDIMENTS_HAS_THREADS
 
+/* Compiler supports namespaces */
+#undef RUDIMENTS_NAMESPACE
+
 /* Version */
 #undef RUDIMENTS_VERSION
 

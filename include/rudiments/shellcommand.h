@@ -39,6 +39,10 @@
 //				posix_spawn_file_actions_addclose()
 //				posix_spawn_file_actions_adddup2()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class shellcommand {
 	public:
 		int	run(const char *command);
@@ -63,6 +67,10 @@ class shellcommand {
 
 	#include <rudiments/private/shellcommand.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/shellcommandinlines.h>

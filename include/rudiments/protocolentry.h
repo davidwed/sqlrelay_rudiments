@@ -9,6 +9,10 @@
 // The protocolentry class provides methods for retrieving
 // entries from /etc/protocols
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class protocolentry {
 	public:
 
@@ -61,5 +65,9 @@ class protocolentry {
 
 	#include <rudiments/private/protocolentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

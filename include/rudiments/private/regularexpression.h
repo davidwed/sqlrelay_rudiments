@@ -13,8 +13,8 @@
 		#endif
 	
 		#define RUDIMENTS_REGEX_MATCHES 128
-		int	matchcount;
-		char	*str;
+		int		matchcount;
+		const char	*str;
 
 		#ifdef RUDIMENTS_HAS_PCRE
 		int		matches[RUDIMENTS_REGEX_MATCHES*3];

@@ -6,6 +6,10 @@
 
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 xmldom::xmldom() : xmlsax() {
 	nullnode=xmldomnode::createNullNode();
 	rootnode=nullnode;
@@ -136,3 +140,7 @@ bool xmldom::cdata(char *string) {
 	currentparent->insertChild(cdatanode,currentparent->getChildCount());
 	return true;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

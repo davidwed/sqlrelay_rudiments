@@ -17,10 +17,18 @@
 //	gnu extensions -
 //		stdlib.h - getpt()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class pseudotty : public filedescriptor {
 	public:
 
 	#include <rudiments/private/pseudotty.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

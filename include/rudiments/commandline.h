@@ -8,6 +8,10 @@
 
 // The commandline class provides methods for parsing command line arguments.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class commandline {
 	public:
 			commandline(int argc, const char **argv);
@@ -25,5 +29,9 @@ class commandline {
 	#include <rudiments/private/commandline.h>
 
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -8,7 +8,11 @@
 
 // The dtd class implements a minimal XML DTD parser.
 
-class dtd : public errorhandler {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class dtd {
 	public:
 		bool	parseFile(const char *filename);
 			// Parse file "filename" and generate a DTD tree.
@@ -22,7 +26,13 @@ class dtd : public errorhandler {
 		xmldom	*xml();
 			// Returns an XML representation of the DTD.
 
+		char	*getError();
+
 	#include <rudiments/private/dtd.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

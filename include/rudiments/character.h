@@ -9,6 +9,10 @@
 // The character class provides methods for evaluating and manipulating
 // characters.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class character {
 	public:
 		static bool	isAlphanumeric(int c);
@@ -39,5 +43,9 @@ class character {
 
 		static void	safePrint(char c);
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

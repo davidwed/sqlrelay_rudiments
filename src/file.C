@@ -18,6 +18,10 @@
 	#include <sys/xattr.h>
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 file::file() : filedescriptor() {
 	getcurrentpropertiesonopen=true;
 }
@@ -30,32 +34,38 @@ bool file::create(const char *name, mode_t perms) {
 
 ssize_t file::create(const char *name, mode_t perms,
 						unsigned short number) {
-	return create(name,perms,(void *)&number,sizeof(unsigned short));
+	return create(name,perms,static_cast<const void *>(&number),
+							sizeof(unsigned short));
 }
 
 ssize_t file::create(const char *name, mode_t perms, unsigned long number) {
-	return create(name,perms,(void *)&number,sizeof(unsigned long));
+	return create(name,perms,static_cast<const void *>(&number),
+							sizeof(unsigned long));
 }
 
 ssize_t file::create(const char *name, mode_t perms, float number) {
-	return create(name,perms,(void *)&number,sizeof(float));
+	return create(name,perms,static_cast<const void *>(&number),
+								sizeof(float));
 }
 
 ssize_t file::create(const char *name, mode_t perms, double number) {
-	return create(name,perms,(void *)&number,sizeof(double));
+	return create(name,perms,static_cast<const void *>(&number),
+								sizeof(double));
 }
 
 ssize_t file::create(const char *name, mode_t perms, char number) {
-	return create(name,perms,(void *)&number,sizeof(char));
+	return create(name,perms,static_cast<const void *>(&number),
+								sizeof(char));
 }
 
 ssize_t file::create(const char *name, mode_t perms,
 					const char *string, size_t size) {
-	return create(name,perms,(void *)string,size);
+	return create(name,perms,static_cast<const void *>(string),size);
 }
 
 ssize_t file::create(const char *name, mode_t perms, const char *string) {
-	return create(name,perms,(void *)string,charstring::length(string));
+	return create(name,perms,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 ssize_t file::create(const char *name, mode_t perms,
@@ -139,7 +149,7 @@ bool file::open(const char *name, int flags, mode_t perms) {
 char *file::getContents() {
 	off_t	size=(fd>-1)?st.st_size:0;
 	char	*contents=new char[size+1];
-	contents[size]=(char)NULL;
+	contents[size]='\0';
 	return (size==0 || read(contents,size)==size)?contents:NULL;
 }
 
@@ -677,7 +687,7 @@ bool file::lock(int method, short type, short whence,
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	return !fcntl(method,(long)&lck);
+	return !fcntl(method,reinterpret_cast<long>(&lck));
 }
 
 bool file::checkLock(short type, short whence, off_t start, off_t len,
@@ -687,8 +697,10 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	bool	retval=(!fcntl(F_SETLKW,(long)&lck));
-	rawbuffer::copy((void *)retlck,(void *)&lck,sizeof(struct flock));
+	bool	retval=(!fcntl(F_SETLKW,reinterpret_cast<long>(&lck)));
+	rawbuffer::copy(static_cast<void *>(retlck),
+			static_cast<const void *>(&lck),
+			sizeof(struct flock));
 	return retval;
 }
 
@@ -698,7 +710,7 @@ bool file::unlock(short whence, off_t start, off_t len) const {
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	return !fcntl(F_SETLK,(long)&lck);
+	return !fcntl(F_SETLK,reinterpret_cast<long>(&lck));
 }
 
 bool file::changeOwner(const char *newuser, const char *newgroup) const {
@@ -826,7 +838,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 		} else {
 			// NULL-terminate the buffer, readlink()
 			// doesn't do this for us
-			buffer[len]=(char)NULL;
+			buffer[len]='\0';
 			return buffer;
 		}
 	}
@@ -868,9 +880,9 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 						time_t lastaccesstime,
 						time_t lastmodtime) {
 	timeval	tv[2];
-	tv[0].tv_sec=(long)lastaccesstime;
+	tv[0].tv_sec=static_cast<long>(lastaccesstime);
 	tv[0].tv_usec=0;
-	tv[1].tv_sec=(long)lastmodtime;
+	tv[1].tv_sec=static_cast<long>(lastmodtime);
 	tv[1].tv_usec=0;
 	return !utimes(filename,tv);
 }
@@ -931,8 +943,12 @@ char **file::listAttributes() const {
 bool file::getAttribute(const char *name, unsigned short *number) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)number,(void *)buffer,sizeof(unsigned short));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(number),
+			static_cast<const void *>(buffer),
+			sizeof(unsigned short));
 	delete[] buffer;
 	return retval;
 }
@@ -940,8 +956,12 @@ bool file::getAttribute(const char *name, unsigned short *number) const {
 bool file::getAttribute(const char *name, unsigned long *number) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)number,(void *)buffer,sizeof(unsigned long));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(number),
+			static_cast<const void *>(buffer),
+			sizeof(unsigned long));
 	delete[] buffer;
 	return retval;
 }
@@ -949,8 +969,12 @@ bool file::getAttribute(const char *name, unsigned long *number) const {
 bool file::getAttribute(const char *name, short *number) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)number,(void *)buffer,sizeof(short));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(number),
+			static_cast<const void *>(buffer),
+			sizeof(short));
 	delete[] buffer;
 	return retval;
 }
@@ -958,8 +982,12 @@ bool file::getAttribute(const char *name, short *number) const {
 bool file::getAttribute(const char *name, long *number) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)number,(void *)buffer,sizeof(long));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(number),
+			static_cast<const void *>(buffer),
+			sizeof(long));
 	delete[] buffer;
 	return retval;
 }
@@ -967,8 +995,12 @@ bool file::getAttribute(const char *name, long *number) const {
 bool file::getAttribute(const char *name, float *number) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)number,(void *)buffer,sizeof(float));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(number),
+			static_cast<const void *>(buffer),
+			sizeof(float));
 	delete[] buffer;
 	return retval;
 }
@@ -976,8 +1008,12 @@ bool file::getAttribute(const char *name, float *number) const {
 bool file::getAttribute(const char *name, double *number) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)number,(void *)buffer,sizeof(double));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(number),
+			static_cast<const void *>(buffer),
+			sizeof(double));
 	delete[] buffer;
 	return retval;
 }
@@ -985,8 +1021,12 @@ bool file::getAttribute(const char *name, double *number) const {
 bool file::getAttribute(const char *name, unsigned char *character) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)character,(void *)buffer,sizeof(unsigned char));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(character),
+			static_cast<const void *>(buffer),
+			sizeof(unsigned char));
 	delete[] buffer;
 	return retval;
 }
@@ -994,8 +1034,12 @@ bool file::getAttribute(const char *name, unsigned char *character) const {
 bool file::getAttribute(const char *name, char *character) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)character,(void *)buffer,sizeof(char));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(character),
+			static_cast<const void *>(buffer),
+			sizeof(char));
 	delete[] buffer;
 	return retval;
 }
@@ -1003,29 +1047,33 @@ bool file::getAttribute(const char *name, char *character) const {
 bool file::getAttribute(const char *name, bool *value) const {
 	size_t		size;
 	unsigned char	*buffer;
-	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	rawbuffer::copy((void *)value,(void *)buffer,sizeof(bool));
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	rawbuffer::copy(static_cast<void *>(value),
+			static_cast<const void *>(buffer),
+			sizeof(bool));
 	delete[] buffer;
 	return retval;
 }
 
 bool file::getAttribute(const char *name, unsigned char **string) const {
 	size_t	size;
-	return getAttribute(name,(void **)string,&size);
+	return getAttribute(name,reinterpret_cast<void **>(string),&size);
 }
 
 bool file::getAttribute(const char *name, char **string) const {
 	size_t	size;
-	return getAttribute(name,(void **)string,&size);
+	return getAttribute(name,reinterpret_cast<void **>(string),&size);
 }
 
 bool file::getAttribute(const char *name,
 				unsigned char **string, size_t *size) const {
-	return getAttribute(name,(void **)string,size);
+	return getAttribute(name,reinterpret_cast<void **>(string),size);
 }
 
 bool file::getAttribute(const char *name, char **string, size_t *size) const {
-	return getAttribute(name,(void **)string,size);
+	return getAttribute(name,reinterpret_cast<void **>(string),size);
 }
 
 bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
@@ -1041,7 +1089,7 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 	for (int i=0; i<100; i++) {
 
 		// allocate a buffer
-		(*buffer)=(void *)(new unsigned char[(*size)]);
+		(*buffer)=static_cast<void *>(new unsigned char[(*size)]);
 
 		// attempt to read the attribute into the buffer
 		ssize_t	newsize=fgetxattr(fd,name,(*buffer),(*size));
@@ -1051,10 +1099,10 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 		// of the buffer necessary to retrieve it, if so, try again
 		// with a bigger buffer.
 		if (newsize==-1) {
-			delete[] (unsigned char *)(*buffer);
+			delete[] static_cast<unsigned char *>(*buffer);
 			return false;
 		} else if (newsize>(ssize_t)(*size)) {
-			delete[] (unsigned char *)(*buffer);
+			delete[] static_cast<unsigned char *>(*buffer);
 			(*size)=newsize;
 		} else {
 			return true;
@@ -1066,59 +1114,69 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 }
 
 bool file::createAttribute(const char *name, unsigned short number) const {
-	return createAttribute(name,(void *)&number,sizeof(number));
+	return createAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::createAttribute(const char *name, unsigned long number) const {
-	return createAttribute(name,(void *)&number,sizeof(number));
+	return createAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::createAttribute(const char *name, short number) const {
-	return createAttribute(name,(void *)&number,sizeof(number));
+	return createAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::createAttribute(const char *name, long number) const {
-	return createAttribute(name,(void *)&number,sizeof(number));
+	return createAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::createAttribute(const char *name, float number) const {
-	return createAttribute(name,(void *)&number,sizeof(number));
+	return createAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::createAttribute(const char *name, double number) const {
-	return createAttribute(name,(void *)&number,sizeof(number));
+	return createAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::createAttribute(const char *name, unsigned char character) const {
-	return createAttribute(name,(void *)&character,sizeof(character));
+	return createAttribute(name,static_cast<const void *>(&character),
+							sizeof(character));
 }
 
 bool file::createAttribute(const char *name, char character) const {
-	return createAttribute(name,(void *)&character,sizeof(character));
+	return createAttribute(name,static_cast<const void *>(&character),
+							sizeof(character));
 }
 
 bool file::createAttribute(const char *name, bool value) const {
-	return createAttribute(name,(void *)&value,sizeof(value));
+	return createAttribute(name,static_cast<const void *>(&value),
+							sizeof(value));
 }
 
 bool file::createAttribute(const char *name,
 				const unsigned char *string) const {
-	return createAttribute(name,(void *)string,
-					charstring::length((char *)string));
+	return createAttribute(name,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 bool file::createAttribute(const char *name, const char *string) const {
-	return createAttribute(name,(void *)string,charstring::length(string));
+	return createAttribute(name,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 bool file::createAttribute(const char *name, const unsigned char *string,
 							size_t size) const {
-	return createAttribute(name,(void *)string,size);
+	return createAttribute(name,static_cast<const void *>(string),size);
 }
 
 bool file::createAttribute(const char *name, const char *string,
 							size_t size) const {
-	return createAttribute(name,(void *)string,size);
+	return createAttribute(name,static_cast<const void *>(string),size);
 }
 
 bool file::createAttribute(const char *name, const void *value,
@@ -1127,59 +1185,69 @@ bool file::createAttribute(const char *name, const void *value,
 }
 
 bool file::replaceAttribute(const char *name, unsigned short number) const {
-	return replaceAttribute(name,(void *)&number,sizeof(number));
+	return replaceAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::replaceAttribute(const char *name, unsigned long number) const {
-	return replaceAttribute(name,(void *)&number,sizeof(number));
+	return replaceAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::replaceAttribute(const char *name, short number) const {
-	return replaceAttribute(name,(void *)&number,sizeof(number));
+	return replaceAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::replaceAttribute(const char *name, long number) const {
-	return replaceAttribute(name,(void *)&number,sizeof(number));
+	return replaceAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::replaceAttribute(const char *name, float number) const {
-	return replaceAttribute(name,(void *)&number,sizeof(number));
+	return replaceAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::replaceAttribute(const char *name, double number) const {
-	return replaceAttribute(name,(void *)&number,sizeof(number));
+	return replaceAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::replaceAttribute(const char *name, unsigned char character) const {
-	return replaceAttribute(name,(void *)&character,sizeof(character));
+	return replaceAttribute(name,static_cast<const void *>(&character),
+							sizeof(character));
 }
 
 bool file::replaceAttribute(const char *name, char character) const {
-	return replaceAttribute(name,(void *)&character,sizeof(character));
+	return replaceAttribute(name,static_cast<const void *>(&character),
+							sizeof(character));
 }
 
 bool file::replaceAttribute(const char *name, bool value) const {
-	return replaceAttribute(name,(void *)&value,sizeof(value));
+	return replaceAttribute(name,static_cast<const void *>(&value),
+							sizeof(value));
 }
 
 bool file::replaceAttribute(const char *name,
 				const unsigned char *string) const {
-	return replaceAttribute(name,(void *)string,
-					charstring::length((char *)string));
+	return replaceAttribute(name,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 bool file::replaceAttribute(const char *name, const char *string) const {
-	return replaceAttribute(name,(void *)string,charstring::length(string));
+	return replaceAttribute(name,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 bool file::replaceAttribute(const char *name, const unsigned char *string,
 							size_t size) const {
-	return replaceAttribute(name,(void *)string,size);
+	return replaceAttribute(name,static_cast<const void *>(string),size);
 }
 
 bool file::replaceAttribute(const char *name, const char *string,
 							size_t size) const {
-	return replaceAttribute(name,(void *)string,size);
+	return replaceAttribute(name,static_cast<const void *>(string),size);
 }
 
 bool file::replaceAttribute(const char *name, const void *value,
@@ -1188,58 +1256,68 @@ bool file::replaceAttribute(const char *name, const void *value,
 }
 
 bool file::setAttribute(const char *name, unsigned short number) const {
-	return setAttribute(name,(void *)&number,sizeof(number));
+	return setAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::setAttribute(const char *name, unsigned long number) const {
-	return setAttribute(name,(void *)&number,sizeof(number));
+	return setAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::setAttribute(const char *name, short number) const {
-	return setAttribute(name,(void *)&number,sizeof(number));
+	return setAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::setAttribute(const char *name, long number) const {
-	return setAttribute(name,(void *)&number,sizeof(number));
+	return setAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::setAttribute(const char *name, float number) const {
-	return setAttribute(name,(void *)&number,sizeof(number));
+	return setAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::setAttribute(const char *name, double number) const {
-	return setAttribute(name,(void *)&number,sizeof(number));
+	return setAttribute(name,static_cast<const void *>(&number),
+							sizeof(number));
 }
 
 bool file::setAttribute(const char *name, unsigned char character) const {
-	return setAttribute(name,(void *)&character,sizeof(character));
+	return setAttribute(name,static_cast<const void *>(&character),
+							sizeof(character));
 }
 
 bool file::setAttribute(const char *name, char character) const {
-	return setAttribute(name,(void *)&character,sizeof(character));
+	return setAttribute(name,static_cast<const void *>(&character),
+							sizeof(character));
 }
 
 bool file::setAttribute(const char *name, bool value) const {
-	return setAttribute(name,(void *)&value,sizeof(value));
+	return setAttribute(name,static_cast<const void *>(&value),
+							sizeof(value));
 }
 
 bool file::setAttribute(const char *name, const unsigned char *string) const {
-	return setAttribute(name,(void *)string,
-				charstring::length((char *)string));
+	return setAttribute(name,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 bool file::setAttribute(const char *name, const char *string) const {
-	return setAttribute(name,(void *)string,charstring::length(string));
+	return setAttribute(name,static_cast<const void *>(string),
+						charstring::length(string));
 }
 
 bool file::setAttribute(const char *name, const unsigned char *string,
 							size_t size) const {
-	return setAttribute(name,(void *)string,size);
+	return setAttribute(name,static_cast<const void *>(string),size);
 }
 
 bool file::setAttribute(const char *name, const char *string,
 							size_t size) const {
-	return setAttribute(name,(void *)string,size);
+	return setAttribute(name,static_cast<const void *>(string),size);
 }
 
 bool file::setAttribute(const char *name, const void *value,
@@ -1271,13 +1349,13 @@ char **file::attributeArray(const char *buffer, size_t size) const {
 	attributes[counter]=NULL;
 
 	// copy the attributes into the array
-	char	*ptr=(char *)buffer;
+	const char	*ptr=buffer;
 	counter=0;
 	for (size_t index=0; index<size; index++) {
 		if (!buffer[index]) {
 			attributes[counter]=charstring::duplicate(ptr);
 			if (index<size-1) {
-				ptr=(char *)&buffer[index+1];
+				ptr=&buffer[index+1];
 			}
 			counter++;
 		}
@@ -1305,9 +1383,9 @@ char *file::dirname(const char *filename) {
 	charstring::rightTrim(retval,'/');
 	char	*lastslash=charstring::findLast(retval,'/');
 	if (lastslash==retval) {
-		(*(lastslash+1))=(char)NULL;
+		(*(lastslash+1))='\0';
 	} else {
-		(*lastslash)=(char)NULL;
+		(*lastslash)='\0';
 	}
 	return retval;
 }
@@ -1336,7 +1414,7 @@ char *file::basename(const char *filename, const char *suffix) {
 	char	*retval=basename(filename);
 	char	*ptr=charstring::findLast(retval,suffix);
 	if (!(*(ptr+charstring::length(suffix)))) {
-		(*ptr)=(char)NULL;
+		(*ptr)='\0';
 	}
 	return retval;
 }
@@ -1352,3 +1430,7 @@ long file::maxLinks(const char *filename) {
 long file::maxLinks() const {
 	return fpathconf(fd,_PC_LINK_MAX);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -10,6 +10,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R))
 pthread_mutex_t	*serviceentry::semutex;
@@ -197,3 +201,7 @@ void serviceentry::print() const {
 		printf("	%s\n",getAliasList()[i]);
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -15,6 +15,10 @@
 	#include <sys/ioctl.h>
 #endif
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
 	pthread_mutex_t	*datetime::timemutex;
 #endif
@@ -48,7 +52,7 @@ datetime::~datetime() {
 bool datetime::initialize(const char *tmstring) {
 
 	// get the date
-	char	*ptr=(char *)tmstring;
+	const char	*ptr=tmstring;
 	mon=atoi(ptr)-1;
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
@@ -172,12 +176,12 @@ int datetime::getMonth() const {
 	return mon+1;
 }
 
-char *datetime::getMonthName() const {
-	return (char *)monthname[mon];
+const char *datetime::getMonthName() const {
+	return monthname[mon];
 }
 
-char *datetime::getMonthAbbreviation() const {
-	return (char *)monthabbr[mon];
+const char *datetime::getMonthAbbreviation() const {
+	return monthabbr[mon];
 }
 
 int datetime::getDayOfMonth() const {
@@ -200,7 +204,7 @@ bool datetime::isDaylightSavingsTime() const {
 	return isdst;
 }
 
-char *datetime::getTimeZoneString() const {
+const char *datetime::getTimeZoneString() const {
 	return zone;
 }
 
@@ -280,9 +284,12 @@ void datetime::setTimeMutex(pthread_mutex_t *mutex) {
 }
 #endif
 
-char *datetime::getString() {
+const char *datetime::getString() {
 	delete[] timestring;
-	timestring=new char[100];
+	timestring=new char[2+1+2+1+charstring::integerLength(
+					static_cast<long>(getYear()))+1+
+				2+1+2+1+2+1+
+				charstring::length(getTimeZoneString())];
 	sprintf(timestring,"%02d/%02d/%d %02d:%02d:%02d %s",
 			getMonth(),getDayOfMonth(),getYear(),
 			getHour(),getMinutes(),getSeconds(),
@@ -444,8 +451,8 @@ bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone,
 	// daylight savings time (ie. EST was passed in, but daylight savings
 	// time is currently in effect, so we want to use EDT instead) then
 	// use the combined timezone.
-	char	*combinedzone=lookupCombinedTimeZone(zone);
-	char	*realzone=(char *)zone;
+	const char	*combinedzone=lookupCombinedTimeZone(zone);
+	const char	*realzone=zone;
 	if (daylightZone(zone) || !ignoredst) {
 		realzone=combinedzone;
 	}
@@ -695,7 +702,7 @@ static char timezones[][15]={
 // through every zoneinfo file (on platforms that support them), but I've tried
 // that before and I get multiple hits for a given zone.  If anyone reads this
 // comment and knows the answer, please let me know.
-char *datetime::lookupCombinedTimeZone(const char *zn) const {
+const char *datetime::lookupCombinedTimeZone(const char *zn) const {
 
 	// run through the list of timezones that observe daylight
 	// savings time, if "zn" is in that list, return the
@@ -706,7 +713,7 @@ char *datetime::lookupCombinedTimeZone(const char *zn) const {
 			return timezones[index+2];
 		}
 	}
-	return (char *)zn;
+	return zn;
 }
 
 bool datetime::daylightZone(const char *zn) const {
@@ -721,3 +728,7 @@ bool datetime::daylightZone(const char *zn) const {
 	}
 	return false;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

@@ -1,4 +1,4 @@
 	protected:
-		char	*listenscript;
-		char	*acceptscript;
-		char	*disconnectscript;
+		const char	*listenscript;
+		const char	*acceptscript;
+		const char	*disconnectscript;

@@ -16,7 +16,9 @@
 // logger class method will output logging information to each of the
 // logdestinations in seqence.
 
-
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
  
 // The logdestination class is a virtual base class that just defines methods
 // that the real logdestination classes must implement.
@@ -115,5 +117,9 @@ class logger {
 
 	#include <rudiments/private/logger.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -26,6 +26,10 @@
 // system's swap space. As a side-effect, it cannot be deleted by a user other
 // than the one that created it.
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class permissions {
 	public:
 		static	bool	setFilePermissions(const char *filename,
@@ -127,5 +131,9 @@ class permissions {
 		static	mode_t	setGroupId();
 				// returns -----s--- (g+s) permissions
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

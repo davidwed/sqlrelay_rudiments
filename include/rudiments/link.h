@@ -14,10 +14,18 @@
 //	sys/stat.h - lstat(),lchmod(),
 //	sys/xattr.h - lsetxattr(),lgetxattr(),llistxattr(),lremovexattr()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class link : public file {
 	public:
 
 	#include <rudiments/private/link.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

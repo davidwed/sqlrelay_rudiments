@@ -39,10 +39,6 @@ ifeq ($(INCLUDE_DTD),1)
 	SRCS += dtd.C
 	LOBJS += dtd.lo
 endif
-ifeq ($(INCLUDE_ERRORHANDLER),1)
-	SRCS += errorhandler.C
-	LOBJS += errorhandler.lo
-endif
 ifeq ($(INCLUDE_ENVIRONMENT),1)
 	SRCS += environment.C
 	LOBJS += environment.lo

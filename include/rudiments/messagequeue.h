@@ -9,10 +9,18 @@
 // wrap:
 //	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class messagequeue {
 	public:
 
 	#include <rudiments/private/messagequeue.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -10,6 +10,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
 pthread_mutex_t	*hostentry::hemutex;
@@ -28,7 +32,7 @@ hostentry::~hostentry() {
 char *hostentry::getName() const {
 	// On some platforms, this is a const char *,
 	// so we'll cast it, just in case.
-	return (char *)he->h_name;
+	return const_cast<char *>(he->h_name);
 }
 
 char **hostentry::getAliasList() const {
@@ -132,7 +136,7 @@ bool hostentry::initialize(const char *hostname, const char *address,
 
 char *hostentry::getAddressString(int index) const {
 	char	*address=new char[(getAddressLength()*4)+1];
-	address[0]=(char)NULL;
+	address[0]='\0';
 	for (int byte=0; byte<getAddressLength(); byte++) {
 		sprintf(address,"%s%d",address,getAddressList()[index][byte]);
 		if (byte<getAddressLength()-1) {
@@ -278,3 +282,7 @@ void hostentry::print() const {
 		delete[] addr;
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

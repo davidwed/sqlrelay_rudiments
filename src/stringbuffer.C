@@ -6,14 +6,18 @@
 
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
 
 stringbuffer::stringbuffer() : variablebuffer(128,32) {
 }
 
 stringbuffer::stringbuffer(char *initialcontents,
 					size_t initialsize, size_t increment) :
-			variablebuffer((unsigned char *)initialcontents,
-						initialsize,increment) {
+			variablebuffer(reinterpret_cast<unsigned char *>(
+							initialcontents),
+							initialsize,increment) {
 }
 
 stringbuffer::~stringbuffer() {
@@ -25,7 +29,7 @@ void stringbuffer::setPosition(size_t pos) {
 
 char *stringbuffer::getString() {
 	terminate();
-	return (char *)getBuffer();
+	return reinterpret_cast<char *>(getBuffer());
 }
 
 size_t stringbuffer::getStringLength() {
@@ -34,7 +38,7 @@ size_t stringbuffer::getStringLength() {
 
 char *stringbuffer::detachString() {
 	terminate();
-	return (char *)detachBuffer();
+	return reinterpret_cast<char *>(detachBuffer());
 }
 
 size_t stringbuffer::getPosition() {
@@ -61,8 +65,7 @@ void stringbuffer::terminate() {
 
 stringbuffer *stringbuffer::append(const unsigned char *string) {
 	if (string) {
-		variablebuffer::append(string,
-			charstring::length((char *)string));
+		variablebuffer::append(string,charstring::length(string));
 	}
 	return this;
 }
@@ -198,7 +201,7 @@ stringbuffer *stringbuffer::append(double number, unsigned short precision,
 }
 
 stringbuffer *stringbuffer::write(const unsigned char *string) {
-	variablebuffer::write(string,charstring::length((char *)string));
+	variablebuffer::write(string,charstring::length(string));
 	return this;
 }
 
@@ -306,3 +309,7 @@ stringbuffer *stringbuffer::write(double number, unsigned short precision,
 	delete[] numstr;
 	return this;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

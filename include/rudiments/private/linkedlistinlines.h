@@ -8,6 +8,10 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #define LINKEDLIST_TEMPLATE template <class datatype, class linkedlistnodetype>
 
 #define LINKEDLIST_CLASS linkedlist<datatype,linkedlistnodetype>
@@ -245,5 +249,9 @@ void LINKEDLIST_CLASS::print() const {
 		current=(linkedlistnodetype *)current->getNext();
 	}
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

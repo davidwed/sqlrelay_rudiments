@@ -10,6 +10,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	defined(__GNUC__) && !defined(HAVE_GETSPNAM_R)
 pthread_mutex_t	*shadowentry::spmutex;
@@ -127,10 +131,10 @@ bool shadowentry::initialize(const char *username) {
 	#else
 #ifdef RUDIMENTS_HAS_THREADS
 		return (!(spmutex && pthread_mutex_lock(spmutex)) &&
-			((sp=getspnam((char *)username))!=NULL) &&
+			((sp=getspnam(const_cast<char *>(username)))!=NULL) &&
 			!(spmutex && pthread_mutex_unlock(spmutex)));
 #else
-		return ((sp=getspnam((char *)username))!=NULL);
+		return ((sp=getspnam(const_cast<char *>(username)))!=NULL);
 #endif
 	#endif
 }
@@ -248,3 +252,7 @@ void shadowentry::print() const {
 	printf("Expiration Date: %d\n",getExpirationDate());
 	printf("Flag: %d\n",getFlag());
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

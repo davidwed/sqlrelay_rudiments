@@ -9,7 +9,11 @@
 // The modemclient implements methods for connecting to and communicating with
 // a remote host using a modem.
 
-class modemclient : public client, public modemutil {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class modemclient : public client, private modemutil {
 	public:
 			modemclient();
 		virtual	~modemclient();
@@ -59,5 +63,9 @@ class modemclient : public client, public modemutil {
 
 	#include <rudiments/private/modemclient.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

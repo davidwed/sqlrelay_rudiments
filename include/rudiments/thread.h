@@ -8,10 +8,18 @@
 
 // pthread wrapper
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class thread {
 	public:
 
 	#include <rudiments/private/thread.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -6,6 +6,10 @@
 
 #include <rudiments/private/serversocketincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class serversocket : public server {
 	public:
 			serversocket();
@@ -57,5 +61,9 @@ class serversocket : public server {
 
 	#include <rudiments/private/serversocket.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

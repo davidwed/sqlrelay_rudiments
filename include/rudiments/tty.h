@@ -19,10 +19,18 @@
 //	linux only -
 //		unistd.h - vhangup()
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class tty : public filedescriptor {
 	public:
 
 	#include <rudiments/private/tty.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -7,6 +7,10 @@
 #include <dlfcn.h>
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #ifdef RUDIMENTS_HAS_THREADS
 pthread_mutex_t	*dynamiclib::errormutex;
 #endif
@@ -45,8 +49,8 @@ char *dynamiclib::getError() const {
 		return NULL;
 	}
 #endif
-	char	*error=(char *)dlerror();
-	char	*retval=NULL;
+	const char	*error=dlerror();
+	char		*retval=NULL;
 	if (error) {
 		retval=charstring::duplicate(error);
 	}
@@ -61,5 +65,9 @@ char *dynamiclib::getError() const {
 #ifdef RUDIMENTS_HAS_THREADS
 void dynamiclib::setErrorMutex(pthread_mutex_t *mutex) {
 	errormutex=mutex;
+}
+#endif
+
+#ifdef RUDIMENTS_NAMESPACE
 }
 #endif

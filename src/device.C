@@ -5,6 +5,10 @@
 
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 device::device() : file() {
 	dontGetCurrentPropertiesOnOpen();
 }
@@ -18,3 +22,7 @@ bool device::createDeviceNode(const char *filename, bool blockdevice,
 	dev_t	dev=(major<<8|minor);
 	return !mknod(filename,mode,dev);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

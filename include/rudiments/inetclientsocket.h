@@ -13,7 +13,11 @@
 // Its ultimate parent class: filedescriptor provides methods for reading and 
 // writing data and closing connections.
 
-class inetclientsocket : public clientsocket, public inetsocketutil  {
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class inetclientsocket : public clientsocket, private inetsocketutil  {
 	public:
 			inetclientsocket();
 		virtual	~inetclientsocket();
@@ -84,5 +88,9 @@ class inetclientsocket : public clientsocket, public inetsocketutil  {
 
 	#include <rudiments/private/inetclientsocket.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

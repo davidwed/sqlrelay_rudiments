@@ -10,6 +10,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
 pthread_mutex_t	*passwdentry::pemutex;
@@ -255,3 +259,7 @@ void passwdentry::print() const {
 	printf("Home Directory: %s\n",getHomeDirectory());
 	printf("Shell: %s\n",getShell());
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

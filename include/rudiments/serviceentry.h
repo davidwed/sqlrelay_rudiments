@@ -9,6 +9,10 @@
 // The serviceentry class provides methods for retrieving
 // entries from /etc/services
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 class serviceentry {
 	public:
 
@@ -68,5 +72,9 @@ class serviceentry {
 
 	#include <rudiments/private/serviceentry.h>
 };
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

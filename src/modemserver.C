@@ -8,6 +8,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 modemserver::modemserver() : server() {
 	devicename="";
 	baud="";
@@ -25,9 +29,9 @@ void modemserver::initialize(const char *device, const char *baud,
 					const char *acceptscript,
 					const char *disconnectscript) {
 	modemutil::initialize(device,baud);
-	this->listenscript=(char *)listenscript;
-	this->acceptscript=(char *)acceptscript;
-	this->disconnectscript=(char *)disconnectscript;
+	this->listenscript=listenscript;
+	this->acceptscript=acceptscript;
+	this->disconnectscript=disconnectscript;
 }
 
 bool modemserver::listen(const char *device, const char *baud,
@@ -87,3 +91,7 @@ bool modemserver::close() {
 	ch.runScript(disconnectscript,NULL);
 	return filedescriptor::close();
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

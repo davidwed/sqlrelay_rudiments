@@ -5,6 +5,10 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 #define DICTIONARYNODE_TEMPLATE \
 	template <class keytype, class datatype>
 
@@ -59,5 +63,9 @@ void DICTIONARYNODE_CLASS::print() const {
 	printf(":");
 	datautil.print(data);
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
 
 #endif

@@ -14,6 +14,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
 	translateByteOrder();
 }
@@ -86,7 +90,7 @@ int inetclientsocket::connect() {
 		}
 
 		// set the address type and port to connect to
-		rawbuffer::zero((void *)&sin,sizeof(sin));
+		rawbuffer::zero(static_cast<void *>(&sin),sizeof(sin));
 		sin.sin_family=he.getAddressType();
 		sin.sin_port=htons(port);
 
@@ -144,17 +148,19 @@ int inetclientsocket::connect() {
 					addressindex++) {
 
 				// set which host to connect to
-				rawbuffer::copy((void *)&sin.sin_addr,
-					(void *)he.getAddressList()
-							[addressindex],
+				rawbuffer::copy(
+					static_cast<void *>(&sin.sin_addr),
+					static_cast<const void *>(
+						he.getAddressList()
+							[addressindex]),
 					he.getAddressLength());
 	
 				// attempt to connect
 				if (clientsocket::connect(
-						(struct sockaddr *)&sin,
-						sizeof(sin),
-						timeoutsec,
-						timeoutusec)==RESULT_SUCCESS) {
+					static_cast<struct sockaddr *>(&sin),
+					sizeof(sin),
+					timeoutsec,
+					timeoutusec)==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
 				}
 			}
@@ -173,8 +179,9 @@ int inetclientsocket::connect() {
 				}
 
 				// attempt to connect to the socket
-				if (clientsocket::connect((struct sockaddr *)
-						ainfo->ai_addr,
+				if (clientsocket::connect(
+					static_cast<struct sockaddr *>(
+								ainfo->ai_addr),
 						ainfo->ai_addrlen,
 						timeoutsec,
 						timeoutusec)==RESULT_SUCCESS) {
@@ -197,3 +204,7 @@ int inetclientsocket::connect() {
 
 	return RESULT_ERROR;
 }
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif
