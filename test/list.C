@@ -3,59 +3,86 @@
 
 int	main(int argc, char **argv) {
 
-	list<int>	prl;
+	// create a list of integers
+	list<int>	intl;
 
+	// append values to the list, displaying the list after each append
 	printf("append(0)\n");
-	prl.append(0);
-	prl.print();
+	intl.append(0);
+	intl.print();
+
 	printf("append(1)\n");
-	prl.append(1);
-	prl.print();
+	intl.append(1);
+	intl.print();
+
 	printf("append(3)\n");
-	prl.append(3);
-	prl.print();
+	intl.append(3);
+	intl.print();
+
+	// insert a value into the middle of the list, display the list
 	printf("insert(2,2)\n");
-	prl.insert(2,2);
-	prl.print();
+	intl.insert(2,2);
+	intl.print();
+
+	// remove values from the list, displaying the list after each removal
 	printf("removeByIndex(0)\n");
-	prl.removeByIndex(0);
-	prl.print();
+	intl.removeByIndex(0);
+	intl.print();
+
 	printf("removeByData(3)\n");
-	prl.removeByData(3);
-	prl.print();
+	intl.removeByData(3);
+	intl.print();
+
+	// change a value in the list, display the list
 	printf("setDataByIndex(1,50)\n");
-	prl.setDataByIndex(1,50);
-	prl.print();
+	intl.setDataByIndex(1,50);
+	intl.print();
+
+	// clear the list, display the list
 	printf("clear()\n");
-	prl.clear();
-	prl.print();
+	intl.clear();
+	intl.print();
 
 
 	printf("\n\n");
 
+
+	// create a list of strings
 	stringlist	strl;
 
+	// append values to the list, displaying the list after each append
 	printf("append(zero)\n");
 	strl.append("zero");
 	strl.print();
+
 	printf("append(one)\n");
 	strl.append("one");
 	strl.print();
+
 	printf("append(three)\n");
 	strl.append("three");
 	strl.print();
+
+	// insert a value into the middle of the list, display the list
 	printf("insert(2,two)\n");
 	strl.insert(2,"two");
 	strl.print();
+
+	// remove values from the list, displaying the list after each removal
 	printf("removeByIndex(0)\n");
 	strl.removeByIndex(0);
 	strl.print();
+
 	printf("removeByData(three)\n");
 	strl.removeByData("three");
 	strl.print();
+
+	// change a value in the list, display the list
 	printf("setDataByIndex(1,fifty)\n");
 	strl.setDataByIndex(1,"fifty");
 	strl.print();
+
+	// clear the list, display the list
 	printf("clear()\n");
 	strl.clear();
 	strl.print();

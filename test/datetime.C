@@ -13,7 +13,6 @@ int main(int argv, const char **argc) {
 	printf("setting TZ=America/New_York...\n");
 	environment	env;
 	env.setValue("TZ","America/New_York");
-	//env.setValue("TZ","EST");
 
 	// get the current date
 	datetime	dt;

@@ -10,9 +10,12 @@
 #include <stdio.h>
 
 int main(int argv, const char **argc) {
+
+	// attach to a shared memory segment keyed to /tmp/shm
         sharedmemory    shm;
         shm.attach(ftok("/tmp/shm",0));
 
+	// display the data contained in the shared memory segment
         char    *shmptr=(char *)shm.getPointer();
         printf("%s\n",shmptr);
 }

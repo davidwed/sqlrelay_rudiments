@@ -20,31 +20,56 @@ class myserver : public daemonprocess, public inetserversocket {
 
 void	myserver::listen() {
 
+
+	// make sure that only one instance is running
 	int	pid=checkForPidFile("/tmp/svr.pidfile");
 	if (pid>-1) {
 		printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
 	}
 
-	createPidFile("/tmp/svr.pidfile",permissions::ownerReadWrite());
+
+	// detach from the controlling terminal
 	detach();
 
+
+	// create a pid file which is used to make sure that only one instance
+	// is running and can also be used to kill the process
+	createPidFile("/tmp/svr.pidfile",permissions::ownerReadWrite());
+
+
+	// listen on inet socket port 8000
 	listenOnSocket(NULL,8000,15);
 
+
+	// loop...
 	for (;;) {
+
+		// accept a client connection
 		datatransport	*clientsock=acceptClientConnection();
+
+
+		// read 5 bytes from the client and display it
 		char	buffer[6];
 		buffer[5]=(char)NULL;
 		int	sizeread=clientsock->read((char *)buffer,5);
 		printf("%s\n",buffer);
+
+
+		// write "hello" back to the client
 		clientsock->write("hello",5);
+
+
+		// close the socket and clean up
 		clientsock->close();
 		delete clientsock;
 	}
 }
 
+
 myserver	*mysvr;
 
+// define a function to shut down the process cleanly
 RETSIGTYPE	shutDown() {
 	printf("shutting down\n");
 	mysvr->close();
@@ -53,11 +78,14 @@ RETSIGTYPE	shutDown() {
 	exit(0);
 }
 
+
 int main(int argv, const char **argc) {
 
 	mysvr=new myserver();
+
+	// set up signal handlers for clean shutdown
 	mysvr->handleShutDown((RETSIGTYPE *)shutDown);
+	mysvr->handleCrash((RETSIGTYPE *)shutDown);
+
 	mysvr->listen();
-	delete mysvr;
-	exit(0);
 }

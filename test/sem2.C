@@ -12,9 +12,12 @@
 
 int main(int argv, const char **argc) {
 
+	// attach to the semaphore set keyed to /tmp/sem containing 2 semaphores
         semaphoreset	sem;
 	sem.attach(ftok("/tmp/sem",0),2);
 
+	// loop 10 times, printing 1 and 2, synchronizing with another process
+	// using the semaphores
         for (int i=0; i<10; i++) {
                 sem.wait(1);
                 printf("1\n");

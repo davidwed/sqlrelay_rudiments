@@ -224,9 +224,10 @@ int datetime::adjustTimeZone(const char *newtz) {
 	initTimeString();
 	initTimeStruct();
 
-	// get a struct tm relative to this new time zone
-	//	(note that this must use localtime, not
-	//		localtime_r or the timezone will not be set)
+	// Get a struct tm relative to this new time zone...
+	// Note that this must use localtime, not localtime_r or the timezone
+	// will not be set.  Also, there's no advantage to using localtime_r
+	// here because this whole method is mutex'ed anyway.
 	struct tm	*lcltm=localtime(&epoch);
 	if (!lcltm) {
 		return 0;

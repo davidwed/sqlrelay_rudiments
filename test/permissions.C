@@ -9,13 +9,16 @@
 
 int main(int argv, const char **argc) {
 
+
         // Create a file with rw-r--r-- permissions
         int     fd=open("/tmp/tempfile",O_RDWR|O_CREAT,
                                 permissions::evalPermString("rw-r--r--"));
 
+
         // change the permissions to rw-rw-r--
         permissions::setFilePermissions(fd,
                                 permissions::evalPermString("rw-rw-r--"));
+
 
         // close and delete the file
         close(fd);

@@ -12,6 +12,7 @@
 
 char *logger::logHeader(const char *name) {
 	datetime	dt;
+	dt.getSystemDateAndTime();
 	char	*dtstring=dt.getString();
 	char	*retval=new char[strlen(dtstring)+strlen(name)+16];
 	sprintf(retval,"%s %s [%d]",dtstring,name,getpid());

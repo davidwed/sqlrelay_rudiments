@@ -9,6 +9,7 @@
 
 int main(int argv, const char **argc) {
 
+	// display the contents of xmls.xml
 	xmldom	x;
 	x.parseFile("xmls.xml");
 	stringbuffer	*xml=x.getRootNode()->xml();

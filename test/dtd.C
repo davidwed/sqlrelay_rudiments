@@ -9,6 +9,7 @@
 
 int main(int argv, const char **argc) {
 
+	// display the contents of dtd.dtd
 	dtd	d;
 	d.parseFile("dtd.dtd");
 	printf("%s\n",d.xml()->getString());
