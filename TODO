@@ -91,22 +91,84 @@ filedescriptor
 
 --------------------------------------------------------------------------------
 
-internationalization:
-	langinfo.h - locale info functions
-	locale.h/xlocale.h - setlocale, localeconv, etc.
-	iconv.h - character set conversion
-	libintl.h - gettext functions
-	stdlib.h - rpmatch() - response match
+charstring class:
+	stdlib.h - strtof(_l)() - string to float
+		strtold(_l)() - string to long double
+		strtoul(_l)() - string to ulong
+		strto(ll|q)(_l)() - string to long long
+		strto(ull|uq)(_l)() - string to unsigned long long
+	stdio.h - sprintf()
+	string.h/strings.h -
+		strxfrm(_l)()
+		strcspn(),strspn(),strpbrk()
+	wordexp.h - wordexp()/wordfree() - word expansion???
+	gnu extensions -
+		stdio.h - asprintf(), open_memstream(), obstack_printf()
+		obstack.h - lots of object stack macros for
+				building strings char at a time
+	not in bsd - 
+		monetary.h - strfmon(_l)()
 
-glob class:
+filesystem class:
+	bsd/linux only (solaris uses an ioctl) - 
+		sys/quota.h - quotactl() function, macros, defines
+	bsd/linux only - 
+		fstab.h - /etc/fstab parser
+			getfsent(),getfsspec(),getfsfile(),setfsent(),endfsent()
+	sunos/linux only - 
+		mntent.h - read/write fstab, mtab, etc.
+				setmntent(),getmntent(_r)()
+				addmntent(),endmntent(),hasmntopt()
+	linux only -
+		sys/mount.h - mount(),umount(),umount2()
+
+commandline class:
+	getopt.h - make sure commandline class has full functionality
+			getopt(),getopt_long(),getopt_long_only()
+
+datetime class:
+	time.h - difftime()
+
+timer class:
+	not on many systems -
+		time.h and sys/time.h -
+				clock_getres(), clock_gettime(), clock_settime()
+				clock_nanosleep(), clock_getcpuclockid()
+				timer_create(), timer_delete(), timer_settime(),
+				timer_gettime(), timer_getoverrun()
+					CLOCK_REALTIME
+					CLOCK_MONOTONIC
+					CLOCK_PROCESS_CPUTIME_ID
+					CLOCK_THREAD_CPUTIME_ID
+
+filedescriptor class:
+	fcntl.h - fcntl()
+			F_GET/SETFD - get/set close-on-exec bit
+			F_GET/SETFL - get/set flags
+				O_APPEND,O_NONBLOCK,O_ASYNC,O_DIRECT
+			F_GET/SETOWN - get/set process group that will receive
+					signals on i/o availability
+			F_GET/SETSIG - get/set what signal to send to process
+					group on i/o/availability
+	sys/select.h - select(),pselect()
+	sys/ioctl.h - ioctl()
+	sys/poll.h - poll()
+	sys/uio.h - readv()/writev()
+	gnu extensions - 
+		stdio.h - dprintf()
+	linux only - 
+		sys/sendfile.h - sendfile()
+	not in many systems - 
+		sys/epoll.h - epoll functions for speeding up network io
+				epoll_create(),epoll_ctl(),epoll_wait()
+		aio.h - aio_init(),aio_read(),aio_write(),lio_listio(),
+			aio_error(),aio_return(),aio_cancel(),
+			aio_suspend(),aio_fsync()
+
+directorylisting class:
 	glob.h - glob(),globfree(),glob_pattern_p()
-
-filesystem traversal class:
-	fts.h/ftw.h - file heirarchy traversal functions
-			fts_open(),fts_close()
-			fts_children(),fts_read(),fts_set()
-			ftw()/nftw() - call a function on every
-					element in a directory tree
+	not in posix - 
+		dirent/direct.h - scandir(),alphasort(),versionsort()
 
 link class:
 	unistd.h - lchown()
@@ -116,22 +178,9 @@ link class:
 pipe class:
 	unistd.h - pipe(), pathconf()/fpathconf(): __POSIX_PIPE_BUF()
 
-directory class:
-	dirent/direct.h - scandir(),alphasort(),versionsort() - not in posix
-
-filesystem class:
-	sys/mount.h - mount(),umount(),umount2()
-	sys/quota.h - quotactl() function, macros, defines
-	sys/utsname.h - uname()
-	fstab.h - /etc/fstab parser
-			getfsent(),getfsspec(),getfsfile(),setfsent(),endfsent()
-	mntent.h - read/write fstab, mtab, etc.
-			setmntent(),getmntent(_r)()
-			addmntent(),endmntent(),hasmntopt()
-
 math class:
 	stdlib.h - abs(), labs(), llabs(), div(), ldiv(), lldiv()
-	math.h - fpclassify()
+	math.h/tgmath.h - fpclassify()
 			signbit()
 			isfinite()
 			isnormal()
@@ -141,7 +190,7 @@ math class:
 			isless(),islessequal()
 			islessgreater()
 			isunordered()
-	tgmath.h - acos(),asin(),atan(),atan2()
+			acos(),asin(),atan(),atan2()
 			cos(),sin(),tan()
 			acosh(),asinh(),atanh(),
 			cosh(),sinh(),tanh()
@@ -164,69 +213,20 @@ math class:
 			fma()
 			carg(),conj(),cproj()
 			cimag(),creal()
-	sys/param.h - howmany(),roundup(),powerof2(),MIN(),MAX()
-	inttypes.h - some integer math functions
+	may not be in solaris - 
+		inttypes.h - some integer math functions
 			imaxabs(),imaxdiv()
 			strtoimax(),strtoumax(),wcstoimax(),wcstoumax()
-
-bit manipulation class:
-	sys/param.h - setbit(),clrbit(),isset(),isclr()
-	string.h - ffs(),ffsl(),ffsll()
-
-commandline class:
-	getopt.h - make sure commandline class has full functionality
-			getopt(),getopt_long(),getopt_long_only()
+	not in solaris - 
+		sys/param.h - howmany(),roundup(),powerof2(),MIN(),MAX()
 
 raw buffers:
-	string.h -
-		memcpy(),memmove(),memccpy,memset()
-		memcmp(),memchr(),rawmwmchr(),memrchr()
-		memmem(),mempcpy()
-		memfrob()
+	string.h - memcpy(),memmove(),memccpy,memset(),memcmp(),memchr()
 	unistd.h - swab()
-
-charstring class:
-	stdlib.h - strtof(_l)() - string to float
-		strtold(_l)() - string to long double
-		strtoul(_l)() - string to ulong
-		strto(ll|q)(_l)() - string to long long
-		strto(ull|uq)(_l)() - string to unsigned long long
-	stdio.h - sprintf(),asprintf
-		open_memstream(),objstack_printf()
-	string.h/strings.h -
-		strxfrm(_l)()
-		strcspn(),strspn(),strpbrk()
-	monetary.h - strfmon(_l)() - format monetary values
-	wordexp.h - wordexp()/wordfree() - word expansion???
-	obstack.h - lots of object stack macros for
-			building strings char at a time
-
-character class:
-	ctype.h - isalnum() - alpha numeric
-		isalpha()
-		iscntrl() - control character
-		isdigit()
-		islower()
-		isgraph() - printable but non-space
-		isprint()
-		ispunct()
-		isspace()
-		isupper()
-		isxdigit() - hex digit
-		isblank()
-		isctype() - space or tab, gnu extension
-		iascii()
-		tolower()
-		toupper()
-		toascii() - clears high order bits, makes it an ascii character
-
-multibyte/widechar - 
-	stdlib.h - mblen() - get multibyte character length
-		mbtowc() - convert multibyte to widechar
-		wctomb() - convert widechar to multibyte
-		mbstowcs() - convert multibyte string to wide char string
-		wcstombs() - convert wide char string to multibyte string
-	wchar.h/wctype.h - lots of multibyte/wide character utilities
+	gnu extensions - 
+		string.h - rawmemchr(),memrchr(),memmem(),mempcpy()
+	linux only - 
+		string.h - memfrob()
 
 serialportprofile class:
 	termios.h - cfgetospeed(),cfgetispeed(),
@@ -237,59 +237,32 @@ serialportprofile class:
 		tcdrain(),tcflush(),tcflow()
 		tcgetsid()
 
-datetime class:
-	time.h - difftime()
-
-timer class:
-	many systems don't have these...
-	time.h and sys/time.h - clock_getres(), clock_gettime(), clock_settime()
-				clock_nanosleep(), clock_getcpuclockid()
-				timer_create(), timer_delete(), timer_settime(),
-				timer_gettime(), timer_getoverrun()
-					CLOCK_REALTIME
-					CLOCK_MONOTONIC
-					CLOCK_PROCESS_CPUTIME_ID
-					CLOCK_THREAD_CPUTIME_ID
-
 tty:
-	stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)(),getpt()
 	unistd.h - tcgetpgrp(),tcsetpgrp()
 			ctermid()
 			ttyname(_r)()
 			isatty()
-			vhangup()
-	stdio.h - ctermid()
-	pty.h - openpty(),forkpty()
-	ttyent.h - getttyent()/getttynam()/setttyent()/endttyent()
-	utmp.h - login_tty()
 	unistd.h - pathconf()/fpathconf():
 				__PC_VDISABLE()
 				__POSIX_MAX_CANON()
 				__POSIX_MAX_INPUT()
+	linux only -
+		unistd.h - vhangup()
+
+pseudotty class:
+	not in solaris - 
+		pty.h - openpty(),forkpty()
+		utmp.h - login_tty()
+	not on solaris or linux -
+		ttyent.h - getttyent()/getttynam()/setttyent()/endttyent()
+	not in bsd -
+		stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)()
+	gnu extensions -
+		stdlib.h - getpt()
 
 errors:
 	stdio.h - perror()
 	string.h - strerror(_r)()
-
-filedescriptor class:
-	fcntl.h - fcntl()
-			F_GET/SETFD - get/set close-on-exec bit
-			F_GET/SETFL - get/set flags
-				O_APPEND,O_NONBLOCK,O_ASYNC,O_DIRECT
-			F_GET/SETOWN - get/set process group that will receive
-					signals on i/o availability
-			F_GET/SETSIG - get/set what signal to send to process
-					group on i/o/availability
-	aio.h - aio_init(),aio_read(),aio_write(),lio_listio(),aio_error(),
-		aio_return(),aio_cancel(),aio_suspend(),aio_fsync()
-	stdio.h - dprintf()
-	sys/select.h - select(),pselect() functions
-	sys/epoll.h - epoll functions for speeding up network io
-			epoll_create(),epoll_ctl(),epoll_wait()
-	sys/ioctl.h - ioctl()
-	sys/poll.h - poll() function
-	sys/uio.h - readv()/writev() functions
-	sys/sendfile.h - sendfile() function
 
 memorymap class:
 	sys/mman.h - mmap(),munmap(),mprotect(),msync()
@@ -297,35 +270,38 @@ memorymap class:
 			mlock(),munlock(),munlockall(),
 			mremap()
 			mincore()
-			remap_file_pages()
-			shm_open(),shm_unlink()
+	linux only - 
+		sys/mman.h - remap_file_pages()
+	not in bsd - 
+		sys/mman.h - shm_open(),shm_unlink()
 
 shell commands:
 	stdlib.h - system()
 	unistd.h - execve()/fexecve(),execv(),execle(),execl(),execvp(),execlp()
 	stdio.h - popen(), pclose()
-	spawn.h - posix spawn interface
-			posix_spawn()
-			posix_spawnp()
-			posix_spawnattr_init()
-			posix_spawnattr_destroy()
-			posix_spawnattr_getsigdefault()
-			posix_spawnattr_setsigdefault()
-			posix_spawnattr_getsigmask()
-			posix_spawnattr_setsigmask()
-			posix_spawnattr_getflags()
-			posix_spawnattr_setflags()
-			posix_spawnattr_getpgroup()
-			posix_spawnattr_setpgroup()
-			posix_spawnattr_getschedpolicy()
-			posix_spawnattr_setschedpolicy()
-			posix_spawnattr_getschedparam()
-			posix_spawnattr_setschedparam()
-			posix_spawn_file_actions_init()
-			posix_spawn_file_actions_destroy()
-			posix_spawn_file_actions_addopen()
-			posix_spawn_file_actions_addclose()
-			posix_spawn_file_actions_adddup2()
+	not in many systems -
+		spawn.h - posix spawn interface
+				posix_spawn()
+				posix_spawnp()
+				posix_spawnattr_init()
+				posix_spawnattr_destroy()
+				posix_spawnattr_getsigdefault()
+				posix_spawnattr_setsigdefault()
+				posix_spawnattr_getsigmask()
+				posix_spawnattr_setsigmask()
+				posix_spawnattr_getflags()
+				posix_spawnattr_setflags()
+				posix_spawnattr_getpgroup()
+				posix_spawnattr_setpgroup()
+				posix_spawnattr_getschedpolicy()
+				posix_spawnattr_setschedpolicy()
+				posix_spawnattr_getschedparam()
+				posix_spawnattr_setschedparam()
+				posix_spawn_file_actions_init()
+				posix_spawn_file_actions_destroy()
+				posix_spawn_file_actions_addopen()
+				posix_spawn_file_actions_addclose()
+				posix_spawn_file_actions_adddup2()
 
 process:
 	unistd.h - nice()
@@ -334,19 +310,15 @@ process:
 			getsid()
 			setsid()
 			getuid(),geteuid(),getgid(),getegid()
-			getgroups(),group_member()
+			getgroups()
 			setuid(),setreuid(),seteuid()
 			setgid(),setregid(),setegid()
-			getresuid(),getresgid()
-			setresuid(),setresgid()
 			fork(),vfork()
 			profil()
 			acct()
-			daemon()
 			getdtablesize()
 			brk()/sbrk()
 			syscall()
-	execinfo.h - backtrace(),backtrace_symbols(),backtrace_symbols_fd()
 	sched.h - functions for manipulating the scheduler
 			sched_setparam(),sched_getparam()
 			sched_setscheduler(),sched_getscheduler()
@@ -354,28 +326,33 @@ process:
 			sched_get_priority_max(),sched_get_priority_min()
 			sched_rr_get_interval()
 			sched_setaffinity(),sched_getaffinity()
-	ucontext.h - user-level context switching
-			getcontext(),setcontext(),swapcontext(),makecontext()
 	sys/acct.h - acct() - process accounting on/off
-	sys/prctl.h - prctl() function 
-	sys/ptrace.h - ptrace() function
+	sys/ptrace.h - ptrace()
 	sys/resource.h - get/set process priority/resource usage
 				getrlimit(),setrlimit()
 				getrusage()
 				getpriority(),setpriority()
-	sys/stat.h - umask(),getumask()
+	sys/stat.h - umask()
 	sys/times.h - times() - function for getting process times
-	sys/gmon.h and sys/gmon_out.h - monstartup() profiling function, structs
-	sys/vlimit.h - vlimit() function
-	sys/vtimes.h - vtimes() function
+	not in solaris -
+		unistd.h - daemon()
+	not in many systems - 
+		unistd.h - group_member()
+				getresuid(),getresgid()
+				setresuid(),setresgid()
+		sys/gmon.h and sys/gmon_out.h - monstartup()
+	linux only - 
+		execinfo.h - backtrace(),backtrace_symbols(),
+				backtrace_symbols_fd()
+		sys/prctl.h - prctl()
+	not in bsd - 
+		ucontext.h - user-level context switching
+			getcontext(),setcontext(),swapcontext(),makecontext()
 
 signals:
-	stdlib.h - abort(), atexit(), on_exit(), exit(), _Exit()
+	stdlib.h - abort(), atexit(), exit(), _Exit()
 	string.h - strsignal()
-	unistd.h - alarm(), ualarm()
-			sleep(), usleep(), nanosleep()
-			pause()
-			_exit()
+	unistd.h - pause(), _exit()
 	setjmp.h - setjmp()/longjump()/sigsetjump() - save stack contexts
 	signal.h - signal stuff - need to implement more of this
 			sysv_signal(),bsd_signal(),signal()
@@ -391,39 +368,48 @@ signals:
 			sigvec(),sigreturn(),siginterrupt(),
 			sigstack(),signalstack()
 			sighold(),sigrelse(),sigignore(),sigset()
-	sys/wait.h - wait(),wait3(),wait4(),waitid(),waitpid() functions
+	sys/wait.h - wait(),wait3(),wait4(),waitpid()
+	not in many systems - 
+		stdlib.h - on_exit()
+		sys/wait.h - waitid()
 
 system:
+	sys/utsname.h - uname()
 	stdlib.h - getloadavg()
-	unistd.h - sysconf(),confstr()
-			gethostid(),sethostid()
-			getpagesize()
+	unistd.h - sysconf()
+			confstr() - use sysctl() on bsd
+			gethostid(),sethostid() - use sysctl() on bsd
+			getpagesize() - use sysconf() on bsd
 			sync()
-	sys/kdaemon.h - bdflush() function
-	sys/klog.h - klogctl() function
-	sys/personality.h - personality() - set linux kernel personality
 	sys/raw.h - structs/defines for /dev/rawctl ioctl()'s
-	sys/reboot.h - reboot() function
-	sys/swap.h - swapon()/swapoff() functions
-	sys/sysctl.h - sysctl() function
-	sys/sysinfo.h - functions for gettting overall system statistics
+	sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()
+	not in solaris - 
+		sys/sysctl.h - sysctl()
+	linux only - 
+		sys/kdaemon.h - bdflush()
+		sys/klog.h - klogctl()
+		sys/personality.h - personality() - set linux kernel personality
+		sys/reboot.h - reboot()
+		sys/swap.h - swapon()/swapoff()
+		sys/sysinfo.h - functions for gettting overall system statistics
 				sysinfo(),
 				get_nprocs_conf(),get_nprocs(),
 				get_phys_pages,get_avphys_pages()
-	sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()
+
 
 login records:
 	unistd.h - ttyslot(),getlogin(_r)(),setlogin()
 			getusershell(),endusershell(),setusershell()
 	stdio.h - cuserid()
-	utmp.h - login(),logout(),logwtmp(),updwtmp(),uptmpname(),
-			getutent(_r)(),setutent(),endutent(),
-			getutid(_r)(),getutline(_r)(),pututline()
 	utmpx.h - setutxent(),endutxent(),
 			getutxent(),getutxid(),getutxline()
 			pututxline()
 			utmpxname(),updwtmpx()
 			getutmp(),getutmpx()
+	not on solaris -
+		utmp.h - login(),logout(),logwtmp(),updwtmp(),uptmpname(),
+			getutent(_r)(),setutent(),endutent(),
+			getutid(_r)(),getutline(_r)(),pututline()
 
 messagequeue class:
 	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
@@ -449,30 +435,42 @@ data structures:
 			hsearch(_r)(),hcreate(_r)(),hdestroy(_r)()
 			tsearch(),tfind(),tdelete(),twalk(),tdestroy()
 			lfind(),lsearch()
-	sys/queue.h - list, tail queue and circular queue structs and macros
-			LIST_INIT(),
-			LIST_INSERT_AFTER(),LIST_INSERT_HEAD(),
-			LIST_REMOVE(),
-			TAILQ_INIT(),
-			TAILQ_INSERT_HEAD(),TAILQ_INSERT_TAIL(),
-			TAILQ_INSERT_AFTER(),
-			TAILQ_REMOVE(),
-			CIRCLEQ_INIT(),
-			CIRCLEQ_INSERT_AFTER(),CIRCLEQ_INSERT_BEFORE(),
-			CIRCLEQ_INSERT_HEAD(),CIRCLEQ_INSERT_TAIL(),
-			CIRCLEQ_REMOVE()
+	not in solaris -
+		sys/queue.h - list, tail queue and circular queue
+				structs and macros
+				LIST_INIT(),
+				LIST_INSERT_AFTER(),LIST_INSERT_HEAD(),
+				LIST_REMOVE(),
+				TAILQ_INIT(),
+				TAILQ_INSERT_HEAD(),TAILQ_INSERT_TAIL(),
+				TAILQ_INSERT_AFTER(),
+				TAILQ_REMOVE(),
+				CIRCLEQ_INIT(),
+				CIRCLEQ_INSERT_AFTER(),CIRCLEQ_INSERT_BEFORE(),
+				CIRCLEQ_INSERT_HEAD(),CIRCLEQ_INSERT_TAIL(),
+				CIRCLEQ_REMOVE()
+
+internationalization:
+	langinfo.h - locale info functions
+	locale.h/xlocale.h - setlocale, localeconv, etc.
+	iconv.h - character set conversion
+	libintl.h - gettext functions
+	stdlib.h - rpmatch() - response match
+
+filesystem traversal class:
+	fts.h/ftw.h - file heirarchy traversal functions
+			fts_open(),fts_close()
+			fts_children(),fts_read(),fts_set()
+			ftw()/nftw() - call a function on every
+					element in a directory tree
 
 network:
 	unistd.h - gethostname()/sethostname()
-			getdomainname()/setdomainname()
 	netdb.h - netgroup functions
 			herror(),hstrerror()
 			rcmd(_af)(),rexec(_af)(),ruserok(_af)(),rresvport(_af)()
 			gai_strerror(),getnameinfo(),getaddrinfo_a(),
-			gai_suspend(),gai_error(),gai_cancel()
 	resolv.h - resolver functions, lots of these
-	ifaddrs.h - discover network interfaces
-			getifaddrs(),freeifaddrs()
 	sys/socket.h - socket(),socketpair(),
 			getsockname(),getpeername(),
 			bind(),listen(),accept(),
@@ -481,40 +479,46 @@ network:
 			sendto(),recvfrom(),
 			sendmsg(),recvmsg(),
 			getsockopt(),setsockopt(),
-			shutdown(),
-			sockatmark(),
-			isfdtype()
-	net/ethernet.h - ethernet interface structs/defines
+			shutdown()
 	net/if.h - physical interface structs/defines
 	net/if_arp.h - arp protocol structs/defines
-	net/if_packet.h - packet sockets structs/defines
-	net/if_ppp.h - ppp interfaces structs/defines
-	net/if_shaper.h - traffic shaper structs/defines
-	net/if_slip.h - slip interfaces structs/defines
 	net/route.h - routing structs/defines
-	netinet/ether.h - ethernet addresses to acii and back
-				ether_ntoa(_r)()
-				ether_aton(_r)()
-				ether_ntohost()
-				ether_hostton()
-				ether_line()
+	netinet/in.h - ntohl,ntohs,htoln,htons
 	netinet/icmp6.h - icmp structs
 	netinet/if_ether.h - more arp structs???
-	netinet/if_fddi.h - fddi packet struct???
-	netinet/if_tr.h - ???
 	netinet/igmp.h - igmp structs???
-	netinet/in.h - ip/ipv6 address structs,
-			ntohl,ntohs,htoln,htons
-			bindresvport(),bindresvport6()
-			inet6_option_space()
-			inet6_option_init()
-			inet6_option_append()
-			inet6_option_alloc()
-			inet6_option_next()
-			inet6_option_find()
-	netinet/ip.h - ip packet structs
-	netinet/ip6.h - ipv6 packet structs
-	netinet/ip_icmp.h - icmp packet structs
 	netinet/tcp.h - #defines for setsockopt, tcp packet structs
 	netinet/udp.h - udp packet structs
-	netpacket/packet.h - raw packet structs
+
+	not on solaris -
+		unistd.h - getdomainname()/setdomainname()
+		netdb.h - gai_suspend(),gai_error(),gai_cancel()
+		ifaddrs.h - discover network interfaces
+				getifaddrs(),freeifaddrs()
+		net/if_packet.h - packet sockets structs/defines
+		net/if_ppp.h - ppp interfaces structs/defines
+		netinet/in.h - ip/ipv6 address structs,
+				bindresvport(),bindresvport6()
+				inet6_option_space()
+				inet6_option_init()
+				inet6_option_append()
+				inet6_option_alloc()
+				inet6_option_next()
+				inet6_option_find()
+		netinet/ip.h - ip packet structs
+		netinet/ip6.h - ipv6 packet structs
+		netinet/ip_icmp.h - icmp packet structs
+	not on many systems -
+		sys/socket.h - sockatmark()
+		net/ethernet.h - ethernet interface structs/defines
+		net/if_shaper.h - traffic shaper structs/defines
+		net/if_slip.h - slip interfaces structs/defines
+		netinet/if_fddi.h - fddi packet struct???
+		netinet/if_tr.h - ???
+		netinet/ether.h - ethernet addresses to acii and back
+					ether_ntoa(_r)()
+					ether_aton(_r)()
+					ether_ntohost()
+					ether_hostton()
+					ether_line()
+		netpacket/packet.h - raw packet structs
