@@ -253,6 +253,7 @@ class filedescriptor {
 			// Causes waits not to automatically retry if
 			// interrupted by a signal.  This is the default.
 
+
 		// By default, read() will attempt to read the specified number
 		// of bytes from the file descriptor, in several passes if
 		// necessary.  No single pass will try to read more than
@@ -267,8 +268,19 @@ class filedescriptor {
 			// number of bytes from the file descriptor, in several
 			// passes if necessary.
 
+
+		// By default, calls to waitForNonBlockingRead() and
+		// waitForNonBlockingWrite() will wait using the select()
+		// system call.  These methods override that behavior.
 		void	useListener(listener *lstnr);
+			// Causes calls to waitForNonBlockingRead() and
+			// waitForNonBlockingWrite() to in turn call
+			// lstnr->waitForNonBlockingRead() or
+			// lstnr->waitForNonBlockingWrite().
 		void	dontUseListener();
+			// Causes calls to waitForNonBlockingRead() and
+			// waitForNonBlockingWrite() to use select().
+			// This is the default.
 
 	#include <rudiments/private/filedescriptor.h>
 };
