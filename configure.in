@@ -51,6 +51,215 @@ AC_ARG_ENABLE(threads,
 	ENABLE_RUDIMENTS_THREADS="no",
 	ENABLE_RUDIMENTS_THREADS="yes")
 
+dnl   options to disable building various classes
+AC_ARG_ENABLE(charstring,
+	[  --disable-charstring    Don't build charstring class],
+	INCLUDE_CHARSTRING="0",
+	INCLUDE_CHARSTRING="1")
+AC_ARG_ENABLE(character,
+	[  --disable-character     Don't build character class],
+	INCLUDE_CHARACTER="0",
+	INCLUDE_CHARACTER="1")
+AC_ARG_ENABLE(intervaltimer,
+	[  --disable-intervaltimer Don't build intervaltimer class],
+	INCLUDE_INTERVALTIMER="0",
+	INCLUDE_INTERVALTIMER="1")
+AC_ARG_ENABLE(math,
+	[  --disable-math          Don't build math class],
+	INCLUDE_MATH="0",
+	INCLUDE_MATH="1")
+dnl force disable math class for now
+INCLUDE_MATH="0"
+AC_ARG_ENABLE(rawbuffer,
+	[  --disable-rawbuffer     Don't build rawbuffer class],
+	INCLUDE_RAWBUFFER="0",
+	INCLUDE_RAWBUFFER="1")
+AC_ARG_ENABLE(memorymap,
+	[  --disable-memorymap     Don't build memorymap class],
+	INCLUDE_MEMORYMAP="0",
+	INCLUDE_MEMORYMAP="1")
+AC_ARG_ENABLE(mutex,
+	[  --disable-mutex         Don't build mutex class],
+	INCLUDE_MUTEX="0",
+	INCLUDE_MUTEX="1")
+AC_ARG_ENABLE(serialport,
+	[  --disable-serialport    Don't build serialport class],
+	INCLUDE_SERIALPORT="0",
+	INCLUDE_SERIALPORT="1")
+AC_ARG_ENABLE(serialportprofile,
+	[  --disable-serialportprofile    Don't build serialportprofile class],
+	INCLUDE_SERIALPORTPROFILE="0",
+	INCLUDE_SERIALPORTPROFILE="1")
+AC_ARG_ENABLE(parameterstring,
+	[  --disable-parameterstring      Don't build parameterstring class],
+	INCLUDE_PARAMETERSTRING="0",
+	INCLUDE_PARAMETERSTRING="1")
+AC_ARG_ENABLE(environment,
+	[  --disable-environment   Don't build environment class],
+	INCLUDE_ENVIRONMENT="0",
+	INCLUDE_ENVIRONMENT="1")
+AC_ARG_ENABLE(commandline,
+	[  --disable-commandline   Don't build commandline class],
+	INCLUDE_COMMANDLINE="0",
+	INCLUDE_COMMANDLINE="1")
+AC_ARG_ENABLE(datetime,
+	[  --disable-datetime      Don't build datetime class],
+	INCLUDE_DATETIME="0",
+	INCLUDE_DATETIME="1")
+AC_ARG_ENABLE(timezonefile,
+	[  --disable-timezonefile  Don't build timezonefile class],
+	INCLUDE_TIMEZONEFILE="0",
+	INCLUDE_TIMEZONEFILE="1")
+AC_ARG_ENABLE(groupentry,
+	[  --disable-groupentry    Don't build groupentry class],
+	INCLUDE_GROUPENTRY="0",
+	INCLUDE_GROUPENTRY="1")
+AC_ARG_ENABLE(passwdentry,
+	[  --disable-passwdentry   Don't build passwdentry class],
+	INCLUDE_PASSWDENTRY="0",
+	INCLUDE_PASSWDENTRY="1")
+AC_ARG_ENABLE(serviceentry,
+	[  --disable-serviceentry  Don't build serviceentry class],
+	INCLUDE_SERVICEENTRY="0",
+	INCLUDE_SERVICEENTRY="1")
+AC_ARG_ENABLE(shadowentry,
+	[  --disable-shadowentry   Don't build shadowentry class],
+	INCLUDE_SHADOWENTRY="0",
+	INCLUDE_SHADOWENTRY="1")
+AC_ARG_ENABLE(rpcentry,
+	[  --disable-rpcentry      Don't build rpcentry class],
+	INCLUDE_RPCENTRY="0",
+	INCLUDE_RPCENTRY="1")
+AC_ARG_ENABLE(protocolentry,
+	[  --disable-protocolentry Don't build protocolentry class],
+	INCLUDE_PROTOCOLENTRY="0",
+	INCLUDE_PROTOCOLENTRY="1")
+AC_ARG_ENABLE(hostentry,
+	[  --disable-hostentry     Don't build hostentry class],
+	INCLUDE_HOSTENTRY="0",
+	INCLUDE_HOSTENTRY="1")
+AC_ARG_ENABLE(dynamiclib,
+	[  --disable-dynamiclib    Don't build dynamiclib class],
+	INCLUDE_DYNAMICLIB="0",
+	INCLUDE_DYNAMICLIB="1")
+AC_ARG_ENABLE(crypt,
+	[  --disable-crypt         Don't build crypt class],
+	INCLUDE_CRYPT="0",
+	INCLUDE_CRYPT="1")
+AC_ARG_ENABLE(variablebuffer,
+	[  --disable-variablebuffer       Don't build variablebuffer class],
+	INCLUDE_VARIABLEBUFFER="0",
+	INCLUDE_VARIABLEBUFFER="1")
+AC_ARG_ENABLE(stringbuffer,
+	[  --disable-stringbuffer  Don't build stringbuffer class],
+	INCLUDE_STRINGBUFFER="0",
+	INCLUDE_STRINGBUFFER="1")
+AC_ARG_ENABLE(errorhandler,
+	[  --disable-errorhandler  Don't build errorhandler class],
+	INCLUDE_ERRORHANDLER="0",
+	INCLUDE_ERRORHANDLER="1")
+AC_ARG_ENABLE(xmlsax,
+	[  --disable-xmlsax        Don't build xmlsax class],
+	INCLUDE_XMLSAX="0",
+	INCLUDE_XMLSAX="1")
+AC_ARG_ENABLE(xmldom,
+	[  --disable-xmldom        Don't build xmldom class],
+	INCLUDE_XMLDOM="0",
+	INCLUDE_XMLDOM="1")
+AC_ARG_ENABLE(dtd,
+	[  --disable-dtd           Don't build dtd class],
+	INCLUDE_DTD="0",
+	INCLUDE_DTD="1")
+AC_ARG_ENABLE(filesystem,
+	[  --disable-filesystem    Don't build filesystem class],
+	INCLUDE_FILESYSTEM="0",
+	INCLUDE_FILESYSTEM="1")
+AC_ARG_ENABLE(directory,
+	[  --disable-directory     Don't build directory class],
+	INCLUDE_DIRECTORY="0",
+	INCLUDE_DIRECTORY="1")
+AC_ARG_ENABLE(filedescriptor,
+	[  --disable-filedescriptor       Don't build filedescriptor class],
+	INCLUDE_FILEDESCRIPTOR="0",
+	INCLUDE_FILEDESCRIPTOR="1")
+AC_ARG_ENABLE(file,
+	[  --disable-file          Don't build file class],
+	INCLUDE_FILE="0",
+	INCLUDE_FILE="1")
+AC_ARG_ENABLE(device,
+	[  --disable-device        Don't build device class],
+	INCLUDE_DEVICE="0",
+	INCLUDE_DEVICE="1")
+AC_ARG_ENABLE(datatransport,
+	[  --disable-datatransport Don't build datatransport class],
+	INCLUDE_DATATRANSPORT="0",
+	INCLUDE_DATATRANSPORT="1")
+AC_ARG_ENABLE(client,
+	[  --disable-client        Don't build client class],
+	INCLUDE_CLIENT="0",
+	INCLUDE_CLIENT="1")
+AC_ARG_ENABLE(inetclient,
+	[  --disable-inetclient    Don't build inetclient class],
+	INCLUDE_INETCLIENT="0",
+	INCLUDE_INETCLIENT="1")
+AC_ARG_ENABLE(unixclient,
+	[  --disable-unixclient    Don't build unixclient class],
+	INCLUDE_UNIXCLIENT="0",
+	INCLUDE_UNIXCLIENT="1")
+AC_ARG_ENABLE(server,
+	[  --disable-server        Don't build server class],
+	INCLUDE_SERVER="0",
+	INCLUDE_SERVER="1")
+AC_ARG_ENABLE(inetserver,
+	[  --disable-inetserver    Don't build inetserver class],
+	INCLUDE_INETSERVER="0",
+	INCLUDE_INETSERVER="1")
+AC_ARG_ENABLE(unixserver,
+	[  --disable-unixserver    Don't build unixserver class],
+	INCLUDE_UNIXSERVER="0",
+	INCLUDE_UNIXSERVER="1")
+AC_ARG_ENABLE(listener,
+	[  --disable-listener      Don't build listener class],
+	INCLUDE_LISTENER="0",
+	INCLUDE_LISTENER="1")
+AC_ARG_ENABLE(logger,
+	[  --disable-logger        Don't build logger class],
+	INCLUDE_LOGGER="0",
+	INCLUDE_LOGGER="1")
+AC_ARG_ENABLE(memorypool,
+	[  --disable-memorypool    Don't build memorypool class],
+	INCLUDE_MEMORYPOOL="0",
+	INCLUDE_MEMORYPOOL="1")
+AC_ARG_ENABLE(signalclasses,
+	[  --disable-signalclasses Don't build signalclasses],
+	INCLUDE_SIGNALCLASSES="0",
+	INCLUDE_SIGNALCLASSES="1")
+AC_ARG_ENABLE(daemonprocess,
+	[  --disable-daemonprocess Don't build daemonprocess],
+	INCLUDE_DAEMONPROCESS="0",
+	INCLUDE_DAEMONPROCESS="1")
+AC_ARG_ENABLE(semaphoreset,
+	[  --disable-semaphoreset  Don't build semaphoreset],
+	INCLUDE_SEMAPHORESET="0",
+	INCLUDE_SEMAPHORESET="1")
+AC_ARG_ENABLE(sharedmemory,
+	[  --disable-sharedmemory  Don't build sharedmemory],
+	INCLUDE_SHAREDMEMORY="0",
+	INCLUDE_SHAREDMEMORY="1")
+AC_ARG_ENABLE(permissions,
+	[  --disable-permissions   Don't build permissions],
+	INCLUDE_PERMISSIONS="0",
+	INCLUDE_PERMISSIONS="1")
+AC_ARG_ENABLE(regularexpression,
+	[  --disable-regularexpression    Don't build regularexpression],
+	INCLUDE_REGULAREXPRESSION="0",
+	INCLUDE_REGULAREXPRESSION="1")
+AC_ARG_ENABLE(randomnumber,
+	[  --disable-randomnumber  Don't build randomnumber],
+	INCLUDE_RANDOMNUMBER="0",
+	INCLUDE_RANDOMNUMBER="1")
+
+
 CPPFLAGS="-D_REENTRANT $CPPFLAGS"
 
 AC_SUBST(CPPFLAGS)
@@ -567,6 +776,63 @@ dnl if interfaces removed,                    c:r:a -> c:r:0
 SONAME_VERSION_INFO="1:0:0"
 AC_SUBST(SONAME_VERSION_INFO)
 AC_PREFIX_DEFAULT(/usr/local/firstworks)
+
+
+
+dnl   perform substitutions for disable options
+AC_SUBST(INCLUDE_CHARSTRING)
+AC_SUBST(INCLUDE_CHARACTER)
+AC_SUBST(INCLUDE_INTERVALTIMER)
+AC_SUBST(INCLUDE_MATH)
+AC_SUBST(INCLUDE_RAWBUFFER)
+AC_SUBST(INCLUDE_MEMORYMAP)
+AC_SUBST(INCLUDE_MUTEX)
+AC_SUBST(INCLUDE_SERIALPORT)
+AC_SUBST(INCLUDE_SERIALPORTPROFILE)
+AC_SUBST(INCLUDE_PARAMETERSTRING)
+AC_SUBST(INCLUDE_ENVIRONMENT)
+AC_SUBST(INCLUDE_COMMANDLINE)
+AC_SUBST(INCLUDE_DATETIME)
+AC_SUBST(INCLUDE_TIMEZONEFILE)
+AC_SUBST(INCLUDE_GROUPENTRY)
+AC_SUBST(INCLUDE_PASSWDENTRY)
+AC_SUBST(INCLUDE_SERVICEENTRY)
+AC_SUBST(INCLUDE_SHADOWENTRY)
+AC_SUBST(INCLUDE_RPCENTRY)
+AC_SUBST(INCLUDE_PROTOCOLENTRY)
+AC_SUBST(INCLUDE_HOSTENTRY)
+AC_SUBST(INCLUDE_DYNAMICLIB)
+AC_SUBST(INCLUDE_CRYPT)
+AC_SUBST(INCLUDE_VARIABLEBUFFER)
+AC_SUBST(INCLUDE_STRINGBUFFER)
+AC_SUBST(INCLUDE_ERRORHANDLER)
+AC_SUBST(INCLUDE_XMLSAX)
+AC_SUBST(INCLUDE_XMLDOM)
+AC_SUBST(INCLUDE_DTD)
+AC_SUBST(INCLUDE_FILESYSTEM)
+AC_SUBST(INCLUDE_DIRECTORY)
+AC_SUBST(INCLUDE_FILEDESCRIPTOR)
+AC_SUBST(INCLUDE_FILE)
+AC_SUBST(INCLUDE_DEVICE)
+AC_SUBST(INCLUDE_DATATRANSPORT)
+AC_SUBST(INCLUDE_CLIENT)
+AC_SUBST(INCLUDE_INETCLIENT)
+AC_SUBST(INCLUDE_UNIXCLIENT)
+AC_SUBST(INCLUDE_SERVER)
+AC_SUBST(INCLUDE_INETSERVER)
+AC_SUBST(INCLUDE_UNIXSERVER)
+AC_SUBST(INCLUDE_LISTENER)
+AC_SUBST(INCLUDE_LOGGER)
+AC_SUBST(INCLUDE_MEMORYPOOL)
+AC_SUBST(INCLUDE_SIGNALCLASSES)
+AC_SUBST(INCLUDE_DAEMONPROCESS)
+AC_SUBST(INCLUDE_SEMAPHORESET)
+AC_SUBST(INCLUDE_SHAREDMEMORY)
+AC_SUBST(INCLUDE_PERMISSIONS)
+AC_SUBST(INCLUDE_REGULAREXPRESSION)
+AC_SUBST(INCLUDE_RANDOMNUMBER)
+#AC_SUBST(INCLUDE_DICTIONARY)
+#AC_SUBST(INCLUDE_LIST)
 
 
 dnl Output files.

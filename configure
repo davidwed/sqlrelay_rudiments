@@ -465,7 +465,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CPPFLAGS CXXFLAGS INSTALLSTRIP SMALLCODE CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX ac_ct_CXX CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL PIPE HAS_THREADS PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS PCREINCLUDES PCRELIBS INCLUDE_REGULAREXPRESSION SOCKETLIBS INCLUDE_SHADOWENTRY NANOSLEEPLIB INCLUDE_CRYPT CRYPTLIB MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CPPFLAGS CXXFLAGS INSTALLSTRIP SMALLCODE CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX ac_ct_CXX CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL PIPE HAS_THREADS PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS PCREINCLUDES PCRELIBS INCLUDE_REGULAREXPRESSION SOCKETLIBS INCLUDE_SHADOWENTRY NANOSLEEPLIB INCLUDE_CRYPT CRYPTLIB MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO INCLUDE_CHARSTRING INCLUDE_CHARACTER INCLUDE_INTERVALTIMER INCLUDE_MATH INCLUDE_RAWBUFFER INCLUDE_MEMORYMAP INCLUDE_MUTEX INCLUDE_SERIALPORT INCLUDE_SERIALPORTPROFILE INCLUDE_PARAMETERSTRING INCLUDE_ENVIRONMENT INCLUDE_COMMANDLINE INCLUDE_DATETIME INCLUDE_TIMEZONEFILE INCLUDE_GROUPENTRY INCLUDE_PASSWDENTRY INCLUDE_SERVICEENTRY INCLUDE_RPCENTRY INCLUDE_PROTOCOLENTRY INCLUDE_HOSTENTRY INCLUDE_DYNAMICLIB INCLUDE_VARIABLEBUFFER INCLUDE_STRINGBUFFER INCLUDE_ERRORHANDLER INCLUDE_XMLSAX INCLUDE_XMLDOM INCLUDE_DTD INCLUDE_FILESYSTEM INCLUDE_DIRECTORY INCLUDE_FILEDESCRIPTOR INCLUDE_FILE INCLUDE_DEVICE INCLUDE_DATATRANSPORT INCLUDE_CLIENT INCLUDE_INETCLIENT INCLUDE_UNIXCLIENT INCLUDE_SERVER INCLUDE_INETSERVER INCLUDE_UNIXSERVER INCLUDE_LISTENER INCLUDE_LOGGER INCLUDE_MEMORYPOOL INCLUDE_SIGNALCLASSES INCLUDE_DAEMONPROCESS INCLUDE_SEMAPHORESET INCLUDE_SHAREDMEMORY INCLUDE_PERMISSIONS INCLUDE_RANDOMNUMBER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1026,6 +1026,57 @@ Optional Features:
   --disable-ssl           Disable SSL support
   --disable-pcre          Don't use PCRE for regular expressions
   --disable-threads       Disable thread support
+  --disable-charstring    Don't build charstring class
+  --disable-character     Don't build character class
+  --disable-intervaltimer Don't build intervaltimer class
+  --disable-math          Don't build math class
+  --disable-rawbuffer     Don't build rawbuffer class
+  --disable-memorymap     Don't build memorymap class
+  --disable-mutex         Don't build mutex class
+  --disable-serialport    Don't build serialport class
+  --disable-serialportprofile    Don't build serialportprofile class
+  --disable-parameterstring      Don't build parameterstring class
+  --disable-environment   Don't build environment class
+  --disable-commandline   Don't build commandline class
+  --disable-datetime      Don't build datetime class
+  --disable-timezonefile  Don't build timezonefile class
+  --disable-groupentry    Don't build groupentry class
+  --disable-passwdentry   Don't build passwdentry class
+  --disable-serviceentry  Don't build serviceentry class
+  --disable-shadowentry   Don't build shadowentry class
+  --disable-rpcentry      Don't build rpcentry class
+  --disable-protocolentry Don't build protocolentry class
+  --disable-hostentry     Don't build hostentry class
+  --disable-dynamiclib    Don't build dynamiclib class
+  --disable-crypt         Don't build crypt class
+  --disable-variablebuffer       Don't build variablebuffer class
+  --disable-stringbuffer  Don't build stringbuffer class
+  --disable-errorhandler  Don't build errorhandler class
+  --disable-xmlsax        Don't build xmlsax class
+  --disable-xmldom        Don't build xmldom class
+  --disable-dtd           Don't build dtd class
+  --disable-filesystem    Don't build filesystem class
+  --disable-directory     Don't build directory class
+  --disable-filedescriptor       Don't build filedescriptor class
+  --disable-file          Don't build file class
+  --disable-device        Don't build device class
+  --disable-datatransport Don't build datatransport class
+  --disable-client        Don't build client class
+  --disable-inetclient    Don't build inetclient class
+  --disable-unixclient    Don't build unixclient class
+  --disable-server        Don't build server class
+  --disable-inetserver    Don't build inetserver class
+  --disable-unixserver    Don't build unixserver class
+  --disable-listener      Don't build listener class
+  --disable-logger        Don't build logger class
+  --disable-memorypool    Don't build memorypool class
+  --disable-signalclasses Don't build signalclasses
+  --disable-daemonprocess Don't build daemonprocess
+  --disable-semaphoreset  Don't build semaphoreset
+  --disable-sharedmemory  Don't build sharedmemory
+  --disable-permissions   Don't build permissions
+  --disable-regularexpression    Don't build regularexpression
+  --disable-randomnumber  Don't build randomnumber
   --enable-shared[=PKGS]
                           build shared libraries [default=yes]
   --enable-static[=PKGS]
@@ -1593,6 +1644,366 @@ if test "${enable_threads+set}" = set; then
 else
   ENABLE_RUDIMENTS_THREADS="yes"
 fi;
+
+# Check whether --enable-charstring or --disable-charstring was given.
+if test "${enable_charstring+set}" = set; then
+  enableval="$enable_charstring"
+  INCLUDE_CHARSTRING="0"
+else
+  INCLUDE_CHARSTRING="1"
+fi;
+# Check whether --enable-character or --disable-character was given.
+if test "${enable_character+set}" = set; then
+  enableval="$enable_character"
+  INCLUDE_CHARACTER="0"
+else
+  INCLUDE_CHARACTER="1"
+fi;
+# Check whether --enable-intervaltimer or --disable-intervaltimer was given.
+if test "${enable_intervaltimer+set}" = set; then
+  enableval="$enable_intervaltimer"
+  INCLUDE_INTERVALTIMER="0"
+else
+  INCLUDE_INTERVALTIMER="1"
+fi;
+# Check whether --enable-math or --disable-math was given.
+if test "${enable_math+set}" = set; then
+  enableval="$enable_math"
+  INCLUDE_MATH="0"
+else
+  INCLUDE_MATH="1"
+fi;
+INCLUDE_MATH="0"
+# Check whether --enable-rawbuffer or --disable-rawbuffer was given.
+if test "${enable_rawbuffer+set}" = set; then
+  enableval="$enable_rawbuffer"
+  INCLUDE_RAWBUFFER="0"
+else
+  INCLUDE_RAWBUFFER="1"
+fi;
+# Check whether --enable-memorymap or --disable-memorymap was given.
+if test "${enable_memorymap+set}" = set; then
+  enableval="$enable_memorymap"
+  INCLUDE_MEMORYMAP="0"
+else
+  INCLUDE_MEMORYMAP="1"
+fi;
+# Check whether --enable-mutex or --disable-mutex was given.
+if test "${enable_mutex+set}" = set; then
+  enableval="$enable_mutex"
+  INCLUDE_MUTEX="0"
+else
+  INCLUDE_MUTEX="1"
+fi;
+# Check whether --enable-serialport or --disable-serialport was given.
+if test "${enable_serialport+set}" = set; then
+  enableval="$enable_serialport"
+  INCLUDE_SERIALPORT="0"
+else
+  INCLUDE_SERIALPORT="1"
+fi;
+# Check whether --enable-serialportprofile or --disable-serialportprofile was given.
+if test "${enable_serialportprofile+set}" = set; then
+  enableval="$enable_serialportprofile"
+  INCLUDE_SERIALPORTPROFILE="0"
+else
+  INCLUDE_SERIALPORTPROFILE="1"
+fi;
+# Check whether --enable-parameterstring or --disable-parameterstring was given.
+if test "${enable_parameterstring+set}" = set; then
+  enableval="$enable_parameterstring"
+  INCLUDE_PARAMETERSTRING="0"
+else
+  INCLUDE_PARAMETERSTRING="1"
+fi;
+# Check whether --enable-environment or --disable-environment was given.
+if test "${enable_environment+set}" = set; then
+  enableval="$enable_environment"
+  INCLUDE_ENVIRONMENT="0"
+else
+  INCLUDE_ENVIRONMENT="1"
+fi;
+# Check whether --enable-commandline or --disable-commandline was given.
+if test "${enable_commandline+set}" = set; then
+  enableval="$enable_commandline"
+  INCLUDE_COMMANDLINE="0"
+else
+  INCLUDE_COMMANDLINE="1"
+fi;
+# Check whether --enable-datetime or --disable-datetime was given.
+if test "${enable_datetime+set}" = set; then
+  enableval="$enable_datetime"
+  INCLUDE_DATETIME="0"
+else
+  INCLUDE_DATETIME="1"
+fi;
+# Check whether --enable-timezonefile or --disable-timezonefile was given.
+if test "${enable_timezonefile+set}" = set; then
+  enableval="$enable_timezonefile"
+  INCLUDE_TIMEZONEFILE="0"
+else
+  INCLUDE_TIMEZONEFILE="1"
+fi;
+# Check whether --enable-groupentry or --disable-groupentry was given.
+if test "${enable_groupentry+set}" = set; then
+  enableval="$enable_groupentry"
+  INCLUDE_GROUPENTRY="0"
+else
+  INCLUDE_GROUPENTRY="1"
+fi;
+# Check whether --enable-passwdentry or --disable-passwdentry was given.
+if test "${enable_passwdentry+set}" = set; then
+  enableval="$enable_passwdentry"
+  INCLUDE_PASSWDENTRY="0"
+else
+  INCLUDE_PASSWDENTRY="1"
+fi;
+# Check whether --enable-serviceentry or --disable-serviceentry was given.
+if test "${enable_serviceentry+set}" = set; then
+  enableval="$enable_serviceentry"
+  INCLUDE_SERVICEENTRY="0"
+else
+  INCLUDE_SERVICEENTRY="1"
+fi;
+# Check whether --enable-shadowentry or --disable-shadowentry was given.
+if test "${enable_shadowentry+set}" = set; then
+  enableval="$enable_shadowentry"
+  INCLUDE_SHADOWENTRY="0"
+else
+  INCLUDE_SHADOWENTRY="1"
+fi;
+# Check whether --enable-rpcentry or --disable-rpcentry was given.
+if test "${enable_rpcentry+set}" = set; then
+  enableval="$enable_rpcentry"
+  INCLUDE_RPCENTRY="0"
+else
+  INCLUDE_RPCENTRY="1"
+fi;
+# Check whether --enable-protocolentry or --disable-protocolentry was given.
+if test "${enable_protocolentry+set}" = set; then
+  enableval="$enable_protocolentry"
+  INCLUDE_PROTOCOLENTRY="0"
+else
+  INCLUDE_PROTOCOLENTRY="1"
+fi;
+# Check whether --enable-hostentry or --disable-hostentry was given.
+if test "${enable_hostentry+set}" = set; then
+  enableval="$enable_hostentry"
+  INCLUDE_HOSTENTRY="0"
+else
+  INCLUDE_HOSTENTRY="1"
+fi;
+# Check whether --enable-dynamiclib or --disable-dynamiclib was given.
+if test "${enable_dynamiclib+set}" = set; then
+  enableval="$enable_dynamiclib"
+  INCLUDE_DYNAMICLIB="0"
+else
+  INCLUDE_DYNAMICLIB="1"
+fi;
+# Check whether --enable-crypt or --disable-crypt was given.
+if test "${enable_crypt+set}" = set; then
+  enableval="$enable_crypt"
+  INCLUDE_CRYPT="0"
+else
+  INCLUDE_CRYPT="1"
+fi;
+# Check whether --enable-variablebuffer or --disable-variablebuffer was given.
+if test "${enable_variablebuffer+set}" = set; then
+  enableval="$enable_variablebuffer"
+  INCLUDE_VARIABLEBUFFER="0"
+else
+  INCLUDE_VARIABLEBUFFER="1"
+fi;
+# Check whether --enable-stringbuffer or --disable-stringbuffer was given.
+if test "${enable_stringbuffer+set}" = set; then
+  enableval="$enable_stringbuffer"
+  INCLUDE_STRINGBUFFER="0"
+else
+  INCLUDE_STRINGBUFFER="1"
+fi;
+# Check whether --enable-errorhandler or --disable-errorhandler was given.
+if test "${enable_errorhandler+set}" = set; then
+  enableval="$enable_errorhandler"
+  INCLUDE_ERRORHANDLER="0"
+else
+  INCLUDE_ERRORHANDLER="1"
+fi;
+# Check whether --enable-xmlsax or --disable-xmlsax was given.
+if test "${enable_xmlsax+set}" = set; then
+  enableval="$enable_xmlsax"
+  INCLUDE_XMLSAX="0"
+else
+  INCLUDE_XMLSAX="1"
+fi;
+# Check whether --enable-xmldom or --disable-xmldom was given.
+if test "${enable_xmldom+set}" = set; then
+  enableval="$enable_xmldom"
+  INCLUDE_XMLDOM="0"
+else
+  INCLUDE_XMLDOM="1"
+fi;
+# Check whether --enable-dtd or --disable-dtd was given.
+if test "${enable_dtd+set}" = set; then
+  enableval="$enable_dtd"
+  INCLUDE_DTD="0"
+else
+  INCLUDE_DTD="1"
+fi;
+# Check whether --enable-filesystem or --disable-filesystem was given.
+if test "${enable_filesystem+set}" = set; then
+  enableval="$enable_filesystem"
+  INCLUDE_FILESYSTEM="0"
+else
+  INCLUDE_FILESYSTEM="1"
+fi;
+# Check whether --enable-directory or --disable-directory was given.
+if test "${enable_directory+set}" = set; then
+  enableval="$enable_directory"
+  INCLUDE_DIRECTORY="0"
+else
+  INCLUDE_DIRECTORY="1"
+fi;
+# Check whether --enable-filedescriptor or --disable-filedescriptor was given.
+if test "${enable_filedescriptor+set}" = set; then
+  enableval="$enable_filedescriptor"
+  INCLUDE_FILEDESCRIPTOR="0"
+else
+  INCLUDE_FILEDESCRIPTOR="1"
+fi;
+# Check whether --enable-file or --disable-file was given.
+if test "${enable_file+set}" = set; then
+  enableval="$enable_file"
+  INCLUDE_FILE="0"
+else
+  INCLUDE_FILE="1"
+fi;
+# Check whether --enable-device or --disable-device was given.
+if test "${enable_device+set}" = set; then
+  enableval="$enable_device"
+  INCLUDE_DEVICE="0"
+else
+  INCLUDE_DEVICE="1"
+fi;
+# Check whether --enable-datatransport or --disable-datatransport was given.
+if test "${enable_datatransport+set}" = set; then
+  enableval="$enable_datatransport"
+  INCLUDE_DATATRANSPORT="0"
+else
+  INCLUDE_DATATRANSPORT="1"
+fi;
+# Check whether --enable-client or --disable-client was given.
+if test "${enable_client+set}" = set; then
+  enableval="$enable_client"
+  INCLUDE_CLIENT="0"
+else
+  INCLUDE_CLIENT="1"
+fi;
+# Check whether --enable-inetclient or --disable-inetclient was given.
+if test "${enable_inetclient+set}" = set; then
+  enableval="$enable_inetclient"
+  INCLUDE_INETCLIENT="0"
+else
+  INCLUDE_INETCLIENT="1"
+fi;
+# Check whether --enable-unixclient or --disable-unixclient was given.
+if test "${enable_unixclient+set}" = set; then
+  enableval="$enable_unixclient"
+  INCLUDE_UNIXCLIENT="0"
+else
+  INCLUDE_UNIXCLIENT="1"
+fi;
+# Check whether --enable-server or --disable-server was given.
+if test "${enable_server+set}" = set; then
+  enableval="$enable_server"
+  INCLUDE_SERVER="0"
+else
+  INCLUDE_SERVER="1"
+fi;
+# Check whether --enable-inetserver or --disable-inetserver was given.
+if test "${enable_inetserver+set}" = set; then
+  enableval="$enable_inetserver"
+  INCLUDE_INETSERVER="0"
+else
+  INCLUDE_INETSERVER="1"
+fi;
+# Check whether --enable-unixserver or --disable-unixserver was given.
+if test "${enable_unixserver+set}" = set; then
+  enableval="$enable_unixserver"
+  INCLUDE_UNIXSERVER="0"
+else
+  INCLUDE_UNIXSERVER="1"
+fi;
+# Check whether --enable-listener or --disable-listener was given.
+if test "${enable_listener+set}" = set; then
+  enableval="$enable_listener"
+  INCLUDE_LISTENER="0"
+else
+  INCLUDE_LISTENER="1"
+fi;
+# Check whether --enable-logger or --disable-logger was given.
+if test "${enable_logger+set}" = set; then
+  enableval="$enable_logger"
+  INCLUDE_LOGGER="0"
+else
+  INCLUDE_LOGGER="1"
+fi;
+# Check whether --enable-memorypool or --disable-memorypool was given.
+if test "${enable_memorypool+set}" = set; then
+  enableval="$enable_memorypool"
+  INCLUDE_MEMORYPOOL="0"
+else
+  INCLUDE_MEMORYPOOL="1"
+fi;
+# Check whether --enable-signalclasses or --disable-signalclasses was given.
+if test "${enable_signalclasses+set}" = set; then
+  enableval="$enable_signalclasses"
+  INCLUDE_SIGNALCLASSES="0"
+else
+  INCLUDE_SIGNALCLASSES="1"
+fi;
+# Check whether --enable-daemonprocess or --disable-daemonprocess was given.
+if test "${enable_daemonprocess+set}" = set; then
+  enableval="$enable_daemonprocess"
+  INCLUDE_DAEMONPROCESS="0"
+else
+  INCLUDE_DAEMONPROCESS="1"
+fi;
+# Check whether --enable-semaphoreset or --disable-semaphoreset was given.
+if test "${enable_semaphoreset+set}" = set; then
+  enableval="$enable_semaphoreset"
+  INCLUDE_SEMAPHORESET="0"
+else
+  INCLUDE_SEMAPHORESET="1"
+fi;
+# Check whether --enable-sharedmemory or --disable-sharedmemory was given.
+if test "${enable_sharedmemory+set}" = set; then
+  enableval="$enable_sharedmemory"
+  INCLUDE_SHAREDMEMORY="0"
+else
+  INCLUDE_SHAREDMEMORY="1"
+fi;
+# Check whether --enable-permissions or --disable-permissions was given.
+if test "${enable_permissions+set}" = set; then
+  enableval="$enable_permissions"
+  INCLUDE_PERMISSIONS="0"
+else
+  INCLUDE_PERMISSIONS="1"
+fi;
+# Check whether --enable-regularexpression or --disable-regularexpression was given.
+if test "${enable_regularexpression+set}" = set; then
+  enableval="$enable_regularexpression"
+  INCLUDE_REGULAREXPRESSION="0"
+else
+  INCLUDE_REGULAREXPRESSION="1"
+fi;
+# Check whether --enable-randomnumber or --disable-randomnumber was given.
+if test "${enable_randomnumber+set}" = set; then
+  enableval="$enable_randomnumber"
+  INCLUDE_RANDOMNUMBER="0"
+else
+  INCLUDE_RANDOMNUMBER="1"
+fi;
+
 
 CPPFLAGS="-D_REENTRANT $CPPFLAGS"
 
@@ -4027,7 +4438,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4030 "configure"' > conftest.$ac_ext
+  echo '#line 4441 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5143,7 +5554,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5146:" \
+echo "$as_me:5557:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6174,11 +6585,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6177: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6588: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6181: \$? = $ac_status" >&5
+   echo "$as_me:6592: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6406,11 +6817,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6409: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6820: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6413: \$? = $ac_status" >&5
+   echo "$as_me:6824: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6473,11 +6884,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6476: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6887: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6480: \$? = $ac_status" >&5
+   echo "$as_me:6891: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8591,7 +9002,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8594 "configure"
+#line 9005 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8689,7 +9100,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8692 "configure"
+#line 9103 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10845,11 +11256,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10848: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11259: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10852: \$? = $ac_status" >&5
+   echo "$as_me:11263: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -10912,11 +11323,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10915: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11326: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10919: \$? = $ac_status" >&5
+   echo "$as_me:11330: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12241,7 +12652,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12244 "configure"
+#line 12655 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12339,7 +12750,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12342 "configure"
+#line 12753 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13161,11 +13572,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13164: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13575: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13168: \$? = $ac_status" >&5
+   echo "$as_me:13579: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13228,11 +13639,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13231: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13642: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13235: \$? = $ac_status" >&5
+   echo "$as_me:13646: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15194,11 +15605,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15197: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15608: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15201: \$? = $ac_status" >&5
+   echo "$as_me:15612: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15426,11 +15837,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15429: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15840: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15433: \$? = $ac_status" >&5
+   echo "$as_me:15844: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15493,11 +15904,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15496: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15907: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15500: \$? = $ac_status" >&5
+   echo "$as_me:15911: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17611,7 +18022,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17614 "configure"
+#line 18025 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -17709,7 +18120,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17712 "configure"
+#line 18123 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -28377,6 +28788,62 @@ SONAME_VERSION_INFO="1:0:0"
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#AC_SUBST(INCLUDE_DICTIONARY)
+#AC_SUBST(INCLUDE_LIST)
+
+
 echo
 echo "***** Output Files ***********"
           ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
@@ -29063,6 +29530,54 @@ s,@CYGWIN@,$CYGWIN,;t t
 s,@UWIN@,$UWIN,;t t
 s,@RUDIMENTS_VERSION@,$RUDIMENTS_VERSION,;t t
 s,@SONAME_VERSION_INFO@,$SONAME_VERSION_INFO,;t t
+s,@INCLUDE_CHARSTRING@,$INCLUDE_CHARSTRING,;t t
+s,@INCLUDE_CHARACTER@,$INCLUDE_CHARACTER,;t t
+s,@INCLUDE_INTERVALTIMER@,$INCLUDE_INTERVALTIMER,;t t
+s,@INCLUDE_MATH@,$INCLUDE_MATH,;t t
+s,@INCLUDE_RAWBUFFER@,$INCLUDE_RAWBUFFER,;t t
+s,@INCLUDE_MEMORYMAP@,$INCLUDE_MEMORYMAP,;t t
+s,@INCLUDE_MUTEX@,$INCLUDE_MUTEX,;t t
+s,@INCLUDE_SERIALPORT@,$INCLUDE_SERIALPORT,;t t
+s,@INCLUDE_SERIALPORTPROFILE@,$INCLUDE_SERIALPORTPROFILE,;t t
+s,@INCLUDE_PARAMETERSTRING@,$INCLUDE_PARAMETERSTRING,;t t
+s,@INCLUDE_ENVIRONMENT@,$INCLUDE_ENVIRONMENT,;t t
+s,@INCLUDE_COMMANDLINE@,$INCLUDE_COMMANDLINE,;t t
+s,@INCLUDE_DATETIME@,$INCLUDE_DATETIME,;t t
+s,@INCLUDE_TIMEZONEFILE@,$INCLUDE_TIMEZONEFILE,;t t
+s,@INCLUDE_GROUPENTRY@,$INCLUDE_GROUPENTRY,;t t
+s,@INCLUDE_PASSWDENTRY@,$INCLUDE_PASSWDENTRY,;t t
+s,@INCLUDE_SERVICEENTRY@,$INCLUDE_SERVICEENTRY,;t t
+s,@INCLUDE_RPCENTRY@,$INCLUDE_RPCENTRY,;t t
+s,@INCLUDE_PROTOCOLENTRY@,$INCLUDE_PROTOCOLENTRY,;t t
+s,@INCLUDE_HOSTENTRY@,$INCLUDE_HOSTENTRY,;t t
+s,@INCLUDE_DYNAMICLIB@,$INCLUDE_DYNAMICLIB,;t t
+s,@INCLUDE_VARIABLEBUFFER@,$INCLUDE_VARIABLEBUFFER,;t t
+s,@INCLUDE_STRINGBUFFER@,$INCLUDE_STRINGBUFFER,;t t
+s,@INCLUDE_ERRORHANDLER@,$INCLUDE_ERRORHANDLER,;t t
+s,@INCLUDE_XMLSAX@,$INCLUDE_XMLSAX,;t t
+s,@INCLUDE_XMLDOM@,$INCLUDE_XMLDOM,;t t
+s,@INCLUDE_DTD@,$INCLUDE_DTD,;t t
+s,@INCLUDE_FILESYSTEM@,$INCLUDE_FILESYSTEM,;t t
+s,@INCLUDE_DIRECTORY@,$INCLUDE_DIRECTORY,;t t
+s,@INCLUDE_FILEDESCRIPTOR@,$INCLUDE_FILEDESCRIPTOR,;t t
+s,@INCLUDE_FILE@,$INCLUDE_FILE,;t t
+s,@INCLUDE_DEVICE@,$INCLUDE_DEVICE,;t t
+s,@INCLUDE_DATATRANSPORT@,$INCLUDE_DATATRANSPORT,;t t
+s,@INCLUDE_CLIENT@,$INCLUDE_CLIENT,;t t
+s,@INCLUDE_INETCLIENT@,$INCLUDE_INETCLIENT,;t t
+s,@INCLUDE_UNIXCLIENT@,$INCLUDE_UNIXCLIENT,;t t
+s,@INCLUDE_SERVER@,$INCLUDE_SERVER,;t t
+s,@INCLUDE_INETSERVER@,$INCLUDE_INETSERVER,;t t
+s,@INCLUDE_UNIXSERVER@,$INCLUDE_UNIXSERVER,;t t
+s,@INCLUDE_LISTENER@,$INCLUDE_LISTENER,;t t
+s,@INCLUDE_LOGGER@,$INCLUDE_LOGGER,;t t
+s,@INCLUDE_MEMORYPOOL@,$INCLUDE_MEMORYPOOL,;t t
+s,@INCLUDE_SIGNALCLASSES@,$INCLUDE_SIGNALCLASSES,;t t
+s,@INCLUDE_DAEMONPROCESS@,$INCLUDE_DAEMONPROCESS,;t t
+s,@INCLUDE_SEMAPHORESET@,$INCLUDE_SEMAPHORESET,;t t
+s,@INCLUDE_SHAREDMEMORY@,$INCLUDE_SHAREDMEMORY,;t t
+s,@INCLUDE_PERMISSIONS@,$INCLUDE_PERMISSIONS,;t t
+s,@INCLUDE_RANDOMNUMBER@,$INCLUDE_RANDOMNUMBER,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
