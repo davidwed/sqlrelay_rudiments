@@ -293,54 +293,66 @@ dnl sets the substitution variable PTHREADLIB
 AC_DEFUN([FW_CHECK_PTHREAD],
 [
 
-HAVE_PTHREAD=""
-PTHREADINCLUDES=""
-PTHREADLIB=""
-
-if ( test "$cross_compiling" = "yes" )
+if ( test "$ENABLE_RUDIMENTS_THREADS" = "yes" )
 then
-	
-	dnl cross compiling
-	echo "cross compiling"
-	if ( test -n "$PTHREADPATH" )
+
+	HAVE_PTHREAD=""
+	PTHREADINCLUDES=""
+	PTHREADLIB=""
+
+	if ( test "$cross_compiling" = "yes" )
 	then
-		PTHREADINCLUDES="-I$PTHREADPATH/include"
-		PTHREADLIB="-L$PTHREADPATH/lib -lpthread"
+	
+		dnl cross compiling
+		echo "cross compiling"
+		if ( test -n "$PTHREADPATH" )
+		then
+			PTHREADINCLUDES="-I$PTHREADPATH/include"
+			PTHREADLIB="-L$PTHREADPATH/lib -lpthread"
+		else
+			PTHREADLIB="-lpthread"
+		fi
+		HAVE_PTHREAD="yes"
+
 	else
-		PTHREADLIB="-lpthread"
+
+		for i in "pthread" "c_r"
+		do
+			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
+			if ( test -n "$PTHREADLIB" )
+			then
+				if ( test "$i" = "c_r" )
+				then
+					PTHREADLIB="$PTHREADLIB -pthread"
+				fi
+				break
+			fi
+		done
+		if ( test -n "$PTHREADLIB" )
+		then
+			HAVE_PTHREAD="yes"
+		fi
 	fi
-	HAVE_PTHREAD="yes"
+
+	FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
+	FW_LIBS(pthreads,[$PTHREADLIB])
+
+	if ( test -z "$HAVE_PTHREAD" )
+	then
+		AC_MSG_ERROR(pthread library not found.  Rudiments requires this package.)
+		exit
+	fi
+
+	AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
 
 else
 
-	for i in "pthread" "c_r"
-	do
-		FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
-		if ( test -n "$PTHREADLIB" )
-		then
-			if ( test "$i" = "c_r" )
-			then
-				PTHREADLIB="$PTHREADLIB -pthread"
-			fi
-			break
-		fi
-	done
-	if ( test -n "$PTHREADLIB" )
-	then
-		HAVE_PTHREAD="yes"
-	fi
-fi
+	echo "disabled"
 
-FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
-FW_LIBS(pthreads,[$PTHREADLIB])
+fi
 
 AC_SUBST(PTHREADINCLUDES)
 AC_SUBST(PTHREADLIB)
-if ( test -z "$HAVE_PTHREAD" )
-then
-	AC_MSG_ERROR(pthread library not found.  Rudiments requires this package.)
-	exit
-fi
 ])
 
 

@@ -94,7 +94,7 @@ class logger {
 			// from the datetime class.  If you are using
 			// logHeader() in a multi-threaded application, you
 			// must supply a mutex to the datetime class using it's
-			// setLocalTimeMutex() method.
+			// setTimeMutex() method.
 
 
 		// These methods write log entries to each

@@ -41,6 +41,7 @@ class rpcentry {
 		void	print() const;
 			// Prints out the rpc entry.
 
+#ifdef RUDIMENTS_HAS_THREADS
 		static	bool	needsMutex();
 			// If your system doesn't support getrpcbyname_r()
 			// and getrpcbynumber_r() then this class needs a
@@ -53,6 +54,7 @@ class rpcentry {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
+#endif
 
 	#include <rudiments/private/rpcentry.h>
 };

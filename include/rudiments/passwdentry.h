@@ -59,6 +59,7 @@ class passwdentry {
 		void	print() const;
 			// Prints out the passwd entry.
 
+#ifdef RUDIMENTS_HAS_THREADS
 		static	bool	needsMutex();
 			// If your system doesn't support getpwnam_r() and
 			// getpwuid_r() then this class needs a mutex to assure
@@ -71,6 +72,7 @@ class passwdentry {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
+#endif
 
 	#include <rudiments/private/passwdentry.h>
 };

@@ -3,7 +3,9 @@
 
 #include <rudiments/private/config.h>
 
-#include <pthread.h>
+#ifdef RUDIMENTS_HAS_THREADS
+	#include <pthread.h>
+#endif
 
 #include <netdb.h>
 #ifdef HAVE_RPCENT_H

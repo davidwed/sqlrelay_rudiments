@@ -13,7 +13,7 @@
 
 #define MAXBUFFER	(32*1024)
 
-#if defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
 pthread_mutex_t	*protocolentry::pemutex;
 #endif
@@ -21,7 +21,9 @@ pthread_mutex_t	*protocolentry::pemutex;
 protocolentry::protocolentry() {
 	pe=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && \
+		(!defined(HAVE_GETPROTOBYNAME_R) || \
+			!defined(HAVE_GETPROTOBYNUMBER_R))
 		pemutex=NULL;
 	#endif
 }
@@ -42,6 +44,7 @@ int protocolentry::getNumber() const {
 	return pe->p_proto;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool protocolentry::needsMutex() {
 	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
 		return true;
@@ -55,6 +58,7 @@ void protocolentry::setMutex(pthread_mutex_t *mutex) {
 		pemutex=mutex;
 	#endif
 }
+#endif
 
 bool protocolentry::initialize(const char *protocolname) {
 	return initialize(protocolname,0);
@@ -95,11 +99,17 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		return false;
 	#else
 		pe=NULL;
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((pemutex)?!pthread_mutex_lock(pemutex):true) &&
 			((pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
 			((pemutex)?!pthread_mutex_unlock(pemutex):true));
+#else
+		return ((pe=((protocolname)
+				?getprotobyname(protocolname)
+				:getprotobynumber(number)))!=NULL);
+#endif
 	#endif
 }
 

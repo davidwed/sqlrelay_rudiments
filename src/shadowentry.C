@@ -13,7 +13,8 @@
 
 #define MAXBUFFER	(32*1024)
 
-#if defined(__GNUC__) && !defined(HAVE_GETSPNAM_R)
+#if defined(RUDIMENTS_HAS_THREADS) && \
+	defined(__GNUC__) && !defined(HAVE_GETSPNAM_R)
 pthread_mutex_t	*shadowentry::spmutex;
 #endif
 
@@ -21,7 +22,7 @@ pthread_mutex_t	*shadowentry::spmutex;
 shadowentry::shadowentry() {
 	sp=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETSPNAM_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_GETSPNAM_R)
 		spmutex=NULL;
 	#endif
 }
@@ -82,6 +83,7 @@ int shadowentry::getFlag() const {
 #endif
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool shadowentry::needsMutex() {
 	#if !defined(HAVE_GETSPNAM_R)
 		return true;
@@ -95,6 +97,7 @@ void shadowentry::setMutex(pthread_mutex_t *mutex) {
 		spmutex=mutex;
 	#endif
 }
+#endif
 
 bool shadowentry::initialize(const char *username) {
 	if (sp) {
@@ -122,9 +125,13 @@ bool shadowentry::initialize(const char *username) {
 		}
 		return false;
 	#else
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((spmutex)?!pthread_mutex_lock(spmutex):true) &&
 			((sp=getspnam((char *)username))!=NULL) &&
 			((spmutex)?!pthread_mutex_unlock(spmutex):true));
+#else
+		return ((sp=getspnam((char *)username))!=NULL);
+#endif
 	#endif
 }
 

@@ -22,8 +22,8 @@
 	#include <unistd.h>
 #endif
 
-#ifdef __GNUC__
-pthread_mutex_t	*datetime::timemutex;
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
+	pthread_mutex_t	*datetime::timemutex;
 #endif
 
 datetime::datetime() {
@@ -112,14 +112,18 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	#elif HAS_TM_NAME
 		zone=strdup(tmstruct->tm_name);
 	#else
-		if (timemutex && !acquireLock()) {
-			return false;
-		}
+		#ifdef RUDIMENTS_HAS_THREADS
+			if (timemutex && !acquireLock()) {
+				return false;
+			}
+		#endif
 		tzset();
 		zone=strdup((tzname[0] && tzname[0][0])?tzname[0]:"UCT");
-		if (timemutex && !releaseLock()) {
-			return false;
-		}
+		#ifdef RUDIMENTS_HAS_THREADS
+			if (timemutex && !releaseLock()) {
+				return false;
+			}
+		#endif
 	#endif
 	#ifdef HAS___TM_GMTOFF
 		gmtoff=tmstruct->__tm_gmtoff;
@@ -128,14 +132,18 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	#elif HAS_TM_TZADJ
 		gmtoff=-tmstruct->tm_tzadj;
 	#else
-		if (timemutex && !acquireLock()) {
-			return false;
-		}
+		#ifdef RUDIMENTS_HAS_THREADS
+			if (timemutex && !acquireLock()) {
+				return false;
+			}
+		#endif
 		tzset();
 		gmtoff=-timezone;
-		if (timemutex && !releaseLock()) {
-			return false;
-		}
+		#ifdef RUDIMENTS_HAS_THREADS
+			if (timemutex && !releaseLock()) {
+				return false;
+			}
+		#endif
 	#endif
 	return normalizeBrokenDownTime(true);
 }
@@ -190,9 +198,11 @@ time_t datetime::getEpoch() const {
 
 struct tm *datetime::getTm() {
 
-	if (timemutex && !acquireLock()) {
-		return NULL;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (timemutex && !acquireLock()) {
+			return NULL;
+		}
+	#endif
 
 	delete structtm;
 	structtm=new struct tm;
@@ -211,9 +221,11 @@ struct tm *datetime::getTm() {
 		return NULL;
 	}
 
-	if (timemutex && !releaseLock()) {
-		return NULL;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (timemutex && !releaseLock()) {
+			return NULL;
+		}
+	#endif
 	return structtm;
 }
 
@@ -247,9 +259,11 @@ void datetime::addYears(int years) {
 	normalizeBrokenDownTime(true);
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 void datetime::setTimeMutex(pthread_mutex_t *mutex) {
 	timemutex=mutex;
 }
+#endif
 
 char *datetime::getString() {
 	delete[] timestring;
@@ -351,9 +365,11 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
 bool datetime::adjustTimeZone(const char *newtz) {
 
-	if (!acquireLock()) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (!acquireLock()) {
+			return false;
+		}
+	#endif
 
 	// Clear out the zone so getBrokenDownTimeFromEpoch() won't try to
 	// preserve it.
@@ -370,9 +386,11 @@ bool datetime::adjustTimeZone(const char *newtz) {
 		retval=false;
 	}
 
-	if (!releaseLock()) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (!releaseLock()) {
+			return false;
+		}
+	#endif
 	return retval;
 }
 
@@ -421,9 +439,11 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 	// I'm using localtime here instead of localtime_r because
 	// localtime_r doesn't appear to handle the timezone properly,
 	// at least, not in glibc-2.3
-	if (needmutex && !acquireLock()) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (needmutex && !acquireLock()) {
+			return false;
+		}
+	#endif
 	bool	retval=false;
 	struct tm	*tms;
 	if ((tms=localtime(&epoch))) {
@@ -436,24 +456,30 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 		isdst=tms->tm_isdst;
 		retval=normalizeBrokenDownTime(false);
 	}
-	if (needmutex && !releaseLock()) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (needmutex && !releaseLock()) {
+			return false;
+		}
+	#endif
 	return retval;
 }
 
 bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
-	if (needmutex && !acquireLock()) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (needmutex && !acquireLock()) {
+			return false;
+		}
+	#endif
 
 	// If a time zone was passed in, use it.
 	char	*oldzone=NULL;
 	if (zone && zone[0] && !setTimeZoneEnvVar(zone,&oldzone)) {
-		if (needmutex) {
-			releaseLock();
-		}
+		#ifdef RUDIMENTS_HAS_THREADS
+			if (needmutex) {
+				releaseLock();
+			}
+		#endif
 		return false;
 	}
 
@@ -512,13 +538,16 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		retval=(retval && restoreTimeZoneEnvVar(oldzone));
 	}
 
-	if (needmutex && !releaseLock()) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (needmutex && !releaseLock()) {
+			return false;
+		}
+	#endif
 
 	return retval;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool datetime::acquireLock() {
 	return !(timemutex && pthread_mutex_lock(timemutex));
 }
@@ -526,3 +555,4 @@ bool datetime::acquireLock() {
 bool datetime::releaseLock() {
 	return !(timemutex && pthread_mutex_unlock(timemutex));
 }
+#endif

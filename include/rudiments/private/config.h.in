@@ -306,6 +306,9 @@
 /* Rudiments supports SSL */
 #undef RUDIMENTS_HAS_SSL
 
+/* Rudiments supports threads */
+#undef RUDIMENTS_HAS_THREADS
+
 /* Version */
 #undef RUDIMENTS_VERSION
 

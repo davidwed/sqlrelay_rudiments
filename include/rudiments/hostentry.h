@@ -61,6 +61,7 @@ class hostentry {
 		void	print() const;
 			// Prints out the host entry.
 
+#ifdef RUDIMENTS_HAS_THREADS
 		static	bool	needsMutex();
 			// If your system doesn't support gethostbyname_r()
 			// and gethostbyaddr_r() then this class needs a
@@ -73,6 +74,7 @@ class hostentry {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
+#endif
 
 	#include <rudiments/private/hostentry.h>
 };

@@ -13,7 +13,7 @@
 
 #define MAXBUFFER	(32*1024)
 
-#if defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
 pthread_mutex_t	*passwdentry::pemutex;
 #endif
@@ -22,7 +22,8 @@ pthread_mutex_t	*passwdentry::pemutex;
 passwdentry::passwdentry() {
 	pwd=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && \
+		(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
 		pemutex=NULL;
 	#endif
 }
@@ -59,6 +60,7 @@ char *passwdentry::getShell() const {
 	return pwd->pw_shell;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool passwdentry::needsMutex() {
 	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
 		return true;
@@ -72,6 +74,7 @@ void passwdentry::setMutex(pthread_mutex_t *mutex) {
 		pemutex=mutex;
 	#endif
 }
+#endif
 
 bool passwdentry::initialize(const char *username) {
 	return initialize(username,0);
@@ -111,11 +114,17 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		}
 		return false;
 	#else
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((pemutex)?!pthread_mutex_lock(pemutex):true) &&
-				((pwd=((username)
-					?getpwnam(username)
-					:getpwuid(userid)))!=NULL) &&
+			((pwd=((username)
+				?getpwnam(username)
+				:getpwuid(userid)))!=NULL) &&
 			((pemutex)?!pthread_mutex_unlock(pemutex):true));
+#else
+		return (((pwd=((username)
+				?getpwnam(username)
+				:getpwuid(userid)))!=NULL));
+#endif
 	#endif
 }
 

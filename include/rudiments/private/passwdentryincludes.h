@@ -5,4 +5,7 @@
 
 #include <sys/types.h>
 #include <pwd.h>
-#include <pthread.h>
+
+#ifdef RUDIMENTS_HAS_THREADS
+	#include <pthread.h>
+#endif

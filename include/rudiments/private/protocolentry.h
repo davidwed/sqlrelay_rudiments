@@ -6,8 +6,9 @@
 		protoent	pebuffer;
 		char		*buffer;
 
-		#if !defined(HAVE_GETPROTOBYNAME_R) || \
-				!defined(HAVE_GETPROTOBYNUMBER_R)
+		#if defined(RUDIMENTS_HAS_THREADS) && \
+			(!defined(HAVE_GETPROTOBYNAME_R) || \
+				!defined(HAVE_GETPROTOBYNUMBER_R))
 			static	pthread_mutex_t	*pemutex;
 		#endif
 

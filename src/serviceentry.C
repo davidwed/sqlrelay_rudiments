@@ -13,7 +13,7 @@
 
 #define MAXBUFFER	(32*1024)
 
-#if defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R))
 pthread_mutex_t	*serviceentry::semutex;
 #endif
@@ -22,7 +22,9 @@ pthread_mutex_t	*serviceentry::semutex;
 serviceentry::serviceentry() {
 	se=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && \
+		(!defined(HAVE_GETSERVBYNAME_R) || \
+			!defined(HAVE_GETSERVBYPORT_R))
 		semutex=NULL;
 	#endif
 }
@@ -47,6 +49,7 @@ char **serviceentry::getAliasList() const {
 	return se->s_aliases;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool serviceentry::needsMutex() {
 	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
 		return true;
@@ -60,6 +63,7 @@ void serviceentry::setMutex(pthread_mutex_t *mutex) {
 		semutex=mutex;
 	#endif
 }
+#endif
 
 bool serviceentry::initialize(const char *servicename,
 							const char *protocol) {
@@ -105,11 +109,17 @@ bool serviceentry::initialize(const char *servicename, int port,
 		return false;
 	#else
 		se=NULL;
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((semutex)?!pthread_mutex_lock(semutex):true) &&
 			((se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL) &&
 			((semutex)?!pthread_mutex_unlock(semutex):true));
+#else
+		return ((se=((servicename)
+				?getservbyname(servicename,protocol)
+				:getservbyport(htons(port),protocol)))!=NULL);
+#endif
 	#endif
 }
 

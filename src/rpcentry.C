@@ -13,7 +13,7 @@
 
 #define MAXBUFFER	(32*1024)
 
-#if defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
 pthread_mutex_t	*rpcentry::remutex;
 #endif
@@ -22,7 +22,9 @@ pthread_mutex_t	*rpcentry::remutex;
 rpcentry::rpcentry() {
 	re=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && \
+		(!defined(HAVE_GETRPCBYNAME_R) || \
+			!defined(HAVE_GETRPCBYNUMBER_R))
 		remutex=NULL;
 	#endif
 }
@@ -43,6 +45,7 @@ char **rpcentry::getAliasList() const {
 	return re->r_aliases;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool rpcentry::needsMutex() {
 	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
 		return true;
@@ -56,6 +59,7 @@ void rpcentry::setMutex(pthread_mutex_t *mutex) {
 		remutex=mutex;
 	#endif
 }
+#endif
 
 bool rpcentry::initialize(const char *name) {
 	return initialize(name,0);
@@ -97,11 +101,17 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		return false;
 	#else
 		re=NULL;
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((remutex)?!pthread_mutex_lock(remutex):true) &&
 			((re=((rpcname)
 				?getrpcbyname((char *)rpcname)
 				:getrpcbynumber(number)))!=NULL) &&
 			((remutex)?!pthread_mutex_unlock(remutex):true));
+#else
+		return ((re=((rpcname)
+				?getrpcbyname((char *)rpcname)
+				:getrpcbynumber(number)))!=NULL);
+#endif
 	#endif
 }
 

@@ -13,7 +13,7 @@
 
 #define MAXBUFFER (32*1024)
 
-#if defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
 pthread_mutex_t	*groupentry::gemutex;
 #endif
@@ -21,7 +21,8 @@ pthread_mutex_t	*groupentry::gemutex;
 groupentry::groupentry() {
 	grp=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && \
+		(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
 		gemutex=NULL;
 	#endif
 }
@@ -46,6 +47,7 @@ char **groupentry::getMembers() const {
 	return grp->gr_mem;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool groupentry::needsMutex() {
 	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
 		return true;
@@ -59,6 +61,7 @@ void groupentry::setMutex(pthread_mutex_t *mutex) {
 		gemutex=mutex;
 	#endif
 }
+#endif
 
 bool groupentry::initialize(const char *groupname) {
 	return initialize(groupname,0);
@@ -99,11 +102,17 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		}
 		return false;
 	#else
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((gemutex)?!pthread_mutex_lock(gemutex):true) &&
 			((grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
 			((gemutex)?!pthread_mutex_unlock(gemutex):true));
+#else
+		return ((grp=((groupname)
+				?getgrnam(groupname)
+				:getgrgid(groupid)))!=NULL);
+#endif
 	#endif
 }
 

@@ -6,7 +6,9 @@
 		group	grpbuffer;
 		char	*buffer;
 
-		#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		#if defined(RUDIMENTS_HAS_THREADS) && \
+			(!defined(HAVE_GETGRNAM_R) || \
+				!defined(HAVE_GETGRUID_R))
 			static	pthread_mutex_t	*gemutex;
 		#endif
 

@@ -7,4 +7,6 @@
 
 #include <time.h>
 #include <sys/types.h>
-#include <pthread.h>
+#ifdef RUDIMENTS_HAS_THREADS
+	#include <pthread.h>
+#endif

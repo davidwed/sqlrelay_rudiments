@@ -13,7 +13,7 @@
 
 #define MAXBUFFER	(32*1024)
 
-#if defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
 pthread_mutex_t	*hostentry::hemutex;
 #endif
@@ -22,7 +22,9 @@ pthread_mutex_t	*hostentry::hemutex;
 hostentry::hostentry() {
 	he=NULL;
 	buffer=NULL;
-	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+	#if defined(RUDIMENTS_HAS_THREADS) && \
+		(!defined(HAVE_GETHOSTBYNAME_R) || \
+			!defined(HAVE_GETHOSTBYADDR_R))
 		hemutex=NULL;
 	#endif
 }
@@ -51,6 +53,7 @@ char **hostentry::getAddressList() const {
 	return he->h_addr_list;
 }
 
+#ifdef RUDIMENTS_HAS_THREADS
 bool hostentry::needsMutex() {
 	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
 		return true;
@@ -64,6 +67,7 @@ void hostentry::setMutex(pthread_mutex_t *mutex) {
 		hemutex=mutex;
 	#endif
 }
+#endif
 
 bool hostentry::initialize(const char *hostname) {
 	return initialize(hostname,NULL,0,0);
@@ -106,11 +110,17 @@ bool hostentry::initialize(const char *hostname, const char *address,
 		return false;
 	#else
 		he=NULL;
+#ifdef RUDIMENTS_HAS_THREADS
 		return (((hemutex)?!pthread_mutex_lock(hemutex):true) &&
 			((he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL) &&
 			((hemutex)?!pthread_mutex_unlock(hemutex):true));
+#else
+		return ((he=((hostname)
+				?gethostbyname(hostname)
+				:gethostbyaddr(address,len,type)))!=NULL);
+#endif
 	#endif
 }
 

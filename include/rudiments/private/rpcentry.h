@@ -6,8 +6,9 @@
 		rpcent	rebuffer;
 		char	*buffer;
 
-		#if !defined(HAVE_GETRPCBYNAME_R) || \
-				!defined(HAVE_GETRPCBYNUMBER_R)
+		#if defined(RUDIMENTS_HAS_THREADS) && \
+			(!defined(HAVE_GETRPCBYNAME_R) || \
+				!defined(HAVE_GETRPCBYNUMBER_R))
 			static	pthread_mutex_t	*remutex;
 		#endif
 

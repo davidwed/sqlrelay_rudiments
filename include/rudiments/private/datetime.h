@@ -26,9 +26,11 @@
 		bool	setTimeZoneEnvVar(const char *zone, char **oldzone);
 		bool	restoreTimeZoneEnvVar(const char *oldzone);
 
-		bool	acquireLock();
-		bool	releaseLock();
-
 		environment	env;
 
-		static	pthread_mutex_t	*timemutex;
+		#ifdef RUDIMENTS_HAS_THREADS
+			bool	acquireLock();
+			bool	releaseLock();
+
+			static	pthread_mutex_t	*timemutex;
+		#endif

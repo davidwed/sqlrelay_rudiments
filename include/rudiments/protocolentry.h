@@ -44,6 +44,7 @@ class protocolentry {
 		void	print() const;
 			// Prints out the protocol entry.
 
+#ifdef RUDIMENTS_HAS_THREADS
 		static	bool	needsMutex();
 			// If your system doesn't support getprotobyname_r()
 			// and getprotobynumber_r() then this class needs a
@@ -56,6 +57,7 @@ class protocolentry {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
+#endif
 
 	#include <rudiments/private/protocolentry.h>
 };
