@@ -19,8 +19,8 @@ ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	LOBJS += daemonprocess.lo
 endif
 ifeq ($(INCLUDE_DATETIME),1)
-	SRCS += datetime.C timezonefile.C
-	LOBJS += datetime.lo timezonefile.lo
+	SRCS += datetime.C
+	LOBJS += datetime.lo
 endif
 ifeq ($(INCLUDE_TIMEZONEFILE),1)
 	SRCS += timezonefile.C
