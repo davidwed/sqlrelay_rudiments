@@ -2,17 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/xmldom.h>
+#include <rudiments/charstring.h>
 
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 xmldom::xmldom() : xmlsax() {
 	nullnode=xmldomnode::createNullNode();
@@ -55,7 +47,7 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	}
 	stringbuffer	*xml=rootnode->xml();
 	bool	retval=true;
-	int	length=strlen(xml->getString());
+	int	length=charstring::getLength(xml->getString());
 	if (fl.write(xml->getString(),length)!=length) {
 		retval=false;
 	}

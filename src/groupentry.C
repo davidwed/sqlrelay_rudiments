@@ -2,13 +2,10 @@
 // See the COPYING file for more information
 
 #include <rudiments/groupentry.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #include <errno.h>
 
 #define MAXBUFFER (32*1024)
@@ -115,7 +112,7 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 bool groupentry::getPassword(const char *groupname, char **password) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
-		*password=strdup(grp.getPassword());
+		*password=charstring::duplicate(grp.getPassword());
 		return true;
 	}
 	return false;
@@ -138,7 +135,7 @@ bool groupentry::getMembers(const char *groupname, char ***members) {
 		char	**memb=new char *[counter+1];
 		memb[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			memb[i]=strdup(grp.getMembers()[i]);
+			memb[i]=charstring::duplicate(grp.getMembers()[i]);
 		}
 		*members=memb;
 		return true;
@@ -149,7 +146,7 @@ bool groupentry::getMembers(const char *groupname, char ***members) {
 bool groupentry::getName(gid_t groupid, char **name) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
-		*name=strdup(grp.getName());
+		*name=charstring::duplicate(grp.getName());
 		return true;
 	}
 	return false;
@@ -158,7 +155,7 @@ bool groupentry::getName(gid_t groupid, char **name) {
 bool groupentry::getPassword(gid_t groupid, char **password) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
-		*password=strdup(grp.getPassword());
+		*password=charstring::duplicate(grp.getPassword());
 		return true;
 	}
 	return false;
@@ -172,7 +169,7 @@ bool groupentry::getMembers(gid_t groupid, char ***members) {
 		char	**memb=new char *[counter+1];
 		memb[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			memb[i]=strdup(grp.getMembers()[i]);
+			memb[i]=charstring::duplicate(grp.getMembers()[i]);
 		}
 		*members=memb;
 		return true;

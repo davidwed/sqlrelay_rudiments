@@ -2,20 +2,11 @@
 // See the COPYING file for more information
 
 #include <rudiments/xmlsax.h>
+#include <rudiments/charstring.h>
 
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #ifdef HAVE_MMAP
 	#include <sys/mman.h>
-#endif
-#include <fcntl.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
 #endif
 
 xmlsax::xmlsax() : errorhandler() {
@@ -187,7 +178,7 @@ bool xmlsax::parseTag(char current, char *next) {
 	}
 
 	// handle comments and cdata
-	if (!strcmp(name->getString(),"!--")) {
+	if (!charstring::compare(name->getString(),"!--")) {
 		if (!(ch=parseComment(ch))) {
 			delete name;
 			parseTagFailed();
@@ -195,7 +186,7 @@ bool xmlsax::parseTag(char current, char *next) {
 		}
 		delete name;
 		return (*next=getCharacter())!=(char)NULL;
-	} else if (!strcmp(name->getString(),"![CDATA[")) {
+	} else if (!charstring::compare(name->getString(),"![CDATA[")) {
 		if (!(ch=parseCData(ch))) {
 			delete name;
 			parseTagFailed();
@@ -330,7 +321,8 @@ bool xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 
 		// look for comments
 		namelen++;
-		if (namelen==3 && !strcmp((*name)->getString(),"!--")) {
+		if (namelen==3 &&
+			!charstring::compare((*name)->getString(),"!--")) {
 			return true;
 		}
 
@@ -652,19 +644,19 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 	}
 
 	// handle some predefined general entities
-	if (!strcmp((*buffer),"&amp;")) {
+	if (!charstring::compare((*buffer),"&amp;")) {
 		(*buffer)[0]='&';
 		(*buffer)[1]=(char)NULL;
-	} else if (!strcmp((*buffer),"&lt;")) {
+	} else if (!charstring::compare((*buffer),"&lt;")) {
 		(*buffer)[0]='<';
 		(*buffer)[1]=(char)NULL;
-	} else if (!strcmp((*buffer),"&gt;")) {
+	} else if (!charstring::compare((*buffer),"&gt;")) {
 		(*buffer)[0]='>';
 		(*buffer)[1]=(char)NULL;
-	} else if (!strcmp((*buffer),"&apos;")) {
+	} else if (!charstring::compare((*buffer),"&apos;")) {
 		(*buffer)[0]='\'';
 		(*buffer)[1]=(char)NULL;
-	} else if (!strcmp((*buffer),"&quot;")) {
+	} else if (!charstring::compare((*buffer),"&quot;")) {
 		(*buffer)[0]='"';
 		(*buffer)[1]=(char)NULL;
 	} else {

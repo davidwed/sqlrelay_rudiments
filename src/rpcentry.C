@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/rpcentry.h>
+#include <rudiments/charstring.h>
 
 // Some systems (notably cygwin 1.5.7-1) define getrpcbyname and getrpcbynumber
 // in their header files but then either don't implement them or don't export
@@ -11,10 +12,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -124,7 +121,7 @@ bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(re.getAliasList()[i]);
+			alias[i]=charstring::duplicate(re.getAliasList()[i]);
 		}
 		*aliaslist=alias;
 		return true;
@@ -135,7 +132,7 @@ bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
 bool rpcentry::getName(int number, char **name) {
 	rpcentry	re;
 	if (re.initialize(number)) {
-		*name=strdup(re.getName());
+		*name=charstring::duplicate(re.getName());
 		return true;
 	}
 	return false;
@@ -149,7 +146,7 @@ bool rpcentry::getAliasList(int number, char ***aliaslist) {
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(re.getAliasList()[i]);
+			alias[i]=charstring::duplicate(re.getAliasList()[i]);
 		}
 		*aliaslist=alias;
 		return true;

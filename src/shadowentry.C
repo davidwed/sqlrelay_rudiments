@@ -2,13 +2,10 @@
 // See the COPYING file for more information
 
 #include <rudiments/shadowentry.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -135,7 +132,7 @@ bool shadowentry::initialize(const char *username) {
 bool shadowentry::getEncryptedPassword(const char *username, char **password) {
 	shadowentry	sp;
 	if (sp.initialize(username)) {
-		*password=strdup(sp.getEncryptedPassword());
+		*password=charstring::duplicate(sp.getEncryptedPassword());
 		return true;
 	}
 	return false;

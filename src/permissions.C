@@ -2,11 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/permissions.h>
+#include <rudiments/charstring.h>
 
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
+#include <stdlib.h>
 #include <sys/stat.h>
 
 
@@ -19,13 +17,13 @@ bool permissions::setFilePermissions(int fd, mode_t perms) {
 }
 
 mode_t permissions::everyoneReadWrite() {
-	return S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
+	return S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH;
 }
 
 mode_t permissions::everyoneReadWriteExecute() {
-	return S_IRUSR | S_IWUSR | S_IXUSR | 
-		S_IRGRP | S_IWGRP | S_IXGRP | 
-		S_IROTH | S_IWOTH | S_IXOTH;
+	return S_IRUSR|S_IWUSR|S_IXUSR|
+		S_IRGRP|S_IWGRP|S_IXGRP|
+		S_IROTH|S_IWOTH|S_IXOTH;
 }
 
 mode_t permissions::ownerRead() {
@@ -41,15 +39,15 @@ mode_t permissions::ownerExecute() {
 }
 
 mode_t permissions::ownerReadWrite() {
-	return S_IRUSR | S_IWUSR;
+	return S_IRUSR|S_IWUSR;
 }
 
 mode_t permissions::ownerReadExecute() {
-	return S_IRUSR | S_IXUSR;
+	return S_IRUSR|S_IXUSR;
 }
 
 mode_t permissions::ownerReadWriteExecute() {
-	return S_IRUSR | S_IWUSR | S_IXUSR;
+	return S_IRUSR|S_IWUSR|S_IXUSR;
 }
 
 mode_t permissions::groupRead() {
@@ -65,15 +63,15 @@ mode_t permissions::groupExecute() {
 }
 
 mode_t permissions::groupReadWrite() {
-	return S_IRGRP | S_IWGRP;
+	return S_IRGRP|S_IWGRP;
 }
 
 mode_t permissions::groupReadExecute() {
-	return S_IRGRP | S_IXGRP;
+	return S_IRGRP|S_IXGRP;
 }
 
 mode_t permissions::groupReadWriteExecute() {
-	return S_IRGRP | S_IWGRP | S_IXGRP;
+	return S_IRGRP|S_IWGRP|S_IXGRP;
 }
 
 mode_t permissions::othersRead() {
@@ -89,15 +87,15 @@ mode_t permissions::othersExecute() {
 }
 
 mode_t permissions::othersReadWrite() {
-	return S_IROTH | S_IWOTH;
+	return S_IROTH|S_IWOTH;
 }
 
 mode_t permissions::othersReadExecute() {
-	return S_IROTH | S_IXOTH;
+	return S_IROTH|S_IXOTH;
 }
 
 mode_t permissions::othersReadWriteExecute() {
-	return S_IROTH | S_IWOTH | S_IXOTH;
+	return S_IROTH|S_IWOTH|S_IXOTH;
 }
 
 mode_t permissions::saveInSwapSpace() {
@@ -114,7 +112,7 @@ mode_t permissions::setGroupId() {
 
 mode_t permissions::evalPermString(const char *permstring) {
 	mode_t	retval=0;
-	if (strlen(permstring)==9) {
+	if (charstring::getLength(permstring)==9) {
 
 		// handle user permissions
 		if (permstring[0]=='r') {

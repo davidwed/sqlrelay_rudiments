@@ -4,14 +4,18 @@
 #include <rudiments/file.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/charstring.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+
+// need these for memcpy...
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -59,7 +63,7 @@ ssize_t file::create(const char *name, mode_t perms,
 }
 
 ssize_t file::create(const char *name, mode_t perms, const char *string) {
-	return create(name,perms,(void *)string,strlen(string));
+	return create(name,perms,(void *)string,charstring::getLength(string));
 }
 
 ssize_t file::create(const char *name, mode_t permissions,
@@ -676,7 +680,7 @@ bool file::lock(int method, short type, short whence, off_t start, off_t len) {
 	lck.l_start=start;
 	lck.l_len=len;
 	// FIXME: if a signal interrupts this, we should retry
-	return !fcntl(fd,method,&lck);
+	return !fcntl(method,(long)&lck);
 }
 
 bool file::checkLock(short type, short whence, off_t start, off_t len,
@@ -687,7 +691,7 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	lck.l_start=start;
 	lck.l_len=len;
 	// FIXME: if a signal interrupts this, we should retry
-	bool	retval=(!fcntl(fd,F_SETLKW,&lck));
+	bool	retval=(!fcntl(F_SETLKW,(long)&lck));
 	memcpy((void *)retlck,(void *)&lck,sizeof(struct flock));
 	return retval;
 }
@@ -699,7 +703,7 @@ bool file::unlock(short whence, off_t start, off_t len) {
 	lck.l_start=start;
 	lck.l_len=len;
 	// FIXME: if a signal interrupts this, we should retry
-	return !fcntl(fd,F_SETLK,&lck);
+	return !fcntl(F_SETLK,(long)&lck);
 }
 
 bool file::changeOwner(const char *newuser, const char *newgroup) {
@@ -1063,7 +1067,7 @@ char **file::attributeArray(const char *buffer, size_t size) {
 	counter=0;
 	for (size_t index=0; index<size; index++) {
 		if (!buffer[index]) {
-			attributes[counter]=strdup(ptr);
+			attributes[counter]=charstring::duplicate(ptr);
 			if (index<size-1) {
 				ptr=(char *)&buffer[index+1];
 			}

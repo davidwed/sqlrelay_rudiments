@@ -38,20 +38,19 @@ class syslogdestination : public logdestination {
 // The filedestination class writes log data to a file.
 class filedestination : public logdestination {
 	public:
-			filedestination();
 		bool	open(const char *filename);
 		void	close();
 	#include <rudiments/private/filedestination.h>
 };
 
 
-// The filedestination class writes log data to standard output.
+// The stdoutdestination class writes log data to standard output.
 class stdoutdestination : public logdestination {
 	#include <rudiments/private/stdoutdestination.h>
 };
 
 
-// The filedestination class writes log data to standard error.
+// The stderrdestination class writes log data to standard error.
 class stderrdestination : public logdestination {
 	#include <rudiments/private/stderrdestination.h>
 };

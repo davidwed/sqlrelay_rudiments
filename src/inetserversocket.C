@@ -2,12 +2,15 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetserversocket.h>
+#include <rudiments/charstring.h>
 
 #include <arpa/inet.h>
 #include <netdb.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+
+// need these for memset...
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
@@ -107,5 +110,5 @@ char *inetserversocket::getClientAddress() {
 	}
 
 	// convert the address to a string and return a copy of it
-	return strdup(inet_ntoa(clientsin.sin_addr));
+	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
 }

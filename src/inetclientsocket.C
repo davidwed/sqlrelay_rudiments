@@ -14,6 +14,8 @@
 #endif
 #include <stdio.h>
 #include <stdlib.h>
+
+// need these for memset...
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>

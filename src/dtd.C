@@ -2,12 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/dtd.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 bool dtd::parseFile(const char *filename) {
 	if (!xmld.parseFile(filename)) {
@@ -53,9 +50,11 @@ bool dtd::parseDtd() {
 
 		// for each element, create a new element node,
 		// for each attribute, create a new attribute node
-		if ((!strcmp(currentnode->getName(),"!ELEMENT") &&
+		if ((!charstring::compare(currentnode->getName(),
+							"!ELEMENT") &&
 					!newElement(currentnode)) ||
-			(!strcmp(currentnode->getName(),"!ATTLIST") &&
+			(!charstring::compare(currentnode->getName(),
+							"!ATTLIST") &&
 					!newAttribute(currentnode))) {
 				return false;
 		}
@@ -107,7 +106,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 	// return failure for a NULL list and success for "EMPTY"
 	if (!list) {
 		return false;
-	} else if (!strcmp(list,"EMPTY")) {
+	} else if (!charstring::compare(list,"EMPTY")) {
 		return true;
 	} else {
 
@@ -126,7 +125,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			// if we don't find the delimiter,
 			// use the end of the string instead 
 			if (!ptr2) {
-				ptr2=(char *)(list+strlen(list));
+				ptr2=(char *)(list+charstring::getLength(list));
 			}
 	
 			// parse out the value, including the * or +
@@ -138,11 +137,12 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			// if specified, evaluate any trailing *'s or +'s and
 			// truncate them
 			if (checkcount) {
-				count[0]=value[strlen(value)-1];
+				count[0]=value[charstring::getLength(value)-1];
 				if (count[0]!='*' && count[0]!='+') {
 					count[0]='1';
 				} else {
-					value[strlen(value)-1]=(char)NULL;
+					value[charstring::getLength(value)-1]=
+								(char)NULL;
 				}
 			}
 
@@ -225,7 +225,7 @@ bool dtd::newAttribute(xmldomnode *node) {
 
 	// insert the list of valid values or none if CDATA
 	char	*values=node->getAttribute(2)->getName();
-	return (!strcmp(values,"CDATA"))?
+	return (!charstring::compare(values,"CDATA"))?
 			true:parseList(values,attribute,0,2,'|',"value");
 }
 

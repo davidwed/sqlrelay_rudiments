@@ -2,11 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/xmldomnode.h>
-
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 
@@ -21,8 +17,8 @@ xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 				const char *name, const char *value) {
 	init(nullnode);
 	this->type=type;
-	nodename=(name)?strdup((char *)name):NULL;
-	nodevalue=(value)?strdup((char *)value):NULL;
+	nodename=(name)?charstring::duplicate((char *)name):NULL;
+	nodevalue=(value)?charstring::duplicate((char *)value):NULL;
 }
 
 void xmldomnode::init(xmldomnode *nullnode) {
@@ -85,7 +81,7 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name) const {
 			current && !current->isNullNode();
 				current=current->getPreviousTagSibling()) {
 		char	*nm=current->getName();
-		if ((name && nm && !strcmp(name,nm)) || !name) {
+		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			return current;
 		}
 	}
@@ -99,11 +95,12 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 			current && !current->isNullNode();
 				current=current->getPreviousTagSibling()) {
 		char	*nm=current->getName();
-		if ((name && nm && !strcmp(name,nm)) || !name) {
+		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			char	*value=current->
 					getAttribute(attributename)->
 						getValue();
-			if (value && !strcmp(value,attributevalue)) {
+			if (value &&
+				!charstring::compare(value,attributevalue)) {
 				return current;
 			}
 		}
@@ -124,7 +121,7 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name) const {
 			current && !current->isNullNode();
 				current=current->getNextTagSibling()) {
 		char	*nm=current->getName();
-		if ((name && nm && !strcmp(name,nm)) || !name) {
+		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			return current;
 		}
 	}
@@ -138,11 +135,12 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 			current && !current->isNullNode();
 				current=current->getNextTagSibling()) {
 		char	*nm=current->getName();
-		if ((name && nm && !strcmp(name,nm)) || !name) {
+		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			char	*value=current->
 					getAttribute(attributename)->
 						getValue();
-			if (value && !strcmp(value,attributevalue)) {
+			if (value &&
+				!charstring::compare(value,attributevalue)) {
 				return current;
 			}
 		}
@@ -163,11 +161,12 @@ xmldomnode *xmldomnode::getChild(const char *name,
 			current && !current->isNullNode();
 				current=current->next) {
 		char	*nm=current->getName();
-		if ((name && nm && !strcmp(name,nm)) || !name) {
+		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			char	*value=current->
 					getAttribute(attributename)->
 						getValue();
-			if (value && !strcmp(value,attributevalue)) {
+			if (value &&
+				!charstring::compare(value,attributevalue)) {
 				return current;
 			}
 		}
@@ -265,7 +264,7 @@ xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,
 	xmldomnode	*current=first;
 	if (name) {
 		for (int i=0; i<count; i++) {
-			if (!strcmp(current->nodename,name)) {
+			if (!charstring::compare(current->nodename,name)) {
 				break;
 			}
 			current=current->next;
@@ -317,7 +316,7 @@ bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 	xmldomnode	*current=*first;
 	if (node || name) {
 		while (current &&
-			(name && strcmp(current->nodename,name)) ||
+			(name && charstring::compare(current->nodename,name)) ||
 			(node && current!=node)) {
 			current=current->next;
 		}
@@ -453,11 +452,11 @@ void xmldomnode::setType(xmldomnodetype type) {
 }
 
 void xmldomnode::setName(const char *name) {
-	nodename=(name)?strdup(name):NULL;
+	nodename=(name)?charstring::duplicate(name):NULL;
 }
 
 void xmldomnode::setValue(const char *value) {
-	nodevalue=(value)?strdup(value):NULL;
+	nodevalue=(value)?charstring::duplicate(value):NULL;
 }
 
 void xmldomnode::setParent(xmldomnode *parent) {

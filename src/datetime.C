@@ -2,24 +2,18 @@
 // See the COPYING file for more information
 
 #include <rudiments/datetime.h>
+#include <rudiments/charstring.h>
 #ifdef HAVE_RTC
 	#include <rudiments/file.h>
 #endif
 
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #include <stdio.h>
 #include <sys/time.h>
 
 #ifdef HAVE_RTC
 	#include <linux/rtc.h>
 	#include <sys/ioctl.h>
-	#include <sys/stat.h>
-	#include <fcntl.h>
-	#include <unistd.h>
 #endif
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
@@ -43,29 +37,29 @@ bool datetime::initialize(const char *tmstring) {
 	// get the date
 	char	*ptr=(char *)tmstring;
 	mon=atoi(ptr)-1;
-	ptr=strchr(ptr,'/')+sizeof(char);
+	ptr=charstring::contains(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	mday=atoi(ptr);
-	ptr=strchr(ptr,'/')+sizeof(char);
+	ptr=charstring::contains(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	year=atoi(ptr)-1900;
 
 	// get the time
-	ptr=strchr(ptr,' ')+sizeof(char);
+	ptr=charstring::contains(ptr,' ')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	hour=atoi(ptr);
-	ptr=strchr(ptr,':')+sizeof(char);
+	ptr=charstring::contains(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	min=atoi(ptr);
-	ptr=strchr(ptr,':')+sizeof(char);
+	ptr=charstring::contains(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
@@ -76,9 +70,9 @@ bool datetime::initialize(const char *tmstring) {
 
 	// get the time zone if it was provided
 	delete[] zone;
-	if ((ptr=strchr(ptr,' '))) {
+	if ((ptr=charstring::contains(ptr,' '))) {
 		ptr=ptr+sizeof(char);
-		zone=(ptr && ptr[0])?strdup(ptr):NULL;
+		zone=(ptr && ptr[0])?charstring::duplicate(ptr):NULL;
 	} else {
 		zone=NULL;
 	}
@@ -106,11 +100,11 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	// FIXME: what if the zone/offset are garbage, is there a good way to
 	// tell?
 	#ifdef HAS___TM_ZONE
-		zone=strdup(tmstruct->__tm_zone);
+		zone=charstring::duplicate(tmstruct->__tm_zone);
 	#elif HAS_TM_ZONE
-		zone=strdup(tmstruct->tm_zone);
+		zone=charstring::duplicate(tmstruct->tm_zone);
 	#elif HAS_TM_NAME
-		zone=strdup(tmstruct->tm_name);
+		zone=charstring::duplicate(tmstruct->tm_name);
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
 			if (timemutex && !acquireLock()) {
@@ -118,7 +112,8 @@ bool datetime::initialize(const struct tm *tmstruct) {
 			}
 		#endif
 		tzset();
-		zone=strdup((tzname[0] && tzname[0][0])?tzname[0]:"UCT");
+		zone=charstring::duplicate((tzname[0] && tzname[0][0])?
+							tzname[0]:"UCT");
 		#ifdef RUDIMENTS_HAS_THREADS
 			if (timemutex && !releaseLock()) {
 				return false;
@@ -303,7 +298,7 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 
 		// get the time from the rtc
 		rtc_time rt;
-		if (ioctl(devrtc.getFileDescriptor(),RTC_RD_TIME,&rt)==-1) {
+		if (devrtc.ioctl(RTC_RD_TIME,&rt)==-1) {
 			devrtc.close();
 			return false;
 		}
@@ -317,7 +312,7 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 		min=rt.tm_min;
 		sec=rt.tm_sec;
 		isdst=rt.tm_isdst;
-		zone=strdup(hwtz);
+		zone=charstring::duplicate(hwtz);
 
 		return normalizeBrokenDownTime(true);
 	#else
@@ -357,8 +352,7 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 		rt.tm_isdst=isdst;
 
 		// set the rtc and clean up
-		bool	retval=(ioctl(devrtc.getFileDescriptor(),
-						RTC_SET_TIME,&rt)!=-1);
+		bool	retval=(devrtc.ioctl(RTC_SET_TIME,&rt)!=-1);
 		devrtc.close();
 
 		return retval;
@@ -400,12 +394,14 @@ bool datetime::adjustTimeZone(const char *newtz) {
 
 char *datetime::getString(time_t seconds) {
 	datetime	dt;
-	return ((dt.initialize(seconds))?strdup(dt.getString()):NULL);
+	return ((dt.initialize(seconds))?
+		charstring::duplicate(dt.getString()):NULL);
 }
 
 char *datetime::getString(const struct tm *tmstruct) {
 	datetime	dt;
-	return ((dt.initialize(tmstruct))?strdup(dt.getString()):NULL);
+	return ((dt.initialize(tmstruct))?
+		charstring::duplicate(dt.getString()):NULL);
 }
 
 time_t datetime::getEpoch(const char *datestring) {
@@ -421,7 +417,7 @@ time_t datetime::getEpoch(const struct tm *tmstruct) {
 bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone) {
 	char	*tz=env.getValue("TZ");
 	if (tz) {
-		*oldzone=strdup(tz);
+		*oldzone=charstring::duplicate(tz);
 	} else {
 		*oldzone=NULL;
 	}
@@ -523,7 +519,7 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		// Use tzset to get the timezone name
 		tzset();
 		delete[] zone;
-		zone=strdup(tzname[0]);
+		zone=charstring::duplicate(tzname[0]);
 
 		// Get the offset from the struct tm if we can, otherwise get
 		// it from the value set by tzset()

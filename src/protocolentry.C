@@ -2,13 +2,10 @@
 // See the COPYING file for more information
 
 #include <rudiments/protocolentry.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -116,7 +113,7 @@ bool protocolentry::getAliasList(const char *protocolname, char ***aliaslist) {
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(pe.getAliasList()[i]);
+			alias[i]=charstring::duplicate(pe.getAliasList()[i]);
 		}
 		*aliaslist=alias;
 		return true;
@@ -136,7 +133,7 @@ bool protocolentry::getNumber(const char *protocolname, int *number) {
 bool protocolentry::getName(int number, char **name) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
-		*name=strdup(pe.getName());
+		*name=charstring::duplicate(pe.getName());
 		return true;
 	}
 	return false;
@@ -150,7 +147,7 @@ bool protocolentry::getAliasList(int number, char ***aliaslist) {
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(pe.getAliasList()[i]);
+			alias[i]=charstring::duplicate(pe.getAliasList()[i]);
 		}
 		*aliaslist=alias;
 		return true;

@@ -2,14 +2,11 @@
 // See the COPYING file for more information
 
 #include <rudiments/unixserversocket.h>
+#include <rudiments/charstring.h>
 
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
-#endif
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
 #endif
 
 unixserversocket::unixserversocket() : serversocket(), unixsocket() {
@@ -30,7 +27,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	unlink(filename);
 	memset((void *)&sockaddrun,0,sizeof(sockaddrun));
 	sockaddrun.sun_family=AF_UNIX;
-	strcpy(sockaddrun.sun_path,filename);
+	charstring::copyInto(sockaddrun.sun_path,filename);
 
 	// create the socket
 	return ((fd=::socket(AF_UNIX,SOCK_STREAM,0))>-1);

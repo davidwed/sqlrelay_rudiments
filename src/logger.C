@@ -5,43 +5,32 @@
 
 #include <rudiments/datetime.h>
 #include <rudiments/permissions.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 
-filedestination::filedestination() {
-	logfile=-1;
-}
-
 bool filedestination::open(const char *filename) {
-	return ((logfile=::open(filename,O_CREAT|O_WRONLY|O_APPEND,
-				permissions::ownerReadWrite()))!=-1);
+	return logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,
+				permissions::ownerReadWrite());
 }
 
 void filedestination::close() {
-	::close(logfile);
-	logfile=-1;
+	logfile.close();
 }
 
 void filedestination::write(const char *string) {
-	::write(logfile,string,strlen(string));
+	logfile.write(string);
 }
 
 void stdoutdestination::write(const char *string) {
-	::write(1,string,strlen(string));
+	::write(1,string,charstring::getLength(string));
 }
 
 void stderrdestination::write(const char *string) {
-	::write(2,string,strlen(string));
+	::write(2,string,charstring::getLength(string));
 }
 
 void syslogdestination::open(const char *ident, int option,
@@ -81,13 +70,15 @@ char *logger::logHeader(const char *name) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
 	char	*dtstring=dt.getString();
-	char	*retval=new char[strlen(dtstring)+strlen(name)+16];
+	char	*retval=new char[charstring::getLength(dtstring)+
+					charstring::getLength(name)+16];
 	sprintf(retval,"%s %s [%d]",dtstring,name,getpid());
 	return retval;
 }
 
 void logger::write(const char *header, int tabs, const char *string) const {
-	char	logentry[strlen(header)+3+tabs+strlen(string)+2+1];
+	char	logentry[charstring::getLength(header)+3+tabs+
+				charstring::getLength(string)+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
@@ -97,7 +88,7 @@ void logger::write(const char *header, int tabs, const char *string) const {
 }
 
 void logger::write(const char *header, int tabs, char character) const {
-	char	logentry[strlen(header)+3+tabs+1+2+1];
+	char	logentry[charstring::getLength(header)+3+tabs+1+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
@@ -107,7 +98,7 @@ void logger::write(const char *header, int tabs, char character) const {
 }
 
 void logger::write(const char *header, int tabs, long number) const {
-	char	logentry[strlen(header)+3+tabs+20+2+1];
+	char	logentry[charstring::getLength(header)+3+tabs+20+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
@@ -117,7 +108,7 @@ void logger::write(const char *header, int tabs, long number) const {
 }
 
 void logger::write(const char *header, int tabs, double number) const {
-	char	logentry[strlen(header)+3+tabs+21+2+1];
+	char	logentry[charstring::getLength(header)+3+tabs+21+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');

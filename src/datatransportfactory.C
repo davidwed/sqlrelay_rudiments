@@ -6,20 +6,21 @@
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/unixserversocket.h>
 #include <rudiments/unixclientsocket.h>
+#include <rudiments/charstring.h>
 
 server *datatransportfactory::getServer(const char *type) {
-	if (!strcmp(type,"inet")) {
+	if (!charstring::compare(type,"inet")) {
 		return new inetserversocket();
-	} else if (!strcmp(type,"unix")) {
+	} else if (!charstring::compare(type,"unix")) {
 		return new unixserversocket();
 	}
 	return NULL;
 }
 
 client *datatransportfactory::getClient(const char *type) {
-	if (!strcmp(type,"inet")) {
+	if (!charstring::compare(type,"inet")) {
 		return new inetclientsocket();
-	} else if (!strcmp(type,"unix")) {
+	} else if (!charstring::compare(type,"unix")) {
 		return new unixclientsocket();
 	}
 	return NULL;

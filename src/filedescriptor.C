@@ -3,6 +3,8 @@
 
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
+#include <rudiments/charstring.h>
+
 #include <errno.h>
 #include <stdio.h>
 #ifdef HAVE_SYS_TIMES_H
@@ -12,15 +14,12 @@
 #ifdef HAVE_SYS_SELECT_H
 	#include <sys/select.h>
 #endif
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #include <fcntl.h>
 #include <sys/fcntl.h>
+#include <sys/ioctl.h>
 
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
@@ -151,15 +150,15 @@ BIO *filedescriptor::newSSLBIO() const {
 #endif
 
 bool filedescriptor::useNonBlockingMode() {
-	return (fcntl(fd,F_SETFL,fcntl(fd,F_GETFL,0)|O_NONBLOCK)!=-1);
+	return (fcntl(F_SETFL,fcntl(F_GETFL,0)|O_NONBLOCK)!=-1);
 }
 
 bool filedescriptor::useBlockingMode() {
-	return (fcntl(fd,F_SETFL,fcntl(fd,F_GETFL,0)&(~O_NONBLOCK))!=-1);
+	return (fcntl(F_SETFL,fcntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
 }
 
 bool filedescriptor::isUsingNonBlockingMode() {
-	return (fcntl(fd,F_GETFL,0)&O_NONBLOCK);
+	return (fcntl(F_GETFL,0)&O_NONBLOCK);
 }
 
 ssize_t filedescriptor::write(unsigned short number) {
@@ -216,13 +215,15 @@ ssize_t filedescriptor::write(const char *string, size_t size) {
 }
 
 ssize_t filedescriptor::write(const unsigned char *string) {
-	DEBUG_WRITE_STRING("ustring",string,strlen((char *)string));
-	return safeWrite((void *)string,strlen((char *)string),-1,-1);
+	DEBUG_WRITE_STRING("ustring",string,
+				charstring::getLength((char *)string));
+	return safeWrite((void *)string,
+				charstring::getLength((char *)string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string) {
-	DEBUG_WRITE_STRING("string",string,strlen(string));
-	return safeWrite((void *)string,strlen(string),-1,-1);
+	DEBUG_WRITE_STRING("string",string,charstring::getLength(string));
+	return safeWrite((void *)string,charstring::getLength(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size) {
@@ -290,14 +291,16 @@ ssize_t filedescriptor::write(const char *string, size_t size,
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
-							long sec, long usec) {
-	DEBUG_WRITE_STRING("ustring",string,strlen((char *)string));
-	return safeWrite((void *)string,strlen((char *)string),sec,usec);
+						long sec, long usec) {
+	DEBUG_WRITE_STRING("ustring",string,
+				charstring::getLength((char *)string));
+	return safeWrite((void *)string,
+				charstring::getLength((char *)string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, long sec, long usec) {
-	DEBUG_WRITE_STRING("string",string,strlen(string));
-	return safeWrite((void *)string,strlen(string),sec,usec);
+	DEBUG_WRITE_STRING("string",string,charstring::getLength(string));
+	return safeWrite((void *)string,charstring::getLength(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
@@ -476,7 +479,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 	*buffer=new char[buffersize];
 
 	// initialize termination detector
-	int	termlen=strlen(terminator);
+	int	termlen=charstring::getLength(terminator);
 	char	*term=new char[termlen];
 	for (int i=0; i<termlen; i++) {
 		term[i]=(char)NULL;
@@ -553,7 +556,8 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 				term[termlen-1]=charbuffer;
 
 				// check for termination
-				if (!strncmp(term,terminator,termlen)) {
+				if (!charstring::compare(term,terminator,
+								termlen)) {
 					break;
 				}
 			} else {
@@ -831,3 +835,11 @@ int filedescriptor::getSSLResult() const {
 	return sslresult;
 }
 #endif
+
+int filedescriptor::fcntl(int cmd, long arg) {
+	return ::fcntl(fd,cmd,arg);
+}
+
+int filedescriptor::ioctl(int cmd, void *arg) {
+	return ::ioctl(fd,cmd,arg);
+}

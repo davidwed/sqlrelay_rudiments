@@ -16,10 +16,6 @@
 	#include <sys/wait.h>
 #endif
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 #ifdef __GNUC__
 signalhandler	daemonprocess::shutdownhandler;
@@ -43,7 +39,7 @@ bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
 	char	*pid=charstring::parseNumber((long)getpid());
 	bool	retval=(fl.create(filename,permissions,pid)==
-						(ssize_t)strlen(pid));
+					(ssize_t)charstring::getLength(pid));
 	delete[] pid;
 	fl.close();
 	return retval;

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/environment.h>
+#include <rudiments/charstring.h>
 #include <stdlib.h>
 
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
@@ -23,7 +24,8 @@ bool environment::setValue(const char *variable, const char *value) {
 	if (envstrings.getData((char *)variable,&pestr)) {
 		delete[] pestr;
 	}
-	pestr=new char[strlen(variable)+strlen(value)+2];
+	pestr=new char[charstring::getLength(variable)+
+			charstring::getLength(value)+2];
 	sprintf(pestr,"%s=%s",variable,value);
 	if (putenv(pestr)!=-1) {
 		envstrings.setData((char *)variable,pestr);

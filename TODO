@@ -25,8 +25,6 @@ paths:
 					element in a directory tree
 
 file class:
-	fcntl.h - fcntl()
-	sys/ioctl.h - ioctl()
 	unistd.h - pathconf()/fpathconf():
 				__POSIX_LINK_MAX()
 				__POSIX_CHOWN_RESTRICTED()
@@ -204,12 +202,21 @@ errors:
 	string.h - strerror(_r)()
 
 filedescriptor class:
+	fcntl.h - fcntl()
+			F_GET/SETFD - get/set close-on-exec bit
+			F_GET/SETFL - get/set flags
+				O_APPEND,O_NONBLOCK,O_ASYNC,O_DIRECT
+			F_GET/SETOWN - get/set process group that will receive
+					signals on i/o availability
+			F_GET/SETSIG - get/set what signal to send to process
+					group on i/o/availability
 	aio.h - aio_init(),aio_read(),aio_write(),lio_listio(),aio_error(),
 		aio_return(),aio_cancel(),aio_suspend(),aio_fsync()
 	stdio.h - dprintf()
 	sys/select.h - select(),pselect() functions
 	sys/epoll.h - epoll functions for speeding up network io
 			epoll_create(),epoll_ctl(),epoll_wait()
+	sys/ioctl.h - ioctl()
 	sys/poll.h - poll() function
 	sys/uio.h - readv()/writev() functions
 	sys/sendfile.h - sendfile() function
@@ -441,6 +448,8 @@ network:
 	netinet/tcp.h - #defines for setsockopt, tcp packet structs
 	netinet/udp.h - udp packet structs
 	netpacket/packet.h - raw packet structs
+
+what does the logger.C warning mean
 
 should file class have non-static versions of createDeviceNode/createFifo/
 	createTemporaryFile which mirror other create() methods?

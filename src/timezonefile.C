@@ -3,19 +3,10 @@
 
 #include <rudiments/timezonefile.h>
 #include <rudiments/file.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <netinet/in.h>
 
 timezonefile::timezonefile() {
@@ -55,7 +46,7 @@ bool timezonefile::parseFile(const char *filename) {
 		return false;
 	}
 	magic[4]=(char)NULL;
-	if (strcmp(magic,"TZif")) {
+	if (charstring::compare(magic,"TZif")) {
 		printf("magic not TZif\n");
 		return false;
 	}

@@ -401,6 +401,12 @@ class filedescriptor {
 			// Returns the listener set previously by useListener() 
 			// or NULL if none has been set.
 
+
+		int	fcntl(int command, long arg);
+		int	ioctl(int command, void *arg);
+			// Interfaces for performing varions miscellaneous
+			// operations on the file descriptor.
+
 	#include <rudiments/private/filedescriptor.h>
 };
 

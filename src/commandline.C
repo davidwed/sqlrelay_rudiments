@@ -2,13 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/commandline.h>
-
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-
-#include <stdio.h>
+#include <rudiments/charstring.h>
 
 commandline::commandline(int argc, const char **argv) {
 	this->argc=argc;
@@ -22,7 +16,7 @@ char *commandline::value(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<argc-1; i++) {
-			if (!strcmp(arg,argv[i])) {
+			if (!charstring::compare(arg,argv[i])) {
 				return argv[i+1];
 			}
 		}
@@ -34,7 +28,7 @@ bool commandline::found(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<argc; i++) {
-			if (!strcmp(arg,argv[i])) {
+			if (!charstring::compare(arg,argv[i])) {
 				return true;
 			}
 		}

@@ -6,16 +6,8 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
 #include <errno.h>
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <sys/stat.h>
 
 #include <stdlib.h>
 

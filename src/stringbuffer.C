@@ -5,10 +5,6 @@
 #include <rudiments/charstring.h>
 
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 
 stringbuffer::stringbuffer() : variablebuffer(128,32) {
@@ -77,26 +73,29 @@ stringbuffer *stringbuffer::write(double number) {
 }
 
 size_t stringbuffer::getStringLength() {
-	return strlen(getString());
+	return charstring::getLength(getString());
 }
 
 stringbuffer *stringbuffer::append(const char *string) {
 	if (string) {
-		variablebuffer::append((unsigned char *)string,strlen(string));
+		variablebuffer::append((unsigned char *)string,
+					charstring::getLength(string));
 	}
 	return this;
 }
 
 stringbuffer *stringbuffer::append(long number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::append((unsigned char *)numstr,
+					charstring::getLength(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::append(double number, unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
-	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::append((unsigned char *)numstr,
+					charstring::getLength(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -104,26 +103,30 @@ stringbuffer *stringbuffer::append(double number, unsigned short scale) {
 stringbuffer *stringbuffer::append(double number, unsigned short precision,
 							unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
-	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::append((unsigned char *)numstr,
+					charstring::getLength(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(const char *string) {
-	variablebuffer::write((unsigned char *)string,strlen(string));
+	variablebuffer::write((unsigned char *)string,
+					charstring::getLength(string));
 	return this;
 }
 
 stringbuffer *stringbuffer::write(long number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::write((unsigned char *)numstr,
+					charstring::getLength(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(double number, unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
-	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::write((unsigned char *)numstr,
+					charstring::getLength(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -131,7 +134,8 @@ stringbuffer *stringbuffer::write(double number, unsigned short scale) {
 stringbuffer *stringbuffer::write(double number, unsigned short precision,
 							unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
-	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::write((unsigned char *)numstr,
+					charstring::getLength(numstr));
 	delete[] numstr;
 	return this;
 }

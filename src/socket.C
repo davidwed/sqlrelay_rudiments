@@ -15,12 +15,12 @@ socket::socket(int filedesc) :
 #ifdef FIONBIO
 bool socket::useNonBlockingMode() {
 	int	nonblocking=1;
-	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
+	return (ioctl(FIONBIO,&nonblocking)!=-1);
 }
 
 bool socket::useBlockingMode() {
 	int	nonblocking=0;
-	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
+	return (ioctl(FIONBIO,&nonblocking)!=-1);
 }
 #endif
 

@@ -2,13 +2,10 @@
 // See the COPYING file for more information
 
 #include <rudiments/hostentry.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -141,7 +138,7 @@ bool hostentry::getAliasList(const char *hostname, char ***aliaslist) {
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(he.getAliasList()[i]);
+			alias[i]=charstring::duplicate(he.getAliasList()[i]);
 		}
 		*aliaslist=alias;
 		return true;
@@ -175,7 +172,7 @@ bool hostentry::getAddressList(const char *hostname, char ***addresslist) {
 		char	**addr=new char *[counter+1];
 		addr[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			addr[i]=strdup(he.getAddressList()[i]);
+			addr[i]=charstring::duplicate(he.getAddressList()[i]);
 		}
 		*addresslist=addr;
 		return true;
@@ -187,7 +184,8 @@ bool hostentry::getAddressString(const char *hostname, int index,
 							char **addressstring) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
-		*addressstring=strdup(he.getAddressString(index));
+		*addressstring=charstring::
+				duplicate(he.getAddressString(index));
 		return true;
 	}
 	return false;
@@ -197,7 +195,7 @@ bool hostentry::getAddressString(const char *hostname, int index,
 bool hostentry::getName(const char *address, int len, int type, char **name) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		*name=strdup(he.getName());
+		*name=charstring::duplicate(he.getName());
 		return true;
 	}
 	return false;
@@ -212,7 +210,7 @@ bool hostentry::getAliasList(const char *address, int len, int type,
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(he.getAliasList()[i]);
+			alias[i]=charstring::duplicate(he.getAliasList()[i]);
 		}
 		*aliaslist=alias;
 		return true;
@@ -229,7 +227,7 @@ bool hostentry::getAddressList(const char *address, int len, int type,
 		char	**addr=new char *[counter+1];
 		addr[counter]=NULL;
 		for (int i=0; i<counter; i++) {
-			addr[i]=strdup(he.getAddressList()[i]);
+			addr[i]=charstring::duplicate(he.getAddressList()[i]);
 		}
 		*addresslist=addr;
 		return true;
@@ -241,7 +239,8 @@ bool hostentry::getAddressString(const char *address, int len, int type,
 					int index, char **addressstring) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		*addressstring=strdup(he.getAddressString(index));
+		*addressstring=charstring::
+				duplicate(he.getAddressString(index));
 		return true;
 	}
 	return false;

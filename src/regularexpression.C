@@ -5,10 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #if defined(RUDIMENTS_HAS_PCRE)
-	#include <string.h>
-	#ifdef HAVE_STRINGS_H
-		#include <strings.h>
-	#endif
+	#include <rudiments/charstring.h>
 #elif defined(HAVE_REGEX_H)
 #elif defined(HAVE_REGEXP_H)
 	#include <regexp.h>
@@ -90,7 +87,8 @@ bool regularexpression::match(const char *str) {
 	#if defined(RUDIMENTS_HAS_PCRE)
 		this->str=(char *)str;
 		return (expr && (matchcount=pcre_exec(expr,NULL,
-						str,strlen(str),0,0,matches,
+						str,charstring::getLength(str),
+						0,0,matches,
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
 	#elif defined(HAVE_REGEX_H)
 		this->str=(char *)str;
