@@ -3,12 +3,7 @@ what does the logger.C warning mean
 should file class have non-static versions of createDeviceNode/createFifo/
 	createTemporaryFile which mirror other create() methods?
 
-charstring class has lots of static methods with no
-	corresponding non-static method, is this ok?
-
 looks like there's a bug in xml comment parsing, ! gets prepended to value
-
-some of the static methods can probably be inlined
 
 --------------------------------------------------------------------------------
 
@@ -19,12 +14,8 @@ internationalization:
 	libintl.h - gettext functions
 	stdlib.h - rpmatch() - response match
 
-paths:
-	need methods for returning the filename and directory name from a path
-	and for replacing ./'s and ../'s in a path
-	sys/ipc.h - ftok()
-	unistd.h - chdir()/fchdir()
-			pathconf()/fpathconf():
+path class:
+	unistd.h - pathconf()/fpathconf():
 				__POSIX_PATH_MAX()
 				__POSIX_NAME_MAX()
 				__POSIX_NO_TRUNC()
@@ -58,7 +49,7 @@ directory class:
 			dirfd()
 			scandir(),alphasort(),versionsort() - not in posix
 			getdirentries()
-	unistd.h - getcwd(),rmdir(),chroot()
+	unistd.h - chdir(),getcwd(),rmdir(),chroot()
 	sys/stat.h - mkdir()
 
 filesystem class:
@@ -157,11 +148,10 @@ charstring class:
 		toascii() - clears high order bits, makes it an ascii character
 	string.h/strings.h -
 		strxfrm(_l)()
-		strrchr()
 		strcspn(),strspn(),strpbrk()
 		strcasestr() - gnu extension???
-		strndup()
-		strnlen()
+		strndup() - gnu extension
+		strnlen() - gnu extension
 	monetary.h - strfmon(_l)() - format monetary values
 	wordexp.h - wordexp()/wordfree() - word expansion???
 	obstack.h - lots of object stack macros for

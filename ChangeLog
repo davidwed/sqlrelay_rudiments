@@ -28,9 +28,10 @@
 	added static getLength() method to charstring class
 	added wait() with timeout methods to semaphore class
 	added chown/fchown,unlink,rename,link,symlink,readlink,fsync,fdatasync,
-		revoke,utimes,mknod,mkfifo,mkstemp,access,xattr-related
-		function wrappers to the file class
+		utimes,mknod,mkfifo,mkstemp,access,xattr-related function
+		wrappers to the file class
 	added dup/dup2 wrappers to filedescriptor class
+	added path class
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

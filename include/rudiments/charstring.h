@@ -78,16 +78,30 @@ class charstring {
 			// "str2", ignoring case.
 
 
-		static	char	*contains(const char *haystack,
+		static	bool	contains(const char *haystack,
 						const char *needle);
-			// If "haystack" contains "needle", then this method
-			// returns a pointer to the substring.  Otherwise it
-			// returns NULL.
-		static	char	*contains(const char *haystack,
+			// Returns true if "haystack" contains "needle" or
+			// false otherwise.
+		static	bool	contains(const char *haystack,
 						char needle);
-			// If "haystack" contains "needle", then this method
-			// returns a pointer to the substring.  Otherwise it
-			// returns NULL.
+			// Returns true if "haystack" contains "needle" or
+			// false otherwise.
+		static	char	*firstOccurrance(const char *haystack,
+							const char *needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or NULL if not found.
+		static	char	*firstOccurrance(const char *haystack,
+							char needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or NULL if not found.
+		static	char	*lastOccurrance(const char *haystack,
+							const char *needle);
+			// Returns a pointer to the last occurrance of "needle"
+			// in "haystack" or NULL if not found.
+		static	char	*lastOccurrance(const char *haystack,
+							char needle);
+			// Returns a pointer to the last occurrance of "needle"
+			// in "haystack" or NULL if not found.
 
 
 		static	char	*duplicate(const char *str);

@@ -63,12 +63,42 @@ int charstring::compareIgnoringCase(const char *str1,
 	return strncasecmp(str1,str2,size);
 }
 
-char *charstring::contains(const char *haystack, const char *needle) {
+bool charstring::contains(const char *haystack, const char *needle) {
+	return (firstOccurrance(haystack,needle)!=NULL);
+}
+
+bool charstring::contains(const char *haystack, const char needle) {
+	return (firstOccurrance(haystack,needle)!=NULL);
+}
+
+char *charstring::firstOccurrance(const char *haystack, const char *needle) {
 	return strstr(haystack,needle);
 }
 
-char *charstring::contains(const char *haystack, const char needle) {
+char *charstring::firstOccurrance(const char *haystack, const char needle) {
 	return strchr(haystack,needle);
+}
+
+char *charstring::lastOccurrance(const char *haystack, const char *needle) {
+
+	size_t	haystacklen=length(haystack);
+	size_t	needlelen=length(needle);
+	if (needlelen>haystacklen) {
+		return NULL;
+	}
+	
+	char	*ptr=(char *)haystack+haystacklen-needlelen;
+	while (ptr>haystack) {
+		if (compare(ptr,needle)) {
+			return ptr;
+		}
+		ptr--;
+	}
+	return NULL;
+}
+
+char *charstring::lastOccurrance(const char *haystack, const char needle) {
+	return strrchr(haystack,needle);
 }
 
 char *charstring::duplicate(const char *str) {
