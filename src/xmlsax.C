@@ -28,6 +28,7 @@ xmlsax::~xmlsax() {
 
 void xmlsax::reset() {
 	string=NULL;
+	ptr=NULL;
 	line=1;
 }
 
@@ -78,19 +79,14 @@ bool xmlsax::parseFile(const char *filename) {
 	// open the file
 	bool retval;
 	if ((retval=fl.open(filename,O_RDONLY))) {
-		// try to mmap it shared, if that fails, try private,
-		// if neither mmap succeeds then that's ok, just set ptr to
-		// NULL and fallback to just reading from the file
-		if ((ptr=string=(char *)mmap(NULL,fl.getSize(),
-						PROT_READ,MAP_SHARED,
-						fl.getFileDescriptor(),0))==
-						MAP_FAILED) {
-			if ((ptr=string=(char *)mmap(NULL,fl.getSize(),
+		// Try to mmap() the file.  If it fails, that's ok, ptr will be
+		// set to NULL from the previous call to reset() and will cause
+		// getCharacter() to read from the file.
+		if ((string=(char *)mmap(NULL,fl.getSize(),
 						PROT_READ,MAP_PRIVATE,
-						fl.getFileDescriptor(),0))==
+						fl.getFileDescriptor(),0))!=
 						MAP_FAILED) {
-				ptr=NULL;
-			}
+			ptr=string;
 		}
 		retval=parse();
 		if (ptr) {
