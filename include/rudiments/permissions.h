@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef PERMISSIONS_H
-#define PERMISSIONS_H
+#ifndef RUDIMENTS_PERMISSIONS_H
+#define RUDIMENTS_PERMISSIONS_H
 
 #include <rudiments/private/config.h>
 

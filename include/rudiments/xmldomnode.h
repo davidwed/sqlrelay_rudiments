@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef XMLDOMNODE_H
-#define XMLDOMNODE_H
+#ifndef RUDIMENTS_XMLDOMNODE_H
+#define RUDIMENTS_XMLDOMNODE_H
 
 #include <rudiments/private/config.h>
 

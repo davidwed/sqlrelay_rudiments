@@ -1,8 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information.
 
-#ifndef TABLE_H
-#define TABLE_H
+#ifndef RUDIMENTS_TABLE_H
+#define RUDIMENTS_TABLE_H
 
 #include <rudiments/private/config.h>
 

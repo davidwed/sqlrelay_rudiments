@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef INETCLIENTSOCKET_H
-#define INETCLIENTSOCKET_H
+#ifndef RUDIMENTS_INETCLIENTSOCKET_H
+#define RUDIMENTS_INETCLIENTSOCKET_H
 
 #include <rudiments/private/config.h>
 

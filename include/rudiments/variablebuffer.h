@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef VARIABLEBUFFER_H
-#define VARIABLEBUFFER_H
+#ifndef RUDIMENTS_VARIABLEBUFFER_H
+#define RUDIMENTS_VARIABLEBUFFER_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef CONNECTIONDATA_H
-#define CONNECTIONDATA_H
+#ifndef RUDIMENTS_CONNECTIONDATA_H
+#define RUDIMENTS_CONNECTIONDATA_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef RUDIMENTS_SERVER_H
+#define RUDIMENTS_SERVER_H
 
 #include <rudiments/datatransport.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SEMAPHORESET_H
-#define SEMAPHORESET_H
+#ifndef RUDIMENTS_SEMAPHORESET_H
+#define RUDIMENTS_SEMAPHORESET_H
 
 #include <rudiments/private/config.h>
 

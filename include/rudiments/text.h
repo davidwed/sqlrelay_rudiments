@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef TEXT_H
-#define TEXT_H
+#ifndef RUDIMENTS_TEXT_H
+#define RUDIMENTS_TEXT_H
 
 #include <rudiments/private/config.h>
 

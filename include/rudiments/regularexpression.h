@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef REGEXP_H
-#define REGEXP_H
+#ifndef RUDIMENTS_REGEXP_H
+#define RUDIMENTS_REGEXP_H
 
 #include <rudiments/private/config.h>
 

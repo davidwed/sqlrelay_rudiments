@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef INETSERVERSOCKET_H
-#define INETSERVERSOCKET_H
+#ifndef RUDIMENTS_INETSERVERSOCKET_H
+#define RUDIMENTS_INETSERVERSOCKET_H
 
 #include <rudiments/private/config.h>
 

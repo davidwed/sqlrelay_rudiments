@@ -1,8 +1,8 @@
 // Copyright (c) 2000-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef DATETIME_H
-#define DATETIME_H
+#ifndef RUDIMENTS_DATETIME_H
+#define RUDIMENTS_DATETIME_H
 
 #include <rudiments/private/config.h>
 

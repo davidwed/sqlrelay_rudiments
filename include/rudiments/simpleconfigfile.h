@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SIMPLECONFIGFILE_H
-#define SIMPLECONFIGFILE_H
+#ifndef RUDIMENTS_SIMPLECONFIGFILE_H
+#define RUDIMENTS_SIMPLECONFIGFILE_H
 
 #include <rudiments/private/config.h>
 

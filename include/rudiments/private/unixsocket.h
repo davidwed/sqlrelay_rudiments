@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef UNIXSOCKET_H
-#define UNIXSOCKET_H
+#ifndef RUDIMENTS_UNIXSOCKET_H
+#define RUDIMENTS_UNIXSOCKET_H
 
 #include <sys/un.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef DAEMONPROCESS_H
-#define DAEMONPROCESS_H
+#ifndef RUDIMENTS_DAEMONPROCESS_H
+#define RUDIMENTS_DAEMONPROCESS_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef COMMANDLINE_H
-#define COMMANDLINE_H
+#ifndef RUDIMENTS_COMMANDLINE_H
+#define RUDIMENTS_COMMANDLINE_H
 
 #include <rudiments/private/config.h>
 

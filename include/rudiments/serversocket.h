@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SERVERSOCKET_H
-#define SERVERSOCKET_H
+#ifndef RUDIMENTS_SERVERSOCKET_H
+#define RUDIMENTS_SERVERSOCKET_H
 
 #include <rudiments/server.h>
 

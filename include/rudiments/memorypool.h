@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef MEMORYPOOL_H
-#define MEMORYPOOL_H
+#ifndef RUDIMENTS_MEMORYPOOL_H
+#define RUDIMENTS_MEMORYPOOL_H
 
 #include <rudiments/private/config.h>
 

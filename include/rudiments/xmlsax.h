@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef XMLSAX_H
-#define XMLSAX_H
+#ifndef RUDIMENTS_XMLSAX_H
+#define RUDIMENTS_XMLSAX_H
 
 #include <rudiments/private/config.h>
 

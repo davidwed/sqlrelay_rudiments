@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RANDOMNUMBER_H
-#define RANDOMNUMBER_H
+#ifndef RUDIMENTS_RANDOMNUMBER_H
+#define RUDIMENTS_RANDOMNUMBER_H
 
 #include <rudiments/private/config.h>
 

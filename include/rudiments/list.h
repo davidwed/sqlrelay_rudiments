@@ -1,54 +1,106 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information.
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef RUDIMENTS_LIST_H
+#define RUDIMENTS_LIST_H
 
 #include <rudiments/private/config.h>
 
-template <class type>
+template <class datatype, class keytype=datatype>
 class listnode {
 	public:
 			listnode();
-			listnode(type value);
-			listnode(type value,
-					listnode<type> *previous,
-					listnode<type> *next);
+			listnode(datatype value);
+			listnode(datatype value,
+					listnode<datatype,keytype> *previous,
+					listnode<datatype,keytype> *next);
+		virtual	~listnode();
 
-		void	setValue(type value);
-		type	getValue() const;
+		virtual void		setValue(datatype value);
+		virtual datatype	getValue() const;
 
-		void	setPrevious(listnode<type> *previous);
-		void	setNext(listnode<type> *next);
+		virtual int	compare(keytype key)=0;
 
-		listnode<type>	*getPrevious() const;
-		listnode<type>	*getNext() const;
+		void	setPrevious(listnode<datatype,keytype> *previous);
+		void	setNext(listnode<datatype,keytype> *next);
+
+		listnode<datatype,keytype>	*getPrevious() const;
+		listnode<datatype,keytype>	*getNext() const;
 
 	#include <rudiments/private/listnode.h>
 };
 
 #include <rudiments/private/listnodeinlines.h>
 
-template <class type>
+template <class datatype>
+class primitivelistnode : public listnode<datatype> {
+	public:
+			primitivelistnode() :
+				listnode<datatype>() {};
+			primitivelistnode(datatype value) :
+				listnode<datatype>(value) {};
+			primitivelistnode(datatype value,
+					primitivelistnode<datatype> *previous,
+					primitivelistnode<datatype> *next) :
+				listnode<datatype>(value,previous,next) {};
+		virtual int	compare(datatype key);
+};
+
+#include <rudiments/private/primitivelistnodeinlines.h>
+
+class stringlistnode : public listnode<char *> {
+	public:
+			stringlistnode() :
+				listnode<char *>() {}
+			stringlistnode(char * value) :
+				listnode<char *>(value) {}
+			stringlistnode(char * value,
+					stringlistnode *previous,
+					stringlistnode *next) :
+				listnode<char *>(value,previous,next) {}
+		virtual int	compare(char *key);
+};
+
+#include <rudiments/private/stringlistnodeinlines.h>
+
+template <class datatype, class keytype>
+class objectlistnode : public listnode<datatype,keytype> {
+	public:
+			objectlistnode() :
+				listnode<datatype,keytype>() {};
+			objectlistnode(datatype value) :
+				listnode<datatype,keytype>(value) {};
+			objectlistnode(datatype value,
+				objectlistnode<datatype,keytype> *previous,
+				objectlistnode<datatype,keytype> *next) :
+			listnode<datatype,keytype>(value,previous,next) {};
+		virtual int	compare(keytype key);
+};
+
+#include <rudiments/private/objectlistnodeinlines.h>
+
+template < class datatype, class keytype=datatype,
+		class listnodetype=primitivelistnode<datatype> >
 class list {
 	public:
 			list();
 			~list();
 
-		void	append(type value);
-		int	insert(unsigned long index, type value);
+		void	append(datatype value);
+		int	insert(unsigned long index, datatype value);
 
 		int	removeIndex(unsigned long index);
-		int	removeValue(type value);
-		int	removeAllValues(type value);
-		int	removeNode(listnode<type> *node);
+		int	removeValue(keytype key);
+		int	removeAllValues(keytype key);
+		int	removeNode(listnodetype *node);
 
-		int	setValue(unsigned long index, type value);
-		int	getValue(unsigned long index, type *value) const;
+		int	setValue(unsigned long index, datatype value);
+		int	getValue(unsigned long index, datatype *value) const;
+		int	getValue(keytype key, datatype *value) const;
 
 		unsigned long	getLength() const;
 
-		listnode<type>	*getNode(unsigned long index) const;
+		listnodetype	*getNode(unsigned long index) const;
 
 		void	clear();
 
@@ -56,5 +108,15 @@ class list {
 };
 
 #include <rudiments/private/listinlines.h>
+
+typedef list< char *, char *, stringlistnode >			stringlist;
+
+template <class datatype>
+class primitivelist : public list< datatype, datatype,
+					primitivelistnode<datatype> > {};
+
+template <class datatype, class keytype>
+class objectlist : public list< datatype, keytype,
+					objectlistnode<datatype,keytype> > {};
 
 #endif

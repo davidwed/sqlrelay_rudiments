@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#ifndef CONNECTIONDATANODE_H
-#define CONNECTIONDATANODE_H
+#ifndef RUDIMENTS_CONNECTIONDATANODE_H
+#define RUDIMENTS_CONNECTIONDATANODE_H
 
 class connectiondatanode {
 	friend class connectiondata;

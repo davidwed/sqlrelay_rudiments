@@ -4,32 +4,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-template <class type>
-inline list<type>::list() {
+template <class datatype, class keytype, class listnodetype>
+inline list<datatype,keytype,listnodetype>::list() {
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
-template <class type>
-inline list<type>::~list() {
+template <class datatype, class keytype, class listnodetype>
+inline list<datatype,keytype,listnodetype>::~list() {
 	clear();
 }
 
-template <class type>
-void list<type>::append(type value) {
+template <class datatype, class keytype, class listnodetype>
+void list<datatype,keytype,listnodetype>::append(datatype value) {
 	if (last) {
-		last->setNext(new listnode<type>(value,last,NULL));
-		last=last->getNext();
+		last->setNext(new listnodetype(value,last,NULL));
+		last=(listnodetype *)last->getNext();
 	} else {
-		first=new listnode<type>(value);
+		first=(listnodetype *)new listnodetype(value);
 		last=first;
 	}
 	length++;
 }
 
-template <class type>
-int list<type>::insert(unsigned long index, type value) {
+template <class datatype, class keytype, class listnodetype>
+int list<datatype,keytype,listnodetype>::insert(unsigned long index,
+							datatype value) {
 
 	// handle invalid index
 	if (index>length) {
@@ -43,30 +44,33 @@ int list<type>::insert(unsigned long index, type value) {
 	}
 
 	// handle insert into index 0
-	listnode<type>	*newnode;
+	listnodetype	*newnode;
 	if (!index) {
-		newnode=new listnode<type>(value,NULL,first);
+		newnode=new listnodetype(value,NULL,first);
 		first->setPrevious(newnode);
-		first=newnode;
+		first=(listnodetype *)newnode;
 		length++;
 		return 1;
 	}
 
 	// handle general insert
-	listnode<type>	*current=getNode(index-1);
+	listnodetype	*current=getNode(index-1);
 	if (!current) {
 		return 0;
 	}
-	newnode=new listnode<type>(value,current,current->getNext());
+	newnode=(listnodetype *)new listnodetype(value,
+					(listnodetype *)current,
+					(listnodetype *)current->getNext());
 	current->getNext()->setPrevious(newnode);
 	current->setNext(newnode);
 	length++;
 	return 1;
 }
 
-template <class type>
-inline int list<type>::setValue(unsigned long index, type value) {
-	listnode<type>	*current=getNode(index);
+template <class datatype, class keytype, class listnodetype>
+inline int list<datatype,keytype,listnodetype>::setValue(unsigned long index,
+							datatype value) {
+	listnodetype	*current=getNode(index);
 	if (current) {
 		current->setValue(value);
 		return 1;
@@ -74,45 +78,46 @@ inline int list<type>::setValue(unsigned long index, type value) {
 	return 0;
 }
 
-template <class type>
-inline int list<type>::removeIndex(unsigned long index) {
+template <class datatype, class keytype, class listnodetype>
+inline int list<datatype,keytype,listnodetype>::removeIndex(
+							unsigned long index) {
 	return removeNode(getNode(index));
 }
 
-template <class type>
-int list<type>::removeValue(type value) {
+template <class datatype, class keytype, class listnodetype>
+int list<datatype,keytype,listnodetype>::removeValue(keytype key) {
 
-	listnode<type>	*current=first;
+	listnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
-		if (current->getValue()==value) {
+		if (!current->compare(key)) {
 			return removeNode(current);
 		}
-		current=current->getNext();
+		current=(listnodetype *)current->getNext();
 	}
 	return 0;
 }
 
-template <class type>
-int list<type>::removeAllValues(type value) {
+template <class datatype, class keytype, class listnodetype>
+int list<datatype,keytype,listnodetype>::removeAllValues(keytype key) {
 
-	listnode<type>	*current=first;
-	listnode<type>	*next;
+	listnodetype	*current=first;
+	listnodetype	*next;
 	for (unsigned long i=0; i<length; i++) {
-		if (current->getValue()==value) {
-			next=current->getNext();
+		if (!current->compare(key)) {
+			next=(listnodetype *)current->getNext();
 			if (!removeNode(current)) {
 				return 0;
 			}
 			current=next;
 		} else {
-			current=current->getNext();
+			current=(listnodetype *)current->getNext();
 		}
 	}
 	return 1;
 }
 
-template <class type>
-int list<type>::removeNode(listnode<type> *node) {
+template <class datatype, class keytype, class listnodetype>
+int list<datatype,keytype,listnodetype>::removeNode(listnodetype *node) {
 	if (!node) {
 		return 0;
 	}
@@ -123,19 +128,20 @@ int list<type>::removeNode(listnode<type> *node) {
 		node->getPrevious()->setNext(node->getNext());
 	}
 	if (node==first) {
-		first=node->getNext();
+		first=(listnodetype *)node->getNext();
 	}
 	if (node==last) {
-		last=node->getPrevious();
+		last=(listnodetype *)node->getPrevious();
 	}
 	delete node;
 	length--;
 	return 1;
 }
 
-template <class type>
-inline int list<type>::getValue(unsigned long index, type *value) const {
-	listnode<type>	*current=getNode(index);
+template <class datatype, class keytype, class listnodetype>
+inline int list<datatype,keytype,listnodetype>::getValue(unsigned long index,
+							datatype *value) const {
+	listnodetype	*current=getNode(index);
 	if (current) {
 		*value=current->getValue();
 		return 1;
@@ -143,29 +149,43 @@ inline int list<type>::getValue(unsigned long index, type *value) const {
 	return 0;
 }
 
-template <class type>
-inline unsigned long list<type>::getLength() const {
+template <class datatype, class keytype, class listnodetype>
+inline int list<datatype,keytype,listnodetype>::getValue(keytype key,
+							datatype *value) const {
+	for (listnodetype *current=first; current;
+			current=(listnodetype *)current->getNext()) {
+		if (!current->compare(key)) {
+			*value=current->getValue();
+			return 1;
+		}
+	}
+	return 0;
+}
+
+template <class datatype, class keytype, class listnodetype>
+inline unsigned long list<datatype,keytype,listnodetype>::getLength() const {
 	return length;
 }
 
-template <class type>
-listnode<type> *list<type>::getNode(unsigned long index) const {
+template <class datatype, class keytype, class listnodetype>
+listnodetype *list<datatype,keytype,listnodetype>::getNode(unsigned long index)
+									const {
 	if (index>length) {
 		return NULL;
 	}
-	listnode<type>	*current=first;
+	listnodetype	*current=first;
 	for (unsigned long i=0; i<index; i++) {
-		current=current->getNext();
+		current=(listnodetype *)current->getNext();
 	}
 	return current;
 }
 
-template <class type>
-void list<type>::clear() {
-	listnode<type>	*current=first;
-	listnode<type>	*next;
+template <class datatype, class keytype, class listnodetype>
+void list<datatype,keytype,listnodetype>::clear() {
+	listnodetype	*current=first;
+	listnodetype	*next;
 	for (unsigned long i=0; i<length; i++) {
-		next=current->getNext();
+		next=(listnodetype *)current->getNext();
 		delete current;
 		current=next;
 	}

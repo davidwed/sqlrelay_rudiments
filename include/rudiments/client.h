@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef RUDIMENTS_CLIENT_H
+#define RUDIMENTS_CLIENT_H
 
 #include <rudiments/datatransport.h>
 #include <rudiments/connectiondata.h>

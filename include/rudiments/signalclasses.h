@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SIGNALCLASSES_H
-#define SIGNALCLASSES_H
+#ifndef RUDIMENTS_SIGNALCLASSES_H
+#define RUDIMENTS_SIGNALCLASSES_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SHAREDMEMORY_H
-#define SHAREDMEMORY_H
+#ifndef RUDIMENTS_SHAREDMEMORY_H
+#define RUDIMENTS_SHAREDMEMORY_H
 
 #include <rudiments/private/config.h>
 

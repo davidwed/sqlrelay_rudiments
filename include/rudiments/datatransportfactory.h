@@ -1,5 +1,8 @@
-#ifndef DATATRANSPORT_FACTORY_H
-#define DATATRANSPORT_FACTORY_H
+// Copyright (c) 2002 David Muse
+// See the COPYING file for more information.
+
+#ifndef RUDIMENTS_DATATRANSPORT_FACTORY_H
+#define RUDIMENTS_DATATRANSPORT_FACTORY_H
 
 #include <rudiments/client.h>
 #include <rudiments/server.h>

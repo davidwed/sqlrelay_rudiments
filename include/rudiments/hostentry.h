@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef HOSTENTRY_H
-#define HOSTENTRY_H
+#ifndef RUDIMENTS_HOSTENTRY_H
+#define RUDIMENTS_HOSTENTRY_H
 
 #include <rudiments/private/config.h>
 

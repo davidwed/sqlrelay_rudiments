@@ -21,7 +21,7 @@ install:
 	$(INSTALL) -m 644 rudiments/hostentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetclientsocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetserversocket.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/linkedlist.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/list.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/listener.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/logger.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/memorypool.h $(incdir)/rudiments
@@ -35,6 +35,7 @@ install:
 	$(INSTALL) -m 644 rudiments/serversocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/sharedmemory.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/signalclasses.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/string.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/stringbuffer.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/text.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/unixclientsocket.h $(incdir)/rudiments
@@ -74,10 +75,10 @@ install:
 	$(INSTALL) -m 644 rudiments/private/inetsocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/inetclientsocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/inetserversocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/linkedlist.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/linkedlistinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/linkedlistnode.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/linkedlistnodeinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/list.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/listinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/listnode.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/listnodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/listener.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/listenerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/logdestination.h $(incdir)/rudiments/private
@@ -107,6 +108,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/signalset.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/stderrdestination.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/stdoutdestination.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/string.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/stringinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/stringbuffer.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/stringbufferinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/syslogdestination.h $(incdir)/rudiments/private

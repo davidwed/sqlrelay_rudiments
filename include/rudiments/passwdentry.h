@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef PASSWDENTRY_H
-#define PASSWDENTRY_H
+#ifndef RUDIMENTS_PASSWDENTRY_H
+#define RUDIMENTS_PASSWDENTRY_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef LISTENER_H
-#define LISTENER_H
+#ifndef RUDIMENTS_LISTENER_H
+#define RUDIMENTS_LISTENER_H
 
 #include <rudiments/private/config.h>
 #include <sys/types.h>

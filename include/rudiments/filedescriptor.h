@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef FILEDESCRIPTOR_H
-#define FILEDESCRIPTOR_H
+#ifndef RUDIMENTS_FILEDESCRIPTOR_H
+#define RUDIMENTS_FILEDESCRIPTOR_H
 
 #include <rudiments/private/config.h>
 #include <rudiments/listener.h>

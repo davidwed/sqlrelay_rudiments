@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef SERIALPORTSETTINGS_H
-#define SERIALPORTSETTINGS_H
+#ifndef RUDIMENTS_SERIALPORTSETTINGS_H
+#define RUDIMENTS_SERIALPORTSETTINGS_H
 
 #include <termios.h>
 #include <unistd.h>

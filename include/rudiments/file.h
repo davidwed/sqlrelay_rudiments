@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef FILE_H
-#define FILE_H
+#ifndef RUDIMENTS_FILE_H
+#define RUDIMENTS_FILE_H
 
 #include <rudiments/private/config.h>
 

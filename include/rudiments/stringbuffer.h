@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef STRINGBUFFER_H
-#define STRINGBUFFER_H
+#ifndef RUDIMENTS_STRINGBUFFER_H
+#define RUDIMENTS_STRINGBUFFER_H
 
 #include <rudiments/private/config.h>
 #include <rudiments/variablebuffer.h>

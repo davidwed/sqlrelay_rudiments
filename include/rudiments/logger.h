@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef RUDIMENTS_LOGGER_H
+#define RUDIMENTS_LOGGER_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef UNIXCLIENTSOCKET_H
-#define UNIXCLIENTSOCKET_H
+#ifndef RUDIMENTS_UNIXCLIENTSOCKET_H
+#define RUDIMENTS_UNIXCLIENTSOCKET_H
 
 #include <rudiments/private/config.h>
 

@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef INETSOCKET_H
-#define INETSOCKET_H
+#ifndef RUDIMENTS_INETSOCKET_H
+#define RUDIMENTS_INETSOCKET_H
 
 #include <netdb.h>
 #include <netinet/in.h>

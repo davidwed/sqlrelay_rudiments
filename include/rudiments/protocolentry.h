@@ -1,8 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef PROTOCOLENTRY_H
-#define PROTOCOLENTRY_H
+#ifndef RUDIMENTS_PROTOCOLENTRY_H
+#define RUDIMENTS_PROTOCOLENTRY_H
 
 #include <rudiments/private/config.h>
 
