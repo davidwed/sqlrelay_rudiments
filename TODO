@@ -1,13 +1,11 @@
-use explicit specialization to handle primitive/string list/dictionaries
-
-document text->string class conversion
+comment string class
 document/comment list and dictionary classes
-document filedescriptor,file,stringbuffer,variablebuffer,
+document filedescriptor,file,string,stringbuffer,variablebuffer,
 		hostentry,protocolentry,passwdentry,groupentry
 document clienttransport/namevaluepairs relationship
 document new read-til-terminate method in transport class
-rebuild class doc's
 
+a termios class would be nice
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldomnode should probably use list class

@@ -175,7 +175,8 @@ AC_TRY_LINK([#include <linux/rtc.h>
 ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(HAVE_RTC, 1, Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(localtime_r)
-AC_TRY_LINK([#include <time.h>],
+AC_TRY_LINK([#include <time.h>,
+#include <stdlib.h>],
 localtime_r(NULL,NULL);,AC_DEFINE(HAVE_LOCALTIME_R,1, Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
@@ -206,35 +207,43 @@ AC_TRY_LINK([#include <stdlib.h>],
 rand();,AC_DEFINE(HAVE_RAND,1, Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getpwnam_r)
-AC_TRY_LINK([#include <pwd.h>],
+AC_TRY_LINK([#include <pwd.h>
+#include <stdlib.h>],
 getpwnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWNAM_R,1, Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getpwuid_r)
-AC_TRY_LINK([#include <pwd.h>],
+AC_TRY_LINK([#include <pwd.h>
+#include <stdlib.h>],
 getpwuid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWUID_R,1, Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getgrnam_r)
-AC_TRY_LINK([#include <grp.h>],
+AC_TRY_LINK([#include <grp.h>
+#include <stdlib.h>],
 getgrnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRNAM_R,1, Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getgrgid_r)
-AC_TRY_LINK([#include <grp.h>],
+AC_TRY_LINK([#include <grp.h>
+#include <stdlib.h>],
 getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R,1, Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(gethostbyname_r)
-AC_TRY_LINK([#include <netdb.h>],
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
 gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1, Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(gethostbyaddr_r)
-AC_TRY_LINK([#include <netdb.h>],
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
 gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1, Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getprotobyname_r)
-AC_TRY_LINK([#include <netdb.h>],
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
 getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R,1, Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getprotobynumber_r)
-AC_TRY_LINK([#include <netdb.h>],
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
 getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1, Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
