@@ -16,7 +16,7 @@ int main(int argc, const char **argv) {
 	time_t	starttime=time(NULL);
 
 	for (int i=0; i<100000; i++) {
-		clnt.connectToServer("localhost",10000,0,1);
+		clnt.connectToServer("localhost",10000,-1,-1,0,1);
 		sizeread=clnt.read(buffer,5);
 		buffer[sizeread]=(char)NULL;
 		clnt.close();

@@ -4,6 +4,11 @@
 #include <rudiments/unixclientsocket.h>
 
 #include <stdio.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#include <errno.h>
 
 int main(int argc, const char **argv) {
 
@@ -11,7 +16,10 @@ int main(int argc, const char **argv) {
 	unixclientsocket	clnt;
 
 	// connect to a server listening on /tmp/lsnr.socket
-	clnt.connectToServer("/tmp/lsnr.socket",1,0);
+	if (clnt.connectToServer("/tmp/lsnr.socket",-1,-1,1,1)<0) {
+		printf("connect failed: %s\n",strerror(errno));
+		exit(0);
+	}
 
 	// write "hello" to the server
 	clnt.write("hello",5);

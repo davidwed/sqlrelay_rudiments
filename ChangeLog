@@ -8,7 +8,12 @@
 		than 0
 	updated rudiments-config and pkgconfig scripts to include pthreads/ssl
 		libs and cflags
-	added ssl support to filedescriptor class and all child classes
+	added optional ssl support to filedescriptor class and all child classes
+	added optional pcre support
+	re-engineered regular expression class
+	xmlsax class uses mmap if it's available
+	inet/unix client/server sockets inherit from generic socket class now
+	added blocking/non-blocking mode switches to filedescriptor/socket class
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

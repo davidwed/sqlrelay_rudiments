@@ -65,6 +65,7 @@ void	myserver::listen() {
 	// listen on inet socket port 8000
 	if (!listenOnSocket(NULL,8000,15)) {
 		printf("couldn't listen on port 8000\n");
+		exit(0);
 	}
 
 	// loop...
@@ -87,7 +88,7 @@ void	myserver::listen() {
 			clientsock->write("hello",5);
 
 		} else {
-			printf("accept failed");
+			printf("accept failed\n");
 		}
 
 		// close the socket and clean up

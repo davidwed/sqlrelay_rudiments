@@ -23,17 +23,23 @@
 
 int inetclientsocket::connectToServer(const char *host,
 						unsigned short port,
+						long timeoutsec,
+						long timeoutusec,
 						unsigned int retrywait,
 						unsigned int retrycount) {
-	initialize(host,port,retrywait,retrycount);
+	initialize(host,port,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
 
 void inetclientsocket::initialize(const char *host,
 						unsigned short port,
+						long timeoutsec,
+						long timeoutusec,
 						unsigned int retrywait,
 						unsigned int retrycount) {
 	inetsocket::initialize(host,port);
+	this->timeoutsec=timeoutsec;
+	this->timeoutusec=timeoutusec;
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;
 }
@@ -44,6 +50,10 @@ void inetclientsocket::initialize(namevaluepairs *cd) {
 	cd->getData("host",&host);
 	char	*port;
 	cd->getData("port",&port);
+	char	*timeoutsec;
+	cd->getData("timeoutsec",&timeoutsec);
+	char	*timeoutusec;
+	cd->getData("timeoutusec",&timeoutusec);
 	char	*retrywait;
 	cd->getData("retrywait",&retrywait);
 	char	*retrycount;
@@ -51,6 +61,8 @@ void inetclientsocket::initialize(namevaluepairs *cd) {
 
 	initialize(host?host:"",
 			atoi(port?port:"0"),
+			atoi(timeoutsec?timeoutsec:"-1"),
+			atoi(timeoutusec?timeoutusec:"-1"),
 			atoi(retrywait?retrywait:"0"),
 			atoi(retrycount?retrycount:"0"));
 }
@@ -115,6 +127,12 @@ int inetclientsocket::connect() {
 	for (unsigned int counter=0;
 			counter<retrycount || !retrycount; counter++) {
 
+		// wait the specified amount of time between reconnect tries
+		// unless we're on the very first try
+		if (counter) {
+			sleep(retrywait);
+		}
+
 		#ifndef HAVE_GETADDRINFO
 
 			// try to connect to each of the addresses
@@ -130,16 +148,12 @@ int inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
-				#ifdef RUDIMENTS_HAS_SSL
-				if (sslConnect((struct sockaddr *)&sin,
-							sizeof(sin))) {
-				#else
-				if (::connect(fd,(struct sockaddr *)&sin,
-							sizeof(sin))!=-1) {
-				#endif
+				if (connect((struct sockaddr *)&sin,
+						sizeof(sin),
+						timeoutsec,
+						timeoutusec)==RESULT_SUCESS) {
 					return RESULT_SUCCESS;
 				}
-				return RESULT_ERROR;
 			}
 
 		#else
@@ -156,15 +170,11 @@ int inetclientsocket::connect() {
 				}
 
 				// attempt to connect to the socket
-				#ifdef RUDIMENTS_HAS_SSL
-				if (sslConnect((struct sockaddr *)
+				if (socket::connect((struct sockaddr *)
 						ainfo->ai_addr,
-						ainfo->ai_addrlen)) {
-				#else
-				if (::connect(fd,(struct sockaddr *)
-						ainfo->ai_addr,
-						ainfo->ai_addrlen)!=-1) {
-				#endif
+						ainfo->ai_addrlen,
+						timeoutsec,
+						timeoutusec)==RESULT_SUCCESS) {
 					freeaddrinfo(ai);
 					return RESULT_SUCCESS;
 				} else {
@@ -173,9 +183,6 @@ int inetclientsocket::connect() {
 			}
 
 		#endif
-
-		// wait the specified amount of time between reconnect tries
-		sleep(retrywait);
 	}
 
 	// if we're here, the connect failed

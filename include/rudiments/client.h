@@ -15,7 +15,7 @@ class client : virtual public datatransport {
 		virtual void	initialize(namevaluepairs *cd)=0;
 
 		virtual int	connect()=0;
-				// This method returns an int instead of a bool
+				// This method return an int instead of a bool
 				// because we want child classes that have non
 				// atomic connection procedures (such as a
 				// modem) to be able to implement return codes

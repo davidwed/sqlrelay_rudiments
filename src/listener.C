@@ -11,7 +11,7 @@
 #include <errno.h>
 
 listener::listener() {
-	retryinterruptedwaits=1;
+	retryinterruptedwaits=true;
 }
 
 listener::~listener() {
@@ -19,11 +19,11 @@ listener::~listener() {
 }
 
 void listener::retryInterruptedWaits() {
-	retryinterruptedwaits=1;
+	retryinterruptedwaits=true;
 }
 
 void listener::dontRetryInterruptedWaits() {
-	retryinterruptedwaits=0;
+	retryinterruptedwaits=false;
 }
 
 void listener::addFileDescriptor(int fd) {
@@ -39,18 +39,18 @@ void listener::removeAllFileDescriptors() {
 }
 
 int listener::waitForNonBlockingRead(long sec, long usec) {
-	return safeSelect(sec,usec,1,0);
+	return safeSelect(sec,usec,true,false);
 }
 
 int listener::waitForNonBlockingWrite(long sec, long usec) {
-	return safeSelect(sec,usec,0,1);
+	return safeSelect(sec,usec,false,true);
 }
 
 listenerlist *listener::getReadyList() {
 	return &readylist;
 }
 
-int listener::safeSelect(long sec, long usec, int read, int write) {
+int listener::safeSelect(long sec, long usec, bool read, bool write) {
 
 	// set up the timeout
 	timeval	tv;

@@ -21,10 +21,10 @@ class socket : virtual public datatransport {
 #ifdef RUDIMENTS_HAS_SSL
 	protected:
 		BIO	*newSSLBIO() const;
-		bool	sslConnect(struct sockaddr *sin, socklen_t length);
 		bool	sslAccept(socket *sock);
-
 #endif
+		int	connect(struct sockaddr *addr, socklen_t addrlen,
+							long sec, long usec);
 };
 
 #endif

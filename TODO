@@ -1,7 +1,9 @@
 get epoch from string doesn't work right on solaris x86
 
-blocking/nonblocking mode switch functions for filedescriptor
-sendto/recvfrom methods for filedescriptor or datatransport
+test blocking/nonblocking mode switch functions
+implement connect timeout for sockets
+
+send/sendto/sendmsg and recv/recvfrom/recvmsg methods for socket class
 
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
@@ -20,15 +22,12 @@ xmldomnode should probably use list class
 should be able to validate an xml document against the dtd
 dtd class needs to store +/* child element modifiers
 
-naming convention should support tcp/udp/etc sockets and non-stream tcp sockets
-	ie: protocol-type-domain-client/server-socket
-	eg: tcpstreaminetclientsocket
+support tcp/udp/etc. sockets and non-stream tcp sockets
 test invalid xml
 
 handle CDATA/internal subsets better
 is xmldom really DOM compliant?
 xml classes need to support entities defined in the DOCTYPE declaration
-xml comment problem?
 
 support non-posix semaphores
 handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 

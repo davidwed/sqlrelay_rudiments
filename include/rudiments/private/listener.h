@@ -8,5 +8,5 @@
 	protected:
 
 		virtual	int	safeSelect(long sec, long usec,
-						int read, int write);
-		int	retryinterruptedwaits;
+						bool read, bool write);
+		bool	retryinterruptedwaits;

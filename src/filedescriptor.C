@@ -28,15 +28,20 @@
 
 
 filedescriptor::filedescriptor(int filedesc) {
-	filedescriptor();
+	init();
 	fd=filedesc;
 }
 
 filedescriptor::filedescriptor() {
+	init();
 	fd=-1;
-	retryinterruptedreads=0;
-	retryinterruptedwrites=0;
-	allowshortreads=0;
+}
+
+void filedescriptor::init() {
+	retryinterruptedreads=false;
+	retryinterruptedwrites=false;
+	retryinterruptedwaits=true;
+	allowshortreads=false;
 	lstnr=NULL;
 #ifdef RUDIMENTS_HAS_SSL
 	ctx=NULL;
@@ -314,35 +319,35 @@ bool filedescriptor::close() {
 }
 
 void filedescriptor::retryInterruptedReads() {
-	retryinterruptedreads=1;
+	retryinterruptedreads=true;
 }
 
 void filedescriptor::dontRetryInterruptedReads() {
-	retryinterruptedreads=0;
+	retryinterruptedreads=false;
 }
 
 void filedescriptor::retryInterruptedWrites() {
-	retryinterruptedwrites=1;
+	retryinterruptedwrites=true;
 }
 
 void filedescriptor::dontRetryInterruptedWrites() {
-	retryinterruptedwrites=0;
+	retryinterruptedwrites=false;
 }
 
 void filedescriptor::retryInterruptedWaits() {
-	retryinterruptedwaits=1;
+	retryinterruptedwaits=true;
 }
 
 void filedescriptor::dontRetryInterruptedWaits() {
-	retryinterruptedwaits=0;
+	retryinterruptedwaits=false;
 }
 
 void filedescriptor::allowShortReads() {
-	allowshortreads=1;
+	allowshortreads=true;
 }
 
 void filedescriptor::dontAllowShortReads() {
-	allowshortreads=0;
+	allowshortreads=false;
 }
 
 void filedescriptor::useListener(listener *lstnr) {
@@ -486,7 +491,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if necessary, select
 		if (sec>-1 && usec>-1) {
 
-			int	selectresult=safeSelect(sec,usec,1,0);
+			int	selectresult=safeSelect(sec,usec,true,false);
 
 			// return error or timeout
 			if (selectresult<0) {
@@ -550,7 +555,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		// if necessary, select
 		if (sec>-1 && usec>-1) {
 
-			int	selectresult=safeSelect(sec,usec,0,1);
+			int	selectresult=safeSelect(sec,usec,false,true);
 
 			// return error or timeout
 			if (selectresult<0) {
@@ -583,15 +588,15 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) {
 	return (lstnr)?lstnr->waitForNonBlockingRead(sec,usec):
-			safeSelect(sec,usec,1,0);
+			safeSelect(sec,usec,true,false);
 }
 
 int filedescriptor::waitForNonBlockingWrite(long sec, long usec) {
 	return (lstnr)?lstnr->waitForNonBlockingWrite(sec,usec):
-			safeSelect(sec,usec,0,1);
+			safeSelect(sec,usec,false,true);
 }
 
-int filedescriptor::safeSelect(long sec, long usec, int read, int write) {
+int filedescriptor::safeSelect(long sec, long usec, bool read, bool write) {
 
 	// set up the timeout
 	timeval	tv;

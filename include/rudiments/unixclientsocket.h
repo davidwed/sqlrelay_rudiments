@@ -21,6 +21,8 @@ class unixclientsocket : public client, public unixsocket {
 	public:
 
 		int	connectToServer(const char *filename,
+					long timeoutsec,
+					long timeoutusec,
 					unsigned int retrywait,
 					unsigned int retrycount);
 			// Convenience method that calls the initialize() and
@@ -35,14 +37,17 @@ class unixclientsocket : public client, public unixsocket {
 		// seperately.
 		void	initialize(namevaluepairs *cd);
 			// Queries namevaluepairs "cd" for "filename",
-			// "retrywait" and "retrycount".  Initializes the class
-			// to use the result when connect() is called.
+			// "timeoutsec", "timeoutusec", "retrywait" and
+			// "retrycount".  Initializes the class to use the
+			// result when connect() is called.
 		void	initialize(const char *filename,
+					long timeoutsec,
+					long timeoutusec,
 					unsigned int retrywait,
 					unsigned int retrycount);
 			// Initializes the class to use "filename",
-			// "retrywait" and "retrycount" when connect() is
-			// called.
+			// "timeoutsec", "timeoutusec", "retrywait" and
+			// "retrycount" when connect() is called.
 
 		int	connect();
 			// Attempts to connect to the "filename" set earlier.
@@ -53,6 +58,13 @@ class unixclientsocket : public client, public unixsocket {
 			// connect indefinitely.  Setting "retrywait" to 0
 			// will cause it to try to connect over and over
 			// as fast as possible (not recommended).
+			//
+			// Each attempt to connect will wait "timeoutsec"
+			// seconds and "timeoutusec" microseconds for the
+			// connect to succeed.  Specifying -1 for either
+			// parameter will cause the attempt to wait until the
+			// underlying protocol times out which may be up to 2
+			// minutes.
 			//
 			// Returns RESULT_SUCCESS on success and RESULT_ERROR
 			// on failure.

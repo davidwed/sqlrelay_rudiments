@@ -4,6 +4,11 @@
 #include <rudiments/inetclientsocket.h>
 
 #include <stdio.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#include <errno.h>
 
 int main(int argc, const char **argv) {
 
@@ -11,7 +16,10 @@ int main(int argc, const char **argv) {
 	inetclientsocket	clnt;
 
 	// connect to a server on localhost, listening on port 8000
-	clnt.connectToServer("localhost",8000,1,0);
+	if (clnt.connectToServer("localhost",8000,5,0,1,1)<0) {
+		printf("connect failed: %s\n",strerror(errno));
+		exit(1);
+	}
 
 	// write "hello" to the server
 	clnt.write("hello",5);

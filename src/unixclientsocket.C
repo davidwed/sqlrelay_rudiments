@@ -11,16 +11,22 @@
 #endif
 
 int unixclientsocket::connectToServer(const char *filename,
+						long timeoutsec,
+						long timeoutusec,
 						unsigned int retrywait,
 						unsigned int retrycount) {
-	initialize(filename,retrywait,retrycount);
+	initialize(filename,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
 
 void unixclientsocket::initialize(const char *filename,
+						long timeoutsec,
+						long timeoutusec,
 						unsigned int retrywait,
 						unsigned int retrycount) {
 	unixsocket::initialize(filename);
+	this->timeoutsec=timeoutsec;
+	this->timeoutusec=timeoutusec;
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;
 }
@@ -29,12 +35,18 @@ void unixclientsocket::initialize(namevaluepairs *cd) {
 
 	char	*filename;
 	cd->getData("filename",&filename);
+	char	*timeoutsec;
+	cd->getData("timeoutsec",&timeoutsec);
+	char	*timeoutusec;
+	cd->getData("timeoutusec",&timeoutusec);
 	char	*retrywait;
 	cd->getData("retrywait",&retrywait);
 	char	*retrycount;
 	cd->getData("retrycount",&retrycount);
 
 	initialize(filename?filename:"",
+			atoi(timeoutsec?timeoutsec:"0"),
+			atoi(timeoutusec?timeoutusec:"0"),
 			atoi(retrywait?retrywait:"0"),
 			atoi(retrycount?retrycount:"0"));
 }
@@ -55,23 +67,18 @@ int unixclientsocket::connect() {
 	for (unsigned int counter=0;
 			counter<retrycount || !retrycount; counter++) {
 
-		// attempt to connect
-		if (::connect(fd,(struct sockaddr *)&sockaddrun,
-						sizeof(sockaddrun))!=-1) {
-			#ifdef RUDIMENTS_HAS_SSL
-			if (ctx) {
-				if (!initializeSSL() ||
-					SSL_connect(ssl)!=1) {
-					close();
-					return RESULT_ERROR;
-				}
-			}
-			#endif
-			return RESULT_SUCCESS;
+		// wait the specified amount of time between reconnect tries
+		// unless we're on the very first try
+		if (counter) {
+			sleep(retrywait);
 		}
 
-		// wait the specified amount of time between reconnect tries
-		sleep(retrywait);
+		// attempt to connect
+		if (socket::connect((struct sockaddr *)&sockaddrun,
+				sizeof(sockaddrun),
+				timeoutsec,timeoutusec)==RESULT_SUCCESS) {
+			return RESULT_SUCCESS;
+		}
 	}
 
 	// if we're here, the connect failed

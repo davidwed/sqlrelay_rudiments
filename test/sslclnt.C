@@ -4,6 +4,11 @@
 #include <rudiments/inetclientsocket.h>
 
 #include <stdio.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#include <errno.h>
 
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	strncpy(buf,(char *)userdata,size);
@@ -31,8 +36,8 @@ int main(int argc, const char **argv) {
 	clnt.setSSLContext(ctx);
 
 	// connect to a server on localhost, listening on port 8000
-	if (!clnt.connectToServer("localhost",8000,1,0)) {
-		printf("connect failed\n");
+	if (clnt.connectToServer("localhost",8000,-1,-1,1,1)<0) {
+		printf("connect failed: %s\n",strerror(errno));
 		clnt.close();
 		exit(1);
 	}
