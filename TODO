@@ -1,6 +1,3 @@
-need to test if iovec.iov_base is (void *) or (char *) in configure
-
-
 document text->string class conversion
 
 xmldomnode should probably use list class
@@ -31,5 +28,5 @@ handle CDATA/internal subsets better
 is xmldom really DOM compliant?
 
 support non-posix semaphores
-handoff fails on Redhat 5.2 and SCO - SCO problem appears to be 
-					alignment-related
+handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
+						alignment-related

@@ -2,11 +2,7 @@
 // See the COPYING file for more information
 
 #include <stdlib.h>
-#if defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H)
-	#include "/usr/local/firstworks/include/regex.h"
-#elif defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
-	#include "/firstworks/include/regex.h"
-#elif defined(HAVE_REGEX_H)
+#if defined(HAVE_REGEX_H)
 	#include <sys/types.h>
 	#include <regex.h>
 #elif defined(HAVE_REGEXP_H)
@@ -30,7 +26,7 @@ RUDIMENTS_INLINE regularexpression::regularexpression(const char *pattern) {
 
 RUDIMENTS_INLINE regularexpression::~regularexpression() {
 	if (compiledexpression) {
-		#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
+		#if defined(HAVE_REGEX_H)
 			regfree((regex_t *)compiledexpression);
 		#elif defined(HAVE_REGEXP_H)
 			delete (regexp *)compiledexpression;
@@ -47,7 +43,7 @@ RUDIMENTS_INLINE regularexpression::~regularexpression() {
 RUDIMENTS_INLINE int regularexpression::match(const char *str) {
 
 	if (compiledexpression) {
-		#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
+		#if defined(HAVE_REGEX_H)
 			return !regexec((regex_t *)compiledexpression,str,0,
 						(regmatch_t *)NULL,0);
 		#elif defined(HAVE_REGEXP_H)

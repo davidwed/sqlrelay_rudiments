@@ -8,7 +8,7 @@
 
 int regularexpression::compile(const char *pattern) {
 
-	#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
+	#if defined(HAVE_REGEX_H)
 		if (compiledexpression) {
 			regfree((regex_t *)compiledexpression);
 			compiledexpression=0;
@@ -67,7 +67,7 @@ int regularexpression::match(const char *str, const char *pattern) {
 
 	int	retval=0;
 
-	#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
+	#if defined(HAVE_REGEX_H)
 		regex_t	preg;
 		if (!regcomp(&preg,pattern,REG_EXTENDED|REG_NOSUB)) {
 			retval=!regexec(&preg,str,0,
