@@ -87,7 +87,7 @@ mode_t sharedmemory::getPermissions() {
 	return 0;
 }
 
-bool sharedmemory::create(key_t key, int size, mode_t permissions) {
+bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
 	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
@@ -133,7 +133,7 @@ bool sharedmemory::attach(key_t key) {
 			(int)(shmptr=shmat(shmid,0,0))!=-1);
 }
 
-bool sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
+bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
 	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {

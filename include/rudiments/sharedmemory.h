@@ -27,7 +27,8 @@ class sharedmemory {
 			// method below.  If it was just attached to, it is
 			// not removed.
 
-		bool	create(key_t key, int size, mode_t permissions);
+		bool	create(key_t key, size_t size,
+						mode_t permissions);
 			// Creates a shared memory segment of "size" bytes, 
 			// identified by "key".
 			// "key" should be generated using the ftok
@@ -36,7 +37,8 @@ class sharedmemory {
 			//	for the segment.
 		bool	attach(key_t key);
 			// Attaches to a shared memory identified by "key".
-		bool	createOrAttach(key_t key, int size, mode_t permissions);
+		bool	createOrAttach(key_t key, size_t size,
+						mode_t permissions);
 			// Attempts to create the shared memory segment 
 			// identified by "key".  If this fails, it attempts
 			// to attach to a shared memory segment identified by
