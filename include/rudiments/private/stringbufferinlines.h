@@ -14,7 +14,7 @@ inline stringbuffer::stringbuffer() : variablebuffer(128,32) {
 inline stringbuffer::~stringbuffer() {
 }
 
-inline void stringbuffer::setPosition(unsigned long pos) {
+inline void stringbuffer::setPosition(size_t pos) {
 	variablebuffer::setPosition(pos);
 }
 
@@ -27,7 +27,7 @@ inline size_t stringbuffer::getStringLength() {
 	return strlen(getString());
 }
 
-inline unsigned long stringbuffer::getPosition() {
+inline size_t stringbuffer::getPosition() {
 	return variablebuffer::getPosition();
 }
 

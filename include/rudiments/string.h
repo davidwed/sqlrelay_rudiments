@@ -43,22 +43,20 @@ class string {
 		char	*copyInto(const string *str);
 		char	*copyInto(const char *str);
 		char	*copyInto(const char *str, size_t size);
-		char	*copyInto(unsigned long location,
-					const string *str);
-		char	*copyInto(unsigned long location,
-					const char *str);
-		char	*copyInto(unsigned long location,
-					const char *str, size_t size);
+		char	*copyInto(size_t location, const string *str);
+		char	*copyInto(size_t location, const char *str);
+		char	*copyInto(size_t location, const char *str,
+							size_t size);
 
 		static	char	*copyInto(char *dest, const string *source);
 		static	char	*copyInto(char *dest, const char *source);
 		static	char	*copyInto(char *dest,
 					const char *source, size_t size);
-		static	char	*copyInto(char *dest, unsigned long location,
+		static	char	*copyInto(char *dest, size_t location,
 					const string *source);
-		static	char	*copyInto(char *dest, unsigned long location,
+		static	char	*copyInto(char *dest, size_t location,
 					const char *source);
-		static	char	*copyInto(char *dest, unsigned long location,
+		static	char	*copyInto(char *dest, size_t location,
 					const char *source, size_t size);
 
 

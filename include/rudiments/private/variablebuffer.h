@@ -2,11 +2,11 @@
 // See the COPYING file for more information.
 
 	protected:
-		void	extend(unsigned long size);
+		void	extend(size_t size);
 
 		unsigned char	*buffer;
-		unsigned long	initialsize;
-		unsigned long	increment;
-		unsigned long	buffersize;
-		unsigned long	position;
-		unsigned long	end;
+		size_t		initialsize;
+		size_t		increment;
+		size_t		buffersize;
+		size_t		position;
+		size_t		end;

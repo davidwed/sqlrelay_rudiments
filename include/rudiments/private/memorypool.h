@@ -4,9 +4,9 @@
 	private:
 		memorypoollist	nodelist;
 
-		unsigned long	initialsize;
-		unsigned long	increment;
+		size_t	initialsize;
+		size_t	increment;
 
-		unsigned long	freecounter;
-		unsigned long	resizeinterval;
-		unsigned long	totalusedsize;
+		size_t	freecounter;
+		size_t	resizeinterval;
+		size_t	totalusedsize;

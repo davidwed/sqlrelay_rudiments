@@ -24,9 +24,9 @@ typedef	primitivelistnode<memorypoolnode *>	memorypoollistnode;
 
 class memorypool {
 	public:
-			memorypool(unsigned long initialsize,
-					unsigned long increment,
-					unsigned long resizeinterval);
+			memorypool(size_t initialsize,
+					size_t increment,
+					size_t resizeinterval);
 			// Creates a memory pool of initial size "initialsize".
 			//
 			// When the pool needs to grow, it will grow by at least
@@ -41,11 +41,11 @@ class memorypool {
 			~memorypool();
 			// Destroys the memory pool.
 
-		unsigned char	*malloc(unsigned long size);
+		unsigned char	*malloc(size_t size);
 			// Returns a pointer to a contiguous block of "size"
 			// bytes in the pool.  The pool will grow as necessary
 			// to accomodate allocations.
-		unsigned char	*calloc(unsigned long size);
+		unsigned char	*calloc(size_t size);
 			// Returns a pointer to a contiguous block of "size"
 			// bytes in the pool.  The pool will grow as necessary
 			// to accomodate allocations.  Each byte of data in

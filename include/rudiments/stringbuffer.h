@@ -18,7 +18,7 @@ class stringbuffer : public variablebuffer {
 			// to accomodate the string written to it.
 		virtual	~stringbuffer();
 
-		void	setPosition(unsigned long pos);
+		void	setPosition(size_t pos);
 			// Sets the position at which the next write will
 			// occur to "pos".  If the position is set beyond the
 			// end of the buffer, the buffer will grow but the data
@@ -62,9 +62,9 @@ class stringbuffer : public variablebuffer {
 			// Returns the length of the string currently stored
 			// in the stringbuffer.
 
-		unsigned long	getPosition();
-				// Returns the position in the buffer at which
-				// the next write will occur.
+		size_t	getPosition();
+			// Returns the position in the buffer at which
+			// the next write will occur.
 
 	#include <rudiments/private/stringbuffer.h>
 };

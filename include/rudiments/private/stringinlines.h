@@ -89,18 +89,15 @@ inline char *string::copyInto(const char *str, size_t size) {
 	return strncpy(buffer,str,size);
 }
 
-inline char *string::copyInto(unsigned long location,
-					const string *str) {
+inline char *string::copyInto(size_t location, const string *str) {
 	return strcpy(buffer+location,str->getString());
 }
 
-inline char *string::copyInto(unsigned long location,
-					const char *str) {
+inline char *string::copyInto(size_t location, const char *str) {
 	return strcpy(buffer+location,str);
 }
 
-inline char *string::copyInto(unsigned long location,
-					const char *str, size_t size) {
+inline char *string::copyInto(size_t location, const char *str, size_t size) {
 	return strncpy(buffer+location,str,size);
 }
 
@@ -116,17 +113,17 @@ inline char *string::copyInto(char *dest, const char *source, size_t size) {
 	return strncpy(dest,source,size);
 }
 
-inline char *string::copyInto(char *dest, unsigned long location,
+inline char *string::copyInto(char *dest, size_t location,
 						const string *source) {
 	return strcpy(dest+location,source->getString());
 }
 
-inline char *string::copyInto(char *dest, unsigned long location,
+inline char *string::copyInto(char *dest, size_t location,
 						const char *source) {
 	return strcpy(dest+location,source);
 }
 
-inline char *string::copyInto(char *dest, unsigned long location,
+inline char *string::copyInto(char *dest, size_t location,
 					const char *source, size_t size) {
 	return strncpy(dest+location,source,size);
 }

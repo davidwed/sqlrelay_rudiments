@@ -9,28 +9,28 @@ inline unsigned char *variablebuffer::getBuffer() {
 	return buffer;
 }
 
-inline unsigned long variablebuffer::getSize() {
+inline size_t variablebuffer::getSize() {
 	return end;
 }
 
-inline unsigned long variablebuffer::getPosition() {
+inline size_t variablebuffer::getPosition() {
 	return position;
 }
 
-inline unsigned long variablebuffer::getEnd() {
+inline size_t variablebuffer::getEnd() {
 	return end;
 }
 
-inline unsigned long variablebuffer::getActualSize() {
+inline size_t variablebuffer::getActualSize() {
 	return buffersize;
 }
 
-inline void variablebuffer::setPosition(unsigned long pos) {
+inline void variablebuffer::setPosition(size_t pos) {
 	position=pos;
 }
 
 inline variablebuffer *variablebuffer::append(const unsigned char *data,
-						unsigned long size) {
+								size_t size) {
 	position=end;
 	return write(data,size);
 }

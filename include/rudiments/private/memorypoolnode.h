@@ -4,11 +4,11 @@
 class memorypoolnode {
 	friend class memorypool;
 	private:
-			memorypoolnode(unsigned long size);
+			memorypoolnode(size_t size);
 			~memorypoolnode();
 
 		unsigned char	*buffer;
-		unsigned long	size;
-		unsigned long	remaining;
-		unsigned long	position;
+		size_t		size;
+		size_t		remaining;
+		size_t		position;
 };

@@ -8,8 +8,7 @@
 #endif
 #include <string.h>
 
-variablebuffer::variablebuffer(unsigned long initialsize,
-					unsigned long increment) {
+variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	buffer=new unsigned char[initialsize];
 	buffersize=initialsize;
 	this->initialsize=initialsize;
@@ -18,9 +17,9 @@ variablebuffer::variablebuffer(unsigned long initialsize,
 	end=0;
 }
 
-unsigned long variablebuffer::read(unsigned char *data, unsigned long size) {
+ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 
-	unsigned long	bytestoread=size;
+	size_t	bytestoread=size;
 	if (position>end) {
 		bytestoread=0;
 	} else if (position+size>end) {
@@ -33,8 +32,7 @@ unsigned long variablebuffer::read(unsigned char *data, unsigned long size) {
 	return bytestoread;
 }
 
-variablebuffer *variablebuffer::write(const unsigned char *data,
-						unsigned long size) {
+variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 
 	// if the buffer is too small, extend it
 	if (position>buffersize) {
@@ -62,9 +60,8 @@ void variablebuffer::clear() {
 	end=0;
 }
 
-void variablebuffer::extend(unsigned long size) {
-	unsigned long	newbuffersize=buffersize+
-					((size/increment)*increment)+
+void variablebuffer::extend(size_t size) {
+	size_t	newbuffersize=buffersize+((size/increment)*increment)+
 					(((size%increment)>0)*increment);
 	unsigned char	*newbuffer=new unsigned char[newbuffersize];
 	memcpy((void *)newbuffer,(void *)buffer,buffersize);

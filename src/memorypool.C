@@ -15,16 +15,16 @@
 	#include <strings.h>
 #endif
 
-memorypoolnode::memorypoolnode(unsigned long size) {
+memorypoolnode::memorypoolnode(size_t size) {
 	buffer=new unsigned char[size];
 	position=0;
 	remaining=size;
 	this->size=size;
 }
 
-memorypool::memorypool(unsigned long initialsize,
-			unsigned long increment,
-			unsigned long resizeinterval) {
+memorypool::memorypool(size_t initialsize,
+			size_t increment,
+			size_t resizeinterval) {
 	this->initialsize=initialsize;
 	this->increment=increment;
 	this->resizeinterval=resizeinterval;
@@ -34,8 +34,7 @@ memorypool::memorypool(unsigned long initialsize,
 	nodelist.append(new memorypoolnode(initialsize));
 }
 
-unsigned char *memorypool::malloc(unsigned long length) {
-
+unsigned char *memorypool::malloc(size_t length) { 
 	// add the length to the total size
 	totalusedsize=totalusedsize+length;
 
@@ -64,7 +63,7 @@ unsigned char *memorypool::malloc(unsigned long length) {
 	return buffer;
 }
 
-unsigned char *memorypool::calloc(unsigned long length) {
+unsigned char *memorypool::calloc(size_t length) {
 	unsigned char	*buffer=malloc(length);
 	memset((void *)buffer,0,length);
 	return buffer;

@@ -13,6 +13,7 @@ install:
 	$(INSTALL) -m 644 rudiments/datatransportfactory.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datetime.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/dtd.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/dictionary.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filedescriptor.h $(incdir)/rudiments
@@ -55,6 +56,10 @@ install:
 	$(INSTALL) -m 644 rudiments/private/datetimeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/dtd.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/dtdinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/dictionary.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/dictionaryinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/dictionarynode.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/dictionarynodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandler.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandlerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/file.h $(incdir)/rudiments/private
@@ -81,9 +86,13 @@ install:
 	$(INSTALL) -m 644 rudiments/private/memorypool.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/memorypoolinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/memorypoolnode.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/objectdictionarynodeinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/objectlistnodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/passwdentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/passwdentryinlines.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/permissionsinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/primitivedictionarynodeinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/primitivelistnodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/protocolentry.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/protocolentryinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/randomnumberinlines.h $(incdir)/rudiments/private
@@ -105,6 +114,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/stringinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/stringbuffer.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/stringbufferinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/stringdictionarynodeinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/stringlistnodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/syslogdestination.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/text.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/textinlines.h $(incdir)/rudiments/private
