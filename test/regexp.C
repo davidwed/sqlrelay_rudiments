@@ -16,40 +16,40 @@ int main(int argc, const char **argv) {
         if (re.match("Hello Dave!")) {
                 printf("The string contains Dave\n");
         }
-	printf("%d matches\n",re.getMatchingSubstringCount());
-	for (int i=0; i<re.getMatchingSubstringCount(); i++) {
-		printf("match: \"%s\"\n",re.getMatchingSubstring(i));
+	printf("%d matches\n",re.getSubstringCount());
+	for (int i=0; i<re.getSubstringCount(); i++) {
+		printf("match: \"%s\"\n",re.getSubstringStart(i));
 	}
 
         if (re.match("Goodbye Dave!")) {
                 printf("The string contains Dave\n");
         }
-	printf("%d matches\n",re.getMatchingSubstringCount());
-	for (int i=0; i<re.getMatchingSubstringCount(); i++) {
-		printf("match: \"%s\"\n",re.getMatchingSubstring(i));
+	printf("%d matches\n",re.getSubstringCount());
+	for (int i=0; i<re.getSubstringCount(); i++) {
+		printf("match: \"%s\"\n",re.getSubstringStart(i));
 	}
 
         if (re.match("Dave is a jerk!")) {
                 printf("The string contains Dave\n");
         }
-	printf("%d matches\n",re.getMatchingSubstringCount());
-	for (int i=0; i<re.getMatchingSubstringCount(); i++) {
-		printf("match: \"%s\"\n",re.getMatchingSubstring(i));
+	printf("%d matches\n",re.getSubstringCount());
+	for (int i=0; i<re.getSubstringCount(); i++) {
+		printf("match: \"%s\"\n",re.getSubstringStart(i));
 	}
 
         if (re.match("Dave writes cool software!")) {
                 printf("The string contains Dave\n");
         }
-	printf("%d matches\n",re.getMatchingSubstringCount());
-	for (int i=0; i<re.getMatchingSubstringCount(); i++) {
-		printf("match: \"%s\"\n",re.getMatchingSubstring(i));
+	printf("%d matches\n",re.getSubstringCount());
+	for (int i=0; i<re.getSubstringCount(); i++) {
+		printf("match: \"%s\"\n",re.getSubstringStart(i));
 	}
 
         if (re.match("See ya later Dave!")) {
                 printf("The string contains Dave\n");
         }
-	printf("%d matches\n",re.getMatchingSubstringCount());
-	for (int i=0; i<re.getMatchingSubstringCount(); i++) {
-		printf("match: \"%s\"\n",re.getMatchingSubstring(i));
+	printf("%d matches\n",re.getSubstringCount());
+	for (int i=0; i<re.getSubstringCount(); i++) {
+		printf("match: \"%s\"\n",re.getSubstringStart(i));
 	}
 }
