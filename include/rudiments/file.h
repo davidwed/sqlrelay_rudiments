@@ -156,6 +156,8 @@ class file : public filedescriptor {
 
 		// These methods return the blocksize to use
 		// for most efficient I/O with the file.
+		// Note that some systems don't support this.
+		// On those systems, a block size of -1 is returned.
 		blksize_t	getBlockSize() const;
 		static int	getBlockSize(const char *filename,
 						blksize_t *size);
@@ -164,6 +166,8 @@ class file : public filedescriptor {
 
 		// These methods return the number of
 		// blocks allocated for the file.
+		// Note that some systems don't support this.
+		// On those systems, a block count of -1 is returned.
 		blkcnt_t	getBlockCount() const;
 		static int	getBlockCount(const char *filename,
 						blkcnt_t *blocks);
