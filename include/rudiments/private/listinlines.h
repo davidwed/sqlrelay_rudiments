@@ -4,20 +4,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-template <class datatype, class keytype, class listnodetype>
-inline list<datatype,keytype,listnodetype>::list() {
+#define LIST_TEMPLATE \
+	template <class datatype, class keytype, class listnodetype>
+
+#define LIST_CLASS \
+	list<datatype,keytype,listnodetype>
+
+LIST_TEMPLATE
+inline LIST_CLASS::list() {
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
-template <class datatype, class keytype, class listnodetype>
-inline list<datatype,keytype,listnodetype>::~list() {
+LIST_TEMPLATE
+inline LIST_CLASS::~list() {
 	clear();
 }
 
-template <class datatype, class keytype, class listnodetype>
-void list<datatype,keytype,listnodetype>::append(datatype data) {
+LIST_TEMPLATE
+void LIST_CLASS::append(datatype data) {
 	if (last) {
 		last->setNext(new listnodetype(data,last,NULL));
 		last=(listnodetype *)last->getNext();
@@ -28,9 +34,8 @@ void list<datatype,keytype,listnodetype>::append(datatype data) {
 	length++;
 }
 
-template <class datatype, class keytype, class listnodetype>
-int list<datatype,keytype,listnodetype>::insert(unsigned long index,
-							datatype data) {
+LIST_TEMPLATE
+int LIST_CLASS::insert(unsigned long index, datatype data) {
 
 	// handle invalid index
 	if (index>length) {
@@ -67,10 +72,8 @@ int list<datatype,keytype,listnodetype>::insert(unsigned long index,
 	return 1;
 }
 
-template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::setDataByIndex(
-							unsigned long index,
-							datatype data) {
+LIST_TEMPLATE
+inline int LIST_CLASS::setDataByIndex(unsigned long index, datatype data) {
 	listnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		current->setData(data);
@@ -79,14 +82,13 @@ inline int list<datatype,keytype,listnodetype>::setDataByIndex(
 	return 0;
 }
 
-template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::removeByIndex(
-							unsigned long index) {
+LIST_TEMPLATE
+inline int LIST_CLASS::removeByIndex(unsigned long index) {
 	return removeNode(getNodeByIndex(index));
 }
 
-template <class datatype, class keytype, class listnodetype>
-int list<datatype,keytype,listnodetype>::removeByKey(keytype key) {
+LIST_TEMPLATE
+int LIST_CLASS::removeByKey(keytype key) {
 
 	listnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
@@ -98,8 +100,8 @@ int list<datatype,keytype,listnodetype>::removeByKey(keytype key) {
 	return 0;
 }
 
-template <class datatype, class keytype, class listnodetype>
-int list<datatype,keytype,listnodetype>::removeAllByKey(keytype key) {
+LIST_TEMPLATE
+int LIST_CLASS::removeAllByKey(keytype key) {
 
 	listnodetype	*current=first;
 	listnodetype	*next;
@@ -117,8 +119,8 @@ int list<datatype,keytype,listnodetype>::removeAllByKey(keytype key) {
 	return 1;
 }
 
-template <class datatype, class keytype, class listnodetype>
-int list<datatype,keytype,listnodetype>::removeNode(listnodetype *node) {
+LIST_TEMPLATE
+int LIST_CLASS::removeNode(listnodetype *node) {
 	if (!node) {
 		return 0;
 	}
@@ -139,10 +141,9 @@ int list<datatype,keytype,listnodetype>::removeNode(listnodetype *node) {
 	return 1;
 }
 
-template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::getDataByIndex(
-							unsigned long index,
-							datatype *data) const {
+LIST_TEMPLATE
+inline int LIST_CLASS::getDataByIndex(unsigned long index,
+						datatype *data) const {
 	listnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		*data=current->getData();
@@ -151,10 +152,8 @@ inline int list<datatype,keytype,listnodetype>::getDataByIndex(
 	return 0;
 }
 
-template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::getDataByKey(
-							keytype key,
-							datatype *data) const {
+LIST_TEMPLATE
+inline int LIST_CLASS::getDataByKey(keytype key, datatype *data) const {
 	for (listnodetype *current=first; current;
 			current=(listnodetype *)current->getNext()) {
 		if (!current->compare(key)) {
@@ -165,14 +164,13 @@ inline int list<datatype,keytype,listnodetype>::getDataByKey(
 	return 0;
 }
 
-template <class datatype, class keytype, class listnodetype>
-inline unsigned long list<datatype,keytype,listnodetype>::getLength() const {
+LIST_TEMPLATE
+inline unsigned long LIST_CLASS::getLength() const {
 	return length;
 }
 
-template <class datatype, class keytype, class listnodetype>
-listnodetype *list<datatype,keytype,listnodetype>::getNodeByIndex(
-						unsigned long index) const {
+LIST_TEMPLATE
+listnodetype *LIST_CLASS::getNodeByIndex(unsigned long index) const {
 	if (index>=length) {
 		return NULL;
 	}
@@ -183,8 +181,8 @@ listnodetype *list<datatype,keytype,listnodetype>::getNodeByIndex(
 	return current;
 }
 
-template <class datatype, class keytype, class listnodetype>
-void list<datatype,keytype,listnodetype>::clear() {
+LIST_TEMPLATE
+void LIST_CLASS::clear() {
 	listnodetype	*current=first;
 	listnodetype	*next;
 	for (unsigned long i=0; i<length; i++) {

@@ -1,4 +1,5 @@
 xmlsax compilation generates warning with xscale_le-gcc
+xmldomnode should probably use list class
 
 dtd test crashes
 table class is generally screwed up

@@ -3,22 +3,28 @@
 
 #include <stdlib.h>
 
-template <class datatype, class keytype>
-inline listnode<datatype,keytype>::listnode() {
+#define LISTNODE_TEMPLATE \
+	template <class datatype, class keytype>
+
+#define LISTNODE_CLASS \
+	listnode<datatype,keytype>
+
+LISTNODE_TEMPLATE
+inline LISTNODE_CLASS::listnode() {
 	data=0;
 	previous=NULL;
 	next=NULL;
 }
 
-template <class datatype, class keytype>
-inline listnode<datatype,keytype>::listnode(datatype data) {
+LISTNODE_TEMPLATE
+inline LISTNODE_CLASS::listnode(datatype data) {
 	this->data=data;
 	previous=NULL;
 	next=NULL;
 }
 
-template <class datatype, class keytype>
-inline listnode<datatype,keytype>::listnode(datatype data,
+LISTNODE_TEMPLATE
+inline LISTNODE_CLASS::listnode(datatype data,
 					listnode<datatype,keytype> *previous,
 					listnode<datatype,keytype> *next) {
 	this->data=data;
@@ -26,39 +32,36 @@ inline listnode<datatype,keytype>::listnode(datatype data,
 	this->next=next;
 }
 
-template <class datatype, class keytype>
-inline listnode<datatype,keytype>::~listnode() {
+LISTNODE_TEMPLATE
+inline LISTNODE_CLASS::~listnode() {
 }
 
-template <class datatype, class keytype>
-inline void listnode<datatype,keytype>::setData(datatype data) {
+LISTNODE_TEMPLATE
+inline void LISTNODE_CLASS::setData(datatype data) {
 	this->data=data;
 }
 
-template <class datatype, class keytype>
-inline datatype listnode<datatype,keytype>::getData() const {
+LISTNODE_TEMPLATE
+inline datatype LISTNODE_CLASS::getData() const {
 	return data;
 }
 
-template <class datatype, class keytype>
-inline void listnode<datatype,keytype>::setPrevious(
-					listnode<datatype,keytype> *previous) {
+LISTNODE_TEMPLATE
+inline void LISTNODE_CLASS::setPrevious(listnode<datatype,keytype> *previous) {
 	this->previous=previous;
 }
 
-template <class datatype, class keytype>
-inline void listnode<datatype,keytype>::setNext(
-					listnode<datatype,keytype> *next) {
+LISTNODE_TEMPLATE
+inline void LISTNODE_CLASS::setNext(listnode<datatype,keytype> *next) {
 	this->next=next;
 }
 
-template <class datatype, class keytype>
-inline listnode<datatype,keytype> *listnode<datatype,keytype>::getPrevious()
-									const {
+LISTNODE_TEMPLATE
+inline listnode<datatype,keytype> *LISTNODE_CLASS::getPrevious() const {
 	return previous;
 }
 
-template <class datatype, class keytype>
-inline listnode<datatype,keytype> *listnode<datatype,keytype>::getNext() const {
+LISTNODE_TEMPLATE
+inline listnode<datatype,keytype> *LISTNODE_CLASS::getNext() const {
 	return next;
 }

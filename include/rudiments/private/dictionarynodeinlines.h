@@ -1,35 +1,40 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-template <class keytype, class datatype>
-inline dictionarynode<keytype,datatype>::dictionarynode() {
+#define DICTIONARYNODE_TEMPLATE \
+	template <class keytype, class datatype>
+
+#define DICTIONARYNODE_CLASS \
+	dictionarynode<keytype,datatype>
+
+DICTIONARYNODE_TEMPLATE
+inline DICTIONARYNODE_CLASS::dictionarynode() {
 	key=0;
 	data=0;
 }
 
-template <class keytype, class datatype>
-inline dictionarynode<keytype,datatype>::dictionarynode(keytype key,
-							datatype data) {
+DICTIONARYNODE_TEMPLATE
+inline DICTIONARYNODE_CLASS::dictionarynode(keytype key, datatype data) {
 	this->key=key;
 	this->data=data;
 }
 
-template <class keytype, class datatype>
-inline void dictionarynode<keytype,datatype>::setKey(keytype key) {
+DICTIONARYNODE_TEMPLATE
+inline void DICTIONARYNODE_CLASS::setKey(keytype key) {
 	this->key=key;
 }
 
-template <class keytype, class datatype>
-inline void dictionarynode<keytype,datatype>::setData(datatype data) {
+DICTIONARYNODE_TEMPLATE
+inline void DICTIONARYNODE_CLASS::setData(datatype data) {
 	this->data=data;
 }
 
-template <class keytype, class datatype>
-inline keytype dictionarynode<keytype,datatype>::getKey() const {
+DICTIONARYNODE_TEMPLATE
+inline keytype DICTIONARYNODE_CLASS::getKey() const {
 	return key;
 }
 
-template <class keytype, class datatype>
-inline datatype dictionarynode<keytype,datatype>::getData() const {
+DICTIONARYNODE_TEMPLATE
+inline datatype DICTIONARYNODE_CLASS::getData() const {
 	return data;
 }

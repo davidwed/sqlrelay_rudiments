@@ -53,7 +53,7 @@ list: list.C list.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ list.lo -L../src -lrudiments_p
 
 mem: mem.C mem.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p
 
 passwdgroup: passwdgroup.C passwdgroup.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ passwdgroup.lo -L../src -lrudiments_p
