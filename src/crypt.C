@@ -1,0 +1,49 @@
+// Copyright (c) 2004 David Muse
+// See the COPYING file for more information
+
+#include <rudiments/crypt.h>
+#include <rudiments/charstring.h>
+
+// need for memset...
+#include <string.h>
+
+char *crypt::encrypt(const char *password, const char *salt) {
+	#ifdef HAVE_CRYPT_R
+		crypt_data	cd;
+		memset((void *)&cd,0,sizeof(cd));
+		char	*encryptedpassword=crypt_r(password,salt,&cd);
+		return (encryptedpassword)?
+			charstring::duplicate(encryptedpassword):NULL;
+	#else
+		#ifdef RUDIMENTS_HAS_THREADS
+		if (cryptmutex && pthread_mutex_lock(cryptmutex)) {
+			return NULL;
+		}
+		#endif
+		char	*encryptedpassword=::crypt(password,salt);
+		char	*retval=(encryptedpassword)?
+				charstring::duplicate(encryptedpassword):NULL;
+		#ifdef RUDIMENTS_HAS_THREADS
+		if (cryptmutex) {
+			pthread_mutex_unlock(cryptmutex);
+		}
+		#endif
+		return retval;
+	#endif
+}
+
+#ifdef RUDIMENTS_HAS_THREADS
+bool crypt::needsMutex() {
+	#if !defined(HAVE_CRYPT_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void crypt::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_CRYPT_R)
+		cryptmutex=mutex;
+	#endif
+}
+#endif
