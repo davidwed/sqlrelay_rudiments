@@ -7,18 +7,21 @@
 
 int main(int argv, const char **argc) {
 
+	// create a dictionary containing string keys and string values
 	namevaluepairs	dict;
 
+	// add values to the dictionary
 	dict.setData("1","one");
 	dict.setData("2","two");
 	dict.setData("3","three");
 	dict.setData("4","four");
 
+	// display the length and contents of the dictionary
 	printf("length: %d\n",dict.getList()->getLength());
-
 	dict.print();
 	printf("\n");
 
+	// remove values, displaying the dictionary after each removal
 	dict.removeData("3");
 	dict.print();
 	printf("\n");
@@ -34,18 +37,23 @@ int main(int argv, const char **argc) {
 	dict.removeData("1");
 	dict.print();
 
+
+
+	// create a dictionary containing long integer keys and string values
 	numericdictionary<char *>	numdict;
 
+	// add values to the dictionary
 	numdict.setData(1,"one");
 	numdict.setData(2,"two");
 	numdict.setData(3,"three");
 	numdict.setData(4,"four");
 
+	// display the length and contents of the dictionary
 	printf("length: %d\n",numdict.getList()->getLength());
-
 	numdict.print();
 	printf("\n");
 
+	// remove values, displaying the dictionary after each removal
 	numdict.removeData(3);
 	numdict.print();
 	printf("\n");
@@ -62,18 +70,24 @@ int main(int argv, const char **argc) {
 	numdict.print();
 	printf("\n");
 
+
+
+	// create a dictionary containing double precision
+	// floating point keys and string values
 	dictionary<double,char *>	doubledict;
 
+	// add values to the dictionary
 	doubledict.setData(1.1,"one point one");
 	doubledict.setData(2.2,"two point two");
 	doubledict.setData(3.3,"three point three");
 	doubledict.setData(4.4,"four point four");
 
+	// display the length and contents of the dictionary
 	printf("length: %d\n",doubledict.getList()->getLength());
-
 	doubledict.print();
 	printf("\n");
 
+	// remove values, displaying the dictionary after each removal
 	doubledict.removeData(3.3);
 	doubledict.print();
 	printf("\n");

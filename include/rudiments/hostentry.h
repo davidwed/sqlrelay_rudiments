@@ -66,8 +66,13 @@ class hostentry {
 			// prints out the host entry
 
 		static	int	needsMutex();
-			// Returns 1 if this class needs a mutex to operate
-			// safely in a threaded environment and 0 otherwise.
+			// If your system doesn't support gethostbyname_r()
+			// and gethostbyaddr_r() then this class needs a
+			// mutex to assure thread safety.
+			//
+			// This method returns 1 if this class needs a mutex to
+			// operate safely in a threaded environment and 0
+			// otherwise.
 		static	void	setMutex(pthread_mutex_t *mutex);
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then

@@ -60,7 +60,8 @@ class inetclientsocket : public client, public inetsocket  {
 			//
 			// Returns 1 on success and 0 on failure.
 			//
-			// Note that connect() uses the hostentry and
+			// Note that if your system does not support
+			// getaddrinfo() then connect() uses the hostentry and
 			// protocolentry classes.  If you are using this method
 			// in a multithreaded application, you may need to
 			// supply those classes with mutexes.  See hostentry.h

@@ -1,5 +1,8 @@
-update docs
-document environment class
+example programs for:
+	DTD
+	xmlsax
+	stringbuffer
+	variablebuffer
 
 a termios class would be nice
 a thread class would be nice

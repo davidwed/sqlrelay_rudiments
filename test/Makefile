@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log oneshotclnt oneshotsvr passwdgroup permissions protohost regexp sem2 shm2 text datetime dict dtd env file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err group cmdline host log oneshotclnt oneshotsvr passwd permissions protocol regexp sem2 shm2 text datetime dict dtd env file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log oneshotclnt oneshotsvr passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dict dtd env file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err group cmdline host log oneshotclnt oneshotsvr passwd permissions protocol regexp sem1 sem2 shm1 shm2 text datetime dict dtd env file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -52,6 +52,12 @@ env: env.C env.lo
 file: file.C file.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ file.lo -L../src -lrudiments_p
 
+group: group.C group.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ group.lo -L../src -lrudiments_p
+
+host: host.C host.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ host.lo -L../src -lrudiments_p
+
 list: list.C list.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ list.lo -L../src -lrudiments_p
 
@@ -64,14 +70,14 @@ oneshotclnt: oneshotclnt.C oneshotclnt.lo
 oneshotsvr: oneshotsvr.C oneshotsvr.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ oneshotsvr.lo -L../src -lrudiments_p
 
-passwdgroup: passwdgroup.C passwdgroup.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ passwdgroup.lo -L../src -lrudiments_p
+passwd: passwd.C passwd.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ passwd.lo -L../src -lrudiments_p
 
 permissions: permissions.C permissions.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ permissions.lo -L../src -lrudiments_p
 
-protohost: protohost.C protohost.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ protohost.lo -L../src -lrudiments_p
+protocol: protocol.C protocol.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ protocol.lo -L../src -lrudiments_p
 
 regexp: regexp.C regexp.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ regexp.lo -L../src -lrudiments_p
