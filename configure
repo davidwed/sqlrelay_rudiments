@@ -1577,7 +1577,7 @@ fi;
 # Check whether --enable-profiling or --disable-profiling was given.
 if test "${enable_profiling+set}" = set; then
   enableval="$enable_profiling"
-  CXXFLAGS="$CXXFLAGS -g -pg -Wall"
+  CXXFLAGS="$CXXFLAGS -pg -Wall"
 else
   CXXFLAGS="$CXXFLAGS -Wall"
 fi;

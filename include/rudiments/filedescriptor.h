@@ -434,6 +434,19 @@ class filedescriptor {
 			// Interfaces for performing varions miscellaneous
 			// operations on the file descriptor.
 
+		bool	bufferWrites();
+			// Causes small write()'s to be collected up and
+			// sent together when the buffer is full or when
+			// a maximum of 0.2 seconds has gone by.  This is
+			// the default. (enables Nagle's algorithm)
+			//
+			// Returns true on success and false on failure.
+		bool	dontBufferWrites();
+			// Causes all write()'s to be sent immediately.
+			// (disables Nagle's algorithm)
+			//
+			// Returns true on success and false on failure.
+
 	#include <rudiments/private/filedescriptor.h>
 };
 

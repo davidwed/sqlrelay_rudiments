@@ -12,7 +12,7 @@ AC_ARG_ENABLE(debug,
 	CXXFLAGS="$CXXFLAGS -Wall")
 AC_ARG_ENABLE(profiling,
 	[  --enable-profiling      compile with -pg option],
-	CXXFLAGS="$CXXFLAGS -g -pg -Wall",
+	CXXFLAGS="$CXXFLAGS -pg -Wall",
 	CXXFLAGS="$CXXFLAGS -Wall")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],

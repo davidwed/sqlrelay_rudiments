@@ -7,7 +7,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: svr sslsvr lsnr inetclnt sslclnt unixclnt dir dmn group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep server.pem
+all: svr sslsvr lsnr inetclnt sslclnt unixclnt dir dmn group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -188,6 +188,12 @@ timer: timer.C timer.lo
 
 sleep: sleep.C sleep.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sleep.lo -all-static $(LIBS)
+
+inetclntbench: inetclntbench.C inetclntbench.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclntbench.lo -all-static $(LIBS)
+
+inetsvrbench: inetsvrbench.C inetsvrbench.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsvrbench.lo -all-static $(LIBS)
 
 server.pem:
 	$(MAKE) -C certificates

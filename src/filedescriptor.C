@@ -16,6 +16,7 @@
 #include <sys/fcntl.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <sys/socket.h>
 #include <sys/uio.h>
 #include <limits.h>
@@ -1166,6 +1167,21 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 
 	// if we're here then we must have received some bad data
 	return false;
+}
+
+bool filedescriptor::bufferWrites() {
+	return setNoDelay(0);
+}
+
+bool filedescriptor::dontBufferWrites() {
+	return setNoDelay(1);
+}
+
+bool filedescriptor::setNoDelay(int onoff) {
+	int	value=onoff;
+	return !setsockopt(fd,IPPROTO_TCP,TCP_NODELAY,
+				(SETSOCKOPT_OPTVAL_TYPE)&value,
+					(socklen_t)sizeof(int));
 }
 
 #ifdef RUDIMENTS_NAMESPACE
