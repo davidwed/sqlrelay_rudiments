@@ -120,10 +120,10 @@ class semaphoreset {
 		int	setGroupName(const char *groupname);
 			// makes this semaphore set owned by 
 			// the group "groupname"
-		int	setUserId(ushort uid);
+		int	setUserId(uid_t uid);
 			// makes this semaphore set owned by 
 			// the user identified by "uid"
-		int	setGroupId(ushort gid);
+		int	setGroupId(gid_t gid);
 			// makes this semaphore set owned by 
 			// the group identified by "gid"
 		int	setPermissions(mode_t permissions);
@@ -145,10 +145,10 @@ class semaphoreset {
 			// Note that this method allocates a buffer
 			// internally and returns it.  The calling program must
 			// deallocate this buffer.
-		unsigned short	getUserId();
+		uid_t	getUserId();
 			// returns the user id of the user that owns this
 			// semaphore set
-		unsigned short	getGroupId();
+		gid_t	getGroupId();
 			// returns the group id of the group that owns this
 			// semaphore set
 		mode_t	getPermissions();

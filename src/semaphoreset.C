@@ -9,6 +9,9 @@
 	#include <rudiments/private/semaphoresetinlines.h>
 #endif
 
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
+
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -141,26 +144,16 @@ void semaphoreset::createOperations() {
 
 int semaphoreset::setUserName(const char *username) {
 
-#ifdef HAVE_GETPWNAM_R
-	passwd	*passwdent=new passwd;
-	char	buffer[1024];
-	if (getpwnam_r(username,passwdent,buffer,1024,&passwdent)) {
+	passwdentry	*passwdent=new passwdentry();
+	if (!passwdent->initialize(username)) {
 		return 0;
 	}
-#else
-	passwd	*passwdent=NULL;
-	if (!(passwdent=getpwnam(username))) {
-		return 0;
-	}
-#endif
-	int	retval=setUserId(passwdent->pw_uid);
-#ifdef HAVE_GETPWNAM_R
+	int	retval=setUserId(passwdent->getUserId());
 	delete passwdent;
-#endif
 	return retval;
 }
 
-int semaphoreset::setUserId(ushort uid) {
+int semaphoreset::setUserId(uid_t uid) {
 	semid_ds	setds;
 	setds.sem_perm.uid=uid;
 	semun	semctlun;
@@ -188,7 +181,7 @@ int semaphoreset::setGroupName(const char *groupname) {
 	return retval;
 }
 
-int semaphoreset::setGroupId(ushort gid) {
+int semaphoreset::setGroupId(gid_t gid) {
 	semid_ds	setds;
 	setds.sem_perm.gid=gid;
 	semun	semctlun;
@@ -231,7 +224,7 @@ char *semaphoreset::getUserName() {
 	return NULL;
 }
 
-unsigned short semaphoreset::getUserId() {
+uid_t semaphoreset::getUserId() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;
@@ -268,7 +261,7 @@ char *semaphoreset::getGroupName() {
 	return NULL;
 }
 
-unsigned short semaphoreset::getGroupId() {
+gid_t semaphoreset::getGroupId() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;

@@ -25,11 +25,6 @@ int	main() {
         sem->create(ftok("/tmp/sem",0),
 			permissions::evalPermString("rw-------"),2,vals);
 
-	/*sem->setUserName("mused");
-	char	*user=sem->getUserName();
-	printf("owner: %s\n",user);
-	delete[] user;*/
-
         for (int i=0; i<10; i++) {
                 sem->wait(0);
                 printf("2\n");

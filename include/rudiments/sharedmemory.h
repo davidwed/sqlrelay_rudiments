@@ -73,10 +73,10 @@ class sharedmemory {
 		int	setGroupName(const char *groupname);
 			// makes this shared memory segment owned by
 			// the group "groupname"
-		int	setUserId(ushort uid);
+		int	setUserId(uid_t uid);
 			// makes this shared memory segment owned by
 			// the user identified by uid
-		int	setGroupId(ushort gid);
+		int	setGroupId(gid_t gid);
 			// makes this shared memory segment owned by
 			// the group identified by gid
 		int	setPermissions(mode_t permissions);
@@ -89,10 +89,10 @@ class sharedmemory {
 		char	*getGroupName();
 			// returns the name of the group that owns this
 			// shared memory segment
-		ushort	getUserId();
+		uid_t	getUserId();
 			// returns the user id of the user that owns this
 			// shared memory segment
-		ushort	getGroupId();
+		gid_t	getGroupId();
 			// returns the group id of the group that owns this
 			// shared memory segment
 		mode_t	getPermissions();

@@ -33,13 +33,13 @@ inline void *sharedmemory::getPointer() const {
 	return shmptr;
 }
 
-inline int sharedmemory::setUserId(ushort uid) {
+inline int sharedmemory::setUserId(uid_t uid) {
 	shmid_ds	setds;
 	setds.shm_perm.uid=uid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline int sharedmemory::setGroupId(ushort gid) {
+inline int sharedmemory::setGroupId(gid_t gid) {
 	shmid_ds	setds;
 	setds.shm_perm.gid=gid;
 	return !shmctl(shmid,IPC_SET,&setds);
@@ -51,7 +51,7 @@ inline int sharedmemory::setPermissions(mode_t permissions) {
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline unsigned short sharedmemory::getUserId() {
+inline uid_t sharedmemory::getUserId() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.uid;
@@ -59,7 +59,7 @@ inline unsigned short sharedmemory::getUserId() {
 	return 0;
 }
 
-inline unsigned short sharedmemory::getGroupId() {
+inline gid_t sharedmemory::getGroupId() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.gid;

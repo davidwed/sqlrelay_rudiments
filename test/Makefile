@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log permissions regexp sem2 shm2 text datetime dtd mem random sem1 shm1 signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions regexp sem2 shm2 text datetime dtd mem random sem1 shm1 signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log permissions regexp sem1 sem2 shm1 shm2 text datetime dtd mem random signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions regexp sem1 sem2 shm1 shm2 text datetime dtd mem random signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 
 rebuild: clean all
@@ -46,6 +46,9 @@ log: log.C log.lo
 
 mem: mem.C mem.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p
+
+passwdgroup: passwdgroup.C passwdgroup.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ passwdgroup.lo -L../src -lrudiments_p
 
 permissions: permissions.C permissions.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ permissions.lo -L../src -lrudiments_p
