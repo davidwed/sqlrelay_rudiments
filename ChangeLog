@@ -17,6 +17,7 @@
 		2^64-1), appear to be negative and still be valid as long as
 		it's not -1
 	fixed rpm 4.1 doc-install complaints
+	added --enable-debug option to configure, only 1 library is built now
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better
