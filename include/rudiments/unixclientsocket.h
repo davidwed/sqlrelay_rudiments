@@ -27,7 +27,8 @@ class unixclientsocket : public client, public unixsocket {
 			// initialize() and connect()
 			// methods below.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns RESULT_SUCCESS on success and RESULT_ERROR
+			// on failure.
 
 
 
@@ -53,7 +54,8 @@ class unixclientsocket : public client, public unixsocket {
 			// will cause it to try to connect over and over
 			// as fast as possible (not recommended).
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns RESULT_SUCCESS on success and RESULT_ERROR
+			// on failure.
 };
 
 #ifdef ENABLE_RUDIMENTS_INLINES

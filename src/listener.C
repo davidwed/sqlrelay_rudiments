@@ -55,12 +55,12 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 			if (retryinterruptedwaits && errno==EINTR) {
 				continue;
 			}
-			return -1;
+			return RESULT_ERROR;
 
 		} else if (!selectresult) {
 
 			// timeout
-			return -2;
+			return RESULT_TIMEOUT;
 		}
 	
 		// return the file descriptor that
@@ -75,6 +75,6 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 
 		// if none of the file descriptors caused the select to fall
 		// through, return error
-		return -1;
+		return RESULT_ERROR;
 	}
 }

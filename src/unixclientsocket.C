@@ -35,7 +35,7 @@ int unixclientsocket::connect() {
 	// create a unix socket
 	if ((fd=socket(AF_UNIX,SOCK_STREAM,0))==-1) {
 		fd=-1;
-		return 0;
+		return RESULT_ERROR;
 	}
 
 	// try to connect, over and over for the specified number of times
@@ -45,7 +45,7 @@ int unixclientsocket::connect() {
 		// attempt to connect
 		if (::connect(fd,(struct sockaddr *)&sockaddrun,
 						sizeof(sockaddrun))!=-1) {
-			return 1;
+			return RESULT_SUCCESS;
 		}
 
 		// wait the specified amount of time between reconnect tries
@@ -54,5 +54,5 @@ int unixclientsocket::connect() {
 
 	// if we're here, the connect failed
 	close();
-	return 0;
+	return RESULT_ERROR;
 }

@@ -34,7 +34,7 @@ class filedescriptor {
 
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were
-		// successfully written or -1 if an error occurred.
+		// successfully written or RESULT_ERROR if an error occurred.
 		virtual ssize_t	write(unsigned short number);
 				// Write "number" to the file descriptor.
 		virtual ssize_t	write(unsigned long number);
@@ -75,8 +75,8 @@ class filedescriptor {
 		// Write methods - write data to the file descriptor with a
 		// timeout of "sec" seconds and "usec" microseconds.
 		// These methods return the number of bytes that were
-		// successfully written, -1 if an error occurred or -2 if a
-		// timeout occurred.
+		// successfully written, RESULT_ERROR if an error occurred or
+		// RESULT_TIMEOUT if a timeout occurred.
 		virtual ssize_t	write(unsigned short number,
 							long sec, long usec);
 				// Write "number" to the file descriptor.
@@ -123,7 +123,7 @@ class filedescriptor {
 
 		// Read methods - read data from the file descriptor.
 		// These methods return the number of bytes that were
-		// successfully read or -1 if an error occurred.
+		// successfully read or RESULT_ERROR if an error occurred.
 		virtual ssize_t	read(unsigned short *buffer);
 				// Reads sizeof(unsigned short) bytes
 				// from the file descriptor into "buffer".
@@ -167,8 +167,8 @@ class filedescriptor {
 		// Read methods - read data from the file descriptor with a
 		// timeout of "sec" seconds and "usec" microseconds.
 		// These methods return the number of bytes that were
-		// successfully read, -1 if an error occurred or -2 if a
-		// timeout occurred.
+		// successfully read, RESULT_ERROR if an error occurred or
+		// RESULT_TIMEOUT if a timeout occurred.
 		virtual ssize_t	read(unsigned short *buffer,
 							long sec, long usec);
 				// Reads sizeof(unsigned short) bytes
@@ -229,9 +229,9 @@ class filedescriptor {
 				// method to fall through immediately unless a
 				// data is immediately available.
 				//
-				// Returns -1 on error, -2 on timeout and
-				// otherwise returns the file descriptor that
-				// is ready to be read from.
+				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
+				// on timeout and otherwise returns the file
+				// descriptor that is ready to be read from.
 		virtual int	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
@@ -245,9 +245,9 @@ class filedescriptor {
 				// method to fall through immediately unless a
 				// data is immediately available.
 				//
-				// Returns -1 on error, -2 on timeout and
-				// otherwise returns the file descriptor that
-				// is ready to be written to.
+				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
+				// on timeout and otherwise returns the file
+				// descriptor that is ready to be written to.
 
 
 		// By default, if a read or write is occurring and a signal

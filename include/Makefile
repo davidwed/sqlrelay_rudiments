@@ -4,7 +4,7 @@ include ../features.mk
 top_srcdir = ..
 INSTALL = $(top_srcdir)/install-sh -c
 
-HEADERS =
+HEADERS = resultcodes.h
 PRIVATEHEADERS = config.h rudimentsinlines.h
 
 ifeq ($(INCLUDE_CLIENT),1)

@@ -24,7 +24,8 @@ class inetclientsocket : public client, public inetsocket  {
 			// initialize() and connect()
 			// methods below.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns RESULT_SUCCESS on success and RESULT_ERROR
+			// on failure.
 			//
 			// See connect() below for a note about use in
 			// multithreaded applications.
@@ -57,7 +58,8 @@ class inetclientsocket : public client, public inetsocket  {
 			// will cause it to try to connect over and over
 			// as fast as possible (not recommended).
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns RESULT_SUCCESS on success and RESULT_ERROR
+			// on failure.
 			//
 			// Note that if your system does not support
 			// getaddrinfo() then connect() uses the hostentry and

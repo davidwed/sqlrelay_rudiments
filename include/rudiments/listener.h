@@ -32,9 +32,9 @@ class listener {
 				// method to fall through immediately unless a
 				// data is immediately available.
 				//
-				// Returns -1 on error, -2 on timeout and
-				// otherwise returns the file descriptor that
-				// is ready to be read from.
+				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
+				// on timeout and otherwise returns the file
+				// descriptor that is ready to be read from.
 		virtual	int	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
@@ -48,9 +48,9 @@ class listener {
 				// method to fall through immediately unless a
 				// data is immediately available.
 				//
-				// Returns -1 on error, -2 on timeout and
-				// otherwise returns the file descriptor that
-				// is ready to be written to.
+				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
+				// on timeout and otherwise returns the file
+				// descriptor that is ready to be read from.
 
 		virtual	void	removeFileDescriptor(int fd);
                         	// Removes the specified file descriptor from
