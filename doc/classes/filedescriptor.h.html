@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/filedescriptor.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre4/include/rudiments/filedescriptor.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -454,6 +454,18 @@
                         <font color="#0000ff">// (disables Nagle's algorithm)</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
+
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getType() <font color="#298a52"><b>const</b></font>;
+
+                <font color="#298a52"><b>char</b></font>            *getPeerAddress() <font color="#298a52"><b>const</b></font>;
+                                <font color="#0000ff">// Returns the IP address of the client at</font>
+                                <font color="#0000ff">// the other end of the connection if </font>
+                                <font color="#0000ff">// the filedescriptor is an inet socket or</font>
+                                <font color="#0000ff">// NULL otherwise.</font>
+                                <font color="#0000ff">//</font>
+                                <font color="#0000ff">// Note that the buffer for the address is</font>
+                                <font color="#0000ff">// allocated internally and must be freed by</font>
+                                <font color="#0000ff">// the calling program.</font>
 
 <font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/filedescriptor.h&gt;</font>
 };
