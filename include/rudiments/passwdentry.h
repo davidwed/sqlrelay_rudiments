@@ -25,6 +25,8 @@ class passwdentry {
 		char	*getHomeDirectory() const;
 		char	*getShell() const;
 
+		void	print() const;
+
 	#include <rudiments/private/passwdentry.h>
 };
 

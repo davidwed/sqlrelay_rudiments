@@ -53,11 +53,17 @@
 /* Some systems have getgrnam_r */
 #define HAVE_GETGRNAM_R 1
 
+/* Some systems have gethostbyaddr_r */
+#define HAVE_GETHOSTBYADDR_R 1
+
 /* Some systems have gethostbyname_r */
 #define HAVE_GETHOSTBYNAME_R 1
 
 /* Some systems have getprotobyname_r */
 #define HAVE_GETPROTOBYNAME_R 1
+
+/* Some systems have getprotobynumber_r */
+#define HAVE_GETPROTOBYNUMBER_R 1
 
 /* Some systems have getpwnam_r */
 #define HAVE_GETPWNAM_R 1

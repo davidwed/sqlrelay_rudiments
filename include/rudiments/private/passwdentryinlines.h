@@ -5,10 +5,12 @@
 
 inline passwdentry::passwdentry() {
 	pwd=NULL;
+	buffer=NULL;
 }
 
 inline passwdentry::~passwdentry() {
 	delete pwd;
+	delete[] buffer;
 }
 
 inline char *passwdentry::getName() const {

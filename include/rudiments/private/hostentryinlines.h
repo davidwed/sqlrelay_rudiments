@@ -5,10 +5,12 @@
 
 inline hostentry::hostentry() {
 	he=NULL;
+	buffer=NULL;
 }
 
 inline hostentry::~hostentry() {
 	delete he;
+	delete[] buffer;
 }
 
 inline char *hostentry::getName() const {

@@ -8,15 +8,35 @@
 #endif
 
 #include <stdio.h>
+#include <errno.h>
+
+#define MAXBUFFER	(32*1024)
 
 int hostentry::initialize(const char *hostname) {
 	if (he) {
 		delete he;
 	}
 	#ifdef HAVE_GETHOSTBYNAME_R
-		he=new hostent;
+		// gethostbyname_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
 		int	errnop;
-		return !gethostbyname_r(hostname,he,buffer,1024,&he,&errnop);
+		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+			he=new hostent;
+			buffer=new char[size];
+			if (gethostbyname_r(hostname,he,
+						buffer,size,&he,&errnop)==0) {
+				return 1;
+			}
+			delete he;
+			delete buffer;
+			he=NULL;
+			if (errnop!=ENOMEM) {
+				return 0;
+			}
+		}
 	#else
 		he=NULL;
 		return ((he=gethostbyname(hostname))!=NULL);
@@ -28,10 +48,26 @@ int hostentry::initialize(const char *address, int len, int type) {
 		delete he;
 	}
 	#ifdef HAVE_GETHOSTBYADDR_R
-		he=new hostent;
+		// gethostbyaddr_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
 		int	errnop;
-		return !gethostbyaddr_r(address,len,type,
-					he,buffer,1024,&he,&errnop);
+		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+			he=new hostent;
+			buffer=new char[size];
+			if (gethostbyaddr_r(address,len,type,he,
+						buffer,size,&he,&errnop)==0) {
+				return 1;
+			}
+			delete he;
+			delete buffer;
+			he=NULL;
+			if (errnop!=ENOMEM) {
+				return 0;
+			}
+		}
 	#else
 		he=NULL;
 		return ((he=gethostbyaddr(address,len,type))!=NULL);

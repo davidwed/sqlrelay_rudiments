@@ -22,6 +22,8 @@ class groupentry {
 		gid_t	getGroupId() const;
 		char	**getMembers() const;
 
+		void	print() const;
+
 	#include <rudiments/private/groupentry.h>
 };
 

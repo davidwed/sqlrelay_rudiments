@@ -8,14 +8,34 @@
 #endif
 
 #include <stdio.h>
+#include <errno.h>
+
+#define MAXBUFFER	(32*1024)
 
 int protocolentry::initialize(const char *protocolname) {
 	if (pe) {
 		delete pe;
 	}
 	#ifdef HAVE_GETPROTOBYNAME_R
-		pe=new protoent;
-		return !getprotobyname_r(protocolname,pe,buffer,1024,&pe);
+		// getprotobyname_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
+		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+			pe=new protoent;
+			buffer=new char[size];
+			if (getprotobyname_r(protocolname,pe,
+						buffer,size,&pe)==0) {
+				return 1;
+			}
+			delete pe;
+			delete buffer;
+			pe=NULL;
+			if (errno!=ENOMEM) {
+				return 0;
+			}
+		}
 	#else
 		pe=NULL;
 		return ((pe=getprotobyname(protocolname))!=NULL);
@@ -27,8 +47,25 @@ int protocolentry::initialize(int number) {
 		delete pe;
 	}
 	#ifdef HAVE_GETPROTOBYNUMBER_R
-		pe=new protoent;
-		return !getprotobynumber_r(number,pe,buffer,1024,&pe);
+		// getprotobynumber_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
+		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+			pe=new protoent;
+			buffer=new char[size];
+			if (getprotobynumber_r(number,pe,
+						buffer,size,&pe)==0) {
+				return 1;
+			}
+			delete pe;
+			delete buffer;
+			pe=NULL;
+			if (errno!=ENOMEM) {
+				return 0;
+			}
+		}
 	#else
 		pe=NULL;
 		return ((pe=getprotobynumber(number))!=NULL);

@@ -7,13 +7,35 @@
 	#include <rudiments/private/passwdentryinlines.h>
 #endif
 
+#include <stdio.h>
+#include <errno.h>
+
+#define MAXBUFFER	(32*1024)
+
 int passwdentry::initialize(const char *username) {
 	if (pwd) {
 		delete pwd;
+		delete buffer;
 	}
 	#ifdef HAVE_GETPWNAM_R
-		pwd=new passwd;
-		return (getpwnam_r(username,pwd,buffer,1024,&pwd)==0);
+		// getpwnam_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
+		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+			pwd=new passwd;
+			buffer=new char[size];
+			if (getpwnam_r(username,pwd,buffer,size,&pwd)==0) {
+				return 1;
+			}
+			delete pwd;
+			delete buffer;
+			pwd=NULL;
+			if (errno!=ENOMEM) {
+				return 0;
+			}
+		}
 	#else
 		return ((pwd=getpwnam(username))!=NULL);
 	#endif
@@ -24,9 +46,40 @@ int passwdentry::initialize(uid_t userid) {
 		delete pwd;
 	}
 	#ifdef HAVE_GETPWUID_R
-		pwd=new passwd;
-		return (getpwuid_r(userid,pwd,buffer,1024,&pwd)==0);
+		// getpwuid_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
+		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+			pwd=new passwd;
+			buffer=new char[size];
+			if (getpwuid_r(userid,pwd,buffer,size,&pwd)==0) {
+				return 1;
+			}
+			delete pwd;
+			delete buffer;
+			pwd=NULL;
+			if (errno!=ENOMEM) {
+				return 0;
+			}
+		}
 	#else
 		return ((pwd=getpwuid(userid))!=NULL);
 	#endif
+}
+
+void passwdentry::print() const {
+
+	if (!pwd) {
+		return;
+	}
+
+	printf("Name: %s\n",getName());
+	printf("Password: %s\n",getPassword());
+	printf("User Id: %d\n",getUserId());
+	printf("Primary Group: %d\n",getPrimaryGroup());
+	printf("Real Name: %s\n",getRealName());
+	printf("Home Directory: %s\n",getHomeDirectory());
+	printf("Shell: %s\n",getShell());
 }

@@ -5,10 +5,12 @@
 
 groupentry::groupentry() {
 	grp=NULL;
+	buffer=NULL;
 }
 
 groupentry::~groupentry() {
 	delete grp;
+	delete[] buffer;
 }
 
 inline char *groupentry::getName() const {

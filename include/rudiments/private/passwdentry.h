@@ -3,4 +3,4 @@
 
 	private:
 		passwd	*pwd;
-		char	buffer[1024];
+		char	*buffer;

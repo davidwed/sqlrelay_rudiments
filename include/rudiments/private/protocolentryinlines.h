@@ -5,10 +5,12 @@
 
 inline protocolentry::protocolentry() {
 	pe=NULL;
+	buffer=NULL;
 }
 
 inline protocolentry::~protocolentry() {
 	delete pe;
+	delete[] buffer;
 }
 
 inline char *protocolentry::getName() const {
