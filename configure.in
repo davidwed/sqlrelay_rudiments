@@ -34,6 +34,18 @@ AC_ARG_WITH(ssl-libs,
 	[  --with-ssl-libs         SSL libraries],
 	SSLLIBS="$withval",
 	SSLLIBS="")
+AC_ARG_ENABLE(pcre,
+	[  --disable-pcre          Don't use PCRE for regular expressions],
+	ENABLE_RUDIMENTS_PCRE="no",
+	ENABLE_RUDIMENTS_PCRE="yes")
+AC_ARG_WITH(pcre-includes,
+	[  --with-pcre-includes    PCRE includes],
+	PCREINCLUDES="$withval",
+	PCREINCLUDES="")
+AC_ARG_WITH(pcre-libs,
+	[  --with-pcre-libs        PCRE libraries],
+	PCRELIBS="$withval",
+	PCRELIBS="")
 AC_ARG_ENABLE(threads,
 	[  --disable-threads       Disable thread support],
 	ENABLE_RUDIMENTS_THREADS="no",
@@ -118,6 +130,13 @@ dnl Checks for ssl library.
 echo
 echo "***** ssl ********************"
 FW_CHECK_SSL
+echo "******************************"
+
+
+dnl Checks for ssl library.
+echo
+echo "***** pcre *******************"
+FW_CHECK_PCRE
 echo "******************************"
 
 

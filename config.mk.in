@@ -23,7 +23,7 @@ STRIP = @STRIP@
 STRIPCOMMENTNOTE = $(top_builddir)/strip-comment-note
 
 # includes and defines
-BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@
+BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
@@ -64,3 +64,6 @@ PTHREADLIB = @PTHREADLIB@
 
 # ssl library
 SSLLIBS = @SSLLIBS@
+
+# pcre library
+PCRELIBS = @PCRELIBS@

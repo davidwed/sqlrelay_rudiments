@@ -303,6 +303,9 @@
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
 
+/* Rudiments supports PCRE */
+#undef RUDIMENTS_HAS_PCRE
+
 /* Rudiments supports SSL */
 #undef RUDIMENTS_HAS_SSL
 

@@ -3,7 +3,13 @@
 
 #include <rudiments/regularexpression.h>
 #include <stdlib.h>
-#if defined(HAVE_REGEX_H)
+#if defined(RUDIMENTS_HAS_PCRE)
+	#include <string.h>
+	#ifdef HAVE_STRINGS_H
+		#include <strings.h>
+	#endif
+	#include <pcre/pcre.h>
+#elif defined(HAVE_REGEX_H)
 	#include <sys/types.h>
 	#include <regex.h>
 #elif defined(HAVE_REGEXP_H)
@@ -25,7 +31,9 @@ regularexpression::regularexpression(const char *pattern) {
 
 regularexpression::~regularexpression() {
 	if (compiledexpression) {
-		#if defined(HAVE_REGEX_H)
+		#if defined(RUDIMENTS_HAS_PCRE)
+			pcre_free((pcre *)compiledexpression);
+		#elif defined(HAVE_REGEX_H)
 			regfree((regex_t *)compiledexpression);
 		#elif defined(HAVE_REGEXP_H)
 			delete (regexp *)compiledexpression;
@@ -42,7 +50,10 @@ regularexpression::~regularexpression() {
 bool regularexpression::match(const char *str) {
 
 	if (compiledexpression) {
-		#if defined(HAVE_REGEX_H)
+		#if defined(RUDIMENTS_HAS_PCRE)
+			return (pcre_exec((pcre *)compiledexpression,NULL,
+						str,strlen(str),0,0,NULL,0)>-1);
+		#elif defined(HAVE_REGEX_H)
 			return !regexec((regex_t *)compiledexpression,str,0,
 						(regmatch_t *)NULL,0);
 		#elif defined(HAVE_REGEXP_H)
@@ -61,7 +72,20 @@ bool regularexpression::match(const char *str) {
 
 bool regularexpression::compile(const char *pattern) {
 
-	#if defined(HAVE_REGEX_H)
+	#if defined(RUDIMENTS_HAS_PCRE)
+		if (compiledexpression) {
+			pcre_free((pcre *)compiledexpression);
+			compiledexpression=0;
+		}
+		const char	*error;
+		int		erroroffset;
+		pcre	*expr=pcre_compile(pattern,0,&error,&erroroffset,NULL);
+		// FIXME: pcre_study here...
+		if (expr) {
+			compiledexpression=(long)expr;
+			return true;
+		}
+	#elif defined(HAVE_REGEX_H)
 		if (compiledexpression) {
 			regfree((regex_t *)compiledexpression);
 			compiledexpression=0;
@@ -120,7 +144,14 @@ bool regularexpression::match(const char *str, const char *pattern) {
 
 	bool	retval=false;
 
-	#if defined(HAVE_REGEX_H)
+	#if defined(RUDIMENTS_HAS_PCRE)
+		const char	*error;
+		int		erroroffset;
+		pcre	*expr=pcre_compile(pattern,0,&error,&erroroffset,NULL);
+		// FIXME: pcre_study here...
+		retval=(pcre_exec(expr,NULL,str,strlen(str),0,0,NULL,0)>-1);
+		pcre_free(expr);
+	#elif defined(HAVE_REGEX_H)
 		regex_t	preg;
 		if (!regcomp(&preg,pattern,REG_EXTENDED|REG_NOSUB)) {
 			retval=!regexec(&preg,str,0,

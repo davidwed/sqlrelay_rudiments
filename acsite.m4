@@ -405,6 +405,56 @@ AC_SUBST(SSLINCLUDES)
 AC_SUBST(SSLLIBS)
 ])
 
+
+
+dnl checks for the pcre library
+dnl requires:  cross_compiling
+dnl sets the substitution variable PCRELIBS
+AC_DEFUN([FW_CHECK_PCRE],
+[
+
+if ( test "$ENABLE_RUDIMENTS_PCRE" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+		dnl cross compiling
+		echo "cross compiling"
+		if ( test -n "$PCRELIBS" -o -n "$PCREINCLUDES" )
+		then
+			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+		fi
+
+	else
+
+		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+		then
+			PCRELIBS=`pcre-config --libs`
+			PCREINCLUDES=`pcre-config --cflags`
+			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+		else
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre],[pcre/pcre.h],[pcre],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
+			if ( test -n "$PCRELIBS" )
+			then
+				AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+			fi
+		fi
+	fi
+
+	FW_INCLUDES(pcre,[$PCREINCLUDES])
+	FW_LIBS(pcre,[$PCRELIBS])
+
+else
+
+	echo "disabled"
+
+fi
+
+AC_SUBST(PCREINCLUDES)
+AC_SUBST(PCRELIBS)
+])
+
 dnl checks for rpc entry functions and header files
 AC_DEFUN([FW_CHECK_RPC],
 [

@@ -465,7 +465,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL PIPE PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL PIPE PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS PCREINCLUDES PCRELIBS LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1024,6 +1024,7 @@ Optional Features:
   --enable-debug          compile with -g and -pg options and don't strip binaries
   --enable-inlines        use inline methods
   --disable-ssl           Disable SSL support
+  --disable-pcre          Don't use PCRE for regular expressions
   --disable-threads       Disable thread support
   --enable-shared[=PKGS]
                           build shared libraries [default=yes]
@@ -1040,6 +1041,8 @@ Optional Packages:
   --with-pthread-prefix   Location of pthread library
   --with-ssl-includes     SSL includes
   --with-ssl-libs         SSL libraries
+  --with-pcre-includes    PCRE includes
+  --with-pcre-libs        PCRE libraries
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
                           both]
@@ -1559,6 +1562,29 @@ if test "${with_ssl_libs+set}" = set; then
   SSLLIBS="$withval"
 else
   SSLLIBS=""
+fi;
+# Check whether --enable-pcre or --disable-pcre was given.
+if test "${enable_pcre+set}" = set; then
+  enableval="$enable_pcre"
+  ENABLE_RUDIMENTS_PCRE="no"
+else
+  ENABLE_RUDIMENTS_PCRE="yes"
+fi;
+
+# Check whether --with-pcre-includes or --without-pcre-includes was given.
+if test "${with_pcre_includes+set}" = set; then
+  withval="$with_pcre_includes"
+  PCREINCLUDES="$withval"
+else
+  PCREINCLUDES=""
+fi;
+
+# Check whether --with-pcre-libs or --without-pcre-libs was given.
+if test "${with_pcre_libs+set}" = set; then
+  withval="$with_pcre_libs"
+  PCRELIBS="$withval"
+else
+  PCRELIBS=""
 fi;
 # Check whether --enable-threads or --disable-threads was given.
 if test "${enable_threads+set}" = set; then
@@ -3897,7 +3923,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3900 "configure"' > conftest.$ac_ext
+  echo '#line 3926 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5013,7 +5039,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5016:" \
+echo "$as_me:5042:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6044,11 +6070,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6047: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6073: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6051: \$? = $ac_status" >&5
+   echo "$as_me:6077: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6276,11 +6302,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6279: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6305: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6283: \$? = $ac_status" >&5
+   echo "$as_me:6309: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6343,11 +6369,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6346: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6372: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6350: \$? = $ac_status" >&5
+   echo "$as_me:6376: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8461,7 +8487,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8464 "configure"
+#line 8490 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8559,7 +8585,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8562 "configure"
+#line 8588 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10715,11 +10741,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10718: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10744: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10722: \$? = $ac_status" >&5
+   echo "$as_me:10748: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -10782,11 +10808,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10785: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10811: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10789: \$? = $ac_status" >&5
+   echo "$as_me:10815: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12111,7 +12137,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12114 "configure"
+#line 12140 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12209,7 +12235,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12212 "configure"
+#line 12238 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13031,11 +13057,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13034: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13060: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13038: \$? = $ac_status" >&5
+   echo "$as_me:13064: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13098,11 +13124,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13101: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13127: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13105: \$? = $ac_status" >&5
+   echo "$as_me:13131: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15064,11 +15090,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15067: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15093: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15071: \$? = $ac_status" >&5
+   echo "$as_me:15097: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15296,11 +15322,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15299: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15325: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15303: \$? = $ac_status" >&5
+   echo "$as_me:15329: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15363,11 +15389,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15366: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15392: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15370: \$? = $ac_status" >&5
+   echo "$as_me:15396: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17481,7 +17507,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17484 "configure"
+#line 17510 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -17579,7 +17605,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17582 "configure"
+#line 17608 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -20373,6 +20399,455 @@ fi
 if ( test -n "$SSLLIBS" )
 then
 	echo "ssl libs... $SSLLIBS"
+fi
+
+
+else
+
+	echo "disabled"
+
+fi
+
+
+
+
+echo "******************************"
+
+
+echo
+echo "***** pcre *******************"
+
+
+if ( test "$ENABLE_RUDIMENTS_PCRE" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+				echo "cross compiling"
+		if ( test -n "$PCRELIBS" -o -n "$PCREINCLUDES" )
+		then
+
+cat >>confdefs.h <<\_ACEOF
+#define RUDIMENTS_HAS_PCRE 1
+_ACEOF
+
+		fi
+
+	else
+
+		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+		then
+			PCRELIBS=`pcre-config --libs`
+			PCREINCLUDES=`pcre-config --cflags`
+
+cat >>confdefs.h <<\_ACEOF
+#define RUDIMENTS_HAS_PCRE 1
+_ACEOF
+
+		else
+
+
+eval "PCREINCLUDES=\"\""
+eval "PCRELIBS=\"\""
+eval "PCRELIBPATH=\"\""
+eval "PCRESTATIC=\"\""
+if ( test -n "" )
+then
+	eval "=\"\""
+fi
+
+SEARCHPATH=/usr
+NAME=pcre
+HEADER=pcre/pcre.h
+LIBNAME=pcre
+LINKSTATIC=""
+LINKRPATH=""
+INCLUDESTRING=""
+LIBSTRING=""
+LIBPATH=""
+STATIC=""
+HEADERSANDLIBSPATH=""
+
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "/usr/lib/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"\""
+		eval "LIBPATH=\"\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/usr/lib/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/usr/lib/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"\""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+if ( test -z "$LIBSTRING" )
+then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "/usr/lib/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I/usr/include/$NAME\""
+		eval "LIBPATH=\"\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/usr/lib/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/usr/lib/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I/usr/include/$NAME\""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+fi
+if ( test -z "$LIBSTRING" )
+then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "/usr/lib/$NAME/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"\""
+		eval "LIBPATH=\"/usr/lib/$NAME\"; LIBSTRING=\"-L/usr/lib/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "/usr/lib/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L/usr/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/usr/lib/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"\""
+			eval "LIBSTRING=\"-L/usr/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+fi
+if ( test -z "$LIBSTRING" )
+then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "/usr/lib/$NAME/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I/usr/include/$NAME\""
+		eval "LIBPATH=\"/usr/lib/$NAME\"; LIBSTRING=\"-L/usr/lib/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "/usr/lib/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L/usr/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/usr/lib/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I/usr/include/$NAME\""
+			eval "LIBSTRING=\"-L/usr/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+fi
+
+if ( test -z "$LIBSTRING" )
+then
+
+	for paths in "$SEARCHPATH" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/usr/local/firstworks"
+	do
+		if ( test -n "$paths" )
+		then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "$paths/lib/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib\"; LIBSTRING=\"-L$paths/lib -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			if ( test -z "$LIBSTRING" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "$paths/lib/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib\"; LIBSTRING=\"-L$paths/lib -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+			if ( test -z "$LIBSTRING" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "$paths/lib/$NAME/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib/$NAME\"; LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+			if ( test -z "$LIBSTRING" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER="yes""
+fi
+
+
+if ( test -r "$paths/lib/$NAME/lib$LIBNAME.$SO" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib/$NAME\"; LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB="yes""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+			if ( test -n "$LIBSTRING" )
+			then
+				HEADERSANDLIBSPATH="$paths"
+				break
+			fi
+		fi
+	done
+else
+	HEADERSANDLIBSPATH="/usr"
+fi
+
+eval "PCREINCLUDES=\"$INCLUDESTRING\""
+eval "PCRELIBS=\"$LIBSTRING\""
+eval "PCRELIBPATH=\"$LIBPATH\""
+eval "PCRESTATIC=\"$STATIC\""
+if ( test -n "" )
+then
+	eval "=\"$HEADERSANDLIBSPATH\""
+fi
+
+			if ( test -n "$PCRELIBS" )
+			then
+
+cat >>confdefs.h <<\_ACEOF
+#define RUDIMENTS_HAS_PCRE 1
+_ACEOF
+
+			fi
+		fi
+	fi
+
+
+if ( test -n "$PCREINCLUDES" )
+then
+	echo "pcre includes... $PCREINCLUDES"
+fi
+
+
+if ( test -n "$PCRELIBS" )
+then
+	echo "pcre libs... $PCRELIBS"
 fi
 
 
@@ -26425,6 +26900,8 @@ s,@PTHREADINCLUDES@,$PTHREADINCLUDES,;t t
 s,@PTHREADLIB@,$PTHREADLIB,;t t
 s,@SSLINCLUDES@,$SSLINCLUDES,;t t
 s,@SSLLIBS@,$SSLLIBS,;t t
+s,@PCREINCLUDES@,$PCREINCLUDES,;t t
+s,@PCRELIBS@,$PCRELIBS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@SOCKETLIB@,$SOCKETLIB,;t t
 s,@XNETLIB@,$XNETLIB,;t t
