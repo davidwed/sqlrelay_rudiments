@@ -1,5 +1,8 @@
 netbsd-2.0 CMSG_SIZE bug
 
+shmptr must be cast to long rather than int for amd64.  Should shmptr be cast
+	to long or long long though?
+
 --------------------------------------------------------------------------------
 
 document shmfile class

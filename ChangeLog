@@ -21,6 +21,7 @@
 		charstring class
 	added variables() to environment class
 	regularexpression::match() fails immediately if string is NULL now
+	#ifdef'ed out OCRNL, ONOCR, ONLRET in serialportprofile for mac os x
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

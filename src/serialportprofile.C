@@ -592,17 +592,23 @@ void serialportprofile::discardEndOfTransmission(bool truefalse) {
 }
 #endif
 
+#ifdef OCRNL
 void serialportprofile::mapCarriageReturnToNewLineOnOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OCRNL)
 }
+#endif
 
+#ifdef ONOCR
 void serialportprofile::dontOutputCarriageReturnAtColumnZero(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,ONOCR)
 }
+#endif
 
+#ifdef ONLRET
 void serialportprofile::mapNewLineToCarriageReturnOnOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,ONLRET)
 }
+#endif
 
 #ifdef OFILL
 void serialportprofile::useFillCharactersForDelay(bool truefalse) {
@@ -694,17 +700,23 @@ bool serialportprofile::discardEndOfTransmission() {
 }
 #endif
 
+#ifdef OCRNL
 bool serialportprofile::mapCarriageReturnToNewLineOnOutput() {
 	return GET_FLAG(c_oflag,OCRNL);
 }
+#endif
 
+#ifdef ONOCR
 bool serialportprofile::dontOutputCarriageReturnAtColumnZero() {
 	return GET_FLAG(c_oflag,ONOCR);
 }
+#endif
 
+#ifdef ONLRET
 bool serialportprofile::mapNewLineToCarriageReturnOnOutput() {
 	return GET_FLAG(c_oflag,ONLRET);
 }
+#endif
 
 #ifdef OFILL
 bool serialportprofile::useFillCharactersForDelay() {

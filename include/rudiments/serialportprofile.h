@@ -573,15 +573,21 @@ class serialportprofile {
 			// map new line to carriage return/new line on
 			// output
 			// termios flag: ONLCR
+		#ifdef OCRNL
 		void	mapCarriageReturnToNewLineOnOutput(bool truefalse);
 			// map carriage return to new line on output
 			// termios flag: OCRNL
+		#endif
+		#ifdef OCNOCR
 		void	dontOutputCarriageReturnAtColumnZero(bool truefalse);
 			// don't output carriage return at column 0
 			// termios flag: ONOCR
+		#endif
+		#ifdef ONLORET
 		void	mapNewLineToCarriageReturnOnOutput(bool truefalse);
 			// map new line to carriage return on output
 			// termios flag: ONLRET
+		#endif
 		#ifdef OFILL
 		void	useFillCharactersForDelay(bool truefalse);
 			// send fill characters for delay instead of using a
@@ -642,15 +648,21 @@ class serialportprofile {
 		bool	mapNewLineToCarriageReturnNewLineOnOutput();
 			// returns true if new lines are mapped to carriage
 			// return/new line on output
+		#ifdef OCRNL
 		bool	mapCarriageReturnToNewLineOnOutput();
 			// returns true if carriage returns are mapped to new
 			// lines on output
+		#endif
+		#ifdef OCNOCR
 		bool	dontOutputCarriageReturnAtColumnZero();
 			// returns true if carriage returns aren't sent at
 			// column 0
+		#endif
+		#ifdef ONLORET
 		bool	mapNewLineToCarriageReturnOnOutput();
 			// returns true if new lines are mapped to carriage
 			// returns on output
+		#endif
 		#ifdef OFILL
 		bool	useFillCharactersForDelay();
 			// returns true if fill characters are sent for delay
