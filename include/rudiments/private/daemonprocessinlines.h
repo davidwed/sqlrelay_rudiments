@@ -17,6 +17,9 @@
 	#include <sys/wait.h>
 #endif
 
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
+
 inline void daemonprocess::waitOnChildren() {
 	while(waitpid(-1,NULL,WNOHANG)>0);
 }
@@ -28,6 +31,14 @@ inline void daemonprocess::shutDown() {
 
 inline void daemonprocess::crash() {
 	(*crashfunc)(0);
+}
+
+inline int daemonprocess::runAsUser(const char *username) const {
+	return runAsUserId(passwdentry::getUserId(username));
+}
+
+inline int daemonprocess::runAsGroup(const char *groupname) const {
+	return runAsGroupId(groupentry::getGroupId(groupname));
 }
 
 inline int daemonprocess::runAsUserId(uid_t uid) const {

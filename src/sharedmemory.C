@@ -70,28 +70,11 @@ int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 	return 0;
 }
 
-int sharedmemory::setUserName(const char *username) {
-	passwdentry	passwdent;
-	int	retval=(passwdent.initialize(username) &&
-			setUserId(passwdent.getUserId()));
-	return retval;
-}
-
-int sharedmemory::setGroupName(const char *groupname) {
-	groupentry	groupent;
-	int	retval=(groupent.initialize(groupname) &&
-			setGroupId(groupent.getGroupId()));
-	return retval;
-}
-
 char *sharedmemory::getUserName() {
 	shmid_ds	getds;
 	char	*retval=NULL;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		passwdentry	passwdent;
-		if (passwdent.initialize(getds.shm_perm.uid)) {
-			retval=strdup(passwdent.getName());
-		}
+		return passwdentry::getName(getds.shm_perm.uid);
 	}
 	return retval;
 }
@@ -100,10 +83,7 @@ char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
 	char	*retval=NULL;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		groupentry	groupent;
-		if (groupent.initialize(getds.shm_perm.gid)) {
-			retval=strdup(groupent.getName());
-		}
+		return groupentry::getName(getds.shm_perm.gid);
 	}
 	return retval;
 }

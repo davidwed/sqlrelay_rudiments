@@ -60,3 +60,17 @@ mode_t permissions::evalPermString(const char *permstring) {
 	}
 	return retval;
 }
+
+char *permissions::evalPermOctal(mode_t permoctal) {
+
+	char	*permstring=new char[10];
+	permstring[9]=(char)NULL;
+
+	mode_t	shift=permoctal;
+	for (int i=8; i>=0; i--) {
+		int	pos=i%3;
+		permstring[i]=(shift&1)?((pos==2)?'x':(pos==1)?'w':'r'):'-';
+		shift=shift>>1;
+	}
+	return permstring;
+}

@@ -6,8 +6,6 @@
 	#define inline
 	#include <rudiments/private/daemonprocessinlines.h>
 #endif
-#include <rudiments/passwdentry.h>
-#include <rudiments/groupentry.h>
 #include <rudiments/file.h>
 #include <rudiments/text.h>
 
@@ -31,18 +29,6 @@ daemonprocess::~daemonprocess() {
 	waitOnChildren();
 }
 
-inline int daemonprocess::runAsUser(const char *username) const {
-	passwdentry	pwent;
-	return (pwent.initialize(username) &&
-			runAsUserId(pwent.getUserId()));
-}
-
-inline int daemonprocess::runAsGroup(const char *groupname) const {
-	groupentry	grent;
-	return (grent.initialize(groupname) &&
-			runAsGroupId(grent.getGroupId()));
-}
-
 int daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
 	char	*pid=text::parseNumber(getpid());
@@ -54,7 +40,6 @@ int daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 
 int daemonprocess::checkForPidFile(const char *filename) const {
 	char	*pidstring=file::getContents(filename);
-printf("pid: %s\n",pidstring);
 	int	retval=(pidstring && pidstring[0])?atoi(pidstring):-1;
 	delete[] pidstring;
 	return retval;

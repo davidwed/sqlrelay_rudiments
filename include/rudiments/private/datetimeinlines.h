@@ -1,6 +1,11 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
+#include <string.h>
+#ifdef HAVE_STRINGS
+	#include <strings.h>
+#endif
+
 inline datetime::~datetime() {
 	delete[] timestring;
 }
@@ -21,23 +26,23 @@ inline int datetime::getMonth() const {
 	return timestruct.tm_mon+1;
 }
 
-inline int	datetime::getDayOfMonth() const {
+inline int datetime::getDayOfMonth() const {
 	return timestruct.tm_mday;
 }
 
-inline int	datetime::getDayOfWeek() const {
+inline int datetime::getDayOfWeek() const {
 	return timestruct.tm_wday;
 }
 
-inline int	datetime::getDayOfYear() const {
+inline int datetime::getDayOfYear() const {
 	return timestruct.tm_yday+1;
 }
 
-inline int	datetime::getYear() const {
+inline int datetime::getYear() const {
 	return timestruct.tm_year+1900;
 }
 
-inline int	datetime::isDaylightSavingsTime() const {
+inline int datetime::isDaylightSavingsTime() const {
 	return timestruct.tm_isdst;
 }
 
@@ -53,7 +58,7 @@ inline char	*datetime::getTimeZone() const {
 	#endif
 }
 
-inline long	datetime::getTimeZoneOffset() const {
+inline long datetime::getTimeZoneOffset() const {
 	#ifdef HAS___TM_GMTOFF
 		return timestruct.__tm_gmtoff;
 	#elif HAS_TM_GMTOFF
@@ -65,10 +70,15 @@ inline long	datetime::getTimeZoneOffset() const {
 	#endif
 }
 
-inline time_t	datetime::getEpoch() const {
+inline time_t datetime::getEpoch() const {
 	return epoch;
 }
 
 inline tm	*datetime::getTm() {
 	return &timestruct;
+}
+
+inline char	*datetime::getString(time_t epoch) {
+	datetime	dt(epoch);
+	return strdup(dt.getString());
 }

@@ -142,24 +142,12 @@ void semaphoreset::createOperations() {
 	}
 }
 
-int semaphoreset::setUserName(const char *username) {
-	passwdentry	passwdent;
-	return (passwdent.initialize(username) &&
-			setUserId(passwdent.getUserId()));
-}
-
 int semaphoreset::setUserId(uid_t uid) {
 	semid_ds	setds;
 	setds.sem_perm.uid=uid;
 	semun	semctlun;
 	semctlun.buf=&setds;
 	return !semctl(semid,0,IPC_SET,semctlun);
-}
-
-int semaphoreset::setGroupName(const char *groupname) {
-	groupentry	groupent;
-	return (groupent.initialize(groupname) &&
-			setGroupId(groupent.getGroupId()));
 }
 
 int semaphoreset::setGroupId(gid_t gid) {
@@ -184,10 +172,7 @@ char *semaphoreset::getUserName() {
 	semctlun.buf=&getds;
 	char	*retval=NULL;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
-		passwdentry	passwdent;
-		if (passwdent.initialize(getds.sem_perm.uid)) {
-			retval=strdup(passwdent.getName());
-		}
+		return passwdentry::getName(getds.sem_perm.uid);
 	}
 	return retval;
 }
@@ -208,10 +193,7 @@ char *semaphoreset::getGroupName() {
 	semctlun.buf=&getds;
 	char	*retval=NULL;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
-		groupentry	groupent;
-		if (groupent.initialize(getds.sem_perm.gid)) {
-			retval=strdup(groupent.getName());
-		}
+		return groupentry::getName(getds.sem_perm.gid);
 	}
 	return retval;
 }

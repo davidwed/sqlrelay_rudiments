@@ -75,16 +75,16 @@ datetime::datetime(const tm *timestruct) {
 	timestring=NULL;
 }
 
-datetime::datetime(const time_t *epoch) {
+datetime::datetime(const time_t epoch) {
 #ifdef HAVE_LOCALTIME_R
-	localtime_r(epoch,&timestruct);
+	localtime_r(&epoch,&timestruct);
 #else
-	tm	*lcltm=localtime(epoch);
+	tm	*lcltm=localtime(&epoch);
 	if (lcltm) {
 		memcpy((void *)&timestruct,(void *)lcltm,sizeof(struct tm));
 	}
 #endif
-	this->epoch=*epoch;
+	this->epoch=epoch;
 	timestring=NULL;
 }
 

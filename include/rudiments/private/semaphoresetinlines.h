@@ -6,6 +6,9 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
+
 #ifndef HAVE_SEMUN
 union semun {
 	int	val;
@@ -68,4 +71,12 @@ inline int semaphoreset::getWaitingForZero(int index) {
 inline int semaphoreset::getWaitingForIncrement(int index) {
 	semun	semctlun;
 	return !semctl(semid,index,GETNCNT,semctlun);
+}
+
+int semaphoreset::setUserName(const char *username) {
+	return setUserId(passwdentry::getUserId(username));
+}
+
+int semaphoreset::setGroupName(const char *groupname) {
+	return setGroupId(groupentry::getGroupId(groupname));
 }

@@ -106,13 +106,8 @@ int filesystem::remove(char *file) {
 }
 
 int filesystem::changeOwner(char *file, char *username, char *groupname) {
-
-	passwdentry	passwdent;
-	groupentry	groupent;
-	return ((username)?(!passwdent.initialize(username)):1) &&
-			((groupname)?(!groupent.initialize(groupname)):1) &&
-			(!chown(file,(username)?passwdent.getUserId():-1,
-				(groupname)?groupent.getGroupId():-1));
+	return (!chown(file,(username)?passwdentry::getUserId(username):-1,
+			(groupname)?groupentry::getGroupId(groupname):-1));
 }
 
 char **filesystem::list(char *pattern) {

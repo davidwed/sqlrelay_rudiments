@@ -17,8 +17,8 @@ class datetime {
 				// current time
 			datetime(const char *datestring);
 				// datestring must be "mm/dd/yyyy hh:mm:ss"
-			datetime(const time_t *epoch);
-				// *epoch is the number of seconds since 1970,
+			datetime(time_t epoch);
+				// epoch is the number of seconds since 1970,
 				// output by many standard time functions
 			datetime(const tm *timestruct);
 				// *timestruct is a (struct tm *), output by 
@@ -84,6 +84,13 @@ class datetime {
 			// and time currently represented in the class.
 			//
 			// Returns 1 on success and 0 on failure.
+
+
+		static char	*getString(time_t epoch);
+			// returns "mm/dd/yyyy hh:mm:ss"
+			// Note that this method allocates a buffer to return
+			// the string in which must be deleted by the calling
+			// program.
 
 	#include <rudiments/private/datetime.h>
 };

@@ -5,6 +5,9 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
+
 inline sharedmemory::sharedmemory() {
 	created=0;
 	shmptr=NULL;
@@ -31,6 +34,14 @@ inline int sharedmemory::getId() const {
 
 inline void *sharedmemory::getPointer() const {
 	return shmptr;
+}
+
+inline int sharedmemory::setUserName(const char *username) {
+	return setUserId(passwdentry::getUserId(username));
+}
+
+inline int sharedmemory::setGroupName(const char *groupname) {
+	return setGroupId(groupentry::getGroupId(groupname));
 }
 
 inline int sharedmemory::setUserId(uid_t uid) {

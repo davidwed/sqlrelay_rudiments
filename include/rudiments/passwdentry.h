@@ -27,6 +27,21 @@ class passwdentry {
 
 		void	print() const;
 
+
+		static char	*getName(uid_t userid);
+		static char	*getPassword(uid_t userid);
+		static gid_t	getPrimaryGroup(uid_t userid);
+		static char	*getRealName(uid_t userid);
+		static char	*getHomeDirectory(uid_t userid);
+		static char	*getShell(uid_t userid);
+
+		static char	*getPassword(const char *username);
+		static uid_t	getUserId(const char *username);
+		static gid_t	getPrimaryGroup(const char *username);
+		static char	*getRealName(const char *username);
+		static char	*getHomeDirectory(const char *username);
+		static char	*getShell(const char *username);
+
 	#include <rudiments/private/passwdentry.h>
 };
 

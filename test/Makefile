@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem2 shm2 text datetime dtd mem random sem1 shm1 signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem2 shm2 text datetime dtd file mem random sem1 shm1 signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dtd mem random signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dtd file mem random signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 
 rebuild: clean all
@@ -43,6 +43,9 @@ cmdline: cmdline.C cmdline.lo
 
 log: log.C log.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ log.lo -L../src -lrudiments_p
+
+file: file.C file.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ file.lo -L../src -lrudiments_p
 
 mem: mem.C mem.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p

@@ -65,6 +65,7 @@ class permissions {
 				//	rw-rw-rwt : read/write for everyone,
 				//			and save the file in
 				//			swap space
+		static	char	*evalPermOctal(mode_t mode);
 		
 
 
