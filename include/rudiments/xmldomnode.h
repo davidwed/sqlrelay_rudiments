@@ -361,8 +361,23 @@ class xmldomnode {
 				// stringbuffer.
 
 		stringbuffer	*getPath() const;
+				// If the xmldomnode is an element, returns the
+				// "path" of the xmldomnode.  The path will have
+				// the following form:
+				//
+				// /element[index]/element[index]/...
+				//
+				// The return value is allocated inside the
+				// method and must be deallocated by the calling
+				// program.
 		xmldomnode	*getChildByPath(const char *path) const;
-		
+				// Returns the child element with "path" of the
+				// form:
+				//
+				// /element[index]/element[index]/...
+				//
+				// Returns the null node if the specified
+				// element was not found.
 
 	#include <rudiments/private/xmldomnode.h>
 };
