@@ -1,6 +1,3 @@
-define RESULT_ERROR=-1, RESULT_TIMEOUT=-2, RESULT_ABORT=-3, etc. and make
-	methods uniformly return true/false or one of them
-
 methods that use select() return the first file descriptor that caused the
 	select to fall through rather than returning the number of file
 	descriptors that have available data
