@@ -475,9 +475,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 	// The result of SSL_read may be undefined if count=0
 	#ifdef RUDIMENTS_HAS_SSL
-	/*if (!count) {
+	if (!count) {
 		return 0;
-	}*/
+	}
 	#endif
 
 	ssize_t	totalread=0;
@@ -518,6 +518,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
+		// FIXME: we may need to do something else to check errno
+		// for SSL_read's
 		if (actualread!=sizetoread) {
 			if (retryinterruptedreads && errno==EINTR) {
 				// if we got an EINTR, then we need to
@@ -545,9 +547,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 	// The result of SSL_write may be undefined if count=0
 	#ifdef RUDIMENTS_HAS_SSL
-	/*if (!count) {
+	if (!count) {
 		return 0;
-	}*/
+	}
 	#endif
 
 	ssize_t	retval;
@@ -575,6 +577,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		}
 		#endif
 
+		// FIXME: we may need to do something else to check errno
+		// for SSL_write's
 		if (retval!=count) {
 			if (retryinterruptedwrites && errno==EINTR) {
 				continue;
