@@ -11,7 +11,12 @@ int main(int argv, const char **argc) {
 	environment	env;
 
 	printf("TEST=%s\n",env.getValue("TEST"));
-	if (env.setValue("TEST","test")) {
+	if (env.setValue("TEST","value")) {
+		printf("TEST=%s\n",env.getValue("TEST"));
+	} else {
+		printf("setValue() failed\n");
+	}
+	if (env.setValue("TEST","newvalue")) {
 		printf("TEST=%s\n",env.getValue("TEST"));
 	} else {
 		printf("setValue() failed\n");
