@@ -1,286 +1,287 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments-0.25/include/rudiments/string.h.html</title>
-<meta name="Generator" content="Vim/6.1">
+<title>~/src/firstworks/rudiments-0.26/include/rudiments/string.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <pre>
-<font color="#0000f8">// Copyright (c) 2003 David Muse</font>
-<font color="#0000f8">// See the COPYING file for more information.</font>
+<font color="#0000ff">// Copyright (c) 2003 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
 
 <font color="#a020f0">#ifndef RUDIMENTS_STRING_H</font>
 <font color="#a020f0">#define RUDIMENTS_STRING_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/stringincludes.h&gt;</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
+<font color="#0000ff">// The string class provides methods for manipulating strings.</font>
 
-<font color="#0000f8">// The string class provides methods for manipulating strings.</font>
+<font color="#2e8b57"><b>class</b></font> string {
+        <font color="#a52a2a"><b>public</b></font>:
 
-<font color="#288850"><b>class</b></font> string {
-        <font color="#a02828"><b>public</b></font>:
+                <font color="#0000ff">// The static methods operate on standalone strings.</font>
 
-                <font color="#0000f8">// The static methods operate on standalone strings.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    zero(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Sets &quot;size&quot; bytes of &quot;str&quot; to NULL.</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    zero(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Sets &quot;size&quot; bytes of &quot;str&quot; to NULL.</font>
-
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *append(<font color="#288850"><b>char</b></font> *dest, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *source);
-                        <font color="#0000f8">// Appends &quot;source&quot; to &quot;dest&quot;.  Assumes that there</font>
-                        <font color="#0000f8">// is enough room remaining in &quot;dest&quot; to accommodate</font>
-                        <font color="#0000f8">// the new string.</font>
-                        <font color="#0000f8">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *append(<font color="#288850"><b>char</b></font> *dest, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *source,
-                                                        <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Appends &quot;size&quot; bytes of &quot;source&quot; to &quot;dest&quot;.  Assumes</font>
-                        <font color="#0000f8">// that there is enough room remaining in &quot;dest&quot; to</font>
-                        <font color="#0000f8">// accommodate the new string.</font>
-                        <font color="#0000f8">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source);
+                        <font color="#0000ff">// Appends &quot;source&quot; to &quot;dest&quot;.  Assumes that there</font>
+                        <font color="#0000ff">// is enough room remaining in &quot;dest&quot; to accommodate</font>
+                        <font color="#0000ff">// the new string.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Appends &quot;size&quot; bytes of &quot;source&quot; to &quot;dest&quot;.  Assumes</font>
+                        <font color="#0000ff">// that there is enough room remaining in &quot;dest&quot; to</font>
+                        <font color="#0000ff">// accommodate the new string.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
 
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>char</b></font> *dest, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *source);
-                        <font color="#0000f8">// Replaces &quot;dest&quot; with &quot;source&quot;.  Assumes that there</font>
-                        <font color="#0000f8">// is enough room in &quot;dest&quot; to accommodate &quot;source&quot;.</font>
-                        <font color="#0000f8">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>char</b></font> *dest,
-                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *source, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Replaces the first &quot;size&quot; bytes of &quot;dest&quot; with</font>
-                        <font color="#0000f8">// &quot;source&quot;.  Assumes that &quot;dest&quot; is at least &quot;size&quot;</font>
-                        <font color="#0000f8">// bytes long.</font>
-                        <font color="#0000f8">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>char</b></font> *dest, <font color="#288850"><b>size_t</b></font> location,
-                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *source);
-                        <font color="#0000f8">// Replaces &quot;dest&quot; with &quot;source&quot;, starting &quot;location&quot;</font>
-                        <font color="#0000f8">// bytes into &quot;dest&quot;.  Assumes that there is enough</font>
-                        <font color="#0000f8">// room in &quot;dest&quot; (after &quot;location&quot; bytes) to</font>
-                        <font color="#0000f8">// accommodate &quot;source&quot;.</font>
-                        <font color="#0000f8">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>char</b></font> *dest, <font color="#288850"><b>size_t</b></font> location,
-                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *source, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Replaces &quot;size&quot; bytes of &quot;dest&quot; with &quot;source&quot;,</font>
-                        <font color="#0000f8">// starting &quot;location&quot; bytes into &quot;dest&quot;.  Assumes that</font>
-                        <font color="#0000f8">// there are &quot;size&quot; bytes in &quot;dest&quot; (after &quot;location&quot;</font>
-                        <font color="#0000f8">// bytes).</font>
-                        <font color="#0000f8">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source);
+                        <font color="#0000ff">// Replaces &quot;dest&quot; with &quot;source&quot;.  Assumes that there</font>
+                        <font color="#0000ff">// is enough room in &quot;dest&quot; to accommodate &quot;source&quot;.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>char</b></font> *dest,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Replaces the first &quot;size&quot; bytes of &quot;dest&quot; with</font>
+                        <font color="#0000ff">// &quot;source&quot;.  Assumes that &quot;dest&quot; is at least &quot;size&quot;</font>
+                        <font color="#0000ff">// bytes long.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>size_t</b></font> location,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source);
+                        <font color="#0000ff">// Replaces &quot;dest&quot; with &quot;source&quot;, starting &quot;location&quot;</font>
+                        <font color="#0000ff">// bytes into &quot;dest&quot;.  Assumes that there is enough</font>
+                        <font color="#0000ff">// room in &quot;dest&quot; (after &quot;location&quot; bytes) to</font>
+                        <font color="#0000ff">// accommodate &quot;source&quot;.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>size_t</b></font> location,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Replaces &quot;size&quot; bytes of &quot;dest&quot; with &quot;source&quot;,</font>
+                        <font color="#0000ff">// starting &quot;location&quot; bytes into &quot;dest&quot;.  Assumes that</font>
+                        <font color="#0000ff">// there are &quot;size&quot; bytes in &quot;dest&quot; (after &quot;location&quot;</font>
+                        <font color="#0000ff">// bytes).</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
 
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     compare(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str1, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str2);
-                        <font color="#0000f8">// Returns -1,0 or 1 if &quot;str1&quot; is greater than, </font>
-                        <font color="#0000f8">// equal to or less than &quot;str2&quot;.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     compare(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str1, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str2,
-                                                        <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Returns -1,0 or 1 if &quot;size&quot; bytes of &quot;str1&quot; are</font>
-                        <font color="#0000f8">// greater than, equal to or less than &quot;size&quot; bytes of</font>
-                        <font color="#0000f8">// &quot;str2&quot;.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     compareIgnoringCase(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str1,
-                                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str2);
-                        <font color="#0000f8">// Returns -1,0 or 1 if &quot;str1&quot; is greater than, </font>
-                        <font color="#0000f8">// equal to or less than &quot;str2&quot;, ignoring case.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     compareIgnoringCase(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str1,
-                                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str2,
-                                                        <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Returns -1,0 or 1 if &quot;size&quot; bytes of &quot;str1&quot; are</font>
-                        <font color="#0000f8">// greater than, equal to or less than &quot;size&quot; bytes of</font>
-                        <font color="#0000f8">// &quot;str2&quot;, ignoring case.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compare(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2);
+                        <font color="#0000ff">// Returns -1,0 or 1 if &quot;str1&quot; is greater than, </font>
+                        <font color="#0000ff">// equal to or less than &quot;str2&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compare(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Returns -1,0 or 1 if &quot;size&quot; bytes of &quot;str1&quot; are</font>
+                        <font color="#0000ff">// greater than, equal to or less than &quot;size&quot; bytes of</font>
+                        <font color="#0000ff">// &quot;str2&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compareIgnoringCase(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2);
+                        <font color="#0000ff">// Returns -1,0 or 1 if &quot;str1&quot; is greater than, </font>
+                        <font color="#0000ff">// equal to or less than &quot;str2&quot;, ignoring case.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compareIgnoringCase(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Returns -1,0 or 1 if &quot;size&quot; bytes of &quot;str1&quot; are</font>
+                        <font color="#0000ff">// greater than, equal to or less than &quot;size&quot; bytes of</font>
+                        <font color="#0000ff">// &quot;str2&quot;, ignoring case.</font>
 
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *contains(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *haystack,
-                                                <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *needle);
-                        <font color="#0000f8">// If &quot;haystack&quot; contains &quot;needle&quot;, then this method</font>
-                        <font color="#0000f8">// returns a pointer to the substring.  Otherwise it</font>
-                        <font color="#0000f8">// returns NULL.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *contains(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *haystack,
-                                                <font color="#288850"><b>char</b></font> needle);
-                        <font color="#0000f8">// If &quot;haystack&quot; contains &quot;needle&quot;, then this method</font>
-                        <font color="#0000f8">// returns a pointer to the substring.  Otherwise it</font>
-                        <font color="#0000f8">// returns NULL.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *contains(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *needle);
+                        <font color="#0000ff">// If &quot;haystack&quot; contains &quot;needle&quot;, then this method</font>
+                        <font color="#0000ff">// returns a pointer to the substring.  Otherwise it</font>
+                        <font color="#0000ff">// returns NULL.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *contains(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack,
+                                                <font color="#2e8b57"><b>char</b></font> needle);
+                        <font color="#0000ff">// If &quot;haystack&quot; contains &quot;needle&quot;, then this method</font>
+                        <font color="#0000ff">// returns a pointer to the substring.  Otherwise it</font>
+                        <font color="#0000ff">// returns NULL.</font>
 
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *duplicate(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// Creates a duplicate of &quot;str&quot; and returns a pointer</font>
-                        <font color="#0000f8">// to it.  Note that this method allocates a buffer for</font>
-                        <font color="#0000f8">// the duplicate string internally and returns it.  The</font>
-                        <font color="#0000f8">// calling program must deallocate this buffer.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *duplicate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// Creates a duplicate of &quot;str&quot; and returns a pointer</font>
+                        <font color="#0000ff">// to it.  Note that this method allocates a buffer for</font>
+                        <font color="#0000ff">// the duplicate string internally and returns it.  The</font>
+                        <font color="#0000ff">// calling program must deallocate this buffer.</font>
 
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    upper(<font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// converts &quot;str&quot; to uppercase</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    lower(<font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// converts &quot;str&quot; to lowercase</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    upper(<font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// converts &quot;str&quot; to uppercase</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    lower(<font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// converts &quot;str&quot; to lowercase</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    rightTrim(<font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// trims all spaces off of the right hand side of &quot;str&quot;</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    rightTrim(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>char</b></font> character);
-                        <font color="#0000f8">// trims all &quot;character&quot;'s off of the right hand side</font>
-                        <font color="#0000f8">// of &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    rightTrim(<font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// trims all spaces off of the right hand side of &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    rightTrim(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
+                        <font color="#0000ff">// trims all &quot;character&quot;'s off of the right hand side</font>
+                        <font color="#0000ff">// of &quot;str&quot;</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    leftTrim(<font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// trims all spaces off of the left hand side of &quot;str&quot;</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    leftTrim(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>char</b></font> character);
-                        <font color="#0000f8">// trims all &quot;character&quot;'s off of the left hand side</font>
-                        <font color="#0000f8">// of &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    leftTrim(<font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// trims all spaces off of the left hand side of &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    leftTrim(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
+                        <font color="#0000ff">// trims all &quot;character&quot;'s off of the left hand side</font>
+                        <font color="#0000ff">// of &quot;str&quot;</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    bothTrim(<font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// trims all spaces off of both sides of &quot;str&quot;</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    bothTrim(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>char</b></font> character);
-                        <font color="#0000f8">// trims all characters off of both sides of &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    bothTrim(<font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// trims all spaces off of both sides of &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    bothTrim(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
+                        <font color="#0000ff">// trims all characters off of both sides of &quot;str&quot;</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    strip(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>char</b></font> character);
-                        <font color="#0000f8">// strips all instances of &quot;character&quot; from &quot;str&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    strip(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
+                        <font color="#0000ff">// strips all instances of &quot;character&quot; from &quot;str&quot;</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    strip(<font color="#288850"><b>char</b></font> *str1, <font color="#288850"><b>char</b></font> *str2);
-                        <font color="#0000f8">// strips all instances of &quot;str2&quot; from &quot;str1&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    strip(<font color="#2e8b57"><b>char</b></font> *str1, <font color="#2e8b57"><b>char</b></font> *str2);
+                        <font color="#0000ff">// strips all instances of &quot;str2&quot; from &quot;str1&quot;</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     integerLength(<font color="#288850"><b>long</b></font> number);
-                        <font color="#0000f8">// returns the number of characters needed to represent</font>
-                        <font color="#0000f8">// &quot;number&quot; as a string</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>long</b></font> number);
+                        <font color="#0000ff">// returns the number of characters needed to represent</font>
+                        <font color="#0000ff">// &quot;number&quot; as a string</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     isInteger(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *val);
-                        <font color="#0000f8">// returns 1 the string &quot;val&quot; is an integer and 0 if it</font>
-                        <font color="#0000f8">// is not an integer</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     isInteger(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     isInteger(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val, <font color="#2e8b57"><b>int</b></font> size);
+                        <font color="#0000ff">// returns 1 the string &quot;val&quot; is an integer and 0 if it</font>
+                        <font color="#0000ff">// is not an integer</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     isNumber(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *val);
-                        <font color="#0000f8">// returns 1 the string &quot;val&quot; is a number and 0 if it</font>
-                        <font color="#0000f8">// is not a number</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *parseNumber(<font color="#288850"><b>long</b></font> number);
-                        <font color="#0000f8">// Returns a string representing &quot;number&quot;.  The string</font>
-                        <font color="#0000f8">// is allocated inside the function and must be deleted</font>
-                        <font color="#0000f8">// by the calling program.</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *parseNumber(<font color="#288850"><b>double</b></font> number);
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *parseNumber(<font color="#288850"><b>double</b></font> number,
-                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> scale);
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *parseNumber(<font color="#288850"><b>double</b></font> number,
-                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> precision,
-                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> scale);
-                        <font color="#0000f8">// Returns a string representing &quot;number&quot;.  The string</font>
-                        <font color="#0000f8">// is allocated inside the function and must be deleted</font>
-                        <font color="#0000f8">// by the calling program.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     isNumber(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     isNumber(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val, <font color="#2e8b57"><b>int</b></font> size);
+                        <font color="#0000ff">// returns 1 the string &quot;val&quot; is a number and 0 if it</font>
+                        <font color="#0000ff">// is not a number</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>long</b></font> number);
+                        <font color="#0000ff">// Returns a string representing &quot;number&quot;.  The string</font>
+                        <font color="#0000ff">// is allocated inside the function and must be deleted</font>
+                        <font color="#0000ff">// by the calling program.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>double</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                        <font color="#0000ff">// Returns a string representing &quot;number&quot;.  The string</font>
+                        <font color="#0000ff">// is allocated inside the function and must be deleted</font>
+                        <font color="#0000ff">// by the calling program.</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *httpEscape(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *input);
-                        <font color="#0000f8">// http escapes &quot;input&quot; and returns it in a buffer</font>
-                        <font color="#0000f8">// allocated inside the function.  This buffer must be</font>
-                        <font color="#0000f8">// deleted by the calling program.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *httpEscape(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *input);
+                        <font color="#0000ff">// http escapes &quot;input&quot; and returns it in a buffer</font>
+                        <font color="#0000ff">// allocated inside the function.  This buffer must be</font>
+                        <font color="#0000ff">// deleted by the calling program.</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    leftJustify(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>int</b></font> length);
-                        <font color="#0000f8">// Moves leading spaces to the end of &quot;str&quot; for</font>
-                        <font color="#0000f8">// &quot;length&quot; characters.</font>
-                        <font color="#0000f8">// </font>
-                        <font color="#0000f8">// Example:</font>
-                        <font color="#0000f8">//      &quot;   hello   &quot; -&gt; &quot;hello      &quot;</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    rightJustify(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>int</b></font> length);
-                        <font color="#0000f8">// Moves trailing spaces to the beginning of &quot;str&quot; for</font>
-                        <font color="#0000f8">// &quot;length&quot; characters.</font>
-                        <font color="#0000f8">// </font>
-                        <font color="#0000f8">// Example:</font>
-                        <font color="#0000f8">//      &quot;   hello   &quot; -&gt; &quot;      hello&quot;</font>
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    center(<font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>int</b></font> length);
-                        <font color="#0000f8">// Centers the text of &quot;str&quot; for &quot;length&quot; characters.</font>
-                        <font color="#0000f8">// </font>
-                        <font color="#0000f8">// Example:</font>
-                        <font color="#0000f8">//      &quot;hello      &quot; -&gt; &quot;   hello   &quot;</font>
-
-
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    leftJustify(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
+                        <font color="#0000ff">// Moves leading spaces to the end of &quot;str&quot; for</font>
+                        <font color="#0000ff">// &quot;length&quot; characters.</font>
+                        <font color="#0000ff">// </font>
+                        <font color="#0000ff">// Example:</font>
+                        <font color="#0000ff">//      &quot;   hello   &quot; -&gt; &quot;hello      &quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    rightJustify(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
+                        <font color="#0000ff">// Moves trailing spaces to the beginning of &quot;str&quot; for</font>
+                        <font color="#0000ff">// &quot;length&quot; characters.</font>
+                        <font color="#0000ff">// </font>
+                        <font color="#0000ff">// Example:</font>
+                        <font color="#0000ff">//      &quot;   hello   &quot; -&gt; &quot;      hello&quot;</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    center(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
+                        <font color="#0000ff">// Centers the text of &quot;str&quot; for &quot;length&quot; characters.</font>
+                        <font color="#0000ff">// </font>
+                        <font color="#0000ff">// Example:</font>
+                        <font color="#0000ff">//      &quot;hello      &quot; -&gt; &quot;   hello   &quot;</font>
 
 
-                <font color="#0000f8">// The following methods allow you to create an instance of</font>
-                <font color="#0000f8">// the string class to store and manipulate a string.</font>
 
-                        string(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// Creates an string containing &quot;str&quot;.</font>
-                        string(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Creates an string &quot;size&quot; bytes long containing &quot;str&quot;.</font>
-                        string(<font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Creates an uninitialized string of &quot;size&quot; bytes.</font>
+
+                <font color="#0000ff">// The following methods allow you to create an instance of</font>
+                <font color="#0000ff">// the string class to store and manipulate a string.</font>
+
+                        string(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// Creates an string containing &quot;str&quot;.</font>
+                        string(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Creates an string &quot;size&quot; bytes long containing &quot;str&quot;.</font>
+                        string(<font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Creates an uninitialized string of &quot;size&quot; bytes.</font>
                         ~string();
 
 
-                <font color="#288850"><b>char</b></font>    *getString() <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns a pointer to the internal buffer containing</font>
-                        <font color="#0000f8">// the string.</font>
-                <font color="#288850"><b>size_t</b></font>  getLength() <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns the length of the string currently stored.</font>
-                <font color="#288850"><b>size_t</b></font>  getSize() <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns the size of the internal buffer.</font>
+                <font color="#2e8b57"><b>char</b></font>    *getString() <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns a pointer to the internal buffer containing</font>
+                        <font color="#0000ff">// the string.</font>
+                <font color="#2e8b57"><b>size_t</b></font>  getLength() <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns the length of the string currently stored.</font>
+                <font color="#2e8b57"><b>size_t</b></font>  getSize() <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns the size of the internal buffer.</font>
 
 
-                <font color="#288850"><b>void</b></font>    zero();
-                        <font color="#0000f8">// Sets every byte in the internal buffer to NULL.</font>
+                <font color="#2e8b57"><b>void</b></font>    zero();
+                        <font color="#0000ff">// Sets every byte in the internal buffer to NULL.</font>
 
 
-                <font color="#288850"><b>char</b></font>    *append(<font color="#288850"><b>const</b></font> string *str);
-                <font color="#288850"><b>char</b></font>    *append(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// Appends &quot;str&quot; to the currently stored string.</font>
-                <font color="#288850"><b>char</b></font>    *append(<font color="#288850"><b>const</b></font> string *str, <font color="#288850"><b>size_t</b></font> size);
-                <font color="#288850"><b>char</b></font>    *append(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Appends &quot;size&quot; bytes of &quot;str&quot; to the currently</font>
-                        <font color="#0000f8">// stored string.</font>
+                <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>const</b></font> string *str);
+                <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// Appends &quot;str&quot; to the currently stored string.</font>
+                <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>const</b></font> string *str, <font color="#2e8b57"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Appends &quot;size&quot; bytes of &quot;str&quot; to the currently</font>
+                        <font color="#0000ff">// stored string.</font>
 
 
-                <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// Replaces the current string with &quot;str&quot;.  Assumes</font>
-                        <font color="#0000f8">// that there is enough room in the internal buffer</font>
-                        <font color="#0000f8">// to accommodate &quot;str&quot;.</font>
-                        <font color="#0000f8">// Returns a pointer to the current string.</font>
-                <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Replaces the first &quot;size&quot; bytes of the current string</font>
-                        <font color="#0000f8">// with &quot;str&quot;.  Assumes that there are at least &quot;size&quot;</font>
-                        <font color="#0000f8">// bytes available in the internal buffer.</font>
-                        <font color="#0000f8">// Returns a pointer to the current string.</font>
-                <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>size_t</b></font> location, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str);
-                        <font color="#0000f8">// Replaces the current string with &quot;str&quot;, starting</font>
-                        <font color="#0000f8">// &quot;location&quot; bytes into the internal buffer.  Assumes</font>
-                        <font color="#0000f8">// that there is enough room in the internal buffer</font>
-                        <font color="#0000f8">// (after &quot;location&quot; bytes) to accommodate &quot;str&quot;.</font>
-                        <font color="#0000f8">// Returns a pointer to the current string.</font>
-                <font color="#288850"><b>char</b></font>    *copyInto(<font color="#288850"><b>size_t</b></font> location, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str,
-                                                        <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Replaces &quot;size&quot; bytes of the current string with</font>
-                        <font color="#0000f8">// &quot;str&quot;, starting &quot;location&quot; bytes into the internal</font>
-                        <font color="#0000f8">// buffer.  Assumes that there are at least &quot;size&quot;</font>
-                        <font color="#0000f8">// bytes in the internal buffer (after &quot;location&quot;</font>
-                        <font color="#0000f8">// bytes).</font>
-                        <font color="#0000f8">// Returns a pointer to the current string.</font>
+                <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// Replaces the current string with &quot;str&quot;.  Assumes</font>
+                        <font color="#0000ff">// that there is enough room in the internal buffer</font>
+                        <font color="#0000ff">// to accommodate &quot;str&quot;.</font>
+                        <font color="#0000ff">// Returns a pointer to the current string.</font>
+                <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Replaces the first &quot;size&quot; bytes of the current string</font>
+                        <font color="#0000ff">// with &quot;str&quot;.  Assumes that there are at least &quot;size&quot;</font>
+                        <font color="#0000ff">// bytes available in the internal buffer.</font>
+                        <font color="#0000ff">// Returns a pointer to the current string.</font>
+                <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>size_t</b></font> location, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// Replaces the current string with &quot;str&quot;, starting</font>
+                        <font color="#0000ff">// &quot;location&quot; bytes into the internal buffer.  Assumes</font>
+                        <font color="#0000ff">// that there is enough room in the internal buffer</font>
+                        <font color="#0000ff">// (after &quot;location&quot; bytes) to accommodate &quot;str&quot;.</font>
+                        <font color="#0000ff">// Returns a pointer to the current string.</font>
+                <font color="#2e8b57"><b>char</b></font>    *copyInto(<font color="#2e8b57"><b>size_t</b></font> location, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Replaces &quot;size&quot; bytes of the current string with</font>
+                        <font color="#0000ff">// &quot;str&quot;, starting &quot;location&quot; bytes into the internal</font>
+                        <font color="#0000ff">// buffer.  Assumes that there are at least &quot;size&quot;</font>
+                        <font color="#0000ff">// bytes in the internal buffer (after &quot;location&quot;</font>
+                        <font color="#0000ff">// bytes).</font>
+                        <font color="#0000ff">// Returns a pointer to the current string.</font>
 
 
-                <font color="#288850"><b>int</b></font>     compare(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns -1,0 or 1 if the current string is greater</font>
-                        <font color="#0000f8">// than, equal to or less than &quot;str&quot;.</font>
-                <font color="#288850"><b>int</b></font>     compare(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str, <font color="#288850"><b>size_t</b></font> size) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns -1,0 or 1 if &quot;size&quot; bytes of the current</font>
-                        <font color="#0000f8">// string are greater than, equal to or less than</font>
-                        <font color="#0000f8">// &quot;size&quot; bytes of &quot;str&quot;.</font>
-                <font color="#288850"><b>int</b></font>     compareIgnoringCase(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns -1,0 or 1 if the current string is greater</font>
-                        <font color="#0000f8">// than, equal to or less than &quot;str&quot;, ignoring case.</font>
-                <font color="#288850"><b>int</b></font>     compareIgnoringCase(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str,
-                                                <font color="#288850"><b>size_t</b></font> size) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns -1,0 or 1 if &quot;size&quot; bytes of the current</font>
-                        <font color="#0000f8">// string are greater than, equal to or less than</font>
-                        <font color="#0000f8">// &quot;size&quot; bytes of &quot;str&quot;, ignoring case.</font>
+                <font color="#2e8b57"><b>int</b></font>     compare(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str) <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns -1,0 or 1 if the current string is greater</font>
+                        <font color="#0000ff">// than, equal to or less than &quot;str&quot;.</font>
+                <font color="#2e8b57"><b>int</b></font>     compare(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns -1,0 or 1 if &quot;size&quot; bytes of the current</font>
+                        <font color="#0000ff">// string are greater than, equal to or less than</font>
+                        <font color="#0000ff">// &quot;size&quot; bytes of &quot;str&quot;.</font>
+                <font color="#2e8b57"><b>int</b></font>     compareIgnoringCase(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str) <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns -1,0 or 1 if the current string is greater</font>
+                        <font color="#0000ff">// than, equal to or less than &quot;str&quot;, ignoring case.</font>
+                <font color="#2e8b57"><b>int</b></font>     compareIgnoringCase(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Returns -1,0 or 1 if &quot;size&quot; bytes of the current</font>
+                        <font color="#0000ff">// string are greater than, equal to or less than</font>
+                        <font color="#0000ff">// &quot;size&quot; bytes of &quot;str&quot;, ignoring case.</font>
 
 
-                <font color="#288850"><b>char</b></font>    *contains(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *str) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// If the current string contains &quot;str&quot;, then this</font>
-                        <font color="#0000f8">// method returns a pointer to the substring.</font>
-                        <font color="#0000f8">// Otherwise it returns NULL.</font>
-                <font color="#288850"><b>char</b></font>    *contains(<font color="#288850"><b>char</b></font> ch) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// If the current string contains &quot;ch&quot;, then this</font>
-                        <font color="#0000f8">// method returns a pointer to the substring.</font>
-                        <font color="#0000f8">// Otherwise it returns NULL.</font>
+                <font color="#2e8b57"><b>char</b></font>    *contains(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str) <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// If the current string contains &quot;str&quot;, then this</font>
+                        <font color="#0000ff">// method returns a pointer to the substring.</font>
+                        <font color="#0000ff">// Otherwise it returns NULL.</font>
+                <font color="#2e8b57"><b>char</b></font>    *contains(<font color="#2e8b57"><b>char</b></font> ch) <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// If the current string contains &quot;ch&quot;, then this</font>
+                        <font color="#0000ff">// method returns a pointer to the substring.</font>
+                        <font color="#0000ff">// Otherwise it returns NULL.</font>
 
 
-                <font color="#288850"><b>char</b></font>    *duplicate() <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Creates a duplicate of the string and returns a</font>
-                        <font color="#0000f8">// pointer to it.  Note that this method allocates a</font>
-                        <font color="#0000f8">// buffer for the duplicate string internally and</font>
-                        <font color="#0000f8">// returns it.  The calling program must deallocate</font>
-                        <font color="#0000f8">// this buffer.</font>
+                <font color="#2e8b57"><b>char</b></font>    *duplicate() <font color="#2e8b57"><b>const</b></font>;
+                        <font color="#0000ff">// Creates a duplicate of the string and returns a</font>
+                        <font color="#0000ff">// pointer to it.  Note that this method allocates a</font>
+                        <font color="#0000ff">// buffer for the duplicate string internally and</font>
+                        <font color="#0000ff">// returns it.  The calling program must deallocate</font>
+                        <font color="#0000ff">// this buffer.</font>
 
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/string.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/string.h&gt;</font>
 };
 
 <font color="#a020f0">#ifdef ENABLE_INLINES</font>
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/stringinlines.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/stringinlines.h&gt;</font>
 <font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>

@@ -123,6 +123,19 @@ int string::isInteger(const char *str) {
 	return	1;
 }
 
+int string::isInteger(const char *str, int size) {
+
+	char	*ptr=(char *)str;
+	for (int index=0; index<size; index++) {
+		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
+			(ptr>str && *ptr=='-')) {
+			return 0;
+		}
+		ptr++;
+	}
+	return	1;
+}
+
 int string::isNumber(const char *str) {
 
 	int	decimal=0;
@@ -134,6 +147,23 @@ int string::isNumber(const char *str) {
 		if (*ptr=='.') {
 			decimal=1;
 		}
+	}
+	return	1;
+}
+
+int string::isNumber(const char *str, int size) {
+
+	int	decimal=0;
+	char	*ptr=(char *)str;
+	for (int index=0; index<size; index++) {
+		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
+			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
+			return 0;
+		}
+		if (*ptr=='.') {
+			decimal=1;
+		}
+		ptr++;
 	}
 	return	1;
 }

@@ -127,10 +127,12 @@ class string {
 			// "number" as a string
 
 		static	int	isInteger(const char *val);
+		static	int	isInteger(const char *val, int size);
 			// returns 1 the string "val" is an integer and 0 if it
 			// is not an integer
 
 		static	int	isNumber(const char *val);
+		static	int	isNumber(const char *val, int size);
 			// returns 1 the string "val" is a number and 0 if it
 			// is not a number
 		static	char	*parseNumber(long number);
