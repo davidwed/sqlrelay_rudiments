@@ -61,6 +61,9 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
+/* Some systems define environ in unistd.h */
+#undef HAVE_ENVIRON
+
 /* Some systems have fdatasync */
 #undef HAVE_FDATASYNC
 
@@ -312,6 +315,9 @@
 
 /* Some systems have setuid */
 #undef HAVE_SETUID
+
+/* Some systems have shm_open */
+#undef HAVE_SHM_OPEN
 
 /* struct spwd has sp_expire */
 #undef HAVE_SP_EXPIRE

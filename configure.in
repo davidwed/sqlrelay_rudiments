@@ -688,11 +688,9 @@ AC_TRY_LINK([#include <stdlib.h>
 fdatasync(0);,AC_DEFINE(HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_NANOSLEEP
+FW_CHECK_CLOCK_NANOSLEEP
 
-AC_MSG_CHECKING(clock_nanosleep)
-AC_TRY_LINK([#include <stdlib.h>
-#include <time.h>],
-clock_nanosleep(0,0,NULL,NULL);,AC_DEFINE(HAVE_CLOCK_NANOSLEEP,1,Some systems have clock_nanosleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+FW_CHECK_SHM_OPEN
 
 FW_CHECK_RPC
 
@@ -798,6 +796,11 @@ then
 #include <string.h>],
 void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(void *), AC_DEFINE(HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument) AC_MSG_RESULT(char *))
 fi
+
+AC_MSG_CHECKING(environ)
+AC_TRY_LINK([#include <stdlib.h>
+#include <unistd.h>],
+char **env=environ;,AC_DEFINE(HAVE_ENVIRON,1,Some systems define environ in unistd.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then

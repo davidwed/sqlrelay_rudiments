@@ -95,7 +95,15 @@ stringbuffer *stringbuffer::append(long long number) {
 	return append(number,0);
 }
 
+stringbuffer *stringbuffer::append(unsigned short number) {
+	return append(number,0);
+}
+
 stringbuffer *stringbuffer::append(unsigned long number) {
+	return append(number,0);
+}
+
+stringbuffer *stringbuffer::append(unsigned long long number) {
 	return append(number,0);
 }
 

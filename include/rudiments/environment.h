@@ -23,6 +23,11 @@ class environment {
 		void	remove(const char *variable);
 			// Removes "variable" from the environment.
 
+		static	char	**variables();
+			// Returns a NULL terminated list of all
+			// environment variables.  Each entry in the list is
+			// of the form NAME=VALUE.
+
 	#include <rudiments/private/environment.h>
 
 };

@@ -9,11 +9,11 @@ exec_prefix_set=no
 version=@RUDIMENTS_VERSION@
 
 if ( test "@libdir@" = "/usr/lib" ); then
-	rudiments_libs="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@ @DLLIB@"  
-	rudiments_libs_with_rpath="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@ @DLLIB@"
+	rudiments_libs="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @SHMOPENLIB@ @CRYPTLIB@ @DLLIB@"  
+	rudiments_libs_with_rpath="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @SHMOPENLIB@ @CRYPTLIB@ @DLLIB@"
 else
-	rudiments_libs="-L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@ @DLLIB@"
-	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@ @DLLIB@"
+	rudiments_libs="-L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @SHMOPENLIB@ @CRYPTLIB@ @DLLIB@"
+	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @SHMOPENLIB@ @CRYPTLIB@ @DLLIB@"
 fi
 if ( test "@includedir@" = "/usr/include" ); then
 	rudiments_cflags="@PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"

@@ -8,6 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef HAVE_ENVIRON
+	#include <unistd.h>
+#else
+	extern	char	**environ;
+#endif
+
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 
 environment::~environment() {
@@ -63,4 +69,8 @@ void environment::remove(const char *variable) {
 	// know, it's all that can be done.
 	setValue(variable,"");
 #endif
+}
+
+char **environment::variables() {
+	return environ;
 }
