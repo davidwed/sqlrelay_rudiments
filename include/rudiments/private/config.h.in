@@ -36,6 +36,9 @@
 /* Some systems don't have st_blksize in struct stat */
 #undef HAVE_BLKSIZE_T
 
+/* Some systems have clock_nanosleep */
+#undef HAVE_CLOCK_NANOSLEEP
+
 /* Cygwin style statfs */
 #undef HAVE_CYGWIN_STATFS
 

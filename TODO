@@ -1,7 +1,5 @@
-timer class needs testing
-
-on solaris, use -D_REENTRANT during configure and
-	during build to get _r functions
+timer class needs testing and a bit of work
+	how do you turn the timer off???
 
 netbsd compiler error
 
@@ -15,6 +13,8 @@ file class:
 serial port class:
 	inherits from device class
 	reads return 0 when they time out
+
+need an SSL context wrapper
 
 what does the logger.C warning mean
 
