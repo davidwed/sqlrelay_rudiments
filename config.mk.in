@@ -6,10 +6,11 @@ SONAME_VERSION_INFO=@SONAME_VERSION_INFO@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
-bindir = $(DESTDIR)@bindir@
-incdir = $(DESTDIR)@includedir@
-libdir = $(DESTDIR)@libdir@
-docdir = $(DESTDIR)$(prefix)/doc/rudiments
+bindir = @bindir@
+includedir = @includedir@
+libdir = @libdir@
+datadir = @datadir@
+docdir = ${datadir}/doc/rudiments
 
 # compiler to use
 CXX = @CXX@

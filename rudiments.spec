@@ -7,6 +7,13 @@ Group: Development/Libraries
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-root
 
+%if %([[ %{_vendor} == "suse" ]] && echo 1 || echo 0)
+	%define docdir %{_docdir}/%{name}
+%else
+	%define docdir %{_docdir}/%{name}-%{version}
+%endif
+
+
 %description
 Rudiments is an Open Source C++ class library providing base classes
 for things such as daemons, clients and servers, and wrapper classes
@@ -39,8 +46,12 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-#%makeinstall bindir=%{buildroot}%{_bindir} libdir=%{buildroot}%{_libdir} incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
-%makeinstall DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
+make \
+	bindir=%{buildroot}%{_bindir} \
+	includedir=%{buildroot}%{_includedir} \
+	libdir=%{buildroot}%{_libdir} \
+	docdir=%{buildroot}%{docdir} \
+	install
 
 %post
 /sbin/ldconfig
@@ -63,7 +74,7 @@ rm -rf %{buildroot}
 %{_bindir}/rudiments-config
 
 %files doc
-%{_docdir}/%{name}-%{version}
+%{docdir}
 
 %changelog
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
