@@ -428,42 +428,6 @@ dynamic libraries:
 	dlfcn.h - dlopen(),dlclose(),dlsym(),dlvsym()
 			dlerror(),dladdr(),dladdr1(),dlinfo()
 
-data structures:
-	stdlib.h - bsearch(), qsort()
-	search.h - functions for doing searches in arrays/hash tables
-			insque(),remque()
-			hsearch(_r)(),hcreate(_r)(),hdestroy(_r)()
-			tsearch(),tfind(),tdelete(),twalk(),tdestroy()
-			lfind(),lsearch()
-	not in solaris -
-		sys/queue.h - list, tail queue and circular queue
-				structs and macros
-				LIST_INIT(),
-				LIST_INSERT_AFTER(),LIST_INSERT_HEAD(),
-				LIST_REMOVE(),
-				TAILQ_INIT(),
-				TAILQ_INSERT_HEAD(),TAILQ_INSERT_TAIL(),
-				TAILQ_INSERT_AFTER(),
-				TAILQ_REMOVE(),
-				CIRCLEQ_INIT(),
-				CIRCLEQ_INSERT_AFTER(),CIRCLEQ_INSERT_BEFORE(),
-				CIRCLEQ_INSERT_HEAD(),CIRCLEQ_INSERT_TAIL(),
-				CIRCLEQ_REMOVE()
-
-internationalization:
-	langinfo.h - locale info functions
-	locale.h/xlocale.h - setlocale, localeconv, etc.
-	iconv.h - character set conversion
-	libintl.h - gettext functions
-	stdlib.h - rpmatch() - response match
-
-filesystem traversal class:
-	fts.h/ftw.h - file heirarchy traversal functions
-			fts_open(),fts_close()
-			fts_children(),fts_read(),fts_set()
-			ftw()/nftw() - call a function on every
-					element in a directory tree
-
 network:
 	unistd.h - gethostname()/sethostname()
 	netdb.h - netgroup functions
@@ -522,3 +486,10 @@ network:
 					ether_hostton()
 					ether_line()
 		netpacket/packet.h - raw packet structs
+
+internationalization:
+	langinfo.h - locale info functions
+	locale.h/xlocale.h - setlocale, localeconv, etc.
+	iconv.h - character set conversion
+	libintl.h - gettext functions
+	stdlib.h - rpmatch() - response match
