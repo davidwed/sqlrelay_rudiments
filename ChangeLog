@@ -1,3 +1,6 @@
+0.25.1 - a couple of build fixes
+	added shadowentry class and test program
+
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better
 	added rudiments-config script

@@ -89,7 +89,7 @@ void passwdentry::print() const {
 	printf("Name: %s\n",getName());
 	printf("Password: %s\n",getPassword());
 	printf("User Id: %d\n",getUserId());
-	printf("Primary Group: %d\n",getPrimaryGroup());
+	printf("Primary Group Id: %d\n",getPrimaryGroupId());
 	printf("Real Name: %s\n",getRealName());
 	printf("Home Directory: %s\n",getHomeDirectory());
 	printf("Shell: %s\n",getShell());

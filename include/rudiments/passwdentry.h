@@ -16,7 +16,7 @@ class passwdentry {
 		// of these mthods
 		static int	getName(uid_t userid, char **name);
 		static int	getPassword(uid_t userid, char **password);
-		static int	getPrimaryGroup(uid_t userid, gid_t *groupid);
+		static int	getPrimaryGroupId(uid_t userid, gid_t *groupid);
 		static int	getRealName(uid_t userid, char **realname);
 		static int	getHomeDirectory(uid_t userid, char **homedir);
 		static int	getShell(uid_t userid, char **shell);
@@ -25,7 +25,7 @@ class passwdentry {
 							char **password);
 		static int	getUserId(const char *username,
 							uid_t *userid);
-		static int	getPrimaryGroup(const char *username,
+		static int	getPrimaryGroupId(const char *username,
 							gid_t *groupid);
 		static int	getRealName(const char *username,
 							char **realname);
@@ -47,7 +47,7 @@ class passwdentry {
 		char	*getName() const;
 		char	*getPassword() const;
 		uid_t	getUserId() const;
-		gid_t	getPrimaryGroup() const;
+		gid_t	getPrimaryGroupId() const;
 		char	*getRealName() const;
 		char	*getHomeDirectory() const;
 		char	*getShell() const;

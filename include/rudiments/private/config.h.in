@@ -79,6 +79,9 @@
 /* Some systems have getpwuid_r */
 #undef HAVE_GETPWUID_R
 
+/* Some systems have getspnam_r */
+#undef HAVE_GETSPNAM_R
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 

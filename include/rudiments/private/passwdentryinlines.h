@@ -33,7 +33,7 @@ RUDIMENTS_INLINE uid_t passwdentry::getUserId() const {
 	return pwd->pw_uid;
 }
 
-RUDIMENTS_INLINE gid_t passwdentry::getPrimaryGroup() const {
+RUDIMENTS_INLINE gid_t passwdentry::getPrimaryGroupId() const {
 	return pwd->pw_gid;
 }
 
@@ -67,11 +67,11 @@ RUDIMENTS_INLINE int passwdentry::getPassword(uid_t userid, char **password) {
 	return 0;
 }
 
-RUDIMENTS_INLINE int passwdentry::getPrimaryGroup(uid_t userid,
+RUDIMENTS_INLINE int passwdentry::getPrimaryGroupId(uid_t userid,
 							gid_t *groupid) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
-		*groupid=pwd.getPrimaryGroup();
+		*groupid=pwd.getPrimaryGroupId();
 		return 1;
 	}
 	return 0;
@@ -126,11 +126,11 @@ RUDIMENTS_INLINE int passwdentry::getPassword(const char *username,
 	return 0;
 }
 
-RUDIMENTS_INLINE int passwdentry::getPrimaryGroup(const char *username,
+RUDIMENTS_INLINE int passwdentry::getPrimaryGroupId(const char *username,
 							gid_t *groupid) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
-		*groupid=pwd.getPrimaryGroup();
+		*groupid=pwd.getPrimaryGroupId();
 		return 1;
 	}
 	return 0;

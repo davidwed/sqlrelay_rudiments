@@ -15,13 +15,20 @@ int main(int argv, const char **argc) {
 
 	// print the components individually
 	printf("Individually...\n");
-	printf("	Name:		%s\n",pwent.getName());
-	printf("	Password:	%s\n",pwent.getPassword());
-	printf("	User Id:	%d\n",pwent.getUserId());
-	printf("	Primary Group:	%d\n",pwent.getPrimaryGroup());
-	printf("	Real Name:	%s\n",pwent.getRealName());
-	printf("	Home Directory:	%s\n",pwent.getHomeDirectory());
-	printf("	Shell:		%s\n",pwent.getShell());
+	printf("	Name:			%s\n",
+					pwent.getName());
+	printf("	Password:		%s\n",
+					pwent.getPassword());
+	printf("	User Id:		%d\n",
+					pwent.getUserId());
+	printf("	Primary Group Id:	%d\n",
+					pwent.getPrimaryGroupId());
+	printf("	Real Name:		%s\n",
+					pwent.getRealName());
+	printf("	Home Directory:		%s\n",
+					pwent.getHomeDirectory());
+	printf("	Shell:		%s\n",
+					pwent.getShell());
 	printf("\n");
 
 	// use the built in print method
@@ -36,13 +43,20 @@ int main(int argv, const char **argc) {
 
 	// print the components individually
 	printf("Individually...\n");
-	printf("	Name:		%s\n",pwent.getName());
-	printf("	Password:	%s\n",pwent.getPassword());
-	printf("	User Id:	%d\n",pwent.getUserId());
-	printf("	Primary Group:	%d\n",pwent.getPrimaryGroup());
-	printf("	Real Name:	%s\n",pwent.getRealName());
-	printf("	Home Directory:	%s\n",pwent.getHomeDirectory());
-	printf("	Shell:		%s\n",pwent.getShell());
+	printf("	Name:			%s\n",
+					pwent.getName());
+	printf("	Password:		%s\n",
+					pwent.getPassword());
+	printf("	User Id:		%d\n",
+					pwent.getUserId());
+	printf("	Primary Group Id:	%d\n",
+					pwent.getPrimaryGroupId());
+	printf("	Real Name:		%s\n",
+					pwent.getRealName());
+	printf("	Home Directory:		%s\n",
+					pwent.getHomeDirectory());
+	printf("	Shell:			%s\n",
+					pwent.getShell());
 	printf("\n");
 
 	// use the built in print method
