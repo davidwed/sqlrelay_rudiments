@@ -97,6 +97,7 @@ bool regularexpression::study() {
 			delete extra;
 		}
 		extra=pcre_study(expr,0,&error);
+		return (!extra && error)?false:true;
 	#else
 		return true;
 	#endif
