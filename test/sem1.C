@@ -21,19 +21,17 @@ int	main() {
 	close(fd);
 
         int     vals[2]={0,1};
-        semaphoreset *sem=new semaphoreset();
-        sem->create(ftok("/tmp/sem",0),
+        semaphoreset	sem;
+        sem.create(ftok("/tmp/sem",0),
 			permissions::evalPermString("rw-------"),2,vals);
 
         for (int i=0; i<10; i++) {
-                sem->wait(0);
+                sem.wait(0);
                 printf("2\n");
-                sem->signal(1);
+                sem.signal(1);
         
-                sem->wait(0);
+                sem.wait(0);
                 printf("4\n");
-                sem->signal(1);
+                sem.signal(1);
         }
-
-	delete sem;
 }

@@ -86,4 +86,6 @@ int	main() {
 		}
 	}
 	printf("\n");
+
+	delete sb;
 }

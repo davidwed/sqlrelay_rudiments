@@ -9,13 +9,12 @@
 
 int	main() {
 
-	unixclientsocket	*clnt=new unixclientsocket();
-	clnt->connectToServer("/tmp/lsnr.socket",1,0);
-	clnt->write("hello",5);
+	unixclientsocket	*clnt;
+	clnt.connectToServer("/tmp/lsnr.socket",1,0);
+	clnt.write("hello",5);
 	char	buffer[11];
-	int	sizeread=clnt->read(buffer,10);
+	int	sizeread=clnt.read(buffer,10);
 	buffer[sizeread]=(char)NULL;
 	printf("%s\n",buffer);
-	clnt->close();
-	delete clnt;
+	clnt.close();
 }

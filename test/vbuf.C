@@ -59,4 +59,6 @@ int	main() {
 		}
 	}
 	printf("\n");
+
+	delete vb;
 }

@@ -12,20 +12,18 @@
 
 int	main() {
 
-        semaphoreset *sem=new semaphoreset();
-	sem->attach(ftok("/tmp/sem",0),2);
+        semaphoreset	sem;
+	sem.attach(ftok("/tmp/sem",0),2);
 
         for (int i=0; i<10; i++) {
-                sem->wait(1);
+                sem.wait(1);
                 printf("1\n");
-                sem->signal(0);
+                sem.signal(0);
         
-                sem->wait(1);
+                sem.wait(1);
                 printf("3\n");
-                sem->signal(0);
+                sem.signal(0);
         }
-
-	delete sem;
 
 	unlink("/tmp/sem");
 }

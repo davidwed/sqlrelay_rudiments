@@ -12,11 +12,10 @@ int	main() {
 	clnt.connectToServer("/tmp/handoff.socket",0,1);
 
 	for (;;) {
-		int		descriptor;
+		int	descriptor;
 		clnt.receiveFileDescriptor(&descriptor);
-		datatransport	*clientsock=new datatransport(descriptor);
-		clientsock->write("hello");
-		clientsock->close();
-		delete clientsock;
+		datatransport	clientsock(descriptor);
+		clientsock.write("hello");
+		clientsock.close();
 	}
 }
