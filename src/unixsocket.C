@@ -49,7 +49,7 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	messageheader.msg_iovlen=1;
 
 	// use other parts of the msghdr structure to send the descriptor
-	#ifdef HAVE_CMSGHDR
+	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 
 		// new-style:
 		// The descriptor is passed in the cmsghdr part of a 
@@ -112,7 +112,7 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	messageheader.msg_iov=iovector;
 	messageheader.msg_iovlen=1;
 
-	#ifdef HAVE_CMSGHDR
+	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 		#ifdef HAVE_CMSG_SPACE
 		// new-style:
 		// The descriptor is received in the cmsghdr part 
@@ -144,7 +144,7 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 
 	// if we got valid data, set the passed-in descriptor to the 
 	// descriptor we received and return success
-	#ifdef HAVE_CMSGHDR
+	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 
 		#ifdef HAVE_CMSG_SPACE
 		struct cmsghdr	*cmptr=CMSG_FIRSTHDR(&messageheader);

@@ -1,7 +1,7 @@
 all: database/index.txt database/serial certificates/ca.pem certificatechains/client.pem certificatechains/server.pem
 
 clean:
-	rm -f keys/* requests/* certificates/* database/index* database/serial* database/newcerts/* certificatechains/*
+	rm -f keys/*.key requests/*.csr certificates/*.pem database/index* database/serial* database/newcerts/*.pem certificatechains/*.pem
 
 
 database/index.txt:

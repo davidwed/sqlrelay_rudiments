@@ -61,12 +61,6 @@ fi
 
 
 dnl Additional defines.
-AH_TEMPLATE([socklen_t],[Some systems don't define socklen_t])
-AH_TEMPLATE([HAVE_SEMUN],[Some systems define union semun])
-AH_TEMPLATE([HAVE_CMSGHDR],[Some systems define struct cmsghdr])
-AH_TEMPLATE([SIGNAL_HANDLER_INT],[Most systems define signal handlers with an integer parameter])
-AH_TEMPLATE([HAVE_CMSG_SPACE],[Some systems don't define CMSG_SPACE])
-AH_TEMPLATE([ENABLE_RUDIMENTS_INLINES],[Use inline functions or not])
 if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 	AC_DEFINE_UNQUOTED(ENABLE_RUDIMENTS_INLINES,1,Use inline functions or not)
 fi
@@ -158,29 +152,31 @@ AC_TYPE_SIZE_T
 AC_MSG_CHECKING(for socklen_t)
 AC_EGREP_CPP(socklen_t,[#include <sys/socket.h>],AC_MSG_RESULT(yes),AC_MSG_RESULT(no); AC_DEFINE(socklen_t, int, Some systems don't define socklen_t))
 AC_MSG_CHECKING(for union semun)
-AC_EGREP_CPP(union semun,[#include <sys/sem.h>],AC_DEFINE(HAVE_SEMUN,1, Some systems define union semun) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-AC_MSG_CHECKING(for struct cmsghdr)
-AC_EGREP_CPP(struct cmsghdr,[#include <sys/socket.h>],AC_DEFINE(HAVE_CMSGHDR,1, Some systems define struct cmsghdr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(union semun,[#include <sys/sem.h>],AC_DEFINE(HAVE_SEMUN,1,Some systems define union semun) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for struct msghdr.msg_controllen)
+AC_TRY_LINK([#include <sys/types.h>
+#include <sys/socket.h>],
+struct msghdr m; m.msg_controllen=0;,AC_DEFINE(HAVE_MSGHDR_MSG_CONTROLLEN,1,Some msghdr structs have a msg_controllen member) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(for CMSG_SPACE)
 AC_TRY_LINK([#include <sys/socket.h>],
-int a; a=CMSG_SPACE(sizeof(int));,AC_DEFINE(HAVE_CMSG_SPACE, 1, Some systems don't define CMSG_SPACE) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+int a; a=CMSG_SPACE(sizeof(int));,AC_DEFINE(HAVE_CMSG_SPACE,1,Some systems don't define CMSG_SPACE) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if struct stat contains st_blksize)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 struct stat st;
-blksize_t s=st.st_blksize;,AC_DEFINE(HAVE_BLKSIZE_T, 1, Some systems don't have st_blksize in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+blksize_t s=st.st_blksize;,AC_DEFINE(HAVE_BLKSIZE_T,1,Some systems don't have st_blksize in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if struct stat contains st_blocks)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 struct stat st;
-blkcnt_t b=st.st_blocks;,AC_DEFINE(HAVE_BLKCNT_T, 1, Some systems don't have st_blocks in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+blkcnt_t b=st.st_blocks;,AC_DEFINE(HAVE_BLKCNT_T,1,Some systems don't have st_blocks in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if S_ISSOCK exists)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
-S_ISSOCK(0);,AC_DEFINE(HAVE_S_ISSOCK, 1, Some systems don't have S_ISSOCK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+S_ISSOCK(0);,AC_DEFINE(HAVE_S_ISSOCK,1,Some systems don't have S_ISSOCK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(type of iovec.iov_base)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
@@ -195,7 +191,7 @@ echo "***** Signal Handlers ********"
 AC_TYPE_SIGNAL
 AC_MSG_CHECKING(signal handler parameter)
 AC_TRY_LINK([#include <signal.h>],
-void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(SIGNAL_HANDLER_INT, 1, Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
+void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
 echo "******************************"
 
 
@@ -206,36 +202,36 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 AC_STRUCT_TIMEZONE
 AC_MSG_CHECKING(tm_zone)
-AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(HAS_TM_ZONE,1, Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(HAS_TM_ZONE,1,Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(tm_gmtoff)
-AC_EGREP_CPP(tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS_TM_GMTOFF,1, Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS_TM_GMTOFF,1,Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(__tm_zone)
-AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(HAS___TM_ZONE,1, Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(HAS___TM_ZONE,1,Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(__tm_gmtoff)
-AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS___TM_GMTOFF,1, Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS___TM_GMTOFF,1,Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(timezone)
 AC_TRY_LINK([#include <time.h>],
 long	t=-timezone;,AC_DEFINE(HAS_TIMEZONE,1,Some systems use _timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(tm_name)
-AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(HAS_TM_NAME,1, Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(HAS_TM_NAME,1,Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(tm_tzadj)
-AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(HAS_TM_TZADJ,1, Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(real-time-clock support)
 AC_TRY_LINK([#include <linux/rtc.h>
 #include <sys/ioctl.h>],
-ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(HAVE_RTC, 1, Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(HAVE_RTC,1,Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(localtime_r)
 AC_TRY_LINK([#include <time.h>,
 #include <stdlib.h>],
-localtime_r(NULL,NULL);,AC_DEFINE(HAVE_LOCALTIME_R,1, Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+localtime_r(NULL,NULL);,AC_DEFINE(HAVE_LOCALTIME_R,1,Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
 
@@ -252,36 +248,36 @@ AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open setenv putenv unsetenv)
 
 AC_LANG(C++)
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
-AC_TRY_COMPILE([#include <sys/types.h>
+AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
 AC_LANG(C)
 
 AC_MSG_CHECKING(srand48)
 AC_TRY_LINK([#include <stdlib.h>],
-srand48(0);,AC_DEFINE(HAVE_SRAND48,1, Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+srand48(0);,AC_DEFINE(HAVE_SRAND48,1,Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(lrand48)
 AC_TRY_LINK([#include <stdlib.h>],
-lrand48();,AC_DEFINE(HAVE_LRAND48,1, Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+lrand48();,AC_DEFINE(HAVE_LRAND48,1,Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(srand)
 AC_TRY_LINK([#include <stdlib.h>],
-srand(0);,AC_DEFINE(HAVE_SRAND,1, Some systems have srand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+srand(0);,AC_DEFINE(HAVE_SRAND,1,Some systems have srand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(rand)
 AC_TRY_LINK([#include <stdlib.h>],
-rand();,AC_DEFINE(HAVE_RAND,1, Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+rand();,AC_DEFINE(HAVE_RAND,1,Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(setuid)
 AC_TRY_LINK([#include <sys/types.h>
 #include <unistd.h>],
-setuid(0);,AC_DEFINE(HAVE_SETUID,1, Some systems have setuid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+setuid(0);,AC_DEFINE(HAVE_SETUID,1,Some systems have setuid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(setgid)
 AC_TRY_LINK([#include <sys/types.h>
 #include <unistd.h>],
-setgid(0);,AC_DEFINE(HAVE_SETGID,1, Some systems have setgid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+setgid(0);,AC_DEFINE(HAVE_SETGID,1,Some systems have setgid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 #AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
 #AC_SUBST(SOCKETLIB)
@@ -298,59 +294,59 @@ AC_LANG(C++)
 AC_MSG_CHECKING(getpwnam_r)
 AC_TRY_LINK([#include <pwd.h>
 #include <stdlib.h>],
-getpwnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWNAM_R,1, Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getpwnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWNAM_R,1,Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getpwuid_r)
 AC_TRY_LINK([#include <pwd.h>
 #include <stdlib.h>],
-getpwuid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWUID_R,1, Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getpwuid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getgrnam_r)
 AC_TRY_LINK([#include <grp.h>
 #include <stdlib.h>],
-getgrnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRNAM_R,1, Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getgrnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRNAM_R,1,Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getgrgid_r)
 AC_TRY_LINK([#include <grp.h>
 #include <stdlib.h>],
-getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R,1, Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getaddrinfo)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getaddrinfo(NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_GETADDRINFO,1, Some systems have getaddrinfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getaddrinfo(NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_GETADDRINFO,1,Some systems have getaddrinfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(gethostbyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1, Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1,Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(gethostbyaddr_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1, Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getprotobyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R,1, Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R,1,Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getprotobynumber_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1, Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1,Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_SHADOW
 
 AC_MSG_CHECKING(getservbyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYNAME_R,1, Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYNAME_R,1,Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getservbyport_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R,1, Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_RPC
 

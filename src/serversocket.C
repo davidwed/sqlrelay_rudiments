@@ -4,9 +4,9 @@
 #include <rudiments/serversocket.h>
 
 #include <sys/types.h>
-#define _XPG4_2
+//#define _XPG4_2
 #include <sys/socket.h>
-#undef _XPG4_2
+//#undef _XPG4_2
 
 bool serversocket::dontLingerOnClose() {
 	return setLingerOnClose(0,1);

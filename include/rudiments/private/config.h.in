@@ -36,9 +36,6 @@
 /* Some systems don't have st_blksize in struct stat */
 #undef HAVE_BLKSIZE_T
 
-/* Some systems define struct cmsghdr */
-#undef HAVE_CMSGHDR
-
 /* Some systems don't define CMSG_SPACE */
 #undef HAVE_CMSG_SPACE
 
@@ -142,6 +139,9 @@
 
 /* Define to 1 if you have a working `mmap' system call. */
 #undef HAVE_MMAP
+
+/* Some msghdr structs have a msg_controllen member */
+#undef HAVE_MSGHDR_MSG_CONTROLLEN
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
