@@ -95,9 +95,15 @@
                         <font color="#0000f8">//</font>
                         <font color="#0000f8">// 01/05/2002 12:54:23 myprogram [2421]</font>
                         <font color="#0000f8">//</font>
-                        <font color="#0000f8">// (Note that this method allocates a string internally</font>
+                        <font color="#0000f8">// Note that this method allocates a string internally</font>
                         <font color="#0000f8">// and returns it.  This string must be deleted by the</font>
-                        <font color="#0000f8">// calling program.)</font>
+                        <font color="#0000f8">// calling program.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Note that this method uses getSystemDateAndTime()</font>
+                        <font color="#0000f8">// from the datetime class.  If you are using</font>
+                        <font color="#0000f8">// logHeader() in a multi-threaded application, you</font>
+                        <font color="#0000f8">// must supply a mutex to the datetime class using it's</font>
+                        <font color="#0000f8">// setLocalTimeMutex() method.</font>
 
 
                 <font color="#0000f8">// These methods write log entries to each</font>

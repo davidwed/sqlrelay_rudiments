@@ -36,9 +36,9 @@
 
 <font color="#288850"><b>class</b></font> unixserversocket : <font color="#a02828"><b>public</b></font> serversocket, <font color="#a02828"><b>public</b></font> unixsocket {
         <font color="#a02828"><b>public</b></font>:
-                                unixserversocket();
+                        unixserversocket();
 
-                <font color="#288850"><b>int</b></font>             listenOnSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#288850"><b>int</b></font>     listenOnSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
                                                 mode_t mask,
                                                 <font color="#288850"><b>int</b></font> backlog);
                                 <font color="#0000f8">// Listen on &quot;filename&quot; and allow &quot;backlog&quot;</font>

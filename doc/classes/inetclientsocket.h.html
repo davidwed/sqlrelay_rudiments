@@ -33,6 +33,9 @@
                         <font color="#0000f8">// methods below.</font>
                         <font color="#0000f8">//</font>
                         <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// See connect() below for a note about use in</font>
+                        <font color="#0000f8">// multithreaded applications.</font>
 
 
 
@@ -63,6 +66,13 @@
                         <font color="#0000f8">// as fast as possible (not recommended).</font>
                         <font color="#0000f8">//</font>
                         <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Note that if your system does not support</font>
+                        <font color="#0000f8">// getaddrinfo() then connect() uses the hostentry and</font>
+                        <font color="#0000f8">// protocolentry classes.  If you are using this method</font>
+                        <font color="#0000f8">// in a multithreaded application, you may need to</font>
+                        <font color="#0000f8">// supply those classes with mutexes.  See hostentry.h</font>
+                        <font color="#0000f8">// and protocolentry.h for more detail.</font>
 };
 
 <font color="#a020f0">#ifdef ENABLE_INLINES</font>

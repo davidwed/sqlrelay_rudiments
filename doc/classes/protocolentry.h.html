@@ -13,6 +13,10 @@
 
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
 
+<font color="#a020f0">#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYADDR_R)</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;pthread.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;netdb.h&gt;</font>
 
 <font color="#0000f8">// The protocolentry class provides methods for retrieving</font>
@@ -48,6 +52,19 @@
 
                 <font color="#288850"><b>void</b></font>    print() <font color="#288850"><b>const</b></font>;
                         <font color="#0000f8">// prints out the protocol entry</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     needsMutex();
+                        <font color="#0000f8">// If your system doesn't support getprotobyname_r()</font>
+                        <font color="#0000f8">// and getprotobynumber_r() then this class needs a</font>
+                        <font color="#0000f8">// mutex to assure thread safety.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// This method returns 1 if this class needs a mutex to</font>
+                        <font color="#0000f8">// operate safely in a threaded environment and 0</font>
+                        <font color="#0000f8">// otherwise.</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    setMutex(pthread_mutex_t *mutex);
+                        <font color="#0000f8">// Allows you to supply a mutex is the class needs it.</font>
+                        <font color="#0000f8">// If your application is not multithreaded, then</font>
+                        <font color="#0000f8">// there is no need to supply a mutex.</font>
 
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/protocolentry.h&gt;</font>
 };

@@ -73,11 +73,21 @@
                         <font color="#0000f8">// to the segment using this pointer.</font>
 
                 <font color="#288850"><b>int</b></font>     setUserName(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username);
-                        <font color="#0000f8">// makes this shared memory segment owned by</font>
-                        <font color="#0000f8">// the user &quot;username&quot;</font>
+                        <font color="#0000f8">// Makes this shared memory segment owned by</font>
+                        <font color="#0000f8">// the user &quot;username&quot;.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Note that setUserName() uses the passwdentry class.</font>
+                        <font color="#0000f8">// If you are using this method in a multithreaded</font>
+                        <font color="#0000f8">// application, you may need to supply the passwdentry</font>
+                        <font color="#0000f8">// class a mutex.  See passwdentry.h for more detail.</font>
                 <font color="#288850"><b>int</b></font>     setGroupName(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname);
-                        <font color="#0000f8">// makes this shared memory segment owned by</font>
-                        <font color="#0000f8">// the group &quot;groupname&quot;</font>
+                        <font color="#0000f8">// Makes this shared memory segment owned by</font>
+                        <font color="#0000f8">// the group &quot;groupname&quot;.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Note that setGroupName() uses the groupentry class.</font>
+                        <font color="#0000f8">// If you are using this method in a multithreaded</font>
+                        <font color="#0000f8">// application, you may need to supply the groupentry</font>
+                        <font color="#0000f8">// class a mutex.  See groupentry.h for more detail.</font>
                 <font color="#288850"><b>int</b></font>     setUserId(uid_t uid);
                         <font color="#0000f8">// makes this shared memory segment owned by</font>
                         <font color="#0000f8">// the user identified by uid</font>
@@ -91,9 +101,19 @@
                 <font color="#288850"><b>char</b></font>    *getUserName();
                         <font color="#0000f8">// returns the name of the user that owns this</font>
                         <font color="#0000f8">// shared memory segment</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Note that getUserName() uses the passwdentry class.</font>
+                        <font color="#0000f8">// If you are using this method in a multithreaded</font>
+                        <font color="#0000f8">// application, you may need to supply the passwdentry</font>
+                        <font color="#0000f8">// class a mutex.  See passwdentry.h for more detail.</font>
                 <font color="#288850"><b>char</b></font>    *getGroupName();
                         <font color="#0000f8">// returns the name of the group that owns this</font>
                         <font color="#0000f8">// shared memory segment</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Note that getGroupName() uses the groupentry class.</font>
+                        <font color="#0000f8">// If you are using this method in a multithreaded</font>
+                        <font color="#0000f8">// application, you may need to supply the groupentry</font>
+                        <font color="#0000f8">// class a mutex.  See groupentry.h for more detail.</font>
                 uid_t   getUserId();
                         <font color="#0000f8">// returns the user id of the user that owns this</font>
                         <font color="#0000f8">// shared memory segment</font>

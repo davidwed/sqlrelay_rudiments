@@ -53,6 +53,39 @@
                                 <font color="#0000f8">// descriptor.</font>
 
 
+                <font color="#0000f8">// Write methods - write data to the file descriptor with a</font>
+                <font color="#0000f8">// timeout of &quot;sec&quot; seconds and &quot;usec&quot; microseconds.</font>
+                <font color="#0000f8">// These methods return the number of bytes that were</font>
+                <font color="#0000f8">// successfully written or -1 if a timeout occurred.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> number,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Converts &quot;number&quot; to network byte order</font>
+                                <font color="#0000f8">// and writes it to the file descriptor.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>long</b></font> number,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Converts &quot;number&quot; to network byte order</font>
+                                <font color="#0000f8">// and writes it to the file descriptor.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>float</b></font> number, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Write &quot;number&quot; to the file descriptor.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>double</b></font> number, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Write &quot;number&quot; to the file descriptor.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>char</b></font> character, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Write &quot;character&quot; to the file descriptor.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Write &quot;string&quot; to the file descriptor.  Note</font>
+                                <font color="#0000f8">// that &quot;string&quot; must be NULL-terminated.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>size_t</b></font> size,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Write &quot;size&quot; bytes from &quot;string&quot; to the file</font>
+                                <font color="#0000f8">// descriptor.  Note that it is possible to</font>
+                                <font color="#0000f8">// write beyond the string's NULL terminator</font>
+                                <font color="#0000f8">// using this method.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>void</b></font> *buffer, <font color="#288850"><b>size_t</b></font> size,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Write &quot;size&quot; bytes from &quot;buffer&quot; to the file</font>
+                                <font color="#0000f8">// descriptor.</font>
+
+
                 <font color="#0000f8">// Read methods - read data from the file descriptor.</font>
                 <font color="#0000f8">// These methods return the number of bytes that were</font>
                 <font color="#0000f8">// successfully read.</font>
@@ -80,6 +113,43 @@
                                 <font color="#0000f8">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000f8">// into &quot;buffer&quot;.</font>
                 <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>char</b></font> **buffer, <font color="#288850"><b>char</b></font> *terminator);
+                                <font color="#0000f8">// Reads from the file desciptor into &quot;buffer&quot;</font>
+                                <font color="#0000f8">// until &quot;terminator&quot; is encountered.  Note</font>
+                                <font color="#0000f8">// that &quot;buffer&quot; is allocated internally and</font>
+                                <font color="#0000f8">// must be freed by the calling program.</font>
+
+
+                <font color="#0000f8">// Read methods - read data from the file descriptor with a</font>
+                <font color="#0000f8">// timeout of &quot;sec&quot; seconds and &quot;usec&quot; microseconds.</font>
+                <font color="#0000f8">// These methods return the number of bytes that were</font>
+                <font color="#0000f8">// successfully read or -1 if a timeout occurred.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> *buffer,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads sizeof(unsigned short) bytes</font>
+                                <font color="#0000f8">// from the file descriptor into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>long</b></font> *buffer,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads sizeof(unsigned long) bytes</font>
+                                <font color="#0000f8">// from the file descriptor into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>float</b></font> *buffer, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads sizeof(float) bytes from the file</font>
+                                <font color="#0000f8">// descriptor into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>double</b></font> *buffer, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads sizeof(double) bytes from the file</font>
+                                <font color="#0000f8">// descriptor into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>char</b></font> *buffer, <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads sizeof(char) bytes from the file</font>
+                                <font color="#0000f8">// descriptor into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>char</b></font> *buffer, <font color="#288850"><b>size_t</b></font> size,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads &quot;size&quot; bytes from the file descriptor</font>
+                                <font color="#0000f8">// into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>void</b></font> *buf, <font color="#288850"><b>size_t</b></font> size,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
+                                <font color="#0000f8">// Reads &quot;size&quot; bytes from the file descriptor</font>
+                                <font color="#0000f8">// into &quot;buffer&quot;.</font>
+                <font color="#288850"><b>virtual</b></font> ssize_t read(<font color="#288850"><b>char</b></font> **buffer, <font color="#288850"><b>char</b></font> *terminator,
+                                                        <font color="#288850"><b>long</b></font> sec, <font color="#288850"><b>long</b></font> usec);
                                 <font color="#0000f8">// Reads from the file desciptor into &quot;buffer&quot;</font>
                                 <font color="#0000f8">// until &quot;terminator&quot; is encountered.  Note</font>
                                 <font color="#0000f8">// that &quot;buffer&quot; is allocated internally and</font>

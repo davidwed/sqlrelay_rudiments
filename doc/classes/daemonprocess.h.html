@@ -55,7 +55,17 @@
                         <font color="#0000f8">// They have no effect unless the process is started</font>
                         <font color="#0000f8">// by the root user.</font>
                         <font color="#288850"><b>int</b></font>     runAsUser(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username) <font color="#288850"><b>const</b></font>;
+                                <font color="#0000f8">// Note that runAsUser() uses the passwdentry</font>
+                                <font color="#0000f8">// class.  If you are using this method in a</font>
+                                <font color="#0000f8">// multithreaded application, you may need to</font>
+                                <font color="#0000f8">// supply the passwdentry classes a mutex.</font>
+                                <font color="#0000f8">// See passwdentry.h for more detail.</font>
                         <font color="#288850"><b>int</b></font>     runAsGroup(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname) <font color="#288850"><b>const</b></font>;
+                                <font color="#0000f8">// Note that runAsGroup() uses the groupentry</font>
+                                <font color="#0000f8">// class.  If you are using this method in a</font>
+                                <font color="#0000f8">// multithreaded application, you may need to</font>
+                                <font color="#0000f8">// supply the groupentry classes a mutex.</font>
+                                <font color="#0000f8">// See groupentry.h for more detail.</font>
                         <font color="#288850"><b>int</b></font>     runAsUserId(uid_t uid) <font color="#288850"><b>const</b></font>;
                         <font color="#288850"><b>int</b></font>     runAsGroupId(gid_t gid) <font color="#288850"><b>const</b></font>;
 
