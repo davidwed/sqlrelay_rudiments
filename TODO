@@ -1,24 +1,14 @@
 connectiondata should just be generic name/value list class
 need generic parser/lexer classes, use them for xmlsax
 
-why does setting the user of a semaphore cause it to set it's queue to 0
 
-print methods for passwdentry, groupentry
+document/test program for filedescriptor,file,fileproperties,filesystem
 
-document passwdentry/groupentry
+document stringbuffer,variablebuffer
 
-document/test program for filedescriptor
-
-document/test program for file
-
-document stringbuffer
-document variablebuffer
+document/comment hostentry,protocolentry,passwdentry,groupentry
 
 document/comment/test program for connectiondata class
-
-document/test program for fileproperties class
-
-document/test program form filesystem class
 
 document clienttransport/connectiondata relationship
 
