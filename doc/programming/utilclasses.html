@@ -565,6 +565,10 @@ The standard functions and structures for managing semaphores are complex.
 The sempahoreset class attempts to rectify this situation.  Below is some code
 illustrating the use of the semaphoreset class.</p>
 
+<p>There are methods in the semaphoreset class that allow you to get and
+set user/group ownership and permissions of a semaphore set that are not 
+documented here, but they are straightforward and rarely used.</p>
+
 <p>The first program prints out 1 and 3, the second program prints out 2 and 4.
 They use a set of 2 semaphores to synchronize these activities.  No matter
 what order the programs are started in, they will always print out 
@@ -652,10 +656,6 @@ what order the programs are started in, they will always print out
 }
 </pre>
 
-<p>There are other methods in the semaphoreset class that allow you to get and
-set user/group ownership and permissions of a semaphore set but they are
-straightforward and rarely used.</p>
-
 <a name="sharedmemory"></a>
 <span class="heading">Using the Shared Memory Class</span><br><br>
 
@@ -663,6 +663,10 @@ straightforward and rarely used.</p>
 The standard functions and structures for managing shared memory segments are 
 complex.  The sharedmemory class attempts to rectify this situation.  Below is
 some code illustrating the use of the sharedmemory class.</p>
+
+<p>There are methods in the sharedmemory class that allow you to get and
+set user/group ownership and permissions of a segment that are not 
+documented here, but they are straightforward and rarely used.</p>
 
 <p>This program puts some data into shared memory then goes to sleep, giving
 another program time to access the segment.</p>
@@ -727,10 +731,6 @@ another program time to access the segment.</p>
 }
 </pre>
 
-<p>There are other methods in the sharedmemory class that allow you to
-get and set user/group ownership and permissions of a segment but they are
-straightforward and rarely used.</p>
-
 
 <a name="signal"></a>
 <span class="heading">Using the Signal Classes</span><br><br>
@@ -751,7 +751,8 @@ signals, waiting for signals and examining blocked signals.</p>
 <p>The signalhandler class provides methods for catching and handling 
 signals.</p>
 
-<p>Below is some code illustrating the use of all three classes.</p>
+<p>Below is some code illustrating the use of all three classes.  Note that
+you'll have to kill this program with a -9.</p>
 
 <pre>
 <font color="#0000f8">// Copyright (c) 2001  David Muse</font>
@@ -786,8 +787,6 @@ signals.</p>
         }
 }
 </pre>
-
-<p>Note that you'll have to kill that program with a -9.</p>
 
 <a name="stringbuffer"></a>
 <span class="heading">Using the String Buffer Class</span><br><br>
@@ -1025,7 +1024,7 @@ Emails:
 <a name="passwdentry"></a>
 <span class="heading">Using the Password Entry Class</span><br><br>
 
-<p>The passwdentry class allows you to look up entries from /etc/passwd, or
+<p>The passwdentry class allows you to look up entries from /etc/passwd or
 from elsewhere if you're using the Name Service Switch.</p>
 
 <pre>
@@ -1088,7 +1087,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <a name="groupentry"></a>
 <span class="heading">Using the Group Entry Class</span><br><br>
 
-<p>The groupentry class allows you to look up entries from /etc/group, or
+<p>The groupentry class allows you to look up entries from /etc/group or
 from elsewhere if you're using the Name Service Switch.</p>
 
 <pre>
@@ -1151,7 +1150,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <a name="hostentry"></a>
 <span class="heading">Using the Host Entry Class</span><br><br>
 
-<p>The hostentry class allows you to look up entries from /etc/hosts, or
+<p>The hostentry class allows you to look up entries from /etc/hosts or
 from elsewhere if you're using the Name Service Switch.</p>
 
 <pre>
@@ -1238,7 +1237,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <a name="protocolentry"></a>
 <span class="heading">Using the Protocol Entry Class</span><br><br>
 
-<p>The protocolentry class allows you to look up entries from /etc/protocols,
+<p>The protocolentry class allows you to look up entries from /etc/protocols
 or from elsewhere if you're using the Name Service Switch.</p>
 
 <pre>
@@ -1297,7 +1296,9 @@ or from elsewhere if you're using the Name Service Switch.</p>
 <span class="heading">Using the List Class</span><br><br>
 
 <p>The list class allows you to store arbitrary data in a doubly-linked
-list.  Since lists of strings are commonly used, a stringlist typedef is
+list.</p>
+
+<p>Since lists of strings are commonly used, a stringlist typedef is
 provided for convenience.</p>
 
 <pre>
@@ -1396,7 +1397,8 @@ provided for convenience.</p>
 <span class="heading">Using the Dictionary Class</span><br><br>
 
 <p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
-Since dictionaries with string and long integer keys and dictionaries with
+
+<p>Since dictionaries with string and long integer keys and dictionaries with
 string keys and values are commonly used, convenience classes are provided
 for each.</p>
 

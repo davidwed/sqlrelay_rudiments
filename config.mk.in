@@ -21,7 +21,7 @@ AR = @AR@
 STRIP = @STRIP@
 
 # includes and defines
-BASECPPFLAGS = @CPPFLAGS@
+BASECPPFLAGS = @CPPFLAGS@ @PTHREADSINCLUDES@
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
