@@ -5,6 +5,8 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 
+// for ENOMEM
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 
