@@ -14,19 +14,21 @@
 
 class regularexpression {
 	public:
-			regularexpression();
-			regularexpression(const char *pattern);
-				// this constructor calls the compile method
-				// below during initialization
-		virtual	~regularexpression();
 
 		// if you need to do a quick comparison, use this method
 		static	int	match(const char *str, const char *pattern);
 				// returns 1 if "str" matches "pattern"
 				// and 0 if "str" doesn't match "pattern"
 
+
 		// if you need to do many comparisons against a single
 		// expression, use these methods
+			regularexpression();
+			regularexpression(const char *pattern);
+				// this constructor calls the compile method
+				// below during initialization
+		virtual	~regularexpression();
+
 		int	compile(const char *pattern);
 				// Compiles the regular expression given in
 				// "pattern". Returns 1 if the compilation 

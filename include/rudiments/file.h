@@ -31,7 +31,11 @@
 class file : public filedescriptor {
 	public:
 			file();
+			// Creates an uninitialized instance of the file class.
 			file(int fd);
+			// Creates an uninitialized instance of the file class
+			// and associates already open file descriptor "fd"
+			// with it.
 
 		int	open(const char *name, int flags);
 			// Opens file "name" using "flags".  Once the file is
