@@ -9,6 +9,8 @@
 	pthread.h is included for xxxentry classes now no matter what
 	shadowentry is disabled on systems that have no shadow support
 	added filesystem class
+	added test for s_warn, s_inact, s_expire and s_flag in struct spwd and
+		compile in support for them if found in shadowentry class
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better
