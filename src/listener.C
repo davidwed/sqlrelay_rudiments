@@ -26,11 +26,11 @@ void listener::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=false;
 }
 
-void listener::addFileDescriptor(int fd) {
+void listener::addFileDescriptor(filedescriptor *fd) {
 	filedescriptorlist.append(fd);
 }
 
-void listener::removeFileDescriptor(int fd) {
+void listener::removeFileDescriptor(filedescriptor *fd) {
 	filedescriptorlist.removeByData(fd);
 }
 
@@ -58,6 +58,15 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 
 	for (;;) {
 
+		// if we're using ssl, some of the filedescriptors may have
+		// SSL data pending, in that case, we need to bypass the
+		// select altogether and just return those filedescriptors
+		// in the ready list immediately
+		#ifdef RUDIMENTS_HAS_SSL
+			readylist.clear();
+		#endif
+		int	selectresult=0;
+
 		// some versions of select modify the timeout, so reset it
 		// every time
 		tv.tv_sec=sec;
@@ -71,15 +80,36 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		listenerlistnode	*current=
 				filedescriptorlist.getNodeByIndex(0);
 		while(current) {
-			if (current->getData()>largest) {
-				largest=current->getData();
+
+			if (current->getData()->getFileDescriptor()>largest) {
+				largest=current->getData()->getFileDescriptor();
 			}
-			FD_SET(current->getData(),&fdlist);
+
+			FD_SET(current->getData()->getFileDescriptor(),&fdlist);
+
+			// if we support SSL, check here to see if the
+			// filedescriptor has SSL data pending
+			#ifdef RUDIMENTS_HAS_SSL
+				SSL	*ssl=current->getData()->getSSL();
+				if (ssl && SSL_pending(ssl)) {
+					readylist.append(current->getData());
+					selectresult++;
+				}
+			#endif
+
 			current=current->getNext();
 		}
 
+		// if we support SSL and at least 1 of the filedescriptors
+		// had SSL data pending, return here
+		#ifdef RUDIMENTS_HAS_SSL
+			if (selectresult) {
+				return selectresult;
+			}
+		#endif
+
 		// wait for data to be available on the file descriptor
-		int	selectresult=select(largest+1,(read)?&fdlist:NULL,
+		selectresult=select(largest+1,(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
 						NULL,tvptr);
 
@@ -99,10 +129,13 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 	
 		// build the list of file descriptors that
 		// caused the select() to fall through
-		readylist.clear();
+		#ifndef RUDIMENTS_HAS_SSL
+			readylist.clear();
+		#endif
 		current=filedescriptorlist.getNodeByIndex(0);
 		while (current) {
-			if (FD_ISSET(current->getData(),&fdlist)) {
+			if (FD_ISSET(current->getData()->getFileDescriptor(),
+					&fdlist)) {
 				readylist.append(current->getData());
 			}
 			current=current->getNext();

@@ -26,8 +26,8 @@ int main(int argc, const char **argv) {
 
 	// create a listener and add the 2 sockets to it
 	listener	pool;
-	pool.addFileDescriptor(inetsock.getFileDescriptor());
-	pool.addFileDescriptor(unixsock.getFileDescriptor());
+	pool.addFileDescriptor(&inetsock);
+	pool.addFileDescriptor(&unixsock);
 
 
 	// loop...
@@ -35,15 +35,15 @@ int main(int argc, const char **argv) {
 
 		// wait for a client to connect to one of the sockets
 		pool.waitForNonBlockingRead(-1,-1);
-		int	fd=-1;
+		filedescriptor	*fd=NULL;
 		pool.getReadyList()->getDataByIndex(0,&fd);
 
 		// figure out which socket the client connected to
 		datatransport	*clientsock;
-		if (fd==inetsock.getFileDescriptor()) {
+		if (fd==&inetsock) {
 			clientsock=inetsock.acceptClientConnection();
 			printf("inetsock: ");
-		} else if (fd==unixsock.getFileDescriptor()) {
+		} else if (fd==&unixsock) {
 			clientsock=unixsock.acceptClientConnection();
 			printf("unixsock: ");
 		} else {

@@ -16,8 +16,8 @@ int main(int argc, const char **argv) {
 	handoffsock.listenOnSocket("/tmp/handoff.socket",0000,15);
 
 	listener	pool;
-	pool.addFileDescriptor(serversock.getFileDescriptor());
-	pool.addFileDescriptor(handoffsock.getFileDescriptor());
+	pool.addFileDescriptor(&serversock);
+	pool.addFileDescriptor(&handoffsock);
 
 	inetsocket	*clientsock=NULL;
 	unixsocket	*handoffclientsock=NULL;
@@ -25,12 +25,12 @@ int main(int argc, const char **argv) {
 	for (;;) {
 
 		pool.waitForNonBlockingRead(-1,-1);
-		int	fd=-1;
+		filedescriptor	*fd=NULL;
 		pool.getReadyList()->getDataByIndex(0,&fd);
 
-		if (fd==serversock.getFileDescriptor()) {
+		if (fd==&serversock) {
 			clientsock=serversock.acceptClientConnection();
-		} else if (fd==handoffsock.getFileDescriptor()) {
+		} else if (fd==&handoffsock) {
 			handoffclientsock=handoffsock.acceptClientConnection();
 		} else {
 			printf("error or timeout waiting...\n");

@@ -4,10 +4,15 @@
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
 #include <rudiments/inetserversocket.h>
+#include <rudiments/private/config.h>
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 
 int passwd_cb(char *buf, int size, int rwflag, void *userdata) {
 	strncpy(buf,(char *)userdata,size);
@@ -43,7 +48,7 @@ void	myserver::listen() {
 
 	SSL_library_init();
 	SSL_CTX	*ctx=SSL_CTX_new(SSLv2_server_method());
-	SSL_CTX_set_mode(ctx,SSL_MODE_ENABLE_PARTIAL_WRITE);
+	SSL_CTX_set_mode(ctx,SSL_MODE_AUTO_RETRY);
 	SSL_CTX_use_certificate_chain_file(ctx,"server.pem");
 	SSL_CTX_set_default_passwd_cb(ctx,passwd_cb);
 	SSL_CTX_set_default_passwd_cb_userdata(ctx,(void *)"password");

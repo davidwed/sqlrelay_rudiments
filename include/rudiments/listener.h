@@ -6,8 +6,8 @@
 
 #include <rudiments/private/listenerincludes.h>
 
-typedef linkedlist<int>		listenerlist;
-typedef linkedlistnode<int>	listenerlistnode;
+typedef linkedlist<filedescriptor *>		listenerlist;
+typedef linkedlistnode<filedescriptor *>	listenerlistnode;
 
 // The listener class listens on a pool of file descriptors.
 
@@ -16,7 +16,7 @@ class listener {
 			listener();
 		virtual	~listener();
 
-		virtual	void	addFileDescriptor(int fd);
+		virtual	void	addFileDescriptor(filedescriptor *fd);
                         	// Adds the specified file descriptor to
 				// the pool that the listener is listening on.
 
@@ -63,7 +63,7 @@ class listener {
 				// write after the last call to
 				// waitForNonBlockingWrite().
 
-		virtual	void	removeFileDescriptor(int fd);
+		virtual	void	removeFileDescriptor(filedescriptor *fd);
                         	// Removes the specified file descriptor from
 				// the pool.
 			

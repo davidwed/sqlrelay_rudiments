@@ -92,14 +92,14 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	#endif
 
 	// finally, send the msghdr
-write('0');
+//write('0');
 	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
 bool unixsocket::receiveFileDescriptor(int *filedesc) {
-printf("%d: read on %d before recvmsg\n",getpid(),fd);
+/*printf("%d: read on %d before recvmsg\n",getpid(),fd);
 char ch;
-read(&ch);
+read(&ch);*/
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr

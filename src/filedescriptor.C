@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/filedescriptor.h>
+#include <rudiments/listener.h>
 #include <errno.h>
 #include <stdio.h>
 #ifdef HAVE_SYS_TIMES_H
@@ -503,8 +504,26 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		errno=0;
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
-			actualread=SSL_read(ssl,(void *)((long)buf+totalread),
-								sizetoread);
+			for (bool done=false; !done ;) {
+
+				actualread=SSL_read(ssl,
+						(void *)((long)buf+totalread),
+						sizetoread);
+
+				switch (SSL_get_error(ssl,actualread)) {
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+						continue;
+					case SSL_ERROR_WANT_X509_LOOKUP:
+					case SSL_ERROR_SSL:
+						actualread=-1;
+					case SSL_ERROR_ZERO_RETURN:
+					case SSL_ERROR_SYSCALL:
+					case SSL_ERROR_NONE:
+					default:
+						done=true;
+				}
+			}
 		} else {
 		#endif
 			actualread=::read(fd,(void *)((long)buf+totalread),
@@ -512,20 +531,25 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		#ifdef RUDIMENTS_HAS_SSL
 		}
 		#endif
-printf("%d: read(%d)=%d  %s\n",getpid(),fd,actualread,strerror(errno));
 
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
-		// FIXME: we may need to do something else to check errno
-		// for SSL_read's
 		if (actualread!=sizetoread) {
-			if (retryinterruptedreads && errno==EINTR) {
-				// if we got an EINTR, then we need to
+			if (errno==EINTR) {
+				// if we got an EINTR, then we may need to
 				// retry the read
-				continue;
+				if (retryinterruptedreads) {
+					continue;
+				} else {
+					totalread=totalread+actualread;
+					break;
+				}
 			} else if (actualread==0 && errno==0) {
 				// eof condition
 				break;
+			} else if (actualread==-1) {
+				// error condition
+				return -1;
 			}
 		}
 
@@ -567,7 +591,23 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		errno=0;
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
-			retval=::SSL_write(ssl,buf,count);
+			for (bool done=false; !done ;) {
+
+				retval=::SSL_write(ssl,buf,count);
+
+				switch (SSL_get_error(ssl,retval)) {
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+						continue;
+					case SSL_ERROR_WANT_X509_LOOKUP:
+					case SSL_ERROR_SSL:
+					case SSL_ERROR_ZERO_RETURN:
+					case SSL_ERROR_SYSCALL:
+					case SSL_ERROR_NONE:
+					default:
+						done=true;
+				}
+			}
 		} else {
 		#endif
 			retval=::write(fd,buf,count);
@@ -575,8 +615,6 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		}
 		#endif
 
-		// FIXME: we may need to do something else to check errno
-		// for SSL_write's
 		if (retval!=count) {
 			if (retryinterruptedwrites && errno==EINTR) {
 				continue;
@@ -588,6 +626,11 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 }
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) {
+	#ifdef RUDIMENTS_HAS_SSL
+		if (ssl && SSL_pending(ssl)) {
+			return 1;
+		}
+	#endif
 	return (lstnr)?lstnr->waitForNonBlockingRead(sec,usec):
 			safeSelect(sec,usec,true,false);
 }

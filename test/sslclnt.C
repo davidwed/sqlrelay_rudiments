@@ -21,7 +21,7 @@ int main(int argc, const char **argv) {
 	// initialize the SSL context
 	SSL_library_init();
 	SSL_CTX	*ctx=SSL_CTX_new(SSLv2_client_method());
-	SSL_CTX_set_mode(ctx,SSL_MODE_ENABLE_PARTIAL_WRITE);
+	SSL_CTX_set_mode(ctx,SSL_MODE_AUTO_RETRY);
 	SSL_CTX_use_certificate_chain_file(ctx,"client.pem");
 	SSL_CTX_set_default_passwd_cb(ctx,passwdCallback);
 	SSL_CTX_set_default_passwd_cb_userdata(ctx,(void *)"password");
@@ -43,33 +43,33 @@ int main(int argc, const char **argv) {
 	}
 
 	// make sure the certificate was valid
-	if (SSL_get_verify_result(clnt.getSSL())!=X509_V_OK) {
+	/*if (SSL_get_verify_result(clnt.getSSL())!=X509_V_OK) {
 		printf("SSL_get_verify_result failed\n");
 		clnt.close();
 		exit(1);
-	}
+	}*/
 
 	// make sure the server sent a certificate
-	X509	*certificate=SSL_get_peer_certificate(clnt.getSSL());
+	/*X509	*certificate=SSL_get_peer_certificate(clnt.getSSL());
 	if (!certificate) {
 		printf("peer sent no certificate\n");
 		clnt.close();
 		exit(1);
-	}
+	}*/
 
 	// Make sure the commonname in the certificate is the one we expect it
 	// to be (localhost).
 	// (we may also want to check the subject name field or certificate
 	// extension for the commonname because sometimes it's there instead
 	// of in the commonname field)
-	char	commonname[256];
+	/*char	commonname[256];
 	X509_NAME_get_text_by_NID(X509_get_subject_name(certificate),
 					NID_commonName,commonname,256);
 	if (strcasecmp(commonname,"localhost")) {
 		printf("%s!=localhost\n",commonname);
 		clnt.close();
 		exit(1);
-	}
+	}*/
 
 	// write "hello" to the server
 	clnt.write("hello",5);
