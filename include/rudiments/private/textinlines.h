@@ -19,17 +19,9 @@ inline void text::bothTrim(char *string, char character) {
 }
 
 inline int text::integerLength(long number) {
-	int	length;
-	if (number>0) {
-		length=0;
-		for (long num=number; num>0; num=num/10) {
-			length++;
-		}
-	} else {
-		length=1;
-		for (long num=number; num<0; num=num/10) {
-			length++;
-		}
+	int	length=(number>0)?0:1;
+	for (long num=number; num>0; num=num/10) {
+		length++;
 	}
 	return length;
 }

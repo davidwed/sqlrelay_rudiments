@@ -56,6 +56,16 @@ class text {
 		static	int	isNumber(const char *val);
 				// returns 1 the string "val" is a number
 				// and 0 if it is not a number
+		static	char	*parseNumber(long number);
+				// Returns a string representing "number".
+				// The string is allocated inside the function
+				// and must be deleted by the calling program.
+		static	char	*parseNumber(double number,
+						unsigned short precision,
+						unsigned short scale);
+				// Returns a string representing "number".
+				// The string is allocated inside the function
+				// and must be deleted by the calling program.
 
 		static	char	*httpEscape(const char *input);
 				// http escapes "input" and returns it in a

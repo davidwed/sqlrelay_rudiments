@@ -5,13 +5,16 @@
 #define STRINGBUFFER_H
 
 #include <rudiments/private/config.h>
+#include <rudiments/variablebuffer.h>
+
+#include <sys/types.h>
 
 // The stringbuffer class can be used to store strings of arbitrary length.
 
 class stringbuffer {
 	public:
 			stringbuffer();
-			~stringbuffer();
+		virtual	~stringbuffer();
 
 		// The append() methods return a pointer to the stringbuffer
 		// instance.  This enables append chaining:
@@ -37,7 +40,7 @@ class stringbuffer {
 			// Returns the string currently stored in the
 			// stringbuffer.
 
-		int	getStringLength();
+		size_t	getStringLength();
 			// Returns the length of the string currently stored
 			// in the stringbuffer.
 

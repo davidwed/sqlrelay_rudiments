@@ -12,7 +12,7 @@ class variablebuffer {
 	public:
 			variablebuffer(unsigned long initialsize,
 						unsigned long increment);
-			~variablebuffer();
+		virtual	~variablebuffer();
 
 		// The append() methods return a pointer to the variablebuffer
 		// instance.  This enables append chaining:

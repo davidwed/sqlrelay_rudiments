@@ -255,3 +255,17 @@ int text::countTrailingSpaces(char *string, int length) {
 	}
 	return trailingspaces;
 }
+
+char *text::parseNumber(long number) {
+	char	*string=new char[integerLength(number)];
+	sprintf(string,"%d",number);
+	return string;
+}
+
+char *text::parseNumber(double number,
+				unsigned short precision,
+				unsigned short scale) {
+	char	*string=new char[22];
+	sprintf(string,"%.*f",precision,number);
+	return string;
+}
