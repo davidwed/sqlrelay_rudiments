@@ -106,14 +106,36 @@ int filesystem::remove(char *file) {
 
 int filesystem::changeOwner(char *file, char *username, char *groupname) {
 
-	passwd	*passwdent=(username)?getpwnam(username):NULL;
-	group	*groupent=(groupname)?getgrnam(groupname):NULL;
+	passwd	*passwdent;
+	group	*groupent;
+#if defined(HAVE_GETPWNAM_R) || defined(HAVE_GETGRNAM_R)
+	char	buffer[1024];
+#endif
+#ifdef HAVE_GETPWNAM_R
+	passwd	pwd;
+	if (username && getpwnam_r(username,&pwd,buffer,1024,&passwdent)) {
+		return 0;
+	}
+#else
+	passwdent=(username)?getpwnam(username):NULL;
+#endif
+#ifdef HAVE_GETGRNAM_R
+	group	grp;
+	if (groupname && getgrnam_r(groupname,&grp,buffer,1024,&groupent)) {
+		return 0;
+	}
+#else
+	groupent=(groupname)?getgrnam(groupname):NULL;
+#endif
 	uid_t	uid=(username)?passwdent->pw_uid:-1;
 	gid_t	gid=(groupname)?groupent->gr_gid:-1;
-	int	retval=(chown(file,uid,gid)==0);
-	delete passwdent;
-	delete groupent;
-	return retval;
+#ifdef HAVE_GETPWNAM_R
+	delete	passwdent;
+#endif
+#ifdef HAVE_GETGRNAM_R
+	delete	groupent;
+#endif
+	return (chown(file,uid,gid)==0);
 }
 
 char **filesystem::list(char *pattern) {

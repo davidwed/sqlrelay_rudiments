@@ -26,6 +26,9 @@
 	added stringbuffer class, made errorhandler use it
 	added --enable-small-code and --with-inlines to configure script
 	added -fno-exceptions to default CXXFLAGS
+	added variablebuffer class
+	added dtd class
+	reentrant getpw/getgr functions used now if available
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

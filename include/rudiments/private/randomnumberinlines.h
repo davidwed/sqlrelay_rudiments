@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <stdlib.h>
-//#include <rudiments/private/config.h>
 
 #if defined(HAVE_SRAND) && defined(HAVE_RAND)
 	#define SEEDRANDOM srand

@@ -68,31 +68,65 @@ int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 }
 
 int sharedmemory::setUserName(const char *username) {
-	passwd	*passwdent=getpwnam(username);
-	if (!passwdent) {
+	passwd	*passwdent;
+#ifdef HAVE_GETPWNAM_R
+	char	buffer[1024];
+	passwd	pwd;
+	if (getpwnam_r(username,&pwd,buffer,1024,&passwdent)) {
 		return 0;
 	}
+#else
+	if (!(passwdent=getpwnam(username))) {
+		return 0;
+	}
+#endif
 	int	retval=setUserId(passwdent->pw_uid);
+#ifdef HAVE_GETPWNAM_R
 	delete passwdent;
+#endif
 	return retval;
 }
 
 int sharedmemory::setGroupName(const char *groupname) {
-	group	*groupent=getgrnam(groupname);
-	if (!groupent) {
+	group	*groupent;
+#ifdef HAVE_GETGRNAM_R
+	char	buffer[1024];
+	group	grp;
+	if (getgrnam_r(groupname,&grp,buffer,1024,&groupent)) {
 		return 0;
 	}
+#else
+	if (!(groupent=getgrnam(groupname))) {
+		return 0;
+	}
+#endif
 	int	retval=setGroupId(groupent->gr_gid);
+#ifdef HAVE_GETGRNAM_R
 	delete groupent;
+#endif
 	return retval;
 }
 
 char *sharedmemory::getUserName() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		passwd	*passwdent=getpwuid(getds.shm_perm.uid);
+		passwd	*passwdent;
+#ifdef HAVE_GETPWUID_R
+		char	buffer[1024];
+		passwd	pwd;
+		if (getpwuid_r(getds.shm_perm.uid,&pwd,
+					buffer,1024,&passwdent)) {
+			return NULL;
+		}
+#else
+		if (!(passwdent=getpwuid(getds.shm_perm.uid))) {
+			return NULL;
+		}
+#endif
 		char	*retval=strdup(passwdent->pw_name);
+#ifdef HAVE_GETPWUID_R
 		delete passwdent;
+#endif
 		return retval;
 	}
 	return NULL;
@@ -101,9 +135,22 @@ char *sharedmemory::getUserName() {
 char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		group	*groupent=getgrgid(getds.shm_perm.gid);
+		group	*groupent;
+#ifdef GETGRGID_R
+		char	buffer[1024];
+		group	grp;
+		if (getgrgid_r(getds.shm_perm.gid,&grp,buffer,1024,&groupent)) {
+			return NULL;
+		}
+#else
+		if (!(groupent=getgrgid(getds.shm_perm.gid))) {
+			return NULL;
+		}
+#endif
 		char	*retval=strdup(groupent->gr_name);
+#ifdef GETGRGID_R
 		delete groupent;
+#endif
 		return retval;
 	}
 	return NULL;

@@ -1,8 +1,6 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-//#include <rudiments/private/config.h>
-
 #define __USE_UNIX98
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -47,22 +45,12 @@ inline void daemonprocess::crash() {
 	(*crashfunc)(0);
 }
 
-inline int daemonprocess::runAsUser(const char *username) const {
-	struct	passwd	*ent=getpwnam((username)?username:"");
-	return (ent)?runAsUserId(ent->pw_uid):0;
-}
-
 inline int daemonprocess::runAsUserId(uid_t uid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else
 		return setreuid(uid,uid);
 	#endif
-}
-
-inline int daemonprocess::runAsGroup(const char *groupname) const {
-	struct	group	*ent=getgrnam((groupname)?groupname:"");
-	return (ent)?runAsGroupId(ent->gr_gid):0;
 }
 
 inline int daemonprocess::runAsGroupId(gid_t gid) const {

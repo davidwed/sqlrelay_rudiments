@@ -37,6 +37,40 @@ daemonprocess::~daemonprocess() {
 	delete crashhandler;
 }
 
+inline int daemonprocess::runAsUser(const char *username) const {
+	passwd	*ent;
+#ifdef HAVE_GETPWNAM_R
+	char	buffer[1024];
+	passwd	pwd;
+	if (getpwnam_r((username)?username:"",&pwd,buffer,1024,&ent)) {
+		return 0;
+	}
+#else
+	ent=getpwnam((username)?username:"");
+#endif
+	int	retval=(ent)?runAsUserId(ent->pw_uid):0;
+#ifdef HAVE_GETPWNAM_R
+	delete ent;
+#endif
+}
+
+inline int daemonprocess::runAsGroup(const char *groupname) const {
+	group	*ent;
+#ifdef HAVE_GETGRNAM_R
+	char	buffer[1024];
+	group	grp;
+	if (getgrnam_r((groupname)?groupname:"",&grp,buffer,1024,&ent)) {
+		return 0;
+	}
+#else
+	ent=getgrnam((groupname)?groupname:"");
+#endif
+	int	retval=(ent)?runAsGroupId(ent->gr_gid):0;
+#ifdef HAVE_GETGRNAM_R
+	delete ent;
+#endif
+}
+
 int daemonprocess::checkForPidFile(const char *filename) const {
 
 	// open the file, don't need to check for error here, getSize() below

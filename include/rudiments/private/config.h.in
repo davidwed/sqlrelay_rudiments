@@ -46,6 +46,18 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
+/* Some systems have getgrgid_r */
+#undef HAVE_GETGRGID_R
+
+/* Some systems have getgrnam_r */
+#undef HAVE_GETGRNAM_R
+
+/* Some systems have getpwnam_r */
+#undef HAVE_GETPWNAM_R
+
+/* Some systems have getpwuid_r */
+#undef HAVE_GETPWUID_R
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 

@@ -1,8 +1,6 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information
 
-//#include <rudiments/private/config.h>
-
 #include <stdlib.h>
 #if defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H)
 	#include "/usr/local/firstworks/include/regex.h"
