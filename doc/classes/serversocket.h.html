@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/serversocket.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_SERVERSOCKET_H</font>
+<font color="#a020f0">#define RUDIMENTS_SERVERSOCKET_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/server.h&gt;</font>
+
+<font color="#288850"><b>class</b></font> serversocket : <font color="#a02828"><b>public</b></font> server {
+        <font color="#a02828"><b>public</b></font>:
+
+                <font color="#0000f8">// These 4 methods allow you to set socket options.  They must</font>
+                <font color="#0000f8">// be called after calling bind() and before calling listen().</font>
+                <font color="#288850"><b>int</b></font>     lingerOnClose(<font color="#288850"><b>int</b></font> timeout);
+                        <font color="#0000f8">// Instructs the socket to stay open for</font>
+                        <font color="#0000f8">// &quot;timeout&quot; seconds even after close() is</font>
+                        <font color="#0000f8">// called to allow the client to receive</font>
+                        <font color="#0000f8">// any data that may still be buffered.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     dontLingerOnClose();
+                        <font color="#0000f8">// Instructs the socket to close immediately</font>
+                        <font color="#0000f8">// when close() is called, dumping any data</font>
+                        <font color="#0000f8">// that may still be buffered but that the</font>
+                        <font color="#0000f8">// client may not have received.  This is</font>
+                        <font color="#0000f8">// the default.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     reuseAddresses();
+                        <font color="#0000f8">// Allows sockets in the TIME_WAIT state to be</font>
+                        <font color="#0000f8">// reused.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     dontReuseAddresses();
+                        <font color="#0000f8">// Prevents sockets in the TIME_WAIT state from</font>
+                        <font color="#0000f8">// being reused.  This is the default.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+                <font color="#288850"><b>virtual</b></font> <font color="#288850"><b>int</b></font>     listen(<font color="#288850"><b>int</b></font> backlog);
+                                <font color="#0000f8">// Waits until a client connects then places</font>
+                                <font color="#0000f8">// that connection in queue.  Up to &quot;backlog&quot;</font>
+                                <font color="#0000f8">// connections may be queued before future</font>
+                                <font color="#0000f8">// conenctions are refused.</font>
+                                <font color="#0000f8">//</font>
+                                <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/serversocket.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/serversocketinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

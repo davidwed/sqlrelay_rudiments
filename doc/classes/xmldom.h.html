@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/xmldom.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/xmldom.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,10 +8,8 @@
 <font color="#0000f8">// Copyright (c) 2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef XMLDOM_H</font>
-<font color="#a020f0">#define XMLDOM_H</font>
-
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;strstream.h&gt;</font>
+<font color="#a020f0">#ifndef RUDIMENTS_XMLDOM_H</font>
+<font color="#a020f0">#define RUDIMENTS_XMLDOM_H</font>
 
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
 
@@ -24,7 +22,7 @@
         <font color="#a02828"><b>public</b></font>:
 
                         xmldom();
-                        ~xmldom();
+                <font color="#288850"><b>virtual</b></font> ~xmldom();
 
                 <font color="#288850"><b>int</b></font>     parseFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
                         <font color="#0000f8">// Parse file &quot;filename&quot; and generate a DOM tree.</font>
@@ -45,7 +43,9 @@
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/xmldom.h&gt;</font>
 };
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/xmldominlines.h&gt;</font>
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/xmldominlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

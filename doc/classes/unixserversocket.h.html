@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/unixserversocket.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/unixserversocket.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,12 +8,12 @@
 <font color="#0000f8">// Copyright (c) 2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef UNIXSERVERSOCKET_H</font>
-<font color="#a020f0">#define UNIXSERVERSOCKET_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_UNIXSERVERSOCKET_H</font>
+<font color="#a020f0">#define RUDIMENTS_UNIXSERVERSOCKET_H</font>
 
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/serversocket.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/serversocket.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/unixsocket.h&gt;</font>
 
 <font color="#0000f8">// The unixserversocket class allows you to write programs that can talk to</font>
@@ -39,11 +39,12 @@
                                 unixserversocket();
 
                 <font color="#288850"><b>int</b></font>             listenOnSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
-                                                mode_t mode,
+                                                mode_t mask,
                                                 <font color="#288850"><b>int</b></font> backlog);
                                 <font color="#0000f8">// Listen on &quot;filename&quot; and allow &quot;backlog&quot;</font>
                                 <font color="#0000f8">// connections to pile up before refusing them.</font>
-                                <font color="#0000f8">// Set the permissions on &quot;filename&quot; to &quot;mode&quot;.</font>
+                                <font color="#0000f8">// Set the permissions on &quot;filename&quot; using</font>
+                                <font color="#0000f8">// umask &quot;mask&quot;.</font>
                                 <font color="#0000f8">//</font>
                                 <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
 
@@ -55,11 +56,11 @@
                 <font color="#0000f8">// If you need to set socket options or do anything special</font>
                 <font color="#0000f8">// between the discrete steps of socket initialization, you</font>
                 <font color="#0000f8">// should use a combination of these methods.</font>
-                <font color="#288850"><b>int</b></font>     initUnixServerSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
-                                                        mode_t mode);
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename, mode_t mask);
                         <font color="#0000f8">// Creates the actual socket and initializes the class</font>
                         <font color="#0000f8">// to use &quot;filename&quot; when bind() is called.  The</font>
-                        <font color="#0000f8">// permissions on &quot;filename&quot; will be set to &quot;mode&quot;.</font>
+                        <font color="#0000f8">// permissions on &quot;filename&quot; will be set using umask</font>
+                        <font color="#0000f8">// &quot;mask&quot;.</font>
                         <font color="#0000f8">//</font>
                         <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
                 <font color="#288850"><b>int</b></font>     bind();
@@ -68,41 +69,6 @@
                         <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
 
 
-                <font color="#0000f8">// These 4 methods allow you to set socket options.  They must</font>
-                <font color="#0000f8">// be called after calling bind() and before calling listen().</font>
-                <font color="#288850"><b>int</b></font>     lingerOnClose(<font color="#288850"><b>int</b></font> timeout);
-                        <font color="#0000f8">// Instructs the socket to stay open for</font>
-                        <font color="#0000f8">// &quot;timeout&quot; seconds even after close() is</font>
-                        <font color="#0000f8">// called to allow the client to receive</font>
-                        <font color="#0000f8">// any data that may still be buffered.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-                <font color="#288850"><b>int</b></font>     dontLingerOnClose();
-                        <font color="#0000f8">// Instructs the socket to close immediately</font>
-                        <font color="#0000f8">// when close() is called, dumping any data</font>
-                        <font color="#0000f8">// that may still be buffered but that the</font>
-                        <font color="#0000f8">// client may not have received.  This is</font>
-                        <font color="#0000f8">// the default.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-                <font color="#288850"><b>int</b></font>     reuseAddresses();
-                        <font color="#0000f8">// Allows sockets in the TIME_WAIT state to be</font>
-                        <font color="#0000f8">// reused.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-                <font color="#288850"><b>int</b></font>     dontReuseAddresses();
-                        <font color="#0000f8">// Prevents sockets in the TIME_WAIT state from</font>
-                        <font color="#0000f8">// being reused.  This is the default.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-
-                <font color="#288850"><b>int</b></font>             listen(<font color="#288850"><b>int</b></font> backlog);
-                                <font color="#0000f8">// Waits until a client connects then places</font>
-                                <font color="#0000f8">// that connection in queue.  Up to &quot;backlog&quot;</font>
-                                <font color="#0000f8">// connections may be queued before future</font>
-                                <font color="#0000f8">// conenctions are refused.</font>
-                                <font color="#0000f8">//</font>
-                                <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
                 unixsocket      *acceptClientConnection();
                                 <font color="#0000f8">// Removes the client connection from the queue</font>
                                 <font color="#0000f8">// and associates a new socket with that</font>
@@ -112,17 +78,12 @@
                                 <font color="#0000f8">// Returns an inetsocket on success and NULL</font>
                                 <font color="#0000f8">// on failure.</font>
 
-
-
-                <font color="#0000f8">// Many operating systems support passing an open file</font>
-                <font color="#0000f8">// descriptor between processes.  The receiving process can</font>
-                <font color="#0000f8">// then read or write data to or from that file descriptor.</font>
-                <font color="#0000f8">// These methods implement that functionality.</font>
-                <font color="#288850"><b>int</b></font>     passFileDescriptor(<font color="#288850"><b>int</b></font> descriptor);
-                <font color="#288850"><b>int</b></font>     receiveFileDescriptor(<font color="#288850"><b>int</b></font> *descriptor);
-
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/unixserversocket.h&gt;</font>
 };
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/unixserversocketinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

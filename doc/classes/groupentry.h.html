@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/groupentry.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_GROUPENTRY_H</font>
+<font color="#a020f0">#define RUDIMENTS_GROUPENTRY_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;grp.h&gt;</font>
+
+<font color="#0000f8">// The groupentry class provides methods for retrieving entries from /etc/group</font>
+
+<font color="#288850"><b>class</b></font> groupentry {
+        <font color="#a02828"><b>public</b></font>:
+
+                <font color="#0000f8">// if you need to quickly look up a specific field, use one of</font>
+                <font color="#0000f8">// these methods</font>
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPassword(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname,
+                                                        <font color="#288850"><b>char</b></font> **password);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getGroupId(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname,
+                                                        gid_t *groupid);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getMembers(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname,
+                                                        <font color="#288850"><b>char</b></font> ***members);
+
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getName(gid_t groupid, <font color="#288850"><b>char</b></font> **name);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPassword(gid_t groupid, <font color="#288850"><b>char</b></font> **password);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getMembers(gid_t groupid, <font color="#288850"><b>char</b></font> ***members);
+
+
+                <font color="#0000f8">// if you need to look up a group entry and refer to multiple</font>
+                <font color="#0000f8">// fields, use these methods</font>
+                        groupentry();
+                        ~groupentry();
+
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname);
+                        <font color="#0000f8">// looks up a group entry by name</font>
+                <font color="#288850"><b>int</b></font>     initialize(gid_t groupid);
+                        <font color="#0000f8">// looks up a group entry by group id</font>
+
+                <font color="#288850"><b>char</b></font>    *getName() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    *getPassword() <font color="#288850"><b>const</b></font>;
+                gid_t   getGroupId() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    **getMembers() <font color="#288850"><b>const</b></font>;
+
+
+                <font color="#288850"><b>void</b></font>    print() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// prints out the group entry</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/groupentry.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/groupentryinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/protocolentry.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_PROTOCOLENTRY_H</font>
+<font color="#a020f0">#define RUDIMENTS_PROTOCOLENTRY_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;netdb.h&gt;</font>
+
+<font color="#0000f8">// The protocolentry class provides methods for retrieving</font>
+<font color="#0000f8">// entries from /etc/protocols</font>
+
+<font color="#288850"><b>class</b></font> protocolentry {
+        <font color="#a02828"><b>public</b></font>:
+
+                <font color="#0000f8">// if you need to quickly look up a specific field, use one of</font>
+                <font color="#0000f8">// these methods</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAliasList(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *protocolname,
+                                                <font color="#288850"><b>char</b></font> ***aliaslist);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getNumber(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *protocolname,
+                                                <font color="#288850"><b>int</b></font> *number);
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getName(<font color="#288850"><b>int</b></font> number, <font color="#288850"><b>char</b></font> **name);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAliasList(<font color="#288850"><b>int</b></font> number, <font color="#288850"><b>char</b></font> ***aliaslist);
+
+
+                <font color="#0000f8">// if you need to look up a protocol entry and refer to multiple</font>
+                <font color="#0000f8">// fields, use these methods</font>
+                        protocolentry();
+                        ~protocolentry();
+
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *protocolname);
+                        <font color="#0000f8">// looks up a protocol entry by name</font>
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>int</b></font> number);
+                        <font color="#0000f8">// looks up a protocol entry by number</font>
+
+                <font color="#288850"><b>char</b></font>    *getName() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    **getAliasList() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getNumber() <font color="#288850"><b>const</b></font>;
+
+                <font color="#288850"><b>void</b></font>    print() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// prints out the protocol entry</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/protocolentry.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/protocolentryinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

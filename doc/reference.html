@@ -14,36 +14,81 @@
 <p>The <b>rudiments</b> class library consists of several classes.  Some are 
 utility classes, others are designed to be base classes for software.</p>
 
-<ul>
-<li><b>Base Classes:</b>
+<blockquote>
 	<ul>
 	<li><b><a href="classes/daemonprocess.h.html">daemonprocess</a></b> - base class for daemons
-	<li><b><a href="classes/errorhandler.h.html">errorhandler</a></b> - base class for several other rudiments classes, provides a method for getting the error messages that they can generate
-	<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
-	<li><b><a href="classes/inetserversocket.h.html">inetserversocket</a></b> - base class for inet tcp stream servers
-	<li><b><a href="classes/listener.h.html">listener</a></b> - base class for listening on pools of file descriptors
-	<li><b><a href="classes/transport.h.html">transport</a></b> - base class for classes that transport data over (or associated with) a file descriptor (such as clients and servers)
-	<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
-	<li><b><a href="classes/unixserversocket.h.html">unixserversocket</a></b> - base class for unix tcp stream servers
-	<li><b><a href="classes/xmlsax.h.html">xmlsax</a></b> - base class for xml parsers
 	</ul>
-<li><b>Utility Classes:</b>
+
+	<ul>
+	<li><b><a href="classes/errorhandler.h.html">errorhandler</a></b> - base class that provides methods for setting and retrieving error messages
+	</ul>
+
+	<ul>
+	<li><b><a href="classes/filedescriptor.h.html">filedescriptor</a></b> - base class for classes that need to interact with file descriptors
+	<ul>
+		<li><b><a href="classes/file.h.html">file</a></b> - base class for classes that need to interact with files
+		<li><b><a href="classes/datatransportfactory.h.html">datatransportfactory</a></b> - class for generating instances of clients and servers
+		<li><b><a href="classes/datatransport.h.html">datatransport</a></b> - base class for classes that transport data over (or associated with) a file descriptor (such as clients and servers)
+		<ul>
+			<li><b><a href="classes/client.h.html">client</a></b> - base class for clients
+			<ul>
+				<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
+				<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
+			</ul>
+			<li><b><a href="classes/server.h.html">server</a></b> - base class for servers
+			<ul>
+				<li><b><a href="classes/serversocket.h.html">serversocket</a></b> - base class for servers that listen on sockets
+				<ul>
+					<li><b><a href="classes/inetserversocket.h.html">inetserversocket</a></b> - base class for inet tcp stream servers
+					<li><b><a href="classes/unixserversocket.h.html">unixserversocket</a></b> - base class for unix tcp stream servers
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+	<li><b><a href="classes/listener.h.html">listener</a></b> - base class for listening on pools of file descriptors
+	</ul>
+
 	<ul>
 	<li><b><a href="classes/commandline.h.html">commandline</a></b> - command line processing class
 	<li><b><a href="classes/datetime.h.html">datetime</a></b> - date/time processing class
 	<li><b><a href="classes/logger.h.html">logger</a></b> - class for generating log messages
-	<li><b><a href="classes/memorypool.h.html">memorypool</a></b> - class that implements a memory pool
 	<li><b><a href="classes/permissions.h.html">permissions</a></b> - class for generating file permissions
 	<li><b><a href="classes/randomnumber.h.html">randomnumber</a></b> - class for generating random numbers
 	<li><b><a href="classes/regularexpression.h.html">regularexpression</a></b> - class for dealing with regular expressions
-	<li><b><a href="classes/semaphoreset.h.html">semaphoreset</a></b> - semaphore class
-	<li><b><a href="classes/sharedmemory.h.html">sharedmemory</a></b> - shared memory class
+	</ul>
+
+	<ul>
 	<li><b><a href="classes/signalclasses.h.html">signalclasses</a></b> - classes with methods for managing signals
-	<li><b><a href="classes/text.h.html">text</a></b> - text processing and evaluation class
+	<li><b><a href="classes/sharedmemory.h.html">sharedmemory</a></b> - shared memory class
+	<li><b><a href="classes/semaphoreset.h.html">semaphoreset</a></b> - semaphore class
+	</ul>
+
+	<ul>
+	<li><b><a href="classes/memorypool.h.html">memorypool</a></b> - class that implements a memory pool
+	<li><b><a href="classes/variablebuffer.h.html">variablebuffer</a></b> - class for storing arbitrary length data
+	<li><b><a href="classes/stringbuffer.h.html">stringbuffer</a></b> - class for storing arbitrary length strings
+	<li><b><a href="classes/string.h.html">string</a></b> - string processing and evaluation class
+	</ul>
+
+	<ul>
 	<li><b><a href="classes/xmldom.h.html">xmldom</a></b> - a minimal XML DOM parser
 	<li><b><a href="classes/xmldomnode.h.html">xmldomnode</a></b> - an XML DOM tree node
+	<li><b><a href="classes/xmlsax.h.html">xmlsax</a></b> - base class for xml parsers
+	<li><b><a href="classes/dtd.h.html">dtd</a></b> - class for processing xml dtd's
 	</ul>
-</ul>
+
+	<ul>
+	<li><b><a href="classes/groupentry.h.html">groupentry</a></b> - container for /etc/group entries
+	<li><b><a href="classes/hostentry.h.html">hostentry</a></b> - container for /etc/hosts entries
+	<li><b><a href="classes/passwdentry.h.html">passwdentry</a></b> - container for /etc/passwd entires
+	<li><b><a href="classes/protocolentry.h.html">protocolentry</a></b> - container for /etc/protocols entries
+	</ul>
+
+	<ul>
+	<li><b><a href="classes/dictionary.h.html">dictionary</a></b> - class for storing lists of key/data pairs
+	<li><b><a href="classes/list.h.html">list</a></b> - class for storing data in a doubly linked list
+	</ul>
+</blockquote>
 
 <p>As a rule of thumb, the base classes should be inherited from and the
 utility classes should be instantiated as needed.  Some of the utility classes

@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/variablebuffer.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_VARIABLEBUFFER_H</font>
+<font color="#a020f0">#define RUDIMENTS_VARIABLEBUFFER_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
+
+<font color="#0000f8">// The variablebuffer class can be used to store raw data of arbitrary length.</font>
+
+<font color="#288850"><b>class</b></font> variablebuffer {
+        <font color="#a02828"><b>public</b></font>:
+                        variablebuffer(<font color="#288850"><b>size_t</b></font> initialsize, <font color="#288850"><b>size_t</b></font> increment);
+                        variablebuffer(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *initialcontents,
+                                        <font color="#288850"><b>size_t</b></font> initialsize, <font color="#288850"><b>size_t</b></font> increment);
+                        <font color="#0000f8">// Creates a new buffer of size &quot;initialsize&quot;</font>
+                        <font color="#0000f8">// which will grow in chunks of size &quot;increment&quot;.</font>
+                        <font color="#0000f8">// The position at which the first write or append</font>
+                        <font color="#0000f8">// will occur is initialized to 0.</font>
+                <font color="#288850"><b>virtual</b></font> ~variablebuffer();
+
+                <font color="#288850"><b>void</b></font>    setPosition(<font color="#288850"><b>size_t</b></font> pos);
+                        <font color="#0000f8">// Sets the position at which the next read or write</font>
+                        <font color="#0000f8">// will occur to &quot;pos&quot;.  If the position is set beyond</font>
+                        <font color="#0000f8">// the end of the buffer, the buffer will grow but the</font>
+                        <font color="#0000f8">// data between the current end of the buffer and the</font>
+                        <font color="#0000f8">// new position will be undefined.</font>
+
+                <font color="#0000f8">// The write() and append() methods return a pointer to the</font>
+                <font color="#0000f8">// variablebuffer instance.  This enables chaining:</font>
+                <font color="#0000f8">//</font>
+                <font color="#0000f8">//      sb-&gt;write(data1)-&gt;write(data2)-&gt;write(data3);</font>
+                <font color="#0000f8">//              or</font>
+                <font color="#0000f8">//      sb-&gt;append(data1)-&gt;append(data2)-&gt;append(data3);</font>
+                variablebuffer  *write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *data, <font color="#288850"><b>size_t</b></font> size);
+                        <font color="#0000f8">// Writes &quot;data&quot; to the variablebuffer at the current</font>
+                        <font color="#0000f8">// position.  If necessary, the buffer will grow to</font>
+                        <font color="#0000f8">// accommodate the new data.</font>
+                variablebuffer  *append(<font color="#288850"><b>const</b></font> <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *data, <font color="#288850"><b>size_t</b></font> size);
+                        <font color="#0000f8">// Appends &quot;data&quot; to the variablebuffer.  The buffer</font>
+                        <font color="#0000f8">// will grow to accommodate the new data.</font>
+
+                ssize_t read(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *data, <font color="#288850"><b>size_t</b></font> size);
+                        <font color="#0000f8">// Reads &quot;size&quot; bytes from the variablebuffer at the</font>
+                        <font color="#0000f8">// current position into &quot;data&quot;.  Also increments the</font>
+                        <font color="#0000f8">// current position by &quot;size&quot; bytes.</font>
+
+                <font color="#288850"><b>void</b></font>    clear();
+                        <font color="#0000f8">// Empties the variablebuffer.</font>
+
+                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font>   *getBuffer();
+                                <font color="#0000f8">// Returns the current data stored in the</font>
+                                <font color="#0000f8">// variablebuffer.</font>
+                <font color="#288850"><b>size_t</b></font>          getSize();
+                                <font color="#0000f8">// Returns the current amount of data stored</font>
+                                <font color="#0000f8">// in the variablebuffer.</font>
+                <font color="#288850"><b>size_t</b></font>          getPosition();
+                                <font color="#0000f8">// Returns the position in the buffer at which</font>
+                                <font color="#0000f8">// the next write will occur.</font>
+                <font color="#288850"><b>size_t</b></font>          getEnd();
+                                <font color="#0000f8">// Returns the position in the buffer at which</font>
+                                <font color="#0000f8">// the next append will occur.</font>
+                <font color="#288850"><b>size_t</b></font>          getActualSize();
+                                <font color="#0000f8">// Returns the actual size of the buffer which</font>
+                                <font color="#0000f8">// may be larger than the value returned by</font>
+                                <font color="#0000f8">// getSize() since the buffer grows in chunks.</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/variablebuffer.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/variablebufferinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

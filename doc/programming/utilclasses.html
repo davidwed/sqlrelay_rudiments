@@ -18,7 +18,7 @@
 <li><a href="#semaphoreset">Using the Semaphore Set Class</a></li>
 <li><a href="#sharedmemory">Using the Shared Memory Class</a></li>
 <li><a href="#signal">Using the Signal Classes</a></li>
-<li><a href="#text">Using the Text Class</a></li>
+<li><a href="#string">Using the String Class</a></li>
 <li><a href="#xmldom">Using the XML DOM Classes</a></li>
 </ul>
 
@@ -558,59 +558,59 @@ main() {
 
 <p>Note that you'll have to kill that program with a -9.</p>
 
-<a name="text"></a>
-<span class="heading">Using the Text Class</span><br><br>
+<a name="string"></a>
+<span class="heading">Using the String Class</span><br><br>
 
-<p>The text class contains some commonly needed text manipulation and
-evaluation functions.  Below is some code illustrating the use of the text
+<p>The string class contains some commonly needed string manipulation and
+evaluation functions.  Below is some code illustrating the use of the string
 class.</p>
 
 <PRE>
-<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/text.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/string.h&gt;</FONT>
 <FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
 <FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;string.h&gt;</FONT>
 
 main() {
 
-        <FONT color=#0000ff>// initialize a text buffer and print it out</FONT>
+        <FONT color=#0000ff>// initialize a string buffer and print it out</FONT>
         <B><FONT color=#288a51>char</FONT></B>    buffer[<FONT color=#ff00ff>100</FONT>];
         strcpy(buffer,<FONT color=#ff00ff>&quot;     hello      &quot;</FONT>);
         cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
 
         <FONT color=#0000ff>// trim the spaces off of the right hand side</FONT>
-        text::rightTrim(buffer);
+        string::rightTrim(buffer);
         cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
 
         <FONT color=#0000ff>// trim the spaces off of the left hand side</FONT>
-        text::leftTrim(buffer);
+        string::leftTrim(buffer);
         cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
 
         <FONT color=#0000ff>// convert buffer to uppercase</FONT>
-        text::upper(buffer);
+        string::upper(buffer);
         cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
 
         <FONT color=#0000ff>// convert buffer to lowercase</FONT>
-        text::lower(buffer);
+        string::lower(buffer);
         cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
 
         <FONT color=#0000ff>// http escape the buffer</FONT>
-        <B><FONT color=#288a51>char</FONT></B>    *escbuffer=text::httpEscape(<FONT color=#ff00ff>&quot;!@#$%^&amp;*()hello-+&quot;</FONT>);
+        <B><FONT color=#288a51>char</FONT></B>    *escbuffer=string::httpEscape(<FONT color=#ff00ff>&quot;!@#$%^&amp;*()hello-+&quot;</FONT>);
         cout &lt;&lt; <FONT color=#ff00ff>&quot;!@#$%^&amp;*()hello-+  http escaped is  &quot;</FONT> &lt;&lt; escbuffer &lt;&lt; endl;
         <B><FONT color=#a62828>delete</FONT></B> escbuffer;
         
         <FONT color=#0000ff>// evaluate a string to see if it's a number</FONT>
-        <B><FONT color=#a62828>if</FONT></B> (text::isNumber(<FONT color=#ff00ff>&quot;-100.5&quot;</FONT>)) {
+        <B><FONT color=#a62828>if</FONT></B> (string::isNumber(<FONT color=#ff00ff>&quot;-100.5&quot;</FONT>)) {
                 cout &lt;&lt; <FONT color=#ff00ff>&quot;-100.5 is a number&quot;</FONT> &lt;&lt; endl;
         }
-        <B><FONT color=#a62828>if</FONT></B> (!text::isNumber(<FONT color=#ff00ff>&quot;-100.5.10&quot;</FONT>)) {
+        <B><FONT color=#a62828>if</FONT></B> (!string::isNumber(<FONT color=#ff00ff>&quot;-100.5.10&quot;</FONT>)) {
                 cout &lt;&lt; <FONT color=#ff00ff>&quot;-100.5.10 is not a number&quot;</FONT> &lt;&lt; endl;
         }
         
         <FONT color=#0000ff>// evaluate a string to see if it's an integer</FONT>
-        <B><FONT color=#a62828>if</FONT></B> (text::isInteger(<FONT color=#ff00ff>&quot;-100&quot;</FONT>)) {
+        <B><FONT color=#a62828>if</FONT></B> (string::isInteger(<FONT color=#ff00ff>&quot;-100&quot;</FONT>)) {
                 cout &lt;&lt; <FONT color=#ff00ff>&quot;-100 is an integer&quot;</FONT> &lt;&lt; endl;
         }
-        <B><FONT color=#a62828>if</FONT></B> (!text::isInteger(<FONT color=#ff00ff>&quot;-100.5&quot;</FONT>)) {
+        <B><FONT color=#a62828>if</FONT></B> (!string::isInteger(<FONT color=#ff00ff>&quot;-100.5&quot;</FONT>)) {
                 cout &lt;&lt; <FONT color=#ff00ff>&quot;-100.5.10 is not an integer&quot;</FONT> &lt;&lt; endl;
         }
 }

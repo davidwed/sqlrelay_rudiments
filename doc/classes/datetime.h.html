@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/datetime.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/datetime.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,8 +8,11 @@
 <font color="#0000f8">// Copyright (c) 2000-2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef DATETIME_H</font>
-<font color="#a020f0">#define DATETIME_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_DATETIME_H</font>
+<font color="#a020f0">#define RUDIMENTS_DATETIME_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;time.h&gt;</font>
 
 <font color="#0000f8">// The datetime class provides methods for converting date/time formats and</font>
@@ -21,8 +24,8 @@
                                 <font color="#0000f8">// current time</font>
                         datetime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
                                 <font color="#0000f8">// datestring must be &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
-                        datetime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>time_t</b></font> *epoch);
-                                <font color="#0000f8">// *epoch is the number of seconds since 1970,</font>
+                        datetime(<font color="#288850"><b>time_t</b></font> epoch);
+                                <font color="#0000f8">// epoch is the number of seconds since 1970,</font>
                                 <font color="#0000f8">// output by many standard time functions</font>
                         datetime(<font color="#288850"><b>const</b></font> tm *timestruct);
                                 <font color="#0000f8">// *timestruct is a (struct tm *), output by </font>
@@ -63,10 +66,48 @@
                 tm      *getTm();
                         <font color="#0000f8">// returns a pointer to the internal &quot;struct tm&quot;</font>
 
+
+                <font color="#288850"><b>int</b></font>     getSystemDateAndTime();
+                        <font color="#0000f8">// Sets the date and time represented in the class to</font>
+                        <font color="#0000f8">// the date and time stored in the system clock.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     setSystemDateAndTime();
+                        <font color="#0000f8">// Sets the system clock's date and time to the date</font>
+                        <font color="#0000f8">// and time currently represented in the class.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+                <font color="#0000f8">// These methods only work if your system has a working</font>
+                <font color="#0000f8">// real-time-clock at /dev/rtc.</font>
+                <font color="#288850"><b>int</b></font>     getHardwareDateAndTime();
+                        <font color="#0000f8">// Sets the date and time represented in the class to</font>
+                        <font color="#0000f8">// the date and time stored in the hardware clock.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     setHardwareDateAndTime();
+                        <font color="#0000f8">// Sets the hardware clock's date and time to the date</font>
+                        <font color="#0000f8">// and time currently represented in the class.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>char</b></font>     *getString(<font color="#288850"><b>time_t</b></font> epoch);
+                        <font color="#0000f8">// returns &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
+                        <font color="#0000f8">// Note that this method allocates a buffer to return</font>
+                        <font color="#0000f8">// the string in which must be deleted by the calling</font>
+                        <font color="#0000f8">// program.</font>
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>time_t</b></font>   getEpoch(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
+                        <font color="#0000f8">// parses &quot;mm/dd/yyyy hh:mm:ss&quot; and returns the</font>
+                        <font color="#0000f8">// number of seconds since 1970.</font>
+
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/datetime.h&gt;</font>
 };
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/datetimeinlines.h&gt;</font>
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/datetimeinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

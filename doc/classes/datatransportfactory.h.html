@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/datatransportfactory.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_DATATRANSPORT_FACTORY_H</font>
+<font color="#a020f0">#define RUDIMENTS_DATATRANSPORT_FACTORY_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/client.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/server.h&gt;</font>
+
+<font color="#0000f8">// The datatransportfactory class provides factory methods for getting clients</font>
+<font color="#0000f8">// and servers.</font>
+
+<font color="#288850"><b>class</b></font> datatransportfactory {
+        <font color="#a02828"><b>public</b></font>:
+                <font color="#288850"><b>static</b></font> client   *getClient(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *type);
+                        <font color="#0000f8">// Returns an instance of a child of the client</font>
+                        <font color="#0000f8">// class as follows:</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">//    type              class</font>
+                        <font color="#0000f8">// &quot;inet&quot;             inetclientsocket</font>
+                        <font color="#0000f8">// &quot;unix&quot;             unixclientsocket</font>
+                        <font color="#0000f8">// anything else      NULL</font>
+
+                <font color="#288850"><b>static</b></font> server   *getServer(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *type);
+                        <font color="#0000f8">// Returns an instance of a child of the server</font>
+                        <font color="#0000f8">// class as follows:</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">//    type              class</font>
+                        <font color="#0000f8">// &quot;inet&quot;             inetserversocket</font>
+                        <font color="#0000f8">// &quot;unix&quot;             unixserversocket</font>
+                        <font color="#0000f8">// anything else      NULL</font>
+};
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

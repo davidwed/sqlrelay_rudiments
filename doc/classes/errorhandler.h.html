@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/errorhandler.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/errorhandler.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,10 +8,10 @@
 <font color="#0000f8">// Copyright (c) 2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef ERRORHANDLER_H</font>
-<font color="#a020f0">#define ERRORHANDLER_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_ERRORHANDLER_H</font>
+<font color="#a020f0">#define RUDIMENTS_ERRORHANDLER_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;strstream.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/stringbuffer.h&gt;</font>
 
 <font color="#0000f8">// The errorhandler class is a base class for many rudiments classes.</font>
 
@@ -26,7 +26,9 @@
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/errorhandler.h&gt;</font>
 };
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/errorhandlerinlines.h&gt;</font>
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/errorhandlerinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

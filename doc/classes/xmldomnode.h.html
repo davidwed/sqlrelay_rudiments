@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/xmldomnode.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/xmldomnode.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,10 +8,10 @@
 <font color="#0000f8">// Copyright (c) 2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef XMLDOMNODE_H</font>
-<font color="#a020f0">#define XMLDOMNODE_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_XMLDOMNODE_H</font>
+<font color="#a020f0">#define RUDIMENTS_XMLDOMNODE_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;strstream.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/stringbuffer.h&gt;</font>
 
 <font color="#0000f8">// The xmldomnode class provides a generic container for DOM tree elements.</font>
 <font color="#0000f8">// One can navigate the nodes of the tree, modify the tree and read or modify</font>
@@ -39,7 +39,7 @@
 <font color="#0000f8">// Here is a breakdown by node type:</font>
 <font color="#0000f8">//</font>
 <font color="#0000f8">//      For the document root:</font>
-<font color="#0000f8">//              type - ROOT_XMLNODETYPE</font>
+<font color="#0000f8">//              type - ROOT_XMLDOMNODETYPE</font>
 <font color="#0000f8">//              name - &quot;document&quot;</font>
 <font color="#0000f8">//              value - unused</font>
 <font color="#0000f8">//              parent node - unused</font>
@@ -50,7 +50,7 @@
 <font color="#0000f8">//                                      and the top-level enclosing tag</font>
 <font color="#0000f8">//</font>
 <font color="#0000f8">//      For a tag:</font>
-<font color="#0000f8">//              type - TAG_XMLNODETYPE</font>
+<font color="#0000f8">//              type - TAG_XMLDOMNODETYPE</font>
 <font color="#0000f8">//              name - the tag name</font>
 <font color="#0000f8">//              value - unused</font>
 <font color="#0000f8">//              parent node - the parent tag or document root</font>
@@ -63,7 +63,7 @@
 <font color="#0000f8">//                                      and/or cdata segments</font>
 <font color="#0000f8">//</font>
 <font color="#0000f8">//      For a tag attribute:</font>
-<font color="#0000f8">//              type - ATTRIBUTE_XMLNODETYPE</font>
+<font color="#0000f8">//              type - ATTRIBUTE_XMLDOMNODETYPE</font>
 <font color="#0000f8">//              name - the attribute name</font>
 <font color="#0000f8">//              value - the attribute value</font>
 <font color="#0000f8">//                  (note that for tags with standalone</font>
@@ -75,7 +75,7 @@
 <font color="#0000f8">//              a list of child nodes - unused</font>
 <font color="#0000f8">//</font>
 <font color="#0000f8">//      For a segment of text:</font>
-<font color="#0000f8">//              type - TEXT_XMLNODETYPE</font>
+<font color="#0000f8">//              type - TEXT_XMLDOMNODETYPE</font>
 <font color="#0000f8">//              name - &quot;text&quot;</font>
 <font color="#0000f8">//              value - the text itself</font>
 <font color="#0000f8">//              parent node - the tag containing the text</font>
@@ -85,7 +85,7 @@
 <font color="#0000f8">//              a list of child nodes - unused</font>
 <font color="#0000f8">//</font>
 <font color="#0000f8">//      For a comment:</font>
-<font color="#0000f8">//              type - COMMENT_XMLNODETYPE</font>
+<font color="#0000f8">//              type - COMMENT_XMLDOMNODETYPE</font>
 <font color="#0000f8">//              name - &quot;comment&quot;</font>
 <font color="#0000f8">//              value - the comment itself</font>
 <font color="#0000f8">//              parent node - the tag containing the comment</font>
@@ -97,7 +97,7 @@
 <font color="#0000f8">//              a list of child nodes - unused</font>
 <font color="#0000f8">//</font>
 <font color="#0000f8">//      For a segment of cdata:</font>
-<font color="#0000f8">//              type - CDATA_XMLNODETYPE</font>
+<font color="#0000f8">//              type - CDATA_XMLDOMNODETYPE</font>
 <font color="#0000f8">//              name - &quot;cdata&quot;</font>
 <font color="#0000f8">//              value - the cdata itself</font>
 <font color="#0000f8">//              parent node - the tag containing the cdata</font>
@@ -190,6 +190,10 @@
                 xmldomnode      *getNextSibling() <font color="#288850"><b>const</b></font>;
                                 <font color="#0000f8">// Returns a pointer to the next sibling node</font>
                                 <font color="#0000f8">// or the nullnode if none exists.</font>
+                xmldomnode      *getNextTagSibling();
+                                <font color="#0000f8">// Returns a pointer to the next sibling node</font>
+                                <font color="#0000f8">// whose type is TAG_XMLDOMNODE.  If no match</font>
+                                <font color="#0000f8">// is found, nullnode is returned.</font>
 
                 <font color="#288850"><b>int</b></font>             getChildCount() <font color="#288850"><b>const</b></font>;
                                 <font color="#0000f8">// Returns the number of immediate child nodes.</font>
@@ -210,6 +214,10 @@
                                 <font color="#0000f8">// checked, and the first child node with any</font>
                                 <font color="#0000f8">// name (with matching attribute name/value)</font>
                                 <font color="#0000f8">// will be returned.  If no match is found,</font>
+                                <font color="#0000f8">// nullnode is returned.</font>
+                xmldomnode      *getFirstTagChild();
+                                <font color="#0000f8">// Returns the first child node whose type is</font>
+                                <font color="#0000f8">// TAG_XMLDOMNODE.  If no match is found,</font>
                                 <font color="#0000f8">// nullnode is returned.</font>
 
                 <font color="#288850"><b>int</b></font>             getAttributeCount() <font color="#288850"><b>const</b></font>;
@@ -249,6 +257,8 @@
                         <font color="#0000f8">// Inserts &quot;child&quot; into the list of child nodes at</font>
                         <font color="#0000f8">// &quot;position&quot;.  The position of the next sibling</font>
                         <font color="#0000f8">// (and all successive siblings) is incremented.</font>
+                <font color="#288850"><b>int</b></font>     appendChild(xmldomnode *child);
+                        <font color="#0000f8">// Appends &quot;child&quot; to the list of child nodes.</font>
                 <font color="#288850"><b>int</b></font>     deleteChild(<font color="#288850"><b>int</b></font> position);
                         <font color="#0000f8">// Deletes the child node at &quot;position&quot;.  The position</font>
                         <font color="#0000f8">// of the next sibling (and all successive siblings)</font>
@@ -263,17 +273,25 @@
                         <font color="#0000f8">// value &quot;value&quot; into the list of child nodes at</font>
                         <font color="#0000f8">// &quot;position&quot;.  The position of the next sibling</font>
                         <font color="#0000f8">// (and all successive siblings) is incremented.</font>
+                <font color="#288850"><b>int</b></font>     appendText(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *value);
+                        <font color="#0000f8">// Appends a child node of type TEXT_XMLDOMNODE with</font>
+                        <font color="#0000f8">// value &quot;value&quot; to the list of child nodes.</font>
 
                 <font color="#288850"><b>int</b></font>     insertAttribute(xmldomnode *attribute, <font color="#288850"><b>int</b></font> position);
                         <font color="#0000f8">// Inserts &quot;attribute&quot; into the list of attributes at</font>
                         <font color="#0000f8">// &quot;position&quot;.  The position of the next attribute</font>
                         <font color="#0000f8">// (and all successive attributes) is incremented.</font>
+                <font color="#288850"><b>int</b></font>     appendAttribute(xmldomnode *attribute);
+                        <font color="#0000f8">// Appends &quot;attribute&quot; to the list of attributes.</font>
                 <font color="#288850"><b>int</b></font>     insertAttribute(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *value,
                                         <font color="#288850"><b>int</b></font> position);
                         <font color="#0000f8">// Creates an attribute node with &quot;name&quot; and &quot;value&quot;</font>
                         <font color="#0000f8">// and inserts it into the list of attributes at</font>
                         <font color="#0000f8">// &quot;position&quot;.  The position of the next attribute</font>
                         <font color="#0000f8">// (and all successive attributes) is incremented.</font>
+                <font color="#288850"><b>int</b></font>     appendAttribute(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *value);
+                        <font color="#0000f8">// Creates an attribute node with &quot;name&quot; and &quot;value&quot;</font>
+                        <font color="#0000f8">// and appends it to the list of attributes.</font>
                 <font color="#288850"><b>int</b></font>     deleteAttribute(<font color="#288850"><b>int</b></font> position);
                         <font color="#0000f8">// Deletes the attribute at &quot;position&quot;.  The position</font>
                         <font color="#0000f8">// of the next attribute (and all successive attributes)</font>
@@ -289,17 +307,19 @@
                         <font color="#0000f8">// (and all successive attributes) is decremented.</font>
 
 
-                strstream       *xml() <font color="#288850"><b>const</b></font>;
-                                <font color="#0000f8">// Allocates a strstream, writes a textual</font>
+                stringbuffer    *xml() <font color="#288850"><b>const</b></font>;
+                                <font color="#0000f8">// Allocates a stringbuffer, writes a textual</font>
                                 <font color="#0000f8">// representation of the tree starting at this</font>
-                                <font color="#0000f8">// node to it and returns the strstream.</font>
+                                <font color="#0000f8">// node to it and returns the stringbuffer;</font>
                                 <font color="#0000f8">// The calling program must deallocate the</font>
-                                <font color="#0000f8">// strstream.</font>
+                                <font color="#0000f8">// stringbuffer.</font>
 
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/xmldomnode.h&gt;</font>
 };
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/xmldomnodeinlines.h&gt;</font>
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/xmldomnodeinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

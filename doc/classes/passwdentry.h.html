@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/passwdentry.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_PASSWDENTRY_H</font>
+<font color="#a020f0">#define RUDIMENTS_PASSWDENTRY_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;pwd.h&gt;</font>
+
+<font color="#0000f8">// The passwdentry class provides methods for retrieving</font>
+<font color="#0000f8">// entries from /etc/passwd</font>
+
+<font color="#288850"><b>class</b></font> passwdentry {
+        <font color="#a02828"><b>public</b></font>:
+
+                <font color="#0000f8">// if you need to quickly look up ap specific field, use one</font>
+                <font color="#0000f8">// of these mthods</font>
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getName(uid_t userid, <font color="#288850"><b>char</b></font> **name);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPassword(uid_t userid, <font color="#288850"><b>char</b></font> **password);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPrimaryGroup(uid_t userid, gid_t *groupid);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getRealName(uid_t userid, <font color="#288850"><b>char</b></font> **realname);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getHomeDirectory(uid_t userid, <font color="#288850"><b>char</b></font> **homedir);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getShell(uid_t userid, <font color="#288850"><b>char</b></font> **shell);
+
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPassword(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username,
+                                                        <font color="#288850"><b>char</b></font> **password);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getUserId(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username,
+                                                        uid_t *userid);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPrimaryGroup(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username,
+                                                        gid_t *groupid);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getRealName(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username,
+                                                        <font color="#288850"><b>char</b></font> **realname);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getHomeDirectory(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username,
+                                                        <font color="#288850"><b>char</b></font> **homedir);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getShell(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username,
+                                                        <font color="#288850"><b>char</b></font> **shell);
+
+                <font color="#0000f8">// if you need to look up a passwd entry and refer to multiple</font>
+                <font color="#0000f8">// fields, use these methods</font>
+                        passwdentry();
+                        ~passwdentry();
+
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username);
+                        <font color="#0000f8">// looks up a passwd entry by name</font>
+                <font color="#288850"><b>int</b></font>     initialize(uid_t userid);
+                        <font color="#0000f8">// looks up a passwd entry by user id</font>
+
+                <font color="#288850"><b>char</b></font>    *getName() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    *getPassword() <font color="#288850"><b>const</b></font>;
+                uid_t   getUserId() <font color="#288850"><b>const</b></font>;
+                gid_t   getPrimaryGroup() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    *getRealName() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    *getHomeDirectory() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    *getShell() <font color="#288850"><b>const</b></font>;
+
+                <font color="#288850"><b>void</b></font>    print() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// prints out the passwd entry</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/passwdentry.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/passwdentryinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

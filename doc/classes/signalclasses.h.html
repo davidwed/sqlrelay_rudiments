@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/signalclasses.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/signalclasses.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,8 +8,10 @@
 <font color="#0000f8">// Copyright (c) 1999-2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef SIGNALCLASSES_H</font>
-<font color="#a020f0">#define SIGNALCLASSES_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_SIGNALCLASSES_H</font>
+<font color="#a020f0">#define RUDIMENTS_SIGNALCLASSES_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
 
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;signal.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
@@ -74,20 +76,18 @@
         <font color="#a02828"><b>public</b></font>:
                         signalhandler();
                         signalhandler(<font color="#288850"><b>int</b></font> signum, <font color="#288850"><b>void</b></font> *handler);
-                        <font color="#0000f8">// calls the setSignal() and setHandler() methods</font>
+                        <font color="#0000f8">// calls the setHandler() and handleSignal() methods</font>
                         <font color="#0000f8">// below during instantiation</font>
-                <font color="#288850"><b>virtual</b></font> ~signalhandler();
 
-                <font color="#288850"><b>void</b></font>    setSignal(<font color="#288850"><b>int</b></font> signum);
-                        <font color="#0000f8">// sets which signal this handler will respond to</font>
                 <font color="#288850"><b>void</b></font>    setHandler(<font color="#288850"><b>void</b></font> *inthandler);
                         <font color="#0000f8">// sets the function to call when the process</font>
                         <font color="#0000f8">// receives the signal</font>
 
-                <font color="#288850"><b>int</b></font>     handleSignal();
-                        <font color="#0000f8">// Instructs the program to actually handle the signal.</font>
-                        <font color="#0000f8">// After calling this method, if any other methods</font>
-                        <font color="#0000f8">// are called, this method must be called again.</font>
+                <font color="#288850"><b>int</b></font>     handleSignal(<font color="#288850"><b>int</b></font> signum);
+                        <font color="#0000f8">// Instructs the program to handle &quot;signum&quot; by calling</font>
+                        <font color="#0000f8">// the handler set previously in setHandler().  May</font>
+                        <font color="#0000f8">// be called multiple times to associate the same</font>
+                        <font color="#0000f8">// handler with several signals.</font>
 
                 <font color="#0000f8">// Signal flags modify the behavior of the signal handling</font>
                 <font color="#0000f8">// process.</font>
@@ -118,14 +118,16 @@
                                 <font color="#0000f8">// and 0 if it is not</font>
                 <font color="#288850"><b>void</b></font>            setMask(sigset_t sigset);
                                 <font color="#0000f8">// explicitly sets the mask to &quot;sigset&quot;</font>
-                sigset_t        *getMask() <font color="#288850"><b>const</b></font>;
+                sigset_t        getMask() <font color="#288850"><b>const</b></font>;
                                 <font color="#0000f8">// returns the set of signals currently masked</font>
 
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/signalhandler.h&gt;</font>
 
 };
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/signalclassesinlines.h&gt;</font>
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/signalclassesinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/dtd.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_DTD_H</font>
+<font color="#a020f0">#define RUDIMENTS_DTD_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/xmldom.h&gt;</font>
+
+<font color="#0000f8">// The dtd class implements a minimal XML DTD parser.</font>
+
+<font color="#288850"><b>class</b></font> dtd {
+        <font color="#a02828"><b>public</b></font>:
+
+                        dtd();
+                        ~dtd();
+
+                <font color="#288850"><b>int</b></font>     parseFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
+                        <font color="#0000f8">// Parse file &quot;filename&quot; and generate a DTD tree.</font>
+                <font color="#288850"><b>int</b></font>     parseString(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string);
+                        <font color="#0000f8">// Parse string &quot;string&quot; and generate a DTD tree.</font>
+
+                stringbuffer    *xml() <font color="#288850"><b>const</b></font>;
+                                <font color="#0000f8">// Allocates a stringbuffer, writes a textual</font>
+                                <font color="#0000f8">// representation of the tree and returns the</font>
+                                <font color="#0000f8">// stringbuffer; The calling program must</font>
+                                <font color="#0000f8">// deallocate the stringbuffer.</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/dtd.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/dtdinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments/include/rudiments/logger.h.html</title>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/logger.h.html</title>
 <meta name="Generator" content="Vim/6.1">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -8,10 +8,11 @@
 <font color="#0000f8">// Copyright (c) 2002 David Muse</font>
 <font color="#0000f8">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef LOGGER_H</font>
-<font color="#a020f0">#define LOGGER_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_LOGGER_H</font>
+<font color="#a020f0">#define RUDIMENTS_LOGGER_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;fstream.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/list.h&gt;</font>
+
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;syslog.h&gt;</font>
 
 <font color="#0000f8">// The logger class and associated logdestination classes provide methods for</font>
@@ -46,6 +47,7 @@
 <font color="#0000f8">// The filedestination class writes log data to a file.</font>
 <font color="#288850"><b>class</b></font> filedestination : <font color="#a02828"><b>public</b></font> logdestination {
         <font color="#a02828"><b>public</b></font>:
+                        filedestination();
                 <font color="#288850"><b>int</b></font>     open(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
                 <font color="#288850"><b>void</b></font>    close();
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/filedestination.h&gt;</font>
@@ -64,8 +66,8 @@
 };
 
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/logdestnode.h&gt;</font>
-
+<font color="#288850"><b>typedef</b></font> list&lt;logdestination *&gt;          loggerlist;
+<font color="#288850"><b>typedef</b></font> listnode&lt;logdestination *&gt;      loggerlistnode;
 
 <font color="#0000f8">// The logger class provides methods for managing</font>
 <font color="#0000f8">// logdestinations and writing log entries.</font>
@@ -120,7 +122,9 @@
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/logger.h&gt;</font>
 };
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/loggerinlines.h&gt;</font>
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/loggerinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
 </pre>

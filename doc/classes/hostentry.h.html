@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments-0.25/include/rudiments/hostentry.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef RUDIMENTS_HOSTENTRY_H</font>
+<font color="#a020f0">#define RUDIMENTS_HOSTENTRY_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;netdb.h&gt;</font>
+
+<font color="#0000f8">// The hostentry class provides methods for retrieving entries from /etc/hosts</font>
+
+<font color="#288850"><b>class</b></font> hostentry {
+        <font color="#a02828"><b>public</b></font>:
+
+                <font color="#0000f8">// if you need to quickly look up a specific field, use one of</font>
+                <font color="#0000f8">// these methods</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAliasList(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                                <font color="#288850"><b>char</b></font> ***aliaslist);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAddressType(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                                <font color="#288850"><b>int</b></font> *addresstype);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAddressLength(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                                <font color="#288850"><b>int</b></font> *addresslength);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAddressList(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                                <font color="#288850"><b>char</b></font> ***addresslist);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAddressString(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                                <font color="#288850"><b>int</b></font> index,
+                                                <font color="#288850"><b>char</b></font> **addressstring);
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getName(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address,
+                                                <font color="#288850"><b>int</b></font> len, <font color="#288850"><b>int</b></font> type,
+                                                <font color="#288850"><b>char</b></font> **name);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAliasList(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address,
+                                                <font color="#288850"><b>int</b></font> len, <font color="#288850"><b>int</b></font> type,
+                                                <font color="#288850"><b>char</b></font> ***aliaslist);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAddressList(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address,
+                                                <font color="#288850"><b>int</b></font> len, <font color="#288850"><b>int</b></font> type,
+                                                <font color="#288850"><b>char</b></font> ***addresslist);
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     getAddressString(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address,
+                                                <font color="#288850"><b>int</b></font> len, <font color="#288850"><b>int</b></font> type,
+                                                <font color="#288850"><b>int</b></font> index,
+                                                <font color="#288850"><b>char</b></font> **addressstring);
+
+                <font color="#0000f8">// if you need to look up a host entry and refer to multiple</font>
+                <font color="#0000f8">// fields, use these methods</font>
+                        hostentry();
+                        ~hostentry();
+
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname);
+                        <font color="#0000f8">// looks up a host entry by name</font>
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address, <font color="#288850"><b>int</b></font> len, <font color="#288850"><b>int</b></font> type);
+                        <font color="#0000f8">// looks up a host entry by address</font>
+
+                <font color="#288850"><b>char</b></font>    *getName() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    **getAliasList() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getAddressType() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getAddressLength() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    **getAddressList() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>char</b></font>    *getAddressString(<font color="#288850"><b>int</b></font> index) <font color="#288850"><b>const</b></font>;
+
+                <font color="#288850"><b>void</b></font>    print() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// prints out the host entry</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/hostentry.h&gt;</font>
+};
+
+<font color="#a020f0">#ifdef ENABLE_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/hostentryinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>
