@@ -19219,6 +19219,12 @@ then
 fi
 
 
+		if ( test "`uname -s`" = "Darwin" -a -r "INSTALL" )
+	then
+		mv INSTALL INSTALL.txt
+	fi
+
+
 echo "$as_me:$LINENO: checking for dynamic library extension" >&5
 echo $ECHO_N "checking for dynamic library extension... $ECHO_C" >&6
 if ( test -n "$CYGWIN" )

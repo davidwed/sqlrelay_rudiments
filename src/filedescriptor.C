@@ -683,9 +683,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		if (ssl) {
 			for (bool done=false; !done ;) {
 
-printf("SSL_read(%d)...\n",sizetoread);
 				actualread=SSL_read(ssl,ptr,sizetoread);
-printf("after SSL_read\n");
 				sslresult=actualread;
 
 				switch (SSL_get_error(ssl,actualread)) {

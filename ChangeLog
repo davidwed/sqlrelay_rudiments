@@ -8,6 +8,7 @@
 	fixed several timezone-related bugs
 	added modem client/server
 	made default parseNumber base 10 instead of 0
+	INSTALL is moved to INSTALL.txt for OS X now
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

@@ -296,6 +296,16 @@ fi
 ])
 
 
+AC_DEFUN([FW_CHECK_OSX],
+[
+	dnl Hack so "make install" will work on OS X
+	if ( test "`uname -s`" = "Darwin" -a -r "INSTALL" )
+	then
+		mv INSTALL INSTALL.txt
+	fi
+])
+
+
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
 AC_DEFUN([FW_CHECK_INLINE],
