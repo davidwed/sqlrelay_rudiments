@@ -43,6 +43,14 @@ inline ssize_t filedescriptor::write(unsigned long number) {
 	return safeWrite((void *)&number,sizeof(unsigned long));
 }
 
+inline ssize_t filedescriptor::write(short number) {
+	return safeWrite((void *)&number,sizeof(short));
+}
+
+inline ssize_t filedescriptor::write(long number) {
+	return safeWrite((void *)&number,sizeof(long));
+}
+
 inline ssize_t filedescriptor::write(float number) {
 	return safeWrite((void *)&number,sizeof(float));
 }
@@ -51,16 +59,28 @@ inline ssize_t filedescriptor::write(double number) {
 	return safeWrite((void *)&number,sizeof(double));
 }
 
+inline ssize_t filedescriptor::write(unsigned char character) {
+	return safeWrite((void *)&character,sizeof(unsigned char));
+}
+
 inline ssize_t filedescriptor::write(char character) {
 	return safeWrite((void *)&character,sizeof(char));
 }
 
+inline ssize_t filedescriptor::write(const unsigned char *string) {
+	return safeWrite((void *)string,strlen((char *)string));
+}
+
 inline ssize_t filedescriptor::write(const char *string) {
-	return safeWrite(string,strlen(string));
+	return safeWrite((void *)string,strlen(string));
+}
+
+inline ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
+	return safeWrite((void *)string,size);
 }
 
 inline ssize_t filedescriptor::write(const char *string, size_t size) {
-	return safeWrite(string,size);
+	return safeWrite((void *)string,size);
 }
 
 inline ssize_t filedescriptor::write(const void *buffer, size_t size) {
@@ -75,6 +95,14 @@ inline ssize_t filedescriptor::read(unsigned long *buffer) {
 	return safeRead((void *)buffer,sizeof(unsigned long));
 }
 
+inline ssize_t filedescriptor::read(short *buffer) {
+	return safeRead((void *)buffer,sizeof(short));
+}
+
+inline ssize_t filedescriptor::read(long *buffer) {
+	return safeRead((void *)buffer,sizeof(long));
+}
+
 inline ssize_t filedescriptor::read(float *buffer) {
 	return safeRead((void *)buffer,sizeof(float));
 }
@@ -83,8 +111,16 @@ inline ssize_t filedescriptor::read(double *buffer) {
 	return safeRead((void *)buffer,sizeof(double));
 }
 
+inline ssize_t filedescriptor::read(unsigned char *buffer) {
+	return safeRead((void *)buffer,sizeof(unsigned char));
+}
+
 inline ssize_t filedescriptor::read(char *buffer) {
 	return safeRead((void *)buffer,sizeof(char));
+}
+
+inline ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
+	return safeRead((void *)buffer,size);
 }
 
 inline ssize_t filedescriptor::read(char *buffer, size_t size) {

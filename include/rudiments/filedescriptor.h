@@ -42,15 +42,29 @@ class filedescriptor {
 				// Write "number" to the file descriptor.
 		virtual ssize_t	write(unsigned long number);
 				// Write "number" to the file descriptor.
+		virtual ssize_t	write(short number);
+				// Write "number" to the file descriptor.
+		virtual ssize_t	write(long number);
+				// Write "number" to the file descriptor.
 		virtual ssize_t	write(float number);
 				// Write "number" to the file descriptor.
 		virtual ssize_t	write(double number);
 				// Write "number" to the file descriptor.
+		virtual ssize_t	write(unsigned char character);
+				// Write "character" to the file descriptor.
 		virtual ssize_t	write(char character);
 				// Write "character" to the file descriptor.
+		virtual ssize_t	write(const unsigned char *string);
+				// Write "string" to the file descriptor.  Note
+				// that "string" must be NULL-terminated.
 		virtual ssize_t	write(const char *string);
 				// Write "string" to the file descriptor.  Note
 				// that "string" must be NULL-terminated.
+		virtual ssize_t	write(const unsigned char *string, size_t size);
+				// Write "size" bytes from "string" to the file
+				// descriptor.  Note that it is possible to
+				// write beyond the string's NULL terminator
+				// using this method.
 		virtual ssize_t	write(const char *string, size_t size);
 				// Write "size" bytes from "string" to the file
 				// descriptor.  Note that it is possible to
@@ -70,15 +84,27 @@ class filedescriptor {
 		virtual ssize_t	read(unsigned long *buffer);
 				// Reads sizeof(unsigned long) bytes
 				// from the file descriptor into "buffer".
+		virtual ssize_t	read(short *buffer);
+				// Reads sizeof(short) bytes
+				// from the file descriptor into "buffer".
+		virtual ssize_t	read(long *buffer);
+				// Reads sizeof(long) bytes
+				// from the file descriptor into "buffer".
 		virtual ssize_t	read(float *buffer);
 				// Reads sizeof(float) bytes from the file
 				// descriptor into "buffer".
 		virtual ssize_t	read(double *buffer);
 				// Reads sizeof(double) bytes from the file
 				// descriptor into "buffer".
+		virtual ssize_t	read(unsigned char *buffer);
+				// Reads sizeof(unsigned char) bytes
+				// from the file descriptor into "buffer".
 		virtual ssize_t	read(char *buffer);
 				// Reads sizeof(char) bytes from the file
 				// descriptor into "buffer".
+		virtual ssize_t	read(unsigned char *buffer, size_t size);
+				// Reads "size" bytes from the file descriptor
+				// into "buffer".
 		virtual ssize_t	read(char *buffer, size_t size);
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
