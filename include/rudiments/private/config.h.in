@@ -321,6 +321,9 @@
 /* Version */
 #undef RUDIMENTS_VERSION
 
+/* setsockopt takes a const void * on most systems */
+#undef SETSOCKOPT_OPTVAL_TYPE
+
 /* Most systems define signal handlers with an integer parameter */
 #undef SIGNAL_HANDLER_INT
 

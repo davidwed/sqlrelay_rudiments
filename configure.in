@@ -246,6 +246,13 @@ AC_FUNC_MKTIME
 AC_FUNC_MMAP
 AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open setenv putenv unsetenv)
 
+AC_LANG(C++)
+AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/socket.h>],
+setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
+AC_LANG(C)
+
 AC_MSG_CHECKING(srand48)
 AC_TRY_LINK([#include <stdlib.h>],
 srand48(0);,AC_DEFINE(HAVE_SRAND48,1, Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
