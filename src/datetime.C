@@ -65,7 +65,7 @@ datetime::datetime(const time_t *epoch) {
 	timestring=NULL;
 }
 
-char	*datetime::getString() {
+char *datetime::getString() {
 	if (!timestring) {
 		timestring=new char[20];
 		sprintf(timestring,"%02d/%02d/%d %02d:%02d:%02d",

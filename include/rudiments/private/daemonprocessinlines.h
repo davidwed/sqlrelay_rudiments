@@ -21,7 +21,7 @@
 	#include <sys/wait.h>
 #endif
 
-inline int	daemonprocess::createPidFile(const char *filename,
+inline int daemonprocess::createPidFile(const char *filename,
 						mode_t permissions) {
 	int	fd=open(filename,O_CREAT|O_TRUNC,permissions);
 	if (fd>-1) {
@@ -34,21 +34,21 @@ inline int	daemonprocess::createPidFile(const char *filename,
 	return 0;
 }
 
-inline void	daemonprocess::waitOnChildren() {
+inline void daemonprocess::waitOnChildren() {
 	while(waitpid(-1,NULL,WNOHANG)>0);
 }
 
 
-inline void	daemonprocess::shutDown() {
+inline void daemonprocess::shutDown() {
 	(*shutdownfunc)(0);
 }
 
-inline int	daemonprocess::runAsUser(const char *username) const {
+inline int daemonprocess::runAsUser(const char *username) const {
 	struct	passwd	*ent=getpwnam((username)?username:"");
 	return (ent)?runAsUserId(ent->pw_uid):0;
 }
 
-inline int	daemonprocess::runAsUserId(uid_t uid) const {
+inline int daemonprocess::runAsUserId(uid_t uid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else
@@ -56,12 +56,12 @@ inline int	daemonprocess::runAsUserId(uid_t uid) const {
 	#endif
 }
 
-inline int	daemonprocess::runAsGroup(const char *groupname) const {
+inline int daemonprocess::runAsGroup(const char *groupname) const {
 	struct	group	*ent=getgrnam((groupname)?groupname:"");
 	return (ent)?runAsGroupId(ent->gr_gid):0;
 }
 
-inline int	daemonprocess::runAsGroupId(gid_t gid) const {
+inline int daemonprocess::runAsGroupId(gid_t gid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else

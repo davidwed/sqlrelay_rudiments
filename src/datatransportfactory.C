@@ -7,7 +7,7 @@
 #include <rudiments/unixserversocket.h>
 #include <rudiments/unixclientsocket.h>
 
-server	*datatransportfactory::getServer(const char *type) {
+server *datatransportfactory::getServer(const char *type) {
 	if (!strcmp(type,"inet")) {
 		return new inetserversocket();
 	} else if (!strcmp(type,"unix")) {
@@ -16,7 +16,7 @@ server	*datatransportfactory::getServer(const char *type) {
 	return NULL;
 }
 
-client	*datatransportfactory::getClient(const char *type) {
+client *datatransportfactory::getClient(const char *type) {
 	if (!strcmp(type,"inet")) {
 		return new inetclientsocket();
 	} else if (!strcmp(type,"unix")) {

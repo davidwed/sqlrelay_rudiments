@@ -18,7 +18,7 @@
 
 //#define DEBUG_UNIXSOCKET 1
 
-int	unixsocket::passFileDescriptor(int descriptor) {
+int unixsocket::passFileDescriptor(int descriptor) {
 
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
@@ -79,7 +79,7 @@ int	unixsocket::passFileDescriptor(int descriptor) {
 	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
-int	unixsocket::receiveFileDescriptor(int *descriptor) {
+int unixsocket::receiveFileDescriptor(int *descriptor) {
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr

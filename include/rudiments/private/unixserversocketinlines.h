@@ -5,7 +5,7 @@ inline unixserversocket::unixserversocket() : unixsocket(), serversocket() {
 	mask=0;
 }
 
-inline int	unixserversocket::listenOnSocket(const char *filename,
+inline int unixserversocket::listenOnSocket(const char *filename,
 						mode_t mask, int backlog) {
 	initialize(filename,mask);
 	return bind() && listen(backlog);

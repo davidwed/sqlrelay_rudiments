@@ -12,7 +12,7 @@
 	#include <strings.h>
 #endif
 
-mode_t	permissions::evalPermString(const char *permstring) {
+mode_t permissions::evalPermString(const char *permstring) {
 	mode_t	retval=0;
 	if (strlen(permstring)==9) {
 

@@ -5,10 +5,10 @@ variablebuffer::~variablebuffer() {
 	delete[] buffer;
 }
 
-unsigned char	*variablebuffer::getBuffer() {
+unsigned char *variablebuffer::getBuffer() {
 	return buffer;
 }
 
-unsigned long	variablebuffer::getSize() {
+unsigned long variablebuffer::getSize() {
 	return position;
 }

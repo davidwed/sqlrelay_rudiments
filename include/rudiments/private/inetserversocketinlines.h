@@ -3,12 +3,12 @@
 
 inline inetserversocket::inetserversocket() : serversocket(), inetsocket() {}
 
-inline int	inetserversocket::listenOnSocket(const char *address,
+inline int inetserversocket::listenOnSocket(const char *address,
 					unsigned short port, int backlog) {
 	initialize(address,port);
 	return bind() && listen(backlog);
 }
 
-inline unsigned short	inetserversocket::getPort() {
+inline unsigned short inetserversocket::getPort() {
 	return port;
 }

@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-int	serversocket::setLingerOnClose(int timeout, int onoff) {
+int serversocket::setLingerOnClose(int timeout, int onoff) {
 	struct	linger	ling;
 	ling.l_onoff=onoff;
 	ling.l_linger=timeout;
@@ -18,12 +18,12 @@ int	serversocket::setLingerOnClose(int timeout, int onoff) {
 				(void *)&ling,sizeof(struct linger));
 }
 
-int	serversocket::setReuseAddresses(int onoff) {
+int serversocket::setReuseAddresses(int onoff) {
 	int	value=onoff;
 	return !setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,
 			(void *)&value,(socklen_t)sizeof(int));
 }
 
-int	serversocket::listen(int backlog) {
+int serversocket::listen(int backlog) {
 	return !::listen(fd,backlog);
 }

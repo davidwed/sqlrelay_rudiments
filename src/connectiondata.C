@@ -22,7 +22,7 @@ connectiondata::~connectiondata() {
 	}
 }
 
-void	connectiondata::setValue(const char *key, const char *value) {
+void connectiondata::setValue(const char *key, const char *value) {
 
 	if (!first) {
 		first=new connectiondatanode(key,value);
@@ -39,7 +39,7 @@ void	connectiondata::setValue(const char *key, const char *value) {
 	keycount++;
 }
 
-void	connectiondata::removeValue(const char *key) {
+void connectiondata::removeValue(const char *key) {
 
 	connectiondatanode	*current=findNode(key);
 	if (current) {
@@ -54,7 +54,7 @@ void	connectiondata::removeValue(const char *key) {
 	}
 }
 
-connectiondatanode	*connectiondata::findNode(int index) const {
+connectiondatanode *connectiondata::findNode(int index) const {
 	connectiondatanode	*current=first;
 	for (int i=0; i<index && current; i++) {
 		current=current->next;
@@ -62,7 +62,7 @@ connectiondatanode	*connectiondata::findNode(int index) const {
 	return current;
 }
 
-connectiondatanode	*connectiondata::findNode(const char *key) const {
+connectiondatanode *connectiondata::findNode(const char *key) const {
 	connectiondatanode	*current=first;
 	while(current) {
 		if (!strcmp(key,current->key)) {

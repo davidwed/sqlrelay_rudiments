@@ -19,7 +19,7 @@
 	#include <strings.h>
 #endif
 
-int	xmlsax::parseFile(const char *filename) {
+int xmlsax::parseFile(const char *filename) {
 
 	// reset string/line
 	reset();
@@ -30,7 +30,7 @@ int	xmlsax::parseFile(const char *filename) {
 		parse() && close());
 }
 
-int	xmlsax::parseString(const char *string) {
+int xmlsax::parseString(const char *string) {
 
 	// close any previously opened files
 	if (!close()) {
@@ -47,7 +47,7 @@ int	xmlsax::parseString(const char *string) {
 	return parse();
 }
 
-int	xmlsax::close() {
+int xmlsax::close() {
 
 	// close any previously opened files
 	if (filedescriptor>-1 && ::close(filedescriptor)==-1) {
@@ -60,7 +60,7 @@ int	xmlsax::close() {
 	return 1;
 }
 
-int	xmlsax::parse() {
+int xmlsax::parse() {
 
 	char	ch;
 
@@ -93,7 +93,7 @@ int	xmlsax::parse() {
 	return 1;
 }
 
-char	xmlsax::parseTag(char current) {
+char xmlsax::parseTag(char current) {
 
 	char	ch=current;
 
@@ -218,7 +218,7 @@ char	xmlsax::parseTag(char current) {
 	return getCharacter();
 }
 
-char	xmlsax::parseTagName(char current, stringbuffer **name) {
+char xmlsax::parseTagName(char current, stringbuffer **name) {
 
 	// create a buffer to hold the tag name
 	*name=new stringbuffer();
@@ -268,7 +268,7 @@ char	xmlsax::parseTagName(char current, stringbuffer **name) {
 	}
 }
 
-char	xmlsax::parseComment(char current) {
+char xmlsax::parseComment(char current) {
 
 	// create a buffer to store the comment
 	stringbuffer	*text=new stringbuffer();
@@ -308,7 +308,7 @@ char	xmlsax::parseComment(char current) {
 	}
 }
 
-char	xmlsax::parseCData(char current) {
+char xmlsax::parseCData(char current) {
 
 	// create a buffer to store the comment
 	stringbuffer	*text=new stringbuffer();
@@ -356,7 +356,7 @@ char	xmlsax::parseCData(char current) {
 	return ch;
 }
 
-char	xmlsax::parseAttribute(char current, char standalone) {
+char xmlsax::parseAttribute(char current, char standalone) {
 
 	char		ch=current;
 	stringbuffer	*data=new stringbuffer();
@@ -530,7 +530,7 @@ char	xmlsax::parseAttribute(char current, char standalone) {
 	return getCharacter();
 }
 
-int	xmlsax::getGeneralEntity(char breakchar, char **buffer) {
+int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 
 	// create a buffer and set the first character to &
 	*buffer=new char[7];
@@ -604,7 +604,7 @@ int	xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 	return 1;
 }
 
-char	xmlsax::parseText(char current) {
+char xmlsax::parseText(char current) {
 
 	// create a buffer to hold the text
 	stringbuffer	*textdata=new stringbuffer();
@@ -679,7 +679,7 @@ char	xmlsax::parseText(char current) {
 	}
 }
 
-char	xmlsax::skipWhitespace(char current) {
+char xmlsax::skipWhitespace(char current) {
 
 	char	ch=current;
 	int	first=1;
@@ -713,7 +713,7 @@ char	xmlsax::skipWhitespace(char current) {
 	return ch;
 }
 
-char	xmlsax::getCharacter() {
+char xmlsax::getCharacter() {
 
 	// get a character from the string or file, whichever is appropriate,
 	// if the character is an EOF, return a NULL

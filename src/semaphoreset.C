@@ -40,7 +40,7 @@ semaphoreset::~semaphoreset() {
 	}
 }
 
-int	semaphoreset::create(key_t key, mode_t permissions, 
+int semaphoreset::create(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
 	this->semcount=semcount;
@@ -65,7 +65,7 @@ int	semaphoreset::create(key_t key, mode_t permissions,
 	return 0;
 }
 
-int	semaphoreset::attach(key_t key, int semcount) {
+int semaphoreset::attach(key_t key, int semcount) {
 
 	this->semcount=semcount;
 
@@ -77,7 +77,7 @@ int	semaphoreset::attach(key_t key, int semcount) {
 	return 0;
 }
 
-int	semaphoreset::createOrAttach(key_t key, mode_t permissions, 
+int semaphoreset::createOrAttach(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
 	this->semcount=semcount;
@@ -104,7 +104,7 @@ int	semaphoreset::createOrAttach(key_t key, mode_t permissions,
 	return 1;
 }
 
-void	semaphoreset::createOperations() {
+void semaphoreset::createOperations() {
 
 	waitop=new sembuf *[semcount];
 	waitwithundoop=new sembuf *[semcount];
@@ -139,7 +139,7 @@ void	semaphoreset::createOperations() {
 	}
 }
 
-int	semaphoreset::setUserName(const char *username) {
+int semaphoreset::setUserName(const char *username) {
 	passwd	*passwdent=getpwnam(username);
 	if (!passwdent) {
 		return 0;
@@ -149,7 +149,7 @@ int	semaphoreset::setUserName(const char *username) {
 	return retval;
 }
 
-int	semaphoreset::setUserId(ushort uid) {
+int semaphoreset::setUserId(ushort uid) {
 	semid_ds	setds;
 	setds.sem_perm.uid=uid;
 	semun	semctlun;
@@ -157,7 +157,7 @@ int	semaphoreset::setUserId(ushort uid) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
-int	semaphoreset::setGroupName(const char *groupname) {
+int semaphoreset::setGroupName(const char *groupname) {
 	group	*groupent=getgrnam(groupname);
 	if (!groupent) {
 		return -1;
@@ -167,7 +167,7 @@ int	semaphoreset::setGroupName(const char *groupname) {
 	return retval;
 }
 
-int	semaphoreset::setGroupId(ushort gid) {
+int semaphoreset::setGroupId(ushort gid) {
 	semid_ds	setds;
 	setds.sem_perm.gid=gid;
 	semun	semctlun;
@@ -175,7 +175,7 @@ int	semaphoreset::setGroupId(ushort gid) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
-int	semaphoreset::setPermissions(mode_t permissions) {
+int semaphoreset::setPermissions(mode_t permissions) {
 	semid_ds	setds;
 	setds.sem_perm.mode=permissions;
 	semun	semctlun;
@@ -183,7 +183,7 @@ int	semaphoreset::setPermissions(mode_t permissions) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
-char	*semaphoreset::getUserName() {
+char *semaphoreset::getUserName() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;
@@ -196,7 +196,7 @@ char	*semaphoreset::getUserName() {
 	return NULL;
 }
 
-unsigned short	semaphoreset::getUserId() {
+unsigned short semaphoreset::getUserId() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;
@@ -206,7 +206,7 @@ unsigned short	semaphoreset::getUserId() {
 	return 0;
 }
 
-char	*semaphoreset::getGroupName() {
+char *semaphoreset::getGroupName() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;
@@ -219,7 +219,7 @@ char	*semaphoreset::getGroupName() {
 	return NULL;
 }
 
-unsigned short	semaphoreset::getGroupId() {
+unsigned short semaphoreset::getGroupId() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;
@@ -229,7 +229,7 @@ unsigned short	semaphoreset::getGroupId() {
 	return 0;
 }
 
-mode_t	semaphoreset::getPermissions() {
+mode_t semaphoreset::getPermissions() {
 	semid_ds	getds;
 	semun	semctlun;
 	semctlun.buf=&getds;

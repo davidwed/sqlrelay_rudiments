@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-void	logger::addLogDestination(logdestination *logdest) {
+void logger::addLogDestination(logdestination *logdest) {
 	if (last) {
 		last->next=new logdestnode;
 		last->next->logdest=logdest;
@@ -27,7 +27,7 @@ void	logger::addLogDestination(logdestination *logdest) {
 	}
 }
 
-void	logger::removeLogDestination(logdestination *logdest) {
+void logger::removeLogDestination(logdestination *logdest) {
 	logdestnode	*current=first;
 	while (current) {
 		if (current->logdest==logdest) {
@@ -53,7 +53,7 @@ void	logger::removeLogDestination(logdestination *logdest) {
 	}
 }
 
-void	logger::removeAllLogDestinations() {
+void logger::removeAllLogDestinations() {
 	logdestnode	*current=first;
 	while (current) {
 		last=current->next;
@@ -64,7 +64,7 @@ void	logger::removeAllLogDestinations() {
 	last=NULL;
 }
 
-char	*logger::logHeader(const char *name) {
+char *logger::logHeader(const char *name) {
 	datetime	*dt=new datetime();
 	char	*dtstring=dt->getString();
 	char	*retval=new char[strlen(dtstring)+strlen(name)+16];
@@ -73,7 +73,7 @@ char	*logger::logHeader(const char *name) {
 	return retval;
 }
 
-void	logger::write(const char *header, int tabs, const char *string) const {
+void logger::write(const char *header, int tabs, const char *string) const {
 	char	*logentry=new char[strlen(header)+3+tabs+strlen(string)+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -84,7 +84,7 @@ void	logger::write(const char *header, int tabs, const char *string) const {
 	delete[] logentry;
 }
 
-void	logger::write(const char *header, int tabs, char character) const {
+void logger::write(const char *header, int tabs, char character) const {
 	char	*logentry=new char[strlen(header)+3+tabs+1+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -95,7 +95,7 @@ void	logger::write(const char *header, int tabs, char character) const {
 	delete[] logentry;
 }
 
-void	logger::write(const char *header, int tabs, long number) const {
+void logger::write(const char *header, int tabs, long number) const {
 	char	*logentry=new char[strlen(header)+3+tabs+20+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -106,7 +106,7 @@ void	logger::write(const char *header, int tabs, long number) const {
 	delete[] logentry;
 }
 
-void	logger::write(const char *header, int tabs, double number) const {
+void logger::write(const char *header, int tabs, double number) const {
 	char	*logentry=new char[strlen(header)+3+tabs+21+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -117,7 +117,7 @@ void	logger::write(const char *header, int tabs, double number) const {
 	delete[] logentry;
 }
 
-void	logger::write(const char *logentry) const {
+void logger::write(const char *logentry) const {
 	logdestnode	*current=first;
 	while (current) {
 		current->logdest->write(logentry);

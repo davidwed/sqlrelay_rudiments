@@ -8,6 +8,6 @@
 inline file::file() : filedescriptor() {}
 inline file::file(int fd) : filedescriptor(fd) {}
 
-inline int	file::open(const char *name, int flags, mode_t perms) {
+inline int file::open(const char *name, int flags, mode_t perms) {
 	return ::open(name,flags,perms);
 }

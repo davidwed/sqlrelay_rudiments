@@ -26,7 +26,7 @@
 #endif
 #include <string.h>
 
-int	filesystem::copy(char *source, char *destination) {
+int filesystem::copy(char *source, char *destination) {
 
 	// open the files
 	int	src=open(source,O_RDONLY);
@@ -94,7 +94,7 @@ int	filesystem::copy(char *source, char *destination) {
 	return retval;
 }
 
-int	filesystem::remove(char *file) {
+int filesystem::remove(char *file) {
 	char	**files=list(file);
 	int	index=0;
 	while (files[index]) {
@@ -104,7 +104,7 @@ int	filesystem::remove(char *file) {
 	delete[] files;
 }
 
-int	filesystem::changeOwner(char *file, char *username, char *groupname) {
+int filesystem::changeOwner(char *file, char *username, char *groupname) {
 
 	passwd	*passwdent=(username)?getpwnam(username):NULL;
 	group	*groupent=(groupname)?getgrnam(groupname):NULL;
@@ -116,7 +116,7 @@ int	filesystem::changeOwner(char *file, char *username, char *groupname) {
 	return retval;
 }
 
-char	**filesystem::list(char *pattern) {
+char **filesystem::list(char *pattern) {
 
 	// open the directory
 	DIR	*dir=opendir(pattern);

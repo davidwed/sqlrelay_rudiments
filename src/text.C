@@ -13,7 +13,7 @@
 	#include <strings.h>
 #endif
 
-void	text::upper(char *string) {
+void text::upper(char *string) {
 
 	int	i=0;
 	while (string[i]) {
@@ -24,7 +24,7 @@ void	text::upper(char *string) {
 	}
 }
 
-void	text::lower(char *string) {
+void text::lower(char *string) {
 
 	int	i=0;
 	while (string[i]) {
@@ -35,7 +35,7 @@ void	text::lower(char *string) {
 	}
 }
 
-void	text::rightTrim(char *string,char character) {
+void text::rightTrim(char *string,char character) {
 
 	if (string && string[0]) {
 
@@ -58,7 +58,7 @@ void	text::rightTrim(char *string,char character) {
 	}
 }
 
-void	text::leftTrim(char *string, char character) {
+void text::leftTrim(char *string, char character) {
 
 	if (string && string[0]) {
 
@@ -81,7 +81,7 @@ void	text::leftTrim(char *string, char character) {
 	}
 }
 
-void	text::strip(char *string, char character) {
+void text::strip(char *string, char character) {
 
 	int	index=0;
 	int	total=0;
@@ -99,7 +99,7 @@ void	text::strip(char *string, char character) {
 	string[index-total]=(char)NULL;
 }
 
-void	text::strip(char *string1, char *string2) {
+void text::strip(char *string1, char *string2) {
 
 	int	str2len=strlen(string2);
 	int	index=0;
@@ -119,7 +119,7 @@ void	text::strip(char *string1, char *string2) {
 	string1[index-total]=(char)NULL;
 }
 
-int	text::isInteger(const char *string) {
+int text::isInteger(const char *string) {
 
 	char	*ptr=(char *)string;
 	while (*ptr) {
@@ -132,7 +132,7 @@ int	text::isInteger(const char *string) {
 	return	1;
 }
 
-int	text::isNumber(const char *string) {
+int text::isNumber(const char *string) {
 
 	int	decimal=0;
 	char	*ptr=(char *)string;
@@ -149,7 +149,7 @@ int	text::isNumber(const char *string) {
 	return	1;
 }
 
-char	*text::httpEscape(const char *input) {
+char *text::httpEscape(const char *input) {
 
 	char	*output=new char[strlen(input)*3+1];
 	char	*outptr=output;
@@ -174,7 +174,7 @@ char	*text::httpEscape(const char *input) {
 	return output;
 }
 
-void	text::leftJustify(char *string, int length) {
+void text::leftJustify(char *string, int length) {
 
 	// count leading spaces
 	int	spaces=countLeadingSpaces(string,length);
@@ -192,7 +192,7 @@ void	text::leftJustify(char *string, int length) {
 	}
 }
 
-void	text::rightJustify(char *string, int length) {
+void text::rightJustify(char *string, int length) {
 
 	// count trailing spaces
 	int	spaces=countTrailingSpaces(string,length);
@@ -210,7 +210,7 @@ void	text::rightJustify(char *string, int length) {
 	}
 }
 
-void	text::center(char *string, int length) {
+void text::center(char *string, int length) {
 
 	int	leadingspaces=countLeadingSpaces(string,length);
 	int	trailingspaces=countTrailingSpaces(string,length);
@@ -240,7 +240,7 @@ void	text::center(char *string, int length) {
 	}
 }
 
-int	text::countLeadingSpaces(char *string, int length) {
+int text::countLeadingSpaces(char *string, int length) {
 	int	leadingspaces=0;
 	for (int index=0; string[index]==' ' && index<length; index++) {
 		leadingspaces++;
@@ -248,7 +248,7 @@ int	text::countLeadingSpaces(char *string, int length) {
 	return leadingspaces;
 }
 
-int	text::countTrailingSpaces(char *string, int length) {
+int text::countTrailingSpaces(char *string, int length) {
 	int	trailingspaces=0;
 	for (int index=length-1; string[index]==' ' && index>-1; index--) {
 		trailingspaces++;

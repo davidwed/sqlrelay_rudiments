@@ -17,41 +17,41 @@ inline sharedmemory::~sharedmemory() {
 	}
 }
 
-inline int	sharedmemory::forceRemove() {
+inline int sharedmemory::forceRemove() {
 	return !shmctl(shmid,IPC_RMID,NULL);
 }
 
-inline void	sharedmemory::dontRemove() {
+inline void sharedmemory::dontRemove() {
 	created=0;
 }
 
-inline int	sharedmemory::getId() const {
+inline int sharedmemory::getId() const {
 	return shmid;
 }
 
-inline void	*sharedmemory::getPointer() const {
+inline void *sharedmemory::getPointer() const {
 	return shmptr;
 }
 
-inline int	sharedmemory::setUserId(ushort uid) {
+inline int sharedmemory::setUserId(ushort uid) {
 	shmid_ds	setds;
 	setds.shm_perm.uid=uid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline int	sharedmemory::setGroupId(ushort gid) {
+inline int sharedmemory::setGroupId(ushort gid) {
 	shmid_ds	setds;
 	setds.shm_perm.gid=gid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline int	sharedmemory::setPermissions(mode_t permissions) {
+inline int sharedmemory::setPermissions(mode_t permissions) {
 	shmid_ds	setds;
 	setds.shm_perm.mode=permissions;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline unsigned short	sharedmemory::getUserId() {
+inline unsigned short sharedmemory::getUserId() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.uid;
@@ -59,7 +59,7 @@ inline unsigned short	sharedmemory::getUserId() {
 	return 0;
 }
 
-inline unsigned short	sharedmemory::getGroupId() {
+inline unsigned short sharedmemory::getGroupId() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.gid;
@@ -67,7 +67,7 @@ inline unsigned short	sharedmemory::getGroupId() {
 	return 0;
 }
 
-inline mode_t	sharedmemory::getPermissions() {
+inline mode_t sharedmemory::getPermissions() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.mode;

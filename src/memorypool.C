@@ -31,7 +31,7 @@ memorypool::memorypool(unsigned long initialsize,
 	last=first;
 }
 
-char	*memorypool::malloc(unsigned long length) {
+char *memorypool::malloc(unsigned long length) {
 
 	// add the length to the total size
 	totalusedsize=totalusedsize+length;
@@ -65,7 +65,7 @@ char	*memorypool::malloc(unsigned long length) {
 	return retval;
 }
 
-char	*memorypool::calloc(unsigned long length) {
+char *memorypool::calloc(unsigned long length) {
 	char	*retval=malloc(length);
 	for (int i=0; i<length; i++) {
 		retval[i]=(char)NULL;
@@ -73,7 +73,7 @@ char	*memorypool::calloc(unsigned long length) {
 	return retval;
 }
 
-void	memorypool::free() {
+void memorypool::free() {
 
 	// if it's time to re-evaluate and re-size of the first node, do that
 	freecounter++;
@@ -108,7 +108,7 @@ void	memorypool::free() {
 	first->next=NULL;
 }
 
-void	memorypool::print() const {
+void memorypool::print() const {
 
 	long		segmentindex=0;
 	memorypoolnode	*current=first;

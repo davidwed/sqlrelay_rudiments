@@ -17,7 +17,7 @@
 	#include <strings.h>
 #endif
 
-void	inetclientsocket::initialize(connectiondata *cd) {
+void inetclientsocket::initialize(connectiondata *cd) {
 
 	char	*host=cd->getValue("host");
 	char	*port=cd->getValue("port");
@@ -30,7 +30,7 @@ void	inetclientsocket::initialize(connectiondata *cd) {
 			atoi(retrycount?retrycount:"0"));
 }
 
-int	inetclientsocket::connect() {
+int inetclientsocket::connect() {
 
 	// get the host entry
 	hostentry=NULL;

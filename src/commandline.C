@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-char	*commandline::value(const char *arg) const {
+char *commandline::value(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<argc-1; i++) {
@@ -26,7 +26,7 @@ char	*commandline::value(const char *arg) const {
 	return "";
 }
 
-int	commandline::found(const char *arg) const {
+int commandline::found(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<argc; i++) {

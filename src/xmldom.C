@@ -17,7 +17,7 @@
 	#include <strings.h>
 #endif
 
-int	xmldom::writeFile(const char *filename, mode_t perms) const {
+int xmldom::writeFile(const char *filename, mode_t perms) const {
 	int	fd=::open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms);
 	if (fd==-1) {
 		return 0;
@@ -34,14 +34,14 @@ int	xmldom::writeFile(const char *filename, mode_t perms) const {
 	return retval;
 }
 
-void	xmldom::createRootNode() {
+void xmldom::createRootNode() {
 	rootnode=new xmldomnode(nullnode);
 	rootnode->setName("document");
 	rootnode->setType(ROOT_XMLDOMNODETYPE);
 	currentparent=rootnode;
 }
 
-int	xmldom::tagStart(char *name) {
+int xmldom::tagStart(char *name) {
 	currentattribute=NULL;
 	if (rootnode->isNullNode()) {
 		createRootNode();
@@ -54,7 +54,7 @@ int	xmldom::tagStart(char *name) {
 	return 1;
 }
 
-int	xmldom::attributeName(char *name) {
+int xmldom::attributeName(char *name) {
 	currentattribute=new xmldomnode(nullnode);
 	currentattribute->setName(name);
 	currentattribute->setType(ATTRIBUTE_XMLDOMNODETYPE);
@@ -63,7 +63,7 @@ int	xmldom::attributeName(char *name) {
 	return 1;
 }
 
-int	xmldom::attributeValue(char *value) {
+int xmldom::attributeValue(char *value) {
 	if (!currentattribute) {
 		if (!attributeName(value)) {
 			return 0;
@@ -74,7 +74,7 @@ int	xmldom::attributeValue(char *value) {
 	return 1;
 }
 
-int	xmldom::text(char *string) {
+int xmldom::text(char *string) {
 	currentattribute=NULL;
 	xmldomnode	*textnode=new xmldomnode(nullnode);
 	textnode->setName("text");
@@ -84,13 +84,13 @@ int	xmldom::text(char *string) {
 	return 1;
 }
 
-int	xmldom::tagEnd(char *name) {
+int xmldom::tagEnd(char *name) {
 	currentattribute=NULL;
 	currentparent=currentparent->getParent();
 	return 1;
 }
 
-int	xmldom::comment(char *string) {
+int xmldom::comment(char *string) {
 	currentattribute=NULL;
 	xmldomnode	*commentnode=new xmldomnode(nullnode);
 	commentnode->setName("comment");
@@ -100,7 +100,7 @@ int	xmldom::comment(char *string) {
 	return 1;
 }
 
-int	xmldom::cdata(char *string) {
+int xmldom::cdata(char *string) {
 	currentattribute=NULL;
 	xmldomnode	*cdatanode=new xmldomnode(nullnode);
 	cdatanode->setName("cdata");

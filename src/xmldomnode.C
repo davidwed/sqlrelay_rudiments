@@ -71,7 +71,7 @@ xmldomnode::~xmldomnode() {
 	}
 }
 
-xmldomnode	*xmldomnode::createNullNode() {
+xmldomnode *xmldomnode::createNullNode() {
 	xmldomnode	*nn=new xmldomnode(NULL);
 	nn->parent=nn;
 	nn->next=nn;
@@ -81,7 +81,7 @@ xmldomnode	*xmldomnode::createNullNode() {
 	return nn;
 }
 
-xmldomnode	*xmldomnode::getChild(const char *name,
+xmldomnode *xmldomnode::getChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
 	xmldomnode	*current=firstchild;
@@ -100,7 +100,7 @@ xmldomnode	*xmldomnode::getChild(const char *name,
 	return nullnode;
 }
 
-int	xmldomnode::insertText(const char *value, int position) {
+int xmldomnode::insertText(const char *value, int position) {
 	xmldomnode	*text=new xmldomnode(nullnode);
 	text->setName("text");
 	text->setValue(value);
@@ -108,7 +108,7 @@ int	xmldomnode::insertText(const char *value, int position) {
 				&firstchild,&lastchild,&childcount);
 }
 
-int	xmldomnode::insertAttribute(const char *name, const char *value,
+int xmldomnode::insertAttribute(const char *name, const char *value,
 								int position) {
 	xmldomnode	*attribute=new xmldomnode(nullnode);
 	attribute->setName(name);
@@ -117,7 +117,7 @@ int	xmldomnode::insertAttribute(const char *name, const char *value,
 			&firstattribute,&lastattribute,&attributecount);
 }
 
-stringbuffer	*xmldomnode::xml(stringbuffer *string) const {
+stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 	stringbuffer	*output=string;
 	if (!string) {
 		output=new stringbuffer();
@@ -182,7 +182,7 @@ stringbuffer	*xmldomnode::xml(stringbuffer *string) const {
 	return output;
 }
 
-void	xmldomnode::set(char **variable, const char *value) {
+void xmldomnode::set(char **variable, const char *value) {
 	if (!value) {
 		(*variable)=NULL;
 	}
@@ -190,7 +190,7 @@ void	xmldomnode::set(char **variable, const char *value) {
 	strcpy((*variable),value);
 }
 
-xmldomnode	*xmldomnode::getNode(xmldomnode *first, int position,
+xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,
 					const char *name, int count) const {
 	if (!first || position>=count) {
 		return nullnode;
@@ -211,7 +211,7 @@ xmldomnode	*xmldomnode::getNode(xmldomnode *first, int position,
 	return current;
 }
 
-int	xmldomnode::insertNode(xmldomnode *node, int position,
+int xmldomnode::insertNode(xmldomnode *node, int position,
 				xmldomnodetype type,
 				xmldomnode **first, xmldomnode **last,
 				int *count) {
@@ -240,7 +240,7 @@ int	xmldomnode::insertNode(xmldomnode *node, int position,
 	return 1;
 }
 
-int	xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
+int xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 				xmldomnode **first, xmldomnode **last,
 				int *count) {
 

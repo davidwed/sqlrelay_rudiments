@@ -11,9 +11,9 @@
 #include <stdlib.h>
 
 #ifdef __GNUC__
-static	signalhandler	*daemonprocess::sighandler;
-static	void		(*daemonprocess::shutdownfunc)(int);
-static	signalhandler	*daemonprocess::deadchildhandler;
+static signalhandler	*daemonprocess::sighandler;
+static void		(*daemonprocess::shutdownfunc)(int);
+static signalhandler	*daemonprocess::deadchildhandler;
 #endif
 
 daemonprocess::daemonprocess() {
@@ -33,7 +33,7 @@ daemonprocess::~daemonprocess() {
 	delete sighandler;
 }
 
-int	daemonprocess::checkForPidFile(const char *filename) const {
+int daemonprocess::checkForPidFile(const char *filename) const {
 
 	// open the file, don't need to check for error here, getSize() below
 	// will return -1 if the file descriptor is no good
@@ -58,7 +58,7 @@ int	daemonprocess::checkForPidFile(const char *filename) const {
 	return retval;
 }
 
-void	daemonprocess::detach() const {
+void daemonprocess::detach() const {
 
 	// fork and let the parent process exit
 	if (fork()) {
@@ -79,7 +79,7 @@ void	daemonprocess::detach() const {
 	umask(0);
 }
 
-void	daemonprocess::handleShutDown(void *shutdownfunction) {
+void daemonprocess::handleShutDown(void *shutdownfunction) {
 
 	shutdownfunc=(void(*)(int))shutdownfunction;
 

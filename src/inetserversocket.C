@@ -19,7 +19,7 @@
 	#include <strings.h>
 #endif
 
-int	inetserversocket::initialize(const char *address, unsigned short port) {
+int inetserversocket::initialize(const char *address, unsigned short port) {
 
 	inetsocket::initialize(address,port);
 
@@ -40,7 +40,7 @@ int	inetserversocket::initialize(const char *address, unsigned short port) {
 	return (fd=socket(AF_INET,SOCK_STREAM,0))>-1;
 }
 
-int	inetserversocket::bind() {
+int inetserversocket::bind() {
 
 	// bind the socket
 	if (::bind(fd,(struct sockaddr *)&sin,sizeof(sin))==-1) {
@@ -63,7 +63,7 @@ int	inetserversocket::bind() {
 	return 1;
 }
 
-inetsocket	*inetserversocket::acceptClientConnection() {
+inetsocket *inetserversocket::acceptClientConnection() {
 
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
@@ -81,7 +81,7 @@ inetsocket	*inetserversocket::acceptClientConnection() {
 	return new inetsocket(clientsock);
 }
 
-char	*inetserversocket::getClientAddress() {
+char *inetserversocket::getClientAddress() {
 
 	// initialize a socket address structure
 	struct sockaddr_in	clientsin;

@@ -1,23 +1,23 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-inline	datetime::~datetime() {
+inline datetime::~datetime() {
 	delete[] timestring;
 }
 
-inline int	datetime::getHour() const {
+inline int datetime::getHour() const {
 	return timestruct.tm_hour;
 }
 
-inline int	datetime::getMinutes() const {
+inline int datetime::getMinutes() const {
 	return timestruct.tm_min;
 }
 
-inline int	datetime::getSeconds() const {
+inline int datetime::getSeconds() const {
 	return timestruct.tm_sec;
 }
 
-inline int	datetime::getMonth() const {
+inline int datetime::getMonth() const {
 	return timestruct.tm_mon+1;
 }
 

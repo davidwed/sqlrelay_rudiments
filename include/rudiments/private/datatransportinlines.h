@@ -15,84 +15,84 @@ inline datatransport::datatransport() : filedescriptor() {}
 
 inline datatransport::datatransport(int fd) : filedescriptor(fd) {}
 
-inline ssize_t	datatransport::write(unsigned short number) {
+inline ssize_t datatransport::write(unsigned short number) {
 	unsigned short	temp=htons(number);
 	return safeWrite((void *)&temp,sizeof(unsigned short));
 }
 
-inline ssize_t	datatransport::write(unsigned long number) {
+inline ssize_t datatransport::write(unsigned long number) {
 	unsigned long	temp=htonl(number);
 	return safeWrite((void *)&temp,sizeof(unsigned long));
 }
 
-inline ssize_t	datatransport::write(float number) {
+inline ssize_t datatransport::write(float number) {
 	return filedescriptor::write((void *)&number,sizeof(float));
 }
 
-inline ssize_t	datatransport::write(double number) {
+inline ssize_t datatransport::write(double number) {
 	return filedescriptor::write((void *)&number,sizeof(double));
 }
 
-inline ssize_t	datatransport::write(char character) {
+inline ssize_t datatransport::write(char character) {
 	return filedescriptor::write((void *)&character,sizeof(char));
 }
 
-inline ssize_t	datatransport::write(const char *string) {
+inline ssize_t datatransport::write(const char *string) {
 	return filedescriptor::write(string,strlen(string));
 }
 
-inline ssize_t	datatransport::write(const char *string, size_t size) {
+inline ssize_t datatransport::write(const char *string, size_t size) {
 	return filedescriptor::write(string,size);
 }
 
-inline ssize_t	datatransport::write(const void *buffer, size_t size) {
+inline ssize_t datatransport::write(const void *buffer, size_t size) {
 	return filedescriptor::write((void *)buffer,size);
 }
 
-inline ssize_t	datatransport::read(unsigned short *buffer) {
+inline ssize_t datatransport::read(unsigned short *buffer) {
 	unsigned short	temp;
 	int	retval=(int)safeRead((void *)&temp,sizeof(unsigned short));
 	*buffer=ntohs(temp);
 	return retval;
 }
 
-inline ssize_t	datatransport::read(unsigned long *buffer) {
+inline ssize_t datatransport::read(unsigned long *buffer) {
 	unsigned long	temp;
 	int	retval=(int)safeRead((void *)&temp,sizeof(unsigned long));
 	*buffer=ntohl(temp);
 	return retval;
 }
 
-inline ssize_t	datatransport::read(float *buffer) {
+inline ssize_t datatransport::read(float *buffer) {
 	return filedescriptor::read((void *)buffer,sizeof(float));
 }
 
-inline ssize_t	datatransport::read(double *buffer) {
+inline ssize_t datatransport::read(double *buffer) {
 	return filedescriptor::read((void *)buffer,sizeof(double));
 }
 
-inline ssize_t	datatransport::read(char *buffer) {
+inline ssize_t datatransport::read(char *buffer) {
 	return filedescriptor::read((void *)buffer,sizeof(char));
 }
 
-inline ssize_t	datatransport::read(char *buffer, size_t size) {
+inline ssize_t datatransport::read(char *buffer, size_t size) {
 	return filedescriptor::read((void *)buffer,size);
 }
 
-inline ssize_t	datatransport::read(void *buffer, size_t size) {
+inline ssize_t datatransport::read(void *buffer, size_t size) {
 	return filedescriptor::read(buffer,size);
 }
 
-inline ssize_t	datatransport::read(char **buffer, char *terminator) {
+inline ssize_t datatransport::read(char **buffer, char *terminator) {
 	return filedescriptor::read(buffer,terminator);
 }
 
-inline int	datatransport::passFileDescriptor(int descriptor) {
+inline int datatransport::passFileDescriptor(int descriptor) {
 	// by default do nothing and return an error
 	return 0;
 }
 
-inline int	datatransport::receiveFileDescriptor(int *descriptor) {
+inline int datatransport::receiveFileDescriptor(int *descriptor) {
 	// by default do nothing and return an error
 	return 0;
 }

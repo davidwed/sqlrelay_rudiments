@@ -17,7 +17,7 @@
 #endif
 #include <sys/stat.h>
 
-int	sharedmemory::create(key_t key, int size, mode_t permissions) {
+int sharedmemory::create(key_t key, int size, mode_t permissions) {
 
 	// create the shared memory segment
 	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
@@ -36,12 +36,12 @@ int	sharedmemory::create(key_t key, int size, mode_t permissions) {
 	return 0;
 }
 
-int	sharedmemory::attach(key_t key) {
+int sharedmemory::attach(key_t key) {
 	return ((shmid=shmget(key,0,0))>-1 &&
 			(int)(shmptr=shmat(shmid,0,0))>-1);
 }
 
-int	sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
+int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 
 	// create the shared memory segment
 	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
@@ -67,7 +67,7 @@ int	sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 	return 0;
 }
 
-int	sharedmemory::setUserName(const char *username) {
+int sharedmemory::setUserName(const char *username) {
 	passwd	*passwdent=getpwnam(username);
 	if (!passwdent) {
 		return 0;
@@ -77,7 +77,7 @@ int	sharedmemory::setUserName(const char *username) {
 	return retval;
 }
 
-int	sharedmemory::setGroupName(const char *groupname) {
+int sharedmemory::setGroupName(const char *groupname) {
 	group	*groupent=getgrnam(groupname);
 	if (!groupent) {
 		return 0;
@@ -87,7 +87,7 @@ int	sharedmemory::setGroupName(const char *groupname) {
 	return retval;
 }
 
-char	*sharedmemory::getUserName() {
+char *sharedmemory::getUserName() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		passwd	*passwdent=getpwuid(getds.shm_perm.uid);
@@ -98,7 +98,7 @@ char	*sharedmemory::getUserName() {
 	return NULL;
 }
 
-char	*sharedmemory::getGroupName() {
+char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		group	*groupent=getgrgid(getds.shm_perm.gid);

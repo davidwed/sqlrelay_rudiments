@@ -7,7 +7,7 @@
 	#include <rudiments/private/regularexpressioninlines.h>
 #endif
 
-int	regularexpression::compile(const char *pattern) {
+int regularexpression::compile(const char *pattern) {
 
 	#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
 		if (compiledexpression) {
@@ -64,7 +64,7 @@ int	regularexpression::compile(const char *pattern) {
 	return 0;
 }
 
-int	regularexpression::match(const char *str, const char *pattern) {
+int regularexpression::match(const char *str, const char *pattern) {
 
 	int	retval=0;
 

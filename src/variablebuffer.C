@@ -17,7 +17,7 @@ variablebuffer::variablebuffer(unsigned long initialsize,
 	position=0;
 }
 
-variablebuffer	*variablebuffer::append(const unsigned char *data,
+variablebuffer *variablebuffer::append(const unsigned char *data,
 						unsigned long size) {
 
 	// if the buffer is too small, extend it
@@ -35,7 +35,7 @@ variablebuffer	*variablebuffer::append(const unsigned char *data,
 	return this;
 }
 
-void	variablebuffer::clear() {
+void variablebuffer::clear() {
 	delete[] buffer;
 	buffer=new unsigned char[initialsize];
 	buffersize=initialsize;

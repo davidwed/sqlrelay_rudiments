@@ -14,10 +14,10 @@ inline listener::~listener() {
 	removeAllFileDescriptors();
 }
 
-inline void	listener::retryInterruptedWaits() {
+inline void listener::retryInterruptedWaits() {
 	retryinterruptedwaits=1;
 }
 
-inline void	listener::dontRetryInterruptedWaits() {
+inline void listener::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=0;
 }

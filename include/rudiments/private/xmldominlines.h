@@ -17,14 +17,14 @@ inline xmldom::~xmldom() {
 	delete nullnode;
 }
 
-inline int	xmldom::parseFile(const char *filename) {
+inline int xmldom::parseFile(const char *filename) {
 	return xmlsax::parseFile(filename);
 }
 
-inline int	xmldom::parseString(const char *string) {
+inline int xmldom::parseString(const char *string) {
 	return xmlsax::parseFile(string);
 }
 
-inline xmldomnode	*xmldom::getRootNode() const {
+inline xmldomnode *xmldom::getRootNode() const {
 	return (rootnode)?rootnode:nullnode;
 }

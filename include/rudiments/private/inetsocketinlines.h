@@ -10,7 +10,7 @@ inline inetsocket::inetsocket(int filedescriptor) :
 	initialize(NULL,0);
 }
 
-inline void	inetsocket::initialize(const char *address,
+inline void inetsocket::initialize(const char *address,
 					unsigned short port) {
 	this->address=(char *)address;
 	this->port=port;

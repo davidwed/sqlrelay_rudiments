@@ -15,11 +15,11 @@ inline stringbuffer::~stringbuffer() {
 	delete[] buffer;
 }
 
-inline char	*stringbuffer::getString() {
+inline char *stringbuffer::getString() {
 	return (buffer)?buffer:(char *)"";
 }
 
-inline void	stringbuffer::clear() {
+inline void stringbuffer::clear() {
 	delete[] buffer;
 	buffer=NULL;
 }

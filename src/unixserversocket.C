@@ -13,7 +13,7 @@
 	#include <unistd.h>
 #endif
 
-int	unixserversocket::initialize(const char *filename, mode_t mask) {
+int unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	unixsocket::initialize(filename);
 	this->mask=mask;
@@ -33,7 +33,7 @@ int	unixserversocket::initialize(const char *filename, mode_t mask) {
 	return (fd=socket(AF_UNIX,SOCK_STREAM,0))>-1;
 }
 
-int	unixserversocket::bind() {
+int unixserversocket::bind() {
 
 	// set umask and store old umask
 	mode_t	oldmask=umask(mask);
@@ -50,7 +50,7 @@ int	unixserversocket::bind() {
 	return retval;
 }
 
-unixsocket	*unixserversocket::acceptClientConnection() {
+unixsocket *unixserversocket::acceptClientConnection() {
 
 	// initialize a socket address structure
 	sockaddr_un	clientsun;

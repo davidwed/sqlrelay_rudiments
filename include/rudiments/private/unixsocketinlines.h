@@ -10,6 +10,6 @@ inline unixsocket::unixsocket(int filedescriptor) :
 	filename=NULL;
 }
 
-inline void	unixsocket::initialize(const char *filename) {
+inline void unixsocket::initialize(const char *filename) {
 	this->filename=(char *)filename;
 }

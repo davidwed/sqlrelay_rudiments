@@ -13,7 +13,7 @@
 #endif
 #include <errno.h>
 
-void	listener::addFileDescriptor(int fd) {
+void listener::addFileDescriptor(int fd) {
 	if (last) {
 		last->next=new filedescriptornode;
 		last->next->fd=fd;
@@ -29,7 +29,7 @@ void	listener::addFileDescriptor(int fd) {
 	}
 }
 
-void	listener::removeFileDescriptor(int fd) {
+void listener::removeFileDescriptor(int fd) {
 	current=first;
 	while (current) {
 		if (current->fd==fd) {
@@ -54,7 +54,7 @@ void	listener::removeFileDescriptor(int fd) {
 	}
 }
 
-void	listener::removeAllFileDescriptors() {
+void listener::removeAllFileDescriptors() {
 	current=first;
 	while (current) {
 		last=current->next;

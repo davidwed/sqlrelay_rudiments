@@ -13,7 +13,7 @@
 	#include <unistd.h>
 #endif
 
-void	unixclientsocket::initialize(connectiondata *cd) {
+void unixclientsocket::initialize(connectiondata *cd) {
 
 	char	*filename=cd->getValue("filename");
 	char	*retrywait=cd->getValue("retrywait");
@@ -24,7 +24,7 @@ void	unixclientsocket::initialize(connectiondata *cd) {
 			atoi(retrycount?retrycount:"0"));
 }
 
-int	unixclientsocket::connect() {
+int unixclientsocket::connect() {
 
 	// set the filename to connect to
 	sun.sun_family=AF_UNIX;
