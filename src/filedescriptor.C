@@ -32,7 +32,9 @@ filedescriptor::filedescriptor(int fd) {
 	retryinterruptedwrites=0;
 	allowshortreads=0;
 	lstnr=NULL;
+#ifdef RUDIMENTS_HAS_SSL
 	ssl=NULL;
+#endif
 }
 
 filedescriptor::filedescriptor() {
@@ -41,7 +43,9 @@ filedescriptor::filedescriptor() {
 	retryinterruptedwrites=0;
 	allowshortreads=0;
 	lstnr=NULL;
+#ifdef RUDIMENTS_HAS_SSL
 	ssl=NULL;
+#endif
 }
 
 filedescriptor::~filedescriptor() {
@@ -56,6 +60,7 @@ void filedescriptor::setFileDescriptor(int fd) {
 	this->fd=fd;
 }
 
+#ifdef RUDIMENTS_HAS_SSL
 bool filedescriptor::setSSL(SSL *ssl) {
 	this->ssl=ssl;
 	return SSL_set_fd(ssl,fd);
@@ -64,6 +69,7 @@ bool filedescriptor::setSSL(SSL *ssl) {
 SSL *filedescriptor::getSSL() const {
 	return ssl;
 }
+#endif
 
 ssize_t filedescriptor::write(unsigned short number) {
 	return safeWrite((void *)&number,sizeof(unsigned short),-1,-1);
@@ -433,13 +439,17 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// read...
 		errno=0;
+		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
 			actualread=SSL_read(ssl,(void *)((long)buf+totalread),
 								sizetoread);
 		} else {
+		#endif
 			actualread=::read(fd,(void *)((long)buf+totalread),
 								sizetoread);
+		#ifdef RUDIMENTS_HAS_SSL
 		}
+		#endif
 
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
@@ -483,11 +493,15 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		}
 
 		errno=0;
+		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
 			retval=SSL_write(ssl,buf,count);
 		} else {
+		#endif
 			retval=::write(fd,buf,count);
+		#ifdef RUDIMENTS_HAS_SSL
 		}
+		#endif
 
 		if (retval!=count) {
 			if (retryinterruptedwrites && errno==EINTR) {
