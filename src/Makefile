@@ -1,14 +1,178 @@
 include ../config.mk
+include ../features.mk
 
 top_builddir = ..
 INSTALL = $(top_builddir)/install-sh -c
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
-SRCS = commandline.C daemonprocess.C datetime.C dtd.C errorhandler.C file.C filedescriptor.C groupentry.C hostentry.C inetclientsocket.C inetserversocket.C inetsocket.C listener.C logger.C memorypool.C passwdentry.C permissions.C protocolentry.C randomnumber.C regularexpression.C semaphoreset.C server.C serversocket.C sharedmemory.C signalclasses.C string.C stringbuffer.C text.C datatransport.C datatransportfactory.C unixclientsocket.C unixserversocket.C unixsocket.C variablebuffer.C xmldom.C xmldomnode.C xmlsax.C
-NLOBJS = commandline.n.lo daemonprocess.n.lo dtd.n.lo datetime.n.lo errorhandler.n.lo file.n.lo filedescriptor.n.lo groupentry.n.lo hostentry.n.lo inetclientsocket.n.lo inetserversocket.n.lo inetsocket.n.lo listener.n.lo logger.n.lo memorypool.n.lo passwdentry.n.lo permissions.n.lo protocolentry.n.lo randomnumber.n.lo regularexpression.n.lo semaphoreset.n.lo server.n.lo serversocket.n.lo sharedmemory.n.lo signalclasses.n.lo string.n.lo stringbuffer.n.lo text.n.lo datatransport.n.lo datatransportfactory.n.lo unixclientsocket.n.lo unixserversocket.n.lo unixsocket.n.lo variablebuffer.n.lo xmldom.n.lo xmldomnode.n.lo xmlsax.n.lo
-PLOBJS = commandline.p.lo daemonprocess.p.lo dtd.p.lo datetime.p.lo errorhandler.p.lo file.p.lo filedescriptor.p.lo groupentry.p.lo hostentry.p.lo inetclientsocket.p.lo inetserversocket.p.lo inetsocket.p.lo listener.p.lo logger.p.lo memorypool.p.lo passwdentry.p.lo permissions.p.lo protocolentry.p.lo randomnumber.p.lo regularexpression.p.lo semaphoreset.p.lo server.p.lo serversocket.p.lo sharedmemory.p.lo signalclasses.p.lo string.p.lo stringbuffer.p.lo text.p.lo datatransport.p.lo datatransportfactory.p.lo unixclientsocket.p.lo unixserversocket.p.lo unixsocket.p.lo variablebuffer.p.lo xmldom.p.lo xmldomnode.p.lo xmlsax.p.lo
-
+SRCS = 
+ifeq ($(INCLUDE_COMMANDLINE),1)
+	SRCS +=commandline.C
+	NLOBJS +=commandline.n.lo
+	PLOBJS +=commandline.p.lo
+endif
+ifeq ($(INCLUDE_DAEMONPROCESS),1)
+	SRCS += daemonprocess.C
+	NLOBJS += daemonprocess.n.lo
+	PLOBJS += daemonprocess.p.lo
+endif
+ifeq ($(INCLUDE_DATETIME),1)
+	SRCS += datetime.C
+	NLOBJS += datetime.n.lo
+	PLOBJS += datetime.p.lo
+endif
+ifeq ($(INCLUDE_DTD),1)
+	SRCS += dtd.C
+	NLOBJS += dtd.n.lo
+	PLOBJS += dtd.p.lo
+endif
+ifeq ($(INCLUDE_ERRORHANDLER),1)
+	SRCS += errorhandler.C
+	NLOBJS += errorhandler.n.lo
+	PLOBJS += errorhandler.p.lo
+endif
+ifeq ($(INCLUDE_FILE),1)
+	SRCS += file.C
+	NLOBJS += file.n.lo
+	PLOBJS += file.p.lo
+endif
+ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
+	SRCS += filedescriptor.C
+	NLOBJS += filedescriptor.n.lo
+	PLOBJS += filedescriptor.p.lo
+endif
+ifeq ($(INCLUDE_GROUPENTRY),1)
+	SRCS += groupentry.C
+	NLOBJS += groupentry.n.lo
+	PLOBJS += groupentry.p.lo
+endif
+ifeq ($(INCLUDE_HOSTENTRY),1)
+	SRCS += hostentry.C
+	NLOBJS += hostentry.n.lo
+	PLOBJS += hostentry.p.lo
+endif
+ifeq ($(INCLUDE_INETCLIENT),1)
+	SRCS += inetclientsocket.C
+	NLOBJS += inetclientsocket.n.lo
+	PLOBJS += inetclientsocket.p.lo
+endif
+ifeq ($(INCLUDE_INETSERVER),1)
+	SRCS += inetsocket.C inetserversocket.C
+	NLOBJS += inetsocket.n.lo inetserversocket.n.lo
+	PLOBJS += inetsocket.p.lo inetserversocket.p.lo
+endif
+ifeq ($(INCLUDE_LISTENER),1)
+	SRCS += listener.C
+	NLOBJS += listener.n.lo
+	PLOBJS += listener.p.lo
+endif
+ifeq ($(INCLUDE_LOGGER),1)
+	SRCS += logger.C
+	NLOBJS += logger.n.lo
+	PLOBJS += logger.p.lo
+endif
+ifeq ($(INCLUDE_MEMORYPOOL),1)
+	SRCS += memorypool.C
+	NLOBJS += memorypool.n.lo
+	PLOBJS += memorypool.p.lo
+endif
+ifeq ($(INCLUDE_PASSWDENTRY),1)
+	SRCS += passwdentry.C
+	NLOBJS += passwdentry.n.lo
+	PLOBJS += passwdentry.p.lo
+endif
+ifeq ($(INCLUDE_PERMISSIONS),1)
+	SRCS += permissions.C
+	NLOBJS += permissions.n.lo
+	PLOBJS += permissions.p.lo
+endif
+ifeq ($(INCLUDE_PROTOCOLENTRY),1)
+	SRCS += protocolentry.C
+	NLOBJS += protocolentry.n.lo
+	PLOBJS += protocolentry.p.lo
+endif
+ifeq ($(INCLUDE_RANDOMNUMBER),1)
+	SRCS += randomnumber.C
+	NLOBJS += randomnumber.n.lo
+	PLOBJS += randomnumber.p.lo
+endif
+ifeq ($(INCLUDE_REGULAREXPRESSION),1)
+	SRCS += regularexpression.C
+	NLOBJS += regularexpression.n.lo
+	PLOBJS += regularexpression.p.lo
+endif
+ifeq ($(INCLUDE_SEMAPHORESET),1)
+	SRCS += semaphoreset.C
+	NLOBJS += semaphoreset.n.lo
+	PLOBJS += semaphoreset.p.lo
+endif
+ifeq ($(INCLUDE_SERVER),1)
+	SRCS += server.C
+	NLOBJS += server.n.lo
+	PLOBJS += server.p.lo
+endif
+ifeq ($(INCLUDE_SERVER),1)
+	SRCS += serversocket.C
+	NLOBJS += serversocket.n.lo
+	PLOBJS += serversocket.p.lo
+endif
+ifeq ($(INCLUDE_SHAREDMEMORY),1)
+	SRCS += sharedmemory.C
+	NLOBJS += sharedmemory.n.lo
+	PLOBJS += sharedmemory.p.lo
+endif
+ifeq ($(INCLUDE_SIGNALCLASSES),1)
+	SRCS += signalclasses.C
+	NLOBJS += signalclasses.n.lo
+	PLOBJS += signalclasses.p.lo
+endif
+ifeq ($(INCLUDE_STRING),1)
+	SRCS += string.C
+	NLOBJS += string.n.lo
+	PLOBJS += string.p.lo
+endif
+ifeq ($(INCLUDE_STRINGBUFFER),1)
+	SRCS += stringbuffer.C
+	NLOBJS += stringbuffer.n.lo
+	PLOBJS += stringbuffer.p.lo
+endif
+ifeq ($(INCLUDE_TEXT),1)
+	SRCS += text.C
+	NLOBJS += text.n.lo
+	PLOBJS += text.p.lo
+endif
+ifeq ($(INCLUDE_DATATRANSPORT),1)
+	SRCS += datatransport.C datatransportfactory.C
+	NLOBJS += datatransport.n.lo datatransportfactory.n.lo
+	PLOBJS += datatransport.p.lo datatransportfactory.p.lo
+endif
+ifeq ($(INCLUDE_UNIXCLIENT),1)
+	SRCS += unixclientsocket.C
+	NLOBJS += unixclientsocket.n.lo
+	PLOBJS += unixclientsocket.p.lo
+endif
+ifeq ($(INCLUDE_UNIXSERVER),1)
+	SRCS += unixsocket.C unixserversocket.C
+	NLOBJS += unixsocket.n.lo unixserversocket.n.lo
+	PLOBJS += unixsocket.p.lo unixserversocket.p.lo
+endif
+ifeq ($(INCLUDE_VARIABLEBUFFER),1)
+	SRCS += variablebuffer.C
+	NLOBJS += variablebuffer.n.lo
+	PLOBJS += variablebuffer.p.lo
+endif
+ifeq ($(INCLUDE_XMLDOM),1)
+	SRCS += xmldom.C xmldomnode.C
+	NLOBJS += xmldom.n.lo xmldomnode.n.lo
+	PLOBJS += xmldom.p.lo xmldomnode.p.lo
+endif
+ifeq ($(INCLUDE_XMLSAX),1)
+	SRCS += xmlsax.C
+	NLOBJS += xmlsax.n.lo
+	PLOBJS += xmlsax.p.lo
+endif
+	
 .SUFFIXES: .n.lo .p.lo
 
 .C.n.lo:
