@@ -42,7 +42,7 @@ int shadowentry::initialize(const char *username) {
 		return 0;
 	#else
 		return (((spmutex)?!pthread_mutex_lock(spmutex):1) &&
-			((sp=getspnam(username))!=NULL) &&
+			((sp=getspnam((char *)username))!=NULL) &&
 			((spmutex)?!pthread_mutex_unlock(spmutex):1));
 	#endif
 }
