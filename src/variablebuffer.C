@@ -9,15 +9,15 @@
 #include <stdio.h>
 
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
-	buffer=new unsigned char[initialsize];
-	buffersize=initialsize;
-	this->initialsize=initialsize;
-	this->increment=increment;
-	position=0;
-	endofbuffer=0;
+	init(new unsigned char[initialsize],initialsize,increment);
 }
 
 variablebuffer::variablebuffer(unsigned char *initialcontents,
+				size_t initialsize, size_t increment) {
+	init(initialcontents,initialsize,increment);
+}
+
+void variablebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
 	buffer=initialcontents;
 	buffersize=initialsize;

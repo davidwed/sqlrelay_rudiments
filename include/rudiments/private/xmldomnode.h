@@ -19,6 +19,7 @@
 		xmldomnode	*nullnode;
 		bool		isnullnode;
 
+		void		init(xmldomnode *nullnode);
 		xmldomnode	*getNode(xmldomnode *first,
 					int position, const char *name,
 					int count) const;

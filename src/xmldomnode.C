@@ -11,30 +11,23 @@
 #include <stdio.h>
 
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
-	this->nullnode=nullnode;
+	init(nullnode);
 	type=(xmldomnodetype)NULL;
 	nodename=NULL;
 	nodevalue=NULL;
-	parent=nullnode;
-	next=nullnode;
-	previous=nullnode;
-	firstchild=NULL;
-	lastchild=NULL;
-	childcount=0;
-	firstattribute=NULL;
-	lastattribute=NULL;
-	attributecount=0;
-	cascade=true;
-	isnullnode=false;
 }
 
 xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 			const char *name, const char *value) {
-	this->nullnode=nullnode;
+	init(nullnode);
 	this->type=type;
 	nodename=(name)?strdup((char *)name):NULL;
 	nodevalue=(value)?strdup((char *)value):NULL;
-	parent=NULL;
+}
+
+void xmldomnode::init(xmldomnode *nullnode) {
+	this->nullnode=nullnode;
+	parent=nullnode;
 	next=nullnode;
 	previous=nullnode;
 	firstchild=NULL;

@@ -25,9 +25,7 @@ regularexpression::regularexpression() {
 }
 
 regularexpression::regularexpression(const char *pattern) {
-	#ifndef HAVE_REGEX_H
-		expr=NULL;
-	#endif
+	regularexpression();
 	compile(pattern);
 }
 

@@ -28,16 +28,8 @@
 
 
 filedescriptor::filedescriptor(int filedesc) {
+	filedescriptor();
 	fd=filedesc;
-	retryinterruptedreads=0;
-	retryinterruptedwrites=0;
-	allowshortreads=0;
-	lstnr=NULL;
-#ifdef RUDIMENTS_HAS_SSL
-	ctx=NULL;
-	bio=NULL;
-	ssl=NULL;
-#endif
 }
 
 filedescriptor::filedescriptor() {
