@@ -173,6 +173,10 @@ ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h
 	PRIVATEHEADERS += unixclientsocket.h unixclientsocketincludes.h
 endif
+ifeq ($(INCLUDE_MODEMCLIENT),1)
+	HEADERS += modemclient.h
+	PRIVATEHEADERS += modemclient.h modemclientincludes.h
+endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	HEADERS += unixserversocket.h
 	PRIVATEHEADERS += unixserversocket.h unixserversocketincludes.h

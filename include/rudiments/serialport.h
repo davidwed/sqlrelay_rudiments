@@ -12,6 +12,9 @@
 class serialport : public filedescriptor {
 	public:
 
+			serialport();
+		virtual	~serialport();
+
 		bool	setProfileNow(serialportprofile *profile);
 			// tcsetattr(TCSANOW)
 		bool	setProfileOnDrain(serialportprofile *profile);

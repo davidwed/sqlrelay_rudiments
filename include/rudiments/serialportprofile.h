@@ -10,148 +10,148 @@
 // wraps struct termios
 
 class serialportprofile {
-
-	enum	inputmode_t {
-		cannonical=0,
-		raw
-	};
-
-	enum	flowcontrol_t {
-		fc_none=0,
-		fc_software,
-		fc_hardware
-	};
-
-	enum	baudrate_t {
-		baud_0=B0,
-		baud_50=B50,
-		baud_75=B75,
-		baud_110=B110,
-		baud_134=B134,
-		baud_150=B150,
-		baud_200=B200,
-		baud_300=B300,
-		baud_600=B600,
-		baud_1200=B1200,
-		baud_1800=B1800,
-		baud_2400=B2400,
-		baud_4800=B4800,
-		baud_9600=B9600,
-		#if defined(B57600)
-		baud_19200=B19200,
-		#elif defined(EXTA)
-		baud_19200=EXTA,
-		#endif
-		#if defined(B38400)
-		baud_38400=B38400,
-		#elif defined(EXTB)
-		baud_38400=EXTB,
-		#endif
-		#ifdef B57600
-		baud_57600=B57600,
-		#endif
-		#ifdef B76800
-		baud_76800=B76800,
-		#endif
-		#ifdef B115200
-		baud_115200=B115200,
-		#endif
-		#ifdef B230400
-		baud_230400=B230400,
-		#endif
-		#ifdef B460800
-		baud_460800=B460800,
-		#endif
-		#ifdef B500000
-		baud_500000=B500000,
-		#endif
-		#ifdef B576000
-		baud_576000=B576000,
-		#endif
-		#ifdef B921600
-		baud_921600=B921600,
-		#endif
-		#ifdef B1000000
-		baud_1000000=B1000000,
-		#endif
-		#ifdef B1142000
-		baud_1152000=B1152000,
-		#endif
-		#ifdef B1500000
-		baud_1500000=B1500000,
-		#endif
-		#ifdef B2000000
-		baud_2000000=B2000000,
-		#endif
-		#ifdef B2500000
-		baud_2500000=B2500000,
-		#endif
-		#ifdef B3000000
-		baud_3000000=B3000000,
-		#endif
-		#ifdef B3500000
-		baud_3500000=B3500000,
-		#endif
-		#ifdef B4000000
-		baud_4000000=B4000000,
-		#endif
-	};
-
-	enum	charsize_t {
-		cs_5=CS5,
-		cs_6=CS6,
-		cs_7=CS7,
-		cs_8=CS8
-	};
-
-	#ifdef NLDLY
-	enum	newlinedelay_t {
-		nl_none=NL0,
-		nl_100=NL1
-	};
-	#endif
-
-	#ifdef CRDLY
-	enum	carriagereturndelay_t {
-		cr_none=CR0,
-		cr_depends=CR1,
-		cr_100=CR2,
-		cr_150=CR3
-	};
-	#endif
-
-	#ifdef TABDLY
-	enum	tabdelay_t {
-		td_none=TAB0,
-		td_depends=TAB1,
-		td_100=TAB2
-	};
-	#endif
-
-	#ifdef BSDLY
-	enum	backspacedelay_t {
-		bs_none=BS0,
-		bs_50=BS1
-	};
-	#endif
-
-	#ifdef VTDLY
-	enum	verticaltabdelay_t {
-		vt_none=VT0,
-		vt_2=VT1
-	};
-	#endif
-
-	#ifdef FFDLY
-	enum	formfeeddelay_t {
-		ff_none=FF0,
-		ff_2=FF1
-	};
-	#endif
-
 	public:
 
+		enum	inputmode_t {
+			cannonical=0,
+			raw
+		};
+
+		enum	flowcontrol_t {
+			fc_none=0,
+			fc_software,
+			fc_hardware
+		};
+
+		enum	baudrate_t {
+			baud_0=B0,
+			baud_50=B50,
+			baud_75=B75,
+			baud_110=B110,
+			baud_134=B134,
+			baud_150=B150,
+			baud_200=B200,
+			baud_300=B300,
+			baud_600=B600,
+			baud_1200=B1200,
+			baud_1800=B1800,
+			baud_2400=B2400,
+			baud_4800=B4800,
+			baud_9600=B9600,
+			#if defined(B57600)
+			baud_19200=B19200,
+			#elif defined(EXTA)
+			baud_19200=EXTA,
+			#endif
+			#if defined(B38400)
+			baud_38400=B38400,
+			#elif defined(EXTB)
+			baud_38400=EXTB,
+			#endif
+			#ifdef B57600
+			baud_57600=B57600,
+			#endif
+			#ifdef B76800
+			baud_76800=B76800,
+			#endif
+			#ifdef B115200
+			baud_115200=B115200,
+			#endif
+			#ifdef B230400
+			baud_230400=B230400,
+			#endif
+			#ifdef B460800
+			baud_460800=B460800,
+			#endif
+			#ifdef B500000
+			baud_500000=B500000,
+			#endif
+			#ifdef B576000
+			baud_576000=B576000,
+			#endif
+			#ifdef B921600
+			baud_921600=B921600,
+			#endif
+			#ifdef B1000000
+			baud_1000000=B1000000,
+			#endif
+			#ifdef B1142000
+			baud_1152000=B1152000,
+			#endif
+			#ifdef B1500000
+			baud_1500000=B1500000,
+			#endif
+			#ifdef B2000000
+			baud_2000000=B2000000,
+			#endif
+			#ifdef B2500000
+			baud_2500000=B2500000,
+			#endif
+			#ifdef B3000000
+			baud_3000000=B3000000,
+			#endif
+			#ifdef B3500000
+			baud_3500000=B3500000,
+			#endif
+			#ifdef B4000000
+			baud_4000000=B4000000,
+			#endif
+		};
+
+		enum	charsize_t {
+			cs_5=CS5,
+			cs_6=CS6,
+			cs_7=CS7,
+			cs_8=CS8
+		};
+
+		#ifdef NLDLY
+		enum	newlinedelay_t {
+			nl_none=NL0,
+			nl_100=NL1
+		};
+		#endif
+
+		#ifdef CRDLY
+		enum	carriagereturndelay_t {
+			cr_none=CR0,
+			cr_depends=CR1,
+			cr_100=CR2,
+			cr_150=CR3
+		};
+		#endif
+
+		#ifdef TABDLY
+		enum	tabdelay_t {
+			td_none=TAB0,
+			td_depends=TAB1,
+			td_100=TAB2
+		};
+		#endif
+
+		#ifdef BSDLY
+		enum	backspacedelay_t {
+			bs_none=BS0,
+			bs_50=BS1
+		};
+		#endif
+
+		#ifdef VTDLY
+		enum	verticaltabdelay_t {
+			vt_none=VT0,
+			vt_2=VT1
+		};
+		#endif
+
+		#ifdef FFDLY
+		enum	formfeeddelay_t {
+			ff_none=FF0,
+			ff_2=FF1
+		};
+		#endif
+
 			serialportprofile();
+			~serialportprofile();
 
 		void	setControlOptions(tcflag_t flags);
 			// set control options to "flags"

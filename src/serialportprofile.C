@@ -10,6 +10,13 @@
 #include <rudiments/character.h>
 #include <rudiments/charstring.h>
 
+serialportprofile::serialportprofile() {
+	defaultOptions();
+}
+
+serialportprofile::~serialportprofile() {
+}
+
 serialportprofile::baudrate_t serialportprofile::translateBaudString(
 							const char *baudrate) {
 

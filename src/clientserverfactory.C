@@ -6,6 +6,7 @@
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/unixserversocket.h>
 #include <rudiments/unixclientsocket.h>
+#include <rudiments/modemclient.h>
 #include <rudiments/charstring.h>
 
 server *clientserverfactory::getServer(const char *type) {
@@ -22,6 +23,8 @@ client *clientserverfactory::getClient(const char *type) {
 		return new inetclientsocket();
 	} else if (!charstring::compare(type,"unix")) {
 		return new unixclientsocket();
+	} else if (!charstring::compare(type,"modem")) {
+		return new modemclient();
 	}
 	return NULL;
 }

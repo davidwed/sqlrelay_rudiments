@@ -159,6 +159,10 @@ ifeq ($(INCLUDE_UNIXCLIENT),1)
 	SRCS += unixclientsocket.C
 	LOBJS += unixclientsocket.lo
 endif
+ifeq ($(INCLUDE_MODEMCLIENT),1)
+	SRCS += modemclient.C
+	LOBJS += modemclient.lo
+endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	SRCS += unixserversocket.C
 	LOBJS += unixserversocket.lo

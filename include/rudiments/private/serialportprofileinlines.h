@@ -4,11 +4,6 @@
 #include <rudiments/rawbuffer.h>
 
 RUDIMENTS_INLINE
-serialportprofile::serialportprofile() {
-	defaultOptions();
-}
-
-RUDIMENTS_INLINE
 void serialportprofile::setControlOptions(tcflag_t flags) {
 	tio.c_cflag=flags;
 }

@@ -7,6 +7,9 @@
 	#include <rudiments/private/serialportinlines.h>
 #endif
 
+serialport::serialport() : filedescriptor() {}
+serialport::~serialport() {}
+
 bool serialport::getProfile(serialportprofile *profile) {
 	termios	tio;
 	if (tcgetattr(fd,&tio)) {
