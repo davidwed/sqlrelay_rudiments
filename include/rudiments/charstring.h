@@ -11,8 +11,6 @@
 class charstring {
 	public:
 
-		// The static methods operate on standalone strings.
-
 		static	size_t	length(const char *string);
 			// Returns the length of "string".
 
@@ -182,15 +180,17 @@ class charstring {
 
 		static	long long	toLongLong(const char *string);
 			// Converts "string" to a long integer.
-		static	long long	toLongLong(const char *string, char **endptr);
+		static	long long	toLongLong(const char *string,
+							char **endptr);
 			// Converts "string" to a long long integer.  If
 			// non-NULL, endptr will be set to the first character
 			// in the string after the number.
-		static	long long	toLongLong(const char *string, int base);
+		static	long long	toLongLong(const char *string,
+								int base);
 			// Converts "string" to a long long integer of
 			// base "base".
 		static	long long	toLongLong(const char *string,
-					char **endptr, int base);
+						char **endptr, int base);
 			// Converts "string" to a long long integer of
 			// base "base".  If non-NULL, endptr will be set to the
 			// first character in the string after the number.
@@ -244,5 +244,9 @@ class charstring {
 
 	#include <rudiments/private/charstring.h>
 };
+	
+#ifdef ENABLE_RUDIMENTS_INLINES
+	#include <rudiments/private/charstringinlines.h>
+#endif
 
 #endif

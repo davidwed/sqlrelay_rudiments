@@ -3,81 +3,9 @@
 
 #include <rudiments/charstring.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
+#ifndef ENABLE_RUDIMENTS_INLINES
+	#include <rudiments/private/charstringinlines.h>
 #endif
-
-size_t charstring::length(const char *string) {
-	return strlen(string);
-}
-
-void charstring::zero(char *str, size_t size) {
-	memset((void *)str,0,size);
-}
-
-char *charstring::append(char *dest, const char *source) {
-	return strcat(dest,source);
-}
-
-char *charstring::append(char *dest, const char *source, size_t size) {
-	return strncat(dest,source,size);
-}
-
-char *charstring::copy(char *dest, const char *source) {
-	return strcpy(dest,source);
-}
-
-char *charstring::copy(char *dest, const char *source, size_t size) {
-	return strncpy(dest,source,size);
-}
-
-char *charstring::copy(char *dest, size_t location, const char *source) {
-	return strcpy(dest+location,source);
-}
-
-char *charstring::copy(char *dest, size_t location,
-					const char *source, size_t size) {
-	return strncpy(dest+location,source,size);
-}
-
-int charstring::compare(const char *str1, const char *str2) {
-	// FIXME: use strcoll?
-	return strcmp(str1,str2);
-}
-
-int charstring::compare(const char *str1, const char *str2, size_t size) {
-	return strncmp(str1,str2,size);
-}
-
-int charstring::compareIgnoringCase(const char *str1, const char *str2) {
-	// FIXME: use strcasecmp_l?
-	return strcasecmp(str1,str2);
-}
-
-int charstring::compareIgnoringCase(const char *str1,
-						const char *str2, size_t size) {
-	// FIXME: use strncasecmp_l?
-	return strncasecmp(str1,str2,size);
-}
-
-bool charstring::contains(const char *haystack, const char *needle) {
-	return (findFirst(haystack,needle)!=NULL);
-}
-
-bool charstring::contains(const char *haystack, const char needle) {
-	return (findFirst(haystack,needle)!=NULL);
-}
-
-char *charstring::findFirst(const char *haystack, const char *needle) {
-	return strstr(haystack,needle);
-}
-
-char *charstring::findFirst(const char *haystack, const char needle) {
-	return strchr(haystack,needle);
-}
 
 char *charstring::findLast(const char *haystack, const char *needle) {
 
@@ -95,26 +23,6 @@ char *charstring::findLast(const char *haystack, const char *needle) {
 		ptr--;
 	}
 	return NULL;
-}
-
-char *charstring::findLast(const char *haystack, const char needle) {
-	return strrchr(haystack,needle);
-}
-
-char *charstring::duplicate(const char *str) {
-	return strdup(str);
-}
-
-void charstring::rightTrim(char *string) {
-	rightTrim(string,' ');
-}
-
-void charstring::leftTrim(char *string) {
-	leftTrim(string,' ');
-}
-
-void charstring::bothTrim(char *string) {
-	bothTrim(string,' ');
 }
 
 void charstring::upper(char *str) {
@@ -408,62 +316,6 @@ char *charstring::parseNumber(double number,
 	char	*str=new char[precision+3];
 	sprintf(str,"%*.*f",precision,scale,number);
 	return str;
-}
-
-long charstring::toLong(const char *string) {
-	return strtol(string,NULL,0);
-}
-
-long charstring::toLong(const char *string, char **endptr) {
-	return strtol(string,endptr,0);
-}
-
-long charstring::toLong(const char *string, int base) {
-	return strtol(string,NULL,base);
-}
-
-long charstring::toLong(const char *string, char **endptr, int base) {
-	return strtol(string,endptr,base);
-}
-
-long long charstring::toLongLong(const char *string) {
-	return strtoll(string,NULL,0);
-}
-
-long long charstring::toLongLong(const char *string, char **endptr) {
-	return strtoll(string,endptr,0);
-}
-
-long long charstring::toLongLong(const char *string, int base) {
-	return strtoll(string,NULL,base);
-}
-
-long long charstring::toLongLong(const char *string, char **endptr, int base) {
-	return strtoll(string,endptr,base);
-}
-
-float charstring::toFloat(const char *string) {
-	return strtof(string,NULL);
-}
-
-float charstring::toFloat(const char *string, char **endptr) {
-	return strtof(string,endptr);
-}
-
-double charstring::toDouble(const char *string) {
-	return strtod(string,NULL);
-}
-
-double charstring::toDouble(const char *string, char **endptr) {
-	return strtod(string,endptr);
-}
-
-long double charstring::toLongDouble(const char *string) {
-	return strtold(string,NULL);
-}
-
-long double charstring::toLongDouble(const char *string, char **endptr) {
-	return strtold(string,endptr);
 }
 
 void charstring::bothTrim(char *string, char character) {

@@ -164,7 +164,7 @@ ifeq ($(INCLUDE_STRINGBUFFER),1)
 endif
 ifeq ($(INCLUDE_CHARSTRING),1)
 	HEADERS += charstring.h
-	PRIVATEHEADERS += charstring.h charstringincludes.h
+	PRIVATEHEADERS += charstring.h charstringincludes.h charstringinlines.h
 endif
 ifeq ($(INCLUDE_CHARACTER),1)
 	HEADERS += character.h
