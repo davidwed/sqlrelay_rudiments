@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/server.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/server.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,25 +9,33 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_SERVER_H</font>
-<font color="#a520f7">#define RUDIMENTS_SERVER_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_SERVER_H</font>
+<font color="#a020f0">#define RUDIMENTS_SERVER_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/serverincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/serverincludes.h&gt;</font>
 
 <font color="#0000ff">// The server class provides a base class for classes that implement the server</font>
 <font color="#0000ff">// side of a client-server communication model.</font>
 
-<font color="#298a52"><b>class</b></font> server : <font color="#a52829"><b>public</b></font> filedescriptor {
-        <font color="#a52829"><b>public</b></font>:
-                        server();
-                <font color="#298a52"><b>virtual</b></font> ~server();
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    bind()=<font color="#ff00ff">0</font>;
-                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    listen(<font color="#298a52"><b>int</b></font> backlog)=<font color="#ff00ff">0</font>;
-                <font color="#298a52"><b>virtual</b></font> filedescriptor  *accept()=<font color="#ff00ff">0</font>;
+<font color="#2e8b57"><b>class</b></font> server : <font color="#a52a2a"><b>public</b></font> filedescriptor {
+        <font color="#a52a2a"><b>public</b></font>:
+                        server();
+                <font color="#2e8b57"><b>virtual</b></font> ~server();
+
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    bind()=<font color="#ff00ff">0</font>;
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    listen(<font color="#2e8b57"><b>int</b></font> backlog)=<font color="#ff00ff">0</font>;
+                <font color="#2e8b57"><b>virtual</b></font> filedescriptor  *accept()=<font color="#ff00ff">0</font>;
 };
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

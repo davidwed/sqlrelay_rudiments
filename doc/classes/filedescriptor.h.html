@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/filedescriptor.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/filedescriptor.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,34 +9,40 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_FILEDESCRIPTOR_H</font>
-<font color="#a520f7">#define RUDIMENTS_FILEDESCRIPTOR_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_FILEDESCRIPTOR_H</font>
+<font color="#a020f0">#define RUDIMENTS_FILEDESCRIPTOR_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/filedescriptorincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/filedescriptorincludes.h&gt;</font>
 
 <font color="#0000ff">// The filedescriptor class is a base class for other classes that utilize</font>
 <font color="#0000ff">// file descriptors.</font>
 
-<font color="#298a52"><b>class</b></font> filedescriptor {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>class</b></font> listener;
+
+<font color="#2e8b57"><b>class</b></font> filedescriptor {
+        <font color="#a52a2a"><b>public</b></font>:
                         filedescriptor();
                                 <font color="#0000ff">// Creates an uninitialized filedescriptor.</font>
-                <font color="#298a52"><b>virtual</b></font> ~filedescriptor();
+                <font color="#2e8b57"><b>virtual</b></font> ~filedescriptor();
                                 <font color="#0000ff">// Calls close() if it hasn't already been</font>
                                 <font color="#0000ff">// called.</font>
 
 
-                <font color="#298a52"><b>bool</b></font>    close();
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    close();
                                 <font color="#0000ff">// Closes the file descriptor.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#298a52"><b>int</b></font>     getFileDescriptor() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     getFileDescriptor() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the file descriptor.</font>
-                <font color="#298a52"><b>void</b></font>    setFileDescriptor(<font color="#298a52"><b>int</b></font> filedesc);
+                <font color="#2e8b57"><b>void</b></font>    setFileDescriptor(<font color="#2e8b57"><b>int</b></font> filedesc);
                                 <font color="#0000ff">// Sets the file descriptor associated with</font>
                                 <font color="#0000ff">// the class to &quot;filedesc&quot;.</font>
 
-                <font color="#298a52"><b>int</b></font>     duplicate() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     duplicate() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Duplicates the file descriptor and returns</font>
                                 <font color="#0000ff">// the handle of the duplicate descriptor.  The</font>
                                 <font color="#0000ff">// old and new descriptors may be used</font>
@@ -46,7 +52,7 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the lowest-numbered unused descriptor</font>
                                 <font color="#0000ff">// on success or -1 on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    duplicate(<font color="#298a52"><b>int</b></font> newfd) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>    duplicate(<font color="#2e8b57"><b>int</b></font> newfd) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Sets file descriptor handle &quot;newfd&quot; to be a</font>
                                 <font color="#0000ff">// duplicate of this file descriptor.  If</font>
                                 <font color="#0000ff">// &quot;newfd&quot; is already open, it will be closed</font>
@@ -54,13 +60,13 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-<font color="#a520f7">                #ifdef RUDIMENTS_HAS_SSL</font>
-                <font color="#298a52"><b>void</b></font>    setSSLContext(SSL_CTX *ctx);
+<font color="#a020f0">                #ifdef RUDIMENTS_HAS_SSL</font>
+                <font color="#2e8b57"><b>void</b></font>    setSSLContext(SSL_CTX *ctx);
                                 <font color="#0000ff">// Associates SSL context &quot;ctx&quot; with the</font>
                                 <font color="#0000ff">// filedescriptor.  Passing in a NULL for &quot;ctx&quot;</font>
                                 <font color="#0000ff">// has the additional side effect of calling</font>
                                 <font color="#0000ff">// deInitializeSSL() below.</font>
-                <font color="#298a52"><b>bool</b></font>    initializeSSL();
+                <font color="#2e8b57"><b>bool</b></font>    initializeSSL();
                                 <font color="#0000ff">// Should be called after calling</font>
                                 <font color="#0000ff">// setSSLContext() and one of open(),</font>
                                 <font color="#0000ff">// create() or connect() (from socket child</font>
@@ -70,76 +76,76 @@
                                 <font color="#0000ff">// accept() and close() methods.</font>
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns true on success and false on failure</font>
-                SSL     *getSSL() <font color="#298a52"><b>const</b></font>;
+                SSL     *getSSL() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns a pointer to the currently</font>
                                 <font color="#0000ff">// initialized SSL handle or NULL if</font>
                                 <font color="#0000ff">// initializeSSL() has not been called or</font>
                                 <font color="#0000ff">// failed.</font>
-                <font color="#298a52"><b>void</b></font>    deInitializeSSL();
+                <font color="#2e8b57"><b>void</b></font>    deInitializeSSL();
                                 <font color="#0000ff">// Causes read(), write(), connect(), accept()</font>
                                 <font color="#0000ff">// and close() methods to be performed</font>
                                 <font color="#0000ff">// without the accompanying SSL-specific</font>
                                 <font color="#0000ff">// functions.</font>
 
-                <font color="#298a52"><b>int</b></font>     getSSLResult() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     getSSLResult() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the result code of the previously</font>
                                 <font color="#0000ff">// executed SSL command.  If a method fails</font>
                                 <font color="#0000ff">// but errno is 0 then an SSL-related error</font>
                                 <font color="#0000ff">// occurred.  You may call SSL_get_error()</font>
                                 <font color="#0000ff">// on the result of this method to determine</font>
                                 <font color="#0000ff">// the exact error.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
-                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    useNonBlockingMode() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    useNonBlockingMode() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Puts the file descriptor in non-blocking</font>
                                 <font color="#0000ff">// mode.  Returns true on success and false on</font>
                                 <font color="#0000ff">// failure.</font>
-                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    useBlockingMode() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    useBlockingMode() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Puts the file descriptor in blocking mode.</font>
                                 <font color="#0000ff">// Returns true on success and false on</font>
                                 <font color="#0000ff">// failure.</font>
-                <font color="#298a52"><b>bool</b></font>    isUsingNonBlockingMode() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>    isUsingNonBlockingMode() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns true if the file descriptor is in</font>
                                 <font color="#0000ff">// non-blocking mode and false otherwise.</font>
 
                 <font color="#0000ff">// Write methods - write data to the file descriptor.</font>
                 <font color="#0000ff">// These methods return the number of bytes that were</font>
                 <font color="#0000ff">// successfully written or RESULT_ERROR if an error occurred.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>short</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>short</b></font> number);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>long</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>long</b></font> number);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>float</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>float</b></font> number);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>double</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>double</b></font> number);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> character);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> character);
                                 <font color="#0000ff">// Write &quot;character&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>char</b></font> character);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>char</b></font> character);
                                 <font color="#0000ff">// Write &quot;character&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>bool</b></font> value);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>bool</b></font> value);
                                 <font color="#0000ff">// Write &quot;value&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                                 <font color="#0000ff">// Write &quot;string&quot; to the file descriptor.  Note</font>
                                 <font color="#0000ff">// that &quot;string&quot; must be NULL-terminated.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                                 <font color="#0000ff">// Write &quot;string&quot; to the file descriptor.  Note</font>
                                 <font color="#0000ff">// that &quot;string&quot; must be NULL-terminated.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
                                 <font color="#0000ff">// Write &quot;size&quot; bytes from &quot;string&quot; to the file</font>
                                 <font color="#0000ff">// descriptor.  Note that it is possible to</font>
                                 <font color="#0000ff">// write beyond the string's NULL terminator</font>
                                 <font color="#0000ff">// using this method.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
                                 <font color="#0000ff">// Write &quot;size&quot; bytes from &quot;string&quot; to the file</font>
                                 <font color="#0000ff">// descriptor.  Note that it is possible to</font>
                                 <font color="#0000ff">// write beyond the string's NULL terminator</font>
                                 <font color="#0000ff">// using this method.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size);
                                 <font color="#0000ff">// Write &quot;size&quot; bytes from &quot;buffer&quot; to the file</font>
                                 <font color="#0000ff">// descriptor.</font>
 
@@ -149,44 +155,44 @@
                 <font color="#0000ff">// These methods return the number of bytes that were</font>
                 <font color="#0000ff">// successfully written, RESULT_ERROR if an error occurred or</font>
                 <font color="#0000ff">// RESULT_TIMEOUT if a timeout occurred.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>short</b></font> number, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>short</b></font> number, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>long</b></font> number, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>long</b></font> number, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>float</b></font> number, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>float</b></font> number, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>double</b></font> number, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>double</b></font> number, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;number&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> character, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> character, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;character&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>char</b></font> character, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>char</b></font> character, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;character&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>bool</b></font> value, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>bool</b></font> value, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;value&quot; to the file descriptor.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;string&quot; to the file descriptor.  Note</font>
                                 <font color="#0000ff">// that &quot;string&quot; must be NULL-terminated.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;string&quot; to the file descriptor.  Note</font>
                                 <font color="#0000ff">// that &quot;string&quot; must be NULL-terminated.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size,
-                                                        <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size,
+                                                        <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;size&quot; bytes from &quot;string&quot; to the file</font>
                                 <font color="#0000ff">// descriptor.  Note that it is possible to</font>
                                 <font color="#0000ff">// write beyond the string's NULL terminator</font>
                                 <font color="#0000ff">// using this method.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size,
-                                                        <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size,
+                                                        <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;size&quot; bytes from &quot;string&quot; to the file</font>
                                 <font color="#0000ff">// descriptor.  Note that it is possible to</font>
                                 <font color="#0000ff">// write beyond the string's NULL terminator</font>
                                 <font color="#0000ff">// using this method.</font>
-                <font color="#298a52"><b>ssize_t</b></font> write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size,
-                                                        <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size,
+                                                        <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Write &quot;size&quot; bytes from &quot;buffer&quot; to the file</font>
                                 <font color="#0000ff">// descriptor.</font>
 
@@ -194,43 +200,43 @@
                 <font color="#0000ff">// Read methods - read data from the file descriptor.</font>
                 <font color="#0000ff">// These methods return the number of bytes that were</font>
                 <font color="#0000ff">// successfully read or RESULT_ERROR if an error occurred.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(unsigned short) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(unsigned long) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>short</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>short</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(short) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>long</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>long</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(long) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>float</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>float</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(float) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>double</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>double</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(double) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(unsigned char) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>char</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>char</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(char) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>bool</b></font> *buffer);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>bool</b></font> *buffer);
                                 <font color="#0000ff">// Reads sizeof(bool) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size);
                                 <font color="#0000ff">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000ff">// into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size);
                                 <font color="#0000ff">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000ff">// into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>void</b></font> *buf, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>void</b></font> *buf, <font color="#2e8b57"><b>size_t</b></font> size);
                                 <font color="#0000ff">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000ff">// into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>char</b></font> **buffer, <font color="#298a52"><b>char</b></font> *terminator);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>char</b></font> **buffer, <font color="#2e8b57"><b>char</b></font> *terminator);
                                 <font color="#0000ff">// Reads from the file desciptor into &quot;buffer&quot;</font>
                                 <font color="#0000ff">// until &quot;terminator&quot; is encountered.  Note</font>
                                 <font color="#0000ff">// that &quot;buffer&quot; is allocated internally and</font>
@@ -242,45 +248,45 @@
                 <font color="#0000ff">// These methods return the number of bytes that were</font>
                 <font color="#0000ff">// successfully read, RESULT_ERROR if an error occurred or</font>
                 <font color="#0000ff">// RESULT_TIMEOUT if a timeout occurred.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(unsigned short) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(unsigned long) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>short</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>short</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(short) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>long</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>long</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(long) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>float</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>float</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(float) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>double</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>double</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(double) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(unsigned char) bytes</font>
                                 <font color="#0000ff">// from the file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(char) bytes from the file</font>
                                 <font color="#0000ff">// descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>bool</b></font> *buffer, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>bool</b></font> *buffer, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads sizeof(bool) bytes from the</font>
                                 <font color="#0000ff">// file descriptor into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size,
-                                                        <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size,
+                                                        <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000ff">// into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000ff">// into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>void</b></font> *buf, <font color="#298a52"><b>size_t</b></font> size, <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>void</b></font> *buf, <font color="#2e8b57"><b>size_t</b></font> size, <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads &quot;size&quot; bytes from the file descriptor</font>
                                 <font color="#0000ff">// into &quot;buffer&quot;.</font>
-                <font color="#298a52"><b>ssize_t</b></font> read(<font color="#298a52"><b>char</b></font> **buffer, <font color="#298a52"><b>char</b></font> *terminator,
-                                                        <font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>ssize_t</b></font> read(<font color="#2e8b57"><b>char</b></font> **buffer, <font color="#2e8b57"><b>char</b></font> *terminator,
+                                                        <font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Reads from the file desciptor into &quot;buffer&quot;</font>
                                 <font color="#0000ff">// until &quot;terminator&quot; is encountered.  Note</font>
                                 <font color="#0000ff">// that &quot;buffer&quot; is allocated internally and</font>
@@ -288,7 +294,7 @@
 
 
                 <font color="#0000ff">// Wait methods.</font>
-                <font color="#298a52"><b>int</b></font>     waitForNonBlockingRead(<font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     waitForNonBlockingRead(<font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Causes the application to wait until a read()</font>
                                 <font color="#0000ff">// will proceed without blocking or until &quot;sec&quot;</font>
                                 <font color="#0000ff">// seconds and &quot;usec&quot; microseconds have elapsed.</font>
@@ -312,7 +318,7 @@
                                 <font color="#0000ff">// greater than 1, indicating that a set of</font>
                                 <font color="#0000ff">// file descriptors that the listener is</font>
                                 <font color="#0000ff">// listening on are all ready to be read from.</font>
-                <font color="#298a52"><b>int</b></font>     waitForNonBlockingWrite(<font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     waitForNonBlockingWrite(<font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Causes the application to wait until a</font>
                                 <font color="#0000ff">// write() will proceed without blocking or</font>
                                 <font color="#0000ff">// until &quot;sec&quot; seconds and &quot;usec&quot; microseconds</font>
@@ -343,34 +349,34 @@
                 <font color="#0000ff">// interrupts it, the read or write returns with errno set to</font>
                 <font color="#0000ff">// EINTR and must be retried.  These methods override that</font>
                 <font color="#0000ff">// behavior.</font>
-                <font color="#298a52"><b>void</b></font>    retryInterruptedReads();
+                <font color="#2e8b57"><b>void</b></font>    retryInterruptedReads();
                         <font color="#0000ff">// Causes reads to automatically retry if interrupted</font>
                         <font color="#0000ff">// by a signal.</font>
-                <font color="#298a52"><b>void</b></font>    dontRetryInterruptedReads();
+                <font color="#2e8b57"><b>void</b></font>    dontRetryInterruptedReads();
                         <font color="#0000ff">// Causes reads not to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.</font>
-                <font color="#298a52"><b>void</b></font>    retryInterruptedWrites();
+                <font color="#2e8b57"><b>void</b></font>    retryInterruptedWrites();
                         <font color="#0000ff">// Causes writes to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.  This is the default.</font>
-                <font color="#298a52"><b>void</b></font>    dontRetryInterruptedWrites();
+                <font color="#2e8b57"><b>void</b></font>    dontRetryInterruptedWrites();
                         <font color="#0000ff">// Causes writes not to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.</font>
-                <font color="#298a52"><b>void</b></font>    retryInterruptedWaits();
+                <font color="#2e8b57"><b>void</b></font>    retryInterruptedWaits();
                         <font color="#0000ff">// Causes waits to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.  This is the default.</font>
-                <font color="#298a52"><b>void</b></font>    dontRetryInterruptedWaits();
+                <font color="#2e8b57"><b>void</b></font>    dontRetryInterruptedWaits();
                         <font color="#0000ff">// Causes waits not to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.</font>
-                <font color="#298a52"><b>void</b></font>    retryInterruptedFcntl();
+                <font color="#2e8b57"><b>void</b></font>    retryInterruptedFcntl();
                         <font color="#0000ff">// Causes fcntl() to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.  This is the default.</font>
-                <font color="#298a52"><b>void</b></font>    dontRetryInterruptedFcntl();
+                <font color="#2e8b57"><b>void</b></font>    dontRetryInterruptedFcntl();
                         <font color="#0000ff">// Causes fcntl() not to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.</font>
-                <font color="#298a52"><b>void</b></font>    retryInterruptedIoctl();
+                <font color="#2e8b57"><b>void</b></font>    retryInterruptedIoctl();
                         <font color="#0000ff">// Causes ioctl() to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.  This is the default.</font>
-                <font color="#298a52"><b>void</b></font>    dontRetryInterruptedIoctl();
+                <font color="#2e8b57"><b>void</b></font>    dontRetryInterruptedIoctl();
                         <font color="#0000ff">// Causes ioctl() not to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.</font>
 
@@ -379,14 +385,14 @@
                 <font color="#0000ff">// of bytes from the file descriptor, in several passes if</font>
                 <font color="#0000ff">// necessary.  No single pass will try to read more than</font>
                 <font color="#0000ff">// SSIZE_MAX bytes.  These methods override that behavior.</font>
-                <font color="#298a52"><b>void</b></font>    allowShortReads();
+                <font color="#2e8b57"><b>void</b></font>    allowShortReads();
                         <font color="#0000ff">// Causes a read to return the number of bytes that</font>
                         <font color="#0000ff">// were read in a single pass from the file descriptor.</font>
                         <font color="#0000ff">// Note that reads longer than SSIZE_MAX will always</font>
                         <font color="#0000ff">// return SSIZE_MAX or fewer bytes.  This is useful,</font>
                         <font color="#0000ff">// for example, when reading from devices which block</font>
                         <font color="#0000ff">// rather than returning 0 for EOF.</font>
-                <font color="#298a52"><b>void</b></font>    dontAllowShortReads();
+                <font color="#2e8b57"><b>void</b></font>    dontAllowShortReads();
                         <font color="#0000ff">// Causes a read to attempt to read the specified</font>
                         <font color="#0000ff">// number of bytes from the file descriptor, in several</font>
                         <font color="#0000ff">// passes if necessary.</font>
@@ -395,35 +401,45 @@
                 <font color="#0000ff">// By default, calls to waitForNonBlockingRead() and</font>
                 <font color="#0000ff">// waitForNonBlockingWrite() will wait using the select()</font>
                 <font color="#0000ff">// system call.  These methods override that behavior.</font>
-                <font color="#298a52"><b>void</b></font>    useListener(listener *lstnr);
+                <font color="#2e8b57"><b>void</b></font>    useListener(listener *lstnr);
                         <font color="#0000ff">// Causes calls to waitForNonBlockingRead() and</font>
                         <font color="#0000ff">// waitForNonBlockingWrite() to in turn call</font>
                         <font color="#0000ff">// lstnr-&gt;waitForNonBlockingRead() or</font>
                         <font color="#0000ff">// lstnr-&gt;waitForNonBlockingWrite().</font>
-                <font color="#298a52"><b>void</b></font>    dontUseListener();
+                <font color="#2e8b57"><b>void</b></font>    dontUseListener();
                         <font color="#0000ff">// Causes calls to waitForNonBlockingRead() and</font>
                         <font color="#0000ff">// waitForNonBlockingWrite() to use select().</font>
                         <font color="#0000ff">// This is the default.</font>
                 listener        *getListener();
                         <font color="#0000ff">// Returns the listener set previously by useListener() </font>
                         <font color="#0000ff">// or NULL if none has been set.</font>
+                <font color="#2e8b57"><b>void</b></font>    useListenerInsideReads();
+                <font color="#2e8b57"><b>void</b></font>    dontUseListenerInsideReads();
+                        <font color="#0000ff">// </font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: document this</font>
+                <font color="#2e8b57"><b>void</b></font>    useListenerInsideWrites();
+                <font color="#2e8b57"><b>void</b></font>    dontUseListenerInsideWrites();
+                        <font color="#0000ff">// </font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: document this</font>
 
 
-                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    passFileDescriptor(<font color="#298a52"><b>int</b></font> descriptor);
-                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    receiveFileDescriptor(<font color="#298a52"><b>int</b></font> *descriptor);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    passFileDescriptor(<font color="#2e8b57"><b>int</b></font> descriptor);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    receiveFileDescriptor(<font color="#2e8b57"><b>int</b></font> *descriptor);
 
-                <font color="#298a52"><b>void</b></font>    translateByteOrder();
-                <font color="#298a52"><b>void</b></font>    dontTranslateByteOrder();
+                <font color="#2e8b57"><b>void</b></font>    translateByteOrder();
+                <font color="#2e8b57"><b>void</b></font>    dontTranslateByteOrder();
 
-                <font color="#298a52"><b>int</b></font>     fcntl(<font color="#298a52"><b>int</b></font> command, <font color="#298a52"><b>long</b></font> arg) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>     ioctl(<font color="#298a52"><b>int</b></font> command, <font color="#298a52"><b>void</b></font> *arg) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     fcntl(<font color="#2e8b57"><b>int</b></font> command, <font color="#2e8b57"><b>long</b></font> arg) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>     ioctl(<font color="#2e8b57"><b>int</b></font> command, <font color="#2e8b57"><b>void</b></font> *arg) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Interfaces for performing varions miscellaneous</font>
                         <font color="#0000ff">// operations on the file descriptor.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/filedescriptor.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/filedescriptor.h&gt;</font>
 };
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/shellcommand.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/shellcommand.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -11,10 +11,10 @@
 <font color="#0000ff">// Copyright (c) 2003 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_SHELLCOMMAND_H</font>
-<font color="#a520f7">#define RUDIMENTS_SHELLCOMMAND_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_SHELLCOMMAND_H</font>
+<font color="#a020f0">#define RUDIMENTS_SHELLCOMMAND_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/shellcommandincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/shellcommandincludes.h&gt;</font>
 
 <font color="#0000ff">// The shellcommand class provides methods for running commands, reading their</font>
 <font color="#0000ff">// output or writing input to them.</font>
@@ -47,36 +47,44 @@
 <font color="#0000ff">//                              posix_spawn_file_actions_addclose()</font>
 <font color="#0000ff">//                              posix_spawn_file_actions_adddup2()</font>
 
-<font color="#298a52"><b>class</b></font> shellcommand {
-        <font color="#a52829"><b>public</b></font>:
-                <font color="#298a52"><b>int</b></font>     run(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *command);
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>class</b></font> shellcommand {
+        <font color="#a52a2a"><b>public</b></font>:
+                <font color="#2e8b57"><b>int</b></font>     run(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *command);
                         <font color="#0000ff">// Runs &quot;command&quot;.</font>
 
-                <font color="#298a52"><b>int</b></font>     getStandardInput();
+                <font color="#2e8b57"><b>int</b></font>     getStandardInput();
                         <font color="#0000ff">// If run() succeeded, returns the file descriptor</font>
                         <font color="#0000ff">// of the standard input of the command or 0 otherwise.</font>
 
-                <font color="#298a52"><b>int</b></font>     getStandardOutput();
+                <font color="#2e8b57"><b>int</b></font>     getStandardOutput();
                         <font color="#0000ff">// If run() succeeded, returns the file descriptor</font>
                         <font color="#0000ff">// of the standard output of the command or 0 otherwise.</font>
 
-                <font color="#298a52"><b>int</b></font>     getStandardError();
+                <font color="#2e8b57"><b>int</b></font>     getStandardError();
                         <font color="#0000ff">// If run() succeeded, returns the file descriptor</font>
                         <font color="#0000ff">// of the standard error of the command or 0 otherwise.</font>
 
-                <font color="#298a52"><b>int</b></font>     close();
+                <font color="#2e8b57"><b>int</b></font>     close();
                         <font color="#0000ff">// Closes the previously run command.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns 1 on success and 0 on failure.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/shellcommand.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/shellcommand.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/shellcommandinlines.h&gt;</font>
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef ENABLE_RUDIMENTS_INLINES</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/shellcommandinlines.h&gt;</font>
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

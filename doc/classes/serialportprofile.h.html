@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/serialportprofile.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/serialportprofile.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,189 +9,193 @@
 <font color="#0000ff">// Copyright (c) 2004 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_SERIALPORTPROFILE_H</font>
-<font color="#a520f7">#define RUDIMENTS_SERIALPORTPROFILE_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_SERIALPORTPROFILE_H</font>
+<font color="#a020f0">#define RUDIMENTS_SERIALPORTPROFILE_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/serialportprofileincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/serialportprofileincludes.h&gt;</font>
 
 <font color="#0000ff">// cfmakeraw, cfsetspeed???</font>
 <font color="#0000ff">// wraps struct termios</font>
 
-<font color="#298a52"><b>class</b></font> serialportprofile {
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-        <font color="#298a52"><b>enum</b></font>    inputmode_t {
-                cannonical=<font color="#ff00ff">0</font>,
-                raw
-        };
+<font color="#2e8b57"><b>class</b></font> serialportprofile {
+        <font color="#a52a2a"><b>public</b></font>:
 
-        <font color="#298a52"><b>enum</b></font>    flowcontrol_t {
-                fc_none=<font color="#ff00ff">0</font>,
-                fc_software,
-                fc_hardware
-        };
+                <font color="#2e8b57"><b>enum</b></font>    inputmode_t {
+                        cannonical=<font color="#ff00ff">0</font>,
+                        raw
+                };
 
-        <font color="#298a52"><b>enum</b></font>    baudrate_t {
-                baud_0=B0,
-                baud_50=B50,
-                baud_75=B75,
-                baud_110=B110,
-                baud_134=B134,
-                baud_150=B150,
-                baud_200=B200,
-                baud_300=B300,
-                baud_600=B600,
-                baud_1200=B1200,
-                baud_1800=B1800,
-                baud_2400=B2400,
-                baud_4800=B4800,
-                baud_9600=B9600,
-<font color="#a520f7">                #if defined(B57600)</font>
-                baud_19200=B19200,
-<font color="#a520f7">                #elif defined(EXTA)</font>
-                baud_19200=EXTA,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #if defined(B38400)</font>
-                baud_38400=B38400,
-<font color="#a520f7">                #elif defined(EXTB)</font>
-                baud_38400=EXTB,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B57600</font>
-                baud_57600=B57600,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B76800</font>
-                baud_76800=B76800,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B115200</font>
-                baud_115200=B115200,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B230400</font>
-                baud_230400=B230400,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B460800</font>
-                baud_460800=B460800,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B500000</font>
-                baud_500000=B500000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B576000</font>
-                baud_576000=B576000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B921600</font>
-                baud_921600=B921600,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B1000000</font>
-                baud_1000000=B1000000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B1142000</font>
-                baud_1152000=B1152000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B1500000</font>
-                baud_1500000=B1500000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B2000000</font>
-                baud_2000000=B2000000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B2500000</font>
-                baud_2500000=B2500000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B3000000</font>
-                baud_3000000=B3000000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B3500000</font>
-                baud_3500000=B3500000,
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef B4000000</font>
-                baud_4000000=B4000000,
-<font color="#a520f7">                #endif</font>
-        };
+                <font color="#2e8b57"><b>enum</b></font>    flowcontrol_t {
+                        fc_none=<font color="#ff00ff">0</font>,
+                        fc_software,
+                        fc_hardware
+                };
 
-        <font color="#298a52"><b>enum</b></font>    charsize_t {
-                cs_5=CS5,
-                cs_6=CS6,
-                cs_7=CS7,
-                cs_8=CS8
-        };
+                <font color="#2e8b57"><b>enum</b></font>    baudrate_t {
+                        baud_0=B0,
+                        baud_50=B50,
+                        baud_75=B75,
+                        baud_110=B110,
+                        baud_134=B134,
+                        baud_150=B150,
+                        baud_200=B200,
+                        baud_300=B300,
+                        baud_600=B600,
+                        baud_1200=B1200,
+                        baud_1800=B1800,
+                        baud_2400=B2400,
+                        baud_4800=B4800,
+                        baud_9600=B9600,
+<font color="#a020f0">                        #if defined(B57600)</font>
+                        baud_19200=B19200,
+<font color="#a020f0">                        #elif defined(EXTA)</font>
+                        baud_19200=EXTA,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #if defined(B38400)</font>
+                        baud_38400=B38400,
+<font color="#a020f0">                        #elif defined(EXTB)</font>
+                        baud_38400=EXTB,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B57600</font>
+                        baud_57600=B57600,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B76800</font>
+                        baud_76800=B76800,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B115200</font>
+                        baud_115200=B115200,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B230400</font>
+                        baud_230400=B230400,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B460800</font>
+                        baud_460800=B460800,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B500000</font>
+                        baud_500000=B500000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B576000</font>
+                        baud_576000=B576000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B921600</font>
+                        baud_921600=B921600,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B1000000</font>
+                        baud_1000000=B1000000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B1142000</font>
+                        baud_1152000=B1152000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B1500000</font>
+                        baud_1500000=B1500000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B2000000</font>
+                        baud_2000000=B2000000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B2500000</font>
+                        baud_2500000=B2500000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B3000000</font>
+                        baud_3000000=B3000000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B3500000</font>
+                        baud_3500000=B3500000,
+<font color="#a020f0">                        #endif</font>
+<font color="#a020f0">                        #ifdef B4000000</font>
+                        baud_4000000=B4000000,
+<font color="#a020f0">                        #endif</font>
+                };
 
-<font color="#a520f7">        #ifdef NLDLY</font>
-        <font color="#298a52"><b>enum</b></font>    newlinedelay_t {
-                nl_none=NL0,
-                nl_100=NL1
-        };
-<font color="#a520f7">        #endif</font>
+                <font color="#2e8b57"><b>enum</b></font>    charsize_t {
+                        cs_5=CS5,
+                        cs_6=CS6,
+                        cs_7=CS7,
+                        cs_8=CS8
+                };
 
-<font color="#a520f7">        #ifdef CRDLY</font>
-        <font color="#298a52"><b>enum</b></font>    carriagereturndelay_t {
-                cr_none=CR0,
-                cr_depends=CR1,
-                cr_100=CR2,
-                cr_150=CR3
-        };
-<font color="#a520f7">        #endif</font>
+<font color="#a020f0">                #ifdef NLDLY</font>
+                <font color="#2e8b57"><b>enum</b></font>    newlinedelay_t {
+                        nl_none=NL0,
+                        nl_100=NL1
+                };
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">        #ifdef TABDLY</font>
-        <font color="#298a52"><b>enum</b></font>    tabdelay_t {
-                td_none=TAB0,
-                td_depends=TAB1,
-                td_100=TAB2
-        };
-<font color="#a520f7">        #endif</font>
+<font color="#a020f0">                #ifdef CRDLY</font>
+                <font color="#2e8b57"><b>enum</b></font>    carriagereturndelay_t {
+                        cr_none=CR0,
+                        cr_depends=CR1,
+                        cr_100=CR2,
+                        cr_150=CR3
+                };
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">        #ifdef BSDLY</font>
-        <font color="#298a52"><b>enum</b></font>    backspacedelay_t {
-                bs_none=BS0,
-                bs_50=BS1
-        };
-<font color="#a520f7">        #endif</font>
+<font color="#a020f0">                #ifdef TABDLY</font>
+                <font color="#2e8b57"><b>enum</b></font>    tabdelay_t {
+                        td_none=TAB0,
+                        td_depends=TAB1,
+                        td_100=TAB2
+                };
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">        #ifdef VTDLY</font>
-        <font color="#298a52"><b>enum</b></font>    verticaltabdelay_t {
-                vt_none=VT0,
-                vt_2=VT1
-        };
-<font color="#a520f7">        #endif</font>
+<font color="#a020f0">                #ifdef BSDLY</font>
+                <font color="#2e8b57"><b>enum</b></font>    backspacedelay_t {
+                        bs_none=BS0,
+                        bs_50=BS1
+                };
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">        #ifdef FFDLY</font>
-        <font color="#298a52"><b>enum</b></font>    formfeeddelay_t {
-                ff_none=FF0,
-                ff_2=FF1
-        };
-<font color="#a520f7">        #endif</font>
+<font color="#a020f0">                #ifdef VTDLY</font>
+                <font color="#2e8b57"><b>enum</b></font>    verticaltabdelay_t {
+                        vt_none=VT0,
+                        vt_2=VT1
+                };
+<font color="#a020f0">                #endif</font>
 
-        <font color="#a52829"><b>public</b></font>:
+<font color="#a020f0">                #ifdef FFDLY</font>
+                <font color="#2e8b57"><b>enum</b></font>    formfeeddelay_t {
+                        ff_none=FF0,
+                        ff_2=FF1
+                };
+<font color="#a020f0">                #endif</font>
 
                         serialportprofile();
+                        ~serialportprofile();
 
-                <font color="#298a52"><b>void</b></font>    setControlOptions(tcflag_t flags);
+                <font color="#2e8b57"><b>void</b></font>    setControlOptions(tcflag_t flags);
                         <font color="#0000ff">// set control options to &quot;flags&quot;</font>
-                <font color="#298a52"><b>void</b></font>    setLocalOptions(tcflag_t flags);
+                <font color="#2e8b57"><b>void</b></font>    setLocalOptions(tcflag_t flags);
                         <font color="#0000ff">// set local options to &quot;flags&quot;</font>
-                <font color="#298a52"><b>void</b></font>    setInputOptions(tcflag_t flags);
+                <font color="#2e8b57"><b>void</b></font>    setInputOptions(tcflag_t flags);
                         <font color="#0000ff">// set input options to &quot;flags&quot;</font>
-                <font color="#298a52"><b>void</b></font>    setOutputOptions(tcflag_t flags);
+                <font color="#2e8b57"><b>void</b></font>    setOutputOptions(tcflag_t flags);
                         <font color="#0000ff">// set output options to &quot;flags&quot;</font>
-                <font color="#298a52"><b>void</b></font>    setControlCharacters(cc_t *c_cc);
+                <font color="#2e8b57"><b>void</b></font>    setControlCharacters(cc_t *c_cc);
                         <font color="#0000ff">// Set control characters to the values pointed to by</font>
                         <font color="#0000ff">// &quot;c_cc&quot;.  Note that c_cc must be an array of length</font>
                         <font color="#0000ff">// NCCS.</font>
-                <font color="#298a52"><b>void</b></font>    setOptions(termios *newtio);
+                <font color="#2e8b57"><b>void</b></font>    setOptions(termios *newtio);
                         <font color="#0000ff">// set all options and control characters to</font>
                         <font color="#0000ff">// the values set in &quot;newtio&quot;</font>
 
-                <font color="#298a52"><b>void</b></font>    defaultControlOptions();
+                <font color="#2e8b57"><b>void</b></font>    defaultControlOptions();
                         <font color="#0000ff">// set the control options to system defaults</font>
-                <font color="#298a52"><b>void</b></font>    defaultLocalOptions();
+                <font color="#2e8b57"><b>void</b></font>    defaultLocalOptions();
                         <font color="#0000ff">// set the local options to system defaults</font>
-                <font color="#298a52"><b>void</b></font>    defaultInputOptions();
+                <font color="#2e8b57"><b>void</b></font>    defaultInputOptions();
                         <font color="#0000ff">// set the input options to system defaults</font>
-                <font color="#298a52"><b>void</b></font>    defaultOutputOptions();
+                <font color="#2e8b57"><b>void</b></font>    defaultOutputOptions();
                         <font color="#0000ff">// set the output options to system defaults</font>
-                <font color="#298a52"><b>void</b></font>    defaultControlCharacters();
+                <font color="#2e8b57"><b>void</b></font>    defaultControlCharacters();
                         <font color="#0000ff">// set the control characters to system defaults</font>
-                <font color="#298a52"><b>void</b></font>    defaultOptions();
+                <font color="#2e8b57"><b>void</b></font>    defaultOptions();
                         <font color="#0000ff">// set all options and control characters to</font>
                         <font color="#0000ff">// system defaults</font>
 
-                <font color="#298a52"><b>void</b></font>    evalOptionsString(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>void</b></font>    evalOptionsString(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Serial port configuration requirements are often</font>
                         <font color="#0000ff">// given as a 3 character string representing the</font>
                         <font color="#0000ff">// number of bits-per-char, the parity and the number</font>
@@ -199,12 +203,12 @@
                         <font color="#0000ff">// This methods parses such a string and sets the</font>
                         <font color="#0000ff">// profile to match those values.</font>
 
-                <font color="#298a52"><b>void</b></font>            inputMode(inputmode_t inputmode);
+                <font color="#2e8b57"><b>void</b></font>            inputMode(inputmode_t inputmode);
                                 <font color="#0000ff">// set input mode to &quot;inputmode&quot;</font>
                 inputmode_t     inputMode();
                                 <font color="#0000ff">// get the current input mode setting</font>
 
-                <font color="#298a52"><b>void</b></font>            flowControl(flowcontrol_t flowcontrol);
+                <font color="#2e8b57"><b>void</b></font>            flowControl(flowcontrol_t flowcontrol);
                                 <font color="#0000ff">// set flow control to &quot;flowcontrol&quot;</font>
                 flowcontrol_t   flowControl();
                                 <font color="#0000ff">// get the current flow control setting</font>
@@ -212,39 +216,48 @@
                 <font color="#0000ff">// control options</font>
 
                 <font color="#0000ff">// setters...</font>
-                <font color="#298a52"><b>void</b></font>    baud(baudrate_t baud);
+                <font color="#2e8b57"><b>void</b></font>    baud(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *baudrate);
+                <font color="#2e8b57"><b>void</b></font>    baud(baudrate_t baudrate);
                         <font color="#0000ff">// set the (input and output) baud rate</font>
                         <font color="#0000ff">// default is 0</font>
-                <font color="#298a52"><b>bool</b></font>    inputBaud(baudrate_t baud);
+                <font color="#2e8b57"><b>bool</b></font>    inputBaud(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *baudrate);
+                <font color="#2e8b57"><b>bool</b></font>    inputBaud(baudrate_t baudrate);
                         <font color="#0000ff">// set the input baud rate</font>
                         <font color="#0000ff">// default is 0</font>
-                <font color="#298a52"><b>bool</b></font>    outputBaud(baudrate_t baud);
+                <font color="#2e8b57"><b>bool</b></font>    outputBaud(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *baudrate);
+                <font color="#2e8b57"><b>bool</b></font>    outputBaud(baudrate_t baudrate);
                         <font color="#0000ff">// set the output baud rate</font>
                         <font color="#0000ff">// default is 0</font>
-                <font color="#298a52"><b>void</b></font>    characterSize(charsize_t size);
+                <font color="#2e8b57"><b>void</b></font>    characterSize(charsize_t size);
                         <font color="#0000ff">// set the character size</font>
                         <font color="#0000ff">// default is 5 bits</font>
-                <font color="#298a52"><b>void</b></font>    twoStopBits(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: CSIZE</font>
+                <font color="#2e8b57"><b>void</b></font>    twoStopBits(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// use two stop bits if &quot;truefalse&quot; is true</font>
                         <font color="#0000ff">// or one stop bit if &quot;truefalse&quot; is false</font>
                         <font color="#0000ff">// default is one stop bit</font>
-                <font color="#298a52"><b>void</b></font>    receiverOn(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: CSTOPB</font>
+                <font color="#2e8b57"><b>void</b></font>    receiverOn(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// turn the receiver on/off</font>
                         <font color="#0000ff">// (enables serial port to read incoming data)</font>
                         <font color="#0000ff">// default is off</font>
                         <font color="#0000ff">// (you probably always want to set this on)</font>
-                <font color="#298a52"><b>void</b></font>    parityCheck(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: CREAD</font>
+                <font color="#2e8b57"><b>void</b></font>    parityCheck(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// turn parity checking on/off</font>
                         <font color="#0000ff">// default is off</font>
-                <font color="#298a52"><b>void</b></font>    oddParity(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: CPARENB</font>
+                <font color="#2e8b57"><b>void</b></font>    oddParity(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// use odd parity if &quot;truefalse&quot; is true</font>
                         <font color="#0000ff">// or even parity if &quot;truefalse&quot; is false</font>
                         <font color="#0000ff">// default is even parity</font>
-                <font color="#298a52"><b>void</b></font>    hangupOnClose(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: PARODD</font>
+                <font color="#2e8b57"><b>void</b></font>    hangupOnClose(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// lower modem control lines after</font>
                         <font color="#0000ff">// last process closes the device (hang up)</font>
                         <font color="#0000ff">// default is not to hang up on close</font>
-                <font color="#298a52"><b>void</b></font>    ignoreModemControlLines(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: HUPCL</font>
+                <font color="#2e8b57"><b>void</b></font>    ignoreModemControlLines(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// ignore (possibly sporadic) job control and hangup</font>
                         <font color="#0000ff">// signals that could terminate or otherwise control</font>
                         <font color="#0000ff">// the program</font>
@@ -252,14 +265,18 @@
                         <font color="#0000ff">// (this should be set to true when communicating</font>
                         <font color="#0000ff">// with a device connected directly to the computer as</font>
                         <font color="#0000ff">// opposed to over a modem)</font>
-<font color="#a520f7">                #ifdef LOBLK</font>
-                <font color="#298a52"><b>void</b></font>    blockJobControlOutput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: CLOCAL</font>
+<font color="#a020f0">                #ifdef LOBLK</font>
+                <font color="#2e8b57"><b>void</b></font>    blockJobControlOutput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// block output from a nonconcurrent shell layer</font>
                         <font color="#0000ff">// default is not to block</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    hardwareFlowControl(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: LOBLK</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    hardwareFlowControl(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// use RTS/CTS flow control</font>
                         <font color="#0000ff">// default is not to use RTS/CTS flow control</font>
+                        <font color="#0000ff">// termios flag: CRTSCTS/NEW_CRTSCTS/</font>
+                        <font color="#0000ff">//                      CRTS_IFLOW/CRTS_OFLOW</font>
 
                 <font color="#0000ff">// getters...</font>
                 baudrate_t      baud();
@@ -270,25 +287,25 @@
                                 <font color="#0000ff">// returns current output baud</font>
                 charsize_t      characterSize();
                                 <font color="#0000ff">// returns current character size</font>
-                <font color="#298a52"><b>bool</b></font>            twoStopBits();
+                <font color="#2e8b57"><b>bool</b></font>            twoStopBits();
                                 <font color="#0000ff">// returns true if two stop bits are being used</font>
-                <font color="#298a52"><b>bool</b></font>            receiverOn();
+                <font color="#2e8b57"><b>bool</b></font>            receiverOn();
                                 <font color="#0000ff">// returns true if the receiver is on</font>
-                <font color="#298a52"><b>bool</b></font>            parityCheck();
+                <font color="#2e8b57"><b>bool</b></font>            parityCheck();
                                 <font color="#0000ff">// returns true if parity check is enabled</font>
-                <font color="#298a52"><b>bool</b></font>            oddParity();
+                <font color="#2e8b57"><b>bool</b></font>            oddParity();
                                 <font color="#0000ff">// returns true if odd parity is being used</font>
-                <font color="#298a52"><b>bool</b></font>            hangupOnClose();
+                <font color="#2e8b57"><b>bool</b></font>            hangupOnClose();
                                 <font color="#0000ff">// returns true if the modem lines will be</font>
                                 <font color="#0000ff">// lowered when the last device closes the</font>
                                 <font color="#0000ff">// device</font>
-                <font color="#298a52"><b>bool</b></font>            ignoreModemControlLines();
+                <font color="#2e8b57"><b>bool</b></font>            ignoreModemControlLines();
                                 <font color="#0000ff">// returns true if (possibly sporadic) job</font>
                                 <font color="#0000ff">// control and hangup signals are being ignored</font>
-                <font color="#298a52"><b>bool</b></font>            blockJobControlOutput();
+                <font color="#2e8b57"><b>bool</b></font>            blockJobControlOutput();
                                 <font color="#0000ff">// returns true if output from a nonconcurrent</font>
                                 <font color="#0000ff">// shell layer is being blocked</font>
-                <font color="#298a52"><b>bool</b></font>            hardwareFlowControl();
+                <font color="#2e8b57"><b>bool</b></font>            hardwareFlowControl();
                                 <font color="#0000ff">// returns true if RTS/CTS hardware flow</font>
                                 <font color="#0000ff">// control is being used</font>
 
@@ -296,18 +313,20 @@
 
                 <font color="#0000ff">// local options</font>
                 <font color="#0000ff">// setters...</font>
-                <font color="#298a52"><b>void</b></font>    generateSignals(<font color="#298a52"><b>bool</b></font> truefalse);
+                <font color="#2e8b57"><b>void</b></font>    generateSignals(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// cause corresponding signals to be raised when any of</font>
                         <font color="#0000ff">// the INTR, QUIT, SUSP or DSUSP characters are received</font>
                         <font color="#0000ff">// default is not to raise signals</font>
-                <font color="#298a52"><b>void</b></font>    canonicalInput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ISIG</font>
+                <font color="#2e8b57"><b>void</b></font>    canonicalInput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// enable special characters EOF, EOL, EOL2, ERASE,</font>
                         <font color="#0000ff">// KILL, LNEXT, REPRINT, STATUS and WERASE, buffer by</font>
                         <font color="#0000ff">// lines</font>
                         <font color="#0000ff">// default is not to enable the special characters and</font>
                         <font color="#0000ff">// not buffer by lines</font>
-<font color="#a520f7">                #ifdef XCASE</font>
-                <font color="#298a52"><b>void</b></font>    escapedUpperCase(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ICANON</font>
+<font color="#a020f0">                #ifdef XCASE</font>
+                <font color="#2e8b57"><b>void</b></font>    escapedUpperCase(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set true, converts</font>
                         <font color="#0000ff">// characters from input to lower case unless they are</font>
                         <font color="#0000ff">// preceeded by a \.  On output, preceeds each upper</font>
@@ -317,113 +336,125 @@
                         <font color="#0000ff">// (this is used when communicating with terminals that</font>
                         <font color="#0000ff">// can display upper or lower case, but only transmit/</font>
                         <font color="#0000ff">// receive upper case)</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    echoInput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: XCASE</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    echoInput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set true then echo</font>
                         <font color="#0000ff">// input.</font>
-                <font color="#298a52"><b>void</b></font>    eraseCharactersOn(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHO</font>
+                <font color="#2e8b57"><b>void</b></font>    eraseCharactersOn(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set true, character</font>
                         <font color="#0000ff">// set using eraseCharacter() erases the preceeding</font>
                         <font color="#0000ff">// character and character set using</font>
                         <font color="#0000ff">// wordEraseCharacter() erases the preceeding word.</font>
-                <font color="#298a52"><b>void</b></font>    killCharacterOn(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHOE</font>
+                <font color="#2e8b57"><b>void</b></font>    killCharacterOn(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set true, character</font>
                         <font color="#0000ff">// set using killCharacter() erases the current line.</font>
-                <font color="#298a52"><b>void</b></font>    echoNewLine(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHOK</font>
+                <font color="#2e8b57"><b>void</b></font>    echoNewLine(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set true, new line</font>
                         <font color="#0000ff">// characters are echoed even if echoInput() is set</font>
                         <font color="#0000ff">// false.</font>
-                <font color="#298a52"><b>void</b></font>    extendedFunctions(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHONL</font>
+                <font color="#2e8b57"><b>void</b></font>    extendedFunctions(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set true, enables</font>
                         <font color="#0000ff">// characters set by secondEndOfLineCharacter(),</font>
                         <font color="#0000ff">// reprintCharacter() and wordEraseCharacter().  Also</font>
                         <font color="#0000ff">// enables lowerCase().</font>
-                <font color="#298a52"><b>void</b></font>    echoControlCharacters(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IEXTEN</font>
+                <font color="#2e8b57"><b>void</b></font>    echoControlCharacters(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If echoInput() is also set true, control characters</font>
                         <font color="#0000ff">// are echoed as ^X where X is the ascii code for the</font>
                         <font color="#0000ff">// character plus 0x40.</font>
-<font color="#a520f7">                #ifdef ECHOPRT</font>
-                <font color="#298a52"><b>void</b></font>    echoErasedCharacter(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHOCTL</font>
+<font color="#a020f0">                #ifdef ECHOPRT</font>
+                <font color="#2e8b57"><b>void</b></font>    echoErasedCharacter(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() and echoInput() are also set</font>
                         <font color="#0000ff">// true, characters are printed as they are erased.</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    emulateKill(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHOPRT</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    emulateKill(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If cannonicalInput() is also set, the character set</font>
                         <font color="#0000ff">// using killCharacter() causes the line to be erased</font>
                         <font color="#0000ff">// by erasing each character on the line.</font>
                         <font color="#0000ff">// (useful when a terminal doesn't support the KILL</font>
                         <font color="#0000ff">// character but does support the ERASE character)</font>
-                <font color="#298a52"><b>void</b></font>    noFlushAfterInterruptOrQuit(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ECHOKE</font>
+                <font color="#2e8b57"><b>void</b></font>    noFlushAfterInterruptOrQuit(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// Disables flushing of the input/output queues when</font>
                         <font color="#0000ff">// generating SIGINT, SIGQUIT or SIGSUSP signals.</font>
-<font color="#a520f7">                #ifdef PENDIN</font>
-                <font color="#298a52"><b>void</b></font>    retypePendingCharacters(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: NOFLSH</font>
+<font color="#a020f0">                #ifdef PENDIN</font>
+                <font color="#2e8b57"><b>void</b></font>    retypePendingCharacters(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// All characters in the input queue are reprinted when</font>
                         <font color="#0000ff">// the next character is read.</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    sendSignalForBackgroundOutput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: PENDIN</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    sendSignalForBackgroundOutput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// Send the SIGTTOU signal to the process group of a</font>
                         <font color="#0000ff">// background process which tries to write to its</font>
                         <font color="#0000ff">// controlling terminal.</font>
+                        <font color="#0000ff">// termios flag: TOSTOP</font>
 
                 <font color="#0000ff">// getters...</font>
-                <font color="#298a52"><b>bool</b></font>    generateSignals();
+                <font color="#2e8b57"><b>bool</b></font>    generateSignals();
                         <font color="#0000ff">// returns true if corresponding signals will be raised</font>
                         <font color="#0000ff">// when any of the INTR, QUIT, SUSP or DSUSP characters</font>
                         <font color="#0000ff">// are received default is not to raise signals</font>
-                <font color="#298a52"><b>bool</b></font>    canonicalInput();
+                <font color="#2e8b57"><b>bool</b></font>    canonicalInput();
                         <font color="#0000ff">// returns true if special characters EOF, EOL, EOL2,</font>
                         <font color="#0000ff">// ERASE, KILL, LNEXT, REPRINT, STATUS and WERASE are</font>
                         <font color="#0000ff">// enabled and buffering is being done by lines</font>
-<font color="#a520f7">                #ifdef XCASE</font>
-                <font color="#298a52"><b>bool</b></font>    escapedUpperCase();
+<font color="#a020f0">                #ifdef XCASE</font>
+                <font color="#2e8b57"><b>bool</b></font>    escapedUpperCase();
                         <font color="#0000ff">// Returns true if on input, characters are being</font>
                         <font color="#0000ff">// converted from upper to lower case unless they are</font>
                         <font color="#0000ff">// preceeded by a \ and on output lower case characters</font>
                         <font color="#0000ff">// are being converted to upper case and upper case</font>
                         <font color="#0000ff">// characters are being preceeded with a \.</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    echoInput();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    echoInput();
                         <font color="#0000ff">// returns true if input characters are being echoed</font>
-                <font color="#298a52"><b>bool</b></font>    eraseCharactersOn();
+                <font color="#2e8b57"><b>bool</b></font>    eraseCharactersOn();
                         <font color="#0000ff">// returns true if the character set using</font>
                         <font color="#0000ff">// eraseCharacter() erases the preceeding</font>
                         <font color="#0000ff">// character and the character set using</font>
                         <font color="#0000ff">// wordEraseCharacter() erases the preceeding word</font>
-                <font color="#298a52"><b>bool</b></font>    killCharacterOn();
+                <font color="#2e8b57"><b>bool</b></font>    killCharacterOn();
                         <font color="#0000ff">// returns true if the character set using</font>
                         <font color="#0000ff">// killCharacter() erases the current line</font>
-                <font color="#298a52"><b>bool</b></font>    echoNewLine();
+                <font color="#2e8b57"><b>bool</b></font>    echoNewLine();
                         <font color="#0000ff">// returns true if new line characters are being echoed</font>
                         <font color="#0000ff">// even if echoInput() is set false</font>
-                <font color="#298a52"><b>bool</b></font>    extendedFunctions();
+                <font color="#2e8b57"><b>bool</b></font>    extendedFunctions();
                         <font color="#0000ff">// returns true if characters set by</font>
                         <font color="#0000ff">// secondEndOfLineCharacter(), reprintCharacter() and</font>
                         <font color="#0000ff">// wordEraseCharacter() are enabled and lowerCase() is</font>
                         <font color="#0000ff">// enabled</font>
-                <font color="#298a52"><b>bool</b></font>    echoControlCharacters();
+                <font color="#2e8b57"><b>bool</b></font>    echoControlCharacters();
                         <font color="#0000ff">// returns true if control characters are being echoed</font>
                         <font color="#0000ff">// as ^X where X is the ascii code for the character</font>
                         <font color="#0000ff">// plus 0x40</font>
-<font color="#a520f7">                #ifdef ECHOPRT</font>
-                <font color="#298a52"><b>bool</b></font>    echoErasedCharacter();
+<font color="#a020f0">                #ifdef ECHOPRT</font>
+                <font color="#2e8b57"><b>bool</b></font>    echoErasedCharacter();
                         <font color="#0000ff">// returns true if characters are being printed as they</font>
                         <font color="#0000ff">// are erased</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    emulateKill();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    emulateKill();
                         <font color="#0000ff">// returns true if the character set using</font>
                         <font color="#0000ff">// killCharacter() causes the line to be erased</font>
                         <font color="#0000ff">// by erasing each character on the line</font>
-                <font color="#298a52"><b>bool</b></font>    noFlushAfterInterruptOrQuit();
+                <font color="#2e8b57"><b>bool</b></font>    noFlushAfterInterruptOrQuit();
                         <font color="#0000ff">// returns true if flushing of the input/output queues</font>
                         <font color="#0000ff">// when generating SIGINT, SIGQUIT or SIGSUSP signals</font>
                         <font color="#0000ff">// is enabled</font>
-<font color="#a520f7">                #ifdef PENDIN</font>
-                <font color="#298a52"><b>bool</b></font>    retypePendingCharacters();
+<font color="#a020f0">                #ifdef PENDIN</font>
+                <font color="#2e8b57"><b>bool</b></font>    retypePendingCharacters();
                         <font color="#0000ff">// returns true if all characters in the input queue</font>
                         <font color="#0000ff">// are reprinted when the next character is read</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    sendSignalForBackgroundOutput();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    sendSignalForBackgroundOutput();
                         <font color="#0000ff">// returns true if the SIGTTOU signal is being sent</font>
                         <font color="#0000ff">// to the process group of a background process which</font>
                         <font color="#0000ff">// tries to write to its controlling terminal</font>
@@ -431,93 +462,109 @@
 
 
                 <font color="#0000ff">// input options</font>
-                <font color="#298a52"><b>void</b></font>    inputParityCheck(<font color="#298a52"><b>bool</b></font> truefalse);
+                <font color="#2e8b57"><b>void</b></font>    inputParityCheck(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// enable parity checking on input</font>
-                <font color="#298a52"><b>void</b></font>    ignoreParityErrors(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: INPCK</font>
+                <font color="#2e8b57"><b>void</b></font>    ignoreParityErrors(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// ignore parity errors (ie. if a character has a</font>
                         <font color="#0000ff">// parity error, just return what we got, rather than</font>
                         <font color="#0000ff">// marking or converting it)</font>
-                <font color="#298a52"><b>void</b></font>    markParityErrors(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IGNPAR</font>
+                <font color="#2e8b57"><b>void</b></font>    markParityErrors(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// Unless ignoreParityErrors() is set true, prefix a</font>
                         <font color="#0000ff">// character with a parity error with \337 \0.  The</font>
                         <font color="#0000ff">// default is to convert it to \0 unless</font>
                         <font color="#0000ff">// ignoreParityErrors() is set true.</font>
-                <font color="#298a52"><b>void</b></font>    stripParityBits(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: PARMRK</font>
+                <font color="#2e8b57"><b>void</b></font>    stripParityBits(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// set the 8th bit of each character (the parity bit)</font>
                         <font color="#0000ff">// to 0</font>
-                <font color="#298a52"><b>void</b></font>    softwareFlowControlOnOutput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ISTRIP</font>
+                <font color="#2e8b57"><b>void</b></font>    softwareFlowControlOnOutput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// enable XON/XOFF flow control on output.</font>
-                <font color="#298a52"><b>void</b></font>    softwareFlowControlOnInput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IXON</font>
+                <font color="#2e8b57"><b>void</b></font>    softwareFlowControlOnInput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// enable XON/XOFF flow control on input.</font>
-                <font color="#298a52"><b>void</b></font>    anyCharacterStartsFlow(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IXOFF</font>
+                <font color="#2e8b57"><b>void</b></font>    anyCharacterStartsFlow(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// enable any character to restart output</font>
-                <font color="#298a52"><b>void</b></font>    ignoreBreak(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IXANY</font>
+                <font color="#2e8b57"><b>void</b></font>    ignoreBreak(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// ignore BREAK character</font>
-                <font color="#298a52"><b>void</b></font>    sendSignalOnBreak(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IGNBRK</font>
+                <font color="#2e8b57"><b>void</b></font>    sendSignalOnBreak(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// If ignoreBreak() isn't set true and a BREAK character</font>
                         <font color="#0000ff">// is received, flush input and output queues and send a</font>
                         <font color="#0000ff">// SIGINT if the serial port is the controlling terminal</font>
                         <font color="#0000ff">// of the process group.  If ignoreBreak() is not set,</font>
                         <font color="#0000ff">// the default is to return a \0 character or \377 \0</font>
                         <font color="#0000ff">// if markParityErrors() is set true.</font>
-                <font color="#298a52"><b>void</b></font>    mapNewLineToCarriageReturnOnInput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: BRKINT</font>
+                <font color="#2e8b57"><b>void</b></font>    mapNewLineToCarriageReturnOnInput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// translate new line to carriage return on input</font>
-<font color="#a520f7">                #ifdef ONOEOT</font>
-                <font color="#298a52"><b>void</b></font>    discardEndOfTransmission(<font color="#298a52"><b>bool</b></font> truefalse);
-                        <font color="#0000ff">// ONOEOT</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    ignoreCarriageReturn(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: INLCR</font>
+<font color="#a020f0">                #ifdef ONOEOT</font>
+                <font color="#2e8b57"><b>void</b></font>    discardEndOfTransmission(<font color="#2e8b57"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flat: ONOEOT</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    ignoreCarriageReturn(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// ignore carriage return on input</font>
-                <font color="#298a52"><b>void</b></font>    mapCarriageReturnToNewLineOnInput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IGNCR</font>
+                <font color="#2e8b57"><b>void</b></font>    mapCarriageReturnToNewLineOnInput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// translate carriage return to new line on input</font>
-<font color="#a520f7">                #ifdef IUCLC</font>
-                <font color="#298a52"><b>void</b></font>    lowerCase(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ICRNL</font>
+<font color="#a020f0">                #ifdef IUCLC</font>
+                <font color="#2e8b57"><b>void</b></font>    lowerCase(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// map uppercase characters to lowercase on input</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    bellIfLineTooLong(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: IUCLC</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    bellIfLineTooLong(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// ring bell when input queue is full</font>
+                        <font color="#0000ff">// termios flag: IMAXBEL</font>
 
                 <font color="#0000ff">// getters...</font>
-                <font color="#298a52"><b>bool</b></font>    inputParityCheck();
+                <font color="#2e8b57"><b>bool</b></font>    inputParityCheck();
                         <font color="#0000ff">// returns true if input parity checking is enabled</font>
-                <font color="#298a52"><b>bool</b></font>    markParityErrors();
+                <font color="#2e8b57"><b>bool</b></font>    ignoreParityErrors();
+                        <font color="#0000ff">// returns true if parity errors are being ignored</font>
+                <font color="#2e8b57"><b>bool</b></font>    markParityErrors();
                         <font color="#0000ff">// returns true if characters with parity errors are</font>
                         <font color="#0000ff">// prefixed with \377 \0</font>
-                <font color="#298a52"><b>bool</b></font>    stripParityBits();
+                <font color="#2e8b57"><b>bool</b></font>    stripParityBits();
                         <font color="#0000ff">// returns true if the 8th bit (the parity bit) of</font>
                         <font color="#0000ff">// each character is being set to 0</font>
-                <font color="#298a52"><b>bool</b></font>    softwareFlowControlOnOutput();
+                <font color="#2e8b57"><b>bool</b></font>    softwareFlowControlOnOutput();
                         <font color="#0000ff">// returns true if XON/XOFF flow control is enabled on</font>
                         <font color="#0000ff">// output</font>
-                <font color="#298a52"><b>bool</b></font>    softwareFlowControlOnInput();
+                <font color="#2e8b57"><b>bool</b></font>    softwareFlowControlOnInput();
                         <font color="#0000ff">// returns true if XON/XOFF flow control is enabled on</font>
                         <font color="#0000ff">// input</font>
-                <font color="#298a52"><b>bool</b></font>    anyCharacterStartsFlow();
+                <font color="#2e8b57"><b>bool</b></font>    anyCharacterStartsFlow();
                         <font color="#0000ff">// returns true if any character will restart output</font>
-                <font color="#298a52"><b>bool</b></font>    ignoreBreak();
+                <font color="#2e8b57"><b>bool</b></font>    ignoreBreak();
                         <font color="#0000ff">// returns true if the BREAK character is being ignored </font>
-                <font color="#298a52"><b>bool</b></font>    sendSignalOnBreak();
+                <font color="#2e8b57"><b>bool</b></font>    sendSignalOnBreak();
                         <font color="#0000ff">// returns true if input and output queues are flushed</font>
                         <font color="#0000ff">// and a SIGINT is sent to the process group if the</font>
                         <font color="#0000ff">// serial port is the controlling terminal when a BREAK</font>
                         <font color="#0000ff">// character is received</font>
-                <font color="#298a52"><b>bool</b></font>    mapNewLineToCarriageReturnOnInput();
+                <font color="#2e8b57"><b>bool</b></font>    mapNewLineToCarriageReturnOnInput();
                         <font color="#0000ff">// returns true if new lines are mapped to carriage</font>
                         <font color="#0000ff">// returns on input</font>
-<font color="#a520f7">                #ifdef ONOEOT</font>
-                <font color="#298a52"><b>bool</b></font>    discardEndOfTransmission();
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    ignoreCarriageReturn();
+<font color="#a020f0">                #ifdef ONOEOT</font>
+                <font color="#2e8b57"><b>bool</b></font>    discardEndOfTransmission();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    ignoreCarriageReturn();
                         <font color="#0000ff">// returns true if carriage returns are ignored on input</font>
-                <font color="#298a52"><b>bool</b></font>    mapCarriageReturnToNewLineOnInput();
+                <font color="#2e8b57"><b>bool</b></font>    mapCarriageReturnToNewLineOnInput();
                         <font color="#0000ff">// returns true if carriage returns are mapped to new</font>
                         <font color="#0000ff">// lines on input</font>
-<font color="#a520f7">                #ifdef IUCLC</font>
-                <font color="#298a52"><b>bool</b></font>    lowerCase();
+<font color="#a020f0">                #ifdef IUCLC</font>
+                <font color="#2e8b57"><b>bool</b></font>    lowerCase();
                         <font color="#0000ff">// returns true if uppercase characters are mapped to</font>
                         <font color="#0000ff">// lowercase on input</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    bellIfLineTooLong();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    bellIfLineTooLong();
                         <font color="#0000ff">// returns true if the bell will be rung when the input</font>
                         <font color="#0000ff">// queue is full</font>
 
@@ -525,198 +572,244 @@
 
 
                 <font color="#0000ff">// output options</font>
-                <font color="#298a52"><b>void</b></font>    postProcessOutput(<font color="#298a52"><b>bool</b></font> truefalse);
+                <font color="#2e8b57"><b>void</b></font>    postProcessOutput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// enables implementation-defined output processing</font>
-<font color="#a520f7">                #ifdef OLCUC</font>
-                <font color="#298a52"><b>void</b></font>    outputUpperCase(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: OPOST</font>
+<font color="#a020f0">                #ifdef OLCUC</font>
+                <font color="#2e8b57"><b>void</b></font>    outputUpperCase(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// map lowercase characters to uppercase on output</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    mapNewLineToCarriageReturnNewLineOnOutput(
-                                                        <font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: OLCUC</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    mapNewLineToCarriageReturnNewLineOnOutput(
+                                                        <font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// map new line to carriage return/new line on</font>
                         <font color="#0000ff">// output</font>
-                <font color="#298a52"><b>void</b></font>    mapCarriageReturnToNewLineOnOutput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ONLCR</font>
+<font color="#a020f0">                #ifdef OCRNL</font>
+                <font color="#2e8b57"><b>void</b></font>    mapCarriageReturnToNewLineOnOutput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// map carriage return to new line on output</font>
-                <font color="#298a52"><b>void</b></font>    dontOutputCarriageReturnAtColumnZero(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: OCRNL</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef ONOCR</font>
+                <font color="#2e8b57"><b>void</b></font>    dontOutputCarriageReturnAtColumnZero(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// don't output carriage return at column 0</font>
-                <font color="#298a52"><b>void</b></font>    mapNewLineToCarriageReturnOnOutput(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ONOCR</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef ONLRET</font>
+                <font color="#2e8b57"><b>void</b></font>    mapNewLineToCarriageReturnOnOutput(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// map new line to carriage return on output</font>
-<font color="#a520f7">                #ifdef OFILL</font>
-                <font color="#298a52"><b>void</b></font>    useFillCharactersForDelay(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: ONLRET</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef OFILL</font>
+                <font color="#2e8b57"><b>void</b></font>    useFillCharactersForDelay(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// send fill characters for delay instead of using a</font>
                         <font color="#0000ff">// timed delay</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef OFDEL</font>
-                <font color="#298a52"><b>void</b></font>    useDelForFill(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: OFILL</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef OFDEL</font>
+                <font color="#2e8b57"><b>void</b></font>    useDelForFill(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// use the DEL character instead of NULL for the fill</font>
                         <font color="#0000ff">// character</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    expandTabToSpaces(<font color="#298a52"><b>bool</b></font> truefalse);
+                        <font color="#0000ff">// termios flag: OFDEL</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    expandTabToSpaces(<font color="#2e8b57"><b>bool</b></font> truefalse);
                         <font color="#0000ff">// map tabs to spaces</font>
+                        <font color="#0000ff">// termios flag: XTAGS/OXTABS/TAB3</font>
 
-<font color="#a520f7">                #ifdef NLDLY</font>
-                <font color="#298a52"><b>void</b></font>    delayAfterNewLine(newlinedelay_t nldelay);
+<font color="#a020f0">                #ifdef NLDLY</font>
+                <font color="#2e8b57"><b>void</b></font>    delayAfterNewLine(newlinedelay_t nldelay);
                         <font color="#0000ff">// send a delay after each new line character</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef CRDLY</font>
-                <font color="#298a52"><b>void</b></font>    delayAfterCarriageReturn(carriagereturndelay_t crdelay);
+                        <font color="#0000ff">// termios flag: NLDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef CRDLY</font>
+                <font color="#2e8b57"><b>void</b></font>    delayAfterCarriageReturn(carriagereturndelay_t crdelay);
                         <font color="#0000ff">// send a delay after each carriage return character</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef TABDLY</font>
-                <font color="#298a52"><b>void</b></font>    delayAfterTab(tabdelay_t tabdelay);
+                        <font color="#0000ff">// termios flag: CRDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef TABDLY</font>
+                <font color="#2e8b57"><b>void</b></font>    delayAfterTab(tabdelay_t tabdelay);
                         <font color="#0000ff">// send a delay after each tab character</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef BSDLY</font>
-                <font color="#298a52"><b>void</b></font>    delayAfterBackSpace(backspacedelay_t bsdelay);
+                        <font color="#0000ff">// termios flag: TABDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef BSDLY</font>
+                <font color="#2e8b57"><b>void</b></font>    delayAfterBackSpace(backspacedelay_t bsdelay);
                         <font color="#0000ff">// send a delay after each backspace character</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef VTDLY</font>
-                <font color="#298a52"><b>void</b></font>    delayAfterVerticalTab(verticaltabdelay_t vtdelay);
+                        <font color="#0000ff">// termios flag: BSDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef VTDLY</font>
+                <font color="#2e8b57"><b>void</b></font>    delayAfterVerticalTab(verticaltabdelay_t vtdelay);
                         <font color="#0000ff">// send a delay after each vertical tab character</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef FFDLY</font>
-                <font color="#298a52"><b>void</b></font>    delayAfterFormFeed(formfeeddelay_t ffdelay);
+                        <font color="#0000ff">// termios flag: VTDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef FFDLY</font>
+                <font color="#2e8b57"><b>void</b></font>    delayAfterFormFeed(formfeeddelay_t ffdelay);
                         <font color="#0000ff">// send a delay after each form feed character</font>
-<font color="#a520f7">                #endif</font>
+                        <font color="#0000ff">// termios flag: FFDLY</font>
+<font color="#a020f0">                #endif</font>
 
 
                 <font color="#0000ff">// getters...</font>
-                <font color="#298a52"><b>bool</b></font>    postProcessOutput();
+                <font color="#2e8b57"><b>bool</b></font>    postProcessOutput();
                         <font color="#0000ff">// returns true if implementation-defined output</font>
                         <font color="#0000ff">// processing is enabled</font>
-<font color="#a520f7">                #ifdef OLCUC</font>
-                <font color="#298a52"><b>bool</b></font>    outputUpperCase();
+<font color="#a020f0">                #ifdef OLCUC</font>
+                <font color="#2e8b57"><b>bool</b></font>    outputUpperCase();
                         <font color="#0000ff">// returns true if lowercase characters are mapped to</font>
                         <font color="#0000ff">// uppercase on output</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    mapNewLineToCarriageReturnNewLineOnOutput();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    mapNewLineToCarriageReturnNewLineOnOutput();
                         <font color="#0000ff">// returns true if new lines are mapped to carriage</font>
                         <font color="#0000ff">// return/new line on output</font>
-                <font color="#298a52"><b>bool</b></font>    mapCarriageReturnToNewLineOnOutput();
+<font color="#a020f0">                #ifdef OCRNL</font>
+                <font color="#2e8b57"><b>bool</b></font>    mapCarriageReturnToNewLineOnOutput();
                         <font color="#0000ff">// returns true if carriage returns are mapped to new</font>
                         <font color="#0000ff">// lines on output</font>
-                <font color="#298a52"><b>bool</b></font>    dontOutputCarriageReturnAtColumnZero();
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef ONOCR</font>
+                <font color="#2e8b57"><b>bool</b></font>    dontOutputCarriageReturnAtColumnZero();
                         <font color="#0000ff">// returns true if carriage returns aren't sent at</font>
                         <font color="#0000ff">// column 0</font>
-                <font color="#298a52"><b>bool</b></font>    mapNewLineToCarriageReturnOnOutput();
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef ONLRET</font>
+                <font color="#2e8b57"><b>bool</b></font>    mapNewLineToCarriageReturnOnOutput();
                         <font color="#0000ff">// returns true if new lines are mapped to carriage</font>
                         <font color="#0000ff">// returns on output</font>
-<font color="#a520f7">                #ifdef OFILL</font>
-                <font color="#298a52"><b>bool</b></font>    useFillCharactersForDelay();
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef OFILL</font>
+                <font color="#2e8b57"><b>bool</b></font>    useFillCharactersForDelay();
                         <font color="#0000ff">// returns true if fill characters are sent for delay</font>
                         <font color="#0000ff">// instead of using a timed delay</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef OFDEL</font>
-                <font color="#298a52"><b>bool</b></font>    useDelForFill();
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef OFDEL</font>
+                <font color="#2e8b57"><b>bool</b></font>    useDelForFill();
                         <font color="#0000ff">// returns true if the DEL character is used instead of</font>
                         <font color="#0000ff">// NULL for the fill character</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>bool</b></font>    expandTabToSpaces();
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>bool</b></font>    expandTabToSpaces();
                         <font color="#0000ff">// returns true if the tabs are mapped to spaces</font>
-<font color="#a520f7">                #ifdef NLDLY</font>
+<font color="#a020f0">                #ifdef NLDLY</font>
                 newlinedelay_t          delayAfterNewLine();
                         <font color="#0000ff">// returns the delay that is sent after new line</font>
                         <font color="#0000ff">// characters</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef CRDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef CRDLY</font>
                 carriagereturndelay_t   delayAfterCarriageReturn();
                         <font color="#0000ff">// returns the delay that is sent after carriage return</font>
                         <font color="#0000ff">// characters</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef TABDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef TABDLY</font>
                 tabdelay_t              delayAfterTab();
                         <font color="#0000ff">// returns the delay that is sent after tab characters</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef BSDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef BSDLY</font>
                 backspacedelay_t        delayAfterBackSpace();
                         <font color="#0000ff">// returns the delay that is sent after backspace</font>
                         <font color="#0000ff">// characters</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef VTDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef VTDLY</font>
                 verticaltabdelay_t      delayAfterVerticalTab();
                         <font color="#0000ff">// returns the delay that is sent after vertical tab</font>
                         <font color="#0000ff">// characters</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef FFDLY</font>
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef FFDLY</font>
                 formfeeddelay_t         delayAfterFormFeed();
                         <font color="#0000ff">// returns the delay that is sent after form feed</font>
                         <font color="#0000ff">// characters</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
 
 
                 <font color="#0000ff">// control characters</font>
-                <font color="#298a52"><b>void</b></font>    interruptCharacter(cc_t character);
+                <font color="#2e8b57"><b>void</b></font>    interruptCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause a SIGINT to be</font>
                         <font color="#0000ff">// sent to the process when generateSignals() is set</font>
                         <font color="#0000ff">// true</font>
-                <font color="#298a52"><b>void</b></font>    quitCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VINTR</font>
+                <font color="#2e8b57"><b>void</b></font>    quitCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause a SIGQUIT to be</font>
                         <font color="#0000ff">// sent to the process when generateSignals() is set</font>
                         <font color="#0000ff">// true</font>
-                <font color="#298a52"><b>void</b></font>    eraseCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VQUIT</font>
+                <font color="#2e8b57"><b>void</b></font>    eraseCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause a character erase</font>
                         <font color="#0000ff">// when canonicalInput() is set to true</font>
-                <font color="#298a52"><b>void</b></font>    killCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VERASE</font>
+                <font color="#2e8b57"><b>void</b></font>    killCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause a line erase</font>
                         <font color="#0000ff">// when canonicalInput() is set to true</font>
-                <font color="#298a52"><b>void</b></font>    endOfFileCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VKILL</font>
+                <font color="#2e8b57"><b>void</b></font>    endOfFileCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause the pending tty</font>
                         <font color="#0000ff">// buffer to be sent to the program without waiting for</font>
                         <font color="#0000ff">// end-of-line and read()'s to return 0 when</font>
                         <font color="#0000ff">// canonicalInput() is set to true</font>
-                <font color="#298a52"><b>void</b></font>    endOfLineCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VEOF</font>
+                <font color="#2e8b57"><b>void</b></font>    endOfLineCharacter(cc_t character);
                         <font color="#0000ff">// set the end-of-line character, recognized when </font>
                         <font color="#0000ff">// canonicalInput() is set to true</font>
-                <font color="#298a52"><b>void</b></font>    secondEndOfLineCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VEOL</font>
+                <font color="#2e8b57"><b>void</b></font>    secondEndOfLineCharacter(cc_t character);
                         <font color="#0000ff">// set the &quot;other&quot; end-of-line character, recognized</font>
                         <font color="#0000ff">// when canonicalInput() is set to true</font>
-                <font color="#298a52"><b>void</b></font>    switchCharacer(cc_t character);
+                        <font color="#0000ff">// termios flag: VEOL2</font>
+                <font color="#2e8b57"><b>void</b></font>    switchCharacer(cc_t character);
                         <font color="#0000ff">// set the switch character</font>
-                <font color="#298a52"><b>void</b></font>    startCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VSWTCH/VSWTC</font>
+                <font color="#2e8b57"><b>void</b></font>    startCharacter(cc_t character);
                         <font color="#0000ff">// set the start character for XON/XOFF flow control</font>
-                <font color="#298a52"><b>void</b></font>    stopCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VSTART</font>
+                <font color="#2e8b57"><b>void</b></font>    stopCharacter(cc_t character);
                         <font color="#0000ff">// set the stop character for XON/XOFF flow control</font>
-                <font color="#298a52"><b>void</b></font>    suspendCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VSTOP</font>
+                <font color="#2e8b57"><b>void</b></font>    suspendCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause a SIGSUSP to be</font>
                         <font color="#0000ff">// sent to the process when generateSignals() is set</font>
                         <font color="#0000ff">// true</font>
-<font color="#a520f7">                #ifdef VDSUSP</font>
-                <font color="#298a52"><b>void</b></font>    delayedSuspendCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VSUSP</font>
+<font color="#a020f0">                #ifdef VDSUSP</font>
+                <font color="#2e8b57"><b>void</b></font>    delayedSuspendCharacter(cc_t character);
                         <font color="#0000ff">// set the character that will cause a SIGTSTP to be</font>
                         <font color="#0000ff">// sent to the process when generateSignals() and</font>
                         <font color="#0000ff">// extendedFunctions() are set true</font>
-<font color="#a520f7">                #endif</font>
-                <font color="#298a52"><b>void</b></font>    literalNextCharcter(cc_t character);
+                        <font color="#0000ff">// termios flag: VDSUSP</font>
+<font color="#a020f0">                #endif</font>
+                <font color="#2e8b57"><b>void</b></font>    literalNextCharcter(cc_t character);
                         <font color="#0000ff">// set the character that &quot;quotes&quot; the next character,</font>
                         <font color="#0000ff">// depriving it of special meaning, recognized when</font>
                         <font color="#0000ff">// extendedFunctions() is set true</font>
-                <font color="#298a52"><b>void</b></font>    wordEraseCharcter(cc_t character);
+                        <font color="#0000ff">// termios flag: VLNEXT</font>
+                <font color="#2e8b57"><b>void</b></font>    wordEraseCharcter(cc_t character);
                         <font color="#0000ff">// set the word erase character, recognized when</font>
                         <font color="#0000ff">// canonicalInput() and extendedFunctions() are set true</font>
+                        <font color="#0000ff">// termios flag: VWERASE</font>
 
-                <font color="#298a52"><b>void</b></font>    reprintCharacter(cc_t character);
+                <font color="#2e8b57"><b>void</b></font>    reprintCharacter(cc_t character);
                         <font color="#0000ff">// set the character that causes unread characters to</font>
                         <font color="#0000ff">// be reprinted, recognized when canonicalInput() and</font>
                         <font color="#0000ff">// extendedFunctions() are set true</font>
-                <font color="#298a52"><b>void</b></font>    discardPendingOutputCharacter(cc_t character);
+                        <font color="#0000ff">// termios flag: VREPRINT</font>
+                <font color="#2e8b57"><b>void</b></font>    discardPendingOutputCharacter(cc_t character);
                         <font color="#0000ff">// set the character that toggles discarding pending</font>
                         <font color="#0000ff">// output, recognized when extendedFunctions() is set</font>
                         <font color="#0000ff">// true</font>
+                        <font color="#0000ff">// termios flag: VDISCARD</font>
 
-<font color="#a520f7">                #ifdef VSTATUS</font>
-                <font color="#298a52"><b>void</b></font>    statusRequestCharacter(cc_t character);
+<font color="#a020f0">                #ifdef VSTATUS</font>
+                <font color="#2e8b57"><b>void</b></font>    statusRequestCharacter(cc_t character);
                         <font color="#0000ff">// set the status request character</font>
-<font color="#a520f7">                #endif</font>
+                        <font color="#0000ff">// termios flag: VSTATUS</font>
+<font color="#a020f0">                #endif</font>
 
-                <font color="#298a52"><b>void</b></font>    readThreshold(cc_t count);
+                <font color="#2e8b57"><b>void</b></font>    readThreshold(cc_t count);
                         <font color="#0000ff">// set the number of characters that must be read</font>
                         <font color="#0000ff">// before a read() will begin waiting for readTimeout()</font>
                         <font color="#0000ff">// deciseconds before falling through</font>
-                <font color="#298a52"><b>void</b></font>    readTimeout(cc_t deciseconds);
+                        <font color="#0000ff">// termios flag: VMIN</font>
+                <font color="#2e8b57"><b>void</b></font>    readTimeout(cc_t deciseconds);
                         <font color="#0000ff">// set the number of deciseconds that a read() will</font>
                         <font color="#0000ff">// wait after reading readThreshold() characters before</font>
                         <font color="#0000ff">// falling through</font>
+                        <font color="#0000ff">// termios flag: VTIME</font>
 
 
                 <font color="#0000ff">// getters...</font>
@@ -755,12 +848,12 @@
                         <font color="#0000ff">// returns the character that will cause a SIGSUSP to be</font>
                         <font color="#0000ff">// sent to the process when generateSignals() is set</font>
                         <font color="#0000ff">// true</font>
-<font color="#a520f7">                #ifdef VDSUSP</font>
+<font color="#a020f0">                #ifdef VDSUSP</font>
                 cc_t    delayedSuspendCharacter();
                         <font color="#0000ff">// returns the character that will cause a SIGTSTP to be</font>
                         <font color="#0000ff">// sent to the process when generateSignals() and</font>
                         <font color="#0000ff">// extendedFunctions() are set true</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
                 cc_t    literalNextCharcter();
                         <font color="#0000ff">// returns the character that &quot;quotes&quot; the next</font>
                         <font color="#0000ff">// character, depriving it of special meaning,</font>
@@ -797,14 +890,14 @@
                 termios *getTermios();
                         <font color="#0000ff">// returns the struct termios used internally</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/serialportprofile.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/serialportprofile.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef HAVE_RUDIMENTS_INLINES</font>
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/serialportprofileinlines.h&gt;</font>
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

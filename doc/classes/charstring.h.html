@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/charstring.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/charstring.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,54 +9,93 @@
 <font color="#0000ff">// Copyright (c) 2003 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_CHARSTRING_H</font>
-<font color="#a520f7">#define RUDIMENTS_CHARSTRING_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_CHARSTRING_H</font>
+<font color="#a020f0">#define RUDIMENTS_CHARSTRING_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/charstringincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/charstringincludes.h&gt;</font>
 
 <font color="#0000ff">// The charstring class provides methods for manipulating strings.</font>
+<font color="#0000ff">//</font>
+<font color="#0000ff">// Unlike the functions in string.h, these methods are NULL safe.  If any of</font>
+<font color="#0000ff">// the pointer arguments are NULL, your application will not crash.</font>
 
-<font color="#298a52"><b>class</b></font> charstring {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>size_t</b></font>  length(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+<font color="#2e8b57"><b>class</b></font> charstring {
+        <font color="#a52a2a"><b>public</b></font>:
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>size_t</b></font>  length(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Returns the length of &quot;string&quot;.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    zero(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>size_t</b></font>  length(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                        <font color="#0000ff">// Returns the length of &quot;string&quot;.</font>
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    zero(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Sets &quot;size&quot; bytes of &quot;str&quot; to NULL.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *append(<font color="#298a52"><b>char</b></font> *dest, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *source);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source);
                         <font color="#0000ff">// Appends &quot;source&quot; to &quot;dest&quot;.  Assumes that there</font>
                         <font color="#0000ff">// is enough room remaining in &quot;dest&quot; to accommodate</font>
                         <font color="#0000ff">// the new string.</font>
                         <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *append(<font color="#298a52"><b>char</b></font> *dest, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *source,
-                                                        <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Appends &quot;size&quot; bytes of &quot;source&quot; to &quot;dest&quot;.  Assumes</font>
                         <font color="#0000ff">// that there is enough room remaining in &quot;dest&quot; to</font>
                         <font color="#0000ff">// accommodate the new string.</font>
                         <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>long</b></font> number);
+                        <font color="#0000ff">// Converts &quot;number&quot; to a string and appends it to</font>
+                        <font color="#0000ff">// &quot;dest&quot;.  Assumes that there is enough room remaining</font>
+                        <font color="#0000ff">// in &quot;dest&quot; to accommodate the new string.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                        <font color="#0000ff">// Converts &quot;number&quot; to a string and appends it to</font>
+                        <font color="#0000ff">// &quot;dest&quot;.  Assumes that there is enough room remaining</font>
+                        <font color="#0000ff">// in &quot;dest&quot; to accommodate the new string.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>double</b></font> number);
+                        <font color="#0000ff">// Converts &quot;number&quot; to a string and appends it to</font>
+                        <font color="#0000ff">// &quot;dest&quot;.  Assumes that there is enough room remaining</font>
+                        <font color="#0000ff">// in &quot;dest&quot; to accommodate the new string.</font>
+                        <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>double</b></font> number,
+                                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                        <font color="#0000ff">// Converts &quot;number&quot; to a string using &quot;scale&quot; and</font>
+                        <font color="#0000ff">// appends it to &quot;dest&quot;.  Assumes that there is enough</font>
+                        <font color="#0000ff">// room remaining in &quot;dest&quot; to accommodate the new</font>
+                        <font color="#0000ff">// string.  Returns a pointer to &quot;dest&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *append(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                        <font color="#0000ff">// Converts &quot;number&quot; to a string using &quot;precision&quot; and</font>
+                        <font color="#0000ff">// &quot;scale&quot; and appends it to &quot;dest&quot;.  Assumes that there</font>
+                        <font color="#0000ff">// is enough room remaining in &quot;dest&quot; to accommodate</font>
+                        <font color="#0000ff">// the new string.  Returns a pointer to &quot;dest&quot;.</font>
 
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *copy(<font color="#298a52"><b>char</b></font> *dest, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *source);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copy(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source);
                         <font color="#0000ff">// Replaces &quot;dest&quot; with &quot;source&quot;.  Assumes that there</font>
                         <font color="#0000ff">// is enough room in &quot;dest&quot; to accommodate &quot;source&quot;.</font>
                         <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *copy(<font color="#298a52"><b>char</b></font> *dest,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *source, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copy(<font color="#2e8b57"><b>char</b></font> *dest,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Replaces the first &quot;size&quot; bytes of &quot;dest&quot; with</font>
                         <font color="#0000ff">// &quot;source&quot;.  Assumes that &quot;dest&quot; is at least &quot;size&quot;</font>
                         <font color="#0000ff">// bytes long.</font>
                         <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *copy(<font color="#298a52"><b>char</b></font> *dest, <font color="#298a52"><b>size_t</b></font> location,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *source);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copy(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>size_t</b></font> location,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source);
                         <font color="#0000ff">// Replaces &quot;dest&quot; with &quot;source&quot;, starting &quot;location&quot;</font>
                         <font color="#0000ff">// bytes into &quot;dest&quot;.  Assumes that there is enough</font>
                         <font color="#0000ff">// room in &quot;dest&quot; (after &quot;location&quot; bytes) to</font>
                         <font color="#0000ff">// accommodate &quot;source&quot;.</font>
                         <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *copy(<font color="#298a52"><b>char</b></font> *dest, <font color="#298a52"><b>size_t</b></font> location,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *source, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *copy(<font color="#2e8b57"><b>char</b></font> *dest, <font color="#2e8b57"><b>size_t</b></font> location,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *source, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Replaces &quot;size&quot; bytes of &quot;dest&quot; with &quot;source&quot;,</font>
                         <font color="#0000ff">// starting &quot;location&quot; bytes into &quot;dest&quot;.  Assumes that</font>
                         <font color="#0000ff">// there are &quot;size&quot; bytes in &quot;dest&quot; (after &quot;location&quot;</font>
@@ -64,200 +103,320 @@
                         <font color="#0000ff">// Returns a pointer to &quot;dest&quot;.</font>
 
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     compare(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str1, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str2);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compare(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2);
                         <font color="#0000ff">// Returns -1,0 or 1 if &quot;str1&quot; is greater than, </font>
                         <font color="#0000ff">// equal to or less than &quot;str2&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     compare(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str1, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str2,
-                                                                <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compare(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2,
+                                                                <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Returns -1,0 or 1 if &quot;size&quot; bytes of &quot;str1&quot; are</font>
                         <font color="#0000ff">// greater than, equal to or less than &quot;size&quot; bytes of</font>
                         <font color="#0000ff">// &quot;str2&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     compareIgnoringCase(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str1,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str2);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compareIgnoringCase(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2);
                         <font color="#0000ff">// Returns -1,0 or 1 if &quot;str1&quot; is greater than, </font>
                         <font color="#0000ff">// equal to or less than &quot;str2&quot;, ignoring case.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     compareIgnoringCase(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str1,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str2,
-                                                        <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     compareIgnoringCase(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str1,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str2,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Returns -1,0 or 1 if &quot;size&quot; bytes of &quot;str1&quot; are</font>
                         <font color="#0000ff">// greater than, equal to or less than &quot;size&quot; bytes of</font>
                         <font color="#0000ff">// &quot;str2&quot;, ignoring case.</font>
 
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    contains(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *haystack,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *needle);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    contains(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *needle);
                         <font color="#0000ff">// Returns true if &quot;haystack&quot; contains &quot;needle&quot; or</font>
                         <font color="#0000ff">// false otherwise.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    contains(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *haystack,
-                                                <font color="#298a52"><b>char</b></font> needle);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    contains(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack, <font color="#2e8b57"><b>char</b></font> needle);
                         <font color="#0000ff">// Returns true if &quot;haystack&quot; contains &quot;needle&quot; or</font>
                         <font color="#0000ff">// false otherwise.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *findFirst(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *haystack,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *needle);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *findFirst(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *needle);
                         <font color="#0000ff">// Returns a pointer to the first occurrance of &quot;needle&quot;</font>
                         <font color="#0000ff">// in &quot;haystack&quot; or NULL if not found.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *findFirst(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *haystack,
-                                                        <font color="#298a52"><b>char</b></font> needle);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *findFirst(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack, <font color="#2e8b57"><b>char</b></font> needle);
                         <font color="#0000ff">// Returns a pointer to the first occurrance of &quot;needle&quot;</font>
                         <font color="#0000ff">// in &quot;haystack&quot; or NULL if not found.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *findLast(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *haystack,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *needle);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *findLast(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *needle);
                         <font color="#0000ff">// Returns a pointer to the last occurrance of &quot;needle&quot;</font>
                         <font color="#0000ff">// in &quot;haystack&quot; or NULL if not found.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *findLast(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *haystack,
-                                                        <font color="#298a52"><b>char</b></font> needle);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *findLast(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *haystack, <font color="#2e8b57"><b>char</b></font> needle);
                         <font color="#0000ff">// Returns a pointer to the last occurrance of &quot;needle&quot;</font>
                         <font color="#0000ff">// in &quot;haystack&quot; or NULL if not found.</font>
 
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *duplicate(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *duplicate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
                         <font color="#0000ff">// Creates a duplicate of &quot;str&quot; and returns a pointer</font>
                         <font color="#0000ff">// to it.  Note that this method allocates a buffer for</font>
                         <font color="#0000ff">// the duplicate string internally and returns it.  The</font>
                         <font color="#0000ff">// calling program must deallocate this buffer.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *duplicate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>size_t</b></font> length);
+                        <font color="#0000ff">// Creates a duplicate of the first &quot;length&quot; bytes of</font>
+                        <font color="#0000ff">// &quot;str&quot; and returns a pointer to it.  Note that this</font>
+                        <font color="#0000ff">// method allocates a buffer for the duplicate string</font>
+                        <font color="#0000ff">// internally and returns it.  The calling program must</font>
+                        <font color="#0000ff">// deallocate this buffer.</font>
 
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    upper(<font color="#298a52"><b>char</b></font> *str);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    upper(<font color="#2e8b57"><b>char</b></font> *str);
                         <font color="#0000ff">// Converts &quot;str&quot; to uppercase.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    lower(<font color="#298a52"><b>char</b></font> *str);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    lower(<font color="#2e8b57"><b>char</b></font> *str);
                         <font color="#0000ff">// Converts &quot;str&quot; to lowercase.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    rightTrim(<font color="#298a52"><b>char</b></font> *str);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    rightTrim(<font color="#2e8b57"><b>char</b></font> *str);
                         <font color="#0000ff">// Rrims all spaces off of the right hand side of &quot;str&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    rightTrim(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>char</b></font> character);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    rightTrim(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
                         <font color="#0000ff">// Rrims all &quot;character&quot;'s off of the right hand side</font>
                         <font color="#0000ff">// of &quot;str&quot;.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    leftTrim(<font color="#298a52"><b>char</b></font> *str);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    leftTrim(<font color="#2e8b57"><b>char</b></font> *str);
                         <font color="#0000ff">// Trims all spaces off of the left hand side of &quot;str&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    leftTrim(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>char</b></font> character);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    leftTrim(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
                         <font color="#0000ff">// Trims all &quot;character&quot;'s off of the left hand side</font>
                         <font color="#0000ff">// of &quot;str&quot;.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    bothTrim(<font color="#298a52"><b>char</b></font> *str);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    bothTrim(<font color="#2e8b57"><b>char</b></font> *str);
                         <font color="#0000ff">// Trims all spaces off of both sides of &quot;str&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    bothTrim(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>char</b></font> character);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    bothTrim(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
                         <font color="#0000ff">// Trims all characters off of both sides of &quot;str&quot;.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    strip(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>char</b></font> character);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    strip(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>char</b></font> character);
                         <font color="#0000ff">// Strips all instances of &quot;character&quot; from &quot;str&quot;.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    strip(<font color="#298a52"><b>char</b></font> *str1, <font color="#298a52"><b>char</b></font> *str2);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    strip(<font color="#2e8b57"><b>char</b></font> *str1, <font color="#2e8b57"><b>char</b></font> *str2);
                         <font color="#0000ff">// Strips all instances of &quot;str2&quot; from &quot;str1&quot;.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     integerLength(<font color="#298a52"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>short</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     integerLength(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font> number);
                         <font color="#0000ff">// Returns the number of characters needed to represent</font>
                         <font color="#0000ff">// &quot;number&quot; as a string.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    isInteger(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *val);
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    isInteger(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *val, <font color="#298a52"><b>int</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    isInteger(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    isInteger(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val, <font color="#2e8b57"><b>int</b></font> size);
                         <font color="#0000ff">// Returns true if the string &quot;val&quot; is an integer and</font>
                         <font color="#0000ff">// false if it is not an integer.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    isNumber(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *val);
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    isNumber(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *val, <font color="#298a52"><b>int</b></font> size);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    isNumber(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    isNumber(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *val, <font color="#2e8b57"><b>int</b></font> size);
                         <font color="#0000ff">// Returns true the string &quot;val&quot; is a number and false</font>
                         <font color="#0000ff">// if it is not a number</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *parseNumber(<font color="#298a52"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>short</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>short</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>long</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
                         <font color="#0000ff">// Returns a string representing &quot;number&quot;.  The string</font>
                         <font color="#0000ff">// is allocated inside the function and must be deleted</font>
                         <font color="#0000ff">// by the calling program.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *parseNumber(<font color="#298a52"><b>double</b></font> number);
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *parseNumber(<font color="#298a52"><b>double</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *parseNumber(<font color="#298a52"><b>double</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> precision,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>float</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>float</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>float</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>double</b></font> number);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *parseNumber(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
                         <font color="#0000ff">// Returns a string representing &quot;number&quot;.  The string</font>
                         <font color="#0000ff">// is allocated inside the function and must be deleted</font>
                         <font color="#0000ff">// by the calling program.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font>    toLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font>    toLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long integer.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font>    toLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>char</b></font> **endptr);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font>    toLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>char</b></font> **endptr);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long integer.  If non-NULL,</font>
                         <font color="#0000ff">// endptr will be set to the first character in the</font>
                         <font color="#0000ff">// string after the number.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font>    toLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>int</b></font> base);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font>    toLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>int</b></font> base);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long integer of base &quot;base&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font>    toLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                        <font color="#298a52"><b>char</b></font> **endptr, <font color="#298a52"><b>int</b></font> base);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font>    toLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                        <font color="#2e8b57"><b>char</b></font> **endptr, <font color="#2e8b57"><b>int</b></font> base);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long integer of base &quot;base&quot;.</font>
                         <font color="#0000ff">// If non-NULL, endptr will be set to the first</font>
                         <font color="#0000ff">// character in the string after the number.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font>       toLongLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
-                        <font color="#0000ff">// Converts &quot;string&quot; to a long integer.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font>       toLongLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                        <font color="#298a52"><b>char</b></font> **endptr);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>   toUnsignedLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long integer.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>   toUnsignedLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>char</b></font> **endptr);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long integer.  If</font>
+                        <font color="#0000ff">// non-NULL, endptr will be set to the first character</font>
+                        <font color="#0000ff">// in the string after the number.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>   toUnsignedLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                                <font color="#2e8b57"><b>int</b></font> base);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long integer of base</font>
+                        <font color="#0000ff">// &quot;base&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>   toUnsignedLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>char</b></font> **endptr,
+                                                        <font color="#2e8b57"><b>int</b></font> base);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long integer of base</font>
+                        <font color="#0000ff">// &quot;base&quot;.</font>
+                        <font color="#0000ff">// If non-NULL, endptr will be set to the first</font>
+                        <font color="#0000ff">// character in the string after the number.</font>
+
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>       toLongLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a long long integer.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>       toLongLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>char</b></font> **endptr);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long long integer.  If</font>
                         <font color="#0000ff">// non-NULL, endptr will be set to the first character</font>
                         <font color="#0000ff">// in the string after the number.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font>       toLongLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                                <font color="#298a52"><b>int</b></font> base);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>       toLongLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                                <font color="#2e8b57"><b>int</b></font> base);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long long integer of</font>
                         <font color="#0000ff">// base &quot;base&quot;.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font>       toLongLong(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                <font color="#298a52"><b>char</b></font> **endptr, <font color="#298a52"><b>int</b></font> base);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>       toLongLong(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                <font color="#2e8b57"><b>char</b></font> **endptr, <font color="#2e8b57"><b>int</b></font> base);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long long integer of</font>
                         <font color="#0000ff">// base &quot;base&quot;.  If non-NULL, endptr will be set to the</font>
                         <font color="#0000ff">// first character in the string after the number.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>float</b></font>   toFloat(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>      toUnsignedLongLong(
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                        <font color="#0000ff">// Converts &quot;string&quot; to an unsigned long long integer.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>      toUnsignedLongLong(
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>char</b></font> **endptr);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long long integer.  If</font>
+                        <font color="#0000ff">// non-NULL, endptr will be set to the first character</font>
+                        <font color="#0000ff">// in the string after the number.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>      toUnsignedLongLong(
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>int</b></font> base);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long long integer of</font>
+                        <font color="#0000ff">// base &quot;base&quot;.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>long</b></font>      toUnsignedLongLong(
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>char</b></font> **endptr,
+                                                        <font color="#2e8b57"><b>int</b></font> base);
+                        <font color="#0000ff">// Converts &quot;string&quot; to a unsigned long long integer of</font>
+                        <font color="#0000ff">// base &quot;base&quot;.  If non-NULL, endptr will be set to the</font>
+                        <font color="#0000ff">// first character in the string after the number.</font>
+
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>float</b></font>   toFloat(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Converts &quot;string&quot; to a floating point number.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>float</b></font>   toFloat(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>char</b></font> **endptr);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>float</b></font>   toFloat(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>char</b></font> **endptr);
                         <font color="#0000ff">// Converts &quot;string&quot; to a floating point number.  If</font>
                         <font color="#0000ff">// non-NULL, endptr will be set to the first character</font>
                         <font color="#0000ff">// in the string after the number.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>double</b></font>  toDouble(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>double</b></font>  toDouble(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Converts &quot;string&quot; to a double precision</font>
                         <font color="#0000ff">// floating point number.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>double</b></font>  toDouble(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>char</b></font> **endptr);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>double</b></font>  toDouble(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>char</b></font> **endptr);
                         <font color="#0000ff">// Converts &quot;string&quot; to a double precision floating</font>
                         <font color="#0000ff">// point number.  If non-NULL, endptr will be set to</font>
                         <font color="#0000ff">// the first character in the string after the number.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>double</b></font>     toLongDouble(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>double</b></font>     toLongDouble(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long double precision</font>
                         <font color="#0000ff">// floating point number.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>double</b></font>     toLongDouble(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                                <font color="#298a52"><b>char</b></font> **endptr);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>long</b></font> <font color="#2e8b57"><b>double</b></font>     toLongDouble(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                                <font color="#2e8b57"><b>char</b></font> **endptr);
                         <font color="#0000ff">// Converts &quot;string&quot; to a long double precision floating</font>
                         <font color="#0000ff">// point number.  If non-NULL, endptr will be set to</font>
                         <font color="#0000ff">// the first character in the string after the number.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *httpEscape(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *input);
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *httpEscape(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *input);
                         <font color="#0000ff">// http escapes &quot;input&quot; and returns it in a buffer</font>
                         <font color="#0000ff">// allocated inside the function.  This buffer must be</font>
                         <font color="#0000ff">// deleted by the calling program.</font>
 
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    leftJustify(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>int</b></font> length);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    leftJustify(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
                         <font color="#0000ff">// Moves leading spaces to the end of &quot;str&quot; for</font>
                         <font color="#0000ff">// &quot;length&quot; characters.</font>
                         <font color="#0000ff">// </font>
                         <font color="#0000ff">// Example:</font>
                         <font color="#0000ff">//      &quot;   hello   &quot; -&gt; &quot;hello      &quot;</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    rightJustify(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>int</b></font> length);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    rightJustify(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
                         <font color="#0000ff">// Moves trailing spaces to the beginning of &quot;str&quot; for</font>
                         <font color="#0000ff">// &quot;length&quot; characters.</font>
                         <font color="#0000ff">// </font>
                         <font color="#0000ff">// Example:</font>
                         <font color="#0000ff">//      &quot;   hello   &quot; -&gt; &quot;      hello&quot;</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    center(<font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>int</b></font> length);
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    center(<font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
                         <font color="#0000ff">// Centers the text of &quot;str&quot; for &quot;length&quot; characters.</font>
                         <font color="#0000ff">// </font>
                         <font color="#0000ff">// Example:</font>
                         <font color="#0000ff">//      &quot;hello      &quot; -&gt; &quot;   hello   &quot;</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/charstring.h&gt;</font>
+
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     safePrint(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                        <font color="#0000ff">// Prints &quot;str&quot;, however all non-printing characters</font>
+                        <font color="#0000ff">// are printed as hex values of the format: (0x0a) and</font>
+                        <font color="#0000ff">// carriage returns, line feeds and tabs are printed</font>
+                        <font color="#0000ff">// as \n, \r and \t.</font>
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     safePrint(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>int</b></font> length);
+                        <font color="#0000ff">// safePrint()'s &quot;length&quot; characters of &quot;str&quot; </font>
+
+
+                <font color="#0000ff">// These methods parse &quot;string&quot; delimited by &quot;delimiter&quot;</font>
+                <font color="#0000ff">// and allocate &quot;listlength&quot; elements of &quot;list&quot; to return the</font>
+                <font color="#0000ff">// parts.  Each member of &quot;list&quot; and &quot;list&quot; must be deallocated</font>
+                <font color="#0000ff">// by the calling program.  In the versions of the method</font>
+                <font color="#0000ff">// where &quot;stringlength&quot; or &quot;delimiterlength&quot; are not</font>
+                <font color="#0000ff">// supplied, string and/or delimiter are presumed to be</font>
+                <font color="#0000ff">// NULL terminated strings.</font>
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     split(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                        <font color="#2e8b57"><b>ssize_t</b></font> stringlength,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *delimiter,
+                                        <font color="#2e8b57"><b>ssize_t</b></font> delimiterlength,
+                                        <font color="#2e8b57"><b>char</b></font> ***list,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *listlength);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     split(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *delimiter,
+                                        <font color="#2e8b57"><b>ssize_t</b></font> delimiterlength,
+                                        <font color="#2e8b57"><b>char</b></font> ***list,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *listlength);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     split(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                        <font color="#2e8b57"><b>ssize_t</b></font> stringlength,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *delimiter,
+                                        <font color="#2e8b57"><b>char</b></font> ***list,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *listlength);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     split(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *delimiter,
+                                        <font color="#2e8b57"><b>char</b></font> ***list,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *listlength);
+
+
+
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/charstring.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/charstringinlines.h&gt;</font>
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

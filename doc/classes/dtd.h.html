@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/dtd.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/dtd.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,20 +9,24 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_DTD_H</font>
-<font color="#a520f7">#define RUDIMENTS_DTD_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_DTD_H</font>
+<font color="#a020f0">#define RUDIMENTS_DTD_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/dtdincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/dtdincludes.h&gt;</font>
 
 <font color="#0000ff">// The dtd class implements a minimal XML DTD parser.</font>
 
-<font color="#298a52"><b>class</b></font> dtd : <font color="#a52829"><b>public</b></font> errorhandler {
-        <font color="#a52829"><b>public</b></font>:
-                <font color="#298a52"><b>bool</b></font>    parseFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>class</b></font> dtd {
+        <font color="#a52a2a"><b>public</b></font>:
+                <font color="#2e8b57"><b>bool</b></font>    parseFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Parse file &quot;filename&quot; and generate a DTD tree.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure</font>
-                <font color="#298a52"><b>bool</b></font>    parseString(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>bool</b></font>    parseString(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Parse string &quot;string&quot; and generate a DTD tree.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure</font>
@@ -30,10 +34,16 @@
                 xmldom  *xml();
                         <font color="#0000ff">// Returns an XML representation of the DTD.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/dtd.h&gt;</font>
+                <font color="#2e8b57"><b>char</b></font>    *getError();
+
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/dtd.h&gt;</font>
 };
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

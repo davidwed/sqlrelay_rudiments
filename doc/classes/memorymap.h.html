@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.27/include/rudiments/memorymap.h.html</title>
-<meta name="Generator" content="Vim/6.2">
+<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/memorymap.h.html</title>
+<meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,23 +9,29 @@
 <font color="#0000ff">// Copyright (c) 2004 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_MEMORYMAP_H</font>
-<font color="#a520f7">#define RUDIMENTS_MEMORYMAP_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_MEMORYMAP_H</font>
+<font color="#a020f0">#define RUDIMENTS_MEMORYMAP_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/memorymapincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/memorymapincludes.h&gt;</font>
+
+<font color="#a020f0">#ifdef HAVE_MMAP</font>
 
 <font color="#0000ff">// The memorymap class provides methods for mapping a file (or file descriptor)</font>
 <font color="#0000ff">// to a region of memory and manipulating the mapped region.</font>
 
-<font color="#298a52"><b>class</b></font> memorymap {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>class</b></font> memorymap {
+        <font color="#a52a2a"><b>public</b></font>:
                         memorymap();
                         <font color="#0000ff">// creates an unattached memorymap</font>
                         ~memorymap();
                         <font color="#0000ff">// destroys the memorymap, detaching if necessary</font>
 
-                <font color="#298a52"><b>bool</b></font>    attach(<font color="#298a52"><b>int</b></font> fd, off_t offset, <font color="#298a52"><b>size_t</b></font> len,
-                                                <font color="#298a52"><b>int</b></font> protection, <font color="#298a52"><b>int</b></font> flags);
+                <font color="#2e8b57"><b>bool</b></font>    attach(<font color="#2e8b57"><b>int</b></font> fd, off_t offset, <font color="#2e8b57"><b>size_t</b></font> len,
+                                                <font color="#2e8b57"><b>int</b></font> protection, <font color="#2e8b57"><b>int</b></font> flags);
                         <font color="#0000ff">// Attaches the memorymap to file descriptor &quot;fd&quot; at</font>
                         <font color="#0000ff">// &quot;offset&quot; for &quot;len&quot; bytes.</font>
                         <font color="#0000ff">//</font>
@@ -60,15 +66,15 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#298a52"><b>bool</b></font>    detach();
+                <font color="#2e8b57"><b>bool</b></font>    detach();
                         <font color="#0000ff">// detaches the memory map from the file descriptor</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#298a52"><b>bool</b></font>    setProtection(<font color="#298a52"><b>int</b></font> protection);
+                <font color="#2e8b57"><b>bool</b></font>    setProtection(<font color="#2e8b57"><b>int</b></font> protection);
                         <font color="#0000ff">// Sets the protection of the entire memory map to</font>
                         <font color="#0000ff">// &quot;protection&quot;.  See protect() below for more info.</font>
-                <font color="#298a52"><b>bool</b></font>    setProtection(off_t offset, <font color="#298a52"><b>size_t</b></font> len, <font color="#298a52"><b>int</b></font> protection);
+                <font color="#2e8b57"><b>bool</b></font>    setProtection(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len, <font color="#2e8b57"><b>int</b></font> protection);
                         <font color="#0000ff">// Sets the protection of the memory map to &quot;protection&quot;</font>
                         <font color="#0000ff">// for &quot;len&quot; bytes, starting at &quot;offset&quot;.</font>
                         <font color="#0000ff">//</font>
@@ -84,19 +90,19 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#298a52"><b>void</b></font>    *getData();
+                <font color="#2e8b57"><b>void</b></font>    *getData();
                         <font color="#0000ff">// Returns a pointer to the region of memory that the</font>
                         <font color="#0000ff">// file is mapped into.</font>
-                <font color="#298a52"><b>size_t</b></font>  getLength();
+                <font color="#2e8b57"><b>size_t</b></font>  getLength();
                         <font color="#0000ff">// Returns the length of the region of memory that the</font>
                         <font color="#0000ff">// file is mapped into.</font>
 
-                <font color="#298a52"><b>bool</b></font>    sync(<font color="#298a52"><b>bool</b></font> immediate, <font color="#298a52"><b>bool</b></font> invalidate);
+                <font color="#2e8b57"><b>bool</b></font>    sync(<font color="#2e8b57"><b>bool</b></font> immediate, <font color="#2e8b57"><b>bool</b></font> invalidate);
                         <font color="#0000ff">// Make sure that changes made to the memory map have</font>
                         <font color="#0000ff">// been copied to the storage mediam that the mapped</font>
                         <font color="#0000ff">// file resides on.  See sync() below for more info.</font>
-                <font color="#298a52"><b>bool</b></font>    sync(off_t offset, <font color="#298a52"><b>size_t</b></font> len,
-                                <font color="#298a52"><b>bool</b></font> immediate, <font color="#298a52"><b>bool</b></font> invalidate);
+                <font color="#2e8b57"><b>bool</b></font>    sync(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len,
+                                <font color="#2e8b57"><b>bool</b></font> immediate, <font color="#2e8b57"><b>bool</b></font> invalidate);
                         <font color="#0000ff">// Make sure that changes made to the memory map for</font>
                         <font color="#0000ff">// &quot;len&quot; bytes, starting at &quot;offset&quot; have been copied</font>
                         <font color="#0000ff">// to the storage mediam that the mapped file resides</font>
@@ -121,82 +127,88 @@
                 <font color="#0000ff">// and continues for &quot;len&quot; bytes.</font>
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// These methods return true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    sequentialAccess(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    sequentialAccess(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// The region will be accessed in sequential order.</font>
-                <font color="#298a52"><b>bool</b></font>    randomAccess(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    randomAccess(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// The region will be accessed in random order.</font>
-                <font color="#298a52"><b>bool</b></font>    willNeed(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    willNeed(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// The region will be accessed in the near future.</font>
-                <font color="#298a52"><b>bool</b></font>    wontNeed(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    wontNeed(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// The region will not be accessed in the near future.</font>
-                <font color="#298a52"><b>bool</b></font>    normalAccess(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    normalAccess(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// Removes any advice that has previously been applied</font>
                         <font color="#0000ff">// to the region.</font>
 
-<font color="#a520f7">                #ifdef HAVE_MLOCK</font>
-                <font color="#298a52"><b>bool</b></font>    lock();
+<font color="#a020f0">                #ifdef HAVE_MLOCK</font>
+                <font color="#2e8b57"><b>bool</b></font>    lock();
                         <font color="#0000ff">// Disables paging of the entire memory map.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    lock(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    lock(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// Disables paging of data in the memory map, starting</font>
                         <font color="#0000ff">// at &quot;offset&quot;, for &quot;len&quot; bytes.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">                #ifdef HAVE_MUNLOCK</font>
-                <font color="#298a52"><b>bool</b></font>    unlock();
+<font color="#a020f0">                #ifdef HAVE_MUNLOCK</font>
+                <font color="#2e8b57"><b>bool</b></font>    unlock();
                         <font color="#0000ff">// Enables paging of the entire memory map.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    unlock(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    unlock(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// Enables paging of data in the memory map, starting</font>
                         <font color="#0000ff">// at &quot;offset&quot;, for &quot;len&quot; bytes.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">                #ifdef HAVE_MINCORE</font>
-                <font color="#298a52"><b>bool</b></font>    inMemory();
+<font color="#a020f0">                #ifdef HAVE_MINCORE</font>
+                <font color="#2e8b57"><b>bool</b></font>    inMemory();
                         <font color="#0000ff">// Returns true if all pages of the memory map are</font>
                         <font color="#0000ff">// currently cached in system ram.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    inMemory(off_t offset, <font color="#298a52"><b>size_t</b></font> len);
+                <font color="#2e8b57"><b>bool</b></font>    inMemory(off_t offset, <font color="#2e8b57"><b>size_t</b></font> len);
                         <font color="#0000ff">// Returns true if all pages of the memory map starting</font>
                         <font color="#0000ff">// at &quot;offset&quot;, for &quot;len&quot; bytes are currently cached in</font>
                         <font color="#0000ff">// system ram.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
 
-<font color="#a520f7">                #ifdef HAVE_MLOCK</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     lockAll();
+<font color="#a020f0">                #ifdef HAVE_MLOCK</font>
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     lockAll();
                                 <font color="#0000ff">// Disables paging (storing to swap partition)</font>
                                 <font color="#0000ff">// of all pages of memory currently used for</font>
                                 <font color="#0000ff">// memorymaps by the process and all newly</font>
                                 <font color="#0000ff">// allocated pages.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     lockAllCurrent();
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     lockAllCurrent();
                                 <font color="#0000ff">// Disables paging (storing to swap partition)</font>
                                 <font color="#0000ff">// of all pages of memory currently used for</font>
                                 <font color="#0000ff">// memorymaps by the process.  Newly allocated</font>
                                 <font color="#0000ff">// pages may still be paged out.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     lockAllFuture();
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     lockAllFuture();
                                 <font color="#0000ff">// Disables paging (storing to swap partition)</font>
                                 <font color="#0000ff">// of all newly allocated pages of memory used</font>
                                 <font color="#0000ff">// for memorymaps by the process.  Currently</font>
                                 <font color="#0000ff">// allocated pages may still be paged out.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a520f7">                #endif</font>
-<font color="#a520f7">                #ifdef HAVE_MUNLOCK</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     unlockAll();
+<font color="#a020f0">                #endif</font>
+<font color="#a020f0">                #ifdef HAVE_MUNLOCK</font>
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     unlockAll();
                                 <font color="#0000ff">// Enables paging of data stored in all</font>
                                 <font color="#0000ff">// memorymaps currently open by the process.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/memorymap.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/memorymap.h&gt;</font>
 };
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+}
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
+
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>
