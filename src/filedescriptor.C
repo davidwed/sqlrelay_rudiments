@@ -125,11 +125,11 @@ bool filedescriptor::isUsingNonBlockingMode() {
 }
 
 ssize_t filedescriptor::write(unsigned short number) {
-	return safeWrite((void *)&number,sizeof(unsigned short),-1,-1);
+	return write((void *)&number,sizeof(unsigned short),-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned long number) {
-	return safeWrite((void *)&number,sizeof(unsigned long),-1,-1);
+	return write((void *)&number,sizeof(unsigned long),-1,-1);
 }
 
 ssize_t filedescriptor::write(short number) {
@@ -152,6 +152,10 @@ ssize_t filedescriptor::write(unsigned char character) {
 	return safeWrite((void *)&character,sizeof(unsigned char),-1,-1);
 }
 
+ssize_t filedescriptor::write(bool value) {
+	return safeWrite((void *)&value,sizeof(bool),-1,-1);
+}
+
 ssize_t filedescriptor::write(char character) {
 	return safeWrite((void *)&character,sizeof(char),-1,-1);
 }
@@ -169,10 +173,12 @@ ssize_t filedescriptor::write(const void *buffer, size_t size) {
 }
 
 ssize_t filedescriptor::write(unsigned short number, long sec, long usec) {
+	number=hostToNet(number);
 	return safeWrite((void *)&number,sizeof(unsigned short),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned long number, long sec, long usec) {
+	number=hostToNet(number);
 	return safeWrite((void *)&number,sizeof(unsigned long),sec,usec);
 }
 
@@ -196,6 +202,10 @@ ssize_t filedescriptor::write(unsigned char character, long sec, long usec) {
 	return safeWrite((void *)&character,sizeof(unsigned char),sec,usec);
 }
 
+ssize_t filedescriptor::write(bool value, long sec, long usec) {
+	return safeWrite((void *)&value,sizeof(bool),sec,usec);
+}
+
 ssize_t filedescriptor::write(char character, long sec, long usec) {
 	return safeWrite((void *)&character,sizeof(char),sec,usec);
 }
@@ -216,11 +226,11 @@ ssize_t filedescriptor::write(const void *buffer, size_t size,
 }
 
 ssize_t filedescriptor::read(unsigned short *buffer) {
-	return safeRead((void *)buffer,sizeof(unsigned short),-1,-1);
+	return read((void *)buffer,sizeof(unsigned short),-1,-1);
 }
 
 ssize_t filedescriptor::read(unsigned long *buffer) {
-	return safeRead((void *)buffer,sizeof(unsigned long),-1,-1);
+	return read((void *)buffer,sizeof(unsigned long),-1,-1);
 }
 
 ssize_t filedescriptor::read(short *buffer) {
@@ -241,6 +251,10 @@ ssize_t filedescriptor::read(double *buffer) {
 
 ssize_t filedescriptor::read(unsigned char *buffer) {
 	return safeRead((void *)buffer,sizeof(unsigned char),-1,-1);
+}
+
+ssize_t filedescriptor::read(bool *buffer) {
+	return safeRead((void *)buffer,sizeof(bool),-1,-1);
 }
 
 ssize_t filedescriptor::read(char *buffer) {
@@ -264,11 +278,15 @@ ssize_t filedescriptor::read(char **buffer, char *terminator) {
 }
 
 ssize_t filedescriptor::read(unsigned short *buffer, long sec, long usec) {
-	return safeRead((void *)buffer,sizeof(unsigned short),sec,usec);
+	ssize_t	retval=safeRead((void *)buffer,sizeof(unsigned short),sec,usec);
+	*buffer=netToHost(*buffer);
+	return retval;
 }
 
 ssize_t filedescriptor::read(unsigned long *buffer, long sec, long usec) {
-	return safeRead((void *)buffer,sizeof(unsigned long),sec,usec);
+	ssize_t	retval=safeRead((void *)buffer,sizeof(unsigned long),sec,usec);
+	*buffer=netToHost(*buffer);
+	return retval;
 }
 
 ssize_t filedescriptor::read(short *buffer, long sec, long usec) {
@@ -289,6 +307,10 @@ ssize_t filedescriptor::read(double *buffer, long sec, long usec) {
 
 ssize_t filedescriptor::read(unsigned char *buffer, long sec, long usec) {
 	return safeRead((void *)buffer,sizeof(unsigned char),sec,usec);
+}
+
+ssize_t filedescriptor::read(bool *buffer, long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(bool),sec,usec);
 }
 
 ssize_t filedescriptor::read(char *buffer, long sec, long usec) {
@@ -703,6 +725,22 @@ ssize_t filedescriptor::write(const unsigned char *string,
 
 ssize_t filedescriptor::write(const char *string, long sec, long usec) {
 	return safeWrite((void *)string,strlen(string),sec,usec);
+}
+
+unsigned short filedescriptor::hostToNet(unsigned short value) const {
+	return value;
+}
+
+unsigned long filedescriptor::hostToNet(unsigned long value) const {
+	return value;
+}
+
+unsigned short filedescriptor::netToHost(unsigned short value) const {
+	return value;
+}
+
+unsigned long filedescriptor::netToHost(unsigned long value) const {
+	return value;
 }
 
 #ifdef RUDIMENTS_HAS_SSL

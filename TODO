@@ -1,3 +1,5 @@
+a bunch of methods can probabaly be made const
+
 add ioctl, fcntl to filedescriptor class
 
 on SCO, sometimes you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???

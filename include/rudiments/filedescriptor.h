@@ -99,6 +99,8 @@ class filedescriptor {
 				// Write "character" to the file descriptor.
 		virtual ssize_t	write(char character);
 				// Write "character" to the file descriptor.
+		virtual ssize_t	write(bool value);
+				// Write "value" to the file descriptor.
 		virtual ssize_t	write(const unsigned char *string);
 				// Write "string" to the file descriptor.  Note
 				// that "string" must be NULL-terminated.
@@ -144,6 +146,8 @@ class filedescriptor {
 				// Write "character" to the file descriptor.
 		virtual ssize_t	write(char character, long sec, long usec);
 				// Write "character" to the file descriptor.
+		virtual ssize_t	write(bool value, long sec, long usec);
+				// Write "value" to the file descriptor.
 		virtual ssize_t	write(const unsigned char *string,
 							long sec, long usec);
 				// Write "string" to the file descriptor.  Note
@@ -196,6 +200,9 @@ class filedescriptor {
 		virtual ssize_t	read(char *buffer);
 				// Reads sizeof(char) bytes from the file
 				// descriptor into "buffer".
+		virtual ssize_t	read(bool *buffer);
+				// Reads sizeof(bool) bytes from the file
+				// descriptor into "buffer".
 		virtual ssize_t	read(unsigned char *buffer, size_t size);
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
@@ -244,6 +251,9 @@ class filedescriptor {
 		virtual ssize_t	read(char *buffer, long sec, long usec);
 				// Reads sizeof(char) bytes from the file
 				// descriptor into "buffer".
+		virtual ssize_t	read(bool *buffer, long sec, long usec);
+				// Reads sizeof(bool) bytes from the
+				// file descriptor into "buffer".
 		virtual ssize_t	read(unsigned char *buffer,
 					size_t size, long sec, long usec);
 				// Reads "size" bytes from the file descriptor

@@ -20,6 +20,10 @@
 	added setDelimiter method to parameterstring class
 	added support for cygwin >=1.5.7-1
 	added search for gthreads to configure for SCO
+	added netToHost/hostToNet virtual methods to fildescriptor class,
+		override them in datatransport class to call ntohl/ntohs
+		and htonl/htons, removed a bunch of read/write methods from
+		datatransport
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

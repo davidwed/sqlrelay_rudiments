@@ -5,6 +5,11 @@
 
 		void	init();
 
+		virtual	unsigned short	hostToNet(unsigned short value) const;
+		virtual	unsigned long	hostToNet(unsigned long value) const;
+		virtual	unsigned short	netToHost(unsigned short value) const;
+		virtual	unsigned long	netToHost(unsigned long value) const;
+
 		virtual	ssize_t	safeRead(void *buf, ssize_t count,
 							long sec, long usec);
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
