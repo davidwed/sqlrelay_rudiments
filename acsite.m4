@@ -316,7 +316,7 @@ then
 
 	else
 
-		for i in "pthread" "c_r"
+		for i in "pthread" "c_r" "gthreads"
 		do
 			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
 			if ( test -n "$PTHREADLIB" )
@@ -331,6 +331,12 @@ then
 		if ( test -n "$PTHREADLIB" )
 		then
 			HAVE_PTHREAD="yes"
+		fi
+
+		dnl override PTHREADLIB on microsoft platforms
+		if ( test -n "$PTHREADINCLUDES" -a "$MICROSOFT" = "yes" )
+		then
+			PTHREADLIB="-pthread"
 		fi
 	fi
 

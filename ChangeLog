@@ -19,6 +19,7 @@
 	added check for (const void *) vs. (const char *) for setsockopt calls
 	added setDelimiter method to parameterstring class
 	added support for cygwin >=1.5.7-1
+	added search for gthreads to configure for SCO
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

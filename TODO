@@ -1,3 +1,8 @@
+on SCO, sometimes you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
+
+
+should configure script use -pthread for cygwin?
+
 get epoch from string doesn't work right on solaris x86
 
 send/sendto/sendmsg and recv/recvfrom/recvmsg methods for socket class

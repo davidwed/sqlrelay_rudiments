@@ -3,14 +3,11 @@
 
 #include <rudiments/private/unixsocket.h>
 
-#include <sys/types.h>
 #include <netinet/in.h>
-#define _XPG4_2
-	#include <sys/socket.h>
-#undef _XPG4_2
 #include <sys/uio.h>
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <unistd.h>
 
@@ -92,14 +89,10 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	#endif
 
 	// finally, send the msghdr
-//write('0');
 	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
 bool unixsocket::receiveFileDescriptor(int *filedesc) {
-/*printf("%d: read on %d before recvmsg\n",getpid(),fd);
-char ch;
-read(&ch);*/
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr

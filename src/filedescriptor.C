@@ -19,6 +19,7 @@
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#include <fcntl.h>
 #include <sys/fcntl.h>
 
 // if SSIZE_MAX is undefined, choose a good safe value
