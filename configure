@@ -1462,9 +1462,9 @@ fi;
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval="$enable_debug"
-  CXXFLAGS="-g -pg -fno-exceptions -Wall"; INSTALLSTRIP=""
+  CXXFLAGS="-g -pg -fno-rtti -fno-exceptions -Wall"; INSTALLSTRIP=""
 else
-  CXXFLAGS="-fomit-frame-pointer -fno-exceptions -Wall"; INSTALLSTRIP="-s"
+  CXXFLAGS="-fomit-frame-pointer -fno-rtti -fno-exceptions -Wall"; INSTALLSTRIP="-s"
 fi;
 
 # Check whether --with-system-libtool or --without-system-libtool was given.

@@ -44,7 +44,7 @@ class filesystem {
 
 		// These methods return the fundamental block size of the
 		// filesystem.
-		// (works on Net/Open/FreeBSD, SCO OSR5, Solaris)
+		// (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris)
 		//
 		// The static methods return true on success and false on
 		// failure.

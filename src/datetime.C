@@ -95,6 +95,9 @@ bool datetime::initialize(time_t seconds) {
 		if (ltmutex && pthread_mutex_lock(ltmutex)) {
 			return false;
 		}
+		// FIXME: some (at least glibc 2.1) platforms's localtime()
+		// doesn't set the timezone-related fields, they only set
+		// the global variables tzname, timezone, daylight
 		struct tm	*lcltm=localtime(&seconds);
 		bool	retval=(lcltm && copyStructTm(lcltm,timestruct));
 		if (ltmutex && pthread_mutex_unlock(ltmutex)) {
@@ -238,6 +241,8 @@ bool datetime::adjustTimeZone(const char *newtz) {
 	// Note that this must use localtime, not localtime_r or the timezone
 	// will not be set.  Also, there's no advantage to using localtime_r
 	// here because this whole method is mutex'ed anyway.
+	// FIXME: it appears that all versions of localtime() DON'T set
+	// the timezone fields, rather they only set tzname, timezone, daylight
 	struct tm	*lcltm=localtime(&epoch);
 	if (!lcltm) {
 		return false;

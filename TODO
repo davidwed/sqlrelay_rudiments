@@ -1,3 +1,7 @@
+it appears that on some platforms (at least glibc-2.1), localtime doesn't set
+	tm_gmtoff or tm_zone in struct tm, but on other platforms, it does.
+	hopefully, all platforms that don't have localtime_r don't set it.
+
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
 

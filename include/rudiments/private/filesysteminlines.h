@@ -102,7 +102,8 @@ RUDIMENTS_INLINE long filesystem::getType() const {
 }
 
 RUDIMENTS_INLINE bool filesystem::getBlockSize(const char *path, long *size) {
-#if defined(HAVE_FREEBSD_STATFS) || \
+#if defined(HAVE_LINUX_STATFS) || \
+	defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	STATFS(path,size,f_bsize)
@@ -117,7 +118,8 @@ RUDIMENTS_INLINE bool filesystem::getBlockSize(const char *path, long *size) {
 }
 
 RUDIMENTS_INLINE bool filesystem::getBlockSize(int fd, long *size) {
-#if defined(HAVE_FREEBSD_STATFS) || \
+#if defined(HAVE_LINUX_STATFS) || \
+	defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	FSTATFS(fd,size,f_bsize)
@@ -132,7 +134,8 @@ RUDIMENTS_INLINE bool filesystem::getBlockSize(int fd, long *size) {
 }
 
 RUDIMENTS_INLINE long filesystem::getBlockSize() const {
-#if defined(HAVE_FREEBSD_STATFS) || \
+#if defined(HAVE_LINUX_STATFS) || \
+	defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	return st.f_bsize;
