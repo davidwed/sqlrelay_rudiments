@@ -738,10 +738,16 @@ char xmlsax::getCharacter() {
 	// if the character is an EOF, return a NULL
 	char	ch;
 	if (string) {
+		// If you've come here chasing valgrind errors...
+		// ptr may be set to the return value of mmap() which is
+		// neither on the stack nor in the heap.  There's no actual
+		// error here, valgrind just doesn't know about variables that
+		// aren't on the stack or in the heap and it thinks it's
+		// uninitialized.
 		ch=*ptr;
 		ptr++;
 	} else {
-		if (fl.read((void *)&ch,sizeof(char))!=sizeof(char)) {
+		if (fl.read(&ch)!=sizeof(char)) {
 			ch=(char)NULL;
 		}
 	}

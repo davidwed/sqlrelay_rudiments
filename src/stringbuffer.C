@@ -46,6 +46,12 @@ void stringbuffer::clear() {
 }
 
 void stringbuffer::terminate() {
+	// If you've come here chasing down valgrind errors...
+	// Valgrind doesn't like it if we test buffer[endofbuffer] unless
+	// buffer[endofbuffer] has actually been written to.  In reality, it
+	// doesn't matter if buffer[endofbuffer] has had a NULL written to it
+	// of if it just happens to have a NULL in it already.  Valgrind is
+	// being a bit over cautious.
 	if (buffer[endofbuffer]!=(unsigned char)NULL) {
 		variablebuffer::append((unsigned char)NULL);
 		endofbuffer--;
