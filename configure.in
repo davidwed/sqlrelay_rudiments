@@ -349,6 +349,11 @@ AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
 getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(semtimedop)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/sem.h>],
+semtimedop(0,NULL,0,NULL);,AC_DEFINE(HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_CHECK_RPC
 
 echo "******************************"

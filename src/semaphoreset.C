@@ -73,23 +73,27 @@ bool semaphoreset::wait(int index) {
 	return !semop(semid,waitop[index],1);
 }
 
+#ifdef HAVE_SEMTIMEDOP
 bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
 	timespec	ts;
 	ts.tv_sec=seconds;
 	ts.tv_nsec=nanoseconds;
 	return !semtimedop(semid,waitop[index],1,&ts);
 }
+#endif
 
 bool semaphoreset::waitWithUndo(int index) {
 	return !semop(semid,waitwithundoop[index],1);
 }
 
+#ifdef HAVE_SEMTIMEDOP
 bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
 	timespec	ts;
 	ts.tv_sec=seconds;
 	ts.tv_nsec=nanoseconds;
 	return !semtimedop(semid,waitwithundoop[index],1,&ts);
 }
+#endif
 
 bool semaphoreset::signal(int index) {
 	return !semop(semid,signalop[index],1);

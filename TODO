@@ -1,3 +1,6 @@
+implement semaphoreset::wait() with timeout for systems
+	that don't have semtimedop
+
 internationalization:
 	langinfo.h - locale info functions
 	locale.h/xlocale.h - setlocale, localeconv, etc.
