@@ -22,7 +22,7 @@ class environment {
 			// Overwriting any value that "variable" previously
 			// had.
 			// Returns 1 on success and 0 on failure.
-		void	remove(const char *variable) const;
+		void	remove(const char *variable);
 			// Removes "variable" from the environment.
 
 	#include <rudiments/private/environment.h>

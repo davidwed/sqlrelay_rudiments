@@ -188,7 +188,7 @@ AC_LANG(C)
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_MKTIME
-AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open setenv putenv)
+AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open setenv putenv unsetenv)
 
 AC_MSG_CHECKING(srand48)
 AC_TRY_LINK([#include <stdlib.h>],
