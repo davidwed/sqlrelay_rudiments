@@ -11,6 +11,8 @@ internationalization:
 paths:
 	need methods for returning the filename and directory name from a path
 	and for replacing ./'s and ../'s in a path
+	sys/ipc.h - ftok()
+	unistd.h - chdir()/fchdir()
 	glob.h - glob(),globfree(),glob_pattern_p()
 	fts.h/ftw.h - file heirarchy traversal functions
 			fts_open(),fts_close()
@@ -19,20 +21,13 @@ paths:
 					element in a directory tree
 
 file class:
-	sys/ipc.h - ftok()
 	stdlib.h - mkstemp()/mkdtemp()
 	unistd.h - access(),euidaccess()
 			pread(),pwrite()
 			pipe()
-			chown()/fchown()/lchown()
-			chdir()/fchdir()
-			dup()/dup2()
+			lchown()
 			pathconf()/fpathconf()
-			link()/symlink()/readlink()
-			unlink()
 			revoke()
-			fsync()/fdatasync()
-	stdio.h - remove()/rename()
 	fcntl.h - fcntl(),posix_fadvise(),posix_fallocate()
 	utime.h - utime()
 	sys/ioctl.h - ioctl()
@@ -439,9 +434,6 @@ charstring class has lots of static methods with no
 	corresponding non-static method, is this ok?
 
 rename variablebuffer rawbuffer???
-
-randomnumber class should be able to generate long, ulong, ulonglong,
-	float, double, long double, etc.
 
 should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl

@@ -32,6 +32,24 @@ class filedescriptor {
 				// Sets the file descriptor associated with
 				// the class to "filedesc".
 
+		virtual int	duplicate() const;
+				// Duplicates the file descriptor and returns
+				// the handle of the duplicate descriptor.  The
+				// old and new descriptors may be used
+				// interchangeably, they share locks, position
+				// pointers, flags (except the close-on-exec
+				// flag), etc.
+				//
+				// Returns the lowest-numbered unused descriptor
+				// on success or -1 on failure.
+		virtual bool	duplicate(int newfd) const;
+				// Sets file descriptor handle "newfd" to be a
+				// duplicate of this file descriptor.  If
+				// "newfd" is already open, it will be closed
+				// first.
+				//
+				// Returns true on success and false on failure.
+
 		#ifdef RUDIMENTS_HAS_SSL
 		virtual void	setSSLContext(SSL_CTX *ctx);
 				// Associates SSL context "ctx" with the

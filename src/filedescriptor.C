@@ -98,6 +98,14 @@ void filedescriptor::setFileDescriptor(int filedesc) {
 	fd=filedesc;
 }
 
+int filedescriptor::duplicate() const {
+	return dup(fd);
+}
+
+bool filedescriptor::duplicate(int newfd) const {
+	return dup(newfd);
+}
+
 #ifdef RUDIMENTS_HAS_SSL
 void filedescriptor::setSSLContext(SSL_CTX *ctx) {
 	if (!ctx) {

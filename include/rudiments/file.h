@@ -184,6 +184,22 @@ class file : public filedescriptor {
 				// bytes, resulting in a file of "length" bytes.
 				// Returns true on success and false on failure.
 
+
+		bool	sync();
+			// Changes to files are often cached in system ram,
+			// this method makes sure that those changes are copied
+			// to the storage medium that the file resides on.
+			//
+			// Returns true on success and false on failure.
+			//
+			// Note that if a hard disk has on-board write cache
+			// enabled, this method only assures that the changes
+			// has been copied into the disk's write cache, not
+			// necessarily to the disk itself.
+		bool	dataSync();
+			// Similar to sync() but does not wait for the file's
+			// last-access or last-modification times to be copied.
+
 		// These methods allow you to set the position at which the
 		// next read or write will occur.  Each returns the position
 		// relative to the beginning of the file on success or -1 on
@@ -442,6 +458,65 @@ class file : public filedescriptor {
 		// methods alter that behaviour.
 		void	getCurrentPropertiesOnOpen();
 		void	dontGetCurrentPropertiesOnOpen();
+
+
+		// These methods change the user and group that owns the file.
+		//
+		// They return true on success and false on failure.
+		bool	changeOwner(const char *newuser, const char *newgroup);
+		bool	changeOwner(uid_t uid, gid_t gid);
+		static bool	changeOwner(const char *filename,
+						const char *newuser,
+						const char *newgroup);
+		static bool	changeOwner(const char *filename,
+						uid_t uid, gid_t gid);
+
+		// These methods change the user that owns the file.
+		//
+		// They return true on success and false on failure.
+		bool	changeOwnerUserId(const char *newuser);
+		bool	changeOwnerUserId(uid_t uid);
+		static bool	changeOwnerUserId(const char *filename,
+							const char *newuser);
+		static bool	changeOwnerUserId(const char *filename,
+							uid_t uid);
+
+		// These methods change the group that owns the file.
+		//
+		// They return true on success and false on failure.
+		bool	changeOwnerGroupId(const char *newgroup);
+		bool	changeOwnerGroupId(gid_t gid);
+		static bool	changeOwnerGroupId(const char *filename,
+							const char *newgroup);
+		static bool	changeOwnerGroupId(const char *filename,
+							gid_t gid);
+
+
+		static bool	rename(const char *oldpath,
+					const char *newpath);
+			// Renames "oldpath" to "newpath".  Returns true on
+			// success and false on failure.
+		static bool	remove(const char *filename);
+			// Removes file "filename".  Returns true on success
+			// and false on failure.  (Will not remove a directory).
+
+
+		static bool	symlink(const char *oldpath,
+					const char *newpath);
+			// Creates a symbolic link between "oldpath" and
+			// "newpath". Returns true on success and false on
+			// failure.
+		static bool	link(const char *oldpath,
+					const char *newpath);
+			// Creates a hard link between "oldpath" and "newpath".
+			// Returns true on success and false on failure.
+		static char	*readlink(const char *filename);
+			// Returns the pathname of the file that the symbolic
+			// link "filename" points to.  Returns NULL on failure.
+			//
+			// Note that this method allocates a buffer for the
+			// path internally and returns it.  The calling program
+			// must deallocate this buffer.
 
 	#include <rudiments/private/file.h>
 };

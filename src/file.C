@@ -2,6 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/file.h>
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -679,4 +681,136 @@ bool file::unlock(short whence, off_t start, off_t len) {
 	lck.l_len=len;
 	// FIXME: if a signal interrupts this, we should retry
 	return !fcntl(fd,F_SETLK,&lck);
+}
+
+bool file::changeOwner(const char *newuser, const char *newgroup) {
+	uid_t	uid;
+	gid_t	gid;
+	return (passwdentry::getUserId(newuser,&uid) &&
+		groupentry::getGroupId(newgroup,&gid) &&
+		!fchown(fd,uid,gid));
+}
+
+bool file::changeOwner(uid_t uid, gid_t gid) {
+	return !fchown(fd,uid,gid);
+}
+
+bool file::changeOwner(const char *filename, const char *newuser,
+						const char *newgroup) {
+	uid_t	uid;
+	gid_t	gid;
+	return (passwdentry::getUserId(newuser,&uid) &&
+		groupentry::getGroupId(newgroup,&gid) &&
+		!chown(filename,uid,gid));
+}
+
+bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
+	return !chown(filename,uid,gid);
+}
+
+
+bool file::changeOwnerUserId(const char *newuser) {
+	uid_t	uid;
+	return (passwdentry::getUserId(newuser,&uid) &&
+		!fchown(fd,uid,(gid_t)-1));
+}
+
+bool file::changeOwnerUserId(uid_t uid) {
+	return !fchown(fd,uid,(gid_t)-1);
+}
+
+bool file::changeOwnerUserId(const char *filename, const char *newuser) {
+	uid_t	uid;
+	return (passwdentry::getUserId(newuser,&uid) &&
+		!chown(filename,uid,(gid_t)-1));
+}
+
+bool file::changeOwnerUserId(const char *filename, uid_t uid) {
+	return !chown(filename,uid,(gid_t)-1);
+}
+
+
+bool file::changeOwnerGroupId(const char *newgroup) {
+	gid_t	gid;
+	return (groupentry::getGroupId(newgroup,&gid) &&
+		!fchown(fd,(uid_t)-1,gid));
+}
+
+bool file::changeOwnerGroupId(gid_t gid) {
+	return !fchown(fd,(uid_t)-1,gid);
+}
+
+bool file::changeOwnerGroupId(const char *filename,
+					const char *newgroup) {
+	gid_t	gid;
+	return (groupentry::getGroupId(newgroup,&gid) &&
+		!chown(filename,(uid_t)-1,gid));
+}
+
+bool file::changeOwnerGroupId(const char *filename, gid_t gid) {
+	return !chown(filename,(uid_t)-1,gid);
+}
+
+bool file::rename(const char *oldpath, const char *newpath) {
+	return !::rename(oldpath,newpath);
+}
+
+bool file::remove(const char *filename) {
+	return !unlink(filename);
+}
+
+bool file::link(const char *oldpath, const char *newpath) {
+	return !::link(oldpath,newpath);
+}
+
+bool file::symlink(const char *oldpath, const char *newpath) {
+	return !::symlink(oldpath,newpath);
+}
+
+char *file::readlink(const char *filename) {
+
+	size_t	buffersize=1024;
+	for (;;) {
+
+		// create a buffer to store the path
+		char	*buffer=new char[buffersize];
+
+		// read the path into the buffer
+		int	len=::readlink(filename,buffer,buffersize);
+
+		if (len==-1) {
+
+			// if the call to readlink failed, delete the buffer
+			// and return NULL
+			delete[] buffer;
+			return NULL;
+
+		} else if ((size_t)len==buffersize) {
+
+			// if the length of the path was the same as the buffer
+			// size the we didn't get the entire path, increase the
+			// size of the buffer and try again
+			delete[] buffer;
+			buffersize=buffersize+1024;
+
+			// if the buffer size exceeds 10k then return failure
+			if (buffersize>10240) {
+				return NULL;
+			}
+
+		} else {
+			// NULL-terminate the buffer, readlink()
+			// doesn't do this for us
+			buffer[len]=(char)NULL;
+			return buffer;
+		}
+	}
+}
+
+bool file::sync() {
+	return !fsync(fd);
+}
+
+bool file::dataSync() {
+	return !fdatasync(fd);
 }
