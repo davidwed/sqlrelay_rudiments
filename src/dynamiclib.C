@@ -40,7 +40,7 @@ char *dynamiclib::getError() {
 		return NULL;
 	}
 #endif
-	char	*error=dlerror();
+	char	*error=(char *)dlerror();
 	char	*retval=NULL;
 	if (error) {
 		retval=charstring::duplicate(error);
