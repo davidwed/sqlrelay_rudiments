@@ -37,7 +37,7 @@ uninstall:
 	cd doc; $(MAKE) uninstall
 
 unconfig: clean
-	$(RM) config.mk config.cache config.h config.log config.status include/rudiments/private/config.h include/rudiments/private/config.h.in~
+	$(RM) config.mk config.cache config.h config.log config.status include/rudiments/private/config.h include/rudiments/private/config.h.in~ features.mk
 	$(RM) bin/rudiments-config
 	$(RM) libtool
 	$(RMTREE) autom4te.cache
