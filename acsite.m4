@@ -381,3 +381,22 @@ AC_TRY_LINK([#include <netdb.h>
 #include <rpc/rpc.h>],
 getrpcbynumber(0);,AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 ])
+
+dnl checks for shadow entry functions and header files
+AC_DEFUN([FW_CHECK_SHADOW],
+[
+
+INCLUDE_SHADOWENTRY="0"
+
+AC_MSG_CHECKING(getspnam_r)
+AC_TRY_LINK([#include <shadow.h>
+#include <stdlib.h>],
+getspnam_r(NULL,NULL,NULL,0,NULL);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getspnam)
+AC_TRY_LINK([#include <shadow.h>
+#include <stdlib.h>],
+getspnam(NULL);,INCLUDE_SHADOWENTRY="1"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_SUBST(INCLUDE_SHADOWENTRY)
+])

@@ -1,7 +1,3 @@
-some systems have no shadow utilities at all
-need to test for getrpcbyname in rpc/rpcent.h and rpc/rpc.h if getrpcbyname_r
-	is not found
-
 document shadowentry, serviceentry, rpcentry, timezonefile classes
 
 a termios class would be nice
@@ -18,6 +14,7 @@ test invalid xml
 
 handle CDATA/internal subsets better
 is xmldom really DOM compliant?
+xml classes need to support entities defined in the DOCTYPE declaration
 
 support non-posix semaphores
 handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
