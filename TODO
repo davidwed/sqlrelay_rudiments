@@ -1,4 +1,4 @@
-make sure semaphore/sharedmemory create error code is correct
+string class name conflicts with stl string class
 
 document filesystem, timezonefile classes
 

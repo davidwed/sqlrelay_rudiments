@@ -26,6 +26,7 @@ install:
 	$(INSTALL) -m 644 classes/environment.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/filedescriptor.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/file.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/filesystem.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/groupentry.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/hostentry.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/inetclientsocket.h.html $(docdir)/classes

@@ -11,6 +11,7 @@
 <li><a href="#environment">Using the Environment Class</a></li>
 <li><a href="#commandline">Using the Command Line Class</a></li>
 <li><a href="#datetime">Using the Date/Time Class</a></li>
+<li><a href="#filesystem">Using the Filesystem Class</a></li>
 <li><a href="#logger">Using the Logger Class</a></li>
 <li><a href="#memorypool">Using the Memory Pool Class</a></li>
 <li><a href="#permissions">Using the Permissions Class</a></li>
@@ -216,6 +217,72 @@ negative numbers to subtract time.</p>
         <font color="#0000f8">// switch time zones</font>
         dt.adjustTimeZone(<font color="#f800f8">&quot;MST&quot;</font>);
         printf(<font color="#f800f8">&quot;Adjusting time zone to Mountain time: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,dt.getString());
+}
+</pre>
+
+<a name="filesystem"></a>
+<span class="heading">Using the Filesystem Class</span><br><br>
+
+<p>The filesystem class provides methods for collecting statistics about a
+filesystem.  The "standard" function for getting filesystem statistics
+is either statfs or statvfs.  Few operating systems implement statvfs and the
+structure returned by statfs varies greatly between operating systems.  The
+filesystem class attempts to remedy this situation.  However, no operating
+system supports every method in the filesystem class.</p>
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/filesystem.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+        filesystem      fs;
+        fs.initialize(<font color="#ff00ff">&quot;/&quot;</font>);
+
+        printf(<font color="#ff00ff">&quot;root fileststem stats:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;        type:                           0x</font><font color="#6a5acd">%08x</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getType());
+        printf(<font color="#ff00ff">&quot;        block size:                     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getBlockSize());
+        printf(<font color="#ff00ff">&quot;        optimum tranfer block size:     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getOptimumTransferBlockSize());
+        printf(<font color="#ff00ff">&quot;        total blocks:                   </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getTotalBlocks());
+        printf(<font color="#ff00ff">&quot;        free blocks:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getFreeBlocks());
+        printf(<font color="#ff00ff">&quot;        available blocks:               </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getAvailableBlocks());
+        printf(<font color="#ff00ff">&quot;        total nodes:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getTotalFileNodes());
+        printf(<font color="#ff00ff">&quot;        free nodes:                     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getFreeFileNodes());
+        printf(<font color="#ff00ff">&quot;        available nodes:                </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getAvailableFileNodes());
+        printf(<font color="#ff00ff">&quot;        filesystem id:                  </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getFileSystemId());
+        printf(<font color="#ff00ff">&quot;        maximum file name length:       </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getMaximumFileNameLength());
+        printf(<font color="#ff00ff">&quot;        owner:                          </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getOwner());
+        printf(<font color="#ff00ff">&quot;        sync writes:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getSyncWrites());
+        printf(<font color="#ff00ff">&quot;        async writes:                   </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getAsyncWrites());
+        printf(<font color="#ff00ff">&quot;        fs type name:                   </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getTypeName());
+        printf(<font color="#ff00ff">&quot;        mount point:                    </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getMountPoint());
+        printf(<font color="#ff00ff">&quot;        sync reads:                     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getSyncReads());
+        printf(<font color="#ff00ff">&quot;        async reads:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getAsyncReads());
+        printf(<font color="#ff00ff">&quot;        device name:                    </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getDeviceName());
+        printf(<font color="#ff00ff">&quot;        fs specific string:             </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                fs.getFilesystemSpecificString());
 }
 </pre>
 
