@@ -102,27 +102,10 @@ RUDIMENTS_INLINE bool xmldomnode::insertChild(xmldomnode *child, int position) {
 				&firstchild,&lastchild,&childcount);
 }
 
-RUDIMENTS_INLINE bool xmldomnode::appendChild(xmldomnode *child) {
-	return insertChild(child,getChildCount());
-}
-
-RUDIMENTS_INLINE bool xmldomnode::appendText(const char *value) {
-	return insertText(value,getChildCount());
-}
-
 RUDIMENTS_INLINE bool xmldomnode::insertAttribute(xmldomnode *attribute,
 								int position) {
 	return insertNode(attribute,position,ATTRIBUTE_XMLDOMNODETYPE,
 			&firstattribute,&lastattribute,&attributecount);
-}
-
-RUDIMENTS_INLINE bool xmldomnode::appendAttribute(xmldomnode *attribute) {
-	return insertAttribute(attribute,getAttributeCount());
-}
-
-RUDIMENTS_INLINE bool xmldomnode::appendAttribute(const char *name,
-							const char *value) {
-	return insertAttribute(name,value,getAttributeCount());
 }
 
 RUDIMENTS_INLINE bool xmldomnode::deleteChild(int position) {

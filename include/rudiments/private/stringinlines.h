@@ -8,11 +8,6 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE string::string(const char *str) {
-	buffer=strdup(str);
-	this->size=strlen(str);
-}
-
 RUDIMENTS_INLINE string::string(const char *str, size_t size) {
 	memcpy((void *)buffer,(void *)str,size);
 	this->size=size;
@@ -47,16 +42,8 @@ RUDIMENTS_INLINE void string::zero(char *str, size_t size) {
 	memset((void *)str,0,size);
 }
 
-RUDIMENTS_INLINE char *string::append(const string *str) {
-	return strcat(buffer,str->getString());
-}
-
 RUDIMENTS_INLINE char *string::append(const char *str) {
 	return strcat(buffer,str);
-}
-
-RUDIMENTS_INLINE char *string::append(const string *str, size_t size) {
-	return strncat(buffer,str->getString(),size);
 }
 
 RUDIMENTS_INLINE char *string::append(const char *str, size_t size) {
@@ -182,17 +169,4 @@ RUDIMENTS_INLINE void string::leftTrim(char *string) {
 
 RUDIMENTS_INLINE void string::bothTrim(char *string) {
 	bothTrim(string,' ');
-}
-
-RUDIMENTS_INLINE void string::bothTrim(char *string, char character) {
-	leftTrim(string,character);
-	rightTrim(string,character);
-}
-
-RUDIMENTS_INLINE int string::integerLength(long number) {
-	int	length=(number>0)?0:1;
-	for (long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
-		length++;
-	}
-	return length;
 }

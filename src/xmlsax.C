@@ -731,3 +731,21 @@ char xmlsax::getCharacter() {
 	}
 	return ch;
 }
+
+void xmlsax::parseTagFailed() {
+	clearError();
+	appendError("error: parseTagFailed() failed at line ");
+	appendError(line);
+}
+
+void xmlsax::parseAttributeFailed() {
+	clearError();
+	appendError("error: parseAttributeFailed() failed at line ");
+	appendError(line);
+}
+
+void xmlsax::parseTextFailed() {
+	clearError();
+	appendError("error: parseText() failed at line ");
+	appendError(line);
+}

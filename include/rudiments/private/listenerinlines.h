@@ -1,8 +1,6 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <stdlib.h>
-
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE listener::listener() {

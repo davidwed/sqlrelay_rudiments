@@ -19,16 +19,6 @@ RUDIMENTS_INLINE xmldom::~xmldom() {
 	delete nullnode;
 }
 
-RUDIMENTS_INLINE bool xmldom::parseFile(const char *filename) {
-	reset();
-	return xmlsax::parseFile(filename);
-}
-
-RUDIMENTS_INLINE bool xmldom::parseString(const char *string) {
-	reset();
-	return xmlsax::parseFile(string);
-}
-
 RUDIMENTS_INLINE xmldomnode *xmldom::getRootNode() const {
 	return (rootnode)?rootnode:nullnode;
 }

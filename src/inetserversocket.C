@@ -18,6 +18,12 @@
 	#include <strings.h>
 #endif
 
+bool inetserversocket::listenOnSocket(const char *address, unsigned short port,
+								int backlog) {
+	initialize(address,port);
+	return (bind() && listen(backlog));
+}
+
 bool inetserversocket::initialize(const char *address, unsigned short port) {
 
 	inetsocket::initialize(address,port);

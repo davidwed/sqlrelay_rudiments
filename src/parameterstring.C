@@ -159,3 +159,11 @@ int parameterstring::parsePartLength(const char *data, char delimiter,
 	}
 	return counter;
 }
+
+char *parameterstring::parseName(const char *data, char **outbuffer) {
+	return parsePart(parseNameLength(data),'=',data,outbuffer,0,0);
+}
+
+char *parameterstring::parseValue(const char *data, char **outbuffer) {
+	return parsePart(parseValueLength(data),';',data,outbuffer,1,1);
+}

@@ -7,6 +7,11 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -54,6 +59,47 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 				:getrpcbynumber(number)))!=NULL) &&
 			((remutex)?!pthread_mutex_unlock(remutex):true));
 	#endif
+}
+
+bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
+	rpcentry	re;
+	if (re.initialize(name)) {
+		int	counter;
+		for (counter=0; re.getAliasList()[counter]; counter++);
+		char	**alias=new char *[counter+1];
+		alias[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			alias[i]=strdup(re.getAliasList()[i]);
+		}
+		*aliaslist=alias;
+		return true;
+	}
+	return false;
+}
+
+bool rpcentry::getName(int number, char **name) {
+	rpcentry	re;
+	if (re.initialize(number)) {
+		*name=strdup(re.getName());
+		return true;
+	}
+	return false;
+}
+
+bool rpcentry::getAliasList(int number, char ***aliaslist) {
+	rpcentry	re;
+	if (re.initialize(number)) {
+		int	counter;
+		for (counter=0; re.getAliasList()[counter]; counter++);
+		char	**alias=new char *[counter+1];
+		alias[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			alias[i]=strdup(re.getAliasList()[i]);
+		}
+		*aliaslist=alias;
+		return true;
+	}
+	return false;
 }
 
 void rpcentry::print() const {

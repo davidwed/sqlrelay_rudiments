@@ -5,3 +5,8 @@
 #ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/randomnumberinlines.h>
 #endif
+
+int randomnumber::generateNumber(int seed) {
+	SEEDRANDOM(seed);
+	return GETRANDOM();
+}

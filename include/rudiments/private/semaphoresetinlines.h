@@ -74,15 +74,3 @@ RUDIMENTS_INLINE int semaphoreset::getWaitingForIncrement(int index) {
 	semun	semctlun;
 	return semctl(semid,index,GETNCNT,semctlun);
 }
-
-RUDIMENTS_INLINE bool semaphoreset::setUserName(const char *username) {
-	uid_t	userid;
-	return passwdentry::getUserId(username,&userid) &&
-			setUserId(userid);
-}
-
-RUDIMENTS_INLINE bool semaphoreset::setGroupName(const char *groupname) {
-	gid_t	groupid;
-	return groupentry::getGroupId(groupname,&groupid) &&
-			setGroupId(groupid);
-}

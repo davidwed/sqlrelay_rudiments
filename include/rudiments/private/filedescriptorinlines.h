@@ -4,10 +4,6 @@
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 #include <rudiments/private/rudimentsinlines.h>
 
@@ -71,14 +67,6 @@ RUDIMENTS_INLINE ssize_t filedescriptor::write(char character) {
 	return safeWrite((void *)&character,sizeof(char),-1,-1);
 }
 
-RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string) {
-	return safeWrite((void *)string,strlen((char *)string),-1,-1);
-}
-
-RUDIMENTS_INLINE ssize_t filedescriptor::write(const char *string) {
-	return safeWrite((void *)string,strlen(string),-1,-1);
-}
-
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string,
 								size_t size) {
 	return safeWrite((void *)string,size,-1,-1);
@@ -132,16 +120,6 @@ RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned char character,
 RUDIMENTS_INLINE ssize_t filedescriptor::write(char character,
 							long sec, long usec) {
 	return safeWrite((void *)&character,sizeof(char),sec,usec);
-}
-
-RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string,
-							long sec, long usec) {
-	return safeWrite((void *)string,strlen((char *)string),sec,usec);
-}
-
-RUDIMENTS_INLINE ssize_t filedescriptor::write(const char *string,
-							long sec, long usec) {
-	return safeWrite((void *)string,strlen(string),sec,usec);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string,

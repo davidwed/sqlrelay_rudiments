@@ -3,3 +3,4 @@
 
 	private:
 		struct	stat	st;
+		bool		getcurrentpropertiesonopen;

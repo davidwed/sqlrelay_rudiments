@@ -7,6 +7,11 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -53,6 +58,56 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 				:getprotobynumber(number)))!=NULL) &&
 			((pemutex)?!pthread_mutex_unlock(pemutex):true));
 	#endif
+}
+
+bool protocolentry::getAliasList(const char *protocolname, char ***aliaslist) {
+	protocolentry	pe;
+	if (pe.initialize(protocolname)) {
+		int	counter;
+		for (counter=0; pe.getAliasList()[counter]; counter++);
+		char	**alias=new char *[counter+1];
+		alias[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			alias[i]=strdup(pe.getAliasList()[i]);
+		}
+		*aliaslist=alias;
+		return true;
+	}
+	return false;
+}
+
+bool protocolentry::getNumber(const char *protocolname, int *number) {
+	protocolentry	pe;
+	if (pe.initialize(protocolname)) {
+		*number=pe.getNumber();
+		return true;
+	}
+	return false;
+}
+
+bool protocolentry::getName(int number, char **name) {
+	protocolentry	pe;
+	if (pe.initialize(number)) {
+		*name=strdup(pe.getName());
+		return true;
+	}
+	return false;
+}
+
+bool protocolentry::getAliasList(int number, char ***aliaslist) {
+	protocolentry	pe;
+	if (pe.initialize(number)) {
+		int	counter;
+		for (counter=0; pe.getAliasList()[counter]; counter++);
+		char	**alias=new char *[counter+1];
+		alias[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			alias[i]=strdup(pe.getAliasList()[i]);
+		}
+		*aliaslist=alias;
+		return true;
+	}
+	return false;
 }
 
 void protocolentry::print() const {

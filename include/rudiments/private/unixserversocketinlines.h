@@ -7,10 +7,3 @@ RUDIMENTS_INLINE unixserversocket::unixserversocket() :
 					serversocket(), unixsocket() {
 	mask=0;
 }
-
-RUDIMENTS_INLINE bool unixserversocket::listenOnSocket(const char *filename,
-							mode_t mask,
-							int backlog) {
-	initialize(filename,mask);
-	return bind() && listen(backlog);
-}

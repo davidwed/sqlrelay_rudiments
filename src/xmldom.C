@@ -16,6 +16,16 @@
 	#include <strings.h>
 #endif
 
+bool xmldom::parseFile(const char *filename) {
+	reset();
+	return xmlsax::parseFile(filename);
+}
+
+bool xmldom::parseString(const char *string) {
+	reset();
+	return xmlsax::parseFile(string);
+}
+
 void xmldom::reset() {
 	if (!rootnode->isNullNode()) {
 		rootnode->cascadeOnDelete();

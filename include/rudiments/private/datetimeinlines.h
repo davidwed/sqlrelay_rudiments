@@ -1,11 +1,6 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <string.h>
-#ifdef HAVE_STRINGS
-	#include <strings.h>
-#endif
-
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE datetime::datetime() {
@@ -127,51 +122,14 @@ RUDIMENTS_INLINE void datetime::addYears(int years) {
 	updateTimePreservingTimeZone();
 }
 
-RUDIMENTS_INLINE char *datetime::getString(time_t seconds) {
-	datetime	dt;
-	return ((dt.initialize(seconds))?strdup(dt.getString()):NULL);
-}
-
-RUDIMENTS_INLINE char *datetime::getString(const struct tm *tmstruct) {
-	datetime	dt;
-	return ((dt.initialize(tmstruct))?strdup(dt.getString()):NULL);
-}
-
-RUDIMENTS_INLINE time_t datetime::getEpoch(const char *datestring) {
-	datetime	dt;
-	return ((dt.initialize(datestring))?dt.getEpoch():-1);
-}
-
-RUDIMENTS_INLINE time_t datetime::getEpoch(const struct tm *tmstruct) {
-	datetime	dt;
-	return ((dt.initialize(tmstruct))?dt.getEpoch():-1);
-}
-
-RUDIMENTS_INLINE bool datetime::setTimeZoneEnvVar(const char *zone,
-							char **oldzone) {
-	char	*tz=env.getValue("TZ");
-	if (tz) {
-		*oldzone=strdup(tz);
-	} else {
-		*oldzone=NULL;
-	}
-	return env.setValue("TZ",zone);
-}
-
-RUDIMENTS_INLINE bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
-	if (oldzone) {
-		bool	retval=env.setValue("TZ",oldzone);
-		delete[] oldzone;
-		return retval;
-	}
-	env.remove("TZ");
-	return true;
-}
-
 RUDIMENTS_INLINE void datetime::setLocalTimeMutex(pthread_mutex_t *mutex) {
 	ltmutex=mutex;
 }
 
 RUDIMENTS_INLINE void datetime::setEnvironmentMutex(pthread_mutex_t *mutex) {
 	envmutex=mutex;
+}
+
+RUDIMENTS_INLINE bool datetime::updateTime() {
+	return ((epoch=mktime(timestruct))!=-1);
 }

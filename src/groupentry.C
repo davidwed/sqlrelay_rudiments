@@ -7,6 +7,11 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 #include <errno.h>
 
 #define MAXBUFFER (32*1024)
@@ -53,6 +58,74 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 				:getgrgid(groupid)))!=NULL) &&
 			((gemutex)?!pthread_mutex_unlock(gemutex):true));
 	#endif
+}
+
+bool groupentry::getPassword(const char *groupname, char **password) {
+	groupentry	grp;
+	if (grp.initialize(groupname)) {
+		*password=strdup(grp.getPassword());
+		return true;
+	}
+	return false;
+}
+
+bool groupentry::getGroupId(const char *groupname, gid_t *groupid) {
+	groupentry	grp;
+	if (grp.initialize(groupname)) {
+		*groupid=grp.getGroupId();
+		return true;
+	}
+	return false;
+}
+
+bool groupentry::getMembers(const char *groupname, char ***members) {
+	groupentry	grp;
+	if (grp.initialize(groupname)) {
+		int	counter;
+		for (counter=0; grp.getMembers()[counter]; counter++);
+		char	**memb=new char *[counter+1];
+		memb[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			memb[i]=strdup(grp.getMembers()[i]);
+		}
+		*members=memb;
+		return true;
+	}
+	return false;
+}
+
+bool groupentry::getName(gid_t groupid, char **name) {
+	groupentry	grp;
+	if (grp.initialize(groupid)) {
+		*name=strdup(grp.getName());
+		return true;
+	}
+	return false;
+}
+
+bool groupentry::getPassword(gid_t groupid, char **password) {
+	groupentry	grp;
+	if (grp.initialize(groupid)) {
+		*password=strdup(grp.getPassword());
+		return true;
+	}
+	return false;
+}
+
+bool groupentry::getMembers(gid_t groupid, char ***members) {
+	groupentry	grp;
+	if (grp.initialize(groupid)) {
+		int	counter;
+		for (counter=0; grp.getMembers()[counter]; counter++);
+		char	**memb=new char *[counter+1];
+		memb[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			memb[i]=strdup(grp.getMembers()[i]);
+		}
+		*members=memb;
+		return true;
+	}
+	return false;
 }
 
 void groupentry::print() const {

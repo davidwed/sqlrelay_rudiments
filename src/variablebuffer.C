@@ -6,6 +6,9 @@
 	#include <rudiments/private/variablebufferinlines.h>
 #endif
 #include <string.h>
+#ifdef HAVE_STRINGS
+	#include <strings.h>
+#endif
 #include <stdio.h>
 
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {

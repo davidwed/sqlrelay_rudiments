@@ -6,12 +6,8 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <stdio.h>
+/*#include <fcntl.h>
+#include <stdio.h>*/
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -32,18 +28,6 @@ RUDIMENTS_INLINE void daemonprocess::shutDown() {
 
 RUDIMENTS_INLINE void daemonprocess::crash() {
 	(*crashfunc)(0);
-}
-
-RUDIMENTS_INLINE int daemonprocess::runAsUser(const char *username) const {
-	uid_t	userid;
-	return (passwdentry::getUserId(username,&userid))?
-					runAsUserId(userid):1;
-}
-
-RUDIMENTS_INLINE int daemonprocess::runAsGroup(const char *groupname) const {
-	gid_t	groupid;
-	return (groupentry::getGroupId(groupname,&groupid))?
-					runAsGroupId(groupid):1;
 }
 
 RUDIMENTS_INLINE int daemonprocess::runAsUserId(uid_t uid) const {

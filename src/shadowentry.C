@@ -7,6 +7,11 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 #include <errno.h>
 
 #define MAXBUFFER	(32*1024)
@@ -45,6 +50,99 @@ bool shadowentry::initialize(const char *username) {
 			((sp=getspnam((char *)username))!=NULL) &&
 			((spmutex)?!pthread_mutex_unlock(spmutex):true));
 	#endif
+}
+
+bool shadowentry::getEncryptedPassword(const char *username, char **password) {
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*password=strdup(sp.getEncryptedPassword());
+		return true;
+	}
+	return false;
+}
+
+bool shadowentry::getLastChangeDate(const char *username, long *lstchg) {
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*lstchg=sp.getLastChangeDate();
+		return true;
+	}
+	return false;
+}
+
+bool shadowentry::getDaysBeforeChangeAllowed(const char *username, int *min) {
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*min=sp.getDaysBeforeChangeAllowed();
+		return true;
+	}
+	return false;
+}
+
+bool shadowentry::getDaysBeforeChangeRequired(const char *username, int *max) {
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*max=sp.getDaysBeforeChangeRequired();
+		return true;
+	}
+	return false;
+}
+
+bool shadowentry::getDaysBeforeExpirationWarning(const char *username,
+								int *warn) {
+#ifdef HAVE_SP_WARN
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*warn=sp.getDaysBeforeExpirationWarning();
+		return true;
+	}
+	return false;
+#else
+	*warn=-1;
+	return true;
+#endif
+}
+
+bool shadowentry::getDaysOfInactivityAllowed(const char *username, int *inact) {
+#ifdef HAVE_SP_INACT
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*inact=sp.getDaysOfInactivityAllowed();
+		return true;
+	}
+	return false;
+#else
+	*inact=-1;
+	return true;
+#endif
+}
+
+bool shadowentry::getExpirationDate(const char *username, int *expire) {
+#ifdef HAVE_SP_EXPIRE
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*expire=sp.getExpirationDate();
+		return true;
+	}
+	return false;
+#else
+	*expire=-1;
+	return true;
+#endif
+}
+
+bool shadowentry::getFlag(const char *username, int *flag) {
+#ifdef HAVE_SP_FLAG
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*flag=sp.getFlag();
+		return true;
+	}
+	return false;
+#else
+	*flag=-1;
+	return true;
+#endif
 }
 
 void shadowentry::print() const {

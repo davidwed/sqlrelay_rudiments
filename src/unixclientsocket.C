@@ -6,11 +6,19 @@
 	#include <rudiments/private/unixclientsocketinlines.h>
 #endif
 
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+
+int unixclientsocket::connectToServer(const char *filename,
+						unsigned int retrywait,
+						unsigned int retrycount) {
+	initialize(filename,retrywait,retrycount);
+	return connect();
+}
 
 void unixclientsocket::initialize(namevaluepairs *cd) {
 

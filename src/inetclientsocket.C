@@ -17,10 +17,20 @@
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
+int inetclientsocket::connectToServer(const char *host,
+						unsigned short port,
+						unsigned int retrywait,
+						unsigned int retrycount) {
+	initialize(host,port,retrywait,retrycount);
+	return connect();
+}
 
 void inetclientsocket::initialize(namevaluepairs *cd) {
 

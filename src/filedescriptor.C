@@ -14,13 +14,16 @@
 #ifdef HAVE_SYS_SELECT_H
 	#include <sys/select.h>
 #endif
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
 #ifndef SSIZE_MAX
 	#define SSIZE_MAX 32767
 #endif
-
 
 ssize_t filedescriptor::read(char **buffer, char *terminator,
 						long sec, long usec) {
@@ -263,4 +266,21 @@ int filedescriptor::safeSelect(long sec, long usec, int read, int write) {
 
 		return fd;
 	}
+}
+
+ssize_t filedescriptor::write(const unsigned char *string) {
+	return safeWrite((void *)string,strlen((char *)string),-1,-1);
+}
+
+ssize_t filedescriptor::write(const char *string) {
+	return safeWrite((void *)string,strlen(string),-1,-1);
+}
+
+ssize_t filedescriptor::write(const unsigned char *string,
+							long sec, long usec) {
+	return safeWrite((void *)string,strlen((char *)string),sec,usec);
+}
+
+ssize_t filedescriptor::write(const char *string, long sec, long usec) {
+	return safeWrite((void *)string,strlen(string),sec,usec);
 }

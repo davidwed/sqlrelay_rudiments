@@ -1,7 +1,6 @@
 // Copyright (c) 2002  David Muse
 // See the file COPYING for more information
 
-#include <unistd.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
@@ -13,14 +12,7 @@
 	#include <unistd.h>
 #endif
 
-#include <rudiments/permissions.h>
-
 #include <rudiments/private/rudimentsinlines.h>
-
-RUDIMENTS_INLINE bool filedestination::open(const char *filename) {
-	return ((logfile=::open(filename,O_CREAT|O_WRONLY|O_APPEND,
-				permissions::ownerReadWrite()))!=-1);
-}
 
 RUDIMENTS_INLINE void filedestination::close() {
 	::close(logfile);
@@ -44,18 +36,6 @@ RUDIMENTS_INLINE void syslogdestination::write(const char *string) {
 
 RUDIMENTS_INLINE filedestination::filedestination() {
 	logfile=-1;
-}
-
-RUDIMENTS_INLINE void filedestination::write(const char *string) {
-	::write(logfile,string,strlen(string));
-}
-
-RUDIMENTS_INLINE void stdoutdestination::write(const char *string) {
-	::write(1,string,strlen(string));
-}
-
-RUDIMENTS_INLINE void stderrdestination::write(const char *string) {
-	::write(2,string,strlen(string));
 }
 
 

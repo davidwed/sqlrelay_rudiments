@@ -15,18 +15,14 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int randomnumber::generateNumber(int seed) {
-	SEEDRANDOM(seed);
-	return GETRANDOM();
-}
-
 RUDIMENTS_INLINE int randomnumber::generateScaledNumber(int seed, int lower,
 								int upper) {
 	return lower+(int)(((float)generateNumber(seed)*(float)(upper-lower))/
 							float(RAND_MAX));
 }
 
-RUDIMENTS_INLINE int randomnumber::scaleNumber(int number, int lower, int upper) {
+RUDIMENTS_INLINE int randomnumber::scaleNumber(int number, int lower,
+								int upper) {
 	return lower+(int)(((float)number*(float)(upper-lower))/
 							float(RAND_MAX));
 }

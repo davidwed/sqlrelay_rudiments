@@ -12,6 +12,11 @@
 	#include <strings.h>
 #endif
 
+string::string(const char *str) {
+	buffer=strdup(str);
+	this->size=strlen(str);
+}
+
 void string::upper(char *str) {
 	for (int i=0; str[i]; i++) {
 		if (str[i]>='a' && str[i]<='z') {
@@ -300,4 +305,25 @@ char *string::parseNumber(double number,
 	char	*str=new char[precision+3];
 	sprintf(str,"%*.*f",precision,scale,number);
 	return str;
+}
+
+char *string::append(const string *str) {
+	return strcat(buffer,str->getString());
+}
+
+char *string::append(const string *str, size_t size) {
+	return strncat(buffer,str->getString(),size);
+}
+
+void string::bothTrim(char *string, char character) {
+	leftTrim(string,character);
+	rightTrim(string,character);
+}
+
+int string::integerLength(long number) {
+	int	length=(number>0)?0:1;
+	for (long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+		length++;
+	}
+	return length;
 }

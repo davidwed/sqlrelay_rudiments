@@ -1,12 +1,6 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE rpcentry::rpcentry() {
@@ -31,48 +25,6 @@ RUDIMENTS_INLINE int rpcentry::getNumber() const {
 
 RUDIMENTS_INLINE char **rpcentry::getAliasList() const {
 	return re->r_aliases;
-}
-
-RUDIMENTS_INLINE bool rpcentry::getAliasList(const char *name,
-							char ***aliaslist) {
-	rpcentry	re;
-	if (re.initialize(name)) {
-		int	counter;
-		for (counter=0; re.getAliasList()[counter]; counter++);
-		char	**alias=new char *[counter+1];
-		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(re.getAliasList()[i]);
-		}
-		*aliaslist=alias;
-		return true;
-	}
-	return false;
-}
-
-RUDIMENTS_INLINE bool rpcentry::getName(int number, char **name) {
-	rpcentry	re;
-	if (re.initialize(number)) {
-		*name=strdup(re.getName());
-		return true;
-	}
-	return false;
-}
-
-RUDIMENTS_INLINE bool rpcentry::getAliasList(int number, char ***aliaslist) {
-	rpcentry	re;
-	if (re.initialize(number)) {
-		int	counter;
-		for (counter=0; re.getAliasList()[counter]; counter++);
-		char	**alias=new char *[counter+1];
-		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
-			alias[i]=strdup(re.getAliasList()[i]);
-		}
-		*aliaslist=alias;
-		return true;
-	}
-	return false;
 }
 
 RUDIMENTS_INLINE bool rpcentry::needsMutex() {

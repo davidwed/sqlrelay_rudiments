@@ -354,3 +354,19 @@ bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 	}
 	return false;
 }
+
+bool xmldomnode::appendChild(xmldomnode *child) {
+	return insertChild(child,getChildCount());
+}
+
+bool xmldomnode::appendText(const char *value) {
+	return insertText(value,getChildCount());
+}
+
+bool xmldomnode::appendAttribute(xmldomnode *attribute) {
+	return insertAttribute(attribute,getAttributeCount());
+}
+
+bool xmldomnode::appendAttribute(const char *name, const char *value) {
+	return insertAttribute(name,value,getAttributeCount());
+}

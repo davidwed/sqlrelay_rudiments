@@ -38,18 +38,6 @@ RUDIMENTS_INLINE void *sharedmemory::getPointer() const {
 	return shmptr;
 }
 
-RUDIMENTS_INLINE bool sharedmemory::setUserName(const char *username) {
-	uid_t	userid;
-	return passwdentry::getUserId(username,&userid) &&
-			setUserId(userid);
-}
-
-RUDIMENTS_INLINE bool sharedmemory::setGroupName(const char *groupname) {
-	gid_t	groupid;
-	return groupentry::getGroupId(groupname,&groupid) &&
-			setGroupId(groupid);
-}
-
 RUDIMENTS_INLINE bool sharedmemory::setUserId(uid_t uid) {
 	shmid_ds	setds;
 	setds.shm_perm.uid=uid;

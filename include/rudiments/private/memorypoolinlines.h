@@ -6,8 +6,3 @@
 RUDIMENTS_INLINE memorypoolnode::~memorypoolnode() {
 	delete[] buffer;
 }
-
-RUDIMENTS_INLINE memorypool::~memorypool() {
-	free();
-	delete nodelist.getNodeByIndex(0)->getData();
-}

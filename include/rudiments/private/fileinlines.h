@@ -1,9 +1,6 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#include <string.h>
-
-#include <unistd.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -11,17 +8,10 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE file::file() : filedescriptor() {
+	getcurrentpropertiesonopen=true;
 }
 
 RUDIMENTS_INLINE file::file(int fd) : filedescriptor(fd) {
-}
-
-RUDIMENTS_INLINE bool file::open(const char *name, int flags) {
-	return ((fd=::open(name,flags))!=-1 && getCurrentProperties());
-}
-
-RUDIMENTS_INLINE bool file::open(const char *name, int flags, mode_t perms) {
-	return ((fd=::open(name,flags,perms))!=-1 && getCurrentProperties());
 }
 
 RUDIMENTS_INLINE bool file::create(const char *name, mode_t perms) {
@@ -54,11 +44,6 @@ RUDIMENTS_INLINE ssize_t file::create(const char *name, mode_t perms,
 }
 
 RUDIMENTS_INLINE ssize_t file::create(const char *name, mode_t perms,
-						const char *string) {
-	return create(name,perms,(void *)string,strlen(string));
-}
-
-RUDIMENTS_INLINE ssize_t file::create(const char *name, mode_t perms,
 					const char *string, size_t size) {
 	return create(name,perms,(void *)string,size);
 }
@@ -82,11 +67,6 @@ RUDIMENTS_INLINE off_t file::getCurrentPosition() {
 RUDIMENTS_INLINE bool file::exists(const char *filename) {
 	struct stat	st;
 	return !stat(filename,&st);
-}
-
-RUDIMENTS_INLINE ssize_t file::getContents(unsigned char *buffer,
-							size_t buffersize) {
-	return read(buffer,(buffersize<(size_t)getSize())?buffersize:getSize());
 }
 
 RUDIMENTS_INLINE bool file::getCurrentProperties() {
@@ -409,4 +389,12 @@ RUDIMENTS_INLINE nlink_t file::getNumberOfHardLinks() const {
 
 RUDIMENTS_INLINE struct stat *file::getStat() {
 	return &st;
+}
+
+RUDIMENTS_INLINE void file::getCurrentPropertiesOnOpen() {
+	getcurrentpropertiesonopen=true;
+}
+
+RUDIMENTS_INLINE void file::dontGetCurrentPropertiesOnOpen() {
+	getcurrentpropertiesonopen=false;
 }

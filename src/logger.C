@@ -7,8 +7,26 @@
 #endif
 
 #include <rudiments/datetime.h>
+#include <rudiments/permissions.h>
 
 #include <stdio.h>
+
+bool filedestination::open(const char *filename) {
+	return ((logfile=::open(filename,O_CREAT|O_WRONLY|O_APPEND,
+				permissions::ownerReadWrite()))!=-1);
+}
+
+void filedestination::write(const char *string) {
+	::write(logfile,string,strlen(string));
+}
+
+void stdoutdestination::write(const char *string) {
+	::write(1,string,strlen(string));
+}
+
+void stderrdestination::write(const char *string) {
+	::write(2,string,strlen(string));
+}
 
 char *logger::logHeader(const char *name) {
 	datetime	dt;

@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #include <string.h>
-#ifdef HAVE_STRING_H
+#ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
 
@@ -31,6 +31,12 @@ memorypool::memorypool(size_t initialsize,
 	freecounter=0;
 
 	nodelist.append(new memorypoolnode(initialsize));
+}
+
+
+memorypool::~memorypool() {
+	free();
+	delete nodelist.getNodeByIndex(0)->getData();
 }
 
 unsigned char *memorypool::malloc(size_t length) { 

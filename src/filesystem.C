@@ -6,6 +6,85 @@
 	#include <rudiments/private/filesysteminlines.h>
 #endif
 
+bool filesystem::initialize(const char *path) {
+	close();
+	closeflag=true;
+	return ((fd=::open(path,O_RDONLY))!=-1 && getCurrentProperties());
+}
+
+bool filesystem::initialize(int fd) {
+	close();
+	closeflag=false;
+	this->fd=fd;
+	return getCurrentProperties();
+}
+
+bool filesystem::getTypeName(const char *path, char **name) {
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_OPENBSD_STATFS)
+	STATFS(path,name,f_fstypename)
+#else
+	#ifdef HAVE_STATVFS
+		STATFS(path,name,f_basetype)
+	#else
+		#ifdef HAVE_LINUX_STATFS
+			struct statfs st;
+			if (statfs(path,&st)==-1) {
+				return false;
+			}
+			*name=filesystem::getFsTypeName(st.f_type);
+			return true;
+		#else
+			*name=NULL;
+			return true;
+		#endif
+	#endif
+#endif
+}
+
+bool filesystem::getTypeName(int fd, char **name) {
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_OPENBSD_STATFS)
+	FSTATFS(fd,name,f_fstypename)
+#else
+	#ifdef HAVE_STATVFS
+		FSTATFS(fd,name,f_basetype)
+	#else
+		#ifdef HAVE_LINUX_STATFS
+			struct statfs st;
+			if (fstatfs(fd,&st)==-1) {
+				return false;
+			}
+			*name=filesystem::getFsTypeName(st.f_type);
+			return true;
+		#else
+			*name=NULL;
+			return true;
+		#endif
+	#endif
+#endif
+}
+
+char *filesystem::getTypeName() const {
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_OPENBSD_STATFS)
+	return (char *)st.f_fstypename;
+#else
+	#ifdef HAVE_STATVFS
+		return (char *)st.f_basetype;
+	#else
+		#ifdef HAVE_LINUX_STATFS
+			return filesystem::getFsTypeName(st.f_type);
+		#else
+			return NULL;
+		#endif
+	#endif
+#endif
+}
+
 #ifdef HAVE_LINUX_STATFS
 	char *filesystem::getFsTypeName(long fstype) {
 		if (fstype==0xADF5) {

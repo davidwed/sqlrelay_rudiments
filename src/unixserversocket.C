@@ -66,3 +66,9 @@ unixsocket *unixserversocket::acceptClientConnection() {
 	// return a new unixsocket
 	return new unixsocket(clientsock);
 }
+
+bool unixserversocket::listenOnSocket(const char *filename, mode_t mask,
+								int backlog) {
+	initialize(filename,mask);
+	return bind() && listen(backlog);
+}

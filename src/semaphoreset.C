@@ -157,6 +157,18 @@ bool semaphoreset::setGroupId(gid_t gid) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
+bool semaphoreset::setUserName(const char *username) {
+	uid_t	userid;
+	return passwdentry::getUserId(username,&userid) &&
+			setUserId(userid);
+}
+
+bool semaphoreset::setGroupName(const char *groupname) {
+	gid_t	groupid;
+	return groupentry::getGroupId(groupname,&groupid) &&
+			setGroupId(groupid);
+}
+
 bool semaphoreset::setPermissions(mode_t permissions) {
 	semid_ds	setds;
 	setds.sem_perm.mode=permissions;

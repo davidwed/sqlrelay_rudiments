@@ -116,4 +116,16 @@ char *sharedmemory::getGroupName() {
 	return NULL;
 }
 
+bool sharedmemory::setUserName(const char *username) {
+	uid_t	userid;
+	return (passwdentry::getUserId(username,&userid) &&
+						setUserId(userid));
+}
+
+bool sharedmemory::setGroupName(const char *groupname) {
+	gid_t	groupid;
+	return (groupentry::getGroupId(groupname,&groupid) &&
+						setGroupId(groupid));
+}
+
 #endif

@@ -6,6 +6,7 @@
 	#include <rudiments/private/listenerinlines.h>
 #endif
 
+#include <stdlib.h>
 #include <sys/time.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>

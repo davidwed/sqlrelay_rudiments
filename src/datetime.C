@@ -11,7 +11,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_STRINGS
+#ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
 #include <stdio.h>
@@ -308,10 +308,6 @@ bool datetime::setTimeZone(const char *tz) {
 	return retval;
 }
 
-bool	datetime::updateTime() {
-	return ((epoch=mktime(timestruct))!=-1);
-}
-
 bool	datetime::updateTimePreservingTimeZone() {
 	// FIXME: What to do if oldtm doesn't
 	// have it's tm_zone and tm_gmtoff set?
@@ -371,5 +367,45 @@ bool	datetime::copyStructTm(const struct tm *oldtm, struct tm *newtm) {
 	// FIXME: what should happen here if oldtm's timezone/offset were
 	// not set?
 
+	return true;
+}
+
+char *datetime::getString(time_t seconds) {
+	datetime	dt;
+	return ((dt.initialize(seconds))?strdup(dt.getString()):NULL);
+}
+
+char *datetime::getString(const struct tm *tmstruct) {
+	datetime	dt;
+	return ((dt.initialize(tmstruct))?strdup(dt.getString()):NULL);
+}
+
+time_t datetime::getEpoch(const char *datestring) {
+	datetime	dt;
+	return ((dt.initialize(datestring))?dt.getEpoch():-1);
+}
+
+time_t datetime::getEpoch(const struct tm *tmstruct) {
+	datetime	dt;
+	return ((dt.initialize(tmstruct))?dt.getEpoch():-1);
+}
+
+bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone) {
+	char	*tz=env.getValue("TZ");
+	if (tz) {
+		*oldzone=strdup(tz);
+	} else {
+		*oldzone=NULL;
+	}
+	return env.setValue("TZ",zone);
+}
+
+bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
+	if (oldzone) {
+		bool	retval=env.setValue("TZ",oldzone);
+		delete[] oldzone;
+		return retval;
+	}
+	env.remove("TZ");
 	return true;
 }

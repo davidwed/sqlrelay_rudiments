@@ -329,6 +329,13 @@ class file : public filedescriptor {
 		// used internally.
 		struct stat	*getStat();
 
+		// By default, the open() and create() methods call 
+		// getCurrentProperties() so the other methods of this class
+		// will return valid data about the file immediately.  These
+		// methods alter that behaviour.
+		void	getCurrentPropertiesOnOpen();
+		void	dontGetCurrentPropertiesOnOpen();
+
 	#include <rudiments/private/file.h>
 };
 

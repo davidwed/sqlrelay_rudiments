@@ -9,6 +9,10 @@
 #include <rudiments/string.h>
 
 #include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 
 #ifdef __GNUC__
 signalhandler	daemonprocess::shutdownhandler;
@@ -81,4 +85,16 @@ void daemonprocess::handleCrash(void *crashfunction) {
 
 	crashhandler.setHandler((void *)crash);
 	crashhandler.handleSignal(SIGSEGV);
+}
+
+int daemonprocess::runAsUser(const char *username) const {
+	uid_t	userid;
+	return (passwdentry::getUserId(username,&userid))?
+					runAsUserId(userid):1;
+}
+
+int daemonprocess::runAsGroup(const char *groupname) const {
+	gid_t	groupid;
+	return (groupentry::getGroupId(groupname,&groupid))?
+					runAsGroupId(groupid):1;
 }

@@ -18,24 +18,6 @@ RUDIMENTS_INLINE void xmlsax::reset() {
 	line=1;
 }
 
-RUDIMENTS_INLINE void xmlsax::parseTagFailed() {
-	clearError();
-	appendError("error: parseTagFailed() failed at line ");
-	appendError(line);
-}
-
-RUDIMENTS_INLINE void xmlsax::parseAttributeFailed() {
-	clearError();
-	appendError("error: parseAttributeFailed() failed at line ");
-	appendError(line);
-}
-
-RUDIMENTS_INLINE void xmlsax::parseTextFailed() {
-	clearError();
-	appendError("error: parseText() failed at line ");
-	appendError(line);
-}
-
 RUDIMENTS_INLINE bool xmlsax::tagStart(char *name) {
 	// by default, just return success
 	return true;
