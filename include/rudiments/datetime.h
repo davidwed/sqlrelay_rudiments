@@ -181,18 +181,11 @@ class datetime {
 		//
 		// If you don't supply mutex'es, the methods in this class
 		// will still work, but will not be thread-safe.
-		static	void	setLocalTimeMutex(pthread_mutex_t *mutex);
+		static	void	setTimeMutex(pthread_mutex_t *mutex);
 				// Allows you to supply a mutex to regulate
-				// access to the localtime() function.
-		static	void	setEnvironmentMutex(pthread_mutex_t *mutex);
-				// Allows you to supply a mutex to regulate
-				// access to the environment variable TZ.
+				// access to the non-reentrant functions.
 
 	#include <rudiments/private/datetime.h>
 };
-
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/datetimeinlines.h>
-#endif
 
 #endif

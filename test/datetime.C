@@ -46,12 +46,14 @@ int main(int argc, const char **argv) {
 	printf("Epoch from tm         : %ld\n",epoch);
 
 	// get time from hardware clock
-	dt.getHardwareDateAndTime("GMT");
-	printf("Hardware Clock (assuming GMT): %s\n",dt.getString());
+	printf("Hardware Clock (assuming GMT): %s\n",
+		(dt.getHardwareDateAndTime("GMT"))?
+					dt.getString():"failed");
 
 	// get time from hardware clock adjusting for timezone
-	dt.getAdjustedHardwareDateAndTime("GMT");
-	printf("Adjusted Hardware Clock      : %s\n",dt.getString());
+	printf("Adjusted Hardware Clock      : %s\n",
+		(dt.getAdjustedHardwareDateAndTime("GMT"))?
+					dt.getString():"failed");
 
 	// switch time zones
 	dt.adjustTimeZone("MST");

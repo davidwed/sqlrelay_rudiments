@@ -2,21 +2,33 @@
 // See the COPYING file for more information.
 
 	private:
-		struct tm	*timestruct;
-		time_t		epoch;
-		char		*timestring;
+		int	sec;
+		int	min;
+		int	hour;
+		int	mday;
+		int	mon;
+		int	year;
+		int	wday;
+		int	yday;
+		int	isdst;
 
-		void	initTimeString();
-		void	initTimeStruct();
-		bool	setTimeZone(const char *tz);
-		bool	updateTime();
-		bool	updateTimePreservingTimeZone();
-		bool	copyStructTm(const struct tm *oldtm, struct tm *newtm);
+		char	*zone;
+		long	gmtoff;
+
+		char		*timestring;
+		struct tm	*structtm;
+
+		time_t	epoch;
+
+		bool	getBrokenDownTimeFromEpoch(bool needmutex);
+		bool	normalizeBrokenDownTime(bool needmutex);
 
 		bool	setTimeZoneEnvVar(const char *zone, char **oldzone);
 		bool	restoreTimeZoneEnvVar(const char *oldzone);
 
+		bool	acquireLock();
+		bool	releaseLock();
+
 		environment	env;
 
-		static	pthread_mutex_t	*ltmutex;
-		static	pthread_mutex_t	*envmutex;
+		static	pthread_mutex_t	*timemutex;

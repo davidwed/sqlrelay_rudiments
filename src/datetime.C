@@ -5,9 +5,6 @@
 #ifdef HAVE_RTC
 	#include <rudiments/file.h>
 #endif
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/datetimeinlines.h>
-#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -26,102 +23,237 @@
 #endif
 
 #ifdef __GNUC__
-pthread_mutex_t	*datetime::ltmutex;
-pthread_mutex_t	*datetime::envmutex;
+pthread_mutex_t	*datetime::timemutex;
 #endif
+
+datetime::datetime() {
+	zone=NULL;
+	timestring=NULL;
+	structtm=NULL;
+}
+
+datetime::~datetime() {
+	delete[] zone;
+	delete[] timestring;
+	delete structtm;
+}
 
 bool datetime::initialize(const char *tmstring) {
 
-	initTimeString();
-	initTimeStruct();
-
 	// get the date
 	char	*ptr=(char *)tmstring;
-	timestruct->tm_mon=atoi(ptr)-1;
+	mon=atoi(ptr)-1;
 	ptr=strchr(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	timestruct->tm_mday=atoi(ptr);
+	mday=atoi(ptr);
 	ptr=strchr(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	timestruct->tm_year=atoi(ptr)-1900;
+	year=atoi(ptr)-1900;
 
 	// get the time
 	ptr=strchr(ptr,' ')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	timestruct->tm_hour=atoi(ptr);
+	hour=atoi(ptr);
 	ptr=strchr(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	timestruct->tm_min=atoi(ptr);
+	min=atoi(ptr);
 	ptr=strchr(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	timestruct->tm_sec=atoi(ptr);
+	sec=atoi(ptr);
 
-	// initialize these fields
-	timestruct->tm_wday=0;
-	timestruct->tm_yday=0;
-	timestruct->tm_isdst=0;
-
-	// get the time zone (setTimeZone() will run updateTime())
+	// get the time zone
 	ptr=strchr(ptr,' ')+sizeof(char);
-	return setTimeZone((ptr && ptr[0])?ptr:"GMT");
+	delete[] zone;
+	zone=(ptr && ptr[0])?strdup(ptr):NULL;
+
+	// normalize, string and epoch
+	return normalizeBrokenDownTime(true);
 }
 
 bool datetime::initialize(time_t seconds) {
-
-	if (seconds<0) {
-		return false;
-	}
-
-	initTimeString();
-	initTimeStruct();
-
-	#ifdef HAVE_LOCALTIME_R
-		if (!localtime_r(&seconds,timestruct)) {
-			return false;
-		}
-		// update time will attach the current timezone
-		return updateTime();
-	#else
-		if (ltmutex && pthread_mutex_lock(ltmutex)) {
-			return false;
-		}
-		// FIXME: some (at least glibc 2.1) platforms's localtime()
-		// doesn't set the timezone-related fields, they only set
-		// the global variables tzname, timezone, daylight
-		struct tm	*lcltm=localtime(&seconds);
-		bool	retval=(lcltm && copyStructTm(lcltm,timestruct));
-		if (ltmutex && pthread_mutex_unlock(ltmutex)) {
-			return false;
-		}
-		return retval;
-	#endif
+	epoch=seconds;
+	return getBrokenDownTimeFromEpoch(true);
 }
 
 bool datetime::initialize(const struct tm *tmstruct) {
 
-	initTimeString();
-	initTimeStruct();
+	sec=tmstruct->tm_sec;
+	min=tmstruct->tm_min;
+	hour=tmstruct->tm_hour;
+	mday=tmstruct->tm_mday;
+	mon=tmstruct->tm_mon;
+	year=tmstruct->tm_year;
+	wday=tmstruct->tm_wday;
+	yday=tmstruct->tm_yday;
+	isdst=tmstruct->tm_isdst;
+	// FIXME: what if the zone/offset are garbage, is there a good way to
+	// tell?
+	#ifdef HAS___TM_ZONE
+		zone=strdup(tmstruct->__tm_zone);
+	#elif HAS_TM_ZONE
+		zone=strdup(tmstruct->tm_zone);
+	#elif HAS_TM_NAME
+		zone=strdup(tmstruct->tm_name);
+	#else
+		if (timemutex && !acquireLock()) {
+			return false;
+		}
+		tzset();
+		zone=strdup((tzname[0] && tzname[0][0])?tzname[0]:"UCT");
+		if (timemutex && !releaseLock()) {
+			return false;
+		}
+	#endif
+	#ifdef HAS___TM_GMTOFF
+		gmtoff=tmstruct->__tm_gmtoff;
+	#elif HAS_TM_GMTOFF
+		gmtoff=tmstruct->tm_gmtoff;
+	#elif HAS_TM_TZADJ
+		gmtoff=-tmstruct->tm_tzadj;
+	#else
+		if (timemutex && !acquireLock()) {
+			return false;
+		}
+		tzset();
+		gmtoff=-timezone;
+		if (timemutex && !releaseLock()) {
+			return false;
+		}
+	#endif
+	return normalizeBrokenDownTime(true);
+}
 
-	return copyStructTm(tmstruct,timestruct);
+int datetime::getHour() const {
+	return hour;
+}
+
+int datetime::getMinutes() const {
+	return min;
+}
+
+int datetime::getSeconds() const {
+	return sec;
+}
+
+int datetime::getMonth() const {
+	return mon+1;
+}
+
+int datetime::getDayOfMonth() const {
+	return mday;
+}
+
+int datetime::getDayOfWeek() const {
+	return wday+1;
+}
+
+int datetime::getDayOfYear() const {
+	return yday+1;
+}
+
+int datetime::getYear() const {
+	return year+1900;
+}
+
+bool datetime::isDaylightSavingsTime() const {
+	return isdst;
+}
+
+char	*datetime::getTimeZoneString() const {
+	return zone;
+}
+
+long datetime::getTimeZoneOffset() const {
+	return gmtoff;
+}
+
+time_t datetime::getEpoch() const {
+	return epoch;
+}
+
+struct tm *datetime::getTm() {
+
+	if (timemutex && !acquireLock()) {
+		return NULL;
+	}
+
+	delete structtm;
+	structtm=new struct tm;
+	structtm->tm_mon=mon;
+	structtm->tm_mday=mday;
+	structtm->tm_year=year;
+	structtm->tm_hour=hour;
+	structtm->tm_min=min;
+	structtm->tm_sec=sec;
+	structtm->tm_isdst=isdst;
+
+	char	*oldzone;
+	if ((zone && zone[0] && !setTimeZoneEnvVar(zone,&oldzone)) ||
+		(mktime(structtm)==-1) ||
+		(zone && zone[0] && !restoreTimeZoneEnvVar(oldzone))) {
+		return NULL;
+	}
+
+	if (timemutex && !releaseLock()) {
+		return NULL;
+	}
+	return structtm;
+}
+
+void datetime::addSeconds(int seconds) {
+	sec=sec+seconds;
+	normalizeBrokenDownTime(true);
+}
+
+void datetime::addMinutes(int minutes) {
+	min=min+minutes;
+	normalizeBrokenDownTime(true);
+}
+
+void datetime::addHours(int hours) {
+	hour=hour+hours;
+	normalizeBrokenDownTime(true);
+}
+
+void datetime::addDays(int days) {
+	hour=yday+days;
+	normalizeBrokenDownTime(true);
+}
+
+void datetime::addMonths(int months) {
+	hour=mon+months;
+	normalizeBrokenDownTime(true);
+}
+
+void datetime::addYears(int years) {
+	hour=year+years;
+	normalizeBrokenDownTime(true);
+}
+
+void datetime::setTimeMutex(pthread_mutex_t *mutex) {
+	timemutex=mutex;
 }
 
 char *datetime::getString() {
-	if (!timestring) {
-		timestring=new char[100];
-		strftime(timestring,100,"%m/%d/%Y %H:%M:%S %Z",timestruct);
-	}
+	delete[] timestring;
+	timestring=new char[100];
+	sprintf(timestring,"%02d/%02d/%d %02d:%02d:%02d %s",
+			getMonth(),getDayOfMonth(),getYear(),
+			getHour(),getMinutes(),getSeconds(),
+			getTimeZoneString());
 	return timestring;
 }
+
 
 bool datetime::getSystemDateAndTime() {
 	return initialize(time(NULL));
@@ -131,7 +263,7 @@ bool datetime::setSystemDateAndTime() {
 	timeval	tv;
 	tv.tv_sec=epoch;
 	tv.tv_usec=0;
-	// should set the time zone too...
+	// FIXME: should set /etc/localtime (or /etc/TZ) and TZ env var too...
 	return !settimeofday(&tv,NULL);
 }
 
@@ -152,26 +284,17 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 		}
 		devrtc.close();
 
-		initTimeString();
-		initTimeStruct();
+		// set the local values
+		mon=rt.tm_mon;
+		mday=rt.tm_mday;
+		year=rt.tm_year;
+		hour=rt.tm_hour;
+		min=rt.tm_min;
+		sec=rt.tm_sec;
+		isdst=rt.tm_isdst;
+		zone=strdup(hwtz);
 
-		// set the local timestruct values
-		timestruct->tm_mon=rt.tm_mon;
-		timestruct->tm_mday=rt.tm_mday;
-		timestruct->tm_year=rt.tm_year;
-		timestruct->tm_hour=rt.tm_hour;
-		timestruct->tm_min=rt.tm_min;
-		timestruct->tm_sec=rt.tm_sec;
-		timestruct->tm_wday=0;
-		timestruct->tm_yday=0;
-		timestruct->tm_isdst=rt.tm_isdst;
-
-		// setTimeZone() will call updateTime()
-		// so we don't need to do that here
-		if (!setTimeZone(hwtz)) {
-			return false;
-		}
-		return true;
+		return normalizeBrokenDownTime(true);
 	#else
 		return false;
 	#endif
@@ -198,15 +321,15 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
 		// set the values to be stored in the rtc
 		rtc_time rt;
-		rt.tm_mon=timestruct->tm_mon;
-		rt.tm_mday=timestruct->tm_mday;
-		rt.tm_year=timestruct->tm_year;
-		rt.tm_hour=timestruct->tm_hour;
-		rt.tm_min=timestruct->tm_min;
-		rt.tm_sec=timestruct->tm_sec;
-		rt.tm_wday=timestruct->tm_wday;
-		rt.tm_yday=timestruct->tm_yday;
-		rt.tm_isdst=timestruct->tm_isdst;
+		rt.tm_mon=mon;
+		rt.tm_mday=mday;
+		rt.tm_year=year;
+		rt.tm_hour=hour;
+		rt.tm_min=min;
+		rt.tm_sec=sec;
+		rt.tm_wday=wday;
+		rt.tm_yday=yday;
+		rt.tm_isdst=isdst;
 
 		// set the rtc and clean up
 		bool	retval=(ioctl(devrtc.getFileDescriptor(),
@@ -221,158 +344,29 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
 bool datetime::adjustTimeZone(const char *newtz) {
 
-	// obtain exclusive access to localtime
-	if (ltmutex && pthread_mutex_lock(ltmutex)) {
+	if (!acquireLock()) {
 		return false;
 	}
 
-	// change the time zone
+	// Clear out the zone so getBrokenDownTimeFromEpoch() won't try to
+	// preserve it.
+	delete[] zone;
+	zone=NULL;
+
+	// Change the time zone, get the broken down time relative to the
+	// current epoch, in the new time zone.
 	char	*oldzone;
-	if (newtz) {
-		if (!setTimeZoneEnvVar(newtz,&oldzone)) {
-			return false;
-		}
+	bool	retval=true;
+	if ((newtz && newtz[0] && !setTimeZoneEnvVar(newtz,&oldzone)) ||
+		!getBrokenDownTimeFromEpoch(false) ||
+		(newtz && newtz[0] && !restoreTimeZoneEnvVar(oldzone))) {
+		retval=false;
 	}
 
-	initTimeString();
-	initTimeStruct();
-
-	// Get a struct tm relative to this new time zone...
-	// Note that this must use localtime, not localtime_r or the timezone
-	// will not be set.  Also, there's no advantage to using localtime_r
-	// here because this whole method is mutex'ed anyway.
-	// FIXME: it appears that all versions of localtime() DON'T set
-	// the timezone fields, rather they only set tzname, timezone, daylight
-	struct tm	*lcltm=localtime(&epoch);
-	if (!lcltm) {
+	if (!releaseLock()) {
 		return false;
 	}
-
-	// replace the current struct tm the new struct tm
-	if (!copyStructTm(lcltm,timestruct)) {
-		return false;
-	}
-
-	if (newtz) {
-		restoreTimeZoneEnvVar(oldzone);
-	}
-
-	// release exclusive access to localtime
-	if (ltmutex && pthread_mutex_unlock(ltmutex)) {
-		return false;
-	}
-	return true;
-}
-
-bool datetime::setTimeZone(const char *tz) {
-
-	// create a copy of the current struct tm and use it from now on
-	//
-	// Why not just call mktime() on the existing struct tm?
-	//
-	// The timezone string is (const char *), at least on linux it is.
-	// So if you set it once, you can't change it.  If the timezone has
-	// already been set by a previous call to mktime() and this call to
-	// mktime() would cause it to be changed, it will cause serious
-	// problems.  To get around this, we have to create an all new
-	// struct tm, copy the old data into it, then call mktime() to set the
-	// timezone/offset.
-	struct tm	*newtimestruct=new struct tm;
-	newtimestruct->tm_mon=timestruct->tm_mon;
-	newtimestruct->tm_mday=timestruct->tm_mday;
-	newtimestruct->tm_year=timestruct->tm_year;
-	newtimestruct->tm_hour=timestruct->tm_hour;
-	newtimestruct->tm_min=timestruct->tm_min;
-	newtimestruct->tm_sec=timestruct->tm_sec;
-	newtimestruct->tm_wday=0;
-	newtimestruct->tm_yday=0;
-	newtimestruct->tm_isdst=timestruct->tm_isdst;
-	delete timestruct;
-	timestruct=newtimestruct;
-
-	// obtain exclusive access to the environment variables
-	if (envmutex && pthread_mutex_lock(envmutex)) {
-		return false;
-	}
-
-	// change the current timezone
-	char	*oldtz;
-	setTimeZoneEnvVar(tz,&oldtz);
-
-	// call mktime to fill in the zone/offset and set the epoch
-	bool	retval=updateTime();
-
-	// restore the original timezone
-	restoreTimeZoneEnvVar(oldtz);
-
-	// release exclusive access to the environment variables
-	if (envmutex && pthread_mutex_lock(envmutex)) {
-		return false;
-	}
-
 	return retval;
-}
-
-bool	datetime::updateTimePreservingTimeZone() {
-	// FIXME: What to do if oldtm doesn't
-	// have it's tm_zone and tm_gmtoff set?
-	char	*currentzone=strdup(getTimeZoneString());
-	bool	retval=setTimeZone(currentzone);
-	delete[] currentzone;
-	return retval;
-}
-
-bool	datetime::copyStructTm(const struct tm *oldtm, struct tm *newtm) {
-
-	// what we want to do here is copy oldtm to newtm and set epoch,
-	// without modifying the timezone stored in oldtm or newtm...
-
-	// Get the epoch here
-	//
-	// We can't just call mktime on oldtm because it will try to set it's
-	// timezone (which is a const and can't be set more than once), so
-	// we'll copy the relevent parts over to temptm and call mktime on that.
-	// We don't care what temptm's time zone gets set to.
-	//
-	// Oddly, gcc-3.3 gets pissed if we just do:
-	// struct tm	temptm;
-	// for struct tm's that define the timezone abbreviationm as a const
-	// char array instead of a const char pointer.  But it allows it if
-	// you do:
-	// struct tm	*temptm=new struct tm;
-	// go figure...
-	struct tm	*temptm=new struct tm;
-	temptm->tm_sec=oldtm->tm_sec;
-	temptm->tm_min=oldtm->tm_min;
-	temptm->tm_hour=oldtm->tm_hour;
-	temptm->tm_mday=oldtm->tm_mday;
-	temptm->tm_mon=oldtm->tm_mon;
-	temptm->tm_year=oldtm->tm_year;
-	temptm->tm_wday=oldtm->tm_wday;
-	temptm->tm_yday=oldtm->tm_yday;
-	temptm->tm_isdst=oldtm->tm_isdst;
-	time_t	tempepoch=mktime(temptm);
-	delete temptm;
-	if (tempepoch==-1) {
-		return false;
-	}
-	epoch=tempepoch;
-
-	// now copy oldtm into newtm
-	newtm->tm_sec=oldtm->tm_sec;
-	newtm->tm_min=oldtm->tm_min;
-	newtm->tm_hour=oldtm->tm_hour;
-	newtm->tm_mday=oldtm->tm_mday;
-	newtm->tm_mon=oldtm->tm_mon;
-	newtm->tm_year=oldtm->tm_year;
-	newtm->tm_wday=oldtm->tm_wday;
-	newtm->tm_yday=oldtm->tm_yday;
-	newtm->tm_isdst=oldtm->tm_isdst;
-
-	// FIXME: what should happen here if oldtm's timezone/offset were
-	// not set?
-
-	return true;
 }
 
 char *datetime::getString(time_t seconds) {
@@ -413,4 +407,127 @@ bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 	}
 	env.remove("TZ");
 	return true;
+}
+
+bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
+
+	/*#ifdef HAVE_LOCALTIME_R
+		struct tm	tms;
+		if (localtime_r(&epoch,&tms)) {
+			sec=tms.tm_sec;
+			min=tms.tm_min;
+			hour=tms.tm_hour;
+			mday=tms.tm_mday;
+			mon=tms.tm_mon;
+			year=tms.tm_year;
+			isdst=tms.tm_isdst;
+			return normalizeBrokenDownTime(needmutex);
+		}
+		return false;
+	#else*/
+		if (needmutex && !acquireLock()) {
+			return false;
+		}
+		bool	retval=false;
+		struct tm	*tms;
+		if ((tms=localtime(&epoch))) {
+			sec=tms->tm_sec;
+			min=tms->tm_min;
+			hour=tms->tm_hour;
+			mday=tms->tm_mday;
+			mon=tms->tm_mon;
+			year=tms->tm_year;
+			isdst=tms->tm_isdst;
+			retval=normalizeBrokenDownTime(false);
+		}
+		if (needmutex && !releaseLock()) {
+			return false;
+		}
+		return retval;
+	//#endif
+}
+
+bool datetime::normalizeBrokenDownTime(bool needmutex) {
+
+	if (needmutex && !acquireLock()) {
+		return false;
+	}
+
+	// If a time zone was passed in, use it.
+	char	*oldzone=NULL;
+	if (zone && zone[0] && !setTimeZoneEnvVar(zone,&oldzone)) {
+		if (needmutex) {
+			releaseLock();
+		}
+		return false;
+	}
+
+	int	retval=true;
+
+	// copy relevent values into a struct tm
+	struct tm	tms;
+	tms.tm_sec=sec;
+	tms.tm_min=min;
+	tms.tm_hour=hour;
+	tms.tm_mday=mday;
+	tms.tm_mon=mon;
+	tms.tm_year=year;
+	tms.tm_isdst=isdst;
+
+	// mktime() will get the epoch, set wday
+	// and yday and normalize other values
+	time_t	ep=mktime(&tms);
+	if (ep==-1) {
+		retval=false;
+	} else {
+
+		// store the epoch
+		epoch=ep;
+
+		// copy values back out of struct tm
+		sec=tms.tm_sec;
+		min=tms.tm_min;
+		hour=tms.tm_hour;
+		mday=tms.tm_mday;
+		mon=tms.tm_mon;
+		year=tms.tm_year;
+		isdst=tms.tm_isdst;
+		wday=tms.tm_wday;
+		yday=tms.tm_yday;
+	
+		// Use tzset to get the timezone name
+		tzset();
+		delete[] zone;
+		zone=strdup(tzname[0]);
+
+		// Get the offset from the struct tm if we can, otherwise get
+		// it from the value set by tzset()
+		#ifdef HAS___TM_GMTOFF
+			gmtoff=tms.__tm_gmtoff;
+		#elif HAS_TM_GMTOFF
+			gmtoff=tms.tm_gmtoff;
+		#elif HAS_TM_TZADJ
+			gmtoff=-tms.tm_tzadj;
+		#else
+			gmtoff=-timezone;
+		#endif
+	}
+
+	if (oldzone) {
+		retval=(retval && restoreTimeZoneEnvVar(oldzone));
+	}
+
+	if (needmutex && !releaseLock()) {
+		return false;
+	}
+
+	return retval;
+}
+
+bool datetime::acquireLock() {
+	return !(timemutex && pthread_mutex_lock(timemutex));
+}
+
+bool datetime::releaseLock() {
+	return !(timemutex && pthread_mutex_unlock(timemutex));
 }
