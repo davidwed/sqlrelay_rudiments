@@ -3,6 +3,7 @@
 
 #include <rudiments/memorymap.h>
 
+#include <sys/types.h>
 #include <sys/mman.h>
 
 // for getpagesize()...

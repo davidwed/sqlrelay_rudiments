@@ -482,6 +482,7 @@ then
 	HAVE_REGCOMP=""
 	AC_MSG_CHECKING(regcomp)
 	AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <regex.h>],
 regcomp(NULL,NULL,0);,HAVE_REGCOMP="yes"; AC_DEFINE(HAVE_REGCOMP,1,Some systems have regcomp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -495,7 +496,8 @@ fi
 AC_SUBST(INCLUDE_REGULAREXPRESSION)
 
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
-AC_TRY_LINK([#include <sys/types.h>
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/socket.h>],
 setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
 
@@ -644,6 +646,8 @@ getservbyport_r(0,NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETSERVBYPORT_R_5,1,Some sys
 
 AC_MSG_CHECKING(semtimedop)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
 #include <sys/sem.h>],
 semtimedop(0,NULL,0,NULL);,AC_DEFINE(HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -695,43 +699,51 @@ FW_CHECK_CRYPT_R
 
 AC_MSG_CHECKING(mmap functions take caddr_t argument)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 munlock((void *)NULL,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MMAP_CADDR_T,1,Some systems use caddr_t argument for mmap functions) AC_MSG_RESULT(yes))
 
 AC_MSG_CHECKING(mincore with char * argument)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 char *tmp;
 mincore(NULL,0,tmp);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(HAVE_MINCORE_CHAR,1,Some systems have mincore with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(mincore with unsigned char * argument)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 unsigned char *tmp;
 mincore(NULL,0,tmp);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(HAVE_MINCORE_UCHAR,1,Some systems have mincore with unsigned char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(mlock)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 mlock(NULL,0);,AC_DEFINE(HAVE_MLOCK,1,Some systems have mlock) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(mlockall)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 mlockall(0);,AC_DEFINE(HAVE_MLOCKALL,1,Some systems have mlockall) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(munlock)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 munlock(NULL,0);,AC_DEFINE(HAVE_MUNLOCK,1,Some systems have munlock) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(munlockall)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 munlockall();,AC_DEFINE(HAVE_MUNLOCKALL,1,Some systems have munlockall) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(madvise)
 AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>],
 madvise(NULL,0,MADV_NORMAL);,AC_DEFINE(HAVE_MADVISE,1,Some systems have madvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 

@@ -25334,6 +25334,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <regex.h>
 int
 main ()
@@ -25398,6 +25399,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 int
@@ -27677,6 +27679,8 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
 #include <sys/sem.h>
 int
 main ()
@@ -29676,6 +29680,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -29732,6 +29737,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -29793,6 +29799,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -29854,6 +29861,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -29910,6 +29918,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -29966,6 +29975,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -30022,6 +30032,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
@@ -30078,6 +30089,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/mman.h>
 int
 main ()
