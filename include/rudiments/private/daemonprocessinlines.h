@@ -1,7 +1,9 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#define __USE_UNIX98
+#ifndef __USE_UNIX98
+	#define __USE_UNIX98
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

@@ -11,11 +11,11 @@
 #include <stdlib.h>
 
 #ifdef __GNUC__
-static signalhandler	daemonprocess::shutdownhandler;
-static signalhandler	daemonprocess::crashhandler;
-static void		(*daemonprocess::shutdownfunc)(int);
-static void		(*daemonprocess::crashfunc)(int);
-static signalhandler	daemonprocess::deadchildhandler;
+signalhandler	daemonprocess::shutdownhandler;
+signalhandler	daemonprocess::crashhandler;
+void		(*daemonprocess::shutdownfunc)(int);
+void		(*daemonprocess::crashfunc)(int);
+signalhandler	daemonprocess::deadchildhandler;
 #endif
 
 daemonprocess::daemonprocess() {
