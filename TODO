@@ -1,6 +1,7 @@
+stringbuffer still doesn't work exactly right
+
 connectiondata should just be generic name/value list class
 need generic parser/lexer classes, use them for xmlsax
-
 
 document/test program for filedescriptor,file,fileproperties,filesystem
 
