@@ -4,7 +4,7 @@
 	private:
 		namevaluepairs	nvp;
 
-		int	countPairs(const char *connstring);
+		int	countPairs(const char *paramstring);
 		char	*parseName(const char *data, char **outbuffer);
 		char	*parseValue(const char *data, char **outbuffer);
 		char	*parsePart(int len, char delimiter,

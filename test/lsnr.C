@@ -7,7 +7,7 @@
 #include <rudiments/permissions.h>
 #include <stdio.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 
 	// listen on inet socket port 1800

@@ -5,7 +5,7 @@
 #include <rudiments/inetserversocket.h>
 #include <rudiments/permissions.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	inetserversocket	svr;
 	svr.listenOnSocket(NULL,11000,15);

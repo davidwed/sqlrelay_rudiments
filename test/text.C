@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// initialize a text buffer and print it out
 	char    buffer[100];

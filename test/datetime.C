@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// set current time zone to America/New_York
 	printf("setting TZ=America/New_York...\n");

@@ -4,7 +4,7 @@
 #include <rudiments/filesystem.h>
 #include <stdio.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	filesystem	fs;
 	fs.initialize("/");

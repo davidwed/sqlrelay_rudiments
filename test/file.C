@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 
 	// remove the file (in case it already exists)

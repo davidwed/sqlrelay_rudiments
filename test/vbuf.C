@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// create a buffer
 	variablebuffer	*vb=new variablebuffer(10,10);

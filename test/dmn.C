@@ -21,7 +21,7 @@ RETSIGTYPE	shutDown() {
 	exit(0);
 }
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	dmn=new daemonprocess();
 

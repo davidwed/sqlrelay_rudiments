@@ -75,7 +75,7 @@ RETSIGTYPE	shutDown() {
 }
 
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	mysvr=new myserver();
 

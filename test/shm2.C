@@ -7,7 +7,7 @@
 #include <rudiments/permissions.h>
 #include <stdio.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// attach to a shared memory segment keyed to /tmp/shm
         sharedmemory    shm;

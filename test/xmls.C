@@ -105,7 +105,7 @@ int	myxmlsax::cdata(char *string) {
 }
 
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	myxmlsax	x;
 	printf("=====================================================\n");

@@ -1,12 +1,12 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/connectstring.h>
+#include <rudiments/parameterstring.h>
 #ifndef ENABLE_INLINES
-	#include <rudiments/private/connectstringinlines.h>
+	#include <rudiments/private/parameterstringinlines.h>
 #endif
 
-connectstring::~connectstring() {
+parameterstring::~parameterstring() {
 	// delete each name and value in the list
 	for (unsigned int i=0; i<nvp.getList()->getLength(); i++) {
 		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getKey();
@@ -14,13 +14,13 @@ connectstring::~connectstring() {
 	}
 }
 
-int connectstring::parse(const char *connstring) {
+int parameterstring::parse(const char *paramstring) {
 
 	nvp.getList()->clear();
 
-	int	paircount=countPairs(connstring);
+	int	paircount=countPairs(paramstring);
 
-	char	*ptr=(char *)connstring;
+	char	*ptr=(char *)paramstring;
 	for (int i=0; i<paircount; i++) {
 
 		char	*namebuffer;
@@ -51,13 +51,13 @@ int connectstring::parse(const char *connstring) {
 	return 1;
 }
 
-int connectstring::countPairs(const char *connstring) {
+int parameterstring::countPairs(const char *paramstring) {
 
 	// count ;'s that are not inside of quotes
 	char	*ptr;
 	int	paircount=0;
 	int	inquotes=0;
-	for (ptr=(char *)connstring; (*ptr); ptr++) {
+	for (ptr=(char *)paramstring; (*ptr); ptr++) {
 
 		// handle quotes
 		if (*ptr=='\'') {
@@ -84,7 +84,7 @@ int connectstring::countPairs(const char *connstring) {
 	return paircount;
 }
 
-char *connectstring::parsePart(int len, char delimiter,
+char *parameterstring::parsePart(int len, char delimiter,
 					const char *data, char **outbuffer,
 						int quotes, int escapedchars) {
 
@@ -126,7 +126,7 @@ char *connectstring::parsePart(int len, char delimiter,
 	return ptr;
 }
 
-int connectstring::parsePartLength(const char *data, char delimiter,
+int parameterstring::parsePartLength(const char *data, char delimiter,
 					int quotes, int escapedchars) {
 
 	int	counter=0;

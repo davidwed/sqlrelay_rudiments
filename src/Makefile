@@ -12,10 +12,10 @@ ifeq ($(INCLUDE_COMMANDLINE),1)
 	NLOBJS += commandline.n.lo
 	PLOBJS += commandline.p.lo
 endif
-ifeq ($(INCLUDE_CONNECTSTRING),1)
-	SRCS += connectstring.C
-	NLOBJS += connectstring.n.lo
-	PLOBJS += connectstring.p.lo
+ifeq ($(INCLUDE_PARAMETERSTRING),1)
+	SRCS += parameterstring.C
+	NLOBJS += parameterstring.n.lo
+	PLOBJS += parameterstring.p.lo
 endif
 ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	SRCS += daemonprocess.C

@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 
         // Create a file with rw-r--r-- permissions

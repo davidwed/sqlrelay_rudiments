@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <time.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	unsigned short	port;
 	char	buffer[11];

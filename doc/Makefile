@@ -16,6 +16,7 @@ install:
 	$(INSTALL) -m 644 css/styles.css $(docdir)/css
 	$(INSTALL) -m 644 classes/client.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/commandline.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/parameterstring.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/daemonprocess.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/datatransportfactory.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/datatransport.h.html $(docdir)/classes
@@ -50,6 +51,7 @@ install:
 	$(INSTALL) -m 644 classes/signalclasses.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/stringbuffer.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/string.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/timezonefile.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/unixclientsocket.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/unixserversocket.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/variablebuffer.h.html $(docdir)/classes

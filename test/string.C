@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// create a new string 50 bytes long
 	string	s(50);

@@ -6,9 +6,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
-	commandline     cmdline(argv,argc);
+	commandline     cmdline(argc,argv);
 
 	// if -help was specified, display a usage message
 	if (cmdline.found("-help")) {

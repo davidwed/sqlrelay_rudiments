@@ -10,6 +10,7 @@
 <ul>
 <li><a href="#environment">Using the Environment Class</a></li>
 <li><a href="#commandline">Using the Command Line Class</a></li>
+<li><a href="#parameterstring">Using the Parameter String Class</a></li>
 <li><a href="#datetime">Using the Date/Time Class</a></li>
 <li><a href="#timezonefile">Using the Timezonefile Class</a></li>
 <li><a href="#filesystem">Using the Filesystem Class</a></li>
@@ -125,6 +126,42 @@ class.</p>
         }
 }
 </pre>
+
+
+<a name="parameterstring"></a>
+<span class="heading">Using the Parameter String Class</span><br><br>
+
+<p>Sometimes a function needs to take an arbitrary set of parameters.  For
+example, a function for connecting to a database may need host, port, socket,
+username and password, any of which could be omitted depending on the
+database.  Though C++ support methods which take an arbitrary number of
+parameters, sometimes it is more convenient to for the method to accept a
+single string parameter with name/value pairs in it instead.</p>
+
+<p>The parameterstring class provides methods for parsing and accessing
+a parameter string of the following form:</p>
+
+<blockquote>
+name1='value1';name2='value2';name3='value3'
+</blockquote>
+
+<p>The single quotes are optional.  If a parameter needs to contain a single
+quote, then it can be escaped as follows:</p>
+
+<blockquote>
+name='\'value\''
+</blockquote>
+
+<p>Backslashes can be similarly escaped:</p>
+
+<blockquote>
+name='\\value\\'
+</blockquote>
+
+<pre>
+...
+</pre>
+
 
 <a name="datetime"></a>
 <span class="heading">Using the Date/Time Class</span><br><br>

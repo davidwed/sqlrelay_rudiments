@@ -6,7 +6,7 @@
 #include <rudiments/randomnumber.h>
 #include <stdio.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
         // it's common to seed a random number generator with the number of
         // seconds since 1970 (the epoch), so we'll get the current date.

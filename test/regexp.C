@@ -4,7 +4,7 @@
 #include <rudiments/regularexpression.h>
 #include <stdio.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
         // A quick match...
         if (regularexpression::match("Hello Dave!",".*Dave.*")) {

@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// attach to the semaphore set keyed to /tmp/sem containing 2 semaphores
         semaphoreset	sem;

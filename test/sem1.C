@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	// create a file called /tmp/sem
 	unlink("/tmp/sem");

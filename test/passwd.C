@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 
 	// get the password entry for "root"

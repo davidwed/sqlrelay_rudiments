@@ -3,7 +3,7 @@
 
 #include <rudiments/logger.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 	
 	logger			lg;
 

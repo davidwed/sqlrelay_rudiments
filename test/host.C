@@ -17,7 +17,7 @@ char *getAddressString(int length, const char *addr) {
 	return address;
 }
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 
 	// get the host information for "localhost"

@@ -7,7 +7,7 @@
 
 #include <time.h>
 
-int main(int argv, const char **argc) {
+int main(int argc, const char **argv) {
 
 	char			buffer[11];
 	int			sizeread;
