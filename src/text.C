@@ -262,10 +262,23 @@ char *text::parseNumber(long number) {
 	return string;
 }
 
+char *text::parseNumber(double number) {
+	char	*string=new char[22];
+	sprintf(string,"%f",number);
+	return string;
+}
+
+char *text::parseNumber(double number,
+				unsigned short scale) {
+	char	*string=new char[22];
+	sprintf(string,"%.*f",scale,number);
+	return string;
+}
+
 char *text::parseNumber(double number,
 				unsigned short precision,
 				unsigned short scale) {
-	char	*string=new char[22];
-	sprintf(string,"%.*f",precision,number);
+	char	*string=new char[precision+3];
+	sprintf(string,"%*.*f",precision,scale,number);
 	return string;
 }

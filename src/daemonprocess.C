@@ -31,7 +31,7 @@ daemonprocess::~daemonprocess() {
 
 int daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
-	char	*pid=text::parseNumber(getpid());
+	char	*pid=text::parseNumber((long)getpid());
 	int	retval=(fl.create(filename,permissions,pid)==strlen(pid));
 	delete[] pid;
 	fl.close();
