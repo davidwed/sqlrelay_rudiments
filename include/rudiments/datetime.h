@@ -14,11 +14,44 @@
 class datetime {
 	public:
 
+		typedef enum {
+			GMT=0,	// Greenwich Mean Time
+			ECT,	// European Central Time
+			EET,	// European Eastern Time
+			ART,	// ???
+			EAT,	// Saudi Arabia
+			MET,	// Iran
+			NET,	// ???
+			PLT,	// West Asia
+			IST,	// India
+			BST,	// Central Asia
+			VST,	// Bangkok
+			CTT,	// China
+			JST,	// Japan
+			ACT,	// Central Australia
+			AET,	// Eastern Australia
+			SST,	// Central Pacific
+			NST,	// New Zealand
+			MIT,	// Samoa
+			HST,	// Hawaii
+			AST,	// Alaska
+			PST,	// Pacific Standard Time
+			PNT,	// Arizona
+			MST,	// Mountain Standard Time
+			CST,	// Central Standard Time
+			EST,	// Eastern Standard Time
+			IET,	// Indiana East
+			PRT,	// Atlantic Standard Time
+			CNT,	// Newfoundland
+			AGT,	// Eastern South America
+			BET,	// Eastern South America
+			CAT	// Azores
+		} tzone;
 
 		// if you need a quick conversion, use one of these methods
 		static char	*getString(time_t epoch);
 		static char	*getString(const tm *timestruct);
-			// returns "mm/dd/yyyy hh:mm:ss"
+			// returns "mm/dd/yyyy hh:mm:ss TZN"
 			// Note that this method allocates a buffer to return
 			// the string in which must be deleted by the calling
 			// program.
@@ -38,7 +71,7 @@ class datetime {
 		int	initialize(const char *datestring);
 			// Parses "datestring" and sets the date and time
 			// represented in the class to that time.
-			// Datestring must be "mm/dd/yyyy hh:mm:ss".
+			// Datestring must be "mm/dd/yyyy hh:mm:ss TZN".
 			//
 			// Returns 1 on success and 0 on failure.
 		int	initialize(time_t epoch);
@@ -62,12 +95,23 @@ class datetime {
 			// the date and time stored in the system clock.
 			//
 			// Returns 1 on success and 0 on failure.
-		int	getHardwareDateAndTime();
+		int	getHardwareDateAndTime(tzone hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
 			// Sets the date and time represented in the class to
 			// the date and time stored in the hardware clock.
+			//
+			// "hwtz" must be set to the timezone that the hardware
+			// clock is using.
+			//
+			// Returns 1 on success and 0 on failure.
+		int	getAdjustedHardwareDateAndTime(tzone hwtz);
+			// This method only works if your system has a working
+			// real-time clock at /dev/rtc.
+			//
+			// Gets the date and time from the hardware clock,
+			// then adjusts it to the timezone used by the system.
 			//
 			// Returns 1 on success and 0 on failure.
 		int	setSystemDateAndTime();
@@ -75,12 +119,15 @@ class datetime {
 			// and time currently represented in the class.
 			//
 			// Returns 1 on success and 0 on failure.
-		int	setHardwareDateAndTime();
+		int	setHardwareDateAndTime(tzone hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
 			// Sets the hardware clock's date and time to the date
 			// and time currently represented in the class.
+			//
+			// "hwtz" must be set to the timezone that the system
+			// clock using.
 			//
 			// Returns 1 on success and 0 on failure.
 
@@ -99,18 +146,24 @@ class datetime {
 			// returns 1 if daylight savings time is currently
 			// in effect and 0 if it isn't
 
-		char	*getTimeZone() const;
+		tzone	getTimeZone() const;
+			// returns the time zone
+
+		char	*getTimeZoneString() const;
 			// returns a 3 character string representing the
 			// time zone
 
 		long	getTimeZoneOffset() const;
-			// returns (in seconds) the offset from GMT
+			// returns the offset from GMT (in seconds)
 
+		void	adjustTimeZone(tzone newtz);
+			// recalculates the time currently represented in the
+			// class to correspond to the time zone "newtz"
 
 		// These methods output conversions to other date/time
 		// formats.
 		char	*getString();
-			// returns "mm/dd/yyyy hh:mm:ss"
+			// returns "mm/dd/yyyy hh:mm:ss TZN"
 			// (Note that this method returns a pointer to an
 			// internal string which will be deleted if the
 			// class instance is deleted.)

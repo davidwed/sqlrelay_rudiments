@@ -12,6 +12,11 @@ RUDIMENTS_INLINE datetime::~datetime() {
 	delete[] timestring;
 }
 
+RUDIMENTS_INLINE void datetime::initTimeString() {
+	delete[] timestring;
+	timestring=NULL;
+}
+
 RUDIMENTS_INLINE int datetime::getHour() const {
 	return timestruct.tm_hour;
 }
@@ -48,7 +53,11 @@ RUDIMENTS_INLINE int datetime::isDaylightSavingsTime() const {
 	return timestruct.tm_isdst;
 }
 
-RUDIMENTS_INLINE char	*datetime::getTimeZone() const {
+RUDIMENTS_INLINE datetime::tzone datetime::getTimeZone() const {
+	return timezone;
+}
+
+RUDIMENTS_INLINE char	*datetime::getTimeZoneString() const {
 	#ifdef HAS___TM_ZONE
 		return (char *)timestruct.__tm_zone;
 	#elif HAS_TM_ZONE
@@ -57,6 +66,24 @@ RUDIMENTS_INLINE char	*datetime::getTimeZone() const {
 		return (char *)timestruct.tm_name;
 	#else
 		return "";
+	#endif
+}
+
+RUDIMENTS_INLINE void datetime::setTimeZone(tzone tz) {
+	timezone=tz;
+	#ifdef HAS___TM_ZONE
+		timestruct.__tm_zone=tzonestring[tz];
+	#elif HAS_TM_ZONE
+		timestruct.tm_zone=tzonestring[tz];
+	#elif HAS_TM_NAME
+		timestruct.tm_name=tzonestring[tz];
+	#endif
+	#ifdef HAS___TM_GMTOFF
+		timestruct.__tm_gmtoff=tzoneoffset[tz];
+	#elif HAS_TM_GMTOFF
+		timestruct.tm_gmtoff=tzoneoffset[tz];
+	#elif HAS_TM_TZADJ
+		timestruct.tm_tzadj=tzoneoffset[tz];
 	#endif
 }
 
