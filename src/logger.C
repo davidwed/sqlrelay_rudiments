@@ -2,7 +2,6 @@
 // See the file COPYING for more information
 
 #include <rudiments/logger.h>
-
 #include <rudiments/datetime.h>
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>

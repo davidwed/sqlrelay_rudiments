@@ -1,11 +1,9 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information.
 
+#include <rudiments/charstring.h>
+
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS
-	#include <strings.h>
-#endif
 
 template <class datatype>
 inline int linkedlistutil<datatype>::
@@ -26,7 +24,7 @@ inline void linkedlistutil<char *>::print(char *data) const {
 
 template <>
 inline int linkedlistutil<char *>::compare(char *data1, char *data2) const {
-	return strcmp(data1,data2);
+	return charstring::compare(data1,data2);
 }
 
 template <>

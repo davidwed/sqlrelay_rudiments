@@ -2,22 +2,20 @@
 // See the COPYING file for more information
 
 #include <rudiments/sharedmemory.h>
-
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 // need these for memset...
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
-
-#include <stdlib.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 
 sharedmemory::sharedmemory() {
 	created=false;

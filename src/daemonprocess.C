@@ -7,15 +7,17 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <stdlib.h>
+
+// for fork/getpid...
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+
+// for wait...
 #ifdef HAVE_SYS_WAIT_H
 	#include <sys/wait.h>
 #endif
-#include <stdlib.h>
 
 #ifdef __GNUC__
 signalhandler	daemonprocess::shutdownhandler;

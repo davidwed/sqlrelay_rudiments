@@ -3,13 +3,13 @@
 
 #include <rudiments/variablebuffer.h>
 
+#include <stdio.h>
+
 // need these for memcpy...
 #include <string.h>
 #ifdef HAVE_STRINGS
 	#include <strings.h>
 #endif
-
-#include <stdio.h>
 
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	init(new unsigned char[initialsize],initialsize,increment);

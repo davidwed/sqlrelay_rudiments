@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/regularexpression.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #if defined(RUDIMENTS_HAS_PCRE)

@@ -32,24 +32,24 @@ class charstring {
 			// Returns a pointer to "dest".
 
 
-		static	char	*copyInto(char *dest, const char *source);
+		static	char	*copy(char *dest, const char *source);
 			// Replaces "dest" with "source".  Assumes that there
 			// is enough room in "dest" to accommodate "source".
 			// Returns a pointer to "dest".
-		static	char	*copyInto(char *dest,
+		static	char	*copy(char *dest,
 					const char *source, size_t size);
 			// Replaces the first "size" bytes of "dest" with
 			// "source".  Assumes that "dest" is at least "size"
 			// bytes long.
 			// Returns a pointer to "dest".
-		static	char	*copyInto(char *dest, size_t location,
+		static	char	*copy(char *dest, size_t location,
 					const char *source);
 			// Replaces "dest" with "source", starting "location"
 			// bytes into "dest".  Assumes that there is enough
 			// room in "dest" (after "location" bytes) to
 			// accommodate "source".
 			// Returns a pointer to "dest".
-		static	char	*copyInto(char *dest, size_t location,
+		static	char	*copy(char *dest, size_t location,
 					const char *source, size_t size);
 			// Replaces "size" bytes of "dest" with "source",
 			// starting "location" bytes into "dest".  Assumes that
@@ -234,23 +234,23 @@ class charstring {
 			// stored string.
 
 
-		char	*copyInto(const char *str);
+		char	*copy(const char *str);
 			// Replaces the current string with "str".  Assumes
 			// that there is enough room in the internal buffer
 			// to accommodate "str".
 			// Returns a pointer to the current string.
-		char	*copyInto(const char *str, size_t size);
+		char	*copy(const char *str, size_t size);
 			// Replaces the first "size" bytes of the current string
 			// with "str".  Assumes that there are at least "size"
 			// bytes available in the internal buffer.
 			// Returns a pointer to the current string.
-		char	*copyInto(size_t location, const char *str);
+		char	*copy(size_t location, const char *str);
 			// Replaces the current string with "str", starting
 			// "location" bytes into the internal buffer.  Assumes
 			// that there is enough room in the internal buffer
 			// (after "location" bytes) to accommodate "str".
 			// Returns a pointer to the current string.
-		char	*copyInto(size_t location, const char *str,
+		char	*copy(size_t location, const char *str,
 							size_t size);
 			// Replaces "size" bytes of the current string with
 			// "str", starting "location" bytes into the internal

@@ -6,9 +6,6 @@
 
 #include <arpa/inet.h>
 #include <netdb.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
 
 // need these for memset...
 #include <string.h>

@@ -3,11 +3,10 @@
 
 #include <rudiments/unixserversocket.h>
 #include <rudiments/charstring.h>
+#include <rudiments/file.h>
 
+// need for umask...
 #include <sys/stat.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
 
 unixserversocket::unixserversocket() : serversocket(), unixsocket() {
 	mask=0;
@@ -24,10 +23,10 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	}
 
 	// init the socket structure
-	unlink(filename);
+	file::remove(filename);
 	memset((void *)&sockaddrun,0,sizeof(sockaddrun));
 	sockaddrun.sun_family=AF_UNIX;
-	charstring::copyInto(sockaddrun.sun_path,filename);
+	charstring::copy(sockaddrun.sun_path,filename);
 
 	// create the socket
 	return ((fd=::socket(AF_UNIX,SOCK_STREAM,0))>-1);
@@ -78,5 +77,5 @@ unixsocket *unixserversocket::acceptClientConnection() {
 bool unixserversocket::listenOnSocket(const char *filename, mode_t mask,
 								int backlog) {
 	initialize(filename,mask);
-	return bind() && listen(backlog);
+	return (bind() && listen(backlog));
 }

@@ -2,18 +2,19 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetclientsocket.h>
-
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
 #ifdef HAVE_GETADDRINFO
 	#include <rudiments/charstring.h>
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+
+// need this for sleep
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#include <stdio.h>
-#include <stdlib.h>
 
 // need these for memset...
 #include <string.h>

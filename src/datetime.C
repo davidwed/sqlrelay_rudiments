@@ -7,10 +7,9 @@
 	#include <rudiments/file.h>
 #endif
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
-
 #ifdef HAVE_RTC
 	#include <linux/rtc.h>
 	#include <sys/ioctl.h>

@@ -3,15 +3,11 @@
 
 #include <rudiments/private/unixsocket.h>
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <netinet/in.h>
 #include <sys/uio.h>
 #include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
 
 //#define DEBUG_UNIXSOCKET 1
 

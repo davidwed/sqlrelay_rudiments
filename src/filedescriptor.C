@@ -5,8 +5,8 @@
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
 
-#include <errno.h>
 #include <stdio.h>
+#include <errno.h>
 #ifdef HAVE_SYS_TIMES_H
 	#include <sys/times.h>
 #endif
@@ -537,7 +537,8 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 				if (totalread==buffersize) {
 					char	*newbuffer=
 						new char[buffersize+512];
-					strncpy(newbuffer,*buffer,buffersize);
+					charstring::copy(newbuffer,
+							*buffer,buffersize);
 					delete *buffer;
 					buffersize=buffersize+512;
 					*buffer=newbuffer;

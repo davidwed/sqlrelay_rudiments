@@ -120,7 +120,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 		for (;;) {
 	
 			// look for the specified delimiter
-			ptr2=strchr(ptr1,delimiter);
+			ptr2=charstring::contains(ptr1,delimiter);
 
 			// if we don't find the delimiter,
 			// use the end of the string instead 
@@ -132,7 +132,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			length=ptr2-ptr1;
 			value=new char[length+1];
 			value[length]=(char)NULL;
-			strncpy(value,ptr1,length);
+			charstring::copy(value,ptr1,length);
 
 			// if specified, evaluate any trailing *'s or +'s and
 			// truncate them

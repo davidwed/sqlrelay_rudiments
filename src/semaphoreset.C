@@ -2,15 +2,12 @@
 // See the COPYING file for more information
 
 #include <rudiments/semaphoreset.h>
-
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-#include <errno.h>
 #include <stdio.h>
-
 #include <stdlib.h>
-
+#include <errno.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
 

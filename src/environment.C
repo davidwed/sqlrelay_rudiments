@@ -3,11 +3,11 @@
 
 #include <rudiments/environment.h>
 #include <rudiments/charstring.h>
-#include <stdlib.h>
 
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 
 #include <stdio.h>
+#include <stdlib.h>
 
 environment::~environment() {
 	for (namevaluepairslistnode *node=

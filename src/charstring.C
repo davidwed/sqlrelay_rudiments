@@ -69,35 +69,35 @@ char *charstring::append(char *dest, const char *source, size_t size) {
 	return strncat(dest,source,size);
 }
 
-char *charstring::copyInto(const char *str) {
+char *charstring::copy(const char *str) {
 	return strcpy(buffer,str);
 }
 
-char *charstring::copyInto(const char *str, size_t size) {
+char *charstring::copy(const char *str, size_t size) {
 	return strncpy(buffer,str,size);
 }
 
-char *charstring::copyInto(size_t location, const char *str) {
+char *charstring::copy(size_t location, const char *str) {
 	return strcpy(buffer+location,str);
 }
 
-char *charstring::copyInto(size_t location, const char *str, size_t size) {
+char *charstring::copy(size_t location, const char *str, size_t size) {
 	return strncpy(buffer+location,str,size);
 }
 
-char *charstring::copyInto(char *dest, const char *source) {
+char *charstring::copy(char *dest, const char *source) {
 	return strcpy(dest,source);
 }
 
-char *charstring::copyInto(char *dest, const char *source, size_t size) {
+char *charstring::copy(char *dest, const char *source, size_t size) {
 	return strncpy(dest,source,size);
 }
 
-char *charstring::copyInto(char *dest, size_t location, const char *source) {
+char *charstring::copy(char *dest, size_t location, const char *source) {
 	return strcpy(dest+location,source);
 }
 
-char *charstring::copyInto(char *dest, size_t location,
+char *charstring::copy(char *dest, size_t location,
 					const char *source, size_t size) {
 	return strncpy(dest+location,source,size);
 }

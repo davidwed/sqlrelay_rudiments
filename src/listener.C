@@ -4,10 +4,6 @@
 #include <rudiments/listener.h>
 
 #include <stdlib.h>
-#include <sys/time.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
 #include <errno.h>
 
 listener::listener() {

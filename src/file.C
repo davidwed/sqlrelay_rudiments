@@ -6,22 +6,21 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
-
-// need these for memcpy...
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #include <sys/time.h>
 #ifdef HAVE_XATTRS
 	#include <sys/xattr.h>
+#endif
+
+// need these for memcpy...
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
 #endif
 
 file::file() : filedescriptor() {

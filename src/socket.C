@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/socket.h>
+
 #include <errno.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
