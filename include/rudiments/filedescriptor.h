@@ -31,16 +31,19 @@ class filedescriptor {
 				// Sets the file descriptor associated with
 				// the class to "fd".
 
+		#ifdef RUDIMENTS_HAS_SSL
 		virtual bool	setSSL(SSL *ssl);
 				// Associates ssl handle "ssl" with the
-				// filedescriptor.
+				// filedescriptor.  If "ssl" is non-NULL, all
+				// reads and writes will be done using SSL
+				// read/write functions.
 				//
 				// Returns true on success and false on failure.
 		virtual SSL	*getSSL() const;
 				// Returns a pointer to the ssl handle currently
 				// associated with the filedescriptor or NULL
 				// if no handle has been associated.
-
+		#endif
 
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were

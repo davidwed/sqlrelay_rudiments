@@ -313,26 +313,21 @@ then
 
 else
 
+	for i in "pthread" "c_r"
+	do
+		FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
+		if ( test -n "$PTHREADLIB" )
+		then
+			if ( test "$i" = "c_r" )
+			then
+				PTHREADLIB="$PTHREADLIB -pthread"
+			fi
+			break
+		fi
+	done
 	if ( test -n "$PTHREADLIB" )
 	then
 		HAVE_PTHREAD="yes"
-	else
-		for i in "pthread" "c_r"
-		do
-			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
-			if ( test -n "$PTHREADLIB" )
-			then
-				if ( test "$i" = "c_r" )
-				then
-					PTHREADLIB="$PTHREADLIB -pthread"
-				fi
-				break
-			fi
-		done
-		if ( test -n "$PTHREADLIB" )
-		then
-			HAVE_PTHREAD="yes"
-		fi
 	fi
 fi
 
@@ -352,48 +347,50 @@ fi
 
 dnl checks for the ssl library
 dnl requires:  SSLPATH, RPATHFLAG, cross_compiling
-dnl sets the substitution variable SSLLIB
+dnl sets the substitution variable SSLLIBS
 AC_DEFUN([FW_CHECK_SSL],
 [
 
-HAVE_SSL=""
-SSLINCLUDES=""
-SSLLIB=""
-
-if ( test "$cross_compiling" = "yes" )
+if ( test "$ENABLE_RUDIMENTS_SSL" = "yes" )
 then
-	
-	dnl cross compiling
-	echo "cross compiling"
-	if ( test -n "$SSLPATH" )
+
+	if ( test "$cross_compiling" = "yes" )
 	then
-		SSLINCLUDES="-I$SSLPATH/include"
-		SSLLIB="-L$SSLPATH/lib -lssl"
+
+		dnl cross compiling
+		echo "cross compiling"
+		if ( test -n "$SSLLIBS" -o -n "$SSLINCLUDES" )
+		then
+			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
+		fi
+
 	else
-		SSLLIB="-lssl"
+
+		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
+		then
+			SSLLIBS=`pkg-config openssl --libs`
+			SSLINCLUDES=`pkg-config openssl --cflags`
+			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
+		else
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[ssl],[openssl/ssl.h],[ssl],[""],[""],[SSLINCLUDES],[SSLLIBS],[SSLLIBPATH],[SSLSTATIC])
+			if ( test -n "$SSLLIBS" )
+			then
+				AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
+			fi
+		fi
 	fi
-	HAVE_SSL="yes"
+
+	FW_INCLUDES(ssl,[$SSLINCLUDES])
+	FW_LIBS(ssl,[$SSLLIBS])
 
 else
 
-	if ( test -n "$SSLLIB" )
-	then
-		HAVE_SSL="yes"
-	else
-		FW_CHECK_HEADERS_AND_LIBS([$SSLPATH],[ssl],[openssl/ssl.h],[ssl],[""],[""],[SSLINCLUDES],[SSLLIB],[SSLLIBPATH],[SSLSTATIC])
-		if ( test -n "$SSLLIB" )
-		then
-			HAVE_SSL="yes"
-		fi
-	fi
+	echo "disabled"
+
 fi
 
-FW_INCLUDES(ssl,[$SSLINCLUDES])
-FW_LIBS(ssl,[$SSLLIB])
-
-AC_SUBST(HAVE_SSL)
 AC_SUBST(SSLINCLUDES)
-AC_SUBST(SSLLIB)
+AC_SUBST(SSLLIBS)
 ])
 
 dnl checks for rpc entry functions and header files

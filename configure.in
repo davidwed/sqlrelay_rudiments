@@ -22,10 +22,18 @@ AC_ARG_WITH(pthread-prefix,
 	[  --with-pthread-prefix   Location of pthread library],
 	PTHREADPATH="$withval",
 	PTHREADPATH="")
-AC_ARG_WITH(ssl-prefix,
-	[  --with-ssl-prefix       Location of ssl library],
-	SSLPATH="$withval",
-	SSLPATH="")
+AC_ARG_ENABLE(ssl,
+	[  --disable-ssl           Disable SSL support],
+	ENABLE_RUDIMENTS_SSL="no",
+	ENABLE_RUDIMENTS_SSL="yes")
+AC_ARG_WITH(ssl-includes,
+	[  --with-ssl-includes     SSL includes],
+	SSLINCLUDES="$withval",
+	SSLINCLUDES="")
+AC_ARG_WITH(ssl-libs,
+	[  --with-ssl-libs         SSL libraries],
+	SSLLIBS="$withval",
+	SSLLIBS="")
 
 AC_SUBST(CXXFLAGS)
 AC_SUBST(INSTALLSTRIP)

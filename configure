@@ -465,7 +465,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL PIPE PTHREADINCLUDES PTHREADLIB HAVE_SSL SSLINCLUDES SSLLIB LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL PIPE PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1023,6 +1023,7 @@ Optional Features:
   --enable-small-code     optimize for small code size
   --enable-debug          compile with -g and -pg options and don't strip binaries
   --enable-inlines        use inline methods
+  --disable-ssl           Disable SSL support
   --enable-shared[=PKGS]
                           build shared libraries [default=yes]
   --enable-static[=PKGS]
@@ -1036,7 +1037,8 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-system-libtool   use system libtool instead of ./libtool
   --with-pthread-prefix   Location of pthread library
-  --with-ssl-prefix       Location of ssl library
+  --with-ssl-includes     SSL includes
+  --with-ssl-libs         SSL libraries
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
                           both]
@@ -1531,13 +1533,28 @@ if test "${with_pthread_prefix+set}" = set; then
 else
   PTHREADPATH=""
 fi;
-
-# Check whether --with-ssl-prefix or --without-ssl-prefix was given.
-if test "${with_ssl_prefix+set}" = set; then
-  withval="$with_ssl_prefix"
-  SSLPATH="$withval"
+# Check whether --enable-ssl or --disable-ssl was given.
+if test "${enable_ssl+set}" = set; then
+  enableval="$enable_ssl"
+  ENABLE_RUDIMENTS_SSL="no"
 else
-  SSLPATH=""
+  ENABLE_RUDIMENTS_SSL="yes"
+fi;
+
+# Check whether --with-ssl-includes or --without-ssl-includes was given.
+if test "${with_ssl_includes+set}" = set; then
+  withval="$with_ssl_includes"
+  SSLINCLUDES="$withval"
+else
+  SSLINCLUDES=""
+fi;
+
+# Check whether --with-ssl-libs or --without-ssl-libs was given.
+if test "${with_ssl_libs+set}" = set; then
+  withval="$with_ssl_libs"
+  SSLLIBS="$withval"
+else
+  SSLLIBS=""
 fi;
 
 
@@ -3869,7 +3886,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3872 "configure"' > conftest.$ac_ext
+  echo '#line 3889 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4985,7 +5002,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4988:" \
+echo "$as_me:5005:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6016,11 +6033,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6019: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6036: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6023: \$? = $ac_status" >&5
+   echo "$as_me:6040: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6248,11 +6265,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6251: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6268: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6255: \$? = $ac_status" >&5
+   echo "$as_me:6272: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6315,11 +6332,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6318: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6335: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6322: \$? = $ac_status" >&5
+   echo "$as_me:6339: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8433,7 +8450,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8436 "configure"
+#line 8453 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8531,7 +8548,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8534 "configure"
+#line 8551 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10687,11 +10704,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10690: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10707: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10694: \$? = $ac_status" >&5
+   echo "$as_me:10711: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -10754,11 +10771,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10757: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10774: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10761: \$? = $ac_status" >&5
+   echo "$as_me:10778: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12083,7 +12100,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12086 "configure"
+#line 12103 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12181,7 +12198,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12184 "configure"
+#line 12201 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13003,11 +13020,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13006: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13023: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13010: \$? = $ac_status" >&5
+   echo "$as_me:13027: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13070,11 +13087,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13073: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13090: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13077: \$? = $ac_status" >&5
+   echo "$as_me:13094: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15036,11 +15053,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15039: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15056: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15043: \$? = $ac_status" >&5
+   echo "$as_me:15060: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15268,11 +15285,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15271: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15288: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15275: \$? = $ac_status" >&5
+   echo "$as_me:15292: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15335,11 +15352,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15338: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15355: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15342: \$? = $ac_status" >&5
+   echo "$as_me:15359: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17453,7 +17470,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17456 "configure"
+#line 17473 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -17551,7 +17568,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17554 "configure"
+#line 17571 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -19471,12 +19488,8 @@ then
 
 else
 
-	if ( test -n "$PTHREADLIB" )
-	then
-		HAVE_PTHREAD="yes"
-	else
-		for i in "pthread" "c_r"
-		do
+	for i in "pthread" "c_r"
+	do
 
 
 eval "PTHREADINCLUDES=\"\""
@@ -19858,19 +19871,18 @@ then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
-			if ( test -n "$PTHREADLIB" )
-			then
-				if ( test "$i" = "c_r" )
-				then
-					PTHREADLIB="$PTHREADLIB -pthread"
-				fi
-				break
-			fi
-		done
 		if ( test -n "$PTHREADLIB" )
 		then
-			HAVE_PTHREAD="yes"
+			if ( test "$i" = "c_r" )
+			then
+				PTHREADLIB="$PTHREADLIB -pthread"
+			fi
+			break
 		fi
+	done
+	if ( test -n "$PTHREADLIB" )
+	then
+		HAVE_PTHREAD="yes"
 	fi
 fi
 
@@ -19904,33 +19916,38 @@ echo
 echo "***** ssl ********************"
 
 
-HAVE_SSL=""
-SSLINCLUDES=""
-SSLLIB=""
-
-if ( test "$cross_compiling" = "yes" )
+if ( test "$ENABLE_RUDIMENTS_SSL" = "yes" )
 then
 
-		echo "cross compiling"
-	if ( test -n "$SSLPATH" )
+	if ( test "$cross_compiling" = "yes" )
 	then
-		SSLINCLUDES="-I$SSLPATH/include"
-		SSLLIB="-L$SSLPATH/lib -lssl"
-	else
-		SSLLIB="-lssl"
-	fi
-	HAVE_SSL="yes"
 
-else
+				echo "cross compiling"
+		if ( test -n "$SSLLIBS" -o -n "$SSLINCLUDES" )
+		then
 
-	if ( test -n "$SSLLIB" )
-	then
-		HAVE_SSL="yes"
+cat >>confdefs.h <<\_ACEOF
+#define RUDIMENTS_HAS_SSL 1
+_ACEOF
+
+		fi
+
 	else
+
+		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
+		then
+			SSLLIBS=`pkg-config openssl --libs`
+			SSLINCLUDES=`pkg-config openssl --cflags`
+
+cat >>confdefs.h <<\_ACEOF
+#define RUDIMENTS_HAS_SSL 1
+_ACEOF
+
+		else
 
 
 eval "SSLINCLUDES=\"\""
-eval "SSLLIB=\"\""
+eval "SSLLIBS=\"\""
 eval "SSLLIBPATH=\"\""
 eval "SSLSTATIC=\"\""
 if ( test -n "" )
@@ -19938,7 +19955,7 @@ then
 	eval "=\"\""
 fi
 
-SEARCHPATH=$SSLPATH
+SEARCHPATH=/usr
 NAME=ssl
 HEADER=openssl/ssl.h
 LIBNAME=ssl
@@ -20300,7 +20317,7 @@ else
 fi
 
 eval "SSLINCLUDES=\"$INCLUDESTRING\""
-eval "SSLLIB=\"$LIBSTRING\""
+eval "SSLLIBS=\"$LIBSTRING\""
 eval "SSLLIBPATH=\"$LIBPATH\""
 eval "SSLSTATIC=\"$STATIC\""
 if ( test -n "" )
@@ -20308,12 +20325,16 @@ then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
-		if ( test -n "$SSLLIB" )
-		then
-			HAVE_SSL="yes"
+			if ( test -n "$SSLLIBS" )
+			then
+
+cat >>confdefs.h <<\_ACEOF
+#define RUDIMENTS_HAS_SSL 1
+_ACEOF
+
+			fi
 		fi
 	fi
-fi
 
 
 if ( test -n "$SSLINCLUDES" )
@@ -20322,12 +20343,17 @@ then
 fi
 
 
-if ( test -n "$SSLLIB" )
+if ( test -n "$SSLLIBS" )
 then
-	echo "ssl libs... $SSLLIB"
+	echo "ssl libs... $SSLLIBS"
 fi
 
 
+else
+
+	echo "disabled"
+
+fi
 
 
 
@@ -26370,9 +26396,8 @@ s,@LIBTOOL@,$LIBTOOL,;t t
 s,@PIPE@,$PIPE,;t t
 s,@PTHREADINCLUDES@,$PTHREADINCLUDES,;t t
 s,@PTHREADLIB@,$PTHREADLIB,;t t
-s,@HAVE_SSL@,$HAVE_SSL,;t t
 s,@SSLINCLUDES@,$SSLINCLUDES,;t t
-s,@SSLLIB@,$SSLLIB,;t t
+s,@SSLLIBS@,$SSLLIBS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@SOCKETLIB@,$SOCKETLIB,;t t
 s,@XNETLIB@,$XNETLIB,;t t

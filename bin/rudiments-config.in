@@ -9,13 +9,13 @@ exec_prefix_set=no
 version=@RUDIMENTS_VERSION@
 
 if ( test "@libdir@" = "/usr/lib" ); then
-	rudiments_libs="-lrudiments"
-	rudiments_libs_with_rpath="-lrudiments"
+	rudiments_libs="-lrudiments @PTHREADLIB@ @SSLLIBS@ "
+	rudiments_libs_with_rpath="-lrudiments @PTHREADLIB@ @SSLLIBS@"
 else
-	rudiments_libs="-L@libdir@ -lrudiments"
-	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments"
+	rudiments_libs="-L@libdir@ -lrudiments @PTHREADLIB@ @SSLLIBS@"
+	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments @PTHREADLIB@ @SSLLIBS@"
 fi
-rudiments_cflags="-I@includedir@"
+rudiments_cflags="-I@includedir@ @PTHREADINCLUDES@ @SSLINCLUDES@"
 
 usage()
 {

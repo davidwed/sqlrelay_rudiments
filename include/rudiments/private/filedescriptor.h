@@ -17,4 +17,7 @@
 		int	allowshortreads;
 
 		listener	*lstnr;
+
+		#ifdef RUDIMENTS_HAS_SSL
 		SSL		*ssl;
+		#endif

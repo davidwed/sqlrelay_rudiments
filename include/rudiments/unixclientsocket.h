@@ -23,9 +23,8 @@ class unixclientsocket : public client, public unixsocket {
 		int	connectToServer(const char *filename,
 					unsigned int retrywait,
 					unsigned int retrycount);
-			// Convenience method that calls the
-			// initialize() and connect()
-			// methods below.
+			// Convenience method that calls the initialize() and
+			// connect() methods defined below.
 			//
 			// Returns RESULT_SUCCESS on success and RESULT_ERROR
 			// on failure.
@@ -44,6 +43,7 @@ class unixclientsocket : public client, public unixsocket {
 			// Initializes the class to use "filename",
 			// "retrywait" and "retrycount" when connect() is
 			// called.
+
 		int	connect();
 			// Attempts to connect to the "filename" set earlier.
 			// If the connection fails, it will retry "retrycount"
