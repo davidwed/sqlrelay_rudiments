@@ -12,6 +12,9 @@
 #ifdef HAVE_RPCENT_H
 	#include <rpc/rpcent.h>
 #endif
+#ifdef HAVE_RPC_H
+	#include <rpc/rpc.h>
+#endif
 
 #define MAXBUFFER	(32*1024)
 

@@ -5,6 +5,4 @@
 
 #include <sys/types.h>
 #include <shadow.h>
-#if !defined(HAVE_GETSPNAM_R)
-	#include <pthread.h>
-#endif
+#include <pthread.h>

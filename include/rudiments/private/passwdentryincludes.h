@@ -5,6 +5,4 @@
 
 #include <sys/types.h>
 #include <pwd.h>
-#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
-	#include <pthread.h>
-#endif
+#include <pthread.h>

@@ -5,6 +5,7 @@
 	-fomit-frame-pointer -fno-exceptions -fno-rtti are used now, debugging
 		build just uses -fno-exceptions -fno-rtti
 	rpc/rpcent.h is included if necessary for getrpcbyxxx_r
+	pthread.h is included for xxxentry classes now no matter what
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better

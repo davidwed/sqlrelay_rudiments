@@ -289,7 +289,16 @@ AC_MSG_CHECKING(getrpcbyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+if ( test "$HAVEGETRPCBYNAME_R" = "no" )
+then
+AC_MSG_CHECKING(getrpcbyname_r)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpc.h>],
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
 HAVEGETRPCBYNUMBER_R="no"
@@ -304,7 +313,16 @@ AC_MSG_CHECKING(getrpcbynumber_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+if ( test "$HAVE_GETRPCBYNUMBER_R" = "no" )
+then
+AC_MSG_CHECKING(getrpcbynumber_r)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpc.h>],
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
 LIBS="$OLDLIBS"

@@ -152,6 +152,9 @@
 /* Some systems have rpc/rpcent.h */
 #undef HAVE_RPCENT_H
 
+/* Some systems have rpc/rpc.h */
+#undef HAVE_RPC_H
+
 /* Do we have a real-time-clock */
 #undef HAVE_RTC
 

@@ -3,8 +3,6 @@
 
 #include <rudiments/private/config.h>
 
-#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
-	#include <pthread.h>
-#endif
+#include <pthread.h>
 
 #include <netdb.h>

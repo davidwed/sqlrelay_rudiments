@@ -5,6 +5,4 @@
 
 #include <sys/types.h>
 #include <grp.h>
-#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
-	#include <pthread.h>
-#endif
+#include <pthread.h>
