@@ -360,6 +360,10 @@ class xmldomnode {
 				// The calling program must deallocate the
 				// stringbuffer.
 
+		stringbuffer	*getPath() const;
+		xmldomnode	*getChildByPath(const char *path) const;
+		
+
 	#include <rudiments/private/xmldomnode.h>
 };
 

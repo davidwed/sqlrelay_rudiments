@@ -1,6 +1,10 @@
+daemonprocess needs to register the deadchildhandler during shutdown, otherwise
+	the signalhandler's call to waitpid() interferes with other library
+	calls (like system()) that call wait() or waitpid().
+
 a bunch of methods can probabaly be made const
 
-add ioctl, fcntl to filedescriptor class
+add mmap, ioctl, fcntl to filedescriptor class
 
 on SCO, sometimes you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
 strip fails on openbsd

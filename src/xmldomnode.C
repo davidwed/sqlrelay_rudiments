@@ -18,7 +18,7 @@ xmldomnode::xmldomnode(xmldomnode *nullnode) {
 }
 
 xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
-			const char *name, const char *value) {
+				const char *name, const char *value) {
 	init(nullnode);
 	this->type=type;
 	nodename=(name)?strdup((char *)name):NULL;
@@ -73,9 +73,10 @@ xmldomnode *xmldomnode::createNullNode() {
 }
 
 xmldomnode *xmldomnode::getPreviousTagSibling() const {
-	xmldomnode	*node=(xmldomnode *)this;
-	while (!(node=node->getPreviousSibling())->isNullNode() &&
-				!node->getType()==TAG_XMLDOMNODETYPE);
+	xmldomnode	*node=(xmldomnode *)getPreviousSibling();
+	while (!node->isNullNode() && node->getType()!=TAG_XMLDOMNODETYPE) {
+		node=node->getPreviousSibling();
+	}
 	return node;
 }
 
@@ -112,7 +113,7 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 
 xmldomnode *xmldomnode::getNextTagSibling() const {
 	xmldomnode	*node=(xmldomnode *)getNextSibling();
-	while (!node->isNullNode() && !node->getType()==TAG_XMLDOMNODETYPE) {
+	while (!node->isNullNode() && node->getType()!=TAG_XMLDOMNODETYPE) {
 		node=node->getNextSibling();
 	}
 	return node;
@@ -507,4 +508,91 @@ bool xmldomnode::deleteAttribute(xmldomnode *attribute) {
 
 stringbuffer *xmldomnode::xml() const {
 	return xml(NULL);
+}
+
+stringbuffer *xmldomnode::getPath() const {
+
+	// Path: /element[index]/...
+
+	// run up the tree, counting parent nodes
+	int	ancestors=0;
+	xmldomnode	*node=(xmldomnode *)this;
+	while (!node->isNullNode() && node->getType()!=ROOT_XMLDOMNODETYPE) {
+		ancestors++;
+		node=node->getParent();
+	}
+
+	// create pointers to the names of each parent node
+	char		*names[ancestors];
+	unsigned long	indices[ancestors];
+	node=(xmldomnode *)this;
+	for (int index=ancestors-1; index>=0; index--) {
+
+		// get the name
+		names[index]=node->getName();
+
+		// figure out which sibling this node is
+		indices[index]=0;
+		for (xmldomnode *siblingnode=(xmldomnode *)node->
+				getPreviousTagSibling(names[index]);
+			(!siblingnode->isNullNode() &&
+				siblingnode->getType()!=ROOT_XMLDOMNODETYPE);
+			siblingnode=siblingnode->
+				getPreviousTagSibling(names[index])) {
+			indices[index]++;
+		}
+		
+		node=node->getParent();
+	}
+
+	// run through the list of parent node names and indices,
+	// append them all to the path
+	stringbuffer	*path=new stringbuffer();
+	for (int index=0; index<ancestors; index++) {
+		path->append('/')->append(names[index]);
+		path->append('[')->append((long)indices[index])->append(']');
+	}
+
+	return path;
+}
+
+xmldomnode *xmldomnode::getChildByPath(const char *path) const {
+
+	// Path: /element[index]/...
+	xmldomnode	*node=(xmldomnode *)this;
+	stringbuffer	name;
+	stringbuffer	indexstring;
+	stringbuffer	*buffer=&name;
+	char		*ptr=(char *)path;
+	for (;;) {
+
+		if (!*ptr || *ptr=='@') {
+			break;
+		} else if (*ptr=='/') {
+			buffer=&name;
+		} else if (*ptr=='[') {
+			buffer=&indexstring;
+		} else if (*ptr==']') {
+
+			// get the first child
+			node=node->getChild(name.getString());
+
+			// now skip until we get the specified index
+			unsigned long	index=atoi(indexstring.getString());
+			for (unsigned long i=0; i<index; i++) {
+				node=node->getNextTagSibling(name.getString());
+			}
+
+			// reset the buffers
+			name.clear();
+			indexstring.clear();
+
+		} else {
+			buffer->append(*ptr);
+		}
+
+		ptr++;
+	}
+
+	return node;
 }

@@ -36,9 +36,6 @@
 /* Some systems don't have st_blksize in struct stat */
 #undef HAVE_BLKSIZE_T
 
-/* Some systems don't define CMSG_SPACE */
-#undef HAVE_CMSG_SPACE
-
 /* Cygwin style statfs */
 #undef HAVE_CYGWIN_STATFS
 
