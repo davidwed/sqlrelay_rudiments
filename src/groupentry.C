@@ -48,7 +48,7 @@ int groupentry::initialize(gid_t groupid) {
 		delete[] buffer;
 		buffer=NULL;
 	}
-	#ifdef HAVE_GETPWUID_R
+	#ifdef HAVE_GETGRGID_R
 		// getgrgid_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
