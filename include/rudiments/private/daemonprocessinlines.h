@@ -43,6 +43,10 @@ inline void daemonprocess::shutDown() {
 	(*shutdownfunc)(0);
 }
 
+inline void daemonprocess::crash() {
+	(*crashfunc)(0);
+}
+
 inline int daemonprocess::runAsUser(const char *username) const {
 	struct	passwd	*ent=getpwnam((username)?username:"");
 	return (ent)?runAsUserId(ent->pw_uid):0;

@@ -3,9 +3,13 @@
 
 	private:
 		static	void	shutDown();
+		static	void	crash();
 
-		static	signalhandler	*sighandler;
+		static	signalhandler	*shutdownhandler;
 		static	void		(*shutdownfunc)(int);
+
+		static	signalhandler	*crashhandler;
+		static	void		(*crashfunc)(int);
 
 		static	signalhandler	*deadchildhandler;
 		static	void		waitOnChildren();

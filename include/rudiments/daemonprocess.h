@@ -56,6 +56,10 @@ class daemonprocess {
 				// This method allows you to designate a
 				// function to run when the daemon is killed.
 
+		static	void	handleCrash(void *crashfunction);
+				// This method allows you to designate a
+				// function to run if the daemon crashes.
+
 	#include <rudiments/private/daemonprocess.h>
 
 };

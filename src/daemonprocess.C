@@ -11,15 +11,18 @@
 #include <stdlib.h>
 
 #ifdef __GNUC__
-static signalhandler	*daemonprocess::sighandler;
+static signalhandler	*daemonprocess::shutdownhandler;
+static signalhandler	*daemonprocess::crashhandler;
 static void		(*daemonprocess::shutdownfunc)(int);
+static void		(*daemonprocess::crashfunc)(int);
 static signalhandler	*daemonprocess::deadchildhandler;
 #endif
 
 daemonprocess::daemonprocess() {
 
 	deadchildhandler=new signalhandler();
-	sighandler=new signalhandler();
+	shutdownhandler=new signalhandler();
+	crashhandler=new signalhandler();
 
 	deadchildhandler->setHandler((void *)waitOnChildren);
 	deadchildhandler->addFlag(SA_NOCLDSTOP);
@@ -30,7 +33,8 @@ daemonprocess::~daemonprocess() {
 	waitOnChildren();
 
 	delete deadchildhandler;
-	delete sighandler;
+	delete shutdownhandler;
+	delete crashhandler;
 }
 
 int daemonprocess::checkForPidFile(const char *filename) const {
@@ -83,7 +87,15 @@ void daemonprocess::handleShutDown(void *shutdownfunction) {
 
 	shutdownfunc=(void(*)(int))shutdownfunction;
 
-	sighandler->setHandler((void *)shutDown);
-	sighandler->handleSignal(SIGINT);
-	sighandler->handleSignal(SIGTERM);
+	shutdownhandler->setHandler((void *)shutDown);
+	shutdownhandler->handleSignal(SIGINT);
+	shutdownhandler->handleSignal(SIGTERM);
+}
+
+void daemonprocess::handleCrash(void *crashfunction) {
+
+	crashfunc=(void(*)(int))crashfunction;
+
+	crashhandler->setHandler((void *)crash);
+	crashhandler->handleSignal(SIGSEGV);
 }
