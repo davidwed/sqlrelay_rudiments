@@ -14,14 +14,6 @@ for the standard C functions for things like such as regular
 expressions, semaphores and signal handling.
 
 
-#%package debug
-#Summary: Runtime libraries for rudiments compiled with debugging support.
-#Group: Development/Libraries
-
-#%description debug
-#Runtime libraries for rudiments compiled with debugging support.
-
-
 %package devel
 Summary: Libraries and header files for developing with rudiments.
 Group: Development/Libraries
@@ -61,9 +53,6 @@ rm -rf %{buildroot}
 %files
 %defattr(-, root, root)
 %{_libdir}/librudiments-*.so.*
-
-#%files debug
-#%{_libdir}/librudiments_p-*.so.*
 
 %files devel
 %{_includedir}/rudiments
