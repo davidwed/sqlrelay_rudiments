@@ -80,7 +80,7 @@ class file : public filedescriptor {
 		// These methods allow you to lock the entire file.
 		bool	tryLockFile(short type);
 		bool	lockFile(short type);
-		bool	checkLockFile(short type, flock *lck);
+		bool	checkLockFile(short type, struct flock *lck);
 		bool	unlockFile(short type);
 
 		// These methods allow you to lock an arbitrary region of the
@@ -88,7 +88,7 @@ class file : public filedescriptor {
 		bool	tryLockRegion(short type, off_t start, off_t len);
 		bool	lockRegion(short type, off_t start, off_t len);
 		bool	checkLockRegion(short type, off_t start, off_t len,
-								flock *lck);
+							struct flock *lck);
 		bool	unlockRegion(off_t start, off_t len);
 
 		// These methods allow you to lock an arbitrary region of the
@@ -97,9 +97,10 @@ class file : public filedescriptor {
 		bool	tryLockFromCurrent(short type, off_t start, off_t len);
 		bool	lockFromCurrent(short type, off_t len);
 		bool	lockFromCurrent(short type, off_t start, off_t len);
-		bool	checkLockFromCurrent(short type, off_t len, flock *lck);
+		bool	checkLockFromCurrent(short type, off_t len,
+							struct flock *lck);
 		bool	checkLockFromCurrent(short type, off_t start, off_t len,
-								flock *lck);
+							struct flock *lck);
 		bool	unlockFromCurrent(off_t len);
 		bool	unlockFromCurrent(off_t start, off_t len);
 
@@ -109,9 +110,10 @@ class file : public filedescriptor {
 		bool	tryLockFromEnd(short type, off_t start, off_t len);
 		bool	lockFromEnd(short type, off_t len);
 		bool	lockFromEnd(short type, off_t start, off_t len);
-		bool	checkLockFromEnd(short type, off_t len, flock *lck);
+		bool	checkLockFromEnd(short type, off_t len,
+							struct flock *lck);
 		bool	checkLockFromEnd(short type, off_t start, off_t len,
-								flock *lck);
+							struct flock *lck);
 		bool	unlockFromEnd(off_t len);
 		bool	unlockFromEnd(off_t start, off_t len);
 
@@ -119,7 +121,8 @@ class file : public filedescriptor {
 		// starting at a given offset.
 		bool	tryLockRemainder(short type, off_t start);
 		bool	lockRemainder(short type, off_t start);
-		bool	checkLockRemainder(short type, off_t start, flock *lck);
+		bool	checkLockRemainder(short type, off_t start,
+							struct flock *lck);
 		bool	unlockRemainder(off_t start);
 
 		// These methods allow you to lock "the remainder" of a file
@@ -128,9 +131,10 @@ class file : public filedescriptor {
 		bool	tryLockRemainderFromCurrent(short type, off_t start);
 		bool	lockRemainderFromCurrent(short type);
 		bool	lockRemainderFromCurrent(short type, off_t start);
-		bool	checkLockRemainderFromCurrent(short type, flock *lck);
+		bool	checkLockRemainderFromCurrent(short type,
+							struct flock *lck);
 		bool	checkLockRemainderFromCurrent(short type, off_t start,
-								flock *lck);
+							struct flock *lck);
 		bool	unlockRemainderFromCurrent();
 		bool	unlockRemainderFromCurrent(off_t start);
 
@@ -140,9 +144,10 @@ class file : public filedescriptor {
 		bool	tryLockRemainderFromEnd(short type, off_t start);
 		bool	lockRemainderFromEnd(short type);
 		bool	lockRemainderFromEnd(short type, off_t start);
-		bool	checkLockRemainderFromEnd(short type, flock *lck);
+		bool	checkLockRemainderFromEnd(short type,
+							struct flock *lck);
 		bool	checkLockRemainderFromEnd(short type, off_t start,
-								flock *lck);
+							struct flock *lck);
 		bool	unlockRemainderFromEnd();
 		bool	unlockRemainderFromEnd(off_t start);
 

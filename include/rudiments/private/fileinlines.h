@@ -50,7 +50,7 @@ RUDIMENTS_INLINE ssize_t file::create(const char *name, mode_t perms,
 
 RUDIMENTS_INLINE bool file::lock(int method, short type, short whence,
 						off_t start, off_t len) {
-	flock	lck;
+	struct flock	lck;
 	lck.l_type=type;
 	lck.l_whence=whence;
 	lck.l_start=start;
@@ -60,20 +60,21 @@ RUDIMENTS_INLINE bool file::lock(int method, short type, short whence,
 }
 
 RUDIMENTS_INLINE bool file::checkLock(short type, short whence,
-					off_t start, off_t len, flock *retlck) {
-	flock	lck;
+						off_t start, off_t len,
+						struct flock *retlck) {
+	struct flock	lck;
 	lck.l_type=type;
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
 	// FIXME: if a signal interrupts this, we should retry
 	bool	retval=(!fcntl(fd,F_SETLKW,&lck));
-	memcpy((void *)retlck,(void *)&lck,sizeof(flock));
+	memcpy((void *)retlck,(void *)&lck,sizeof(struct flock));
 	return retval;
 }
 
 RUDIMENTS_INLINE bool file::unlock(short whence, off_t start, off_t len) {
-	flock	lck;
+	struct flock	lck;
 	lck.l_type=F_UNLCK;
 	lck.l_whence=whence;
 	lck.l_start=start;
@@ -90,7 +91,7 @@ RUDIMENTS_INLINE bool file::lockFile(short type) {
 	return lockRegion(type,0,0);
 }
 
-RUDIMENTS_INLINE bool file::checkLockFile(short type, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockFile(short type, struct flock *retlck) {
 	return checkLockRegion(type,0,0,retlck);
 }
 
@@ -106,8 +107,9 @@ RUDIMENTS_INLINE bool file::lockRegion(short type, off_t start, off_t len) {
 	return lock(F_SETLKW,type,SEEK_SET,start,len);
 }
 
-RUDIMENTS_INLINE bool file::checkLockRegion(short type, off_t start,
-						off_t len, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockRegion(short type,
+						off_t start, off_t len,
+						struct flock *retlck) {
 	return checkLock(type,SEEK_SET,start,len,retlck);
 }
 
@@ -133,13 +135,14 @@ RUDIMENTS_INLINE bool file::lockFromCurrent(short type,
 	return lock(F_SETLKW,type,SEEK_CUR,start,len);
 }
 
-RUDIMENTS_INLINE bool file::checkLockFromCurrent(short type,
-						off_t len, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockFromCurrent(short type, off_t len,
+							struct flock *retlck) {
 	return checkLockFromCurrent(type,0,len,retlck);
 }
 
-RUDIMENTS_INLINE bool file::checkLockFromCurrent(short type, off_t start,
-						off_t len, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockFromCurrent(short type,
+						off_t start, off_t len,
+							struct flock *retlck) {
 	return checkLock(type,SEEK_CUR,start,len,retlck);
 }
 
@@ -167,13 +170,14 @@ RUDIMENTS_INLINE bool file::lockFromEnd(short type, off_t start, off_t len) {
 	return lock(F_SETLKW,type,SEEK_END,start,len);
 }
 
-RUDIMENTS_INLINE bool file::checkLockFromEnd(short type,
-						off_t len, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockFromEnd(short type, off_t len,
+							struct flock *retlck) {
 	return checkLockFromEnd(type,0,len,retlck);
 }
 
-RUDIMENTS_INLINE bool file::checkLockFromEnd(short type, off_t start,
-						off_t len, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockFromEnd(short type,
+						off_t start, off_t len,
+							struct flock *retlck) {
 	return checkLock(type,SEEK_END,start,len,retlck);
 }
 
@@ -193,8 +197,8 @@ RUDIMENTS_INLINE bool file::lockRemainder(short type, off_t start) {
 	return lock(F_SETLKW,type,SEEK_SET,start,0);
 }
 
-RUDIMENTS_INLINE bool file::checkLockRemainder(short type,
-						off_t start, flock *retlck) {
+RUDIMENTS_INLINE bool file::checkLockRemainder(short type, off_t start,
+							struct flock *retlck) {
 	return checkLock(type,SEEK_SET,start,0,retlck);
 }
 
@@ -220,12 +224,13 @@ RUDIMENTS_INLINE bool file::lockRemainderFromCurrent(short type, off_t start) {
 }
 
 RUDIMENTS_INLINE bool file::checkLockRemainderFromCurrent(short type,
-								flock *retlck) {
+							struct flock *retlck) {
 	return checkLockRemainderFromCurrent(type,0,retlck);
 }
 
 RUDIMENTS_INLINE bool file::checkLockRemainderFromCurrent(short type,
-						off_t start, flock *retlck) {
+							off_t start,
+							struct flock *retlck) {
 	return checkLock(type,SEEK_CUR,start,0,retlck);
 }
 
@@ -254,12 +259,12 @@ RUDIMENTS_INLINE bool file::lockRemainderFromEnd(short type, off_t start) {
 }
 
 RUDIMENTS_INLINE bool file::checkLockRemainderFromEnd(short type,
-							flock *retlck) {
+							struct flock *retlck) {
 	return checkLockRemainderFromEnd(type,0,retlck);
 }
 
 RUDIMENTS_INLINE bool file::checkLockRemainderFromEnd(short type, off_t start,
-								flock *retlck) {
+							struct flock *retlck) {
 	return checkLock(type,SEEK_END,start,0,retlck);
 }
 
