@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <errno.h>
 
+#ifdef HAVE_RPCENT_H
+	#include <rpc/rpcent.h>
+#endif
+
 #define MAXBUFFER	(32*1024)
 
 #if defined(__GNUC__) && \

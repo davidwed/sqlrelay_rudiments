@@ -149,6 +149,9 @@
 /* Define to 1 if you have the `re_comp' function. */
 #undef HAVE_RE_COMP
 
+/* Some systems have rpc/rpcent.h */
+#undef HAVE_RPCENT_H
+
 /* Do we have a real-time-clock */
 #undef HAVE_RTC
 

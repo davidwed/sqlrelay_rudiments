@@ -21,7 +21,9 @@ AC_ARG_WITH(ptheads-prefix,
 
 
 CXXFLAGS="-fomit-frame-pointer -fno-exceptions -fno-rtti"
+DEBUGCXXFLAGS="-fno-exceptions -fno-rtti"
 AC_SUBST(CXXFLAGS)
+AC_SUBST(DEBUGCXXFLAGS)
 AC_SUBST(SMALLCODE)
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(SMALL_CODE,1,Use small rather than fast code)
@@ -287,7 +289,7 @@ AC_MSG_CHECKING(getrpcbyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
 HAVEGETRPCBYNUMBER_R="no"
@@ -302,7 +304,7 @@ AC_MSG_CHECKING(getrpcbynumber_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
 LIBS="$OLDLIBS"

@@ -2,9 +2,9 @@
 	added shadowentry, serviceentry and rpcentry classes and test programs
 	reorganized *entry class code a bit to generate smaller code
 	uses -pipe compilation flag now if possible
-	-fomit-frame-pointer -fno-exceptions -fno-rtti are used now
-	configure script checks for getrpcbyxxx_r functions in rpc/rpcent.h
-		now if they're not found in netdb.h
+	-fomit-frame-pointer -fno-exceptions -fno-rtti are used now, debugging
+		build just uses -fno-exceptions -fno-rtti
+	rpc/rpcent.h is included if necessary for getrpcbyxxx_r
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better
