@@ -17,7 +17,6 @@ class inetsocket : virtual public datatransport {
 	protected:
 		char		*address;
 		unsigned short	port;
-		hostent		*hostentry;
 		sockaddr_in	sin;
 };
 

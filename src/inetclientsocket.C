@@ -33,10 +33,20 @@ void inetclientsocket::initialize(connectiondata *cd) {
 int inetclientsocket::connect() {
 
 	// get the host entry
-	hostentry=NULL;
+#ifdef HAVE_GETHOSTBYNAME_R
+	hostent	*hostentry;
+	char	hostbuffer[1024];
+	hostent	hst;
+	int	errnop;
+	if (gethostbyname_r(address,&hst,hostbuffer,1024,&hostentry,&errnop)) {
+		return 0;
+	}
+#else
+	hostent	*hostentry=NULL;
 	if (!(hostentry=gethostbyname(address))) {
 		return 0;
 	}
+#endif
 
 	// set the address type and port to connect to
 	memset((void *)&sin,0,sizeof(sin));
@@ -44,16 +54,37 @@ int inetclientsocket::connect() {
 	sin.sin_port=htons(port);
 
 	// use tcp protocol
+#ifdef HAVE_GETPROTOBYNAME_R
 	protoent	*protocol;
-	if (!(protocol=getprotobyname("tcp"))) {
+	char		protobuffer[1024];
+	protoent	proto;
+	if (getprotobyname_r("tcp",&proto,protobuffer,1024,&protocol)) {
+		#ifdef HAVE_GETHOSTBYNAME_R
+			delete hostentry;
+		#endif
 		return 0;
 	}
+#else
+	protoent	*protocol=NULL;
+	if (!(protocol=getprotobyname("tcp"))) {
+		#ifdef HAVE_GETHOSTBYNAME_R
+			delete hostentry;
+		#endif
+		return 0;
+	}
+#endif
 
 	// create an inet socket
 	if ((fd=socket(AF_INET,SOCK_STREAM,protocol->p_proto))==-1) {
 		fd=-1;
+		#ifdef HAVE_GETPROTOBYNAME_R
+			delete protocol;
+		#endif
 		return 0;
 	}
+	#ifdef HAVE_GETPROTOBYNAME_R
+		delete protocol;
+	#endif
 
 	// if create failed, show this error
 
@@ -66,14 +97,17 @@ int inetclientsocket::connect() {
 		while (hostentry->h_addr_list[addressindex]) {
 
 			// set which host to connect to
-			bcopy((void *)hostentry->h_addr_list[addressindex],
-				(void *)&sin.sin_addr,
+			memcpy((void *)&sin.sin_addr,
+				(void *)hostentry->h_addr_list[addressindex],
 				hostentry->h_length);
 			addressindex++;
 	
 			// attempt to connect
 			if (::connect(fd,(struct sockaddr *)&sin,
 							sizeof(sin))!=-1) {
+					#ifdef HAVE_GETHOSTBYNAME_R
+						delete hostentry;
+					#endif
 					return 1;
 			}
 		}
@@ -84,5 +118,9 @@ int inetclientsocket::connect() {
 
 	// if we're here, the connect failed
 	close();
+
+#ifdef HAVE_GETHOSTBYNAME_R
+	delete hostentry;
+#endif
 	return 0;
 }

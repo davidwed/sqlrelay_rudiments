@@ -1,4 +1,4 @@
-do results of getpwnam, getgrnam, gethostbyname, getprotobyname need to be freed?
+do results of gethostbyname, getprotobyname need to be freed?
 
 
 document filedescriptor
