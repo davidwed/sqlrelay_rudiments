@@ -89,6 +89,7 @@ RUDIMENTS_INLINE int filesystem::getType(const char *path, long *type) {
 	STATFS(path,type,f_type)
 #else
 	*type=0;
+	return 1;
 #endif
 }
 
@@ -99,6 +100,7 @@ RUDIMENTS_INLINE int filesystem::getType(int fd, long *type) {
 	FSTATFS(fd,type,f_type)
 #else
 	*type=0;
+	return 1;
 #endif
 }
 
@@ -122,6 +124,7 @@ RUDIMENTS_INLINE int filesystem::getBlockSize(const char *path, long *size) {
 		STATFS(path,size,f_frsize)
 	#else
 		*size=0;
+		return 1;
 	#endif
 #endif
 }
@@ -136,6 +139,7 @@ RUDIMENTS_INLINE int filesystem::getBlockSize(int fd, long *size) {
 		FSTATFS(fd,size,f_frsize)
 	#else
 		*size=0;
+		return 1;
 	#endif
 #endif
 }
@@ -166,6 +170,7 @@ RUDIMENTS_INLINE int filesystem::getOptimumTransferBlockSize(const char *path,
 		STATFS(path,size,f_iosize)
 	#else
 		*size=0;
+		return 1;
 	#endif
 #endif
 }
@@ -182,6 +187,7 @@ RUDIMENTS_INLINE int filesystem::getOptimumTransferBlockSize(int fd,
 		FSTATFS(fd,size,f_iosize)
 	#else
 		*size=0;
+		return 1;
 	#endif
 #endif
 }
@@ -211,6 +217,7 @@ RUDIMENTS_INLINE int filesystem::getTotalBlocks(const char *path,
 	STATFS(path,blocks,f_blocks)
 #else
 	*blocks=0;
+	return 1;
 #endif
 }
 
@@ -223,6 +230,7 @@ RUDIMENTS_INLINE int filesystem::getTotalBlocks(int fd, long *blocks) {
 	FSTATFS(fd,blocks,f_blocks)
 #else
 	*blocks=0;
+	return 1;
 #endif
 }
 
@@ -247,6 +255,7 @@ RUDIMENTS_INLINE int filesystem::getFreeBlocks(const char *path, long *blocks) {
 	STATFS(path,blocks,f_bfree)
 #else
 	*blocks=0;
+	return 1;
 #endif
 }
 
@@ -259,6 +268,7 @@ RUDIMENTS_INLINE int filesystem::getFreeBlocks(int fd, long *blocks) {
 	FSTATFS(fd,blocks,f_bfree)
 #else
 	*blocks=0;
+	return 1;
 #endif
 }
 
@@ -284,6 +294,7 @@ RUDIMENTS_INLINE int filesystem::getAvailableBlocks(const char *path,
 	STATFS(path,blocks,f_bavail)
 #else
 	*blocks=0;
+	return 1;
 #endif
 }
 
@@ -296,6 +307,7 @@ RUDIMENTS_INLINE int filesystem::getAvailableBlocks(int fd, long *blocks) {
 	FSTATFS(fd,blocks,f_bavail)
 #else
 	*blocks=0;
+	return 1;
 #endif
 }
 
@@ -321,6 +333,7 @@ RUDIMENTS_INLINE int filesystem::getTotalFileNodes(const char *path,
 	STATFS(path,nodes,f_files)
 #else
 	*nodes=0;
+	return 1;
 #endif
 }
 
@@ -333,6 +346,7 @@ RUDIMENTS_INLINE int filesystem::getTotalFileNodes(int fd, long *nodes) {
 	FSTATFS(fd,nodes,f_files)
 #else
 	*nodes=0;
+	return 1;
 #endif
 }
 
@@ -358,6 +372,7 @@ RUDIMENTS_INLINE int filesystem::getFreeFileNodes(const char *path,
 	STATFS(path,nodes,f_ffree)
 #else
 	*nodes=0;
+	return 1;
 #endif
 }
 
@@ -370,6 +385,7 @@ RUDIMENTS_INLINE int filesystem::getFreeFileNodes(int fd, long *nodes) {
 	FSTATFS(fd,nodes,f_ffree)
 #else
 	*nodes=0;
+	return 1;
 #endif
 }
 
@@ -391,6 +407,7 @@ RUDIMENTS_INLINE int filesystem::getAvailableFileNodes(const char *path,
 	STATFS(path,nodes,f_ffree)
 #else
 	*nodes=0;
+	return 1;
 #endif
 }
 
@@ -399,6 +416,7 @@ RUDIMENTS_INLINE int filesystem::getAvailableFileNodes(int fd, long *nodes) {
 	FSTATFS(fd,nodes,f_ffree)
 #else
 	*nodes=0;
+	return 1;
 #endif
 }
 
@@ -433,6 +451,7 @@ RUDIMENTS_INLINE long filesystem::getAvailableFileNodes() const {
 		STATFS(path,id,f_fsid)
 	#else
 		*id=0;
+		return 1;
 	#endif
 	}
 
@@ -444,6 +463,7 @@ RUDIMENTS_INLINE long filesystem::getAvailableFileNodes() const {
 		FSTATFS(fd,id,f_fsid)
 	#else
 		*id=0;
+		return 1;
 	#endif
 	}
 
@@ -468,6 +488,7 @@ RUDIMENTS_INLINE int filesystem::getMaximumFileNameLength(const char *path,
 		STATFS(path,length,f_namemax)
 	#else
 		*length=0;
+		return 1;
 	#endif
 #endif
 }
@@ -481,6 +502,7 @@ RUDIMENTS_INLINE int filesystem::getMaximumFileNameLength(int fd,
 		FSTATFS(fd,length,f_namemax)
 	#else
 		*length=0;
+		return 1;
 	#endif
 #endif
 }
@@ -660,6 +682,7 @@ RUDIMENTS_INLINE int filesystem::getMountPoint(const char *path, char **mtpt) {
 	STATFS(path,mtpt,f_mntonname)
 #else
 	*mtpt=NULL;
+	return 1;
 #endif
 }
 
@@ -670,6 +693,7 @@ RUDIMENTS_INLINE int filesystem::getMountPoint(int fd, char **mtpt) {
 	FSTATFS(fd,mtpt,f_mntonname)
 #else
 	*mtpt=NULL;
+	return 1;
 #endif
 }
 
@@ -740,6 +764,7 @@ RUDIMENTS_INLINE int filesystem::getDeviceName(const char *path,
 	STATFS(path,devname,f_mntfromname)
 #else
 	*devname=NULL;
+	return 1;
 #endif
 }
 
@@ -749,6 +774,7 @@ RUDIMENTS_INLINE int filesystem::getDeviceName(int fd, char **devname) {
 	FSTATFS(fd,devname,f_mntfromname)
 #else
 	*devname=NULL;
+	return 1;
 #endif
 }
 
@@ -767,6 +793,7 @@ RUDIMENTS_INLINE int filesystem::getFilesystemSpecificString(const char *path,
 	STATFS(path,str,f_fstr)
 #else
 	*str=NULL;
+	return 1;
 #endif
 }
 
@@ -776,6 +803,7 @@ RUDIMENTS_INLINE int filesystem::getFilesystemSpecificString(int fd,
 	FSTATFS(fd,str,f_fstr)
 #else
 	*str=NULL;
+	return 1;
 #endif
 }
 

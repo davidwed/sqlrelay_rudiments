@@ -20,8 +20,8 @@ AC_ARG_WITH(ptheads-prefix,
 	PTHREADSPATH="")
 
 
-CXXFLAGS="-fomit-frame-pointer -fno-exceptions"
-DEBUGCXXFLAGS="-fno-exceptions"
+CXXFLAGS="-fomit-frame-pointer -fno-exceptions -Wall"
+DEBUGCXXFLAGS="-fno-exceptions -Wall"
 AC_SUBST(CXXFLAGS)
 AC_SUBST(DEBUGCXXFLAGS)
 AC_SUBST(SMALLCODE)

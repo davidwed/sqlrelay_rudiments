@@ -167,22 +167,22 @@ int	timezonefile::parseFile(const char *filename) {
 }
 
 void timezonefile::print() {
-	printf("ttisgmtcnt: %d\n",ttisgmtcnt);
-	printf("ttisstdcnt: %d\n",ttisstdcnt);
-	printf("leapcnt: %d\n",leapcnt);
-	printf("timecnt: %d\n",timecnt);
-	printf("typecnt: %d\n",typecnt);
-	printf("charcnt: %d\n",charcnt);
+	printf("ttisgmtcnt: %ld\n",ttisgmtcnt);
+	printf("ttisstdcnt: %ld\n",ttisstdcnt);
+	printf("leapcnt: %ld\n",leapcnt);
+	printf("timecnt: %ld\n",timecnt);
+	printf("typecnt: %ld\n",typecnt);
+	printf("charcnt: %ld\n",charcnt);
 	int	i;
 	for (i=0; i<timecnt; i++) {
-		printf("transitiontime[%d]: %d\n",i,transitiontime[i]);
+		printf("transitiontime[%d]: %ld\n",i,transitiontime[i]);
 	}
 	for (i=0; i<timecnt; i++) {
 		printf("localtime[%d]: %d\n",i,localtime[i]);
 	}
 	for (i=0; i<typecnt; i++) {
 		printf("ttinfo[%d] {\n",i);
-		printf("	tt_gmtoff: %d\n",ti[i].tt_gmtoff);
+		printf("	tt_gmtoff: %ld\n",ti[i].tt_gmtoff);
 		printf("	tt_isdst: %d\n",ti[i].tt_isdst);
 		printf("	tt_abbrind: %d\n",ti[i].tt_abbrind);
 		printf("}\n");
@@ -196,8 +196,8 @@ void timezonefile::print() {
 	}
 	printf("\n");
 	for (i=0; i<leapcnt; i++) {
-		printf("leapsecondtime[%d]: %d\n",i,leapsecondtime[i]);
-		printf("totalleapseconds[%d]: %d\n",i,totalleapseconds[i]);
+		printf("leapsecondtime[%d]: %ld\n",i,leapsecondtime[i]);
+		printf("totalleapseconds[%d]: %ld\n",i,totalleapseconds[i]);
 	}
 	for (int counter=0; counter<typecnt; counter++) {
 		printf("timezonestrings[%d]=%s\n",counter,

@@ -86,7 +86,7 @@ RUDIMENTS_INLINE int file::exists(const char *filename) {
 
 RUDIMENTS_INLINE ssize_t file::getContents(unsigned char *buffer,
 							size_t buffersize) {
-	return read(buffer,(buffersize<getSize())?buffersize:getSize());
+	return read(buffer,(buffersize<(size_t)getSize())?buffersize:getSize());
 }
 
 RUDIMENTS_INLINE int file::getCurrentProperties() {

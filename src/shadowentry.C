@@ -55,7 +55,7 @@ void shadowentry::print() const {
 
 	printf("Name: %s\n",getName());
 	printf("Encrypted Password: %s\n",getEncryptedPassword());
-	printf("Last Change: %d\n",getLastChangeDate());
+	printf("Last Change: %ld\n",getLastChangeDate());
 	printf("Days Before Change Allowed: %d\n",
 				getDaysBeforeChangeAllowed());
 	printf("Days Before Change Required: %d\n",

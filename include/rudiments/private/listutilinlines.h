@@ -61,5 +61,5 @@ inline void listutil<double>::print(double data) const {
 
 template <class datatype>
 inline void listutil<datatype>::print(datatype data) const {
-	printf("%x",data);
+	printf("%lx",(unsigned long)data);
 }

@@ -25,7 +25,7 @@
 		} else if (fstype==0xEF53) {
 			return "ext2";
 		// hfs???
-		} else if (fstype==0xF995E849) {
+		} else if (fstype==(long)0xF995E849) {
 			return "hpfs";
 		} else if (fstype==0x9660) {
 			return "iso";

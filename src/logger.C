@@ -47,7 +47,7 @@ void logger::write(const char *header, int tabs, long number) const {
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
-	sprintf(logentry,"%s%d\n\n",logentry,number);
+	sprintf(logentry,"%s%ld\n\n",logentry,number);
 	write(logentry);
 	delete[] logentry;
 }

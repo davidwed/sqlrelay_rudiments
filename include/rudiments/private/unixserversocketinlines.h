@@ -4,7 +4,7 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE unixserversocket::unixserversocket() :
-					unixsocket(), serversocket() {
+					serversocket(), unixsocket() {
 	mask=0;
 }
 
