@@ -1,6 +1,4 @@
 update docs/comments for new lock/truncate methods in file class
-dictionary class setData doesn't return false if key isn't found, it creates it,
-	right?
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
 
