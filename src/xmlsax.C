@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_MMAP
+	#include <sys/mman.h>
+#endif
 #include <fcntl.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
@@ -71,7 +74,32 @@ bool xmlsax::parseFile(const char *filename) {
 	// close any previously opened files, open the file, parse it, close
 	// it again
 	close();
+#ifdef HAVE_MMAP
+	// open the file
+	bool retval;
+	if ((retval=fl.open(filename,O_RDONLY))) {
+		// try to mmap it shared, if that fails, try private,
+		// if neither mmap succeeds then that's ok, just set ptr to
+		// NULL and fallback to just reading from the file
+		if ((ptr=string=(char *)mmap(NULL,fl.getSize(),
+						PROT_READ,MAP_SHARED,
+						fl.getFileDescriptor(),0))==
+						MAP_FAILED) {
+			if ((ptr=string=(char *)mmap(NULL,fl.getSize(),
+						PROT_READ,MAP_PRIVATE,
+						fl.getFileDescriptor(),0))==
+						MAP_FAILED) {
+				ptr=NULL;
+			}
+		}
+		retval=parse();
+		if (ptr) {
+			munmap(string,fl.getSize());
+		}
+	} 
+#else
 	bool	retval=(fl.open(filename,O_RDONLY) && parse());
+#endif
 	close();
 	return retval;
 }
@@ -85,8 +113,7 @@ bool xmlsax::parseString(const char *string) {
 	reset();
 
 	// set string pointers
-	this->string=(char *)string;
-	ptr=this->string;
+	ptr=this->string=(char *)string;
 
 	return parse();
 }
@@ -772,8 +799,8 @@ char xmlsax::getCharacter() {
 	// if the character is an EOF, return a NULL
 	char	ch;
 	if (string) {
-		ptr++;
 		ch=*ptr;
+		ptr++;
 	} else {
 		if (fl.read((void *)&ch,sizeof(char))!=sizeof(char)) {
 			ch=(char)NULL;

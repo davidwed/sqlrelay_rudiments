@@ -73,6 +73,9 @@
 /* Some systems have gethostbyname_r */
 #undef HAVE_GETHOSTBYNAME_R
 
+/* Define to 1 if you have the `getpagesize' function. */
+#undef HAVE_GETPAGESIZE
+
 /* Some systems have getprotobyname_r */
 #undef HAVE_GETPROTOBYNAME_R
 
@@ -124,6 +127,9 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
+
+/* Define to 1 if you have a working `mmap' system call. */
+#undef HAVE_MMAP
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
