@@ -14,6 +14,8 @@ namespace rudiments {
 
 class dtd {
 	public:
+			dtd();
+
 		bool	parseFile(const char *filename);
 			// Parse file "filename" and generate a DTD tree.
 			//
@@ -23,10 +25,10 @@ class dtd {
 			//
 			// Returns true on success and false on failure
 
-		xmldom	*xml();
-			// Returns an XML representation of the DTD.
+		xmldomnode	*xml();
+				// Returns an XML representation of the DTD.
 
-		char	*getError();
+		const char	*getError();
 
 	#include <rudiments/private/dtd.h>
 };

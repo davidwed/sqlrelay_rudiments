@@ -33,8 +33,10 @@ class groupentry {
 
 		// If you need to look up a group entry and refer to multiple
 		// fields, use these methods.
-			groupentry();
-			~groupentry();
+				groupentry();
+				groupentry(const groupentry &g);
+		groupentry	&operator=(const groupentry &g);
+				~groupentry();
 
 		bool	initialize(const char *groupname);
 			// Looks up a group entry by name.

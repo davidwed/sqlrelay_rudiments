@@ -9,6 +9,15 @@ namespace rudiments {
 
 server::server() : filedescriptor() {}
 
+server::server(const server &s) : filedescriptor(s) {}
+
+server &server::operator=(const server &s) {
+	if (this!=&s) {
+		filedescriptor::operator=(s);
+	}
+	return *this;
+}
+
 server::~server() {}
 
 #ifdef RUDIMENTS_NAMESPACE

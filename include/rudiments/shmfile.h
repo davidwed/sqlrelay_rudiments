@@ -21,6 +21,8 @@ class shmfile : public file {
 	public:
 
 			shmfile();
+			shmfile(const shmfile &s);
+		shmfile	&operator=(const shmfile &s);
 		virtual	~shmfile();
 
 		static bool	remove(const char *filename);

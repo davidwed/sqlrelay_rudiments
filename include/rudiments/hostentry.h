@@ -47,8 +47,10 @@ class hostentry {
 
 		// If you need to look up a host entry and refer to multiple
 		// fields, use these methods.
-			hostentry();
-			~hostentry();
+				hostentry();
+				hostentry(const hostentry &h);
+		hostentry	&operator=(const hostentry &h);
+				~hostentry();
 
 		bool	initialize(const char *hostname);
 			// Looks up a host entry by name.

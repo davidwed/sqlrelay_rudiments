@@ -3,6 +3,7 @@
 
 #include <rudiments/protocolentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,11 +22,27 @@ pthread_mutex_t	*protocolentry::pemutex;
 
 protocolentry::protocolentry() {
 	pe=NULL;
-	buffer=NULL;
+	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
+		rawbuffer::zero(&pebuffer,sizeof(pebuffer));
+		buffer=NULL;
+	#endif
+}
+
+protocolentry::protocolentry(const protocolentry &p) {
+	initialize(p.getName());
+}
+
+protocolentry &protocolentry::operator=(const protocolentry &p) {
+	if (this!=&p) {
+		initialize(p.getName());
+	}
+	return *this;
 }
 
 protocolentry::~protocolentry() {
-	delete[] buffer;
+	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
+		delete[] buffer;
+	#endif
 }
 
 char *protocolentry::getName() const {
@@ -65,12 +82,13 @@ bool protocolentry::initialize(int number) {
 }
 
 bool protocolentry::initialize(const char *protocolname, int number) {
-	if (pe) {
-		pe=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
+
 	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
+		if (pe) {
+			pe=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// getprotobyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -107,17 +125,17 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		return false;
 	#else
 		pe=NULL;
-#ifdef RUDIMENTS_HAS_THREADS
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(pemutex && pthread_mutex_lock(pemutex)) &&
 			((pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
 			!(pemutex && pthread_mutex_unlock(pemutex)));
-#else
+		#else
 		return ((pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL);
-#endif
+		#endif
 	#endif
 }
 

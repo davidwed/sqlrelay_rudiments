@@ -3,6 +3,7 @@
 
 #include <rudiments/passwdentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,11 +23,27 @@ pthread_mutex_t	*passwdentry::pemutex;
 
 passwdentry::passwdentry() {
 	pwd=NULL;
-	buffer=NULL;
+	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+		rawbuffer::zero(&pwdbuffer,sizeof(pwdbuffer));
+		buffer=NULL;
+	#endif
+}
+
+passwdentry::passwdentry(const passwdentry &p) {
+	initialize(p.getName());
+}
+
+passwdentry &passwdentry::operator=(const passwdentry &p) {
+	if (this!=&p) {
+		initialize(p.getName());
+	}
+	return *this;
 }
 
 passwdentry::~passwdentry() {
-	delete[] buffer;
+	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+		delete[] buffer;
+	#endif
 }
 
 char *passwdentry::getName() const {
@@ -82,12 +99,13 @@ bool passwdentry::initialize(uid_t userid) {
 }
 
 bool passwdentry::initialize(const char *username, uid_t userid) {
-	if (pwd) {
-		pwd=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
+
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+		if (pwd) {
+			pwd=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// getpwnam_r and getpwuid_r are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
 		// require that you pass them a pre-allocated buffer.  If the
@@ -123,17 +141,18 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		}
 		return false;
 	#else
-#ifdef RUDIMENTS_HAS_THREADS
+		pwd=NULL;
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(pemutex && pthread_mutex_lock(pemutex)) &&
 			((pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL) &&
 			!(pemutex && pthread_mutex_unlock(pemutex)));
-#else
+		#else
 		return (((pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL));
-#endif
+		#endif
 	#endif
 }
 

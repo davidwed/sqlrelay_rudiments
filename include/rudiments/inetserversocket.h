@@ -23,8 +23,10 @@ namespace rudiments {
 
 class inetserversocket : public serversocket, private inetsocketutil {
 	public:
-			inetserversocket();
-		virtual	~inetserversocket();
+				inetserversocket();
+				inetserversocket(const inetserversocket &i);
+		inetserversocket	&operator=(const inetserversocket &i);
+		virtual		~inetserversocket();
 
 		bool	listen(const char *address,
 						unsigned short port,

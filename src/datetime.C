@@ -38,9 +38,23 @@ static const char monthabbr[][4]={
 };
 
 datetime::datetime() {
+	sec=0;
+	min=0;
+	hour=0;
+	mday=0;
+	mon=0;
+	year=0;
+	wday=0;
+	yday=0;
+	isdst=0;
 	zone=NULL;
+	gmtoff=0;
 	timestring=NULL;
 	structtm=NULL;
+	epoch=0;
+	#ifdef RUDIMENTS_HAS_THREADS
+	timemutex=NULL;
+	#endif
 }
 
 datetime::~datetime() {
@@ -602,7 +616,7 @@ bool datetime::releaseLock() {
 }
 #endif
 
-static char timezones[][15]={
+static const char * const timezones[]={
 
 	"ACST",	// Australian Central Standard Time	UTC + 9:30 hours
 	"ACDT",	// Australian Central Daylight Time	UTC + 10:30 hours
@@ -696,6 +710,109 @@ static char timezones[][15]={
 	"",
 	""
 };
+
+static const long	timezoneoffsets[]={
+
+	34200,	// Australian Central Standard Time	UTC + 9:30 hours
+	37800,	// Australian Central Daylight Time	UTC + 10:30 hours
+	34200,
+
+	-14400,	// Atlantic Standard Time		UTC - 4 hours
+	-10800,	// Atlantic Daylight Time		UTC - 3 hours
+	-14400,
+
+	36000,	// Australian Eastern Standard Time	UTC + 10 hours
+	39600,	// Australian Eastern Daylight Time	UTC + 11 hours
+	36000,
+
+	-32400,	// Alaska Standard Time	UTC - 9 hours
+	-28800,	// Alaska Daylight Time	UTC - 8 hours
+	-32400,
+
+	-21600,	// Central Standard Time	UTC - 6 hours
+	-18000,	// Central Daylight Time	UTC - 5 hours
+	-21600,
+
+	3600,	// Central European Time	UTC + 1 hour
+	7200,	// Central European Summer Time	UTC + 2 hours
+	3600,
+
+	-18000,	// Eastern Standard Time	UTC - 5 hours
+	-14400,	// Eastern Daylight Time	UTC - 4 hours
+	-18000,
+
+	7200,	// Eastern European Time	UTC + 2 hours
+	10800,	// Eastern European Summer Time	UTC + 3 hours
+	7200,
+
+	0,	// Greenwich Mean Time	UTC
+	3600,	// British Summer Time	UTC + 1 hour
+	0,
+
+	-14400,	// Heure Normale de l'Atlantique	UTC - 4 hours
+	-10800,	// Heure Avancée de l'Atlantique	UTC - 3 hours
+	-14400,
+
+	-21600,	// Heure Normale du Centre		UTC - 6 hours
+	-18000,	// Heure Avancée du Centre		UTC - 5 hours
+	-21600,
+
+	-36000,	// Hawaii-Aleutian Standard Time	UTC - 10 hours
+	-32400,	// Hawaii-Aleutian Daylight Time	UTC - 9 hours
+	-36000,
+
+	-18000,	// Heure Normale de l'Est	UTC - 5 hours
+	-14400,	// Heure Avancée de l'Est	UTC - 4 hours
+	-18000,
+
+	-28800,	// Heure Normale du Pacifique	UTC - 8 hours
+	-25200,	// Heure Avancée du Pacifique	UTC - 7 hours
+	-28800,
+
+	-25200,	// Heure Normale des Rocheuses	UTC - 7 hours
+	-21600,	// Heure Avancée des Rocheuses	UTC - 6 hours
+	-25200,
+
+	-12600,	// Heure Normale de Terre-Neuve	UTC - 3:30 hours
+	-9000,	// Heure Avancée de Terre-Neuve	UTC - 2:30 hours
+	-12600,
+
+	-32400,	// Heure Normale du Yukon	UTC - 9 hours
+	-28800,	// Heure Avancée du Yukon	UTC - 8 hours
+	-32400,
+
+	-25200,	// Mountain Standard Time	UTC - 7 hours
+	-21600,	// Mountain Daylight Time	UTC - 6 hours
+	-25200,
+
+	3600,	// Mitteleuropäische Zeit	UTC + 1 hour
+	7200,	// Mitteleuropäische Sommerzeit	UTC + 2 hours
+	3600,
+
+	-12600,	// Newfoundland Standard Time	UTC - 3:30 hours
+	-9000,	// Newfoundland Daylight Time	UTC - 2:30 hours
+	-12600,
+
+	-28800,	// Pacific Standard Time	UTC - 8 hours
+	-25200,	// Pacific Daylight Time	UTC - 7 hours
+	-28800,
+
+	0,	// Western European Time	UTC
+	3600,	// Western European Summer Time	UTC + 1 hour
+	0,
+
+	0,
+	0,
+	0
+};
+
+const char * const *datetime::getTimeZoneAbbreviations() {
+	return timezones;
+}
+
+const long *datetime::getTimeZoneOffsets() {
+	return timezoneoffsets;
+}
 
 // FIXME: this is kind of lame.  There must be a better way to do this than
 // looking up values in a table embedded in the class.  I guess I could look

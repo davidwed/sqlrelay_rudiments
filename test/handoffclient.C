@@ -7,6 +7,10 @@
 
 #include <time.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 	char			buffer[11];

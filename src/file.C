@@ -23,7 +23,27 @@ namespace rudiments {
 #endif
 
 file::file() : filedescriptor() {
+	rawbuffer::zero(&st,sizeof(st));
 	getcurrentpropertiesonopen=true;
+	retryinterruptedlockops=true;
+}
+
+file::file(const file &f) : filedescriptor(f) {
+	fileClone(f);
+}
+
+file &file::operator=(const file &f) {
+	if (this!=&f) {
+		filedescriptor::operator=(f);
+		fileClone(f);
+	}
+	return *this;
+}
+
+void file::fileClone(const file &f) {
+	st=f.st;
+	getcurrentpropertiesonopen=f.getcurrentpropertiesonopen;
+	retryinterruptedlockops=f.retryinterruptedlockops;
 }
 
 file::~file() {}
@@ -698,9 +718,7 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	lck.l_start=start;
 	lck.l_len=len;
 	bool	retval=(!fcntl(F_SETLKW,reinterpret_cast<long>(&lck)));
-	rawbuffer::copy(static_cast<void *>(retlck),
-			static_cast<const void *>(&lck),
-			sizeof(struct flock));
+	*retlck=lck;
 	return retval;
 }
 

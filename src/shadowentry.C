@@ -3,6 +3,7 @@
 
 #include <rudiments/shadowentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,11 +23,27 @@ pthread_mutex_t	*shadowentry::spmutex;
 
 shadowentry::shadowentry() {
 	sp=NULL;
-	buffer=NULL;
+	#ifdef HAVE_GETSPNAM_R
+		rawbuffer::zero(&spbuffer,sizeof(spbuffer));
+		buffer=NULL;
+	#endif
+}
+
+shadowentry::shadowentry(const shadowentry &s) {
+	initialize(s.getName());
+}
+
+shadowentry &shadowentry::operator=(const shadowentry &s) {
+	if (this!=&s) {
+		initialize(s.getName());
+	}
+	return *this;
 }
 
 shadowentry::~shadowentry() {
-	delete[] buffer;
+	#ifdef HAVE_GETSPNAM_R
+		delete[] buffer;
+	#endif
 }
 
 char *shadowentry::getName() const {
@@ -98,12 +115,13 @@ void shadowentry::setMutex(pthread_mutex_t *mutex) {
 #endif
 
 bool shadowentry::initialize(const char *username) {
-	if (sp) {
-		sp=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
+
 	#ifdef HAVE_GETSPNAM_R
+		if (sp) {
+			sp=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// getspnam_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -129,13 +147,14 @@ bool shadowentry::initialize(const char *username) {
 		}
 		return false;
 	#else
-#ifdef RUDIMENTS_HAS_THREADS
+		sp=NULL;
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(spmutex && pthread_mutex_lock(spmutex)) &&
 			((sp=getspnam(const_cast<char *>(username)))!=NULL) &&
 			!(spmutex && pthread_mutex_unlock(spmutex)));
-#else
+		#else
 		return ((sp=getspnam(const_cast<char *>(username)))!=NULL);
-#endif
+		#endif
 	#endif
 }
 

@@ -26,6 +26,8 @@ class file : public filedescriptor {
 
 			file();
 			// Creates an uninitialized instance of the file class.
+			file(const file &f);
+		file	&operator=(const file &f);
 		virtual	~file();
 
 

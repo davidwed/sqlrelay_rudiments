@@ -13,3 +13,7 @@
 		struct	sembuf	**signalwithundoop;
 
 			key_t	key;
+
+		// FIXME: it should be possible to copy a semaphoreset
+				semaphoreset(const semaphoreset &s);
+		semaphoreset	&operator=(const semaphoreset &s);

@@ -15,8 +15,10 @@ namespace rudiments {
 
 class modemclient : public client, private modemutil {
 	public:
-			modemclient();
-		virtual	~modemclient();
+				modemclient();
+				modemclient(const modemclient &m);
+		modemclient	&operator=(const modemclient &m);
+		virtual		~modemclient();
 
 		void	initialize(namevaluepairs *cd);
 			// Initializes the class to use "device",

@@ -12,3 +12,5 @@
 		size_t		buffersize;
 		size_t		position;
 		size_t		endofbuffer;
+
+		void	variablebufferClone(const variablebuffer &v);

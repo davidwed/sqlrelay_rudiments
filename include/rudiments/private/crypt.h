@@ -5,3 +5,8 @@
 			#ifdef RUDIMENTS_HAS_THREADS
 			static pthread_mutex_t	*cryptmutex;
 			#endif
+
+		crypt();
+		crypt(const crypt &c);
+		crypt	&operator=(const crypt &c);
+		~crypt();

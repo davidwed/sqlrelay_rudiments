@@ -10,3 +10,7 @@
 		size_t	freecounter;
 		size_t	resizeinterval;
 		size_t	totalusedsize;
+
+		// FIXME: it should be possible to copy a memorypool
+				memorypool(const memorypool &m);
+		memorypool	&operator=(const memorypool &m);

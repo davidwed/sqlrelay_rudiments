@@ -6,6 +6,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 	commandline     cmdline(argc,argv);

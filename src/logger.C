@@ -13,10 +13,22 @@
 namespace rudiments {
 #endif
 
-filedestination::filedestination() {
+filedestination::filedestination() : logdestination() {}
+
+filedestination::filedestination(const filedestination &f) :
+						logdestination(f) {
+	logfile=f.logfile;
+}
+
+filedestination &filedestination::operator=(const filedestination &f) {
+	if (this!=&f) {
+		logfile=f.logfile;
+	}
+	return *this;
 }
 
 filedestination::~filedestination() {
+	close();
 }
 
 bool filedestination::open(const char *filename) {
@@ -38,6 +50,22 @@ void stdoutdestination::write(const char *string) {
 
 void stderrdestination::write(const char *string) {
 	::write(2,string,charstring::length(string));
+}
+
+syslogdestination::syslogdestination() : logdestination() {}
+
+syslogdestination::syslogdestination(const syslogdestination &s) :
+						logdestination(s) {}
+
+syslogdestination &syslogdestination::operator=(const syslogdestination &s) {
+	if (this!=&s) {
+		priority=s.priority;
+	}
+	return *this;
+}
+
+syslogdestination::~syslogdestination() {
+	close();
 }
 
 void syslogdestination::open(const char *ident, int option,

@@ -29,9 +29,7 @@ void intervaltimer::setInitialInterval(long seconds, long microseconds) {
 }
 
 void intervaltimer::setInitialInterval(timeval *tv) {
-	rawbuffer::copy(static_cast<void *>(&(values.it_value)),
-			static_cast<const void *>(tv),
-			sizeof(values.it_value));
+	values.it_value=*tv;
 }
 
 void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
@@ -40,9 +38,7 @@ void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
 }
 
 void intervaltimer::setPeriodicInterval(timeval *tv) {
-	rawbuffer::copy(static_cast<void *>(&(values.it_interval)),
-			static_cast<const void *>(tv),
-			sizeof(values.it_interval));
+	values.it_interval=*tv;
 }
 
 void intervaltimer::setIntervals(long seconds, long microseconds) {
@@ -56,9 +52,7 @@ void intervaltimer::setIntervals(timeval *tv) {
 }
 
 void intervaltimer::setIntervals(itimerval *itv) {
-	rawbuffer::copy(static_cast<void *>(&values),
-			static_cast<const void *>(itv),
-			sizeof(values));
+	values=*itv;
 }
 
 void intervaltimer::getInitialInterval(long *seconds,
@@ -72,9 +66,7 @@ void intervaltimer::getInitialInterval(long *seconds,
 }
 
 void intervaltimer::getInitialInterval(timeval *tv) const {
-	rawbuffer::copy(static_cast<void *>(tv),
-			static_cast<const void *>(&(values.it_value)),
-			sizeof(values.it_value));
+	*tv=values.it_value;
 }
 
 void intervaltimer::getPeriodicInterval(long *seconds,
@@ -88,15 +80,11 @@ void intervaltimer::getPeriodicInterval(long *seconds,
 }
 
 void intervaltimer::getPeriodicInterval(timeval *tv) const {
-	rawbuffer::copy(static_cast<void *>(tv),
-			static_cast<const void *>(&(values.it_interval)),
-			sizeof(values.it_interval));
+	*tv=values.it_interval;
 }
 
 void intervaltimer::getIntervals(itimerval *itv) const {
-	rawbuffer::copy(static_cast<void *>(itv),
-			static_cast<const void *>(&values),
-			sizeof(values));
+	*itv=values;
 }
 
 bool intervaltimer::start() const {
@@ -131,7 +119,7 @@ bool intervaltimer::getTimeRemaining(timeval *tv) const {
 
 bool intervaltimer::stop() const {
 	itimerval	stopvals;
-	rawbuffer::zero(static_cast<void *>(&stopvals),sizeof(stopvals));
+	rawbuffer::zero(&stopvals,sizeof(stopvals));
 	return start(&stopvals);
 }
 

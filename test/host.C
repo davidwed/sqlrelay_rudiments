@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <sys/socket.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 // this function takes addr[]={127,1,1,0} and returns "127.1.1.0"
 char *getAddressString(int length, const char *addr) {
 	char	*address=new char[(length*4)+1];

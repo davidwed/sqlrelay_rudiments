@@ -30,8 +30,30 @@ void variablebuffer::init(unsigned char *initialcontents,
 	endofbuffer=0;
 }
 
+variablebuffer::variablebuffer(const variablebuffer &v) {
+	variablebufferClone(v);
+}
+
+variablebuffer &variablebuffer::operator=(const variablebuffer &v) {
+	if (this!=&v) {
+		delete[] buffer;
+		variablebufferClone(v);
+	}
+	return *this;
+}
+
 variablebuffer::~variablebuffer() {
 	delete[] buffer;
+}
+
+void variablebuffer::variablebufferClone(const variablebuffer &v) {
+	initialsize=v.initialsize;
+	increment=v.increment;
+	buffersize=v.buffersize;
+	position=v.position;
+	endofbuffer=v.endofbuffer;
+	buffer=new unsigned char[v.buffersize];
+	rawbuffer::copy(buffer,v.buffer,buffersize);
 }
 
 ssize_t variablebuffer::read(unsigned char *data, size_t size) {

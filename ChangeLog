@@ -28,6 +28,7 @@
 	fixed a bunch of const-related messes
 	added rudiments namespace
 	retired errorhandler class
+	implemented copy constructors, = operators for many classes
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

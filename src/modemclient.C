@@ -20,8 +20,30 @@ namespace rudiments {
 modemclient::modemclient() : client(), modemutil() {
 	connectscript="";
 	disconnectscript="";
+	phonenumber="";
 	retrywait=0;
 	retrycount=0;
+}
+
+modemclient::modemclient(const modemclient &m) : client(m), modemutil(m) {
+	modemclientClone(m);
+}
+
+modemclient &modemclient::operator=(const modemclient &m) {
+	if (this!=&m) {
+		client::operator=(m);
+		modemutil::operator=(m);
+		modemclientClone(m);
+	}
+	return *this;
+}
+
+void modemclient::modemclientClone(const modemclient &m) {
+	connectscript=m.connectscript;
+	phonenumber=m.phonenumber;
+	disconnectscript=m.disconnectscript;
+	retrywait=m.retrywait;
+	retrycount=m.retrycount;
 }
 
 modemclient::~modemclient() {

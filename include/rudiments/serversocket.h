@@ -12,8 +12,10 @@ namespace rudiments {
 
 class serversocket : public server {
 	public:
-			serversocket();
-		virtual	~serversocket();
+				serversocket();
+				serversocket(const serversocket &s);
+		serversocket	&operator=(const serversocket &s);
+		virtual		~serversocket();
 
 #ifdef FIONBIO
 		virtual bool	useNonBlockingMode() const;

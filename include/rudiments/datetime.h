@@ -41,8 +41,8 @@ class datetime {
 
 		// if you need anything other than a quick conversion,
 		// use these methods
-			datetime();
-			~datetime();
+		datetime();
+		~datetime();
 
 		bool	initialize(const char *tmstring);
 			// Parses "tmstring" and sets the date and time
@@ -116,16 +116,16 @@ class datetime {
 
 
 		// These methods return commonly needed time/date values
-		int	getHour() const;
-		int	getMinutes() const;
-		int	getSeconds() const;
-		int	getMonth() const;
+		int		getHour() const;
+		int		getMinutes() const;
+		int		getSeconds() const;
+		int		getMonth() const;
 		const char	*getMonthName() const;
 		const char	*getMonthAbbreviation() const;
-		int	getDayOfMonth() const;
-		int	getDayOfWeek() const;
-		int	getDayOfYear() const;
-		int	getYear() const;
+		int		getDayOfMonth() const;
+		int		getDayOfWeek() const;
+		int		getDayOfYear() const;
+		int		getYear() const;
 
 		bool	isDaylightSavingsTime() const;
 			// returns 1 if daylight savings time is currently
@@ -180,21 +180,21 @@ class datetime {
 			// (Note that this method returns a pointer to an
 			// internal string which will be deleted if the
 			// class instance is deleted.)
-		time_t	getEpoch() const;
+		time_t		getEpoch() const;
 			// returns the number of seconds since 1970
 		struct tm	*getTm();
 			// returns a pointer to the internal "struct tm"
 
 
 		// These methods return timezone data
-		static char	**getTimeZoneAbbreviations();
+		static const char * const	*getTimeZoneAbbreviations();
 				// Returns a NULL terminated array of timezone
 				// abbreviations.
-		static long	*getTimeZoneOffsets();
+		static const long		*getTimeZoneOffsets();
 				// Returns an array of timezone offsets from
 				// GMT (in seconds).  Each element of this
 				// array corresponds to an element of the
-				// array returned b getTimeZoneStrings().
+				// array returned b getTimeZoneAbbreviations().
 
 
 #ifdef RUDIMENTS_HAS_THREADS

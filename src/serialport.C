@@ -9,6 +9,16 @@ namespace rudiments {
 #endif
 
 serialport::serialport() : filedescriptor() {}
+
+serialport::serialport(const serialport &s) : filedescriptor(s) {}
+
+serialport &serialport::operator=(const serialport &s) {
+	if (this!=&s) {
+		filedescriptor::operator=(s);
+	}
+	return *this;
+}
+
 serialport::~serialport() {}
 
 bool serialport::setProfileNow(serialportprofile *profile) {

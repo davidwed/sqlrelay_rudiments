@@ -70,7 +70,7 @@ unsigned char *memorypool::malloc(size_t length) {
 
 unsigned char *memorypool::calloc(size_t length) {
 	unsigned char	*buffer=malloc(length);
-	rawbuffer::zero(static_cast<void *>(buffer),length);
+	rawbuffer::zero(buffer,length);
 	return buffer;
 }
 

@@ -14,6 +14,17 @@ inetsocketutil::inetsocketutil() {
 	initialize(NULL,0);
 }
 
+inetsocketutil::inetsocketutil(const inetsocketutil &i) {
+	initialize(i.address,i.port);
+}
+
+inetsocketutil &inetsocketutil::operator=(const inetsocketutil &i) {
+	if (this!=&i) {
+		initialize(i.address,i.port);
+	}
+	return *this;
+}
+
 inetsocketutil::~inetsocketutil() {}
 
 void inetsocketutil::initialize(const char *address, unsigned short port) {

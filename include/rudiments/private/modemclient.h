@@ -4,3 +4,5 @@
 		const char	*phonenumber;
 		unsigned int	retrywait;
 		unsigned int	retrycount;
+
+		void	modemclientClone(const modemclient &m);

@@ -103,7 +103,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 		}
 
 		// init the segment to zero's
-		rawbuffer::zero(static_cast<void *>(shmptr),size);
+		rawbuffer::zero(shmptr,size);
 		return true;
 	}
 
@@ -149,7 +149,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		}
 
 		// init the segment to zero's
-		rawbuffer::zero(static_cast<void *>(shmptr),size);
+		rawbuffer::zero(shmptr,size);
 		return true;
 		
 	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))!=-1) {

@@ -17,3 +17,6 @@
 		unsigned char	*transutclocal;
 		unsigned char	*rawtimezonestring;
 		unsigned char	**timezonestrings;
+
+		void	timezonefileClean();
+		void	timezonefileClone(const timezonefile &t);

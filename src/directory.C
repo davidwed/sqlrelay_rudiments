@@ -19,9 +19,6 @@ pthread_mutex_t	*directory::rdmutex;
 directory::directory() {
 	dir=NULL;
 	currentindex=0;
-	#if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_READDIR_R)
-	rdmutex=NULL;
-	#endif
 }
 
 directory::~directory() {

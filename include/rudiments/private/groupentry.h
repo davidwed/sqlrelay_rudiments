@@ -2,9 +2,11 @@
 // See the COPYING file for more information.
 
 	private:
-		group	*grp;
-		group	grpbuffer;
-		char	*buffer;
+		group		*grp;
+		#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+			group		grpbuffer;
+			char		*buffer;
+		#endif
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETGRNAM_R) || \

@@ -3,8 +3,11 @@
 
 	private:
 		hostent	*he;
-		hostent	hebuffer;
-		char	*buffer;
+		#if defined(HAVE_GETHOSTBYNAME_R) && \
+				defined(HAVE_GETHOSTBYADDR_R)
+			hostent	hebuffer;
+			char	*buffer;
+		#endif
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETHOSTBYNAME_R) || \

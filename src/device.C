@@ -13,6 +13,15 @@ device::device() : file() {
 	dontGetCurrentPropertiesOnOpen();
 }
 
+device::device(const device &d) : file(d) {}
+
+device &device::operator=(const device &d) {
+	if (this!=&d) {
+		file::operator=(d);
+	}
+	return *this;
+}
+
 device::~device() {}
 
 bool device::createDeviceNode(const char *filename, bool blockdevice,

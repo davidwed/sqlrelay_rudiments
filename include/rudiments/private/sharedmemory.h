@@ -5,3 +5,7 @@
 			int	shmid;
 			bool	created;
 			void	*shmptr;
+
+		// FIXME: it should be possible to copy a sharedmemory object
+				sharedmemory(const sharedmemory &s);
+		sharedmemory	&operator=(const sharedmemory &s);

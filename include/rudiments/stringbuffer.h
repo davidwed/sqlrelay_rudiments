@@ -14,13 +14,16 @@ namespace rudiments {
 
 class stringbuffer : public variablebuffer {
 	public:
-			stringbuffer();
-			stringbuffer(char *initialcontents,
-					size_t initialsize,
-					size_t increment);
-			// Creates a new buffer which will grow as necessary
-			// to accomodate the string written to it.
-			~stringbuffer();
+				stringbuffer();
+				stringbuffer(char *initialcontents,
+						size_t initialsize,
+						size_t increment);
+				// Creates a new buffer which will grow as
+				// necessary to accomodate the string written
+				// to it.
+				stringbuffer(const stringbuffer &s);
+		stringbuffer	&operator=(const stringbuffer &s);
+				~stringbuffer();
 
 		void	setPosition(size_t pos);
 			// Sets the position at which the next write will
@@ -106,17 +109,9 @@ class stringbuffer : public variablebuffer {
 		void	clear();
 			// Empties the stringbuffer.
 
-		char	*getString();
-			// Returns the string currently stored in the
-			// stringbuffer.
-
-		size_t	getStringLength();
-			// Returns the length of the string currently stored
-			// in the stringbuffer.
-
-		size_t	getPosition();
-			// Returns the position in the buffer at which
-			// the next write will occur.
+		const char	*getString();
+				// Returns the string currently stored in the
+				// stringbuffer.
 
 		char	*detachString();
 			// Returns a pointer to the string currently stored
@@ -125,6 +120,14 @@ class stringbuffer : public variablebuffer {
 			//
 			// The calling program must deallocate the string
 			// returned from this method.
+
+		size_t	getStringLength();
+			// Returns the length of the string currently stored
+			// in the stringbuffer.
+
+		size_t	getPosition();
+			// Returns the position in the buffer at which
+			// the next write will occur.
 
 	#include <rudiments/private/stringbuffer.h>
 };

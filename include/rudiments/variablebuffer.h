@@ -21,6 +21,8 @@ class variablebuffer {
 			// which will grow in chunks of size "increment".
 			// The position at which the first write or append
 			// will occur is initialized to 0.
+			variablebuffer(const variablebuffer &v);
+		variablebuffer	&operator=(const variablebuffer &v);
 		virtual	~variablebuffer();
 
 		void	setPosition(size_t pos);

@@ -6,6 +6,10 @@
 #include <errno.h>
 #include <strings.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 	unixclientsocket clnt;

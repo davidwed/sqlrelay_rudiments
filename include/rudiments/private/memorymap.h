@@ -2,5 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
-			void	*data;
-			size_t	length;
+		void	*data;
+		size_t	length;
+
+		// FIXME: it should be possible to copy a memorymap
+				memorymap(const memorymap &m);
+		memorymap	&operator=(const memorymap &m);

@@ -42,8 +42,10 @@ class passwdentry {
 
 		// If you need to look up a passwd entry and refer to multiple
 		// fields, use these methods.
-			passwdentry();
-			~passwdentry();
+				passwdentry();
+				passwdentry(const passwdentry &p);
+		passwdentry	&operator=(const passwdentry &p);
+				~passwdentry();
 
 		bool	initialize(const char *username);
 			// Looks up a passwd entry by name.

@@ -15,13 +15,13 @@ namespace rudiments {
 
 class chat {
 	public:
-			chat(filedescriptor *fd);
-			// Initializes an instance of chat.  Data will be
-			// written to and read from "fd".
-			chat(filedescriptor *readfd, filedescriptor *writefd);
-			// Initializes an instance of chat.  Data will be
-			// written to "writefd" and read from "readfd".
-			~chat();
+		chat(filedescriptor *fd);
+		// Initializes an instance of chat.  Data will be
+		// written to and read from "fd".
+		chat(filedescriptor *rfd, filedescriptor *wfd);
+		// Initializes an instance of chat.  Data will be
+		// written to "wfd" and read from "rfd".
+		~chat();
 
 		// These methods process "script" which is expected to be
 		// a chunk of XML of the following format:

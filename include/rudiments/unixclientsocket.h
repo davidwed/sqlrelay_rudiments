@@ -24,8 +24,10 @@ namespace rudiments {
 class unixclientsocket : public clientsocket, private unixsocketutil {
 	public:
 
-			unixclientsocket();
-		virtual	~unixclientsocket();
+				unixclientsocket();
+				unixclientsocket(const unixclientsocket &u);
+		unixclientsocket	&operator=(const unixclientsocket &u);
+		virtual		~unixclientsocket();
 
 		int	connect(const char *filename,
 					long timeoutsec,

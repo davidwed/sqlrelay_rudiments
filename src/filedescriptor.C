@@ -69,11 +69,22 @@ namespace rudiments {
 #endif
 
 filedescriptor::filedescriptor() {
-	init();
-	fd=-1;
+	filedescriptorInit();
 }
 
-void filedescriptor::init() {
+filedescriptor::filedescriptor(const filedescriptor &f) {
+	filedescriptorClone(f);
+}
+
+filedescriptor &filedescriptor::operator=(const filedescriptor &f) {
+	if (this!=&f) {
+		filedescriptorClone(f);
+	}
+	return *this;
+}
+
+void filedescriptor::filedescriptorInit() {
+	fd=-1;
 	translatebyteorder=false;
 	retryinterruptedreads=false;
 	retryinterruptedwrites=false;
@@ -89,6 +100,26 @@ void filedescriptor::init() {
 	bio=NULL;
 	ssl=NULL;
 	sslresult=1;
+#endif
+}
+
+void filedescriptor::filedescriptorClone(const filedescriptor &f) {
+	fd=f.fd;
+	translatebyteorder=f.translatebyteorder;
+	retryinterruptedreads=f.retryinterruptedreads;
+	retryinterruptedwrites=f.retryinterruptedwrites;
+	retryinterruptedwaits=f.retryinterruptedwaits;
+	retryinterruptedfcntl=f.retryinterruptedfcntl;
+	retryinterruptedioctl=f.retryinterruptedioctl;
+	allowshortreads=f.allowshortreads;
+	lstnr=f.lstnr;
+	uselistenerinsidereads=f.uselistenerinsidereads;
+	uselistenerinsidewrites=f.uselistenerinsidewrites;
+#ifdef RUDIMENTS_HAS_SSL
+	ctx=f.ctx;
+	bio=f.bio;
+	ssl=f.ssl;
+	sslresult=f.sslresult;
 #endif
 }
 
@@ -760,7 +791,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#ifdef DEBUG_READ
 				printf(")\n");
 				#endif
-				return -1;
+				return RESULT_ERROR;
 			}
 		}
 

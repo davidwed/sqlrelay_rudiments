@@ -12,6 +12,17 @@ namespace rudiments {
 
 unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {}
 
+unixclientsocket::unixclientsocket(const unixclientsocket &u) :
+					clientsocket(u), unixsocketutil(u) {}
+
+unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
+	if (this!=&u) {
+		clientsocket::operator=(u);
+		unixsocketutil::operator=(u);
+	}
+	return *this;
+}
+
 unixclientsocket::~unixclientsocket() {}
 
 int unixclientsocket::connect(const char *filename,

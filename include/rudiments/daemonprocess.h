@@ -19,52 +19,52 @@ namespace rudiments {
 
 class daemonprocess {
 	public:
-				daemonprocess();
-			virtual	~daemonprocess();
+			daemonprocess();
+		virtual	~daemonprocess();
 
-			int	checkForPidFile(const char *filename) const;
-				// Checks for filename "filename" and reads the
-				// process id out of it, if it exists.  Returns
-				// the process id on success or -1 on failure.
-			bool	createPidFile(const char *filename,
-						mode_t permissions) const;
-				// Create's file "filename" with permissions
-				// "permissions" and puts the current process
-				// id in it.  Note that when you delete this
-				// file during shutdown you must use the full
-				// pathname since the detach() method below
-				// changes directories to "/".  Returns true on
-				// success and false on failure.
+		int	checkForPidFile(const char *filename) const;
+			// Checks for filename "filename" and reads the
+			// process id out of it, if it exists.  Returns
+			// the process id on success or -1 on failure.
+		bool	createPidFile(const char *filename,
+					mode_t permissions) const;
+			// Create's file "filename" with permissions
+			// "permissions" and puts the current process
+			// id in it.  Note that when you delete this
+			// file during shutdown you must use the full
+			// pathname since the detach() method below
+			// changes directories to "/".  Returns true on
+			// success and false on failure.
 
-			void	detach() const;
-				// Detach from the controlling terminal and
-				// process and run in the background.  Also
-				// change directories to "/" and set the file
-				// creation mask such that all files are 
-				// created -rw-rw-rw and all directories 
-				// drwxrwxrwx.
+		void	detach() const;
+			// Detach from the controlling terminal and
+			// process and run in the background.  Also
+			// change directories to "/" and set the file
+			// creation mask such that all files are 
+			// created -rw-rw-rw and all directories 
+			// drwxrwxrwx.
 
-			// These methods allow the daemon to run as a different
-			// user or group than the one that started the process.
-			// They have no effect unless the process is started
-			// by the root user.
-			//
-			// These methods return 1 on success, 0 on failure and
-			// -1 on error.
-			int	runAsUser(const char *username) const;
-				// Note that runAsUser() uses the passwdentry
-				// class.  If you are using this method in a
-				// multithreaded application, you may need to
-				// supply the passwdentry classes a mutex.
-				// See passwdentry.h for more detail.
-			int	runAsGroup(const char *groupname) const;
-				// Note that runAsGroup() uses the groupentry
-				// class.  If you are using this method in a
-				// multithreaded application, you may need to
-				// supply the groupentry classes a mutex.
-				// See groupentry.h for more detail.
-			int	runAsUserId(uid_t uid) const;
-			int	runAsGroupId(gid_t gid) const;
+		// These methods allow the daemon to run as a different
+		// user or group than the one that started the process.
+		// They have no effect unless the process is started
+		// by the root user.
+		//
+		// These methods return 1 on success, 0 on failure and
+		// -1 on error.
+		int	runAsUser(const char *username) const;
+			// Note that runAsUser() uses the passwdentry
+			// class.  If you are using this method in a
+			// multithreaded application, you may need to
+			// supply the passwdentry classes a mutex.
+			// See passwdentry.h for more detail.
+		int	runAsGroup(const char *groupname) const;
+			// Note that runAsGroup() uses the groupentry
+			// class.  If you are using this method in a
+			// multithreaded application, you may need to
+			// supply the groupentry classes a mutex.
+			// See groupentry.h for more detail.
+		int	runAsUserId(uid_t uid) const;
+		int	runAsGroupId(gid_t gid) const;
 
 		static	void	handleShutDown(void *shutdownfunction);
 				// This method allows you to designate a

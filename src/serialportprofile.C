@@ -64,11 +64,11 @@ void serialportprofile::defaultOutputOptions() {
 }
 
 void serialportprofile::defaultControlCharacters() {
-	rawbuffer::zero(static_cast<void *>(&tio.c_cc),sizeof(tio.c_cc));
+	rawbuffer::zero(&tio.c_cc,sizeof(tio.c_cc));
 }
 
 void serialportprofile::defaultOptions() {
-	rawbuffer::zero(static_cast<void *>(&tio),sizeof(tio));
+	rawbuffer::zero(&tio,sizeof(tio));
 }
 
 bool serialportprofile::inputBaud(serialportprofile::baudrate_t baudrate) {

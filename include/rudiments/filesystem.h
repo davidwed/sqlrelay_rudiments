@@ -22,10 +22,12 @@ namespace rudiments {
 
 class filesystem {
 	public:
-			filesystem();
-			// Creates an uninitialized instance of the filesystem
-			// class.
-			~filesystem();
+				filesystem();
+				// Creates an uninitialized instance of the
+				// filesystem class.
+				filesystem(const filesystem &f);
+		filesystem	&operator=(const filesystem &f);
+		virtual		~filesystem();
 
 		bool	initialize(const char *path);
 			// Initializes the instance to use filesystem "path".

@@ -26,7 +26,7 @@ pthread_mutex_t	*crypt::cryptmutex;
 char *crypt::encrypt(const char *password, const char *salt) {
 	#ifdef HAVE_CRYPT_R
 		crypt_data	cd;
-		rawbuffer::zero(static_cast<void *>(&cd),sizeof(cd));
+		rawbuffer::zero(&cd,sizeof(cd));
 		char	*encryptedpassword=crypt_r(password,salt,&cd);
 		return (encryptedpassword)?
 			charstring::duplicate(encryptedpassword):NULL;

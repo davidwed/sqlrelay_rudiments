@@ -14,18 +14,36 @@ namespace rudiments {
 #endif
 
 timezonefile::timezonefile() {
-	rawtimezonestring=NULL;
-	timezonestrings=NULL;
-	transutclocal=NULL;
-	transstdwall=NULL;
-	leapsecondtime=NULL;
-	totalleapseconds=NULL;
-	transitiontime=NULL;
+	ttisgmtcnt=0;
+	ttisstdcnt=0;
+	leapcnt=0;
+	timecnt=0;
+	typecnt=0;
+	charcnt=0;
+	transitiontime=0;
 	localtime=NULL;
 	ti=NULL;
+	leapsecondtime=NULL;
+	totalleapseconds=NULL;
+	transstdwall=NULL;
+	transutclocal=NULL;
+	rawtimezonestring=NULL;
+	timezonestrings=NULL;
 }
 
-timezonefile::~timezonefile() {
+timezonefile::timezonefile(const timezonefile &t) {
+	timezonefileClone(t);
+}
+
+timezonefile &timezonefile::operator=(const timezonefile &t) {
+	if (this!=&t) {
+		timezonefileClean();
+		timezonefileClone(t);
+	}
+	return *this;
+}
+
+void timezonefile::timezonefileClean() {
 	delete[] timezonestrings;
 	delete[] rawtimezonestring;
 	delete[] transutclocal;
@@ -35,6 +53,51 @@ timezonefile::~timezonefile() {
 	delete[] transitiontime;
 	delete[] localtime;
 	delete[] ti;
+}
+
+void timezonefile::timezonefileClone(const timezonefile &t) {
+	ttisgmtcnt=t.ttisgmtcnt;
+	ttisstdcnt=t.ttisstdcnt;
+	leapcnt=t.leapcnt;
+	timecnt=t.timecnt;
+	typecnt=t.typecnt;
+	charcnt=t.charcnt;
+	transitiontime=new long[timecnt];
+	localtime=new unsigned char[timecnt];
+	for (long i=0; i<timecnt; i++) {
+		transitiontime[i]=t.transitiontime[i];
+		localtime[i]=t.localtime[i];
+	}
+	ti=new ttinfo[typecnt];
+	for (long i=0; i<timecnt; i++) {
+		ti[i]=t.ti[i];
+	}
+	leapsecondtime=new long[leapcnt];
+	totalleapseconds=new long[leapcnt];
+	for (long i=0; i<leapcnt; i++) {
+		leapsecondtime[i]=t.leapsecondtime[i];
+		totalleapseconds[i]=t.totalleapseconds[i];
+	}
+	transstdwall=new unsigned char[ttisstdcnt];
+	for (long i=0; i<ttisstdcnt; i++) {
+		transstdwall[i]=t.transstdwall[i];
+	}
+	transutclocal=new unsigned char[ttisgmtcnt];
+	for (long i=0; i<ttisgmtcnt; i++) {
+		transutclocal[i]=t.transutclocal[i];
+	}
+	rawtimezonestring=new unsigned char[charcnt+1];
+	for (long i=0; i<charcnt+1; i++) {
+		rawtimezonestring[i]=t.rawtimezonestring[i];
+	}
+	timezonestrings=new unsigned char *[typecnt];
+	for (long i=0; i<typecnt; i++) {
+		timezonestrings[i]=&rawtimezonestring[ti[i].tt_abbrind];
+	}
+}
+
+timezonefile::~timezonefile() {
+	timezonefileClean();
 }
 
 bool timezonefile::parseFile(const char *filename) {
@@ -144,13 +207,10 @@ bool timezonefile::parseFile(const char *filename) {
 
 	// set pointers to the timezones
 	timezonestrings=new unsigned char *[typecnt];
-	unsigned char	*null;
-	unsigned char	*ptr=rawtimezonestring;
 	int	counter;
 	for (counter=0; counter<typecnt; counter++) {
 		timezonestrings[counter]=&rawtimezonestring[
 						ti[counter].tt_abbrind];
-		ptr=null+1;
 	}
 
 	leapsecondtime=new long[leapcnt];

@@ -72,7 +72,7 @@ xmldomnode *xmldom::getRootNode() const {
 	return (rootnode)?rootnode:nullnode;
 }
 
-bool xmldom::tagStart(char *name) {
+bool xmldom::tagStart(const char *name) {
 	currentattribute=NULL;
 	if (rootnode->isNullNode()) {
 		createRootNode();
@@ -85,7 +85,7 @@ bool xmldom::tagStart(char *name) {
 	return true;
 }
 
-bool xmldom::attributeName(char *name) {
+bool xmldom::attributeName(const char *name) {
 	currentattribute=new xmldomnode(nullnode);
 	currentattribute->setName(name);
 	currentattribute->setType(ATTRIBUTE_XMLDOMNODETYPE);
@@ -94,7 +94,7 @@ bool xmldom::attributeName(char *name) {
 	return true;
 }
 
-bool xmldom::attributeValue(char *value) {
+bool xmldom::attributeValue(const char *value) {
 	if (!currentattribute) {
 		if (!attributeName(value)) {
 			return false;
@@ -105,7 +105,7 @@ bool xmldom::attributeValue(char *value) {
 	return true;
 }
 
-bool xmldom::text(char *string) {
+bool xmldom::text(const char *string) {
 	currentattribute=NULL;
 	xmldomnode	*textnode=new xmldomnode(nullnode);
 	textnode->setName("text");
@@ -115,13 +115,13 @@ bool xmldom::text(char *string) {
 	return true;
 }
 
-bool xmldom::tagEnd(char *name) {
+bool xmldom::tagEnd(const char *name) {
 	currentattribute=NULL;
 	currentparent=currentparent->getParent();
 	return true;
 }
 
-bool xmldom::comment(char *string) {
+bool xmldom::comment(const char *string) {
 	currentattribute=NULL;
 	xmldomnode	*commentnode=new xmldomnode(nullnode);
 	commentnode->setName("comment");
@@ -131,7 +131,7 @@ bool xmldom::comment(char *string) {
 	return true;
 }
 
-bool xmldom::cdata(char *string) {
+bool xmldom::cdata(const char *string) {
 	currentattribute=NULL;
 	xmldomnode	*cdatanode=new xmldomnode(nullnode);
 	cdatanode->setName("cdata");

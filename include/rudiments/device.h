@@ -18,6 +18,8 @@ class device : public file {
 			device();
 			// Creates an uninitialized instance of the
 			// device class.
+			device(const device &d);
+		device	&operator=(const device &d);
 		virtual	~device();
 
 		static bool	createDeviceNode(const char *filename,

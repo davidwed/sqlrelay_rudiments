@@ -44,8 +44,10 @@ class shadowentry {
 
 		// If you need to look up a shadow entry and refer to multiple
 		// fields, use these methods.
-			shadowentry();
-			~shadowentry();
+				shadowentry();
+				shadowentry(const shadowentry &s);
+		shadowentry	&operator=(const shadowentry &s);
+				~shadowentry();
 
 		bool	initialize(const char *username);
 			// Looks up a shadow entry by name.

@@ -17,6 +17,10 @@
 #endif
 #include <errno.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	strncpy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;

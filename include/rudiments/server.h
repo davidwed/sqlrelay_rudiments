@@ -16,6 +16,8 @@ namespace rudiments {
 class server : public filedescriptor {
 	public:
 			server();
+			server(const server &s);
+		server	&operator=(const server &s);
 		virtual	~server();
 
 		virtual	bool	bind()=0;

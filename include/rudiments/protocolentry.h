@@ -31,8 +31,10 @@ class protocolentry {
 
 		// If you need to look up a protocol entry and refer to multiple
 		// fields, use these methods.
-			protocolentry();
-			~protocolentry();
+				protocolentry();
+				protocolentry(const protocolentry &p);
+		protocolentry	&operator=(const protocolentry &p);
+				~protocolentry();
 
 		bool	initialize(const char *protocolname);
 			// Looks up a protocol entry by name.

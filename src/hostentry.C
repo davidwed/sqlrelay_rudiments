@@ -3,6 +3,7 @@
 
 #include <rudiments/hostentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,11 +23,27 @@ pthread_mutex_t	*hostentry::hemutex;
 
 hostentry::hostentry() {
 	he=NULL;
-	buffer=NULL;
+	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
+		rawbuffer::zero(&hebuffer,sizeof(hebuffer));
+		buffer=NULL;
+	#endif
+}
+
+hostentry::hostentry(const hostentry &h) {
+	initialize(h.getName());
+}
+
+hostentry &hostentry::operator=(const hostentry &h) {
+	if (this!=&h) {
+		initialize(h.getName());
+	}
+	return *this;
 }
 
 hostentry::~hostentry() {
-	delete[] buffer;
+	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
+		delete[] buffer;
+	#endif
 }
 
 char *hostentry::getName() const {
@@ -77,12 +94,13 @@ bool hostentry::initialize(const char *address, int len, int type) {
 
 bool hostentry::initialize(const char *hostname, const char *address,
 							int len, int type) {
-	if (he) {
-		he=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
+
 	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
+		if (he) {
+			he=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// gethostbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -120,17 +138,17 @@ bool hostentry::initialize(const char *hostname, const char *address,
 		return false;
 	#else
 		he=NULL;
-#ifdef RUDIMENTS_HAS_THREADS
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(hemutex && pthread_mutex_lock(hemutex)) &&
 			((he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL) &&
 			!(hemutex && pthread_mutex_unlock(hemutex)));
-#else
+		#else
 		return ((he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL);
-#endif
+		#endif
 	#endif
 }
 

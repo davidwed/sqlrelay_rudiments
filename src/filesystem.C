@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/filesystem.h>
+#include <rudiments/rawbuffer.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -15,6 +16,24 @@ namespace rudiments {
 filesystem::filesystem() {
 	fd=-1;
 	closeflag=false;
+	rawbuffer::zero(&st,sizeof(st));
+}
+
+filesystem::filesystem(const filesystem &f) {
+	filesystemClone(f);
+}
+
+filesystem &filesystem::operator=(const filesystem &f) {
+	if (this!=&f) {
+		filesystemClone(f);
+	}
+	return *this;
+}
+
+void filesystem::filesystemClone(const filesystem &f) {
+	fd=f.fd;
+	closeflag=f.closeflag;
+	st=f.st;
 }
 
 filesystem::~filesystem() {

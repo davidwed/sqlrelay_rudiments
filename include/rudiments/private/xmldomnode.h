@@ -32,3 +32,7 @@
 					xmldomnode **first, xmldomnode **last,
 					int *count);
 		stringbuffer	*xml(stringbuffer *string) const;
+
+
+				xmldomnode(const xmldomnode &x);
+		xmldomnode	&operator=(const xmldomnode &x);

@@ -17,6 +17,8 @@ class client : public filedescriptor {
 	public:
 
 			client();
+			client(const client &c);
+		client	&operator=(const client &c);
 		virtual ~client();
 
 		virtual void	initialize(namevaluepairs *cd)=0;

@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 void    handleSigusr1() {
         printf("Got a SIGUSR1!\n");
 }

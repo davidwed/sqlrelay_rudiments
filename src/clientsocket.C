@@ -14,6 +14,15 @@ namespace rudiments {
 
 clientsocket::clientsocket() : client() {}
 
+clientsocket::clientsocket(const clientsocket &c) : client(c) {}
+
+clientsocket &clientsocket::operator=(const clientsocket &c) {
+	if (this!=&c) {
+		client::operator=(c);
+	}
+	return *this;
+}
+
 clientsocket::~clientsocket() {}
 
 #ifdef FIONBIO
@@ -104,8 +113,7 @@ int clientsocket::connect(struct sockaddr *addr, socklen_t addrlen,
 				// connect was unsuccessful.
 				struct sockaddr	peeraddr;
 				socklen_t	size=sizeof(peeraddr);
-				rawbuffer::zero(static_cast<void *>(&peeraddr),
-							sizeof(peeraddr));
+				rawbuffer::zero(&peeraddr,sizeof(peeraddr));
 				if (getpeername(fd,&peeraddr,&size)==-1) {
 
 					// On some platforms, getpeername()

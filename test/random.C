@@ -6,6 +6,10 @@
 #include <rudiments/randomnumber.h>
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
         // it's common to seed a random number generator with the number of

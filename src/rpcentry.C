@@ -3,6 +3,7 @@
 
 #include <rudiments/rpcentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 // Some systems (notably cygwin 1.5.7-1) define getrpcbyname and getrpcbynumber
 // in their header files but then either don't implement them or don't export
@@ -28,11 +29,16 @@ pthread_mutex_t	*rpcentry::remutex;
 
 rpcentry::rpcentry() {
 	re=NULL;
-	buffer=NULL;
+	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
+		rawbuffer::zero(&rebuffer,sizeof(rebuffer));
+		buffer=NULL;
+	#endif
 }
 
 rpcentry::~rpcentry() {
-	delete[] buffer;
+	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
+		delete[] buffer;
+	#endif
 }
 
 char *rpcentry::getName() const {
@@ -72,12 +78,13 @@ bool rpcentry::initialize(int number) {
 }
 
 bool rpcentry::initialize(const char *rpcname, int number) {
-	if (re) {
-		re=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
+
 	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
+		if (re) {
+			re=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// getrpcbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -114,17 +121,17 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		return false;
 	#else
 		re=NULL;
-#ifdef RUDIMENTS_HAS_THREADS
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(remutex && pthread_mutex_lock(remutex)) &&
 			((re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && pthread_mutex_unlock(remutex)));
-#else
+		#else
 		return ((re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL);
-#endif
+		#endif
 	#endif
 }
 

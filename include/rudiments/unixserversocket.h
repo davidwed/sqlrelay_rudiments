@@ -30,8 +30,10 @@ namespace rudiments {
 
 class unixserversocket : public serversocket, private unixsocketutil {
 	public:
-			unixserversocket();
-		virtual ~unixserversocket();
+				unixserversocket();
+				unixserversocket(const unixserversocket &u);
+		unixserversocket	&operator=(const unixserversocket &u);
+		virtual		~unixserversocket();
 
 		bool	listen(const char *filename,
 					mode_t mask,

@@ -5,3 +5,7 @@
 		void	write(const char *logentry);
 
 		loggerlist	logdestlist;
+
+		// FIXME: should be possible to copy a logger
+			logger(const logger &l);
+		logger	&operator=(const logger &l);

@@ -28,8 +28,10 @@ class rpcentry {
 
 		// If you need to look up a rpc entry and refer to multiple
 		// fields, use these methods.
-			rpcentry();
-			~rpcentry();
+				rpcentry();
+				rpcentry(const rpcentry &r);
+		rpcentry	&operator=(const rpcentry &r);
+				~rpcentry();
 
 		bool	initialize(const char *name);
 			// Looks up a rpc entry by name.

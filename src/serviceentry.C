@@ -3,6 +3,7 @@
 
 #include <rudiments/serviceentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,11 +23,27 @@ pthread_mutex_t	*serviceentry::semutex;
 
 serviceentry::serviceentry() {
 	se=NULL;
-	buffer=NULL;
+	#if defined(HAVE_GETSERVBYNAME_R) && defined(HAVE_GETSERVBYPORT_R)
+		rawbuffer::zero(&sebuffer,sizeof(sebuffer));
+		buffer=NULL;
+	#endif
+}
+
+serviceentry::serviceentry(const serviceentry &s) {
+	initialize(s.getName(),s.getProtocol());
+}
+
+serviceentry &serviceentry::operator=(const serviceentry &s) {
+	if (this!=&s) {
+		initialize(s.getName(),s.getProtocol());
+	}
+	return *this;
 }
 
 serviceentry::~serviceentry() {
-	delete[] buffer;
+	#if defined(HAVE_GETSERVBYNAME_R) && defined(HAVE_GETSERVBYPORT_R)
+		delete[] buffer;
+	#endif
 }
 
 char *serviceentry::getName() const {
@@ -61,8 +78,7 @@ void serviceentry::setMutex(pthread_mutex_t *mutex) {
 }
 #endif
 
-bool serviceentry::initialize(const char *servicename,
-							const char *protocol) {
+bool serviceentry::initialize(const char *servicename, const char *protocol) {
 	return initialize(servicename,0,protocol);
 }
 
@@ -73,12 +89,12 @@ bool serviceentry::initialize(int port, const char *protocol) {
 bool serviceentry::initialize(const char *servicename, int port,
 						const char *protocol) {
 
-	if (se) {
-		se=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
 	#if defined(HAVE_GETSERVBYNAME_R) && defined(HAVE_GETSERVBYPORT_R)
+		if (se) {
+			se=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// getservbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -119,17 +135,17 @@ bool serviceentry::initialize(const char *servicename, int port,
 		return false;
 	#else
 		se=NULL;
-#ifdef RUDIMENTS_HAS_THREADS
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(semutex && pthread_mutex_lock(semutex)) &&
 			((se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL) &&
 			!(semutex && pthread_mutex_unlock(semutex)));
-#else
+		#else
 		return ((se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL);
-#endif
+		#endif
 	#endif
 }
 

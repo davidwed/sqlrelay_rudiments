@@ -10,7 +10,15 @@
 namespace rudiments {
 #endif
 
-stringbuffer::stringbuffer() : variablebuffer(128,32) {
+stringbuffer::stringbuffer() : variablebuffer(128,32) {}
+
+stringbuffer::stringbuffer(const stringbuffer &s) : variablebuffer(s) {}
+
+stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
+	if (this!=&s) {
+		variablebuffer::operator=(s);
+	}
+	return *this;
 }
 
 stringbuffer::stringbuffer(char *initialcontents,
@@ -27,7 +35,7 @@ void stringbuffer::setPosition(size_t pos) {
 	variablebuffer::setPosition(pos);
 }
 
-char *stringbuffer::getString() {
+const char *stringbuffer::getString() {
 	terminate();
 	return reinterpret_cast<char *>(getBuffer());
 }

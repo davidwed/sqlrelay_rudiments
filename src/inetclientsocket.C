@@ -22,6 +22,17 @@ inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
 	translateByteOrder();
 }
 
+inetclientsocket::inetclientsocket(const inetclientsocket &i) :
+					clientsocket(i), inetsocketutil(i) {}
+
+inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
+	if (this!=&i) {
+		clientsocket::operator=(i);
+		inetsocketutil::operator=(i);
+	}
+	return *this;
+}
+
 inetclientsocket::~inetclientsocket() {}
 
 int inetclientsocket::connect(const char *host,
@@ -90,7 +101,7 @@ int inetclientsocket::connect() {
 		}
 
 		// set the address type and port to connect to
-		rawbuffer::zero(static_cast<void *>(&sin),sizeof(sin));
+		rawbuffer::zero(&sin,sizeof(sin));
 		sin.sin_family=he.getAddressType();
 		sin.sin_port=htons(port);
 

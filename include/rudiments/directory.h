@@ -15,8 +15,8 @@ namespace rudiments {
 
 class directory {
 	public:
-			directory();
-			~directory();
+				directory();
+				~directory();
 
 		bool	open(const char *path);
 			// opens directory "path"

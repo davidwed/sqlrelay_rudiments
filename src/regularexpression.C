@@ -17,15 +17,15 @@ namespace rudiments {
 #endif
 
 regularexpression::regularexpression() {
-	init();
+	regularexpressionInit();
 }
 
 regularexpression::regularexpression(const char *pattern) {
-	init();
+	regularexpressionInit();
 	compile(pattern);
 }
 
-void regularexpression::init() {
+void regularexpression::regularexpressionInit() {
 	#ifdef RUDIMENTS_HAS_PCRE
 		expr=NULL;
 		extra=NULL;

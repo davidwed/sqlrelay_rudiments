@@ -4,6 +4,10 @@
 #include <rudiments/inetserversocket.h>
 #include <rudiments/permissions.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 	inetserversocket	svr;

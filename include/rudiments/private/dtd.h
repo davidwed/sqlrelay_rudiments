@@ -15,3 +15,7 @@
 					char delimiter, const char *name);
 		bool	newAttribute(xmldomnode *node);
 		void	nodeError(xmldomnode *node);
+
+
+			dtd(const dtd &d);
+		dtd	&operator=(const dtd &d);

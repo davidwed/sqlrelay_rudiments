@@ -16,8 +16,10 @@ namespace rudiments {
 class serialport : public filedescriptor {
 	public:
 
-			serialport();
-		virtual	~serialport();
+				serialport();
+				serialport(const serialport &s);
+		serialport	&operator=(const serialport &s);
+		virtual		~serialport();
 
 		bool	setProfileNow(serialportprofile *profile);
 			// tcsetattr(TCSANOW)

@@ -3,7 +3,129 @@ netbsd-2.0 CMSG_SIZE bug
 valgrind errors
 
 all constructors need to initialize all member variables
-implement copy constructors, =operators (private if necessary)
+
+xmldomnode should implement copy constructor, = operator
+dynamiclib should implement copy constructor, = operator
+
+environment class:
+	wrap clearenv()
+	make thread safe
+	make all members static
+
+--------------------------------------------------------------------------------
+
+use const's instead of #defines
+	const unsigned long	MAX_QUERY_LENGTH=32768;
+
+for class specific #defines
+	class A {
+		private:
+			static const unsigned long	NUM_ELEMENTS;
+			int	elements[NUM_ELEMENTS];
+	};
+
+	const unsigned long A::NUM_ELEMENTS=5;
+
+--------------------------------------------------------------------------------
+
+implement strdup/strndup so we can safely use delete[] on the output
+
+--------------------------------------------------------------------------------
+
+memory pool class might be re-implemented like in item 10 in effective c++
+
+--------------------------------------------------------------------------------
+
+for all classes with pointers in them:
+	declare, define copy constructor and operator=
+
+if a class isn't the kind of class that will ever be copied or assigned to:
+	declare private copy constructor and operator= but do not define them
+in fact, all declare (but don't define) all operators you want to disallow
+
+--------------------------------------------------------------------------------
+
+use initialization list to initialize variables when posssible
+
+initialization list MUST be used for const or reference types
+
+also, use initialization list for non-primitive types.  This will cause just
+the copy constructor to be called rather than the constructor and then
+= operator:
+
+	class A {
+		public:
+			A(const string &str1, const string &str2);
+		private:
+			string a;
+			string b;
+	};
+
+	A::A() : a(str1), b(str2) {}
+instead of
+	A::A() { a=str1; b=str2; }
+
+--------------------------------------------------------------------------------
+
+Base classes are instantiated in the order they're inherited from, member
+classes are instantiated in the order they're declared in the class.
+Everything is destroyed in the opposite order.
+
+To help make sense of this, keep objects in init list in same order that
+they're declared in the inheritance list and in the class.
+
+	class foo : public foo, public baz {
+		public:
+			foo(const string &str1, const string &str2);
+		private:
+			string	a;
+			string	b;
+	};
+
+	foo::foo(const string &a, const string &b) :
+			foo(), baz(), a(str1), b(str2) {}
+
+--------------------------------------------------------------------------------
+
+When implementing operator=, always check for assignment to self
+and return *this first.
+
+--------------------------------------------------------------------------------
+
+Split all classes into:
+
+foo.h
+	class foodata;
+
+	class foo {
+		public:
+			foo();
+			~foo();
+		private:
+			foodata	*fd;
+	};
+
+foo.C
+	class foodata {
+		...
+	};
+
+	foo::foo() {
+		fd=new foodata();
+	}
+
+	foo::~foo() {
+		delete fd;
+	}
+
+--------------------------------------------------------------------------------
+
+use references rather than pointers where possible
+
+--------------------------------------------------------------------------------
+
+convert linkedlist/dictionary classes to use void * base class with template
+	over top to enforce type safety
 
 
 --------------------------------------------------------------------------------

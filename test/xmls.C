@@ -5,22 +5,26 @@
 
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 class myxmlsax : public xmlsax {
 	public:
 			myxmlsax();
 	private:
 		bool	xmlVersionStart();
 		bool	xmlVersionEnd();
-		bool	doctypeStart(char *name);
-		bool	externalSubset(char *filename);
+		bool	doctypeStart(const char *name);
+		bool	externalSubset(const char *filename);
 		bool	doctypeEnd();
-		bool	tagStart(char *name);
-		bool	attributeName(char *name);
-		bool	attributeValue(char *value);
-		bool	text(char *string);
-		bool	tagEnd(char *name);
-		bool	comment(char *string);
-		bool	cdata(char *string);
+		bool	tagStart(const char *name);
+		bool	attributeName(const char *name);
+		bool	attributeValue(const char *value);
+		bool	text(const char *string);
+		bool	tagEnd(const char *name);
+		bool	comment(const char *string);
+		bool	cdata(const char *string);
 		void	indent(int spaces);
 		int	ind;
 };
@@ -39,12 +43,12 @@ bool	myxmlsax::xmlVersionEnd() {
 	return true;
 }
 
-bool	myxmlsax::doctypeStart(char *name) {
+bool	myxmlsax::doctypeStart(const char *name) {
 	printf("DOCTYPE start: %s\n",name);
 	return true;
 }
 
-bool	myxmlsax::externalSubset(char *filename) {
+bool	myxmlsax::externalSubset(const char *filename) {
 	printf("	external subset: %s\n",filename);
 	return true;
 }
@@ -60,45 +64,45 @@ void	myxmlsax::indent(int spaces) {
 	}
 }
 
-bool	myxmlsax::tagStart(char *name) {
+bool	myxmlsax::tagStart(const char *name) {
 	indent(ind);
 	printf("tagStart: %s\n",name);
 	ind++;
 	return true;
 }
 
-bool	myxmlsax::attributeName(char *name) {
+bool	myxmlsax::attributeName(const char *name) {
 	indent(ind+1);
 	printf("attribute name: %s\n",name);
 	return true;
 }
 
-bool	myxmlsax::attributeValue(char *value) {
+bool	myxmlsax::attributeValue(const char *value) {
 	indent(ind+1);
 	printf("attribute value: %s\n",value);
 	return true;
 }
 
-bool	myxmlsax::text(char *string) {
+bool	myxmlsax::text(const char *string) {
 	indent(ind+1);
 	printf("text: \n%s\n",string);
 	return true;
 }
 
-bool	myxmlsax::tagEnd(char *name) {
+bool	myxmlsax::tagEnd(const char *name) {
 	ind--;
 	indent(ind);
 	printf("tagEnd: %s\n",name);
 	return true;
 }
 
-bool	myxmlsax::comment(char *string) {
+bool	myxmlsax::comment(const char *string) {
 	indent(ind);
 	printf("comment: \n%s\n",string);
 	return true;
 }
 
-bool	myxmlsax::cdata(char *string) {
+bool	myxmlsax::cdata(const char *string) {
 	indent(ind);
 	printf("cdata: \n%s\n",string);
 	return true;

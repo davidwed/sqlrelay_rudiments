@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 RETSIGTYPE	alarmhandler() {
 	printf("alarm!\n");
 }

@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 	// initialize a text buffer and print it out
@@ -120,12 +124,12 @@ int main(int argc, const char **argv) {
 
 
 	// print the number of bytes necessary to store each number as a string
-	printf("size of 1 is: %d\n",charstring::integerLength(1));
-	printf("size of 10 is: %d\n",charstring::integerLength(10));
-	printf("size of 100 is: %d\n",charstring::integerLength(100));
-	printf("size of 1000 is: %d\n",charstring::integerLength(1000));
-	printf("size of -1 is: %d\n",charstring::integerLength(-1));
-	printf("size of -10 is: %d\n",charstring::integerLength(-10));
-	printf("size of -100 is: %d\n",charstring::integerLength(-100));
-	printf("size of -1000 is: %d\n",charstring::integerLength(-1000));
+	printf("size of 1 is: %d\n",charstring::integerLength((long)1));
+	printf("size of 10 is: %d\n",charstring::integerLength((long)10));
+	printf("size of 100 is: %d\n",charstring::integerLength((long)100));
+	printf("size of 1000 is: %d\n",charstring::integerLength((long)1000));
+	printf("size of -1 is: %d\n",charstring::integerLength((long)-1));
+	printf("size of -10 is: %d\n",charstring::integerLength((long)-10));
+	printf("size of -100 is: %d\n",charstring::integerLength((long)-100));
+	printf("size of -1000 is: %d\n",charstring::integerLength((long)-1000));
 }

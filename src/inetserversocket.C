@@ -17,6 +17,17 @@ inetserversocket::inetserversocket() : serversocket(), inetsocketutil() {
 	translateByteOrder();
 }
 
+inetserversocket::inetserversocket(const inetserversocket &i) :
+					serversocket(i), inetsocketutil(i) {}
+
+inetserversocket &inetserversocket::operator=(const inetserversocket &i) {
+	if (this!=&i) {
+		serversocket::operator=(i);
+		inetsocketutil::operator=(i);
+	}
+	return *this;
+}
+
 inetserversocket::~inetserversocket() {}
 
 unsigned short inetserversocket::getPort() {
@@ -34,7 +45,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	inetsocketutil::initialize(address,port);
 
 	// initialize a socket address structure
-	rawbuffer::zero(static_cast<void *>(&sin),sizeof(sin));
+	rawbuffer::zero(&sin,sizeof(sin));
 	sin.sin_family=AF_INET;
 	sin.sin_port=htons(port);
 
@@ -64,8 +75,7 @@ bool inetserversocket::bind() {
 		// initialize a socket address structure
 		sockaddr_in	socknamesin;
 		socklen_t	size=sizeof(socknamesin);
-		rawbuffer::zero(static_cast<void *>(&socknamesin),
-						sizeof(socknamesin));
+		rawbuffer::zero(&socknamesin,sizeof(socknamesin));
 
 		if (getsockname(fd,
 			reinterpret_cast<struct sockaddr *>(&socknamesin),
@@ -85,7 +95,7 @@ filedescriptor *inetserversocket::accept() {
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
 	socklen_t	size=sizeof(clientsin);
-	rawbuffer::zero(static_cast<void *>(&clientsin),sizeof(clientsin));
+	rawbuffer::zero(&clientsin,sizeof(clientsin));
 
 	// accept on the socket
 	int		clientsock;
@@ -111,7 +121,7 @@ char *inetserversocket::getClientAddress() {
 	// initialize a socket address structure
 	struct sockaddr_in	clientsin;
 	socklen_t		size=sizeof(clientsin);
-	rawbuffer::zero(static_cast<void *>(&clientsin),sizeof(clientsin));
+	rawbuffer::zero(&clientsin,sizeof(clientsin));
 
 	// get the peer address
 	if (getpeername(fd,reinterpret_cast<struct sockaddr *>(&clientsin),

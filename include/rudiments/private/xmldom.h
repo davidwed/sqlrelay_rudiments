@@ -4,15 +4,18 @@
 	private:
 			void	reset();
 
-			bool	tagStart(char *name);
-			bool	attributeName(char *name);
-			bool	attributeValue(char *value);
-			bool	text(char *string);
-			bool	tagEnd(char *name);
-			bool	comment(char *string);
-			bool	cdata(char *string);
+			bool	tagStart(const char *name);
+			bool	attributeName(const char *name);
+			bool	attributeValue(const char *value);
+			bool	text(const char *string);
+			bool	tagEnd(const char *name);
+			bool	comment(const char *string);
+			bool	cdata(const char *string);
 
 			xmldomnode	*nullnode;
 			xmldomnode	*rootnode;
 			xmldomnode	*currentparent;
 			xmldomnode	*currentattribute;
+
+				xmldom(const xmldom &x);
+			xmldom	&operator=(const xmldom &x);

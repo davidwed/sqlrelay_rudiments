@@ -9,4 +9,8 @@
 
 		virtual	int	safeSelect(long sec, long usec,
 						bool read, bool write);
-		bool	retryinterruptedwaits;
+		bool		retryinterruptedwaits;
+
+		// FIXME: it should be possible to copy a listener
+				listener(const listener &l);
+		listener	&operator=(const listener &l);

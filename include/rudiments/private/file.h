@@ -24,3 +24,5 @@
 						size_t size, int flags) const;
 		char	**attributeArray(const char *buffer, size_t size) const;
 		#endif
+
+		void	fileClone(const file &f);

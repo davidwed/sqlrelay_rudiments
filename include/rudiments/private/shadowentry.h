@@ -3,8 +3,10 @@
 
 	private:
 		spwd	*sp;
-		spwd	spbuffer;
-		char	*buffer;
+		#if defined(HAVE_GETSPNAM_R)
+			spwd	spbuffer;
+			char	*buffer;
+		#endif
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			!defined(HAVE_GETSPNAM_R)

@@ -4,6 +4,10 @@
 #include <rudiments/parameterstring.h>
 #include <stdio.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, char **argv) {
 
 	parameterstring	pstr;

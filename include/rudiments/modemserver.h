@@ -12,8 +12,10 @@ namespace rudiments {
 
 class modemserver : public server, private modemutil {
 	public:
-			modemserver();
-		virtual	~modemserver();
+				modemserver();
+				modemserver(const modemserver &m);
+		modemserver	&operator=(const modemserver &m);
+		virtual		~modemserver();
 
 		bool	listen(const char *device, const char *baud,
 						const char *listenscript,

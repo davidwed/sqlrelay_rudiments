@@ -13,7 +13,10 @@ namespace rudiments {
 class unixsocketutil {
 	public:
 			unixsocketutil();
-		virtual ~unixsocketutil();
+			unixsocketutil(const unixsocketutil &u);
+		unixsocketutil	&operator=(const unixsocketutil &u);
+		virtual		~unixsocketutil();
+
 		void	initialize(const char *filename);
 
 	#include <rudiments/private/unixsocketutil.h>

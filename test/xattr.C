@@ -3,6 +3,10 @@
 #include <errno.h>
 #include <string.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, char **argv) {
 
 	file	testfile;

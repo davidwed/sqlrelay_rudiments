@@ -11,6 +11,15 @@ namespace rudiments {
 
 shmfile::shmfile() : file() {}
 
+shmfile::shmfile(const shmfile &s) : file(s) {}
+
+shmfile &shmfile::operator=(const shmfile &s) {
+	if (this!=&s) {
+		file::operator=(s);
+	}
+	return *this;
+}
+
 shmfile::~shmfile() {}
 
 int shmfile::openInternal(const char *name, int flags) {

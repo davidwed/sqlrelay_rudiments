@@ -7,3 +7,6 @@
 			#ifdef RUDIMENTS_HAS_THREADS
 			static pthread_mutex_t	*errormutex;
 			#endif
+
+					dynamiclib(const dynamiclib &d);
+			dynamiclib	&operator=(const dynamiclib &d);

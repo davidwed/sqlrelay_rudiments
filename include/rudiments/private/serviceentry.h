@@ -3,8 +3,11 @@
 
 	private:
 		servent		*se;
-		servent		sebuffer;
-		char		*buffer;
+		#if defined(HAVE_GETSERVBYNAME_R) || \
+				defined(HAVE_GETSERVBYPORT_R)
+			servent		sebuffer;
+			char		*buffer;
+		#endif
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETSERVBYNAME_R) || \

@@ -7,6 +7,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 

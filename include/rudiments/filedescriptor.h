@@ -19,6 +19,8 @@ class filedescriptor {
 	public:
 			filedescriptor();
 				// Creates an uninitialized filedescriptor.
+			filedescriptor(const filedescriptor &f);
+		filedescriptor	&operator=(const filedescriptor &f);
 		virtual	~filedescriptor();
 				// Calls close() if it hasn't already been
 				// called.

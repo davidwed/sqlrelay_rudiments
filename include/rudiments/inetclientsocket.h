@@ -19,8 +19,10 @@ namespace rudiments {
 
 class inetclientsocket : public clientsocket, private inetsocketutil  {
 	public:
-			inetclientsocket();
-		virtual	~inetclientsocket();
+				inetclientsocket();
+				inetclientsocket(const inetclientsocket &i);
+		inetclientsocket	&operator=(const inetclientsocket &i);
+		virtual		~inetclientsocket();
 
 		int	connect(const char *host,
 					unsigned short port,

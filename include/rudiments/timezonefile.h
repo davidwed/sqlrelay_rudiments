@@ -21,8 +21,10 @@ struct ttinfo {
 
 class timezonefile {
 	public:
-			timezonefile();
-			~timezonefile();
+				timezonefile();
+				timezonefile(const timezonefile &t);
+		timezonefile	&operator=(const timezonefile &t);
+				~timezonefile();
 
 		bool		parseFile(const char *filename);
 				// Parses "filename".  Returns true on success

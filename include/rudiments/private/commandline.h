@@ -4,3 +4,6 @@
 	private:
 		int	argc;
 		char	**argv;
+
+		commandline(const commandline &c);
+		commandline	&operator=(const commandline &c);

@@ -3,8 +3,11 @@
 
 	private:
 		rpcent	*re;
-		rpcent	rebuffer;
-		char	*buffer;
+		#if defined(HAVE_GETRPCBYNAME_R) && \
+				defined(HAVE_GETRPCBYNUMBER_R)
+			rpcent	rebuffer;
+			char	*buffer;
+		#endif
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETRPCBYNAME_R) || \

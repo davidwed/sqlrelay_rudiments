@@ -29,3 +29,6 @@
 			long		line;
 			bool		allowtrailingtext;
 			stringbuffer	err;
+
+			xmlsax(const xmlsax &x);
+		xmlsax	&operator=(const xmlsax &x);

@@ -12,8 +12,10 @@ namespace rudiments {
 
 class clientsocket : public client {
 	public:
-			clientsocket();
-		virtual	~clientsocket();
+				clientsocket();
+				clientsocket(const clientsocket &c);
+		clientsocket	&operator=(const clientsocket &c);
+		virtual		~clientsocket();
 
 #ifdef FIONBIO
 		virtual bool	useNonBlockingMode() const;

@@ -12,9 +12,13 @@ namespace rudiments {
 
 class inetsocketutil {
 	public:
-			inetsocketutil();
-		virtual	~inetsocketutil();
-		void	initialize(const char *address, unsigned short port);
+				inetsocketutil();
+				inetsocketutil(const inetsocketutil &i);
+		inetsocketutil	&operator=(const inetsocketutil &i);
+		virtual		~inetsocketutil();
+
+		void		initialize(const char *address,
+						unsigned short port);
 
 	#include <rudiments/private/inetsocketutil.h>
 };

@@ -30,6 +30,11 @@ class logdestination {
 // The syslogdestination class writes log data to syslog.
 class syslogdestination : public logdestination {
 	public:
+				syslogdestination();
+				syslogdestination(const syslogdestination &f);
+		syslogdestination	&operator=(const syslogdestination &f);
+		virtual		~syslogdestination();
+
 		void	open(const char *ident, int option,
 					int facility, int priority);
 		void	close();
@@ -40,8 +45,11 @@ class syslogdestination : public logdestination {
 // The filedestination class writes log data to a file.
 class filedestination : public logdestination {
 	public:
-			filedestination();
-		virtual	~filedestination();
+				filedestination();
+				filedestination(const filedestination &f);
+		filedestination	&operator=(const filedestination &f);
+		virtual		~filedestination();
+
 		bool	open(const char *filename);
 		void	close();
 	#include <rudiments/private/filedestination.h>

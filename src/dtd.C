@@ -10,6 +10,8 @@
 namespace rudiments {
 #endif
 
+dtd::dtd() {}
+
 bool dtd::parseFile(const char *filename) {
 	if (!xmld.parseFile(filename)) {
 		err.clear();
@@ -245,11 +247,11 @@ bool dtd::newAttribute(xmldomnode *node) {
 	return false;
 }
 
-xmldom *dtd::xml() {
-	return &xmldtd;
+xmldomnode *dtd::xml() {
+	return xmldtd.getRootNode();
 }
 
-char *dtd::getError() {
+const char *dtd::getError() {
 	return err.getString();
 }
 

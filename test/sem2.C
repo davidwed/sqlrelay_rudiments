@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+using namespace rudiments;
+#endif
+
 int main(int argc, const char **argv) {
 
 	// attach to the semaphore set keyed to /tmp/sem containing 2 semaphores

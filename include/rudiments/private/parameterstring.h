@@ -17,3 +17,6 @@
 		int	parsePartLength(const char *data, char delimiter,
 						int quotes, int escapedchars);
 		
+		// FIXME: it should be possible to copy a parameterstring
+				parameterstring(const parameterstring &p);
+		parameterstring	&operator=(const parameterstring &p);

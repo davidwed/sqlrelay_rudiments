@@ -3,6 +3,7 @@
 
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,11 +22,27 @@ pthread_mutex_t	*groupentry::gemutex;
 
 groupentry::groupentry() {
 	grp=NULL;
-	buffer=NULL;
+	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+		rawbuffer::zero(&grpbuffer,sizeof(grpbuffer));
+		buffer=NULL;
+	#endif
+}
+
+groupentry::groupentry(const groupentry &g) {
+	initialize(g.getName());
+}
+
+groupentry &groupentry::operator=(const groupentry &g) {
+	if (this!=&g) {
+		initialize(g.getName());
+	}
+	return *this;
 }
 
 groupentry::~groupentry() {
-	delete[] buffer;
+	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+		delete[] buffer;
+	#endif
 }
 
 char *groupentry::getName() const {
@@ -70,26 +87,27 @@ bool groupentry::initialize(gid_t groupid) {
 
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
-	if (grp) {
-		grp=NULL;
-		delete[] buffer;
-		buffer=NULL;
-	}
 	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+		if (grp) {
+			grp=NULL;
+			delete[] buffer;
+			buffer=NULL;
+		}
 		// getgrnam_r and getgrgid_t are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
 		// require that you pass them a pre-allocated buffer.  If the
 		// buffer is too small, they return an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+
 			buffer=new char[size];
 			#if defined(HAVE_GETGRNAM_R_5) && \
 						 defined(HAVE_GETGRGID_R_5)
 			if (!((groupname)
 				?(getgrnam_r(groupname,&grpbuffer,
-							buffer,size,&grp))
+						buffer,size,&grp))
 				:(getgrgid_r(groupid,&grpbuffer,
-							buffer,size,&grp)))) {
+						buffer,size,&grp)))) {
 				return (grp!=NULL);
 			}
 			#elif defined(HAVE_GETGRNAM_R_4) && \
@@ -111,17 +129,18 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		}
 		return false;
 	#else
-#ifdef RUDIMENTS_HAS_THREADS
+		grp=NULL;
+		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(gemutex && pthread_mutex_lock(gemutex)) &&
 			((grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
 			!(gemutex && pthread_mutex_unlock(gemutex)));
-#else
+		#else
 		return ((grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL);
-#endif
+		#endif
 	#endif
 }
 

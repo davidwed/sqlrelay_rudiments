@@ -24,37 +24,37 @@ void xmlsax::reset() {
 	line=1;
 }
 
-bool xmlsax::tagStart(char *name) {
+bool xmlsax::tagStart(const char *name) {
 	// by default, just return success
 	return true;
 }
 
-bool xmlsax::attributeName(char *name) {
+bool xmlsax::attributeName(const char *name) {
 	// by default, just return success
 	return true;
 }
 
-bool xmlsax::attributeValue(char *value) {
+bool xmlsax::attributeValue(const char *value) {
 	// by default, just return success
 	return true;
 }
 
-bool xmlsax::text(char *string) {
+bool xmlsax::text(const char *string) {
 	// by default, just return success
 	return true;
 }
 
-bool xmlsax::tagEnd(char *name) {
+bool xmlsax::tagEnd(const char *name) {
 	// by default, just return success
 	return true;
 }
 
-bool xmlsax::comment(char *string) {
+bool xmlsax::comment(const char *string) {
 	// by default, just return success
 	return true;
 }
 
-bool xmlsax::cdata(char *string) {
+bool xmlsax::cdata(const char *string) {
 	// by default, just return success
 	return true;
 }
@@ -778,6 +778,10 @@ void xmlsax::parseTextFailed() {
 	err.clear();
 	err.append("error: parseText() failed at line ");
 	err.append(line);
+}
+
+const char *xmlsax::getError() {
+	return err.getString();
 }
 
 #ifdef RUDIMENTS_NAMESPACE

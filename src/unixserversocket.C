@@ -18,6 +18,20 @@ unixserversocket::unixserversocket() : serversocket(), unixsocketutil() {
 	mask=0;
 }
 
+unixserversocket::unixserversocket(const unixserversocket &u) :
+				serversocket(u), unixsocketutil(u) {
+	mask=u.mask;
+}
+
+unixserversocket &unixserversocket::operator=(const unixserversocket &u) {
+	if (this!=&u) {
+		serversocket::operator=(u);
+		unixsocketutil::operator=(u);
+		mask=u.mask;
+	}
+	return *this;
+}
+
 unixserversocket::~unixserversocket() {}
 
 bool unixserversocket::initialize(const char *filename, mode_t mask) {
@@ -32,7 +46,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	file::remove(filename);
-	rawbuffer::zero(static_cast<void *>(&sockaddrun),sizeof(sockaddrun));
+	rawbuffer::zero(&sockaddrun,sizeof(sockaddrun));
 	sockaddrun.sun_family=AF_UNIX;
 	charstring::copy(sockaddrun.sun_path,filename);
 
@@ -72,7 +86,7 @@ filedescriptor *unixserversocket::accept() {
 	// initialize a socket address structure
 	sockaddr_un	clientsun;
 	socklen_t	size=sizeof(clientsun);
-	rawbuffer::zero(static_cast<void *>(&clientsun),sizeof(clientsun));
+	rawbuffer::zero(&clientsun,sizeof(clientsun));
 
 	// accept on the socket
 	int		clientsock;

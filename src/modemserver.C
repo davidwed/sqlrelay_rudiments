@@ -12,12 +12,29 @@
 namespace rudiments {
 #endif
 
-modemserver::modemserver() : server() {
-	devicename="";
-	baud="";
+modemserver::modemserver() : server(), modemutil() {
 	listenscript="";
 	acceptscript="";
 	disconnectscript="";
+}
+
+modemserver::modemserver(const modemserver &m) : server(m), modemutil(m) {
+	modemserverClone(m);
+}
+
+modemserver &modemserver::operator=(const modemserver &m) {
+	if (this!=&m) {
+		server::operator=(m);
+		modemutil::operator=(m);
+		modemserverClone(m);
+	}
+	return *this;
+}
+
+void modemserver::modemserverClone(const modemserver &m) {
+	listenscript=m.listenscript;
+	acceptscript=m.acceptscript;
+	disconnectscript=m.disconnectscript;
 }
 
 modemserver::~modemserver() {

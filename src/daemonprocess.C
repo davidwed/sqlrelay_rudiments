@@ -30,6 +30,8 @@ void		(*daemonprocess::crashfunc)(int);
 
 daemonprocess::daemonprocess() {
 
+	// FIXME: setting static members in the constructor???
+
 	// we want daemons to wait for children to die before shutting down,
 	// so register some default shutdown/crash handlers that only do that
 	// FIXME: it should be possible to use one of the C++ casting operators

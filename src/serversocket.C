@@ -12,6 +12,15 @@ namespace rudiments {
 
 serversocket::serversocket() : server() {}
 
+serversocket::serversocket(const serversocket &s) : server(s) {}
+
+serversocket &serversocket::operator=(const serversocket &s) {
+	if (this!=&s) {
+		server::operator=(s);
+	}
+	return *this;
+}
+
 serversocket::~serversocket() {}
 
 #ifdef FIONBIO

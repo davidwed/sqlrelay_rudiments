@@ -35,8 +35,10 @@ class serviceentry {
 
 		// If you need to look up a service entry and refer to multiple
 		// fields, use these methods.
-			serviceentry();
-			~serviceentry();
+				serviceentry();
+				serviceentry(const serviceentry &s);
+		serviceentry	&operator=(const serviceentry &s);
+				~serviceentry();
 
 		bool	initialize(const char *servicename,
 					const char *protocol);

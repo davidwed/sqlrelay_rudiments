@@ -3,7 +3,8 @@
 
 	protected:
 
-		void	init();
+		void	filedescriptorInit();
+		void	filedescriptorClone(const filedescriptor &f);
 
 		virtual	unsigned short	hostToNet(unsigned short value) const;
 		virtual	unsigned long	hostToNet(unsigned long value) const;

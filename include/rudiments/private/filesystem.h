@@ -15,3 +15,5 @@
 
 		int	fd;
 		bool	closeflag;
+
+		void	filesystemClone(const filesystem &f);
