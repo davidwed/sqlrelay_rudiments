@@ -1,3 +1,5 @@
+filesystem class almost certainly won't work on non-linux systems
+
 document timezonefile classes
 
 a termios class would be nice

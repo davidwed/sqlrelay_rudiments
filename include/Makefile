@@ -62,6 +62,10 @@ ifeq ($(INCLUDE_FILE),1)
 	HEADERS += file.h
 	PRIVATEHEADERS += file.h fileinlines.h fileincludes.h
 endif
+ifeq ($(INCLUDE_FILESYSTEM),1)
+	HEADERS += filesystem.h
+	PRIVATEHEADERS += filesystem.h filesysteminlines.h filesystemincludes.h
+endif
 ifeq ($(INCLUDE_GROUPENTRY),1)
 	HEADERS += groupentry.h
 	PRIVATEHEADERS += groupentry.h groupentryinlines.h \

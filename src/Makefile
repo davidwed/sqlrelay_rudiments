@@ -47,6 +47,11 @@ ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
 	NLOBJS += filedescriptor.n.lo
 	PLOBJS += filedescriptor.p.lo
 endif
+ifeq ($(INCLUDE_FILESYSTEM),1)
+	SRCS += filesystem.C
+	NLOBJS += filesystem.n.lo
+	PLOBJS += filesystem.p.lo
+endif
 ifeq ($(INCLUDE_GROUPENTRY),1)
 	SRCS += groupentry.C
 	NLOBJS += groupentry.n.lo

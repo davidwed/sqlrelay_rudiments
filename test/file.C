@@ -1,3 +1,6 @@
+// Copyright (c) 2003  David Muse
+// See the file COPYING for more information
+
 #include <rudiments/groupentry.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/file.h>
