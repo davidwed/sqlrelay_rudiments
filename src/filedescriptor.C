@@ -467,10 +467,12 @@ bool filedescriptor::close() {
 		sslresult=SSL_shutdown(ssl);
 	}
 #endif
-	if (::close(fd)==-1) {
-		return false;
+	if (fd!=-1) {
+		if (::close(fd)==-1) {
+			return false;
+		}
+		fd=-1;
 	}
-	fd=-1;
 	return true;
 }
 
