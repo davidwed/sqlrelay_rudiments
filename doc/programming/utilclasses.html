@@ -791,12 +791,131 @@ you'll have to kill this program with a -9.</p>
 <a name="stringbuffer"></a>
 <span class="heading">Using the String Buffer Class</span><br><br>
 
-<p>...</p>
+<p>The stringbuffer class allows you to manipulate strings of arbitrary length.
+You can append data to a stringbuffer or write data at arbitrary positions in
+the buffer.</p>
+
+<pre>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/stringbuffer.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;stdio.h&gt;</font>
+
+<font color="#288850"><b>int</b></font> main(<font color="#288850"><b>int</b></font> argc, <font color="#288850"><b>char</b></font> **argv) {
+
+        <font color="#0000f8">// create a stringbuffer</font>
+        stringbuffer    strb;
+
+        <font color="#0000f8">// append some data to it</font>
+        strb.append(<font color="#f800f8">&quot;hello &quot;</font>)-&gt;append(<font color="#f800f8">&quot;there, &quot;</font>)-&gt;append(<font color="#f800f8">&quot;goodbye&quot;</font>);
+
+        <font color="#0000f8">// display the string length and data</font>
+        printf(<font color="#f800f8">&quot;Length: </font><font color="#6858c8">%d</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,strb.getStringLength());
+        printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,strb.getString());
+
+        <font color="#0000f8">// clear the stringbuffer</font>
+        strb.clear();
+
+        <font color="#0000f8">// append 12345 to the string</font>
+        strb.append(<font color="#f800f8">&quot;12345&quot;</font>);
+
+        <font color="#0000f8">// set position to 10 and write 12345 again, this will leave a gap</font>
+        <font color="#0000f8">// in the string between positions 5 and 10 with garbage in it</font>
+        strb.setPosition(<font color="#f800f8">10</font>);
+        strb.write(<font color="#f800f8">&quot;12345&quot;</font>);
+
+        <font color="#0000f8">// display the string length and the string</font>
+        printf(<font color="#f800f8">&quot;Length: </font><font color="#6858c8">%d</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,strb.getStringLength());
+        <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> i=<font color="#f800f8">0</font>; i&lt;<font color="#f800f8">15</font>; i++) {
+                printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%c</font><font color="#f800f8">&quot;</font>,strb.getString()[i]);
+        }
+        printf(<font color="#f800f8">&quot;</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
+
+        <font color="#0000f8">// clear the stringbuffer</font>
+        strb.clear();
+
+        <font color="#0000f8">// append an integer to the stringbuffer</font>
+        strb.append((<font color="#288850"><b>long</b></font>)<font color="#f800f8">1</font>)-&gt;append(<font color="#f800f8">&quot; &quot;</font>);
+
+        <font color="#0000f8">// append a character to the stringbuffer</font>
+        strb.append(<font color="#f800f8">'a'</font>)-&gt;append(<font color="#f800f8">&quot; &quot;</font>);
+
+        <font color="#0000f8">// append a floating point number to the stringbuffer</font>
+        strb.append((<font color="#288850"><b>double</b></font>)<font color="#f800f8">2.2</font>)-&gt;append(<font color="#f800f8">&quot; &quot;</font>);
+
+        <font color="#0000f8">// append a floating point number to the stringbuffer with precision</font>
+        <font color="#0000f8">// and scale</font>
+        strb.append(<font color="#f800f8">2.2</font>,<font color="#f800f8">2</font>,<font color="#f800f8">3</font>);
+
+        <font color="#0000f8">// display the string length and data</font>
+        printf(<font color="#f800f8">&quot;Length: </font><font color="#6858c8">%d</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,strb.getStringLength());
+        printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,strb.getString());
+}
+</pre>
 
 <a name="variablebuffer"></a>
 <span class="heading">Using the Variable Buffer Class</span><br><br>
 
-<p>...</p>
+<p>The variablebuffer class allows you to manipulate a buffer of arbitrary
+length containing binary data.  You can append data to a variablebuffer or
+write data at arbitrary positions in the buffer.</p>
+
+<pre>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/variablebuffer.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;stdio.h&gt;</font>
+
+<font color="#288850"><b>int</b></font> main(<font color="#288850"><b>int</b></font> argc, <font color="#288850"><b>char</b></font> **argv) {
+
+        <font color="#0000f8">// create a variablebuffer</font>
+        variablebuffer  varb(<font color="#f800f8">5</font>,<font color="#f800f8">5</font>);
+
+        <font color="#0000f8">// append some string data to the buffer</font>
+        varb.append((<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *)<font color="#f800f8">&quot;hello there, goodbye</font><font color="#6858c8">\0</font><font color="#f800f8">&quot;</font>,<font color="#f800f8">21</font>);
+
+        <font color="#0000f8">// display the buffer size and data</font>
+        printf(<font color="#f800f8">&quot;Size: </font><font color="#6858c8">%d</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,varb.getSize());
+        printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,varb.getBuffer());
+
+        <font color="#0000f8">// clear the buffer</font>
+        varb.clear();
+
+        <font color="#0000f8">// append 12345 to the buffer</font>
+        varb.append((<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *)<font color="#f800f8">&quot;12345&quot;</font>,<font color="#f800f8">5</font>);
+
+        <font color="#0000f8">// set position to 10 and write 12345 again, this will leave a gap</font>
+        <font color="#0000f8">// in the buffer between positions 5 and 10 with garbage in it</font>
+        varb.setPosition(<font color="#f800f8">10</font>);
+        varb.write((<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *)<font color="#f800f8">&quot;12345&quot;</font>,<font color="#f800f8">5</font>);
+
+        <font color="#0000f8">// display the buffer size and the buffer</font>
+        printf(<font color="#f800f8">&quot;Size: </font><font color="#6858c8">%d</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,varb.getSize());
+        <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> i=<font color="#f800f8">0</font>; i&lt;<font color="#f800f8">15</font>; i++) {
+                printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%c</font><font color="#f800f8">&quot;</font>,varb.getBuffer()[i]);
+        }
+        printf(<font color="#f800f8">&quot;</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
+
+        <font color="#0000f8">// clear the buffer</font>
+        varb.clear();
+
+        <font color="#0000f8">// append an integer to the buffer</font>
+        <font color="#288850"><b>long</b></font>    number=<font color="#f800f8">1</font>;
+        varb.append((<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *)&amp;number,<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>long</b></font>));
+
+        <font color="#0000f8">// append a character to the buffer</font>
+        <font color="#288850"><b>char</b></font>    character=<font color="#f800f8">'a'</font>;
+        varb.append((<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *)&amp;character,<font color="#a02828"><b>sizeof</b></font>(character));
+
+        <font color="#0000f8">// append a floating point number to the buffer</font>
+        <font color="#288850"><b>double</b></font>  doublenumber=<font color="#f800f8">2.2</font>;
+        varb.append((<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *)&amp;doublenumber,<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>double</b></font>));
+
+        <font color="#0000f8">// display the size and data</font>
+        printf(<font color="#f800f8">&quot;Size: </font><font color="#6858c8">%d</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,varb.getSize());
+        <font color="#288850"><b>long</b></font>    *numptr=(<font color="#288850"><b>long</b></font> *)(varb.getBuffer());
+        <font color="#288850"><b>char</b></font>    *charptr=(<font color="#288850"><b>char</b></font> *)(varb.getBuffer()+<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>long</b></font>));
+        <font color="#288850"><b>double</b></font>  *doubleptr=(<font color="#288850"><b>double</b></font> *)(varb.getBuffer()+
+                                        <font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>long</b></font>)+<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>char</b></font>));
+        printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%d</font><font color="#f800f8"> </font><font color="#6858c8">%c</font><font color="#f800f8"> </font><font color="#6858c8">%f</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,*numptr,*charptr,*doubleptr);
+}
+</pre>
 
 <a name="string"></a>
 <span class="heading">Using the String Class</span><br><br>
