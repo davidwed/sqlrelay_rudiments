@@ -78,6 +78,10 @@ bool regularexpression::study() {
 
 bool regularexpression::match(const char *str) {
 
+	if (!str) {
+		return false;
+	}
+
 	#ifdef RUDIMENTS_HAS_PCRE
 		this->str=(char *)str;
 		return (expr && (matchcount=pcre_exec(expr,extra,
