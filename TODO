@@ -1,24 +1,18 @@
-document text->string class conversion
+use explicit specialization to handle primitive/string list/dictionaries
 
+document text->string class conversion
+document/comment list and dictionary classes
+document filedescriptor,file,stringbuffer,variablebuffer,
+		hostentry,protocolentry,passwdentry,groupentry
+document clienttransport/namevaluepairs relationship
+document new read-til-terminate method in transport class
+rebuild class doc's
+
+need generic parser/lexer classes, use them for xmlsax
+probably can combine memorypool and variablebuffer classes
 xmldomnode should probably use list class
 should be able to validate an xml document against the dtd
 
-probably can combine memorypool and variablebuffer classes
-
-need generic parser/lexer classes, use them for xmlsax
-
-document/test program for filedescriptor
-
-document/comment list and dictionary classes
-
-document file,stringbuffer,variablebuffer,
-		hostentry,protocolentry,passwdentry,groupentry
-
-document clienttransport/namevaluepairs relationship
-
-document new read-til-terminate method in transport class
-
-rebuild class doc's
 naming convention should support tcp/udp/etc sockets and non-stream tcp sockets
 	ie: protocol-type-domain-client/server-socket
 	eg: tcpstreaminetclientsocket

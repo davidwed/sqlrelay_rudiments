@@ -50,34 +50,10 @@ inline listnode<datatype> *LISTNODE_CLASS::getNext() const {
 
 LISTNODE_TEMPLATE
 inline int LISTNODE_CLASS::compare(datatype data) const {
-	if (this->data<data) {
-		return -1;
-	} else if (this->data==data) {
-		return 0;
-	} else {
-		return 1;
-	}
+	return datautil.compare(this->data,data);
 }
 
 LISTNODE_TEMPLATE
 inline void LISTNODE_CLASS::print() const {
-	printf("%d\n",data);
-}
-
-
-// Copyright (c) 2003 David Muse
-// See the COPYING file for more information
-
-#include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-
-inline int listnode<char *>::compare(char *data) const {
-	return strcmp(this->data,data);
-}
-
-inline void listnode<char *>::print() const {
-	printf("%s\n",data);
+	return datautil.print(data);
 }

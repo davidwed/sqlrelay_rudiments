@@ -12,8 +12,9 @@
 // Each list is composed of a series of listnode's.  Each listnode contains
 // the data.
 
-
 #include <rudiments/private/config.h>
+
+#include <rudiments/private/listutil.h>
 
 template <class datatype>
 class listnode {
@@ -111,22 +112,8 @@ class list {
 
 #include <rudiments/private/listinlines.h>
 
-
-
-// One of the most common things to store in a list is a string.
-// Strings need to be handled slightly differently than other "primitive" types.
-// So the stringlist and stringlistnode classes are provided for convenience.
-
-class stringlistnode : public listnode<char *> {
-	public:
-			stringlistnode() : listnode<char *>() {}
-		virtual int	compare(char *data) const;
-		virtual void	print() const;
-
-};
-
-#include <rudiments/private/stringlistnodeinlines.h>
-
+// string...
+typedef listnode< char *>		stringlistnode;
 typedef list< char *, stringlistnode >	stringlist;
 
 #endif

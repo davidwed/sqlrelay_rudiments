@@ -30,10 +30,7 @@ endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h
 	PRIVATEHEADERS += dictionary.h dictionaryinlines.h \
-				dictionarynode.h dictionarynodeinlines.h \
-				objectdictionarynodeinlines.h \
-				stringdictionarynodeinlines.h
-				
+				dictionarynode.h dictionarynodeinlines.h
 #endif
 ifeq ($(INCLUDE_DTD),1)
 	HEADERS += dtd.h
@@ -75,7 +72,7 @@ endif
 #ifeq ($(INCLUDE_LIST),1)
 	HEADERS += list.h
 	PRIVATEHEADERS += list.h listinlines.h listnode.h listnodeinlines.h \
-				stringlistnodeinlines.h
+				listutil.h listutilinlines.h
 #endif
 ifeq ($(INCLUDE_LOGGER),1)
 	HEADERS += logger.h

@@ -4,3 +4,6 @@
 	protected:
 		keytype		key;
 		datatype	data;
+
+		listutil<keytype>	keyutil;
+		listutil<datatype>	datautil;

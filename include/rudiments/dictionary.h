@@ -6,6 +6,7 @@
 
 #include <rudiments/private/config.h>
 
+#include <rudiments/list.h>
 
 // The dictionary class allows you to store arbitrary numbers of key/value
 // pairs.  Since the dictionary class is template-based, you can store
@@ -43,8 +44,6 @@ class dictionarynode {
 };
 
 #include <rudiments/private/dictionarynodeinlines.h>
-
-#include <rudiments/list.h>
 
 template <class keytype, class datatype>
 class dictionarylistnode :
@@ -89,34 +88,10 @@ class dictionary {
 #include <rudiments/private/dictionaryinlines.h>
 
 
-
-// object...
-
-template <class keytype, class datatype>
-class objectdictionarynode : public dictionarynode<keytype,datatype> {
-	public:
-			objectdictionarynode() :
-				dictionarynode<keytype,datatype>() {};
-		int	compare(keytype testkey) const;
-		void	print() const;
-};
-
-#include <rudiments/private/objectdictionarynodeinlines.h>
-
-
-
 // string...
-
 template <class datatype>
-class stringdictionarynode : public dictionarynode<char *,datatype> {
-	public:
-			stringdictionarynode() :
-				dictionarynode<char *,datatype>() {};
-		int	compare(char * testkey) const;
-		void	print() const;
-};
-
-#include <rudiments/private/stringdictionarynodeinlines.h>
+class stringdictionarynode :
+		public dictionarynode< char *,datatype > {};
 
 template <class datatype>
 class stringdictionarylistnode :
@@ -131,9 +106,10 @@ class stringdictionary : public dictionary< char *, datatype,
 				stringdictionarylistnode<datatype>,
 				stringdictionarylist<datatype> > {};
 
-
-
 // numeric...
+template <class datatype>
+class numericdictionarynode :
+		public dictionarynode< long, datatype > {};
 
 template <class datatype>
 class numericdictionarylistnode :
@@ -144,16 +120,16 @@ class numericdictionarylist : public dictionarylist< long, datatype > {};
 
 template <class datatype>
 class numericdictionary : public dictionary< long, datatype,
-				dictionarynode<long, datatype>,
+				numericdictionarynode<datatype>,
 				numericdictionarylistnode<datatype>,
 				numericdictionarylist<datatype> > {};
 
 
 
 // name/value pairs...
-
-typedef stringdictionarylistnode<char *> namevaluepairslistnode;
-typedef stringdictionarylist<char *> namevaluepairslist;
-typedef stringdictionary<char *> namevaluepairs;
+typedef stringdictionarynode<char *>		namevaluepairsnode;
+typedef stringdictionarylistnode<char *>	namevaluepairslistnode;
+typedef stringdictionarylist<char *>		namevaluepairslist;
+typedef stringdictionary<char *>		namevaluepairs;
 
 #endif

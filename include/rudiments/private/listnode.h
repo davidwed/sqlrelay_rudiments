@@ -5,3 +5,4 @@
 		datatype		data;
 		listnode<datatype>	*next;
 		listnode<datatype>	*previous;
+		listutil<datatype>	datautil;

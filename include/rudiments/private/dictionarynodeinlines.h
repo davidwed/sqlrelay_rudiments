@@ -34,18 +34,12 @@ inline datatype DICTIONARYNODE_CLASS::getData() const {
 }
 
 DICTIONARYNODE_TEMPLATE
-inline int DICTIONARYNODE_CLASS::compare(keytype key) const {
-	if (this->key<key) {
-		return -1;
-	} else if (this->key==key) {
-		return 0;
-	} else {
-		return 1;
-	}
+inline int DICTIONARYNODE_CLASS::compare(keytype testkey) const {
+	return keyutil.compare(key,testkey);
 }
 
 DICTIONARYNODE_TEMPLATE
 inline void DICTIONARYNODE_CLASS::print() const {
-	printf("key:  %d\n",key);
-	printf("data: %d\n",data);
+	keyutil.print(key);
+	datautil.print(data);
 }
