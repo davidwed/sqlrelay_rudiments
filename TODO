@@ -1,4 +1,4 @@
-SCO's shadow entry doesn't have warn, inact, expire or flag
+make sure semaphore/sharedmemory create error code is correct
 
 document filesystem, timezonefile classes
 
