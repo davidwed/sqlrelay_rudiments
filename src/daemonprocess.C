@@ -9,28 +9,33 @@
 
 #include <stdlib.h>
 
-// for fork/getpid...
+// for fork/getpid/exit...
 #include <unistd.h>
 
 // for wait...
 #include <sys/wait.h>
 
 #ifdef __GNUC__
+signalhandler	daemonprocess::deadchildhandler;
 signalhandler	daemonprocess::shutdownhandler;
 signalhandler	daemonprocess::crashhandler;
 void		(*daemonprocess::shutdownfunc)(int);
 void		(*daemonprocess::crashfunc)(int);
-signalhandler	daemonprocess::deadchildhandler;
 #endif
 
 daemonprocess::daemonprocess() {
-	deadchildhandler.setHandler((void *)waitOnChildren);
-	deadchildhandler.addFlag(SA_NOCLDSTOP);
-	deadchildhandler.handleSignal(SIGCHLD);
+
+	// we want daemons to wait for children to die before shutting down,
+	// so register some default shutdown/crash handlers that only do that
+	shutdownhandler.setHandler((void *)defaultShutDown);
+	shutdownhandler.handleSignal(SIGINT);
+	shutdownhandler.handleSignal(SIGTERM);
+
+	crashhandler.setHandler((void *)defaultCrash);
+	crashhandler.handleSignal(SIGSEGV);
 }
 
 daemonprocess::~daemonprocess() {
-	waitOnChildren();
 }
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
@@ -100,16 +105,40 @@ int daemonprocess::runAsGroup(const char *groupname) const {
 					runAsGroupId(groupid):1;
 }
 
-void daemonprocess::waitOnChildren() {
-	while(waitpid(-1,NULL,WNOHANG)>0);
+void daemonprocess::waitForChildren() {
+	// It's tempting to pass WNOHANG here, but it's probably not what
+	// we really want.  WNOHANG will cause the waitpid() to wait for all
+	// children who are currently in their final exit() stage.  But, if
+	// the parent calls exit(), and all the children will start dying off,
+	// the parent may receive the SIGCHLD from the child before the child
+	// is in its final exit() stage and not actually wait for it.
+	while(waitpid(-1,NULL,0)>0);
 }
 
 void daemonprocess::shutDown() {
+	registerWaitForChildren();
 	(*shutdownfunc)(0);
 }
 
 void daemonprocess::crash() {
+	registerWaitForChildren();
 	(*crashfunc)(0);
+}
+
+void daemonprocess::defaultShutDown() {
+	registerWaitForChildren();
+	exit(0);
+}
+
+void daemonprocess::defaultCrash() {
+	registerWaitForChildren();
+	exit(1);
+}
+
+void daemonprocess::registerWaitForChildren() {
+	deadchildhandler.setHandler((void *)waitForChildren);
+	deadchildhandler.addFlag(SA_NOCLDSTOP);
+	deadchildhandler.handleSignal(SIGCHLD);
 }
 
 int daemonprocess::runAsUserId(uid_t uid) const {

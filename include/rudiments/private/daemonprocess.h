@@ -2,6 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
+		static	void	defaultShutDown();
+		static	void	defaultCrash();
 		static	void	shutDown();
 		static	void	crash();
 
@@ -12,4 +14,6 @@
 		static	void		(*crashfunc)(int);
 
 		static	signalhandler	deadchildhandler;
-		static	void		waitOnChildren();
+		static	void		registerWaitForChildren();
+
+		static	void		waitForChildren();

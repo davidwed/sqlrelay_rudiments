@@ -5,6 +5,7 @@
 #include <rudiments/permissions.h>
 
 #include <stdlib.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <stdio.h>
 
@@ -13,7 +14,7 @@ daemonprocess	*dmn;
 // define a function to shut down the process cleanly
 RETSIGTYPE	shutDown() {
 
-	printf("shutting down\n");
+	printf("%d: shutting down\n",getpid());
 
 	// clean up
 	delete dmn;
@@ -48,9 +49,16 @@ int main(int argc, const char **argv) {
 	// is running and can also be used to kill the process
 	dmn->createPidFile("/tmp/dmn.pidfile",permissions::ownerReadWrite());
 
+	if (!fork()) {
+		for (;;) {
+			printf("%d: child looping...\n",getpid());
+			sleep(1);
+		}
+	}
+
 	// loop, printing "looping..." once per second
 	for (;;) {
-		printf("looping...\n");
+		printf("%d: parent looping...\n",getpid());
 		sleep(1);
 	}
 }

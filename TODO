@@ -16,8 +16,6 @@ need an SSL context wrapper
 
 what does the logger.C warning mean
 
-on SCO, you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
-
 strip fails on openbsd
 
 if openssl/pcre libs are installed, but not includes, configure still tries
@@ -33,10 +31,6 @@ rename variablebuffer rawbuffer???
 should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl
 	
-daemonprocess needs to register the deadchildhandler during shutdown, otherwise
-	the signalhandler's call to waitpid() interferes with other library
-	calls (like system()) that call wait() or waitpid().
-
 need a table (dynamic 2d array) class
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
