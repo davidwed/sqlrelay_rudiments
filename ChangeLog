@@ -8,6 +8,7 @@
 	rpc/rpc.h is included if necessary for getrpcbyxxx_r
 	pthread.h is included for xxxentry classes now no matter what
 	shadowentry is disabled on systems that have no shadow support
+	added filesystem class
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better

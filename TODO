@@ -1,6 +1,6 @@
 filesystem class almost certainly won't work on non-linux systems
 
-document timezonefile classes
+document filesystem, timezonefile classes
 
 a termios class would be nice
 a thread class would be nice
