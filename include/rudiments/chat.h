@@ -14,9 +14,9 @@ class chat {
 			chat(filedescriptor *readfd, filedescriptor *writefd);
 			~chat();
 
-		int	runScript(const char *script);
-		int	runScript(const char *script,
-					namevaluepairs *variables);
+		int	runScript(const char *script, char **abort);
+		int	runScript(const char *script, char **abort,
+						namevaluepairs *variables);
 
 	#include <rudiments/private/chat.h>
 };

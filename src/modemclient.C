@@ -41,11 +41,11 @@ void modemclient::initialize(namevaluepairs *cd) {
 }
 
 void modemclient::initialize(const char *devicename, const char *baud,
-			const char *connectscript,
-			const char *phonenumber,
-			const char *disconnectscript,
-			unsigned int retrywait,
-			unsigned int retrycount) {
+				const char *connectscript,
+				const char *phonenumber,
+				const char *disconnectscript,
+				unsigned int retrywait,
+				unsigned int retrycount) {
 	modemutil::initialize(devicename,baud);
 	this->connectscript=(char *)connectscript;
 	this->phonenumber=(char *)phonenumber;
@@ -61,6 +61,9 @@ int modemclient::connect() {
 
 	unsigned int	whichtry=0;
 	for (;;) {
+
+		delete[] connecterror;
+		connecterror=NULL;
 
 		// open the serial port
 		// this is kind of lame, this class should somehow
@@ -82,7 +85,8 @@ int modemclient::connect() {
 
 		// run connectscript here...
 		chat	ch(this,this);
-		int	result=ch.runScript(connectscript,&phnvp);
+		int	result=ch.runScript(connectscript,
+						&connecterror,&phnvp);
 
 		// runScript() will return RESULT_(SUCCESS|ABORT|TIMEOUT|ERROR)
 		// or a number >= 2 indicating that one of the abort conditions
@@ -95,7 +99,8 @@ int modemclient::connect() {
 		close();
 		whichtry++;
 		if (whichtry==retrycount) {
-			return RESULT_TIMEOUT;
+			// return the last thing that caused us to retry
+			return result;
 		}
 
 		// even though the modem's file descriptor is closed here,
@@ -110,7 +115,9 @@ int modemclient::connect() {
 
 bool modemclient::close() {
 
-	chat	ch(this,this);
-	ch.runScript(disconnectscript);
-	return filedescriptor::close();
+	if (fd!=-1) {
+		chat	ch(this,this);
+		ch.runScript(disconnectscript,NULL);
+		return filedescriptor::close();
+	}
 }

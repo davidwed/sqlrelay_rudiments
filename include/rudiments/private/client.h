@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
+		char		*connecterror;
 		long		timeoutsec;
 		long		timeoutusec;
 		unsigned int	retrywait;

@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/character.h>
+#include <stdio.h>
 
 bool character::isAlphanumeric(int c) {
 	return isalnum(c)!=0;
@@ -74,4 +75,18 @@ int character::toLowerCase(int c) {
 
 int character::toAscii(int c) {
 	return toascii(c);
+}
+
+void character::safePrint(char c) {
+	if (c=='\r') {
+		printf("\\r");
+	} else if (c=='\n') {
+		printf("\\n");
+	} else if (c=='	') {
+		printf("\\t");
+	} else if (c>=' ' && c<='~') {
+		printf("%c",c);
+	} else {
+		printf("(0x%02x)",c);
+	}
 }

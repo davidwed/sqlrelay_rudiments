@@ -4,6 +4,14 @@
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/client.h>
 
-client::client() : filedescriptor() {}
+client::client() : filedescriptor() {
+	connecterror=NULL;
+}
 
-client::~client() {}
+client::~client() {
+	delete[] connecterror;
+}
+
+char *client::getVerboseConnectError() {
+	return connecterror;
+}

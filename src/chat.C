@@ -3,8 +3,9 @@
 #include <rudiments/xmldomnode.h>
 #include <rudiments/regularexpression.h>
 #include <rudiments/intervaltimer.h>
+#include <rudiments/character.h>
 
-//#define DEBUG_CHAT 1
+#define DEBUG_CHAT 1
 
 chat::chat(filedescriptor *readfd, filedescriptor *writefd) {
 	this->readfd=readfd;
@@ -14,11 +15,12 @@ chat::chat(filedescriptor *readfd, filedescriptor *writefd) {
 
 chat::~chat() {}
 
-int chat::runScript(const char *script) {
-	return runScript(script,NULL);
+int chat::runScript(const char *script, char **abort) {
+	return runScript(script,abort,NULL);
 }
 
-int chat::runScript(const char *script, namevaluepairs *variables) {
+int chat::runScript(const char *script, char **abort,
+				namevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
 	printf("runScript(\"%s\")\n",script);
@@ -54,13 +56,14 @@ int chat::runScript(const char *script, namevaluepairs *variables) {
 				node->getAttributeValue("seconds"));
 		} else if (!charstring::compare(node->getName(),"abort")) {
 			appendAbortString(node->getAttributeValue("string"));
-		} else if (!charstring::compare(node->getName(),"clearabort")) {
+		} else if (!charstring::compare(node->getName(),
+							"clearabort")) {
 			clearAbortStrings();
 		} else if (!charstring::compare(node->getName(),"send")) {
 			result=send(node->getAttributeValue("string"),
 								variables);
 		} else if (!charstring::compare(node->getName(),"expect")) {
-			result=expect(node->getAttributeValue("string"));
+			result=expect(node->getAttributeValue("string"),abort);
 		}
 
 		if (result!=RESULT_SUCCESS) {
@@ -71,6 +74,8 @@ int chat::runScript(const char *script, namevaluepairs *variables) {
 				printf("timeout\n");
 			} else if (result==RESULT_ABORT) {
 				printf("abort\n");
+			} else {
+				printf("abort condition met\n");
 			}
 			#endif
 			return result;
@@ -106,6 +111,7 @@ void chat::appendAbortString(const char *string) {
 		}
 		index++;
 	}
+	newstring[index]=(char)NULL;
 
 	aborts.append(newstring);
 }
@@ -119,10 +125,14 @@ void chat::clearAbortStrings() {
 	aborts.clear();
 }
 
-int chat::expect(const char *string) {
+int chat::expect(const char *string, char **abort) {
+
+	if (abort) {
+		*abort=NULL;
+	}
 
 	#ifdef DEBUG_CHAT
-	printf("expecting \"%s\"...\n",string);
+	printf("expecting \"%s\" (%d second timeout)...\n",string,timeout);
 	#endif
 
 	stringbuffer	response;
@@ -136,13 +146,7 @@ int chat::expect(const char *string) {
 		int	result=readfd->read(&ch,timeout,0);
 
 		#ifdef DEBUG_CHAT
-		if (ch=='\r') {
-			printf("\\r");
-		} else if (ch=='\n') {
-			printf("\\n");
-		} else {
-			printf("%c",ch);
-		}
+		character::safePrint(ch);
 		fflush(stdout);
 		#endif
 
@@ -150,6 +154,14 @@ int chat::expect(const char *string) {
 		if (result!=sizeof(char)) {
 			#ifdef DEBUG_CHAT
 			printf("\n");
+			printf("failed: ");
+			if (result==RESULT_TIMEOUT) {
+				printf("timed out...\n");
+			} else if (result==RESULT_ERROR) {
+				printf("error...\n");
+			} else {
+				printf("result was: %d\n",result);
+			}
 			#endif
 			return result;
 		}
@@ -173,9 +185,16 @@ int chat::expect(const char *string) {
 			if (regularexpression::match(response.getString(),
 								abortstring)) {
 				#ifdef DEBUG_CHAT
-				printf("\nabort: \"%s\" matched \"%s\"\n",
-					response.getString(),abortstring);
+				printf("\nabort: \"");
+				charstring::safePrint(response.getString());
+				printf("\" matched \"");
+				charstring::safePrint(abortstring);
+				printf("\"\n");
 				#endif
+				if (abort) {
+					*abort=charstring::
+						duplicate(abortstring);
+				}
 				return index;
 			}
 			index++;
@@ -184,8 +203,11 @@ int chat::expect(const char *string) {
 		// look for the expected string
 		if (regularexpression::match(response.getString(),string)) {
 			#ifdef DEBUG_CHAT
-			printf("\nsuccess: \"%s\" matched \"%s\"\n",
-					response.getString(),string);
+			printf("\nsuccess: \"");
+			charstring::safePrint(response.getString());
+			printf("\" matched \"");
+			charstring::safePrint(string);
+			printf("\"\n");
 			#endif
 			return RESULT_SUCCESS;
 		}

@@ -44,10 +44,10 @@ class unixclientsocket : public clientsocket, public unixsocketutil {
 			// "retrycount".  Initializes the class to use the
 			// result when connect() is called.
 		void	initialize(const char *filename,
-					long timeoutsec,
-					long timeoutusec,
-					unsigned int retrywait,
-					unsigned int retrycount);
+						long timeoutsec,
+						long timeoutusec,
+						unsigned int retrywait,
+						unsigned int retrycount);
 			// Initializes the class to use "filename",
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount" when connect() is called.

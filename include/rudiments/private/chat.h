@@ -9,6 +9,6 @@
 		void	clearAbortStrings();
 		int	send(const char *string,
 					namevaluepairs *variables);
-		int	expect(const char *string);
+		int	expect(const char *string, char **abort);
 		int	substituteVariables(char **ch,
 					namevaluepairs *variables);

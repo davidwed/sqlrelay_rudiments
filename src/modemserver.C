@@ -64,7 +64,7 @@ bool modemserver::listen(int backlog) {
 	}
 
 	chat	ch(this,this);
-	if (ch.runScript(listenscript)!=RESULT_SUCCESS) {
+	if (ch.runScript(listenscript,NULL)!=RESULT_SUCCESS) {
 		close();
 		return false;
 	}
@@ -74,7 +74,7 @@ bool modemserver::listen(int backlog) {
 filedescriptor *modemserver::accept() {
 
 	chat	ch(this,this);
-	if (ch.runScript(acceptscript)==RESULT_SUCCESS) {
+	if (ch.runScript(acceptscript,NULL)==RESULT_SUCCESS) {
 		filedescriptor	*retval=new filedescriptor;
 		retval->setFileDescriptor(fd);
 		return retval;
@@ -84,6 +84,6 @@ filedescriptor *modemserver::accept() {
 
 bool modemserver::close() {
 	chat	ch(this,this);
-	ch.runScript(disconnectscript);
+	ch.runScript(disconnectscript,NULL);
 	return filedescriptor::close();
 }

@@ -36,6 +36,8 @@ class character {
 		static int	toUpperCase(int c);
 		static int	toLowerCase(int c);
 		static int	toAscii(int c);
+
+		static void	safePrint(char c);
 };
 
 #endif

@@ -335,6 +335,15 @@ class charstring {
 			// Example:
 			//	"hello      " -> "   hello   "
 
+
+		static void	safePrint(const char *str);
+			// Prints "str", however all non-printing characters
+			// are printed as hex values of the format: (0x0a) and
+			// carriage returns, line feeds and tabs are printed
+			// as \n, \r and \t.
+		static void	safePrint(const char *str, int length);
+			// safePrint()'s "length" characters of "str" 
+
 	#include <rudiments/private/charstring.h>
 };
 

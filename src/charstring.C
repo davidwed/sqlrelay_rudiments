@@ -4,6 +4,7 @@
 #include <rudiments/charstring.h>
 
 #include <rudiments/rawbuffer.h>
+#include <rudiments/character.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -671,3 +672,15 @@ char *charstring::duplicate(const char *string, size_t length) {
 	return buffer;
 }
 #endif
+
+void charstring::safePrint(const char *string, int length) {
+	char	*ch=(char *)string;
+	for (int i=0; i<length && *ch; i++) {
+		character::safePrint(*ch);
+		ch++;
+	}
+}
+
+void charstring::safePrint(const char *string) {
+	safePrint(string,charstring::length(string));
+}

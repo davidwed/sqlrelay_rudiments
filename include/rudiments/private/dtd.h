@@ -12,3 +12,4 @@
 					int checkcount, int indent,
 					char delimiter, const char *name);
 		bool	newAttribute(xmldomnode *node);
+		void	nodeError(xmldomnode *node);

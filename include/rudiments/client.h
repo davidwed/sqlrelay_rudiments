@@ -23,6 +23,7 @@ class client : public filedescriptor {
 				// modem) to be able to implement return codes
 				// other than success or failure (such as
 				// abort).
+		virtual	char	*getVerboseConnectError();
 
 	#include <rudiments/private/client.h>
 };

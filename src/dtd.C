@@ -13,8 +13,6 @@ bool dtd::parseFile(const char *filename) {
 		return false;
 	}
 	if (!parseDtd()) {
-		clearError();
-		appendError(xmldtd.getError());
 		return false;
 	}
 	return true;
@@ -27,8 +25,6 @@ bool dtd::parseString(const char *string) {
 		return false;
 	}
 	if (!parseDtd()) {
-		clearError();
-		appendError(xmldtd.getError());
 		return false;
 	}
 	return true;
@@ -71,6 +67,7 @@ bool dtd::newElement(xmldomnode *node) {
 
 	// sanity check
 	if (node->getAttributeCount()<2) {
+		nodeError(node);
 		return false;
 	}
 
@@ -83,6 +80,7 @@ bool dtd::newElement(xmldomnode *node) {
 					TAG_XMLDOMNODETYPE,"element",NULL);
 	element->cascadeOnDelete();
 	if (!dtdnode->appendChild(element)) {
+		nodeError(node);
 		delete element;
 		return false;
 	}
@@ -90,12 +88,17 @@ bool dtd::newElement(xmldomnode *node) {
 	// add a name attribute to the element
 	char	*name=node->getAttribute(0)->getName();
 	if (!element->appendAttribute("name",name)) {
+		nodeError(node);
 		return false;
 	}
 
 	// add the list of valid child elements to the tree
 	char	*list=node->getAttribute(1)->getName();
-	return parseList(list,element,1,1,',',"child");
+	if (parseList(list,element,1,1,',',"child")) {
+		return true;
+	}
+	nodeError(node);
+	return false;
 }
 
 bool dtd::parseList(const char *list, xmldomnode *node,
@@ -195,6 +198,7 @@ bool dtd::newAttribute(xmldomnode *node) {
 
 	// sanity check
 	if (node->getAttributeCount()<4) {
+		nodeError(node);
 		return false;
 	}
 
@@ -202,6 +206,7 @@ bool dtd::newAttribute(xmldomnode *node) {
 	xmldomnode	*element=xmldtd.getRootNode()->getChild("dtd")->
 		getChild("element","name",node->getAttribute(0)->getName());
 	if (element->isNullNode()) {
+		nodeError(node);
 		return false;
 	}
 
@@ -212,6 +217,7 @@ bool dtd::newAttribute(xmldomnode *node) {
 					TAG_XMLDOMNODETYPE,"attribute",NULL);
 	attribute->cascadeOnDelete();
 	if (!element->appendChild(attribute)) {
+		nodeError(node);
 		return false;
 	}
 
@@ -220,15 +226,29 @@ bool dtd::newAttribute(xmldomnode *node) {
 				node->getAttribute(1)->getName()) ||
 		!attribute->appendAttribute("default",
 				node->getAttribute(3)->getName())) {
+		nodeError(node);
 		return false;
 	}
 
 	// insert the list of valid values or none if CDATA
 	char	*values=node->getAttribute(2)->getName();
-	return (!charstring::compare(values,"CDATA"))?
-			true:parseList(values,attribute,0,2,'|',"value");
+	if (!charstring::compare(values,"CDATA")) {
+		return true;
+	}
+	if (parseList(values,attribute,0,2,'|',"value")) {
+		return true;
+	}
+	nodeError(node);
+	return false;
 }
 
 xmldom *dtd::xml() {
 	return &xmldtd;
+}
+
+void dtd::nodeError(xmldomnode *node) {
+	stringbuffer	*xml=node->xml();
+	appendError("error processing:\n");
+	appendError(xml->getString());
+	delete xml;
 }
