@@ -433,7 +433,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				continue;
 			} else if (actualread==0 && errno==0) {
 				// eof condition
-				return 0;
+				break;
 			}
 		}
 
