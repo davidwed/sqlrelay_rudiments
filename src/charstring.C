@@ -363,6 +363,12 @@ char *charstring::parseNumber(long number) {
 	return str;
 }
 
+char *charstring::parseNumber(unsigned long number) {
+	char	*str=new char[integerLength(number)+1];
+	sprintf(str,"%ld",number);
+	return str;
+}
+
 char *charstring::parseNumber(double number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
@@ -400,6 +406,14 @@ int charstring::integerLength(long number) {
 	return length;
 }
 
+int charstring::integerLength(unsigned long number) {
+	int	length=0;
+	for (long num=number; num>0; num=num/10) {
+		length++;
+	}
+	return length;
+}
+
 size_t charstring::length(const char *string) {
 	return (string)?strlen(string):0;
 }
@@ -414,6 +428,42 @@ char *charstring::append(char *dest, const char *source) {
 
 char *charstring::append(char *dest, const char *source, size_t size) {
 	return (dest && source)?strncat(dest,source,size):NULL;
+}
+
+char *charstring::append(char *dest, long number) {
+	char	*str=charstring::parseNumber(number);
+	char	*retval=append(dest,str);
+	delete[] str;
+	return retval;
+}
+
+char *charstring::append(char *dest, unsigned long number) {
+	char	*str=charstring::parseNumber(number);
+	char	*retval=append(dest,str);
+	delete[] str;
+	return retval;
+}
+
+char *charstring::append(char *dest, double number) {
+	char	*str=charstring::parseNumber(number);
+	char	*retval=append(dest,str);
+	delete[] str;
+	return retval;
+}
+
+char *charstring::append(char *dest, double number, unsigned short scale) {
+	char	*str=charstring::parseNumber(number,scale);
+	char	*retval=append(dest,str);
+	delete[] str;
+	return retval;
+}
+
+char *charstring::append(char *dest, double number, unsigned short precision,
+							unsigned short scale) {
+	char	*str=charstring::parseNumber(number,precision,scale);
+	char	*retval=append(dest,str);
+	delete[] str;
+	return retval;
 }
 
 char *charstring::copy(char *dest, const char *source) {

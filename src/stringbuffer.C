@@ -92,6 +92,14 @@ stringbuffer *stringbuffer::append(long number) {
 	return this;
 }
 
+stringbuffer *stringbuffer::append(unsigned long number) {
+	char	*numstr=charstring::parseNumber(number);
+	variablebuffer::append((unsigned char *)numstr,
+					charstring::length(numstr));
+	delete[] numstr;
+	return this;
+}
+
 stringbuffer *stringbuffer::append(double number, unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::append((unsigned char *)numstr,
@@ -116,6 +124,14 @@ stringbuffer *stringbuffer::write(const char *string) {
 }
 
 stringbuffer *stringbuffer::write(long number) {
+	char	*numstr=charstring::parseNumber(number);
+	variablebuffer::write((unsigned char *)numstr,
+					charstring::length(numstr));
+	delete[] numstr;
+	return this;
+}
+
+stringbuffer *stringbuffer::write(unsigned long number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write((unsigned char *)numstr,
 					charstring::length(numstr));

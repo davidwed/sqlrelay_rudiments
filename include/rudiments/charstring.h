@@ -31,6 +31,35 @@ class charstring {
 			// that there is enough room remaining in "dest" to
 			// accommodate the new string.
 			// Returns a pointer to "dest".
+		static	char	*append(char *dest, long number);
+			// Converts "number" to a string and appends it to
+			// "dest".  Assumes that there is enough room remaining
+			// in "dest" to accommodate the new string.
+			// Returns a pointer to "dest".
+		static	char	*append(char *dest, unsigned long number);
+			// Converts "number" to a string and appends it to
+			// "dest".  Assumes that there is enough room remaining
+			// in "dest" to accommodate the new string.
+			// Returns a pointer to "dest".
+		static	char	*append(char *dest, double number);
+			// Converts "number" to a string and appends it to
+			// "dest".  Assumes that there is enough room remaining
+			// in "dest" to accommodate the new string.
+			// Returns a pointer to "dest".
+		static	char	*append(char *dest, double number,
+							unsigned short scale);
+			// Converts "number" to a string using "scale" and
+			// appends it to "dest".  Assumes that there is enough
+			// room remaining in "dest" to accommodate the new
+			// string.  Returns a pointer to "dest".
+		static	char	*append(char *dest, double number,
+						unsigned short precision,
+						unsigned short scale);
+			// Converts "number" to a string using "precision" and
+			// "scale" and appends it to "dest".  Assumes that there
+			// is enough room remaining in "dest" to accommodate
+			// the new string.  Returns a pointer to "dest".
+
 
 
 		static	char	*copy(char *dest, const char *source);
@@ -147,6 +176,7 @@ class charstring {
 			// Strips all instances of "str2" from "str1".
 
 		static	int	integerLength(long number);
+		static	int	integerLength(unsigned long number);
 			// Returns the number of characters needed to represent
 			// "number" as a string.
 
@@ -160,6 +190,7 @@ class charstring {
 			// Returns true the string "val" is a number and false
 			// if it is not a number
 		static	char	*parseNumber(long number);
+		static	char	*parseNumber(unsigned long number);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted
 			// by the calling program.

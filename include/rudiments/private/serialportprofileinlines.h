@@ -69,17 +69,17 @@ void serialportprofile::defaultOptions() {
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::inputBaud(serialportprofile::baudrate_t baud) {
-	return !cfsetispeed(&tio,(tcflag_t)baud);
+bool serialportprofile::inputBaud(serialportprofile::baudrate_t baudrate) {
+	return !cfsetispeed(&tio,(tcflag_t)baudrate);
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::outputBaud(serialportprofile::baudrate_t baud) {
-	return !cfsetospeed(&tio,(tcflag_t)baud);
+bool serialportprofile::outputBaud(serialportprofile::baudrate_t baudrate) {
+	return !cfsetospeed(&tio,(tcflag_t)baudrate);
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::baud(serialportprofile::baudrate_t baud) {
+void serialportprofile::baud(serialportprofile::baudrate_t baudrate) {
 
 	#ifdef CBAUD
 		#ifdef CBAUDEX
@@ -150,7 +150,7 @@ void serialportprofile::baud(serialportprofile::baudrate_t baud) {
 				#endif
 				);
 	#endif
-	tio.c_cflag|=(tcflag_t)baud;
+	tio.c_cflag|=(tcflag_t)baudrate;
 }
 
 RUDIMENTS_INLINE
@@ -356,7 +356,7 @@ bool serialportprofile::hardwareFlowControl() {
 	#elif defined(CRTS_IFLOW)
 		return GET_FLAG(c_cflag,CRTS_IFLOW);
 	#elif defined(CCTS_OFLOW)
-		return GET_FLAG(c_cflag,CRTS_IFLOW);
+		return GET_FLAG(c_cflag,CRTS_OFLOW);
 	#endif
 }
 
@@ -518,6 +518,11 @@ void serialportprofile::inputParityCheck(bool truefalse) {
 }
 
 RUDIMENTS_INLINE
+void serialportprofile::ignoreParityErrors(bool truefalse) {
+	SET_FLAG(truefalse,c_iflag,IGNPAR)
+}
+
+RUDIMENTS_INLINE
 void serialportprofile::markParityErrors(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,PARMRK)
 }
@@ -582,6 +587,11 @@ void serialportprofile::bellIfLineTooLong(bool truefalse) {
 RUDIMENTS_INLINE
 bool serialportprofile::inputParityCheck() {
 	return GET_FLAG(c_iflag,INPCK);
+}
+
+RUDIMENTS_INLINE
+bool serialportprofile::ignoreParityErrors() {
+	return GET_FLAG(c_iflag,IGNPAR);
 }
 
 RUDIMENTS_INLINE

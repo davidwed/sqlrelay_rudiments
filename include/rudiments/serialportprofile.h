@@ -204,38 +204,47 @@ class serialportprofile {
 		// control options
 
 		// setters...
-		void	baud(baudrate_t baud);
+		void	baud(const char *baudrate);
+		void	baud(baudrate_t baudrate);
 			// set the (input and output) baud rate
 			// default is 0
-		bool	inputBaud(baudrate_t baud);
+		bool	inputBaud(const char *baudrate);
+		bool	inputBaud(baudrate_t baudrate);
 			// set the input baud rate
 			// default is 0
-		bool	outputBaud(baudrate_t baud);
+		bool	outputBaud(const char *baudrate);
+		bool	outputBaud(baudrate_t baudrate);
 			// set the output baud rate
 			// default is 0
 		void	characterSize(charsize_t size);
 			// set the character size
 			// default is 5 bits
+			// termios flag: CSIZE
 		void	twoStopBits(bool truefalse);
 			// use two stop bits if "truefalse" is true
 			// or one stop bit if "truefalse" is false
 			// default is one stop bit
+			// termios flag: CSTOPB
 		void	receiverOn(bool truefalse);
 			// turn the receiver on/off
 			// (enables serial port to read incoming data)
 			// default is off
 			// (you probably always want to set this on)
+			// termios flag: CREAD
 		void	parityCheck(bool truefalse);
 			// turn parity checking on/off
 			// default is off
+			// termios flag: CPARENB
 		void	oddParity(bool truefalse);
 			// use odd parity if "truefalse" is true
 			// or even parity if "truefalse" is false
 			// default is even parity
+			// termios flag: PARODD
 		void	hangupOnClose(bool truefalse);
 			// lower modem control lines after
 			// last process closes the device (hang up)
 			// default is not to hang up on close
+			// termios flag: HUPCL
 		void	ignoreModemControlLines(bool truefalse);
 			// ignore (possibly sporadic) job control and hangup
 			// signals that could terminate or otherwise control
@@ -244,14 +253,18 @@ class serialportprofile {
 			// (this should be set to true when communicating
 			// with a device connected directly to the computer as
 			// opposed to over a modem)
+			// termios flag: CLOCAL
 		#ifdef LOBLK
 		void	blockJobControlOutput(bool truefalse);
 			// block output from a nonconcurrent shell layer
 			// default is not to block
+			// termios flag: LOBLK
 		#endif
 		void	hardwareFlowControl(bool truefalse);
 			// use RTS/CTS flow control
 			// default is not to use RTS/CTS flow control
+			// termios flag: CRTSCTS/NEW_CRTSCTS/
+			//			CRTS_IFLOW/CRTS_OFLOW
 
 		// getters...
 		baudrate_t	baud();
@@ -292,12 +305,14 @@ class serialportprofile {
 			// cause corresponding signals to be raised when any of
 			// the INTR, QUIT, SUSP or DSUSP characters are received
 			// default is not to raise signals
+			// termios flag: ISIG
 		void	canonicalInput(bool truefalse);
 			// enable special characters EOF, EOL, EOL2, ERASE,
 			// KILL, LNEXT, REPRINT, STATUS and WERASE, buffer by
 			// lines
 			// default is not to enable the special characters and
 			// not buffer by lines
+			// termios flag: ICANON
 		#ifdef XCASE
 		void	escapedUpperCase(bool truefalse);
 			// If cannonicalInput() is also set true, converts
@@ -309,35 +324,43 @@ class serialportprofile {
 			// (this is used when communicating with terminals that
 			// can display upper or lower case, but only transmit/
 			// receive upper case)
+			// termios flag: XCASE
 		#endif
 		void	echoInput(bool truefalse);
 			// If cannonicalInput() is also set true then echo
 			// input.
+			// termios flag: ECHO
 		void	eraseCharactersOn(bool truefalse);
 			// If cannonicalInput() is also set true, character
 			// set using eraseCharacter() erases the preceeding
 			// character and character set using
 			// wordEraseCharacter() erases the preceeding word.
+			// termios flag: ECHOE
 		void	killCharacterOn(bool truefalse);
 			// If cannonicalInput() is also set true, character
 			// set using killCharacter() erases the current line.
+			// termios flag: ECHOK
 		void	echoNewLine(bool truefalse);
 			// If cannonicalInput() is also set true, new line
 			// characters are echoed even if echoInput() is set
 			// false.
+			// termios flag: ECHONL
 		void	extendedFunctions(bool truefalse);
 			// If cannonicalInput() is also set true, enables
 			// characters set by secondEndOfLineCharacter(),
 			// reprintCharacter() and wordEraseCharacter().  Also
 			// enables lowerCase().
+			// termios flag: IEXTEN
 		void	echoControlCharacters(bool truefalse);
 			// If echoInput() is also set true, control characters
 			// are echoed as ^X where X is the ascii code for the
 			// character plus 0x40.
+			// termios flag: ECHOCTL
 		#ifdef ECHOPRT
 		void	echoErasedCharacter(bool truefalse);
 			// If cannonicalInput() and echoInput() are also set
 			// true, characters are printed as they are erased.
+			// termios flag: ECHOPRT
 		#endif
 		void	emulateKill(bool truefalse);
 			// If cannonicalInput() is also set, the character set
@@ -345,18 +368,22 @@ class serialportprofile {
 			// by erasing each character on the line.
 			// (useful when a terminal doesn't support the KILL
 			// character but does support the ERASE character)
+			// termios flag: ECHOKE
 		void	noFlushAfterInterruptOrQuit(bool truefalse);
 			// Disables flushing of the input/output queues when
 			// generating SIGINT, SIGQUIT or SIGSUSP signals.
+			// termios flag: NOFLSH
 		#ifdef PENDIN
 		void	retypePendingCharacters(bool truefalse);
 			// All characters in the input queue are reprinted when
 			// the next character is read.
+			// termios flag: PENDIN
 		#endif
 		void	sendSignalForBackgroundOutput(bool truefalse);
 			// Send the SIGTTOU signal to the process group of a
 			// background process which tries to write to its
 			// controlling terminal.
+			// termios flag: TOSTOP
 
 		// getters...
 		bool	generateSignals();
@@ -425,26 +452,34 @@ class serialportprofile {
 		// input options
 		void	inputParityCheck(bool truefalse);
 			// enable parity checking on input
+			// termios flag: INPCK
 		void	ignoreParityErrors(bool truefalse);
 			// ignore parity errors (ie. if a character has a
 			// parity error, just return what we got, rather than
 			// marking or converting it)
+			// termios flag: IGNPAR
 		void	markParityErrors(bool truefalse);
 			// Unless ignoreParityErrors() is set true, prefix a
 			// character with a parity error with \337 \0.  The
 			// default is to convert it to \0 unless
 			// ignoreParityErrors() is set true.
+			// termios flag: PARMRK
 		void	stripParityBits(bool truefalse);
 			// set the 8th bit of each character (the parity bit)
 			// to 0
+			// termios flag: ISTRIP
 		void	softwareFlowControlOnOutput(bool truefalse);
 			// enable XON/XOFF flow control on output.
+			// termios flag: IXON
 		void	softwareFlowControlOnInput(bool truefalse);
 			// enable XON/XOFF flow control on input.
+			// termios flag: IXOFF
 		void	anyCharacterStartsFlow(bool truefalse);
 			// enable any character to restart output
+			// termios flag: IXANY
 		void	ignoreBreak(bool truefalse);
 			// ignore BREAK character
+			// termios flag: IGNBRK
 		void	sendSignalOnBreak(bool truefalse);
 			// If ignoreBreak() isn't set true and a BREAK character
 			// is received, flush input and output queues and send a
@@ -452,26 +487,34 @@ class serialportprofile {
 			// of the process group.  If ignoreBreak() is not set,
 			// the default is to return a \0 character or \377 \0
 			// if markParityErrors() is set true.
+			// termios flag: BRKINT
 		void	mapNewLineToCarriageReturnOnInput(bool truefalse);
 			// translate new line to carriage return on input
+			// termios flag: INLCR
 		#ifdef ONOEOT
 		void	discardEndOfTransmission(bool truefalse);
-			// ONOEOT
+			// termios flat: ONOEOT
 		#endif
 		void	ignoreCarriageReturn(bool truefalse);
 			// ignore carriage return on input
+			// termios flag: IGNCR
 		void	mapCarriageReturnToNewLineOnInput(bool truefalse);
 			// translate carriage return to new line on input
+			// termios flag: ICRNL
 		#ifdef IUCLC
 		void	lowerCase(bool truefalse);
 			// map uppercase characters to lowercase on input
+			// termios flag: IUCLC
 		#endif
 		void	bellIfLineTooLong(bool truefalse);
 			// ring bell when input queue is full
+			// termios flag: IMAXBEL
 
 		// getters...
 		bool	inputParityCheck();
 			// returns true if input parity checking is enabled
+		bool	ignoreParityErrors();
+			// returns true if parity errors are being ignored
 		bool	markParityErrors();
 			// returns true if characters with parity errors are
 			// prefixed with \377 \0
@@ -519,56 +562,71 @@ class serialportprofile {
 		// output options
 		void	postProcessOutput(bool truefalse);
 			// enables implementation-defined output processing
+			// termios flag: OPOST
 		#ifdef OLCUC
 		void	outputUpperCase(bool truefalse);
 			// map lowercase characters to uppercase on output
+			// termios flag: OLCUC
 		#endif
 		void	mapNewLineToCarriageReturnNewLineOnOutput(
 							bool truefalse);
 			// map new line to carriage return/new line on
 			// output
+			// termios flag: ONLCR
 		void	mapCarriageReturnToNewLineOnOutput(bool truefalse);
 			// map carriage return to new line on output
+			// termios flag: OCRNL
 		void	dontOutputCarriageReturnAtColumnZero(bool truefalse);
 			// don't output carriage return at column 0
+			// termios flag: ONOCR
 		void	mapNewLineToCarriageReturnOnOutput(bool truefalse);
 			// map new line to carriage return on output
+			// termios flag: ONLRET
 		#ifdef OFILL
 		void	useFillCharactersForDelay(bool truefalse);
 			// send fill characters for delay instead of using a
 			// timed delay
+			// termios flag: OFILL
 		#endif
 		#ifdef OFDEL
 		void	useDelForFill(bool truefalse);
 			// use the DEL character instead of NULL for the fill
 			// character
+			// termios flag: OFDEL
 		#endif
 		void	expandTabToSpaces(bool truefalse);
 			// map tabs to spaces
+			// termios flag: XTAGS/OXTABS/TAB3
 
 		#ifdef NLDLY
 		void	delayAfterNewLine(newlinedelay_t nldelay);
 			// send a delay after each new line character
+			// termios flag: NLDLY
 		#endif
 		#ifdef CRDLY
 		void	delayAfterCarriageReturn(carriagereturndelay_t crdelay);
 			// send a delay after each carriage return character
+			// termios flag: CRDLY
 		#endif
 		#ifdef TABDLY
 		void	delayAfterTab(tabdelay_t tabdelay);
 			// send a delay after each tab character
+			// termios flag: TABDLY
 		#endif
 		#ifdef BSDLY
 		void	delayAfterBackSpace(backspacedelay_t bsdelay);
 			// send a delay after each backspace character
+			// termios flag: BSDLY
 		#endif
 		#ifdef VTDLY
 		void	delayAfterVerticalTab(verticaltabdelay_t vtdelay);
 			// send a delay after each vertical tab character
+			// termios flag: VTDLY
 		#endif
 		#ifdef FFDLY
 		void	delayAfterFormFeed(formfeeddelay_t ffdelay);
 			// send a delay after each form feed character
+			// termios flag: FFDLY
 		#endif
 
 
@@ -642,73 +700,92 @@ class serialportprofile {
 			// set the character that will cause a SIGINT to be
 			// sent to the process when generateSignals() is set
 			// true
+			// termios flag: VINTR
 		void	quitCharacter(cc_t character);
 			// set the character that will cause a SIGQUIT to be
 			// sent to the process when generateSignals() is set
 			// true
+			// termios flag: VQUIT
 		void	eraseCharacter(cc_t character);
 			// set the character that will cause a character erase
 			// when canonicalInput() is set to true
+			// termios flag: VERASE
 		void	killCharacter(cc_t character);
 			// set the character that will cause a line erase
 			// when canonicalInput() is set to true
+			// termios flag: VKILL
 		void	endOfFileCharacter(cc_t character);
 			// set the character that will cause the pending tty
 			// buffer to be sent to the program without waiting for
 			// end-of-line and read()'s to return 0 when
 			// canonicalInput() is set to true
+			// termios flag: VEOF
 		void	endOfLineCharacter(cc_t character);
 			// set the end-of-line character, recognized when 
 			// canonicalInput() is set to true
+			// termios flag: VEOL
 		void	secondEndOfLineCharacter(cc_t character);
 			// set the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
+			// termios flag: VEOL2
 		void	switchCharacer(cc_t character);
 			// set the switch character
+			// termios flag: VSWTCH/VSWTC
 		void	startCharacter(cc_t character);
 			// set the start character for XON/XOFF flow control
+			// termios flag: VSTART
 		void	stopCharacter(cc_t character);
 			// set the stop character for XON/XOFF flow control
+			// termios flag: VSTOP
 		void	suspendCharacter(cc_t character);
 			// set the character that will cause a SIGSUSP to be
 			// sent to the process when generateSignals() is set
 			// true
+			// termios flag: VSUSP
 		#ifdef VDSUSP
 		void	delayedSuspendCharacter(cc_t character);
 			// set the character that will cause a SIGTSTP to be
 			// sent to the process when generateSignals() and
 			// extendedFunctions() are set true
+			// termios flag: VDSUSP
 		#endif
 		void	literalNextCharcter(cc_t character);
 			// set the character that "quotes" the next character,
 			// depriving it of special meaning, recognized when
 			// extendedFunctions() is set true
+			// termios flag: VLNEXT
 		void	wordEraseCharcter(cc_t character);
 			// set the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
+			// termios flag: VWERASE
 
 		void	reprintCharacter(cc_t character);
 			// set the character that causes unread characters to
 			// be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
+			// termios flag: VREPRINT
 		void	discardPendingOutputCharacter(cc_t character);
 			// set the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
+			// termios flag: VDISCARD
 
 		#ifdef VSTATUS
 		void	statusRequestCharacter(cc_t character);
 			// set the status request character
+			// termios flag: VSTATUS
 		#endif
 
 		void	readThreshold(cc_t count);
 			// set the number of characters that must be read
 			// before a read() will begin waiting for readTimeout()
 			// deciseconds before falling through
+			// termios flag: VMIN
 		void	readTimeout(cc_t deciseconds);
 			// set the number of deciseconds that a read() will
 			// wait after reading readThreshold() characters before
 			// falling through
+			// termios flag: VTIME
 
 
 		// getters...

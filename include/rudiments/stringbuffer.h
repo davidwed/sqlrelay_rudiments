@@ -35,6 +35,7 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*write(const char *string, size_t size);
 		stringbuffer	*write(char character);
 		stringbuffer	*write(long number);
+		stringbuffer	*write(unsigned long number);
 		stringbuffer	*write(double number);
 		stringbuffer	*write(double number,
 						unsigned short scale);
@@ -48,6 +49,7 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*append(const char *string, size_t size);
 		stringbuffer	*append(char character);
 		stringbuffer	*append(long number);
+		stringbuffer	*append(unsigned long number);
 		stringbuffer	*append(double number);
 		stringbuffer	*append(double number,
 						unsigned short scale);
