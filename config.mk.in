@@ -18,10 +18,6 @@ CXX = @CXX@
 # archiver to use
 AR = @AR@
 
-# command to strip a binary
-STRIP = @STRIP@
-STRIPCOMMENTNOTE = $(top_builddir)/strip-comment-note
-
 # includes and defines
 BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 
@@ -32,14 +28,11 @@ CXXFLAGS = @CXXFLAGS@ @PIPE@
 # linker flags
 LDFLAGS = @LDFLAGS@
 
-# flag to strip during install
-INSTALLSTRIP = @INSTALLSTRIP@
-
 # libtool command
 LIBTOOL = @LIBTOOL@
 
 # install command
-INSTALL = STRIPPROG="$(STRIP)" $(LIBTOOL) --mode=install $(top_builddir)/install-sh -c
+INSTALL = $(LIBTOOL) --mode=install $(top_builddir)/install-sh -c
 
 # mkinstalldirs command
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs

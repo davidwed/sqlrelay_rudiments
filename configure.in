@@ -7,9 +7,9 @@ AC_ARG_ENABLE(small-code,
 	SMALLCODE="-O -Os -fno-exceptions",
 	SMALLCODE="")
 AC_ARG_ENABLE(debug,
-	[  --enable-debug          compile with -g and -pg options and don't strip binaries],
-	CXXFLAGS="$CXXFLAGS -g -pg -Wall"; INSTALLSTRIP=""; DEBUGSTRIP="touch",
-	CXXFLAGS="$CXXFLAGS -Wall"; INSTALLSTRIP="-s"; DEBUGSTRIP="")
+	[  --enable-debug          compile with -g and -pg options],
+	CXXFLAGS="$CXXFLAGS -g -pg -Wall",
+	CXXFLAGS="$CXXFLAGS -Wall")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],
 	USE_SYSTEM_LIBTOOL=$withval,
@@ -265,7 +265,6 @@ CXXFLAGS="$SMALLCODE $CXXFLAGS"
 
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
-AC_SUBST(INSTALLSTRIP)
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(SMALL_CODE,1,Use small rather than fast code)
 fi
@@ -312,13 +311,6 @@ AC_SUBST(AR)
 FW_CHECK_MICROSOFT
 FW_CHECK_SO_EXT
 
-if ( test -n "$DEBUGSTRIP" )
-then
-	STRIP="$DEBUGSTRIP"
-	AC_SUBST(STRIP)
-fi
-
-FW_CHECK_GNU_STRIP
 FW_CHECK_PIPE
 echo "******************************"
 
@@ -909,9 +901,8 @@ echo
 echo "***** Output Files ***********"
 AC_CONFIG_HEADER(include/rudiments/private/config.h)
 AC_CONFIG_SRCDIR(test/xmls.C)
-AC_CONFIG_FILES(config.mk bin/rudiments-config features.mk strip-comment-note rudiments.pc)
+AC_CONFIG_FILES(config.mk bin/rudiments-config features.mk rudiments.pc)
 AC_OUTPUT
 chmod 755 bin/rudiments-config
-chmod 755 strip-comment-note
 echo "******************************"
 echo

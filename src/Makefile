@@ -285,7 +285,6 @@ endif
 
 .C.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-	$(STRIPCOMMENTNOTE) $@
 
 all: librudiments.la
 
@@ -302,7 +301,7 @@ librudiments.la: $(SRCS) $(LOBJS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)
-	$(INSTALL) $(INSTALLSTRIP) librudiments.la $(libdir)/librudiments.la
+	$(INSTALL) librudiments.la $(libdir)/librudiments.la
 	$(LIBTOOL) --mode=finish $(libdir)
 
 uninstall:
