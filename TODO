@@ -5,38 +5,11 @@ internationalization:
 	libintl.h - gettext functions
 	stdlib.h - rpmatch() - response match
 
-file/directory:
-	stdlib.h - mktemp()/mkstemp()/mkdtemp()
-			canonicalize_file_name()/realpath()
-	unistd.h - access(),euidaccess()
-			pread(),pwrite()
-			pipe()
-			chown()/fchown()/lchown()
-			chdir()/fchdir()
-			getcwd()/get_current_dir_name()/getwd()
-			dup()/dup2()
-			pathconf()/fpathconf()
-			ttyname(_r)()
-			isatty()
-			link()/symlink()/readlink()
-			unlink(),rmdir()
-			revoke()
-			chroot()
-			fsync(),sync(),fdatasync()
-			truncate()/ftruncate()
-			lockf()
-	stdio.h - remove()/rename()
-			tmpfile()/tmpnam(_r)()/tempnam()
-			fopencokie()???
-			dprintf()
-	dirent/direct.h - opendir(),closedir(),readdir(),rewinddir()
-				seekdir(),telldir()
-				dirfd()
-				scandir()
-				alphasort(),versionsort()
-				getdirentries()
-	string.h - basename() / libgen.h - dirname()
-	fcntl.h - fcntl(),lockf(),posix_fadvise(),posix_fallocate()
+paths:
+	stdlib.h - canonicalize_file_name()/realpath()
+	string.h - basename()
+	libgen.h - dirname() (glibc < 2.2.1, path must not have a trailing /
+				or a segfault will occur)
 	fnmatch.h/glob.h - filename/path matching
 			fnmatch()
 			glob(),globfree(),glob_pattern_p()
@@ -45,8 +18,24 @@ file/directory:
 			fts_children(),fts_read(),fts_set()
 			ftw()/nftw() - call a function on every
 					element in a directory tree
+
+file class:
+	stdlib.h - mkstemp()/mkdtemp()
+	unistd.h - access(),euidaccess()
+			pread(),pwrite()
+			pipe()
+			chown()/fchown()/lchown()
+			chdir()/fchdir()
+			dup()/dup2()
+			pathconf()/fpathconf()
+			link()/symlink()/readlink()
+			unlink()
+			revoke()
+			fsync()/fdatasync()
+	stdio.h - remove()/rename()
+			dprintf()
+	fcntl.h - fcntl(),posix_fadvise(),posix_fallocate()
 	utime.h - utime()
-	sys/file.h - flock()
 	sys/ioctl.h - ioctl()
 	sys/stat.h - stat(),fstat(),lstat()
 			chmod(),lchmod(),fchmod()
@@ -57,7 +46,15 @@ file/directory:
 			listxattr(),llistxattr(),flistxattr()
 			removexattr(),lremovexattr(),fremovexattr()
 
-filesystem:
+directory class:
+	dirent/direct.h - opendir(),closedir(),readdir(),rewinddir()
+			seekdir(),telldir()
+			dirfd()
+			scandir(),alphasort(),versionsort() - not in posix
+			getdirentries()
+	unistd.h - getcwd(),rmdir(),chroot()
+
+filesystem class:
 	sys/fsuid.h - setfsuid()/getfsuid() - uid for filesystem checks
 	sys/mount.h - mount(),umount(),umount2()
 	sys/quota.h - quotactl() function, macros, defines
@@ -68,7 +65,7 @@ filesystem:
 			setmntent(),getmntent(_r)()
 			addmntent(),endmntent(),hasmntopt()
 
-math:
+math class:
 	stdlib.h - abs(), labs(), llabs(), div(), ldiv(), lldiv()
 	math.h - fpclassify()
 			signbit()
@@ -108,11 +105,11 @@ math:
 			imaxabs(),imaxdiv()
 			strtoimax(),strtoumax(),wcstoimax(),wcstoumax()
 
-bit manipulation:
+bit manipulation class:
 	sys/param.h - setbit(),clrbit(),isset(),isclr()
 	string.h - ffs(),ffsl(),ffsll()
 
-command line:
+commandline class:
 	getopt.h - make sure commandline class has full functionality
 			getopt(),getopt_long(),getopt_long_only()
 	stdlib.h - getsubopt() - comma-seperated value parser
@@ -126,7 +123,7 @@ raw buffers:
 		memfrob()
 	unistd.h - swab()
 
-strings:
+charstring class:
 	stdlib.h - strtof(_l)() - string to float
 		strtold(_l)() - string to long double
 		strtoul(_l)() - string to ulong
@@ -171,7 +168,7 @@ multibyte/widechar -
 		wcstombs() - convert wide char string to multibyte string
 	wchar.h/wctype.h - lots of multibyte/wide character utilities
 
-serial ports:
+serialportprofile class:
 	termios.h - cfgetospeed(),cfgetispeed(),
 		cfsetospeed(),cfsetispeed(),cfsetspeed()
 		tcgetattr(),tcsetattr()
@@ -186,9 +183,11 @@ time:
 
 tty:
 	stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)(),getpt()
-			vhangup()
 	unistd.h - tcgetpgrp(),tcsetpgrp()
 			ctermid()
+			ttyname(_r)()
+			isatty()
+			vhangup()
 	stdio.h - ctermid()
 	pty.h - openpty(),forkpty()
 	ttyent.h - getttyent()/getttynam()/setttyent()/endttyent()
@@ -318,6 +317,7 @@ system:
 	unistd.h - sysconf(),confstr()
 			gethostid(),sethostid()
 			getpagesize()
+			sync()
 	sys/kdaemon.h - bdflush() function
 	sys/klog.h - klogctl() function
 	sys/personality.h - personality() - set linux kernel personality
@@ -442,7 +442,8 @@ network:
 
 charstring class has lots of static methods with no
 	corresponding non-static method, is this ok?
-charstring::toLong should support optional numeric base
+
+rename variablebuffer rawbuffer???
 
 randomnumber class should be able to generate long, ulong, ulonglong,
 	float, double, long double, etc.
@@ -505,21 +506,28 @@ filedescriptor
 		tcpsocket
 			inetsocket
 				inetstreamsocket
-					inetstreamsocketclient (imp client)
-					inetstreamsocketserver (imp server)
+					inetstreamsocketclient (impl client)
+					inetstreamsocketserver (impl server)
 				inetdatagramsocket
-					inetdatagramsocketclient (imp client)
-					inetdatagramsocketserver (imp server)
+					inetdatagramsocketclient (impl client)
+					inetdatagramsocketserver (impl server)
 				...
 		unixsocket
 			unixstreamsocket
-				unixstreamsocketclient (imp client)
-				unixstreamsocketserver (imp server)
+				unixstreamsocketclient (impl client)
+				unixstreamsocketserver (impl server)
 			unixdatagramsocket
-				unixstreamsocketclient (imp client)
-				unixstreamsocketserver (imp server)
+				unixstreamsocketclient (impl client)
+				unixstreamsocketserver (impl server)
 		udpsocket
 			...
 		packetsocket
 			...
 		...
+	serialport
+		serialportclient (impl client)
+		serialportserver (impl server)
+	modem
+		modemclient (impl client)
+		modemserver (impl server)
+	...
