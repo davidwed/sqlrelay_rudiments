@@ -8,6 +8,9 @@
 
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
+#ifdef HAVE_GETADDRINFO
+	#include <rudiments/string.h>
+#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -38,51 +41,100 @@ void inetclientsocket::initialize(namevaluepairs *cd) {
 
 int inetclientsocket::connect() {
 
-	// get the host entry
-	hostentry	he;
-	if (!he.initialize(address)) {
-		return 0;
-	}
+	#ifndef HAVE_GETADDRINFO
 
-	// set the address type and port to connect to
-	memset((void *)&sin,0,sizeof(sin));
-	sin.sin_family=he.getAddressType();
-	sin.sin_port=htons(port);
+		// get the host entry
+		hostentry	he;
+		if (!he.initialize(address)) {
+			return 0;
+		}
 
-	// use tcp protocol
-	protocolentry	pe;
-	if (!pe.initialize("tcp")) {
-		return 0;
-	}
+		// use tcp protocol
+		protocolentry	pe;
+		if (!pe.initialize("tcp")) {
+			return 0;
+		}
 
-	// create an inet socket
-	if ((fd=socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
-		fd=-1;
-		return 0;
-	}
+		// set the address type and port to connect to
+		memset((void *)&sin,0,sizeof(sin));
+		sin.sin_family=he.getAddressType();
+		sin.sin_port=htons(port);
+
+		// create an inet socket
+		if ((fd=socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
+			fd=-1;
+			return 0;
+		}
+
+	#else
+
+		// create a hint indicating that SOCK_STREAM should be used
+		addrinfo	hints;
+		memset(&hints,0,sizeof(addrinfo));
+		hints.ai_socktype=SOCK_STREAM;
+
+		// get a string representing the port number
+		char	*portstr=string::parseNumber((long)port);
+
+		// get the address info for the given address/port
+		addrinfo	*ai;
+		if (getaddrinfo(address,portstr,&hints,&ai)) {
+			delete[] portstr;
+			return 0;
+		}
+		delete[] portstr;
+
+		// create an inet socket
+		if ((fd=socket(ai->ai_family,ai->ai_socktype,
+						ai->ai_protocol))==-1) {
+			fd=-1;
+			freeaddrinfo(ai);
+			return 0;
+		}
+
+	#endif
 
 	// if create failed, show this error
 
 	// try to connect, over and over for the specified number of times
 	for (int counter=0; counter<retrycount || !retrycount; counter++) {
 
-		// try to connect to each of the addresses
-		// that came back from the address lookup
-		for (int addressindex=0;
-				he.getAddressList()[addressindex];
-				addressindex++) {
+		#ifndef HAVE_GETADDRINFO
 
-			// set which host to connect to
-			memcpy((void *)&sin.sin_addr,
-				(void *)he.getAddressList()[addressindex],
-				he.getAddressLength());
+			// try to connect to each of the addresses
+			// that came back from the address lookup
+			for (int addressindex=0;
+					he.getAddressList()[addressindex];
+					addressindex++) {
+
+				// set which host to connect to
+				memcpy((void *)&sin.sin_addr,
+					(void *)he.getAddressList()
+							[addressindex],
+					he.getAddressLength());
 	
-			// attempt to connect
-			if (::connect(fd,(struct sockaddr *)&sin,
+				// attempt to connect
+				if (::connect(fd,(struct sockaddr *)&sin,
 							sizeof(sin))!=-1) {
-					return 1;
+						return 1;
+				}
 			}
-		}
+
+		#else
+
+			// try to connect to each of the addresses
+			// that came back from the address lookup
+			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
+
+				if (::connect(fd,
+					(struct sockaddr *)ainfo->ai_addr,
+						ainfo->ai_addrlen)!=-1) {
+					freeaddrinfo(ai);
+					return 1;
+				}
+			}
+
+		#endif
 
 		// wait the specified amount of time between reconnect tries
 		sleep(retrywait);
@@ -90,6 +142,10 @@ int inetclientsocket::connect() {
 
 	// if we're here, the connect failed
 	close();
+
+	#ifndef HAVE_GETADDRINFO
+		freeaddrinfo(ai);
+	#endif
 
 	return 0;
 }
