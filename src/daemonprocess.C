@@ -33,6 +33,8 @@ daemonprocess::daemonprocess() {
 
 	crashhandler.setHandler((void *)defaultCrash);
 	crashhandler.handleSignal(SIGSEGV);
+
+	waitForChildren();
 }
 
 daemonprocess::~daemonprocess() {
@@ -105,7 +107,7 @@ int daemonprocess::runAsGroup(const char *groupname) const {
 					runAsGroupId(groupid):1;
 }
 
-void daemonprocess::waitForChildren() {
+void daemonprocess::waitForChildrenToExit() {
 	// It's tempting to pass WNOHANG here, but it's probably not what
 	// we really want.  WNOHANG will cause the waitpid() to wait for all
 	// children who are currently in their final exit() stage.  But, if
@@ -116,28 +118,34 @@ void daemonprocess::waitForChildren() {
 }
 
 void daemonprocess::shutDown() {
-	registerWaitForChildren();
+	waitForChildren();
 	(*shutdownfunc)(0);
 }
 
 void daemonprocess::crash() {
-	registerWaitForChildren();
+	waitForChildren();
 	(*crashfunc)(0);
 }
 
 void daemonprocess::defaultShutDown() {
-	registerWaitForChildren();
+	waitForChildren();
 	exit(0);
 }
 
 void daemonprocess::defaultCrash() {
-	registerWaitForChildren();
+	waitForChildren();
 	exit(1);
 }
 
-void daemonprocess::registerWaitForChildren() {
-	deadchildhandler.setHandler((void *)waitForChildren);
+void daemonprocess::waitForChildren() {
+	deadchildhandler.setHandler((void *)waitForChildrenToExit);
 	deadchildhandler.addFlag(SA_NOCLDSTOP);
+	deadchildhandler.handleSignal(SIGCHLD);
+}
+
+void daemonprocess::dontWaitForChildren() {
+	deadchildhandler.setHandler((void *)SIG_DFL);
+	deadchildhandler.removeAllFlags();
 	deadchildhandler.handleSignal(SIGCHLD);
 }
 

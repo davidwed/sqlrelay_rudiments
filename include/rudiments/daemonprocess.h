@@ -70,6 +70,23 @@ class daemonprocess {
 				// This method allows you to designate a
 				// function to run if the daemon crashes.
 
+		static	void	waitForChildren();
+				// This method causes the daemon to wait
+				// on child processes which have exited,
+				// preventing so-called "zombie" processes
+				// from occurring.  This method is called
+				// in the constructor and is thus the default
+				// behavior of this class.
+		static	void	dontWaitForChildren();
+				// This method causes the daemon not to
+				// wait on child processes which have exited.
+				// Ordinarily, you'd want to wait on child
+				// processes, but this interferes with the
+				// behavior of WEXITSTATUS() after a call to
+				// system() (and possibly other calls).  This
+				// method allows you to disable waiting on
+				// child processes.
+
 	#include <rudiments/private/daemonprocess.h>
 
 };

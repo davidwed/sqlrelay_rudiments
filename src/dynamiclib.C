@@ -6,6 +6,10 @@
 
 #include <dlfcn.h>
 
+#ifdef RUDIMENTS_HAS_THREADS
+pthread_mutex_t	*dynamiclib::errormutex;
+#endif
+
 dynamiclib::dynamiclib() {
 	handle=NULL;
 #ifdef RUDIMENTS_HAS_THREADS

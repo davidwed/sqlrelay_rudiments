@@ -14,6 +14,5 @@
 		static	void		(*crashfunc)(int);
 
 		static	signalhandler	deadchildhandler;
-		static	void		registerWaitForChildren();
 
-		static	void		waitForChildren();
+		static	void		waitForChildrenToExit();

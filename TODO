@@ -59,6 +59,8 @@ need to use internally:
 	memorymap class intstead of mmap*()
 	mutex class instead of pthread_mutex_*()
 
+get a mingw port working
+
 --------------------------------------------------------------------------------
 
 filedescriptor/client/server heirarchy still needs revision:
