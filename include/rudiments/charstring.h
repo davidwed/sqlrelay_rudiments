@@ -13,7 +13,7 @@ class charstring {
 
 		// The static methods operate on standalone strings.
 
-		static	size_t	getLength(const char *string);
+		static	size_t	length(const char *string);
 			// Returns the length of "string".
 
 		static	void	zero(char *str, size_t size);
@@ -196,103 +196,6 @@ class charstring {
 			// 
 			// Example:
 			//	"hello      " -> "   hello   "
-
-
-
-
-		// The following methods allow you to create an instance of
-		// the string class to store and manipulate a string.
-
-			charstring(const char *str);
-			// Creates an string containing "str".
-			charstring(const char *str, size_t size);
-			// Creates an string "size" bytes long containing "str".
-			charstring(size_t size);
-			// Creates an uninitialized string of "size" bytes.
-			~charstring();
-
-
-		char	*getString() const;
-			// Returns a pointer to the internal buffer containing
-			// the string.
-		size_t	getLength() const;
-			// Returns the length of the string currently stored.
-		size_t	getSize() const;
-			// Returns the size of the internal buffer.
-
-
-		void	zero();
-			// Sets every byte in the internal buffer to NULL.
-
-
-		char	*append(const charstring *str);
-		char	*append(const char *str);
-			// Appends "str" to the currently stored string.
-		char	*append(const charstring *str, size_t size);
-		char	*append(const char *str, size_t size);
-			// Appends "size" bytes of "str" to the currently
-			// stored string.
-
-
-		char	*copy(const char *str);
-			// Replaces the current string with "str".  Assumes
-			// that there is enough room in the internal buffer
-			// to accommodate "str".
-			// Returns a pointer to the current string.
-		char	*copy(const char *str, size_t size);
-			// Replaces the first "size" bytes of the current string
-			// with "str".  Assumes that there are at least "size"
-			// bytes available in the internal buffer.
-			// Returns a pointer to the current string.
-		char	*copy(size_t location, const char *str);
-			// Replaces the current string with "str", starting
-			// "location" bytes into the internal buffer.  Assumes
-			// that there is enough room in the internal buffer
-			// (after "location" bytes) to accommodate "str".
-			// Returns a pointer to the current string.
-		char	*copy(size_t location, const char *str,
-							size_t size);
-			// Replaces "size" bytes of the current string with
-			// "str", starting "location" bytes into the internal
-			// buffer.  Assumes that there are at least "size"
-			// bytes in the internal buffer (after "location"
-			// bytes).
-			// Returns a pointer to the current string.
-
-
-		int	compare(const char *str) const;
-			// Returns -1,0 or 1 if the current string is greater
-			// than, equal to or less than "str".
-		int	compare(const char *str, size_t size) const;
-			// Returns -1,0 or 1 if "size" bytes of the current
-			// string are greater than, equal to or less than
-			// "size" bytes of "str".
-		int	compareIgnoringCase(const char *str) const;
-			// Returns -1,0 or 1 if the current string is greater
-			// than, equal to or less than "str", ignoring case.
-		int	compareIgnoringCase(const char *str,
-						size_t size) const;
-			// Returns -1,0 or 1 if "size" bytes of the current
-			// string are greater than, equal to or less than
-			// "size" bytes of "str", ignoring case.
-
-
-		char	*contains(const char *str) const;
-			// If the current string contains "str", then this
-			// method returns a pointer to the substring.
-			// Otherwise it returns NULL.
-		char	*contains(char ch) const;
-			// If the current string contains "ch", then this
-			// method returns a pointer to the substring.
-			// Otherwise it returns NULL.
-
-
-		char	*duplicate() const;
-			// Creates a duplicate of the string and returns a
-			// pointer to it.  Note that this method allocates a
-			// buffer for the duplicate string internally and
-			// returns it.  The calling program must deallocate
-			// this buffer.
 
 	#include <rudiments/private/charstring.h>
 };

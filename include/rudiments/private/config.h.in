@@ -179,9 +179,6 @@
 /* Define to 1 if you have the <regex.h> header file. */
 #undef HAVE_REGEX_H
 
-/* Some systems have revoke */
-#undef HAVE_REVOKE
-
 /* Define to 1 if you have the `re_comp' function. */
 #undef HAVE_RE_COMP
 

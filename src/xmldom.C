@@ -47,7 +47,7 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	}
 	stringbuffer	*xml=rootnode->xml();
 	bool	retval=true;
-	int	length=charstring::getLength(xml->getString());
+	int	length=charstring::length(xml->getString());
 	if (fl.write(xml->getString(),length)!=length) {
 		retval=false;
 	}

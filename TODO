@@ -6,8 +6,6 @@ should file class have non-static versions of createDeviceNode/createFifo/
 charstring class has lots of static methods with no
 	corresponding non-static method, is this ok?
 
-need __USE_BSD to get revoke() on uclibc
-
 looks like there's a bug in xml comment parsing, ! gets prepended to value
 
 some of the static methods can probably be inlined

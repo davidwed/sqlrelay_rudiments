@@ -62,7 +62,7 @@ ssize_t file::create(const char *name, mode_t perms,
 }
 
 ssize_t file::create(const char *name, mode_t perms, const char *string) {
-	return create(name,perms,(void *)string,charstring::getLength(string));
+	return create(name,perms,(void *)string,charstring::length(string));
 }
 
 ssize_t file::create(const char *name, mode_t permissions,
@@ -837,12 +837,6 @@ bool file::dataSync() {
 	return !fdatasync(fd);
 }
 
-#ifdef HAVE_REVOKE
-bool file::revoke(const char *filename) {
-	return !::revoke(filename);
-}
-#endif
-
 bool file::setLastAccessTime(const char *filename,
 					time_t lastaccesstime) {
 	time_t	lastmodtime;
@@ -1018,22 +1012,22 @@ bool file::getAttribute(const char *name, bool *value) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, const unsigned char **string) {
+bool file::getAttribute(const char *name, unsigned char **string) {
 	size_t	size;
 	return getAttribute(name,(void **)string,&size);
 }
 
-bool file::getAttribute(const char *name, const char **string) {
+bool file::getAttribute(const char *name, char **string) {
 	size_t	size;
 	return getAttribute(name,(void **)string,&size);
 }
 
-bool file::getAttribute(const char *name, const unsigned char **string,
-								size_t *size) {
+bool file::getAttribute(const char *name,
+				unsigned char **string, size_t *size) {
 	return getAttribute(name,(void **)string,size);
 }
 
-bool file::getAttribute(const char *name, const char **string, size_t *size) {
+bool file::getAttribute(const char *name, char **string, size_t *size) {
 	return getAttribute(name,(void **)string,size);
 }
 
@@ -1112,12 +1106,11 @@ bool file::createAttribute(const char *name, bool value) {
 
 bool file::createAttribute(const char *name, const unsigned char *string) {
 	return createAttribute(name,(void *)string,
-					charstring::getLength((char *)string));
+					charstring::length((char *)string));
 }
 
 bool file::createAttribute(const char *name, const char *string) {
-	return createAttribute(name,(void *)string,
-					charstring::getLength(string));
+	return createAttribute(name,(void *)string,charstring::length(string));
 }
 
 bool file::createAttribute(const char *name, const unsigned char *string,
@@ -1171,12 +1164,11 @@ bool file::replaceAttribute(const char *name, bool value) {
 
 bool file::replaceAttribute(const char *name, const unsigned char *string) {
 	return replaceAttribute(name,(void *)string,
-					charstring::getLength((char *)string));
+					charstring::length((char *)string));
 }
 
 bool file::replaceAttribute(const char *name, const char *string) {
-	return replaceAttribute(name,(void *)string,
-					charstring::getLength(string));
+	return replaceAttribute(name,(void *)string,charstring::length(string));
 }
 
 bool file::replaceAttribute(const char *name, const unsigned char *string,
@@ -1230,11 +1222,11 @@ bool file::setAttribute(const char *name, bool value) {
 
 bool file::setAttribute(const char *name, const unsigned char *string) {
 	return setAttribute(name,(void *)string,
-				charstring::getLength((char *)string));
+				charstring::length((char *)string));
 }
 
 bool file::setAttribute(const char *name, const char *string) {
-	return setAttribute(name,(void *)string,charstring::getLength(string));
+	return setAttribute(name,(void *)string,charstring::length(string));
 }
 
 bool file::setAttribute(const char *name, const unsigned char *string,

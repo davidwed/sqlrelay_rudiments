@@ -88,7 +88,7 @@ bool regularexpression::match(const char *str) {
 	#if defined(RUDIMENTS_HAS_PCRE)
 		this->str=(char *)str;
 		return (expr && (matchcount=pcre_exec(expr,NULL,
-						str,charstring::getLength(str),
+						str,charstring::length(str),
 						0,0,matches,
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
 	#elif defined(HAVE_REGEX_H)

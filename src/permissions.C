@@ -112,7 +112,7 @@ mode_t permissions::setGroupId() {
 
 mode_t permissions::evalPermString(const char *permstring) {
 	mode_t	retval=0;
-	if (charstring::getLength(permstring)==9) {
+	if (charstring::length(permstring)==9) {
 
 		// handle user permissions
 		if (permstring[0]=='r') {

@@ -25,11 +25,11 @@ void filedestination::write(const char *string) {
 }
 
 void stdoutdestination::write(const char *string) {
-	::write(1,string,charstring::getLength(string));
+	::write(1,string,charstring::length(string));
 }
 
 void stderrdestination::write(const char *string) {
-	::write(2,string,charstring::getLength(string));
+	::write(2,string,charstring::length(string));
 }
 
 void syslogdestination::open(const char *ident, int option,
@@ -69,15 +69,15 @@ char *logger::logHeader(const char *name) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
 	char	*dtstring=dt.getString();
-	char	*retval=new char[charstring::getLength(dtstring)+
-					charstring::getLength(name)+16];
+	char	*retval=new char[charstring::length(dtstring)+
+					charstring::length(name)+16];
 	sprintf(retval,"%s %s [%d]",dtstring,name,getpid());
 	return retval;
 }
 
 void logger::write(const char *header, int tabs, const char *string) const {
-	char	logentry[charstring::getLength(header)+3+tabs+
-				charstring::getLength(string)+2+1];
+	char	logentry[charstring::length(header)+3+tabs+
+				charstring::length(string)+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
@@ -87,7 +87,7 @@ void logger::write(const char *header, int tabs, const char *string) const {
 }
 
 void logger::write(const char *header, int tabs, char character) const {
-	char	logentry[charstring::getLength(header)+3+tabs+1+2+1];
+	char	logentry[charstring::length(header)+3+tabs+1+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
@@ -97,7 +97,7 @@ void logger::write(const char *header, int tabs, char character) const {
 }
 
 void logger::write(const char *header, int tabs, long number) const {
-	char	logentry[charstring::getLength(header)+3+tabs+20+2+1];
+	char	logentry[charstring::length(header)+3+tabs+20+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
@@ -107,7 +107,7 @@ void logger::write(const char *header, int tabs, long number) const {
 }
 
 void logger::write(const char *header, int tabs, double number) const {
-	char	logentry[charstring::getLength(header)+3+tabs+21+2+1];
+	char	logentry[charstring::length(header)+3+tabs+21+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');

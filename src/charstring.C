@@ -10,55 +10,12 @@
 	#include <strings.h>
 #endif
 
-charstring::charstring(const char *str, size_t size) {
-	memcpy((void *)buffer,(void *)str,size);
-	this->size=size;
-}
-
-charstring::charstring(size_t size) {
-	buffer=new char[size];
-	this->size=size;
-}
-
-charstring::charstring(const char *str) {
-	buffer=strdup(str);
-	this->size=strlen(str);
-}
-
-charstring::~charstring() {
-	delete[] buffer;
-}
-
-char *charstring::getString() const {
-	return buffer;
-}
-
-size_t charstring::getLength() const {
-	return strlen(buffer);
-}
-
-size_t charstring::getLength(const char *string) {
+size_t charstring::length(const char *string) {
 	return strlen(string);
-}
-
-size_t charstring::getSize() const {
-	return size;
-}
-
-void charstring::zero() {
-	memset((void *)buffer,0,size);
 }
 
 void charstring::zero(char *str, size_t size) {
 	memset((void *)str,0,size);
-}
-
-char *charstring::append(const char *str) {
-	return strcat(buffer,str);
-}
-
-char *charstring::append(const char *str, size_t size) {
-	return strncat(buffer,str,size);
 }
 
 char *charstring::append(char *dest, const char *source) {
@@ -67,22 +24,6 @@ char *charstring::append(char *dest, const char *source) {
 
 char *charstring::append(char *dest, const char *source, size_t size) {
 	return strncat(dest,source,size);
-}
-
-char *charstring::copy(const char *str) {
-	return strcpy(buffer,str);
-}
-
-char *charstring::copy(const char *str, size_t size) {
-	return strncpy(buffer,str,size);
-}
-
-char *charstring::copy(size_t location, const char *str) {
-	return strcpy(buffer+location,str);
-}
-
-char *charstring::copy(size_t location, const char *str, size_t size) {
-	return strncpy(buffer+location,str,size);
 }
 
 char *charstring::copy(char *dest, const char *source) {
@@ -100,26 +41,6 @@ char *charstring::copy(char *dest, size_t location, const char *source) {
 char *charstring::copy(char *dest, size_t location,
 					const char *source, size_t size) {
 	return strncpy(dest+location,source,size);
-}
-
-int charstring::compare(const char *str) const {
-	// FIXME: use strcoll?
-	return strcmp(buffer,str);
-}
-
-int charstring::compare(const char *str, size_t size) const {
-	return strncmp(buffer,str,size);
-}
-
-int charstring::compareIgnoringCase(const char *str) const {
-	// FIXME: use strcasecmp_l?
-	return strcasecmp(buffer,str);
-}
-
-
-int charstring::compareIgnoringCase(const char *str, size_t size) const {
-	// FIXME: use strncasecmp_l?
-	return strncasecmp(buffer,str,size);
 }
 
 int charstring::compare(const char *str1, const char *str2) {
@@ -142,24 +63,12 @@ int charstring::compareIgnoringCase(const char *str1,
 	return strncasecmp(str1,str2,size);
 }
 
-char *charstring::contains(const char *str) const {
-	return strstr(buffer,str);
-}
-
-char *charstring::contains(const char ch) const {
-	return strchr(buffer,ch);
-}
-
 char *charstring::contains(const char *haystack, const char *needle) {
 	return strstr(haystack,needle);
 }
 
 char *charstring::contains(const char *haystack, const char needle) {
 	return strchr(haystack,needle);
-}
-
-char *charstring::duplicate() const {
-	return strdup(buffer);
 }
 
 char *charstring::duplicate(const char *str) {
@@ -493,14 +402,6 @@ double charstring::toDouble(const char *string) {
 
 double charstring::toDouble(const char *string, char **endptr) {
 	return strtod(string,endptr);
-}
-
-char *charstring::append(const charstring *str) {
-	return strcat(buffer,str->getString());
-}
-
-char *charstring::append(const charstring *str, size_t size) {
-	return strncat(buffer,str->getString(),size);
 }
 
 void charstring::bothTrim(char *string, char character) {

@@ -41,7 +41,7 @@ bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
 	char	*pid=charstring::parseNumber((long)getpid());
 	bool	retval=(fl.create(filename,permissions,pid)==
-					(ssize_t)charstring::getLength(pid));
+					(ssize_t)charstring::length(pid));
 	delete[] pid;
 	fl.close();
 	return retval;

@@ -216,14 +216,14 @@ ssize_t filedescriptor::write(const char *string, size_t size) {
 
 ssize_t filedescriptor::write(const unsigned char *string) {
 	DEBUG_WRITE_STRING("ustring",string,
-				charstring::getLength((char *)string));
+				charstring::length((char *)string));
 	return safeWrite((void *)string,
-				charstring::getLength((char *)string),-1,-1);
+				charstring::length((char *)string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string) {
-	DEBUG_WRITE_STRING("string",string,charstring::getLength(string));
-	return safeWrite((void *)string,charstring::getLength(string),-1,-1);
+	DEBUG_WRITE_STRING("string",string,charstring::length(string));
+	return safeWrite((void *)string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size) {
@@ -293,14 +293,14 @@ ssize_t filedescriptor::write(const char *string, size_t size,
 ssize_t filedescriptor::write(const unsigned char *string,
 						long sec, long usec) {
 	DEBUG_WRITE_STRING("ustring",string,
-				charstring::getLength((char *)string));
+				charstring::length((char *)string));
 	return safeWrite((void *)string,
-				charstring::getLength((char *)string),sec,usec);
+				charstring::length((char *)string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, long sec, long usec) {
-	DEBUG_WRITE_STRING("string",string,charstring::getLength(string));
-	return safeWrite((void *)string,charstring::getLength(string),sec,usec);
+	DEBUG_WRITE_STRING("string",string,charstring::length(string));
+	return safeWrite((void *)string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
@@ -479,7 +479,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 	*buffer=new char[buffersize];
 
 	// initialize termination detector
-	int	termlen=charstring::getLength(terminator);
+	int	termlen=charstring::length(terminator);
 	char	*term=new char[termlen];
 	for (int i=0; i<termlen; i++) {
 		term[i]=(char)NULL;

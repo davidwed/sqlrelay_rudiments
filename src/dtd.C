@@ -125,7 +125,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			// if we don't find the delimiter,
 			// use the end of the string instead 
 			if (!ptr2) {
-				ptr2=(char *)(list+charstring::getLength(list));
+				ptr2=(char *)(list+charstring::length(list));
 			}
 	
 			// parse out the value, including the * or +
@@ -137,11 +137,11 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			// if specified, evaluate any trailing *'s or +'s and
 			// truncate them
 			if (checkcount) {
-				count[0]=value[charstring::getLength(value)-1];
+				count[0]=value[charstring::length(value)-1];
 				if (count[0]!='*' && count[0]!='+') {
 					count[0]='1';
 				} else {
-					value[charstring::getLength(value)-1]=
+					value[charstring::length(value)-1]=
 								(char)NULL;
 				}
 			}

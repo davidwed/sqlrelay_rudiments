@@ -537,15 +537,6 @@ class file : public filedescriptor {
 			// path internally and returns it.  The calling program
 			// must deallocate this buffer.
 
-		#ifdef HAVE_REVOKE
-		static bool	revoke(const char *filename);
-			// Closes all file descriptors bound to "filename" for
-			// all processes, system-wide.  Will only succeed if
-			// called by root or the owner of the file.
-			//
-			// Returns true on success and false on failure.
-		#endif
-
 		static bool	setLastAccessTime(const char *filename,
 							time_t lastaccesstime);
 			// Sets the last access time of "filename" to
@@ -635,24 +626,20 @@ class file : public filedescriptor {
 			// reads the value of "name" into buffer "character"
 		bool	getAttribute(const char *name, bool *value);
 			// reads the value of "name" into buffer "value"
-		bool	getAttribute(const char *name,
-						const unsigned char **string);
+		bool	getAttribute(const char *name, unsigned char **string);
 			// allocates "string" and reads the value of
 			// "name" into it
-		bool	getAttribute(const char *name, const char **string);
+		bool	getAttribute(const char *name, char **string);
 			// allocates "string" and reads the value of
 			// "name" into it
 		bool	getAttribute(const char *name,
-						const unsigned char **string,
-						size_t *size);
+					unsigned char **string, size_t *size);
 			// allocates "string", reads the value of "name" into it
 		bool	getAttribute(const char *name,
-						const char **string,
-						size_t *size);
+					char **string, size_t *size);
 			// allocates "string", reads the value of "name" into it
 		bool	getAttribute(const char *name,
-						void **buffer,
-						size_t *size);
+					void **buffer, size_t *size);
 			// allocates "buffer", reads the value of "name" into it
 
 
@@ -690,12 +677,10 @@ class file : public filedescriptor {
 						size_t size);
 			// creates attribute "name" with value "string"
 		bool	createAttribute(const char *name,
-						const char *string,
-						size_t size);
+					const char *string, size_t size);
 			// creates attribute "name" with value "string"
 		bool	createAttribute(const char *name,
-						const void *buffer,
-						size_t size);
+					const void *buffer, size_t size);
 			// creates attribute "name" with value "buffer"
 
 

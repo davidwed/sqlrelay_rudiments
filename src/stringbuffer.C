@@ -73,13 +73,13 @@ stringbuffer *stringbuffer::write(double number) {
 }
 
 size_t stringbuffer::getStringLength() {
-	return charstring::getLength(getString());
+	return charstring::length(getString());
 }
 
 stringbuffer *stringbuffer::append(const char *string) {
 	if (string) {
 		variablebuffer::append((unsigned char *)string,
-					charstring::getLength(string));
+					charstring::length(string));
 	}
 	return this;
 }
@@ -87,7 +87,7 @@ stringbuffer *stringbuffer::append(const char *string) {
 stringbuffer *stringbuffer::append(long number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::append((unsigned char *)numstr,
-					charstring::getLength(numstr));
+					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -95,7 +95,7 @@ stringbuffer *stringbuffer::append(long number) {
 stringbuffer *stringbuffer::append(double number, unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::append((unsigned char *)numstr,
-					charstring::getLength(numstr));
+					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -104,21 +104,21 @@ stringbuffer *stringbuffer::append(double number, unsigned short precision,
 							unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
 	variablebuffer::append((unsigned char *)numstr,
-					charstring::getLength(numstr));
+					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(const char *string) {
 	variablebuffer::write((unsigned char *)string,
-					charstring::getLength(string));
+					charstring::length(string));
 	return this;
 }
 
 stringbuffer *stringbuffer::write(long number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write((unsigned char *)numstr,
-					charstring::getLength(numstr));
+					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -126,7 +126,7 @@ stringbuffer *stringbuffer::write(long number) {
 stringbuffer *stringbuffer::write(double number, unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::write((unsigned char *)numstr,
-					charstring::getLength(numstr));
+					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -135,7 +135,7 @@ stringbuffer *stringbuffer::write(double number, unsigned short precision,
 							unsigned short scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
 	variablebuffer::write((unsigned char *)numstr,
-					charstring::getLength(numstr));
+					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
