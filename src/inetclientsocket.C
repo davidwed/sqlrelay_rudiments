@@ -34,11 +34,11 @@ int inetclientsocket::connect() {
 
 	// get the host entry
 #ifdef HAVE_GETHOSTBYNAME_R
-	hostent	*hostentry;
+	hostent	*hostentry=new hostent;
 	char	hostbuffer[1024];
-	hostent	hst;
 	int	errnop;
-	if (gethostbyname_r(address,&hst,hostbuffer,1024,&hostentry,&errnop)) {
+	if (gethostbyname_r(address,hostentry,hostbuffer,1024,
+						&hostentry,&errnop)) {
 		return 0;
 	}
 #else
@@ -55,10 +55,9 @@ int inetclientsocket::connect() {
 
 	// use tcp protocol
 #ifdef HAVE_GETPROTOBYNAME_R
-	protoent	*protocol;
+	protoent	*protocol=new protoent;
 	char		protobuffer[1024];
-	protoent	proto;
-	if (getprotobyname_r("tcp",&proto,protobuffer,1024,&protocol)) {
+	if (getprotobyname_r("tcp",protocol,protobuffer,1024,&protocol)) {
 		#ifdef HAVE_GETHOSTBYNAME_R
 			delete hostentry;
 		#endif

@@ -1,24 +1,17 @@
-do results of gethostbyname, getprotobyname need to be freed?
+usergroup class to abstract pwd.h/grp.h
+netdb class to abstract netdb.h
 
+document/test program for filedescriptor
 
-document filedescriptor
-test program for filedescriptor
+document/test program for file
 
-document file
-test program for file
+document/test program for stringbuffer
 
-document stringbuffer
-test program for stringbuffer
+document/comment/test program for connectiondata class
 
-document connectiondata
-comment connectiondata
-test program for connectiondata class
+document/test program for fileproperties class
 
-document fileproperties
-test program for fileproperties class
-
-document filesystem
-test program form filesystem class
+document/test program form filesystem class
 
 document clienttransport/connectiondata relationship
 

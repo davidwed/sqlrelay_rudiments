@@ -8,6 +8,7 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/permissions.h>
 #include <stdio.h>
+#include <unistd.h>
 
 int	main() {
 
@@ -25,4 +26,6 @@ int	main() {
         }
 
 	delete sem;
+
+	unlink("/tmp/sem");
 }

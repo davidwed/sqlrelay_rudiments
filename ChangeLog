@@ -28,7 +28,8 @@
 	added -fno-exceptions to default CXXFLAGS
 	added variablebuffer class
 	added dtd class
-	reentrant getpw/getgr functions used now if available
+	uses reentrant getpw/getgr functions if available
+	uses reentrant gethostbyname/getprotobyname functions if available
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

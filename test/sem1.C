@@ -8,13 +8,27 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/permissions.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 
 int	main() {
 
-        int     vals[2]={0,1,};
+	unlink("/tmp/sem");
+	int	fd=open("/tmp/sem",O_CREAT|O_TRUNC|O_RDWR,
+			permissions::evalPermString("rw-------"));
+	close(fd);
+
+        int     vals[2]={0,1};
         semaphoreset *sem=new semaphoreset();
         sem->create(ftok("/tmp/sem",0),
 			permissions::evalPermString("rw-------"),2,vals);
+
+	/*sem->setUserName("mused");
+	char	*user=sem->getUserName();
+	printf("owner: %s\n",user);
+	delete[] user;*/
 
         for (int i=0; i<10; i++) {
                 sem->wait(0);

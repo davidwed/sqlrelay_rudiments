@@ -68,14 +68,14 @@ int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 }
 
 int sharedmemory::setUserName(const char *username) {
-	passwd	*passwdent;
 #ifdef HAVE_GETPWNAM_R
+	passwd	*passwdent=new passwd;
 	char	buffer[1024];
-	passwd	pwd;
-	if (getpwnam_r(username,&pwd,buffer,1024,&passwdent)) {
+	if (getpwnam_r(username,passwdent,buffer,1024,&passwdent)) {
 		return 0;
 	}
 #else
+	passwd	*passwdent=NULL;
 	if (!(passwdent=getpwnam(username))) {
 		return 0;
 	}
@@ -88,14 +88,14 @@ int sharedmemory::setUserName(const char *username) {
 }
 
 int sharedmemory::setGroupName(const char *groupname) {
-	group	*groupent;
 #ifdef HAVE_GETGRNAM_R
+	group	*groupent=new group;
 	char	buffer[1024];
-	group	grp;
-	if (getgrnam_r(groupname,&grp,buffer,1024,&groupent)) {
+	if (getgrnam_r(groupname,groupent,buffer,1024,&groupent)) {
 		return 0;
 	}
 #else
+	group	*groupent=NULL;
 	if (!(groupent=getgrnam(groupname))) {
 		return 0;
 	}
@@ -110,15 +110,15 @@ int sharedmemory::setGroupName(const char *groupname) {
 char *sharedmemory::getUserName() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		passwd	*passwdent;
 #ifdef HAVE_GETPWUID_R
+		passwd	*passwdent=new passwd;
 		char	buffer[1024];
-		passwd	pwd;
-		if (getpwuid_r(getds.shm_perm.uid,&pwd,
+		if (getpwuid_r(getds.shm_perm.uid,passwdent,
 					buffer,1024,&passwdent)) {
 			return NULL;
 		}
 #else
+		passwd	*passwdent=NULL;
 		if (!(passwdent=getpwuid(getds.shm_perm.uid))) {
 			return NULL;
 		}
@@ -135,14 +135,15 @@ char *sharedmemory::getUserName() {
 char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		group	*groupent;
 #ifdef GETGRGID_R
+		group	*groupent=new group;
 		char	buffer[1024];
-		group	grp;
-		if (getgrgid_r(getds.shm_perm.gid,&grp,buffer,1024,&groupent)) {
+		if (getgrgid_r(getds.shm_perm.gid,groupent,
+					buffer,1024,&groupent)) {
 			return NULL;
 		}
 #else
+		group	*groupent=NULL;
 		if (!(groupent=getgrgid(getds.shm_perm.gid))) {
 			return NULL;
 		}
