@@ -49,7 +49,7 @@ inline int daemonprocess::runAsUserId(uid_t uid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else
-		return !setreuid(uid,uid);
+		return !setuid(uid);
 	#endif
 }
 
@@ -57,6 +57,6 @@ inline int daemonprocess::runAsGroupId(gid_t gid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else
-		return !setregid(gid,gid);
+		return !setgid(gid);
 	#endif
 }
