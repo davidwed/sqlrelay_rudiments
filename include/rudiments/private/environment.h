@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		#if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
+		#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 			namevaluepairs	envstrings;
 		#endif

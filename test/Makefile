@@ -86,7 +86,7 @@ text: text.C text.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ text.lo -L../src -lrudiments_p
 
 datetime: datetime.C datetime.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ datetime.lo -L../src -lrudiments_p
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ datetime.lo -L../src -lrudiments_p -lefence
 
 dict: dict.C dict.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ dict.lo -L../src -lrudiments_p

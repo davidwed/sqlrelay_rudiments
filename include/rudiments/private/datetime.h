@@ -2,16 +2,19 @@
 // See the COPYING file for more information.
 
 	private:
-		tm	timestruct;
-		time_t	epoch;
-		char	*timestring;
-		tzone	timezone;
+		struct tm	*timestruct;
+		time_t		epoch;
+		char		*timestring;
 
 		void	initTimeString();
-		void	setTimeZone(tzone tz);
-		tzone	determineTimeZone(const tm *tmstruct);
-		tzone	determineTimeZone(const char *tmstring);
+		void	initTimeStruct();
+		int	setTimeZone(const char *tz);
+		long	getTimeZoneOffset(const char *zone);
+		char	*getTimeZoneString(const struct tm *tmstruct) const;
+		int	updateTime();
+		int	copyStructTm(const struct tm *oldtm, struct tm *newtm);
 
-		const static tzone	tzonelist[];
-		const static char	*tzonestring[];
-		const static long	tzoneoffset[];
+		int	setTimeZoneEnvVar(const char *zone, char **oldzone);
+		int	restoreTimeZoneEnvVar(const char *oldzone);
+
+		environment	env;

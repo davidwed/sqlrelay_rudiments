@@ -5,6 +5,7 @@
 
 #include <rudiments/datetime.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argv, const char **argc) {
 
@@ -25,12 +26,10 @@ int main(int argv, const char **argc) {
 	printf("Time Zone	      : %s\n",dt.getTimeZoneString());
 	printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
 	printf("Seconds since 1970    : %d\n",dt.getEpoch());
-	char	*string=dt.getString();
-	printf("Date String	      : %s\n",string);
-	delete[] string;
+	printf("Date String	      : %s\n",dt.getString());
 
 	// use static methods to translate between formats
-	string=datetime::getString(dt.getEpoch());
+	char	*string=datetime::getString(dt.getEpoch());
 	printf("String from Epoch     : %s\n",string);
 	delete[] string;
 	string=datetime::getString(dt.getTm());
@@ -44,32 +43,14 @@ int main(int argv, const char **argc) {
 	printf("Epoch from tm         : %d\n",epoch);
 
 	// get time from hardware clock
-	dt.getHardwareDateAndTime(datetime::GMT);
-	string=dt.getString();
-	printf("Hardware Clock (assuming GMT): %s\n",string);
-	delete[] string;
+	dt.getHardwareDateAndTime("GMT");
+	printf("Hardware Clock (assuming GMT): %s\n",dt.getString());
 
 	// get time from hardware clock adjusting for timezone
-	dt.getAdjustedHardwareDateAndTime(datetime::GMT);
-	string=dt.getString();
-	printf("Adjusted Hardware Clock      : %s\n",string);
-	delete[] string;
+	dt.getAdjustedHardwareDateAndTime("GMT");
+	printf("Adjusted Hardware Clock      : %s\n",dt.getString());
 
 	// switch time zones
-	dt.adjustTimeZone(datetime::JST);
-	string=dt.getString();
-	printf("Adjusting time zone to Japanese time: %s\n",string);
-	delete[] string;
-
-	// list of time zones
-	printf("\nTimezones: \n");
-	for (int i=0; datetime::getTimeZoneAbbreviations()[i]; i++) {
-		printf("%s: %6d  ",
-			datetime::getTimeZoneAbbreviations()[i],
-			datetime::getTimeZoneOffsets()[i]);
-		if (!((i+1)%6)) {
-			printf("\n");
-		}
-	}
-	printf("\n");
+	dt.adjustTimeZone("PST");
+	printf("Adjusting time zone to Pacific time: %s\n",dt.getString());
 }

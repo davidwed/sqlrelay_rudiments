@@ -6,6 +6,8 @@
 
 #include <rudiments/private/config.h>
 
+#include <rudiments/dictionary.h>
+
 // The environment class provides methods for accessing and manipulating
 // environment variables.
 

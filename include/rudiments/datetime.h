@@ -6,6 +6,8 @@
 
 #include <rudiments/private/config.h>
 
+#include <rudiments/environment.h>
+
 #include <time.h>
 
 // The datetime class provides methods for converting date/time formats and
@@ -14,43 +16,9 @@
 class datetime {
 	public:
 
-		typedef enum {
-			GMT=0,	// Greenwich Mean Time
-			ECT,	// European Central Time
-			EET,	// European Eastern Time
-			ART,	// ???
-			EAT,	// Saudi Arabia
-			MET,	// Iran
-			NET,	// ???
-			PLT,	// West Asia
-			IST,	// India
-			BST,	// Central Asia
-			VST,	// Bangkok
-			CTT,	// China
-			JST,	// Japan
-			ACT,	// Central Australia
-			AET,	// Eastern Australia
-			SST,	// Central Pacific
-			NST,	// New Zealand
-			MIT,	// Samoa
-			HST,	// Hawaii
-			AST,	// Alaska
-			PST,	// Pacific Standard Time
-			PNT,	// Arizona
-			MST,	// Mountain Standard Time
-			CST,	// Central Standard Time
-			EST,	// Eastern Standard Time
-			IET,	// Indiana East
-			PRT,	// Atlantic Standard Time
-			CNT,	// Newfoundland
-			AGT,	// Eastern South America
-			BET,	// Eastern South America
-			CAT	// Azores
-		} tzone;
-
 		// if you need a quick conversion, use one of these methods
-		static char	*getString(time_t epoch);
-		static char	*getString(const tm *timestruct);
+		static char	*getString(time_t seconds);
+		static char	*getString(const struct tm *tmstruct);
 			// returns "mm/dd/yyyy hh:mm:ss TZN"
 			// Note that this method allocates a buffer to return
 			// the string in which must be deleted by the calling
@@ -58,8 +26,8 @@ class datetime {
 		static time_t	getEpoch(const char *datestring);
 			// parses "mm/dd/yyyy hh:mm:ss TZN" and returns the
 			// number of seconds since 1970.
-		static time_t	getEpoch(const tm *timestruct);
-			// converts "timestruct" to the number of seconds
+		static time_t	getEpoch(const struct tm *tmstruct);
+			// converts "tmstruct" to the number of seconds
 			// since 1970.
 
 
@@ -68,23 +36,23 @@ class datetime {
 			datetime();
 			~datetime();
 
-		int	initialize(const char *datestring);
-			// Parses "datestring" and sets the date and time
+		int	initialize(const char *tmstring);
+			// Parses "tmstring" and sets the date and time
 			// represented in the class to that time.
 			// Datestring must be "mm/dd/yyyy hh:mm:ss TZN".
 			//
 			// Returns 1 on success and 0 on failure.
-		int	initialize(time_t epoch);
-			// Processes "epoch" and sets the date and time
+		int	initialize(time_t seconds);
+			// Processes "seconds" and sets the date and time
 			// represented in the class to that time.
-			// Epoch is the number of seconds since 1970;
+			// "seconds" is the number of seconds since 1970;
 			// output by many standard time functions.
 			//
 			// Returns 1 on success and 0 on failure.
-		int	initialize(const tm *timestruct);
-			// Processes "timestruct" and sets the date and time
+		int	initialize(const struct tm *tmstruct);
+			// Processes "tmstruct" and sets the date and time
 			// represented in the class to that time.
-			// "timestruct" is a (struct tm *); output by 
+			// "tmstruct" is a (struct tm *); output by 
 			// many standard time functions.
 			//
 			// Returns 1 on success and 0 on failure.
@@ -95,7 +63,7 @@ class datetime {
 			// the date and time stored in the system clock.
 			//
 			// Returns 1 on success and 0 on failure.
-		int	getHardwareDateAndTime(tzone hwtz);
+		int	getHardwareDateAndTime(const char *hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
@@ -106,7 +74,7 @@ class datetime {
 			// clock is using.
 			//
 			// Returns 1 on success and 0 on failure.
-		int	getAdjustedHardwareDateAndTime(tzone hwtz);
+		int	getAdjustedHardwareDateAndTime(const char *hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
@@ -119,7 +87,7 @@ class datetime {
 			// and time currently represented in the class.
 			//
 			// Returns 1 on success and 0 on failure.
-		int	setHardwareDateAndTime(tzone hwtz);
+		int	setHardwareDateAndTime(const char *hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
@@ -146,9 +114,6 @@ class datetime {
 			// returns 1 if daylight savings time is currently
 			// in effect and 0 if it isn't
 
-		tzone	getTimeZone() const;
-			// returns the time zone
-
 		char	*getTimeZoneString() const;
 			// returns a 3 character string representing the
 			// time zone
@@ -156,9 +121,11 @@ class datetime {
 		long	getTimeZoneOffset() const;
 			// returns the offset from GMT (in seconds)
 
-		void	adjustTimeZone(tzone newtz);
-			// recalculates the time currently represented in the
-			// class to correspond to the time zone "newtz"
+		int	adjustTimeZone(const char *newtz);
+			// Recalculates the time currently represented in the
+			// class to correspond to the time zone "newtz".
+			//
+			// Returns 1 on success and 0 on failure.
 
 
 		// These methods allow you to add discrete time intervals to
@@ -180,7 +147,7 @@ class datetime {
 			// class instance is deleted.)
 		time_t	getEpoch() const;
 			// returns the number of seconds since 1970
-		tm	*getTm();
+		struct tm	*getTm();
 			// returns a pointer to the internal "struct tm"
 
 
