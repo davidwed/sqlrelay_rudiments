@@ -29,7 +29,7 @@ int unixsocket::passFileDescriptor(int descriptor) {
 
 	// must send at least 1 iovector with 1 byte of real data
 	struct iovec	iovector[1];
-	iovector[0].iov_base=(void *)" ";
+	iovector[0].iov_base=(IOV_BASE_TYPE)" ";
 	iovector[0].iov_len=sizeof(char);
 	messageheader.msg_iov=iovector;
 	messageheader.msg_iovlen=1;
@@ -93,7 +93,7 @@ int unixsocket::receiveFileDescriptor(int *descriptor) {
 	// so we'll receive that too
 	struct iovec	iovector[1];
 	char		ptr;
-	iovector[0].iov_base=&ptr;
+	iovector[0].iov_base=(IOV_BASE_TYPE)&ptr;
 	iovector[0].iov_len=sizeof(char);
 	messageheader.msg_iov=iovector;
 	messageheader.msg_iovlen=1;

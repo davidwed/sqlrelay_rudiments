@@ -5,6 +5,7 @@
 #define RUDIMENTS_INETSOCKET_H
 
 #include <netdb.h>
+#include <sys/types.h>
 #include <netinet/in.h>
 
 #include <rudiments/datatransport.h>
