@@ -71,10 +71,14 @@ bool datetime::initialize(const char *tmstring) {
 	}
 	sec=atoi(ptr);
 
-	// get the time zone
-	ptr=strchr(ptr,' ')+sizeof(char);
+	// get the time zone if it was provided
 	delete[] zone;
-	zone=(ptr && ptr[0])?strdup(ptr):NULL;
+	if ((ptr=strchr(ptr,' '))) {
+		ptr=ptr+sizeof(char);
+		zone=(ptr && ptr[0])?strdup(ptr):NULL;
+	} else {
+		zone=NULL;
+	}
 
 	// normalize, string and epoch
 	return normalizeBrokenDownTime(true);
