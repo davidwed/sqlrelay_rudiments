@@ -16,6 +16,12 @@ ifeq ($(INCLUDE_COMMANDLINE),1)
 	PRIVATEHEADERS += commandline.h commandlineinlines.h \
 				commandlineincludes.h
 endif
+ifeq ($(INCLUDE_CONNECTSTRING),1)
+	HEADERS += connectstring.h
+	PRIVATEHEADERS += connectstring.h connectstringinlines.h \
+				connectstringincludes.h
+endif
+ifeq ($(INCLUDE_DAEMONPROCESS),1)
 ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	HEADERS += daemonprocess.h
 	PRIVATEHEADERS += daemonprocess.h daemonprocessinlines.h \

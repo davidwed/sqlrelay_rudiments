@@ -8,9 +8,14 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 SRCS = 
 ifeq ($(INCLUDE_COMMANDLINE),1)
-	SRCS +=commandline.C
-	NLOBJS +=commandline.n.lo
-	PLOBJS +=commandline.p.lo
+	SRCS += commandline.C
+	NLOBJS += commandline.n.lo
+	PLOBJS += commandline.p.lo
+endif
+ifeq ($(INCLUDE_CONNECTSTRING),1)
+	SRCS += connectstring.C
+	NLOBJS += connectstring.n.lo
+	PLOBJS += connectstring.p.lo
 endif
 ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	SRCS += daemonprocess.C

@@ -1,6 +1,6 @@
 string class name conflicts with stl string class
 
-document filesystem, timezonefile classes
+document timezonefile classes
 
 a termios class would be nice
 a thread class would be nice
