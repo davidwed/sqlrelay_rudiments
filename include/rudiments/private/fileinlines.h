@@ -55,6 +55,7 @@ RUDIMENTS_INLINE bool file::lock(int method, short type, short whence,
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
+	// FIXME: if a signal interrupts this, we should retry
 	return !fcntl(fd,method,&lck);
 }
 
@@ -65,6 +66,7 @@ RUDIMENTS_INLINE bool file::checkLock(short type, short whence,
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
+	// FIXME: if a signal interrupts this, we should retry
 	bool	retval=(!fcntl(fd,F_SETLKW,&lck));
 	memcpy((void *)retlck,(void *)&lck,sizeof(flock));
 	return retval;
@@ -76,6 +78,7 @@ RUDIMENTS_INLINE bool file::unlock(short whence, off_t start, off_t len) {
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
+	// FIXME: if a signal interrupts this, we should retry
 	return !fcntl(fd,F_SETLK,&lck);
 }
 

@@ -12,6 +12,7 @@ these classes would be nice:
 	dirent/direct wrapper
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
+xmldom should support xpath
 xmldomnode should probably use list class
 should be able to validate an xml document against the dtd
 dtd class needs to store +/* child element modifiers
