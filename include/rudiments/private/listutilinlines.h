@@ -24,18 +24,22 @@ inline int listutil<datatype>::
 	}
 }
 
+template <>
 inline void listutil<char *>::print(char *data) const {
 	printf("%s\n",data);
 }
 
+template <>
 inline int listutil<char *>::compare(char *data1, char *data2) const {
 	return !strcmp(data1,data2);
 }
 
+template <>
 inline void listutil<char>::print(char data) const {
 	printf("%d\n",data);
 }
 
+template <>
 inline void listutil<int>::print(int data) const {
 	printf("%d\n",data);
 }
@@ -44,14 +48,17 @@ inline void listutil<short>::print(short data) const {
 	printf("%d\n",data);
 }
 
+template <>
 inline void listutil<long>::print(long data) const {
 	printf("%d\n",data);
 }
 
+template <>
 inline void listutil<float>::print(float data) const {
 	printf("%f\n",data);
 }
 
+template <>
 inline void listutil<double>::print(double data) const {
 	printf("%d\n",data);
 }

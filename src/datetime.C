@@ -145,6 +145,9 @@ int datetime::getHardwareDateAndTime() {
 		timestruct.tm_yday=rt.tm_yday;
 		timestruct.tm_isdst=rt.tm_isdst;
 		close(devrtc);
+		epoch=mktime(&timestruct);
+		delete[] timestring;
+		timestring=NULL;
 		return 1;
 	#else
 		return 0;
