@@ -3,7 +3,7 @@
 
 #include <rudiments/private/config.h>
 
-#include <rudiments/text.h>
+#include <rudiments/string.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -15,108 +15,108 @@ int main(int argv, const char **argc) {
 	printf("!%s!\n",buffer);
 
 	// trim the spaces off of the right hand side
-	text::rightTrim(buffer);
+	string::rightTrim(buffer);
 	printf("!%s!\n",buffer);
 
 	// trim the spaces off of the left hand side
-	text::leftTrim(buffer);
+	string::leftTrim(buffer);
 	printf("!%s!\n",buffer);
 
 	// strip the spaces out
 	strcpy(buffer,"   hello      there   buddy  ");
-	text::strip(buffer,' ');
+	string::strip(buffer,' ');
 	printf("!%s!\n",buffer);
 
 	// strip the "   " out
 	strcpy(buffer,"   hello       there  buddy  ");
-	text::strip(buffer,"   ");
+	string::strip(buffer,"   ");
 	printf("!%s!\n",buffer);
 
 	// convert buffer to uppercase
-	text::upper(buffer);
+	string::upper(buffer);
 	printf("!%s!\n",buffer);
 
 	// convert buffer to lowercase
-	text::lower(buffer);
+	string::lower(buffer);
 	printf("!%s!\n",buffer);
 
 	// http escape the buffer
-	char    *escbuffer=text::httpEscape("!@#$%^&*()hello-+");
+	char    *escbuffer=string::httpEscape("!@#$%^&*()hello-+");
 	printf("!@#$\\%^&*()hello-+  http escaped is  %s\n",escbuffer);
 	delete escbuffer;
 	
 	// evaluate a string to see if it's a number
-	if (text::isNumber("-100.5")) {
+	if (string::isNumber("-100.5")) {
 		printf("-100.5 is a number\n");
 	}
-	if (!text::isNumber("-100.5.10")) {
+	if (!string::isNumber("-100.5.10")) {
 		printf("-100.5.10 is not a number\n");
 	}
 	
 	// evaluate a string to see if it's an integer
-	if (text::isInteger("-100")) {
+	if (string::isInteger("-100")) {
 		printf("-100 is an integer\n");
 	}
-	if (!text::isInteger("-100.5")) {
+	if (!string::isInteger("-100.5")) {
 		printf("-100.5.10 is not an integer\n");
 	}
 
 	char	string[16];
 	strcpy(string,"     hello     ");
 	printf("|%s|\n",string);
-	text::leftJustify(string,15);
+	string::leftJustify(string,15);
 	printf("|%s|\n",string);
-	text::rightJustify(string,15);
+	string::rightJustify(string,15);
 	printf("|%s|\n",string);
 
 	strcpy(string,"     hello     ");
 	printf("|%s|\n",string);
-	text::rightJustify(string,15);
+	string::rightJustify(string,15);
 	printf("|%s|\n",string);
-	text::leftJustify(string,15);
+	string::leftJustify(string,15);
 	printf("|%s|\n",string);
 
 
 	strcpy(string,"hello          ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string," hello         ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"  hello        ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"   hello       ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"    hello      ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"     hello     ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"      hello    ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"       hello   ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"        hello  ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"         hello ");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 	strcpy(string,"          hello");
-	text::center(string,15);
+	string::center(string,15);
 	printf("|%s|\n",string);
 
-	printf("size of 1 is: %d\n",text::integerLength(1));
-	printf("size of 10 is: %d\n",text::integerLength(10));
-	printf("size of 100 is: %d\n",text::integerLength(100));
-	printf("size of 1000 is: %d\n",text::integerLength(1000));
-	printf("size of -1 is: %d\n",text::integerLength(-1));
-	printf("size of -10 is: %d\n",text::integerLength(-10));
-	printf("size of -100 is: %d\n",text::integerLength(-100));
-	printf("size of -1000 is: %d\n",text::integerLength(-1000));
+	printf("size of 1 is: %d\n",string::integerLength(1));
+	printf("size of 10 is: %d\n",string::integerLength(10));
+	printf("size of 100 is: %d\n",string::integerLength(100));
+	printf("size of 1000 is: %d\n",string::integerLength(1000));
+	printf("size of -1 is: %d\n",string::integerLength(-1));
+	printf("size of -10 is: %d\n",string::integerLength(-10));
+	printf("size of -100 is: %d\n",string::integerLength(-100));
+	printf("size of -1000 is: %d\n",string::integerLength(-1000));
 }
