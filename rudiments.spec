@@ -72,6 +72,7 @@ rm -rf %{buildroot}
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_bindir}/rudiments-config
+%{_libdir}/pkgconfig/rudiments.pc
 
 %files doc
 %{docdir}

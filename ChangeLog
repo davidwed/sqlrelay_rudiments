@@ -1,3 +1,6 @@
+0.26 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
+		patch
+
 0.25.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now
 	docs are installed in ${datadir}/doc/rudiments instead of

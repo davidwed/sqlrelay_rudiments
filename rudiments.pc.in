@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: rudiments
+Description: A C++ foundation class library.
+Version: @RUDIMENTS_VERSION@
+Requires:
+Libs: -L@libdir@ -lrudiments
+Cflags: -I@includedir@/rudiments

@@ -1,3 +1,5 @@
+top_builddir = .
+
 include config.mk
 
 PWD=$(shell pwd)
@@ -28,13 +30,18 @@ install-bin:
 install-doc:
 	cd doc; $(MAKE) install
 
-install: install-libs install-includes install-bin install-doc
+install-pc:
+	$(MKINSTALLDIRS) $(libdir)/pkgconfig
+	$(INSTALL) -m 0644 rudiments.pc $(libdir)/pkgconfig/rudiments.pc
+
+install: install-libs install-includes install-bin install-doc install-pc
 
 uninstall:
 	cd src; $(MAKE) uninstall
 	cd include; $(MAKE) uninstall
 	cd bin; $(MAKE) uninstall
 	cd doc; $(MAKE) uninstall
+	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
 unconfig: clean
 	$(RM) config.mk config.cache config.h config.log config.status include/rudiments/private/config.h include/rudiments/private/config.h.in~ features.mk
@@ -42,6 +49,7 @@ unconfig: clean
 	$(RM) libtool
 	$(RMTREE) autom4te.cache
 	$(RM) strip-comment-note
+	$(RM) rudiments.pc
 
 distclean: unconfig
 

@@ -25261,7 +25261,7 @@ echo "***** Output Files ***********"
           ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
 
 
-                                        ac_config_files="$ac_config_files config.mk bin/rudiments-config features.mk strip-comment-note"
+                                                  ac_config_files="$ac_config_files config.mk bin/rudiments-config features.mk strip-comment-note rudiments.pc"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -25792,6 +25792,7 @@ do
   "bin/rudiments-config" ) CONFIG_FILES="$CONFIG_FILES bin/rudiments-config" ;;
   "features.mk" ) CONFIG_FILES="$CONFIG_FILES features.mk" ;;
   "strip-comment-note" ) CONFIG_FILES="$CONFIG_FILES strip-comment-note" ;;
+  "rudiments.pc" ) CONFIG_FILES="$CONFIG_FILES rudiments.pc" ;;
   "include/rudiments/private/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/rudiments/private/config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
