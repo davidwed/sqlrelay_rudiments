@@ -293,6 +293,7 @@ CXXFLAGS="$SMALLCODE $CXXFLAGS"
 
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
+
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(SMALL_CODE,1,Use small rather than fast code)
 fi
@@ -341,6 +342,7 @@ FW_CHECK_OSX
 FW_CHECK_SO_EXT
 
 FW_CHECK_PIPE
+FW_CHECK_WNOLONGDOUBLE
 echo "******************************"
 
 

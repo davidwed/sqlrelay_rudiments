@@ -328,6 +328,22 @@ AC_SUBST(PIPE)
 ])
 
 
+
+dnl checks to see if -Wno-long-double option to gcc works or not
+AC_DEFUN([FW_CHECK_WNOLONGDOUBLE],
+[
+AC_MSG_CHECKING(for -Wno-long-double option)
+FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Wno-long-double],[],[],[WNOLONGDOUBLE="-Wno-long-double"],[WNOLONGDOUBLE=""])
+if ( test -n "$WNOLONGDOUBLE" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(WNOLONGDOUBLE)
+])
+
+
 dnl Determines what extension shared object files have
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
