@@ -38,6 +38,7 @@ int protocolentry::initialize(const char *protocolname) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		pe=NULL;
 		return ((pe=getprotobyname(protocolname))!=NULL);
 	#endif
@@ -70,6 +71,7 @@ int protocolentry::initialize(int number) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		pe=NULL;
 		return ((pe=getprotobynumber(number))!=NULL);
 	#endif

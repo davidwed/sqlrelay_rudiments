@@ -38,6 +38,7 @@ int groupentry::initialize(const char *groupname) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		return ((grp=getgrnam(groupname))!=NULL);
 	#endif
 }
@@ -68,6 +69,7 @@ int groupentry::initialize(gid_t groupid) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		return ((grp=getgrgid(groupid))!=NULL);
 	#endif
 }

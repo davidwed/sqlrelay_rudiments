@@ -10,17 +10,26 @@ int main(int argv, const char **argc) {
 
 	environment	env;
 
+	// print the environment variable "TEST"
 	printf("TEST=%s\n",env.getValue("TEST"));
+
+	// set the value of "TEST" to "value"
 	if (env.setValue("TEST","value")) {
 		printf("TEST=%s\n",env.getValue("TEST"));
 	} else {
 		printf("setValue() failed\n");
 	}
+
+	// set the value of "TEST" to "newvalue"
 	if (env.setValue("TEST","newvalue")) {
 		printf("TEST=%s\n",env.getValue("TEST"));
 	} else {
 		printf("setValue() failed\n");
 	}
+
+	// remove "TEST" from the environment
 	env.remove("TEST");
+
+	// print the (non-existent) environment variable "TEST"
 	printf("TEST=%s\n",env.getValue("TEST"));
 }

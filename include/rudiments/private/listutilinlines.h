@@ -56,7 +56,7 @@ inline void listutil<float>::print(float data) const {
 
 template <>
 inline void listutil<double>::print(double data) const {
-	printf("%d",data);
+	printf("%f",data);
 }
 
 template <class datatype>

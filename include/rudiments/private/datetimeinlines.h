@@ -106,32 +106,32 @@ RUDIMENTS_INLINE struct tm *datetime::getTm() {
 
 RUDIMENTS_INLINE void datetime::addSeconds(int seconds) {
 	timestruct->tm_sec=timestruct->tm_sec+seconds;
-	updateTime();
+	updateTimePreservingTimeZone();
 }
 
 RUDIMENTS_INLINE void datetime::addMinutes(int minutes) {
 	timestruct->tm_min=timestruct->tm_min+minutes;
-	updateTime();
+	updateTimePreservingTimeZone();
 }
 
 RUDIMENTS_INLINE void datetime::addHours(int hours) {
 	timestruct->tm_hour=timestruct->tm_hour+hours;
-	updateTime();
+	updateTimePreservingTimeZone();
 }
 
 RUDIMENTS_INLINE void datetime::addDays(int days) {
 	timestruct->tm_hour=timestruct->tm_yday+days;
-	updateTime();
+	updateTimePreservingTimeZone();
 }
 
 RUDIMENTS_INLINE void datetime::addMonths(int months) {
 	timestruct->tm_hour=timestruct->tm_mon+months;
-	updateTime();
+	updateTimePreservingTimeZone();
 }
 
 RUDIMENTS_INLINE void datetime::addYears(int years) {
 	timestruct->tm_hour=timestruct->tm_year+years;
-	updateTime();
+	updateTimePreservingTimeZone();
 }
 
 RUDIMENTS_INLINE char *datetime::getString(time_t seconds) {

@@ -26,9 +26,17 @@ class datetime {
 		static time_t	getEpoch(const char *datestring);
 			// parses "mm/dd/yyyy hh:mm:ss TZN" and returns the
 			// number of seconds since 1970.
+			//
+			// Note that TZN must be a valid timezone.  Otherwise
+			// GMT is assumed.
+			//
 		static time_t	getEpoch(const struct tm *tmstruct);
 			// converts "tmstruct" to the number of seconds
 			// since 1970.
+			//
+			// Note that in "tmstruct", the timezone and GMT offset
+			// must be set to valid values.  Otherwise GMT is
+			// assumed.
 
 
 		// if you need anything other than a quick conversion,
@@ -40,6 +48,9 @@ class datetime {
 			// Parses "tmstring" and sets the date and time
 			// represented in the class to that time.
 			// Datestring must be "mm/dd/yyyy hh:mm:ss TZN".
+			//
+			// Note that TZN must be a valid timezone.  Otherwise
+			// GMT is assumed.
 			//
 			// Returns 1 on success and 0 on failure.
 		int	initialize(time_t seconds);
@@ -54,6 +65,10 @@ class datetime {
 			// represented in the class to that time.
 			// "tmstruct" is a (struct tm *); output by 
 			// many standard time functions.
+			//
+			// Note that in "tmstruct", the timezone and GMT offset
+			// must be set to valid values.  Otherwise GMT is
+			// assumed.
 			//
 			// Returns 1 on success and 0 on failure.
 

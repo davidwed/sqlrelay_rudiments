@@ -88,14 +88,13 @@ int datetime::initialize(time_t seconds) {
 		if (!localtime_r(&seconds,timestruct)) {
 			return 0;
 		}
+		// update time will attach the current timezone
+		return updateTime();
 	#else
+		// should protect this with a mutex
 		struct tm	*lcltm=localtime(&seconds);
-		if (!lcltm || !copyStructTm(lcltm,timestruct)) {
-			return 0;
-		}
+		return (lcltm && copyStructTm(lcltm,timestruct));
 	#endif
-
-	return updateTime();
 }
 
 int datetime::initialize(const struct tm *tmstruct) {
@@ -103,9 +102,7 @@ int datetime::initialize(const struct tm *tmstruct) {
 	initTimeString();
 	initTimeStruct();
 
-	copyStructTm(tmstruct,timestruct);
-
-	return updateTime();
+	return copyStructTm(tmstruct,timestruct);
 }
 
 char *datetime::getString() {
@@ -124,6 +121,7 @@ int datetime::setSystemDateAndTime() {
 	timeval	tv;
 	tv.tv_sec=epoch;
 	tv.tv_usec=0;
+	// should set the time zone too...
 	return !settimeofday(&tv,NULL);
 }
 
@@ -170,16 +168,7 @@ int datetime::getHardwareDateAndTime(const char *hwtz) {
 }
 
 int datetime::getAdjustedHardwareDateAndTime(const char *hwtz) {
-
-	if (!getHardwareDateAndTime(hwtz)) {
-		return 0;
-	}
-
-	datetime	dt;
-	dt.getSystemDateAndTime();
-
-	// adjust the current timezone to the timezone of the system clock
-	return adjustTimeZone(dt.getTimeZoneString());
+	return (getHardwareDateAndTime(hwtz) && adjustTimeZone(NULL));
 }
 
 int datetime::setHardwareDateAndTime(const char *hwtz) {
@@ -222,23 +211,39 @@ int datetime::setHardwareDateAndTime(const char *hwtz) {
 
 int datetime::adjustTimeZone(const char *newtz) {
 
-	initTimeString();
-	timestruct->tm_sec=timestruct->tm_sec-
-				getTimeZoneOffset()+
-					getTimeZoneOffset(newtz);
+	// this should be surrounded by a mutex...
 
-	// setTimeZone() will call updateTime()
-	// so we don't have to do that here
-	return (!setTimeZone(newtz));
+	// change the time zone
+	char	*oldzone;
+	if (newtz) {
+		if (!setTimeZoneEnvVar(newtz,&oldzone)) {
+			return 0;
+		}
+	}
+
+	initTimeString();
+	initTimeStruct();
+
+	// get a struct tm relative to this new time zone
+	//	(note that this must use localtime, not
+	//		localtime_r or the timezone will not be set)
+	struct tm	*lcltm=localtime(&epoch);
+	if (!lcltm) {
+		return 0;
+	}
+
+	// replace the current struct tm the new struct tm
+	if (!copyStructTm(lcltm,timestruct)) {
+		return 0;
+	}
+
+	if (newtz) {
+		restoreTimeZoneEnvVar(oldzone);
+	}
+	return 1;
 }
 
 int datetime::setTimeZone(const char *tz) {
-
-	// this whole function should be surrounded by a mutex
-
-	// change the current timezone
-	char	*oldtz;
-	setTimeZoneEnvVar(tz,&oldtz);
 
 	// create a copy of the current struct tm and use it from now on
 	//
@@ -264,6 +269,12 @@ int datetime::setTimeZone(const char *tz) {
 	delete timestruct;
 	timestruct=newtimestruct;
 
+	// this should be surrounded by a mutex...
+
+	// change the current timezone
+	char	*oldtz;
+	setTimeZoneEnvVar(tz,&oldtz);
+
 	// call mktime to fill in the zone/offset and set the epoch
 	int	retval=updateTime();
 
@@ -275,11 +286,11 @@ int datetime::setTimeZone(const char *tz) {
 
 long datetime::getTimeZoneOffset(const char *zone) {
 
-	// this whole function should be surrounded by a mutex
+	// this should be surrounded by a mutex...
 
 	// change the current timezone
-	char	*oldtz;
-	setTimeZoneEnvVar(zone,&oldtz);
+	char	*oldzone;
+	setTimeZoneEnvVar(zone,&oldzone);
 
 	// set "timezone" (a stinkin' global variable)
 	tzset();
@@ -290,7 +301,7 @@ long datetime::getTimeZoneOffset(const char *zone) {
 	long	retval=-1*timezone;
 
 	// restore the original timezone
-	restoreTimeZoneEnvVar(oldtz);
+	restoreTimeZoneEnvVar(oldzone);
 
 	return retval;
 }
@@ -299,30 +310,34 @@ int	datetime::updateTime() {
 	return ((epoch=mktime(timestruct))!=-1);
 }
 
+int	datetime::updateTimePreservingTimeZone() {
+	// FIXME: What to do if oldtm doesn't
+	// have it's tm_zone and tm_gmtoff set?
+	char	*currentzone=strdup(getTimeZoneString());
+	int	retval=setTimeZone(currentzone);
+	delete[] currentzone;
+	return retval;
+}
+
 int	datetime::copyStructTm(const struct tm *oldtm, struct tm *newtm) {
 
-	// copy parts
-	newtm->tm_mon=oldtm->tm_mon;
-	newtm->tm_mday=oldtm->tm_mday;
-	newtm->tm_year=oldtm->tm_year;
-	newtm->tm_hour=oldtm->tm_hour;
-	newtm->tm_min=oldtm->tm_min;
-	newtm->tm_sec=oldtm->tm_sec;
-	newtm->tm_wday=0;
-	newtm->tm_yday=0;
-	newtm->tm_isdst=oldtm->tm_isdst;
+	// what we want to do here is copy oldtm to newtm and set epoch,
+	// without modifying the timezone stored in oldtm or newtm...
 
-	// this whole function should be surrounded by a mutex
+	// get the epoch here, we don't care if temptm's zone gets screwed up
+	struct tm	temptm;
+	memcpy(&temptm,oldtm,sizeof(struct tm));
+	time_t	tempepoch=mktime(&temptm);
+	if (tempepoch==-1) {
+		return 0;
+	}
+	epoch=tempepoch;
 
-	// get the current timezone
-	char	*oldtz;
-	setTimeZoneEnvVar(getTimeZoneString(oldtm),&oldtz);
+	// now copy newtm into oldtm
+	memcpy(newtm,oldtm,sizeof(struct tm));
 
-	// call mktime to fill in the zone/offset
-	int	retval=updateTime();
+	// FIXME: what should happen here if oldtm's timezone/offset were
+	// not set?
 
-	// restore the original timezone
-	restoreTimeZoneEnvVar(oldtz);
-
-	return retval;
+	return 1;
 }

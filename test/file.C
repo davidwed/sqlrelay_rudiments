@@ -8,16 +8,21 @@
 
 int main(int argv, const char **argc) {
 
+	// remove the file (in case it already exists)
 	unlink("testfile");
 
+	// create a new file called "testfile" with rw-rw---- permissions
+	// and initial contents "hello"
 	file	fl;
 	fl.create("testfile",permissions::evalPermString("rw-rw----"),"hello");
 
 	printf("testfile:\n");
 
+	// display the permissions of the file
 	mode_t	mode=fl.getPermissions();
 	printf("	permissions: %s\n",permissions::evalPermOctal(mode));
 
+	// get the 
 	uid_t	uid=fl.getOwnerUserId();
 	char	*username;
 	passwdentry::getName(uid,&username);

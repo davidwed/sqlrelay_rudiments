@@ -9,6 +9,12 @@
 
 int main(int argv, const char **argc) {
 
+	// set current time zone to America/New_York
+	printf("setting TZ=America/New_York...\n");
+	environment	env;
+	env.setValue("TZ","America/New_York");
+	//env.setValue("TZ","EST");
+
 	// get the current date
 	datetime	dt;
 	dt.getSystemDateAndTime();
@@ -51,6 +57,6 @@ int main(int argv, const char **argc) {
 	printf("Adjusted Hardware Clock      : %s\n",dt.getString());
 
 	// switch time zones
-	dt.adjustTimeZone("PST");
-	printf("Adjusting time zone to Pacific time: %s\n",dt.getString());
+	dt.adjustTimeZone("MST");
+	printf("Adjusting time zone to Mountain time: %s\n",dt.getString());
 }

@@ -61,4 +61,32 @@ int main(int argv, const char **argc) {
 	numdict.removeData(1);
 	numdict.print();
 	printf("\n");
+
+	dictionary<double,char *>	doubledict;
+
+	doubledict.setData(1.1,"one point one");
+	doubledict.setData(2.2,"two point two");
+	doubledict.setData(3.3,"three point three");
+	doubledict.setData(4.4,"four point four");
+
+	printf("length: %d\n",doubledict.getList()->getLength());
+
+	doubledict.print();
+	printf("\n");
+
+	doubledict.removeData(3.3);
+	doubledict.print();
+	printf("\n");
+
+	doubledict.removeData(2.2);
+	doubledict.print();
+	printf("\n");
+
+	doubledict.removeData(4.4);
+	doubledict.print();
+	printf("\n");
+
+	doubledict.removeData(1.1);
+	doubledict.print();
+	printf("\n");
 }

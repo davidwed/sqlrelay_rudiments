@@ -37,6 +37,7 @@ int passwdentry::initialize(const char *username) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		return ((pwd=getpwnam(username))!=NULL);
 	#endif
 }
@@ -67,6 +68,7 @@ int passwdentry::initialize(uid_t userid) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		return ((pwd=getpwuid(userid))!=NULL);
 	#endif
 }

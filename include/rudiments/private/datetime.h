@@ -12,6 +12,7 @@
 		long	getTimeZoneOffset(const char *zone);
 		char	*getTimeZoneString(const struct tm *tmstruct) const;
 		int	updateTime();
+		int	updateTimePreservingTimeZone();
 		int	copyStructTm(const struct tm *oldtm, struct tm *newtm);
 
 		int	setTimeZoneEnvVar(const char *zone, char **oldzone);

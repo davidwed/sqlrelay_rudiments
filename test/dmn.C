@@ -12,6 +12,7 @@
 
 daemonprocess	*dmn;
 
+// define a function to shut down the process cleanly
 RETSIGTYPE	shutDown() {
 
 	printf("shutting down\n");
@@ -24,10 +25,17 @@ RETSIGTYPE	shutDown() {
 
 int main(int argv, const char **argc) {
 
-	// launch the listener
 	dmn=new daemonprocess();
-	dmn->handleShutDown((RETSIGTYPE *)shutDown);
 
+	// set up signal handlers for clean shutdown
+	dmn->handleShutDown((RETSIGTYPE *)shutDown);
+	dmn->handleCrash((RETSIGTYPE *)shutDown);
+
+	// change the user/group that the daemon is running as
+	dmn->runAsUser("nobody");
+	dmn->runAsGroup("nobody");
+
+	// make sure that only one instance is running
 	int	pid=dmn->checkForPidFile("/tmp/dmn.pidfile");
 	if (pid>-1) {
 		printf("Sorry, an instance of this daemon is already running with process id: %d\n",pid);
@@ -35,9 +43,14 @@ int main(int argv, const char **argc) {
 		exit(0);
 	}
 
+	// detach from the controlling terminal
 	dmn->detach();
+
+	// create a pid file which is used to make sure that only one instance
+	// is running and can also be used to kill the process
 	dmn->createPidFile("/tmp/dmn.pidfile",permissions::ownerReadWrite());
 
+	// loop, printing "looping..." once per second
 	for (;;) {
 		printf("looping...\n");
 		sleep(1);

@@ -39,6 +39,7 @@ int hostentry::initialize(const char *hostname) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		he=NULL;
 		return ((he=gethostbyname(hostname))!=NULL);
 	#endif
@@ -72,6 +73,7 @@ int hostentry::initialize(const char *address, int len, int type) {
 		}
 		return 0;
 	#else
+		// should protect this with a mutex...
 		he=NULL;
 		return ((he=gethostbyaddr(address,len,type))!=NULL);
 	#endif
