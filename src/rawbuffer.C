@@ -1,3 +1,6 @@
+// Copyright (c) 2004 David Muse
+// See the COPYING file for more information
+
 #include <rudiments/rawbuffer.h>
 
 void *rawbuffer::copy(void *dest, const void *src, size_t size) {

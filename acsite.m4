@@ -293,6 +293,7 @@ dnl sets the substitution variable PTHREADLIB
 AC_DEFUN([FW_CHECK_PTHREAD],
 [
 
+HAS_THREADS="no"
 if ( test "$ENABLE_RUDIMENTS_THREADS" = "yes" )
 then
 
@@ -350,13 +351,16 @@ then
 	fi
 
 	AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
+	HAS_THREADS="yes"
 
 else
 
 	echo "disabled"
+	HAS_THREADS="yes"
 
 fi
 
+AC_SUBST(HAS_THREADS)
 AC_SUBST(PTHREADINCLUDES)
 AC_SUBST(PTHREADLIB)
 ])

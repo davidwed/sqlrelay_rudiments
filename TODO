@@ -1,5 +1,6 @@
 use rawbuffer class intstead of mem*()
 use memorymap class intstead of mmap*()
+use mutex class instead of pthread_mutex_*()
 
 solaris:
 	can't find pcre or openssl
@@ -59,7 +60,6 @@ implement these classes:
 	loginrecord
 	messagequeue
 	thread
-	mutex
 	sslcontext
 	table (dynamic 2d array)
 	generic parser/lexer classes, use them for xmlsax
@@ -70,6 +70,7 @@ tests for:
 	math
 	rawbuffer
 	memorymap
+	mutex
 
 --------------------------------------------------------------------------------
 

@@ -194,6 +194,10 @@ ifeq ($(INCLUDE_MEMORYMAP),1)
 	SRCS += memorymap.C
 	LOBJS += memorymap.lo
 endif
+ifeq ($(INCLUDE_MUTEX),1)
+	SRCS += mutex.C
+	LOBJS += mutex.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)

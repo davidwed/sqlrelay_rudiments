@@ -214,7 +214,11 @@ ifeq ($(INCLUDE_RAWBUFFER),1)
 endif
 ifeq ($(INCLUDE_MEMORYMAP),1)
 	HEADERS += memorymap.h
-	PRIVATEHEADERS += memorymap.h
+	PRIVATEHEADERS += memorymapincludes.h memorymap.h
+endif
+ifeq ($(INCLUDE_MUTEX),1)
+	HEADERS += mutex.h
+	PRIVATEHEADERS += mutexincludes.h mutex.h
 endif
 
 
