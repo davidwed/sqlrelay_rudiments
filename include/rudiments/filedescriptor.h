@@ -21,9 +21,9 @@ class filedescriptor {
 				// called.
 
 
-		virtual int	close();
+		virtual bool	close();
 				// Closes the file descriptor.
-				// Returns 1 on success and 0 on failure.
+				// Returns true on success and false on failure.
 
 		virtual int	getFileDescriptor() const;
 				// Returns the file descriptor.
@@ -34,7 +34,7 @@ class filedescriptor {
 
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were
-		// successfully written.
+		// successfully written or -1 if an error occurred.
 		virtual ssize_t	write(unsigned short number);
 				// Write "number" to the file descriptor.
 		virtual ssize_t	write(unsigned long number);
@@ -75,7 +75,8 @@ class filedescriptor {
 		// Write methods - write data to the file descriptor with a
 		// timeout of "sec" seconds and "usec" microseconds.
 		// These methods return the number of bytes that were
-		// successfully written or -1 if a timeout occurred.
+		// successfully written, -1 if an error occurred or -2 if a
+		// timeout occurred.
 		virtual ssize_t	write(unsigned short number,
 							long sec, long usec);
 				// Write "number" to the file descriptor.
@@ -122,7 +123,7 @@ class filedescriptor {
 
 		// Read methods - read data from the file descriptor.
 		// These methods return the number of bytes that were
-		// successfully read.
+		// successfully read or -1 if an error occurred.
 		virtual ssize_t	read(unsigned short *buffer);
 				// Reads sizeof(unsigned short) bytes
 				// from the file descriptor into "buffer".
@@ -166,7 +167,8 @@ class filedescriptor {
 		// Read methods - read data from the file descriptor with a
 		// timeout of "sec" seconds and "usec" microseconds.
 		// These methods return the number of bytes that were
-		// successfully read or -1 if a timeout occurred.
+		// successfully read, -1 if an error occurred or -2 if a
+		// timeout occurred.
 		virtual ssize_t	read(unsigned short *buffer,
 							long sec, long usec);
 				// Reads sizeof(unsigned short) bytes

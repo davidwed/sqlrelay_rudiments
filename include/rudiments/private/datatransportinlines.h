@@ -143,9 +143,6 @@ RUDIMENTS_INLINE ssize_t datatransport::read(unsigned short *buffer,
 
 RUDIMENTS_INLINE ssize_t datatransport::read(unsigned long *buffer,
 							long sec, long usec) {
-	if (safeSelect(sec,usec,1,0)==-1) {
-		return -1;
-	}
 	unsigned long	temp;
 	int	retval=(int)safeRead((void *)&temp,
 					sizeof(unsigned long),sec,usec);

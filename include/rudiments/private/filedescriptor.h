@@ -7,7 +7,7 @@
 							long sec, long usec);
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
 							long sec, long usec);
-		virtual	ssize_t	safeSelect(long sec, long usec,
+		virtual	int	safeSelect(long sec, long usec,
 							int read, int write);
 
 		int	fd;

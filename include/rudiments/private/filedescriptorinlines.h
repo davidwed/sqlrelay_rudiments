@@ -267,12 +267,12 @@ RUDIMENTS_INLINE ssize_t filedescriptor::read(void *buffer, size_t size,
 	return safeRead(buffer,size,sec,usec);
 }
 
-RUDIMENTS_INLINE int filedescriptor::close() {
+RUDIMENTS_INLINE bool filedescriptor::close() {
 	if (::close(fd)==-1) {
-		return 0;
+		return false;
 	}
 	fd=-1;
-	return 1;
+	return true;
 }
 
 RUDIMENTS_INLINE void filedescriptor::retryInterruptedReads() {

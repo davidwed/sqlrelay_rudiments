@@ -20,7 +20,7 @@ class datatransport : public filedescriptor {
 
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were
-		// successfully written.
+		// successfully written or -1 if an error occurred.
 		virtual ssize_t	write(unsigned short number);
 				// Converts "number" to network byte order
 				// and writes it to the file descriptor.
@@ -49,7 +49,8 @@ class datatransport : public filedescriptor {
 		// Write methods - write data to the file descriptor with a
 		// timeout of "sec" seconds and "usec" microseconds.
 		// These methods return the number of bytes that were
-		// successfully written or -1 if a timeout occurred.
+		// successfully written, -1 if an error occurred or -2 if a
+		// timeout occurred.
 		virtual ssize_t	write(unsigned short number,
 							long sec, long usec);
 				// Converts "number" to network byte order
@@ -81,7 +82,7 @@ class datatransport : public filedescriptor {
 
 		// Read methods - read data from the file descriptor.
 		// These methods return the number of bytes that were
-		// successfully read.
+		// successfully read or -1 if an error occurred.
 		virtual ssize_t	read(unsigned short *buffer);
 				// Reads sizeof(unsigned short) bytes
 				// from the file descriptor into "buffer" and
@@ -115,7 +116,8 @@ class datatransport : public filedescriptor {
 		// Read methods - read data from the file descriptor with a
 		// timeout of "sec" seconds and "usec" microseconds.
 		// These methods return the number of bytes that were
-		// successfully read or -1 if a timeout occurred.
+		// successfully read, -1 if an error occurred or -2 if a
+		// timeout occurred.
 		virtual ssize_t	read(unsigned short *buffer,
 							long sec, long usec);
 				// Reads sizeof(unsigned short) bytes

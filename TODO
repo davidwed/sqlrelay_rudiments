@@ -1,5 +1,7 @@
 string class name conflicts with stl string class - rename to charstring?
 
+make some methods return bool that return int now
+
 these classes would be nice:
 	table
 	termios
