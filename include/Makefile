@@ -29,9 +29,12 @@ ifeq ($(INCLUDE_DATATRANSPORT),1)
 					datatransportfactoryincludes.h
 endif
 ifeq ($(INCLUDE_DATETIME),1)
-	HEADERS += datetime.h timezonefile.h
-	PRIVATEHEADERS += datetime.h datetimeincludes.h \
-				timezonefile.h 
+	HEADERS += datetime.h
+	PRIVATEHEADERS += datetime.h datetimeincludes.h
+endif
+ifeq ($(INCLUDE_TIMEZONEFILE),1)
+	HEADERS += timezonefile.h
+	PRIVATEHEADERS += timezonefile.h 
 endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h

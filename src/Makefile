@@ -22,6 +22,10 @@ ifeq ($(INCLUDE_DATETIME),1)
 	SRCS += datetime.C timezonefile.C
 	LOBJS += datetime.lo timezonefile.lo
 endif
+ifeq ($(INCLUDE_TIMEZONEFILE),1)
+	SRCS += timezonefile.C
+	LOBJS += timezonefile.lo
+endif
 ifeq ($(INCLUDE_DTD),1)
 	SRCS += dtd.C
 	LOBJS += dtd.lo
