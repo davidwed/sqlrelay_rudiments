@@ -12,6 +12,7 @@
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+#include <stdio.h>
 
 connectiondata::~connectiondata() {
 	connectiondatanode	*current=first;
@@ -72,4 +73,12 @@ connectiondatanode *connectiondata::findNode(const char *key) const {
 		}
 	}
 	return NULL;
+}
+
+void connectiondata::print() const {
+	connectiondatanode	*current=first;
+	while(current) {
+		printf("%s=%s\n",current->key,current->value);
+		current=current->next;
+	}
 }

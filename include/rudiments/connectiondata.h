@@ -21,6 +21,8 @@ class connectiondata {
 		char	*getKey(int index) const;
 		char	*getValue(int index) const;
 
+		void	print() const;
+
 	#include <rudiments/private/connectiondata.h>
 };
 
