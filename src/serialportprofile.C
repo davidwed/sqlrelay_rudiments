@@ -11,14 +11,19 @@
 
 void serialportprofile::inputMode(serialportprofile::inputmode_t inputmode) {
 	if (inputmode==cannonical) {
-		tio.c_lflag|=(ICANON|ECHO|ECHOE);
+		canonicalInput(true);
+		echoInput(true);
+		echoErase(true);
 	} else {
-		tio.c_lflag&=~(ICANON|ECHO|ECHOE);
+		canonicalInput(false);
+		echoInput(false);
+		echoErase(false);
 	}
 }
 
 serialportprofile::inputmode_t serialportprofile::inputMode() {
-	return (tio.c_lflag&(ICANON|ECHO|ECHOE))?cannonical:raw;
+	return (canonicalInput() && echoInput() && echoErase())?
+							cannonical:raw;
 }
 
 void serialportprofile::evalOptionsString(const char *string) {
