@@ -188,9 +188,9 @@ ifeq ($(INCLUDE_XMLSAX),1)
 	HEADERS += xmlsax.h
 	PRIVATEHEADERS += xmlsax.h xmlsaxincludes.h
 endif
-ifeq ($(INCLUDE_TIMER),1)
-	HEADERS += timer.h
-	PRIVATEHEADERS += timer.h timerincludes.h
+ifeq ($(INCLUDE_INTERVALTIMER),1)
+	HEADERS += intervaltimer.h
+	PRIVATEHEADERS += intervaltimer.h intervaltimerincludes.h
 endif
 
 

@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/config.h>
-#include <rudiments/timer.h>
+#include <rudiments/intervaltimer.h>
 
 #include <stdlib.h>
 #include <errno.h>
@@ -15,22 +15,22 @@
 	#include <unistd.h>
 #endif
 
-timer::timer(int which) {
+intervaltimer::intervaltimer(int which) {
 	this->which=which;
 }
 
-bool timer::setTimer(long seconds) {
+bool intervaltimer::setTimer(long seconds) {
 	return setTimer(seconds,0);
 }
 
-bool timer::setTimer(long seconds, long microseconds) {
+bool intervaltimer::setTimer(long seconds, long microseconds) {
 	timeval	value;
 	value.tv_sec=seconds;
 	value.tv_usec=microseconds;
 	return setTimer(&value);
 }
 
-bool timer::setTimer(timeval *value) {
+bool intervaltimer::setTimer(timeval *value) {
 	itimerval	values;
 	values.it_interval.tv_sec=0;
 	values.it_interval.tv_usec=0;
@@ -39,24 +39,24 @@ bool timer::setTimer(timeval *value) {
 	return setTimer(&values);
 }
 
-bool timer::setTimer(itimerval *values) {
+bool intervaltimer::setTimer(itimerval *values) {
 	itimerval	oldvalues;
 	return setTimer(values,&oldvalues);
 }
 
-bool timer::setTimer(itimerval *values, itimerval *oldvalues) {
+bool intervaltimer::setTimer(itimerval *values, itimerval *oldvalues) {
 	return !setitimer(which,values,oldvalues);
 }
 
-bool timer::cancelTimer() {
+bool intervaltimer::cancelTimer() {
 	return setTimer((long)0,(long)0);
 }
 
-bool timer::getTimeRemaining(long *seconds) {
+bool intervaltimer::getTimeRemaining(long *seconds) {
 	return getTimeRemaining(seconds,NULL);
 }
 
-bool timer::getTimeRemaining(long *seconds, long *microseconds) {
+bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) {
 	timeval	value;
 	bool	retval=getTimeRemaining(&value);
 	if (seconds) {
@@ -68,7 +68,7 @@ bool timer::getTimeRemaining(long *seconds, long *microseconds) {
 	return retval;
 }
 
-bool timer::getTimeRemaining(timeval *value) {
+bool intervaltimer::getTimeRemaining(timeval *value) {
 	itimerval	values;
 	bool	retval=getitimer(which,&values);
 	value->tv_sec=values.it_value.tv_sec;
@@ -76,11 +76,11 @@ bool timer::getTimeRemaining(timeval *value) {
 	return retval;
 }
 
-bool timer::getInterval(long *seconds) {
+bool intervaltimer::getInterval(long *seconds) {
 	return getInterval(seconds,NULL);
 }
 
-bool timer::getInterval(long *seconds, long *microseconds) {
+bool intervaltimer::getInterval(long *seconds, long *microseconds) {
 	timeval	value;
 	bool	retval=getInterval(&value);
 	if (seconds) {
@@ -92,7 +92,7 @@ bool timer::getInterval(long *seconds, long *microseconds) {
 	return retval;
 }
 
-bool timer::getInterval(timeval *value) {
+bool intervaltimer::getInterval(timeval *value) {
 	itimerval	values;
 	bool	retval=getitimer(which,&values);
 	value->tv_sec=values.it_interval.tv_sec;
@@ -100,18 +100,18 @@ bool timer::getInterval(timeval *value) {
 	return retval;
 }
 
-bool timer::getTimer(itimerval *values) {
+bool intervaltimer::getTimer(itimerval *values) {
 	return !getitimer(which,values);
 }
 
-bool timer::sleep(long seconds) {
+bool intervaltimer::sleep(long seconds) {
 	timespec	nanotimetosleep;
 	nanotimetosleep.tv_sec=seconds;
 	nanotimetosleep.tv_nsec=0;
 	return nanosleep(&nanotimetosleep);
 }
 
-bool timer::sleep(long seconds, long *remainingseconds) {
+bool intervaltimer::sleep(long seconds, long *remainingseconds) {
 	timespec	nanotimetosleep;
 	nanotimetosleep.tv_sec=seconds;
 	nanotimetosleep.tv_nsec=0;
@@ -121,14 +121,14 @@ bool timer::sleep(long seconds, long *remainingseconds) {
 	return retval;
 }
 
-bool timer::microsleep(long seconds, long microseconds) {
+bool intervaltimer::microsleep(long seconds, long microseconds) {
 	timeval		timetosleep;
 	timetosleep.tv_sec=seconds;
 	timetosleep.tv_usec=microseconds;
 	return microsleep(&timetosleep);
 }
 
-bool timer::microsleep(long seconds, long microseconds,
+bool intervaltimer::microsleep(long seconds, long microseconds,
 			long *secondsremaining, long *microsecondsremaining) {
 	timeval		timetosleep;
 	timetosleep.tv_sec=seconds;
@@ -144,14 +144,14 @@ bool timer::microsleep(long seconds, long microseconds,
 	return retval;
 }
 
-bool timer::microsleep(timeval *timetosleep) {
+bool intervaltimer::microsleep(timeval *timetosleep) {
 	timespec	nanotimetosleep;
 	nanotimetosleep.tv_sec=timetosleep->tv_sec;
 	nanotimetosleep.tv_nsec=timetosleep->tv_usec*1000;
 	return nanosleep(&nanotimetosleep);
 }
 
-bool timer::microsleep(timeval *timetosleep, timeval *timeremaining) {
+bool intervaltimer::microsleep(timeval *timetosleep, timeval *timeremaining) {
 	timespec	nanotimetosleep;
 	nanotimetosleep.tv_sec=timetosleep->tv_sec;
 	nanotimetosleep.tv_nsec=timetosleep->tv_usec*1000;
@@ -162,14 +162,14 @@ bool timer::microsleep(timeval *timetosleep, timeval *timeremaining) {
 	return retval;
 }
 
-bool timer::nanosleep(long seconds, long nanoseconds) {
+bool intervaltimer::nanosleep(long seconds, long nanoseconds) {
 	timespec	timetosleep;
 	timetosleep.tv_sec=seconds;
 	timetosleep.tv_nsec=nanoseconds;
 	return nanosleep(&timetosleep);
 }
 
-bool timer::nanosleep(long seconds, long nanoseconds,
+bool intervaltimer::nanosleep(long seconds, long nanoseconds,
 			long *secondsremaining, long *nanosecondsremaining) {
 	timespec	timetosleep;
 	timetosleep.tv_sec=seconds;
@@ -185,7 +185,7 @@ bool timer::nanosleep(long seconds, long nanoseconds,
 	return retval;
 }
 
-bool timer::nanosleep(timespec *timetosleep) {
+bool intervaltimer::nanosleep(timespec *timetosleep) {
 
 	timespec	sleeptime;
 	sleeptime.tv_sec=timetosleep->tv_sec;
@@ -201,7 +201,7 @@ bool timer::nanosleep(timespec *timetosleep) {
 	return true;
 }
 
-bool timer::nanosleep(timespec *timetosleep, timespec *timeremaining) {
+bool intervaltimer::nanosleep(timespec *timetosleep, timespec *timeremaining) {
 
 	#ifdef HAVE_NANOSLEEP
 	return !::nanosleep(timetosleep,timeremaining);

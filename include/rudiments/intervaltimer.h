@@ -1,18 +1,19 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_TIMER_H
-#define RUDIMENTS_TIMER_H
+#ifndef RUDIMENTS_INTERVALTIMER_H
+#define RUDIMENTS_INTERVALTIMER_H
 
-#include <rudiments/private/timerincludes.h>
+#include <rudiments/private/intervaltimerincludes.h>
 
-// The timer class provides methods for interfacing with timers and
-// suspending execution.
+// The intervaltimer class provides methods for interfacing with
+// interval timers.
 
-class timer {
+class intervaltimer {
 	public:
-			timer(int which);
-			// Initialize the timer.  "which" must be one of:
+			intervaltimer(int which);
+			// Initialize the interval timer.  "which" must be one
+			// of:
 			// ITIMER_REAL - decrements in real time, raises SIGALRM
 			// ITIMER_VIRTUAL - decrements when the process is
 			//			executing but not during system
@@ -22,8 +23,8 @@ class timer {
 			//			calls, raises SIGPROF
 
 
-		// These methods allow you set the timer.  They return true on
-		// success and false on failure.
+		// These methods allow you set the interval timer.  They return
+		// true on success and false on failure.
 		bool	setTimer(long seconds);
 			// Set the timer to expire in "seconds" seconds
 			// and 0 microseconds.
@@ -138,7 +139,7 @@ class timer {
 				// of seconds and nanoseconds that were not
 				// slept.
 
-	#include <rudiments/private/timer.h>
+	#include <rudiments/private/intervaltimer.h>
 };
 
 #endif

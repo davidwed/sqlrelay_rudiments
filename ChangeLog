@@ -36,6 +36,7 @@
 	added directory class
 	removed static methods that took an "int fd" from file class
 	added device class
+	added intervaltimer class
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

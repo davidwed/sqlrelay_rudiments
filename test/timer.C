@@ -1,4 +1,4 @@
-#include <rudiments/timer.h>
+#include <rudiments/intervaltimer.h>
 #include <rudiments/signalclasses.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -7,7 +7,7 @@ RETSIGTYPE	alarmhandler() {
 	printf("alarm!\n");
 }
 
-void	waitForTimer(timer *t) {
+void	waitForTimer(intervaltimer *t) {
 
 	for (;;) {
 		itimerval	gtv;
@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 	ah.setHandler((void *)alarmhandler);
 	ah.handleSignal(SIGALRM);
 
-	timer	t(ITIMER_REAL);
+	intervaltimer	t(ITIMER_REAL);
 	t.setTimer(2);
 	waitForTimer(&t);
 	t.setTimer(2,500000);

@@ -166,9 +166,9 @@ ifeq ($(INCLUDE_XMLSAX),1)
 	SRCS += xmlsax.C
 	LOBJS += xmlsax.lo
 endif
-ifeq ($(INCLUDE_TIMER),1)
-	SRCS += timer.C
-	LOBJS += timer.lo
+ifeq ($(INCLUDE_INTERVALTIMER),1)
+	SRCS += intervaltimer.C
+	LOBJS += intervaltimer.lo
 endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
