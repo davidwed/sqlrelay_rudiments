@@ -29,6 +29,16 @@ void serialportprofile::setOutputOptions(tcflag_t flags) {
 }
 
 RUDIMENTS_INLINE
+void serialportprofile::setControlCharacters(cc_t *c_cc) {
+	rawbuffer::copy((void *)&tio.c_cc,(void *)c_cc,sizeof(cc_t)*NCCS);
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::setOptions(termios *newtio) {
+	rawbuffer::copy((void *)&tio,(void *)newtio,sizeof(tio));
+}
+
+RUDIMENTS_INLINE
 void serialportprofile::defaultControlOptions() {
 	tio.c_cflag=0;
 }
@@ -70,10 +80,75 @@ bool serialportprofile::outputBaud(serialportprofile::baudrate_t baud) {
 
 RUDIMENTS_INLINE
 void serialportprofile::baud(serialportprofile::baudrate_t baud) {
-	#ifdef CBAUDEX
-	tio.c_cflag&=(CBAUD|CBAUDEX);
+
+	#ifdef CBAUD
+		#ifdef CBAUDEX
+		tio.c_cflag&=(CBAUD|CBAUDEX);
+		#else
+		tio.c_cflag&=CBAUD;
+		#endif
 	#else
-	tio.c_cflag&=CBAUD;
+		tio.c_cflag&=(B0|B50|B75|B110|B134|B150|B200|B300|
+				B600|B1200|B1800|B2400|B4800|B9600
+				#if defined(B57600)
+				|B19200
+				#elif defined(EXTA)
+				|EXTA
+				#endif
+				#if defined(B38400)
+				|B38400
+				#elif defined(EXTB)
+				|EXTB
+				#endif
+				#ifdef B57600
+				|B57600
+				#endif
+				#ifdef B76800
+				|B76800
+				#endif
+				#ifdef B115200
+				|B115200
+				#endif
+				#ifdef B230400
+				|B230400
+				#endif
+				#ifdef B460800
+				|B460800
+				#endif
+				#ifdef B500000
+				|B500000
+				#endif
+				#ifdef B576000
+				|B576000
+				#endif
+				#ifdef B921600
+				|B921600
+				#endif
+				#ifdef B1000000
+				|B1000000
+				#endif
+				#ifdef B1142000
+				|B1152000
+				#endif
+				#ifdef B1500000
+				|B1500000
+				#endif
+				#ifdef B2000000
+				|B2000000
+				#endif
+				#ifdef B2500000
+				|B2500000
+				#endif
+				#ifdef B3000000
+				|B3000000
+				#endif
+				#ifdef B3500000
+				|B3500000
+				#endif
+				#ifdef B4000000
+				|B4000000
+				#endif
+				);
 	#endif
 	tio.c_cflag|=(tcflag_t)baud;
 }
@@ -95,8 +170,8 @@ void serialportprofile::characterSize(serialportprofile::charsize_t size) {
 #define GET_CHAR(character) (tio.c_cc[character])
 
 RUDIMENTS_INLINE
-void serialportprofile::stopBits(serialportprofile::stopbits_t stopbits) {
-	SET_FLAG((stopbits==onestopbit),c_cflag,CSTOPB)
+void serialportprofile::twoStopBits(bool truefalse) {
+	SET_FLAG(truefalse,c_cflag,CSTOPB)
 }
 
 RUDIMENTS_INLINE
@@ -133,16 +208,91 @@ void serialportprofile::blockJobControlOutput(bool truefalse) {
 
 RUDIMENTS_INLINE
 void serialportprofile::hardwareFlowControl(bool truefalse) {
-	#ifdef NEW_CRTSCTS
-		SET_FLAG(truefalse,c_cflag,NEW_CRTSCTS)
-	#else
+	#if defined(CRTSCTS)
 		SET_FLAG(truefalse,c_cflag,CRTSCTS)
+	#elif defined(NEW_CRTSCTS)
+		SET_FLAG(truefalse,c_cflag,NEW_CRTSCTS)
+	#elif defined(CRTS_IFLOW)
+		SET_FLAG(truefalse,c_cflag,CRTS_IFLOW)
+	#elif defined(CCTS_OFLOW)
+		SET_FLAG(truefalse,c_cflag,CRTS_IFLOW)
 	#endif
 }
 
+// FIXME:
+//	CDTRCTS - DTR/CTS full-duplex flow control
+//	MDMBUF - DTR/DCD hardware flow control
+//	CHWFLOW - (MDMBUF|CRTSCTS|CDTRCTS)
+
 RUDIMENTS_INLINE
 serialportprofile::baudrate_t serialportprofile::baud() {
-	return (baudrate_t)GET_FLAG(c_cflag,CBAUD);
+	#ifdef CBAUD
+		return (baudrate_t)GET_FLAG(c_cflag,CBAUD);
+	#else
+		tcflag_t	cbaud=
+				(B0|B50|B75|B110|B134|B150|B200|B300|
+				B600|B1200|B1800|B2400|B4800|B9600
+				#if defined(B57600)
+				|B19200
+				#elif defined(EXTA)
+				|EXTA
+				#endif
+				#if defined(B38400)
+				|B38400
+				#elif defined(EXTB)
+				|EXTB
+				#endif
+				#ifdef B57600
+				|B57600
+				#endif
+				#ifdef B76800
+				|B76800
+				#endif
+				#ifdef B115200
+				|B115200
+				#endif
+				#ifdef B230400
+				|B230400
+				#endif
+				#ifdef B460800
+				|B460800
+				#endif
+				#ifdef B500000
+				|B500000
+				#endif
+				#ifdef B576000
+				|B576000
+				#endif
+				#ifdef B921600
+				|B921600
+				#endif
+				#ifdef B1000000
+				|B1000000
+				#endif
+				#ifdef B1142000
+				|B1152000
+				#endif
+				#ifdef B1500000
+				|B1500000
+				#endif
+				#ifdef B2000000
+				|B2000000
+				#endif
+				#ifdef B2500000
+				|B2500000
+				#endif
+				#ifdef B3000000
+				|B3000000
+				#endif
+				#ifdef B3500000
+				|B3500000
+				#endif
+				#ifdef B4000000
+				|B4000000
+				#endif
+				);
+		return (baudrate_t)GET_FLAG(c_cflag,cbaud);
+	#endif
 }
 
 RUDIMENTS_INLINE
@@ -161,9 +311,8 @@ serialportprofile::charsize_t serialportprofile::characterSize() {
 }
 
 RUDIMENTS_INLINE
-serialportprofile::stopbits_t serialportprofile::stopBits() {
-	bool	two=GET_FLAG(c_cflag,CSTOPB);
-	return (two)?twostopbits:onestopbit;
+bool serialportprofile::twoStopBits() {
+	return (charsize_t)GET_FLAG(c_cflag,CSTOPB);
 }
 
 RUDIMENTS_INLINE
@@ -200,10 +349,14 @@ bool serialportprofile::blockJobControlOutput() {
 
 RUDIMENTS_INLINE
 bool serialportprofile::hardwareFlowControl() {
-	#ifdef NEW_CRTSCTS
-		return GET_FLAG(c_cflag,NEW_CRTSCTS);
-	#else
+	#if defined(CRTSCTS)
 		return GET_FLAG(c_cflag,CRTSCTS);
+	#elif defined(NEW_CRTSCTS)
+		return GET_FLAG(c_cflag,NEW_CRTSCTS);
+	#elif defined(CRTS_IFLOW)
+		return GET_FLAG(c_cflag,CRTS_IFLOW);
+	#elif defined(CCTS_OFLOW)
+		return GET_FLAG(c_cflag,CRTS_IFLOW);
 	#endif
 }
 
@@ -219,7 +372,7 @@ void serialportprofile::canonicalInput(bool truefalse) {
 
 #ifdef XCASE
 RUDIMENTS_INLINE
-void serialportprofile::upperCaseUnescapedCharacters(bool truefalse) {
+void serialportprofile::escapedUpperCase(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,XCASE)
 }
 #endif
@@ -230,23 +383,18 @@ void serialportprofile::echoInput(bool truefalse) {
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::echoErase(bool truefalse) {
+void serialportprofile::eraseCharactersOn(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOE)
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::echoNewLineAfterKill(bool truefalse) {
+void serialportprofile::killCharacterOn(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOK)
 }
 
 RUDIMENTS_INLINE
 void serialportprofile::echoNewLine(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHONL)
-}
-
-RUDIMENTS_INLINE
-void serialportprofile::flushAfterInterruptOrQuit(bool truefalse) {
-	SET_FLAG((!truefalse),c_lflag,NOFLSH)
 }
 
 RUDIMENTS_INLINE
@@ -259,20 +407,29 @@ void serialportprofile::echoControlCharacters(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOCTL)
 }
 
+#ifdef ECHOPRT
 RUDIMENTS_INLINE
 void serialportprofile::echoErasedCharacter(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOPRT)
 }
+#endif
 
 RUDIMENTS_INLINE
-void serialportprofile::lineKill(bool truefalse) {
+void serialportprofile::emulateKill(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOKE)
 }
 
 RUDIMENTS_INLINE
+void serialportprofile::noFlushAfterInterruptOrQuit(bool truefalse) {
+	SET_FLAG(truefalse,c_lflag,NOFLSH)
+}
+
+#ifdef PENDIN
+RUDIMENTS_INLINE
 void serialportprofile::retypePendingCharacters(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,PENDIN)
 }
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::sendSignalForBackgroundOutput(bool truefalse) {
@@ -289,9 +446,9 @@ bool serialportprofile::canonicalInput() {
 	return GET_FLAG(c_lflag,ICANON);
 }
 
-#ifdef HAVE_XCASE
+#ifdef XCASE
 RUDIMENTS_INLINE
-bool serialportprofile::upperCaseUnescapedCharacters() {
+bool serialportprofile::escapedUpperCase() {
 	return GET_FLAG(c_lflag,XCASE);
 }
 #endif
@@ -302,24 +459,18 @@ bool serialportprofile::echoInput() {
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::echoErase() {
+bool serialportprofile::eraseCharactersOn() {
 	return GET_FLAG(c_lflag,ECHOE);
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::echoNewLineAfterKill() {
+bool serialportprofile::killCharacterOn() {
 	return GET_FLAG(c_lflag,ECHOK);
 }
 
 RUDIMENTS_INLINE
 bool serialportprofile::echoNewLine() {
 	return GET_FLAG(c_lflag,ECHONL);
-}
-
-RUDIMENTS_INLINE
-bool serialportprofile::flushAfterInterruptOrQuit() {
-	bool	retval=!(GET_FLAG(c_lflag,NOFLSH));
-	return retval;
 }
 
 RUDIMENTS_INLINE
@@ -332,20 +483,29 @@ bool serialportprofile::echoControlCharacters() {
 	return GET_FLAG(c_lflag,ECHOCTL);
 }
 
+#ifdef ECHOPRT
 RUDIMENTS_INLINE
 bool serialportprofile::echoErasedCharacter() {
 	return GET_FLAG(c_lflag,ECHOPRT);
 }
+#endif
 
 RUDIMENTS_INLINE
-bool serialportprofile::lineKill() {
+bool serialportprofile::emulateKill() {
 	return GET_FLAG(c_lflag,ECHOKE);
 }
 
 RUDIMENTS_INLINE
+bool serialportprofile::noFlushAfterInterruptOrQuit() {
+	return GET_FLAG(c_lflag,NOFLSH);
+}
+
+#ifdef PENDIN
+RUDIMENTS_INLINE
 bool serialportprofile::retypePendingCharacters() {
 	return GET_FLAG(c_lflag,PENDIN);
 }
+#endif
 
 RUDIMENTS_INLINE
 bool serialportprofile::sendSignalForBackgroundOutput() {
@@ -407,10 +567,12 @@ void serialportprofile::mapCarriageReturnToNewLineOnInput(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,ICRNL)
 }
 
+#ifdef IUCLC
 RUDIMENTS_INLINE
 void serialportprofile::lowerCase(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,IUCLC)
 }
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::bellIfLineTooLong(bool truefalse) {
@@ -472,10 +634,12 @@ bool serialportprofile::mapCarriageReturnToNewLineOnInput() {
 	return GET_FLAG(c_iflag,ICRNL);
 }
 
+#ifdef IUCLC
 RUDIMENTS_INLINE
 bool serialportprofile::lowerCase() {
 	return GET_FLAG(c_iflag,IUCLC);
 }
+#endif
 
 RUDIMENTS_INLINE
 bool serialportprofile::bellIfLineTooLong() {
@@ -487,15 +651,24 @@ void serialportprofile::postProcessOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OPOST)
 }
 
+#ifdef OLCUC
 RUDIMENTS_INLINE
 void serialportprofile::outputUpperCase(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OLCUC)
 }
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::mapNewLineToCarriageReturnNewLineOnOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,ONLCR)
 }
+
+#ifdef ONOEOT
+RUDIMENTS_INLINE
+void serialportprofile::discardEndOfTransmission(bool truefalse) {
+	SET_FLAG(truefalse,c_oflag,ONOEOT)
+}
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::mapCarriageReturnToNewLineOnOutput(bool truefalse) {
@@ -512,82 +685,108 @@ void serialportprofile::mapNewLineToCarriageReturnOnOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,ONLRET)
 }
 
+#ifdef OFILL
 RUDIMENTS_INLINE
 void serialportprofile::useFillCharactersForDelay(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OFILL)
 }
+#endif
 
+#ifdef OFDEL
 RUDIMENTS_INLINE
 void serialportprofile::useDelForFill(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OFDEL)
 }
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::expandTabToSpaces(bool truefalse) {
-	#ifdef XTABS
+	#if defined(XTABS)
 		SET_FLAG(truefalse,c_oflag,XTABS)
+	#elif defined(OXTABS)
+		SET_FLAG(truefalse,c_oflag,OXTABS)
 	#else
 		SET_FLAG(truefalse,c_oflag,TAB3)
 	#endif
 }
 
-
+#ifdef NLDLY
 RUDIMENTS_INLINE
 void serialportprofile::delayAfterNewLine(
 		serialportprofile::newlinedelay_t nldelay) {
 	tio.c_oflag&=NLDLY;
 	tio.c_oflag|=(tcflag_t)nldelay;
 }
+#endif
 
+#ifdef CRDLY
 RUDIMENTS_INLINE
 void serialportprofile::delayAfterCarriageReturn(
 		serialportprofile::carriagereturndelay_t crdelay) {
 	tio.c_oflag&=CRDLY;
 	tio.c_oflag|=(tcflag_t)crdelay;
 }
+#endif
 
+#ifdef TABDLY
 RUDIMENTS_INLINE
 void serialportprofile::delayAfterTab(
 		serialportprofile::tabdelay_t tabdelay) {
 	tio.c_oflag&=TABDLY;
 	tio.c_oflag|=(tcflag_t)tabdelay;
 }
+#endif
 
+#ifdef BSDLY
 RUDIMENTS_INLINE
 void serialportprofile::delayAfterBackSpace(
 		serialportprofile::backspacedelay_t bsdelay) {
 	tio.c_oflag&=BSDLY;
 	tio.c_oflag|=(tcflag_t)bsdelay;
 }
+#endif
 
+#ifdef VTDLY
 RUDIMENTS_INLINE
 void serialportprofile::delayAfterVerticalTab(
 		serialportprofile::verticaltabdelay_t vtdelay) {
 	tio.c_oflag&=VTDLY;
 	tio.c_oflag|=(tcflag_t)vtdelay;
 }
+#endif
 
+#ifdef FFDLY
 RUDIMENTS_INLINE
 void serialportprofile::delayAfterFormFeed(
 		serialportprofile::formfeeddelay_t ffdelay) {
 	tio.c_oflag&=FFDLY;
 	tio.c_oflag|=(tcflag_t)ffdelay;
 }
+#endif
 
 RUDIMENTS_INLINE
 bool serialportprofile::postProcessOutput() {
 	return GET_FLAG(c_oflag,OPOST);
 }
 
+#ifdef OLCUC
 RUDIMENTS_INLINE
 bool serialportprofile::outputUpperCase() {
 	return GET_FLAG(c_oflag,OLCUC);
 }
+#endif
 
 RUDIMENTS_INLINE
 bool serialportprofile::mapNewLineToCarriageReturnNewLineOnOutput() {
 	return GET_FLAG(c_oflag,ONLCR);
 }
+
+#ifdef ONOEOT
+RUDIMENTS_INLINE
+bool serialportprofile::discardEndOfTransmission() {
+	return GET_FLAG(c_oflag,ONOEOT);
+}
+#endif
 
 RUDIMENTS_INLINE
 bool serialportprofile::mapCarriageReturnToNewLineOnOutput() {
@@ -604,60 +803,78 @@ bool serialportprofile::mapNewLineToCarriageReturnOnOutput() {
 	return GET_FLAG(c_oflag,ONLRET);
 }
 
+#ifdef OFILL
 RUDIMENTS_INLINE
 bool serialportprofile::useFillCharactersForDelay() {
 	return GET_FLAG(c_oflag,OFILL);
 }
+#endif
 
+#ifdef OFDEL
 RUDIMENTS_INLINE
 bool serialportprofile::useDelForFill() {
 	return GET_FLAG(c_oflag,OFDEL);
 }
+#endif
 
 RUDIMENTS_INLINE
 bool serialportprofile::expandTabToSpaces() {
-	#ifdef XTABS
+	#if defined(XTABS)
 		return GET_FLAG(c_oflag,XTABS);
+	#elif defined(OXTABS)
+		return GET_FLAG(c_oflag,OXTABS);
 	#else
 		return GET_FLAG(c_oflag,TAB3);
 	#endif
 }
 
+#ifdef NLDLY
 RUDIMENTS_INLINE
 serialportprofile::newlinedelay_t
 		serialportprofile::delayAfterNewLine() {
 	return (newlinedelay_t)GET_FLAG(c_cflag,NLDLY);
 }
+#endif
 
+#ifdef CRDLY
 RUDIMENTS_INLINE
 serialportprofile::carriagereturndelay_t
 		serialportprofile::delayAfterCarriageReturn() {
 	return (carriagereturndelay_t)GET_FLAG(c_cflag,CRDLY);
 }
+#endif
 
+#ifdef TABDLY
 RUDIMENTS_INLINE
 serialportprofile::tabdelay_t
 		serialportprofile::delayAfterTab() {
 	return (tabdelay_t)GET_FLAG(c_cflag,TABDLY);
 }
+#endif
 
+#ifdef BSDLY
 RUDIMENTS_INLINE
 serialportprofile::backspacedelay_t
 		serialportprofile::delayAfterBackSpace() {
 	return (backspacedelay_t)GET_FLAG(c_cflag,BSDLY);
 }
+#endif
 
+#ifdef VTDLY
 RUDIMENTS_INLINE
 serialportprofile::verticaltabdelay_t
 		serialportprofile::delayAfterVerticalTab() {
 	return (verticaltabdelay_t)GET_FLAG(c_cflag,VTDLY);
 }
+#endif
 
+#ifdef FFDLY
 RUDIMENTS_INLINE
 serialportprofile::formfeeddelay_t
 		serialportprofile::delayAfterFormFeed() {
 	return (formfeeddelay_t)GET_FLAG(c_cflag,FFDLY);
 }
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::interruptCharacter(cc_t character) {
@@ -694,6 +911,7 @@ void serialportprofile::secondEndOfLineCharacter(cc_t character) {
 	SET_CHAR(VEOL2,character)
 }
 
+#if defined(VSWTCH) || defined(VSWTC)
 RUDIMENTS_INLINE
 void serialportprofile::switchCharacer(cc_t character) {
 	#ifdef VSWTCH
@@ -702,6 +920,7 @@ void serialportprofile::switchCharacer(cc_t character) {
 	SET_CHAR(VSWTC,character)
 	#endif
 }
+#endif
 
 RUDIMENTS_INLINE
 void serialportprofile::startCharacter(cc_t character) {
@@ -798,6 +1017,7 @@ cc_t serialportprofile::secondEndOfLineCharacter() {
 	return GET_CHAR(VEOL2);
 }
 
+#if defined(VSWTCH) || defined(VSWTC)
 RUDIMENTS_INLINE
 cc_t serialportprofile::switchCharacer() {
 	#ifdef VSWTCH
@@ -806,6 +1026,7 @@ cc_t serialportprofile::switchCharacer() {
 	return GET_CHAR(VSWTC);
 	#endif
 }
+#endif
 
 RUDIMENTS_INLINE
 cc_t serialportprofile::startCharacter() {

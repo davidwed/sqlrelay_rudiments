@@ -13,16 +13,16 @@ void serialportprofile::inputMode(serialportprofile::inputmode_t inputmode) {
 	if (inputmode==cannonical) {
 		canonicalInput(true);
 		echoInput(true);
-		echoErase(true);
+		eraseCharactersOn(true);
 	} else {
 		canonicalInput(false);
 		echoInput(false);
-		echoErase(false);
+		eraseCharactersOn(false);
 	}
 }
 
 serialportprofile::inputmode_t serialportprofile::inputMode() {
-	return (canonicalInput() && echoInput() && echoErase())?
+	return (canonicalInput() && echoInput() && eraseCharactersOn())?
 							cannonical:raw;
 }
 
@@ -66,7 +66,8 @@ void serialportprofile::evalOptionsString(const char *string) {
 			break;
 	}
 
-	stopBits((stopbits=='2')?twostopbits:onestopbit);
+	
+	twoStopBits((stopbits=='2'));
 }
 
 void serialportprofile::flowControl(

@@ -226,6 +226,11 @@ ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
 				serialportprofileinlines.h \
 				serialportprofile.h
 endif
+ifeq ($(INCLUDE_SERIALPORT),1)
+	HEADERS += serialport.h
+	PRIVATEHEADERS += serialportincludes.h \
+				serialportinlines.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

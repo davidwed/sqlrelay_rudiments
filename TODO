@@ -1,9 +1,12 @@
 solaris:
 	can't find pcre or openssl
-	munmap,mprotect,msync,madvise,mlock,munlock,mincore takes caddr_t for first argument
 
 if openssl/pcre libs are installed, but not includes, configure still tries
 	to include openssl/pcre support
+
+what does the logger.C warning mean
+
+--------------------------------------------------------------------------------
 
 fix math class
 wrap shm_open/shm_unlink somewhere
@@ -12,8 +15,6 @@ move sleep methods into another class
 file class:
 	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
-
-what does the logger.C warning mean
 
 a bunch of methods can probabaly be made const
 a bunch of static methods can probably be inlined

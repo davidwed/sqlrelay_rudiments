@@ -202,6 +202,10 @@ ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
 	SRCS += serialportprofile.C
 	LOBJS += serialportprofile.lo
 endif
+ifeq ($(INCLUDE_SERIALPORT),1)
+	SRCS += serialport.C
+	LOBJS += serialport.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)

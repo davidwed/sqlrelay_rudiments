@@ -11,6 +11,7 @@
 //			ctermid()
 //			ttyname(_r)()
 //			isatty()
+//	termios.h - tcgetsid()
 //	unistd.h - pathconf()/fpathconf():
 //				__PC_VDISABLE()
 //				__POSIX_MAX_CANON()
