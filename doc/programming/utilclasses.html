@@ -24,7 +24,7 @@
 <li><a href="#signal">Using the Signal Classes</a></li>
 <li><a href="#stringbuffer">Using the String Buffer Class</a></li>
 <li><a href="#variablebuffer">Using the Variable Buffer Class</a></li>
-<li><a href="#string">Using the String Class</a></li>
+<li><a href="#charstring">Using the Charstring Class</a></li>
 <li><a href="#xmlsax">Using the XML SAX Class</a></li>
 <li><a href="#xmldom">Using the XML DOM Classes</a></li>
 <li><a href="#dtd">Using the DTD Class</a></li>
@@ -35,7 +35,7 @@
 <li><a href="#protocolentry">Using the Protocol Entry Class</a></li>
 <li><a href="#serviceentry">Using the Service Entry Class</a></li>
 <li><a href="#rpcentry">Using the RPC Entry Class</a></li>
-<li><a href="#list">Using the List Class</a></li>
+<li><a href="#linkedlist">Using the Linkedlist Class</a></li>
 <li><a href="#dictionary">Using the Dictionary Class</a></li>
 </ul>
 
@@ -1116,9 +1116,9 @@ write data at arbitrary positions in the buffer.</p>
 </pre>
 
 <a name="string"></a>
-<span class="heading">Using the String Class</span><br><br>
+<span class="heading">Using the Charstring Class</span><br><br>
 
-<p>The string class contains some commonly needed string manipulation and
+<p>The charstring class contains some commonly needed string manipulation and
 evaluation functions.  Below is some code illustrating the use of the string
 class.</p>
 
@@ -1126,7 +1126,7 @@ class.</p>
 <font color="#0000f8">// Copyright (c) 2003  David Muse</font>
 <font color="#0000f8">// See the file COPYING for more information</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/string.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/charstring.h&gt;</font>
 
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;stdio.h&gt;</font>
 
@@ -1134,7 +1134,7 @@ class.</p>
 <font color="#288850"><b>int</b></font> main(<font color="#288850"><b>int</b></font> argv, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> **argc) {
 
         <font color="#0000f8">// create a new string 50 bytes long</font>
-        string  s(<font color="#f800f8">50</font>);
+        charstring  s(<font color="#f800f8">50</font>);
 
 
         <font color="#0000f8">// set every byte in the string to NULL</font>
@@ -1918,10 +1918,10 @@ or from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
-<a name="list"></a>
-<span class="heading">Using the List Class</span><br><br>
+<a name="linkedlist"></a>
+<span class="heading">Using the Linkedlist Class</span><br><br>
 
-<p>The list class allows you to store arbitrary data in a doubly-linked
+<p>The linkedlist class allows you to store arbitrary data in a doubly-linked
 list.</p>
 
 <p>Since lists of strings are commonly used, a stringlist typedef is
@@ -1931,13 +1931,13 @@ provided for convenience.</p>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/list.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/linkedlist.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;stdio.h&gt;</font>
 
 <font color="#288850"><b>int</b></font>     main(<font color="#288850"><b>int</b></font> argc, <font color="#288850"><b>char</b></font> **argv) {
 
         <font color="#0000f8">// create a list of integers</font>
-        list&lt;<font color="#288850"><b>int</b></font>&gt;       intl;
+        linkedlist&lt;<font color="#288850"><b>int</b></font>&gt;       intl;
 
         <font color="#0000f8">// append values to the list, displaying the list after each append</font>
         printf(<font color="#f800f8">&quot;append(0)</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
