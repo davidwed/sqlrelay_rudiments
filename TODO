@@ -1,6 +1,7 @@
-PF_INET/FreeBSD thing
+dictionary class setData doesn't return false if key isn't found, it creates it,
+	right?
 
-string class name conflicts with stl string class
+PF_INET/FreeBSD thing
 
 these classes would be nice:
 	table
@@ -8,6 +9,7 @@ these classes would be nice:
 	thread
 	networkinterfaces (stubbed out)
 	shellcommand (stubbed out)
+	dirent/direct wrapper
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldomnode should probably use list class

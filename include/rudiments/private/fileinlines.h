@@ -48,6 +48,226 @@ RUDIMENTS_INLINE ssize_t file::create(const char *name, mode_t perms,
 	return create(name,perms,(void *)string,size);
 }
 
+RUDIMENTS_INLINE bool file::lock(int method, short type, short whence,
+						off_t start, off_t len) {
+	flock	lck;
+	lck.l_type=type;
+	lck.l_whence=whence;
+	lck.l_start=start;
+	lck.l_len=len;
+	return !fcntl(fd,method,&lck);
+}
+
+RUDIMENTS_INLINE bool file::checkLock(short type, short whence,
+					off_t start, off_t len, flock *retlck) {
+	flock	lck;
+	lck.l_type=type;
+	lck.l_whence=whence;
+	lck.l_start=start;
+	lck.l_len=len;
+	bool	retval=(!fcntl(fd,F_SETLKW,&lck));
+	memcpy((void *)retlck,(void *)&lck,sizeof(flock));
+	return retval;
+}
+
+RUDIMENTS_INLINE bool file::unlock(short whence, off_t start, off_t len) {
+	flock	lck;
+	lck.l_type=F_UNLCK;
+	lck.l_whence=whence;
+	lck.l_start=start;
+	lck.l_len=len;
+	return !fcntl(fd,F_SETLK,&lck);
+}
+
+RUDIMENTS_INLINE bool file::tryLockFile(short type) {
+	return tryLockRegion(type,0,0);
+}
+
+RUDIMENTS_INLINE bool file::lockFile(short type) {
+	return lockRegion(type,0,0);
+}
+
+RUDIMENTS_INLINE bool file::checkLockFile(short type, flock *retlck) {
+	return checkLockRegion(type,0,0,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockFile(short type) {
+	return unlockRegion(0,0);
+}
+
+RUDIMENTS_INLINE bool file::tryLockRegion(short type, off_t start, off_t len) {
+	return lock(F_SETLK,type,SEEK_SET,start,len);
+}
+
+RUDIMENTS_INLINE bool file::lockRegion(short type, off_t start, off_t len) {
+	return lock(F_SETLKW,type,SEEK_SET,start,len);
+}
+
+RUDIMENTS_INLINE bool file::checkLockRegion(short type, off_t start,
+						off_t len, flock *retlck) {
+	return checkLock(type,SEEK_SET,start,len,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockRegion(off_t start, off_t len) {
+	return unlock(SEEK_SET,start,len);
+}
+
+RUDIMENTS_INLINE bool file::tryLockFromCurrent(short type, off_t len) {
+	return tryLockFromCurrent(type,0,len);
+}
+
+RUDIMENTS_INLINE bool file::tryLockFromCurrent(short type,
+						off_t start, off_t len) {
+	return lock(F_SETLK,type,SEEK_CUR,start,len);
+}
+
+RUDIMENTS_INLINE bool file::lockFromCurrent(short type, off_t len) {
+	return lockFromCurrent(type,0,len);
+}
+
+RUDIMENTS_INLINE bool file::lockFromCurrent(short type,
+						off_t start, off_t len) {
+	return lock(F_SETLKW,type,SEEK_CUR,start,len);
+}
+
+RUDIMENTS_INLINE bool file::checkLockFromCurrent(short type,
+						off_t len, flock *retlck) {
+	return checkLockFromCurrent(type,0,len,retlck);
+}
+
+RUDIMENTS_INLINE bool file::checkLockFromCurrent(short type, off_t start,
+						off_t len, flock *retlck) {
+	return checkLock(type,SEEK_CUR,start,len,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockFromCurrent(off_t len) {
+	return unlockFromCurrent(0,len);
+}
+
+RUDIMENTS_INLINE bool file::unlockFromCurrent(off_t start, off_t len) {
+	return unlock(SEEK_CUR,start,len);
+}
+
+RUDIMENTS_INLINE bool file::tryLockFromEnd(short type, off_t len) {
+	return tryLockFromEnd(type,0,len);
+}
+
+RUDIMENTS_INLINE bool file::tryLockFromEnd(short type, off_t start, off_t len) {
+	return lock(F_SETLK,type,SEEK_END,start,len);
+}
+
+RUDIMENTS_INLINE bool file::lockFromEnd(short type, off_t len) {
+	return lockFromEnd(type,0,len);
+}
+
+RUDIMENTS_INLINE bool file::lockFromEnd(short type, off_t start, off_t len) {
+	return lock(F_SETLKW,type,SEEK_END,start,len);
+}
+
+RUDIMENTS_INLINE bool file::checkLockFromEnd(short type,
+						off_t len, flock *retlck) {
+	return checkLockFromEnd(type,0,len,retlck);
+}
+
+RUDIMENTS_INLINE bool file::checkLockFromEnd(short type, off_t start,
+						off_t len, flock *retlck) {
+	return checkLock(type,SEEK_END,start,len,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockFromEnd(off_t len) {
+	return unlockFromEnd(0,len);
+}
+
+RUDIMENTS_INLINE bool file::unlockFromEnd(off_t start, off_t len) {
+	return unlock(SEEK_END,start,len);
+}
+
+RUDIMENTS_INLINE bool file::tryLockRemainder(short type, off_t start) {
+	return lock(F_SETLK,type,SEEK_SET,start,0);
+}
+
+RUDIMENTS_INLINE bool file::lockRemainder(short type, off_t start) {
+	return lock(F_SETLKW,type,SEEK_SET,start,0);
+}
+
+RUDIMENTS_INLINE bool file::checkLockRemainder(short type,
+						off_t start, flock *retlck) {
+	return checkLock(type,SEEK_SET,start,0,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockRemainder(off_t start) {
+	return unlock(SEEK_SET,start,0);
+}
+
+RUDIMENTS_INLINE bool file::tryLockRemainderFromCurrent(short type) {
+	return tryLockRemainderFromCurrent(type,0);
+}
+
+RUDIMENTS_INLINE bool file::tryLockRemainderFromCurrent(short type,
+								off_t start) {
+	return lock(F_SETLK,type,SEEK_CUR,start,0);
+}
+
+RUDIMENTS_INLINE bool file::lockRemainderFromCurrent(short type) {
+	return lockRemainderFromCurrent(type,0);
+}
+
+RUDIMENTS_INLINE bool file::lockRemainderFromCurrent(short type, off_t start) {
+	return lock(F_SETLKW,type,SEEK_CUR,start,0);
+}
+
+RUDIMENTS_INLINE bool file::checkLockRemainderFromCurrent(short type,
+								flock *retlck) {
+	return checkLockRemainderFromCurrent(type,0,retlck);
+}
+
+RUDIMENTS_INLINE bool file::checkLockRemainderFromCurrent(short type,
+						off_t start, flock *retlck) {
+	return checkLock(type,SEEK_CUR,start,0,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockRemainderFromCurrent() {
+	return unlockRemainderFromCurrent(0);
+}
+
+RUDIMENTS_INLINE bool file::unlockRemainderFromCurrent(off_t start) {
+	return unlock(SEEK_CUR,start,0);
+}
+
+RUDIMENTS_INLINE bool file::tryLockRemainderFromEnd(short type) {
+	return tryLockRemainderFromEnd(type,0);
+}
+
+RUDIMENTS_INLINE bool file::tryLockRemainderFromEnd(short type, off_t start) {
+	return lock(F_SETLK,type,SEEK_END,start,0);
+}
+
+RUDIMENTS_INLINE bool file::lockRemainderFromEnd(short type) {
+	return lockRemainderFromEnd(type,0);
+}
+
+RUDIMENTS_INLINE bool file::lockRemainderFromEnd(short type, off_t start) {
+	return lock(F_SETLKW,type,SEEK_END,start,0);
+}
+
+RUDIMENTS_INLINE bool file::checkLockRemainderFromEnd(short type,
+							flock *retlck) {
+	return checkLockRemainderFromEnd(type,0,retlck);
+}
+
+RUDIMENTS_INLINE bool file::checkLockRemainderFromEnd(short type, off_t start,
+								flock *retlck) {
+	return checkLock(type,SEEK_END,start,0,retlck);
+}
+
+RUDIMENTS_INLINE bool file::unlockRemainderFromEnd() {
+	return unlockRemainderFromEnd(0);
+}
+
+RUDIMENTS_INLINE bool file::unlockRemainderFromEnd(off_t start) {
+	return unlock(SEEK_END,start,0);
+}
+
 RUDIMENTS_INLINE off_t file::setPositionRelativeToBeginning(off_t offset) {
 	return lseek(fd,offset,SEEK_SET);
 }

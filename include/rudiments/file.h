@@ -77,6 +77,76 @@ class file : public filedescriptor {
 			// Sets the initial contents to "data" of size "size".
 
 
+		// These methods allow you to lock the entire file.
+		bool	tryLockFile(short type);
+		bool	lockFile(short type);
+		bool	checkLockFile(short type, flock *lck);
+		bool	unlockFile(short type);
+
+		// These methods allow you to lock an arbitrary region of the
+		// file.
+		bool	tryLockRegion(short type, off_t start, off_t len);
+		bool	lockRegion(short type, off_t start, off_t len);
+		bool	checkLockRegion(short type, off_t start, off_t len,
+								flock *lck);
+		bool	unlockRegion(off_t start, off_t len);
+
+		// These methods allow you to lock an arbitrary region of the
+		// file relative to the current position.
+		bool	tryLockFromCurrent(short type, off_t len);
+		bool	tryLockFromCurrent(short type, off_t start, off_t len);
+		bool	lockFromCurrent(short type, off_t len);
+		bool	lockFromCurrent(short type, off_t start, off_t len);
+		bool	checkLockFromCurrent(short type, off_t len, flock *lck);
+		bool	checkLockFromCurrent(short type, off_t start, off_t len,
+								flock *lck);
+		bool	unlockFromCurrent(off_t len);
+		bool	unlockFromCurrent(off_t start, off_t len);
+
+		// These methods allow you to lock an arbitrary region of the
+		// file relative to the end of the file.
+		bool	tryLockFromEnd(short type, off_t len);
+		bool	tryLockFromEnd(short type, off_t start, off_t len);
+		bool	lockFromEnd(short type, off_t len);
+		bool	lockFromEnd(short type, off_t start, off_t len);
+		bool	checkLockFromEnd(short type, off_t len, flock *lck);
+		bool	checkLockFromEnd(short type, off_t start, off_t len,
+								flock *lck);
+		bool	unlockFromEnd(off_t len);
+		bool	unlockFromEnd(off_t start, off_t len);
+
+		// These methods allow you to lock "the remainder" of a file
+		// starting at a given offset.
+		bool	tryLockRemainder(short type, off_t start);
+		bool	lockRemainder(short type, off_t start);
+		bool	checkLockRemainder(short type, off_t start, flock *lck);
+		bool	unlockRemainder(off_t start);
+
+		// These methods allow you to lock "the remainder" of a file
+		// relative to the current position.
+		bool	tryLockRemainderFromCurrent(short type);
+		bool	tryLockRemainderFromCurrent(short type, off_t start);
+		bool	lockRemainderFromCurrent(short type);
+		bool	lockRemainderFromCurrent(short type, off_t start);
+		bool	checkLockRemainderFromCurrent(short type, flock *lck);
+		bool	checkLockRemainderFromCurrent(short type, off_t start,
+								flock *lck);
+		bool	unlockRemainderFromCurrent();
+		bool	unlockRemainderFromCurrent(off_t start);
+
+		// These methods allow you to lock "the remainder" of a file
+		// relative to the end of the file.
+		bool	tryLockRemainderFromEnd(short type);
+		bool	tryLockRemainderFromEnd(short type, off_t start);
+		bool	lockRemainderFromEnd(short type);
+		bool	lockRemainderFromEnd(short type, off_t start);
+		bool	checkLockRemainderFromEnd(short type, flock *lck);
+		bool	checkLockRemainderFromEnd(short type, off_t start,
+								flock *lck);
+		bool	unlockRemainderFromEnd();
+		bool	unlockRemainderFromEnd(off_t start);
+
+
 		// These methods allow you to set the position at which the
 		// next read or write will occur.  Each returns the position
 		// relative to the beginning of the file on success or -1 on
