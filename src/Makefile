@@ -38,10 +38,6 @@ ifeq ($(INCLUDE_ENVIRONMENT),1)
 	SRCS += environment.C
 	LOBJS += environment.lo
 endif
-ifeq ($(INCLUDE_PATH),1)
-	SRCS += path.C
-	LOBJS += path.lo
-endif
 ifeq ($(INCLUDE_FILE),1)
 	SRCS += file.C
 	LOBJS += file.lo

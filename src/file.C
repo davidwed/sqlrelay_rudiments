@@ -6,8 +6,10 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ipc.h>
 #include <errno.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
@@ -1166,3 +1168,60 @@ char **file::attributeArray(const char *buffer, size_t size) {
 	return attributes;
 }
 #endif
+
+char *file::dirname(const char *filename) {
+
+	if (!filename) {
+		return NULL;
+	} else if (!charstring::contains(filename,'/') ||
+			!charstring::compare(filename,".")) {
+		return charstring::duplicate(".");
+	} else if (!charstring::compare(filename,"..")) {
+		return charstring::duplicate("..");
+	} else if (!charstring::compare(filename,"/")) {
+		return charstring::duplicate("/");
+	}
+
+	char	*retval=charstring::duplicate(filename);
+	charstring::rightTrim(retval,'/');
+	char	*lastslash=charstring::findLast(retval,'/');
+	if (lastslash==retval) {
+		(*(lastslash+1))=(char)NULL;
+	} else {
+		(*lastslash)=(char)NULL;
+	}
+	return retval;
+}
+
+char *file::basename(const char *filename) {
+
+	if (!filename) {
+		return NULL;
+	}
+
+	char	*copy=charstring::duplicate(filename);
+	charstring::rightTrim(copy,'/');
+
+	char	*retval;
+	char	*ptr=charstring::findLast(copy,'/');
+	if (!ptr) {
+		retval=charstring::duplicate(copy);
+	} else {
+		retval=charstring::duplicate(ptr+1);
+	}
+	delete[] copy;
+	return retval;
+}
+
+char *file::basename(const char *filename, const char *suffix) {
+	char	*retval=basename(filename);
+	char	*ptr=charstring::findLast(retval,suffix);
+	if (!(*(ptr+charstring::length(suffix)))) {
+		(*ptr)=(char)NULL;
+	}
+	return retval;
+}
+
+key_t file::generateKey(const char *filename, int id) {
+	return ::ftok(filename,id);
+}

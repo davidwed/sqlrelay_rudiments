@@ -319,7 +319,7 @@ class file : public filedescriptor {
 		#ifdef HAVE_XATTRS
 
 		// Some filesystems support extended file attributes.  These
-		// methods provide an interface for getting and setting such
+		// methods provide an interface for getting and setting those
 		// attributes.
 
 		char	**listAttributes();
@@ -607,6 +607,34 @@ class file : public filedescriptor {
 							const char *filename);
 			// Sets the last access and modification times of
 			// "filename" to now.
+
+
+		static char	*dirname(const char *filename);
+				// Returns the directory portion of "filename".
+				// This method allocates a buffer internally
+				// and returns it.  The calling program must
+				// deallocate the buffer.
+		static char	*basename(const char *filename);
+				// Returns the non-directory portion of
+				// "filename".
+				// This method allocates a buffer internally
+				// and returns it.  The calling program must
+				// deallocate the buffer.
+		static char	*basename(const char *filename,
+						const char *suffix);
+				// Returns the non-directory portion of
+				// "filename", truncating "suffix".
+				// This method allocates a buffer internally
+				// and returns it.  The calling program must
+				// deallocate the buffer.
+
+
+		static key_t	generateKey(const char *filename, int id);
+				// Generates a key based on "filename" and the
+				// least signifigant 8 bits of id (which must
+				// be non-zero) suitable for use with
+				// semaphores, shared memory segments and
+				// message queues.
 
 	#include <rudiments/private/file.h>
 };

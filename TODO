@@ -2,6 +2,10 @@ file class:
 	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
 
+serial port class:
+	inherits from device class
+	reads return 0 when they time out
+
 what does the logger.C warning mean
 
 on SCO, you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
@@ -96,10 +100,6 @@ internationalization:
 	stdlib.h - rpmatch() - response match
 
 path class:
-	unistd.h - pathconf()/fpathconf():
-				__POSIX_PATH_MAX()
-				__POSIX_NAME_MAX()
-				__POSIX_NO_TRUNC()
 	glob.h - glob(),globfree(),glob_pattern_p()
 	fts.h/ftw.h - file heirarchy traversal functions
 			fts_open(),fts_close()

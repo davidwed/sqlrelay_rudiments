@@ -30,6 +30,7 @@ class directory {
 				// permissions "perms"
 		static bool	remove(const char *path);
 				// removes the directory "path" if it is empty
+
 		static char	*getCurrentWorkingDirectory();
 				// Returns the current working directory.
 				//
@@ -38,9 +39,24 @@ class directory {
 				// deallocate the buffer.
 		static bool	changeDirectory(const char *path);
 				// sets the current working directory to "path"
+
 		static bool	changeRoot(const char *path);
 				// changes root to "path"
 
+		static long	maxFileNameLength(const char *pathname);
+				// Returns the length of the longest file name
+				// that can be created in directory "pathname".
+
+		static long	maxPathLength(const char *pathname);
+				// Returns the length of the longest relative
+				// path name that can be created under the
+				// directory "pathname".
+
+		static bool	canAccessLongFileNames(const char *pathname);
+				// Returns true if an attempt to access a
+				// file in directory "pathname" longer than the
+				// length returned by maxFileNameLength() will
+				// succeed or false if it will fail.
 
 
 #ifdef RUDIMENTS_HAS_THREADS

@@ -110,4 +110,21 @@ int main(int argc, const char **argv) {
 	// display the number of hard links to the file
 	nlink_t	nlink=fl.getNumberOfHardLinks();
 	printf("	hard links : %ld\n",nlink);
+
+
+	char	*path="/usr/local/firstworks/include/rudiments/path.h";
+	char	*dirname=file::dirname(path);
+	printf("dirname(%s)=%s\n",path,dirname);
+	delete[] dirname;
+
+	char	*basename=file::basename(path);
+	printf("basename(%s)=%s\n",path,basename);
+	delete[] basename;
+
+	basename=file::basename(path,".h");
+	printf("basename(%s,\".h\")=%s\n",path,basename);
+	delete[] basename;
+
+	printf("key=%d\n",file::generateKey("/",1));
+
 }

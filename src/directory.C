@@ -139,3 +139,15 @@ void directory::setMutex(pthread_mutex_t *mutex) {
 	#endif
 }
 #endif
+
+long directory::maxFileNameLength(const char *pathname) {
+	return pathconf(pathname,_PC_NAME_MAX);
+}
+
+long directory::maxPathLength(const char *pathname) {
+	return pathconf(pathname,_PC_PATH_MAX);
+}
+
+bool directory::canAccessLongFileNames(const char *pathname) {
+	return !pathconf(pathname,_PC_NO_TRUNC);
+}

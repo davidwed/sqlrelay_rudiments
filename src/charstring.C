@@ -89,7 +89,7 @@ char *charstring::findLast(const char *haystack, const char *needle) {
 	
 	char	*ptr=(char *)haystack+haystacklen-needlelen;
 	while (ptr>haystack) {
-		if (compare(ptr,needle)) {
+		if (!compare(ptr,needle)) {
 			return ptr;
 		}
 		ptr--;

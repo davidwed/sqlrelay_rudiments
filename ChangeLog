@@ -30,8 +30,8 @@
 	added chown/fchown,unlink,rename,link,symlink,readlink,fsync,fdatasync,
 		utimes,mknod,mkfifo,mkstemp,access,xattr-related function
 		wrappers to the file class
+	added basename/dirname methods and ftok wrapper to file class
 	added dup/dup2 wrappers to filedescriptor class
-	added path class
 	added directory class
 	removed static methods that took an "int fd" from file class
 	added device class
