@@ -106,6 +106,10 @@ int daemonprocess::runAsGroup(const char *groupname) const {
 					runAsGroupId(groupid):1;
 }
 
+void daemonprocess::waitOnChildren() {
+	while(waitpid(-1,NULL,WNOHANG)>0);
+}
+
 void daemonprocess::shutDown() {
 	(*shutdownfunc)(0);
 }

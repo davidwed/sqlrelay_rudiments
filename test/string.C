@@ -1,7 +1,7 @@
 // Copyright (c) 2003  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/text.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 
@@ -9,7 +9,7 @@
 int main(int argc, const char **argv) {
 
 	// create a new string 50 bytes long
-	text	s(50);
+	charstring	s(50);
 
 
 	// set every byte in the string to NULL

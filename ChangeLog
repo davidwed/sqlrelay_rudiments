@@ -2,8 +2,8 @@
 	added shadowentry, serviceentry and rpcentry classes and test programs
 	reorganized *entry class code a bit to generate smaller code
 	uses -pipe compilation flag now if possible
-	-fomit-frame-pointer -fno-exceptions -fno-rtti are used now, debugging
-		build just uses -fno-exceptions -fno-rtti
+	-fomit-frame-pointer -fno-exceptions are used now, debugging
+		build just uses -fno-exceptions
 	rpc/rpcent.h is included if necessary for getrpcbyxxx_r
 	rpc/rpc.h is included if necessary for getrpcbyxxx_r
 	pthread.h is included for xxxentry classes now no matter what

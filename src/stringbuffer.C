@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/stringbuffer.h>
+#include <rudiments/charstring.h>
 
 #include <stdio.h>
 #include <string.h>

@@ -8,8 +8,8 @@ AC_ARG_ENABLE(small-code,
 	SMALLCODE="")
 AC_ARG_ENABLE(debug,
 	[  --enable-debug          compile with -g and -pg options and don't strip binaries],
-	CXXFLAGS="-g -pg -fno-rtti -fno-exceptions -Wall"; INSTALLSTRIP="",
-	CXXFLAGS="-fomit-frame-pointer -fno-rtti -fno-exceptions -Wall"; INSTALLSTRIP="-s")
+	CXXFLAGS="-g -pg -fno-exceptions -Wall"; INSTALLSTRIP="",
+	CXXFLAGS="-fomit-frame-pointer -fno-exceptions -Wall"; INSTALLSTRIP="-s")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],
 	USE_SYSTEM_LIBTOOL=$withval,
@@ -45,17 +45,6 @@ if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 fi
 
 
-
-dnl Checks for libtool.
-echo
-echo "***** Libtool ****************"
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
-FW_CHECK_USE_SYSTEM_LIBTOOL
-echo "******************************"
-
-
-
 dnl Checks for programs.
 echo
 echo "***** Programs ***************"
@@ -75,6 +64,20 @@ AC_SUBST(AR)
 FW_CHECK_GNU_STRIP
 FW_CHECK_PIPE
 echo "******************************"
+
+
+
+dnl Checks for libtool.
+echo
+echo "***** Libtool ****************"
+OLDCC=$CC
+CC=$CXX
+AC_LIBTOOL_WIN32_DLL
+AC_PROG_LIBTOOL
+FW_CHECK_USE_SYSTEM_LIBTOOL
+CC=$OLDCC
+echo "******************************"
+
 
 
 dnl Checks for header files.
