@@ -22,14 +22,19 @@ inline LINKEDLIST_CLASS::~linkedlist() {
 
 LINKEDLIST_TEMPLATE
 void LINKEDLIST_CLASS::append(datatype data) {
-	linkedlistnodetype	*newnode=new linkedlistnodetype();
-	newnode->setData(data);
+	linkedlistnodetype	*node=new linkedlistnodetype();
+	node->setData(data);
+	append(node);
+}
+
+LINKEDLIST_TEMPLATE
+void LINKEDLIST_CLASS::append(linkedlistnodetype *node) {
 	if (last) {
-		last->setNext(newnode);
-		newnode->setPrevious(last);
-		last=newnode;
+		last->setNext(node);
+		node->setPrevious(last);
+		last=node;
 	} else {
-		first=newnode;
+		first=node;
 		last=first;
 	}
 	length++;
@@ -37,6 +42,13 @@ void LINKEDLIST_CLASS::append(datatype data) {
 
 LINKEDLIST_TEMPLATE
 bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
+	linkedlistnodetype	*node=new linkedlistnodetype();
+	node->setData(data);
+	return insert(index,node);
+}
+
+LINKEDLIST_TEMPLATE
+bool LINKEDLIST_CLASS::insert(unsigned long index, linkedlistnodetype *node) {
 
 	// handle invalid index
 	if (index>length) {
@@ -45,17 +57,15 @@ bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
 
 	// handle append
 	if (index==length) {
-		append(data);
+		append(node);
 		return true;
 	}
 
 	// handle insert into index 0
-	linkedlistnodetype	*newnode=new linkedlistnodetype();
 	if (!index) {
-		newnode->setData(data);
-		newnode->setNext(first);
-		first->setPrevious(newnode);
-		first=(linkedlistnodetype *)newnode;
+		node->setNext(first);
+		first->setPrevious(node);
+		first=(linkedlistnodetype *)node;
 		length++;
 		return true;
 	}
@@ -65,11 +75,10 @@ bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
 	if (!current) {
 		return false;
 	}
-	newnode->setData(data);
-	newnode->setPrevious(current);
-	newnode->setNext(current->getNext());
-	current->getNext()->setPrevious(newnode);
-	current->setNext(newnode);
+	node->setPrevious(current);
+	node->setNext(current->getNext());
+	current->getNext()->setPrevious(node);
+	current->setNext(node);
 	length++;
 	return true;
 }

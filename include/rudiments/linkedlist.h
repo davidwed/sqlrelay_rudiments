@@ -66,9 +66,17 @@ class linkedlist {
 		void	append(datatype data);
 			// Creates a new linkedlistnode containing "data" and
 			// appends it to the linkedlist.
+		void	append(linkedlistnodetype *node);
+			// Appends already created linkedlistnode "node" to the
+			// linkedlist.
 		bool	insert(unsigned long index, datatype data);
 			// Creates a new linkedlistnode containing "data" and
 			// inserts it into the linkedlist at "index".
+			//
+			// Returns true on success and false on failure.
+		bool	insert(unsigned long index, linkedlistnodetype *node);
+			// Inserts already created linkedlistnode "node" into
+			// the linkedlist at "index".
 			//
 			// Returns true on success and false on failure.
 

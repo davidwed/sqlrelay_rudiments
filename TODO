@@ -1,8 +1,4 @@
-add xnet/socket/nsl/etc. libs to rudiments-config --libs
-
 get epoch from string doesn't work right on solaris x86
-
-test blocking/nonblocking mode switch functions
 
 send/sendto/sendmsg and recv/recvfrom/recvmsg methods for socket class
 
@@ -33,21 +29,3 @@ xml classes need to support entities defined in the DOCTYPE declaration
 support non-posix semaphores
 handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
 						alignment-related
-
-Pie in the sky:
-Is it possible to implement a scheme for class versioning, where classes can
-	be modified through some process without breaking binary compatibility?
-	(can each class keep an array of pointers, 1 to each version of the
-		class, then can we override the -> operator to select the
-		proper version?)
-Is it possible to implement a generic garbage collection scheme without a vm but
-	still retain the ability to manually manage memory?
-	(maybe: "yes, use static instances of classes when
-			you want garbage collection")
-Implement functions for easily calling functions from other languages.
-	ie.  call("perl","method","param1","param2",...);
-	ie.  call("java","method","param1","param2",...);
-	ie.  call("python","method","param1","param2",...);
-	etc...
-	or something
-Class serialization.
