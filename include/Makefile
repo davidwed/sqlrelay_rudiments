@@ -76,7 +76,6 @@ install:
 	$(INSTALL) -m 644 rudiments/private/listener.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/listenerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/logdestination.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/logdestnode.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/logger.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/loggerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/memorypool.h $(incdir)/rudiments/private

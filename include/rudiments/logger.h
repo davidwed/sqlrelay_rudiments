@@ -6,6 +6,8 @@
 
 #include <rudiments/private/config.h>
 
+#include <rudiments/list.h>
+
 #include <syslog.h>
 
 // The logger class and associated logdestination classes provide methods for
@@ -58,8 +60,6 @@ class stderrdestination : public logdestination {
 	#include <rudiments/private/stderrdestination.h>
 };
 
-
-#include <rudiments/private/logdestnode.h>
 
 
 // The logger class provides methods for managing

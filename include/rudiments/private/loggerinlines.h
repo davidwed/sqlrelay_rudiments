@@ -21,10 +21,8 @@ inline int filedestination::open(const char *filename) {
 }
 
 inline void filedestination::close() {
-	if (logfile) {
-		::close(logfile);
-		logfile=-1;
-	}
+	::close(logfile);
+	logfile=-1;
 }
 
 inline void syslogdestination::open(const char *ident,
@@ -47,9 +45,7 @@ inline filedestination::filedestination() {
 }
 
 inline void filedestination::write(const char *string) {
-	if (logfile>-1) {
-		::write(logfile,string,strlen(string));
-	}
+	::write(logfile,string,strlen(string));
 }
 
 inline void stdoutdestination::write(const char *string) {
@@ -63,10 +59,20 @@ inline void stderrdestination::write(const char *string) {
 
 
 inline logger::logger() {
-	first=NULL;
-	last=NULL;
 }
 
 inline logger::~logger() {
 	removeAllLogDestinations();
+}
+
+inline void logger::addLogDestination(logdestination *logdest) {
+	logdestlist.append(logdest);
+}
+
+inline void logger::removeLogDestination(logdestination *logdest) {
+	logdestlist.removeByKey(logdest);
+}
+
+inline void logger::removeAllLogDestinations() {
+	logdestlist.clear();
 }
