@@ -42,17 +42,28 @@ class regularexpression {
 			// Returns true if the match was successful and
 			// false if it was not.
 
-		int	getMatchingSubstringCount();
+	#if defined(RUDIMENTS_HAS_PCRE) || defined(HAVE_REGEX_H)
+		int	getSubstringCount();
 			// Returns the number of substrings of "str" passed into
 			// match() that match "pattern" passed into compile().
 
-		int	getMatchingSubstringOffset(unsigned short index);
-			// Returns the number of bytes after the beginning of
-			// the string of the "index"'th matching substring.
+		char	*getSubstringStart(int index);
+			// Returns the "index"'th matching substring or NULL
+			// if index is invalid.
 
-		char	*getMatchingSubstring(unsigned short index);
-			// Returns the number of bytes after the beginning of
-			// the string of the "index"'th matching substring.
+		char	*getSubstringEnd(int index);
+			// Returns the data directly after the "index"'th
+			// matching substring or NULL if index is invalid.
+
+		int	getSubstringStartOffset(int index);
+			// Returns the offset of the "index"'th matching
+			// substring or -1 if index is invalid.
+
+		int	getSubstringEndOffset(int index);
+			// Returns the offset of the data directly after the
+			// "index"'th matching substring or -1 if index is
+			// invalid.
+	#endif
 
 	#include <rudiments/private/regularexpression.h>
 };
