@@ -362,7 +362,8 @@ char *charstring::parseNumber(short number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(short number, unsigned short zeropadding) {
+char *charstring::parseNumber(short number,
+				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
 	sprintf(str,"%0*hd",zeropadding,number);
@@ -385,7 +386,8 @@ char *charstring::parseNumber(long number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(long number, unsigned short zeropadding) {
+char *charstring::parseNumber(long number,
+				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
 	sprintf(str,"%0*ld",zeropadding,number);
@@ -408,7 +410,8 @@ char *charstring::parseNumber(long long number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(long long number, unsigned short zeropadding) {
+char *charstring::parseNumber(long long number,
+				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
 	sprintf(str,"%0*lld",zeropadding,number);

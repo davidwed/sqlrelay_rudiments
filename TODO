@@ -1,3 +1,7 @@
+netbsd-2.0 CMSG_SIZE bug
+
+--------------------------------------------------------------------------------
+
 document shmfile class
 document sleep class
 document modem*/chat classes

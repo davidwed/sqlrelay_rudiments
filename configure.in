@@ -7,7 +7,11 @@ AC_ARG_ENABLE(small-code,
 	SMALLCODE="-O -Os -fno-exceptions",
 	SMALLCODE="")
 AC_ARG_ENABLE(debug,
-	[  --enable-debug          compile with -g and -pg options],
+	[  --enable-debug          compile with -g option],
+	CXXFLAGS="$CXXFLAGS -g -Wall",
+	CXXFLAGS="$CXXFLAGS -Wall")
+AC_ARG_ENABLE(profiling,
+	[  --enable-profiling      compile with -pg option],
 	CXXFLAGS="$CXXFLAGS -g -pg -Wall",
 	CXXFLAGS="$CXXFLAGS -Wall")
 AC_ARG_WITH(system-libtool,

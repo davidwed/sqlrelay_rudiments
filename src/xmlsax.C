@@ -79,7 +79,7 @@ bool xmlsax::parseFile(const char *filename) {
 		if (ptr) {
 			mm.detach();
 		}
-	} 
+	}
 #else
 	bool	retval=(fl.open(filename,O_RDONLY) && parse());
 #endif

@@ -43,12 +43,10 @@ daemonprocess::~daemonprocess() {
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions)
 									const {
-	file	fl;
-	char	*pid=charstring::parseNumber((long)getpid());
-	bool	retval=(fl.create(filename,permissions,pid)==
+	char	*pid=charstring::parseNumber((unsigned long)getpid());
+	bool	retval=(file::createFile(filename,permissions,pid)==
 					(ssize_t)charstring::length(pid));
 	delete[] pid;
-	fl.close();
 	return retval;
 }
 

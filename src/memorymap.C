@@ -30,10 +30,13 @@ bool memorymap::attach(int fd, off_t offset, size_t len,
 
 bool memorymap::detach() {
 	#ifdef HAVE_MMAP_CADDR_T
-	return !munmap((caddr_t)data,length);
+	bool	retval=!munmap((caddr_t)data,length);
 	#else
-	return !munmap(data,length);
+	bool	retval=!munmap(data,length);
 	#endif
+	data=NULL;
+	length=0;
+	return retval;
 }
 
 bool memorymap::setProtection(int protection) {
