@@ -1,5 +1,4 @@
-document shadowentry, serviceentry, rpcentry classes
-document timezonefile class
+document shadowentry, serviceentry, rpcentry, timezonefile classes
 
 a termios class would be nice
 a thread class would be nice

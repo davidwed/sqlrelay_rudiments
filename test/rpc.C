@@ -29,7 +29,7 @@ int main(int argv, const char **argc) {
 
 
 
-	// get the protocol information for protocol number 6
+	// get the protocol information for protocol number 100000
 	re.initialize(100000);
 
 	// print the components individually
