@@ -40,6 +40,8 @@
 	added error class
 	added /sw to configure script search paths
 	added -Wno-long-double if system supports it
+	moved inetserversocket::getClientAddress() to
+		filedescriptor::getPeerAddress()
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

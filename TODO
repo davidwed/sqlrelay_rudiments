@@ -1,7 +1,4 @@
-rename sleep class, causing too many collisions with sleep()
-	rest, slumber, hold, snooze, nap, doze
-
-need to add -Wno-long-double on Mac OS 10.3
+some platforms may need -D_THREAD_SAFE like solaris needs -D_REENTRANT
 
 document error.h
 

@@ -114,7 +114,7 @@ fi
 
 for paths in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/sw" "/usr/local/firstworks"
 do
-	if ( test -n "$paths" )
+	if ( test -n "$paths" -a -d "$paths" )
 	then
 
 		if ( test "$paths" = "/" )

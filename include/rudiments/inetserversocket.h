@@ -81,7 +81,6 @@ class inetserversocket : public serversocket, private inetsocketutil {
 				// the socket is listening on.  If the
 				// port has not been set, 0 is 
 				// returned instead.
-		char		*getClientAddress();
 				// Writes the address of the client at
 				// the other end of "sock" to "buffer".
 };

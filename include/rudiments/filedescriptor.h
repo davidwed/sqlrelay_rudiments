@@ -447,6 +447,18 @@ class filedescriptor {
 			//
 			// Returns true on success and false on failure.
 
+		const char	*getType() const;
+
+		char		*getPeerAddress() const;
+				// Returns the IP address of the client at
+				// the other end of the connection if 
+				// the filedescriptor is an inet socket or
+				// NULL otherwise.
+				//
+				// Note that the buffer for the address is
+				// allocated internally and must be freed by
+				// the calling program.
+
 	#include <rudiments/private/filedescriptor.h>
 };
 
