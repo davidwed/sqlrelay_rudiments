@@ -130,6 +130,26 @@ class file : public filedescriptor {
 			// zero is returned.  If an error occurs then a NULL
 			// is returned.
 
+		ssize_t	getContents(unsigned char *buffer, size_t buffersize);
+			// Reads the contents of the currently open file into
+			// "buffer" of length "buffersize".  If the file is
+			// larger than "buffersize" then only "buffersize" bytes
+			// of the file will be read into "buffer".
+			//
+			// Returns the number of bytes copied into "buffer" or
+			// -1 on error.
+
+		static	ssize_t	getContents(const char *name,
+						unsigned char *buffer,
+						size_t buffersize);
+			// Reads the contents of the file "name" into
+			// "buffer" of length "buffersize".  If the file is
+			// larger than "buffersize" then only "buffersize" bytes
+			// of the file will be read into "buffer".
+			//
+			// Returns the number of bytes copied into "buffer" or
+			// -1 on error.
+
 		int	getCurrentProperties();
 			// Gets the current file properties.
 

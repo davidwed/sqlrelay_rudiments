@@ -463,3 +463,28 @@ RUDIMENTS_INLINE char *string::duplicate() const {
 RUDIMENTS_INLINE char *string::duplicate(const char *str) {
 	return strdup(str);
 }
+
+RUDIMENTS_INLINE void string::rightTrim(char *string) {
+	rightTrim(string,' ');
+}
+
+RUDIMENTS_INLINE void string::leftTrim(char *string) {
+	leftTrim(string,' ');
+}
+
+RUDIMENTS_INLINE void string::bothTrim(char *string) {
+	bothTrim(string,' ');
+}
+
+RUDIMENTS_INLINE void string::bothTrim(char *string, char character) {
+	leftTrim(string,character);
+	rightTrim(string,character);
+}
+
+RUDIMENTS_INLINE int string::integerLength(long number) {
+	int	length=(number>0)?0:1;
+	for (long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+		length++;
+	}
+	return length;
+}

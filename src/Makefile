@@ -132,11 +132,6 @@ ifeq ($(INCLUDE_STRINGBUFFER),1)
 	NLOBJS += stringbuffer.n.lo
 	PLOBJS += stringbuffer.p.lo
 endif
-ifeq ($(INCLUDE_TEXT),1)
-	SRCS += text.C
-	NLOBJS += text.n.lo
-	PLOBJS += text.p.lo
-endif
 ifeq ($(INCLUDE_DATATRANSPORT),1)
 	SRCS += datatransport.C datatransportfactory.C
 	NLOBJS += datatransport.n.lo datatransportfactory.n.lo

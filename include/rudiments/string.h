@@ -199,6 +199,91 @@ class string {
 		char	*duplicate() const;
 		static	char	*duplicate(const char *str);
 
+
+		static	void	upper(char *str); 
+				// converts "str" to uppercase
+		static	void	lower(char *str); 
+				// converts "str" to lowercase
+
+		static	void	rightTrim(char *str);
+				// trims all spaces off of the right hand
+				// side of "str"
+		static	void	rightTrim(char *str, char character);
+				// trims all characters off of the right hand
+				// side of "str"
+
+		static	void	leftTrim(char *str);
+				// trims all spaces off of the left hand
+				// side of "str"
+		static	void	leftTrim(char *str, char character);
+				// trims all characters off of the left hand
+				// side of "str"
+
+		static	void	bothTrim(char *str);
+				// trims all spaces off of both 
+				// sides of "str"
+		static	void	bothTrim(char *str, char character);
+				// trims all characters off of both 
+				// sides of "str"
+
+		static	void	strip(char *str, char character);
+				// strips all instances of "character"
+				// from "str"
+
+		static	void	strip(char *str1, char *str2);
+				// strips all instances of "str2"
+				// from "str1"
+
+		static	int	integerLength(long number);
+				// returns the number of characters needed
+				// to represent "number" as a string
+
+		static	int	isInteger(const char *val);
+				// returns 1 the string "val" is an integer
+				// and 0 if it is not an integer
+
+		static	int	isNumber(const char *val);
+				// returns 1 the string "val" is a number
+				// and 0 if it is not a number
+		static	char	*parseNumber(long number);
+				// Returns a string representing "number".
+				// The string is allocated inside the function
+				// and must be deleted by the calling program.
+		static	char	*parseNumber(double number);
+		static	char	*parseNumber(double number,
+						unsigned short scale);
+		static	char	*parseNumber(double number,
+						unsigned short precision,
+						unsigned short scale);
+				// Returns a string representing "number".
+				// The string is allocated inside the function
+				// and must be deleted by the calling program.
+
+		static	char	*httpEscape(const char *input);
+				// http escapes "input" and returns it in a
+				// buffer allocated inside the function.
+				// This buffer must be deleted by the calling
+				// program.
+
+		static	void	leftJustify(char *str, int length);
+				// Moves leading spaces to the end of "str"
+				// for "length" characters.
+				// 
+				// Example:
+				//	"   hello   " -> "hello      "
+		static	void	rightJustify(char *str, int length);
+				// Moves trailing spaces to the beginning of
+				// "str" for "length" characters.
+				// 
+				// Example:
+				//	"   hello   " -> "      hello"
+		static	void	center(char *str, int length);
+				// Centers the text of "str" for "length"
+				// characters.
+				// 
+				// Example:
+				//	"hello      " -> "   hello   "
+
 	#include <rudiments/private/string.h>
 };
 

@@ -7,7 +7,7 @@
 	#include <strings.h>
 #endif
 
-#include <rudiments/text.h>
+#include <rudiments/string.h>
 
 #include <rudiments/private/rudimentsinlines.h>
 
@@ -69,7 +69,7 @@ RUDIMENTS_INLINE stringbuffer *stringbuffer::append(char character) {
 }
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::append(long number) {
-	char	*numstr=text::parseNumber(number);
+	char	*numstr=string::parseNumber(number);
 	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
@@ -80,14 +80,14 @@ RUDIMENTS_INLINE stringbuffer *stringbuffer::append(double number) {
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::append(double number,
 							unsigned short scale) {
-	char	*numstr=text::parseNumber(number,scale);
+	char	*numstr=string::parseNumber(number,scale);
 	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::append(double number,
 			unsigned short precision, unsigned short scale) {
-	char	*numstr=text::parseNumber(number,precision,scale);
+	char	*numstr=string::parseNumber(number,precision,scale);
 	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
@@ -109,7 +109,7 @@ RUDIMENTS_INLINE stringbuffer *stringbuffer::write(char character) {
 }
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::write(long number) {
-	char	*numstr=text::parseNumber(number);
+	char	*numstr=string::parseNumber(number);
 	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
@@ -120,14 +120,14 @@ RUDIMENTS_INLINE stringbuffer *stringbuffer::write(double number) {
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::write(double number,
 							unsigned short scale) {
-	char	*numstr=text::parseNumber(number,scale);
+	char	*numstr=string::parseNumber(number,scale);
 	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::write(double number,
 			unsigned short precision, unsigned short scale) {
-	char	*numstr=text::parseNumber(number,precision,scale);
+	char	*numstr=string::parseNumber(number,precision,scale);
 	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
 	return this;
 }

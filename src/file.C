@@ -26,6 +26,15 @@ char *file::getContents(const char *name) {
 	return contents;
 }
 
+ssize_t file::getContents(const char *name, unsigned char *buffer,
+						size_t buffersize) {
+	file	fl;
+	fl.open(name,O_RDONLY);
+	ssize_t	bytes=fl.getContents(buffer,buffersize);
+	fl.close();
+	return bytes;
+}
+
 size_t file::create(const char *name, mode_t permissions,
 					const void *data, size_t size) {
 	create(name,permissions);

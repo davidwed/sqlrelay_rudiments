@@ -4,3 +4,6 @@
 	private:
 		char	*buffer;
 		size_t	size;
+
+		static	int	countLeadingSpaces(char *string, int length);
+		static	int	countTrailingSpaces(char *string, int length);

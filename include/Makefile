@@ -5,7 +5,7 @@ top_srcdir = ..
 INSTALL = $(top_srcdir)/install-sh -c
 
 HEADERS =
-PRIVATEHEADERS =
+PRIVATEHEADERS = config.h rudimentsinlines.h
 
 ifeq ($(INCLUDE_CLIENT),1)
 	HEADERS += client.h
@@ -30,7 +30,10 @@ endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h
 	PRIVATEHEADERS += dictionary.h dictionaryinlines.h \
-				dictionarynode.h dictionarynodeinlines.h
+				dictionarynode.h dictionarynodeinlines.h \
+				objectdictionarynodeinlines.h \
+				stringdictionarynodeinlines.h
+				
 #endif
 ifeq ($(INCLUDE_DTD),1)
 	HEADERS += dtd.h
@@ -71,11 +74,13 @@ ifeq ($(INCLUDE_LISTENER),1)
 endif
 #ifeq ($(INCLUDE_LIST),1)
 	HEADERS += list.h
-	PRIVATEHEADERS += list.h listinlines.h listnode.h listnodeinlines.h
+	PRIVATEHEADERS += list.h listinlines.h listnode.h listnodeinlines.h \
+				objectlistnodeinlines.h stringlistnodeinlines.h
 #endif
 ifeq ($(INCLUDE_LOGGER),1)
 	HEADERS += logger.h
-	PRIVATEHEADERS += logdestination.h logger.h loggerinlines.h \
+	PRIVATEHEADERS += filedestination.h \
+				logdestination.h logger.h loggerinlines.h \
 				stderrdestination.h stdoutdestination.h \
 				syslogdestination.h
 endif
@@ -126,10 +131,6 @@ endif
 ifeq ($(INCLUDE_STRING),1)
 	HEADERS += string.h
 	PRIVATEHEADERS += string.h stringinlines.h
-endif
-ifeq ($(INCLUDE_TEXT),1)
-	HEADERS += text.h
-	PRIVATEHEADERS += text.h textinlines.h
 endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h
