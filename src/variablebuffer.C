@@ -7,6 +7,7 @@
 	#include <rudiments/private/variablebufferinlines.h>
 #endif
 #include <string.h>
+#include <stdio.h>
 
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	buffer=new unsigned char[initialsize];
@@ -45,10 +46,10 @@ ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 
 	// if the buffer is too small, extend it
-	if (position>buffersize) {
+	if (position>=buffersize) {
 		extend(position-buffersize+size);
-	} else if (size>buffersize-position) {
-		extend(position+size-buffersize);
+	} else if (size>=buffersize-position) {
+		extend(buffersize-position+size);
 	}
 
 	// copy the data into the buffer

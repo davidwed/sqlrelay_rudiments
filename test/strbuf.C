@@ -87,5 +87,11 @@ int main(int argv, const char **argc) {
 	}
 	printf("\n");
 
+	sb->clear();
+	for (int i=0; i<1024; i++) {
+		sb->append("0");
+	}
+	printf("%s\n",sb->getString());
+
 	delete sb;
 }
