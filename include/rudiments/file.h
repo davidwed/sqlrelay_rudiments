@@ -139,6 +139,9 @@ class file : public filedescriptor {
 		int	getCurrentProperties();
 			// Gets the current file properties.
 
+		static int	exists(const char *filename);
+			// Returns 1 if the file exists and 0 otherwise.
+
 		// These methods return the permissions of the file.
 		mode_t		getPermissions() const;
 		static int	getPermissions(const char *filename,

@@ -48,3 +48,6 @@ SOCKETLIB = @SOCKETLIB@
 
 # nsl library
 NSLLIB = @NSLLIB@
+
+# pthreads library
+PTHREADSLIB = @PTHREADSLIB@

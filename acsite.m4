@@ -258,6 +258,7 @@ AC_DEFUN([FW_CHECK_PTHREADS],
 
 HAVE_PTHREADS=""
 PTHREADSINCLUDES=""
+PTHREADSLIB=""
 
 if ( test "$cross_compiling" = "yes" )
 then
@@ -267,41 +268,36 @@ then
 	if ( test -n "$PTHREADSPATH" )
 	then
 		PTHREADSINCLUDES="-I$PTHREADSPATH/include"
+		PTHREADSLIB="-L$PTHREADSPATH/lib -lpthread"
+	else
+		PTHREADSLIB="-lpthread"
 	fi
 	HAVE_PTHREADS="yes"
 
 else
-	AC_MSG_CHECKING(for /usr/include/pthread.h)
-	if ( test -r "/usr/include/pthread.h" )
-	then
-		AC_MSG_RESULT(yes)
-		HAVE_PTHREADS="yes"
-	else
-		AC_MSG_RESULT(no)
-		for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
+
+	for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
+	do
+		for j in "pthread" "pth" "c_r" "gthreads"
 		do
-			for j in "$PTHREADSPATH/include" "$PTHREADSPATH/include/$i" "/usr/include/$i" "/usr/local/include" "/usr/local/include/$i" "/usr/pkg/include" "/usr/pkg/include/$i" "/usr/local/include" "/usr/local/include/$i" "/opt/sfw/include" "/opt/sfw/include/$i"
-			do
-				if ( test -n "$j" )
-				then
-					AC_MSG_CHECKING(for $j/pthread.h)
-					if ( test -r "$j/pthread.h" )
-					then
-						PTHREADSINCLUDES="-I$j"
-						AC_MSG_RESULT(yes)
-						HAVE_PTHREADS="yes"
-						break
-					fi
-					AC_MSG_RESULT(no)
-				fi
-			done
+			FW_CHECK_HEADERS_AND_LIBS([$PTHREADSPATH],[$i],[pthread.h],[$j],[""],[""],[PTHREADSINCLUDES],[PTHREADSLIB],[PTHREADSLIBPATH],[PTHREADSTATIC])
+			if ( test -n "$PTHREADSLIB" )
+			then
+				break
+			fi
 		done
-	fi
+		if ( test -n "$PTHREADSLIB" )
+		then
+			HAVE_PTHREADS="yes"
+			break
+		fi
+	done
 fi
 AC_SUBST(PTHREADSINCLUDES)
+AC_SUBST(PTHREADSLIB)
 if ( test -z "$HAVE_PTHREADS" )
 then
-	AC_MSG_ERROR(pthreads.h not found.  Rudiments requires this file.)
+	AC_MSG_ERROR(pthreads not found.  Rudiments requires this package.)
 	exit
 fi
 ])

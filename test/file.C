@@ -18,9 +18,14 @@ int main(int argv, const char **argc) {
 	file	fl;
 	fl.create("testfile",permissions::evalPermString("rw-rw----"),"hello");
 
-
 	printf("testfile:\n");
 	
+	// check for existence
+	if (file::exists("testfile")) {
+		printf("	exists\n");
+	} else {
+		printf("	does not exist\n");
+	}
 
 	// display the permissions of the file
 	mode_t	mode=fl.getPermissions();

@@ -79,6 +79,11 @@ RUDIMENTS_INLINE off_t file::getCurrentPosition() {
 	return lseek(fd,0,SEEK_CUR);
 }
 
+RUDIMENTS_INLINE int file::exists(const char *filename) {
+	struct stat	st;
+	return !stat(filename,&st);
+}
+
 RUDIMENTS_INLINE ssize_t file::getContents(unsigned char *buffer,
 							size_t buffersize) {
 	return read(buffer,(buffersize<getSize())?buffersize:getSize());
