@@ -2,3 +2,4 @@
 // See the COPYING file for more information.
 
 #include <rudiments/stringbuffer.h>
+#include <rudiments/dictionary.h>

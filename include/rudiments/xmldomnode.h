@@ -260,6 +260,13 @@ class xmldomnode {
 		xmldomnode	*getAttribute(int position) const;
 				// Returns the attribute node at index
 				// "position" or the nullnode if not found.
+		namevaluepairs	*getAttributes() const;
+				// Returns the attribute names and values in
+				// a namevaluepairs dictionary.  The instance
+				// of namevaluepairs is allocated internally
+				// and must be deleted by the calling program.					// Returns NULL if the node is a nullNode and
+				// an empty dictionary if the node has no
+				// attributes.
 
 		xmldomnode	*getNullNode() const;
 				// Returns the nullnode used by this node.

@@ -370,3 +370,17 @@ bool xmldomnode::appendAttribute(xmldomnode *attribute) {
 bool xmldomnode::appendAttribute(const char *name, const char *value) {
 	return insertAttribute(name,value,getAttributeCount());
 }
+
+namevaluepairs *xmldomnode::getAttributes() const {
+
+	if (isnullnode) {
+		return NULL;
+	}
+
+	namevaluepairs	*nvp=new namevaluepairs();
+	for (int i=0; i<attributecount; i++) {
+		nvp->setData(getAttribute(i)->getName(),
+				getAttribute(i)->getValue());
+	}
+	return nvp;
+}
