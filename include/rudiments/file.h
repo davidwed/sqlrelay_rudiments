@@ -11,6 +11,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#ifndef HAVE_BLKCNT_T
+	typedef long blkcnt_t;
+#endif
+#ifndef HAVE_BLKSIZE_T
+	typedef long blksize_t;
+#endif
+
 // The file class provides methods for interacting with files and for 
 // discovering the properties associated with a file such as permissions,
 // ownership, size, etc.
@@ -149,7 +156,7 @@ class file : public filedescriptor {
 
 		// These methods return the blocksize to use
 		// for most efficient I/O with the file.
-		blkcnt_t	getBlockSize() const;
+		blksize_t	getBlockSize() const;
 		static int	getBlockSize(const char *filename,
 						blksize_t *size);
 		static int	getBlockSize(int fd, blksize_t *size);
