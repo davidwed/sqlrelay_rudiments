@@ -22,7 +22,6 @@ ifeq ($(INCLUDE_CONNECTSTRING),1)
 				connectstringincludes.h
 endif
 ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	HEADERS += daemonprocess.h
 	PRIVATEHEADERS += daemonprocess.h daemonprocessinlines.h \
 				daemonprocessincludes.h
