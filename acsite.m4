@@ -318,7 +318,6 @@ else
 		if ( test -n "$PTHREADLIB" )
 		then
 			HAVE_PTHREAD="yes"
-			break
 		fi
 	fi
 fi
