@@ -1,3 +1,27 @@
+AC_DEFUN([FW_INCLUDES],
+[
+if ( test -n "$2" )
+then
+	echo "$1 includes... $2"
+fi
+])
+
+AC_DEFUN([FW_LIBS],
+[
+if ( test -n "$2" )
+then
+	echo "$1 libs... $2"
+fi
+])
+
+AC_DEFUN([FW_CHECK_FILE],
+[
+if ( test -r "$1" )
+then
+	eval "$2"
+fi
+])
+
 AC_DEFUN([FW_TRY_LINK],
 [
 SAVECPPFLAGS="$CPPFLAGS"
@@ -18,14 +42,14 @@ export LD_LIBRARY_PATH
 AC_DEFUN([FW_CHECK_LIB],
 [
 FOUNDLIB=""
-AC_CHECK_FILE($1, FOUNDLIB="yes")
+FW_CHECK_FILE($1, FOUNDLIB="yes")
 if ( test -n "$FOUNDLIB" )
 then
 	eval "$2"
 else
 	if ( test -n "$3" )
 	then
-		AC_CHECK_FILE($3, FOUNDLIB="yes")
+		FW_CHECK_FILE($3, FOUNDLIB="yes")
 		if ( test -n "$FOUNDLIB" )
 		then
 			eval "$4"
@@ -39,8 +63,8 @@ AC_DEFUN([FW_CHECK_HEADER_LIB],
 [
 FOUNDHEADER=""
 FOUNDLIB=""
-AC_CHECK_FILE($1, FOUNDHEADER="yes")
-AC_CHECK_FILE($3, FOUNDLIB="yes")
+FW_CHECK_FILE($1, FOUNDHEADER="yes")
+FW_CHECK_FILE($3, FOUNDLIB="yes")
 if ( test -n "$FOUNDLIB" )
 then
 	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
@@ -51,7 +75,7 @@ then
 else
 	if ( test -n "$5" -a -n "$6" )
 	then
-		AC_CHECK_FILE($5, FOUNDLIB="yes")
+		FW_CHECK_FILE($5, FOUNDLIB="yes")
 		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
 		then
 			eval "$2"
@@ -293,6 +317,10 @@ else
 		fi
 	done
 fi
+
+FW_INCLUDES(pthreads,[$PTHREADSINCLUDES])
+FW_LIBS(pthreads,[$PTHREADSLIB])
+
 AC_SUBST(PTHREADSINCLUDES)
 AC_SUBST(PTHREADSLIB)
 if ( test -z "$HAVE_PTHREADS" )
@@ -398,5 +426,161 @@ AC_TRY_LINK([#include <shadow.h>
 #include <stdlib.h>],
 getspnam(NULL);,INCLUDE_SHADOWENTRY="1"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+if ( test "$INCLUDE_SHADOWENTRY" = "1" )
+then
+
+AC_MSG_CHECKING(spwd has sp_warn)
+AC_TRY_LINK([#include <shadow.h>
+#include <stdlib.h>],
+struct spwd sp; sp.sp_warn=0;,AC_DEFINE(HAVE_SP_WARN,1,struct spwd has sp_warn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(spwd has sp_inact)
+AC_TRY_LINK([#include <shadow.h>
+#include <stdlib.h>],
+struct spwd sp; sp.sp_inact=0;,AC_DEFINE(HAVE_SP_INACT,1,struct spwd has sp_inact)
+AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(spwd has sp_expire)
+AC_TRY_LINK([#include <shadow.h>
+#include <stdlib.h>],
+struct spwd sp; sp.sp_expire=0;,AC_DEFINE(HAVE_SP_EXPIRE,1,struct spwd has sp_expire) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(spwd has sp_flag)
+AC_TRY_LINK([#include <shadow.h>
+#include <stdlib.h>],
+struct spwd sp; sp.sp_flag=0;,AC_DEFINE(HAVE_SP_FLAG,1,struct spwd has sp_flag) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+fi 
+
 AC_SUBST(INCLUDE_SHADOWENTRY)
+])
+
+
+dnl checks for statfs/statvfs capibilities
+AC_DEFUN([FW_STATFS],
+[
+
+STATFS_STYLE="unknown"
+
+AC_MSG_CHECKING(statfs/statvfs)
+
+AC_TRY_LINK([#include <sys/vfs.h>],
+[struct statfs sfs;
+sfs.f_type=0;
+sfs.f_bsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.__val[0]=0;
+sfs.f_namelen=0;
+statfs("/",&sfs);]
+,AC_DEFINE(HAVE_LINUX_STATFS,1,Linux style statfs) STATFS_STYLE="linux style")
+
+dnl freebsd is very different from linux
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_LINK([#include <sys/param.h>
+#include <sys/mount.h>],
+[struct statfs sfs;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_type=0;
+sfs.f_flags=0;
+sfs.f_syncwrites=0;
+sfs.f_asyncwrites=0;
+sfs.f_fstypename[0]=0;
+sfs.f_mntonname[0]=0;
+sfs.f_syncreads=0;
+sfs.f_asyncreads=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);]
+,AC_DEFINE(HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) STATFS_STYLE="freebsd style")
+fi
+
+dnl netbsd is like freebsd but lacks a few fields
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_LINK([#include <sys/param.h>
+#include <sys/mount.h>],
+[struct statfs sfs;
+sfs.f_type=0;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_flags=0;
+sfs.f_syncwrites=0;
+sfs.f_asyncwrites=0;
+sfs.f_fstypename[0]=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statfs("/",&sfs);]
+,AC_DEFINE(HAVE_NETBSD_STATFS,1,NetBSD style statfs) STATFS_STYLE="netbsd style")
+fi
+
+dnl openbsd is like netbsd but with an additional mount_info union and without
+dnl an f_type field
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_LINK([#include <sys/param.h>
+#include <sys/mount.h>],
+[struct statfs sfs;
+sfs.f_flags=0;
+sfs.f_bsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_owner=0;
+sfs.f_syncwrites=0;
+sfs.f_asyncwrites=0;
+sfs.f_fstypename[0]=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+sfs.mount_info.ufs_args.fspec=NULL;
+statfs("/",&sfs);]
+,AC_DEFINE(HAVE_OPENBSD_STATFS,1,OpenBSD style statfs) STATFS_STYLE="openbsd style")
+fi
+
+dnl SCO and Solaris both have statvfs
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_LINK([#include <sys/types.h>
+#include <sys/statvfs.h>],
+[struct statvfs sfs;
+sfs.f_bsize=0;
+sfs.f_frsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_favail=0;
+sfs.f_fsid=0;
+sfs.f_basetype[0]=0;
+sfs.f_flag=0;
+sfs.f_fstr[0]=0;
+statvfs("/",&sfs);]
+,AC_DEFINE(HAVE_STATVFS,1,statvfs) STATFS_STYLE="statvfs")
+fi
+
+AC_MSG_RESULT($STATFS_STYLE)
+
 ])

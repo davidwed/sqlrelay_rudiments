@@ -1,4 +1,4 @@
-filesystem class almost certainly won't work on non-linux systems
+SCO's shadow entry doesn't have warn, inact, expire or flag
 
 document filesystem, timezonefile classes
 

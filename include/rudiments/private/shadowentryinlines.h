@@ -42,19 +42,35 @@ RUDIMENTS_INLINE int shadowentry::getDaysBeforeChangeRequired() const {
 }
 
 RUDIMENTS_INLINE int shadowentry::getDaysBeforeExpirationWarning() const {
+#ifdef HAVE_SP_WARN
 	return sp->sp_warn;
+#else
+	return -1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::getDaysOfInactivityAllowed() const {
+#ifdef HAVE_SP_INACT
 	return sp->sp_inact;
+#else
+	return -1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::getExpirationDate() const {
+#ifdef HAVE_SP_EXPIRE
 	return sp->sp_expire;
+#else
+	return -1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::getFlag() const {
+#ifdef HAVE_SP_FLAG
 	return sp->sp_flag;
+#else
+	return -1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::getEncryptedPassword(const char *username,
@@ -103,33 +119,64 @@ RUDIMENTS_INLINE int shadowentry::getDaysBeforeChangeRequired(
 RUDIMENTS_INLINE int shadowentry::getDaysBeforeExpirationWarning(
 						const char *username,
 							int *warn) {
+#ifdef HAVE_SP_WARN
 	shadowentry	sp;
 	if (sp.initialize(username)) {
 		*warn=sp.getDaysBeforeExpirationWarning();
 		return 1;
 	}
 	return 0;
+#else
+	*warn=-1;
+	return 1;
+#endif
+}
+
+RUDIMENTS_INLINE int shadowentry::getDaysOfInactivityAllowed(
+						const char *username,
+							int *inact) {
+#ifdef HAVE_SP_INACT
+	shadowentry	sp;
+	if (sp.initialize(username)) {
+		*inact=sp.getDaysOfInactivityAllowed();
+		return 1;
+	}
+	return 0;
+#else
+	*inact=-1;
+	return 1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::getExpirationDate(
 						const char *username,
 							int *expire) {
+#ifdef HAVE_SP_EXPIRE
 	shadowentry	sp;
 	if (sp.initialize(username)) {
 		*expire=sp.getExpirationDate();
 		return 1;
 	}
 	return 0;
+#else
+	*expire=-1;
+	return 1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::getFlag(const char *username,
 							int *flag) {
+#ifdef HAVE_SP_FLAG
 	shadowentry	sp;
 	if (sp.initialize(username)) {
 		*flag=sp.getFlag();
 		return 1;
 	}
 	return 0;
+#else
+	*flag=-1;
+	return 1;
+#endif
 }
 
 RUDIMENTS_INLINE int shadowentry::needsMutex() {

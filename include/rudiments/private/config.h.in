@@ -52,6 +52,9 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
+/* FreeBSD style statfs */
+#undef HAVE_FREEBSD_STATFS
+
 /* Some systems have getaddrinfo */
 #undef HAVE_GETADDRINFO
 
@@ -103,6 +106,9 @@
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
+/* Linux style statfs */
+#undef HAVE_LINUX_STATFS
+
 /* Some systems have localtime_r */
 #undef HAVE_LOCALTIME_R
 
@@ -119,11 +125,17 @@
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
 
+/* NetBSD style statfs */
+#undef HAVE_NETBSD_STATFS
+
 /* Define to 1 if you have the <netdb.h> header file. */
 #undef HAVE_NETDB_H
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
+
+/* OpenBSD style statfs */
+#undef HAVE_OPENBSD_STATFS
 
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
@@ -167,11 +179,26 @@
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
 
+/* struct spwd has sp_expire */
+#undef HAVE_SP_EXPIRE
+
+/* struct spwd has sp_flag */
+#undef HAVE_SP_FLAG
+
+/* struct spwd has sp_inact */
+#undef HAVE_SP_INACT
+
+/* struct spwd has sp_warn */
+#undef HAVE_SP_WARN
+
 /* Some systems have srand */
 #undef HAVE_SRAND
 
 /* Some systems have srand48 */
 #undef HAVE_SRAND48
+
+/* statvfs */
+#undef HAVE_STATVFS
 
 /* Define to 1 if you have the <stddef.h> header file. */
 #undef HAVE_STDDEF_H

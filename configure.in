@@ -131,6 +131,7 @@ AC_MSG_CHECKING(type of iovec.iov_base)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 struct iovec iov; iov.iov_base=(void *)" ";,AC_DEFINE(IOV_BASE_TYPE,void *,iov_base is void *) AC_MSG_RESULT(void *), AC_DEFINE(IOV_BASE_TYPE,char *,iov_base is char *) AC_MSG_RESULT(char *))
+FW_STATFS
 echo "******************************"
 
 

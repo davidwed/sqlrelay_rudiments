@@ -3,8 +3,15 @@
 
 	private:
 		void	close();
+#ifdef HAVE_LINUX_STATFS
+		static	char	*getFsTypeName(long type);
+#endif
 
+#ifdef HAVE_STATVFS
+		struct	statvfs	st;
+#else
 		struct	statfs	st;
+#endif
 
 		int	fd;
 		int	closeflag;
