@@ -330,3 +330,12 @@ int charstring::integerLength(long number) {
 	}
 	return length;
 }
+
+#ifndef HAVE_STRNDUP
+char *charstring::duplicate(const char *string, size_t length) {
+	char	*buffer=new char[length];
+	strncpy(buffer,string,length);
+	buffer[length-1]=(char)NULL;
+	return buffer;
+}
+#endif

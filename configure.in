@@ -749,6 +749,11 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <string.h>],
 strtold(NULL,NULL);,AC_DEFINE(HAVE_STRTOLD,1,Some systems have strtold) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(strndup)
+AC_TRY_LINK([#include <stdlib.h>
+#include <string.h>],
+strndup(NULL,0);,AC_DEFINE(HAVE_STRNDUP,1,Some systems have strndup) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(swab arguments)
 AC_TRY_LINK([#include <stdlib.h>
 #include <unistd.h>],

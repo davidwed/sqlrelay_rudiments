@@ -103,6 +103,13 @@ char *charstring::duplicate(const char *str) {
 	return strdup(str);
 }
 
+#ifdef HAVE_STRNDUP
+RUDIMENTS_INLINE
+char *charstring::duplicate(const char *str, size_t length) {
+	return strndup(str,length);
+}
+#endif
+
 RUDIMENTS_INLINE
 void charstring::rightTrim(char *string) {
 	rightTrim(string,' ');

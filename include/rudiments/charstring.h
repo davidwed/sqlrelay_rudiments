@@ -107,6 +107,12 @@ class charstring {
 			// to it.  Note that this method allocates a buffer for
 			// the duplicate string internally and returns it.  The
 			// calling program must deallocate this buffer.
+		static	char	*duplicate(const char *str, size_t length);
+			// Creates a duplicate of the first "length" bytes of
+			// "str" and returns a pointer to it.  Note that this
+			// method allocates a buffer for the duplicate string
+			// internally and returns it.  The calling program must
+			// deallocate this buffer.
 
 
 		static	void	upper(char *str); 
