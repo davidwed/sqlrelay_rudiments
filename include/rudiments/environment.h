@@ -27,7 +27,7 @@ class environment {
 
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/environmentinlines.h>
 #endif
 

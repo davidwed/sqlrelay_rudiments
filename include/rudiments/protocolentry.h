@@ -56,7 +56,7 @@ class protocolentry {
 	#include <rudiments/private/protocolentry.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/protocolentryinlines.h>
 #endif
 

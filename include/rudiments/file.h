@@ -109,7 +109,8 @@ class file : public filedescriptor {
 		static	char	*getContents(const char *name);
 			// Allocates a string large enough to accommodate the
 			// contents of the file "name" , reads the contents of
-			// the file into the string and returns the string.
+			// the file into the string, terminates it with a NULL
+			// and returns the string.
 			// The string must be freed by the calling program.
 			//
 			// If the file contains no data, then a string of length
@@ -290,7 +291,7 @@ class file : public filedescriptor {
 	#include <rudiments/private/file.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/fileinlines.h>
 #endif
 

@@ -21,7 +21,7 @@ class daemonprocess {
 			int	checkForPidFile(const char *filename) const;
 				// Checks for filename "filename" and reads the
 				// process id out of it, if it exists.  Returns
-				// the process id on success or 0 on failure.
+				// the process id on success or -1 on failure.
 			int	createPidFile(const char *filename,
 						mode_t permissions);
 				// Create's file "filename" with permissions
@@ -71,7 +71,7 @@ class daemonprocess {
 
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/daemonprocessinlines.h>
 #endif
 

@@ -58,7 +58,7 @@ class randomnumber {
 			// 2^32-1.
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/randomnumberinlines.h>
 #endif
 

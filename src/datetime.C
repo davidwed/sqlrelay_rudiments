@@ -5,7 +5,7 @@
 #ifdef HAVE_RTC
 	#include <rudiments/file.h>
 #endif
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/datetimeinlines.h>
 #endif
 

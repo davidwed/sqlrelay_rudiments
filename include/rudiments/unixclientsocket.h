@@ -54,7 +54,7 @@ class unixclientsocket : public client, public unixsocket {
 			// Returns 1 on success and 0 on failure.
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/unixclientsocketinlines.h>
 #endif
 

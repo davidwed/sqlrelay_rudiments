@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/unixsocket.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/unixsocketinlines.h>
 #endif
 

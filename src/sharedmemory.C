@@ -4,7 +4,7 @@
 #ifndef __CYGWIN__
 
 #include <rudiments/sharedmemory.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/sharedmemoryinlines.h>
 #endif
 

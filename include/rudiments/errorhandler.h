@@ -19,7 +19,7 @@ class errorhandler {
 	#include <rudiments/private/errorhandler.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/errorhandlerinlines.h>
 #endif
 

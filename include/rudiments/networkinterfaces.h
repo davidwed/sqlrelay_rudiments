@@ -34,7 +34,7 @@ class networkinterface {
 	#include <rudiments/private/networkinterface.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/networkinterfaceinlines.h>
 #endif
 

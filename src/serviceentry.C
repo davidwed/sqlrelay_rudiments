@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/serviceentry.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/serviceentryinlines.h>
 #endif
 

@@ -68,7 +68,7 @@ class variablebuffer {
 	#include <rudiments/private/variablebuffer.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/variablebufferinlines.h>
 #endif
 

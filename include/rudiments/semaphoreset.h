@@ -185,7 +185,7 @@ class semaphoreset {
 
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/semaphoresetinlines.h>
 #endif
 

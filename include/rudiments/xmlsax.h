@@ -48,7 +48,7 @@ class xmlsax : public errorhandler {
 	#include <rudiments/private/xmlsax.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/xmlsaxinlines.h>
 #endif
 

@@ -71,7 +71,7 @@ class listener {
 	#include <rudiments/private/listener.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/listenerinlines.h>
 #endif
 

@@ -53,7 +53,7 @@ class rpcentry {
 	#include <rudiments/private/rpcentry.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/rpcentryinlines.h>
 #endif
 

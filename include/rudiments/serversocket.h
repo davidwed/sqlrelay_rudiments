@@ -49,7 +49,7 @@ class serversocket : public server {
 	#include <rudiments/private/serversocket.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/serversocketinlines.h>
 #endif
 

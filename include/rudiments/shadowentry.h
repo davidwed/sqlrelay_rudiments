@@ -73,7 +73,7 @@ class shadowentry {
 	#include <rudiments/private/shadowentry.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/shadowentryinlines.h>
 #endif
 

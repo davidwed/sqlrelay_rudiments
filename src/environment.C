@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/environment.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#define RUDIMENTS_INLINE
 	#include <rudiments/private/environmentinlines.h>
 #endif

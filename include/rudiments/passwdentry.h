@@ -71,7 +71,7 @@ class passwdentry {
 	#include <rudiments/private/passwdentry.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/passwdentryinlines.h>
 #endif
 

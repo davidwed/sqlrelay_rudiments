@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/logger.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/loggerinlines.h>
 #endif
 

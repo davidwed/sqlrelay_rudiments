@@ -112,7 +112,7 @@ class list {
 
 
 // A class for containing lists of strings is defined here for convenience.
-typedef listnode< char *>		stringlistnode;
+typedef listnode< char * >		stringlistnode;
 typedef list< char *, stringlistnode >	stringlist;
 
 #endif

@@ -1,8 +1,11 @@
-string class name conflicts with stl string class
+string class name conflicts with stl string class - rename to charstring?
 
-a table class would be nice
-a termios class would be nice
-a thread class would be nice
+these classes would be nice:
+	table
+	termios
+	thread
+	networkinterfaces (stubbed out)
+	shellcommand (stubbed out)
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldomnode should probably use list class

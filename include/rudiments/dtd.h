@@ -28,7 +28,7 @@ class dtd {
 	#include <rudiments/private/dtd.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/dtdinlines.h>
 #endif
 

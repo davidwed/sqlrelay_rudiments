@@ -1,7 +1,7 @@
 /* include/rudiments/private/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Use inline functions or not */
-#undef ENABLE_INLINES
+#undef ENABLE_RUDIMENTS_INLINES
 
 /* Some systems define tm_gmtoff in their struct tm */
 #undef HAS_TM_GMTOFF

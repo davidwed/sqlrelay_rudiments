@@ -26,7 +26,7 @@ class commandline {
 
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/commandlineinlines.h>
 #endif
 

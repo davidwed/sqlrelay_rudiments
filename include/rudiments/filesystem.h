@@ -201,7 +201,7 @@ class filesystem {
 	#include <rudiments/private/filesystem.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/filesysteminlines.h>
 #endif
 

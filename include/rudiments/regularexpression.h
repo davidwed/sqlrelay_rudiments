@@ -42,7 +42,7 @@ class regularexpression {
 	#include <rudiments/private/regularexpression.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/regularexpressioninlines.h>
 #endif
 

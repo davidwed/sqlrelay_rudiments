@@ -60,7 +60,7 @@ class groupentry {
 	#include <rudiments/private/groupentry.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/groupentryinlines.h>
 #endif
 

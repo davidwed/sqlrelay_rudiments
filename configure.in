@@ -12,8 +12,8 @@ AC_ARG_WITH(system-libtool,
 	USE_SYSTEM_LIBTOOL="no")
 AC_ARG_ENABLE(inlines,
 	[  --enable-inlines        use inline methods],
-	ENABLE_INLINES="yes",
-	ENABLE_INLINES="no")
+	ENABLE_RUDIMENTS_INLINES="yes",
+	ENABLE_RUDIMENTS_INLINES="no")
 AC_ARG_WITH(ptheads-prefix,
 	[  --with-ptheads-prefix         Location of Pthreads],
 	PTHREADSPATH=$withval,
@@ -37,9 +37,9 @@ AH_TEMPLATE([HAVE_SEMUN],[Some systems define union semun])
 AH_TEMPLATE([HAVE_CMSGHDR],[Some systems define struct cmsghdr])
 AH_TEMPLATE([SIGNAL_HANDLER_INT],[Most systems define signal handlers with an integer parameter])
 AH_TEMPLATE([HAVE_CMSG_SPACE],[Some systems don't define CMSG_SPACE])
-AH_TEMPLATE([ENABLE_INLINES],[Use inline functions or not])
-if ( test "$ENABLE_INLINES" = "yes" ); then
-	AC_DEFINE_UNQUOTED(ENABLE_INLINES,1,Use inline functions or not)
+AH_TEMPLATE([ENABLE_RUDIMENTS_INLINES],[Use inline functions or not])
+if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
+	AC_DEFINE_UNQUOTED(ENABLE_RUDIMENTS_INLINES,1,Use inline functions or not)
 fi
 
 

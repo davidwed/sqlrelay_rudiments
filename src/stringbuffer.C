@@ -2,6 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/stringbuffer.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/stringbufferinlines.h>
 #endif

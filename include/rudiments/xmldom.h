@@ -33,7 +33,7 @@ class xmldom : public xmlsax {
 	#include <rudiments/private/xmldom.h>
 };
 
-#ifdef ENABLE_INLINES
+#ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/xmldominlines.h>
 #endif
 

@@ -1469,9 +1469,9 @@ fi;
 # Check whether --enable-inlines or --disable-inlines was given.
 if test "${enable_inlines+set}" = set; then
   enableval="$enable_inlines"
-  ENABLE_INLINES="yes"
+  ENABLE_RUDIMENTS_INLINES="yes"
 else
-  ENABLE_INLINES="no"
+  ENABLE_RUDIMENTS_INLINES="no"
 fi;
 
 # Check whether --with-ptheads-prefix or --without-ptheads-prefix was given.
@@ -1510,10 +1510,10 @@ fi
 
 
 
-if ( test "$ENABLE_INLINES" = "yes" ); then
+if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 
 cat >>confdefs.h <<_ACEOF
-#define ENABLE_INLINES 1
+#define ENABLE_RUDIMENTS_INLINES 1
 _ACEOF
 
 fi

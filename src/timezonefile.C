@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/timezonefile.h>
-#ifndef ENABLE_INLINES
+#ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/timezonefileinlines.h>
 #endif
 
