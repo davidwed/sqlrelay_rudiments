@@ -19,7 +19,7 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 		// not sure why this has to be rebuilt every time, but
 		// it appears to have to be
 		fd_set	fdlist;
-		int	largest;
+		int	largest=-1;
 		FD_ZERO(&fdlist);
 		listenerlistnode	*current=
 				filedescriptorlist.getNodeByIndex(0);

@@ -84,14 +84,6 @@ int inetclientsocket::connect() {
 		}
 		delete[] portstr;
 
-		// create an inet socket
-		if ((fd=socket(ai->ai_family,ai->ai_socktype,
-						ai->ai_protocol))==-1) {
-			fd=-1;
-			freeaddrinfo(ai);
-			return 0;
-		}
-
 	#endif
 
 	// if create failed, show this error
@@ -126,9 +118,19 @@ int inetclientsocket::connect() {
 			// that came back from the address lookup
 			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
 
+				// create an inet socket
+				if ((fd=socket(ai->ai_family,
+						ai->ai_socktype,
+						ai->ai_protocol))==-1) {
+					continue;
+				}
+
+				// attempt to connect to the socket
 				if (::connect(fd,
 					(struct sockaddr *)ainfo->ai_addr,
-						ainfo->ai_addrlen)!=-1) {
+						ainfo->ai_addrlen)==-1) {
+					close();
+				} else {
 					freeaddrinfo(ai);
 					return 1;
 				}
@@ -141,10 +143,10 @@ int inetclientsocket::connect() {
 	}
 
 	// if we're here, the connect failed
-	close();
-
 	#ifdef HAVE_GETADDRINFO
 		freeaddrinfo(ai);
+	#else
+		close();
 	#endif
 
 	return 0;
