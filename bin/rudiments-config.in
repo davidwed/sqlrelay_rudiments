@@ -10,14 +10,10 @@ version=@RUDIMENTS_VERSION@
 
 if ( test "@libdir@" = "/usr/lib" ); then
 	rudiments_libs="-lrudiments"
-	rudiments_debug_profiling_libs="-lrudiments_p"
 	rudiments_libs_with_rpath="-lrudiments"
-	rudiments_debug_profiling_libs_with_rpath="-lrudiments_p"
 else
 	rudiments_libs="-L@libdir@ -lrudiments"
-	rudiments_debug_profiling_libs="-L@libdir@ -lrudiments_p"
 	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments"
-	rudiments_debug_profiling_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments_p"
 fi
 rudiments_cflags="-I@includedir@"
 
@@ -31,7 +27,6 @@ Options:
 	[--version]
 	[--libs]
 	[--with-rpath]
-	[--debug-profiling-libs]
 	[--cflags]
 EOF
 	exit $1
@@ -63,9 +58,6 @@ while ( test "$#" -gt "0" ); do
     --libs)
       echo_libs=yes
       ;;
-    --debug-profiling-libs)
-      echo_debug_profiling_libs=yes
-      ;;
     --with-rpath)
       with_rpath=yes
       ;;
@@ -95,12 +87,3 @@ if ( test "$echo_libs" = "yes" ); then
       echo $rudiments_libs
     fi
 fi      
-
-if ( test "$echo_debug_profiling_libs" = "yes" ); then
-    if ( test "$with_rpath" = "yes" ); then
-      echo $rudiments_debug_profiling_libs_with_rpath
-    else
-      echo $rudiments_debug_profiling_libs
-    fi
-fi      
-

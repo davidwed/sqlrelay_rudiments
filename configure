@@ -469,7 +469,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS DEBUGCXXFLAGS SMALLCODE build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT LN_S ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CPP EGREP LIBTOOL CXX ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE AR PIPE CXXCPP PTHREADSINCLUDES PTHREADSLIB LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT LN_S ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CPP EGREP LIBTOOL CXX ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE AR PIPE CXXCPP PTHREADSINCLUDES PTHREADSLIB LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1017,6 +1017,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-small-code     optimize for small code size
+  --enable-debug          compile with -g and -pg options and don't strip binaries
   --enable-inlines        use inline methods
   --enable-shared=PKGS  build shared libraries default=yes
   --enable-static=PKGS  build static libraries default=yes
@@ -1458,6 +1459,13 @@ if test "${enable_small_code+set}" = set; then
 else
   SMALLCODE=""
 fi;
+# Check whether --enable-debug or --disable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval="$enable_debug"
+  CXXFLAGS="-g -pg -fno-exceptions -Wall"; INSTALLSTRIP=""
+else
+  CXXFLAGS="-fomit-frame-pointer -fno-exceptions -Wall"; INSTALLSTRIP="-s"
+fi;
 
 # Check whether --with-system-libtool or --without-system-libtool was given.
 if test "${with_system_libtool+set}" = set; then
@@ -1483,8 +1491,6 @@ else
 fi;
 
 
-CXXFLAGS="-fomit-frame-pointer -fno-exceptions -Wall"
-DEBUGCXXFLAGS="-fno-exceptions -Wall"
 
 
 
@@ -4028,7 +4034,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4031 "configure"' > conftest.$ac_ext
+  echo '#line 4037 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4575,7 +4581,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4578: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4584: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6416,7 +6422,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6419 "configure"
+#line 6425 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6514,7 +6520,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6517 "configure"
+#line 6523 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15290,7 +15296,7 @@ s,@ECHO_N@,$ECHO_N,;t t
 s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
 s,@CXXFLAGS@,$CXXFLAGS,;t t
-s,@DEBUGCXXFLAGS@,$DEBUGCXXFLAGS,;t t
+s,@INSTALLSTRIP@,$INSTALLSTRIP,;t t
 s,@SMALLCODE@,$SMALLCODE,;t t
 s,@build@,$build,;t t
 s,@build_cpu@,$build_cpu,;t t
