@@ -36,33 +36,27 @@ void inetclientsocket::initialize(connectiondata *cd) {
 int inetclientsocket::connect() {
 
 	// get the host entry
-	hostentry	*he=new hostentry();
-	if (!he->initialize(address)) {
-		delete he;
+	hostentry	he;
+	if (!he.initialize(address)) {
 		return 0;
 	}
 
 	// set the address type and port to connect to
 	memset((void *)&sin,0,sizeof(sin));
-	sin.sin_family=he->getAddressType();
+	sin.sin_family=he.getAddressType();
 	sin.sin_port=htons(port);
 
 	// use tcp protocol
-	protocolentry	*pe=new protocolentry();
-	if (!pe->initialize("tcp")) {
-		delete pe;
-		delete he;
+	protocolentry	pe;
+	if (!pe.initialize("tcp")) {
 		return 0;
 	}
 
 	// create an inet socket
-	if ((fd=socket(AF_INET,SOCK_STREAM,pe->getNumber()))==-1) {
+	if ((fd=socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
 		fd=-1;
-		delete pe;
-		delete he;
 		return 0;
 	}
-	delete pe;
 
 	// if create failed, show this error
 
@@ -72,18 +66,17 @@ int inetclientsocket::connect() {
 		// try to connect to each of the addresses
 		// that came back from the address lookup
 		for (int addressindex=0;
-				he->getAddressList()[addressindex];
+				he.getAddressList()[addressindex];
 				addressindex++) {
 
 			// set which host to connect to
 			memcpy((void *)&sin.sin_addr,
-				(void *)he->getAddressList()[addressindex],
-				he->getAddressLength());
+				(void *)he.getAddressList()[addressindex],
+				he.getAddressLength());
 	
 			// attempt to connect
 			if (::connect(fd,(struct sockaddr *)&sin,
 							sizeof(sin))!=-1) {
-					delete he;
 					return 1;
 			}
 		}
@@ -95,6 +88,5 @@ int inetclientsocket::connect() {
 	// if we're here, the connect failed
 	close();
 
-	delete he;
 	return 0;
 }
