@@ -174,19 +174,57 @@ class xmldomnode {
 		char		*getValue() const;
 				// Returns the node value.
 
+
 		xmldomnode	*getParent() const;
 				// Returns a pointer to the parent node or the
 				// nullnode if none exists.
 		xmldomnode	*getPreviousSibling() const;
 				// Returns a pointer to the previous sibling
 				// node or the nullnode if none exists.
+		xmldomnode	*getPreviousTagSibling() const;
+				// Returns a pointer to the previous sibling
+				// node whose type is TAG_XMLDOMNODE.  If no
+				// match is found, nullnode is returned.
+		xmldomnode	*getPreviousTagSibling(const char *name) const;
+				// Returns the previous sibling node named
+				// "name" whose type is TAG_XMLDOMNODE or the
+				// nullnode if not found.
+		xmldomnode	*getPreviousTagSibling(const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+				// Returns the previous sibling node named
+				// "name" with an attribute named
+				// "attributename" with value "attributevalue"
+				// whose type is TAG_XMLDOMNODE.  If "name" is
+				// null, then the name of the child node is not
+				// checked, and the first child node with any
+				// name (with matching attribute name/value)
+				// will be returned.  If no match is found,
+				// nullnode is returned.
 		xmldomnode	*getNextSibling() const;
 				// Returns a pointer to the next sibling node
 				// or the nullnode if none exists.
-		xmldomnode	*getNextTagSibling();
+		xmldomnode	*getNextTagSibling() const;
 				// Returns a pointer to the next sibling node
 				// whose type is TAG_XMLDOMNODE.  If no match
 				// is found, nullnode is returned.
+		xmldomnode	*getNextTagSibling(const char *name) const;
+				// Returns the next sibling node named "name"
+				// whose type is TAG_XMLDOMNODE or the nullnode
+				// if not found.
+		xmldomnode	*getNextTagSibling(const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+				// Returns the next sibling node named "name"
+				// with an attribute named "attributename" with
+				// value "attributevalue" whose type is
+				// TAG_XMLDOMNODE.  If "name" is null,
+				// then the name of the child node is not
+				// checked, and the first child node with any
+				// name (with matching attribute name/value)
+				// will be returned.  If no match is found,
+				// nullnode is returned.
+
 
 		int		getChildCount() const;
 				// Returns the number of immediate child nodes.
@@ -208,10 +246,11 @@ class xmldomnode {
 				// name (with matching attribute name/value)
 				// will be returned.  If no match is found,
 				// nullnode is returned.
-		xmldomnode	*getFirstTagChild();
+		xmldomnode	*getFirstTagChild() const;
 				// Returns the first child node whose type is
 				// TAG_XMLDOMNODE.  If no match is found,
 				// nullnode is returned.
+
 
 		int		getAttributeCount() const;
 				// Returns the number of attributes.

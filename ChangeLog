@@ -48,6 +48,7 @@
 	removed unnecessary -pedantic from CXXFLAGS
 	added list/dictionary classes, other classes use them instead of
 		implementing their own lists/dicts
+	added environment class
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

@@ -82,14 +82,83 @@ xmldomnode *xmldomnode::createNullNode() {
 	return nn;
 }
 
-xmldomnode *xmldomnode::getNextTagSibling() {
-	xmldomnode	*node=this;
+xmldomnode *xmldomnode::getPreviousTagSibling() const {
+	xmldomnode	*node=(xmldomnode *)this;
+	while (!(node=node->getPreviousSibling())->isNullNode() &&
+				!node->getType()==TAG_XMLDOMNODETYPE);
+	return node;
+}
+
+xmldomnode *xmldomnode::getPreviousTagSibling(const char *name) const {
+	for (xmldomnode *current=getPreviousTagSibling();
+			current && !current->isNullNode();
+				current=current->getPreviousTagSibling()) {
+		char	*nm=current->getName();
+		if ((name && nm && !strcmp(name,nm)) || !name) {
+			return current;
+		}
+	}
+	return nullnode;
+}
+
+xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	for (xmldomnode *current=getPreviousTagSibling();
+			current && !current->isNullNode();
+				current=current->getPreviousTagSibling()) {
+		char	*nm=current->getName();
+		if ((name && nm && !strcmp(name,nm)) || !name) {
+			char	*value=current->
+					getAttribute(attributename)->
+						getValue();
+			if (value && !strcmp(value,attributevalue)) {
+				return current;
+			}
+		}
+	}
+	return nullnode;
+}
+
+xmldomnode *xmldomnode::getNextTagSibling() const {
+	xmldomnode	*node=(xmldomnode *)this;
 	while (!(node=node->getNextSibling())->isNullNode() &&
 				!node->getType()==TAG_XMLDOMNODETYPE);
 	return node;
 }
 
-xmldomnode *xmldomnode::getFirstTagChild() {
+xmldomnode *xmldomnode::getNextTagSibling(const char *name) const {
+	for (xmldomnode *current=getNextTagSibling();
+			current && !current->isNullNode();
+				current=current->getNextTagSibling()) {
+		char	*nm=current->getName();
+		if ((name && nm && !strcmp(name,nm)) || !name) {
+			return current;
+		}
+	}
+	return nullnode;
+}
+
+xmldomnode *xmldomnode::getNextTagSibling(const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	for (xmldomnode *current=getNextTagSibling();
+			current && !current->isNullNode();
+				current=current->getNextTagSibling()) {
+		char	*nm=current->getName();
+		if ((name && nm && !strcmp(name,nm)) || !name) {
+			char	*value=current->
+					getAttribute(attributename)->
+						getValue();
+			if (value && !strcmp(value,attributevalue)) {
+				return current;
+			}
+		}
+	}
+	return nullnode;
+}
+
+xmldomnode *xmldomnode::getFirstTagChild() const {
 	xmldomnode	*node=getChild(0);
 	return (node->getType()==TAG_XMLDOMNODETYPE)?
 					node:node->getNextTagSibling();
@@ -98,18 +167,18 @@ xmldomnode *xmldomnode::getFirstTagChild() {
 xmldomnode *xmldomnode::getChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
-	xmldomnode	*current=firstchild;
-	char		*nm;
-	char		*value;
-	while (current && !current->isNullNode()) {
-		nm=current->getName();
+	for (xmldomnode *current=firstchild;
+			current && !current->isNullNode();
+				current=current->next) {
+		char	*nm=current->getName();
 		if ((name && nm && !strcmp(name,nm)) || !name) {
-			value=current->getAttribute(attributename)->getValue();
+			char	*value=current->
+					getAttribute(attributename)->
+						getValue();
 			if (value && !strcmp(value,attributevalue)) {
 				return current;
 			}
 		}
-		current=current->next;
 	}
 	return nullnode;
 }

@@ -160,6 +160,17 @@ class datetime {
 			// recalculates the time currently represented in the
 			// class to correspond to the time zone "newtz"
 
+
+		// These methods allow you to add discrete time intervals to
+		// the time currently represented in the class.
+		void	addSeconds(int seconds);
+		void	addMinutes(int minutes);
+		void	addHours(int hours);
+		void	addDays(int days);
+		void	addMonths(int months);
+		void	addYears(int years);
+
+
 		// These methods output conversions to other date/time
 		// formats.
 		char	*getString();

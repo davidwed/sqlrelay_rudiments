@@ -32,6 +32,11 @@ ifeq ($(INCLUDE_ERRORHANDLER),1)
 	NLOBJS += errorhandler.n.lo
 	PLOBJS += errorhandler.p.lo
 endif
+ifeq ($(INCLUDE_ENVIRONMENT),1)
+	SRCS += environment.C
+	NLOBJS += environment.n.lo
+	PLOBJS += environment.p.lo
+endif
 ifeq ($(INCLUDE_FILE),1)
 	SRCS += file.C
 	NLOBJS += file.n.lo

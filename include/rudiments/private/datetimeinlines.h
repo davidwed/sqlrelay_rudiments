@@ -107,6 +107,36 @@ RUDIMENTS_INLINE tm *datetime::getTm() {
 	return &timestruct;
 }
 
+RUDIMENTS_INLINE void datetime::addSeconds(int seconds) {
+	timestruct.tm_sec=timestruct.tm_sec+seconds;
+	epoch=mktime(&timestruct);
+}
+
+RUDIMENTS_INLINE void datetime::addMinutes(int minutes) {
+	timestruct.tm_min=timestruct.tm_min+minutes;
+	epoch=mktime(&timestruct);
+}
+
+RUDIMENTS_INLINE void datetime::addHours(int hours) {
+	timestruct.tm_hour=timestruct.tm_hour+hours;
+	epoch=mktime(&timestruct);
+}
+
+RUDIMENTS_INLINE void datetime::addDays(int days) {
+	timestruct.tm_hour=timestruct.tm_yday+days;
+	epoch=mktime(&timestruct);
+}
+
+RUDIMENTS_INLINE void datetime::addMonths(int months) {
+	timestruct.tm_hour=timestruct.tm_mon+months;
+	epoch=mktime(&timestruct);
+}
+
+RUDIMENTS_INLINE void datetime::addYears(int years) {
+	timestruct.tm_hour=timestruct.tm_year+years;
+	epoch=mktime(&timestruct);
+}
+
 RUDIMENTS_INLINE char *datetime::getString(time_t epoch) {
 	datetime	dt;
 	return ((dt.initialize(epoch))?strdup(dt.getString()):NULL);

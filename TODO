@@ -1,6 +1,9 @@
 use getaddrinfo and friends instead of gethostbyname_r on xBSD
 
+datetime test fails to get proper timezone
+
 update docs
+document environment class
 
 a termios class would be nice
 a thread class would be nice

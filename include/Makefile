@@ -36,6 +36,10 @@ ifeq ($(INCLUDE_DTD),1)
 	HEADERS += dtd.h
 	PRIVATEHEADERS += dtd.h dtdinlines.h
 endif
+ifeq ($(INCLUDE_ENVIRONMENT),1)
+	HEADERS += environment.h
+	PRIVATEHEADERS += environment.h environmentinlines.h
+endif
 ifeq ($(INCLUDE_ERRORHANDLER),1)
 	HEADERS += errorhandler.h
 	PRIVATEHEADERS += errorhandler.h errorhandlerinlines.h

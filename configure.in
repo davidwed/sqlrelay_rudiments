@@ -185,10 +185,11 @@ echo "******************************"
 dnl Checks for library functions.
 echo
 echo "***** Functions **************"
+AC_LANG(C)
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_MKTIME
-AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open)
+AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open setenv putenv)
 
 AC_MSG_CHECKING(srand48)
 AC_TRY_LINK([#include <stdlib.h>],
@@ -252,6 +253,7 @@ AC_CHECK_LIB(xnet,gethostbyname,XNETLIB=-lxnet,XNETLIB="")
 AC_SUBST(XNETLIB)
 AC_CHECK_LIB(nsl,gethostbyname,NSLLIB=-lnsl,NSLLIB="")
 AC_SUBST(NSLLIB)
+AC_LANG(C++)
 echo "******************************"
 
 

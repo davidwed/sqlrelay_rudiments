@@ -107,6 +107,9 @@
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
 
+/* Define to 1 if you have the `putenv' function. */
+#undef HAVE_PUTENV
+
 /* Some systems have rand */
 #undef HAVE_RAND
 
@@ -136,6 +139,9 @@
 
 /* Define to 1 if you have the `sem_open' function. */
 #undef HAVE_SEM_OPEN
+
+/* Define to 1 if you have the `setenv' function. */
+#undef HAVE_SETENV
 
 /* Some systems have srand */
 #undef HAVE_SRAND

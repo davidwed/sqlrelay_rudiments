@@ -324,22 +324,23 @@ void datetime::adjustTimeZone(tzone newtz) {
 				getTimeZoneOffset()+tzoneoffset[newtz];
 	mktime(&timestruct);
 	setTimeZone(newtz);
+	initTimeString();
 }
 
 datetime::tzone datetime::determineTimeZone(const tm *tmstruct) {
 
-	#ifdef HAS___TM_GMTOFF
-		long	offset=tmstruct->__tm_gmtoff;
-	#elif HAS_TM_GMTOFF
-		long	offset=tmstruct->tm_gmtoff;
-	#elif HAS_TM_TZADJ
-		long	offset=tmstruct->tm_tzadj;
+	#ifdef HAS___TM_ZONE
+		char	*tmzone=(char *)timestruct.__tm_zone;
+	#elif HAS_TM_ZONE
+		char	*tmzone=(char *)timestruct.tm_zone;
+	#elif HAS_TM_NAME
+		char	*tmzone=(char *)timestruct.tm_name;
 	#else
-		long	offset=0;
+		return GMT;
 	#endif
 
 	for (int index=0; tzonestring[index]; index++) {
-		if (tzoneoffset[index]==offset) {
+		if (!strcmp(tzonestring[index],tmzone)) {
 			return tzonelist[index];
 		}
 	}
