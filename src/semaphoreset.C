@@ -143,7 +143,6 @@ void semaphoreset::createOperations() {
 }
 
 int semaphoreset::setUserName(const char *username) {
-
 	passwdentry	*passwdent=new passwdentry();
 	if (!passwdent->initialize(username)) {
 		return 0;
@@ -162,22 +161,12 @@ int semaphoreset::setUserId(uid_t uid) {
 }
 
 int semaphoreset::setGroupName(const char *groupname) {
-#ifdef HAVE_GETGRNAM_R
-	group	*groupent=new group;
-	char	buffer[1024];
-	if (getgrnam_r(groupname,groupent,buffer,1024,&groupent)) {
+	groupentry	*groupent=new groupentry();
+	if (!groupent->initialize(groupname)) {
 		return 0;
 	}
-#else
-	group	*groupent=NULL;
-	if (!(groupent=getgrnam(groupname))) {
-		return 0;
-	}
-#endif
-	int	retval=setGroupId(groupent->gr_gid);
-#ifdef HAVE_GETGRNAM_R
+	int	retval=setGroupId(groupent->getGroupId());
 	delete groupent;
-#endif
 	return retval;
 }
 
@@ -199,34 +188,22 @@ int semaphoreset::setPermissions(mode_t permissions) {
 
 char *semaphoreset::getUserName() {
 	semid_ds	getds;
-	semun	semctlun;
+	semun		semctlun;
 	semctlun.buf=&getds;
+	char	*retval=NULL;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
-#ifdef HAVE_GETPWUID_R
-		passwd	*passwdent=new passwd;
-		char	buffer[1024];
-		if (getpwuid_r(getds.sem_perm.uid,passwdent,
-					buffer,1024,&passwdent)) {
-			return NULL;
+		passwdentry	*passwdent=new passwdentry();
+		if (passwdent->initialize(getds.sem_perm.uid)) {
+			retval=strdup(passwdent->getName());
 		}
-#else
-		passwd	*passwdent=NULL;
-		if (!(passwdent=getpwuid(getds.sem_perm.uid))) {
-			return NULL;
-		}
-#endif
-		char	*retval=strdup(passwdent->pw_name);
-#ifdef HAVE_GETPWUID_R
 		delete passwdent;
-#endif
-		return retval;
 	}
-	return NULL;
+	return retval;
 }
 
 uid_t semaphoreset::getUserId() {
 	semid_ds	getds;
-	semun	semctlun;
+	semun		semctlun;
 	semctlun.buf=&getds;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
 		return (short)getds.sem_perm.uid;
@@ -236,34 +213,22 @@ uid_t semaphoreset::getUserId() {
 
 char *semaphoreset::getGroupName() {
 	semid_ds	getds;
-	semun	semctlun;
+	semun		semctlun;
 	semctlun.buf=&getds;
+	char	*retval=NULL;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
-#ifdef GETGRGID_R
-		group	*groupent=new group;
-		char	buffer[1024];
-		if (getgrgid(getds.sem_perm.gid,groupent,
-					buffer,1024,&groupent)) {
-			return NULL;
+		groupentry	*groupent=new groupentry();
+		if (groupent->initialize(getds.sem_perm.gid)) {
+			retval=strdup(groupent->getName());
 		}
-#else
-		group	*groupent=NULL;
-		if (!(groupent=getgrgid(getds.sem_perm.gid))) {
-			return NULL;
-		}
-#endif
-		char	*retval=strdup(groupent->gr_name);
-#ifdef GETGRGID_R
 		delete groupent;
-#endif
-		return retval;
 	}
-	return NULL;
+	return retval;
 }
 
 gid_t semaphoreset::getGroupId() {
 	semid_ds	getds;
-	semun	semctlun;
+	semun		semctlun;
 	semctlun.buf=&getds;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
 		return (short)getds.sem_perm.gid;
@@ -273,7 +238,7 @@ gid_t semaphoreset::getGroupId() {
 
 mode_t semaphoreset::getPermissions() {
 	semid_ds	getds;
-	semun	semctlun;
+	semun		semctlun;
 	semctlun.buf=&getds;
 	if (!semctl(semid,0,IPC_STAT,semctlun)) {
 		return getds.sem_perm.mode;
