@@ -1,3 +1,5 @@
+use getaddrinfo and friends instead of gethostbyname_r on xBSD
+
 comment string class
 document/comment list and dictionary classes
 document filedescriptor,file,string,stringbuffer,variablebuffer,

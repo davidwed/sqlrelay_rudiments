@@ -81,11 +81,11 @@ RUDIMENTS_INLINE tm *datetime::getTm() {
 }
 
 RUDIMENTS_INLINE char *datetime::getString(time_t epoch) {
-	datetime	dt(epoch);
-	return strdup(dt.getString());
+	datetime	dt;
+	return ((dt.initialize(epoch))?strdup(dt.getString()):NULL);
 }
 
 RUDIMENTS_INLINE time_t datetime::getEpoch(const char *datestring) {
-	datetime	dt(datestring);
-	return dt.getEpoch();
+	datetime	dt;
+	return ((dt.initialize(datestring))?dt.getEpoch():-1);
 }

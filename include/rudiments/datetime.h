@@ -14,16 +14,18 @@
 class datetime {
 	public:
 			datetime();
-				// current time
-			datetime(const char *datestring);
-				// datestring must be "mm/dd/yyyy hh:mm:ss"
-			datetime(time_t epoch);
-				// epoch is the number of seconds since 1970,
-				// output by many standard time functions
-			datetime(const tm *timestruct);
-				// *timestruct is a (struct tm *), output by 
-				// many standard time functions
 			~datetime();
+
+		int	initialize();
+			// current time
+		int	initialize(const char *datestring);
+			// datestring must be "mm/dd/yyyy hh:mm:ss"
+		int	initialize(time_t epoch);
+			// epoch is the number of seconds since 1970,
+			// output by many standard time functions
+		int	initialize(const tm *timestruct);
+			// *timestruct is a (struct tm *), output by 
+			// many standard time functions
 
 		// These methods return commonly needed time/date values
 		int	getHour() const;

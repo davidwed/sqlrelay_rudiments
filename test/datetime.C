@@ -10,6 +10,7 @@ int main(int argv, const char **argc) {
 
 	// get the current date
 	datetime	dt;
+	dt.initialize();
 
 	// Write out the different parts of the date.
 	printf("Hour		  : %d\n",dt.getHour());

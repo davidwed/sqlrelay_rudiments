@@ -24,19 +24,33 @@
 
 datetime::datetime() {
 	timestring=NULL;
-	epoch=time(NULL);
-#ifdef HAVE_LOCALTIME_R
-	localtime_r(&epoch,&timestruct);
-#else
-	tm	*lcltm=localtime(&epoch);
-	if (lcltm) {
-		memcpy((void *)&timestruct,(void *)lcltm,sizeof(struct tm));
-	}
-#endif
+	epoch=0;
 }
 
-datetime::datetime(const char *timestring) {
+int datetime::initialize() {
 
+	if ((epoch=time(NULL))==-1) {
+		return 0;
+	}
+
+	delete[] timestring;
+	timestring=NULL;
+
+	#ifdef HAVE_LOCALTIME_R
+		return (localtime_r(&epoch,&timestruct)!=NULL);
+	#else
+		tm	*lcltm=localtime(&epoch);
+		if (!lcltm) {
+			return 0;
+		}
+		memcpy((void *)&timestruct,(void *)lcltm,sizeof(struct tm));
+		return 1;
+	#endif
+}
+
+int datetime::initialize(const char *timestring) {
+
+	delete[] this->timestring;
 	this->timestring=strdup(timestring);
 
 	// get the date
@@ -64,27 +78,39 @@ datetime::datetime(const char *timestring) {
 	timestruct.tm_yday=0;
 	timestruct.tm_isdst=0;
 
-	epoch=mktime(&timestruct);
+	return ((epoch=mktime(&timestruct))!=-1);
 }
 
-datetime::datetime(const tm *timestruct) {
+int datetime::initialize(const tm *timestruct) {
+
+	delete[] timestring;
+	timestring=NULL;
+
 	memcpy((void *)&(this->timestruct),(void *)timestruct,
 						sizeof(struct tm));
-	epoch=mktime(&this->timestruct);
-	timestring=NULL;
+
+	return ((epoch=mktime(&this->timestruct))!=-1);
 }
 
-datetime::datetime(const time_t epoch) {
-#ifdef HAVE_LOCALTIME_R
-	localtime_r(&epoch,&timestruct);
-#else
-	tm	*lcltm=localtime(&epoch);
-	if (lcltm) {
+int datetime::initialize(time_t epoch) {
+
+	#ifdef HAVE_LOCALTIME_R
+		if (!localtime_r(&epoch,&timestruct)) {
+			return 0;
+		}
+	#else
+		tm	*lcltm=localtime(&epoch);
+		if (!lcltm) {
+			return 0;
+		}
 		memcpy((void *)&timestruct,(void *)lcltm,sizeof(struct tm));
-	}
-#endif
-	this->epoch=epoch;
+	#endif
+
+	delete[] timestring;
 	timestring=NULL;
+
+	this->epoch=epoch;
+	return 1;
 }
 
 char *datetime::getString() {
@@ -102,19 +128,20 @@ char *datetime::getString() {
 }
 
 int datetime::getSystemDateAndTime() {
-	delete timestring;
+	delete[] timestring;
 	timestring=NULL;
 	epoch=time(NULL);
-#ifdef HAVE_LOCALTIME_R
-	return (localtime_r(&epoch,&timestruct)!=NULL);
-#else
-	tm	*lcltm=localtime(&epoch);
-	if (lcltm) {
-		memcpy((void *)&timestruct,(void *)lcltm,sizeof(struct tm));
-		return 1;
-	}
-	return 0;
-#endif
+	#ifdef HAVE_LOCALTIME_R
+		return (localtime_r(&epoch,&timestruct)!=NULL);
+	#else
+		tm	*lcltm=localtime(&epoch);
+		if (lcltm) {
+			memcpy((void *)&timestruct,
+				(void *)lcltm,sizeof(struct tm));
+			return 1;
+		}
+		return 0;
+	#endif
 }
 
 int datetime::setSystemDateAndTime() {
