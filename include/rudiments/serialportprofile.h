@@ -323,7 +323,7 @@ class serialportprofile {
 			// set using killCharacter() erases the current line.
 		void	echoNewLine(bool truefalse);
 			// If cannonicalInput() is also set true, new line
-			// characters are echoes even if echoInput() is set
+			// characters are echoed even if echoInput() is set
 			// false.
 		void	extendedFunctions(bool truefalse);
 			// If cannonicalInput() is also set true, enables
@@ -360,249 +360,434 @@ class serialportprofile {
 
 		// getters...
 		bool	generateSignals();
+			// returns true if corresponding signals will be raised
+			// when any of the INTR, QUIT, SUSP or DSUSP characters
+			// are received default is not to raise signals
 		bool	canonicalInput();
+			// returns true if special characters EOF, EOL, EOL2,
+			// ERASE, KILL, LNEXT, REPRINT, STATUS and WERASE are
+			// enabled and buffering is being done by lines
 		#ifdef XCASE
 		bool	escapedUpperCase();
+			// Returns true if on input, characters are being
+			// converted from upper to lower case unless they are
+			// preceeded by a \ and on output lower case characters
+			// are being converted to upper case and upper case
+			// characters are being preceeded with a \.
 		#endif
 		bool	echoInput();
+			// returns true if input characters are being echoed
 		bool	eraseCharactersOn();
+			// returns true if the character set using
+			// eraseCharacter() erases the preceeding
+			// character and the character set using
+			// wordEraseCharacter() erases the preceeding word
 		bool	killCharacterOn();
+			// returns true if the character set using
+			// killCharacter() erases the current line
 		bool	echoNewLine();
+			// returns true if new line characters are being echoed
+			// even if echoInput() is set false
 		bool	extendedFunctions();
+			// returns true if characters set by
+			// secondEndOfLineCharacter(), reprintCharacter() and
+			// wordEraseCharacter() are enabled and lowerCase() is
+			// enabled
 		bool	echoControlCharacters();
+			// returns true if control characters are being echoed
+			// as ^X where X is the ascii code for the character
+			// plus 0x40
 		#ifdef ECHOPRT
 		bool	echoErasedCharacter();
+			// returns true if characters are being printed as they
+			// are erased
 		#endif
 		bool	emulateKill();
+			// returns true if the character set using
+			// killCharacter() causes the line to be erased
+			// by erasing each character on the line
 		bool	noFlushAfterInterruptOrQuit();
+			// returns true if flushing of the input/output queues
+			// when generating SIGINT, SIGQUIT or SIGSUSP signals
+			// is enabled
 		#ifdef PENDIN
 		bool	retypePendingCharacters();
+			// returns true if all characters in the input queue
+			// are reprinted when the next character is read
 		#endif
 		bool	sendSignalForBackgroundOutput();
+			// returns true if the SIGTTOU signal is being sent
+			// to the process group of a background process which
+			// tries to write to its controlling terminal
 
 
 
 		// input options
 		void	inputParityCheck(bool truefalse);
-			// INPCK
+			// enable parity checking on input
+		void	ignoreParityErrors(bool truefalse);
+			// ignore parity errors (ie. if a character has a
+			// parity error, just return what we got, rather than
+			// marking or converting it)
 		void	markParityErrors(bool truefalse);
-			// PARMRK
+			// Unless ignoreParityErrors() is set true, prefix a
+			// character with a parity error with \337 \0.  The
+			// default is to convert it to \0 unless
+			// ignoreParityErrors() is set true.
 		void	stripParityBits(bool truefalse);
-			// ISTRIP
+			// set the 8th bit of each character (the parity bit)
+			// to 0
 		void	softwareFlowControlOnOutput(bool truefalse);
-			// IXON
+			// enable XON/XOFF flow control on output.
 		void	softwareFlowControlOnInput(bool truefalse);
-			// IXOFF
+			// enable XON/XOFF flow control on input.
 		void	anyCharacterStartsFlow(bool truefalse);
-			// IXANY
+			// enable any character to restart output
 		void	ignoreBreak(bool truefalse);
-			// IGNBRK
+			// ignore BREAK character
 		void	sendSignalOnBreak(bool truefalse);
-			// BRKINT
+			// If ignoreBreak() isn't set true and a BREAK character
+			// is received, flush input and output queues and send a
+			// SIGINT if the serial port is the controlling terminal
+			// of the process group.  If ignoreBreak() is not set,
+			// the default is to return a \0 character or \377 \0
+			// if markParityErrors() is set true.
 		void	mapNewLineToCarriageReturnOnInput(bool truefalse);
-			// INLCR
+			// translate new line to carriage return on input
 		#ifdef ONOEOT
 		void	discardEndOfTransmission(bool truefalse);
 			// ONOEOT
 		#endif
 		void	ignoreCarriageReturn(bool truefalse);
-			// IGNCR
+			// ignore carriage return on input
 		void	mapCarriageReturnToNewLineOnInput(bool truefalse);
-			// ICRNL
+			// translate carriage return to new line on input
 		#ifdef IUCLC
 		void	lowerCase(bool truefalse);
-			// IUCLC
+			// map uppercase characters to lowercase on input
 		#endif
 		void	bellIfLineTooLong(bool truefalse);
-			// IMAXBEL
+			// ring bell when input queue is full
 
 		// getters...
 		bool	inputParityCheck();
+			// returns true if input parity checking is enabled
 		bool	markParityErrors();
+			// returns true if characters with parity errors are
+			// prefixed with \377 \0
 		bool	stripParityBits();
+			// returns true if the 8th bit (the parity bit) of
+			// each character is being set to 0
 		bool	softwareFlowControlOnOutput();
+			// returns true if XON/XOFF flow control is enabled on
+			// output
 		bool	softwareFlowControlOnInput();
+			// returns true if XON/XOFF flow control is enabled on
+			// input
 		bool	anyCharacterStartsFlow();
+			// returns true if any character will restart output
 		bool	ignoreBreak();
+			// returns true if the BREAK character is being ignored	
 		bool	sendSignalOnBreak();
+			// returns true if input and output queues are flushed
+			// and a SIGINT is sent to the process group if the
+			// serial port is the controlling terminal when a BREAK
+			// character is received
 		bool	mapNewLineToCarriageReturnOnInput();
+			// returns true if new lines are mapped to carriage
+			// returns on input
 		#ifdef ONOEOT
 		bool	discardEndOfTransmission();
 		#endif
 		bool	ignoreCarriageReturn();
+			// returns true if carriage returns are ignored on input
 		bool	mapCarriageReturnToNewLineOnInput();
+			// returns true if carriage returns are mapped to new
+			// lines on input
 		#ifdef IUCLC
 		bool	lowerCase();
+			// returns true if uppercase characters are mapped to
+			// lowercase on input
 		#endif
 		bool	bellIfLineTooLong();
+			// returns true if the bell will be rung when the input
+			// queue is full
 
 
 
 
 		// output options
 		void	postProcessOutput(bool truefalse);
-			// OPOST
+			// enables implementation-defined output processing
 		#ifdef OLCUC
 		void	outputUpperCase(bool truefalse);
-			// OLCUC
+			// map lowercase characters to uppercase on output
 		#endif
 		void	mapNewLineToCarriageReturnNewLineOnOutput(
 							bool truefalse);
-			// ONLCR
+			// map new line to carriage return/new line on
+			// output
 		void	mapCarriageReturnToNewLineOnOutput(bool truefalse);
-			// OCRNL
-		void	outputCarriageReturnAtColumnZero(bool truefalse);
-			// true=~ONOCR
+			// map carriage return to new line on output
+		void	dontOutputCarriageReturnAtColumnZero(bool truefalse);
+			// don't output carriage return at column 0
 		void	mapNewLineToCarriageReturnOnOutput(bool truefalse);
-			// ONLRET
+			// map new line to carriage return on output
 		#ifdef OFILL
 		void	useFillCharactersForDelay(bool truefalse);
-			// OFILL
+			// send fill characters for delay instead of using a
+			// timed delay
 		#endif
 		#ifdef OFDEL
 		void	useDelForFill(bool truefalse);
-			// OFDEL
+			// use the DEL character instead of NULL for the fill
+			// character
 		#endif
 		void	expandTabToSpaces(bool truefalse);
-			// TAB3/XTABS
+			// map tabs to spaces
 
 		#ifdef NLDLY
 		void	delayAfterNewLine(newlinedelay_t nldelay);
-			// NLDLY
+			// send a delay after each new line character
 		#endif
 		#ifdef CRDLY
 		void	delayAfterCarriageReturn(carriagereturndelay_t crdelay);
-			// CRDLY
+			// send a delay after each carriage return character
 		#endif
 		#ifdef TABDLY
 		void	delayAfterTab(tabdelay_t tabdelay);
-			// TABDLY
+			// send a delay after each tab character
 		#endif
 		#ifdef BSDLY
 		void	delayAfterBackSpace(backspacedelay_t bsdelay);
-			// BSDLY
+			// send a delay after each backspace character
 		#endif
 		#ifdef VTDLY
 		void	delayAfterVerticalTab(verticaltabdelay_t vtdelay);
-			// VTDLY
+			// send a delay after each vertical tab character
 		#endif
 		#ifdef FFDLY
 		void	delayAfterFormFeed(formfeeddelay_t ffdelay);
-			// FFDLY
+			// send a delay after each form feed character
 		#endif
 
 
 		// getters...
 		bool	postProcessOutput();
+			// returns true if implementation-defined output
+			// processing is enabled
 		#ifdef OLCUC
 		bool	outputUpperCase();
+			// returns true if lowercase characters are mapped to
+			// uppercase on output
 		#endif
 		bool	mapNewLineToCarriageReturnNewLineOnOutput();
+			// returns true if new lines are mapped to carriage
+			// return/new line on output
 		bool	mapCarriageReturnToNewLineOnOutput();
-		bool	outputCarriageReturnAtColumnZero();
+			// returns true if carriage returns are mapped to new
+			// lines on output
+		bool	dontOutputCarriageReturnAtColumnZero();
+			// returns true if carriage returns aren't sent at
+			// column 0
 		bool	mapNewLineToCarriageReturnOnOutput();
+			// returns true if new lines are mapped to carriage
+			// returns on output
 		#ifdef OFILL
 		bool	useFillCharactersForDelay();
+			// returns true if fill characters are sent for delay
+			// instead of using a timed delay
 		#endif
 		#ifdef OFDEL
 		bool	useDelForFill();
+			// returns true if the DEL character is used instead of
+			// NULL for the fill character
 		#endif
 		bool	expandTabToSpaces();
+			// returns true if the tabs are mapped to spaces
 		#ifdef NLDLY
 		newlinedelay_t		delayAfterNewLine();
+			// returns the delay that is sent after new line
+			// characters
 		#endif
 		#ifdef CRDLY
 		carriagereturndelay_t	delayAfterCarriageReturn();
+			// returns the delay that is sent after carriage return
+			// characters
 		#endif
 		#ifdef TABDLY
 		tabdelay_t		delayAfterTab();
+			// returns the delay that is sent after tab characters
 		#endif
 		#ifdef BSDLY
 		backspacedelay_t	delayAfterBackSpace();
+			// returns the delay that is sent after backspace
+			// characters
 		#endif
 		#ifdef VTDLY
 		verticaltabdelay_t	delayAfterVerticalTab();
+			// returns the delay that is sent after vertical tab
+			// characters
 		#endif
 		#ifdef FFDLY
 		formfeeddelay_t		delayAfterFormFeed();
+			// returns the delay that is sent after form feed
+			// characters
 		#endif
 
 
 
 		// control characters
 		void	interruptCharacter(cc_t character);
-			// VINTR
+			// set the character that will cause a SIGINT to be
+			// sent to the process when generateSignals() is set
+			// true
 		void	quitCharacter(cc_t character);
-			// VQUIT
+			// set the character that will cause a SIGQUIT to be
+			// sent to the process when generateSignals() is set
+			// true
 		void	eraseCharacter(cc_t character);
-			// VERASE
+			// set the character that will cause a character erase
+			// when canonicalInput() is set to true
 		void	killCharacter(cc_t character);
-			// VKILL
+			// set the character that will cause a line erase
+			// when canonicalInput() is set to true
 		void	endOfFileCharacter(cc_t character);
-			// VEOF
+			// set the character that will cause the pending tty
+			// buffer to be sent to the program without waiting for
+			// end-of-line and read()'s to return 0 when
+			// canonicalInput() is set to true
 		void	endOfLineCharacter(cc_t character);
-			// VEOL
+			// set the end-of-line character, recognized when 
+			// canonicalInput() is set to true
 		void	secondEndOfLineCharacter(cc_t character);
-			// VEOL2
+			// set the "other" end-of-line character, recognized
+			// when canonicalInput() is set to true
 		void	switchCharacer(cc_t character);
-			// VSWITCH
+			// set the switch character
 		void	startCharacter(cc_t character);
-			// VSTART
+			// set the start character for XON/XOFF flow control
 		void	stopCharacter(cc_t character);
-			// VSTOP
+			// set the stop character for XON/XOFF flow control
 		void	suspendCharacter(cc_t character);
-			// VSUSP
+			// set the character that will cause a SIGSUSP to be
+			// sent to the process when generateSignals() is set
+			// true
 		#ifdef VDSUSP
 		void	delayedSuspendCharacter(cc_t character);
-			// VDSUSP
+			// set the character that will cause a SIGTSTP to be
+			// sent to the process when generateSignals() and
+			// extendedFunctions() are set true
 		#endif
 		void	literalNextCharcter(cc_t character);
-			// VLNEXT
+			// set the character that "quotes" the next character,
+			// depriving it of special meaning, recognized when
+			// extendedFunctions() is set true
 		void	wordEraseCharcter(cc_t character);
-			// VWERASE
+			// set the word erase character, recognized when
+			// canonicalInput() and extendedFunctions() are set true
 
 		void	reprintCharacter(cc_t character);
-			// VREPRINT
+			// set the character that causes unread characters to
+			// be reprinted, recognized when canonicalInput() and
+			// extendedFunctions() are set true
 		void	discardPendingOutputCharacter(cc_t character);
-			// VDISCARD, IEXTEN must be on
+			// set the character that toggles discarding pending
+			// output, recognized when extendedFunctions() is set
+			// true
 
 		#ifdef VSTATUS
 		void	statusRequestCharacter(cc_t character);
-			// VSTATUS
+			// set the status request character
 		#endif
 
 		void	readThreshold(cc_t count);
+			// set the number of characters that must be read
+			// before a read() will begin waiting for readTimeout()
+			// deciseconds before falling through
 		void	readTimeout(cc_t deciseconds);
+			// set the number of deciseconds that a read() will
+			// wait after reading readThreshold() characters before
+			// falling through
 
 
 		// getters...
 		cc_t	interruptCharacter();
+			// returns the character that will cause a SIGINT to be
+			// sent to the process when generateSignals() is set
+			// true
 		cc_t	quitCharacter();
+			// returns the character that will cause a SIGQUIT to be
+			// sent to the process when generateSignals() is set
+			// true
 		cc_t	eraseCharacter();
+			// returns the character that will cause a character
+			// erase when canonicalInput() is set to true
 		cc_t	killCharacter();
+			// returns the character that will cause a line erase
+			// when canonicalInput() is set to true
 		cc_t	endOfFileCharacter();
+			// returns the character that will cause the pending tty
+			// buffer to be sent to the program without waiting for
+			// end-of-line and read()'s to return 0 when
+			// canonicalInput() is set to true
 		cc_t	endOfLineCharacter();
+			// returns the end-of-line character, recognized when 
+			// canonicalInput() is set to true
 		cc_t	secondEndOfLineCharacter();
+			// returns the "other" end-of-line character, recognized
+			// when canonicalInput() is set to true
 		cc_t	switchCharacer();
+			// returns the switch character
 		cc_t	startCharacter();
+			// returns the start character for XON/XOFF flow control
 		cc_t	stopCharacter();
+			// returns the stop character for XON/XOFF flow control
 		cc_t	suspendCharacter();
+			// returns the character that will cause a SIGSUSP to be
+			// sent to the process when generateSignals() is set
+			// true
+		#ifdef VDSUSP
 		cc_t	delayedSuspendCharacter();
+			// returns the character that will cause a SIGTSTP to be
+			// sent to the process when generateSignals() and
+			// extendedFunctions() are set true
+		#endif
 		cc_t	literalNextCharcter();
+			// returns the character that "quotes" the next
+			// character, depriving it of special meaning,
+			// recognized when extendedFunctions() is set true
 		cc_t	wordEraseCharcter();
+			// returns the word erase character, recognized when
+			// canonicalInput() and extendedFunctions() are set true
+
 
 		cc_t	reprintCharacter();
+			// returns the character that causes unread characters
+			// to be reprinted, recognized when canonicalInput() and
+			// extendedFunctions() are set true
 		cc_t	discardPendingOutputCharacter();
+			// returns the character that toggles discarding pending
+			// output, recognized when extendedFunctions() is set
+			// true
 
 		cc_t	statusRequestCharacter();
+			// returns the status request character
 
 		cc_t	readThreshold();
+			// returns the number of characters that must be read
+			// before a read() will begin waiting for readTimeout()
+			// deciseconds before falling through
 		cc_t	readTimeout();
+			// returns the number of deciseconds that a read() will
+			// wait after reading readThreshold() characters before
+			// falling through
 
 
 
 
 		termios	*getTermios();
+			// returns the struct termios used internally
 
 	#include <rudiments/private/serialportprofile.h>
 };
