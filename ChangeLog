@@ -16,6 +16,7 @@
 		as a memory address could actually be larger than 2^31-1 (or
 		2^64-1), appear to be negative and still be valid as long as
 		it's not -1
+	fixed rpm 4.1 doc-install complaints
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better

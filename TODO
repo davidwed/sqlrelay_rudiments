@@ -1,7 +1,6 @@
 string class name conflicts with stl string class
 
-document timezonefile classes
-
+a table class would be nice
 a termios class would be nice
 a thread class would be nice
 need generic parser/lexer classes, use them for xmlsax
