@@ -70,6 +70,10 @@ off_t file::setPositionRelativeToEnd(off_t offset) {
 	return lseek(fd,offset,SEEK_END);
 }
 
+off_t file::getCurrentPosition() {
+	return lseek(fd,0,SEEK_CUR);
+}
+
 int file::getCurrentProperties() {
 	return (fstat(fd,&st)!=-1);
 }

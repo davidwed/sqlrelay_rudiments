@@ -91,6 +91,9 @@ class file : public filedescriptor {
 			// Sets the position to the end of the
 			// file + "offset" bytes.
 
+		off_t	getCurrentPosition();
+			// Returns the position at which the next read or
+			// write will occur or -1 on error.
 
 		char	*getContents();
 			// Allocates a string large enough to accommodate the

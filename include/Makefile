@@ -21,6 +21,7 @@ install:
 	$(INSTALL) -m 644 rudiments/hostentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetclientsocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetserversocket.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/linkedlist.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/listener.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/logger.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/memorypool.h $(incdir)/rudiments
@@ -73,6 +74,10 @@ install:
 	$(INSTALL) -m 644 rudiments/private/inetsocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/inetclientsocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/inetserversocketinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/linkedlist.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/linkedlistinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/linkedlistnode.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/linkedlistnodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/listener.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/listenerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/logdestination.h $(incdir)/rudiments/private
