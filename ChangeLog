@@ -16,6 +16,7 @@
 	added blocking/non-blocking mode switches to filedescriptor/socket class
 	added support for connect with timeout to socket client classes
 	changed (void *) cast to (const void *) for setsockopt calls
+	added check for (const void *) vs. (const char *) for setsockopt calls
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now
