@@ -60,6 +60,18 @@ class filedescriptor {
 				// functions.
 		#endif
 
+		virtual bool	useNonBlockingMode();
+				// Puts the file descriptor in non-blocking
+				// mode.  Returns true on success and false on
+				// failure.
+		virtual bool	useBlockingMode();
+				// Puts the file descriptor in blocking mode.
+				// Returns true on success and false on
+				// failure.
+		virtual bool	isUsingNonBlockingMode();
+				// Returns true if the file descriptor is in
+				// non-blocking mode and false otherwise.
+
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were
 		// successfully written or RESULT_ERROR if an error occurred.

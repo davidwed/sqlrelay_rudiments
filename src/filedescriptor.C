@@ -4,6 +4,7 @@
 #include <rudiments/filedescriptor.h>
 #include <errno.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
 #ifdef HAVE_SYS_TIMES_H
 	#include <sys/times.h>
 #endif
@@ -18,6 +19,7 @@
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#include <sys/fcntl.h>
 
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
@@ -110,6 +112,29 @@ BIO *filedescriptor::newSSLBIO() const {
 	return BIO_new_fd(fd,BIO_NOCLOSE);
 }
 #endif
+
+bool filedescriptor::useNonBlockingMode() {
+#ifdef FIONBIO
+	int	nonblocking=1;
+	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
+#else
+	return (fcntl(fd,F_SETFL,fcntl(fd,F_GETFL,0)|O_NONBLOCK)!=-1);
+#endif
+}
+
+bool filedescriptor::useBlockingMode() {
+#ifdef FIONBIO
+	int	nonblocking=0;
+	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
+#else
+	return (fcntl(fd,F_SETFL,fcntl(fd,F_GETFL,0)&(~O_NONBLOCK))!=-1);
+#endif
+}
+
+bool filedescriptor::isUsingNonBlockingMode() {
+	// FIXME: how do I do this with ioctl?
+	return (fcntl(fd,F_GETFL,0)&O_NONBLOCK);
+}
 
 ssize_t filedescriptor::write(unsigned short number) {
 	return safeWrite((void *)&number,sizeof(unsigned short),-1,-1);
