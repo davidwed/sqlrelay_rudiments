@@ -54,7 +54,7 @@ RUDIMENTS_INLINE char	*datetime::getTimeZone() const {
 	#elif HAS_TM_ZONE
 		return (char *)timestruct.tm_zone;
 	#elif HAS_TM_NAME
-		return timestruct.tm_name;
+		return (char *)timestruct.tm_name;
 	#else
 		return "";
 	#endif
