@@ -26,9 +26,9 @@ int protocolentry::initialize(const char *protocolname) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (getprotobyname_r(protocolname,&pebuffer,
-						buffer,size,&pe)==0) {
-				return 1;
+			if (!getprotobyname_r(protocolname,&pebuffer,
+							buffer,size,&pe)) {
+				return pe!=NULL;
 			}
 			delete[] buffer;
 			buffer=NULL;
@@ -58,9 +58,9 @@ int protocolentry::initialize(int number) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (getprotobynumber_r(number,&pebuffer,
-						buffer,size,&pe)==0) {
-				return 1;
+			if (!getprotobynumber_r(number,&pebuffer,
+							buffer,size,&pe)) {
+				return pe!=NULL;
 			}
 			delete[] buffer;
 			buffer=NULL;

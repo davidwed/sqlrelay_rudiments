@@ -21,7 +21,7 @@ int main(int argv, const char **argc) {
 	printf("\n");
 
 	groupentry	grent;
-	grent.initialize("root");
+	grent.initialize("test");
 	grent.print();
 	printf("\n");
 

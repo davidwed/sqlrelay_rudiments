@@ -26,9 +26,8 @@ int passwdentry::initialize(const char *username) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (getpwnam_r(username,&pwdbuffer,
-						buffer,size,&pwd)==0) {
-				return 1;
+			if (!getpwnam_r(username,&pwdbuffer,buffer,size,&pwd)) {
+				return pwd!=NULL;
 			}
 			delete[] buffer;
 			buffer=NULL;
@@ -57,9 +56,8 @@ int passwdentry::initialize(uid_t userid) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (getpwuid_r(userid,&pwdbuffer,
-						buffer,size,&pwd)==0) {
-				return 1;
+			if (!getpwuid_r(userid,&pwdbuffer,buffer,size,&pwd)) {
+				return pwd!=NULL;
 			}
 			delete[] buffer;
 			buffer=NULL;

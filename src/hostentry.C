@@ -27,9 +27,9 @@ int hostentry::initialize(const char *hostname) {
 		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (gethostbyname_r(hostname,&hebuffer,
-						buffer,size,&he,&errnop)==0) {
-				return 1;
+			if (!gethostbyname_r(hostname,&hebuffer,
+						buffer,size,&he,&errnop)) {
+				return he!=NULL;
 			}
 			delete[] buffer;
 			buffer=NULL;
@@ -60,9 +60,9 @@ int hostentry::initialize(const char *address, int len, int type) {
 		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
-			if (gethostbyaddr_r(address,len,type,&hebuffer,
-						buffer,size,&he,&errnop)==0) {
-				return 1;
+			if (!gethostbyaddr_r(address,len,type,&hebuffer,
+						buffer,size,&he,&errnop)) {
+				return he!=NULL;
 			}
 			delete[] buffer;
 			buffer=NULL;
