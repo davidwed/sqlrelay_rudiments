@@ -6,6 +6,6 @@
 
 	protected:
 
-		virtual	ssize_t	safeSelect(long sec, long usec,
+		virtual	int	safeSelect(long sec, long usec,
 						int read, int write);
 		int	retryinterruptedwaits;
