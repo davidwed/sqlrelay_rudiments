@@ -22,7 +22,8 @@
 		bool	setAttribute(const char *name,
 						const void *value,
 						size_t size, int flags) const;
-		char	**attributeArray(const char *buffer, size_t size) const;
+		const char * const	*attributeArray(const char *buffer,
+							size_t size) const;
 		#endif
 
 		void	fileClone(const file &f);

@@ -45,11 +45,11 @@ groupentry::~groupentry() {
 	#endif
 }
 
-char *groupentry::getName() const {
+const char *groupentry::getName() const {
 	return grp->gr_name;
 }
 
-char *groupentry::getPassword() const {
+const char *groupentry::getPassword() const {
 	return grp->gr_passwd;
 }
 
@@ -57,7 +57,7 @@ gid_t groupentry::getGroupId() const {
 	return grp->gr_gid;
 }
 
-char **groupentry::getMembers() const {
+const char * const *groupentry::getMembers() const {
 	return grp->gr_mem;
 }
 

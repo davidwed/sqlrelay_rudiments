@@ -55,7 +55,7 @@ environment::~environment() {
 }
 #endif
 
-char *environment::getValue(const char *variable) const {
+const char *environment::getValue(const char *variable) const {
 	return getenv(variable);
 }
 
@@ -75,7 +75,7 @@ void environment::remove(const char *variable) {
 #endif
 }
 
-char **environment::variables() {
+const char * const *environment::variables() {
 	return environ;
 }
 

@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 	testfile.create("testfile",permissions::evalPermString("rw-r--r--"),
 				"hello world\n");
 
-	char	**attrs=testfile.listAttributes();
+	const char * const *attrs=testfile.listAttributes();
 	if (attrs) {
 		printf("Attributes:\n");
 		for (int i=0; attrs[i]; i++) {

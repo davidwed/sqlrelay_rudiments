@@ -9,7 +9,7 @@ environment class:
 	make thread safe
 	make all members static
 
-check all pointers for const correctness
+use STL classes instead of linkedlist, dictionary
 
 --------------------------------------------------------------------------------
 
@@ -82,11 +82,6 @@ they're declared in the inheritance list and in the class.
 
 --------------------------------------------------------------------------------
 
-When implementing operator=, always check for assignment to self
-and return *this first.
-
---------------------------------------------------------------------------------
-
 Split all classes into:
 
 foo.h
@@ -116,12 +111,6 @@ foo.C
 --------------------------------------------------------------------------------
 
 use references rather than pointers where possible
-
---------------------------------------------------------------------------------
-
-convert linkedlist/dictionary classes to use void * base class with template
-	over top to enforce type safety
-
 
 --------------------------------------------------------------------------------
 

@@ -17,17 +17,18 @@ class environment {
 	public:
 			~environment();
 
-		char	*getValue(const char *variable) const;
-			// Returns the value of "variable".
-		bool	setValue(const char *variable, const char *value);
-			// Sets the value of "variable" to "value",
-			// Overwriting any value that "variable" previously
-			// had.
-			// Returns true on success and false on failure.
-		void	remove(const char *variable);
-			// Removes "variable" from the environment.
+		const char	*getValue(const char *variable) const;
+				// Returns the value of "variable".
+		bool		setValue(const char *variable,
+						const char *value);
+				// Sets the value of "variable" to "value",
+				// Overwriting any value that "variable"
+				// previously had.
+				// Returns true on success and false on failure.
+		void		remove(const char *variable);
+				// Removes "variable" from the environment.
 
-		static	char	**variables();
+		static	const char * const	*variables();
 			// Returns a NULL terminated list of all
 			// environment variables.  Each entry in the list is
 			// of the form NAME=VALUE.

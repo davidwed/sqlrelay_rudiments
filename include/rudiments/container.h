@@ -38,15 +38,15 @@ class container {
 			// delete[] (as appropriate) on whatever data is
 			// contained in the class.  This is the default.
 
-		virtual	bool	save(filedescriptor *fd);
-		virtual	bool	save(unsigned char *buffer);
+		virtual	bool	save(const filedescriptor *fd);
+		virtual	bool	save(const unsigned char *buffer);
 				// Writes a representation of the data in the
 				// container out to the filedescriptor or
 				// buffer.
 				//
 				// Returns true on success and false on failure.
-		virtual	bool	load(filedescriptor *fd);
-		virtual	bool	load(unsigned char *buffer);
+		virtual	bool	load(const filedescriptor *fd);
+		virtual	bool	load(const unsigned char *buffer);
 				// Loads the data from filedescriptor or buffer.
 				// Replaces data currently stored in the
 				// container and implies copyReferences() and

@@ -46,13 +46,11 @@ hostentry::~hostentry() {
 	#endif
 }
 
-char *hostentry::getName() const {
-	// On some platforms, this is a const char *,
-	// so we'll cast it, just in case.
-	return const_cast<char *>(he->h_name);
+const char *hostentry::getName() const {
+	return he->h_name;
 }
 
-char **hostentry::getAliasList() const {
+const char * const *hostentry::getAliasList() const {
 	return he->h_aliases;
 }
 
@@ -64,7 +62,7 @@ int hostentry::getAddressLength() const {
 	return he->h_length;
 }
 
-char **hostentry::getAddressList() const {
+const char * const *hostentry::getAddressList() const {
 	return he->h_addr_list;
 }
 
@@ -218,8 +216,7 @@ bool hostentry::getAddressString(const char *hostname, int index,
 							char **addressstring) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
-		*addressstring=charstring::
-				duplicate(he.getAddressString(index));
+		*addressstring=he.getAddressString(index);
 		return true;
 	}
 	return false;
@@ -273,8 +270,7 @@ bool hostentry::getAddressString(const char *address, int len, int type,
 					int index, char **addressstring) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		*addressstring=charstring::
-				duplicate(he.getAddressString(index));
+		*addressstring=he.getAddressString(index);
 		return true;
 	}
 	return false;

@@ -193,7 +193,8 @@ long filesystem::getBlockSize() const {
 #endif
 }
 
-bool filesystem::getOptimumTransferBlockSize(const char *path, long *size) {
+bool filesystem::getOptimumTransferBlockSize(const char *path,
+						long *size) {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS) 
@@ -547,7 +548,8 @@ long filesystem::getAvailableFileNodes() const {
 	}
 #endif
 
-bool filesystem::getMaximumFileNameLength(const char *path, long *length) {
+bool filesystem::getMaximumFileNameLength(const char *path,
+						long *length) {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS)
 	STATFS(path,length,f_namelen)
@@ -687,7 +689,7 @@ long filesystem::getAsyncWrites() const {
 #endif
 }
 
-bool filesystem::getMountPoint(const char *path, char **mtpt) {
+bool filesystem::getMountPoint(const char *path, const char **mtpt) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
@@ -699,7 +701,7 @@ bool filesystem::getMountPoint(const char *path, char **mtpt) {
 #endif
 }
 
-bool filesystem::getMountPoint(int fd, char **mtpt) {
+bool filesystem::getMountPoint(int fd, const char **mtpt) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
@@ -711,12 +713,12 @@ bool filesystem::getMountPoint(int fd, char **mtpt) {
 #endif
 }
 
-char *filesystem::getMountPoint() const {
+const char *filesystem::getMountPoint() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return (char *)st.f_mntonname;
+	return (const char *)st.f_mntonname;
 #else
 	return NULL;
 #endif
@@ -774,7 +776,7 @@ long filesystem::getAsyncReads() const {
 #endif
 }
 
-bool filesystem::getDeviceName(const char *path, char **devname) {
+bool filesystem::getDeviceName(const char *path, const char **devname) {
 #if defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
@@ -785,7 +787,7 @@ bool filesystem::getDeviceName(const char *path, char **devname) {
 #endif
 }
 
-bool filesystem::getDeviceName(int fd, char **devname) {
+bool filesystem::getDeviceName(int fd, const char **devname) {
 #if defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
@@ -796,17 +798,18 @@ bool filesystem::getDeviceName(int fd, char **devname) {
 #endif
 }
 
-char *filesystem::getDeviceName() const {
+const char *filesystem::getDeviceName() const {
 #if defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return (char *)st.f_mntfromname;
+	return (const char *)st.f_mntfromname;
 #else
 	return NULL;
 #endif
 }
 
-bool filesystem::getFilesystemSpecificString(const char *path, char **str) {
+bool filesystem::getFilesystemSpecificString(const char *path,
+						const char **str) {
 #ifdef HAVE_STATVFS
 	STATFS(path,str,f_fstr)
 #else
@@ -815,7 +818,7 @@ bool filesystem::getFilesystemSpecificString(const char *path, char **str) {
 #endif
 }
 
-bool filesystem::getFilesystemSpecificString(int fd, char **str) {
+bool filesystem::getFilesystemSpecificString(int fd, const char **str) {
 #ifdef HAVE_STATVFS
 	FSTATFS(fd,str,f_fstr)
 #else
@@ -824,9 +827,9 @@ bool filesystem::getFilesystemSpecificString(int fd, char **str) {
 #endif
 }
 
-char *filesystem::getFilesystemSpecificString() const {
+const char *filesystem::getFilesystemSpecificString() const {
 #ifdef HAVE_STATVFS
-	return (char *)st.f_fstr;
+	return (const char *)st.f_fstr;
 #else
 	return NULL;
 #endif
@@ -843,7 +846,7 @@ struct statfs *filesystem::getStatfs() {
 }
 #endif
 
-bool filesystem::getTypeName(const char *path, char **name) {
+bool filesystem::getTypeName(const char *path, const char **name) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
@@ -868,7 +871,7 @@ bool filesystem::getTypeName(const char *path, char **name) {
 #endif
 }
 
-bool filesystem::getTypeName(int fd, char **name) {
+bool filesystem::getTypeName(int fd, const char **name) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
@@ -893,15 +896,15 @@ bool filesystem::getTypeName(int fd, char **name) {
 #endif
 }
 
-char *filesystem::getTypeName() const {
+const char *filesystem::getTypeName() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return (char *)st.f_fstypename;
+	return (const char *)st.f_fstypename;
 #else
 	#ifdef HAVE_STATVFS
-		return (char *)st.f_basetype;
+		return (const char *)st.f_basetype;
 	#else
 		#if defined(HAVE_LINUX_STATFS)
 			return filesystem::getFsTypeName(st.f_type);
@@ -913,7 +916,7 @@ char *filesystem::getTypeName() const {
 }
 
 #if defined(HAVE_LINUX_STATFS)
-	char *filesystem::getFsTypeName(long fstype) {
+	const char *filesystem::getFsTypeName(long fstype) {
 		if (fstype==0xADF5) {
 			return "adfs";
 		} else if (fstype==0xADFF) {

@@ -72,6 +72,7 @@ class permissions {
 				//			and save the file in
 				//			swap space
 		static	char	*evalPermOctal(mode_t mode);
+				// FIXME: document this
 		
 
 

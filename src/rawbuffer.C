@@ -95,8 +95,7 @@ void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
 				static_cast<const unsigned char *>(haystack);
 				ptr<endptr; ptr++) {
 
-				if (!memcmp(static_cast<const void *>(ptr),
-							needle,needlesize)) {
+				if (!memcmp(ptr,needle,needlesize)) {
 					return const_cast<void *>(
 						static_cast<const void *>(ptr));
 				}
@@ -115,8 +114,7 @@ void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
 						haystacksize-needlesize;
 			ptr>=haystack; ptr--) {
 
-			if (!memcmp(static_cast<const void *>(ptr),
-						needle,needlesize)) {
+			if (!memcmp(ptr,needle,needlesize)) {
 				return const_cast<void *>(
 					static_cast<const void *>(ptr));
 			}

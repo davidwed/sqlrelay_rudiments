@@ -133,7 +133,7 @@ void charstring::strip(char *str, char character) {
 	str[index-total]='\0';
 }
 
-void charstring::strip(char *str1, char *str2) {
+void charstring::strip(char *str1, const char *str2) {
 
 	if (!str1 || !str2) {
 		return;
@@ -336,7 +336,7 @@ void charstring::center(char *str, int length) {
 	}
 }
 
-int charstring::countLeadingSpaces(char *str, int length) {
+int charstring::countLeadingSpaces(const char *str, int length) {
 
 	if (!str) {
 		return 0;
@@ -349,7 +349,7 @@ int charstring::countLeadingSpaces(char *str, int length) {
 	return leadingspaces;
 }
 
-int charstring::countTrailingSpaces(char *str, int length) {
+int charstring::countTrailingSpaces(const char *str, int length) {
 
 	if (!str) {
 		return 0;
@@ -545,7 +545,7 @@ size_t charstring::length(const unsigned char *string) {
 }
 
 void charstring::zero(char *str, size_t size) {
-	rawbuffer::set(static_cast<void *>(str),0,size);
+	rawbuffer::set(str,0,size);
 }
 
 char *charstring::append(char *dest, const char *source) {

@@ -45,11 +45,11 @@ protocolentry::~protocolentry() {
 	#endif
 }
 
-char *protocolentry::getName() const {
+const char *protocolentry::getName() const {
 	return pe->p_name;
 }
 
-char **protocolentry::getAliasList() const {
+const char * const *protocolentry::getAliasList() const {
 	return pe->p_aliases;
 }
 

@@ -64,7 +64,7 @@ bool parameterstring::parse(const char *paramstring) {
 	return true;
 }
 
-char *parameterstring::getValue(const char *name) {
+const char *parameterstring::getValue(const char *name) {
 	char	*retval;
 	return (nvp.getData(const_cast<char *>(name),&retval))?retval:NULL;
 }
@@ -107,8 +107,9 @@ int parameterstring::countPairs(const char *paramstring) {
 }
 
 const char *parameterstring::parsePart(int len, char delimiter,
-					const char *data, char **outbuffer,
-						int quotes, int escapedchars) {
+					const char *data,
+					char **outbuffer,
+					int quotes, int escapedchars) {
 
 	const char	*ptr=data;
 

@@ -154,6 +154,10 @@ void filedescriptor::setSSLContext(SSL_CTX *ctx) {
 	this->ctx=ctx;
 }
 
+SSL_CTX *filedescriptor::getSSLContext() {
+	return ctx;
+}
+
 bool filedescriptor::initializeSSL() {
 	if (fd==-1) {
 		return false;
@@ -202,277 +206,258 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	return (fcntl(F_GETFL,0)&O_NONBLOCK);
 }
 
-ssize_t filedescriptor::write(unsigned short number) {
+ssize_t filedescriptor::write(unsigned short number) const {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned long number) {
+ssize_t filedescriptor::write(unsigned long number) const {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(short number) {
+ssize_t filedescriptor::write(short number) const {
 	DEBUG_WRITE_INT("short",number);
-	return safeWrite(static_cast<const void *>(&number),
-						sizeof(short),-1,-1);
+	return safeWrite(&number,sizeof(short),-1,-1);
 }
 
-ssize_t filedescriptor::write(long number) {
+ssize_t filedescriptor::write(long number) const {
 	DEBUG_WRITE_INT("long",number);
-	return safeWrite(static_cast<const void *>(&number),
-						sizeof(long),-1,-1);
+	return safeWrite(&number,sizeof(long),-1,-1);
 }
 
-ssize_t filedescriptor::write(float number) {
+ssize_t filedescriptor::write(float number) const {
 	DEBUG_WRITE_FLOAT("float",number);
-	return safeWrite(static_cast<const void *>(&number),
-						sizeof(float),-1,-1);
+	return safeWrite(&number,sizeof(float),-1,-1);
 }
 
-ssize_t filedescriptor::write(double number) {
+ssize_t filedescriptor::write(double number) const {
 	DEBUG_WRITE_FLOAT("double",number);
-	return safeWrite(static_cast<const void *>(&number),
-						sizeof(double),-1,-1);
+	return safeWrite(&number,sizeof(double),-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned char character) {
+ssize_t filedescriptor::write(unsigned char character) const {
 	DEBUG_WRITE_CHAR("uchar",character);
-	return safeWrite(static_cast<const void *>(&character),
-						sizeof(unsigned char),-1,-1);
+	return safeWrite(&character,sizeof(unsigned char),-1,-1);
 }
 
-ssize_t filedescriptor::write(bool value) {
+ssize_t filedescriptor::write(bool value) const {
 	DEBUG_WRITE_INT("bool",value);
-	return safeWrite(static_cast<const void *>(&value),
-						sizeof(bool),-1,-1);
+	return safeWrite(&value,sizeof(bool),-1,-1);
 }
 
-ssize_t filedescriptor::write(char character) {
+ssize_t filedescriptor::write(char character) const {
 	DEBUG_WRITE_CHAR("char",character);
-	return safeWrite(static_cast<const void *>(&character),
-						sizeof(char),-1,-1);
+	return safeWrite(&character,sizeof(char),-1,-1);
 }
 
-ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
+ssize_t filedescriptor::write(const unsigned char *string, size_t size) const {
 	DEBUG_WRITE_STRING("ustring",string,size);
-	return safeWrite(static_cast<const void *>(string),size,-1,-1);
+	return safeWrite(string,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(const char *string, size_t size) {
+ssize_t filedescriptor::write(const char *string, size_t size) const {
 	DEBUG_WRITE_STRING("string",string,size);
-	return safeWrite(static_cast<const void *>(string),size,-1,-1);
+	return safeWrite(string,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(const unsigned char *string) {
+ssize_t filedescriptor::write(const unsigned char *string) const {
 	DEBUG_WRITE_STRING("ustring",string,charstring::length(string));
-	return safeWrite(static_cast<const void *>(string),
-				charstring::length(string),-1,-1);
+	return safeWrite(string,charstring::length(string),-1,-1);
 }
 
-ssize_t filedescriptor::write(const char *string) {
+ssize_t filedescriptor::write(const char *string) const {
 	DEBUG_WRITE_STRING("string",string,charstring::length(string));
-	return safeWrite(static_cast<const void *>(string),
-				charstring::length(string),-1,-1);
+	return safeWrite(string,charstring::length(string),-1,-1);
 }
 
-ssize_t filedescriptor::write(const void *buffer, size_t size) {
+ssize_t filedescriptor::write(const void *buffer, size_t size) const {
 	DEBUG_WRITE_VOID("void",buffer,size);
-	return safeWrite(static_cast<const void *>(buffer),size,-1,-1);
+	return safeWrite(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned short number, long sec, long usec) {
+ssize_t filedescriptor::write(unsigned short number,
+					long sec, long usec) const {
 	DEBUG_WRITE_INT("ushort",number);
 	number=hostToNet(number);
-	return safeWrite(static_cast<const void *>(&number),
-				sizeof(unsigned short),sec,usec);
+	return safeWrite(&number,sizeof(unsigned short),sec,usec);
 }
 
-ssize_t filedescriptor::write(unsigned long number, long sec, long usec) {
+ssize_t filedescriptor::write(unsigned long number,
+					long sec, long usec) const {
 	DEBUG_WRITE_INT("ulong",number);
 	number=hostToNet(number);
-	return safeWrite(static_cast<const void *>(&number),
-				sizeof(unsigned long),sec,usec);
+	return safeWrite(&number,sizeof(unsigned long),sec,usec);
 }
 
-ssize_t filedescriptor::write(short number, long sec, long usec) {
+ssize_t filedescriptor::write(short number, long sec, long usec) const {
 	DEBUG_WRITE_INT("short",number);
-	return safeWrite(static_cast<const void *>(&number),
-					sizeof(short),sec,usec);
+	return safeWrite(&number,sizeof(short),sec,usec);
 }
 
-ssize_t filedescriptor::write(long number, long sec, long usec) {
+ssize_t filedescriptor::write(long number, long sec, long usec) const {
 	DEBUG_WRITE_INT("long",number);
-	return safeWrite(static_cast<const void *>(&number),
-					sizeof(long),sec,usec);
+	return safeWrite(&number,sizeof(long),sec,usec);
 }
 
-ssize_t filedescriptor::write(float number, long sec, long usec) {
+ssize_t filedescriptor::write(float number, long sec, long usec) const {
 	DEBUG_WRITE_FLOAT("float",number);
-	return safeWrite(static_cast<const void *>(&number),
-					sizeof(float),sec,usec);
+	return safeWrite(&number,sizeof(float),sec,usec);
 }
 
-ssize_t filedescriptor::write(double number, long sec, long usec) {
+ssize_t filedescriptor::write(double number, long sec, long usec) const {
 	DEBUG_WRITE_FLOAT("double",number);
-	return safeWrite(static_cast<const void *>(&number),
-					sizeof(double),sec,usec);
+	return safeWrite(&number,sizeof(double),sec,usec);
 }
 
-ssize_t filedescriptor::write(unsigned char character, long sec, long usec) {
+ssize_t filedescriptor::write(unsigned char character,
+						long sec, long usec) const {
 	DEBUG_WRITE_CHAR("uchar",character);
-	return safeWrite(static_cast<const void *>(&character),
-					sizeof(unsigned char),sec,usec);
+	return safeWrite(&character,sizeof(unsigned char),sec,usec);
 }
 
-ssize_t filedescriptor::write(bool value, long sec, long usec) {
+ssize_t filedescriptor::write(bool value, long sec, long usec) const {
 	DEBUG_WRITE_INT("bool",value);
-	return safeWrite(static_cast<const void *>(&value),
-					sizeof(bool),sec,usec);
+	return safeWrite(&value,sizeof(bool),sec,usec);
 }
 
-ssize_t filedescriptor::write(char character, long sec, long usec) {
+ssize_t filedescriptor::write(char character, long sec, long usec) const {
 	DEBUG_WRITE_CHAR("char",character);
-	return safeWrite(static_cast<const void *>(&character),
-						sizeof(char),sec,usec);
+	return safeWrite(&character,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size,
-							long sec, long usec) {
+						long sec, long usec) const {
 	DEBUG_WRITE_STRING("ustring",string,size);
-	return safeWrite(static_cast<const void *>(string),size,sec,usec);
+	return safeWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size,
-							long sec, long usec) {
+						long sec, long usec) const {
 	DEBUG_WRITE_STRING("string",string,size);
-	return safeWrite(static_cast<const void *>(string),size,sec,usec);
+	return safeWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
-						long sec, long usec) {
+						long sec, long usec) const {
 	DEBUG_WRITE_STRING("ustring",string,charstring::length(string));
-	return safeWrite(static_cast<const void *>(string),
-				charstring::length(string),sec,usec);
+	return safeWrite(string,charstring::length(string),sec,usec);
 }
 
-ssize_t filedescriptor::write(const char *string, long sec, long usec) {
+ssize_t filedescriptor::write(const char *string, long sec, long usec) const {
 	DEBUG_WRITE_STRING("string",string,charstring::length(string));
-	return safeWrite(static_cast<const void *>(string),
-				charstring::length(string),sec,usec);
+	return safeWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
-							long sec, long usec) {
+						long sec, long usec) const {
 	DEBUG_WRITE_VOID("void",buffer,size);
 	return safeWrite(buffer,size,sec,usec);
 }
 
-ssize_t filedescriptor::read(unsigned short *buffer) {
+ssize_t filedescriptor::read(unsigned short *buffer) const {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned long *buffer) {
+ssize_t filedescriptor::read(unsigned long *buffer) const {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(short *buffer) {
-	return safeRead(static_cast<void *>(buffer),sizeof(short),-1,-1);
+ssize_t filedescriptor::read(short *buffer) const {
+	return safeRead(buffer,sizeof(short),-1,-1);
 }
 
-ssize_t filedescriptor::read(long *buffer) {
-	return safeRead(static_cast<void *>(buffer),sizeof(long),-1,-1);
+ssize_t filedescriptor::read(long *buffer) const {
+	return safeRead(buffer,sizeof(long),-1,-1);
 }
 
-ssize_t filedescriptor::read(float *buffer) {
-	return safeRead(static_cast<void *>(buffer),sizeof(float),-1,-1);
+ssize_t filedescriptor::read(float *buffer) const {
+	return safeRead(buffer,sizeof(float),-1,-1);
 }
 
-ssize_t filedescriptor::read(double *buffer) {
-	return safeRead(static_cast<void *>(buffer),sizeof(double),-1,-1);
+ssize_t filedescriptor::read(double *buffer) const {
+	return safeRead(buffer,sizeof(double),-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned char *buffer) {
-	return safeRead(static_cast<void *>(buffer),
-				sizeof(unsigned char),-1,-1);
+ssize_t filedescriptor::read(unsigned char *buffer) const {
+	return safeRead(buffer,sizeof(unsigned char),-1,-1);
 }
 
-ssize_t filedescriptor::read(bool *buffer) {
-	return safeRead(static_cast<void *>(buffer),sizeof(bool),-1,-1);
+ssize_t filedescriptor::read(bool *buffer) const {
+	return safeRead(buffer,sizeof(bool),-1,-1);
 }
 
-ssize_t filedescriptor::read(char *buffer) {
-	return safeRead(static_cast<void *>(buffer),sizeof(char),-1,-1);
+ssize_t filedescriptor::read(char *buffer) const {
+	return safeRead(buffer,sizeof(char),-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
-	return safeRead(static_cast<void *>(buffer),size,-1,-1);
-}
-
-ssize_t filedescriptor::read(char *buffer, size_t size) {
-	return safeRead(static_cast<void *>(buffer),size,-1,-1);
-}
-
-ssize_t filedescriptor::read(void *buffer, size_t size) {
+ssize_t filedescriptor::read(unsigned char *buffer, size_t size) const {
 	return safeRead(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::read(char **buffer, char *terminator) {
+ssize_t filedescriptor::read(char *buffer, size_t size) const {
+	return safeRead(buffer,size,-1,-1);
+}
+
+ssize_t filedescriptor::read(void *buffer, size_t size) const {
+	return safeRead(buffer,size,-1,-1);
+}
+
+ssize_t filedescriptor::read(char **buffer, char *terminator) const {
 	return read(buffer,terminator,-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned short *buffer, long sec, long usec) {
-	ssize_t	retval=safeRead(static_cast<void *>(buffer),
-					sizeof(unsigned short),sec,usec);
+ssize_t filedescriptor::read(unsigned short *buffer,
+					long sec, long usec) const {
+	ssize_t	retval=safeRead(buffer,sizeof(unsigned short),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(unsigned long *buffer, long sec, long usec) {
-	ssize_t	retval=safeRead(static_cast<void *>(buffer),
-					sizeof(unsigned long),sec,usec);
+ssize_t filedescriptor::read(unsigned long *buffer, long sec, long usec) const {
+	ssize_t	retval=safeRead(buffer,sizeof(unsigned long),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(short *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),
-					sizeof(short),sec,usec);
+ssize_t filedescriptor::read(short *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(short),sec,usec);
 }
 
-ssize_t filedescriptor::read(long *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),sizeof(long),sec,usec);
+ssize_t filedescriptor::read(long *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(long),sec,usec);
 }
 
-ssize_t filedescriptor::read(float *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),sizeof(float),sec,usec);
+ssize_t filedescriptor::read(float *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(float),sec,usec);
 }
 
-ssize_t filedescriptor::read(double *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),sizeof(double),sec,usec);
+ssize_t filedescriptor::read(double *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(double),sec,usec);
 }
 
-ssize_t filedescriptor::read(unsigned char *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),
-					sizeof(unsigned char),sec,usec);
+ssize_t filedescriptor::read(unsigned char *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(unsigned char),sec,usec);
 }
 
-ssize_t filedescriptor::read(bool *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),sizeof(bool),sec,usec);
+ssize_t filedescriptor::read(bool *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(bool),sec,usec);
 }
 
-ssize_t filedescriptor::read(char *buffer, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),sizeof(char),sec,usec);
+ssize_t filedescriptor::read(char *buffer, long sec, long usec) const {
+	return safeRead(buffer,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer, size_t size,
-							long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),size,sec,usec);
+						long sec, long usec) const {
+	return safeRead(buffer,size,sec,usec);
 }
 
-ssize_t filedescriptor::read(char *buffer, size_t size, long sec, long usec) {
-	return safeRead(static_cast<void *>(buffer),size,sec,usec);
+ssize_t filedescriptor::read(char *buffer, size_t size,
+						long sec, long usec) const {
+	return safeRead(buffer,size,sec,usec);
 }
 
-ssize_t filedescriptor::read(void *buffer, size_t size, long sec, long usec) {
+ssize_t filedescriptor::read(void *buffer, size_t size,
+						long sec, long usec) const {
 	return safeRead(buffer,size,sec,usec);
 }
 
@@ -566,7 +551,7 @@ listener *filedescriptor::getListener() {
 }
 
 ssize_t filedescriptor::read(char **buffer, char *terminator,
-						long sec, long usec) {
+						long sec, long usec) const {
 
 	// initialize a buffer
 	int	buffersize=512;
@@ -593,7 +578,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 	for (;;) {
 
 		// read from the file descriptor
-		if ((sizeread=safeRead(static_cast<void *>(&charbuffer),
+		if ((sizeread=safeRead(&charbuffer,
 				sizeof(char),sec,usec))<=RESULT_ERROR) {
 			totalread=sizeread;
 			break;
@@ -676,7 +661,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 }
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
-						long sec, long usec) {
+						long sec, long usec) const {
 
 	// FIXME: is this what we want to do?
 	// maybe we should set some kind of error condition too
@@ -762,7 +747,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		#endif
 			actualread=::read(fd,ptr,sizetoread);
 			#ifdef DEBUG_READ
-			for (int i=0; i<sizetoread; i++) {
+			for (int i=0; i<actualread; i++) {
 				printf("0x%02x ",
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
@@ -775,6 +760,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// handle that...
 		if (actualread!=sizetoread) {
 			if (errno==EINTR) {
+				#ifdef DEBUG_READ
+				printf(" EINTR ");
+				#endif
 				// if we got an EINTR, then we may need to
 				// retry the read
 				if (retryinterruptedreads) {
@@ -785,6 +773,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				}
 			} else if (actualread==0 && errno==0) {
 				// eof condition
+				#ifdef DEBUG_READ
+				printf(" EOF ");
+				#endif
 				break;
 			} else if (actualread==-1) {
 				// error condition
@@ -799,6 +790,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// if we want to allow short reads, then break out here
 		if (allowshortreads) {
+			#ifdef DEBUG_READ
+			printf(" SHORTREAD ");
+			#endif
 			break;
 		}
 	}
@@ -810,7 +804,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
-						long sec, long usec) {
+						long sec, long usec) const {
 
 	// The result of SSL_write may be undefined if count=0
 	#ifdef RUDIMENTS_HAS_SSL
@@ -981,7 +975,7 @@ int filedescriptor::ioctl(int cmd, void *arg) const {
 	return result;
 }
 
-bool filedescriptor::passFileDescriptor(int filedesc) {
+bool filedescriptor::passFileDescriptor(int filedesc) const {
 
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
@@ -1044,7 +1038,7 @@ bool filedescriptor::passFileDescriptor(int filedesc) {
 	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
-bool filedescriptor::receiveFileDescriptor(int *filedesc) {
+bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr

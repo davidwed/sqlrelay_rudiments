@@ -49,10 +49,10 @@ class serviceentry {
 			// Looks up a service entry by port and protocol.
 			// Returns true on success and false on failure.
 
-		char	*getName() const;
-		int	getPort() const;
-		char	*getProtocol() const;
-		char	**getAliasList() const;
+		const char		*getName() const;
+		int			getPort() const;
+		const char		*getProtocol() const;
+		const char * const *	getAliasList() const;
 
 		void	print() const;
 			// Prints out the service entry.

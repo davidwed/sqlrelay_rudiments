@@ -57,12 +57,16 @@ class hostentry {
 		bool	initialize(const char *address, int len, int type);
 			// Looks up a host entry by address.
 
-		char	*getName() const;
-		char	**getAliasList() const;
-		int	getAddressType() const;
-		int	getAddressLength() const;
-		char	**getAddressList() const;
-		char	*getAddressString(int index) const;
+		const char		*getName() const;
+		const char * const	*getAliasList() const;
+		int			getAddressType() const;
+		int			getAddressLength() const;
+		const char * const	*getAddressList() const;
+		char			*getAddressString(int index) const;
+					// This method allocates a buffer
+					// internally and returns it.  The
+					// calling program must deallocate the
+					// buffer.
 
 		void	print() const;
 			// Prints out the host entry.

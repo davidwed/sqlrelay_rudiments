@@ -45,10 +45,10 @@ class groupentry {
 			// Looks up a group entry by group id.
 			// Returns true on success and false on failure.
 
-		char	*getName() const;
-		char	*getPassword() const;
-		gid_t	getGroupId() const;
-		char	**getMembers() const;
+		const char		*getName() const;
+		const char		*getPassword() const;
+		gid_t			getGroupId() const;
+		const char * const	*getMembers() const;
 
 
 		void	print() const;

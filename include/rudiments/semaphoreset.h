@@ -155,7 +155,7 @@ class semaphoreset {
 			// semaphore set to "permissions"
 
 
-		char	*getUserName();
+		const char	*getUserName();
 			// returns the name of the user that owns this
 			// semaphore set
 			//
@@ -167,7 +167,7 @@ class semaphoreset {
 			// If you are using this method in a multithreaded
 			// application, you may need to supply the passwdentry
 			// class a mutex.  See passwdentry.h for more detail.
-		char	*getGroupName();
+		const char	*getGroupName();
 			// returns the name of the group that owns this
 			// semaphore set
 			//

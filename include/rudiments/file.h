@@ -379,7 +379,7 @@ class file : public filedescriptor {
 		// methods provide an interface for getting and setting those
 		// attributes.
 
-		char	**listAttributes() const;
+		const char * const	*listAttributes() const;
 			// Returns a NULL terminated array of attributes or
 			// NULL if an error occurred.
 

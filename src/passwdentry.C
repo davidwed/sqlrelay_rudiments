@@ -46,11 +46,11 @@ passwdentry::~passwdentry() {
 	#endif
 }
 
-char *passwdentry::getName() const {
+const char *passwdentry::getName() const {
 	return pwd->pw_name;
 }
 
-char *passwdentry::getPassword() const {
+const char *passwdentry::getPassword() const {
 	return pwd->pw_passwd;
 }
 
@@ -62,15 +62,15 @@ gid_t passwdentry::getPrimaryGroupId() const {
 	return pwd->pw_gid;
 }
 
-char *passwdentry::getRealName() const {
+const char *passwdentry::getRealName() const {
 	return pwd->pw_gecos;
 }
 
-char *passwdentry::getHomeDirectory() const {
+const char *passwdentry::getHomeDirectory() const {
 	return pwd->pw_dir;
 }
 
-char *passwdentry::getShell() const {
+const char *passwdentry::getShell() const {
 	return pwd->pw_shell;
 }
 

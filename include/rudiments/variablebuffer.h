@@ -78,7 +78,7 @@ class variablebuffer {
 		void	clear();
 			// Empties the variablebuffer.
 
-		unsigned char	*getBuffer();
+		const unsigned char	*getBuffer();
 				// Returns the current data stored in the
 				// variablebuffer.
 		size_t		getSize();

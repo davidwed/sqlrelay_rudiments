@@ -39,6 +39,10 @@ class dynamiclib {
 			// Returns a human-readable description of the previous
 			// error that occurred, or NULL if no error has
 			// occurred.
+			//
+			// This method allocates a buffer internally and
+			// returns it.  The calling program must deallocate
+			// the buffer.
 		
 #ifdef RUDIMENTS_HAS_THREADS
 		// getError() is not reentrant and thus not thread safe.  If

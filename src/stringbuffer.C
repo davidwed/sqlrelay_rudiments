@@ -37,7 +37,7 @@ void stringbuffer::setPosition(size_t pos) {
 
 const char *stringbuffer::getString() {
 	terminate();
-	return reinterpret_cast<char *>(getBuffer());
+	return reinterpret_cast<const char *>(getBuffer());
 }
 
 size_t stringbuffer::getStringLength() {

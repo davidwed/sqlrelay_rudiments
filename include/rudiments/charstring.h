@@ -33,7 +33,7 @@ class charstring {
 			// the new string.
 			// Returns a pointer to "dest".
 		static	char	*append(char *dest, const char *source,
-							size_t size);
+								size_t size);
 			// Appends "size" bytes of "source" to "dest".  Assumes
 			// that there is enough room remaining in "dest" to
 			// accommodate the new string.
@@ -80,7 +80,7 @@ class charstring {
 			// bytes long.
 			// Returns a pointer to "dest".
 		static	char	*copy(char *dest, size_t location,
-					const char *source);
+						const char *source);
 			// Replaces "dest" with "source", starting "location"
 			// bytes into "dest".  Assumes that there is enough
 			// room in "dest" (after "location" bytes) to
@@ -176,7 +176,7 @@ class charstring {
 		static	void	strip(char *str, char character);
 			// Strips all instances of "character" from "str".
 
-		static	void	strip(char *str1, char *str2);
+		static	void	strip(char *str1, const char *str2);
 			// Strips all instances of "str2" from "str1".
 
 		static	int	integerLength(short number);
@@ -294,9 +294,9 @@ class charstring {
 		static	unsigned long long	toUnsignedLongLong(
 							const char *string,
 							char **endptr);
-			// Converts "string" to a unsigned long long integer.  If
-			// non-NULL, endptr will be set to the first character
-			// in the string after the number.
+			// Converts "string" to a unsigned long long integer.
+			// If non-NULL, endptr will be set to the first
+			// character in the string after the number.
 		static	unsigned long long	toUnsignedLongLong(
 							const char *string,
 							int base);

@@ -131,9 +131,8 @@ bool signalhandler::handleSignal(int signum) {
 bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	struct sigaction	oldaction;
 	bool	retval=!sigaction(signum,&handlerstruct,&oldaction);
-	rawbuffer::copy(static_cast<void *>(&oldhandler->handlerstruct),
-			static_cast<const void *>(&oldaction),
-			sizeof(struct sigaction));
+	rawbuffer::copy(&oldhandler->handlerstruct,&oldaction,
+					sizeof(struct sigaction));
 	return retval;
 }
 

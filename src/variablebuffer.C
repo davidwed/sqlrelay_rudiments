@@ -65,9 +65,7 @@ ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 		bytestoread=endofbuffer-position;
 	}
 
-	rawbuffer::copy(static_cast<void *>(data),
-			static_cast<const void *>(buffer+position),
-			bytestoread);
+	rawbuffer::copy(data,buffer+position,bytestoread);
 	position=position+bytestoread;
 
 	return bytestoread;
@@ -83,9 +81,7 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 	}
 
 	// copy the data into the buffer
-	rawbuffer::copy(static_cast<void *>(buffer+position),
-			static_cast<const void *>(data),
-			size);
+	rawbuffer::copy(buffer+position,data,size);
 
 	// increment the position indices
 	position=position+size;
@@ -166,15 +162,13 @@ void variablebuffer::extend(size_t size) {
 	size_t	newbuffersize=buffersize+((size/increment)*increment)+
 					(((size%increment)>0)*increment);
 	unsigned char	*newbuffer=new unsigned char[newbuffersize];
-	rawbuffer::copy(static_cast<void *>(newbuffer),
-			static_cast<const void *>(buffer),
-			buffersize);
+	rawbuffer::copy(newbuffer,buffer,buffersize);
 	delete[] buffer;
 	buffer=newbuffer;
 	buffersize=newbuffersize;
 }
 
-unsigned char *variablebuffer::getBuffer() {
+const unsigned char *variablebuffer::getBuffer() {
 	return buffer;
 }
 

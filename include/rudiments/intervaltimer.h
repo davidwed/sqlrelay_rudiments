@@ -33,24 +33,24 @@ class intervaltimer {
 		void	setInitialInterval(long seconds, long microseconds);
 			// Set the timer's initial interval to "seconds"
 			// seconds and "microseconds" microseconds.
-		void	setInitialInterval(timeval *tv);
+		void	setInitialInterval(const timeval *tv);
 			// Set the timer's initial interval to seconds and
 			// microseconds specified in "tv".
 
 		void	setPeriodicInterval(long seconds, long microseconds);
 			// Set the timer's periodic interval to "seconds"
 			// seconds and "microseconds" microseconds.
-		void	setPeriodicInterval(timeval *tv);
+		void	setPeriodicInterval(const timeval *tv);
 			// Set the timer's periodic interval to seconds and
 			// microseconds specified in "tv".
 
 		void	setIntervals(long seconds, long microseconds);
 			// Set the timer's initial and periodic intervals both
 			// to "seconds" seconds and "microseconds" microseconds.
-		void	setIntervals(timeval *tv);
+		void	setIntervals(const timeval *tv);
 			// Set the timer's initial and periodic intervals both
 			// to seconds and microseconds specified in "tv".
-		void	setIntervals(itimerval *itv);
+		void	setIntervals(const itimerval *itv);
 			// Set the timer's initial and periodic intervals as
 			// specified by "itv".
 

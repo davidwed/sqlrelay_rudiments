@@ -43,8 +43,8 @@ BIO *clientsocket::newSSLBIO() const {
 }
 #endif
 
-int clientsocket::connect(struct sockaddr *addr, socklen_t addrlen,
-						long sec, long usec) {
+int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
+							long sec, long usec) {
 	int	retval;
 	if (sec==-1 || usec==-1) {
 

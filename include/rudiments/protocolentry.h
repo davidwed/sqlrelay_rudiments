@@ -43,9 +43,9 @@ class protocolentry {
 			// Looks up a protocol entry by number.
 			// Returns true on success and false on failure.
 
-		char	*getName() const;
-		char	**getAliasList() const;
-		int	getNumber() const;
+		const char		*getName() const;
+		const char * const	*getAliasList() const;
+		int			getNumber() const;
 
 		void	print() const;
 			// Prints out the protocol entry.

@@ -40,9 +40,9 @@ class rpcentry {
 			// Looks up a rpc entry by number.
 			// Returns true on success and false on failure.
 
-		char	*getName() const;
-		int	getNumber() const;
-		char	**getAliasList() const;
+		const char		*getName() const;
+		int			getNumber() const;
+		const char * const	*getAliasList() const;
 
 		void	print() const;
 			// Prints out the rpc entry.

@@ -171,9 +171,9 @@ class xmldomnode {
 		// contained in the node.
 		xmldomnodetype	getType() const;
 				// Returns the node type.
-		char		*getName() const;
+		const char	*getName() const;
 				// Returns the node name.
-		char		*getValue() const;
+		const char	*getValue() const;
 				// Returns the node value.
 
 
@@ -279,10 +279,10 @@ class xmldomnode {
 		xmldomnode	*getAttribute(int position) const;
 				// Returns the attribute node at index
 				// "position" or the nullnode if not found.
-		char		*getAttributeValue(const char *name) const;
+		const char	*getAttributeValue(const char *name) const;
 				// Returns the value of the attribute named
 				// "name" or the nullnode if not found.
-		char		*getAttributeValue(int position) const;
+		const char	*getAttributeValue(int position) const;
 				// Returns the value of the attribute node at
 				// index "position" or the nullnode if not
 				// found.
@@ -416,7 +416,7 @@ class xmldomnode {
 				//
 				// Returns the null node if the specified
 				// element was not found.
-		char		*getAttributeValueByPath(const char *path,
+		const char	*getAttributeValueByPath(const char *path,
 							int position) const;
 				// Returns the value of the attribute at index
 				// "position" of the child element with "path"
@@ -426,7 +426,7 @@ class xmldomnode {
 				//
 				// Returns the null node if the specified
 				// element was not found.
-		char		*getAttributeValueByPath(const char *path,
+		const char	*getAttributeValueByPath(const char *path,
 							const char *name) const;
 				// Returns the value of the attribute named
 				// "name" of the child element with "path" of

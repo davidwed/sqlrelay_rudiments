@@ -31,6 +31,8 @@
 	implemented copy constructors, = operators for many classes
 	charstring class doesn't use strndup or strdup anymore so
 		strings created using malloc aren't freed using delete[]
+	removed errant connect() definitions from inetclientsocket,
+		unixclientsocket
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

@@ -165,11 +165,11 @@ class serialportprofile {
 			// set input options to "flags"
 		void	setOutputOptions(tcflag_t flags);
 			// set output options to "flags"
-		void	setControlCharacters(cc_t *c_cc);
+		void	setControlCharacters(const cc_t *c_cc);
 			// Set control characters to the values pointed to by
 			// "c_cc".  Note that c_cc must be an array of length
 			// NCCS.
-		void	setOptions(termios *newtio);
+		void	setOptions(const termios *newtio);
 			// set all options and control characters to
 			// the values set in "newtio"
 

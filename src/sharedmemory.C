@@ -163,7 +163,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 	return false;
 }
 
-char *sharedmemory::getUserName() {
+const char *sharedmemory::getUserName() {
 	shmid_ds	getds;
 	char		*name;
 	if (!shmctl(shmid,IPC_STAT,&getds) &&
@@ -173,7 +173,7 @@ char *sharedmemory::getUserName() {
 	return NULL;
 }
 
-char *sharedmemory::getGroupName() {
+const char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
 	char		*name;
 	if (!shmctl(shmid,IPC_STAT,&getds) &&

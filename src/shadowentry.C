@@ -46,11 +46,11 @@ shadowentry::~shadowentry() {
 	#endif
 }
 
-char *shadowentry::getName() const {
+const char *shadowentry::getName() const {
 	return sp->sp_namp;
 }
 
-char *shadowentry::getEncryptedPassword() const {
+const char *shadowentry::getEncryptedPassword() const {
 	return sp->sp_pwdp;
 }
 

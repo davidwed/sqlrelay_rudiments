@@ -92,14 +92,14 @@ bool dtd::newElement(xmldomnode *node) {
 	}
 
 	// add a name attribute to the element
-	char	*name=node->getAttribute(0)->getName();
+	const char	*name=node->getAttribute(0)->getName();
 	if (!element->appendAttribute("name",name)) {
 		nodeError(node);
 		return false;
 	}
 
 	// add the list of valid child elements to the tree
-	char	*list=node->getAttribute(1)->getName();
+	const char	*list=node->getAttribute(1)->getName();
 	if (parseList(list,element,1,1,',',"child")) {
 		return true;
 	}
@@ -236,7 +236,7 @@ bool dtd::newAttribute(xmldomnode *node) {
 	}
 
 	// insert the list of valid values or none if CDATA
-	char	*values=node->getAttribute(2)->getName();
+	const char	*values=node->getAttribute(2)->getName();
 	if (!charstring::compare(values,"CDATA")) {
 		return true;
 	}

@@ -17,11 +17,11 @@ class commandline {
 		commandline(int argc, const char **argv);
 		~commandline();
 
-		char	*value(const char *arg) const;
+		const char	*value(const char *arg) const;
 				// Returns the value of "arg" (which is assumed
 				// to be the next item on the command line
 				// after "arg").
-		bool	found(const char *arg) const;
+		bool		found(const char *arg) const;
 				// Returns 1 if "arg" was found and 0 
 				// if it was not found.  This is useful for
 				// processing command line switches.

@@ -29,8 +29,8 @@ class inetserversocket : public serversocket, private inetsocketutil {
 		virtual		~inetserversocket();
 
 		bool	listen(const char *address,
-						unsigned short port,
-						int backlog);
+					unsigned short port,
+					int backlog);
 				// Listen on "address" and "port" and allow
 				// "backlog" connections to pile up before
 				// refusing them.

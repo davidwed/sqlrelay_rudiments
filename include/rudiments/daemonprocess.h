@@ -27,7 +27,7 @@ class daemonprocess {
 			// process id out of it, if it exists.  Returns
 			// the process id on success or -1 on failure.
 		bool	createPidFile(const char *filename,
-					mode_t permissions) const;
+						mode_t permissions) const;
 			// Create's file "filename" with permissions
 			// "permissions" and puts the current process
 			// id in it.  Note that when you delete this

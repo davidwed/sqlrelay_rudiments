@@ -14,9 +14,9 @@
 namespace rudiments {
 #endif
 
-chat::chat(filedescriptor *fd) : readfd(fd), writefd(fd), timeout(45) {}
+chat::chat(const filedescriptor *fd) : readfd(fd), writefd(fd), timeout(45) {}
 
-chat::chat(filedescriptor *rfd, filedescriptor *wfd) :
+chat::chat(const filedescriptor *rfd, const filedescriptor *wfd) :
 				 readfd(rfd), writefd(wfd), timeout(45) {}
 
 chat::~chat() {}

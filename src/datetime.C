@@ -471,7 +471,7 @@ bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone,
 		realzone=combinedzone;
 	}
 
-	char	*tz=env.getValue("TZ");
+	const char	*tz=env.getValue("TZ");
 	if (tz) {
 		*oldzone=charstring::duplicate(tz);
 	} else {

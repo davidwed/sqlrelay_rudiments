@@ -53,15 +53,15 @@ class shadowentry {
 			// Looks up a shadow entry by name.
 			// Returns true on success and false on failure.
 
-		char	*getName() const;
-		char	*getEncryptedPassword() const;
-		long	getLastChangeDate() const;
-		int	getDaysBeforeChangeAllowed() const;
-		int	getDaysBeforeChangeRequired() const;
-		int	getDaysBeforeExpirationWarning() const;
-		int	getDaysOfInactivityAllowed() const;
-		int	getExpirationDate() const;
-		int	getFlag() const;
+		const char	*getName() const;
+		const char	*getEncryptedPassword() const;
+		long		getLastChangeDate() const;
+		int		getDaysBeforeChangeAllowed() const;
+		int		getDaysBeforeChangeRequired() const;
+		int		getDaysBeforeExpirationWarning() const;
+		int		getDaysOfInactivityAllowed() const;
+		int		getExpirationDate() const;
+		int		getFlag() const;
 
 		void	print() const;
 			// Prints out the shadow entry.

@@ -20,7 +20,7 @@ intervaltimer::intervaltimer(int which) {
 }
 
 void intervaltimer::initialize() {
-	rawbuffer::zero(static_cast<void *>(&values),sizeof(values));
+	rawbuffer::zero(&values,sizeof(values));
 }
 
 void intervaltimer::setInitialInterval(long seconds, long microseconds) {
@@ -28,7 +28,7 @@ void intervaltimer::setInitialInterval(long seconds, long microseconds) {
 	values.it_value.tv_usec=microseconds;
 }
 
-void intervaltimer::setInitialInterval(timeval *tv) {
+void intervaltimer::setInitialInterval(const timeval *tv) {
 	values.it_value=*tv;
 }
 
@@ -37,7 +37,7 @@ void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
 	values.it_interval.tv_usec=microseconds;
 }
 
-void intervaltimer::setPeriodicInterval(timeval *tv) {
+void intervaltimer::setPeriodicInterval(const timeval *tv) {
 	values.it_interval=*tv;
 }
 
@@ -46,12 +46,12 @@ void intervaltimer::setIntervals(long seconds, long microseconds) {
 	setPeriodicInterval(seconds,microseconds);
 }
 
-void intervaltimer::setIntervals(timeval *tv) {
+void intervaltimer::setIntervals(const timeval *tv) {
 	setInitialInterval(tv);
 	setPeriodicInterval(tv);
 }
 
-void intervaltimer::setIntervals(itimerval *itv) {
+void intervaltimer::setIntervals(const itimerval *itv) {
 	values=*itv;
 }
 

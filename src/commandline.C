@@ -15,7 +15,7 @@ commandline::commandline(int argc, const char **argv) {
 
 commandline::~commandline() {}
 
-char *commandline::value(const char *arg) const {
+const char *commandline::value(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<argc-1; i++) {

@@ -35,16 +35,12 @@ void serialportprofile::setOutputOptions(tcflag_t flags) {
 	tio.c_oflag=flags;
 }
 
-void serialportprofile::setControlCharacters(cc_t *c_cc) {
-	rawbuffer::copy(static_cast<void *>(&tio.c_cc),
-			static_cast<const void *>(c_cc),
-			sizeof(cc_t)*NCCS);
+void serialportprofile::setControlCharacters(const cc_t *c_cc) {
+	rawbuffer::copy(&tio.c_cc,c_cc,sizeof(cc_t)*NCCS);
 }
 
-void serialportprofile::setOptions(termios *newtio) {
-	rawbuffer::copy(static_cast<void *>(&tio),
-			static_cast<const void *>(newtio),
-			sizeof(tio));
+void serialportprofile::setOptions(const termios *newtio) {
+	rawbuffer::copy(&tio,newtio,sizeof(tio));
 }
 
 void serialportprofile::defaultControlOptions() {

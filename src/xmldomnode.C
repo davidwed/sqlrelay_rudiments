@@ -85,7 +85,7 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name) const {
 	for (xmldomnode *current=getPreviousTagSibling();
 			current && !current->isNullNode();
 				current=current->getPreviousTagSibling()) {
-		char	*nm=current->getName();
+		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			return current;
 		}
@@ -99,10 +99,10 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 	for (xmldomnode *current=getPreviousTagSibling();
 			current && !current->isNullNode();
 				current=current->getPreviousTagSibling()) {
-		char	*nm=current->getName();
+		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
-			char	*value=current->
-					getAttribute(attributename)->
+			const char	*value=current->
+						getAttribute(attributename)->
 						getValue();
 			if (value &&
 				!charstring::compare(value,attributevalue)) {
@@ -125,7 +125,7 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name) const {
 	for (xmldomnode *current=getNextTagSibling();
 			current && !current->isNullNode();
 				current=current->getNextTagSibling()) {
-		char	*nm=current->getName();
+		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			return current;
 		}
@@ -139,10 +139,10 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 	for (xmldomnode *current=getNextTagSibling();
 			current && !current->isNullNode();
 				current=current->getNextTagSibling()) {
-		char	*nm=current->getName();
+		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
-			char	*value=current->
-					getAttribute(attributename)->
+			const char	*value=current->
+						getAttribute(attributename)->
 						getValue();
 			if (value &&
 				!charstring::compare(value,attributevalue)) {
@@ -179,10 +179,10 @@ xmldomnode *xmldomnode::getChild(const char *name,
 	for (xmldomnode *current=firstchild;
 			current && !current->isNullNode();
 				current=current->next) {
-		char	*nm=current->getName();
+		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
-			char	*value=current->
-					getAttribute(attributename)->
+			const char	*value=current->
+						getAttribute(attributename)->
 						getValue();
 			if (value &&
 				!charstring::compare(value,attributevalue)) {
@@ -388,8 +388,10 @@ namevaluepairs *xmldomnode::getAttributes() const {
 
 	namevaluepairs	*nvp=new namevaluepairs();
 	for (int i=0; i<attributecount; i++) {
-		nvp->setData(getAttribute(i)->getName(),
-				getAttribute(i)->getValue());
+		// FIXME: this isn't really safe, if we return a namevaluepairs
+		// object, then users can delete[] the name, value...
+		nvp->setData(const_cast<char *>(getAttribute(i)->getName()),
+			const_cast<char *>(getAttribute(i)->getValue()));
 	}
 	return nvp;
 }
@@ -406,11 +408,11 @@ xmldomnodetype xmldomnode::getType() const {
 	return type;
 }
 
-char *xmldomnode::getName() const {
+const char *xmldomnode::getName() const {
 	return nodename;
 }
 
-char *xmldomnode::getValue() const {
+const char *xmldomnode::getValue() const {
 	return nodevalue;
 }
 
@@ -458,11 +460,11 @@ xmldomnode *xmldomnode::getAttribute(const char *name) const {
 	return getNode(firstattribute,0,name,attributecount);
 }
 
-char *xmldomnode::getAttributeValue(int position) const {
+const char *xmldomnode::getAttributeValue(int position) const {
 	return getAttribute(position)->getValue();
 }
 
-char *xmldomnode::getAttributeValue(const char *name) const {
+const char *xmldomnode::getAttributeValue(const char *name) const {
 	return getAttribute(name)->getValue();
 }
 
@@ -541,7 +543,7 @@ stringbuffer *xmldomnode::getPath() const {
 	}
 
 	// create pointers to the names of each parent node
-	char		*names[ancestors];
+	const char	*names[ancestors];
 	unsigned long	indices[ancestors];
 	node=this;
 	for (int index=ancestors-1; index>=0; index--) {
@@ -627,12 +629,12 @@ xmldomnode *xmldomnode::getAttributeByPath(const char *path,
 	return getChildByPath(path)->getAttribute(name);
 }
 
-char *xmldomnode::getAttributeValueByPath(const char *path,
+const char *xmldomnode::getAttributeValueByPath(const char *path,
 						int position) const {
 	return getChildByPath(path)->getAttributeValue(position);
 }
 
-char *xmldomnode::getAttributeValueByPath(const char *path,
+const char *xmldomnode::getAttributeValueByPath(const char *path,
 						const char *name) const {
 	return getChildByPath(path)->getAttributeValue(name);
 }

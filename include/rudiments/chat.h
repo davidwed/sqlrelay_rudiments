@@ -15,10 +15,10 @@ namespace rudiments {
 
 class chat {
 	public:
-		chat(filedescriptor *fd);
+		chat(const filedescriptor *fd);
 		// Initializes an instance of chat.  Data will be
 		// written to and read from "fd".
-		chat(filedescriptor *rfd, filedescriptor *wfd);
+		chat(const filedescriptor *rfd, const filedescriptor *wfd);
 		// Initializes an instance of chat.  Data will be
 		// written to "wfd" and read from "rfd".
 		~chat();

@@ -251,7 +251,7 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
-char *semaphoreset::getUserName() {
+const char *semaphoreset::getUserName() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;
@@ -273,7 +273,7 @@ uid_t semaphoreset::getUserId() {
 	return 0;
 }
 
-char *semaphoreset::getGroupName() {
+const char *semaphoreset::getGroupName() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;

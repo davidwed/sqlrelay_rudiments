@@ -54,13 +54,13 @@ class passwdentry {
 			// Looks up a passwd entry by user id.
 			// Returns true on success and false on failure.
 
-		char	*getName() const;
-		char	*getPassword() const;
-		uid_t	getUserId() const;
-		gid_t	getPrimaryGroupId() const;
-		char	*getRealName() const;
-		char	*getHomeDirectory() const;
-		char	*getShell() const;
+		const char	*getName() const;
+		const char	*getPassword() const;
+		uid_t		getUserId() const;
+		gid_t		getPrimaryGroupId() const;
+		const char	*getRealName() const;
+		const char	*getHomeDirectory() const;
+		const char	*getShell() const;
 
 		void	print() const;
 			// Prints out the passwd entry.

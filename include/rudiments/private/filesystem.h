@@ -4,7 +4,7 @@
 	private:
 		void	close();
 #if defined(HAVE_LINUX_STATFS)
-		static	char	*getFsTypeName(long type);
+		static	const char	*getFsTypeName(long type);
 #endif
 
 #ifdef HAVE_STATVFS

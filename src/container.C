@@ -33,19 +33,19 @@ void container::dontCascadeOnDelete() {
 }
 
 
-bool container::save(filedescriptor *fd) {
+bool container::save(const filedescriptor *fd) {
 	return false;
 }
 
-bool container::save(unsigned char *buffer) {
+bool container::save(const unsigned char *buffer) {
 	return false;
 }
 
-bool container::load(filedescriptor *fd) {
+bool container::load(const filedescriptor *fd) {
 	return false;
 }
 
-bool container::load(unsigned char *buffer) {
+bool container::load(const unsigned char *buffer) {
 	return false;
 }
 

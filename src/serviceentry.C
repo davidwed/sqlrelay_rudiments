@@ -46,7 +46,7 @@ serviceentry::~serviceentry() {
 	#endif
 }
 
-char *serviceentry::getName() const {
+const char *serviceentry::getName() const {
 	return se->s_name;
 }
 
@@ -54,11 +54,11 @@ int serviceentry::getPort() const {
 	return ntohs(se->s_port);
 }
 
-char *serviceentry::getProtocol() const {
+const char *serviceentry::getProtocol() const {
 	return se->s_proto;
 }
 
-char **serviceentry::getAliasList() const {
+const char * const *serviceentry::getAliasList() const {
 	return se->s_aliases;
 }
 

@@ -159,16 +159,14 @@ int inetclientsocket::connect() {
 					addressindex++) {
 
 				// set which host to connect to
-				rawbuffer::copy(
-					static_cast<void *>(&sin.sin_addr),
-					static_cast<const void *>(
-						he.getAddressList()
-							[addressindex]),
+				rawbuffer::copy(&sin.sin_addr,
+					he.getAddressList()[addressindex],
 					he.getAddressLength());
 	
 				// attempt to connect
-				if (clientsocket::connect(
-					static_cast<struct sockaddr *>(&sin),
+				if (connect(
+					static_cast<const struct sockaddr *>(
+									&sin),
 					sizeof(sin),
 					timeoutsec,
 					timeoutusec)==RESULT_SUCCESS) {
@@ -191,7 +189,7 @@ int inetclientsocket::connect() {
 
 				// attempt to connect to the socket
 				if (clientsocket::connect(
-					static_cast<struct sockaddr *>(
+					static_cast<const struct sockaddr *>(
 								ainfo->ai_addr),
 						ainfo->ai_addrlen,
 						timeoutsec,

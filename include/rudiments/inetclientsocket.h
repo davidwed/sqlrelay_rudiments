@@ -87,8 +87,6 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 			// in a multithreaded application, you may need to
 			// supply those classes with mutexes.  See hostentry.h
 			// and protocolentry.h for more detail.
-
-	#include <rudiments/private/inetclientsocket.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

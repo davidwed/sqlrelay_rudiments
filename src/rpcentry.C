@@ -41,7 +41,7 @@ rpcentry::~rpcentry() {
 	#endif
 }
 
-char *rpcentry::getName() const {
+const char *rpcentry::getName() const {
 	return re->r_name;
 }
 
@@ -49,7 +49,7 @@ int rpcentry::getNumber() const {
 	return re->r_number;
 }
 
-char **rpcentry::getAliasList() const {
+const char * const *rpcentry::getAliasList() const {
 	return re->r_aliases;
 }
 

@@ -12,9 +12,9 @@
 		virtual	unsigned long	netToHost(unsigned long value) const;
 
 		virtual	ssize_t	safeRead(void *buf, ssize_t count,
-						long sec, long usec);
+						long sec, long usec) const;
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
-						long sec, long usec);
+						long sec, long usec) const;
 		virtual	int	safeSelect(long sec, long usec,
 						bool read, bool write) const;
 
@@ -33,8 +33,8 @@
 
 		#ifdef RUDIMENTS_HAS_SSL
 		virtual	BIO	*newSSLBIO() const;
-		SSL_CTX		*ctx;
-		SSL		*ssl;
-		BIO		*bio;
-		int		sslresult;
+			SSL_CTX	*ctx;
+			SSL	*ssl;
+			BIO	*bio;
+		mutable	int	sslresult;
 		#endif
