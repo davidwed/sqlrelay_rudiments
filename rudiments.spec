@@ -39,7 +39,8 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-%makeinstall bindir=%{buildroot}%{_bindir} libdir=%{buildroot}%{_libdir} incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
+#%makeinstall bindir=%{buildroot}%{_bindir} libdir=%{buildroot}%{_libdir} incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
+%makeinstall DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
 
 %post
 /sbin/ldconfig
