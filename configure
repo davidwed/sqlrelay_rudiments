@@ -25244,7 +25244,7 @@ fi
 
 
 
-RUDIMENTS_VERSION="0.26.2"
+RUDIMENTS_VERSION="0.26.3"
 
 
 cat >>confdefs.h <<_ACEOF

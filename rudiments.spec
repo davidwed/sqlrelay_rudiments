@@ -1,6 +1,6 @@
 Summary: C++ class library for daemons, clients and servers.
 Name: rudiments
-Version: 0.26.2
+Version: 0.26.3
 Release: 1
 License: LGPL
 Group: Development/Libraries
@@ -39,7 +39,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-%makeinstall incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
+%makeinstall bindir=%{buildroot}%{_bindir} libdir=%{buildroot}%{_libdir} incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
 
 %post
 /sbin/ldconfig
