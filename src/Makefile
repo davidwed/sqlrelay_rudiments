@@ -198,6 +198,10 @@ ifeq ($(INCLUDE_MUTEX),1)
 	SRCS += mutex.C
 	LOBJS += mutex.lo
 endif
+ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
+	SRCS += serialportprofile.C
+	LOBJS += serialportprofile.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)

@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/config.h>
-#include <string.h>
-#include <stdlib.h>
+#include <rudiments/private/rudimentsinlines.h>
+
+#include <termios.h>
 #include <unistd.h>

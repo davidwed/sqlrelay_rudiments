@@ -8,6 +8,12 @@
 // for getpagesize()...
 #include <unistd.h>
 
+#ifdef HAVE_MMAP_CADDR_T
+	#define ADDRCAST caddr_t
+#else
+	#define ADDRCAST void *
+#endif
+
 memorymap::memorymap() {
 	data=NULL;
 	length=0;
@@ -25,7 +31,11 @@ bool memorymap::attach(int fd, off_t offset, size_t len,
 }
 
 bool memorymap::detach() {
+	#ifdef HAVE_MMAP_CADDR_T
+	return !munmap((caddr_t)data,length);
+	#else
 	return !munmap(data,length);
+	#endif
 }
 
 bool memorymap::setProtection(int protection) {
@@ -34,7 +44,7 @@ bool memorymap::setProtection(int protection) {
 
 bool memorymap::setProtection(off_t offset, size_t len, int protection) {
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !mprotect((void *)ptr,len,protection);
+	return !mprotect((ADDRCAST)ptr,len,protection);
 }
 
 void *memorymap::getData() {
@@ -52,57 +62,78 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 bool memorymap::sync(off_t offset, size_t len,
 			bool immediate, bool invalidate) {
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !msync((void *)ptr,len,((immediate)?MS_SYNC:MS_ASYNC)|
+	return !msync((ADDRCAST)ptr,len,((immediate)?MS_SYNC:MS_ASYNC)|
 					((invalidate)?MS_INVALIDATE:0));
 }
 
 bool memorymap::sequentialAccess(off_t offset, size_t len) {
+	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((void *)ptr,len,MADV_SEQUENTIAL);
+	return !madvise((ADDRCAST)ptr,len,MADV_SEQUENTIAL);
+	#else
+	return true;
+	#endif
 }
 
 bool memorymap::randomAccess(off_t offset, size_t len) {
+	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((void *)ptr,len,MADV_RANDOM);
+	return !madvise((ADDRCAST)ptr,len,MADV_RANDOM);
+	#else
+	return true;
+	#endif
 }
 
 bool memorymap::willNeed(off_t offset, size_t len) {
+	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((void *)ptr,len,MADV_WILLNEED);
+	return !madvise((ADDRCAST)ptr,len,MADV_WILLNEED);
+	#else
+	return true;
+	#endif
 }
 
 bool memorymap::wontNeed(off_t offset, size_t len) {
+	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((void *)ptr,len,MADV_DONTNEED);
+	return !madvise((ADDRCAST)ptr,len,MADV_DONTNEED);
+	#else
+	return true;
+	#endif
 }
 
 bool memorymap::normalAccess(off_t offset, size_t len) {
+	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !madvise((void *)ptr,len,MADV_NORMAL);
+	return !madvise((ADDRCAST)ptr,len,MADV_NORMAL);
+	#else
+	return true;
+	#endif
 }
 
+#ifdef HAVE_MLOCK
 bool memorymap::lock() {
 	return lock(0,length);
 }
 
 bool memorymap::lock(off_t offset, size_t len) {
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !mlock((void *)ptr,len);
+	return !mlock((ADDRCAST)ptr,len);
 }
+#endif
 
+#ifdef HAVE_MUNLOCK
 bool memorymap::unlock() {
 	return !munlock(0,length);
 }
 
 bool memorymap::unlock(off_t offset, size_t len) {
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	return !munlock((void *)ptr,len);
+	return !munlock((ADDRCAST)ptr,len);
 }
+#endif
 
-bool memorymap::resize(size_t newlength, bool maymove) {
-	return !mremap(data,length,newlength,(maymove)?MREMAP_MAYMOVE:0);
-}
-
+#ifdef HAVE_MINCORE
 bool memorymap::inMemory() {
 	return inMemory(0,length);
 }
@@ -112,11 +143,15 @@ bool memorymap::inMemory(off_t offset, size_t len) {
 	// create an array of char's, 1 for each page
 	int		pagesize=getpagesize();
 	int		tmplen=(len+pagesize-1)/pagesize;
+	#ifdef HAVE_MINCORE_CHAR
+	char		tmp[tmplen];
+	#else
 	unsigned char	tmp[tmplen];
+	#endif
 
 	// call mincore to fill the array
 	unsigned char	*ptr=((unsigned char *)data)+offset;
-	if (mincore((void *)ptr,len,tmp)) {
+	if (mincore((ADDRCAST)ptr,len,tmp)) {
 		return false;
 	}
 
@@ -129,7 +164,24 @@ bool memorymap::inMemory(off_t offset, size_t len) {
 	}
 	return true;
 }
+#endif
 
+#ifdef HAVE_MLOCKALL
+bool memorymap::lockAll() {
+	return !mlockall(MCL_CURRENT|MCL_FUTURE);
+}
+
+bool memorymap::lockAllCurrent() {
+	return !mlockall(MCL_CURRENT);
+}
+
+bool memorymap::lockAllFuture() {
+	return !mlockall(MCL_FUTURE);
+}
+#endif
+
+#ifdef HAVE_MUNLOCKALL
 bool memorymap::unlockAll() {
 	return !munlockall();
 }
+#endif

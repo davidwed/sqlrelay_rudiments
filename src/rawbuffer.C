@@ -17,7 +17,11 @@ void *rawbuffer::copyUntil(void *dest, const void *src,
 }
 
 void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
+	#ifdef HAVE_SWAB_CHAR
+	swab((const char *)src,(char *)dest,size);
+	#else
 	swab(src,dest,size);
+	#endif
 	return dest;
 }
 

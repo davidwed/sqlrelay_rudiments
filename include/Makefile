@@ -220,6 +220,12 @@ ifeq ($(INCLUDE_MUTEX),1)
 	HEADERS += mutex.h
 	PRIVATEHEADERS += mutexincludes.h mutex.h
 endif
+ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
+	HEADERS += serialportprofile.h
+	PRIVATEHEADERS += serialportprofileincludes.h \
+				serialportprofileinlines.h \
+				serialportprofile.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

@@ -208,20 +208,44 @@
 /* Some systems have lrand48 */
 #undef HAVE_LRAND48
 
+/* Some systems have madvise */
+#undef HAVE_MADVISE
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
 /* Some systems have mincore */
 #undef HAVE_MINCORE
 
+/* Some systems have mincore with char argument */
+#undef HAVE_MINCORE_CHAR
+
+/* Some systems have mincore with unsigned char argument */
+#undef HAVE_MINCORE_UCHAR
+
+/* Some systems have mlock */
+#undef HAVE_MLOCK
+
+/* Some systems have mlockall */
+#undef HAVE_MLOCKALL
+
 /* Define to 1 if you have a working `mmap' system call. */
 #undef HAVE_MMAP
+
+/* Some systems use caddr_t argument for mmap functions */
+#undef HAVE_MMAP_CADDR_T
 
 /* Some msghdr structs have a msg_controllen member */
 #undef HAVE_MSGHDR_MSG_CONTROLLEN
 
 /* Some msghdr structs have a msg_flags member */
 #undef HAVE_MSGHDR_MSG_FLAGS
+
+/* Some systems have munlock */
+#undef HAVE_MUNLOCK
+
+/* Some systems have munlockall */
+#undef HAVE_MUNLOCKALL
 
 /* Some systems have nanosleep */
 #undef HAVE_NANOSLEEP
@@ -319,8 +343,17 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
+/* Some systems have strtof */
+#undef HAVE_STRTOF
+
+/* Some systems have strtold */
+#undef HAVE_STRTOLD
+
 /* Define to 1 if `tm_zone' is member of `struct tm'. */
 #undef HAVE_STRUCT_TM_TM_ZONE
+
+/* Some systems have swab with a char * argument */
+#undef HAVE_SWAB_CHAR
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */

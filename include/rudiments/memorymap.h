@@ -125,6 +125,7 @@ class memorymap {
 			// Removes any advice that has previously been applied
 			// to the region.
 
+		#ifdef HAVE_MLOCK
 		bool	lock();
 			// Disables paging of the entire memory map.
 			// Returns true on success and false on failure.
@@ -132,7 +133,9 @@ class memorymap {
 			// Disables paging of data in the memory map, starting
 			// at "offset", for "len" bytes.
 			// Returns true on success and false on failure.
+		#endif
 
+		#ifdef HAVE_MUNLOCK
 		bool	unlock();
 			// Enables paging of the entire memory map.
 			// Returns true on success and false on failure.
@@ -140,15 +143,7 @@ class memorymap {
 			// Enables paging of data in the memory map, starting
 			// at "offset", for "len" bytes.
 			// Returns true on success and false on failure.
-
-		bool	resize(size_t newlen, bool maymove);
-			// Resizes the memory map to "newlen" bytes.  This may
-			// require that a new chunk of memory be reserved for
-			// the memory map.  If "maymove" is true, then this
-			// is allowed.  If "maymove" is false, then the
-			// method will fail if a new chunk of memory must be
-			// reserved.
-			// Returns true on success and false on failure.
+		#endif
 
 		#ifdef HAVE_MINCORE
 		bool	inMemory();
@@ -163,10 +158,32 @@ class memorymap {
 		#endif
 
 
+		#ifdef HAVE_MLOCK
+		static bool	lockAll();
+				// Disables paging (storing to swap partition)
+				// of all pages of memory currently used for
+				// memorymaps by the process and all newly
+				// allocated pages.
+				// Returns true on success and false on failure.
+		static bool	lockAllCurrent();
+				// Disables paging (storing to swap partition)
+				// of all pages of memory currently used for
+				// memorymaps by the process.  Newly allocated
+				// pages may still be paged out.
+				// Returns true on success and false on failure.
+		static bool	lockAllFuture();
+				// Disables paging (storing to swap partition)
+				// of all newly allocated pages of memory used
+				// for memorymaps by the process.  Currently
+				// allocated pages may still be paged out.
+				// Returns true on success and false on failure.
+		#endif
+		#ifdef HAVE_MUNLOCK
 		static bool	unlockAll();
 				// Enables paging of data stored in all
 				// memorymaps currently open by the process.
 				// Returns true on success and false on failure.
+		#endif
 
 	#include <rudiments/private/memorymap.h>
 };

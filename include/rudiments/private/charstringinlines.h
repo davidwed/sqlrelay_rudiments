@@ -160,12 +160,20 @@ long long charstring::toLongLong(const char *string, char **endptr, int base) {
 
 RUDIMENTS_INLINE
 float charstring::toFloat(const char *string) {
+	#ifdef HAVE_STRTOF
 	return strtof(string,NULL);
+	#else
+	return (float)strtod(string,NULL);
+	#endif
 }
 
 RUDIMENTS_INLINE
 float charstring::toFloat(const char *string, char **endptr) {
+	#ifdef HAVE_STRTOF
 	return strtof(string,endptr);
+	#else
+	return (float)strtod(string,endptr);
+	#endif
 }
 
 RUDIMENTS_INLINE
@@ -180,10 +188,18 @@ double charstring::toDouble(const char *string, char **endptr) {
 
 RUDIMENTS_INLINE
 long double charstring::toLongDouble(const char *string) {
+	#ifdef HAVE_STRTOLD
 	return strtold(string,NULL);
+	#else
+	return (long double)strtod(string,NULL);
+	#endif
 }
 
 RUDIMENTS_INLINE
 long double charstring::toLongDouble(const char *string, char **endptr) {
+	#ifdef HAVE_STRTOLD
 	return strtold(string,endptr);
+	#else
+	return (long double)strtod(string,endptr);
+	#endif
 }

@@ -1,5 +1,6 @@
 solaris:
 	can't find pcre or openssl
+	munmap,mprotect,msync,madvise,mlock,munlock,mincore takes caddr_t for first argument
 
 if openssl/pcre libs are installed, but not includes, configure still tries
 	to include openssl/pcre support

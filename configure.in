@@ -75,7 +75,7 @@ dnl Checks for programs.
 echo
 echo "***** Programs ***************"
 AC_PROG_CXX
-dnlAC_PROG_CC
+dnl AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -491,10 +491,62 @@ isblank(' ');,AC_DEFINE(HAVE_ISBLANK,1,Some systems have isblank) AC_MSG_RESULT(
 
 FW_CHECK_CRYPT_R
 
-AC_MSG_CHECKING(mincore)
+AC_MSG_CHECKING(mmap functions take caddr_t argument)
 AC_TRY_LINK([#include <stdlib.h>
 #include <sys/mman.h>],
-mincore(NULL,0,NULL);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+munlock((void *)NULL,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MMAP_CADDR_T,1,Some systems use caddr_t argument for mmap functions) AC_MSG_RESULT(yes))
+
+AC_MSG_CHECKING(mincore with char * argument)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+char *tmp;
+mincore(NULL,0,tmp);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(HAVE_MINCORE_CHAR,1,Some systems have mincore with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(mincore with unsigned char * argument)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+unsigned char *tmp;
+mincore(NULL,0,tmp);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(HAVE_MINCORE_UCHAR,1,Some systems have mincore with unsigned char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(mlock)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+mlock(NULL,0);,AC_DEFINE(HAVE_MLOCK,1,Some systems have mlock) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(mlockall)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+mlockall(0);,AC_DEFINE(HAVE_MLOCKALL,1,Some systems have mlockall) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(munlock)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+munlock(NULL,0);,AC_DEFINE(HAVE_MUNLOCK,1,Some systems have munlock) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(munlockall)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+munlockall();,AC_DEFINE(HAVE_MUNLOCKALL,1,Some systems have munlockall) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(madvise)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+madvise(NULL,0,MADV_NORMAL);,AC_DEFINE(HAVE_MADVISE,1,Some systems have madvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(strtof)
+AC_TRY_LINK([#include <stdlib.h>
+#include <string.h>],
+strtof(NULL,NULL);,AC_DEFINE(HAVE_STRTOF,1,Some systems have strtof) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(strtold)
+AC_TRY_LINK([#include <stdlib.h>
+#include <string.h>],
+strtold(NULL,NULL);,AC_DEFINE(HAVE_STRTOLD,1,Some systems have strtold) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(swab arguments)
+AC_TRY_LINK([#include <stdlib.h>
+#include <unistd.h>],
+void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(void *), AC_DEFINE(HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument) AC_MSG_RESULT(char *))
 
 echo "******************************"
 
