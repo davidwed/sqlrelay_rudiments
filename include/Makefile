@@ -177,7 +177,7 @@ ifeq ($(INCLUDE_CHARACTER),1)
 endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h
-	PRIVATEHEADERS += unixclientsocket.h unixclientsocketincludes.h
+	PRIVATEHEADERS += unixclientsocketincludes.h
 endif
 ifeq ($(INCLUDE_MODEMCLIENT),1)
 	HEADERS += modemclient.h
