@@ -82,7 +82,7 @@ ifeq ($(INCLUDE_HOSTENTRY),1)
 endif
 ifeq ($(INCLUDE_INETCLIENT),1)
 	HEADERS += inetclientsocket.h
-	PRIVATEHEADERS += inetclientsocket.h inetclientsocketincludes.h
+	PRIVATEHEADERS += inetclientsocketincludes.h
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
 	HEADERS += inetserversocket.h
