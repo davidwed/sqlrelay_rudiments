@@ -274,72 +274,67 @@ AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers don't support the inline keywor
 
 
 dnl checks for the pthreads library
-dnl requires:  PTHREADSPATH, RPATHFLAG, cross_compiling
-dnl sets the substitution variable PTHREADSLIB
-dnl sets the environment variable PTHREADSLIBPATH
-AC_DEFUN([FW_CHECK_PTHREADS],
+dnl requires:  PTHREADPATH, RPATHFLAG, cross_compiling
+dnl sets the substitution variable PTHREADLIB
+AC_DEFUN([FW_CHECK_PTHREAD],
 [
 
-HAVE_PTHREADS=""
-PTHREADSINCLUDES=""
-PTHREADSLIB=""
+HAVE_PTHREAD=""
+PTHREADINCLUDES=""
+PTHREADLIB=""
 
 if ( test "$cross_compiling" = "yes" )
 then
 	
 	dnl cross compiling
 	echo "cross compiling"
-	if ( test -n "$PTHREADSPATH" )
+	if ( test -n "$PTHREADPATH" )
 	then
-		PTHREADSINCLUDES="-I$PTHREADSPATH/include"
-		PTHREADSLIB="-L$PTHREADSPATH/lib -lpthread"
+		PTHREADINCLUDES="-I$PTHREADPATH/include"
+		PTHREADLIB="-L$PTHREADPATH/lib -lpthread"
 	else
-		PTHREADSLIB="-lpthread"
+		PTHREADLIB="-lpthread"
 	fi
-	HAVE_PTHREADS="yes"
+	HAVE_PTHREAD="yes"
 
 else
 
-	dnl FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[],[-pthread],[],[PTHREADSINCLUDES="-pthread"; PTHREADSLIB="-pthread"],[])
-
-	if ( test -n "$PTHREADSLIB" )
+	if ( test -n "$PTHREADLIB" )
 	then
-		HAVE_PTHREADS="yes"
+		HAVE_PTHREAD="yes"
 	else
-		for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
+		for i in "pthread" "c_r"
 		do
-			for j in "pthread" "pth" "c_r" "gthreads"
-			do
-				FW_CHECK_HEADERS_AND_LIBS([$PTHREADSPATH],[$i],[$i.h],[$j],[""],[""],[PTHREADSINCLUDES],[PTHREADSLIB],[PTHREADSLIBPATH],[PTHREADSTATIC])
-				if ( test -n "$PTHREADSLIB" )
-				then
-					if ( test "$j" = "c_r" )
-					then
-						PTHREADSLIB="$PTHREADSLIB -pthread"
-					fi
-					break
-				fi
-			done
-			if ( test -n "$PTHREADSLIB" )
+			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
+			if ( test -n "$PTHREADLIB" )
 			then
-				HAVE_PTHREADS="yes"
+				if ( test "$i" = "c_r" )
+				then
+					PTHREADLIB="$PTHREADLIB -pthread"
+				fi
 				break
 			fi
 		done
+		if ( test -n "$PTHREADLIB" )
+		then
+			HAVE_PTHREAD="yes"
+			break
+		fi
 	fi
 fi
 
-FW_INCLUDES(pthreads,[$PTHREADSINCLUDES])
-FW_LIBS(pthreads,[$PTHREADSLIB])
+FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
+FW_LIBS(pthreads,[$PTHREADLIB])
 
-AC_SUBST(PTHREADSINCLUDES)
-AC_SUBST(PTHREADSLIB)
-if ( test -z "$HAVE_PTHREADS" )
+AC_SUBST(PTHREADINCLUDES)
+AC_SUBST(PTHREADLIB)
+if ( test -z "$HAVE_PTHREAD" )
 then
-	AC_MSG_ERROR(pthreads not found.  Rudiments requires this package.)
+	AC_MSG_ERROR(pthread library not found.  Rudiments requires this package.)
 	exit
 fi
 ])
+
 
 dnl checks for rpc entry functions and header files
 AC_DEFUN([FW_CHECK_RPC],

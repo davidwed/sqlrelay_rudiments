@@ -469,7 +469,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE AR STRIP PIPE build build_cpu build_vendor build_os host host_cpu host_vendor host_os ECHO RANLIB ac_ct_RANLIB ac_ct_STRIP CXXCPP EGREP LIBTOOL PTHREADSINCLUDES PTHREADSLIB LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS INSTALLSTRIP SMALLCODE CXX LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE AR STRIP PIPE build build_cpu build_vendor build_os host host_cpu host_vendor host_os ECHO RANLIB ac_ct_RANLIB ac_ct_STRIP CXXCPP EGREP LIBTOOL PTHREADINCLUDES PTHREADLIB LIBOBJS SOCKETLIB XNETLIB NSLLIB INCLUDE_SHADOWENTRY MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1028,7 +1028,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-system-libtool   use system libtool instead of ./libtool
-  --with-ptheads-prefix         Location of Pthreads
+  --with-pthread-prefix   Location of pthreads
   --with-gnu-ld           assume the C compiler uses GNU ld default=no
   --with-pic              try to use only PIC/non-PIC objects default=use both
 
@@ -1482,14 +1482,13 @@ else
   ENABLE_RUDIMENTS_INLINES="no"
 fi;
 
-# Check whether --with-ptheads-prefix or --without-ptheads-prefix was given.
-if test "${with_ptheads_prefix+set}" = set; then
-  withval="$with_ptheads_prefix"
-  PTHREADSPATH=$withval
+# Check whether --with-pthread-prefix or --without-pthread-prefix was given.
+if test "${with_pthread_prefix+set}" = set; then
+  withval="$with_pthread_prefix"
+  PTHREADPATH="$withval"
 else
-  PTHREADSPATH=""
+  PTHREADPATH=""
 fi;
-
 
 
 
@@ -4820,7 +4819,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4823 "configure"' > conftest.$ac_ext
+  echo '#line 4822 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5367,7 +5366,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:5370: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:5369: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -7208,7 +7207,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7211 "configure"
+#line 7210 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7306,7 +7305,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7309 "configure"
+#line 7308 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8721,49 +8720,46 @@ echo
 echo "***** threads ****************"
 
 
-HAVE_PTHREADS=""
-PTHREADSINCLUDES=""
-PTHREADSLIB=""
+HAVE_PTHREAD=""
+PTHREADINCLUDES=""
+PTHREADLIB=""
 
 if ( test "$cross_compiling" = "yes" )
 then
 
 		echo "cross compiling"
-	if ( test -n "$PTHREADSPATH" )
+	if ( test -n "$PTHREADPATH" )
 	then
-		PTHREADSINCLUDES="-I$PTHREADSPATH/include"
-		PTHREADSLIB="-L$PTHREADSPATH/lib -lpthread"
+		PTHREADINCLUDES="-I$PTHREADPATH/include"
+		PTHREADLIB="-L$PTHREADPATH/lib -lpthread"
 	else
-		PTHREADSLIB="-lpthread"
+		PTHREADLIB="-lpthread"
 	fi
-	HAVE_PTHREADS="yes"
+	HAVE_PTHREAD="yes"
 
 else
 
-
-	if ( test -n "$PTHREADSLIB" )
+	if ( test -n "$PTHREADLIB" )
 	then
-		HAVE_PTHREADS="yes"
+		HAVE_PTHREAD="yes"
 	else
-		for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
+		for i in "pthread" "c_r"
 		do
-			for j in "pthread" "pth" "c_r" "gthreads"
-			do
 
 
-eval "PTHREADSINCLUDES=\"\""
-eval "PTHREADSLIB=\"\""
-eval "PTHREADSLIBPATH=\"\""
+eval "PTHREADINCLUDES=\"\""
+eval "PTHREADLIB=\"\""
+eval "PTHREADLIBPATH=\"\""
 eval "PTHREADSTATIC=\"\""
 if ( test -n "" )
 then
 	eval "=\"\""
 fi
 
-SEARCHPATH=$PTHREADSPATH
-NAME=$i
-HEADER=$i.h
-LIBNAME=$j
+SEARCHPATH=$PTHREADPATH
+NAME=pthread
+HEADER=pthread.h
+LIBNAME=$i
 LINKSTATIC=""
 LINKRPATH=""
 INCLUDESTRING=""
@@ -9121,52 +9117,51 @@ else
 	HEADERSANDLIBSPATH="/usr"
 fi
 
-eval "PTHREADSINCLUDES=\"$INCLUDESTRING\""
-eval "PTHREADSLIB=\"$LIBSTRING\""
-eval "PTHREADSLIBPATH=\"$LIBPATH\""
+eval "PTHREADINCLUDES=\"$INCLUDESTRING\""
+eval "PTHREADLIB=\"$LIBSTRING\""
+eval "PTHREADLIBPATH=\"$LIBPATH\""
 eval "PTHREADSTATIC=\"$STATIC\""
 if ( test -n "" )
 then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
-				if ( test -n "$PTHREADSLIB" )
-				then
-					if ( test "$j" = "c_r" )
-					then
-						PTHREADSLIB="$PTHREADSLIB -pthread"
-					fi
-					break
-				fi
-			done
-			if ( test -n "$PTHREADSLIB" )
+			if ( test -n "$PTHREADLIB" )
 			then
-				HAVE_PTHREADS="yes"
+				if ( test "$i" = "c_r" )
+				then
+					PTHREADLIB="$PTHREADLIB -pthread"
+				fi
 				break
 			fi
 		done
+		if ( test -n "$PTHREADLIB" )
+		then
+			HAVE_PTHREAD="yes"
+			break
+		fi
 	fi
 fi
 
 
-if ( test -n "$PTHREADSINCLUDES" )
+if ( test -n "$PTHREADINCLUDES" )
 then
-	echo "pthreads includes... $PTHREADSINCLUDES"
+	echo "pthreads includes... $PTHREADINCLUDES"
 fi
 
 
-if ( test -n "$PTHREADSLIB" )
+if ( test -n "$PTHREADLIB" )
 then
-	echo "pthreads libs... $PTHREADSLIB"
+	echo "pthreads libs... $PTHREADLIB"
 fi
 
 
 
 
-if ( test -z "$HAVE_PTHREADS" )
+if ( test -z "$HAVE_PTHREAD" )
 then
-	{ { echo "$as_me:$LINENO: error: pthreads not found.  Rudiments requires this package." >&5
-echo "$as_me: error: pthreads not found.  Rudiments requires this package." >&2;}
+	{ { echo "$as_me:$LINENO: error: pthread library not found.  Rudiments requires this package." >&5
+echo "$as_me: error: pthread library not found.  Rudiments requires this package." >&2;}
    { (exit 1); exit 1; }; }
 	exit
 fi
@@ -14434,8 +14429,8 @@ s,@ac_ct_STRIP@,$ac_ct_STRIP,;t t
 s,@CXXCPP@,$CXXCPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
-s,@PTHREADSINCLUDES@,$PTHREADSINCLUDES,;t t
-s,@PTHREADSLIB@,$PTHREADSLIB,;t t
+s,@PTHREADINCLUDES@,$PTHREADINCLUDES,;t t
+s,@PTHREADLIB@,$PTHREADLIB,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@SOCKETLIB@,$SOCKETLIB,;t t
 s,@XNETLIB@,$XNETLIB,;t t

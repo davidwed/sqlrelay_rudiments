@@ -21,7 +21,7 @@ AR = @AR@
 STRIP = @STRIP@
 
 # includes and defines
-BASECPPFLAGS = @CPPFLAGS@ @PTHREADSINCLUDES@
+BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
@@ -52,4 +52,4 @@ SOCKETLIB = @SOCKETLIB@
 NSLLIB = @NSLLIB@
 
 # pthreads library
-PTHREADSLIB = @PTHREADSLIB@
+PTHREADLIB = @PTHREADLIB@
