@@ -28,7 +28,14 @@ regularexpression::regularexpression(const char *pattern) {
 }
 
 void regularexpression::init() {
-	#ifndef HAVE_REGEX_H
+	#if defined(RUDIMENTS_HAS_PCRE)
+		expr=NULL;
+	#elif defined(HAVE_REGEX_H)
+	#elif defined(HAVE_REGEXP_H)
+		expr=NULL;
+	#elif defined(HAVE_REGCMP) || \
+		defined(HAVE_RE_COMP) || \
+		defined(HAVE_REGEXPR_H)
 		expr=NULL;
 	#endif
 }
