@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/modemserver.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/modemserver.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -20,8 +20,10 @@
 
 <font color="#2e8b57"><b>class</b></font> modemserver : <font color="#a52a2a"><b>public</b></font> server, <font color="#a52a2a"><b>private</b></font> modemutil {
         <font color="#a52a2a"><b>public</b></font>:
-                        modemserver();
-                <font color="#2e8b57"><b>virtual</b></font> ~modemserver();
+                                modemserver();
+                                modemserver(<font color="#2e8b57"><b>const</b></font> modemserver &amp;m);
+                modemserver     &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> modemserver &amp;m);
+                <font color="#2e8b57"><b>virtual</b></font>         ~modemserver();
 
                 <font color="#2e8b57"><b>bool</b></font>    listen(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *device, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *baud,
                                                 <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *listenscript,

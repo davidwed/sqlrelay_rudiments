@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/parameterstring.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/parameterstring.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -32,10 +32,10 @@
                         parameterstring();
                         ~parameterstring();
 
-                <font color="#2e8b57"><b>void</b></font>    setDelimiter(<font color="#2e8b57"><b>char</b></font> delim);
-                <font color="#2e8b57"><b>bool</b></font>    parse(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
-                <font color="#2e8b57"><b>char</b></font>    *getValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
-                <font color="#2e8b57"><b>void</b></font>    clear();
+                <font color="#2e8b57"><b>void</b></font>            setDelimiter(<font color="#2e8b57"><b>char</b></font> delim);
+                <font color="#2e8b57"><b>bool</b></font>            parse(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>void</b></font>            clear();
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/parameterstring.h&gt;</font>
 };

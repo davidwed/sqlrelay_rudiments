@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/unixsocketutil.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/unixsocketutil.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -21,7 +21,10 @@
 <font color="#2e8b57"><b>class</b></font> unixsocketutil {
         <font color="#a52a2a"><b>public</b></font>:
                         unixsocketutil();
-                <font color="#2e8b57"><b>virtual</b></font> ~unixsocketutil();
+                        unixsocketutil(<font color="#2e8b57"><b>const</b></font> unixsocketutil &amp;u);
+                unixsocketutil  &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> unixsocketutil &amp;u);
+                <font color="#2e8b57"><b>virtual</b></font>         ~unixsocketutil();
+
                 <font color="#2e8b57"><b>void</b></font>    initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/unixsocketutil.h&gt;</font>

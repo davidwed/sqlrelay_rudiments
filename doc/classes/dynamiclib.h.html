@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/dynamiclib.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/dynamiclib.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -47,6 +47,10 @@
                         <font color="#0000ff">// Returns a human-readable description of the previous</font>
                         <font color="#0000ff">// error that occurred, or NULL if no error has</font>
                         <font color="#0000ff">// occurred.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// This method allocates a buffer internally and</font>
+                        <font color="#0000ff">// returns it.  The calling program must deallocate</font>
+                        <font color="#0000ff">// the buffer.</font>
 
 <font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
                 <font color="#0000ff">// getError() is not reentrant and thus not thread safe.  If</font>

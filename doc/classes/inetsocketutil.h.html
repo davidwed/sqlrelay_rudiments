@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/inetsocketutil.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/inetsocketutil.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -20,9 +20,13 @@
 
 <font color="#2e8b57"><b>class</b></font> inetsocketutil {
         <font color="#a52a2a"><b>public</b></font>:
-                        inetsocketutil();
-                <font color="#2e8b57"><b>virtual</b></font> ~inetsocketutil();
-                <font color="#2e8b57"><b>void</b></font>    initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *address, <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> port);
+                                inetsocketutil();
+                                inetsocketutil(<font color="#2e8b57"><b>const</b></font> inetsocketutil &amp;i);
+                inetsocketutil  &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> inetsocketutil &amp;i);
+                <font color="#2e8b57"><b>virtual</b></font>         ~inetsocketutil();
+
+                <font color="#2e8b57"><b>void</b></font>            initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *address,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> port);
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/inetsocketutil.h&gt;</font>
 };

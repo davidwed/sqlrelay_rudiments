@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/xmldomnode.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/xmldomnode.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -115,7 +115,8 @@
 
 <font color="#0000ff">// node types</font>
 <font color="#2e8b57"><b>enum</b></font> xmldomnodetype {
-        ROOT_XMLDOMNODETYPE=<font color="#ff00ff">1</font>,
+        NULL_XMLDOMNODETYPE=<font color="#ff00ff">0</font>,
+        ROOT_XMLDOMNODETYPE,
         TAG_XMLDOMNODETYPE,
         ATTRIBUTE_XMLDOMNODETYPE,
         TEXT_XMLDOMNODETYPE,
@@ -179,9 +180,9 @@
                 <font color="#0000ff">// contained in the node.</font>
                 xmldomnodetype  getType() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the node type.</font>
-                <font color="#2e8b57"><b>char</b></font>            *getName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getName() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the node name.</font>
-                <font color="#2e8b57"><b>char</b></font>            *getValue() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getValue() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the node value.</font>
 
 
@@ -287,10 +288,10 @@
                 xmldomnode      *getAttribute(<font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the attribute node at index</font>
                                 <font color="#0000ff">// &quot;position&quot; or the nullnode if not found.</font>
-                <font color="#2e8b57"><b>char</b></font>            *getAttributeValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute named</font>
                                 <font color="#0000ff">// &quot;name&quot; or the nullnode if not found.</font>
-                <font color="#2e8b57"><b>char</b></font>            *getAttributeValue(<font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValue(<font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute node at</font>
                                 <font color="#0000ff">// index &quot;position&quot; or the nullnode if not</font>
                                 <font color="#0000ff">// found.</font>
@@ -424,7 +425,7 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
-                <font color="#2e8b57"><b>char</b></font>            *getAttributeValueByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValueByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
                                                         <font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute at index</font>
                                 <font color="#0000ff">// &quot;position&quot; of the child element with &quot;path&quot;</font>
@@ -434,7 +435,7 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
-                <font color="#2e8b57"><b>char</b></font>            *getAttributeValueByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValueByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
                                                         <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute named</font>
                                 <font color="#0000ff">// &quot;name&quot; of the child element with &quot;path&quot; of</font>

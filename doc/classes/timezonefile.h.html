@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/timezonefile.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/timezonefile.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -29,8 +29,10 @@
 
 <font color="#2e8b57"><b>class</b></font> timezonefile {
         <font color="#a52a2a"><b>public</b></font>:
-                        timezonefile();
-                        ~timezonefile();
+                                timezonefile();
+                                timezonefile(<font color="#2e8b57"><b>const</b></font> timezonefile &amp;t);
+                timezonefile    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> timezonefile &amp;t);
+                                ~timezonefile();
 
                 <font color="#2e8b57"><b>bool</b></font>            parseFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                                 <font color="#0000ff">// Parses &quot;filename&quot;.  Returns true on success</font>

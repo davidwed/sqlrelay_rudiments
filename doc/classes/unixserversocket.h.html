@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/unixserversocket.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/unixserversocket.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -38,8 +38,10 @@
 
 <font color="#2e8b57"><b>class</b></font> unixserversocket : <font color="#a52a2a"><b>public</b></font> serversocket, <font color="#a52a2a"><b>private</b></font> unixsocketutil {
         <font color="#a52a2a"><b>public</b></font>:
-                        unixserversocket();
-                <font color="#2e8b57"><b>virtual</b></font> ~unixserversocket();
+                                unixserversocket();
+                                unixserversocket(<font color="#2e8b57"><b>const</b></font> unixserversocket &amp;u);
+                unixserversocket        &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> unixserversocket &amp;u);
+                <font color="#2e8b57"><b>virtual</b></font>         ~unixserversocket();
 
                 <font color="#2e8b57"><b>bool</b></font>    listen(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                         mode_t mask,

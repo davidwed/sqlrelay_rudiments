@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/serialport.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/serialport.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -24,8 +24,10 @@
 <font color="#2e8b57"><b>class</b></font> serialport : <font color="#a52a2a"><b>public</b></font> filedescriptor {
         <font color="#a52a2a"><b>public</b></font>:
 
-                        serialport();
-                <font color="#2e8b57"><b>virtual</b></font> ~serialport();
+                                serialport();
+                                serialport(<font color="#2e8b57"><b>const</b></font> serialport &amp;s);
+                serialport      &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> serialport &amp;s);
+                <font color="#2e8b57"><b>virtual</b></font>         ~serialport();
 
                 <font color="#2e8b57"><b>bool</b></font>    setProfileNow(serialportprofile *profile);
                         <font color="#0000ff">// tcsetattr(TCSANOW)</font>

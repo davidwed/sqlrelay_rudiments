@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/semaphoreset.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/semaphoreset.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -163,7 +163,7 @@
                         <font color="#0000ff">// semaphore set to &quot;permissions&quot;</font>
 
 
-                <font color="#2e8b57"><b>char</b></font>    *getUserName();
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getUserName();
                         <font color="#0000ff">// returns the name of the user that owns this</font>
                         <font color="#0000ff">// semaphore set</font>
                         <font color="#0000ff">//</font>
@@ -175,7 +175,7 @@
                         <font color="#0000ff">// If you are using this method in a multithreaded</font>
                         <font color="#0000ff">// application, you may need to supply the passwdentry</font>
                         <font color="#0000ff">// class a mutex.  See passwdentry.h for more detail.</font>
-                <font color="#2e8b57"><b>char</b></font>    *getGroupName();
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getGroupName();
                         <font color="#0000ff">// returns the name of the group that owns this</font>
                         <font color="#0000ff">// semaphore set</font>
                         <font color="#0000ff">//</font>

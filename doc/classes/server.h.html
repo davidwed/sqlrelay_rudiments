@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/server.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/server.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -24,6 +24,8 @@
 <font color="#2e8b57"><b>class</b></font> server : <font color="#a52a2a"><b>public</b></font> filedescriptor {
         <font color="#a52a2a"><b>public</b></font>:
                         server();
+                        server(<font color="#2e8b57"><b>const</b></font> server &amp;s);
+                server  &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> server &amp;s);
                 <font color="#2e8b57"><b>virtual</b></font> ~server();
 
                 <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    bind()=<font color="#ff00ff">0</font>;

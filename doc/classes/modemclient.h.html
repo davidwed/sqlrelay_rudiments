@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/modemclient.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/modemclient.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -23,8 +23,10 @@
 
 <font color="#2e8b57"><b>class</b></font> modemclient : <font color="#a52a2a"><b>public</b></font> client, <font color="#a52a2a"><b>private</b></font> modemutil {
         <font color="#a52a2a"><b>public</b></font>:
-                        modemclient();
-                <font color="#2e8b57"><b>virtual</b></font> ~modemclient();
+                                modemclient();
+                                modemclient(<font color="#2e8b57"><b>const</b></font> modemclient &amp;m);
+                modemclient     &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> modemclient &amp;m);
+                <font color="#2e8b57"><b>virtual</b></font>         ~modemclient();
 
                 <font color="#2e8b57"><b>void</b></font>    initialize(namevaluepairs *cd);
                         <font color="#0000ff">// Initializes the class to use &quot;device&quot;,</font>
@@ -36,8 +38,8 @@
                                         <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *connectscript,
                                         <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *phonenumber,
                                         <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *disconnectscript,
-                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>int</b></font> retrywait,
-                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>int</b></font> retrycount);
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> retrywait,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> retrycount);
                         <font color="#0000ff">// Initializes the class to use &quot;device&quot;,</font>
                         <font color="#0000ff">// &quot;baud, &quot;connectscript&quot;, &quot;phonenumber&quot;,</font>
                         <font color="#0000ff">// &quot;disconnectscript&quot;, &quot;retrywait&quot; and</font>

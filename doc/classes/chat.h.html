@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/chat.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/chat.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -23,13 +23,13 @@
 
 <font color="#2e8b57"><b>class</b></font> chat {
         <font color="#a52a2a"><b>public</b></font>:
-                        chat(filedescriptor *fd);
-                        <font color="#0000ff">// Initializes an instance of chat.  Data will be</font>
-                        <font color="#0000ff">// written to and read from &quot;fd&quot;.</font>
-                        chat(filedescriptor *readfd, filedescriptor *writefd);
-                        <font color="#0000ff">// Initializes an instance of chat.  Data will be</font>
-                        <font color="#0000ff">// written to &quot;writefd&quot; and read from &quot;readfd&quot;.</font>
-                        ~chat();
+                chat(<font color="#2e8b57"><b>const</b></font> filedescriptor *fd);
+                <font color="#0000ff">// Initializes an instance of chat.  Data will be</font>
+                <font color="#0000ff">// written to and read from &quot;fd&quot;.</font>
+                chat(<font color="#2e8b57"><b>const</b></font> filedescriptor *rfd, <font color="#2e8b57"><b>const</b></font> filedescriptor *wfd);
+                <font color="#0000ff">// Initializes an instance of chat.  Data will be</font>
+                <font color="#0000ff">// written to &quot;wfd&quot; and read from &quot;rfd&quot;.</font>
+                ~chat();
 
                 <font color="#0000ff">// These methods process &quot;script&quot; which is expected to be</font>
                 <font color="#0000ff">// a chunk of XML of the following format:</font>

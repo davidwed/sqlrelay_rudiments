@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/protocolentry.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/protocolentry.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -39,8 +39,10 @@
 
                 <font color="#0000ff">// If you need to look up a protocol entry and refer to multiple</font>
                 <font color="#0000ff">// fields, use these methods.</font>
-                        protocolentry();
-                        ~protocolentry();
+                                protocolentry();
+                                protocolentry(<font color="#2e8b57"><b>const</b></font> protocolentry &amp;p);
+                protocolentry   &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> protocolentry &amp;p);
+                                ~protocolentry();
 
                 <font color="#2e8b57"><b>bool</b></font>    initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *protocolname);
                         <font color="#0000ff">// Looks up a protocol entry by name.</font>
@@ -49,9 +51,9 @@
                         <font color="#0000ff">// Looks up a protocol entry by number.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#2e8b57"><b>char</b></font>    *getName() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>char</b></font>    **getAliasList() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getNumber() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>              *getName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>      *getAliasList() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>                     getNumber() <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#2e8b57"><b>void</b></font>    print() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Prints out the protocol entry.</font>

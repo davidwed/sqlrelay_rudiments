@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/xmlsax.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/xmlsax.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -32,32 +32,32 @@
                 <font color="#0000ff">// When these methods are run, they parse the XML.  As these</font>
                 <font color="#0000ff">// methods encounter tags, attributes, text, etc., they call</font>
                 <font color="#0000ff">// the callback methods below.</font>
-                <font color="#2e8b57"><b>bool</b></font>    parseFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
-                        <font color="#0000ff">// parse file &quot;filename&quot;</font>
-                <font color="#2e8b57"><b>bool</b></font>    parseString(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
-                        <font color="#0000ff">// parse string &quot;string&quot;</font>
-                <font color="#2e8b57"><b>char</b></font>    *getError();
-                        <font color="#0000ff">// if parseFile() or parseString() fails, returns</font>
-                        <font color="#0000ff">// the error that caused the failure</font>
+                <font color="#2e8b57"><b>bool</b></font>            parseFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                                <font color="#0000ff">// parse file &quot;filename&quot;</font>
+                <font color="#2e8b57"><b>bool</b></font>            parseString(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                                <font color="#0000ff">// parse string &quot;string&quot;</font>
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getError();
+                                <font color="#0000ff">// if parseFile() or parseString() fails,</font>
+                                <font color="#0000ff">// returns the error that caused the failure</font>
 
         <font color="#a52a2a"><b>protected</b></font>:
                 <font color="#0000ff">// Callback methods.  These methods are called as the XML is</font>
                 <font color="#0000ff">// parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    tagStart(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    tagStart(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
                                 <font color="#0000ff">// Gets called when a start tag is parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    attributeName(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    attributeName(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
                                 <font color="#0000ff">// Gets called when an attribute name</font>
                                 <font color="#0000ff">// is parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    attributeValue(<font color="#2e8b57"><b>char</b></font> *value);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    attributeValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
                                 <font color="#0000ff">// Gets called when an attribute value</font>
                                 <font color="#0000ff">// is parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    text(<font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    text(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                                 <font color="#0000ff">// Gets called when a block of text is parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    tagEnd(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    tagEnd(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
                                 <font color="#0000ff">// Gets called when an end tag is parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    comment(<font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    comment(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                                 <font color="#0000ff">// Gets called when a comment is parsed.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    cdata(<font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    cdata(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                                 <font color="#0000ff">// Gets called when cdata is parsed.</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/xmlsax.h&gt;</font>

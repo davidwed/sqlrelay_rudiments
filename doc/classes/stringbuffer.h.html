@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/stringbuffer.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/stringbuffer.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -22,13 +22,16 @@
 
 <font color="#2e8b57"><b>class</b></font> stringbuffer : <font color="#a52a2a"><b>public</b></font> variablebuffer {
         <font color="#a52a2a"><b>public</b></font>:
-                        stringbuffer();
-                        stringbuffer(<font color="#2e8b57"><b>char</b></font> *initialcontents,
-                                        <font color="#2e8b57"><b>size_t</b></font> initialsize,
-                                        <font color="#2e8b57"><b>size_t</b></font> increment);
-                        <font color="#0000ff">// Creates a new buffer which will grow as necessary</font>
-                        <font color="#0000ff">// to accomodate the string written to it.</font>
-                        ~stringbuffer();
+                                stringbuffer();
+                                stringbuffer(<font color="#2e8b57"><b>char</b></font> *initialcontents,
+                                                <font color="#2e8b57"><b>size_t</b></font> initialsize,
+                                                <font color="#2e8b57"><b>size_t</b></font> increment);
+                                <font color="#0000ff">// Creates a new buffer which will grow as</font>
+                                <font color="#0000ff">// necessary to accomodate the string written</font>
+                                <font color="#0000ff">// to it.</font>
+                                stringbuffer(<font color="#2e8b57"><b>const</b></font> stringbuffer &amp;s);
+                stringbuffer    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> stringbuffer &amp;s);
+                                ~stringbuffer();
 
                 <font color="#2e8b57"><b>void</b></font>    setPosition(<font color="#2e8b57"><b>size_t</b></font> pos);
                         <font color="#0000ff">// Sets the position at which the next write will</font>
@@ -114,17 +117,9 @@
                 <font color="#2e8b57"><b>void</b></font>    clear();
                         <font color="#0000ff">// Empties the stringbuffer.</font>
 
-                <font color="#2e8b57"><b>char</b></font>    *getString();
-                        <font color="#0000ff">// Returns the string currently stored in the</font>
-                        <font color="#0000ff">// stringbuffer.</font>
-
-                <font color="#2e8b57"><b>size_t</b></font>  getStringLength();
-                        <font color="#0000ff">// Returns the length of the string currently stored</font>
-                        <font color="#0000ff">// in the stringbuffer.</font>
-
-                <font color="#2e8b57"><b>size_t</b></font>  getPosition();
-                        <font color="#0000ff">// Returns the position in the buffer at which</font>
-                        <font color="#0000ff">// the next write will occur.</font>
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getString();
+                                <font color="#0000ff">// Returns the string currently stored in the</font>
+                                <font color="#0000ff">// stringbuffer.</font>
 
                 <font color="#2e8b57"><b>char</b></font>    *detachString();
                         <font color="#0000ff">// Returns a pointer to the string currently stored</font>
@@ -133,6 +128,14 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// The calling program must deallocate the string</font>
                         <font color="#0000ff">// returned from this method.</font>
+
+                <font color="#2e8b57"><b>size_t</b></font>  getStringLength();
+                        <font color="#0000ff">// Returns the length of the string currently stored</font>
+                        <font color="#0000ff">// in the stringbuffer.</font>
+
+                <font color="#2e8b57"><b>size_t</b></font>  getPosition();
+                        <font color="#0000ff">// Returns the position in the buffer at which</font>
+                        <font color="#0000ff">// the next write will occur.</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/stringbuffer.h&gt;</font>
 };

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/hostentry.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/hostentry.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -55,20 +55,26 @@
 
                 <font color="#0000ff">// If you need to look up a host entry and refer to multiple</font>
                 <font color="#0000ff">// fields, use these methods.</font>
-                        hostentry();
-                        ~hostentry();
+                                hostentry();
+                                hostentry(<font color="#2e8b57"><b>const</b></font> hostentry &amp;h);
+                hostentry       &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> hostentry &amp;h);
+                                ~hostentry();
 
                 <font color="#2e8b57"><b>bool</b></font>    initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *hostname);
                         <font color="#0000ff">// Looks up a host entry by name.</font>
                 <font color="#2e8b57"><b>bool</b></font>    initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *address, <font color="#2e8b57"><b>int</b></font> len, <font color="#2e8b57"><b>int</b></font> type);
                         <font color="#0000ff">// Looks up a host entry by address.</font>
 
-                <font color="#2e8b57"><b>char</b></font>    *getName() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>char</b></font>    **getAliasList() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getAddressType() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getAddressLength() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>char</b></font>    **getAddressList() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>char</b></font>    *getAddressString(<font color="#2e8b57"><b>int</b></font> index) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>              *getName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>      *getAliasList() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>                     getAddressType() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>                     getAddressLength() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>      *getAddressList() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>char</b></font>                    *getAddressString(<font color="#2e8b57"><b>int</b></font> index) <font color="#2e8b57"><b>const</b></font>;
+                                        <font color="#0000ff">// This method allocates a buffer</font>
+                                        <font color="#0000ff">// internally and returns it.  The</font>
+                                        <font color="#0000ff">// calling program must deallocate the</font>
+                                        <font color="#0000ff">// buffer.</font>
 
                 <font color="#2e8b57"><b>void</b></font>    print() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Prints out the host entry.</font>

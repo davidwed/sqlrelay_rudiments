@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/file.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/file.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -34,6 +34,8 @@
 
                         file();
                         <font color="#0000ff">// Creates an uninitialized instance of the file class.</font>
+                        file(<font color="#2e8b57"><b>const</b></font> file &amp;f);
+                file    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> file &amp;f);
                 <font color="#2e8b57"><b>virtual</b></font> ~file();
 
 
@@ -153,7 +155,7 @@
                 <font color="#2e8b57"><b>bool</b></font>    tryLockFile(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
                 <font color="#2e8b57"><b>bool</b></font>    lockFile(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
                 <font color="#2e8b57"><b>bool</b></font>    checkLockFile(<font color="#2e8b57"><b>short</b></font> type, <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>bool</b></font>    unlockFile(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>    unlockFile() <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock an arbitrary</font>
                 <font color="#0000ff">// region of the file.</font>
@@ -385,7 +387,7 @@
                 <font color="#0000ff">// methods provide an interface for getting and setting those</font>
                 <font color="#0000ff">// attributes.</font>
 
-                <font color="#2e8b57"><b>char</b></font>    **listAttributes() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>      *listAttributes() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Returns a NULL terminated array of attributes or</font>
                         <font color="#0000ff">// NULL if an error occurred.</font>
 

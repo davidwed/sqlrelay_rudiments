@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/device.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/device.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -26,6 +26,8 @@
                         device();
                         <font color="#0000ff">// Creates an uninitialized instance of the</font>
                         <font color="#0000ff">// device class.</font>
+                        device(<font color="#2e8b57"><b>const</b></font> device &amp;d);
+                device  &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> device &amp;d);
                 <font color="#2e8b57"><b>virtual</b></font> ~device();
 
                 <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     createDeviceNode(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,

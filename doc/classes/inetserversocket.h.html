@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/inetserversocket.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/inetserversocket.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -31,12 +31,14 @@
 
 <font color="#2e8b57"><b>class</b></font> inetserversocket : <font color="#a52a2a"><b>public</b></font> serversocket, <font color="#a52a2a"><b>private</b></font> inetsocketutil {
         <font color="#a52a2a"><b>public</b></font>:
-                        inetserversocket();
-                <font color="#2e8b57"><b>virtual</b></font> ~inetserversocket();
+                                inetserversocket();
+                                inetserversocket(<font color="#2e8b57"><b>const</b></font> inetserversocket &amp;i);
+                inetserversocket        &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> inetserversocket &amp;i);
+                <font color="#2e8b57"><b>virtual</b></font>         ~inetserversocket();
 
                 <font color="#2e8b57"><b>bool</b></font>    listen(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *address,
-                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> port,
-                                                <font color="#2e8b57"><b>int</b></font> backlog);
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> port,
+                                        <font color="#2e8b57"><b>int</b></font> backlog);
                                 <font color="#0000ff">// Listen on &quot;address&quot; and &quot;port&quot; and allow</font>
                                 <font color="#0000ff">// &quot;backlog&quot; connections to pile up before</font>
                                 <font color="#0000ff">// refusing them.</font>

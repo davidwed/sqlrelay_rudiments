@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/logger.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/logger.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -38,6 +38,11 @@
 <font color="#0000ff">// The syslogdestination class writes log data to syslog.</font>
 <font color="#2e8b57"><b>class</b></font> syslogdestination : <font color="#a52a2a"><b>public</b></font> logdestination {
         <font color="#a52a2a"><b>public</b></font>:
+                                syslogdestination();
+                                syslogdestination(<font color="#2e8b57"><b>const</b></font> syslogdestination &amp;f);
+                syslogdestination       &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> syslogdestination &amp;f);
+                <font color="#2e8b57"><b>virtual</b></font>         ~syslogdestination();
+
                 <font color="#2e8b57"><b>void</b></font>    open(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *ident, <font color="#2e8b57"><b>int</b></font> option,
                                         <font color="#2e8b57"><b>int</b></font> facility, <font color="#2e8b57"><b>int</b></font> priority);
                 <font color="#2e8b57"><b>void</b></font>    close();
@@ -48,8 +53,11 @@
 <font color="#0000ff">// The filedestination class writes log data to a file.</font>
 <font color="#2e8b57"><b>class</b></font> filedestination : <font color="#a52a2a"><b>public</b></font> logdestination {
         <font color="#a52a2a"><b>public</b></font>:
-                        filedestination();
-                <font color="#2e8b57"><b>virtual</b></font> ~filedestination();
+                                filedestination();
+                                filedestination(<font color="#2e8b57"><b>const</b></font> filedestination &amp;f);
+                filedestination &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> filedestination &amp;f);
+                <font color="#2e8b57"><b>virtual</b></font>         ~filedestination();
+
                 <font color="#2e8b57"><b>bool</b></font>    open(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                 <font color="#2e8b57"><b>void</b></font>    close();
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/filedestination.h&gt;</font>

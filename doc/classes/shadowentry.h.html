@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/shadowentry.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/shadowentry.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -52,22 +52,24 @@
 
                 <font color="#0000ff">// If you need to look up a shadow entry and refer to multiple</font>
                 <font color="#0000ff">// fields, use these methods.</font>
-                        shadowentry();
-                        ~shadowentry();
+                                shadowentry();
+                                shadowentry(<font color="#2e8b57"><b>const</b></font> shadowentry &amp;s);
+                shadowentry     &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> shadowentry &amp;s);
+                                ~shadowentry();
 
                 <font color="#2e8b57"><b>bool</b></font>    initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username);
                         <font color="#0000ff">// Looks up a shadow entry by name.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#2e8b57"><b>char</b></font>    *getName() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>char</b></font>    *getEncryptedPassword() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>long</b></font>    getLastChangeDate() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getDaysBeforeChangeAllowed() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getDaysBeforeChangeRequired() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getDaysBeforeExpirationWarning() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getDaysOfInactivityAllowed() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getExpirationDate() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     getFlag() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getEncryptedPassword() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>long</b></font>            getLastChangeDate() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>             getDaysBeforeChangeAllowed() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>             getDaysBeforeChangeRequired() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>             getDaysBeforeExpirationWarning() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>             getDaysOfInactivityAllowed() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>             getExpirationDate() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>             getFlag() <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#2e8b57"><b>void</b></font>    print() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Prints out the shadow entry.</font>

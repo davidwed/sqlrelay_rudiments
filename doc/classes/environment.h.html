@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre2/include/rudiments/environment.h.html</title>
+<title>~/src/firstworks/rudiments-0.28pre3/include/rudiments/environment.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -25,20 +25,28 @@
         <font color="#a52a2a"><b>public</b></font>:
                         ~environment();
 
-                <font color="#2e8b57"><b>char</b></font>    *getValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *variable) <font color="#2e8b57"><b>const</b></font>;
-                        <font color="#0000ff">// Returns the value of &quot;variable&quot;.</font>
-                <font color="#2e8b57"><b>bool</b></font>    setValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *variable, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
-                        <font color="#0000ff">// Sets the value of &quot;variable&quot; to &quot;value&quot;,</font>
-                        <font color="#0000ff">// Overwriting any value that &quot;variable&quot; previously</font>
-                        <font color="#0000ff">// had.</font>
-                        <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>void</b></font>    remove(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *variable);
-                        <font color="#0000ff">// Removes &quot;variable&quot; from the environment.</font>
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *variable) <font color="#2e8b57"><b>const</b></font>;
+                                <font color="#0000ff">// Returns the value of &quot;variable&quot;.</font>
+                <font color="#2e8b57"><b>bool</b></font>            setValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *variable,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
+                                <font color="#0000ff">// Sets the value of &quot;variable&quot; to &quot;value&quot;,</font>
+                                <font color="#0000ff">// Overwriting any value that &quot;variable&quot;</font>
+                                <font color="#0000ff">// previously had.</font>
+                                <font color="#0000ff">// Returns true on success and false on failure.</font>
+                <font color="#2e8b57"><b>bool</b></font>            remove(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *variable);
+                                <font color="#0000ff">// Removes &quot;variable&quot; from the environment.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    **variables();
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>      *variables();
                         <font color="#0000ff">// Returns a NULL terminated list of all</font>
                         <font color="#0000ff">// environment variables.  Each entry in the list is</font>
                         <font color="#0000ff">// of the form NAME=VALUE.</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    setMutex(pthread_mutex_t *mutex);
+                        <font color="#0000ff">// Allows you to supply a mutex if the class needs it.</font>
+                        <font color="#0000ff">// If your application is not multithreaded, then</font>
+                        <font color="#0000ff">// there is no need to supply a mutex.</font>
+<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/environment.h&gt;</font>
 
