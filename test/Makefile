@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err group cmdline host log oneshotclnt oneshotsvr passwd permissions protocol regexp sem2 shm2 text datetime dict dtd env file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err group cmdline host log oneshotclnt oneshotsvr passwd permissions protocol regexp sem2 shm2 text datetime tzf dict dtd env file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err group cmdline host log oneshotclnt oneshotsvr passwd permissions protocol regexp sem1 sem2 shm1 shm2 text datetime dict dtd env file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err group cmdline host log oneshotclnt oneshotsvr passwd permissions protocol regexp sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -99,6 +99,9 @@ text: text.C text.lo
 
 datetime: datetime.C datetime.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ datetime.lo -L../src -lrudiments_p 
+
+tzf: tzf.C tzf.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ tzf.lo -L../src -lrudiments_p 
 
 dict: dict.C dict.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ dict.lo -L../src -lrudiments_p

@@ -18,9 +18,9 @@ ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	PLOBJS += daemonprocess.p.lo
 endif
 ifeq ($(INCLUDE_DATETIME),1)
-	SRCS += datetime.C
-	NLOBJS += datetime.n.lo
-	PLOBJS += datetime.p.lo
+	SRCS += datetime.C timezonefile.C
+	NLOBJS += datetime.n.lo timezonefile.n.lo
+	PLOBJS += datetime.p.lo timezonefile.p.lo
 endif
 ifeq ($(INCLUDE_DTD),1)
 	SRCS += dtd.C

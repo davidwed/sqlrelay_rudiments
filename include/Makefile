@@ -24,8 +24,9 @@ ifeq ($(INCLUDE_DATATRANSPORT),1)
 	PRIVATEHEADERS += datatransport.h datatransportinlines.h
 endif
 ifeq ($(INCLUDE_DATETIME),1)
-	HEADERS += datetime.h
-	PRIVATEHEADERS += datetime.h datetimeinlines.h
+	HEADERS += datetime.h timezonefile.h
+	PRIVATEHEADERS += datetime.h datetimeinlines.h \
+				timezonefile.h timezonefileinlines.h
 endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h
