@@ -20,6 +20,9 @@ class unixsocket : virtual public datatransport {
 	protected:
 		char		*filename;
 		sockaddr_un	sockaddrun;
+		#ifdef RUDIMENTS_HAS_SSL
+		BIO	*newSSLBIO();
+		#endif
 };
 
 #endif

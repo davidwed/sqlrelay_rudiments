@@ -58,6 +58,15 @@ int unixclientsocket::connect() {
 		// attempt to connect
 		if (::connect(fd,(struct sockaddr *)&sockaddrun,
 						sizeof(sockaddrun))!=-1) {
+			#ifdef RUDIMENTS_HAS_SSL
+			if (ctx) {
+				if (!initializeSSL() ||
+					SSL_connect(ssl)!=1) {
+					close();
+					return RESULT_ERROR;
+				}
+			}
+			#endif
 			return RESULT_SUCCESS;
 		}
 

@@ -15,3 +15,9 @@ void inetsocket::initialize(const char *address, unsigned short port) {
 	this->address=(char *)address;
 	this->port=port;
 }
+
+#ifdef RUDIMENTS_HAS_SSL
+BIO *inetsocket::newSSLBIO() {
+	return BIO_new_socket(fd,BIO_NOCLOSE);
+}
+#endif

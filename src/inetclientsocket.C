@@ -132,6 +132,15 @@ int inetclientsocket::connect() {
 				// attempt to connect
 				if (::connect(fd,(struct sockaddr *)&sin,
 							sizeof(sin))!=-1) {
+					#ifdef RUDIMENTS_HAS_SSL
+					if (ctx) {
+						if (!initializeSSL() ||
+							SSL_connect(ssl)!=1) {
+							close();
+							return RESULT_ERROR;
+						}
+					}
+					#endif
 					return RESULT_SUCCESS;
 				}
 			}
@@ -156,6 +165,15 @@ int inetclientsocket::connect() {
 					close();
 				} else {
 					freeaddrinfo(ai);
+					#ifdef RUDIMENTS_HAS_SSL
+					if (ctx) {
+						if (!initializeSSL() ||
+							SSL_connect(ssl)!=1) {
+							close();
+							return RESULT_ERROR;
+						}
+					}
+					#endif
 					return RESULT_SUCCESS;
 				}
 			}

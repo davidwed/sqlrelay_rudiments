@@ -33,6 +33,8 @@ filedescriptor::filedescriptor(int fd) {
 	allowshortreads=0;
 	lstnr=NULL;
 #ifdef RUDIMENTS_HAS_SSL
+	ctx=NULL;
+	bio=NULL;
 	ssl=NULL;
 #endif
 }
@@ -44,12 +46,17 @@ filedescriptor::filedescriptor() {
 	allowshortreads=0;
 	lstnr=NULL;
 #ifdef RUDIMENTS_HAS_SSL
+	ctx=NULL;
+	bio=NULL;
 	ssl=NULL;
 #endif
 }
 
 filedescriptor::~filedescriptor() {
 	close();
+#ifdef RUDIMENTS_HAS_SSL
+	setSSLContext(NULL);
+#endif
 }
 
 int filedescriptor::getFileDescriptor() const {
@@ -61,13 +68,46 @@ void filedescriptor::setFileDescriptor(int fd) {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-bool filedescriptor::setSSL(SSL *ssl) {
-	this->ssl=ssl;
-	return SSL_set_fd(ssl,fd);
+void filedescriptor::setSSLContext(SSL_CTX *ctx) {
+	if (!ctx) {
+		deInitializeSSL();
+	}
+	this->ctx=ctx;
+}
+
+bool filedescriptor::initializeSSL() {
+	if (fd==-1) {
+		return false;
+	}
+	deInitializeSSL();
+	if (ctx) {
+		bio=newSSLBIO();
+		ssl=SSL_new(ctx);
+		SSL_set_bio(ssl,bio,bio);
+	}
+	return true;
+}
+
+void filedescriptor::deInitializeSSL() {
+	if (ssl) {
+		SSL_free(ssl);
+		ssl=NULL;
+	}
+	if (bio) {
+		// BIO_free causes a segfault, and none of the example code
+		// that I've seen calls it, but the function exists so
+		// presumably it has a purpose.
+		//BIO_free(bio);
+		bio=NULL;
+	}
 }
 
 SSL *filedescriptor::getSSL() const {
 	return ssl;
+}
+
+BIO *filedescriptor::newSSLBIO() {
+	return BIO_new_fd(fd,BIO_NOCLOSE);
 }
 #endif
 
@@ -256,6 +296,11 @@ ssize_t filedescriptor::read(void *buffer, size_t size, long sec, long usec) {
 }
 
 bool filedescriptor::close() {
+#ifdef RUDIMENTS_HAS_SSL
+	if (ssl) {
+		SSL_shutdown(ssl);
+	}
+#endif
 	if (::close(fd)==-1) {
 		return false;
 	}
@@ -415,6 +460,13 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 						long sec, long usec) {
 
+	// The result of SSL_read may be undefined if count=0
+	#ifdef RUDIMENTS_HAS_SSL
+	if (!count) {
+		return 0;
+	}
+	#endif
+
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
 	ssize_t	actualread;
@@ -478,6 +530,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 						long sec, long usec) {
 
+	// The result of SSL_write may be undefined if count=0
+	#ifdef RUDIMENTS_HAS_SSL
+	if (!count) {
+		return 0;
+	}
+	#endif
+
 	ssize_t	retval;
 	for (;;) {
 
@@ -495,7 +554,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		errno=0;
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
-			retval=SSL_write(ssl,buf,count);
+			retval=::SSL_write(ssl,buf,count);
 		} else {
 		#endif
 			retval=::write(fd,buf,count);

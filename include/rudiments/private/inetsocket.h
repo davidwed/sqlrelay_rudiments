@@ -19,6 +19,9 @@ class inetsocket : virtual public datatransport {
 		char		*address;
 		unsigned short	port;
 		sockaddr_in	sin;
+		#ifdef RUDIMENTS_HAS_SSL
+		BIO	*newSSLBIO();
+		#endif
 };
 
 #endif

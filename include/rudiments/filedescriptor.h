@@ -32,17 +32,31 @@ class filedescriptor {
 				// the class to "fd".
 
 		#ifdef RUDIMENTS_HAS_SSL
-		virtual bool	setSSL(SSL *ssl);
-				// Associates ssl handle "ssl" with the
-				// filedescriptor.  If "ssl" is non-NULL, all
-				// reads and writes will be done using SSL
-				// read/write functions.
+		virtual void	setSSLContext(SSL_CTX *ctx);
+				// Associates SSL context "ctx" with the
+				// filedescriptor.  Passing in a NULL for "ctx"
+				// has the additional side effect of calling
+				// deInitializeSSL() below.
+		virtual bool	initializeSSL();
+				// Should be called after calling
+				// setSSLContext() and one of open(),
+				// create() or connect() (from socket child
+				// classes). Causes the appropriate SSL
+				// function to be called instead of or in
+				// concert with read(), write(), connect(),
+				// accept() and close() methods.
 				//
-				// Returns true on success and false on failure.
+				// Returns true on success and false on failure
 		virtual SSL	*getSSL() const;
-				// Returns a pointer to the ssl handle currently
-				// associated with the filedescriptor or NULL
-				// if no handle has been associated.
+				// Returns a pointer to the currently
+				// initialized SSL handle or NULL if
+				// initializeSSL() has not been called or
+				// failed.
+		virtual void	deInitializeSSL();
+				// Causes read(), write(), connect(), accept()
+				// and close() methods to be performed
+				// without the accompanying SSL-specific
+				// functions.
 		#endif
 
 		// Write methods - write data to the file descriptor.

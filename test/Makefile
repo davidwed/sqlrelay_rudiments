@@ -6,12 +6,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr sslsvr lsnr inetclnt sslclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -24,11 +24,17 @@ rebuild: clean all
 svr: svr.C svr.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ svr.lo -all-static -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
 
+sslsvr: sslsvr.C sslsvr.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sslsvr.lo -all-static -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
+
 lsnr: lsnr.C lsnr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lsnr.lo -all-static -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
 
 inetclnt: inetclnt.C inetclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclnt.lo -all-static -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
+
+sslclnt: sslclnt.C sslclnt.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sslclnt.lo -all-static -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
 
 unixclnt: unixclnt.C unixclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclnt.lo -all-static -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
