@@ -3,11 +3,11 @@
 
 #include <rudiments/private/inetsocket.h>
 
-inetsocket::inetsocket() : datatransport() {
+inetsocket::inetsocket() : socket() {
 	initialize(NULL,0);
 }
 
-inetsocket::inetsocket(int filedescriptor) : datatransport(filedescriptor) {
+inetsocket::inetsocket(int filedescriptor) : socket(filedescriptor) {
 	initialize(NULL,0);
 }
 
@@ -15,9 +15,3 @@ void inetsocket::initialize(const char *address, unsigned short port) {
 	this->address=(char *)address;
 	this->port=port;
 }
-
-#ifdef RUDIMENTS_HAS_SSL
-BIO *inetsocket::newSSLBIO() {
-	return BIO_new_socket(fd,BIO_NOCLOSE);
-}
-#endif

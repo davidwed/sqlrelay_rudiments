@@ -79,7 +79,7 @@ ifeq ($(INCLUDE_INETCLIENT),1)
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
 	HEADERS += inetserversocket.h
-	PRIVATEHEADERS += inetsocket.h inetserversocketincludes.h
+	PRIVATEHEADERS += inetserversocketincludes.h
 endif
 ifeq ($(INCLUDE_LISTENER),1)
 	HEADERS += listener.h
@@ -179,6 +179,42 @@ endif
 ifeq ($(INCLUDE_XMLSAX),1)
 	HEADERS += xmlsax.h
 	PRIVATEHEADERS += xmlsax.h xmlsaxincludes.h
+endif
+
+
+# if either inetserver or inetclient are defined, include inetsocket.h
+ifeq ($(INCLUDE_INETSERVER),1)
+	PRIVATEHEADERS += inetsocket.h
+else
+	ifeq ($(INCLUDE_INETCLIENT),1)
+		PRIVATEHEADERS += inetsocket.h
+	endif
+endif
+
+# if either unixserver or unixclient are defined, include unixsocket.h
+ifeq ($(INCLUDE_UNIXSERVER),1)
+	PRIVATEHEADERS += unixsocket.h
+else
+	ifeq ($(INCLUDE_UNIXCLIENT),1)
+		PRIVATEHEADERS += unixsocket.h
+	endif
+endif
+
+# if inet/unix server/socket are defined, include socket.h
+ifeq ($(INCLUDE_INETSERVER),1)
+	PRIVATEHEADERS += socket.h
+else
+	ifeq ($(INCLUDE_UNIXSERVER),1)
+		PRIVATEHEADERS += socket.h
+	else
+		ifeq ($(INCLUDE_INETCLIENT),1)
+			PRIVATEHEADERS += socket.h
+		else
+			ifeq ($(INCLUDE_UNIXCLIENT),1)
+				PRIVATEHEADERS += socket.h
+			endif
+		endif
+	endif
 endif
 
 

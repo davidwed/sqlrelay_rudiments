@@ -8,9 +8,9 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-#include <rudiments/datatransport.h>
+#include <rudiments/private/socket.h>
 
-class inetsocket : virtual public datatransport {
+class inetsocket : virtual public socket {
 	public:
 			inetsocket();
 			inetsocket(int filedescriptor);
@@ -19,9 +19,6 @@ class inetsocket : virtual public datatransport {
 		char		*address;
 		unsigned short	port;
 		sockaddr_in	sin;
-		#ifdef RUDIMENTS_HAS_SSL
-		BIO	*newSSLBIO();
-		#endif
 };
 
 #endif

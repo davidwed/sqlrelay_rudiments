@@ -46,7 +46,7 @@ int unixclientsocket::connect() {
 	strcpy(sockaddrun.sun_path,filename);
 
 	// create a unix socket
-	if ((fd=socket(AF_UNIX,SOCK_STREAM,0))==-1) {
+	if ((fd=::socket(AF_UNIX,SOCK_STREAM,0))==-1) {
 		fd=-1;
 		return RESULT_ERROR;
 	}

@@ -14,11 +14,11 @@
 
 //#define DEBUG_UNIXSOCKET 1
 
-unixsocket::unixsocket() : datatransport() {
+unixsocket::unixsocket() : socket() {
 	filename=NULL;
 }
 
-unixsocket::unixsocket(int filedescriptor) : datatransport(filedescriptor) {
+unixsocket::unixsocket(int filedescriptor) : socket(filedescriptor) {
 	filename=NULL;
 }
 
@@ -211,9 +211,3 @@ bool unixsocket::receiveFileDescriptor(int *descriptor) {
 	// if we're here then we must have received some bad data
 	return false;
 }
-
-#ifdef RUDIMENTS_HAS_SSL
-BIO *unixsocket::newSSLBIO() {
-	return BIO_new_socket(fd,BIO_NOCLOSE);
-}
-#endif

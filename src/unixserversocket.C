@@ -30,7 +30,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	strcpy(sockaddrun.sun_path,filename);
 
 	// create the socket
-	return ((fd=socket(AF_UNIX,SOCK_STREAM,0))>-1);
+	return ((fd=::socket(AF_UNIX,SOCK_STREAM,0))>-1);
 }
 
 bool unixserversocket::bind() {

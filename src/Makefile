@@ -63,8 +63,8 @@ ifeq ($(INCLUDE_INETCLIENT),1)
 	LOBJS += inetclientsocket.lo
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += inetsocket.C inetserversocket.C
-	LOBJS += inetsocket.lo inetserversocket.lo
+	SRCS += inetserversocket.C
+	LOBJS += inetserversocket.lo
 endif
 ifeq ($(INCLUDE_LISTENER),1)
 	SRCS += listener.C
@@ -143,8 +143,8 @@ ifeq ($(INCLUDE_UNIXCLIENT),1)
 	LOBJS += unixclientsocket.lo
 endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
-	SRCS += unixsocket.C unixserversocket.C
-	LOBJS += unixsocket.lo unixserversocket.lo
+	SRCS += unixserversocket.C
+	LOBJS += unixserversocket.lo
 endif
 ifeq ($(INCLUDE_VARIABLEBUFFER),1)
 	SRCS += variablebuffer.C
@@ -157,6 +157,49 @@ endif
 ifeq ($(INCLUDE_XMLSAX),1)
 	SRCS += xmlsax.C
 	LOBJS += xmlsax.lo
+endif
+
+# if either inetserver or inetclient are defined, include inetsocket.h
+ifeq ($(INCLUDE_INETSERVER),1)
+	SRCS += inetsocket.C
+	LOBJS += inetsocket.lo
+else
+	ifeq ($(INCLUDE_INETCLIENT),1)
+		SRCS += inetsocket.C
+		LOBJS += inetsocket.lo
+	endif
+endif
+
+# if either unixserver or unixclient are defined, include unixsocket.h
+ifeq ($(INCLUDE_UNIXSERVER),1)
+	SRCS += unixsocket.C
+	LOBJS += unixsocket.lo
+else
+	ifeq ($(INCLUDE_UNIXCLIENT),1)
+		SRCS += unixsocket.C
+		LOBJS += unixsocket.lo
+	endif
+endif
+
+# if inet/unix server/socket are defined, include socket.h
+ifeq ($(INCLUDE_INETSERVER),1)
+	SRCS += socket.C
+	LOBJS += socket.lo
+else
+	ifeq ($(INCLUDE_UNIXSERVER),1)
+		SRCS += socket.C
+		LOBJS += socket.lo
+	else
+		ifeq ($(INCLUDE_INETCLIENT),1)
+			SRCS += socket.C
+			LOBJS += socket.lo
+		else
+			ifeq ($(INCLUDE_UNIXCLIENT),1)
+				SRCS += socket.C
+				LOBJS += socket.lo
+			endif
+		endif
+	endif
 endif
 	
 .SUFFIXES: .lo

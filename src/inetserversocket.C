@@ -45,7 +45,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	}
 
 	// create the socket
-	return ((fd=socket(AF_INET,SOCK_STREAM,0))>-1);
+	return ((fd=::socket(AF_INET,SOCK_STREAM,0))>-1);
 }
 
 bool inetserversocket::bind() {

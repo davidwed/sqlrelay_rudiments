@@ -77,7 +77,7 @@ int inetclientsocket::connect() {
 		sin.sin_port=htons(port);
 
 		// create an inet socket
-		if ((fd=socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
+		if ((fd=::socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
 			fd=-1;
 			return RESULT_ERROR;
 		}
@@ -152,7 +152,7 @@ int inetclientsocket::connect() {
 			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
 
 				// create an inet socket
-				if ((fd=socket(ai->ai_family,
+				if ((fd=::socket(ai->ai_family,
 						ai->ai_socktype,
 						ai->ai_protocol))==-1) {
 					continue;

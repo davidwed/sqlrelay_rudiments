@@ -7,9 +7,9 @@
 #include <sys/types.h>
 #include <sys/un.h>
 
-#include <rudiments/datatransport.h>
+#include <rudiments/private/socket.h>
 
-class unixsocket : virtual public datatransport {
+class unixsocket : virtual public socket {
 	public:
 			unixsocket();
 			unixsocket(int filedescriptor);
@@ -20,9 +20,6 @@ class unixsocket : virtual public datatransport {
 	protected:
 		char		*filename;
 		sockaddr_un	sockaddrun;
-		#ifdef RUDIMENTS_HAS_SSL
-		BIO	*newSSLBIO();
-		#endif
 };
 
 #endif
