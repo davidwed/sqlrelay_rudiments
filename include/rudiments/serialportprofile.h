@@ -578,12 +578,12 @@ class serialportprofile {
 			// map carriage return to new line on output
 			// termios flag: OCRNL
 		#endif
-		#ifdef OCNOCR
+		#ifdef ONOCR
 		void	dontOutputCarriageReturnAtColumnZero(bool truefalse);
 			// don't output carriage return at column 0
 			// termios flag: ONOCR
 		#endif
-		#ifdef ONLORET
+		#ifdef ONLRET
 		void	mapNewLineToCarriageReturnOnOutput(bool truefalse);
 			// map new line to carriage return on output
 			// termios flag: ONLRET
@@ -653,12 +653,12 @@ class serialportprofile {
 			// returns true if carriage returns are mapped to new
 			// lines on output
 		#endif
-		#ifdef OCNOCR
+		#ifdef ONOCR
 		bool	dontOutputCarriageReturnAtColumnZero();
 			// returns true if carriage returns aren't sent at
 			// column 0
 		#endif
-		#ifdef ONLORET
+		#ifdef ONLRET
 		bool	mapNewLineToCarriageReturnOnOutput();
 			// returns true if new lines are mapped to carriage
 			// returns on output

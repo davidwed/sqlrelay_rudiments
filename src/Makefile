@@ -23,6 +23,10 @@ ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	SRCS += daemonprocess.C
 	LOBJS += daemonprocess.lo
 endif
+ifeq ($(INCLUDE_PROCESS),1)
+	SRCS += process.C
+	LOBJS += process.lo
+endif
 ifeq ($(INCLUDE_DATETIME),1)
 	SRCS += datetime.C
 	LOBJS += datetime.lo

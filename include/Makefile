@@ -22,6 +22,10 @@ ifeq ($(INCLUDE_DAEMONPROCESS),1)
 	HEADERS += daemonprocess.h
 	PRIVATEHEADERS += daemonprocess.h daemonprocessincludes.h
 endif
+ifeq ($(INCLUDE_PROCESS),1)
+	HEADERS += process.h
+	PRIVATEHEADERS += processincludes.h
+endif
 ifeq ($(INCLUDE_DATETIME),1)
 	HEADERS += datetime.h
 	PRIVATEHEADERS += datetime.h datetimeincludes.h
