@@ -17,3 +17,4 @@
 		int	allowshortreads;
 
 		listener	*lstnr;
+		SSL		*ssl;

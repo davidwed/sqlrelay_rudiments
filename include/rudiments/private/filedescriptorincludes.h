@@ -5,3 +5,5 @@
 #include <rudiments/listener.h>
 
 #include <sys/types.h>
+
+#include <openssl/ssl.h>
