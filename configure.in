@@ -857,6 +857,53 @@ AC_SUBST(INCLUDE_CONTAINER)
 #AC_SUBST(INCLUDE_LIST)
 
 
+# prepend DESTDIR where appropriate
+if ( test "`echo $ac_default_prefix | cut -c1`" = "/" )
+then
+	ac_default_prefix='${DESTDIR}'"$ac_default_prefix"
+fi
+if ( test "`echo $prefix | cut -c1`" = "/" )
+then
+	prefix='${DESTDIR}'"$prefix"
+fi
+if ( test "`echo $exec_prefix | cut -c1`" = "/" )
+then
+	exec_prefix='${DESTDIR}'"$exec_prefix"
+fi
+if ( test "`echo $includedir | cut -c1`" = "/" )
+then
+	includedir='${DESTDIR}'"$includedir"
+fi
+if ( test "`echo $libdir | cut -c1`" = "/" )
+then
+	libdir='${DESTDIR}'"$libdir"
+fi
+if ( test "`echo $libexecdir | cut -c1`" = "/" )
+then
+	libexecdir='${DESTDIR}'"$libexecdir"
+fi
+if ( test "`echo $bindir | cut -c1`" = "/" )
+then
+	bindir='${DESTDIR}'"$bindir"
+fi
+if ( test "`echo $localstatedir | cut -c1`" = "/" )
+then
+	localstatedir='${DESTDIR}'"$localstatedir"
+fi
+if ( test "`echo $sysconfdir | cut -c1`" = "/" )
+then
+	sysconfdir='${DESTDIR}'"$sysconfdir"
+fi
+if ( test "`echo $mandir | cut -c1`" = "/" )
+then
+	mandir='${DESTDIR}'"$mandir"
+fi
+if ( test "`echo $datadir | cut -c1`" = "/" )
+then
+	datadir='${DESTDIR}'"$datadir"
+fi
+
+
 dnl Output files.
 echo
 echo "***** Output Files ***********"

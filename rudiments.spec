@@ -46,12 +46,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-make \
-	bindir=%{buildroot}%{_bindir} \
-	includedir=%{buildroot}%{_includedir} \
-	libdir=%{buildroot}%{_libdir} \
-	docdir=%{buildroot}%{docdir} \
-	install
+make DESTDIR=%{buildroot} docdir=%{buildroot}%{docdir} install
 
 %post
 /sbin/ldconfig
