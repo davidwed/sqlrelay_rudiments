@@ -96,6 +96,9 @@
 /* Define to 1 if you have the `re_comp' function. */
 #define HAVE_RE_COMP 1
 
+/* Do we have a real-time-clock */
+#define HAVE_RTC 1
+
 /* Some systems define union semun */
 /* #undef HAVE_SEMUN */
 

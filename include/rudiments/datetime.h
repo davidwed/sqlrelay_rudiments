@@ -66,6 +66,20 @@ class datetime {
 			//
 			// Returns 1 on success and 0 on failure.
 
+
+		// These methods only work if your system has a working
+		// real-time-clock at /dev/rtc.
+		int	getHardwareDateAndTime();
+			// Sets the date and time represented in the class to
+			// the date and time stored in the hardware clock.
+			//
+			// Returns 1 on success and 0 on failure.
+		int	setHardwareDateAndTime();
+			// Sets the hardware clock's date and time to the date
+			// and time currently represented in the class.
+			//
+			// Returns 1 on success and 0 on failure.
+
 	#include <rudiments/private/datetime.h>
 };
 

@@ -157,6 +157,12 @@ AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(HAS_TM_NAME,1, Some systems d
 
 AC_MSG_CHECKING(tm_tzadj)
 AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(HAS_TM_TZADJ,1, Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(real-time-clock support)
+AC_TRY_COMPILE([#include <linux/rtc.h>
+#include <sys/ioctl.h>],
+ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(HAVE_RTC, 1, Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
