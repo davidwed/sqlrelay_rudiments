@@ -19,10 +19,16 @@ rebuild:
 install-libs:
 	cd src; $(MAKE) install
 
-install: install-libs
+install-includes:
 	cd include; $(MAKE) install
+
+install-bin:
 	cd bin; $(MAKE) install
+
+install-doc:
 	cd doc; $(MAKE) install
+
+install: install-libs install-includes install-bin install-doc
 
 uninstall:
 	cd src; $(MAKE) uninstall
