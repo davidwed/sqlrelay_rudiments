@@ -1,8 +1,7 @@
+top_builddir = ..
+
 include ../config.mk
 include ../features.mk
-
-top_srcdir = ..
-INSTALL = $(top_srcdir)/install-sh -c
 
 HEADERS = resultcodes.h
 PRIVATEHEADERS = config.h rudimentsinlines.h
@@ -184,8 +183,8 @@ endif
 
 
 install:
-	$(top_srcdir)/mkinstalldirs $(includedir)/rudiments
-	$(top_srcdir)/mkinstalldirs $(includedir)/rudiments/private
+	$(MKINSTALLDIRS) $(includedir)/rudiments
+	$(MKINSTALLDIRS) $(includedir)/rudiments/private
 	for i in $(HEADERS); do $(INSTALL) -m 644 rudiments/$$i $(includedir)/rudiments; done
 	for i in $(PRIVATEHEADERS); do $(INSTALL) -m 644 rudiments/private/$$i $(includedir)/rudiments/private; done
 

@@ -1,7 +1,6 @@
-include ../config.mk
-
 top_builddir = ..
-INSTALL = $(top_builddir)/install-sh -c
+
+include ../config.mk
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 

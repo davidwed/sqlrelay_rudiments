@@ -1,6 +1,7 @@
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch
 	fixed comment detection in xmlsax
+	STRIPPROG is set before calling install-sh now
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

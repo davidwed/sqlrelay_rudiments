@@ -36,7 +36,7 @@ INSTALLSTRIP = @INSTALLSTRIP@
 LIBTOOL = @LIBTOOL@
 
 # install command
-INSTALL = $(top_builddir)/install-sh -c
+INSTALL = STRIPPROG="$(STRIP)" $(LIBTOOL) --mode=install $(top_builddir)/install-sh -c
 
 # mkinstalldirs command
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
