@@ -61,10 +61,11 @@ install:
 	$(INSTALL) -m 644 rudiments/private/dtdinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandler.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/errorhandlerinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/file.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/fileinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedescriptornode.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedestination.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedescriptor.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/fileinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filesystem.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filesysteminlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/groupentry.h $(incdir)/rudiments
