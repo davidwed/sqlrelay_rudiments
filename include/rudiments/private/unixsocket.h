@@ -9,14 +9,14 @@
 
 #include <rudiments/private/socket.h>
 
-class unixsocket : public socket {
+class unixsocket : virtual public socket {
 	public:
 			unixsocket();
-			unixsocket(int filedescriptor);
+			unixsocket(int filedesc);
 		void	initialize(const char *filename);
 
-		bool	passFileDescriptor(int descriptor);
-		bool	receiveFileDescriptor(int *descriptor);
+		bool	passFileDescriptor(int filedesc);
+		bool	receiveFileDescriptor(int *filedesc);
 	protected:
 		char		*filename;
 		sockaddr_un	sockaddrun;

@@ -87,13 +87,9 @@ inetsocket *inetserversocket::acceptClientConnection() {
 
 	inetsocket	*returnsock=new inetsocket(clientsock);
 	#ifdef RUDIMENTS_HAS_SSL
-		if (ctx) {
-			returnsock->setSSLContext(ctx);
-			if (!returnsock->initializeSSL() ||
-				SSL_accept(returnsock->getSSL())!=1) {
-				delete returnsock;
-				return NULL;
-			}
+		if (!sslAccept(returnsock)) {
+			delete returnsock;
+			return NULL;
 		}
 	#endif
 	return returnsock;

@@ -14,11 +14,12 @@
 
 //#define DEBUG_UNIXSOCKET 1
 
-unixsocket::unixsocket() : socket() {
+unixsocket::unixsocket() : filedescriptor(), datatransport(), socket() {
 	filename=NULL;
 }
 
-unixsocket::unixsocket(int filedescriptor) : socket(filedescriptor) {
+unixsocket::unixsocket(int filedesc) :
+	filedescriptor(filedesc), datatransport(filedesc), socket(filedesc) {
 	filename=NULL;
 }
 
@@ -26,7 +27,7 @@ void unixsocket::initialize(const char *filename) {
 	this->filename=(char *)filename;
 }
 
-bool unixsocket::passFileDescriptor(int descriptor) {
+bool unixsocket::passFileDescriptor(int filedesc) {
 
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
@@ -74,12 +75,12 @@ bool unixsocket::passFileDescriptor(int descriptor) {
 		messageheader.msg_control=(caddr_t)cmptr;
 		messageheader.msg_controllen=controllen;
 		#endif
-		*((int *)CMSG_DATA(cmptr))=descriptor;
+		*((int *)CMSG_DATA(cmptr))=filedesc;
 	#else
 		// old-style:
 		// the descriptor is passed in the accrights/accrightslen 
 		// section of the msghdr
-		messageheader.msg_accrights=(caddr_t)&descriptor;
+		messageheader.msg_accrights=(caddr_t)&filedesc;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
 
@@ -87,7 +88,7 @@ bool unixsocket::passFileDescriptor(int descriptor) {
 	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
-bool unixsocket::receiveFileDescriptor(int *descriptor) {
+bool unixsocket::receiveFileDescriptor(int *filedesc) {
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr
@@ -127,8 +128,8 @@ bool unixsocket::receiveFileDescriptor(int *descriptor) {
 	#else
 		// old-style
 		// The descriptor is passed in the accrights
-		int	newdescriptor;
-		messageheader.msg_accrights=(caddr_t)&newdescriptor;
+		int	newfiledesc;
+		messageheader.msg_accrights=(caddr_t)&newfiledesc;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
 
@@ -148,7 +149,7 @@ bool unixsocket::receiveFileDescriptor(int *descriptor) {
 				cmptr->cmsg_type==SCM_RIGHTS) {
 
 			// if we got good data, set the desctiptor and return
-			*descriptor=*((int *)CMSG_DATA(cmptr));
+			*filedesc=*((int *)CMSG_DATA(cmptr));
 			return true;
 
 		}
@@ -188,7 +189,7 @@ bool unixsocket::receiveFileDescriptor(int *descriptor) {
 #endif
 		#else
 		if (messageheader.msg_controllen==controllen) {
-			*descriptor=*((int *)CMSG_DATA(cmptr));
+			*filedesc=*((int *)CMSG_DATA(cmptr));
 			return true;
 		}
 #ifdef DEBUG_UNIXSOCKET
@@ -203,7 +204,7 @@ bool unixsocket::receiveFileDescriptor(int *descriptor) {
 		#endif
 	#else
 		if (messageheader.msg_accrightslen==sizeof(int)) {
-			*descriptor=newdescriptor;
+			*filedesc=newfiledesc;
 			return true;
 		}
 	#endif

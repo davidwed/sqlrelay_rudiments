@@ -48,17 +48,14 @@ void	myserver::listen() {
 		// accept a client connection
 		datatransport	*clientsock=acceptClientConnection();
 
-
 		// read 5 bytes from the client and display it
 		char	buffer[6];
 		buffer[5]=(char)NULL;
 		clientsock->read((char *)buffer,5);
 		printf("%s\n",buffer);
 
-
 		// write "hello" back to the client
 		clientsock->write("hello",5);
-
 
 		// close the socket and clean up
 		clientsock->close();

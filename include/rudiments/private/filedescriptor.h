@@ -19,7 +19,7 @@
 		listener	*lstnr;
 
 		#ifdef RUDIMENTS_HAS_SSL
-		virtual	BIO	*newSSLBIO();
+		virtual	BIO	*newSSLBIO() const;
 		SSL_CTX		*ctx;
 		SSL		*ssl;
 		BIO		*bio;

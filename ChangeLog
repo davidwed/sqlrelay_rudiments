@@ -6,9 +6,9 @@
 	fixed filedescriptor::safeRead(); when trying to read more bytes than
 		are available, it now returns the number of bytes read rather
 		than 0
-	added ssl support to filedescriptor class
 	updated rudiments-config and pkgconfig scripts to include pthreads/ssl
 		libs and cflags
+	added ssl support to filedescriptor class and all child classes
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

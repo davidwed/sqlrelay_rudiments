@@ -3,11 +3,12 @@
 
 #include <rudiments/private/inetsocket.h>
 
-inetsocket::inetsocket() : socket() {
+inetsocket::inetsocket() : filedescriptor(), datatransport(), socket() {
 	initialize(NULL,0);
 }
 
-inetsocket::inetsocket(int filedescriptor) : socket(filedescriptor) {
+inetsocket::inetsocket(int filedesc) :
+	filedescriptor(filedesc), datatransport(filedesc), socket(filedesc) {
 	initialize(NULL,0);
 }
 

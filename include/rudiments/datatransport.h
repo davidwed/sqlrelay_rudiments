@@ -9,14 +9,15 @@
 // The datatransport class is a base class for other classes that transport data
 // over (or associated with) a file descriptor (such as clients and servers).
 
-class datatransport : public filedescriptor {
+class datatransport : virtual public filedescriptor {
 	public:
 
 			datatransport();
 				// Creates an uninitialized datatransport.
-			datatransport(int fd);
+			datatransport(int filedesc);
 				// Creates a datatransport and associates the
-				// already open file descriptor "fd" with it.
+				// already open file descriptor "filedesc"
+				// with it.
 
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were

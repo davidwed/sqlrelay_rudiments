@@ -13,9 +13,10 @@ class filedescriptor {
 	public:
 			filedescriptor();
 				// Creates an uninitialized filedescriptor.
-			filedescriptor(int fd);
+			filedescriptor(int filedesc);
 				// Creates a filedescriptor and associates the
-				// already open file descriptor "fd" with it.
+				// already open file descriptor "filedesc"
+				// with it.
 		virtual	~filedescriptor();
 				// Calls close() if it hasn't already been
 				// called.
@@ -27,9 +28,9 @@ class filedescriptor {
 
 		virtual int	getFileDescriptor() const;
 				// Returns the file descriptor.
-		virtual void	setFileDescriptor(int fd);
+		virtual void	setFileDescriptor(int filedesc);
 				// Sets the file descriptor associated with
-				// the class to "fd".
+				// the class to "filedesc".
 
 		#ifdef RUDIMENTS_HAS_SSL
 		virtual void	setSSLContext(SSL_CTX *ctx);

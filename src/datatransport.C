@@ -15,7 +15,7 @@
 
 datatransport::datatransport() : filedescriptor() {}
 
-datatransport::datatransport(int fd) : filedescriptor(fd) {}
+datatransport::datatransport(int filedesc) : filedescriptor(filedesc) {}
 
 ssize_t datatransport::write(float number) {
 	return filedescriptor::write((void *)&number,sizeof(float));
@@ -168,12 +168,12 @@ ssize_t datatransport::read(unsigned long *buffer, long sec, long usec) {
 	return retval;
 }
 
-bool datatransport::passFileDescriptor(int descriptor) {
+bool datatransport::passFileDescriptor(int filedesc) {
 	// by default do nothing and return an error
 	return false;
 }
 
-bool datatransport::receiveFileDescriptor(int *descriptor) {
+bool datatransport::receiveFileDescriptor(int *filedesc) {
 	// by default do nothing and return an error
 	return false;
 }

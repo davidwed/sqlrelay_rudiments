@@ -130,19 +130,16 @@ int inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
+				#ifdef RUDIMENTS_HAS_SSL
+				if (sslConnect((struct sockaddr *)&sin,
+							sizeof(sin))) {
+				#else
 				if (::connect(fd,(struct sockaddr *)&sin,
 							sizeof(sin))!=-1) {
-					#ifdef RUDIMENTS_HAS_SSL
-					if (ctx) {
-						if (!initializeSSL() ||
-							SSL_connect(ssl)!=1) {
-							close();
-							return RESULT_ERROR;
-						}
-					}
-					#endif
+				#endif
 					return RESULT_SUCCESS;
 				}
+				return RESULT_ERROR;
 			}
 
 		#else
@@ -159,22 +156,19 @@ int inetclientsocket::connect() {
 				}
 
 				// attempt to connect to the socket
-				if (::connect(fd,
-					(struct sockaddr *)ainfo->ai_addr,
-						ainfo->ai_addrlen)==-1) {
-					close();
-				} else {
+				#ifdef RUDIMENTS_HAS_SSL
+				if (sslConnect((struct sockaddr *)
+						ainfo->ai_addr,
+						ainfo->ai_addrlen)) {
+				#else
+				if (::connect(fd,(struct sockaddr *)
+						ainfo->ai_addr,
+						ainfo->ai_addrlen)!=-1) {
+				#endif
 					freeaddrinfo(ai);
-					#ifdef RUDIMENTS_HAS_SSL
-					if (ctx) {
-						if (!initializeSSL() ||
-							SSL_connect(ssl)!=1) {
-							close();
-							return RESULT_ERROR;
-						}
-					}
-					#endif
 					return RESULT_SUCCESS;
+				} else {
+					close();
 				}
 			}
 

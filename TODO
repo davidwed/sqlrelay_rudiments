@@ -1,5 +1,8 @@
 get epoch from string doesn't work right on solaris x86
 
+blocking/nonblocking mode switch functions for filedescriptor
+sendto/recvfrom methods for filedescriptor or datatransport
+
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
 

@@ -10,10 +10,10 @@
 
 #include <rudiments/private/socket.h>
 
-class inetsocket : public socket {
+class inetsocket : virtual public socket {
 	public:
 			inetsocket();
-			inetsocket(int filedescriptor);
+			inetsocket(int filedesc);
 		void	initialize(const char *address, unsigned short port);
 	protected:
 		char		*address;

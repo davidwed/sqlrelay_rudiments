@@ -26,8 +26,8 @@
 #endif
 
 
-filedescriptor::filedescriptor(int fd) {
-	this->fd=fd;
+filedescriptor::filedescriptor(int filedesc) {
+	fd=filedesc;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
 	allowshortreads=0;
@@ -40,7 +40,7 @@ filedescriptor::filedescriptor(int fd) {
 }
 
 filedescriptor::filedescriptor() {
-	this->fd=-1;
+	fd=-1;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
 	allowshortreads=0;
@@ -63,8 +63,8 @@ int filedescriptor::getFileDescriptor() const {
 	return fd;
 }
 
-void filedescriptor::setFileDescriptor(int fd) {
-	this->fd=fd;
+void filedescriptor::setFileDescriptor(int filedesc) {
+	fd=filedesc;
 }
 
 #ifdef RUDIMENTS_HAS_SSL
@@ -106,7 +106,7 @@ SSL *filedescriptor::getSSL() const {
 	return ssl;
 }
 
-BIO *filedescriptor::newSSLBIO() {
+BIO *filedescriptor::newSSLBIO() const {
 	return BIO_new_fd(fd,BIO_NOCLOSE);
 }
 #endif
@@ -493,12 +493,10 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		errno=0;
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
-printf("SSL_read\n");
 			actualread=SSL_read(ssl,(void *)((long)buf+totalread),
 								sizetoread);
 		} else {
 		#endif
-printf("regular read\n");
 			actualread=::read(fd,(void *)((long)buf+totalread),
 								sizetoread);
 		#ifdef RUDIMENTS_HAS_SSL
@@ -556,11 +554,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		errno=0;
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
-printf("SSL_write\n");
 			retval=::SSL_write(ssl,buf,count);
 		} else {
 		#endif
-printf("regular write\n");
 			retval=::write(fd,buf,count);
 		#ifdef RUDIMENTS_HAS_SSL
 		}
