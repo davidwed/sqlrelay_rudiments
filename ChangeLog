@@ -36,6 +36,10 @@
 	configure defines -DSMALL_CODE=1 so routines can be written one way
 		or the other
 	moved fileproperties class into file class
+	incorporated matthias saou's spec file instead of mine, added devel
+		package to it
+	removed make rpm target and associated cruft
+	removed kdevelop files
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

@@ -38,9 +38,6 @@ RMTREE = rm -rf
 # command to create a symbolic link
 SYMLINK = ln -s
 
-# rpm build dir
-RPM_BUILD_DIR = @RPM_BUILD_DIR@
-
 # windows environment
 MINGW32 = @MINGW32@
 CYGWIN = @CYGWIN@
@@ -51,6 +48,3 @@ SOCKETLIB = @SOCKETLIB@
 
 # nsl library
 NSLLIB = @NSLLIB@
-
-# libs necessary to link into the DLL on Windows
-DLLLIBS = @DLLLIBS@

@@ -34,7 +34,7 @@ librudiments.la: $(SRCS) $(LOBJS)
 	$(LIBTOOL) --mode=link $(CXX) -o $@ $(LOBJS) -rpath $(libdir) -release $(VERSION) -version-info $(SONAME_VERSION_INFO)
 
 librudiments_p.la: $(SRCS) $(PLOBJS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ $(PLOBJS) $(DLLLIBS) -rpath $(libdir) -release $(VERSION) -version-info $(SONAME_VERSION_INFO)
+	$(LIBTOOL) --mode=link $(CXX) -o $@ $(PLOBJS) -rpath $(libdir) -release $(VERSION) -version-info $(SONAME_VERSION_INFO)
 
 install:
 	$(top_builddir)/mkinstalldirs $(libdir)
