@@ -52,8 +52,8 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 
 		// read from the file descriptor
 		if ((sizeread=safeRead((void *)&charbuffer,
-						sizeof(char),sec,usec))==-1) {
-			totalread=-1;
+				sizeof(char),sec,usec))<=RESULT_ERROR) {
+			totalread=sizeread;
 			break;
 		}
 		totalread=totalread+sizeread;
