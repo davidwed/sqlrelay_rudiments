@@ -19,6 +19,8 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+#include <unistd.h>
+
 sharedmemory::sharedmemory() {
 	created=false;
 	shmptr=NULL;
