@@ -11,6 +11,11 @@
 	added filesystem class
 	added test for s_warn, s_inact, s_expire and s_flag in struct spwd and
 		compile in support for them if found in shadowentry class
+	applied Taguchi Takeshi's listener and inetsocketclient patches
+	check for shmat()!=-1 instead of shmat()>-1 in sharedmemory class now
+		as a memory address could actually be larger than 2^31-1 (or
+		2^64-1), appear to be negative and still be valid as long as
+		it's not -1
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better
