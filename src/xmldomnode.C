@@ -13,7 +13,7 @@ namespace rudiments {
 
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	init(nullnode);
-	type=static_cast<xmldomnodetype>(NULL);
+	type=NULL_XMLDOMNODETYPE;
 	nodename=NULL;
 	nodevalue=NULL;
 }

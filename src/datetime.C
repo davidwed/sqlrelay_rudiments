@@ -67,34 +67,34 @@ bool datetime::initialize(const char *tmstring) {
 
 	// get the date
 	const char	*ptr=tmstring;
-	mon=atoi(ptr)-1;
+	mon=charstring::toLong(ptr)-1;
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	mday=atoi(ptr);
+	mday=charstring::toLong(ptr);
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	year=atoi(ptr)-1900;
+	year=charstring::toLong(ptr)-1900;
 
 	// get the time
 	ptr=charstring::findFirst(ptr,' ')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	hour=atoi(ptr);
+	hour=charstring::toLong(ptr);
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	min=atoi(ptr);
+	min=charstring::toLong(ptr);
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	sec=atoi(ptr);
+	sec=charstring::toLong(ptr);
 
 	// initialize the daylight savings time flag
 	isdst=-1;
@@ -174,19 +174,19 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	return normalizeBrokenDownTime(true);
 }
 
-int datetime::getHour() const {
+long datetime::getHour() const {
 	return hour;
 }
 
-int datetime::getMinutes() const {
+long datetime::getMinutes() const {
 	return min;
 }
 
-int datetime::getSeconds() const {
+long datetime::getSeconds() const {
 	return sec;
 }
 
-int datetime::getMonth() const {
+long datetime::getMonth() const {
 	return mon+1;
 }
 
@@ -198,19 +198,19 @@ const char *datetime::getMonthAbbreviation() const {
 	return monthabbr[mon];
 }
 
-int datetime::getDayOfMonth() const {
+long datetime::getDayOfMonth() const {
 	return mday;
 }
 
-int datetime::getDayOfWeek() const {
+long datetime::getDayOfWeek() const {
 	return wday+1;
 }
 
-int datetime::getDayOfYear() const {
+long datetime::getDayOfYear() const {
 	return yday+1;
 }
 
-int datetime::getYear() const {
+long datetime::getYear() const {
 	return year+1900;
 }
 
@@ -262,32 +262,32 @@ struct tm *datetime::getTm() {
 	return structtm;
 }
 
-bool datetime::addSeconds(int seconds) {
+bool datetime::addSeconds(long seconds) {
 	sec=sec+seconds;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addMinutes(int minutes) {
+bool datetime::addMinutes(long minutes) {
 	min=min+minutes;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addHours(int hours) {
+bool datetime::addHours(long hours) {
 	hour=hour+hours;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addDays(int days) {
+bool datetime::addDays(long days) {
 	hour=yday+days;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addMonths(int months) {
+bool datetime::addMonths(long months) {
 	hour=mon+months;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addYears(int years) {
+bool datetime::addYears(long years) {
 	hour=year+years;
 	return normalizeBrokenDownTime(true);
 }
@@ -304,7 +304,7 @@ const char *datetime::getString() {
 					static_cast<long>(getYear()))+1+
 				2+1+2+1+2+1+
 				charstring::length(getTimeZoneString())];
-	sprintf(timestring,"%02d/%02d/%d %02d:%02d:%02d %s",
+	sprintf(timestring,"%02ld/%02ld/%ld %02ld:%02ld:%02ld %s",
 			getMonth(),getDayOfMonth(),getYear(),
 			getHour(),getMinutes(),getSeconds(),
 			getTimeZoneString());
@@ -540,7 +540,7 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		return false;
 	}
 
-	int	retval=true;
+	bool	retval=true;
 
 	// copy relevent values into a struct tm
 	struct tm	tms;

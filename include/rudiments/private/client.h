@@ -5,13 +5,13 @@
 		char		*connecterror;
 		long		timeoutsec;
 		long		timeoutusec;
-		unsigned int	retrywait;
-		unsigned int	retrycount;
+		unsigned long	retrywait;
+		unsigned long	retrycount;
 
 	private:
 		void	clientInit(char *connecterror,
 					long timeoutsec,
 					long timeoutusec,
-					unsigned int retrywait,
-					unsigned int retrycount);
+					unsigned long retrywait,
+					unsigned long retrycount);
 		void	clientClone(const client &c);

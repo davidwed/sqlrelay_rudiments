@@ -28,8 +28,8 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 					unsigned short port,
 					long timeoutsec,
 					long timeoutusec,
-					unsigned int retrywait,
-					unsigned int retrycount);
+					unsigned long retrywait,
+					unsigned long retrycount);
 			// Convenience method that calls the initialize() and
 			// connect() methods defined below.
 			//
@@ -52,8 +52,8 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 						unsigned short port,
 						long timeoutsec,
 						long timeoutusec,
-						unsigned int retrywait,
-						unsigned int retrycount);
+						unsigned long retrywait,
+						unsigned long retrycount);
 			// Initializes the class to use "host", "port",
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount" when connect() is called.

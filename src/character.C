@@ -2,6 +2,9 @@
 // See the COPYING file for more information.
 
 #include <rudiments/character.h>
+
+#include <ctype.h>
+
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -53,11 +56,10 @@ bool character::isHexDigit(int c) {
 }
 
 bool character::isBlank(int c) {
-	#ifdef HAVE_ISBLANK
-	return isblank(c)!=0;
-	#else
+	// don't be tempted to use isblank() here, it's too challenging to get
+	// it to work on every platform without a bunch of confusing #defines
+	// before including ctype.h
 	return (isSpace(c) || c=='	');
-	#endif
 }
 
 bool character::isWhitespace(int c) {

@@ -6,7 +6,9 @@
 #include <rudiments/rawbuffer.h>
 
 #ifdef HAVE_CRYPT_R
-#define __USE_GNU
+	#ifndef __USE_GNU
+		#define __USE_GNU
+	#endif
 #endif
 #ifdef HAVE_CRYPT_H
 #include <crypt.h>

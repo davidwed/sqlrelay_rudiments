@@ -116,16 +116,16 @@ class datetime {
 
 
 		// These methods return commonly needed time/date values
-		int		getHour() const;
-		int		getMinutes() const;
-		int		getSeconds() const;
-		int		getMonth() const;
+		long		getHour() const;
+		long		getMinutes() const;
+		long		getSeconds() const;
+		long		getMonth() const;
 		const char	*getMonthName() const;
 		const char	*getMonthAbbreviation() const;
-		int		getDayOfMonth() const;
-		int		getDayOfWeek() const;
-		int		getDayOfYear() const;
-		int		getYear() const;
+		long		getDayOfMonth() const;
+		long		getDayOfWeek() const;
+		long		getDayOfYear() const;
+		long		getYear() const;
 
 		bool	isDaylightSavingsTime() const;
 			// returns 1 if daylight savings time is currently
@@ -165,12 +165,12 @@ class datetime {
 
 		// These methods allow you to add discrete time intervals to
 		// the time currently represented in the class.
-		bool	addSeconds(int seconds);
-		bool	addMinutes(int minutes);
-		bool	addHours(int hours);
-		bool	addDays(int days);
-		bool	addMonths(int months);
-		bool	addYears(int years);
+		bool	addSeconds(long seconds);
+		bool	addMinutes(long minutes);
+		bool	addHours(long hours);
+		bool	addDays(long days);
+		bool	addMonths(long months);
+		bool	addYears(long years);
 
 
 		// These methods output conversions to other date/time

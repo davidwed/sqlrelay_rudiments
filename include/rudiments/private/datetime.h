@@ -2,15 +2,15 @@
 // See the COPYING file for more information.
 
 	private:
-		int	sec;
-		int	min;
-		int	hour;
-		int	mday;
-		int	mon;
-		int	year;
-		int	wday;
-		int	yday;
-		int	isdst;
+		long	sec;
+		long	min;
+		long	hour;
+		long	mday;
+		long	mon;
+		long	year;
+		long	wday;
+		long	yday;
+		long	isdst;
 
 		char	*zone;
 		long	gmtoff;

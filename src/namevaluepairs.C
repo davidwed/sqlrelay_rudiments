@@ -8,7 +8,7 @@
 namespace rudiments {
 #endif
 
-// explicitly intstantiate namevaluepairs templates
+// explicitly intsantiate namevaluepairs templates
 template class stringdictionarynode< char * >;
 template class stringdictionarylistnode< char * >;
 template class stringdictionarylist< char * >;

@@ -32,8 +32,8 @@ class unixclientsocket : public clientsocket, private unixsocketutil {
 		int	connect(const char *filename,
 					long timeoutsec,
 					long timeoutusec,
-					unsigned int retrywait,
-					unsigned int retrycount);
+					unsigned long retrywait,
+					unsigned long retrycount);
 			// Convenience method that calls the initialize() and
 			// connect() methods defined below.
 			//
@@ -52,8 +52,8 @@ class unixclientsocket : public clientsocket, private unixsocketutil {
 		void	initialize(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
-						unsigned int retrywait,
-						unsigned int retrycount);
+						unsigned long retrywait,
+						unsigned long retrycount);
 			// Initializes the class to use "filename",
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount" when connect() is called.

@@ -76,7 +76,7 @@ bool xmlsax::parseFile(const char *filename) {
 		// cause getCharacter() to read from the file.
 		if (mm.attach(fl.getFileDescriptor(),0,fl.getSize(),
 						PROT_READ,MAP_PRIVATE)) {
-			string=static_cast<const char *>(mm.getData());
+			string=static_cast<char *>(mm.getData());
 			ptr=string;
 		}
 		retval=parse();
@@ -621,7 +621,7 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 	} else {
 		// handle numeric general entities
 		if ((*buffer)[1]=='#') {
-			long	number=atoi((*buffer)+2);
+			long	number=charstring::toLong((*buffer)+2);
 			if (number>127) {
 				number=127;
 			}

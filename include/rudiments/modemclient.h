@@ -30,8 +30,8 @@ class modemclient : public client, private modemutil {
 					const char *connectscript,
 					const char *phonenumber,
 					const char *disconnectscript,
-					unsigned int retrywait,
-					unsigned int retrycount);
+					unsigned long retrywait,
+					unsigned long retrycount);
 			// Initializes the class to use "device",
 			// "baud, "connectscript", "phonenumber",
 			// "disconnectscript", "retrywait" and

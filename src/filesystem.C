@@ -71,7 +71,7 @@ bool filesystem::getCurrentProperties() {
 #ifdef HAVE_STATVFS
 	#define STATFS(path,out,member) \
 		struct statvfs st; \
-		if (statvfs(path,&st)==-1) { \
+		if (::statvfs(path,&st)==-1) { \
 			return false; \
 		} \
 		*out=st.member; \
@@ -87,7 +87,7 @@ bool filesystem::getCurrentProperties() {
 #else
 	#define STATFS(path,out,member) \
 		struct statfs st; \
-		if (statfs(path,&st)==-1) { \
+		if (::statfs(path,&st)==-1) { \
 			return false; \
 		} \
 		*out=st.member; \
@@ -858,7 +858,7 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 	#else
 		#if defined(HAVE_LINUX_STATFS)
 			struct statfs st;
-			if (statfs(path,&st)==-1) {
+			if (::statfs(path,&st)==-1) {
 				return false;
 			}
 			*name=filesystem::getFsTypeName(st.f_type);

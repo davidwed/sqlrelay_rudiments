@@ -3,6 +3,8 @@
 
 #include <rudiments/memorymap.h>
 
+#ifdef HAVE_MMAP
+
 // for getpagesize()...
 #include <unistd.h>
 
@@ -194,4 +196,6 @@ bool memorymap::unlockAll() {
 
 #ifdef RUDIMENTS_NAMESPACE
 }
+#endif
+
 #endif

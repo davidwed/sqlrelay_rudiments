@@ -190,8 +190,8 @@ void rpcentry::print() const {
 	}
 }
 
-#endif
-
 #ifdef RUDIMENTS_NAMESPACE
 }
+#endif
+
 #endif

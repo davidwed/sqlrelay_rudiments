@@ -1,6 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
+#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/modemclient.h>
 #include <rudiments/chat.h>
 
@@ -75,8 +76,8 @@ void modemclient::initialize(const char *devicename, const char *baud,
 				const char *connectscript,
 				const char *phonenumber,
 				const char *disconnectscript,
-				unsigned int retrywait,
-				unsigned int retrycount) {
+				unsigned long retrywait,
+				unsigned long retrycount) {
 	modemutil::initialize(devicename,baud);
 	this->connectscript=connectscript;
 	this->phonenumber=phonenumber;
@@ -90,7 +91,7 @@ int modemclient::connect() {
 	namevaluepairs	phnvp;
 	phnvp.setData("phonenumber",const_cast<char *>(phonenumber));
 
-	unsigned int	whichtry=0;
+	unsigned long	whichtry=0;
 	for (;;) {
 
 		delete[] connecterror;

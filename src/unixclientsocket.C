@@ -28,8 +28,8 @@ unixclientsocket::~unixclientsocket() {}
 int unixclientsocket::connect(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
-						unsigned int retrywait,
-						unsigned int retrycount) {
+						unsigned long retrywait,
+						unsigned long retrycount) {
 	initialize(filename,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
@@ -37,8 +37,8 @@ int unixclientsocket::connect(const char *filename,
 void unixclientsocket::initialize(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
-						unsigned int retrywait,
-						unsigned int retrycount) {
+						unsigned long retrywait,
+						unsigned long retrycount) {
 	unixsocketutil::initialize(filename);
 	this->timeoutsec=timeoutsec;
 	this->timeoutusec=timeoutusec;
@@ -61,10 +61,10 @@ void unixclientsocket::initialize(namevaluepairs *cd) {
 		cd->getData("retrycount",&retrycount);
 
 		initialize(filename?filename:"",
-				atoi(timeoutsec?timeoutsec:"0"),
-				atoi(timeoutusec?timeoutusec:"0"),
-				atoi(retrywait?retrywait:"0"),
-				atoi(retrycount?retrycount:"0"));
+			charstring::toLong(timeoutsec?timeoutsec:"0"),
+			charstring::toLong(timeoutusec?timeoutusec:"0"),
+			charstring::toUnsignedLong(retrywait?retrywait:"0"),
+			charstring::toUnsignedLong(retrycount?retrycount:"0"));
 	}
 }
 
@@ -81,7 +81,7 @@ int unixclientsocket::connect() {
 	}
 
 	// try to connect, over and over for the specified number of times
-	for (unsigned int counter=0;
+	for (unsigned long counter=0;
 			counter<retrycount || !retrycount; counter++) {
 
 		// wait the specified amount of time between reconnect tries

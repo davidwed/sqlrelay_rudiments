@@ -6,7 +6,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
-#include <rudiments/intervaltimer.h>
+#include <rudiments/sleep.h>
 
 #include <stdlib.h>
 
@@ -58,9 +58,10 @@ bool daemonprocess::createPidFile(const char *filename, mode_t permissions)
 	return retval;
 }
 
-int daemonprocess::checkForPidFile(const char *filename) const {
+long daemonprocess::checkForPidFile(const char *filename) const {
 	char	*pidstring=file::getContents(filename);
-	int	retval=(pidstring && pidstring[0])?atoi(pidstring):-1;
+	long	retval=(pidstring && pidstring[0])?
+				charstring::toLong(pidstring):-1;
 	delete[] pidstring;
 	return retval;
 }
@@ -71,7 +72,7 @@ void daemonprocess::detach() const {
 	if (fork()) {
 		// cygwin needs a sleep or both processes will exit
 		#ifdef __CYGWIN__
-		intervaltimer::sleep(1);
+		sleep::macrosleep(1);
 		#endif
 		_exit(0);
 	}

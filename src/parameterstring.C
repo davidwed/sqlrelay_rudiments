@@ -17,7 +17,7 @@ parameterstring::parameterstring() {
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
-	for (unsigned int i=0; i<nvp.getList()->getLength(); i++) {
+	for (unsigned long i=0; i<nvp.getList()->getLength(); i++) {
 		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getKey();
 		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getData();
 	}

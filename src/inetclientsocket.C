@@ -5,9 +5,7 @@
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
-#ifdef HAVE_GETADDRINFO
-	#include <rudiments/charstring.h>
-#endif
+#include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/sleep.h>
 
@@ -39,8 +37,8 @@ int inetclientsocket::connect(const char *host,
 						unsigned short port,
 						long timeoutsec,
 						long timeoutusec,
-						unsigned int retrywait,
-						unsigned int retrycount) {
+						unsigned long retrywait,
+						unsigned long retrycount) {
 	initialize(host,port,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
@@ -49,8 +47,8 @@ void inetclientsocket::initialize(const char *host,
 						unsigned short port,
 						long timeoutsec,
 						long timeoutusec,
-						unsigned int retrywait,
-						unsigned int retrycount) {
+						unsigned long retrywait,
+						unsigned long retrycount) {
 	inetsocketutil::initialize(host,port);
 	this->timeoutsec=timeoutsec;
 	this->timeoutusec=timeoutusec;
@@ -76,11 +74,11 @@ void inetclientsocket::initialize(namevaluepairs *cd) {
 		cd->getData("retrycount",&retrycount);
 	
 		initialize(host?host:"",
-				atoi(port?port:"0"),
-				atoi(timeoutsec?timeoutsec:"-1"),
-				atoi(timeoutusec?timeoutusec:"-1"),
-				atoi(retrywait?retrywait:"0"),
-				atoi(retrycount?retrycount:"0"));
+			charstring::toLong(port?port:"0"),
+			charstring::toLong(timeoutsec?timeoutsec:"-1"),
+			charstring::toLong(timeoutusec?timeoutusec:"-1"),
+			charstring::toUnsignedLong(retrywait?retrywait:"0"),
+			charstring::toUnsignedLong(retrycount?retrycount:"0"));
 	}
 }
 
@@ -141,7 +139,7 @@ int inetclientsocket::connect() {
 	// if create failed, show this error
 
 	// try to connect, over and over for the specified number of times
-	for (unsigned int counter=0;
+	for (unsigned long counter=0;
 			counter<retrycount || !retrycount; counter++) {
 
 		// wait the specified amount of time between reconnect tries
@@ -164,8 +162,8 @@ int inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
-				if (connect(
-					static_cast<const struct sockaddr *>(
+				if (clientsocket::connect(
+					reinterpret_cast<struct sockaddr *>(
 									&sin),
 					sizeof(sin),
 					timeoutsec,
@@ -189,7 +187,7 @@ int inetclientsocket::connect() {
 
 				// attempt to connect to the socket
 				if (clientsocket::connect(
-					static_cast<const struct sockaddr *>(
+					reinterpret_cast<struct sockaddr *>(
 								ainfo->ai_addr),
 						ainfo->ai_addrlen,
 						timeoutsec,

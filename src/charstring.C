@@ -7,7 +7,16 @@
 #include <rudiments/character.h>
 
 #include <stdio.h>
+
+// for strtof and strtold
+#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
 #include <stdlib.h>
+
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
@@ -738,7 +747,7 @@ float charstring::toFloat(const char *string) {
 	#ifdef HAVE_STRTOF
 	return (string)?strtof(string,NULL):0.0;
 	#else
-	return (string)?(float)strtod(string,NULL):0.0;
+	return (string)?static_cast<float>(strtod(string,NULL)):0.0;
 	#endif
 }
 
@@ -746,7 +755,7 @@ float charstring::toFloat(const char *string, char **endptr) {
 	#ifdef HAVE_STRTOF
 	return (string)?strtof(string,endptr):0.0;
 	#else
-	return (string)?(float)strtod(string,endptr):0.0;
+	return (string)?static_cast<float>(strtod(string,endptr)):0.0;
 	#endif
 }
 
@@ -762,7 +771,7 @@ long double charstring::toLongDouble(const char *string) {
 	#ifdef HAVE_STRTOLD
 	return (string)?strtold(string,NULL):0.0;
 	#else
-	return (string)?(long double)strtod(string,NULL):0.0;
+	return (string)?static_cast<long double>(strtod(string,NULL)):0.0;
 	#endif
 }
 
@@ -770,7 +779,7 @@ long double charstring::toLongDouble(const char *string, char **endptr) {
 	#ifdef HAVE_STRTOLD
 	return (string)?strtold(string,endptr):0.0;
 	#else
-	return (string)?(long double)strtod(string,endptr):0.0;
+	return (string)?static_cast<long double>(strtod(string,endptr)):0.0;
 	#endif
 }
 

@@ -3,6 +3,10 @@
 
 #include <rudiments/process.h>
 
+#ifndef __USE_XOPEN_EXTENDED
+	// for getsid()
+	#define __USE_XOPEN_EXTENDED
+#endif
 #include <unistd.h>
 
 #ifdef RUDIMENTS_NAMESPACE

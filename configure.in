@@ -716,10 +716,6 @@ AC_MSG_CHECKING(posix_fallocate)
 AC_TRY_LINK([#include <fcntl.h>],
 posix_fallocate(0,0,0);,AC_DEFINE(HAVE_POSIX_FALLOCATE,1,Some systems have posix_fallocate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(isblank)
-AC_TRY_LINK([#include <ctype.h>],
-isblank(' ');,AC_DEFINE(HAVE_ISBLANK,1,Some systems have isblank) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 FW_CHECK_CRYPT_R
 
 AC_MSG_CHECKING(mmap functions take caddr_t argument)
@@ -773,12 +769,24 @@ AC_TRY_LINK([#include <stdlib.h>
 madvise(NULL,0,MADV_NORMAL);,AC_DEFINE(HAVE_MADVISE,1,Some systems have madvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(strtof)
-AC_TRY_LINK([#include <stdlib.h>
+AC_TRY_LINK([#ifndef __USE_GNU
+#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+#define __USE_ISOC9X
+#endif
+#include <stdlib.h>
 #include <string.h>],
 strtof(NULL,NULL);,AC_DEFINE(HAVE_STRTOF,1,Some systems have strtof) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(strtold)
-AC_TRY_LINK([#include <stdlib.h>
+AC_TRY_LINK([#ifndef __USE_GNU
+#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+#define __USE_ISOC9X
+#endif
+#include <stdlib.h>
 #include <string.h>],
 strtold(NULL,NULL);,AC_DEFINE(HAVE_STRTOLD,1,Some systems have strtold) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 

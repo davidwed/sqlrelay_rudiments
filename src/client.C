@@ -36,7 +36,7 @@ client::~client() {
 
 void client::clientInit(char *connecterror,
 			long timeoutsec, long timeoutusec,
-			unsigned int retrywait, unsigned int retrycount) {
+			unsigned long retrywait, unsigned long retrycount) {
 	this->connecterror=connecterror;
 	this->timeoutsec=timeoutsec;
 	this->timeoutusec=timeoutusec;

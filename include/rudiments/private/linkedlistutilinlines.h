@@ -15,8 +15,7 @@ namespace rudiments {
 
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
-int linkedlistutil<datatype>::
-			compare(datatype data1, datatype data2) const {
+int linkedlistutil<datatype>::compare(datatype data1, datatype data2) const {
 	if (data1<data2) {
 		return -1;
 	} else if (data1==data2) {

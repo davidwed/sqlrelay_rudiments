@@ -202,9 +202,6 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Some systems have isblank */
-#undef HAVE_ISBLANK
-
 /* Linux style statfs */
 #undef HAVE_LINUX_STATFS
 

@@ -22,7 +22,7 @@ class daemonprocess {
 			daemonprocess();
 		virtual	~daemonprocess();
 
-		int	checkForPidFile(const char *filename) const;
+		long	checkForPidFile(const char *filename) const;
 			// Checks for filename "filename" and reads the
 			// process id out of it, if it exists.  Returns
 			// the process id on success or -1 on failure.

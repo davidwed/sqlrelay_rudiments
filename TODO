@@ -1,4 +1,4 @@
-netbsd-2.0 CMSG_SIZE bug
+need to add -ldl on some platforms (where it's not picked up in ssl libs)
 
 --------------------------------------------------------------------------------
 
