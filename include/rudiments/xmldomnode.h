@@ -255,11 +255,18 @@ class xmldomnode {
 		int		getAttributeCount() const;
 				// Returns the number of attributes.
 		xmldomnode	*getAttribute(const char *name) const;
-				// Returns the attribute named "name".
+				// Returns the attribute named "name"
 				// or the nullnode if not found.
 		xmldomnode	*getAttribute(int position) const;
 				// Returns the attribute node at index
 				// "position" or the nullnode if not found.
+		char		*getAttributeValue(const char *name) const;
+				// Returns the value of the attribute named
+				// "name" or the nullnode if not found.
+		char		*getAttributeValue(int position) const;
+				// Returns the value of the attribute node at
+				// index "position" or the nullnode if not
+				// found.
 		namevaluepairs	*getAttributes() const;
 				// Returns the attribute names and values in
 				// a namevaluepairs dictionary.  The instance

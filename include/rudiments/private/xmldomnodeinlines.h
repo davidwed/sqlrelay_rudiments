@@ -73,6 +73,14 @@ RUDIMENTS_INLINE xmldomnode *xmldomnode::getAttribute(const char *name) const {
 	return getNode(firstattribute,0,name,attributecount);
 }
 
+RUDIMENTS_INLINE char *xmldomnode::getAttributeValue(int position) const {
+	return getAttribute(position)->getValue();
+}
+
+RUDIMENTS_INLINE char *xmldomnode::getAttributeValue(const char *name) const {
+	return getAttribute(name)->getValue();
+}
+
 RUDIMENTS_INLINE void xmldomnode::setType(xmldomnodetype type) {
 	this->type=type;
 }
