@@ -12,6 +12,8 @@
 	#include <strings.h>
 #endif
 
+#include <stdio.h>
+
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	this->nullnode=nullnode;
 	type=(xmldomnodetype)NULL;
@@ -79,6 +81,19 @@ xmldomnode *xmldomnode::createNullNode() {
 	nn->isnullnode=1;
 	nn->nullnode=nn;
 	return nn;
+}
+
+xmldomnode *xmldomnode::getNextTagSibling() {
+	xmldomnode	*node=this;
+	while (!(node=node->getNextSibling())->isNullNode() &&
+				!node->getType()==TAG_XMLDOMNODETYPE);
+	return node;
+}
+
+xmldomnode *xmldomnode::getFirstTagChild() {
+	xmldomnode	*node=getChild(0);
+	return (node->getType()==TAG_XMLDOMNODETYPE)?
+					node:node->getNextTagSibling();
 }
 
 xmldomnode *xmldomnode::getChild(const char *name,

@@ -7,6 +7,7 @@
 	#include <rudiments/private/dtdinlines.h>
 #endif
 
+#include <stdio.h>
 #include <string.h>
 #ifdef HAVE_STRINGS
 	#include <strings.h>
@@ -18,178 +19,199 @@ int dtd::parseDtd() {
 	xmldtd->createRootNode();
 	xmldtd->getRootNode()->cascadeOnDelete();
 
-	xmldomnode	*root=xmld->getRootNode();
-	int		tagcount=root->getChildCount();
-
 	// step through tags
-	xmldomnode	*currentnode=root->getChild(0);
-	while (currentnode!=root->getNullNode()) {
+	xmldomnode	*root=xmld->getRootNode();
+	xmldomnode	*currentnode=root->getFirstTagChild();
+	while (!currentnode->isNullNode()) {
 
-		if (currentnode->getType()==TAG_XMLDOMNODETYPE) {
+		if (!strcmp(currentnode->getName(),"!ELEMENT")) {
 
-			if (!strcmp(currentnode->getName(),"!ENTITY")) {
+			// for each element, create a new element node
+			if (!newElement(currentnode)) {
+				return 0;
+			}
 
-				// for each entity, create a new entity node
-				if (!newEntity(currentnode)) {
-					return 0;
-				}
+		} else if (!strcmp(currentnode->getName(),"!ATTLIST")) {
 
-			} else if (!strcmp(currentnode->getName(),
-							"!ATTRIBUTE")) {
-
-				// for each attribute, create a new
-				// attribute node
-				if (!newAttribute(currentnode)) {
-					return 0;
-				}
+			// for each attribute, create a new
+			// attribute node
+			if (!newAttribute(currentnode)) {
+				return 0;
 			}
 		}
 
 		// move on to the next tag
-		currentnode=currentnode->getNextSibling();
+		currentnode=currentnode->getNextTagSibling();
 	}
 
 	// success
 	return 1;
 }
 
-int dtd::newEntity(xmldomnode *node) {
+int dtd::newElement(xmldomnode *node) {
+
+	// sanity check
+	if (node->getAttributeCount()<2) {
+		return 0;
+	}
 
 	// add the following to the tree:
 	// ...
-	// 	<entity name="entityname">
+	// 	<element name="elementname">
+	// 		<child name="elementname" count="*">
+	// 			...
+	// 		</child>
 	// 		...
-	// 		<attribute name="atttributename" count="*">
+	// 		<attribute name="attributename" default="...">
+	// 			<value data="value"/>
 	// 			...
 	// 		</attribute>
 	// 		...
-	// 	</entity>
+	// 	</element>
 	// ...
 
-	xmldomnode	*entity=new xmldomnode(
-					xmldtd->getRootNode()->getNullNode(),
-					TAG_XMLDOMNODETYPE,
-					"entity",
-					NULL);
-	if (!xmldtd->getRootNode()->appendChild(entity)) {
-		delete entity;
+	xmldomnode	*root=xmldtd->getRootNode();
+	root->appendText("\n");
+	xmldomnode	*element=new xmldomnode(root->getNullNode(),
+					TAG_XMLDOMNODETYPE,"element",NULL);
+	element->cascadeOnDelete();
+	if (!root->appendChild(element)) {
+		delete element;
 		return 0;
 	}
-	if (!entity->appendAttribute("name",node->getAttribute(0)->getName())) {
-		return 0;
-	}
-	if (!xmldtd->getRootNode()->appendText("\n")) {
+	if (!element->appendAttribute("name",
+					node->getAttribute(0)->getName())) {
 		return 0;
 	}
 
-	return parseList(node->getAttribute(1)->getName(),entity,
-				1,1,"attribute");
+	return parseList(node->getAttribute(1)->getName(),element,
+							1,1,',',"child");
 }
 
-int dtd::parseList(const char *attributelist, xmldomnode *entity,
+int dtd::parseList(const char *list, xmldomnode *node,
 					int checkcount, int indent,
+					char delimiter,
 					const char *name) {
 
-	if (!attributelist) {
+	if (!list) {
 
-		// return failure for a NULL attribute list
+		// return failure for a NULL list
 		return 0;
 
-	} else if (attributelist[0]!='(') {
 
-		char	*ptr1=(char *)attributelist+1;
+	} else if (!strcmp(list,"EMPTY")) {
+
+		// return success for "EMPTY"
+		return 1;
+
+	} else {
+
+		char	*ptr1=(char *)list;
 		char	*ptr2;
 		int	length;
 		char	*word;
 		char	count[2];
+		count[1]=(char)NULL;
 		for (;;) {
 	
-			// look for a | or ) as a delimiter, if we find neither
-			// then return failure
-			if (!(ptr2=strchr(ptr1,'|')) &&
-				!(ptr2=strchr(ptr1,')'))) {
-				return 0;
+			// look for the specified delimiter
+			ptr2=strchr(ptr1,delimiter);
+
+			// if we don't find the delimiter, go
+			// to the end of the string
+			if (!ptr2) {
+				ptr2=(char *)(list+strlen(list));
 			}
 	
 			// parse out the word, including the * or +
 			length=ptr2-ptr1;
 			word=new char[length+1];
+			word[length]=(char)NULL;
 			strncpy(word,ptr1,length);
 
 			// evaluate the trailing * or + and truncate it
 			if (checkcount) {
 				count[0]=word[strlen(word)-1];
 				if (count[0]!='*' && count[0]!='+') {
-					count[0]=(char)NULL;
+					count[0]='1';
 				} else {
 					word[strlen(word)-1]=(char)NULL;
 				}
 			}
 
-			// create the new attribute tag
+			// create the new tag
+			node->appendText("\n");
 			for (int i=0; i<indent; i++) {
-				entity->appendText("	");
+				node->appendText("	");
 			}
-			xmldomnode	*attribute=new xmldomnode(
+			xmldomnode	*newtag=new xmldomnode(
 					xmldtd->getRootNode()->getNullNode(),
 					TAG_XMLDOMNODETYPE,name,NULL);
-			if (!entity->appendChild(attribute)) {
-				delete attribute;
+			newtag->cascadeOnDelete();
+			if (!node->appendChild(newtag)) {
+				delete newtag;
 				delete[] word;
 				return 0;
 			}
-			if (!attribute->appendAttribute("name",word) ||
+			if (!newtag->appendAttribute("name",word) ||
 				(checkcount &&
-				!attribute->appendAttribute("count",count))) {
+				!newtag->appendAttribute("count",count))) {
 				return 0;
 			}
-			entity->appendText("\n");
 	
 			// clean up
 			delete[] word;
 	
-			// move on to the next word
-			ptr1=ptr2+1;
-	
 			// break if we're at the end of the string
-			if (!ptr1) {
+			if (!*ptr2) {
 				break;
 			}
+	
+			// move on to the next word
+			ptr1=ptr2+1;
 		}
 
 		// return success
 		return 1;
-
-	} else if (!strcmp(attributelist,"EMPTY")) {
-
-		// return success for "EMPTY"
-		return 1;
-
 	}
-
-	// return failure for anything else
-	return 0;
 }
 
 int dtd::newAttribute(xmldomnode *node) {
 
-	// get the appropriate entity
-	xmldomnode	*entity=xmldtd->getRootNode()->
-		getChild("entity","name",node->getAttribute(0)->getName());
-	if (entity->isNullNode()) {
+	// sanity check
+	if (node->getAttributeCount()<4) {
 		return 0;
 	}
 
-	// get the appropriate attribute
-	xmldomnode	*attribute=entity->getChild(0)->
-		getChild("attribute","name",node->getAttribute(1)->getName());
-	if (attribute->isNullNode()) {
+	// get the appropriate element
+	xmldomnode	*element=xmldtd->getRootNode()->
+		getChild("element","name",node->getAttribute(0)->getName());
+	if (element->isNullNode()) {
 		return 0;
 	}
 
-	// insert the list of valid values and the default
-	return (parseList(node->getAttribute(2)->getName(),
-				attribute,0,2,"value") &&
-		attribute->appendAttribute("default",
-				node->getAttribute(3)->getName()));
+	// create a new attribute element
+	element->appendText("\n	");
+	xmldomnode	*attribute=new xmldomnode(
+					xmldtd->getRootNode()->getNullNode(),
+					TAG_XMLDOMNODETYPE,"attribute",NULL);
+	attribute->cascadeOnDelete();
+	if (!element->appendChild(attribute)) {
+		return 0;
+	}
+
+	// insert the name and default value attributes
+	if (!attribute->appendAttribute("name",
+				node->getAttribute(1)->getName()) ||
+		!attribute->appendAttribute("default",
+				node->getAttribute(3)->getName())) {
+		return 0;
+	}
+
+	// insert the list of valid values or none if CDATA
+	if (strcmp(node->getAttribute(2)->getName(),"CDATA")) {
+		return parseList(node->getAttribute(2)->getName(),
+					attribute,0,2,'|',"value");
+	}
+	return 1;
 }

@@ -21,6 +21,12 @@ class dtd {
 		int	parseString(const char *string);
 			// Parse string "string" and generate a DTD tree.
 
+		stringbuffer	*xml() const;
+				// Allocates a stringbuffer, writes a textual
+				// representation of the tree and returns the
+				// stringbuffer; The calling program must
+				// deallocate the stringbuffer.
+
 	#include <rudiments/private/dtd.h>
 };
 

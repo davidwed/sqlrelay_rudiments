@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log permissions regexp sem2 shm2 text datetime mem random sem1 shm1 signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err cmdline log permissions regexp sem2 shm2 text datetime dtd mem random sem1 shm1 signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log permissions regexp sem1 sem2 shm1 shm2 text datetime mem random signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log permissions regexp sem1 sem2 shm1 shm2 text datetime dtd mem random signal handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 
 rebuild: clean all
@@ -70,6 +70,9 @@ text: text.C text.lo
 
 datetime: datetime.C datetime.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ datetime.lo -L../src -lrudiments_p
+
+dtd: dtd.C dtd.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ dtd.lo -L../src -lrudiments_p
 
 random: random.C random.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ random.lo -L../src -lrudiments_p

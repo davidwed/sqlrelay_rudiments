@@ -18,3 +18,7 @@ inline int dtd::parseFile(const char *filename) {
 inline int dtd::parseString(const char *string) {
 	return (xmld->parseString(string) && parseDtd());
 }
+
+inline stringbuffer *dtd::xml() const {
+	return xmldtd->getRootNode()->xml();
+}

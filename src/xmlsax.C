@@ -7,7 +7,6 @@
 	#include <rudiments/private/xmlsaxinlines.h>
 #endif
 
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -362,12 +361,14 @@ char xmlsax::parseAttribute(char current, char standalone) {
 	stringbuffer	*data=new stringbuffer();
 
 	if (standalone!='!' ||
-			(standalone=='!' && ch!='"' && ch!='\'' && ch!='[')) {
+			(standalone=='!' &&
+				ch!='"' && ch!='\'' && ch!='[' && ch!='(')) {
 
 		// get the attribute name
 		for (;;) {
 
-			if (ch==' ' || ch=='	' || ch=='\n' || ch=='\r') {
+			if (ch==' ' || ch=='	' || ch=='\n' || ch=='\r' ||
+				(standalone && ch=='>')) {
 
 				// if we got whitespace, skip past it
 				if (!(ch=skipWhitespace(ch))) {
@@ -400,7 +401,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 				// if we got an = then we've gotten the entire
 				// name, terminate it and break out of the loop
 				break;
-	
+
 			} else {
 	
 				// otherwise add the character
@@ -442,12 +443,14 @@ char xmlsax::parseAttribute(char current, char standalone) {
 	int	nest=0;
 	for (;;) {
 
-		if (standalone=='!' && delimiter=='[' && ch==']') {
+		if (standalone=='!' &&
+			((delimiter=='[' && ch==']') ||
+			(delimiter=='(' && ch==')'))) {
 
 			// handle nesting in internal subsets
 			if (nest) {
 				nest--;
-				data->append(']');
+				data->append(ch);
 			} else {
 				break;
 			}
@@ -457,6 +460,9 @@ char xmlsax::parseAttribute(char current, char standalone) {
 			// handle nesting in internal subsets
 			if (standalone=='!' && delimiter=='[') {
 				data->append('[');
+				nest++;
+			} else if (standalone=='!' && delimiter=='(') {
+				data->append('(');
 				nest++;
 			} else {
 				// if we got a matching " or ' then we've

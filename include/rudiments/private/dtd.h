@@ -6,9 +6,9 @@
 		xmldom	*xmldtd;
 
 		int	parseDtd();
-		int	newEntity(xmldomnode *node);
+		int	newElement(xmldomnode *node);
 		int	parseList(const char *attributelist,
-					xmldomnode *entity,
+					xmldomnode *element,
 					int checkcount, int indent,
-					const char *name);
+					char delimiter, const char *name);
 		int	newAttribute(xmldomnode *node);

@@ -1,0 +1,43 @@
+<!ELEMENT globalconfig (store,ids,clerks,operation,devices)>
+
+<!ELEMENT store EMPTY>
+	<!ATTLIST store merchantname CDATA "">
+	<!ATTLIST store address CDATA "">
+	<!ATTLIST store city CDATA "">
+	<!ATTLIST store state CDATA "">
+	<!ATTLIST store zip CDATA "">
+	<!ATTLIST store phone CDATA "">
+
+<!ELEMENT ids EMPTY>
+	<!ATTLIST ids merchant CDATA "">
+	<!ATTLIST ids processormerchant CDATA "">
+	<!ATTLIST ids store CDATA "">
+	<!ATTLIST ids lane CDATA "">
+
+<!ELEMENT clerks (clerk+)>
+<!ELEMENT clerk EMPTY>
+	<!ATTLIST clerk id CDATA "">
+	<!ATTLIST clerk pin CDATA "">
+
+<!ELEMENT operation EMPTY>
+	<!ATTLIST operation mode (demo|production) "production">
+
+<!ELEMENT devices (checkreader,msr,receiptprinter,voidprinter)>
+
+<!ELEMENT checkreader EMPTY>
+	<!ATTLIST checkreader type CDATA (demo|magtekencehck2500|magtekmicrimage|orion)>
+	<!ATTLIST checkreader imagerdevice CDATA "/dev/imager">
+	<!ATTLIST checkreader micrdevice CDATA "/dev/micr">
+
+<!ELEMENT msr EMPTY>
+	<!ATTLIST msr type CDATA (demo|amc31b)>
+	<!ATTLIST msr device CDATA "/dev/msr">
+
+<!ELEMENT receiptprinter EMPTY>
+	<!ATTLIST receiptprinter type CDATA (demo|apsepm205serial)>
+	<!ATTLIST receiptprinter device CDATA "/dev/receiptprinter">
+
+<!ELEMENT voidprinter EMPTY>
+	<!ATTLIST voidprinter type CDATA (demo)>
+	<!ATTLIST voidprinter mode (enable|disable) "enable">
+	<!ATTLIST voidprinter device CDATA "/dev/voidprinter">

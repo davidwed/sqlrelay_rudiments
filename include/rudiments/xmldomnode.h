@@ -185,6 +185,10 @@ class xmldomnode {
 		xmldomnode	*getNextSibling() const;
 				// Returns a pointer to the next sibling node
 				// or the nullnode if none exists.
+		xmldomnode	*getNextTagSibling();
+				// Returns a pointer to the next sibling node
+				// whose type is TAG_XMLDOMNODE.  If no match
+				// is found, nullnode is returned.
 
 		int		getChildCount() const;
 				// Returns the number of immediate child nodes.
@@ -205,6 +209,10 @@ class xmldomnode {
 				// checked, and the first child node with any
 				// name (with matching attribute name/value)
 				// will be returned.  If no match is found,
+				// nullnode is returned.
+		xmldomnode	*getFirstTagChild();
+				// Returns the first child node whose type is
+				// TAG_XMLDOMNODE.  If no match is found,
 				// nullnode is returned.
 
 		int		getAttributeCount() const;
