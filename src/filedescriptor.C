@@ -4,6 +4,7 @@
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
@@ -21,6 +22,9 @@
 #include <sys/uio.h>
 #include <limits.h>
 #include <arpa/inet.h>
+
+// for FD_SET (macro that uses memset) on solaris
+#include <string.h>
 
 //#define DEBUG_PASSFD 1
 
@@ -767,6 +771,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			#endif
 
 			rawbuffer::copy(data,readbufferhead,bytestocopy);
+			data=data+bytestocopy;
 			bytesread=bytesread+bytestocopy;
 			readbufferhead=readbufferhead+bytestocopy;
 			bytesunread=bytesunread-bytestocopy;
@@ -929,9 +934,11 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			actualread=::read(fd,ptr,sizetoread);
 			#ifdef DEBUG_READ
 			for (int i=0; i<actualread; i++) {
-				printf("0x%02x ",
+				character::safePrint(
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
+			printf("(%ld bytes) ",actualread);
+			fflush(stdout);
 			#endif
 		#ifdef RUDIMENTS_HAS_SSL
 		}
@@ -1019,7 +1026,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		printf("	bytesunwritten=%d\n",bytesunwritten);
 		#endif
 
-		if (bytesunwritten<writebufferspace) {
+		if (bytesunwritten<=writebufferspace) {
 
 			#ifdef DEBUG_WRITE
 			printf("buffering %d bytes\n",bytesunwritten);
@@ -1042,12 +1049,15 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					sec,usec);
 			// FIXME: if result!=writebufferspace then
 			// we got a short write, how do we handle that?
+			if (result!=writebuffersize+writebufferspace) {
+				printf("aaaaah, short write!!!!!\n");
+			}
 			if (result<0) {
 				return result;
 			}
 
 			writebufferptr=writebuffer;
-			byteswritten=byteswritten+result;
+			byteswritten=byteswritten+writebufferspace;
 			data=data+byteswritten;
 			bytesunwritten=bytesunwritten-byteswritten;
 		}

@@ -338,7 +338,7 @@ librudiments.la: $(SRCS) $(LOBJS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)
-	$(INSTALL) librudiments.la $(libdir)/librudiments.la
+	$(LTINSTALL) librudiments.la $(libdir)/librudiments.la
 	$(LIBTOOL) --mode=finish $(libdir)
 
 uninstall:

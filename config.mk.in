@@ -32,7 +32,8 @@ LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 
 # install command
-INSTALL = $(LIBTOOL) --mode=install $(top_builddir)/install-sh -c
+LTINSTALL = $(LIBTOOL) --mode=install $(top_builddir)/install-sh -c
+INSTALL = $(top_builddir)/install-sh -c
 
 # mkinstalldirs command
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
