@@ -1,3 +1,5 @@
+add xnet/socket/nsl/etc. libs to rudiments-config --libs
+
 get epoch from string doesn't work right on solaris x86
 
 test blocking/nonblocking mode switch functions

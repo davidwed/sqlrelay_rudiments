@@ -291,6 +291,9 @@
 /* iov_base is char * */
 #undef IOV_BASE_TYPE
 
+/* Solaris 2.6 has a few missing function prototypes */
+#undef NEED_XNET_PROTOTYPES
+
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 

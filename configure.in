@@ -269,15 +269,16 @@ AC_MSG_CHECKING(rand)
 AC_TRY_LINK([#include <stdlib.h>],
 rand();,AC_DEFINE(HAVE_RAND,1, Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
-AC_SUBST(SOCKETLIB)
-AC_CHECK_LIB(xnet,gethostbyname,XNETLIB=-lxnet,XNETLIB="")
-AC_SUBST(XNETLIB)
-AC_CHECK_LIB(nsl,gethostbyname,NSLLIB=-lnsl,NSLLIB="")
-AC_SUBST(NSLLIB)
+#AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
+#AC_SUBST(SOCKETLIB)
+dnl AC_CHECK_LIB(xnet,gethostbyname,XNETLIB=-lxnet,XNETLIB="")
+dnl AC_SUBST(XNETLIB)
+dnl AC_CHECK_LIB(nsl,gethostbyname,NSLLIB=-lnsl,NSLLIB="")
+FW_CHECK_XNET_PROTOTYPES
+FW_CHECK_SOCKET_LIBS
 
 OLDLIBS="$LIBS"
-LIBS="$LIBS $SOCKETLIB $XNETLIB $NSLLIB"
+LIBS="$LIBS $SOCKETLIBS"
 
 AC_LANG(C++)
 AC_MSG_CHECKING(getpwnam_r)

@@ -14,6 +14,11 @@
 
 //#define DEBUG_UNIXSOCKET 1
 
+#ifdef NEED_XNET_PROTOTYPES
+extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
+extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
+#endif
+
 unixsocket::unixsocket() : filedescriptor(), datatransport(), socket() {
 	filename=NULL;
 }

@@ -54,10 +54,7 @@ CYGWIN = @CYGWIN@
 UWIN = @UWIN@
 
 # socket library
-SOCKETLIB = @SOCKETLIB@
-
-# nsl library
-NSLLIB = @NSLLIB@
+SOCKETLIBS = @SOCKETLIBS@
 
 # pthreads library
 PTHREADLIB = @PTHREADLIB@

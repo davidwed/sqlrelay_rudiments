@@ -736,3 +736,46 @@ fi
 AC_MSG_RESULT($STATFS_STYLE)
 
 ])
+
+
+dnl checks for __xnet_*
+AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
+[
+	if ( test -n "$XNETLIB" )
+	then
+		AC_MSG_CHECKING(for sendmsg prototype)
+		AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/socket.h>],
+sendmsg(0,NULL,0);,AC_MSG_RESULT(yes), AC_DEFINE(NEED_XNET_PROTOTYPES, 1, Solaris 2.6 has a few missing function prototypes) AC_MSG_RESULT(no))
+	fi
+])
+
+dnl check to see which should be used of -lsocket, -lnsl and -lxnet
+AC_DEFUN([FW_CHECK_SOCKET_LIBS],
+[
+	AC_LANG(C)
+	SOCKETLIBS=""
+	DONE=""
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet"
+	do
+		if ( test -n "$i" )
+		then
+			AC_MSG_CHECKING($i is required for socket-related calls)
+		else
+			AC_MSG_CHECKING(no extra libraries are required for socket-related calls)
+		fi
+		FW_TRY_LINK([#include <stdlib.h>],[connect(0,NULL,0); listen(0,0); bind(0,NULL,0); accept(0,NULL,0); send(0,NULL,0,0); sendto(0,NULL,0,0,NULL,0); sendmsg(0,NULL,0); gethostbyname(NULL);],[],[$i],[],[SOCKETLIBS="$i"; DONE="yes"; AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		if ( test -n "$DONE" )
+		then
+			break
+		fi
+	done
+	AC_LANG(C++)
+
+	if ( test -z "$DONE" )
+	then
+		AC_MSG_ERROR(no combination of networking libraries was found.)
+	fi
+
+	AC_SUBST(SOCKETLIBS)
+])
