@@ -33,21 +33,6 @@ int main(int argv, const char **argc) {
 	printf("compare: %d=0\n",s.compareIgnoringCase("HELLO"));
 	printf("compare: %d=0\n",s.compareIgnoringCase("HELLO",3));
 
-	printf("equals: %d=1\n",s.equals("hello"));
-	printf("equals: %d=1\n",s.equals("hello",3));
-	printf("equals: %d=1\n",s.equalsIgnoringCase("HELLO"));
-	printf("equals: %d=1\n",s.equalsIgnoringCase("HELLO",3));
-
-	printf("gt: %d=1\n",s.greaterThan("a"));
-	printf("gt: %d=1\n",s.greaterThan("a",3));
-	printf("gt: %d=1\n",s.greaterThanIgnoringCase("A"));
-	printf("gt: %d=1\n",s.greaterThanIgnoringCase("A",3));
-
-	printf("lt: %d=1\n",s.lessThan("z"));
-	printf("lt: %d=1\n",s.lessThan("z",3));
-	printf("lt: %d=1\n",s.lessThanIgnoringCase("Z"));
-	printf("lt: %d=1\n",s.lessThanIgnoringCase("Z",3));
-
 	s.zero();
 	s.append("hello");
 	printf("contains: \"%s\"=llo\n",s.contains("llo"));

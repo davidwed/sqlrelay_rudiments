@@ -18,8 +18,18 @@
 <li><a href="#semaphoreset">Using the Semaphore Set Class</a></li>
 <li><a href="#sharedmemory">Using the Shared Memory Class</a></li>
 <li><a href="#signal">Using the Signal Classes</a></li>
+<li><a href="#stringbuffer">Using the String Buffer Class</a></li>
+<li><a href="#variablebuffer">Using the Variable Buffer Class</a></li>
 <li><a href="#string">Using the String Class</a></li>
+<li><a href="#xmlsax">Using the XML SAX Class</a></li>
 <li><a href="#xmldom">Using the XML DOM Classes</a></li>
+<li><a href="#dtd">Using the DTD Class</a></li>
+<li><a href="#passwdentry">Using the Password Entry Class</a></li>
+<li><a href="#groupentry">Using the Group Entry Class</a></li>
+<li><a href="#hostentry">Using the Host Entry Class</a></li>
+<li><a href="#protocolentry">Using the Protocol Entry Class</a></li>
+<li><a href="#list">Using the List Class</a></li>
+<li><a href="#dictionary">Using the Dictionary Class</a></li>
 </ul>
 
 <a name="commandline"></a>
@@ -71,8 +81,9 @@ illustrating the use of the datetime class.</p>
 
 main() {
 
-        <FONT color=#0000ff>// get the current date</FONT>
+        <FONT color=#0000ff>// get the current date from the system clock</FONT>
         datetime        dt;
+        dt.getSystemDateAndTime();
 
         <FONT color=#0000ff>// Write out the different parts of the date.</FONT>
         cout &lt;&lt; <FONT color=#ff00ff>&quot;Hour                  :&quot;</FONT> &lt;&lt; dt.getHour() &lt;&lt; endl;
@@ -91,6 +102,32 @@ main() {
         cout &lt;&lt; <FONT color=#ff00ff>&quot;Seconds since 1970    :&quot;</FONT> &lt;&lt; dt.getEpoch() &lt;&lt; endl;
 }
 </PRE>
+
+<p>The datetime class allows you to query and set the system clock. If your
+platform has a working real-time-clock (/dev/rtc), then you can query or set
+the hardware clock as well.  Note that your program must run as root in order
+to set the system or hardware clock.  Since it is common for the system clock
+to be wet to the local time zone and the hardware clock to be set to GMT,
+methods are provided for converting between time zones.</p>
+
+<blockquote>
+...
+</blockquote>
+
+<p>The datetime class also provides methods for converting between several
+common ways of representing time.  Such as a formatted string, the number of
+seconds since 1970 and "struct tm".</p>
+
+<blockquote>
+...
+</blockquote>
+
+<p>Finally, the datetime class provides methods for getting a list of valid
+time zone abbreviations and offsets.</p>
+
+<blockquote>
+...
+</blockquote>
 
 <a name="logger"></a>
 <span class="heading">Using the Logger Class</span><br><br>
@@ -558,6 +595,16 @@ main() {
 
 <p>Note that you'll have to kill that program with a -9.</p>
 
+<a name="stringbuffer"></a>
+<span class="heading">Using the String Buffer Class</span><br><br>
+
+<p>...</p>
+
+<a name="variablebuffer"></a>
+<span class="heading">Using the Variable Buffer Class</span><br><br>
+
+<p>...</p>
+
 <a name="string"></a>
 <span class="heading">Using the String Class</span><br><br>
 
@@ -616,6 +663,10 @@ main() {
 }
 </PRE>
 
+<a name="xmlsax"></a>
+<span class="heading">Using the XML SAX Class</span><br><br>
+
+<p>...</p>
 
 <a name="xmldom"></a>
 <span class="heading">Using the XML DOM Class</span><br><br>
@@ -754,6 +805,42 @@ Emails:
         work: mused@workemail.com
 </PRE>
 </blockquote>
+
+<a name="dtd"></a>
+<span class="heading">Using the DTD Class</span><br><br>
+
+<p>...</p>
+
+<a name="passwdentry"></a>
+<span class="heading">Using the Password Entry Class</span><br><br>
+
+<p>...</p>
+
+<a name="groupentry"></a>
+<span class="heading">Using the Group Entry Class</span><br><br>
+
+<p>...</p>
+
+<a name="hostentry"></a>
+<span class="heading">Using the Host Entry Class</span><br><br>
+
+<p>...</p>
+
+<a name="protocolentry"></a>
+<span class="heading">Using the Protocol Entry Class</span><br><br>
+
+<p>...</p>
+
+<a name="list"></a>
+<span class="heading">Using the List Class</span><br><br>
+
+<p>...</p>
+
+<a name="dictionary"></a>
+<span class="heading">Using the Dictionary Class</span><br><br>
+
+<p>...</p>
+
 
 </body>
 </html>

@@ -56,7 +56,7 @@ class datetime {
 			// the string in which must be deleted by the calling
 			// program.
 		static time_t	getEpoch(const char *datestring);
-			// parses "mm/dd/yyyy hh:mm:ss" and returns the
+			// parses "mm/dd/yyyy hh:mm:ss TZN" and returns the
 			// number of seconds since 1970.
 		static time_t	getEpoch(const tm *timestruct);
 			// converts "timestruct" to the number of seconds

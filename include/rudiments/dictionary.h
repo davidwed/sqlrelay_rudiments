@@ -88,7 +88,9 @@ class dictionary {
 #include <rudiments/private/dictionaryinlines.h>
 
 
-// string...
+
+// A set of classes for storing dictionaries who's keys are strings are
+// provided here for convenience.
 template <class datatype>
 class stringdictionarynode :
 		public dictionarynode< char *,datatype > {};
@@ -106,7 +108,10 @@ class stringdictionary : public dictionary< char *, datatype,
 				stringdictionarylistnode<datatype>,
 				stringdictionarylist<datatype> > {};
 
-// numeric...
+
+
+// A set of classes for storing dictionaries who's keys are long integers are
+// provided here for convenience.
 template <class datatype>
 class numericdictionarynode :
 		public dictionarynode< long, datatype > {};
@@ -126,7 +131,8 @@ class numericdictionary : public dictionary< long, datatype,
 
 
 
-// name/value pairs...
+// A set of classes for storing dictionaries who's keys and values are both
+// strings are provided here for convenience.
 typedef stringdictionarynode< char * >		namevaluepairsnode;
 typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
 typedef stringdictionarylist< char * >		namevaluepairslist;

@@ -10,9 +10,12 @@
 <ul>
 <li><a href="#daemon">Using the Daemon Class</a></li>
 <li><a href="#errorhandler">Using the Error Handler Class</a></li>
+<li><a href="#filedescriptor">Using the File Descriptor Class</a></li>
+<li><a href="#file">Using the File Class</a></li>
+<li><a href="#datatransport">Using the Data Transport Classes</a></li>
 <li><a href="#server">Using the Server Socket Classes</a></li>
-<li><a href="#client">Using the Client Socket Class</a></li>
-<li><a href="#complex">Using the Complex Socket Initialization methods of the Server Class</a></li>
+<li><a href="#client">Using the Client Socket Classes</a></li>
+<li><a href="#complex">Using the Complex Socket Initialization methods of the Server Classes</a></li>
 </ul>
 
 <a name="daemon"></a>
@@ -164,8 +167,23 @@ main() {
 }
 </PRE>
 
+<a name="#filedescriptor">
+<span class="heading">Using the File Descriptor Class</span><br><br>
+
+<p>...</p>
+
+<a name="#file">
+<span class="heading">Using the File Class</span><br><br>
+
+<p>...</p>
+
+<a name="#datatransport">
+<span class="heading">Using the Data Transport Classes</span><br><br>
+
+<p>...</p>
+
 <a name="server"></a>
-<span class="heading">Using the Server Socket Class</span><br><br>
+<span class="heading">Using the Server Socket Classes</span><br><br>
 
 <p>Daemons are commonly used to serve data to clients on the same machine or
 over a network.  Below is an example combining the daemon and listener classes.
@@ -295,7 +313,7 @@ servers on the same machine could talk over inet ports, unix ports are much
 faster and use fewer system resources.</p>
 
 <a name="client"></a>
-<span class="heading">Using the Client Socket Class</span><br><br>
+<span class="heading">Using the Client Socket Classes</span><br><br>
 
 <p>Here's the code for a client that can talk to the server above.  This client
 sends a string to the server, reads what the server sends back and prints it
@@ -359,7 +377,8 @@ main() {
 </PRE>
 
 <a name="complex"></a>
-<span class="heading">Using the Complex Socket Initialization methods of the Server Classes</span><br><br>
+<span class="heading">Using the Complex Socket Initialization methods of the
+Server Classes</span><br><br>
 
 <p>Setting up a server to listen on a socket is actually a multi-step process. 
 The listenOnSocket() methods simplify this process but some applications may

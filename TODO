@@ -1,13 +1,9 @@
 use getaddrinfo and friends instead of gethostbyname_r on xBSD
 
-comment string class
-document/comment list and dictionary classes
-document filedescriptor,file,string,stringbuffer,variablebuffer,
-		hostentry,protocolentry,passwdentry,groupentry
-document clienttransport/namevaluepairs relationship
-document new read-til-terminate method in transport class
+update docs
 
 a termios class would be nice
+a thread class would be nice
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldomnode should probably use list class

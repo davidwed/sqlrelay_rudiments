@@ -95,7 +95,9 @@
 <font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/dictionaryinlines.h&gt;</font>
 
 
-<font color="#0000f8">// string...</font>
+
+<font color="#0000f8">// A set of classes for storing dictionaries who's keys are strings are</font>
+<font color="#0000f8">// provided here for convenience.</font>
 <font color="#288850"><b>template</b></font> &lt;<font color="#288850"><b>class</b></font> datatype&gt;
 <font color="#288850"><b>class</b></font> stringdictionarynode :
                 <font color="#a02828"><b>public</b></font> dictionarynode&lt; <font color="#288850"><b>char</b></font> *,datatype &gt; {};
@@ -113,7 +115,10 @@
                                 stringdictionarylistnode&lt;datatype&gt;,
                                 stringdictionarylist&lt;datatype&gt; &gt; {};
 
-<font color="#0000f8">// numeric...</font>
+
+
+<font color="#0000f8">// A set of classes for storing dictionaries who's keys are long integers are</font>
+<font color="#0000f8">// provided here for convenience.</font>
 <font color="#288850"><b>template</b></font> &lt;<font color="#288850"><b>class</b></font> datatype&gt;
 <font color="#288850"><b>class</b></font> numericdictionarynode :
                 <font color="#a02828"><b>public</b></font> dictionarynode&lt; <font color="#288850"><b>long</b></font>, datatype &gt; {};
@@ -133,11 +138,12 @@
 
 
 
-<font color="#0000f8">// name/value pairs...</font>
-<font color="#288850"><b>typedef</b></font> stringdictionarynode&lt;<font color="#288850"><b>char</b></font> *&gt;            namevaluepairsnode;
-<font color="#288850"><b>typedef</b></font> stringdictionarylistnode&lt;<font color="#288850"><b>char</b></font> *&gt;        namevaluepairslistnode;
-<font color="#288850"><b>typedef</b></font> stringdictionarylist&lt;<font color="#288850"><b>char</b></font> *&gt;            namevaluepairslist;
-<font color="#288850"><b>typedef</b></font> stringdictionary&lt;<font color="#288850"><b>char</b></font> *&gt;                namevaluepairs;
+<font color="#0000f8">// A set of classes for storing dictionaries who's keys and values are both</font>
+<font color="#0000f8">// strings are provided here for convenience.</font>
+<font color="#288850"><b>typedef</b></font> stringdictionarynode&lt; <font color="#288850"><b>char</b></font> * &gt;          namevaluepairsnode;
+<font color="#288850"><b>typedef</b></font> stringdictionarylistnode&lt; <font color="#288850"><b>char</b></font> * &gt;      namevaluepairslistnode;
+<font color="#288850"><b>typedef</b></font> stringdictionarylist&lt; <font color="#288850"><b>char</b></font> * &gt;          namevaluepairslist;
+<font color="#288850"><b>typedef</b></font> stringdictionary&lt; <font color="#288850"><b>char</b></font> * &gt;              namevaluepairs;
 
 <font color="#a020f0">#endif</font>
 </pre>

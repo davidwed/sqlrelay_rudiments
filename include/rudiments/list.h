@@ -112,7 +112,9 @@ class list {
 
 #include <rudiments/private/listinlines.h>
 
-// string...
+
+
+// A class for containing lists of strings is defined here for convenience.
 typedef listnode< char *>		stringlistnode;
 typedef list< char *, stringlistnode >	stringlist;
 
