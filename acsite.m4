@@ -456,7 +456,7 @@ then
 		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
 		then
 			FW_CHECK_HEADERS_AND_LIBS([/usr],[ssl],[openssl/ssl.h],[ssl],[""],[""],[OPENSSLINCLUDES],[OPENSSLLIBS],[SSLLIBPATH],[SSLSTATIC])
-			FW_CHECK_HEADERS_AND_LIBS([/usr],[crypto],[openssl/crypto.h],[crypto],[""],[""],[CRYPTOINCLUDES],[CRYPTOLIBS],[CRYPTOLIBPATH],[CRYPTOSTATIC])
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[ssl],[openssl/crypto.h],[crypto],[""],[""],[CRYPTOINCLUDES],[CRYPTOLIBS],[CRYPTOLIBPATH],[CRYPTOSTATIC])
 			if ( test -n "$OPENSSLINCLUDES" -a -n "$CRYPTOINCLUDES" )
 			then
 				SSLINCLUDES="$OPENSSLINCLUDES $CRYPTOINCLUDES"

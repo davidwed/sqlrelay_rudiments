@@ -21066,7 +21066,7 @@ fi
 
 
 SEARCHPATH=/usr
-NAME=crypto
+NAME=ssl
 HEADER=openssl/crypto.h
 LIBNAME=crypto
 LINKSTATIC=""
