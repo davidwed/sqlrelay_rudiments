@@ -6,7 +6,8 @@
 
 #include <rudiments/private/messagequeue.h>
 
-// msg* wrapper
+// wrap:
+//	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
 
 class messagequeue {
 	public:

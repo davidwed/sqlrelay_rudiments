@@ -6,7 +6,17 @@
 
 #include <rudiments/private/tty.h>
 
-// tty interface class
+// wrap:
+//	unistd.h - tcgetpgrp(),tcsetpgrp()
+//			ctermid()
+//			ttyname(_r)()
+//			isatty()
+//	unistd.h - pathconf()/fpathconf():
+//				__PC_VDISABLE()
+//				__POSIX_MAX_CANON()
+//				__POSIX_MAX_INPUT()
+//	linux only -
+//		unistd.h - vhangup()
 
 class tty : public filedescriptor {
 	public:

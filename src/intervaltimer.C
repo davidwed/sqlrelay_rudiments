@@ -18,6 +18,10 @@
 
 intervaltimer::intervaltimer(int which) {
 	this->which=which;
+	initialize();
+}
+
+void intervaltimer::initialize() {
 	memset((void *)&values,0,sizeof(values));
 }
 
@@ -111,9 +115,10 @@ bool intervaltimer::getTimeRemaining(timeval *tv) {
 	return getTimeRemaining(&(tv->tv_sec),&(tv->tv_usec));
 }
 
-bool intervaltimer::cancel() {
-	memset((void *)&values,0,sizeof(values));
-	return start();
+bool intervaltimer::stop() {
+	itimerval	stopvals;
+	memset((void *)&stopvals,0,sizeof(stopvals));
+	return start(&stopvals);
 }
 
 bool intervaltimer::sleep(long seconds) {

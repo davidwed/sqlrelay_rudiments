@@ -9,6 +9,15 @@
 // like filedescriptor class, but read() returns EOF when a timeout has occurred
 // also, wraps termios.h functions
 
+// wrap:
+//	termios.h - cfgetospeed(),cfgetispeed(),
+//		cfsetospeed(),cfsetispeed(),cfsetspeed()
+//		tcgetattr(),tcsetattr()
+//		cfmakeraw()
+//		tcsendbreak()
+//		tcdrain(),tcflush(),tcflow()
+//		tcgetsid()
+
 class serialport : public filedescriptor {
 	public:
 

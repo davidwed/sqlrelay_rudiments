@@ -11,6 +11,34 @@
 // The shellcommand class provides methods for running commands, reading their
 // output or writing input to them.
 
+// wrap:
+//	stdlib.h - system()
+//	unistd.h - execve()/fexecve(),execv(),execle(),execl(),execvp(),execlp()
+//	stdio.h - popen(), pclose()
+//	not in many systems -
+//		spawn.h - posix spawn interface
+//				posix_spawn()
+//				posix_spawnp()
+//				posix_spawnattr_init()
+//				posix_spawnattr_destroy()
+//				posix_spawnattr_getsigdefault()
+//				posix_spawnattr_setsigdefault()
+//				posix_spawnattr_getsigmask()
+//				posix_spawnattr_setsigmask()
+//				posix_spawnattr_getflags()
+//				posix_spawnattr_setflags()
+//				posix_spawnattr_getpgroup()
+//				posix_spawnattr_setpgroup()
+//				posix_spawnattr_getschedpolicy()
+//				posix_spawnattr_setschedpolicy()
+//				posix_spawnattr_getschedparam()
+//				posix_spawnattr_setschedparam()
+//				posix_spawn_file_actions_init()
+//				posix_spawn_file_actions_destroy()
+//				posix_spawn_file_actions_addopen()
+//				posix_spawn_file_actions_addclose()
+//				posix_spawn_file_actions_adddup2()
+
 class shellcommand {
 	public:
 		int	run(const char *command);

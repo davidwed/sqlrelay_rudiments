@@ -22,6 +22,9 @@ class intervaltimer {
 			//			executing or and during system
 			//			calls, raises SIGPROF
 
+		void	initialize();
+			// Sets (or resets) the initial and periodic intervals
+			// to 0 seconds and 0 microseconds.
 
 		void	setInitialInterval(long seconds, long microseconds);
 			// Set the timer's initial interval to "seconds"
@@ -86,9 +89,9 @@ class intervaltimer {
 			// will raise the signal.
 
 
-		bool	cancel();
-			// If a timer was set to run periodically, this
-			// method will cancel it.
+		bool	stop();
+			// Stops the currently running timer, but preserves
+			// it's initial and perodic intervals.
 
 
 		// These methods allow you to suspend execution of the process

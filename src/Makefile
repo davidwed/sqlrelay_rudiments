@@ -174,6 +174,10 @@ ifeq ($(INCLUDE_INTERVALTIMER),1)
 	SRCS += intervaltimer.C
 	LOBJS += intervaltimer.lo
 endif
+ifeq ($(INCLUDE_DYNAMICLIB),1)
+	SRCS += dynamiclib.C
+	LOBJS += dynamiclib.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)

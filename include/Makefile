@@ -196,6 +196,10 @@ ifeq ($(INCLUDE_INTERVALTIMER),1)
 	HEADERS += intervaltimer.h
 	PRIVATEHEADERS += intervaltimer.h intervaltimerincludes.h
 endif
+ifeq ($(INCLUDE_DYNAMICLIB),1)
+	HEADERS += dynamiclib.h
+	PRIVATEHEADERS += dynamiclib.h dynamiclibincludes.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

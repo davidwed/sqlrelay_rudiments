@@ -9,6 +9,11 @@
 // like file class, but some methods operate on the link instead of the
 // file the link points to
 
+// wrap:
+//	unistd.h - lchown()
+//	sys/stat.h - lstat(),lchmod(),
+//	sys/xattr.h - lsetxattr(),lgetxattr(),llistxattr(),lremovexattr()
+
 class link : public file {
 	public:
 

@@ -12,12 +12,6 @@ file class:
 	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
 
-serial port class:
-	inherits from device class
-	reads return 0 when they time out
-
-need an SSL context wrapper
-
 what does the logger.C warning mean
 
 strip fails on openbsd
@@ -32,8 +26,6 @@ rename variablebuffer rawbuffer???
 should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl
 	
-need a table (dynamic 2d array) class
-need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 
 xml:
@@ -50,6 +42,29 @@ xml:
 support non-posix semaphores
 fd handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
 						alignment-related
+
+implement these classes:
+	directorylisting
+	link
+	pipe
+	math
+	rawbuffers
+	serialport
+	serialportprofile
+	tty
+	pseudotty
+	memorymap
+	shellcommand
+	process
+	system
+	loginrecord
+	messagequeue
+	thread
+	mutex
+	encryption
+	sslcontext
+	table (dynamic 2d array)
+	generic parser/lexer classes, use them for xmlsax
 
 --------------------------------------------------------------------------------
 
@@ -165,189 +180,9 @@ filedescriptor class:
 			aio_error(),aio_return(),aio_cancel(),
 			aio_suspend(),aio_fsync()
 
-directorylisting class:
-	glob.h - glob(),globfree(),glob_pattern_p()
-	not in posix - 
-		dirent/direct.h - scandir(),alphasort(),versionsort()
-
-link class:
-	unistd.h - lchown()
-	sys/stat.h - lstat(),lchmod(),
-	sys/xattr.h - lsetxattr(),lgetxattr(),llistxattr(),lremovexattr()
-
-pipe class:
-	unistd.h - pipe(), pathconf()/fpathconf(): __POSIX_PIPE_BUF()
-
-math class:
-	stdlib.h - abs(), labs(), llabs(), div(), ldiv(), lldiv()
-	math.h/tgmath.h - fpclassify()
-			signbit()
-			isfinite()
-			isnormal()
-			isnan()
-			isinf()
-			isgreater(),isgreaterequal()
-			isless(),islessequal()
-			islessgreater()
-			isunordered()
-			acos(),asin(),atan(),atan2()
-			cos(),sin(),tan()
-			acosh(),asinh(),atanh(),
-			cosh(),sinh(),tanh()
-			exp(),frexp(),ldexp(),log(),log10()
-			expm1(),log1p(),logb(),exp2(),log2()
-			pow(),sqrt(),hypot(),cbrt()
-			ceil(),fabs(),floor(),fmod()
-			nearbyint(),round(),trunc()
-			remquo()
-			lrint(),llrint()
-			lround(),llround()
-			copysign(),
-			erf(),erfc(),tgamma(),lgamma(),
-			rint()
-			nextafter(),nexttoward(),
-			remainder()
-			scalb(),scalbn(),scalbln()
-			ilogb()
-			fdim(),fmax(),fmin()
-			fma()
-			carg(),conj(),cproj()
-			cimag(),creal()
-	may not be in solaris - 
-		inttypes.h - some integer math functions
-			imaxabs(),imaxdiv()
-			strtoimax(),strtoumax(),wcstoimax(),wcstoumax()
-	not in solaris - 
-		sys/param.h - howmany(),roundup(),powerof2(),MIN(),MAX()
-
-raw buffers:
-	string.h - memcpy(),memmove(),memccpy,memset(),memcmp(),memchr()
-	unistd.h - swab()
-	gnu extensions - 
-		string.h - rawmemchr(),memrchr(),memmem(),mempcpy()
-	linux only - 
-		string.h - memfrob()
-
-serialportprofile class:
-	termios.h - cfgetospeed(),cfgetispeed(),
-		cfsetospeed(),cfsetispeed(),cfsetspeed()
-		tcgetattr(),tcsetattr()
-		cfmakeraw()
-		tcsendbreak()
-		tcdrain(),tcflush(),tcflow()
-		tcgetsid()
-
-tty:
-	unistd.h - tcgetpgrp(),tcsetpgrp()
-			ctermid()
-			ttyname(_r)()
-			isatty()
-	unistd.h - pathconf()/fpathconf():
-				__PC_VDISABLE()
-				__POSIX_MAX_CANON()
-				__POSIX_MAX_INPUT()
-	linux only -
-		unistd.h - vhangup()
-
-pseudotty class:
-	not in solaris - 
-		pty.h - openpty(),forkpty()
-		utmp.h - login_tty()
-	not on solaris or linux -
-		ttyent.h - getttyent()/getttynam()/setttyent()/endttyent()
-	not in bsd -
-		stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)()
-	gnu extensions -
-		stdlib.h - getpt()
-
 errors:
 	stdio.h - perror()
 	string.h - strerror(_r)()
-
-memorymap class:
-	sys/mman.h - mmap(),munmap(),mprotect(),msync()
-			madvise()/posix_madvise()
-			mlock(),munlock(),munlockall(),
-			mremap()
-			mincore()
-	linux only - 
-		sys/mman.h - remap_file_pages()
-	not in bsd - 
-		sys/mman.h - shm_open(),shm_unlink()
-
-shell commands:
-	stdlib.h - system()
-	unistd.h - execve()/fexecve(),execv(),execle(),execl(),execvp(),execlp()
-	stdio.h - popen(), pclose()
-	not in many systems -
-		spawn.h - posix spawn interface
-				posix_spawn()
-				posix_spawnp()
-				posix_spawnattr_init()
-				posix_spawnattr_destroy()
-				posix_spawnattr_getsigdefault()
-				posix_spawnattr_setsigdefault()
-				posix_spawnattr_getsigmask()
-				posix_spawnattr_setsigmask()
-				posix_spawnattr_getflags()
-				posix_spawnattr_setflags()
-				posix_spawnattr_getpgroup()
-				posix_spawnattr_setpgroup()
-				posix_spawnattr_getschedpolicy()
-				posix_spawnattr_setschedpolicy()
-				posix_spawnattr_getschedparam()
-				posix_spawnattr_setschedparam()
-				posix_spawn_file_actions_init()
-				posix_spawn_file_actions_destroy()
-				posix_spawn_file_actions_addopen()
-				posix_spawn_file_actions_addclose()
-				posix_spawn_file_actions_adddup2()
-
-process:
-	unistd.h - nice()
-			getpid(),getppid(),getpgid()/getpgrp()
-			setpgid()/setpgrp()
-			getsid()
-			setsid()
-			getuid(),geteuid(),getgid(),getegid()
-			getgroups()
-			setuid(),setreuid(),seteuid()
-			setgid(),setregid(),setegid()
-			fork(),vfork()
-			profil()
-			acct()
-			getdtablesize()
-			brk()/sbrk()
-			syscall()
-	sched.h - functions for manipulating the scheduler
-			sched_setparam(),sched_getparam()
-			sched_setscheduler(),sched_getscheduler()
-			sched_yield(),
-			sched_get_priority_max(),sched_get_priority_min()
-			sched_rr_get_interval()
-			sched_setaffinity(),sched_getaffinity()
-	sys/acct.h - acct() - process accounting on/off
-	sys/ptrace.h - ptrace()
-	sys/resource.h - get/set process priority/resource usage
-				getrlimit(),setrlimit()
-				getrusage()
-				getpriority(),setpriority()
-	sys/stat.h - umask()
-	sys/times.h - times() - function for getting process times
-	not in solaris -
-		unistd.h - daemon()
-	not in many systems - 
-		unistd.h - group_member()
-				getresuid(),getresgid()
-				setresuid(),setresgid()
-		sys/gmon.h and sys/gmon_out.h - monstartup()
-	linux only - 
-		execinfo.h - backtrace(),backtrace_symbols(),
-				backtrace_symbols_fd()
-		sys/prctl.h - prctl()
-	not in bsd - 
-		ucontext.h - user-level context switching
-			getcontext(),setcontext(),swapcontext(),makecontext()
 
 signals:
 	stdlib.h - abort(), atexit(), exit(), _Exit()
@@ -373,60 +208,8 @@ signals:
 		stdlib.h - on_exit()
 		sys/wait.h - waitid()
 
-system:
-	sys/utsname.h - uname()
-	stdlib.h - getloadavg()
-	unistd.h - sysconf()
-			confstr() - use sysctl() on bsd
-			gethostid(),sethostid() - use sysctl() on bsd
-			getpagesize() - use sysconf() on bsd
-			sync()
-	sys/raw.h - structs/defines for /dev/rawctl ioctl()'s
-	sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()
-	not in solaris - 
-		sys/sysctl.h - sysctl()
-	linux only - 
-		sys/kdaemon.h - bdflush()
-		sys/klog.h - klogctl()
-		sys/personality.h - personality() - set linux kernel personality
-		sys/reboot.h - reboot()
-		sys/swap.h - swapon()/swapoff()
-		sys/sysinfo.h - functions for gettting overall system statistics
-				sysinfo(),
-				get_nprocs_conf(),get_nprocs(),
-				get_phys_pages,get_avphys_pages()
-
-
-login records:
-	unistd.h - ttyslot(),getlogin(_r)(),setlogin()
-			getusershell(),endusershell(),setusershell()
-	stdio.h - cuserid()
-	utmpx.h - setutxent(),endutxent(),
-			getutxent(),getutxid(),getutxline()
-			pututxline()
-			utmpxname(),updwtmpx()
-			getutmp(),getutmpx()
-	not on solaris -
-		utmp.h - login(),logout(),logwtmp(),updwtmp(),uptmpname(),
-			getutent(_r)(),setutent(),endutent(),
-			getutid(_r)(),getutline(_r)(),pututline()
-
-messagequeue class:
-	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
-
-threading:
-	pthread.h - lots of threading stuff
-
 catalogs ???:
 	nl_types.h - catopen()/catgets()/catclose()
-
-encryption:
-	stdlib.h/unistd.h - setkey(_r)(),encrypt(_r)()
-	crypt.h - crypt(_r)(),setkey(_r)(),encrypt(_r)()
-
-dynamic libraries:
-	dlfcn.h - dlopen(),dlclose(),dlsym(),dlvsym()
-			dlerror(),dladdr(),dladdr1(),dlinfo()
 
 network:
 	unistd.h - gethostname()/sethostname()

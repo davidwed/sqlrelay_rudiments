@@ -6,7 +6,13 @@
 
 #include <rudiments/private/rawbuffer.h>
 
-// wraps mem* functions and swab
+// wrap:
+//	string.h - memcpy(),memmove(),memccpy,memset(),memcmp(),memchr()
+//	unistd.h - swab()
+//	gnu extensions - 
+//		string.h - rawmemchr(),memrchr(),memmem(),mempcpy()
+//	linux only - 
+//		string.h - memfrob()
 
 class rawbuffer {
 	public:

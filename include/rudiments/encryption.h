@@ -6,7 +6,9 @@
 
 #include <rudiments/private/encrypt.h>
 
-// setkey/crypt/encrypt wrapper
+// wrap:
+//	stdlib.h/unistd.h - setkey(_r)(),encrypt(_r)()
+//	crypt.h - crypt(_r)(),setkey(_r)(),encrypt(_r)()
 
 class encrypt {
 	public:

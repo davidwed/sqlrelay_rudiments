@@ -6,7 +6,16 @@
 
 #include <rudiments/private/memorymap.h>
 
-// wraps mman.h functions
+// wrap:
+//	sys/mman.h - mmap(),munmap(),mprotect(),msync()
+//			madvise()/posix_madvise()
+//			mlock(),munlock(),munlockall(),
+//			mremap()
+//			mincore()
+//	linux only - 
+//		sys/mman.h - remap_file_pages()
+//	not in bsd - 
+//		sys/mman.h - shm_open(),shm_unlink()
 
 class memorymap {
 	public:

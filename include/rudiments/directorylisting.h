@@ -6,7 +6,10 @@
 
 #include <rudiments/private/directorylisting.h>
 
-// glob, scandir/alphasort/versionsort wrapper
+// wrap:
+//	glob.h - glob(),globfree(),glob_pattern_p()
+//	not in posix - 
+//	dirent/direct.h - scandir(),alphasort(),versionsort()
 
 class directorylisting {
 	public:

@@ -177,10 +177,10 @@ class datetime {
 		// Many of the functions that the datetime class uses internally
 		// are not reentrant and thus not thread-safe.  Indeed, for
 		// some functions, there is no thread-safe version.  If your
-		// application is multi-threaded, you must use these methods to
-		// supply mutex'es to ensure thread safety.
+		// application is multi-threaded, you must use this method to
+		// supply a mutex and ensure thread safety.
 		//
-		// If you don't supply mutex'es, the methods in this class
+		// If you don't supply a mutex, the methods in this class
 		// will still work, but will not be thread-safe.
 		static	void	setTimeMutex(pthread_mutex_t *mutex);
 				// Allows you to supply a mutex to regulate

@@ -10,6 +10,9 @@
 // read() methods read from filedes[0]
 // write() methods write to filedes[1]
 
+// wrap:
+//	unistd.h - pipe(), pathconf()/fpathconf(): __POSIX_PIPE_BUF()
+
 class pipe : public filedescriptor {
 	public:
 
