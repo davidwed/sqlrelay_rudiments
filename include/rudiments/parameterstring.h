@@ -20,6 +20,7 @@ class parameterstring {
 			parameterstring();
 			~parameterstring();
 
+		void	setDelimiter(char delim);
 		bool	parse(const char *string);
 		char	*getValue(const char *name);
 

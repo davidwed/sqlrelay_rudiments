@@ -4,6 +4,7 @@
 #include <rudiments/parameterstring.h>
 
 parameterstring::parameterstring() {
+	delim=';';
 }
 
 parameterstring::~parameterstring() {
@@ -12,6 +13,10 @@ parameterstring::~parameterstring() {
 		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getKey();
 		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getData();
 	}
+}
+
+void parameterstring::setDelimiter(char delim) {
+	this->delim=delim;
 }
 
 bool parameterstring::parse(const char *paramstring) {
@@ -39,7 +44,7 @@ bool parameterstring::parse(const char *paramstring) {
 
 		nvp.setData(namebuffer,valuebuffer);
 
-		if (*ptr==';') {
+		if (*ptr==delim) {
 			ptr++;
 		} else if (!*ptr) {
 			break;
@@ -76,13 +81,13 @@ int parameterstring::countPairs(const char *paramstring) {
 			continue;
 		}
 
-		if (!inquotes && *ptr==';') {
+		if (!inquotes && *ptr==delim) {
 			paircount++;
 		}
 	}
 
 	// handle case where final character wasn't a ;
-	if (*(ptr-1)!=';') {
+	if (*(ptr-1)!=delim) {
 		paircount++;
 	}
 
@@ -170,7 +175,7 @@ char *parameterstring::parseName(const char *data, char **outbuffer) {
 }
 
 char *parameterstring::parseValue(const char *data, char **outbuffer) {
-	return parsePart(parseValueLength(data),';',data,outbuffer,1,1);
+	return parsePart(parseValueLength(data),delim,data,outbuffer,1,1);
 }
 
 int parameterstring::parseNameLength(const char *data) {
@@ -178,5 +183,5 @@ int parameterstring::parseNameLength(const char *data) {
 }
 
 int parameterstring::parseValueLength(const char *data) {
-	return parsePartLength(data,';',1,1);
+	return parsePartLength(data,delim,1,1);
 }

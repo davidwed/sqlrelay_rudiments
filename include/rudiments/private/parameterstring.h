@@ -3,6 +3,7 @@
 
 	private:
 		namevaluepairs	nvp;
+		char		delim;
 
 		int	countPairs(const char *paramstring);
 		char	*parseName(const char *data, char **outbuffer);
