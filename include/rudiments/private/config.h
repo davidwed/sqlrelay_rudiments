@@ -48,10 +48,10 @@
 #define HAVE_FORK 1
 
 /* Some systems have getgrgid_r */
-/* #undef HAVE_GETGRGID_R */
+#define HAVE_GETGRGID_R 1
 
 /* Some systems have getgrnam_r */
-/* #undef HAVE_GETGRNAM_R */
+#define HAVE_GETGRNAM_R 1
 
 /* Some systems have gethostbyaddr_r */
 #define HAVE_GETHOSTBYADDR_R 1
@@ -66,10 +66,10 @@
 #define HAVE_GETPROTOBYNUMBER_R 1
 
 /* Some systems have getpwnam_r */
-/* #undef HAVE_GETPWNAM_R */
+#define HAVE_GETPWNAM_R 1
 
 /* Some systems have getpwuid_r */
-/* #undef HAVE_GETPWUID_R */
+#define HAVE_GETPWUID_R 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
@@ -85,7 +85,7 @@
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
-#define HAVE_MALLOC 0
+#define HAVE_MALLOC 1
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
@@ -197,13 +197,13 @@
 /* #undef HAVE_VFORK_H */
 
 /* Define to 1 if `fork' works. */
-#define HAVE_WORKING_FORK 1
+/* #undef HAVE_WORKING_FORK */
 
 /* Define to 1 if `vfork' works. */
 #define HAVE_WORKING_VFORK 1
 
 /* Some compliers don't support the inline keyword */
-#define INLINE inline
+#define INLINE 
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
@@ -249,7 +249,7 @@
 /* #undef inline */
 
 /* Define to rpl_malloc if the replacement function should be used. */
-#define malloc rpl_malloc
+/* #undef malloc */
 
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef mode_t */

@@ -19,7 +19,7 @@ inline stringbuffer::~stringbuffer() {
 
 inline char *stringbuffer::getString() {
 	buffer->append((unsigned char *)"\0",1);
-	buffer->position--;
+	buffer->setPosition(buffer->getPosition()-1);
 	return (char *)buffer->getBuffer();
 }
 

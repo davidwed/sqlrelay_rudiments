@@ -7,6 +7,7 @@
 	#include <rudiments/private/variablebufferinlines.h>
 #endif
 #include <string.h>
+#include <stdio.h>
 
 variablebuffer::variablebuffer(unsigned long initialsize,
 					unsigned long increment) {
@@ -15,23 +16,27 @@ variablebuffer::variablebuffer(unsigned long initialsize,
 	this->initialsize=initialsize;
 	this->increment=increment;
 	position=0;
+	end=0;
 }
 
-variablebuffer *variablebuffer::append(const unsigned char *data,
+variablebuffer *variablebuffer::write(const unsigned char *data,
 						unsigned long size) {
 
 	// if the buffer is too small, extend it
-	if (size>buffersize-position) {
-		buffersize=buffersize+size+increment;
-		unsigned char	*newbuffer=new unsigned char[buffersize];
-		memcpy((void *)newbuffer,(void *)buffer,position);
-		delete[] buffer;
-		buffer=newbuffer;
+	if (position>buffersize) {
+		extend(position-buffersize+size);
+	} else if (size>buffersize-position) {
+		extend(position+size-buffersize);
 	}
 
 	// copy the data into the buffer
 	memcpy((void *)(buffer+position),(void *)data,size);
+
+	// increment the position indices
 	position=position+size;
+	if (position>end) {
+		end=position;
+	}
 	return this;
 }
 
@@ -40,4 +45,16 @@ void variablebuffer::clear() {
 	buffer=new unsigned char[initialsize];
 	buffersize=initialsize;
 	position=0;
+	end=0;
+}
+
+void variablebuffer::extend(unsigned long size) {
+	unsigned long	newbuffersize=buffersize+
+					((size/increment)*increment)+
+					(((size%increment)>0)*increment);
+	unsigned char	*newbuffer=new unsigned char[newbuffersize];
+	memcpy((void *)newbuffer,(void *)buffer,buffersize);
+	delete[] buffer;
+	buffer=newbuffer;
+	buffersize=newbuffersize;
 }

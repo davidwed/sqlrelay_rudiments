@@ -1,14 +1,28 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-variablebuffer::~variablebuffer() {
+inline variablebuffer::~variablebuffer() {
 	delete[] buffer;
 }
 
-unsigned char *variablebuffer::getBuffer() {
+inline unsigned char *variablebuffer::getBuffer() {
 	return buffer;
 }
 
-unsigned long variablebuffer::getSize() {
+inline unsigned long variablebuffer::getSize() {
+	return end;
+}
+
+inline unsigned long variablebuffer::getPosition() {
 	return position;
+}
+
+inline void variablebuffer::setPosition(unsigned long pos) {
+	position=pos;
+}
+
+inline variablebuffer *variablebuffer::append(const unsigned char *data,
+						unsigned long size) {
+	position=end;
+	return write(data,size);
 }

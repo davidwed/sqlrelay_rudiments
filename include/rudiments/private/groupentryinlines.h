@@ -3,12 +3,12 @@
 
 #include <stdlib.h>
 
-groupentry::groupentry() {
+inline groupentry::groupentry() {
 	grp=NULL;
 	buffer=NULL;
 }
 
-groupentry::~groupentry() {
+inline groupentry::~groupentry() {
 	delete grp;
 	delete[] buffer;
 }
