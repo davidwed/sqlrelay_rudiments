@@ -88,9 +88,15 @@ class logger {
 			//
 			// 01/05/2002 12:54:23 myprogram [2421]
 			//
-			// (Note that this method allocates a string internally
+			// Note that this method allocates a string internally
 			// and returns it.  This string must be deleted by the
-			// calling program.)
+			// calling program.
+			//
+			// Note that this method uses getSystemDateAndTime()
+			// from the datetime class.  If you are using
+			// logHeader() in a multi-threaded application, you
+			// must supply a mutex to the datetime class using it's
+			// setLocalTimeMutex() method.
 
 
 		// These methods write log entries to each

@@ -66,11 +66,21 @@ class sharedmemory {
 			// to the segment using this pointer.
 
 		int	setUserName(const char *username);
-			// makes this shared memory segment owned by
-			// the user "username"
+			// Makes this shared memory segment owned by
+			// the user "username".
+			//
+			// Note that setUserName() uses the passwdentry class.
+			// If you are using this method in a multithreaded
+			// application, you may need to supply the passwdentry
+			// class a mutex.  See passwdentry.h for more detail.
 		int	setGroupName(const char *groupname);
-			// makes this shared memory segment owned by
-			// the group "groupname"
+			// Makes this shared memory segment owned by
+			// the group "groupname".
+			//
+			// Note that setGroupName() uses the groupentry class.
+			// If you are using this method in a multithreaded
+			// application, you may need to supply the groupentry
+			// class a mutex.  See groupentry.h for more detail.
 		int	setUserId(uid_t uid);
 			// makes this shared memory segment owned by
 			// the user identified by uid
@@ -84,9 +94,19 @@ class sharedmemory {
 		char	*getUserName();
 			// returns the name of the user that owns this
 			// shared memory segment
+			//
+			// Note that getUserName() uses the passwdentry class.
+			// If you are using this method in a multithreaded
+			// application, you may need to supply the passwdentry
+			// class a mutex.  See passwdentry.h for more detail.
 		char	*getGroupName();
 			// returns the name of the group that owns this
 			// shared memory segment
+			//
+			// Note that getGroupName() uses the groupentry class.
+			// If you are using this method in a multithreaded
+			// application, you may need to supply the groupentry
+			// class a mutex.  See groupentry.h for more detail.
 		uid_t	getUserId();
 			// returns the user id of the user that owns this
 			// shared memory segment

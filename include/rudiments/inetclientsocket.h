@@ -26,6 +26,9 @@ class inetclientsocket : public client, public inetsocket  {
 			// methods below.
 			//
 			// Returns 1 on success and 0 on failure.
+			//
+			// See connect() below for a note about use in
+			// multithreaded applications.
 
 
 
@@ -56,6 +59,12 @@ class inetclientsocket : public client, public inetsocket  {
 			// as fast as possible (not recommended).
 			//
 			// Returns 1 on success and 0 on failure.
+			//
+			// Note that connect() uses the hostentry and
+			// protocolentry classes.  If you are using this method
+			// in a multithreaded application, you may need to
+			// supply those classes with mutexes.  See hostentry.h
+			// and protocolentry.h for more detail.
 };
 
 #ifdef ENABLE_INLINES

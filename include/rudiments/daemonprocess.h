@@ -48,7 +48,17 @@ class daemonprocess {
 			// They have no effect unless the process is started
 			// by the root user.
 			int	runAsUser(const char *username) const;
+				// Note that runAsUser() uses the passwdentry
+				// class.  If you are using this method in a
+				// multithreaded application, you may need to
+				// supply the passwdentry classes a mutex.
+				// See passwdentry.h for more detail.
 			int	runAsGroup(const char *groupname) const;
+				// Note that runAsGroup() uses the groupentry
+				// class.  If you are using this method in a
+				// multithreaded application, you may need to
+				// supply the groupentry classes a mutex.
+				// See groupentry.h for more detail.
 			int	runAsUserId(uid_t uid) const;
 			int	runAsGroupId(gid_t gid) const;
 
