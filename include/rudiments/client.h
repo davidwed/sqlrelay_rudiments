@@ -5,14 +5,14 @@
 #define RUDIMENTS_CLIENT_H
 
 #include <rudiments/datatransport.h>
-#include <rudiments/connectiondata.h>
+#include <rudiments/dictionary.h>
 
 // The client class provides a base class for classes that implement the client
 // side of a client-server communication model.
 
 class client : virtual public datatransport {
 	public:
-		virtual void	initialize(connectiondata *cd)=0;
+		virtual void	initialize(namevaluepairs *cd)=0;
 		virtual int	connect()=0;
 
 	#include <rudiments/private/client.h>

@@ -3,7 +3,6 @@ xmlsax compilation generates warning with xscale_le-gcc
 dtd test crashes
 table class is generally screwed up
 
-connectiondata should just use dictionary class
 need generic parser/lexer classes, use them for xmlsax
 
 document/test program for filedescriptor,file
@@ -12,9 +11,7 @@ document stringbuffer,variablebuffer
 
 document/comment hostentry,protocolentry,passwdentry,groupentry
 
-document/comment/test program for connectiondata class
-
-document clienttransport/connectiondata relationship
+document clienttransport/namevaluepairs relationship
 
 document new read-til-terminate method in transport class
 

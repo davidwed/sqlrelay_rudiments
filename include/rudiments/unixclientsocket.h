@@ -35,10 +35,10 @@ class unixclientsocket : public client, public unixsocket {
 
 		// These methods are split up in case you need to use them
 		// seperately.
-		void	initialize(connectiondata *cd);
-			// Queries connectiondata for "filename", "retrywait"
-			// and "retrycount".  Initializes the class to use the
-			// result when connect() is called.
+		void	initialize(namevaluepairs *cd);
+			// Queries namevaluepairs "cd" for "filename",
+			// "retrywait" and "retrycount".  Initializes the class
+			// to use the result when connect() is called.
 		void	initialize(const char *filename,
 					unsigned int retrywait, int retrycount);
 			// Initializes the class to use "filename",

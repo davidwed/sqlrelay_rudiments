@@ -92,4 +92,6 @@ template <class valuetype>
 class numericdictionary : public dictionary< long, valuetype,
 				primitivedictionarynode<long, valuetype> > {};
 
+class namevaluepairs : public stringdictionary< char * > {};
+
 #endif

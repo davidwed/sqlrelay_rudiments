@@ -8,7 +8,6 @@ install:
 	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/client.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/commandline.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/connectiondata.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/daemonprocess.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datatransport.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datatransportfactory.h $(incdir)/rudiments

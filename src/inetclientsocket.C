@@ -20,7 +20,7 @@
 	#include <strings.h>
 #endif
 
-void inetclientsocket::initialize(connectiondata *cd) {
+void inetclientsocket::initialize(namevaluepairs *cd) {
 
 	char	*host;
 	cd->getValue("host",&host);

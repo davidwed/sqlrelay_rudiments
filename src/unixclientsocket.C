@@ -13,7 +13,7 @@
 	#include <unistd.h>
 #endif
 
-void unixclientsocket::initialize(connectiondata *cd) {
+void unixclientsocket::initialize(namevaluepairs *cd) {
 
 	char	*filename;
 	cd->getValue("filename",&filename);
