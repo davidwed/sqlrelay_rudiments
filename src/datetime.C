@@ -107,7 +107,7 @@ int datetime::getSystemDateAndTime() {
 	timestring=NULL;
 	epoch=time(NULL);
 #ifdef HAVE_LOCALTIME_R
-	return !(localtime_r(&epoch,&timestruct)!=NULL);
+	return (localtime_r(&epoch,&timestruct)!=NULL);
 #else
 	tm	*lcltm=localtime(&epoch);
 	if (lcltm) {
