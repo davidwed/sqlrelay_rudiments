@@ -119,7 +119,7 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	this->semcount=semcount;
 
 	// create the semaphore
-	if ((semid=semget(key,semcount,IPC_CREAT|IPC_EXCL|permissions))>-1) {
+	if ((semid=semget(key,semcount,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// if creation succeeded, initialize the semaphore
 		if (values) {
@@ -142,7 +142,7 @@ bool semaphoreset::attach(key_t key, int semcount) {
 
 	this->semcount=semcount;
 
-	if ((semid=semget(key,semcount,0))>-1) {
+	if ((semid=semget(key,semcount,0))!=-1) {
 		createOperations();
 		return true;
 	}
@@ -156,7 +156,7 @@ bool semaphoreset::createOrAttach(key_t key, mode_t permissions,
 	this->semcount=semcount;
 
 	// create the semaphore
-	if ((semid=semget(key,semcount,IPC_CREAT|IPC_EXCL|permissions))>-1) {
+	if ((semid=semget(key,semcount,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// if creation succeeded, initialize the semaphore
 		if (values) {
@@ -169,7 +169,7 @@ bool semaphoreset::createOrAttach(key_t key, mode_t permissions,
 		created=true;
 		
 	} else if (!(errno==EEXIST && 
-				(semid=semget(key,semcount,permissions))>-1)) {
+				(semid=semget(key,semcount,permissions))!=-1)) {
 
 		return false;
 	}

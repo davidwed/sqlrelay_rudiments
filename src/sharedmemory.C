@@ -85,7 +85,7 @@ mode_t sharedmemory::getPermissions() {
 bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
-	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
+	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// mark for removal
 		created=true;
@@ -124,14 +124,14 @@ bool sharedmemory::attach(key_t key) {
 	// it needs to be compared to -1.  So, we cast it to a signed integer
 	// to see if it's not -1, but allow that it could very well be less
 	// than -1 and still be valid.
-	return ((shmid=shmget(key,0,0))>-1 &&
+	return ((shmid=shmget(key,0,0))!=-1 &&
 			(int)(shmptr=shmat(shmid,0,0))!=-1);
 }
 
 bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
-	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
+	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// mark for removal
 		created=true;
@@ -148,7 +148,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		rawbuffer::zero((void *)shmptr,size);
 		return true;
 		
-	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))>-1) {
+	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))!=-1) {
 
 		// attach to the segment, return 1 on success and 0 on failure
 		shmptr=shmat(shmid,0,0);

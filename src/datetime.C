@@ -95,6 +95,7 @@ bool datetime::initialize(const char *tmstring) {
 }
 
 bool datetime::initialize(time_t seconds) {
+	// FIXME: assumes GMT unless specified in environment
 	epoch=seconds;
 	return getBrokenDownTimeFromEpoch(true);
 }
@@ -125,8 +126,8 @@ bool datetime::initialize(const struct tm *tmstruct) {
 			}
 		#endif
 		tzset();
-		zone=charstring::duplicate((tzname[0] && tzname[0][0])?
-							tzname[0]:"UCT");
+		zone=charstring::duplicate((tzname[isdst] && tzname[isdst][0])?
+							tzname[isdst]:"UCT");
 		#ifdef RUDIMENTS_HAS_THREADS
 			releaseLock();
 		#endif
@@ -200,7 +201,7 @@ bool datetime::isDaylightSavingsTime() const {
 	return isdst;
 }
 
-char	*datetime::getTimeZoneString() const {
+char *datetime::getTimeZoneString() const {
 	return zone;
 }
 
@@ -291,6 +292,7 @@ char *datetime::getString() {
 
 
 bool datetime::getSystemDateAndTime() {
+	// FIXME: assumes GMT unless specified in environment
 	return initialize(time(NULL));
 }
 
@@ -434,7 +436,7 @@ bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone) {
 	} else {
 		*oldzone=NULL;
 	}
-	return env.setValue("TZ",zone);
+	return env.setValue("TZ",lookupActualTimeZone(zone));
 }
 
 bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
@@ -478,6 +480,7 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 }
 
 bool datetime::normalizeBrokenDownTime(bool needmutex) {
+printf("normalizeBrokenDownTime()\n");
 
 	#ifdef RUDIMENTS_HAS_THREADS
 		if (needmutex && !acquireLock()) {
@@ -485,8 +488,10 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		}
 	#endif
 
+printf("zone=%s\n",zone);
 	// If a time zone was passed in, use it.
 	char	*oldzone=NULL;
+printf("set TZ...\n");
 	if (zone && zone[0] && !setTimeZoneEnvVar(zone,&oldzone)) {
 		#ifdef RUDIMENTS_HAS_THREADS
 			if (needmutex) {
@@ -495,6 +500,8 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		#endif
 		return false;
 	}
+environment	env;
+printf("TZ=%s\n",env.getValue("TZ"));
 
 	int	retval=true;
 
@@ -510,6 +517,7 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
 	// mktime() will get the epoch, set wday
 	// and yday and normalize other values
+printf("mktime()...\n");
 	time_t	ep=mktime(&tms);
 	if (ep==-1) {
 		retval=false;
@@ -530,9 +538,11 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		yday=tms.tm_yday;
 	
 		// Use tzset to get the timezone name
+printf("tzset()...\n");
 		tzset();
 		delete[] zone;
-		zone=charstring::duplicate(tzname[0]);
+		zone=charstring::duplicate(tzname[isdst]);
+printf("isdst=%d tzname[0]=%s  tzname[1]=%s  zone=%s\n",isdst,tzname[0],tzname[1],zone);
 
 		// Get the offset from the struct tm if we can, otherwise get
 		// it from the value set by tzset()
@@ -549,9 +559,11 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		#endif
 	}
 
+printf("restore TZ...\n");
 	if (oldzone) {
 		retval=(retval && restoreTimeZoneEnvVar(oldzone));
 	}
+printf("TZ=%s\n",env.getValue("TZ"));
 
 	#ifdef RUDIMENTS_HAS_THREADS
 		if (needmutex) {
@@ -571,3 +583,237 @@ bool datetime::releaseLock() {
 	return !(timemutex && pthread_mutex_unlock(timemutex));
 }
 #endif
+
+static char timezones[][15]={
+
+	"A",	// Alpha Time Zone	UTC + 1 hour
+	"A",	// Alpha Time Zone	UTC + 1 hour
+	"A",
+
+	"ACST",	// Australian Central Standard Time	UTC + 9:30 hours
+	"ACDT",	// Australian Central Daylight Time	UTC + 10:30 hours
+	"ACST-10:30ACDT",
+
+	"AST",	// Atlantic Standard Time		UTC - 4 hours
+	"ADT",	// Atlantic Daylight Time		UTC - 3 hours
+	"AST4ADT",
+
+	"AEST",	// Australian Eastern Standard Time	UTC + 10 hours
+	"AEDT",	// Australian Eastern Daylight Time	UTC + 11 hours
+	"AEST10AEDT",
+
+	"AKST",	// Alaska Standard Time	UTC - 9 hours
+	"AKDT",	// Alaska Daylight Time	UTC - 8 hours
+	"AKST-9AKDT",
+
+	"AWST",	// Australian Western Standard Time	UTC + 8 hours
+	"AWST",	// Australian Western Standard Time	UTC + 8 hours
+	"AWST",
+
+	"B",	// Bravo Time Zone	UTC + 2 hours
+	"B",	// Bravo Time Zone	UTC + 2 hours
+	"B",
+
+	"C",	// Charlie Time Zone	UTC + 3 hours
+	"C",	// Charlie Time Zone	UTC + 3 hours
+	"C",
+
+	"CST",	// Central Standard Time	UTC - 6 hours
+	"CDT",	// Central Daylight Time	UTC - 5 hours
+	"CST6CDT",
+
+	"CET",	// Central European Time	UTC + 1 hour
+	"CEST",	// Central European Summer Time	UTC + 2 hours
+	"CET-1CST",
+
+	"CXT",	// Christmas Island Time	UTC + 7 hours
+	"CXT",	// Christmas Island Time	UTC + 7 hours
+	"CXT",
+
+	"D",	// Delta Time Zone	UTC + 4 hours
+	"D",	// Delta Time Zone	UTC + 4 hours
+	"D",
+
+	"E",	// Echo Time Zone	UTC + 5 hours
+	"E",	// Echo Time Zone	UTC + 5 hours
+	"E",
+
+	"EST",	// Eastern Standard Time	UTC - 5 hours
+	"EDT",	// Eastern Daylight Time	UTC - 4 hours
+	"EST5EDT",
+
+	"EET",	// Eastern European Time	UTC + 2 hours
+	"EEST",	// Eastern European Summer Time	UTC + 3 hours
+	"EET-2EEST",
+
+	"F",	// Foxtrot Time Zone	UTC + 6 hours
+	"F",	// Foxtrot Time Zone	UTC + 6 hours
+	"F",
+
+	"G",	// Golf Time Zone	UTC + 7 hours
+	"G",	// Golf Time Zone	UTC + 7 hours
+	"G",
+
+	"GMT",	// Greenwich Mean Time	UTC
+	"BST",	// British Summer Time	UTC + 1 hour
+	"GMT0BST",
+
+	"H",	// Hotel Time Zone	UTC + 8 hours
+	"H",	// Hotel Time Zone	UTC + 8 hours
+	"H",
+
+	"HNA",	// Heure Normale de l'Atlantique	UTC - 4 hours
+	"HAA",	// Heure Avancée de l'Atlantique	UTC - 3 hours
+	"HNA4HAA",
+
+	"HNC",	// Heure Normale du Centre		UTC - 6 hours
+	"HAC",	// Heure Avancée du Centre		UTC - 5 hours
+	"HNC6HAC",
+
+	"HAST",	// Hawaii-Aleutian Standard Time	UTC - 10 hours
+	"HADT",	// Hawaii-Aleutian Daylight Time	UTC - 9 hours
+	"HAST10HADT",
+
+	"HNE",	// Heure Normale de l'Est	UTC - 5 hours
+	"HAE",	// Heure Avancée de l'Est	UTC - 4 hours
+	"HNE5HAE",
+
+	"HNP",	// Heure Normale du Pacifique	UTC - 8 hours
+	"HAP",	// Heure Avancée du Pacifique	UTC - 7 hours
+	"HNP8HAP",
+
+	"HNR",	// Heure Normale des Rocheuses	UTC - 7 hours
+	"HAR",	// Heure Avancée des Rocheuses	UTC - 6 hours
+	"HNR7HAR",
+
+	"HNT",	// Heure Normale de Terre-Neuve	UTC - 3:30 hours
+	"HAT",	// Heure Avancée de Terre-Neuve	UTC - 2:30 hours
+	"HNT3:30HAT",
+
+	"HNY",	// Heure Normale du Yukon	UTC - 9 hours
+	"HAY",	// Heure Avancée du Yukon	UTC - 8 hours
+	"HNY9HAY",
+
+	"I",	// India Time Zone	UTC + 9 hours
+	"I",	// India Time Zone	UTC + 9 hours
+	"I",
+
+	"IST",	// Irish Standard Time	UTC + 0 hours
+	"IST",	// Irish Standard Time	UTC + 0 hours
+	"IST",
+
+	"K",	// Kilo Time Zone	UTC + 10 hours
+	"K",	// Kilo Time Zone	UTC + 10 hours
+	"K",
+
+	"L",	// Lima Time Zone	UTC + 11 hours
+	"L",	// Lima Time Zone	UTC + 11 hours
+	"L",
+
+	"M",	// Mike Time Zone	UTC + 12 hours
+	"M",	// Mike Time Zone	UTC + 12 hours
+	"M",
+
+	"MST",	// Mountain Standard Time	UTC - 7 hours
+	"MDT",	// Mountain Daylight Time	UTC - 6 hours
+	"MST7MDT",
+
+	"MEZ",	// Mitteleuropäische Zeit	UTC + 1 hour
+	"MESZ",	// Mitteleuropäische Sommerzeit	UTC + 2 hours
+	"MEZ-1MESZ"
+
+	"N",	// November Time Zone		UTC - 1 hour
+	"N",	// November Time Zone		UTC - 1 hour
+	"N",
+
+	"NST",	// Newfoundland Standard Time	UTC - 3:30 hours
+	"NDT",	// Newfoundland Daylight Time	UTC - 2:30 hours
+	"NST3:30NDT",
+
+	"NFT",	// Norfolk (Island) Time	UTC + 11:30 hours
+	"NFT",	// Norfolk (Island) Time	UTC + 11:30 hours
+	"NFT",
+
+	"O",	// Oscar Time Zone		UTC - 2 hours
+	"O",	// Oscar Time Zone		UTC - 2 hours
+	"O",
+
+	"P",	// Papa Time Zone		UTC - 3 hours
+	"P",	// Papa Time Zone		UTC - 3 hours
+	"P",
+
+	"PST",	// Pacific Standard Time	UTC - 8 hours
+	"PDT",	// Pacific Daylight Time	UTC - 7 hours
+	"PST8PDT",
+
+	"Q",	// Quebec Time Zone	UTC - 4 hours
+	"Q",	// Quebec Time Zone	UTC - 4 hours
+	"Q",
+
+	"R",	// Romeo Time Zone	UTC - 5 hours
+	"R",	// Romeo Time Zone	UTC - 5 hours
+	"R",
+
+	"S",	// Sierra Time Zone	UTC - 6 hours
+	"S",	// Sierra Time Zone	UTC - 6 hours
+	"S",
+
+	"T",	// Tango Time Zone	UTC - 7 hours
+	"T",	// Tango Time Zone	UTC - 7 hours
+	"T",
+
+	"U",	// Uniform Time Zone	UTC - 8 hours
+	"U",	// Uniform Time Zone	UTC - 8 hours
+	"U",
+
+	"UTC",	// Coordinated Universal Time	UTC
+	"UTC",	// Coordinated Universal Time	UTC
+	"UTC",
+
+	"V",	// Victor Time Zone	UTC - 9 hours
+	"V",	// Victor Time Zone	UTC - 9 hours
+	"V",
+
+	"W",	// Whiskey Time Zone	UTC - 10 hours
+	"W",	// Whiskey Time Zone	UTC - 10 hours
+	"W",
+
+	"WET",	// Western European Time	UTC
+	"WEST",	// Western European Summer Time	UTC + 1 hour
+	"WET-1WEST",
+
+	"WST",	// Western Standard Time	UTC + 8 hours
+	"WST",	// Western Standard Time	UTC + 8 hours
+	"WST",
+
+	"X",	// X-ray Time Zone	UTC - 11 hours
+	"X",	// X-ray Time Zone	UTC - 11 hours
+	"X",
+
+	"Y",	// Yankee Time Zone	UTC - 12 hours
+	"Y",	// Yankee Time Zone	UTC - 12 hours
+	"Y",
+
+	"Z",	// Zulu Time Zone	UTC
+	"Z",	// Zulu Time Zone	UTC
+	"Z",
+
+	"",
+	"",
+	""
+};
+
+// FIXME: this is kind of lame.  There must be a better way to do this than
+// looking up values in a table embedded in the class.  I guess I could look
+// through every zoneinfo file (on platforms that support them), but I've tried
+// that before and I get multiple hits for a given zone.  If anyone reads this
+// comment and knows the answer, please let me know.
+char *datetime::lookupActualTimeZone(const char *zn) {
+	for (int index=0; timezones[index][0]; index=index+3) {
+		if (!charstring::compare(zn,timezones[index]) ||
+			!charstring::compare(zn,timezones[index+1])) {
+			return timezones[index+2];
+		}
+	}
+	return NULL;
+}
