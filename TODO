@@ -1,3 +1,5 @@
+use (u)intXX_t types
+
 document: cygwin needs "file" command to be able to build dll's
 
 some platforms may need -D_THREAD_SAFE like solaris needs -D_REENTRANT
@@ -7,6 +9,8 @@ document error.h
 make sure all system calls that can be interrupted are restarted if they're
 	interrupted by a signal
 	(or at least have the option of being restarted)
+
+--------------------------------------------------------------------------------
 
 use const's instead of #defines
 	const unsigned long	MAX_QUERY_LENGTH=32768;
