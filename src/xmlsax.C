@@ -264,6 +264,7 @@ bool xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 	*name=new stringbuffer();
 
 	int	bracketcount=0;
+	int	namelen=0;
 
 	// get characters and put them in the buffer
 	char	ch=current;
@@ -302,6 +303,12 @@ bool xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 			return true;
 		} else {
 			(*name)->append(ch);
+		}
+
+		// look for comments
+		namelen++;
+		if (namelen==3 && !strcmp((*name)->getString(),"!--")) {
+			return true;
 		}
 
 		// get the next character
