@@ -29,7 +29,6 @@ install:
 	$(INSTALL) -m 644 classes/semaphoreset.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/sharedmemory.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/signalclasses.h.html $(docdir)/classes
-	$(INSTALL) -m 644 classes/text.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/transport.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/unixclientsocket.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/unixserversocket.h.html $(docdir)/classes

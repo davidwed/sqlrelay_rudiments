@@ -44,6 +44,7 @@
 	added slackware packaged build target
 	added support for gcc-3.2.2
 	added a features.mk file so features could be compiled in/out
+	moved text class stuff into string class
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

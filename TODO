@@ -1,3 +1,5 @@
+document text->string class conversion
+
 xmldomnode should probably use list class
 should be able to validate an xml document against the dtd
 
