@@ -47,10 +47,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-%makeinstall incdir=%{buildroot}%{_includedir}
-rm -f doc/Makefile
-rm -rf doc/CVS
-rm -rf doc/*/CVS
+%makeinstall incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
 
 %post
 /sbin/ldconfig
@@ -73,9 +70,10 @@ rm -rf %{buildroot}
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
+%{_bindir}/rudiments-config
 
 %files doc
-%doc doc
+%{_docdir}/%{name}-%{version}
 
 %changelog
 * Fri Jan  31 2003 David Muse <mused@firstworks.com>

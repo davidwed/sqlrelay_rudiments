@@ -469,7 +469,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS SMALLCODE build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT LN_S ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CPP EGREP LIBTOOL CXX ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE AR CXXCPP PTHREADSINCLUDES LIBOBJS SOCKETLIB XNETLIB NSLLIB MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CXXFLAGS SMALLCODE build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT LN_S ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CPP EGREP LIBTOOL CXX ac_ct_CXX INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA SET_MAKE AR PIPE CXXCPP PTHREADSINCLUDES LIBOBJS SOCKETLIB XNETLIB NSLLIB MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1454,7 +1454,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # Check whether --enable-small-code or --disable-small-code was given.
 if test "${enable_small_code+set}" = set; then
   enableval="$enable_small_code"
-  SMALLCODE="-O -Os -fomit-frame-pointer -fno-exceptions"
+  SMALLCODE="-O -Os"
 else
   SMALLCODE=""
 fi;
@@ -1483,7 +1483,7 @@ else
 fi;
 
 
-CXXFLAGS=""
+CXXFLAGS="-fomit-frame-pointer -fno-exceptions -fno-rtti"
 
 
 if ( test -n "$SMALLCODE" ); then
@@ -8652,12 +8652,74 @@ echo "${ECHO_T}no" >&6
 fi
 
 
+
+
+echo "$as_me:$LINENO: checking for -pipe option" >&5
+echo $ECHO_N "checking for -pipe option... $ECHO_C" >&6
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="-pipe"
+LIBS=""
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <stdio.h>
+int
+main ()
+{
+printf("hello");
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  PIPE="-pipe"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+PIPE=""
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+if ( test -n "$PIPE" )
+then
+	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+	echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+
 echo "******************************"
 
 
 echo
 echo "***** Headers ****************"
-
 
 
 
@@ -13049,6 +13111,7 @@ echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
+HAVE_GETRPCBYNAME_R="no"
 echo "$as_me:$LINENO: checking getrpcbyname_r" >&5
 echo $ECHO_N "checking getrpcbyname_r... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
@@ -13060,6 +13123,55 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <netdb.h>
 #include <stdlib.h>
+int
+main ()
+{
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  HAVEGETRPCBYNAME_R="yes";
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNAME_R 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+
+if ( test "$HAVEGETRPCBYNAME_R" = "no" )
+then
+echo "$as_me:$LINENO: checking getrpcbyname_r" >&5
+echo $ECHO_N "checking getrpcbyname_r... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpcent.h>
 int
 main ()
 {
@@ -13094,7 +13206,9 @@ echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
 
+HAVEGETRPCBYNUMBER_R="no"
 echo "$as_me:$LINENO: checking getrpcbynumber_r" >&5
 echo $ECHO_N "checking getrpcbynumber_r... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
@@ -13106,6 +13220,55 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <netdb.h>
 #include <stdlib.h>
+int
+main ()
+{
+getrpcbynumber_r(0,NULL,NULL,0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  HAVEGETRPCBYNUMBER_R="yes";
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNUMBER_R 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+
+if ( test "$HAVE_GETRPCBYNUMBER_R" = "no" )
+then
+echo "$as_me:$LINENO: checking getrpcbynumber_r" >&5
+echo $ECHO_N "checking getrpcbynumber_r... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpcent.h>
 int
 main ()
 {
@@ -13140,6 +13303,7 @@ echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
 
 LIBS="$OLDLIBS"
 
@@ -13834,6 +13998,7 @@ s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@SET_MAKE@,$SET_MAKE,;t t
 s,@AR@,$AR,;t t
+s,@PIPE@,$PIPE,;t t
 s,@CXXCPP@,$CXXCPP,;t t
 s,@PTHREADSINCLUDES@,$PTHREADSINCLUDES,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t

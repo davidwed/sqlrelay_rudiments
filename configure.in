@@ -4,7 +4,7 @@ AC_INIT(src/daemonprocess.C)
 
 AC_ARG_ENABLE(small-code,
 	[  --enable-small-code     optimize for small code size],
-	SMALLCODE="-O -Os -fomit-frame-pointer -fno-exceptions",
+	SMALLCODE="-O -Os",
 	SMALLCODE="")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],
@@ -20,7 +20,7 @@ AC_ARG_WITH(ptheads-prefix,
 	PTHREADSPATH="")
 
 
-CXXFLAGS=""
+CXXFLAGS="-fomit-frame-pointer -fno-exceptions -fno-rtti"
 AC_SUBST(CXXFLAGS)
 AC_SUBST(SMALLCODE)
 if ( test -n "$SMALLCODE" ); then
@@ -69,6 +69,7 @@ AC_CHECK_PROG(AR,$host_alias-ar,$host_alias-ar,ar)
 AC_SUBST(AR)
 
 FW_CHECK_GNU_STRIP
+FW_CHECK_PIPE
 echo "******************************"
 
 
@@ -274,15 +275,35 @@ AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
 getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R,1, Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+HAVE_GETRPCBYNAME_R="no"
 AC_MSG_CHECKING(getrpcbyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+if ( test "$HAVEGETRPCBYNAME_R" = "no" )
+then
+AC_MSG_CHECKING(getrpcbyname_r)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpcent.h>],
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+HAVEGETRPCBYNUMBER_R="no"
 AC_MSG_CHECKING(getrpcbynumber_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test "$HAVE_GETRPCBYNUMBER_R" = "no" )
+then
+AC_MSG_CHECKING(getrpcbynumber_r)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpcent.h>],
 getrpcbynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
 
 LIBS="$OLDLIBS"
 
