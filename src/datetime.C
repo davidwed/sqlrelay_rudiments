@@ -71,6 +71,9 @@ bool datetime::initialize(const char *tmstring) {
 	}
 	sec=atoi(ptr);
 
+	// initialize the daylight savings time flag
+	isdst=-1;
+
 	// get the time zone if it was provided
 	delete[] zone;
 	if ((ptr=strchr(ptr,' '))) {
