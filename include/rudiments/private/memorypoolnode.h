@@ -7,7 +7,7 @@ class memorypoolnode {
 			memorypoolnode(unsigned long size);
 			~memorypoolnode();
 
-		char		*buffer;
+		char	*buffer;
 		memorypoolnode	*next;
 		memorypoolnode	*previous;
 		unsigned long	size;

@@ -68,7 +68,7 @@ char	*memorypool::malloc(unsigned long length) {
 char	*memorypool::calloc(unsigned long length) {
 	char	*retval=malloc(length);
 	for (int i=0; i<length; i++) {
-		retval[i]=0;
+		retval[i]=(char)NULL;
 	}
 	return retval;
 }
