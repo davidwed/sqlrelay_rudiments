@@ -159,7 +159,7 @@ class xmldomnode {
 		// These methods control the behavior when the node is deleted.
 		void		cascadeOnDelete();
 				// Instructs the destructor to recursively
-				// delete all child nodes.
+				// delete all child nodes. (the default)
 		void		dontCascadeOnDelete();
 				// Instructs the destructor not to recursively
 				// delete all child nodes.

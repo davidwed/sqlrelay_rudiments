@@ -2,6 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
+			void	reset();
+
 			int	tagStart(char *name);
 			int	attributeName(char *name);
 			int	attributeValue(char *value);

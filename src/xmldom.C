@@ -16,6 +16,16 @@
 	#include <strings.h>
 #endif
 
+void xmldom::reset() {
+	if (!rootnode->isNullNode()) {
+		rootnode->cascadeOnDelete();
+		delete rootnode;
+		rootnode=nullnode;
+	}
+	currentparent=NULL;
+	currentattribute=NULL;
+}
+
 int xmldom::writeFile(const char *filename, mode_t perms) const {
 	file	fl;
 	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {

@@ -20,10 +20,12 @@ RUDIMENTS_INLINE xmldom::~xmldom() {
 }
 
 RUDIMENTS_INLINE int xmldom::parseFile(const char *filename) {
+	reset();
 	return xmlsax::parseFile(filename);
 }
 
 RUDIMENTS_INLINE int xmldom::parseString(const char *string) {
+	reset();
 	return xmlsax::parseFile(string);
 }
 

@@ -27,7 +27,7 @@ xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	firstattribute=NULL;
 	lastattribute=NULL;
 	attributecount=0;
-	cascade=0;
+	cascade=1;
 	isnullnode=0;
 }
 
@@ -46,7 +46,7 @@ xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 	firstattribute=NULL;
 	lastattribute=NULL;
 	attributecount=0;
-	cascade=0;
+	cascade=1;
 	isnullnode=0;
 }
 

@@ -10,6 +10,7 @@ need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldomnode should probably use list class
 should be able to validate an xml document against the dtd
+dtd class needs to store +/* child element modifiers
 
 naming convention should support tcp/udp/etc sockets and non-stream tcp sockets
 	ie: protocol-type-domain-client/server-socket
