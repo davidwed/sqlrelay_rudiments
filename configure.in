@@ -68,15 +68,8 @@ if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 	AC_DEFINE_UNQUOTED(ENABLE_RUDIMENTS_INLINES,1,Use inline functions or not)
 fi
 
-dnl library hacks here...
-HACKLIBS=""
-dnl SCO 5.0.6 hack
-if ( test "`uname -a`" = "SCO_SV osr506 3.2 5.0.6 i386" )
-then
-	HACKLIBS="/usr/ccs/lib/crti.o $LIBS"
-fi
-LIBS="$HACKLIBS $LIBS"
-
+dnl check for hacks here
+FW_CHECK_HACKS
 
 dnl Checks for programs.
 echo
@@ -475,6 +468,14 @@ AC_TRY_LINK([#include <stdlib.h>
 clock_nanosleep(0,0,NULL,NULL);,AC_DEFINE(HAVE_CLOCK_NANOSLEEP,1,Some systems have clock_nanosleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_RPC
+
+AC_MSG_CHECKING(pselect)
+AC_TRY_LINK([#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/select.h>
+#include <stdlib.h>],
+pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_PSELECT,1,Some systems have pselect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
 

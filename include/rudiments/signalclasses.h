@@ -78,9 +78,12 @@ class signalhandler {
 			// Calls the setHandler() and handleSignal() methods
 			// below during instantiation.
 
-		void	setHandler(void *inthandler);
+		void	setHandler(void *handler);
 			// Sets the function to call when the process
 			// receives the signal.
+		void	*getHandler();
+			// Returns a pointer to the function that will be
+			// called when the process receives the signal.
 
 		bool	handleSignal(int signum);
 			// Instructs the program to handle "signum" by calling
@@ -89,6 +92,7 @@ class signalhandler {
 			// handler with several signals.
 			//
 			// Returns true on success and false on failure.
+		bool	handleSignal(int signum, signalhandler *oldhandler);
 		
 		// Signal flags modify the behavior of the signal handling
 		// process.

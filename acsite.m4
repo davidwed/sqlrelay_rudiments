@@ -870,18 +870,15 @@ AC_DEFUN([FW_CHECK_NANOSLEEP],
 dnl check to see which should be used of -lsocket, -lnsl and -lxnet
 AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 [
+
+	AC_MSG_CHECKING(for socket libraries)
+
 	AC_LANG(C)
 	SOCKETLIBS=""
 	DONE=""
 	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet"
 	do
-		if ( test -n "$i" )
-		then
-			AC_MSG_CHECKING($i is required for socket-related calls)
-		else
-			AC_MSG_CHECKING(no extra libraries are required for socket-related calls)
-		fi
-		FW_TRY_LINK([#include <stdlib.h>],[connect(0,NULL,0); listen(0,0); bind(0,NULL,0); accept(0,NULL,0); send(0,NULL,0,0); sendto(0,NULL,0,0,NULL,0); sendmsg(0,NULL,0); gethostbyname(NULL);],[],[$i],[],[SOCKETLIBS="$i"; DONE="yes"; AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <stdlib.h>],[connect(0,NULL,0); listen(0,0); bind(0,NULL,0); accept(0,NULL,0); send(0,NULL,0,0); sendto(0,NULL,0,0,NULL,0); sendmsg(0,NULL,0); gethostbyname(NULL);],[],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
 		if ( test -n "$DONE" )
 		then
 			break
@@ -894,5 +891,37 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 		AC_MSG_ERROR(no combination of networking libraries was found.)
 	fi
 
+	if ( test -z "$SOCKETLIBS" )
+	then
+		AC_MSG_RESULT(none)
+	else
+		AC_MSG_RESULT($SOCKETLIBS)
+	fi
+
 	AC_SUBST(SOCKETLIBS)
+])
+
+AC_DEFUN([FW_CHECK_SCO_HACK],
+[
+	AC_LANG(C)
+	LINKOK=""
+	AC_TRY_LINK([#include <stdlib.h>],exit(0);,LINKOK="yes")
+	if ( test -z "$LINKOK" )
+	then
+		OLDLIBS="$LIBS"
+		LIBS="/usr/ccs/lib/crti.o $LIBS"
+		AC_TRY_LINK([#include <stdlib.h>],exit(0);,LINKOK="yes")
+		if ( test -n "$LINKOK" )
+		then
+			HACKLIBS="$HACKLIBS /usr/ccs/lib/crti.o"
+		fi
+		LIBS="$OLDLIBS"
+	fi
+])
+
+AC_DEFUN([FW_CHECK_HACKS],
+[
+HACKLIBS=""
+FW_CHECK_SCO_HACK
+LIBS="$HACKLIBS $LIBS"
 ])

@@ -7,6 +7,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+// for memcpy
+#include <string.h>
+
 
 
 // signalset methods
@@ -80,6 +83,10 @@ void signalhandler::setHandler(void *handler) {
 	#endif
 }
 
+void *signalhandler::getHandler() {
+	return (void *)handlerstruct.sa_handler;
+}
+
 void signalhandler::removeAllFlags() {
 	handlerstruct.sa_flags=0;
 }
@@ -118,4 +125,12 @@ int signalhandler::getFlags() const {
 
 bool signalhandler::handleSignal(int signum) {
 	return !sigaction(signum,&handlerstruct,(struct sigaction *)NULL);
+}
+
+bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
+	struct sigaction	oldaction;
+	bool	retval=!sigaction(signum,&handlerstruct,&oldaction);
+	memcpy((void *)&oldhandler->handlerstruct,
+		(void *)&oldaction,sizeof(struct sigaction));
+	return retval;
 }

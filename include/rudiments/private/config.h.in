@@ -226,6 +226,9 @@
 /* OpenBSD style statfs */
 #undef HAVE_OPENBSD_STATFS
 
+/* Some systems have pselect */
+#undef HAVE_PSELECT
+
 /* Some systems have putenv */
 #undef HAVE_PUTENV
 
