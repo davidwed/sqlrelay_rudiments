@@ -3,6 +3,9 @@
 	fixed comment detection in xmlsax
 	STRIPPROG is set before calling install-sh now
 	made return value of pass/receiveFileDescriptor a bool
+	fixed filedescriptor::safeRead(); when trying to read more bytes than
+		are available, it now returns the number of bytes read rather
+		than 0
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now
