@@ -40,7 +40,7 @@ void	myclass::test() {
 	fd.close();
 }
 
-int	main() {
+int main(int argv, const char **argc) {
 	myclass	m;
 	m.test();
 }

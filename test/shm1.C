@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 
-int	main() {
+int main(int argv, const char **argc) {
         sharedmemory    shm;
         shm.create(ftok("/tmp/shm",0),128,
                                 permissions::evalPermString("rw-------"));

@@ -170,11 +170,12 @@ char *semaphoreset::getUserName() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;
-	char	*retval=NULL;
-	if (!semctl(semid,0,IPC_STAT,semctlun)) {
-		return passwdentry::getName(getds.sem_perm.uid);
+	char		*name;
+	if (!semctl(semid,0,IPC_STAT,semctlun) &&
+			passwdentry::getName(getds.sem_perm.uid,&name)) {
+		return name;
 	}
-	return retval;
+	return NULL;
 }
 
 uid_t semaphoreset::getUserId() {
@@ -191,11 +192,12 @@ char *semaphoreset::getGroupName() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;
-	char	*retval=NULL;
-	if (!semctl(semid,0,IPC_STAT,semctlun)) {
-		return groupentry::getName(getds.sem_perm.gid);
+	char		*name;
+	if (!semctl(semid,0,IPC_STAT,semctlun) &&
+			groupentry::getName(getds.sem_perm.gid,&name)) {
+		return name;
 	}
-	return retval;
+	return NULL;
 }
 
 gid_t semaphoreset::getGroupId() {

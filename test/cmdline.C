@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int     main(int argv, const char **argc) {
+int main(int argv, const char **argc) {
 
 	commandline     cmdline(argv,argc);
 

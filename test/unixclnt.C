@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	unixclientsocket	clnt;
 	clnt.connectToServer("/tmp/lsnr.socket",1,0);

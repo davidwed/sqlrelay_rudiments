@@ -72,20 +72,22 @@ int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 
 char *sharedmemory::getUserName() {
 	shmid_ds	getds;
-	char	*retval=NULL;
-	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		return passwdentry::getName(getds.shm_perm.uid);
+	char		*name;
+	if (!shmctl(shmid,IPC_STAT,&getds) &&
+			passwdentry::getName(getds.shm_perm.uid,&name)) {
+		return name;
 	}
-	return retval;
+	return NULL;
 }
 
 char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
-	char	*retval=NULL;
-	if (!shmctl(shmid,IPC_STAT,&getds)) {
-		return groupentry::getName(getds.shm_perm.gid);
+	char		*name;
+	if (!shmctl(shmid,IPC_STAT,&getds) &&
+			groupentry::getName(getds.shm_perm.gid,&name)) {
+		return name;
 	}
-	return retval;
+	return NULL;
 }
 
 #endif

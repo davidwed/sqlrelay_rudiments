@@ -1,3 +1,7 @@
+dtd test crashes
+host/proto entry classes need static methods
+table class is generally screwed up
+
 connectiondata should just be generic name/value list class
 need generic parser/lexer classes, use them for xmlsax
 

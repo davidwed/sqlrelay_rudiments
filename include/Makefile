@@ -17,7 +17,6 @@ install:
 	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filedescriptor.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/filesystem.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/groupentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/hostentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetclientsocket.h $(incdir)/rudiments
@@ -66,8 +65,6 @@ install:
 	$(INSTALL) -m 644 rudiments/private/filedescriptornode.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedestination.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedescriptor.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/filesystem.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/filesysteminlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/groupentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/groupentryinlines.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/hostentry.h $(incdir)/rudiments

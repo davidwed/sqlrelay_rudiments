@@ -6,7 +6,7 @@
 #include <errno.h>
 #include <strings.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	unixclientsocket clnt;
 	clnt.connectToServer("/tmp/handoff.socket",0,1);

@@ -37,11 +37,15 @@ inline void *sharedmemory::getPointer() const {
 }
 
 inline int sharedmemory::setUserName(const char *username) {
-	return setUserId(passwdentry::getUserId(username));
+	uid_t	userid;
+	return passwdentry::getUserId(username,&userid) &&
+			setUserId(userid);
 }
 
 inline int sharedmemory::setGroupName(const char *groupname) {
-	return setGroupId(groupentry::getGroupId(groupname));
+	gid_t	groupid;
+	return groupentry::getGroupId(groupname,&groupid) &&
+			setGroupId(groupid);
 }
 
 inline int sharedmemory::setUserId(uid_t uid) {

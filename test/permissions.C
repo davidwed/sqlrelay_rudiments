@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
         // Create a file with rw-r--r-- permissions
         int     fd=open("/tmp/tempfile",O_RDWR|O_CREAT,

@@ -74,6 +74,9 @@ shm1: shm1.C shm1.lo
 shm2: shm2.C shm2.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ shm2.lo -L../src -lrudiments_p
 
+tbl: tbl.C tbl.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ tbl.lo -L../src -lrudiments_p -lefence
+
 text: text.C text.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ text.lo -L../src -lrudiments_p
 

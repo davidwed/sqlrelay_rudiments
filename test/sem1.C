@@ -13,7 +13,7 @@
 #include <fcntl.h>
 
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	unlink("/tmp/sem");
 	int	fd=open("/tmp/sem",O_CREAT|O_TRUNC|O_RDWR,

@@ -32,52 +32,70 @@ inline char **groupentry::getMembers() const {
 	return grp->gr_mem;
 }
 
-inline char *groupentry::getPassword(const char *groupname) {
+inline int groupentry::getPassword(const char *groupname, char **password) {
 	groupentry	grp;
-	return (grp.initialize(groupname))?strdup(grp.getPassword()):NULL;
-}
-
-inline gid_t groupentry::getGroupId(const char *groupname) {
-	groupentry	grp;
-	return (grp.initialize(groupname))?grp.getGroupId():-1;
-}
-
-inline char **groupentry::getMembers(const char *groupname) {
-	groupentry	grp;
-	if (!grp.initialize(groupname)) {
-		return NULL;
+	if (grp.initialize(groupname)) {
+		*password=strdup(grp.getPassword());
+		return 1;
 	}
-	int	counter;
-	for (counter=0; grp.getMembers()[counter]; counter++);
-	char	**members=new char *[counter+1];
-	members[counter]=NULL;
-	for (int i=0; i<counter; i++) {
-		members[i]=strdup(grp.getMembers()[i]);
-	}
-	return members;
+	return 0;
 }
 
-inline char *groupentry::getName(gid_t groupid) {
+inline int groupentry::getGroupId(const char *groupname, gid_t *groupid) {
 	groupentry	grp;
-	return (grp.initialize(groupid))?strdup(grp.getName()):NULL;
+	if (grp.initialize(groupname)) {
+		*groupid=grp.getGroupId();
+		return 1;
+	}
+	return 0;
 }
 
-inline char *groupentry::getPassword(gid_t groupid) {
+inline int groupentry::getMembers(const char *groupname, char ***members) {
 	groupentry	grp;
-	return (grp.initialize(groupid))?strdup(grp.getPassword()):NULL;
+	if (grp.initialize(groupname)) {
+		int	counter;
+		for (counter=0; grp.getMembers()[counter]; counter++);
+		char	**memb=new char *[counter+1];
+		memb[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			memb[i]=strdup(grp.getMembers()[i]);
+		}
+		*members=memb;
+		return 1;
+	}
+	return 0;
 }
 
-inline char **groupentry::getMembers(gid_t groupid) {
+inline int groupentry::getName(gid_t groupid, char **name) {
 	groupentry	grp;
-	if (!grp.initialize(groupid)) {
-		return NULL;
+	if (grp.initialize(groupid)) {
+		*name=strdup(grp.getName());
+		return 1;
 	}
-	int	counter;
-	for (counter=0; grp.getMembers()[counter]; counter++);
-	char	**members=new char *[counter+1];
-	members[counter]=NULL;
-	for (int i=0; i<counter; i++) {
-		members[i]=strdup(grp.getMembers()[i]);
+	return 0;
+}
+
+inline int groupentry::getPassword(gid_t groupid, char **password) {
+	groupentry	grp;
+	if (grp.initialize(groupid)) {
+		*password=strdup(grp.getPassword());
+		return 1;
 	}
-	return members;
+	return 0;
+}
+
+inline int groupentry::getMembers(gid_t groupid, char ***members) {
+	groupentry	grp;
+	if (grp.initialize(groupid)) {
+		int	counter;
+		for (counter=0; grp.getMembers()[counter]; counter++);
+		char	**memb=new char *[counter+1];
+		memb[counter]=NULL;
+		for (int i=0; i<counter; i++) {
+			memb[i]=strdup(grp.getMembers()[i]);
+		}
+		*members=memb;
+		return 1;
+	}
+	return 0;
 }

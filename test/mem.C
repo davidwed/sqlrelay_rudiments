@@ -6,7 +6,7 @@
 #include <rudiments/memorypool.h>
 #include <stdio.h>
 
-main() {
+int main(int argv, const char **argc) {
 
 	memorypool	*mp=new memorypool(32,16,10);
 

@@ -4,7 +4,7 @@
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	hostentry	he;
 	he.initialize("localhost");

@@ -9,7 +9,7 @@
 #include <rudiments/permissions.h>
 #include <stdio.h>
 
-int	main() {
+int main(int argv, const char **argc) {
         sharedmemory    shm;
         shm.attach(ftok("/tmp/shm",0));
 

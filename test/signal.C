@@ -11,7 +11,7 @@ void    handleSigusr1() {
         printf("Got a SIGUSR1!\n");
 }
 
-int	main() {
+int main(int argv, const char **argc) {
 
         // this program will ignore all signals except SIGUSR1
         signalset       ignoreset;

@@ -19,11 +19,11 @@ class variablebuffer {
 		virtual	~variablebuffer();
 
 		void	setPosition(unsigned long pos);
-			// Sets the position at which the next write will
-			// occur to "pos".  If the position is set beyond the
-			// end of the buffer, the buffer will grow but the data
-			// between the current end of the buffer and the new
-			// position will be undefined.
+			// Sets the position at which the next read or write
+			// will occur to "pos".  If the position is set beyond
+			// the end of the buffer, the buffer will grow but the
+			// data between the current end of the buffer and the
+			// new position will be undefined.
 
 		// The write() and append() methods return a pointer to the
 		// variablebuffer instance.  This enables chaining:
@@ -40,6 +40,12 @@ class variablebuffer {
 						unsigned long size);
 			// Appends "data" to the variablebuffer.  The buffer
 			// will grow to accommodate the new data.
+
+		unsigned long	read(unsigned char *data,
+						unsigned long size);
+			// Reads "size" bytes from the variablebuffer at the
+			// current position into "data".  Also increments the
+			// current position by "size" bytes.
 
 		void	clear();
 			// Empties the variablebuffer.

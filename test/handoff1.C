@@ -7,7 +7,7 @@
 #include <rudiments/permissions.h>
 #include <stdio.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	inetserversocket	serversock;
 	serversock.listenOnSocket(NULL,10000,15);

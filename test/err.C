@@ -34,7 +34,7 @@ void	myclass::test4() {
 	appendError("error4");
 }
 
-int	main() {
+int main(int argv, const char **argc) {
 	myclass	m;
 	m.test1();
 	printf("%s\n",m.getError());

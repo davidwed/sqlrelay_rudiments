@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	// initialize a text buffer and print it out
 	char    buffer[100];
@@ -42,7 +42,7 @@ int	main() {
 
 	// http escape the buffer
 	char    *escbuffer=text::httpEscape("!@#$%^&*()hello-+");
-	printf("!@#$\%^&*()hello-+  http escaped is  %s\n",escbuffer);
+	printf("!@#$\\%^&*()hello-+  http escaped is  %s\n",escbuffer);
 	delete escbuffer;
 	
 	// evaluate a string to see if it's a number

@@ -53,7 +53,7 @@ RETSIGTYPE	shutDown() {
 	exit(0);
 }
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	mysvr=new myserver();
 	mysvr->handleShutDown((RETSIGTYPE *)shutDown);

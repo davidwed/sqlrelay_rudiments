@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	passwdentry	pwent;
 	pwent.initialize("root");

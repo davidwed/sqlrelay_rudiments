@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	variablebuffer	*vb=new variablebuffer(10,10);
 
@@ -59,6 +59,33 @@ int	main() {
 		}
 	}
 	printf("\n");
+
+	unsigned char	buffer[5];
+	buffer[4]=(unsigned char)NULL;
+	vb->setPosition(0);
+	unsigned long	sizeread=vb->read(buffer,4);
+	printf("%d: ",sizeread);
+	for (int i=0; i<sizeread; i++) {
+		printf("%c",buffer[i]);
+	}
+	printf("\n");
+
+	vb->setPosition(5);
+	sizeread=vb->read(buffer,4);
+	printf("%d: ",sizeread);
+	for (int i=0; i<sizeread; i++) {
+		printf("%c",buffer[i]);
+	}
+	printf("\n");
+
+	vb->setPosition(60);
+	sizeread=vb->read(buffer,4);
+	printf("%d: ",sizeread);
+	for (int i=0; i<sizeread; i++) {
+		printf("%c",buffer[i]);
+	}
+	printf("\n");
+
 
 	delete vb;
 }

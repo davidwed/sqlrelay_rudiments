@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	dtd	d;
 	d.parseFile("dtd.dtd");

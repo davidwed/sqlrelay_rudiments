@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	xmldom	x;
 	x.parseFile("xmls.xml");

@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-main() {
+int main(int argv, const char **argc) {
 
 	unlink("testfile");
 
@@ -21,13 +21,15 @@ main() {
 
 	uid_t	uid;
 	fl.getOwnerUserId(&uid);
-	char	*username=passwdentry::getName(uid);
+	char	*username;
+	passwdentry::getName(uid,&username);
 	printf("	user       : %s\n",username);
 	delete[] username;
 
 	gid_t	gid;
 	fl.getOwnerGroupId(&gid);
-	char	*groupname=groupentry::getName(gid);
+	char	*groupname;
+	groupentry::getName(gid,&groupname);
 	printf("	group      : %s\n",groupname);
 	delete[] groupname;
 

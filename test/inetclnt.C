@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	inetclientsocket	clnt;
 	clnt.connectToServer("localhost",8000,1,0);

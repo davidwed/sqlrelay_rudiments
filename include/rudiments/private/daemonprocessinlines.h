@@ -34,11 +34,15 @@ inline void daemonprocess::crash() {
 }
 
 inline int daemonprocess::runAsUser(const char *username) const {
-	return runAsUserId(passwdentry::getUserId(username));
+	uid_t	userid;
+	return passwdentry::getUserId(username,&userid) &&
+		runAsUserId(userid);
 }
 
 inline int daemonprocess::runAsGroup(const char *groupname) const {
-	return runAsGroupId(groupentry::getGroupId(groupname));
+	gid_t	groupid;
+	return groupentry::getGroupId(groupname,&groupid) &&
+		runAsGroupId(groupid);
 }
 
 inline int daemonprocess::runAsUserId(uid_t uid) const {

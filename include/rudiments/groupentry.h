@@ -24,13 +24,16 @@ class groupentry {
 
 		void	print() const;
 
-		static char	*getPassword(const char *groupname);
-		static gid_t	getGroupId(const char *groupname);
-		static char	**getMembers(const char *groupname);
+		static int	getPassword(const char *groupname,
+							char **password);
+		static int	getGroupId(const char *groupname,
+							gid_t *groupid);
+		static int	getMembers(const char *groupname,
+							char ***members);
 
-		static char	*getName(gid_t groupid);
-		static char	*getPassword(gid_t groupid);
-		static char	**getMembers(gid_t groupid);
+		static int	getName(gid_t groupid, char **name);
+		static int	getPassword(gid_t groupid, char **password);
+		static int	getMembers(gid_t groupid, char ***members);
 
 	#include <rudiments/private/groupentry.h>
 };

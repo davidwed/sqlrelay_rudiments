@@ -22,7 +22,7 @@ RETSIGTYPE	shutDown() {
 	exit(0);
 }
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	// launch the listener
 	dmn=new daemonprocess();

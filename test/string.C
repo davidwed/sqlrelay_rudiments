@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	stringbuffer	*str=new stringbuffer();
 	str->append("hello ")->append("there ")->append("world ");

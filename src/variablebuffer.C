@@ -18,6 +18,21 @@ variablebuffer::variablebuffer(unsigned long initialsize,
 	end=0;
 }
 
+unsigned long variablebuffer::read(unsigned char *data, unsigned long size) {
+
+	unsigned long	bytestoread=size;
+	if (position>end) {
+		bytestoread=0;
+	} else if (position+size>end) {
+		bytestoread=end-position;
+	}
+
+	memcpy((void *)data,(void *)(buffer+position),bytestoread);
+	position=position+bytestoread;
+
+	return bytestoread;
+}
+
 variablebuffer *variablebuffer::write(const unsigned char *data,
 						unsigned long size) {
 

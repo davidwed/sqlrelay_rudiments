@@ -66,61 +66,68 @@ int	myxmlsax::tagStart(char *name) {
 	indent(ind);
 	printf("tagStart: %s\n",name);
 	ind++;
+	return 1;
 }
 
 int	myxmlsax::attributeName(char *name) {
 	indent(ind+1);
 	printf("attribute name: %s\n",name);
+	return 1;
 }
 
 int	myxmlsax::attributeValue(char *value) {
 	indent(ind+1);
 	printf("attribute value: %s\n",value);
+	return 1;
 }
 
 int	myxmlsax::text(char *string) {
 	indent(ind+1);
 	printf("text: \n%s\n",string);
+	return 1;
 }
 
 int	myxmlsax::tagEnd(char *name) {
 	ind--;
 	indent(ind);
 	printf("tagEnd: %s\n",name);
+	return 1;
 }
 
 int	myxmlsax::comment(char *string) {
 	indent(ind);
 	printf("comment: \n%s\n",string);
+	return 1;
 }
 
 int	myxmlsax::cdata(char *string) {
 	indent(ind);
 	printf("cdata: \n%s\n",string);
+	return 1;
 }
 
 
-int	main() {
+int main(int argv, const char **argc) {
 
 	myxmlsax	x;
 	printf("=====================================================\n");
-	x.parseString("
-<?xml version=\"1.0\" ?>
-<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>
-<test>start test text
-	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
-	<tag2 name21=\"value21\" name22=\"value22\"> start tag2 text
-		<tag3 name31=\"value31\" name32=\"value32\"> start tag3 text
-			<tag4 name42=\"value41\" name42=\"value42\" /> end tag4 end text
-		</tag3> end tag3 text
-<!-- test comment -->
-<?target test=\"test1\"?>
-	</tag2> end tag2 text
-&amp;&lt;&gt;&apos;&quot;
-&amp&lt&gt&apos&quot
-&&&&&
-<![CDATA[ test [ test [ test [test]]]]]>
-</test>
+	x.parseString("\n\
+<?xml version=\"1.0\" ?>\n\
+<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n\
+<test>start test text\n\
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text\n\
+	<tag2 name21=\"value21\" name22=\"value22\"> start tag2 text\n\
+		<tag3 name31=\"value31\" name32=\"value32\"> start tag3 text\n\
+			<tag4 name42=\"value41\" name42=\"value42\" /> end tag4 end text\n\
+		</tag3> end tag3 text\n\
+<!-- test comment -->\n\
+<?target test=\"test1\"?>\n\
+	</tag2> end tag2 text\n\
+&amp;&lt;&gt;&apos;&quot;\n\
+&amp&lt&gt&apos&quot\n\
+&&&&&\n\
+<![CDATA[ test [ test [ test [test]]]]]>\n\
+</test>\n\
 ");
 	printf("=====================================================\n");
 	x.parseFile("xmls.xml");

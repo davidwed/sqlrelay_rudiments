@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int	main() {
+int main(int argv, const char **argc) {
 
         semaphoreset	sem;
 	sem.attach(ftok("/tmp/sem",0),2);
