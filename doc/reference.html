@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>firstworks   Rudiments Reference</title>
+<link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Rudiments Reference</span><br><br>
+
+<p></p>
+
+<span class="heading">Classes:</span>
+
+<p>The <b>rudiments</b> class library consists of several classes.  Some are 
+utility classes, others are designed to be base classes for software.</p>
+
+<ul>
+<li><b>Base Classes:</b>
+	<ul>
+	<li><b><a href="classes/daemonprocess.h.html">daemonprocess</a></b> - base class for daemons
+	<li><b><a href="classes/errorhandler.h.html">errorhandler</a></b> - base class for several other rudiments classes, provides a method for getting the error messages that they can generate
+	<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
+	<li><b><a href="classes/inetserversocket.h.html">inetserversocket</a></b> - base class for inet tcp stream servers
+	<li><b><a href="classes/listener.h.html">listener</a></b> - base class for listening on pools of file descriptors
+	<li><b><a href="classes/transport.h.html">transport</a></b> - base class for classes that transport data over (or associated with) a file descriptor (such as clients and servers)
+	<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
+	<li><b><a href="classes/unixserversocket.h.html">unixserversocket</a></b> - base class for unix tcp stream servers
+	<li><b><a href="classes/xmlsax.h.html">xmlsax</a></b> - base class for xml parsers
+	</ul>
+<li><b>Utility Classes:</b>
+	<ul>
+	<li><b><a href="classes/commandline.h.html">commandline</a></b> - command line processing class
+	<li><b><a href="classes/datetime.h.html">datetime</a></b> - date/time processing class
+	<li><b><a href="classes/logger.h.html">logger</a></b> - class for generating log messages
+	<li><b><a href="classes/memorypool.h.html">memorypool</a></b> - class that implements a memory pool
+	<li><b><a href="classes/permissions.h.html">permissions</a></b> - class for generating file permissions
+	<li><b><a href="classes/randomnumber.h.html">randomnumber</a></b> - class for generating random numbers
+	<li><b><a href="classes/regularexpression.h.html">regularexpression</a></b> - class for dealing with regular expressions
+	<li><b><a href="classes/semaphoreset.h.html">semaphoreset</a></b> - semaphore class
+	<li><b><a href="classes/sharedmemory.h.html">sharedmemory</a></b> - shared memory class
+	<li><b><a href="classes/signalclasses.h.html">signalclasses</a></b> - classes with methods for managing signals
+	<li><b><a href="classes/text.h.html">text</a></b> - text processing and evaluation class
+	<li><b><a href="classes/xmldom.h.html">xmldom</a></b> - a minimal XML DOM parser
+	<li><b><a href="classes/xmldomnode.h.html">xmldomnode</a></b> - an XML DOM tree node
+	</ul>
+</ul>
+
+<p>As a rule of thumb, the base classes should be inherited from and the
+utility classes should be instantiated as needed.  Some of the utility classes
+have static methods which can be called directly without instantiating an 
+instance of the class.</p>
+
+</body>
+</html>

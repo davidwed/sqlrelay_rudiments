@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/daemonprocess.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 1999-2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef DAEMONPROCESS_H</font>
+<font color="#a020f0">#define DAEMONPROCESS_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/signalclasses.h&gt;</font>
+
+<font color="#0000f8">// Daemons are long running processes which often detach themselves from</font>
+<font color="#0000f8">// the controlling terminal and run in the background.  They are frequently</font>
+<font color="#0000f8">// started at boot time and run until the machine is shut down.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// Daemons typically perform &quot;housecleaning&quot; tasks or serve data to client</font>
+<font color="#0000f8">// programs.  See the server class.</font>
+
+<font color="#288850"><b>class</b></font> daemonprocess {
+        <font color="#a02828"><b>public</b></font>:
+                                daemonprocess();
+                        <font color="#288850"><b>virtual</b></font> ~daemonprocess();
+
+                        <font color="#288850"><b>int</b></font>     checkForPidFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename) <font color="#288850"><b>const</b></font>;
+                                <font color="#0000f8">// Checks for filename &quot;filename&quot; and reads the</font>
+                                <font color="#0000f8">// process id out of it, if it exists.  Returns</font>
+                                <font color="#0000f8">// the process id on success or 0 on failure.</font>
+                        <font color="#288850"><b>void</b></font>    createPidFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
+                                <font color="#0000f8">// Create's file &quot;filename&quot; and puts the current</font>
+                                <font color="#0000f8">// process id in it.  Note that when you delete</font>
+                                <font color="#0000f8">// this file during shutdown you must use the </font>
+                                <font color="#0000f8">// full pathname since the detach() method </font>
+                                <font color="#0000f8">// below changes directories to &quot;/&quot;.</font>
+
+                        <font color="#288850"><b>void</b></font>    detach() <font color="#288850"><b>const</b></font>;
+                                <font color="#0000f8">// Detach from the controlling terminal and</font>
+                                <font color="#0000f8">// process and run in the background.  Also</font>
+                                <font color="#0000f8">// change directories to &quot;/&quot; and set the file</font>
+                                <font color="#0000f8">// creation mask such that all files are </font>
+                                <font color="#0000f8">// created -rw-rw-rw and all directories </font>
+                                <font color="#0000f8">// drwxrwxrwx.</font>
+
+                        <font color="#0000f8">// These methods allow the daemon to run as a different</font>
+                        <font color="#0000f8">// user or group than the one that started the process.</font>
+                        <font color="#0000f8">// They have no effect unless the process is started</font>
+                        <font color="#0000f8">// by the root user.</font>
+                        <font color="#288850"><b>int</b></font>     runAsUser(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username) <font color="#288850"><b>const</b></font>;
+                        <font color="#288850"><b>int</b></font>     runAsGroup(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname) <font color="#288850"><b>const</b></font>;
+                        <font color="#288850"><b>int</b></font>     runAsUserId(uid_t uid) <font color="#288850"><b>const</b></font>;
+                        <font color="#288850"><b>int</b></font>     runAsGroupId(gid_t gid) <font color="#288850"><b>const</b></font>;
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    handleShutDown(<font color="#288850"><b>void</b></font> *shutdownfunction);
+                                <font color="#0000f8">// This method allows you to designate a</font>
+                                <font color="#0000f8">// function to run when the daemon is killed.</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/daemonprocess.h&gt;</font>
+
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/daemonprocessinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/sharedmemory.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 1999-2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef SHAREDMEMORY_H</font>
+<font color="#a020f0">#define SHAREDMEMORY_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;pwd.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;grp.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/errorhandler.h&gt;</font>
+
+<font color="#0000f8">// Shared memory segments allow multiple processes to access a common</font>
+<font color="#0000f8">// address space.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// Shared memory can be used for interprocess communication and is generally</font>
+<font color="#0000f8">// faster than using fifo's or unix sockets.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// To synchronize access to shared memory, use the semaphoreset class.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// A shared memory segment is owned by a user and group and has access </font>
+<font color="#0000f8">// permissions just like a file.</font>
+
+<font color="#288850"><b>class</b></font> sharedmemory : <font color="#a02828"><b>public</b></font> errorhandler {
+        <font color="#a02828"><b>public</b></font>:
+                        sharedmemory();
+                        <font color="#0000f8">// Creates a shared memory segment.</font>
+                <font color="#288850"><b>virtual</b></font> ~sharedmemory();
+                        <font color="#0000f8">// Cleans up and removes the shared memory segment if</font>
+                        <font color="#0000f8">// it was created by the create() or createOrAttach() </font>
+                        <font color="#0000f8">// method below.  If it was just attached to, it is</font>
+                        <font color="#0000f8">// not removed.</font>
+
+                <font color="#288850"><b>int</b></font>     create(key_t key, <font color="#288850"><b>int</b></font> size, mode_t permissions);
+                        <font color="#0000f8">// Creates a shared memory segment of &quot;size&quot; bytes, </font>
+                        <font color="#0000f8">// identified by &quot;key&quot;.</font>
+                        <font color="#0000f8">// &quot;key&quot; should be generated using the ftok</font>
+                        <font color="#0000f8">//      function.</font>
+                        <font color="#0000f8">// &quot;permissions&quot; sets the access permissions</font>
+                        <font color="#0000f8">//      for the segment.</font>
+                <font color="#288850"><b>int</b></font>     attach(key_t key);
+                        <font color="#0000f8">// Attaches to a shared memory identified by &quot;key&quot;.</font>
+                <font color="#288850"><b>int</b></font>     createOrAttach(key_t key, <font color="#288850"><b>int</b></font> size, mode_t permissions);
+                        <font color="#0000f8">// Attempts to create the shared memory segment </font>
+                        <font color="#0000f8">// identified by &quot;key&quot;.  If this fails, it attempts</font>
+                        <font color="#0000f8">// to attach to a shared memory segment identified by</font>
+                        <font color="#0000f8">// &quot;key&quot;.</font>
+
+                <font color="#288850"><b>void</b></font>    dontRemove();
+                        <font color="#0000f8">// Instructs the destructor not to remove the shared</font>
+                        <font color="#0000f8">// memory segment if it was created during a call to</font>
+                        <font color="#0000f8">// create() or createOrAttach() above.  This is useful</font>
+                        <font color="#0000f8">// if an application creates a shared memory segment</font>
+                        <font color="#0000f8">// then forks and wants to delete the shared memory</font>
+                        <font color="#0000f8">// segment in the forked process but does not want</font>
+                        <font color="#0000f8">// the segment removed from the system.</font>
+                <font color="#288850"><b>int</b></font>     forceRemove();
+                        <font color="#0000f8">// Removes the shared memory segment whether it was</font>
+                        <font color="#0000f8">// created or just attached to.</font>
+
+                <font color="#288850"><b>int</b></font>     getId() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// Returns the internal id for the </font>
+                        <font color="#0000f8">// shared memory segment.</font>
+
+                <font color="#288850"><b>void</b></font>    *getPointer() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// Returns a pointer to the shared memory</font>
+                        <font color="#0000f8">// segment.  Data may be read from or written</font>
+                        <font color="#0000f8">// to the segment using this pointer.</font>
+
+                <font color="#288850"><b>int</b></font>     setUserName(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *username);
+                        <font color="#0000f8">// makes this shared memory segment owned by</font>
+                        <font color="#0000f8">// the user &quot;username&quot;</font>
+                <font color="#288850"><b>int</b></font>     setGroupName(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *groupname);
+                        <font color="#0000f8">// makes this shared memory segment owned by</font>
+                        <font color="#0000f8">// the group &quot;groupname&quot;</font>
+                <font color="#288850"><b>int</b></font>     setUserId(ushort uid);
+                        <font color="#0000f8">// makes this shared memory segment owned by</font>
+                        <font color="#0000f8">// the user identified by uid</font>
+                <font color="#288850"><b>int</b></font>     setGroupId(ushort gid);
+                        <font color="#0000f8">// makes this shared memory segment owned by</font>
+                        <font color="#0000f8">// the group identified by gid</font>
+                <font color="#288850"><b>int</b></font>     setPermissions(mode_t permissions);
+                        <font color="#0000f8">// sets the access permissions for this</font>
+                        <font color="#0000f8">// shared memory segment to &quot;permissions&quot;</font>
+
+                <font color="#288850"><b>char</b></font>    *getUserName();
+                        <font color="#0000f8">// returns the name of the user that owns this</font>
+                        <font color="#0000f8">// shared memory segment</font>
+                <font color="#288850"><b>char</b></font>    *getGroupName();
+                        <font color="#0000f8">// returns the name of the group that owns this</font>
+                        <font color="#0000f8">// shared memory segment</font>
+                ushort  getUserId();
+                        <font color="#0000f8">// returns the user id of the user that owns this</font>
+                        <font color="#0000f8">// shared memory segment</font>
+                ushort  getGroupId();
+                        <font color="#0000f8">// returns the group id of the group that owns this</font>
+                        <font color="#0000f8">// shared memory segment</font>
+                mode_t  getPermissions();
+                        <font color="#0000f8">// returns the access permissions for this</font>
+                        <font color="#0000f8">// shared memory segment</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/sharedmemory.h&gt;</font>
+
+};
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

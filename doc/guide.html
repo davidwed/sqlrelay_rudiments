@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>firstworks   Rudiments Guide</title>
+<link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Rudiments Guide</span><br><br>
+
+<span class="heading">Downloading Rudiments:</span><br><br>
+<p>You can download the most current source distribution of <b>rudiments</b> 
+from <a href="http://www.firstworks.com/downloads/rudiments">http://www.firstworks.com/downloads/rudiments</a>.</p>
+
+<span class="heading">Unpacking Rudiments:</span><br><br>
+
+<p>To unpack the distribution, copy the file to a location on your machine
+that you have access to and execute the following commands:<p>
+
+<ul>
+<li>gunzip rudiments-X.XX.tar.gz</li>
+<li>tar xf rudiments-X.XX.tar</li>
+</ul>
+
+<p>This will create a rudiments-X.XX directory. Change directories into that 
+directory.</p>
+
+<span class="heading">Compiling Rudiments:</span><br><br>
+
+<p>To compile <b>Rudiments</b>, read the INSTALL file, 
+then execute the following commands:</p>
+
+<ul>
+<li>configure</li>
+<li>make</li>
+</ul>
+
+<p><b>Rudiments</b> should compile and function on unix-based systems
+using the GNU development system.  Other compilers may work too but have not
+been tested on the current version.</p>
+
+<p>The -pedantic flag must be used with newer GNU compilers.  This flag is
+turned on by default, don't disable it.</p>
+
+<p>Upon sucessfull compilation, the lib directory should contain 
+both librudiments.a and librudiments.so.</p>
+
+<span class="heading">Installing Rudiments:</span><br><br>
+
+<p>To install <b>Rudiments</b>, become root and execute:</p>
+
+<ul>
+<li>make install</li>
+</ul>
+
+<p>By default, everything is installed under /usr/local/firstworks.</p>
+
+<p>To uninstall <b>Rudiments</b>, become root and execute:</p>
+
+<ul>
+<li>make uninstall</li>
+</ul>
+
+
+<span class="heading">Classes:</span>
+
+<p>The <b>rudiments</b> class library consists of several classes.  Some are 
+utility classes, others are designed to be base classes for software.</p>
+
+<ul>
+<li><b>Base Classes:</b>
+	<ul>
+	<li><b><a href="classes/daemonprocess.h.html">daemonprocess</a></b> - base class for daemons
+	<li><b><a href="classes/errorhandler.h.html">errorhandler</a></b> - base class for several other rudiments classes, provides a method for getting the error messages that they can generate
+	<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
+	<li><b><a href="classes/inetserversocket.h.html">inetserversocket</a></b> - base class for inet tcp stream servers
+	<li><b><a href="classes/listener.h.html">listener</a></b> - base class for listening on pools of file descriptors
+	<li><b><a href="classes/transport.h.html">transport</a></b> - base class for classes that transport data over (or associated with) a file descriptor (such as clients and servers)
+	<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
+	<li><b><a href="classes/unixserversocket.h.html">unixserversocket</a></b> - base class for unix tcp stream servers
+	<li><b><a href="classes/xmlsax.h.html">xmlsax</a></b> - base class for xml parsers
+	</ul>
+<li><b>Utility Classes:</b>
+	<ul>
+	<li><b><a href="classes/commandline.h.html">commandline</a></b> - command line processing class
+	<li><b><a href="classes/datetime.h.html">datetime</a></b> - date/time processing class
+	<li><b><a href="classes/logger.h.html">logger</a></b> - class for generating log messages
+	<li><b><a href="classes/memorypool.h.html">memorypool</a></b> - class that implements a memory pool
+	<li><b><a href="classes/permissions.h.html">permissions</a></b> - class for generating file permissions
+	<li><b><a href="classes/randomnumber.h.html">randomnumber</a></b> - class for generating random numbers
+	<li><b><a href="classes/regularexpression.h.html">regularexpression</a></b> - class for dealing with regular expressions
+	<li><b><a href="classes/semaphoreset.h.html">semaphoreset</a></b> - semaphore class
+	<li><b><a href="classes/sharedmemory.h.html">sharedmemory</a></b> - shared memory class
+	<li><b><a href="classes/signalclasses.h.html">signalclasses</a></b> - classes with methods for managing signals
+	<li><b><a href="classes/text.h.html">text</a></b> - text processing and evaluation class
+	<li><b><a href="classes/xmldom.h.html">xmldom</a></b> - a minimal XML DOM parser
+	<li><b><a href="classes/xmldomnode.h.html">xmldomnode</a></b> - an XML DOM tree node
+	</ul>
+</ul>
+
+<p>As a rule of thumb, the base classes should be inherited from and the
+utility classes should be instantiated as needed.  Some of the utility classes
+have static methods which can be called directly without instantiating an 
+instance of the class.</p>
+
+<p>Refer to <a href="programming/baseclasses.html">base classes</a> and 
+<a href="programming/utilclasses.html">utility classes</a> programming 
+examples for more more information.</p>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/inetclientsocket.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef INETCLIENTSOCKET_H</font>
+<font color="#a020f0">#define INETCLIENTSOCKET_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/clienttransport.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/inetsocket.h&gt;</font>
+
+<font color="#0000f8">// The inetclientsocket class allows you to write programs that can talk to</font>
+<font color="#0000f8">// other programs across a network over TCP stream sockets.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// The inetclientsocket class provides methods for connecting to servers.</font>
+<font color="#0000f8">// Its ultimate parent class: transport provides methods for reading and </font>
+<font color="#0000f8">// writing data and closing connections.</font>
+
+<font color="#288850"><b>class</b></font> inetclientsocket : <font color="#a02828"><b>public</b></font> clienttransport, <font color="#a02828"><b>public</b></font> inetsocket  {
+        <font color="#a02828"><b>public</b></font>:
+
+                <font color="#288850"><b>int</b></font>     connectToServer(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                        <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> port,
+                                        <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>int</b></font> retrytime,
+                                        <font color="#288850"><b>int</b></font> tries);
+                        <font color="#0000f8">// Convenience method that calls the</font>
+                        <font color="#0000f8">// initInetClientSocket() and connect()</font>
+                        <font color="#0000f8">// methods below.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+
+                <font color="#0000f8">// These methods are split up in case you need to use them</font>
+                <font color="#0000f8">// seperately.  All three must be called in succession to</font>
+                <font color="#0000f8">// connect to a server.</font>
+                <font color="#288850"><b>void</b></font>    initInetClientSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *hostname,
+                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> port,
+                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>int</b></font> retrytime,
+                                                <font color="#288850"><b>int</b></font> tries);
+                        <font color="#0000f8">// Initializes the class to use &quot;hostname&quot;, &quot;port&quot;,</font>
+                        <font color="#0000f8">// &quot;retrytime&quot; and &quot;tries&quot; when connect() is called.</font>
+                <font color="#288850"><b>int</b></font>     connect();
+                        <font color="#0000f8">// Attempts to connect to the &quot;hostname&quot; and &quot;port&quot; set</font>
+                        <font color="#0000f8">// earlier.  If the connection fails, it will retry</font>
+                        <font color="#0000f8">// &quot;tries&quot; times, waiting &quot;retrytime&quot; seconds between</font>
+                        <font color="#0000f8">// tries.  If &quot;hostname&quot; resolves to multiple</font>
+                        <font color="#0000f8">// addresses, each address will be tried &quot;tries&quot; times.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Setting &quot;tries&quot; to 0 will cause it to try to </font>
+                        <font color="#0000f8">// connect indefinitely.  Setting &quot;retrytime&quot; to 0</font>
+                        <font color="#0000f8">// will cause it to try to connect over and over</font>
+                        <font color="#0000f8">// as fast as possible (not recommended).</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/inetclientsocketinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

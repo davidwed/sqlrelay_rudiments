@@ -1,0 +1,759 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the Utility Classes</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Programming with Rudiments using the Utility Classes</span><br><br>
+
+<ul>
+<li><a href="#commandline">Using the Command Line Class</a></li>
+<li><a href="#datetime">Using the Date/Time Class</a></li>
+<li><a href="#logger">Using the Logger Class</a></li>
+<li><a href="#memorypool">Using the Memory Pool Class</a></li>
+<li><a href="#permissions">Using the Permissions Class</a></li>
+<li><a href="#randomnumber">Using the Random Number Class</a></li>
+<li><a href="#regularexpression">Using the Regular Expression Class</a></li>
+<li><a href="#semaphoreset">Using the Semaphore Set Class</a></li>
+<li><a href="#sharedmemory">Using the Shared Memory Class</a></li>
+<li><a href="#signal">Using the Signal Classes</a></li>
+<li><a href="#text">Using the Text Class</a></li>
+<li><a href="#xmldom">Using the XML DOM Classes</a></li>
+</ul>
+
+<a name="commandline"></a>
+<span class="heading">Using the Command Line Class</span><br><br>
+
+<p>Most programs take command line options in the option/value pair format:</p>
+<p>program -option value -option value ...</p>
+<p>The commandline class makes it easy to deal with command line options of
+this format.  Below is some code illustrating the use of the commandline 
+class.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/commandline.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;unistd.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;stdlib.h&gt;</FONT>
+
+<B><FONT color=#288a51>int</FONT></B>     main(<B><FONT color=#288a51>int</FONT></B> argv, <B><FONT color=#288a51>char</FONT></B> **argc) {
+
+        commandline     cmdline(argv,argc);
+
+        <B><FONT color=#a62828>if</FONT></B> (cmdline.found(<FONT color=#ff00ff>&quot;-help&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;usage:  divide -divisor number -dividend number&quot;</FONT> &lt;&lt; endl;
+                exit(<FONT color=#ff00ff>0</FONT>);
+        }
+
+        <B><FONT color=#a62828>if</FONT></B> (cmdline.found(<FONT color=#ff00ff>&quot;-divisor&quot;</FONT>) &amp;&amp; cmdline.found(<FONT color=#ff00ff>&quot;-dividend&quot;</FONT>)) {
+                <B><FONT color=#288a51>int</FONT></B>     divisor=atoi(cmdline.value(<FONT color=#ff00ff>&quot;-divisor&quot;</FONT>));
+                <B><FONT color=#288a51>int</FONT></B>     dividend=atoi(cmdline.value(<FONT color=#ff00ff>&quot;-dividend&quot;</FONT>));
+                cout &lt;&lt; divisor/dividend &lt;&lt; endl;
+        } <B><FONT color=#a62828>else</FONT></B> {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;You must supply a divisor and a dividend.&quot;</FONT> &lt;&lt; endl;
+        }
+}
+</PRE>
+
+<a name="datetime"></a>
+<span class="heading">Using the Date/Time Class</span><br><br>
+
+<p>One of the most difficult things to do in a Unix environment is deal with
+dates and times.  The "standard" functions and structures associated with 
+dates and times are complex and vary widely from platform to platform.  The 
+datetime class attempts to rectify this situation.  Below is some code 
+illustrating the use of the datetime class.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/datetime.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+
+main() {
+
+        <FONT color=#0000ff>// get the current date</FONT>
+        datetime        dt;
+
+        <FONT color=#0000ff>// Write out the different parts of the date.</FONT>
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Hour                  :&quot;</FONT> &lt;&lt; dt.getHour() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Minutes               :&quot;</FONT> &lt;&lt; dt.getMinutes() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Seconds               :&quot;</FONT> &lt;&lt; dt.getSeconds() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Month                 :&quot;</FONT> &lt;&lt; dt.getMonth() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;DayOfMonth            :&quot;</FONT> &lt;&lt; dt.getDayOfMonth() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;DayOfWeek             :&quot;</FONT> &lt;&lt; dt.getDayOfWeek() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;DayOfYear             :&quot;</FONT> &lt;&lt; dt.getDayOfYear() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Year                  :&quot;</FONT> &lt;&lt; dt.getYear() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Daylight Savings Time :&quot;</FONT> &lt;&lt; dt.isDaylightSavingsTime();
+        cout &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Time Zone             :&quot;</FONT> &lt;&lt; dt.getTimeZone() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Offset from GMT       :&quot;</FONT> &lt;&lt; dt.getTimeZoneOffset() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Date String           :&quot;</FONT> &lt;&lt; dt.getString() &lt;&lt; endl;
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Seconds since 1970    :&quot;</FONT> &lt;&lt; dt.getEpoch() &lt;&lt; endl;
+}
+</PRE>
+
+<a name="logger"></a>
+<span class="heading">Using the Logger Class</span><br><br>
+
+<p>The logger class and associated logdestination classes provide a framework
+for generating log messages from applications.  An application can define a set
+of logdestinations and attach them to an instance of the logger class.  Then,
+when the application calls one of the write() methods of the logger class, the
+log message is written to each of the logdestinations.  For example, an
+application could simultaneously log to stderr and to a file.  Currently stdout,
+stderr, file and syslog logdestinations are supported.  If an application needs
+to send one set of log messages to one destination and another set to a
+different destinations, it can create two instances of the logger class and use
+one for each set of messages.</p>
+
+<p>The following example illustrates use of the logger class.</p>
+
+<PRE>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/logger.h&gt;</font>
+
+main() {
+
+        <font color="#0000f8">// log to &quot;logfile&quot;</font>
+        filedestination         fd;
+        fd.open(<font color="#f800f8">&quot;logfile&quot;</font>);
+
+        <font color="#0000f8">// log to stdout</font>
+        stdoutdestination       sod;
+
+        <font color="#0000f8">// log to stderr</font>
+        stderrdestination       sed;
+
+        <font color="#0000f8">// log to syslog</font>
+        syslogdestination       sd;
+        sd.open(<font color="#f800f8">&quot;logtest&quot;</font>,LOG_CONS,LOG_USER,LOG_INFO);
+
+        <font color="#0000f8">// create a logger</font>
+        logger          lg;
+
+        <font color="#0000f8">// add all 4 log destinations to it</font>
+        lg.addLogDestination(&amp;fd);
+        lg.addLogDestination(&amp;sod);
+        lg.addLogDestination(&amp;sed);
+        lg.addLogDestination(&amp;sd);
+
+        <font color="#0000f8">// use the standard log header</font>
+        <font color="#288850"><b>char</b></font>    *header=logger::logHeader(<font color="#f800f8">&quot;logtest&quot;</font>);
+
+        <font color="#0000f8">// write log messages to all 4 destinations</font>
+        lg.write(header,<font color="#f800f8">0</font>,<font color="#f800f8">&quot;entering loop&quot;</font>);
+        <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> i=<font color="#f800f8">0</font>; i&lt;<font color="#f800f8">5</font>; i++) {
+                lg.write(header,<font color="#f800f8">1</font>,(<font color="#288850"><b>long</b></font>)i);
+        }
+        lg.write(header,<font color="#f800f8">0</font>,<font color="#f800f8">&quot;exiting loop&quot;</font>);
+
+        <font color="#0000f8">// clean up</font>
+        lg.removeAllLogDestinations();
+        sd.close();
+        fd.close();
+}
+</PRE>
+
+<a name="memorypool"></a>
+<span class="heading">Using the Memory Pool Class</span><br><br>
+
+<p>The memory pool class implements a pool of memory that starts with an
+initial buffer and grows dynamically as needed.  Each time the pool is freed,
+the dynamic buffers are deallocated.  After a configurable number of free's,
+the initial buffer is resized to the average amount of memory that was
+requested between free's since the last time it resized.</p>
+
+<p>The memory pool class is especially useful for applications that do the same
+task over and over where varying amounts of memory are required during each
+iteration.  The class is particularly efficient in cases where memory
+requirements are fairly constant between iterations with sporadic requirements
+for lots of memory or where the memory requirements steadily get larger or 
+smaller across iterations.</p>
+
+<p>Using a memory pool can be faster than allocating memory on demand, then
+deallocating it later and more efficient than using static buffers that are
+large enough to contain the largest possible data.</p>
+
+<p>The following code connects to a server on the local machine and reads
+variable/value pairs from it.</p>
+
+<PRE>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/memorypool.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/inetclientsocket.h&gt;</font>
+
+<font color="#a020f0">#define OPTIMISTIC_VARIABLE_COUNT       </font><font color="#f800f8">5</font>
+<font color="#a020f0">#define OPTIMISTIC_VARIABLE_LENGTH      </font><font color="#f800f8">10</font>
+<font color="#a020f0">#define OPTIMISTIC_VALUE_LENGTH         </font><font color="#f800f8">20</font>
+
+main() {
+
+        <font color="#0000f8">// calculate an optimistic initial size for the memory pool</font>
+        <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>long</b></font>   initialsize=OPTIMISTIC_VARIABLE_COUNT*
+                                        ((<font color="#f800f8">2</font>*<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>char</b></font> *))+
+                                        OPTIMISTIC_VARIABLE_LENGTH+<font color="#f800f8">1</font>+
+                                        OPTIMISTIC_VALUE_LENGTH+<font color="#f800f8">1</font>);
+
+        <font color="#0000f8">// create a memory pool: grow by 50 bytes when necessary and</font>
+        <font color="#0000f8">// re-evaluate the initial size every 10 iterations</font>
+        memorypool      *mp=<font color="#a02828"><b>new</b></font> memorypool(initialsize,<font color="#f800f8">50</font>,<font color="#f800f8">10</font>);
+
+        <font color="#0000f8">// create an inet client socket, connect to localhost on port 1000</font>
+        inetclientsocket        *cis=<font color="#a02828"><b>new</b></font> inetclientsocket();
+        cis-&gt;connectToServer(<font color="#f800f8">&quot;localhost&quot;</font>,<font color="#f800f8">1000</font>,<font color="#f800f8">0</font>,<font color="#f800f8">1</font>);
+
+        <font color="#a02828"><b>for</b></font> (;;) {
+
+                <font color="#0000f8">// get the number of fields</font>
+                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font>  fieldcount;
+                <font color="#a02828"><b>if</b></font> (cis-&gt;read(&amp;fieldcount)!=<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>short</b></font>)) {
+                        <font color="#a02828"><b>break</b></font>;
+                }
+
+                <font color="#0000f8">// if the fieldcount is 0, that's the end</font>
+                <font color="#a02828"><b>if</b></font> (fieldcount==<font color="#f800f8">0</font>) {
+                        mp-&gt;free();
+                        <font color="#a02828"><b>break</b></font>;
+                }
+
+                <font color="#0000f8">// create arrays of pointers to the variables/values</font>
+                <font color="#288850"><b>char</b></font>    **vars=(<font color="#288850"><b>char</b></font> **)mp-&gt;malloc(fieldcount*<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>char</b></font> *));
+                <font color="#288850"><b>char</b></font>    **vals=(<font color="#288850"><b>char</b></font> **)mp-&gt;malloc(fieldcount*<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>char</b></font> *));
+
+                <font color="#0000f8">// get the fields</font>
+                <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>short</b></font> i=<font color="#f800f8">0</font>; i&lt;fieldcount; i++) {
+
+                        <font color="#0000f8">// get the length of the variable</font>
+                        <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font>  length;
+                        <font color="#a02828"><b>if</b></font> (cis-&gt;read(&amp;length)!=<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>short</b></font>)) {
+                                <font color="#a02828"><b>break</b></font>;
+                        }
+
+                        <font color="#0000f8">// get the variable and null-terminate it</font>
+                        vars[i]=mp-&gt;malloc(length+<font color="#f800f8">1</font>);
+                        <font color="#a02828"><b>if</b></font> (cis-&gt;read(vars[i],length)!=length) {
+                                <font color="#a02828"><b>break</b></font>;
+                        }
+                        vars[i][length]=(<font color="#288850"><b>char</b></font>)<font color="#f800f8">NULL</font>;
+
+                        <font color="#0000f8">// get the length of the value</font>
+                        <font color="#a02828"><b>if</b></font> (cis-&gt;read(&amp;length)!=<font color="#a02828"><b>sizeof</b></font>(<font color="#288850"><b>short</b></font>)) {
+                                <font color="#a02828"><b>break</b></font>;
+                        }
+
+                        <font color="#0000f8">// get the value and null-terminate it</font>
+                        vals[i]=mp-&gt;malloc(length+<font color="#f800f8">1</font>);
+                        <font color="#a02828"><b>if</b></font> (cis-&gt;read(vals[i],length)!=length) {
+                                <font color="#a02828"><b>break</b></font>;
+                        }
+                        vals[i][length]=(<font color="#288850"><b>char</b></font>)<font color="#f800f8">NULL</font>;
+                }
+
+                <font color="#0000f8">// do something interesting with the variable/value pairs here...</font>
+
+                <font color="#0000f8">// free the memory pool</font>
+                mp-&gt;free();
+        }
+
+        cis-&gt;close();
+        <font color="#a02828"><b>delete</b></font> cis;
+
+        <font color="#a02828"><b>delete</b></font> mp;
+}
+</PRE>
+
+<a name="permissions"></a>
+<span class="heading">Using the Permissions Class</span><br><br>
+
+<p>The permissions class provides simple methods for generating permissions.
+The output of these methods can be used whenever a function takes an argument
+of type mode_t.  Below is some code illustrating the use of the permissions
+class.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/permissions.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/types.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/stat.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;fcntl.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;unistd.h&gt;</FONT>
+
+main() {
+
+        <FONT color=#0000ff>// Create a file with rw-r--r-- permissions</FONT>
+        <B><FONT color=#288a51>int</FONT></B>     fd=open(<FONT color=#ff00ff>&quot;/tmp/tempfile&quot;</FONT>,O_RDWR|O_CREAT,
+                                permissions::evalPermString(<FONT color=#ff00ff>&quot;rw-r--r--&quot;</FONT>));
+
+        <FONT color=#0000ff>// change the permissions to rw-rw-r--</FONT>
+        permissions::setFilePermissions(fd,
+                                permissions::evalPermString(<FONT color=#ff00ff>&quot;rw-rw-r--&quot;</FONT>));
+
+        <FONT color=#0000ff>// close and delete the file</FONT>
+        close(fd);
+        unlink(<FONT color=#ff00ff>&quot;/tmp/tempfile&quot;</FONT>);
+
+
+        <FONT color=#0000ff>// do the same as above using different methods</FONT>
+        fd=open(<FONT color=#ff00ff>&quot;/tmp/tempfile&quot;</FONT>,O_RDWR|O_CREAT,
+                                permissions::ownerReadWrite()|
+                                permissions::groupRead()|
+                                permissions::othersRead());
+        permissions::setFilePermissions(fd,
+                                permissions::ownerReadWrite()|
+                                permissions::groupReadWrite()|
+                                permissions::othersRead());
+        close(fd);
+        unlink(<FONT color=#ff00ff>&quot;/tmp/tempfile&quot;</FONT>);
+}
+</PRE>
+
+<a name="randomnumber"></a>
+<span class="heading">Using the Random Number Class</span><br><br>
+
+<p>Functions for generating random numbers vary from platform to platform.  
+The randomnumber class attempts to rectify this situation.  Below is some code
+illustrating the use of the randomnumber class.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/datetime.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/randomnumber.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+
+main() {
+
+        <FONT color=#0000ff>// it's common to seed a random number generator with the number of</FONT>
+        <FONT color=#0000ff>// seconds since 1970 (the epoch), so we'll get the current date.</FONT>
+        datetime        dt;
+
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;A random number between 0 and 2^32: &quot;</FONT>;
+        cout &lt;&lt; randomnumber::generateNumber(dt.getEpoch());
+        cout &lt;&lt; endl;
+
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;A random number between 100 and 1000: &quot;</FONT>;
+        cout &lt;&lt; randomnumber::generateScaledNumber(dt.getEpoch(),<FONT color=#ff00ff>100</FONT>,<FONT color=#ff00ff>1000</FONT>);
+        cout &lt;&lt; endl;
+
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Another random number between 100 and 1000: &quot;</FONT>;
+        <B><FONT color=#288a51>int</FONT></B>     basenumber=randomnumber::generateNumber(dt.getEpoch());
+        <B><FONT color=#288a51>int</FONT></B>     scalednumber=randomnumber::scaleNumber(basenumber,<FONT color=#ff00ff>100</FONT>,<FONT color=#ff00ff>1000</FONT>);
+        cout &lt;&lt; scalednumber &lt;&lt; endl;
+}
+</PRE>
+
+
+<a name="regularexpression"></a>
+<span class="heading">Using the Regular Expression Class</span><br><br>
+
+<p>Regular expressions allow a programmer to perform complex string matching 
+but methods for using regular expressions vary from platform to platform.  The
+regularexpression class attempts to rectify this situation.  Below is some code
+illustrating the use of the regularexpression class.</p>
+
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/regularexpression.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+
+main() {
+
+        <FONT color=#0000ff>// A quick match...</FONT>
+        <B><FONT color=#a62828>if</FONT></B> (regularexpression::match(<FONT color=#ff00ff>&quot;Hello Dave!&quot;</FONT>,<FONT color=#ff00ff>&quot;.*Dave.*&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;The string contains .*Dave.*&quot;</FONT> &lt;&lt; endl;
+        }
+
+        <FONT color=#0000ff>// If you need to match over and over...</FONT>
+        regularexpression       re(<FONT color=#ff00ff>&quot;.*Dave.*&quot;</FONT>);
+        <B><FONT color=#a62828>if</FONT></B> (re.match(<FONT color=#ff00ff>&quot;Hello Dave!&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;The string contains .*Dave.*&quot;</FONT> &lt;&lt; endl;
+        }
+        <B><FONT color=#a62828>if</FONT></B> (re.match(<FONT color=#ff00ff>&quot;Goodbye Dave!&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;The string contains .*Dave.*&quot;</FONT> &lt;&lt; endl;
+        }
+        <B><FONT color=#a62828>if</FONT></B> (re.match(<FONT color=#ff00ff>&quot;Dave is a jerk!&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;The string contains .*Dave.*&quot;</FONT> &lt;&lt; endl;
+        }
+        <B><FONT color=#a62828>if</FONT></B> (re.match(<FONT color=#ff00ff>&quot;Dave writes cool software!&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;The string contains .*Dave.*&quot;</FONT> &lt;&lt; endl;
+        }
+        <B><FONT color=#a62828>if</FONT></B> (re.match(<FONT color=#ff00ff>&quot;See ya later Dave!&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;The string contains .*Dave.*&quot;</FONT> &lt;&lt; endl;
+        }
+        
+}
+</PRE>
+
+<a name="semaphoreset"></a>
+<span class="heading">Using the Semaphore Set Class</span><br><br>
+
+<p>Semaphores allow seperate processes or threads to synchronize activities.
+The standard functions and structures for managing semaphores are complex.  
+The sempahoreset class attempts to rectify this situation.  Below is some code
+illustrating the use of the semaphoreset class.</p>
+
+<p>The first program prints out 1 and 3, the second program prints out 2 and 4.
+They use a set of 2 semaphores to synchronize these activities.  No matter
+what order the programs are started in, they will always print out 
+
+<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
+
+<p>These programs must both be run to the background.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/types.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/ipc.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/semaphoreset.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/permissions.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+
+main() {
+
+        <B><FONT color=#288a51>int</FONT></B>     vals[<FONT color=#ff00ff>2</FONT>]={<FONT color=#ff00ff>0</FONT>,<FONT color=#ff00ff>1</FONT>,};
+        semaphoreset *sem=<B><FONT color=#a62828>new</FONT></B> semaphoreset();
+        sem-&gt;create(ftok(<FONT color=#ff00ff>&quot;/tmp/sem&quot;</FONT>,<FONT color=#ff00ff>0</FONT>),<FONT color=#ff00ff>2</FONT>,vals,
+                                permissions::evalPermString(<FONT color=#ff00ff>&quot;rw-------&quot;</FONT>));
+
+        <B><FONT color=#a62828>for</FONT></B> (<B><FONT color=#288a51>int</FONT></B> i=<FONT color=#ff00ff>0</FONT>; i&lt;<FONT color=#ff00ff>10</FONT>; i++) {
+                sem-&gt;wait(<FONT color=#ff00ff>0</FONT>);
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;2&quot;</FONT> &lt;&lt; endl;
+                sem-&gt;signal(<FONT color=#ff00ff>1</FONT>);
+        
+                sem-&gt;wait(<FONT color=#ff00ff>0</FONT>);
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;4&quot;</FONT> &lt;&lt; endl;
+                sem-&gt;signal(<FONT color=#ff00ff>1</FONT>);
+        }
+
+        <B><FONT color=#a62828>delete</FONT></B> sem;
+}
+</PRE>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/types.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/ipc.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/semaphoreset.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/permissions.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+
+main() {
+
+        semaphoreset *sem=<B><FONT color=#a62828>new</FONT></B> semaphoreset();
+        sem-&gt;attach(ftok(<FONT color=#ff00ff>&quot;/tmp/sem&quot;</FONT>,<FONT color=#ff00ff>0</FONT>),<FONT color=#ff00ff>2</FONT>);
+
+        <B><FONT color=#a62828>for</FONT></B> (<B><FONT color=#288a51>int</FONT></B> i=<FONT color=#ff00ff>0</FONT>; i&lt;<FONT color=#ff00ff>10</FONT>; i++) {
+                sem-&gt;wait(<FONT color=#ff00ff>1</FONT>);
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;0&quot;</FONT> &lt;&lt; endl;
+                sem-&gt;signal(<FONT color=#ff00ff>0</FONT>);
+        
+                sem-&gt;wait(<FONT color=#ff00ff>1</FONT>);
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;1&quot;</FONT> &lt;&lt; endl;
+                sem-&gt;signal(<FONT color=#ff00ff>0</FONT>);
+        }
+
+        <B><FONT color=#a62828>delete</FONT></B> sem;
+}
+</PRE>
+
+<a name="sharedmemory"></a>
+<span class="heading">Using the Shared Memory Class</span><br><br>
+
+<p>Shared memory allows seperate processes to access a common block of memory.
+The standard functions and structures for managing shared memory segments are 
+complex.  The sharedmemory class attempts to rectify this situation.  Below is
+some code illustrating the use of the sharedmemory class.</p>
+
+<p>This program puts some data into shared memory then goes to sleep, giving
+another program time to access the segment.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/types.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/ipc.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/sharedmemory.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/permissions.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;unistd.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;string.h&gt;</FONT>
+
+main() {
+        sharedmemory    shm;
+        shm.create(ftok(<FONT color=#ff00ff>&quot;/tmp/shm&quot;</FONT>,<FONT color=#ff00ff>0</FONT>),<FONT color=#ff00ff>128</FONT>,
+                                permissions::evalPermString(<FONT color=#ff00ff>&quot;rw-------&quot;</FONT>));
+
+        <B><FONT color=#288a51>char</FONT></B>    *shmptr=(<B><FONT color=#288a51>char</FONT></B> *)shm.getPointer();
+        strcpy(shmptr,<FONT color=#ff00ff>&quot;This string is in shared memory.&quot;</FONT>);
+
+        sleep(<FONT color=#ff00ff>1000</FONT>);
+}
+</PRE>
+
+
+<p>This program reads the data from shared memory.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/types.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;sys/ipc.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/sharedmemory.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/permissions.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+
+main() {
+        sharedmemory    shm;
+        shm.attach(ftok(<FONT color=#ff00ff>&quot;/tmp/shm&quot;</FONT>,<FONT color=#ff00ff>0</FONT>));
+
+        <B><FONT color=#288a51>char</FONT></B>    *shmptr=(<B><FONT color=#288a51>char</FONT></B> *)shm.getPointer();
+        cout &lt;&lt; shmptr &lt;&lt; endl;
+}
+</PRE>
+
+
+<p>There are other methods in the sharedmemory class that allow you to
+get and set user/group ownership and permissions of a segment but they are
+straightforward and rarely used.</p>
+
+
+<a name="signal"></a>
+<span class="heading">Using the Signal Classes</span><br><br>
+
+<p>Signals allow processes to interrupt the execution of other processes.
+Signal handlers allow processes to intercept and react to the signals sent to 
+them.</p>
+
+<p>Rudiments provides 3 classes for working with signals: signalset, 
+signalmanager and signalhandler.
+
+<p>A signalset is just a collection of signals.  The signalset class allows 
+a programmer to build up a collection of signals.</p>
+
+<p>The signalmanager class provides methods for sending signals, ignoring
+signals, waiting for signals and examining blocked signals.</p>
+
+<p>The signalhandler class provides methods for catching and handling 
+signals.</p>
+
+<p>Below is some code illustrating the use of all three classes.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/signalclasses.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;unistd.h&gt;</FONT>
+
+<B><FONT color=#288a51>void</FONT></B>    handleSigusr1() {
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;Got a SIGUSR1!&quot;</FONT> &lt;&lt; endl;
+}
+
+main() {
+
+        <FONT color=#0000ff>// this program will ignore all signals except SIGUSR1</FONT>
+        signalset       ignoreset;
+        ignoreset.addAllSignals();
+        ignoreset.removeSignal(SIGUSR1);
+        signalmanager::ignoreSignals(ignoreset.getSignalSet());
+
+        <FONT color=#0000ff>// when it gets a SIGUSR1, it will run the handleSigusr1() function</FONT>
+        signalhandler   shandler(SIGUSR1,(<B><FONT color=#288a51>void</FONT></B> *)&amp;handleSigusr1);
+        shandler.handleSignal();
+
+        <FONT color=#0000ff>// Loop forever, each time waiting for a signal not in the ignoreset</FONT>
+        <FONT color=#0000ff>// to be sent. Since SIGUSR1 is the only signal not in the ignoreset,</FONT>
+        <FONT color=#0000ff>// waitForSignals will fall through only when SIGUSR1 is received.</FONT>
+        <B><FONT color=#a62828>while</FONT></B>(<FONT color=#ff00ff>1</FONT>) {
+                signalmanager::waitForSignals(ignoreset.getSignalSet());
+        }
+}
+</PRE>
+
+<p>Note that you'll have to kill that program with a -9.</p>
+
+<a name="text"></a>
+<span class="heading">Using the Text Class</span><br><br>
+
+<p>The text class contains some commonly needed text manipulation and
+evaluation functions.  Below is some code illustrating the use of the text
+class.</p>
+
+<PRE>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;rudiments/text.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;iostream.h&gt;</FONT>
+<FONT color=#a620f7>#include </FONT><FONT color=#ff00ff>&lt;string.h&gt;</FONT>
+
+main() {
+
+        <FONT color=#0000ff>// initialize a text buffer and print it out</FONT>
+        <B><FONT color=#288a51>char</FONT></B>    buffer[<FONT color=#ff00ff>100</FONT>];
+        strcpy(buffer,<FONT color=#ff00ff>&quot;     hello      &quot;</FONT>);
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
+
+        <FONT color=#0000ff>// trim the spaces off of the right hand side</FONT>
+        text::rightTrim(buffer);
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
+
+        <FONT color=#0000ff>// trim the spaces off of the left hand side</FONT>
+        text::leftTrim(buffer);
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
+
+        <FONT color=#0000ff>// convert buffer to uppercase</FONT>
+        text::upper(buffer);
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
+
+        <FONT color=#0000ff>// convert buffer to lowercase</FONT>
+        text::lower(buffer);
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; buffer &lt;&lt; <FONT color=#ff00ff>&quot;!&quot;</FONT> &lt;&lt; endl;
+
+        <FONT color=#0000ff>// http escape the buffer</FONT>
+        <B><FONT color=#288a51>char</FONT></B>    *escbuffer=text::httpEscape(<FONT color=#ff00ff>&quot;!@#$%^&amp;*()hello-+&quot;</FONT>);
+        cout &lt;&lt; <FONT color=#ff00ff>&quot;!@#$%^&amp;*()hello-+  http escaped is  &quot;</FONT> &lt;&lt; escbuffer &lt;&lt; endl;
+        <B><FONT color=#a62828>delete</FONT></B> escbuffer;
+        
+        <FONT color=#0000ff>// evaluate a string to see if it's a number</FONT>
+        <B><FONT color=#a62828>if</FONT></B> (text::isNumber(<FONT color=#ff00ff>&quot;-100.5&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;-100.5 is a number&quot;</FONT> &lt;&lt; endl;
+        }
+        <B><FONT color=#a62828>if</FONT></B> (!text::isNumber(<FONT color=#ff00ff>&quot;-100.5.10&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;-100.5.10 is not a number&quot;</FONT> &lt;&lt; endl;
+        }
+        
+        <FONT color=#0000ff>// evaluate a string to see if it's an integer</FONT>
+        <B><FONT color=#a62828>if</FONT></B> (text::isInteger(<FONT color=#ff00ff>&quot;-100&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;-100 is an integer&quot;</FONT> &lt;&lt; endl;
+        }
+        <B><FONT color=#a62828>if</FONT></B> (!text::isInteger(<FONT color=#ff00ff>&quot;-100.5&quot;</FONT>)) {
+                cout &lt;&lt; <FONT color=#ff00ff>&quot;-100.5.10 is not an integer&quot;</FONT> &lt;&lt; endl;
+        }
+}
+</PRE>
+
+
+<a name="xmldom"></a>
+<span class="heading">Using the XML DOM Class</span><br><br>
+
+<p>The XML DOM and XML DOM Node classes provide a framework for DOM parsing of
+XML documents.  The xmldom class provides methods for parsing the document
+and accessing it's root node.  Each node of the document is represented by an
+instance of the xmldomnode class.  The xmldomnode class provides methods for
+accessing a node's data, attributes, child nodes, parent nodes and sibling
+nodes.  Since the xmldom class creates a representation of the XML document
+in memory, it should not be used to process arbitrarily large documents which
+could exhaust system memory.</p>
+
+<p>The following XML file contains an address book.</p>
+
+<PRE>
+<font color="#0000f8">&lt;?</font><font color="#288850"><b>xml</b></font><font color="#288850"><b> </b></font><font color="#288850"><b>version</b></font>=<font color="#f800f8">&quot;1.0&quot;</font><font color="#0000f8">?&gt;</font>
+<font color="#008888">&lt;!</font><font color="#a02828"><b>DOCTYPE</b></font> instances <font color="#a02828"><b>SYSTEM</b></font> <font color="#f800f8">&quot;adbook.dtd&quot;</font><font color="#008888">&gt;</font>
+<font color="#008888">&lt;</font><font color="#008888">addressbook</font><font color="#008888">&gt;</font>
+        <font color="#008888">&lt;</font><font color="#008888">person</font><font color="#008888"> </font><font color="#288850"><b>firstname</b></font>=<font color="#f800f8">&quot;David&quot;</font><font color="#008888"> </font><font color="#288850"><b>middlename</b></font>=<font color="#f800f8">&quot;Lee&quot;</font><font color="#008888"> </font><font color="#288850"><b>lastname</b></font>=<font color="#f800f8">&quot;Muse&quot;</font><font color="#008888">&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">phones</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-222-333-4444&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-333-444-5555&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;mobile&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-444-555-6666&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/phones&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">addresses</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;1234 homestreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;12345&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;2345 workstreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;23456&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/addresses&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">emails</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;mused@firstworks.com&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;mused@workemail.com&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/emails&gt;</font>
+        <font color="#008888">&lt;/person&gt;</font>
+<font color="#008888">&lt;/addressbook&gt;</font>
+</PRE>
+
+<p>The following program parses the addressbook and prints it to the screen.</p>
+
+<PRE>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/xmldom.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;iostream.h&gt;</font>
+
+<font color="#288850"><b>int</b></font>     main() {
+
+        xmldom  x;
+        x.parseFile(<font color="#f800f8">&quot;addressbook.xml&quot;</font>);
+        x.getRootNode()-&gt;cascadeOnDelete();
+
+
+        xmldomnode      *addressbook=x.getRootNode()-&gt;getChild(<font color="#f800f8">&quot;addressbook&quot;</font>);
+        <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> i=<font color="#f800f8">0</font>; i&lt;addressbook-&gt;getChildCount(); i++) {
+
+                xmldomnode      *person=addressbook-&gt;getChild(i);
+                <font color="#a02828"><b>if</b></font> (person-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                        <font color="#a02828"><b>continue</b></font>;
+                }
+
+                cout &lt;&lt; person-&gt;getAttribute(<font color="#f800f8">&quot;firstname&quot;</font>)-&gt;getValue() &lt;&lt; <font color="#f800f8">&quot; &quot;</font>;
+                cout &lt;&lt; person-&gt;getAttribute(<font color="#f800f8">&quot;middlename&quot;</font>)-&gt;getValue() &lt;&lt; <font color="#f800f8">&quot; &quot;</font>;
+                cout &lt;&lt; person-&gt;getAttribute(<font color="#f800f8">&quot;lastname&quot;</font>)-&gt;getValue() &lt;&lt; endl;
+
+                xmldomnode      *phones=person-&gt;getChild(<font color="#f800f8">&quot;phones&quot;</font>);
+                cout &lt;&lt; <font color="#f800f8">&quot;Phones:&quot;</font> &lt;&lt; endl;
+                <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> j=<font color="#f800f8">0</font>; j&lt;phones-&gt;getChildCount(); j++) {
+
+                        xmldomnode      *phone=phones-&gt;getChild(j);
+                        <font color="#a02828"><b>if</b></font> (phone-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                                <font color="#a02828"><b>continue</b></font>;
+                        }
+                        cout &lt;&lt; <font color="#f800f8">&quot;       &quot;</font>;
+                        cout &lt;&lt; phone-&gt;getAttribute(<font color="#f800f8">&quot;location&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#f800f8">&quot;: &quot;</font>;
+                        cout &lt;&lt; phone-&gt;getAttribute(<font color="#f800f8">&quot;number&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; endl;
+                }
+                cout &lt;&lt; endl;
+
+                xmldomnode      *addresses=person-&gt;getChild(<font color="#f800f8">&quot;addresses&quot;</font>);
+                cout &lt;&lt; <font color="#f800f8">&quot;Addresses:&quot;</font> &lt;&lt; endl;
+                <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> j=<font color="#f800f8">0</font>; j&lt;addresses-&gt;getChildCount(); j++) {
+
+                        xmldomnode      *address=addresses-&gt;getChild(j);
+                        <font color="#a02828"><b>if</b></font> (address-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                                <font color="#a02828"><b>continue</b></font>;
+                        }
+                        cout &lt;&lt; <font color="#f800f8">&quot;       &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#f800f8">&quot;location&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#f800f8">&quot;: &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#f800f8">&quot;address&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#f800f8">&quot; &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#f800f8">&quot;city&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#f800f8">&quot;, &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#f800f8">&quot;state&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#f800f8">&quot; &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#f800f8">&quot;zip&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; endl;
+                }
+                cout &lt;&lt; endl;
+
+                xmldomnode      *emails=person-&gt;getChild(<font color="#f800f8">&quot;emails&quot;</font>);
+                cout &lt;&lt; <font color="#f800f8">&quot;Emails:&quot;</font> &lt;&lt; endl;
+                <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> j=<font color="#f800f8">0</font>; j&lt;emails-&gt;getChildCount(); j++) {
+
+                        xmldomnode      *email=emails-&gt;getChild(j);
+                        <font color="#a02828"><b>if</b></font> (email-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                                <font color="#a02828"><b>continue</b></font>;
+                        }
+                        cout &lt;&lt; <font color="#f800f8">&quot;       &quot;</font>;
+                        cout &lt;&lt; email-&gt;getAttribute(<font color="#f800f8">&quot;location&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#f800f8">&quot;: &quot;</font>;
+                        cout &lt;&lt; email-&gt;getAttribute(<font color="#f800f8">&quot;address&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; endl;
+                }
+                cout &lt;&lt; endl;
+        }
+}
+</PRE>
+
+<p>Here is the output of the program above.</p>
+
+<blockquote>
+<PRE>
+David Lee Muse
+Phones:
+        home: 1-222-333-4444
+        work: 1-333-444-5555
+        mobile: 1-444-555-6666
+
+Addresses:
+        home: 1234 homestreet dr. mycity, GA 12345
+        work: 2345 workstreet dr. mycity, GA 23456
+
+Emails:
+        home: mused@firstworks.com
+        work: mused@workemail.com
+</PRE>
+</blockquote>
+
+</body>
+</html>

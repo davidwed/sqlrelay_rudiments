@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/inetserversocket.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef INETSERVERSOCKET_H</font>
+<font color="#a020f0">#define INETSERVERSOCKET_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/serversocket.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/inetsocket.h&gt;</font>
+
+<font color="#0000f8">// The inetserversocket class allows you to write programs that can talk to</font>
+<font color="#0000f8">// other programs across a network over TCP stream sockets.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// The inetserversocket class provides methods for setting up sockets and</font>
+<font color="#0000f8">// accepting client connections.  Its ultimate parent class: transport,</font>
+<font color="#0000f8">// provides methods for reading and writing data and closing connections.</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// If you need to listen on more than 1 socket at a time, you should use the </font>
+<font color="#0000f8">// inetserversocket class (and possibly the unixserversocket class) in</font>
+<font color="#0000f8">// conjunction with the listener class.</font>
+
+<font color="#288850"><b>class</b></font> inetserversocket : <font color="#a02828"><b>public</b></font> serversocket, <font color="#a02828"><b>public</b></font> inetsocket {
+        <font color="#a02828"><b>public</b></font>:
+                                inetserversocket();
+
+                <font color="#288850"><b>int</b></font>             listenOnSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address,
+                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> port,
+                                                <font color="#288850"><b>int</b></font> backlog);
+                                <font color="#0000f8">// Listen on &quot;address&quot; and &quot;port&quot; and allow</font>
+                                <font color="#0000f8">// &quot;backlog&quot; connections to pile up before</font>
+                                <font color="#0000f8">// refusing them.</font>
+                                <font color="#0000f8">//</font>
+                                <font color="#0000f8">// To listen on all addresses enter a NULL</font>
+                                <font color="#0000f8">// for &quot;address&quot;.  Entering a value of 0 for</font>
+                                <font color="#0000f8">// the &quot;port&quot; causes the server to listen on an</font>
+                                <font color="#0000f8">// arbitrary port.</font>
+                                <font color="#0000f8">//</font>
+                                <font color="#0000f8">// The getPort() method can be used later to </font>
+                                <font color="#0000f8">// discover this port.</font>
+                                <font color="#0000f8">//</font>
+                                <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+
+                <font color="#0000f8">// The following 9 methods provide discrete control over socket</font>
+                <font color="#0000f8">// initialization.</font>
+                <font color="#0000f8">//</font>
+                <font color="#0000f8">// If you need to set socket options or do anything special</font>
+                <font color="#0000f8">// between the discrete steps of socket initialization, you</font>
+                <font color="#0000f8">// should use a combination of these methods.</font>
+                <font color="#288850"><b>int</b></font>     initInetServerSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *address,
+                                                        <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> port);
+                        <font color="#0000f8">// Creates the actual socket and Initializes the class</font>
+                        <font color="#0000f8">// to use &quot;address&quot; and &quot;port&quot; when bind() is called.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     bind();
+                        <font color="#0000f8">// Associates the socket with an address.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+                <font color="#0000f8">// These 4 methods allow you to set socket options.  They must</font>
+                <font color="#0000f8">// be called after calling bind() and before calling listen().</font>
+                <font color="#288850"><b>int</b></font>     lingerOnClose(<font color="#288850"><b>int</b></font> timeout);
+                        <font color="#0000f8">// Instructs the socket to stay open for</font>
+                        <font color="#0000f8">// &quot;timeout&quot; seconds even after close() is</font>
+                        <font color="#0000f8">// called to allow the client to receive</font>
+                        <font color="#0000f8">// any data that may still be buffered.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     dontLingerOnClose();
+                        <font color="#0000f8">// Instructs the socket to close immediately</font>
+                        <font color="#0000f8">// when close() is called, dumping any data</font>
+                        <font color="#0000f8">// that may still be buffered but that the</font>
+                        <font color="#0000f8">// client may not have received.  This is</font>
+                        <font color="#0000f8">// the default.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     reuseAddresses();
+                        <font color="#0000f8">// Allows sockets in the TIME_WAIT state to be</font>
+                        <font color="#0000f8">// reused.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     dontReuseAddresses();
+                        <font color="#0000f8">// Prevents sockets in the TIME_WAIT state from</font>
+                        <font color="#0000f8">// being reused.  This is the default.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+                <font color="#0000f8">// These 4 methods allow you to set socket options.  They must</font>
+                <font color="#0000f8">// be called after calling bind() and before calling listen().</font>
+                <font color="#288850"><b>int</b></font>             listen(<font color="#288850"><b>int</b></font> backlog);
+                                <font color="#0000f8">// Waits until a client connects then places</font>
+                                <font color="#0000f8">// that connection in queue.  Up to &quot;backlog&quot;</font>
+                                <font color="#0000f8">// connections may be queued before future</font>
+                                <font color="#0000f8">// conenctions are refused.</font>
+                                <font color="#0000f8">//</font>
+                                <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                inetsocket      *acceptClientConnection();
+                                <font color="#0000f8">// Removes the client connection from the queue</font>
+                                <font color="#0000f8">// and associates a new socket with that</font>
+                                <font color="#0000f8">// connection.  Communication with the client</font>
+                                <font color="#0000f8">// may be done over this new socket.  </font>
+                                <font color="#0000f8">//</font>
+                                <font color="#0000f8">// Returns an inetsocket on success and NULL</font>
+                                <font color="#0000f8">// on failure.</font>
+
+                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font>  getPort();
+                                <font color="#0000f8">// Returns the inet port number that</font>
+                                <font color="#0000f8">// the socket is listening on.  If the</font>
+                                <font color="#0000f8">// port has not been set or if the</font>
+                                <font color="#0000f8">// socket is a unix socket, 0 is </font>
+                                <font color="#0000f8">// returned instead.</font>
+                <font color="#288850"><b>char</b></font>            *getClientAddress();
+                                <font color="#0000f8">// Writes the address of the client at</font>
+                                <font color="#0000f8">// the other end of &quot;sock&quot; to &quot;buffer&quot;.</font>
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/inetserversocketinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

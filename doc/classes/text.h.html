@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/text.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 1999-2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef TEXT_H</font>
+<font color="#a020f0">#define TEXT_H</font>
+
+<font color="#0000f8">// The text class provides methods for performing commonly needed transforms</font>
+<font color="#0000f8">// on strings of text.</font>
+
+<font color="#288850"><b>class</b></font> text {
+        <font color="#a02828"><b>public</b></font>:
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    upper(<font color="#288850"><b>char</b></font> *string);
+                                <font color="#0000f8">// converts &quot;string&quot; to uppercase</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    lower(<font color="#288850"><b>char</b></font> *string);
+                                <font color="#0000f8">// converts &quot;string&quot; to lowercase</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    rightTrim(<font color="#288850"><b>char</b></font> *string);
+                                <font color="#0000f8">// trims all spaces off of the right hand</font>
+                                <font color="#0000f8">// side of &quot;string&quot;</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    rightTrim(<font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>char</b></font> character);
+                                <font color="#0000f8">// trims all characters off of the right hand</font>
+                                <font color="#0000f8">// side of &quot;string&quot;</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    leftTrim(<font color="#288850"><b>char</b></font> *string);
+                                <font color="#0000f8">// trims all spaces off of the left hand</font>
+                                <font color="#0000f8">// side of &quot;string&quot;</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    leftTrim(<font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>char</b></font> character);
+                                <font color="#0000f8">// trims all characters off of the left hand</font>
+                                <font color="#0000f8">// side of &quot;string&quot;</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    bothTrim(<font color="#288850"><b>char</b></font> *string);
+                                <font color="#0000f8">// trims all spaces off of both </font>
+                                <font color="#0000f8">// sides of &quot;string&quot;</font>
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    bothTrim(<font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>char</b></font> character);
+                                <font color="#0000f8">// trims all characters off of both </font>
+                                <font color="#0000f8">// sides of &quot;string&quot;</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    strip(<font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>char</b></font> character);
+                                <font color="#0000f8">// strips all instances of &quot;character&quot;</font>
+                                <font color="#0000f8">// from &quot;string&quot;</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>void</b></font>    strip(<font color="#288850"><b>char</b></font> *string1, <font color="#288850"><b>char</b></font> *string2);
+                                <font color="#0000f8">// strips all instances of &quot;string2&quot;</font>
+                                <font color="#0000f8">// from &quot;string1&quot;</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     isInteger(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *val);
+                                <font color="#0000f8">// returns 1 the string &quot;val&quot; is an integer</font>
+                                <font color="#0000f8">// and 0 if it is not an integer</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>int</b></font>     isNumber(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *val);
+                                <font color="#0000f8">// returns 1 the string &quot;val&quot; is a number</font>
+                                <font color="#0000f8">// and 0 if it is not a number</font>
+
+                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *httpEscape(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *input);
+                                <font color="#0000f8">// http escapes &quot;input&quot; and returns it in a</font>
+                                <font color="#0000f8">// buffer allocated inside the function.</font>
+                                <font color="#0000f8">// This buffer must be deleted by the calling</font>
+                                <font color="#0000f8">// program.</font>
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/textinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

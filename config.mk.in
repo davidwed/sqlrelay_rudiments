@@ -1,0 +1,56 @@
+SHELL = /bin/sh
+VPATH = @srcdir@
+
+VERSION = @VERSION@
+SONAME_VERSION_INFO=@SONAME_VERSION_INFO@
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+incdir = @includedir@
+libdir = @libdir@
+docdir = $(prefix)/doc/rudiments
+
+# compiler to use
+CXX = @CXX@
+
+# archiver to use
+AR = @AR@
+
+# command to strip a binary
+STRIP = @STRIP@
+
+# includes and defines
+BASECPPFLAGS = @CPPFLAGS@
+
+# debug and optimization flags (-g, -O2, etc.)
+# NOTE: -FPIC gets added if we're not using libtool
+CXXFLAGS = -pedantic -w @CXXFLAGS@
+DEBUGCXXFLAGS = -pedantic -w @DEBUGCXXFLAGS@
+
+# libtool command
+LIBTOOL = @LIBTOOL@
+
+# commands to erase files and directories
+RM = rm -f
+RMTREE = rm -rf
+
+# command to create a symbolic link
+SYMLINK = ln -s
+
+# rpm build dir
+RPM_BUILD_DIR = @RPM_BUILD_DIR@
+
+# windows environment
+MINGW32 = @MINGW32@
+CYGWIN = @CYGWIN@
+UWIN = @UWIN@
+
+# socket library
+SOCKETLIB = @SOCKETLIB@
+
+# nsl library
+NSLLIB = @NSLLIB@
+
+# libs necessary to link into the DLL on Windows
+DLLLIBS = @DLLLIBS@

@@ -1,0 +1,255 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/daemonprocess.C)
+
+AC_ARG_WITH(cxxflags,
+	[  --with-cxxflags         debug/optimization flags to use],
+	CXXFLAGS="$CXXFLAGS $withval",
+	CXXFLAGS="$CXXFLAGS")
+AC_ARG_ENABLE(small-code,
+	[  --enable-small-code     optimize for small code size],
+	DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -O -Os -fomit-frame-pointer -fno-exceptions",
+	DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -fomit-frame-pointer -fno-exceptions")
+AC_ARG_WITH(system-libtool,
+	[  --with-system-libtool   use system libtool instead of ./libtool],
+	USE_SYSTEM_LIBTOOL=$withval,
+	USE_SYSTEM_LIBTOOL="no")
+AC_ARG_ENABLE(inlines,
+	[  --enable-inlines        use inline methods],
+	ENABLE_INLINES="yes",
+	ENABLE_INLINES="no")
+
+AC_SUBST(DEBUGCXXFLAGS)
+
+
+
+dnl Additional defines.
+AH_TEMPLATE([socklen_t],[Some systems don't define socklen_t])
+AH_TEMPLATE([HAVE_SEMUN],[Some systems define union semun])
+AH_TEMPLATE([HAVE_CMSGHDR],[Some systems define struct cmsghdr])
+AH_TEMPLATE([SIGNAL_HANDLER_INT],[Most systems define signal handlers with an integer parameter])
+AH_TEMPLATE([HAVE_CMSG_SPACE],[Some systems don't define CMSG_SPACE])
+AH_TEMPLATE([ENABLE_INLINES],[Use inline functions or not])
+if ( test "$ENABLE_INLINES" = "yes" ); then
+	AC_DEFINE_UNQUOTED(ENABLE_INLINES,1,Use inline functions or not)
+fi
+
+
+dnl Checks for programs.
+echo
+echo "***** Programs ***************"
+AC_CANONICAL_HOST
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_LANG(C++)
+
+dnl have to set ar here because libtool (currently) fails
+dnl to use the correct one when cross-compiling
+AC_CHECK_PROG(AR,$host_alias-ar,$host_alias-ar,ar)
+AC_SUBST(AR)
+echo "******************************"
+
+
+dnl Checks for libtool.
+echo
+echo "***** Libtool ****************"
+AC_LIBTOOL_WIN32_DLL
+AC_PROG_LIBTOOL
+echo "******************************"
+
+dnl override libtool if so desired
+dnl a bit crude, but AC_PROG_LIBTOOL sets vital
+dnl environment variables, it seems
+if ( test "$USE_SYSTEM_LIBTOOL" = "yes" ); then
+  LIBTOOL="libtool"
+fi
+
+
+dnl Checks for header files.
+echo
+echo "***** Headers ****************"
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h strings.h sys/socket.h sys/time.h syslog.h unistd.h regex.h regexp.h libgen.h regexpr.h])
+echo "******************************"
+
+
+dnl Checks for inline keyword
+echo
+echo "***** Inline Functions *******"
+AC_MSG_CHECKING(inline)
+INLINE="inline"
+# intel optimizing compiler doesn't have inlines, assume that CC doesn't either
+# even though it might, this test needs to be more robust
+if ( test "$CXX" = "icc" -o "$CXX" = "CC" ); then
+	INLINE=""
+else 
+	# redhat's gcc 2.96 has problems with inlines
+	CXX_VERSION=`$CXX --version`
+	if ( test "$CXX_VERSION" = "2.96" ); then
+		INLINE=""
+	fi
+fi
+if ( test "$INLINE" = "inline" ); then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers don't support the inline keyword) 
+echo "******************************"
+
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+echo
+echo "***** Structures *************"
+AC_C_CONST
+AC_TYPE_UID_T
+AC_C_INLINE
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_MSG_CHECKING(for socklen_t)
+AC_EGREP_CPP(socklen_t,[#include <sys/socket.h>],AC_MSG_RESULT(yes),AC_MSG_RESULT(no); AC_DEFINE(socklen_t, int, Some systems don't define socklen_t))
+AC_MSG_CHECKING(for union semun)
+AC_EGREP_CPP(union semun,[#include <sys/sem.h>],AC_DEFINE(HAVE_SEMUN,1, Some systems define union semun) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for struct cmsghdr)
+AC_EGREP_CPP(struct cmsghdr,[#include <sys/socket.h>],AC_DEFINE(HAVE_CMSGHDR,1, Some systems define struct cmsghdr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for CMSG_SPACE)
+AC_TRY_COMPILE([#include <sys/socket.h>],
+int a; a=CMSG_SPACE(sizeof(int));,AC_DEFINE(HAVE_CMSG_SPACE, 1, Some systems don't define CMSG_SPACE) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+echo "******************************"
+
+
+dnl Checks associated with signal handlers
+echo
+echo "***** Signal Handlers ********"
+AC_TYPE_SIGNAL
+AC_MSG_CHECKING(signal handler parameter)
+AC_TRY_COMPILE([#include <signal.h>],
+void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(SIGNAL_HANDLER_INT, 1, Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
+echo "******************************"
+
+
+dnl Checks associated with time structure
+echo
+echo "***** Time Structure *********"
+AC_HEADER_TIME
+AC_STRUCT_TM
+AC_STRUCT_TIMEZONE
+AC_MSG_CHECKING(tm_zone)
+AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(HAS_TM_ZONE,1, Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(tm_gmtoff)
+AC_EGREP_CPP(tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS_TM_GMTOFF,1, Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(__tm_zone)
+AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(HAS___TM_ZONE,1, Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(__tm_gmtoff)
+AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS___TM_GMTOFF,1, Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(tm_name)
+AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(HAS_TM_NAME,1, Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(tm_tzadj)
+AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(HAS_TM_TZADJ,1, Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+echo "******************************"
+
+
+dnl Checks for library functions.
+echo
+echo "***** Functions **************"
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MKTIME
+AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open)
+
+AC_MSG_CHECKING(srand48)
+AC_TRY_COMPILE([#include <stdlib.h>],
+srand48(0);,AC_DEFINE(HAVE_SRAND48,1, Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(lrand48)
+AC_TRY_COMPILE([#include <stdlib.h>],
+lrand48();,AC_DEFINE(HAVE_LRAND48,1, Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(srand)
+AC_TRY_COMPILE([#include <stdlib.h>],
+srand(0);,AC_DEFINE(HAVE_SRAND,1, Some systems have srand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(rand)
+AC_TRY_COMPILE([#include <stdlib.h>],
+rand();,AC_DEFINE(HAVE_RAND,1, Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
+AC_SUBST(SOCKETLIB)
+AC_CHECK_LIB(xnet,gethostbyname,XNETLIB=-lxnet,XNETLIB="")
+AC_SUBST(XNETLIB)
+AC_CHECK_LIB(nsl,gethostbyname,NSLLIB=-lnsl,NSLLIB="")
+AC_SUBST(NSLLIB)
+echo "******************************"
+
+
+dnl Check for microsoft platform.
+CYGWIN=""
+MINGW32=""
+UWIN=""
+dnl AC_CANONICAL_HOST gets called when AC_PROG_LIBTOOL is called above
+case $host_os in
+	*cygwin* ) CYGWIN="yes";;
+	*mingw32* ) MINGW32="yes";;
+	*uwin* ) UWIN="yes";;
+esac
+AC_SUBST(MINGW32)
+AC_SUBST(CYGWIN)
+AC_SUBST(UWIN)
+
+DLLLIBS=""
+if ( test -n "$UWIN" -o -n "$MINGW32" -o -n "$CYGWIN" ); then
+	dnl Hack so "make install" will work on windows
+	if ( test -r "INSTALL" ); then
+		mv INSTALL INSTALL.txt
+	fi
+	DLLLIBS="-lstdc"
+fi
+AC_SUBST(DLLLIBS)
+
+
+dnl Checks for rpm build directory.
+RPM_BUILD_DIR=`rpm --eval "%_topdir" 2>/dev/null`
+AC_SUBST(RPM_BUILD_DIR)
+
+
+dnl Default build variables.
+VERSION="0.25"
+AC_SUBST(VERSION)
+AC_DEFINE_UNQUOTED(VERSION,"$VERSION",Version)
+dnl rules for CURRENT:REVISION:AGE version info:
+dnl apply the following rules in order:
+dnl if library source changed at all,         c:r:a -> c:r+1:a
+dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
+dnl if interfaces added,                      c:r:a -> c:r:a+1
+dnl if interfaces removed,                    c:r:a -> c:r:0
+SONAME_VERSION_INFO="1:0:0"
+AC_SUBST(SONAME_VERSION_INFO)
+AC_PREFIX_DEFAULT(/usr/local/firstworks)
+
+
+dnl Output files.
+echo
+echo "***** Output Files ***********"
+AC_CONFIG_HEADER(include/rudiments/private/config.h)
+AC_CONFIG_SRCDIR(test/xmls.C)
+AC_CONFIG_FILES(config.mk rudiments.spec.in bin/rudiments-config)
+AC_OUTPUT
+chmod 755 bin/rudiments-config
+
+sed -e "s|\${prefix}|%{prefix}|" \
+-e "s|\${exec_prefix}|%{exec_prefix}|" \
+rudiments.spec.in > rudiments.spec
+
+echo "******************************"
+echo

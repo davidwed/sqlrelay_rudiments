@@ -1,0 +1,198 @@
+0.25 -	doc's mention genericsocket class now
+	configure script figures out rpm build directory better
+	added rudiments-config script
+	Makefile.in's are just Makefile's now
+	read/write methods return ssize_t's now
+	added logger class and logdestination classes
+	implemented totally different client/server class structure
+	renamed lots of methods to just read(),write(),open(),close(),etc.
+	added xmlsax,xmldom,xmldomnode class
+	added errorhandler class
+	made other classes report errors through the errorhandler class
+	added SONAME_VERSION_INFO and WITH_LIBTOOL variables to config.mk (fmw)
+	added the debian directory (fmw)
+	added memorypool class
+	made lots of (char *)'s into (const char *)'s.
+	made lots of methods const methods
+	inlined lots of methods
+	used autoconf/autoheader 2.53
+	made libtool build the default
+	made build process cross-compile-friendly
+	added --with-system-libtool option to configure (fmw)
+	added fileproperties class (wrapper for stat/lstat)
+	added conectiondata class for use with clienttransport children
+	added right/left justify and center methods to text class
+	added --debug-profiling-libs to rudiments-config
+	added stringbuffer class, made errorhandler use it
+	added --enable-small-code and --with-inlines to configure script
+	added -fno-exceptions to default CXXFLAGS
+
+0.24 -	fixed poor linger implementation
+	added options for SO_REUSEADDR
+	added simple/complex port initilization methods to server class
+	added options to server/client class to automatically retry reads that
+		were interrupted by signals
+	spec file takes libdir, incdir, prefix and exec_prefix into account
+	added support for file descriptor passing over unix sockets
+	server/client classes split into genericsocket, serversocket, 
+		clientsocket classes
+	serversocketpool class added which can listen on an 
+		arbitrary number of ports
+	make generates a profiling version of librudiments.a now
+	test programs are statically linked now
+	added create/attach and createOrAttach methods to semaphoreset class
+	semaphoreset correctly cleans up now
+	include files moved to rudiments subdir of incdir
+	in genericsocket class, reads which didn't get all of the data but
+		did not encounter an error keep trying until all the data
+		is read now
+	safeRead handles count>SSIZE_MAX and eof conditions correctly now
+	setuid/setgid were replaced with setreuid/setregid
+	added #include <netinet/in.h> and defined _XPG4_2 around 
+		#include <socket.h> for solaris8
+	tests don't build by default now
+	clientsocket correctly checks for connect() error now
+
+0.23 -	fixed stupidity where semaphoreset destructor was trying to
+		individually delete all of the semaphores in a set rather
+		than just the whole set at once
+
+0.22 -  added support for "make rpm"
+	added lingerOnClose and disconnectClient calls to svr.C test program
+	check for ld -G vs ld -shared
+
+0.21 -	got rid of some compiler warnings
+	made client/server write/read methods use unsigned long/short
+	added strip commands to text class
+	made configure script take --includedir and --exec-prefix into account
+	added return values for disconnectClient(), stopListening() and 
+		closeConnection() methods in client/server classes
+	added linger socket options to server/client classes
+
+0.20 -	changed DYNAMICAR to use ld -G -o instead of g++ -Wl,-G -o, it was
+		putting an undefined main symbol in the library which java
+		doesn't like
+	tries=0 in client class causes the client to loop infinitely now
+	changed daemon class name to daemonprocess to avoid conflict with
+		daemon function in unistd.h
+	made daemonprocess signal handlers pointers and handled them as such;
+		not doing so and using ld -G -o to create the library caused 
+		any program using the daemonprocess class to crash
+	client class reports a "failed to connect" error only after it's tried
+		for the number of times it's supposed to try, not each time
+	added server/client programs to the test suite
+
+0.19 -	added test suite
+	simplified random number scaling code
+	added negative number tests to random number tester
+	changed randomnumber to prefer rand/srand over nrand48/srand48
+		because SCO's RAND_MAX is 2^15-1 but it's nrand48 returns
+		a number between 0 and 2^32-1 which caused scaling errors
+		but it's rand returns a number between 0 and 2^15-1.
+	added a getRandMax method to the randomnumber class
+		
+	
+
+0.18 -	getUnixServerPort() returns NULL now if the unix socket was never
+		opened in server class
+	initialized serverportin in server class
+	initialized serversock in client class
+	made a bunch of methods static 
+	rolled casechange, trim and encoding classes into text class
+	totally changed random number class
+	added setUsername/setGroupname methods to semaphoreset class
+	daemon class handles SIGCLD by waiting on dead child processes 
+		on it's own now
+	changed several method names in the server class
+	some tweaks for microsoft platform compatibility
+	added a permissions class
+	changed some method names in the signalhandler class
+	added documentation to all of the header files
+	added signalset and signalmanager classes
+	changed signalhandler.h/C to signalclasses.h/C
+	added programming examples to documentation
+	added isNumber/isInteger methods to text class, made them both 
+		recognize negative numbers
+	make clean now removes the .pics directories that Konqueror makes
+
+
+0.17.1 - quick-fix: closeServerSocket() doesn't unlink the unix socket anymore
+
+0.17 -  added some new methods to the regularexpression class
+	added datetime class
+
+0.16 -  got rid of some unnecessary strlen()'s
+	fixed some "I wasn't such a good programmer back then" errors
+	removed idiotic readFromXXX(char *buffer) functions which had no
+		length parameters from client/server classes
+	added methods to daemon class so it can run as a given user/group
+
+0.15 -  tweaks for gcc-2.96
+
+0.14 -	added more writeToServer/writeToClient and readFromServer/readFromClient
+		methods for writing/reading non-character data
+	added chdir("/") and umask(0) to detach() method in daemon class
+	closing a unix socket unlinks the associated file now
+	added socket option SO_REUSEADDR to inet sockets in server class
+
+0.13 -	removed redundant -fpic and unnecessary -DPIC
+	added #include <sys/types.h> to regularexpression, sharedmemory and
+		semaphoreset classes
+	allowed c++ to be used instead of forcing g++
+	changed check for integer signal handler type
+	fixed a few memory leaks
+	preliminary CYGWIN support
+	added detach method to daemon class, must be explicitly called for the
+		daemon to detach from the controlling tty.
+
+0.12 -	added Unix Domain support to server and client classes
+	removed the extern "C" { #undef __cplusplus ... #define __cplusplus }
+		stuff, it caused more trouble than it overcame
+	build improvements
+	error messages go to stderr now and include the strerror() of the
+		error number
+	detect signal handler function signature
+	changed signal handler function signature to void handler() from
+		void handler(int) for greater compatibility
+	added randomnumber class
+
+0.11 -	added sharedmemory class
+	removed select from the readfromfileptr routine 
+		(wasn't supposed to be there anyway)
+	made wait() and signal() semaphoreset class members not use SEM_UNDO
+		by default and added waitWithUndo() and signalWithUndo() 
+		members
+
+0.10 -  added select before accept in server class
+
+0.9 -	documentation improvements and fixes
+	added -fpic -fPIC -DPIC to CXXFLAGS
+	added extern "C" and #undef/#define __cplusplus in various places
+	added modes to install scripts
+	fixed the server class to allow connections using INADDR_ANY
+
+0.8 -	build fix: made calls to "test" more compatible
+
+0.7 -	cleaner build
+	client::openConnection now tries to connect to all the addresses that
+		a hostname resolves to before giving up
+	client::openConnection fails gracefully if gethostbyname or
+		getprotobyname fails
+
+0.6 -	removed LDFLAGS from config.mk
+	general Makefile maintenance
+
+0.5 -	documentation installs now
+	detection of union semun at configure time
+	reingineered Makefiles to be frienlier to non-gnu make
+
+0.4 -	more robust build/install/uninstall
+
+0.3 -	configure based install. 
+	Reorganization of includes.
+	make install/uninstall directives.
+	Got rid of RCS.
+
+0.2 -	bug fixes.
+	
+0.1 -	First release.

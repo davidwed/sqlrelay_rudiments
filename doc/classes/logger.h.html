@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/logger.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef LOGGER_H</font>
+<font color="#a020f0">#define LOGGER_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;fstream.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;syslog.h&gt;</font>
+
+<font color="#0000f8">// The logger class and associated logdestination classes provide methods for</font>
+<font color="#0000f8">// logging data from an application.  The following destinations are supported:</font>
+<font color="#0000f8">//      file, syslog, stdout and stderr</font>
+<font color="#0000f8">//</font>
+<font color="#0000f8">// To use these classes: instantiate one or more logdestinations,</font>
+<font color="#0000f8">// instantiate a logger, and add the logdestination instance(s) to the</font>
+<font color="#0000f8">// logger class instance using addLogDestination().  Then, each call to a</font>
+<font color="#0000f8">// logger class method will output logging information to each of the</font>
+<font color="#0000f8">// logdestinations in seqence.</font>
+
+
+
+<font color="#0000f8">// The logdestination class is a virtual base class that just defines methods</font>
+<font color="#0000f8">// that the real logdestination classes must implement.</font>
+<font color="#288850"><b>class</b></font> logdestination {
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/logdestination.h&gt;</font>
+};
+
+
+<font color="#0000f8">// The syslogdestination class writes log data to syslog.</font>
+<font color="#288850"><b>class</b></font> syslogdestination : <font color="#a02828"><b>public</b></font> logdestination {
+        <font color="#a02828"><b>public</b></font>:
+                <font color="#288850"><b>void</b></font>    open(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *ident, <font color="#288850"><b>int</b></font> option,
+                                        <font color="#288850"><b>int</b></font> facility, <font color="#288850"><b>int</b></font> priority);
+                <font color="#288850"><b>void</b></font>    close();
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/syslogdestination.h&gt;</font>
+};
+
+
+<font color="#0000f8">// The filedestination class writes log data to a file.</font>
+<font color="#288850"><b>class</b></font> filedestination : <font color="#a02828"><b>public</b></font> logdestination {
+        <font color="#a02828"><b>public</b></font>:
+                <font color="#288850"><b>int</b></font>     open(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
+                <font color="#288850"><b>void</b></font>    close();
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/filedestination.h&gt;</font>
+};
+
+
+<font color="#0000f8">// The filedestination class writes log data to standard output.</font>
+<font color="#288850"><b>class</b></font> stdoutdestination : <font color="#a02828"><b>public</b></font> logdestination {
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/stdoutdestination.h&gt;</font>
+};
+
+
+<font color="#0000f8">// The filedestination class writes log data to standard error.</font>
+<font color="#288850"><b>class</b></font> stderrdestination : <font color="#a02828"><b>public</b></font> logdestination {
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/stderrdestination.h&gt;</font>
+};
+
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/logdestnode.h&gt;</font>
+
+
+<font color="#0000f8">// The logger class provides methods for managing</font>
+<font color="#0000f8">// logdestinations and writing log entries.</font>
+<font color="#288850"><b>class</b></font> logger {
+        <font color="#a02828"><b>public</b></font>:
+                        logger();
+                        ~logger();
+
+                <font color="#0000f8">// These methods add or remove logdestinations.</font>
+                <font color="#288850"><b>void</b></font>    addLogDestination(logdestination *logdest);
+                        <font color="#0000f8">// Add &quot;logdest&quot; to the list of destinations that</font>
+                        <font color="#0000f8">// log entries will be written to.</font>
+                <font color="#288850"><b>void</b></font>    removeLogDestination(logdestination *logdest);
+                        <font color="#0000f8">// Remove &quot;logdest&quot; from the list of destinations that</font>
+                        <font color="#0000f8">// log entries will be written to.</font>
+                <font color="#288850"><b>void</b></font>    removeAllLogDestinations();
+                        <font color="#0000f8">// Remove all entries from the list of destinations that</font>
+                        <font color="#0000f8">// log entries will be written to.</font>
+
+
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>char</b></font>     *logHeader(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name);
+                        <font color="#0000f8">// Returns a string containing the current date,</font>
+                        <font color="#0000f8">// followed by &quot;name&quot;, followed by the process id in</font>
+                        <font color="#0000f8">// brackets.  For example:</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// 01/05/2002 12:54:23 myprogram [2421]</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// (Note that this method allocates a string internally</font>
+                        <font color="#0000f8">// and returns it.  This string must be deleted by the</font>
+                        <font color="#0000f8">// calling program.)</font>
+
+
+                <font color="#0000f8">// These methods write log entries to each</font>
+                <font color="#0000f8">// logdestination in sequence.</font>
+                <font color="#288850"><b>void</b></font>    write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *header, <font color="#288850"><b>int</b></font> tabs,
+                                                <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string) <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// Writes &quot;header&quot;, followed by &quot;tabs&quot; tabs, followed</font>
+                        <font color="#0000f8">// by &quot;string&quot; as a single log entry.</font>
+                <font color="#288850"><b>void</b></font>    write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *header, <font color="#288850"><b>int</b></font> tabs,
+                                                <font color="#288850"><b>char</b></font> character) <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// Writes &quot;header&quot;, followed by &quot;tabs&quot; tabs, followed</font>
+                        <font color="#0000f8">// by &quot;character&quot; as a single log entry.</font>
+                <font color="#288850"><b>void</b></font>    write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *header, <font color="#288850"><b>int</b></font> tabs,
+                                                <font color="#288850"><b>long</b></font> number) <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// Writes &quot;header&quot;, followed by &quot;tabs&quot; tabs, followed</font>
+                        <font color="#0000f8">// by &quot;number&quot; as a single log entry.</font>
+                <font color="#288850"><b>void</b></font>    write(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *header, <font color="#288850"><b>int</b></font> tabs,
+                                                <font color="#288850"><b>double</b></font> number) <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// Writes &quot;header&quot;, followed by &quot;tabs&quot; tabs, followed</font>
+                        <font color="#0000f8">// by &quot;number&quot; as a single log entry.</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/logger.h&gt;</font>
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/loggerinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

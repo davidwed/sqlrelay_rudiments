@@ -1,0 +1,58 @@
+filedescriptor - open,close,read,write
+	file - chmod,chown,stat
+	transport - pass fd
+		client - connect
+			socket
+				unix
+				inet
+					tcp
+						stream
+						dgram
+					udp
+			serial
+				modem
+			ipc
+			
+		server - bind,listen,accept
+			socket
+				unix
+				inet
+					tcp
+						stream
+						dgram
+					udp
+			serial
+				modem
+			ipc
+
+
+
+document stringbuffer
+test program for stringbuffer
+
+document connectiondata
+comment connectiondata
+test program for connectiondata class
+
+document fileproperties
+test program for fileproperties class
+
+document filesystem
+test program form filesystem class
+
+document clienttransport/connectiondata relationship
+
+document new read-til-terminate method in transport class
+
+rebuild class doc's
+naming convention should support tcp/udp/etc sockets and non-stream tcp sockets
+	ie: protocol-type-domain-client/server-socket
+	eg: tcpstreaminetclientsocket
+test invalid xml
+
+handle CDATA/internal subsets better
+is xmldom really DOM compliant?
+
+support non-posix semaphores
+handoff fails on Redhat 5.2 and SCO - SCO problem appears to be 
+					alignment-related

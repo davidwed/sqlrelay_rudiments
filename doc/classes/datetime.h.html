@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/datetime.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2000-2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef DATETIME_H</font>
+<font color="#a020f0">#define DATETIME_H</font>
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;time.h&gt;</font>
+
+<font color="#0000f8">// The datetime class provides methods for converting date/time formats and</font>
+<font color="#0000f8">// accessing various date/time values.</font>
+
+<font color="#288850"><b>class</b></font> datetime {
+        <font color="#a02828"><b>public</b></font>:
+                        datetime();
+                                <font color="#0000f8">// current time</font>
+                        datetime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
+                                <font color="#0000f8">// datestring must be &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
+                        datetime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>time_t</b></font> *epoch);
+                                <font color="#0000f8">// *epoch is the number of seconds since 1970,</font>
+                                <font color="#0000f8">// output by many standard time functions</font>
+                        datetime(<font color="#288850"><b>const</b></font> tm *timestruct);
+                                <font color="#0000f8">// *timestruct is a (struct tm *), output by </font>
+                                <font color="#0000f8">// many standard time functions</font>
+                        ~datetime();
+
+                <font color="#0000f8">// These methods return commonly needed time/date values</font>
+                <font color="#288850"><b>int</b></font>     getHour() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getMinutes() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getSeconds() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getMonth() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getDayOfMonth() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getDayOfWeek() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getDayOfYear() <font color="#288850"><b>const</b></font>;
+                <font color="#288850"><b>int</b></font>     getYear() <font color="#288850"><b>const</b></font>;
+
+                <font color="#288850"><b>int</b></font>     isDaylightSavingsTime() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// returns 1 if daylight savings time is currently</font>
+                        <font color="#0000f8">// in effect and 0 if it isn't</font>
+
+                <font color="#288850"><b>char</b></font>    *getTimeZone() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// returns a 3 character string representing the</font>
+                        <font color="#0000f8">// time zone</font>
+
+                <font color="#288850"><b>long</b></font>    getTimeZoneOffset() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// returns (in seconds) the offset from GMT</font>
+
+
+                <font color="#0000f8">// These methods output conversions to other date/time</font>
+                <font color="#0000f8">// formats.</font>
+                <font color="#288850"><b>char</b></font>    *getString();
+                        <font color="#0000f8">// returns &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
+                        <font color="#0000f8">// (Note that this method returns a pointer to an</font>
+                        <font color="#0000f8">// internal string which will be deleted if the</font>
+                        <font color="#0000f8">// class instance is deleted.)</font>
+                <font color="#288850"><b>time_t</b></font>  getEpoch() <font color="#288850"><b>const</b></font>;
+                        <font color="#0000f8">// returns the number of seconds since 1970</font>
+                tm      *getTm();
+                        <font color="#0000f8">// returns a pointer to the internal &quot;struct tm&quot;</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/datetime.h&gt;</font>
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/datetimeinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>/usr/local/src/rudiments/include/rudiments/errorhandler.h.html</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
+<font color="#0000f8">// See the COPYING file for more information.</font>
+
+<font color="#a020f0">#ifndef ERRORHANDLER_H</font>
+<font color="#a020f0">#define ERRORHANDLER_H</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;strstream.h&gt;</font>
+
+<font color="#0000f8">// The errorhandler class is a base class for many rudiments classes.</font>
+
+<font color="#288850"><b>class</b></font> errorhandler {
+        <font color="#a02828"><b>public</b></font>:
+                <font color="#288850"><b>char</b></font>    *getError();
+                        <font color="#0000f8">// When a method in a class that inherits from</font>
+                        <font color="#0000f8">// errorhandler returns a return value indicating an</font>
+                        <font color="#0000f8">// error, this method may called to retrieve the</font>
+                        <font color="#0000f8">// error message.</font>
+
+<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/errorhandler.h&gt;</font>
+};
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/errorhandlerinlines.h&gt;</font>
+
+<font color="#a020f0">#endif</font>
+</pre>
+</body>
+</html>

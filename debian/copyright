@@ -1,0 +1,19 @@
+This package was debianized by Andreas Tille tille@debian.org on
+Sat, 20 Oct 2001 08:09:48 +0200.
+
+It was downloaded from:
+   http://www.firstworks.com/downloads/rudiments/rudiments-0.23.tar.gz
+
+The homepage is
+   http://www.firstworks.com/rudiments.html
+
+Rudiments - A set of C++ utilities and base classes.
+Copyright (c) 1999-2000 David Muse
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+Debian GNU/Linux users can find the GNU General Public License at
+/usr/share/common-licenses/GPL

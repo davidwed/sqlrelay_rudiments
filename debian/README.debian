@@ -1,0 +1,14 @@
+librudiments for DEBIAN
+-----------------------
+
+Librudiments is a prerequisite for sqlrelay.
+
+The development package librudiments-0.25-1-dev contains a profiling
+version named librudiments_p (.so and .a).
+
+Librudiments is compiled with g++ 3.0; in fact, it doesn't compile
+with 2.95. Thus, you will have to use 3.0 for your own projects based
+on librudiments.
+
+
+Florian M. Weps <fweps@greenmail.ch>, Mon, 5 Aug 2002 19:54:46 +0200
