@@ -29,6 +29,9 @@ BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 # NOTE: -FPIC gets added if we're not using libtool
 CXXFLAGS = @CXXFLAGS@ @PIPE@
 
+# linker flags
+LDFLAGS = @LDFLAGS@
+
 # flag to strip during install
 INSTALLSTRIP = @INSTALLSTRIP@
 
