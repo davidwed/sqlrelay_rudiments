@@ -9,7 +9,7 @@
 
 int	main() {
 
-	unixclientsocket	*clnt;
+	unixclientsocket	clnt;
 	clnt.connectToServer("/tmp/lsnr.socket",1,0);
 	clnt.write("hello",5);
 	char	buffer[11];

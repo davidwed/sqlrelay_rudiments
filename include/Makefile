@@ -17,7 +17,6 @@ install:
 	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filedescriptor.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/fileproperties.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filesystem.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/groupentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/hostentry.h $(incdir)/rudiments
@@ -66,8 +65,6 @@ install:
 	$(INSTALL) -m 644 rudiments/private/filedestination.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedescriptor.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/fileinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/fileproperties.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/filepropertiesinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filesystem.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filesysteminlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/groupentry.h $(incdir)/rudiments

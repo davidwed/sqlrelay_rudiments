@@ -6,7 +6,6 @@
 	#define inline
 	#include <rudiments/private/daemonprocessinlines.h>
 #endif
-#include <rudiments/fileproperties.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/file.h>
@@ -23,7 +22,6 @@ static signalhandler	daemonprocess::deadchildhandler;
 #endif
 
 daemonprocess::daemonprocess() {
-
 	deadchildhandler.setHandler((void *)waitOnChildren);
 	deadchildhandler.addFlag(SA_NOCLDSTOP);
 	deadchildhandler.handleSignal(SIGCHLD);
@@ -48,21 +46,16 @@ inline int daemonprocess::runAsGroup(const char *groupname) const {
 int daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
 	char	*pid=text::parseNumber(getpid());
-	size_t	pidlen=strlen(pid);
-	int	retval=fl.create(filename,permissions,(void *)pid,pidlen);
+	int	retval=(fl.create(filename,permissions,pid)==strlen(pid));
 	delete[] pid;
 	fl.close();
-	return (retval==pidlen);
+	return retval;
 }
 
 int daemonprocess::checkForPidFile(const char *filename) const {
-	file	fl;
-	if (!fl.open(filename,O_RDONLY)) {
-		return -1;
-	}
-	char	*pidstring=fl.getContents();
-	fl.close();
-	int	retval=(pidstring)?atoi(pidstring):-1;
+	char	*pidstring=file::getContents(filename);
+printf("pid: %s\n",pidstring);
+	int	retval=(pidstring && pidstring[0])?atoi(pidstring):-1;
 	delete[] pidstring;
 	return retval;
 }

@@ -13,17 +13,24 @@
 #include <string.h>
 
 char *file::getContents() {
-	off_t	size;
-	if (fileproperties::getSize(fd,&size)==-1) {
-		return NULL;
-	}
-	char	*buffer=new char[size+1];
-	buffer[size]=(char)NULL;
-	return (read(buffer,size)==size)?buffer:NULL;
+	char	*contents=new char[st.st_size+1];
+	contents[st.st_size]=(char)NULL;
+printf("st_size=%d\n",st.st_size);
+	return (st.st_size==0 || read(contents,st.st_size)==sizeof(st.st_size))?
+			contents:NULL;
+}
+
+char *file::getContents(const char *name) {
+	file	fl;
+	fl.open(name,O_RDONLY);
+	char	*contents=fl.getContents();
+printf("contents: %s\n",contents);
+	fl.close();
+	return contents;
 }
 
 size_t file::create(const char *name, mode_t permissions,
-					void *data, size_t size) {
+					const void *data, size_t size) {
 	create(name,permissions);
 	size_t	retval=write(data,size);
 	close();

@@ -17,5 +17,4 @@ int	main() {
 	buffer[sizeread]=(char)NULL;
 	printf("%s\n",buffer);
 	clnt.close();
-	delete clnt;
 }
