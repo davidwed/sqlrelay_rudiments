@@ -9,7 +9,7 @@
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
 #ifdef HAVE_GETADDRINFO
-	#include <rudiments/string.h>
+	#include <rudiments/charstring.h>
 #endif
 
 #include <sys/types.h>
@@ -84,7 +84,7 @@ int inetclientsocket::connect() {
 		hints.ai_socktype=SOCK_STREAM;
 
 		// get a string representing the port number
-		char	*portstr=string::parseNumber((long)port);
+		char	*portstr=charstring::parseNumber((long)port);
 
 		// get the address info for the given address/port
 		addrinfo	*ai;

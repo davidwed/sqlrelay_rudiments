@@ -6,7 +6,7 @@
 	#include <rudiments/private/daemonprocessinlines.h>
 #endif
 #include <rudiments/file.h>
-#include <rudiments/string.h>
+#include <rudiments/charstring.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +34,7 @@ daemonprocess::~daemonprocess() {
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
-	char	*pid=string::parseNumber((long)getpid());
+	char	*pid=charstring::parseNumber((long)getpid());
 	bool	retval=(fl.create(filename,permissions,pid)==
 						(ssize_t)strlen(pid));
 	delete[] pid;

@@ -175,9 +175,9 @@ ifeq ($(INCLUDE_STRINGBUFFER),1)
 	PRIVATEHEADERS += stringbuffer.h stringbufferinlines.h \
 				stringbufferincludes.h
 endif
-ifeq ($(INCLUDE_STRING),1)
-	HEADERS += string.h
-	PRIVATEHEADERS += string.h stringinlines.h stringincludes.h
+ifeq ($(INCLUDE_CHARSTRING),1)
+	HEADERS += charstring.h
+	PRIVATEHEADERS += charstring.h charstringinlines.h charstringincludes.h
 endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h

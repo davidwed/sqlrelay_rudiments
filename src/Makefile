@@ -123,9 +123,9 @@ ifeq ($(INCLUDE_SIGNALCLASSES),1)
 	SRCS += signalclasses.C
 	LOBJS += signalclasses.lo
 endif
-ifeq ($(INCLUDE_STRING),1)
-	SRCS += string.C
-	LOBJS += string.lo
+ifeq ($(INCLUDE_CHARSTRING),1)
+	SRCS += charstring.C
+	LOBJS += charstring.lo
 endif
 ifeq ($(INCLUDE_STRINGBUFFER),1)
 	SRCS += stringbuffer.C
