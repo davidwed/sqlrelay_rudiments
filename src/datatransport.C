@@ -168,12 +168,12 @@ ssize_t datatransport::read(unsigned long *buffer, long sec, long usec) {
 	return retval;
 }
 
-int datatransport::passFileDescriptor(int descriptor) {
+bool datatransport::passFileDescriptor(int descriptor) {
 	// by default do nothing and return an error
-	return 0;
+	return false;
 }
 
-int datatransport::receiveFileDescriptor(int *descriptor) {
+bool datatransport::receiveFileDescriptor(int *descriptor) {
 	// by default do nothing and return an error
-	return 0;
+	return false;
 }

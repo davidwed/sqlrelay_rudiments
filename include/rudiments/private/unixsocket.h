@@ -15,8 +15,8 @@ class unixsocket : virtual public datatransport {
 			unixsocket(int filedescriptor);
 		void	initialize(const char *filename);
 
-		int	passFileDescriptor(int descriptor);
-		int	receiveFileDescriptor(int *descriptor);
+		bool	passFileDescriptor(int descriptor);
+		bool	receiveFileDescriptor(int *descriptor);
 	protected:
 		char		*filename;
 		sockaddr_un	sockaddrun;
