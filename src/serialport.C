@@ -8,9 +8,13 @@
 namespace rudiments {
 #endif
 
-serialport::serialport() : filedescriptor() {}
+serialport::serialport() : filedescriptor() {
+	type="serialport";
+}
 
-serialport::serialport(const serialport &s) : filedescriptor(s) {}
+serialport::serialport(const serialport &s) : filedescriptor(s) {
+	type="serialport";
+}
 
 serialport &serialport::operator=(const serialport &s) {
 	if (this!=&s) {

@@ -18,10 +18,13 @@ namespace rudiments {
 
 inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
 	translateByteOrder();
+	type="inetclientsocket";
 }
 
 inetclientsocket::inetclientsocket(const inetclientsocket &i) :
-					clientsocket(i), inetsocketutil(i) {}
+					clientsocket(i), inetsocketutil(i) {
+	type="inetclientsocket";
+}
 
 inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
 	if (this!=&i) {

@@ -85,7 +85,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		FD_ZERO(&fdlist);
 		listenerlistnode	*current=
 				filedescriptorlist.getNodeByIndex(0);
-		while(current) {
+		while (current) {
 
 			if (current->getData()->getFileDescriptor()>largest) {
 				largest=current->getData()->getFileDescriptor();

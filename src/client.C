@@ -42,6 +42,7 @@ void client::clientInit(char *connecterror,
 	this->timeoutusec=timeoutusec;
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;
+	type="client";
 }
 
 void client::clientClone(const client &c) {

@@ -4,12 +4,11 @@
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 
 #include <stdio.h>
-// some systems need string.h to provide memset() for FD_ZERO/FD_SET
-#include <string.h>
 #include <sys/time.h>
 #include <sys/select.h>
 #include <unistd.h>
@@ -21,6 +20,7 @@
 #include <sys/socket.h>
 #include <sys/uio.h>
 #include <limits.h>
+#include <arpa/inet.h>
 
 //#define DEBUG_PASSFD 1
 
@@ -106,6 +106,7 @@ void filedescriptor::filedescriptorInit() {
 	ssl=NULL;
 	sslresult=1;
 #endif
+	type="filedescriptor";
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
@@ -1211,6 +1212,27 @@ bool filedescriptor::setNoDelay(int onoff) {
 	return !setsockopt(fd,IPPROTO_TCP,TCP_NODELAY,
 				(SETSOCKOPT_OPTVAL_TYPE)&value,
 					(socklen_t)sizeof(int));
+}
+
+const char *filedescriptor::getType() const {
+	return type;
+}
+
+char *filedescriptor::getPeerAddress() const {
+
+	// initialize a socket address structure
+	struct sockaddr_in	clientsin;
+	socklen_t		size=sizeof(clientsin);
+	rawbuffer::zero(&clientsin,sizeof(clientsin));
+
+	// get the peer address
+	if (getpeername(fd,reinterpret_cast<struct sockaddr *>(&clientsin),
+								&size)==-1) {
+		return NULL;
+	}
+
+	// convert the address to a string and return a copy of it
+	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
 }
 
 #ifdef RUDIMENTS_NAMESPACE

@@ -39,3 +39,5 @@
 			BIO	*bio;
 		mutable	int	sslresult;
 		#endif
+
+		const char	*type;

@@ -23,10 +23,12 @@ modemclient::modemclient() : client(), modemutil() {
 	phonenumber="";
 	retrywait=0;
 	retrycount=0;
+	type="modemclient";
 }
 
 modemclient::modemclient(const modemclient &m) : client(m), modemutil(m) {
 	modemclientClone(m);
+	type="modemclient";
 }
 
 modemclient &modemclient::operator=(const modemclient &m) {

@@ -7,9 +7,13 @@
 namespace rudiments {
 #endif
 
-server::server() : filedescriptor() {}
+server::server() : filedescriptor() {
+	type="server";
+}
 
-server::server(const server &s) : filedescriptor(s) {}
+server::server(const server &s) : filedescriptor(s) {
+	type="server";
+}
 
 server &server::operator=(const server &s) {
 	if (this!=&s) {

@@ -11,9 +11,12 @@ namespace rudiments {
 
 device::device() : file() {
 	dontGetCurrentPropertiesOnOpen();
+	type="device";
 }
 
-device::device(const device &d) : file(d) {}
+device::device(const device &d) : file(d) {
+	type="device";
+}
 
 device &device::operator=(const device &d) {
 	if (this!=&d) {

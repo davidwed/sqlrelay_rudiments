@@ -10,10 +10,14 @@
 namespace rudiments {
 #endif
 
-unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {}
+unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {
+	type="unixclientsocket";
+}
 
 unixclientsocket::unixclientsocket(const unixclientsocket &u) :
-					clientsocket(u), unixsocketutil(u) {}
+					clientsocket(u), unixsocketutil(u) {
+	type="unixclientsocket";
+}
 
 unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
 	if (this!=&u) {

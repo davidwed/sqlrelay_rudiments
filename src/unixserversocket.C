@@ -16,11 +16,13 @@ namespace rudiments {
 
 unixserversocket::unixserversocket() : serversocket(), unixsocketutil() {
 	mask=0;
+	type="unixserversocket";
 }
 
 unixserversocket::unixserversocket(const unixserversocket &u) :
 				serversocket(u), unixsocketutil(u) {
 	mask=u.mask;
+	type="unixserversocket";
 }
 
 unixserversocket &unixserversocket::operator=(const unixserversocket &u) {

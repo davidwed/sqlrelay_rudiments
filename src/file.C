@@ -26,10 +26,12 @@ file::file() : filedescriptor() {
 	rawbuffer::zero(&st,sizeof(st));
 	getcurrentpropertiesonopen=true;
 	retryinterruptedlockops=true;
+	type="file";
 }
 
 file::file(const file &f) : filedescriptor(f) {
 	fileClone(f);
+	type="file";
 }
 
 file &file::operator=(const file &f) {

@@ -12,9 +12,13 @@
 namespace rudiments {
 #endif
 
-clientsocket::clientsocket() : client() {}
+clientsocket::clientsocket() : client() {
+	type="clientsocket";
+}
 
-clientsocket::clientsocket(const clientsocket &c) : client(c) {}
+clientsocket::clientsocket(const clientsocket &c) : client(c) {
+	type="clientsocket";
+}
 
 clientsocket &clientsocket::operator=(const clientsocket &c) {
 	if (this!=&c) {

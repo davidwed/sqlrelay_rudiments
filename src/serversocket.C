@@ -9,9 +9,13 @@
 namespace rudiments {
 #endif
 
-serversocket::serversocket() : server() {}
+serversocket::serversocket() : server() {
+	type="serversocket";
+}
 
-serversocket::serversocket(const serversocket &s) : server(s) {}
+serversocket::serversocket(const serversocket &s) : server(s) {
+	type="serversocket";
+}
 
 serversocket &serversocket::operator=(const serversocket &s) {
 	if (this!=&s) {

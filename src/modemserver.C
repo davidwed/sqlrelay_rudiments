@@ -16,10 +16,12 @@ modemserver::modemserver() : server(), modemutil() {
 	listenscript="";
 	acceptscript="";
 	disconnectscript="";
+	type="modemserver";
 }
 
 modemserver::modemserver(const modemserver &m) : server(m), modemutil(m) {
 	modemserverClone(m);
+	type="modemserver";
 }
 
 modemserver &modemserver::operator=(const modemserver &m) {

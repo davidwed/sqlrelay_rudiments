@@ -15,10 +15,13 @@ namespace rudiments {
 
 inetserversocket::inetserversocket() : serversocket(), inetsocketutil() {
 	translateByteOrder();
+	type="inetserversocket";
 }
 
 inetserversocket::inetserversocket(const inetserversocket &i) :
-					serversocket(i), inetsocketutil(i) {}
+					serversocket(i), inetsocketutil(i) {
+	type="inetserversocket";
+}
 
 inetserversocket &inetserversocket::operator=(const inetserversocket &i) {
 	if (this!=&i) {
@@ -114,23 +117,6 @@ filedescriptor *inetserversocket::accept() {
 		}
 	#endif
 	return returnsock;
-}
-
-char *inetserversocket::getClientAddress() {
-
-	// initialize a socket address structure
-	struct sockaddr_in	clientsin;
-	socklen_t		size=sizeof(clientsin);
-	rawbuffer::zero(&clientsin,sizeof(clientsin));
-
-	// get the peer address
-	if (getpeername(fd,reinterpret_cast<struct sockaddr *>(&clientsin),
-								&size)==-1) {
-		return NULL;
-	}
-
-	// convert the address to a string and return a copy of it
-	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
 }
 
 #ifdef RUDIMENTS_NAMESPACE
