@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/process.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000ff">// Copyright (c) 2004 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
+
+<font color="#a520f7">#ifndef RUDIMENTS_PROCESS_H</font>
+<font color="#a520f7">#define RUDIMENTS_PROCESS_H</font>
+
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/process.h&gt;</font>
+
+<font color="#0000ff">// wrap:</font>
+<font color="#0000ff">//      unistd.h - nice()</font>
+<font color="#0000ff">//                      getpid(),getppid(),getpgid()/getpgrp()</font>
+<font color="#0000ff">//                      setpgid()/setpgrp()</font>
+<font color="#0000ff">//                      getsid()</font>
+<font color="#0000ff">//                      setsid()</font>
+<font color="#0000ff">//                      getuid(),geteuid(),getgid(),getegid()</font>
+<font color="#0000ff">//                      getgroups()</font>
+<font color="#0000ff">//                      setuid(),setreuid(),seteuid()</font>
+<font color="#0000ff">//                      setgid(),setregid(),setegid()</font>
+<font color="#0000ff">//                      fork(),vfork()</font>
+<font color="#0000ff">//                      profil()</font>
+<font color="#0000ff">//                      acct()</font>
+<font color="#0000ff">//                      getdtablesize()</font>
+<font color="#0000ff">//                      brk()/sbrk()</font>
+<font color="#0000ff">//                      syscall()</font>
+<font color="#0000ff">//      sched.h - functions for manipulating the scheduler</font>
+<font color="#0000ff">//                      sched_setparam(),sched_getparam()</font>
+<font color="#0000ff">//                      sched_setscheduler(),sched_getscheduler()</font>
+<font color="#0000ff">//                      sched_yield(),</font>
+<font color="#0000ff">//                      sched_get_priority_max(),sched_get_priority_min()</font>
+<font color="#0000ff">//                      sched_rr_get_interval()</font>
+<font color="#0000ff">//                      sched_setaffinity(),sched_getaffinity()</font>
+<font color="#0000ff">//      sys/acct.h - acct() - process accounting on/off</font>
+<font color="#0000ff">//      sys/ptrace.h - ptrace()</font>
+<font color="#0000ff">//      sys/resource.h - get/set process priority/resource usage</font>
+<font color="#0000ff">//                              getrlimit(),setrlimit()</font>
+<font color="#0000ff">//                              getrusage()</font>
+<font color="#0000ff">//                              getpriority(),setpriority()</font>
+<font color="#0000ff">//      sys/stat.h - umask()</font>
+<font color="#0000ff">//      sys/times.h - times() - function for getting process times</font>
+<font color="#0000ff">//      not in solaris -</font>
+<font color="#0000ff">//              unistd.h - daemon()</font>
+<font color="#0000ff">//      not in many systems - </font>
+<font color="#0000ff">//              unistd.h - group_member()</font>
+<font color="#0000ff">//                              getresuid(),getresgid()</font>
+<font color="#0000ff">//                              setresuid(),setresgid()</font>
+<font color="#0000ff">//              sys/gmon.h and sys/gmon_out.h - monstartup()</font>
+<font color="#0000ff">//      linux only - </font>
+<font color="#0000ff">//              execinfo.h - backtrace(),backtrace_symbols(),</font>
+<font color="#0000ff">//                              backtrace_symbols_fd()</font>
+<font color="#0000ff">//              sys/prctl.h - prctl()</font>
+<font color="#0000ff">//      not in bsd - </font>
+<font color="#0000ff">//              ucontext.h - user-level context switching</font>
+<font color="#0000ff">//                      getcontext(),setcontext(),swapcontext(),makecontext()</font>
+
+
+<font color="#298a52"><b>class</b></font> process {
+        <font color="#a52829"><b>public</b></font>:
+
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/process.h&gt;</font>
+};
+
+<font color="#a520f7">#endif</font>
+</pre>
+</body>
+</html>

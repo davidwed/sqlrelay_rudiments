@@ -1,31 +1,41 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments-0.25/include/rudiments/client.h.html</title>
-<meta name="Generator" content="Vim/6.1">
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/client.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <pre>
-<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
-<font color="#0000f8">// See the COPYING file for more information.</font>
+<font color="#0000ff">// Copyright (c) 2002 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_CLIENT_H</font>
-<font color="#a020f0">#define RUDIMENTS_CLIENT_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_CLIENT_H</font>
+<font color="#a520f7">#define RUDIMENTS_CLIENT_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/datatransport.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/dictionary.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/clientincludes.h&gt;</font>
 
-<font color="#0000f8">// The client class provides a base class for classes that implement the client</font>
-<font color="#0000f8">// side of a client-server communication model.</font>
+<font color="#0000ff">// The client class provides a base class for classes that implement the client</font>
+<font color="#0000ff">// side of a client-server communication model.</font>
 
-<font color="#288850"><b>class</b></font> client : <font color="#288850"><b>virtual</b></font> <font color="#a02828"><b>public</b></font> datatransport {
-        <font color="#a02828"><b>public</b></font>:
-                <font color="#288850"><b>virtual</b></font> <font color="#288850"><b>void</b></font>    initialize(namevaluepairs *cd)=<font color="#f800f8">0</font>;
-                <font color="#288850"><b>virtual</b></font> <font color="#288850"><b>int</b></font>     connect()=<font color="#f800f8">0</font>;
+<font color="#298a52"><b>class</b></font> client : <font color="#a52829"><b>public</b></font> filedescriptor {
+        <font color="#a52829"><b>public</b></font>:
 
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/client.h&gt;</font>
+                        client();
+                <font color="#298a52"><b>virtual</b></font> ~client();
+
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>void</b></font>    initialize(namevaluepairs *cd)=<font color="#ff00ff">0</font>;
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>int</b></font>     connect()=<font color="#ff00ff">0</font>;
+                                <font color="#0000ff">// This method return an int instead of a bool</font>
+                                <font color="#0000ff">// because we want child classes that have non</font>
+                                <font color="#0000ff">// atomic connection procedures (such as a</font>
+                                <font color="#0000ff">// modem) to be able to implement return codes</font>
+                                <font color="#0000ff">// other than success or failure (such as</font>
+                                <font color="#0000ff">// abort).</font>
+
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/client.h&gt;</font>
 };
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

@@ -1,45 +1,39 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments-0.25/include/rudiments/dtd.h.html</title>
-<meta name="Generator" content="Vim/6.1">
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/dtd.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <pre>
-<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
-<font color="#0000f8">// See the COPYING file for more information.</font>
+<font color="#0000ff">// Copyright (c) 2002 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_DTD_H</font>
-<font color="#a020f0">#define RUDIMENTS_DTD_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_DTD_H</font>
+<font color="#a520f7">#define RUDIMENTS_DTD_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/xmldom.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/dtdincludes.h&gt;</font>
 
-<font color="#0000f8">// The dtd class implements a minimal XML DTD parser.</font>
+<font color="#0000ff">// The dtd class implements a minimal XML DTD parser.</font>
 
-<font color="#288850"><b>class</b></font> dtd {
-        <font color="#a02828"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> dtd : <font color="#a52829"><b>public</b></font> errorhandler {
+        <font color="#a52829"><b>public</b></font>:
+                <font color="#298a52"><b>bool</b></font>    parseFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                        <font color="#0000ff">// Parse file &quot;filename&quot; and generate a DTD tree.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns true on success and false on failure</font>
+                <font color="#298a52"><b>bool</b></font>    parseString(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+                        <font color="#0000ff">// Parse string &quot;string&quot; and generate a DTD tree.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns true on success and false on failure</font>
 
-                        dtd();
-                        ~dtd();
+                xmldom  *xml();
+                        <font color="#0000ff">// Returns an XML representation of the DTD.</font>
 
-                <font color="#288850"><b>int</b></font>     parseFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                        <font color="#0000f8">// Parse file &quot;filename&quot; and generate a DTD tree.</font>
-                <font color="#288850"><b>int</b></font>     parseString(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string);
-                        <font color="#0000f8">// Parse string &quot;string&quot; and generate a DTD tree.</font>
-
-                stringbuffer    *xml() <font color="#288850"><b>const</b></font>;
-                                <font color="#0000f8">// Allocates a stringbuffer, writes a textual</font>
-                                <font color="#0000f8">// representation of the tree and returns the</font>
-                                <font color="#0000f8">// stringbuffer; The calling program must</font>
-                                <font color="#0000f8">// deallocate the stringbuffer.</font>
-
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/dtd.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/dtd.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/dtdinlines.h&gt;</font>
-<font color="#a020f0">#endif</font>
-
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

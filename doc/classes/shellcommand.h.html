@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/shellcommand.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000ff">// </font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: implement this class</font>
+
+<font color="#0000ff">// Copyright (c) 2003 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
+
+<font color="#a520f7">#ifndef RUDIMENTS_SHELLCOMMAND_H</font>
+<font color="#a520f7">#define RUDIMENTS_SHELLCOMMAND_H</font>
+
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/shellcommandincludes.h&gt;</font>
+
+<font color="#0000ff">// The shellcommand class provides methods for running commands, reading their</font>
+<font color="#0000ff">// output or writing input to them.</font>
+
+<font color="#0000ff">// wrap:</font>
+<font color="#0000ff">//      stdlib.h - system()</font>
+<font color="#0000ff">//      unistd.h - execve()/fexecve(),execv(),execle(),execl(),execvp(),execlp()</font>
+<font color="#0000ff">//      stdio.h - popen(), pclose()</font>
+<font color="#0000ff">//      not in many systems -</font>
+<font color="#0000ff">//              spawn.h - posix spawn interface</font>
+<font color="#0000ff">//                              posix_spawn()</font>
+<font color="#0000ff">//                              posix_spawnp()</font>
+<font color="#0000ff">//                              posix_spawnattr_init()</font>
+<font color="#0000ff">//                              posix_spawnattr_destroy()</font>
+<font color="#0000ff">//                              posix_spawnattr_getsigdefault()</font>
+<font color="#0000ff">//                              posix_spawnattr_setsigdefault()</font>
+<font color="#0000ff">//                              posix_spawnattr_getsigmask()</font>
+<font color="#0000ff">//                              posix_spawnattr_setsigmask()</font>
+<font color="#0000ff">//                              posix_spawnattr_getflags()</font>
+<font color="#0000ff">//                              posix_spawnattr_setflags()</font>
+<font color="#0000ff">//                              posix_spawnattr_getpgroup()</font>
+<font color="#0000ff">//                              posix_spawnattr_setpgroup()</font>
+<font color="#0000ff">//                              posix_spawnattr_getschedpolicy()</font>
+<font color="#0000ff">//                              posix_spawnattr_setschedpolicy()</font>
+<font color="#0000ff">//                              posix_spawnattr_getschedparam()</font>
+<font color="#0000ff">//                              posix_spawnattr_setschedparam()</font>
+<font color="#0000ff">//                              posix_spawn_file_actions_init()</font>
+<font color="#0000ff">//                              posix_spawn_file_actions_destroy()</font>
+<font color="#0000ff">//                              posix_spawn_file_actions_addopen()</font>
+<font color="#0000ff">//                              posix_spawn_file_actions_addclose()</font>
+<font color="#0000ff">//                              posix_spawn_file_actions_adddup2()</font>
+
+<font color="#298a52"><b>class</b></font> shellcommand {
+        <font color="#a52829"><b>public</b></font>:
+                <font color="#298a52"><b>int</b></font>     run(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *command);
+                        <font color="#0000ff">// Runs &quot;command&quot;.</font>
+
+                <font color="#298a52"><b>int</b></font>     getStandardInput();
+                        <font color="#0000ff">// If run() succeeded, returns the file descriptor</font>
+                        <font color="#0000ff">// of the standard input of the command or 0 otherwise.</font>
+
+                <font color="#298a52"><b>int</b></font>     getStandardOutput();
+                        <font color="#0000ff">// If run() succeeded, returns the file descriptor</font>
+                        <font color="#0000ff">// of the standard output of the command or 0 otherwise.</font>
+
+                <font color="#298a52"><b>int</b></font>     getStandardError();
+                        <font color="#0000ff">// If run() succeeded, returns the file descriptor</font>
+                        <font color="#0000ff">// of the standard error of the command or 0 otherwise.</font>
+
+                <font color="#298a52"><b>int</b></font>     close();
+                        <font color="#0000ff">// Closes the previously run command.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns 1 on success and 0 on failure.</font>
+
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/shellcommand.h&gt;</font>
+};
+
+<font color="#a520f7">#ifdef ENABLE_RUDIMENTS_INLINES</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/shellcommandinlines.h&gt;</font>
+<font color="#a520f7">#endif</font>
+
+<font color="#a520f7">#endif</font>
+</pre>
+</body>
+</html>

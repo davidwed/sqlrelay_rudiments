@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/tty.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000ff">// Copyright (c) 2004 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
+
+<font color="#a520f7">#ifndef RUDIMENTS_TTY_H</font>
+<font color="#a520f7">#define RUDIMENTS_TTY_H</font>
+
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/tty.h&gt;</font>
+
+<font color="#0000ff">// wrap:</font>
+<font color="#0000ff">//      unistd.h - tcgetpgrp(),tcsetpgrp()</font>
+<font color="#0000ff">//                      ctermid()</font>
+<font color="#0000ff">//                      ttyname(_r)()</font>
+<font color="#0000ff">//                      isatty()</font>
+<font color="#0000ff">//      termios.h - tcgetsid()</font>
+<font color="#0000ff">//      unistd.h - pathconf()/fpathconf():</font>
+<font color="#0000ff">//                              __PC_VDISABLE()</font>
+<font color="#0000ff">//                              __POSIX_MAX_CANON()</font>
+<font color="#0000ff">//                              __POSIX_MAX_INPUT()</font>
+<font color="#0000ff">//      linux only -</font>
+<font color="#0000ff">//              unistd.h - vhangup()</font>
+
+<font color="#298a52"><b>class</b></font> tty : <font color="#a52829"><b>public</b></font> filedescriptor {
+        <font color="#a52829"><b>public</b></font>:
+
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/tty.h&gt;</font>
+};
+
+<font color="#a520f7">#endif</font>
+</pre>
+</body>
+</html>

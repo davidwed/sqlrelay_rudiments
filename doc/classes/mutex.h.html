@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/mutex.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000ff">// Copyright (c) 2004 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
+
+<font color="#a520f7">#ifndef RUDIMENTS_MUTEX_H</font>
+<font color="#a520f7">#define RUDIMENTS_MUTEX_H</font>
+
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/mutexincludes.h&gt;</font>
+
+<font color="#0000ff">// The mutex class provides an interface to pthreads mutual exclusion locks.</font>
+
+<font color="#298a52"><b>class</b></font> mutex {
+        <font color="#a52829"><b>public</b></font>:
+                        mutex();
+                        <font color="#0000ff">// Initialize a mutex.</font>
+                        mutex(pthread_mutex_t *mut);
+                        <font color="#0000ff">// Attach already initialized &quot;mut&quot; to this instance.</font>
+                        ~mutex();
+                        <font color="#0000ff">// Destroy the mutex.</font>
+
+                <font color="#298a52"><b>bool</b></font>    lock();
+                        <font color="#0000ff">// Lock the mutex.  Will wait until the lock succeds.</font>
+                        <font color="#0000ff">// Returns true on success and false if an error occurs.</font>
+                <font color="#298a52"><b>bool</b></font>    tryLock();
+                        <font color="#0000ff">// Try to lock the mutex.  Will return immediately</font>
+                        <font color="#0000ff">// if the mutex could not be locked, returning false</font>
+                        <font color="#0000ff">// and setting errno to EBUSY.</font>
+                        <font color="#0000ff">// Returns true on success and false if an error occurs.</font>
+                <font color="#298a52"><b>bool</b></font>    unlock();
+                        <font color="#0000ff">// Unlock the mutex.</font>
+                        <font color="#0000ff">// Returns true on success and false if an error occurs.</font>
+
+                pthread_mutex_t *getMutex();
+                                <font color="#0000ff">// Returns the mutex used by</font>
+                                <font color="#0000ff">// the class internally.</font>
+
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/mutex.h&gt;</font>
+};
+
+<font color="#a520f7">#endif</font>
+</pre>
+</body>
+</html>

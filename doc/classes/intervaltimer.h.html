@@ -1,0 +1,185 @@
+<html>
+<head>
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/intervaltimer.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<font color="#0000ff">// Copyright (c) 2004 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
+
+<font color="#a520f7">#ifndef RUDIMENTS_INTERVALTIMER_H</font>
+<font color="#a520f7">#define RUDIMENTS_INTERVALTIMER_H</font>
+
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/intervaltimerincludes.h&gt;</font>
+
+<font color="#0000ff">// The intervaltimer class provides methods for interfacing with</font>
+<font color="#0000ff">// interval timers.</font>
+
+<font color="#298a52"><b>class</b></font> intervaltimer {
+        <font color="#a52829"><b>public</b></font>:
+                        intervaltimer(<font color="#298a52"><b>int</b></font> which);
+                        <font color="#0000ff">// Initialize the interval timer.  &quot;which&quot; must be one</font>
+                        <font color="#0000ff">// of:</font>
+                        <font color="#0000ff">// ITIMER_REAL - decrements in real time, raises SIGALRM</font>
+                        <font color="#0000ff">// ITIMER_VIRTUAL - decrements when the process is</font>
+                        <font color="#0000ff">//                      executing but not during system</font>
+                        <font color="#0000ff">//                      calls, raises SIGVTALRM</font>
+                        <font color="#0000ff">// ITIMER_PROF - decrements when the process is </font>
+                        <font color="#0000ff">//                      executing or and during system</font>
+                        <font color="#0000ff">//                      calls, raises SIGPROF</font>
+
+                <font color="#298a52"><b>void</b></font>    initialize();
+                        <font color="#0000ff">// Sets (or resets) the initial and periodic intervals</font>
+                        <font color="#0000ff">// to 0 seconds and 0 microseconds.</font>
+
+                <font color="#298a52"><b>void</b></font>    setInitialInterval(<font color="#298a52"><b>long</b></font> seconds, <font color="#298a52"><b>long</b></font> microseconds);
+                        <font color="#0000ff">// Set the timer's initial interval to &quot;seconds&quot;</font>
+                        <font color="#0000ff">// seconds and &quot;microseconds&quot; microseconds.</font>
+                <font color="#298a52"><b>void</b></font>    setInitialInterval(timeval *tv);
+                        <font color="#0000ff">// Set the timer's initial interval to seconds and</font>
+                        <font color="#0000ff">// microseconds specified in &quot;tv&quot;.</font>
+
+                <font color="#298a52"><b>void</b></font>    setPeriodicInterval(<font color="#298a52"><b>long</b></font> seconds, <font color="#298a52"><b>long</b></font> microseconds);
+                        <font color="#0000ff">// Set the timer's periodic interval to &quot;seconds&quot;</font>
+                        <font color="#0000ff">// seconds and &quot;microseconds&quot; microseconds.</font>
+                <font color="#298a52"><b>void</b></font>    setPeriodicInterval(timeval *tv);
+                        <font color="#0000ff">// Set the timer's periodic interval to seconds and</font>
+                        <font color="#0000ff">// microseconds specified in &quot;tv&quot;.</font>
+
+                <font color="#298a52"><b>void</b></font>    setIntervals(<font color="#298a52"><b>long</b></font> seconds, <font color="#298a52"><b>long</b></font> microseconds);
+                        <font color="#0000ff">// Set the timer's initial and periodic intervals both</font>
+                        <font color="#0000ff">// to &quot;seconds&quot; seconds and &quot;microseconds&quot; microseconds.</font>
+                <font color="#298a52"><b>void</b></font>    setIntervals(timeval *tv);
+                        <font color="#0000ff">// Set the timer's initial and periodic intervals both</font>
+                        <font color="#0000ff">// to seconds and microseconds specified in &quot;tv&quot;.</font>
+                <font color="#298a52"><b>void</b></font>    setIntervals(itimerval *itv);
+                        <font color="#0000ff">// Set the timer's initial and periodic intervals as</font>
+                        <font color="#0000ff">// specified by &quot;itv&quot;.</font>
+
+
+                <font color="#298a52"><b>void</b></font>    getInitialInterval(<font color="#298a52"><b>long</b></font> *seconds,
+                                                <font color="#298a52"><b>long</b></font> *microseconds) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Set &quot;seconds&quot; and &quot;microseconds&quot; to the timer's</font>
+                        <font color="#0000ff">// initial interval values.</font>
+                <font color="#298a52"><b>void</b></font>    getInitialInterval(timeval *tv) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Set &quot;tv&quot; to the timer's initial interval values.</font>
+
+                <font color="#298a52"><b>void</b></font>    getPeriodicInterval(<font color="#298a52"><b>long</b></font> *seconds,
+                                                <font color="#298a52"><b>long</b></font> *microseconds) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Set &quot;seconds&quot; and &quot;microseconds&quot; to the timer's</font>
+                        <font color="#0000ff">// periodic interval values.</font>
+                <font color="#298a52"><b>void</b></font>    getPeriodicInterval(timeval *tv) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Set &quot;tv&quot; to the timer's periodic interval values.</font>
+
+                <font color="#298a52"><b>void</b></font>    getIntervals(itimerval *itv) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Set &quot;itv&quot; to the timer's intial and periodic values.</font>
+
+
+                <font color="#298a52"><b>bool</b></font>    start() <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Start (or restart) the timer.  It will first run for</font>
+                        <font color="#0000ff">// the initial interval, then raise a signal, then run</font>
+                        <font color="#0000ff">// over and over for the periodic interval, raising the</font>
+                        <font color="#0000ff">// signal at the end of each interval.</font>
+                <font color="#298a52"><b>bool</b></font>    start(itimerval *itv) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Start (or restart) the timer.  It will first run for</font>
+                        <font color="#0000ff">// the initial interval, then raise a signal, then run</font>
+                        <font color="#0000ff">// over and over for the periodic interval, raising the</font>
+                        <font color="#0000ff">// signal at the end of each interval.  &quot;itv&quot; will be</font>
+                        <font color="#0000ff">// set to the intervals that the timer was using prior</font>
+                        <font color="#0000ff">// to calling start().</font>
+
+
+                <font color="#298a52"><b>bool</b></font>    getTimeRemaining(<font color="#298a52"><b>long</b></font> *seconds,
+                                                <font color="#298a52"><b>long</b></font> *microseconds) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Sets &quot;seconds&quot; and &quot;microseconds&quot; to the time</font>
+                        <font color="#0000ff">// remaining before the timer will raise the signal.</font>
+                <font color="#298a52"><b>bool</b></font>    getTimeRemaining(timeval *tv) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Sets &quot;tv&quot; to the time remaining before the timer</font>
+                        <font color="#0000ff">// will raise the signal.</font>
+
+
+                <font color="#298a52"><b>bool</b></font>    stop() <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Stops the currently running timer, but preserves</font>
+                        <font color="#0000ff">// it's initial and perodic intervals.</font>
+
+
+                <font color="#0000ff">// These methods allow you to suspend execution of the process</font>
+                <font color="#0000ff">// for a specified amount of time.  They return true on success</font>
+                <font color="#0000ff">// and false on failure (such as if a signal interrupts them).</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     sleep(<font color="#298a52"><b>long</b></font> seconds);
+                                <font color="#0000ff">// Suspend execution for &quot;seconds&quot; seconds.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     sleep(<font color="#298a52"><b>long</b></font> seconds,
+                                        <font color="#298a52"><b>long</b></font> *remainingseconds);
+                                <font color="#0000ff">// Suspend execution for &quot;seconds&quot; seconds.</font>
+                                <font color="#0000ff">// If a signal interrupts the sleep,</font>
+                                <font color="#0000ff">// &quot;remainingseconds&quot; is populated with the</font>
+                                <font color="#0000ff">// number of seconds that were not slept.</font>
+
+
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     microsleep(<font color="#298a52"><b>long</b></font> seconds,
+                                        <font color="#298a52"><b>long</b></font> microseconds);
+                                <font color="#0000ff">// Suspend execution for &quot;seconds&quot; seconds</font>
+                                <font color="#0000ff">// and &quot;microseconds&quot; microseconds.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     microsleep(<font color="#298a52"><b>long</b></font> seconds,
+                                        <font color="#298a52"><b>long</b></font> microseconds,
+                                        <font color="#298a52"><b>long</b></font> *secondsremaining,
+                                        <font color="#298a52"><b>long</b></font> *microsecondsremaining);
+                                <font color="#0000ff">// Suspend execution for &quot;seconds&quot; seconds</font>
+                                <font color="#0000ff">// and &quot;microseconds&quot; microseconds.</font>
+                                <font color="#0000ff">// If a signal interrupts the sleep,</font>
+                                <font color="#0000ff">// &quot;remainingseconds&quot; is populated with the</font>
+                                <font color="#0000ff">// number of seconds that were not slept and</font>
+                                <font color="#0000ff">// &quot;remainingmicroseconds&quot; is populated with the</font>
+                                <font color="#0000ff">// number of microseconds that were not slept.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     microsleep(timeval *timetosleep);
+                                <font color="#0000ff">// Suspend execution for the number of seconds</font>
+                                <font color="#0000ff">// and microseconds specified in &quot;timetosleep&quot;.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     microsleep(timeval *timetosleep,
+                                                timeval *timeremaining);
+                                <font color="#0000ff">// Suspend execution for the number of seconds</font>
+                                <font color="#0000ff">// and microseconds specified in &quot;timetosleep&quot;.</font>
+                                <font color="#0000ff">// If a signal interrupts the sleep,</font>
+                                <font color="#0000ff">// &quot;timeremaining&quot; is populated with the number</font>
+                                <font color="#0000ff">// of seconds and microseconds that were not</font>
+                                <font color="#0000ff">// slept.</font>
+
+
+                <font color="#0000ff">// These methods allow you to sleep for very small amounts</font>
+                <font color="#0000ff">// of time.  Note that some systems do not have true</font>
+                <font color="#0000ff">// nanosecond clock resolution.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     nanosleep(<font color="#298a52"><b>long</b></font> seconds,
+                                        <font color="#298a52"><b>long</b></font> nanoseconds);
+                                <font color="#0000ff">// Suspend execution for &quot;seconds&quot; seconds</font>
+                                <font color="#0000ff">// and &quot;nanoseconds&quot; nanoseconds.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     nanosleep(<font color="#298a52"><b>long</b></font> seconds,
+                                        <font color="#298a52"><b>long</b></font> nanoseconds,
+                                        <font color="#298a52"><b>long</b></font> *secondsremaining,
+                                        <font color="#298a52"><b>long</b></font> *nanosecondsremaining);
+                                <font color="#0000ff">// Suspend execution for &quot;seconds&quot; seconds</font>
+                                <font color="#0000ff">// and &quot;nanoseconds&quot; nanoseconds.</font>
+                                <font color="#0000ff">// If a signal interrupts the sleep,</font>
+                                <font color="#0000ff">// &quot;remainingseconds&quot; is populated with the</font>
+                                <font color="#0000ff">// number of seconds that were not slept and</font>
+                                <font color="#0000ff">// &quot;remainingnanoseconds&quot; is populated with the</font>
+                                <font color="#0000ff">// number of nanoseconds that were not slept.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     nanosleep(timespec *timetosleep);
+                                <font color="#0000ff">// Suspend execution for the number of seconds</font>
+                                <font color="#0000ff">// and nanoseconds specified in &quot;timetosleep&quot;.</font>
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     nanosleep(timespec *timetosleep,
+                                                timespec *timeremaining);
+                                <font color="#0000ff">// Suspend execution for the number of seconds</font>
+                                <font color="#0000ff">// and nanoseconds specified in &quot;timetosleep&quot;.</font>
+                                <font color="#0000ff">// If a signal interrupts the sleep,</font>
+                                <font color="#0000ff">// &quot;timeremaining&quot; is populated with the number</font>
+                                <font color="#0000ff">// of seconds and nanoseconds that were not</font>
+                                <font color="#0000ff">// slept.</font>
+
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/intervaltimer.h&gt;</font>
+};
+
+<font color="#a520f7">#endif</font>
+</pre>
+</body>
+</html>

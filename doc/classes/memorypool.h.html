@@ -1,76 +1,70 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments-0.25/include/rudiments/memorypool.h.html</title>
-<meta name="Generator" content="Vim/6.1">
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/memorypool.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <pre>
-<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
-<font color="#0000f8">// See the COPYING file for more information.</font>
+<font color="#0000ff">// Copyright (c) 2002 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_MEMORYPOOL_H</font>
-<font color="#a020f0">#define RUDIMENTS_MEMORYPOOL_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_MEMORYPOOL_H</font>
+<font color="#a520f7">#define RUDIMENTS_MEMORYPOOL_H</font>
 
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/memorypoolincludes.h&gt;</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/list.h&gt;</font>
+<font color="#298a52"><b>typedef</b></font> linkedlist&lt;memorypoolnode *&gt;            memorypoollist;
+<font color="#298a52"><b>typedef</b></font> linkedlistnode&lt;memorypoolnode *&gt;        memorypoollistnode;
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/memorypoolnode.h&gt;</font>
+<font color="#0000ff">// The memorypool class provides methods for creating and using a memory pool.</font>
+<font color="#0000ff">//</font>
+<font color="#0000ff">// If you have an iterative process that requires variable amounts of ram</font>
+<font color="#0000ff">// for each iteration, using a memory pool can be faster than allocating</font>
+<font color="#0000ff">// and deallocating memory on-demand and less resource-intensive than</font>
+<font color="#0000ff">// allocating static buffers that are large enough to accommodate the maximum</font>
+<font color="#0000ff">// amount of data you may have to store.</font>
 
-<font color="#288850"><b>typedef</b></font> list&lt;memorypoolnode *&gt;          memorypoollist;
-<font color="#288850"><b>typedef</b></font> listnode&lt;memorypoolnode *&gt;      memorypoollistnode;
-
-<font color="#0000f8">// The memorypool class provides methods for creating and using a memory pool.</font>
-<font color="#0000f8">//</font>
-<font color="#0000f8">// If you have an iterative process that requires variable amounts of ram</font>
-<font color="#0000f8">// for each iteration, using a memory pool can be faster than allocating</font>
-<font color="#0000f8">// and deallocating memory on-demand and less resource-intensive than</font>
-<font color="#0000f8">// allocating static buffers that are large enough to accommodate the maximum</font>
-<font color="#0000f8">// amount of data you may have to store.</font>
-
-<font color="#288850"><b>class</b></font> memorypool {
-        <font color="#a02828"><b>public</b></font>:
-                        memorypool(<font color="#288850"><b>size_t</b></font> initialsize,
-                                        <font color="#288850"><b>size_t</b></font> increment,
-                                        <font color="#288850"><b>size_t</b></font> resizeinterval);
-                        <font color="#0000f8">// Creates a memory pool of initial size &quot;initialsize&quot;.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// When the pool needs to grow, it will grow by at least</font>
-                        <font color="#0000f8">// &quot;increment&quot; bytes.  If more than increment bytes</font>
-                        <font color="#0000f8">// are requested, it will grow by that amount instead.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// When free() has been called &quot;resizeinterval&quot; times,</font>
-                        <font color="#0000f8">// it will evaluate the average amount of memory</font>
-                        <font color="#0000f8">// malloc'ed (since the last time it did this) and</font>
-                        <font color="#0000f8">// resize the initial buffer size to this size.  This</font>
-                        <font color="#0000f8">// will ideally minimize the </font>
+<font color="#298a52"><b>class</b></font> memorypool {
+        <font color="#a52829"><b>public</b></font>:
+                        memorypool(<font color="#298a52"><b>size_t</b></font> initialsize,
+                                        <font color="#298a52"><b>size_t</b></font> increment,
+                                        <font color="#298a52"><b>size_t</b></font> resizeinterval);
+                        <font color="#0000ff">// Creates a memory pool of initial size &quot;initialsize&quot;.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// When the pool needs to grow, it will grow by at least</font>
+                        <font color="#0000ff">// &quot;increment&quot; bytes.  If more than increment bytes</font>
+                        <font color="#0000ff">// are requested, it will grow by that amount instead.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// When free() has been called &quot;resizeinterval&quot; times,</font>
+                        <font color="#0000ff">// it will evaluate the average amount of memory</font>
+                        <font color="#0000ff">// malloc'ed (since the last time it did this) and</font>
+                        <font color="#0000ff">// resize the initial buffer size to this size.  This</font>
+                        <font color="#0000ff">// will ideally minimize the </font>
                         ~memorypool();
-                        <font color="#0000f8">// Destroys the memory pool.</font>
+                        <font color="#0000ff">// Destroys the memory pool.</font>
 
-                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font>   *malloc(<font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Returns a pointer to a contiguous block of &quot;size&quot;</font>
-                        <font color="#0000f8">// bytes in the pool.  The pool will grow as necessary</font>
-                        <font color="#0000f8">// to accomodate allocations.</font>
-                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font>   *calloc(<font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Returns a pointer to a contiguous block of &quot;size&quot;</font>
-                        <font color="#0000f8">// bytes in the pool.  The pool will grow as necessary</font>
-                        <font color="#0000f8">// to accomodate allocations.  Each byte of data in</font>
-                        <font color="#0000f8">// the block of data is set to NULL.</font>
+                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font>   *malloc(<font color="#298a52"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Returns a pointer to a contiguous block of &quot;size&quot;</font>
+                        <font color="#0000ff">// bytes in the pool.  The pool will grow as necessary</font>
+                        <font color="#0000ff">// to accomodate allocations.</font>
+                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font>   *calloc(<font color="#298a52"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Returns a pointer to a contiguous block of &quot;size&quot;</font>
+                        <font color="#0000ff">// bytes in the pool.  The pool will grow as necessary</font>
+                        <font color="#0000ff">// to accomodate allocations.  Each byte of data in</font>
+                        <font color="#0000ff">// the block of data is set to NULL.</font>
 
-                <font color="#288850"><b>void</b></font>    free();
-                        <font color="#0000f8">// Shrinks the pool back down to it's initial size</font>
-                        <font color="#0000f8">// and frees all previously allocated blocks.</font>
+                <font color="#298a52"><b>void</b></font>    free();
+                        <font color="#0000ff">// Shrinks the pool back down to it's initial size</font>
+                        <font color="#0000ff">// and frees all previously allocated blocks.</font>
 
-                <font color="#288850"><b>void</b></font>    print() <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Prints a visual representation of the pool.</font>
+                <font color="#298a52"><b>void</b></font>    print();
+                        <font color="#0000ff">// Prints a visual representation of the pool.</font>
 
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/memorypool.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/memorypool.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/memorypoolinlines.h&gt;</font>
-<font color="#a020f0">#endif</font>
-
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

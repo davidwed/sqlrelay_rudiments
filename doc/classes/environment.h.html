@@ -1,46 +1,41 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments-0.25/include/rudiments/environment.h.html</title>
-<meta name="Generator" content="Vim/6.1">
+<title>~/src/firstworks/rudiments-0.27/include/rudiments/environment.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <pre>
-<font color="#0000f8">// Copyright (c) 2003 David Muse</font>
-<font color="#0000f8">// See the COPYING file for more information.</font>
+<font color="#0000ff">// Copyright (c) 2003 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_ENVIRONMENT_H</font>
-<font color="#a020f0">#define RUDIMENTS_ENVIRONMENT_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_ENVIRONMENT_H</font>
+<font color="#a520f7">#define RUDIMENTS_ENVIRONMENT_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/environmentincludes.h&gt;</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/dictionary.h&gt;</font>
+<font color="#0000ff">// The environment class provides methods for accessing and manipulating</font>
+<font color="#0000ff">// environment variables.</font>
 
-<font color="#0000f8">// The environment class provides methods for accessing and manipulating</font>
-<font color="#0000f8">// environment variables.</font>
+<font color="#298a52"><b>class</b></font> environment {
+        <font color="#a52829"><b>public</b></font>:
+                        ~environment();
 
-<font color="#288850"><b>class</b></font> environment {
-        <font color="#a02828"><b>public</b></font>:
-                <font color="#288850"><b>virtual</b></font> ~environment();
+                <font color="#298a52"><b>char</b></font>    *getValue(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *variable) <font color="#298a52"><b>const</b></font>;
+                        <font color="#0000ff">// Returns the value of &quot;variable&quot;.</font>
+                <font color="#298a52"><b>bool</b></font>    setValue(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *variable, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value);
+                        <font color="#0000ff">// Sets the value of &quot;variable&quot; to &quot;value&quot;,</font>
+                        <font color="#0000ff">// Overwriting any value that &quot;variable&quot; previously</font>
+                        <font color="#0000ff">// had.</font>
+                        <font color="#0000ff">// Returns true on success and false on failure.</font>
+                <font color="#298a52"><b>void</b></font>    remove(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *variable);
+                        <font color="#0000ff">// Removes &quot;variable&quot; from the environment.</font>
 
-                <font color="#288850"><b>char</b></font>    *getValue(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *variable) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Returns the value of &quot;variable&quot;.</font>
-                <font color="#288850"><b>int</b></font>     setValue(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *variable, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *value);
-                        <font color="#0000f8">// Sets the value of &quot;variable&quot; to &quot;value&quot;,</font>
-                        <font color="#0000f8">// Overwriting any value that &quot;variable&quot; previously</font>
-                        <font color="#0000f8">// had.</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-                <font color="#288850"><b>void</b></font>    remove(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *variable) <font color="#288850"><b>const</b></font>;
-                        <font color="#0000f8">// Removes &quot;variable&quot; from the environment.</font>
-
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/environment.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/environment.h&gt;</font>
 
 };
 
-<font color="#a020f0">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/environmentinlines.h&gt;</font>
-<font color="#a020f0">#endif</font>
-
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>
