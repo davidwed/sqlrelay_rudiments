@@ -23,13 +23,13 @@ bool serversocket::setLingerOnClose(int timeout, int onoff) {
 	ling.l_onoff=onoff;
 	ling.l_linger=timeout;
 	return !setsockopt(fd,SOL_SOCKET,SO_LINGER,
-				(void *)&ling,sizeof(struct linger));
+				(const void *)&ling,sizeof(struct linger));
 }
 
 bool serversocket::setReuseAddresses(int onoff) {
 	int	value=onoff;
 	return !setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,
-			(void *)&value,(socklen_t)sizeof(int));
+				(const void *)&value,(socklen_t)sizeof(int));
 }
 
 bool serversocket::listen(int backlog) {
