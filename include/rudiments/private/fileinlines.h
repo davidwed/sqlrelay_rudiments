@@ -12,11 +12,9 @@
 #endif
 
 inline file::file() : filedescriptor() {
-	success=0;
 }
 
 inline file::file(int fd) : filedescriptor(fd) {
-	success=0;
 }
 
 inline int file::open(const char *name, int flags) {
@@ -73,13 +71,13 @@ off_t file::setPositionRelativeToEnd(off_t offset) {
 }
 
 int file::getCurrentProperties() {
-	return (success=(fstat(fd,&st)!=-1));
+	return (fstat(fd,&st)!=-1);
 }
 
 #define STAT(filename,out,member) \
 	struct stat st; \
 	if (stat(filename,&st)==-1) { \
-		return -1; \
+		return 0; \
 	} \
 	*out=st.member; \
 	return 1;
@@ -87,14 +85,7 @@ int file::getCurrentProperties() {
 #define FSTAT(fd,out,member) \
 	struct stat st; \
 	if (fstat(fd,&st)==-1) { \
-		return -1; \
-	} \
-	*out=st.member; \
-	return 1;
-
-#define RETURN_PROPERTY(out,member) \
-	if (!success) { \
-		return -1; \
+		return 0; \
 	} \
 	*out=st.member; \
 	return 1;
@@ -140,72 +131,72 @@ inline int file::getBlockCount(int fd, blkcnt_t *blocks) {
 }
 
 inline int file::isSocket(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISSOCK(st.st_mode):-1;
 }
 
 inline int file::isSocket(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISSOCK(st.st_mode):-1;
 }
 
 inline int file::isSymbolicLink(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISLNK(st.st_mode):-1;
 }
 
 inline int file::isSymbolicLink(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISLNK(st.st_mode):-1;
 }
 
 inline int file::isRegularFile(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISREG(st.st_mode):-1;
 }
 
 inline int file::isRegularFile(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISREG(st.st_mode):-1;
 }
 
 inline int file::isBlockDevice(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISBLK(st.st_mode):-1;
 }
 
 inline int file::isBlockDevice(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISBLK(st.st_mode):-1;
 }
 
 inline int file::isDirectory(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISDIR(st.st_mode):-1;
 }
 
 inline int file::isDirectory(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISDIR(st.st_mode):-1;
 }
 
 inline int file::isCharacterDevice(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISCHR(st.st_mode):-1;
 }
 
 inline int file::isCharacterDevice(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISCHR(st.st_mode):-1;
 }
 
 inline int file::isFifo(const char *filename) {
-	struct	stat	st;
+	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISFIFO(st.st_mode):-1;
 }
 
 inline int file::isFifo(int fd) {
-	struct	stat	st;
+	struct stat	st;
 	return (fstat(fd,&st)>-1)?S_ISFIFO(st.st_mode):-1;
 }
 
@@ -260,88 +251,88 @@ inline int file::getInode(int fd, ino_t *inode) {
 }
 
 inline int file::getNumberOfHardLinks(const char *filename, nlink_t *nlink) {
-	STAT(filename,nlink,st_nlink);
+	STAT(filename,nlink,st_nlink)
 }
 
 inline int file::getNumberOfHardLinks(int fd, nlink_t *nlink) {
-	FSTAT(fd,nlink,st_nlink);
+	FSTAT(fd,nlink,st_nlink)
 }
 
-inline int file::getPermissions(mode_t *mode) const {
-	RETURN_PROPERTY(mode,st_mode);
+inline mode_t file::getPermissions() const {
+	return st.st_mode;
 }
 
-inline int file::getOwnerUserId(uid_t *uid) const {
-	RETURN_PROPERTY(uid,st_uid);
+inline uid_t file::getOwnerUserId() const {
+	return st.st_uid;
 }
 
-inline int file::getOwnerGroupId(gid_t *gid) const {
-	RETURN_PROPERTY(gid,st_gid);
+inline gid_t file::getOwnerGroupId() const {
+	return st.st_gid;
 }
 
-inline int file::getSize(off_t *size) const {
-	RETURN_PROPERTY(size,st_size);
+inline off_t file::getSize() const {
+	return st.st_size;
 }
 
-inline int file::getBlockCount(blkcnt_t *blocks) const {
-	RETURN_PROPERTY(blocks,st_blocks);
+inline blkcnt_t file::getBlockCount() const {
+	return st.st_blocks;
 }
 
 inline int file::isSocket() const {
-	return (success)?S_ISSOCK(st.st_mode):-1;
+	return S_ISSOCK(st.st_mode);
 }
 
 inline int file::isSymbolicLink() const {
-	return (success)?S_ISLNK(st.st_mode):-1;
+	return S_ISLNK(st.st_mode);
 }
 
 inline int file::isRegularFile() const {
-	return (success)?S_ISREG(st.st_mode):-1;
+	return S_ISREG(st.st_mode);
 }
 
 inline int file::isBlockDevice() const {
-	return (success)?S_ISBLK(st.st_mode):-1;
+	return S_ISBLK(st.st_mode);
 }
 
 inline int file::isDirectory() const {
-	return (success)?S_ISDIR(st.st_mode):-1;
+	return S_ISDIR(st.st_mode);
 }
 
 inline int file::isCharacterDevice() const {
-	return (success)?S_ISCHR(st.st_mode):-1;
+	return S_ISCHR(st.st_mode);
 }
 
 inline int file::isFifo() const {
-	return (success)?S_ISFIFO(st.st_mode):-1;
+	return S_ISFIFO(st.st_mode);
 }
 
-inline int file::getLastAccessTime(time_t *atime) const {
-	RETURN_PROPERTY(atime,st_atime);
+inline time_t file::getLastAccessTime() const {
+	return st.st_atime;
 }
 
-inline int file::getLastModificationTime(time_t *mtime) const {
-	RETURN_PROPERTY(mtime,st_mtime);
+inline time_t file::getLastModificationTime() const {
+	return st.st_mtime;
 }
 
-inline int file::getLastChangeTime(time_t *ctime) const {
-	RETURN_PROPERTY(ctime,st_ctime);
+inline time_t file::getLastChangeTime() const {
+	return st.st_ctime;
 }
 
 
-inline int file::getDevice(dev_t *dev) const {
-	RETURN_PROPERTY(dev,st_dev);
+inline dev_t file::getDevice() const {
+	return st.st_dev;
 }
 
-inline int file::getDeviceType(dev_t *devtype) const {
-	RETURN_PROPERTY(devtype,st_rdev);
+inline dev_t file::getDeviceType() const {
+	return st.st_rdev;
 }
 
-inline int file::getInode(ino_t *inode) const {
-	RETURN_PROPERTY(inode,st_ino);
+inline ino_t file::getInode() const {
+	return st.st_ino;
 }
 
-inline int file::getNumberOfHardLinks(nlink_t *nlink) const {
-	RETURN_PROPERTY(nlink,st_nlink);
+inline nlink_t file::getNumberOfHardLinks() const {
+	return st.st_nlink;
 }
 
 struct stat *file::getStat() {

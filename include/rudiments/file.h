@@ -117,27 +117,27 @@ class file : public filedescriptor {
 			// Gets the current file properties.
 
 		// These methods return the permissions of the file.
-		int		getPermissions(mode_t *perms) const;
+		mode_t		getPermissions() const;
 		static int	getPermissions(const char *filename,
 						mode_t *perms);
 		static int	getPermissions(int fd, mode_t *perms);
 
 		// These methods return the user id of the file's owner.
-		int		getOwnerUserId(uid_t *uid) const;
+		uid_t		getOwnerUserId() const;
 		static int	getOwnerUserId(const char *filename,
 						uid_t *uid);
 		static int	getOwnerUserId(int fd, uid_t *uid);
 
 
 		// These methods return the group id of the file's owner.
-		int		getOwnerGroupId(gid_t *gid) const;
+		gid_t		getOwnerGroupId() const;
 		static int	getOwnerGroupId(const char *filename,
 						gid_t *gid);
 		static int	getOwnerGroupId(int fd, gid_t *gid);
 
 
 		// These methods return the number of bytes in the file.
-		int		getSize(off_t *size) const;
+		off_t		getSize() const;
 		static int	getSize(const char *filename,
 						off_t *size);
 		static int	getSize(int fd, off_t *size);
@@ -145,57 +145,57 @@ class file : public filedescriptor {
 
 		// These methods return the number of
 		// blocks allocated for the file.
-		int		getBlockCount(blkcnt_t *blocks) const;
+		blkcnt_t	getBlockCount() const;
 		static int	getBlockCount(const char *filename,
 						blkcnt_t *blocks);
 		static int	getBlockCount(int fd, blkcnt_t *blocks);
 
 
 		// These methods return 1 of the file is a
-		// socket or 0 if it's not.
+		// socket or 0 if it's not or -1 on error.
 		int		isSocket() const;
 		static int	isSocket(const char *filename);
 		static int	isSocket(int fd);
 
 		// These methods return 1 of the file is a
-		// symbolic link or 0 if it's not.
+		// symbolic link, 0 if it's not or -1 on error.
 		int		isSymbolicLink() const;
 		static int	isSymbolicLink(const char *filename);
 		static int	isSymbolicLink(int fd);
 
 		// These methods return 1 of the file is a
-		// regular file or 0 if it's not.
+		// regular file, 0 if it's not or -1 on error.
 		int		isRegularFile() const;
 		static int	isRegularFile(const char *filename);
 		static int	isRegularFile(int fd);
 
 		// These methods return 1 of the file is a
-		// block device or 0 if it's not.
+		// block device, 0 if it's not or -1 on error.
 		int		isBlockDevice() const;
 		static int	isBlockDevice(const char *filename);
 		static int	isBlockDevice(int fd);
 
 		// These methods return 1 of the file is a
-		// directory or 0 if it's not.
+		// directory, 0 if it's not or -1 on error.
 		int		isDirectory() const;
 		static int	isDirectory(const char *filename);
 		static int	isDirectory(int fd);
 
 		// These methods return 1 of the file is a
-		// character device or 0 if it's not.
+		// character device, 0 if it's not or -1 on error.
 		int		isCharacterDevice() const;
 		static int	isCharacterDevice(const char *filename);
 		static int	isCharacterDevice(int fd);
 
 		// These methods return 1 of the file is a
-		// fifo or 0 if it's not.
+		// fifo, 0 if it's not or -1 on error.
 		int		isFifo() const;
 		static int	isFifo(const char *filename);
 		static int	isFifo(int fd);
 
 
 		// These methods return the time of last access.
-		int		getLastAccessTime(time_t *atime) const;
+		time_t		getLastAccessTime() const;
 		static int	getLastAccessTime(const char *filename,
 							time_t *atime);
 		static int	getLastAccessTime(int fd, time_t *atime);
@@ -205,7 +205,7 @@ class file : public filedescriptor {
 		//
 		// Modification time IS NOT affected by chmod, chown,
 		// or creating links.
-		int		getLastModificationTime(time_t *mtime) const;
+		time_t		getLastModificationTime() const;
 		static int	getLastModificationTime(const char *filename,
 							time_t *mtime);
 		static int	getLastModificationTime(int fd, time_t *mtime);
@@ -214,33 +214,33 @@ class file : public filedescriptor {
 		// These methods return the time of last change.
 		//
 		// Change time IS affected by chmod, chown and creating links.
-		int		getLastChangeTime(time_t *ctime) const;
+		time_t		getLastChangeTime() const;
 		static int	getLastChangeTime(const char *filename,
 							time_t *ctime);
 		static int	getLastChangeTime(int fd, time_t *ctime);
 
 
 		// These methods return the device of the file.
-		int		getDevice(dev_t *dev) const;
+		dev_t		getDevice() const;
 		static int	getDevice(const char *filename, dev_t *dev);
 		static int	getDevice(int fd, dev_t *dev);
 
 
 		// These methods return the device type of the file.
-		int		getDeviceType(dev_t *devtype) const;
+		dev_t		getDeviceType() const;
 		static int	getDeviceType(const char *filename,
 							dev_t *devtype);
 		static int	getDeviceType(int fd, dev_t *devtype);
 
 
 		// These methods return the inode of the file.
-		int		getInode(ino_t *inode) const;
+		ino_t		getInode() const;
 		static int	getInode(const char *filename, ino_t *inode);
 		static int  	getInode(int fd, ino_t *inode);
 
 
 		// These methods return the number of hard links to the file.
-		int		getNumberOfHardLinks(nlink_t *nlink) const;
+		nlink_t		getNumberOfHardLinks() const;
 		static int	getNumberOfHardLinks(const char *filename,
 							nlink_t *nlink);
 		static int	getNumberOfHardLinks(int fd, nlink_t *nlink);

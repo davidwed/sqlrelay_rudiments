@@ -15,30 +15,25 @@ int main(int argv, const char **argc) {
 
 	printf("testfile:\n");
 
-	mode_t	mode;
-	fl.getPermissions(&mode);
+	mode_t	mode=fl.getPermissions();
 	printf("	permissions: %s\n",permissions::evalPermOctal(mode));
 
-	uid_t	uid;
-	fl.getOwnerUserId(&uid);
+	uid_t	uid=fl.getOwnerUserId();
 	char	*username;
 	passwdentry::getName(uid,&username);
 	printf("	user       : %s\n",username);
 	delete[] username;
 
-	gid_t	gid;
-	fl.getOwnerGroupId(&gid);
+	gid_t	gid=fl.getOwnerGroupId();
 	char	*groupname;
 	groupentry::getName(gid,&groupname);
 	printf("	group      : %s\n",groupname);
 	delete[] groupname;
 
-	off_t	size;
-	fl.getSize(&size);
+	off_t	size=fl.getSize();
 	printf("	size       : %d\n",size);
 
-	blkcnt_t	blocks;
-	fl.getBlockCount(&blocks);
+	blkcnt_t	blocks=fl.getBlockCount();
 	printf("	blocks     : %d\n",blocks);
 
 	printf("	is a socket: %d\n",fl.isSocket());
@@ -49,37 +44,30 @@ int main(int argv, const char **argc) {
 	printf("	is a character device: %d\n",fl.isCharacterDevice());
 	printf("	is a fifo: %d\n",fl.isFifo());
 
-	time_t	atime;
-	fl.getLastAccessTime(&atime);
+	time_t	atime=fl.getLastAccessTime();
 	char	*atimestr=datetime::getString(atime);
 	printf("	last access      : %s\n",atimestr);
 	delete[] atimestr;
 
-	time_t	mtime;
-	fl.getLastModificationTime(&mtime);
+	time_t	mtime=fl.getLastModificationTime();
 	char	*mtimestr=datetime::getString(mtime);
 	printf("	last modification: %s\n",mtimestr);
 	delete[] mtimestr;
 
-	time_t	ctime;
-	fl.getLastChangeTime(&ctime);
+	time_t	ctime=fl.getLastChangeTime();
 	char	*ctimestr=datetime::getString(ctime);
 	printf("	last change      : %s\n",ctimestr);
 	delete[] ctimestr;
 
-	dev_t	dev;
-	fl.getDevice(&dev);
+	dev_t	dev=fl.getDevice();
 	printf("	device           : %d\n",dev);
 
-	dev_t	devtype;
-	fl.getDeviceType(&devtype);
+	dev_t	devtype=fl.getDeviceType();
 	printf("	device type      : %d\n",devtype);
 
-	ino_t	inode;
-	fl.getInode(&inode);
+	ino_t	inode=fl.getInode();
 	printf("	inode            : %d\n",inode);
 
-	nlink_t	nlink;
-	fl.getNumberOfHardLinks(&nlink);
+	nlink_t	nlink=fl.getNumberOfHardLinks();
 	printf("	hard links : %d\n",nlink);
 }
