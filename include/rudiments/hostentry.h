@@ -8,23 +8,13 @@
 
 #include <netdb.h>
 
+// The hostentry class provides methods for retrieving entries from /etc/hosts
+
 class hostentry {
 	public:
-			hostentry();
-			~hostentry();
 
-		int	initialize(const char *hostname);
-		int	initialize(const char *address, int len, int type);
-
-		char	*getName() const;
-		char	**getAliasList() const;
-		int	getAddressType() const;
-		int	getAddressLength() const;
-		char	**getAddressList() const;
-		char	*getAddressString(int index) const;
-
-		void	print() const;
-
+		// if you need to quickly look up a specific field, use one of
+		// these methods
 		static	int	getAliasList(const char *hostname,
 						char ***aliaslist);
 		static	int	getAddressType(const char *hostname,
@@ -50,6 +40,26 @@ class hostentry {
 						int len, int type,
 						int index,
 						char **addressstring);
+
+		// if you need to look up a host entry and refer to multiple
+		// fields, use these methods
+			hostentry();
+			~hostentry();
+
+		int	initialize(const char *hostname);
+			// looks up a host entry by name
+		int	initialize(const char *address, int len, int type);
+			// looks up a host entry by address
+
+		char	*getName() const;
+		char	**getAliasList() const;
+		int	getAddressType() const;
+		int	getAddressLength() const;
+		char	**getAddressList() const;
+		char	*getAddressString(int index) const;
+
+		void	print() const;
+			// prints out the host entry
 
 	#include <rudiments/private/hostentry.h>
 };

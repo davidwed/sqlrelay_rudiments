@@ -27,7 +27,6 @@ class xmlsax : public errorhandler {
 		int	parseString(const char *string);
 			// parse string "string"
 
-
 	protected:
 		// Callback methods.  These methods are called as the XML is
 		// parsed.

@@ -6,15 +6,16 @@
 			void	close();
 			int	parse();
 			void	parseFailed();
-			char	parseTag(char current);
+			int	parseTag(char current, char *next);
 			void	parseTagFailed();
-			char	parseTagName(char current, stringbuffer **name);
+			int	parseTagName(char current, stringbuffer **name,
+						char *next);
 			char	parseComment(char current);
 			char	parseCData(char current);
 			char	parseAttribute(char current, char standalone);
 			int	getGeneralEntity(char breakchar, char **buffer);
 			void	parseAttributeFailed();
-			char	parseText(char current);
+			int	parseText(char current, char *next);
 			void	parseTextFailed();
 			char	skipWhitespace(char current);
 			char	getCharacter();
@@ -22,3 +23,4 @@
 			char	*ptr;
 			file	fl;
 			long	line;
+			int	allowtrailingtext;

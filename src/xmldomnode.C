@@ -35,8 +35,8 @@ xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 			const char *name, const char *value) {
 	this->nullnode=nullnode;
 	this->type=type;
-	nodename=(char *)name;
-	nodevalue=(char *)value;
+	nodename=(name)?strdup((char *)name):NULL;
+	nodevalue=(value)?strdup((char *)value):NULL;
 	parent=NULL;
 	next=nullnode;
 	previous=nullnode;
@@ -194,13 +194,6 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 		output->append("]]>");
 	}
 	return output;
-}
-
-void xmldomnode::set(char **variable, const char *value) {
-	if (!value) {
-		(*variable)=NULL;
-	}
-	(*variable)=strdup(value);
 }
 
 xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,

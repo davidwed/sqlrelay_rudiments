@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem2 shm2 text datetime dict dtd file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient tbl vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem2 shm2 text datetime dict dtd file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dict dtd file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient tbl vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dict dtd file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -78,9 +78,6 @@ shm1: shm1.C shm1.lo
 
 shm2: shm2.C shm2.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ shm2.lo -L../src -lrudiments_p
-
-tbl: tbl.C tbl.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ tbl.lo -L../src -lrudiments_p
 
 text: text.C text.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ text.lo -L../src -lrudiments_p

@@ -67,18 +67,17 @@ int xmlsax::parse() {
 	for (;;) {
 
 		// parse the tag
-		ch=parseTag(ch);
-		if (ch==-1) {
+		if (!parseTag(ch,&ch)) {
 			return 0;
 		} else if (!ch) {
 			break;
 		}
 
 		// parse text until we find another tag
-		ch=parseText(ch);
-		if (ch==-1) {
-			return 0;
-		} else if (!ch) {
+		// Strictly speaking, if parseText returns 0 then there was
+		// trailing text after the last tag.  There is so commonly
+		// trailing text though, that we'll allow it.
+		if (!parseText(ch,&ch)) {
 			break;
 		}
 	}
@@ -87,14 +86,14 @@ int xmlsax::parse() {
 	return 1;
 }
 
-char xmlsax::parseTag(char current) {
+int xmlsax::parseTag(char current, char *next) {
 
 	char	ch=current;
 
 	// make sure there's a <, skip any whitespace after it
 	if (ch!='<' || !(ch=skipWhitespace(getCharacter()))) {
 		parseTagFailed();
-		return -1;
+		return 0;
 	}
 
 	// is this a standalone tag or end-tag?
@@ -106,16 +105,16 @@ char xmlsax::parseTag(char current) {
 		endtag=1;
 		if (!(ch=skipWhitespace(getCharacter()))) {
 			parseTagFailed();
-			return -1;
+			return 0;
 		}
 	}
 
 	// get the tag name
 	stringbuffer	*name;
-	if (!(ch=parseTagName(ch,&name))) {
+	if (!parseTagName(ch,&name,&ch)) {
 		delete name;
 		parseTagFailed();
-		return -1;
+		return 0;
 	}
 
 	// handle comments and cdata
@@ -123,18 +122,18 @@ char xmlsax::parseTag(char current) {
 		if (!(ch=parseComment(ch))) {
 			delete name;
 			parseTagFailed();
-			return -1;
+			return 0;
 		}
 		delete name;
-		return getCharacter();
+		return (*next=getCharacter())!=(char)NULL;
 	} else if (!strcmp(name->getString(),"![CDATA[")) {
 		if (!(ch=parseCData(ch))) {
 			delete name;
 			parseTagFailed();
-			return -1;
+			return 0;
 		}
 		delete name;
-		return getCharacter();
+		return (*next=getCharacter())!=(char)NULL;
 	}
 
 	if (endtag) {
@@ -143,7 +142,7 @@ char xmlsax::parseTag(char current) {
 		if (!(ch=skipWhitespace(ch)) || ch!='>') {
 			delete name;
 			parseTagFailed();
-			return -1;
+			return 0;
 		}
 
 	} else {
@@ -151,7 +150,7 @@ char xmlsax::parseTag(char current) {
 		// call the callback for tag start
 		if (!tagStart(name->getString())) {
 			delete name;
-			return -1;
+			return 0;
 		}
 
 		// parse the attributes
@@ -161,7 +160,7 @@ char xmlsax::parseTag(char current) {
 			if (!(ch=skipWhitespace(ch))) {
 				delete name;
 				parseTagFailed();
-				return -1;
+				return 0;
 			}
 	
 			if (ch=='/') {
@@ -171,7 +170,7 @@ char xmlsax::parseTag(char current) {
 								ch!='>') {
 					delete name;
 					parseTagFailed();
-					return -1;
+					return 0;
 				}
 				break;
 			} else if (ch=='?') {
@@ -180,7 +179,7 @@ char xmlsax::parseTag(char current) {
 				if (!(ch=getCharacter()) || ch!='>') {
 					delete name;
 					parseTagFailed();
-					return -1;
+					return 0;
 				}
 				break;
 			} else if (ch=='>') {
@@ -190,7 +189,7 @@ char xmlsax::parseTag(char current) {
 				if (!(ch=parseAttribute(ch,standalone))) {
 					delete name;
 					parseTagFailed();
-					return -1;
+					return 0;
 				}
 			}
 		}
@@ -201,7 +200,7 @@ char xmlsax::parseTag(char current) {
 	if (endtag || standalone) {
 		if (!tagEnd(name->getString())) {
 			delete name;
-			return -1;
+			return 0;
 		}
 	}
 
@@ -209,10 +208,11 @@ char xmlsax::parseTag(char current) {
 	delete name;
 
 	// return the first character after the closing >
-	return getCharacter();
+	*next=getCharacter();
+	return 1;
 }
 
-char xmlsax::parseTagName(char current, stringbuffer **name) {
+int xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 
 	// create a buffer to hold the tag name
 	*name=new stringbuffer();
@@ -223,14 +223,14 @@ char xmlsax::parseTagName(char current, stringbuffer **name) {
 	char	ch=current;
 	for (;;) {
 
-		if (ch<1) {
+		if (!ch) {
 
 			// we should not run into a NULL or EOF here, if we
 			// do then it's an error
 			clearError();
 			appendError("error: parseTagName() failed at line ");
 			appendError(line);
-			return -1;
+			return 0;
 
 		} else if (ch=='[') {
 
@@ -242,7 +242,7 @@ char xmlsax::parseTagName(char current, stringbuffer **name) {
 			if (bracketcount==2) {
 				// return the character after
 				// the end of the name
-				return getCharacter();
+				return (*next=getCharacter())!=(char)NULL;
 			}
 
 		} else if (ch==' ' || ch=='	' ||
@@ -252,7 +252,8 @@ char xmlsax::parseTagName(char current, stringbuffer **name) {
 			// parsing the name
 
 			// return the character after the end of the name
-			return ch;
+			*next=ch;
+			return 1;
 		} else {
 			(*name)->append(ch);
 		}
@@ -605,7 +606,7 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 	return 1;
 }
 
-char xmlsax::parseText(char current) {
+int xmlsax::parseText(char current, char *next) {
 
 	// create a buffer to hold the text
 	stringbuffer	*textdata=new stringbuffer();
@@ -614,17 +615,12 @@ char xmlsax::parseText(char current) {
 	for (;;) {
 
 		if (!ch) {
-			delete textdata;
-			return (char)NULL;
-		}
 
-		if (ch<1) {
-
-			// we shouldn't get any NULL's or EOF's, if we do
-			// then that's an error
+			// we should not run into a NULL or EOF here, if we do
+			// then return an error.
 			delete textdata;
-			parseTextFailed();
-			return -1;
+			*next=(char)NULL;
+			return 0;
 
 		} else if (ch=='<') {
 
@@ -632,7 +628,8 @@ char xmlsax::parseText(char current) {
 			// call the text callback and return the <
 			text(textdata->getString());
 			delete textdata;
-			return ch;
+			*next=ch;
+			return 1;
 
 		}
 
@@ -648,7 +645,8 @@ char xmlsax::parseText(char current) {
 				// if we hit the end, that's an error
 				parseTextFailed();
 				delete textdata;
-				return (char)NULL;
+				*next=(char)NULL;
+				return 0;
 
 			} else if (result<0) {
 

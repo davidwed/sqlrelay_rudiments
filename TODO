@@ -1,15 +1,16 @@
-xmlsax compilation generates warning with xscale_le-gcc
 xmldomnode should probably use list class
+should be able to validate an xml document against the dtd
 
-dtd test crashes
+probably can combine memorypool and variablebuffer classes
 
 need generic parser/lexer classes, use them for xmlsax
 
-document/test program for filedescriptor,file
+document/test program for filedescriptor
 
-document stringbuffer,variablebuffer
+document/comment list and dictionary classes
 
-document/comment hostentry,protocolentry,passwdentry,groupentry
+document file,stringbuffer,variablebuffer,
+		hostentry,protocolentry,passwdentry,groupentry
 
 document clienttransport/namevaluepairs relationship
 

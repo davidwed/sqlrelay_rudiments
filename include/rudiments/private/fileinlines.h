@@ -131,31 +131,44 @@ RUDIMENTS_INLINE int file::getSize(int fd, off_t *size) {
 	FSTAT(fd,size,st_size)
 }
 
-#ifdef HAVE_BLKSIZE_T
-
 RUDIMENTS_INLINE int file::getBlockSize(const char *filename,
 							blksize_t *size) {
+#ifdef HAVE_BLKSIZE_T
 	STAT(filename,size,st_blksize)
+#else
+	*size=-1;
+	return 1;
+#endif
 }
 
 RUDIMENTS_INLINE int file::getBlockSize(int fd, blksize_t *size) {
+#ifdef HAVE_BLKSIZE_T
 	FSTAT(fd,size,st_blksize)
+#else
+	*size=-1;
+	return 1;
+#endif
 }
 
-#endif
-
-#ifdef HAVE_BLKCNT_T
 
 RUDIMENTS_INLINE int file::getBlockCount(const char *filename,
 							blkcnt_t *blocks) {
+#ifdef HAVE_BLKCNT_T
 	STAT(filename,blocks,st_blocks)
+#else
+	*blocks=-1;
+	return 1;
+#endif
 }
 
 RUDIMENTS_INLINE int file::getBlockCount(int fd, blkcnt_t *blocks) {
+#ifdef HAVE_BLKCNT_T
 	FSTAT(fd,blocks,st_blocks)
-}
-
+#else
+	*blocks=-1;
+	return 1;
 #endif
+}
 
 #ifndef HAVE_S_ISSOCK
 	#define S_ISSOCK(m) ((m&040000==040000)?1:0)
@@ -309,21 +322,22 @@ RUDIMENTS_INLINE off_t file::getSize() const {
 	return st.st_size;
 }
 
-#ifdef HAVE_BLKSIZE_T
 
 RUDIMENTS_INLINE blksize_t file::getBlockSize() const {
+#ifdef HAVE_BLKSIZE_T
 	return st.st_blksize;
-}
-
+#else
+	return -1;
 #endif
-
-#ifdef HAVE_BLKCNT_T
+}
 
 RUDIMENTS_INLINE blkcnt_t file::getBlockCount() const {
+#ifdef HAVE_BLKCNT_T
 	return st.st_blocks;
-}
-
+#else
+	return -1;
 #endif
+}
 
 RUDIMENTS_INLINE int file::isSocket() const {
 	return S_ISSOCK(st.st_mode);

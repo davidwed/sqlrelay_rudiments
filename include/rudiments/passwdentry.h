@@ -9,25 +9,14 @@
 #include <sys/types.h>
 #include <pwd.h>
 
+// The passwdentry class provides methods for retrieving
+// entries from /etc/passwd
+
 class passwdentry {
 	public:
-			passwdentry();
-			~passwdentry();
 
-		int	initialize(const char *username);
-		int	initialize(uid_t userid);
-
-		char	*getName() const;
-		char	*getPassword() const;
-		uid_t	getUserId() const;
-		gid_t	getPrimaryGroup() const;
-		char	*getRealName() const;
-		char	*getHomeDirectory() const;
-		char	*getShell() const;
-
-		void	print() const;
-
-
+		// if you need to quickly look up ap specific field, use one
+		// of these mthods
 		static int	getName(uid_t userid, char **name);
 		static int	getPassword(uid_t userid, char **password);
 		static int	getPrimaryGroup(uid_t userid, gid_t *groupid);
@@ -47,6 +36,27 @@ class passwdentry {
 							char **homedir);
 		static int	getShell(const char *username,
 							char **shell);
+
+		// if you need to look up a passwd entry and refer to multiple
+		// fields, use these methods
+			passwdentry();
+			~passwdentry();
+
+		int	initialize(const char *username);
+			// looks up a passwd entry by name
+		int	initialize(uid_t userid);
+			// looks up a passwd entry by user id
+
+		char	*getName() const;
+		char	*getPassword() const;
+		uid_t	getUserId() const;
+		gid_t	getPrimaryGroup() const;
+		char	*getRealName() const;
+		char	*getHomeDirectory() const;
+		char	*getShell() const;
+
+		void	print() const;
+			// prints out the passwd entry
 
 	#include <rudiments/private/passwdentry.h>
 };

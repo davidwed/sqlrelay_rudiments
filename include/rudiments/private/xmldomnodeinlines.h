@@ -2,6 +2,10 @@
 // See the COPYING file for more information.
 
 #include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
 
 #include <rudiments/private/rudimentsinlines.h>
 
@@ -74,11 +78,11 @@ RUDIMENTS_INLINE void xmldomnode::setType(xmldomnodetype type) {
 }
 
 RUDIMENTS_INLINE void xmldomnode::setName(const char *name) {
-	set(&(nodename),name);
+	nodename=(name)?strdup(name):NULL;
 }
 
 RUDIMENTS_INLINE void xmldomnode::setValue(const char *value) {
-	set(&(nodevalue),value);
+	nodevalue=(value)?strdup(value):NULL;
 }
 
 RUDIMENTS_INLINE void xmldomnode::setParent(xmldomnode *parent) {

@@ -14,7 +14,16 @@ RUDIMENTS_INLINE dtd::~dtd() {
 }
 
 RUDIMENTS_INLINE int dtd::parseFile(const char *filename) {
-	return (xmld->parseFile(filename) && parseDtd());
+	if (!xmld->parseFile(filename)) {
+		printf("parse xml error\n%s\n",xmld->getError());
+		return 0;
+	}
+	if (!parseDtd()) {
+		printf("parse dtd error\n%s\n",xmldtd->getError());
+		return 0;
+	}
+	return 1;
+	//return (xmld->parseFile(filename) && parseDtd());
 }
 
 RUDIMENTS_INLINE int dtd::parseString(const char *string) {
