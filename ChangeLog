@@ -6,6 +6,8 @@
 	fixed filedescriptor::safeRead(); when trying to read more bytes than
 		are available, it now returns the number of bytes read rather
 		than 0
+	added ssl inet client class
+	reworked inet/unix socket client/server inheritance scheme
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now
