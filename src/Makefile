@@ -204,7 +204,8 @@ endif
 .C.p.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(DEBUGCXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
-all: librudiments.la librudiments_p.la
+#all: librudiments.la librudiments_p.la
+all: librudiments.la
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
@@ -223,7 +224,7 @@ librudiments_p.la: $(SRCS) $(PLOBJS)
 install:
 	$(top_builddir)/mkinstalldirs $(libdir)
 	$(LIBTOOL) --mode=install $(INSTALL) -s librudiments.la $(libdir)/librudiments.la
-	$(LIBTOOL) --mode=install $(INSTALL) librudiments_p.la $(libdir)/librudiments_p.la
+	#$(LIBTOOL) --mode=install $(INSTALL) librudiments_p.la $(libdir)/librudiments_p.la
 	$(LIBTOOL) --mode=finish $(libdir)
 
 uninstall:
