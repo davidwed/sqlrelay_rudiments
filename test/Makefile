@@ -15,6 +15,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) client.pem
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
+	$(LIBTOOL) --mode=clean $(RM) *.exe
 	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dir dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep
 	$(RM) test.log
 	$(RMTREE) .libs

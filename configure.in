@@ -757,6 +757,14 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <unistd.h>],
 void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(void *), AC_DEFINE(HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument) AC_MSG_RESULT(char *))
 
+if ( test "$INCLUDE_DYNAMICLIB" = "1" )
+then
+	AC_MSG_CHECKING(whether we can link against -ldl)
+	FW_TRY_LINK([#include <stdlib.h>
+#include <dlfcn.h>],[dlopen(NULL,0);],[],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
+fi
+AC_SUBST(DLLIB)
+
 echo "******************************"
 
 
@@ -802,12 +810,6 @@ AC_SUBST(INCLUDE_RPCENTRY)
 AC_SUBST(INCLUDE_PROTOCOLENTRY)
 AC_SUBST(INCLUDE_HOSTENTRY)
 AC_SUBST(INCLUDE_DYNAMICLIB)
-DLLIB=""
-if ( test "$INCLUDE_DYNAMICLIB" = "1" )
-then
-	DLLIB="-ldl"
-fi
-AC_SUBST(DLLIB)
 AC_SUBST(INCLUDE_CRYPT)
 AC_SUBST(INCLUDE_VARIABLEBUFFER)
 AC_SUBST(INCLUDE_STRINGBUFFER)

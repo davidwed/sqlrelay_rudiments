@@ -53,17 +53,17 @@ MINGW32 = @MINGW32@
 CYGWIN = @CYGWIN@
 UWIN = @UWIN@
 
-# socket library
-SOCKETLIBS = @SOCKETLIBS@
-
-# pthreads library
-PTHREADLIB = @PTHREADLIB@
-
 # ssl library
 SSLLIBS = @SSLLIBS@
 
 # pcre library
 PCRELIBS = @PCRELIBS@
+
+# socket library
+SOCKETLIBS = @SOCKETLIBS@
+
+# pthreads library
+PTHREADLIB = @PTHREADLIB@
 
 # nanosleep library
 NANOSLEEPLIB = @NANOSLEEPLIB@
