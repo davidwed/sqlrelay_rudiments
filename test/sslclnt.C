@@ -37,17 +37,17 @@ int main(int argc, const char **argv) {
 		exit(1);
 	}
 
-	// make sure the server sent a certificate
-	X509	*certificate=SSL_get_peer_certificate(clnt.getSSL());
-	if (!certificate) {
-		printf("peer sent no certificate\n");
+	// make sure the certificate was valid
+	if (SSL_get_verify_result(clnt.getSSL())!=X509_V_OK) {
+		printf("SSL_get_verify_result failed\n");
 		clnt.close();
 		exit(1);
 	}
 
-	// make sure the certificate was valid
-	if (SSL_get_verify_result(clnt.getSSL())!=X509_V_OK) {
-		printf("SSL_get_verify_result failed\n");
+	// make sure the server sent a certificate
+	X509	*certificate=SSL_get_peer_certificate(clnt.getSSL());
+	if (!certificate) {
+		printf("peer sent no certificate\n");
 		clnt.close();
 		exit(1);
 	}

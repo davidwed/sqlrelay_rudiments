@@ -9,7 +9,7 @@
 
 #include <rudiments/private/socket.h>
 
-class unixsocket : virtual public socket {
+class unixsocket : public socket {
 	public:
 			unixsocket();
 			unixsocket(int filedescriptor);

@@ -65,7 +65,18 @@ unixsocket *unixserversocket::acceptClientConnection() {
 	}
 
 	// return a new unixsocket
-	return new unixsocket(clientsock);
+	unixsocket	*returnsock=new unixsocket(clientsock);
+	#ifdef RUDIMENTS_HAS_SSL
+		if (ctx) {
+			returnsock->setSSLContext(ctx);
+			if (!returnsock->initializeSSL() ||
+				SSL_accept(returnsock->getSSL())!=1) {
+				delete returnsock;
+				return NULL;
+			}
+		}
+	#endif
+	return returnsock;
 }
 
 bool unixserversocket::listenOnSocket(const char *filename, mode_t mask,

@@ -10,7 +10,7 @@
 
 #include <rudiments/private/socket.h>
 
-class inetsocket : virtual public socket {
+class inetsocket : public socket {
 	public:
 			inetsocket();
 			inetsocket(int filedescriptor);
