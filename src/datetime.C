@@ -326,17 +326,47 @@ int	datetime::copyStructTm(const struct tm *oldtm, struct tm *newtm) {
 	// what we want to do here is copy oldtm to newtm and set epoch,
 	// without modifying the timezone stored in oldtm or newtm...
 
-	// get the epoch here, we don't care if temptm's zone gets screwed up
-	struct tm	temptm;
-	memcpy(&temptm,oldtm,sizeof(struct tm));
-	time_t	tempepoch=mktime(&temptm);
+	// Get the epoch here
+	//
+	// We can't just call mktime on oldtm because it will try to set it's
+	// timezone (which is a const and can't be set more than once), so
+	// we'll copy the relevent parts over to temptm and call mktime on that.
+	// We don't care what temptm's time zone gets set to.
+	//
+	// Oddly, gcc-3.3 gets pissed if we just do:
+	// struct tm	temptm;
+	// for struct tm's that define the timezone abbreviationm as a const
+	// char array instead of a const char pointer.  But it allows it if
+	// you do:
+	// struct tm	*temptm=new struct tm;
+	// go figure...
+	struct tm	*temptm=new struct tm;
+	temptm->tm_sec=oldtm->tm_sec;
+	temptm->tm_min=oldtm->tm_min;
+	temptm->tm_hour=oldtm->tm_hour;
+	temptm->tm_mday=oldtm->tm_mday;
+	temptm->tm_mon=oldtm->tm_mon;
+	temptm->tm_year=oldtm->tm_year;
+	temptm->tm_wday=oldtm->tm_wday;
+	temptm->tm_yday=oldtm->tm_yday;
+	temptm->tm_isdst=oldtm->tm_isdst;
+	time_t	tempepoch=mktime(temptm);
+	delete temptm;
 	if (tempepoch==-1) {
 		return 0;
 	}
 	epoch=tempepoch;
 
-	// now copy newtm into oldtm
-	memcpy(newtm,oldtm,sizeof(struct tm));
+	// now copy oldtm into newtm
+	newtm->tm_sec=oldtm->tm_sec;
+	newtm->tm_min=oldtm->tm_min;
+	newtm->tm_hour=oldtm->tm_hour;
+	newtm->tm_mday=oldtm->tm_mday;
+	newtm->tm_mon=oldtm->tm_mon;
+	newtm->tm_year=oldtm->tm_year;
+	newtm->tm_wday=oldtm->tm_wday;
+	newtm->tm_yday=oldtm->tm_yday;
+	newtm->tm_isdst=oldtm->tm_isdst;
 
 	// FIXME: what should happen here if oldtm's timezone/offset were
 	// not set?
