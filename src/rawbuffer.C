@@ -34,7 +34,7 @@ void *rawbuffer::set(void *dest, unsigned char character, size_t size) {
 	return (dest)?memset(dest,(int)character,size):NULL;
 }
 
-void *rawbuffer::zero(void *dest, unsigned char character, size_t size) {
+void *rawbuffer::zero(void *dest, size_t size) {
 	return set(dest,0,size);
 }
 
