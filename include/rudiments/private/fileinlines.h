@@ -61,6 +61,18 @@ size_t	file::create(const char *name, mode_t perms,
 	return create(name,perms,(void *)string,size);
 }
 
+off_t file::setPositionRelativeToBeginning(off_t offset) {
+	return lseek(fd,offset,SEEK_SET);
+}
+
+off_t file::setPositionRelativeToCurrent(off_t offset) {
+	return lseek(fd,offset,SEEK_CUR);
+}
+
+off_t file::setPositionRelativeToEnd(off_t offset) {
+	return lseek(fd,offset,SEEK_END);
+}
+
 int file::getCurrentProperties() {
 printf("getCurrentProperties()\n");
 	return (success=(fstat(fd,&st)!=-1));

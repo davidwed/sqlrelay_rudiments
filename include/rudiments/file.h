@@ -76,6 +76,22 @@ class file : public filedescriptor {
 					const void *data, size_t size);
 			// Sets the initial contents to "data" of size "size".
 
+
+		// These methods allow you to set the position at which the
+		// next read or write will occur.  Each returns the position
+		// relative to the beginning of the file on success or -1 on
+		// failure.
+		off_t	setPositionRelativeToBeginning(off_t offset);
+			// Sets the position to the beginning of the
+			// file + "offset" bytes.
+		off_t	setPositionRelativeToCurrent(off_t offset);
+			// Sets the position to the current
+			// position + "offset" bytes.
+		off_t	setPositionRelativeToEnd(off_t offset);
+			// Sets the position to the end of the
+			// file + "offset" bytes.
+
+
 		char	*getContents();
 			// Allocates a string large enough to accommodate the
 			// contents of the currently opened file, reads the

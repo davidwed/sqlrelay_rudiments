@@ -15,7 +15,6 @@
 char *file::getContents() {
 	char	*contents=new char[st.st_size+1];
 	contents[st.st_size]=(char)NULL;
-printf("st_size=%d\n",st.st_size);
 	return (st.st_size==0 || read(contents,st.st_size)==sizeof(st.st_size))?
 			contents:NULL;
 }
@@ -24,7 +23,6 @@ char *file::getContents(const char *name) {
 	file	fl;
 	fl.open(name,O_RDONLY);
 	char	*contents=fl.getContents();
-printf("contents: %s\n",contents);
 	fl.close();
 	return contents;
 }
