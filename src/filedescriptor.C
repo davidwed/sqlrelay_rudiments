@@ -4,7 +4,6 @@
 #include <rudiments/filedescriptor.h>
 #include <errno.h>
 #include <stdio.h>
-#include <sys/ioctl.h>
 #ifdef HAVE_SYS_TIMES_H
 	#include <sys/times.h>
 #endif
@@ -114,25 +113,14 @@ BIO *filedescriptor::newSSLBIO() const {
 #endif
 
 bool filedescriptor::useNonBlockingMode() {
-#ifdef FIONBIO
-	int	nonblocking=1;
-	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
-#else
 	return (fcntl(fd,F_SETFL,fcntl(fd,F_GETFL,0)|O_NONBLOCK)!=-1);
-#endif
 }
 
 bool filedescriptor::useBlockingMode() {
-#ifdef FIONBIO
-	int	nonblocking=0;
-	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
-#else
 	return (fcntl(fd,F_SETFL,fcntl(fd,F_GETFL,0)&(~O_NONBLOCK))!=-1);
-#endif
 }
 
 bool filedescriptor::isUsingNonBlockingMode() {
-	// FIXME: how do I do this with ioctl?
 	return (fcntl(fd,F_GETFL,0)&O_NONBLOCK);
 }
 

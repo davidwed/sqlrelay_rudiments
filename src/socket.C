@@ -8,6 +8,18 @@ socket::socket() : filedescriptor(), datatransport() {}
 socket::socket(int filedesc) :
 	filedescriptor(filedesc), datatransport(filedesc) {}
 
+#ifdef FIONBIO
+bool socket::useNonBlockingMode() {
+	int	nonblocking=1;
+	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
+}
+
+bool socket::useBlockingMode() {
+	int	nonblocking=0;
+	return (ioctl(fd,FIONBIO,&nonblocking)!=-1);
+}
+#endif
+
 #ifdef RUDIMENTS_HAS_SSL
 BIO *socket::newSSLBIO() const {
 	return BIO_new_socket(fd,BIO_NOCLOSE);

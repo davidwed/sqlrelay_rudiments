@@ -6,6 +6,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
 
 #include <rudiments/datatransport.h>
 
@@ -13,6 +14,10 @@ class socket : virtual public datatransport {
 	public:
 			socket();
 			socket(int filedesc);
+#ifdef FIONBIO
+		virtual bool	useNonBlockingMode();
+		virtual bool	useBlockingMode();
+#endif
 #ifdef RUDIMENTS_HAS_SSL
 	protected:
 		BIO	*newSSLBIO() const;
