@@ -79,6 +79,9 @@
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
+/* Some systems have localtime_r */
+#undef HAVE_LOCALTIME_R
+
 /* Some systems have lrand48 */
 #undef HAVE_LRAND48
 

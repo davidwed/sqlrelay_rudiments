@@ -163,6 +163,10 @@ AC_TRY_COMPILE([#include <linux/rtc.h>
 #include <sys/ioctl.h>],
 ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(HAVE_RTC, 1, Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(localtime_r)
+AC_TRY_COMPILE([#include <time.h>],
+localtime_r(NULL,NULL);,AC_DEFINE(HAVE_LOCALTIME_R,1, Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

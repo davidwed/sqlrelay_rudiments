@@ -60,9 +60,14 @@ class datetime {
 			// returns a pointer to the internal "struct tm"
 
 
+		int	getSystemDateAndTime();
+			// Sets the date and time represented in the class to
+			// the date and time stored in the system clock.
+			//
+			// Returns 1 on success and 0 on failure.
 		int	setSystemDateAndTime();
-			// Sets the system date and time to the date and time
-			// currently represented in the class.
+			// Sets the system clock's date and time to the date
+			// and time currently represented in the class.
 			//
 			// Returns 1 on success and 0 on failure.
 
