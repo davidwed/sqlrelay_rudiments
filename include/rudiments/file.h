@@ -604,89 +604,190 @@ class file : public filedescriptor {
 			// Opens and returns the file descriptor handle of the
 			// file on success and -1 on failure.
 
+
 		#ifdef HAVE_XATTRS
 		char	**listAttributes();
 			// Returns a NULL terminated array of attributes of the
 			// file or NULL if an error occurred.
-		bool	getAttribute(const char *name,
-						unsigned char **buffer,
-						size_t *size);
-			// Retrieves the value of the attribute "name" of the
-			// file into "buffer", allocating as necessary.  Returns
-			// the size of "buffer" in "size".
-			//
-			// Returns true on success and false on failure.
-		bool	createAttribute(const char *name,
-						const unsigned char *value,
-						size_t size);
-			// Creates a new attribute named "name" and sets it's
-			// value to "value" of size "size".
-			//
-			// Returns true on success and false on failure.  Will
-			// fail if the attribute already exists.
-		bool	replaceAttribute(const char *name,
-						const unsigned char *value,
-						size_t size);
-			// Replaces the value of the attribute "name" with
-			// "value" of size "size".
-			//
-			// Returns true on success and false on failure.  Will
-			// fail if the attribute doesn't already exist.
-		bool	setAttribute(const char *name,
-						const unsigned char *value,
-						size_t size);
-			// Replaces the value of the attribute "name" with
-			// "value" of size "size" or creates the attribute
-			// if it doesn't already exist.
-			//
-			// Returns true on success and false on failure.
-		bool	removeAttribute(const char *name);
-			// Removes attribute "name" of the file.
-			//
-			// Returns true on success and false on failure.
 
-		static char	**listAttributes(const char *filename);
-			// Returns a NULL terminated array of attributes of
-			// "filename" or NULL if an error occurred.
-		static bool	getAttribute(const char *filename,
-						const char *name,
-						unsigned char **buffer,
+
+		// Get attribute methods - gets the value of the named
+		// attribute.
+		// Returns true on success and false on failure.
+		bool	getAttribute(const char *name,
+						unsigned short *number);
+			// reads the value of "name" into buffer "number"
+		bool	getAttribute(const char *name,
+						unsigned long *number);
+			// reads the value of "name" into buffer "number"
+		bool	getAttribute(const char *name, short *number);
+			// reads the value of "name" into buffer "number"
+		bool	getAttribute(const char *name, long *number);
+			// reads the value of "name" into buffer "number"
+		bool	getAttribute(const char *name, float *number);
+			// reads the value of "name" into buffer "number"
+		bool	getAttribute(const char *name, double *number);
+			// reads the value of "name" into buffer "number"
+		bool	getAttribute(const char *name,
+						unsigned char *character);
+			// reads the value of "name" into buffer "character"
+		bool	getAttribute(const char *name, char *character);
+			// reads the value of "name" into buffer "character"
+		bool	getAttribute(const char *name, bool *value);
+			// reads the value of "name" into buffer "value"
+		bool	getAttribute(const char *name,
+						const unsigned char **string);
+			// allocates "string" and reads the value of
+			// "name" into it
+		bool	getAttribute(const char *name, const char **string);
+			// allocates "string" and reads the value of
+			// "name" into it
+		bool	getAttribute(const char *name,
+						const unsigned char **string,
 						size_t *size);
-			// Retrieves the value of the attribute "name" of
-			// "filename" into "buffer", allocating as necessary.
-			// Returns the size of "buffer" in "size".
-			//
-			// Returns true on success and false on failure.
-		bool	createAttribute(const char *filename,
-						const char *name,
-						const unsigned char *value,
+			// allocates "string", reads the value of "name" into it
+		bool	getAttribute(const char *name,
+						const char **string,
+						size_t *size);
+			// allocates "string", reads the value of "name" into it
+		bool	getAttribute(const char *name,
+						void **buffer,
+						size_t *size);
+			// allocates "buffer", reads the value of "name" into it
+
+
+		// Create attribute methods - creates a new attribute.
+		// Returns true on success and false on failure.  Will
+		// fail if the attribute already exists.
+		bool	createAttribute(const char *name,
+						unsigned short number);
+			// creates attribute "name" with value "number"
+		bool	createAttribute(const char *name,
+						unsigned long number);
+			// creates attribute "name" with value "number"
+		bool	createAttribute(const char *name, short number);
+			// creates attribute "name" with value "number"
+		bool	createAttribute(const char *name, long number);
+			// creates attribute "name" with value "number"
+		bool	createAttribute(const char *name, float number);
+			// creates attribute "name" with value "number"
+		bool	createAttribute(const char *name, double number);
+			// creates attribute "name" with value "number"
+		bool	createAttribute(const char *name,
+						unsigned char character);
+			// creates attribute "name" with value "character"
+		bool	createAttribute(const char *name, char character);
+			// creates attribute "name" with value "character"
+		bool	createAttribute(const char *name, bool value);
+			// creates attribute "name" with value "value"
+		bool	createAttribute(const char *name,
+						const unsigned char *string);
+			// creates attribute "name" with value "string"
+		bool	createAttribute(const char *name, const char *string);
+			// creates attribute "name" with value "string"
+		bool	createAttribute(const char *name,
+						const unsigned char *string,
 						size_t size);
-			// Creates a new attribute named "name" and sets it's
-			// value to "value" of size "size".
-			//
-			// Returns true on success and false on failure.  Will
-			// fail if the attribute already exists.
-		bool	replaceAttribute(const char *filename,
-						const char *name,
-						const unsigned char *value,
+			// creates attribute "name" with value "string"
+		bool	createAttribute(const char *name,
+						const char *string,
 						size_t size);
-			// Replaces the value of the attribute "name" with
-			// "value" of size "size".
-			//
-			// Returns true on success and false on failure.  Will
-			// fail if the attribute doesn't already exist.
-		bool	setAttribute(const char *filename,
-						const char *name,
-						const unsigned char *value,
+			// creates attribute "name" with value "string"
+		bool	createAttribute(const char *name,
+						const void *buffer,
 						size_t size);
-			// Replaces the value of the attribute "name" with
-			// "value" of size "size" or creates the attribute
-			// if it doesn't already exist.
-			//
-			// Returns true on success and false on failure.
-		bool	removeAttribute(const char *filename, const char *name);
-			// Removes attribute "name" of the file "filename".
-			//
+			// creates attribute "name" with value "buffer"
+
+
+		// Replace attribute methods - replaces and existing attribute.
+		// Returns true on success and false on failure.  Will
+		// fail if the attribute doesn't already exist.
+		bool	replaceAttribute(const char *name,
+						unsigned short number);
+			// replaces attribute "name" with value "number"
+		bool	replaceAttribute(const char *name,
+						unsigned long number);
+			// replaces attribute "name" with value "number"
+		bool	replaceAttribute(const char *name, short number);
+			// replaces attribute "name" with value "number"
+		bool	replaceAttribute(const char *name, long number);
+			// replaces attribute "name" with value "number"
+		bool	replaceAttribute(const char *name, float number);
+			// replaces attribute "name" with value "number"
+		bool	replaceAttribute(const char *name, double number);
+			// replaces attribute "name" with value "number"
+		bool	replaceAttribute(const char *name,
+						unsigned char character);
+			// replaces attribute "name" with value "character"
+		bool	replaceAttribute(const char *name, char character);
+			// replaces attribute "name" with value "character"
+		bool	replaceAttribute(const char *name, bool value);
+			// replaces attribute "name" with value "value"
+		bool	replaceAttribute(const char *name,
+						const unsigned char *string);
+			// replaces attribute "name" with value "string"
+		bool	replaceAttribute(const char *name, const char *string);
+			// replaces attribute "name" with value "string"
+		bool	replaceAttribute(const char *name,
+						const unsigned char *string,
+						size_t size);
+			// replaces attribute "name" with value "string"
+		bool	replaceAttribute(const char *name,
+						const char *string,
+						size_t size);
+			// replaces attribute "name" with value "string"
+		bool	replaceAttribute(const char *name,
+						const void *buffer,
+						size_t size);
+			// replaces attribute "name" with value "buffer"
+
+
+		// Set attribute methods - creates new attribute or replaces
+		// existing attribute.
+		// Returns true on success and false on failure.  Will
+		// fail if the attribute doesn't already exist.
+		bool	setAttribute(const char *name,
+						unsigned short number);
+			// sets attribute "name" to value "number"
+		bool	setAttribute(const char *name,
+						unsigned long number);
+			// sets attribute "name" to value "number"
+		bool	setAttribute(const char *name, short number);
+			// sets attribute "name" to value "number"
+		bool	setAttribute(const char *name, long number);
+			// sets attribute "name" to value "number"
+		bool	setAttribute(const char *name, float number);
+			// sets attribute "name" to value "number"
+		bool	setAttribute(const char *name, double number);
+			// sets attribute "name" to value "number"
+		bool	setAttribute(const char *name,
+						unsigned char character);
+			// sets attribute "name" to value "character"
+		bool	setAttribute(const char *name, char character);
+			// sets attribute "name" to value "character"
+		bool	setAttribute(const char *name, bool value);
+			// sets attribute "name" to value "value"
+		bool	setAttribute(const char *name,
+						const unsigned char *string);
+			// sets attribute "name" to value "string"
+		bool	setAttribute(const char *name, const char *string);
+			// sets attribute "name" to value "string"
+		bool	setAttribute(const char *name,
+						const unsigned char *string,
+						size_t size);
+			// sets attribute "name" to value "string"
+		bool	setAttribute(const char *name,
+						const char *string,
+						size_t size);
+			// sets attribute "name" to value "string"
+		bool	setAttribute(const char *name,
+						const void *buffer,
+						size_t size);
+			// sets attribute "name" to value "buffer"
+
+
+		bool	removeAttribute(const char *name);
+			// Removes attribute "name".
 			// Returns true on success and false on failure.
 		#endif
 

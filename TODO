@@ -1,5 +1,18 @@
-implement semaphoreset::wait() with timeout for systems
-	that don't have semtimedop
+what does the logger.C warning mean
+
+should file class have non-static versions of createDeviceNode/createFifo/
+	createTemporaryFile which mirror other create() methods?
+
+charstring class has lots of static methods with no
+	corresponding non-static method, is this ok?
+
+need __USE_BSD to get revoke() on uclibc
+
+looks like there's a bug in xml comment parsing, ! gets prepended to value
+
+some of the static methods can probably be inlined
+
+--------------------------------------------------------------------------------
 
 internationalization:
 	langinfo.h - locale info functions
@@ -448,22 +461,6 @@ network:
 	netinet/tcp.h - #defines for setsockopt, tcp packet structs
 	netinet/udp.h - udp packet structs
 	netpacket/packet.h - raw packet structs
-
-what does the logger.C warning mean
-
-should file class have non-static versions of createDeviceNode/createFifo/
-	createTemporaryFile which mirror other create() methods?
-
-need file::create/replace/setAttribute methods for each data type that we have
-	a read/write for
-
-need __USE_BSD to get revoke() on uclibc
-
-link class inherits from file, but operations apply to link, not file, need
-	to move link/symlink/readlink methods there
-
-charstring class has lots of static methods with no
-	corresponding non-static method, is this ok?
 
 rename variablebuffer rawbuffer???
 

@@ -14,12 +14,7 @@
 
 		#ifdef HAVE_XATTRS
 		bool	setAttribute(const char *name,
-						const unsigned char *value,
+						const void *value,
 						size_t size, int flags);
-		static bool	setAttribute(const char *filename,
-						const char *name,
-						const unsigned char *value,
-						size_t size, int flags);
-		static char	**attributeArray(const char *buffer,
-						size_t size);
+		char	**attributeArray(const char *buffer, size_t size);
 		#endif

@@ -937,8 +937,107 @@ char **file::listAttributes() {
 	return NULL;
 }
 
-bool file::getAttribute(const char *name,
-				unsigned char **buffer, size_t *size) {
+bool file::getAttribute(const char *name, unsigned short *number) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)number,(void *)buffer,sizeof(unsigned short));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, unsigned long *number) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)number,(void *)buffer,sizeof(unsigned long));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, short *number) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)number,(void *)buffer,sizeof(short));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, long *number) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)number,(void *)buffer,sizeof(long));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, float *number) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)number,(void *)buffer,sizeof(float));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, double *number) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)number,(void *)buffer,sizeof(double));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, unsigned char *character) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)character,(void *)buffer,sizeof(unsigned char));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, char *character) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)character,(void *)buffer,sizeof(char));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, bool *value) {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,(void **)&buffer,&size);
+	memcpy((void *)value,(void *)buffer,sizeof(bool));
+	delete[] buffer;
+	return retval;
+}
+
+bool file::getAttribute(const char *name, const unsigned char **string) {
+	size_t	size;
+	return getAttribute(name,(void **)string,&size);
+}
+
+bool file::getAttribute(const char *name, const char **string) {
+	size_t	size;
+	return getAttribute(name,(void **)string,&size);
+}
+
+bool file::getAttribute(const char *name, const unsigned char **string,
+								size_t *size) {
+	return getAttribute(name,(void **)string,size);
+}
+
+bool file::getAttribute(const char *name, const char **string, size_t *size) {
+	return getAttribute(name,(void **)string,size);
+}
+
+bool file::getAttribute(const char *name, void **buffer, size_t *size) {
 
 	// The fgetxattr interface is designed such that you have to guess the
 	// size of the buffer that it will need, call fgetxattr, then see if
@@ -951,20 +1050,20 @@ bool file::getAttribute(const char *name,
 	for (int i=0; i<100; i++) {
 
 		// allocate a buffer
-		(*buffer)=new unsigned char[(*size)];
+		(*buffer)=(void *)(new unsigned char[(*size)]);
 
 		// attempt to read the attribute into the buffer
-		ssize_t	newsize=fgetxattr(fd,name,(void *)(*buffer),(*size));
+		ssize_t	newsize=fgetxattr(fd,name,(*buffer),(*size));
 
 		// it's possible that someone changed the attribute between
 		// the previous 2 calls to fgetxattr and increased the size
 		// of the buffer necessary to retrieve it, if so, try again
 		// with a bigger buffer.
 		if (newsize==-1) {
-			delete[] (*buffer);
+			delete[] (unsigned char *)(*buffer);
 			return false;
 		} else if (newsize>(ssize_t)(*size)) {
-			delete[] (*buffer);
+			delete[] (unsigned char *)(*buffer);
 			(*size)=newsize;
 		} else {
 			return true;
@@ -975,76 +1074,189 @@ bool file::getAttribute(const char *name,
 	return false;
 }
 
-bool file::createAttribute(const char *name, const unsigned char *value,
-					size_t size) {
+bool file::createAttribute(const char *name, unsigned short number) {
+	return createAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, unsigned long number) {
+	return createAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, short number) {
+	return createAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, long number) {
+	return createAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, float number) {
+	return createAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, double number) {
+	return createAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, unsigned char character) {
+	return createAttribute(name,(void *)&character,sizeof(character));
+}
+
+bool file::createAttribute(const char *name, char character) {
+	return createAttribute(name,(void *)&character,sizeof(character));
+}
+
+bool file::createAttribute(const char *name, bool value) {
+	return createAttribute(name,(void *)&value,sizeof(value));
+}
+
+bool file::createAttribute(const char *name, const unsigned char *string) {
+	return createAttribute(name,(void *)string,
+					charstring::getLength((char *)string));
+}
+
+bool file::createAttribute(const char *name, const char *string) {
+	return createAttribute(name,(void *)string,
+					charstring::getLength(string));
+}
+
+bool file::createAttribute(const char *name, const unsigned char *string,
+								size_t size) {
+	return createAttribute(name,(void *)string,size);
+}
+
+bool file::createAttribute(const char *name, const char *string, size_t size) {
+	return createAttribute(name,(void *)string,size);
+}
+
+bool file::createAttribute(const char *name, const void *value, size_t size) {
 	return setAttribute(name,value,size,XATTR_CREATE);
 }
 
-bool file::replaceAttribute(const char *name, const unsigned char *value,
-					size_t size) {
+bool file::replaceAttribute(const char *name, unsigned short number) {
+	return replaceAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, unsigned long number) {
+	return replaceAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, short number) {
+	return replaceAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, long number) {
+	return replaceAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, float number) {
+	return replaceAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, double number) {
+	return replaceAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, unsigned char character) {
+	return replaceAttribute(name,(void *)&character,sizeof(character));
+}
+
+bool file::replaceAttribute(const char *name, char character) {
+	return replaceAttribute(name,(void *)&character,sizeof(character));
+}
+
+bool file::replaceAttribute(const char *name, bool value) {
+	return replaceAttribute(name,(void *)&value,sizeof(value));
+}
+
+bool file::replaceAttribute(const char *name, const unsigned char *string) {
+	return replaceAttribute(name,(void *)string,
+					charstring::getLength((char *)string));
+}
+
+bool file::replaceAttribute(const char *name, const char *string) {
+	return replaceAttribute(name,(void *)string,
+					charstring::getLength(string));
+}
+
+bool file::replaceAttribute(const char *name, const unsigned char *string,
+								size_t size) {
+	return replaceAttribute(name,(void *)string,size);
+}
+
+bool file::replaceAttribute(const char *name, const char *string, size_t size) {
+	return replaceAttribute(name,(void *)string,size);
+}
+
+bool file::replaceAttribute(const char *name, const void *value, size_t size) {
 	return setAttribute(name,value,size,XATTR_REPLACE);
 }
 
-bool file::setAttribute(const char *name, const unsigned char *value,
-							size_t size) {
+bool file::setAttribute(const char *name, unsigned short number) {
+	return setAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, unsigned long number) {
+	return setAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, short number) {
+	return setAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, long number) {
+	return setAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, float number) {
+	return setAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, double number) {
+	return setAttribute(name,(void *)&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, unsigned char character) {
+	return setAttribute(name,(void *)&character,sizeof(character));
+}
+
+bool file::setAttribute(const char *name, char character) {
+	return setAttribute(name,(void *)&character,sizeof(character));
+}
+
+bool file::setAttribute(const char *name, bool value) {
+	return setAttribute(name,(void *)&value,sizeof(value));
+}
+
+bool file::setAttribute(const char *name, const unsigned char *string) {
+	return setAttribute(name,(void *)string,
+				charstring::getLength((char *)string));
+}
+
+bool file::setAttribute(const char *name, const char *string) {
+	return setAttribute(name,(void *)string,charstring::getLength(string));
+}
+
+bool file::setAttribute(const char *name, const unsigned char *string,
+								size_t size) {
+	return setAttribute(name,(void *)string,size);
+}
+
+bool file::setAttribute(const char *name, const char *string, size_t size) {
+	return setAttribute(name,(void *)string,size);
+}
+
+bool file::setAttribute(const char *name, const void *value, size_t size) {
 	return setAttribute(name,value,size,0);
 }
 
-bool file::setAttribute(const char *name, const unsigned char *value,
-					size_t size, int flags) {
+bool file::setAttribute(const char *name, const void *value,
+						size_t size, int flags) {
 	return fsetxattr(fd,name,value,size,flags);
 }
 
 bool file::removeAttribute(const char *name) {
 	return fremovexattr(fd,name);
-}
-
-char **file::listAttributes(const char *filename) {
-	file	attrfile;
-	if (attrfile.open(filename,O_RDONLY)) {
-		return attrfile.listAttributes();
-	}
-	return NULL;
-}
-
-bool file::getAttribute(const char *filename, const char *name,
-						unsigned char **buffer,
-						size_t *size) {
-	file	attrfile;
-	return (attrfile.open(filename,O_RDONLY) &&
-		attrfile.getAttribute(name,buffer,size));
-}
-
-bool file::createAttribute(const char *filename,
-					const char *name,
-					const unsigned char *value,
-					size_t size) {
-	return setAttribute(filename,name,value,size,XATTR_CREATE);
-}
-
-bool file::replaceAttribute(const char *filename,
-					const char *name,
-					const unsigned char *value,
-					size_t size) {
-	return setAttribute(filename,name,value,size,XATTR_REPLACE);
-}
-
-bool file::setAttribute(const char *filename,
-					const char *name,
-					const unsigned char *value,
-					size_t size) {
-	return setAttribute(filename,name,value,size,0);
-}
-
-bool file::setAttribute(const char *filename,
-					const char *name,
-					const unsigned char *value,
-					size_t size, int flags) {
-	return setxattr(filename,name,value,size,flags);
-}
-
-bool file::removeAttribute(const char *filename, const char *name) {
-	return removexattr(filename,name);
 }
 
 char **file::attributeArray(const char *buffer, size_t size) {
