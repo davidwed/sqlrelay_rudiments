@@ -44,6 +44,7 @@ inline void listutil<int>::print(int data) const {
 	printf("%d\n",data);
 }
 
+template <>
 inline void listutil<short>::print(short data) const {
 	printf("%d\n",data);
 }
