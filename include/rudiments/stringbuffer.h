@@ -14,24 +14,42 @@
 class stringbuffer {
 	public:
 			stringbuffer();
+			// Creates a new buffer which will grow as necessary
+			// to accomodate the string written to it.
 		virtual	~stringbuffer();
 
-		// The append() methods return a pointer to the stringbuffer
-		// instance.  This enables append chaining:
-		// sb->append("numbers: ")->append(5)->append(5.5);
+		void	setPosition(unsigned long pos);
+			// Sets the position at which the next write will
+			// occur to "pos".  If the position is set beyond the
+			// end of the buffer, the buffer will grow but the data
+			// between the current end of the buffer and the new
+			// position will be undefined.
+
+		// The write() and append() methods return a pointer to the
+		// variablebuffer instance.  This enables chaining:
+		//
+		//	sb->write("numbers: ")->write(5)->write(5.5);
+		//	 	or
+		//	sb->append("numbers: ")->append(5)->append(5.5);
+		stringbuffer	*write(const char *string);
+		stringbuffer	*write(char character);
+		stringbuffer	*write(long number);
+		stringbuffer	*write(double number);
+		stringbuffer	*write(double number,
+						unsigned short precision,
+						unsigned short scale);
+			// Writes the data to the stringbuffer at the current
+			// position.  If necessary, the buffer will grow to
+			// accommodate the new data.
 		stringbuffer	*append(const char *string);
-			// Appends "string" to the stringbuffer.
 		stringbuffer	*append(char character);
-			// Appends "character" to the stringbuffer.
 		stringbuffer	*append(long number);
-			// Appends "number" to the stringbuffer.
 		stringbuffer	*append(double number);
-			// Appends "number" to the stringbuffer.
 		stringbuffer	*append(double number,
 						unsigned short precision,
 						unsigned short scale);
-			// Appends "number" to the stringbuffer using the
-			// supplied "precision" and "scale".
+			// Appends the data to the stringbuffer.  The buffer
+			// will grow to accommodate the new data.
 
 		void	clear();
 			// Empties the stringbuffer.
@@ -43,6 +61,10 @@ class stringbuffer {
 		size_t	getStringLength();
 			// Returns the length of the string currently stored
 			// in the stringbuffer.
+
+		unsigned long	getPosition();
+				// Returns the position in the buffer at which
+				// the next write will occur.
 
 	#include <rudiments/private/stringbuffer.h>
 };

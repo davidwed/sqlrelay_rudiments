@@ -35,4 +35,55 @@ int	main() {
 	printf("length: %d\n%s\n",str->getStringLength(),str->getString());
 
 	delete str;
+
+	stringbuffer	*sb=new stringbuffer();
+
+	sb->append("12345");
+	sb->append("12345");
+	sb->append("12345");
+	sb->append("12345");
+	sb->append("12345");
+	for (int i=0; i<sb->getStringLength(); i++) {
+		printf("%c",sb->getString()[i]);
+	}
+	printf("\n");
+
+	sb->setPosition(0);
+	sb->write("66666");
+	for (int i=0; i<sb->getStringLength(); i++) {
+		printf("%c",sb->getString()[i]);
+	}
+	printf("\n");
+
+	sb->setPosition(30);
+	sb->write("66666");
+	for (int i=0; i<35; i++) {
+		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
+			printf("%c",sb->getString()[i]);
+		} else {
+			printf(".");
+		}
+	}
+	printf("\n");
+
+	sb->setPosition(50);
+	sb->append("12345");
+	for (int i=0; i<40; i++) {
+		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
+			printf("%c",sb->getString()[i]);
+		} else {
+			printf(".");
+		}
+	}
+	printf("\n");
+
+	sb->write("12345");
+	for (int i=0; i<45; i++) {
+		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
+			printf("%c",sb->getString()[i]);
+		} else {
+			printf(".");
+		}
+	}
+	printf("\n");
 }

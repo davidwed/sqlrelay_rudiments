@@ -17,6 +17,10 @@ inline stringbuffer::~stringbuffer() {
 	delete buffer;
 }
 
+inline void stringbuffer::setPosition(unsigned long pos) {
+	buffer->setPosition(pos);
+}
+
 inline char *stringbuffer::getString() {
 	buffer->append((unsigned char *)"\0",1);
 	buffer->setPosition(buffer->getPosition()-1);
@@ -25,6 +29,10 @@ inline char *stringbuffer::getString() {
 
 inline size_t stringbuffer::getStringLength() {
 	return strlen(getString());
+}
+
+inline unsigned long stringbuffer::getPosition() {
+	return buffer->getPosition();
 }
 
 inline void stringbuffer::clear() {
@@ -55,5 +63,32 @@ inline stringbuffer *stringbuffer::append(double number,
 			unsigned short precision, unsigned short scale) {
 	char	*numstr=text::parseNumber(number,precision,scale);
 	buffer->append((unsigned char *)numstr,strlen(numstr));
+	return this;
+}
+
+inline stringbuffer *stringbuffer::write(const char *string) {
+	buffer->write((unsigned char *)string,strlen(string));
+	return this;
+}
+
+inline stringbuffer *stringbuffer::write(char character) {
+	buffer->write((unsigned char *)&character,sizeof(character));
+	return this;
+}
+
+inline stringbuffer *stringbuffer::write(long number) {
+	char	*numstr=text::parseNumber(number);
+	buffer->write((unsigned char *)numstr,strlen(numstr));
+	return this;
+}
+
+inline stringbuffer *stringbuffer::write(double number) {
+	return write(number,0,0);
+}
+
+inline stringbuffer *stringbuffer::write(double number,
+			unsigned short precision, unsigned short scale) {
+	char	*numstr=text::parseNumber(number,precision,scale);
+	buffer->write((unsigned char *)numstr,strlen(numstr));
 	return this;
 }

@@ -17,6 +17,14 @@ inline unsigned long variablebuffer::getPosition() {
 	return position;
 }
 
+inline unsigned long variablebuffer::getEnd() {
+	return end;
+}
+
+inline unsigned long variablebuffer::getActualSize() {
+	return buffersize;
+}
+
 inline void variablebuffer::setPosition(unsigned long pos) {
 	position=pos;
 }

@@ -53,6 +53,13 @@ class variablebuffer {
 		unsigned long	getPosition();
 				// Returns the position in the buffer at which
 				// the next write will occur.
+		unsigned long	getEnd();
+				// Returns the position in the buffer at which
+				// the next append will occur.
+		unsigned long	getActualSize();
+				// Returns the actual size of the buffer which
+				// may be larger than the value returned by
+				// getSize() since the buffer grows in chunks.
 
 	#include <rudiments/private/variablebuffer.h>
 };
