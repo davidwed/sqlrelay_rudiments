@@ -31,6 +31,7 @@
 		utimes,mknod,mkfifo,mkstemp,access,xattr-related function
 		wrappers to the file class
 	added basename/dirname methods and ftok wrapper to file class
+	added a few pathconf wrappers to file class
 	added dup/dup2 wrappers to filedescriptor class
 	added directory class
 	removed static methods that took an "int fd" from file class

@@ -8,6 +8,9 @@
 // need for umask...
 #include <sys/stat.h>
 
+// need for memset...
+#include <string.h>
+
 unixserversocket::unixserversocket() : serversocket(), unixsocket() {
 	mask=0;
 }

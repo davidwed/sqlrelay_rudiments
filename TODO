@@ -99,18 +99,15 @@ internationalization:
 	libintl.h - gettext functions
 	stdlib.h - rpmatch() - response match
 
-path class:
+glob class:
 	glob.h - glob(),globfree(),glob_pattern_p()
+
+filesystem traversal class:
 	fts.h/ftw.h - file heirarchy traversal functions
 			fts_open(),fts_close()
 			fts_children(),fts_read(),fts_set()
 			ftw()/nftw() - call a function on every
 					element in a directory tree
-
-file class:
-	unistd.h - pathconf()/fpathconf():
-				__POSIX_LINK_MAX()
-				__POSIX_CHOWN_RESTRICTED()
 
 link class:
 	unistd.h - lchown()
@@ -183,7 +180,6 @@ bit manipulation class:
 commandline class:
 	getopt.h - make sure commandline class has full functionality
 			getopt(),getopt_long(),getopt_long_only()
-	stdlib.h - getsubopt() - comma-seperated value parser
 
 raw buffers:
 	string.h -

@@ -226,9 +226,11 @@ class file : public filedescriptor {
 		// has been copied into the disk's write cache, not
 		// necessarily to the disk itself.
 		bool	sync();
+		#ifdef HAVE_FDATASYNC
 		bool	dataSync();
 			// Similar to sync() but does not wait for the file's
 			// last-access or last-modification times to be copied.
+		#endif
 
 
 		// By default, the open() and create() methods call 
@@ -314,6 +316,15 @@ class file : public filedescriptor {
 		bool	changeOwnerUserId(uid_t uid);
 		bool	changeOwnerGroupId(const char *newgroup);
 		bool	changeOwnerGroupId(gid_t gid);
+
+		bool	canChangeOwner();
+			// Returns true if any of the changeOwner()
+			// methods are allowed on "filename" and
+			// false otherwise.
+
+		long	maxLinks();
+			// Returns the maximum number of links that can be
+			// created to "filename".
 
 
 		#ifdef HAVE_XATTRS
@@ -591,6 +602,11 @@ class file : public filedescriptor {
 		static bool	changeOwnerGroupId(const char *filename,
 							gid_t gid);
 
+		static bool	canChangeOwner(const char *filename);
+				// Returns true if any of the changeOwner()
+				// methods are allowed on "filename" and
+				// false otherwise.
+
 
 		// These methods allow you to override the last access and/or
 		// modification time of a file.
@@ -635,6 +651,10 @@ class file : public filedescriptor {
 				// be non-zero) suitable for use with
 				// semaphores, shared memory segments and
 				// message queues.
+
+		static long	maxLinks(const char *filename);
+				// Returns the maximum number of links that
+				// can be created to "filename".
 
 	#include <rudiments/private/file.h>
 };

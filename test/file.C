@@ -112,7 +112,7 @@ int main(int argc, const char **argv) {
 	printf("	hard links : %ld\n",nlink);
 
 
-	char	*path="/usr/local/firstworks/include/rudiments/path.h";
+	char	*path="/usr/local/firstworks/include/rudiments/file.h";
 	char	*dirname=file::dirname(path);
 	printf("dirname(%s)=%s\n",path,dirname);
 	delete[] dirname;
@@ -127,4 +127,7 @@ int main(int argc, const char **argv) {
 
 	printf("key=%d\n",file::generateKey("/",1));
 
+	printf("maxLinks(%s)=%d\n",path,file::maxLinks(path));
+
+	printf("canChangeOwner(%s)=%d\n",path,file::canChangeOwner(path));
 }

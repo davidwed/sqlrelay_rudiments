@@ -52,6 +52,9 @@
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
 
+/* Some systems have fdatasync */
+#undef HAVE_FDATASYNC
+
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
@@ -139,6 +142,9 @@
 
 /* Some msghdr structs have a msg_controllen member */
 #undef HAVE_MSGHDR_MSG_CONTROLLEN
+
+/* Some msghdr structs have a msg_flags member */
+#undef HAVE_MSGHDR_MSG_FLAGS
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H

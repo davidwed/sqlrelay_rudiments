@@ -157,6 +157,10 @@ AC_MSG_CHECKING(for struct msghdr.msg_controllen)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 struct msghdr m; m.msg_controllen=0;,AC_DEFINE(HAVE_MSGHDR_MSG_CONTROLLEN,1,Some msghdr structs have a msg_controllen member) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for struct msghdr.msg_flags)
+AC_TRY_LINK([#include <sys/types.h>
+#include <sys/socket.h>],
+struct msghdr m; m.msg_flags=0;,AC_DEFINE(HAVE_MSGHDR_MSG_FLAGS,1,Some msghdr structs have a msg_flags member) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if struct stat contains st_blksize)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
@@ -363,6 +367,11 @@ AC_MSG_CHECKING(readdir_r)
 AC_TRY_LINK([#include <stdlib.h>
 #include <dirent.h>],
 readdir_r(NULL,NULL,NULL);,AC_DEFINE(HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(fdatasync)
+AC_TRY_LINK([#include <stdlib.h>
+#include <unistd.h>],
+fdatasync(0);,AC_DEFINE(HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_RPC
 

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/unixclientsocket.h>
+#include <rudiments/charstring.h>
 
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -53,7 +54,7 @@ int unixclientsocket::connect() {
 
 	// set the filename to connect to
 	sockaddrun.sun_family=AF_UNIX;
-	strcpy(sockaddrun.sun_path,filename);
+	charstring::copy(sockaddrun.sun_path,filename);
 
 	// create a unix socket
 	if ((fd=::socket(AF_UNIX,SOCK_STREAM,0))==-1) {

@@ -46,8 +46,10 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	messageheader.msg_name=NULL;
 	messageheader.msg_namelen=0;
 
+	#ifdef HAVE_MSGHDR_MSG_FLAGS
 	// initialize flags to 0
 	messageheader.msg_flags=0;
+	#endif
 
 	// must send at least 1 iovector with 1 byte of real data
 	struct iovec	iovector[1];
@@ -104,8 +106,10 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	messageheader.msg_name=NULL;
 	messageheader.msg_namelen=0;
 
+	#ifdef HAVE_MSGHDR_MSG_FLAGS
 	// initialize flags to 0
 	messageheader.msg_flags=0;
+	#endif
 
 	// the process that's going to handoff it's socket will also 
 	// send a single iovector with a single byte of data in it, 

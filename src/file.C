@@ -667,6 +667,14 @@ bool file::changeOwnerGroupId(const char *filename, gid_t gid) {
 	return !chown(filename,(uid_t)-1,gid);
 }
 
+bool file::canChangeOwner(const char *filename) {
+	return !pathconf(filename,_PC_CHOWN_RESTRICTED);
+}
+
+bool file::canChangeOwner() {
+	return !fpathconf(fd,_PC_CHOWN_RESTRICTED);
+}
+
 bool file::rename(const char *oldpath, const char *newpath) {
 	return !::rename(oldpath,newpath);
 }
@@ -727,9 +735,11 @@ bool file::sync() {
 	return !fsync(fd);
 }
 
+#ifdef HAVE_FDATASYNC
 bool file::dataSync() {
 	return !fdatasync(fd);
 }
+#endif
 
 bool file::setLastAccessTime(const char *filename,
 					time_t lastaccesstime) {
@@ -1224,4 +1234,12 @@ char *file::basename(const char *filename, const char *suffix) {
 
 key_t file::generateKey(const char *filename, int id) {
 	return ::ftok(filename,id);
+}
+
+long file::maxLinks(const char *filename) {
+	return pathconf(filename,_PC_LINK_MAX);
+}
+
+long file::maxLinks() {
+	return fpathconf(fd,_PC_LINK_MAX);
 }
