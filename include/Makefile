@@ -96,6 +96,7 @@ install:
 	$(INSTALL) -m 644 rudiments/private/randomnumberinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/regularexpression.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/regularexpressioninlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/rudimentsinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/semaphoreset.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/semaphoresetinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/serverinlines.h $(incdir)/rudiments/private

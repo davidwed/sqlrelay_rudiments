@@ -1,14 +1,8 @@
-INLINE should be RUDIMENTS_INLINE
-
-runAsUser/Group doesn't appear to work
-
-update rpm INSTALL docs
-
 xmlsax compilation generates warning with xscale_le-gcc
 xmldomnode should probably use list class
 
 dtd test crashes
-table class is generally screwed up
+table, simpleconfigfile, serialportsettings classes are incomplete
 
 need generic parser/lexer classes, use them for xmlsax
 

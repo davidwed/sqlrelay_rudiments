@@ -60,20 +60,21 @@ CUSTOM INSTALL:
 
 RPM INSTALL:
 
-	If your system supports RedHat Package Manager RPM's then you can
-	build and install them like this:
+	If your system supports RedHat Package Manager RPM version 4.0.3 or
+	greater then you can build RPMS by running the following command
+	against the distribution tarball:
 
-		./configure
-	
-	As root:
-		make rpm
+		rpm -ta rudiments-xxx.tar.gz
 
-	This will generate RPM's in the packages/RPMS directory.  You can 
-	install them by changing directories into packages/RPMS and executing 
-	the following command as root:
+	(where xxx is replaced with the version number)
 
-		rpm -i *
+	This will generate RPM's in the system-wide RPM directory (usually
+	/usr/src/redhat/RPMS or /usr/local/rpm/RPMS) under the subdirectory
+	corresponding to your system architecture.  You can install them by
+	changing directories into that directory and executing the following
+	command as root:
 
+		rpm -i rudiments-*
 
 DEBIAN INSTALL:
 
