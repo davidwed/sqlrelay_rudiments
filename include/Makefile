@@ -61,6 +61,10 @@ ifeq ($(INCLUDE_FILE),1)
 	HEADERS += file.h
 	PRIVATEHEADERS += file.h fileincludes.h
 endif
+ifeq ($(INCLUDE_DEVICE),1)
+	HEADERS += device.h
+	PRIVATEHEADERS += deviceincludes.h
+endif
 ifeq ($(INCLUDE_PATH),1)
 	HEADERS += path.h
 	PRIVATEHEADERS += pathincludes.h

@@ -1,7 +1,6 @@
 file class:
-	needs static versions of create methods
-	probably don't need static methods that take a file
-		descriptor as first argument
+	need static versions of create methods
+	move create*Link/resolveSymbolicLink into link class
 
 what does the logger.C warning mean
 

@@ -361,44 +361,20 @@ bool file::getCurrentProperties() {
 	*out=st.member; \
 	return true;
 
-#define FSTAT(fd,out,member) \
-	struct stat st; \
-	if (fstat(fd,&st)==-1) { \
-		return false; \
-	} \
-	*out=st.member; \
-	return true;
-
 bool file::getPermissions(const char *filename, mode_t *mode) {
 	STAT(filename,mode,st_mode)
-}
-
-bool file::getPermissions(int fd, mode_t *mode) {
-	FSTAT(fd,mode,st_mode)
 }
 
 bool file::getOwnerUserId(const char *filename, uid_t *uid) {
 	STAT(filename,uid,st_uid)
 }
 
-bool file::getOwnerUserId(int fd, uid_t *uid) {
-	FSTAT(fd,uid,st_uid)
-}
-
 bool file::getOwnerGroupId(const char *filename, gid_t *gid) {
 	STAT(filename,gid,st_gid)
 }
 
-bool file::getOwnerGroupId(int fd, gid_t *gid) {
-	FSTAT(fd,gid,st_gid)
-}
-
 bool file::getSize(const char *filename, off_t *size) {
 	STAT(filename,size,st_size)
-}
-
-bool file::getSize(int fd, off_t *size) {
-	FSTAT(fd,size,st_size)
 }
 
 bool file::getBlockSize(const char *filename, blksize_t *size) {
@@ -410,28 +386,9 @@ bool file::getBlockSize(const char *filename, blksize_t *size) {
 #endif
 }
 
-bool file::getBlockSize(int fd, blksize_t *size) {
-#ifdef HAVE_BLKSIZE_T
-	FSTAT(fd,size,st_blksize)
-#else
-	*size=-1;
-	return true;
-#endif
-}
-
-
 bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 #ifdef HAVE_BLKCNT_T
 	STAT(filename,blocks,st_blocks)
-#else
-	*blocks=-1;
-	return true;
-#endif
-}
-
-bool file::getBlockCount(int fd, blkcnt_t *blocks) {
-#ifdef HAVE_BLKCNT_T
-	FSTAT(fd,blocks,st_blocks)
 #else
 	*blocks=-1;
 	return true;
@@ -447,19 +404,9 @@ int file::isSocket(const char *filename) {
 	return (stat(filename,&st)>-1)?S_ISSOCK(st.st_mode):-1;
 }
 
-int file::isSocket(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISSOCK(st.st_mode):-1;
-}
-
 int file::isSymbolicLink(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISLNK(st.st_mode):-1;
-}
-
-int file::isSymbolicLink(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISLNK(st.st_mode):-1;
 }
 
 int file::isRegularFile(const char *filename) {
@@ -467,19 +414,9 @@ int file::isRegularFile(const char *filename) {
 	return (stat(filename,&st)>-1)?S_ISREG(st.st_mode):-1;
 }
 
-int file::isRegularFile(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISREG(st.st_mode):-1;
-}
-
 int file::isBlockDevice(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISBLK(st.st_mode):-1;
-}
-
-int file::isBlockDevice(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISBLK(st.st_mode):-1;
 }
 
 int file::isDirectory(const char *filename) {
@@ -487,19 +424,9 @@ int file::isDirectory(const char *filename) {
 	return (stat(filename,&st)>-1)?S_ISDIR(st.st_mode):-1;
 }
 
-int file::isDirectory(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISDIR(st.st_mode):-1;
-}
-
 int file::isCharacterDevice(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISCHR(st.st_mode):-1;
-}
-
-int file::isCharacterDevice(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISCHR(st.st_mode):-1;
 }
 
 int file::isFifo(const char *filename) {
@@ -507,67 +434,32 @@ int file::isFifo(const char *filename) {
 	return (stat(filename,&st)>-1)?S_ISFIFO(st.st_mode):-1;
 }
 
-int file::isFifo(int fd) {
-	struct stat	st;
-	return (fstat(fd,&st)>-1)?S_ISFIFO(st.st_mode):-1;
-}
-
-
 bool file::getLastAccessTime(const char *filename, time_t *atime) {
 	STAT(filename,atime,st_atime)
-}
-
-bool file::getLastAccessTime(int fd, time_t *atime) {
-	FSTAT(fd,atime,st_atime)
 }
 
 bool file::getLastModificationTime(const char *filename, time_t *mtime) {
 	STAT(filename,mtime,st_mtime)
 }
 
-bool file::getLastModificationTime(int fd, time_t *mtime) {
-	FSTAT(fd,mtime,st_mtime)
-}
-
 bool file::getLastChangeTime(const char *filename, time_t *ctime) {
 	STAT(filename,ctime,st_ctime)
 }
 
-bool file::getLastChangeTime(int fd, time_t *ctime) {
-	FSTAT(fd,ctime,st_ctime)
-}
-
-
 bool file::getDevice(const char *filename, dev_t *dev) {
 	STAT(filename,dev,st_dev)
-}
-
-bool file::getDevice(int fd, dev_t *dev) {
-	FSTAT(fd,dev,st_dev)
 }
 
 bool file::getDeviceType(const char *filename, dev_t *devtype) {
 	STAT(filename,devtype,st_rdev)
 }
 
-bool file::getDeviceType(int fd, dev_t *devtype) {
-	FSTAT(fd,devtype,st_rdev)
-}
-
 bool file::getInode(const char *filename, ino_t *inode) {
 	STAT(filename,inode,st_ino)
 }
 
-bool file::getInode(int fd, ino_t *inode) {
-	FSTAT(fd,inode,st_ino)
-}
-
 bool file::getNumberOfHardLinks(const char *filename, nlink_t *nlink) {
 	STAT(filename,nlink,st_nlink)
-}
-
-bool file::getNumberOfHardLinks(int fd, nlink_t *nlink) {
-	FSTAT(fd,nlink,st_nlink)
 }
 
 mode_t file::getPermissions() const {
@@ -781,15 +673,15 @@ bool file::remove(const char *filename) {
 	return !unlink(filename);
 }
 
-bool file::link(const char *oldpath, const char *newpath) {
-	return !::link(oldpath,newpath);
+bool file::createHardLink(const char *oldpath, const char *newpath) {
+	return !link(oldpath,newpath);
 }
 
-bool file::symlink(const char *oldpath, const char *newpath) {
-	return !::symlink(oldpath,newpath);
+bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
+	return !symlink(oldpath,newpath);
 }
 
-char *file::readlink(const char *filename) {
+char *file::resolveSymbolicLink(const char *filename) {
 
 	size_t	buffersize=1024;
 	for (;;) {
@@ -872,14 +764,6 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 
 bool file::setLastAccessAndModificationTimes(const char *filename) {
 	return !utimes(filename,NULL);
-}
-
-bool file::createDeviceNode(const char *filename, bool blockdevice,
-				unsigned short major, unsigned short minor,
-				mode_t perms) {
-	mode_t	mode=perms|((blockdevice)?S_IFBLK:S_IFCHR);
-	dev_t	dev=(major<<8|minor);
-	return !mknod(filename,mode,dev);
 }
 
 bool file::createFifo(const char *filename, mode_t perms) {

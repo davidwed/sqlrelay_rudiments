@@ -46,6 +46,10 @@ ifeq ($(INCLUDE_FILE),1)
 	SRCS += file.C
 	LOBJS += file.lo
 endif
+ifeq ($(INCLUDE_DEVICE),1)
+	SRCS += device.C
+	LOBJS += device.lo
+endif
 ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
 	SRCS += filedescriptor.C
 	LOBJS += filedescriptor.lo
