@@ -14,7 +14,7 @@
 class listener {
 	public:
 			listener();
-			~listener();
+		virtual	~listener();
 
 		virtual	void	addFileDescriptor(int fd);
                         // Adds the specified file descriptor to

@@ -36,6 +36,7 @@ int hostentry::initialize(const char *hostname) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		he=NULL;
 		return ((he=gethostbyname(hostname))!=NULL);
@@ -66,6 +67,7 @@ int hostentry::initialize(const char *address, int len, int type) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		he=NULL;
 		return ((he=gethostbyaddr(address,len,type))!=NULL);

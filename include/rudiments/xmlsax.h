@@ -18,7 +18,7 @@ class xmlsax : public errorhandler {
 	public:
 
 			xmlsax();
-			~xmlsax();
+		virtual	~xmlsax();
 
 
 		// When these methods are run, they parse the XML.  As these

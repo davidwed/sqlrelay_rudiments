@@ -17,7 +17,7 @@ class xmldom : public xmlsax {
 	public:
 
 			xmldom();
-			~xmldom();
+		virtual	~xmldom();
 
 		int	parseFile(const char *filename);
 			// Parse file "filename" and generate a DOM tree.

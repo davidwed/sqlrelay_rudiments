@@ -25,8 +25,8 @@ BASECPPFLAGS = @CPPFLAGS@
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
-CXXFLAGS = -pedantic -w @CXXFLAGS@
-DEBUGCXXFLAGS = -pedantic -w @DEBUGCXXFLAGS@
+CXXFLAGS = -pedantic @CXXFLAGS@
+DEBUGCXXFLAGS = -pedantic @DEBUGCXXFLAGS@
 
 # libtool command
 LIBTOOL = @LIBTOOL@

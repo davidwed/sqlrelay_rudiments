@@ -35,6 +35,7 @@ int groupentry::initialize(const char *groupname) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		return ((grp=getgrnam(groupname))!=NULL);
 	#endif
@@ -63,6 +64,7 @@ int groupentry::initialize(gid_t groupid) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		return ((grp=getgrgid(groupid))!=NULL);
 	#endif

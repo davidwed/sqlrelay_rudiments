@@ -39,7 +39,7 @@ inline char *groupentry::getPassword(const char *groupname) {
 
 inline gid_t groupentry::getGroupId(const char *groupname) {
 	groupentry	grp;
-	return (grp.initialize(groupname))?grp.getGroupId():NULL;
+	return (grp.initialize(groupname))?grp.getGroupId():-1;
 }
 
 inline char **groupentry::getMembers(const char *groupname) {

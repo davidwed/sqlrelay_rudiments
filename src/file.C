@@ -13,10 +13,10 @@
 #include <string.h>
 
 char *file::getContents() {
-	char	*contents=new char[st.st_size+1];
-	contents[st.st_size]=(char)NULL;
-	return (st.st_size==0 || read(contents,st.st_size)==sizeof(st.st_size))?
-			contents:NULL;
+	off_t	size=(fd>-1)?st.st_size:0;
+	char	*contents=new char[size+1];
+	contents[size]=(char)NULL;
+	return (size==0 || read(contents,size)==size)?contents:NULL;
 }
 
 char *file::getContents(const char *name) {

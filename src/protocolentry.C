@@ -35,6 +35,7 @@ int protocolentry::initialize(const char *protocolname) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		pe=NULL;
 		return ((pe=getprotobyname(protocolname))!=NULL);
@@ -64,6 +65,7 @@ int protocolentry::initialize(int number) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		pe=NULL;
 		return ((pe=getprotobynumber(number))!=NULL);

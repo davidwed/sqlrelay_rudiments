@@ -35,6 +35,7 @@ int passwdentry::initialize(const char *username) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		return ((pwd=getpwnam(username))!=NULL);
 	#endif
@@ -63,6 +64,7 @@ int passwdentry::initialize(uid_t userid) {
 				return 0;
 			}
 		}
+		return 0;
 	#else
 		return ((pwd=getpwuid(userid))!=NULL);
 	#endif
