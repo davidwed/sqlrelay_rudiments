@@ -5,11 +5,11 @@
 		static	void	shutDown();
 		static	void	crash();
 
-		static	signalhandler	*shutdownhandler;
+		static	signalhandler	shutdownhandler;
 		static	void		(*shutdownfunc)(int);
 
-		static	signalhandler	*crashhandler;
+		static	signalhandler	crashhandler;
 		static	void		(*crashfunc)(int);
 
-		static	signalhandler	*deadchildhandler;
+		static	signalhandler	deadchildhandler;
 		static	void		waitOnChildren();

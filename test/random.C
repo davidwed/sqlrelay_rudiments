@@ -23,7 +23,7 @@ int	main() {
         printf("\n");
 
         printf("Another random number between 100 and 1000: ");
-        int     basenumber=randomnumber::generateNumber(dt.getEpoch());
+        int     basenumber=randomnumber::generateNumber(dt.getEpoch()+1);
         int     scalednumber=randomnumber::scaleNumber(basenumber,100,1000);
         printf("%d",scalednumber);
         printf("\n");
@@ -34,7 +34,7 @@ int	main() {
         printf("\n");
 
         printf("Another random number between -100 and -1000: ");
-        basenumber=randomnumber::generateNumber(dt.getEpoch());
+        basenumber=randomnumber::generateNumber(dt.getEpoch()+1);
         scalednumber=randomnumber::scaleNumber(basenumber,-100,-1000);
         printf("%d",scalednumber);
         printf("\n");
@@ -44,7 +44,7 @@ int	main() {
         printf("\n");
 
         printf("Another random number between -100 and 100: ");
-        basenumber=randomnumber::generateNumber(dt.getEpoch());
+        basenumber=randomnumber::generateNumber(dt.getEpoch()+1);
         scalednumber=randomnumber::scaleNumber(basenumber,-100,100);
         printf("%d",scalednumber);
         printf("\n");

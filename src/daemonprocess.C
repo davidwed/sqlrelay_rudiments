@@ -9,74 +9,61 @@
 #include <rudiments/fileproperties.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/file.h>
+#include <rudiments/text.h>
 
 #include <stdlib.h>
 
 #ifdef __GNUC__
-static signalhandler	*daemonprocess::shutdownhandler;
-static signalhandler	*daemonprocess::crashhandler;
+static signalhandler	daemonprocess::shutdownhandler;
+static signalhandler	daemonprocess::crashhandler;
 static void		(*daemonprocess::shutdownfunc)(int);
 static void		(*daemonprocess::crashfunc)(int);
-static signalhandler	*daemonprocess::deadchildhandler;
+static signalhandler	daemonprocess::deadchildhandler;
 #endif
 
 daemonprocess::daemonprocess() {
 
-	deadchildhandler=new signalhandler();
-	shutdownhandler=new signalhandler();
-	crashhandler=new signalhandler();
-
-	deadchildhandler->setHandler((void *)waitOnChildren);
-	deadchildhandler->addFlag(SA_NOCLDSTOP);
-	deadchildhandler->handleSignal(SIGCHLD);
+	deadchildhandler.setHandler((void *)waitOnChildren);
+	deadchildhandler.addFlag(SA_NOCLDSTOP);
+	deadchildhandler.handleSignal(SIGCHLD);
 }
 
 daemonprocess::~daemonprocess() {
 	waitOnChildren();
-
-	delete deadchildhandler;
-	delete shutdownhandler;
-	delete crashhandler;
 }
 
 inline int daemonprocess::runAsUser(const char *username) const {
-	passwdentry	*pwent=new passwdentry();
-	int	retval=(pwent->initialize(username) &&
-			runAsUserId(pwent->getUserId()));
-	delete pwent;
-	return retval;
+	passwdentry	pwent;
+	return (pwent.initialize(username) &&
+			runAsUserId(pwent.getUserId()));
 }
 
 inline int daemonprocess::runAsGroup(const char *groupname) const {
-	groupentry	*grent=new groupentry();
-	int	retval=(grent->initialize(groupname) &&
-			runAsGroupId(grent->getGroupId()));
-	delete grent;
-	return retval;
+	groupentry	grent;
+	return (grent.initialize(groupname) &&
+			runAsGroupId(grent.getGroupId()));
+}
+
+int daemonprocess::createPidFile(const char *filename, mode_t permissions) {
+	file	fl;
+	char	*pid=text::parseNumber(getpid());
+	size_t	pidlen=strlen(pid);
+	int	retval=fl.create(filename,permissions,(void *)pid,pidlen);
+	delete[] pid;
+	fl.close();
+	return (retval==pidlen);
 }
 
 int daemonprocess::checkForPidFile(const char *filename) const {
-
-	// open the file, don't need to check for error here, getSize() below
-	// will return -1 if the file descriptor is no good
-	int	fd=open(filename,O_RDONLY);
-
-	// get the file size
-	off_t	size;
-	if (fileproperties::getSize(fd,&size)==-1) {
+	file	fl;
+	if (!fl.open(filename,O_RDONLY)) {
 		return -1;
 	}
-
-	// get the contents of the file (a pid in string form)
-	int	retval=-1;
-	char	*pidstring=new char[size+1];
-	if (read(fd,pidstring,size)==size) {
-		pidstring[size]=(char)NULL;
-		retval=atoi(pidstring);
-	}
+	char	*pidstring=fl.getContents();
+	fl.close();
+	int	retval=(pidstring)?atoi(pidstring):-1;
 	delete[] pidstring;
-
-	// return the pid
 	return retval;
 }
 
@@ -105,15 +92,15 @@ void daemonprocess::handleShutDown(void *shutdownfunction) {
 
 	shutdownfunc=(void(*)(int))shutdownfunction;
 
-	shutdownhandler->setHandler((void *)shutDown);
-	shutdownhandler->handleSignal(SIGINT);
-	shutdownhandler->handleSignal(SIGTERM);
+	shutdownhandler.setHandler((void *)shutDown);
+	shutdownhandler.handleSignal(SIGINT);
+	shutdownhandler.handleSignal(SIGTERM);
 }
 
 void daemonprocess::handleCrash(void *crashfunction) {
 
 	crashfunc=(void(*)(int))crashfunction;
 
-	crashhandler->setHandler((void *)crash);
-	crashhandler->handleSignal(SIGSEGV);
+	crashhandler.setHandler((void *)crash);
+	crashhandler.handleSignal(SIGSEGV);
 }

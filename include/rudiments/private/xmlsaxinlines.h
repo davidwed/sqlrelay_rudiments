@@ -13,7 +13,6 @@ inline xmlsax::~xmlsax() {
 
 inline void xmlsax::reset() {
 	string=NULL;
-	filedescriptor=-1;
 	line=1;
 }
 

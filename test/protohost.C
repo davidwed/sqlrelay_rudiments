@@ -6,13 +6,11 @@
 
 int	main() {
 
-	hostentry	*he=new hostentry();
-	he->initialize("localhost");
-	he->print();
-	delete he;
+	hostentry	he;
+	he.initialize("localhost");
+	he.print();
 
-	protocolentry	*pe=new protocolentry();
-	pe->initialize("tcp");
-	pe->print();
-	delete he;
+	protocolentry	pe;
+	pe.initialize("tcp");
+	pe.print();
 }

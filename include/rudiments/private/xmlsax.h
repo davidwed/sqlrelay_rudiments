@@ -3,7 +3,7 @@
 
 	private:
 			void	reset();
-			int	close();
+			void	close();
 			int	parse();
 			void	parseFailed();
 			char	parseTag(char current);
@@ -20,5 +20,5 @@
 			char	getCharacter();
 			char	*string;
 			char	*ptr;
-			int	filedescriptor;
+			file	fl;
 			long	line;

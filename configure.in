@@ -7,7 +7,7 @@ AC_ARG_WITH(cxxflags,
 	CXXFLAGS="$CXXFLAGS")
 AC_ARG_ENABLE(small-code,
 	[  --enable-small-code     optimize for small code size],
-	DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -O -Os -fomit-frame-pointer -fno-exceptions",
+	DEBUGCXXFLAGS="$CXXFLAGS -g -pg -DSMALL_CODE=1"; CXXFLAGS="$CXXFLAGS -O -Os -fomit-frame-pointer -fno-exceptions -DSMALL_CODE=1",
 	DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -fomit-frame-pointer -fno-exceptions")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],

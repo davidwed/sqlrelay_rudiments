@@ -15,13 +15,11 @@
 
 // signalhandler methods
 signalhandler::signalhandler() {
-	handlerstruct=new (struct sigaction);
 	removeAllSignalsFromMask();
 	removeAllFlags();
 }
 
 signalhandler::signalhandler(int signum, void *handler) {
-	handlerstruct=new (struct sigaction);
 	removeAllSignalsFromMask();
 	removeAllFlags();
 	setHandler(handler);

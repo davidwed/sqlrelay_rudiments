@@ -1461,7 +1461,7 @@ fi;
 # Check whether --enable-small-code or --disable-small-code was given.
 if test "${enable_small_code+set}" = set; then
   enableval="$enable_small_code"
-  DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -O -Os -fomit-frame-pointer -fno-exceptions"
+  DEBUGCXXFLAGS="$CXXFLAGS -g -pg -DSMALL_CODE=1"; CXXFLAGS="$CXXFLAGS -O -Os -fomit-frame-pointer -fno-exceptions -DSMALL_CODE=1"
 else
   DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -fomit-frame-pointer -fno-exceptions"
 fi;

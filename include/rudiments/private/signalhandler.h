@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		struct	sigaction	*handlerstruct;
+		struct	sigaction	handlerstruct;
 			int		signalnumber;

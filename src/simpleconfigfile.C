@@ -11,31 +11,19 @@
 int simpleconfigfile::parseFile(const char *varfilename) {
 
 	// open file
-	file	configfile();
+	file	configfile;
 	if (!configfile.open(varfilename,O_RDONLY,NULL)) {
 		return 0;
 	}
 
-	// read the file into a string
-	off_t	size;
-	if (!fileproperties::getSize(configfile.getFileDescriptor(),&size)) {
-		return 0;
-	}
-	char	*filestring=new char[size+1];
-	if (configfile.read(filestring,size)!=size) {
-		delete[] filestring;
-		return 0;
-	}
-
-	// close the file
-	if (!configfile.close()) {
-		return 0;
-	}
+	// get the contents of the file
+	char	*filestring=configfile.getContents();
+	configfile.close();
 	
 	// parse the string
 	parseString(filestring);
 
-	// delete the string
+	// clean up
 	delete[] filestring;
 
 	return 1;

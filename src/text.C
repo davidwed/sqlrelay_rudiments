@@ -257,7 +257,7 @@ int text::countTrailingSpaces(char *string, int length) {
 }
 
 char *text::parseNumber(long number) {
-	char	*string=new char[integerLength(number)];
+	char	*string=new char[integerLength(number)+1];
 	sprintf(string,"%d",number);
 	return string;
 }

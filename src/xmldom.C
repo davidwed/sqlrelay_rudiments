@@ -18,17 +18,17 @@
 #endif
 
 int xmldom::writeFile(const char *filename, mode_t perms) const {
-	int	fd=::open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms);
-	if (fd==-1) {
+	file	fl;
+	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {
 		return 0;
 	}
 	stringbuffer	*xml=rootnode->xml();
 	int	retval=1;
 	int	length=strlen(xml->getString());
-	if (::write(fd,xml->getString(),length)!=length) {
+	if (fl.write(xml->getString(),length)!=length) {
 		retval=0;
 	}
-	if (::close(fd)==-1) {
+	if (!fl.close()) {
 		retval=0;
 	}
 	return retval;

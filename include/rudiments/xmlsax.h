@@ -8,6 +8,7 @@
 
 #include <rudiments/errorhandler.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/file.h>
 
 // The xmlsax class is a base class for an XML SAX parser.  To use this
 // class, you should create a class that inherits from it and implements the

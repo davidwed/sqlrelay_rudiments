@@ -20,7 +20,7 @@ inline void text::bothTrim(char *string, char character) {
 
 inline int text::integerLength(long number) {
 	int	length=(number>0)?0:1;
-	for (long num=number; num>0; num=num/10) {
+	for (long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;

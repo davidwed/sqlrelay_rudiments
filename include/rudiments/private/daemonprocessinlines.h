@@ -17,19 +17,6 @@
 	#include <sys/wait.h>
 #endif
 
-inline int daemonprocess::createPidFile(const char *filename,
-						mode_t permissions) {
-	int	fd=open(filename,O_CREAT|O_TRUNC,permissions);
-	if (fd>-1) {
-		char	pidbuffer[21];
-		sprintf(pidbuffer,"%d",getpid());
-		write(fd,pidbuffer,strlen(pidbuffer));
-		close(fd);
-		return 1;
-	}
-	return 0;
-}
-
 inline void daemonprocess::waitOnChildren() {
 	while(waitpid(-1,NULL,WNOHANG)>0);
 }

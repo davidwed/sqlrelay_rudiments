@@ -57,54 +57,51 @@ inline int signalmanager::examineBlockedSignals(sigset_t *sigset) {
 
 
 // signalhandler methods
-inline signalhandler::~signalhandler() {
-	delete handlerstruct;
-}
 
 inline void signalhandler::setHandler(void *handler) {
 	#ifdef SIGNAL_HANDLER_INT
-		handlerstruct->sa_handler=(void(*)(int))handler;
+		handlerstruct.sa_handler=(void(*)(int))handler;
 	#else
-		handlerstruct->sa_handler=(void(*)(void))handler;
+		handlerstruct.sa_handler=(void(*)(void))handler;
 	#endif
 }
 
 inline void signalhandler::removeAllFlags() {
-	handlerstruct->sa_flags=0;
+	handlerstruct.sa_flags=0;
 }
 
 inline void signalhandler::addFlag(int flag) {
-	handlerstruct->sa_flags|=flag;
+	handlerstruct.sa_flags|=flag;
 }
 
 inline int signalhandler::addAllSignalsToMask() {
-	return sigfillset(&handlerstruct->sa_mask);
+	return sigfillset(&handlerstruct.sa_mask);
 }
 
 inline int signalhandler::addSignalToMask(int signum) {
-	return sigaddset(&handlerstruct->sa_mask,signum);
+	return sigaddset(&handlerstruct.sa_mask,signum);
 }
 
 inline int signalhandler::removeSignalFromMask(int signum) {
-	return sigdelset(&handlerstruct->sa_mask,signum);
+	return sigdelset(&handlerstruct.sa_mask,signum);
 }
 
 inline int signalhandler::removeAllSignalsFromMask() {
-	return sigemptyset(&handlerstruct->sa_mask);
+	return sigemptyset(&handlerstruct.sa_mask);
 }
 
 inline int signalhandler::signalIsInMask(int signum) const {
-	return sigismember(&handlerstruct->sa_mask,signum);
+	return sigismember(&handlerstruct.sa_mask,signum);
 }
 
-inline sigset_t *signalhandler::getMask() const {
-	return &handlerstruct->sa_mask;
+inline sigset_t signalhandler::getMask() const {
+	return handlerstruct.sa_mask;
 }
 
 inline int signalhandler::getFlags() const {
-	return handlerstruct->sa_flags;
+	return handlerstruct.sa_flags;
 }
 
 inline int signalhandler::handleSignal(int signum) {
-	return sigaction(signum,handlerstruct,(struct sigaction *)NULL);
+	return sigaction(signum,&handlerstruct,(struct sigaction *)NULL);
 }

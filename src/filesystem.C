@@ -19,6 +19,7 @@
 
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/file.h>
 #include <errno.h>
 
 #ifdef HAVE_STRINGS
@@ -29,13 +30,13 @@
 int filesystem::copy(char *source, char *destination) {
 
 	// open the files
-	int	src=open(source,O_RDONLY);
-	if (src==-1) {
+	file	src;
+	if (!src.open(source,O_RDONLY)) {
 		return 0;
 	}
-	int	dst=open(destination,O_WRONLY|O_CREAT|O_TRUNC);
-	if (dst==-1) {
-		close(src);
+	file	dst;
+	if (!dst.open(destination,O_WRONLY|O_CREAT|O_TRUNC)) {
+		src.close();
 		return 0;
 	}
 
@@ -48,7 +49,7 @@ int filesystem::copy(char *source, char *destination) {
 		ssize_t	sizeread;
 		for (;;) {
 
-			sizeread=read(src,(void *)block,sizeof(block));
+			sizeread=src.read((void *)block,sizeof(block));
 
 			// retry reads that were interrupted by signals
 			if (sizeread==-1 && errno==EINTR) {
@@ -72,7 +73,7 @@ int filesystem::copy(char *source, char *destination) {
 		ssize_t	sizewritten;
 		for (;;) {
 
-			sizewritten=write(dst,(void *)block,sizeread);
+			sizewritten=dst.write((void *)block,sizeread);
 
 			// retry writes that were interrupted by signals
 			if (sizewritten==-1 && errno==EINTR) {
@@ -88,8 +89,8 @@ int filesystem::copy(char *source, char *destination) {
 	}
 
 	// close files
-	close(src);
-	close(dst);
+	src.close();
+	dst.close();
 
 	return retval;
 }
@@ -106,15 +107,12 @@ int filesystem::remove(char *file) {
 
 int filesystem::changeOwner(char *file, char *username, char *groupname) {
 
-	passwdentry	*passwdent=new passwdentry();
-	groupentry	*groupent=new groupentry();
-	int	retval=((username)?(!passwdent->initialize(username)):1) &&
-			((groupname)?(!groupent->initialize(groupname)):1) &&
-			(!chown(file,(username)?passwdent->getUserId():-1,
-				(groupname)?groupent->getGroupId():-1));
-	delete passwdent;
-	delete groupent;
-	return retval;
+	passwdentry	passwdent;
+	groupentry	groupent;
+	return ((username)?(!passwdent.initialize(username)):1) &&
+			((groupname)?(!groupent.initialize(groupname)):1) &&
+			(!chown(file,(username)?passwdent.getUserId():-1,
+				(groupname)?groupent.getGroupId():-1));
 }
 
 char **filesystem::list(char *pattern) {

@@ -30,6 +30,11 @@
 	added dtd class
 	uses reentrant getpw/getgr functions if available
 	uses reentrant gethostbyname/getprotobyname functions if available
+	uses localtime_r function if available
+	uses static instead of dynamically allocated variables now where
+		possible
+	configure defines -DSMALL_CODE=1 so routines can be written one way
+		or the other
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

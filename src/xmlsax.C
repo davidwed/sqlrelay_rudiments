@@ -25,18 +25,18 @@ int xmlsax::parseFile(const char *filename) {
 
 	// close any previously opened files, open the file, parse it, close
 	// it again
-	return (close() && (filedescriptor=open(filename,O_RDONLY))>-1 &&
-		parse() && close());
+	close();
+	int	retval=((fl.open(filename,O_RDONLY)) && parse());
+	close();
+	return retval;
 }
 
 int xmlsax::parseString(const char *string) {
 
 	// close any previously opened files
-	if (!close()) {
-		return 0;
-	}
+	close();
 
-	// reset filedescriptor/line
+	// reset fd/line
 	reset();
 
 	// set string pointers
@@ -46,17 +46,13 @@ int xmlsax::parseString(const char *string) {
 	return parse();
 }
 
-int xmlsax::close() {
+void xmlsax::close() {
 
-	// close any previously opened files
-	if (filedescriptor>-1 && ::close(filedescriptor)==-1) {
-		return 0;
-	}
-
-	// reset string/filedescriptor/line
+	// reset string/fd/line
 	reset();
 
-	return 1;
+	// close any previously opened files
+	fl.close();
 }
 
 int xmlsax::parse() {
@@ -729,8 +725,7 @@ char xmlsax::getCharacter() {
 		ptr++;
 		ch=*ptr;
 	} else {
-		if (read(filedescriptor,(void *)&ch,sizeof(char))!=
-							sizeof(char)) {
+		if (fl.read((void *)&ch,sizeof(char))!=sizeof(char)) {
 			ch=(char)NULL;
 		}
 	}
