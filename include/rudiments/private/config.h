@@ -61,7 +61,7 @@
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
-#define HAVE_MALLOC 1
+#define HAVE_MALLOC 0
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
@@ -173,13 +173,13 @@
 /* #undef HAVE_VFORK_H */
 
 /* Define to 1 if `fork' works. */
-/* #undef HAVE_WORKING_FORK */
+#define HAVE_WORKING_FORK 1
 
 /* Define to 1 if `vfork' works. */
 #define HAVE_WORKING_VFORK 1
 
 /* Some compliers don't support the inline keyword */
-#define INLINE 
+#define INLINE inline
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
@@ -225,7 +225,7 @@
 /* #undef inline */
 
 /* Define to rpl_malloc if the replacement function should be used. */
-/* #undef malloc */
+#define malloc rpl_malloc
 
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef mode_t */
