@@ -1,7 +1,7 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
 	private:
 		type		value;
-		listnode	*next;
-		listnode	*previous;
+		listnode<type>	*next;
+		listnode<type>	*previous;
