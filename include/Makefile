@@ -188,6 +188,10 @@ ifeq ($(INCLUDE_XMLSAX),1)
 	HEADERS += xmlsax.h
 	PRIVATEHEADERS += xmlsax.h xmlsaxincludes.h
 endif
+ifeq ($(INCLUDE_TIMER),1)
+	HEADERS += timer.h
+	PRIVATEHEADERS += timer.h timerincludes.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

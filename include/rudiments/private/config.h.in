@@ -146,6 +146,9 @@
 /* Some msghdr structs have a msg_flags member */
 #undef HAVE_MSGHDR_MSG_FLAGS
 
+/* Some systems have nanosleep */
+#undef HAVE_NANOSLEEP
+
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
 

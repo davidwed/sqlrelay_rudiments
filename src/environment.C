@@ -24,8 +24,8 @@ bool environment::setValue(const char *variable, const char *value) {
 	if (envstrings.getData((char *)variable,&pestr)) {
 		delete[] pestr;
 	}
-	pestr=new char[charstring::getLength(variable)+
-			charstring::getLength(value)+2];
+	pestr=new char[charstring::length(variable)+
+			charstring::length(value)+2];
 	sprintf(pestr,"%s=%s",variable,value);
 	if (putenv(pestr)!=-1) {
 		envstrings.setData((char *)variable,pestr);

@@ -21,6 +21,8 @@
 		bool	retryinterruptedreads;
 		bool	retryinterruptedwrites;
 		bool	retryinterruptedwaits;
+		bool	retryinterruptedfcntl;
+		bool	retryinterruptedioctl;
 		bool	allowshortreads;
 
 		listener	*lstnr;

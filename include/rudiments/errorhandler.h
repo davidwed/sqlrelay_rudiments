@@ -16,7 +16,15 @@ class errorhandler {
 			// error, this method may called to retrieve the
 			// error message.
 
+	protected:
+		void	clearError();
+		void	appendError(const char *string);
+		void	appendError(char character);
+		void	appendError(long number);
+		void	appendError(double number);
+
 	#include <rudiments/private/errorhandler.h>
+
 };
 
 #endif

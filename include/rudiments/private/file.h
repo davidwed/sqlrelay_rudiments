@@ -4,6 +4,7 @@
 	private:
 		struct	stat	st;
 		bool		getcurrentpropertiesonopen;
+		bool		retryinterruptedlockops;
 
 		bool	lock(int method, short type, short whence,
 						off_t start, off_t len);

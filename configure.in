@@ -373,6 +373,16 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <unistd.h>],
 fdatasync(0);,AC_DEFINE(HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(nanosleep)
+AC_TRY_LINK([#include <stdlib.h>
+#include <time.h>],
+nanosleep(NULL,NULL);,AC_DEFINE(HAVE_NANOSLEEP,1,Some systems have nanosleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(clock_nanosleep)
+AC_TRY_LINK([#include <stdlib.h>
+#include <time.h>],
+clock_nanosleep(0,0,NULL,NULL);,AC_DEFINE(HAVE_CLOCK_NANOSLEEP,1,Some systems have clock_nanosleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_CHECK_RPC
 
 echo "******************************"

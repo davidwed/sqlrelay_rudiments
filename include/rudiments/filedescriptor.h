@@ -353,19 +353,31 @@ class filedescriptor {
 			// by a signal.
 		void	dontRetryInterruptedReads();
 			// Causes reads not to automatically retry if
-			// interrupted by a signal.  This is the default.
+			// interrupted by a signal.
 		void	retryInterruptedWrites();
 			// Causes writes to automatically retry if
 			// interrupted by a signal.  This is the default.
 		void	dontRetryInterruptedWrites();
 			// Causes writes not to automatically retry if
-			// interrupted by a signal.  This is the default.
+			// interrupted by a signal.
 		void	retryInterruptedWaits();
 			// Causes waits to automatically retry if
 			// interrupted by a signal.  This is the default.
 		void	dontRetryInterruptedWaits();
 			// Causes waits not to automatically retry if
+			// interrupted by a signal.
+		void	retryInterruptedFcntl();
+			// Causes fcntl() to automatically retry if
 			// interrupted by a signal.  This is the default.
+		void	dontRetryInterruptedFcntl();
+			// Causes fcntl() not to automatically retry if
+			// interrupted by a signal.
+		void	retryInterruptedIoctl();
+			// Causes ioctl() to automatically retry if
+			// interrupted by a signal.  This is the default.
+		void	dontRetryInterruptedIoctl();
+			// Causes ioctl() not to automatically retry if
+			// interrupted by a signal.
 
 
 		// By default, read() will attempt to read the specified number

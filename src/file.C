@@ -572,7 +572,6 @@ bool file::lock(int method, short type, short whence, off_t start, off_t len) {
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	// FIXME: if a signal interrupts this, we should retry
 	return !fcntl(method,(long)&lck);
 }
 
@@ -583,7 +582,6 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	// FIXME: if a signal interrupts this, we should retry
 	bool	retval=(!fcntl(F_SETLKW,(long)&lck));
 	memcpy((void *)retlck,(void *)&lck,sizeof(struct flock));
 	return retval;
@@ -595,7 +593,6 @@ bool file::unlock(short whence, off_t start, off_t len) {
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	// FIXME: if a signal interrupts this, we should retry
 	return !fcntl(F_SETLK,(long)&lck);
 }
 

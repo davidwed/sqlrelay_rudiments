@@ -71,6 +71,8 @@ void filedescriptor::init() {
 	retryinterruptedreads=false;
 	retryinterruptedwrites=false;
 	retryinterruptedwaits=true;
+	retryinterruptedfcntl=true;
+	retryinterruptedioctl=true;
 	allowshortreads=false;
 	lstnr=NULL;
 #ifdef RUDIMENTS_HAS_SSL
@@ -448,6 +450,22 @@ void filedescriptor::retryInterruptedWaits() {
 
 void filedescriptor::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=false;
+}
+
+void filedescriptor::retryInterruptedFcntl() {
+	retryinterruptedfcntl=true;
+}
+
+void filedescriptor::dontRetryInterruptedFcntl() {
+	retryinterruptedfcntl=true;
+}
+
+void filedescriptor::retryInterruptedIoctl() {
+	retryinterruptedioctl=true;
+}
+
+void filedescriptor::dontRetryInterruptedIoctl() {
+	retryinterruptedioctl=true;
 }
 
 void filedescriptor::allowShortReads() {
@@ -837,9 +855,17 @@ int filedescriptor::getSSLResult() const {
 #endif
 
 int filedescriptor::fcntl(int cmd, long arg) {
-	return ::fcntl(fd,cmd,arg);
+	int	result;
+	do {
+		result=::fcntl(fd,cmd,arg);
+	} while (retryinterruptedfcntl && result==-1 && errno==EINTR);
+	return result;
 }
 
 int filedescriptor::ioctl(int cmd, void *arg) {
-	return ::ioctl(fd,cmd,arg);
+	int	result;
+	do {
+		result=::ioctl(fd,cmd,arg);
+	} while (retryinterruptedioctl && result==-1 && errno==EINTR);
+	return result;
 }
