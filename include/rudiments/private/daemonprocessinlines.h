@@ -36,15 +36,15 @@ RUDIMENTS_INLINE void daemonprocess::crash() {
 }
 
 RUDIMENTS_INLINE int daemonprocess::runAsUser(const char *username) const {
-	uid_t	userid=-1;
-	passwdentry::getUserId(username,&userid);
-	return runAsUserId(userid);
+	uid_t	userid;
+	return (passwdentry::getUserId(username,&userid))?
+					runAsUserId(userid):1;
 }
 
 RUDIMENTS_INLINE int daemonprocess::runAsGroup(const char *groupname) const {
-	gid_t	groupid=-1;
-	groupentry::getGroupId(groupname,&groupid);
-	return runAsGroupId(groupid);
+	gid_t	groupid;
+	return (groupentry::getGroupId(groupname,&groupid))?
+					runAsGroupId(groupid):1;
 }
 
 RUDIMENTS_INLINE int daemonprocess::runAsUserId(uid_t uid) const {

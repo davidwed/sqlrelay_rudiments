@@ -243,6 +243,9 @@
 /* Most systems define signal handlers with an integer parameter */
 #undef SIGNAL_HANDLER_INT
 
+/* Use small rather than fast code */
+#undef SMALL_CODE
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 

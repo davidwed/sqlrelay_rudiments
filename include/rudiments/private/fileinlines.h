@@ -158,7 +158,7 @@ RUDIMENTS_INLINE int file::getBlockCount(int fd, blkcnt_t *blocks) {
 #endif
 
 #ifndef HAVE_S_ISSOCK
-	#define S_ISSOCK(m) 0
+	#define S_ISSOCK(m) ((m&040000==040000)?1:0)
 #endif
 
 RUDIMENTS_INLINE int file::isSocket(const char *filename) {

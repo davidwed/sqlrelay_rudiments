@@ -269,7 +269,7 @@ class file : public filedescriptor {
 };
 
 #ifdef ENABLE_INLINES
-	#include <rudiments/private/file.h>
+	#include <rudiments/private/fileinlines.h>
 #endif
 
 #endif

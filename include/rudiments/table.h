@@ -41,8 +41,4 @@ class table {
 	#include <rudiments/private/table.h>
 };
 
-#ifdef ENABLE_INLINES
-	#include <rudiments/private/tableinlines.h>
-#endif
-
 #endif
