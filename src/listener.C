@@ -26,10 +26,10 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 		listenerlistnode	*current=
 				filedescriptorlist.getNodeByIndex(0);
 		while(current) {
-			if (current->getValue()>largest) {
-				largest=current->getValue();
+			if (current->getData()>largest) {
+				largest=current->getData();
 			}
-			FD_SET(current->getValue(),&fdlist);
+			FD_SET(current->getData(),&fdlist);
 			current=(listenerlistnode *)current->getNext();
 		}
 
@@ -60,8 +60,8 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 			// caused the select to fall through
 			current=filedescriptorlist.getNodeByIndex(0);
 			while (current) {
-				if (FD_ISSET(current->getValue(),&fdlist)) {
-					return current->getValue();
+				if (FD_ISSET(current->getData(),&fdlist)) {
+					return current->getData();
 				}
 				current=(listenerlistnode *)current->getNext();
 			}

@@ -10,12 +10,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <string.h>
+#ifdef HAVE_STRING_H
+	#include <strings.h>
+#endif
+
 memorypoolnode::memorypoolnode(unsigned long size) {
-	buffer=new char[size];
+	buffer=new unsigned char[size];
 	position=0;
 	remaining=size;
 	this->size=size;
-	next=NULL;
 }
 
 memorypool::memorypool(unsigned long initialsize,
@@ -26,54 +30,50 @@ memorypool::memorypool(unsigned long initialsize,
 	this->resizeinterval=resizeinterval;
 	totalusedsize=0;
 	freecounter=0;
-	first=new memorypoolnode(initialsize);
-	first->next=NULL;
-	last=first;
+
+	nodelist.append(new memorypoolnode(initialsize));
 }
 
-char *memorypool::malloc(unsigned long length) {
+unsigned char *memorypool::malloc(unsigned long length) {
 
 	// add the length to the total size
 	totalusedsize=totalusedsize+length;
 
 	// look for a node with enough memory remaining
-	memorypoolnode	*current=first;
-	while (current) {
-		if (current->remaining>=length) {
+	memorypoollistnode	*node=nodelist.getNodeByIndex(0);
+	memorypoolnode		*memnode;
+	while (node) {
+		memnode=node->getData();
+		if (memnode->remaining>=length) {
 			break;
 		}
-		current=current->next;
+		node=(memorypoollistnode *)node->getNext();
 	}
 
 	// if we didn't find a node with enough memory remaining,
 	// create a new one at the end of the list
-	if (!current) {
-		if (length>increment) {
-			last->next=new memorypoolnode(length);
-		} else {
-			last->next=new memorypoolnode(increment);
-		}
-		last->next->next=NULL;
-		last=last->next;
-		current=last;
+	if (!node) {
+		memnode=new memorypoolnode((length>increment)?length:increment);
+		nodelist.append(memnode);
 	}
 
 	// return the buffer
-	char	*retval=current->buffer+current->position;
-	current->position=current->position+length;
-	current->remaining=current->remaining-length;
-	return retval;
+	unsigned char	*buffer=memnode->buffer+memnode->position;
+	memnode->position=memnode->position+length;
+	memnode->remaining=memnode->remaining-length;
+	return buffer;
 }
 
-char *memorypool::calloc(unsigned long length) {
-	char	*retval=malloc(length);
-	for (int i=0; i<length; i++) {
-		retval[i]=(char)NULL;
-	}
-	return retval;
+unsigned char *memorypool::calloc(unsigned long length) {
+	unsigned char	*buffer=malloc(length);
+	memset((void *)buffer,0,length);
+	return buffer;
 }
 
 void memorypool::free() {
+
+	memorypoollistnode	*firstlistnode=nodelist.getNodeByIndex(0);
+	memorypoolnode		*first=firstlistnode->getData();
 
 	// if it's time to re-evaluate and re-size of the first node, do that
 	freecounter++;
@@ -88,7 +88,7 @@ void memorypool::free() {
 
 		// resize the first buffer to this size
 		delete[] first->buffer;
-		first->buffer=new char[initialsize];
+		first->buffer=new unsigned char[initialsize];
 		first->size=initialsize;
 		first->remaining=initialsize;
 	}
@@ -98,30 +98,35 @@ void memorypool::free() {
 	first->remaining=initialsize;
 
 	// delete all nodes beyond the first node
-	memorypoolnode	*current=first->next;
-	while (current) {
-		last=current->next;
-		delete current;
-		current=last;
+	memorypoollistnode	*currentlistnode=
+			(memorypoollistnode *)firstlistnode->getNext();
+	memorypoollistnode	*nextlistnode;
+	while (currentlistnode) {
+		nextlistnode=(memorypoollistnode *)currentlistnode->getNext();
+		delete currentlistnode->getData();
+		currentlistnode=nextlistnode;
 	}
-	last=first;
-	first->next=NULL;
+	nodelist.clear();
+	nodelist.append(first);
 }
 
 void memorypool::print() const {
 
 	long		segmentindex=0;
-	memorypoolnode	*current=first;
+	memorypoollistnode	*listnode=nodelist.getNodeByIndex(0);
+	memorypoolnode		*memnode;
 
-	while (current) {
-		printf("segment %d: (%d,%d)\n",
-				segmentindex,current->size,current->position);
-		for (long i=0; i<current->position; i++) {
-			if (current->buffer[i]>=' ' && 
-				current->buffer[i]<='~') {
-				printf("'%c'",current->buffer[i]);
+	while (listnode) {
+		memnode=listnode->getData();
+		printf("segment %d(%x): (%d,%d)\n",
+				segmentindex,memnode,
+				memnode->size,memnode->position);
+		for (long i=0; i<memnode->position; i++) {
+			if (memnode->buffer[i]>=' ' && 
+				memnode->buffer[i]<='~') {
+				printf("'%c'",memnode->buffer[i]);
 			} else {
-				printf("%3d",(int)current->buffer[i]);
+				printf("%3d",(int)memnode->buffer[i]);
 			}
 			if (!((i+1)%20)) {
 				printf("\n");
@@ -129,7 +134,7 @@ void memorypool::print() const {
 				printf(" ");
 			}
 		}
-		current=current->next;
+		listnode=(memorypoollistnode *)listnode->getNext();
 		printf("\n\n");
 		segmentindex++;
 	}

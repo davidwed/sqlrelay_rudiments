@@ -3,9 +3,9 @@
 
 template <class datatype>
 inline int primitivelistnode<datatype>::compare(datatype key) {
-	if (value<key) {
+	if (data<key) {
 		return -1;
-	} else if (value==key) {
+	} else if (data==key) {
 		return 0;
 	} else {
 		return 1;

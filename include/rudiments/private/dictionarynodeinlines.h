@@ -1,35 +1,35 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-template <class keytype, class valuetype>
-inline dictionarynode<keytype,valuetype>::dictionarynode() {
+template <class keytype, class datatype>
+inline dictionarynode<keytype,datatype>::dictionarynode() {
 	key=0;
-	value=0;
+	data=0;
 }
 
-template <class keytype, class valuetype>
-inline dictionarynode<keytype,valuetype>::dictionarynode(keytype key,
-							valuetype value) {
+template <class keytype, class datatype>
+inline dictionarynode<keytype,datatype>::dictionarynode(keytype key,
+							datatype data) {
 	this->key=key;
-	this->value=value;
+	this->data=data;
 }
 
-template <class keytype, class valuetype>
-inline void dictionarynode<keytype,valuetype>::setKey(keytype key) {
+template <class keytype, class datatype>
+inline void dictionarynode<keytype,datatype>::setKey(keytype key) {
 	this->key=key;
 }
 
-template <class keytype, class valuetype>
-inline void dictionarynode<keytype,valuetype>::setValue(valuetype value) {
-	this->value=value;
+template <class keytype, class datatype>
+inline void dictionarynode<keytype,datatype>::setData(datatype data) {
+	this->data=data;
 }
 
-template <class keytype, class valuetype>
-inline keytype dictionarynode<keytype,valuetype>::getKey() const {
+template <class keytype, class datatype>
+inline keytype dictionarynode<keytype,datatype>::getKey() const {
 	return key;
 }
 
-template <class keytype, class valuetype>
-inline valuetype dictionarynode<keytype,valuetype>::getValue() const {
-	return value;
+template <class keytype, class datatype>
+inline datatype dictionarynode<keytype,datatype>::getData() const {
+	return data;
 }

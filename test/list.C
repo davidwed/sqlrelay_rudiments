@@ -7,8 +7,8 @@ void	print(primitivelist<int> *l) {
 
 	int	value;
 	for (int i=0; i<l->getLength(); i++) {
-		l->getValueByIndex(i,&value);
-		printf("%d: %d,%d\n",i,l->getNodeByIndex(i)->getValue(),value);
+		l->getDataByIndex(i,&value);
+		printf("%d: %d,%d\n",i,l->getNodeByIndex(i)->getData(),value);
 	}
 }
 
@@ -18,8 +18,8 @@ void	print(stringlist *l) {
 
 	char	*value;
 	for (int i=0; i<l->getLength(); i++) {
-		l->getValueByIndex(i,&value);
-		printf("%d: %s,%s\n",i,l->getNodeByIndex(i)->getValue(),value);
+		l->getDataByIndex(i,&value);
+		printf("%d: %s,%s\n",i,l->getNodeByIndex(i)->getData(),value);
 	}
 }
 
@@ -45,8 +45,8 @@ int	main(int argc, char **argv) {
 	printf("removeByKey(3)\n");
 	prl.removeByKey(3);
 	print(&prl);
-	printf("setValueByIndex(1,50)\n");
-	prl.setValueByIndex(1,50);
+	printf("setDataByIndex(1,50)\n");
+	prl.setDataByIndex(1,50);
 	print(&prl);
 	printf("clear()\n");
 	prl.clear();
@@ -75,8 +75,8 @@ int	main(int argc, char **argv) {
 	printf("removeByKey(three)\n");
 	strl.removeByKey("three");
 	print(&strl);
-	printf("setValueByIndex(1,fifty)\n");
-	strl.setValueByIndex(1,"fifty");
+	printf("setDataByIndex(1,fifty)\n");
+	strl.setDataByIndex(1,"fifty");
 	print(&strl);
 	printf("clear()\n");
 	strl.clear();

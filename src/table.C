@@ -161,8 +161,7 @@ unsigned char *table::allocateField(unsigned long row, unsigned long col,
 	initFields();
 	unsigned long	*fieldlength=
 			(unsigned long *)fields->malloc(sizeof(unsigned long));
-	unsigned char	*field=
-			(unsigned char *)fields->malloc(length+1);
+	unsigned char	*field=fields->malloc(length+1);
 
 	memcpy((void *)fieldlength,(void *)&length,sizeof(unsigned long));
 

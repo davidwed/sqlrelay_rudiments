@@ -23,13 +23,13 @@
 void inetclientsocket::initialize(namevaluepairs *cd) {
 
 	char	*host;
-	cd->getValue("host",&host);
+	cd->getData("host",&host);
 	char	*port;
-	cd->getValue("port",&port);
+	cd->getData("port",&port);
 	char	*retrywait;
-	cd->getValue("retrywait",&retrywait);
+	cd->getData("retrywait",&retrywait);
 	char	*retrycount;
-	cd->getValue("retrycount",&retrycount);
+	cd->getData("retrycount",&retrycount);
 
 	initialize(host?host:"",
 			atoi(port?port:"0"),

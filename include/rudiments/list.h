@@ -10,14 +10,14 @@ template <class datatype, class keytype=datatype>
 class listnode {
 	public:
 			listnode();
-			listnode(datatype value);
-			listnode(datatype value,
+			listnode(datatype data);
+			listnode(datatype data,
 					listnode<datatype,keytype> *previous,
 					listnode<datatype,keytype> *next);
 		virtual	~listnode();
 
-		virtual void		setValue(datatype value);
-		virtual datatype	getValue() const;
+		virtual void		setData(datatype data);
+		virtual datatype	getData() const;
 
 		virtual int	compare(keytype key)=0;
 
@@ -37,12 +37,12 @@ class primitivelistnode : public listnode<datatype> {
 	public:
 			primitivelistnode() :
 				listnode<datatype>() {};
-			primitivelistnode(datatype value) :
-				listnode<datatype>(value) {};
-			primitivelistnode(datatype value,
+			primitivelistnode(datatype data) :
+				listnode<datatype>(data) {};
+			primitivelistnode(datatype data,
 					primitivelistnode<datatype> *previous,
 					primitivelistnode<datatype> *next) :
-				listnode<datatype>(value,previous,next) {};
+				listnode<datatype>(data,previous,next) {};
 		virtual int	compare(datatype key);
 };
 
@@ -52,12 +52,12 @@ class stringlistnode : public listnode<char *> {
 	public:
 			stringlistnode() :
 				listnode<char *>() {}
-			stringlistnode(char * value) :
-				listnode<char *>(value) {}
-			stringlistnode(char * value,
+			stringlistnode(char * data) :
+				listnode<char *>(data) {}
+			stringlistnode(char * data,
 					stringlistnode *previous,
 					stringlistnode *next) :
-				listnode<char *>(value,previous,next) {}
+				listnode<char *>(data,previous,next) {}
 		virtual int	compare(char *key);
 };
 
@@ -68,12 +68,12 @@ class objectlistnode : public listnode<datatype,keytype> {
 	public:
 			objectlistnode() :
 				listnode<datatype,keytype>() {};
-			objectlistnode(datatype value) :
-				listnode<datatype,keytype>(value) {};
-			objectlistnode(datatype value,
+			objectlistnode(datatype data) :
+				listnode<datatype,keytype>(data) {};
+			objectlistnode(datatype data,
 				objectlistnode<datatype,keytype> *previous,
 				objectlistnode<datatype,keytype> *next) :
-			listnode<datatype,keytype>(value,previous,next) {};
+			listnode<datatype,keytype>(data,previous,next) {};
 		virtual int	compare(keytype key);
 };
 
@@ -86,20 +86,20 @@ class list {
 			list();
 			~list();
 
-		void	append(datatype value);
-		int	insert(unsigned long index, datatype value);
+		void	append(datatype data);
+		int	insert(unsigned long index, datatype data);
 
 		int	removeByIndex(unsigned long index);
 		int	removeByKey(keytype key);
 		int	removeAllByKey(keytype key);
 		int	removeNode(listnodetype *node);
 
-		int	setValueByIndex(unsigned long index,
-						datatype value);
-		int	getValueByIndex(unsigned long index,
-						datatype *value) const;
+		int	setDataByIndex(unsigned long index,
+						datatype data);
+		int	getDataByIndex(unsigned long index,
+						datatype *data) const;
 
-		int	getValueByKey(keytype key, datatype *value) const;
+		int	getDataByKey(keytype key, datatype *data) const;
 
 		unsigned long	getLength() const;
 

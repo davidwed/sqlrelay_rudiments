@@ -7,5 +7,5 @@
 #endif
 
 inline int stringlistnode::compare(char *key) {
-	return strcmp(value,key);
+	return strcmp(data,key);
 }

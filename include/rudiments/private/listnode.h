@@ -2,6 +2,6 @@
 // See the COPYING file for more information
 
 	protected:
-		datatype			value;
+		datatype			data;
 		listnode<datatype,keytype>	*next;
 		listnode<datatype,keytype>	*previous;

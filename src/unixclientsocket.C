@@ -16,11 +16,11 @@
 void unixclientsocket::initialize(namevaluepairs *cd) {
 
 	char	*filename;
-	cd->getValue("filename",&filename);
+	cd->getData("filename",&filename);
 	char	*retrywait;
-	cd->getValue("retrywait",&retrywait);
+	cd->getData("retrywait",&retrywait);
 	char	*retrycount;
-	cd->getValue("retrycount",&retrycount);
+	cd->getData("retrycount",&retrycount);
 
 	initialize(filename?filename:"",
 			atoi(retrywait?retrywait:"0"),

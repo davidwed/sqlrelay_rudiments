@@ -12,7 +12,7 @@ int main(int argv, const char **argc) {
 
 	printf("first run...\n");
 	for (int i=0; i<20; i++) {
-		char	*segment=mp->malloc(6);
+		char	*segment=(char *)mp->malloc(6);
 		for (int j=0; j<6; j++) {
 			segment[j]=(char)'a'+i;
 		}
@@ -24,18 +24,18 @@ int main(int argv, const char **argc) {
 	mp->print();
 
 	printf("second run...\n");
-	char	*segment=mp->malloc(40);
+	char	*segment=(char *)mp->malloc(40);
 	for (int j=0; j<40; j++) {
 		segment[j]='z';
 	}
 	for (int i=0; i<20; i++) {
-		char	*segment=mp->malloc(6);
+		char	*segment=(char *)mp->malloc(6);
 		for (int j=0; j<6; j++) {
 			segment[j]=(char)'a'+i;
 		}
 	}
 	for (int i=0; i<20; i++) {
-		char	*segment=mp->malloc(2);
+		char	*segment=(char *)mp->malloc(2);
 		for (int j=0; j<6; j++) {
 			segment[j]=(char)'A'+i;
 		}

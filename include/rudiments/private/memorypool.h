@@ -2,8 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		memorypoolnode	*first;
-		memorypoolnode	*last;
+		memorypoollist	nodelist;
 
 		unsigned long	initialsize;
 		unsigned long	increment;

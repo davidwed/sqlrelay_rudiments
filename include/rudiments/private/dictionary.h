@@ -2,6 +2,6 @@
 // See the COPYING file for more information
 
 	protected:
-		list< dictionarynode<keytype,valuetype> *, keytype,
-			objectlistnode< dictionarynode<keytype,valuetype> *,
+		list< dictionarynode<keytype,datatype> *, keytype,
+			objectlistnode< dictionarynode<keytype,datatype> *,
 					keytype> >	dict;

@@ -3,4 +3,4 @@
 
 	protected:
 		keytype		key;
-		valuetype	value;
+		datatype	data;

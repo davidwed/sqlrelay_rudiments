@@ -3,5 +3,5 @@
 
 template <class datatype, class keytype>
 inline int objectlistnode<datatype,keytype>::compare(keytype key) {
-	return this->value->compare(key);
+	return this->data->compare(key);
 }

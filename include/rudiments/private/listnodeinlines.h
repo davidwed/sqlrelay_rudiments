@@ -5,23 +5,23 @@
 
 template <class datatype, class keytype>
 inline listnode<datatype,keytype>::listnode() {
-	value=0;
+	data=0;
 	previous=NULL;
 	next=NULL;
 }
 
 template <class datatype, class keytype>
-inline listnode<datatype,keytype>::listnode(datatype value) {
-	this->value=value;
+inline listnode<datatype,keytype>::listnode(datatype data) {
+	this->data=data;
 	previous=NULL;
 	next=NULL;
 }
 
 template <class datatype, class keytype>
-inline listnode<datatype,keytype>::listnode(datatype value,
+inline listnode<datatype,keytype>::listnode(datatype data,
 					listnode<datatype,keytype> *previous,
 					listnode<datatype,keytype> *next) {
-	this->value=value;
+	this->data=data;
 	this->previous=previous;
 	this->next=next;
 }
@@ -31,13 +31,13 @@ inline listnode<datatype,keytype>::~listnode() {
 }
 
 template <class datatype, class keytype>
-inline void listnode<datatype,keytype>::setValue(datatype value) {
-	this->value=value;
+inline void listnode<datatype,keytype>::setData(datatype data) {
+	this->data=data;
 }
 
 template <class datatype, class keytype>
-inline datatype listnode<datatype,keytype>::getValue() const {
-	return value;
+inline datatype listnode<datatype,keytype>::getData() const {
+	return data;
 }
 
 template <class datatype, class keytype>

@@ -7,5 +7,5 @@ inline memorypoolnode::~memorypoolnode() {
 
 inline memorypool::~memorypool() {
 	free();
-	delete first;
+	delete nodelist.getNodeByIndex(0)->getData();
 }

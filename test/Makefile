@@ -26,7 +26,7 @@ svr: svr.C svr.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ svr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
 
 lsnr: lsnr.C lsnr.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ lsnr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB) -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ lsnr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
 
 inetclnt: inetclnt.C inetclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ inetclnt.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
@@ -50,10 +50,10 @@ file: file.C file.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ file.lo -L../src -lrudiments_p
 
 list: list.C list.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ list.lo -L../src -lrudiments_p -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ list.lo -L../src -lrudiments_p
 
 mem: mem.C mem.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p -lefence
 
 passwdgroup: passwdgroup.C passwdgroup.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ passwdgroup.lo -L../src -lrudiments_p

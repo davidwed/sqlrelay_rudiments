@@ -66,7 +66,7 @@ void logger::write(const char *header, int tabs, double number) const {
 void logger::write(const char *logentry) const {
 	loggerlistnode	*current=logdestlist.getNodeByIndex(0);
 	while (current) {
-		current->getValue()->write(logentry);
+		current->getData()->write(logentry);
 		current=(loggerlistnode *)current->getNext();
 	}
 }

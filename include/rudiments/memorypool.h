@@ -4,9 +4,15 @@
 #ifndef RUDIMENTS_MEMORYPOOL_H
 #define RUDIMENTS_MEMORYPOOL_H
 
+
 #include <rudiments/private/config.h>
 
+#include <rudiments/list.h>
+
 #include <rudiments/private/memorypoolnode.h>
+
+typedef	primitivelist<memorypoolnode *>		memorypoollist;
+typedef	primitivelistnode<memorypoolnode *>	memorypoollistnode;
 
 // The memorypool class provides methods for creating and using a memory pool.
 //
@@ -35,11 +41,11 @@ class memorypool {
 			~memorypool();
 			// Destroys the memory pool.
 
-		char	*malloc(unsigned long size);
+		unsigned char	*malloc(unsigned long size);
 			// Returns a pointer to a contiguous block of "size"
 			// bytes in the pool.  The pool will grow as necessary
 			// to accomodate allocations.
-		char	*calloc(unsigned long size);
+		unsigned char	*calloc(unsigned long size);
 			// Returns a pointer to a contiguous block of "size"
 			// bytes in the pool.  The pool will grow as necessary
 			// to accomodate allocations.  Each byte of data in
