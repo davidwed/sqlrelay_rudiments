@@ -19,6 +19,7 @@ what does the logger.C warning mean
 strip fails on openbsd
 
 a bunch of methods can probabaly be made const
+a bunch of static methods can probably be inlined
 
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
@@ -49,7 +50,6 @@ implement these classes:
 	directorylisting
 	link
 	pipe
-	rawbuffers
 	serialport
 	serialportprofile
 	tty
@@ -68,6 +68,8 @@ implement these classes:
 
 tests for:
 	dynamiclib
+	math
+	rawbuffer
 
 --------------------------------------------------------------------------------
 

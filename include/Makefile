@@ -208,6 +208,10 @@ ifeq ($(INCLUDE_MATH),1)
 	HEADERS += math.h
 	PRIVATEHEADERS += mathincludes.h mathinlines.h
 endif
+ifeq ($(INCLUDE_RAWBUFFER),1)
+	HEADERS += rawbuffer.h
+	PRIVATEHEADERS += rawbufferincludes.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h
