@@ -91,6 +91,10 @@ class semaphoreset {
 
 		bool	wait(int index);
 			// wait on the "index"'th semaphore in the set
+		bool	wait(int index, long seconds, long nanoseconds);
+			// Wait on the "index"'th semaphore in the set until
+			// "seconds" and "nanoseconds" elapse.  Returns false
+			// and sets errno to EAGAIN if a timeout occurs.
 		bool	signal(int index);
 			// signal on the "index"'th semaphore in the set
 
@@ -98,6 +102,11 @@ class semaphoreset {
 		bool	waitWithUndo(int index);
 			// wait on the "index"'th semaphore in the set and
 			// undo the wait when the program exits
+		bool	waitWithUndo(int index, long seconds, long nanoseconds);
+			// Wait on the "index"'th semaphore in the set until
+			// "seconds" and "nanoseconds" elapse.  Undo the wait
+			// when the program exits.  Returns false and sets
+			// errno to EAGAIN if a timeout occurs.
 		bool	signalWithUndo(int index);
 			// signal on the "index"'th semaphore in the set and
 			// undo the signal when the program exits

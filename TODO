@@ -6,13 +6,9 @@ internationalization:
 	stdlib.h - rpmatch() - response match
 
 paths:
-	stdlib.h - canonicalize_file_name()/realpath()
-	string.h - basename()
-	libgen.h - dirname() (glibc < 2.2.1, path must not have a trailing /
-				or a segfault will occur)
-	fnmatch.h/glob.h - filename/path matching
-			fnmatch()
-			glob(),globfree(),glob_pattern_p()
+	need methods for returning the filename and directory name from a path
+	and for replacing ./'s and ../'s in a path
+	glob.h - glob(),globfree(),glob_pattern_p()
 	fts.h/ftw.h - file heirarchy traversal functions
 			fts_open(),fts_close()
 			fts_children(),fts_read(),fts_set()
@@ -20,6 +16,7 @@ paths:
 					element in a directory tree
 
 file class:
+	sys/ipc.h - ftok()
 	stdlib.h - mkstemp()/mkdtemp()
 	unistd.h - access(),euidaccess()
 			pread(),pwrite()
@@ -33,7 +30,6 @@ file class:
 			revoke()
 			fsync()/fdatasync()
 	stdio.h - remove()/rename()
-			dprintf()
 	fcntl.h - fcntl(),posix_fadvise(),posix_fallocate()
 	utime.h - utime()
 	sys/ioctl.h - ioctl()
@@ -177,7 +173,7 @@ serialportprofile class:
 		tcdrain(),tcflush(),tcflow()
 		tcgetsid()
 
-time:
+datetime class:
 	time.h and sys/time.h - there may a few more time functions
 					that I need to wrap
 
@@ -197,20 +193,18 @@ errors:
 	stdio.h - perror()
 	string.h - strerror(_r)()
 
-io:
+filedescriptor class:
 	aio.h - aio_init(),aio_read(),aio_write(),lio_listio(),aio_error(),
 		aio_return(),aio_cancel(),aio_suspend(),aio_fsync()
-	stdio.h - printf()
-	unistd - getpass()
-	stropts.h - streams io
-		isastream(),getmsg(),getpmsg(),putmsg(),putpmsg()
-		fattach(),fdetach()
+	stdio.h - dprintf()
 	sys/select.h - select(),pselect() functions
 	sys/epoll.h - epoll functions for speeding up network io
 			epoll_create(),epoll_ctl(),epoll_wait()
 	sys/poll.h - poll() function
 	sys/uio.h - readv()/writev() functions
 	sys/sendfile.h - sendfile() function
+
+memorymap class:
 	sys/mman.h - mmap(),munmap(),mprotect(),msync()
 			madvise()/posix_madvise()
 			mlock(),munlock(),munlockall(),
@@ -344,10 +338,8 @@ login records:
 			utmpxname(),updwtmpx()
 			getutmp(),getutmpx()
 
-ipc:
-	sys/ipc.h - ftok() function
+messagequeue class:
 	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
-	sys/sem.h - semtimedop()???
 
 threading:
 	pthread.h - lots of threading stuff

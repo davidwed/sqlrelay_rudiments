@@ -73,8 +73,22 @@ bool semaphoreset::wait(int index) {
 	return !semop(semid,waitop[index],1);
 }
 
+bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
+	timespec	ts;
+	ts.tv_sec=seconds;
+	ts.tv_nsec=nanoseconds;
+	return !semtimedop(semid,waitop[index],1,&ts);
+}
+
 bool semaphoreset::waitWithUndo(int index) {
 	return !semop(semid,waitwithundoop[index],1);
+}
+
+bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
+	timespec	ts;
+	ts.tv_sec=seconds;
+	ts.tv_nsec=nanoseconds;
+	return !semtimedop(semid,waitwithundoop[index],1,&ts);
 }
 
 bool semaphoreset::signal(int index) {

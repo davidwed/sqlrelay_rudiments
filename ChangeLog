@@ -26,6 +26,7 @@
 		datatransport
 	added primitve xml path methods
 	added static getLength() method to charstring class
+	added wait() with timeout methods to semaphore class
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now
