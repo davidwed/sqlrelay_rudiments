@@ -7,8 +7,8 @@ inline dtd::dtd() {
 }
 
 inline dtd::~dtd() {
-	delete xmld;
 	delete xmldtd;
+	delete xmld;
 }
 
 inline int dtd::parseFile(const char *filename) {
