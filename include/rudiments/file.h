@@ -19,6 +19,8 @@ class file : public filedescriptor {
 			// Opens file "name" using "flags".  If the file
 			// doesn't already exist and flags contains O_CREAT,
 			// the file will be created with permissions "perms".
+			//
+			// Returns 1 on success and 0 on failure.
 };
 
 #ifdef ENABLE_INLINES

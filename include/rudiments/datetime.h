@@ -59,6 +59,13 @@ class datetime {
 		tm	*getTm();
 			// returns a pointer to the internal "struct tm"
 
+
+		int	setSystemDateAndTime();
+			// Sets the system date and time to the date and time
+			// currently represented in the class.
+			//
+			// Returns 1 on success and 0 on failure.
+
 	#include <rudiments/private/datetime.h>
 };
 

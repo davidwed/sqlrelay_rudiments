@@ -19,6 +19,10 @@ inline char *stringbuffer::getString() {
 	return (buffer)?buffer:(char *)"";
 }
 
+inline int stringbuffer::getStringLength() {
+	return buffer?strlen(buffer):0;
+}
+
 inline void stringbuffer::clear() {
 	delete[] buffer;
 	buffer=NULL;

@@ -13,6 +13,7 @@
 	#include <strings.h>
 #endif
 #include <stdio.h>
+#include <sys/time.h>
 
 datetime::datetime() {
 	epoch=time(NULL);
@@ -77,4 +78,11 @@ char *datetime::getString() {
 				timestruct.tm_sec);
 	}
 	return timestring;
+}
+
+int datetime::setSystemDateAndTime() {
+	timeval	tv;
+	tv.tv_sec=epoch;
+	tv.tv_usec=0;
+	return !settimeofday(&tv,NULL);
 }

@@ -34,8 +34,12 @@ class stringbuffer {
 			// Empties the stringbuffer.
 
 		char	*getString();
-			// Returns the current string stored in the
+			// Returns the string currently stored in the
 			// stringbuffer.
+
+		int	getStringLength();
+			// Returns the length of the string currently stored
+			// in the stringbuffer.
 
 	#include <rudiments/private/stringbuffer.h>
 };
