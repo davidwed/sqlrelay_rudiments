@@ -515,8 +515,8 @@ printf("TZ=%s\n",env.getValue("TZ"));
 	tms.tm_year=year;
 	tms.tm_isdst=isdst;
 
-	// mktime() will get the epoch, set wday
-	// and yday and normalize other values
+	// mktime() will get the epoch, set wday, yday, isdst
+	// and normalize other values
 printf("mktime()...\n");
 	time_t	ep=mktime(&tms);
 	if (ep==-1) {
