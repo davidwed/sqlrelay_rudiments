@@ -1483,8 +1483,8 @@ else
 fi;
 
 
-CXXFLAGS="-fomit-frame-pointer -fno-exceptions -fno-rtti"
-DEBUGCXXFLAGS="-fno-exceptions -fno-rtti"
+CXXFLAGS="-fomit-frame-pointer -fno-exceptions"
+DEBUGCXXFLAGS="-fno-exceptions"
 
 
 
