@@ -1012,6 +1012,9 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	const unsigned char	*data=
 		reinterpret_cast<const unsigned char *>(buf);
 
+	ssize_t	initialwritebuffersize=writebufferptr-writebuffer;
+	bool	first=true;
+
 	ssize_t	byteswritten=0;
 	ssize_t	bytesunwritten=count;
 	while (byteswritten<count) {
@@ -1057,9 +1060,17 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			}
 
 			writebufferptr=writebuffer;
-			byteswritten=byteswritten+writebufferspace;
-			data=data+byteswritten;
-			bytesunwritten=bytesunwritten-byteswritten;
+			// The first time the buffer is written, the number of
+			// bytes that were already in the buffer need to be
+			// taken into account when calculating byteswritten,
+			// bytesunwritten and data.
+			ssize_t	adjustment=(first)?initialwritebuffersize:0;
+			if (first) {
+				first=false;
+			}
+			byteswritten=byteswritten+result-adjustment;
+			bytesunwritten=bytesunwritten-result+adjustment;
+			data=data+result-adjustment;
 		}
 	}
 
