@@ -995,7 +995,130 @@ class.</p>
 <a name="xmlsax"></a>
 <span class="heading">Using the XML SAX Class</span><br><br>
 
-<p>...</p>
+<p>The XML SAX class provides a callback-based framework for parsing XML
+documents.  The xmlsax class provides methods for parsing strings of XML or 
+XML files.  When it encounters a tag, attribute or other XML component, it
+calls one of it's callback methods.  These methods may be overridden by
+a child class to perform specific tasks.  The xmlsax class is especially useful
+if you can't afford to load the entire document into memory and use the XML DOM
+class, or if you just need to extract specific data from an XML file.</p>
+
+<pre>
+<font color="#0000f8">// Copyright (c) 2002  David Muse</font>
+<font color="#0000f8">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/private/config.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/xmlsax.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#f800f8">&lt;stdio.h&gt;</font>
+
+<font color="#288850"><b>class</b></font> myxmlsax : <font color="#a02828"><b>public</b></font> xmlsax {
+        <font color="#a02828"><b>public</b></font>:
+                        myxmlsax();
+        <font color="#a02828"><b>private</b></font>:
+                <font color="#288850"><b>int</b></font>     xmlVersionStart();
+                <font color="#288850"><b>int</b></font>     xmlVersionEnd();
+                <font color="#288850"><b>int</b></font>     doctypeStart(<font color="#288850"><b>char</b></font> *name);
+                <font color="#288850"><b>int</b></font>     externalSubset(<font color="#288850"><b>char</b></font> *filename);
+                <font color="#288850"><b>int</b></font>     doctypeEnd();
+                <font color="#288850"><b>int</b></font>     tagStart(<font color="#288850"><b>char</b></font> *name);
+                <font color="#288850"><b>int</b></font>     attributeName(<font color="#288850"><b>char</b></font> *name);
+                <font color="#288850"><b>int</b></font>     attributeValue(<font color="#288850"><b>char</b></font> *value);
+                <font color="#288850"><b>int</b></font>     text(<font color="#288850"><b>char</b></font> *string);
+                <font color="#288850"><b>int</b></font>     tagEnd(<font color="#288850"><b>char</b></font> *name);
+                <font color="#288850"><b>int</b></font>     comment(<font color="#288850"><b>char</b></font> *string);
+                <font color="#288850"><b>int</b></font>     cdata(<font color="#288850"><b>char</b></font> *string);
+                <font color="#288850"><b>void</b></font>    indent(<font color="#288850"><b>int</b></font> spaces);
+                <font color="#288850"><b>int</b></font>     ind;
+};
+
+myxmlsax::myxmlsax() : xmlsax() {
+        ind=<font color="#f800f8">0</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::xmlVersionStart() {
+        printf(<font color="#f800f8">&quot;XML version start:</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::xmlVersionEnd() {
+        printf(<font color="#f800f8">&quot;XML version end:</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::doctypeStart(<font color="#288850"><b>char</b></font> *name) {
+        printf(<font color="#f800f8">&quot;DOCTYPE start: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,name);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::externalSubset(<font color="#288850"><b>char</b></font> *filename) {
+        printf(<font color="#f800f8">&quot;        external subset: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,filename);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::doctypeEnd() {
+        printf(<font color="#f800f8">&quot;DOCTYPE end:</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>void</b></font>    myxmlsax::indent(<font color="#288850"><b>int</b></font> spaces) {
+        <font color="#a02828"><b>for</b></font> (<font color="#288850"><b>int</b></font> i=<font color="#f800f8">0</font>; i&lt;spaces; i++) {
+                printf(<font color="#f800f8">&quot;  &quot;</font>);
+        }
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::tagStart(<font color="#288850"><b>char</b></font> *name) {
+        indent(ind);
+        printf(<font color="#f800f8">&quot;tagStart: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,name);
+        ind++;
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::attributeName(<font color="#288850"><b>char</b></font> *name) {
+        indent(ind+<font color="#f800f8">1</font>);
+        printf(<font color="#f800f8">&quot;attribute name: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,name);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::attributeValue(<font color="#288850"><b>char</b></font> *value) {
+        indent(ind+<font color="#f800f8">1</font>);
+        printf(<font color="#f800f8">&quot;attribute value: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,value);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::text(<font color="#288850"><b>char</b></font> *string) {
+        indent(ind+<font color="#f800f8">1</font>);
+        printf(<font color="#f800f8">&quot;text: </font><font color="#6858c8">\n</font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,string);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::tagEnd(<font color="#288850"><b>char</b></font> *name) {
+        ind--;
+        indent(ind);
+        printf(<font color="#f800f8">&quot;tagEnd: </font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,name);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::comment(<font color="#288850"><b>char</b></font> *string) {
+        indent(ind);
+        printf(<font color="#f800f8">&quot;comment: </font><font color="#6858c8">\n</font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,string);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+<font color="#288850"><b>int</b></font>     myxmlsax::cdata(<font color="#288850"><b>char</b></font> *string) {
+        indent(ind);
+        printf(<font color="#f800f8">&quot;cdata: </font><font color="#6858c8">\n</font><font color="#6858c8">%s</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,string);
+        <font color="#a02828"><b>return</b></font> <font color="#f800f8">1</font>;
+}
+
+
+<font color="#288850"><b>int</b></font> main(<font color="#288850"><b>int</b></font> argv, <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> **argc) {
+
+        myxmlsax        x;
+        x.parseFile(<font color="#f800f8">&quot;xmls.xml&quot;</font>);
+}
+</pre>
 
 <a name="xmldom"></a>
 <span class="heading">Using the XML DOM Class</span><br><br>
