@@ -28,6 +28,7 @@ regularexpression::regularexpression(const char *pattern) {
 void regularexpression::init() {
 	#if defined(RUDIMENTS_HAS_PCRE)
 		expr=NULL;
+		extra=NULL;
 	#elif defined(HAVE_REGEX_H)
 	#elif defined(HAVE_REGEXP_H)
 		expr=NULL;
@@ -42,6 +43,9 @@ regularexpression::~regularexpression() {
 	#if defined(RUDIMENTS_HAS_PCRE)
 		if (expr) {
 			pcre_free(expr);
+		}
+		if (extra) {
+			delete extra;
 		}
 	#elif defined(HAVE_REGEX_H)
 		regfree(&expr);
@@ -60,11 +64,14 @@ bool regularexpression::compile(const char *pattern) {
 		if (expr) {
 			pcre_free(expr);
 		}
+		if (extra) {
+			delete extra;
+			extra=NULL;
+		}
 		const char	*error;
 		int		erroroffset;
 		return (expr=pcre_compile(pattern,0,&error,
 						&erroroffset,NULL))!=NULL;
-		// FIXME: pcre_study here...
 	#elif defined(HAVE_REGEX_H)
 		regfree(&expr);
 		return !regcomp(&expr,pattern,REG_EXTENDED);
@@ -83,11 +90,23 @@ bool regularexpression::compile(const char *pattern) {
 	#endif
 }
 
+bool regularexpression::study() {
+	#if defined(RUDIMENTS_HAS_PCRE)
+		const char	*error;
+		if (extra) {
+			delete extra;
+		}
+		extra=pcre_study(expr,0,&error);
+	#else
+		return true;
+	#endif
+}
+
 bool regularexpression::match(const char *str) {
 
 	#if defined(RUDIMENTS_HAS_PCRE)
 		this->str=(char *)str;
-		return (expr && (matchcount=pcre_exec(expr,NULL,
+		return (expr && (matchcount=pcre_exec(expr,extra,
 						str,charstring::length(str),
 						0,0,matches,
 						RUDIMENTS_REGEX_MATCHES*3))>-1);

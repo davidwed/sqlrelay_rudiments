@@ -35,6 +35,15 @@ class regularexpression {
 			//
 			// Returns true if the compilation 
 			// succeeded and false if it failed.
+		bool	study();
+			// Studies the previously compiled pattern so it can be
+			// executed faster.  If you plan on calling match()
+			// several times on this pattern, studying it may be
+			// worthwhile.  If not, the studying the pattern may
+			// take longer than the time saved by studying it.
+			//
+			// Returns true if the study succeeded
+			// and false if if failed.
 		bool	match(const char *str);
 			// Matches "str" against the regular expression
 			// compiled earlier using the compile method.

@@ -27,11 +27,13 @@ int main(int argc, const char **argv) {
         }
 	printMatches(&re);
 
+	re.study();
         if (re.match("Goodbye Dave!")) {
                 printf("The string contains Dave\n");
         }
 	printMatches(&re);
 
+	re.study();
         if (re.match("Dave is a jerk!")) {
                 printf("The string contains Dave\n");
         }

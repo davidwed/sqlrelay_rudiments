@@ -6,7 +6,8 @@
 		void	init();
 
 		#if defined(RUDIMENTS_HAS_PCRE)
-			pcre	*expr;
+			pcre		*expr;
+			pcre_extra	*extra;
 		#elif defined(HAVE_REGEX_H)
 			regex_t	expr;
 		#elif defined(HAVE_REGEXP_H)

@@ -3,9 +3,6 @@ timer class needs testing and a bit of work
 
 netbsd compiler error
 
-regularexpression class:
-	need to add a study method
-
 file class:
 	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
