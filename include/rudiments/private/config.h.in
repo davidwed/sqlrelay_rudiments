@@ -312,6 +312,9 @@
 /* Define to 1 if `vfork' works. */
 #undef HAVE_WORKING_VFORK
 
+/* Some systems have extended filesystem attributes */
+#undef HAVE_XATTRS
+
 /* iov_base is char * */
 #undef IOV_BASE_TYPE
 

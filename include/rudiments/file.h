@@ -265,8 +265,27 @@ class file : public filedescriptor {
 			// 
 			// Returns true on success and false on failure.
 
+
 		static bool	exists(const char *filename);
 			// Returns true if the file exists and false otherwise.
+		static bool	readable(const char *filename);
+			// Returns true if "filename" is readable by the user
+			// or false otherwise.
+		static bool	writeable(const char *filename);
+			// Returns true if "filename" is writeable by the user
+			// or false otherwise.
+		static bool	executable(const char *filename);
+			// Returns true if "filename" is executable by the user
+			// or false otherwise.
+		static bool	accessible(const char *filename, int mode);
+			// Checks to see if "filename" exists, is readable,
+			// is writeable and/or is executable by the user, based
+			// on the value of "mode".  Mode should be an or'ed
+			// combination of F_OK (exists), R_OK (readable),
+			// W_OK (writable) and X_OK (executable) flags.
+			//
+			// Returns true if the file meets the conditions set
+			// by the mode and false otherwise.
 
 		// These methods return the permissions of the file.
 		//
@@ -584,6 +603,92 @@ class file : public filedescriptor {
 			//
 			// Opens and returns the file descriptor handle of the
 			// file on success and -1 on failure.
+
+		#ifdef HAVE_XATTRS
+		char	**listAttributes();
+			// Returns a NULL terminated array of attributes of the
+			// file or NULL if an error occurred.
+		bool	getAttribute(const char *name,
+						unsigned char **buffer,
+						size_t *size);
+			// Retrieves the value of the attribute "name" of the
+			// file into "buffer", allocating as necessary.  Returns
+			// the size of "buffer" in "size".
+			//
+			// Returns true on success and false on failure.
+		bool	createAttribute(const char *name,
+						const unsigned char *value,
+						size_t size);
+			// Creates a new attribute named "name" and sets it's
+			// value to "value" of size "size".
+			//
+			// Returns true on success and false on failure.  Will
+			// fail if the attribute already exists.
+		bool	replaceAttribute(const char *name,
+						const unsigned char *value,
+						size_t size);
+			// Replaces the value of the attribute "name" with
+			// "value" of size "size".
+			//
+			// Returns true on success and false on failure.  Will
+			// fail if the attribute doesn't already exist.
+		bool	setAttribute(const char *name,
+						const unsigned char *value,
+						size_t size);
+			// Replaces the value of the attribute "name" with
+			// "value" of size "size" or creates the attribute
+			// if it doesn't already exist.
+			//
+			// Returns true on success and false on failure.
+		bool	removeAttribute(const char *name);
+			// Removes attribute "name" of the file.
+			//
+			// Returns true on success and false on failure.
+
+		static char	**listAttributes(const char *filename);
+			// Returns a NULL terminated array of attributes of
+			// "filename" or NULL if an error occurred.
+		static bool	getAttribute(const char *filename,
+						const char *name,
+						unsigned char **buffer,
+						size_t *size);
+			// Retrieves the value of the attribute "name" of
+			// "filename" into "buffer", allocating as necessary.
+			// Returns the size of "buffer" in "size".
+			//
+			// Returns true on success and false on failure.
+		bool	createAttribute(const char *filename,
+						const char *name,
+						const unsigned char *value,
+						size_t size);
+			// Creates a new attribute named "name" and sets it's
+			// value to "value" of size "size".
+			//
+			// Returns true on success and false on failure.  Will
+			// fail if the attribute already exists.
+		bool	replaceAttribute(const char *filename,
+						const char *name,
+						const unsigned char *value,
+						size_t size);
+			// Replaces the value of the attribute "name" with
+			// "value" of size "size".
+			//
+			// Returns true on success and false on failure.  Will
+			// fail if the attribute doesn't already exist.
+		bool	setAttribute(const char *filename,
+						const char *name,
+						const unsigned char *value,
+						size_t size);
+			// Replaces the value of the attribute "name" with
+			// "value" of size "size" or creates the attribute
+			// if it doesn't already exist.
+			//
+			// Returns true on success and false on failure.
+		bool	removeAttribute(const char *filename, const char *name);
+			// Removes attribute "name" of the file "filename".
+			//
+			// Returns true on success and false on failure.
+		#endif
 
 	#include <rudiments/private/file.h>
 };

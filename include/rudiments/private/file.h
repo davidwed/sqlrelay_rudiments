@@ -11,3 +11,15 @@
 						off_t start, off_t len,
 						struct flock *retlck);
 		bool	unlock(short whence, off_t start, off_t len);
+
+		#ifdef HAVE_XATTRS
+		bool	setAttribute(const char *name,
+						const unsigned char *value,
+						size_t size, int flags);
+		static bool	setAttribute(const char *filename,
+						const char *name,
+						const unsigned char *value,
+						size_t size, int flags);
+		static char	**attributeArray(const char *buffer,
+						size_t size);
+		#endif

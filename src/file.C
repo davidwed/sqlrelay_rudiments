@@ -16,6 +16,9 @@
 	#include <unistd.h>
 #endif
 #include <sys/time.h>
+#ifdef HAVE_XATTRS
+	#include <sys/xattr.h>
+#endif
 
 file::file() : filedescriptor() {
 	getcurrentpropertiesonopen=true;
@@ -324,8 +327,23 @@ off_t file::getCurrentPosition() {
 }
 
 bool file::exists(const char *filename) {
-	struct stat	st;
-	return !stat(filename,&st);
+	return accessible(filename,F_OK);
+}
+
+bool file::readable(const char *filename) {
+	return accessible(filename,R_OK);
+}
+
+bool file::writeable(const char *filename) {
+	return accessible(filename,W_OK);
+}
+
+bool file::executable(const char *filename) {
+	return accessible(filename,X_OK);
+}
+
+bool file::accessible(const char *filename, int mode) {
+	return !access(filename,mode);
 }
 
 bool file::getCurrentProperties() {
@@ -689,7 +707,7 @@ bool file::changeOwner(const char *newuser, const char *newgroup) {
 	gid_t	gid;
 	return (passwdentry::getUserId(newuser,&uid) &&
 		groupentry::getGroupId(newgroup,&gid) &&
-		!fchown(fd,uid,gid));
+		changeOwner(uid,gid));
 }
 
 bool file::changeOwner(uid_t uid, gid_t gid) {
@@ -702,7 +720,7 @@ bool file::changeOwner(const char *filename, const char *newuser,
 	gid_t	gid;
 	return (passwdentry::getUserId(newuser,&uid) &&
 		groupentry::getGroupId(newgroup,&gid) &&
-		!chown(filename,uid,gid));
+		changeOwner(filename,uid,gid));
 }
 
 bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
@@ -713,7 +731,7 @@ bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
 bool file::changeOwnerUserId(const char *newuser) {
 	uid_t	uid;
 	return (passwdentry::getUserId(newuser,&uid) &&
-		!fchown(fd,uid,(gid_t)-1));
+				changeOwnerUserId(uid));
 }
 
 bool file::changeOwnerUserId(uid_t uid) {
@@ -723,7 +741,7 @@ bool file::changeOwnerUserId(uid_t uid) {
 bool file::changeOwnerUserId(const char *filename, const char *newuser) {
 	uid_t	uid;
 	return (passwdentry::getUserId(newuser,&uid) &&
-		!chown(filename,uid,(gid_t)-1));
+				changeOwnerUserId(filename,uid));
 }
 
 bool file::changeOwnerUserId(const char *filename, uid_t uid) {
@@ -734,7 +752,7 @@ bool file::changeOwnerUserId(const char *filename, uid_t uid) {
 bool file::changeOwnerGroupId(const char *newgroup) {
 	gid_t	gid;
 	return (groupentry::getGroupId(newgroup,&gid) &&
-		!fchown(fd,(uid_t)-1,gid));
+				changeOwnerGroupId(gid));
 }
 
 bool file::changeOwnerGroupId(gid_t gid) {
@@ -745,7 +763,7 @@ bool file::changeOwnerGroupId(const char *filename,
 					const char *newgroup) {
 	gid_t	gid;
 	return (groupentry::getGroupId(newgroup,&gid) &&
-		!chown(filename,(uid_t)-1,gid));
+				changeOwnerGroupId(filename,gid));
 }
 
 bool file::changeOwnerGroupId(const char *filename, gid_t gid) {
@@ -824,30 +842,24 @@ bool file::revoke(const char *filename) {
 
 bool file::setLastAccessTime(const char *filename,
 					time_t lastaccesstime) {
-	time_t	modtime;
-	if (!getLastModificationTime(filename,&modtime)) {
+	time_t	lastmodtime;
+	if (!getLastModificationTime(filename,&lastmodtime)) {
 		return false;
 	}
-	timeval	tv[2];
-	tv[0].tv_sec=(long)lastaccesstime;
-	tv[0].tv_usec=0;
-	tv[1].tv_sec=(long)modtime;
-	tv[1].tv_usec=0;
-	return !utimes(filename,tv);
+	return setLastAccessAndModificationTimes(filename,
+						lastaccesstime,
+						lastmodtime);
 }
 
 bool file::setLastModificationTime(const char *filename,
 					time_t lastmodtime) {
-	time_t	actime;
-	if (!getLastAccessTime(filename,&actime)) {
+	time_t	lastaccesstime;
+	if (!getLastAccessTime(filename,&lastaccesstime)) {
 		return false;
 	}
-	timeval	tv[2];
-	tv[0].tv_sec=(long)actime;
-	tv[0].tv_usec=0;
-	tv[1].tv_sec=(long)lastmodtime;
-	tv[1].tv_usec=0;
-	return !utimes(filename,tv);
+	return setLastAccessAndModificationTimes(filename,
+						lastaccesstime,
+						lastmodtime);
 }
 
 bool file::setLastAccessAndModificationTimes(const char *filename,
@@ -880,3 +892,237 @@ bool file::createFifo(const char *filename, mode_t perms) {
 int file::createTemporaryFile(char *templatefilename) {
 	return mkstemp(templatefilename);
 }
+
+#ifdef HAVE_XATTRS
+char **file::listAttributes() {
+
+	// The flistxattr interface is designed such that you have to guess the
+	// size of the buffer that it will need, call flistxattr, then see if
+	// your guess was correct.  If not, you have to try again.
+
+	// try with a 8 byte buffer to start
+	size_t	size=8;
+	char	*buffer;
+
+	// try 100 times...
+	for (int i=0; i<100; i++) {
+
+		// allocate a buffer
+		buffer=new char[size];
+
+		// attempt to read the attribute into the buffer
+		size_t	newsize=flistxattr(fd,buffer,size);
+
+		// it's possible that someone changed the attribute between
+		// the previous 2 calls to fgetxattr and increased the size
+		// of the buffer necessary to retrieve it, if so, try again
+		// with a bigger buffer.
+		if (newsize>size) {
+			delete[] buffer;
+			size=newsize;
+		} else {
+			char	**retval=attributeArray(buffer,size);
+			delete[] buffer;
+			return retval;
+		}
+	}
+
+	// if we couldn't get the attribute after 100 tries, give up
+	return NULL;
+}
+
+bool file::getAttribute(const char *name,
+				unsigned char **buffer, size_t *size) {
+
+	// The fgetxattr interface is designed such that you have to guess the
+	// size of the buffer that it will need, call fgetxattr, then see if
+	// your guess was correct.  If not, you have to try again.
+
+	// try with a 8 byte buffer to start
+	(*size)=8;
+
+	// try 100 times...
+	for (int i=0; i<100; i++) {
+
+		// allocate a buffer
+		(*buffer)=new unsigned char[(*size)];
+
+		// attempt to read the attribute into the buffer
+		size_t	newsize=fgetxattr(fd,name,(void *)(*buffer),(*size));
+
+		// it's possible that someone changed the attribute between
+		// the previous 2 calls to fgetxattr and increased the size
+		// of the buffer necessary to retrieve it, if so, try again
+		// with a bigger buffer.
+		if (newsize>(*size)) {
+			delete[] (*buffer);
+			(*size)=newsize;
+		} else {
+			return true;
+		}
+	}
+
+	// if we couldn't get the attribute after 100 tries, give up
+	return false;
+}
+
+bool file::createAttribute(const char *name, const unsigned char *value,
+					size_t size) {
+	return setAttribute(name,value,size,XATTR_CREATE);
+}
+
+bool file::replaceAttribute(const char *name, const unsigned char *value,
+					size_t size) {
+	return setAttribute(name,value,size,XATTR_REPLACE);
+}
+
+bool file::setAttribute(const char *name, const unsigned char *value,
+							size_t size) {
+	return setAttribute(name,value,size,0);
+}
+
+bool file::setAttribute(const char *name, const unsigned char *value,
+					size_t size, int flags) {
+	return fsetxattr(fd,name,value,size,flags);
+}
+
+bool file::removeAttribute(const char *name) {
+	return fremovexattr(fd,name);
+}
+
+char **file::listAttributes(const char *filename) {
+
+	// The listxattr interface is designed such that you have to guess the
+	// size of the buffer that it will need, call listxattr, then see if
+	// your guess was correct.  If not, you have to try again.
+
+	// try with a 8 byte buffer to start
+	size_t	size=8;
+
+	// try 100 times...
+	for (int i=0; i<100; i++) {
+
+		// allocate a buffer
+		char	*buffer=new char[size];
+
+		// attempt to read the attribute into the buffer
+		size_t	newsize=listxattr(filename,buffer,size);
+
+		// it's possible that someone changed the attribute between
+		// the previous 2 calls to fgetxattr and increased the size
+		// of the buffer necessary to retrieve it, if so, try again
+		// with a bigger buffer.
+		if (newsize>size) {
+			delete[] buffer;
+			size=newsize;
+		} else {
+			char	**retval=attributeArray(buffer,size);
+			delete[] buffer;
+			return retval;
+		}
+	}
+
+	// if we couldn't get the attribute after 100 tries, give up
+	return NULL;
+}
+
+bool file::getAttribute(const char *filename, const char *name,
+						unsigned char **buffer,
+						size_t *size) {
+
+	// The getxattr interface is designed such that you have to guess the
+	// size of the buffer that it will need, call getxattr, then see if
+	// your guess was correct.  If not, you have to try again.
+
+	// try with a 8 byte buffer to start
+	(*size)=8;
+
+	// try 100 times...
+	for (int i=0; i<100; i++) {
+
+		// allocate a buffer
+		(*buffer)=new unsigned char[(*size)];
+
+		// attempt to read the attribute into the buffer
+		size_t	newsize=getxattr(filename,name,
+					(void *)(*buffer),(*size));
+
+		// it's possible that someone changed the attribute between
+		// the previous 2 calls to fgetxattr and increased the size
+		// of the buffer necessary to retrieve it, if so, try again
+		// with a bigger buffer.
+		if (newsize>(*size)) {
+			delete[] (*buffer);
+			(*size)=newsize;
+		} else {
+			return true;
+		}
+	}
+
+	// if we couldn't get the attribute after 100 tries, give up
+	return false;
+}
+
+bool file::createAttribute(const char *filename,
+					const char *name,
+					const unsigned char *value,
+					size_t size) {
+	return setAttribute(filename,name,value,size,XATTR_CREATE);
+}
+
+bool file::replaceAttribute(const char *filename,
+					const char *name,
+					const unsigned char *value,
+					size_t size) {
+	return setAttribute(filename,name,value,size,XATTR_REPLACE);
+}
+
+bool file::setAttribute(const char *filename,
+					const char *name,
+					const unsigned char *value,
+					size_t size) {
+	return setAttribute(filename,name,value,size,0);
+}
+
+bool file::setAttribute(const char *filename,
+					const char *name,
+					const unsigned char *value,
+					size_t size, int flags) {
+	return setxattr(filename,name,value,size,flags);
+}
+
+bool file::removeAttribute(const char *filename, const char *name) {
+	return removexattr(filename,name);
+}
+
+char **file::attributeArray(const char *buffer, size_t size) {
+
+	// count the number of attributes
+	int	counter=0;
+	for (size_t index=0; index<size; index++) {
+		if (!buffer[index]) {
+			counter++;
+		}
+	}
+
+	// create an array to hold them
+	char	**attributes=new char *[counter+1];
+	attributes[counter]=NULL;
+
+	// copy the attributes into the array
+	char	*ptr=(char *)buffer;
+	counter=0;
+	for (size_t index=0; index<size; index++) {
+		if (!buffer[index]) {
+			attributes[counter]=strdup(ptr);
+			if (index<size-1) {
+				ptr=(char *)&buffer[index+1];
+			}
+			counter++;
+		}
+	}
+
+	// return the array
+	return attributes;
+}
+#endif

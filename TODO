@@ -25,15 +25,11 @@ paths:
 					element in a directory tree
 
 file class:
-	unistd.h - access(),euidaccess()
-			pread(),pwrite()
-			pathconf()/fpathconf():
-				__POSIX_LINK_MAX()
-				__POSIX_CHOWN_RESTRICTED()
 	fcntl.h - fcntl()
 	sys/ioctl.h - ioctl()
-	sys/xattr.h - setxattr(),getxattr(),listxattr(),removexattr()
-			fsetxattr(),fgetxattr(),flistxattr(),fremovexattr()
+	unistd.h - pathconf()/fpathconf():
+				__POSIX_LINK_MAX()
+				__POSIX_CHOWN_RESTRICTED()
 
 link class:
 	unistd.h - lchown()
@@ -448,6 +444,10 @@ network:
 
 should file class have non-static versions of createDeviceNode/createFifo/
 	createTemporaryFile which mirror other create() methods?
+
+need tests for xattr wrappers
+
+need __USE_BSD to get revoke() on uclibc
 
 link class inherits from file, but operations apply to link, not file, need
 	to move link/symlink/readlink methods there
