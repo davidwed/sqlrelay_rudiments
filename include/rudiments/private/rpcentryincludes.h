@@ -6,3 +6,9 @@
 #include <pthread.h>
 
 #include <netdb.h>
+#ifdef HAVE_RPCENT_H
+	#include <rpc/rpcent.h>
+#endif
+#ifdef HAVE_RPC_H
+	#include <rpc/rpc.h>
+#endif

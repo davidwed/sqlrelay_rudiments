@@ -9,13 +9,6 @@
 #include <stdio.h>
 #include <errno.h>
 
-#ifdef HAVE_RPCENT_H
-	#include <rpc/rpcent.h>
-#endif
-#ifdef HAVE_RPC_H
-	#include <rpc/rpc.h>
-#endif
-
 #define MAXBUFFER	(32*1024)
 
 #if defined(__GNUC__) && \
@@ -57,7 +50,7 @@ int rpcentry::initialize(const char *rpcname, int number) {
 		re=NULL;
 		return (((remutex)?!pthread_mutex_lock(remutex):1) &&
 			((re=((rpcname)
-				?getrpcbyname(rpcname)
+				?getrpcbyname((char *)rpcname)
 				:getrpcbynumber(number)))!=NULL) &&
 			((remutex)?!pthread_mutex_unlock(remutex):1));
 	#endif

@@ -1,3 +1,7 @@
+some systems have no shadow utilities at all
+need to test for getrpcbyname in rpc/rpcent.h and rpc/rpc.h if getrpcbyname_r
+	is not found
+
 document shadowentry, serviceentry, rpcentry, timezonefile classes
 
 a termios class would be nice
