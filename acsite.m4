@@ -430,15 +430,21 @@ then
 
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			PCRELIBS=`pcre-config --libs`
-			PCREINCLUDES=`pcre-config --cflags`
-			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
-		else
-			FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre],[pcre/pcre.h],[pcre],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
+			AC_MSG_CHECKING(pcre)
+			PCRELIBS=`pcre-config --libs 2> /dev/null`
 			if ( test -n "$PCRELIBS" )
 			then
-				AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+				AC_MSG_RESULT(yes)
+			else
+				AC_MSG_RESULT(no)
 			fi
+		else
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[pcre],[pcre/pcre.h],[pcre],[""],[""],[PCREINCLUDES],[PCRELIBS],[PCRELIBPATH],[PCRESTATIC])
+		fi
+		if ( test -n "$PCRELIBS" )
+		then
+			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
 		fi
 	fi
 

@@ -20444,13 +20444,18 @@ _ACEOF
 
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
-			PCRELIBS=`pcre-config --libs`
-			PCREINCLUDES=`pcre-config --cflags`
-
-cat >>confdefs.h <<\_ACEOF
-#define RUDIMENTS_HAS_PCRE 1
-_ACEOF
-
+			echo "$as_me:$LINENO: checking pcre" >&5
+echo $ECHO_N "checking pcre... $ECHO_C" >&6
+			PCRELIBS=`pcre-config --libs 2> /dev/null`
+			if ( test -n "$PCRELIBS" )
+			then
+				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+				echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+			else
+				echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+			fi
 		else
 
 
@@ -20833,14 +20838,14 @@ then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
-			if ( test -n "$PCRELIBS" )
-			then
+		fi
+		if ( test -n "$PCRELIBS" )
+		then
 
 cat >>confdefs.h <<\_ACEOF
 #define RUDIMENTS_HAS_PCRE 1
 _ACEOF
 
-			fi
 		fi
 	fi
 

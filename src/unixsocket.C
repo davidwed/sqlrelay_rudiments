@@ -12,6 +12,8 @@
 #include <limits.h>
 #include <stdio.h>
 
+#include <unistd.h>
+
 //#define DEBUG_UNIXSOCKET 1
 
 #ifdef NEED_XNET_PROTOTYPES
@@ -90,10 +92,14 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	#endif
 
 	// finally, send the msghdr
+write('0');
 	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
 bool unixsocket::receiveFileDescriptor(int *filedesc) {
+printf("%d: read on %d before recvmsg\n",getpid(),fd);
+char ch;
+read(&ch);
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr

@@ -512,6 +512,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		#ifdef RUDIMENTS_HAS_SSL
 		}
 		#endif
+printf("%d: read(%d)=%d  %s\n",getpid(),fd,actualread,strerror(errno));
 
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
