@@ -1,0 +1,48 @@
+#include <rudiments/modemutil.h>
+#include <rudiments/serialport.h>
+#include <rudiments/serialportprofile.h>
+#include <rudiments/signalclasses.h>
+#include <rudiments/file.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+
+modemutil::modemutil() {
+	devicename="";
+	baud="";
+}
+
+modemutil::~modemutil() {}
+
+void modemutil::initialize(const char *device, const char *baud) {
+	this->devicename=(char *)device;
+	this->baud=(char *)baud;
+}
+
+bool modemutil::configureSerialPort(int fd, const char *baud) {
+
+	serialportprofile	spp;
+	spp.baud(baud);
+	spp.ignoreParityErrors(true);
+	spp.hardwareFlowControl(true);
+	spp.characterSize(serialportprofile::cs_8);
+	spp.receiverOn(true);
+	spp.ignoreModemControlLines(true);
+	spp.readThreshold(1);
+	spp.readTimeout(0);
+
+	// this is kind of lame, this class should somehow
+	// inherit from serialport
+	serialport	sp;
+	sp.setFileDescriptor(fd);
+	bool	retval=(sp.flush() && sp.setProfileNow(&spp));
+	// set the file descriptor to -1 so it won't get
+	// closed when the instance of serialport goes away
+	sp.setFileDescriptor(-1);
+	return retval;
+}
