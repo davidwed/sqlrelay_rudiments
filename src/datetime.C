@@ -2,7 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/datetime.h>
-#include <rudiments/file.h>
+#ifdef HAVE_RTC
+	#include <rudiments/file.h>
+#endif
 #ifndef ENABLE_INLINES
 	#include <rudiments/private/datetimeinlines.h>
 #endif

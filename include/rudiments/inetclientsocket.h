@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_INETCLIENTSOCKET_H
 #define RUDIMENTS_INETCLIENTSOCKET_H
 
-#include <rudiments/private/inetsocketincludes.h>
+#include <rudiments/private/inetclientsocketincludes.h>
 
 // The inetclientsocket class allows you to write programs that can talk to
 // other programs across a network over TCP stream sockets.

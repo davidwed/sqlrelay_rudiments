@@ -108,22 +108,19 @@ AC_MSG_CHECKING(for CMSG_SPACE)
 AC_TRY_LINK([#include <sys/socket.h>],
 int a; a=CMSG_SPACE(sizeof(int));,AC_DEFINE(HAVE_CMSG_SPACE, 1, Some systems don't define CMSG_SPACE) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if struct stat contains st_blksize)
-AC_TRY_LINK([#define __USE_UNIX98
-#include <sys/types.h>
+AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 struct stat st;
 blksize_t s=st.st_blksize;,AC_DEFINE(HAVE_BLKSIZE_T, 1, Some systems don't have st_blksize in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if struct stat contains st_blocks)
-AC_TRY_LINK([#define __USE_UNIX98
-#include <sys/types.h>
+AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 struct stat st;
 blkcnt_t b=st.st_blocks;,AC_DEFINE(HAVE_BLKCNT_T, 1, Some systems don't have st_blocks in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_MSG_CHECKING(if S_ISSOCK exists)
-AC_TRY_LINK([#define __USE_UNIX98
-#include <sys/types.h>
+AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 S_ISSOCK(0);,AC_DEFINE(HAVE_S_ISSOCK, 1, Some systems don't have S_ISSOCK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
