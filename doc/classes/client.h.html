@@ -9,44 +9,44 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_CLIENT_H</font>
-<font color="#a020f0">#define RUDIMENTS_CLIENT_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_CLIENT_H</font>
+<font color="#a520f7">#define RUDIMENTS_CLIENT_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/clientincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/clientincludes.h&gt;</font>
 
 <font color="#0000ff">// The client class provides a base class for classes that implement the client</font>
 <font color="#0000ff">// side of a client-server communication model.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> client : <font color="#a52a2a"><b>public</b></font> filedescriptor {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> client : <font color="#a52829"><b>public</b></font> filedescriptor {
+        <font color="#a52829"><b>public</b></font>:
 
                         client();
-                        client(<font color="#2e8b57"><b>const</b></font> client &amp;c);
-                client  &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> client &amp;c);
-                <font color="#2e8b57"><b>virtual</b></font> ~client();
+                        client(<font color="#298a52"><b>const</b></font> client &amp;c);
+                client  &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> client &amp;c);
+                <font color="#298a52"><b>virtual</b></font> ~client();
 
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>void</b></font>    initialize(namevaluepairs *cd)=<font color="#ff00ff">0</font>;
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>int</b></font>     connect()=<font color="#ff00ff">0</font>;
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>void</b></font>    initialize(namevaluepairs *cd)=<font color="#ff00ff">0</font>;
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>int</b></font>     connect()=<font color="#ff00ff">0</font>;
                                 <font color="#0000ff">// This method return an int instead of a bool</font>
                                 <font color="#0000ff">// because we want child classes that have non</font>
                                 <font color="#0000ff">// atomic connection procedures (such as a</font>
                                 <font color="#0000ff">// modem) to be able to implement return codes</font>
                                 <font color="#0000ff">// other than success or failure (such as</font>
                                 <font color="#0000ff">// abort).</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>char</b></font>    *getVerboseConnectError();
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>char</b></font>    *getVerboseConnectError();
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/client.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/client.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

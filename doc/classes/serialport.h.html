@@ -9,63 +9,63 @@
 <font color="#0000ff">// Copyright (c) 2004 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_SERIALPORT_H</font>
-<font color="#a020f0">#define RUDIMENTS_SERIALPORT_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_SERIALPORT_H</font>
+<font color="#a520f7">#define RUDIMENTS_SERIALPORT_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/serialportincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/serialportincludes.h&gt;</font>
 
 <font color="#0000ff">// like filedescriptor class, but read() returns EOF when a timeout has occurred</font>
 <font color="#0000ff">// also, wraps termios.h functions</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> serialport : <font color="#a52a2a"><b>public</b></font> filedescriptor {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> serialport : <font color="#a52829"><b>public</b></font> filedescriptor {
+        <font color="#a52829"><b>public</b></font>:
 
                                 serialport();
-                                serialport(<font color="#2e8b57"><b>const</b></font> serialport &amp;s);
-                serialport      &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> serialport &amp;s);
-                <font color="#2e8b57"><b>virtual</b></font>         ~serialport();
+                                serialport(<font color="#298a52"><b>const</b></font> serialport &amp;s);
+                serialport      &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> serialport &amp;s);
+                <font color="#298a52"><b>virtual</b></font>         ~serialport();
 
-                <font color="#2e8b57"><b>bool</b></font>    setProfileNow(serialportprofile *profile);
+                <font color="#298a52"><b>bool</b></font>    setProfileNow(serialportprofile *profile);
                         <font color="#0000ff">// tcsetattr(TCSANOW)</font>
-                <font color="#2e8b57"><b>bool</b></font>    setProfileOnDrain(serialportprofile *profile);
+                <font color="#298a52"><b>bool</b></font>    setProfileOnDrain(serialportprofile *profile);
                         <font color="#0000ff">// tcsetattr(TCSADRAIN)</font>
-                <font color="#2e8b57"><b>bool</b></font>    setProfileOnFlush(serialportprofile *profile);
+                <font color="#298a52"><b>bool</b></font>    setProfileOnFlush(serialportprofile *profile);
                         <font color="#0000ff">// tcsetattr(TCSAFLUSH)</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    getProfile(serialportprofile *profile);
+                <font color="#298a52"><b>bool</b></font>    getProfile(serialportprofile *profile);
                         <font color="#0000ff">// tcgetattr</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    drain();
+                <font color="#298a52"><b>bool</b></font>    drain();
                         <font color="#0000ff">// tcdrain</font>
-                <font color="#2e8b57"><b>bool</b></font>    flush();
+                <font color="#298a52"><b>bool</b></font>    flush();
                         <font color="#0000ff">// tcflush(TCIOFLUSH)</font>
-                <font color="#2e8b57"><b>bool</b></font>    flushInput();
+                <font color="#298a52"><b>bool</b></font>    flushInput();
                         <font color="#0000ff">// tcflush(TCIFLUSH)</font>
-                <font color="#2e8b57"><b>bool</b></font>    flushOutput();
+                <font color="#298a52"><b>bool</b></font>    flushOutput();
                         <font color="#0000ff">// tcflush(TCOFLUSH)</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    suspendOutput();
+                <font color="#298a52"><b>bool</b></font>    suspendOutput();
                         <font color="#0000ff">// tcflow(TCOOFF)</font>
-                <font color="#2e8b57"><b>bool</b></font>    restartOutput();
+                <font color="#298a52"><b>bool</b></font>    restartOutput();
                         <font color="#0000ff">// tcflow(TCOON)</font>
-                <font color="#2e8b57"><b>bool</b></font>    transmitStop();
+                <font color="#298a52"><b>bool</b></font>    transmitStop();
                         <font color="#0000ff">// tcflow(TCIOFF)</font>
-                <font color="#2e8b57"><b>bool</b></font>    transmitStart();
+                <font color="#298a52"><b>bool</b></font>    transmitStart();
                         <font color="#0000ff">// tcflow(TCION)</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    sendBreak(<font color="#2e8b57"><b>int</b></font> duration);
+                <font color="#298a52"><b>bool</b></font>    sendBreak(<font color="#298a52"><b>int</b></font> duration);
                         <font color="#0000ff">// tcsendbreak()</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

@@ -9,54 +9,54 @@
 <font color="#0000ff">// Copyright (c) 2004 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_CHARACTER_H</font>
-<font color="#a020f0">#define RUDIMENTS_CHARACTER_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_CHARACTER_H</font>
+<font color="#a520f7">#define RUDIMENTS_CHARACTER_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/characterincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/characterincludes.h&gt;</font>
 
 <font color="#0000ff">// The character class provides methods for evaluating and manipulating</font>
 <font color="#0000ff">// characters.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> character {
-        <font color="#a52a2a"><b>public</b></font>:
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isAlphanumeric(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isAlphabetical(<font color="#2e8b57"><b>int</b></font> c);
+<font color="#298a52"><b>class</b></font> character {
+        <font color="#a52829"><b>public</b></font>:
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isAlphanumeric(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isAlphabetical(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isLowerCase(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isUpperCase(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isLowerCase(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isUpperCase(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isPunctuation(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isPunctuation(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isPrintable(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isPrintableNonSpace(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isPrintable(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isPrintableNonSpace(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isControlCharacter(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isControlCharacter(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isDigit(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isHexDigit(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isDigit(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isHexDigit(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isSpace(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isBlank(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isWhitespace(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isSpace(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isBlank(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isWhitespace(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     isAscii(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     isAscii(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      toUpperCase(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      toLowerCase(<font color="#2e8b57"><b>int</b></font> c);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      toAscii(<font color="#2e8b57"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      toUpperCase(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      toLowerCase(<font color="#298a52"><b>int</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      toAscii(<font color="#298a52"><b>int</b></font> c);
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>void</b></font>     safePrint(<font color="#2e8b57"><b>char</b></font> c);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>void</b></font>     safePrint(<font color="#298a52"><b>char</b></font> c);
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 2003 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_LINKEDLIST_H</font>
-<font color="#a020f0">#define RUDIMENTS_LINKEDLIST_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_LINKEDLIST_H</font>
+<font color="#a520f7">#define RUDIMENTS_LINKEDLIST_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistincludes.h&gt;</font>
 
 <font color="#0000ff">// The linkedlist class allows you to store arbitrary amounts of data in a</font>
 <font color="#0000ff">// doubly-linked list.  Since the linkedlist class is template-based, you can</font>
@@ -21,34 +21,34 @@
 <font color="#0000ff">// Each linkedlist is composed of a series of linkedlistnode's.  Each</font>
 <font color="#0000ff">// linkedlistnode contains the data.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>template</b></font> &lt;<font color="#2e8b57"><b>class</b></font> datatype&gt;
-<font color="#2e8b57"><b>class</b></font> linkedlistnode {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>template</b></font> &lt;<font color="#298a52"><b>class</b></font> datatype&gt;
+<font color="#298a52"><b>class</b></font> linkedlistnode {
+        <font color="#a52829"><b>public</b></font>:
                         linkedlistnode();
                         <font color="#0000ff">// Creates a new linkedlist node, initializing the data</font>
                         <font color="#0000ff">// to 0 and the next/previous pointers to NULL.</font>
-                <font color="#2e8b57"><b>virtual</b></font> ~linkedlistnode();
+                <font color="#298a52"><b>virtual</b></font> ~linkedlistnode();
                         <font color="#0000ff">// Destroys the linkedlist node.  Note that this method</font>
                         <font color="#0000ff">// does not delete the data contained in the node.</font>
 
-                <font color="#2e8b57"><b>void</b></font>            setData(datatype data);
+                <font color="#298a52"><b>void</b></font>            setData(datatype data);
                                 <font color="#0000ff">// Set the data stored in the node</font>
                                 <font color="#0000ff">// to &quot;data&quot;.</font>
-                datatype        getData() <font color="#2e8b57"><b>const</b></font>;
+                datatype        getData() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Return the data stored in the node.</font>
 
-                <font color="#2e8b57"><b>int</b></font>     compare(datatype data) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>     compare(datatype data) <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Returns -1,0 or 1 if the data stored in the</font>
                         <font color="#0000ff">// node is less than, equal to or greater than</font>
                         <font color="#0000ff">// &quot;data&quot;.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    setPrevious(linkedlistnode&lt;datatype&gt; *previous);
+                <font color="#298a52"><b>void</b></font>    setPrevious(linkedlistnode&lt;datatype&gt; *previous);
                         <font color="#0000ff">// Sets the pointer to the previous node to &quot;previous&quot;.</font>
-                <font color="#2e8b57"><b>void</b></font>    setNext(linkedlistnode&lt;datatype&gt; *next);
+                <font color="#298a52"><b>void</b></font>    setNext(linkedlistnode&lt;datatype&gt; *next);
                         <font color="#0000ff">// Sets the pointer to the next node to &quot;next&quot;.</font>
 
                 linkedlistnode&lt;datatype&gt;        *getPrevious();
@@ -58,72 +58,72 @@
                                         <font color="#0000ff">// Returns the next node in the</font>
                                         <font color="#0000ff">// linkedlist.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    print() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>void</b></font>    print() <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Prints the data stored in the node.</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistnode.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistnode.h&gt;</font>
 };
 
-<font color="#2e8b57"><b>template</b></font> &lt; <font color="#2e8b57"><b>class</b></font> datatype, <font color="#2e8b57"><b>class</b></font> linkedlistnodetype=linkedlistnode&lt;datatype&gt; &gt;
-<font color="#2e8b57"><b>class</b></font> linkedlist {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>template</b></font> &lt; <font color="#298a52"><b>class</b></font> datatype, <font color="#298a52"><b>class</b></font> linkedlistnodetype=linkedlistnode&lt;datatype&gt; &gt;
+<font color="#298a52"><b>class</b></font> linkedlist {
+        <font color="#a52829"><b>public</b></font>:
                         linkedlist();
                         <font color="#0000ff">// Creates an empty linkedlist.</font>
-                <font color="#2e8b57"><b>virtual</b></font> ~linkedlist();
+                <font color="#298a52"><b>virtual</b></font> ~linkedlist();
                         <font color="#0000ff">// Deletes the linkedlist and all of it's</font>
                         <font color="#0000ff">// linkedlistnodes.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    append(datatype data);
+                <font color="#298a52"><b>void</b></font>    append(datatype data);
                         <font color="#0000ff">// Creates a new linkedlistnode containing &quot;data&quot; and</font>
                         <font color="#0000ff">// appends it to the linkedlist.</font>
-                <font color="#2e8b57"><b>void</b></font>    append(linkedlistnodetype *node);
+                <font color="#298a52"><b>void</b></font>    append(linkedlistnodetype *node);
                         <font color="#0000ff">// Appends already created linkedlistnode &quot;node&quot; to the</font>
                         <font color="#0000ff">// linkedlist.</font>
-                <font color="#2e8b57"><b>bool</b></font>    insert(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> index, datatype data);
+                <font color="#298a52"><b>bool</b></font>    insert(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> index, datatype data);
                         <font color="#0000ff">// Creates a new linkedlistnode containing &quot;data&quot; and</font>
                         <font color="#0000ff">// inserts it into the linkedlist at &quot;index&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>bool</b></font>    insert(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> index, linkedlistnodetype *node);
+                <font color="#298a52"><b>bool</b></font>    insert(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> index, linkedlistnodetype *node);
                         <font color="#0000ff">// Inserts already created linkedlistnode &quot;node&quot; into</font>
                         <font color="#0000ff">// the linkedlist at &quot;index&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    removeByIndex(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> index);
+                <font color="#298a52"><b>bool</b></font>    removeByIndex(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> index);
                         <font color="#0000ff">// Deletes the linkedlistnode at &quot;index&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>bool</b></font>    removeByData(datatype data);
+                <font color="#298a52"><b>bool</b></font>    removeByData(datatype data);
                         <font color="#0000ff">// Deletes the first linkedlistnode containing &quot;data&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>bool</b></font>    removeAllByData(datatype data);
+                <font color="#298a52"><b>bool</b></font>    removeAllByData(datatype data);
                         <font color="#0000ff">// Deletes all linkedlistnodes containing &quot;data&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>bool</b></font>    removeNode(linkedlistnodetype *node);
+                <font color="#298a52"><b>bool</b></font>    removeNode(linkedlistnodetype *node);
                         <font color="#0000ff">// Removed linkedlistnode &quot;node&quot; from the linkedlist.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    setDataByIndex(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> index,
+                <font color="#298a52"><b>bool</b></font>    setDataByIndex(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> index,
                                                 datatype data);
                         <font color="#0000ff">// Sets the data contained in the linkedlistnode at</font>
                         <font color="#0000ff">// &quot;index&quot; to &quot;data&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>bool</b></font>    getDataByIndex(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> index,
+                <font color="#298a52"><b>bool</b></font>    getDataByIndex(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> index,
                                                 datatype *data);
                         <font color="#0000ff">// Returns the data contained in the linkedlistnode at</font>
                         <font color="#0000ff">// &quot;index&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>   getLength() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font>   getLength() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the length of the linkedlist.</font>
 
-                linkedlistnodetype      *getNodeByIndex(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> index);
+                linkedlistnodetype      *getNodeByIndex(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> index);
                                 <font color="#0000ff">// Returns a pointer to the linkedlistnode at</font>
                                 <font color="#0000ff">// &quot;index&quot;.</font>
                 linkedlistnodetype      *getNodeByData(datatype data);
@@ -136,29 +136,29 @@
                                 <font color="#0000ff">// linkedlistnode after &quot;startnode&quot; containing</font>
                                 <font color="#0000ff">// &quot;data&quot;.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    clear();
+                <font color="#298a52"><b>void</b></font>    clear();
                         <font color="#0000ff">// Deletes all linkedlistnodes currently in the</font>
                         <font color="#0000ff">// linkedlist.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    print() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>void</b></font>    print() <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Prints out a representation of the linkedlist.</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/linkedlist.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/linkedlist.h&gt;</font>
 };
 
 <font color="#0000ff">// A class for containing linkedlists of strings is defined here for</font>
 <font color="#0000ff">// convenience.</font>
-<font color="#2e8b57"><b>typedef</b></font> linkedlistnode&lt; <font color="#2e8b57"><b>char</b></font> * &gt;                stringlistnode;
-<font color="#2e8b57"><b>typedef</b></font> linkedlist&lt; <font color="#2e8b57"><b>char</b></font> *, stringlistnode &gt;    stringlist;
+<font color="#298a52"><b>typedef</b></font> linkedlistnode&lt; <font color="#298a52"><b>char</b></font> * &gt;                stringlistnode;
+<font color="#298a52"><b>typedef</b></font> linkedlist&lt; <font color="#298a52"><b>char</b></font> *, stringlistnode &gt;    stringlist;
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistnodeinlines.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistinlines.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistnodeinlines.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/linkedlistinlines.h&gt;</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

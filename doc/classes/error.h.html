@@ -9,46 +9,46 @@
 <font color="#0000ff">// Copyright (c) 2005 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef ERROR_H</font>
-<font color="#a020f0">#define ERROR_H</font>
+<font color="#a520f7">#ifndef ERROR_H</font>
+<font color="#a520f7">#define ERROR_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;errno.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;errno.h&gt;</font>
 
 <font color="#0000ff">// The error class provides an interface to the errors that system calls</font>
 <font color="#0000ff">// can generate.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> error {
-        <font color="#a52a2a"><b>public</b></font>:
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>            clearError();
+<font color="#298a52"><b>class</b></font> error {
+        <font color="#a52829"><b>public</b></font>:
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>            clearError();
                                         <font color="#0000ff">// Set the current system call error to</font>
                                         <font color="#0000ff">// 0, &quot;Success&quot;.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>            setErrorNumber(<font color="#2e8b57"><b>int</b></font> err);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>            setErrorNumber(<font color="#298a52"><b>int</b></font> err);
                                         <font color="#0000ff">// Set the current system call error to</font>
                                         <font color="#0000ff">// &quot;err&quot;.  &quot;err&quot; should be one of the</font>
                                         <font color="#0000ff">// errors defined in error.h such as</font>
                                         <font color="#0000ff">// EINTR, ENOMEM, etc.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>             getErrorNumber();
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>             getErrorNumber();
                                         <font color="#0000ff">// Returns the current system call</font>
                                         <font color="#0000ff">// error.  Will match one of the errors</font>
                                         <font color="#0000ff">// defined in error.h such as EINTR,</font>
                                         <font color="#0000ff">// ENOMEM, etc.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getErrorString();
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getErrorString();
                                         <font color="#0000ff">// Returns a string representation</font>
                                         <font color="#0000ff">// of the current system call error.</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

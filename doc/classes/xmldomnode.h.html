@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_XMLDOMNODE_H</font>
-<font color="#a020f0">#define RUDIMENTS_XMLDOMNODE_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_XMLDOMNODE_H</font>
+<font color="#a520f7">#define RUDIMENTS_XMLDOMNODE_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/xmldomnodeincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/xmldomnodeincludes.h&gt;</font>
 
 <font color="#0000ff">// The xmldomnode class provides a generic container for DOM tree elements.</font>
 <font color="#0000ff">// One can navigate the nodes of the tree, modify the tree and read or modify</font>
@@ -109,12 +109,12 @@
 <font color="#0000ff">//              a list of attribute nodes - unused</font>
 <font color="#0000ff">//              a list of child nodes - unused</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
 <font color="#0000ff">// node types</font>
-<font color="#2e8b57"><b>enum</b></font> xmldomnodetype {
+<font color="#298a52"><b>enum</b></font> xmldomnodetype {
         NULL_XMLDOMNODETYPE=<font color="#ff00ff">0</font>,
         ROOT_XMLDOMNODETYPE,
         TAG_XMLDOMNODETYPE,
@@ -124,8 +124,8 @@
         CDATA_XMLDOMNODETYPE
 };
 
-<font color="#2e8b57"><b>class</b></font> xmldomnode {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> xmldomnode {
+        <font color="#a52829"><b>public</b></font>:
                         xmldomnode(xmldomnode *nullnode);
                                 <font color="#0000ff">// Creates a new node and intializes its</font>
                                 <font color="#0000ff">// member variables to NULL.</font>
@@ -144,7 +144,7 @@
                                 <font color="#0000ff">// &quot;node2&quot; doesn't exist.</font>
                         xmldomnode(xmldomnode *nullnode,
                                         xmldomnodetype type,
-                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
+                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value);
                                 <font color="#0000ff">// Creates a new node (as above) and intializes</font>
                                 <font color="#0000ff">// its member variables to the values passed in.</font>
                         ~xmldomnode();
@@ -153,7 +153,7 @@
 
 
 
-                <font color="#2e8b57"><b>static</b></font>  xmldomnode      *createNullNode();
+                <font color="#298a52"><b>static</b></font>  xmldomnode      *createNullNode();
                                         <font color="#0000ff">// Creates a special &quot;null node&quot; whose</font>
                                         <font color="#0000ff">// parent, next sibling and previous</font>
                                         <font color="#0000ff">// siblings point back to itself.</font>
@@ -168,41 +168,41 @@
 
 
                 <font color="#0000ff">// These methods control the behavior when the node is deleted.</font>
-                <font color="#2e8b57"><b>void</b></font>            cascadeOnDelete();
+                <font color="#298a52"><b>void</b></font>            cascadeOnDelete();
                                 <font color="#0000ff">// Instructs the destructor to recursively</font>
                                 <font color="#0000ff">// delete all child nodes. (the default)</font>
-                <font color="#2e8b57"><b>void</b></font>            dontCascadeOnDelete();
+                <font color="#298a52"><b>void</b></font>            dontCascadeOnDelete();
                                 <font color="#0000ff">// Instructs the destructor not to recursively</font>
                                 <font color="#0000ff">// delete all child nodes.</font>
 
 
                 <font color="#0000ff">// These methods provide read-access to the data</font>
                 <font color="#0000ff">// contained in the node.</font>
-                xmldomnodetype  getType() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnodetype  getType() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the node type.</font>
-                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getName() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the node name.</font>
-                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getValue() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getValue() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the node value.</font>
 
 
-                xmldomnode      *getParent() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getParent() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns a pointer to the parent node or the</font>
                                 <font color="#0000ff">// nullnode if none exists.</font>
-                xmldomnode      *getPreviousSibling() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getPreviousSibling() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns a pointer to the previous sibling</font>
                                 <font color="#0000ff">// node or the nullnode if none exists.</font>
-                xmldomnode      *getPreviousTagSibling() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getPreviousTagSibling() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns a pointer to the previous sibling</font>
                                 <font color="#0000ff">// node whose type is TAG_XMLDOMNODE.  If no</font>
                                 <font color="#0000ff">// match is found, nullnode is returned.</font>
-                xmldomnode      *getPreviousTagSibling(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getPreviousTagSibling(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the previous sibling node named</font>
                                 <font color="#0000ff">// &quot;name&quot; whose type is TAG_XMLDOMNODE or the</font>
                                 <font color="#0000ff">// nullnode if not found.</font>
-                xmldomnode      *getPreviousTagSibling(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
-                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributename,
-                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributevalue) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getPreviousTagSibling(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
+                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributename,
+                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributevalue) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the previous sibling node named</font>
                                 <font color="#0000ff">// &quot;name&quot; with an attribute named</font>
                                 <font color="#0000ff">// &quot;attributename&quot; with value &quot;attributevalue&quot;</font>
@@ -212,20 +212,20 @@
                                 <font color="#0000ff">// name (with matching attribute name/value)</font>
                                 <font color="#0000ff">// will be returned.  If no match is found,</font>
                                 <font color="#0000ff">// nullnode is returned.</font>
-                xmldomnode      *getNextSibling() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getNextSibling() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns a pointer to the next sibling node</font>
                                 <font color="#0000ff">// or the nullnode if none exists.</font>
-                xmldomnode      *getNextTagSibling() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getNextTagSibling() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns a pointer to the next sibling node</font>
                                 <font color="#0000ff">// whose type is TAG_XMLDOMNODE.  If no match</font>
                                 <font color="#0000ff">// is found, nullnode is returned.</font>
-                xmldomnode      *getNextTagSibling(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getNextTagSibling(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the next sibling node named &quot;name&quot;</font>
                                 <font color="#0000ff">// whose type is TAG_XMLDOMNODE or the nullnode</font>
                                 <font color="#0000ff">// if not found.</font>
-                xmldomnode      *getNextTagSibling(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
-                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributename,
-                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributevalue) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getNextTagSibling(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
+                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributename,
+                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributevalue) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the next sibling node named &quot;name&quot;</font>
                                 <font color="#0000ff">// with an attribute named &quot;attributename&quot; with</font>
                                 <font color="#0000ff">// value &quot;attributevalue&quot; whose type is</font>
@@ -237,18 +237,18 @@
                                 <font color="#0000ff">// nullnode is returned.</font>
 
 
-                <font color="#2e8b57"><b>int</b></font>             getChildCount() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>             getChildCount() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the number of immediate child nodes.</font>
-                xmldomnode      *getChild(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getChild(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the child node named &quot;name&quot;</font>
                                 <font color="#0000ff">// or the nullnode if not found.</font>
-                xmldomnode      *getChild(<font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getChild(<font color="#298a52"><b>int</b></font> position) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the child node at index &quot;position&quot;</font>
                                 <font color="#0000ff">// or the nullnode if not found.</font>
-                xmldomnode      *getChild(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
-                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributename,
-                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributevalue)
-                                                <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getChild(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
+                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributename,
+                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributevalue)
+                                                <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the first child node named &quot;name&quot;</font>
                                 <font color="#0000ff">// with an attribute named &quot;attributename&quot; with</font>
                                 <font color="#0000ff">// value &quot;attributevalue&quot;.  If &quot;name&quot; is null,</font>
@@ -257,18 +257,18 @@
                                 <font color="#0000ff">// name (with matching attribute name/value)</font>
                                 <font color="#0000ff">// will be returned.  If no match is found,</font>
                                 <font color="#0000ff">// nullnode is returned.</font>
-                xmldomnode      *getFirstTagChild() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getFirstTagChild() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the first child node whose type is</font>
                                 <font color="#0000ff">// TAG_XMLDOMNODE.  If no match is found,</font>
                                 <font color="#0000ff">// nullnode is returned.</font>
-                xmldomnode      *getFirstTagChild(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getFirstTagChild(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the first child node named &quot;name&quot;</font>
                                 <font color="#0000ff">// whose type is TAG_XMLDOMNODE.  If no match</font>
                                 <font color="#0000ff">// is found, nullnode is returned.</font>
-                xmldomnode      *getFirstTagChild(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
-                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributename,
-                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *attributevalue)
-                                                <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getFirstTagChild(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
+                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributename,
+                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *attributevalue)
+                                                <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the first child node named &quot;name&quot;</font>
                                 <font color="#0000ff">// with an attribute named &quot;attributename&quot; with</font>
                                 <font color="#0000ff">// value &quot;attributevalue&quot; whose type is</font>
@@ -280,22 +280,22 @@
                                 <font color="#0000ff">// nullnode is returned.</font>
 
 
-                <font color="#2e8b57"><b>int</b></font>             getAttributeCount() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>             getAttributeCount() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the number of attributes.</font>
-                xmldomnode      *getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the attribute named &quot;name&quot;</font>
                                 <font color="#0000ff">// or the nullnode if not found.</font>
-                xmldomnode      *getAttribute(<font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getAttribute(<font color="#298a52"><b>int</b></font> position) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the attribute node at index</font>
                                 <font color="#0000ff">// &quot;position&quot; or the nullnode if not found.</font>
-                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getAttributeValue(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute named</font>
                                 <font color="#0000ff">// &quot;name&quot; or the nullnode if not found.</font>
-                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValue(<font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getAttributeValue(<font color="#298a52"><b>int</b></font> position) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute node at</font>
                                 <font color="#0000ff">// index &quot;position&quot; or the nullnode if not</font>
                                 <font color="#0000ff">// found.</font>
-                namevaluepairs  *getAttributes() <font color="#2e8b57"><b>const</b></font>;
+                namevaluepairs  *getAttributes() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the attribute names and values in</font>
                                 <font color="#0000ff">// a namevaluepairs dictionary.  The instance</font>
                                 <font color="#0000ff">// of namevaluepairs is allocated internally</font>
@@ -303,9 +303,9 @@
                                 <font color="#0000ff">// an empty dictionary if the node has no</font>
                                 <font color="#0000ff">// attributes.</font>
 
-                xmldomnode      *getNullNode() <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getNullNode() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the nullnode used by this node.</font>
-                <font color="#2e8b57"><b>bool</b></font>            isNullNode() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>bool</b></font>            isNullNode() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns true if this node is the special</font>
                                 <font color="#0000ff">// nullnode and false otherwise.</font>
 
@@ -313,82 +313,82 @@
                 <font color="#0000ff">// These methods provide write-access to the data contained in</font>
                 <font color="#0000ff">// the node.  These methods can also be used to move nodes</font>
                 <font color="#0000ff">// around in the tree, and insert or delete them.</font>
-                <font color="#2e8b57"><b>void</b></font>    setType(xmldomnodetype type);
+                <font color="#298a52"><b>void</b></font>    setType(xmldomnodetype type);
                         <font color="#0000ff">// Sets the node type to &quot;type&quot;.</font>
-                <font color="#2e8b57"><b>void</b></font>    setName(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#298a52"><b>void</b></font>    setName(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name);
                         <font color="#0000ff">// Sets the node name to &quot;name&quot;.</font>
-                <font color="#2e8b57"><b>void</b></font>    setValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
+                <font color="#298a52"><b>void</b></font>    setValue(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value);
                         <font color="#0000ff">// Sets the node value to &quot;value&quot;.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    setParent(xmldomnode *parent);
+                <font color="#298a52"><b>void</b></font>    setParent(xmldomnode *parent);
                         <font color="#0000ff">// Sets the parent of the node to &quot;parent&quot;.</font>
-                <font color="#2e8b57"><b>void</b></font>    setPreviousSibling(xmldomnode *previous);
+                <font color="#298a52"><b>void</b></font>    setPreviousSibling(xmldomnode *previous);
                         <font color="#0000ff">// Sets the previous sibling of the node to &quot;previous&quot;.</font>
-                <font color="#2e8b57"><b>void</b></font>    setNextSibling(xmldomnode *next);
+                <font color="#298a52"><b>void</b></font>    setNextSibling(xmldomnode *next);
                         <font color="#0000ff">// Sets the next sibling of the node to &quot;next&quot;.</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    insertChild(xmldomnode *child, <font color="#2e8b57"><b>int</b></font> position);
+                <font color="#298a52"><b>bool</b></font>    insertChild(xmldomnode *child, <font color="#298a52"><b>int</b></font> position);
                         <font color="#0000ff">// Inserts &quot;child&quot; into the list of child nodes at</font>
                         <font color="#0000ff">// &quot;position&quot;.  The position of the next sibling</font>
                         <font color="#0000ff">// (and all successive siblings) is incremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    appendChild(xmldomnode *child);
+                <font color="#298a52"><b>bool</b></font>    appendChild(xmldomnode *child);
                         <font color="#0000ff">// Appends &quot;child&quot; to the list of child nodes.</font>
-                <font color="#2e8b57"><b>bool</b></font>    deleteChild(<font color="#2e8b57"><b>int</b></font> position);
+                <font color="#298a52"><b>bool</b></font>    deleteChild(<font color="#298a52"><b>int</b></font> position);
                         <font color="#0000ff">// Deletes the child node at &quot;position&quot;.  The position</font>
                         <font color="#0000ff">// of the next sibling (and all successive siblings)</font>
                         <font color="#0000ff">// is decremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    deleteChild(xmldomnode *child);
+                <font color="#298a52"><b>bool</b></font>    deleteChild(xmldomnode *child);
                         <font color="#0000ff">// Searches the list of child nodes for &quot;child&quot; and</font>
                         <font color="#0000ff">// deletes it.  The position of the next sibling (and</font>
                         <font color="#0000ff">// all successive siblings) is decremented.</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    insertText(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value, <font color="#2e8b57"><b>int</b></font> position);
+                <font color="#298a52"><b>bool</b></font>    insertText(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value, <font color="#298a52"><b>int</b></font> position);
                         <font color="#0000ff">// Inserts a child node of type TEXT_XMLDOMNODE with</font>
                         <font color="#0000ff">// value &quot;value&quot; into the list of child nodes at</font>
                         <font color="#0000ff">// &quot;position&quot;.  The position of the next sibling</font>
                         <font color="#0000ff">// (and all successive siblings) is incremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    appendText(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
+                <font color="#298a52"><b>bool</b></font>    appendText(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value);
                         <font color="#0000ff">// Appends a child node of type TEXT_XMLDOMNODE with</font>
                         <font color="#0000ff">// value &quot;value&quot; to the list of child nodes.</font>
 
-                <font color="#2e8b57"><b>bool</b></font>    insertAttribute(xmldomnode *attribute, <font color="#2e8b57"><b>int</b></font> position);
+                <font color="#298a52"><b>bool</b></font>    insertAttribute(xmldomnode *attribute, <font color="#298a52"><b>int</b></font> position);
                         <font color="#0000ff">// Inserts &quot;attribute&quot; into the list of attributes at</font>
                         <font color="#0000ff">// &quot;position&quot;.  The position of the next attribute</font>
                         <font color="#0000ff">// (and all successive attributes) is incremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    appendAttribute(xmldomnode *attribute);
+                <font color="#298a52"><b>bool</b></font>    appendAttribute(xmldomnode *attribute);
                         <font color="#0000ff">// Appends &quot;attribute&quot; to the list of attributes.</font>
-                <font color="#2e8b57"><b>bool</b></font>    insertAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value,
-                                        <font color="#2e8b57"><b>int</b></font> position);
+                <font color="#298a52"><b>bool</b></font>    insertAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value,
+                                        <font color="#298a52"><b>int</b></font> position);
                         <font color="#0000ff">// Creates an attribute node with &quot;name&quot; and &quot;value&quot;</font>
                         <font color="#0000ff">// and inserts it into the list of attributes at</font>
                         <font color="#0000ff">// &quot;position&quot;.  The position of the next attribute</font>
                         <font color="#0000ff">// (and all successive attributes) is incremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    appendAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *value);
+                <font color="#298a52"><b>bool</b></font>    appendAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *value);
                         <font color="#0000ff">// Creates an attribute node with &quot;name&quot; and &quot;value&quot;</font>
                         <font color="#0000ff">// and appends it to the list of attributes.</font>
-                <font color="#2e8b57"><b>bool</b></font>    deleteAttribute(<font color="#2e8b57"><b>int</b></font> position);
+                <font color="#298a52"><b>bool</b></font>    deleteAttribute(<font color="#298a52"><b>int</b></font> position);
                         <font color="#0000ff">// Deletes the attribute at &quot;position&quot;.  The position</font>
                         <font color="#0000ff">// of the next attribute (and all successive attributes)</font>
                         <font color="#0000ff">// is decremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    deleteAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#298a52"><b>bool</b></font>    deleteAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name);
                         <font color="#0000ff">// Searches the list of attribute nodes for an attribute</font>
                         <font color="#0000ff">// named &quot;name&quot; and deletes it.  The position of the</font>
                         <font color="#0000ff">// next attribute (and all successive attributes) is</font>
                         <font color="#0000ff">// decremented.</font>
-                <font color="#2e8b57"><b>bool</b></font>    deleteAttribute(xmldomnode *attribute);
+                <font color="#298a52"><b>bool</b></font>    deleteAttribute(xmldomnode *attribute);
                         <font color="#0000ff">// Searches the list of attribute nodes for &quot;attribute&quot;</font>
                         <font color="#0000ff">// and deletes it.  The position of the next attribute</font>
                         <font color="#0000ff">// (and all successive attributes) is decremented.</font>
 
 
-                stringbuffer    *xml() <font color="#2e8b57"><b>const</b></font>;
+                stringbuffer    *xml() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Allocates a stringbuffer, writes a textual</font>
                                 <font color="#0000ff">// representation of the tree starting at this</font>
                                 <font color="#0000ff">// node to it and returns the stringbuffer;</font>
                                 <font color="#0000ff">// The calling program must deallocate the</font>
                                 <font color="#0000ff">// stringbuffer.</font>
 
-                stringbuffer    *getPath() <font color="#2e8b57"><b>const</b></font>;
+                stringbuffer    *getPath() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// If the xmldomnode is an element, returns the</font>
                                 <font color="#0000ff">// &quot;path&quot; of the xmldomnode.  The path will have</font>
                                 <font color="#0000ff">// the following form:</font>
@@ -398,7 +398,7 @@
                                 <font color="#0000ff">// The return value is allocated inside the</font>
                                 <font color="#0000ff">// method and must be deallocated by the calling</font>
                                 <font color="#0000ff">// program.</font>
-                xmldomnode      *getChildByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getChildByPath(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *path) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the child element with &quot;path&quot; of the</font>
                                 <font color="#0000ff">// form:</font>
                                 <font color="#0000ff">//</font>
@@ -406,8 +406,8 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
-                xmldomnode      *getAttributeByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
-                                                        <font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getAttributeByPath(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *path,
+                                                        <font color="#298a52"><b>int</b></font> position) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the attribute node at index</font>
                                 <font color="#0000ff">// &quot;position&quot; of the child element with &quot;path&quot;</font>
                                 <font color="#0000ff">// of the form:</font>
@@ -416,8 +416,8 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
-                xmldomnode      *getAttributeByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
-                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                xmldomnode      *getAttributeByPath(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *path,
+                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the attribute node named &quot;name&quot;</font>
                                 <font color="#0000ff">// of the child element with &quot;path&quot; of the form:</font>
                                 <font color="#0000ff">//</font>
@@ -425,8 +425,8 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
-                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValueByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
-                                                        <font color="#2e8b57"><b>int</b></font> position) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getAttributeValueByPath(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *path,
+                                                        <font color="#298a52"><b>int</b></font> position) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute at index</font>
                                 <font color="#0000ff">// &quot;position&quot; of the child element with &quot;path&quot;</font>
                                 <font color="#0000ff">// of the form:</font>
@@ -435,8 +435,8 @@
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
-                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>      *getAttributeValueByPath(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path,
-                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getAttributeValueByPath(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *path,
+                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Returns the value of the attribute named</font>
                                 <font color="#0000ff">// &quot;name&quot; of the child element with &quot;path&quot; of</font>
                                 <font color="#0000ff">// the form:</font>
@@ -446,14 +446,14 @@
                                 <font color="#0000ff">// Returns the null node if the specified</font>
                                 <font color="#0000ff">// element was not found.</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/xmldomnode.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/xmldomnode.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

@@ -9,41 +9,41 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_CLIENTSOCKET_H</font>
-<font color="#a020f0">#define RUDIMENTS_CLIENTSOCKET_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_CLIENTSOCKET_H</font>
+<font color="#a520f7">#define RUDIMENTS_CLIENTSOCKET_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/clientsocketincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/clientsocketincludes.h&gt;</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> clientsocket : <font color="#a52a2a"><b>public</b></font> client {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> clientsocket : <font color="#a52829"><b>public</b></font> client {
+        <font color="#a52829"><b>public</b></font>:
                                 clientsocket();
-                                clientsocket(<font color="#2e8b57"><b>const</b></font> clientsocket &amp;c);
-                clientsocket    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> clientsocket &amp;c);
-                <font color="#2e8b57"><b>virtual</b></font>         ~clientsocket();
+                                clientsocket(<font color="#298a52"><b>const</b></font> clientsocket &amp;c);
+                clientsocket    &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> clientsocket &amp;c);
+                <font color="#298a52"><b>virtual</b></font>         ~clientsocket();
 
-<font color="#a020f0">#ifdef FIONBIO</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    useNonBlockingMode() <font color="#2e8b57"><b>const</b></font>;
+<font color="#a520f7">#ifdef FIONBIO</font>
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    useNonBlockingMode() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Puts the file descriptor in non-blocking</font>
                                 <font color="#0000ff">// mode.  Returns true on success and false on</font>
                                 <font color="#0000ff">// failure.</font>
-                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>    useBlockingMode() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>virtual</b></font> <font color="#298a52"><b>bool</b></font>    useBlockingMode() <font color="#298a52"><b>const</b></font>;
                                 <font color="#0000ff">// Puts the file descriptor in blocking mode.</font>
                                 <font color="#0000ff">// Returns true on success and false on</font>
                                 <font color="#0000ff">// failure.</font>
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/clientsocket.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/clientsocket.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

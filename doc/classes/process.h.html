@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 2004 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_PROCESS_H</font>
-<font color="#a020f0">#define RUDIMENTS_PROCESS_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_PROCESS_H</font>
+<font color="#a520f7">#define RUDIMENTS_PROCESS_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/processincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/processincludes.h&gt;</font>
 
 <font color="#0000ff">// wrap:</font>
 <font color="#0000ff">//      unistd.h - nice()</font>
@@ -54,60 +54,60 @@
 <font color="#0000ff">//              ucontext.h - user-level context switching</font>
 <font color="#0000ff">//                      getcontext(),setcontext(),swapcontext(),makecontext()</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> process {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> process {
+        <font color="#a52829"><b>public</b></font>:
 
-                <font color="#2e8b57"><b>static</b></font>  pid_t   getProcessId();
+                <font color="#298a52"><b>static</b></font>  pid_t   getProcessId();
                                 <font color="#0000ff">// returns the process id of the current process</font>
-                <font color="#2e8b57"><b>static</b></font>  pid_t   getParentProcessId();
+                <font color="#298a52"><b>static</b></font>  pid_t   getParentProcessId();
                                 <font color="#0000ff">// returns the process id of the parent process</font>
                                 <font color="#0000ff">// of the current process</font>
 
-                <font color="#2e8b57"><b>static</b></font>  pid_t   getProcessGroupId();
+                <font color="#298a52"><b>static</b></font>  pid_t   getProcessGroupId();
                                 <font color="#0000ff">// returns the process group id of the</font>
                                 <font color="#0000ff">// current process</font>
-                <font color="#2e8b57"><b>static</b></font>  pid_t   getProcessGroupId(pid_t pid);
+                <font color="#298a52"><b>static</b></font>  pid_t   getProcessGroupId(pid_t pid);
                                 <font color="#0000ff">// returns the process group id of the</font>
                                 <font color="#0000ff">// process pid</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    setProcessGroupId();
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    setProcessGroupId();
                                 <font color="#0000ff">// sets the process group id of the current</font>
                                 <font color="#0000ff">// process to the current process id</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    setProcessGroupId(pid_t pgid);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    setProcessGroupId(pid_t pgid);
                                 <font color="#0000ff">// sets the process group id of the current</font>
                                 <font color="#0000ff">// process to pgid</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    setProcessGroupId(pid_t pid, pid_t pgid);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    setProcessGroupId(pid_t pid, pid_t pgid);
                                 <font color="#0000ff">// sets the process group id of the process</font>
                                 <font color="#0000ff">// pid to pgid</font>
 
-                <font color="#2e8b57"><b>static</b></font>  pid_t   getSessionId();
+                <font color="#298a52"><b>static</b></font>  pid_t   getSessionId();
                                 <font color="#0000ff">// returns the session id of the current process</font>
-                <font color="#2e8b57"><b>static</b></font>  pid_t   getSessionId(pid_t pid);
+                <font color="#298a52"><b>static</b></font>  pid_t   getSessionId(pid_t pid);
                                 <font color="#0000ff">// returns the session id of the process pid</font>
 
-                <font color="#2e8b57"><b>static</b></font>  gid_t   getRealUserId();
+                <font color="#298a52"><b>static</b></font>  gid_t   getRealUserId();
                                 <font color="#0000ff">// returns the real user id of the</font>
                                 <font color="#0000ff">// current process</font>
-                <font color="#2e8b57"><b>static</b></font>  gid_t   getEffectiveUserId();
+                <font color="#298a52"><b>static</b></font>  gid_t   getEffectiveUserId();
                                 <font color="#0000ff">// returns the effective user id of the</font>
                                 <font color="#0000ff">// current process</font>
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     setUserId(uid_t uid);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setUserId(uid_t uid);
                                 <font color="#0000ff">// Sets the effective user id of the current</font>
                                 <font color="#0000ff">// process to uid.  If the effective user id</font>
                                 <font color="#0000ff">// is root, the real and saved user id's are</font>
                                 <font color="#0000ff">// also set.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     setEffectiveUserId(uid_t uid);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setEffectiveUserId(uid_t uid);
                                 <font color="#0000ff">// Sets the effective user id of the current</font>
                                 <font color="#0000ff">// process to uid.  Does not set the real</font>
                                 <font color="#0000ff">// or saved user id's.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     setRealAndEffectiveUserId(uid_t uid,
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setRealAndEffectiveUserId(uid_t uid,
                                                                 uid_t euid);
                                 <font color="#0000ff">// Sets the real user id of the current process</font>
                                 <font color="#0000ff">// to uid and the effective user id of</font>
@@ -118,25 +118,25 @@
                                 <font color="#0000ff">// set to the new effective user id.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  gid_t   getRealGroupId();
+                <font color="#298a52"><b>static</b></font>  gid_t   getRealGroupId();
                                 <font color="#0000ff">// returns the real group id of the</font>
                                 <font color="#0000ff">// current process</font>
-                <font color="#2e8b57"><b>static</b></font>  gid_t   getEffectiveGroupId();
+                <font color="#298a52"><b>static</b></font>  gid_t   getEffectiveGroupId();
                                 <font color="#0000ff">// returns the effective group id of the</font>
                                 <font color="#0000ff">// current process</font>
 
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     setGroupId(gid_t gid);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setGroupId(gid_t gid);
                                 <font color="#0000ff">// Sets the effective group id of the current</font>
                                 <font color="#0000ff">// process to gid.  If the effective group id</font>
                                 <font color="#0000ff">// is root, the real and saved group id's are</font>
                                 <font color="#0000ff">// also set.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     setEffectiveGroupId(gid_t gid);
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setEffectiveGroupId(gid_t gid);
                                 <font color="#0000ff">// Sets the effective group id of the current</font>
                                 <font color="#0000ff">// process to gid.  Does not set the real</font>
                                 <font color="#0000ff">// or saved group id's.</font>
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     setRealAndEffectiveGroupId(gid_t gid,
+                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setRealAndEffectiveGroupId(gid_t gid,
                                                                 gid_t egid);
                                 <font color="#0000ff">// Sets the real group id of the current process</font>
                                 <font color="#0000ff">// to gid and the effective group id of</font>
@@ -148,11 +148,11 @@
                                 <font color="#0000ff">// Returns true on success and false on failure.</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 1999-2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_DAEMONPROCESS_H</font>
-<font color="#a020f0">#define RUDIMENTS_DAEMONPROCESS_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_DAEMONPROCESS_H</font>
+<font color="#a520f7">#define RUDIMENTS_DAEMONPROCESS_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/daemonprocessincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/daemonprocessincludes.h&gt;</font>
 
 <font color="#0000ff">// Daemons are long running processes which often detach themselves from</font>
 <font color="#0000ff">// the controlling terminal and run in the background.  They are frequently</font>
@@ -21,21 +21,21 @@
 <font color="#0000ff">// Daemons typically perform &quot;housecleaning&quot; tasks or serve data to client</font>
 <font color="#0000ff">// programs.  See the server class.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> daemonprocess {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> daemonprocess {
+        <font color="#a52829"><b>public</b></font>:
                         daemonprocess();
-                <font color="#2e8b57"><b>virtual</b></font> ~daemonprocess();
+                <font color="#298a52"><b>virtual</b></font> ~daemonprocess();
 
-                <font color="#2e8b57"><b>long</b></font>    checkForPidFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>long</b></font>    checkForPidFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename) <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Checks for filename &quot;filename&quot; and reads the</font>
                         <font color="#0000ff">// process id out of it, if it exists.  Returns</font>
                         <font color="#0000ff">// the process id on success or -1 on failure.</font>
-                <font color="#2e8b57"><b>bool</b></font>    createPidFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
-                                                mode_t permissions) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>bool</b></font>    createPidFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                                                mode_t permissions) <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Create's file &quot;filename&quot; with permissions</font>
                         <font color="#0000ff">// &quot;permissions&quot; and puts the current process</font>
                         <font color="#0000ff">// id in it.  Note that when you delete this</font>
@@ -44,7 +44,7 @@
                         <font color="#0000ff">// changes directories to &quot;/&quot;.  Returns true on</font>
                         <font color="#0000ff">// success and false on failure.</font>
 
-                <font color="#2e8b57"><b>void</b></font>    detach() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>void</b></font>    detach() <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Detach from the controlling terminal and</font>
                         <font color="#0000ff">// process and run in the background.  Also</font>
                         <font color="#0000ff">// change directories to &quot;/&quot; and set the file</font>
@@ -59,37 +59,37 @@
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// These methods return 1 on success, 0 on failure and</font>
                 <font color="#0000ff">// -1 on error.</font>
-                <font color="#2e8b57"><b>int</b></font>     runAsUser(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>     runAsUser(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username) <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Note that runAsUser() uses the passwdentry</font>
                         <font color="#0000ff">// class.  If you are using this method in a</font>
                         <font color="#0000ff">// multithreaded application, you may need to</font>
                         <font color="#0000ff">// supply the passwdentry classes a mutex.</font>
                         <font color="#0000ff">// See passwdentry.h for more detail.</font>
-                <font color="#2e8b57"><b>int</b></font>     runAsGroup(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *groupname) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>     runAsGroup(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *groupname) <font color="#298a52"><b>const</b></font>;
                         <font color="#0000ff">// Note that runAsGroup() uses the groupentry</font>
                         <font color="#0000ff">// class.  If you are using this method in a</font>
                         <font color="#0000ff">// multithreaded application, you may need to</font>
                         <font color="#0000ff">// supply the groupentry classes a mutex.</font>
                         <font color="#0000ff">// See groupentry.h for more detail.</font>
-                <font color="#2e8b57"><b>int</b></font>     runAsUserId(uid_t uid) <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>int</b></font>     runAsGroupId(gid_t gid) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>     runAsUserId(uid_t uid) <font color="#298a52"><b>const</b></font>;
+                <font color="#298a52"><b>int</b></font>     runAsGroupId(gid_t gid) <font color="#298a52"><b>const</b></font>;
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    handleShutDown(<font color="#2e8b57"><b>void</b></font> *shutdownfunction);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    handleShutDown(<font color="#298a52"><b>void</b></font> *shutdownfunction);
                                 <font color="#0000ff">// This method allows you to designate a</font>
                                 <font color="#0000ff">// function to run when the daemon is killed.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    handleCrash(<font color="#2e8b57"><b>void</b></font> *crashfunction);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    handleCrash(<font color="#298a52"><b>void</b></font> *crashfunction);
                                 <font color="#0000ff">// This method allows you to designate a</font>
                                 <font color="#0000ff">// function to run if the daemon crashes.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    waitForChildren();
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    waitForChildren();
                                 <font color="#0000ff">// This method causes the daemon to wait</font>
                                 <font color="#0000ff">// on child processes which have exited,</font>
                                 <font color="#0000ff">// preventing so-called &quot;zombie&quot; processes</font>
                                 <font color="#0000ff">// from occurring.  This method is called</font>
                                 <font color="#0000ff">// in the constructor and is thus the default</font>
                                 <font color="#0000ff">// behavior of this class.</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    dontWaitForChildren();
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    dontWaitForChildren();
                                 <font color="#0000ff">// This method causes the daemon not to</font>
                                 <font color="#0000ff">// wait on child processes which have exited.</font>
                                 <font color="#0000ff">// Ordinarily, you'd want to wait on child</font>
@@ -99,15 +99,15 @@
                                 <font color="#0000ff">// method allows you to disable waiting on</font>
                                 <font color="#0000ff">// child processes.</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/daemonprocess.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/daemonprocess.h&gt;</font>
 
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

@@ -11,55 +11,55 @@
 <font color="#0000ff">// Copyright (c) 2003 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_NETWORKINTERFACES_H</font>
-<font color="#a020f0">#define RUDIMENTS_NETWORKINTERFACES_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_NETWORKINTERFACES_H</font>
+<font color="#a520f7">#define RUDIMENTS_NETWORKINTERFACES_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/networkinterfacesincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/networkinterfacesincludes.h&gt;</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>typedef</b></font> listnode&lt; networkinterface * &gt;  networkinterfacelistnode;
-<font color="#2e8b57"><b>typedef</b></font> list&lt; networkinterface *, networkinterfacelistnode &gt;
+<font color="#298a52"><b>typedef</b></font> listnode&lt; networkinterface * &gt;  networkinterfacelistnode;
+<font color="#298a52"><b>typedef</b></font> list&lt; networkinterface *, networkinterfacelistnode &gt;
                                                 networkinterfacelist;
 
-<font color="#2e8b57"><b>class</b></font> networkinterface {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> networkinterface {
+        <font color="#a52829"><b>public</b></font>:
                 sockaddr        getAddress();
                 sockaddr        getDestinationAddress();
                 sockaddr        getBroadcastAddress();
                 sockaddr        getNetmask();
                 sockaddr        getHardwareAddress();
 
-                <font color="#2e8b57"><b>short</b></font>   getFlags();
-                <font color="#2e8b57"><b>int</b></font>     getMetric();
-                <font color="#2e8b57"><b>int</b></font>     getMaximumTransmitUnit();
+                <font color="#298a52"><b>short</b></font>   getFlags();
+                <font color="#298a52"><b>int</b></font>     getMetric();
+                <font color="#298a52"><b>int</b></font>     getMaximumTransmitUnit();
                 ifmap   getDeviceMap();
-                <font color="#2e8b57"><b>int</b></font>     getSlaveDevice();
-                <font color="#2e8b57"><b>int</b></font>     getForUseByInterfaceData();
-                <font color="#2e8b57"><b>int</b></font>     getIndex();
-                <font color="#2e8b57"><b>int</b></font>     getLinkBandwidth();
-                <font color="#2e8b57"><b>int</b></font>     getQueueLength();
-                <font color="#2e8b57"><b>char</b></font>    *getNewName();
+                <font color="#298a52"><b>int</b></font>     getSlaveDevice();
+                <font color="#298a52"><b>int</b></font>     getForUseByInterfaceData();
+                <font color="#298a52"><b>int</b></font>     getIndex();
+                <font color="#298a52"><b>int</b></font>     getLinkBandwidth();
+                <font color="#298a52"><b>int</b></font>     getQueueLength();
+                <font color="#298a52"><b>char</b></font>    *getNewName();
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/networkinterface.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/networkinterface.h&gt;</font>
 };
 
-<font color="#2e8b57"><b>class</b></font> networkinterfaces {
-        <font color="#a52a2a"><b>public</b></font>:
-                <font color="#2e8b57"><b>static</b></font>  networkinterfacelist    *getList();
+<font color="#298a52"><b>class</b></font> networkinterfaces {
+        <font color="#a52829"><b>public</b></font>:
+                <font color="#298a52"><b>static</b></font>  networkinterfacelist    *getList();
 }
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/networkinterfaceinlines.h&gt;</font>
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef ENABLE_RUDIMENTS_INLINES</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/networkinterfaceinlines.h&gt;</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

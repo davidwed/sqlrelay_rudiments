@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 1999-2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_REGEXP_H</font>
-<font color="#a020f0">#define RUDIMENTS_REGEXP_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_REGEXP_H</font>
+<font color="#a520f7">#define RUDIMENTS_REGEXP_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/regularexpressionincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/regularexpressionincludes.h&gt;</font>
 
 <font color="#0000ff">// The regular expression class provides methods for making comparisons</font>
 <font color="#0000ff">// between text and regular expressions.</font>
@@ -20,15 +20,15 @@
 <font color="#0000ff">// Regular expressions are complex, powerful, used in command line</font>
 <font color="#0000ff">// programs like grep, sed and find, and extensively in Perl.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> regularexpression {
-        <font color="#a52a2a"><b>public</b></font>:
+<font color="#298a52"><b>class</b></font> regularexpression {
+        <font color="#a52829"><b>public</b></font>:
 
                 <font color="#0000ff">// if you need to do a quick comparison, use this method</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    match(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *pattern);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    match(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str, <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *pattern);
                                 <font color="#0000ff">// Returns true if &quot;str&quot; matches &quot;pattern&quot;</font>
                                 <font color="#0000ff">// and false if &quot;str&quot; doesn't match &quot;pattern&quot;.</font>
 
@@ -36,18 +36,18 @@
                 <font color="#0000ff">// if you need to do many comparisons against a single</font>
                 <font color="#0000ff">// expression, use these methods</font>
                         regularexpression();
-                        regularexpression(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *pattern);
+                        regularexpression(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *pattern);
                         <font color="#0000ff">// this constructor calls the compile method</font>
                         <font color="#0000ff">// below during initialization</font>
                         ~regularexpression();
 
-                <font color="#2e8b57"><b>bool</b></font>    compile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *pattern);
+                <font color="#298a52"><b>bool</b></font>    compile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *pattern);
                         <font color="#0000ff">// Compiles the regular expression given in</font>
                         <font color="#0000ff">// &quot;pattern&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true if the compilation </font>
                         <font color="#0000ff">// succeeded and false if it failed.</font>
-                <font color="#2e8b57"><b>bool</b></font>    study();
+                <font color="#298a52"><b>bool</b></font>    study();
                         <font color="#0000ff">// Studies the previously compiled pattern so it can be</font>
                         <font color="#0000ff">// executed faster.  If you plan on calling match()</font>
                         <font color="#0000ff">// several times on this pattern, studying it may be</font>
@@ -56,42 +56,42 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true if the study succeeded</font>
                         <font color="#0000ff">// and false if if failed.</font>
-                <font color="#2e8b57"><b>bool</b></font>    match(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *str);
+                <font color="#298a52"><b>bool</b></font>    match(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *str);
                         <font color="#0000ff">// Matches &quot;str&quot; against the regular expression</font>
                         <font color="#0000ff">// compiled earlier using the compile method.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true if the match was successful and</font>
                         <font color="#0000ff">// false if it was not.</font>
 
-                <font color="#2e8b57"><b>int</b></font>     getSubstringCount();
+                <font color="#298a52"><b>int</b></font>     getSubstringCount();
                         <font color="#0000ff">// Returns the number of substrings of &quot;str&quot; passed into</font>
                         <font color="#0000ff">// match() that match &quot;pattern&quot; passed into compile().</font>
 
-                <font color="#2e8b57"><b>char</b></font>    *getSubstringStart(<font color="#2e8b57"><b>int</b></font> index);
+                <font color="#298a52"><b>char</b></font>    *getSubstringStart(<font color="#298a52"><b>int</b></font> index);
                         <font color="#0000ff">// Returns the &quot;index&quot;'th matching substring or NULL</font>
                         <font color="#0000ff">// if index is invalid.</font>
 
-                <font color="#2e8b57"><b>char</b></font>    *getSubstringEnd(<font color="#2e8b57"><b>int</b></font> index);
+                <font color="#298a52"><b>char</b></font>    *getSubstringEnd(<font color="#298a52"><b>int</b></font> index);
                         <font color="#0000ff">// Returns the data directly after the &quot;index&quot;'th</font>
                         <font color="#0000ff">// matching substring or NULL if index is invalid.</font>
 
-                <font color="#2e8b57"><b>int</b></font>     getSubstringStartOffset(<font color="#2e8b57"><b>int</b></font> index);
+                <font color="#298a52"><b>int</b></font>     getSubstringStartOffset(<font color="#298a52"><b>int</b></font> index);
                         <font color="#0000ff">// Returns the offset of the &quot;index&quot;'th matching</font>
                         <font color="#0000ff">// substring or -1 if index is invalid.</font>
 
-                <font color="#2e8b57"><b>int</b></font>     getSubstringEndOffset(<font color="#2e8b57"><b>int</b></font> index);
+                <font color="#298a52"><b>int</b></font>     getSubstringEndOffset(<font color="#298a52"><b>int</b></font> index);
                         <font color="#0000ff">// Returns the offset of the data directly after the</font>
                         <font color="#0000ff">// &quot;index&quot;'th matching substring or -1 if index is</font>
                         <font color="#0000ff">// invalid.</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/regularexpression.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/regularexpression.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>

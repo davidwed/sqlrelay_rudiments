@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 1999-2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a020f0">#ifndef RUDIMENTS_RANDOMNUMBER_H</font>
-<font color="#a020f0">#define RUDIMENTS_RANDOMNUMBER_H</font>
+<font color="#a520f7">#ifndef RUDIMENTS_RANDOMNUMBER_H</font>
+<font color="#a520f7">#define RUDIMENTS_RANDOMNUMBER_H</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/randomnumberincludes.h&gt;</font>
+<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/randomnumberincludes.h&gt;</font>
 
 <font color="#0000ff">// The randomnumber class provides methods for generating and scaling </font>
 <font color="#0000ff">// random numbers.</font>
@@ -33,34 +33,34 @@
 <font color="#0000ff">// same value before all numbers in the range have been returned because</font>
 <font color="#0000ff">// it scales the result of generateNumber() which operates on a larger range.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#2e8b57"><b>namespace</b></font> rudiments {
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#298a52"><b>namespace</b></font> rudiments {
+<font color="#a520f7">#endif</font>
 
-<font color="#2e8b57"><b>class</b></font> randomnumber {
-        <font color="#a52a2a"><b>public</b></font>:
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     generateNumber(<font color="#2e8b57"><b>int</b></font> seed);
+<font color="#298a52"><b>class</b></font> randomnumber {
+        <font color="#a52829"><b>public</b></font>:
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     generateNumber(<font color="#298a52"><b>int</b></font> seed);
                         <font color="#0000ff">// Generates a random number between 0 and 2^32, based</font>
                         <font color="#0000ff">// on seed, and returns it.  </font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// It is ok to use the result of this method as the </font>
                         <font color="#0000ff">// seed for the next number.</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     generateScaledNumber(<font color="#2e8b57"><b>int</b></font> seed,
-                                                        <font color="#2e8b57"><b>int</b></font> lower, <font color="#2e8b57"><b>int</b></font> upper);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     generateScaledNumber(<font color="#298a52"><b>int</b></font> seed,
+                                                        <font color="#298a52"><b>int</b></font> lower, <font color="#298a52"><b>int</b></font> upper);
                         <font color="#0000ff">// Generates a random number between 0 and 2^32, based</font>
                         <font color="#0000ff">// on seed, scales that value to be between</font>
                         <font color="#0000ff">// lower and upper and returns it.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// It is NOT ok to use the result of this method as </font>
                         <font color="#0000ff">// the seed for the next number.</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     scaleNumber(<font color="#2e8b57"><b>int</b></font> number, <font color="#2e8b57"><b>int</b></font> lower, <font color="#2e8b57"><b>int</b></font> upper);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     scaleNumber(<font color="#298a52"><b>int</b></font> number, <font color="#298a52"><b>int</b></font> lower, <font color="#298a52"><b>int</b></font> upper);
                         <font color="#0000ff">// Scales number to be between lower and upper and </font>
                         <font color="#0000ff">// returns it.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// It is NOT ok to use the result of this method as </font>
                         <font color="#0000ff">// the seed for the next number.</font>
 
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>int</b></font>     getRandMax();
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>int</b></font>     getRandMax();
                         <font color="#0000ff">// Operating systems can generate random numbers</font>
                         <font color="#0000ff">// between 0 and RAND_MAX.</font>
                         <font color="#0000ff">// This method returns RAND_MAX.</font>
@@ -69,28 +69,28 @@
                         <font color="#0000ff">// but there are exceptions where it is 2^15-1 or</font>
                         <font color="#0000ff">// 2^32-1.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    needsMutex();
+<font color="#a520f7">#ifdef RUDIMENTS_HAS_THREADS</font>
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    needsMutex();
                         <font color="#0000ff">// If your system doesn't support rand_r() then this</font>
                         <font color="#0000ff">// class needs a mutex to assure thread safety.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// This method returns true if this class needs a mutex</font>
                         <font color="#0000ff">// to operate safely in a threaded environment and false</font>
                         <font color="#0000ff">// otherwise.</font>
-                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>void</b></font>    setMutex(pthread_mutex_t *mutex);
+                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    setMutex(pthread_mutex_t *mutex);
                         <font color="#0000ff">// Allows you to supply a mutex is the class needs it.</font>
                         <font color="#0000ff">// If your application is not multithreaded, then</font>
                         <font color="#0000ff">// there is no need to supply a mutex.</font>
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/randomnumber.h&gt;</font>
+<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/randomnumber.h&gt;</font>
 };
 
-<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 
-<font color="#a020f0">#endif</font>
+<font color="#a520f7">#endif</font>
 </pre>
 </body>
 </html>
