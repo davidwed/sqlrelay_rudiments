@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28pre4/include/rudiments/filedescriptor.h.html</title>
+<title>~/src/firstworks/rudiments-0.28/include/rudiments/filedescriptor.h.html</title>
 <meta name="Generator" content="Vim/6.3">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -466,6 +466,28 @@
                                 <font color="#0000ff">// Note that the buffer for the address is</font>
                                 <font color="#0000ff">// allocated internally and must be freed by</font>
                                 <font color="#0000ff">// the calling program.</font>
+
+
+                <font color="#0000ff">// If an application does many small writes, the overhead of</font>
+                <font color="#0000ff">// all of those ::write() system calls can slow the application</font>
+                <font color="#0000ff">// down substantially.  To address that issue, the</font>
+                <font color="#0000ff">// filedescriptor class can buffer data passed in to any of it's</font>
+                <font color="#0000ff">// write() methods and only make ::write() system calls when</font>
+                <font color="#0000ff">// the buffer is full or when it's flushed manually.  Note that</font>
+                <font color="#0000ff">// when using buffered writes, the data is not actually written</font>
+                <font color="#0000ff">// to the file descriptor until the buffer is full or until</font>
+                <font color="#0000ff">// it's flushed manually.</font>
+                <font color="#298a52"><b>bool</b></font>            setWriteBufferSize(<font color="#298a52"><b>ssize_t</b></font> size) <font color="#298a52"><b>const</b></font>;
+                                <font color="#0000ff">// Discards the current write buffer and sets</font>
+                                <font color="#0000ff">// the size of the write buffer to &quot;size&quot;.  A</font>
+                                <font color="#0000ff">// size of 0 means don't buffer writes at all.</font>
+                                <font color="#0000ff">// A size less than 0 will return false.</font>
+                <font color="#298a52"><b>bool</b></font>            flushWriteBuffer(<font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec) <font color="#298a52"><b>const</b></font>;
+                                <font color="#0000ff">// Causes the contents of the write buffer to</font>
+                                <font color="#0000ff">// be written to the filedescriptor immediately.</font>
+
+
+                <font color="#298a52"><b>bool</b></font>            setReadBufferSize(<font color="#298a52"><b>ssize_t</b></font> size) <font color="#298a52"><b>const</b></font>;
 
 <font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/filedescriptor.h&gt;</font>
 };
