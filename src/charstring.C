@@ -426,12 +426,44 @@ long charstring::toLong(const char *string, char **endptr, int base) {
 	return strtol(string,endptr,base);
 }
 
+long long charstring::toLongLong(const char *string) {
+	return strtoll(string,NULL,0);
+}
+
+long long charstring::toLongLong(const char *string, char **endptr) {
+	return strtoll(string,endptr,0);
+}
+
+long long charstring::toLongLong(const char *string, int base) {
+	return strtoll(string,NULL,base);
+}
+
+long long charstring::toLongLong(const char *string, char **endptr, int base) {
+	return strtoll(string,endptr,base);
+}
+
+float charstring::toFloat(const char *string) {
+	return strtof(string,NULL);
+}
+
+float charstring::toFloat(const char *string, char **endptr) {
+	return strtof(string,endptr);
+}
+
 double charstring::toDouble(const char *string) {
 	return strtod(string,NULL);
 }
 
 double charstring::toDouble(const char *string, char **endptr) {
 	return strtod(string,endptr);
+}
+
+long double charstring::toLongDouble(const char *string) {
+	return strtold(string,NULL);
+}
+
+long double charstring::toLongDouble(const char *string, char **endptr) {
+	return strtold(string,endptr);
 }
 
 void charstring::bothTrim(char *string, char character) {

@@ -1,7 +1,3 @@
-use rawbuffer class intstead of mem*()
-use memorymap class intstead of mmap*()
-use mutex class instead of pthread_mutex_*()
-
 solaris:
 	can't find pcre or openssl
 
@@ -17,8 +13,6 @@ file class:
 	move create*Link/resolveSymbolicLink into link class
 
 what does the logger.C warning mean
-
-strip fails on openbsd
 
 a bunch of methods can probabaly be made const
 a bunch of static methods can probably be inlined
@@ -41,10 +35,6 @@ xml:
 	handle CDATA/internal subsets better
 	is xmldom really DOM compliant?
 	xml classes need to support entities defined in the DOCTYPE declaration
-
-support non-posix semaphores
-fd handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
-						alignment-related
 
 implement these classes:
 	directorylisting
@@ -71,6 +61,11 @@ tests for:
 	rawbuffer
 	memorymap
 	mutex
+
+need to use internally:
+	rawbuffer class intstead of mem*()
+	memorymap class intstead of mmap*()
+	mutex class instead of pthread_mutex_*()
 
 --------------------------------------------------------------------------------
 
@@ -113,10 +108,7 @@ filedescriptor
 --------------------------------------------------------------------------------
 
 charstring class:
-	stdlib.h - strtof(_l)() - string to float
-		strtold(_l)() - string to long double
-		strtoul(_l)() - string to ulong
-		strto(ll|q)(_l)() - string to long long
+	stdlib.h - strtoul(_l)() - string to ulong
 		strto(ull|uq)(_l)() - string to unsigned long long
 	stdio.h - sprintf()
 	string.h/strings.h -

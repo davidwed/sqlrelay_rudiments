@@ -180,11 +180,42 @@ class charstring {
 			// If non-NULL, endptr will be set to the first
 			// character in the string after the number.
 
+		static	long long	toLongLong(const char *string);
+			// Converts "string" to a long integer.
+		static	long long	toLongLong(const char *string, char **endptr);
+			// Converts "string" to a long long integer.  If
+			// non-NULL, endptr will be set to the first character
+			// in the string after the number.
+		static	long long	toLongLong(const char *string, int base);
+			// Converts "string" to a long long integer of
+			// base "base".
+		static	long long	toLongLong(const char *string,
+					char **endptr, int base);
+			// Converts "string" to a long long integer of
+			// base "base".  If non-NULL, endptr will be set to the
+			// first character in the string after the number.
+
+		static	float	toFloat(const char *string);
+			// Converts "string" to a floating point number.
+		static	float	toFloat(const char *string, char **endptr);
+			// Converts "string" to a floating point number.  If
+			// non-NULL, endptr will be set to the first character
+			// in the string after the number.
+
 		static	double	toDouble(const char *string);
 			// Converts "string" to a double precision
 			// floating point number.
 		static	double	toDouble(const char *string, char **endptr);
 			// Converts "string" to a double precision floating
+			// point number.  If non-NULL, endptr will be set to
+			// the first character in the string after the number.
+
+		static	long double	toLongDouble(const char *string);
+			// Converts "string" to a long double precision
+			// floating point number.
+		static	long double	toLongDouble(const char *string,
+								char **endptr);
+			// Converts "string" to a long double precision floating
 			// point number.  If non-NULL, endptr will be set to
 			// the first character in the string after the number.
 
