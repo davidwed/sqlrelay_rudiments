@@ -139,7 +139,7 @@ int datetime::setHardwareDateAndTime() {
 		rt.tm_wday=timestruct.tm_wday;
 		rt.tm_yday=timestruct.tm_yday;
 		rt.tm_isdst=timestruct.tm_isdst;
-		int	retval=ioctl(devrtc,RTC_SET_TIME,&rt)!=-1;
+		int	retval=(ioctl(devrtc,RTC_SET_TIME,&rt)!=-1);
 		close(devrtc);
 		return retval;
 	#else
