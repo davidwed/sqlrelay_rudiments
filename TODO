@@ -1,7 +1,12 @@
+add ioctl, fcntl to filedescriptor class
+
 on SCO, sometimes you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
+strip fails on openbsd
 
+can't find pcre or openssl on solaris
 
-should configure script use -pthread for cygwin?
+if openssl/pcre libs are installed, but not includes, configure still tries
+	to include openssl/pcre support
 
 get epoch from string doesn't work right on solaris x86
 
@@ -17,6 +22,7 @@ these classes would be nice:
 	networkinterfaces (stubbed out)
 	shellcommand (stubbed out)
 	dirent/direct wrapper
+	dlopen/dlsym/etc. wrapper
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldom should support xpath
@@ -32,5 +38,5 @@ is xmldom really DOM compliant?
 xml classes need to support entities defined in the DOCTYPE declaration
 
 support non-posix semaphores
-handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
+fd handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
 						alignment-related
