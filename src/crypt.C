@@ -4,6 +4,15 @@
 #include <rudiments/crypt.h>
 #include <rudiments/charstring.h>
 
+#ifdef HAVE_CRYPT_R
+#define __USE_GNU
+#endif
+#ifdef HAVE_CRYPT_H
+#include <crypt.h>
+#else
+#include <unistd.h>
+#endif
+
 // need for memset...
 #include <string.h>
 

@@ -98,7 +98,8 @@ bool intervaltimer::start() const {
 }
 
 bool intervaltimer::start(itimerval *itv) const {
-	return !setitimer(which,&values,itv);
+	// Solaris 8 complains if the 2nd argument isn't cast
+	return !setitimer(which,(itimerval *)&values,itv);
 }
 
 bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {

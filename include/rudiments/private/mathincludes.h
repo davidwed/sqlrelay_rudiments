@@ -4,5 +4,6 @@
 #include <rudiments/private/config.h>
 #include <rudiments/private/rudimentsinlines.h>
 
+// FIXME: can any of these be moved into math.C
 #include <math.h>
 #include <tgmath.h>

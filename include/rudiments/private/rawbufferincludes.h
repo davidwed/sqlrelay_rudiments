@@ -2,6 +2,8 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/config.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
+
+// necessary to get swab on redhat 7.3
+//#define _XOPEN_SOURCE 600
+
+#include <sys/types.h>

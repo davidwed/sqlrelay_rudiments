@@ -15,7 +15,11 @@ else
 	rudiments_libs="-L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@ @DLLIB@"
 	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@ @DLLIB@"
 fi
-rudiments_cflags="-I@includedir@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"
+if ( test "@includedir@" = "/usr/include" ); then
+	rudiments_cflags="@PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"
+else
+	rudiments_cflags="-I@includedir@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"
+fi
 
 usage()
 {

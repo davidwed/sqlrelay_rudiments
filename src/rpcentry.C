@@ -79,7 +79,6 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
 			#if defined(HAVE_GETRPCBYNAME_R_5) && \
@@ -104,7 +103,7 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 			delete[] buffer;
 			buffer=NULL;
 			re=NULL;
-			if (errnop!=ENOMEM) {
+			if (errno!=ENOMEM) {
 				return false;
 			}
 		}

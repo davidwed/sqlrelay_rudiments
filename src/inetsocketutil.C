@@ -3,6 +3,9 @@
 
 #include <rudiments/inetsocketutil.h>
 
+// for NULL
+#include <stdlib.h>
+
 inetsocketutil::inetsocketutil() {
 	initialize(NULL,0);
 }

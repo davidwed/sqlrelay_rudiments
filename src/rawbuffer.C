@@ -2,6 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/rawbuffer.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 void *rawbuffer::copy(void *dest, const void *src, size_t size) {
 	return memcpy(dest,src,size);

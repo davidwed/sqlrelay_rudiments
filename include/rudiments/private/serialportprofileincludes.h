@@ -5,4 +5,6 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 #include <termios.h>
+
+// FIXME: can this be moved into serialportprofile.C
 #include <unistd.h>

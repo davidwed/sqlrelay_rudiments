@@ -3,6 +3,9 @@
 
 #include <rudiments/unixsocketutil.h>
 
+// for NULL
+#include <stdlib.h>
+
 unixsocketutil::unixsocketutil() {
 	initialize(NULL);
 }

@@ -3,6 +3,7 @@
 
 #include <rudiments/private/config.h>
 
+// FIXME: can this be moved into dynamiclib.C
 #include <dlfcn.h>
 
 #ifdef RUDIMENTS_HAS_THREADS

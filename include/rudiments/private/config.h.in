@@ -42,6 +42,9 @@
 /* Some systems have crypt */
 #undef HAVE_CRYPT
 
+/* Some systems have crypt.h */
+#undef HAVE_CRYPT_H
+
 /* Some systems have crypt_r */
 #undef HAVE_CRYPT_R
 

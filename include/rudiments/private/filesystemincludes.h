@@ -3,6 +3,7 @@
 
 #include <rudiments/private/config.h>
 
+// FIXME: can any of these be moved into filesystem.C
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS)
 	#include <sys/types.h>

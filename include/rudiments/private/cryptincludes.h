@@ -3,11 +3,6 @@
 
 #include <rudiments/private/config.h>
 
-#ifdef HAVE_CRYPT_R
-#define __USE_GNU
-#endif
-#include <crypt.h>
-
 #ifdef RUDIMENTS_HAS_THREADS
 	#include <pthread.h>
 #endif
