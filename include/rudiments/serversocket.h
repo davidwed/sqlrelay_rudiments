@@ -1,16 +1,15 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_SOCKET_H
-#define RUDIMENTS_SOCKET_H
+#ifndef RUDIMENTS_SERVERSOCKET_H
+#define RUDIMENTS_SERVERSOCKET_H
 
-#include <rudiments/private/socketincludes.h>
+#include <rudiments/private/serversocketincludes.h>
 
-class socket : public datatransport {
+class serversocket : public server {
 	public:
-			socket();
-			socket(int filedesc);
-		virtual	~socket();
+			serversocket();
+		virtual	~serversocket();
 
 #ifdef FIONBIO
 		virtual bool	useNonBlockingMode() const;
@@ -56,7 +55,7 @@ class socket : public datatransport {
 			//
 			// Returns true on success and false on failure.
 
-	#include <rudiments/private/socket.h>
+	#include <rudiments/private/serversocket.h>
 };
 
 #endif

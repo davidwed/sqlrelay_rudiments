@@ -4,10 +4,8 @@
 #ifdef RUDIMENTS_HAS_SSL
 	protected:
 		BIO	*newSSLBIO() const;
-		bool	sslAccept(socket *sock);
+		bool	sslAccept(filedescriptor *sock);
 #endif
-		int	connect(struct sockaddr *addr, socklen_t addrlen,
-							long sec, long usec);
 
 	private:
 		bool	setLingerOnClose(int timeout, int onoff);

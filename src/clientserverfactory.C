@@ -1,14 +1,14 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/datatransportfactory.h>
+#include <rudiments/clientserverfactory.h>
 #include <rudiments/inetserversocket.h>
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/unixserversocket.h>
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/charstring.h>
 
-server *datatransportfactory::getServer(const char *type) {
+server *clientserverfactory::getServer(const char *type) {
 	if (!charstring::compare(type,"inet")) {
 		return new inetserversocket();
 	} else if (!charstring::compare(type,"unix")) {
@@ -17,7 +17,7 @@ server *datatransportfactory::getServer(const char *type) {
 	return NULL;
 }
 
-client *datatransportfactory::getClient(const char *type) {
+client *clientserverfactory::getClient(const char *type) {
 	if (!charstring::compare(type,"inet")) {
 		return new inetclientsocket();
 	} else if (!charstring::compare(type,"unix")) {

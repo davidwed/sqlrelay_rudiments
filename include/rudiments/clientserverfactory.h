@@ -1,15 +1,15 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_DATATRANSPORT_FACTORY_H
-#define RUDIMENTS_DATATRANSPORT_FACTORY_H
+#ifndef RUDIMENTS_CLIENTSERVER_FACTORY_H
+#define RUDIMENTS_CLIENTSERVER_FACTORY_H
 
-#include <rudiments/private/datatransportfactoryincludes.h>
+#include <rudiments/private/clientserverfactoryincludes.h>
 
-// The datatransportfactory class provides factory methods for getting clients
+// The clientserverfactory class provides factory methods for getting clients
 // and servers.
 
-class datatransportfactory {
+class clientserverfactory {
 	public:
 		static client	*getClient(const char *type);
 			// Returns an instance of a child of the client
