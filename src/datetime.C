@@ -411,40 +411,28 @@ bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 
 bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 
-	/*#ifdef HAVE_LOCALTIME_R
-		struct tm	tms;
-		if (localtime_r(&epoch,&tms)) {
-			sec=tms.tm_sec;
-			min=tms.tm_min;
-			hour=tms.tm_hour;
-			mday=tms.tm_mday;
-			mon=tms.tm_mon;
-			year=tms.tm_year;
-			isdst=tms.tm_isdst;
-			return normalizeBrokenDownTime(needmutex);
-		}
+	// I'm using localtime here instead of localtime_r because
+	// localtime_r doesn't appear to handle the timezone properly,
+	// at least, not in glibc-2.3
+	if (needmutex && !acquireLock()) {
 		return false;
-	#else*/
-		if (needmutex && !acquireLock()) {
-			return false;
-		}
-		bool	retval=false;
-		struct tm	*tms;
-		if ((tms=localtime(&epoch))) {
-			sec=tms->tm_sec;
-			min=tms->tm_min;
-			hour=tms->tm_hour;
-			mday=tms->tm_mday;
-			mon=tms->tm_mon;
-			year=tms->tm_year;
-			isdst=tms->tm_isdst;
-			retval=normalizeBrokenDownTime(false);
-		}
-		if (needmutex && !releaseLock()) {
-			return false;
-		}
-		return retval;
-	//#endif
+	}
+	bool	retval=false;
+	struct tm	*tms;
+	if ((tms=localtime(&epoch))) {
+		sec=tms->tm_sec;
+		min=tms->tm_min;
+		hour=tms->tm_hour;
+		mday=tms->tm_mday;
+		mon=tms->tm_mon;
+		year=tms->tm_year;
+		isdst=tms->tm_isdst;
+		retval=normalizeBrokenDownTime(false);
+	}
+	if (needmutex && !releaseLock()) {
+		return false;
+	}
+	return retval;
 }
 
 bool datetime::normalizeBrokenDownTime(bool needmutex) {

@@ -300,26 +300,33 @@ then
 
 else
 
-	for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
-	do
-		for j in "pthread" "pth" "c_r" "gthreads"
+	dnl FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[],[-pthread],[],[PTHREADSINCLUDES="-pthread"; PTHREADSLIB="-pthread"],[])
+
+	if ( test -n "$PTHREADSLIB" )
+	then
+		HAVE_PTHREADS="yes"
+	else
+		for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
 		do
-			FW_CHECK_HEADERS_AND_LIBS([$PTHREADSPATH],[$i],[pthread.h],[$j],[""],[""],[PTHREADSINCLUDES],[PTHREADSLIB],[PTHREADSLIBPATH],[PTHREADSTATIC])
+			for j in "pthread" "pth" "c_r" "gthreads"
+			do
+				FW_CHECK_HEADERS_AND_LIBS([$PTHREADSPATH],[$i],[$i.h],[$j],[""],[""],[PTHREADSINCLUDES],[PTHREADSLIB],[PTHREADSLIBPATH],[PTHREADSTATIC])
+				if ( test -n "$PTHREADSLIB" )
+				then
+					if ( test "$j" = "c_r" )
+					then
+						PTHREADSLIB="$PTHREADSLIB -pthread"
+					fi
+					break
+				fi
+			done
 			if ( test -n "$PTHREADSLIB" )
 			then
+				HAVE_PTHREADS="yes"
 				break
 			fi
 		done
-		if ( test -n "$PTHREADSLIB" )
-		then
-			if ( test "$j" = "c_r" )
-			then
-				PTHREADSLIB="-pthread $PTHREADSLIB"
-			fi
-			HAVE_PTHREADS="yes"
-			break
-		fi
-	done
+	fi
 fi
 
 FW_INCLUDES(pthreads,[$PTHREADSINCLUDES])

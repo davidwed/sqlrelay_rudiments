@@ -8740,10 +8740,15 @@ then
 
 else
 
-	for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
-	do
-		for j in "pthread" "pth" "c_r" "gthreads"
+
+	if ( test -n "$PTHREADSLIB" )
+	then
+		HAVE_PTHREADS="yes"
+	else
+		for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
 		do
+			for j in "pthread" "pth" "c_r" "gthreads"
+			do
 
 
 eval "PTHREADSINCLUDES=\"\""
@@ -8757,7 +8762,7 @@ fi
 
 SEARCHPATH=$PTHREADSPATH
 NAME=$i
-HEADER=pthread.h
+HEADER=$i.h
 LIBNAME=$j
 LINKSTATIC=""
 LINKRPATH=""
@@ -9125,21 +9130,22 @@ then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
+				if ( test -n "$PTHREADSLIB" )
+				then
+					if ( test "$j" = "c_r" )
+					then
+						PTHREADSLIB="$PTHREADSLIB -pthread"
+					fi
+					break
+				fi
+			done
 			if ( test -n "$PTHREADSLIB" )
 			then
+				HAVE_PTHREADS="yes"
 				break
 			fi
 		done
-		if ( test -n "$PTHREADSLIB" )
-		then
-			if ( test "$j" = "c_r" )
-			then
-				PTHREADSLIB="-pthread $PTHREADSLIB"
-			fi
-			HAVE_PTHREADS="yes"
-			break
-		fi
-	done
+	fi
 fi
 
 
