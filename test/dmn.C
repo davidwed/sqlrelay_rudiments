@@ -4,8 +4,6 @@
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
 
-#include <rudiments/private/config.h>
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>

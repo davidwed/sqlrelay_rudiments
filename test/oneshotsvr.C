@@ -5,8 +5,6 @@
 #include <rudiments/permissions.h>
 #include <rudiments/inetserversocket.h>
 
-#include <rudiments/private/config.h>
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>

@@ -1,8 +1,6 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/private/config.h>
-
 #include <stdlib.h>
 #include <rudiments/datetime.h>
 #include <rudiments/randomnumber.h>

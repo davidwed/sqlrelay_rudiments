@@ -1,13 +1,11 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/private/config.h>
-
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <rudiments/semaphoreset.h>
-#include <rudiments/permissions.h>
 #include <rudiments/file.h>
+#include <rudiments/permissions.h>
 #include <stdio.h>
 #include <unistd.h>
 

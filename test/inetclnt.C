@@ -3,8 +3,6 @@
 
 #include <rudiments/inetclientsocket.h>
 
-#include <rudiments/private/config.h>
-
 #include <stdio.h>
 
 int main(int argv, const char **argc) {

@@ -1,8 +1,6 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/regularexpression.h>
 #include <stdio.h>
 
