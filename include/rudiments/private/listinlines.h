@@ -54,7 +54,7 @@ int list<datatype,keytype,listnodetype>::insert(unsigned long index,
 	}
 
 	// handle general insert
-	listnodetype	*current=getNode(index-1);
+	listnodetype	*current=getNodeByIndex(index-1);
 	if (!current) {
 		return 0;
 	}
@@ -68,9 +68,10 @@ int list<datatype,keytype,listnodetype>::insert(unsigned long index,
 }
 
 template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::setValue(unsigned long index,
+inline int list<datatype,keytype,listnodetype>::setValueByIndex(
+							unsigned long index,
 							datatype value) {
-	listnodetype	*current=getNode(index);
+	listnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		current->setValue(value);
 		return 1;
@@ -79,13 +80,13 @@ inline int list<datatype,keytype,listnodetype>::setValue(unsigned long index,
 }
 
 template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::removeIndex(
+inline int list<datatype,keytype,listnodetype>::removeByIndex(
 							unsigned long index) {
-	return removeNode(getNode(index));
+	return removeNode(getNodeByIndex(index));
 }
 
 template <class datatype, class keytype, class listnodetype>
-int list<datatype,keytype,listnodetype>::removeValue(keytype key) {
+int list<datatype,keytype,listnodetype>::removeByKey(keytype key) {
 
 	listnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
@@ -98,7 +99,7 @@ int list<datatype,keytype,listnodetype>::removeValue(keytype key) {
 }
 
 template <class datatype, class keytype, class listnodetype>
-int list<datatype,keytype,listnodetype>::removeAllValues(keytype key) {
+int list<datatype,keytype,listnodetype>::removeAllByKey(keytype key) {
 
 	listnodetype	*current=first;
 	listnodetype	*next;
@@ -139,9 +140,10 @@ int list<datatype,keytype,listnodetype>::removeNode(listnodetype *node) {
 }
 
 template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::getValue(unsigned long index,
+inline int list<datatype,keytype,listnodetype>::getValueByIndex(
+							unsigned long index,
 							datatype *value) const {
-	listnodetype	*current=getNode(index);
+	listnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		*value=current->getValue();
 		return 1;
@@ -150,7 +152,8 @@ inline int list<datatype,keytype,listnodetype>::getValue(unsigned long index,
 }
 
 template <class datatype, class keytype, class listnodetype>
-inline int list<datatype,keytype,listnodetype>::getValue(keytype key,
+inline int list<datatype,keytype,listnodetype>::getValueByKey(
+							keytype key,
 							datatype *value) const {
 	for (listnodetype *current=first; current;
 			current=(listnodetype *)current->getNext()) {
@@ -168,9 +171,9 @@ inline unsigned long list<datatype,keytype,listnodetype>::getLength() const {
 }
 
 template <class datatype, class keytype, class listnodetype>
-listnodetype *list<datatype,keytype,listnodetype>::getNode(unsigned long index)
-									const {
-	if (index>length) {
+listnodetype *list<datatype,keytype,listnodetype>::getNodeByIndex(
+						unsigned long index) const {
+	if (index>=length) {
 		return NULL;
 	}
 	listnodetype	*current=first;

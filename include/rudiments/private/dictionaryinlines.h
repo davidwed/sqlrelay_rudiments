@@ -18,7 +18,7 @@ inline void dictionary<keytype,valuetype,dictionarynodetype>::
 				setValue(keytype key, valuetype value) {
 
 	dictionarynode<keytype,valuetype>	*node;
-	if (dict.getValue(key,&node)) {
+	if (dict.getValueByKey(key,&node)) {
 		node->setValue(value);
 	} else {
 		node=new dictionarynodetype(key,value);
@@ -30,7 +30,7 @@ template <class keytype, class valuetype, class dictionarynodetype>
 inline int dictionary<keytype,valuetype,dictionarynodetype>::
 				getValue(keytype key, valuetype *value) {
 	dictionarynode<keytype,valuetype>	*node;
-	if (dict.getValue(key,&node)) {
+	if (dict.getValueByKey(key,&node)) {
 		*value=node->getValue();
 		return 1;
 	}
@@ -40,7 +40,7 @@ inline int dictionary<keytype,valuetype,dictionarynodetype>::
 template <class keytype, class valuetype, class dictionarynodetype>
 inline int dictionary<keytype,valuetype,dictionarynodetype>::
 						removeValue(keytype key) {
-	return dict.removeValue(key);
+	return dict.removeByKey(key);
 }
 
 template <class keytype, class valuetype, class dictionarynodetype>
@@ -53,7 +53,7 @@ template <class keytype, class valuetype, class dictionarynodetype>
 inline int dictionary<keytype,valuetype,dictionarynodetype>::
 			getKey(unsigned long index, keytype *key) const {
 	dictionarynode<keytype,valuetype>	*node;
-	if (dict.getValue(index,&node)) {
+	if (dict.getValueByIndex(index,&node)) {
 		*key=node->getKey();
 		return 1;
 	}

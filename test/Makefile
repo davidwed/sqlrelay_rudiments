@@ -50,7 +50,7 @@ file: file.C file.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ file.lo -L../src -lrudiments_p
 
 list: list.C list.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ list.lo -L../src -lrudiments_p
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ list.lo -L../src -lrudiments_p -lefence
 
 mem: mem.C mem.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p
@@ -80,7 +80,7 @@ shm2: shm2.C shm2.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ shm2.lo -L../src -lrudiments_p
 
 tbl: tbl.C tbl.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ tbl.lo -L../src -lrudiments_p -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ tbl.lo -L../src -lrudiments_p
 
 text: text.C text.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ text.lo -L../src -lrudiments_p
@@ -101,10 +101,10 @@ signal: signal.C signal.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ signal.lo -L../src -lrudiments_p
 
 string: string.C string.lo 
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ string.lo -L../src -lrudiments_p -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ string.lo -L../src -lrudiments_p
 
 strbuf: strbuf.C strbuf.lo 
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ strbuf.lo -L../src -lrudiments_p -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ strbuf.lo -L../src -lrudiments_p
 
 handoff1: handoff1.C handoff1.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ handoff1.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)

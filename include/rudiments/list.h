@@ -89,18 +89,21 @@ class list {
 		void	append(datatype value);
 		int	insert(unsigned long index, datatype value);
 
-		int	removeIndex(unsigned long index);
-		int	removeValue(keytype key);
-		int	removeAllValues(keytype key);
+		int	removeByIndex(unsigned long index);
+		int	removeByKey(keytype key);
+		int	removeAllByKey(keytype key);
 		int	removeNode(listnodetype *node);
 
-		int	setValue(unsigned long index, datatype value);
-		int	getValue(unsigned long index, datatype *value) const;
-		int	getValue(keytype key, datatype *value) const;
+		int	setValueByIndex(unsigned long index,
+						datatype value);
+		int	getValueByIndex(unsigned long index,
+						datatype *value) const;
+
+		int	getValueByKey(keytype key, datatype *value) const;
 
 		unsigned long	getLength() const;
 
-		listnodetype	*getNode(unsigned long index) const;
+		listnodetype	*getNodeByIndex(unsigned long index) const;
 
 		void	clear();
 

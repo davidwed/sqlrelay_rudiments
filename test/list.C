@@ -7,8 +7,8 @@ void	print(primitivelist<int> *l) {
 
 	int	value;
 	for (int i=0; i<l->getLength(); i++) {
-		l->getValue(i,&value);
-		printf("%d: %d,%d\n",i,l->getNode(i)->getValue(),value);
+		l->getValueByIndex(i,&value);
+		printf("%d: %d,%d\n",i,l->getNodeByIndex(i)->getValue(),value);
 	}
 }
 
@@ -18,8 +18,8 @@ void	print(stringlist *l) {
 
 	char	*value;
 	for (int i=0; i<l->getLength(); i++) {
-		l->getValue(i,&value);
-		printf("%d: %s,%s\n",i,l->getNode(i)->getValue(),value);
+		l->getValueByIndex(i,&value);
+		printf("%d: %s,%s\n",i,l->getNodeByIndex(i)->getValue(),value);
 	}
 }
 
@@ -39,14 +39,14 @@ int	main(int argc, char **argv) {
 	printf("insert(2,2)\n");
 	prl.insert(2,2);
 	print(&prl);
-	printf("removeIndex(0)\n");
-	prl.removeIndex(0);
+	printf("removeByIndex(0)\n");
+	prl.removeByIndex(0);
 	print(&prl);
-	printf("removeValue(3)\n");
-	prl.removeValue(3);
+	printf("removeByKey(3)\n");
+	prl.removeByKey(3);
 	print(&prl);
-	printf("setValue(1,50)\n");
-	prl.setValue(1,50);
+	printf("setValueByIndex(1,50)\n");
+	prl.setValueByIndex(1,50);
 	print(&prl);
 	printf("clear()\n");
 	prl.clear();
@@ -69,14 +69,14 @@ int	main(int argc, char **argv) {
 	printf("insert(2,two)\n");
 	strl.insert(2,"two");
 	print(&strl);
-	printf("removeIndex(0)\n");
-	strl.removeIndex(0);
+	printf("removeByIndex(0)\n");
+	strl.removeByIndex(0);
 	print(&strl);
-	printf("removeValue(three)\n");
-	strl.removeValue("three");
+	printf("removeByKey(three)\n");
+	strl.removeByKey("three");
 	print(&strl);
-	printf("setValue(1,fifty)\n");
-	strl.setValue(1,"fifty");
+	printf("setValueByIndex(1,fifty)\n");
+	strl.setValueByIndex(1,"fifty");
 	print(&strl);
 	printf("clear()\n");
 	strl.clear();

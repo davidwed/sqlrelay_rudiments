@@ -1,11 +1,13 @@
+list test isn't exactly right
+
 dtd test crashes
 host/proto entry classes need static methods
 table class is generally screwed up
 
-connectiondata should just be generic name/value list class
+connectiondata should just use dictionary class
 need generic parser/lexer classes, use them for xmlsax
 
-document/test program for filedescriptor,file,filesystem
+document/test program for filedescriptor,file
 
 document stringbuffer,variablebuffer
 
