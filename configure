@@ -20336,6 +20336,612 @@ fi
 
 			fi
 		fi
+
+
+
+
+
+		if ( test "$paths" = "/" )
+		then
+						if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+						paths=""
+		fi
+
+				if ( test "$USEFULLLIBPATH" = "yes" )
+		then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
 		if ( test -n "$LIBSTRING" )
 		then
 			HEADERSANDLIBSPATH="$paths"
@@ -20346,6 +20952,7 @@ done
 
 INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
 LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
 
 eval "PTHREADINCLUDES=\"$INCLUDESTRING\""
 eval "PTHREADLIB=\"$LIBSTRING\""
@@ -21083,6 +21690,612 @@ fi
 
 			fi
 		fi
+
+
+
+
+
+		if ( test "$paths" = "/" )
+		then
+						if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+						paths=""
+		fi
+
+				if ( test "$USEFULLLIBPATH" = "yes" )
+		then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
 		if ( test -n "$LIBSTRING" )
 		then
 			HEADERSANDLIBSPATH="$paths"
@@ -21093,6 +22306,7 @@ done
 
 INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
 LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
 
 eval "OPENSSLINCLUDES=\"$INCLUDESTRING\""
 eval "OPENSSLLIBS=\"$LIBSTRING\""
@@ -21733,6 +22947,612 @@ fi
 
 			fi
 		fi
+
+
+
+
+
+		if ( test "$paths" = "/" )
+		then
+						if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+						paths=""
+		fi
+
+				if ( test "$USEFULLLIBPATH" = "yes" )
+		then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
 		if ( test -n "$LIBSTRING" )
 		then
 			HEADERSANDLIBSPATH="$paths"
@@ -21743,6 +23563,7 @@ done
 
 INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
 LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
 
 eval "CRYPTOINCLUDES=\"$INCLUDESTRING\""
 eval "CRYPTOLIBS=\"$LIBSTRING\""
@@ -22469,6 +24290,612 @@ fi
 
 			fi
 		fi
+
+
+
+
+
+		if ( test "$paths" = "/" )
+		then
+						if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/lib64\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+						paths=""
+		fi
+
+				if ( test "$USEFULLLIBPATH" = "yes" )
+		then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/$NAME/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/$NAME/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
+				if ( test -z "$LIBSTRING" )
+		then
+			if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$paths/include/$NAME/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+		eval "LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$paths/lib64/opt/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$paths/lib64/opt/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$paths/include/$NAME\""
+			eval "LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+		fi
+
 		if ( test -n "$LIBSTRING" )
 		then
 			HEADERSANDLIBSPATH="$paths"
@@ -22479,6 +24906,7 @@ done
 
 INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
 LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
 
 eval "PCREINCLUDES=\"$INCLUDESTRING\""
 eval "PCRELIBS=\"$LIBSTRING\""

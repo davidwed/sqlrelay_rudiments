@@ -33,6 +33,8 @@
 		strings created using malloc aren't freed using delete[]
 	removed errant connect() definitions from inetclientsocket,
 		unixclientsocket
+	added WNOHANG back to waitpid() call in daemonprocess class and made
+		sure the call gets restarted if it's interrupted by a signal
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch
