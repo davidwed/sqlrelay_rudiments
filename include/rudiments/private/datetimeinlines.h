@@ -8,6 +8,12 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
+RUDIMENTS_INLINE datetime::datetime() {
+	timestruct=NULL;
+	timestring=NULL;
+	epoch=0;
+}
+
 RUDIMENTS_INLINE datetime::~datetime() {
 	delete[] timestring;
 	delete timestruct;
@@ -66,19 +72,6 @@ RUDIMENTS_INLINE char	*datetime::getTimeZoneString() const {
 		return (char *)timestruct->tm_zone;
 	#elif HAS_TM_NAME
 		return (char *)timestruct->tm_name;
-	#else
-		return "";
-	#endif
-}
-
-RUDIMENTS_INLINE char	*datetime::getTimeZoneString(const struct tm *tmstruct)
-							const {
-	#ifdef HAS___TM_ZONE
-		return (char *)tmstruct->__tm_zone;
-	#elif HAS_TM_ZONE
-		return (char *)tmstruct->tm_zone;
-	#elif HAS_TM_NAME
-		return (char *)tmstruct->tm_name;
 	#else
 		return "";
 	#endif
@@ -173,4 +166,12 @@ RUDIMENTS_INLINE int datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 	}
 	env.remove("TZ");
 	return 1;
+}
+
+RUDIMENTS_INLINE void datetime::setLocalTimeMutex(pthread_mutex_t *mutex) {
+	ltmutex=mutex;
+}
+
+RUDIMENTS_INLINE void datetime::setEnvironmentMutex(pthread_mutex_t *mutex) {
+	envmutex=mutex;
 }

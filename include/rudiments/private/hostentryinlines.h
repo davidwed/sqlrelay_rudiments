@@ -12,6 +12,9 @@
 RUDIMENTS_INLINE hostentry::hostentry() {
 	he=NULL;
 	buffer=NULL;
+	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+		hemutex=NULL;
+	#endif
 }
 
 RUDIMENTS_INLINE hostentry::~hostentry() {
@@ -160,4 +163,18 @@ RUDIMENTS_INLINE int hostentry::getAddressString(const char *address,
 		return 1;
 	}
 	return 0;
+}
+
+RUDIMENTS_INLINE int hostentry::needsMutex() {
+	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+		return 1;
+	#else
+		return 0;
+	#endif
+}
+
+RUDIMENTS_INLINE void hostentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+		hemutex=mutex;
+	#endif
 }

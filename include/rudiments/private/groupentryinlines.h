@@ -12,6 +12,9 @@
 RUDIMENTS_INLINE groupentry::groupentry() {
 	grp=NULL;
 	buffer=NULL;
+	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		gemutex=NULL;
+	#endif
 }
 
 RUDIMENTS_INLINE groupentry::~groupentry() {
@@ -103,4 +106,18 @@ RUDIMENTS_INLINE int groupentry::getMembers(gid_t groupid, char ***members) {
 		return 1;
 	}
 	return 0;
+}
+
+RUDIMENTS_INLINE int groupentry::needsMutex() {
+	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		return 1;
+	#else
+		return 0;
+	#endif
+}
+
+RUDIMENTS_INLINE void groupentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		gemutex=mutex;
+	#endif
 }

@@ -23,11 +23,10 @@
 	#include <unistd.h>
 #endif
 
-datetime::datetime() {
-	timestruct=NULL;
-	timestring=NULL;
-	epoch=0;
-}
+#ifdef __GNUC__
+pthread_mutex_t	*datetime::ltmutex;
+pthread_mutex_t	*datetime::envmutex;
+#endif
 
 int datetime::initialize(const char *tmstring) {
 
@@ -91,9 +90,15 @@ int datetime::initialize(time_t seconds) {
 		// update time will attach the current timezone
 		return updateTime();
 	#else
-		// should protect this with a mutex
+		if (ltmutex && pthread_mutex_lock(ltmutex)) {
+			return 0;
+		}
 		struct tm	*lcltm=localtime(&seconds);
-		return (lcltm && copyStructTm(lcltm,timestruct));
+		int	retval=(lcltm && copyStructTm(lcltm,timestruct));
+		if (ltmutex && pthread_mutex_unlock(ltmutex)) {
+			return 0;
+		}
+		return retval;
 	#endif
 }
 
@@ -211,7 +216,10 @@ int datetime::setHardwareDateAndTime(const char *hwtz) {
 
 int datetime::adjustTimeZone(const char *newtz) {
 
-	// this should be surrounded by a mutex...
+	// obtain exclusive access to localtime
+	if (ltmutex && pthread_mutex_lock(ltmutex)) {
+		return 0;
+	}
 
 	// change the time zone
 	char	*oldzone;
@@ -240,6 +248,11 @@ int datetime::adjustTimeZone(const char *newtz) {
 
 	if (newtz) {
 		restoreTimeZoneEnvVar(oldzone);
+	}
+
+	// release exclusive access to localtime
+	if (ltmutex && pthread_mutex_unlock(ltmutex)) {
+		return 0;
 	}
 	return 1;
 }
@@ -270,7 +283,10 @@ int datetime::setTimeZone(const char *tz) {
 	delete timestruct;
 	timestruct=newtimestruct;
 
-	// this should be surrounded by a mutex...
+	// obtain exclusive access to the environment variables
+	if (envmutex && pthread_mutex_lock(envmutex)) {
+		return 0;
+	}
 
 	// change the current timezone
 	char	*oldtz;
@@ -282,27 +298,10 @@ int datetime::setTimeZone(const char *tz) {
 	// restore the original timezone
 	restoreTimeZoneEnvVar(oldtz);
 
-	return retval;
-}
-
-long datetime::getTimeZoneOffset(const char *zone) {
-
-	// this should be surrounded by a mutex...
-
-	// change the current timezone
-	char	*oldzone;
-	setTimeZoneEnvVar(zone,&oldzone);
-
-	// set "timezone" (a stinkin' global variable)
-	tzset();
-
-	// interestingly enough, tzset() returns seconds east of GMT while
-	// every other time-related function returns seconds west of GMT,
-	// go figure...
-	long	retval=-1*timezone;
-
-	// restore the original timezone
-	restoreTimeZoneEnvVar(oldzone);
+	// release exclusive access to the environment variables
+	if (envmutex && pthread_mutex_lock(envmutex)) {
+		return 0;
+	}
 
 	return retval;
 }

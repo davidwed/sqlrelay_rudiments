@@ -12,6 +12,9 @@
 RUDIMENTS_INLINE protocolentry::protocolentry() {
 	pe=NULL;
 	buffer=NULL;
+	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+		pemutex=NULL;
+	#endif
 }
 
 RUDIMENTS_INLINE protocolentry::~protocolentry() {
@@ -81,4 +84,18 @@ RUDIMENTS_INLINE int protocolentry::getAliasList(int number,
 		return 1;
 	}
 	return 0;
+}
+
+RUDIMENTS_INLINE int protocolentry::needsMutex() {
+	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+		return 1;
+	#else
+		return 0;
+	#endif
+}
+
+RUDIMENTS_INLINE void protocolentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+		pemutex=mutex;
+	#endif
 }

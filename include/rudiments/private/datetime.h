@@ -9,8 +9,6 @@
 		void	initTimeString();
 		void	initTimeStruct();
 		int	setTimeZone(const char *tz);
-		long	getTimeZoneOffset(const char *zone);
-		char	*getTimeZoneString(const struct tm *tmstruct) const;
 		int	updateTime();
 		int	updateTimePreservingTimeZone();
 		int	copyStructTm(const struct tm *oldtm, struct tm *newtm);
@@ -19,3 +17,6 @@
 		int	restoreTimeZoneEnvVar(const char *oldzone);
 
 		environment	env;
+
+		static	pthread_mutex_t	*ltmutex;
+		static	pthread_mutex_t	*envmutex;

@@ -11,6 +11,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef __GNUC__
+pthread_mutex_t	*hostentry::hemutex;
+#endif
+
 int hostentry::initialize(const char *hostname) {
 	if (he) {
 		he=NULL;
@@ -39,9 +43,10 @@ int hostentry::initialize(const char *hostname) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
 		he=NULL;
-		return ((he=gethostbyname(hostname))!=NULL);
+		return (((hemutex)?!pthread_mutex_lock(hemutex):1) &&
+			((he=gethostbyname(hostname))!=NULL) &&
+			((hemutex)?!pthread_mutex_unlock(hemutex):1));
 	#endif
 }
 
@@ -73,9 +78,10 @@ int hostentry::initialize(const char *address, int len, int type) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
 		he=NULL;
-		return ((he=gethostbyaddr(address,len,type))!=NULL);
+		return (((hemutex)?!pthread_mutex_lock(hemutex):1) &&
+			((he=gethostbyaddr(address,len,type))!=NULL) &&
+			((hemutex)?!pthread_mutex_unlock(hemutex):1));
 	#endif
 }
 

@@ -9,6 +9,7 @@
 #include <rudiments/environment.h>
 
 #include <time.h>
+#include <pthread.h>
 
 // The datetime class provides methods for converting date/time formats and
 // accessing various date/time values.
@@ -175,6 +176,22 @@ class datetime {
 				// GMT (in seconds).  Each element of this
 				// array corresponds to an element of the
 				// array returned b getTimeZoneStrings().
+
+
+		// Many of the functions that the datetime class uses internally
+		// are not reentrant and thus not thread-safe.  Indeed, for
+		// some functions, there is no thread-safe version.  If your
+		// application is multi-threaded, you must use these methods to
+		// supply mutex'es to ensure thread safety.
+		//
+		// If you don't supply mutex'es, the methods in this class
+		// will still work, but will not be thread-safe.
+		static	void	setLocalTimeMutex(pthread_mutex_t *mutex);
+				// Allows you to supply a mutex to regulate
+				// access to the localtime() function.
+		static	void	setEnvironmentMutex(pthread_mutex_t *mutex);
+				// Allows you to supply a mutex to regulate
+				// access to the environment variable TZ.
 
 	#include <rudiments/private/datetime.h>
 };

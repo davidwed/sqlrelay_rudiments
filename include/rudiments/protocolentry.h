@@ -6,6 +6,10 @@
 
 #include <rudiments/private/config.h>
 
+#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYADDR_R)
+	#include <pthread.h>
+#endif
+
 #include <netdb.h>
 
 // The protocolentry class provides methods for retrieving
@@ -41,6 +45,14 @@ class protocolentry {
 
 		void	print() const;
 			// prints out the protocol entry
+
+		static	int	needsMutex();
+			// Returns 1 if this class needs a mutex to operate
+			// safely in a threaded environment and 0 otherwise.
+		static	void	setMutex(pthread_mutex_t *mutex);
+			// Allows you to supply a mutex is the class needs it.
+			// If your application is not multithreaded, then
+			// there is no need to supply a mutex.
 
 	#include <rudiments/private/protocolentry.h>
 };

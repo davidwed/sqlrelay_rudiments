@@ -11,6 +11,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef __GNUC__
+pthread_mutex_t	*passwdentry::pemutex;
+#endif
+
 int passwdentry::initialize(const char *username) {
 	if (pwd) {
 		pwd=NULL;
@@ -37,8 +41,9 @@ int passwdentry::initialize(const char *username) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
-		return ((pwd=getpwnam(username))!=NULL);
+		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
+			((pwd=getpwnam(username))!=NULL) &&
+			((pemutex)?!pthread_mutex_unlock(pemutex):1));
 	#endif
 }
 
@@ -68,8 +73,9 @@ int passwdentry::initialize(uid_t userid) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
-		return ((pwd=getpwuid(userid))!=NULL);
+		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
+			((pwd=getpwuid(userid))!=NULL) &&
+			((pemutex)?!pthread_mutex_unlock(pemutex):1));
 	#endif
 }
 

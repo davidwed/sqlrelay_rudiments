@@ -11,6 +11,10 @@
 
 #define MAXBUFFER (32*1024)
 
+#ifdef __GNUC__
+pthread_mutex_t	*groupentry::gemutex;
+#endif
+
 int groupentry::initialize(const char *groupname) {
 	if (grp) {
 		grp=NULL;
@@ -38,8 +42,9 @@ int groupentry::initialize(const char *groupname) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
-		return ((grp=getgrnam(groupname))!=NULL);
+		return (((gemutex)?!pthread_mutex_lock(gemutex):1) &&
+			((grp=getgrnam(groupname))!=NULL) &&
+			((gemutex)?!pthread_mutex_unlock(gemutex):1));
 	#endif
 }
 
@@ -70,7 +75,9 @@ int groupentry::initialize(gid_t groupid) {
 		return 0;
 	#else
 		// should protect this with a mutex...
-		return ((grp=getgrgid(groupid))!=NULL);
+		return (((gemutex)?!pthread_mutex_lock(gemutex):1) &&
+			((grp=getgrgid(groupid))!=NULL) &&
+			((gemutex)?!pthread_mutex_unlock(gemutex):1));
 	#endif
 }
 

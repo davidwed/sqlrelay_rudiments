@@ -6,6 +6,10 @@
 
 #include <rudiments/private/config.h>
 
+#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+	#include <pthread.h>
+#endif
+
 #include <netdb.h>
 
 // The hostentry class provides methods for retrieving entries from /etc/hosts
@@ -60,6 +64,14 @@ class hostentry {
 
 		void	print() const;
 			// prints out the host entry
+
+		static	int	needsMutex();
+			// Returns 1 if this class needs a mutex to operate
+			// safely in a threaded environment and 0 otherwise.
+		static	void	setMutex(pthread_mutex_t *mutex);
+			// Allows you to supply a mutex is the class needs it.
+			// If your application is not multithreaded, then
+			// there is no need to supply a mutex.
 
 	#include <rudiments/private/hostentry.h>
 };

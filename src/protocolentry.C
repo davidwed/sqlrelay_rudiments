@@ -11,6 +11,10 @@
 
 #define MAXBUFFER	(32*1024)
 
+#ifdef __GNUC__
+pthread_mutex_t	*protocolentry::pemutex;
+#endif
+
 int protocolentry::initialize(const char *protocolname) {
 	if (pe) {
 		pe=NULL;
@@ -38,9 +42,10 @@ int protocolentry::initialize(const char *protocolname) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
 		pe=NULL;
-		return ((pe=getprotobyname(protocolname))!=NULL);
+		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
+			((pe=getprotobyname(protocolname))!=NULL) &&
+			((pemutex)?!pthread_mutex_unlock(pemutex):1));
 	#endif
 }
 
@@ -71,9 +76,10 @@ int protocolentry::initialize(int number) {
 		}
 		return 0;
 	#else
-		// should protect this with a mutex...
 		pe=NULL;
-		return ((pe=getprotobynumber(number))!=NULL);
+		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
+			((pe=getprotobynumber(number))!=NULL) &&
+			((pemutex)?!pthread_mutex_lock(pemutex):1));
 	#endif
 }
 

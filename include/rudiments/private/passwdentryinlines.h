@@ -12,6 +12,9 @@
 RUDIMENTS_INLINE passwdentry::passwdentry() {
 	pwd=NULL;
 	buffer=NULL;
+	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+		pemutex=NULL;
+	#endif
 }
 
 RUDIMENTS_INLINE passwdentry::~passwdentry() {
@@ -161,4 +164,18 @@ RUDIMENTS_INLINE int passwdentry::getShell(const char *username,
 		return 1;
 	}
 	return 0;
+}
+
+RUDIMENTS_INLINE int passwdentry::needsMutex() {
+	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+		return 1;
+	#else
+		return 0;
+	#endif
+}
+
+RUDIMENTS_INLINE void passwdentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+		pemutex=mutex;
+	#endif
 }

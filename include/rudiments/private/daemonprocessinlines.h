@@ -1,6 +1,9 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
+
 #ifndef __USE_UNIX98
 	#define __USE_UNIX98
 #endif
@@ -18,9 +21,6 @@
 #ifdef HAVE_SYS_WAIT_H
 	#include <sys/wait.h>
 #endif
-
-#include <rudiments/passwdentry.h>
-#include <rudiments/groupentry.h>
 
 #include <rudiments/private/rudimentsinlines.h>
 
