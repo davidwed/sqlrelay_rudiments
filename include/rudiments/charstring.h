@@ -191,6 +191,10 @@ class charstring {
 			// if it is not a number
 		static	char	*parseNumber(long number);
 		static	char	*parseNumber(unsigned long number);
+		static	char	*parseNumber(long number,
+						unsigned short zeropadding);
+		static	char	*parseNumber(unsigned long number,
+						unsigned short zeropadding);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted
 			// by the calling program.

@@ -177,6 +177,10 @@ ifeq ($(INCLUDE_MODEMCLIENT),1)
 	HEADERS += modemclient.h
 	PRIVATEHEADERS += modemclient.h modemclientincludes.h
 endif
+ifeq ($(INCLUDE_MODEMSERVER),1)
+	HEADERS += modemserver.h
+	PRIVATEHEADERS += modemserver.h modemserverincludes.h
+endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	HEADERS += unixserversocket.h
 	PRIVATEHEADERS += unixserversocket.h unixserversocketincludes.h
@@ -225,15 +229,27 @@ endif
 ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
 	HEADERS += serialportprofile.h
 	PRIVATEHEADERS += serialportprofileincludes.h \
-				serialportprofileinlines.h \
 				serialportprofile.h
 endif
 ifeq ($(INCLUDE_SERIALPORT),1)
 	HEADERS += serialport.h
-	PRIVATEHEADERS += serialportincludes.h \
-				serialportinlines.h
+	PRIVATEHEADERS += serialportincludes.h
+endif
+ifeq ($(INCLUDE_CHAT),1)
+	HEADERS += chat.h
+	PRIVATEHEADERS += chatincludes.h
 endif
 
+# if either modemserver or modemclient are defined, include modemutil.h
+ifeq ($(INCLUDE_MODEMSERVER),1)
+	HEADERS += modemutil.h
+	PRIVATEHEADERS += modemutil.h modemutilincludes.h
+else
+	ifeq ($(INCLUDE_MODEMCLIENT),1)
+		HEADERS += modemutil.h
+		PRIVATEHEADERS += modemutil.h modemutilincludes.h
+	endif
+endif
 
 # if either inetserver or inetclient are defined, include inetsocketutil.h
 ifeq ($(INCLUDE_INETSERVER),1)

@@ -2,14 +2,10 @@
 // See the COPYING file for more information
 
 #include <rudiments/variablebuffer.h>
+#include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
-
-// need these for memcpy...
-#include <string.h>
-#ifdef HAVE_STRINGS
-	#include <strings.h>
-#endif
 
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	init(new unsigned char[initialsize],initialsize,increment);
@@ -43,7 +39,7 @@ ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 		bytestoread=endofbuffer-position;
 	}
 
-	memcpy((void *)data,(void *)(buffer+position),bytestoread);
+	rawbuffer::copy((void *)data,(void *)(buffer+position),bytestoread);
 	position=position+bytestoread;
 
 	return bytestoread;
@@ -59,7 +55,7 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 	}
 
 	// copy the data into the buffer
-	memcpy((void *)(buffer+position),(void *)data,size);
+	rawbuffer::copy((void *)(buffer+position),(void *)data,size);
 
 	// increment the position indices
 	position=position+size;
@@ -67,6 +63,46 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 		endofbuffer=position;
 	}
 	return this;
+}
+
+variablebuffer *variablebuffer::write(char *string) {
+	return write((unsigned char *)string,charstring::length(string));
+}
+
+variablebuffer *variablebuffer::write(char *string, size_t size) {
+	return write((unsigned char *)string,size);
+}
+
+variablebuffer *variablebuffer::write(char character) {
+	return write((unsigned char *)&character,sizeof(char));
+}
+
+variablebuffer *variablebuffer::write(short number) {
+	return write((unsigned char *)&number,sizeof(short));
+}
+
+variablebuffer *variablebuffer::write(long number) {
+	return write((unsigned char *)&number,sizeof(long));
+}
+
+variablebuffer *variablebuffer::write(unsigned char character) {
+	return write((unsigned char *)&character,sizeof(unsigned char));
+}
+
+variablebuffer *variablebuffer::write(unsigned short number) {
+	return write((unsigned char *)&number,sizeof(unsigned short));
+}
+
+variablebuffer *variablebuffer::write(unsigned long number) {
+	return write((unsigned char *)&number,sizeof(unsigned long));
+}
+
+variablebuffer *variablebuffer::write(float number) {
+	return write((unsigned char *)&number,sizeof(float));
+}
+
+variablebuffer *variablebuffer::write(double number) {
+	return write((unsigned char *)&number,sizeof(double));
 }
 
 void variablebuffer::clear() {
@@ -81,7 +117,7 @@ void variablebuffer::extend(size_t size) {
 	size_t	newbuffersize=buffersize+((size/increment)*increment)+
 					(((size%increment)>0)*increment);
 	unsigned char	*newbuffer=new unsigned char[newbuffersize];
-	memcpy((void *)newbuffer,(void *)buffer,buffersize);
+	rawbuffer::copy((void *)newbuffer,(void *)buffer,buffersize);
 	delete[] buffer;
 	buffer=newbuffer;
 	buffersize=newbuffersize;
@@ -114,4 +150,44 @@ void variablebuffer::setPosition(size_t pos) {
 variablebuffer *variablebuffer::append(const unsigned char *data, size_t size) {
 	position=endofbuffer;
 	return write(data,size);
+}
+
+variablebuffer *variablebuffer::append(char *string) {
+	return append((unsigned char *)string,charstring::length(string));
+}
+
+variablebuffer *variablebuffer::append(char *string, size_t size) {
+	return append((unsigned char *)string,size);
+}
+
+variablebuffer *variablebuffer::append(char character) {
+	return append((unsigned char *)&character,sizeof(char));
+}
+
+variablebuffer *variablebuffer::append(short number) {
+	return append((unsigned char *)&number,sizeof(short));
+}
+
+variablebuffer *variablebuffer::append(long number) {
+	return append((unsigned char *)&number,sizeof(long));
+}
+
+variablebuffer *variablebuffer::append(unsigned char character) {
+	return append((unsigned char *)&character,sizeof(unsigned char));
+}
+
+variablebuffer *variablebuffer::append(unsigned short number) {
+	return append((unsigned char *)&number,sizeof(unsigned short));
+}
+
+variablebuffer *variablebuffer::append(unsigned long number) {
+	return append((unsigned char *)&number,sizeof(unsigned long));
+}
+
+variablebuffer *variablebuffer::append(float number) {
+	return append((unsigned char *)&number,sizeof(float));
+}
+
+variablebuffer *variablebuffer::append(double number) {
+	return append((unsigned char *)&number,sizeof(double));
 }

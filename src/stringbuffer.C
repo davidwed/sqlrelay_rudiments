@@ -85,15 +85,24 @@ stringbuffer *stringbuffer::append(const char *string) {
 }
 
 stringbuffer *stringbuffer::append(long number) {
-	char	*numstr=charstring::parseNumber(number);
+	return append(number,0);
+}
+
+stringbuffer *stringbuffer::append(unsigned long number) {
+	return append(number,0);
+}
+
+stringbuffer *stringbuffer::append(long number, unsigned short zeropadding) {
+	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append((unsigned char *)numstr,
 					charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(unsigned long number) {
-	char	*numstr=charstring::parseNumber(number);
+stringbuffer *stringbuffer::append(unsigned long number,
+					unsigned short zeropadding) {
+	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append((unsigned char *)numstr,
 					charstring::length(numstr));
 	delete[] numstr;

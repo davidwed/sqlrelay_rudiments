@@ -4,15 +4,10 @@
 #include <rudiments/inetserversocket.h>
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 #include <arpa/inet.h>
 #include <netdb.h>
-
-// need these for memset...
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 inetserversocket::inetserversocket() : serversocket(), inetsocketutil() {
 	translateByteOrder();
@@ -35,7 +30,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	inetsocketutil::initialize(address,port);
 
 	// initialize a socket address structure
-	memset((void *)&sin,0,sizeof(sin));
+	rawbuffer::zero((void *)&sin,sizeof(sin));
 	sin.sin_family=AF_INET;
 	sin.sin_port=htons(port);
 
@@ -64,7 +59,7 @@ bool inetserversocket::bind() {
 		// initialize a socket address structure
 		sockaddr_in	socknamesin;
 		socklen_t	size=sizeof(socknamesin);
-		memset((void *)&socknamesin,0,sizeof(socknamesin));
+		rawbuffer::zero((void *)&socknamesin,sizeof(socknamesin));
 
 		if (getsockname(fd,(struct sockaddr *)&socknamesin,
 					(socklen_t *)&size)>-1) {
@@ -83,7 +78,7 @@ filedescriptor *inetserversocket::accept() {
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
 	socklen_t	size=sizeof(clientsin);
-	memset((void *)&clientsin,0,sizeof(clientsin));
+	rawbuffer::zero((void *)&clientsin,sizeof(clientsin));
 
 	// accept on the socket
 	int		clientsock;
@@ -108,7 +103,7 @@ char *inetserversocket::getClientAddress() {
 	// initialize a socket address structure
 	struct sockaddr_in	clientsin;
 	int			size=sizeof(clientsin);
-	memset((void *)&clientsin,0,sizeof(clientsin));
+	rawbuffer::zero((void *)&clientsin,sizeof(clientsin));
 
 	// get the peer address
 	if (getpeername(fd,(struct sockaddr *)&clientsin,

@@ -163,6 +163,10 @@ ifeq ($(INCLUDE_MODEMCLIENT),1)
 	SRCS += modemclient.C
 	LOBJS += modemclient.lo
 endif
+ifeq ($(INCLUDE_MODEMSERVER),1)
+	SRCS += modemserver.C
+	LOBJS += modemserver.lo
+endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	SRCS += unixserversocket.C
 	LOBJS += unixserversocket.lo
@@ -215,8 +219,23 @@ ifeq ($(INCLUDE_SERIALPORT),1)
 	SRCS += serialport.C
 	LOBJS += serialport.lo
 endif
+ifeq ($(INCLUDE_CHAT),1)
+	SRCS += chat.C
+	LOBJS += chat.lo
+endif
 
-# if either inetserver or inetclient are defined, include inetsocket.h
+# if either modemserver or modemclient are defined, include modemutil.C
+ifeq ($(INCLUDE_MODEMSERVER),1)
+	SRCS += modemutil.C
+	LOBJS += modemutil.lo
+else
+	ifeq ($(INCLUDE_MODEMCLIENT),1)
+		SRCS += modemutil.C
+		LOBJS += modemutil.lo
+	endif
+endif
+
+# if either inetserver or inetclient are defined, include inetsocketutil.C
 ifeq ($(INCLUDE_INETSERVER),1)
 	SRCS += inetsocketutil.C
 	LOBJS += inetsocketutil.lo
@@ -227,7 +246,7 @@ else
 	endif
 endif
 
-# if either unixserver or unixclient are defined, include unixsocket.h
+# if either unixserver or unixclient are defined, include unixsocketutil.C
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	SRCS += unixsocketutil.C
 	LOBJS += unixsocketutil.lo
@@ -238,7 +257,7 @@ else
 	endif
 endif
 
-# if inet/unix server are defined, include serversocket.h
+# if inet/unix server are defined, include serversocket.C
 ifeq ($(INCLUDE_INETSERVER),1)
 	SRCS += serversocket.C
 	LOBJS += serversocket.lo
@@ -249,7 +268,7 @@ else
 	endif
 endif
 
-# if inet/unix client are defined, include clientsocket.h
+# if inet/unix client are defined, include clientsocket.C
 ifeq ($(INCLUDE_INETCLIENT),1)
 	SRCS += clientsocket.C
 	LOBJS += clientsocket.lo

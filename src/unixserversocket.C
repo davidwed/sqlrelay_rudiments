@@ -4,13 +4,11 @@
 #include <rudiments/unixserversocket.h>
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 #include <rudiments/file.h>
 
 // need for umask...
 #include <sys/stat.h>
-
-// need for memset...
-#include <string.h>
 
 unixserversocket::unixserversocket() : serversocket(), unixsocketutil() {
 	mask=0;
@@ -30,7 +28,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	file::remove(filename);
-	memset((void *)&sockaddrun,0,sizeof(sockaddrun));
+	rawbuffer::zero((void *)&sockaddrun,sizeof(sockaddrun));
 	sockaddrun.sun_family=AF_UNIX;
 	charstring::copy(sockaddrun.sun_path,filename);
 
@@ -69,7 +67,7 @@ filedescriptor *unixserversocket::accept() {
 	// initialize a socket address structure
 	sockaddr_un	clientsun;
 	socklen_t	size=sizeof(clientsun);
-	memset((void *)&clientsun,0,sizeof(clientsun));
+	rawbuffer::zero((void *)&clientsun,sizeof(clientsun));
 
 	// accept on the socket
 	int		clientsock;

@@ -27,6 +27,8 @@
 		bool	translatebyteorder;
 
 		listener	*lstnr;
+		bool		uselistenerinsidereads;
+		bool		uselistenerinsidewrites;
 
 		#ifdef RUDIMENTS_HAS_SSL
 		virtual	BIO	*newSSLBIO() const;

@@ -2,13 +2,11 @@
 // See the COPYING file for more information
 
 #include <rudiments/signalclasses.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stddef.h>
 #include <unistd.h>
 #include <stdlib.h>
-
-// for memcpy
-#include <string.h>
 
 
 
@@ -130,7 +128,7 @@ bool signalhandler::handleSignal(int signum) {
 bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	struct sigaction	oldaction;
 	bool	retval=!sigaction(signum,&handlerstruct,&oldaction);
-	memcpy((void *)&oldhandler->handlerstruct,
-		(void *)&oldaction,sizeof(struct sigaction));
+	rawbuffer::copy((void *)&oldhandler->handlerstruct,
+			(void *)&oldaction,sizeof(struct sigaction));
 	return retval;
 }

@@ -250,6 +250,23 @@ class xmldomnode {
 				// Returns the first child node whose type is
 				// TAG_XMLDOMNODE.  If no match is found,
 				// nullnode is returned.
+		xmldomnode	*getFirstTagChild(const char *name) const;
+				// Returns the first child node named "name"
+				// whose type is TAG_XMLDOMNODE.  If no match
+				// is found, nullnode is returned.
+		xmldomnode	*getFirstTagChild(const char *name,
+						const char *attributename,
+						const char *attributevalue)
+						const;
+				// Returns the first child node named "name"
+				// with an attribute named "attributename" with
+				// value "attributevalue" whose type is
+				// TAG_XMLDOMNODE.  If "name" is null,
+				// then the name of the child node is not
+				// checked, and the first child node with any
+				// name (with matching attribute name/value)
+				// will be returned.  If no match is found,
+				// nullnode is returned.
 
 
 		int		getAttributeCount() const;

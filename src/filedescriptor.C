@@ -78,6 +78,8 @@ void filedescriptor::init() {
 	retryinterruptedioctl=true;
 	allowshortreads=false;
 	lstnr=NULL;
+	uselistenerinsidereads=false;
+	uselistenerinsidewrites=false;
 #ifdef RUDIMENTS_HAS_SSL
 	ctx=NULL;
 	bio=NULL;
@@ -106,7 +108,7 @@ int filedescriptor::duplicate() const {
 }
 
 bool filedescriptor::duplicate(int newfd) const {
-	return dup(newfd);
+	return (dup2(fd,newfd)==newfd);
 }
 
 #ifdef RUDIMENTS_HAS_SSL
@@ -483,6 +485,22 @@ void filedescriptor::useListener(listener *lstnr) {
 	this->lstnr=lstnr;
 }
 
+void filedescriptor::useListenerInsideReads() {
+	uselistenerinsidereads=true;
+}
+
+void filedescriptor::dontUseListenerInsideReads() {
+	uselistenerinsidereads=false;
+}
+
+void filedescriptor::useListenerInsideWrites() {
+	uselistenerinsidewrites=true;
+}
+
+void filedescriptor::dontUseListenerInsideWrites() {
+	uselistenerinsidewrites=false;
+}
+
 void filedescriptor::dontUseListener() {
 	lstnr=NULL;
 }
@@ -496,7 +514,9 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 
 	// initialize a buffer
 	int	buffersize=512;
-	*buffer=new char[buffersize];
+	if (buffer) {
+		*buffer=new char[buffersize];
+	}
 
 	// initialize termination detector
 	int	termlen=charstring::length(terminator);
@@ -551,7 +571,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 			}
 
 			// copy to return buffer
-			if (copytobuffer) {
+			if (copytobuffer && buffer) {
 
 				// extend buffer if necessary
 				if (totalread==buffersize) {
@@ -567,7 +587,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 				(*buffer)[totalread-1]=charbuffer;
 				(*buffer)[totalread]=(char)NULL;
 			}
-			// handle escaping
+
 			if (copytoterm) {
 
 				// update terminator detector
@@ -581,6 +601,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 								termlen)) {
 					break;
 				}
+
 			} else {
 
 				// clear terminator
@@ -600,6 +621,12 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 						long sec, long usec) {
+
+	// FIXME: is this what we want to do?
+	// maybe we should set some kind of error condition too
+	if (!buf) {
+		return 0;
+	}
 
 	#ifdef DEBUG_READ
 	printf("%d: safeRead(%d,",getpid(),fd);
@@ -624,9 +651,11 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 
 		// if necessary, select
-		if (sec>-1 && usec>-1) {
+		if (sec>-1 && usec>-1 || uselistenerinsidereads) {
 
-			int	selectresult=safeSelect(sec,usec,true,false);
+			int	selectresult=(uselistenerinsidereads)?
+					waitForNonBlockingRead(sec,usec):
+					safeSelect(sec,usec,true,false);
 
 			// return error or timeout
 			if (selectresult<0) {
@@ -635,6 +664,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#endif
 				return selectresult;
 			}
+
+			// FIXME: if uselistenerinsidereads is set, and data
+			// is available on a different file descriptor than
+			// this one (and none is available on this one),
+			// return the current size (a short read).  Apps should
+			// respond to this short read condition by checking the
+			// listener's ready list... maybe?
 		}
 
 		// set a pointer to the position in the buffer that we need
@@ -647,7 +683,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		if (ssl) {
 			for (bool done=false; !done ;) {
 
+printf("SSL_read(%d)...\n",sizetoread);
 				actualread=SSL_read(ssl,ptr,sizetoread);
+printf("after SSL_read\n");
 				sslresult=actualread;
 
 				switch (SSL_get_error(ssl,actualread)) {
@@ -728,9 +766,11 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	for (;;) {
 
 		// if necessary, select
-		if (sec>-1 && usec>-1) {
+		if (sec>-1 && usec>-1 || uselistenerinsidewrites) {
 
-			int	selectresult=safeSelect(sec,usec,false,true);
+			int	selectresult=(uselistenerinsidewrites)?
+					waitForNonBlockingWrite(sec,usec):
+					safeSelect(sec,usec,false,true);
 
 			// return error or timeout
 			if (selectresult<0) {
@@ -761,7 +801,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			}
 		} else {
 		#endif
+
 			retval=::write(fd,buf,count);
+
 		#ifdef RUDIMENTS_HAS_SSL
 		}
 		#endif

@@ -2,6 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/regularexpression.h>
+#ifndef RUDIMENTS_HAS_PCRE
+	#include <rudiments/rawbuffer.h>
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,6 +25,8 @@ void regularexpression::init() {
 	#ifdef RUDIMENTS_HAS_PCRE
 		expr=NULL;
 		extra=NULL;
+	#else
+		rawbuffer::zero(&expr,sizeof(expr));
 	#endif
 }
 

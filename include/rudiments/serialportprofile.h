@@ -869,8 +869,4 @@ class serialportprofile {
 	#include <rudiments/private/serialportprofile.h>
 };
 
-#ifdef HAVE_RUDIMENTS_INLINES
-	#include <rudiments/private/serialportprofileinlines.h>
-#endif
-
 #endif

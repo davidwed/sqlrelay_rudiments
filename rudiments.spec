@@ -73,7 +73,7 @@ rm -rf %{buildroot}
 %{docdir}
 
 %changelog
-* Fri Jan  31 2003 David Muse <david.muse@firstworks.com>
+* Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
 - Made it so it could be distributed with rudiments.
 - Added devel.
 

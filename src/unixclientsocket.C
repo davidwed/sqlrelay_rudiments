@@ -4,7 +4,9 @@
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/charstring.h>
+#include <rudiments/intervaltimer.h>
 
+// FIXME: need these?
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -35,22 +37,24 @@ void unixclientsocket::initialize(const char *filename,
 
 void unixclientsocket::initialize(namevaluepairs *cd) {
 
-	char	*filename;
-	cd->getData("filename",&filename);
-	char	*timeoutsec;
-	cd->getData("timeoutsec",&timeoutsec);
-	char	*timeoutusec;
-	cd->getData("timeoutusec",&timeoutusec);
-	char	*retrywait;
-	cd->getData("retrywait",&retrywait);
-	char	*retrycount;
-	cd->getData("retrycount",&retrycount);
+	if (cd) {
+		char	*filename;
+		cd->getData("filename",&filename);
+		char	*timeoutsec;
+		cd->getData("timeoutsec",&timeoutsec);
+		char	*timeoutusec;
+		cd->getData("timeoutusec",&timeoutusec);
+		char	*retrywait;
+		cd->getData("retrywait",&retrywait);
+		char	*retrycount;
+		cd->getData("retrycount",&retrycount);
 
-	initialize(filename?filename:"",
-			atoi(timeoutsec?timeoutsec:"0"),
-			atoi(timeoutusec?timeoutusec:"0"),
-			atoi(retrywait?retrywait:"0"),
-			atoi(retrycount?retrycount:"0"));
+		initialize(filename?filename:"",
+				atoi(timeoutsec?timeoutsec:"0"),
+				atoi(timeoutusec?timeoutusec:"0"),
+				atoi(retrywait?retrywait:"0"),
+				atoi(retrycount?retrycount:"0"));
+	}
 }
 
 int unixclientsocket::connect() {
@@ -72,7 +76,7 @@ int unixclientsocket::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			sleep(retrywait);
+			intervaltimer::sleep(retrywait);
 		}
 
 		// attempt to connect

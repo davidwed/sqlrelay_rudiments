@@ -3,6 +3,7 @@
 
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/clientsocket.h>
+#include <rudiments/rawbuffer.h>
 
 #include <errno.h>
 #include <unistd.h>
@@ -99,7 +100,8 @@ int clientsocket::connect(struct sockaddr *addr, socklen_t addrlen,
 				// connect was unsuccessful.
 				struct sockaddr	peeraddr;
 				socklen_t	size=sizeof(peeraddr);
-				memset((void *)&peeraddr,0,sizeof(peeraddr));
+				rawbuffer::zero((void *)&peeraddr,
+						sizeof(peeraddr));
 				if (getpeername(fd,&peeraddr,&size)==-1) {
 
 					// On some platforms, getpeername()

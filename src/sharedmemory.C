@@ -4,18 +4,13 @@
 #include <rudiments/sharedmemory.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-
-// need these for memset...
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 sharedmemory::sharedmemory() {
 	created=false;
@@ -104,7 +99,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 		}
 
 		// init the segment to zero's
-		memset((void *)shmptr,0,size);
+		rawbuffer::zero((void *)shmptr,size);
 		return true;
 	}
 
@@ -150,7 +145,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		}
 
 		// init the segment to zero's
-		memset((void *)shmptr,0,size);
+		rawbuffer::zero((void *)shmptr,size);
 		return true;
 		
 	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))>-1) {

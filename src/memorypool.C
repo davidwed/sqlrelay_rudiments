@@ -2,15 +2,10 @@
 // See the COPYING file for more information
 
 #include <rudiments/memorypool.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-
-// need these for memset...
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 memorypoolnode::memorypoolnode(size_t size) {
 	buffer=new unsigned char[size];
@@ -71,7 +66,7 @@ unsigned char *memorypool::malloc(size_t length) {
 
 unsigned char *memorypool::calloc(size_t length) {
 	unsigned char	*buffer=malloc(length);
-	memset((void *)buffer,0,length);
+	rawbuffer::zero((void *)buffer,length);
 	return buffer;
 }
 

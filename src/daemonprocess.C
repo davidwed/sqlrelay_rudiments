@@ -6,6 +6,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/intervaltimer.h>
 
 #include <stdlib.h>
 
@@ -64,7 +65,7 @@ void daemonprocess::detach() const {
 	if (fork()) {
 		// cygwin needs a sleep or both processes will exit
 		#ifdef __CYGWIN__
-		sleep(1);
+		intervaltimer::sleep(1);
 		#endif
 		_exit(0);
 	}

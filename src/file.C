@@ -5,6 +5,7 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/rawbuffer.h>
 
 
 #include <stdio.h>
@@ -16,9 +17,6 @@
 #ifdef HAVE_XATTRS
 	#include <sys/xattr.h>
 #endif
-
-// need these for memcpy...
-#include <string.h>
 
 file::file() : filedescriptor() {
 	getcurrentpropertiesonopen=true;
@@ -634,7 +632,7 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	lck.l_start=start;
 	lck.l_len=len;
 	bool	retval=(!fcntl(F_SETLKW,(long)&lck));
-	memcpy((void *)retlck,(void *)&lck,sizeof(struct flock));
+	rawbuffer::copy((void *)retlck,(void *)&lck,sizeof(struct flock));
 	return retval;
 }
 
@@ -878,7 +876,7 @@ bool file::getAttribute(const char *name, unsigned short *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)number,(void *)buffer,sizeof(unsigned short));
+	rawbuffer::copy((void *)number,(void *)buffer,sizeof(unsigned short));
 	delete[] buffer;
 	return retval;
 }
@@ -887,7 +885,7 @@ bool file::getAttribute(const char *name, unsigned long *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)number,(void *)buffer,sizeof(unsigned long));
+	rawbuffer::copy((void *)number,(void *)buffer,sizeof(unsigned long));
 	delete[] buffer;
 	return retval;
 }
@@ -896,7 +894,7 @@ bool file::getAttribute(const char *name, short *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)number,(void *)buffer,sizeof(short));
+	rawbuffer::copy((void *)number,(void *)buffer,sizeof(short));
 	delete[] buffer;
 	return retval;
 }
@@ -905,7 +903,7 @@ bool file::getAttribute(const char *name, long *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)number,(void *)buffer,sizeof(long));
+	rawbuffer::copy((void *)number,(void *)buffer,sizeof(long));
 	delete[] buffer;
 	return retval;
 }
@@ -914,7 +912,7 @@ bool file::getAttribute(const char *name, float *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)number,(void *)buffer,sizeof(float));
+	rawbuffer::copy((void *)number,(void *)buffer,sizeof(float));
 	delete[] buffer;
 	return retval;
 }
@@ -923,7 +921,7 @@ bool file::getAttribute(const char *name, double *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)number,(void *)buffer,sizeof(double));
+	rawbuffer::copy((void *)number,(void *)buffer,sizeof(double));
 	delete[] buffer;
 	return retval;
 }
@@ -932,7 +930,7 @@ bool file::getAttribute(const char *name, unsigned char *character) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)character,(void *)buffer,sizeof(unsigned char));
+	rawbuffer::copy((void *)character,(void *)buffer,sizeof(unsigned char));
 	delete[] buffer;
 	return retval;
 }
@@ -941,7 +939,7 @@ bool file::getAttribute(const char *name, char *character) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)character,(void *)buffer,sizeof(char));
+	rawbuffer::copy((void *)character,(void *)buffer,sizeof(char));
 	delete[] buffer;
 	return retval;
 }
@@ -950,7 +948,7 @@ bool file::getAttribute(const char *name, bool *value) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
-	memcpy((void *)value,(void *)buffer,sizeof(bool));
+	rawbuffer::copy((void *)value,(void *)buffer,sizeof(bool));
 	delete[] buffer;
 	return retval;
 }

@@ -47,8 +47,4 @@ class serialport : public filedescriptor {
 			// tcsendbreak()
 };
 
-#ifdef HAVE_RUDIMENTS_INLINES
-	#include <rudiments/private/serialportinlines.h>
-#endif
-
 #endif

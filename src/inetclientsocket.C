@@ -8,15 +8,14 @@
 #ifdef HAVE_GETADDRINFO
 	#include <rudiments/charstring.h>
 #endif
+#include <rudiments/rawbuffer.h>
+#include <rudiments/intervaltimer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 // need this for sleep
 #include <unistd.h>
-
-// need these for memset...
-#include <string.h>
 
 inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
 	translateByteOrder();
@@ -49,25 +48,28 @@ void inetclientsocket::initialize(const char *host,
 
 void inetclientsocket::initialize(namevaluepairs *cd) {
 
-	char	*host;
-	cd->getData("host",&host);
-	char	*port;
-	cd->getData("port",&port);
-	char	*timeoutsec;
-	cd->getData("timeoutsec",&timeoutsec);
-	char	*timeoutusec;
-	cd->getData("timeoutusec",&timeoutusec);
-	char	*retrywait;
-	cd->getData("retrywait",&retrywait);
-	char	*retrycount;
-	cd->getData("retrycount",&retrycount);
+	if (cd) {
 
-	initialize(host?host:"",
-			atoi(port?port:"0"),
-			atoi(timeoutsec?timeoutsec:"-1"),
-			atoi(timeoutusec?timeoutusec:"-1"),
-			atoi(retrywait?retrywait:"0"),
-			atoi(retrycount?retrycount:"0"));
+		char	*host;
+		cd->getData("host",&host);
+		char	*port;
+		cd->getData("port",&port);
+		char	*timeoutsec;
+		cd->getData("timeoutsec",&timeoutsec);
+		char	*timeoutusec;
+		cd->getData("timeoutusec",&timeoutusec);
+		char	*retrywait;
+		cd->getData("retrywait",&retrywait);
+		char	*retrycount;
+		cd->getData("retrycount",&retrycount);
+	
+		initialize(host?host:"",
+				atoi(port?port:"0"),
+				atoi(timeoutsec?timeoutsec:"-1"),
+				atoi(timeoutusec?timeoutusec:"-1"),
+				atoi(retrywait?retrywait:"0"),
+				atoi(retrycount?retrycount:"0"));
+	}
 }
 
 int inetclientsocket::connect() {
@@ -87,7 +89,7 @@ int inetclientsocket::connect() {
 		}
 
 		// set the address type and port to connect to
-		memset((void *)&sin,0,sizeof(sin));
+		rawbuffer::zero((void *)&sin,sizeof(sin));
 		sin.sin_family=he.getAddressType();
 		sin.sin_port=htons(port);
 
@@ -101,7 +103,7 @@ int inetclientsocket::connect() {
 
 		// create a hint indicating that SOCK_STREAM should be used
 		addrinfo	hints;
-		memset(&hints,0,sizeof(addrinfo));
+		rawbuffer::zero(&hints,sizeof(addrinfo));
 		// For now, we're using PF_INET.  Specifying PF_INET prevents
 		// IPV6 addresses from working, but that's how this class works
 		// if we don't have getaddrinfo anyway.
@@ -133,7 +135,7 @@ int inetclientsocket::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			sleep(retrywait);
+			intervaltimer::sleep(retrywait);
 		}
 
 		#ifndef HAVE_GETADDRINFO
@@ -145,7 +147,7 @@ int inetclientsocket::connect() {
 					addressindex++) {
 
 				// set which host to connect to
-				memcpy((void *)&sin.sin_addr,
+				rawbuffer::copy((void *)&sin.sin_addr,
 					(void *)he.getAddressList()
 							[addressindex],
 					he.getAddressLength());

@@ -50,6 +50,10 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*append(char character);
 		stringbuffer	*append(long number);
 		stringbuffer	*append(unsigned long number);
+		stringbuffer	*append(long number,
+					unsigned short zeropadding);
+		stringbuffer	*append(unsigned long number,
+					unsigned short zeropadding);
 		stringbuffer	*append(double number);
 		stringbuffer	*append(double number,
 						unsigned short scale);

@@ -18,7 +18,7 @@ class filedescriptor {
 				// called.
 
 
-		bool	close();
+		virtual	bool	close();
 				// Closes the file descriptor.
 				// Returns true on success and false on failure.
 
@@ -399,6 +399,12 @@ class filedescriptor {
 		listener	*getListener();
 			// Returns the listener set previously by useListener() 
 			// or NULL if none has been set.
+		void	useListenerInsideReads();
+		void	dontUseListenerInsideReads();
+			// FIXME: document this
+		void	useListenerInsideWrites();
+		void	dontUseListenerInsideWrites();
+			// FIXME: document this
 
 
 		virtual bool	passFileDescriptor(int descriptor);

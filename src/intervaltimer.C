@@ -3,9 +3,9 @@
 
 #include <rudiments/private/config.h>
 #include <rudiments/intervaltimer.h>
+#include <rudiments/rawbuffer.h>
 
 #include <stdlib.h>
-#include <string.h>
 #include <errno.h>
 
 #if defined(HAVE_NANOSLEEP) || defined (HAVE_CLOCK_NANOSLEEP)
@@ -22,7 +22,7 @@ intervaltimer::intervaltimer(int which) {
 }
 
 void intervaltimer::initialize() {
-	memset((void *)&values,0,sizeof(values));
+	rawbuffer::zero((void *)&values,sizeof(values));
 }
 
 void intervaltimer::setInitialInterval(long seconds, long microseconds) {
@@ -31,7 +31,7 @@ void intervaltimer::setInitialInterval(long seconds, long microseconds) {
 }
 
 void intervaltimer::setInitialInterval(timeval *tv) {
-	memcpy((void *)&(values.it_value),
+	rawbuffer::copy((void *)&(values.it_value),
 		(void *)tv,sizeof(values.it_value));
 }
 
@@ -41,7 +41,7 @@ void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
 }
 
 void intervaltimer::setPeriodicInterval(timeval *tv) {
-	memcpy((void *)&(values.it_interval),
+	rawbuffer::copy((void *)&(values.it_interval),
 		(void *)tv,sizeof(values.it_interval));
 }
 
@@ -56,7 +56,7 @@ void intervaltimer::setIntervals(timeval *tv) {
 }
 
 void intervaltimer::setIntervals(itimerval *itv) {
-	memcpy((void *)&values,(void *)itv,sizeof(values));
+	rawbuffer::copy((void *)&values,(void *)itv,sizeof(values));
 }
 
 void intervaltimer::getInitialInterval(long *seconds,
@@ -70,7 +70,7 @@ void intervaltimer::getInitialInterval(long *seconds,
 }
 
 void intervaltimer::getInitialInterval(timeval *tv) const {
-	memcpy((void *)tv,(void *)&(values.it_value),
+	rawbuffer::copy((void *)tv,(void *)&(values.it_value),
 				sizeof(values.it_value));
 }
 
@@ -85,12 +85,12 @@ void intervaltimer::getPeriodicInterval(long *seconds,
 }
 
 void intervaltimer::getPeriodicInterval(timeval *tv) const {
-	memcpy((void *)tv,(void *)&(values.it_interval),
+	rawbuffer::copy((void *)tv,(void *)&(values.it_interval),
 				sizeof(values.it_interval));
 }
 
 void intervaltimer::getIntervals(itimerval *itv) const {
-	memcpy((void *)itv,(void *)&values,sizeof(values));
+	rawbuffer::copy((void *)itv,(void *)&values,sizeof(values));
 }
 
 bool intervaltimer::start() const {
@@ -120,7 +120,7 @@ bool intervaltimer::getTimeRemaining(timeval *tv) const {
 
 bool intervaltimer::stop() const {
 	itimerval	stopvals;
-	memset((void *)&stopvals,0,sizeof(stopvals));
+	rawbuffer::zero((void *)&stopvals,sizeof(stopvals));
 	return start(&stopvals);
 }
 

@@ -2,6 +2,9 @@
 	added append(long|unsigned long|double...) methods to charstring class
 	implemented ignoreParityErrors in serialportprofile class
 	added baud methods to serialportprofile class that take string args
+	xmldom::parseString() works now (properly calls xmlsax::parseString())
+	regularexpression class zero's it's expression during init now to
+		prevent a segfault when it's freed
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

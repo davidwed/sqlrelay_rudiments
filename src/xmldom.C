@@ -27,7 +27,7 @@ bool xmldom::parseFile(const char *filename) {
 
 bool xmldom::parseString(const char *string) {
 	reset();
-	return xmlsax::parseFile(string);
+	return xmlsax::parseString(string);
 }
 
 void xmldom::reset() {

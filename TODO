@@ -1,3 +1,12 @@
+document modem*/chat classes
+add to chat class:
+	\b-backspace
+	\K-BREAK
+	\N-null
+	\ddd-octal digits
+	^C-control character represented by C
+
+
 fix math class
 wrap shm_open/shm_unlink somewhere
 move sleep methods into another class

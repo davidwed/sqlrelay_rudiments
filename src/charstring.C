@@ -358,14 +358,25 @@ int charstring::countTrailingSpaces(char *str, int length) {
 }
 
 char *charstring::parseNumber(long number) {
-	char	*str=new char[integerLength(number)+1];
-	sprintf(str,"%ld",number);
+	return parseNumber(number,0);
+}
+
+char *charstring::parseNumber(long number, unsigned short zeropadding) {
+	int	len=integerLength(number);
+	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
+	sprintf(str,"%0*ld",zeropadding,number);
 	return str;
 }
 
 char *charstring::parseNumber(unsigned long number) {
-	char	*str=new char[integerLength(number)+1];
-	sprintf(str,"%ld",number);
+	return parseNumber(number,0);
+}
+
+char *charstring::parseNumber(unsigned long number,
+				unsigned short zeropadding) {
+	int	len=integerLength(number);
+	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
+	sprintf(str,"%0*ld",zeropadding,number);
 	return str;
 }
 

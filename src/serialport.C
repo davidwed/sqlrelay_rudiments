@@ -2,13 +2,58 @@
 // See the COPYING file for more information.
 
 #include <rudiments/serialport.h>
-
-#ifndef HAVE_RUDIMENTS_INLINES
-	#include <rudiments/private/serialportinlines.h>
-#endif
+#include <rudiments/rawbuffer.h>
 
 serialport::serialport() : filedescriptor() {}
 serialport::~serialport() {}
+
+bool serialport::setProfileNow(serialportprofile *profile) {
+	return !tcsetattr(fd,TCSANOW,profile->getTermios());
+}
+
+bool serialport::setProfileOnDrain(serialportprofile *profile) {
+	return !tcsetattr(fd,TCSADRAIN,profile->getTermios());
+}
+
+bool serialport::setProfileOnFlush(serialportprofile *profile) {
+	return !tcsetattr(fd,TCSAFLUSH,profile->getTermios());
+}
+
+bool serialport::drain() {
+	return !tcdrain(fd);
+}
+
+bool serialport::flush() {
+	return !tcflush(fd,TCIOFLUSH);
+}
+
+bool serialport::flushInput() {
+	return !tcflush(fd,TCIFLUSH);
+}
+
+bool serialport::flushOutput() {
+	return !tcflush(fd,TCOFLUSH);
+}
+
+bool serialport::suspendOutput() {
+	return !tcflow(fd,TCOOFF);
+}
+
+bool serialport::restartOutput() {
+	return !tcflow(fd,TCOON);
+}
+
+bool serialport::transmitStop() {
+	return !tcflow(fd,TCIOFF);
+}
+
+bool serialport::transmitStart() {
+	return !tcflow(fd,TCION);
+}
+
+bool serialport::sendBreak(int duration) {
+	return !tcsendbreak(fd,duration);
+}
 
 bool serialport::getProfile(serialportprofile *profile) {
 	termios	tio;
