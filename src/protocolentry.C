@@ -16,6 +16,7 @@ int protocolentry::initialize(const char *protocolname) {
 	if (pe) {
 		pe=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETPROTOBYNAME_R
 		// getprotobyname_r is goofy.
@@ -30,6 +31,7 @@ int protocolentry::initialize(const char *protocolname) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			pe=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
@@ -46,6 +48,7 @@ int protocolentry::initialize(int number) {
 	if (pe) {
 		pe=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETPROTOBYNUMBER_R
 		// getprotobynumber_r is goofy.
@@ -60,6 +63,7 @@ int protocolentry::initialize(int number) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			pe=NULL;
 			if (errno!=ENOMEM) {
 				return 0;

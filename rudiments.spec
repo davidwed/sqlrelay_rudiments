@@ -48,7 +48,7 @@ rm -rf %{buildroot}
 %{_libdir}/*.la
 
 %changelog
-* Fri Jan  31 2003 David Muse <matthias.saou@est.une.marmotte.net>
+* Fri Jan  31 2003 David Muse <mused@firstworks.com>
 - Made it so it could be distributed with rudiments.
 - Added devel.
 

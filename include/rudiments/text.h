@@ -60,6 +60,9 @@ class text {
 				// Returns a string representing "number".
 				// The string is allocated inside the function
 				// and must be deleted by the calling program.
+		static	char	*parseNumber(double number);
+		static	char	*parseNumber(double number,
+						unsigned short scale);
 		static	char	*parseNumber(double number,
 						unsigned short precision,
 						unsigned short scale);

@@ -16,6 +16,7 @@ int passwdentry::initialize(const char *username) {
 	if (pwd) {
 		pwd=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETPWNAM_R
 		// getpwnam_r is goofy.
@@ -30,6 +31,7 @@ int passwdentry::initialize(const char *username) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			pwd=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
@@ -45,6 +47,7 @@ int passwdentry::initialize(uid_t userid) {
 	if (pwd) {
 		pwd=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETPWUID_R
 		// getpwuid_r is goofy.
@@ -59,6 +62,7 @@ int passwdentry::initialize(uid_t userid) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			pwd=NULL;
 			if (errno!=ENOMEM) {
 				return 0;

@@ -72,7 +72,13 @@ inline stringbuffer *stringbuffer::append(long number) {
 }
 
 inline stringbuffer *stringbuffer::append(double number) {
-	return append(number,0,0);
+	return append(number,4);
+}
+
+inline stringbuffer *stringbuffer::append(double number, unsigned short scale) {
+	char	*numstr=text::parseNumber(number,scale);
+	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
+	return this;
 }
 
 inline stringbuffer *stringbuffer::append(double number,
@@ -104,7 +110,13 @@ inline stringbuffer *stringbuffer::write(long number) {
 }
 
 inline stringbuffer *stringbuffer::write(double number) {
-	return write(number,0,0);
+	return write(number,4);
+}
+
+inline stringbuffer *stringbuffer::write(double number, unsigned short scale) {
+	char	*numstr=text::parseNumber(number,scale);
+	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
+	return this;
 }
 
 inline stringbuffer *stringbuffer::write(double number,

@@ -40,6 +40,8 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*write(long number);
 		stringbuffer	*write(double number);
 		stringbuffer	*write(double number,
+						unsigned short scale);
+		stringbuffer	*write(double number,
 						unsigned short precision,
 						unsigned short scale);
 			// Writes the data to the stringbuffer at the current
@@ -50,6 +52,8 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*append(char character);
 		stringbuffer	*append(long number);
 		stringbuffer	*append(double number);
+		stringbuffer	*append(double number,
+						unsigned short scale);
 		stringbuffer	*append(double number,
 						unsigned short precision,
 						unsigned short scale);

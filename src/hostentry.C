@@ -16,6 +16,7 @@ int hostentry::initialize(const char *hostname) {
 	if (he) {
 		he=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETHOSTBYNAME_R
 		// gethostbyname_r is goofy.
@@ -31,6 +32,7 @@ int hostentry::initialize(const char *hostname) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			he=NULL;
 			if (errnop!=ENOMEM) {
 				return 0;
@@ -47,6 +49,7 @@ int hostentry::initialize(const char *address, int len, int type) {
 	if (he) {
 		he=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETHOSTBYADDR_R
 		// gethostbyaddr_r is goofy.
@@ -62,6 +65,7 @@ int hostentry::initialize(const char *address, int len, int type) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			he=NULL;
 			if (errnop!=ENOMEM) {
 				return 0;

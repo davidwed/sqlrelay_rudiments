@@ -16,6 +16,7 @@ int groupentry::initialize(const char *groupname) {
 	if (grp) {
 		grp=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETGRNAM_R
 		// getgrnam_r is goofy.
@@ -30,6 +31,7 @@ int groupentry::initialize(const char *groupname) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			grp=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
@@ -45,6 +47,7 @@ int groupentry::initialize(gid_t groupid) {
 	if (grp) {
 		grp=NULL;
 		delete[] buffer;
+		buffer=NULL;
 	}
 	#ifdef HAVE_GETPWUID_R
 		// getgrgid_r is goofy.
@@ -59,6 +62,7 @@ int groupentry::initialize(gid_t groupid) {
 				return 1;
 			}
 			delete[] buffer;
+			buffer=NULL;
 			grp=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
