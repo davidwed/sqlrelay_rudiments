@@ -32,7 +32,8 @@ BIO *socket::newSSLBIO() const {
 bool socket::sslAccept(socket *sock) {
 	if (ctx) {
 		sock->setSSLContext(ctx);
-		if (!sock->initializeSSL() || SSL_accept(sock->getSSL())!=1) {
+		if (!sock->initializeSSL() ||
+			(sslresult=SSL_accept(sock->getSSL()))!=1) {
 			return false;
 		}
 	}
@@ -45,7 +46,7 @@ int socket::connect(struct sockaddr *addr, socklen_t addrlen,
 	int	retval;
 	if (sec==-1 || usec==-1) {
 
-		// if no timeout was passed in, just do a plain vanilla select
+		// if no timeout was passed in, just do a plain vanilla connect
 		retval=(::connect(fd,addr,addrlen)==-1)?
 				RESULT_ERROR:RESULT_SUCCESS;
 
@@ -148,7 +149,8 @@ int socket::connect(struct sockaddr *addr, socklen_t addrlen,
 
 	#ifdef RUDIMENTS_HAS_SSL
 	if (retval==RESULT_SUCCESS) {
-		if (!ctx || (initializeSSL() && SSL_connect(ssl)==1)) {
+		if (!ctx || (initializeSSL() &&
+				(sslresult=SSL_connect(ssl))==1)) {
 			return RESULT_SUCCESS;
 		}
 		close();

@@ -48,6 +48,7 @@ void filedescriptor::init() {
 	ctx=NULL;
 	bio=NULL;
 	ssl=NULL;
+	sslresult=1;
 #endif
 }
 
@@ -309,7 +310,7 @@ ssize_t filedescriptor::read(void *buffer, size_t size, long sec, long usec) {
 bool filedescriptor::close() {
 #ifdef RUDIMENTS_HAS_SSL
 	if (ssl) {
-		SSL_shutdown(ssl);
+		sslresult=SSL_shutdown(ssl);
 	}
 #endif
 	if (::close(fd)==-1) {
@@ -509,6 +510,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				actualread=SSL_read(ssl,
 						(void *)((long)buf+totalread),
 						sizetoread);
+				sslresult=actualread;
 
 				switch (SSL_get_error(ssl,actualread)) {
 					case SSL_ERROR_WANT_READ:
@@ -594,6 +596,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			for (bool done=false; !done ;) {
 
 				retval=::SSL_write(ssl,buf,count);
+				sslresult=retval;
 
 				switch (SSL_get_error(ssl,retval)) {
 					case SSL_ERROR_WANT_READ:
@@ -700,3 +703,9 @@ ssize_t filedescriptor::write(const unsigned char *string,
 ssize_t filedescriptor::write(const char *string, long sec, long usec) {
 	return safeWrite((void *)string,strlen(string),sec,usec);
 }
+
+#ifdef RUDIMENTS_HAS_SSL
+int filedescriptor::getSSLResult() const {
+	return sslresult;
+}
+#endif

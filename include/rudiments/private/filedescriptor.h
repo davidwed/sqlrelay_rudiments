@@ -25,4 +25,5 @@
 		SSL_CTX		*ctx;
 		SSL		*ssl;
 		BIO		*bio;
+		int		sslresult;
 		#endif

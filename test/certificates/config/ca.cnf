@@ -1,0 +1,52 @@
+#
+# OpenSSL configuration file.
+#
+
+[ req ]
+distinguished_name	= req_distinguished_name
+x509_extensions		= v3_ca
+req_extensions		= v3_req
+prompt			= no
+
+[ req_distinguished_name ]
+0.organizationName	= Rudiments
+organizationalUnitName	= Rudiments Certificate Authority Department
+emailAddress		= root@ca.localdomain
+localityName		= Atlanta
+stateOrProvinceName	= Georgia
+countryName		= US
+commonName		= ca.localdomain
+
+[ v3_ca ]
+basicConstraints	= CA:TRUE
+subjectKeyIdentifier	= hash
+authorityKeyIdentifier	= keyid:always,issuer:always
+
+[ v3_req ]
+basicConstraints	= CA:FALSE
+subjectKeyIdentifier	= hash
+
+[ ca ]
+default_ca		= CA_default
+
+[ CA_default ]
+serial			= database/serial
+database		= database/index.txt
+new_certs_dir		= database/newcerts
+certificate		= certificates/ca.pem
+private_key		= keys/ca.key
+default_days		= 3650
+default_md		= sha1
+preserve		= no
+email_in_dn		= no
+nameopt			= default_ca
+certopt			= default_ca
+policy			= policy_match
+
+[ policy_match ]
+countryName		= match
+stateOrProvinceName	= match
+organizationName	= match
+organizationalUnitName	= optional
+commonName		= supplied
+emailAddress		= optional

@@ -1,0 +1,16 @@
+#
+# OpenSSL configuration file.
+#
+
+[ req ]
+distinguished_name	= req_distinguished_name
+prompt			= no
+
+[ req_distinguished_name ]
+0.organizationName	= Rudiments
+organizationalUnitName	= Rudiments Client Department
+emailAddress		= root@client.localdomain
+localityName		= Atlanta
+stateOrProvinceName	= Georgia
+countryName		= US
+commonName		= client.localdomain

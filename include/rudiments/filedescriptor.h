@@ -58,6 +58,14 @@ class filedescriptor {
 				// and close() methods to be performed
 				// without the accompanying SSL-specific
 				// functions.
+
+		int		getSSLResult() const;
+				// Returns the result code of the previously
+				// executed SSL command.  If a method fails
+				// but errno is 0 then an SSL-related error
+				// occurred.  You may call SSL_get_error()
+				// on the result of this method to determine
+				// the exact error.
 		#endif
 
 		virtual bool	useNonBlockingMode();
