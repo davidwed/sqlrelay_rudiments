@@ -22,11 +22,6 @@ pthread_mutex_t	*serviceentry::semutex;
 serviceentry::serviceentry() {
 	se=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && \
-		(!defined(HAVE_GETSERVBYNAME_R) || \
-			!defined(HAVE_GETSERVBYPORT_R))
-		semutex=NULL;
-	#endif
 }
 
 serviceentry::~serviceentry() {

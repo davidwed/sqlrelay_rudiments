@@ -22,10 +22,6 @@ pthread_mutex_t	*passwdentry::pemutex;
 passwdentry::passwdentry() {
 	pwd=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && \
-		(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
-		pemutex=NULL;
-	#endif
 }
 
 passwdentry::~passwdentry() {

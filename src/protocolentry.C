@@ -21,11 +21,6 @@ pthread_mutex_t	*protocolentry::pemutex;
 protocolentry::protocolentry() {
 	pe=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && \
-		(!defined(HAVE_GETPROTOBYNAME_R) || \
-			!defined(HAVE_GETPROTOBYNUMBER_R))
-		pemutex=NULL;
-	#endif
 }
 
 protocolentry::~protocolentry() {

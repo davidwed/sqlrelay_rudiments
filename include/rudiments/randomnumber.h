@@ -56,6 +56,22 @@ class randomnumber {
 			// RAND_MAX is usually 2^31-1 on 32 bit machines
 			// but there are exceptions where it is 2^15-1 or
 			// 2^32-1.
+
+#ifdef RUDIMENTS_HAS_THREADS
+		static	bool	needsMutex();
+			// If your system doesn't support rand_r() then this
+			// class needs a mutex to assure thread safety.
+			//
+			// This method returns true if this class needs a mutex
+			// to operate safely in a threaded environment and false
+			// otherwise.
+		static	void	setMutex(pthread_mutex_t *mutex);
+			// Allows you to supply a mutex is the class needs it.
+			// If your application is not multithreaded, then
+			// there is no need to supply a mutex.
+#endif
+
+	#include <rudiments/private/randomnumber.h>
 };
 
 #endif

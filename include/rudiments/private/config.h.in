@@ -161,6 +161,9 @@
 /* Some systems have rand */
 #undef HAVE_RAND
 
+/* Some systems have rand_r */
+#undef HAVE_RAND_R
+
 /* Define to 1 if you have the `regcmp' function. */
 #undef HAVE_REGCMP
 

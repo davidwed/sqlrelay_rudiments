@@ -13,6 +13,9 @@ class charstring {
 
 		// The static methods operate on standalone strings.
 
+		static	size_t	getLength(const char *string);
+			// Returns the length of "string".
+
 		static	void	zero(char *str, size_t size);
 			// Sets "size" bytes of "str" to NULL.
 
@@ -148,6 +151,28 @@ class charstring {
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted
 			// by the calling program.
+
+		static	long	toLong(const char *string);
+			// Converts "string" to a long integer.
+		static	long	toLong(const char *string, char **endptr);
+			// Converts "string" to a long integer.  If non-NULL,
+			// endptr will be set to the first character in the
+			// string after the number.
+		static	long	toLong(const char *string, int base);
+			// Converts "string" to a long integer of base "base".
+		static	long	toLong(const char *string,
+					char **endptr, int base);
+			// Converts "string" to a long integer of base "base".
+			// If non-NULL, endptr will be set to the first
+			// character in the string after the number.
+
+		static	double	toDouble(const char *string);
+			// Converts "string" to a double precision
+			// floating point number.
+		static	double	toDouble(const char *string, char **endptr);
+			// Converts "string" to a double precision floating
+			// point number.  If non-NULL, endptr will be set to
+			// the first character in the string after the number.
 
 		static	char	*httpEscape(const char *input);
 			// http escapes "input" and returns it in a buffer

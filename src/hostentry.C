@@ -22,11 +22,6 @@ pthread_mutex_t	*hostentry::hemutex;
 hostentry::hostentry() {
 	he=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && \
-		(!defined(HAVE_GETHOSTBYNAME_R) || \
-			!defined(HAVE_GETHOSTBYADDR_R))
-		hemutex=NULL;
-	#endif
 }
 
 hostentry::~hostentry() {

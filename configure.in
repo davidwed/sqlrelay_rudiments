@@ -266,6 +266,10 @@ AC_MSG_CHECKING(rand)
 AC_TRY_LINK([#include <stdlib.h>],
 rand();,AC_DEFINE(HAVE_RAND,1,Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(rand_r)
+AC_TRY_LINK([#include <stdlib.h>],
+rand_r(0);,AC_DEFINE(HAVE_RAND_R,1,Some systems have rand_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(setuid)
 AC_TRY_LINK([#include <sys/types.h>
 #include <unistd.h>],

@@ -1,10 +1,460 @@
+internationalization:
+	langinfo.h - locale info functions
+	locale.h/xlocale.h - setlocale, localeconv, etc.
+	iconv.h - character set conversion
+	libintl.h - gettext functions
+	stdlib.h - rpmatch() - response match
+
+file/directory:
+	stdlib.h - mktemp()/mkstemp()/mkdtemp()
+			canonicalize_file_name()/realpath()
+	unistd.h - access(),euidaccess()
+			pread(),pwrite()
+			pipe()
+			chown()/fchown()/lchown()
+			chdir()/fchdir()
+			getcwd()/get_current_dir_name()/getwd()
+			dup()/dup2()
+			pathconf()/fpathconf()
+			ttyname(_r)()
+			isatty()
+			link()/symlink()/readlink()
+			unlink(),rmdir()
+			revoke()
+			chroot()
+			fsync(),sync(),fdatasync()
+			truncate()/ftruncate()
+			lockf()
+	stdio.h - remove()/rename()
+			tmpfile()/tmpnam(_r)()/tempnam()
+			fopencokie()???
+			dprintf()
+	dirent/direct.h - opendir(),closedir(),readdir(),rewinddir()
+				seekdir(),telldir()
+				dirfd()
+				scandir()
+				alphasort(),versionsort()
+				getdirentries()
+	string.h - basename() / libgen.h - dirname()
+	fcntl.h - fcntl(),lockf(),posix_fadvise(),posix_fallocate()
+	fnmatch.h/glob.h - filename/path matching
+			fnmatch()
+			glob(),globfree(),glob_pattern_p()
+	fts.h/ftw.h - file heirarchy traversal functions
+			fts_open(),fts_close()
+			fts_children(),fts_read(),fts_set()
+			ftw()/nftw() - call a function on every
+					element in a directory tree
+	utime.h - utime()
+	sys/file.h - flock()
+	sys/ioctl.h - ioctl()
+	sys/stat.h - stat(),fstat(),lstat()
+			chmod(),lchmod(),fchmod()
+			mkdir(),mknod(),mkfifo()
+	sys/xattr.h - extended file attributes
+			setxattr(),lsetxattr(),fsetxattr()
+			getxattr(),lgetxattr(),fgetxattr()
+			listxattr(),llistxattr(),flistxattr()
+			removexattr(),lremovexattr(),fremovexattr()
+
+filesystem:
+	sys/fsuid.h - setfsuid()/getfsuid() - uid for filesystem checks
+	sys/mount.h - mount(),umount(),umount2()
+	sys/quota.h - quotactl() function, macros, defines
+	sys/utsname.h - uname()
+	fstab.h - /etc/fstab parser
+			getfsent(),getfsspec(),getfsfile(),setfsent(),endfsent()
+	mntent.h - read/write fstab, mtab, etc.
+			setmntent(),getmntent(_r)()
+			addmntent(),endmntent(),hasmntopt()
+
+math:
+	stdlib.h - abs(), labs(), llabs(), div(), ldiv(), lldiv()
+	math.h - fpclassify()
+			signbit()
+			isfinite()
+			isnormal()
+			isnan()
+			isinf()
+			isgreater(),isgreaterequal()
+			isless(),islessequal()
+			islessgreater()
+			isunordered()
+	tgmath.h - acos(),asin(),atan(),atan2()
+			cos(),sin(),tan()
+			acosh(),asinh(),atanh(),
+			cosh(),sinh(),tanh()
+			exp(),frexp(),ldexp(),log(),log10()
+			expm1(),log1p(),logb(),exp2(),log2()
+			pow(),sqrt(),hypot(),cbrt()
+			ceil(),fabs(),floor(),fmod()
+			nearbyint(),round(),trunc()
+			remquo()
+			lrint(),llrint()
+			lround(),llround()
+			copysign(),
+			erf(),erfc(),tgamma(),lgamma(),
+			rint()
+			nextafter(),nexttoward(),
+			remainder()
+			scalb(),scalbn(),scalbln()
+			ilogb()
+			fdim(),fmax(),fmin()
+			fma()
+			carg(),conj(),cproj()
+			cimag(),creal()
+	sys/param.h - howmany(),roundup(),powerof2(),MIN(),MAX()
+	inttypes.h - some integer math functions
+			imaxabs(),imaxdiv()
+			strtoimax(),strtoumax(),wcstoimax(),wcstoumax()
+
+bit manipulation:
+	sys/param.h - setbit(),clrbit(),isset(),isclr()
+	string.h - ffs(),ffsl(),ffsll()
+
+command line:
+	getopt.h - make sure commandline class has full functionality
+			getopt(),getopt_long(),getopt_long_only()
+	stdlib.h - getsubopt() - comma-seperated value parser
+
+raw buffers:
+	string.h -
+		memcpy(),memmove(),memccpy,memset()
+		memcmp(),memchr(),rawmwmchr(),memrchr()
+		memmem(),mempcpy()
+		bzero(),bcopy(),bcmp()
+		memfrob()
+	unistd.h - swab()
+
+strings:
+	stdlib.h - strtof(_l)() - string to float
+		strtold(_l)() - string to long double
+		strtoul(_l)() - string to ulong
+		strto(ll|q)(_l)() - string to long long
+		strto(ull|uq)(_l)() - string to unsigned long long
+	stdio.h - sprintf(),asprintf
+		open_memstream(),objstack_printf()
+	ctype.h - isalnum() - alpha numeric
+		isalpha()
+		iscntrl() - control character
+		isdigit()
+		islower()
+		isgraph() - printable but non-space
+		isprint()
+		ispunct()
+		isspace()
+		isupper()
+		isxdigit() - hex digit
+		isblank()
+		isctype() - space or tab, gnu extension
+		iascii()
+		tolower()
+		toupper()
+		toascii() - clears high order bits, makes it an ascii character
+	string.h/strings.h -
+		strxfrm(_l)()
+		strrchr()
+		strcspn(),strspn(),strpbrk()
+		strcasestr() - gnu extension???
+		strndup()
+		strnlen()
+	monetary.h - strfmon(_l)() - format monetary values
+	wordexp.h - wordexp()/wordfree() - word expansion???
+	obstack.h - lots of object stack macros for
+			building strings char at a time
+
+multibyte/widechar - 
+	stdlib.h - mblen() - get multibyte character length
+		mbtowc() - convert multibyte to widechar
+		wctomb() - convert widechar to multibyte
+		mbstowcs() - convert multibyte string to wide char string
+		wcstombs() - convert wide char string to multibyte string
+	wchar.h/wctype.h - lots of multibyte/wide character utilities
+
+serial ports:
+	termios.h - cfgetospeed(),cfgetispeed(),
+		cfsetospeed(),cfsetispeed(),cfsetspeed()
+		tcgetattr(),tcsetattr()
+		cfmakeraw()
+		tcsendbreak()
+		tcdrain(),tcflush(),tcflow()
+		tcgetsid()
+
+time:
+	time.h and sys/time.h - there may a few more time functions
+					that I need to wrap
+
+tty:
+	stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)(),getpt()
+			vhangup()
+	unistd.h - tcgetpgrp(),tcsetpgrp()
+			ctermid()
+	stdio.h - ctermid()
+	pty.h - openpty(),forkpty()
+	ttyent.h - getttyent()/getttynam()/setttyent()/endttyent()
+	utmp.h - login_tty()
+
+errors:
+	stdio.h - perror()
+	string.h - strerror(_r)()
+
+io:
+	aio.h - aio_init(),aio_read(),aio_write(),lio_listio(),aio_error(),
+		aio_return(),aio_cancel(),aio_suspend(),aio_fsync()
+	stdio.h - printf()
+	unistd - getpass()
+	stropts.h - streams io
+		isastream(),getmsg(),getpmsg(),putmsg(),putpmsg()
+		fattach(),fdetach()
+	sys/select.h - select(),pselect() functions
+	sys/epoll.h - epoll functions for speeding up network io
+			epoll_create(),epoll_ctl(),epoll_wait()
+	sys/poll.h - poll() function
+	sys/uio.h - readv()/writev() functions
+	sys/sendfile.h - sendfile() function
+	sys/mman.h - mmap(),munmap(),mprotect(),msync()
+			madvise()/posix_madvise()
+			mlock(),munlock(),munlockall(),
+			mremap()
+			mincore()
+			remap_file_pages()
+			shm_open(),shm_unlink()
+
+shell commands:
+	stdlib.h - system()
+	unistd.h - execve()/fexecve(),execv(),execle(),execl(),execvp(),execlp()
+	stdio.h - popen(), pclose()
+	spawn.h - posix spawn interface
+			posix_spawn()
+			posix_spawnp()
+			posix_spawnattr_init()
+			posix_spawnattr_destroy()
+			posix_spawnattr_getsigdefault()
+			posix_spawnattr_setsigdefault()
+			posix_spawnattr_getsigmask()
+			posix_spawnattr_setsigmask()
+			posix_spawnattr_getflags()
+			posix_spawnattr_setflags()
+			posix_spawnattr_getpgroup()
+			posix_spawnattr_setpgroup()
+			posix_spawnattr_getschedpolicy()
+			posix_spawnattr_setschedpolicy()
+			posix_spawnattr_getschedparam()
+			posix_spawnattr_setschedparam()
+			posix_spawn_file_actions_init()
+			posix_spawn_file_actions_destroy()
+			posix_spawn_file_actions_addopen()
+			posix_spawn_file_actions_addclose()
+			posix_spawn_file_actions_adddup2()
+
+process:
+	unistd.h - nice()
+			getpid(),getppid(),getpgid()/getpgrp()
+			setpgid()/setpgrp()
+			getsid()
+			setsid()
+			getuid(),geteuid(),getgid(),getegid()
+			getgroups(),group_member()
+			setuid(),setreuid(),seteuid()
+			setgid(),setregid(),setegid()
+			getresuid(),getresgid()
+			setresuid(),setresgid()
+			fork(),vfork()
+			profil()
+			acct()
+			daemon()
+			getdtablesize()
+			brk()/sbrk()
+			syscall()
+	execinfo.h - backtrace(),backtrace_symbols(),backtrace_symbols_fd()
+	sched.h - functions for manipulating the scheduler
+			sched_setparam(),sched_getparam()
+			sched_setscheduler(),sched_getscheduler()
+			sched_yield(),
+			sched_get_priority_max(),sched_get_priority_min()
+			sched_rr_get_interval()
+			sched_setaffinity(),sched_getaffinity()
+	ucontext.h - user-level context switching
+			getcontext(),setcontext(),swapcontext(),makecontext()
+	sys/acct.h - acct() - process accounting on/off
+	sys/prctl.h - prctl() function 
+	sys/ptrace.h - ptrace() function
+	sys/resource.h - get/set process priority/resource usage
+				getrlimit(),setrlimit()
+				getrusage()
+				getpriority(),setpriority()
+	sys/stat.h - umask(),getumask()
+	sys/times.h - times() - function for getting process times
+	sys/gmon.h and sys/gmon_out.h - monstartup() profiling function, structs
+	sys/vlimit.h - vlimit() function
+	sys/vtimes.h - vtimes() function
+
+signals:
+	stdlib.h - abort(), atexit(), on_exit(), exit(), _Exit()
+	string.h - strsignal()
+	unistd.h - alarm(), ualarm()
+			sleep(), usleep()
+			pause()
+			_exit()
+	setjmp.h - setjmp()/longjump()/sigsetjump() - save stack contexts
+	signal.h - signal stuff - need to implement more of this
+			sysv_signal(),bsd_signal(),signal()
+			kill(),killpg(),raise()
+			ssignal(),gsignal()
+			psignal()
+			sigpause(),sigblock()
+			sigsetmask(),siggetmask()
+			sigemptyset(),sigfillset(),sigaddset(),sigdelset()
+			sigismember(),sigisemptyset(),sigandset,sigorset()
+			sigprocmask(),sigaction(),sigpending(),sigwait(),
+			sigwaitinfo(),sigtimedwait(),sigqueue()
+			sigvec(),sigreturn(),siginterrupt(),
+			sigstack(),signalstack()
+			sighold(),sigrelse(),sigignore(),sigset()
+	sys/wait.h - wait(),wait3(),wait4(),waitid(),waitpid() functions
+
+system:
+	stdlib.h - getloadavg()
+	unistd.h - sysconf(),confstr()
+			gethostid(),sethostid()
+			getpagesize()
+	sys/kdaemon.h - bdflush() function
+	sys/klog.h - klogctl() function
+	sys/personality.h - personality() - set linux kernel personality
+	sys/raw.h - structs/defines for /dev/rawctl ioctl()'s
+	sys/reboot.h - reboot() function
+	sys/swap.h - swapon()/swapoff() functions
+	sys/sysctl.h - sysctl() function
+	sys/sysinfo.h - functions for gettting overall system statistics
+				sysinfo(),
+				get_nprocs_conf(),get_nprocs(),
+				get_phys_pages,get_avphys_pages()
+	sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()
+
+login records:
+	unistd.h - ttyslot(),getlogin(_r)(),setlogin()
+			getusershell(),endusershell(),setusershell()
+	stdio.h - cuserid()
+	utmp.h - login(),logout(),logwtmp(),updwtmp(),uptmpname(),
+			getutent(_r)(),setutent(),endutent(),
+			getutid(_r)(),getutline(_r)(),pututline()
+	utmpx.h - setutxent(),endutxent(),
+			getutxent(),getutxid(),getutxline()
+			pututxline()
+			utmpxname(),updwtmpx()
+			getutmp(),getutmpx()
+
+ipc:
+	sys/ipc.h - ftok() function
+	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
+	sys/sem.h - semtimedop()???
+
+threading:
+	pthread.h - lots of threading stuff
+
+catalogs ???:
+	nl_types.h - catopen()/catgets()/catclose()
+
+encryption:
+	stdlib.h/unistd.h - setkey(_r)(),encrypt(_r)()
+	crypt.h - crypt(_r)(),setkey(_r)(),encrypt(_r)()
+
+dynamic libraries:
+	dlfcn.h - dlopen(),dlclose(),dlsym(),dlvsym()
+			dlerror(),dladdr(),dladdr1(),dlinfo()
+
+data structures:
+	stdlib.h - bsearch(), qsort()
+	search.h - functions for doing searches in arrays/hash tables
+			insque(),remque()
+			hsearch(_r)(),hcreate(_r)(),hdestroy(_r)()
+			tsearch(),tfind(),tdelete(),twalk(),tdestroy()
+			lfind(),lsearch()
+	sys/queue.h - list, tail queue and circular queue structs and macros
+			LIST_INIT(),
+			LIST_INSERT_AFTER(),LIST_INSERT_HEAD(),
+			LIST_REMOVE(),
+			TAILQ_INIT(),
+			TAILQ_INSERT_HEAD(),TAILQ_INSERT_TAIL(),
+			TAILQ_INSERT_AFTER(),
+			TAILQ_REMOVE(),
+			CIRCLEQ_INIT(),
+			CIRCLEQ_INSERT_AFTER(),CIRCLEQ_INSERT_BEFORE(),
+			CIRCLEQ_INSERT_HEAD(),CIRCLEQ_INSERT_TAIL(),
+			CIRCLEQ_REMOVE()
+
+network:
+	unistd.h - gethostname()/sethostname()
+			getdomainname()/setdomainname()
+	netdb.h - netgroup functions
+			herror(),hstrerror()
+			rcmd(_af)(),rexec(_af)(),ruserok(_af)(),rresvport(_af)()
+			gai_strerror(),getnameinfo(),getaddrinfo_a(),
+			gai_suspend(),gai_error(),gai_cancel()
+	resolv.h - resolver functions, lots of these
+	ifaddrs.h - discover network interfaces
+			getifaddrs(),freeifaddrs()
+	sys/socket.h - socket(),socketpair(),
+			getsockname(),getpeername(),
+			bind(),listen(),accept(),
+			connect(),
+			send(),recv(),
+			sendto(),recvfrom(),
+			sendmsg(),recvmsg(),
+			getsockopt(),setsockopt(),
+			shutdown(),
+			sockatmark(),
+			isfdtype()
+	net/ethernet.h - ethernet interface structs/defines
+	net/if.h - physical interface structs/defines
+	net/if_arp.h - arp protocol structs/defines
+	net/if_packet.h - packet sockets structs/defines
+	net/if_ppp.h - ppp interfaces structs/defines
+	net/if_shaper.h - traffic shaper structs/defines
+	net/if_slip.h - slip interfaces structs/defines
+	net/route.h - routing structs/defines
+	netinet/ether.h - ethernet addresses to acii and back
+				ether_ntoa(_r)()
+				ether_aton(_r)()
+				ether_ntohost()
+				ether_hostton()
+				ether_line()
+	netinet/icmp6.h - icmp structs
+	netinet/if_ether.h - more arp structs???
+	netinet/if_fddi.h - fddi packet struct???
+	netinet/if_tr.h - ???
+	netinet/igmp.h - igmp structs???
+	netinet/in.h - ip/ipv6 address structs,
+			ntohl,ntohs,htoln,htons
+			bindresvport(),bindresvport6()
+			inet6_option_space()
+			inet6_option_init()
+			inet6_option_append()
+			inet6_option_alloc()
+			inet6_option_next()
+			inet6_option_find()
+	netinet/ip.h - ip packet structs
+	netinet/ip6.h - ipv6 packet structs
+	netinet/ip_icmp.h - icmp packet structs
+	netinet/tcp.h - #defines for setsockopt, tcp packet structs
+	netinet/udp.h - udp packet structs
+	netpacket/packet.h - raw packet structs
+
+charstring class has lots of static methods with no
+	corresponding non-static method, is this ok?
+charstring::toLong should support optional numeric base
+
+randomnumber class should be able to generate long, ulong, ulonglong,
+	float, double, long double, etc.
+
+should be able to associate a zlib handle with a file descriptor and read/write
+	compressed data, just like ssl
+	
 daemonprocess needs to register the deadchildhandler during shutdown, otherwise
 	the signalhandler's call to waitpid() interferes with other library
 	calls (like system()) that call wait() or waitpid().
 
 a bunch of methods can probabaly be made const
-
-add mmap, ioctl, fcntl to filedescriptor class
 
 on SCO, sometimes you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
 strip fails on openbsd
@@ -27,8 +477,6 @@ these classes would be nice:
 	thread
 	networkinterfaces (stubbed out)
 	shellcommand (stubbed out)
-	dirent/direct wrapper
-	dlopen/dlsym/etc. wrapper
 need generic parser/lexer classes, use them for xmlsax
 probably can combine memorypool and variablebuffer classes
 xmldom should support xpath
@@ -46,3 +494,32 @@ xml classes need to support entities defined in the DOCTYPE declaration
 support non-posix semaphores
 fd handoff fails on Redhat 5.2, SCO, alpha - SCO problem appears to be 
 						alignment-related
+
+filedescriptor/client/server heirarchy still needs revision:
+
+client (interface)
+server (interface)
+filedescriptor
+	file
+	socket
+		tcpsocket
+			inetsocket
+				inetstreamsocket
+					inetstreamsocketclient (imp client)
+					inetstreamsocketserver (imp server)
+				inetdatagramsocket
+					inetdatagramsocketclient (imp client)
+					inetdatagramsocketserver (imp server)
+				...
+		unixsocket
+			unixstreamsocket
+				unixstreamsocketclient (imp client)
+				unixstreamsocketserver (imp server)
+			unixdatagramsocket
+				unixstreamsocketclient (imp client)
+				unixstreamsocketserver (imp server)
+		udpsocket
+			...
+		packetsocket
+			...
+		...

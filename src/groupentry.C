@@ -21,10 +21,6 @@ pthread_mutex_t	*groupentry::gemutex;
 groupentry::groupentry() {
 	grp=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && \
-		(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
-		gemutex=NULL;
-	#endif
 }
 
 groupentry::~groupentry() {

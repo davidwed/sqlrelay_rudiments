@@ -4,6 +4,7 @@
 #include <rudiments/charstring.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
@@ -34,6 +35,10 @@ char *charstring::getString() const {
 
 size_t charstring::getLength() const {
 	return strlen(buffer);
+}
+
+size_t charstring::getLength(const char *string) {
+	return strlen(string);
 }
 
 size_t charstring::getSize() const {
@@ -98,6 +103,7 @@ char *charstring::copyInto(char *dest, size_t location,
 }
 
 int charstring::compare(const char *str) const {
+	// FIXME: use strcoll?
 	return strcmp(buffer,str);
 }
 
@@ -106,15 +112,18 @@ int charstring::compare(const char *str, size_t size) const {
 }
 
 int charstring::compareIgnoringCase(const char *str) const {
+	// FIXME: use strcasecmp_l?
 	return strcasecmp(buffer,str);
 }
 
 
 int charstring::compareIgnoringCase(const char *str, size_t size) const {
+	// FIXME: use strncasecmp_l?
 	return strncasecmp(buffer,str,size);
 }
 
 int charstring::compare(const char *str1, const char *str2) {
+	// FIXME: use strcoll?
 	return strcmp(str1,str2);
 }
 
@@ -123,11 +132,13 @@ int charstring::compare(const char *str1, const char *str2, size_t size) {
 }
 
 int charstring::compareIgnoringCase(const char *str1, const char *str2) {
+	// FIXME: use strcasecmp_l?
 	return strcasecmp(str1,str2);
 }
 
 int charstring::compareIgnoringCase(const char *str1,
 						const char *str2, size_t size) {
+	// FIXME: use strncasecmp_l?
 	return strncasecmp(str1,str2,size);
 }
 
@@ -437,6 +448,7 @@ char *charstring::parseNumber(long number) {
 }
 
 char *charstring::parseNumber(double number) {
+	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
 	sprintf(str,"%f",number);
 	return str;
@@ -444,6 +456,7 @@ char *charstring::parseNumber(double number) {
 
 char *charstring::parseNumber(double number,
 				unsigned short scale) {
+	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
 	sprintf(str,"%.*f",scale,number);
 	return str;
@@ -452,9 +465,34 @@ char *charstring::parseNumber(double number,
 char *charstring::parseNumber(double number,
 				unsigned short precision,
 				unsigned short scale) {
+	// FIXME: use (e|f|g)cvt(_r)?
 	char	*str=new char[precision+3];
 	sprintf(str,"%*.*f",precision,scale,number);
 	return str;
+}
+
+long charstring::toLong(const char *string) {
+	return strtol(string,NULL,0);
+}
+
+long charstring::toLong(const char *string, char **endptr) {
+	return strtol(string,endptr,0);
+}
+
+long charstring::toLong(const char *string, int base) {
+	return strtol(string,NULL,base);
+}
+
+long charstring::toLong(const char *string, char **endptr, int base) {
+	return strtol(string,endptr,base);
+}
+
+double charstring::toDouble(const char *string) {
+	return strtod(string,NULL);
+}
+
+double charstring::toDouble(const char *string, char **endptr) {
+	return strtod(string,endptr);
 }
 
 char *charstring::append(const charstring *str) {

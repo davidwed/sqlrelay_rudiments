@@ -116,7 +116,7 @@ ifeq ($(INCLUDE_PROTOCOLENTRY),1)
 endif
 ifeq ($(INCLUDE_RANDOMNUMBER),1)
 	HEADERS += randomnumber.h
-	PRIVATEHEADERS += randomnumberincludes.h
+	PRIVATEHEADERS += randomnumber.h randomnumberincludes.h
 endif
 ifeq ($(INCLUDE_REGULAREXPRESSION),1)
 	HEADERS += regularexpression.h

@@ -28,11 +28,6 @@ pthread_mutex_t	*rpcentry::remutex;
 rpcentry::rpcentry() {
 	re=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && \
-		(!defined(HAVE_GETRPCBYNAME_R) || \
-			!defined(HAVE_GETRPCBYNUMBER_R))
-		remutex=NULL;
-	#endif
 }
 
 rpcentry::~rpcentry() {

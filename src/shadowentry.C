@@ -22,9 +22,6 @@ pthread_mutex_t	*shadowentry::spmutex;
 shadowentry::shadowentry() {
 	sp=NULL;
 	buffer=NULL;
-	#if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_GETSPNAM_R)
-		spmutex=NULL;
-	#endif
 }
 
 shadowentry::~shadowentry() {
