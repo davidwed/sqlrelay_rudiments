@@ -111,7 +111,7 @@ bool intervaltimer::getTimeRemaining(timeval *tv) {
 	return getTimeRemaining(&(tv->tv_sec),&(tv->tv_usec));
 }
 
-bool intervaltimer::cancelTimer() {
+bool intervaltimer::cancel() {
 	memset((void *)&values,0,sizeof(values));
 	return start();
 }

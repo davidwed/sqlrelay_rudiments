@@ -138,6 +138,10 @@ ifeq ($(INCLUDE_CHARSTRING),1)
 	SRCS += charstring.C
 	LOBJS += charstring.lo
 endif
+ifeq ($(INCLUDE_CHARACTER),1)
+	SRCS += character.C
+	LOBJS += character.lo
+endif
 ifeq ($(INCLUDE_STRINGBUFFER),1)
 	SRCS += stringbuffer.C
 	LOBJS += stringbuffer.lo

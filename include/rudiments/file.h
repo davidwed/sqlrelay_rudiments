@@ -215,6 +215,44 @@ class file : public filedescriptor {
 		bool	unlockRemainderFromEnd(off_t start);
 
 
+		// These methods allow you to advise the kernel that you are
+		// going to access a region of a file in a particular manner.
+		// The kernel can then perform some optimisations.
+		//
+		// In these methods, the region of the file begins at "start"
+		// and continues for "len" bytes.
+		//
+		// These methods return true on success and false on failure.
+		//
+		// On operating systems don't support these methods, they
+		// return true but don't actually do anything.
+		bool	sequentialAccess(off_t start, size_t len);
+			// The region will be accessed in sequential order.
+		bool	randomAccess(off_t start, size_t len);
+			// The region will be accessed in random order.
+		bool	onlyOnce(off_t start, size_t len);
+			// The region will be only be accessed once.
+		bool	willNeed(off_t start, size_t len);
+			// The region will be accessed in the near future.
+		bool	wontNeed(off_t start, size_t len);
+			// The region will not be accessed in the near future.
+		bool	normalAccess(off_t start, size_t len);
+			// Removes any advice that has previously been applied
+			// to the region.
+
+
+		#ifdef HAVE_POSIX_FALLOCATE
+		bool	reserve(off_t start, size_t len);
+			// Reserves space on the storage medium such that a
+			// write to the region starting at "start" and
+			// continuing for "len" bytes will not fail due to
+			// lack of storage space.
+			//
+			// Returns true if the region can be reserved and
+			// false otherwise.
+		#endif
+
+
 		// Changes to files are often cached in system ram, these
 		// methods makes sure that those changes are copied
 		// to the storage medium that the file resides on.

@@ -86,7 +86,7 @@ class intervaltimer {
 			// will raise the signal.
 
 
-		bool	cancelTimer();
+		bool	cancel();
 			// If a timer was set to run periodically, this
 			// method will cancel it.
 

@@ -477,6 +477,18 @@ AC_TRY_LINK([#include <sys/time.h>
 #include <stdlib.h>],
 pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_PSELECT,1,Some systems have pselect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(posix_fadvise)
+AC_TRY_LINK([#include <fcntl.h>],
+posix_fadvise(0,0,0,0);,AC_DEFINE(HAVE_POSIX_FADVISE,1,Some systems have posix_fadvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(posix_fallocate)
+AC_TRY_LINK([#include <fcntl.h>],
+posix_fallocate(0,0,0);,AC_DEFINE(HAVE_POSIX_FALLOCATE,1,Some systems have posix_fallocate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(isblank)
+AC_TRY_LINK([#include <ctype.h>],
+isblank(' ');,AC_DEFINE(HAVE_ISBLANK,1,Some systems have isblank) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

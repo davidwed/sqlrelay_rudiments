@@ -1,0 +1,77 @@
+// Copyright (c) 2004 David Muse
+// See the COPYING file for more information.
+
+#include <rudiments/character.h>
+
+bool character::isAlphanumeric(int c) {
+	return isalnum(c)!=0;
+}
+
+bool character::isAlphabetical(int c) {
+	return isalpha(c)!=0;
+}
+
+bool character::isControlCharacter(int c) {
+	return iscntrl(c)!=0;
+}
+
+bool character::isDigit(int c) {
+	return isdigit(c)!=0;
+}
+
+bool character::isLowerCase(int c) {
+	return islower(c)!=0;
+}
+
+bool character::isPrintableNonSpace(int c) {
+	return isgraph(c)!=0;
+}
+
+bool character::isPrintable(int c) {
+	return isprint(c)!=0;
+}
+
+bool character::isPunctuation(int c) {
+	return ispunct(c)!=0;
+}
+
+bool character::isSpace(int c) {
+	return isspace(c)!=0;
+}
+
+bool character::isUpperCase(int c) {
+	return isupper(c)!=0;
+}
+
+bool character::isHexDigit(int c) {
+	return isxdigit(c)!=0;
+}
+
+bool character::isBlank(int c) {
+	#ifdef HAVE_ISBLANK
+	return isblank(c)!=0;
+	#else
+	return (isSpace(c) || c=='	');
+	#endif
+}
+
+bool character::isWhitespace(int c) {
+	return (isBlank(c) || c=='\n' || c=='\r');
+}
+
+bool character::isAscii(int c) {
+	return isascii(c)!=0;
+}
+
+
+int character::toUpperCase(int c) {
+	return toupper(c);
+}
+
+int character::toLowerCase(int c) {
+	return tolower(c);
+}
+
+int character::toAscii(int c) {
+	return toascii(c);
+}

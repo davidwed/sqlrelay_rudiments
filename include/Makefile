@@ -166,6 +166,10 @@ ifeq ($(INCLUDE_CHARSTRING),1)
 	HEADERS += charstring.h
 	PRIVATEHEADERS += charstring.h charstringincludes.h
 endif
+ifeq ($(INCLUDE_CHARACTER),1)
+	HEADERS += character.h
+	PRIVATEHEADERS += characterincludes.h
+endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h
 	PRIVATEHEADERS += unixclientsocketincludes.h

@@ -6,6 +6,8 @@ if openssl/pcre libs are installed, but not includes, configure still tries
 
 intervaltimer class needs more tests
 
+move sleep methods into another class
+
 file class:
 	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
@@ -114,9 +116,6 @@ link class:
 pipe class:
 	unistd.h - pipe(), pathconf()/fpathconf(): __POSIX_PIPE_BUF()
 
-file class:
-	fcntl.h - posix_fadvise(),posix_fallocate()
-
 directory class:
 	dirent/direct.h - scandir(),alphasort(),versionsort() - not in posix
 
@@ -183,7 +182,6 @@ raw buffers:
 		memcpy(),memmove(),memccpy,memset()
 		memcmp(),memchr(),rawmwmchr(),memrchr()
 		memmem(),mempcpy()
-		bzero(),bcopy(),bcmp()
 		memfrob()
 	unistd.h - swab()
 
@@ -195,6 +193,15 @@ charstring class:
 		strto(ull|uq)(_l)() - string to unsigned long long
 	stdio.h - sprintf(),asprintf
 		open_memstream(),objstack_printf()
+	string.h/strings.h -
+		strxfrm(_l)()
+		strcspn(),strspn(),strpbrk()
+	monetary.h - strfmon(_l)() - format monetary values
+	wordexp.h - wordexp()/wordfree() - word expansion???
+	obstack.h - lots of object stack macros for
+			building strings char at a time
+
+character class:
 	ctype.h - isalnum() - alpha numeric
 		isalpha()
 		iscntrl() - control character
@@ -212,13 +219,6 @@ charstring class:
 		tolower()
 		toupper()
 		toascii() - clears high order bits, makes it an ascii character
-	string.h/strings.h -
-		strxfrm(_l)()
-		strcspn(),strspn(),strpbrk()
-	monetary.h - strfmon(_l)() - format monetary values
-	wordexp.h - wordexp()/wordfree() - word expansion???
-	obstack.h - lots of object stack macros for
-			building strings char at a time
 
 multibyte/widechar - 
 	stdlib.h - mblen() - get multibyte character length
@@ -241,8 +241,8 @@ datetime class:
 	time.h - difftime()
 
 timer class:
-	time.h and sys/time.h - clock()
-				clock_getres(), clock_gettime(), clock_settime()
+	many systems don't have these...
+	time.h and sys/time.h - clock_getres(), clock_gettime(), clock_settime()
 				clock_nanosleep(), clock_getcpuclockid()
 				timer_create(), timer_delete(), timer_settime(),
 				timer_gettime(), timer_getoverrun()

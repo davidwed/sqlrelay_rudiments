@@ -286,6 +286,60 @@ bool file::checkLockRemainderFromEnd(short type, off_t start,
 	return checkLock(type,SEEK_END,start,0,retlck);
 }
 
+bool file::sequentialAccess(off_t start, size_t len) {
+	#ifdef HAVE_POSIX_FADVISE
+	return !posix_fadvise(fd,start,len,POSIX_FADV_SEQUENTIAL);
+	#else
+	return true;
+	#endif
+}
+
+bool file::randomAccess(off_t start, size_t len) {
+	#ifdef HAVE_POSIX_FADVISE
+	return !posix_fadvise(fd,start,len,POSIX_FADV_RANDOM);
+	#else
+	return true;
+	#endif
+}
+
+bool file::onlyOnce(off_t start, size_t len) {
+	#ifdef HAVE_POSIX_FADVISE
+	return !posix_fadvise(fd,start,len,POSIX_FADV_NOREUSE);
+	#else
+	return true;
+	#endif
+}
+
+bool file::willNeed(off_t start, size_t len) {
+	#ifdef HAVE_POSIX_FADVISE
+	return !posix_fadvise(fd,start,len,POSIX_FADV_WILLNEED);
+	#else
+	return true;
+	#endif
+}
+
+bool file::wontNeed(off_t start, size_t len) {
+	#ifdef HAVE_POSIX_FADVISE
+	return !posix_fadvise(fd,start,len,POSIX_FADV_DONTNEED);
+	#else
+	return true;
+	#endif
+}
+
+bool file::normalAccess(off_t start, size_t len) {
+	#ifdef HAVE_POSIX_FADVISE
+	return !posix_fadvise(fd,start,len,POSIX_FADV_NORMAL);
+	#else
+	return true;
+	#endif
+}
+
+#ifdef HAVE_POSIX_FALLOCATE
+bool file::reserve(off_t start, size_t len) {
+	return !posix_fallocate(fd,start,len);
+}
+#endif
+
 bool file::truncate(const char *filename) {
 	return !::truncate(filename,0);
 }

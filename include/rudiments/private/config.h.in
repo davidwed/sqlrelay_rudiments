@@ -190,6 +190,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Some systems have isblank */
+#undef HAVE_ISBLANK
+
 /* Linux style statfs */
 #undef HAVE_LINUX_STATFS
 
@@ -225,6 +228,12 @@
 
 /* OpenBSD style statfs */
 #undef HAVE_OPENBSD_STATFS
+
+/* Some systems have posix_fadvise */
+#undef HAVE_POSIX_FADVISE
+
+/* Some systems have posix_fallocate */
+#undef HAVE_POSIX_FALLOCATE
 
 /* Some systems have pselect */
 #undef HAVE_PSELECT
