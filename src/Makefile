@@ -108,14 +108,9 @@ ifeq ($(INCLUDE_SEMAPHORESET),1)
 	PLOBJS += semaphoreset.p.lo
 endif
 ifeq ($(INCLUDE_SERVER),1)
-	SRCS += server.C
-	NLOBJS += server.n.lo
-	PLOBJS += server.p.lo
-endif
-ifeq ($(INCLUDE_SERVER),1)
-	SRCS += serversocket.C
-	NLOBJS += serversocket.n.lo
-	PLOBJS += serversocket.p.lo
+	SRCS += server.C serversocket.C
+	NLOBJS += server.n.lo serversocket.n.lo
+	PLOBJS += server.p.lo serversocket.p.lo
 endif
 ifeq ($(INCLUDE_SHAREDMEMORY),1)
 	SRCS += sharedmemory.C

@@ -1,136 +1,165 @@
 include ../config.mk
+include ../features.mk
 
 top_srcdir = ..
 INSTALL = $(top_srcdir)/install-sh -c
 
+HEADERS =
+PRIVATEHEADERS =
+
+ifeq ($(INCLUDE_CLIENT),1)
+	HEADERS += client.h
+	PRIVATEHEADERS += client.h
+endif
+ifeq ($(INCLUDE_COMMANDLINE),1)
+	HEADERS += commandline.h
+	PRIVATEHEADERS += commandline.h commandlineinlines.h
+endif
+ifeq ($(INCLUDE_DAEMONPROCESS),1)
+	HEADERS += daemonprocess.h
+	PRIVATEHEADERS += daemonprocess.h daemonprocessinlines.h
+endif
+ifeq ($(INCLUDE_DATATRANSPORT),1)
+	HEADERS += datatransportfactory.h datatransport.h
+	PRIVATEHEADERS += datatransport.h datatransportinlines.h
+endif
+ifeq ($(INCLUDE_DATETIME),1)
+	HEADERS += datetime.h
+	PRIVATEHEADERS += datetime.h datetimeinlines.h
+endif
+#ifeq ($(INCLUDE_DICTIONARY),1)
+	HEADERS += dictionary.h
+	PRIVATEHEADERS += dictionary.h dictionaryinlines.h \
+				dictionarynode.h dictionarynodeinlines.h
+#endif
+ifeq ($(INCLUDE_DTD),1)
+	HEADERS += dtd.h
+	PRIVATEHEADERS += dtd.h dtdinlines.h
+endif
+ifeq ($(INCLUDE_ERRORHANDLER),1)
+	HEADERS += errorhandler.h
+	PRIVATEHEADERS += errorhandler.h errorhandlerinlines.h
+endif
+ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
+	HEADERS += filedescriptor.h
+	PRIVATEHEADERS += filedescriptor.h filedescriptorinlines.h
+endif
+ifeq ($(INCLUDE_FILE),1)
+	HEADERS += file.h
+	PRIVATEHEADERS += file.h fileinlines.h
+endif
+ifeq ($(INCLUDE_GROUPENTRY),1)
+	HEADERS += groupentry.h
+	PRIVATEHEADERS += groupentry.h groupentryinlines.h
+endif
+ifeq ($(INCLUDE_HOSTENTRY),1)
+	HEADERS += hostentry.h
+	PRIVATEHEADERS += hostentry.h hostentryinlines.h
+endif
+ifeq ($(INCLUDE_INETCLIENT),1)
+	HEADERS += inetclientsocket.h
+	PRIVATEHEADERS += inetclientsocketinlines.h
+endif
+ifeq ($(INCLUDE_INETSERVER),1)
+	HEADERS += inetserversocket.h
+	PRIVATEHEADERS += inetserversocketinlines.h \
+				inetsocket.h inetsocketinlines.h
+endif
+ifeq ($(INCLUDE_LISTENER),1)
+	HEADERS += listener.h
+	PRIVATEHEADERS += listener.h listenerinlines.h
+endif
+#ifeq ($(INCLUDE_LIST),1)
+	HEADERS += list.h
+	PRIVATEHEADERS += list.h listinlines.h listnode.h listnodeinlines.h
+#endif
+ifeq ($(INCLUDE_LOGGER),1)
+	HEADERS += logger.h
+	PRIVATEHEADERS += logdestination.h logger.h loggerinlines.h \
+				stderrdestination.h stdoutdestination.h \
+				syslogdestination.h
+endif
+ifeq ($(INCLUDE_MEMORYPOOL),1)
+	HEADERS += memorypool.h
+	PRIVATEHEADERS += memorypool.h memorypoolinlines.h memorypoolnode.h
+endif
+ifeq ($(INCLUDE_PASSWDENTRY),1)
+	HEADERS += passwdentry.h
+	PRIVATEHEADERS += passwdentry.h passwdentryinlines.h
+endif
+ifeq ($(INCLUDE_PERMISSIONS),1)
+	HEADERS += permissions.h
+	PRIVATEHEADERS += permissionsinlines.h
+endif
+ifeq ($(INCLUDE_PROTOCOLENTRY),1)
+	HEADERS += protocolentry.h
+	PRIVATEHEADERS += protocolentry.h protocolentryinlines.h
+endif
+ifeq ($(INCLUDE_RANDOMNUMBER),1)
+	HEADERS += randomnumber.h
+	PRIVATEHEADERS += randomnumberinlines.h
+endif
+ifeq ($(INCLUDE_REGULAREXPRESSION),1)
+	HEADERS += regularexpression.h
+	PRIVATEHEADERS += regularexpression.h regularexpressioninlines.h
+endif
+ifeq ($(INCLUDE_SEMAPHORESET),1)
+	HEADERS += semaphoreset.h
+	PRIVATEHEADERS += semaphoreset.h semaphoresetinlines.h
+endif
+ifeq ($(INCLUDE_SERVER),1)
+	HEADERS += server.h serversocket.h
+	PRIVATEHEADERS += serverinlines.h serversocket.h serversocketinlines.h
+endif
+ifeq ($(INCLUDE_SHAREDMEMORY),1)
+	HEADERS += sharedmemory.h
+	PRIVATEHEADERS += sharedmemory.h sharedmemoryinlines.h
+endif
+ifeq ($(INCLUDE_SIGNALCLASSES),1)
+	HEADERS += signalclasses.h
+	PRIVATEHEADERS += signalclassesinlines.h signalhandler.h signalset.h
+endif
+ifeq ($(INCLUDE_STRINGBUFFER),1)
+	HEADERS += stringbuffer.h
+	PRIVATEHEADERS += stringbuffer.h stringbufferinlines.h
+endif
+ifeq ($(INCLUDE_STRING),1)
+	HEADERS += string.h
+	PRIVATEHEADERS += string.h stringinlines.h
+endif
+ifeq ($(INCLUDE_TEXT),1)
+	HEADERS += text.h
+	PRIVATEHEADERS += text.h textinlines.h
+endif
+ifeq ($(INCLUDE_UNIXCLIENT),1)
+	HEADERS += unixclientsocket.h
+	PRIVATEHEADERS += unixclientsocketinlines.h
+endif
+ifeq ($(INCLUDE_UNIXSERVER),1)
+	HEADERS += unixserversocket.h
+	PRIVATEHEADERS += unixserversocket.h unixserversocketinlines.h \
+				unixsocket.h unixsocketinlines.h
+endif
+ifeq ($(INCLUDE_VARIABLEBUFFER),1)
+	HEADERS += variablebuffer.h
+	PRIVATEHEADERS += variablebuffer.h variablebufferinlines.h
+endif
+ifeq ($(INCLUDE_XMLDOM),1)
+	HEADERS += xmldom.h xmldomnode.h
+	PRIVATEHEADERS += xmldom.h xmldominlines.h \
+				xmldomnode.h xmldomnodeinlines.h
+endif
+ifeq ($(INCLUDE_XMLSAX),1)
+	HEADERS += xmlsax.h
+	PRIVATEHEADERS += xmlsax.h xmlsaxinlines.h
+endif
+
+
 install:
 	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments
 	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/client.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/commandline.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/daemonprocess.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/datatransport.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/datatransportfactory.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/datetime.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/dtd.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/dictionary.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/filedescriptor.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/groupentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/hostentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/inetclientsocket.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/inetserversocket.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/list.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/listener.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/logger.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/memorypool.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/passwdentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/permissions.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/protocolentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/randomnumber.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/regularexpression.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/semaphoreset.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/server.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/serversocket.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/sharedmemory.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/signalclasses.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/string.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/stringbuffer.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/text.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/unixclientsocket.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/unixserversocket.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/variablebuffer.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/xmlsax.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/xmldom.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/xmldomnode.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/client.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/commandline.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/commandlineinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/config.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/daemonprocess.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/daemonprocessinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/datatransport.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/datatransportinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/datetime.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/datetimeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/dtd.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/dtdinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/dictionary.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/dictionaryinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/dictionarynode.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/dictionarynodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/errorhandler.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/errorhandlerinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/file.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/fileinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/filedestination.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/filedescriptor.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/groupentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/groupentryinlines.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/hostentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/hostentryinlines.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/inetsocket.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/inetsocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/inetclientsocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/inetserversocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/list.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/listinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/listnode.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/listnodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/listener.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/listenerinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/logdestination.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/logger.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/loggerinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/memorypool.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/memorypoolinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/memorypoolnode.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/objectdictionarynodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/objectlistnodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/passwdentry.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/passwdentryinlines.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/permissionsinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/protocolentry.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/protocolentryinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/randomnumberinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/regularexpression.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/regularexpressioninlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/rudimentsinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/semaphoreset.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/semaphoresetinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/serverinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/serversocket.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/serversocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/sharedmemory.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/sharedmemoryinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/signalclassesinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/signalhandler.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/signalset.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stderrdestination.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stdoutdestination.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/string.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stringinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stringbuffer.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stringbufferinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stringdictionarynodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/stringlistnodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/syslogdestination.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/text.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/textinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/unixclientsocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/unixserversocket.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/unixserversocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/unixsocket.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/unixsocketinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/variablebuffer.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/variablebufferinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/xmlsax.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/xmlsaxinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/xmldom.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/xmldominlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/xmldomnode.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/xmldomnodeinlines.h $(incdir)/rudiments/private
+	for i in $(HEADERS); do $(INSTALL) -m 644 rudiments/$$i $(incdir)/rudiments; done
+	for i in $(PRIVATEHEADERS); do $(INSTALL) -m 644 rudiments/private/$$i $(incdir)/rudiments/private; done
 
 uninstall:
 	$(RM) $(incdir)/client.h
