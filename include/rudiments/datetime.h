@@ -116,6 +116,8 @@ class datetime {
 		int	getMinutes() const;
 		int	getSeconds() const;
 		int	getMonth() const;
+		char	*getMonthName() const;
+		char	*getMonthAbbreviation() const;
 		int	getDayOfMonth() const;
 		int	getDayOfWeek() const;
 		int	getDayOfYear() const;

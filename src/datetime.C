@@ -19,6 +19,20 @@
 	pthread_mutex_t	*datetime::timemutex;
 #endif
 
+static const char monthname[][10]={
+	"January","February","March",
+	"April","May","June",
+	"July","August","September",
+	"October","November","December"
+};
+
+static const char monthabbr[][4]={
+	"Jan","Feb","Mar",
+	"Apr","May","Jun",
+	"Jul","Aug","Sep",
+	"Oct","Nov","Dec"
+};
+
 datetime::datetime() {
 	zone=NULL;
 	timestring=NULL;
@@ -156,6 +170,14 @@ int datetime::getSeconds() const {
 
 int datetime::getMonth() const {
 	return mon+1;
+}
+
+char *datetime::getMonthName() const {
+	return (char *)monthname[mon];
+}
+
+char *datetime::getMonthAbbreviation() const {
+	return (char *)monthabbr[mon];
 }
 
 int datetime::getDayOfMonth() const {

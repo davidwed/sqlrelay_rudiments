@@ -44,6 +44,7 @@
 	made charstring/rawbuffer classes NULL-safe
 	added zero method to rawbuffer class
 	no stripping is done at compile, link or install time now
+	added getMonthName/Abbreviation to datetime class
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now
