@@ -1,7 +1,6 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <stdio.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
@@ -9,22 +8,19 @@
 
 #include <rudiments/text.h>
 
-inline stringbuffer::stringbuffer() {
-	buffer=new variablebuffer(128,32);
+inline stringbuffer::stringbuffer() : variablebuffer(128,32) {
 }
 
 inline stringbuffer::~stringbuffer() {
-	delete buffer;
 }
 
 inline void stringbuffer::setPosition(unsigned long pos) {
-	buffer->setPosition(pos);
+	variablebuffer::setPosition(pos);
 }
 
 inline char *stringbuffer::getString() {
-	buffer->append((unsigned char *)"\0",1);
-	buffer->setPosition(buffer->getPosition()-1);
-	return (char *)buffer->getBuffer();
+	terminate();
+	return (char *)getBuffer();
 }
 
 inline size_t stringbuffer::getStringLength() {
@@ -32,26 +28,34 @@ inline size_t stringbuffer::getStringLength() {
 }
 
 inline unsigned long stringbuffer::getPosition() {
-	return buffer->getPosition();
+	return variablebuffer::getPosition();
 }
 
 inline void stringbuffer::clear() {
-	buffer->clear();
+	variablebuffer::clear();
+}
+
+inline void stringbuffer::terminate() {
+	if (buffer[end]!='\0') {
+		variablebuffer::append((unsigned char *)"\0",1);
+		end--;
+		position--;
+	}
 }
 
 inline stringbuffer *stringbuffer::append(const char *string) {
-	buffer->append((unsigned char *)string,strlen(string));
+	variablebuffer::append((unsigned char *)string,strlen(string));
 	return this;
 }
 
 inline stringbuffer *stringbuffer::append(char character) {
-	buffer->append((unsigned char *)&character,sizeof(character));
+	variablebuffer::append((unsigned char *)&character,sizeof(character));
 	return this;
 }
 
 inline stringbuffer *stringbuffer::append(long number) {
 	char	*numstr=text::parseNumber(number);
-	buffer->append((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
 
@@ -62,23 +66,23 @@ inline stringbuffer *stringbuffer::append(double number) {
 inline stringbuffer *stringbuffer::append(double number,
 			unsigned short precision, unsigned short scale) {
 	char	*numstr=text::parseNumber(number,precision,scale);
-	buffer->append((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::append((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
 
 inline stringbuffer *stringbuffer::write(const char *string) {
-	buffer->write((unsigned char *)string,strlen(string));
+	variablebuffer::write((unsigned char *)string,strlen(string));
 	return this;
 }
 
 inline stringbuffer *stringbuffer::write(char character) {
-	buffer->write((unsigned char *)&character,sizeof(character));
+	variablebuffer::write((unsigned char *)&character,sizeof(character));
 	return this;
 }
 
 inline stringbuffer *stringbuffer::write(long number) {
 	char	*numstr=text::parseNumber(number);
-	buffer->write((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
 	return this;
 }
 
@@ -89,6 +93,6 @@ inline stringbuffer *stringbuffer::write(double number) {
 inline stringbuffer *stringbuffer::write(double number,
 			unsigned short precision, unsigned short scale) {
 	char	*numstr=text::parseNumber(number,precision,scale);
-	buffer->write((unsigned char *)numstr,strlen(numstr));
+	variablebuffer::write((unsigned char *)numstr,strlen(numstr));
 	return this;
 }

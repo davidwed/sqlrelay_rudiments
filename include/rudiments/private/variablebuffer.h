@@ -1,7 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-	private:
+	protected:
 		void	extend(unsigned long size);
 
 		unsigned char	*buffer;

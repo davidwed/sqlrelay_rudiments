@@ -7,7 +7,6 @@
 	#include <rudiments/private/variablebufferinlines.h>
 #endif
 #include <string.h>
-#include <stdio.h>
 
 variablebuffer::variablebuffer(unsigned long initialsize,
 					unsigned long increment) {

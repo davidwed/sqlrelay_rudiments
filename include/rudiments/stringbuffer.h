@@ -11,7 +11,7 @@
 
 // The stringbuffer class can be used to store strings of arbitrary length.
 
-class stringbuffer {
+class stringbuffer : public variablebuffer {
 	public:
 			stringbuffer();
 			// Creates a new buffer which will grow as necessary

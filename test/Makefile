@@ -86,8 +86,8 @@ random: random.C random.lo
 signal: signal.C signal.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ signal.lo -L../src -lrudiments_p
 
-string: string.C string.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ string.lo -L../src -lrudiments_p
+string: string.C string.lo 
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ string.lo -L../src -lrudiments_p -lefence
 
 handoff1: handoff1.C handoff1.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ handoff1.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
