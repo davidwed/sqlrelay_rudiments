@@ -79,6 +79,12 @@
 /* Some systems have getpwuid_r */
 #undef HAVE_GETPWUID_R
 
+/* Some systems have getrpcbyname_r */
+#undef HAVE_GETRPCBYNAME_R
+
+/* Some systems have getrpcbynumber_r */
+#undef HAVE_GETRPCBYNUMBER_R
+
 /* Some systems have getservbyname_r */
 #undef HAVE_GETSERVBYNAME_R
 

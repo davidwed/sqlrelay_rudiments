@@ -107,6 +107,11 @@ ifeq ($(INCLUDE_REGULAREXPRESSION),1)
 	NLOBJS += regularexpression.n.lo
 	PLOBJS += regularexpression.p.lo
 endif
+ifeq ($(INCLUDE_RPCENTRY),1)
+	SRCS += rpcentry.C
+	NLOBJS += rpcentry.n.lo
+	PLOBJS += rpcentry.p.lo
+endif
 ifeq ($(INCLUDE_SEMAPHORESET),1)
 	SRCS += semaphoreset.C
 	NLOBJS += semaphoreset.n.lo

@@ -126,6 +126,10 @@ ifeq ($(INCLUDE_REGULAREXPRESSION),1)
 	PRIVATEHEADERS += regularexpression.h regularexpressioninlines.h \
 				regularexpressionincludes.h
 endif
+ifeq ($(INCLUDE_RPCENTRY),1)
+	HEADERS += rpcentry.h
+	PRIVATEHEADERS += rpcentryinlines.h rpcentryincludes.h
+endif
 ifeq ($(INCLUDE_SEMAPHORESET),1)
 	HEADERS += semaphoreset.h
 	PRIVATEHEADERS += semaphoreset.h semaphoresetinlines.h \

@@ -1,4 +1,4 @@
-document shadowentry, serviceentry classes
+document shadowentry, serviceentry, rpcentry classes
 document timezonefile class
 
 a termios class would be nice
