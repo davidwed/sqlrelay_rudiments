@@ -34,24 +34,15 @@ int main(int argc, const char **argv) {
 		exit(1);
 	}
 
-	unsigned char	writebuffer[buffersize];
-	for (unsigned long index=0; index<buffersize; index++) {
-		writebuffer[index]='h';
-	}
+	clnt.setWriteBufferSize(buffersize);
 
-	// write "hello" to the server 10000000 times
 	time_t	start=time(NULL);
 	for (unsigned long i=0; i<iterations; i++) {
-		clnt.write(writebuffer,buffersize);
+		clnt.write('h');
 	}
+	clnt.flushWriteBuffer(-1,-1);
 	time_t	end=time(NULL);
 	printf("total time=%d\n",end-start);
-
-	// read 10 bytes from the server and display them
-	char	buffer[11];
-	int	sizeread=clnt.read(buffer,10);
-	buffer[sizeread]=(char)NULL;
-	printf("%s\n",buffer);
 
 	// close the connection to the server
 	clnt.close();

@@ -459,6 +459,28 @@ class filedescriptor {
 				// allocated internally and must be freed by
 				// the calling program.
 
+
+		// If an application does many small writes, the overhead of
+		// all of those ::write() system calls can slow the application
+		// down substantially.  To address that issue, the
+		// filedescriptor class can buffer data passed in to any of it's
+		// write() methods and only make ::write() system calls when
+		// the buffer is full or when it's flushed manually.  Note that
+		// when using buffered writes, the data is not actually written
+		// to the file descriptor until the buffer is full or until
+		// it's flushed manually.
+		bool		setWriteBufferSize(ssize_t size) const;
+				// Discards the current write buffer and sets
+				// the size of the write buffer to "size".  A
+				// size of 0 means don't buffer writes at all.
+				// A size less than 0 will return false.
+		bool		flushWriteBuffer(long sec, long usec) const;
+				// Causes the contents of the write buffer to
+				// be written to the filedescriptor immediately.
+
+
+		bool		setReadBufferSize(ssize_t size) const;
+
 	#include <rudiments/private/filedescriptor.h>
 };
 

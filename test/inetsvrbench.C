@@ -15,7 +15,6 @@ using namespace rudiments;
 #endif
 
 unsigned long	buffersize;
-unsigned long	iterations;
 
 class myserver : public daemonprocess, public inetserversocket {
 	public:
@@ -48,21 +47,17 @@ void	myserver::listen() {
 		printf("couldn't listen on port 8000\n");
 	}
 
-	unsigned char	buffer[buffersize];
-
 	// loop...
 	for (;;) {
 
 		// accept a client connection
 		filedescriptor	*clientsock=accept();
+		clientsock->allowShortReads();
+		clientsock->setReadBufferSize(buffersize);
 
 		// read from the client
-		for (unsigned long i=0; i<iterations; i++) {
-			clientsock->read(&buffer,buffersize);
-		}
-
-		// write "hello" back to the client
-		clientsock->write("hello",5);
+		unsigned char	buffer;
+		while (clientsock->read(&buffer)>0) {}
 
 		// close the socket and clean up
 		clientsock->close();
@@ -85,13 +80,12 @@ RETSIGTYPE	shutDown() {
 
 int main(int argc, const char **argv) {
 
-	if (argc<3) {
-		printf("usage: inetsvrbench [buffer size] [iterations]\n");
+	if (argc<2) {
+		printf("usage: inetsvrbench [buffer size]\n");
 		exit(1);
 	}
 
 	buffersize=charstring::toUnsignedLong(argv[1]);
-	iterations=charstring::toUnsignedLong(argv[2]);
 
 	mysvr=new myserver();
 

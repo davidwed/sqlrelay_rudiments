@@ -11,6 +11,10 @@
 		virtual	unsigned short	netToHost(unsigned short value) const;
 		virtual	unsigned long	netToHost(unsigned long value) const;
 
+		virtual	ssize_t	bufferedRead(void *buf, ssize_t count,
+						long sec, long usec) const;
+		virtual	ssize_t	bufferedWrite(const void *buf, ssize_t count,
+						long sec, long usec) const;
 		virtual	ssize_t	safeRead(void *buf, ssize_t count,
 						long sec, long usec) const;
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
@@ -25,7 +29,7 @@
 		bool	retryinterruptedwaits;
 		bool	retryinterruptedfcntl;
 		bool	retryinterruptedioctl;
-		bool	allowshortreads;
+		mutable bool	allowshortreads;
 		bool	translatebyteorder;
 
 		listener	*lstnr;
@@ -41,3 +45,12 @@
 		#endif
 
 		const char	*type;
+
+		mutable unsigned char	*writebuffer;
+		mutable unsigned char	*writebufferend;
+		mutable unsigned char	*writebufferptr;
+
+		mutable unsigned char	*readbuffer;
+		mutable unsigned char	*readbufferend;
+		mutable unsigned char	*readbufferhead;
+		mutable unsigned char	*readbuffertail;
