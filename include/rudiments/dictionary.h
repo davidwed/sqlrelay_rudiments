@@ -64,10 +64,10 @@ class dictionary {
 			// Deletes the dictionary and all of it's
 			// dictionarynodes.
 
-		bool	setData(keytype key, datatype data);
+		void	setData(keytype key, datatype data);
 			// Sets the data associated with "key" to "data".
-			// Returns true on success or false if "key" wasn't
-			// found.
+			// If "key" already exists, the data currently
+			// accociated with it is replaced with "data".
 		bool	getData(keytype key, datatype *data);
 			// Sets "data" to the data associated with "key".
 			// Returns true on success or false if "key" wasn't

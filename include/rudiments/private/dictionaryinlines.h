@@ -25,17 +25,15 @@ inline DICTIONARY_CLASS::~dictionary() {
 }
 
 DICTIONARY_TEMPLATE
-inline bool DICTIONARY_CLASS::setData(keytype key, datatype data) {
+inline void DICTIONARY_CLASS::setData(keytype key, datatype data) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		node->getData()->setData(data);
-		return false;
 	} else {
 		dictionarynodetype	*dictnode=new dictionarynodetype();
 		dictnode->setKey(key);
 		dictnode->setData(data);
 		dict.append(dictnode);
-		return true;
 	}
 }
 
