@@ -758,10 +758,19 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <string.h>],
 strndup(NULL,0);,AC_DEFINE(HAVE_STRNDUP,1,Some systems have strndup) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(swab arguments)
+SWAB_DEFINED=""
+AC_MSG_CHECKING(whether swab is defined in unistd.h)
 AC_TRY_LINK([#include <stdlib.h>
 #include <unistd.h>],
+[swab(NULL,NULL,0);],[SWAB_DEFINED="yes"; AC_MSG_RESULT(yes)],[AC_DEFINE(MUST_DEFINE_SWAB,1,Some systems have swab but don't define it) AC_MSG_RESULT(no)])
+
+if ( test -n "$SWAB_DEFINED" )
+then
+	AC_MSG_CHECKING(swab arguments)
+	AC_TRY_LINK([#include <stdlib.h>
+#include <unistd.h>],
 void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(void *), AC_DEFINE(HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument) AC_MSG_RESULT(char *))
+fi
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then

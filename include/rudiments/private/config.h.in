@@ -398,6 +398,9 @@
 /* iov_base is char * */
 #undef IOV_BASE_TYPE
 
+/* Some systems have swab but don't define it */
+#undef MUST_DEFINE_SWAB
+
 /* Solaris 2.6 has a few missing function prototypes */
 #undef NEED_XNET_PROTOTYPES
 

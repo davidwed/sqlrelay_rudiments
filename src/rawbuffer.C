@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifdef MUST_DEFINE_SWAB
+extern "C" void swab(const void *from, void *to, ssize_t n);
+#endif
+
 void *rawbuffer::copy(void *dest, const void *src, size_t size) {
 	return (dest && src)?memcpy(dest,src,size):NULL;
 }
