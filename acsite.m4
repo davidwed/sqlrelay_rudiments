@@ -117,169 +117,93 @@ do
 	if ( test -n "$paths" -a -d "$paths" )
 	then
 
-		if ( test "$paths" = "/" )
-		then
-			dnl look in /usr/include and /lib
-			if ( test "$USEFULLLIBPATH" = "yes" )
+		for LIBDIR in "lib" "lib64"
+		do
+
+			if ( test "$paths" = "/" )
 			then
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/lib/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/lib\"; LIBSTRING=\"/lib/lib$LIBNAME.$SOSUFFIX\"],[/lib/lib$LIBNAME.a],[LIBSTRING=\"/lib/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/lib/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/lib\"; LIBSTRING=\"-l$LIBNAME\"],[/lib/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				dnl look in /usr/include and /$LIBDIR
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+					FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"/$LIBDIR/lib$LIBNAME.$SOSUFFIX\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				else
+					FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-l$LIBNAME\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				fi
+
+				dnl set paths to "" so we won't get //'s from here on
+				paths=""
 			fi
 
-			dnl set paths to "" so we won't get //'s from here on
-			paths=""
-		fi
-
-		dnl look in $path/include and $path/lib
-		if ( test "$USEFULLLIBPATH" = "yes" )
-		then
-			FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib\"; LIBSTRING=\"$paths/lib/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-		else
-			FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib\"; LIBSTRING=\"-L$paths/lib -l$LIBNAME\"],[$paths/lib/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-		fi
-
-		dnl look in $path/include/$NAME and $path/lib
-		if ( test -z "$LIBSTRING" )
-		then
+			dnl look in $path/include and $path/$LIBDIR
 			if ( test "$USEFULLLIBPATH" = "yes" )
 			then
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib\"; LIBSTRING=\"$paths/lib/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR\"; LIBSTRING=\"$paths/$LIBDIR/lib$LIBNAME.$SOSUFFIX\"],[$paths/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"$paths/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
 			else
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib\"; LIBSTRING=\"-L$paths/lib -l$LIBNAME\"],[$paths/lib/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR\"; LIBSTRING=\"-L$paths/$LIBDIR -l$LIBNAME\"],[$paths/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/$LIBDIR -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
 			fi
-		fi
 
-		dnl look in $path/include and $path/lib/$NAME
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
+			dnl look in $path/include/$NAME and $path/$LIBDIR
+			if ( test -z "$LIBSTRING" )
 			then
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/$NAME\"; LIBSTRING=\"$paths/lib/$NAME/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib/$NAME/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/$NAME\"; LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"],[$paths/lib/$NAME/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+					FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR\"; LIBSTRING=\"$paths/$LIBDIR/lib$LIBNAME.$SOSUFFIX\"],[$paths/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"$paths/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				else
+					FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR\"; LIBSTRING=\"-L$paths/$LIBDIR -l$LIBNAME\"],[$paths/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/$LIBDIR -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				fi
 			fi
-		fi
 
-		dnl look in $path/include/$NAME and $path/lib/$NAME
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
+			dnl look in $path/include and $path/$LIBDIR/$NAME
+			if ( test -z "$LIBSTRING" )
 			then
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/$NAME\"; LIBSTRING=\"$paths/lib/$NAME/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib/$NAME/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/$NAME\"; LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"],[$paths/lib/$NAME/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+					FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/$NAME\"; LIBSTRING=\"$paths/$LIBDIR/$NAME/lib$LIBNAME.$SOSUFFIX\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.a],[LIBSTRING=\"$paths/$LIBDIR/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				else
+					FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/$NAME\"; LIBSTRING=\"-L$paths/$LIBDIR/$NAME -l$LIBNAME\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/$LIBDIR/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				fi
 			fi
-		fi
 
-		dnl look in $path/include and $path/lib/opt
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
+			dnl look in $path/include/$NAME and $path/$LIBDIR/$NAME
+			if ( test -z "$LIBSTRING" )
 			then
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/opt\"; LIBSTRING=\"$paths/lib/opt/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib/opt/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/opt\"; LIBSTRING=\"-L$paths/lib/opt -l$LIBNAME\"],[$paths/lib/opt/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+					FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/$NAME\"; LIBSTRING=\"$paths/$LIBDIR/$NAME/lib$LIBNAME.$SOSUFFIX\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.a],[LIBSTRING=\"$paths/$LIBDIR/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				else
+					FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/$NAME\"; LIBSTRING=\"-L$paths/$LIBDIR/$NAME -l$LIBNAME\"],[$paths/$LIBDIR/$NAME/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/$LIBDIR/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				fi
 			fi
-		fi
 
-		dnl look in $path/include/$NAME and $path/lib/opt
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
+			dnl look in $path/include and $path/$LIBDIR/opt
+			if ( test -z "$LIBSTRING" )
 			then
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/opt\"; LIBSTRING=\"$paths/lib/opt/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib/opt/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib/opt\"; LIBSTRING=\"-L$paths/lib/opt -l$LIBNAME\"],[$paths/lib/opt/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/$LIBDIR/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/opt\"; LIBSTRING=\"$paths/$LIBDIR/opt/lib$LIBNAME.$SOSUFFIX\"],[$paths/$LIBDIR/opt/lib$LIBNAME.a],[LIBSTRING=\"$paths/$LIBDIR/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+					else
+					FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/$LIBDIR/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/opt\"; LIBSTRING=\"-L$paths/$LIBDIR/opt -l$LIBNAME\"],[$paths/$LIBDIR/opt/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/$LIBDIR/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				fi
 			fi
-		fi
 
-
-
-
-
-		if ( test "$paths" = "/" )
-		then
-			dnl look in /usr/include and /lib64
-			if ( test "$USEFULLLIBPATH" = "yes" )
+			dnl look in $path/include/$NAME and $path/$LIBDIR/opt
+			if ( test -z "$LIBSTRING" )
 			then
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/lib64/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/lib64\"; LIBSTRING=\"/lib64/lib$LIBNAME.$SOSUFFIX\"],[/lib64/lib$LIBNAME.a],[LIBSTRING=\"/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/lib64/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/lib64\"; LIBSTRING=\"-l$LIBNAME\"],[/lib64/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+					FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/$LIBDIR/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/opt\"; LIBSTRING=\"$paths/$LIBDIR/opt/lib$LIBNAME.$SOSUFFIX\"],[$paths/$LIBDIR/opt/lib$LIBNAME.a],[LIBSTRING=\"$paths/$LIBDIR/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				else
+					FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/$LIBDIR/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/$LIBDIR/opt\"; LIBSTRING=\"-L$paths/$LIBDIR/opt -l$LIBNAME\"],[$paths/$LIBDIR/opt/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/$LIBDIR/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				fi
 			fi
 
-			dnl set paths to "" so we won't get //'s from here on
-			paths=""
-		fi
-
-		dnl look in $path/include and $path/lib64
-		if ( test "$USEFULLLIBPATH" = "yes" )
-		then
-			FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib64/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib64/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-		else
-			FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib64/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"],[$paths/lib64/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-		fi
-
-		dnl look in $path/include/$NAME and $path/lib64
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
+			if ( test -n "$LIBSTRING" )
 			then
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib64/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64\"; LIBSTRING=\"$paths/lib64/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib64/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib64/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib64/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64\"; LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"],[$paths/lib64/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib64 -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
+				HEADERSANDLIBSPATH="$paths"
+				break
 			fi
-		fi
 
-		dnl look in $path/include and $path/lib64/$NAME
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
-			then
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib64/$NAME/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"],[$paths/lib64/$NAME/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-			fi
-		fi
-
-		dnl look in $path/include/$NAME and $path/lib64/$NAME
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
-			then
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib64/$NAME/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib64/$NAME/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib64/$NAME/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/$NAME\"; LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"],[$paths/lib64/$NAME/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib64/$NAME -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-			fi
-		fi
-
-		dnl look in $path/include and $path/lib64/opt
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
-			then
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib64/opt/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$HEADER],[INCLUDESTRING=\"-I$paths/include\"],[$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"],[$paths/lib64/opt/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-			fi
-		fi
-
-		dnl look in $path/include/$NAME and $path/lib64/opt
-		if ( test -z "$LIBSTRING" )
-		then
-			if ( test "$USEFULLLIBPATH" = "yes" )
-			then
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX\"],[$paths/lib64/opt/lib$LIBNAME.a],[LIBSTRING=\"$paths/lib64/opt/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
-			else
-				FW_CHECK_HEADER_LIB([$paths/include/$NAME/$HEADER],[INCLUDESTRING=\"-I$paths/include/$NAME\"],[$paths/lib64/opt/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$paths/lib64/opt\"; LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"],[$paths/lib64/opt/lib$LIBNAME.a],[LIBSTRING=\"-L$paths/lib64/opt -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
-			fi
-		fi
-
-		if ( test -n "$LIBSTRING" )
-		then
-			HEADERSANDLIBSPATH="$paths"
-			break
-		fi
+		done
 	fi
 done
 
@@ -457,7 +381,7 @@ then
 
 	if ( test "$cross_compiling" = "yes" )
 	then
-	
+
 		dnl cross compiling
 		echo "cross compiling"
 		if ( test -n "$PTHREADPATH" )
