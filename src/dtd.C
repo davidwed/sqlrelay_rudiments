@@ -3,7 +3,7 @@
 
 #include <rudiments/dtd.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/dtdinlines.h>
 #endif
 

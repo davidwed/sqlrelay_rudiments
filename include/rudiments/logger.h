@@ -118,6 +118,7 @@ class logger {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/loggerinlines.h>
 #endif
 

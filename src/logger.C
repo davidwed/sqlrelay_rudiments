@@ -3,7 +3,7 @@
 
 #include <rudiments/logger.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/loggerinlines.h>
 #endif
 

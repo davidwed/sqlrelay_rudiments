@@ -15,64 +15,64 @@
 
 #include <rudiments/permissions.h>
 
-inline int filedestination::open(const char *filename) {
+INLINE int filedestination::open(const char *filename) {
 	return ((logfile=::open(filename,O_CREAT|O_WRONLY|O_APPEND,
 				permissions::ownerReadWrite()))!=-1);
 }
 
-inline void filedestination::close() {
+INLINE void filedestination::close() {
 	::close(logfile);
 	logfile=-1;
 }
 
-inline void syslogdestination::open(const char *ident,
+INLINE void syslogdestination::open(const char *ident,
 					int option, int facility,
 					int priority) {
 	openlog(ident,option,facility);
 	this->priority=priority;
 }
 
-inline void syslogdestination::close() {
+INLINE void syslogdestination::close() {
 	closelog();
 }
 
-inline void syslogdestination::write(const char *string) {
+INLINE void syslogdestination::write(const char *string) {
 	syslog(priority,string);
 }
 
-inline filedestination::filedestination() {
+INLINE filedestination::filedestination() {
 	logfile=-1;
 }
 
-inline void filedestination::write(const char *string) {
+INLINE void filedestination::write(const char *string) {
 	::write(logfile,string,strlen(string));
 }
 
-inline void stdoutdestination::write(const char *string) {
+INLINE void stdoutdestination::write(const char *string) {
 	::write(1,string,strlen(string));
 }
 
-inline void stderrdestination::write(const char *string) {
+INLINE void stderrdestination::write(const char *string) {
 	::write(2,string,strlen(string));
 }
 
 
 
-inline logger::logger() {
+INLINE logger::logger() {
 }
 
-inline logger::~logger() {
+INLINE logger::~logger() {
 	removeAllLogDestinations();
 }
 
-inline void logger::addLogDestination(logdestination *logdest) {
+INLINE void logger::addLogDestination(logdestination *logdest) {
 	logdestlist.append(logdest);
 }
 
-inline void logger::removeLogDestination(logdestination *logdest) {
+INLINE void logger::removeLogDestination(logdestination *logdest) {
 	logdestlist.removeByData(logdest);
 }
 
-inline void logger::removeAllLogDestinations() {
+INLINE void logger::removeAllLogDestinations() {
 	logdestlist.clear();
 }

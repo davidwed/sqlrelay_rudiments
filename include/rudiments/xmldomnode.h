@@ -313,6 +313,7 @@ class xmldomnode {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/xmldomnodeinlines.h>
 #endif
 

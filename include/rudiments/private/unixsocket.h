@@ -21,7 +21,8 @@ class unixsocket : virtual public datatransport {
 		sockaddr_un	sun;
 };
 
-#ifdef USE_INLINES
+#ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/unixsocketinlines.h>
 #endif
 

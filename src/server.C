@@ -3,6 +3,6 @@
 
 #include <rudiments/server.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/serverinlines.h>
 #endif

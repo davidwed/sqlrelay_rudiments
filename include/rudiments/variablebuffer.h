@@ -71,6 +71,7 @@ class variablebuffer {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/variablebufferinlines.h>
 #endif
 

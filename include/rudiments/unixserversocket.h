@@ -77,6 +77,7 @@ class unixserversocket : public serversocket, public unixsocket {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/unixserversocketinlines.h>
 #endif
 

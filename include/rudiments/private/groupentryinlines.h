@@ -7,32 +7,32 @@
 	#include <strings.h>
 #endif
 
-inline groupentry::groupentry() {
+INLINE groupentry::groupentry() {
 	grp=NULL;
 	buffer=NULL;
 }
 
-inline groupentry::~groupentry() {
+INLINE groupentry::~groupentry() {
 	delete[] buffer;
 }
 
-inline char *groupentry::getName() const {
+INLINE char *groupentry::getName() const {
 	return grp->gr_name;
 }
 
-inline char *groupentry::getPassword() const {
+INLINE char *groupentry::getPassword() const {
 	return grp->gr_passwd;
 }
 
-inline gid_t groupentry::getGroupId() const {
+INLINE gid_t groupentry::getGroupId() const {
 	return grp->gr_gid;
 }
 
-inline char **groupentry::getMembers() const {
+INLINE char **groupentry::getMembers() const {
 	return grp->gr_mem;
 }
 
-inline int groupentry::getPassword(const char *groupname, char **password) {
+INLINE int groupentry::getPassword(const char *groupname, char **password) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
 		*password=strdup(grp.getPassword());
@@ -41,7 +41,7 @@ inline int groupentry::getPassword(const char *groupname, char **password) {
 	return 0;
 }
 
-inline int groupentry::getGroupId(const char *groupname, gid_t *groupid) {
+INLINE int groupentry::getGroupId(const char *groupname, gid_t *groupid) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
 		*groupid=grp.getGroupId();
@@ -50,7 +50,7 @@ inline int groupentry::getGroupId(const char *groupname, gid_t *groupid) {
 	return 0;
 }
 
-inline int groupentry::getMembers(const char *groupname, char ***members) {
+INLINE int groupentry::getMembers(const char *groupname, char ***members) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
 		int	counter;
@@ -66,7 +66,7 @@ inline int groupentry::getMembers(const char *groupname, char ***members) {
 	return 0;
 }
 
-inline int groupentry::getName(gid_t groupid, char **name) {
+INLINE int groupentry::getName(gid_t groupid, char **name) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		*name=strdup(grp.getName());
@@ -75,7 +75,7 @@ inline int groupentry::getName(gid_t groupid, char **name) {
 	return 0;
 }
 
-inline int groupentry::getPassword(gid_t groupid, char **password) {
+INLINE int groupentry::getPassword(gid_t groupid, char **password) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		*password=strdup(grp.getPassword());
@@ -84,7 +84,7 @@ inline int groupentry::getPassword(gid_t groupid, char **password) {
 	return 0;
 }
 
-inline int groupentry::getMembers(gid_t groupid, char ***members) {
+INLINE int groupentry::getMembers(gid_t groupid, char ***members) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		int	counter;

@@ -3,7 +3,7 @@
 
 #include <rudiments/hostentry.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/hostentryinlines.h>
 #endif
 

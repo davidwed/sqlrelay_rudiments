@@ -257,6 +257,7 @@ class file : public filedescriptor {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/file.h>
 #endif
 

@@ -127,6 +127,7 @@ class permissions {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/permissionsinlines.h>
 #endif
 

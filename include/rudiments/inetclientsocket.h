@@ -61,6 +61,7 @@ class inetclientsocket : public client, public inetsocket  {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/inetclientsocketinlines.h>
 #endif
 

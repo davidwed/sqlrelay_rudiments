@@ -8,65 +8,65 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-inline sharedmemory::sharedmemory() {
+INLINE sharedmemory::sharedmemory() {
 	created=0;
 	shmptr=NULL;
 	shmid=-1;
 }
 
-inline sharedmemory::~sharedmemory() {
+INLINE sharedmemory::~sharedmemory() {
 	if (created) {
 		forceRemove();
 	}
 }
 
-inline int sharedmemory::forceRemove() {
+INLINE int sharedmemory::forceRemove() {
 	return !shmctl(shmid,IPC_RMID,NULL);
 }
 
-inline void sharedmemory::dontRemove() {
+INLINE void sharedmemory::dontRemove() {
 	created=0;
 }
 
-inline int sharedmemory::getId() const {
+INLINE int sharedmemory::getId() const {
 	return shmid;
 }
 
-inline void *sharedmemory::getPointer() const {
+INLINE void *sharedmemory::getPointer() const {
 	return shmptr;
 }
 
-inline int sharedmemory::setUserName(const char *username) {
+INLINE int sharedmemory::setUserName(const char *username) {
 	uid_t	userid;
 	return passwdentry::getUserId(username,&userid) &&
 			setUserId(userid);
 }
 
-inline int sharedmemory::setGroupName(const char *groupname) {
+INLINE int sharedmemory::setGroupName(const char *groupname) {
 	gid_t	groupid;
 	return groupentry::getGroupId(groupname,&groupid) &&
 			setGroupId(groupid);
 }
 
-inline int sharedmemory::setUserId(uid_t uid) {
+INLINE int sharedmemory::setUserId(uid_t uid) {
 	shmid_ds	setds;
 	setds.shm_perm.uid=uid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline int sharedmemory::setGroupId(gid_t gid) {
+INLINE int sharedmemory::setGroupId(gid_t gid) {
 	shmid_ds	setds;
 	setds.shm_perm.gid=gid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline int sharedmemory::setPermissions(mode_t permissions) {
+INLINE int sharedmemory::setPermissions(mode_t permissions) {
 	shmid_ds	setds;
 	setds.shm_perm.mode=permissions;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-inline uid_t sharedmemory::getUserId() {
+INLINE uid_t sharedmemory::getUserId() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.uid;
@@ -74,7 +74,7 @@ inline uid_t sharedmemory::getUserId() {
 	return 0;
 }
 
-inline gid_t sharedmemory::getGroupId() {
+INLINE gid_t sharedmemory::getGroupId() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.gid;
@@ -82,7 +82,7 @@ inline gid_t sharedmemory::getGroupId() {
 	return 0;
 }
 
-inline mode_t sharedmemory::getPermissions() {
+INLINE mode_t sharedmemory::getPermissions() {
 	shmid_ds	getds;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
 		return getds.shm_perm.mode;

@@ -55,6 +55,7 @@ class hostentry {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/hostentryinlines.h>
 #endif
 

@@ -7,28 +7,28 @@
 	#include <strings.h>
 #endif
 
-inline protocolentry::protocolentry() {
+INLINE protocolentry::protocolentry() {
 	pe=NULL;
 	buffer=NULL;
 }
 
-inline protocolentry::~protocolentry() {
+INLINE protocolentry::~protocolentry() {
 	delete[] buffer;
 }
 
-inline char *protocolentry::getName() const {
+INLINE char *protocolentry::getName() const {
 	return pe->p_name;
 }
 
-inline char **protocolentry::getAliasList() const {
+INLINE char **protocolentry::getAliasList() const {
 	return pe->p_aliases;
 }
 
-inline int protocolentry::getNumber() const {
+INLINE int protocolentry::getNumber() const {
 	return pe->p_proto;
 }
 
-inline int protocolentry::getAliasList(const char *protocolname,
+INLINE int protocolentry::getAliasList(const char *protocolname,
 						char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
@@ -45,7 +45,7 @@ inline int protocolentry::getAliasList(const char *protocolname,
 	return 0;
 }
 
-inline int protocolentry::getNumber(const char *protocolname, int *number) {
+INLINE int protocolentry::getNumber(const char *protocolname, int *number) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
 		*number=pe.getNumber();
@@ -54,7 +54,7 @@ inline int protocolentry::getNumber(const char *protocolname, int *number) {
 	return 0;
 }
 
-inline int protocolentry::getName(int number, char **name) {
+INLINE int protocolentry::getName(int number, char **name) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		*name=strdup(pe.getName());
@@ -63,7 +63,7 @@ inline int protocolentry::getName(int number, char **name) {
 	return 0;
 }
 
-inline int protocolentry::getAliasList(int number, char ***aliaslist) {
+INLINE int protocolentry::getAliasList(int number, char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		int	counter;

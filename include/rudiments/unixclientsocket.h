@@ -58,6 +58,7 @@ class unixclientsocket : public client, public unixsocket {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/unixclientsocketinlines.h>
 #endif
 

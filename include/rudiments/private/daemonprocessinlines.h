@@ -20,32 +20,32 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-inline void daemonprocess::waitOnChildren() {
+INLINE void daemonprocess::waitOnChildren() {
 	while(waitpid(-1,NULL,WNOHANG)>0);
 }
 
 
-inline void daemonprocess::shutDown() {
+INLINE void daemonprocess::shutDown() {
 	(*shutdownfunc)(0);
 }
 
-inline void daemonprocess::crash() {
+INLINE void daemonprocess::crash() {
 	(*crashfunc)(0);
 }
 
-inline int daemonprocess::runAsUser(const char *username) const {
+INLINE int daemonprocess::runAsUser(const char *username) const {
 	uid_t	userid=-1;
 	passwdentry::getUserId(username,&userid);
 	return runAsUserId(userid);
 }
 
-inline int daemonprocess::runAsGroup(const char *groupname) const {
+INLINE int daemonprocess::runAsGroup(const char *groupname) const {
 	gid_t	groupid=-1;
 	groupentry::getGroupId(groupname,&groupid);
 	return runAsGroupId(groupid);
 }
 
-inline int daemonprocess::runAsUserId(uid_t uid) const {
+INLINE int daemonprocess::runAsUserId(uid_t uid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else
@@ -53,7 +53,7 @@ inline int daemonprocess::runAsUserId(uid_t uid) const {
 	#endif
 }
 
-inline int daemonprocess::runAsGroupId(gid_t gid) const {
+INLINE int daemonprocess::runAsGroupId(gid_t gid) const {
 	#ifdef __CYGWIN__
 		return 1;
 	#else

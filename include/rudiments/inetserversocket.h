@@ -77,6 +77,7 @@ class inetserversocket : public serversocket, public inetsocket {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/inetserversocketinlines.h>
 #endif
 

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-inline int inetclientsocket::connectToServer(const char *host,
+INLINE int inetclientsocket::connectToServer(const char *host,
 					unsigned short port,
 					unsigned int retrywait,
 					int retrycount) {
@@ -12,7 +12,7 @@ inline int inetclientsocket::connectToServer(const char *host,
 	return connect();
 }
 
-inline void inetclientsocket::initialize(const char *host,
+INLINE void inetclientsocket::initialize(const char *host,
 						unsigned short port,
 						unsigned int retrywait,
 						int retrycount) {

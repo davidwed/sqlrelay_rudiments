@@ -13,22 +13,22 @@
 	#error "Couldn't find a suitable replacement for rand/srand"
 #endif
 
-inline int randomnumber::generateNumber(int seed) {
+INLINE int randomnumber::generateNumber(int seed) {
 	SEEDRANDOM(seed);
 	return GETRANDOM();
 }
 
-inline int randomnumber::generateScaledNumber(int seed, int lower,
+INLINE int randomnumber::generateScaledNumber(int seed, int lower,
 								int upper) {
 	return lower+(int)(((float)generateNumber(seed)*(float)(upper-lower))/
 							float(RAND_MAX));
 }
 
-inline int randomnumber::scaleNumber(int number, int lower, int upper) {
+INLINE int randomnumber::scaleNumber(int number, int lower, int upper) {
 	return lower+(int)(((float)number*(float)(upper-lower))/
 							float(RAND_MAX));
 }
 
-inline int randomnumber::getRandMax() {
+INLINE int randomnumber::getRandMax() {
 	return RAND_MAX;
 }

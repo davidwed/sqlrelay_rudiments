@@ -3,7 +3,7 @@
 
 #include <rudiments/xmlsax.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/xmlsaxinlines.h>
 #endif
 

@@ -31,6 +31,7 @@ class dtd {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/dtdinlines.h>
 #endif
 

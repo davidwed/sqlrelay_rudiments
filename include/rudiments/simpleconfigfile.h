@@ -32,6 +32,7 @@ class simpleconfigfile : public errorhandler {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/simpleconfigfileinlines.h>
 #endif
 

@@ -34,6 +34,7 @@ class protocolentry {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/protocolentryinlines.h>
 #endif
 

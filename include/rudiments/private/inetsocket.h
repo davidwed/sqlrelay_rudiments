@@ -20,6 +20,9 @@ class inetsocket : virtual public datatransport {
 		sockaddr_in	sin;
 };
 
-#include <rudiments/private/inetsocketinlines.h>
+#ifdef ENABLE_INLINES
+	#define INLINE inline
+	#include <rudiments/private/inetsocketinlines.h>
+#endif
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <rudiments/inetserversocket.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/inetserversocketinlines.h>
 #endif
 

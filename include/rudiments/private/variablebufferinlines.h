@@ -1,35 +1,35 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-inline variablebuffer::~variablebuffer() {
+INLINE variablebuffer::~variablebuffer() {
 	delete[] buffer;
 }
 
-inline unsigned char *variablebuffer::getBuffer() {
+INLINE unsigned char *variablebuffer::getBuffer() {
 	return buffer;
 }
 
-inline size_t variablebuffer::getSize() {
+INLINE size_t variablebuffer::getSize() {
 	return endofbuffer;
 }
 
-inline size_t variablebuffer::getPosition() {
+INLINE size_t variablebuffer::getPosition() {
 	return position;
 }
 
-inline size_t variablebuffer::getEnd() {
+INLINE size_t variablebuffer::getEnd() {
 	return endofbuffer;
 }
 
-inline size_t variablebuffer::getActualSize() {
+INLINE size_t variablebuffer::getActualSize() {
 	return buffersize;
 }
 
-inline void variablebuffer::setPosition(size_t pos) {
+INLINE void variablebuffer::setPosition(size_t pos) {
 	position=pos;
 }
 
-inline variablebuffer *variablebuffer::append(const unsigned char *data,
+INLINE variablebuffer *variablebuffer::append(const unsigned char *data,
 								size_t size) {
 	position=endofbuffer;
 	return write(data,size);

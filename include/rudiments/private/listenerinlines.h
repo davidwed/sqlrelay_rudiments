@@ -3,38 +3,38 @@
 
 #include <stdlib.h>
 
-inline listener::listener() {
+INLINE listener::listener() {
 	retryinterruptedwaits=1;
 }
 
-inline listener::~listener() {
+INLINE listener::~listener() {
 	removeAllFileDescriptors();
 }
 
-inline void listener::retryInterruptedWaits() {
+INLINE void listener::retryInterruptedWaits() {
 	retryinterruptedwaits=1;
 }
 
-inline void listener::dontRetryInterruptedWaits() {
+INLINE void listener::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=0;
 }
 
-inline void listener::addFileDescriptor(int fd) {
+INLINE void listener::addFileDescriptor(int fd) {
 	filedescriptorlist.append(fd);
 }
 
-inline void listener::removeFileDescriptor(int fd) {
+INLINE void listener::removeFileDescriptor(int fd) {
 	filedescriptorlist.removeByData(fd);
 }
 
-inline void listener::removeAllFileDescriptors() {
+INLINE void listener::removeAllFileDescriptors() {
 	filedescriptorlist.clear();
 }
 
-inline int listener::waitForNonBlockingRead(long sec, long usec) {
+INLINE int listener::waitForNonBlockingRead(long sec, long usec) {
 	return safeSelect(sec,usec,1,0);
 }
 
-inline int listener::waitForNonBlockingWrite(long sec, long usec) {
+INLINE int listener::waitForNonBlockingWrite(long sec, long usec) {
 	return safeSelect(sec,usec,0,1);
 }

@@ -1,14 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/daemonprocess.C)
 
-AC_ARG_WITH(cxxflags,
-	[  --with-cxxflags         debug/optimization flags to use],
-	CXXFLAGS="$CXXFLAGS $withval",
-	CXXFLAGS="$CXXFLAGS")
+
 AC_ARG_ENABLE(small-code,
 	[  --enable-small-code     optimize for small code size],
-	DEBUGCXXFLAGS="$CXXFLAGS -g -pg -DSMALL_CODE=1"; CXXFLAGS="$CXXFLAGS -O -Os -fomit-frame-pointer -fno-exceptions -DSMALL_CODE=1",
-	DEBUGCXXFLAGS="$CXXFLAGS -g -pg"; CXXFLAGS="$CXXFLAGS -fomit-frame-pointer -fno-exceptions")
+	SMALLCODE="-O -Os -fomit-frame-pointer -fno-exceptions -DSMALL_CODE=1",
+	SMALLCODE="")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],
 	USE_SYSTEM_LIBTOOL=$withval,
@@ -18,7 +15,9 @@ AC_ARG_ENABLE(inlines,
 	ENABLE_INLINES="yes",
 	ENABLE_INLINES="no")
 
-AC_SUBST(DEBUGCXXFLAGS)
+CXXFLAGS=""
+AC_SUBST(CXXFLAGS)
+AC_SUBST(SMALLCODE)
 
 
 

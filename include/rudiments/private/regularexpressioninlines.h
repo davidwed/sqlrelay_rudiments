@@ -17,16 +17,16 @@
 	#include <regexpr.h>
 #endif
 
-inline regularexpression::regularexpression() {
+INLINE regularexpression::regularexpression() {
 	compiledexpression=0;
 }
 
-inline regularexpression::regularexpression(const char *pattern) {
+INLINE regularexpression::regularexpression(const char *pattern) {
 	compiledexpression=0;
 	compile(pattern);
 }
 
-inline regularexpression::~regularexpression() {
+INLINE regularexpression::~regularexpression() {
 	if (compiledexpression) {
 		#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
 			regfree((regex_t *)compiledexpression);
@@ -42,7 +42,7 @@ inline regularexpression::~regularexpression() {
 	}
 }
 
-inline int regularexpression::match(const char *str) {
+INLINE int regularexpression::match(const char *str) {
 
 	if (compiledexpression) {
 		#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)

@@ -1,24 +1,24 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-inline dtd::dtd() {
+INLINE dtd::dtd() {
 	xmld=new xmldom();
 	xmldtd=new xmldom();
 }
 
-inline dtd::~dtd() {
+INLINE dtd::~dtd() {
 	delete xmldtd;
 	delete xmld;
 }
 
-inline int dtd::parseFile(const char *filename) {
+INLINE int dtd::parseFile(const char *filename) {
 	return (xmld->parseFile(filename) && parseDtd());
 }
 
-inline int dtd::parseString(const char *string) {
+INLINE int dtd::parseString(const char *string) {
 	return (xmld->parseString(string) && parseDtd());
 }
 
-inline stringbuffer *dtd::xml() const {
+INLINE stringbuffer *dtd::xml() const {
 	return xmldtd->getRootNode()->xml();
 }

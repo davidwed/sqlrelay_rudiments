@@ -9,129 +9,129 @@
 	#include <strings.h>
 #endif
 
-inline filedescriptor::filedescriptor(int fd) {
+INLINE filedescriptor::filedescriptor(int fd) {
 	this->fd=fd;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
 	lstnr=NULL;
 }
 
-inline filedescriptor::filedescriptor() {
+INLINE filedescriptor::filedescriptor() {
 	this->fd=-1;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
 	lstnr=NULL;
 }
 
-inline filedescriptor::~filedescriptor() {
+INLINE filedescriptor::~filedescriptor() {
 	close();
 }
 
-inline int filedescriptor::getFileDescriptor() const {
+INLINE int filedescriptor::getFileDescriptor() const {
 	return fd;
 }
 
-inline void filedescriptor::setFileDescriptor(int fd) {
+INLINE void filedescriptor::setFileDescriptor(int fd) {
 	this->fd=fd;
 }
 
-inline ssize_t filedescriptor::write(unsigned short number) {
+INLINE ssize_t filedescriptor::write(unsigned short number) {
 	return safeWrite((void *)&number,sizeof(unsigned short));
 }
 
-inline ssize_t filedescriptor::write(unsigned long number) {
+INLINE ssize_t filedescriptor::write(unsigned long number) {
 	return safeWrite((void *)&number,sizeof(unsigned long));
 }
 
-inline ssize_t filedescriptor::write(short number) {
+INLINE ssize_t filedescriptor::write(short number) {
 	return safeWrite((void *)&number,sizeof(short));
 }
 
-inline ssize_t filedescriptor::write(long number) {
+INLINE ssize_t filedescriptor::write(long number) {
 	return safeWrite((void *)&number,sizeof(long));
 }
 
-inline ssize_t filedescriptor::write(float number) {
+INLINE ssize_t filedescriptor::write(float number) {
 	return safeWrite((void *)&number,sizeof(float));
 }
 
-inline ssize_t filedescriptor::write(double number) {
+INLINE ssize_t filedescriptor::write(double number) {
 	return safeWrite((void *)&number,sizeof(double));
 }
 
-inline ssize_t filedescriptor::write(unsigned char character) {
+INLINE ssize_t filedescriptor::write(unsigned char character) {
 	return safeWrite((void *)&character,sizeof(unsigned char));
 }
 
-inline ssize_t filedescriptor::write(char character) {
+INLINE ssize_t filedescriptor::write(char character) {
 	return safeWrite((void *)&character,sizeof(char));
 }
 
-inline ssize_t filedescriptor::write(const unsigned char *string) {
+INLINE ssize_t filedescriptor::write(const unsigned char *string) {
 	return safeWrite((void *)string,strlen((char *)string));
 }
 
-inline ssize_t filedescriptor::write(const char *string) {
+INLINE ssize_t filedescriptor::write(const char *string) {
 	return safeWrite((void *)string,strlen(string));
 }
 
-inline ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
+INLINE ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
 	return safeWrite((void *)string,size);
 }
 
-inline ssize_t filedescriptor::write(const char *string, size_t size) {
+INLINE ssize_t filedescriptor::write(const char *string, size_t size) {
 	return safeWrite((void *)string,size);
 }
 
-inline ssize_t filedescriptor::write(const void *buffer, size_t size) {
+INLINE ssize_t filedescriptor::write(const void *buffer, size_t size) {
 	return safeWrite((void *)buffer,size);
 }
 
-inline ssize_t filedescriptor::read(unsigned short *buffer) {
+INLINE ssize_t filedescriptor::read(unsigned short *buffer) {
 	return safeRead((void *)buffer,sizeof(unsigned short));
 }
 
-inline ssize_t filedescriptor::read(unsigned long *buffer) {
+INLINE ssize_t filedescriptor::read(unsigned long *buffer) {
 	return safeRead((void *)buffer,sizeof(unsigned long));
 }
 
-inline ssize_t filedescriptor::read(short *buffer) {
+INLINE ssize_t filedescriptor::read(short *buffer) {
 	return safeRead((void *)buffer,sizeof(short));
 }
 
-inline ssize_t filedescriptor::read(long *buffer) {
+INLINE ssize_t filedescriptor::read(long *buffer) {
 	return safeRead((void *)buffer,sizeof(long));
 }
 
-inline ssize_t filedescriptor::read(float *buffer) {
+INLINE ssize_t filedescriptor::read(float *buffer) {
 	return safeRead((void *)buffer,sizeof(float));
 }
 
-inline ssize_t filedescriptor::read(double *buffer) {
+INLINE ssize_t filedescriptor::read(double *buffer) {
 	return safeRead((void *)buffer,sizeof(double));
 }
 
-inline ssize_t filedescriptor::read(unsigned char *buffer) {
+INLINE ssize_t filedescriptor::read(unsigned char *buffer) {
 	return safeRead((void *)buffer,sizeof(unsigned char));
 }
 
-inline ssize_t filedescriptor::read(char *buffer) {
+INLINE ssize_t filedescriptor::read(char *buffer) {
 	return safeRead((void *)buffer,sizeof(char));
 }
 
-inline ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
+INLINE ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
 	return safeRead((void *)buffer,size);
 }
 
-inline ssize_t filedescriptor::read(char *buffer, size_t size) {
+INLINE ssize_t filedescriptor::read(char *buffer, size_t size) {
 	return safeRead((void *)buffer,size);
 }
 
-inline ssize_t filedescriptor::read(void *buffer, size_t size) {
+INLINE ssize_t filedescriptor::read(void *buffer, size_t size) {
 	return safeRead(buffer,size);
 }
 
-inline int filedescriptor::close() {
+INLINE int filedescriptor::close() {
 	if (::close(fd)==-1) {
 		return 0;
 	}
@@ -139,34 +139,34 @@ inline int filedescriptor::close() {
 	return 1;
 }
 
-inline void filedescriptor::retryInterruptedReads() {
+INLINE void filedescriptor::retryInterruptedReads() {
 	retryinterruptedreads=1;
 }
 
-inline void filedescriptor::dontRetryInterruptedReads() {
+INLINE void filedescriptor::dontRetryInterruptedReads() {
 	retryinterruptedreads=0;
 }
 
-inline void filedescriptor::retryInterruptedWrites() {
+INLINE void filedescriptor::retryInterruptedWrites() {
 	retryinterruptedwrites=1;
 }
 
-inline void filedescriptor::dontRetryInterruptedWrites() {
+INLINE void filedescriptor::dontRetryInterruptedWrites() {
 	retryinterruptedwrites=0;
 }
 
-inline void filedescriptor::retryInterruptedWaits() {
+INLINE void filedescriptor::retryInterruptedWaits() {
 	retryinterruptedwaits=1;
 }
 
-inline void filedescriptor::dontRetryInterruptedWaits() {
+INLINE void filedescriptor::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=0;
 }
 
-inline void filedescriptor::useListener(listener *lstnr) {
+INLINE void filedescriptor::useListener(listener *lstnr) {
 	this->lstnr=lstnr;
 }
 
-inline void filedescriptor::dontUseListener() {
+INLINE void filedescriptor::dontUseListener() {
 	this->lstnr=NULL;
 }

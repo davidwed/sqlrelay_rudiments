@@ -3,28 +3,28 @@
 
 #include <stdlib.h>
 
-inline xmldom::xmldom() : xmlsax() {
+INLINE xmldom::xmldom() : xmlsax() {
 	nullnode=xmldomnode::createNullNode();
 	rootnode=nullnode;
 	currentparent=NULL;
 	currentattribute=NULL;
 }
 
-inline xmldom::~xmldom() {
+INLINE xmldom::~xmldom() {
 	if (!rootnode->isNullNode()) {
 		delete rootnode;
 	}
 	delete nullnode;
 }
 
-inline int xmldom::parseFile(const char *filename) {
+INLINE int xmldom::parseFile(const char *filename) {
 	return xmlsax::parseFile(filename);
 }
 
-inline int xmldom::parseString(const char *string) {
+INLINE int xmldom::parseString(const char *string) {
 	return xmlsax::parseFile(string);
 }
 
-inline xmldomnode *xmldom::getRootNode() const {
+INLINE xmldomnode *xmldom::getRootNode() const {
 	return (rootnode)?rootnode:nullnode;
 }

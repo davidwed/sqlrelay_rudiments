@@ -3,7 +3,7 @@
 
 #include <rudiments/serversocket.h>
 #ifndef ENABLE_INLINES
-	#define inline
+	#define INLINE
 	#include <rudiments/private/serversocketinlines.h>
 #endif
 

@@ -41,6 +41,7 @@ class regularexpression {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/regularexpressioninlines.h>
 #endif
 

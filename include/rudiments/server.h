@@ -17,6 +17,7 @@ class server : virtual public datatransport {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/serverinlines.h>
 #endif
 

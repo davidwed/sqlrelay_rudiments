@@ -50,6 +50,7 @@ class serversocket : public server {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/serversocketinlines.h>
 #endif
 

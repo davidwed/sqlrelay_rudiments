@@ -52,6 +52,7 @@ class passwdentry {
 };
 
 #ifdef ENABLE_INLINES
+	#define INLINE inline
 	#include <rudiments/private/passwdentryinlines.h>
 #endif
 
