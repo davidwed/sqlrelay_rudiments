@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_INETSERVERSOCKET_H
 #define RUDIMENTS_INETSERVERSOCKET_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/serversocket.h>
 #include <rudiments/private/inetsocket.h>
 
@@ -77,7 +75,6 @@ class inetserversocket : public serversocket, public inetsocket {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/inetserversocketinlines.h>
 #endif
 

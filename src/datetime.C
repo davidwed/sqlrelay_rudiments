@@ -3,7 +3,6 @@
 
 #include <rudiments/datetime.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/datetimeinlines.h>
 #endif
 

@@ -1,10 +1,12 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information
 
-inline commandline::commandline(int argc, const char **argv) {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE commandline::commandline(int argc, const char **argv) {
 	this->argc=argc;
 	this->argv=(char **)argv;
 }
 
-inline commandline::~commandline() {
+RUDIMENTS_INLINE commandline::~commandline() {
 }

@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_LOGGER_H
 #define RUDIMENTS_LOGGER_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/list.h>
 
 #include <syslog.h>
@@ -118,7 +116,6 @@ class logger {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/loggerinlines.h>
 #endif
 

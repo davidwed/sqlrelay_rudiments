@@ -99,7 +99,6 @@ class text {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/textinlines.h>
 #endif
 

@@ -3,6 +3,5 @@
 
 #include <rudiments/datatransport.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/datatransportinlines.h>
 #endif

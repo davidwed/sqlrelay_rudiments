@@ -3,7 +3,6 @@
 
 #include <rudiments/passwdentry.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/passwdentryinlines.h>
 #endif
 

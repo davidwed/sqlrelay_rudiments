@@ -3,7 +3,6 @@
 
 #include <rudiments/signalclasses.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/signalclassesinlines.h>
 #endif
 

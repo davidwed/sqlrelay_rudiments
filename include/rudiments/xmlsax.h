@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_XMLSAX_H
 #define RUDIMENTS_XMLSAX_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/errorhandler.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/file.h>
@@ -54,7 +52,6 @@ class xmlsax : public errorhandler {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/xmlsaxinlines.h>
 #endif
 

@@ -5,8 +5,6 @@
 #define RUDIMENTS_MEMORYPOOL_H
 
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/list.h>
 
 #include <rudiments/private/memorypoolnode.h>
@@ -62,7 +60,6 @@ class memorypool {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/memorypoolinlines.h>
 #endif
 

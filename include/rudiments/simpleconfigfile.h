@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_SIMPLECONFIGFILE_H
 #define RUDIMENTS_SIMPLECONFIGFILE_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/errorhandler.h>
 #include <rudiments/stringbuffer.h>
 
@@ -32,7 +30,6 @@ class simpleconfigfile : public errorhandler {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/simpleconfigfileinlines.h>
 #endif
 

@@ -13,22 +13,24 @@
 	#error "Couldn't find a suitable replacement for rand/srand"
 #endif
 
-INLINE int randomnumber::generateNumber(int seed) {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE int randomnumber::generateNumber(int seed) {
 	SEEDRANDOM(seed);
 	return GETRANDOM();
 }
 
-INLINE int randomnumber::generateScaledNumber(int seed, int lower,
+RUDIMENTS_INLINE int randomnumber::generateScaledNumber(int seed, int lower,
 								int upper) {
 	return lower+(int)(((float)generateNumber(seed)*(float)(upper-lower))/
 							float(RAND_MAX));
 }
 
-INLINE int randomnumber::scaleNumber(int number, int lower, int upper) {
+RUDIMENTS_INLINE int randomnumber::scaleNumber(int number, int lower, int upper) {
 	return lower+(int)(((float)number*(float)(upper-lower))/
 							float(RAND_MAX));
 }
 
-INLINE int randomnumber::getRandMax() {
+RUDIMENTS_INLINE int randomnumber::getRandMax() {
 	return RAND_MAX;
 }

@@ -3,7 +3,6 @@
 
 #include <rudiments/inetclientsocket.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/inetclientsocketinlines.h>
 #endif
 

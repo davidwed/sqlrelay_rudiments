@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_XMLDOM_H
 #define RUDIMENTS_XMLDOM_H
 
-#include <rudiments/private/config.h>
-
 #include <sys/types.h>
 
 #include <rudiments/xmlsax.h>
@@ -39,7 +37,6 @@ class xmldom : public xmlsax {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/xmldominlines.h>
 #endif
 

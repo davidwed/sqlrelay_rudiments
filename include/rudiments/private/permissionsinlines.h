@@ -3,105 +3,107 @@
 
 #include <sys/stat.h>
 
-INLINE int permissions::setFilePermissions(const char *filename,
-							mode_t perms) {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE int permissions::setFilePermissions(const char *filename,
+								mode_t perms) {
 	return chmod(filename,perms);
 }
 
-INLINE int permissions::setFilePermissions(int fd, mode_t perms) {
+RUDIMENTS_INLINE int permissions::setFilePermissions(int fd, mode_t perms) {
 	return fchmod(fd,perms);
 }
 
-INLINE mode_t permissions::everyoneReadWrite() {
+RUDIMENTS_INLINE mode_t permissions::everyoneReadWrite() {
 	return S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 }
 
-INLINE mode_t permissions::everyoneReadWriteExecute() {
+RUDIMENTS_INLINE mode_t permissions::everyoneReadWriteExecute() {
 	return S_IRUSR | S_IWUSR | S_IXUSR | 
 		S_IRGRP | S_IWGRP | S_IXGRP | 
 		S_IROTH | S_IWOTH | S_IXOTH;
 }
 
-INLINE mode_t permissions::ownerRead() {
+RUDIMENTS_INLINE mode_t permissions::ownerRead() {
 	return S_IRUSR;
 }
 
-INLINE mode_t permissions::ownerWrite() {
+RUDIMENTS_INLINE mode_t permissions::ownerWrite() {
 	return S_IWUSR;
 }
 
-INLINE mode_t permissions::ownerExecute() {
+RUDIMENTS_INLINE mode_t permissions::ownerExecute() {
 	return S_IXUSR;
 }
 
-INLINE mode_t permissions::ownerReadWrite() {
+RUDIMENTS_INLINE mode_t permissions::ownerReadWrite() {
 	return S_IRUSR | S_IWUSR;
 }
 
-INLINE mode_t permissions::ownerReadExecute() {
+RUDIMENTS_INLINE mode_t permissions::ownerReadExecute() {
 	return S_IRUSR | S_IXUSR;
 }
 
-INLINE mode_t permissions::ownerReadWriteExecute() {
+RUDIMENTS_INLINE mode_t permissions::ownerReadWriteExecute() {
 	return S_IRUSR | S_IWUSR | S_IXUSR;
 }
 
-INLINE mode_t permissions::groupRead() {
+RUDIMENTS_INLINE mode_t permissions::groupRead() {
 	return S_IRGRP;
 }
 
-INLINE mode_t permissions::groupWrite() {
+RUDIMENTS_INLINE mode_t permissions::groupWrite() {
 	return S_IWGRP;
 }
 
-INLINE mode_t permissions::groupExecute() {
+RUDIMENTS_INLINE mode_t permissions::groupExecute() {
 	return S_IXGRP;
 }
 
-INLINE mode_t permissions::groupReadWrite() {
+RUDIMENTS_INLINE mode_t permissions::groupReadWrite() {
 	return S_IRGRP | S_IWGRP;
 }
 
-INLINE mode_t permissions::groupReadExecute() {
+RUDIMENTS_INLINE mode_t permissions::groupReadExecute() {
 	return S_IRGRP | S_IXGRP;
 }
 
-INLINE mode_t permissions::groupReadWriteExecute() {
+RUDIMENTS_INLINE mode_t permissions::groupReadWriteExecute() {
 	return S_IRGRP | S_IWGRP | S_IXGRP;
 }
 
-INLINE mode_t permissions::othersRead() {
+RUDIMENTS_INLINE mode_t permissions::othersRead() {
 	return S_IROTH;
 }
 
-INLINE mode_t permissions::othersWrite() {
+RUDIMENTS_INLINE mode_t permissions::othersWrite() {
 	return S_IWOTH;
 }
 
-INLINE mode_t permissions::othersExecute() {
+RUDIMENTS_INLINE mode_t permissions::othersExecute() {
 	return S_IXOTH;
 }
 
-INLINE mode_t permissions::othersReadWrite() {
+RUDIMENTS_INLINE mode_t permissions::othersReadWrite() {
 	return S_IROTH | S_IWOTH;
 }
 
-INLINE mode_t permissions::othersReadExecute() {
+RUDIMENTS_INLINE mode_t permissions::othersReadExecute() {
 	return S_IROTH | S_IXOTH;
 }
 
-INLINE mode_t permissions::othersReadWriteExecute() {
+RUDIMENTS_INLINE mode_t permissions::othersReadWriteExecute() {
 	return S_IROTH | S_IWOTH | S_IXOTH;
 }
 
-INLINE mode_t permissions::saveInSwapSpace() {
+RUDIMENTS_INLINE mode_t permissions::saveInSwapSpace() {
 	return S_ISVTX;
 }
 
-INLINE mode_t permissions::setUserId() {
+RUDIMENTS_INLINE mode_t permissions::setUserId() {
 	return S_ISUID;
 }
 
-INLINE mode_t permissions::setGroupId() {
+RUDIMENTS_INLINE mode_t permissions::setGroupId() {
 	return S_ISGID;
 }

@@ -7,29 +7,31 @@
 	#include <strings.h>
 #endif
 
-INLINE protocolentry::protocolentry() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE protocolentry::protocolentry() {
 	pe=NULL;
 	buffer=NULL;
 }
 
-INLINE protocolentry::~protocolentry() {
+RUDIMENTS_INLINE protocolentry::~protocolentry() {
 	delete[] buffer;
 }
 
-INLINE char *protocolentry::getName() const {
+RUDIMENTS_INLINE char *protocolentry::getName() const {
 	return pe->p_name;
 }
 
-INLINE char **protocolentry::getAliasList() const {
+RUDIMENTS_INLINE char **protocolentry::getAliasList() const {
 	return pe->p_aliases;
 }
 
-INLINE int protocolentry::getNumber() const {
+RUDIMENTS_INLINE int protocolentry::getNumber() const {
 	return pe->p_proto;
 }
 
-INLINE int protocolentry::getAliasList(const char *protocolname,
-						char ***aliaslist) {
+RUDIMENTS_INLINE int protocolentry::getAliasList(const char *protocolname,
+							char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
 		int	counter;
@@ -45,7 +47,8 @@ INLINE int protocolentry::getAliasList(const char *protocolname,
 	return 0;
 }
 
-INLINE int protocolentry::getNumber(const char *protocolname, int *number) {
+RUDIMENTS_INLINE int protocolentry::getNumber(const char *protocolname,
+								int *number) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
 		*number=pe.getNumber();
@@ -54,7 +57,7 @@ INLINE int protocolentry::getNumber(const char *protocolname, int *number) {
 	return 0;
 }
 
-INLINE int protocolentry::getName(int number, char **name) {
+RUDIMENTS_INLINE int protocolentry::getName(int number, char **name) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		*name=strdup(pe.getName());
@@ -63,7 +66,8 @@ INLINE int protocolentry::getName(int number, char **name) {
 	return 0;
 }
 
-INLINE int protocolentry::getAliasList(int number, char ***aliaslist) {
+RUDIMENTS_INLINE int protocolentry::getAliasList(int number,
+							char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		int	counter;

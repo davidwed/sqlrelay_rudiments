@@ -4,7 +4,6 @@
 #ifndef RUDIMENTS_STRINGBUFFER_H
 #define RUDIMENTS_STRINGBUFFER_H
 
-#include <rudiments/private/config.h>
 #include <rudiments/variablebuffer.h>
 
 #include <sys/types.h>
@@ -79,7 +78,6 @@ class stringbuffer : public variablebuffer {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/stringbufferinlines.h>
 #endif
 

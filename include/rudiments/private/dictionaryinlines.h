@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <rudiments/private/rudimentsinlines.h>
+
 #define DICTIONARY_TEMPLATE \
 	template <class keytype, class datatype, \
 			class dictionarynodetype, \

@@ -4,10 +4,9 @@
 #ifndef RUDIMENTS_LISTENER_H
 #define RUDIMENTS_LISTENER_H
 
-#include <rudiments/private/config.h>
-#include <sys/types.h>
-
 #include <rudiments/list.h>
+
+#include <sys/types.h>
 
 typedef list<int>	listenerlist;
 typedef listnode<int>	listenerlistnode;
@@ -75,7 +74,6 @@ class listener {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/listenerinlines.h>
 #endif
 

@@ -3,7 +3,6 @@
 
 #include <rudiments/memorypool.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/memorypoolinlines.h>
 #endif
 

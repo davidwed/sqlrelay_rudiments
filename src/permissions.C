@@ -3,7 +3,6 @@
 
 #include <rudiments/permissions.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/permissionsinlines.h>
 #endif
 

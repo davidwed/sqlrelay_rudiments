@@ -3,28 +3,30 @@
 
 #include <stdlib.h>
 
-INLINE xmldom::xmldom() : xmlsax() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE xmldom::xmldom() : xmlsax() {
 	nullnode=xmldomnode::createNullNode();
 	rootnode=nullnode;
 	currentparent=NULL;
 	currentattribute=NULL;
 }
 
-INLINE xmldom::~xmldom() {
+RUDIMENTS_INLINE xmldom::~xmldom() {
 	if (!rootnode->isNullNode()) {
 		delete rootnode;
 	}
 	delete nullnode;
 }
 
-INLINE int xmldom::parseFile(const char *filename) {
+RUDIMENTS_INLINE int xmldom::parseFile(const char *filename) {
 	return xmlsax::parseFile(filename);
 }
 
-INLINE int xmldom::parseString(const char *string) {
+RUDIMENTS_INLINE int xmldom::parseString(const char *string) {
 	return xmlsax::parseFile(string);
 }
 
-INLINE xmldomnode *xmldom::getRootNode() const {
+RUDIMENTS_INLINE xmldomnode *xmldom::getRootNode() const {
 	return (rootnode)?rootnode:nullnode;
 }

@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_DATATRANSPORT_H
 #define RUDIMENTS_DATATRANSPORT_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/filedescriptor.h>
 
 // The datatransport class is a base class for other classes that transport data
@@ -84,7 +82,6 @@ class datatransport : public filedescriptor {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/datatransportinlines.h>
 #endif
 

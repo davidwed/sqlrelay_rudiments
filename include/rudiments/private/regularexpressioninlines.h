@@ -17,16 +17,18 @@
 	#include <regexpr.h>
 #endif
 
-INLINE regularexpression::regularexpression() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE regularexpression::regularexpression() {
 	compiledexpression=0;
 }
 
-INLINE regularexpression::regularexpression(const char *pattern) {
+RUDIMENTS_INLINE regularexpression::regularexpression(const char *pattern) {
 	compiledexpression=0;
 	compile(pattern);
 }
 
-INLINE regularexpression::~regularexpression() {
+RUDIMENTS_INLINE regularexpression::~regularexpression() {
 	if (compiledexpression) {
 		#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)
 			regfree((regex_t *)compiledexpression);
@@ -42,7 +44,7 @@ INLINE regularexpression::~regularexpression() {
 	}
 }
 
-INLINE int regularexpression::match(const char *str) {
+RUDIMENTS_INLINE int regularexpression::match(const char *str) {
 
 	if (compiledexpression) {
 		#if defined(HAVE_REGEX_H) || defined(HAVE__USR_LOCAL_FIRSTWORKS_INCLUDE_REGEX_H) || defined(HAVE__FIRSTWORKS_INCLUDE_REGEX_H)

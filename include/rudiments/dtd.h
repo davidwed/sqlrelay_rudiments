@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_DTD_H
 #define RUDIMENTS_DTD_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/xmldom.h>
 
 // The dtd class implements a minimal XML DTD parser.
@@ -31,7 +29,6 @@ class dtd {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/dtdinlines.h>
 #endif
 

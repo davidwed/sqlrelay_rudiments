@@ -99,7 +99,6 @@ class datetime {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/datetimeinlines.h>
 #endif
 

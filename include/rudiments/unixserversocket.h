@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_UNIXSERVERSOCKET_H
 #define RUDIMENTS_UNIXSERVERSOCKET_H
 
-#include <rudiments/private/config.h>
-
 #include <sys/types.h>
 
 #include <rudiments/serversocket.h>
@@ -77,7 +75,6 @@ class unixserversocket : public serversocket, public unixsocket {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/unixserversocketinlines.h>
 #endif
 

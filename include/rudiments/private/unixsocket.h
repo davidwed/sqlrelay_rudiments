@@ -22,7 +22,6 @@ class unixsocket : virtual public datatransport {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/unixsocketinlines.h>
 #endif
 

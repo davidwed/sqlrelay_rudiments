@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_XMLDOMNODE_H
 #define RUDIMENTS_XMLDOMNODE_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/stringbuffer.h>
 
 // The xmldomnode class provides a generic container for DOM tree elements.
@@ -313,7 +311,6 @@ class xmldomnode {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/xmldomnodeinlines.h>
 #endif
 

@@ -7,36 +7,39 @@
 	#include <strings.h>
 #endif
 
-INLINE hostentry::hostentry() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE hostentry::hostentry() {
 	he=NULL;
 	buffer=NULL;
 }
 
-INLINE hostentry::~hostentry() {
+RUDIMENTS_INLINE hostentry::~hostentry() {
 	delete[] buffer;
 }
 
-INLINE char *hostentry::getName() const {
+RUDIMENTS_INLINE char *hostentry::getName() const {
 	return he->h_name;
 }
 
-INLINE char **hostentry::getAliasList() const {
+RUDIMENTS_INLINE char **hostentry::getAliasList() const {
 	return he->h_aliases;
 }
 
-INLINE int hostentry::getAddressType() const {
+RUDIMENTS_INLINE int hostentry::getAddressType() const {
 	return he->h_addrtype;
 }
 
-INLINE int hostentry::getAddressLength() const {
+RUDIMENTS_INLINE int hostentry::getAddressLength() const {
 	return he->h_length;
 }
 
-INLINE char **hostentry::getAddressList() const {
+RUDIMENTS_INLINE char **hostentry::getAddressList() const {
 	return he->h_addr_list;
 }
 
-INLINE int hostentry::getAliasList(const char *hostname, char ***aliaslist) {
+RUDIMENTS_INLINE int hostentry::getAliasList(const char *hostname,
+							char ***aliaslist) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		int	counter;
@@ -52,7 +55,8 @@ INLINE int hostentry::getAliasList(const char *hostname, char ***aliaslist) {
 	return 0;
 }
 
-INLINE int hostentry::getAddressType(const char *hostname, int *addresstype) {
+RUDIMENTS_INLINE int hostentry::getAddressType(const char *hostname,
+							int *addresstype) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addresstype=he.getAddressType();
@@ -61,8 +65,8 @@ INLINE int hostentry::getAddressType(const char *hostname, int *addresstype) {
 	return 0;
 }
 
-INLINE int hostentry::getAddressLength(const char *hostname,
-						int *addresslength) {
+RUDIMENTS_INLINE int hostentry::getAddressLength(const char *hostname,
+							int *addresslength) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addresslength=he.getAddressLength();
@@ -71,8 +75,8 @@ INLINE int hostentry::getAddressLength(const char *hostname,
 	return 0;
 }
 
-INLINE int hostentry::getAddressList(const char *hostname,
-						char ***addresslist) {
+RUDIMENTS_INLINE int hostentry::getAddressList(const char *hostname,
+							char ***addresslist) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		int	counter;
@@ -88,8 +92,9 @@ INLINE int hostentry::getAddressList(const char *hostname,
 	return 0;
 }
 
-INLINE int hostentry::getAddressString(const char *hostname, int index,
-						char **addressstring) {
+RUDIMENTS_INLINE int hostentry::getAddressString(const char *hostname,
+							int index,
+							char **addressstring) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addressstring=strdup(he.getAddressString(index));
@@ -99,7 +104,8 @@ INLINE int hostentry::getAddressString(const char *hostname, int index,
 }
 
 
-INLINE int hostentry::getName(const char *address, int len, int type,
+RUDIMENTS_INLINE int hostentry::getName(const char *address,
+						int len, int type,
 						char **name) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
@@ -109,7 +115,8 @@ INLINE int hostentry::getName(const char *address, int len, int type,
 	return 0;
 }
 
-INLINE int hostentry::getAliasList(const char *address, int len, int type,
+RUDIMENTS_INLINE int hostentry::getAliasList(const char *address,
+						int len, int type,
 						char ***aliaslist) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
@@ -126,7 +133,8 @@ INLINE int hostentry::getAliasList(const char *address, int len, int type,
 	return 0;
 }
 
-INLINE int hostentry::getAddressList(const char *address, int len, int type,
+RUDIMENTS_INLINE int hostentry::getAddressList(const char *address,
+						int len, int type,
 						char ***addresslist) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
@@ -143,8 +151,8 @@ INLINE int hostentry::getAddressList(const char *address, int len, int type,
 	return 0;
 }
 
-INLINE int hostentry::getAddressString(const char *address, int len, int type,
-						int index,
+RUDIMENTS_INLINE int hostentry::getAddressString(const char *address,
+						int len, int type, int index,
 						char **addressstring) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {

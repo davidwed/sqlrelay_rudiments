@@ -3,7 +3,6 @@
 
 #include <rudiments/filedescriptor.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/filedescriptorinlines.h>
 #endif
 #include <errno.h>

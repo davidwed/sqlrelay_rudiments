@@ -4,7 +4,6 @@
 #ifndef RUDIMENTS_FILEDESCRIPTOR_H
 #define RUDIMENTS_FILEDESCRIPTOR_H
 
-#include <rudiments/private/config.h>
 #include <rudiments/listener.h>
 
 #include <sys/types.h>
@@ -163,7 +162,6 @@ class filedescriptor {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/filedescriptorinlines.h>
 #endif
 

@@ -7,44 +7,46 @@
 	#include <strings.h>
 #endif
 
-INLINE passwdentry::passwdentry() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE passwdentry::passwdentry() {
 	pwd=NULL;
 	buffer=NULL;
 }
 
-INLINE passwdentry::~passwdentry() {
+RUDIMENTS_INLINE passwdentry::~passwdentry() {
 	delete[] buffer;
 }
 
-INLINE char *passwdentry::getName() const {
+RUDIMENTS_INLINE char *passwdentry::getName() const {
 	return pwd->pw_name;
 }
 
-INLINE char *passwdentry::getPassword() const {
+RUDIMENTS_INLINE char *passwdentry::getPassword() const {
 	return pwd->pw_passwd;
 }
 
-INLINE uid_t passwdentry::getUserId() const {
+RUDIMENTS_INLINE uid_t passwdentry::getUserId() const {
 	return pwd->pw_uid;
 }
 
-INLINE gid_t passwdentry::getPrimaryGroup() const {
+RUDIMENTS_INLINE gid_t passwdentry::getPrimaryGroup() const {
 	return pwd->pw_gid;
 }
 
-INLINE char *passwdentry::getRealName() const {
+RUDIMENTS_INLINE char *passwdentry::getRealName() const {
 	return pwd->pw_gecos;
 }
 
-INLINE char *passwdentry::getHomeDirectory() const {
+RUDIMENTS_INLINE char *passwdentry::getHomeDirectory() const {
 	return pwd->pw_dir;
 }
 
-INLINE char *passwdentry::getShell() const {
+RUDIMENTS_INLINE char *passwdentry::getShell() const {
 	return pwd->pw_shell;
 }
 
-INLINE int passwdentry::getName(uid_t userid, char **name) {
+RUDIMENTS_INLINE int passwdentry::getName(uid_t userid, char **name) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
 		*name=strdup(pwd.getName());
@@ -53,7 +55,7 @@ INLINE int passwdentry::getName(uid_t userid, char **name) {
 	return 0;
 }
 
-INLINE int passwdentry::getPassword(uid_t userid, char **password) {
+RUDIMENTS_INLINE int passwdentry::getPassword(uid_t userid, char **password) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
 		*password=strdup(pwd.getPassword());
@@ -62,7 +64,8 @@ INLINE int passwdentry::getPassword(uid_t userid, char **password) {
 	return 0;
 }
 
-INLINE int passwdentry::getPrimaryGroup(uid_t userid, gid_t *groupid) {
+RUDIMENTS_INLINE int passwdentry::getPrimaryGroup(uid_t userid,
+							gid_t *groupid) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
 		*groupid=pwd.getPrimaryGroup();
@@ -71,7 +74,8 @@ INLINE int passwdentry::getPrimaryGroup(uid_t userid, gid_t *groupid) {
 	return 0;
 }
 
-INLINE int passwdentry::getRealName(uid_t userid, char **realname) {
+RUDIMENTS_INLINE int passwdentry::getRealName(uid_t userid,
+							char **realname) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
 		*realname=strdup(pwd.getRealName());
@@ -80,7 +84,8 @@ INLINE int passwdentry::getRealName(uid_t userid, char **realname) {
 	return 0;
 }
 
-INLINE int passwdentry::getHomeDirectory(uid_t userid, char **homedir) {
+RUDIMENTS_INLINE int passwdentry::getHomeDirectory(uid_t userid,
+							char **homedir) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
 		*homedir=strdup(pwd.getHomeDirectory());
@@ -89,7 +94,7 @@ INLINE int passwdentry::getHomeDirectory(uid_t userid, char **homedir) {
 	return 0;
 }
 
-INLINE int passwdentry::getShell(uid_t userid, char **shell) {
+RUDIMENTS_INLINE int passwdentry::getShell(uid_t userid, char **shell) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
 		*shell=strdup(pwd.getShell());
@@ -98,7 +103,8 @@ INLINE int passwdentry::getShell(uid_t userid, char **shell) {
 	return 0;
 }
 
-INLINE int passwdentry::getUserId(const char *username, uid_t *userid) {
+RUDIMENTS_INLINE int passwdentry::getUserId(const char *username,
+							uid_t *userid) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*userid=pwd.getUserId();
@@ -107,7 +113,8 @@ INLINE int passwdentry::getUserId(const char *username, uid_t *userid) {
 	return 0;
 }
 
-INLINE int passwdentry::getPassword(const char *username, char **password) {
+RUDIMENTS_INLINE int passwdentry::getPassword(const char *username,
+							char **password) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*password=strdup(pwd.getPassword());
@@ -116,7 +123,8 @@ INLINE int passwdentry::getPassword(const char *username, char **password) {
 	return 0;
 }
 
-INLINE int passwdentry::getPrimaryGroup(const char *username, gid_t *groupid) {
+RUDIMENTS_INLINE int passwdentry::getPrimaryGroup(const char *username,
+							gid_t *groupid) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*groupid=pwd.getPrimaryGroup();
@@ -125,7 +133,8 @@ INLINE int passwdentry::getPrimaryGroup(const char *username, gid_t *groupid) {
 	return 0;
 }
 
-INLINE int passwdentry::getRealName(const char *username, char **realname) {
+RUDIMENTS_INLINE int passwdentry::getRealName(const char *username,
+							char **realname) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*realname=strdup(pwd.getRealName());
@@ -134,7 +143,8 @@ INLINE int passwdentry::getRealName(const char *username, char **realname) {
 	return 0;
 }
 
-INLINE int passwdentry::getHomeDirectory(const char *username, char **homedir) {
+RUDIMENTS_INLINE int passwdentry::getHomeDirectory(const char *username,
+							char **homedir) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*homedir=strdup(pwd.getHomeDirectory());
@@ -143,7 +153,8 @@ INLINE int passwdentry::getHomeDirectory(const char *username, char **homedir) {
 	return 0;
 }
 
-INLINE int passwdentry::getShell(const char *username, char **shell) {
+RUDIMENTS_INLINE int passwdentry::getShell(const char *username,
+							char **shell) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*shell=strdup(pwd.getShell());

@@ -5,7 +5,6 @@
 
 #include <rudiments/sharedmemory.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/sharedmemoryinlines.h>
 #endif
 

@@ -8606,37 +8606,6 @@ echo "******************************"
 
 
 echo
-echo "***** Inline Functions *******"
-echo "$as_me:$LINENO: checking inline" >&5
-echo $ECHO_N "checking inline... $ECHO_C" >&6
-INLINE="inline"
-# intel optimizing compiler doesn't have inlines, assume that CC doesn't either
-# even though it might, this test needs to be more robust
-if ( test "$CXX" = "icc" -o "$CXX" = "CC" ); then
-	INLINE=""
-else
-	# redhat's gcc 2.96 has problems with inlines
-	CXX_VERSION=`$CXX --version`
-	if ( test "$CXX_VERSION" = "2.96" ); then
-		INLINE=""
-	fi
-fi
-if ( test "$INLINE" = "inline" ); then
-	echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-	echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-cat >>confdefs.h <<_ACEOF
-#define INLINE $INLINE
-_ACEOF
-
-echo "******************************"
-
-
-echo
 echo "***** Structures *************"
 echo "$as_me:$LINENO: checking for an ANSI C-conforming const" >&5
 echo $ECHO_N "checking for an ANSI C-conforming const... $ECHO_C" >&6

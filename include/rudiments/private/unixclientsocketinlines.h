@@ -3,13 +3,15 @@
 
 #include <stdlib.h>
 
-INLINE int unixclientsocket::connectToServer(const char *filename,
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE int unixclientsocket::connectToServer(const char *filename,
 				unsigned int retrywait, int retrycount) {
 	initialize(filename,retrywait,retrycount);
 	return connect();
 }
 
-INLINE void unixclientsocket::initialize(const char *filename,
+RUDIMENTS_INLINE void unixclientsocket::initialize(const char *filename,
 				unsigned int retrywait, int retrycount) {
 	unixsocket::initialize(filename);
 	this->retrywait=retrywait;

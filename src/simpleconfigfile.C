@@ -4,7 +4,6 @@
 #include <simpleconfigfile.h>
 #include <file.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/simpleconfigfileinlines.h>
 #endif
 

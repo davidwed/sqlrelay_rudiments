@@ -3,7 +3,6 @@
 
 #include <rudiments/private/unixsocket.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/unixsocketinlines.h>
 #endif
 

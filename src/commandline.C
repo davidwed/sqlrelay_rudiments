@@ -3,7 +3,7 @@
 
 #include <rudiments/commandline.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
+	#define RUDIMENTS_INLINE
 	#include <rudiments/private/commandlineinlines.h>
 #endif
 

@@ -166,7 +166,6 @@ class semaphoreset {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/semaphoresetinlines.h>
 #endif
 

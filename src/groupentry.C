@@ -3,7 +3,6 @@
 
 #include <rudiments/groupentry.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/groupentryinlines.h>
 #endif
 

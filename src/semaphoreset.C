@@ -5,7 +5,6 @@
 
 #include <rudiments/semaphoreset.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/semaphoresetinlines.h>
 #endif
 

@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_ERRORHANDLER_H
 #define RUDIMENTS_ERRORHANDLER_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/stringbuffer.h>
 
 // The errorhandler class is a base class for many rudiments classes.
@@ -22,7 +20,6 @@ class errorhandler {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/errorhandlerinlines.h>
 #endif
 

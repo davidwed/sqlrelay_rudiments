@@ -3,68 +3,70 @@
 
 #include <stdlib.h>
 
-INLINE xmlsax::xmlsax() : errorhandler() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE xmlsax::xmlsax() : errorhandler() {
 	reset();
 }
 
-INLINE xmlsax::~xmlsax() {
+RUDIMENTS_INLINE xmlsax::~xmlsax() {
 	close();
 }
 
-INLINE void xmlsax::reset() {
+RUDIMENTS_INLINE void xmlsax::reset() {
 	string=NULL;
 	line=1;
 }
 
-INLINE void xmlsax::parseTagFailed() {
+RUDIMENTS_INLINE void xmlsax::parseTagFailed() {
 	clearError();
 	appendError("error: parseTagFailed() failed at line ");
 	appendError(line);
 }
 
-INLINE void xmlsax::parseAttributeFailed() {
+RUDIMENTS_INLINE void xmlsax::parseAttributeFailed() {
 	clearError();
 	appendError("error: parseAttributeFailed() failed at line ");
 	appendError(line);
 }
 
-INLINE void xmlsax::parseTextFailed() {
+RUDIMENTS_INLINE void xmlsax::parseTextFailed() {
 	clearError();
 	appendError("error: parseText() failed at line ");
 	appendError(line);
 }
 
-INLINE int xmlsax::tagStart(char *name) {
+RUDIMENTS_INLINE int xmlsax::tagStart(char *name) {
 	// by default, just return success
 	return 1;
 }
 
-INLINE int xmlsax::attributeName(char *name) {
+RUDIMENTS_INLINE int xmlsax::attributeName(char *name) {
 	// by default, just return success
 	return 1;
 }
 
-INLINE int xmlsax::attributeValue(char *value) {
+RUDIMENTS_INLINE int xmlsax::attributeValue(char *value) {
 	// by default, just return success
 	return 1;
 }
 
-INLINE int xmlsax::text(char *string) {
+RUDIMENTS_INLINE int xmlsax::text(char *string) {
 	// by default, just return success
 	return 1;
 }
 
-INLINE int xmlsax::tagEnd(char *name) {
+RUDIMENTS_INLINE int xmlsax::tagEnd(char *name) {
 	// by default, just return success
 	return 1;
 }
 
-INLINE int xmlsax::comment(char *string) {
+RUDIMENTS_INLINE int xmlsax::comment(char *string) {
 	// by default, just return success
 	return 1;
 }
 
-INLINE int xmlsax::cdata(char *string) {
+RUDIMENTS_INLINE int xmlsax::cdata(char *string) {
 	// by default, just return success
 	return 1;
 }

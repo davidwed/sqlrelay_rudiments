@@ -3,6 +3,5 @@
 
 #include <rudiments/errorhandler.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/errorhandlerinlines.h>
 #endif

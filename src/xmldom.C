@@ -3,7 +3,6 @@
 
 #include <rudiments/xmldom.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/xmldominlines.h>
 #endif
 

@@ -3,7 +3,6 @@
 
 #include <rudiments/listener.h>
 #ifndef ENABLE_INLINES
-	#define INLINE
 	#include <rudiments/private/listenerinlines.h>
 #endif
 

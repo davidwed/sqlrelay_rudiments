@@ -6,47 +6,49 @@
 	#include <strings.h>
 #endif
 
-INLINE datetime::~datetime() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE datetime::~datetime() {
 	delete[] timestring;
 }
 
-INLINE int datetime::getHour() const {
+RUDIMENTS_INLINE int datetime::getHour() const {
 	return timestruct.tm_hour;
 }
 
-INLINE int datetime::getMinutes() const {
+RUDIMENTS_INLINE int datetime::getMinutes() const {
 	return timestruct.tm_min;
 }
 
-INLINE int datetime::getSeconds() const {
+RUDIMENTS_INLINE int datetime::getSeconds() const {
 	return timestruct.tm_sec;
 }
 
-INLINE int datetime::getMonth() const {
+RUDIMENTS_INLINE int datetime::getMonth() const {
 	return timestruct.tm_mon+1;
 }
 
-INLINE int datetime::getDayOfMonth() const {
+RUDIMENTS_INLINE int datetime::getDayOfMonth() const {
 	return timestruct.tm_mday;
 }
 
-INLINE int datetime::getDayOfWeek() const {
+RUDIMENTS_INLINE int datetime::getDayOfWeek() const {
 	return timestruct.tm_wday;
 }
 
-INLINE int datetime::getDayOfYear() const {
+RUDIMENTS_INLINE int datetime::getDayOfYear() const {
 	return timestruct.tm_yday+1;
 }
 
-INLINE int datetime::getYear() const {
+RUDIMENTS_INLINE int datetime::getYear() const {
 	return timestruct.tm_year+1900;
 }
 
-INLINE int datetime::isDaylightSavingsTime() const {
+RUDIMENTS_INLINE int datetime::isDaylightSavingsTime() const {
 	return timestruct.tm_isdst;
 }
 
-INLINE char	*datetime::getTimeZone() const {
+RUDIMENTS_INLINE char	*datetime::getTimeZone() const {
 	#ifdef HAS___TM_ZONE
 		return (char *)timestruct.__tm_zone;
 	#elif HAS_TM_ZONE
@@ -58,7 +60,7 @@ INLINE char	*datetime::getTimeZone() const {
 	#endif
 }
 
-INLINE long datetime::getTimeZoneOffset() const {
+RUDIMENTS_INLINE long datetime::getTimeZoneOffset() const {
 	#ifdef HAS___TM_GMTOFF
 		return timestruct.__tm_gmtoff;
 	#elif HAS_TM_GMTOFF
@@ -70,20 +72,20 @@ INLINE long datetime::getTimeZoneOffset() const {
 	#endif
 }
 
-INLINE time_t datetime::getEpoch() const {
+RUDIMENTS_INLINE time_t datetime::getEpoch() const {
 	return epoch;
 }
 
-INLINE tm *datetime::getTm() {
+RUDIMENTS_INLINE tm *datetime::getTm() {
 	return &timestruct;
 }
 
-INLINE char *datetime::getString(time_t epoch) {
+RUDIMENTS_INLINE char *datetime::getString(time_t epoch) {
 	datetime	dt(epoch);
 	return strdup(dt.getString());
 }
 
-INLINE time_t datetime::getEpoch(const char *datestring) {
+RUDIMENTS_INLINE time_t datetime::getEpoch(const char *datestring) {
 	datetime	dt(datestring);
 	return dt.getEpoch();
 }

@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_TABLE_H
 #define RUDIMENTS_TABLE_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/memorypool.h>
 #include <rudiments/variablebuffer.h>
 
@@ -44,7 +42,6 @@ class table {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/tableinlines.h>
 #endif
 

@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_UNIXCLIENTSOCKET_H
 #define RUDIMENTS_UNIXCLIENTSOCKET_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/client.h>
 #include <rudiments/private/unixsocket.h>
 
@@ -58,7 +56,6 @@ class unixclientsocket : public client, public unixsocket {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/unixclientsocketinlines.h>
 #endif
 

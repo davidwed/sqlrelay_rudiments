@@ -77,31 +77,6 @@ AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h std
 echo "******************************"
 
 
-dnl Checks for inline keyword
-echo
-echo "***** Inline Functions *******"
-AC_MSG_CHECKING(inline)
-INLINE="inline"
-# intel optimizing compiler doesn't have inlines, assume that CC doesn't either
-# even though it might, this test needs to be more robust
-if ( test "$CXX" = "icc" -o "$CXX" = "CC" ); then
-	INLINE=""
-else 
-	# redhat's gcc 2.96 has problems with inlines
-	CXX_VERSION=`$CXX --version`
-	if ( test "$CXX_VERSION" = "2.96" ); then
-		INLINE=""
-	fi
-fi
-if ( test "$INLINE" = "inline" ); then
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers don't support the inline keyword) 
-echo "******************************"
-
-
 dnl Checks for typedefs, structures, and compiler characteristics.
 echo
 echo "***** Structures *************"

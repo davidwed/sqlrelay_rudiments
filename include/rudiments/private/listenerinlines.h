@@ -3,38 +3,40 @@
 
 #include <stdlib.h>
 
-INLINE listener::listener() {
+#include <rudiments/private/rudimentsinlines.h>
+
+RUDIMENTS_INLINE listener::listener() {
 	retryinterruptedwaits=1;
 }
 
-INLINE listener::~listener() {
+RUDIMENTS_INLINE listener::~listener() {
 	removeAllFileDescriptors();
 }
 
-INLINE void listener::retryInterruptedWaits() {
+RUDIMENTS_INLINE void listener::retryInterruptedWaits() {
 	retryinterruptedwaits=1;
 }
 
-INLINE void listener::dontRetryInterruptedWaits() {
+RUDIMENTS_INLINE void listener::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=0;
 }
 
-INLINE void listener::addFileDescriptor(int fd) {
+RUDIMENTS_INLINE void listener::addFileDescriptor(int fd) {
 	filedescriptorlist.append(fd);
 }
 
-INLINE void listener::removeFileDescriptor(int fd) {
+RUDIMENTS_INLINE void listener::removeFileDescriptor(int fd) {
 	filedescriptorlist.removeByData(fd);
 }
 
-INLINE void listener::removeAllFileDescriptors() {
+RUDIMENTS_INLINE void listener::removeAllFileDescriptors() {
 	filedescriptorlist.clear();
 }
 
-INLINE int listener::waitForNonBlockingRead(long sec, long usec) {
+RUDIMENTS_INLINE int listener::waitForNonBlockingRead(long sec, long usec) {
 	return safeSelect(sec,usec,1,0);
 }
 
-INLINE int listener::waitForNonBlockingWrite(long sec, long usec) {
+RUDIMENTS_INLINE int listener::waitForNonBlockingWrite(long sec, long usec) {
 	return safeSelect(sec,usec,0,1);
 }

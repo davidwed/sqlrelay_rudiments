@@ -4,8 +4,6 @@
 #ifndef RUDIMENTS_INETCLIENTSOCKET_H
 #define RUDIMENTS_INETCLIENTSOCKET_H
 
-#include <rudiments/private/config.h>
-
 #include <rudiments/client.h>
 #include <rudiments/private/inetsocket.h>
 
@@ -61,7 +59,6 @@ class inetclientsocket : public client, public inetsocket  {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/inetclientsocketinlines.h>
 #endif
 

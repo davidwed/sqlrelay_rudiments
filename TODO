@@ -1,3 +1,5 @@
+INLINE should be RUDIMENTS_INLINE
+
 runAsUser/Group doesn't appear to work
 
 update rpm INSTALL docs

@@ -59,7 +59,6 @@ class randomnumber {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/randomnumberinlines.h>
 #endif
 

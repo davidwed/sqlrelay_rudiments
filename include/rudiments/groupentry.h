@@ -39,7 +39,6 @@ class groupentry {
 };
 
 #ifdef ENABLE_INLINES
-	#define INLINE inline
 	#include <rudiments/private/groupentryinlines.h>
 #endif
 

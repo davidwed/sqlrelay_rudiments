@@ -9,6 +9,8 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
+#include <rudiments/private/rudimentsinlines.h>
+
 #ifndef HAVE_SEMUN
 union semun {
 	int	val;
@@ -17,58 +19,58 @@ union semun {
 };
 #endif
 
-INLINE semaphoreset::semaphoreset() {
+RUDIMENTS_INLINE semaphoreset::semaphoreset() {
 	waitop=NULL;
 	created=0;
 	semid=-1;
 }
 
-INLINE int semaphoreset::forceRemove() {
+RUDIMENTS_INLINE int semaphoreset::forceRemove() {
 	semun	semctlun;
 	return !semctl(semid,0,IPC_RMID,semctlun);
 }
 
-INLINE void semaphoreset::dontRemove() {
+RUDIMENTS_INLINE void semaphoreset::dontRemove() {
 	created=0;
 }
 
-INLINE int semaphoreset::getId() const {
+RUDIMENTS_INLINE int semaphoreset::getId() const {
 	return semid;
 }
 
-INLINE int semaphoreset::wait(int index) {
+RUDIMENTS_INLINE int semaphoreset::wait(int index) {
 	return !semop(semid,waitop[index],1);
 }
 
-INLINE int semaphoreset::waitWithUndo(int index) {
+RUDIMENTS_INLINE int semaphoreset::waitWithUndo(int index) {
 	return !semop(semid,waitwithundoop[index],1);
 }
 
-INLINE int semaphoreset::signal(int index) {
+RUDIMENTS_INLINE int semaphoreset::signal(int index) {
 	return !semop(semid,signalop[index],1);
 }
 
-INLINE int semaphoreset::signalWithUndo(int index) {
+RUDIMENTS_INLINE int semaphoreset::signalWithUndo(int index) {
 	return !semop(semid,signalwithundoop[index],1);
 }
 
-INLINE int semaphoreset::getValue(int index) {
+RUDIMENTS_INLINE int semaphoreset::getValue(int index) {
 	semun	semctlun;
 	return !semctl(semid,index,GETVAL,semctlun);
 }
 
-INLINE int semaphoreset::setValue(int index, int value) {
+RUDIMENTS_INLINE int semaphoreset::setValue(int index, int value) {
 	semun	semctlun;
 	semctlun.val=value;
 	return !semctl(semid,index,SETVAL,semctlun);
 }
 
-INLINE int semaphoreset::getWaitingForZero(int index) {
+RUDIMENTS_INLINE int semaphoreset::getWaitingForZero(int index) {
 	semun	semctlun;
 	return !semctl(semid,index,GETZCNT,semctlun);
 }
 
-INLINE int semaphoreset::getWaitingForIncrement(int index) {
+RUDIMENTS_INLINE int semaphoreset::getWaitingForIncrement(int index) {
 	semun	semctlun;
 	return !semctl(semid,index,GETNCNT,semctlun);
 }
