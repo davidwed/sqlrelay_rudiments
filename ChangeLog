@@ -1,3 +1,5 @@
+0.25.2 - fixes for Mac OS 10.2 and Fedora Core 1 compatibility
+
 0.25.1 - a couple of build fixes
 	added shadowentry, serviceentry and rpcentry classes and test programs
 	reorganized *entry class code a bit to generate smaller code

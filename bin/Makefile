@@ -1,9 +1,10 @@
-top_builddir = ..
-
 include ../config.mk
 
+top_srcdir = ..
+INSTALL = $(top_srcdir)/install-sh -c
+
 install:
-	$(MKINSTALLDIRS) $(bindir)
+	$(top_srcdir)/mkinstalldirs $(bindir)
 	$(INSTALL) rudiments-config $(bindir)
 
 uninstall:

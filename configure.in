@@ -309,8 +309,9 @@ echo
 echo "***** Output Files ***********"
 AC_CONFIG_HEADER(include/rudiments/private/config.h)
 AC_CONFIG_SRCDIR(test/xmls.C)
-AC_CONFIG_FILES(config.mk bin/rudiments-config features.mk)
+AC_CONFIG_FILES(config.mk bin/rudiments-config features.mk strip-comment-note)
 AC_OUTPUT
 chmod 755 bin/rudiments-config
+chmod 755 strip-comment-note
 echo "******************************"
 echo

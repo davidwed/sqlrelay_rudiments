@@ -19,6 +19,7 @@ AR = @AR@
 
 # command to strip a binary
 STRIP = @STRIP@
+STRIPCOMMENTNOTE = $(top_builddir)/strip-comment-note
 
 # includes and defines
 BASECPPFLAGS = @CPPFLAGS@ @PTHREADINCLUDES@

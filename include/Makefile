@@ -1,7 +1,8 @@
-top_builddir = ..
-
 include ../config.mk
 include ../features.mk
+
+top_srcdir = ..
+INSTALL = $(top_srcdir)/install-sh -c
 
 HEADERS = resultcodes.h
 PRIVATEHEADERS = config.h rudimentsinlines.h
@@ -28,9 +29,12 @@ ifeq ($(INCLUDE_DATATRANSPORT),1)
 					datatransportfactoryincludes.h
 endif
 ifeq ($(INCLUDE_DATETIME),1)
-	HEADERS += datetime.h timezonefile.h
-	PRIVATEHEADERS += datetime.h datetimeincludes.h \
-				timezonefile.h 
+	HEADERS += datetime.h
+	PRIVATEHEADERS += datetime.h datetimeincludes.h
+endif
+ifeq ($(INCLUDE_TIMEZONEFILE),1)
+	HEADERS += timezonefile.h
+	PRIVATEHEADERS += timezonefile.h 
 endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h
@@ -180,8 +184,8 @@ endif
 
 
 install:
-	$(MKINSTALLDIRS) $(incdir)/rudiments
-	$(MKINSTALLDIRS) $(incdir)/rudiments/private
+	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments
+	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments/private
 	for i in $(HEADERS); do $(INSTALL) -m 644 rudiments/$$i $(incdir)/rudiments; done
 	for i in $(PRIVATEHEADERS); do $(INSTALL) -m 644 rudiments/private/$$i $(incdir)/rudiments/private; done
 
