@@ -23,6 +23,7 @@ install:
 	$(INSTALL) -m 644 classes/dictionary.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/dtd.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/errorhandler.h.html $(docdir)/classes
+	$(INSTALL) -m 644 classes/environment.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/filedescriptor.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/file.h.html $(docdir)/classes
 	$(INSTALL) -m 644 classes/groupentry.h.html $(docdir)/classes
