@@ -469,7 +469,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS DEBUGCXXFLAGS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE AR ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CXXCPP EGREP LIBTOOL LIBOBJS SOCKETLIB XNETLIB NSLLIB MINGW32 CYGWIN UWIN RPM_BUILD_DIR VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS DEBUGCXXFLAGS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE AR ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CXXCPP EGREP LIBTOOL LIBOBJS SOCKETLIB XNETLIB NSLLIB MINGW32 CYGWIN UWIN VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -11694,10 +11694,6 @@ if ( test -n "$UWIN" -o -n "$MINGW32" -o -n "$CYGWIN" ); then
 fi
 
 
-RPM_BUILD_DIR=`rpm --eval "%_topdir" 2>/dev/null`
-
-
-
 VERSION="0.25"
 
 
@@ -11715,7 +11711,7 @@ echo "***** Output Files ***********"
           ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
 
 
-                              ac_config_files="$ac_config_files config.mk rudiments.spec.in bin/rudiments-config"
+                    ac_config_files="$ac_config_files config.mk bin/rudiments-config"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -12242,7 +12238,6 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "config.mk" ) CONFIG_FILES="$CONFIG_FILES config.mk" ;;
-  "rudiments.spec.in" ) CONFIG_FILES="$CONFIG_FILES rudiments.spec.in" ;;
   "bin/rudiments-config" ) CONFIG_FILES="$CONFIG_FILES bin/rudiments-config" ;;
   "include/rudiments/private/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/rudiments/private/config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
@@ -12370,7 +12365,6 @@ s,@NSLLIB@,$NSLLIB,;t t
 s,@MINGW32@,$MINGW32,;t t
 s,@CYGWIN@,$CYGWIN,;t t
 s,@UWIN@,$UWIN,;t t
-s,@RPM_BUILD_DIR@,$RPM_BUILD_DIR,;t t
 s,@VERSION@,$VERSION,;t t
 s,@SONAME_VERSION_INFO@,$SONAME_VERSION_INFO,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
@@ -12832,10 +12826,5 @@ if test "$no_create" != yes; then
 fi
 
 chmod 755 bin/rudiments-config
-
-sed -e "s|\${prefix}|%{prefix}|" \
--e "s|\${exec_prefix}|%{exec_prefix}|" \
-rudiments.spec.in > rudiments.spec
-
 echo "******************************"
 echo
