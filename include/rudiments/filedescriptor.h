@@ -262,7 +262,9 @@ class filedescriptor {
 			// Causes a read to return the number of bytes that
 			// were read in a single pass from the file descriptor.
 			// Note that reads longer than SSIZE_MAX will always
-			// return SSIZE_MAX or fewer bytes.
+			// return SSIZE_MAX or fewer bytes.  This is useful,
+			// for example, when reading from devices which block
+			// rather than returning 0 for EOF.
 		void	dontAllowShortReads();
 			// Causes a read to attempt to read the specified
 			// number of bytes from the file descriptor, in several
