@@ -71,7 +71,7 @@ int main(int argc, const char **argv) {
 	unsigned long	listlength;
 	charstring::split("hello||hi||bye||goodbye","||",&list,&listlength);
 	printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
-	printf("%d items\n",listlength);
+	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
@@ -80,7 +80,7 @@ int main(int argc, const char **argv) {
 
 	charstring::split("hello||hi||bye||goodbye||","||",&list,&listlength);
 	printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
-	printf("%d items\n",listlength);
+	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
 
 	charstring::split("||hello||hi||bye||goodbye||","||",&list,&listlength);
 	printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
-	printf("%d items\n",listlength);
+	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
@@ -99,7 +99,7 @@ int main(int argc, const char **argv) {
 	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",
 							&list,&listlength);
 	printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
-	printf("%d items\n",listlength);
+	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
@@ -108,7 +108,7 @@ int main(int argc, const char **argv) {
 
 	charstring::split("||||||||||","||",&list,&listlength);
 	printf("split(\"||||||||||\",\"||\")\n");
-	printf("%d items\n",listlength);
+	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
@@ -117,7 +117,7 @@ int main(int argc, const char **argv) {
 
 	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",&list,&listlength);
 	printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
-	printf("%d items\n",listlength);
+	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];

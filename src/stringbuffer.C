@@ -46,8 +46,8 @@ void stringbuffer::clear() {
 }
 
 void stringbuffer::terminate() {
-	if (buffer[endofbuffer]!='\0') {
-		variablebuffer::append((unsigned char *)"\0",1);
+	if (buffer[endofbuffer]!=(unsigned char)NULL) {
+		variablebuffer::append((unsigned char)NULL);
 		endofbuffer--;
 		position--;
 	}

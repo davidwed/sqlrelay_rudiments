@@ -1,9 +1,51 @@
 netbsd-2.0 CMSG_SIZE bug
 
-shmptr must be cast to long rather than int for amd64.  Should shmptr be cast
-	to long or long long though?
+valgrind errors
 
 --------------------------------------------------------------------------------
+
+container class paradigm:
+	can be declared like:
+		container	c;
+	have init() method and clear() methods:
+		init() takes paramaters, clear() resets to all 0's
+		clear() {
+			... for each pointer ...
+			if (xxxisattached) {
+				delete[] xxx;
+			}
+		}
+	destructor calls clear();
+	pointers have setXXX()/getXXX() and attachXXX()/detachXXX() methods:
+		manageXXX(bool) causes XXX to be deleted or not during clear()
+		isXXXmanaged() returns true if XXX will be deleted during
+			clear()
+		manageXXX() = manageXXX(true);
+		dontManageXXX() = manageXXX(false);
+		setXXX(char *XXX, bool attach) {
+			if (xxxisattached) {
+				delete[] xxx;
+			}
+			this->XXX=XXX;
+			manageXXX(attach);
+		}
+		setXXX() {
+			setXXX(value,false);
+		}
+		attachXXX() {
+			setXXX(value,true);
+		}
+		getXXX(bool detach) {
+			manageXXX(!detach);
+			return XXX;
+		}
+		getXXX() {
+			getXXX(false);
+		}
+		detachXXX() {
+			getXXX(true);
+		}
+	
 
 document shmfile class
 document sleep class
