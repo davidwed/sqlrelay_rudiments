@@ -56,7 +56,7 @@ RUDIMENTS_INLINE int semaphoreset::signalWithUndo(int index) {
 
 RUDIMENTS_INLINE int semaphoreset::getValue(int index) {
 	semun	semctlun;
-	return !semctl(semid,index,GETVAL,semctlun);
+	return semctl(semid,index,GETVAL,semctlun);
 }
 
 RUDIMENTS_INLINE int semaphoreset::setValue(int index, int value) {
