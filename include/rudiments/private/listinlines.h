@@ -5,31 +5,31 @@
 #include <stdio.h>
 
 template <class type>
-inline linkedlist<type>::linkedlist() {
+inline list<type>::list() {
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
 template <class type>
-inline linkedlist<type>::~linkedlist() {
+inline list<type>::~list() {
 	clear();
 }
 
 template <class type>
-void linkedlist<type>::append(type value) {
+void list<type>::append(type value) {
 	if (last) {
-		last->setNext(new linkedlistnode<type>(value,last,NULL));
+		last->setNext(new listnode<type>(value,last,NULL));
 		last=last->getNext();
 	} else {
-		first=new linkedlistnode<type>(value);
+		first=new listnode<type>(value);
 		last=first;
 	}
 	length++;
 }
 
 template <class type>
-int linkedlist<type>::insert(unsigned long index, type value) {
+int list<type>::insert(unsigned long index, type value) {
 
 	// handle invalid index
 	if (index>length) {
@@ -43,9 +43,9 @@ int linkedlist<type>::insert(unsigned long index, type value) {
 	}
 
 	// handle insert into index 0
-	linkedlistnode<type>	*newnode;
+	listnode<type>	*newnode;
 	if (!index) {
-		newnode=new linkedlistnode<type>(value,NULL,first);
+		newnode=new listnode<type>(value,NULL,first);
 		first->setPrevious(newnode);
 		first=newnode;
 		length++;
@@ -53,11 +53,11 @@ int linkedlist<type>::insert(unsigned long index, type value) {
 	}
 
 	// handle general insert
-	linkedlistnode<type>	*current=getNode(index-1);
+	listnode<type>	*current=getNode(index-1);
 	if (!current) {
 		return 0;
 	}
-	newnode=new linkedlistnode<type>(value,current,current->getNext());
+	newnode=new listnode<type>(value,current,current->getNext());
 	current->getNext()->setPrevious(newnode);
 	current->setNext(newnode);
 	length++;
@@ -65,8 +65,8 @@ int linkedlist<type>::insert(unsigned long index, type value) {
 }
 
 template <class type>
-inline int linkedlist<type>::setValue(unsigned long index, type value) {
-	linkedlistnode<type>	*current=getNode(index);
+inline int list<type>::setValue(unsigned long index, type value) {
+	listnode<type>	*current=getNode(index);
 	if (current) {
 		current->setValue(value);
 		return 1;
@@ -75,14 +75,14 @@ inline int linkedlist<type>::setValue(unsigned long index, type value) {
 }
 
 template <class type>
-inline int linkedlist<type>::removeIndex(unsigned long index) {
+inline int list<type>::removeIndex(unsigned long index) {
 	return removeNode(getNode(index));
 }
 
 template <class type>
-int linkedlist<type>::removeValue(type value) {
+int list<type>::removeValue(type value) {
 
-	linkedlistnode<type>	*current=first;
+	listnode<type>	*current=first;
 	for (unsigned long i=0; i<length; i++) {
 		if (current->getValue()==value) {
 			return removeNode(current);
@@ -93,10 +93,10 @@ int linkedlist<type>::removeValue(type value) {
 }
 
 template <class type>
-int linkedlist<type>::removeAllValues(type value) {
+int list<type>::removeAllValues(type value) {
 
-	linkedlistnode<type>	*current=first;
-	linkedlistnode<type>	*next;
+	listnode<type>	*current=first;
+	listnode<type>	*next;
 	for (unsigned long i=0; i<length; i++) {
 		if (current->getValue()==value) {
 			next=current->getNext();
@@ -112,7 +112,7 @@ int linkedlist<type>::removeAllValues(type value) {
 }
 
 template <class type>
-int linkedlist<type>::removeNode(linkedlistnode<type> *node) {
+int list<type>::removeNode(listnode<type> *node) {
 	if (!node) {
 		return 0;
 	}
@@ -134,8 +134,8 @@ int linkedlist<type>::removeNode(linkedlistnode<type> *node) {
 }
 
 template <class type>
-inline int linkedlist<type>::getValue(unsigned long index, type *value) const {
-	linkedlistnode<type>	*current=getNode(index);
+inline int list<type>::getValue(unsigned long index, type *value) const {
+	listnode<type>	*current=getNode(index);
 	if (current) {
 		*value=current->getValue();
 		return 1;
@@ -144,16 +144,16 @@ inline int linkedlist<type>::getValue(unsigned long index, type *value) const {
 }
 
 template <class type>
-inline unsigned long linkedlist<type>::getLength() const {
+inline unsigned long list<type>::getLength() const {
 	return length;
 }
 
 template <class type>
-linkedlistnode<type> *linkedlist<type>::getNode(unsigned long index) const {
+listnode<type> *list<type>::getNode(unsigned long index) const {
 	if (index>length) {
 		return NULL;
 	}
-	linkedlistnode<type>	*current=first;
+	listnode<type>	*current=first;
 	for (unsigned long i=0; i<index; i++) {
 		current=current->getNext();
 	}
@@ -161,9 +161,9 @@ linkedlistnode<type> *linkedlist<type>::getNode(unsigned long index) const {
 }
 
 template <class type>
-void linkedlist<type>::clear() {
-	linkedlistnode<type>	*current=first;
-	linkedlistnode<type>	*next;
+void list<type>::clear() {
+	listnode<type>	*current=first;
+	listnode<type>	*next;
 	for (unsigned long i=0; i<length; i++) {
 		next=current->getNext();
 		delete current;

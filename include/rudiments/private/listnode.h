@@ -3,5 +3,5 @@
 
 	private:
 		type		value;
-		linkedlistnode	*next;
-		linkedlistnode	*previous;
+		listnode	*next;
+		listnode	*previous;
