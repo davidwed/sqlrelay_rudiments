@@ -612,3 +612,23 @@ xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 
 	return node;
 }
+
+xmldomnode *xmldomnode::getAttributeByPath(const char *path,
+						int position) const {
+	return getChildByPath(path)->getAttribute(position);
+}
+
+xmldomnode *xmldomnode::getAttributeByPath(const char *path,
+						const char *name) const {
+	return getChildByPath(path)->getAttribute(name);
+}
+
+char *xmldomnode::getAttributeValueByPath(const char *path,
+						int position) const {
+	return getChildByPath(path)->getAttributeValue(position);
+}
+
+char *xmldomnode::getAttributeValueByPath(const char *path,
+						const char *name) const {
+	return getChildByPath(path)->getAttributeValue(name);
+}

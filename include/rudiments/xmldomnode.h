@@ -395,6 +395,45 @@ class xmldomnode {
 				//
 				// Returns the null node if the specified
 				// element was not found.
+		xmldomnode	*getAttributeByPath(const char *path,
+							int position) const;
+				// Returns the attribute node at index
+				// "position" of the child element with "path"
+				// of the form:
+				//
+				// /element[index]/element[index]/...
+				//
+				// Returns the null node if the specified
+				// element was not found.
+		xmldomnode	*getAttributeByPath(const char *path,
+							const char *name) const;
+				// Returns the attribute node named "name"
+				// of the child element with "path" of the form:
+				//
+				// /element[index]/element[index]/...
+				//
+				// Returns the null node if the specified
+				// element was not found.
+		char		*getAttributeValueByPath(const char *path,
+							int position) const;
+				// Returns the value of the attribute at index
+				// "position" of the child element with "path"
+				// of the form:
+				//
+				// /element[index]/element[index]/...
+				//
+				// Returns the null node if the specified
+				// element was not found.
+		char		*getAttributeValueByPath(const char *path,
+							const char *name) const;
+				// Returns the value of the attribute named
+				// "name" of the child element with "path" of
+				// the form:
+				//
+				// /element[index]/element[index]/...
+				//
+				// Returns the null node if the specified
+				// element was not found.
 
 	#include <rudiments/private/xmldomnode.h>
 };

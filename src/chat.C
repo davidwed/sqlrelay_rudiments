@@ -134,6 +134,7 @@ int chat::expect(const char *string) {
 
 		// read a character
 		int	result=readfd->read(&ch,timeout,0);
+
 		#ifdef DEBUG_CHAT
 		if (ch=='\r') {
 			printf("\\r");
@@ -154,7 +155,13 @@ int chat::expect(const char *string) {
 		}
 
 		// append the character to the response
-		response.append(ch);
+		// (unless it's a NULL, we shouldn't get these, but when the
+		// modem is first initialized, there may be a few in it's
+		// send buffer from whatever it was doing before and we may
+		// accidentally get some)
+		if (ch!=(char)NULL) {
+			response.append(ch);
+		}
 
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
