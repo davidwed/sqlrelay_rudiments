@@ -626,11 +626,6 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 }
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) {
-	#ifdef RUDIMENTS_HAS_SSL
-		if (ssl && SSL_pending(ssl)) {
-			return 1;
-		}
-	#endif
 	return (lstnr)?lstnr->waitForNonBlockingRead(sec,usec):
 			safeSelect(sec,usec,true,false);
 }
@@ -641,6 +636,12 @@ int filedescriptor::waitForNonBlockingWrite(long sec, long usec) {
 }
 
 int filedescriptor::safeSelect(long sec, long usec, bool read, bool write) {
+
+	#ifdef RUDIMENTS_HAS_SSL
+		if (read && ssl && SSL_pending(ssl)) {
+			return 1;
+		}
+	#endif
 
 	// set up the timeout
 	timeval	tv;
