@@ -31,7 +31,7 @@ inline int listutil<char *>::compare(char *data1, char *data2) const {
 
 template <>
 inline void listutil<char>::print(char data) const {
-	printf("%d",data);
+	printf("%c",data);
 }
 
 template <>
@@ -41,12 +41,12 @@ inline void listutil<int>::print(int data) const {
 
 template <>
 inline void listutil<short>::print(short data) const {
-	printf("%d",data);
+	printf("%hd",data);
 }
 
 template <>
 inline void listutil<long>::print(long data) const {
-	printf("%d",data);
+	printf("%ld",data);
 }
 
 template <>
