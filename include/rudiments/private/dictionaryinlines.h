@@ -75,6 +75,11 @@ inline dictionarylisttype *DICTIONARY_CLASS::getList() {
 }
 
 DICTIONARY_TEMPLATE
+inline void DICTIONARY_CLASS::clear() {
+	dict.clear();
+}
+
+DICTIONARY_TEMPLATE
 inline void DICTIONARY_CLASS::print() const {
 	dictionarylistnodetype	*node=
 			(dictionarylistnodetype *)dict.getNodeByIndex(0);

@@ -61,6 +61,10 @@ char *parameterstring::getValue(const char *name) {
 	return (nvp.getData((char *)name,&retval))?retval:NULL;
 }
 
+void parameterstring::clear() {
+	nvp.clear();
+}
+
 int parameterstring::countPairs(const char *paramstring) {
 
 	// count ;'s that are not inside of quotes

@@ -122,6 +122,7 @@ class linkedlist {
 		void	clear();
 			// Deletes all linkedlistnodes currently in the
 			// linkedlist.
+
 		void	print() const;
 			// Prints out a representation of the linkedlist.
 

@@ -35,6 +35,7 @@ class dictionarynode {
 				// Returns -1,0 or 1 if the key stored in the
 				// node is less than, equal to or greater than
 				// "testkey".
+
 		virtual void	print() const;
 				// Prints the key and data stored in the node.
 
@@ -79,6 +80,10 @@ class dictionary {
 
 		dictionarylisttype	*getList();
 					// Returns the list used internally.
+
+		void	clear();
+			// Deletes all dictionarynodes currently in the
+			// dictionary.
 
 		void	print() const;
 			// Prints out a representation of the dictionary.

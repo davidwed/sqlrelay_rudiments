@@ -23,6 +23,7 @@ class parameterstring {
 		void	setDelimiter(char delim);
 		bool	parse(const char *string);
 		char	*getValue(const char *name);
+		void	clear();
 
 	#include <rudiments/private/parameterstring.h>
 };
