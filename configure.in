@@ -68,10 +68,10 @@ AC_ARG_ENABLE(intervaltimer,
 	[  --disable-intervaltimer Don't build intervaltimer class],
 	INCLUDE_INTERVALTIMER="0",
 	INCLUDE_INTERVALTIMER="1")
-AC_ARG_ENABLE(sleep,
-	[  --disable-sleep         Don't build sleep class],
-	INCLUDE_SLEEP="0",
-	INCLUDE_SLEEP="1")
+AC_ARG_ENABLE(snooze,
+	[  --disable-snooze        Don't build snooze class],
+	INCLUDE_SNOOZE="0",
+	INCLUDE_SNOOZE="1")
 AC_ARG_ENABLE(math,
 	[  --disable-math          Don't build math class],
 	INCLUDE_MATH="0",
@@ -810,6 +810,11 @@ then
 void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(void *), AC_DEFINE(HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument) AC_MSG_RESULT(char *))
 fi
 
+AC_MSG_CHECKING(_NSGetEnviron)
+AC_TRY_LINK([#include <stdlib.h>
+#include <crt_externs.h>],
+char **env=(*_NSGetEnviron());,AC_DEFINE(HAVE_NSGETENVIRON,1,Some systems define _NSGetEnviron in crt_externs.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(environ)
 AC_TRY_LINK([#include <stdlib.h>
 #include <unistd.h>],
@@ -847,7 +852,7 @@ dnl   perform substitutions for disable options
 AC_SUBST(INCLUDE_CHARSTRING)
 AC_SUBST(INCLUDE_CHARACTER)
 AC_SUBST(INCLUDE_INTERVALTIMER)
-AC_SUBST(INCLUDE_SLEEP)
+AC_SUBST(INCLUDE_SNOOZE)
 AC_SUBST(INCLUDE_MATH)
 AC_SUBST(INCLUDE_RAWBUFFER)
 AC_SUBST(INCLUDE_MEMORYMAP)

@@ -12,7 +12,7 @@
 	added detachBuffer, detachString to variablebuffer, stringbuffer
 	added split to charstring class
 	added shmfile class
-	moved sleep methods into sleep class, changed sleep() to macrosleep()
+	moved sleep methods into snooze class, changed sleep() to macrosleep()
 	cleaned up xmlsax class a bit
 	fixed problem where xml comments had ! prepended to them
 	added write()/append() methods for all primitive types to
@@ -38,6 +38,7 @@
 	added .PHONY makefile flag, removed INSTALL -> INSTALL.txt hack
 	added /usr/sfw to configure scripts search paths
 	added error class
+	added /sw to configure script search paths
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

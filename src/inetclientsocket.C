@@ -7,7 +7,7 @@
 #include <rudiments/protocolentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
-#include <rudiments/sleep.h>
+#include <rudiments/snooze.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -145,7 +145,7 @@ int inetclientsocket::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			sleep::macrosleep(retrywait);
+			snooze::macrosnooze(retrywait);
 		}
 
 		#ifndef HAVE_GETADDRINFO

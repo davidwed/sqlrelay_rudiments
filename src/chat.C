@@ -5,7 +5,7 @@
 #include <rudiments/xmldom.h>
 #include <rudiments/xmldomnode.h>
 #include <rudiments/regularexpression.h>
-#include <rudiments/sleep.h>
+#include <rudiments/snooze.h>
 #include <rudiments/character.h>
 
 #define DEBUG_CHAT 1
@@ -305,12 +305,12 @@ int chat::send(const char *string, namevaluepairs *variables) {
 					#ifdef DEBUG_CHAT
 					printf("\ndecisleep\n");
 					#endif
-					sleep::microsleep(0,100000);
+					snooze::microsnooze(0,100000);
 				} else if (ch=='d') {
 					#ifdef DEBUG_CHAT
 					printf("\nsleep\n");
 					#endif
-					sleep::macrosleep(1);
+					snooze::macrosnooze(1);
 					continue;
 				}
 			/*} else if (ptr=='^') {

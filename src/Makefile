@@ -193,9 +193,9 @@ ifeq ($(INCLUDE_INTERVALTIMER),1)
 	SRCS += intervaltimer.C
 	LOBJS += intervaltimer.lo
 endif
-ifeq ($(INCLUDE_SLEEP),1)
-	SRCS += sleep.C
-	LOBJS += sleep.lo
+ifeq ($(INCLUDE_SNOOZE),1)
+	SRCS += snooze.C
+	LOBJS += snooze.lo
 endif
 ifeq ($(INCLUDE_DYNAMICLIB),1)
 	SRCS += dynamiclib.C

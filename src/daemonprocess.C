@@ -6,7 +6,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
-#include <rudiments/sleep.h>
+#include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
 #include <stdlib.h>
@@ -73,7 +73,7 @@ void daemonprocess::detach() const {
 	if (fork()) {
 		// cygwin needs a sleep or both processes will exit
 		#ifdef __CYGWIN__
-		sleep::macrosleep(1);
+		snooze::macrosnooze(1);
 		#endif
 		_exit(0);
 	}

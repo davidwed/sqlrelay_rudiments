@@ -11,7 +11,12 @@
 #ifdef HAVE_ENVIRON
 	#include <unistd.h>
 #else
-	extern	char	**environ;
+	#ifdef HAVE_NSGETENVIRON
+		#include <crt_externs.h>
+		#define environ (*_NSGetEnviron())
+	#else
+		extern	char	**environ;
+	#endif
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE

@@ -208,9 +208,9 @@ ifeq ($(INCLUDE_INTERVALTIMER),1)
 	HEADERS += intervaltimer.h
 	PRIVATEHEADERS += intervaltimer.h intervaltimerincludes.h
 endif
-ifeq ($(INCLUDE_SLEEP),1)
-	HEADERS += sleep.h
-	PRIVATEHEADERS += sleepincludes.h
+ifeq ($(INCLUDE_SNOOZE),1)
+	HEADERS += snooze.h
+	PRIVATEHEADERS += snoozeincludes.h
 endif
 ifeq ($(INCLUDE_DYNAMICLIB),1)
 	HEADERS += dynamiclib.h

@@ -262,6 +262,9 @@
 /* Some systems have netdb.h */
 #undef HAVE_NETDB_H
 
+/* Some systems define _NSGetEnviron in crt_externs.h */
+#undef HAVE_NSGETENVIRON
+
 /* OpenBSD style statfs */
 #undef HAVE_OPENBSD_STATFS
 
