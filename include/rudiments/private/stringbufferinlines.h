@@ -53,7 +53,9 @@ RUDIMENTS_INLINE void stringbuffer::terminate() {
 }
 
 RUDIMENTS_INLINE stringbuffer *stringbuffer::append(const char *string) {
-	variablebuffer::append((unsigned char *)string,strlen(string));
+	if (string) {
+		variablebuffer::append((unsigned char *)string,strlen(string));
+	}
 	return this;
 }
 
