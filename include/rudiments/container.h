@@ -4,6 +4,8 @@
 #ifndef RUDIMENTS_CONTAINER_H
 #define RUDIMENTS_CONTAINER_H
 
+#include <rudiments/private/containerincludes.h>
+
 // The container class provides base class for classes which store related data.
 
 class container {
