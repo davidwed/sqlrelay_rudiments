@@ -173,6 +173,7 @@ class charstring {
 			// is allocated inside the function and must be deleted
 			// by the calling program.
 
+
 		static	long	toLong(const char *string);
 			// Converts "string" to a long integer.
 		static	long	toLong(const char *string, char **endptr);
@@ -187,8 +188,29 @@ class charstring {
 			// If non-NULL, endptr will be set to the first
 			// character in the string after the number.
 
+
+		static	unsigned long	toUnsignedLong(const char *string);
+			// Converts "string" to a unsigned long integer.
+		static	unsigned long	toUnsignedLong(const char *string,
+							char **endptr);
+			// Converts "string" to a unsigned long integer.  If
+			// non-NULL, endptr will be set to the first character
+			// in the string after the number.
+		static	unsigned long	toUnsignedLong(const char *string,
+								int base);
+			// Converts "string" to a unsigned long integer of base
+			// "base".
+		static	unsigned long	toUnsignedLong(const char *string,
+							char **endptr,
+							int base);
+			// Converts "string" to a unsigned long integer of base
+			// "base".
+			// If non-NULL, endptr will be set to the first
+			// character in the string after the number.
+
+
 		static	long long	toLongLong(const char *string);
-			// Converts "string" to a long integer.
+			// Converts "string" to a long long integer.
 		static	long long	toLongLong(const char *string,
 							char **endptr);
 			// Converts "string" to a long long integer.  If
@@ -204,12 +226,37 @@ class charstring {
 			// base "base".  If non-NULL, endptr will be set to the
 			// first character in the string after the number.
 
+
+		static	unsigned long long	toUnsignedLongLong(
+							const char *string);
+			// Converts "string" to an unsigned long long integer.
+		static	unsigned long long	toUnsignedLongLong(
+							const char *string,
+							char **endptr);
+			// Converts "string" to a unsigned long long integer.  If
+			// non-NULL, endptr will be set to the first character
+			// in the string after the number.
+		static	unsigned long long	toUnsignedLongLong(
+							const char *string,
+							int base);
+			// Converts "string" to a unsigned long long integer of
+			// base "base".
+		static	unsigned long long	toUnsignedLongLong(
+							const char *string,
+							char **endptr,
+							int base);
+			// Converts "string" to a unsigned long long integer of
+			// base "base".  If non-NULL, endptr will be set to the
+			// first character in the string after the number.
+
+
 		static	float	toFloat(const char *string);
 			// Converts "string" to a floating point number.
 		static	float	toFloat(const char *string, char **endptr);
 			// Converts "string" to a floating point number.  If
 			// non-NULL, endptr will be set to the first character
 			// in the string after the number.
+
 
 		static	double	toDouble(const char *string);
 			// Converts "string" to a double precision
@@ -219,6 +266,7 @@ class charstring {
 			// point number.  If non-NULL, endptr will be set to
 			// the first character in the string after the number.
 
+
 		static	long double	toLongDouble(const char *string);
 			// Converts "string" to a long double precision
 			// floating point number.
@@ -227,6 +275,7 @@ class charstring {
 			// Converts "string" to a long double precision floating
 			// point number.  If non-NULL, endptr will be set to
 			// the first character in the string after the number.
+
 
 		static	char	*httpEscape(const char *input);
 			// http escapes "input" and returns it in a buffer

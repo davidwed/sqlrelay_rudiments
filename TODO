@@ -222,8 +222,7 @@ filedescriptor
 --------------------------------------------------------------------------------
 
 charstring class:
-	stdlib.h - strtoul(_l)() - string to ulong
-		strto(ull|uq)(_l)() - string to unsigned long long
+	stdlib.h - strtouq(_l)() - string to "quad"
 	stdio.h - sprintf()
 	string.h/strings.h -
 		strxfrm(_l)()

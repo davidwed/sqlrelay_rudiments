@@ -30496,7 +30496,7 @@ echo "******************************"
 
 
 
-RUDIMENTS_VERSION="0.27"
+RUDIMENTS_VERSION="0.28"
 
 
 cat >>confdefs.h <<_ACEOF

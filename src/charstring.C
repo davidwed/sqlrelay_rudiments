@@ -503,6 +503,23 @@ long charstring::toLong(const char *string, char **endptr, int base) {
 	return (string)?strtol(string,endptr,base):0;
 }
 
+unsigned long charstring::toUnsignedLong(const char *string) {
+	return (string)?strtoul(string,NULL,0):0;
+}
+
+unsigned long charstring::toUnsignedLong(const char *string, char **endptr) {
+	return (string)?strtoul(string,endptr,0):0;
+}
+
+unsigned long charstring::toUnsignedLong(const char *string, int base) {
+	return (string)?strtoul(string,NULL,base):0;
+}
+
+unsigned long charstring::toUnsignedLong(const char *string,
+						char **endptr, int base) {
+	return (string)?strtoul(string,endptr,base):0;
+}
+
 long long charstring::toLongLong(const char *string) {
 	return (string)?strtoll(string,NULL,0):0;
 }
@@ -517,6 +534,25 @@ long long charstring::toLongLong(const char *string, int base) {
 
 long long charstring::toLongLong(const char *string, char **endptr, int base) {
 	return (string)?strtoll(string,endptr,base):0;
+}
+
+unsigned long long charstring::toUnsignedLongLong(const char *string) {
+	return (string)?strtoull(string,NULL,0):0;
+}
+
+unsigned long long charstring::toUnsignedLongLong(const char *string,
+							char **endptr) {
+	return (string)?strtoull(string,endptr,0):0;
+}
+
+unsigned long long charstring::toUnsignedLongLong(const char *string,
+								int base) {
+	return (string)?strtoull(string,NULL,base):0;
+}
+
+unsigned long long charstring::toUnsignedLongLong(const char *string,
+						char **endptr, int base) {
+	return (string)?strtoull(string,endptr,base):0;
 }
 
 float charstring::toFloat(const char *string) {
