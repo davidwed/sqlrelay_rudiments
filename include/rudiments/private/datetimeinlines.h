@@ -126,3 +126,11 @@ RUDIMENTS_INLINE time_t datetime::getEpoch(const tm *timestruct) {
 	datetime	dt;
 	return ((dt.initialize(timestruct))?dt.getEpoch():-1);
 }
+
+RUDIMENTS_INLINE char **datetime::getTimeZoneAbbreviations() {
+	return (char **)tzonestring;
+}
+
+RUDIMENTS_INLINE long *datetime::getTimeZoneOffsets() {
+	return (long *)tzoneoffset;
+}

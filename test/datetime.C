@@ -36,4 +36,11 @@ int main(int argv, const char **argc) {
 	printf("Hardware Clock (assuming GMT): %s\n",dt.getString());
 	dt.getAdjustedHardwareDateAndTime(datetime::GMT);
 	printf("Adjusted Hardware Clock: %s\n",dt.getString());
+
+	printf("\nTimezones: \n");
+	for (int i=0; datetime::getTimeZoneAbbreviations()[i]; i++) {
+		printf("%s: %d\n",
+			datetime::getTimeZoneAbbreviations()[i],
+			datetime::getTimeZoneOffsets()[i]);
+	}
 }

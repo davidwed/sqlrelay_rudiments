@@ -172,6 +172,17 @@ class datetime {
 		tm	*getTm();
 			// returns a pointer to the internal "struct tm"
 
+
+		// These methods return timezone data
+		static char	**getTimeZoneAbbreviations();
+				// Returns a NULL terminated array of timezone
+				// abbreviations.
+		static long	*getTimeZoneOffsets();
+				// Returns an array of timezone offsets from
+				// GMT (in seconds).  Each element of this
+				// array corresponds to an element of the
+				// array returned b getTimeZoneStrings().
+
 	#include <rudiments/private/datetime.h>
 };
 
