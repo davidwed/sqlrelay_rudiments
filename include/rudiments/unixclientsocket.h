@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_UNIXCLIENTSOCKET_H
 #define RUDIMENTS_UNIXCLIENTSOCKET_H
 
-#include <rudiments/client.h>
-#include <rudiments/private/unixsocket.h>
+#include <rudiments/private/unixclientsocketincludes.h>
 
 // The unixclientsocket class allows you to write programs that can talk to
 // other programs on the same machine over TCP stream sockets.

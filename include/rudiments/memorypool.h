@@ -4,10 +4,7 @@
 #ifndef RUDIMENTS_MEMORYPOOL_H
 #define RUDIMENTS_MEMORYPOOL_H
 
-
-#include <rudiments/list.h>
-
-#include <rudiments/private/memorypoolnode.h>
+#include <rudiments/private/memorypoolincludes.h>
 
 typedef	list<memorypoolnode *>		memorypoollist;
 typedef	listnode<memorypoolnode *>	memorypoollistnode;

@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_LISTENER_H
 #define RUDIMENTS_LISTENER_H
 
-#include <rudiments/list.h>
-
-#include <sys/types.h>
+#include <rudiments/private/listenerincludes.h>
 
 typedef list<int>	listenerlist;
 typedef listnode<int>	listenerlistnode;

@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_SHAREDMEMORY_H
 #define RUDIMENTS_SHAREDMEMORY_H
 
-#include <rudiments/private/config.h>
-
-#include <sys/types.h>
+#include <rudiments/private/sharedmemoryincludes.h>
 
 // Shared memory segments allow multiple processes to access a common
 // address space.

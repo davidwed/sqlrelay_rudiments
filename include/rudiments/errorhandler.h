@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_ERRORHANDLER_H
 #define RUDIMENTS_ERRORHANDLER_H
 
-#include <rudiments/stringbuffer.h>
+#include <rudiments/private/errorhandlerincludes.h>
 
 // The errorhandler class is a base class for many rudiments classes.
 

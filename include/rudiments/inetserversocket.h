@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_INETSERVERSOCKET_H
 #define RUDIMENTS_INETSERVERSOCKET_H
 
-#include <rudiments/serversocket.h>
-#include <rudiments/private/inetsocket.h>
+#include <rudiments/private/inetserversocketincludes.h>
 
 // The inetserversocket class allows you to write programs that can talk to
 // other programs across a network over TCP stream sockets.

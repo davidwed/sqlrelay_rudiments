@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_COMMANDLINE_H
 #define RUDIMENTS_COMMANDLINE_H
 
-#include <rudiments/private/config.h>
+#include <rudiments/private/commandlineincludes.h>
 
 // The commandline class provides methods for parsing command line arguments.
 

@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_DATATRANSPORT_FACTORY_H
 #define RUDIMENTS_DATATRANSPORT_FACTORY_H
 
-#include <rudiments/client.h>
-#include <rudiments/server.h>
+#include <rudiments/private/datatransportfactoryincludes.h>
 
 // The datatransportfactory class provides factory methods for getting clients
 // and servers.

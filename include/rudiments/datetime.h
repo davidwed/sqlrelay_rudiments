@@ -4,12 +4,7 @@
 #ifndef RUDIMENTS_DATETIME_H
 #define RUDIMENTS_DATETIME_H
 
-#include <rudiments/private/config.h>
-
-#include <rudiments/environment.h>
-
-#include <time.h>
-#include <pthread.h>
+#include <rudiments/private/datetimeincludes.h>
 
 // The datetime class provides methods for converting date/time formats and
 // accessing various date/time values.

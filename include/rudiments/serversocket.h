@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_SERVERSOCKET_H
 #define RUDIMENTS_SERVERSOCKET_H
 
-#include <rudiments/server.h>
+#include <rudiments/serversocketincludes.h>
 
 class serversocket : public server {
 	public:

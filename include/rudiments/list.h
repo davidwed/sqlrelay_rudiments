@@ -4,6 +4,7 @@
 #ifndef RUDIMENTS_LIST_H
 #define RUDIMENTS_LIST_H
 
+#include <rudiments/private/listincludes.h>
 
 // The list class allows you to store arbitrary amounts of data in a
 // doubly-linked list.  Since the list class is template-based, you can store
@@ -11,10 +12,6 @@
 //
 // Each list is composed of a series of listnode's.  Each listnode contains
 // the data.
-
-#include <rudiments/private/config.h>
-
-#include <rudiments/private/listutil.h>
 
 template <class datatype>
 class listnode {

@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_VARIABLEBUFFER_H
 #define RUDIMENTS_VARIABLEBUFFER_H
 
-#include <rudiments/private/config.h>
-
-#include <sys/types.h>
+#include <rudiments/private/variablebufferincludes.h>
 
 // The variablebuffer class can be used to store raw data of arbitrary length.
 

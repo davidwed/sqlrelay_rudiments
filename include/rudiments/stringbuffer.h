@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_STRINGBUFFER_H
 #define RUDIMENTS_STRINGBUFFER_H
 
-#include <rudiments/variablebuffer.h>
-
-#include <sys/types.h>
+#include <rudiments/private/stringbufferincludes.h>
 
 // The stringbuffer class can be used to store strings of arbitrary length.
 

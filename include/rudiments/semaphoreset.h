@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_SEMAPHORESET_H
 #define RUDIMENTS_SEMAPHORESET_H
 
-#include <rudiments/private/config.h>
-
-#include <sys/types.h>
+#include <rudiments/private/semaphoresetincludes.h>
 
 // Semaphores allow processes to synchronize their activities.
 //

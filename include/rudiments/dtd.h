@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_DTD_H
 #define RUDIMENTS_DTD_H
 
-#include <rudiments/xmldom.h>
+#include <rudiments/private/dtdincludes.h>
 
 // The dtd class implements a minimal XML DTD parser.
 

@@ -4,10 +4,7 @@
 #ifndef RUDIMENTS_XMLDOM_H
 #define RUDIMENTS_XMLDOM_H
 
-#include <sys/types.h>
-
-#include <rudiments/xmlsax.h>
-#include <rudiments/xmldomnode.h>
+#include <rudiments/private/xmldomincludes.h>
 
 // The xmldom class implements a minimal XML DOM parser.
 

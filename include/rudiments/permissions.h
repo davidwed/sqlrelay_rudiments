@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_PERMISSIONS_H
 #define RUDIMENTS_PERMISSIONS_H
 
-#include <rudiments/private/config.h>
-
-#include <sys/types.h>
+#include <rudiments/private/permissionsincludes.h>
 
 // Permissions are access priveleges.  Files, directories, semaphores and
 // shared memory segments all have permissions associated with them.

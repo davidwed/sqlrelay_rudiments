@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_DATATRANSPORT_H
 #define RUDIMENTS_DATATRANSPORT_H
 
-#include <rudiments/filedescriptor.h>
+#include <rudiments/private/datatransportincludes.h>
 
 // The datatransport class is a base class for other classes that transport data
 // over (or associated with) a file descriptor (such as clients and servers).

@@ -4,13 +4,7 @@
 #ifndef RUDIMENTS_HOSTENTRY_H
 #define RUDIMENTS_HOSTENTRY_H
 
-#include <rudiments/private/config.h>
-
-#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
-	#include <pthread.h>
-#endif
-
-#include <netdb.h>
+#include <rudiments/private/hostentryincludes.h>
 
 // The hostentry class provides methods for retrieving entries from /etc/hosts
 

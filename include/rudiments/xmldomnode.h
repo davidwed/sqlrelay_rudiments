@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_XMLDOMNODE_H
 #define RUDIMENTS_XMLDOMNODE_H
 
-#include <rudiments/stringbuffer.h>
+#include <rudiments/private/xmldomnodeincludes.h>
 
 // The xmldomnode class provides a generic container for DOM tree elements.
 // One can navigate the nodes of the tree, modify the tree and read or modify

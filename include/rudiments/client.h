@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_CLIENT_H
 #define RUDIMENTS_CLIENT_H
 
-#include <rudiments/datatransport.h>
-#include <rudiments/dictionary.h>
+#include <rudiments/private/clientincludes.h>
 
 // The client class provides a base class for classes that implement the client
 // side of a client-server communication model.

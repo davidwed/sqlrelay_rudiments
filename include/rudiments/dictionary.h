@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_DICTIONARY_H
 #define RUDIMENTS_DICTIONARY_H
 
-#include <rudiments/private/config.h>
-
-#include <rudiments/list.h>
+#include <rudiments/private/dictionaryincludes.h>
 
 // The dictionary class allows you to store arbitrary numbers of key/value
 // pairs.  Since the dictionary class is template-based, you can store

@@ -4,10 +4,7 @@
 #ifndef RUDIMENTS_UNIXSERVERSOCKET_H
 #define RUDIMENTS_UNIXSERVERSOCKET_H
 
-#include <sys/types.h>
-
-#include <rudiments/serversocket.h>
-#include <rudiments/private/unixsocket.h>
+#include <rudiments/private/unixserversocketincludes.h>
 
 // The unixserversocket class allows you to write programs that can talk to
 // other programs on the same machine over TCP stream sockets.

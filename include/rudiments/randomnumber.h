@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_RANDOMNUMBER_H
 #define RUDIMENTS_RANDOMNUMBER_H
 
-#include <rudiments/private/config.h>
+#include <rudiments/private/randomnumberincludes.h>
 
 // The randomnumber class provides methods for generating and scaling 
 // random numbers.

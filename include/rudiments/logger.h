@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_LOGGER_H
 #define RUDIMENTS_LOGGER_H
 
-#include <rudiments/list.h>
-
-#include <syslog.h>
+#include <rudiments/private/loggerincludes.h>
 
 // The logger class and associated logdestination classes provide methods for
 // logging data from an application.  The following destinations are supported:

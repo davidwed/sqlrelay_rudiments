@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_STRING_H
 #define RUDIMENTS_STRING_H
 
-#include <rudiments/private/config.h>
-
-#include <sys/types.h>
+#include <rudiments/private/stringincludes.h>
 
 // The string class provides methods for manipulating strings.
 

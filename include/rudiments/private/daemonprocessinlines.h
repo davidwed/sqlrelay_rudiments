@@ -4,9 +4,6 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 
-#ifndef __USE_UNIX98
-	#define __USE_UNIX98
-#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

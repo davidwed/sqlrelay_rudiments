@@ -4,13 +4,7 @@
 #ifndef RUDIMENTS_PROTOCOLENTRY_H
 #define RUDIMENTS_PROTOCOLENTRY_H
 
-#include <rudiments/private/config.h>
-
-#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYADDR_R)
-	#include <pthread.h>
-#endif
-
-#include <netdb.h>
+#include <rudiments/private/protocolentryincludes.h>
 
 // The protocolentry class provides methods for retrieving
 // entries from /etc/protocols

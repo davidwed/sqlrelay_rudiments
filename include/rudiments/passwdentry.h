@@ -4,14 +4,7 @@
 #ifndef RUDIMENTS_PASSWDENTRY_H
 #define RUDIMENTS_PASSWDENTRY_H
 
-#include <rudiments/private/config.h>
-
-#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
-	#include <pthread.h>
-#endif
-
-#include <sys/types.h>
-#include <pwd.h>
+#include <rudiments/private/passwdentryincludes.h>
 
 // The passwdentry class provides methods for retrieving
 // entries from /etc/passwd

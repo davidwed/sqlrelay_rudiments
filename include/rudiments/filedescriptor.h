@@ -4,9 +4,7 @@
 #ifndef RUDIMENTS_FILEDESCRIPTOR_H
 #define RUDIMENTS_FILEDESCRIPTOR_H
 
-#include <rudiments/listener.h>
-
-#include <sys/types.h>
+#include <rudiments/private/filedescriptorincludes.h>
 
 // The filedescriptor class is a base class for other classes that utilize
 // file descriptors.

@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_SERVER_H
 #define RUDIMENTS_SERVER_H
 
-#include <rudiments/datatransport.h>
+#include <rudiments/private/serverincludes.h>
 
 // The server class provides a base class for classes that implement the server
 // side of a client-server communication model.

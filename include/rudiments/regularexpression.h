@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_REGEXP_H
 #define RUDIMENTS_REGEXP_H
 
-#include <rudiments/private/config.h>
+#include <rudiments/private/regularexpressionincludes.h>
 
 // The regular expression class provides methods for making comparisons
 // between text and regular expressions.

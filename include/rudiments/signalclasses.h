@@ -4,10 +4,7 @@
 #ifndef RUDIMENTS_SIGNALCLASSES_H
 #define RUDIMENTS_SIGNALCLASSES_H
 
-#include <rudiments/private/config.h>
-
-#include <signal.h>
-#include <sys/types.h>
+#include <rudiments/private/signalclassesincludes.h>
 
 // Signals are a means for processes to interrupt each other.
 //

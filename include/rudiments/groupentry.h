@@ -4,14 +4,7 @@
 #ifndef RUDIMENTS_GROUPENTRY_H
 #define RUDIMENTS_GROUPENTRY_H
 
-#include <rudiments/private/config.h>
-
-#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
-	#include <pthread.h>
-#endif
-
-#include <sys/types.h>
-#include <grp.h>
+#include <rudiments/private/groupentryincludes.h>
 
 // The groupentry class provides methods for retrieving entries from /etc/group
 

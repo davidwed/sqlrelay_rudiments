@@ -4,21 +4,7 @@
 #ifndef RUDIMENTS_FILE_H
 #define RUDIMENTS_FILE_H
 
-#include <rudiments/filedescriptor.h>
-#include <stdlib.h>
-#ifndef __USE_UNIX98
-	#define __USE_UNIX98
-#endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#ifndef HAVE_BLKCNT_T
-	typedef long blkcnt_t;
-#endif
-#ifndef HAVE_BLKSIZE_T
-	typedef long blksize_t;
-#endif
+#include <rudiments/private/fileincludes.h>
 
 // The file class provides methods for interacting with files and for 
 // discovering the properties associated with a file such as permissions,

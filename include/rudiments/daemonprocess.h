@@ -4,10 +4,7 @@
 #ifndef RUDIMENTS_DAEMONPROCESS_H
 #define RUDIMENTS_DAEMONPROCESS_H
 
-#include <rudiments/private/config.h>
-
-#include <sys/types.h>
-#include <rudiments/signalclasses.h>
+#include <rudiments/private/daemonprocessincludes.h>
 
 // Daemons are long running processes which often detach themselves from
 // the controlling terminal and run in the background.  They are frequently
