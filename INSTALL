@@ -94,6 +94,20 @@ DEBIAN INSTALL:
 
 		dpkg -i *.deb
 
+SLACKWARE INSTALL:
+
+	If you are a Slackware user, you can build a tgz of rudiments by
+	running the following command as root:
+
+		make tgz
+
+	answer y to both questions it asks you.
+
+	This will generate rudiments-xxx.tgz in the current directory which
+	can be installed using the command:
+
+		installpkg rudiments-*.tgz
+
 CROSS-COMPILE:
 
 	If you need to build libraries for a differnet platform than the one
