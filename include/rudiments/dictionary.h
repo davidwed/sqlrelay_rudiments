@@ -77,6 +77,7 @@ class dictionary {
 		unsigned long	getLength() const;
 
 		int	getKey(unsigned long index, keytype *key) const;
+		int	getValue(unsigned long index, valuetype *value) const;
 
 	#include <rudiments/private/dictionary.h>
 };

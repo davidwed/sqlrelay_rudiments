@@ -59,3 +59,14 @@ inline int dictionary<keytype,valuetype,dictionarynodetype>::
 	}
 	return 0;
 }
+
+template <class keytype, class valuetype, class dictionarynodetype>
+inline int dictionary<keytype,valuetype,dictionarynodetype>::
+			getValue(unsigned long index, valuetype *value) const {
+	dictionarynode<keytype,valuetype>	*node;
+	if (dict.getValueByIndex(index,&node)) {
+		*value=node->getValue();
+		return 1;
+	}
+	return 0;
+}

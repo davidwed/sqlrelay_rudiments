@@ -26,7 +26,7 @@ svr: svr.C svr.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ svr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
 
 lsnr: lsnr.C lsnr.lo
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ lsnr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ lsnr.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB) -lefence
 
 inetclnt: inetclnt.C inetclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ inetclnt.lo -L../src -lrudiments_p $(SOCKETLIB) $(NSLLIB)

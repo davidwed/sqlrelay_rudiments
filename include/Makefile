@@ -48,10 +48,6 @@ install:
 	$(INSTALL) -m 644 rudiments/private/commandline.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/commandlineinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/config.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/connectiondata.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/connectiondatainlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/connectiondatanode.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/connectiondatanodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/daemonprocess.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/daemonprocessinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/datatransport.h $(incdir)/rudiments/private

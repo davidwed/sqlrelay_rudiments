@@ -25,6 +25,32 @@ class hostentry {
 
 		void	print() const;
 
+		static	int	getAliasList(const char *hostname,
+						char ***aliaslist);
+		static	int	getAddressType(const char *hostname,
+						int *addresstype);
+		static	int	getAddressLength(const char *hostname,
+						int *addresslength);
+		static	int	getAddressList(const char *hostname,
+						char ***addresslist);
+		static	int	getAddressString(const char *hostname,
+						int index,
+						char **addressstring);
+
+		static	int	getName(const char *address,
+						int len, int type,
+						char **name);
+		static	int	getAliasList(const char *address,
+						int len, int type,
+						char ***aliaslist);
+		static	int	getAddressList(const char *address,
+						int len, int type,
+						char ***addresslist);
+		static	int	getAddressString(const char *address,
+						int len, int type,
+						int index,
+						char **addressstring);
+
 	#include <rudiments/private/hostentry.h>
 };
 

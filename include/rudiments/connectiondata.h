@@ -4,30 +4,11 @@
 #ifndef RUDIMENTS_CONNECTIONDATA_H
 #define RUDIMENTS_CONNECTIONDATA_H
 
-#include <rudiments/private/config.h>
+#include <rudiments/dictionary.h>
 
-#include <rudiments/private/connectiondatanode.h>
-
-class connectiondata {
+class connectiondata : public stringdictionary<char *> {
 	public:
-			connectiondata();
-			~connectiondata();
-
-		void	setValue(const char *key, const char *value);
-		char	*getValue(const char *key) const;
-		void	removeValue(const char *key);
-
-		int	getKeyCount() const;
-		char	*getKey(int index) const;
-		char	*getValue(int index) const;
-
 		void	print() const;
-
-	#include <rudiments/private/connectiondata.h>
 };
-
-#ifdef ENABLE_INLINES
-	#include <rudiments/private/connectiondatainlines.h>
-#endif
 
 #endif

@@ -12,10 +12,14 @@
 int main(int argv, const char **argc) {
 
 	inetserversocket	inetsock;
-	inetsock.listenOnSocket(NULL,8000,15);
+	if (!inetsock.listenOnSocket(NULL,8000,15)) {
+		printf("couldn't listen on inet socket\n");
+	}
 
 	unixserversocket	unixsock;
-	unixsock.listenOnSocket("/tmp/lsnr.socket",0000,15);
+	if (!unixsock.listenOnSocket("/tmp/lsnr.socket",0000,15)) {
+		printf("couldn't listen on unix socket\n");
+	}
 
 	listener	pool;
 	pool.addFileDescriptor(inetsock.getFileDescriptor());

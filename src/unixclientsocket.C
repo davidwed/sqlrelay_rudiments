@@ -15,9 +15,12 @@
 
 void unixclientsocket::initialize(connectiondata *cd) {
 
-	char	*filename=cd->getValue("filename");
-	char	*retrywait=cd->getValue("retrywait");
-	char	*retrycount=cd->getValue("retrycount");
+	char	*filename;
+	cd->getValue("filename",&filename);
+	char	*retrywait;
+	cd->getValue("retrywait",&retrywait);
+	char	*retrycount;
+	cd->getValue("retrycount",&retrycount);
 
 	initialize(filename?filename:"",
 			atoi(retrywait?retrywait:"0"),

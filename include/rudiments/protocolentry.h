@@ -22,6 +22,14 @@ class protocolentry {
 
 		void	print() const;
 
+		static	int	getAliasList(const char *protocolname,
+						char ***aliaslist);
+		static	int	getNumber(const char *protocolname,
+						int *number);
+
+		static	int	getName(int number, char **name);
+		static	int	getAliasList(int number, char ***aliaslist);
+
 	#include <rudiments/private/protocolentry.h>
 };
 
