@@ -28,7 +28,7 @@ class unixserversocket : public serversocket, public unixsocket {
 	public:
 			unixserversocket();
 
-		int	listenOnSocket(const char *filename,
+		bool	listenOnSocket(const char *filename,
 						mode_t mask,
 						int backlog);
 				// Listen on "filename" and allow "backlog"
@@ -36,7 +36,7 @@ class unixserversocket : public serversocket, public unixsocket {
 				// Set the permissions on "filename" using
 				// umask "mask".
 				//
-				// Returns 1 on success and 0 on failure.
+				// Returns true on success and false on failure.
 
 
 
@@ -46,17 +46,17 @@ class unixserversocket : public serversocket, public unixsocket {
 		// If you need to set socket options or do anything special
 		// between the discrete steps of socket initialization, you
 		// should use a combination of these methods.
-		int	initialize(const char *filename, mode_t mask);
+		bool	initialize(const char *filename, mode_t mask);
 			// Creates the actual socket and initializes the class
 			// to use "filename" when bind() is called.  The
 			// permissions on "filename" will be set using umask
 			// "mask".
 			//
-			// Returns 1 on success and 0 on failure.
-		int	bind();
+			// Returns true on success and false on failure.
+		bool	bind();
 			// Associates the socket with an address.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 
 
 		unixsocket	*acceptClientConnection();

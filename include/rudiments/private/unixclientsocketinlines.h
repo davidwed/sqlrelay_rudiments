@@ -5,7 +5,7 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int unixclientsocket::connectToServer(const char *filename,
+RUDIMENTS_INLINE bool unixclientsocket::connectToServer(const char *filename,
 				unsigned int retrywait, int retrycount) {
 	initialize(filename,retrywait,retrycount);
 	return connect();

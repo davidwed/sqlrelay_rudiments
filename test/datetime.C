@@ -27,8 +27,8 @@ int main(int argc, const char **argv) {
 	printf("Year       : %d\n",dt.getYear());
 	printf("Daylight Savings Time : %d\n",dt.isDaylightSavingsTime());
 	printf("Time Zone	      : %s\n",dt.getTimeZoneString());
-	printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
-	printf("Seconds since 1970    : %d\n",dt.getEpoch());
+	printf("Offset from GMT       : %ld\n",dt.getTimeZoneOffset());
+	printf("Seconds since 1970    : %ld\n",dt.getEpoch());
 	printf("Date String	      : %s\n",dt.getString());
 
 	// use static methods to translate between formats
@@ -40,10 +40,10 @@ int main(int argc, const char **argv) {
 
 	// use static methods to translate between formats
 	time_t	epoch=datetime::getEpoch(string);
-	printf("Epoch from String     : %d\n",epoch);
+	printf("Epoch from String     : %ld\n",epoch);
 	delete[] string;
 	epoch=datetime::getEpoch(dt.getTm());
-	printf("Epoch from tm         : %d\n",epoch);
+	printf("Epoch from tm         : %ld\n",epoch);
 
 	// get time from hardware clock
 	dt.getHardwareDateAndTime("GMT");

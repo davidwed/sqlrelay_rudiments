@@ -39,7 +39,7 @@ class syslogdestination : public logdestination {
 class filedestination : public logdestination {
 	public:
 			filedestination();
-		int	open(const char *filename);
+		bool	open(const char *filename);
 		void	close();
 	#include <rudiments/private/filedestination.h>
 };

@@ -10,4 +10,4 @@
 			static	pthread_mutex_t	*gemutex;
 		#endif
 
-		int	initialize(const char *groupname, gid_t groupid);
+		bool	initialize(const char *groupname, gid_t groupid);

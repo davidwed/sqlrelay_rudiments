@@ -18,7 +18,7 @@
 	#include <strings.h>
 #endif
 
-int inetserversocket::initialize(const char *address, unsigned short port) {
+bool inetserversocket::initialize(const char *address, unsigned short port) {
 
 	inetsocket::initialize(address,port);
 
@@ -36,14 +36,14 @@ int inetserversocket::initialize(const char *address, unsigned short port) {
 	}
 
 	// create the socket
-	return (fd=socket(AF_INET,SOCK_STREAM,0))>-1;
+	return ((fd=socket(AF_INET,SOCK_STREAM,0))>-1);
 }
 
-int inetserversocket::bind() {
+bool inetserversocket::bind() {
 
 	// bind the socket
 	if (::bind(fd,(struct sockaddr *)&sin,sizeof(sin))==-1) {
-		return 0;
+		return false;
 	}
 
 	// get the actual port number if an arbitrary port was requested
@@ -59,7 +59,7 @@ int inetserversocket::bind() {
 			port=(unsigned short int)ntohs(socknamesin.sin_port);
 		}
 	}
-	return 1;
+	return true;
 }
 
 inetsocket *inetserversocket::acceptClientConnection() {

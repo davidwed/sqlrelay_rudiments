@@ -12,37 +12,41 @@
 class passwdentry {
 	public:
 
-		// if you need to quickly look up ap specific field, use one
-		// of these mthods
-		static int	getName(uid_t userid, char **name);
-		static int	getPassword(uid_t userid, char **password);
-		static int	getPrimaryGroupId(uid_t userid, gid_t *groupid);
-		static int	getRealName(uid_t userid, char **realname);
-		static int	getHomeDirectory(uid_t userid, char **homedir);
-		static int	getShell(uid_t userid, char **shell);
+		// If you need to quickly look up ap specific field, use one
+		// of these methods.
+		//
+		// These methods return true on success and false on failure.
+		static bool	getName(uid_t userid, char **name);
+		static bool	getPassword(uid_t userid, char **password);
+		static bool	getPrimaryGroupId(uid_t userid, gid_t *groupid);
+		static bool	getRealName(uid_t userid, char **realname);
+		static bool	getHomeDirectory(uid_t userid, char **homedir);
+		static bool	getShell(uid_t userid, char **shell);
 
-		static int	getPassword(const char *username,
+		static bool	getPassword(const char *username,
 							char **password);
-		static int	getUserId(const char *username,
+		static bool	getUserId(const char *username,
 							uid_t *userid);
-		static int	getPrimaryGroupId(const char *username,
+		static bool	getPrimaryGroupId(const char *username,
 							gid_t *groupid);
-		static int	getRealName(const char *username,
+		static bool	getRealName(const char *username,
 							char **realname);
-		static int	getHomeDirectory(const char *username,
+		static bool	getHomeDirectory(const char *username,
 							char **homedir);
-		static int	getShell(const char *username,
+		static bool	getShell(const char *username,
 							char **shell);
 
-		// if you need to look up a passwd entry and refer to multiple
-		// fields, use these methods
+		// If you need to look up a passwd entry and refer to multiple
+		// fields, use these methods.
 			passwdentry();
 			~passwdentry();
 
-		int	initialize(const char *username);
-			// looks up a passwd entry by name
-		int	initialize(uid_t userid);
-			// looks up a passwd entry by user id
+		bool	initialize(const char *username);
+			// Looks up a passwd entry by name.
+			// Returns true on success and false on failure.
+		bool	initialize(uid_t userid);
+			// Looks up a passwd entry by user id.
+			// Returns true on success and false on failure.
 
 		char	*getName() const;
 		char	*getPassword() const;
@@ -53,15 +57,15 @@ class passwdentry {
 		char	*getShell() const;
 
 		void	print() const;
-			// prints out the passwd entry
+			// Prints out the passwd entry.
 
-		static	int	needsMutex();
+		static	bool	needsMutex();
 			// If your system doesn't support getpwnam_r() and
 			// getpwuid_r() then this class needs a mutex to assure
 			// thread safety.
 			//
-			// This method returns 1 if this class needs a mutex to
-			// operate safely in a threaded environment and 0
+			// This method returns true if this class needs a mutex
+			// to operate safely in a threaded environment and false
 			// otherwise.
 		static	void	setMutex(pthread_mutex_t *mutex);
 			// Allows you to supply a mutex is the class needs it.

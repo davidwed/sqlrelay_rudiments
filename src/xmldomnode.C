@@ -27,8 +27,8 @@ xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	firstattribute=NULL;
 	lastattribute=NULL;
 	attributecount=0;
-	cascade=1;
-	isnullnode=0;
+	cascade=true;
+	isnullnode=false;
 }
 
 xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
@@ -46,8 +46,8 @@ xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 	firstattribute=NULL;
 	lastattribute=NULL;
 	attributecount=0;
-	cascade=1;
-	isnullnode=0;
+	cascade=true;
+	isnullnode=false;
 }
 
 xmldomnode::~xmldomnode() {
@@ -77,7 +77,7 @@ xmldomnode *xmldomnode::createNullNode() {
 	nn->parent=nn;
 	nn->next=nn;
 	nn->previous=nn;
-	nn->isnullnode=1;
+	nn->isnullnode=true;
 	nn->nullnode=nn;
 	return nn;
 }
@@ -184,7 +184,7 @@ xmldomnode *xmldomnode::getChild(const char *name,
 	return nullnode;
 }
 
-int xmldomnode::insertText(const char *value, int position) {
+bool xmldomnode::insertText(const char *value, int position) {
 	xmldomnode	*text=new xmldomnode(nullnode);
 	text->setName("text");
 	text->setValue(value);
@@ -192,7 +192,7 @@ int xmldomnode::insertText(const char *value, int position) {
 				&firstchild,&lastchild,&childcount);
 }
 
-int xmldomnode::insertAttribute(const char *name, const char *value,
+bool xmldomnode::insertAttribute(const char *name, const char *value,
 								int position) {
 	xmldomnode	*attribute=new xmldomnode(nullnode);
 	attribute->setName(name);
@@ -287,12 +287,12 @@ xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,
 	return current;
 }
 
-int xmldomnode::insertNode(xmldomnode *node, int position,
+bool xmldomnode::insertNode(xmldomnode *node, int position,
 				xmldomnodetype type,
 				xmldomnode **first, xmldomnode **last,
 				int *count) {
 	if (position>(*count)) {
-		return 0;
+		return false;
 	}
 	node->parent=this;
 	node->type=type;
@@ -313,15 +313,15 @@ int xmldomnode::insertNode(xmldomnode *node, int position,
 		(*last)=node;
 	}
 	(*count)++;
-	return 1;
+	return true;
 }
 
-int xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
+bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 				xmldomnode **first, xmldomnode **last,
 				int *count) {
 
 	if (position>(*count)) {
-		return 0;
+		return false;
 	}
 	xmldomnode	*current=*first;
 	if (node || name) {
@@ -350,7 +350,7 @@ int xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 		}
 		delete current;
 		(*count)--;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }

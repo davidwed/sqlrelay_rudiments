@@ -22,5 +22,5 @@ int main(int argc, const char **argv) {
 		clnt.close();
 	}
 
-	printf("total real time: %d\n",time(NULL)-starttime);
+	printf("total real time: %ld\n",time(NULL)-starttime);
 }

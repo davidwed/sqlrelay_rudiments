@@ -14,9 +14,9 @@ class xmldom : public xmlsax {
 			xmldom();
 		virtual	~xmldom();
 
-		int	parseFile(const char *filename);
+		bool	parseFile(const char *filename);
 			// Parse file "filename" and generate a DOM tree.
-		int	parseString(const char *string);
+		bool	parseString(const char *string);
 			// Parse string "string" and generate a DOM tree.
 
 		xmldomnode	*getRootNode() const;
@@ -26,7 +26,7 @@ class xmldom : public xmlsax {
 			// Creates a new root node.  Useful for building a
 			// tree from scratch.
 
-		int	writeFile(const char *filename, mode_t perms) const;
+		bool	writeFile(const char *filename, mode_t perms) const;
 			// Writes the current DOM tree to "filename" and sets
 			// permissions of the file to "perms".
 

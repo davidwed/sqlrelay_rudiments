@@ -28,7 +28,7 @@ void	myserver::listen() {
 
 
 	// detach from the controlling terminal
-	detach();
+	//detach();
 
 
 	// create a pid file which is used to make sure that only one instance
@@ -37,7 +37,9 @@ void	myserver::listen() {
 
 
 	// listen on inet socket port 8000
-	listenOnSocket(NULL,8000,15);
+	if (!listenOnSocket(NULL,8000,15)) {
+		printf("couldn't listen on port 8000\n");
+	}
 
 
 	// loop...

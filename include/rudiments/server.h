@@ -11,9 +11,9 @@
 
 class server : virtual public datatransport {
 	public:
-		virtual	int	bind();
-		virtual	int	listen(int backlog);
-		virtual	int	accept();
+		virtual	bool	bind();
+		virtual	bool	listen(int backlog);
+		virtual	bool	accept();
 };
 
 #ifdef ENABLE_RUDIMENTS_INLINES

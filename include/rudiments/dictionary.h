@@ -64,15 +64,18 @@ class dictionary {
 			// Deletes the dictionary and all of it's
 			// dictionarynodes.
 
-		int	setData(keytype key, datatype data);
+		bool	setData(keytype key, datatype data);
 			// Sets the data associated with "key" to "data".
-			// Returns 1 on success or 0 if "key" wasn't found.
-		int	getData(keytype key, datatype *data);
+			// Returns true on success or false if "key" wasn't
+			// found.
+		bool	getData(keytype key, datatype *data);
 			// Sets "data" to the data associated with "key".
-			// Returns 1 on success or 0 if "key" wasn't found.
-		int	removeData(keytype key);
+			// Returns true on success or false if "key" wasn't
+			// found.
+		bool	removeData(keytype key);
 			// Removes the dictionarynode with "key".
-			// Returns 1 on success or 0 if "key" wasn't found.
+			// Returns true on success or false if "key" wasn't
+			// found.
 
 		dictionarylisttype	*getList();
 					// Returns the list used internally.

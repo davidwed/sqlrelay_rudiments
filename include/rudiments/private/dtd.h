@@ -5,10 +5,10 @@
 		xmldom	xmld;
 		xmldom	xmldtd;
 
-		int	parseDtd();
-		int	newElement(xmldomnode *node);
-		int	parseList(const char *attributelist,
+		bool	parseDtd();
+		bool	newElement(xmldomnode *node);
+		bool	parseList(const char *attributelist,
 					xmldomnode *element,
 					int checkcount, int indent,
 					char delimiter, const char *name);
-		int	newAttribute(xmldomnode *node);
+		bool	newAttribute(xmldomnode *node);

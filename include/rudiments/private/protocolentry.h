@@ -11,5 +11,5 @@
 			static	pthread_mutex_t	*pemutex;
 		#endif
 
-		int	initialize(const char *protocolname, int number);
+		bool	initialize(const char *protocolname, int number);
 

@@ -4,18 +4,18 @@
 	private:
 			void	reset();
 			void	close();
-			int	parse();
+			bool	parse();
 			void	parseFailed();
-			int	parseTag(char current, char *next);
+			bool	parseTag(char current, char *next);
 			void	parseTagFailed();
-			int	parseTagName(char current, stringbuffer **name,
+			bool	parseTagName(char current, stringbuffer **name,
 						char *next);
 			char	parseComment(char current);
 			char	parseCData(char current);
 			char	parseAttribute(char current, char standalone);
 			int	getGeneralEntity(char breakchar, char **buffer);
 			void	parseAttributeFailed();
-			int	parseText(char current, char *next);
+			bool	parseText(char current, char *next);
 			void	parseTextFailed();
 			char	skipWhitespace(char current);
 			char	getCharacter();
@@ -23,4 +23,4 @@
 			char	*ptr;
 			file	fl;
 			long	line;
-			int	allowtrailingtext;
+			bool	allowtrailingtext;

@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	vb->append((unsigned char *)"12345",5);
 	vb->append((unsigned char *)"12345",5);
 	vb->append((unsigned char *)"12345",5);
-	for (int i=0; i<vb->getSize(); i++) {
+	for (size_t i=0; i<vb->getSize(); i++) {
 		printf("%c",vb->getBuffer()[i]);
 	}
 	printf("\n");
@@ -27,7 +27,7 @@ int main(int argc, const char **argv) {
 	// byte by byte (the first 5 bytes should be overwritten)
 	vb->setPosition(0);
 	vb->write((unsigned char *)"66666",5);
-	for (int i=0; i<vb->getSize(); i++) {
+	for (size_t i=0; i<vb->getSize(); i++) {
 		printf("%c",vb->getBuffer()[i]);
 	}
 	printf("\n");
@@ -38,7 +38,7 @@ int main(int argc, const char **argv) {
 	// (there should be a gap in the buffer now containing random data)
 	vb->setPosition(30);
 	vb->write((unsigned char *)"66666",5);
-	for (int i=0; i<vb->getSize(); i++) {
+	for (size_t i=0; i<vb->getSize(); i++) {
 		if (vb->getBuffer()[i]>=' ' && vb->getBuffer()[i]<='~') {
 			printf("%c",vb->getBuffer()[i]);
 		} else {
@@ -57,7 +57,7 @@ int main(int argc, const char **argv) {
 	// written at position 50, but rather just at the current end of
 	// the buffer.
 	vb->append((unsigned char *)"12345",5);
-	for (int i=0; i<vb->getSize(); i++) {
+	for (size_t i=0; i<vb->getSize(); i++) {
 		if (vb->getBuffer()[i]>=' ' && vb->getBuffer()[i]<='~') {
 			printf("%c",vb->getBuffer()[i]);
 		} else {
@@ -72,7 +72,7 @@ int main(int argc, const char **argv) {
 	// we just appended.  So calling write() here is equivalent to calling
 	// append.
 	vb->write((unsigned char *)"12345",5);
-	for (int i=0; i<vb->getSize(); i++) {
+	for (size_t i=0; i<vb->getSize(); i++) {
 		if (vb->getBuffer()[i]>=' ' && vb->getBuffer()[i]<='~') {
 			printf("%c",vb->getBuffer()[i]);
 		} else {
@@ -87,8 +87,8 @@ int main(int argc, const char **argv) {
 	buffer[4]=(unsigned char)NULL;
 	vb->setPosition(0);
 	unsigned long	sizeread=vb->read(buffer,4);
-	printf("%d: ",sizeread);
-	for (int i=0; i<sizeread; i++) {
+	printf("%ld: ",sizeread);
+	for (unsigned long i=0; i<sizeread; i++) {
 		printf("%c",buffer[i]);
 	}
 	printf("\n");
@@ -96,8 +96,8 @@ int main(int argc, const char **argv) {
 	// read 4 bytes from position 5 of the buffer and display them
 	vb->setPosition(5);
 	sizeread=vb->read(buffer,4);
-	printf("%d: ",sizeread);
-	for (int i=0; i<sizeread; i++) {
+	printf("%ld: ",sizeread);
+	for (unsigned long i=0; i<sizeread; i++) {
 		printf("%c",buffer[i]);
 	}
 	printf("\n");
@@ -107,8 +107,8 @@ int main(int argc, const char **argv) {
 	// displayed)
 	vb->setPosition(60);
 	sizeread=vb->read(buffer,4);
-	printf("%d: ",sizeread);
-	for (int i=0; i<sizeread; i++) {
+	printf("%ld: ",sizeread);
+	for (unsigned long i=0; i<sizeread; i++) {
 		printf("%c",buffer[i]);
 	}
 	printf("\n");

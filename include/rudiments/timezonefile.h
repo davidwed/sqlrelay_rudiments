@@ -18,9 +18,9 @@ class timezonefile {
 			timezonefile();
 			~timezonefile();
 
-		int		parseFile(const char *filename);
-				// Parses "filename".  Returns 1 on success and
-				// 0 on failure.
+		bool		parseFile(const char *filename);
+				// Parses "filename".  Returns true on success
+				// and false on failure.
 
 		long		getTimeCount();
 				// Returns the number of transition times or

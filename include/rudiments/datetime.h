@@ -40,7 +40,7 @@ class datetime {
 			datetime();
 			~datetime();
 
-		int	initialize(const char *tmstring);
+		bool	initialize(const char *tmstring);
 			// Parses "tmstring" and sets the date and time
 			// represented in the class to that time.
 			// Datestring must be "mm/dd/yyyy hh:mm:ss TZN".
@@ -48,15 +48,15 @@ class datetime {
 			// Note that TZN must be a valid timezone.  Otherwise
 			// GMT is assumed.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	initialize(time_t seconds);
+			// Returns true on success and false on failure.
+		bool	initialize(time_t seconds);
 			// Processes "seconds" and sets the date and time
 			// represented in the class to that time.
 			// "seconds" is the number of seconds since 1970;
 			// output by many standard time functions.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	initialize(const struct tm *tmstruct);
+			// Returns true on success and false on failure.
+		bool	initialize(const struct tm *tmstruct);
 			// Processes "tmstruct" and sets the date and time
 			// represented in the class to that time.
 			// "tmstruct" is a (struct tm *); output by 
@@ -66,15 +66,15 @@ class datetime {
 			// must be set to valid values.  Otherwise GMT is
 			// assumed.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 
 
-		int	getSystemDateAndTime();
+		bool	getSystemDateAndTime();
 			// Sets the date and time represented in the class to
 			// the date and time stored in the system clock.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	getHardwareDateAndTime(const char *hwtz);
+			// Returns true on success and false on failure.
+		bool	getHardwareDateAndTime(const char *hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
@@ -84,21 +84,21 @@ class datetime {
 			// "hwtz" must be set to the timezone that the hardware
 			// clock is using.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	getAdjustedHardwareDateAndTime(const char *hwtz);
+			// Returns true on success and false on failure.
+		bool	getAdjustedHardwareDateAndTime(const char *hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
 			// Gets the date and time from the hardware clock,
 			// then adjusts it to the timezone used by the system.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	setSystemDateAndTime();
+			// Returns true on success and false on failure.
+		bool	setSystemDateAndTime();
 			// Sets the system clock's date and time to the date
 			// and time currently represented in the class.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	setHardwareDateAndTime(const char *hwtz);
+			// Returns true on success and false on failure.
+		bool	setHardwareDateAndTime(const char *hwtz);
 			// This method only works if your system has a working
 			// real-time clock at /dev/rtc.
 			//
@@ -108,7 +108,7 @@ class datetime {
 			// "hwtz" must be set to the timezone that the system
 			// clock using.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 
 
 		// These methods return commonly needed time/date values
@@ -121,7 +121,7 @@ class datetime {
 		int	getDayOfYear() const;
 		int	getYear() const;
 
-		int	isDaylightSavingsTime() const;
+		bool	isDaylightSavingsTime() const;
 			// returns 1 if daylight savings time is currently
 			// in effect and 0 if it isn't
 
@@ -132,11 +132,11 @@ class datetime {
 		long	getTimeZoneOffset() const;
 			// returns the offset from GMT (in seconds)
 
-		int	adjustTimeZone(const char *newtz);
+		bool	adjustTimeZone(const char *newtz);
 			// Recalculates the time currently represented in the
 			// class to correspond to the time zone "newtz".
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 
 
 		// These methods allow you to add discrete time intervals to

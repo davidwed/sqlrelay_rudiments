@@ -16,7 +16,7 @@
 pthread_mutex_t	*passwdentry::pemutex;
 #endif
 
-int passwdentry::initialize(const char *username, uid_t userid) {
+bool passwdentry::initialize(const char *username, uid_t userid) {
 	if (pwd) {
 		pwd=NULL;
 		delete[] buffer;
@@ -35,22 +35,22 @@ int passwdentry::initialize(const char *username, uid_t userid) {
 							buffer,size,&pwd))
 				:(getpwuid_r(userid,&pwdbuffer,
 							buffer,size,&pwd)))) {
-				return pwd!=NULL;
+				return (pwd!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			pwd=NULL;
 			if (errno!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
-		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
+		return (((pemutex)?!pthread_mutex_lock(pemutex):true) &&
 				((pwd=((username)
 					?getpwnam(username)
 					:getpwuid(userid)))!=NULL) &&
-				((pemutex)?!pthread_mutex_unlock(pemutex):1));
+			((pemutex)?!pthread_mutex_unlock(pemutex):true));
 	#endif
 }
 

@@ -5,13 +5,13 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int permissions::setFilePermissions(const char *filename,
+RUDIMENTS_INLINE bool permissions::setFilePermissions(const char *filename,
 								mode_t perms) {
-	return chmod(filename,perms);
+	return (!chmod(filename,perms));
 }
 
-RUDIMENTS_INLINE int permissions::setFilePermissions(int fd, mode_t perms) {
-	return fchmod(fd,perms);
+RUDIMENTS_INLINE bool permissions::setFilePermissions(int fd, mode_t perms) {
+	return (!fchmod(fd,perms));
 }
 
 RUDIMENTS_INLINE mode_t permissions::everyoneReadWrite() {

@@ -8,13 +8,13 @@
 
 		void	initTimeString();
 		void	initTimeStruct();
-		int	setTimeZone(const char *tz);
-		int	updateTime();
-		int	updateTimePreservingTimeZone();
-		int	copyStructTm(const struct tm *oldtm, struct tm *newtm);
+		bool	setTimeZone(const char *tz);
+		bool	updateTime();
+		bool	updateTimePreservingTimeZone();
+		bool	copyStructTm(const struct tm *oldtm, struct tm *newtm);
 
-		int	setTimeZoneEnvVar(const char *zone, char **oldzone);
-		int	restoreTimeZoneEnvVar(const char *oldzone);
+		bool	setTimeZoneEnvVar(const char *zone, char **oldzone);
+		bool	restoreTimeZoneEnvVar(const char *oldzone);
 
 		environment	env;
 

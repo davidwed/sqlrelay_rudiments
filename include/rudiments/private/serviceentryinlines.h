@@ -37,7 +37,7 @@ RUDIMENTS_INLINE char **serviceentry::getAliasList() const {
 	return se->s_aliases;
 }
 
-RUDIMENTS_INLINE int serviceentry::getAliasList(const char *servicename,
+RUDIMENTS_INLINE bool serviceentry::getAliasList(const char *servicename,
 						const char *protocol,
 							char ***aliaslist) {
 	serviceentry	se;
@@ -50,34 +50,34 @@ RUDIMENTS_INLINE int serviceentry::getAliasList(const char *servicename,
 			alias[i]=strdup(se.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int serviceentry::getPort(const char *servicename,
+RUDIMENTS_INLINE bool serviceentry::getPort(const char *servicename,
 						const char *protocol,
 							int *port) {
 	serviceentry	se;
 	if (se.initialize(servicename,protocol)) {
 		*port=se.getPort();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int serviceentry::getName(int port,
+RUDIMENTS_INLINE bool serviceentry::getName(int port,
 						const char *protocol,
 							char **name) {
 	serviceentry	se;
 	if (se.initialize(port,protocol)) {
 		*name=strdup(se.getName());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int serviceentry::getAliasList(int port,
+RUDIMENTS_INLINE bool serviceentry::getAliasList(int port,
 						const char *protocol,
 							char ***aliaslist) {
 	serviceentry	se;
@@ -90,16 +90,16 @@ RUDIMENTS_INLINE int serviceentry::getAliasList(int port,
 			alias[i]=strdup(se.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int serviceentry::needsMutex() {
+RUDIMENTS_INLINE bool serviceentry::needsMutex() {
 	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
-		return 1;
+		return true;
 	#else
-		return 0;
+		return false;
 	#endif
 }
 
@@ -109,11 +109,11 @@ RUDIMENTS_INLINE void serviceentry::setMutex(pthread_mutex_t *mutex) {
 	#endif
 }
 
-RUDIMENTS_INLINE int serviceentry::initialize(const char *servicename,
+RUDIMENTS_INLINE bool serviceentry::initialize(const char *servicename,
 							const char *protocol) {
 	return initialize(servicename,0,protocol);
 }
 
-RUDIMENTS_INLINE int serviceentry::initialize(int port, const char *protocol) {
+RUDIMENTS_INLINE bool serviceentry::initialize(int port, const char *protocol) {
 	return initialize(NULL,port,protocol);
 }

@@ -10,6 +10,7 @@ int main(int argc, char **argv) {
 	// parse the timezone file specified in the first argument
 	timezonefile	tz;
 	if (!tz.parseFile(argv[1])) {
+		printf("usage: tzn file\n");
 		exit(1);
 	}
 

@@ -39,20 +39,20 @@ void inetclientsocket::initialize(namevaluepairs *cd) {
 			atoi(retrycount?retrycount:"0"));
 }
 
-int inetclientsocket::connect() {
+bool inetclientsocket::connect() {
 
 	#ifndef HAVE_GETADDRINFO
 
 		// get the host entry
 		hostentry	he;
 		if (!he.initialize(address)) {
-			return 0;
+			return false;
 		}
 
 		// use tcp protocol
 		protocolentry	pe;
 		if (!pe.initialize("tcp")) {
-			return 0;
+			return false;
 		}
 
 		// set the address type and port to connect to
@@ -63,7 +63,7 @@ int inetclientsocket::connect() {
 		// create an inet socket
 		if ((fd=socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
 			fd=-1;
-			return 0;
+			return false;
 		}
 
 	#else
@@ -80,7 +80,7 @@ int inetclientsocket::connect() {
 		addrinfo	*ai;
 		if (getaddrinfo(address,portstr,&hints,&ai)) {
 			delete[] portstr;
-			return 0;
+			return false;
 		}
 		delete[] portstr;
 
@@ -108,7 +108,7 @@ int inetclientsocket::connect() {
 				// attempt to connect
 				if (::connect(fd,(struct sockaddr *)&sin,
 							sizeof(sin))!=-1) {
-						return 1;
+						return true;
 				}
 			}
 
@@ -132,7 +132,7 @@ int inetclientsocket::connect() {
 					close();
 				} else {
 					freeaddrinfo(ai);
-					return 1;
+					return true;
 				}
 			}
 
@@ -149,5 +149,5 @@ int inetclientsocket::connect() {
 		close();
 	#endif
 
-	return 0;
+	return false;
 }

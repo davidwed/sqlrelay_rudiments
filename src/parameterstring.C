@@ -14,7 +14,7 @@ parameterstring::~parameterstring() {
 	}
 }
 
-int parameterstring::parse(const char *paramstring) {
+bool parameterstring::parse(const char *paramstring) {
 
 	nvp.getList()->clear();
 
@@ -32,7 +32,7 @@ int parameterstring::parse(const char *paramstring) {
 			ptr++;
 		} else {
 			nvp.setData(namebuffer,NULL);
-			return 0;
+			return false;
 		}
 
 		ptr=parseValue(ptr,&valuebuffer);
@@ -44,11 +44,11 @@ int parameterstring::parse(const char *paramstring) {
 		} else if (!*ptr) {
 			break;
 		} else {
-			return 0;
+			return false;
 		}
 	}
 
-	return 1;
+	return true;
 }
 
 int parameterstring::countPairs(const char *paramstring) {

@@ -9,20 +9,20 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 // signalset methods
-RUDIMENTS_INLINE int signalset::addSignal(int signum) {
-	return sigaddset(&sigset,signum);
+RUDIMENTS_INLINE bool signalset::addSignal(int signum) {
+	return !sigaddset(&sigset,signum);
 }
 
-RUDIMENTS_INLINE int signalset::addAllSignals() {
-	return sigfillset(&sigset);
+RUDIMENTS_INLINE bool signalset::addAllSignals() {
+	return !sigfillset(&sigset);
 }
 
-RUDIMENTS_INLINE int signalset::removeSignal(int signum) {
-	return sigdelset(&sigset,signum);
+RUDIMENTS_INLINE bool signalset::removeSignal(int signum) {
+	return !sigdelset(&sigset,signum);
 }
 
-RUDIMENTS_INLINE int signalset::removeAllSignals() {
-	return sigemptyset(&sigset);
+RUDIMENTS_INLINE bool signalset::removeAllSignals() {
+	return !sigemptyset(&sigset);
 }
 
 RUDIMENTS_INLINE int signalset::signalIsInSet(int signum) const {
@@ -37,24 +37,24 @@ RUDIMENTS_INLINE sigset_t *signalset::getSignalSet() {
 
 
 // signalmanager methods
-RUDIMENTS_INLINE int signalmanager::sendSignal(pid_t processid, int signum) {
-	return kill(processid,signum);
+RUDIMENTS_INLINE bool signalmanager::sendSignal(pid_t processid, int signum) {
+	return !kill(processid,signum);
 }
 
-RUDIMENTS_INLINE int signalmanager::raiseSignal(int signum) {
-	return raise(signum);
+RUDIMENTS_INLINE bool signalmanager::raiseSignal(int signum) {
+	return !raise(signum);
 }
 
-RUDIMENTS_INLINE int signalmanager::ignoreSignals(const sigset_t *sigset) {
-	return sigprocmask(SIG_SETMASK,sigset,NULL);
+RUDIMENTS_INLINE bool signalmanager::ignoreSignals(const sigset_t *sigset) {
+	return !sigprocmask(SIG_SETMASK,sigset,NULL);
 }
 
-RUDIMENTS_INLINE int signalmanager::waitForSignals(const sigset_t *sigset) {
-	return sigsuspend(sigset);
+RUDIMENTS_INLINE bool signalmanager::waitForSignals(const sigset_t *sigset) {
+	return (sigsuspend(sigset)==-1);
 }
 
-RUDIMENTS_INLINE int signalmanager::examineBlockedSignals(sigset_t *sigset) {
-	return sigpending(sigset);
+RUDIMENTS_INLINE bool signalmanager::examineBlockedSignals(sigset_t *sigset) {
+	return !sigpending(sigset);
 }
 
 
@@ -78,20 +78,20 @@ RUDIMENTS_INLINE void signalhandler::addFlag(int flag) {
 	handlerstruct.sa_flags|=flag;
 }
 
-RUDIMENTS_INLINE int signalhandler::addAllSignalsToMask() {
-	return sigfillset(&handlerstruct.sa_mask);
+RUDIMENTS_INLINE bool signalhandler::addAllSignalsToMask() {
+	return !sigfillset(&handlerstruct.sa_mask);
 }
 
-RUDIMENTS_INLINE int signalhandler::addSignalToMask(int signum) {
-	return sigaddset(&handlerstruct.sa_mask,signum);
+RUDIMENTS_INLINE bool signalhandler::addSignalToMask(int signum) {
+	return !sigaddset(&handlerstruct.sa_mask,signum);
 }
 
-RUDIMENTS_INLINE int signalhandler::removeSignalFromMask(int signum) {
-	return sigdelset(&handlerstruct.sa_mask,signum);
+RUDIMENTS_INLINE bool signalhandler::removeSignalFromMask(int signum) {
+	return !sigdelset(&handlerstruct.sa_mask,signum);
 }
 
-RUDIMENTS_INLINE int signalhandler::removeAllSignalsFromMask() {
-	return sigemptyset(&handlerstruct.sa_mask);
+RUDIMENTS_INLINE bool signalhandler::removeAllSignalsFromMask() {
+	return !sigemptyset(&handlerstruct.sa_mask);
 }
 
 RUDIMENTS_INLINE int signalhandler::signalIsInMask(int signum) const {
@@ -106,6 +106,6 @@ RUDIMENTS_INLINE int signalhandler::getFlags() const {
 	return handlerstruct.sa_flags;
 }
 
-RUDIMENTS_INLINE int signalhandler::handleSignal(int signum) {
-	return sigaction(signum,&handlerstruct,(struct sigaction *)NULL);
+RUDIMENTS_INLINE bool signalhandler::handleSignal(int signum) {
+	return !sigaction(signum,&handlerstruct,(struct sigaction *)NULL);
 }

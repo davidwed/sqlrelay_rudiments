@@ -16,9 +16,9 @@ class regularexpression {
 	public:
 
 		// if you need to do a quick comparison, use this method
-		static	int	match(const char *str, const char *pattern);
-				// returns 1 if "str" matches "pattern"
-				// and 0 if "str" doesn't match "pattern"
+		static	bool	match(const char *str, const char *pattern);
+				// Returns true if "str" matches "pattern"
+				// and false if "str" doesn't match "pattern".
 
 
 		// if you need to do many comparisons against a single
@@ -29,15 +29,18 @@ class regularexpression {
 				// below during initialization
 		virtual	~regularexpression();
 
-		int	compile(const char *pattern);
+		bool	compile(const char *pattern);
 				// Compiles the regular expression given in
-				// "pattern". Returns 1 if the compilation 
-				// succeeded and 0 if it failed.
-		int	match(const char *str);
+				// "pattern".
+				//
+				// Returns true if the compilation 
+				// succeeded and false if it failed.
+		bool	match(const char *str);
 				// Matches "str" against the regular expression
 				// compiled earlier using the compile method.
-				// Returns 1 if the match was successful and
-				// 0 if it was not.
+				//
+				// Returns true if the match was successful and
+				// false if it was not.
 
 	#include <rudiments/private/regularexpression.h>
 };

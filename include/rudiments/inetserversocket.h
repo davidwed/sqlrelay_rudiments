@@ -21,7 +21,7 @@ class inetserversocket : public serversocket, public inetsocket {
 	public:
 			inetserversocket();
 
-		int	listenOnSocket(const char *address,
+		bool	listenOnSocket(const char *address,
 						unsigned short port,
 						int backlog);
 				// Listen on "address" and "port" and allow
@@ -36,22 +36,22 @@ class inetserversocket : public serversocket, public inetsocket {
 				// The getPort() method can be used later to 
 				// discover this port.
 				//
-				// Returns 1 on success and 0 on failure.
+				// Returns true on success and false on failure.
 
 
 
 		// If you need to set socket options or do anything special
 		// between the discrete steps of socket initialization, you
 		// should use a combination of these methods.
-		int	initialize(const char *address, unsigned short port);
+		bool	initialize(const char *address, unsigned short port);
 			// Creates the actual socket and Initializes the class
 			// to use "address" and "port" when bind() is called.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	bind();
+			// Returns true on success and false on failure.
+		bool	bind();
 			// Associates the socket with an address.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 
 		inetsocket	*acceptClientConnection();
 				// Removes the client connection from the queue

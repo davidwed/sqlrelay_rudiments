@@ -36,37 +36,37 @@ RUDIMENTS_INLINE void xmlsax::parseTextFailed() {
 	appendError(line);
 }
 
-RUDIMENTS_INLINE int xmlsax::tagStart(char *name) {
+RUDIMENTS_INLINE bool xmlsax::tagStart(char *name) {
 	// by default, just return success
-	return 1;
+	return true;
 }
 
-RUDIMENTS_INLINE int xmlsax::attributeName(char *name) {
+RUDIMENTS_INLINE bool xmlsax::attributeName(char *name) {
 	// by default, just return success
-	return 1;
+	return true;
 }
 
-RUDIMENTS_INLINE int xmlsax::attributeValue(char *value) {
+RUDIMENTS_INLINE bool xmlsax::attributeValue(char *value) {
 	// by default, just return success
-	return 1;
+	return true;
 }
 
-RUDIMENTS_INLINE int xmlsax::text(char *string) {
+RUDIMENTS_INLINE bool xmlsax::text(char *string) {
 	// by default, just return success
-	return 1;
+	return true;
 }
 
-RUDIMENTS_INLINE int xmlsax::tagEnd(char *name) {
+RUDIMENTS_INLINE bool xmlsax::tagEnd(char *name) {
 	// by default, just return success
-	return 1;
+	return true;
 }
 
-RUDIMENTS_INLINE int xmlsax::comment(char *string) {
+RUDIMENTS_INLINE bool xmlsax::comment(char *string) {
 	// by default, just return success
-	return 1;
+	return true;
 }
 
-RUDIMENTS_INLINE int xmlsax::cdata(char *string) {
+RUDIMENTS_INLINE bool xmlsax::cdata(char *string) {
 	// by default, just return success
-	return 1;
+	return true;
 }

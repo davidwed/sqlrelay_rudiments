@@ -17,7 +17,7 @@ class commandline {
 				// Returns the value of "arg" (which is assumed
 				// to be the next item on the command line
 				// after "arg").
-		int	found(const char *arg) const;
+		bool	found(const char *arg) const;
 				// Returns 1 if "arg" was found and 0 
 				// if it was not found.  This is useful for
 				// processing command line switches.

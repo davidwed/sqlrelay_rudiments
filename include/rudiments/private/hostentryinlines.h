@@ -41,7 +41,7 @@ RUDIMENTS_INLINE char **hostentry::getAddressList() const {
 	return he->h_addr_list;
 }
 
-RUDIMENTS_INLINE int hostentry::getAliasList(const char *hostname,
+RUDIMENTS_INLINE bool hostentry::getAliasList(const char *hostname,
 							char ***aliaslist) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
@@ -53,32 +53,32 @@ RUDIMENTS_INLINE int hostentry::getAliasList(const char *hostname,
 			alias[i]=strdup(he.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAddressType(const char *hostname,
+RUDIMENTS_INLINE bool hostentry::getAddressType(const char *hostname,
 							int *addresstype) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addresstype=he.getAddressType();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAddressLength(const char *hostname,
+RUDIMENTS_INLINE bool hostentry::getAddressLength(const char *hostname,
 							int *addresslength) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addresslength=he.getAddressLength();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAddressList(const char *hostname,
+RUDIMENTS_INLINE bool hostentry::getAddressList(const char *hostname,
 							char ***addresslist) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
@@ -90,35 +90,35 @@ RUDIMENTS_INLINE int hostentry::getAddressList(const char *hostname,
 			addr[i]=strdup(he.getAddressList()[i]);
 		}
 		*addresslist=addr;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAddressString(const char *hostname,
+RUDIMENTS_INLINE bool hostentry::getAddressString(const char *hostname,
 							int index,
 							char **addressstring) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addressstring=strdup(he.getAddressString(index));
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 
-RUDIMENTS_INLINE int hostentry::getName(const char *address,
+RUDIMENTS_INLINE bool hostentry::getName(const char *address,
 						int len, int type,
 						char **name) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
 		*name=strdup(he.getName());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAliasList(const char *address,
+RUDIMENTS_INLINE bool hostentry::getAliasList(const char *address,
 						int len, int type,
 						char ***aliaslist) {
 	hostentry	he;
@@ -131,12 +131,12 @@ RUDIMENTS_INLINE int hostentry::getAliasList(const char *address,
 			alias[i]=strdup(he.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAddressList(const char *address,
+RUDIMENTS_INLINE bool hostentry::getAddressList(const char *address,
 						int len, int type,
 						char ***addresslist) {
 	hostentry	he;
@@ -149,27 +149,27 @@ RUDIMENTS_INLINE int hostentry::getAddressList(const char *address,
 			addr[i]=strdup(he.getAddressList()[i]);
 		}
 		*addresslist=addr;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::getAddressString(const char *address,
+RUDIMENTS_INLINE bool hostentry::getAddressString(const char *address,
 						int len, int type, int index,
 						char **addressstring) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
 		*addressstring=strdup(he.getAddressString(index));
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int hostentry::needsMutex() {
+RUDIMENTS_INLINE bool hostentry::needsMutex() {
 	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
-		return 1;
+		return true;
 	#else
-		return 0;
+		return false;
 	#endif
 }
 
@@ -179,11 +179,11 @@ RUDIMENTS_INLINE void hostentry::setMutex(pthread_mutex_t *mutex) {
 	#endif
 }
 
-RUDIMENTS_INLINE int hostentry::initialize(const char *hostname) {
+RUDIMENTS_INLINE bool hostentry::initialize(const char *hostname) {
 	return initialize(hostname,NULL,0,0);
 }
 
-RUDIMENTS_INLINE int hostentry::initialize(const char *address,
+RUDIMENTS_INLINE bool hostentry::initialize(const char *address,
 							int len, int type) {
 	return initialize(NULL,address,len,type);
 }

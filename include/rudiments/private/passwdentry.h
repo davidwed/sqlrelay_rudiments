@@ -10,4 +10,4 @@
 			static	pthread_mutex_t	*pemutex;
 		#endif
 
-		int	initialize(const char *username, uid_t userid);
+		bool	initialize(const char *username, uid_t userid);

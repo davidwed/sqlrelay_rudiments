@@ -36,17 +36,17 @@ void LIST_CLASS::append(datatype data) {
 }
 
 LIST_TEMPLATE
-int LIST_CLASS::insert(unsigned long index, datatype data) {
+bool LIST_CLASS::insert(unsigned long index, datatype data) {
 
 	// handle invalid index
 	if (index>length) {
-		return 0;
+		return false;
 	}
 
 	// handle append
 	if (index==length) {
 		append(data);
-		return 1;
+		return true;
 	}
 
 	// handle insert into index 0
@@ -57,13 +57,13 @@ int LIST_CLASS::insert(unsigned long index, datatype data) {
 		first->setPrevious(newnode);
 		first=(listnodetype *)newnode;
 		length++;
-		return 1;
+		return true;
 	}
 
 	// handle general insert
 	listnodetype	*current=getNodeByIndex(index-1);
 	if (!current) {
-		return 0;
+		return false;
 	}
 	newnode->setData(data);
 	newnode->setPrevious(current);
@@ -71,26 +71,26 @@ int LIST_CLASS::insert(unsigned long index, datatype data) {
 	current->getNext()->setPrevious(newnode);
 	current->setNext(newnode);
 	length++;
-	return 1;
+	return true;
 }
 
 LIST_TEMPLATE
-inline int LIST_CLASS::setDataByIndex(unsigned long index, datatype data) {
+inline bool LIST_CLASS::setDataByIndex(unsigned long index, datatype data) {
 	listnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		current->setData(data);
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 LIST_TEMPLATE
-inline int LIST_CLASS::removeByIndex(unsigned long index) {
+inline bool LIST_CLASS::removeByIndex(unsigned long index) {
 	return removeNode(getNodeByIndex(index));
 }
 
 LIST_TEMPLATE
-int LIST_CLASS::removeByData(datatype data) {
+bool LIST_CLASS::removeByData(datatype data) {
 	listnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
 		if (!current->compare(data)) {
@@ -98,11 +98,11 @@ int LIST_CLASS::removeByData(datatype data) {
 		}
 		current=(listnodetype *)current->getNext();
 	}
-	return 0;
+	return false;
 }
 
 LIST_TEMPLATE
-int LIST_CLASS::removeAllByData(datatype data) {
+bool LIST_CLASS::removeAllByData(datatype data) {
 
 	listnodetype	*current=first;
 	listnodetype	*next;
@@ -110,20 +110,20 @@ int LIST_CLASS::removeAllByData(datatype data) {
 		if (!current->compare(data)) {
 			next=(listnodetype *)current->getNext();
 			if (!removeNode(current)) {
-				return 0;
+				return false;
 			}
 			current=next;
 		} else {
 			current=(listnodetype *)current->getNext();
 		}
 	}
-	return 1;
+	return true;
 }
 
 LIST_TEMPLATE
-int LIST_CLASS::removeNode(listnodetype *node) {
+bool LIST_CLASS::removeNode(listnodetype *node) {
 	if (!node) {
-		return 0;
+		return false;
 	}
 	if (node->getNext()) {
 		node->getNext()->setPrevious(node->getPrevious());
@@ -139,18 +139,18 @@ int LIST_CLASS::removeNode(listnodetype *node) {
 	}
 	delete node;
 	length--;
-	return 1;
+	return true;
 }
 
 LIST_TEMPLATE
-inline int LIST_CLASS::getDataByIndex(unsigned long index,
+inline bool LIST_CLASS::getDataByIndex(unsigned long index,
 						datatype *data) const {
 	listnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		*data=current->getData();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 LIST_TEMPLATE
@@ -206,7 +206,7 @@ LIST_TEMPLATE
 void LIST_CLASS::print() const {
 	listnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
-		printf("index %d: ",i);
+		printf("index %ld: ",i);
 		current->print();
 		printf("\n");
 		current=(listnodetype *)current->getNext();

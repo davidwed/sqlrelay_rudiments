@@ -3,5 +3,5 @@
 
 	private:
 			int	shmid;
-			int	created;
+			bool	created;
 			void	*shmptr;

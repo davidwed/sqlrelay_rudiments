@@ -16,7 +16,7 @@
 pthread_mutex_t	*serviceentry::semutex;
 #endif
 
-int serviceentry::initialize(const char *servicename, int port,
+bool serviceentry::initialize(const char *servicename, int port,
 						const char *protocol) {
 
 	if (se) {
@@ -39,23 +39,23 @@ int serviceentry::initialize(const char *servicename, int port,
 				:(getservbyport_r(htons(port),protocol,
 							&sebuffer,
 							buffer,size,&se)))) {
-				return se!=NULL;
+				return (se!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			se=NULL;
 			if (errno!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
 		se=NULL;
-		return (((semutex)?!pthread_mutex_lock(semutex):1) &&
+		return (((semutex)?!pthread_mutex_lock(semutex):true) &&
 			((se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL) &&
-			((semutex)?!pthread_mutex_unlock(semutex):1));
+			((semutex)?!pthread_mutex_unlock(semutex):true));
 	#endif
 }
 

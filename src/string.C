@@ -112,60 +112,60 @@ void string::strip(char *str1, char *str2) {
 	str1[index-total]=(char)NULL;
 }
 
-int string::isInteger(const char *str) {
+bool string::isInteger(const char *str) {
 
 	for (char *ptr=(char *)str; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
-			return 0;
+			return false;
 		}
 	}
-	return	1;
+	return true;
 }
 
-int string::isInteger(const char *str, int size) {
+bool string::isInteger(const char *str, int size) {
 
 	char	*ptr=(char *)str;
 	for (int index=0; index<size; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
-			return 0;
+			return false;
 		}
 		ptr++;
 	}
-	return	1;
+	return true;
 }
 
-int string::isNumber(const char *str) {
+bool string::isNumber(const char *str) {
 
 	int	decimal=0;
 	for (char *ptr=(char *)str; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
-			return 0;
+			return false;
 		}
 		if (*ptr=='.') {
 			decimal=1;
 		}
 	}
-	return	1;
+	return true;
 }
 
-int string::isNumber(const char *str, int size) {
+bool string::isNumber(const char *str, int size) {
 
 	int	decimal=0;
 	char	*ptr=(char *)str;
 	for (int index=0; index<size; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
-			return 0;
+			return false;
 		}
 		if (*ptr=='.') {
 			decimal=1;
 		}
 		ptr++;
 	}
-	return	1;
+	return true;
 }
 
 char *string::httpEscape(const char *input) {

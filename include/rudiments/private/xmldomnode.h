@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		int		cascade;
+		bool		cascade;
 
 		xmldomnodetype	type;
 		char		*nodename;
@@ -17,16 +17,16 @@
 		xmldomnode	*firstattribute;
 		xmldomnode	*lastattribute;
 		xmldomnode	*nullnode;
-		int		isnullnode;
+		bool		isnullnode;
 
 		xmldomnode	*getNode(xmldomnode *first,
 					int position, const char *name,
 					int count) const;
-		int		insertNode(xmldomnode *node, int position,
+		bool		insertNode(xmldomnode *node, int position,
 					xmldomnodetype type,
 					xmldomnode **first, xmldomnode **last,
 					int *count);
-		int		deleteNode(xmldomnode *node, int position,
+		bool		deleteNode(xmldomnode *node, int position,
 					const char *name,
 					xmldomnode **first, xmldomnode **last,
 					int *count);

@@ -19,12 +19,12 @@ RUDIMENTS_INLINE xmldom::~xmldom() {
 	delete nullnode;
 }
 
-RUDIMENTS_INLINE int xmldom::parseFile(const char *filename) {
+RUDIMENTS_INLINE bool xmldom::parseFile(const char *filename) {
 	reset();
 	return xmlsax::parseFile(filename);
 }
 
-RUDIMENTS_INLINE int xmldom::parseString(const char *string) {
+RUDIMENTS_INLINE bool xmldom::parseString(const char *string) {
 	reset();
 	return xmlsax::parseFile(string);
 }

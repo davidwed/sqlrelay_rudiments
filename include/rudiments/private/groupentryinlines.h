@@ -37,27 +37,27 @@ RUDIMENTS_INLINE char **groupentry::getMembers() const {
 	return grp->gr_mem;
 }
 
-RUDIMENTS_INLINE int groupentry::getPassword(const char *groupname,
+RUDIMENTS_INLINE bool groupentry::getPassword(const char *groupname,
 							char **password) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
 		*password=strdup(grp.getPassword());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int groupentry::getGroupId(const char *groupname,
+RUDIMENTS_INLINE bool groupentry::getGroupId(const char *groupname,
 							gid_t *groupid) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
 		*groupid=grp.getGroupId();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int groupentry::getMembers(const char *groupname,
+RUDIMENTS_INLINE bool groupentry::getMembers(const char *groupname,
 							char ***members) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
@@ -69,30 +69,30 @@ RUDIMENTS_INLINE int groupentry::getMembers(const char *groupname,
 			memb[i]=strdup(grp.getMembers()[i]);
 		}
 		*members=memb;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int groupentry::getName(gid_t groupid, char **name) {
+RUDIMENTS_INLINE bool groupentry::getName(gid_t groupid, char **name) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		*name=strdup(grp.getName());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int groupentry::getPassword(gid_t groupid, char **password) {
+RUDIMENTS_INLINE bool groupentry::getPassword(gid_t groupid, char **password) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		*password=strdup(grp.getPassword());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int groupentry::getMembers(gid_t groupid, char ***members) {
+RUDIMENTS_INLINE bool groupentry::getMembers(gid_t groupid, char ***members) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		int	counter;
@@ -103,16 +103,16 @@ RUDIMENTS_INLINE int groupentry::getMembers(gid_t groupid, char ***members) {
 			memb[i]=strdup(grp.getMembers()[i]);
 		}
 		*members=memb;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int groupentry::needsMutex() {
+RUDIMENTS_INLINE bool groupentry::needsMutex() {
 	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
-		return 1;
+		return true;
 	#else
-		return 0;
+		return false;
 	#endif
 }
 
@@ -122,10 +122,10 @@ RUDIMENTS_INLINE void groupentry::setMutex(pthread_mutex_t *mutex) {
 	#endif
 }
 
-RUDIMENTS_INLINE int groupentry::initialize(const char *groupname) {
+RUDIMENTS_INLINE bool groupentry::initialize(const char *groupname) {
 	return initialize(groupname,0);
 }
 
-RUDIMENTS_INLINE int groupentry::initialize(gid_t groupid) {
+RUDIMENTS_INLINE bool groupentry::initialize(gid_t groupid) {
 	return initialize(NULL,groupid);
 }

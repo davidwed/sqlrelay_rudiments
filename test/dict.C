@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	dict.setData("4","four");
 
 	// display the length and contents of the dictionary
-	printf("length: %d\n",dict.getList()->getLength());
+	printf("length: %ld\n",dict.getList()->getLength());
 	dict.print();
 	printf("\n");
 
@@ -49,7 +49,7 @@ int main(int argc, const char **argv) {
 	numdict.setData(4,"four");
 
 	// display the length and contents of the dictionary
-	printf("length: %d\n",numdict.getList()->getLength());
+	printf("length: %ld\n",numdict.getList()->getLength());
 	numdict.print();
 	printf("\n");
 
@@ -83,7 +83,7 @@ int main(int argc, const char **argv) {
 	doubledict.setData(4.4,"four point four");
 
 	// display the length and contents of the dictionary
-	printf("length: %d\n",doubledict.getList()->getLength());
+	printf("length: %ld\n",doubledict.getList()->getLength());
 	doubledict.print();
 	printf("\n");
 

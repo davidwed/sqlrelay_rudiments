@@ -12,39 +12,39 @@ int main(int argc, const char **argv) {
 	printf("root fileststem stats:\n");
 	printf("	type:				0x%08x\n",
 				fs.getType());
-	printf("	block size:			%d\n",
+	printf("	block size:			%ld\n",
 				fs.getBlockSize());
-	printf("	optimum tranfer block size:	%d\n",
+	printf("	optimum tranfer block size:	%ld\n",
 				fs.getOptimumTransferBlockSize());
-	printf("	total blocks:			%d\n",
+	printf("	total blocks:			%ld\n",
 				fs.getTotalBlocks());
-	printf("	free blocks:			%d\n",
+	printf("	free blocks:			%ld\n",
 				fs.getFreeBlocks());
-	printf("	available blocks:		%d\n",
+	printf("	available blocks:		%ld\n",
 				fs.getAvailableBlocks());
-	printf("	total nodes:			%d\n",
+	printf("	total nodes:			%ld\n",
 				fs.getTotalFileNodes());
-	printf("	free nodes:			%d\n",
+	printf("	free nodes:			%ld\n",
 				fs.getFreeFileNodes());
-	printf("	available nodes:		%d\n",
+	printf("	available nodes:		%ld\n",
 				fs.getAvailableFileNodes());
-	printf("	filesystem id:			%d\n",
+	printf("	filesystem id:			%ld\n",
 				fs.getFileSystemId());
-	printf("	maximum file name length:	%d\n",
+	printf("	maximum file name length:	%ld\n",
 				fs.getMaximumFileNameLength());
-	printf("	owner:				%d\n",
+	printf("	owner:				%ld\n",
 				fs.getOwner());
-	printf("	sync writes:			%d\n",
+	printf("	sync writes:			%ld\n",
 				fs.getSyncWrites());
-	printf("	async writes:			%d\n",
+	printf("	async writes:			%ld\n",
 				fs.getAsyncWrites());
 	printf("	fs type name:			%s\n",
 				fs.getTypeName());
 	printf("	mount point:			%s\n",
 				fs.getMountPoint());
-	printf("	sync reads:			%d\n",
+	printf("	sync reads:			%ld\n",
 				fs.getSyncReads());
-	printf("	async reads:			%d\n",
+	printf("	async reads:			%ld\n",
 				fs.getAsyncReads());
 	printf("	device name:			%s\n",
 				fs.getDeviceName());

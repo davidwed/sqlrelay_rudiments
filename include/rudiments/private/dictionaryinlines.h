@@ -25,37 +25,37 @@ inline DICTIONARY_CLASS::~dictionary() {
 }
 
 DICTIONARY_TEMPLATE
-inline int DICTIONARY_CLASS::setData(keytype key, datatype data) {
+inline bool DICTIONARY_CLASS::setData(keytype key, datatype data) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		node->getData()->setData(data);
-		return 0;
+		return false;
 	} else {
 		dictionarynodetype	*dictnode=new dictionarynodetype();
 		dictnode->setKey(key);
 		dictnode->setData(data);
 		dict.append(dictnode);
-		return 1;
+		return true;
 	}
 }
 
 DICTIONARY_TEMPLATE
-inline int DICTIONARY_CLASS::getData(keytype key, datatype *data) {
+inline bool DICTIONARY_CLASS::getData(keytype key, datatype *data) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		*data=node->getData()->getData();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 DICTIONARY_TEMPLATE
-inline int DICTIONARY_CLASS::removeData(keytype key) {
+inline bool DICTIONARY_CLASS::removeData(keytype key) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		return dict.removeNode(node);
 	}
-	return 0;
+	return false;
 }
 
 DICTIONARY_TEMPLATE

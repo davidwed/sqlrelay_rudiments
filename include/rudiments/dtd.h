@@ -10,10 +10,14 @@
 
 class dtd : public errorhandler {
 	public:
-		int	parseFile(const char *filename);
+		bool	parseFile(const char *filename);
 			// Parse file "filename" and generate a DTD tree.
-		int	parseString(const char *string);
+			//
+			// Returns true on success and false on failure
+		bool	parseString(const char *string);
 			// Parse string "string" and generate a DTD tree.
+			//
+			// Returns true on success and false on failure
 
 		xmldom	*xml();
 			// Returns an XML representation of the DTD.

@@ -20,29 +20,29 @@ class xmlsax : public errorhandler {
 		// When these methods are run, they parse the XML.  As these
 		// methods encounter tags, attributes, text, etc., they call
 		// the callback methods below.
-		int	parseFile(const char *filename);
+		bool	parseFile(const char *filename);
 			// parse file "filename"
-		int	parseString(const char *string);
+		bool	parseString(const char *string);
 			// parse string "string"
 
 	protected:
 		// Callback methods.  These methods are called as the XML is
 		// parsed.
-		virtual	int	tagStart(char *name);
+		virtual	bool	tagStart(char *name);
 				// Gets called when a start tag is parsed.
-		virtual	int	attributeName(char *name);
+		virtual	bool	attributeName(char *name);
 				// Gets called when an attribute name
 				// is parsed.
-		virtual	int	attributeValue(char *value);
+		virtual	bool	attributeValue(char *value);
 				// Gets called when an attribute value
 				// is parsed.
-		virtual	int	text(char *string);
+		virtual	bool	text(char *string);
 				// Gets called when a block of text is parsed.
-		virtual	int	tagEnd(char *name);
+		virtual	bool	tagEnd(char *name);
 				// Gets called when an end tag is parsed.
-		virtual	int	comment(char *string);
+		virtual	bool	comment(char *string);
 				// Gets called when a comment is parsed.
-		virtual	int	cdata(char *string);
+		virtual	bool	cdata(char *string);
 				// Gets called when cdata is parsed.
 
 	#include <rudiments/private/xmlsax.h>

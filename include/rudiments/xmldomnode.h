@@ -263,9 +263,9 @@ class xmldomnode {
 
 		xmldomnode	*getNullNode() const;
 				// Returns the nullnode used by this node.
-		int		isNullNode() const;
-				// Returns 1 if this node is the special
-				// nullnode and 0 otherwise.
+		bool		isNullNode() const;
+				// Returns true if this node is the special
+				// nullnode and false otherwise.
 
 
 		// These methods provide write-access to the data contained in
@@ -285,55 +285,55 @@ class xmldomnode {
 		void	setNextSibling(xmldomnode *next);
 			// Sets the next sibling of the node to "next".
 
-		int	insertChild(xmldomnode *child, int position);
+		bool	insertChild(xmldomnode *child, int position);
 			// Inserts "child" into the list of child nodes at
 			// "position".  The position of the next sibling
 			// (and all successive siblings) is incremented.
-		int	appendChild(xmldomnode *child);
+		bool	appendChild(xmldomnode *child);
 			// Appends "child" to the list of child nodes.
-		int	deleteChild(int position);
+		bool	deleteChild(int position);
 			// Deletes the child node at "position".  The position
 			// of the next sibling (and all successive siblings)
 			// is decremented.
-		int	deleteChild(xmldomnode *child);
+		bool	deleteChild(xmldomnode *child);
 			// Searches the list of child nodes for "child" and
 			// deletes it.  The position of the next sibling (and
 			// all successive siblings) is decremented.
 
-		int	insertText(const char *value, int position);
+		bool	insertText(const char *value, int position);
 			// Inserts a child node of type TEXT_XMLDOMNODE with
 			// value "value" into the list of child nodes at
 			// "position".  The position of the next sibling
 			// (and all successive siblings) is incremented.
-		int	appendText(const char *value);
+		bool	appendText(const char *value);
 			// Appends a child node of type TEXT_XMLDOMNODE with
 			// value "value" to the list of child nodes.
 
-		int	insertAttribute(xmldomnode *attribute, int position);
+		bool	insertAttribute(xmldomnode *attribute, int position);
 			// Inserts "attribute" into the list of attributes at
 			// "position".  The position of the next attribute
 			// (and all successive attributes) is incremented.
-		int	appendAttribute(xmldomnode *attribute);
+		bool	appendAttribute(xmldomnode *attribute);
 			// Appends "attribute" to the list of attributes.
-		int	insertAttribute(const char *name, const char *value,
+		bool	insertAttribute(const char *name, const char *value,
 					int position);
 			// Creates an attribute node with "name" and "value"
 			// and inserts it into the list of attributes at
 			// "position".  The position of the next attribute
 			// (and all successive attributes) is incremented.
-		int	appendAttribute(const char *name, const char *value);
+		bool	appendAttribute(const char *name, const char *value);
 			// Creates an attribute node with "name" and "value"
 			// and appends it to the list of attributes.
-		int	deleteAttribute(int position);
+		bool	deleteAttribute(int position);
 			// Deletes the attribute at "position".  The position
 			// of the next attribute (and all successive attributes)
 			// is decremented.
-		int	deleteAttribute(const char *name);
+		bool	deleteAttribute(const char *name);
 			// Searches the list of attribute nodes for an attribute
 			// named "name" and deletes it.  The position of the
 			// next attribute (and all successive attributes) is
 			// decremented.
-		int	deleteAttribute(xmldomnode *attribute);
+		bool	deleteAttribute(xmldomnode *attribute);
 			// Searches the list of attribute nodes for "attribute"
 			// and deletes it.  The position of the next attribute
 			// (and all successive attributes) is decremented.

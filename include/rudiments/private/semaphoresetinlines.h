@@ -21,36 +21,36 @@ union semun {
 
 RUDIMENTS_INLINE semaphoreset::semaphoreset() {
 	waitop=NULL;
-	created=0;
+	created=false;
 	semid=-1;
 }
 
-RUDIMENTS_INLINE int semaphoreset::forceRemove() {
+RUDIMENTS_INLINE bool semaphoreset::forceRemove() {
 	semun	semctlun;
 	return !semctl(semid,0,IPC_RMID,semctlun);
 }
 
 RUDIMENTS_INLINE void semaphoreset::dontRemove() {
-	created=0;
+	created=false;
 }
 
 RUDIMENTS_INLINE int semaphoreset::getId() const {
 	return semid;
 }
 
-RUDIMENTS_INLINE int semaphoreset::wait(int index) {
+RUDIMENTS_INLINE bool semaphoreset::wait(int index) {
 	return !semop(semid,waitop[index],1);
 }
 
-RUDIMENTS_INLINE int semaphoreset::waitWithUndo(int index) {
+RUDIMENTS_INLINE bool semaphoreset::waitWithUndo(int index) {
 	return !semop(semid,waitwithundoop[index],1);
 }
 
-RUDIMENTS_INLINE int semaphoreset::signal(int index) {
+RUDIMENTS_INLINE bool semaphoreset::signal(int index) {
 	return !semop(semid,signalop[index],1);
 }
 
-RUDIMENTS_INLINE int semaphoreset::signalWithUndo(int index) {
+RUDIMENTS_INLINE bool semaphoreset::signalWithUndo(int index) {
 	return !semop(semid,signalwithundoop[index],1);
 }
 
@@ -59,7 +59,7 @@ RUDIMENTS_INLINE int semaphoreset::getValue(int index) {
 	return semctl(semid,index,GETVAL,semctlun);
 }
 
-RUDIMENTS_INLINE int semaphoreset::setValue(int index, int value) {
+RUDIMENTS_INLINE bool semaphoreset::setValue(int index, int value) {
 	semun	semctlun;
 	semctlun.val=value;
 	return !semctl(semid,index,SETVAL,semctlun);
@@ -67,21 +67,21 @@ RUDIMENTS_INLINE int semaphoreset::setValue(int index, int value) {
 
 RUDIMENTS_INLINE int semaphoreset::getWaitingForZero(int index) {
 	semun	semctlun;
-	return !semctl(semid,index,GETZCNT,semctlun);
+	return semctl(semid,index,GETZCNT,semctlun);
 }
 
 RUDIMENTS_INLINE int semaphoreset::getWaitingForIncrement(int index) {
 	semun	semctlun;
-	return !semctl(semid,index,GETNCNT,semctlun);
+	return semctl(semid,index,GETNCNT,semctlun);
 }
 
-RUDIMENTS_INLINE int semaphoreset::setUserName(const char *username) {
+RUDIMENTS_INLINE bool semaphoreset::setUserName(const char *username) {
 	uid_t	userid;
 	return passwdentry::getUserId(username,&userid) &&
 			setUserId(userid);
 }
 
-RUDIMENTS_INLINE int semaphoreset::setGroupName(const char *groupname) {
+RUDIMENTS_INLINE bool semaphoreset::setGroupName(const char *groupname) {
 	gid_t	groupid;
 	return groupentry::getGroupId(groupname,&groupid) &&
 			setGroupId(groupid);

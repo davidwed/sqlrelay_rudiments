@@ -35,10 +35,14 @@ ssize_t file::getContents(const char *name, unsigned char *buffer,
 	return bytes;
 }
 
-size_t file::create(const char *name, mode_t permissions,
+ssize_t file::create(const char *name, mode_t permissions,
 					const void *data, size_t size) {
-	create(name,permissions);
-	size_t	retval=write(data,size);
+	size_t	retval;
+	if (((fd=::open(name,O_CREAT|O_TRUNC|O_RDWR,permissions))!=-1) &&
+				((retval=write(data,size))==size) &&
+					getCurrentProperties()) {
+		return retval;
+	}
 	close();
-	return retval;
+	return -1;
 }

@@ -33,7 +33,7 @@ RUDIMENTS_INLINE int protocolentry::getNumber() const {
 	return pe->p_proto;
 }
 
-RUDIMENTS_INLINE int protocolentry::getAliasList(const char *protocolname,
+RUDIMENTS_INLINE bool protocolentry::getAliasList(const char *protocolname,
 							char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
@@ -45,31 +45,31 @@ RUDIMENTS_INLINE int protocolentry::getAliasList(const char *protocolname,
 			alias[i]=strdup(pe.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int protocolentry::getNumber(const char *protocolname,
+RUDIMENTS_INLINE bool protocolentry::getNumber(const char *protocolname,
 								int *number) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
 		*number=pe.getNumber();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int protocolentry::getName(int number, char **name) {
+RUDIMENTS_INLINE bool protocolentry::getName(int number, char **name) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		*name=strdup(pe.getName());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int protocolentry::getAliasList(int number,
+RUDIMENTS_INLINE bool protocolentry::getAliasList(int number,
 							char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
@@ -81,16 +81,16 @@ RUDIMENTS_INLINE int protocolentry::getAliasList(int number,
 			alias[i]=strdup(pe.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int protocolentry::needsMutex() {
+RUDIMENTS_INLINE bool protocolentry::needsMutex() {
 	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
-		return 1;
+		return true;
 	#else
-		return 0;
+		return false;
 	#endif
 }
 
@@ -100,10 +100,10 @@ RUDIMENTS_INLINE void protocolentry::setMutex(pthread_mutex_t *mutex) {
 	#endif
 }
 
-RUDIMENTS_INLINE int protocolentry::initialize(const char *protocolname) {
+RUDIMENTS_INLINE bool protocolentry::initialize(const char *protocolname) {
 	return initialize(protocolname,0);
 }
 
-RUDIMENTS_INLINE int protocolentry::initialize(int number) {
+RUDIMENTS_INLINE bool protocolentry::initialize(int number) {
 	return initialize(NULL,number);
 }

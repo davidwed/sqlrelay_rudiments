@@ -11,40 +11,40 @@ class serversocket : public server {
 
 		// These 4 methods allow you to set socket options.  They must
 		// be called after calling bind() and before calling listen().
-		int	lingerOnClose(int timeout);
+		bool	lingerOnClose(int timeout);
 			// Instructs the socket to stay open for
 			// "timeout" seconds even after close() is
 			// called to allow the client to receive
 			// any data that may still be buffered.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	dontLingerOnClose();
+			// Returns true on success and false on failure.
+		bool	dontLingerOnClose();
 			// Instructs the socket to close immediately
 			// when close() is called, dumping any data
 			// that may still be buffered but that the
 			// client may not have received.  This is
 			// the default.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	reuseAddresses();
+			// Returns true on success and false on failure.
+		bool	reuseAddresses();
 			// Allows sockets in the TIME_WAIT state to be
 			// reused.
 			//
-			// Returns 1 on success and 0 on failure.
-		int	dontReuseAddresses();
+			// Returns true on success and false on failure.
+		bool	dontReuseAddresses();
 			// Prevents sockets in the TIME_WAIT state from
 			// being reused.  This is the default.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 
 
-		virtual	int	listen(int backlog);
+		virtual	bool	listen(int backlog);
 				// Waits until a client connects then places
 				// that connection in queue.  Up to "backlog"
 				// connections may be queued before future
 				// conenctions are refused.
 				//
-				// Returns 1 on success and 0 on failure.
+				// Returns true on success and false on failure.
 
 	#include <rudiments/private/serversocket.h>
 };

@@ -17,7 +17,7 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int filedestination::open(const char *filename) {
+RUDIMENTS_INLINE bool filedestination::open(const char *filename) {
 	return ((logfile=::open(filename,O_CREAT|O_WRONLY|O_APPEND,
 				permissions::ownerReadWrite()))!=-1);
 }

@@ -15,11 +15,11 @@ class environment {
 
 		char	*getValue(const char *variable) const;
 			// Returns the value of "variable".
-		int	setValue(const char *variable, const char *value);
+		bool	setValue(const char *variable, const char *value);
 			// Sets the value of "variable" to "value",
 			// Overwriting any value that "variable" previously
 			// had.
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 		void	remove(const char *variable);
 			// Removes "variable" from the environment.
 

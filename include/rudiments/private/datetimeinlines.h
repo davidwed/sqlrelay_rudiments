@@ -61,7 +61,7 @@ RUDIMENTS_INLINE int datetime::getYear() const {
 	return timestruct->tm_year+1900;
 }
 
-RUDIMENTS_INLINE int datetime::isDaylightSavingsTime() const {
+RUDIMENTS_INLINE bool datetime::isDaylightSavingsTime() const {
 	return timestruct->tm_isdst;
 }
 
@@ -147,7 +147,7 @@ RUDIMENTS_INLINE time_t datetime::getEpoch(const struct tm *tmstruct) {
 	return ((dt.initialize(tmstruct))?dt.getEpoch():-1);
 }
 
-RUDIMENTS_INLINE int datetime::setTimeZoneEnvVar(const char *zone,
+RUDIMENTS_INLINE bool datetime::setTimeZoneEnvVar(const char *zone,
 							char **oldzone) {
 	char	*tz=env.getValue("TZ");
 	if (tz) {
@@ -158,14 +158,14 @@ RUDIMENTS_INLINE int datetime::setTimeZoneEnvVar(const char *zone,
 	return env.setValue("TZ",zone);
 }
 
-RUDIMENTS_INLINE int datetime::restoreTimeZoneEnvVar(const char *oldzone) {
+RUDIMENTS_INLINE bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 	if (oldzone) {
-		int	retval=env.setValue("TZ",oldzone);
+		bool	retval=env.setValue("TZ",oldzone);
 		delete[] oldzone;
 		return retval;
 	}
 	env.remove("TZ");
-	return 1;
+	return true;
 }
 
 RUDIMENTS_INLINE void datetime::setLocalTimeMutex(pthread_mutex_t *mutex) {

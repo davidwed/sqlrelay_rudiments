@@ -33,7 +33,7 @@ RUDIMENTS_INLINE char **rpcentry::getAliasList() const {
 	return re->r_aliases;
 }
 
-RUDIMENTS_INLINE int rpcentry::getAliasList(const char *name,
+RUDIMENTS_INLINE bool rpcentry::getAliasList(const char *name,
 							char ***aliaslist) {
 	rpcentry	re;
 	if (re.initialize(name)) {
@@ -45,21 +45,21 @@ RUDIMENTS_INLINE int rpcentry::getAliasList(const char *name,
 			alias[i]=strdup(re.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int rpcentry::getName(int number, char **name) {
+RUDIMENTS_INLINE bool rpcentry::getName(int number, char **name) {
 	rpcentry	re;
 	if (re.initialize(number)) {
 		*name=strdup(re.getName());
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int rpcentry::getAliasList(int number, char ***aliaslist) {
+RUDIMENTS_INLINE bool rpcentry::getAliasList(int number, char ***aliaslist) {
 	rpcentry	re;
 	if (re.initialize(number)) {
 		int	counter;
@@ -70,16 +70,16 @@ RUDIMENTS_INLINE int rpcentry::getAliasList(int number, char ***aliaslist) {
 			alias[i]=strdup(re.getAliasList()[i]);
 		}
 		*aliaslist=alias;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-RUDIMENTS_INLINE int rpcentry::needsMutex() {
+RUDIMENTS_INLINE bool rpcentry::needsMutex() {
 	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
-		return 1;
+		return true;
 	#else
-		return 0;
+		return false;
 	#endif
 }
 
@@ -89,10 +89,10 @@ RUDIMENTS_INLINE void rpcentry::setMutex(pthread_mutex_t *mutex) {
 	#endif
 }
 
-RUDIMENTS_INLINE int rpcentry::initialize(const char *name) {
+RUDIMENTS_INLINE bool rpcentry::initialize(const char *name) {
 	return initialize(name,0);
 }
 
-RUDIMENTS_INLINE int rpcentry::initialize(int number) {
+RUDIMENTS_INLINE bool rpcentry::initialize(int number) {
 	return initialize(NULL,number);
 }

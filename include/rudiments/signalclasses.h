@@ -21,17 +21,21 @@
 // easy to manage.
 class signalset {
 	public:
-		int	addSignal(int signum);
-			// add the signal "signum" to the set
-		int	addAllSignals();
-			// add all signals to the set
-		int	removeSignal(int signum);
-			// remove the signal "signum" from the set
-		int	removeAllSignals();
-			// remove all signals from the set
+		bool	addSignal(int signum);
+			// Add the signal "signum" to the set.
+			// Returns true on success and false on failure.
+		bool	addAllSignals();
+			// Add all signals to the set.
+			// Returns true on success and false on failure.
+		bool	removeSignal(int signum);
+			// Remove the signal "signum" from the set.
+			// Returns true on success and false on failure.
+		bool	removeAllSignals();
+			// Remove all signals from the set.
+			// Returns true on success and false on failure.
 		int	signalIsInSet(int signum) const;
-			// returns 1 if the signal "signum" is in the 
-			// set and 0 if it is not
+			// Returns 1 if the signal "signum" is in the 
+			// set, 0 if it is not and -1 on error.
 
 		sigset_t	*getSignalSet();
 				// returns the set of signals
@@ -45,19 +49,24 @@ class signalset {
 // for signals.
 class signalmanager {
 	public:
-		static	int	sendSignal(pid_t processid, int signum);
-				// send singal "signum" to process "processid"
-		static	int	raiseSignal(int signum);
-				// send singal "signum" to self
-		static	int	ignoreSignals(const sigset_t *sigset);
-				// ignore signal "signum"
-		static	int	waitForSignals(const sigset_t *mask);
-				// wait until a signal NOT in the signal set 
-				// "mask" is received
-		static	int	examineBlockedSignals(sigset_t *sigset);
-				// sets "sigset" to the set of signals that
+		static	bool	sendSignal(pid_t processid, int signum);
+				// Send singal "signum" to process "processid".
+				// Returns true on success and false on failure.
+		static	bool	raiseSignal(int signum);
+				// Send singal "signum" to self.
+				// Returns true on success and false on failure.
+		static	bool	ignoreSignals(const sigset_t *sigset);
+				// Ignore signal "signum".
+				// Returns true on success and false on failure.
+		static	bool	waitForSignals(const sigset_t *mask);
+				// Wait until a signal NOT in the signal set 
+				// "mask" is received.
+				// Returns true on success and false on failure.
+		static	bool	examineBlockedSignals(sigset_t *sigset);
+				// Sets "sigset" to the set of signals that
 				// were raised, but blocked during a call to 
-				// waitForSignals()
+				// waitForSignals().
+				// Returns true on success and false on failure.
 };
 
 
@@ -66,50 +75,56 @@ class signalhandler {
 	public:
 			signalhandler();
 			signalhandler(int signum, void *handler);
-			// calls the setHandler() and handleSignal() methods
-			// below during instantiation
+			// Calls the setHandler() and handleSignal() methods
+			// below during instantiation.
 
 		void	setHandler(void *inthandler);
-			// sets the function to call when the process
-			// receives the signal
+			// Sets the function to call when the process
+			// receives the signal.
 
-		int	handleSignal(int signum);
+		bool	handleSignal(int signum);
 			// Instructs the program to handle "signum" by calling
 			// the handler set previously in setHandler().  May
 			// be called multiple times to associate the same
 			// handler with several signals.
+			//
+			// Returns true on success and false on failure.
 		
 		// Signal flags modify the behavior of the signal handling
 		// process.
 		void	removeAllFlags();
-			// remove all flags
+			// Remove all flags.
 		void	addFlag(int flag);
-			// add "flag" to the set of flags modifying the
-	 		// behavior of this signal handler
+			// Add "flag" to the set of flags modifying the
+	 		// behavior of this signal handler.
 		int	getFlags() const;
-			// return the set of flags modifying the behavior of 
-			// this signal handler
+			// Return the set of flags modifying the behavior of 
+			// this signal handler.
 
 
 		// A signal mask is the set of signals that are blocked while
 		// the signal handler function is being called.  Masking
 		// signals can ensure that the function executes without
 		// interruption.
-		int		addSignalToMask(int signum);
-				// add the signal "signum" to the mask
-		int		addAllSignalsToMask();
-				// mask all signals
-		int		removeSignalFromMask(int signum);
-				// remove the signal "signum" from the mask
-		int		removeAllSignalsFromMask();
-				// mask no signals
+		bool		addSignalToMask(int signum);
+				// Add the signal "signum" to the mask.
+				// Returns true on success and false on failure.
+		bool		addAllSignalsToMask();
+				// Mask all signals.
+				// Returns true on success and false on failure.
+		bool		removeSignalFromMask(int signum);
+				// Remove the signal "signum" from the mask.
+				// Returns true on success and false on failure.
+		bool		removeAllSignalsFromMask();
+				// Mask no signals.
+				// Returns true on success and false on failure.
 		int		signalIsInMask(int signum) const;
-				// returns 1 if the signal "signum" is masked 
-				// and 0 if it is not
+				// Returns 1 if the signal "signum" is in the 
+				// set, 0 if it is not and -1 on error.
 		void		setMask(sigset_t sigset);
-				// explicitly sets the mask to "sigset"
+				// Explicitly sets the mask to "sigset".
 		sigset_t	getMask() const;
-				// returns the set of signals currently masked
+				// Returns the set of signals currently masked.
 
 	#include <rudiments/private/signalhandler.h>
 

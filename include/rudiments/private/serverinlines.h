@@ -3,14 +3,14 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int server::bind() {
-	return 1;
+RUDIMENTS_INLINE bool server::bind() {
+	return true;
 }
 
-RUDIMENTS_INLINE int server::listen(int backlog) {
-	return 1;
+RUDIMENTS_INLINE bool server::listen(int backlog) {
+	return true;
 }
 
-RUDIMENTS_INLINE int server::accept() {
-	return 1;
+RUDIMENTS_INLINE bool server::accept() {
+	return true;
 }

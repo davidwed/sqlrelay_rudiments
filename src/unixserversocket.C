@@ -12,14 +12,14 @@
 	#include <unistd.h>
 #endif
 
-int unixserversocket::initialize(const char *filename, mode_t mask) {
+bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	unixsocket::initialize(filename);
 	this->mask=mask;
 
 	// if a null or blank port was specified, return an error
 	if (!filename || (filename && !filename[0])) {
-		return 0;
+		return false;
 	}
 
 	// init the socket structure
@@ -29,18 +29,18 @@ int unixserversocket::initialize(const char *filename, mode_t mask) {
 	strcpy(sockaddrun.sun_path,filename);
 
 	// create the socket
-	return (fd=socket(AF_UNIX,SOCK_STREAM,0))>-1;
+	return ((fd=socket(AF_UNIX,SOCK_STREAM,0))>-1);
 }
 
-int unixserversocket::bind() {
+bool unixserversocket::bind() {
 
 	// set umask and store old umask
 	mode_t	oldmask=umask(mask);
 
 	// bind the socket
-	int	retval=1;
+	bool	retval=true;
 	if (::bind(fd,(struct sockaddr *)&sockaddrun,sizeof(sockaddrun))==-1) {
-		retval=0;
+		retval=false;
 	}
 
 	// restore old umask

@@ -16,7 +16,7 @@
 pthread_mutex_t	*groupentry::gemutex;
 #endif
 
-int groupentry::initialize(const char *groupname, gid_t groupid) {
+bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
 	if (grp) {
 		grp=NULL;
@@ -36,22 +36,22 @@ int groupentry::initialize(const char *groupname, gid_t groupid) {
 							buffer,size,&grp))
 				:(getgrgid_r(groupid,&grpbuffer,
 							buffer,size,&grp)))) {
-				return grp!=NULL;
+				return (grp!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			grp=NULL;
 			if (errno!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
-		return (((gemutex)?!pthread_mutex_lock(gemutex):1) &&
+		return (((gemutex)?!pthread_mutex_lock(gemutex):true) &&
 			((grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
-			((gemutex)?!pthread_mutex_unlock(gemutex):1));
+			((gemutex)?!pthread_mutex_unlock(gemutex):true));
 	#endif
 }
 

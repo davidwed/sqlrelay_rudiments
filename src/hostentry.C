@@ -16,7 +16,7 @@
 pthread_mutex_t	*hostentry::hemutex;
 #endif
 
-int hostentry::initialize(const char *hostname, const char *address,
+bool hostentry::initialize(const char *hostname, const char *address,
 							int len, int type) {
 	if (he) {
 		he=NULL;
@@ -37,23 +37,23 @@ int hostentry::initialize(const char *hostname, const char *address,
 						buffer,size,&he,&errnop))
 				:(gethostbyaddr_r(address,len,type,&hebuffer,
 						buffer,size,&he,&errnop)))) {
-				return he!=NULL;
+				return (he!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			he=NULL;
 			if (errnop!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
 		he=NULL;
-		return (((hemutex)?!pthread_mutex_lock(hemutex):1) &&
+		return (((hemutex)?!pthread_mutex_lock(hemutex):true) &&
 			((he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL) &&
-			((hemutex)?!pthread_mutex_unlock(hemutex):1));
+			((hemutex)?!pthread_mutex_unlock(hemutex):true));
 	#endif
 }
 

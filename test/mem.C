@@ -55,7 +55,7 @@ int main(int argc, const char **argv) {
 	*fp=1.1;
 	*dp=1.1;
 
-	printf("sp: %d  lp: %d ",*sp,*lp);
+	printf("sp: %d  lp: %ld ",*sp,*lp);
 	printf("fp: %f  dp: %f \n",*fp,*dp);
 	mp->print();
 
@@ -77,7 +77,7 @@ int main(int argc, const char **argv) {
 	}
 
 	for (int i=0; i<10; i++) {
-		printf("sp: %d  lp: %d ",spa[i],lpa[i]);
+		printf("sp: %d  lp: %ld ",spa[i],lpa[i]);
 		printf("fp: %f  dp: %f \n",fpa[i],dpa[i]);
 	}
 	mp->print();
@@ -97,7 +97,7 @@ int main(int argc, const char **argv) {
 			mp->malloc(i+j);
 			mp->free();
 		}
-		printf("should be: %d\n",total/11);
+		printf("should be: %ld\n",total/11);
 		mp->print();
 	}
 

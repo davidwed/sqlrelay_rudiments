@@ -11,5 +11,5 @@
 			static	pthread_mutex_t	*semutex;
 		#endif
 
-		int	initialize(const char *servicename, int port,
+		bool	initialize(const char *servicename, int port,
 						const char *protocol);

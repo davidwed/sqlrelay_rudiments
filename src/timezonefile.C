@@ -5,6 +5,7 @@
 #ifndef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/timezonefileinlines.h>
 #endif
+#include <rudiments/file.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -14,104 +15,108 @@
 #include <fcntl.h>
 #include <netinet/in.h>
 
-int	timezonefile::parseFile(const char *filename) {
+bool timezonefile::parseFile(const char *filename) {
 
-	int	file=open(filename,O_RDONLY);
+	file	tzfile;
+	if (!tzfile.open(filename,O_RDONLY)) {
+		return false;
+	}
 
 	char	magic[5];
-	if (read(file,magic,4*sizeof(char))!=4*sizeof(char)) {
+	if (tzfile.read(magic,4*sizeof(char))!=4*sizeof(char)) {
 		printf("read magic failed\n");
-		return 0;
+		return false;
 	}
 	magic[4]=(char)NULL;
 	if (strcmp(magic,"TZif")) {
 		printf("magic not TZif\n");
-		return 0;
+		return false;
 	}
 
 	unsigned char	future[16];
-	if (read(file,future,16)!=16) {
+	if (tzfile.read(future,16)!=16) {
 		printf("read future failed\n");
-		return 0;
+		return false;
 	}
 	
-	if (read(file,&ttisgmtcnt,sizeof(long))!=sizeof(long)) {
+	if (tzfile.read(&ttisgmtcnt,sizeof(long))!=sizeof(long)) {
 		printf("read ttisgmtcnt failed\n");
-		return 0;
+		return false;
 	}
 	ttisgmtcnt=ntohl(ttisgmtcnt);
 
-	if (read(file,&ttisstdcnt,sizeof(long))!=sizeof(long)) {
+	if (tzfile.read(&ttisstdcnt,sizeof(long))!=sizeof(long)) {
 		printf("read ttisstdcnt failed\n");
-		return 0;
+		return false;
 	}
 	ttisstdcnt=ntohl(ttisstdcnt);
 
-	if (read(file,&leapcnt,sizeof(long))!=sizeof(long)) {
+	if (tzfile.read(&leapcnt,sizeof(long))!=sizeof(long)) {
 		printf("read leapcnt failed\n");
-		return 0;
+		return false;
 	}
 	leapcnt=ntohl(leapcnt);
 
-	if (read(file,&timecnt,sizeof(long))!=sizeof(long)) {
+	if (tzfile.read(&timecnt,sizeof(long))!=sizeof(long)) {
 		printf("read timecnt failed\n");
-		return 0;
+		return false;
 	}
 	timecnt=ntohl(timecnt);
 
-	if (read(file,&typecnt,sizeof(long))!=sizeof(long)) {
+	if (tzfile.read(&typecnt,sizeof(long))!=sizeof(long)) {
 		printf("read typecnt failed\n");
-		return 0;
+		return false;
 	}
 	typecnt=ntohl(typecnt);
 
-	if (read(file,&charcnt,sizeof(long))!=sizeof(long)) {
+	if (tzfile.read(&charcnt,sizeof(long))!=sizeof(long)) {
 		printf("read charcnt failed\n");
-		return 0;
+		return false;
 	}
 	charcnt=ntohl(charcnt);
 
 	int	i;
 	transitiontime=new long[timecnt];
 	for (i=0; i<timecnt; i++) {
-		if (read(file,&transitiontime[i],sizeof(long))!=sizeof(long)) {
+		if (tzfile.read(&transitiontime[i],sizeof(long))!=	
+							sizeof(long)) {
 			printf("read transitiontime[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 		transitiontime[i]=ntohl(transitiontime[i]);
 	}
 
 	localtime=new unsigned char[timecnt];
 	for (i=0; i<timecnt; i++) {
-		if (read(file,&localtime[i],sizeof(unsigned char))!=
+		if (tzfile.read(&localtime[i],sizeof(unsigned char))!=
 						sizeof(unsigned char)) {
 			printf("read localtime[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 	}
 
 	ti=new ttinfo[typecnt];
 	for (i=0; i<typecnt; i++) {
-		if (read(file,&ti[i].tt_gmtoff,sizeof(long))!=sizeof(long)) {
+		if (tzfile.read(&ti[i].tt_gmtoff,sizeof(long))!=sizeof(long)) {
 			printf("read ttinfo.tt_gmtoff[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 		ti[i].tt_gmtoff=ntohl(ti[i].tt_gmtoff);
-		if (read(file,&ti[i].tt_isdst,sizeof(char))!=sizeof(char)) {
+		if (tzfile.read(&ti[i].tt_isdst,sizeof(char))!=sizeof(char)) {
 			printf("read ttinfo.tt_isdst[%d] failed\n",i);
-			return 0;
+			return false;
 		}
-		if (read(file,&ti[i].tt_abbrind,sizeof(unsigned char))!=
+		if (tzfile.read(&ti[i].tt_abbrind,sizeof(unsigned char))!=
 							sizeof(unsigned char)) {
 			printf("read ttinfo.tt_abbrind[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 	}
 
 	rawtimezonestring=new unsigned char[charcnt+1];
-	if (read(file,rawtimezonestring,charcnt)!=charcnt) {
+	if (tzfile.read(rawtimezonestring,charcnt)!=charcnt) {
 		printf("read rawtimezonestring failed\n");
-		return 0;
+		return false;
 	}
 	rawtimezonestring[charcnt]=(char)NULL;
 
@@ -129,41 +134,41 @@ int	timezonefile::parseFile(const char *filename) {
 	leapsecondtime=new long[leapcnt];
 	totalleapseconds=new long[leapcnt];
 	for (i=0; i<leapcnt; i++) {
-		if (read(file,&leapsecondtime[i],sizeof(long))!=
+		if (tzfile.read(&leapsecondtime[i],sizeof(long))!=
 							sizeof(long)) {
 			printf("read leapsecondtime[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 		leapsecondtime[i]=ntohl(leapsecondtime[i]);
-		if (read(file,&totalleapseconds[i],sizeof(long))!=
+		if (tzfile.read(&totalleapseconds[i],sizeof(long))!=
 							sizeof(long)) {
 			printf("read totalleapseconds[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 		totalleapseconds[i]=ntohl(totalleapseconds[i]);
 	}
 
 	transstdwall=new unsigned char[ttisstdcnt];
 	for (i=0; i<ttisstdcnt; i++) {
-		if (read(file,&transstdwall[i],sizeof(unsigned char))!=
+		if (tzfile.read(&transstdwall[i],sizeof(unsigned char))!=
 						sizeof(unsigned char)) {
 			printf("read transstdwall[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 	}
 
 	transutclocal=new unsigned char[ttisgmtcnt];
 	for (i=0; i<ttisgmtcnt; i++) {
-		if (read(file,&transutclocal[i],sizeof(unsigned char))!=
+		if (tzfile.read(&transutclocal[i],sizeof(unsigned char))!=
 						sizeof(unsigned char)) {
 			printf("read transutclocal[%d] failed\n",i);
-			return 0;
+			return false;
 		}
 	}
 
-	close(file);
+	tzfile.close();
 
-	return 1;
+	return true;
 }
 
 void timezonefile::print() {

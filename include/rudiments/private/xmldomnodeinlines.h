@@ -10,11 +10,11 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE void xmldomnode::cascadeOnDelete() {
-	cascade=1;
+	cascade=true;
 }
 
 RUDIMENTS_INLINE void xmldomnode::dontCascadeOnDelete() {
-	cascade=0;
+	cascade=false;
 }
 
 RUDIMENTS_INLINE xmldomnodetype xmldomnode::getType() const {
@@ -45,7 +45,7 @@ RUDIMENTS_INLINE xmldomnode *xmldomnode::getNullNode() const {
 	return nullnode;
 }
 
-RUDIMENTS_INLINE int xmldomnode::isNullNode() const {
+RUDIMENTS_INLINE bool xmldomnode::isNullNode() const {
 	return isnullnode;
 }
 
@@ -97,54 +97,54 @@ RUDIMENTS_INLINE void xmldomnode::setNextSibling(xmldomnode *next) {
 	this->next=next;
 }
 
-RUDIMENTS_INLINE int xmldomnode::insertChild(xmldomnode *child, int position) {
+RUDIMENTS_INLINE bool xmldomnode::insertChild(xmldomnode *child, int position) {
 	return insertNode(child,position,child->type,
 				&firstchild,&lastchild,&childcount);
 }
 
-RUDIMENTS_INLINE int xmldomnode::appendChild(xmldomnode *child) {
+RUDIMENTS_INLINE bool xmldomnode::appendChild(xmldomnode *child) {
 	return insertChild(child,getChildCount());
 }
 
-RUDIMENTS_INLINE int xmldomnode::appendText(const char *value) {
+RUDIMENTS_INLINE bool xmldomnode::appendText(const char *value) {
 	return insertText(value,getChildCount());
 }
 
-RUDIMENTS_INLINE int xmldomnode::insertAttribute(xmldomnode *attribute,
+RUDIMENTS_INLINE bool xmldomnode::insertAttribute(xmldomnode *attribute,
 								int position) {
 	return insertNode(attribute,position,ATTRIBUTE_XMLDOMNODETYPE,
 			&firstattribute,&lastattribute,&attributecount);
 }
 
-RUDIMENTS_INLINE int xmldomnode::appendAttribute(xmldomnode *attribute) {
+RUDIMENTS_INLINE bool xmldomnode::appendAttribute(xmldomnode *attribute) {
 	return insertAttribute(attribute,getAttributeCount());
 }
 
-RUDIMENTS_INLINE int xmldomnode::appendAttribute(const char *name,
+RUDIMENTS_INLINE bool xmldomnode::appendAttribute(const char *name,
 							const char *value) {
 	return insertAttribute(name,value,getAttributeCount());
 }
 
-RUDIMENTS_INLINE int xmldomnode::deleteChild(int position) {
+RUDIMENTS_INLINE bool xmldomnode::deleteChild(int position) {
 	return deleteNode(NULL,position,NULL,
 				&firstchild,&lastchild,&childcount);
 }
 
-RUDIMENTS_INLINE int xmldomnode::deleteChild(xmldomnode *child) {
+RUDIMENTS_INLINE bool xmldomnode::deleteChild(xmldomnode *child) {
 	return deleteNode(child,0,NULL,&firstchild,&lastchild,&childcount);
 }
 
-RUDIMENTS_INLINE int xmldomnode::deleteAttribute(int position) {
+RUDIMENTS_INLINE bool xmldomnode::deleteAttribute(int position) {
 	return deleteNode(NULL,position,NULL,
 			&firstattribute,&lastattribute,&attributecount);
 }
 
-RUDIMENTS_INLINE int xmldomnode::deleteAttribute(const char *name) {
+RUDIMENTS_INLINE bool xmldomnode::deleteAttribute(const char *name) {
 	return deleteNode(NULL,0,name,
 			&firstattribute,&lastattribute,&attributecount);
 }
 
-RUDIMENTS_INLINE int xmldomnode::deleteAttribute(xmldomnode *attribute) {
+RUDIMENTS_INLINE bool xmldomnode::deleteAttribute(xmldomnode *attribute) {
 	return deleteNode(attribute,0,NULL,
 			&firstattribute,&lastattribute,&attributecount);
 }

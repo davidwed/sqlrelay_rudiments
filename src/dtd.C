@@ -12,35 +12,35 @@
 	#include <strings.h>
 #endif
 
-int dtd::parseFile(const char *filename) {
+bool dtd::parseFile(const char *filename) {
 	if (!xmld.parseFile(filename)) {
 		clearError();
 		appendError(xmld.getError());
-		return 0;
+		return false;
 	}
 	if (!parseDtd()) {
 		clearError();
 		appendError(xmldtd.getError());
-		return 0;
+		return false;
 	}
-	return 1;
+	return true;
 }
 
-int dtd::parseString(const char *string) {
+bool dtd::parseString(const char *string) {
 	if (!xmld.parseString(string)) {
 		clearError();
 		appendError(xmld.getError());
-		return 0;
+		return false;
 	}
 	if (!parseDtd()) {
 		clearError();
 		appendError(xmldtd.getError());
-		return 0;
+		return false;
 	}
-	return 1;
+	return true;
 }
 
-int dtd::parseDtd() {
+bool dtd::parseDtd() {
 
 	// create the new tree
 	xmldtd.createRootNode();
@@ -60,7 +60,7 @@ int dtd::parseDtd() {
 					!newElement(currentnode)) ||
 			(!strcmp(currentnode->getName(),"!ATTLIST") &&
 					!newAttribute(currentnode))) {
-				return 0;
+				return false;
 		}
 
 		// move on to the next tag
@@ -68,14 +68,14 @@ int dtd::parseDtd() {
 	}
 
 	// success
-	return 1;
+	return true;
 }
 
-int dtd::newElement(xmldomnode *node) {
+bool dtd::newElement(xmldomnode *node) {
 
 	// sanity check
 	if (node->getAttributeCount()<2) {
-		return 0;
+		return false;
 	}
 
 	// append a carriage return just for looks
@@ -88,13 +88,13 @@ int dtd::newElement(xmldomnode *node) {
 	element->cascadeOnDelete();
 	if (!dtdnode->appendChild(element)) {
 		delete element;
-		return 0;
+		return false;
 	}
 
 	// add a name attribute to the element
 	char	*name=node->getAttribute(0)->getName();
 	if (!element->appendAttribute("name",name)) {
-		return 0;
+		return false;
 	}
 
 	// add the list of valid child elements to the tree
@@ -102,16 +102,16 @@ int dtd::newElement(xmldomnode *node) {
 	return parseList(list,element,1,1,',',"child");
 }
 
-int dtd::parseList(const char *list, xmldomnode *node,
+bool dtd::parseList(const char *list, xmldomnode *node,
 					int checkcount, int indent,
 					char delimiter,
 					const char *name) {
 
 	// return failure for a NULL list and success for "EMPTY"
 	if (!list) {
-		return 0;
+		return false;
 	} else if (!strcmp(list,"EMPTY")) {
-		return 1;
+		return true;
 	} else {
 
 		// parse the list, it should be "delimiter" seperated values
@@ -166,7 +166,7 @@ int dtd::parseList(const char *list, xmldomnode *node,
 			if (!node->appendChild(newtag)) {
 				delete newtag;
 				delete[] value;
-				return 0;
+				return false;
 			}
 
 			// give the new element a name attribute and a count
@@ -174,7 +174,7 @@ int dtd::parseList(const char *list, xmldomnode *node,
 			if (!newtag->appendAttribute("name",value) ||
 				(checkcount &&
 				!newtag->appendAttribute("count",count))) {
-				return 0;
+				return false;
 			}
 
 			// clean up
@@ -190,22 +190,22 @@ int dtd::parseList(const char *list, xmldomnode *node,
 		}
 
 		// return success
-		return 1;
+		return true;
 	}
 }
 
-int dtd::newAttribute(xmldomnode *node) {
+bool dtd::newAttribute(xmldomnode *node) {
 
 	// sanity check
 	if (node->getAttributeCount()<4) {
-		return 0;
+		return false;
 	}
 
 	// get the appropriate element to add this attribute to
 	xmldomnode	*element=xmldtd.getRootNode()->getChild("dtd")->
 		getChild("element","name",node->getAttribute(0)->getName());
 	if (element->isNullNode()) {
-		return 0;
+		return false;
 	}
 
 	// create a new "attribute" element and add it to the tree
@@ -215,7 +215,7 @@ int dtd::newAttribute(xmldomnode *node) {
 					TAG_XMLDOMNODETYPE,"attribute",NULL);
 	attribute->cascadeOnDelete();
 	if (!element->appendChild(attribute)) {
-		return 0;
+		return false;
 	}
 
 	// give the new element name and default value attributes
@@ -223,11 +223,11 @@ int dtd::newAttribute(xmldomnode *node) {
 				node->getAttribute(1)->getName()) ||
 		!attribute->appendAttribute("default",
 				node->getAttribute(3)->getName())) {
-		return 0;
+		return false;
 	}
 
 	// insert the list of valid values or none if CDATA
 	char	*values=node->getAttribute(2)->getName();
 	return (!strcmp(values,"CDATA"))?
-			1:parseList(values,attribute,0,2,'|',"value");
+			true:parseList(values,attribute,0,2,'|',"value");
 }

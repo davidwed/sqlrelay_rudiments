@@ -28,10 +28,11 @@ daemonprocess::~daemonprocess() {
 	waitOnChildren();
 }
 
-int daemonprocess::createPidFile(const char *filename, mode_t permissions) {
+bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	file	fl;
 	char	*pid=string::parseNumber((long)getpid());
-	int	retval=(fl.create(filename,permissions,pid)==strlen(pid));
+	bool	retval=(fl.create(filename,permissions,pid)==
+						(ssize_t)strlen(pid));
 	delete[] pid;
 	fl.close();
 	return retval;

@@ -95,46 +95,46 @@ class string {
 
 
 		static	void	upper(char *str); 
-			// converts "str" to uppercase
+			// Converts "str" to uppercase.
 		static	void	lower(char *str); 
-			// converts "str" to lowercase
+			// Converts "str" to lowercase.
 
 		static	void	rightTrim(char *str);
-			// trims all spaces off of the right hand side of "str"
+			// Rrims all spaces off of the right hand side of "str".
 		static	void	rightTrim(char *str, char character);
-			// trims all "character"'s off of the right hand side
-			// of "str"
+			// Rrims all "character"'s off of the right hand side
+			// of "str".
 
 		static	void	leftTrim(char *str);
-			// trims all spaces off of the left hand side of "str"
+			// Trims all spaces off of the left hand side of "str".
 		static	void	leftTrim(char *str, char character);
-			// trims all "character"'s off of the left hand side
-			// of "str"
+			// Trims all "character"'s off of the left hand side
+			// of "str".
 
 		static	void	bothTrim(char *str);
-			// trims all spaces off of both sides of "str"
+			// Trims all spaces off of both sides of "str".
 		static	void	bothTrim(char *str, char character);
-			// trims all characters off of both sides of "str"
+			// Trims all characters off of both sides of "str".
 
 		static	void	strip(char *str, char character);
-			// strips all instances of "character" from "str"
+			// Strips all instances of "character" from "str".
 
 		static	void	strip(char *str1, char *str2);
-			// strips all instances of "str2" from "str1"
+			// Strips all instances of "str2" from "str1".
 
 		static	int	integerLength(long number);
-			// returns the number of characters needed to represent
-			// "number" as a string
+			// Returns the number of characters needed to represent
+			// "number" as a string.
 
-		static	int	isInteger(const char *val);
-		static	int	isInteger(const char *val, int size);
-			// returns 1 the string "val" is an integer and 0 if it
-			// is not an integer
+		static	bool	isInteger(const char *val);
+		static	bool	isInteger(const char *val, int size);
+			// Returns true if the string "val" is an integer and
+			// false if it is not an integer.
 
-		static	int	isNumber(const char *val);
-		static	int	isNumber(const char *val, int size);
-			// returns 1 the string "val" is a number and 0 if it
-			// is not a number
+		static	bool	isNumber(const char *val);
+		static	bool	isNumber(const char *val, int size);
+			// Returns true the string "val" is a number and false
+			// if it is not a number
 		static	char	*parseNumber(long number);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted

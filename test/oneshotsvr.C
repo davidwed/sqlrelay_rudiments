@@ -47,7 +47,7 @@ void	myserver::listen() {
 	// read 5 bytes from the client and display it
 	char	buffer[6];
 	buffer[5]=(char)NULL;
-	int	sizeread=clientsock->read((char *)buffer,5);
+	clientsock->read((char *)buffer,5);
 	printf("%s\n",buffer);
 
 

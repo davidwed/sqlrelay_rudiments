@@ -19,31 +19,31 @@
 #endif
 #include <sys/stat.h>
 
-int sharedmemory::create(key_t key, int size, mode_t permissions) {
+bool sharedmemory::create(key_t key, int size, mode_t permissions) {
 
 	// create the shared memory segment
 	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
 
 		// mark for removal
-		created=1;
+		created=true;
 
 		// attach to the segment, remove the
 		// segment and return 0 on failure
 		shmptr=shmat(shmid,0,0);
 		if ((int)shmptr==-1) {
 			forceRemove();
-			return 0;
+			return false;
 		}
 
 		// init the segment to zero's
 		memset((void *)shmptr,0,size);
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }
 
-int sharedmemory::attach(key_t key) {
+bool sharedmemory::attach(key_t key) {
 
 	// shmat's documentation says something like...
 	// RETURN VALUE
@@ -65,25 +65,25 @@ int sharedmemory::attach(key_t key) {
 			(int)(shmptr=shmat(shmid,0,0))!=-1);
 }
 
-int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
+bool sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 
 	// create the shared memory segment
 	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))>-1) {
 
 		// mark for removal
-		created=1;
+		created=true;
 
 		// attach to the segment, remove the
 		// segment and return 0 on failure
 		shmptr=shmat(shmid,0,0);
 		if ((int)shmptr==-1) {
 			forceRemove();
-			return 0;
+			return false;
 		}
 
 		// init the segment to zero's
 		memset((void *)shmptr,0,size);
-		return 1;
+		return true;
 		
 	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))>-1) {
 
@@ -93,7 +93,7 @@ int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 
 	}
 
-	return 0;
+	return false;
 }
 
 char *sharedmemory::getUserName() {

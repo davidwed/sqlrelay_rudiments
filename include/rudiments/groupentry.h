@@ -11,29 +11,33 @@
 class groupentry {
 	public:
 
-		// if you need to quickly look up a specific field, use one of
-		// these methods
-		static int	getPassword(const char *groupname,
+		// If you need to quickly look up a specific field, use one of
+		// these methods.
+		//
+		// These methods return true on success and false on failure.
+		static bool	getPassword(const char *groupname,
 							char **password);
-		static int	getGroupId(const char *groupname,
+		static bool	getGroupId(const char *groupname,
 							gid_t *groupid);
-		static int	getMembers(const char *groupname,
+		static bool	getMembers(const char *groupname,
 							char ***members);
 
-		static int	getName(gid_t groupid, char **name);
-		static int	getPassword(gid_t groupid, char **password);
-		static int	getMembers(gid_t groupid, char ***members);
+		static bool	getName(gid_t groupid, char **name);
+		static bool	getPassword(gid_t groupid, char **password);
+		static bool	getMembers(gid_t groupid, char ***members);
 
 
-		// if you need to look up a group entry and refer to multiple
-		// fields, use these methods
+		// If you need to look up a group entry and refer to multiple
+		// fields, use these methods.
 			groupentry();
 			~groupentry();
 
-		int	initialize(const char *groupname);
-			// looks up a group entry by name
-		int	initialize(gid_t groupid);
-			// looks up a group entry by group id
+		bool	initialize(const char *groupname);
+			// Looks up a group entry by name.
+			// Returns true on success and false on failure.
+		bool	initialize(gid_t groupid);
+			// Looks up a group entry by group id.
+			// Returns true on success and false on failure.
 
 		char	*getName() const;
 		char	*getPassword() const;
@@ -42,15 +46,15 @@ class groupentry {
 
 
 		void	print() const;
-			// prints out the group entry
+			// Prints out the group entry.
 
-		static	int	needsMutex();
+		static	bool	needsMutex();
 			// If your system doesn't support getgrnam_r() and
 			// getgrgid_r() then this class needs a mutex to assure
 			// thread safety.
 			//
-			// This method returns 1 if this class needs a mutex to
-			// operate safely in a threaded environment and 0
+			// This method returns true if this class needs a mutex
+			// to operate safely in a threaded environment and false
 			// otherwise.
 		static	void	setMutex(pthread_mutex_t *mutex);
 			// Allows you to supply a mutex is the class needs it.

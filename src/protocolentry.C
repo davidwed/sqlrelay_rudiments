@@ -16,7 +16,7 @@
 pthread_mutex_t	*protocolentry::pemutex;
 #endif
 
-int protocolentry::initialize(const char *protocolname, int number) {
+bool protocolentry::initialize(const char *protocolname, int number) {
 	if (pe) {
 		pe=NULL;
 		delete[] buffer;
@@ -35,23 +35,23 @@ int protocolentry::initialize(const char *protocolname, int number) {
 							buffer,size,&pe))
 				:(getprotobynumber_r(number,&pebuffer,
 							buffer,size,&pe)))) {
-				return pe!=NULL;
+				return (pe!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			pe=NULL;
 			if (errno!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
 		pe=NULL;
-		return (((pemutex)?!pthread_mutex_lock(pemutex):1) &&
+		return (((pemutex)?!pthread_mutex_lock(pemutex):true) &&
 			((pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
-			((pemutex)?!pthread_mutex_unlock(pemutex):1));
+			((pemutex)?!pthread_mutex_unlock(pemutex):true));
 	#endif
 }
 

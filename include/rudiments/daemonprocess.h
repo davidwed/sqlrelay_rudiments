@@ -22,15 +22,15 @@ class daemonprocess {
 				// Checks for filename "filename" and reads the
 				// process id out of it, if it exists.  Returns
 				// the process id on success or -1 on failure.
-			int	createPidFile(const char *filename,
+			bool	createPidFile(const char *filename,
 						mode_t permissions);
 				// Create's file "filename" with permissions
 				// "permissions" and puts the current process
 				// id in it.  Note that when you delete this
 				// file during shutdown you must use the full
 				// pathname since the detach() method below
-				// changes directories to "/".  Returns 1 on
-				// success and 0 on failure.
+				// changes directories to "/".  Returns true on
+				// success and false on failure.
 
 			void	detach() const;
 				// Detach from the controlling terminal and
@@ -44,6 +44,9 @@ class daemonprocess {
 			// user or group than the one that started the process.
 			// They have no effect unless the process is started
 			// by the root user.
+			//
+			// These methods return 1 on success, 0 on failure and
+			// -1 on error.
 			int	runAsUser(const char *username) const;
 				// Note that runAsUser() uses the passwdentry
 				// class.  If you are using this method in a

@@ -15,7 +15,7 @@
 pthread_mutex_t	*shadowentry::spmutex;
 #endif
 
-int shadowentry::initialize(const char *username) {
+bool shadowentry::initialize(const char *username) {
 	if (sp) {
 		sp=NULL;
 		delete[] buffer;
@@ -30,20 +30,20 @@ int shadowentry::initialize(const char *username) {
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
 			if (!getspnam_r(username,&spbuffer,buffer,size,&sp)) {
-				return sp!=NULL;
+				return (sp!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			sp=NULL;
 			if (errno!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
-		return (((spmutex)?!pthread_mutex_lock(spmutex):1) &&
+		return (((spmutex)?!pthread_mutex_lock(spmutex):true) &&
 			((sp=getspnam((char *)username))!=NULL) &&
-			((spmutex)?!pthread_mutex_unlock(spmutex):1));
+			((spmutex)?!pthread_mutex_unlock(spmutex):true));
 	#endif
 }
 

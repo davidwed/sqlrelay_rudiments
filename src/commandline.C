@@ -26,14 +26,14 @@ char *commandline::value(const char *arg) const {
 	return "";
 }
 
-int commandline::found(const char *arg) const {
+bool commandline::found(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<argc; i++) {
 			if (!strcmp(arg,argv[i])) {
-				return 1;
+				return true;
 			}
 		}
 	}
-	return 0;
+	return false;
 }

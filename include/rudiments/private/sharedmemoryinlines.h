@@ -11,7 +11,7 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 RUDIMENTS_INLINE sharedmemory::sharedmemory() {
-	created=0;
+	created=false;
 	shmptr=NULL;
 	shmid=-1;
 }
@@ -22,12 +22,12 @@ RUDIMENTS_INLINE sharedmemory::~sharedmemory() {
 	}
 }
 
-RUDIMENTS_INLINE int sharedmemory::forceRemove() {
+RUDIMENTS_INLINE bool sharedmemory::forceRemove() {
 	return !shmctl(shmid,IPC_RMID,NULL);
 }
 
 RUDIMENTS_INLINE void sharedmemory::dontRemove() {
-	created=0;
+	created=false;
 }
 
 RUDIMENTS_INLINE int sharedmemory::getId() const {
@@ -38,31 +38,31 @@ RUDIMENTS_INLINE void *sharedmemory::getPointer() const {
 	return shmptr;
 }
 
-RUDIMENTS_INLINE int sharedmemory::setUserName(const char *username) {
+RUDIMENTS_INLINE bool sharedmemory::setUserName(const char *username) {
 	uid_t	userid;
 	return passwdentry::getUserId(username,&userid) &&
 			setUserId(userid);
 }
 
-RUDIMENTS_INLINE int sharedmemory::setGroupName(const char *groupname) {
+RUDIMENTS_INLINE bool sharedmemory::setGroupName(const char *groupname) {
 	gid_t	groupid;
 	return groupentry::getGroupId(groupname,&groupid) &&
 			setGroupId(groupid);
 }
 
-RUDIMENTS_INLINE int sharedmemory::setUserId(uid_t uid) {
+RUDIMENTS_INLINE bool sharedmemory::setUserId(uid_t uid) {
 	shmid_ds	setds;
 	setds.shm_perm.uid=uid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-RUDIMENTS_INLINE int sharedmemory::setGroupId(gid_t gid) {
+RUDIMENTS_INLINE bool sharedmemory::setGroupId(gid_t gid) {
 	shmid_ds	setds;
 	setds.shm_perm.gid=gid;
 	return !shmctl(shmid,IPC_SET,&setds);
 }
 
-RUDIMENTS_INLINE int sharedmemory::setPermissions(mode_t permissions) {
+RUDIMENTS_INLINE bool sharedmemory::setPermissions(mode_t permissions) {
 	shmid_ds	setds;
 	setds.shm_perm.mode=permissions;
 	return !shmctl(shmid,IPC_SET,&setds);

@@ -6,7 +6,7 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int inetclientsocket::connectToServer(const char *host,
+RUDIMENTS_INLINE bool inetclientsocket::connectToServer(const char *host,
 						unsigned short port,
 						unsigned int retrywait,
 						int retrycount) {

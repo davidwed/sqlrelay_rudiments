@@ -16,7 +16,7 @@
 pthread_mutex_t	*rpcentry::remutex;
 #endif
 
-int rpcentry::initialize(const char *rpcname, int number) {
+bool rpcentry::initialize(const char *rpcname, int number) {
 	if (re) {
 		re=NULL;
 		delete[] buffer;
@@ -36,23 +36,23 @@ int rpcentry::initialize(const char *rpcname, int number) {
 							buffer,size,&re))
 				:(getrpcbynumber_r(number,&rebuffer,
 							buffer,size,&re)))) {
-				return re!=NULL;
+				return (re!=NULL);
 			}
 			delete[] buffer;
 			buffer=NULL;
 			re=NULL;
 			if (errnop!=ENOMEM) {
-				return 0;
+				return false;
 			}
 		}
-		return 0;
+		return false;
 	#else
 		re=NULL;
-		return (((remutex)?!pthread_mutex_lock(remutex):1) &&
+		return (((remutex)?!pthread_mutex_lock(remutex):true) &&
 			((re=((rpcname)
 				?getrpcbyname((char *)rpcname)
 				:getrpcbynumber(number)))!=NULL) &&
-			((remutex)?!pthread_mutex_unlock(remutex):1));
+			((remutex)?!pthread_mutex_unlock(remutex):true));
 	#endif
 }
 

@@ -9,18 +9,18 @@ class myxmlsax : public xmlsax {
 	public:
 			myxmlsax();
 	private:
-		int	xmlVersionStart();
-		int	xmlVersionEnd();
-		int	doctypeStart(char *name);
-		int	externalSubset(char *filename);
-		int	doctypeEnd();
-		int	tagStart(char *name);
-		int	attributeName(char *name);
-		int	attributeValue(char *value);
-		int	text(char *string);
-		int	tagEnd(char *name);
-		int	comment(char *string);
-		int	cdata(char *string);
+		bool	xmlVersionStart();
+		bool	xmlVersionEnd();
+		bool	doctypeStart(char *name);
+		bool	externalSubset(char *filename);
+		bool	doctypeEnd();
+		bool	tagStart(char *name);
+		bool	attributeName(char *name);
+		bool	attributeValue(char *value);
+		bool	text(char *string);
+		bool	tagEnd(char *name);
+		bool	comment(char *string);
+		bool	cdata(char *string);
 		void	indent(int spaces);
 		int	ind;
 };
@@ -29,29 +29,29 @@ myxmlsax::myxmlsax() : xmlsax() {
 	ind=0;
 }
 
-int	myxmlsax::xmlVersionStart() {
+bool	myxmlsax::xmlVersionStart() {
 	printf("XML version start:\n");
-	return 1;
+	return true;
 }
 
-int	myxmlsax::xmlVersionEnd() {
+bool	myxmlsax::xmlVersionEnd() {
 	printf("XML version end:\n");
-	return 1;
+	return true;
 }
 
-int	myxmlsax::doctypeStart(char *name) {
+bool	myxmlsax::doctypeStart(char *name) {
 	printf("DOCTYPE start: %s\n",name);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::externalSubset(char *filename) {
+bool	myxmlsax::externalSubset(char *filename) {
 	printf("	external subset: %s\n",filename);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::doctypeEnd() {
+bool	myxmlsax::doctypeEnd() {
 	printf("DOCTYPE end:\n");
-	return 1;
+	return true;
 }
 
 void	myxmlsax::indent(int spaces) {
@@ -60,48 +60,48 @@ void	myxmlsax::indent(int spaces) {
 	}
 }
 
-int	myxmlsax::tagStart(char *name) {
+bool	myxmlsax::tagStart(char *name) {
 	indent(ind);
 	printf("tagStart: %s\n",name);
 	ind++;
-	return 1;
+	return true;
 }
 
-int	myxmlsax::attributeName(char *name) {
+bool	myxmlsax::attributeName(char *name) {
 	indent(ind+1);
 	printf("attribute name: %s\n",name);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::attributeValue(char *value) {
+bool	myxmlsax::attributeValue(char *value) {
 	indent(ind+1);
 	printf("attribute value: %s\n",value);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::text(char *string) {
+bool	myxmlsax::text(char *string) {
 	indent(ind+1);
 	printf("text: \n%s\n",string);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::tagEnd(char *name) {
+bool	myxmlsax::tagEnd(char *name) {
 	ind--;
 	indent(ind);
 	printf("tagEnd: %s\n",name);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::comment(char *string) {
+bool	myxmlsax::comment(char *string) {
 	indent(ind);
 	printf("comment: \n%s\n",string);
-	return 1;
+	return true;
 }
 
-int	myxmlsax::cdata(char *string) {
+bool	myxmlsax::cdata(char *string) {
 	indent(ind);
 	printf("cdata: \n%s\n",string);
-	return 1;
+	return true;
 }
 
 

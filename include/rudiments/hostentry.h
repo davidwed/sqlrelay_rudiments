@@ -11,43 +11,45 @@
 class hostentry {
 	public:
 
-		// if you need to quickly look up a specific field, use one of
-		// these methods
-		static	int	getAliasList(const char *hostname,
+		// If you need to quickly look up a specific field, use one of
+		// these methods.
+		//
+		// These methods return true on success and false on failure.
+		static	bool	getAliasList(const char *hostname,
 						char ***aliaslist);
-		static	int	getAddressType(const char *hostname,
+		static	bool	getAddressType(const char *hostname,
 						int *addresstype);
-		static	int	getAddressLength(const char *hostname,
+		static	bool	getAddressLength(const char *hostname,
 						int *addresslength);
-		static	int	getAddressList(const char *hostname,
+		static	bool	getAddressList(const char *hostname,
 						char ***addresslist);
-		static	int	getAddressString(const char *hostname,
+		static	bool	getAddressString(const char *hostname,
 						int index,
 						char **addressstring);
 
-		static	int	getName(const char *address,
+		static	bool	getName(const char *address,
 						int len, int type,
 						char **name);
-		static	int	getAliasList(const char *address,
+		static	bool	getAliasList(const char *address,
 						int len, int type,
 						char ***aliaslist);
-		static	int	getAddressList(const char *address,
+		static	bool	getAddressList(const char *address,
 						int len, int type,
 						char ***addresslist);
-		static	int	getAddressString(const char *address,
+		static	bool	getAddressString(const char *address,
 						int len, int type,
 						int index,
 						char **addressstring);
 
-		// if you need to look up a host entry and refer to multiple
-		// fields, use these methods
+		// If you need to look up a host entry and refer to multiple
+		// fields, use these methods.
 			hostentry();
 			~hostentry();
 
-		int	initialize(const char *hostname);
-			// looks up a host entry by name
-		int	initialize(const char *address, int len, int type);
-			// looks up a host entry by address
+		bool	initialize(const char *hostname);
+			// Looks up a host entry by name.
+		bool	initialize(const char *address, int len, int type);
+			// Looks up a host entry by address.
 
 		char	*getName() const;
 		char	**getAliasList() const;
@@ -57,15 +59,15 @@ class hostentry {
 		char	*getAddressString(int index) const;
 
 		void	print() const;
-			// prints out the host entry
+			// Prints out the host entry.
 
-		static	int	needsMutex();
+		static	bool	needsMutex();
 			// If your system doesn't support gethostbyname_r()
 			// and gethostbyaddr_r() then this class needs a
 			// mutex to assure thread safety.
 			//
-			// This method returns 1 if this class needs a mutex to
-			// operate safely in a threaded environment and 0
+			// This method returns true if this class needs a mutex
+			// to operate safely in a threaded environment and false
 			// otherwise.
 		static	void	setMutex(pthread_mutex_t *mutex);
 			// Allows you to supply a mutex is the class needs it.

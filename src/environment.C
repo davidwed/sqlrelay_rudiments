@@ -21,7 +21,7 @@ environment::~environment() {
 	}
 }
 
-int environment::setValue(const char *variable, const char *value) {
+bool environment::setValue(const char *variable, const char *value) {
 	char	*pestr;
 	if (envstrings.getData((char *)variable,&pestr)) {
 		delete[] pestr;
@@ -30,11 +30,11 @@ int environment::setValue(const char *variable, const char *value) {
 	sprintf(pestr,"%s=%s",variable,value);
 	if (putenv(pestr)!=-1) {
 		envstrings.setData((char *)variable,pestr);
-		return 1;
+		return true;
 	} else {
 		delete[] pestr;
 		envstrings.removeData((char *)variable);
-		return 0;
+		return false;
 	}
 }
 #endif

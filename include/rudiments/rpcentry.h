@@ -11,39 +11,43 @@
 class rpcentry {
 	public:
 
-		// if you need to quickly look up a specific field, use one of
-		// these methods
-		static	int	getNumber(const char *name, int *number);
-		static	int	getAliasList(const char *name,
+		// If you need to quickly look up a specific field, use one of
+		// these methods.
+		//
+		// These methods return true on success and false on failure.
+		static	bool	getNumber(const char *name, int *number);
+		static	bool	getAliasList(const char *name,
 						char ***aliaslist);
 
-		static	int	getName(int number, char **name);
-		static	int	getAliasList(int number, char ***aliaslist);
+		static	bool	getName(int number, char **name);
+		static	bool	getAliasList(int number, char ***aliaslist);
 
-		// if you need to look up a rpc entry and refer to multiple
-		// fields, use these methods
+		// If you need to look up a rpc entry and refer to multiple
+		// fields, use these methods.
 			rpcentry();
 			~rpcentry();
 
-		int	initialize(const char *name);
-			// looks up a rpc entry by name
-		int	initialize(int number);
-			// looks up a rpc entry by number
+		bool	initialize(const char *name);
+			// Looks up a rpc entry by name.
+			// Returns true on success and false on failure.
+		bool	initialize(int number);
+			// Looks up a rpc entry by number.
+			// Returns true on success and false on failure.
 
 		char	*getName() const;
 		int	getNumber() const;
 		char	**getAliasList() const;
 
 		void	print() const;
-			// prints out the rpc entry
+			// Prints out the rpc entry.
 
-		static	int	needsMutex();
+		static	bool	needsMutex();
 			// If your system doesn't support getrpcbyname_r()
 			// and getrpcbynumber_r() then this class needs a
 			// mutex to assure thread safety.
 			//
-			// This method returns 1 if this class needs a mutex to
-			// operate safely in a threaded environment and 0
+			// This method returns true if this class needs a mutex
+			// to operate safely in a threaded environment and false
 			// otherwise.
 		static	void	setMutex(pthread_mutex_t *mutex);
 			// Allows you to supply a mutex is the class needs it.

@@ -11,6 +11,6 @@
 			static	pthread_mutex_t	*hemutex;
 		#endif
 
-		int	initialize(const char *hostname,
+		bool	initialize(const char *hostname,
 					const char *address,
 					int len, int type);

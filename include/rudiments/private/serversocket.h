@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		int	setLingerOnClose(int timeout, int onoff);
-		int	setReuseAddresses(int onoff);
+		bool	setLingerOnClose(int timeout, int onoff);
+		bool	setReuseAddresses(int onoff);

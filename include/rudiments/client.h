@@ -12,7 +12,7 @@
 class client : virtual public datatransport {
 	public:
 		virtual void	initialize(namevaluepairs *cd)=0;
-		virtual int	connect()=0;
+		virtual bool	connect()=0;
 
 	#include <rudiments/private/client.h>
 };

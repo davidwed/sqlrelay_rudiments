@@ -26,7 +26,7 @@ void unixclientsocket::initialize(namevaluepairs *cd) {
 			atoi(retrycount?retrycount:"0"));
 }
 
-int unixclientsocket::connect() {
+bool unixclientsocket::connect() {
 
 	// set the filename to connect to
 	sockaddrun.sun_family=AF_UNIX;
@@ -35,7 +35,7 @@ int unixclientsocket::connect() {
 	// create a unix socket
 	if ((fd=socket(AF_UNIX,SOCK_STREAM,0))==-1) {
 		fd=-1;
-		return 0;
+		return false;
 	}
 
 	// try to connect, over and over for the specified number of times
@@ -44,7 +44,7 @@ int unixclientsocket::connect() {
 		// attempt to connect
 		if (::connect(fd,(struct sockaddr *)&sockaddrun,
 						sizeof(sockaddrun))!=-1) {
-			return 1;
+			return true;
 		}
 
 		// wait the specified amount of time between reconnect tries
@@ -53,5 +53,5 @@ int unixclientsocket::connect() {
 
 	// if we're here, the connect failed
 	close();
-	return 0;
+	return false;
 }

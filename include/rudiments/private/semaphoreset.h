@@ -5,7 +5,7 @@
 			void	createOperations();
 
 			int	semid;
-			int	created;
+			bool	created;
 			int	semcount;
 		struct	sembuf	**waitop;
 		struct	sembuf	**waitwithundoop;

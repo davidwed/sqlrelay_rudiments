@@ -17,7 +17,7 @@
 	#include <strings.h>
 #endif
 
-int xmlsax::parseFile(const char *filename) {
+bool xmlsax::parseFile(const char *filename) {
 
 	// reset string/line
 	reset();
@@ -25,12 +25,12 @@ int xmlsax::parseFile(const char *filename) {
 	// close any previously opened files, open the file, parse it, close
 	// it again
 	close();
-	int	retval=((fl.open(filename,O_RDONLY)) && parse());
+	bool	retval=((fl.open(filename,O_RDONLY)) && parse());
 	close();
 	return retval;
 }
 
-int xmlsax::parseString(const char *string) {
+bool xmlsax::parseString(const char *string) {
 
 	// close any previously opened files
 	close();
@@ -54,13 +54,13 @@ void xmlsax::close() {
 	fl.close();
 }
 
-int xmlsax::parse() {
+bool xmlsax::parse() {
 
 	char	ch;
 
 	// skip whitespace/check for an empty document
 	if (!(ch=skipWhitespace((char)NULL))) {
-		return 1;
+		return true;
 	}
 
 	// parse the document body
@@ -68,7 +68,7 @@ int xmlsax::parse() {
 
 		// parse the tag
 		if (!parseTag(ch,&ch)) {
-			return 0;
+			return false;
 		} else if (!ch) {
 			break;
 		}
@@ -83,17 +83,17 @@ int xmlsax::parse() {
 	}
 
 	// document parsed successfully
-	return 1;
+	return true;
 }
 
-int xmlsax::parseTag(char current, char *next) {
+bool xmlsax::parseTag(char current, char *next) {
 
 	char	ch=current;
 
 	// make sure there's a <, skip any whitespace after it
 	if (ch!='<' || !(ch=skipWhitespace(getCharacter()))) {
 		parseTagFailed();
-		return 0;
+		return false;
 	}
 
 	// is this a standalone tag or end-tag?
@@ -105,7 +105,7 @@ int xmlsax::parseTag(char current, char *next) {
 		endtag=1;
 		if (!(ch=skipWhitespace(getCharacter()))) {
 			parseTagFailed();
-			return 0;
+			return false;
 		}
 	}
 
@@ -114,7 +114,7 @@ int xmlsax::parseTag(char current, char *next) {
 	if (!parseTagName(ch,&name,&ch)) {
 		delete name;
 		parseTagFailed();
-		return 0;
+		return false;
 	}
 
 	// handle comments and cdata
@@ -122,7 +122,7 @@ int xmlsax::parseTag(char current, char *next) {
 		if (!(ch=parseComment(ch))) {
 			delete name;
 			parseTagFailed();
-			return 0;
+			return false;
 		}
 		delete name;
 		return (*next=getCharacter())!=(char)NULL;
@@ -130,7 +130,7 @@ int xmlsax::parseTag(char current, char *next) {
 		if (!(ch=parseCData(ch))) {
 			delete name;
 			parseTagFailed();
-			return 0;
+			return false;
 		}
 		delete name;
 		return (*next=getCharacter())!=(char)NULL;
@@ -142,7 +142,7 @@ int xmlsax::parseTag(char current, char *next) {
 		if (!(ch=skipWhitespace(ch)) || ch!='>') {
 			delete name;
 			parseTagFailed();
-			return 0;
+			return false;
 		}
 
 	} else {
@@ -150,7 +150,7 @@ int xmlsax::parseTag(char current, char *next) {
 		// call the callback for tag start
 		if (!tagStart(name->getString())) {
 			delete name;
-			return 0;
+			return false;
 		}
 
 		// parse the attributes
@@ -160,7 +160,7 @@ int xmlsax::parseTag(char current, char *next) {
 			if (!(ch=skipWhitespace(ch))) {
 				delete name;
 				parseTagFailed();
-				return 0;
+				return false;
 			}
 	
 			if (ch=='/') {
@@ -170,7 +170,7 @@ int xmlsax::parseTag(char current, char *next) {
 								ch!='>') {
 					delete name;
 					parseTagFailed();
-					return 0;
+					return false;
 				}
 				break;
 			} else if (ch=='?') {
@@ -179,7 +179,7 @@ int xmlsax::parseTag(char current, char *next) {
 				if (!(ch=getCharacter()) || ch!='>') {
 					delete name;
 					parseTagFailed();
-					return 0;
+					return false;
 				}
 				break;
 			} else if (ch=='>') {
@@ -189,7 +189,7 @@ int xmlsax::parseTag(char current, char *next) {
 				if (!(ch=parseAttribute(ch,standalone))) {
 					delete name;
 					parseTagFailed();
-					return 0;
+					return false;
 				}
 			}
 		}
@@ -200,7 +200,7 @@ int xmlsax::parseTag(char current, char *next) {
 	if (endtag || standalone) {
 		if (!tagEnd(name->getString())) {
 			delete name;
-			return 0;
+			return false;
 		}
 	}
 
@@ -209,10 +209,10 @@ int xmlsax::parseTag(char current, char *next) {
 
 	// return the first character after the closing >
 	*next=getCharacter();
-	return 1;
+	return true;
 }
 
-int xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
+bool xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 
 	// create a buffer to hold the tag name
 	*name=new stringbuffer();
@@ -230,7 +230,7 @@ int xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 			clearError();
 			appendError("error: parseTagName() failed at line ");
 			appendError(line);
-			return 0;
+			return false;
 
 		} else if (ch=='[') {
 
@@ -253,7 +253,7 @@ int xmlsax::parseTagName(char current, stringbuffer **name, char *next) {
 
 			// return the character after the end of the name
 			*next=ch;
-			return 1;
+			return true;
 		} else {
 			(*name)->append(ch);
 		}
@@ -606,7 +606,7 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 	return 1;
 }
 
-int xmlsax::parseText(char current, char *next) {
+bool xmlsax::parseText(char current, char *next) {
 
 	// create a buffer to hold the text
 	stringbuffer	*textdata=new stringbuffer();
@@ -620,7 +620,7 @@ int xmlsax::parseText(char current, char *next) {
 			// then return an error.
 			delete textdata;
 			*next=(char)NULL;
-			return 0;
+			return false;
 
 		} else if (ch=='<') {
 
@@ -629,7 +629,7 @@ int xmlsax::parseText(char current, char *next) {
 			text(textdata->getString());
 			delete textdata;
 			*next=ch;
-			return 1;
+			return true;
 
 		}
 
@@ -646,7 +646,7 @@ int xmlsax::parseText(char current, char *next) {
 				parseTextFailed();
 				delete textdata;
 				*next=(char)NULL;
-				return 0;
+				return false;
 
 			} else if (result<0) {
 

@@ -40,7 +40,7 @@ RUDIMENTS_INLINE regularexpression::~regularexpression() {
 	}
 }
 
-RUDIMENTS_INLINE int regularexpression::match(const char *str) {
+RUDIMENTS_INLINE bool regularexpression::match(const char *str) {
 
 	if (compiledexpression) {
 		#if defined(HAVE_REGEX_H)
@@ -57,5 +57,5 @@ RUDIMENTS_INLINE int regularexpression::match(const char *str) {
 		#endif
 	}
 
-	return 0;
+	return false;
 }

@@ -52,7 +52,7 @@ class semaphoreset {
 				// createOrAttach() below.  If the semaphore
 				// was just attached to, it is not removed.
 
-		int	create(key_t key, mode_t permissions, 
+		bool	create(key_t key, mode_t permissions, 
 					int semcount, const int *values);
 				// Creates a semaphore set identified by "key"
 				//      containing "semcount" semaphores.
@@ -63,11 +63,11 @@ class semaphoreset {
 				// "values" should be an array of starting 
 				// 	values for each of the semaphores 
 				// 	in the set.
-		int	attach(key_t key, int semcount);
+		bool	attach(key_t key, int semcount);
 				// Attaches to an already existing semaphore set
 				// identified by "key", containing "semcount" 
 				// semaphores.
-		int	createOrAttach(key_t key, mode_t permissions, 
+		bool	createOrAttach(key_t key, mode_t permissions, 
 					int semcount, const int *values);
 				// Attempts to create the semaphore set 
 				// identified by "key".  If this fails, it 
@@ -82,35 +82,35 @@ class semaphoreset {
 			// wants to delete the semaphore set in the forked 
 			// process but does not want the semaphore removed from
 			// the system.
-		int	forceRemove();
+		bool	forceRemove();
 			// Removes the semaphore set, whether it
 			// was created or attached to.
 
 		int	getId() const;
 			// Returns the internal id for the semaphore set.
 
-		int	wait(int index);
+		bool	wait(int index);
 			// wait on the "index"'th semaphore in the set
-		int	signal(int index);
+		bool	signal(int index);
 			// signal on the "index"'th semaphore in the set
 
 
-		int	waitWithUndo(int index);
+		bool	waitWithUndo(int index);
 			// wait on the "index"'th semaphore in the set and
 			// undo the wait when the program exits
-		int	signalWithUndo(int index);
+		bool	signalWithUndo(int index);
 			// signal on the "index"'th semaphore in the set and
 			// undo the signal when the program exits
 
 
-		int	setValue(int index, int value);
+		bool	setValue(int index, int value);
 			// set the "index"'th semaphore in the set to "value"
 		int	getValue(int index);
 			// return the value of the "index"'th 
 			// semaphore in the set
 
 
-		int	setUserName(const char *username);
+		bool	setUserName(const char *username);
 			// Makes this semaphore set owned by 
 			// the user "username".
 			// 	
@@ -118,7 +118,7 @@ class semaphoreset {
 			// If you are using this method in a multithreaded
 			// application, you may need to supply the passwdentry
 			// class a mutex.  See passwdentry.h for more detail.
-		int	setGroupName(const char *groupname);
+		bool	setGroupName(const char *groupname);
 			// Makes this semaphore set owned by 
 			// the group "groupname".
 			// 	
@@ -127,13 +127,13 @@ class semaphoreset {
 			// application, you may need to supply the groupentry
 			// class a mutex.  See groupentry.h for more detail.
 
-		int	setUserId(uid_t uid);
+		bool	setUserId(uid_t uid);
 			// makes this semaphore set owned by 
 			// the user identified by "uid"
-		int	setGroupId(gid_t gid);
+		bool	setGroupId(gid_t gid);
 			// makes this semaphore set owned by 
 			// the group identified by "gid"
-		int	setPermissions(mode_t permissions);
+		bool	setPermissions(mode_t permissions);
 			// sets the access permissions for this 
 			// semaphore set to "permissions"
 

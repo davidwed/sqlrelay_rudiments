@@ -12,37 +12,40 @@
 class shadowentry {
 	public:
 
-		// if you need to quickly look up ap specific field, use one
-		// of these mthods
-		static int	getEncryptedPassword(const char *username,
+		// If you need to quickly look up ap specific field, use one
+		// of these mthods.
+		//
+		// These methods return true on success and false on failure.
+		static bool	getEncryptedPassword(const char *username,
 							char **password);
-		static int	getLastChangeDate(
+		static bool	getLastChangeDate(
 						const char *username,
 							long *lstchg);
-		static int	getDaysBeforeChangeAllowed(
+		static bool	getDaysBeforeChangeAllowed(
 						const char *username,
 							int *min);
-		static int	getDaysBeforeChangeRequired(
+		static bool	getDaysBeforeChangeRequired(
 						const char *username,
 							int *max);
-		static int	getDaysBeforeExpirationWarning(
+		static bool	getDaysBeforeExpirationWarning(
 						const char *username,
 							int *warn);
-		static int	getDaysOfInactivityAllowed(
+		static bool	getDaysOfInactivityAllowed(
 						const char *username,
 							int *inact);
-		static int	getExpirationDate(
+		static bool	getExpirationDate(
 						const char *username,
 							int *expire);
-		static int	getFlag(const char *username, int *flag);
+		static bool	getFlag(const char *username, int *flag);
 
-		// if you need to look up a shadow entry and refer to multiple
-		// fields, use these methods
+		// If you need to look up a shadow entry and refer to multiple
+		// fields, use these methods.
 			shadowentry();
 			~shadowentry();
 
-		int	initialize(const char *username);
-			// looks up a shadow entry by name
+		bool	initialize(const char *username);
+			// Looks up a shadow entry by name.
+			// Returns true on success and false on failure.
 
 		char	*getName() const;
 		char	*getEncryptedPassword() const;
@@ -55,15 +58,15 @@ class shadowentry {
 		int	getFlag() const;
 
 		void	print() const;
-			// prints out the shadow entry
+			// Prints out the shadow entry.
 
-		static	int	needsMutex();
+		static	bool	needsMutex();
 			// If your system doesn't support getpwnam_r() and
 			// getpwuid_r() then this class needs a mutex to assure
 			// thread safety.
 			//
-			// This method returns 1 if this class needs a mutex to
-			// operate safely in a threaded environment and 0
+			// This method returns true if this class needs a mutex
+			// to operate safely in a threaded environment and false
 			// otherwise.
 		static	void	setMutex(pthread_mutex_t *mutex);
 			// Allows you to supply a mutex is the class needs it.

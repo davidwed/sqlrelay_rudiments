@@ -14,4 +14,4 @@
 #endif
 
 		int	fd;
-		int	closeflag;
+		bool	closeflag;

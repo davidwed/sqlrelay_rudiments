@@ -8,7 +8,7 @@ RUDIMENTS_INLINE unixserversocket::unixserversocket() :
 	mask=0;
 }
 
-RUDIMENTS_INLINE int unixserversocket::listenOnSocket(const char *filename,
+RUDIMENTS_INLINE bool unixserversocket::listenOnSocket(const char *filename,
 							mode_t mask,
 							int backlog) {
 	initialize(filename,mask);

@@ -16,7 +16,7 @@
 class inetclientsocket : public client, public inetsocket  {
 	public:
 
-		int	connectToServer(const char *host,
+		bool	connectToServer(const char *host,
 					unsigned short port,
 					unsigned int retrywait,
 					int retrycount);
@@ -24,7 +24,7 @@ class inetclientsocket : public client, public inetsocket  {
 			// initialize() and connect()
 			// methods below.
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 			//
 			// See connect() below for a note about use in
 			// multithreaded applications.
@@ -44,7 +44,7 @@ class inetclientsocket : public client, public inetsocket  {
 			// Initializes the class to use "host", "port",
 			// "retrywait" and "retrycount" when connect() is
 			// called.
-		int	connect();
+		bool	connect();
 			// Attempts to connect to the "host" and "port" set
 			// earlier.  If the connection fails, it will retry
 			// "retrycount" times, waiting "retrywait" seconds
@@ -57,7 +57,7 @@ class inetclientsocket : public client, public inetsocket  {
 			// will cause it to try to connect over and over
 			// as fast as possible (not recommended).
 			//
-			// Returns 1 on success and 0 on failure.
+			// Returns true on success and false on failure.
 			//
 			// Note that if your system does not support
 			// getaddrinfo() then connect() uses the hostentry and

@@ -42,7 +42,7 @@ semaphoreset::~semaphoreset() {
 	}
 }
 
-int semaphoreset::create(key_t key, mode_t permissions, 
+bool semaphoreset::create(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
 	this->semcount=semcount;
@@ -58,28 +58,28 @@ int semaphoreset::create(key_t key, mode_t permissions,
 		}
 
 		// mark for removal
-		created=1;
+		created=true;
 
 		createOperations();
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }
 
-int semaphoreset::attach(key_t key, int semcount) {
+bool semaphoreset::attach(key_t key, int semcount) {
 
 	this->semcount=semcount;
 
 	if ((semid=semget(key,semcount,0))>-1) {
 		createOperations();
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }
 
-int semaphoreset::createOrAttach(key_t key, mode_t permissions, 
+bool semaphoreset::createOrAttach(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
 	this->semcount=semcount;
@@ -95,15 +95,15 @@ int semaphoreset::createOrAttach(key_t key, mode_t permissions,
 		}
 
 		// mark for removal
-		created=1;
+		created=true;
 		
 	} else if (!(errno==EEXIST && 
 				(semid=semget(key,semcount,permissions))>-1)) {
 
-		return 0;
+		return false;
 	}
 	createOperations();
-	return 1;
+	return true;
 }
 
 void semaphoreset::createOperations() {
@@ -141,7 +141,7 @@ void semaphoreset::createOperations() {
 	}
 }
 
-int semaphoreset::setUserId(uid_t uid) {
+bool semaphoreset::setUserId(uid_t uid) {
 	semid_ds	setds;
 	setds.sem_perm.uid=uid;
 	semun	semctlun;
@@ -149,7 +149,7 @@ int semaphoreset::setUserId(uid_t uid) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
-int semaphoreset::setGroupId(gid_t gid) {
+bool semaphoreset::setGroupId(gid_t gid) {
 	semid_ds	setds;
 	setds.sem_perm.gid=gid;
 	semun	semctlun;
@@ -157,7 +157,7 @@ int semaphoreset::setGroupId(gid_t gid) {
 	return !semctl(semid,0,IPC_SET,semctlun);
 }
 
-int semaphoreset::setPermissions(mode_t permissions) {
+bool semaphoreset::setPermissions(mode_t permissions) {
 	semid_ds	setds;
 	setds.sem_perm.mode=permissions;
 	semun	semctlun;

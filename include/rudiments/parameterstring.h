@@ -20,7 +20,7 @@ class parameterstring {
 			parameterstring();
 			~parameterstring();
 
-		int	parse(const char *string);
+		bool	parse(const char *string);
 		char	*getValue(const char *name);
 
 	#include <rudiments/private/parameterstring.h>

@@ -3,14 +3,14 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE int serversocket::dontLingerOnClose() {
+RUDIMENTS_INLINE bool serversocket::dontLingerOnClose() {
 	return setLingerOnClose(0,1);
 }
 
-RUDIMENTS_INLINE int serversocket::reuseAddresses() {
+RUDIMENTS_INLINE bool serversocket::reuseAddresses() {
 	return setReuseAddresses(1);
 }
 
-RUDIMENTS_INLINE int serversocket::dontReuseAddresses() {
+RUDIMENTS_INLINE bool serversocket::dontReuseAddresses() {
 	return setReuseAddresses(0);
 }

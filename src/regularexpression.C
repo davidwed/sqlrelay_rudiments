@@ -6,7 +6,7 @@
 	#include <rudiments/private/regularexpressioninlines.h>
 #endif
 
-int regularexpression::compile(const char *pattern) {
+bool regularexpression::compile(const char *pattern) {
 
 	#if defined(HAVE_REGEX_H)
 		if (compiledexpression) {
@@ -16,7 +16,7 @@ int regularexpression::compile(const char *pattern) {
 		regex_t	*preg=new regex_t;
 		if (!regcomp(preg,pattern,REG_EXTENDED|REG_NOSUB)) {
 			compiledexpression=(long)preg;
-			return 1;
+			return true;
 		}
 	#elif defined(HAVE_REGEXP_H)
 		if (compiledexpression) {
@@ -26,7 +26,7 @@ int regularexpression::compile(const char *pattern) {
 		regexp *prog=regcomp(pattern);
 		if (prog) {
 			compiledexpression=(long)prog;
-			return 1;
+			return true;
 		}
 	#elif defined(HAVE_REGCMP)
 		if (compiledexpression) {
@@ -36,7 +36,7 @@ int regularexpression::compile(const char *pattern) {
 		char	*re=regcmp(pattern,NULL);
 		if (re) {
 			compiledexpression=(long)re;
-			return 1;
+			return true;
 		}
 	#elif defined(HAVE_RE_COMP)
 		if (compiledexpression) {
@@ -46,7 +46,7 @@ int regularexpression::compile(const char *pattern) {
 		char	*re=re_comp(pattern);
 		if (re) {
 			compiledexpression=(long)re;
-			return 1;
+			return true;
 		}
 	#elif defined(HAVE_REGEXPR_H)
 		if (compiledexpression) {
@@ -56,16 +56,16 @@ int regularexpression::compile(const char *pattern) {
 		char	*expbuf=compile(pattern,NULL,NULL);
 		if (expbuf) {
 			compiledexpression=(long)expbuf;
-			return 1;
+			return true;
 		}
 	#endif
 
-	return 0;
+	return false;
 }
 
-int regularexpression::match(const char *str, const char *pattern) {
+bool regularexpression::match(const char *str, const char *pattern) {
 
-	int	retval=0;
+	bool	retval=false;
 
 	#if defined(HAVE_REGEX_H)
 		regex_t	preg;
@@ -83,7 +83,7 @@ int regularexpression::match(const char *str, const char *pattern) {
 	#elif defined(HAVE_REGCMP)
 		char	*re=regcmp(pattern,NULL);
 		if (re && regex(re,str,NULL)) {
-			retval=1;
+			retval=true;
 		}
 		delete re;
 	#elif defined(HAVE_RE_COMP)
@@ -93,7 +93,7 @@ int regularexpression::match(const char *str, const char *pattern) {
 	#elif defined(HAVE_REGEXPR_H)
 		char	*expbuf=compile(pattern,NULL,NULL);
 		if (expbuf && step(str,expbuf)) {
-			retval=1;
+			retval=true;
 		}
 		delete expbuf;
 	#endif

@@ -15,7 +15,7 @@ RUDIMENTS_INLINE char *environment::getValue(const char *variable) const {
 }
 
 #ifdef HAVE_SETENV
-RUDIMENTS_INLINE int environment::setValue(const char *variable,
+RUDIMENTS_INLINE bool environment::setValue(const char *variable,
 						const char *value) {
 	return (setenv(variable,value,1)!=-1);
 }

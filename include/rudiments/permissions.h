@@ -28,12 +28,16 @@
 
 class permissions {
 	public:
-		static	int	setFilePermissions(const char *filename,
+		static	bool	setFilePermissions(const char *filename,
 							mode_t perms);
-				// set the permissions on "filename" to "perms"
-		static	int	setFilePermissions(int fd, mode_t perms);
-				// set the permissions on the file associated
-				// with file descriptor "fd" to "perms"
+				// Set the permissions on "filename" to "perms".
+				//
+				// Returns true on success and false on failure.
+		static	bool	setFilePermissions(int fd, mode_t perms);
+				// Set the permissions on the file associated
+				// with file descriptor "fd" to "perms".
+				// 
+				// Returns true on success and false on failure.
 
 		static	mode_t	evalPermString(const char *permstring);
 				// Return a permission defined in "permstring".

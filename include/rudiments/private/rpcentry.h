@@ -11,4 +11,4 @@
 			static	pthread_mutex_t	*remutex;
 		#endif
 
-		int	initialize(const char *name, int number);
+		bool	initialize(const char *name, int number);

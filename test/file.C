@@ -53,12 +53,12 @@ int main(int argc, const char **argv) {
 
 	// display the size of the file in bytes
 	off_t	size=fl.getSize();
-	printf("	size       : %d\n",size);
+	printf("	size       : %ld\n",size);
 
 
 	// display the size of the file in blocks
 	blkcnt_t	blocks=fl.getBlockCount();
-	printf("	blocks     : %d\n",blocks);
+	printf("	blocks     : %ld\n",blocks);
 
 
 	// display the file type
@@ -109,5 +109,5 @@ int main(int argc, const char **argv) {
 
 	// display the number of hard links to the file
 	nlink_t	nlink=fl.getNumberOfHardLinks();
-	printf("	hard links : %d\n",nlink);
+	printf("	hard links : %ld\n",nlink);
 }

@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	printf("Individually...\n");
 	printf("	Name: %s\n",spent.getName());
 	printf("	Encrypted Password: %s\n",spent.getEncryptedPassword());
-	printf("	Last Change: %d\n",
+	printf("	Last Change: %ld\n",
 					spent.getLastChangeDate());
 	printf("	Days Before Change Allowed: %d\n",
 					spent.getDaysBeforeChangeAllowed());

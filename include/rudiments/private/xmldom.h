@@ -4,13 +4,13 @@
 	private:
 			void	reset();
 
-			int	tagStart(char *name);
-			int	attributeName(char *name);
-			int	attributeValue(char *value);
-			int	text(char *string);
-			int	tagEnd(char *name);
-			int	comment(char *string);
-			int	cdata(char *string);
+			bool	tagStart(char *name);
+			bool	attributeName(char *name);
+			bool	attributeValue(char *value);
+			bool	text(char *string);
+			bool	tagEnd(char *name);
+			bool	comment(char *string);
+			bool	cdata(char *string);
 
 			xmldomnode	*nullnode;
 			xmldomnode	*rootnode;

@@ -64,27 +64,41 @@ class list {
 		void	append(datatype data);
 			// Creates a new listnode containing "data" and
 			// appends it to the list.
-		int	insert(unsigned long index, datatype data);
+		bool	insert(unsigned long index, datatype data);
 			// Creates a new listnode containing "data" and
 			// inserts it into the list at "index".
+			//
+			// Returns true on success and false on failure.
 
-		int	removeByIndex(unsigned long index);
+		bool	removeByIndex(unsigned long index);
 			// Deletes the listnode at "index".
-		int	removeByData(datatype data);
+			//
+			// Returns true on success and false on failure.
+		bool	removeByData(datatype data);
 			// Deletes the first listnode containing "data".
-		int	removeAllByData(datatype data);
+			//
+			// Returns true on success and false on failure.
+		bool	removeAllByData(datatype data);
 			// Deletes all listnodes containing "data".
-		int	removeNode(listnodetype *node);
+			//
+			// Returns true on success and false on failure.
+		bool	removeNode(listnodetype *node);
 			// Removed listnode "node" from the list.
+			//
+			// Returns true on success and false on failure.
 
-		int	setDataByIndex(unsigned long index,
+		bool	setDataByIndex(unsigned long index,
 						datatype data);
 			// Sets the data contained in the listnode at "index"
 			// to "data".
-		int	getDataByIndex(unsigned long index,
+			//
+			// Returns true on success and false on failure.
+		bool	getDataByIndex(unsigned long index,
 						datatype *data) const;
 			// Returns the data contained in the listnode at
 			// "index".
+			//
+			// Returns true on success and false on failure.
 
 		unsigned long	getLength() const;
 				// Returns the length of the list.
