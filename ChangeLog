@@ -9,6 +9,8 @@
 	added modem client/server
 	made default parseNumber base 10 instead of 0
 	INSTALL is moved to INSTALL.txt for OS X now
+	added detachBuffer, detachString to variablebuffer, stringbuffer
+	added split to charstring class
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

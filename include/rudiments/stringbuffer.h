@@ -78,6 +78,14 @@ class stringbuffer : public variablebuffer {
 			// Returns the position in the buffer at which
 			// the next write will occur.
 
+		char	*detachString();
+			// Returns a pointer to the string currently stored
+			// in the stringbuffer, then resets the stringbuffer
+			// such that it will no longer use that string.
+			//
+			// The calling program must deallocate the string
+			// returned from this method.
+
 	#include <rudiments/private/stringbuffer.h>
 };
 

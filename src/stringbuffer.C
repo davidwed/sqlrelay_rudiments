@@ -28,6 +28,11 @@ char *stringbuffer::getString() {
 	return (char *)getBuffer();
 }
 
+char *stringbuffer::detachString() {
+	terminate();
+	return (char *)detachBuffer();
+}
+
 size_t stringbuffer::getPosition() {
 	return variablebuffer::getPosition();
 }

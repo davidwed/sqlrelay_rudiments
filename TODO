@@ -1,4 +1,4 @@
-document modem*/chat classes
+document/comment modem*/chat classes
 add to chat class:
 	\b-backspace
 	\K-BREAK
@@ -12,7 +12,6 @@ wrap shm_open/shm_unlink somewhere
 move sleep methods into another class
 
 file class:
-	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
 
 can getData methods in dict/linkedlist classes be const?

@@ -344,6 +344,37 @@ class charstring {
 		static void	safePrint(const char *str, int length);
 			// safePrint()'s "length" characters of "str" 
 
+
+		// These methods parse "string" delimited by "delimiter"
+		// and allocate "listlength" elements of "list" to return the
+		// parts.  Each member of "list" and "list" must be deallocated
+		// by the calling program.  In the versions of the method
+		// where "stringlength" or "delimiterlength" are not
+		// supplied, string and/or delimiter are presumed to be
+		// NULL terminated strings.
+		static void	split(const char *string,
+					ssize_t stringlength,
+					const char *delimiter,
+					ssize_t delimiterlength,
+					char ***list,
+					unsigned long *listlength);
+		static void	split(const char *string,
+					const char *delimiter,
+					ssize_t delimiterlength,
+					char ***list,
+					unsigned long *listlength);
+		static void	split(const char *string,
+					ssize_t stringlength,
+					const char *delimiter,
+					char ***list,
+					unsigned long *listlength);
+		static void	split(const char *string,
+					const char *delimiter,
+					char ***list,
+					unsigned long *listlength);
+
+
+
 	#include <rudiments/private/charstring.h>
 };
 

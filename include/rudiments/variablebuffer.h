@@ -85,6 +85,15 @@ class variablebuffer {
 				// may be larger than the value returned by
 				// getSize() since the buffer grows in chunks.
 
+		unsigned char	*detachBuffer();
+				// Returns a pointer to the buffer currently
+				// stored in the variablebuffer, then resets
+				// the variablebuffer such that it will no
+				// longer use that buffer.
+				//
+				// The calling program must deallocate the
+				// buffer returned from this method.
+
 	#include <rudiments/private/variablebuffer.h>
 };
 

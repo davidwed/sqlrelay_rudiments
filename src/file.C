@@ -58,16 +58,64 @@ ssize_t file::create(const char *name, mode_t perms, const char *string) {
 	return create(name,perms,(void *)string,charstring::length(string));
 }
 
-ssize_t file::create(const char *name, mode_t permissions,
+ssize_t file::create(const char *name, mode_t perms,
 					const void *data, size_t size) {
 	size_t	retval;
-	if (((fd=::open(name,O_CREAT|O_TRUNC|O_RDWR,permissions))!=-1) &&
+	if (((fd=::open(name,O_CREAT|O_TRUNC|O_RDWR,perms))!=-1) &&
 		((retval=write(data,size))==size) &&
 		((getcurrentpropertiesonopen)?getCurrentProperties():true)) {
 		return retval;
 	}
 	close();
 	return -1;
+}
+
+bool file::createFile(const char *name, mode_t perms) {
+	file	fl;
+	return fl.create(name,perms);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms,
+						unsigned short number) {
+	file	fl;
+	return fl.create(name,perms,number);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms, unsigned long number) {
+	file	fl;
+	return fl.create(name,perms,number);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms, float number) {
+	file	fl;
+	return fl.create(name,perms,number);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms, double number) {
+	file	fl;
+	return fl.create(name,perms,number);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms, char number) {
+	file	fl;
+	return fl.create(name,perms,number);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms,
+					const char *string, size_t size) {
+	file	fl;
+	return fl.create(name,perms,string,size);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms, const char *string) {
+	file	fl;
+	return fl.create(name,perms,string);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms,
+					const void *data, size_t size) {
+	file	fl;
+	return fl.create(name,perms,data,size);
 }
 
 bool file::open(const char *name, int flags) {

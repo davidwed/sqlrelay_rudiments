@@ -684,3 +684,108 @@ void charstring::safePrint(const char *string, int length) {
 void charstring::safePrint(const char *string) {
 	safePrint(string,charstring::length(string));
 }
+
+void charstring::split(const char *string, const char *delimiter,
+				char ***list, unsigned long *listlength) {
+	split(string,charstring::length(string),
+			delimiter,charstring::length(delimiter),
+			list,listlength);
+}
+
+void charstring::split(const char *string, ssize_t stringlength,
+				const char *delimiter,
+				char ***list, unsigned long *listlength) {
+	split(string,stringlength,
+			delimiter,charstring::length(delimiter),
+			list,listlength);
+}
+
+void charstring::split(const char *string, 
+				const char *delimiter, ssize_t delimiterlength,
+				char ***list, unsigned long *listlength) {
+	split(string,charstring::length(string),
+			delimiter,delimiterlength,
+			list,listlength);
+}
+
+void charstring::split(const char *string, ssize_t stringlength,
+				const char *delimiter, ssize_t delimiterlength,
+				char ***list, unsigned long *listlength) {
+
+	// handle degenerate cases
+	if (!string || !string[0] || !stringlength ||
+			!delimiter || !delimiter[0] || !delimiterlength) {
+		(*list)=NULL;
+		(*listlength)=0;
+		return;
+	}
+
+	// 2 passes,
+	// 1 to count the number of chunks to split the string into,
+	// 1 to actually split the string
+	for (int pass=0; pass<2; pass++) {
+
+		// set pointers to the beginning and end of the string
+		char	*start=(char *)string;
+		char	*end=(char *)string+stringlength;
+
+		// initialize the list length
+		(*listlength)=0;
+
+		// loop through the string...
+		char *current=start;
+		for (;;) {
+
+			// if there's not enough room left in the string for
+			// another delimiter, then move the current position
+			// to the end
+			if (end-current<delimiterlength) {
+				current=end;
+			}
+
+			// if we found a delimiter or ran into the end of
+			// the string...
+			if (current==end ||
+				!charstring::compare(current,delimiter,
+							delimiterlength)) {
+
+				// handle cases of multiple delimiters in a row
+				if (current!=start) {
+
+					// if we're on the second pass...
+					if (pass) {
+
+						// make a copy of the string
+						// between the last delimiter
+						// and here
+						(*list)[*listlength]=
+							charstring::duplicate(
+								start,
+								current-start);
+					}
+
+					// increment the counter
+					(*listlength)++;
+				}
+
+				if (current==end) {
+					// if we're at the end of the string,
+					// then we're done
+					break;
+				} else {
+					// move the current and start pointers
+					current=current+delimiterlength;
+					start=current;
+				}
+			} else {
+				current++;
+			}
+		}
+
+		// if we're done with the first pass,
+		// create the list and reset the counter
+		if (!pass) {
+			(*list)=new char *[*listlength];
+		}
+	}
+}

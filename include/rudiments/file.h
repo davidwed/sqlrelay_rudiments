@@ -506,6 +506,43 @@ class file : public filedescriptor {
 		#endif
 
 
+		// These methods creates the file "name" with permissions
+		// "perms".  If the file already exists, it will be truncated.
+		static bool	createFile(const char *name, mode_t perms);
+			// Returns true on success and false on failure.
+		static ssize_t	createFile(const char *name, mode_t perms,
+						unsigned short number);
+			// Sets the initial contents to "number".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+						unsigned long number);
+			// Sets the initial contents to "number".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+						float number);
+			// Sets the initial contents to "number".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+						double number);
+			// Sets the initial contents to "number".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+						char number);
+			// Sets the initial contents to "number".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+						const char *string);
+			// Sets the initial contents to "string".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+					const char *string, size_t size);
+			// Sets the initial contents to "string" of size "size".
+			// Returns the number of bytes written or -1 on error.
+		static ssize_t	createFile(const char *name, mode_t perms,
+					const void *data, size_t size);
+			// Sets the initial contents to "data" of size "size".
+			// Returns the number of bytes written or -1 on error.
+
 
 		// These methods allow you to create special kinds of files.
 		static bool	createFifo(const char *filename, mode_t perms);

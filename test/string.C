@@ -64,4 +64,63 @@ int main(int argc, const char **argv) {
 
 	// make sure to clean up what duplicate() returns
 	delete[] hello;
+
+
+	// split
+	char		**list;
+	unsigned long	listlength;
+	charstring::split("hello||hi||bye||goodbye","||",&list,&listlength);
+	printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
+	printf("%d items\n",listlength);
+	for (unsigned long i=0; i<listlength; i++) {
+		printf("	%s\n",list[i]);
+		delete[] list[i];
+	}
+	delete[] list;
+
+	charstring::split("hello||hi||bye||goodbye||","||",&list,&listlength);
+	printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
+	printf("%d items\n",listlength);
+	for (unsigned long i=0; i<listlength; i++) {
+		printf("	%s\n",list[i]);
+		delete[] list[i];
+	}
+	delete[] list;
+
+	charstring::split("||hello||hi||bye||goodbye||","||",&list,&listlength);
+	printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
+	printf("%d items\n",listlength);
+	for (unsigned long i=0; i<listlength; i++) {
+		printf("	%s\n",list[i]);
+		delete[] list[i];
+	}
+	delete[] list;
+
+	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",
+							&list,&listlength);
+	printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
+	printf("%d items\n",listlength);
+	for (unsigned long i=0; i<listlength; i++) {
+		printf("	%s\n",list[i]);
+		delete[] list[i];
+	}
+	delete[] list;
+
+	charstring::split("||||||||||","||",&list,&listlength);
+	printf("split(\"||||||||||\",\"||\")\n");
+	printf("%d items\n",listlength);
+	for (unsigned long i=0; i<listlength; i++) {
+		printf("	%s\n",list[i]);
+		delete[] list[i];
+	}
+	delete[] list;
+
+	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",&list,&listlength);
+	printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
+	printf("%d items\n",listlength);
+	for (unsigned long i=0; i<listlength; i++) {
+		printf("	%s\n",list[i]);
+		delete[] list[i];
+	}
+	delete[] list;
 }

@@ -127,6 +127,15 @@ unsigned char *variablebuffer::getBuffer() {
 	return buffer;
 }
 
+unsigned char *variablebuffer::detachBuffer() {
+	unsigned char	*retval=buffer;
+	buffer=new unsigned char[initialsize];
+	buffersize=initialsize;
+	position=0;
+	endofbuffer=0;
+	return retval;
+}
+
 size_t variablebuffer::getSize() {
 	return endofbuffer;
 }
