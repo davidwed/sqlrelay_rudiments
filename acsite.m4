@@ -28,7 +28,7 @@ SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 CPPFLAGS="$3"
-LIBS="$4"
+LIBS="$HACKLIBS $4"
 LD_LIBRARY_PATH="$5"
 export LD_LIBRARY_PATH
 AC_TRY_LINK([$1],[$2],[$6],[$7])
@@ -462,9 +462,8 @@ then
 
 		if ( test -n "$PCRELIBS" )
 		then
-			AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
-			AC_MSG_RESULT(yes)
-			HAVE_PCRE="yes"
+			FW_TRY_LINK([#include <stdlib.h>
+#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;],[$PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
 		else
 			AC_MSG_RESULT(no)
 		fi

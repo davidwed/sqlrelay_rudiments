@@ -68,6 +68,15 @@ if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 	AC_DEFINE_UNQUOTED(ENABLE_RUDIMENTS_INLINES,1,Use inline functions or not)
 fi
 
+dnl library hacks here...
+HACKLIBS=""
+dnl SCO 5.0.6 hack
+if ( test "`uname -a`" = "SCO_SV osr506 3.2 5.0.6 i386" )
+then
+	HACKLIBS="/usr/ccs/lib/crti.o $LIBS"
+fi
+LIBS="$HACKLIBS $LIBS"
+
 
 dnl Checks for programs.
 echo
