@@ -17,15 +17,18 @@
 			dictionarylistnodetype,dictionarylisttype>
 
 DICTIONARY_TEMPLATE
-inline DICTIONARY_CLASS::dictionary() {
+RUDIMENTS_TEMPLATE_INLINE
+DICTIONARY_CLASS::dictionary() {
 }
 
 DICTIONARY_TEMPLATE
-inline DICTIONARY_CLASS::~dictionary() {
+RUDIMENTS_TEMPLATE_INLINE
+DICTIONARY_CLASS::~dictionary() {
 }
 
 DICTIONARY_TEMPLATE
-inline void DICTIONARY_CLASS::setData(keytype key, datatype data) {
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::setData(keytype key, datatype data) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		node->getData()->setData(data);
@@ -38,7 +41,8 @@ inline void DICTIONARY_CLASS::setData(keytype key, datatype data) {
 }
 
 DICTIONARY_TEMPLATE
-inline bool DICTIONARY_CLASS::getData(keytype key, datatype *data) {
+RUDIMENTS_TEMPLATE_INLINE
+bool DICTIONARY_CLASS::getData(keytype key, datatype *data) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		*data=node->getData()->getData();
@@ -48,7 +52,8 @@ inline bool DICTIONARY_CLASS::getData(keytype key, datatype *data) {
 }
 
 DICTIONARY_TEMPLATE
-inline bool DICTIONARY_CLASS::removeData(keytype key) {
+RUDIMENTS_TEMPLATE_INLINE
+bool DICTIONARY_CLASS::removeData(keytype key) {
 	dictionarylistnodetype	*node=findNode(key);
 	if (node) {
 		return dict.removeNode(node);
@@ -57,7 +62,8 @@ inline bool DICTIONARY_CLASS::removeData(keytype key) {
 }
 
 DICTIONARY_TEMPLATE
-inline dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) const {
+RUDIMENTS_TEMPLATE_INLINE
+dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) const {
 	dictionarylistnodetype	*node=
 			(dictionarylistnodetype *)dict.getNodeByIndex(0);
 	while (node) {
@@ -70,17 +76,20 @@ inline dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) const {
 }
 
 DICTIONARY_TEMPLATE
-inline dictionarylisttype *DICTIONARY_CLASS::getList() {
+RUDIMENTS_TEMPLATE_INLINE
+dictionarylisttype *DICTIONARY_CLASS::getList() {
 	return &dict;
 }
 
 DICTIONARY_TEMPLATE
-inline void DICTIONARY_CLASS::clear() {
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::clear() {
 	dict.clear();
 }
 
 DICTIONARY_TEMPLATE
-inline void DICTIONARY_CLASS::print() const {
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::print() const {
 	dictionarylistnodetype	*node=
 			(dictionarylistnodetype *)dict.getNodeByIndex(0);
 	while (node) {

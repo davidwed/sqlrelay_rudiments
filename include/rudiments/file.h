@@ -26,6 +26,7 @@ class file : public filedescriptor {
 			// Creates an uninitialized instance of the file class
 			// and associates already open file descriptor "fd"
 			// with it.
+		virtual	~file();
 
 
 		// These methods open the file "name" using "flags".

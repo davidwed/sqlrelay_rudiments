@@ -5,6 +5,8 @@
 #include <rudiments/charstring.h>
 
 #include <stdio.h>
+// for atoi...
+#include <stdlib.h>
 
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	init(nullnode);

@@ -11,6 +11,9 @@
 
 class server : virtual public datatransport {
 	public:
+			server();
+		virtual	~server();
+
 		virtual	bool	bind();
 		virtual	bool	listen(int backlog);
 		virtual	bool	accept();

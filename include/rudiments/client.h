@@ -12,6 +12,9 @@
 class client : virtual public datatransport {
 	public:
 
+			client();
+		virtual ~client();
+
 		virtual void	initialize(namevaluepairs *cd)=0;
 
 		virtual int	connect()=0;

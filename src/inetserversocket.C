@@ -15,6 +15,8 @@
 
 inetserversocket::inetserversocket() : serversocket(), inetsocket() {}
 
+inetserversocket::~inetserversocket() {}
+
 unsigned short inetserversocket::getPort() {
 	return port;
 }

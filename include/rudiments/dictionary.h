@@ -20,6 +20,7 @@ class dictionarynode {
 			dictionarynode();
 			// Creates a new dictionary node, initializing the
 			// key and data to 0.
+		virtual	~dictionarynode();
 
 		void	setKey(keytype key);
 			// Sets the key stored in the node to "key".
@@ -42,7 +43,9 @@ class dictionarynode {
 	#include <rudiments/private/dictionarynode.h>
 };
 
-#include <rudiments/private/dictionarynodeinlines.h>
+#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
+	#include <rudiments/private/dictionarynodeinlines.h>
+#endif
 
 template <class keytype, class datatype>
 class dictionarylistnode :
@@ -91,7 +94,9 @@ class dictionary {
 	#include <rudiments/private/dictionary.h>
 };
 
-#include <rudiments/private/dictionaryinlines.h>
+#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
+	#include <rudiments/private/dictionaryinlines.h>
+#endif
 
 
 

@@ -3,6 +3,9 @@
 
 #include <rudiments/parameterstring.h>
 
+// for NULL
+#include <stdlib.h>
+
 parameterstring::parameterstring() {
 	delim=';';
 }

@@ -25,6 +25,8 @@ unixsocket::unixsocket(int filedesc) :
 	filename=NULL;
 }
 
+unixsocket::~unixsocket() {}
+
 void unixsocket::initialize(const char *filename) {
 	this->filename=(char *)filename;
 }

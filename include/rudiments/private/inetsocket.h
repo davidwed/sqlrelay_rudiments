@@ -14,6 +14,7 @@ class inetsocket : virtual public socket {
 	public:
 			inetsocket();
 			inetsocket(int filedesc);
+		virtual	~inetsocket();
 		void	initialize(const char *address, unsigned short port);
 	protected:
 		char		*address;

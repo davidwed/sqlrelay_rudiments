@@ -11,6 +11,8 @@ socket::socket() : filedescriptor(), datatransport() {}
 socket::socket(int filedesc) :
 	filedescriptor(filedesc), datatransport(filedesc) {}
 
+socket::~socket() {}
+
 #ifdef FIONBIO
 bool socket::useNonBlockingMode() {
 	int	nonblocking=1;

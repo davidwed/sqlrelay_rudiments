@@ -16,6 +16,8 @@ class socket : virtual public datatransport {
 	public:
 			socket();
 			socket(int filedesc);
+		virtual	~socket();
+
 #ifdef FIONBIO
 		virtual bool	useNonBlockingMode();
 		virtual bool	useBlockingMode();

@@ -4,10 +4,10 @@
 #include <rudiments/environment.h>
 #include <rudiments/charstring.h>
 
-#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
-
 #include <stdio.h>
 #include <stdlib.h>
+
+#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 
 environment::~environment() {
 	for (namevaluepairslistnode *node=

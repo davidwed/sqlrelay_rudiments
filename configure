@@ -1566,7 +1566,7 @@ if test "${enable_debug+set}" = set; then
   enableval="$enable_debug"
   CXXFLAGS="-g -pg -fno-exceptions -Wall"; INSTALLSTRIP=""; DEBUGSTRIP="touch"
 else
-  CXXFLAGS="-fomit-frame-pointer -fno-exceptions -Wall"; INSTALLSTRIP="-s"; DEBUGSTRIP=""
+  CXXFLAGS="-fno-exceptions -Wall"; INSTALLSTRIP="-s"; DEBUGSTRIP=""
 fi;
 
 # Check whether --with-system-libtool or --without-system-libtool was given.

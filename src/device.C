@@ -13,6 +13,8 @@ device::device(int fd) : file(fd) {
 	dontGetCurrentPropertiesOnOpen();
 }
 
+device::~device() {}
+
 bool device::createDeviceNode(const char *filename, bool blockdevice,
 				unsigned short major, unsigned short minor,
 				mode_t perms) {

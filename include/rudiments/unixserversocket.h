@@ -27,6 +27,7 @@
 class unixserversocket : public serversocket, public unixsocket {
 	public:
 			unixserversocket();
+		virtual ~unixserversocket();
 
 		bool	listenOnSocket(const char *filename,
 						mode_t mask,

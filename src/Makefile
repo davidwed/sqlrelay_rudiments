@@ -5,7 +5,12 @@ include ../features.mk
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
-SRCS = 
+SRCS = dictionary.C
+LOBJS = dictionary.lo
+ifeq ($(INCLUDE_CLIENT),1)
+	SRCS += client.C
+	LOBJS += client.lo
+endif
 ifeq ($(INCLUDE_COMMANDLINE),1)
 	SRCS += commandline.C
 	LOBJS += commandline.lo

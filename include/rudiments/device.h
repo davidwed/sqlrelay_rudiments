@@ -18,6 +18,7 @@ class device : public file {
 			// Creates an uninitialized instance of the device class
 			// and associates already open device descriptor "fd"
 			// with it.
+		virtual	~device();
 
 		static bool	createDeviceNode(const char *filename,
 						bool blockdevice,

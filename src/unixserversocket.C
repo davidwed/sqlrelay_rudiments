@@ -15,6 +15,8 @@ unixserversocket::unixserversocket() : serversocket(), unixsocket() {
 	mask=0;
 }
 
+unixserversocket::~unixserversocket() {}
+
 bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	unixsocket::initialize(filename);

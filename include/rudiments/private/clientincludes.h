@@ -3,4 +3,5 @@
 
 #include <rudiments/resultcodes.h>
 #include <rudiments/datatransport.h>
+#define DISABLE_RUDIMENTS_TEMPLATE_INLINES
 #include <rudiments/dictionary.h>

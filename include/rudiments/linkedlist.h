@@ -52,7 +52,9 @@ class linkedlistnode {
 	#include <rudiments/private/linkedlistnode.h>
 };
 
-#include <rudiments/private/linkedlistnodeinlines.h>
+#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
+	#include <rudiments/private/linkedlistnodeinlines.h>
+#endif
 
 template < class datatype, class linkedlistnodetype=linkedlistnode<datatype> >
 class linkedlist {
@@ -137,7 +139,9 @@ class linkedlist {
 	#include <rudiments/private/linkedlist.h>
 };
 
-#include <rudiments/private/linkedlistinlines.h>
+#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
+	#include <rudiments/private/linkedlistinlines.h>
+#endif
 
 
 

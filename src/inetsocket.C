@@ -7,6 +7,8 @@ inetsocket::inetsocket() : filedescriptor(), datatransport(), socket() {
 	initialize(NULL,0);
 }
 
+inetsocket::~inetsocket() {}
+
 inetsocket::inetsocket(int filedesc) :
 	filedescriptor(filedesc), datatransport(filedesc), socket(filedesc) {
 	initialize(NULL,0);

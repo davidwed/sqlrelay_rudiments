@@ -5,8 +5,11 @@
 
 #include <stdio.h>
 
+#include <rudiments/private/rudimentsinlines.h>
+
 template <class datatype>
-inline int linkedlistutil<datatype>::
+RUDIMENTS_TEMPLATE_INLINE
+int linkedlistutil<datatype>::
 			compare(datatype data1, datatype data2) const {
 	if (data1<data2) {
 		return -1;
@@ -18,46 +21,55 @@ inline int linkedlistutil<datatype>::
 }
 
 template <>
-inline void linkedlistutil<char *>::print(char *data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<char *>::print(char *data) const {
 	printf("%s",data);
 }
 
 template <>
-inline int linkedlistutil<char *>::compare(char *data1, char *data2) const {
+RUDIMENTS_TEMPLATE_INLINE
+int linkedlistutil<char *>::compare(char *data1, char *data2) const {
 	return charstring::compare(data1,data2);
 }
 
 template <>
-inline void linkedlistutil<char>::print(char data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<char>::print(char data) const {
 	printf("%c",data);
 }
 
 template <>
-inline void linkedlistutil<int>::print(int data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<int>::print(int data) const {
 	printf("%d",data);
 }
 
 template <>
-inline void linkedlistutil<short>::print(short data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<short>::print(short data) const {
 	printf("%hd",data);
 }
 
 template <>
-inline void linkedlistutil<long>::print(long data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<long>::print(long data) const {
 	printf("%ld",data);
 }
 
 template <>
-inline void linkedlistutil<float>::print(float data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<float>::print(float data) const {
 	printf("%f",data);
 }
 
 template <>
-inline void linkedlistutil<double>::print(double data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<double>::print(double data) const {
 	printf("%f",data);
 }
 
 template <class datatype>
-inline void linkedlistutil<datatype>::print(datatype data) const {
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<datatype>::print(datatype data) const {
 	printf("%lx",(unsigned long)data);
 }

@@ -17,6 +17,10 @@
 // need these for memset...
 #include <string.h>
 
+inetclientsocket::inetclientsocket() : client(), inetsocket() {}
+
+inetclientsocket::~inetclientsocket() {}
+
 int inetclientsocket::connectToServer(const char *host,
 						unsigned short port,
 						long timeoutsec,

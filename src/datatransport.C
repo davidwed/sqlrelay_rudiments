@@ -9,6 +9,8 @@ datatransport::datatransport() : filedescriptor() {}
 
 datatransport::datatransport(int filedesc) : filedescriptor(filedesc) {}
 
+datatransport::~datatransport() {}
+
 unsigned short datatransport::hostToNet(unsigned short value) const {
 	return htons(value);
 }

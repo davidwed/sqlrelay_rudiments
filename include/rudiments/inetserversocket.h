@@ -20,6 +20,7 @@
 class inetserversocket : public serversocket, public inetsocket {
 	public:
 			inetserversocket();
+		virtual	~inetserversocket();
 
 		bool	listenOnSocket(const char *address,
 						unsigned short port,

@@ -16,6 +16,8 @@ should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl
 	
 probably can combine memorypool and variablebuffer classes
+memorypool actually just works the same way that malloc tends to work, I'm not
+	sure using it nets anything
 
 xml:
 	dtd class needs to store +/* child element modifiers

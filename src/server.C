@@ -3,6 +3,10 @@
 
 #include <rudiments/server.h>
 
+server::server() : datatransport() {}
+
+server::~server() {}
+
 bool server::bind() {
 	return true;
 }

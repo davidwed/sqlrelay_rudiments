@@ -13,6 +13,8 @@ class unixsocket : virtual public socket {
 	public:
 			unixsocket();
 			unixsocket(int filedesc);
+		virtual ~unixsocket();
+
 		void	initialize(const char *filename);
 
 		bool	passFileDescriptor(int filedesc);

@@ -9,6 +9,9 @@
 class serversocket : public server {
 	public:
 
+			serversocket();
+		virtual	~serversocket();
+
 		// These 4 methods allow you to set socket options.  They must
 		// be called after calling bind() and before calling listen().
 		bool	lingerOnClose(int timeout);

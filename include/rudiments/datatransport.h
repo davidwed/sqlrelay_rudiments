@@ -19,6 +19,8 @@ class datatransport : virtual public filedescriptor {
 				// already open file descriptor "filedesc"
 				// with it.
 
+		virtual	~datatransport();
+
 	#include <rudiments/private/datatransport.h>
 };
 

@@ -15,6 +15,8 @@
 
 class inetclientsocket : public client, public inetsocket  {
 	public:
+			inetclientsocket();
+		virtual	~inetclientsocket();
 
 		int	connectToServer(const char *host,
 					unsigned short port,

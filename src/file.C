@@ -28,6 +28,8 @@ file::file(int fd) : filedescriptor(fd) {
 	getcurrentpropertiesonopen=true;
 }
 
+file::~file() {}
+
 bool file::create(const char *name, mode_t perms) {
 	return open(name,O_CREAT|O_TRUNC|O_RDWR,perms);
 }

@@ -1,6 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
+#include <rudiments/private/rudimentsinlines.h>
+
 #define DICTIONARYNODE_TEMPLATE \
 	template <class keytype, class datatype>
 
@@ -8,38 +10,49 @@
 	dictionarynode<keytype,datatype>
 
 DICTIONARYNODE_TEMPLATE
-inline DICTIONARYNODE_CLASS::dictionarynode() {
+RUDIMENTS_TEMPLATE_INLINE
+DICTIONARYNODE_CLASS::dictionarynode() {
 	key=0;
 	data=0;
 }
 
 DICTIONARYNODE_TEMPLATE
-inline void DICTIONARYNODE_CLASS::setKey(keytype key) {
+RUDIMENTS_TEMPLATE_INLINE
+DICTIONARYNODE_CLASS::~dictionarynode() {}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARYNODE_CLASS::setKey(keytype key) {
 	this->key=key;
 }
 
 DICTIONARYNODE_TEMPLATE
-inline void DICTIONARYNODE_CLASS::setData(datatype data) {
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARYNODE_CLASS::setData(datatype data) {
 	this->data=data;
 }
 
 DICTIONARYNODE_TEMPLATE
-inline keytype DICTIONARYNODE_CLASS::getKey() const {
+RUDIMENTS_TEMPLATE_INLINE
+keytype DICTIONARYNODE_CLASS::getKey() const {
 	return key;
 }
 
 DICTIONARYNODE_TEMPLATE
-inline datatype DICTIONARYNODE_CLASS::getData() const {
+RUDIMENTS_TEMPLATE_INLINE
+datatype DICTIONARYNODE_CLASS::getData() const {
 	return data;
 }
 
 DICTIONARYNODE_TEMPLATE
-inline int DICTIONARYNODE_CLASS::compare(keytype testkey) const {
+RUDIMENTS_TEMPLATE_INLINE
+int DICTIONARYNODE_CLASS::compare(keytype testkey) const {
 	return keyutil.compare(key,testkey);
 }
 
 DICTIONARYNODE_TEMPLATE
-inline void DICTIONARYNODE_CLASS::print() const {
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARYNODE_CLASS::print() const {
 	keyutil.print(key);
 	printf(":");
 	datautil.print(data);

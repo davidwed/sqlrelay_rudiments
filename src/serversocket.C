@@ -8,6 +8,9 @@
 #include <sys/socket.h>
 //#undef _XPG4_2
 
+serversocket::serversocket() : server() {}
+serversocket::~serversocket() {}
+
 bool serversocket::dontLingerOnClose() {
 	return setLingerOnClose(0,1);
 }

@@ -4,23 +4,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <rudiments/private/rudimentsinlines.h>
+
 #define LINKEDLIST_TEMPLATE template <class datatype, class linkedlistnodetype>
 
 #define LINKEDLIST_CLASS linkedlist<datatype,linkedlistnodetype>
 
 LINKEDLIST_TEMPLATE
-inline LINKEDLIST_CLASS::linkedlist() {
+RUDIMENTS_TEMPLATE_INLINE
+LINKEDLIST_CLASS::linkedlist() {
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
 LINKEDLIST_TEMPLATE
-inline LINKEDLIST_CLASS::~linkedlist() {
+RUDIMENTS_TEMPLATE_INLINE
+LINKEDLIST_CLASS::~linkedlist() {
 	clear();
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::append(datatype data) {
 	linkedlistnodetype	*node=new linkedlistnodetype();
 	node->setData(data);
@@ -28,6 +33,7 @@ void LINKEDLIST_CLASS::append(datatype data) {
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::append(linkedlistnodetype *node) {
 	if (last) {
 		last->setNext(node);
@@ -41,6 +47,7 @@ void LINKEDLIST_CLASS::append(linkedlistnodetype *node) {
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
 	linkedlistnodetype	*node=new linkedlistnodetype();
 	node->setData(data);
@@ -48,6 +55,7 @@ bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::insert(unsigned long index, linkedlistnodetype *node) {
 
 	// handle invalid index
@@ -84,7 +92,8 @@ bool LINKEDLIST_CLASS::insert(unsigned long index, linkedlistnodetype *node) {
 }
 
 LINKEDLIST_TEMPLATE
-inline bool LINKEDLIST_CLASS::setDataByIndex(unsigned long index,
+RUDIMENTS_TEMPLATE_INLINE
+bool LINKEDLIST_CLASS::setDataByIndex(unsigned long index,
 							datatype data) {
 	linkedlistnodetype	*current=getNodeByIndex(index);
 	if (current) {
@@ -95,11 +104,13 @@ inline bool LINKEDLIST_CLASS::setDataByIndex(unsigned long index,
 }
 
 LINKEDLIST_TEMPLATE
-inline bool LINKEDLIST_CLASS::removeByIndex(unsigned long index) {
+RUDIMENTS_TEMPLATE_INLINE
+bool LINKEDLIST_CLASS::removeByIndex(unsigned long index) {
 	return removeNode(getNodeByIndex(index));
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::removeByData(datatype data) {
 	linkedlistnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
@@ -112,6 +123,7 @@ bool LINKEDLIST_CLASS::removeByData(datatype data) {
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::removeAllByData(datatype data) {
 
 	linkedlistnodetype	*current=first;
@@ -131,6 +143,7 @@ bool LINKEDLIST_CLASS::removeAllByData(datatype data) {
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::removeNode(linkedlistnodetype *node) {
 	if (!node) {
 		return false;
@@ -153,7 +166,8 @@ bool LINKEDLIST_CLASS::removeNode(linkedlistnodetype *node) {
 }
 
 LINKEDLIST_TEMPLATE
-inline bool LINKEDLIST_CLASS::getDataByIndex(unsigned long index,
+RUDIMENTS_TEMPLATE_INLINE
+bool LINKEDLIST_CLASS::getDataByIndex(unsigned long index,
 						datatype *data) const {
 	linkedlistnodetype	*current=getNodeByIndex(index);
 	if (current) {
@@ -164,11 +178,13 @@ inline bool LINKEDLIST_CLASS::getDataByIndex(unsigned long index,
 }
 
 LINKEDLIST_TEMPLATE
-inline unsigned long LINKEDLIST_CLASS::getLength() const {
+RUDIMENTS_TEMPLATE_INLINE
+unsigned long LINKEDLIST_CLASS::getLength() const {
 	return length;
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(unsigned long index)
 									const {
 	if (index>=length) {
@@ -182,11 +198,13 @@ linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(unsigned long index)
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 linkedlistnodetype *LINKEDLIST_CLASS::getNodeByData(datatype data) const {
 	return getNodeByData((linkedlistnodetype *)first,data);
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 linkedlistnodetype *LINKEDLIST_CLASS::getNodeByData(
 						linkedlistnodetype *startnode,
 							datatype data) const {
@@ -201,6 +219,7 @@ linkedlistnodetype *LINKEDLIST_CLASS::getNodeByData(
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::clear() {
 	linkedlistnodetype	*current=first;
 	linkedlistnodetype	*next;
@@ -215,6 +234,7 @@ void LINKEDLIST_CLASS::clear() {
 }
 
 LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::print() const {
 	linkedlistnodetype	*current=first;
 	for (unsigned long i=0; i<length; i++) {
