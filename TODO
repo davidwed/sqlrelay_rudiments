@@ -27,9 +27,7 @@ file class:
 			pipe()
 			lchown()
 			pathconf()/fpathconf()
-			revoke()
 	fcntl.h - fcntl(),posix_fadvise(),posix_fallocate()
-	utime.h - utime()
 	sys/ioctl.h - ioctl()
 	sys/stat.h - stat(),fstat(),lstat()
 			chmod(),lchmod(),fchmod()
@@ -172,8 +170,12 @@ serialportprofile class:
 		tcgetsid()
 
 datetime class:
-	time.h and sys/time.h - there may a few more time functions
-					that I need to wrap
+	time.h and sys/time.h - clock(), difftime()
+				clock_getres(), clock_gettime(), clock_settime()
+				clock_nanosleep(), clock_getcpuclockid()
+				timer_create(), timer_delete(), timer_settime(),
+				timer_gettime(), timer_getoverrun()
+				getitimer(), setitimer()
 
 tty:
 	stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)(),getpt()
@@ -284,7 +286,7 @@ signals:
 	stdlib.h - abort(), atexit(), on_exit(), exit(), _Exit()
 	string.h - strsignal()
 	unistd.h - alarm(), ualarm()
-			sleep(), usleep()
+			sleep(), usleep(), nanosleep()
 			pause()
 			_exit()
 	setjmp.h - setjmp()/longjump()/sigsetjump() - save stack contexts

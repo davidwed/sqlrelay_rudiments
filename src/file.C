@@ -15,6 +15,7 @@
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#include <sys/time.h>
 
 file::file() : filedescriptor() {
 	getcurrentpropertiesonopen=true;
@@ -813,4 +814,53 @@ bool file::sync() {
 
 bool file::dataSync() {
 	return !fdatasync(fd);
+}
+
+#ifdef HAVE_REVOKE
+bool file::revoke(const char *filename) {
+	return !::revoke(filename);
+}
+#endif
+
+bool file::setLastAccessTime(const char *filename,
+					time_t lastaccesstime) {
+	time_t	modtime;
+	if (!getLastModificationTime(filename,&modtime)) {
+		return false;
+	}
+	timeval	tv[2];
+	tv[0].tv_sec=(long)lastaccesstime;
+	tv[0].tv_usec=0;
+	tv[1].tv_sec=(long)modtime;
+	tv[1].tv_usec=0;
+	return !utimes(filename,tv);
+}
+
+bool file::setLastModificationTime(const char *filename,
+					time_t lastmodtime) {
+	time_t	actime;
+	if (!getLastAccessTime(filename,&actime)) {
+		return false;
+	}
+	timeval	tv[2];
+	tv[0].tv_sec=(long)actime;
+	tv[0].tv_usec=0;
+	tv[1].tv_sec=(long)lastmodtime;
+	tv[1].tv_usec=0;
+	return !utimes(filename,tv);
+}
+
+bool file::setLastAccessAndModificationTimes(const char *filename,
+						time_t lastaccesstime,
+						time_t lastmodtime) {
+	timeval	tv[2];
+	tv[0].tv_sec=(long)lastaccesstime;
+	tv[0].tv_usec=0;
+	tv[1].tv_sec=(long)lastmodtime;
+	tv[1].tv_usec=0;
+	return !utimes(filename,tv);
+}
+
+bool file::setLastAccessAndModificationTimes(const char *filename) {
+	return !utimes(filename,NULL);
 }

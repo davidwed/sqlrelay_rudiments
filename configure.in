@@ -354,6 +354,10 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <sys/sem.h>],
 semtimedop(0,NULL,0,NULL);,AC_DEFINE(HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(revoke)
+AC_TRY_LINK([#include <unistd.h>],
+revoke(0);,AC_DEFINE(HAVE_REVOKE,1,Some systems have revoke) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_CHECK_RPC
 
 echo "******************************"

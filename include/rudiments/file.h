@@ -518,6 +518,43 @@ class file : public filedescriptor {
 			// path internally and returns it.  The calling program
 			// must deallocate this buffer.
 
+		#ifdef HAVE_REVOKE
+		static bool	revoke(const char *filename);
+			// Closes all file descriptors bound to "filename" for
+			// all processes, system-wide.  Will only succeed if
+			// called by root or the owner of the file.
+			//
+			// Returns true on success and false on failure.
+		#endif
+
+		static bool	setLastAccessTime(const char *filename,
+							time_t lastaccesstime);
+			// Sets the last access time of "filename" to
+			// "lastaccesstime".
+			//
+			// Returns true on success and false on failure.
+		static bool	setLastModificationTime(const char *filename,
+							time_t lastmodtime);
+			// Sets the last modification time of "filename" to
+			// "lastmodtime".
+			//
+			// Returns true on success and false on failure.
+		static bool	setLastAccessAndModificationTimes(
+							const char *filename,
+							time_t lastaccesstime,
+							time_t lastmodtime);
+			// Sets the last access time of "filename" to
+			// "lastaccesstime" and the last modification time
+			// to "lastmodtime".
+			//
+			// Returns true on success and false on failure.
+		static bool	setLastAccessAndModificationTimes(
+							const char *filename);
+			// Sets the last access and modification times of
+			// "filename" to now.
+			//
+			// Returns true on success and false on failure.
+
 	#include <rudiments/private/file.h>
 };
 
