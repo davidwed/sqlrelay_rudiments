@@ -240,7 +240,9 @@ myserver::~myserver() {
         <font color="#a02828"><b>for</b></font> (;;) {
 
                 <font color="#0000f8">// accept connections, with no timeout</font>
-                <font color="#288850"><b>int</b></font>     fd=waitForData(-<font color="#f800f8">1</font>,-<font color="#f800f8">1</font>);
+		waitForNonBlockingRead(-<font color="#f800f8">1</font>,-<font color="#f800f8">1</font>);
+                <font color="#288850"><b>int</b></font>     fd;
+		getReadyList()-&gt;getDataByIndex(<font color="#f800f8">0</font>,&amp;fd);
 
                 <font color="#a02828"><b>if</b></font> (fd==inetsocket.getFileDescriptor()) {
                         sock=inetsocket.acceptClientConnection();

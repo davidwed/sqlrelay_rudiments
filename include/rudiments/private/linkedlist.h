@@ -2,6 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-		unsigned long	length;
-		listnodetype	*first;
-		listnodetype	*last;
+		unsigned long		length;
+		linkedlistnodetype	*first;
+		linkedlistnodetype	*last;

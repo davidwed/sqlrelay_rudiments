@@ -1,6 +1,4 @@
-update docs - waitForNonBlockingRead/Write...
-
-string class name conflicts with stl string class - rename to charstring?
+string class name conflicts with stl string class
 
 these classes would be nice:
 	table

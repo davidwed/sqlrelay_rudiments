@@ -8,7 +8,7 @@
 #endif
 
 template <class datatype>
-inline int listutil<datatype>::
+inline int linkedlistutil<datatype>::
 			compare(datatype data1, datatype data2) const {
 	if (data1<data2) {
 		return -1;
@@ -20,46 +20,46 @@ inline int listutil<datatype>::
 }
 
 template <>
-inline void listutil<char *>::print(char *data) const {
+inline void linkedlistutil<char *>::print(char *data) const {
 	printf("%s",data);
 }
 
 template <>
-inline int listutil<char *>::compare(char *data1, char *data2) const {
+inline int linkedlistutil<char *>::compare(char *data1, char *data2) const {
 	return strcmp(data1,data2);
 }
 
 template <>
-inline void listutil<char>::print(char data) const {
+inline void linkedlistutil<char>::print(char data) const {
 	printf("%c",data);
 }
 
 template <>
-inline void listutil<int>::print(int data) const {
+inline void linkedlistutil<int>::print(int data) const {
 	printf("%d",data);
 }
 
 template <>
-inline void listutil<short>::print(short data) const {
+inline void linkedlistutil<short>::print(short data) const {
 	printf("%hd",data);
 }
 
 template <>
-inline void listutil<long>::print(long data) const {
+inline void linkedlistutil<long>::print(long data) const {
 	printf("%ld",data);
 }
 
 template <>
-inline void listutil<float>::print(float data) const {
+inline void linkedlistutil<float>::print(float data) const {
 	printf("%f",data);
 }
 
 template <>
-inline void listutil<double>::print(double data) const {
+inline void linkedlistutil<double>::print(double data) const {
 	printf("%f",data);
 }
 
 template <class datatype>
-inline void listutil<datatype>::print(datatype data) const {
+inline void linkedlistutil<datatype>::print(datatype data) const {
 	printf("%lx",(unsigned long)data);
 }
