@@ -91,6 +91,9 @@ class datetime {
 			// Note that this method allocates a buffer to return
 			// the string in which must be deleted by the calling
 			// program.
+		static time_t	getEpoch(const char *datestring);
+			// parses "mm/dd/yyyy hh:mm:ss" and returns the
+			// number of seconds since 1970.
 
 	#include <rudiments/private/datetime.h>
 };

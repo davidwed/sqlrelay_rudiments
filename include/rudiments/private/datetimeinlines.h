@@ -74,11 +74,16 @@ inline time_t datetime::getEpoch() const {
 	return epoch;
 }
 
-inline tm	*datetime::getTm() {
+inline tm *datetime::getTm() {
 	return &timestruct;
 }
 
-inline char	*datetime::getString(time_t epoch) {
+inline char *datetime::getString(time_t epoch) {
 	datetime	dt(epoch);
 	return strdup(dt.getString());
+}
+
+inline time_t datetime::getEpoch(const char *datestring) {
+	datetime	dt(datestring);
+	return dt.getEpoch();
 }

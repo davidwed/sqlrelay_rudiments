@@ -25,4 +25,9 @@ int	main() {
 	printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
 	printf("Date String	   : %s\n",dt.getString());
 	printf("Seconds since 1970    : %d\n",dt.getEpoch());
+
+	char	*string=datetime::getString(dt.getEpoch());
+	time_t	epoch=datetime::getEpoch(string);
+
+	printf("Epoch/String : %d %s\n",epoch,string);
 }
