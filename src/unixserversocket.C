@@ -24,9 +24,9 @@ int unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	unlink(filename);
-	memset((void *)&sun,0,sizeof(sun));
-	sun.sun_family=AF_UNIX;
-	strcpy(sun.sun_path,filename);
+	memset((void *)&sockaddrun,0,sizeof(sockaddrun));
+	sockaddrun.sun_family=AF_UNIX;
+	strcpy(sockaddrun.sun_path,filename);
 
 	// create the socket
 	return (fd=socket(AF_UNIX,SOCK_STREAM,0))>-1;
@@ -39,7 +39,7 @@ int unixserversocket::bind() {
 
 	// bind the socket
 	int	retval=1;
-	if (::bind(fd,(struct sockaddr *)&sun,sizeof(sun))==-1) {
+	if (::bind(fd,(struct sockaddr *)&sockaddrun,sizeof(sockaddrun))==-1) {
 		retval=0;
 	}
 

@@ -256,7 +256,7 @@ then
 	HAVE_PTHREADS="yes"
 
 else
-	AC_MSG_CHECKING(for /usr/include/$i.h)
+	AC_MSG_CHECKING(for /usr/include/pthread.h)
 	if ( test -r "/usr/include/pthread.h" )
 	then
 		AC_MSG_RESULT(yes)

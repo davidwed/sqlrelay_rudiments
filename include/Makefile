@@ -134,7 +134,7 @@ endif
 ifeq ($(INCLUDE_SERVER),1)
 	HEADERS += server.h serversocket.h
 	PRIVATEHEADERS += serverinlines.h serversocket.h serversocketinlines.h \
-				serverincludes.h
+				serverinclues.h serversocketincludes.h
 endif
 ifeq ($(INCLUDE_SHAREDMEMORY),1)
 	HEADERS += sharedmemory.h

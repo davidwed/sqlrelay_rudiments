@@ -29,8 +29,8 @@ void unixclientsocket::initialize(namevaluepairs *cd) {
 int unixclientsocket::connect() {
 
 	// set the filename to connect to
-	sun.sun_family=AF_UNIX;
-	strcpy(sun.sun_path,filename);
+	sockaddrun.sun_family=AF_UNIX;
+	strcpy(sockaddrun.sun_path,filename);
 
 	// create a unix socket
 	if ((fd=socket(AF_UNIX,SOCK_STREAM,0))==-1) {
@@ -42,7 +42,8 @@ int unixclientsocket::connect() {
 	for (int counter=0; counter<retrycount || !retrycount; counter++) {
 
 		// attempt to connect
-		if (::connect(fd,(struct sockaddr *)&sun,sizeof(sun))!=-1) {
+		if (::connect(fd,(struct sockaddr *)&sockaddrun,
+						sizeof(sockaddrun))!=-1) {
 			return 1;
 		}
 

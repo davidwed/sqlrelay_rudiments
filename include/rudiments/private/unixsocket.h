@@ -19,7 +19,7 @@ class unixsocket : virtual public datatransport {
 		int	receiveFileDescriptor(int *descriptor);
 	protected:
 		char		*filename;
-		sockaddr_un	sun;
+		sockaddr_un	sockaddrun;
 };
 
 #ifdef ENABLE_INLINES
