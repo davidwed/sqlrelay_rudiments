@@ -9,8 +9,6 @@
 	#include <rudiments/charstring.h>
 #endif
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif

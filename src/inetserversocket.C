@@ -3,8 +3,6 @@
 
 #include <rudiments/inetserversocket.h>
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #ifdef HAVE_UNISTD_H

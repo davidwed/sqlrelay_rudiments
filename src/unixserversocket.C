@@ -4,7 +4,6 @@
 #include <rudiments/unixserversocket.h>
 
 #include <sys/stat.h>
-#include <sys/socket.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
