@@ -290,5 +290,9 @@ RUDIMENTS_INLINE void filedescriptor::useListener(listener *lstnr) {
 }
 
 RUDIMENTS_INLINE void filedescriptor::dontUseListener() {
-	this->lstnr=NULL;
+	lstnr=NULL;
+}
+
+RUDIMENTS_INLINE listener *filedescriptor::getListener() {
+	return lstnr;
 }

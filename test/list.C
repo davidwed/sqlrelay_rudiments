@@ -1,13 +1,13 @@
 // Copyright (c) 2003  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/list.h>
+#include <rudiments/linkedlist.h>
 #include <stdio.h>
 
 int	main(int argc, char **argv) {
 
 	// create a list of integers
-	list<int>	intl;
+	linkedlist<int>	intl;
 
 	// append values to the list, displaying the list after each append
 	printf("append(0)\n");

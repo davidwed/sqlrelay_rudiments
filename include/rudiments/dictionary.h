@@ -45,11 +45,11 @@ class dictionarynode {
 
 template <class keytype, class datatype>
 class dictionarylistnode :
-		public listnode< dictionarynode<keytype,datatype> * > {};
+		public linkedlistnode< dictionarynode<keytype,datatype> * > {};
 
 template <class keytype, class datatype>
 class dictionarylist :
-		public list< dictionarynode<keytype,datatype> *,
+		public linkedlist< dictionarynode<keytype,datatype> *,
 				dictionarylistnode<keytype,datatype> > {};
 
 template <class keytype, class datatype,

@@ -24,7 +24,10 @@ int main(int argc, const char **argv) {
 
 	for (;;) {
 
-		int	fd=pool.waitForNonBlockingRead(-1,-1);
+		pool.waitForNonBlockingRead(-1,-1);
+		int	fd=-1;
+		pool.getReadyList()->getDataByIndex(0,&fd);
+
 		if (fd==serversock.getFileDescriptor()) {
 			clientsock=serversock.acceptClientConnection();
 		} else if (fd==handoffsock.getFileDescriptor()) {

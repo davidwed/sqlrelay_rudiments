@@ -38,3 +38,7 @@ RUDIMENTS_INLINE int listener::waitForNonBlockingRead(long sec, long usec) {
 RUDIMENTS_INLINE int listener::waitForNonBlockingWrite(long sec, long usec) {
 	return safeSelect(sec,usec,0,1);
 }
+
+RUDIMENTS_INLINE listenerlist *listener::getReadyList() {
+	return &readylist;
+}

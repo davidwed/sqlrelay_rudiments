@@ -34,8 +34,9 @@ int main(int argc, const char **argv) {
 	for (;;) {
 
 		// wait for a client to connect to one of the sockets
-		int	fd=pool.waitForNonBlockingRead(-1,-1);
-
+		pool.waitForNonBlockingRead(-1,-1);
+		int	fd=-1;
+		pool.getReadyList()->getDataByIndex(0,&fd);
 
 		// figure out which socket the client connected to
 		datatransport	*clientsock;

@@ -1,6 +1,4 @@
-methods that use select() return the first file descriptor that caused the
-	select to fall through rather than returning the number of file
-	descriptors that have available data
+update docs - waitForNonBlockingRead/Write...
 
 string class name conflicts with stl string class - rename to charstring?
 

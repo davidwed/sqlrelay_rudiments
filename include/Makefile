@@ -95,10 +95,11 @@ ifeq ($(INCLUDE_LISTENER),1)
 	HEADERS += listener.h
 	PRIVATEHEADERS += listener.h listenerinlines.h listenerincludes.h
 endif
-#ifeq ($(INCLUDE_LIST),1)
-	HEADERS += list.h
-	PRIVATEHEADERS += list.h listinlines.h listnode.h listnodeinlines.h \
-				listutil.h listutilinlines.h listincludes.h
+#ifeq ($(INCLUDE_LINKEDLIST),1)
+	HEADERS += linkedlist.h
+	PRIVATEHEADERS += linkedlist.h linkedlistinlines.h linkedlistnode.h \
+				linkedlistnodeinlines.h linkedlistutil.h \
+				linkedlistutilinlines.h linkedlistincludes.h
 #endif
 ifeq ($(INCLUDE_LOGGER),1)
 	HEADERS += logger.h

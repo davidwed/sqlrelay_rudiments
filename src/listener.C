@@ -15,10 +15,19 @@
 
 int listener::safeSelect(long sec, long usec, int read, int write) {
 
+	// set up the timeout
+	timeval	tv;
+	timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
+
 	for (;;) {
 
-		// not sure why this has to be rebuilt every time, but
-		// it appears to have to be
+		// some versions of select modify the timeout, so reset it
+		// every time
+		tv.tv_sec=sec;
+		tv.tv_usec=usec;
+
+		// select() will modify the list every time it's called
+		// so the list has to be rebuilt every time...
 		fd_set	fdlist;
 		int	largest=-1;
 		FD_ZERO(&fdlist);
@@ -32,23 +41,10 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 			current=current->getNext();
 		}
 
-		// set up the timeout
-		timeval	*tv;
-		if (sec>-1 && usec>-1) {
-			tv=new timeval;
-			tv->tv_sec=sec;
-			tv->tv_usec=usec;
-		} else {
-			tv=NULL;
-		}
-
 		// wait for data to be available on the file descriptor
 		int	selectresult=select(largest+1,(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
-						NULL,tv);
-	
-		// clean up
-		delete tv;
+						NULL,tvptr);
 
 		if (selectresult==-1) {
 
@@ -64,18 +60,19 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 			return RESULT_TIMEOUT;
 		}
 	
-		// return the file descriptor that
-		// caused the select to fall through
+		// build the list of file descriptors that
+		// caused the select() to fall through
+		readylist.clear();
 		current=filedescriptorlist.getNodeByIndex(0);
 		while (current) {
 			if (FD_ISSET(current->getData(),&fdlist)) {
-				return current->getData();
+				readylist.append(current->getData());
 			}
 			current=current->getNext();
 		}
 
-		// if none of the file descriptors caused the select to fall
-		// through, return error
-		return RESULT_ERROR;
+		// return the number of file descriptors that
+		// caused the select() to fall through
+		return selectresult;
 	}
 }

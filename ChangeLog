@@ -72,7 +72,7 @@
 	added a features.mk file so features could be compiled in/out
 	moved text class stuff into string class
 	removed unnecessary -pedantic from CXXFLAGS
-	added list/dictionary classes, other classes use them instead of
+	added linkedlist/dictionary classes, other classes use them instead of
 		implementing their own lists/dicts
 	added environment class
 	datetime class handles timezones properly now

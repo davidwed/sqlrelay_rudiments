@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 #include <rudiments/resultcodes.h>
-#include <rudiments/list.h>
+#include <rudiments/linkedlist.h>
 
 #include <sys/types.h>

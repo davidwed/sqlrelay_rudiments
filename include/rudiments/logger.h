@@ -57,8 +57,8 @@ class stderrdestination : public logdestination {
 };
 
 
-typedef list<logdestination *>		loggerlist;
-typedef listnode<logdestination *>	loggerlistnode;
+typedef linkedlist<logdestination *>		loggerlist;
+typedef linkedlistnode<logdestination *>	loggerlistnode;
 
 // The logger class provides methods for managing
 // logdestinations and writing log entries.

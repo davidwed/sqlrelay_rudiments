@@ -3,6 +3,7 @@
 
 	private:
 		listenerlist	filedescriptorlist;
+		listenerlist	readylist;
 
 	protected:
 

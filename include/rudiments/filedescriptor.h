@@ -230,8 +230,17 @@ class filedescriptor {
 				// data is immediately available.
 				//
 				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
-				// on timeout and otherwise returns the file
-				// descriptor that is ready to be read from.
+				// on timeout and otherwise returns the number
+				// of file descriptors that are ready to be
+				// read from.
+				//
+				// This will usually be 1, indicating that the
+				// file descriptor represented by the class is
+				// ready to be read from.  However, if
+				// useListener() has been called, it may be
+				// greater than 1, indicating that a set of
+				// file descriptors that the listener is
+				// listening on are all ready to be read from.
 		virtual int	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
@@ -246,8 +255,17 @@ class filedescriptor {
 				// data is immediately available.
 				//
 				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
-				// on timeout and otherwise returns the file
-				// descriptor that is ready to be written to.
+				// on timeout and otherwise returns the number
+				// of file descriptors that are ready to be
+				// written to.
+				//
+				// This will usually be 1, indicating that the
+				// file descriptor represented by the class is
+				// ready to be written to.  However, if
+				// useListener() has been called, it may be
+				// greater than 1, indicating that a set of
+				// file descriptors that the listener is
+				// listening on are all ready to be written to.
 
 
 		// By default, if a read or write is occurring and a signal
@@ -303,6 +321,9 @@ class filedescriptor {
 			// Causes calls to waitForNonBlockingRead() and
 			// waitForNonBlockingWrite() to use select().
 			// This is the default.
+		listener	*getListener();
+			// Returns the listener set previously by useListener() 
+			// or NULL if none has been set.
 
 	#include <rudiments/private/filedescriptor.h>
 };

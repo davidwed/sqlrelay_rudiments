@@ -25,7 +25,7 @@ bool xmlsax::parseFile(const char *filename) {
 	// close any previously opened files, open the file, parse it, close
 	// it again
 	close();
-	bool	retval=((fl.open(filename,O_RDONLY)) && parse());
+	bool	retval=(fl.open(filename,O_RDONLY) && parse());
 	close();
 	return retval;
 }

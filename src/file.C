@@ -16,12 +16,12 @@
 
 bool file::open(const char *name, int flags) {
 	return ((fd=::open(name,flags))!=-1 &&
-		(getcurrentpropertiesonopen)?getCurrentProperties():true);
+		((getcurrentpropertiesonopen)?getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int flags, mode_t perms) {
 	return ((fd=::open(name,flags,perms))!=-1 &&
-		(getcurrentpropertiesonopen)?getCurrentProperties():true);
+		((getcurrentpropertiesonopen)?getCurrentProperties():true));
 }
 
 char *file::getContents() {
@@ -61,7 +61,7 @@ ssize_t file::create(const char *name, mode_t permissions,
 	size_t	retval;
 	if (((fd=::open(name,O_CREAT|O_TRUNC|O_RDWR,permissions))!=-1) &&
 		((retval=write(data,size))==size) &&
-		(getcurrentpropertiesonopen)?getCurrentProperties():true) {
+		((getcurrentpropertiesonopen)?getCurrentProperties():true)) {
 		return retval;
 	}
 	close();

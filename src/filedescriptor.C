@@ -224,31 +224,28 @@ int filedescriptor::waitForNonBlockingWrite(long sec, long usec) {
 
 int filedescriptor::safeSelect(long sec, long usec, int read, int write) {
 
+	// set up the timeout
+	timeval	tv;
+	timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
+
 	for (;;) {
 
-		// not sure why this has to be rebuilt every time, but
-		// it appears to have to be
+		// some versions of select modify the timeout, so reset it
+		// every time
+		tv.tv_sec=sec;
+		tv.tv_usec=usec;
+
+		// select() will modify the list every time it's called
+		// so the list has to be rebuilt every time...
 		fd_set	fdlist;
 		FD_ZERO(&fdlist);
 		FD_SET(fd,&fdlist);
 
-		// set up the timeout
-		timeval	*tv;
-		if (sec>-1 && usec>-1) {
-			tv=new timeval;
-			tv->tv_sec=sec;
-			tv->tv_usec=usec;
-		} else {
-			tv=NULL;
-		}
-
 		// wait for data to be available on the file descriptor
 		int	selectresult=select(fd+1,(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
-						NULL,tv);
+						NULL,tvptr);
 	
-		// clean up
-		delete tv;
 
 		if (selectresult==-1) {
 
@@ -264,7 +261,7 @@ int filedescriptor::safeSelect(long sec, long usec, int read, int write) {
 			return RESULT_TIMEOUT;
 		}
 
-		return fd;
+		return selectresult;
 	}
 }
 

@@ -6,8 +6,8 @@
 
 #include <rudiments/private/listenerincludes.h>
 
-typedef list<int>	listenerlist;
-typedef listnode<int>	listenerlistnode;
+typedef linkedlist<int>		listenerlist;
+typedef linkedlistnode<int>	listenerlistnode;
 
 // The listener class listens on a pool of file descriptors.
 
@@ -29,12 +29,14 @@ class listener {
 				// method to wait indefinitely.  
 				//
 				// Entering 0 for both parameters causes the
-				// method to fall through immediately unless a
-				// data is immediately available.
+				// method to fall through immediately, returning
+				// RESULT_TIMEOUT unless a read() will
+				// immediately proceed without blocking.
 				//
 				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
-				// on timeout and otherwise returns the file
-				// descriptor that is ready to be read from.
+				// on timeout and otherwise returns the number
+				// of file descriptors that are ready to be
+				// read from.
 		virtual	int	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
@@ -45,12 +47,21 @@ class listener {
 				// method to wait indefinitely.  
 				//
 				// Entering 0 for both parameters causes the
-				// method to fall through immediately unless a
-				// data is immediately available.
+				// method to fall through immediately, returning
+				// RESULT_TIMEOUT unless a write() will
+				// immediately proceed without blocking.
 				//
 				// Returns RESULT_ERROR on error, RESULT_TIMEOUT
-				// on timeout and otherwise returns the file
-				// descriptor that is ready to be read from.
+				// on timeout and otherwise returns the number
+				// of file descriptors that are ready to be 
+				// written to.
+
+		listenerlist	*getReadyList();
+				// Returns the list of file descriptors that
+				// were ready for read after the last call to
+				// waitForNonBlockingRead() or ready for
+				// write after the last call to
+				// waitForNonBlockingWrite().
 
 		virtual	void	removeFileDescriptor(int fd);
                         	// Removes the specified file descriptor from
