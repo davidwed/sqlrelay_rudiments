@@ -9,8 +9,7 @@ commandline::commandline(int argc, const char **argv) {
 	this->argv=(char **)argv;
 }
 
-commandline::~commandline() {
-}
+commandline::~commandline() {}
 
 char *commandline::value(const char *arg) const {
 

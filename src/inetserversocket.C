@@ -13,7 +13,7 @@
 	#include <strings.h>
 #endif
 
-inetserversocket::inetserversocket() : serversocket(), inetsocket() {}
+inetserversocket::inetserversocket() : server(), inetsocket() {}
 
 inetserversocket::~inetserversocket() {}
 

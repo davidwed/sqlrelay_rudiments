@@ -11,7 +11,7 @@
 // need for memset...
 #include <string.h>
 
-unixserversocket::unixserversocket() : serversocket(), unixsocket() {
+unixserversocket::unixserversocket() : server(), unixsocket() {
 	mask=0;
 }
 

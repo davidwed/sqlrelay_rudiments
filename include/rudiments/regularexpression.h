@@ -27,7 +27,7 @@ class regularexpression {
 			regularexpression(const char *pattern);
 			// this constructor calls the compile method
 			// below during initialization
-		virtual	~regularexpression();
+			~regularexpression();
 
 		bool	compile(const char *pattern);
 			// Compiles the regular expression given in

@@ -6,7 +6,7 @@ file class:
 	need static versions of create methods
 	move create*Link/resolveSymbolicLink into link class
 
-a bunch of methods can probabaly be made const
+can getData methods in dict/linkedlist classes be const?
 a bunch of static methods can probably be inlined
 
 freebsd IPV6_V6ONLY??? socket option
@@ -68,37 +68,54 @@ get a mingw port working
 filedescriptor/client/server heirarchy still needs revision:
 
 client (interface)
+	- initialize(namevaluepairs *cd)
+	- bool connectToServer(sec,usec) (returns true)
 server (interface)
+	- initialize(namevaluepairs *cd)
+	- bool bindToAddress() (returns true)
+	- bool listenForClientConnection(backlog) (returns true)
+	- filedescriptor *acceptClientConnection() (returns NULL)
+
 filedescriptor
-	file
-	socket
-		tcpsocket
+	datatransport
+		- re-implements (host|net)To(Net|Host)
+		socket (will implement a seperate class for
+				inet/unix/ipx/appletalk/packet/etc.)
+			- implements non-blocking mode methods
+			- implements socket option methods
+			- implements connect with timeout (protected)
+			- implements socket-specific ssl stuff
+			- virtual bool connect() (returns true)
+			- virtual bool bind() (returns true)
+			- virtual bool listen(backlog) (returns true)
+			- virtual int accept() (returns 0)
+			( what to do about tcp/udp/etc. stream/dgram/etc.)
 			inetsocket
-				inetstreamsocket
-					inetstreamsocketclient (impl client)
-					inetstreamsocketserver (impl server)
-				inetdatagramsocket
-					inetdatagramsocketclient (impl client)
-					inetdatagramsocketserver (impl server)
+				- initialize(addr,port)
+				- implements bool connect()
+				- implements bool bind()
+				- implements bool listen(backlog)
+				- implements int accept()
+				inetsocketclient (impl client)
+				inetsocketserver (impl server)
 				...
-		unixsocket
-			unixstreamsocket
-				unixstreamsocketclient (impl client)
-				unixstreamsocketserver (impl server)
-			unixdatagramsocket
-				unixstreamsocketclient (impl client)
-				unixstreamsocketserver (impl server)
-		udpsocket
-			...
-		packetsocket
-			...
-		...
-	serialport
-		serialportclient (impl client)
-		serialportserver (impl server)
-	modem
-		modemclient (impl client)
-		modemserver (impl server)
+			unixsocket
+				- initialize(filename)
+				- implements bool connect()
+				- implements bool bind()
+				- implements bool listen(backlog)
+				- implements int accept()
+				- re-implements passFileDescriptor()
+				- re-implements receiveFileDescriptor()
+				unixsocketclient (impl client)
+				unixsocketserver (impl server)
+		serialport
+			serialportclient (impl client)
+			serialportserver (impl server)
+		modem
+			modemclient (impl client)
+			modemserver (impl server)
+	file
 	...
 
 --------------------------------------------------------------------------------

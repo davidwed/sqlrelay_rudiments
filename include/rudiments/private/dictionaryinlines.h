@@ -1,6 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
+#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -63,7 +65,7 @@ bool DICTIONARY_CLASS::removeData(keytype key) {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) const {
+dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) {
 	dictionarylistnodetype	*node=
 			(dictionarylistnodetype *)dict.getNodeByIndex(0);
 	while (node) {
@@ -89,7 +91,7 @@ void DICTIONARY_CLASS::clear() {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void DICTIONARY_CLASS::print() const {
+void DICTIONARY_CLASS::print() {
 	dictionarylistnodetype	*node=
 			(dictionarylistnodetype *)dict.getNodeByIndex(0);
 	while (node) {
@@ -98,3 +100,41 @@ void DICTIONARY_CLASS::print() const {
 		node=(dictionarylistnodetype *)node->getNext();
 	}
 }
+
+
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+stringdictionarynode<datatype>::~stringdictionarynode() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+stringdictionarylistnode<datatype>::~stringdictionarylistnode() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+stringdictionarylist<datatype>::~stringdictionarylist() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+stringdictionary<datatype>::~stringdictionary() {}
+
+
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+numericdictionarynode<datatype>::~numericdictionarynode() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+numericdictionarylistnode<datatype>::~numericdictionarylistnode() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+numericdictionarylist<datatype>::~numericdictionarylist() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+numericdictionary<datatype>::~numericdictionary() {}
+
+#endif

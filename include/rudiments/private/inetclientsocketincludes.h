@@ -2,4 +2,4 @@
 // See the COPYING file for more information.
 
 #include <rudiments/client.h>
-#include <rudiments/private/inetsocket.h>
+#include <rudiments/inetsocket.h>

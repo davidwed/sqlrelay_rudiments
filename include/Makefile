@@ -139,8 +139,8 @@ ifeq ($(INCLUDE_SEMAPHORESET),1)
 	PRIVATEHEADERS += semaphoreset.h semaphoresetincludes.h
 endif
 ifeq ($(INCLUDE_SERVER),1)
-	HEADERS += server.h serversocket.h
-	PRIVATEHEADERS += serversocket.h serverincludes.h serversocketincludes.h
+	HEADERS += server.h
+	PRIVATEHEADERS += serverincludes.h
 endif
 ifeq ($(INCLUDE_SERVICEENTRY),1)
 	HEADERS += serviceentry.h
@@ -235,10 +235,12 @@ endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	PRIVATEHEADERS += inetsocket.h
+	HEADERS += inetsocket.h
+	PRIVATEHEADERS += inetsocket.h inetsocketincludes.h
 else
 	ifeq ($(INCLUDE_INETCLIENT),1)
-		PRIVATEHEADERS += inetsocket.h
+		HEADERS += inetsocket.h
+		PRIVATEHEADERS += inetsocket.h inetsocketincludes.h
 	endif
 endif
 
@@ -253,16 +255,20 @@ endif
 
 # if inet/unix server/socket are defined, include socket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	PRIVATEHEADERS += socket.h
+	HEADERS += socket.h
+	PRIVATEHEADERS += socket.h socketincludes.h
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
-		PRIVATEHEADERS += socket.h
+		HEADERS += socket.h
+		PRIVATEHEADERS += socket.h socketincludes.h
 	else
 		ifeq ($(INCLUDE_INETCLIENT),1)
-			PRIVATEHEADERS += socket.h
+			HEADERS += socket.h
+			PRIVATEHEADERS += socket.h socketincludes.h
 		else
 			ifeq ($(INCLUDE_UNIXCLIENT),1)
-				PRIVATEHEADERS += socket.h
+				HEADERS += socket.h
+				PRIVATEHEADERS += socket.h socketincludes.h
 			endif
 		endif
 	endif
@@ -290,7 +296,6 @@ uninstall:
 	$(RM) $(includedir)/server.h
 	$(RM) $(includedir)/serverpool.h
 	$(RM) $(includedir)/serversocketpool.h
-	$(RM) $(includedir)/serversocket.h
 	$(RM) $(includedir)/sharedmemory.h
 	$(RM) $(includedir)/signalclasses.h
 	$(RM) $(includedir)/text.h
@@ -310,7 +315,6 @@ uninstall:
 	$(RM) $(includedir)/private/server.h
 	$(RM) $(includedir)/private/serverpool.h
 	$(RM) $(includedir)/private/serversocketpool.h
-	$(RM) $(includedir)/private/serversocket.h
 	$(RM) $(includedir)/private/signalhandler.h
 	$(RM) $(includedir)/private/signalset.h
 	$(RM) $(includedir)/private/datetime.h

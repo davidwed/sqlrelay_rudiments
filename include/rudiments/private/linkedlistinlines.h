@@ -1,6 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
+#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -168,7 +170,7 @@ bool LINKEDLIST_CLASS::removeNode(linkedlistnodetype *node) {
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::getDataByIndex(unsigned long index,
-						datatype *data) const {
+						datatype *data) {
 	linkedlistnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		*data=current->getData();
@@ -185,8 +187,7 @@ unsigned long LINKEDLIST_CLASS::getLength() const {
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(unsigned long index)
-									const {
+linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(unsigned long index) {
 	if (index>=length) {
 		return NULL;
 	}
@@ -199,7 +200,7 @@ linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(unsigned long index)
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-linkedlistnodetype *LINKEDLIST_CLASS::getNodeByData(datatype data) const {
+linkedlistnodetype *LINKEDLIST_CLASS::getNodeByData(datatype data) {
 	return getNodeByData((linkedlistnodetype *)first,data);
 }
 
@@ -207,7 +208,7 @@ LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnodetype *LINKEDLIST_CLASS::getNodeByData(
 						linkedlistnodetype *startnode,
-							datatype data) const {
+							datatype data) {
 	linkedlistnodetype	*current=startnode;
 	while (current) {
 		if (!current->compare(data)) {
@@ -244,3 +245,5 @@ void LINKEDLIST_CLASS::print() const {
 		current=(linkedlistnodetype *)current->getNext();
 	}
 }
+
+#endif

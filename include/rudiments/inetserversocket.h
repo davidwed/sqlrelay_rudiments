@@ -17,7 +17,7 @@
 // inetserversocket class (and possibly the unixserversocket class) in
 // conjunction with the listener class.
 
-class inetserversocket : public serversocket, public inetsocket {
+class inetserversocket : public server, public inetsocket {
 	public:
 			inetserversocket();
 		virtual	~inetserversocket();

@@ -9,14 +9,10 @@
 // The server class provides a base class for classes that implement the server
 // side of a client-server communication model.
 
-class server : virtual public datatransport {
+class server {
 	public:
 			server();
 		virtual	~server();
-
-		virtual	bool	bind();
-		virtual	bool	listen(int backlog);
-		virtual	bool	accept();
 };
 
 #endif

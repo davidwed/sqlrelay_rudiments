@@ -23,38 +23,36 @@ class linkedlistnode {
 			// Destroys the linkedlist node.  Note that this method
 			// does not delete the data contained in the node.
 
-		virtual void		setData(datatype data);
-					// Set the data stored in the node
-					// to "data".
-		virtual datatype	getData() const;
-					// Return the data stored in the node.
+		void		setData(datatype data);
+				// Set the data stored in the node
+				// to "data".
+		datatype	getData() const;
+				// Return the data stored in the node.
 
-		virtual int	compare(datatype data) const;
-				// Returns -1,0 or 1 if the data stored in the
-				// node is less than, equal to or greater than
-				// "data".
+		int	compare(datatype data) const;
+			// Returns -1,0 or 1 if the data stored in the
+			// node is less than, equal to or greater than
+			// "data".
 
 		void	setPrevious(linkedlistnode<datatype> *previous);
 			// Sets the pointer to the previous node to "previous".
 		void	setNext(linkedlistnode<datatype> *next);
 			// Sets the pointer to the next node to "next".
 
-		linkedlistnode<datatype>	*getPrevious() const;
+		linkedlistnode<datatype>	*getPrevious();
 					// Returns the previous node in the
 					// linkedlist.
-		linkedlistnode<datatype>	*getNext() const;
+		linkedlistnode<datatype>	*getNext();
 					// Returns the next node in the
 					// linkedlist.
 
-		virtual	void	print() const;
-				// Prints the data stored in the node.
+		void	print() const;
+			// Prints the data stored in the node.
 
 	#include <rudiments/private/linkedlistnode.h>
 };
 
-#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
-	#include <rudiments/private/linkedlistnodeinlines.h>
-#endif
+#include <rudiments/private/linkedlistnodeinlines.h>
 
 template < class datatype, class linkedlistnodetype=linkedlistnode<datatype> >
 class linkedlist {
@@ -106,7 +104,7 @@ class linkedlist {
 			//
 			// Returns true on success and false on failure.
 		bool	getDataByIndex(unsigned long index,
-						datatype *data) const;
+						datatype *data);
 			// Returns the data contained in the linkedlistnode at
 			// "index".
 			//
@@ -115,16 +113,15 @@ class linkedlist {
 		unsigned long	getLength() const;
 				// Returns the length of the linkedlist.
 
-		linkedlistnodetype	*getNodeByIndex(unsigned long index)
-									const;
+		linkedlistnodetype	*getNodeByIndex(unsigned long index);
 				// Returns a pointer to the linkedlistnode at
 				// "index".
-		linkedlistnodetype	*getNodeByData(datatype data) const;
+		linkedlistnodetype	*getNodeByData(datatype data);
 				// Returns a pointer to the first
 				// linkedlistnode containing "data".
 		linkedlistnodetype	*getNodeByData(
 						linkedlistnodetype *startnode,
-							datatype data) const;
+							datatype data);
 				// Returns a pointer to the first
 				// linkedlistnode after "startnode" containing
 				// "data".
@@ -139,9 +136,7 @@ class linkedlist {
 	#include <rudiments/private/linkedlist.h>
 };
 
-#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
-	#include <rudiments/private/linkedlistinlines.h>
-#endif
+#include <rudiments/private/linkedlistinlines.h>
 
 
 

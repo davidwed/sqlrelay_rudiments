@@ -1,6 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information.
 
+#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+
 #include <rudiments/charstring.h>
 
 #include <stdio.h>
@@ -73,3 +75,5 @@ RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<datatype>::print(datatype data) const {
 	printf("%lx",(unsigned long)data);
 }
+
+#endif

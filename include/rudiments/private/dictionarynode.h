@@ -5,5 +5,5 @@
 		keytype		key;
 		datatype	data;
 
-		linkedlistutil<keytype>	keyutil;
+		linkedlistutil<keytype>		keyutil;
 		linkedlistutil<datatype>	datautil;

@@ -1,29 +1,60 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/private/socket.h>
+#include <rudiments/socket.h>
 
 #include <errno.h>
 #include <unistd.h>
 
-socket::socket() : filedescriptor(), datatransport() {}
+socket::socket() : datatransport() {}
 
-socket::socket(int filedesc) :
-	filedescriptor(filedesc), datatransport(filedesc) {}
+socket::socket(int filedesc) : datatransport(filedesc) {}
 
 socket::~socket() {}
 
 #ifdef FIONBIO
-bool socket::useNonBlockingMode() {
+bool socket::useNonBlockingMode() const {
 	int	nonblocking=1;
 	return (ioctl(FIONBIO,&nonblocking)!=-1);
 }
 
-bool socket::useBlockingMode() {
+bool socket::useBlockingMode() const {
 	int	nonblocking=0;
 	return (ioctl(FIONBIO,&nonblocking)!=-1);
 }
 #endif
+
+bool socket::dontLingerOnClose() {
+	return setLingerOnClose(0,1);
+}
+
+bool socket::reuseAddresses() {
+	return setReuseAddresses(1);
+}
+
+bool socket::dontReuseAddresses() {
+	return setReuseAddresses(0);
+}
+
+bool socket::setLingerOnClose(int timeout, int onoff) {
+	struct	linger	ling;
+	ling.l_onoff=onoff;
+	ling.l_linger=timeout;
+	return !setsockopt(fd,SOL_SOCKET,SO_LINGER,
+				(SETSOCKOPT_OPTVAL_TYPE)&ling,
+					sizeof(struct linger));
+}
+
+bool socket::setReuseAddresses(int onoff) {
+	int	value=onoff;
+	return !setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,
+				(SETSOCKOPT_OPTVAL_TYPE)&value,
+					(socklen_t)sizeof(int));
+}
+
+bool socket::listen(int backlog) {
+	return !::listen(fd,backlog);
+}
 
 #ifdef RUDIMENTS_HAS_SSL
 BIO *socket::newSSLBIO() const {

@@ -21,7 +21,7 @@ class sharedmemory {
 	public:
 			sharedmemory();
 			// Creates a shared memory segment.
-		virtual	~sharedmemory();
+			~sharedmemory();
 			// Cleans up and removes the shared memory segment if
 			// it was created by the create() or createOrAttach() 
 			// method below.  If it was just attached to, it is

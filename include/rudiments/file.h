@@ -96,10 +96,10 @@ class file : public filedescriptor {
 
 		// These methods truncate the file.
 		// They return true on success and false on failure.
-		bool	truncate();
+		bool	truncate() const;
 			// Truncates all data in the file, resulting in
 			// a file of zero length.
-		bool	truncate(off_t length);
+		bool	truncate(off_t length) const;
 			// Truncates all data beyond the first "length"
 			// bytes, resulting in a file of "length" bytes.
 
@@ -108,16 +108,16 @@ class file : public filedescriptor {
 		// the next read or write will occur.  Each returns the position
 		// relative to the beginning of the file on success or -1 on
 		// failure.
-		off_t	getCurrentPosition();
+		off_t	getCurrentPosition() const;
 			// Returns the position at which the next read or
 			// write will occur.
-		off_t	setPositionRelativeToBeginning(off_t offset);
+		off_t	setPositionRelativeToBeginning(off_t offset) const;
 			// Sets the position to the beginning of the
 			// file + "offset" bytes.
-		off_t	setPositionRelativeToCurrent(off_t offset);
+		off_t	setPositionRelativeToCurrent(off_t offset) const;
 			// Sets the position to the current
 			// position + "offset" bytes.
-		off_t	setPositionRelativeToEnd(off_t offset);
+		off_t	setPositionRelativeToEnd(off_t offset) const;
 			// Sets the position to the end of the
 			// file + "offset" bytes.
 
@@ -142,78 +142,82 @@ class file : public filedescriptor {
 		// error.
 
 		// These methods allow you to lock the entire file.
-		bool	tryLockFile(short type);
-		bool	lockFile(short type);
-		bool	checkLockFile(short type, struct flock *lck);
-		bool	unlockFile(short type);
+		bool	tryLockFile(short type) const;
+		bool	lockFile(short type) const;
+		bool	checkLockFile(short type, struct flock *lck) const;
+		bool	unlockFile(short type) const;
 
 		// These methods allow you to lock an arbitrary
 		// region of the file.
-		bool	tryLockRegion(short type, off_t start, off_t len);
-		bool	lockRegion(short type, off_t start, off_t len);
+		bool	tryLockRegion(short type, off_t start, off_t len) const;
+		bool	lockRegion(short type, off_t start, off_t len) const;
 		bool	checkLockRegion(short type, off_t start, off_t len,
-							struct flock *lck);
-		bool	unlockRegion(off_t start, off_t len);
+						struct flock *lck) const;
+		bool	unlockRegion(off_t start, off_t len) const;
 
 		// These methods allow you to lock an arbitrary region of the
 		// file relative to the current position.
-		bool	tryLockFromCurrent(short type, off_t len);
-		bool	tryLockFromCurrent(short type, off_t start, off_t len);
-		bool	lockFromCurrent(short type, off_t len);
-		bool	lockFromCurrent(short type, off_t start, off_t len);
+		bool	tryLockFromCurrent(short type, off_t len) const;
+		bool	tryLockFromCurrent(short type, off_t start,
+							off_t len) const;
+		bool	lockFromCurrent(short type, off_t len) const;
+		bool	lockFromCurrent(short type, off_t start,
+							off_t len) const;
 		bool	checkLockFromCurrent(short type, off_t len,
-							struct flock *lck);
+						struct flock *lck) const;
 		bool	checkLockFromCurrent(short type, off_t start, off_t len,
-							struct flock *lck);
-		bool	unlockFromCurrent(off_t len);
-		bool	unlockFromCurrent(off_t start, off_t len);
+						struct flock *lck) const;
+		bool	unlockFromCurrent(off_t len) const;
+		bool	unlockFromCurrent(off_t start, off_t len) const;
 
 		// These methods allow you to lock an arbitrary region of the
 		// file relative to the end of the file.
-		bool	tryLockFromEnd(short type, off_t len);
-		bool	tryLockFromEnd(short type, off_t start, off_t len);
-		bool	lockFromEnd(short type, off_t len);
-		bool	lockFromEnd(short type, off_t start, off_t len);
+		bool	tryLockFromEnd(short type, off_t len) const;
+		bool	tryLockFromEnd(short type, off_t start,
+						off_t len) const;
+		bool	lockFromEnd(short type, off_t len) const;
+		bool	lockFromEnd(short type, off_t start, off_t len) const;
 		bool	checkLockFromEnd(short type, off_t len,
-							struct flock *lck);
+						struct flock *lck) const;
 		bool	checkLockFromEnd(short type, off_t start, off_t len,
-							struct flock *lck);
-		bool	unlockFromEnd(off_t len);
-		bool	unlockFromEnd(off_t start, off_t len);
+						struct flock *lck) const;
+		bool	unlockFromEnd(off_t len) const;
+		bool	unlockFromEnd(off_t start, off_t len) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// starting at a given offset.
-		bool	tryLockRemainder(short type, off_t start);
-		bool	lockRemainder(short type, off_t start);
+		bool	tryLockRemainder(short type, off_t start) const;
+		bool	lockRemainder(short type, off_t start) const;
 		bool	checkLockRemainder(short type, off_t start,
-							struct flock *lck);
-		bool	unlockRemainder(off_t start);
+						struct flock *lck) const;
+		bool	unlockRemainder(off_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// relative to the current position.
-		bool	tryLockRemainderFromCurrent(short type);
-		bool	tryLockRemainderFromCurrent(short type, off_t start);
-		bool	lockRemainderFromCurrent(short type);
-		bool	lockRemainderFromCurrent(short type, off_t start);
+		bool	tryLockRemainderFromCurrent(short type) const;
+		bool	tryLockRemainderFromCurrent(short type,
+							off_t start) const;
+		bool	lockRemainderFromCurrent(short type) const;
+		bool	lockRemainderFromCurrent(short type, off_t start) const;
 		bool	checkLockRemainderFromCurrent(short type,
-							struct flock *lck);
+						struct flock *lck) const;
 		bool	checkLockRemainderFromCurrent(short type, off_t start,
-							struct flock *lck);
-		bool	unlockRemainderFromCurrent();
-		bool	unlockRemainderFromCurrent(off_t start);
+						struct flock *lck) const;
+		bool	unlockRemainderFromCurrent() const;
+		bool	unlockRemainderFromCurrent(off_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// relative to the end of the file.
-		bool	tryLockRemainderFromEnd(short type);
-		bool	tryLockRemainderFromEnd(short type, off_t start);
-		bool	lockRemainderFromEnd(short type);
-		bool	lockRemainderFromEnd(short type, off_t start);
+		bool	tryLockRemainderFromEnd(short type) const;
+		bool	tryLockRemainderFromEnd(short type, off_t start) const;
+		bool	lockRemainderFromEnd(short type) const;
+		bool	lockRemainderFromEnd(short type, off_t start) const;
 		bool	checkLockRemainderFromEnd(short type,
-							struct flock *lck);
+						struct flock *lck) const;
 		bool	checkLockRemainderFromEnd(short type, off_t start,
-							struct flock *lck);
-		bool	unlockRemainderFromEnd();
-		bool	unlockRemainderFromEnd(off_t start);
+						struct flock *lck) const;
+		bool	unlockRemainderFromEnd() const;
+		bool	unlockRemainderFromEnd(off_t start) const;
 
 
 		// These methods allow you to advise the kernel that you are
@@ -227,23 +231,23 @@ class file : public filedescriptor {
 		//
 		// On operating systems don't support these methods, they
 		// return true but don't actually do anything.
-		bool	sequentialAccess(off_t start, size_t len);
+		bool	sequentialAccess(off_t start, size_t len) const;
 			// The region will be accessed in sequential order.
-		bool	randomAccess(off_t start, size_t len);
+		bool	randomAccess(off_t start, size_t len) const;
 			// The region will be accessed in random order.
-		bool	onlyOnce(off_t start, size_t len);
+		bool	onlyOnce(off_t start, size_t len) const;
 			// The region will be only be accessed once.
-		bool	willNeed(off_t start, size_t len);
+		bool	willNeed(off_t start, size_t len) const;
 			// The region will be accessed in the near future.
-		bool	wontNeed(off_t start, size_t len);
+		bool	wontNeed(off_t start, size_t len) const;
 			// The region will not be accessed in the near future.
-		bool	normalAccess(off_t start, size_t len);
+		bool	normalAccess(off_t start, size_t len) const;
 			// Removes any advice that has previously been applied
 			// to the region.
 
 
 		#ifdef HAVE_POSIX_FALLOCATE
-		bool	reserve(off_t start, size_t len);
+		bool	reserve(off_t start, size_t len) const;
 			// Reserves space on the storage medium such that a
 			// write to the region starting at "start" and
 			// continuing for "len" bytes will not fail due to
@@ -264,9 +268,9 @@ class file : public filedescriptor {
 		// enabled, this method only assures that the changes
 		// has been copied into the disk's write cache, not
 		// necessarily to the disk itself.
-		bool	sync();
+		bool	sync() const ;
 		#ifdef HAVE_FDATASYNC
-		bool	dataSync();
+		bool	dataSync() const ;
 			// Similar to sync() but does not wait for the file's
 			// last-access or last-modification times to be copied.
 		#endif
@@ -349,19 +353,20 @@ class file : public filedescriptor {
 		// that owns the file.
 		//
 		// They return true on success and false on failure.
-		bool	changeOwner(const char *newuser, const char *newgroup);
-		bool	changeOwner(uid_t uid, gid_t gid);
-		bool	changeOwnerUserId(const char *newuser);
-		bool	changeOwnerUserId(uid_t uid);
-		bool	changeOwnerGroupId(const char *newgroup);
-		bool	changeOwnerGroupId(gid_t gid);
+		bool	changeOwner(const char *newuser,
+					const char *newgroup) const;
+		bool	changeOwner(uid_t uid, gid_t gid) const;
+		bool	changeOwnerUserId(const char *newuser) const;
+		bool	changeOwnerUserId(uid_t uid) const;
+		bool	changeOwnerGroupId(const char *newgroup) const;
+		bool	changeOwnerGroupId(gid_t gid) const;
 
-		bool	canChangeOwner();
+		bool	canChangeOwner() const;
 			// Returns true if any of the changeOwner()
 			// methods are allowed on "filename" and
 			// false otherwise.
 
-		long	maxLinks();
+		long	maxLinks() const;
 			// Returns the maximum number of links that can be
 			// created to "filename".
 
@@ -372,7 +377,7 @@ class file : public filedescriptor {
 		// methods provide an interface for getting and setting those
 		// attributes.
 
-		char	**listAttributes();
+		char	**listAttributes() const;
 			// Returns a NULL terminated array of attributes or
 			// NULL if an error occurred.
 
@@ -381,118 +386,125 @@ class file : public filedescriptor {
 		// the supplied (preallocated) buffer.
 		// They return true on success and false on failure.
 		bool	getAttribute(const char *name,
-						unsigned short *number);
+						unsigned short *number) const;
 		bool	getAttribute(const char *name,
-						unsigned long *number);
-		bool	getAttribute(const char *name, short *number);
-		bool	getAttribute(const char *name, long *number);
-		bool	getAttribute(const char *name, float *number);
-		bool	getAttribute(const char *name, double *number);
+						unsigned long *number) const;
+		bool	getAttribute(const char *name, short *number) const;
+		bool	getAttribute(const char *name, long *number) const;
+		bool	getAttribute(const char *name, float *number) const;
+		bool	getAttribute(const char *name, double *number) const;
 		bool	getAttribute(const char *name,
-						unsigned char *character);
-		bool	getAttribute(const char *name, char *character);
-		bool	getAttribute(const char *name, bool *value);
+						unsigned char *character) const;
+		bool	getAttribute(const char *name, char *character) const;
+		bool	getAttribute(const char *name, bool *value) const;
 
 		// These methods allocate a buffer, read the value into it
 		// and return the allocated buffer.  Some of these methods also
 		// return the size of the buffer.
 		// They return true on success and false on failure.
-		bool	getAttribute(const char *name, unsigned char **string);
-		bool	getAttribute(const char *name, char **string);
 		bool	getAttribute(const char *name,
-					unsigned char **string, size_t *size);
+					unsigned char **string) const;
 		bool	getAttribute(const char *name,
-					char **string, size_t *size);
+					char **string) const;
 		bool	getAttribute(const char *name,
-					void **buffer, size_t *size);
+					unsigned char **string,
+					size_t *size) const;
+		bool	getAttribute(const char *name,
+					char **string, size_t *size) const;
+		bool	getAttribute(const char *name,
+					void **buffer, size_t *size) const;
 
 
 		// These methods create a new attribute.
 		// They return true on success and false on failure and will
 		// fail if the attribute already exists.
 		bool	createAttribute(const char *name,
-						unsigned short number);
+						unsigned short number) const;
 		bool	createAttribute(const char *name,
-						unsigned long number);
-		bool	createAttribute(const char *name, short number);
-		bool	createAttribute(const char *name, long number);
-		bool	createAttribute(const char *name, float number);
-		bool	createAttribute(const char *name, double number);
+						unsigned long number) const;
+		bool	createAttribute(const char *name, short number) const;
+		bool	createAttribute(const char *name, long number) const;
+		bool	createAttribute(const char *name, float number) const;
+		bool	createAttribute(const char *name, double number) const;
 		bool	createAttribute(const char *name,
-						unsigned char character);
-		bool	createAttribute(const char *name, char character);
-		bool	createAttribute(const char *name, bool value);
+						unsigned char character) const;
+		bool	createAttribute(const char *name, char character) const;
+		bool	createAttribute(const char *name, bool value) const;
 		bool	createAttribute(const char *name,
-						const unsigned char *string);
-		bool	createAttribute(const char *name, const char *string);
+					const unsigned char *string) const;
+		bool	createAttribute(const char *name,
+					const char *string) const;
 		bool	createAttribute(const char *name,
 						const unsigned char *string,
-						size_t size);
+						size_t size) const;
 		bool	createAttribute(const char *name,
-					const char *string, size_t size);
+					const char *string, size_t size) const;
 		bool	createAttribute(const char *name,
-					const void *buffer, size_t size);
+					const void *buffer, size_t size) const;
 
 
 		// These method replace an existing attribute.
 		// They return true on success and false on failure and will
 		// fail if the attribute doesn't already exist.
 		bool	replaceAttribute(const char *name,
-						unsigned short number);
+						unsigned short number) const;
 		bool	replaceAttribute(const char *name,
-						unsigned long number);
-		bool	replaceAttribute(const char *name, short number);
-		bool	replaceAttribute(const char *name, long number);
-		bool	replaceAttribute(const char *name, float number);
-		bool	replaceAttribute(const char *name, double number);
+						unsigned long number) const;
+		bool	replaceAttribute(const char *name, short number) const;
+		bool	replaceAttribute(const char *name, long number) const;
+		bool	replaceAttribute(const char *name, float number) const;
+		bool	replaceAttribute(const char *name, double number) const;
 		bool	replaceAttribute(const char *name,
-						unsigned char character);
-		bool	replaceAttribute(const char *name, char character);
-		bool	replaceAttribute(const char *name, bool value);
+						unsigned char character) const;
 		bool	replaceAttribute(const char *name,
-						const unsigned char *string);
-		bool	replaceAttribute(const char *name, const char *string);
+						char character) const;
+		bool	replaceAttribute(const char *name, bool value) const;
+		bool	replaceAttribute(const char *name,
+					const unsigned char *string) const;
+		bool	replaceAttribute(const char *name,
+						const char *string) const;
 		bool	replaceAttribute(const char *name,
 						const unsigned char *string,
-						size_t size);
+						size_t size) const;
 		bool	replaceAttribute(const char *name,
 						const char *string,
-						size_t size);
+						size_t size) const;
 		bool	replaceAttribute(const char *name,
 						const void *buffer,
-						size_t size);
+						size_t size) const;
 
 
 		// These methods create new attributes or replace existing
 		// attributes.  They returns true on success and false on
 		// failure.
 		bool	setAttribute(const char *name,
-						unsigned short number);
+						unsigned short number) const;
 		bool	setAttribute(const char *name,
-						unsigned long number);
-		bool	setAttribute(const char *name, short number);
-		bool	setAttribute(const char *name, long number);
-		bool	setAttribute(const char *name, float number);
-		bool	setAttribute(const char *name, double number);
+						unsigned long number) const;
+		bool	setAttribute(const char *name, short number) const;
+		bool	setAttribute(const char *name, long number) const;
+		bool	setAttribute(const char *name, float number) const;
+		bool	setAttribute(const char *name, double number) const;
 		bool	setAttribute(const char *name,
-						unsigned char character);
-		bool	setAttribute(const char *name, char character);
-		bool	setAttribute(const char *name, bool value);
+						unsigned char character) const;
+		bool	setAttribute(const char *name, char character) const;
+		bool	setAttribute(const char *name, bool value) const;
 		bool	setAttribute(const char *name,
-						const unsigned char *string);
-		bool	setAttribute(const char *name, const char *string);
+					const unsigned char *string) const;
+		bool	setAttribute(const char *name,
+						const char *string) const;
 		bool	setAttribute(const char *name,
 						const unsigned char *string,
-						size_t size);
+						size_t size) const;
 		bool	setAttribute(const char *name,
 						const char *string,
-						size_t size);
+						size_t size) const;
 		bool	setAttribute(const char *name,
 						const void *buffer,
-						size_t size);
+						size_t size) const;
 
 
-		bool	removeAttribute(const char *name);
+		bool	removeAttribute(const char *name) const;
 			// Removes attribute "name".
 			// Returns true on success and false on failure.
 		#endif

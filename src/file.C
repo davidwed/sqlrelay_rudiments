@@ -115,180 +115,183 @@ ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
 }
 
 
-bool file::tryLockFile(short type) {
+bool file::tryLockFile(short type) const {
 	return tryLockRegion(type,0,0);
 }
 
-bool file::lockFile(short type) {
+bool file::lockFile(short type) const {
 	return lockRegion(type,0,0);
 }
 
-bool file::checkLockFile(short type, struct flock *retlck) {
+bool file::checkLockFile(short type, struct flock *retlck) const {
 	return checkLockRegion(type,0,0,retlck);
 }
 
-bool file::unlockFile(short type) {
+bool file::unlockFile(short type) const {
 	return unlockRegion(0,0);
 }
 
-bool file::tryLockRegion(short type, off_t start, off_t len) {
+bool file::tryLockRegion(short type, off_t start, off_t len) const {
 	return lock(F_SETLK,type,SEEK_SET,start,len);
 }
 
-bool file::lockRegion(short type, off_t start, off_t len) {
+bool file::lockRegion(short type, off_t start, off_t len) const {
 	return lock(F_SETLKW,type,SEEK_SET,start,len);
 }
 
 bool file::checkLockRegion(short type, off_t start, off_t len,
-						struct flock *retlck) {
+						struct flock *retlck) const {
 	return checkLock(type,SEEK_SET,start,len,retlck);
 }
 
-bool file::unlockRegion(off_t start, off_t len) {
+bool file::unlockRegion(off_t start, off_t len) const {
 	return unlock(SEEK_SET,start,len);
 }
 
-bool file::tryLockFromCurrent(short type, off_t len) {
+bool file::tryLockFromCurrent(short type, off_t len) const {
 	return tryLockFromCurrent(type,0,len);
 }
 
-bool file::tryLockFromCurrent(short type, off_t start, off_t len) {
+bool file::tryLockFromCurrent(short type, off_t start, off_t len) const {
 	return lock(F_SETLK,type,SEEK_CUR,start,len);
 }
 
-bool file::lockFromCurrent(short type, off_t len) {
+bool file::lockFromCurrent(short type, off_t len) const {
 	return lockFromCurrent(type,0,len);
 }
 
-bool file::lockFromCurrent(short type, off_t start, off_t len) {
+bool file::lockFromCurrent(short type, off_t start, off_t len) const {
 	return lock(F_SETLKW,type,SEEK_CUR,start,len);
 }
 
-bool file::checkLockFromCurrent(short type, off_t len, struct flock *retlck) {
+bool file::checkLockFromCurrent(short type, off_t len,
+				struct flock *retlck) const {
 	return checkLockFromCurrent(type,0,len,retlck);
 }
 
 bool file::checkLockFromCurrent(short type, off_t start, off_t len,
-							struct flock *retlck) {
+						struct flock *retlck) const {
 	return checkLock(type,SEEK_CUR,start,len,retlck);
 }
 
-bool file::unlockFromCurrent(off_t len) {
+bool file::unlockFromCurrent(off_t len) const {
 	return unlockFromCurrent(0,len);
 }
 
-bool file::unlockFromCurrent(off_t start, off_t len) {
+bool file::unlockFromCurrent(off_t start, off_t len) const {
 	return unlock(SEEK_CUR,start,len);
 }
 
-bool file::tryLockFromEnd(short type, off_t len) {
+bool file::tryLockFromEnd(short type, off_t len) const {
 	return tryLockFromEnd(type,0,len);
 }
 
-bool file::tryLockFromEnd(short type, off_t start, off_t len) {
+bool file::tryLockFromEnd(short type, off_t start, off_t len) const {
 	return lock(F_SETLK,type,SEEK_END,start,len);
 }
 
-bool file::lockFromEnd(short type, off_t len) {
+bool file::lockFromEnd(short type, off_t len) const {
 	return lockFromEnd(type,0,len);
 }
 
-bool file::lockFromEnd(short type, off_t start, off_t len) {
+bool file::lockFromEnd(short type, off_t start, off_t len) const {
 	return lock(F_SETLKW,type,SEEK_END,start,len);
 }
 
-bool file::checkLockFromEnd(short type, off_t len, struct flock *retlck) {
+bool file::checkLockFromEnd(short type, off_t len, struct flock *retlck) const {
 	return checkLockFromEnd(type,0,len,retlck);
 }
 
 bool file::checkLockFromEnd(short type, off_t start, off_t len,
-							struct flock *retlck) {
+						struct flock *retlck) const {
 	return checkLock(type,SEEK_END,start,len,retlck);
 }
 
-bool file::unlockFromEnd(off_t len) {
+bool file::unlockFromEnd(off_t len) const {
 	return unlockFromEnd(0,len);
 }
 
-bool file::unlockFromEnd(off_t start, off_t len) {
+bool file::unlockFromEnd(off_t start, off_t len) const {
 	return unlock(SEEK_END,start,len);
 }
 
-bool file::tryLockRemainder(short type, off_t start) {
+bool file::tryLockRemainder(short type, off_t start) const {
 	return lock(F_SETLK,type,SEEK_SET,start,0);
 }
 
-bool file::lockRemainder(short type, off_t start) {
+bool file::lockRemainder(short type, off_t start) const {
 	return lock(F_SETLKW,type,SEEK_SET,start,0);
 }
 
-bool file::checkLockRemainder(short type, off_t start, struct flock *retlck) {
+bool file::checkLockRemainder(short type, off_t start,
+					struct flock *retlck) const {
 	return checkLock(type,SEEK_SET,start,0,retlck);
 }
 
-bool file::unlockRemainder(off_t start) {
+bool file::unlockRemainder(off_t start) const {
 	return unlock(SEEK_SET,start,0);
 }
 
-bool file::tryLockRemainderFromCurrent(short type) {
+bool file::tryLockRemainderFromCurrent(short type) const {
 	return tryLockRemainderFromCurrent(type,0);
 }
 
-bool file::tryLockRemainderFromCurrent(short type, off_t start) {
+bool file::tryLockRemainderFromCurrent(short type, off_t start) const {
 	return lock(F_SETLK,type,SEEK_CUR,start,0);
 }
 
-bool file::lockRemainderFromCurrent(short type) {
+bool file::lockRemainderFromCurrent(short type) const {
 	return lockRemainderFromCurrent(type,0);
 }
 
-bool file::lockRemainderFromCurrent(short type, off_t start) {
+bool file::lockRemainderFromCurrent(short type, off_t start) const {
 	return lock(F_SETLKW,type,SEEK_CUR,start,0);
 }
 
-bool file::checkLockRemainderFromCurrent(short type, struct flock *retlck) {
+bool file::checkLockRemainderFromCurrent(short type,
+					struct flock *retlck) const {
 	return checkLockRemainderFromCurrent(type,0,retlck);
 }
 
 bool file::checkLockRemainderFromCurrent(short type, off_t start,
-							struct flock *retlck) {
+					struct flock *retlck) const {
 	return checkLock(type,SEEK_CUR,start,0,retlck);
 }
 
-bool file::unlockRemainderFromCurrent() {
+bool file::unlockRemainderFromCurrent() const {
 	return unlockRemainderFromCurrent(0);
 }
 
-bool file::unlockRemainderFromCurrent(off_t start) {
+bool file::unlockRemainderFromCurrent(off_t start) const {
 	return unlock(SEEK_CUR,start,0);
 }
 
-bool file::tryLockRemainderFromEnd(short type) {
+bool file::tryLockRemainderFromEnd(short type) const {
 	return tryLockRemainderFromEnd(type,0);
 }
 
-bool file::tryLockRemainderFromEnd(short type, off_t start) {
+bool file::tryLockRemainderFromEnd(short type, off_t start) const {
 	return lock(F_SETLK,type,SEEK_END,start,0);
 }
 
-bool file::lockRemainderFromEnd(short type) {
+bool file::lockRemainderFromEnd(short type) const {
 	return lockRemainderFromEnd(type,0);
 }
 
-bool file::lockRemainderFromEnd(short type, off_t start) {
+bool file::lockRemainderFromEnd(short type, off_t start) const {
 	return lock(F_SETLKW,type,SEEK_END,start,0);
 }
 
-bool file::checkLockRemainderFromEnd(short type, struct flock *retlck) {
+bool file::checkLockRemainderFromEnd(short type, struct flock *retlck) const {
 	return checkLockRemainderFromEnd(type,0,retlck);
 }
 
 bool file::checkLockRemainderFromEnd(short type, off_t start,
-							struct flock *retlck) {
+						struct flock *retlck) const {
 	return checkLock(type,SEEK_END,start,0,retlck);
 }
 
-bool file::sequentialAccess(off_t start, size_t len) {
+bool file::sequentialAccess(off_t start, size_t len) const {
 	#ifdef HAVE_POSIX_FADVISE
 	return !posix_fadvise(fd,start,len,POSIX_FADV_SEQUENTIAL);
 	#else
@@ -296,7 +299,7 @@ bool file::sequentialAccess(off_t start, size_t len) {
 	#endif
 }
 
-bool file::randomAccess(off_t start, size_t len) {
+bool file::randomAccess(off_t start, size_t len) const {
 	#ifdef HAVE_POSIX_FADVISE
 	return !posix_fadvise(fd,start,len,POSIX_FADV_RANDOM);
 	#else
@@ -304,7 +307,7 @@ bool file::randomAccess(off_t start, size_t len) {
 	#endif
 }
 
-bool file::onlyOnce(off_t start, size_t len) {
+bool file::onlyOnce(off_t start, size_t len) const {
 	#ifdef HAVE_POSIX_FADVISE
 	return !posix_fadvise(fd,start,len,POSIX_FADV_NOREUSE);
 	#else
@@ -312,7 +315,7 @@ bool file::onlyOnce(off_t start, size_t len) {
 	#endif
 }
 
-bool file::willNeed(off_t start, size_t len) {
+bool file::willNeed(off_t start, size_t len) const {
 	#ifdef HAVE_POSIX_FADVISE
 	return !posix_fadvise(fd,start,len,POSIX_FADV_WILLNEED);
 	#else
@@ -320,7 +323,7 @@ bool file::willNeed(off_t start, size_t len) {
 	#endif
 }
 
-bool file::wontNeed(off_t start, size_t len) {
+bool file::wontNeed(off_t start, size_t len) const {
 	#ifdef HAVE_POSIX_FADVISE
 	return !posix_fadvise(fd,start,len,POSIX_FADV_DONTNEED);
 	#else
@@ -328,7 +331,7 @@ bool file::wontNeed(off_t start, size_t len) {
 	#endif
 }
 
-bool file::normalAccess(off_t start, size_t len) {
+bool file::normalAccess(off_t start, size_t len) const {
 	#ifdef HAVE_POSIX_FADVISE
 	return !posix_fadvise(fd,start,len,POSIX_FADV_NORMAL);
 	#else
@@ -337,7 +340,7 @@ bool file::normalAccess(off_t start, size_t len) {
 }
 
 #ifdef HAVE_POSIX_FALLOCATE
-bool file::reserve(off_t start, size_t len) {
+bool file::reserve(off_t start, size_t len) const {
 	return !posix_fallocate(fd,start,len);
 }
 #endif
@@ -350,35 +353,35 @@ bool file::truncate(const char *filename, off_t length) {
 	return !::truncate(filename,length);
 }
 
-bool file::truncate() {
+bool file::truncate() const {
 	return !::ftruncate(fd,0);
 }
 
-bool file::truncate(off_t length) {
+bool file::truncate(off_t length) const {
 	return !::ftruncate(fd,length);
 }
 
-bool file::unlockRemainderFromEnd() {
+bool file::unlockRemainderFromEnd() const {
 	return unlockRemainderFromEnd(0);
 }
 
-bool file::unlockRemainderFromEnd(off_t start) {
+bool file::unlockRemainderFromEnd(off_t start) const {
 	return unlock(SEEK_END,start,0);
 }
 
-off_t file::setPositionRelativeToBeginning(off_t offset) {
+off_t file::setPositionRelativeToBeginning(off_t offset) const {
 	return lseek(fd,offset,SEEK_SET);
 }
 
-off_t file::setPositionRelativeToCurrent(off_t offset) {
+off_t file::setPositionRelativeToCurrent(off_t offset) const {
 	return lseek(fd,offset,SEEK_CUR);
 }
 
-off_t file::setPositionRelativeToEnd(off_t offset) {
+off_t file::setPositionRelativeToEnd(off_t offset) const {
 	return lseek(fd,offset,SEEK_END);
 }
 
-off_t file::getCurrentPosition() {
+off_t file::getCurrentPosition() const {
 	return lseek(fd,0,SEEK_CUR);
 }
 
@@ -617,7 +620,8 @@ void file::dontGetCurrentPropertiesOnOpen() {
 	getcurrentpropertiesonopen=false;
 }
 
-bool file::lock(int method, short type, short whence, off_t start, off_t len) {
+bool file::lock(int method, short type, short whence,
+				off_t start, off_t len) const {
 	struct flock	lck;
 	lck.l_type=type;
 	lck.l_whence=whence;
@@ -627,7 +631,7 @@ bool file::lock(int method, short type, short whence, off_t start, off_t len) {
 }
 
 bool file::checkLock(short type, short whence, off_t start, off_t len,
-						struct flock *retlck) {
+						struct flock *retlck) const {
 	struct flock	lck;
 	lck.l_type=type;
 	lck.l_whence=whence;
@@ -638,7 +642,7 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	return retval;
 }
 
-bool file::unlock(short whence, off_t start, off_t len) {
+bool file::unlock(short whence, off_t start, off_t len) const {
 	struct flock	lck;
 	lck.l_type=F_UNLCK;
 	lck.l_whence=whence;
@@ -647,7 +651,7 @@ bool file::unlock(short whence, off_t start, off_t len) {
 	return !fcntl(F_SETLK,(long)&lck);
 }
 
-bool file::changeOwner(const char *newuser, const char *newgroup) {
+bool file::changeOwner(const char *newuser, const char *newgroup) const {
 	uid_t	uid;
 	gid_t	gid;
 	return (passwdentry::getUserId(newuser,&uid) &&
@@ -655,7 +659,7 @@ bool file::changeOwner(const char *newuser, const char *newgroup) {
 		changeOwner(uid,gid));
 }
 
-bool file::changeOwner(uid_t uid, gid_t gid) {
+bool file::changeOwner(uid_t uid, gid_t gid) const {
 	return !fchown(fd,uid,gid);
 }
 
@@ -673,13 +677,13 @@ bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
 }
 
 
-bool file::changeOwnerUserId(const char *newuser) {
+bool file::changeOwnerUserId(const char *newuser) const {
 	uid_t	uid;
 	return (passwdentry::getUserId(newuser,&uid) &&
 				changeOwnerUserId(uid));
 }
 
-bool file::changeOwnerUserId(uid_t uid) {
+bool file::changeOwnerUserId(uid_t uid) const {
 	return !fchown(fd,uid,(gid_t)-1);
 }
 
@@ -694,18 +698,17 @@ bool file::changeOwnerUserId(const char *filename, uid_t uid) {
 }
 
 
-bool file::changeOwnerGroupId(const char *newgroup) {
+bool file::changeOwnerGroupId(const char *newgroup) const {
 	gid_t	gid;
 	return (groupentry::getGroupId(newgroup,&gid) &&
 				changeOwnerGroupId(gid));
 }
 
-bool file::changeOwnerGroupId(gid_t gid) {
+bool file::changeOwnerGroupId(gid_t gid) const {
 	return !fchown(fd,(uid_t)-1,gid);
 }
 
-bool file::changeOwnerGroupId(const char *filename,
-					const char *newgroup) {
+bool file::changeOwnerGroupId(const char *filename, const char *newgroup) {
 	gid_t	gid;
 	return (groupentry::getGroupId(newgroup,&gid) &&
 				changeOwnerGroupId(filename,gid));
@@ -719,7 +722,7 @@ bool file::canChangeOwner(const char *filename) {
 	return !pathconf(filename,_PC_CHOWN_RESTRICTED);
 }
 
-bool file::canChangeOwner() {
+bool file::canChangeOwner() const {
 	return !fpathconf(fd,_PC_CHOWN_RESTRICTED);
 }
 
@@ -779,12 +782,12 @@ char *file::resolveSymbolicLink(const char *filename) {
 	}
 }
 
-bool file::sync() {
+bool file::sync() const {
 	return !fsync(fd);
 }
 
 #ifdef HAVE_FDATASYNC
-bool file::dataSync() {
+bool file::dataSync() const {
 	return !fdatasync(fd);
 }
 #endif
@@ -835,7 +838,7 @@ int file::createTemporaryFile(char *templatefilename) {
 }
 
 #ifdef HAVE_XATTRS
-char **file::listAttributes() {
+char **file::listAttributes() const {
 
 	// The flistxattr interface is designed such that you have to guess the
 	// size of the buffer that it will need, call flistxattr, then see if
@@ -875,7 +878,7 @@ char **file::listAttributes() {
 	return NULL;
 }
 
-bool file::getAttribute(const char *name, unsigned short *number) {
+bool file::getAttribute(const char *name, unsigned short *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -884,7 +887,7 @@ bool file::getAttribute(const char *name, unsigned short *number) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, unsigned long *number) {
+bool file::getAttribute(const char *name, unsigned long *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -893,7 +896,7 @@ bool file::getAttribute(const char *name, unsigned long *number) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, short *number) {
+bool file::getAttribute(const char *name, short *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -902,7 +905,7 @@ bool file::getAttribute(const char *name, short *number) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, long *number) {
+bool file::getAttribute(const char *name, long *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -911,7 +914,7 @@ bool file::getAttribute(const char *name, long *number) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, float *number) {
+bool file::getAttribute(const char *name, float *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -920,7 +923,7 @@ bool file::getAttribute(const char *name, float *number) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, double *number) {
+bool file::getAttribute(const char *name, double *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -929,7 +932,7 @@ bool file::getAttribute(const char *name, double *number) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, unsigned char *character) {
+bool file::getAttribute(const char *name, unsigned char *character) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -938,7 +941,7 @@ bool file::getAttribute(const char *name, unsigned char *character) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, char *character) {
+bool file::getAttribute(const char *name, char *character) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -947,7 +950,7 @@ bool file::getAttribute(const char *name, char *character) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, bool *value) {
+bool file::getAttribute(const char *name, bool *value) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,(void **)&buffer,&size);
@@ -956,26 +959,26 @@ bool file::getAttribute(const char *name, bool *value) {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, unsigned char **string) {
+bool file::getAttribute(const char *name, unsigned char **string) const {
 	size_t	size;
 	return getAttribute(name,(void **)string,&size);
 }
 
-bool file::getAttribute(const char *name, char **string) {
+bool file::getAttribute(const char *name, char **string) const {
 	size_t	size;
 	return getAttribute(name,(void **)string,&size);
 }
 
 bool file::getAttribute(const char *name,
-				unsigned char **string, size_t *size) {
+				unsigned char **string, size_t *size) const {
 	return getAttribute(name,(void **)string,size);
 }
 
-bool file::getAttribute(const char *name, char **string, size_t *size) {
+bool file::getAttribute(const char *name, char **string, size_t *size) const {
 	return getAttribute(name,(void **)string,size);
 }
 
-bool file::getAttribute(const char *name, void **buffer, size_t *size) {
+bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 
 	// The fgetxattr interface is designed such that you have to guess the
 	// size of the buffer that it will need, call fgetxattr, then see if
@@ -1012,190 +1015,198 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) {
 	return false;
 }
 
-bool file::createAttribute(const char *name, unsigned short number) {
+bool file::createAttribute(const char *name, unsigned short number) const {
 	return createAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, unsigned long number) {
+bool file::createAttribute(const char *name, unsigned long number) const {
 	return createAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, short number) {
+bool file::createAttribute(const char *name, short number) const {
 	return createAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, long number) {
+bool file::createAttribute(const char *name, long number) const {
 	return createAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, float number) {
+bool file::createAttribute(const char *name, float number) const {
 	return createAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, double number) {
+bool file::createAttribute(const char *name, double number) const {
 	return createAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, unsigned char character) {
+bool file::createAttribute(const char *name, unsigned char character) const {
 	return createAttribute(name,(void *)&character,sizeof(character));
 }
 
-bool file::createAttribute(const char *name, char character) {
+bool file::createAttribute(const char *name, char character) const {
 	return createAttribute(name,(void *)&character,sizeof(character));
 }
 
-bool file::createAttribute(const char *name, bool value) {
+bool file::createAttribute(const char *name, bool value) const {
 	return createAttribute(name,(void *)&value,sizeof(value));
 }
 
-bool file::createAttribute(const char *name, const unsigned char *string) {
+bool file::createAttribute(const char *name,
+				const unsigned char *string) const {
 	return createAttribute(name,(void *)string,
 					charstring::length((char *)string));
 }
 
-bool file::createAttribute(const char *name, const char *string) {
+bool file::createAttribute(const char *name, const char *string) const {
 	return createAttribute(name,(void *)string,charstring::length(string));
 }
 
 bool file::createAttribute(const char *name, const unsigned char *string,
-								size_t size) {
+							size_t size) const {
 	return createAttribute(name,(void *)string,size);
 }
 
-bool file::createAttribute(const char *name, const char *string, size_t size) {
+bool file::createAttribute(const char *name, const char *string,
+							size_t size) const {
 	return createAttribute(name,(void *)string,size);
 }
 
-bool file::createAttribute(const char *name, const void *value, size_t size) {
+bool file::createAttribute(const char *name, const void *value,
+							size_t size) const {
 	return setAttribute(name,value,size,XATTR_CREATE);
 }
 
-bool file::replaceAttribute(const char *name, unsigned short number) {
+bool file::replaceAttribute(const char *name, unsigned short number) const {
 	return replaceAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, unsigned long number) {
+bool file::replaceAttribute(const char *name, unsigned long number) const {
 	return replaceAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, short number) {
+bool file::replaceAttribute(const char *name, short number) const {
 	return replaceAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, long number) {
+bool file::replaceAttribute(const char *name, long number) const {
 	return replaceAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, float number) {
+bool file::replaceAttribute(const char *name, float number) const {
 	return replaceAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, double number) {
+bool file::replaceAttribute(const char *name, double number) const {
 	return replaceAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, unsigned char character) {
+bool file::replaceAttribute(const char *name, unsigned char character) const {
 	return replaceAttribute(name,(void *)&character,sizeof(character));
 }
 
-bool file::replaceAttribute(const char *name, char character) {
+bool file::replaceAttribute(const char *name, char character) const {
 	return replaceAttribute(name,(void *)&character,sizeof(character));
 }
 
-bool file::replaceAttribute(const char *name, bool value) {
+bool file::replaceAttribute(const char *name, bool value) const {
 	return replaceAttribute(name,(void *)&value,sizeof(value));
 }
 
-bool file::replaceAttribute(const char *name, const unsigned char *string) {
+bool file::replaceAttribute(const char *name,
+				const unsigned char *string) const {
 	return replaceAttribute(name,(void *)string,
 					charstring::length((char *)string));
 }
 
-bool file::replaceAttribute(const char *name, const char *string) {
+bool file::replaceAttribute(const char *name, const char *string) const {
 	return replaceAttribute(name,(void *)string,charstring::length(string));
 }
 
 bool file::replaceAttribute(const char *name, const unsigned char *string,
-								size_t size) {
+							size_t size) const {
 	return replaceAttribute(name,(void *)string,size);
 }
 
-bool file::replaceAttribute(const char *name, const char *string, size_t size) {
+bool file::replaceAttribute(const char *name, const char *string,
+							size_t size) const {
 	return replaceAttribute(name,(void *)string,size);
 }
 
-bool file::replaceAttribute(const char *name, const void *value, size_t size) {
+bool file::replaceAttribute(const char *name, const void *value,
+							size_t size) const {
 	return setAttribute(name,value,size,XATTR_REPLACE);
 }
 
-bool file::setAttribute(const char *name, unsigned short number) {
+bool file::setAttribute(const char *name, unsigned short number) const {
 	return setAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, unsigned long number) {
+bool file::setAttribute(const char *name, unsigned long number) const {
 	return setAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, short number) {
+bool file::setAttribute(const char *name, short number) const {
 	return setAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, long number) {
+bool file::setAttribute(const char *name, long number) const {
 	return setAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, float number) {
+bool file::setAttribute(const char *name, float number) const {
 	return setAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, double number) {
+bool file::setAttribute(const char *name, double number) const {
 	return setAttribute(name,(void *)&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, unsigned char character) {
+bool file::setAttribute(const char *name, unsigned char character) const {
 	return setAttribute(name,(void *)&character,sizeof(character));
 }
 
-bool file::setAttribute(const char *name, char character) {
+bool file::setAttribute(const char *name, char character) const {
 	return setAttribute(name,(void *)&character,sizeof(character));
 }
 
-bool file::setAttribute(const char *name, bool value) {
+bool file::setAttribute(const char *name, bool value) const {
 	return setAttribute(name,(void *)&value,sizeof(value));
 }
 
-bool file::setAttribute(const char *name, const unsigned char *string) {
+bool file::setAttribute(const char *name, const unsigned char *string) const {
 	return setAttribute(name,(void *)string,
 				charstring::length((char *)string));
 }
 
-bool file::setAttribute(const char *name, const char *string) {
+bool file::setAttribute(const char *name, const char *string) const {
 	return setAttribute(name,(void *)string,charstring::length(string));
 }
 
 bool file::setAttribute(const char *name, const unsigned char *string,
-								size_t size) {
+							size_t size) const {
 	return setAttribute(name,(void *)string,size);
 }
 
-bool file::setAttribute(const char *name, const char *string, size_t size) {
+bool file::setAttribute(const char *name, const char *string,
+							size_t size) const {
 	return setAttribute(name,(void *)string,size);
 }
 
-bool file::setAttribute(const char *name, const void *value, size_t size) {
+bool file::setAttribute(const char *name, const void *value,
+							size_t size) const {
 	return setAttribute(name,value,size,0);
 }
 
 bool file::setAttribute(const char *name, const void *value,
-						size_t size, int flags) {
+						size_t size, int flags) const {
 	return fsetxattr(fd,name,value,size,flags);
 }
 
-bool file::removeAttribute(const char *name) {
+bool file::removeAttribute(const char *name) const {
 	return fremovexattr(fd,name);
 }
 
-char **file::attributeArray(const char *buffer, size_t size) {
+char **file::attributeArray(const char *buffer, size_t size) const {
 
 	// count the number of attributes
 	int	counter=0;
@@ -1288,6 +1299,6 @@ long file::maxLinks(const char *filename) {
 	return pathconf(filename,_PC_LINK_MAX);
 }
 
-long file::maxLinks() {
+long file::maxLinks() const {
 	return fpathconf(fd,_PC_LINK_MAX);
 }

@@ -40,7 +40,8 @@ daemonprocess::daemonprocess() {
 daemonprocess::~daemonprocess() {
 }
 
-bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
+bool daemonprocess::createPidFile(const char *filename, mode_t permissions)
+									const {
 	file	fl;
 	char	*pid=charstring::parseNumber((long)getpid());
 	bool	retval=(fl.create(filename,permissions,pid)==

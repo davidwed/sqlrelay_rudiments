@@ -16,11 +16,11 @@ class listener {
 			listener();
 		virtual	~listener();
 
-		virtual	void	addFileDescriptor(filedescriptor *fd);
+		void	addFileDescriptor(filedescriptor *fd);
                         	// Adds the specified file descriptor to
 				// the pool that the listener is listening on.
 
-		virtual	int	waitForNonBlockingRead(long sec, long usec);
+		int	waitForNonBlockingRead(long sec, long usec);
 				// Causes the application to wait until a read()
 				// will proceed without blocking or until "sec"
 				// seconds and "usec" microseconds have elapsed.
@@ -37,7 +37,7 @@ class listener {
 				// on timeout and otherwise returns the number
 				// of file descriptors that are ready to be
 				// read from.
-		virtual	int	waitForNonBlockingWrite(long sec, long usec);
+		int	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
 				// until "sec" seconds and "usec" microseconds
@@ -63,11 +63,11 @@ class listener {
 				// write after the last call to
 				// waitForNonBlockingWrite().
 
-		virtual	void	removeFileDescriptor(filedescriptor *fd);
+		void	removeFileDescriptor(filedescriptor *fd);
                         	// Removes the specified file descriptor from
 				// the pool.
 			
-		virtual	void	removeAllFileDescriptors();
+		void	removeAllFileDescriptors();
 				// Removes all file descriptors from the pool.
 
 

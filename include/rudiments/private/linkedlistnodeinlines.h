@@ -1,6 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
+#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+
 #include <stdlib.h>
 
 #include <rudiments/private/rudimentsinlines.h>
@@ -48,13 +50,13 @@ void LINKEDLISTNODE_CLASS::setNext(LINKEDLISTNODE_CLASS *next) {
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getPrevious() const {
+LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getPrevious() {
 	return previous;
 }
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() const {
+LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() {
 	return next;
 }
 
@@ -69,3 +71,5 @@ RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLISTNODE_CLASS::print() const {
 	return datautil.print(data);
 }
+
+#endif

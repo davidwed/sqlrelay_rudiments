@@ -1,7 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/private/unixsocket.h>
+#include <rudiments/unixsocket.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,12 +16,11 @@ extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
-unixsocket::unixsocket() : filedescriptor(), datatransport(), socket() {
+unixsocket::unixsocket() : socket() {
 	filename=NULL;
 }
 
-unixsocket::unixsocket(int filedesc) :
-	filedescriptor(filedesc), datatransport(filedesc), socket(filedesc) {
+unixsocket::unixsocket(int filedesc) : socket(filedesc) {
 	filename=NULL;
 }
 

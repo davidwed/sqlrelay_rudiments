@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		void	write(const char *logentry) const;
+		void	write(const char *logentry);
 
 		loggerlist	logdestlist;

@@ -59,7 +59,8 @@ void intervaltimer::setIntervals(itimerval *itv) {
 	memcpy((void *)&values,(void *)itv,sizeof(values));
 }
 
-void intervaltimer::getInitialInterval(long *seconds, long *microseconds) {
+void intervaltimer::getInitialInterval(long *seconds,
+					long *microseconds) const {
 	if (seconds) {
 		*seconds=values.it_value.tv_sec;
 	}
@@ -68,12 +69,13 @@ void intervaltimer::getInitialInterval(long *seconds, long *microseconds) {
 	}
 }
 
-void intervaltimer::getInitialInterval(timeval *tv) {
+void intervaltimer::getInitialInterval(timeval *tv) const {
 	memcpy((void *)tv,(void *)&(values.it_value),
 				sizeof(values.it_value));
 }
 
-void intervaltimer::getPeriodicInterval(long *seconds, long *microseconds) {
+void intervaltimer::getPeriodicInterval(long *seconds,
+					long *microseconds) const {
 	if (seconds) {
 		*seconds=values.it_interval.tv_sec;
 	}
@@ -82,24 +84,24 @@ void intervaltimer::getPeriodicInterval(long *seconds, long *microseconds) {
 	}
 }
 
-void intervaltimer::getPeriodicInterval(timeval *tv) {
+void intervaltimer::getPeriodicInterval(timeval *tv) const {
 	memcpy((void *)tv,(void *)&(values.it_interval),
 				sizeof(values.it_interval));
 }
 
-void intervaltimer::getIntervals(itimerval *itv) {
+void intervaltimer::getIntervals(itimerval *itv) const {
 	memcpy((void *)itv,(void *)&values,sizeof(values));
 }
 
-bool intervaltimer::start() {
+bool intervaltimer::start() const {
 	return start(NULL);
 }
 
-bool intervaltimer::start(itimerval *itv) {
+bool intervaltimer::start(itimerval *itv) const {
 	return !setitimer(which,&values,itv);
 }
 
-bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) {
+bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
 	itimerval	val;
 	bool	retval=getitimer(which,&val);
 	if (seconds) {
@@ -111,11 +113,11 @@ bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) {
 	return retval;
 }
 
-bool intervaltimer::getTimeRemaining(timeval *tv) {
+bool intervaltimer::getTimeRemaining(timeval *tv) const {
 	return getTimeRemaining(&(tv->tv_sec),&(tv->tv_usec));
 }
 
-bool intervaltimer::stop() {
+bool intervaltimer::stop() const {
 	itimerval	stopvals;
 	memset((void *)&stopvals,0,sizeof(stopvals));
 	return start(&stopvals);
@@ -146,7 +148,7 @@ bool intervaltimer::microsleep(long seconds, long microseconds) {
 }
 
 bool intervaltimer::microsleep(long seconds, long microseconds,
-			long *secondsremaining, long *microsecondsremaining) {
+		long *secondsremaining, long *microsecondsremaining) {
 	timeval		timetosleep;
 	timetosleep.tv_sec=seconds;
 	timetosleep.tv_usec=microseconds;
@@ -168,7 +170,8 @@ bool intervaltimer::microsleep(timeval *timetosleep) {
 	return nanosleep(&nanotimetosleep);
 }
 
-bool intervaltimer::microsleep(timeval *timetosleep, timeval *timeremaining) {
+bool intervaltimer::microsleep(timeval *timetosleep,
+				timeval *timeremaining) {
 	timespec	nanotimetosleep;
 	nanotimetosleep.tv_sec=timetosleep->tv_sec;
 	nanotimetosleep.tv_nsec=timetosleep->tv_usec*1000;
@@ -187,7 +190,8 @@ bool intervaltimer::nanosleep(long seconds, long nanoseconds) {
 }
 
 bool intervaltimer::nanosleep(long seconds, long nanoseconds,
-			long *secondsremaining, long *nanosecondsremaining) {
+				long *secondsremaining,
+				long *nanosecondsremaining) {
 	timespec	timetosleep;
 	timetosleep.tv_sec=seconds;
 	timetosleep.tv_nsec=nanoseconds;
@@ -218,7 +222,8 @@ bool intervaltimer::nanosleep(timespec *timetosleep) {
 	return true;
 }
 
-bool intervaltimer::nanosleep(timespec *timetosleep, timespec *timeremaining) {
+bool intervaltimer::nanosleep(timespec *timetosleep,
+				timespec *timeremaining) {
 
 	#ifdef HAVE_NANOSLEEP
 	return !::nanosleep(timetosleep,timeremaining);

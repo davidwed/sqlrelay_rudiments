@@ -34,11 +34,11 @@ bool dynamiclib::close() {
 	return !dlclose(handle);
 }
 
-void *dynamiclib::getSymbol(const char *symbol) {
+void *dynamiclib::getSymbol(const char *symbol) const {
 	return (handle)?dlsym(handle,symbol):NULL;
 }
 
-char *dynamiclib::getError() {
+char *dynamiclib::getError() const {
 #ifdef RUDIMENTS_HAS_THREADS
 	if (errormutex && pthread_mutex_lock(errormutex)) {
 		return NULL;

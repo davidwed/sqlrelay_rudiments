@@ -24,7 +24,7 @@
 // unixserversocket class (and possibly the unixserversocket class) in
 // conjunction with the listener class.
 
-class unixserversocket : public serversocket, public unixsocket {
+class unixserversocket : public server, public unixsocket {
 	public:
 			unixserversocket();
 		virtual ~unixserversocket();

@@ -11,7 +11,7 @@
 
 class environment {
 	public:
-		virtual ~environment();
+			~environment();
 
 		char	*getValue(const char *variable) const;
 			// Returns the value of "variable".

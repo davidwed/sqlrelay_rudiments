@@ -16,7 +16,7 @@ class stringbuffer : public variablebuffer {
 					size_t increment);
 			// Creates a new buffer which will grow as necessary
 			// to accomodate the string written to it.
-		virtual	~stringbuffer();
+			~stringbuffer();
 
 		void	setPosition(size_t pos);
 			// Sets the position at which the next write will

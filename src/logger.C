@@ -79,7 +79,7 @@ char *logger::logHeader(const char *name) {
 	return retval;
 }
 
-void logger::write(const char *header, int tabs, const char *string) const {
+void logger::write(const char *header, int tabs, const char *string) {
 	char	logentry[charstring::length(header)+3+tabs+
 				charstring::length(string)+2+1];
 	sprintf(logentry,"%s : ",header);
@@ -90,7 +90,7 @@ void logger::write(const char *header, int tabs, const char *string) const {
 	write(logentry);
 }
 
-void logger::write(const char *header, int tabs, char character) const {
+void logger::write(const char *header, int tabs, char character) {
 	char	logentry[charstring::length(header)+3+tabs+1+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -100,7 +100,7 @@ void logger::write(const char *header, int tabs, char character) const {
 	write(logentry);
 }
 
-void logger::write(const char *header, int tabs, long number) const {
+void logger::write(const char *header, int tabs, long number) {
 	char	logentry[charstring::length(header)+3+tabs+20+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -110,7 +110,7 @@ void logger::write(const char *header, int tabs, long number) const {
 	write(logentry);
 }
 
-void logger::write(const char *header, int tabs, double number) const {
+void logger::write(const char *header, int tabs, double number) {
 	char	logentry[charstring::length(header)+3+tabs+21+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int i=0; i<tabs; i++) {
@@ -120,7 +120,7 @@ void logger::write(const char *header, int tabs, double number) const {
 	write(logentry);
 }
 
-void logger::write(const char *logentry) const {
+void logger::write(const char *logentry) {
 	loggerlistnode	*current=logdestlist.getNodeByIndex(0);
 	while (current) {
 		current->getData()->write(logentry);

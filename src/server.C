@@ -3,18 +3,5 @@
 
 #include <rudiments/server.h>
 
-server::server() : datatransport() {}
-
+server::server() {}
 server::~server() {}
-
-bool server::bind() {
-	return true;
-}
-
-bool server::listen(int backlog) {
-	return true;
-}
-
-bool server::accept() {
-	return true;
-}

@@ -1,16 +1,16 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/private/inetsocket.h>
+#include <rudiments/inetsocket.h>
+#include <rudiments/charstring.h>
 
-inetsocket::inetsocket() : filedescriptor(), datatransport(), socket() {
+inetsocket::inetsocket() : socket() {
 	initialize(NULL,0);
 }
 
 inetsocket::~inetsocket() {}
 
-inetsocket::inetsocket(int filedesc) :
-	filedescriptor(filedesc), datatransport(filedesc), socket(filedesc) {
+inetsocket::inetsocket(int filedesc) : socket(filedesc) {
 	initialize(NULL,0);
 }
 

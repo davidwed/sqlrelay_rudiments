@@ -32,20 +32,18 @@ class dictionarynode {
 		datatype	getData() const;
 				// Returns the data stored in the node.
 
-		virtual	int	compare(keytype testkey) const;
-				// Returns -1,0 or 1 if the key stored in the
-				// node is less than, equal to or greater than
-				// "testkey".
+		int	compare(keytype testkey) const;
+			// Returns -1,0 or 1 if the key stored in the
+			// node is less than, equal to or greater than
+			// "testkey".
 
-		virtual void	print() const;
-				// Prints the key and data stored in the node.
+		void	print() const;
+			// Prints the key and data stored in the node.
 
 	#include <rudiments/private/dictionarynode.h>
 };
 
-#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
-	#include <rudiments/private/dictionarynodeinlines.h>
-#endif
+#include <rudiments/private/dictionarynodeinlines.h>
 
 template <class keytype, class datatype>
 class dictionarylistnode :
@@ -88,15 +86,11 @@ class dictionary {
 			// Deletes all dictionarynodes currently in the
 			// dictionary.
 
-		void	print() const;
+		void	print();
 			// Prints out a representation of the dictionary.
 
 	#include <rudiments/private/dictionary.h>
 };
-
-#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
-	#include <rudiments/private/dictionaryinlines.h>
-#endif
 
 
 
@@ -104,20 +98,32 @@ class dictionary {
 // provided here for convenience.
 template <class datatype>
 class stringdictionarynode :
-		public dictionarynode< char *,datatype > {};
+		public dictionarynode< char *,datatype > {
+	public:
+		virtual	~stringdictionarynode();
+};
 
 template <class datatype>
 class stringdictionarylistnode :
-		public dictionarylistnode< char *, datatype > {};
+		public dictionarylistnode< char *, datatype > {
+	public:
+		virtual	~stringdictionarylistnode();
+};
 
 template <class datatype>
-class stringdictionarylist : public dictionarylist< char *, datatype > {};
+class stringdictionarylist : public dictionarylist< char *, datatype > {
+	public:
+		virtual	~stringdictionarylist();
+};
 
 template <class datatype>
 class stringdictionary : public dictionary< char *, datatype,
 				stringdictionarynode<datatype>,
 				stringdictionarylistnode<datatype>,
-				stringdictionarylist<datatype> > {};
+				stringdictionarylist<datatype> > {
+	public:
+		virtual	~stringdictionary();
+};
 
 
 
@@ -125,20 +131,32 @@ class stringdictionary : public dictionary< char *, datatype,
 // provided here for convenience.
 template <class datatype>
 class numericdictionarynode :
-		public dictionarynode< long, datatype > {};
+		public dictionarynode< long, datatype > {
+	public:
+		virtual	~numericdictionarynode();
+};
 
 template <class datatype>
 class numericdictionarylistnode :
-		public dictionarylistnode< long, datatype > {};
+		public dictionarylistnode< long, datatype > {
+	public:
+		virtual	~numericdictionarylistnode();
+};
 
 template <class datatype>
-class numericdictionarylist : public dictionarylist< long, datatype > {};
+class numericdictionarylist : public dictionarylist< long, datatype > {
+	public:
+		virtual	~numericdictionarylist();
+};
 
 template <class datatype>
 class numericdictionary : public dictionary< long, datatype,
 				numericdictionarynode<datatype>,
 				numericdictionarylistnode<datatype>,
-				numericdictionarylist<datatype> > {};
+				numericdictionarylist<datatype> > {
+	public:
+		virtual	~numericdictionary();
+};
 
 
 
@@ -148,5 +166,7 @@ typedef stringdictionarynode< char * >		namevaluepairsnode;
 typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
 typedef stringdictionarylist< char * >		namevaluepairslist;
 typedef stringdictionary< char * >		namevaluepairs;
+
+#include <rudiments/private/dictionaryinlines.h>
 
 #endif

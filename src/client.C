@@ -3,5 +3,5 @@
 
 #include <rudiments/client.h>
 
-client::client() : datatransport() {}
+client::client() {}
 client::~client() {}

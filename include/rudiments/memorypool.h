@@ -50,7 +50,7 @@ class memorypool {
 			// Shrinks the pool back down to it's initial size
 			// and frees all previously allocated blocks.
 
-		void	print() const;
+		void	print();
 			// Prints a visual representation of the pool.
 
 	#include <rudiments/private/memorypool.h>

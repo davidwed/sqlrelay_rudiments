@@ -1,6 +1,8 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
+#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+
 #include <rudiments/private/rudimentsinlines.h>
 
 #define DICTIONARYNODE_TEMPLATE \
@@ -57,3 +59,5 @@ void DICTIONARYNODE_CLASS::print() const {
 	printf(":");
 	datautil.print(data);
 }
+
+#endif

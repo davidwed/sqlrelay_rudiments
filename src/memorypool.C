@@ -115,7 +115,7 @@ void memorypool::free() {
 	nodelist.append(first);
 }
 
-void memorypool::print() const {
+void memorypool::print() {
 
 	long		segmentindex=0;
 	memorypoollistnode	*listnode=nodelist.getNodeByIndex(0);

@@ -11,8 +11,6 @@ class linkedlistutil {
 		int	compare(datatype data1, datatype data2) const;
 };
 
-#ifndef DISABLE_RUDIMENTS_TEMPLATE_INLINES
-	#include <rudiments/private/linkedlistutilinlines.h>
-#endif
+#include <rudiments/private/linkedlistutilinlines.h>
 
 #endif

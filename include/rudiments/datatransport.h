@@ -9,7 +9,7 @@
 // The datatransport class is a base class for other classes that transport data
 // over (or associated with) a file descriptor (such as clients and servers).
 
-class datatransport : virtual public filedescriptor {
+class datatransport : public filedescriptor {
 	public:
 
 			datatransport();

@@ -5,8 +5,8 @@ include ../features.mk
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
-SRCS = dictionary.C
-LOBJS = dictionary.lo
+SRCS = namevaluepairs.C
+LOBJS = namevaluepairs.lo
 ifeq ($(INCLUDE_CLIENT),1)
 	SRCS += client.C
 	LOBJS += client.lo
@@ -43,6 +43,10 @@ ifeq ($(INCLUDE_ENVIRONMENT),1)
 	SRCS += environment.C
 	LOBJS += environment.lo
 endif
+ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
+	SRCS += filedescriptor.C
+	LOBJS += filedescriptor.lo
+endif
 ifeq ($(INCLUDE_FILE),1)
 	SRCS += file.C
 	LOBJS += file.lo
@@ -50,10 +54,6 @@ endif
 ifeq ($(INCLUDE_DEVICE),1)
 	SRCS += device.C
 	LOBJS += device.lo
-endif
-ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
-	SRCS += filedescriptor.C
-	LOBJS += filedescriptor.lo
 endif
 ifeq ($(INCLUDE_FILESYSTEM),1)
 	SRCS += filesystem.C
@@ -120,8 +120,8 @@ ifeq ($(INCLUDE_SEMAPHORESET),1)
 	LOBJS += semaphoreset.lo
 endif
 ifeq ($(INCLUDE_SERVER),1)
-	SRCS += server.C serversocket.C
-	LOBJS += server.lo serversocket.lo
+	SRCS += server.C
+	LOBJS += server.lo
 endif
 ifeq ($(INCLUDE_SERVICEENTRY),1)
 	SRCS += serviceentry.C
@@ -236,16 +236,16 @@ endif
 
 # if inet/unix server/socket are defined, include socket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += socket.C
-	LOBJS += socket.lo
+	SRCS += socket.C tcpsocket.C
+	LOBJS += socket.lo tcpsocket.lo
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
 		SRCS += socket.C
 		LOBJS += socket.lo
 	else
 		ifeq ($(INCLUDE_INETCLIENT),1)
-			SRCS += socket.C
-			LOBJS += socket.lo
+			SRCS += socket.C tcpsocket.C
+			LOBJS += socket.lo tcpsocket.lo
 		else
 			ifeq ($(INCLUDE_UNIXCLIENT),1)
 				SRCS += socket.C

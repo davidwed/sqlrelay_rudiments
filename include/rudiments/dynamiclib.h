@@ -20,18 +20,18 @@ class dynamiclib {
 			// Opens library "library".  If "loaddependencies"
 			// is true, then all libraries required by this library
 			// are also loaded, if it is false, they are loaded
-			// later, as needed.  If "global" ist true, then the
+			// later, as needed.  If "global" is true, then the
 			// symbols defined in the library are made available
 			// to libraries which are loaded later.
 			//
 			// Returns true on success and false on failure.
 		bool	close();
 			// Closes and unloads the previously opened library.
-		void	*getSymbol(const char *symbol);
+		void	*getSymbol(const char *symbol) const;
 			// Returns a handle to "symbol" (exported function or
 			// variable) in the currently open library or NULL if
 			// an error occurs or if no library is currently open.
-		char	*getError();
+		char	*getError() const;
 			// Returns a human-readable description of the previous
 			// error that occurred, or NULL if no error has
 			// occurred.

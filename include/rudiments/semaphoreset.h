@@ -46,7 +46,7 @@ class semaphoreset {
 	public:
 			semaphoreset();
 				// Creates a semaphore set.
-		virtual	~semaphoreset();
+			~semaphoreset();
 				// Cleans up and removes the semaphore set
 				// if it was created by create() or 
 				// createOrAttach() below.  If the semaphore

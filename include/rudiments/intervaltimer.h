@@ -51,28 +51,30 @@ class intervaltimer {
 			// specified by "itv".
 
 
-		void	getInitialInterval(long *seconds, long *microseconds);
+		void	getInitialInterval(long *seconds,
+						long *microseconds) const;
 			// Set "seconds" and "microseconds" to the timer's
 			// initial interval values.
-		void	getInitialInterval(timeval *tv);
+		void	getInitialInterval(timeval *tv) const;
 			// Set "tv" to the timer's initial interval values.
 
-		void	getPeriodicInterval(long *seconds, long *microseconds);
+		void	getPeriodicInterval(long *seconds,
+						long *microseconds) const;
 			// Set "seconds" and "microseconds" to the timer's
 			// periodic interval values.
-		void	getPeriodicInterval(timeval *tv);
+		void	getPeriodicInterval(timeval *tv) const;
 			// Set "tv" to the timer's periodic interval values.
 
-		void	getIntervals(itimerval *itv);
+		void	getIntervals(itimerval *itv) const;
 			// Set "itv" to the timer's intial and periodic values.
 
 
-		bool	start();
+		bool	start() const;
 			// Start (or restart) the timer.  It will first run for
 			// the initial interval, then raise a signal, then run
 			// over and over for the periodic interval, raising the
 			// signal at the end of each interval.
-		bool	start(itimerval *itv);
+		bool	start(itimerval *itv) const;
 			// Start (or restart) the timer.  It will first run for
 			// the initial interval, then raise a signal, then run
 			// over and over for the periodic interval, raising the
@@ -81,15 +83,16 @@ class intervaltimer {
 			// to calling start().
 
 
-		bool	getTimeRemaining(long *seconds, long *microseconds);
+		bool	getTimeRemaining(long *seconds,
+						long *microseconds) const;
 			// Sets "seconds" and "microseconds" to the time
 			// remaining before the timer will raise the signal.
-		bool	getTimeRemaining(timeval *tv);
+		bool	getTimeRemaining(timeval *tv) const;
 			// Sets "tv" to the time remaining before the timer
 			// will raise the signal.
 
 
-		bool	stop();
+		bool	stop() const;
 			// Stops the currently running timer, but preserves
 			// it's initial and perodic intervals.
 
@@ -99,19 +102,22 @@ class intervaltimer {
 		// and false on failure (such as if a signal interrupts them).
 		static bool	sleep(long seconds);
 				// Suspend execution for "seconds" seconds.
-		static bool	sleep(long seconds, long *remainingseconds);
+		static bool	sleep(long seconds,
+					long *remainingseconds);
 				// Suspend execution for "seconds" seconds.
 				// If a signal interrupts the sleep,
 				// "remainingseconds" is populated with the
 				// number of seconds that were not slept.
 
 
-		static bool	microsleep(long seconds, long microseconds);
+		static bool	microsleep(long seconds,
+					long microseconds);
 				// Suspend execution for "seconds" seconds
 				// and "microseconds" microseconds.
-		static bool	microsleep(long seconds, long microseconds,
-						long *secondsremaining,
-						long *microsecondsremaining);
+		static bool	microsleep(long seconds,
+					long microseconds,
+					long *secondsremaining,
+					long *microsecondsremaining);
 				// Suspend execution for "seconds" seconds
 				// and "microseconds" microseconds.
 				// If a signal interrupts the sleep,
@@ -135,12 +141,14 @@ class intervaltimer {
 		// These methods allow you to sleep for very small amounts
 		// of time.  Note that some systems do not have true
 		// nanosecond clock resolution.
-		static bool	nanosleep(long seconds, long nanoseconds);
+		static bool	nanosleep(long seconds,
+					long nanoseconds);
 				// Suspend execution for "seconds" seconds
 				// and "nanoseconds" nanoseconds.
-		static bool	nanosleep(long seconds, long nanoseconds,
-						long *secondsremaining,
-						long *nanosecondsremaining);
+		static bool	nanosleep(long seconds,
+					long nanoseconds,
+					long *secondsremaining,
+					long *nanosecondsremaining);
 				// Suspend execution for "seconds" seconds
 				// and "nanoseconds" nanoseconds.
 				// If a signal interrupts the sleep,

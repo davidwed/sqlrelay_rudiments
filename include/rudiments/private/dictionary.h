@@ -2,5 +2,5 @@
 // See the COPYING file for more information
 
 	protected:
-		dictionarylistnodetype	*findNode(keytype key) const;
+		dictionarylistnodetype	*findNode(keytype key);
 		dictionarylisttype	dict;

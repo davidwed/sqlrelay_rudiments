@@ -11,11 +11,11 @@
 		virtual	unsigned long	netToHost(unsigned long value) const;
 
 		virtual	ssize_t	safeRead(void *buf, ssize_t count,
-							long sec, long usec);
+						long sec, long usec);
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
-							long sec, long usec);
+						long sec, long usec);
 		virtual	int	safeSelect(long sec, long usec,
-							bool read, bool write);
+						bool read, bool write) const;
 
 		int	fd;
 		bool	retryinterruptedreads;

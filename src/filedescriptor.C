@@ -146,15 +146,15 @@ BIO *filedescriptor::newSSLBIO() const {
 }
 #endif
 
-bool filedescriptor::useNonBlockingMode() {
+bool filedescriptor::useNonBlockingMode() const {
 	return (fcntl(F_SETFL,fcntl(F_GETFL,0)|O_NONBLOCK)!=-1);
 }
 
-bool filedescriptor::useBlockingMode() {
+bool filedescriptor::useBlockingMode() const {
 	return (fcntl(F_SETFL,fcntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
 }
 
-bool filedescriptor::isUsingNonBlockingMode() {
+bool filedescriptor::isUsingNonBlockingMode() const {
 	return (fcntl(F_GETFL,0)&O_NONBLOCK);
 }
 
@@ -769,17 +769,18 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	return retval;
 }
 
-int filedescriptor::waitForNonBlockingRead(long sec, long usec) {
+int filedescriptor::waitForNonBlockingRead(long sec, long usec) const {
 	return (lstnr)?lstnr->waitForNonBlockingRead(sec,usec):
 			safeSelect(sec,usec,true,false);
 }
 
-int filedescriptor::waitForNonBlockingWrite(long sec, long usec) {
+int filedescriptor::waitForNonBlockingWrite(long sec, long usec) const {
 	return (lstnr)?lstnr->waitForNonBlockingWrite(sec,usec):
 			safeSelect(sec,usec,false,true);
 }
 
-int filedescriptor::safeSelect(long sec, long usec, bool read, bool write) {
+int filedescriptor::safeSelect(long sec, long usec,
+				bool read, bool write) const {
 
 	#ifdef RUDIMENTS_HAS_SSL
 		if (read && ssl && SSL_pending(ssl)) {
@@ -850,7 +851,7 @@ int filedescriptor::getSSLResult() const {
 }
 #endif
 
-int filedescriptor::fcntl(int cmd, long arg) {
+int filedescriptor::fcntl(int cmd, long arg) const {
 	int	result;
 	do {
 		result=::fcntl(fd,cmd,arg);
@@ -858,7 +859,7 @@ int filedescriptor::fcntl(int cmd, long arg) {
 	return result;
 }
 
-int filedescriptor::ioctl(int cmd, void *arg) {
+int filedescriptor::ioctl(int cmd, void *arg) const {
 	int	result;
 	do {
 		result=::ioctl(fd,cmd,arg);

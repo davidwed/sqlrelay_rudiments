@@ -11,7 +11,7 @@
 class commandline {
 	public:
 			commandline(int argc, const char **argv);
-		virtual	~commandline();
+			~commandline();
 
 		char	*value(const char *arg) const;
 				// Returns the value of "arg" (which is assumed

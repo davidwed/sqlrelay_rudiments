@@ -7,15 +7,15 @@
 		bool		retryinterruptedlockops;
 
 		bool	lock(int method, short type, short whence,
-						off_t start, off_t len);
+						off_t start, off_t len) const;
 		bool	checkLock(short type, short whence,
 						off_t start, off_t len,
-						struct flock *retlck);
-		bool	unlock(short whence, off_t start, off_t len);
+						struct flock *retlck) const;
+		bool	unlock(short whence, off_t start, off_t len) const;
 
 		#ifdef HAVE_XATTRS
 		bool	setAttribute(const char *name,
 						const void *value,
-						size_t size, int flags);
-		char	**attributeArray(const char *buffer, size_t size);
+						size_t size, int flags) const;
+		char	**attributeArray(const char *buffer, size_t size) const;
 		#endif

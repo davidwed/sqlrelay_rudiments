@@ -2,4 +2,4 @@
 // See the COPYING file for more information.
 
 #include <rudiments/client.h>
-#include <rudiments/private/unixsocket.h>
+#include <rudiments/unixsocket.h>
