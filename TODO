@@ -4,13 +4,12 @@ valgrind errors
 
 all constructors need to initialize all member variables
 
-xmldomnode should implement copy constructor, = operator
-dynamiclib should implement copy constructor, = operator
-
 environment class:
 	wrap clearenv()
 	make thread safe
 	make all members static
+
+check all pointers for const correctness
 
 --------------------------------------------------------------------------------
 
@@ -25,10 +24,6 @@ for class specific #defines
 	};
 
 	const unsigned long A::NUM_ELEMENTS=5;
-
---------------------------------------------------------------------------------
-
-implement strdup/strndup so we can safely use delete[] on the output
 
 --------------------------------------------------------------------------------
 

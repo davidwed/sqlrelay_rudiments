@@ -647,12 +647,11 @@ char *charstring::findLast(const char *haystack, const char needle) {
 	return (haystack)?strrchr(haystack,needle):NULL;
 }
 
-// If you've come here chasing valgrind errors...
-// strdup() uses malloc(), not new. No doubt some other code has used delete[]
-// rather than free() to free the string.  This should be legal.  Is there
-// a platform where it isn't?
 char *charstring::duplicate(const char *str) {
-	return (str)?strdup(str):NULL;
+	if (!str) {
+		return NULL;
+	}
+	return duplicate(str,length(str));
 }
 
 void charstring::rightTrim(char *string) {
@@ -775,15 +774,6 @@ long double charstring::toLongDouble(const char *string, char **endptr) {
 	#endif
 }
 
-#ifdef HAVE_STRNDUP
-// If you've come here chasing valgrind errors...
-// strndup() uses malloc(), not new. No doubt some other code has used delete[]
-// rather than free() to free the string.  This should be legal.  Is there
-// a platform where it isn't?
-char *charstring::duplicate(const char *str, size_t length) {
-	return (str)?strndup(str,length):NULL;
-}
-#else
 char *charstring::duplicate(const char *str, size_t length) {
 	if (!str) {
 		return NULL;
@@ -793,7 +783,6 @@ char *charstring::duplicate(const char *str, size_t length) {
 	buffer[length]='\0';
 	return buffer;
 }
-#endif
 
 void charstring::safePrint(const char *string, int length) {
 	const char	*ch=string;

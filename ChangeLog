@@ -29,6 +29,8 @@
 	added rudiments namespace
 	retired errorhandler class
 	implemented copy constructors, = operators for many classes
+	charstring class doesn't use strndup or strdup anymore so
+		strings created using malloc aren't freed using delete[]
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

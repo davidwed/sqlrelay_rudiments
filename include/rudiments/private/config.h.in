@@ -352,9 +352,6 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Some systems have strndup */
-#undef HAVE_STRNDUP
-
 /* Some systems have strtof */
 #undef HAVE_STRTOF
 
