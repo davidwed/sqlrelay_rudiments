@@ -65,11 +65,10 @@ void logger::removeAllLogDestinations() {
 }
 
 char *logger::logHeader(const char *name) {
-	datetime	*dt=new datetime();
-	char	*dtstring=dt->getString();
+	datetime	dt;
+	char	*dtstring=dt.getString();
 	char	*retval=new char[strlen(dtstring)+strlen(name)+16];
 	sprintf(retval,"%s %s [%d]",dtstring,name,getpid());
-	delete dt;
 	return retval;
 }
 
