@@ -39,6 +39,12 @@
 /* Some systems have CMSG_SPACE */
 #undef HAVE_CMSG_SPACE
 
+/* Some systems have crypt */
+#undef HAVE_CRYPT
+
+/* Some systems have crypt_r */
+#undef HAVE_CRYPT_R
+
 /* Cygwin style statfs */
 #undef HAVE_CYGWIN_STATFS
 

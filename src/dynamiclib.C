@@ -36,7 +36,7 @@ void *dynamiclib::getSymbol(const char *symbol) {
 
 char *dynamiclib::getError() {
 #ifdef RUDIMENTS_HAS_THREADS
-	if (!(errormutex && pthread_mutex_lock(errormutex))) {
+	if (!(errormutex && !pthread_mutex_lock(errormutex))) {
 		return NULL;
 	}
 #endif

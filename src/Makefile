@@ -178,6 +178,10 @@ ifeq ($(INCLUDE_DYNAMICLIB),1)
 	SRCS += dynamiclib.C
 	LOBJS += dynamiclib.lo
 endif
+ifeq ($(INCLUDE_CRYPT),1)
+	SRCS += crypt.C
+	LOBJS += crypt.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)

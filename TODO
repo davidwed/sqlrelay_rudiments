@@ -1,3 +1,6 @@
+check mutexes, make sure pthread_mutex_lock/unlock return values are
+	being properly handled
+
 solaris:
 	can't find pcre or openssl
 
@@ -61,10 +64,12 @@ implement these classes:
 	messagequeue
 	thread
 	mutex
-	encryption
 	sslcontext
 	table (dynamic 2d array)
 	generic parser/lexer classes, use them for xmlsax
+
+tests for:
+	dynamiclib
 
 --------------------------------------------------------------------------------
 

@@ -489,6 +489,8 @@ AC_MSG_CHECKING(isblank)
 AC_TRY_LINK([#include <ctype.h>],
 isblank(' ');,AC_DEFINE(HAVE_ISBLANK,1,Some systems have isblank) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+FW_CHECK_CRYPT_R
+
 echo "******************************"
 
 

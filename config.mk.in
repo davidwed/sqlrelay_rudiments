@@ -67,3 +67,6 @@ PCRELIBS = @PCRELIBS@
 
 # nanosleep library
 NANOSLEEPLIB = @NANOSLEEPLIB@
+
+# crypt library
+CRYPTLIB = @CRYPTLIB@

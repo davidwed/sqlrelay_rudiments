@@ -200,6 +200,10 @@ ifeq ($(INCLUDE_DYNAMICLIB),1)
 	HEADERS += dynamiclib.h
 	PRIVATEHEADERS += dynamiclib.h dynamiclibincludes.h
 endif
+ifeq ($(INCLUDE_CRYPT),1)
+	HEADERS += crypt.h
+	PRIVATEHEADERS += crypt.h cryptincludes.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

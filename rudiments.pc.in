@@ -7,5 +7,5 @@ Name: rudiments
 Description: A C++ foundation class library.
 Version: @RUDIMENTS_VERSION@
 Requires:
-Libs: -L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@
+Libs: -L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CRYPTLIB@
 Cflags: -I@includedir@/rudiments @PTHREADINCLUDES@ @SSLINCLUDES@

@@ -925,3 +925,53 @@ HACKLIBS=""
 FW_CHECK_SCO_HACK
 LIBS="$HACKLIBS $LIBS"
 ])
+
+
+AC_DEFUN([FW_CHECK_CRYPT_R],
+[
+
+	AC_MSG_CHECKING(crypt)
+	HAVE_CRYPT=""
+	for i in "" "-lcrypt"
+	do
+		FW_TRY_LINK([#include <stdlib.h>
+#include <crypt.h>],[crypt(NULL,NULL);],[],[$i],[],[HAVE_CRYPT="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT,1,Some systems have crypt)],[])
+		if ( test -n "$HAVE_CRYPT" )
+		then
+			break
+		fi
+	done
+	if ( test -n "$HAVE_CRYPT" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
+	AC_MSG_CHECKING(crypt_r)
+	HAVE_CRYPT_R=""
+	for i in "" "-lcrypt"
+	do
+		FW_TRY_LINK([#include <stdlib.h>
+#include <crypt.h>],[crypt_r(NULL,NULL,NULL);],[],[$i],[],[HAVE_CRYPT_R="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT_R,1,Some systems have crypt_r)],[])
+		if ( test -n "$HAVE_CRYPT_R" )
+		then
+			break
+		fi
+	done
+	if ( test -n "$HAVE_CRYPT_R" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
+	INCLUDE_CRYPTLIB="0"
+	if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
+	then
+		INCLUDE_CRYPT="1"
+	fi
+
+	AC_SUBST(INCLUDE_CRYPT)
+	AC_SUBST(CRYPTLIB)
+])
