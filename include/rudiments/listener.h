@@ -9,6 +9,9 @@
 
 #include <rudiments/list.h>
 
+typedef primitivelist<int>	listenerlist;
+typedef primitivelistnode<int>	listenerlistnode;
+
 // The listener class listens on a pool of file descriptors.
 
 class listener {

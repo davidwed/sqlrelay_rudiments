@@ -22,14 +22,15 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 		fd_set	fdlist;
 		int	largest;
 		FD_ZERO(&fdlist);
-		primitivelistnode<int>	*current=
+		//primitivelistnode<int>	*current=
+		listenerlistnode	*current=
 				filedescriptorlist.getNodeByIndex(0);
 		while(current) {
 			if (current->getValue()>largest) {
 				largest=current->getValue();
 			}
 			FD_SET(current->getValue(),&fdlist);
-			current=(primitivelistnode<int> *)current->getNext();
+			current=(listenerlistnode *)current->getNext();
 		}
 
 		// set up the timeout
@@ -62,8 +63,7 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 				if (FD_ISSET(current->getValue(),&fdlist)) {
 					return current->getValue();
 				}
-				current=(primitivelistnode<int> *)
-							current->getNext();
+				current=(listenerlistnode *)current->getNext();
 			}
 			break;
 		}

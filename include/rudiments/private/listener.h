@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		primitivelist<int>	filedescriptorlist;
+		listenerlist	filedescriptorlist;
 
 	protected:
 

@@ -112,7 +112,7 @@ class list {
 
 #include <rudiments/private/listinlines.h>
 
-typedef list< char *, char *, stringlistnode >			stringlist;
+typedef list< char *, char *, stringlistnode >	stringlist;
 
 template <class datatype>
 class primitivelist : public list< datatype, datatype,

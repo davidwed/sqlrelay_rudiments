@@ -4,4 +4,4 @@
 	private:
 		void	write(const char *logentry) const;
 
-		primitivelist<logdestination *>	logdestlist;
+		loggerlist	logdestlist;
