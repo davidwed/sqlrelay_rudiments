@@ -22,6 +22,7 @@
 	reworked xmldom relationship in dtd class
 	fixed ssize_t safeSelect() -> int safeSelect() declaration
 	updated config.sub, config.guess and ltmain.sh
+	made a bunch of methods return bool instead of int
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better
