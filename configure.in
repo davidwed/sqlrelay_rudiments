@@ -33,24 +33,6 @@ if ( test "$ENABLE_INLINES" = "yes" ); then
 fi
 
 
-dnl Checks for programs.
-echo
-echo "***** Programs ***************"
-AC_CANONICAL_HOST
-AC_PROG_CXX
-AC_PROG_CC
-AC_PROG_CPP
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
-AC_LANG(C++)
-
-dnl have to set ar here because libtool (currently) fails
-dnl to use the correct one when cross-compiling
-AC_CHECK_PROG(AR,$host_alias-ar,$host_alias-ar,ar)
-AC_SUBST(AR)
-echo "******************************"
-
 
 dnl Checks for libtool.
 echo
@@ -65,6 +47,34 @@ dnl environment variables, it seems
 if ( test "$USE_SYSTEM_LIBTOOL" = "yes" ); then
   LIBTOOL="libtool"
 fi
+
+
+dnl Checks for programs.
+echo
+echo "***** Programs ***************"
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_LANG(C++)
+
+dnl have to set ar here because libtool (currently) fails
+dnl to use the correct one when cross-compiling
+AC_CHECK_PROG(AR,$host_alias-ar,$host_alias-ar,ar)
+AC_SUBST(AR)
+
+GNUSTRIP=`$STRIP --version 2> /dev/null | grep "GNU strip"`
+AC_MSG_CHECKING(for GNU strip)
+if ( test -n "$GNUSTRIP" ); then
+	AC_MSG_RESULT(yes)
+else
+	STRIP="touch"
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(STRIP)
+echo "******************************"
 
 
 dnl Checks for header files.
