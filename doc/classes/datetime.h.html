@@ -20,17 +20,77 @@
 
 <font color="#288850"><b>class</b></font> datetime {
         <font color="#a02828"><b>public</b></font>:
+
+
+                <font color="#0000f8">// if you need a quick conversion, use one of these methods</font>
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>char</b></font>     *getString(<font color="#288850"><b>time_t</b></font> epoch);
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>char</b></font>     *getString(<font color="#288850"><b>const</b></font> tm *timestruct);
+                        <font color="#0000f8">// returns &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
+                        <font color="#0000f8">// Note that this method allocates a buffer to return</font>
+                        <font color="#0000f8">// the string in which must be deleted by the calling</font>
+                        <font color="#0000f8">// program.</font>
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>time_t</b></font>   getEpoch(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
+                        <font color="#0000f8">// parses &quot;mm/dd/yyyy hh:mm:ss&quot; and returns the</font>
+                        <font color="#0000f8">// number of seconds since 1970.</font>
+                <font color="#288850"><b>static</b></font> <font color="#288850"><b>time_t</b></font>   getEpoch(<font color="#288850"><b>const</b></font> tm *timestruct);
+                        <font color="#0000f8">// converts &quot;timestruct&quot; to the number of seconds</font>
+                        <font color="#0000f8">// since 1970.</font>
+
+
+                <font color="#0000f8">// if you need anything other than a quick conversion,</font>
+                <font color="#0000f8">// use these methods</font>
                         datetime();
-                                <font color="#0000f8">// current time</font>
-                        datetime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
-                                <font color="#0000f8">// datestring must be &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
-                        datetime(<font color="#288850"><b>time_t</b></font> epoch);
-                                <font color="#0000f8">// epoch is the number of seconds since 1970,</font>
-                                <font color="#0000f8">// output by many standard time functions</font>
-                        datetime(<font color="#288850"><b>const</b></font> tm *timestruct);
-                                <font color="#0000f8">// *timestruct is a (struct tm *), output by </font>
-                                <font color="#0000f8">// many standard time functions</font>
                         ~datetime();
+
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
+                        <font color="#0000f8">// Parses &quot;datestring&quot; and sets the date and time</font>
+                        <font color="#0000f8">// represented in the class to that time.</font>
+                        <font color="#0000f8">// Datestring must be &quot;mm/dd/yyyy hh:mm:ss&quot;.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>time_t</b></font> epoch);
+                        <font color="#0000f8">// Processes &quot;epoch&quot; and sets the date and time</font>
+                        <font color="#0000f8">// represented in the class to that time.</font>
+                        <font color="#0000f8">// Epoch is the number of seconds since 1970;</font>
+                        <font color="#0000f8">// output by many standard time functions.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     initialize(<font color="#288850"><b>const</b></font> tm *timestruct);
+                        <font color="#0000f8">// Processes &quot;timestruct&quot; and sets the date and time</font>
+                        <font color="#0000f8">// represented in the class to that time.</font>
+                        <font color="#0000f8">// &quot;timestruct&quot; is a (struct tm *); output by </font>
+                        <font color="#0000f8">// many standard time functions.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
+
+                <font color="#288850"><b>int</b></font>     getSystemDateAndTime();
+                        <font color="#0000f8">// Sets the date and time represented in the class to</font>
+                        <font color="#0000f8">// the date and time stored in the system clock.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     getHardwareDateAndTime();
+                        <font color="#0000f8">// This method only works if your system has a working</font>
+                        <font color="#0000f8">// real-time clock at /dev/rtc.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Sets the date and time represented in the class to</font>
+                        <font color="#0000f8">// the date and time stored in the hardware clock.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     setSystemDateAndTime();
+                        <font color="#0000f8">// Sets the system clock's date and time to the date</font>
+                        <font color="#0000f8">// and time currently represented in the class.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#288850"><b>int</b></font>     setHardwareDateAndTime();
+                        <font color="#0000f8">// This method only works if your system has a working</font>
+                        <font color="#0000f8">// real-time clock at /dev/rtc.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Sets the hardware clock's date and time to the date</font>
+                        <font color="#0000f8">// and time currently represented in the class.</font>
+                        <font color="#0000f8">//</font>
+                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+
 
                 <font color="#0000f8">// These methods return commonly needed time/date values</font>
                 <font color="#288850"><b>int</b></font>     getHour() <font color="#288850"><b>const</b></font>;
@@ -65,42 +125,6 @@
                         <font color="#0000f8">// returns the number of seconds since 1970</font>
                 tm      *getTm();
                         <font color="#0000f8">// returns a pointer to the internal &quot;struct tm&quot;</font>
-
-
-                <font color="#288850"><b>int</b></font>     getSystemDateAndTime();
-                        <font color="#0000f8">// Sets the date and time represented in the class to</font>
-                        <font color="#0000f8">// the date and time stored in the system clock.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-                <font color="#288850"><b>int</b></font>     setSystemDateAndTime();
-                        <font color="#0000f8">// Sets the system clock's date and time to the date</font>
-                        <font color="#0000f8">// and time currently represented in the class.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-
-
-                <font color="#0000f8">// These methods only work if your system has a working</font>
-                <font color="#0000f8">// real-time-clock at /dev/rtc.</font>
-                <font color="#288850"><b>int</b></font>     getHardwareDateAndTime();
-                        <font color="#0000f8">// Sets the date and time represented in the class to</font>
-                        <font color="#0000f8">// the date and time stored in the hardware clock.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-                <font color="#288850"><b>int</b></font>     setHardwareDateAndTime();
-                        <font color="#0000f8">// Sets the hardware clock's date and time to the date</font>
-                        <font color="#0000f8">// and time currently represented in the class.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
-
-
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>char</b></font>     *getString(<font color="#288850"><b>time_t</b></font> epoch);
-                        <font color="#0000f8">// returns &quot;mm/dd/yyyy hh:mm:ss&quot;</font>
-                        <font color="#0000f8">// Note that this method allocates a buffer to return</font>
-                        <font color="#0000f8">// the string in which must be deleted by the calling</font>
-                        <font color="#0000f8">// program.</font>
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>time_t</b></font>   getEpoch(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *datestring);
-                        <font color="#0000f8">// parses &quot;mm/dd/yyyy hh:mm:ss&quot; and returns the</font>
-                        <font color="#0000f8">// number of seconds since 1970.</font>
 
 <font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/datetime.h&gt;</font>
 };

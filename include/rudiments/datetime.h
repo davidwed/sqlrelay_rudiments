@@ -35,16 +35,55 @@ class datetime {
 			datetime();
 			~datetime();
 
-		int	initialize();
-			// current time
 		int	initialize(const char *datestring);
-			// datestring must be "mm/dd/yyyy hh:mm:ss"
+			// Parses "datestring" and sets the date and time
+			// represented in the class to that time.
+			// Datestring must be "mm/dd/yyyy hh:mm:ss".
+			//
+			// Returns 1 on success and 0 on failure.
 		int	initialize(time_t epoch);
-			// epoch is the number of seconds since 1970,
-			// output by many standard time functions
+			// Processes "epoch" and sets the date and time
+			// represented in the class to that time.
+			// Epoch is the number of seconds since 1970;
+			// output by many standard time functions.
+			//
+			// Returns 1 on success and 0 on failure.
 		int	initialize(const tm *timestruct);
-			// *timestruct is a (struct tm *), output by 
-			// many standard time functions
+			// Processes "timestruct" and sets the date and time
+			// represented in the class to that time.
+			// "timestruct" is a (struct tm *); output by 
+			// many standard time functions.
+			//
+			// Returns 1 on success and 0 on failure.
+
+
+		int	getSystemDateAndTime();
+			// Sets the date and time represented in the class to
+			// the date and time stored in the system clock.
+			//
+			// Returns 1 on success and 0 on failure.
+		int	getHardwareDateAndTime();
+			// This method only works if your system has a working
+			// real-time clock at /dev/rtc.
+			//
+			// Sets the date and time represented in the class to
+			// the date and time stored in the hardware clock.
+			//
+			// Returns 1 on success and 0 on failure.
+		int	setSystemDateAndTime();
+			// Sets the system clock's date and time to the date
+			// and time currently represented in the class.
+			//
+			// Returns 1 on success and 0 on failure.
+		int	setHardwareDateAndTime();
+			// This method only works if your system has a working
+			// real-time clock at /dev/rtc.
+			//
+			// Sets the hardware clock's date and time to the date
+			// and time currently represented in the class.
+			//
+			// Returns 1 on success and 0 on failure.
+
 
 		// These methods return commonly needed time/date values
 		int	getHour() const;
@@ -79,32 +118,6 @@ class datetime {
 			// returns the number of seconds since 1970
 		tm	*getTm();
 			// returns a pointer to the internal "struct tm"
-
-
-		int	getSystemDateAndTime();
-			// Sets the date and time represented in the class to
-			// the date and time stored in the system clock.
-			//
-			// Returns 1 on success and 0 on failure.
-		int	setSystemDateAndTime();
-			// Sets the system clock's date and time to the date
-			// and time currently represented in the class.
-			//
-			// Returns 1 on success and 0 on failure.
-
-
-		// These methods only work if your system has a working
-		// real-time-clock at /dev/rtc.
-		int	getHardwareDateAndTime();
-			// Sets the date and time represented in the class to
-			// the date and time stored in the hardware clock.
-			//
-			// Returns 1 on success and 0 on failure.
-		int	setHardwareDateAndTime();
-			// Sets the hardware clock's date and time to the date
-			// and time currently represented in the class.
-			//
-			// Returns 1 on success and 0 on failure.
 
 	#include <rudiments/private/datetime.h>
 };

@@ -27,27 +27,6 @@ datetime::datetime() {
 	epoch=0;
 }
 
-int datetime::initialize() {
-
-	if ((epoch=time(NULL))==-1) {
-		return 0;
-	}
-
-	delete[] timestring;
-	timestring=NULL;
-
-	#ifdef HAVE_LOCALTIME_R
-		return (localtime_r(&epoch,&timestruct)!=NULL);
-	#else
-		tm	*lcltm=localtime(&epoch);
-		if (!lcltm) {
-			return 0;
-		}
-		memcpy((void *)&timestruct,(void *)lcltm,sizeof(struct tm));
-		return 1;
-	#endif
-}
-
 int datetime::initialize(const char *timestring) {
 
 	delete[] this->timestring;
