@@ -10,5 +10,5 @@ int main(int argc, const char **argv) {
 	// display the contents of dtd.dtd
 	dtd	d;
 	d.parseFile("dtd.dtd");
-	printf("%s\n",d.xml()->getString());
+	printf("%s\n",d.xml()->getRootNode()->xml()->getString());
 }

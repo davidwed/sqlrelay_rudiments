@@ -8,22 +8,15 @@
 
 // The dtd class implements a minimal XML DTD parser.
 
-class dtd {
+class dtd : public errorhandler {
 	public:
-
-			dtd();
-			~dtd();
-
 		int	parseFile(const char *filename);
 			// Parse file "filename" and generate a DTD tree.
 		int	parseString(const char *string);
 			// Parse string "string" and generate a DTD tree.
 
-		stringbuffer	*xml() const;
-				// Allocates a stringbuffer, writes a textual
-				// representation of the tree and returns the
-				// stringbuffer; The calling program must
-				// deallocate the stringbuffer.
+		xmldom	*xml();
+			// Returns an XML representation of the DTD.
 
 	#include <rudiments/private/dtd.h>
 };

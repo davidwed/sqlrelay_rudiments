@@ -18,6 +18,8 @@
 		it's not -1
 	fixed rpm 4.1 doc-install complaints
 	added --enable-debug option to configure, only 1 library is built now
+	fixed xmldomnode::getNextTagSibling()
+	reworked xmldom relationship in dtd class
 
 0.25 -	doc's mention genericsocket class now
 	configure script figures out rpm build directory better

@@ -2,8 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
-		xmldom	*xmld;
-		xmldom	*xmldtd;
+		xmldom	xmld;
+		xmldom	xmldtd;
 
 		int	parseDtd();
 		int	newElement(xmldomnode *node);

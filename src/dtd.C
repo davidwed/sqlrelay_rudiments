@@ -12,14 +12,45 @@
 	#include <strings.h>
 #endif
 
+int dtd::parseFile(const char *filename) {
+	if (!xmld.parseFile(filename)) {
+		clearError();
+		appendError(xmld.getError());
+		return 0;
+	}
+	if (!parseDtd()) {
+		clearError();
+		appendError(xmldtd.getError());
+		return 0;
+	}
+	return 1;
+}
+
+int dtd::parseString(const char *string) {
+	if (!xmld.parseString(string)) {
+		clearError();
+		appendError(xmld.getError());
+		return 0;
+	}
+	if (!parseDtd()) {
+		clearError();
+		appendError(xmldtd.getError());
+		return 0;
+	}
+	return 1;
+}
+
 int dtd::parseDtd() {
 
 	// create the new tree
-	xmldtd->createRootNode();
-	xmldtd->getRootNode()->cascadeOnDelete();
+	xmldtd.createRootNode();
+	xmldtd.getRootNode()->cascadeOnDelete();
+	xmldtd.getRootNode()->appendChild(
+			new xmldomnode(xmldtd.getRootNode()->getNullNode(),
+						TAG_XMLDOMNODETYPE,"dtd",NULL));
 
 	// step through tags
-	xmldomnode	*root=xmld->getRootNode();
+	xmldomnode	*root=xmld.getRootNode();
 	xmldomnode	*currentnode=root->getFirstTagChild();
 	while (!currentnode->isNullNode()) {
 
@@ -48,14 +79,14 @@ int dtd::newElement(xmldomnode *node) {
 	}
 
 	// append a carriage return just for looks
-	xmldomnode	*root=xmldtd->getRootNode();
-	root->appendText("\n");
+	xmldomnode	*dtdnode=xmldtd.getRootNode()->getChild("dtd");
+	dtdnode->appendText("\n");
 
 	// create an "element" element and add it to the tree
-	xmldomnode	*element=new xmldomnode(root->getNullNode(),
+	xmldomnode	*element=new xmldomnode(dtdnode->getNullNode(),
 					TAG_XMLDOMNODETYPE,"element",NULL);
 	element->cascadeOnDelete();
-	if (!root->appendChild(element)) {
+	if (!dtdnode->appendChild(element)) {
 		delete element;
 		return 0;
 	}
@@ -129,7 +160,7 @@ int dtd::parseList(const char *list, xmldomnode *node,
 
 			// create a new element and add it to the tree
 			xmldomnode	*newtag=new xmldomnode(
-					xmldtd->getRootNode()->getNullNode(),
+					xmldtd.getRootNode()->getNullNode(),
 					TAG_XMLDOMNODETYPE,name,NULL);
 			newtag->cascadeOnDelete();
 			if (!node->appendChild(newtag)) {
@@ -171,7 +202,7 @@ int dtd::newAttribute(xmldomnode *node) {
 	}
 
 	// get the appropriate element to add this attribute to
-	xmldomnode	*element=xmldtd->getRootNode()->
+	xmldomnode	*element=xmldtd.getRootNode()->getChild("dtd")->
 		getChild("element","name",node->getAttribute(0)->getName());
 	if (element->isNullNode()) {
 		return 0;
@@ -180,7 +211,7 @@ int dtd::newAttribute(xmldomnode *node) {
 	// create a new "attribute" element and add it to the tree
 	element->appendText("\n	");
 	xmldomnode	*attribute=new xmldomnode(
-					xmldtd->getRootNode()->getNullNode(),
+					xmldtd.getRootNode()->getNullNode(),
 					TAG_XMLDOMNODETYPE,"attribute",NULL);
 	attribute->cascadeOnDelete();
 	if (!element->appendChild(attribute)) {

@@ -121,9 +121,10 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 }
 
 xmldomnode *xmldomnode::getNextTagSibling() const {
-	xmldomnode	*node=(xmldomnode *)this;
-	while (!(node=node->getNextSibling())->isNullNode() &&
-				!node->getType()==TAG_XMLDOMNODETYPE);
+	xmldomnode	*node=(xmldomnode *)getNextSibling();
+	while (!node->isNullNode() && !node->getType()==TAG_XMLDOMNODETYPE) {
+		node=node->getNextSibling();
+	}
 	return node;
 }
 
