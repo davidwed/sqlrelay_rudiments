@@ -93,6 +93,14 @@ class signalhandler {
 			//
 			// Returns true on success and false on failure.
 		bool	handleSignal(int signum, signalhandler *oldhandler);
+			// Instructs the program to handle "signum" by calling
+			// the handler set previously in setHandler().  May
+			// be called multiple times to associate the same
+			// handler with several signals.  Populates oldhandler
+			// with the values that were used to handle this signal
+			// prior to this call.
+			//
+			// Returns true on success and false on failure.
 		
 		// Signal flags modify the behavior of the signal handling
 		// process.
