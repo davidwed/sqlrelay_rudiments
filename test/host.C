@@ -3,6 +3,7 @@
 
 #include <rudiments/hostentry.h>
 #include <stdio.h>
+#include <sys/socket.h>
 
 // this function takes addr[]={127,1,1,0} and returns "127.1.1.0"
 char *getAddressString(int length, const char *addr) {

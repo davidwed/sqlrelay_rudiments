@@ -81,6 +81,13 @@ int inetclientsocket::connect() {
 		// create a hint indicating that SOCK_STREAM should be used
 		addrinfo	hints;
 		memset(&hints,0,sizeof(addrinfo));
+		// For now, we're using PF_INET.  Specifying PF_INET prevents
+		// IPV6 addresses from working, but that's how this class works
+		// if we don't have getaddrinfo anyway.
+		// Also, FreeBSD 4.8 appears to have a bug where all addresses
+		// returned from getaddrinfo have PF_INET6 for ai_family, even
+		// if they're PF_INET addresses.
+		hints.ai_family=PF_INET;
 		hints.ai_socktype=SOCK_STREAM;
 
 		// get a string representing the port number

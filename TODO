@@ -1,3 +1,5 @@
+PF_INET/FreeBSD thing
+
 string class name conflicts with stl string class
 
 these classes would be nice:
