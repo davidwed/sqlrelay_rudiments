@@ -87,6 +87,8 @@ bool hostentry::initialize(const char *hostname, const char *address,
 		int	errnop=0;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETHOSTBYNAME_R_6) && \
+					defined(HAVE_GETHOSTBYADDR_R_8)
 			if (!((hostname)
 				?(gethostbyname_r(hostname,&hebuffer,
 						buffer,size,&he,&errnop))
@@ -94,6 +96,16 @@ bool hostentry::initialize(const char *hostname, const char *address,
 						buffer,size,&he,&errnop)))) {
 				return (he!=NULL);
 			}
+			#elif defined(HAVE_GETHOSTBYNAME_R_5) && \
+					defined(HAVE_GETHOSTBYADDR_R_7)
+			if ((hostname)
+				?(he=gethostbyname_r(hostname,&hebuffer,
+						buffer,size,&errnop))
+				:(he=gethostbyaddr_r(address,len,type,&hebuffer,
+						buffer,size,&errnop))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			he=NULL;

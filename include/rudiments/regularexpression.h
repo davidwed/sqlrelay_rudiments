@@ -51,7 +51,6 @@ class regularexpression {
 			// Returns true if the match was successful and
 			// false if it was not.
 
-	#if defined(RUDIMENTS_HAS_PCRE) || defined(HAVE_REGEX_H)
 		int	getSubstringCount();
 			// Returns the number of substrings of "str" passed into
 			// match() that match "pattern" passed into compile().
@@ -72,7 +71,6 @@ class regularexpression {
 			// Returns the offset of the data directly after the
 			// "index"'th matching substring or -1 if index is
 			// invalid.
-	#endif
 
 	#include <rudiments/private/regularexpression.h>
 };

@@ -7,9 +7,7 @@
 #include <rudiments/charstring.h>
 
 #include <stdio.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 
 bool filedestination::open(const char *filename) {
 	return logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,

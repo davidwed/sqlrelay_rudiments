@@ -3,9 +3,7 @@
 
 #include <rudiments/device.h>
 
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 
 device::device() : file() {
 	dontGetCurrentPropertiesOnOpen();

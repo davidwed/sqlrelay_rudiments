@@ -16,13 +16,6 @@ extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
-#ifdef CMSG_SPACE
-union control_union {
-	struct cmsghdr	cm;
-	char		control[CMSG_SPACE(sizeof(int))];
-};
-#endif
-
 unixsocket::unixsocket() : filedescriptor(), datatransport(), socket() {
 	filename=NULL;
 }
@@ -63,8 +56,11 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 
 		// new-style:
 		// The descriptor is passed in the msg_control
-		#ifdef CMSG_SPACE
-		union control_union	control;
+		#ifdef HAVE_CMSG_SPACE
+		union {
+			struct cmsghdr	cm;
+			char		control[CMSG_SPACE(sizeof(int))];
+		} control;
 		messageheader.msg_control=control.control;
 		#else
 		unsigned char	control[sizeof(struct cmsghdr)+sizeof(int)];
@@ -76,7 +72,7 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 		cmptr=CMSG_FIRSTHDR(&messageheader);
 		cmptr->cmsg_level=SOL_SOCKET;
 		cmptr->cmsg_type=SCM_RIGHTS;
-		#ifdef CMSG_LEN
+		#ifdef HAVE_CMSG_LEN
 		cmptr->cmsg_len=CMSG_LEN(sizeof(int));
 		#else
 		cmptr->cmsg_len=sizeof(control);
@@ -124,8 +120,11 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 		// new-style:
 		// The descriptor is received in the msg_control
-		#ifdef CMSG_SPACE
-		union control_union	control;
+		#ifdef HAVE_CMSG_SPACE
+		union {
+			struct cmsghdr	cm;
+			char		control[CMSG_SPACE(sizeof(int))];
+		} control;
 		messageheader.msg_control=control.control;
 		#else
 		unsigned char	control[sizeof(struct cmsghdr)+sizeof(int)];

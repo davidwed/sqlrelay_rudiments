@@ -3,9 +3,9 @@
 
 #include <rudiments/private/config.h>
 
-#if defined(RUDIMENTS_HAS_PCRE)
+#ifdef RUDIMENTS_HAS_PCRE
 	#include <pcre.h>
-#elif defined(HAVE_REGEX_H)
+#else
 	#include <sys/types.h>
 	#include <regex.h>
 #endif

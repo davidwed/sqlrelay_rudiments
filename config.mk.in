@@ -64,3 +64,6 @@ SSLLIBS = @SSLLIBS@
 
 # pcre library
 PCRELIBS = @PCRELIBS@
+
+# nanosleep library
+NANOSLEEPLIB = @NANOSLEEPLIB@

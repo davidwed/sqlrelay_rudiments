@@ -5,12 +5,10 @@
 #include <stdio.h>
 
 void printMatches(regularexpression *re) {
-	#if defined(RUDIMENTS_HAS_PCRE) || defined(HAVE_REGEX_H)
 	printf("%d matches\n",re->getSubstringCount());
 	for (int i=0; i<re->getSubstringCount(); i++) {
 		printf("match: \"%s\"\n",re->getSubstringStart(i));
 	}
-	#endif
 }
 
 int main(int argc, const char **argv) {

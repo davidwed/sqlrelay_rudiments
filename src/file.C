@@ -11,9 +11,7 @@
 #include <stdlib.h>
 #include <sys/ipc.h>
 #include <errno.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 #include <sys/time.h>
 #ifdef HAVE_XATTRS
 	#include <sys/xattr.h>
@@ -21,9 +19,6 @@
 
 // need these for memcpy...
 #include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 file::file() : filedescriptor() {
 	getcurrentpropertiesonopen=true;

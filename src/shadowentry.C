@@ -107,9 +107,15 @@ bool shadowentry::initialize(const char *username) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETSPNAM_R_5)
 			if (!getspnam_r(username,&spbuffer,buffer,size,&sp)) {
 				return (sp!=NULL);
 			}
+			#elif defined(HAVE_GETSPNAM_R_4)
+			if ((sp=getspnam_r(username,&spbuffer,buffer,size))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			sp=NULL;

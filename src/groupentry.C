@@ -79,6 +79,8 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETGRNAM_R_5) && \
+						 defined(HAVE_GETGRGID_R_5)
 			if (!((groupname)
 				?(getgrnam_r(groupname,&grpbuffer,
 							buffer,size,&grp))
@@ -86,6 +88,16 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 							buffer,size,&grp)))) {
 				return (grp!=NULL);
 			}
+			#elif defined(HAVE_GETGRNAM_R_4) && \
+						 defined(HAVE_GETGRGID_R_4)
+			if ((groupname)
+				?(grp=getgrnam_r(groupname,&grpbuffer,
+							buffer,size))
+				:(grp=getgrgid_r(groupid,&grpbuffer,
+							buffer,size))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			grp=NULL;

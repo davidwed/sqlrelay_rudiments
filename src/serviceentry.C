@@ -82,6 +82,8 @@ bool serviceentry::initialize(const char *servicename, int port,
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETSERVBYNAME_R_6) && \
+				defined(HAVE_GETSERVBYPORT_R_6)
 			if (!((servicename)
 				?(getservbyname_r(servicename,protocol,
 							&sebuffer,
@@ -91,6 +93,18 @@ bool serviceentry::initialize(const char *servicename, int port,
 							buffer,size,&se)))) {
 				return (se!=NULL);
 			}
+			#elif defined(HAVE_GETSERVBYNAME_R_5) && \
+				defined(HAVE_GETSERVBYPORT_R_5)
+			if ((servicename)
+				?(se=getservbyname_r(servicename,protocol,
+							&sebuffer,
+							buffer,size))
+				:(se=getservbyport_r(htons(port),protocol,
+							&sebuffer,
+							buffer,size))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			se=NULL;

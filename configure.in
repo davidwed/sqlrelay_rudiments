@@ -116,9 +116,6 @@ dnl Checks for header files.
 echo
 echo "***** Headers ****************"
 AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h strings.h sys/socket.h sys/time.h syslog.h unistd.h regex.h regexp.h libgen.h regexpr.h sys/times.h sys/select.h])
 echo "******************************"
 
 
@@ -152,39 +149,58 @@ AC_C_INLINE
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
+
 AC_MSG_CHECKING(for socklen_t)
 AC_EGREP_CPP(socklen_t,[#include <sys/socket.h>],AC_MSG_RESULT(yes),AC_MSG_RESULT(no); AC_DEFINE(socklen_t, int, Some systems don't define socklen_t))
+
 AC_MSG_CHECKING(for union semun)
 AC_EGREP_CPP(union semun,[#include <sys/sem.h>],AC_DEFINE(HAVE_SEMUN,1,Some systems define union semun) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for struct msghdr.msg_controllen)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 struct msghdr m; m.msg_controllen=0;,AC_DEFINE(HAVE_MSGHDR_MSG_CONTROLLEN,1,Some msghdr structs have a msg_controllen member) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for struct msghdr.msg_flags)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 struct msghdr m; m.msg_flags=0;,AC_DEFINE(HAVE_MSGHDR_MSG_FLAGS,1,Some msghdr structs have a msg_flags member) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(if struct stat contains st_blksize)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 struct stat st;
 blksize_t s=st.st_blksize;,AC_DEFINE(HAVE_BLKSIZE_T,1,Some systems don't have st_blksize in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(if struct stat contains st_blocks)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 struct stat st;
 blkcnt_t b=st.st_blocks;,AC_DEFINE(HAVE_BLKCNT_T,1,Some systems don't have st_blocks in struct stat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(if S_ISSOCK exists)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>],
 S_ISSOCK(0);,AC_DEFINE(HAVE_S_ISSOCK,1,Some systems don't have S_ISSOCK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(type of iovec.iov_base)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 struct iovec iov; iov.iov_base=(void *)" ";,AC_DEFINE(IOV_BASE_TYPE,void *,iov_base is void *) AC_MSG_RESULT(void *), AC_DEFINE(IOV_BASE_TYPE,char *,iov_base is char *) AC_MSG_RESULT(char *))
+
+AC_MSG_CHECKING(CMSG_SPACE)
+AC_TRY_LINK([#include <sys/types.h>
+#include <sys/socket.h>],
+CMSG_SPACE(0);,AC_DEFINE(HAVE_CMSG_SPACE,1,Some systems have CMSG_SPACE) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(CMSG_LEN)
+AC_TRY_LINK([#include <sys/types.h>
+#include <sys/socket.h>],
+CMSG_LEN(0);,AC_DEFINE(HAVE_CMSG_LEN,1,Some systems have CMSG_LEN) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_STATFS
 echo "******************************"
 
@@ -233,7 +249,7 @@ AC_TRY_LINK([#include <linux/rtc.h>
 ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(HAVE_RTC,1,Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(localtime_r)
-AC_TRY_LINK([#include <time.h>,
+AC_TRY_LINK([#include <time.h>
 #include <stdlib.h>],
 localtime_r(NULL,NULL);,AC_DEFINE(HAVE_LOCALTIME_R,1,Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -243,19 +259,41 @@ echo "******************************"
 dnl Checks for library functions.
 echo
 echo "***** Functions **************"
-AC_LANG(C)
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_MKTIME
 AC_FUNC_MMAP
-AC_CHECK_FUNCS(regcomp regcmp re_comp sem_open setenv putenv unsetenv)
 
-AC_LANG(C++)
+AC_MSG_CHECKING(setenv)
+AC_TRY_LINK([#include <stdlib.h>],
+setenv(NULL,NULL,0);,AC_DEFINE(HAVE_SETENV,1,Some systems have setenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(putenv)
+AC_TRY_LINK([#include <stdlib.h>],
+putenv(NULL);,AC_DEFINE(HAVE_PUTENV,1,Some systems have putenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(unsetenv)
+AC_TRY_LINK([#include <stdlib.h>],
+unsetenv(NULL);,AC_DEFINE(HAVE_UNSETENV,1,Some systems have unsetenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_PCRE" )
+then
+	HAVE_REGCOMP=""
+	AC_MSG_CHECKING(regcomp)
+	AC_TRY_LINK([#include <stdlib.h>
+#include <regex.h>],
+regcomp(NULL,NULL,0);,HAVE_REGCOMP="yes"; AC_DEFINE(HAVE_REGCOMP,1,Some systems have regcomp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+fi
+
+INCLUDE_REGULAREXPRESSION="0"
+if ( test -n "$HAVE_PCRE" -o -n "$HAVE_REGCOMP" )
+then
+	INCLUDE_REGULAREXPRESSION="1"
+fi
+AC_SUBST(INCLUDE_REGULAREXPRESSION)
+
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
 AC_TRY_LINK([#include <sys/types.h>
 #include <sys/socket.h>],
 setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
-AC_LANG(C)
 
 AC_MSG_CHECKING(srand48)
 AC_TRY_LINK([#include <stdlib.h>],
@@ -287,74 +325,118 @@ AC_TRY_LINK([#include <sys/types.h>
 #include <unistd.h>],
 setgid(0);,AC_DEFINE(HAVE_SETGID,1,Some systems have setgid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-#AC_CHECK_LIB(socket,socket,SOCKETLIB=-lsocket,SOCKETLIB="")
-#AC_SUBST(SOCKETLIB)
-dnl AC_CHECK_LIB(xnet,gethostbyname,XNETLIB=-lxnet,XNETLIB="")
-dnl AC_SUBST(XNETLIB)
-dnl AC_CHECK_LIB(nsl,gethostbyname,NSLLIB=-lnsl,NSLLIB="")
 FW_CHECK_XNET_PROTOTYPES
 FW_CHECK_SOCKET_LIBS
 
 OLDLIBS="$LIBS"
 LIBS="$LIBS $SOCKETLIBS"
 
-AC_LANG(C++)
-AC_MSG_CHECKING(getpwnam_r)
+AC_MSG_CHECKING(getpwnam_r with 5 parameters)
 AC_TRY_LINK([#include <pwd.h>
 #include <stdlib.h>],
-getpwnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWNAM_R,1,Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getpwnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWNAM_R_5,1,Some systems have getpwnam_r) AC_DEFINE(HAVE_GETPWNAM_R,1,Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getpwuid_r)
+AC_MSG_CHECKING(getpwnam_r with 4 parameters)
 AC_TRY_LINK([#include <pwd.h>
 #include <stdlib.h>],
-getpwuid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getpwnam_r(NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETPWNAM_R_4,1,Some systems have getpwnam_r) AC_DEFINE(HAVE_GETPWNAM_R,1,Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getgrnam_r)
+AC_MSG_CHECKING(getpwuid_r with 5 parameters)
+AC_TRY_LINK([#include <pwd.h>
+#include <stdlib.h>],
+getpwuid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWUID_R_5,1,Some systems have getpwuid_r) AC_DEFINE(HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getpwuid_r with 4 parameters)
+AC_TRY_LINK([#include <pwd.h>
+#include <stdlib.h>],
+getpwuid_r(0,NULL,NULL,0);,AC_DEFINE(HAVE_GETPWUID_R_4,1,Some systems have getpwuid_r) AC_DEFINE(HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getgrnam_r with 5 parameters)
 AC_TRY_LINK([#include <grp.h>
 #include <stdlib.h>],
-getgrnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRNAM_R,1,Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getgrnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRNAM_R_5,1,Some systems have getgrnam_r) AC_DEFINE(HAVE_GETGRNAM_R,1,Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getgrgid_r)
+AC_MSG_CHECKING(getgrnam_r with 4 parameters)
 AC_TRY_LINK([#include <grp.h>
 #include <stdlib.h>],
-getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getgrnam_r(NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETGRNAM_R_4,1,Some systems have getgrnam_r) AC_DEFINE(HAVE_GETGRNAM_R,1,Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getgrgid_r with 5 parameters)
+AC_TRY_LINK([#include <grp.h>
+#include <stdlib.h>],
+getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R_5,1,Some systems have getgrgid_r) AC_DEFINE(HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getgrgid_r with 4 parameters)
+AC_TRY_LINK([#include <grp.h>
+#include <stdlib.h>],
+getgrgid_r(0,NULL,NULL,0);,AC_DEFINE(HAVE_GETGRGID_R_4,1,Some systems have getgrgid_r) AC_DEFINE(HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getaddrinfo)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
 getaddrinfo(NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_GETADDRINFO,1,Some systems have getaddrinfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(gethostbyname_r)
+AC_MSG_CHECKING(gethostbyname_r with 6 parameters)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1,Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1,Some systems have gethostbyname_r) AC_DEFINE(HAVE_GETHOSTBYNAME_R_6,1,Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(gethostbyaddr_r)
+AC_MSG_CHECKING(gethostbyname_r with 5 parameters)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+gethostbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1,Some systems have gethostbyname_r) AC_DEFINE(HAVE_GETHOSTBYNAME_R_5,1,Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getprotobyname_r)
+AC_MSG_CHECKING(gethostbyaddr_r with 8 parameters)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R,1,Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_DEFINE(HAVE_GETHOSTBYADDR_R_8,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getprotobynumber_r)
+AC_MSG_CHECKING(gethostbyaddr_r with 7 parameters)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1,Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_DEFINE(HAVE_GETHOSTBYADDR_R_7,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getprotobyname_r with 5 parameters)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R_5,1,Some systems have getprotobyname_r) AC_DEFINE(HAVE_GETPROTOBYNAME_R,1,Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getprotobyname_r with 4 parameters)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getprotobyname_r(NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETPROTOBYNAME_R_4,1,Some systems have getprotobyname_r) AC_DEFINE(HAVE_GETPROTOBYNAME_R,1,Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getprotobynumber_r with 5 parameters)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R_5,1,Some systems have getprotobynumber_r) AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1,Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getprotobynumber_r with 4 parameters)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getprotobynumber_r(0,NULL,NULL,0);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R_4,1,Some systems have getprotobynumber_r) AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1,Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_SHADOW
 
-AC_MSG_CHECKING(getservbyname_r)
+AC_MSG_CHECKING(getservbyname_r with 6 parameters)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYNAME_R,1,Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYNAME_R_6,1,Some systems have getservbyname_r) AC_DEFINE(HAVE_GETSERVBYNAME_R,1,Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getservbyport_r)
+AC_MSG_CHECKING(getservbyname_r with 5 parameters)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getservbyname_r(NULL,NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETSERVBYNAME_R_5,1,Some systems have getservbyname_r) AC_DEFINE(HAVE_GETSERVBYNAME_R,1,Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getservbyport_r with 6 parameters)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R_6,1,Some systems have getservbyport_r) AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(getservbyport_r with 5 parameters)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getservbyport_r(0,NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETSERVBYPORT_R_5,1,Some systems have getservbyport_r) AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(semtimedop)
 AC_TRY_LINK([#include <stdlib.h>
@@ -376,10 +458,7 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <unistd.h>],
 fdatasync(0);,AC_DEFINE(HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(nanosleep)
-AC_TRY_LINK([#include <stdlib.h>
-#include <time.h>],
-nanosleep(NULL,NULL);,AC_DEFINE(HAVE_NANOSLEEP,1,Some systems have nanosleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+FW_CHECK_NANOSLEEP
 
 AC_MSG_CHECKING(clock_nanosleep)
 AC_TRY_LINK([#include <stdlib.h>

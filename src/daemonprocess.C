@@ -10,14 +10,10 @@
 #include <stdlib.h>
 
 // for fork/getpid...
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 
 // for wait...
-#ifdef HAVE_SYS_WAIT_H
-	#include <sys/wait.h>
-#endif
+#include <sys/wait.h>
 
 #ifdef __GNUC__
 signalhandler	daemonprocess::shutdownhandler;

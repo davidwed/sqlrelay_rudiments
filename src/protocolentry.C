@@ -74,6 +74,8 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETPROTOBYNAME_R_5) && \
+				defined(HAVE_GETPROTOBYNUMBER_R_5)
 			if (!((protocolname)
 				?(getprotobyname_r(protocolname,&pebuffer,
 							buffer,size,&pe))
@@ -81,6 +83,16 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 							buffer,size,&pe)))) {
 				return (pe!=NULL);
 			}
+			#elif defined(HAVE_GETPROTOBYNAME_R_4) && \
+				defined(HAVE_GETPROTOBYNUMBER_R_4)
+			if ((protocolname)
+				?(pe=getprotobyname_r(protocolname,&pebuffer,
+							buffer,size))
+				:(pe=getprotobynumber_r(number,&pebuffer,
+							buffer,size))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			pe=NULL;

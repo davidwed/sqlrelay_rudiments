@@ -91,6 +91,8 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETPWNAM_R_5) && \
+				defined(HAVE_GETPWUID_R_5)
 			if (!((username)
 				?(getpwnam_r(username,&pwdbuffer,
 							buffer,size,&pwd))
@@ -98,6 +100,16 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 							buffer,size,&pwd)))) {
 				return (pwd!=NULL);
 			}
+			#elif defined(HAVE_GETPWNAM_R_4) && \
+				defined(HAVE_GETPWUID_R_4)
+			if ((username)
+				?(pwd=getpwnam_r(username,&pwdbuffer,
+							buffer,size))
+				:(pwd=getpwuid_r(userid,&pwdbuffer,
+							buffer,size))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			pwd=NULL;

@@ -24,12 +24,6 @@
 /* Some systems define __tm_zone in their struct tm */
 #undef HAS___TM_ZONE
 
-/* Define to 1 if you have the `alarm' function. */
-#undef HAVE_ALARM
-
-/* Define to 1 if you have the <arpa/inet.h> header file. */
-#undef HAVE_ARPA_INET_H
-
 /* Some systems don't have st_blocks in struct stat */
 #undef HAVE_BLKCNT_T
 
@@ -38,6 +32,12 @@
 
 /* Some systems have clock_nanosleep */
 #undef HAVE_CLOCK_NANOSLEEP
+
+/* Some systems have CMSG_LEN */
+#undef HAVE_CMSG_LEN
+
+/* Some systems have CMSG_SPACE */
+#undef HAVE_CMSG_SPACE
 
 /* Cygwin style statfs */
 #undef HAVE_CYGWIN_STATFS
@@ -52,14 +52,8 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if you have the <fcntl.h> header file. */
-#undef HAVE_FCNTL_H
-
 /* Some systems have fdatasync */
 #undef HAVE_FDATASYNC
-
-/* Define to 1 if you have the `fork' function. */
-#undef HAVE_FORK
 
 /* FreeBSD style statfs */
 #undef HAVE_FREEBSD_STATFS
@@ -70,14 +64,38 @@
 /* Some systems have getgrgid_r */
 #undef HAVE_GETGRGID_R
 
+/* Some systems have getgrgid_r */
+#undef HAVE_GETGRGID_R_4
+
+/* Some systems have getgrgid_r */
+#undef HAVE_GETGRGID_R_5
+
 /* Some systems have getgrnam_r */
 #undef HAVE_GETGRNAM_R
+
+/* Some systems have getgrnam_r */
+#undef HAVE_GETGRNAM_R_4
+
+/* Some systems have getgrnam_r */
+#undef HAVE_GETGRNAM_R_5
 
 /* Some systems have gethostbyaddr_r */
 #undef HAVE_GETHOSTBYADDR_R
 
+/* Some systems have gethostbyaddr_r */
+#undef HAVE_GETHOSTBYADDR_R_7
+
+/* Some systems have gethostbyaddr_r */
+#undef HAVE_GETHOSTBYADDR_R_8
+
 /* Some systems have gethostbyname_r */
 #undef HAVE_GETHOSTBYNAME_R
+
+/* Some systems have gethostbyname_r */
+#undef HAVE_GETHOSTBYNAME_R_5
+
+/* Some systems have gethostbyname_r */
+#undef HAVE_GETHOSTBYNAME_R_6
 
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
@@ -85,14 +103,38 @@
 /* Some systems have getprotobyname_r */
 #undef HAVE_GETPROTOBYNAME_R
 
+/* Some systems have getprotobyname_r */
+#undef HAVE_GETPROTOBYNAME_R_4
+
+/* Some systems have getprotobyname_r */
+#undef HAVE_GETPROTOBYNAME_R_5
+
 /* Some systems have getprotobynumber_r */
 #undef HAVE_GETPROTOBYNUMBER_R
+
+/* Some systems have getprotobynumber_r */
+#undef HAVE_GETPROTOBYNUMBER_R_4
+
+/* Some systems have getprotobynumber_r */
+#undef HAVE_GETPROTOBYNUMBER_R_5
 
 /* Some systems have getpwnam_r */
 #undef HAVE_GETPWNAM_R
 
+/* Some systems have getpwnam_r */
+#undef HAVE_GETPWNAM_R_4
+
+/* Some systems have getpwnam_r */
+#undef HAVE_GETPWNAM_R_5
+
 /* Some systems have getpwuid_r */
 #undef HAVE_GETPWUID_R
+
+/* Some systems have getpwuid_r */
+#undef HAVE_GETPWUID_R_4
+
+/* Some systems have getpwuid_r */
+#undef HAVE_GETPWUID_R_5
 
 /* Some systems have getrpcbyname */
 #undef HAVE_GETRPCBYNAME
@@ -100,29 +142,53 @@
 /* Some systems have getrpcbyname_r */
 #undef HAVE_GETRPCBYNAME_R
 
+/* Some systems have getrpcbyname_r */
+#undef HAVE_GETRPCBYNAME_R_4
+
+/* Some systems have getrpcbyname_r */
+#undef HAVE_GETRPCBYNAME_R_5
+
 /* Some systems have getrpcbynumber */
 #undef HAVE_GETRPCBYNUMBER
 
 /* Some systems have getrpcbynumber_r */
 #undef HAVE_GETRPCBYNUMBER_R
 
+/* Some systems have getrpcbynumber_r */
+#undef HAVE_GETRPCBYNUMBER_R_4
+
+/* Some systems have getrpcbynumber_r */
+#undef HAVE_GETRPCBYNUMBER_R_5
+
 /* Some systems have getservbyname_r */
 #undef HAVE_GETSERVBYNAME_R
+
+/* Some systems have getservbyname_r */
+#undef HAVE_GETSERVBYNAME_R_5
+
+/* Some systems have getservbyname_r */
+#undef HAVE_GETSERVBYNAME_R_6
 
 /* Some systems have getservbyport_r */
 #undef HAVE_GETSERVBYPORT_R
 
+/* Some systems have getservbyport_r */
+#undef HAVE_GETSERVBYPORT_R_5
+
+/* Some systems have getservbyport_r */
+#undef HAVE_GETSERVBYPORT_R_6
+
 /* Some systems have getspnam_r */
 #undef HAVE_GETSPNAM_R
 
+/* Some systems have getspnam_r */
+#undef HAVE_GETSPNAM_R_4
+
+/* Some systems have getspnam_r */
+#undef HAVE_GETSPNAM_R_5
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
-
-/* Define to 1 if you have the <libgen.h> header file. */
-#undef HAVE_LIBGEN_H
-
-/* Define to 1 if you have the <limits.h> header file. */
-#undef HAVE_LIMITS_H
 
 /* Linux style statfs */
 #undef HAVE_LINUX_STATFS
@@ -132,10 +198,6 @@
 
 /* Some systems have lrand48 */
 #undef HAVE_LRAND48
-
-/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
-   to 0 otherwise. */
-#undef HAVE_MALLOC
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -161,13 +223,10 @@
 /* Some systems have netdb.h */
 #undef HAVE_NETDB_H
 
-/* Define to 1 if you have the <netinet/in.h> header file. */
-#undef HAVE_NETINET_IN_H
-
 /* OpenBSD style statfs */
 #undef HAVE_OPENBSD_STATFS
 
-/* Define to 1 if you have the `putenv' function. */
+/* Some systems have putenv */
 #undef HAVE_PUTENV
 
 /* Some systems have rand */
@@ -179,23 +238,8 @@
 /* Some systems have readdir_r */
 #undef HAVE_READDIR_R
 
-/* Define to 1 if you have the `regcmp' function. */
-#undef HAVE_REGCMP
-
-/* Define to 1 if you have the `regcomp' function. */
+/* Some systems have regcomp */
 #undef HAVE_REGCOMP
-
-/* Define to 1 if you have the <regexpr.h> header file. */
-#undef HAVE_REGEXPR_H
-
-/* Define to 1 if you have the <regexp.h> header file. */
-#undef HAVE_REGEXP_H
-
-/* Define to 1 if you have the <regex.h> header file. */
-#undef HAVE_REGEX_H
-
-/* Define to 1 if you have the `re_comp' function. */
-#undef HAVE_RE_COMP
 
 /* Some systems have rpc/rpcent.h */
 #undef HAVE_RPCENT_H
@@ -212,10 +256,7 @@
 /* Some systems define union semun */
 #undef HAVE_SEMUN
 
-/* Define to 1 if you have the `sem_open' function. */
-#undef HAVE_SEM_OPEN
-
-/* Define to 1 if you have the `setenv' function. */
+/* Some systems have setenv */
 #undef HAVE_SETENV
 
 /* Some systems have setgid */
@@ -245,9 +286,6 @@
 /* statvfs */
 #undef HAVE_STATVFS
 
-/* Define to 1 if you have the <stddef.h> header file. */
-#undef HAVE_STDDEF_H
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -263,9 +301,6 @@
 /* Define to 1 if `tm_zone' is member of `struct tm'. */
 #undef HAVE_STRUCT_TM_TM_ZONE
 
-/* Define to 1 if you have the <syslog.h> header file. */
-#undef HAVE_SYSLOG_H
-
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
 #undef HAVE_SYS_DIR_H
@@ -274,26 +309,11 @@
    */
 #undef HAVE_SYS_NDIR_H
 
-/* Define to 1 if you have the <sys/select.h> header file. */
-#undef HAVE_SYS_SELECT_H
-
-/* Define to 1 if you have the <sys/socket.h> header file. */
-#undef HAVE_SYS_SOCKET_H
-
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
-/* Define to 1 if you have the <sys/times.h> header file. */
-#undef HAVE_SYS_TIMES_H
-
-/* Define to 1 if you have the <sys/time.h> header file. */
-#undef HAVE_SYS_TIME_H
-
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
-
-/* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
-#undef HAVE_SYS_WAIT_H
 
 /* Some systems don't have S_ISSOCK */
 #undef HAVE_S_ISSOCK
@@ -309,20 +329,8 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to 1 if you have the `unsetenv' function. */
+/* Some systems have unsetenv */
 #undef HAVE_UNSETENV
-
-/* Define to 1 if you have the `vfork' function. */
-#undef HAVE_VFORK
-
-/* Define to 1 if you have the <vfork.h> header file. */
-#undef HAVE_VFORK_H
-
-/* Define to 1 if `fork' works. */
-#undef HAVE_WORKING_FORK
-
-/* Define to 1 if `vfork' works. */
-#undef HAVE_WORKING_VFORK
 
 /* Some systems have extended filesystem attributes */
 #undef HAVE_XATTRS
@@ -393,9 +401,6 @@
 #undef inline
 #endif
 
-/* Define to rpl_malloc if the replacement function should be used. */
-#undef malloc
-
 /* Define to `int' if <sys/types.h> does not define. */
 #undef mode_t
 
@@ -410,6 +415,3 @@
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #undef uid_t
-
-/* Define as `fork' if `vfork' does not work. */
-#undef vfork

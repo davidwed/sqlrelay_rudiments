@@ -1,7 +1,8 @@
+solaris:
+	can't find pcre or openssl
+
 timer class needs testing and a bit of work
 	how do you turn the timer off???
-
-netbsd compiler error
 
 file class:
 	need static versions of create methods
@@ -19,14 +20,10 @@ on SCO, you have to manually link /usr/ccs/lib/crtn.o to resolve _fini???
 
 strip fails on openbsd
 
-can't find pcre or openssl on solaris
-
 if openssl/pcre libs are installed, but not includes, configure still tries
 	to include openssl/pcre support
 
 a bunch of methods can probabaly be made const
-
-get epoch from string doesn't work right on solaris x86
 
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?

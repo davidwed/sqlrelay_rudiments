@@ -4,9 +4,7 @@
 #include <rudiments/signalclasses.h>
 
 #include <stddef.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 #include <stdlib.h>
 
 

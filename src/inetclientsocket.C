@@ -12,15 +12,10 @@
 #include <stdlib.h>
 
 // need this for sleep
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 
 // need these for memset...
 #include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
 
 int inetclientsocket::connectToServer(const char *host,
 						unsigned short port,

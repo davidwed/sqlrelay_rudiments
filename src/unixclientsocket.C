@@ -5,9 +5,7 @@
 #include <rudiments/charstring.h>
 
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 
 int unixclientsocket::connectToServer(const char *filename,
 						long timeoutsec,

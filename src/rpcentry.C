@@ -82,6 +82,8 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
+			#if defined(HAVE_GETRPCBYNAME_R_5) && \
+				defined(HAVE_GETRPCBYNUMBER_R_5)
 			if (!((rpcname)
 				?(getrpcbyname_r(rpcname,&rebuffer,
 							buffer,size,&re))
@@ -89,6 +91,16 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 							buffer,size,&re)))) {
 				return (re!=NULL);
 			}
+			#elif defined(HAVE_GETRPCBYNAME_R_4) && \
+				defined(HAVE_GETRPCBYNUMBER_R_4)
+			if ((rpcname)
+				?(re=getrpcbyname_r(rpcname,&rebuffer,
+							buffer,size))
+				:(re=getrpcbynumber_r(number,&rebuffer,
+							buffer,size))) {
+				return true;
+			}
+			#endif
 			delete[] buffer;
 			buffer=NULL;
 			re=NULL;

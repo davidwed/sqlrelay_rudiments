@@ -5,9 +5,7 @@
 #include <rudiments/charstring.h>
 
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 #include <sys/stat.h>
 
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_READDIR_R)
