@@ -3,11 +3,20 @@
 
 #include <rudiments/charstring.h>
 
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/charstringinlines.h>
+#include <rudiments/rawbuffer.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
 #endif
 
 char *charstring::findLast(const char *haystack, const char *needle) {
+
+	if (!haystack || !needle) {
+		return NULL;
+	}
 
 	size_t	haystacklen=length(haystack);
 	size_t	needlelen=length(needle);
@@ -26,6 +35,11 @@ char *charstring::findLast(const char *haystack, const char *needle) {
 }
 
 void charstring::upper(char *str) {
+
+	if (!str) {
+		return;
+	}
+
 	for (int i=0; str[i]; i++) {
 		if (str[i]>='a' && str[i]<='z') {
 			str[i]=str[i]-32;
@@ -34,6 +48,11 @@ void charstring::upper(char *str) {
 }
 
 void charstring::lower(char *str) {
+
+	if (!str) {
+		return;
+	}
+
 	for (int i=0; str[i]; i++) {
 		if (str[i]>='A' && str[i]<='Z') {
 			str[i]=str[i]+32;
@@ -89,6 +108,10 @@ void charstring::leftTrim(char *str, char character) {
 
 void charstring::strip(char *str, char character) {
 
+	if (!str) {
+		return;
+	}
+
 	int	index=0;
 	int	total=0;
 
@@ -106,6 +129,10 @@ void charstring::strip(char *str, char character) {
 }
 
 void charstring::strip(char *str1, char *str2) {
+
+	if (!str1 || !str2) {
+		return;
+	}
 
 	int	str2len=strlen(str2);
 	int	index=0;
@@ -127,6 +154,10 @@ void charstring::strip(char *str1, char *str2) {
 
 bool charstring::isInteger(const char *str) {
 
+	if (!str) {
+		return false;
+	}
+
 	for (char *ptr=(char *)str; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
@@ -137,6 +168,10 @@ bool charstring::isInteger(const char *str) {
 }
 
 bool charstring::isInteger(const char *str, int size) {
+
+	if (!str) {
+		return false;
+	}
 
 	char	*ptr=(char *)str;
 	for (int index=0; index<size; index++) {
@@ -150,6 +185,10 @@ bool charstring::isInteger(const char *str, int size) {
 }
 
 bool charstring::isNumber(const char *str) {
+
+	if (!str) {
+		return false;
+	}
 
 	int	decimal=0;
 	for (char *ptr=(char *)str; *ptr; ptr++) {
@@ -165,6 +204,10 @@ bool charstring::isNumber(const char *str) {
 }
 
 bool charstring::isNumber(const char *str, int size) {
+
+	if (!str) {
+		return false;
+	}
 
 	int	decimal=0;
 	char	*ptr=(char *)str;
@@ -182,6 +225,10 @@ bool charstring::isNumber(const char *str, int size) {
 }
 
 char *charstring::httpEscape(const char *input) {
+
+	if (!input) {
+		return NULL;
+	}
 
 	char	*output=new char[strlen(input)*3+1];
 	char	*outptr=output;
@@ -208,6 +255,10 @@ char *charstring::httpEscape(const char *input) {
 
 void charstring::leftJustify(char *str, int length) {
 
+	if (!str) {
+		return;
+	}
+
 	// count leading spaces
 	int	spaces=countLeadingSpaces(str,length);
 
@@ -226,6 +277,10 @@ void charstring::leftJustify(char *str, int length) {
 
 void charstring::rightJustify(char *str, int length) {
 
+	if (!str) {
+		return;
+	}
+
 	// count trailing spaces
 	int	spaces=countTrailingSpaces(str,length);
 
@@ -243,6 +298,10 @@ void charstring::rightJustify(char *str, int length) {
 }
 
 void charstring::center(char *str, int length) {
+
+	if (!str) {
+		return;
+	}
 
 	int	leadingspaces=countLeadingSpaces(str,length);
 	int	trailingspaces=countTrailingSpaces(str,length);
@@ -273,6 +332,11 @@ void charstring::center(char *str, int length) {
 }
 
 int charstring::countLeadingSpaces(char *str, int length) {
+
+	if (!str) {
+		return 0;
+	}
+
 	int	leadingspaces=0;
 	for (int index=0; str[index]==' ' && index<length; index++) {
 		leadingspaces++;
@@ -281,6 +345,11 @@ int charstring::countLeadingSpaces(char *str, int length) {
 }
 
 int charstring::countTrailingSpaces(char *str, int length) {
+
+	if (!str) {
+		return 0;
+	}
+
 	int	trailingspaces=0;
 	for (int index=length-1; str[index]==' ' && index>-1; index--) {
 		trailingspaces++;
@@ -331,10 +400,176 @@ int charstring::integerLength(long number) {
 	return length;
 }
 
-#ifndef HAVE_STRNDUP
+size_t charstring::length(const char *string) {
+	return (string)?strlen(string):0;
+}
+
+void charstring::zero(char *str, size_t size) {
+	rawbuffer::set((void *)str,0,size);
+}
+
+char *charstring::append(char *dest, const char *source) {
+	return (dest && source)?strcat(dest,source):NULL;
+}
+
+char *charstring::append(char *dest, const char *source, size_t size) {
+	return (dest && source)?strncat(dest,source,size):NULL;
+}
+
+char *charstring::copy(char *dest, const char *source) {
+	return (dest && source)?strcpy(dest,source):NULL;
+}
+
+char *charstring::copy(char *dest, const char *source, size_t size) {
+	return (dest && source)?strncpy(dest,source,size):NULL;
+}
+
+char *charstring::copy(char *dest, size_t location, const char *source) {
+	return (dest && source)?strcpy(dest+location,source):NULL;
+}
+
+char *charstring::copy(char *dest, size_t location,
+					const char *source, size_t size) {
+	return (dest && source)?strncpy(dest+location,source,size):NULL;
+}
+
+int charstring::compare(const char *str1, const char *str2) {
+	// FIXME: use strcoll?
+	return (str1 && str2)?strcmp(str1,str2):(str1!=str2);
+}
+
+int charstring::compare(const char *str1, const char *str2, size_t size) {
+	return (str1 && str2)?strncmp(str1,str2,size):(str1!=str2);
+}
+
+int charstring::compareIgnoringCase(const char *str1, const char *str2) {
+	return (str1 && str2)?strcasecmp(str1,str2):(str1!=str2);
+}
+
+int charstring::compareIgnoringCase(const char *str1,
+						const char *str2, size_t size) {
+	return (str1 && str2)?strncasecmp(str1,str2,size):(str1!=str2);
+}
+
+bool charstring::contains(const char *haystack, const char *needle) {
+	return (findFirst(haystack,needle)!=NULL);
+}
+
+bool charstring::contains(const char *haystack, const char needle) {
+	return (findFirst(haystack,needle)!=NULL);
+}
+
+char *charstring::findFirst(const char *haystack, const char *needle) {
+	return (haystack && needle)?strstr(haystack,needle):NULL;
+}
+
+char *charstring::findFirst(const char *haystack, const char needle) {
+	return (haystack)?strchr(haystack,needle):NULL;
+}
+
+char *charstring::findLast(const char *haystack, const char needle) {
+	return (haystack)?strrchr(haystack,needle):NULL;
+}
+
+char *charstring::duplicate(const char *str) {
+	return (str)?strdup(str):NULL;
+}
+
+void charstring::rightTrim(char *string) {
+	rightTrim(string,' ');
+}
+
+void charstring::leftTrim(char *string) {
+	leftTrim(string,' ');
+}
+
+void charstring::bothTrim(char *string) {
+	bothTrim(string,' ');
+}
+
+long charstring::toLong(const char *string) {
+	return (string)?strtol(string,NULL,0):0;
+}
+
+long charstring::toLong(const char *string, char **endptr) {
+	return (string)?strtol(string,endptr,0):0;
+}
+
+long charstring::toLong(const char *string, int base) {
+	return (string)?strtol(string,NULL,base):0;
+}
+
+long charstring::toLong(const char *string, char **endptr, int base) {
+	return (string)?strtol(string,endptr,base):0;
+}
+
+long long charstring::toLongLong(const char *string) {
+	return (string)?strtoll(string,NULL,0):0;
+}
+
+long long charstring::toLongLong(const char *string, char **endptr) {
+	return (string)?strtoll(string,endptr,0):0;
+}
+
+long long charstring::toLongLong(const char *string, int base) {
+	return (string)?strtoll(string,NULL,base):0;
+}
+
+long long charstring::toLongLong(const char *string, char **endptr, int base) {
+	return (string)?strtoll(string,endptr,base):0;
+}
+
+float charstring::toFloat(const char *string) {
+	#ifdef HAVE_STRTOF
+	return (string)?strtof(string,NULL):0.0;
+	#else
+	return (string)?(float)strtod(string,NULL):0.0;
+	#endif
+}
+
+float charstring::toFloat(const char *string, char **endptr) {
+	#ifdef HAVE_STRTOF
+	return (string)?strtof(string,endptr):0.0;
+	#else
+	return (string)?(float)strtod(string,endptr):0.0;
+	#endif
+}
+
+double charstring::toDouble(const char *string) {
+	return (string)?strtod(string,NULL):0.0;
+}
+
+double charstring::toDouble(const char *string, char **endptr) {
+	return (string)?strtod(string,endptr):0.0;
+}
+
+long double charstring::toLongDouble(const char *string) {
+	#ifdef HAVE_STRTOLD
+	return (string)?strtold(string,NULL):0.0;
+	#else
+	return (string)?(long double)strtod(string,NULL):0.0;
+	#endif
+}
+
+long double charstring::toLongDouble(const char *string, char **endptr) {
+	#ifdef HAVE_STRTOLD
+	return (string)?strtold(string,endptr):0.0;
+	#else
+	return (string)?(long double)strtod(string,endptr):0.0;
+	#endif
+}
+
+#ifdef HAVE_STRNDUP
+char *charstring::duplicate(const char *str, size_t length) {
+	return (str)?strndup(str,length):NULL;
+}
+#else
 char *charstring::duplicate(const char *string, size_t length) {
+	if (!string) {
+		return NULL;
+	}
 	char	*buffer=new char[length];
-	strncpy(buffer,string,length);
+	copy(buffer,string,length);
 	buffer[length-1]=(char)NULL;
 	return buffer;
 }

@@ -7,6 +7,9 @@
 #include <rudiments/private/charstringincludes.h>
 
 // The charstring class provides methods for manipulating strings.
+//
+// Unlike the functions in string.h, these methods are NULL safe.  If any of
+// the pointer arguments are NULL, your application will not crash.
 
 class charstring {
 	public:
@@ -250,9 +253,5 @@ class charstring {
 
 	#include <rudiments/private/charstring.h>
 };
-	
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/charstringinlines.h>
-#endif
 
 #endif

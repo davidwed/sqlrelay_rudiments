@@ -51,8 +51,10 @@ int main(int argc, const char **argv) {
 	printf("compare: %d=0\n",charstring::compareIgnoringCase(s,"HELLO",3));
 
 	// perform several contains() comparisons
-	printf("contains: \"%s\"=llo\n",charstring::contains(s,"llo"));
-	printf("contains: \"%s\"=llo\n",charstring::contains(s,'l'));
+	printf("findFirst: \"%s\"=llo\n",charstring::findFirst(s,"llo"));
+	printf("contains: %d\n",charstring::contains(s,"llo"));
+	printf("findFirst: \"%s\"=llo\n",charstring::findFirst(s,'l'));
+	printf("contains: %d\n",charstring::contains(s,"llo"));
 
 
 
