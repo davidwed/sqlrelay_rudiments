@@ -4,6 +4,7 @@
 #ifndef RUDIMENTS_UNIXSOCKET_H
 #define RUDIMENTS_UNIXSOCKET_H
 
+#include <sys/types.h>
 #include <sys/un.h>
 
 #include <rudiments/datatransport.h>
