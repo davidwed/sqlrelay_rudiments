@@ -11,6 +11,8 @@ int main(int argc, const char **argv) {
 	// create a new string buffer
 	stringbuffer	*str=new stringbuffer();
 
+	// append a NULL to the buffer
+	str->append((char *)NULL);
 
 	// append "hello there world" to the buffer in 3 parts
 	str->append("hello ")->append("there ")->append("world ");
@@ -69,7 +71,7 @@ int main(int argc, const char **argv) {
 	sb->append("12345");
 	sb->append("12345");
 	sb->append("12345");
-	for (int i=0; i<sb->getStringLength(); i++) {
+	for (unsigned int i=0; i<sb->getStringLength(); i++) {
 		printf("%c",sb->getString()[i]);
 	}
 	printf("\n");
@@ -79,7 +81,7 @@ int main(int argc, const char **argv) {
 	// byte by byte (the first 5 bytes should be overwritten)
 	sb->setPosition(0);
 	sb->write("66666");
-	for (int i=0; i<sb->getStringLength(); i++) {
+	for (unsigned int i=0; i<sb->getStringLength(); i++) {
 		printf("%c",sb->getString()[i]);
 	}
 	printf("\n");
