@@ -5,6 +5,7 @@
 #include <rudiments/intervaltimer.h>
 
 #include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 
 #if defined(HAVE_NANOSLEEP) || defined (HAVE_CLOCK_NANOSLEEP)
@@ -17,91 +18,102 @@
 
 intervaltimer::intervaltimer(int which) {
 	this->which=which;
+	memset((void *)&values,0,sizeof(values));
 }
 
-bool intervaltimer::setTimer(long seconds) {
-	return setTimer(seconds,0);
+void intervaltimer::setInitialInterval(long seconds, long microseconds) {
+	values.it_value.tv_sec=seconds;
+	values.it_value.tv_usec=microseconds;
 }
 
-bool intervaltimer::setTimer(long seconds, long microseconds) {
-	timeval	value;
-	value.tv_sec=seconds;
-	value.tv_usec=microseconds;
-	return setTimer(&value);
+void intervaltimer::setInitialInterval(timeval *tv) {
+	memcpy((void *)&(values.it_value),
+		(void *)tv,sizeof(values.it_value));
 }
 
-bool intervaltimer::setTimer(timeval *value) {
-	itimerval	values;
-	values.it_interval.tv_sec=0;
-	values.it_interval.tv_usec=0;
-	values.it_value.tv_sec=value->tv_sec;
-	values.it_value.tv_usec=value->tv_usec;
-	return setTimer(&values);
+void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
+	values.it_interval.tv_sec=seconds;
+	values.it_interval.tv_usec=microseconds;
 }
 
-bool intervaltimer::setTimer(itimerval *values) {
-	itimerval	oldvalues;
-	return setTimer(values,&oldvalues);
+void intervaltimer::setPeriodicInterval(timeval *tv) {
+	memcpy((void *)&(values.it_interval),
+		(void *)tv,sizeof(values.it_interval));
 }
 
-bool intervaltimer::setTimer(itimerval *values, itimerval *oldvalues) {
-	return !setitimer(which,values,oldvalues);
+void intervaltimer::setIntervals(long seconds, long microseconds) {
+	setInitialInterval(seconds,microseconds);
+	setPeriodicInterval(seconds,microseconds);
 }
 
-bool intervaltimer::cancelTimer() {
-	return setTimer((long)0,(long)0);
+void intervaltimer::setIntervals(timeval *tv) {
+	setInitialInterval(tv);
+	setPeriodicInterval(tv);
 }
 
-bool intervaltimer::getTimeRemaining(long *seconds) {
-	return getTimeRemaining(seconds,NULL);
+void intervaltimer::setIntervals(itimerval *itv) {
+	memcpy((void *)&values,(void *)itv,sizeof(values));
+}
+
+void intervaltimer::getInitialInterval(long *seconds, long *microseconds) {
+	if (seconds) {
+		*seconds=values.it_value.tv_sec;
+	}
+	if (microseconds) {
+		*microseconds=values.it_value.tv_usec;
+	}
+}
+
+void intervaltimer::getInitialInterval(timeval *tv) {
+	memcpy((void *)tv,(void *)&(values.it_value),
+				sizeof(values.it_value));
+}
+
+void intervaltimer::getPeriodicInterval(long *seconds, long *microseconds) {
+	if (seconds) {
+		*seconds=values.it_interval.tv_sec;
+	}
+	if (microseconds) {
+		*microseconds=values.it_interval.tv_usec;
+	}
+}
+
+void intervaltimer::getPeriodicInterval(timeval *tv) {
+	memcpy((void *)tv,(void *)&(values.it_interval),
+				sizeof(values.it_interval));
+}
+
+void intervaltimer::getIntervals(itimerval *itv) {
+	memcpy((void *)itv,(void *)&values,sizeof(values));
+}
+
+bool intervaltimer::start() {
+	return start(NULL);
+}
+
+bool intervaltimer::start(itimerval *itv) {
+	return !setitimer(which,&values,itv);
 }
 
 bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) {
-	timeval	value;
-	bool	retval=getTimeRemaining(&value);
+	itimerval	val;
+	bool	retval=getitimer(which,&val);
 	if (seconds) {
-		*seconds=value.tv_sec;
+		*seconds=val.it_value.tv_sec;
 	}
 	if (microseconds) {
-		*microseconds=value.tv_usec;
+		*microseconds=val.it_value.tv_usec;
 	}
 	return retval;
 }
 
-bool intervaltimer::getTimeRemaining(timeval *value) {
-	itimerval	values;
-	bool	retval=getitimer(which,&values);
-	value->tv_sec=values.it_value.tv_sec;
-	value->tv_usec=values.it_value.tv_usec;
-	return retval;
+bool intervaltimer::getTimeRemaining(timeval *tv) {
+	return getTimeRemaining(&(tv->tv_sec),&(tv->tv_usec));
 }
 
-bool intervaltimer::getInterval(long *seconds) {
-	return getInterval(seconds,NULL);
-}
-
-bool intervaltimer::getInterval(long *seconds, long *microseconds) {
-	timeval	value;
-	bool	retval=getInterval(&value);
-	if (seconds) {
-		*seconds=value.tv_sec;
-	}
-	if (microseconds) {
-		*microseconds=value.tv_usec;
-	}
-	return retval;
-}
-
-bool intervaltimer::getInterval(timeval *value) {
-	itimerval	values;
-	bool	retval=getitimer(which,&values);
-	value->tv_sec=values.it_interval.tv_sec;
-	value->tv_usec=values.it_interval.tv_usec;
-	return retval;
-}
-
-bool intervaltimer::getTimer(itimerval *values) {
-	return !getitimer(which,values);
+bool intervaltimer::cancelTimer() {
+	memset((void *)&values,0,sizeof(values));
+	return start();
 }
 
 bool intervaltimer::sleep(long seconds) {

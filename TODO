@@ -4,7 +4,7 @@ solaris:
 if openssl/pcre libs are installed, but not includes, configure still tries
 	to include openssl/pcre support
 
-timer class needs testing
+intervaltimer class needs more tests
 
 file class:
 	need static versions of create methods

@@ -2,4 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		int	which;
+		int		which;
+		itimerval	values;

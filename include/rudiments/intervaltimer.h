@@ -23,54 +23,72 @@ class intervaltimer {
 			//			calls, raises SIGPROF
 
 
-		// These methods allow you set the interval timer.  They return
-		// true on success and false on failure.
-		bool	setTimer(long seconds);
-			// Set the timer to expire in "seconds" seconds
-			// and 0 microseconds.
-		bool	setTimer(long seconds, long microseconds);
-			// Set the timer to expire in "seconds" seconds
-			// and "microseconds" microseconds.
-		bool	setTimer(timeval *value);
-			// Set the timer to expire in the number of seconds
-			// and microseconds specified in value.
-		bool	setTimer(itimerval *values);
-			// Set the timer to expire in the number of seconds
-			// and microseconds specified in values->it_value
-			// and then again, periodically in the number of
-			// seconds and microseconds specified in
-			// values->it_interval.
-		bool	setTimer(itimerval *values, itimerval *oldvalues);
-			// Set the timer to expire in the number of seconds
-			// and microseconds specified in values->it_value
-			// and then again, periodically in the number of
-			// seconds and microseconds specified in
-			// values->it_interval.  Populate oldvalues with the
-			// intervals that the timer was previously set to.
+		void	setInitialInterval(long seconds, long microseconds);
+			// Set the timer's initial interval to "seconds"
+			// seconds and "microseconds" microseconds.
+		void	setInitialInterval(timeval *tv);
+			// Set the timer's initial interval to seconds and
+			// microseconds specified in "tv".
+
+		void	setPeriodicInterval(long seconds, long microseconds);
+			// Set the timer's periodic interval to "seconds"
+			// seconds and "microseconds" microseconds.
+		void	setPeriodicInterval(timeval *tv);
+			// Set the timer's periodic interval to seconds and
+			// microseconds specified in "tv".
+
+		void	setIntervals(long seconds, long microseconds);
+			// Set the timer's initial and periodic intervals both
+			// to "seconds" seconds and "microseconds" microseconds.
+		void	setIntervals(timeval *tv);
+			// Set the timer's initial and periodic intervals both
+			// to seconds and microseconds specified in "tv".
+		void	setIntervals(itimerval *itv);
+			// Set the timer's initial and periodic intervals as
+			// specified by "itv".
+
+
+		void	getInitialInterval(long *seconds, long *microseconds);
+			// Set "seconds" and "microseconds" to the timer's
+			// initial interval values.
+		void	getInitialInterval(timeval *tv);
+			// Set "tv" to the timer's initial interval values.
+
+		void	getPeriodicInterval(long *seconds, long *microseconds);
+			// Set "seconds" and "microseconds" to the timer's
+			// periodic interval values.
+		void	getPeriodicInterval(timeval *tv);
+			// Set "tv" to the timer's periodic interval values.
+
+		void	getIntervals(itimerval *itv);
+			// Set "itv" to the timer's intial and periodic values.
+
+
+		bool	start();
+			// Start (or restart) the timer.  It will first run for
+			// the initial interval, then raise a signal, then run
+			// over and over for the periodic interval, raising the
+			// signal at the end of each interval.
+		bool	start(itimerval *itv);
+			// Start (or restart) the timer.  It will first run for
+			// the initial interval, then raise a signal, then run
+			// over and over for the periodic interval, raising the
+			// signal at the end of each interval.  "itv" will be
+			// set to the intervals that the timer was using prior
+			// to calling start().
+
+
+		bool	getTimeRemaining(long *seconds, long *microseconds);
+			// Sets "seconds" and "microseconds" to the time
+			// remaining before the timer will raise the signal.
+		bool	getTimeRemaining(timeval *tv);
+			// Sets "tv" to the time remaining before the timer
+			// will raise the signal.
+
 
 		bool	cancelTimer();
-			// If a timer was set to expire periodically, this
+			// If a timer was set to run periodically, this
 			// method will cancel it.
-
-		bool	getTimer(itimerval *values);
-			// Populate values with the initial timeout and
-			// interval that the timer are currently set to use.
-
-
-		// These methods allow you get the time remaining on the timer.
-		// They return true on success and false on failure.
-		bool	getTimeRemaining(long *seconds);
-		bool	getTimeRemaining(long *seconds, long *microseconds);
-		bool	getTimeRemaining(timeval *value);
-
-		// These methods allow you get the interval that the timer will
-		// be reset to after expiration.  They return true on success
-		// and false on failure.
-		bool	getInterval(long *seconds);
-		bool	getInterval(long *seconds, long *microseconds);
-		bool	getInterval(timeval *value);
-
-
 
 
 		// These methods allow you to suspend execution of the process
