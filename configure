@@ -30304,6 +30304,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 int
 main ()
 {
@@ -30362,6 +30363,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 int
 main ()
 {
