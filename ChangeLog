@@ -49,6 +49,10 @@
 	added list/dictionary classes, other classes use them instead of
 		implementing their own lists/dicts
 	added environment class
+	datetime class handles timezones properly now
+	added mutexes to datetime, *entry classes
+	added read/write with timeout methods to filedescriptor/datatransport
+	inetsocketclient uses getaddrinfo_r now if possible
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

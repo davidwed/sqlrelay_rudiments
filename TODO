@@ -1,5 +1,3 @@
-use getaddrinfo and friends instead of gethostbyname_r on xBSD
-
 update docs
 document environment class
 

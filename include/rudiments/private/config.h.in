@@ -52,6 +52,9 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
+/* Some systems have getaddrinfo */
+#undef HAVE_GETADDRINFO
+
 /* Some systems have getgrgid_r */
 #undef HAVE_GETGRGID_R
 

@@ -29,9 +29,9 @@
 
 class unixserversocket : public serversocket, public unixsocket {
 	public:
-				unixserversocket();
+			unixserversocket();
 
-		int		listenOnSocket(const char *filename,
+		int	listenOnSocket(const char *filename,
 						mode_t mask,
 						int backlog);
 				// Listen on "filename" and allow "backlog"

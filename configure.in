@@ -227,6 +227,11 @@ AC_TRY_LINK([#include <grp.h>
 #include <stdlib.h>],
 getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R,1, Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(getaddrinfo)
+AC_TRY_LINK([#include <netdb.h>
+#include <stdlib.h>],
+getaddrinfo(NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_GETADDRINFO,1, Some systems have getaddrinfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(gethostbyname_r)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],

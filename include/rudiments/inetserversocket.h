@@ -20,9 +20,9 @@
 
 class inetserversocket : public serversocket, public inetsocket {
 	public:
-				inetserversocket();
+			inetserversocket();
 
-		int		listenOnSocket(const char *address,
+		int	listenOnSocket(const char *address,
 						unsigned short port,
 						int backlog);
 				// Listen on "address" and "port" and allow
