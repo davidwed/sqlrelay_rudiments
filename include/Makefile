@@ -121,6 +121,10 @@ ifeq ($(INCLUDE_RANDOMNUMBER),1)
 	HEADERS += randomnumber.h
 	PRIVATEHEADERS += randomnumber.h randomnumberincludes.h
 endif
+ifeq ($(INCLUDE_CONTAINER),1)
+	HEADERS += container.h
+	PRIVATEHEADERS += container.h containerincludes.h
+endif
 ifeq ($(INCLUDE_REGULAREXPRESSION),1)
 	HEADERS += regularexpression.h
 	PRIVATEHEADERS += regularexpression.h regularexpressionincludes.h

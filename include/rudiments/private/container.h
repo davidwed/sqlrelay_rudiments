@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 	protected:
-		bool		cascade;
+		bool		cascadeondelete;
 		bool		copyreferences;

@@ -11,7 +11,7 @@
 class container {
 	public:
 			container();
-			~container();
+		virtual	~container();
 
 		// These methods control the behavior of the setter methods.
 		void	copyReferences();

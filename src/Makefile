@@ -107,6 +107,10 @@ ifeq ($(INCLUDE_RANDOMNUMBER),1)
 	SRCS += randomnumber.C
 	LOBJS += randomnumber.lo
 endif
+ifeq ($(INCLUDE_CONTAINER),1)
+	SRCS += container.C
+	LOBJS += container.lo
+endif
 ifeq ($(INCLUDE_REGULAREXPRESSION),1)
 	SRCS += regularexpression.C
 	LOBJS += regularexpression.lo
