@@ -41,6 +41,7 @@
 	removed make rpm target and associated cruft
 	removed kdevelop files
 	uses RUDIMENTS_INLINE instead of just INLINE to avoid conflicts
+	added slackware packaged build target
 
 0.24 -	fixed poor linger implementation
 	added options for SO_REUSEADDR

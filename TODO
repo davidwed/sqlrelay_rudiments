@@ -2,7 +2,6 @@ xmlsax compilation generates warning with xscale_le-gcc
 xmldomnode should probably use list class
 
 dtd test crashes
-serialportsettings class is incomplete
 
 need generic parser/lexer classes, use them for xmlsax
 

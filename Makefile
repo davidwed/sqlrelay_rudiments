@@ -1,5 +1,7 @@
 include config.mk
 
+PWD=$(shell pwd)
+
 all:
 	cd src; $(MAKE) all
 
@@ -35,3 +37,10 @@ unconfig: clean
 	$(RMTREE) autom4te.cache
 
 distclean: unconfig
+
+tgz: all
+	mkdir /tmp/rudiments-$(RUDIMENTS_VERSION)
+	make prefix=/tmp/rudiments-$(RUDIMENTS_VERSION)/$(prefix) install
+	cd /tmp/rudiments-$(RUDIMENTS_VERSION); makepkg rudiments-$(RUDIMENTS_VERSION).tgz
+	mv /tmp/rudiments-$(RUDIMENTS_VERSION)/rudiments-$(RUDIMENTS_VERSION).tgz $(PWD)
+	$(RMTREE) /tmp/rudiments-$(RUDIMENTS_VERSION)
