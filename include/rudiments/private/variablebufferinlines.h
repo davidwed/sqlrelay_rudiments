@@ -10,7 +10,7 @@ inline unsigned char *variablebuffer::getBuffer() {
 }
 
 inline size_t variablebuffer::getSize() {
-	return end;
+	return endofbuffer;
 }
 
 inline size_t variablebuffer::getPosition() {
@@ -18,7 +18,7 @@ inline size_t variablebuffer::getPosition() {
 }
 
 inline size_t variablebuffer::getEnd() {
-	return end;
+	return endofbuffer;
 }
 
 inline size_t variablebuffer::getActualSize() {
@@ -31,6 +31,6 @@ inline void variablebuffer::setPosition(size_t pos) {
 
 inline variablebuffer *variablebuffer::append(const unsigned char *data,
 								size_t size) {
-	position=end;
+	position=endofbuffer;
 	return write(data,size);
 }

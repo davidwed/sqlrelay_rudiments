@@ -91,8 +91,6 @@ install:
 	$(INSTALL) -m 644 rudiments/private/passwdentry.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/passwdentryinlines.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/private/permissionsinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/primitivedictionarynodeinlines.h $(incdir)/rudiments/private
-	$(INSTALL) -m 644 rudiments/private/primitivelistnodeinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/protocolentry.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/protocolentryinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/randomnumberinlines.h $(incdir)/rudiments/private

@@ -7,23 +7,19 @@
 
 void print(stringdictionary<char *> *dict) {
 
-	char	*key;
-	char	*value;
-	for (int i=0; i<dict->getLength(); i++) {
-		dict->getKey(i,&key);
-		dict->getData(key,&value);
-		printf("%d: %s=%s\n",i,key,value);
+	for (int i=0; i<dict->getList()->getLength(); i++) {
+		printf("%d: %s=%s\n",i,
+			dict->getList()->getNodeByIndex(i)->getData()->getKey(),
+			dict->getList()->getNodeByIndex(i)->getData()->getData());
 	}
 }
 
 void print(numericdictionary<char *> *dict) {
 
-	long	key;
-	char	*value;
-	for (int i=0; i<dict->getLength(); i++) {
-		dict->getKey(i,&key);
-		dict->getData(key,&value);
-		printf("%d: %d=%s\n",i,key,value);
+	for (int i=0; i<dict->getList()->getLength(); i++) {
+		printf("%d: %d=%s\n",i,
+			dict->getList()->getNodeByIndex(i)->getData()->getKey(),
+			dict->getList()->getNodeByIndex(i)->getData()->getData());
 	}
 }
 
@@ -36,7 +32,7 @@ int main(int argv, const char **argc) {
 	dict.setData("3","three");
 	dict.setData("4","four");
 
-	printf("length: %d\n",dict.getLength());
+	printf("length: %d\n",dict.getList()->getLength());
 
 	print(&dict);
 	printf("\n");
@@ -63,7 +59,7 @@ int main(int argv, const char **argc) {
 	numdict.setData(3,"three");
 	numdict.setData(4,"four");
 
-	printf("length: %d\n",numdict.getLength());
+	printf("length: %d\n",numdict.getList()->getLength());
 
 	print(&numdict);
 	printf("\n");

@@ -258,9 +258,9 @@ fi
 
 
 dnl Default build variables.
-VERSION="0.25"
-AC_SUBST(VERSION)
-AC_DEFINE_UNQUOTED(VERSION,"$VERSION",Version)
+RUDIMENTS_VERSION="0.25"
+AC_SUBST(RUDIMENTS_VERSION)
+AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 dnl rules for CURRENT:REVISION:AGE version info:
 dnl apply the following rules in order:
 dnl if library source changed at all,         c:r:a -> c:r+1:a

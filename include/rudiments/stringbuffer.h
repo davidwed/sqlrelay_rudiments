@@ -14,6 +14,9 @@
 class stringbuffer : public variablebuffer {
 	public:
 			stringbuffer();
+			stringbuffer(char *initialcontents,
+					size_t initialsize,
+					size_t increment);
 			// Creates a new buffer which will grow as necessary
 			// to accomodate the string written to it.
 		virtual	~stringbuffer();
@@ -32,6 +35,7 @@ class stringbuffer : public variablebuffer {
 		//	 	or
 		//	sb->append("numbers: ")->append(5)->append(5.5);
 		stringbuffer	*write(const char *string);
+		stringbuffer	*write(const char *string, size_t size);
 		stringbuffer	*write(char character);
 		stringbuffer	*write(long number);
 		stringbuffer	*write(double number);
@@ -42,6 +46,7 @@ class stringbuffer : public variablebuffer {
 			// position.  If necessary, the buffer will grow to
 			// accommodate the new data.
 		stringbuffer	*append(const char *string);
+		stringbuffer	*append(const char *string, size_t size);
 		stringbuffer	*append(char character);
 		stringbuffer	*append(long number);
 		stringbuffer	*append(double number);

@@ -70,7 +70,7 @@ inline void logger::addLogDestination(logdestination *logdest) {
 }
 
 inline void logger::removeLogDestination(logdestination *logdest) {
-	logdestlist.removeByKey(logdest);
+	logdestlist.removeByData(logdest);
 }
 
 inline void logger::removeAllLogDestinations() {

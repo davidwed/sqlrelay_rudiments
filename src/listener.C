@@ -22,7 +22,6 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 		fd_set	fdlist;
 		int	largest;
 		FD_ZERO(&fdlist);
-		//primitivelistnode<int>	*current=
 		listenerlistnode	*current=
 				filedescriptorlist.getNodeByIndex(0);
 		while(current) {

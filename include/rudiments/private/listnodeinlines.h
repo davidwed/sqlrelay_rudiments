@@ -3,33 +3,15 @@
 
 #include <stdlib.h>
 
-#define LISTNODE_TEMPLATE \
-	template <class datatype, class keytype>
+#define LISTNODE_TEMPLATE template <class datatype>
 
-#define LISTNODE_CLASS \
-	listnode<datatype,keytype>
+#define LISTNODE_CLASS listnode<datatype>
 
 LISTNODE_TEMPLATE
 inline LISTNODE_CLASS::listnode() {
 	data=0;
 	previous=NULL;
 	next=NULL;
-}
-
-LISTNODE_TEMPLATE
-inline LISTNODE_CLASS::listnode(datatype data) {
-	this->data=data;
-	previous=NULL;
-	next=NULL;
-}
-
-LISTNODE_TEMPLATE
-inline LISTNODE_CLASS::listnode(datatype data,
-					listnode<datatype,keytype> *previous,
-					listnode<datatype,keytype> *next) {
-	this->data=data;
-	this->previous=previous;
-	this->next=next;
 }
 
 LISTNODE_TEMPLATE
@@ -47,21 +29,37 @@ inline datatype LISTNODE_CLASS::getData() const {
 }
 
 LISTNODE_TEMPLATE
-inline void LISTNODE_CLASS::setPrevious(listnode<datatype,keytype> *previous) {
+inline void LISTNODE_CLASS::setPrevious(listnode<datatype> *previous) {
 	this->previous=previous;
 }
 
 LISTNODE_TEMPLATE
-inline void LISTNODE_CLASS::setNext(listnode<datatype,keytype> *next) {
+inline void LISTNODE_CLASS::setNext(listnode<datatype> *next) {
 	this->next=next;
 }
 
 LISTNODE_TEMPLATE
-inline listnode<datatype,keytype> *LISTNODE_CLASS::getPrevious() const {
+inline listnode<datatype> *LISTNODE_CLASS::getPrevious() const {
 	return previous;
 }
 
 LISTNODE_TEMPLATE
-inline listnode<datatype,keytype> *LISTNODE_CLASS::getNext() const {
+inline listnode<datatype> *LISTNODE_CLASS::getNext() const {
 	return next;
+}
+
+LISTNODE_TEMPLATE
+inline int LISTNODE_CLASS::compare(datatype data) const {
+	if (this->data<data) {
+		return -1;
+	} else if (this->data==data) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+LISTNODE_TEMPLATE
+inline void LISTNODE_CLASS::print() const {
+	printf("%d\n",data);
 }

@@ -14,16 +14,26 @@ variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	this->initialsize=initialsize;
 	this->increment=increment;
 	position=0;
-	end=0;
+	endofbuffer=0;
+}
+
+variablebuffer::variablebuffer(unsigned char *initialcontents,
+				size_t initialsize, size_t increment) {
+	buffer=initialcontents;
+	buffersize=initialsize;
+	this->initialsize=initialsize;
+	this->increment=increment;
+	position=0;
+	endofbuffer=0;
 }
 
 ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 
 	size_t	bytestoread=size;
-	if (position>end) {
+	if (position>endofbuffer) {
 		bytestoread=0;
-	} else if (position+size>end) {
-		bytestoread=end-position;
+	} else if (position+size>endofbuffer) {
+		bytestoread=endofbuffer-position;
 	}
 
 	memcpy((void *)data,(void *)(buffer+position),bytestoread);
@@ -46,8 +56,8 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 
 	// increment the position indices
 	position=position+size;
-	if (position>end) {
-		end=position;
+	if (position>endofbuffer) {
+		endofbuffer=position;
 	}
 	return this;
 }
@@ -57,7 +67,7 @@ void variablebuffer::clear() {
 	buffer=new unsigned char[initialsize];
 	buffersize=initialsize;
 	position=0;
-	end=0;
+	endofbuffer=0;
 }
 
 void variablebuffer::extend(size_t size) {

@@ -14,12 +14,6 @@ inline DICTIONARYNODE_CLASS::dictionarynode() {
 }
 
 DICTIONARYNODE_TEMPLATE
-inline DICTIONARYNODE_CLASS::dictionarynode(keytype key, datatype data) {
-	this->key=key;
-	this->data=data;
-}
-
-DICTIONARYNODE_TEMPLATE
 inline void DICTIONARYNODE_CLASS::setKey(keytype key) {
 	this->key=key;
 }
@@ -37,4 +31,21 @@ inline keytype DICTIONARYNODE_CLASS::getKey() const {
 DICTIONARYNODE_TEMPLATE
 inline datatype DICTIONARYNODE_CLASS::getData() const {
 	return data;
+}
+
+DICTIONARYNODE_TEMPLATE
+inline int DICTIONARYNODE_CLASS::compare(keytype key) const {
+	if (this->key<key) {
+		return -1;
+	} else if (this->key==key) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+DICTIONARYNODE_TEMPLATE
+inline void DICTIONARYNODE_CLASS::print() const {
+	printf("key:  %d\n",key);
+	printf("data: %d\n",data);
 }

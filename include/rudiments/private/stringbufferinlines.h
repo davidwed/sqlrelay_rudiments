@@ -11,6 +11,12 @@
 inline stringbuffer::stringbuffer() : variablebuffer(128,32) {
 }
 
+inline stringbuffer::stringbuffer(char *initialcontents,
+					size_t initialsize, size_t increment) :
+			variablebuffer((unsigned char *)initialcontents,
+						initialsize,increment) {
+}
+
 inline stringbuffer::~stringbuffer() {
 }
 
@@ -36,15 +42,20 @@ inline void stringbuffer::clear() {
 }
 
 inline void stringbuffer::terminate() {
-	if (buffer[end]!='\0') {
+	if (buffer[endofbuffer]!='\0') {
 		variablebuffer::append((unsigned char *)"\0",1);
-		end--;
+		endofbuffer--;
 		position--;
 	}
 }
 
 inline stringbuffer *stringbuffer::append(const char *string) {
 	variablebuffer::append((unsigned char *)string,strlen(string));
+	return this;
+}
+
+inline stringbuffer *stringbuffer::append(const char *string, size_t size) {
+	variablebuffer::append((unsigned char *)string,size);
 	return this;
 }
 
@@ -72,6 +83,11 @@ inline stringbuffer *stringbuffer::append(double number,
 
 inline stringbuffer *stringbuffer::write(const char *string) {
 	variablebuffer::write((unsigned char *)string,strlen(string));
+	return this;
+}
+
+inline stringbuffer *stringbuffer::write(const char *string, size_t size) {
+	variablebuffer::write((unsigned char *)string,size);
 	return this;
 }
 

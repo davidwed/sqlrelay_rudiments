@@ -469,7 +469,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS DEBUGCXXFLAGS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE AR ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CXXCPP EGREP LIBTOOL LIBOBJS SOCKETLIB XNETLIB NSLLIB MINGW32 CYGWIN UWIN VERSION SONAME_VERSION_INFO LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS DEBUGCXXFLAGS build build_cpu build_vendor build_os host host_cpu host_vendor host_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE AR ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CXXCPP EGREP LIBTOOL LIBOBJS SOCKETLIB XNETLIB NSLLIB MINGW32 CYGWIN UWIN RUDIMENTS_VERSION SONAME_VERSION_INFO LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -11694,11 +11694,11 @@ if ( test -n "$UWIN" -o -n "$MINGW32" -o -n "$CYGWIN" ); then
 fi
 
 
-VERSION="0.25"
+RUDIMENTS_VERSION="0.25"
 
 
 cat >>confdefs.h <<_ACEOF
-#define VERSION "$VERSION"
+#define RUDIMENTS_VERSION "$RUDIMENTS_VERSION"
 _ACEOF
 
 SONAME_VERSION_INFO="1:0:0"
@@ -12365,7 +12365,7 @@ s,@NSLLIB@,$NSLLIB,;t t
 s,@MINGW32@,$MINGW32,;t t
 s,@CYGWIN@,$CYGWIN,;t t
 s,@UWIN@,$UWIN,;t t
-s,@VERSION@,$VERSION,;t t
+s,@RUDIMENTS_VERSION@,$RUDIMENTS_VERSION,;t t
 s,@SONAME_VERSION_INFO@,$SONAME_VERSION_INFO,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF

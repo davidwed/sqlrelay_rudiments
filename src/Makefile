@@ -31,10 +31,10 @@ clean:
 rebuild: clean all
 
 librudiments.la: $(SRCS) $(NLOBJS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ $(NLOBJS) -rpath $(libdir) -release $(VERSION) -version-info $(SONAME_VERSION_INFO)
+	$(LIBTOOL) --mode=link $(CXX) -o $@ $(NLOBJS) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO)
 
 librudiments_p.la: $(SRCS) $(PLOBJS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ $(PLOBJS) -rpath $(libdir) -release $(VERSION) -version-info $(SONAME_VERSION_INFO)
+	$(LIBTOOL) --mode=link $(CXX) -o $@ $(PLOBJS) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO)
 
 install:
 	$(top_builddir)/mkinstalldirs $(libdir)

@@ -7,6 +7,12 @@
 #endif
 
 template <class datatype>
-inline int stringdictionarynode<datatype>::compare(char *key) {
+inline int stringdictionarynode<datatype>::compare(char *key) const {
 	return strcmp(this->key,key);
+}
+
+template <class datatype>
+inline void stringdictionarynode<datatype>::print() const {
+	printf("key:  %s\n",key);
+	printf("data: %x\n",data);
 }

@@ -24,7 +24,7 @@ inline void listener::addFileDescriptor(int fd) {
 }
 
 inline void listener::removeFileDescriptor(int fd) {
-	filedescriptorlist.removeByKey(fd);
+	filedescriptorlist.removeByData(fd);
 }
 
 inline void listener::removeAllFileDescriptors() {

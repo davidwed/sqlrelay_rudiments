@@ -6,81 +6,41 @@
 
 #include <rudiments/private/config.h>
 
-template <class datatype, class keytype=datatype>
+template <class datatype>
 class listnode {
 	public:
 			listnode();
-			listnode(datatype data);
-			listnode(datatype data,
-					listnode<datatype,keytype> *previous,
-					listnode<datatype,keytype> *next);
 		virtual	~listnode();
 
 		virtual void		setData(datatype data);
 		virtual datatype	getData() const;
 
-		virtual int	compare(keytype key)=0;
+		virtual int	compare(datatype data) const;
 
-		void	setPrevious(listnode<datatype,keytype> *previous);
-		void	setNext(listnode<datatype,keytype> *next);
+		void	setPrevious(listnode<datatype> *previous);
+		void	setNext(listnode<datatype> *next);
 
-		listnode<datatype,keytype>	*getPrevious() const;
-		listnode<datatype,keytype>	*getNext() const;
+		listnode<datatype>	*getPrevious() const;
+		listnode<datatype>	*getNext() const;
+
+		virtual	void	print() const;
 
 	#include <rudiments/private/listnode.h>
 };
 
 #include <rudiments/private/listnodeinlines.h>
 
-template <class datatype>
-class primitivelistnode : public listnode<datatype> {
-	public:
-			primitivelistnode() :
-				listnode<datatype>() {};
-			primitivelistnode(datatype data) :
-				listnode<datatype>(data) {};
-			primitivelistnode(datatype data,
-					primitivelistnode<datatype> *previous,
-					primitivelistnode<datatype> *next) :
-				listnode<datatype>(data,previous,next) {};
-		virtual int	compare(datatype key);
-};
-
-#include <rudiments/private/primitivelistnodeinlines.h>
-
 class stringlistnode : public listnode<char *> {
 	public:
-			stringlistnode() :
-				listnode<char *>() {}
-			stringlistnode(char * data) :
-				listnode<char *>(data) {}
-			stringlistnode(char * data,
-					stringlistnode *previous,
-					stringlistnode *next) :
-				listnode<char *>(data,previous,next) {}
-		virtual int	compare(char *key);
+			stringlistnode() : listnode<char *>() {}
+		virtual int	compare(char *data) const;
+		virtual void	print() const;
+
 };
 
 #include <rudiments/private/stringlistnodeinlines.h>
 
-template <class datatype, class keytype>
-class objectlistnode : public listnode<datatype,keytype> {
-	public:
-			objectlistnode() :
-				listnode<datatype,keytype>() {};
-			objectlistnode(datatype data) :
-				listnode<datatype,keytype>(data) {};
-			objectlistnode(datatype data,
-				objectlistnode<datatype,keytype> *previous,
-				objectlistnode<datatype,keytype> *next) :
-			listnode<datatype,keytype>(data,previous,next) {};
-		virtual int	compare(keytype key);
-};
-
-#include <rudiments/private/objectlistnodeinlines.h>
-
-template < class datatype, class keytype=datatype,
-		class listnodetype=primitivelistnode<datatype> >
+template < class datatype, class listnodetype=listnode<datatype> >
 class list {
 	public:
 			list();
@@ -90,8 +50,8 @@ class list {
 		int	insert(unsigned long index, datatype data);
 
 		int	removeByIndex(unsigned long index);
-		int	removeByKey(keytype key);
-		int	removeAllByKey(keytype key);
+		int	removeByData(datatype data);
+		int	removeAllByData(datatype data);
 		int	removeNode(listnodetype *node);
 
 		int	setDataByIndex(unsigned long index,
@@ -99,27 +59,21 @@ class list {
 		int	getDataByIndex(unsigned long index,
 						datatype *data) const;
 
-		int	getDataByKey(keytype key, datatype *data) const;
-
 		unsigned long	getLength() const;
 
 		listnodetype	*getNodeByIndex(unsigned long index) const;
+		listnodetype	*getNodeByData(datatype data) const;
+		listnodetype	*getNodeByData(listnodetype *startnode,
+							datatype data) const;
 
 		void	clear();
+		void	print() const;
 
 	#include <rudiments/private/list.h>
 };
 
 #include <rudiments/private/listinlines.h>
 
-typedef list< char *, char *, stringlistnode >	stringlist;
-
-template <class datatype>
-class primitivelist : public list< datatype, datatype,
-					primitivelistnode<datatype> > {};
-
-template <class datatype, class keytype>
-class objectlist : public list< datatype, keytype,
-					objectlistnode<datatype,keytype> > {};
+typedef list< char *, stringlistnode >	stringlist;
 
 #endif

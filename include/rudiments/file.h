@@ -8,6 +8,7 @@
 
 #include <rudiments/filedescriptor.h>
 #include <sys/types.h>
+#include <sys/fcntl.h>
 #include <sys/stat.h>
 
 // The file class provides methods for interacting with files and for 

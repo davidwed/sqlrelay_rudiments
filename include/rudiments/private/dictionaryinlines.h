@@ -5,10 +5,14 @@
 #include <stdio.h>
 
 #define DICTIONARY_TEMPLATE \
-	template <class keytype, class datatype, class dictionarynodetype>
+	template <class keytype, class datatype, \
+			class dictionarynodetype, \
+			class dictionarylistnodetype, \
+			class dictionarylisttype>
 
 #define DICTIONARY_CLASS \
-	dictionary<keytype,datatype,dictionarynodetype>
+	dictionary<keytype,datatype,dictionarynodetype,\
+			dictionarylistnodetype,dictionarylisttype>
 
 DICTIONARY_TEMPLATE
 inline DICTIONARY_CLASS::dictionary() {
@@ -16,25 +20,28 @@ inline DICTIONARY_CLASS::dictionary() {
 
 DICTIONARY_TEMPLATE
 inline DICTIONARY_CLASS::~dictionary() {
-	dict.clear();
 }
 
 DICTIONARY_TEMPLATE
-inline void DICTIONARY_CLASS::setData(keytype key, datatype data) {
-	dictionarynode<keytype,datatype>	*node;
-	if (dict.getDataByKey(key,&node)) {
-		node->setData(data);
+inline int DICTIONARY_CLASS::setData(keytype key, datatype data) {
+	dictionarylistnodetype	*node=findNode(key);
+	if (node) {
+		node->getData()->setData(data);
+		return 0;
 	} else {
-		node=new dictionarynodetype(key,data);
-		dict.append(node);
+		dictionarynodetype	*dictnode=new dictionarynodetype();
+		dictnode->setKey(key);
+		dictnode->setData(data);
+		dict.append(dictnode);
+		return 1;
 	}
 }
 
 DICTIONARY_TEMPLATE
 inline int DICTIONARY_CLASS::getData(keytype key, datatype *data) {
-	dictionarynode<keytype,datatype>	*node;
-	if (dict.getDataByKey(key,&node)) {
-		*data=node->getData();
+	dictionarylistnodetype	*node=findNode(key);
+	if (node) {
+		*data=node->getData()->getData();
 		return 1;
 	}
 	return 0;
@@ -42,31 +49,27 @@ inline int DICTIONARY_CLASS::getData(keytype key, datatype *data) {
 
 DICTIONARY_TEMPLATE
 inline int DICTIONARY_CLASS::removeData(keytype key) {
-	return dict.removeByKey(key);
-}
-
-DICTIONARY_TEMPLATE
-inline unsigned long DICTIONARY_CLASS::getLength() const {
-	return dict.getLength();
-}
-
-DICTIONARY_TEMPLATE
-inline int DICTIONARY_CLASS::getKey(unsigned long index, keytype *key) const {
-	dictionarynode<keytype,datatype>	*node;
-	if (dict.getDataByIndex(index,&node)) {
-		*key=node->getKey();
-		return 1;
+	dictionarylistnodetype	*node=findNode(key);
+	if (node) {
+		return dict.removeNode(node);
 	}
 	return 0;
 }
 
 DICTIONARY_TEMPLATE
-inline int DICTIONARY_CLASS::getData(unsigned long index, datatype *data)
-									const {
-	dictionarynode<keytype,datatype>	*node;
-	if (dict.getDataByIndex(index,&node)) {
-		*data=node->getData();
-		return 1;
+inline dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) const {
+	dictionarylistnodetype	*node=
+			(dictionarylistnodetype *)dict.getNodeByIndex(0);
+	while (node) {
+		if (!node->getData()->compare(key)) {
+			return node;
+		}
+		node=(dictionarylistnodetype *)node->getNext();
 	}
-	return 0;
+	return NULL;
+}
+
+DICTIONARY_TEMPLATE
+inline dictionarylisttype *DICTIONARY_CLASS::getList() {
+	return &dict;
 }

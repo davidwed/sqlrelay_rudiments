@@ -9,4 +9,4 @@
 		size_t		increment;
 		size_t		buffersize;
 		size_t		position;
-		size_t		end;
+		size_t		endofbuffer;

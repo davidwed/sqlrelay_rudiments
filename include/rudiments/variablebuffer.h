@@ -13,6 +13,8 @@
 class variablebuffer {
 	public:
 			variablebuffer(size_t initialsize, size_t increment);
+			variablebuffer(unsigned char *initialcontents,
+					size_t initialsize, size_t increment);
 			// Creates a new buffer of size "initialsize"
 			// which will grow in chunks of size "increment".
 			// The position at which the first write or append

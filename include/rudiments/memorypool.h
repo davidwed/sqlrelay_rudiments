@@ -11,8 +11,8 @@
 
 #include <rudiments/private/memorypoolnode.h>
 
-typedef	primitivelist<memorypoolnode *>		memorypoollist;
-typedef	primitivelistnode<memorypoolnode *>	memorypoollistnode;
+typedef	list<memorypoolnode *>		memorypoollist;
+typedef	listnode<memorypoolnode *>	memorypoollistnode;
 
 // The memorypool class provides methods for creating and using a memory pool.
 //

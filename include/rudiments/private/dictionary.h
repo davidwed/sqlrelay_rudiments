@@ -2,6 +2,5 @@
 // See the COPYING file for more information
 
 	protected:
-		list< dictionarynode<keytype,datatype> *, keytype,
-			objectlistnode< dictionarynode<keytype,datatype> *,
-					keytype> >	dict;
+		dictionarylistnodetype	*findNode(keytype key) const;
+		dictionarylisttype	dict;
