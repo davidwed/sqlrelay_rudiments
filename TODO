@@ -1,6 +1,3 @@
-regularexpression class needs to be able to return substring match information
-optinally use libpcre for regular expressions
-
 get epoch from string doesn't work right on solaris x86
 
 blocking/nonblocking mode switch functions for filedescriptor

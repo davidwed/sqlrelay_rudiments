@@ -3,7 +3,7 @@ top_builddir = ..
 include ../config.mk
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
-LIBS=-L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS)
+LIBS=-L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS)
 
 .SUFFIXES: .lo
 

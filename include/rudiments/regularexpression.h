@@ -25,22 +25,34 @@ class regularexpression {
 		// expression, use these methods
 			regularexpression();
 			regularexpression(const char *pattern);
-				// this constructor calls the compile method
-				// below during initialization
+			// this constructor calls the compile method
+			// below during initialization
 		virtual	~regularexpression();
 
 		bool	compile(const char *pattern);
-				// Compiles the regular expression given in
-				// "pattern".
-				//
-				// Returns true if the compilation 
-				// succeeded and false if it failed.
+			// Compiles the regular expression given in
+			// "pattern".
+			//
+			// Returns true if the compilation 
+			// succeeded and false if it failed.
 		bool	match(const char *str);
-				// Matches "str" against the regular expression
-				// compiled earlier using the compile method.
-				//
-				// Returns true if the match was successful and
-				// false if it was not.
+			// Matches "str" against the regular expression
+			// compiled earlier using the compile method.
+			//
+			// Returns true if the match was successful and
+			// false if it was not.
+
+		int	getMatchingSubstringCount();
+			// Returns the number of substrings of "str" passed into
+			// match() that match "pattern" passed into compile().
+
+		int	getMatchingSubstringOffset(unsigned short index);
+			// Returns the number of bytes after the beginning of
+			// the string of the "index"'th matching substring.
+
+		char	*getMatchingSubstring(unsigned short index);
+			// Returns the number of bytes after the beginning of
+			// the string of the "index"'th matching substring.
 
 	#include <rudiments/private/regularexpression.h>
 };

@@ -3,12 +3,13 @@
 
 #include <rudiments/regularexpression.h>
 #include <stdlib.h>
+#include <stdio.h>
 #if defined(RUDIMENTS_HAS_PCRE)
 	#include <string.h>
 	#ifdef HAVE_STRINGS_H
 		#include <strings.h>
 	#endif
-	#include <pcre/pcre.h>
+	#include <pcre.h>
 #elif defined(HAVE_REGEX_H)
 	#include <sys/types.h>
 	#include <regex.h>
@@ -47,29 +48,6 @@ regularexpression::~regularexpression() {
 	}
 }
 
-bool regularexpression::match(const char *str) {
-
-	if (compiledexpression) {
-		#if defined(RUDIMENTS_HAS_PCRE)
-			return (pcre_exec((pcre *)compiledexpression,NULL,
-						str,strlen(str),0,0,NULL,0)>-1);
-		#elif defined(HAVE_REGEX_H)
-			return !regexec((regex_t *)compiledexpression,str,0,
-						(regmatch_t *)NULL,0);
-		#elif defined(HAVE_REGEXP_H)
-			return regexec((regexp *)compiledexpression,str);
-		#elif defined(HAVE_REGCMP)
-			return regex((char *)compiledexpression,str,NULL);
-		#elif defined(HAVE_RE_COMP)
-			return !re_exec((char *)compiledexpression);
-		#elif defined(HAVE_REGEXPR_H)
-			return step((char *)compiledexpression,expbuf);
-		#endif
-	}
-
-	return false;
-}
-
 bool regularexpression::compile(const char *pattern) {
 
 	#if defined(RUDIMENTS_HAS_PCRE)
@@ -91,7 +69,7 @@ bool regularexpression::compile(const char *pattern) {
 			compiledexpression=0;
 		}
 		regex_t	*preg=new regex_t;
-		if (!regcomp(preg,pattern,REG_EXTENDED|REG_NOSUB)) {
+		if (!regcomp(preg,pattern,REG_EXTENDED)) {
 			compiledexpression=(long)preg;
 			return true;
 		}
@@ -138,6 +116,82 @@ bool regularexpression::compile(const char *pattern) {
 	#endif
 
 	return false;
+}
+
+bool regularexpression::match(const char *str) {
+
+	this->str=(char *)str;
+
+	#ifndef HAVE_REGEX_H
+	for (int i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
+		matches[i]=-1;
+	}
+	#endif
+
+	if (compiledexpression) {
+		#if defined(RUDIMENTS_HAS_PCRE)
+			int	tempmatches[RUDIMENTS_REGEX_MATCHES*3];
+			matchcount=pcre_exec((pcre *)compiledexpression,NULL,
+					str,strlen(str),0,0,tempmatches,
+					RUDIMENTS_REGEX_MATCHES*3);
+			if (matchcount<0) {
+				matchcount=0;
+			} else {
+				for (int i=0; i<matchcount*2; i=i+2) {
+					matches[i/2]=tempmatches[i];
+				}
+			}
+			return matchcount>-1;
+		#elif defined(HAVE_REGEX_H)
+			regmatch_t	tempmatches[RUDIMENTS_REGEX_MATCHES];
+			matchcount=0;
+			if (!regexec((regex_t *)compiledexpression,
+						str,RUDIMENTS_REGEX_MATCHES,
+						tempmatches,0)) {
+				for (int i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
+					if (tempmatches[i].rm_so==-1) {
+						matchcount=i;
+						break;
+					}
+					matches[i]=tempmatches[i].rm_so;
+				}
+				return true;
+			}
+			return false;
+		#elif defined(HAVE_REGEXP_H)
+			matchcount=0;
+			return regexec((regexp *)compiledexpression,str);
+		#elif defined(HAVE_REGCMP)
+			matchcount=0;
+			return regex((char *)compiledexpression,str,NULL);
+		#elif defined(HAVE_RE_COMP)
+			matchcount=0;
+			return !re_exec((char *)compiledexpression);
+		#elif defined(HAVE_REGEXPR_H)
+			matchcount=0;
+			return step((char *)compiledexpression,expbuf);
+		#endif
+	}
+
+	return false;
+}
+
+int regularexpression::getMatchingSubstringCount() {
+	return matchcount;
+}
+
+int regularexpression::getMatchingSubstringOffset(unsigned short index) {
+	if (index>matchcount) {
+		return -1;
+	}
+	return matches[index];
+}
+
+char *regularexpression::getMatchingSubstring(unsigned short index) {
+	if (index>matchcount) {
+		return NULL;
+	}
+	return str+matches[index];
 }
 
 bool regularexpression::match(const char *str, const char *pattern) {
