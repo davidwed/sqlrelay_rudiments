@@ -4,10 +4,10 @@
 #include <rudiments/protocolentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #define MAXBUFFER	(32*1024)
 
@@ -118,7 +118,7 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 			delete[] buffer;
 			buffer=NULL;
 			pe=NULL;
-			if (errno!=ENOMEM) {
+			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}

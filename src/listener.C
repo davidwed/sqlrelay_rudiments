@@ -2,9 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/listener.h>
+#include <rudiments/error.h>
 
 #include <stdlib.h>
-#include <errno.h>
 
 // some systems need string.h to provide memset() for FD_ZERO/FD_SET
 #include <string.h>
@@ -122,7 +122,8 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		if (selectresult==-1) {
 
 			// if a signal caused the select to fall through, retry
-			if (retryinterruptedwaits && errno==EINTR) {
+			if (retryinterruptedwaits &&
+				error::getErrorNumber()==EINTR) {
 				continue;
 			}
 			return RESULT_ERROR;

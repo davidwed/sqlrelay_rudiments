@@ -1,4 +1,5 @@
-make sure all system calls are restarted if they're interrupted by a signal
+make sure all system calls that can be interrupted are restarted if they're
+	interrupted by a signal
 	(or at least have the option of being restarted)
 
 use const's instead of #defines
@@ -131,7 +132,7 @@ container class paradigm:
 			getXXX(true);
 		}
 
-make sure all constructors need to initialize all member variables
+make sure all constructors initialize all member variables
 	
 use STL classes instead of linkedlist, dictionary
 
@@ -156,8 +157,6 @@ fix math class
 a bunch of static methods can probably be inlined
 	
 probably can combine memorypool and variablebuffer classes
-memorypool actually just works the same way that malloc tends to work, I'm not
-	sure using it nets anything
 
 add to chat class:
 	\K-BREAK
@@ -165,10 +164,8 @@ add to chat class:
 
 xml:
 	should be able to validate an xml document against the dtd
-	xmldomnode should probably use list class
 	test invalid xml
 	handle CDATA/internal subsets better
-	is xmldom really DOM compliant?
 	xml classes need to support entities defined in the DOCTYPE declaration
 
 file class:
@@ -182,7 +179,6 @@ implement these classes:
 	tty
 	pseudotty
 	shellcommand
-	process
 	system
 	loginrecord
 	messagequeue
@@ -429,6 +425,7 @@ filedescriptor class:
 			aio_suspend(),aio_fsync()
 
 errors:
+	errno.h	- errno
 	stdio.h - perror()
 	string.h - strerror(_r)()
 

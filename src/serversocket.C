@@ -3,7 +3,6 @@
 
 #include <rudiments/serversocket.h>
 
-#include <errno.h>
 #include <unistd.h>
 
 #ifdef RUDIMENTS_NAMESPACE

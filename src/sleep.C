@@ -3,8 +3,8 @@
 
 #include <rudiments/private/config.h>
 #include <rudiments/sleep.h>
+#include <rudiments/error.h>
 
-#include <errno.h>
 #if defined(HAVE_NANOSLEEP) || defined (HAVE_CLOCK_NANOSLEEP)
 	#include <time.h>
 #else
@@ -108,7 +108,7 @@ bool sleep::nanosleep(timespec *timetosleep) {
 	for (;;) {
 		if (nanosleep(&sleeptime,&remaining)) {
 			return true;
-		} else if (errno!=EINTR) {
+		} else if (error::getErrorNumber()!=EINTR) {
 			return false;
 		}
 		sleeptime.tv_sec=remaining.tv_sec;

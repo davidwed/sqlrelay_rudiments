@@ -147,7 +147,7 @@ class file : public filedescriptor {
 		bool	tryLockFile(short type) const;
 		bool	lockFile(short type) const;
 		bool	checkLockFile(short type, struct flock *lck) const;
-		bool	unlockFile(short type) const;
+		bool	unlockFile() const;
 
 		// These methods allow you to lock an arbitrary
 		// region of the file.

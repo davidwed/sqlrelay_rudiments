@@ -4,10 +4,10 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #define MAXBUFFER	(32*1024)
 
@@ -135,7 +135,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 			delete[] buffer;
 			buffer=NULL;
 			pwd=NULL;
-			if (errno!=ENOMEM) {
+			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}

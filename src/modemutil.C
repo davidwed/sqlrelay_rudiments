@@ -1,3 +1,6 @@
+// Copyright (c) 2005 David Muse
+// See the COPYING file for more information
+
 #include <rudiments/private/modemutil.h>
 #include <rudiments/serialport.h>
 #include <rudiments/serialportprofile.h>
@@ -9,7 +12,6 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <errno.h>
 #include <string.h>
 
 #ifdef RUDIMENTS_NAMESPACE

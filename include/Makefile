@@ -3,6 +3,8 @@ top_builddir = ..
 include ../config.mk
 include ../features.mk
 
+.PHONY: install uninstall
+
 HEADERS = resultcodes.h
 PRIVATEHEADERS = config.h rudimentsinlines.h
 
@@ -246,6 +248,9 @@ endif
 ifeq ($(INCLUDE_CHAT),1)
 	HEADERS += chat.h
 	PRIVATEHEADERS += chatincludes.h
+endif
+ifeq ($(INCLUDE_ERROR),1)
+	HEADERS += error.h
 endif
 
 # if either modemserver or modemclient are defined, include modemutil.h

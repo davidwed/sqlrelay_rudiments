@@ -11,6 +11,7 @@
 		bool		getcurrentpropertiesonopen;
 		bool		retryinterruptedlockops;
 
+		off_t	lseek(off_t offset, int whence) const;
 		bool	lock(int method, short type, short whence,
 						off_t start, off_t len) const;
 		bool	checkLock(short type, short whence,

@@ -7,6 +7,7 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/sleep.h>
+#include <rudiments/error.h>
 
 #include <stdlib.h>
 
@@ -15,10 +16,6 @@
 
 // for wait...
 #include <sys/wait.h>
-
-// for errno, strerror
-#include <errno.h>
-#include <string.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -140,7 +137,7 @@ void daemonprocess::waitForChildrenToExit() {
 	// exit.
 	for (;;) {
 		int pid=waitpid(-1,NULL,WNOHANG);
-		if (pid==0 || (pid==-1 && errno!=EINTR)) {
+		if (pid==0 || (pid==-1 && error::getErrorNumber()!=EINTR)) {
 			break;
 		}
 	}

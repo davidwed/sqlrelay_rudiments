@@ -4,6 +4,9 @@ include config.mk
 
 PWD=$(shell pwd)
 
+.PHONY: all testprogs clean rebuild install-libs install-includes install-bin \
+	 install-doc install-pc install uninstall unconfig distclean slackware
+
 all:
 	cd src; $(MAKE) all
 

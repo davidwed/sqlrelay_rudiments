@@ -112,7 +112,7 @@ then
 fi
 
 
-for paths in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/local/firstworks"
+for paths in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/usr/local/firstworks"
 do
 	if ( test -n "$paths" )
 	then
@@ -349,7 +349,6 @@ AC_MSG_RESULT($SOSUFFIX)
 
 dnl Checks for microsoft platform.
 dnl sets the substitution variables MINGW32, CYGWIN and UWIN as appropriate
-dnl also moves INSTALL to INSTALL.txt if we're using windows
 dnl sets the enviroment variable MICROSOFT
 AC_DEFUN([FW_CHECK_MICROSOFT],
 [
@@ -370,10 +369,6 @@ dnl Hack so "make install" will work on windows.
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
-	if ( test -r "INSTALL" )
-	then
-		mv INSTALL INSTALL.txt
-	fi
 	MICROSOFT="yes"
 fi
 ])
@@ -381,11 +376,6 @@ fi
 
 AC_DEFUN([FW_CHECK_OSX],
 [
-	dnl Hack so "make install" will work on OS X
-	if ( test "`uname -s`" = "Darwin" -a -r "INSTALL" )
-	then
-		mv INSTALL INSTALL.txt
-	fi
 ])
 
 

@@ -17,7 +17,7 @@
 						long sec, long usec) const;
 		virtual	int	safeSelect(long sec, long usec,
 						bool read, bool write) const;
-		bool	setNoDelay(int onoff);
+		bool		setNoDelay(int onoff);
 
 		int	fd;
 		bool	retryinterruptedreads;

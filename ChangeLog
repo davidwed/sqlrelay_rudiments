@@ -35,6 +35,9 @@
 		unixclientsocket
 	added WNOHANG back to waitpid() call in daemonprocess class and made
 		sure the call gets restarted if it's interrupted by a signal
+	added .PHONY makefile flag, removed INSTALL -> INSTALL.txt hack
+	added /usr/sfw to configure scripts search paths
+	added error class
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

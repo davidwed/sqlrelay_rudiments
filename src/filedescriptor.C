@@ -4,9 +4,10 @@
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
+#include <rudiments/process.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
-#include <errno.h>
 // some systems need string.h to provide memset() for FD_ZERO/FD_SET
 #include <string.h>
 #include <sys/time.h>
@@ -39,20 +40,23 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 
 #ifdef DEBUG_WRITE
 	#define DEBUG_WRITE_INT(type,number) \
-		printf("%d: %s write(%d,%d)\n",getpid(),type,fd,number);
+		printf("%d: %s write(%d,%d)\n", \
+			process::getProcessId(),type,fd,number);
 	#define DEBUG_WRITE_FLOAT(type,number) \
-		printf("%d: %s write(%d,%f)\n",getpid(),type,fd,number);
+		printf("%d: %s write(%d,%f)\n", \
+			process::getProcessId(),type,fd,number);
 	#define DEBUG_WRITE_CHAR(type,character) \
-		printf("%d: %s write(%d,%d)\n",getpid(),type,fd,character);
+		printf("%d: %s write(%d,%d)\n", \
+			process::getProcessId(),type,fd,character);
 	#define DEBUG_WRITE_STRING(type,string,size) \
-		printf("%d: %s write(%d,",getpid(),type,fd); \
+		printf("%d: %s write(%d,",process::getProcessId(),type,fd); \
 		for (size_t i=0; i<size; i++) { \
 			printf("%c",string[i]); \
 		} \
 		printf(",%d)\n",size);
 	#define DEBUG_WRITE_VOID(type,buffer,size) \
 		unsigned char *ptr=static_cast<unsigned char *>(buffer); \
-		printf("%d: %s write(%d,",getpid(),type,fd); \
+		printf("%d: %s write(%d,",process::getProcessId(),type,fd); \
 		for (size_t i=0; i<size; i++) { \
 			printf("0x%02x ",ptr[i]); \
 		} \
@@ -140,11 +144,19 @@ void filedescriptor::setFileDescriptor(int filedesc) {
 }
 
 int filedescriptor::duplicate() const {
-	return dup(fd);
+	int	result;
+	do {
+		result=dup(fd);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 bool filedescriptor::duplicate(int newfd) const {
-	return (dup2(fd,newfd)==newfd);
+	int	result;
+	do {
+		result=dup2(fd,newfd);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return (result==newfd);
 }
 
 #ifdef RUDIMENTS_HAS_SSL
@@ -469,7 +481,11 @@ bool filedescriptor::close() {
 	}
 #endif
 	if (fd!=-1) {
-		if (::close(fd)==-1) {
+		int	result;
+		do {
+			result=::close(fd);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result==-1) {
 			return false;
 		}
 		fd=-1;
@@ -673,7 +689,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	printf("%d: safeRead(%d,",getpid(),fd);
+	printf("%d: safeRead(%d,",process::getProcessId(),fd);
 	#endif
 
 	// The result of SSL_read may be undefined if count=0
@@ -724,7 +740,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				totalread);
 
 		// read...
-		errno=0;
+		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
 			for (bool done=false; !done ;) {
@@ -762,7 +778,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
 		if (actualread!=sizetoread) {
-			if (errno==EINTR) {
+			if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_READ
 				printf(" EINTR ");
 				#endif
@@ -774,7 +790,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 					totalread=totalread+actualread;
 					break;
 				}
-			} else if (actualread==0 && errno==0) {
+			} else if (actualread==0 &&
+					error::getErrorNumber()==0) {
 				// eof condition
 				#ifdef DEBUG_READ
 				printf(" EOF ");
@@ -832,7 +849,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			}
 		}
 
-		errno=0;
+		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
 		if (ssl) {
 			for (bool done=false; !done ;) {
@@ -863,7 +880,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		#endif
 
 		if (retval!=count) {
-			if (retryinterruptedwrites && errno==EINTR) {
+			if (retryinterruptedwrites &&
+				error::getErrorNumber()==EINTR) {
 				continue;
 			}
 		}
@@ -917,7 +935,8 @@ int filedescriptor::safeSelect(long sec, long usec,
 		if (selectresult==-1) {
 
 			// if a signal caused the select to fall through, retry
-			if (retryinterruptedwaits && errno==EINTR) {
+			if (retryinterruptedwaits &&
+				error::getErrorNumber()==EINTR) {
 				continue;
 			}
 			return RESULT_ERROR;
@@ -966,7 +985,8 @@ int filedescriptor::fcntl(int cmd, long arg) const {
 	int	result;
 	do {
 		result=::fcntl(fd,cmd,arg);
-	} while (retryinterruptedfcntl && result==-1 && errno==EINTR);
+	} while (retryinterruptedfcntl && result==-1 &&
+			error::getErrorNumber()==EINTR);
 	return result;
 }
 
@@ -974,7 +994,8 @@ int filedescriptor::ioctl(int cmd, void *arg) const {
 	int	result;
 	do {
 		result=::ioctl(fd,cmd,arg);
-	} while (retryinterruptedioctl && result==-1 && errno==EINTR);
+	} while (retryinterruptedioctl && result==-1 &&
+			error::getErrorNumber()==EINTR);
 	return result;
 }
 
@@ -1038,7 +1059,11 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 	#endif
 
 	// finally, send the msghdr
-	return sendmsg(fd,&messageheader,0)!=-1;
+	int	result;
+	do {
+		result=sendmsg(fd,&messageheader,0);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return (result!=-1);
 }
 
 bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
@@ -1089,7 +1114,11 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	#endif
 
 	// receive the msghdr
-	if (recvmsg(fd,&messageheader,0)==-1) {
+	int	result;
+	do {
+		result=recvmsg(fd,&messageheader,0);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (result==-1) {
 		return false;
 	}
 
@@ -1120,12 +1149,12 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 			// wrong, this will help debug problems with different
 			// platforms
 			if (!cmptr) {
-				printf("%d: ",getpid());
+				printf("%d: ",process::getProcessId());
 				printf("null cmptr\n");
 			} else {
 				//#ifdef HAVE_CMSG_LEN
 				/*if (cmptr->cmsg_len!=CMSG_LEN(sizeof(int))) {
-					printf("%d: ",getpid());
+					printf("%d: ",process::getProcessId());
 					printf("got cmsg_len=");
 			       		printf("%d",static_cast<long>(
 							cmptr->cmsg_len));
@@ -1136,7 +1165,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 				}*/
 				//#endif
 				if (cmptr->cmsg_level!=SOL_SOCKET) {
-					printf("%d: ",getpid());
+					printf("%d: ",process::getProcessId());
 					printf("got cmsg_level=");
 					printf("%d",static_cast<long>(
 							cmptr->cmsg_level));
@@ -1146,7 +1175,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 					printf("\n");
 				}
 				if (cmptr->cmsg_type!=SCM_RIGHTS) {
-					printf("%d: ",getpid());
+					printf("%d: ",process::getProcessId());
 					printf("got cmsg_type=");
 					printf("%d",static_cast<long>(
 							cmptr->cmsg_type));

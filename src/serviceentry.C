@@ -4,10 +4,10 @@
 #include <rudiments/serviceentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #define MAXBUFFER	(32*1024)
 
@@ -128,7 +128,7 @@ bool serviceentry::initialize(const char *servicename, int port,
 			delete[] buffer;
 			buffer=NULL;
 			se=NULL;
-			if (errno!=ENOMEM) {
+			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}

@@ -6,12 +6,12 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
-#include <errno.h>
 #include <unistd.h>
 #include <sys/time.h>
 #ifdef HAVE_XATTRS
@@ -202,7 +202,7 @@ bool file::checkLockFile(short type, struct flock *retlck) const {
 	return checkLockRegion(type,0,0,retlck);
 }
 
-bool file::unlockFile(short type) const {
+bool file::unlockFile() const {
 	return unlockRegion(0,0);
 }
 
@@ -445,19 +445,27 @@ bool file::unlockRemainderFromEnd(off_t start) const {
 }
 
 off_t file::setPositionRelativeToBeginning(off_t offset) const {
-	return lseek(fd,offset,SEEK_SET);
+	return lseek(offset,SEEK_SET);
 }
 
 off_t file::setPositionRelativeToCurrent(off_t offset) const {
-	return lseek(fd,offset,SEEK_CUR);
+	return lseek(offset,SEEK_CUR);
 }
 
 off_t file::setPositionRelativeToEnd(off_t offset) const {
-	return lseek(fd,offset,SEEK_END);
+	return lseek(offset,SEEK_END);
 }
 
 off_t file::getCurrentPosition() const {
-	return lseek(fd,0,SEEK_CUR);
+	return lseek(0,SEEK_CUR);
+}
+
+off_t file::lseek(off_t offset, int whence) const {
+	int	result;
+	do {
+		result=::lseek(fd,offset,whence);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 bool file::exists(const char *filename) {
@@ -712,9 +720,9 @@ bool file::checkLock(short type, short whence, off_t start, off_t len,
 	lck.l_whence=whence;
 	lck.l_start=start;
 	lck.l_len=len;
-	bool	retval=(!fcntl(F_SETLKW,reinterpret_cast<long>(&lck)));
+	int	result=fcntl(F_SETLKW,reinterpret_cast<long>(&lck));
 	*retlck=lck;
-	return retval;
+	return !result;
 }
 
 bool file::unlock(short whence, off_t start, off_t len) const {
@@ -735,7 +743,11 @@ bool file::changeOwner(const char *newuser, const char *newgroup) const {
 }
 
 bool file::changeOwner(uid_t uid, gid_t gid) const {
-	return !fchown(fd,uid,gid);
+	int	result;
+	do {
+		result=fchown(fd,uid,gid);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::changeOwner(const char *filename, const char *newuser,
@@ -748,7 +760,11 @@ bool file::changeOwner(const char *filename, const char *newuser,
 }
 
 bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
-	return !chown(filename,uid,gid);
+	int	result;
+	do {
+		result=chown(filename,uid,gid);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 
@@ -759,7 +775,7 @@ bool file::changeOwnerUserId(const char *newuser) const {
 }
 
 bool file::changeOwnerUserId(uid_t uid) const {
-	return !fchown(fd,uid,(gid_t)-1);
+	return changeOwner(uid,(gid_t)-1);
 }
 
 bool file::changeOwnerUserId(const char *filename, const char *newuser) {
@@ -769,7 +785,7 @@ bool file::changeOwnerUserId(const char *filename, const char *newuser) {
 }
 
 bool file::changeOwnerUserId(const char *filename, uid_t uid) {
-	return !chown(filename,uid,(gid_t)-1);
+	return changeOwner(filename,uid,(gid_t)-1);
 }
 
 
@@ -780,7 +796,7 @@ bool file::changeOwnerGroupId(const char *newgroup) const {
 }
 
 bool file::changeOwnerGroupId(gid_t gid) const {
-	return !fchown(fd,(uid_t)-1,gid);
+	return changeOwner((uid_t)-1,gid);
 }
 
 bool file::changeOwnerGroupId(const char *filename, const char *newgroup) {
@@ -790,7 +806,7 @@ bool file::changeOwnerGroupId(const char *filename, const char *newgroup) {
 }
 
 bool file::changeOwnerGroupId(const char *filename, gid_t gid) {
-	return !chown(filename,(uid_t)-1,gid);
+	return changeOwner(filename,(uid_t)-1,gid);
 }
 
 bool file::canChangeOwner(const char *filename) {

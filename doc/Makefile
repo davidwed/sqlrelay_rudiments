@@ -2,6 +2,8 @@ top_builddir = ..
 
 include ../config.mk
 
+.PHONY: install uninstall html
+
 install:
 	$(MKINSTALLDIRS) $(docdir)
 	$(MKINSTALLDIRS) $(docdir)/classes

@@ -4,12 +4,9 @@
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/clientsocket.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
-#include <errno.h>
 #include <unistd.h>
-
-// for strerror
-#include <string.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -77,7 +74,8 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 			// if connect() fails and errno is set to one of these
 			// values, then the connection is in progress
-			if (errno==EINPROGRESS || errno==EWOULDBLOCK) {
+			if (error::getErrorNumber()==EINPROGRESS ||
+				error::getErrorNumber()==EWOULDBLOCK) {
 
 				// Wait for the socket to become writable.  If
 				// the select() errors or times out then return
@@ -113,7 +111,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 				// in the buffer that was passed in to
 				// getsockopt().
 				if (error) {
-					errno=error;
+					error::setErrorNumber(error);
 					return RESULT_ERROR;
 				}
 
@@ -137,7 +135,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 					// to read 0 bytes, but that will
 					// actually return 0 (success) on linux
 					// and not set errno.
-					if (errno==ENOTCONN) {
+					if (error::getErrorNumber()==ENOTCONN) {
 						char	ch;
 						::read(fd,&ch,sizeof(ch));
 					}

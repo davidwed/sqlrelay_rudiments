@@ -3,6 +3,8 @@ top_builddir = ..
 include ../config.mk
 include ../features.mk
 
+.PHONY: all clean rebuild install uninstall
+
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 SRCS = namevaluepairs.C
@@ -230,6 +232,10 @@ endif
 ifeq ($(INCLUDE_CHAT),1)
 	SRCS += chat.C
 	LOBJS += chat.lo
+endif
+ifeq ($(INCLUDE_ERROR),1)
+	SRCS += error.C
+	LOBJS += error.lo
 endif
 
 # if either modemserver or modemclient are defined, include modemutil.C

@@ -1,3 +1,5 @@
+.PHONY: all clean
+
 all: database/index.txt database/serial certificates/ca.pem certificatechains/client.pem certificatechains/server.pem
 
 clean:

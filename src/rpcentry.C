@@ -4,6 +4,7 @@
 #include <rudiments/rpcentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 // Some systems (notably cygwin 1.5.7-1) define getrpcbyname and getrpcbynumber
 // in their header files but then either don't implement them or don't export
@@ -13,7 +14,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #define MAXBUFFER	(32*1024)
 
@@ -114,7 +114,7 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 			delete[] buffer;
 			buffer=NULL;
 			re=NULL;
-			if (errno!=ENOMEM) {
+			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}

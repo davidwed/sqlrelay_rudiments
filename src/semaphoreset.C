@@ -4,10 +4,10 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 #include <sys/ipc.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -171,7 +171,7 @@ bool semaphoreset::createOrAttach(key_t key, mode_t permissions,
 		// mark for removal
 		created=true;
 		
-	} else if (!(errno==EEXIST && 
+	} else if (!(error::getErrorNumber()==EEXIST && 
 				(semid=semget(key,semcount,permissions))!=-1)) {
 
 		return false;

@@ -5,10 +5,10 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
@@ -152,7 +152,8 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		rawbuffer::zero(shmptr,size);
 		return true;
 		
-	} else if (errno==EEXIST && (shmid=shmget(key,0,permissions))!=-1) {
+	} else if (error::getErrorNumber()==EEXIST &&
+			(shmid=shmget(key,0,permissions))!=-1) {
 
 		// attach to the segment, return 1 on success and 0 on failure
 		shmptr=shmat(shmid,0,0);

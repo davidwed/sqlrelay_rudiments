@@ -4,10 +4,10 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #define MAXBUFFER (32*1024)
 
@@ -123,7 +123,7 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 			delete[] buffer;
 			buffer=NULL;
 			grp=NULL;
-			if (errno!=ENOMEM) {
+			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}

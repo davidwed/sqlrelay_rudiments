@@ -4,10 +4,10 @@
 #include <rudiments/shadowentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #define MAXBUFFER	(32*1024)
 
@@ -141,7 +141,7 @@ bool shadowentry::initialize(const char *username) {
 			delete[] buffer;
 			buffer=NULL;
 			sp=NULL;
-			if (errno!=ENOMEM) {
+			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
