@@ -41,6 +41,7 @@
 		library's data segment
 	added test for crypt.h
 	added container class
+	made charstring/rawbuffer classes NULL-safe
 
 0.26.3 - updated spec file to work on suse 9.0
 	config.mk uses includedir instead of incdir now

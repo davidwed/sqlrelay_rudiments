@@ -34,6 +34,10 @@ void *rawbuffer::set(void *dest, unsigned char character, size_t size) {
 	return (dest)?memset(dest,(int)character,size):NULL;
 }
 
+void *rawbuffer::zero(void *dest, unsigned char character, size_t size) {
+	return set(dest,0,size);
+}
+
 int rawbuffer::compare(const void *s1, const void *s2, size_t size) {
 	return (s1 && s1)?memcmp(s1,s2,size):NULL;
 }

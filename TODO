@@ -1,7 +1,3 @@
-need container base class
-	cascadeOnDelete()
-	copyReferences()
-
 fix math class
 wrap shm_open/shm_unlink somewhere
 move sleep methods into another class

@@ -48,6 +48,10 @@ class rawbuffer {
 				// Sets "size" bytes of "dest" to "character".
 				// Returns a pointer to "dest".
 
+		static void	*zero(void *dest, size_t size);
+				// Sets "size" bytes of "dest" to NULL.
+				// Returns a pointer to "dest".
+
 		static int	compare(const void *s1, const void *s2,
 							size_t size);
 				// Returns an integer less than, equal to or
