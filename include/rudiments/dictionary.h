@@ -6,46 +6,43 @@
 
 #include <rudiments/private/config.h>
 
+
+// The dictionary class allows you to store arbitrary numbers of key/value
+// pairs.  Since the dictionary class is template-based, you can store
+// arbitrary types of keys and values.
+//
+// Each dictionary is composed of a list of dictionarynode's.  Each
+// dictionarynode contains the key and value.
+
+
 template <class keytype, class datatype>
 class dictionarynode {
 	public:
 			dictionarynode();
+			// Creates a new dictionary node, initializing the
+			// key and data to 0.
 
 		void	setKey(keytype key);
+			// Sets the key stored in the node to "key".
 		void	setData(datatype data);
+			// Sets the data stored in the node to "data".
 
 		keytype		getKey() const;
+				// Returns the key stored in the node.
 		datatype	getData() const;
+				// Returns the data stored in the node.
 
 		virtual	int	compare(keytype testkey) const;
+				// Returns -1,0 or 1 if the key stored in the
+				// node is less than, equal to or greater than
+				// "testkey".
 		virtual void	print() const;
+				// Prints the key and data stored in the node.
 
 	#include <rudiments/private/dictionarynode.h>
 };
 
 #include <rudiments/private/dictionarynodeinlines.h>
-
-template <class datatype>
-class stringdictionarynode : public dictionarynode<char *,datatype> {
-	public:
-			stringdictionarynode() :
-				dictionarynode<char *,datatype>() {};
-		int	compare(char * testkey) const;
-		void	print() const;
-};
-
-#include <rudiments/private/stringdictionarynodeinlines.h>
-
-template <class keytype, class datatype>
-class objectdictionarynode : public dictionarynode<keytype,datatype> {
-	public:
-			objectdictionarynode() :
-				dictionarynode<keytype,datatype>() {};
-		int	compare(keytype testkey) const;
-		void	print() const;
-};
-
-#include <rudiments/private/objectdictionarynodeinlines.h>
 
 #include <rudiments/list.h>
 
@@ -65,20 +62,61 @@ template <class keytype, class datatype,
 class dictionary {
 	public:
 			dictionary();
-			~dictionary();
+			// Creates an empty dictionary
+		virtual ~dictionary();
+			// Deletes the dictionary and all of it's
+			// dictionarynodes.
 
 		int	setData(keytype key, datatype data);
+			// Sets the data associated with "key" to "data".
+			// Returns 1 on success or 0 if "key" wasn't found.
 		int	getData(keytype key, datatype *data);
+			// Sets "data" to the data associated with "key".
+			// Returns 1 on success or 0 if "key" wasn't found.
 		int	removeData(keytype key);
+			// Removes the dictionarynode with "key".
+			// Returns 1 on success or 0 if "key" wasn't found.
 
 		dictionarylisttype	*getList();
+					// Returns the list used internally.
 
 		void	print() const;
+			// Prints out a representation of the dictionary.
 
 	#include <rudiments/private/dictionary.h>
 };
 
 #include <rudiments/private/dictionaryinlines.h>
+
+
+
+// object...
+
+template <class keytype, class datatype>
+class objectdictionarynode : public dictionarynode<keytype,datatype> {
+	public:
+			objectdictionarynode() :
+				dictionarynode<keytype,datatype>() {};
+		int	compare(keytype testkey) const;
+		void	print() const;
+};
+
+#include <rudiments/private/objectdictionarynodeinlines.h>
+
+
+
+// string...
+
+template <class datatype>
+class stringdictionarynode : public dictionarynode<char *,datatype> {
+	public:
+			stringdictionarynode() :
+				dictionarynode<char *,datatype>() {};
+		int	compare(char * testkey) const;
+		void	print() const;
+};
+
+#include <rudiments/private/stringdictionarynodeinlines.h>
 
 template <class datatype>
 class stringdictionarylistnode :
@@ -93,6 +131,10 @@ class stringdictionary : public dictionary< char *, datatype,
 				stringdictionarylistnode<datatype>,
 				stringdictionarylist<datatype> > {};
 
+
+
+// numeric...
+
 template <class datatype>
 class numericdictionarylistnode :
 		public dictionarylistnode< long, datatype > {};
@@ -105,6 +147,10 @@ class numericdictionary : public dictionary< long, datatype,
 				dictionarynode<long, datatype>,
 				numericdictionarylistnode<datatype>,
 				numericdictionarylist<datatype> > {};
+
+
+
+// name/value pairs...
 
 typedef stringdictionarylistnode<char *> namevaluepairslistnode;
 typedef stringdictionarylist<char *> namevaluepairslist;

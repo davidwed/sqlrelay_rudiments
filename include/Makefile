@@ -75,7 +75,7 @@ endif
 #ifeq ($(INCLUDE_LIST),1)
 	HEADERS += list.h
 	PRIVATEHEADERS += list.h listinlines.h listnode.h listnodeinlines.h \
-				objectlistnodeinlines.h stringlistnodeinlines.h
+				stringlistnodeinlines.h
 #endif
 ifeq ($(INCLUDE_LOGGER),1)
 	HEADERS += logger.h
