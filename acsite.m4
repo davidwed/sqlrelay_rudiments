@@ -312,6 +312,10 @@ else
 		done
 		if ( test -n "$PTHREADSLIB" )
 		then
+			if ( test "$j" = "c_r" )
+			then
+				PTHREADSLIB="-pthread $PTHREADSLIB"
+			fi
 			HAVE_PTHREADS="yes"
 			break
 		fi
