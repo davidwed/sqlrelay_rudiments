@@ -19,14 +19,21 @@
 #endif
 
 regularexpression::regularexpression() {
-	#ifndef HAVE_REGEX_H
-		expr=NULL;
-	#endif
+	init();
 }
 
 regularexpression::regularexpression(const char *pattern) {
-	regularexpression();
+	init();
 	compile(pattern);
+}
+
+void regularexpression::init() {
+	#if defined(RUDIMENTS_HAS_PCRE) || \
+		defined(HAVE_REGEXP_H) || \
+		defined(HAVE_LIBGEN_H) || \
+		defined(HAVE_REGEXPR_H)
+		expr=NULL;
+	#endif
 }
 
 regularexpression::~regularexpression() {

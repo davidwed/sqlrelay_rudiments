@@ -1,7 +1,6 @@
 get epoch from string doesn't work right on solaris x86
 
 test blocking/nonblocking mode switch functions
-implement connect timeout for sockets
 
 send/sendto/sendmsg and recv/recvfrom/recvmsg methods for socket class
 

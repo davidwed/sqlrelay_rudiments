@@ -3,6 +3,8 @@
 
 	private:
 
+		void	init();
+
 		#if defined(RUDIMENTS_HAS_PCRE)
 			pcre	*expr;
 		#elif defined(HAVE_REGEX_H)
