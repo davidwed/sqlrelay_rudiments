@@ -236,16 +236,16 @@ endif
 
 # if inet/unix server/socket are defined, include socket.h
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += socket.C tcpsocket.C
-	LOBJS += socket.lo tcpsocket.lo
+	SRCS += socket.C
+	LOBJS += socket.lo
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
 		SRCS += socket.C
 		LOBJS += socket.lo
 	else
 		ifeq ($(INCLUDE_INETCLIENT),1)
-			SRCS += socket.C tcpsocket.C
-			LOBJS += socket.lo tcpsocket.lo
+			SRCS += socket.C
+			LOBJS += socket.lo
 		else
 			ifeq ($(INCLUDE_UNIXCLIENT),1)
 				SRCS += socket.C
