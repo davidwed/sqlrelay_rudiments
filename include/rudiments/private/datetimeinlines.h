@@ -85,7 +85,17 @@ RUDIMENTS_INLINE char *datetime::getString(time_t epoch) {
 	return ((dt.initialize(epoch))?strdup(dt.getString()):NULL);
 }
 
+RUDIMENTS_INLINE char *datetime::getString(const tm *timestruct) {
+	datetime	dt;
+	return ((dt.initialize(timestruct))?strdup(dt.getString()):NULL);
+}
+
 RUDIMENTS_INLINE time_t datetime::getEpoch(const char *datestring) {
 	datetime	dt;
 	return ((dt.initialize(datestring))?dt.getEpoch():-1);
+}
+
+RUDIMENTS_INLINE time_t datetime::getEpoch(const tm *timestruct) {
+	datetime	dt;
+	return ((dt.initialize(timestruct))?dt.getEpoch():-1);
 }

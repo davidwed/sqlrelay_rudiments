@@ -13,6 +13,25 @@
 
 class datetime {
 	public:
+
+
+		// if you need a quick conversion, use one of these methods
+		static char	*getString(time_t epoch);
+		static char	*getString(const tm *timestruct);
+			// returns "mm/dd/yyyy hh:mm:ss"
+			// Note that this method allocates a buffer to return
+			// the string in which must be deleted by the calling
+			// program.
+		static time_t	getEpoch(const char *datestring);
+			// parses "mm/dd/yyyy hh:mm:ss" and returns the
+			// number of seconds since 1970.
+		static time_t	getEpoch(const tm *timestruct);
+			// converts "timestruct" to the number of seconds
+			// since 1970.
+
+
+		// if you need anything other than a quick conversion,
+		// use these methods
 			datetime();
 			~datetime();
 
@@ -86,16 +105,6 @@ class datetime {
 			// and time currently represented in the class.
 			//
 			// Returns 1 on success and 0 on failure.
-
-
-		static char	*getString(time_t epoch);
-			// returns "mm/dd/yyyy hh:mm:ss"
-			// Note that this method allocates a buffer to return
-			// the string in which must be deleted by the calling
-			// program.
-		static time_t	getEpoch(const char *datestring);
-			// parses "mm/dd/yyyy hh:mm:ss" and returns the
-			// number of seconds since 1970.
 
 	#include <rudiments/private/datetime.h>
 };
