@@ -42,7 +42,6 @@ implement these classes:
 	link
 	pipe
 	serialport
-	serialportprofile
 	tty
 	pseudotty
 	shellcommand
@@ -62,6 +61,7 @@ tests for:
 	rawbuffer
 	memorymap
 	mutex
+	serialportprofile
 
 need to use internally:
 	rawbuffer class intstead of mem*()

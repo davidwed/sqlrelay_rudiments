@@ -10,6 +10,17 @@
 
 class serialportprofile {
 
+	enum	inputmode_t {
+		cannonical=0,
+		raw
+	};
+
+	enum	flowcontrol_t {
+		fc_none=0,
+		fc_software,
+		fc_hardware
+	};
+
 	enum	baudrate_t {
 		baud_0=B0,
 		baud_50=B50,
@@ -132,27 +143,43 @@ class serialportprofile {
 
 	public:
 
+			serialportprofile();
+
 		void	setControlOptions(tcflag_t flags);
 		void	setLocalOptions(tcflag_t flags);
 		void	setInputOptions(tcflag_t flags);
 		void	setOutputOptions(tcflag_t flags);
 
-		void	evalSettingString(const char *string);
+		void	evalOptionsString(const char *string);
 			// 8n1, 7e2, etc...
+
+		void	defaultControlOptions();
+		void	defaultLocalOptions();
+		void	defaultInputOptions();
+		void	defaultOutputOptions();
+		void	defaultControlCharacters();
+		void	defaultOptions();
+
+		void		inputMode(inputmode_t inputmode);
+		inputmode_t	inputMode();
+
+		void		flowControl(flowcontrol_t flowcontrol);
+		flowcontrol_t	flowControl();
 
 		// control options
 
 		// setters...
 		void	baud(baudrate_t baud);
 			// CBAUD, CBAUDEX
-		// EXTA, EXTB ?
+		bool	inputBaud(baudrate_t baud);
+		bool	outputBaud(baudrate_t baud);
 		void	characterSize(charsize_t size);
 			// CSIZE
 		void	stopBits(stopbits_t stopbits);
 			// one=~CSTOPB two=CSTOPB
 		void	receiverOn(bool truefalse);
 			// true=CREAD
-		void	parityCheckEnabled(bool truefalse);
+		void	parityCheck(bool truefalse);
 			// true=PARENB
 		void	oddParity(bool truefalse);
 			// true=PARODD
@@ -169,10 +196,12 @@ class serialportprofile {
 
 		// getters...
 		baudrate_t	baud();
+		baudrate_t	inputBaud();
+		baudrate_t	outputBaud();
 		charsize_t	characterSize();
 		stopbits_t	stopBits();
 		bool		receiverOn();
-		bool		parityCheckEnabled();
+		bool		parityCheck();
 		bool		oddParity();
 		bool		hangupOnClose();
 		bool		ignoreModemControlLines();
@@ -235,17 +264,17 @@ class serialportprofile {
 
 
 		// input options
-		void	enableParityCheck(bool truefalse);
+		void	inputParityCheck(bool truefalse);
 			// INPCK
 		void	markParityErrors(bool truefalse);
 			// PARMRK
 		void	stripParityBits(bool truefalse);
 			// ISTRIP
-		void	enableSoftwareFlowControlOnOutput(bool truefalse);
+		void	softwareFlowControlOnOutput(bool truefalse);
 			// IXON
-		void	enableSoftwareFlowControlOnInput(bool truefalse);
+		void	softwareFlowControlOnInput(bool truefalse);
 			// IXOFF
-		void	enableAnyCharacterStartsFlow(bool truefalse);
+		void	anyCharacterStartsFlow(bool truefalse);
 			// IXANY
 		void	ignoreBreak(bool truefalse);
 			// IGNBRK
@@ -263,12 +292,12 @@ class serialportprofile {
 			// IMAXBEL
 
 		// getters...
-		bool	enableParityCheck();
+		bool	inputParityCheck();
 		bool	markParityErrors();
 		bool	stripParityBits();
-		bool	enableSoftwareFlowControlOnOutput();
-		bool	enableSoftwareFlowControlOnInput();
-		bool	enableAnyCharacterStartsFlow();
+		bool	softwareFlowControlOnOutput();
+		bool	softwareFlowControlOnInput();
+		bool	anyCharacterStartsFlow();
 		bool	ignoreBreak();
 		bool	sendSignalOnBreak();
 		bool	mapNewLineToCarriageReturnOnInput();

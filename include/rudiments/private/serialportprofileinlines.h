@@ -1,6 +1,13 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information.
 
+#include <rudiments/rawbuffer.h>
+
+RUDIMENTS_INLINE
+serialportprofile::serialportprofile() {
+	defaultOptions();
+}
+
 RUDIMENTS_INLINE
 void serialportprofile::setControlOptions(tcflag_t flags) {
 	tio.c_cflag=flags;
@@ -19,6 +26,46 @@ void serialportprofile::setInputOptions(tcflag_t flags) {
 RUDIMENTS_INLINE
 void serialportprofile::setOutputOptions(tcflag_t flags) {
 	tio.c_oflag=flags;
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::defaultControlOptions() {
+	tio.c_cflag=0;
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::defaultLocalOptions() {
+	tio.c_lflag=0;
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::defaultInputOptions() {
+	tio.c_iflag=0;
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::defaultOutputOptions() {
+	tio.c_oflag=0;
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::defaultControlCharacters() {
+	rawbuffer::set((void *)&tio.c_cc,0,sizeof(tio.c_cc));
+}
+
+RUDIMENTS_INLINE
+void serialportprofile::defaultOptions() {
+	rawbuffer::set((void *)&tio,0,sizeof(tio));
+}
+
+RUDIMENTS_INLINE
+bool serialportprofile::inputBaud(serialportprofile::baudrate_t baud) {
+	return !cfsetispeed(&tio,(tcflag_t)baud);
+}
+
+RUDIMENTS_INLINE
+bool serialportprofile::outputBaud(serialportprofile::baudrate_t baud) {
+	return !cfsetospeed(&tio,(tcflag_t)baud);
 }
 
 RUDIMENTS_INLINE
@@ -58,7 +105,7 @@ void serialportprofile::receiverOn(bool truefalse) {
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::parityCheckEnabled(bool truefalse) {
+void serialportprofile::parityCheck(bool truefalse) {
 	SET_FLAG(truefalse,c_cflag,PARENB)
 }
 
@@ -99,6 +146,16 @@ serialportprofile::baudrate_t serialportprofile::baud() {
 }
 
 RUDIMENTS_INLINE
+serialportprofile::baudrate_t serialportprofile::inputBaud() {
+	return (serialportprofile::baudrate_t)cfgetispeed(&tio);
+}
+
+RUDIMENTS_INLINE
+serialportprofile::baudrate_t serialportprofile::outputBaud() {
+	return (serialportprofile::baudrate_t)cfgetospeed(&tio);
+}
+
+RUDIMENTS_INLINE
 serialportprofile::charsize_t serialportprofile::characterSize() {
 	return (charsize_t)GET_FLAG(c_cflag,CSIZE);
 }
@@ -115,7 +172,7 @@ bool serialportprofile::receiverOn() {
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::parityCheckEnabled() {
+bool serialportprofile::parityCheck() {
 	return GET_FLAG(c_cflag,PARENB);
 }
 
@@ -296,7 +353,7 @@ bool serialportprofile::sendSignalForBackgroundOutput() {
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::enableParityCheck(bool truefalse) {
+void serialportprofile::inputParityCheck(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,INPCK)
 }
 
@@ -311,17 +368,17 @@ void serialportprofile::stripParityBits(bool truefalse) {
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::enableSoftwareFlowControlOnOutput(bool truefalse) {
+void serialportprofile::softwareFlowControlOnOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,IXON)
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::enableSoftwareFlowControlOnInput(bool truefalse) {
+void serialportprofile::softwareFlowControlOnInput(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,IXOFF)
 }
 
 RUDIMENTS_INLINE
-void serialportprofile::enableAnyCharacterStartsFlow(bool truefalse) {
+void serialportprofile::anyCharacterStartsFlow(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,IXANY)
 }
 
@@ -361,7 +418,7 @@ void serialportprofile::bellIfLineTooLong(bool truefalse) {
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::enableParityCheck() {
+bool serialportprofile::inputParityCheck() {
 	return GET_FLAG(c_iflag,INPCK);
 }
 
@@ -376,17 +433,17 @@ bool serialportprofile::stripParityBits() {
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::enableSoftwareFlowControlOnOutput() {
+bool serialportprofile::softwareFlowControlOnOutput() {
 	return GET_FLAG(c_iflag,IXON);
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::enableSoftwareFlowControlOnInput() {
+bool serialportprofile::softwareFlowControlOnInput() {
 	return GET_FLAG(c_iflag,IXOFF);
 }
 
 RUDIMENTS_INLINE
-bool serialportprofile::enableAnyCharacterStartsFlow() {
+bool serialportprofile::anyCharacterStartsFlow() {
 	return GET_FLAG(c_iflag,IXANY);
 }
 
