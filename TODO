@@ -1,3 +1,5 @@
+implement S_ISSOCK for real
+
 xmlsax compilation generates warning with xscale_le-gcc
 xmldomnode should probably use list class
 

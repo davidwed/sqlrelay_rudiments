@@ -1,6 +1,9 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information
 
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <stdlib.h>
 
 #include <rudiments/private/rudimentsinlines.h>

@@ -5,9 +5,11 @@
 #define RUDIMENTS_FILE_H
 
 #include <rudiments/filedescriptor.h>
+#include <stdlib.h>
+#define __USE_UNIX98
 #include <sys/types.h>
-#include <sys/fcntl.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 // The file class provides methods for interacting with files and for 
 // discovering the properties associated with a file such as permissions,
@@ -145,12 +147,24 @@ class file : public filedescriptor {
 		static int	getSize(int fd, off_t *size);
 
 
+#ifdef HAVE_BLKSIZE_T
+		// These methods return the blocksize to use
+		// for most efficient I/O with the file.
+		blkcnt_t	getBlockSize() const;
+		static int	getBlockSize(const char *filename,
+						blksize_t *size);
+		static int	getBlockSize(int fd, blksize_t *size);
+#endif
+
+
+#ifdef HAVE_BLKCNT_T
 		// These methods return the number of
 		// blocks allocated for the file.
 		blkcnt_t	getBlockCount() const;
 		static int	getBlockCount(const char *filename,
 						blkcnt_t *blocks);
 		static int	getBlockCount(int fd, blkcnt_t *blocks);
+#endif
 
 
 		// These methods return 1 of the file is a

@@ -7,6 +7,12 @@
 #endif
 #include <errno.h>
 #include <stdio.h>
+#ifdef HAVE_SYS_TIMES_H
+	#include <sys/times.h>
+#endif
+#ifdef HAVE_SYS_SELECT_H
+	#include <sys/select.h>
+#endif
 
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems

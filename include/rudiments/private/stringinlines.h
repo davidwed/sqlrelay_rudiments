@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <string.h>
-#ifdef STRINGS_H
+#ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
 
