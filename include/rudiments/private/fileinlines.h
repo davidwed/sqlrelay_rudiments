@@ -260,6 +260,22 @@ RUDIMENTS_INLINE bool file::checkLockRemainderFromEnd(short type, off_t start,
 	return checkLock(type,SEEK_END,start,0,retlck);
 }
 
+RUDIMENTS_INLINE bool file::truncate(const char *filename) {
+	return !::truncate(filename,0);
+}
+
+RUDIMENTS_INLINE bool file::truncate(const char *filename, off_t length) {
+	return !::truncate(filename,length);
+}
+
+RUDIMENTS_INLINE bool file::truncate() {
+	return !::ftruncate(fd,0);
+}
+
+RUDIMENTS_INLINE bool file::truncate(off_t length) {
+	return !::ftruncate(fd,length);
+}
+
 RUDIMENTS_INLINE bool file::unlockRemainderFromEnd() {
 	return unlockRemainderFromEnd(0);
 }

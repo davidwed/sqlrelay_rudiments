@@ -147,6 +147,13 @@ class file : public filedescriptor {
 		bool	unlockRemainderFromEnd(off_t start);
 
 
+		// These methods allow you to truncate a file
+		static	bool	truncate(const char *filename);
+		static	bool	truncate(const char *filename, off_t length);
+		bool	truncate();
+		bool	truncate(off_t length);
+
+
 		// These methods allow you to set the position at which the
 		// next read or write will occur.  Each returns the position
 		// relative to the beginning of the file on success or -1 on
