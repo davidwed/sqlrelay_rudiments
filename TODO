@@ -1,3 +1,5 @@
+solaris needs #include <rpc/rpcent.h> for rpcentry class
+
 document shadowentry, serviceentry, rpcentry, timezonefile classes
 
 a termios class would be nice

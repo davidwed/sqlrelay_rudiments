@@ -29,7 +29,7 @@ int hostentry::initialize(const char *hostname, const char *address,
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		int	errnop;
+		int	errnop=0;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			buffer=new char[size];
 			if (!((hostname)
