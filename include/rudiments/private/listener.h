@@ -5,3 +5,9 @@
 		filedescriptornode	*first;
 		filedescriptornode	*last;
 		filedescriptornode	*current;
+
+	protected:
+
+		virtual	ssize_t	safeSelect(long sec, long usec,
+						int read, int write);
+		int	retryinterruptedwaits;

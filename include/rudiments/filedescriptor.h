@@ -5,6 +5,7 @@
 #define FILEDESCRIPTOR_H
 
 #include <rudiments/private/config.h>
+#include <rudiments/listener.h>
 
 #include <sys/types.h>
 
@@ -128,6 +129,9 @@ class filedescriptor {
 		void	dontRetryInterruptedWaits();
 			// Causes waits not to automatically retry if
 			// interrupted by a signal.  This is the default.
+
+		void	useListener(listener *lstnr);
+		void	dontUseListener();
 
 	#include <rudiments/private/filedescriptor.h>
 };

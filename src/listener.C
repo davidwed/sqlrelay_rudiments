@@ -8,7 +8,6 @@
 #endif
 
 #include <sys/time.h>
-#include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -64,11 +63,19 @@ void	listener::removeAllFileDescriptors() {
 	}
 }
 
-int	listener::waitForData(long timeoutsec, long timeoutusec) {
+int listener::waitForNonBlockingRead(long sec, long usec) {
+	return safeSelect(sec,usec,1,0);
+}
+
+int listener::waitForNonBlockingWrite(long sec, long usec) {
+	return safeSelect(sec,usec,0,1);
+}
+
+int listener::safeSelect(long sec, long usec, int read, int write) {
 
 	for (;;) {
 
-		// not sure why this has to rebuild every time, but
+		// not sure why this has to be rebuilt every time, but
 		// it appears to have to be
 		fd_set	fdlist;
 		int	largest;
@@ -84,27 +91,26 @@ int	listener::waitForData(long timeoutsec, long timeoutusec) {
 
 		// set up the timeout
 		timeval	*tv;
-		if (timeoutsec>-1 && timeoutusec>-1) {
+		if (sec>-1 && usec>-1) {
 			tv=new timeval;
-			tv->tv_sec=timeoutsec;
-			tv->tv_usec=timeoutusec;
+			tv->tv_sec=sec;
+			tv->tv_usec=usec;
 		} else {
 			tv=NULL;
 		}
 
-		// wait for one of the file descriptors to be ready
-		int	selectresult=select(largest+1,&fdlist,NULL,NULL,tv);
+		// wait for data to be available on the file descriptor
+		int	selectresult=select(largest+1,(read)?&fdlist:NULL,
+						(write)?&fdlist:NULL,
+						NULL,tv);
 	
 		// clean up
 		delete tv;
 
 		// if a signal caused the select to fall through, retry
-		if (selectresult==-1 && errno==EINTR) {
+		if (selectresult==-1 && retryinterruptedwaits && errno==EINTR) {
 			continue;
-		}
-	
-		// handle non-error
-		if (selectresult>-1) {
+		} else if (selectresult>-1) {
 	
 			// return the file descriptor that
 			// caused the select to fall through
@@ -112,11 +118,14 @@ int	listener::waitForData(long timeoutsec, long timeoutusec) {
 			while (current) {
 				if (FD_ISSET(current->fd,&fdlist)) {
 					return current->fd;
-					break;
 				}
 				current=current->next;
 			}
+			break;
 		}
+	
+		// return the result of the select
+		return selectresult;
 	}
 
 	return -1;

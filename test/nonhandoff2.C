@@ -14,7 +14,7 @@ int	main() {
 	svrp.addFileDescriptor(svr.getFileDescriptor());
 
 	for (;;) {
-		svrp.waitForData(-1,-1);
+		svrp.waitForNonBlockingRead(-1,-1);
 		inetsocket	*clientsock=svr.acceptClientConnection();
 		clientsock->write("hello");
 		clientsock->close();

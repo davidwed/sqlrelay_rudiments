@@ -23,7 +23,7 @@ int	main() {
 
 	for (;;) {
 
-		int	fd=pool.waitForData(-1,-1);
+		int	fd=pool.waitForNonBlockingRead(-1,-1);
 
 		datatransport	*sock;
 		if (fd==inetsock.getFileDescriptor()) {

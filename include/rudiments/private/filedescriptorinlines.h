@@ -13,12 +13,14 @@ inline filedescriptor::filedescriptor(int fd) {
 	this->fd=fd;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
+	lstnr=NULL;
 }
 
 inline filedescriptor::filedescriptor() {
 	this->fd=-1;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
+	lstnr=NULL;
 }
 
 inline	filedescriptor::~filedescriptor() {
@@ -123,4 +125,12 @@ inline void	filedescriptor::retryInterruptedWaits() {
 
 inline void	filedescriptor::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=0;
+}
+
+inline void	filedescriptor::useListener(listener *lstnr) {
+	this->lstnr=lstnr;
+}
+
+inline void	filedescriptor::dontUseListener() {
+	this->lstnr=NULL;
 }

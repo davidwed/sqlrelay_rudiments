@@ -24,7 +24,7 @@ int	main() {
 
 	for (;;) {
 
-		int	fd=pool.waitForData(-1,-1);
+		int	fd=pool.waitForNonBlockingRead(-1,-1);
 		if (fd==serversock.getFileDescriptor()) {
 			clientsock=serversock.acceptClientConnection();
 		} else {

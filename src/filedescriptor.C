@@ -172,11 +172,13 @@ ssize_t	filedescriptor::safeWrite(const void *buf, ssize_t count) {
 }
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) {
-	return safeSelect(sec,usec,1,0);
+	return (lstnr)?lstnr->waitForNonBlockingRead(sec,usec):
+			safeSelect(sec,usec,1,0);
 }
 
 int filedescriptor::waitForNonBlockingWrite(long sec, long usec) {
-	return safeSelect(sec,usec,0,1);
+	return (lstnr)?lstnr->waitForNonBlockingWrite(sec,usec):
+			safeSelect(sec,usec,0,1);
 }
 
 int filedescriptor::safeSelect(long sec, long usec, int read, int write) {

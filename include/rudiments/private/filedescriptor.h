@@ -12,3 +12,5 @@
 		int	retryinterruptedreads;
 		int	retryinterruptedwrites;
 		int	retryinterruptedwaits;
+
+		listener	*lstnr;
