@@ -82,8 +82,8 @@ char *directory::getChildName(unsigned long index) {
 		}
 		char	*retval=charstring::duplicate(entry->d_name);
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rdmutex && pthread_mutex_unlock(rdmutex)) {
-			return NULL;
+		if (rdmutex) 
+			pthread_mutex_unlock(rdmutex);
 		}
 		#endif
 		return retval;

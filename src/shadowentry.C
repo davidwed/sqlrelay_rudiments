@@ -126,9 +126,9 @@ bool shadowentry::initialize(const char *username) {
 		return false;
 	#else
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((spmutex)?!pthread_mutex_lock(spmutex):true) &&
+		return (!(spmutex && pthread_mutex_lock(spmutex)) &&
 			((sp=getspnam((char *)username))!=NULL) &&
-			((spmutex)?!pthread_mutex_unlock(spmutex):true));
+			!(spmutex && pthread_mutex_unlock(spmutex)));
 #else
 		return ((sp=getspnam((char *)username))!=NULL);
 #endif

@@ -4,43 +4,338 @@
 #ifndef RUDIMENTS_MATH_H
 #define RUDIMENTS_MATH_H
 
-#include <rudiments/private/math.h>
+#include <rudiments/private/mathincludes.h>
 
-// wrap:
-//	stdlib.h - abs(), labs(), llabs(), div(), ldiv(), lldiv()
-//	math.h/tgmath.h - fpclassify()
-//			signbit()
-//			isfinite()
-//			isnormal()
-//			isnan()
-//			isinf()
-//			isgreater(),isgreaterequal()
-//			isless(),islessequal()
-//			islessgreater()
-//			isunordered()
-//			acos(),asin(),atan(),atan2()
-//			cos(),sin(),tan()
-//			acosh(),asinh(),atanh(),
-//			cosh(),sinh(),tanh()
-//			exp(),frexp(),ldexp(),log(),log10()
-//			expm1(),log1p(),logb(),exp2(),log2()
-//			pow(),sqrt(),hypot(),cbrt()
-//			ceil(),fabs(),floor(),fmod()
-//			nearbyint(),round(),trunc()
-//			remquo()
-//			lrint(),llrint()
-//			lround(),llround()
-//			copysign(),
-//			erf(),erfc(),tgamma(),lgamma(),
-//			rint()
-//			nextafter(),nexttoward(),
-//			remainder()
-//			scalb(),scalbn(),scalbln()
-//			ilogb()
-//			fdim(),fmax(),fmin()
-//			fma()
-//			carg(),conj(),cproj()
-//			cimag(),creal()
+class math {
+	public:
+		static int	absoluteValue(int j);
+		static div_t	divide(int numer, int denom);
+
+		static long	absoluteValue(long j);
+		static ldiv_t	divide(long numer, long denom);
+
+		static long long	absoluteValue(long long j);
+		static lldiv_t		divide(long long numer,
+						long long denom);
+
+		static bool	isFinite(float x);
+		static bool	isInfinite(float x);
+
+		static bool	isNaN(float x);
+		static bool	areNaN(float x, float y);
+
+		static bool	isNormal(float x);
+		static bool	isSubNormal(float x);
+
+		static bool	isGreater(float x, float y);
+		static bool	isGreaterOrEqual(float x, float y);
+		static bool	isLess(float x, float y);
+		static bool	isLessOrEqual(float x, float y);
+		static bool	isLessOrGreater(float x, float y);
+
+		static bool	isSignBitSet(float x);
+		static float	copySignBit(float x, float y);
+
+		static float	arcCosine(float x);
+		static float	arcSine(float x);
+		static float	arcTangent(float x);
+		static float	arcTangent(float y, float x);
+
+		static float	cosine(float x);
+		static float	sine(float x);
+		static float	tangent(float x);
+
+		static float	hyperbolicArcCosine(float x);
+		static float	hyperbolicArcSine(float x);
+		static float	hyperbolicArcTangent(float x);
+
+		static float	hyperbolicCosine(float x);
+		static float	hyperbolicSine(float x);
+		static float	hyperbolicTangent(float x);
+
+		static float	naturalExponent(float x);
+		static float	naturalLog(float x);
+		static float	naturalExponentMinusOne(float x);
+		static float	naturalLogOfPlusOne(float x);
+
+		static float	normalize(float x, int *exp);
+
+		static float	logBase10(float x);
+
+		static float	exponentBase2(float x);
+		static float	logBase2(float x);
+
+		static float	power(float x, float y);
+
+		static float	squareRoot(float x);
+		static float	cubeRoot(float x);
+
+		static float	hypotenuse(float x, float y);
+
+		static float	computeExponent(float x);
+		static int	integralExponent(float x);
+		static float 	loadExponent(float x, int exp);
+
+		static float	ceiling(float x);
+		static float	floor(float x);
+		static float	absoluteValue(float x);
+
+		static float	remainder(float x, float y);
+		static float	remainder(float x, float y, int *quo);
+
+		static float	truncate(float x);
+		static float	nearbyInteger(float x);
+		static float	round(float x);
+		static float	roundInexact(float x);
+		static long		roundToLong(float x);
+		static long long	roundToLongLong(float x);
+		static long		roundAwayFromZeroToLong(float x);
+		static long long	roundAwayFromZeroToLongLong(float x);
+		static float	nextAfter(float x, float y);
+		static float	nextToward(float x, float y);
+
+		static float	errorFunction(float x);
+		static float	complementaryErrorFunction(float x);
+
+		static float	trueGamma(float x);
+		static float	naturalLogGamma(float x);
+
+		static float	scaleByRadixToPower(float x, float n);
+		static float	scaleByRadixToPower(float x, int n);
+		static float	scaleByRadixToPower(float x, long n);
+
+		static float	larger(float x, float y);
+		static float	smaller(float x, float y);
+
+		static float	multiplyAndAdd(float x, float y, float z);
+		static float	positiveDifference(float x, float y);
+
+		static float	argument(float complex z);
+		static float	conjugate(float complex z);
+		static float	project(float complex z);
+		static float	imaginary(float complex z);
+		static float	real(float complex z);
+
+
+
+
+		// double methods
+		static bool	isFinite(double x);
+		static bool	isInfinite(double x);
+
+		static bool	isNaN(double x);
+		static bool	areNaN(double x, double y);
+
+		static bool	isNormal(double x);
+		static bool	isSubNormal(double x);
+
+		static bool	isGreater(double x, double y);
+		static bool	isGreaterOrEqual(double x, double y);
+		static bool	isLess(double x, double y);
+		static bool	isLessOrEqual(double x, double y);
+		static bool	isLessOrGreater(double x, double y);
+
+		static bool	isSignBitSet(double x);
+		static double	copySignBit(double x, double y);
+
+		static double	arcCosine(double x);
+		static double	arcSine(double x);
+		static double	arcTangent(double x);
+		static double	arcTangent(double y, double x);
+
+		static double	cosine(double x);
+		static double	sine(double x);
+		static double	tangent(double x);
+
+		static double	hyperbolicArcCosine(double x);
+		static double	hyperbolicArcSine(double x);
+		static double	hyperbolicArcTangent(double x);
+
+		static double	hyperbolicCosine(double x);
+		static double	hyperbolicSine(double x);
+		static double	hyperbolicTangent(double x);
+
+		static double	naturalExponent(double x);
+		static double	naturalLog(double x);
+		static double	naturalExponentMinusOne(double x);
+		static double	naturalLogOfPlusOne(double x);
+
+		static double	normalize(double x, int *exp);
+
+		static double	logBase10(double x);
+
+		static double	exponentBase2(double x);
+		static double	logBase2(double x);
+
+		static double	power(double x, double y);
+
+		static double	squareRoot(double x);
+		static double	cubeRoot(double x);
+
+		static double	hypotenuse(double x, double y);
+
+		static double	computeExponent(double x);
+		static int	integralExponent(double x);
+		static double 	loadExponent(double x, int exp);
+
+		static double	ceiling(double x);
+		static double	floor(double x);
+		static double	absoluteValue(double x);
+
+		static double	remainder(double x, double y);
+		static double	remainder(double x, double y, int *quo);
+
+		static double	truncate(double x);
+		static double	nearbyInteger(double x);
+		static double	round(double x);
+		static double	roundInexact(double x);
+		static long		roundToLong(double x);
+		static long long	roundToLongLong(double x);
+		static long		roundAwayFromZeroToLong(double x);
+		static long long	roundAwayFromZeroToLongLong(double x);
+		static double	nextAfter(double x, double y);
+		static double	nextToward(double x, double y);
+
+		static double	errorFunction(double x);
+		static double	complementaryErrorFunction(double x);
+
+		static double	trueGamma(double x);
+		static double	naturalLogGamma(double x);
+
+		static double	scaleByRadixToPower(double x, double n);
+		static double	scaleByRadixToPower(double x, int n);
+		static double	scaleByRadixToPower(double x, long n);
+
+		static double	larger(double x, double y);
+		static double	smaller(double x, double y);
+
+		static double	multiplyAndAdd(double x, double y, double z);
+		static double	positiveDifference(double x, double y);
+
+		static double	argument(double complex z);
+		static double	conjugate(double complex z);
+		static double	project(double complex z);
+		static double	imaginary(double complex z);
+		static double	real(double complex z);
+
+
+		// long double methods
+		static bool	isFinite(long double x);
+		static bool	isInfinite(long double x);
+
+		static bool	isNaN(long double x);
+		static bool	areNaN(long double x, long double y);
+
+		static bool	isNormal(long double x);
+		static bool	isSubNormal(long double x);
+
+		static bool	isGreater(long double x, long double y);
+		static bool	isGreaterOrEqual(long double x, long double y);
+		static bool	isLess(long double x, long double y);
+		static bool	isLessOrEqual(long double x, long double y);
+		static bool	isLessOrGreater(long double x, long double y);
+
+		static bool		isSignBitSet(long double x);
+		static long double	copySignBit(long double x,
+							long double y);
+
+		static long double	arcCosine(long double x);
+		static long double	arcSine(long double x);
+		static long double	arcTangent(long double x);
+		static long double	arcTangent(long double y,
+							long double x);
+
+		static long double	cosine(long double x);
+		static long double	sine(long double x);
+		static long double	tangent(long double x);
+
+		static long double	hyperbolicArcCosine(long double x);
+		static long double	hyperbolicArcSine(long double x);
+		static long double	hyperbolicArcTangent(long double x);
+
+		static long double	hyperbolicCosine(long double x);
+		static long double	hyperbolicSine(long double x);
+		static long double	hyperbolicTangent(long double x);
+
+		static long double	naturalExponent(long double x);
+		static long double	naturalLog(long double x);
+		static long double	naturalExponentMinusOne(long double x);
+		static long double	naturalLogOfPlusOne(long double x);
+
+		static long double	normalize(long double x, int *exp);
+
+		static long double	logBase10(long double x);
+
+		static long double	exponentBase2(long double x);
+		static long double	logBase2(long double x);
+
+		static long double	power(long double x, long double y);
+
+		static long double	squareRoot(long double x);
+		static long double	cubeRoot(long double x);
+
+		static long double	hypotenuse(long double x,
+							long double y);
+
+		static long double	computeExponent(long double x);
+		static int		integralExponent(long double x);
+		static long double 	loadExponent(long double x, int exp);
+
+		static long double	ceiling(long double x);
+		static long double	floor(long double x);
+		static long double	absoluteValue(long double x);
+
+		static long double	remainder(long double x,
+							long double y);
+		static long double	remainder(long double x,
+							long double y,
+							int *quo);
+
+		static long double	truncate(long double x);
+		static long double	nearbyInteger(long double x);
+		static long double	round(long double x);
+		static long double	roundInexact(long double x);
+		static long		roundToLong(long double x);
+		static long long	roundToLongLong(long double x);
+		static long		roundAwayFromZeroToLong(long double x);
+		static long long	roundAwayFromZeroToLongLong(
+								long double x);
+		static long double	nextAfter(long double x,
+							long double y);
+		static long double	nextToward(long double x,
+							long double y);
+
+		static long double	errorFunction(long double x);
+		static long double	complementaryErrorFunction(
+								long double x);
+
+		static long double	trueGamma(long double x);
+		static long double	naturalLogGamma(long double x);
+
+
+		static long double	scaleByRadixToPower(long double x,
+								long double n);
+		static long double	scaleByRadixToPower(long double x,
+								int n);
+		static long double	scaleByRadixToPower(long double x,
+								long n);
+
+		static long double	larger(long double x, long double y);
+		static long double	smaller(long double x, long double y);
+
+		static long double	multiplyAndAdd(long double x,
+								long double y,
+								long double z);
+		static long double	positiveDifference(long double x,
+								long double y);
+
+		static long double	argument(long double complex z);
+		static long double	conjugate(long double complex z);
+		static long double	project(long double complex z);
+		static long double	imaginary(long double complex z);
+		static long double	real(long double complex z);
+
+
 //	may not be in solaris - 
 //		inttypes.h - some integer math functions
 //			imaxabs(),imaxdiv()
@@ -48,10 +343,10 @@
 //	not in solaris - 
 //		sys/param.h - howmany(),roundup(),powerof2(),MIN(),MAX()
 
-class math {
-	public:
-
-	#include <rudiments/private/math.h>
 };
+
+#ifdef ENABLE_RUDIMENTS_INLINES
+	#include <rudiments/private/mathinlines.h>
+#endif
 
 #endif

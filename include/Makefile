@@ -204,6 +204,10 @@ ifeq ($(INCLUDE_CRYPT),1)
 	HEADERS += crypt.h
 	PRIVATEHEADERS += crypt.h cryptincludes.h
 endif
+ifeq ($(INCLUDE_MATH),1)
+	HEADERS += math.h
+	PRIVATEHEADERS += mathincludes.h mathinlines.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

@@ -953,7 +953,7 @@ AC_DEFUN([FW_CHECK_CRYPT_R],
 	for i in "" "-lcrypt"
 	do
 		FW_TRY_LINK([#include <stdlib.h>
-#include <crypt.h>],[crypt_r(NULL,NULL,NULL);],[],[$i],[],[HAVE_CRYPT_R="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT_R,1,Some systems have crypt_r)],[])
+#include <crypt.h>],[crypt_data cd; crypt_r(NULL,NULL,NULL);],[],[$i],[],[HAVE_CRYPT_R="yes"; CRYPTLIB="$i"; AC_DEFINE(HAVE_CRYPT_R,1,Some systems have crypt_r)],[])
 		if ( test -n "$HAVE_CRYPT_R" )
 		then
 			break

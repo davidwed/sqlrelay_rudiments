@@ -1,5 +1,4 @@
-check mutexes, make sure pthread_mutex_lock/unlock return values are
-	being properly handled
+fix math class
 
 solaris:
 	can't find pcre or openssl
@@ -50,7 +49,6 @@ implement these classes:
 	directorylisting
 	link
 	pipe
-	math
 	rawbuffers
 	serialport
 	serialportprofile

@@ -120,11 +120,11 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		return false;
 	#else
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((pemutex)?!pthread_mutex_lock(pemutex):true) &&
+		return (!(pemutex && pthread_mutex_lock(pemutex)) &&
 			((pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL) &&
-			((pemutex)?!pthread_mutex_unlock(pemutex):true));
+			!(pemutex && pthread_mutex_unlock(pemutex)));
 #else
 		return (((pwd=((username)
 				?getpwnam(username)

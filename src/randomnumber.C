@@ -29,15 +29,15 @@ int randomnumber::generateNumber(int seed) {
 		return rand_r(&useed);
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (pthread_mutex_lock(rnmutex)) {
+		if (rnmutex && pthread_mutex_lock(rnmutex)) {
 			return -1;
 		}
 		#endif
 		SEEDRANDOM(seed);
 		int	retval=GETRANDOM();
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (pthread_mutex_unlock(rnmutex)) {
-			return -1;
+		if (rnmutex) {
+			pthread_mutex_unlock(rnmutex);
 		}
 		#endif
 		return retval;

@@ -182,6 +182,10 @@ ifeq ($(INCLUDE_CRYPT),1)
 	SRCS += crypt.C
 	LOBJS += crypt.lo
 endif
+ifeq ($(INCLUDE_MATH),1)
+	SRCS += math.C
+	LOBJS += math.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)

@@ -117,11 +117,11 @@ bool hostentry::initialize(const char *hostname, const char *address,
 	#else
 		he=NULL;
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((hemutex)?!pthread_mutex_lock(hemutex):true) &&
+		return (!(hemutex && pthread_mutex_lock(hemutex)) &&
 			((he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL) &&
-			((hemutex)?!pthread_mutex_unlock(hemutex):true));
+			!(hemutex && pthread_mutex_unlock(hemutex)));
 #else
 		return ((he=((hostname)
 				?gethostbyname(hostname)

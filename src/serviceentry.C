@@ -116,11 +116,11 @@ bool serviceentry::initialize(const char *servicename, int port,
 	#else
 		se=NULL;
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((semutex)?!pthread_mutex_lock(semutex):true) &&
+		return (!(semutex && pthread_mutex_lock(semutex)) &&
 			((se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL) &&
-			((semutex)?!pthread_mutex_unlock(semutex):true));
+			!(semutex && pthread_mutex_unlock(semutex)));
 #else
 		return ((se=((servicename)
 				?getservbyname(servicename,protocol)

@@ -114,9 +114,7 @@ bool datetime::initialize(const struct tm *tmstruct) {
 		zone=charstring::duplicate((tzname[0] && tzname[0][0])?
 							tzname[0]:"UCT");
 		#ifdef RUDIMENTS_HAS_THREADS
-			if (timemutex && !releaseLock()) {
-				return false;
-			}
+			releaseLock();
 		#endif
 	#endif
 	#ifdef HAS___TM_GMTOFF
@@ -138,9 +136,7 @@ bool datetime::initialize(const struct tm *tmstruct) {
 			gmtoff=-_timezone;
 		#endif
 		#ifdef RUDIMENTS_HAS_THREADS
-			if (timemutex && !releaseLock()) {
-				return false;
-			}
+			releaseLock();
 		#endif
 	#endif
 	return normalizeBrokenDownTime(true);
@@ -220,9 +216,7 @@ struct tm *datetime::getTm() {
 	}
 
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (timemutex && !releaseLock()) {
-			return NULL;
-		}
+		releaseLock();
 	#endif
 	return structtm;
 }
@@ -384,9 +378,7 @@ bool datetime::adjustTimeZone(const char *newtz) {
 	}
 
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (!releaseLock()) {
-			return false;
-		}
+		releaseLock();
 	#endif
 	return retval;
 }
@@ -456,8 +448,8 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 		retval=normalizeBrokenDownTime(false);
 	}
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (needmutex && !releaseLock()) {
-			return false;
+		if (needmutex) {
+			releaseLock();
 		}
 	#endif
 	return retval;
@@ -540,8 +532,8 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 	}
 
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (needmutex && !releaseLock()) {
-			return false;
+		if (needmutex) {
+			releaseLock();
 		}
 	#endif
 

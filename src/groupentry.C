@@ -108,11 +108,11 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		return false;
 	#else
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((gemutex)?!pthread_mutex_lock(gemutex):true) &&
+		return (!(gemutex && pthread_mutex_lock(gemutex)) &&
 			((grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
-			((gemutex)?!pthread_mutex_unlock(gemutex):true));
+			!(gemutex && pthread_mutex_unlock(gemutex)));
 #else
 		return ((grp=((groupname)
 				?getgrnam(groupname)

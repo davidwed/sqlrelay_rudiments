@@ -104,11 +104,11 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 	#else
 		pe=NULL;
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((pemutex)?!pthread_mutex_lock(pemutex):true) &&
+		return (!(pemutex && pthread_mutex_lock(pemutex)) &&
 			((pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
-			((pemutex)?!pthread_mutex_unlock(pemutex):true));
+			!(pemutex && pthread_mutex_unlock(pemutex)));
 #else
 		return ((pe=((protocolname)
 				?getprotobyname(protocolname)

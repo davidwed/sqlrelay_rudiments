@@ -112,11 +112,11 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 	#else
 		re=NULL;
 #ifdef RUDIMENTS_HAS_THREADS
-		return (((remutex)?!pthread_mutex_lock(remutex):true) &&
+		return (!(remutex && pthread_mutex_lock(remutex)) &&
 			((re=((rpcname)
 				?getrpcbyname((char *)rpcname)
 				:getrpcbynumber(number)))!=NULL) &&
-			((remutex)?!pthread_mutex_unlock(remutex):true));
+			!(remutex && pthread_mutex_unlock(remutex)));
 #else
 		return ((re=((rpcname)
 				?getrpcbyname((char *)rpcname)
