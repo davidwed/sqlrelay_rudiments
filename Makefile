@@ -44,7 +44,7 @@ unconfig: clean
 
 distclean: unconfig
 
-tgz: all
+slackware: all
 	mkdir /tmp/rudiments-$(RUDIMENTS_VERSION)
 	make prefix=/tmp/rudiments-$(RUDIMENTS_VERSION)/$(prefix) install
 	cd /tmp/rudiments-$(RUDIMENTS_VERSION); makepkg rudiments-$(RUDIMENTS_VERSION).tgz
