@@ -7,7 +7,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS)
 
 .SUFFIXES: .lo
 
-all: svr sslsvr lsnr inetclnt sslclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld server.pem
+all: svr sslsvr lsnr inetclnt sslclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld server.pem
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -15,7 +15,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) client.pem
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dmn err group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -172,6 +172,9 @@ nonhandoffclient: nonhandoffclient.C nonhandoffclient.lo
 
 vbuf: vbuf.C vbuf.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ vbuf.lo -all-static $(LIBS)
+
+xattr: xattr.C xattr.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ xattr.lo -all-static $(LIBS)
 
 xmls: xmls.C xmls.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmls.lo -all-static $(LIBS)

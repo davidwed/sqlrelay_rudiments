@@ -445,7 +445,8 @@ network:
 should file class have non-static versions of createDeviceNode/createFifo/
 	createTemporaryFile which mirror other create() methods?
 
-need tests for xattr wrappers
+need file::create/replace/setAttribute methods for each data type that we have
+	a read/write for
 
 need __USE_BSD to get revoke() on uclibc
 

@@ -911,13 +911,16 @@ char **file::listAttributes() {
 		buffer=new char[size];
 
 		// attempt to read the attribute into the buffer
-		size_t	newsize=flistxattr(fd,buffer,size);
+		ssize_t	newsize=flistxattr(fd,buffer,size);
 
 		// it's possible that someone changed the attribute between
 		// the previous 2 calls to fgetxattr and increased the size
 		// of the buffer necessary to retrieve it, if so, try again
 		// with a bigger buffer.
-		if (newsize>size) {
+		if (newsize==-1) {
+			delete[] buffer;
+			return NULL;
+		} else if (newsize>(ssize_t)size) {
 			delete[] buffer;
 			size=newsize;
 		} else {
@@ -948,13 +951,16 @@ bool file::getAttribute(const char *name,
 		(*buffer)=new unsigned char[(*size)];
 
 		// attempt to read the attribute into the buffer
-		size_t	newsize=fgetxattr(fd,name,(void *)(*buffer),(*size));
+		ssize_t	newsize=fgetxattr(fd,name,(void *)(*buffer),(*size));
 
 		// it's possible that someone changed the attribute between
 		// the previous 2 calls to fgetxattr and increased the size
 		// of the buffer necessary to retrieve it, if so, try again
 		// with a bigger buffer.
-		if (newsize>(*size)) {
+		if (newsize==-1) {
+			delete[] (*buffer);
+			return false;
+		} else if (newsize>(ssize_t)(*size)) {
 			delete[] (*buffer);
 			(*size)=newsize;
 		} else {
@@ -991,76 +997,19 @@ bool file::removeAttribute(const char *name) {
 }
 
 char **file::listAttributes(const char *filename) {
-
-	// The listxattr interface is designed such that you have to guess the
-	// size of the buffer that it will need, call listxattr, then see if
-	// your guess was correct.  If not, you have to try again.
-
-	// try with a 8 byte buffer to start
-	size_t	size=8;
-
-	// try 100 times...
-	for (int i=0; i<100; i++) {
-
-		// allocate a buffer
-		char	*buffer=new char[size];
-
-		// attempt to read the attribute into the buffer
-		size_t	newsize=listxattr(filename,buffer,size);
-
-		// it's possible that someone changed the attribute between
-		// the previous 2 calls to fgetxattr and increased the size
-		// of the buffer necessary to retrieve it, if so, try again
-		// with a bigger buffer.
-		if (newsize>size) {
-			delete[] buffer;
-			size=newsize;
-		} else {
-			char	**retval=attributeArray(buffer,size);
-			delete[] buffer;
-			return retval;
-		}
+	file	attrfile;
+	if (attrfile.open(filename,O_RDONLY)) {
+		return attrfile.listAttributes();
 	}
-
-	// if we couldn't get the attribute after 100 tries, give up
 	return NULL;
 }
 
 bool file::getAttribute(const char *filename, const char *name,
 						unsigned char **buffer,
 						size_t *size) {
-
-	// The getxattr interface is designed such that you have to guess the
-	// size of the buffer that it will need, call getxattr, then see if
-	// your guess was correct.  If not, you have to try again.
-
-	// try with a 8 byte buffer to start
-	(*size)=8;
-
-	// try 100 times...
-	for (int i=0; i<100; i++) {
-
-		// allocate a buffer
-		(*buffer)=new unsigned char[(*size)];
-
-		// attempt to read the attribute into the buffer
-		size_t	newsize=getxattr(filename,name,
-					(void *)(*buffer),(*size));
-
-		// it's possible that someone changed the attribute between
-		// the previous 2 calls to fgetxattr and increased the size
-		// of the buffer necessary to retrieve it, if so, try again
-		// with a bigger buffer.
-		if (newsize>(*size)) {
-			delete[] (*buffer);
-			(*size)=newsize;
-		} else {
-			return true;
-		}
-	}
-
-	// if we couldn't get the attribute after 100 tries, give up
-	return false;
+	file	attrfile;
+	return (attrfile.open(filename,O_RDONLY) &&
+		attrfile.getAttribute(name,buffer,size));
 }
 
 bool file::createAttribute(const char *filename,
