@@ -41,5 +41,6 @@ inline int DICTIONARYNODE_CLASS::compare(keytype testkey) const {
 DICTIONARYNODE_TEMPLATE
 inline void DICTIONARYNODE_CLASS::print() const {
 	keyutil.print(key);
+	printf(":");
 	datautil.print(data);
 }

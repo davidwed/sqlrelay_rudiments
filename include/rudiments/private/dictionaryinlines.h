@@ -75,3 +75,14 @@ DICTIONARY_TEMPLATE
 inline dictionarylisttype *DICTIONARY_CLASS::getList() {
 	return &dict;
 }
+
+DICTIONARY_TEMPLATE
+inline void DICTIONARY_CLASS::print() const {
+	dictionarylistnodetype	*node=
+			(dictionarylistnodetype *)dict.getNodeByIndex(0);
+	while (node) {
+		node->getData()->print();
+		printf("\n");
+		node=(dictionarylistnodetype *)node->getNext();
+	}
+}

@@ -208,6 +208,7 @@ void LIST_CLASS::print() const {
 	for (unsigned long i=0; i<length; i++) {
 		printf("index %d: ",i);
 		current->print();
+		printf("\n");
 		current=(listnodetype *)current->getNext();
 	}
 }

@@ -127,9 +127,9 @@ class numericdictionary : public dictionary< long, datatype,
 
 
 // name/value pairs...
-typedef stringdictionarynode<char *>		namevaluepairsnode;
-typedef stringdictionarylistnode<char *>	namevaluepairslistnode;
-typedef stringdictionarylist<char *>		namevaluepairslist;
-typedef stringdictionary<char *>		namevaluepairs;
+typedef stringdictionarynode< char * >		namevaluepairsnode;
+typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
+typedef stringdictionarylist< char * >		namevaluepairslist;
+typedef stringdictionary< char * >		namevaluepairs;
 
 #endif

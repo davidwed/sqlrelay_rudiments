@@ -8,11 +8,6 @@
 #endif
 
 template <class datatype>
-inline void listutil<datatype>::print(datatype data) const {
-	printf("%x\n",data);
-}
-
-template <class datatype>
 inline int listutil<datatype>::
 			compare(datatype data1, datatype data2) const {
 	if (data1<data2) {
@@ -26,40 +21,45 @@ inline int listutil<datatype>::
 
 template <>
 inline void listutil<char *>::print(char *data) const {
-	printf("%s\n",data);
+	printf("%s",data);
 }
 
 template <>
 inline int listutil<char *>::compare(char *data1, char *data2) const {
-	return !strcmp(data1,data2);
+	return strcmp(data1,data2);
 }
 
 template <>
 inline void listutil<char>::print(char data) const {
-	printf("%d\n",data);
+	printf("%d",data);
 }
 
 template <>
 inline void listutil<int>::print(int data) const {
-	printf("%d\n",data);
+	printf("%d",data);
 }
 
 template <>
 inline void listutil<short>::print(short data) const {
-	printf("%d\n",data);
+	printf("%d",data);
 }
 
 template <>
 inline void listutil<long>::print(long data) const {
-	printf("%d\n",data);
+	printf("%d",data);
 }
 
 template <>
 inline void listutil<float>::print(float data) const {
-	printf("%f\n",data);
+	printf("%f",data);
 }
 
 template <>
 inline void listutil<double>::print(double data) const {
-	printf("%d\n",data);
+	printf("%d",data);
+}
+
+template <class datatype>
+inline void listutil<datatype>::print(datatype data) const {
+	printf("%x",data);
 }
