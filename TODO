@@ -1,8 +1,5 @@
 use rawbuffer class intstead of mem*()
-
-fix math class
-
-wrap shm_open/shm_unlink somewhere
+use memorymap class intstead of mmap*()
 
 solaris:
 	can't find pcre or openssl
@@ -10,8 +7,8 @@ solaris:
 if openssl/pcre libs are installed, but not includes, configure still tries
 	to include openssl/pcre support
 
-intervaltimer class needs more tests
-
+fix math class
+wrap shm_open/shm_unlink somewhere
 move sleep methods into another class
 
 file class:
@@ -68,6 +65,7 @@ implement these classes:
 	generic parser/lexer classes, use them for xmlsax
 
 tests for:
+	intervaltimer
 	dynamiclib
 	math
 	rawbuffer
