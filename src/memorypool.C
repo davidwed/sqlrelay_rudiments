@@ -124,7 +124,7 @@ void memorypool::print() const {
 		memnode=listnode->getData();
 		printf("segment %ld(%lx): (%d,%d)\n",
 				segmentindex,(unsigned long)memnode,
-				memnode->size,memnode->position);
+				(int)memnode->size,(int)memnode->position);
 		for (unsigned long i=0; i<memnode->position; i++) {
 			if (memnode->buffer[i]>=' ' && 
 				memnode->buffer[i]<='~') {

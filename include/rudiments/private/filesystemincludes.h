@@ -9,7 +9,8 @@
 #endif
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
-	defined(HAVE_OPENBSD_STATFS)
+	defined(HAVE_OPENBSD_STATFS) || \
+	defined(HAVE_DARWIN_STATFS)
 	#include <sys/param.h>
 	#include <sys/mount.h>
 #endif
