@@ -184,48 +184,48 @@ endif
 
 
 install:
-	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments
-	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments/private
-	for i in $(HEADERS); do $(INSTALL) -m 644 rudiments/$$i $(incdir)/rudiments; done
-	for i in $(PRIVATEHEADERS); do $(INSTALL) -m 644 rudiments/private/$$i $(incdir)/rudiments/private; done
+	$(top_srcdir)/mkinstalldirs $(includedir)/rudiments
+	$(top_srcdir)/mkinstalldirs $(includedir)/rudiments/private
+	for i in $(HEADERS); do $(INSTALL) -m 644 rudiments/$$i $(includedir)/rudiments; done
+	for i in $(PRIVATEHEADERS); do $(INSTALL) -m 644 rudiments/private/$$i $(includedir)/rudiments/private; done
 
 uninstall:
-	$(RM) $(incdir)/client.h
-	$(RM) $(incdir)/clientsocket.h
-	$(RM) $(incdir)/commandline.h
-	$(RM) $(incdir)/daemon.h
-	$(RM) $(incdir)/daemonprocess.h
-	$(RM) $(incdir)/datetime.h
-	$(RM) $(incdir)/genericsocket.h
-	$(RM) $(incdir)/permissions.h
-	$(RM) $(incdir)/randomnumber.h
-	$(RM) $(incdir)/regularexpression.h
-	$(RM) $(incdir)/semaphoreset.h
-	$(RM) $(incdir)/server.h
-	$(RM) $(incdir)/serverpool.h
-	$(RM) $(incdir)/serversocketpool.h
-	$(RM) $(incdir)/serversocket.h
-	$(RM) $(incdir)/sharedmemory.h
-	$(RM) $(incdir)/signalclasses.h
-	$(RM) $(incdir)/text.h
-	$(RM) $(incdir)/trim.h
-	$(RM) $(incdir)/encoding.h
-	$(RM) $(incdir)/casechange.h
-	$(RM) $(incdir)/private/client.h
-	$(RM) $(incdir)/private/clientsocket.h
-	$(RM) $(incdir)/private/commandline.h
-	$(RM) $(incdir)/private/daemon.h
-	$(RM) $(incdir)/private/daemonprocess.h
-	$(RM) $(incdir)/private/genericsocket.h
-	$(RM) $(incdir)/private/randomnumber.h
-	$(RM) $(incdir)/private/regularexpression.h
-	$(RM) $(incdir)/private/semaphoreset.h
-	$(RM) $(incdir)/private/sharedmemory.h
-	$(RM) $(incdir)/private/server.h
-	$(RM) $(incdir)/private/serverpool.h
-	$(RM) $(incdir)/private/serversocketpool.h
-	$(RM) $(incdir)/private/serversocket.h
-	$(RM) $(incdir)/private/signalhandler.h
-	$(RM) $(incdir)/private/signalset.h
-	$(RM) $(incdir)/private/datetime.h
-	$(RMTREE) $(incdir)/rudiments
+	$(RM) $(includedir)/client.h
+	$(RM) $(includedir)/clientsocket.h
+	$(RM) $(includedir)/commandline.h
+	$(RM) $(includedir)/daemon.h
+	$(RM) $(includedir)/daemonprocess.h
+	$(RM) $(includedir)/datetime.h
+	$(RM) $(includedir)/genericsocket.h
+	$(RM) $(includedir)/permissions.h
+	$(RM) $(includedir)/randomnumber.h
+	$(RM) $(includedir)/regularexpression.h
+	$(RM) $(includedir)/semaphoreset.h
+	$(RM) $(includedir)/server.h
+	$(RM) $(includedir)/serverpool.h
+	$(RM) $(includedir)/serversocketpool.h
+	$(RM) $(includedir)/serversocket.h
+	$(RM) $(includedir)/sharedmemory.h
+	$(RM) $(includedir)/signalclasses.h
+	$(RM) $(includedir)/text.h
+	$(RM) $(includedir)/trim.h
+	$(RM) $(includedir)/encoding.h
+	$(RM) $(includedir)/casechange.h
+	$(RM) $(includedir)/private/client.h
+	$(RM) $(includedir)/private/clientsocket.h
+	$(RM) $(includedir)/private/commandline.h
+	$(RM) $(includedir)/private/daemon.h
+	$(RM) $(includedir)/private/daemonprocess.h
+	$(RM) $(includedir)/private/genericsocket.h
+	$(RM) $(includedir)/private/randomnumber.h
+	$(RM) $(includedir)/private/regularexpression.h
+	$(RM) $(includedir)/private/semaphoreset.h
+	$(RM) $(includedir)/private/sharedmemory.h
+	$(RM) $(includedir)/private/server.h
+	$(RM) $(includedir)/private/serverpool.h
+	$(RM) $(includedir)/private/serversocketpool.h
+	$(RM) $(includedir)/private/serversocket.h
+	$(RM) $(includedir)/private/signalhandler.h
+	$(RM) $(includedir)/private/signalset.h
+	$(RM) $(includedir)/private/datetime.h
+	$(RMTREE) $(includedir)/rudiments

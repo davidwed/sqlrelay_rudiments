@@ -1,11 +1,18 @@
 Summary: C++ class library for daemons, clients and servers.
 Name: rudiments
-Version: 0.26.1
+Version: 0.27
 Release: 1
 License: LGPL
 Group: Development/Libraries
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-root
+
+%if %([[ %{_vendor} == "suse" ]] && echo 1 || echo 0)
+	%define docdir %{_docdir}/%{name}
+%else
+	%define docdir %{_docdir}/%{name}-%{version}
+%endif
+
 
 %description
 Rudiments is an Open Source C++ class library providing base classes
@@ -39,7 +46,12 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-%makeinstall incdir=%{buildroot}%{_includedir} docdir=%{buildroot}%{_docdir}/%{name}-%{version}
+make \
+	bindir=%{buildroot}%{_bindir} \
+	includedir=%{buildroot}%{_includedir} \
+	libdir=%{buildroot}%{_libdir} \
+	docdir=%{buildroot}%{docdir} \
+	install
 
 %post
 /sbin/ldconfig
@@ -62,7 +74,7 @@ rm -rf %{buildroot}
 %{_bindir}/rudiments-config
 
 %files doc
-%{_docdir}/%{name}-%{version}
+%{docdir}
 
 %changelog
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>

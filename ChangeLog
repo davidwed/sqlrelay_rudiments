@@ -1,4 +1,10 @@
+0.25.3 - updated spec file to work on suse 9.0
+	config.mk uses includedir instead of incdir now
+	docs are installed in ${datadir}/doc/rudiments instead of
+		${prefix}/doc/rudiments now
+
 0.25.2 - fixes for Mac OS 10.2 and Fedora Core 1 compatibility
+	timezonefile class build is now independent of datetime
 
 0.25.1 - a couple of build fixes
 	added shadowentry, serviceentry and rpcentry classes and test programs
