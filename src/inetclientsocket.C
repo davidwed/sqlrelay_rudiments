@@ -143,7 +143,7 @@ int inetclientsocket::connect() {
 	// if we're here, the connect failed
 	close();
 
-	#ifndef HAVE_GETADDRINFO
+	#ifdef HAVE_GETADDRINFO
 		freeaddrinfo(ai);
 	#endif
 
