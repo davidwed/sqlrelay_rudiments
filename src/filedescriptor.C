@@ -142,8 +142,15 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 
 		// if necessary, select
-		if (sec>-1 && usec>-1 && !safeSelect(sec,usec,1,0)) {
-			return -1;
+		if (sec>-1 && usec>-1) {
+			int	selectresult=safeSelect(sec,usec,1,0);
+			if (selectresult==0) {
+				// a timeout occurred
+				return -2;
+			} else if (selectresult==-1) {
+				// an error occurred
+				return -1;
+			}
 		}
 
 		// read...
@@ -181,8 +188,15 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	for (;;) {
 
 		// if necessary, select
-		if (sec>-1 && usec>-1 && !safeSelect(sec,usec,0,1)) {
-			return -1;
+		if (sec>-1 && usec>-1) {
+			int	selectresult=safeSelect(sec,usec,0,1);
+			if (selectresult==0) {
+				// a timeout occurred
+				return -2;
+			} else if (selectresult==-1) {
+				// an error occurred
+				return -1;
+			}
 		}
 
 		errno=0;
