@@ -11,7 +11,8 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && \
+	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
 pthread_mutex_t	*protocolentry::pemutex;
 #endif
 

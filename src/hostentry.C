@@ -11,7 +11,8 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && \
+	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
 pthread_mutex_t	*hostentry::hemutex;
 #endif
 

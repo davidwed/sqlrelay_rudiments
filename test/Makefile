@@ -7,12 +7,12 @@ CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
 .SUFFIXES: .lo
 
-all: svr lsnr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem2 shm2 text datetime dict dtd env file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+all: svr lsnr inetclnt unixclnt dmn err cmdline log oneshotclnt oneshotsvr passwdgroup permissions protohost regexp sem2 shm2 text datetime dict dtd env file list mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dict dtd env file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
+	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log oneshotclnt oneshotsvr passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dict dtd env file list mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xmls xmld
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -57,6 +57,12 @@ list: list.C list.lo
 
 mem: mem.C mem.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ mem.lo -L../src -lrudiments_p
+
+oneshotclnt: oneshotclnt.C oneshotclnt.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ oneshotclnt.lo -L../src -lrudiments_p
+
+oneshotsvr: oneshotsvr.C oneshotsvr.lo
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ oneshotsvr.lo -L../src -lrudiments_p
 
 passwdgroup: passwdgroup.C passwdgroup.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ passwdgroup.lo -L../src -lrudiments_p

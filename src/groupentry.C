@@ -11,7 +11,8 @@
 
 #define MAXBUFFER (32*1024)
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && \
+	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
 pthread_mutex_t	*groupentry::gemutex;
 #endif
 

@@ -22,7 +22,8 @@
 #endif
 
 
-ssize_t filedescriptor::read(char **buffer, char *terminator) {
+ssize_t filedescriptor::read(char **buffer, char *terminator,
+						long sec, long usec) {
 
 	// initialize a buffer
 	int	buffersize=512;
@@ -47,7 +48,8 @@ ssize_t filedescriptor::read(char **buffer, char *terminator) {
 	while (1) {
 
 		// read from the file descriptor
-		if ((sizeread=safeRead((void *)&charbuffer,sizeof(char)))==-1) {
+		if ((sizeread=safeRead((void *)&charbuffer,
+						sizeof(char),sec,usec))==-1) {
 			totalread=-1;
 			break;
 		}
@@ -125,7 +127,8 @@ ssize_t filedescriptor::read(char **buffer, char *terminator) {
 	return totalread;
 }
 
-ssize_t filedescriptor::safeRead(void *buf, ssize_t count) {
+ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
+						long sec, long usec) {
 
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
@@ -136,6 +139,11 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count) {
 		sizetoread=count-totalread;
 		if (sizetoread>SSIZE_MAX) {
 			sizetoread=SSIZE_MAX;
+		}
+
+		// if necessary, select
+		if (sec>-1 && usec>-1 && !safeSelect(sec,usec,1,0)) {
+			return -1;
 		}
 
 		// read...
@@ -161,10 +169,17 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count) {
 	return totalread;
 }
 
-ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count) {
+ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
+						long sec, long usec) {
 
 	ssize_t	retval;
 	for (;;) {
+
+		// if necessary, select
+		if (sec>-1 && usec>-1 && !safeSelect(sec,usec,0,1)) {
+			return -1;
+		}
+
 		errno=0;
 		retval=::write(fd,buf,count);
 		if (retval!=count) {

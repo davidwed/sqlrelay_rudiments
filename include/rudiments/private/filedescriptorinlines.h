@@ -38,103 +38,231 @@ RUDIMENTS_INLINE void filedescriptor::setFileDescriptor(int fd) {
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned short number) {
-	return safeWrite((void *)&number,sizeof(unsigned short));
+	return safeWrite((void *)&number,sizeof(unsigned short),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned long number) {
-	return safeWrite((void *)&number,sizeof(unsigned long));
+	return safeWrite((void *)&number,sizeof(unsigned long),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(short number) {
-	return safeWrite((void *)&number,sizeof(short));
+	return safeWrite((void *)&number,sizeof(short),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(long number) {
-	return safeWrite((void *)&number,sizeof(long));
+	return safeWrite((void *)&number,sizeof(long),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(float number) {
-	return safeWrite((void *)&number,sizeof(float));
+	return safeWrite((void *)&number,sizeof(float),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(double number) {
-	return safeWrite((void *)&number,sizeof(double));
+	return safeWrite((void *)&number,sizeof(double),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned char character) {
-	return safeWrite((void *)&character,sizeof(unsigned char));
+	return safeWrite((void *)&character,sizeof(unsigned char),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(char character) {
-	return safeWrite((void *)&character,sizeof(char));
+	return safeWrite((void *)&character,sizeof(char),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string) {
-	return safeWrite((void *)string,strlen((char *)string));
+	return safeWrite((void *)string,strlen((char *)string),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const char *string) {
-	return safeWrite((void *)string,strlen(string));
+	return safeWrite((void *)string,strlen(string),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string,
 								size_t size) {
-	return safeWrite((void *)string,size);
+	return safeWrite((void *)string,size,-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const char *string,
 								size_t size) {
-	return safeWrite((void *)string,size);
+	return safeWrite((void *)string,size,-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::write(const void *buffer,
 								size_t size) {
-	return safeWrite((void *)buffer,size);
+	return safeWrite((void *)buffer,size,-1,-1);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned short number,
+							long sec, long usec) {
+	return safeWrite((void *)&number,sizeof(unsigned short),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned long number,
+							long sec, long usec) {
+	return safeWrite((void *)&number,sizeof(unsigned long),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(short number,
+							long sec, long usec) {
+	return safeWrite((void *)&number,sizeof(short),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(long number,
+							long sec, long usec) {
+	return safeWrite((void *)&number,sizeof(long),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(float number,
+							long sec, long usec) {
+	return safeWrite((void *)&number,sizeof(float),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(double number,
+							long sec, long usec) {
+	return safeWrite((void *)&number,sizeof(double),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(unsigned char character,
+							long sec, long usec) {
+	return safeWrite((void *)&character,sizeof(unsigned char),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(char character,
+							long sec, long usec) {
+	return safeWrite((void *)&character,sizeof(char),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string,
+							long sec, long usec) {
+	return safeWrite((void *)string,strlen((char *)string),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(const char *string,
+							long sec, long usec) {
+	return safeWrite((void *)string,strlen(string),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(const unsigned char *string,
+							size_t size,
+							long sec, long usec) {
+	return safeWrite((void *)string,size,sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(const char *string,
+							size_t size,
+							long sec, long usec) {
+	return safeWrite((void *)string,size,sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::write(const void *buffer,
+							size_t size,
+							long sec, long usec) {
+	return safeWrite((void *)buffer,size,sec,usec);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned short *buffer) {
-	return safeRead((void *)buffer,sizeof(unsigned short));
+	return safeRead((void *)buffer,sizeof(unsigned short),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned long *buffer) {
-	return safeRead((void *)buffer,sizeof(unsigned long));
+	return safeRead((void *)buffer,sizeof(unsigned long),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(short *buffer) {
-	return safeRead((void *)buffer,sizeof(short));
+	return safeRead((void *)buffer,sizeof(short),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(long *buffer) {
-	return safeRead((void *)buffer,sizeof(long));
+	return safeRead((void *)buffer,sizeof(long),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(float *buffer) {
-	return safeRead((void *)buffer,sizeof(float));
+	return safeRead((void *)buffer,sizeof(float),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(double *buffer) {
-	return safeRead((void *)buffer,sizeof(double));
+	return safeRead((void *)buffer,sizeof(double),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned char *buffer) {
-	return safeRead((void *)buffer,sizeof(unsigned char));
+	return safeRead((void *)buffer,sizeof(unsigned char),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(char *buffer) {
-	return safeRead((void *)buffer,sizeof(char));
+	return safeRead((void *)buffer,sizeof(char),-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned char *buffer,
 								size_t size) {
-	return safeRead((void *)buffer,size);
+	return safeRead((void *)buffer,size,-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(char *buffer, size_t size) {
-	return safeRead((void *)buffer,size);
+	return safeRead((void *)buffer,size,-1,-1);
 }
 
 RUDIMENTS_INLINE ssize_t filedescriptor::read(void *buffer, size_t size) {
-	return safeRead(buffer,size);
+	return safeRead(buffer,size,-1,-1);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(char **buffer, char *terminator) {
+	return read(buffer,terminator,-1,-1);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned short *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(unsigned short),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned long *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(unsigned long),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(short *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(short),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(long *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(long),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(float *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(float),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(double *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(double),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned char *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(unsigned char),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(char *buffer,
+							long sec, long usec) {
+	return safeRead((void *)buffer,sizeof(char),sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(unsigned char *buffer,
+							size_t size,
+							long sec, long usec) {
+	return safeRead((void *)buffer,size,sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(char *buffer, size_t size,
+							long sec, long usec) {
+	return safeRead((void *)buffer,size,sec,usec);
+}
+
+RUDIMENTS_INLINE ssize_t filedescriptor::read(void *buffer, size_t size,
+							long sec, long usec) {
+	return safeRead(buffer,size,sec,usec);
 }
 
 RUDIMENTS_INLINE int filedescriptor::close() {
