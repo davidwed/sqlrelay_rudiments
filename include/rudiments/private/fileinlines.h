@@ -5,7 +5,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
-#include <stdio.h>
 
 #include <unistd.h>
 #ifdef HAVE_UNISTD_H
@@ -74,7 +73,6 @@ off_t file::setPositionRelativeToEnd(off_t offset) {
 }
 
 int file::getCurrentProperties() {
-printf("getCurrentProperties()\n");
 	return (success=(fstat(fd,&st)!=-1));
 }
 
