@@ -92,7 +92,7 @@ int unixclientsocket::connect() {
 
 		// attempt to connect
 		if (clientsocket::connect(
-			reinterpret_cast<const struct sockaddr *>(&sockaddrun),
+			reinterpret_cast<struct sockaddr *>(&sockaddrun),
 			sizeof(sockaddrun),
 			timeoutsec,timeoutusec)==RESULT_SUCCESS) {
 			return RESULT_SUCCESS;

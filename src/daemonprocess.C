@@ -16,6 +16,10 @@
 // for wait...
 #include <sys/wait.h>
 
+// for errno, strerror
+#include <errno.h>
+#include <string.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -121,13 +125,32 @@ int daemonprocess::runAsGroup(const char *groupname) const {
 }
 
 void daemonprocess::waitForChildrenToExit() {
-	// It's tempting to pass WNOHANG here, but it's probably not what
-	// we really want.  WNOHANG will cause the waitpid() to wait for all
-	// children who are currently in their final exit() stage.  But, if
-	// the parent calls exit(), and all the children will start dying off,
-	// the parent may receive the SIGCHLD from the child before the child
-	// is in its final exit() stage and not actually wait for it.
-	while(waitpid(-1,NULL,0)>0);
+
+	// Some systems generate a single SIGCHLD even if more than 1 child
+	// has entered it's exit state, so we need to loop here and catch
+	// all of them.
+
+	// If waitpid() returns 0 then there were no more processes in their
+	// exit state, the loop should exit.
+	// If it returns > 0 then it successfully waited on a process and it
+	// should loop back to wait on another one.
+	// If it returns -1 and was interrupted by a signal and should loop
+	// back and be restarted.
+	// If it returns -1 then there was some other error and the loop should
+	// exit.
+	for (;;) {
+		int pid=waitpid(-1,NULL,WNOHANG);
+		if (pid==0 || (pid==-1 && errno!=EINTR)) {
+			break;
+		}
+	}
+
+	// FIXME: What if a SIGCHLD gets generated after waitpid() has returned
+	// but before the signal handler exits?   Will that SIGCHLD be lost?
+
+	// Since we didn't use the SA_ONESHOT flag when we set up this signal
+	// handler, we don't need to reinstall the signal handler here, it will
+	// be done automatically.
 }
 
 void daemonprocess::shutDown() {

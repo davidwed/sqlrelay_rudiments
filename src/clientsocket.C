@@ -8,6 +8,9 @@
 #include <errno.h>
 #include <unistd.h>
 
+// for strerror
+#include <string.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -51,6 +54,13 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		// if no timeout was passed in, just do a plain vanilla connect
 		retval=(::connect(fd,addr,addrlen)==-1)?
 				RESULT_ERROR:RESULT_SUCCESS;
+
+		// FIXME: handle errno is EINTR...
+		// on non-linux systems the connect is still in progress and we
+		// need to use select() to determine when it has
+		// succeeded/failed,
+		// on linux systems, the connect may be re-called
+		// will select() work on linux?
 
 	} else {
 

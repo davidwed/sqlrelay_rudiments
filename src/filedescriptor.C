@@ -1004,13 +1004,13 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 
 		// new-style:
 		// The descriptor is passed in the msg_control
-		/*#ifdef HAVE_CMSG_SPACE
-		union {
-			struct cmsghdr	cm;
-			char		control[CMSG_SPACE(sizeof(int))];
-		} control;
-		messageheader.msg_control=control.control;
-		#else*/
+		//#ifdef HAVE_CMSG_SPACE
+		//union {
+			//struct cmsghdr	cm;
+			//char		control[CMSG_SPACE(sizeof(int))];
+		//} control;
+		//messageheader.msg_control=control.control;
+		//#else
 		unsigned char	control[sizeof(struct cmsghdr)+sizeof(int)];
 		messageheader.msg_control=(caddr_t)control;
 		//#endif
@@ -1020,9 +1020,9 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 		cmptr=CMSG_FIRSTHDR(&messageheader);
 		cmptr->cmsg_level=SOL_SOCKET;
 		cmptr->cmsg_type=SCM_RIGHTS;
-		/*#ifdef HAVE_CMSG_LEN
-		cmptr->cmsg_len=CMSG_LEN(sizeof(int));
-		#else*/
+		//#ifdef HAVE_CMSG_LEN
+		//cmptr->cmsg_len=CMSG_LEN(sizeof(int));
+		//#else
 		cmptr->cmsg_len=sizeof(control);
 		//#endif
 		*(reinterpret_cast<int *>(CMSG_DATA(cmptr)))=filedesc;
@@ -1068,13 +1068,13 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 		// new-style:
 		// The descriptor is received in the msg_control
-		/*#ifdef HAVE_CMSG_SPACE
-		union {
-			struct cmsghdr	cm;
-			char		control[CMSG_SPACE(sizeof(int))];
-		} control;
-		messageheader.msg_control=control.control;
-		#else*/
+		//#ifdef HAVE_CMSG_SPACE
+		//union {
+			//struct cmsghdr	cm;
+			//char		control[CMSG_SPACE(sizeof(int))];
+		//} control;
+		//messageheader.msg_control=control.control;
+		//#else
 		unsigned char	control[sizeof(struct cmsghdr)+sizeof(int)];
 		messageheader.msg_control=(caddr_t)control;
 		//#endif
@@ -1099,10 +1099,11 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 
 		struct cmsghdr  *cmptr=CMSG_FIRSTHDR(&messageheader);
 		if (cmptr && cmptr->cmsg_len==
-			/*#ifdef HAVE_CMSG_LEN
-			CMSG_LEN(sizeof(int)) &&
-			#else*/
-			(sizeof(struct cmsghdr)+sizeof(int)) &&
+			//#ifdef HAVE_CMSG_LEN
+			//CMSG_LEN(sizeof(int)) &&
+			//#else
+			//(sizeof(struct cmsghdr)+sizeof(int)) &&
+			sizeof(control) &&
 			//#endif
 			cmptr->cmsg_level==SOL_SOCKET &&
 			cmptr->cmsg_type==SCM_RIGHTS) {
@@ -1121,8 +1122,8 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 				printf("%d: ",getpid());
 				printf("null cmptr\n");
 			} else {
-				/*#ifdef HAVE_CMSG_LEN
-				if (cmptr->cmsg_len!=CMSG_LEN(sizeof(int))) {
+				//#ifdef HAVE_CMSG_LEN
+				/*if (cmptr->cmsg_len!=CMSG_LEN(sizeof(int))) {
 					printf("%d: ",getpid());
 					printf("got cmsg_len=");
 			       		printf("%d",static_cast<long>(
@@ -1131,8 +1132,8 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 					printf("%d",static_cast<long>(
 							CMSG_LEN(sizeof(int))));
 					printf("\n");
-				}
-				#endif*/
+				}*/
+				//#endif
 				if (cmptr->cmsg_level!=SOL_SOCKET) {
 					printf("%d: ",getpid());
 					printf("got cmsg_level=");
