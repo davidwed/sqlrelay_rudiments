@@ -26232,6 +26232,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_GETRPCBYNAME_R 1
 _ACEOF
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_NETDB_H 1
+_ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
@@ -26367,9 +26371,11 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
 
-echo "$as_me:$LINENO: checking getrpcbyname in netdb" >&5
+if ( test -z "$HAVEGETRPCBYNAME_R" )
+then
+	echo "$as_me:$LINENO: checking getrpcbyname in netdb" >&5
 echo $ECHO_N "checking getrpcbyname in netdb... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -26409,7 +26415,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define HAVE_GETRPCBYNAME 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26423,9 +26433,9 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-echo "$as_me:$LINENO: checking getrpcbyname in rpc/rpcent.h" >&5
+	echo "$as_me:$LINENO: checking getrpcbyname in rpc/rpcent.h" >&5
 echo $ECHO_N "checking getrpcbyname in rpc/rpcent.h... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -26466,6 +26476,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNAME 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
@@ -26480,9 +26494,9 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-echo "$as_me:$LINENO: checking getrpcbyname in rpc/rpc.h" >&5
+	echo "$as_me:$LINENO: checking getrpcbyname in rpc/rpc.h" >&5
 echo $ECHO_N "checking getrpcbyname in rpc/rpc.h... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -26523,6 +26537,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNAME 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
@@ -26537,6 +26555,7 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
+fi
 
 
 
@@ -26584,6 +26603,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   HAVEGETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_GETRPCBYNUMBER_R 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26720,9 +26743,11 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
 
-echo "$as_me:$LINENO: checking getrpcbynumber in netdb" >&5
+if ( test -z "$HAVEGETRPCBYNUMBER_R" )
+then
+	echo "$as_me:$LINENO: checking getrpcbynumber in netdb" >&5
 echo $ECHO_N "checking getrpcbynumber in netdb... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -26762,6 +26787,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNUMBER 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
@@ -26776,9 +26805,9 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-echo "$as_me:$LINENO: checking getrpcbynumber in rpc/rpcent.h" >&5
+	echo "$as_me:$LINENO: checking getrpcbynumber in rpc/rpcent.h" >&5
 echo $ECHO_N "checking getrpcbynumber in rpc/rpcent.h... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -26819,6 +26848,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNUMBER 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
@@ -26833,9 +26866,9 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-echo "$as_me:$LINENO: checking getrpcbynumber in rpc/rpc.h" >&5
+	echo "$as_me:$LINENO: checking getrpcbynumber in rpc/rpc.h" >&5
 echo $ECHO_N "checking getrpcbynumber in rpc/rpc.h... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -26876,6 +26909,10 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
+#define HAVE_GETRPCBYNUMBER 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
@@ -26889,6 +26926,8 @@ echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+
+fi
 
 
 echo "******************************"

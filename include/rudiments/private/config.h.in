@@ -94,8 +94,14 @@
 /* Some systems have getpwuid_r */
 #undef HAVE_GETPWUID_R
 
+/* Some systems have getrpcbyname */
+#undef HAVE_GETRPCBYNAME
+
 /* Some systems have getrpcbyname_r */
 #undef HAVE_GETRPCBYNAME_R
+
+/* Some systems have getrpcbynumber */
+#undef HAVE_GETRPCBYNUMBER
 
 /* Some systems have getrpcbynumber_r */
 #undef HAVE_GETRPCBYNUMBER_R
@@ -143,7 +149,7 @@
 /* NetBSD style statfs */
 #undef HAVE_NETBSD_STATFS
 
-/* Define to 1 if you have the <netdb.h> header file. */
+/* Some systems have netdb.h */
 #undef HAVE_NETDB_H
 
 /* Define to 1 if you have the <netinet/in.h> header file. */

@@ -483,7 +483,7 @@ HAVE_GETRPCBYNAME_R="no"
 AC_MSG_CHECKING(getrpcbyname_r in netdb.h)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getrpcbyname_r in rpc/rpcent.h)
 AC_TRY_LINK([#include <netdb.h>
@@ -498,23 +498,26 @@ AC_TRY_LINK([#include <netdb.h>
 getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 
-AC_MSG_CHECKING(getrpcbyname in netdb)
-AC_TRY_LINK([#include <netdb.h>
+if ( test -z "$HAVEGETRPCBYNAME_R" )
+then
+	AC_MSG_CHECKING(getrpcbyname in netdb)
+	AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbyname(NULL);,AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname(NULL);,AC_DEFINE(HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbyname in rpc/rpcent.h)
-AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(getrpcbyname in rpc/rpcent.h)
+	AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbyname(NULL);,AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname(NULL);,AC_DEFINE(HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbyname in rpc/rpc.h)
-AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(getrpcbyname in rpc/rpc.h)
+	AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
-getrpcbyname(NULL);,AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname(NULL);,AC_DEFINE(HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+fi
 
 
 
@@ -522,7 +525,7 @@ HAVEGETRPCBYNUMBER_R="no"
 AC_MSG_CHECKING(getrpcbynumber_r in netdb.h)
 AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(getrpcbynumber_r in rpc/rpcent.h)
 AC_TRY_LINK([#include <netdb.h>
@@ -537,22 +540,26 @@ AC_TRY_LINK([#include <netdb.h>
 getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 
-AC_MSG_CHECKING(getrpcbynumber in netdb)
-AC_TRY_LINK([#include <netdb.h>
+if ( test -z "$HAVEGETRPCBYNUMBER_R" )
+then
+	AC_MSG_CHECKING(getrpcbynumber in netdb)
+	AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbynumber(0);,AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber(0);,AC_DEFINE(HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbynumber in rpc/rpcent.h)
-AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(getrpcbynumber in rpc/rpcent.h)
+	AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbynumber(0);,AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber(0);,AC_DEFINE(HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbynumber in rpc/rpc.h)
-AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(getrpcbynumber in rpc/rpc.h)
+	AC_TRY_LINK([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
-getrpcbynumber(0);,AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber(0);,AC_DEFINE(HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+fi
 ])
 
 dnl checks for shadow entry functions and header files

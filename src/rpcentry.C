@@ -1,12 +1,13 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-// cygwin currently has a bug where the rudiments dll can't be build because
-// of missing _getrpcbyname and _getrpcbynumber symbols.  I'll have to add
-// some kind of test for this.
-#ifndef __CYGWIN__
-
 #include <rudiments/rpcentry.h>
+
+// Some systems (notably cygwin 1.5.7-1) define getrpcbyname and getrpcbynumber
+// in their header files but then either don't implement them or don't export
+// the symbols.
+#if (defined(HAVE_GETRPCBYNAME_R) || defined(HAVE_GETRPCBYNAME)) \
+	&& (defined(HAVE_GETRPCBYNUMBER_R) || defined(HAVE_GETRPCBYNUMBER)) \
 
 #include <stdio.h>
 #include <stdlib.h>
