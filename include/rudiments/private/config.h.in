@@ -211,6 +211,9 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Some systems have mincore */
+#undef HAVE_MINCORE
+
 /* Define to 1 if you have a working `mmap' system call. */
 #undef HAVE_MMAP
 

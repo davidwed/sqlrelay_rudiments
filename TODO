@@ -1,4 +1,8 @@
+use rawbuffer class intstead of mem*()
+
 fix math class
+
+wrap shm_open/shm_unlink somewhere
 
 solaris:
 	can't find pcre or openssl
@@ -23,8 +27,6 @@ a bunch of static methods can probably be inlined
 
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
-
-rename variablebuffer rawbuffer???
 
 should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl
@@ -54,7 +56,6 @@ implement these classes:
 	serialportprofile
 	tty
 	pseudotty
-	memorymap
 	shellcommand
 	process
 	system
@@ -70,6 +71,7 @@ tests for:
 	dynamiclib
 	math
 	rawbuffer
+	memorymap
 
 --------------------------------------------------------------------------------
 

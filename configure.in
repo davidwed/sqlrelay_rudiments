@@ -491,6 +491,11 @@ isblank(' ');,AC_DEFINE(HAVE_ISBLANK,1,Some systems have isblank) AC_MSG_RESULT(
 
 FW_CHECK_CRYPT_R
 
+AC_MSG_CHECKING(mincore)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/mman.h>],
+mincore(NULL,0,NULL);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

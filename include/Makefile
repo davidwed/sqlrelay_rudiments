@@ -212,6 +212,10 @@ ifeq ($(INCLUDE_RAWBUFFER),1)
 	HEADERS += rawbuffer.h
 	PRIVATEHEADERS += rawbufferincludes.h
 endif
+ifeq ($(INCLUDE_MEMORYMAP),1)
+	HEADERS += memorymap.h
+	PRIVATEHEADERS += memorymap.h
+endif
 
 
 # if either inetserver or inetclient are defined, include inetsocket.h

@@ -4,33 +4,33 @@ void *rawbuffer::copy(void *dest, const void *src, size_t size) {
 	return memcpy(dest,src,size);
 }
 
-void *rawbuffer::copyUntil(void *dest, const void *src,
-				int character, size_t size) {
-	return memccpy(dest,src,character,size);
-}
-
-void *rawbuffer::move(void *dest, const void *src, size_t size) {
+void *rawbuffer::copyWithOverlap(void *dest, const void *src, size_t size) {
 	return memmove(dest,src,size);
 }
 
-void *rawbuffer::moveSwapBytes(void *dest, const void *src, size_t size) {
+void *rawbuffer::copyUntil(void *dest, const void *src,
+				unsigned char character, size_t size) {
+	return memccpy(dest,src,(int)character,size);
+}
+
+void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 	swab(src,dest,size);
 	return dest;
 }
 
-void *rawbuffer::set(void *dest, int c, size_t size) {
-	return memset(dest,c,size);
+void *rawbuffer::set(void *dest, unsigned char character, size_t size) {
+	return memset(dest,(int)character,size);
 }
 
 int rawbuffer::compare(const void *s1, const void *s2, size_t size) {
 	return memcmp(s1,s2,size);
 }
 
-void *rawbuffer::findFirst(const void *haystack, int needle, size_t size) {
+void *rawbuffer::findFirst(const void *haystack, unsigned char needle, size_t size) {
 	return memchr(haystack,needle,size);
 }
 
-void *rawbuffer::findLast(const void *haystack, int needle, size_t size) {
+void *rawbuffer::findLast(const void *haystack, unsigned char needle, size_t size) {
 	#ifdef HAVE_MEMRCHR
 		return memrchr(haystack,needle.size);
 	#else

@@ -190,6 +190,10 @@ ifeq ($(INCLUDE_RAWBUFFER),1)
 	SRCS += rawbuffer.C
 	LOBJS += rawbuffer.lo
 endif
+ifeq ($(INCLUDE_MEMORYMAP),1)
+	SRCS += memorymap.C
+	LOBJS += memorymap.lo
+endif
 
 # if either inetserver or inetclient are defined, include inetsocket.h
 ifeq ($(INCLUDE_INETSERVER),1)
