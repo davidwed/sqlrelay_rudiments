@@ -5,3 +5,7 @@
 		#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 			namevaluepairs	envstrings;
 		#endif
+
+		#ifdef RUDIMENTS_HAS_THREADS
+			static	pthread_mutex_t	*envmutex;
+		#endif

@@ -6,6 +6,9 @@
 
 #include <rudiments/charstring.h>
 
+// For NULL
+#include <stdlib.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif

@@ -1,16 +1,5 @@
 netbsd-2.0 CMSG_SIZE bug
 
-valgrind errors
-
-all constructors need to initialize all member variables
-
-environment class:
-	wrap clearenv()
-	make thread safe
-	make all members static
-
-use STL classes instead of linkedlist, dictionary
-
 --------------------------------------------------------------------------------
 
 use const's instead of #defines
@@ -28,15 +17,6 @@ for class specific #defines
 --------------------------------------------------------------------------------
 
 memory pool class might be re-implemented like in item 10 in effective c++
-
---------------------------------------------------------------------------------
-
-for all classes with pointers in them:
-	declare, define copy constructor and operator=
-
-if a class isn't the kind of class that will ever be copied or assigned to:
-	declare private copy constructor and operator= but do not define them
-in fact, all declare (but don't define) all operators you want to disallow
 
 --------------------------------------------------------------------------------
 
@@ -110,10 +90,6 @@ foo.C
 
 --------------------------------------------------------------------------------
 
-use references rather than pointers where possible
-
---------------------------------------------------------------------------------
-
 container class paradigm:
 	can be declared like:
 		container	c;
@@ -155,7 +131,16 @@ container class paradigm:
 		detachXXX() {
 			getXXX(true);
 		}
+
+make sure all constructors need to initialize all member variables
 	
+use STL classes instead of linkedlist, dictionary
+
+daemonprocess constructor initializes static members, this is lame and messy
+
+environment class:
+	wrap clearenv()
+	make all members static
 
 document shmfile class
 document sleep class

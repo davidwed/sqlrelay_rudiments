@@ -18,6 +18,10 @@
 namespace rudiments {
 #endif
 
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
+pthread_mutex_t	*environment::envmutex;
+#endif
+
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 
 environment::~environment() {
@@ -31,6 +35,12 @@ environment::~environment() {
 }
 
 bool environment::setValue(const char *variable, const char *value) {
+	bool	retval=false;
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex && pthread_mutex_lock(envmutex)) {
+			return retval;
+		}
+	#endif
 	char	*pestr;
 	if (envstrings.getData(const_cast<char *>(variable),&pestr)) {
 		delete[] pestr;
@@ -40,12 +50,18 @@ bool environment::setValue(const char *variable, const char *value) {
 	sprintf(pestr,"%s=%s",variable,value);
 	if (putenv(pestr)!=-1) {
 		envstrings.setData(const_cast<char *>(variable),pestr);
-		return true;
+		retval=true;
 	} else {
 		delete[] pestr;
 		envstrings.removeData(const_cast<char *>(variable));
-		return false;
+		retval=false;
 	}
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex) {
+			pthread_mutex_unlock(envmutex);
+		}
+	#endif
+	return retval;
 }
 #endif
 
@@ -56,28 +72,71 @@ environment::~environment() {
 #endif
 
 const char *environment::getValue(const char *variable) const {
-	return getenv(variable);
+	char	*retval=NULL;
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex && pthread_mutex_lock(envmutex)) {
+			return retval;
+		}
+	#endif
+	retval=getenv(variable);
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex) {
+			pthread_mutex_unlock(envmutex);
+		}
+	#endif
+	return retval;
 }
 
 #ifdef HAVE_SETENV
 bool environment::setValue(const char *variable, const char *value) {
-	return (setenv(variable,value,1)!=-1);
+	bool	retval=false;
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex && pthread_mutex_lock(envmutex)) {
+			return retval;
+		}
+	#endif
+	retval=(setenv(variable,value,1)!=-1);
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex) {
+			pthread_mutex_unlock(envmutex);
+		}
+	#endif
+	return retval;
 }
 #endif
 
-void environment::remove(const char *variable) {
+bool environment::remove(const char *variable) {
 #ifdef HAVE_UNSETENV
+	bool	retval=false;
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex && pthread_mutex_lock(envmutex)) {
+			return retval;
+		}
+	#endif
 	unsetenv(variable);
+	retval=true;
+	#ifdef RUDIMENTS_HAS_THREADS
+		if (envmutex) {
+			pthread_mutex_unlock(envmutex);
+		}
+	#endif
+	return retval;
 #else
 	// I know this isn't the same as calling unsetenv, but as far as I
 	// know, it's all that can be done.
-	setValue(variable,"");
+	return setValue(variable,"");
 #endif
 }
 
 const char * const *environment::variables() {
 	return environ;
 }
+
+#ifdef RUDIMENTS_HAS_THREADS
+void environment::setMutex(pthread_mutex_t *mutex) {
+	envmutex=mutex;
+}
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 }
