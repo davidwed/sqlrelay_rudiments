@@ -261,7 +261,6 @@ else
 	then
 		AC_MSG_RESULT(yes)
 		HAVE_PTHREADS="yes"
-		break
 	else
 		AC_MSG_RESULT(no)
 		for i in "pthread" "pthreads" "pth" "gthread" "gthreads"
