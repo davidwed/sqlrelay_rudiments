@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetclientsocket.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/inetclientsocketinlines.h>
-#endif
 
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
@@ -30,6 +27,15 @@ int inetclientsocket::connectToServer(const char *host,
 						unsigned int retrycount) {
 	initialize(host,port,retrywait,retrycount);
 	return connect();
+}
+
+void inetclientsocket::initialize(const char *host,
+						unsigned short port,
+						unsigned int retrywait,
+						unsigned int retrycount) {
+	inetsocket::initialize(host,port);
+	this->retrywait=retrywait;
+	this->retrycount=retrycount;
 }
 
 void inetclientsocket::initialize(namevaluepairs *cd) {

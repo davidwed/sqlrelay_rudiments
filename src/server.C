@@ -2,6 +2,15 @@
 // See the COPYING file for more information
 
 #include <rudiments/server.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/serverinlines.h>
-#endif
+
+bool server::bind() {
+	return true;
+}
+
+bool server::listen(int backlog) {
+	return true;
+}
+
+bool server::accept() {
+	return true;
+}

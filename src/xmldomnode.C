@@ -2,9 +2,6 @@
 // See the COPYING file for more information.
 
 #include <rudiments/xmldomnode.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/xmldomnodeinlines.h>
-#endif
 
 #include <string.h>
 #ifdef HAVE_STRINGS_H
@@ -383,4 +380,138 @@ namevaluepairs *xmldomnode::getAttributes() const {
 				getAttribute(i)->getValue());
 	}
 	return nvp;
+}
+
+void xmldomnode::cascadeOnDelete() {
+	cascade=true;
+}
+
+void xmldomnode::dontCascadeOnDelete() {
+	cascade=false;
+}
+
+xmldomnodetype xmldomnode::getType() const {
+	return type;
+}
+
+char *xmldomnode::getName() const {
+	return nodename;
+}
+
+char *xmldomnode::getValue() const {
+	return nodevalue;
+}
+
+xmldomnode *xmldomnode::getParent() const {
+	return parent;
+}
+
+xmldomnode *xmldomnode::getPreviousSibling() const {
+	return previous;
+}
+
+xmldomnode *xmldomnode::getNextSibling() const {
+	return next;
+}
+
+xmldomnode *xmldomnode::getNullNode() const {
+	return nullnode;
+}
+
+bool xmldomnode::isNullNode() const {
+	return isnullnode;
+}
+
+int xmldomnode::getChildCount() const {
+	return childcount;
+}
+
+xmldomnode *xmldomnode::getChild(int position) const {
+	return getNode(firstchild,position,NULL,childcount);
+}
+
+xmldomnode *xmldomnode::getChild(const char *name) const {
+	return getNode(firstchild,0,name,childcount);
+}
+
+int xmldomnode::getAttributeCount() const {
+	return attributecount;
+}
+
+xmldomnode *xmldomnode::getAttribute(int position) const {
+	return getNode(firstattribute,position,NULL,attributecount);
+}
+
+xmldomnode *xmldomnode::getAttribute(const char *name) const {
+	return getNode(firstattribute,0,name,attributecount);
+}
+
+char *xmldomnode::getAttributeValue(int position) const {
+	return getAttribute(position)->getValue();
+}
+
+char *xmldomnode::getAttributeValue(const char *name) const {
+	return getAttribute(name)->getValue();
+}
+
+void xmldomnode::setType(xmldomnodetype type) {
+	this->type=type;
+}
+
+void xmldomnode::setName(const char *name) {
+	nodename=(name)?strdup(name):NULL;
+}
+
+void xmldomnode::setValue(const char *value) {
+	nodevalue=(value)?strdup(value):NULL;
+}
+
+void xmldomnode::setParent(xmldomnode *parent) {
+	this->parent=parent;
+}
+
+void xmldomnode::setPreviousSibling(xmldomnode *previous) {
+	this->previous=previous;
+}
+
+void xmldomnode::setNextSibling(xmldomnode *next) {
+	this->next=next;
+}
+
+bool xmldomnode::insertChild(xmldomnode *child, int position) {
+	return insertNode(child,position,child->type,
+				&firstchild,&lastchild,&childcount);
+}
+
+bool xmldomnode::insertAttribute(xmldomnode *attribute, int position) {
+	return insertNode(attribute,position,ATTRIBUTE_XMLDOMNODETYPE,
+			&firstattribute,&lastattribute,&attributecount);
+}
+
+bool xmldomnode::deleteChild(int position) {
+	return deleteNode(NULL,position,NULL,
+				&firstchild,&lastchild,&childcount);
+}
+
+bool xmldomnode::deleteChild(xmldomnode *child) {
+	return deleteNode(child,0,NULL,&firstchild,&lastchild,&childcount);
+}
+
+bool xmldomnode::deleteAttribute(int position) {
+	return deleteNode(NULL,position,NULL,
+			&firstattribute,&lastattribute,&attributecount);
+}
+
+bool xmldomnode::deleteAttribute(const char *name) {
+	return deleteNode(NULL,0,name,
+			&firstattribute,&lastattribute,&attributecount);
+}
+
+bool xmldomnode::deleteAttribute(xmldomnode *attribute) {
+	return deleteNode(attribute,0,NULL,
+			&firstattribute,&lastattribute,&attributecount);
+}
+
+stringbuffer *xmldomnode::xml() const {
+	return xml(NULL);
 }

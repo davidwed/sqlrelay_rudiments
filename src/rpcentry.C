@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/rpcentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/rpcentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +17,53 @@
 	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
 pthread_mutex_t	*rpcentry::remutex;
 #endif
+
+
+rpcentry::rpcentry() {
+	re=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
+		remutex=NULL;
+	#endif
+}
+
+rpcentry::~rpcentry() {
+	delete[] buffer;
+}
+
+char *rpcentry::getName() const {
+	return re->r_name;
+}
+
+int rpcentry::getNumber() const {
+	return re->r_number;
+}
+
+char **rpcentry::getAliasList() const {
+	return re->r_aliases;
+}
+
+bool rpcentry::needsMutex() {
+	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void rpcentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
+		remutex=mutex;
+	#endif
+}
+
+bool rpcentry::initialize(const char *name) {
+	return initialize(name,0);
+}
+
+bool rpcentry::initialize(int number) {
+	return initialize(NULL,number);
+}
 
 bool rpcentry::initialize(const char *rpcname, int number) {
 	if (re) {

@@ -328,8 +328,4 @@ class filedescriptor {
 	#include <rudiments/private/filedescriptor.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/filedescriptorinlines.h>
-#endif
-
 #endif

@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/listener.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/listenerinlines.h>
-#endif
 
 #include <stdlib.h>
 #include <sys/time.h>
@@ -12,6 +9,46 @@
 	#include <unistd.h>
 #endif
 #include <errno.h>
+
+listener::listener() {
+	retryinterruptedwaits=1;
+}
+
+listener::~listener() {
+	removeAllFileDescriptors();
+}
+
+void listener::retryInterruptedWaits() {
+	retryinterruptedwaits=1;
+}
+
+void listener::dontRetryInterruptedWaits() {
+	retryinterruptedwaits=0;
+}
+
+void listener::addFileDescriptor(int fd) {
+	filedescriptorlist.append(fd);
+}
+
+void listener::removeFileDescriptor(int fd) {
+	filedescriptorlist.removeByData(fd);
+}
+
+void listener::removeAllFileDescriptors() {
+	filedescriptorlist.clear();
+}
+
+int listener::waitForNonBlockingRead(long sec, long usec) {
+	return safeSelect(sec,usec,1,0);
+}
+
+int listener::waitForNonBlockingWrite(long sec, long usec) {
+	return safeSelect(sec,usec,0,1);
+}
+
+listenerlist *listener::getReadyList() {
+	return &readylist;
+}
 
 int listener::safeSelect(long sec, long usec, int read, int write) {
 

@@ -119,8 +119,4 @@ class sharedmemory {
 
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/sharedmemoryinlines.h>
-#endif
-
 #endif

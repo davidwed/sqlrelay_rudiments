@@ -2,15 +2,78 @@
 // See the COPYING file for more information
 
 #include <rudiments/stringbuffer.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/stringbufferinlines.h>
-#endif
 
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
+
+stringbuffer::stringbuffer() : variablebuffer(128,32) {
+}
+
+stringbuffer::stringbuffer(char *initialcontents,
+					size_t initialsize, size_t increment) :
+			variablebuffer((unsigned char *)initialcontents,
+						initialsize,increment) {
+}
+
+stringbuffer::~stringbuffer() {
+}
+
+void stringbuffer::setPosition(size_t pos) {
+	variablebuffer::setPosition(pos);
+}
+
+char *stringbuffer::getString() {
+	terminate();
+	return (char *)getBuffer();
+}
+
+size_t stringbuffer::getPosition() {
+	return variablebuffer::getPosition();
+}
+
+void stringbuffer::clear() {
+	variablebuffer::clear();
+}
+
+void stringbuffer::terminate() {
+	if (buffer[endofbuffer]!='\0') {
+		variablebuffer::append((unsigned char *)"\0",1);
+		endofbuffer--;
+		position--;
+	}
+}
+
+stringbuffer *stringbuffer::append(const char *string, size_t size) {
+	variablebuffer::append((unsigned char *)string,size);
+	return this;
+}
+
+stringbuffer *stringbuffer::append(char character) {
+	variablebuffer::append((unsigned char *)&character,sizeof(character));
+	return this;
+}
+
+stringbuffer *stringbuffer::append(double number) {
+	return append(number,4);
+}
+
+stringbuffer *stringbuffer::write(const char *string, size_t size) {
+	variablebuffer::write((unsigned char *)string,size);
+	return this;
+}
+
+stringbuffer *stringbuffer::write(char character) {
+	variablebuffer::write((unsigned char *)&character,sizeof(character));
+	return this;
+}
+
+stringbuffer *stringbuffer::write(double number) {
+	return write(number,4);
+}
 
 size_t stringbuffer::getStringLength() {
 	return strlen(getString());

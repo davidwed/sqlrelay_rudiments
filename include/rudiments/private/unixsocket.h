@@ -22,8 +22,4 @@ class unixsocket : virtual public datatransport {
 		sockaddr_un	sockaddrun;
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/unixsocketinlines.h>
-#endif
-
 #endif

@@ -2,10 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/environment.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#define RUDIMENTS_INLINE
-	#include <rudiments/private/environmentinlines.h>
-#endif
+#include <stdlib.h>
 
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 
@@ -38,3 +35,29 @@ bool environment::setValue(const char *variable, const char *value) {
 	}
 }
 #endif
+
+
+#ifdef HAVE_SETENV
+environment::~environment() {
+}
+#endif
+
+char *environment::getValue(const char *variable) const {
+	return getenv(variable);
+}
+
+#ifdef HAVE_SETENV
+bool environment::setValue(const char *variable, const char *value) {
+	return (setenv(variable,value,1)!=-1);
+}
+#endif
+
+void environment::remove(const char *variable) {
+#ifdef HAVE_UNSETENV
+	unsetenv(variable);
+#else
+	// I know this isn't the same as calling unsetenv, but as far as I
+	// know, it's all that can be done.
+	setValue(variable,"");
+#endif
+}

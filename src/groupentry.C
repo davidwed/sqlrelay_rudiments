@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/groupentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/groupentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +17,56 @@
 	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
 pthread_mutex_t	*groupentry::gemutex;
 #endif
+
+groupentry::groupentry() {
+	grp=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		gemutex=NULL;
+	#endif
+}
+
+groupentry::~groupentry() {
+	delete[] buffer;
+}
+
+char *groupentry::getName() const {
+	return grp->gr_name;
+}
+
+char *groupentry::getPassword() const {
+	return grp->gr_passwd;
+}
+
+gid_t groupentry::getGroupId() const {
+	return grp->gr_gid;
+}
+
+char **groupentry::getMembers() const {
+	return grp->gr_mem;
+}
+
+bool groupentry::needsMutex() {
+	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void groupentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+		gemutex=mutex;
+	#endif
+}
+
+bool groupentry::initialize(const char *groupname) {
+	return initialize(groupname,0);
+}
+
+bool groupentry::initialize(gid_t groupid) {
+	return initialize(NULL,groupid);
+}
 
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
 

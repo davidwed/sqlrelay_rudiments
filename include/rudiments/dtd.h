@@ -25,8 +25,4 @@ class dtd : public errorhandler {
 	#include <rudiments/private/dtd.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/dtdinlines.h>
-#endif
-
 #endif

@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/shadowentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/shadowentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,6 +16,85 @@
 #if defined(__GNUC__) && !defined(HAVE_GETSPNAM_R)
 pthread_mutex_t	*shadowentry::spmutex;
 #endif
+
+
+shadowentry::shadowentry() {
+	sp=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETSPNAM_R)
+		spmutex=NULL;
+	#endif
+}
+
+shadowentry::~shadowentry() {
+	delete[] buffer;
+}
+
+char *shadowentry::getName() const {
+	return sp->sp_namp;
+}
+
+char *shadowentry::getEncryptedPassword() const {
+	return sp->sp_pwdp;
+}
+
+long shadowentry::getLastChangeDate() const {
+	return sp->sp_lstchg;
+}
+
+int shadowentry::getDaysBeforeChangeAllowed() const {
+	return sp->sp_min;
+}
+
+int shadowentry::getDaysBeforeChangeRequired() const {
+	return sp->sp_max;
+}
+
+int shadowentry::getDaysBeforeExpirationWarning() const {
+#ifdef HAVE_SP_WARN
+	return sp->sp_warn;
+#else
+	return -1;
+#endif
+}
+
+int shadowentry::getDaysOfInactivityAllowed() const {
+#ifdef HAVE_SP_INACT
+	return sp->sp_inact;
+#else
+	return -1;
+#endif
+}
+
+int shadowentry::getExpirationDate() const {
+#ifdef HAVE_SP_EXPIRE
+	return sp->sp_expire;
+#else
+	return -1;
+#endif
+}
+
+int shadowentry::getFlag() const {
+#ifdef HAVE_SP_FLAG
+	return sp->sp_flag;
+#else
+	return -1;
+#endif
+}
+
+bool shadowentry::needsMutex() {
+	#if !defined(HAVE_GETSPNAM_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void shadowentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETSPNAM_R)
+		spmutex=mutex;
+	#endif
+}
 
 bool shadowentry::initialize(const char *username) {
 	if (sp) {

@@ -58,8 +58,4 @@ class unixclientsocket : public client, public unixsocket {
 			// on failure.
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/unixclientsocketinlines.h>
-#endif
-
 #endif

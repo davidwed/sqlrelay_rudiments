@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/unixsocket.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/unixsocketinlines.h>
-#endif
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -16,6 +13,18 @@
 #include <stdio.h>
 
 //#define DEBUG_UNIXSOCKET 1
+
+unixsocket::unixsocket() : datatransport() {
+	filename=NULL;
+}
+
+unixsocket::unixsocket(int filedescriptor) : datatransport(filedescriptor) {
+	filename=NULL;
+}
+
+void unixsocket::initialize(const char *filename) {
+	this->filename=(char *)filename;
+}
 
 int unixsocket::passFileDescriptor(int descriptor) {
 

@@ -56,8 +56,4 @@ class memorypool {
 	#include <rudiments/private/memorypool.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/memorypoolinlines.h>
-#endif
-
 #endif

@@ -2,12 +2,21 @@
 // See the COPYING file for more information
 
 #include <rudiments/serversocket.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/serversocketinlines.h>
-#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>
+
+bool serversocket::dontLingerOnClose() {
+	return setLingerOnClose(0,1);
+}
+
+bool serversocket::reuseAddresses() {
+	return setReuseAddresses(1);
+}
+
+bool serversocket::dontReuseAddresses() {
+	return setReuseAddresses(0);
+}
 
 bool serversocket::setLingerOnClose(int timeout, int onoff) {
 	struct	linger	ling;

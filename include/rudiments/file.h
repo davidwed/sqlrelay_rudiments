@@ -446,8 +446,4 @@ class file : public filedescriptor {
 	#include <rudiments/private/file.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/fileinlines.h>
-#endif
-
 #endif

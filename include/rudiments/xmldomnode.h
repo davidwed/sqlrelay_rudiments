@@ -363,8 +363,4 @@ class xmldomnode {
 	#include <rudiments/private/xmldomnode.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/xmldomnodeinlines.h>
-#endif
-
 #endif

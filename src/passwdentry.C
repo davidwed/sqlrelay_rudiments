@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/passwdentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/passwdentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +17,69 @@
 	(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
 pthread_mutex_t	*passwdentry::pemutex;
 #endif
+
+
+passwdentry::passwdentry() {
+	pwd=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+		pemutex=NULL;
+	#endif
+}
+
+passwdentry::~passwdentry() {
+	delete[] buffer;
+}
+
+char *passwdentry::getName() const {
+	return pwd->pw_name;
+}
+
+char *passwdentry::getPassword() const {
+	return pwd->pw_passwd;
+}
+
+uid_t passwdentry::getUserId() const {
+	return pwd->pw_uid;
+}
+
+gid_t passwdentry::getPrimaryGroupId() const {
+	return pwd->pw_gid;
+}
+
+char *passwdentry::getRealName() const {
+	return pwd->pw_gecos;
+}
+
+char *passwdentry::getHomeDirectory() const {
+	return pwd->pw_dir;
+}
+
+char *passwdentry::getShell() const {
+	return pwd->pw_shell;
+}
+
+bool passwdentry::needsMutex() {
+	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void passwdentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+		pemutex=mutex;
+	#endif
+}
+
+bool passwdentry::initialize(const char *username) {
+	return initialize(username,0);
+}
+
+bool passwdentry::initialize(uid_t userid) {
+	return initialize(NULL,userid);
+}
 
 bool passwdentry::initialize(const char *username, uid_t userid) {
 	if (pwd) {

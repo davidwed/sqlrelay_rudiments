@@ -4,9 +4,6 @@
 #ifndef __CYGWIN__
 
 #include <rudiments/semaphoreset.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/semaphoresetinlines.h>
-#endif
 
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
@@ -21,6 +18,25 @@
 	#include <strings.h>
 #endif
 #include <sys/stat.h>
+
+#include <stdlib.h>
+
+#include <sys/ipc.h>
+#include <sys/sem.h>
+
+#ifndef HAVE_SEMUN
+union semun {
+	int	val;
+	struct	semid_ds	*buf;
+	ushort	*array;
+};
+#endif
+
+semaphoreset::semaphoreset() {
+	waitop=NULL;
+	created=false;
+	semid=-1;
+}
 
 semaphoreset::~semaphoreset() {
 
@@ -40,6 +56,56 @@ semaphoreset::~semaphoreset() {
 	if (created) {
 		forceRemove();
 	}
+}
+
+bool semaphoreset::forceRemove() {
+	semun	semctlun;
+	return !semctl(semid,0,IPC_RMID,semctlun);
+}
+
+void semaphoreset::dontRemove() {
+	created=false;
+}
+
+int semaphoreset::getId() const {
+	return semid;
+}
+
+bool semaphoreset::wait(int index) {
+	return !semop(semid,waitop[index],1);
+}
+
+bool semaphoreset::waitWithUndo(int index) {
+	return !semop(semid,waitwithundoop[index],1);
+}
+
+bool semaphoreset::signal(int index) {
+	return !semop(semid,signalop[index],1);
+}
+
+bool semaphoreset::signalWithUndo(int index) {
+	return !semop(semid,signalwithundoop[index],1);
+}
+
+int semaphoreset::getValue(int index) {
+	semun	semctlun;
+	return semctl(semid,index,GETVAL,semctlun);
+}
+
+bool semaphoreset::setValue(int index, int value) {
+	semun	semctlun;
+	semctlun.val=value;
+	return !semctl(semid,index,SETVAL,semctlun);
+}
+
+int semaphoreset::getWaitingForZero(int index) {
+	semun	semctlun;
+	return semctl(semid,index,GETZCNT,semctlun);
+}
+
+int semaphoreset::getWaitingForIncrement(int index) {
+	semun	semctlun;
+	return semctl(semid,index,GETNCNT,semctlun);
 }
 
 bool semaphoreset::create(key_t key, mode_t permissions, 

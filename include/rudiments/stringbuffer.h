@@ -75,8 +75,4 @@ class stringbuffer : public variablebuffer {
 	#include <rudiments/private/stringbuffer.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/stringbufferinlines.h>
-#endif
-
 #endif

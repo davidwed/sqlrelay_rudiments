@@ -2,10 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/commandline.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#define RUDIMENTS_INLINE
-	#include <rudiments/private/commandlineinlines.h>
-#endif
 
 #include <string.h>
 #ifdef HAVE_STRINGS_H
@@ -13,6 +9,14 @@
 #endif
 
 #include <stdio.h>
+
+commandline::commandline(int argc, const char **argv) {
+	this->argc=argc;
+	this->argv=(char **)argv;
+}
+
+commandline::~commandline() {
+}
 
 char *commandline::value(const char *arg) const {
 

@@ -130,8 +130,4 @@ class signalhandler {
 
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/signalclassesinlines.h>
-#endif
-
 #endif

@@ -2,10 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/xmlsax.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/xmlsaxinlines.h>
-#endif
 
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -16,6 +14,54 @@
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
+xmlsax::xmlsax() : errorhandler() {
+	reset();
+}
+
+xmlsax::~xmlsax() {
+	close();
+}
+
+void xmlsax::reset() {
+	string=NULL;
+	line=1;
+}
+
+bool xmlsax::tagStart(char *name) {
+	// by default, just return success
+	return true;
+}
+
+bool xmlsax::attributeName(char *name) {
+	// by default, just return success
+	return true;
+}
+
+bool xmlsax::attributeValue(char *value) {
+	// by default, just return success
+	return true;
+}
+
+bool xmlsax::text(char *string) {
+	// by default, just return success
+	return true;
+}
+
+bool xmlsax::tagEnd(char *name) {
+	// by default, just return success
+	return true;
+}
+
+bool xmlsax::comment(char *string) {
+	// by default, just return success
+	return true;
+}
+
+bool xmlsax::cdata(char *string) {
+	// by default, just return success
+	return true;
+}
 
 bool xmlsax::parseFile(const char *filename) {
 

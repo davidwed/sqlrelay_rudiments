@@ -2,15 +2,16 @@
 // See the COPYING file for more information
 
 #include <rudiments/unixserversocket.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/unixserversocketinlines.h>
-#endif
 
 #include <sys/stat.h>
 #include <sys/socket.h>
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+
+unixserversocket::unixserversocket() : serversocket(), unixsocket() {
+	mask=0;
+}
 
 bool unixserversocket::initialize(const char *filename, mode_t mask) {
 

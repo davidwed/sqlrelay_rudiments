@@ -74,8 +74,4 @@ class daemonprocess {
 
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/daemonprocessinlines.h>
-#endif
-
 #endif

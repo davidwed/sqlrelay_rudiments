@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/protocolentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/protocolentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +17,52 @@
 	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
 pthread_mutex_t	*protocolentry::pemutex;
 #endif
+
+protocolentry::protocolentry() {
+	pe=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+		pemutex=NULL;
+	#endif
+}
+
+protocolentry::~protocolentry() {
+	delete[] buffer;
+}
+
+char *protocolentry::getName() const {
+	return pe->p_name;
+}
+
+char **protocolentry::getAliasList() const {
+	return pe->p_aliases;
+}
+
+int protocolentry::getNumber() const {
+	return pe->p_proto;
+}
+
+bool protocolentry::needsMutex() {
+	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void protocolentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+		pemutex=mutex;
+	#endif
+}
+
+bool protocolentry::initialize(const char *protocolname) {
+	return initialize(protocolname,0);
+}
+
+bool protocolentry::initialize(int number) {
+	return initialize(NULL,number);
+}
 
 bool protocolentry::initialize(const char *protocolname, int number) {
 	if (pe) {

@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/hostentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/hostentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +17,61 @@
 	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
 pthread_mutex_t	*hostentry::hemutex;
 #endif
+
+
+hostentry::hostentry() {
+	he=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+		hemutex=NULL;
+	#endif
+}
+
+hostentry::~hostentry() {
+	delete[] buffer;
+}
+
+char *hostentry::getName() const {
+	return he->h_name;
+}
+
+char **hostentry::getAliasList() const {
+	return he->h_aliases;
+}
+
+int hostentry::getAddressType() const {
+	return he->h_addrtype;
+}
+
+int hostentry::getAddressLength() const {
+	return he->h_length;
+}
+
+char **hostentry::getAddressList() const {
+	return he->h_addr_list;
+}
+
+bool hostentry::needsMutex() {
+	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void hostentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
+		hemutex=mutex;
+	#endif
+}
+
+bool hostentry::initialize(const char *hostname) {
+	return initialize(hostname,NULL,0,0);
+}
+
+bool hostentry::initialize(const char *address, int len, int type) {
+	return initialize(NULL,address,len,type);
+}
 
 bool hostentry::initialize(const char *hostname, const char *address,
 							int len, int type) {

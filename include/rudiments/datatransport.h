@@ -153,8 +153,4 @@ class datatransport : public filedescriptor {
 	#include <rudiments/private/datatransport.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/datatransportinlines.h>
-#endif
-
 #endif

@@ -2,18 +2,34 @@
 // See the file COPYING for more information
 
 #include <rudiments/logger.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/loggerinlines.h>
-#endif
 
 #include <rudiments/datetime.h>
 #include <rudiments/permissions.h>
 
 #include <stdio.h>
+#include <string.h>
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+
+filedestination::filedestination() {
+	logfile=-1;
+}
 
 bool filedestination::open(const char *filename) {
 	return ((logfile=::open(filename,O_CREAT|O_WRONLY|O_APPEND,
 				permissions::ownerReadWrite()))!=-1);
+}
+
+void filedestination::close() {
+	::close(logfile);
+	logfile=-1;
 }
 
 void filedestination::write(const char *string) {
@@ -26,6 +42,39 @@ void stdoutdestination::write(const char *string) {
 
 void stderrdestination::write(const char *string) {
 	::write(2,string,strlen(string));
+}
+
+void syslogdestination::open(const char *ident, int option,
+					int facility, int priority) {
+	openlog(ident,option,facility);
+	this->priority=priority;
+}
+
+void syslogdestination::close() {
+	closelog();
+}
+
+void syslogdestination::write(const char *string) {
+	syslog(priority,string);
+}
+
+logger::logger() {
+}
+
+logger::~logger() {
+	removeAllLogDestinations();
+}
+
+void logger::addLogDestination(logdestination *logdest) {
+	logdestlist.append(logdest);
+}
+
+void logger::removeLogDestination(logdestination *logdest) {
+	logdestlist.removeByData(logdest);
+}
+
+void logger::removeAllLogDestinations() {
+	logdestlist.clear();
 }
 
 char *logger::logHeader(const char *name) {

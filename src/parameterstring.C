@@ -2,9 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/parameterstring.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/parameterstringinlines.h>
-#endif
+
+parameterstring::parameterstring() {
+}
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
@@ -49,6 +49,11 @@ bool parameterstring::parse(const char *paramstring) {
 	}
 
 	return true;
+}
+
+char *parameterstring::getValue(const char *name) {
+	char	*retval;
+	return (nvp.getData((char *)name,&retval))?retval:NULL;
 }
 
 int parameterstring::countPairs(const char *paramstring) {
@@ -166,4 +171,12 @@ char *parameterstring::parseName(const char *data, char **outbuffer) {
 
 char *parameterstring::parseValue(const char *data, char **outbuffer) {
 	return parsePart(parseValueLength(data),';',data,outbuffer,1,1);
+}
+
+int parameterstring::parseNameLength(const char *data) {
+	return parsePartLength(data,'=',0,0);
+}
+
+int parameterstring::parseValueLength(const char *data) {
+	return parsePartLength(data,';',1,1);
 }

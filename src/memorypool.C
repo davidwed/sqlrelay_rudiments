@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/memorypool.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/memorypoolinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +18,10 @@ memorypoolnode::memorypoolnode(size_t size) {
 	this->size=size;
 }
 
+memorypoolnode::~memorypoolnode() {
+	delete[] buffer;
+}
+
 memorypool::memorypool(size_t initialsize,
 			size_t increment,
 			size_t resizeinterval) {
@@ -32,7 +33,6 @@ memorypool::memorypool(size_t initialsize,
 
 	nodelist.append(new memorypoolnode(initialsize));
 }
-
 
 memorypool::~memorypool() {
 	free();

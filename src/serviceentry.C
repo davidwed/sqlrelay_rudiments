@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/serviceentry.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/serviceentryinlines.h>
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +17,58 @@
 	(!defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R))
 pthread_mutex_t	*serviceentry::semutex;
 #endif
+
+
+serviceentry::serviceentry() {
+	se=NULL;
+	buffer=NULL;
+	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
+		semutex=NULL;
+	#endif
+}
+
+serviceentry::~serviceentry() {
+	delete[] buffer;
+}
+
+char *serviceentry::getName() const {
+	return se->s_name;
+}
+
+int serviceentry::getPort() const {
+	return ntohs(se->s_port);
+}
+
+char *serviceentry::getProtocol() const {
+	return se->s_proto;
+}
+
+char **serviceentry::getAliasList() const {
+	return se->s_aliases;
+}
+
+bool serviceentry::needsMutex() {
+	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+void serviceentry::setMutex(pthread_mutex_t *mutex) {
+	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
+		semutex=mutex;
+	#endif
+}
+
+bool serviceentry::initialize(const char *servicename,
+							const char *protocol) {
+	return initialize(servicename,0,protocol);
+}
+
+bool serviceentry::initialize(int port, const char *protocol) {
+	return initialize(NULL,port,protocol);
+}
 
 bool serviceentry::initialize(const char *servicename, int port,
 						const char *protocol) {

@@ -272,8 +272,4 @@ class charstring {
 	#include <rudiments/private/charstring.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/charstringinlines.h>
-#endif
-
 #endif

@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/unixclientsocket.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/unixclientsocketinlines.h>
-#endif
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -18,6 +15,14 @@ int unixclientsocket::connectToServer(const char *filename,
 						unsigned int retrycount) {
 	initialize(filename,retrywait,retrycount);
 	return connect();
+}
+
+void unixclientsocket::initialize(const char *filename,
+						unsigned int retrywait,
+						unsigned int retrycount) {
+	unixsocket::initialize(filename);
+	this->retrywait=retrywait;
+	this->retrycount=retrycount;
 }
 
 void unixclientsocket::initialize(namevaluepairs *cd) {

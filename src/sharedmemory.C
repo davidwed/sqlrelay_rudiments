@@ -4,9 +4,6 @@
 #ifndef __CYGWIN__
 
 #include <rudiments/sharedmemory.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/sharedmemoryinlines.h>
-#endif
 
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
@@ -18,6 +15,79 @@
 	#include <strings.h>
 #endif
 #include <sys/stat.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+
+sharedmemory::sharedmemory() {
+	created=false;
+	shmptr=NULL;
+	shmid=-1;
+}
+
+sharedmemory::~sharedmemory() {
+	if (created) {
+		forceRemove();
+	}
+}
+
+bool sharedmemory::forceRemove() {
+	return !shmctl(shmid,IPC_RMID,NULL);
+}
+
+void sharedmemory::dontRemove() {
+	created=false;
+}
+
+int sharedmemory::getId() const {
+	return shmid;
+}
+
+void *sharedmemory::getPointer() const {
+	return shmptr;
+}
+
+bool sharedmemory::setUserId(uid_t uid) {
+	shmid_ds	setds;
+	setds.shm_perm.uid=uid;
+	return !shmctl(shmid,IPC_SET,&setds);
+}
+
+bool sharedmemory::setGroupId(gid_t gid) {
+	shmid_ds	setds;
+	setds.shm_perm.gid=gid;
+	return !shmctl(shmid,IPC_SET,&setds);
+}
+
+bool sharedmemory::setPermissions(mode_t permissions) {
+	shmid_ds	setds;
+	setds.shm_perm.mode=permissions;
+	return !shmctl(shmid,IPC_SET,&setds);
+}
+
+uid_t sharedmemory::getUserId() {
+	shmid_ds	getds;
+	if (!shmctl(shmid,IPC_STAT,&getds)) {
+		return getds.shm_perm.uid;
+	}
+	return 0;
+}
+
+gid_t sharedmemory::getGroupId() {
+	shmid_ds	getds;
+	if (!shmctl(shmid,IPC_STAT,&getds)) {
+		return getds.shm_perm.gid;
+	}
+	return 0;
+}
+
+mode_t sharedmemory::getPermissions() {
+	shmid_ds	getds;
+	if (!shmctl(shmid,IPC_STAT,&getds)) {
+		return getds.shm_perm.mode;
+	}
+	return 0;
+}
 
 bool sharedmemory::create(key_t key, int size, mode_t permissions) {
 

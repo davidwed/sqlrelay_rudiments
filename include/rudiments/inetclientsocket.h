@@ -69,8 +69,4 @@ class inetclientsocket : public client, public inetsocket  {
 			// and protocolentry.h for more detail.
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/inetclientsocketinlines.h>
-#endif
-
 #endif

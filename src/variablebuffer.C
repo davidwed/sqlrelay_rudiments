@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/variablebuffer.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/variablebufferinlines.h>
-#endif
 #include <string.h>
 #ifdef HAVE_STRINGS
 	#include <strings.h>
@@ -28,6 +25,10 @@ variablebuffer::variablebuffer(unsigned char *initialcontents,
 	this->increment=increment;
 	position=0;
 	endofbuffer=0;
+}
+
+variablebuffer::~variablebuffer() {
+	delete[] buffer;
 }
 
 ssize_t variablebuffer::read(unsigned char *data, size_t size) {
@@ -81,4 +82,33 @@ void variablebuffer::extend(size_t size) {
 	delete[] buffer;
 	buffer=newbuffer;
 	buffersize=newbuffersize;
+}
+
+unsigned char *variablebuffer::getBuffer() {
+	return buffer;
+}
+
+size_t variablebuffer::getSize() {
+	return endofbuffer;
+}
+
+size_t variablebuffer::getPosition() {
+	return position;
+}
+
+size_t variablebuffer::getEnd() {
+	return endofbuffer;
+}
+
+size_t variablebuffer::getActualSize() {
+	return buffersize;
+}
+
+void variablebuffer::setPosition(size_t pos) {
+	position=pos;
+}
+
+variablebuffer *variablebuffer::append(const unsigned char *data, size_t size) {
+	position=endofbuffer;
+	return write(data,size);
 }

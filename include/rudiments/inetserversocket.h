@@ -73,8 +73,4 @@ class inetserversocket : public serversocket, public inetsocket {
 				// the other end of "sock" to "buffer".
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/inetserversocketinlines.h>
-#endif
-
 #endif

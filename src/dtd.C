@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/dtd.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/dtdinlines.h>
-#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -230,4 +227,8 @@ bool dtd::newAttribute(xmldomnode *node) {
 	char	*values=node->getAttribute(2)->getName();
 	return (!strcmp(values,"CDATA"))?
 			true:parseList(values,attribute,0,2,'|',"value");
+}
+
+xmldom *dtd::xml() {
+	return &xmldtd;
 }

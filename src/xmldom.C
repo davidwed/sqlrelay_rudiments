@@ -2,10 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/xmldom.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/xmldominlines.h>
-#endif
 
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #ifdef HAVE_UNISTD_H
@@ -15,6 +13,20 @@
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
+xmldom::xmldom() : xmlsax() {
+	nullnode=xmldomnode::createNullNode();
+	rootnode=nullnode;
+	currentparent=NULL;
+	currentattribute=NULL;
+}
+
+xmldom::~xmldom() {
+	if (!rootnode->isNullNode()) {
+		delete rootnode;
+	}
+	delete nullnode;
+}
 
 bool xmldom::parseFile(const char *filename) {
 	reset();
@@ -58,6 +70,10 @@ void xmldom::createRootNode() {
 	rootnode->setName("document");
 	rootnode->setType(ROOT_XMLDOMNODETYPE);
 	currentparent=rootnode;
+}
+
+xmldomnode *xmldom::getRootNode() const {
+	return (rootnode)?rootnode:nullnode;
 }
 
 bool xmldom::tagStart(char *name) {

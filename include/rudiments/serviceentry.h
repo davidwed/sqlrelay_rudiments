@@ -67,8 +67,4 @@ class serviceentry {
 	#include <rudiments/private/serviceentry.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/serviceentryinlines.h>
-#endif
-
 #endif

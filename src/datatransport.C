@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/datatransport.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/datatransportinlines.h>
-#endif
 
 #include <netinet/in.h>
 #ifdef HAVE_UNISTD_H
@@ -14,6 +11,53 @@
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
+
+datatransport::datatransport() : filedescriptor() {}
+
+datatransport::datatransport(int fd) : filedescriptor(fd) {}
+
+ssize_t datatransport::write(float number) {
+	return filedescriptor::write((void *)&number,sizeof(float));
+}
+
+ssize_t datatransport::write(double number) {
+	return filedescriptor::write((void *)&number,sizeof(double));
+}
+
+ssize_t datatransport::write(char character) {
+	return filedescriptor::write((void *)&character,sizeof(char));
+}
+
+ssize_t datatransport::write(const char *string, size_t size) {
+	return filedescriptor::write(string,size);
+}
+
+ssize_t datatransport::write(const void *buffer, size_t size) {
+	return filedescriptor::write((void *)buffer,size);
+}
+
+ssize_t datatransport::write(float number, long sec, long usec) {
+	return filedescriptor::write((void *)&number,sizeof(float),sec,usec);
+}
+
+ssize_t datatransport::write(double number, long sec, long usec) {
+	return filedescriptor::write((void *)&number,sizeof(double),sec,usec);
+}
+
+ssize_t datatransport::write(char character, long sec, long usec) {
+	return filedescriptor::write((void *)&character,sizeof(char),sec,usec);
+}
+
+ssize_t datatransport::write(const char *string, size_t size,
+							long sec, long usec) {
+	return filedescriptor::write(string,size,sec,usec);
+}
+
+ssize_t datatransport::write(const void *buffer, size_t size,
+							long sec, long usec) {
+	return filedescriptor::write((void *)buffer,size,sec,usec);
+}
 
 ssize_t datatransport::write(unsigned short number) {
 	unsigned short	temp=htons(number);
@@ -41,6 +85,55 @@ ssize_t datatransport::write(const char *string, long sec, long usec) {
 
 ssize_t datatransport::write(const char *string) {
 	return filedescriptor::write(string,strlen(string));
+}
+
+ssize_t datatransport::read(float *buffer) {
+	return filedescriptor::read((void *)buffer,sizeof(float));
+}
+
+ssize_t datatransport::read(double *buffer) {
+	return filedescriptor::read((void *)buffer,sizeof(double));
+}
+
+ssize_t datatransport::read(char *buffer) {
+	return filedescriptor::read((void *)buffer,sizeof(char));
+}
+
+ssize_t datatransport::read(char *buffer, size_t size) {
+	return filedescriptor::read((void *)buffer,size);
+}
+
+ssize_t datatransport::read(void *buffer, size_t size) {
+	return filedescriptor::read(buffer,size);
+}
+
+ssize_t datatransport::read(char **buffer, char *terminator) {
+	return filedescriptor::read(buffer,terminator);
+}
+
+ssize_t datatransport::read(float *buffer, long sec, long usec) {
+	return filedescriptor::read((void *)buffer,sizeof(float),sec,usec);
+}
+
+ssize_t datatransport::read(double *buffer, long sec, long usec) {
+	return filedescriptor::read((void *)buffer,sizeof(double),sec,usec);
+}
+
+ssize_t datatransport::read(char *buffer, long sec, long usec) {
+	return filedescriptor::read((void *)buffer,sizeof(char),sec,usec);
+}
+
+ssize_t datatransport::read(char *buffer, size_t size, long sec, long usec) {
+	return filedescriptor::read((void *)buffer,size,sec,usec);
+}
+
+ssize_t datatransport::read(void *buffer, size_t size, long sec, long usec) {
+	return filedescriptor::read(buffer,size,sec,usec);
+}
+
+ssize_t datatransport::read(char **buffer, char *terminator,
+							long sec, long usec) {
+	return filedescriptor::read(buffer,terminator,sec,usec);
 }
 
 ssize_t datatransport::read(unsigned short *buffer) {
@@ -73,4 +166,14 @@ ssize_t datatransport::read(unsigned long *buffer, long sec, long usec) {
 					sizeof(unsigned long),sec,usec);
 	*buffer=ntohl(temp);
 	return retval;
+}
+
+int datatransport::passFileDescriptor(int descriptor) {
+	// by default do nothing and return an error
+	return 0;
+}
+
+int datatransport::receiveFileDescriptor(int *descriptor) {
+	// by default do nothing and return an error
+	return 0;
 }

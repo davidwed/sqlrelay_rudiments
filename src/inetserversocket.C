@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetserversocket.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/inetserversocketinlines.h>
-#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -17,6 +14,12 @@
 #ifdef HAVE_STRINGS_H
 	#include <strings.h>
 #endif
+
+inetserversocket::inetserversocket() : serversocket(), inetsocket() {}
+
+unsigned short inetserversocket::getPort() {
+	return port;
+}
 
 bool inetserversocket::listenOnSocket(const char *address, unsigned short port,
 								int backlog) {

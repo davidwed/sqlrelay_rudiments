@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/charstring.h>
-#ifndef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/charstringinlines.h>
-#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -12,9 +9,162 @@
 	#include <strings.h>
 #endif
 
+charstring::charstring(const char *str, size_t size) {
+	memcpy((void *)buffer,(void *)str,size);
+	this->size=size;
+}
+
+charstring::charstring(size_t size) {
+	buffer=new char[size];
+	this->size=size;
+}
+
 charstring::charstring(const char *str) {
 	buffer=strdup(str);
 	this->size=strlen(str);
+}
+
+charstring::~charstring() {
+	delete[] buffer;
+}
+
+char *charstring::getString() const {
+	return buffer;
+}
+
+size_t charstring::getLength() const {
+	return strlen(buffer);
+}
+
+size_t charstring::getSize() const {
+	return size;
+}
+
+void charstring::zero() {
+	memset((void *)buffer,0,size);
+}
+
+void charstring::zero(char *str, size_t size) {
+	memset((void *)str,0,size);
+}
+
+char *charstring::append(const char *str) {
+	return strcat(buffer,str);
+}
+
+char *charstring::append(const char *str, size_t size) {
+	return strncat(buffer,str,size);
+}
+
+char *charstring::append(char *dest, const char *source) {
+	return strcat(dest,source);
+}
+
+char *charstring::append(char *dest, const char *source, size_t size) {
+	return strncat(dest,source,size);
+}
+
+char *charstring::copyInto(const char *str) {
+	return strcpy(buffer,str);
+}
+
+char *charstring::copyInto(const char *str, size_t size) {
+	return strncpy(buffer,str,size);
+}
+
+char *charstring::copyInto(size_t location, const char *str) {
+	return strcpy(buffer+location,str);
+}
+
+char *charstring::copyInto(size_t location, const char *str, size_t size) {
+	return strncpy(buffer+location,str,size);
+}
+
+char *charstring::copyInto(char *dest, const char *source) {
+	return strcpy(dest,source);
+}
+
+char *charstring::copyInto(char *dest, const char *source, size_t size) {
+	return strncpy(dest,source,size);
+}
+
+char *charstring::copyInto(char *dest, size_t location, const char *source) {
+	return strcpy(dest+location,source);
+}
+
+char *charstring::copyInto(char *dest, size_t location,
+					const char *source, size_t size) {
+	return strncpy(dest+location,source,size);
+}
+
+int charstring::compare(const char *str) const {
+	return strcmp(buffer,str);
+}
+
+int charstring::compare(const char *str, size_t size) const {
+	return strncmp(buffer,str,size);
+}
+
+int charstring::compareIgnoringCase(const char *str) const {
+	return strcasecmp(buffer,str);
+}
+
+
+int charstring::compareIgnoringCase(const char *str, size_t size) const {
+	return strncasecmp(buffer,str,size);
+}
+
+int charstring::compare(const char *str1, const char *str2) {
+	return strcmp(str1,str2);
+}
+
+int charstring::compare(const char *str1, const char *str2, size_t size) {
+	return strncmp(str1,str2,size);
+}
+
+int charstring::compareIgnoringCase(const char *str1, const char *str2) {
+	return strcasecmp(str1,str2);
+}
+
+int charstring::compareIgnoringCase(const char *str1,
+						const char *str2, size_t size) {
+	return strncasecmp(str1,str2,size);
+}
+
+char *charstring::contains(const char *str) const {
+	return strstr(buffer,str);
+}
+
+char *charstring::contains(const char ch) const {
+	return strchr(buffer,ch);
+}
+
+char *charstring::contains(const char *haystack, const char *needle) {
+	return strstr(haystack,needle);
+}
+
+char *charstring::contains(const char *haystack, const char needle) {
+	return strchr(haystack,needle);
+}
+
+char *charstring::duplicate() const {
+	return strdup(buffer);
+}
+
+char *charstring::duplicate(const char *str) {
+	return strdup(str);
+}
+
+void charstring::rightTrim(char *string) {
+	rightTrim(string,' ');
+}
+
+void charstring::leftTrim(char *string) {
+	leftTrim(string,' ');
+}
+
+void charstring::bothTrim(char *string) {
+	bothTrim(string,' ');
 }
 
 void charstring::upper(char *str) {

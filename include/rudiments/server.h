@@ -16,8 +16,4 @@ class server : virtual public datatransport {
 		virtual	bool	accept();
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/serverinlines.h>
-#endif
-
 #endif

@@ -90,8 +90,4 @@ class timezonefile {
 	#include <rudiments/private/timezonefile.h>
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/timezonefileinlines.h>
-#endif
-
 #endif

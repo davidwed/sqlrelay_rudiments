@@ -128,8 +128,4 @@ class permissions {
 				// returns -----s--- (g+s) permissions
 };
 
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/permissionsinlines.h>
-#endif
-
 #endif
