@@ -47,10 +47,9 @@ int main(int argc, const char **argv) {
 	directory::remove("testdir");
 
 	printf("maxFileNameLength(/usr/local)=%d\n",
-			path::maxFileNameLength("/usr/local"));
+			directory::maxFileNameLength("/usr/local"));
 	printf("maxPathLength(/usr/local)=%d\n",
-			path::maxPathLength("/usr/local"));
+			directory::maxPathLength("/usr/local"));
 	printf("canAccessLongFileNames(/usr/local)=%d\n",
-			path::canAccessLongFileNames("/usr/local"));
-}
+			directory::canAccessLongFileNames("/usr/local"));
 }

@@ -7,6 +7,10 @@
 // need for memset...
 #include <string.h>
 
+#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
+pthread_mutex_t	*crypt::cryptmutex;
+#endif
+
 char *crypt::encrypt(const char *password, const char *salt) {
 	#ifdef HAVE_CRYPT_R
 		crypt_data	cd;

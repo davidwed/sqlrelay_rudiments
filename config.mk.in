@@ -70,3 +70,6 @@ NANOSLEEPLIB = @NANOSLEEPLIB@
 
 # crypt library
 CRYPTLIB = @CRYPTLIB@
+
+# dl library
+DLLIB = @DLLIB@
