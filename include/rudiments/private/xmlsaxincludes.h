@@ -4,3 +4,4 @@
 #include <rudiments/errorhandler.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/file.h>
+#include <rudiments/memorymap.h>

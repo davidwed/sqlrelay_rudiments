@@ -6,8 +6,6 @@
 #include <rudiments/charstring.h>
 
 #include <stdio.h>
-// for atoi...
-#include <stdlib.h>
 
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	init(nullnode);
@@ -594,7 +592,9 @@ xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 			node=node->getChild(name.getString());
 
 			// now skip until we get the specified index
-			unsigned long	index=atoi(indexstring.getString());
+			unsigned long	index=
+				charstring::toUnsignedLong(
+						indexstring.getString());
 			for (unsigned long i=0; i<index; i++) {
 				node=node->getNextTagSibling(name.getString());
 			}

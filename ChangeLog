@@ -11,6 +11,14 @@
 	INSTALL is moved to INSTALL.txt for OS X now
 	added detachBuffer, detachString to variablebuffer, stringbuffer
 	added split to charstring class
+	added shmfile class
+	moved sleep methods into sleep class, changed sleep() to macrosleep()
+	cleaned up xmlsax class a bit
+	fixed problem where xml comments had ! prepended to them
+	added write()/append() methods for all primitive types to
+		variablebuffer/stringbuffer classes
+	added parseNumber()/integerLength() methods for all primitive types to
+		charstring class
 
 0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
 		patch

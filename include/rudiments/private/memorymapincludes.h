@@ -3,3 +3,6 @@
 
 #include <rudiments/private/config.h>
 #include <sys/types.h>
+#ifdef HAVE_MMAP
+	#include <sys/mman.h>
+#endif

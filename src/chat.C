@@ -1,11 +1,20 @@
+// Copyright (c) 2004 David Muse
+// See the COPYING file for more information.
+
 #include <rudiments/chat.h>
 #include <rudiments/xmldom.h>
 #include <rudiments/xmldomnode.h>
 #include <rudiments/regularexpression.h>
-#include <rudiments/intervaltimer.h>
+#include <rudiments/sleep.h>
 #include <rudiments/character.h>
 
 #define DEBUG_CHAT 1
+
+chat::chat(filedescriptor *fd) {
+	readfd=fd;
+	writefd=fd;
+	timeout=45;
+}
 
 chat::chat(filedescriptor *readfd, filedescriptor *writefd) {
 	this->readfd=readfd;
@@ -132,7 +141,7 @@ int chat::expect(const char *string, char **abort) {
 	}
 
 	#ifdef DEBUG_CHAT
-	printf("expecting \"%s\" (%d second timeout)...\n",string,timeout);
+	printf("expecting \"%s\" (%ld second timeout)...\n",string,timeout);
 	#endif
 
 	stringbuffer	response;
@@ -236,34 +245,86 @@ int chat::send(const char *string, namevaluepairs *variables) {
 				ch++;
 				if (!*ch) {
 					break;
+				} else if (*ch=='b') {
+					// backspace
+					*ch='\b';
+					#ifdef DEBUG_CHAT
+					printf("\\b");
+					fflush(stdout);
+					#endif
+				/* } else if (*ch=='K') {
+					// FIXME: break
+					*ch=
+					#ifdef DEBUG_CHAT
+					printf("\\K");
+					fflush(stdout);
+					#endif
+				*/
+				} else if (*ch>='0' && *ch<='8') {
+					// octal digits
+					#ifdef DEBUG_CHAT
+					printf("\\%c",*ch);
+					fflush(stdout);
+					#endif
+					char	val=(*ch-'0')*64;
+					ch++;
+					if (*ch>='0' && *ch<='8') {
+						#ifdef DEBUG_CHAT
+						printf("%c",*ch);
+						fflush(stdout);
+						#endif
+						val=val+(*ch-'0')*8;
+						ch++;
+					}
+					if (*ch>='0' && *ch<='8') {
+						#ifdef DEBUG_CHAT
+						printf("%c",*ch);
+						fflush(stdout);
+						#endif
+						val=val+(*ch-'0');
+						*ch=val;
+					}
+				} else if (*ch=='N') {
+					// null
+					#ifdef DEBUG_CHAT
+					printf("\\0");
+					fflush(stdout);
+					#endif
+					*ch='\0';
 				} else if (*ch=='r') {
+					#ifdef DEBUG_CHAT
+					printf("\\r");
+					fflush(stdout);
+					#endif
 					*ch='\r';
 				} else if (*ch=='n') {
+					#ifdef DEBUG_CHAT
+					printf("\\n");
+					fflush(stdout);
+					#endif
 					*ch='\n';
 				} else if (*ch=='p') {
 					#ifdef DEBUG_CHAT
 					printf("\ndecisleep\n");
 					#endif
-					intervaltimer::microsleep(0,100000);
+					sleep::microsleep(0,100000);
 				} else if (*ch=='d') {
 					#ifdef DEBUG_CHAT
 					printf("\nsleep\n");
 					#endif
-					intervaltimer::sleep(1);
+					sleep::macrosleep(1);
 					continue;
 				}
-			}
-
+			/*} else if (ch=='^') {
+				ch++;
+				// FIXME: control characters
+			*/
 			#ifdef DEBUG_CHAT
-			if (*ch=='\r') {
-				printf("\\r");
-			} else if (*ch=='\n') {
-				printf("\\n");
 			} else {
 				printf("%c",*ch);
-			}
-			fflush(stdout);
+				fflush(stdout);
 			#endif
+			}
 
 			result=writefd->write(*ch);
 			if (result!=sizeof(*ch)) {
@@ -302,7 +363,8 @@ int chat::substituteVariables(char **ch, namevaluepairs *variables) {
 				#ifdef DEBUG_CHAT
 				printf("%s",value);
 				#endif
-				if (result!=charstring::length(value)) {
+				if (result!=
+					(ssize_t)charstring::length(value)) {
 					#ifdef DEBUG_CHAT
 					printf("\n");
 					#endif

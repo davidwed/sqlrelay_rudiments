@@ -1,42 +1,35 @@
-document/comment modem*/chat classes
-add to chat class:
-	\b-backspace
-	\K-BREAK
-	\N-null
-	\ddd-octal digits
-	^C-control character represented by C
-
-
-fix math class
-wrap shm_open/shm_unlink somewhere
-move sleep methods into another class
-
-file class:
-	move create*Link/resolveSymbolicLink into link class
-
-can getData methods in dict/linkedlist classes be const?
-a bunch of static methods can probably be inlined
+document shmfile class
+document sleep class
+document modem*/chat classes
 
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
 
 should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl
+
+fix math class
+
+a bunch of static methods can probably be inlined
 	
 probably can combine memorypool and variablebuffer classes
 memorypool actually just works the same way that malloc tends to work, I'm not
 	sure using it nets anything
 
+add to chat class:
+	\K-BREAK
+	^C-control character represented by C
+
 xml:
-	dtd class needs to store +/* child element modifiers
 	should be able to validate an xml document against the dtd
-	bug in xml comment parsing, ! gets prepended to value
-	xmldom should support xpath
 	xmldomnode should probably use list class
 	test invalid xml
 	handle CDATA/internal subsets better
 	is xmldom really DOM compliant?
 	xml classes need to support entities defined in the DOCTYPE declaration
+
+file class:
+	move create*Link/resolveSymbolicLink into link class
 
 implement these classes:
 	directorylisting
@@ -65,8 +58,6 @@ tests for:
 	serialportprofile
 
 need to use internally:
-	rawbuffer class intstead of mem*()
-	memorymap class intstead of mmap*()
 	mutex class instead of pthread_mutex_*()
 
 get a mingw port working
@@ -230,7 +221,6 @@ filedescriptor
 --------------------------------------------------------------------------------
 
 charstring class:
-	stdlib.h - strtouq(_l)() - string to "quad"
 	stdio.h - sprintf()
 	string.h/strings.h -
 		strxfrm(_l)()
@@ -260,9 +250,6 @@ commandline class:
 	getopt.h - make sure commandline class has full functionality
 			getopt(),getopt_long(),getopt_long_only()
 
-datetime class:
-	time.h - difftime()
-
 timer class:
 	not on many systems -
 		time.h and sys/time.h -
@@ -285,7 +272,6 @@ filedescriptor class:
 			F_GET/SETSIG - get/set what signal to send to process
 					group on i/o/availability
 	sys/select.h - select(),pselect()
-	sys/ioctl.h - ioctl()
 	sys/poll.h - poll()
 	sys/uio.h - readv()/writev()
 	gnu extensions - 

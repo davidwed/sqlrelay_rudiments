@@ -51,6 +51,10 @@ ifeq ($(INCLUDE_FILE),1)
 	SRCS += file.C
 	LOBJS += file.lo
 endif
+ifeq ($(INCLUDE_SHMFILE),1)
+	SRCS += shmfile.C
+	LOBJS += shmfile.lo
+endif
 ifeq ($(INCLUDE_DEVICE),1)
 	SRCS += device.C
 	LOBJS += device.lo
@@ -186,6 +190,10 @@ endif
 ifeq ($(INCLUDE_INTERVALTIMER),1)
 	SRCS += intervaltimer.C
 	LOBJS += intervaltimer.lo
+endif
+ifeq ($(INCLUDE_SLEEP),1)
+	SRCS += sleep.C
+	LOBJS += sleep.lo
 endif
 ifeq ($(INCLUDE_DYNAMICLIB),1)
 	SRCS += dynamiclib.C

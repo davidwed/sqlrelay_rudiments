@@ -63,7 +63,7 @@ bool modemserver::listen(int backlog) {
 		return false;
 	}
 
-	chat	ch(this,this);
+	chat	ch(this);
 	if (ch.runScript(listenscript,NULL)!=RESULT_SUCCESS) {
 		close();
 		return false;
@@ -73,7 +73,7 @@ bool modemserver::listen(int backlog) {
 	
 filedescriptor *modemserver::accept() {
 
-	chat	ch(this,this);
+	chat	ch(this);
 	if (ch.runScript(acceptscript,NULL)==RESULT_SUCCESS) {
 		filedescriptor	*retval=new filedescriptor;
 		retval->setFileDescriptor(fd);
@@ -83,7 +83,7 @@ filedescriptor *modemserver::accept() {
 }
 
 bool modemserver::close() {
-	chat	ch(this,this);
+	chat	ch(this);
 	ch.runScript(disconnectscript,NULL);
 	return filedescriptor::close();
 }

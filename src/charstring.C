@@ -358,6 +358,29 @@ int charstring::countTrailingSpaces(char *str, int length) {
 	return trailingspaces;
 }
 
+char *charstring::parseNumber(short number) {
+	return parseNumber(number,0);
+}
+
+char *charstring::parseNumber(short number, unsigned short zeropadding) {
+	int	len=integerLength(number);
+	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
+	sprintf(str,"%0*hd",zeropadding,number);
+	return str;
+}
+
+char *charstring::parseNumber(unsigned short number) {
+	return parseNumber(number,0);
+}
+
+char *charstring::parseNumber(unsigned short number,
+				unsigned short zeropadding) {
+	int	len=integerLength(number);
+	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
+	sprintf(str,"%0*hd",zeropadding,number);
+	return str;
+}
+
 char *charstring::parseNumber(long number) {
 	return parseNumber(number,0);
 }
@@ -378,6 +401,53 @@ char *charstring::parseNumber(unsigned long number,
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
 	sprintf(str,"%0*ld",zeropadding,number);
+	return str;
+}
+
+char *charstring::parseNumber(long long number) {
+	return parseNumber(number,0);
+}
+
+char *charstring::parseNumber(long long number, unsigned short zeropadding) {
+	int	len=integerLength(number);
+	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
+	sprintf(str,"%0*lld",zeropadding,number);
+	return str;
+}
+
+char *charstring::parseNumber(unsigned long long number) {
+	return parseNumber(number,0);
+}
+
+char *charstring::parseNumber(unsigned long long number,
+				unsigned short zeropadding) {
+	int	len=integerLength(number);
+	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
+	sprintf(str,"%0*lld",zeropadding,number);
+	return str;
+}
+
+char *charstring::parseNumber(float number) {
+	// FIXME: use (q)(e|f|g)cvt(_r)?
+	char	*str=new char[22];
+	sprintf(str,"%f",number);
+	return str;
+}
+
+char *charstring::parseNumber(float number,
+				unsigned short scale) {
+	// FIXME: use (q)(e|f|g)cvt(_r)?
+	char	*str=new char[22];
+	sprintf(str,"%.*f",scale,number);
+	return str;
+}
+
+char *charstring::parseNumber(float number,
+				unsigned short precision,
+				unsigned short scale) {
+	// FIXME: use (e|f|g)cvt(_r)?
+	char	*str=new char[precision+3];
+	sprintf(str,"%*.*f",precision,scale,number);
 	return str;
 }
 
@@ -410,6 +480,14 @@ void charstring::bothTrim(char *string, char character) {
 	rightTrim(string,character);
 }
 
+int charstring::integerLength(short number) {
+	int	length=(number>0)?0:1;
+	for (short num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+		length++;
+	}
+	return length;
+}
+
 int charstring::integerLength(long number) {
 	int	length=(number>0)?0:1;
 	for (long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
@@ -418,9 +496,33 @@ int charstring::integerLength(long number) {
 	return length;
 }
 
+int charstring::integerLength(long long number) {
+	int	length=(number>0)?0:1;
+	for (long long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+		length++;
+	}
+	return length;
+}
+
+int charstring::integerLength(unsigned short number) {
+	int	length=0;
+	for (unsigned short num=number; num>0; num=num/10) {
+		length++;
+	}
+	return length;
+}
+
 int charstring::integerLength(unsigned long number) {
 	int	length=0;
-	for (long num=number; num>0; num=num/10) {
+	for (unsigned long num=number; num>0; num=num/10) {
+		length++;
+	}
+	return length;
+}
+
+int charstring::integerLength(unsigned long long number) {
+	int	length=0;
+	for (unsigned long long num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;

@@ -1,4 +1,4 @@
-#include <rudiments/modemutil.h>
+#include <rudiments/private/modemutil.h>
 #include <rudiments/serialport.h>
 #include <rudiments/serialportprofile.h>
 #include <rudiments/signalclasses.h>

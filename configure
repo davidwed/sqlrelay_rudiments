@@ -465,7 +465,7 @@ ac_includes_default="\
 
 ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.C"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CPPFLAGS CXXFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX ac_ct_CXX CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL MINGW32 CYGWIN UWIN PIPE HAS_THREADS PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS PCREINCLUDES PCRELIBS INCLUDE_REGULAREXPRESSION SOCKETLIBS INCLUDE_SHADOWENTRY NANOSLEEPLIB INCLUDE_CRYPT CRYPTLIB DLLIB RUDIMENTS_VERSION SONAME_VERSION_INFO INCLUDE_CHARSTRING INCLUDE_CHARACTER INCLUDE_INTERVALTIMER INCLUDE_MATH INCLUDE_RAWBUFFER INCLUDE_MEMORYMAP INCLUDE_MUTEX INCLUDE_SERIALPORT INCLUDE_SERIALPORTPROFILE INCLUDE_PARAMETERSTRING INCLUDE_ENVIRONMENT INCLUDE_COMMANDLINE INCLUDE_DATETIME INCLUDE_TIMEZONEFILE INCLUDE_GROUPENTRY INCLUDE_PASSWDENTRY INCLUDE_SERVICEENTRY INCLUDE_RPCENTRY INCLUDE_PROTOCOLENTRY INCLUDE_HOSTENTRY INCLUDE_DYNAMICLIB INCLUDE_VARIABLEBUFFER INCLUDE_STRINGBUFFER INCLUDE_ERRORHANDLER INCLUDE_XMLSAX INCLUDE_XMLDOM INCLUDE_DTD INCLUDE_FILESYSTEM INCLUDE_DIRECTORY INCLUDE_FILEDESCRIPTOR INCLUDE_FILE INCLUDE_DEVICE INCLUDE_DATATRANSPORT INCLUDE_CLIENT INCLUDE_INETCLIENT INCLUDE_UNIXCLIENT INCLUDE_MODEMCLIENT INCLUDE_MODEMSERVER INCLUDE_SERVER INCLUDE_INETSERVER INCLUDE_UNIXSERVER INCLUDE_LISTENER INCLUDE_LOGGER INCLUDE_MEMORYPOOL INCLUDE_SIGNALCLASSES INCLUDE_DAEMONPROCESS INCLUDE_SEMAPHORESET INCLUDE_SHAREDMEMORY INCLUDE_PERMISSIONS INCLUDE_RANDOMNUMBER INCLUDE_CONTAINER INCLUDE_CHAT LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CPPFLAGS CXXFLAGS CC CFLAGS LDFLAGS ac_ct_CC EXEEXT OBJEXT CXX ac_ct_CXX CPP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os EGREP ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL MINGW32 CYGWIN UWIN PIPE HAS_THREADS PTHREADINCLUDES PTHREADLIB SSLINCLUDES SSLLIBS PCREINCLUDES PCRELIBS INCLUDE_REGULAREXPRESSION SOCKETLIBS INCLUDE_SHADOWENTRY NANOSLEEPLIB INCLUDE_CRYPT CRYPTLIB DLLIB RUDIMENTS_VERSION SONAME_VERSION_INFO INCLUDE_CHARSTRING INCLUDE_CHARACTER INCLUDE_INTERVALTIMER INCLUDE_SLEEP INCLUDE_MATH INCLUDE_RAWBUFFER INCLUDE_MEMORYMAP INCLUDE_MUTEX INCLUDE_SERIALPORT INCLUDE_SERIALPORTPROFILE INCLUDE_PARAMETERSTRING INCLUDE_ENVIRONMENT INCLUDE_COMMANDLINE INCLUDE_DATETIME INCLUDE_TIMEZONEFILE INCLUDE_GROUPENTRY INCLUDE_PASSWDENTRY INCLUDE_SERVICEENTRY INCLUDE_RPCENTRY INCLUDE_PROTOCOLENTRY INCLUDE_HOSTENTRY INCLUDE_DYNAMICLIB INCLUDE_VARIABLEBUFFER INCLUDE_STRINGBUFFER INCLUDE_ERRORHANDLER INCLUDE_XMLSAX INCLUDE_XMLDOM INCLUDE_DTD INCLUDE_FILESYSTEM INCLUDE_DIRECTORY INCLUDE_FILEDESCRIPTOR INCLUDE_FILE INCLUDE_SHMFILE INCLUDE_DEVICE INCLUDE_DATATRANSPORT INCLUDE_CLIENT INCLUDE_INETCLIENT INCLUDE_UNIXCLIENT INCLUDE_MODEMCLIENT INCLUDE_MODEMSERVER INCLUDE_SERVER INCLUDE_INETSERVER INCLUDE_UNIXSERVER INCLUDE_LISTENER INCLUDE_LOGGER INCLUDE_MEMORYPOOL INCLUDE_SIGNALCLASSES INCLUDE_DAEMONPROCESS INCLUDE_SEMAPHORESET INCLUDE_SHAREDMEMORY INCLUDE_PERMISSIONS INCLUDE_RANDOMNUMBER INCLUDE_CONTAINER INCLUDE_CHAT LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1029,6 +1029,7 @@ Optional Features:
   --disable-charstring    Don't build charstring class
   --disable-character     Don't build character class
   --disable-intervaltimer Don't build intervaltimer class
+  --disable-sleep         Don't build sleep class
   --disable-math          Don't build math class
   --disable-rawbuffer     Don't build rawbuffer class
   --disable-memorymap     Don't build memorymap class
@@ -1059,6 +1060,7 @@ Optional Features:
   --disable-directory     Don't build directory class
   --disable-filedescriptor       Don't build filedescriptor class
   --disable-file          Don't build file class
+  --disable-shmfile       Don't build shmfile class
   --disable-device        Don't build device class
   --disable-client        Don't build client class
   --disable-inetclient    Don't build inetclient class
@@ -1669,6 +1671,13 @@ if test "${enable_intervaltimer+set}" = set; then
 else
   INCLUDE_INTERVALTIMER="1"
 fi;
+# Check whether --enable-sleep or --disable-sleep was given.
+if test "${enable_sleep+set}" = set; then
+  enableval="$enable_sleep"
+  INCLUDE_SLEEP="0"
+else
+  INCLUDE_SLEEP="1"
+fi;
 # Check whether --enable-math or --disable-math was given.
 if test "${enable_math+set}" = set; then
   enableval="$enable_math"
@@ -1879,6 +1888,13 @@ if test "${enable_file+set}" = set; then
   INCLUDE_FILE="0"
 else
   INCLUDE_FILE="1"
+fi;
+# Check whether --enable-shmfile or --disable-shmfile was given.
+if test "${enable_shmfile+set}" = set; then
+  enableval="$enable_shmfile"
+  INCLUDE_SHMFILE="0"
+else
+  INCLUDE_SHMFILE="1"
 fi;
 # Check whether --enable-device or --disable-device was given.
 if test "${enable_device+set}" = set; then
@@ -4461,7 +4477,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4464 "configure"' > conftest.$ac_ext
+  echo '#line 4480 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5577,7 +5593,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5580:" \
+echo "$as_me:5596:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6608,11 +6624,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6611: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6627: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6615: \$? = $ac_status" >&5
+   echo "$as_me:6631: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6840,11 +6856,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6843: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6859: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6847: \$? = $ac_status" >&5
+   echo "$as_me:6863: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6907,11 +6923,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6910: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6926: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6914: \$? = $ac_status" >&5
+   echo "$as_me:6930: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9025,7 +9041,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9028 "configure"
+#line 9044 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9123,7 +9139,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9126 "configure"
+#line 9142 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11279,11 +11295,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11282: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11298: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11286: \$? = $ac_status" >&5
+   echo "$as_me:11302: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -11346,11 +11362,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11349: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11365: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11353: \$? = $ac_status" >&5
+   echo "$as_me:11369: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12675,7 +12691,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12678 "configure"
+#line 12694 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12773,7 +12789,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12776 "configure"
+#line 12792 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13595,11 +13611,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13598: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13614: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13602: \$? = $ac_status" >&5
+   echo "$as_me:13618: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13662,11 +13678,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13665: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13681: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13669: \$? = $ac_status" >&5
+   echo "$as_me:13685: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15628,11 +15644,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15631: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15647: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15635: \$? = $ac_status" >&5
+   echo "$as_me:15651: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15860,11 +15876,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15863: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15879: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15867: \$? = $ac_status" >&5
+   echo "$as_me:15883: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15927,11 +15943,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15930: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15946: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15934: \$? = $ac_status" >&5
+   echo "$as_me:15950: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18045,7 +18061,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18048 "configure"
+#line 18064 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18143,7 +18159,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18146 "configure"
+#line 18162 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -30594,6 +30610,8 @@ SONAME_VERSION_INFO="1:0:0"
 
 
 
+
+
 #AC_SUBST(INCLUDE_DICTIONARY)
 #AC_SUBST(INCLUDE_LIST)
 
@@ -31332,6 +31350,7 @@ s,@SONAME_VERSION_INFO@,$SONAME_VERSION_INFO,;t t
 s,@INCLUDE_CHARSTRING@,$INCLUDE_CHARSTRING,;t t
 s,@INCLUDE_CHARACTER@,$INCLUDE_CHARACTER,;t t
 s,@INCLUDE_INTERVALTIMER@,$INCLUDE_INTERVALTIMER,;t t
+s,@INCLUDE_SLEEP@,$INCLUDE_SLEEP,;t t
 s,@INCLUDE_MATH@,$INCLUDE_MATH,;t t
 s,@INCLUDE_RAWBUFFER@,$INCLUDE_RAWBUFFER,;t t
 s,@INCLUDE_MEMORYMAP@,$INCLUDE_MEMORYMAP,;t t
@@ -31360,6 +31379,7 @@ s,@INCLUDE_FILESYSTEM@,$INCLUDE_FILESYSTEM,;t t
 s,@INCLUDE_DIRECTORY@,$INCLUDE_DIRECTORY,;t t
 s,@INCLUDE_FILEDESCRIPTOR@,$INCLUDE_FILEDESCRIPTOR,;t t
 s,@INCLUDE_FILE@,$INCLUDE_FILE,;t t
+s,@INCLUDE_SHMFILE@,$INCLUDE_SHMFILE,;t t
 s,@INCLUDE_DEVICE@,$INCLUDE_DEVICE,;t t
 s,@INCLUDE_DATATRANSPORT@,$INCLUDE_DATATRANSPORT,;t t
 s,@INCLUDE_CLIENT@,$INCLUDE_CLIENT,;t t

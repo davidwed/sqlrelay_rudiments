@@ -4,11 +4,7 @@
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/charstring.h>
-#include <rudiments/intervaltimer.h>
-
-// FIXME: need these?
-#include <stdlib.h>
-#include <unistd.h>
+#include <rudiments/sleep.h>
 
 unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {}
 
@@ -76,7 +72,7 @@ int unixclientsocket::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			intervaltimer::sleep(retrywait);
+			sleep::macrosleep(retrywait);
 		}
 
 		// attempt to connect

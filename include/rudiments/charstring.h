@@ -175,8 +175,12 @@ class charstring {
 		static	void	strip(char *str1, char *str2);
 			// Strips all instances of "str2" from "str1".
 
+		static	int	integerLength(short number);
 		static	int	integerLength(long number);
+		static	int	integerLength(long long number);
+		static	int	integerLength(unsigned short number);
 		static	int	integerLength(unsigned long number);
+		static	int	integerLength(unsigned long long number);
 			// Returns the number of characters needed to represent
 			// "number" as a string.
 
@@ -189,15 +193,33 @@ class charstring {
 		static	bool	isNumber(const char *val, int size);
 			// Returns true the string "val" is a number and false
 			// if it is not a number
+		static	char	*parseNumber(short number);
+		static	char	*parseNumber(unsigned short number);
+		static	char	*parseNumber(short number,
+						unsigned short zeropadding);
+		static	char	*parseNumber(unsigned short number,
+						unsigned short zeropadding);
 		static	char	*parseNumber(long number);
 		static	char	*parseNumber(unsigned long number);
 		static	char	*parseNumber(long number,
 						unsigned short zeropadding);
 		static	char	*parseNumber(unsigned long number,
 						unsigned short zeropadding);
+		static	char	*parseNumber(long long number);
+		static	char	*parseNumber(unsigned long long number);
+		static	char	*parseNumber(long long number,
+						unsigned short zeropadding);
+		static	char	*parseNumber(unsigned long long number,
+						unsigned short zeropadding);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted
 			// by the calling program.
+		static	char	*parseNumber(float number);
+		static	char	*parseNumber(float number,
+						unsigned short scale);
+		static	char	*parseNumber(float number,
+						unsigned short precision,
+						unsigned short scale);
 		static	char	*parseNumber(double number);
 		static	char	*parseNumber(double number,
 						unsigned short scale);

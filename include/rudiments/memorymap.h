@@ -6,6 +6,8 @@
 
 #include <rudiments/private/memorymapincludes.h>
 
+#ifdef HAVE_MMAP
+
 // The memorymap class provides methods for mapping a file (or file descriptor)
 // to a region of memory and manipulating the mapped region.
 
@@ -187,5 +189,7 @@ class memorymap {
 
 	#include <rudiments/private/memorymap.h>
 };
+
+#endif
 
 #endif

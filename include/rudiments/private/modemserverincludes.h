@@ -2,4 +2,4 @@
 // See the COPYING file for more information.
 
 #include <rudiments/server.h>
-#include <rudiments/modemutil.h>
+#include <rudiments/private/modemutil.h>

@@ -84,7 +84,7 @@ int modemclient::connect() {
 		}
 
 		// run connectscript here...
-		chat	ch(this,this);
+		chat	ch(this);
 		int	result=ch.runScript(connectscript,
 						&connecterror,&phnvp);
 
@@ -116,8 +116,9 @@ int modemclient::connect() {
 bool modemclient::close() {
 
 	if (fd!=-1) {
-		chat	ch(this,this);
+		chat	ch(this);
 		ch.runScript(disconnectscript,NULL);
 		return filedescriptor::close();
 	}
+	return true;
 }

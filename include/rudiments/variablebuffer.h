@@ -33,28 +33,32 @@ class variablebuffer {
 		//	 	or
 		//	sb->append(data1)->append(data2)->append(data3);
 		variablebuffer	*write(const unsigned char *data, size_t size);
-		variablebuffer	*write(char *string);
-		variablebuffer	*write(char *string, size_t size);
+		variablebuffer	*write(const char *string);
+		variablebuffer	*write(const char *string, size_t size);
 		variablebuffer	*write(char character);
 		variablebuffer	*write(short number);
 		variablebuffer	*write(long number);
+		variablebuffer	*write(long long number);
 		variablebuffer	*write(unsigned char character);
 		variablebuffer	*write(unsigned short number);
 		variablebuffer	*write(unsigned long number);
+		variablebuffer	*write(unsigned long long number);
 		variablebuffer	*write(float number);
 		variablebuffer	*write(double number);
 			// Writes "data" to the variablebuffer at the current
 			// position.  If necessary, the buffer will grow to
 			// accommodate the new data.
 		variablebuffer	*append(const unsigned char *data, size_t size);
-		variablebuffer	*append(char *string);
-		variablebuffer	*append(char *string, size_t size);
+		variablebuffer	*append(const char *string);
+		variablebuffer	*append(const char *string, size_t size);
 		variablebuffer	*append(char character);
 		variablebuffer	*append(short number);
 		variablebuffer	*append(long number);
+		variablebuffer	*append(long long number);
 		variablebuffer	*append(unsigned char character);
 		variablebuffer	*append(unsigned short number);
 		variablebuffer	*append(unsigned long number);
+		variablebuffer	*append(unsigned long long number);
 		variablebuffer	*append(float number);
 		variablebuffer	*append(double number);
 			// Appends "data" to the variablebuffer.  The buffer

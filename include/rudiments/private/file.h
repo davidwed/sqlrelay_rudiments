@@ -1,6 +1,11 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
+	protected:
+		virtual	int	openInternal(const char *name, int flags);
+		virtual	int	openInternal(const char *name,
+						int flags, mode_t perms);
+
 	private:
 		struct	stat	st;
 		bool		getcurrentpropertiesonopen;

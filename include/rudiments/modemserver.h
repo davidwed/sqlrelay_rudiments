@@ -34,6 +34,9 @@ class modemserver : public server, public modemutil {
 				// on failure.
 
 		bool	close();
+			// Hangs up the modem and closes the device.
+			//
+			// Returns true on success and false on failure.
 
 	#include <rudiments/private/modemserver.h>
 };

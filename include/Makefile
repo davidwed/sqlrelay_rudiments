@@ -56,6 +56,10 @@ ifeq ($(INCLUDE_FILE),1)
 	HEADERS += file.h
 	PRIVATEHEADERS += file.h fileincludes.h
 endif
+ifeq ($(INCLUDE_SHMFILE),1)
+	HEADERS += shmfile.h
+	PRIVATEHEADERS += shmfile.h shmfileincludes.h
+endif
 ifeq ($(INCLUDE_DEVICE),1)
 	HEADERS += device.h
 	PRIVATEHEADERS += deviceincludes.h
@@ -202,6 +206,10 @@ ifeq ($(INCLUDE_INTERVALTIMER),1)
 	HEADERS += intervaltimer.h
 	PRIVATEHEADERS += intervaltimer.h intervaltimerincludes.h
 endif
+ifeq ($(INCLUDE_SLEEP),1)
+	HEADERS += sleep.h
+	PRIVATEHEADERS += sleepincludes.h
+endif
 ifeq ($(INCLUDE_DYNAMICLIB),1)
 	HEADERS += dynamiclib.h
 	PRIVATEHEADERS += dynamiclib.h dynamiclibincludes.h
@@ -242,12 +250,10 @@ endif
 
 # if either modemserver or modemclient are defined, include modemutil.h
 ifeq ($(INCLUDE_MODEMSERVER),1)
-	HEADERS += modemutil.h
-	PRIVATEHEADERS += modemutil.h modemutilincludes.h
+	PRIVATEHEADERS += modemutil.h
 else
 	ifeq ($(INCLUDE_MODEMCLIENT),1)
-		HEADERS += modemutil.h
-		PRIVATEHEADERS += modemutil.h modemutilincludes.h
+		PRIVATEHEADERS += modemutil.h
 	endif
 endif
 

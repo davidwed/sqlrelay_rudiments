@@ -8,7 +8,7 @@
 			void	parseFailed();
 			bool	parseTag(char current, char *next);
 			void	parseTagFailed();
-			bool	parseTagName(char current, stringbuffer **name,
+			bool	parseTagName(char current, stringbuffer *name,
 						char *next);
 			char	parseComment(char current);
 			char	parseCData(char current);
@@ -19,8 +19,12 @@
 			void	parseTextFailed();
 			char	skipWhitespace(char current);
 			char	getCharacter();
-			char	*string;
-			char	*ptr;
-			file	fl;
-			long	line;
-			bool	allowtrailingtext;
+
+			char		*string;
+			char		*ptr;
+			file		fl;
+			#ifdef HAVE_MMAP
+			memorymap	mm;
+			#endif
+			long		line;
+			bool		allowtrailingtext;

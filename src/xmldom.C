@@ -121,6 +121,7 @@ bool xmldom::comment(char *string) {
 	currentattribute=NULL;
 	xmldomnode	*commentnode=new xmldomnode(nullnode);
 	commentnode->setName("comment");
+printf("comment: value=\"%s\"\n",string);
 	commentnode->setValue(string);
 	commentnode->setType(COMMENT_XMLDOMNODETYPE);
 	currentparent->insertChild(commentnode,currentparent->getChildCount());

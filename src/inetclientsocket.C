@@ -9,13 +9,10 @@
 	#include <rudiments/charstring.h>
 #endif
 #include <rudiments/rawbuffer.h>
-#include <rudiments/intervaltimer.h>
+#include <rudiments/sleep.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-
-// need this for sleep
-#include <unistd.h>
 
 inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
 	translateByteOrder();
@@ -135,7 +132,7 @@ int inetclientsocket::connect() {
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			intervaltimer::sleep(retrywait);
+			sleep::macrosleep(retrywait);
 		}
 
 		#ifndef HAVE_GETADDRINFO

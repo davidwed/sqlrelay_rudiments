@@ -61,7 +61,7 @@ ssize_t file::create(const char *name, mode_t perms, const char *string) {
 ssize_t file::create(const char *name, mode_t perms,
 					const void *data, size_t size) {
 	size_t	retval;
-	if (((fd=::open(name,O_CREAT|O_TRUNC|O_RDWR,perms))!=-1) &&
+	if (((fd=openInternal(name,O_CREAT|O_TRUNC|O_RDWR,perms))!=-1) &&
 		((retval=write(data,size))==size) &&
 		((getcurrentpropertiesonopen)?getCurrentProperties():true)) {
 		return retval;
@@ -118,13 +118,21 @@ ssize_t file::createFile(const char *name, mode_t perms,
 	return fl.create(name,perms,data,size);
 }
 
+int file::openInternal(const char *name, int flags) {
+	return ::open(name,flags);
+}
+
+int file::openInternal(const char *name, int flags, mode_t perms) {
+	return ::open(name,flags,perms);
+}
+
 bool file::open(const char *name, int flags) {
-	return ((fd=::open(name,flags))!=-1 &&
+	return ((fd=openInternal(name,flags))!=-1 &&
 		((getcurrentpropertiesonopen)?getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int flags, mode_t perms) {
-	return ((fd=::open(name,flags,perms))!=-1 &&
+	return ((fd=openInternal(name,flags,perms))!=-1 &&
 		((getcurrentpropertiesonopen)?getCurrentProperties():true));
 }
 

@@ -31,11 +31,25 @@ class stringbuffer : public variablebuffer {
 		//	sb->write("numbers: ")->write(5)->write(5.5);
 		//	 	or
 		//	sb->append("numbers: ")->append(5)->append(5.5);
+		stringbuffer	*write(const unsigned char *string);
+		stringbuffer	*write(const unsigned char *string,
+							size_t size);
 		stringbuffer	*write(const char *string);
 		stringbuffer	*write(const char *string, size_t size);
 		stringbuffer	*write(char character);
+		stringbuffer	*write(short number);
 		stringbuffer	*write(long number);
+		stringbuffer	*write(long long number);
+		stringbuffer	*write(unsigned char number);
+		stringbuffer	*write(unsigned short number);
 		stringbuffer	*write(unsigned long number);
+		stringbuffer	*write(unsigned long long number);
+		stringbuffer	*write(float number);
+		stringbuffer	*write(float number,
+						unsigned short scale);
+		stringbuffer	*write(float number,
+						unsigned short precision,
+						unsigned short scale);
 		stringbuffer	*write(double number);
 		stringbuffer	*write(double number,
 						unsigned short scale);
@@ -45,15 +59,37 @@ class stringbuffer : public variablebuffer {
 			// Writes the data to the stringbuffer at the current
 			// position.  If necessary, the buffer will grow to
 			// accommodate the new data.
+		stringbuffer	*append(const unsigned char *string);
+		stringbuffer	*append(const unsigned char *string,
+							size_t size);
 		stringbuffer	*append(const char *string);
 		stringbuffer	*append(const char *string, size_t size);
 		stringbuffer	*append(char character);
+		stringbuffer	*append(short character);
 		stringbuffer	*append(long number);
+		stringbuffer	*append(long long number);
+		stringbuffer	*append(unsigned char number);
+		stringbuffer	*append(unsigned short number);
 		stringbuffer	*append(unsigned long number);
+		stringbuffer	*append(unsigned long long number);
+		stringbuffer	*append(short number,
+					unsigned short zeropadding);
 		stringbuffer	*append(long number,
+					unsigned short zeropadding);
+		stringbuffer	*append(long long number,
+					unsigned short zeropadding);
+		stringbuffer	*append(unsigned short number,
 					unsigned short zeropadding);
 		stringbuffer	*append(unsigned long number,
 					unsigned short zeropadding);
+		stringbuffer	*append(unsigned long long number,
+					unsigned short zeropadding);
+		stringbuffer	*append(float number);
+		stringbuffer	*append(float number,
+						unsigned short scale);
+		stringbuffer	*append(float number,
+						unsigned short precision,
+						unsigned short scale);
 		stringbuffer	*append(double number);
 		stringbuffer	*append(double number,
 						unsigned short scale);
