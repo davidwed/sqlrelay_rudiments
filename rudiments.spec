@@ -52,6 +52,12 @@ rm -f doc/Makefile
 rm -rf doc/CVS
 rm -rf doc/*/CVS
 
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
+
 %clean
 rm -rf %{buildroot}
 
