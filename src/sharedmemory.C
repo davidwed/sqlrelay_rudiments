@@ -9,6 +9,9 @@
 	#include <rudiments/private/sharedmemoryinlines.h>
 #endif
 
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -68,93 +71,45 @@ int sharedmemory::createOrAttach(key_t key, int size, mode_t permissions) {
 }
 
 int sharedmemory::setUserName(const char *username) {
-#ifdef HAVE_GETPWNAM_R
-	passwd	*passwdent=new passwd;
-	char	buffer[1024];
-	if (getpwnam_r(username,passwdent,buffer,1024,&passwdent)) {
-		return 0;
-	}
-#else
-	passwd	*passwdent=NULL;
-	if (!(passwdent=getpwnam(username))) {
-		return 0;
-	}
-#endif
-	int	retval=setUserId(passwdent->pw_uid);
-#ifdef HAVE_GETPWNAM_R
+	passwdentry	*passwdent=new passwdentry();
+	int	retval=(passwdent->initialize(username) &&
+			setUserId(passwdent->getUserId()));
 	delete passwdent;
-#endif
 	return retval;
 }
 
 int sharedmemory::setGroupName(const char *groupname) {
-#ifdef HAVE_GETGRNAM_R
-	group	*groupent=new group;
-	char	buffer[1024];
-	if (getgrnam_r(groupname,groupent,buffer,1024,&groupent)) {
-		return 0;
-	}
-#else
-	group	*groupent=NULL;
-	if (!(groupent=getgrnam(groupname))) {
-		return 0;
-	}
-#endif
-	int	retval=setGroupId(groupent->gr_gid);
-#ifdef HAVE_GETGRNAM_R
+	groupentry	*groupent=new groupentry();
+	int	retval=(groupent->initialize(groupname) &&
+			setGroupId(groupent->getGroupId()));
 	delete groupent;
-#endif
 	return retval;
 }
 
 char *sharedmemory::getUserName() {
 	shmid_ds	getds;
+	char	*retval=NULL;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-#ifdef HAVE_GETPWUID_R
-		passwd	*passwdent=new passwd;
-		char	buffer[1024];
-		if (getpwuid_r(getds.shm_perm.uid,passwdent,
-					buffer,1024,&passwdent)) {
-			return NULL;
+		passwdentry	*passwdent=new passwdentry();
+		if (passwdent->initialize(getds.shm_perm.uid)) {
+			retval=strdup(passwdent->getName());
 		}
-#else
-		passwd	*passwdent=NULL;
-		if (!(passwdent=getpwuid(getds.shm_perm.uid))) {
-			return NULL;
-		}
-#endif
-		char	*retval=strdup(passwdent->pw_name);
-#ifdef HAVE_GETPWUID_R
 		delete passwdent;
-#endif
-		return retval;
 	}
-	return NULL;
+	return retval;
 }
 
 char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
+	char	*retval=NULL;
 	if (!shmctl(shmid,IPC_STAT,&getds)) {
-#ifdef GETGRGID_R
-		group	*groupent=new group;
-		char	buffer[1024];
-		if (getgrgid_r(getds.shm_perm.gid,groupent,
-					buffer,1024,&groupent)) {
-			return NULL;
+		groupentry	*groupent=new groupentry();
+		if (groupent->initialize(getds.shm_perm.gid)) {
+			retval=strdup(groupent->getName());
 		}
-#else
-		group	*groupent=NULL;
-		if (!(groupent=getgrgid(getds.shm_perm.gid))) {
-			return NULL;
-		}
-#endif
-		char	*retval=strdup(groupent->gr_name);
-#ifdef GETGRGID_R
 		delete groupent;
-#endif
-		return retval;
 	}
-	return NULL;
+	return retval;
 }
 
 #endif

@@ -14,7 +14,8 @@
 
 int protocolentry::initialize(const char *protocolname) {
 	if (pe) {
-		delete pe;
+		pe=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETPROTOBYNAME_R
 		// getprotobyname_r is goofy.
@@ -23,14 +24,12 @@ int protocolentry::initialize(const char *protocolname) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			pe=new protoent;
 			buffer=new char[size];
-			if (getprotobyname_r(protocolname,pe,
+			if (getprotobyname_r(protocolname,&pebuffer,
 						buffer,size,&pe)==0) {
 				return 1;
 			}
-			delete pe;
-			delete buffer;
+			delete[] buffer;
 			pe=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
@@ -44,7 +43,8 @@ int protocolentry::initialize(const char *protocolname) {
 
 int protocolentry::initialize(int number) {
 	if (pe) {
-		delete pe;
+		pe=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETPROTOBYNUMBER_R
 		// getprotobynumber_r is goofy.
@@ -53,14 +53,12 @@ int protocolentry::initialize(int number) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			pe=new protoent;
 			buffer=new char[size];
-			if (getprotobynumber_r(number,pe,
+			if (getprotobynumber_r(number,&pebuffer,
 						buffer,size,&pe)==0) {
 				return 1;
 			}
-			delete pe;
-			delete buffer;
+			delete[] buffer;
 			pe=NULL;
 			if (errno!=ENOMEM) {
 				return 0;

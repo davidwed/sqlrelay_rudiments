@@ -6,8 +6,6 @@
 
 #include <rudiments/private/config.h>
 
-#include <pwd.h>
-#include <grp.h>
 #include <sys/types.h>
 
 // Semaphores allow processes to synchronize their activities.

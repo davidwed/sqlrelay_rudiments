@@ -9,7 +9,6 @@ inline hostentry::hostentry() {
 }
 
 inline hostentry::~hostentry() {
-	delete he;
 	delete[] buffer;
 }
 

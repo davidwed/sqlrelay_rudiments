@@ -3,4 +3,5 @@
 
 	private:
 		protoent	*pe;
+		protoent	pebuffer;
 		char		*buffer;

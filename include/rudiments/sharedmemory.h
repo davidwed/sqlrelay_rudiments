@@ -6,8 +6,6 @@
 
 #include <rudiments/private/config.h>
 
-#include <pwd.h>
-#include <grp.h>
 #include <sys/types.h>
 
 // Shared memory segments allow multiple processes to access a common

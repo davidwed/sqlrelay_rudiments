@@ -9,7 +9,6 @@ inline protocolentry::protocolentry() {
 }
 
 inline protocolentry::~protocolentry() {
-	delete pe;
 	delete[] buffer;
 }
 

@@ -144,10 +144,8 @@ void semaphoreset::createOperations() {
 
 int semaphoreset::setUserName(const char *username) {
 	passwdentry	*passwdent=new passwdentry();
-	if (!passwdent->initialize(username)) {
-		return 0;
-	}
-	int	retval=setUserId(passwdent->getUserId());
+	int	retval=(passwdent->initialize(username) &&
+			setUserId(passwdent->getUserId()));
 	delete passwdent;
 	return retval;
 }
@@ -162,10 +160,8 @@ int semaphoreset::setUserId(uid_t uid) {
 
 int semaphoreset::setGroupName(const char *groupname) {
 	groupentry	*groupent=new groupentry();
-	if (!groupent->initialize(groupname)) {
-		return 0;
-	}
-	int	retval=setGroupId(groupent->getGroupId());
+	int	retval=(groupent->initialize(groupname) &&
+			setGroupId(groupent->getGroupId()));
 	delete groupent;
 	return retval;
 }

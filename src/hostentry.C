@@ -14,7 +14,8 @@
 
 int hostentry::initialize(const char *hostname) {
 	if (he) {
-		delete he;
+		he=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETHOSTBYNAME_R
 		// gethostbyname_r is goofy.
@@ -24,14 +25,12 @@ int hostentry::initialize(const char *hostname) {
 		// just make the buffer bigger and try again.
 		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			he=new hostent;
 			buffer=new char[size];
-			if (gethostbyname_r(hostname,he,
+			if (gethostbyname_r(hostname,&hebuffer,
 						buffer,size,&he,&errnop)==0) {
 				return 1;
 			}
-			delete he;
-			delete buffer;
+			delete[] buffer;
 			he=NULL;
 			if (errnop!=ENOMEM) {
 				return 0;
@@ -45,7 +44,8 @@ int hostentry::initialize(const char *hostname) {
 
 int hostentry::initialize(const char *address, int len, int type) {
 	if (he) {
-		delete he;
+		he=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETHOSTBYADDR_R
 		// gethostbyaddr_r is goofy.
@@ -55,14 +55,12 @@ int hostentry::initialize(const char *address, int len, int type) {
 		// just make the buffer bigger and try again.
 		int	errnop;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			he=new hostent;
 			buffer=new char[size];
-			if (gethostbyaddr_r(address,len,type,he,
+			if (gethostbyaddr_r(address,len,type,&hebuffer,
 						buffer,size,&he,&errnop)==0) {
 				return 1;
 			}
-			delete he;
-			delete buffer;
+			delete[] buffer;
 			he=NULL;
 			if (errnop!=ENOMEM) {
 				return 0;

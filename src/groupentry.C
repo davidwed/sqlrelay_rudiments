@@ -14,7 +14,8 @@
 
 int groupentry::initialize(const char *groupname) {
 	if (grp) {
-		delete grp;
+		grp=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETGRNAM_R
 		// getgrnam_r is goofy.
@@ -23,13 +24,12 @@ int groupentry::initialize(const char *groupname) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			grp=new group;
 			buffer=new char[size];
-			if (getgrnam_r(groupname,grp,buffer,size,&grp)==0) {
+			if (getgrnam_r(groupname,&grpbuffer,
+						buffer,size,&grp)==0) {
 				return 1;
 			}
-			delete grp;
-			delete buffer;
+			delete[] buffer;
 			grp=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
@@ -42,7 +42,8 @@ int groupentry::initialize(const char *groupname) {
 
 int groupentry::initialize(gid_t groupid) {
 	if (grp) {
-		delete grp;
+		grp=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETPWUID_R
 		// getgrgid_r is goofy.
@@ -51,13 +52,12 @@ int groupentry::initialize(gid_t groupid) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			grp=new group;
 			buffer=new char[size];
-			if (getgrgid_r(groupid,grp,buffer,size,&grp)==0) {
+			if (getgrgid_r(groupid,&grpbuffer,
+						buffer,size,&grp)==0) {
 				return 1;
 			}
-			delete grp;
-			delete buffer;
+			delete[] buffer;
 			grp=NULL;
 			if (errno!=ENOMEM) {
 				return 0;

@@ -9,7 +9,6 @@ inline groupentry::groupentry() {
 }
 
 inline groupentry::~groupentry() {
-	delete grp;
 	delete[] buffer;
 }
 

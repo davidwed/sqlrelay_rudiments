@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <stdlib.h>
+#include <stdio.h>
 
 inline passwdentry::passwdentry() {
 	pwd=NULL;
@@ -9,7 +10,6 @@ inline passwdentry::passwdentry() {
 }
 
 inline passwdentry::~passwdentry() {
-	delete pwd;
 	delete[] buffer;
 }
 

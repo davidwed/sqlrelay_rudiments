@@ -3,4 +3,5 @@
 
 	private:
 		group	*grp;
+		group	grpbuffer;
 		char	*buffer;

@@ -14,8 +14,8 @@
 
 int passwdentry::initialize(const char *username) {
 	if (pwd) {
-		delete pwd;
-		delete buffer;
+		pwd=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETPWNAM_R
 		// getpwnam_r is goofy.
@@ -24,13 +24,12 @@ int passwdentry::initialize(const char *username) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			pwd=new passwd;
 			buffer=new char[size];
-			if (getpwnam_r(username,pwd,buffer,size,&pwd)==0) {
+			if (getpwnam_r(username,&pwdbuffer,
+						buffer,size,&pwd)==0) {
 				return 1;
 			}
-			delete pwd;
-			delete buffer;
+			delete[] buffer;
 			pwd=NULL;
 			if (errno!=ENOMEM) {
 				return 0;
@@ -43,7 +42,8 @@ int passwdentry::initialize(const char *username) {
 
 int passwdentry::initialize(uid_t userid) {
 	if (pwd) {
-		delete pwd;
+		pwd=NULL;
+		delete[] buffer;
 	}
 	#ifdef HAVE_GETPWUID_R
 		// getpwuid_r is goofy.
@@ -52,13 +52,12 @@ int passwdentry::initialize(uid_t userid) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			pwd=new passwd;
 			buffer=new char[size];
-			if (getpwuid_r(userid,pwd,buffer,size,&pwd)==0) {
+			if (getpwuid_r(userid,&pwdbuffer,
+						buffer,size,&pwd)==0) {
 				return 1;
 			}
-			delete pwd;
-			delete buffer;
+			delete[] buffer;
 			pwd=NULL;
 			if (errno!=ENOMEM) {
 				return 0;

@@ -3,4 +3,5 @@
 
 	private:
 		hostent	*he;
+		hostent	hebuffer;
 		char	*buffer;

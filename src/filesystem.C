@@ -17,8 +17,8 @@
 	#include <sys/ndir.h>
 #endif
 
-#include <pwd.h>
-#include <grp.h>
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
 #include <errno.h>
 
 #ifdef HAVE_STRINGS
@@ -106,36 +106,15 @@ int filesystem::remove(char *file) {
 
 int filesystem::changeOwner(char *file, char *username, char *groupname) {
 
-	passwd	*passwdent;
-	group	*groupent;
-#if defined(HAVE_GETPWNAM_R) || defined(HAVE_GETGRNAM_R)
-	char	buffer[1024];
-#endif
-#ifdef HAVE_GETPWNAM_R
-	passwd	pwd;
-	if (username && getpwnam_r(username,&pwd,buffer,1024,&passwdent)) {
-		return 0;
-	}
-#else
-	passwdent=(username)?getpwnam(username):NULL;
-#endif
-#ifdef HAVE_GETGRNAM_R
-	group	grp;
-	if (groupname && getgrnam_r(groupname,&grp,buffer,1024,&groupent)) {
-		return 0;
-	}
-#else
-	groupent=(groupname)?getgrnam(groupname):NULL;
-#endif
-	uid_t	uid=(username)?passwdent->pw_uid:-1;
-	gid_t	gid=(groupname)?groupent->gr_gid:-1;
-#ifdef HAVE_GETPWNAM_R
-	delete	passwdent;
-#endif
-#ifdef HAVE_GETGRNAM_R
-	delete	groupent;
-#endif
-	return (chown(file,uid,gid)==0);
+	passwdentry	*passwdent=new passwdentry();
+	groupentry	*groupent=new groupentry();
+	int	retval=((username)?(!passwdent->initialize(username)):1) &&
+			((groupname)?(!groupent->initialize(groupname)):1) &&
+			(!chown(file,(username)?passwdent->getUserId():-1,
+				(groupname)?groupent->getGroupId():-1));
+	delete passwdent;
+	delete groupent;
+	return retval;
 }
 
 char **filesystem::list(char *pattern) {
