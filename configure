@@ -1570,16 +1570,16 @@ fi;
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval="$enable_debug"
-  CXXFLAGS="$CXXFLAGS -g -Wall"
+  CXXFLAGS="$CXXFLAGS -g"
 else
-  CXXFLAGS="$CXXFLAGS -Wall"
+  CXXFLAGS="$CXXFLAGS"
 fi;
 # Check whether --enable-profiling or --disable-profiling was given.
 if test "${enable_profiling+set}" = set; then
   enableval="$enable_profiling"
-  CXXFLAGS="$CXXFLAGS -pg -Wall"
+  CXXFLAGS="$CXXFLAGS -pg"
 else
-  CXXFLAGS="$CXXFLAGS -Wall"
+  CXXFLAGS="$CXXFLAGS"
 fi;
 
 # Check whether --with-system-libtool or --without-system-libtool was given.
@@ -2053,7 +2053,7 @@ else
 fi;
 
 
-CPPFLAGS="-D_REENTRANT $CPPFLAGS"
+CPPFLAGS="-Wall -D_REENTRANT $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 
 

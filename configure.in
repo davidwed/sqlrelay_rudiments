@@ -8,12 +8,12 @@ AC_ARG_ENABLE(small-code,
 	SMALLCODE="")
 AC_ARG_ENABLE(debug,
 	[  --enable-debug          compile with -g option],
-	CXXFLAGS="$CXXFLAGS -g -Wall",
-	CXXFLAGS="$CXXFLAGS -Wall")
+	CXXFLAGS="$CXXFLAGS -g",
+	CXXFLAGS="$CXXFLAGS")
 AC_ARG_ENABLE(profiling,
 	[  --enable-profiling      compile with -pg option],
-	CXXFLAGS="$CXXFLAGS -pg -Wall",
-	CXXFLAGS="$CXXFLAGS -Wall")
+	CXXFLAGS="$CXXFLAGS -pg",
+	CXXFLAGS="$CXXFLAGS")
 AC_ARG_WITH(system-libtool,
 	[  --with-system-libtool   use system libtool instead of ./libtool],
 	USE_SYSTEM_LIBTOOL=$withval,
@@ -284,7 +284,7 @@ AC_ARG_ENABLE(chat,
 	INCLUDE_CHAT="1")
 
 
-CPPFLAGS="-D_REENTRANT $CPPFLAGS"
+CPPFLAGS="-Wall -D_REENTRANT $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 
 AC_SUBST(CPPFLAGS)
