@@ -567,6 +567,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 						long sec, long usec) {
+
 	#ifdef DEBUG_READ
 	printf("%d: safeRead(%d,",getpid(),fd);
 	#endif

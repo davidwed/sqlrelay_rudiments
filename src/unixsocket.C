@@ -18,18 +18,6 @@ extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
-#ifndef CMSG_ALIGN
-#define CMSG_ALIGN(len) (((len)+sizeof(size_t)-1)&~(sizeof(size_t)-1))
-#endif
-
-#ifndef CMSG_SPACE
-#define CMSG_SPACE(len) (CMSG_ALIGN(len)+CMSG_ALIGN(sizeof(struct cmsghdr)))
-#endif
-
-#ifndef CMSG_LEN
-#define CMSG_LEN(len) (CMSG_ALIGN(sizeof(struct cmsghdr))+(len))
-#endif
-
 unixsocket::unixsocket() : filedescriptor(), datatransport(), socket() {
 	filename=NULL;
 }
@@ -48,8 +36,9 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
 	struct	msghdr	messageheader;
+	memset((void *)&messageheader,0,sizeof(messageheader));
 
-	// no need to name the message
+	// these must be null for stream sockets
 	messageheader.msg_name=NULL;
 	messageheader.msg_namelen=0;
 
@@ -67,19 +56,14 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 
 		// new-style:
-		// The descriptor is passed in the cmsghdr part of a 
-		// control_union.
-
-		// Multiple descriptors could be passed, but we're 
-		// just going to send 1.
+		// The descriptor is passed in the msg_control
 		union {
 			struct cmsghdr	cm;
 			char		control[CMSG_SPACE(sizeof(int))];
-		} control_union;
-		messageheader.msg_control=control_union.control;
-		// FIXME: which of these should I use???
-		//messageheader.msg_controllen=sizeof(control_union.control);
-		messageheader.msg_controllen=sizeof(control_union);
+		} control;
+		memset((void *)&control,0,sizeof(control));
+		messageheader.msg_control=control.control;
+		messageheader.msg_controllen=sizeof(control);
 
 		struct cmsghdr	*cmptr;
 		cmptr=CMSG_FIRSTHDR(&messageheader);
@@ -87,10 +71,12 @@ bool unixsocket::passFileDescriptor(int filedesc) {
 		cmptr->cmsg_type=SCM_RIGHTS;
 		cmptr->cmsg_len=CMSG_LEN(sizeof(int));
 		*((int *)CMSG_DATA(cmptr))=filedesc;
+
+		// FIXME: is this necessary???
+		messageheader.msg_controllen=cmptr->cmsg_len;
 	#else
 		// old-style:
-		// the descriptor is passed in the accrights/accrightslen 
-		// section of the msghdr
+		// The descriptor is passed in the accrights
 		messageheader.msg_accrights=(caddr_t)&filedesc;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
@@ -104,8 +90,9 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr
 	struct msghdr	messageheader;
+	memset((void *)&messageheader,0,sizeof(messageheader));
 
-	// no need to name the message
+	// these must be null for stream sockets
 	messageheader.msg_name=NULL;
 	messageheader.msg_namelen=0;
 
@@ -124,29 +111,24 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 
 	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 		// new-style:
-		// The descriptor is received in the cmsghdr part 
-		// of a control_union.
+		// The descriptor is received in the msg_control
 		union {
 			struct cmsghdr	cm;
 			char		control[CMSG_SPACE(sizeof(int))];
-		} control_union;
-		messageheader.msg_control=control_union.control;
-		// FIXME: which of these should I use???
-		//messageheader.msg_controllen=sizeof(control_union.control);
-		messageheader.msg_controllen=sizeof(control_union);
+		} control;
+		memset((void *)&control,0,sizeof(control));
+		messageheader.msg_control=control.control;
+		messageheader.msg_controllen=sizeof(control);
 	#else
 		// old-style
-		// The descriptor is passed in the accrights
+		// The descriptor is received in the accrights
 		int	newfiledesc;
 		messageheader.msg_accrights=(caddr_t)&newfiledesc;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
 
 	// receive the msghdr
-//int	ret=recvmsg(fd,&messageheader,0);
-//printf("recvmsg()=%d\n",ret);
 	if (recvmsg(fd,&messageheader,0)==-1) {
-//if (ret==-1) {
 		return false;
 	}
 
@@ -155,18 +137,7 @@ bool unixsocket::receiveFileDescriptor(int *filedesc) {
 	// descriptor we received and return success
 	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
 
-/*messageheader.msg_controllen=sizeof(control_union);
-printf("msg_name=%s\n",(char *)messageheader.msg_name);
-printf("msg_namelen=%d\n",messageheader.msg_namelen);
-printf("msg_iov",msg_iov);
-printf("msg_iovlen=%d\n",messageheader.msg_iovlen);
-printf("msg_control",msg_control);
-printf("msg_controllen=%d\n",messageheader.msg_controllen);
-printf("msg_flags=0x%02x\n",messageheader.msg_flags);*/
-		struct cmsghdr	*cmptr=CMSG_FIRSTHDR(&messageheader);
-/*cmptr->cmsg_len=CMSG_LEN(sizeof(int));
-cmptr->cmsg_level=SOL_SOCKET;
-cmptr->cmsg_type=SCM_RIGHTS;*/
+		struct cmsghdr  *cmptr=CMSG_FIRSTHDR(&messageheader);
 		if (cmptr && cmptr->cmsg_len==CMSG_LEN(sizeof(int)) &&
 				cmptr->cmsg_level==SOL_SOCKET &&
 				cmptr->cmsg_type==SCM_RIGHTS) {
