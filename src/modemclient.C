@@ -11,6 +11,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/ioctl.h>
 
 modemclient::modemclient() : client(), modemutil() {
 	connectscript="";
@@ -28,6 +29,7 @@ void modemclient::initialize(namevaluepairs *cd) {
 		cd->getData("device",&devicename);
 		cd->getData("baud",&baud);
 		cd->getData("connectscript",&connectscript);
+		cd->getData("phonenumber",&phonenumber);
 		cd->getData("disconnectscript",&disconnectscript);
 		char	*rwstr;
 		cd->getData("retrywait",&rwstr);
@@ -40,17 +42,22 @@ void modemclient::initialize(namevaluepairs *cd) {
 
 void modemclient::initialize(const char *devicename, const char *baud,
 			const char *connectscript,
+			const char *phonenumber,
 			const char *disconnectscript,
 			unsigned int retrywait,
 			unsigned int retrycount) {
 	modemutil::initialize(devicename,baud);
 	this->connectscript=(char *)connectscript;
+	this->phonenumber=(char *)phonenumber;
 	this->disconnectscript=(char *)disconnectscript;
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;
 }
 
 int modemclient::connect() {
+
+	namevaluepairs	phnvp;
+	phnvp.setData("phonenumber",phonenumber);
 
 	unsigned int	whichtry=0;
 	for (;;) {
@@ -75,7 +82,7 @@ int modemclient::connect() {
 
 		// run connectscript here...
 		chat	ch(this,this);
-		int	result=ch.runScript(connectscript);
+		int	result=ch.runScript(connectscript,&phnvp);
 
 		// runScript() will return RESULT_(SUCCESS|ABORT|TIMEOUT|ERROR)
 		// or a number >= 2 indicating that one of the abort conditions
@@ -102,6 +109,7 @@ int modemclient::connect() {
 }
 
 bool modemclient::close() {
+
 	chat	ch(this,this);
 	ch.runScript(disconnectscript);
 	return filedescriptor::close();

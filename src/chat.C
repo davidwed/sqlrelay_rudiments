@@ -4,7 +4,7 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/intervaltimer.h>
 
-#define DEBUG_CHAT 1
+//#define DEBUG_CHAT 1
 
 chat::chat(filedescriptor *readfd, filedescriptor *writefd) {
 	this->readfd=readfd;
@@ -15,6 +15,10 @@ chat::chat(filedescriptor *readfd, filedescriptor *writefd) {
 chat::~chat() {}
 
 int chat::runScript(const char *script) {
+	return runScript(script,NULL);
+}
+
+int chat::runScript(const char *script, namevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
 	printf("runScript(\"%s\")\n",script);
@@ -49,11 +53,12 @@ int chat::runScript(const char *script) {
 			timeout=charstring::toLong(
 				node->getAttributeValue("seconds"));
 		} else if (!charstring::compare(node->getName(),"abort")) {
-			aborts.append(node->getAttributeValue("string"));
+			appendAbortString(node->getAttributeValue("string"));
 		} else if (!charstring::compare(node->getName(),"clearabort")) {
-			aborts.clear();
+			clearAbortStrings();
 		} else if (!charstring::compare(node->getName(),"send")) {
-			result=send(node->getAttributeValue("string"));
+			result=send(node->getAttributeValue("string"),
+								variables);
 		} else if (!charstring::compare(node->getName(),"expect")) {
 			result=expect(node->getAttributeValue("string"));
 		}
@@ -76,6 +81,42 @@ int chat::runScript(const char *script) {
 	printf("success!\n");
 	#endif
 	return RESULT_SUCCESS;
+}
+
+void chat::appendAbortString(const char *string) {
+
+	char	*newstring=new char[charstring::length(string)+1];
+
+	// replace \\r and \\n
+	int	index=0;
+	for (char *ptr=(char *)string; *ptr; ptr++) {
+		if (*ptr=='\\') {
+			ptr++;
+			if (*ptr=='n') {
+				newstring[index]='\n';
+			} else if (*ptr=='r') {
+				newstring[index]='\r';
+			} else if (*ptr=='\\') {
+				newstring[index]='\\';
+			} else if (!*ptr) {
+				break;
+			}
+		} else {
+			newstring[index]=*ptr;
+		}
+		index++;
+	}
+
+	aborts.append(newstring);
+}
+
+void chat::clearAbortStrings() {
+	for (stringlistnode *sln=aborts.getNodeByIndex(0);
+					sln; sln=sln->getNext()) {
+		char	*abortstring=sln->getData();
+		delete[] abortstring;
+	}
+	aborts.clear();
 }
 
 int chat::expect(const char *string) {
@@ -144,7 +185,7 @@ int chat::expect(const char *string) {
 	}
 }
 
-int chat::send(const char *string) {
+int chat::send(const char *string, namevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
 	printf("sending:\n");
@@ -153,25 +194,29 @@ int chat::send(const char *string) {
 	// write the string, character at a time, processing special characters
 	int	result=RESULT_SUCCESS;
 	if (string) {
-		for (int index=0; string[index]; index++) {
-			
-			// process special characters
-			char	ch=string[index];
-			if (ch=='\\') {
-				index++;
-				ch=string[index];
-				if (!ch) {
+		for (char *ch=(char *)string; *ch; ch++) {
+
+			if (variables) {
+				result=substituteVariables(&ch,variables);
+				if (result!=RESULT_SUCCESS) {
 					break;
-				} else if (ch=='r') {
-					ch='\r';
-				} else if (ch=='n') {
-					ch='\n';
-				} else if (ch=='p') {
+				}
+			}
+
+			if (*ch=='\\') {
+				ch++;
+				if (!*ch) {
+					break;
+				} else if (*ch=='r') {
+					*ch='\r';
+				} else if (*ch=='n') {
+					*ch='\n';
+				} else if (*ch=='p') {
 					#ifdef DEBUG_CHAT
 					printf("\ndecisleep\n");
 					#endif
 					intervaltimer::microsleep(0,100000);
-				} else if (ch=='d') {
+				} else if (*ch=='d') {
 					#ifdef DEBUG_CHAT
 					printf("\nsleep\n");
 					#endif
@@ -181,18 +226,18 @@ int chat::send(const char *string) {
 			}
 
 			#ifdef DEBUG_CHAT
-			if (ch=='\r') {
+			if (*ch=='\r') {
 				printf("\\r");
-			} else if (ch=='\n') {
+			} else if (*ch=='\n') {
 				printf("\\n");
 			} else {
-				printf("%c",ch);
+				printf("%c",*ch);
 			}
 			fflush(stdout);
 			#endif
 
-			result=writefd->write(ch);
-			if (result!=RESULT_SUCCESS) {
+			result=writefd->write(*ch);
+			if (result!=sizeof(*ch)) {
 				#ifdef DEBUG_CHAT
 				printf("\n");
 				#endif
@@ -205,4 +250,38 @@ int chat::send(const char *string) {
 	printf("\n");
 	#endif
 	return result;
+}
+
+
+int chat::substituteVariables(char **ch, namevaluepairs *variables) {
+			
+	// look for $(variable), make sure we don't just have $(\0
+	char	*str=*ch;
+	if (charstring::compare(str,"$(") && *(str+2)) {
+
+		for (namevaluepairslistnode *nln=
+			(namevaluepairslistnode *)
+				variables->getList()->getNodeByIndex(0); nln;
+				nln=(namevaluepairslistnode *)nln->getNext()) {
+
+			char	*variable=nln->getData()->getKey();
+			ssize_t	varlen=charstring::length(variable);
+			char	*value=nln->getData()->getData();
+			if (!charstring::compare(variable,str+2,varlen) &&
+							*(str+2+varlen)==')') {
+				ssize_t	result=writefd->write(value);
+				#ifdef DEBUG_CHAT
+				printf("%s",value);
+				#endif
+				if (result!=charstring::length(value)) {
+					#ifdef DEBUG_CHAT
+					printf("\n");
+					#endif
+					return result;
+				}
+				*ch=*ch+3+varlen;
+			}
+		}
+	}
+	return RESULT_SUCCESS;
 }

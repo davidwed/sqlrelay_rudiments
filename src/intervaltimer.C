@@ -5,6 +5,8 @@
 #include <rudiments/intervaltimer.h>
 #include <rudiments/rawbuffer.h>
 
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 
@@ -213,14 +215,15 @@ bool intervaltimer::nanosleep(timespec *timetosleep) {
 	sleeptime.tv_sec=timetosleep->tv_sec;
 	sleeptime.tv_nsec=timetosleep->tv_nsec;
 	timespec	remaining;
-	while (sleeptime.tv_sec>0 && sleeptime.tv_nsec>0) {
-		if (!nanosleep(&sleeptime,&remaining) && errno!=EINTR) {
+	for (;;) {
+		if (nanosleep(&sleeptime,&remaining)) {
+			return true;
+		} else if (errno!=EINTR) {
 			return false;
 		}
 		sleeptime.tv_sec=remaining.tv_sec;
 		sleeptime.tv_nsec=remaining.tv_nsec;
 	}
-	return true;
 }
 
 bool intervaltimer::nanosleep(timespec *timetosleep,
@@ -254,7 +257,7 @@ bool intervaltimer::nanosleep(timespec *timetosleep,
 		// it's time struct to indicate how much time was left when it
 		// timed out.  And on the platforms that it does do that, if
 		// an error occurs such as being interrupted by a signal, then
-		// the values in the time struct are indefined anyway.
+		// the values in the time struct are undefined anyway.
 		//
 		// So, when using select/pselect, we can't return the number of
 		// nanoseconds that were left if a signal interrupts the call.

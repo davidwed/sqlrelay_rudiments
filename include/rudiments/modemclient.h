@@ -16,19 +16,20 @@ class modemclient : public client, public modemutil {
 
 		void	initialize(namevaluepairs *cd);
 			// Initializes the class to use "device",
-			// "baud, "connectscript", "disconnectscript",
-			// "retrywait" and "retrycount" when connect()
-			// is called.
+			// "baud, "connectscript", "phonenumber",
+			// "disconnectscript", "retrywait" and
+			// "retrycount" when connect() is called.
 		void	initialize(const char *device,
 					const char *baud,
 					const char *connectscript,
+					const char *phonenumber,
 					const char *disconnectscript,
 					unsigned int retrywait,
 					unsigned int retrycount);
 			// Initializes the class to use "device",
-			// "baud, "connectscript", "disconnectscript",
-			// "retrywait" and "retrycount" when connect()
-			// is called.
+			// "baud, "connectscript", "phonenumber",
+			// "disconnectscript", "retrywait" and
+			// "retrycount" when connect() is called.
 
 		int	connect();
 			// Dial the modem and attempt to establish a connection.

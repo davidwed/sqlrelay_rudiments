@@ -133,6 +133,7 @@ char *regularexpression::getSubstringStart(int index) {
 	int	offset=getSubstringStartOffset(index);
 	return (offset>-1)?(str+offset):NULL;
 }
+
 char *regularexpression::getSubstringEnd(int index) {
 	int	offset=getSubstringEndOffset(index);
 	return (offset>-1)?(str+offset):NULL;

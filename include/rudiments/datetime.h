@@ -133,22 +133,40 @@ class datetime {
 
 		long	getTimeZoneOffset() const;
 			// returns the offset from GMT (in seconds)
-
+			
 		bool	adjustTimeZone(const char *newtz);
 			// Recalculates the time currently represented in the
 			// class to correspond to the time zone "newtz".
+			//
+			// If, in the new timezone, daylight savings time is
+			// currently in effect, the time zone will be adjusted
+			// accordingly.  Ie.  if "newtz" = EST and daylight
+			// savings time is in effect in EST5EDT, then EDT
+			// will be used instead.
+			//
+			// Returns true on success and false on failure.
+
+		bool	adjustTimeZone(const char *newtz, bool ignoredst);
+			// Recalculates the time currently represented in the
+			// class to correspond to the time zone "newtz".
+			//
+			// If ignoredst is false, this method works like
+			// adjustTimezone(const char *newtz).  However if
+			// ignoredst is true, this method will not adjust
+			// EST to EDT if daylight savings time is in
+			// effect in EST5EDT.
 			//
 			// Returns true on success and false on failure.
 
 
 		// These methods allow you to add discrete time intervals to
 		// the time currently represented in the class.
-		void	addSeconds(int seconds);
-		void	addMinutes(int minutes);
-		void	addHours(int hours);
-		void	addDays(int days);
-		void	addMonths(int months);
-		void	addYears(int years);
+		bool	addSeconds(int seconds);
+		bool	addMinutes(int minutes);
+		bool	addHours(int hours);
+		bool	addDays(int days);
+		bool	addMonths(int months);
+		bool	addYears(int years);
 
 
 		// These methods output conversions to other date/time

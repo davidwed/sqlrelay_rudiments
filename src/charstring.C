@@ -549,11 +549,11 @@ void charstring::bothTrim(char *string) {
 }
 
 long charstring::toLong(const char *string) {
-	return (string)?strtol(string,NULL,0):0;
+	return (string)?strtol(string,NULL,10):0;
 }
 
 long charstring::toLong(const char *string, char **endptr) {
-	return (string)?strtol(string,endptr,0):0;
+	return (string)?strtol(string,endptr,10):0;
 }
 
 long charstring::toLong(const char *string, int base) {
@@ -565,11 +565,11 @@ long charstring::toLong(const char *string, char **endptr, int base) {
 }
 
 unsigned long charstring::toUnsignedLong(const char *string) {
-	return (string)?strtoul(string,NULL,0):0;
+	return (string)?strtoul(string,NULL,10):0;
 }
 
 unsigned long charstring::toUnsignedLong(const char *string, char **endptr) {
-	return (string)?strtoul(string,endptr,0):0;
+	return (string)?strtoul(string,endptr,10):0;
 }
 
 unsigned long charstring::toUnsignedLong(const char *string, int base) {
@@ -582,11 +582,11 @@ unsigned long charstring::toUnsignedLong(const char *string,
 }
 
 long long charstring::toLongLong(const char *string) {
-	return (string)?strtoll(string,NULL,0):0;
+	return (string)?strtoll(string,NULL,10):0;
 }
 
 long long charstring::toLongLong(const char *string, char **endptr) {
-	return (string)?strtoll(string,endptr,0):0;
+	return (string)?strtoll(string,endptr,10):0;
 }
 
 long long charstring::toLongLong(const char *string, int base) {
@@ -598,12 +598,12 @@ long long charstring::toLongLong(const char *string, char **endptr, int base) {
 }
 
 unsigned long long charstring::toUnsignedLongLong(const char *string) {
-	return (string)?strtoull(string,NULL,0):0;
+	return (string)?strtoull(string,NULL,10):0;
 }
 
 unsigned long long charstring::toUnsignedLongLong(const char *string,
 							char **endptr) {
-	return (string)?strtoull(string,endptr,0):0;
+	return (string)?strtoull(string,endptr,10):0;
 }
 
 unsigned long long charstring::toUnsignedLongLong(const char *string,
@@ -665,9 +665,9 @@ char *charstring::duplicate(const char *string, size_t length) {
 	if (!string) {
 		return NULL;
 	}
-	char	*buffer=new char[length];
+	char	*buffer=new char[length+1];
 	copy(buffer,string,length);
-	buffer[length-1]=(char)NULL;
+	buffer[length]=(char)NULL;
 	return buffer;
 }
 #endif
