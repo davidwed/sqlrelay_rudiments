@@ -10,8 +10,8 @@ inline int	permissions::setFilePermissions(const char *filename,
 	return chmod(filename,perms);
 }
 
-inline int	permissions::setFilePermissions(int filehandle, mode_t perms) {
-	return fchmod(filehandle,perms);
+inline int	permissions::setFilePermissions(int fd, mode_t perms) {
+	return fchmod(fd,perms);
 }
 
 inline mode_t	permissions::everyoneReadWrite() {

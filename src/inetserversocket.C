@@ -37,13 +37,13 @@ int	inetserversocket::initialize(const char *address, unsigned short port) {
 	}
 
 	// create the socket
-	return (filedescriptor=socket(AF_INET,SOCK_STREAM,0))>-1;
+	return (fd=socket(AF_INET,SOCK_STREAM,0))>-1;
 }
 
 int	inetserversocket::bind() {
 
 	// bind the socket
-	if (::bind(filedescriptor,(struct sockaddr *)&sin,sizeof(sin))==-1) {
+	if (::bind(fd,(struct sockaddr *)&sin,sizeof(sin))==-1) {
 		return 0;
 	}
 
@@ -55,8 +55,7 @@ int	inetserversocket::bind() {
 		socklen_t	size=sizeof(socknamesin);
 		memset((void *)&socknamesin,0,sizeof(socknamesin));
 
-		if (getsockname(filedescriptor,
-					(struct sockaddr *)&socknamesin,
+		if (getsockname(fd,(struct sockaddr *)&socknamesin,
 					(socklen_t *)&size)>-1) {
 			port=(unsigned short int)ntohs(socknamesin.sin_port);
 		}
@@ -73,8 +72,7 @@ inetsocket	*inetserversocket::acceptClientConnection() {
 
 	// accept on the socket
 	int		clientsock;
-	if ((clientsock=accept(filedescriptor,
-					(struct sockaddr *)&clientsin,
+	if ((clientsock=::accept(fd,(struct sockaddr *)&clientsin,
 					(socklen_t *)&size))==-1) {
 		return NULL;
 	}
@@ -91,8 +89,7 @@ char	*inetserversocket::getClientAddress() {
 	memset((void *)&clientsin,0,sizeof(clientsin));
 
 	// get the peer address
-	if (getpeername(filedescriptor,
-				(struct sockaddr *)&clientsin,
+	if (getpeername(fd,(struct sockaddr *)&clientsin,
 				(socklen_t *)&size)==-1) {
 		return NULL;
 	}

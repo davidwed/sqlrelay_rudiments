@@ -6,7 +6,7 @@
 
 #include <rudiments/private/config.h>
 
-#include <rudiments/private/clienttransport.h>
+#include <rudiments/client.h>
 #include <rudiments/private/unixsocket.h>
 
 // The unixclientsocket class allows you to write programs that can talk to
@@ -17,10 +17,10 @@
 // better.
 //
 // The inetclientsocket class provides methods for connecting to servers.
-// Its ultimate parent class: transport provides methods for reading and 
+// Its ultimate parent class: filedescriptor provides methods for reading and 
 // writing data and closing connections.
 
-class unixclientsocket : public clienttransport, public unixsocket {
+class unixclientsocket : public client, public unixsocket {
 	public:
 
 		int	connectToServer(const char *filename,
@@ -55,15 +55,6 @@ class unixclientsocket : public clienttransport, public unixsocket {
 			// as fast as possible (not recommended).
 			//
 			// Returns 1 on success and 0 on failure.
-
-
-
-		// Many operating systems support passing an open file
-		// descriptor between processes.  The receiving process can
-		// then read or write data to or from that file descriptor.
-		// These methods implement that functionality.
-		int	passFileDescriptor(int descriptor);
-		int	receiveFileDescriptor(int *descriptor);
 };
 
 #ifdef ENABLE_INLINES

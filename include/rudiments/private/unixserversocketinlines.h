@@ -10,31 +10,3 @@ inline int	unixserversocket::listenOnSocket(const char *filename,
 	initialize(filename,mask);
 	return bind() && listen(backlog);
 }
-
-inline int	unixserversocket::lingerOnClose(int timeout) {
-	return serversocket::lingerOnClose(timeout);
-}
-
-inline int	unixserversocket::dontLingerOnClose() {
-	return serversocket::dontLingerOnClose();
-}
-
-inline int	unixserversocket::reuseAddresses() {
-	return serversocket::reuseAddresses();
-}
-
-inline int	unixserversocket::dontReuseAddresses() {
-	return serversocket::dontReuseAddresses();
-}
-
-inline int	unixserversocket::listen(int backlog) {
-	return serversocket::listen(backlog);
-}
-
-inline int	unixserversocket::passFileDescriptor(int descriptor) {
-	return unixsocket::passFileDescriptor(descriptor);
-}
-
-inline int	unixserversocket::receiveFileDescriptor(int *descriptor) {
-	return unixsocket::receiveFileDescriptor(descriptor);
-}

@@ -1,31 +1,8 @@
-filedescriptor - open,close,read,write
-	file - chmod,chown,stat
-	transport - pass fd
-		client - connect
-			socket
-				unix
-				inet
-					tcp
-						stream
-						dgram
-					udp
-			serial
-				modem
-			ipc
-			
-		server - bind,listen,accept
-			socket
-				unix
-				inet
-					tcp
-						stream
-						dgram
-					udp
-			serial
-				modem
-			ipc
+document filedescriptor
+test program for filedescriptor
 
-
+document file
+test program for file
 
 document stringbuffer
 test program for stringbuffer

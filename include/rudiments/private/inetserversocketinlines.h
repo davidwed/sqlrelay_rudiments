@@ -9,26 +9,6 @@ inline int	inetserversocket::listenOnSocket(const char *address,
 	return bind() && listen(backlog);
 }
 
-inline int	inetserversocket::lingerOnClose(int timeout) {
-	return serversocket::lingerOnClose(timeout);
-}
-
-inline int	inetserversocket::dontLingerOnClose() {
-	return serversocket::dontLingerOnClose();
-}
-
-inline int	inetserversocket::reuseAddresses() {
-	return serversocket::reuseAddresses();
-}
-
-inline int	inetserversocket::dontReuseAddresses() {
-	return serversocket::dontReuseAddresses();
-}
-
-inline int	inetserversocket::listen(int backlog) {
-	return serversocket::listen(backlog);
-}
-
 inline unsigned short	inetserversocket::getPort() {
 	return port;
 }

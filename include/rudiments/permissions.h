@@ -33,10 +33,9 @@ class permissions {
 		static	int	setFilePermissions(const char *filename,
 							mode_t perms);
 				// set the permissions on "filename" to "perms"
-		static	int	setFilePermissions(int filehandle,
-							mode_t perms);
+		static	int	setFilePermissions(int fd, mode_t perms);
 				// set the permissions on the file associated
-				// with "filehandle" to "perms"
+				// with file descriptor "fd" to "perms"
 
 		static	mode_t	evalPermString(const char *permstring);
 				// Return a permission defined in "permstring".

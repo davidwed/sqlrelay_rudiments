@@ -13,6 +13,7 @@ class unixsocket : virtual public transport {
 			unixsocket();
 			unixsocket(int filedescriptor);
 		void	initialize(const char *filename);
+
 		int	passFileDescriptor(int descriptor);
 		int	receiveFileDescriptor(int *descriptor);
 	protected:

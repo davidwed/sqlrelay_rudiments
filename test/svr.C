@@ -35,7 +35,7 @@ void	myserver::listen() {
 		transport	*clientsock=acceptClientConnection();
 		char	buffer[6];
 		buffer[5]=(char)NULL;
-		int	sizeread=clientsock->read(buffer,5);
+		int	sizeread=clientsock->read((char *)buffer,5);
 		printf("%s\n",buffer);
 		clientsock->write("hello",5);
 		clientsock->close();

@@ -30,7 +30,7 @@ int	unixserversocket::initialize(const char *filename, mode_t mask) {
 	strcpy(sun.sun_path,filename);
 
 	// create the socket
-	return (filedescriptor=socket(AF_UNIX,SOCK_STREAM,0))>-1;
+	return (fd=socket(AF_UNIX,SOCK_STREAM,0))>-1;
 }
 
 int	unixserversocket::bind() {
@@ -40,7 +40,7 @@ int	unixserversocket::bind() {
 
 	// bind the socket
 	int	retval=1;
-	if (::bind(filedescriptor,(struct sockaddr *)&sun,sizeof(sun))==-1) {
+	if (::bind(fd,(struct sockaddr *)&sun,sizeof(sun))==-1) {
 		retval=0;
 	}
 
@@ -59,8 +59,7 @@ unixsocket	*unixserversocket::acceptClientConnection() {
 
 	// accept on the socket
 	int		clientsock;
-	if ((clientsock=accept(filedescriptor,
-					(struct sockaddr *)&clientsun,
+	if ((clientsock=::accept(fd,(struct sockaddr *)&clientsun,
 					(socklen_t *)&size))==-1) {
 		return NULL;
 	}

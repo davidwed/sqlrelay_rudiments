@@ -6,17 +6,17 @@
 
 #include <rudiments/private/config.h>
 
-#include <rudiments/private/clienttransport.h>
+#include <rudiments/client.h>
 #include <rudiments/private/inetsocket.h>
 
 // The inetclientsocket class allows you to write programs that can talk to
 // other programs across a network over TCP stream sockets.
 //
 // The inetclientsocket class provides methods for connecting to servers.
-// Its ultimate parent class: transport provides methods for reading and 
+// Its ultimate parent class: filedescriptor provides methods for reading and 
 // writing data and closing connections.
 
-class inetclientsocket : public clienttransport, public inetsocket  {
+class inetclientsocket : public client, public inetsocket  {
 	public:
 
 		int	connectToServer(const char *host,

@@ -76,7 +76,7 @@ int	unixsocket::passFileDescriptor(int descriptor) {
 	#endif
 
 	// finally, send the msghdr
-	return sendmsg(filedescriptor,&messageheader,0)!=-1;
+	return sendmsg(fd,&messageheader,0)!=-1;
 }
 
 int	unixsocket::receiveFileDescriptor(int *descriptor) {
@@ -125,7 +125,7 @@ int	unixsocket::receiveFileDescriptor(int *descriptor) {
 	#endif
 
 	// receive the msghdr
-	if (recvmsg(filedescriptor,&messageheader,0)==-1) {
+	if (recvmsg(fd,&messageheader,0)==-1) {
 		return 0;
 	}
 

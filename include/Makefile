@@ -6,11 +6,14 @@ INSTALL = $(top_srcdir)/install-sh -c
 install:
 	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments
 	$(top_srcdir)/mkinstalldirs $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/client.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/commandline.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/connectiondata.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/daemonprocess.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/datetime.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/errorhandler.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/file.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/filedescriptor.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/fileproperties.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/filesystem.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/inetclientsocket.h $(incdir)/rudiments
@@ -22,6 +25,8 @@ install:
 	$(INSTALL) -m 644 rudiments/randomnumber.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/regularexpression.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/semaphoreset.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/server.h $(incdir)/rudiments
+	$(INSTALL) -m 644 rudiments/serversocket.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/sharedmemory.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/signalclasses.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/stringbuffer.h $(incdir)/rudiments
@@ -33,7 +38,7 @@ install:
 	$(INSTALL) -m 644 rudiments/xmlsax.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/xmldom.h $(incdir)/rudiments
 	$(INSTALL) -m 644 rudiments/xmldomnode.h $(incdir)/rudiments
-	$(INSTALL) -m 644 rudiments/private/clienttransport.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/client.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/commandline.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/commandlineinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/config.h $(incdir)/rudiments/private
@@ -49,6 +54,8 @@ install:
 	$(INSTALL) -m 644 rudiments/private/errorhandlerinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedescriptornode.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filedestination.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/filedescriptor.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/fileinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/fileproperties.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filepropertiesinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/filesystem.h $(incdir)/rudiments/private
@@ -72,7 +79,9 @@ install:
 	$(INSTALL) -m 644 rudiments/private/regularexpressioninlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/semaphoreset.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/semaphoresetinlines.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/serverinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/serversocket.h $(incdir)/rudiments/private
+	$(INSTALL) -m 644 rudiments/private/serversocketinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/sharedmemory.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/sharedmemoryinlines.h $(incdir)/rudiments/private
 	$(INSTALL) -m 644 rudiments/private/signalclassesinlines.h $(incdir)/rudiments/private

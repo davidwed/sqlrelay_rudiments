@@ -31,8 +31,8 @@ int	unixclientsocket::connect() {
 	strcpy(sun.sun_path,filename);
 
 	// create a unix socket
-	if ((filedescriptor=socket(AF_UNIX,SOCK_STREAM,0))==-1) {
-		filedescriptor=-1;
+	if ((fd=socket(AF_UNIX,SOCK_STREAM,0))==-1) {
+		fd=-1;
 		return 0;
 	}
 
@@ -40,8 +40,7 @@ int	unixclientsocket::connect() {
 	for (int counter=0; counter<retrycount || !retrycount; counter++) {
 
 		// attempt to connect
-		if (::connect(filedescriptor,
-				(struct sockaddr *)&sun,sizeof(sun))!=-1) {
+		if (::connect(fd,(struct sockaddr *)&sun,sizeof(sun))!=-1) {
 			return 1;
 		}
 

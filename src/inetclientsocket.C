@@ -50,9 +50,8 @@ int	inetclientsocket::connect() {
 	}
 
 	// create an inet socket
-	if ((filedescriptor=socket(AF_INET,SOCK_STREAM,
-						protocol->p_proto))==-1) {
-		filedescriptor=-1;
+	if ((fd=socket(AF_INET,SOCK_STREAM,protocol->p_proto))==-1) {
+		fd=-1;
 		return 0;
 	}
 
@@ -73,8 +72,8 @@ int	inetclientsocket::connect() {
 			addressindex++;
 	
 			// attempt to connect
-			if (::connect(filedescriptor,
-				(struct sockaddr *)&sin,sizeof(sin))!=-1) {
+			if (::connect(fd,(struct sockaddr *)&sin,
+							sizeof(sin))!=-1) {
 					return 1;
 			}
 		}

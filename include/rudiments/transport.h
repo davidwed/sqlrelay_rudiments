@@ -6,53 +6,32 @@
 
 #include <rudiments/private/config.h>
 
-#include <sys/types.h>
+#include <rudiments/filedescriptor.h>
 
 // The transport class is a base class for other classes that transport data
 // over (or associated with) a file descriptor (such as clients and servers).
 
-class transport {
+class transport : public filedescriptor {
 	public:
-			transport(int filedescriptor);
+
+			transport();
+				// Creates an uninitialized transport.
+			transport(int fd);
 				// Creates a transport and associates the
-				// already open "filedescriptor" with it.
-		virtual	~transport();
-				// Calls close() if it hasn't already been
-				// called.
+				// already open file descriptor "fd" with it.
 
-
-		virtual int	close();
-				// Closes the file descriptor.
-				// Returns 1 on success and 0 on failure.
-
-		virtual int	getFileDescriptor() const;
-				// Returns the file descriptor.
-
+		using filedescriptor::write;
+		using filedescriptor::read;
 
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were
 		// successfully written.
 		virtual ssize_t	write(unsigned short number);
-				// Write "number" to the file descriptor.
+				// Converts "number" to network byte order
+				// and writes it to the file descriptor.
 		virtual ssize_t	write(unsigned long number);
-				// Write "number" to the file descriptor.
-		virtual ssize_t	write(float number);
-				// Write "number" to the file descriptor.
-		virtual ssize_t	write(double number);
-				// Write "number" to the file descriptor.
-		virtual ssize_t	write(char character);
-				// Write "character" to the file descriptor.
-		virtual ssize_t	write(const char *string);
-				// Write "string" to the file descriptor.  Note
-				// that "string" must be NULL-terminated.
-		virtual ssize_t	write(const char *string, size_t size);
-				// Write "size" bytes from "string" to the file
-				// descriptor.  Note that it is possible to
-				// write beyond the string's NULL terminator
-				// using this method.
-		virtual ssize_t	write(const void *buffer, size_t size);
-				// Write "size" bytes from "buffer" to the file
-				// descriptor.
+				// Converts "number" to network byte order
+				// and writes it to the file descriptor.
 
 
 		// Read methods - read data to the file descriptor.
@@ -60,48 +39,12 @@ class transport {
 		// successfully read.
 		virtual ssize_t	read(unsigned short *buffer);
 				// Reads sizeof(unsigned short) bytes
-				// from the file descriptor into "buffer".
+				// from the file descriptor into "buffer" and
+				// converts "buffer" to host byte order.
 		virtual ssize_t	read(unsigned long *buffer);
 				// Reads sizeof(unsigned long) bytes
-				// from the file descriptor into "buffer".
-		virtual ssize_t	read(float *buffer);
-				// Reads sizeof(float) bytes from the file
-				// descriptor into "buffer".
-		virtual ssize_t	read(double *buffer);
-				// Reads sizeof(double) bytes from the file
-				// descriptor into "buffer".
-		virtual ssize_t	read(char *buffer);
-				// Reads sizeof(char) bytes from the file
-				// descriptor into "buffer".
-		virtual ssize_t	read(char *buffer, size_t size);
-				// Reads "size" bytes from the file descriptor
-				// into "buffer".
-		virtual ssize_t	read(void *buf, size_t size);
-				// Reads "size" bytes from the file descriptor
-				// into "buffer".
-		virtual ssize_t	read(char **buffer, char *terminator);
-				// Reads from the file desciptor into "buffer"
-				// until "terminator" is encountered.  Note
-				// that "buffer" is allocated internally and
-				// must be freed by the calling program.
-
-
-		// By default, if a read or write is occurring and a signal
-		// interrupts it, the read or write returns with errno set to
-		// EINTR and must be retried.  These methods override that
-		// behavior.
-		void	retryInterruptedReads();
-			// Causes reads to automatically retry if interrupted
-			// by a signal.
-		void	dontRetryInterruptedReads();
-			// Causes reads not to automatically retry if
-			// interrupted by a signal.  This is the default.
-		void	retryInterruptedWrites();
-			// Causes writes not to automatically retry if
-			// interrupted by a signal.  This is the default.
-		void	dontRetryInterruptedWrites();
-			// Causes writes not to automatically retry if
-			// interrupted by a signal.  This is the default.
+				// from the file descriptor into "buffer" and
+				// converts "buffer" to host byte order.
 
 	#include <rudiments/private/transport.h>
 };

@@ -6,7 +6,7 @@
 
 #include <rudiments/private/config.h>
 
-#include <rudiments/private/serversocket.h>
+#include <rudiments/serversocket.h>
 #include <rudiments/private/inetsocket.h>
 
 // The inetserversocket class allows you to write programs that can talk to
@@ -43,9 +43,6 @@ class inetserversocket : public serversocket, public inetsocket {
 
 
 
-		// The following 9 methods provide discrete control over socket
-		// initialization.
-		//
 		// If you need to set socket options or do anything special
 		// between the discrete steps of socket initialization, you
 		// should use a combination of these methods.
@@ -59,44 +56,6 @@ class inetserversocket : public serversocket, public inetsocket {
 			//
 			// Returns 1 on success and 0 on failure.
 
-		// These 4 methods allow you to set socket options.  They must
-		// be called after calling bind() and before calling listen().
-		int	lingerOnClose(int timeout);
-			// Instructs the socket to stay open for
-			// "timeout" seconds even after close() is
-			// called to allow the client to receive
-			// any data that may still be buffered.
-			//
-			// Returns 1 on success and 0 on failure.
-		int	dontLingerOnClose();
-			// Instructs the socket to close immediately
-			// when close() is called, dumping any data
-			// that may still be buffered but that the
-			// client may not have received.  This is
-			// the default.
-			//
-			// Returns 1 on success and 0 on failure.
-		int	reuseAddresses();
-			// Allows sockets in the TIME_WAIT state to be
-			// reused.
-			//
-			// Returns 1 on success and 0 on failure.
-		int	dontReuseAddresses();
-			// Prevents sockets in the TIME_WAIT state from
-			// being reused.  This is the default.
-			//
-			// Returns 1 on success and 0 on failure.
-
-
-		// These 4 methods allow you to set socket options.  They must
-		// be called after calling bind() and before calling listen().
-		int		listen(int backlog);
-				// Waits until a client connects then places
-				// that connection in queue.  Up to "backlog"
-				// connections may be queued before future
-				// conenctions are refused.
-				//
-				// Returns 1 on success and 0 on failure.
 		inetsocket	*acceptClientConnection();
 				// Removes the client connection from the queue
 				// and associates a new socket with that

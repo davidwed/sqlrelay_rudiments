@@ -15,11 +15,3 @@ inline void	unixclientsocket::initialize(const char *filename,
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;
 }
-
-inline int	unixclientsocket::passFileDescriptor(int descriptor) {
-	return unixsocket::passFileDescriptor(descriptor);
-}
-
-inline int	unixclientsocket::receiveFileDescriptor(int *descriptor) {
-	return unixsocket::receiveFileDescriptor(descriptor);
-}
