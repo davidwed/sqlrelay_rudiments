@@ -41,6 +41,7 @@ unconfig: clean
 	$(RM) bin/rudiments-config
 	$(RM) libtool
 	$(RMTREE) autom4te.cache
+	$(RM) strip-comment-note
 
 distclean: unconfig
 

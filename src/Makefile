@@ -1,8 +1,7 @@
+top_builddir = ..
+
 include ../config.mk
 include ../features.mk
-
-top_builddir = ..
-INSTALL = $(top_builddir)/install-sh -c
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
@@ -160,9 +159,7 @@ endif
 
 .C.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-	if ( test "$(STRIP)" != "touch" ); then \
-		$(STRIP) -x -R .note -R .comment $@; \
-	fi
+	$(STRIPCOMMENTNOTE) $@
 
 all: librudiments.la
 
@@ -178,7 +175,7 @@ librudiments.la: $(SRCS) $(LOBJS)
 	$(LIBTOOL) --mode=link $(CXX) -o $@ $(LOBJS) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO)
 
 install:
-	$(top_builddir)/mkinstalldirs $(libdir)
+	$(MKINSTALLDIRS) $(libdir)
 	$(LIBTOOL) --mode=install $(INSTALL) $(INSTALLSTRIP) librudiments.la $(libdir)/librudiments.la
 	$(LIBTOOL) --mode=finish $(libdir)
 
