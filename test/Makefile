@@ -14,6 +14,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) lsnr svr inetclnt unixclnt dmn err cmdline log passwdgroup permissions protohost regexp sem1 sem2 shm1 shm2 text datetime dtd file list mem random signal string handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient tbl vbuf xmls xmld
 	$(RM) test.log
+	$(RMTREE) .libs
 
 rebuild: clean all
 
