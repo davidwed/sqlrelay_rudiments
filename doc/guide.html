@@ -79,13 +79,15 @@ utility classes, others are designed to be base classes for software.</p>
 	<li><b><a href="classes/filedescriptor.h.html">filedescriptor</a></b> - base class for classes that need to interact with file descriptors
 	<ul>
 		<li><b><a href="classes/file.h.html">file</a></b> - base class for classes that need to interact with files
-		<li><b><a href="classes/datatransportfactory.h.html">datatransportfactory</a></b> - class for generating instances of clients and servers
-		<li><b><a href="classes/datatransport.h.html">datatransport</a></b> - base class for classes that transport data over (or associated with) a file descriptor (such as clients and servers)
+		<li><b><a href="classes/clientserverfactory.h.html">clientserverfactory</a></b> - class for generating instances of clients and servers
 		<ul>
 			<li><b><a href="classes/client.h.html">client</a></b> - base class for clients
 			<ul>
-				<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
-				<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
+				<li><b><a href="classes/clientsocket.h.html">clientsocket</a></b> - base class for clients that listen on sockets
+				<ul>
+					<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
+					<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
+				</ul>
 			</ul>
 			<li><b><a href="classes/server.h.html">server</a></b> - base class for servers
 			<ul>

@@ -12,7 +12,6 @@
 <li><a href="#errorhandler">Using the Error Handler Class</a></li>
 <li><a href="#filedescriptor">Using the File Descriptor Class</a></li>
 <li><a href="#file">Using the File Class</a></li>
-<li><a href="#datatransport">Using the Data Transport Classes</a></li>
 <li><a href="#server">Using the Server Socket Classes</a></li>
 <li><a href="#client">Using the Client Socket Classes</a></li>
 <li><a href="#complex">Using the Complex Socket Initialization methods of the Server Classes</a></li>
@@ -177,11 +176,6 @@ main() {
 
 <p>...</p>
 
-<a name="#datatransport">
-<span class="heading">Using the Data Transport Classes</span><br><br>
-
-<p>...</p>
-
 <a name="server"></a>
 <span class="heading">Using the Server Socket Classes</span><br><br>
 
@@ -222,8 +216,8 @@ myserver::myserver() : daemonprocess(), listener() {
         detach();
 
         <font color="#0000f8">// open, bind and listen on an inet port and unix socket</font>
-        inetsocket.listenOnSocket(<font color="#f800f8">NULL</font>,<font color="#f800f8">8040</font>,<font color="#f800f8">15</font>);
-        unixsocket.listenOnSocket(<font color="#f800f8">&quot;/tmp/mysocket&quot;</font>,S_IRUSR|S_IWUSR,<font color="#f800f8">15</font>);
+        inetsocket.listen(<font color="#f800f8">NULL</font>,<font color="#f800f8">8040</font>,<font color="#f800f8">15</font>);
+        unixsocket.listen(<font color="#f800f8">&quot;/tmp/mysocket&quot;</font>,S_IRUSR|S_IWUSR,<font color="#f800f8">15</font>);
 
         <font color="#0000f8">// add the sockets to the pool</font>
         addFileDescriptor(inetsocket.getFileDescriptor());
@@ -245,9 +239,9 @@ myserver::~myserver() {
 		getReadyList()-&gt;getDataByIndex(<font color="#f800f8">0</font>,&amp;fd);
 
                 <font color="#a02828"><b>if</b></font> (fd==inetsocket.getFileDescriptor()) {
-                        sock=inetsocket.acceptClientConnection();
+                        sock=inetsocket.accept();
                 } <font color="#a02828"><b>else</b></font> <font color="#a02828"><b>if</b></font> (fd==unixsocket.getFileDescriptor()) {
-                        sock=unixsocket.acceptClientConnection();
+                        sock=unixsocket.accept();
                 }
 
                 <font color="#0000f8">// fork to handle the new connection</font>
@@ -337,12 +331,12 @@ out.  It does this once over an inet port and once over a unix port.</p>
 };
 
 <font color="#288850"><b>void</b></font>    myclient::inetSession(<font color="#288850"><b>char</b></font> *host, <font color="#288850"><b>int</b></font> port, <font color="#288850"><b>char</b></font> *message) {
-        inetsock.connectToServer(host,port,<font color="#f800f8">0</font>,<font color="#f800f8">1</font>);
+        inetsock.connect(host,port,<font color="#f800f8">0</font>,<font color="#f800f8">1</font>);
         session(&amp;inetsock,message);
 }
 
 <font color="#288850"><b>void</b></font>    myclient::unixSession(<font color="#288850"><b>char</b></font> *socket, <font color="#288850"><b>char</b></font> *message) {
-        unixsock.connectToServer(socket,<font color="#f800f8">0</font>,<font color="#f800f8">1</font>);
+        unixsock.connect(socket,<font color="#f800f8">0</font>,<font color="#f800f8">1</font>);
         session(&amp;unixsock,message);
 }
 
@@ -383,7 +377,7 @@ main() {
 Server Classes</span><br><br>
 
 <p>Setting up a server to listen on a socket is actually a multi-step process. 
-The listenOnSocket() methods simplify this process but some applications may
+The listen() methods simplify this process but some applications may
 require a more flexible interface.  If you need to set socket options or
 perform additional actions between the steps of socket initialization, you can
 use the Complex Socket Inititalization methods of the server classes.</p>
