@@ -77,6 +77,25 @@ class file : public filedescriptor {
 			// Sets the initial contents to "data" of size "size".
 
 
+		// The following methods allow you to lock files or regions
+		// of files.
+		//
+		// The tryLock() methods attempt to lock and return success if
+		// the lock can be established immediately or false otherwise.
+		//
+		// The lock() methods block until a lock is established and
+		// return true on success or false if an error occurs.
+		//
+		// The checkLock() methods check to see if a lock can be
+		// established but do not actually lock anything.  If a lock
+		// can be established, they return true. Otherwise they return
+		// false and populate the fields in the supplied flock struct
+		// with information about one of the conflicting locks.
+		//
+		// The unlock() methods attempt to release a previosly
+		// established lock and return true on success or false on
+		// error.
+
 		// These methods allow you to lock the entire file.
 		bool	tryLockFile(short type);
 		bool	lockFile(short type);
@@ -154,10 +173,16 @@ class file : public filedescriptor {
 
 		// These methods allow you to truncate a file
 		static	bool	truncate(const char *filename);
-		static	bool	truncate(const char *filename, off_t length);
-		bool	truncate();
-		bool	truncate(off_t length);
+		bool		truncate();
+				// Truncates all data in the file, resulting in
+				// a file of zero length.  Returns true on
+				// success and false on failure.
 
+		static	bool	truncate(const char *filename, off_t length);
+		bool		truncate(off_t length);
+				// Truncates all data beyond the first "length"
+				// bytes, resulting in a file of "length" bytes.
+				// Returns true on success and false on failure.
 
 		// These methods allow you to set the position at which the
 		// next read or write will occur.  Each returns the position

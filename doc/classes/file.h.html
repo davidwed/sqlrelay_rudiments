@@ -1,315 +1,461 @@
 <html>
 <head>
-<title>/usr/local/src/rudiments-0.25/include/rudiments/file.h.html</title>
-<meta name="Generator" content="Vim/6.1">
+<title>~/src/firstworks/rudiments-0.26/include/rudiments/file.h.html</title>
+<meta name="Generator" content="Vim/6.2">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
 <pre>
-<font color="#0000f8">// Copyright (c) 2002 David Muse</font>
-<font color="#0000f8">// See the COPYING file for more information.</font>
+<font color="#0000ff">// Copyright (c) 2002 David Muse</font>
+<font color="#0000ff">// See the COPYING file for more information.</font>
 
 <font color="#a020f0">#ifndef RUDIMENTS_FILE_H</font>
 <font color="#a020f0">#define RUDIMENTS_FILE_H</font>
 
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;rudiments/filedescriptor.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;stdlib.h&gt;</font>
-<font color="#a020f0">#ifndef __USE_UNIX98</font>
-<font color="#a020f0">        #define __USE_UNIX98</font>
-<font color="#a020f0">#endif</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/types.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;sys/stat.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#f800f8">&lt;fcntl.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/fileincludes.h&gt;</font>
 
-<font color="#a020f0">#ifndef HAVE_BLKCNT_T</font>
-        <font color="#288850"><b>typedef</b></font> <font color="#288850"><b>long</b></font> blkcnt_t;
-<font color="#a020f0">#endif</font>
-<font color="#a020f0">#ifndef HAVE_BLKSIZE_T</font>
-        <font color="#288850"><b>typedef</b></font> <font color="#288850"><b>long</b></font> blksize_t;
-<font color="#a020f0">#endif</font>
+<font color="#0000ff">// The file class provides methods for interacting with files and for </font>
+<font color="#0000ff">// discovering the properties associated with a file such as permissions,</font>
+<font color="#0000ff">// ownership, size, etc.</font>
+<font color="#0000ff">//</font>
+<font color="#0000ff">// Use the static methods in this class if you need to get a a single property.</font>
+<font color="#0000ff">//</font>
+<font color="#0000ff">// If you need to get more that one property, create an instance of the class,</font>
+<font color="#0000ff">// call open(), then use the non-static methods to access the properties that</font>
+<font color="#0000ff">// you need.</font>
 
-<font color="#0000f8">// The file class provides methods for interacting with files and for </font>
-<font color="#0000f8">// discovering the properties associated with a file such as permissions,</font>
-<font color="#0000f8">// ownership, size, etc.</font>
-<font color="#0000f8">//</font>
-<font color="#0000f8">// Use the static methods in this class if you need to get a a single property.</font>
-<font color="#0000f8">//</font>
-<font color="#0000f8">// If you need to get more that one property, create an instance of the class,</font>
-<font color="#0000f8">// call open(), then use the non-static methods to access the properties that</font>
-<font color="#0000f8">// you need.</font>
-
-<font color="#288850"><b>class</b></font> file : <font color="#a02828"><b>public</b></font> filedescriptor {
-        <font color="#a02828"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> file : <font color="#a52a2a"><b>public</b></font> filedescriptor {
+        <font color="#a52a2a"><b>public</b></font>:
                         file();
-                        <font color="#0000f8">// Creates an uninitialized instance of the file class.</font>
-                        file(<font color="#288850"><b>int</b></font> fd);
-                        <font color="#0000f8">// Creates an uninitialized instance of the file class</font>
-                        <font color="#0000f8">// and associates already open file descriptor &quot;fd&quot;</font>
-                        <font color="#0000f8">// with it.</font>
+                        <font color="#0000ff">// Creates an uninitialized instance of the file class.</font>
+                        file(<font color="#2e8b57"><b>int</b></font> fd);
+                        <font color="#0000ff">// Creates an uninitialized instance of the file class</font>
+                        <font color="#0000ff">// and associates already open file descriptor &quot;fd&quot;</font>
+                        <font color="#0000ff">// with it.</font>
 
-                <font color="#288850"><b>int</b></font>     open(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, <font color="#288850"><b>int</b></font> flags);
-                        <font color="#0000f8">// Opens file &quot;name&quot; using &quot;flags&quot;.  Once the file is</font>
-                        <font color="#0000f8">// open, it also gets it's properties.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#2e8b57"><b>bool</b></font>    open(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>int</b></font> flags);
+                        <font color="#0000ff">// Opens file &quot;name&quot; using &quot;flags&quot;.  Once the file is</font>
+                        <font color="#0000ff">// open, it also gets it's properties.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#288850"><b>int</b></font>     open(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, <font color="#288850"><b>int</b></font> flags, mode_t perms);
-                        <font color="#0000f8">// Opens file &quot;name&quot; using &quot;flags&quot;.  If the file</font>
-                        <font color="#0000f8">// doesn't already exist and flags contains O_CREAT,</font>
-                        <font color="#0000f8">// the file will be created with permissions &quot;perms&quot;.</font>
-                        <font color="#0000f8">// Once the file is open, it also gets it's properties.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#2e8b57"><b>bool</b></font>    open(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>int</b></font> flags, mode_t perms);
+                        <font color="#0000ff">// Opens file &quot;name&quot; using &quot;flags&quot;.  If the file</font>
+                        <font color="#0000ff">// doesn't already exist and flags contains O_CREAT,</font>
+                        <font color="#0000ff">// the file will be created with permissions &quot;perms&quot;.</font>
+                        <font color="#0000ff">// Once the file is open, it also gets it's properties.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#288850"><b>int</b></font>     create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms);
-                        <font color="#0000f8">// Creates the file &quot;name&quot; with permissions &quot;perms&quot;</font>
-                        <font color="#0000f8">// If the file already exists, it will be truncated.</font>
-                        <font color="#0000f8">// Once the file is created, it also gets it's</font>
-                        <font color="#0000f8">// properties.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns 1 on success and 0 on failure.</font>
+                <font color="#2e8b57"><b>bool</b></font>    create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms);
+                        <font color="#0000ff">// Creates the file &quot;name&quot; with permissions &quot;perms&quot;</font>
+                        <font color="#0000ff">// If the file already exists, it will be truncated.</font>
+                        <font color="#0000ff">// Once the file is created, it also gets it's</font>
+                        <font color="#0000ff">// properties.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#0000f8">// These methods create the file &quot;name&quot; with permissions</font>
-                <font color="#0000f8">// &quot;perms&quot;.  If the the file already exists, it will be</font>
-                <font color="#0000f8">// truncated.  The initial contents of the file are set to</font>
-                <font color="#0000f8">// &quot;data&quot;.</font>
-                <font color="#0000f8">//</font>
-                <font color="#0000f8">// These methods return the number of bytes written to the file</font>
-                <font color="#0000f8">// or -1 if an error occurs.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>short</b></font> number);
-                        <font color="#0000f8">// Sets the initial contents &quot;number&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>long</b></font> number);
-                        <font color="#0000f8">// Sets the initial contents &quot;number&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms, <font color="#288850"><b>float</b></font> number);
-                        <font color="#0000f8">// Sets the initial contents &quot;number&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms, <font color="#288850"><b>double</b></font> number);
-                        <font color="#0000f8">// Sets the initial contents &quot;number&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms, <font color="#288850"><b>char</b></font> number);
-                        <font color="#0000f8">// Sets the initial contents &quot;number&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string);
-                        <font color="#0000f8">// Sets the initial contents to &quot;string&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *string, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Sets the initial contents to &quot;string&quot; of size &quot;size&quot;.</font>
-                <font color="#288850"><b>size_t</b></font>  create(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#288850"><b>const</b></font> <font color="#288850"><b>void</b></font> *data, <font color="#288850"><b>size_t</b></font> size);
-                        <font color="#0000f8">// Sets the initial contents to &quot;data&quot; of size &quot;size&quot;.</font>
+                <font color="#0000ff">// These methods create the file &quot;name&quot; with permissions</font>
+                <font color="#0000ff">// &quot;perms&quot;.  If the the file already exists, it will be</font>
+                <font color="#0000ff">// truncated.  The initial contents of the file are set to</font>
+                <font color="#0000ff">// &quot;data&quot;.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// These methods return the number of bytes written to the file</font>
+                <font color="#0000ff">// or -1 if an error occurs.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number);
+                        <font color="#0000ff">// Sets the initial contents &quot;number&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
+                        <font color="#0000ff">// Sets the initial contents &quot;number&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms, <font color="#2e8b57"><b>float</b></font> number);
+                        <font color="#0000ff">// Sets the initial contents &quot;number&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms, <font color="#2e8b57"><b>double</b></font> number);
+                        <font color="#0000ff">// Sets the initial contents &quot;number&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms, <font color="#2e8b57"><b>char</b></font> number);
+                        <font color="#0000ff">// Sets the initial contents &quot;number&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                        <font color="#0000ff">// Sets the initial contents to &quot;string&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Sets the initial contents to &quot;string&quot; of size &quot;size&quot;.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *data, <font color="#2e8b57"><b>size_t</b></font> size);
+                        <font color="#0000ff">// Sets the initial contents to &quot;data&quot; of size &quot;size&quot;.</font>
 
 
-                <font color="#0000f8">// These methods allow you to set the position at which the</font>
-                <font color="#0000f8">// next read or write will occur.  Each returns the position</font>
-                <font color="#0000f8">// relative to the beginning of the file on success or -1 on</font>
-                <font color="#0000f8">// failure.</font>
+                <font color="#0000ff">// The following methods allow you to lock files or regions</font>
+                <font color="#0000ff">// of files.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The tryLock() methods attempt to lock and return success if</font>
+                <font color="#0000ff">// the lock can be established immediately or false otherwise.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The lock() methods block until a lock is established and</font>
+                <font color="#0000ff">// return true on success or false if an error occurs.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The checkLock() methods check to see if a lock can be</font>
+                <font color="#0000ff">// established but do not actually lock anything.  If a lock</font>
+                <font color="#0000ff">// can be established, they return true. Otherwise they return</font>
+                <font color="#0000ff">// false and populate the fields in the supplied flock struct</font>
+                <font color="#0000ff">// with information about one of the conflicting locks.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The unlock() methods attempt to release a previosly</font>
+                <font color="#0000ff">// established lock and return true on success or false on</font>
+                <font color="#0000ff">// error.</font>
+
+                <font color="#0000ff">// These methods allow you to lock the entire file.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockFile(<font color="#2e8b57"><b>short</b></font> type);
+                <font color="#2e8b57"><b>bool</b></font>    lockFile(<font color="#2e8b57"><b>short</b></font> type);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockFile(<font color="#2e8b57"><b>short</b></font> type, <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockFile(<font color="#2e8b57"><b>short</b></font> type);
+
+                <font color="#0000ff">// These methods allow you to lock an arbitrary region of the</font>
+                <font color="#0000ff">// file.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockRegion(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    lockRegion(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockRegion(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockRegion(off_t start, off_t len);
+
+                <font color="#0000ff">// These methods allow you to lock an arbitrary region of the</font>
+                <font color="#0000ff">// file relative to the current position.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    tryLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    lockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    lockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t len,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockFromCurrent(off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    unlockFromCurrent(off_t start, off_t len);
+
+                <font color="#0000ff">// These methods allow you to lock an arbitrary region of the</font>
+                <font color="#0000ff">// file relative to the end of the file.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    tryLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    lockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    lockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t len,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t start, off_t len,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockFromEnd(off_t len);
+                <font color="#2e8b57"><b>bool</b></font>    unlockFromEnd(off_t start, off_t len);
+
+                <font color="#0000ff">// These methods allow you to lock &quot;the remainder&quot; of a file</font>
+                <font color="#0000ff">// starting at a given offset.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockRemainder(<font color="#2e8b57"><b>short</b></font> type, off_t start);
+                <font color="#2e8b57"><b>bool</b></font>    lockRemainder(<font color="#2e8b57"><b>short</b></font> type, off_t start);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockRemainder(<font color="#2e8b57"><b>short</b></font> type, off_t start,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockRemainder(off_t start);
+
+                <font color="#0000ff">// These methods allow you to lock &quot;the remainder&quot; of a file</font>
+                <font color="#0000ff">// relative to the current position.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type);
+                <font color="#2e8b57"><b>bool</b></font>    tryLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t start);
+                <font color="#2e8b57"><b>bool</b></font>    lockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type);
+                <font color="#2e8b57"><b>bool</b></font>    lockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t start);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off_t start,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockRemainderFromCurrent();
+                <font color="#2e8b57"><b>bool</b></font>    unlockRemainderFromCurrent(off_t start);
+
+                <font color="#0000ff">// These methods allow you to lock &quot;the remainder&quot; of a file</font>
+                <font color="#0000ff">// relative to the end of the file.</font>
+                <font color="#2e8b57"><b>bool</b></font>    tryLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type);
+                <font color="#2e8b57"><b>bool</b></font>    tryLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t start);
+                <font color="#2e8b57"><b>bool</b></font>    lockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type);
+                <font color="#2e8b57"><b>bool</b></font>    lockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t start);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    checkLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type, off_t start,
+                                                        <font color="#2e8b57"><b>struct</b></font> flock *lck);
+                <font color="#2e8b57"><b>bool</b></font>    unlockRemainderFromEnd();
+                <font color="#2e8b57"><b>bool</b></font>    unlockRemainderFromEnd(off_t start);
+
+
+                <font color="#0000ff">// These methods allow you to truncate a file</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    truncate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>bool</b></font>            truncate();
+                                <font color="#0000ff">// Truncates all data in the file, resulting in</font>
+                                <font color="#0000ff">// a file of zero length.  Returns true on</font>
+                                <font color="#0000ff">// success and false on failure.</font>
+
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>bool</b></font>    truncate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, off_t length);
+                <font color="#2e8b57"><b>bool</b></font>            truncate(off_t length);
+                                <font color="#0000ff">// Truncates all data beyond the first &quot;length&quot;</font>
+                                <font color="#0000ff">// bytes, resulting in a file of &quot;length&quot; bytes.</font>
+                                <font color="#0000ff">// Returns true on success and false on failure.</font>
+
+                <font color="#0000ff">// These methods allow you to set the position at which the</font>
+                <font color="#0000ff">// next read or write will occur.  Each returns the position</font>
+                <font color="#0000ff">// relative to the beginning of the file on success or -1 on</font>
+                <font color="#0000ff">// failure.</font>
                 off_t   setPositionRelativeToBeginning(off_t offset);
-                        <font color="#0000f8">// Sets the position to the beginning of the</font>
-                        <font color="#0000f8">// file + &quot;offset&quot; bytes.</font>
+                        <font color="#0000ff">// Sets the position to the beginning of the</font>
+                        <font color="#0000ff">// file + &quot;offset&quot; bytes.</font>
                 off_t   setPositionRelativeToCurrent(off_t offset);
-                        <font color="#0000f8">// Sets the position to the current</font>
-                        <font color="#0000f8">// position + &quot;offset&quot; bytes.</font>
+                        <font color="#0000ff">// Sets the position to the current</font>
+                        <font color="#0000ff">// position + &quot;offset&quot; bytes.</font>
                 off_t   setPositionRelativeToEnd(off_t offset);
-                        <font color="#0000f8">// Sets the position to the end of the</font>
-                        <font color="#0000f8">// file + &quot;offset&quot; bytes.</font>
+                        <font color="#0000ff">// Sets the position to the end of the</font>
+                        <font color="#0000ff">// file + &quot;offset&quot; bytes.</font>
 
                 off_t   getCurrentPosition();
-                        <font color="#0000f8">// Returns the position at which the next read or</font>
-                        <font color="#0000f8">// write will occur or -1 on error.</font>
+                        <font color="#0000ff">// Returns the position at which the next read or</font>
+                        <font color="#0000ff">// write will occur or -1 on error.</font>
 
-                <font color="#288850"><b>char</b></font>    *getContents();
-                        <font color="#0000f8">// Allocates a string large enough to accommodate the</font>
-                        <font color="#0000f8">// contents of the currently opened file, reads the</font>
-                        <font color="#0000f8">// contents of the file into the string and returns the</font>
-                        <font color="#0000f8">// string.  The string must be freed by the calling</font>
-                        <font color="#0000f8">// program.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// If the file contains no data, then a string of length</font>
-                        <font color="#0000f8">// zero is returned.  If an error occurs then a NULL</font>
-                        <font color="#0000f8">// is returned.</font>
+                <font color="#2e8b57"><b>char</b></font>    *getContents();
+                        <font color="#0000ff">// Allocates a string large enough to accommodate the</font>
+                        <font color="#0000ff">// contents of the currently opened file, reads the</font>
+                        <font color="#0000ff">// contents of the file into the string and returns the</font>
+                        <font color="#0000ff">// string.  The string must be freed by the calling</font>
+                        <font color="#0000ff">// program.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// If the file contains no data, then a string of length</font>
+                        <font color="#0000ff">// zero is returned.  If an error occurs then a NULL</font>
+                        <font color="#0000ff">// is returned.</font>
 
-                <font color="#288850"><b>static</b></font>  <font color="#288850"><b>char</b></font>    *getContents(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name);
-                        <font color="#0000f8">// Allocates a string large enough to accommodate the</font>
-                        <font color="#0000f8">// contents of the file &quot;name&quot; , reads the contents of</font>
-                        <font color="#0000f8">// the file into the string and returns the string.</font>
-                        <font color="#0000f8">// The string must be freed by the calling program.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// If the file contains no data, then a string of length</font>
-                        <font color="#0000f8">// zero is returned.  If an error occurs then a NULL</font>
-                        <font color="#0000f8">// is returned.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>char</b></font>    *getContents(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
+                        <font color="#0000ff">// Allocates a string large enough to accommodate the</font>
+                        <font color="#0000ff">// contents of the file &quot;name&quot; , reads the contents of</font>
+                        <font color="#0000ff">// the file into the string, terminates it with a NULL</font>
+                        <font color="#0000ff">// and returns the string.</font>
+                        <font color="#0000ff">// The string must be freed by the calling program.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// If the file contains no data, then a string of length</font>
+                        <font color="#0000ff">// zero is returned.  If an error occurs then a NULL</font>
+                        <font color="#0000ff">// is returned.</font>
 
-                ssize_t getContents(<font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *buffer, <font color="#288850"><b>size_t</b></font> buffersize);
-                        <font color="#0000f8">// Reads the contents of the currently open file into</font>
-                        <font color="#0000f8">// &quot;buffer&quot; of length &quot;buffersize&quot;.  If the file is</font>
-                        <font color="#0000f8">// larger than &quot;buffersize&quot; then only &quot;buffersize&quot; bytes</font>
-                        <font color="#0000f8">// of the file will be read into &quot;buffer&quot;.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns the number of bytes copied into &quot;buffer&quot; or</font>
-                        <font color="#0000f8">// -1 on error.</font>
+                <font color="#2e8b57"><b>ssize_t</b></font> getContents(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> buffersize);
+                        <font color="#0000ff">// Reads the contents of the currently open file into</font>
+                        <font color="#0000ff">// &quot;buffer&quot; of length &quot;buffersize&quot;.  If the file is</font>
+                        <font color="#0000ff">// larger than &quot;buffersize&quot; then only &quot;buffersize&quot; bytes</font>
+                        <font color="#0000ff">// of the file will be read into &quot;buffer&quot;.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns the number of bytes copied into &quot;buffer&quot; or</font>
+                        <font color="#0000ff">// -1 on error.</font>
 
-                <font color="#288850"><b>static</b></font>  ssize_t getContents(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *name,
-                                                <font color="#288850"><b>unsigned</b></font> <font color="#288850"><b>char</b></font> *buffer,
-                                                <font color="#288850"><b>size_t</b></font> buffersize);
-                        <font color="#0000f8">// Reads the contents of the file &quot;name&quot; into</font>
-                        <font color="#0000f8">// &quot;buffer&quot; of length &quot;buffersize&quot;.  If the file is</font>
-                        <font color="#0000f8">// larger than &quot;buffersize&quot; then only &quot;buffersize&quot; bytes</font>
-                        <font color="#0000f8">// of the file will be read into &quot;buffer&quot;.</font>
-                        <font color="#0000f8">//</font>
-                        <font color="#0000f8">// Returns the number of bytes copied into &quot;buffer&quot; or</font>
-                        <font color="#0000f8">// -1 on error.</font>
+                <font color="#2e8b57"><b>static</b></font>  <font color="#2e8b57"><b>ssize_t</b></font> getContents(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer,
+                                                <font color="#2e8b57"><b>size_t</b></font> buffersize);
+                        <font color="#0000ff">// Reads the contents of the file &quot;name&quot; into</font>
+                        <font color="#0000ff">// &quot;buffer&quot; of length &quot;buffersize&quot;.  If the file is</font>
+                        <font color="#0000ff">// larger than &quot;buffersize&quot; then only &quot;buffersize&quot; bytes</font>
+                        <font color="#0000ff">// of the file will be read into &quot;buffer&quot;.</font>
+                        <font color="#0000ff">//</font>
+                        <font color="#0000ff">// Returns the number of bytes copied into &quot;buffer&quot; or</font>
+                        <font color="#0000ff">// -1 on error.</font>
 
-                <font color="#288850"><b>int</b></font>     getCurrentProperties();
-                        <font color="#0000f8">// Gets the current file properties.</font>
+                <font color="#2e8b57"><b>bool</b></font>    getCurrentProperties();
+                        <font color="#0000ff">// Gets the current file properties.</font>
+                        <font color="#0000ff">// </font>
+                        <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#0000f8">// These methods return the permissions of the file.</font>
-                mode_t          getPermissions() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPermissions(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     exists(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                        <font color="#0000ff">// Returns true if the file exists and false otherwise.</font>
+
+                <font color="#0000ff">// These methods return the permissions of the file.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                mode_t          getPermissions() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getPermissions(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 mode_t *perms);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getPermissions(<font color="#288850"><b>int</b></font> fd, mode_t *perms);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getPermissions(<font color="#2e8b57"><b>int</b></font> fd, mode_t *perms);
 
-                <font color="#0000f8">// These methods return the user id of the file's owner.</font>
-                uid_t           getOwnerUserId() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getOwnerUserId(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the user id of the file's owner.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                uid_t           getOwnerUserId() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getOwnerUserId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 uid_t *uid);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getOwnerUserId(<font color="#288850"><b>int</b></font> fd, uid_t *uid);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getOwnerUserId(<font color="#2e8b57"><b>int</b></font> fd, uid_t *uid);
 
 
-                <font color="#0000f8">// These methods return the group id of the file's owner.</font>
-                gid_t           getOwnerGroupId() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getOwnerGroupId(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the group id of the file's owner.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                gid_t           getOwnerGroupId() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getOwnerGroupId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 gid_t *gid);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getOwnerGroupId(<font color="#288850"><b>int</b></font> fd, gid_t *gid);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getOwnerGroupId(<font color="#2e8b57"><b>int</b></font> fd, gid_t *gid);
 
 
-                <font color="#0000f8">// These methods return the number of bytes in the file.</font>
-                off_t           getSize() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getSize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the number of bytes in the file.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                off_t           getSize() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getSize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 off_t *size);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getSize(<font color="#288850"><b>int</b></font> fd, off_t *size);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getSize(<font color="#2e8b57"><b>int</b></font> fd, off_t *size);
 
 
-                <font color="#0000f8">// These methods return the blocksize to use</font>
-                <font color="#0000f8">// for most efficient I/O with the file.</font>
-                <font color="#0000f8">// Note that some systems don't support this.</font>
-                <font color="#0000f8">// On those systems, a block size of -1 is returned.</font>
-                blksize_t       getBlockSize() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getBlockSize(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the blocksize to use</font>
+                <font color="#0000ff">// for most efficient I/O with the file.</font>
+                <font color="#0000ff">// Note that some systems don't support this.</font>
+                <font color="#0000ff">// On those systems, a block size of -1 is returned.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                blksize_t       getBlockSize() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getBlockSize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 blksize_t *size);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getBlockSize(<font color="#288850"><b>int</b></font> fd, blksize_t *size);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getBlockSize(<font color="#2e8b57"><b>int</b></font> fd, blksize_t *size);
 
 
-                <font color="#0000f8">// These methods return the number of</font>
-                <font color="#0000f8">// blocks allocated for the file.</font>
-                <font color="#0000f8">// Note that some systems don't support this.</font>
-                <font color="#0000f8">// On those systems, a block count of -1 is returned.</font>
-                blkcnt_t        getBlockCount() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getBlockCount(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the number of</font>
+                <font color="#0000ff">// blocks allocated for the file.</font>
+                <font color="#0000ff">// Note that some systems don't support this.</font>
+                <font color="#0000ff">// On those systems, a block count of -1 is returned.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                blkcnt_t        getBlockCount() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getBlockCount(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 blkcnt_t *blocks);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getBlockCount(<font color="#288850"><b>int</b></font> fd, blkcnt_t *blocks);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getBlockCount(<font color="#2e8b57"><b>int</b></font> fd, blkcnt_t *blocks);
 
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// socket or 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isSocket() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isSocket(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isSocket(<font color="#288850"><b>int</b></font> fd);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// socket or 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isSocket() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isSocket(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isSocket(<font color="#2e8b57"><b>int</b></font> fd);
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// symbolic link, 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isSymbolicLink() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isSymbolicLink(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isSymbolicLink(<font color="#288850"><b>int</b></font> fd);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// symbolic link, 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isSymbolicLink() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isSymbolicLink(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isSymbolicLink(<font color="#2e8b57"><b>int</b></font> fd);
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// regular file, 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isRegularFile() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isRegularFile(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isRegularFile(<font color="#288850"><b>int</b></font> fd);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// regular file, 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isRegularFile() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isRegularFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isRegularFile(<font color="#2e8b57"><b>int</b></font> fd);
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// block device, 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isBlockDevice() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isBlockDevice(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isBlockDevice(<font color="#288850"><b>int</b></font> fd);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// block device, 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isBlockDevice() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isBlockDevice(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isBlockDevice(<font color="#2e8b57"><b>int</b></font> fd);
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// directory, 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isDirectory() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isDirectory(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isDirectory(<font color="#288850"><b>int</b></font> fd);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// directory, 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isDirectory() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isDirectory(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isDirectory(<font color="#2e8b57"><b>int</b></font> fd);
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// character device, 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isCharacterDevice() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isCharacterDevice(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isCharacterDevice(<font color="#288850"><b>int</b></font> fd);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// character device, 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isCharacterDevice() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isCharacterDevice(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isCharacterDevice(<font color="#2e8b57"><b>int</b></font> fd);
 
-                <font color="#0000f8">// These methods return 1 of the file is a</font>
-                <font color="#0000f8">// fifo, 0 if it's not or -1 on error.</font>
-                <font color="#288850"><b>int</b></font>             isFifo() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isFifo(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      isFifo(<font color="#288850"><b>int</b></font> fd);
-
-
-                <font color="#0000f8">// These methods return the time of last access.</font>
-                <font color="#288850"><b>time_t</b></font>          getLastAccessTime() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getLastAccessTime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
-                                                        <font color="#288850"><b>time_t</b></font> *atime);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getLastAccessTime(<font color="#288850"><b>int</b></font> fd, <font color="#288850"><b>time_t</b></font> *atime);
+                <font color="#0000ff">// These methods return 1 of the file is a</font>
+                <font color="#0000ff">// fifo, 0 if it's not or -1 on error.</font>
+                <font color="#2e8b57"><b>int</b></font>             isFifo() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isFifo(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>      isFifo(<font color="#2e8b57"><b>int</b></font> fd);
 
 
-                <font color="#0000f8">// These methods return the time of last modification.</font>
-                <font color="#0000f8">//</font>
-                <font color="#0000f8">// Modification time IS NOT affected by chmod, chown,</font>
-                <font color="#0000f8">// or creating links.</font>
-                <font color="#288850"><b>time_t</b></font>          getLastModificationTime() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getLastModificationTime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
-                                                        <font color="#288850"><b>time_t</b></font> *mtime);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getLastModificationTime(<font color="#288850"><b>int</b></font> fd, <font color="#288850"><b>time_t</b></font> *mtime);
+                <font color="#0000ff">// These methods return the time of last access.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                <font color="#2e8b57"><b>time_t</b></font>          getLastAccessTime() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getLastAccessTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> *atime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getLastAccessTime(<font color="#2e8b57"><b>int</b></font> fd, <font color="#2e8b57"><b>time_t</b></font> *atime);
 
 
-                <font color="#0000f8">// These methods return the time of last change.</font>
-                <font color="#0000f8">//</font>
-                <font color="#0000f8">// Change time IS affected by chmod, chown and creating links.</font>
-                <font color="#288850"><b>time_t</b></font>          getLastChangeTime() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getLastChangeTime(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
-                                                        <font color="#288850"><b>time_t</b></font> *ctime);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getLastChangeTime(<font color="#288850"><b>int</b></font> fd, <font color="#288850"><b>time_t</b></font> *ctime);
+                <font color="#0000ff">// These methods return the time of last modification.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// Modification time IS NOT affected by chmod, chown,</font>
+                <font color="#0000ff">// or creating links.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                <font color="#2e8b57"><b>time_t</b></font>          getLastModificationTime() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getLastModificationTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> *mtime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getLastModificationTime(<font color="#2e8b57"><b>int</b></font> fd, <font color="#2e8b57"><b>time_t</b></font> *mtime);
 
 
-                <font color="#0000f8">// These methods return the device of the file.</font>
-                dev_t           getDevice() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getDevice(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename, dev_t *dev);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getDevice(<font color="#288850"><b>int</b></font> fd, dev_t *dev);
+                <font color="#0000ff">// These methods return the time of last change.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// Change time IS affected by chmod, chown and creating links.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                <font color="#2e8b57"><b>time_t</b></font>          getLastChangeTime() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getLastChangeTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> *ctime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getLastChangeTime(<font color="#2e8b57"><b>int</b></font> fd, <font color="#2e8b57"><b>time_t</b></font> *ctime);
 
 
-                <font color="#0000f8">// These methods return the device type of the file.</font>
-                dev_t           getDeviceType() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getDeviceType(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the device of the file.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                dev_t           getDevice() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getDevice(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, dev_t *dev);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getDevice(<font color="#2e8b57"><b>int</b></font> fd, dev_t *dev);
+
+
+                <font color="#0000ff">// These methods return the device type of the file.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                dev_t           getDeviceType() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getDeviceType(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                         dev_t *devtype);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getDeviceType(<font color="#288850"><b>int</b></font> fd, dev_t *devtype);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getDeviceType(<font color="#2e8b57"><b>int</b></font> fd, dev_t *devtype);
 
 
-                <font color="#0000f8">// These methods return the inode of the file.</font>
-                ino_t           getInode() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getInode(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename, ino_t *inode);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getInode(<font color="#288850"><b>int</b></font> fd, ino_t *inode);
+                <font color="#0000ff">// These methods return the inode of the file.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                ino_t           getInode() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getInode(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, ino_t *inode);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getInode(<font color="#2e8b57"><b>int</b></font> fd, ino_t *inode);
 
 
-                <font color="#0000f8">// These methods return the number of hard links to the file.</font>
-                nlink_t         getNumberOfHardLinks() <font color="#288850"><b>const</b></font>;
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getNumberOfHardLinks(<font color="#288850"><b>const</b></font> <font color="#288850"><b>char</b></font> *filename,
+                <font color="#0000ff">// These methods return the number of hard links to the file.</font>
+                <font color="#0000ff">//</font>
+                <font color="#0000ff">// The static methods return true on success and false on</font>
+                <font color="#0000ff">// failure.</font>
+                nlink_t         getNumberOfHardLinks() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getNumberOfHardLinks(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                         nlink_t *nlink);
-                <font color="#288850"><b>static</b></font> <font color="#288850"><b>int</b></font>      getNumberOfHardLinks(<font color="#288850"><b>int</b></font> fd, nlink_t *nlink);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>     getNumberOfHardLinks(<font color="#2e8b57"><b>int</b></font> fd, nlink_t *nlink);
 
-                <font color="#0000f8">// This method returns a pointer to the stat structure</font>
-                <font color="#0000f8">// used internally.</font>
-                <font color="#288850"><b>struct</b></font> stat     *getStat();
+                <font color="#0000ff">// This method returns a pointer to the stat structure</font>
+                <font color="#0000ff">// used internally.</font>
+                <font color="#2e8b57"><b>struct</b></font> stat     *getStat();
 
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/file.h&gt;</font>
+                <font color="#0000ff">// By default, the open() and create() methods call </font>
+                <font color="#0000ff">// getCurrentProperties() so the other methods of this class</font>
+                <font color="#0000ff">// will return valid data about the file immediately.  These</font>
+                <font color="#0000ff">// methods alter that behaviour.</font>
+                <font color="#2e8b57"><b>void</b></font>    getCurrentPropertiesOnOpen();
+                <font color="#2e8b57"><b>void</b></font>    dontGetCurrentPropertiesOnOpen();
+
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/file.h&gt;</font>
 };
 
 <font color="#a020f0">#ifdef ENABLE_RUDIMENTS_INLINES</font>
-<font color="#a020f0">        #include </font><font color="#f800f8">&lt;rudiments/private/fileinlines.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/fileinlines.h&gt;</font>
 <font color="#a020f0">#endif</font>
 
 <font color="#a020f0">#endif</font>
