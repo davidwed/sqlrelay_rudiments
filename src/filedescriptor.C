@@ -164,6 +164,11 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 
 		totalread=totalread+actualread;
+
+		// if we want to allow short reads, then break out here
+		if (allowshortreads) {
+			break;
+		}
 	}
 
 	return totalread;

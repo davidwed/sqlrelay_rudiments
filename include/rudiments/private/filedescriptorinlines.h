@@ -15,6 +15,7 @@ RUDIMENTS_INLINE filedescriptor::filedescriptor(int fd) {
 	this->fd=fd;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
+	allowshortreads=0;
 	lstnr=NULL;
 }
 
@@ -22,6 +23,7 @@ RUDIMENTS_INLINE filedescriptor::filedescriptor() {
 	this->fd=-1;
 	retryinterruptedreads=0;
 	retryinterruptedwrites=0;
+	allowshortreads=0;
 	lstnr=NULL;
 }
 
@@ -295,6 +297,14 @@ RUDIMENTS_INLINE void filedescriptor::retryInterruptedWaits() {
 
 RUDIMENTS_INLINE void filedescriptor::dontRetryInterruptedWaits() {
 	retryinterruptedwaits=0;
+}
+
+RUDIMENTS_INLINE void filedescriptor::allowShortReads() {
+	allowshortreads=1;
+}
+
+RUDIMENTS_INLINE void filedescriptor::dontAllowShortReads() {
+	allowshortreads=0;
 }
 
 RUDIMENTS_INLINE void filedescriptor::useListener(listener *lstnr) {

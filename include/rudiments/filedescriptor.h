@@ -253,6 +253,20 @@ class filedescriptor {
 			// Causes waits not to automatically retry if
 			// interrupted by a signal.  This is the default.
 
+		// By default, read() will attempt to read the specified number
+		// of bytes from the file descriptor, in several passes if
+		// necessary.  No single pass will try to read more than
+		// SSIZE_MAX bytes.  These methods override that behavior.
+		void	allowShortReads();
+			// Causes a read to return the number of bytes that
+			// were read in a single pass from the file descriptor.
+			// Note that reads longer than SSIZE_MAX will always
+			// return SSIZE_MAX or fewer bytes.
+		void	dontAllowShortReads();
+			// Causes a read to attempt to read the specified
+			// number of bytes from the file descriptor, in several
+			// passes if necessary.
+
 		void	useListener(listener *lstnr);
 		void	dontUseListener();
 
