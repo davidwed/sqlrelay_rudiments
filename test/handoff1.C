@@ -27,8 +27,10 @@ int main(int argc, const char **argv) {
 		int	fd=pool.waitForNonBlockingRead(-1,-1);
 		if (fd==serversock.getFileDescriptor()) {
 			clientsock=serversock.acceptClientConnection();
-		} else {
+		} else if (fd==handoffsock.getFileDescriptor()) {
 			handoffclientsock=handoffsock.acceptClientConnection();
+		} else {
+			printf("error or timeout waiting...\n");
 		}
 
 		if (clientsock && handoffclientsock) {

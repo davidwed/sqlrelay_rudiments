@@ -17,45 +17,47 @@ class listener {
 		virtual	~listener();
 
 		virtual	void	addFileDescriptor(int fd);
-                        // Adds the specified file descriptor to
-			// the pool that the listener is listening on.
+                        	// Adds the specified file descriptor to
+				// the pool that the listener is listening on.
 
-		virtual	int	waitForNonBlockingRead(long timeoutsec,
-							long timeoutusec);
-			// Causes the application to wait until a read() will
-			// proceed without blocking or until "sec" seconds and
-			// "usec" microseconds have elapsed.
-			//
-			// Entering -1 for either parameter causes the method
-			// to wait indefinitely.  
-			//
-			// Entering 0 for both parameters causes the method to
-			// fall through immediately unless a data is
-			// immediately available.
-			//
-			// Returns the file descriptor that data was available
-			// on or -1 on error.
-		virtual	int	waitForNonBlockingWrite(long timeoutsec,
-							long timeoutusec);
-			// Causes the application to wait until a write() will
-			// proceed without blocking or until "sec" seconds and
-			// "usec" microseconds have elapsed.
-			//
-			// Entering -1 for either parameter causes the method
-			// to wait indefinitely.  
-			//
-			// Entering 0 for both parameters causes the method to
-			// fall through immediately unless a data is
-			// immediately available.
-			//
-			// Returns the file descriptor that data was available
-			// on or -1 on error.
+		virtual	int	waitForNonBlockingRead(long sec, long usec);
+				// Causes the application to wait until a read()
+				// will proceed without blocking or until "sec"
+				// seconds and "usec" microseconds have elapsed.
+				//
+				// Entering -1 for either parameter causes the
+				// method to wait indefinitely.  
+				//
+				// Entering 0 for both parameters causes the
+				// method to fall through immediately unless a
+				// data is immediately available.
+				//
+				// Returns -1 on error, -2 on timeout and
+				// otherwise returns the file descriptor that
+				// is ready to be read from.
+		virtual	int	waitForNonBlockingWrite(long sec, long usec);
+				// Causes the application to wait until a
+				// write() will proceed without blocking or
+				// until "sec" seconds and "usec" microseconds
+				// have elapsed.
+				//
+				// Entering -1 for either parameter causes the
+				// method to wait indefinitely.  
+				//
+				// Entering 0 for both parameters causes the
+				// method to fall through immediately unless a
+				// data is immediately available.
+				//
+				// Returns -1 on error, -2 on timeout and
+				// otherwise returns the file descriptor that
+				// is ready to be written to.
 
 		virtual	void	removeFileDescriptor(int fd);
-                        // Removes the specified file descriptor from the pool.
+                        	// Removes the specified file descriptor from
+				// the pool.
 			
 		virtual	void	removeAllFileDescriptors();
-			// Removes all file descriptors from the pool.
+				// Removes all file descriptors from the pool.
 
 
 		// By default, if a wait is occurring and a signal interrupts

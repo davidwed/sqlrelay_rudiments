@@ -28,7 +28,7 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 				largest=current->getData();
 			}
 			FD_SET(current->getData(),&fdlist);
-			current=(listenerlistnode *)current->getNext();
+			current=current->getNext();
 		}
 
 		// set up the timeout
@@ -49,26 +49,32 @@ int listener::safeSelect(long sec, long usec, int read, int write) {
 		// clean up
 		delete tv;
 
-		// if a signal caused the select to fall through, retry
-		if (selectresult==-1 && retryinterruptedwaits && errno==EINTR) {
-			continue;
-		} else if (selectresult>-1) {
-	
-			// return the file descriptor that
-			// caused the select to fall through
-			current=filedescriptorlist.getNodeByIndex(0);
-			while (current) {
-				if (FD_ISSET(current->getData(),&fdlist)) {
-					return current->getData();
-				}
-				current=(listenerlistnode *)current->getNext();
+		if (selectresult==-1) {
+
+			// if a signal caused the select to fall through, retry
+			if (retryinterruptedwaits && errno==EINTR) {
+				continue;
 			}
-			break;
+			return -1;
+
+		} else if (!selectresult) {
+
+			// timeout
+			return -2;
 		}
 	
-		// return the result of the select
-		return selectresult;
-	}
+		// return the file descriptor that
+		// caused the select to fall through
+		current=filedescriptorlist.getNodeByIndex(0);
+		while (current) {
+			if (FD_ISSET(current->getData(),&fdlist)) {
+				return current->getData();
+			}
+			current=current->getNext();
+		}
 
-	return -1;
+		// if none of the file descriptors caused the select to fall
+		// through, return error
+		return -1;
+	}
 }

@@ -23,7 +23,7 @@ rebuild: clean all
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
 
 svr: svr.C svr.lo 
-	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ svr.lo -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADSLIB) -lefence
+	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ svr.lo -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADSLIB)
 
 lsnr: lsnr.C lsnr.lo
 	$(LIBTOOL) --mode=link $(CXX) -all-static -o $@ lsnr.lo -L../src -lrudiments $(SOCKETLIB) $(NSLLIB) $(PTHREADSLIB)

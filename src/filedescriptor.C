@@ -143,13 +143,12 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// if necessary, select
 		if (sec>-1 && usec>-1) {
+
 			int	selectresult=safeSelect(sec,usec,1,0);
-			if (selectresult==0) {
-				// a timeout occurred
-				return -2;
-			} else if (selectresult==-1) {
-				// an error occurred
-				return -1;
+
+			// return error or timeout
+			if (selectresult<0) {
+				return selectresult;
 			}
 		}
 
@@ -189,13 +188,12 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		// if necessary, select
 		if (sec>-1 && usec>-1) {
+
 			int	selectresult=safeSelect(sec,usec,0,1);
-			if (selectresult==0) {
-				// a timeout occurred
-				return -2;
-			} else if (selectresult==-1) {
-				// an error occurred
-				return -1;
+
+			// return error or timeout
+			if (selectresult<0) {
+				return selectresult;
 			}
 		}
 
@@ -249,17 +247,20 @@ int filedescriptor::safeSelect(long sec, long usec, int read, int write) {
 		// clean up
 		delete tv;
 
-		// if a signal caused the select to fall through, retry
 		if (selectresult==-1) {
+
+			// if a signal caused the select to fall through, retry
 			if (retryinterruptedwaits && errno==EINTR) {
 				continue;
 			}
-			break;
-		}
-	
-		// return the result of the select
-		return selectresult;
-	}
+			return -1;
 
-	return -1;
+		} else if (!selectresult) {
+
+			// timeout
+			return -2;
+		}
+
+		return fd;
+	}
 }

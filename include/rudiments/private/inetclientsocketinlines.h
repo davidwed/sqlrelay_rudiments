@@ -6,10 +6,10 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE bool inetclientsocket::connectToServer(const char *host,
+RUDIMENTS_INLINE int inetclientsocket::connectToServer(const char *host,
 						unsigned short port,
 						unsigned int retrywait,
-						int retrycount) {
+						unsigned int retrycount) {
 	initialize(host,port,retrywait,retrycount);
 	return connect();
 }
@@ -17,7 +17,7 @@ RUDIMENTS_INLINE bool inetclientsocket::connectToServer(const char *host,
 RUDIMENTS_INLINE void inetclientsocket::initialize(const char *host,
 						unsigned short port,
 						unsigned int retrywait,
-						int retrycount) {
+						unsigned int retrycount) {
 	inetsocket::initialize(host,port);
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;

@@ -5,14 +5,16 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-RUDIMENTS_INLINE bool unixclientsocket::connectToServer(const char *filename,
-				unsigned int retrywait, int retrycount) {
+RUDIMENTS_INLINE int unixclientsocket::connectToServer(const char *filename,
+						unsigned int retrywait,
+						unsigned int retrycount) {
 	initialize(filename,retrywait,retrycount);
 	return connect();
 }
 
 RUDIMENTS_INLINE void unixclientsocket::initialize(const char *filename,
-				unsigned int retrywait, int retrycount) {
+						unsigned int retrywait,
+						unsigned int retrycount) {
 	unixsocket::initialize(filename);
 	this->retrywait=retrywait;
 	this->retrycount=retrycount;

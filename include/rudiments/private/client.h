@@ -3,4 +3,4 @@
 
 	protected:
 		unsigned int	retrywait;
-		int		retrycount;
+		unsigned int	retrycount;

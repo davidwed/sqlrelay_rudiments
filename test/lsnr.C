@@ -45,6 +45,9 @@ int main(int argc, const char **argv) {
 		} else if (fd==unixsock.getFileDescriptor()) {
 			clientsock=unixsock.acceptClientConnection();
 			printf("unixsock: ");
+		} else {
+			printf("error or timeout waiting...\n");
+			continue;
 		}
 
 

@@ -20,13 +20,14 @@
 class unixclientsocket : public client, public unixsocket {
 	public:
 
-		bool	connectToServer(const char *filename,
-					unsigned int retrywait, int retrycount);
+		int	connectToServer(const char *filename,
+					unsigned int retrywait,
+					unsigned int retrycount);
 			// Convenience method that calls the
 			// initialize() and connect()
 			// methods below.
 			//
-			// Returns true on success and false on failure.
+			// Returns 1 on success and 0 on failure.
 
 
 
@@ -37,21 +38,22 @@ class unixclientsocket : public client, public unixsocket {
 			// "retrywait" and "retrycount".  Initializes the class
 			// to use the result when connect() is called.
 		void	initialize(const char *filename,
-					unsigned int retrywait, int retrycount);
+					unsigned int retrywait,
+					unsigned int retrycount);
 			// Initializes the class to use "filename",
 			// "retrywait" and "retrycount" when connect() is
 			// called.
-		bool	connect();
+		int	connect();
 			// Attempts to connect to the "filename" set earlier.
 			// If the connection fails, it will retry "retrycount"
 			// times, waiting "retrywait" seconds between tries.
 			//
-			// Setting "retrywait" to 0 will cause it to try to 
-			// connect indefinitely.  Setting "retrytime" to 0
+			// Setting "retrycount" to 0 will cause it to try to 
+			// connect indefinitely.  Setting "retrywait" to 0
 			// will cause it to try to connect over and over
 			// as fast as possible (not recommended).
 			//
-			// Returns true on success and false on failure.
+			// Returns 1 on success and 0 on failure.
 };
 
 #ifdef ENABLE_RUDIMENTS_INLINES

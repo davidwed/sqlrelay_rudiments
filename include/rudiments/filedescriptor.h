@@ -221,15 +221,33 @@ class filedescriptor {
 				// Causes the application to wait until a read()
 				// will proceed without blocking or until "sec"
 				// seconds and "usec" microseconds have elapsed.
-				// Returns -1 on error, 0 on timeout and 1
-				// otherwise.
+				//
+				// Entering -1 for either parameter causes the
+				// method to wait indefinitely.  
+				//
+				// Entering 0 for both parameters causes the
+				// method to fall through immediately unless a
+				// data is immediately available.
+				//
+				// Returns -1 on error, -2 on timeout and
+				// otherwise returns the file descriptor that
+				// is ready to be read from.
 		virtual int	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
 				// until "sec" seconds and "usec" microseconds
 				// have elapsed.
-				// Returns -1 on error, 0 on timeout and 1
-				// otherwise.
+				//
+				// Entering -1 for either parameter causes the
+				// method to wait indefinitely.  
+				//
+				// Entering 0 for both parameters causes the
+				// method to fall through immediately unless a
+				// data is immediately available.
+				//
+				// Returns -1 on error, -2 on timeout and
+				// otherwise returns the file descriptor that
+				// is ready to be written to.
 
 
 		// By default, if a read or write is occurring and a signal
