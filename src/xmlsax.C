@@ -619,6 +619,7 @@ char xmlsax::parseText(char current) {
 	for (;;) {
 
 		if (!ch) {
+			delete textdata;
 			return (char)NULL;
 		}
 
