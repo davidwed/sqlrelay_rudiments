@@ -1,3 +1,6 @@
+do results of getpwnam, getgrnam, gethostbyname, getprotobyname need to be freed?
+
+
 document filedescriptor
 test program for filedescriptor
 
