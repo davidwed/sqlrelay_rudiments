@@ -69,6 +69,10 @@ ifeq ($(INCLUDE_FILESYSTEM),1)
 	HEADERS += filesystem.h
 	PRIVATEHEADERS += filesystem.h filesystemincludes.h
 endif
+ifeq ($(INCLUDE_DIRECTORY),1)
+	HEADERS += directory.h
+	PRIVATEHEADERS += directory.h directoryincludes.h
+endif
 ifeq ($(INCLUDE_GROUPENTRY),1)
 	HEADERS += groupentry.h
 	PRIVATEHEADERS += groupentry.h groupentryincludes.h

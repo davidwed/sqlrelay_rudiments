@@ -22,7 +22,7 @@ char *path::dirname(const char *pathname) {
 
 	char	*retval=charstring::duplicate(pathname);
 	charstring::rightTrim(retval,'/');
-	char	*lastslash=charstring::lastOccurrance(retval,'/');
+	char	*lastslash=charstring::findLast(retval,'/');
 	if (lastslash==retval) {
 		(*(lastslash+1))=(char)NULL;
 	} else {
@@ -41,7 +41,7 @@ char *path::basename(const char *pathname) {
 	charstring::rightTrim(copy,'/');
 
 	char	*retval;
-	char	*ptr=charstring::lastOccurrance(copy,'/');
+	char	*ptr=charstring::findLast(copy,'/');
 	if (!ptr) {
 		retval=charstring::duplicate(copy);
 	} else {
@@ -53,7 +53,7 @@ char *path::basename(const char *pathname) {
 
 char *path::basename(const char *pathname, const char *suffix) {
 	char	*retval=basename(pathname);
-	char	*ptr=charstring::lastOccurrance(retval,suffix);
+	char	*ptr=charstring::findLast(retval,suffix);
 	if (!(*(ptr+charstring::length(suffix)))) {
 		(*ptr)=(char)NULL;
 	}

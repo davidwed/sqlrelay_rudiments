@@ -54,6 +54,10 @@ ifeq ($(INCLUDE_FILESYSTEM),1)
 	SRCS += filesystem.C
 	LOBJS += filesystem.lo
 endif
+ifeq ($(INCLUDE_DIRECTORY),1)
+	SRCS += directory.C
+	LOBJS += directory.lo
+endif
 ifeq ($(INCLUDE_GROUPENTRY),1)
 	SRCS += groupentry.C
 	LOBJS += groupentry.lo

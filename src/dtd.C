@@ -120,7 +120,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 		for (;;) {
 	
 			// look for the specified delimiter
-			ptr2=charstring::firstOccurrance(ptr1,delimiter);
+			ptr2=charstring::findFirst(ptr1,delimiter);
 
 			// if we don't find the delimiter,
 			// use the end of the string instead 

@@ -62,7 +62,7 @@ class charstring {
 			// Returns -1,0 or 1 if "str1" is greater than, 
 			// equal to or less than "str2".
 		static	int	compare(const char *str1, const char *str2,
-							size_t size);
+								size_t size);
 			// Returns -1,0 or 1 if "size" bytes of "str1" are
 			// greater than, equal to or less than "size" bytes of
 			// "str2".
@@ -86,19 +86,19 @@ class charstring {
 						char needle);
 			// Returns true if "haystack" contains "needle" or
 			// false otherwise.
-		static	char	*firstOccurrance(const char *haystack,
+		static	char	*findFirst(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*firstOccurrance(const char *haystack,
+		static	char	*findFirst(const char *haystack,
 							char needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*lastOccurrance(const char *haystack,
+		static	char	*findLast(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*lastOccurrance(const char *haystack,
+		static	char	*findLast(const char *haystack,
 							char needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.

@@ -36,29 +36,29 @@ bool datetime::initialize(const char *tmstring) {
 	// get the date
 	char	*ptr=(char *)tmstring;
 	mon=atoi(ptr)-1;
-	ptr=charstring::firstOccurrance(ptr,'/')+sizeof(char);
+	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	mday=atoi(ptr);
-	ptr=charstring::firstOccurrance(ptr,'/')+sizeof(char);
+	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	year=atoi(ptr)-1900;
 
 	// get the time
-	ptr=charstring::firstOccurrance(ptr,' ')+sizeof(char);
+	ptr=charstring::findFirst(ptr,' ')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	hour=atoi(ptr);
-	ptr=charstring::firstOccurrance(ptr,':')+sizeof(char);
+	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	min=atoi(ptr);
-	ptr=charstring::firstOccurrance(ptr,':')+sizeof(char);
+	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
@@ -69,7 +69,7 @@ bool datetime::initialize(const char *tmstring) {
 
 	// get the time zone if it was provided
 	delete[] zone;
-	if ((ptr=charstring::firstOccurrance(ptr,' '))) {
+	if ((ptr=charstring::findFirst(ptr,' '))) {
 		ptr=ptr+sizeof(char);
 		zone=(ptr && ptr[0])?charstring::duplicate(ptr):NULL;
 	} else {

@@ -164,6 +164,9 @@
 /* Some systems have rand_r */
 #undef HAVE_RAND_R
 
+/* Some systems have readdir_r */
+#undef HAVE_READDIR_R
+
 /* Define to 1 if you have the `regcmp' function. */
 #undef HAVE_REGCMP
 

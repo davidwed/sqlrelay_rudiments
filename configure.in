@@ -359,6 +359,11 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <sys/xattr.h>],
 setxattr(NULL,NULL,NULL,0,0);,AC_DEFINE(HAVE_XATTRS,1,Some systems have extended filesystem attributes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(readdir_r)
+AC_TRY_LINK([#include <stdlib.h>
+#include <dirent.h>],
+readdir_r(NULL,NULL,NULL);,AC_DEFINE(HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_CHECK_RPC
 
 echo "******************************"

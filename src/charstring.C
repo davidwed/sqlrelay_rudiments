@@ -64,22 +64,22 @@ int charstring::compareIgnoringCase(const char *str1,
 }
 
 bool charstring::contains(const char *haystack, const char *needle) {
-	return (firstOccurrance(haystack,needle)!=NULL);
+	return (findFirst(haystack,needle)!=NULL);
 }
 
 bool charstring::contains(const char *haystack, const char needle) {
-	return (firstOccurrance(haystack,needle)!=NULL);
+	return (findFirst(haystack,needle)!=NULL);
 }
 
-char *charstring::firstOccurrance(const char *haystack, const char *needle) {
+char *charstring::findFirst(const char *haystack, const char *needle) {
 	return strstr(haystack,needle);
 }
 
-char *charstring::firstOccurrance(const char *haystack, const char needle) {
+char *charstring::findFirst(const char *haystack, const char needle) {
 	return strchr(haystack,needle);
 }
 
-char *charstring::lastOccurrance(const char *haystack, const char *needle) {
+char *charstring::findLast(const char *haystack, const char *needle) {
 
 	size_t	haystacklen=length(haystack);
 	size_t	needlelen=length(needle);
@@ -97,7 +97,7 @@ char *charstring::lastOccurrance(const char *haystack, const char *needle) {
 	return NULL;
 }
 
-char *charstring::lastOccurrance(const char *haystack, const char needle) {
+char *charstring::findLast(const char *haystack, const char needle) {
 	return strrchr(haystack,needle);
 }
 
