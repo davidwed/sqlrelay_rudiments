@@ -13,6 +13,10 @@ paths:
 	and for replacing ./'s and ../'s in a path
 	sys/ipc.h - ftok()
 	unistd.h - chdir()/fchdir()
+			pathconf()/fpathconf():
+				__POSIX_PATH_MAX()
+				__POSIX_NAME_MAX()
+				__POSIX_NO_TRUNC()
 	glob.h - glob(),globfree(),glob_pattern_p()
 	fts.h/ftw.h - file heirarchy traversal functions
 			fts_open(),fts_close()
@@ -21,30 +25,36 @@ paths:
 					element in a directory tree
 
 file class:
-	stdlib.h - mkstemp()/mkdtemp()
 	unistd.h - access(),euidaccess()
 			pread(),pwrite()
-			pipe()
-			lchown()
-			pathconf()/fpathconf()
-	fcntl.h - fcntl(),posix_fadvise(),posix_fallocate()
+			pathconf()/fpathconf():
+				__POSIX_LINK_MAX()
+				__POSIX_CHOWN_RESTRICTED()
+	fcntl.h - fcntl()
 	sys/ioctl.h - ioctl()
-	sys/stat.h - stat(),fstat(),lstat()
-			chmod(),lchmod(),fchmod()
-			mkdir(),mknod(),mkfifo()
-	sys/xattr.h - extended file attributes
-			setxattr(),lsetxattr(),fsetxattr()
-			getxattr(),lgetxattr(),fgetxattr()
-			listxattr(),llistxattr(),flistxattr()
-			removexattr(),lremovexattr(),fremovexattr()
+	sys/xattr.h - setxattr(),getxattr(),listxattr(),removexattr()
+			fsetxattr(),fgetxattr(),flistxattr(),fremovexattr()
+
+link class:
+	unistd.h - lchown()
+	sys/stat.h - lstat(),lchmod(),
+	sys/xattr.h - lsetxattr(),lgetxattr(),llistxattr(),lremovexattr()
+
+pipe class:
+	unistd.h - pipe(), pathconf()/fpathconf(): __POSIX_PIPE_BUF()
+
+realtime:
+	fcntl.h - posix_fadvise(),posix_fallocate()
 
 directory class:
+	stdlib.h - mkdtemp()
 	dirent/direct.h - opendir(),closedir(),readdir(),rewinddir()
 			seekdir(),telldir()
 			dirfd()
 			scandir(),alphasort(),versionsort() - not in posix
 			getdirentries()
 	unistd.h - getcwd(),rmdir(),chroot()
+	sys/stat.h - mkdir()
 
 filesystem class:
 	sys/fsuid.h - setfsuid()/getfsuid() - uid for filesystem checks
@@ -188,6 +198,10 @@ tty:
 	pty.h - openpty(),forkpty()
 	ttyent.h - getttyent()/getttynam()/setttyent()/endttyent()
 	utmp.h - login_tty()
+	unistd.h - pathconf()/fpathconf():
+				__PC_VDISABLE()
+				__POSIX_MAX_CANON()
+				__POSIX_MAX_INPUT()
 
 errors:
 	stdio.h - perror()
@@ -431,6 +445,12 @@ network:
 	netinet/tcp.h - #defines for setsockopt, tcp packet structs
 	netinet/udp.h - udp packet structs
 	netpacket/packet.h - raw packet structs
+
+should file class have non-static versions of createDeviceNode/createFifo/
+	createTemporaryFile which mirror other create() methods?
+
+link class inherits from file, but operations apply to link, not file, need
+	to move link/symlink/readlink methods there
 
 charstring class has lots of static methods with no
 	corresponding non-static method, is this ok?

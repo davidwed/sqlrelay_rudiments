@@ -555,6 +555,36 @@ class file : public filedescriptor {
 			//
 			// Returns true on success and false on failure.
 
+		static bool	createDeviceNode(const char *filename,
+						bool blockdevice,
+						unsigned short major,
+						unsigned short minor,
+						mode_t perms);
+			// Creates device node "filename" with major number
+			// "major" and minor number "minor".  The device node
+			// will be created as a block device if "blockdevice"
+			// is true, otherwise it will be created as a character
+			// device.  The device node will be assigned
+			// permissions "perms".
+			//
+			// Returns true on success and false on failure.
+
+		static bool	createFifo(const char *filename, mode_t perms);
+			// Creates a fifo called "filename" with permissions
+			// "perms".
+			//
+			// Returns true on success and false on failure.
+
+		static int	createTemporaryFile(char *templatefilename);
+			// Creates a temporary file using "templatefilename"
+			// as a template.  The last 6 characters of
+			// "templatefilename" must be XXXXXX and
+			// "templatefilename" will be modified to contain the
+			// name of the file that was actually created.
+			//
+			// Opens and returns the file descriptor handle of the
+			// file on success and -1 on failure.
+
 	#include <rudiments/private/file.h>
 };
 

@@ -864,3 +864,19 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 bool file::setLastAccessAndModificationTimes(const char *filename) {
 	return !utimes(filename,NULL);
 }
+
+bool file::createDeviceNode(const char *filename, bool blockdevice,
+				unsigned short major, unsigned short minor,
+				mode_t perms) {
+	mode_t	mode=perms|((blockdevice)?S_IFBLK:S_IFCHR);
+	dev_t	dev=(major<<8|minor);
+	return !mknod(filename,mode,dev);
+}
+
+bool file::createFifo(const char *filename, mode_t perms) {
+	return !mkfifo(filename,perms);
+}
+
+int file::createTemporaryFile(char *templatefilename) {
+	return mkstemp(templatefilename);
+}
