@@ -26,7 +26,7 @@ unsigned long datatransport::hostToNet(unsigned long value) const {
 }
 
 unsigned short datatransport::netToHost(unsigned short value) const {
-	return ntohl(value);
+	return ntohs(value);
 }
 
 unsigned long datatransport::netToHost(unsigned long value) const {

@@ -19,6 +19,7 @@ int main(int argc, const char **argv) {
 		clnt.connectToServer("localhost",10000,-1,-1,0,1);
 		sizeread=clnt.read(buffer,5);
 		buffer[sizeread]=(char)NULL;
+		//printf("%s\n",buffer);
 		clnt.close();
 	}
 

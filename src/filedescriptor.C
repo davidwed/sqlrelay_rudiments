@@ -28,6 +28,36 @@
 	#define SSIZE_MAX 32767
 #endif
 
+//#define DEBUG_WRITE 1
+//#define DEBUG_READ 1
+
+#ifdef DEBUG_WRITE
+	#define DEBUG_WRITE_INT(type,number) \
+		printf("%d: %s write(%d,%d)\n",getpid(),type,fd,number);
+	#define DEBUG_WRITE_FLOAT(type,number) \
+		printf("%d: %s write(%d,%f)\n",getpid(),type,fd,number);
+	#define DEBUG_WRITE_CHAR(type,character) \
+		printf("%d: %s write(%d,%d)\n",getpid(),type,fd,character);
+	#define DEBUG_WRITE_STRING(type,string,size) \
+		printf("%d: %s write(%d,",getpid(),type,fd); \
+		for (size_t i=0; i<size; i++) { \
+			printf("%c",string[i]); \
+		} \
+		printf(",%d)\n",size);
+	#define DEBUG_WRITE_VOID(type,buffer,size) \
+		unsigned char *ptr=(unsigned char *)buffer; \
+		printf("%d: %s write(%d,",getpid(),type,fd); \
+		for (size_t i=0; i<size; i++) { \
+			printf("0x%02x ",ptr[i]); \
+		} \
+		printf(",%d)\n",size);
+#else
+	#define DEBUG_WRITE_INT(type,number)
+	#define DEBUG_WRITE_FLOAT(type,number)
+	#define DEBUG_WRITE_CHAR(type,character)
+	#define DEBUG_WRITE_STRING(type,string,size)
+	#define DEBUG_WRITE_VOID(type,buffer,size)
+#endif
 
 filedescriptor::filedescriptor(int filedesc) {
 	init();
@@ -125,112 +155,155 @@ bool filedescriptor::isUsingNonBlockingMode() {
 }
 
 ssize_t filedescriptor::write(unsigned short number) {
-	return write((void *)&number,sizeof(unsigned short),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned long number) {
-	return write((void *)&number,sizeof(unsigned long),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(short number) {
+	DEBUG_WRITE_INT("short",number);
 	return safeWrite((void *)&number,sizeof(short),-1,-1);
 }
 
 ssize_t filedescriptor::write(long number) {
+	DEBUG_WRITE_INT("long",number);
 	return safeWrite((void *)&number,sizeof(long),-1,-1);
 }
 
 ssize_t filedescriptor::write(float number) {
+	DEBUG_WRITE_FLOAT("float",number);
 	return safeWrite((void *)&number,sizeof(float),-1,-1);
 }
 
 ssize_t filedescriptor::write(double number) {
+	DEBUG_WRITE_FLOAT("double",number);
 	return safeWrite((void *)&number,sizeof(double),-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned char character) {
+	DEBUG_WRITE_CHAR("uchar",character);
 	return safeWrite((void *)&character,sizeof(unsigned char),-1,-1);
 }
 
 ssize_t filedescriptor::write(bool value) {
+	DEBUG_WRITE_INT("bool",value);
 	return safeWrite((void *)&value,sizeof(bool),-1,-1);
 }
 
 ssize_t filedescriptor::write(char character) {
+	DEBUG_WRITE_CHAR("char",character);
 	return safeWrite((void *)&character,sizeof(char),-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size) {
+	DEBUG_WRITE_STRING("ustring",string,size);
 	return safeWrite((void *)string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size) {
+	DEBUG_WRITE_STRING("string",string,size);
 	return safeWrite((void *)string,size,-1,-1);
 }
 
+ssize_t filedescriptor::write(const unsigned char *string) {
+	DEBUG_WRITE_STRING("ustring",string,strlen((char *)string));
+	return safeWrite((void *)string,strlen((char *)string),-1,-1);
+}
+
+ssize_t filedescriptor::write(const char *string) {
+	DEBUG_WRITE_STRING("string",string,strlen(string));
+	return safeWrite((void *)string,strlen(string),-1,-1);
+}
+
 ssize_t filedescriptor::write(const void *buffer, size_t size) {
+	DEBUG_WRITE_VOID("void",buffer,size);
 	return safeWrite((void *)buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned short number, long sec, long usec) {
+	DEBUG_WRITE_INT("ushort",number);
 	number=hostToNet(number);
 	return safeWrite((void *)&number,sizeof(unsigned short),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned long number, long sec, long usec) {
+	DEBUG_WRITE_INT("ulong",number);
 	number=hostToNet(number);
 	return safeWrite((void *)&number,sizeof(unsigned long),sec,usec);
 }
 
 ssize_t filedescriptor::write(short number, long sec, long usec) {
+	DEBUG_WRITE_INT("short",number);
 	return safeWrite((void *)&number,sizeof(short),sec,usec);
 }
 
 ssize_t filedescriptor::write(long number, long sec, long usec) {
+	DEBUG_WRITE_INT("long",number);
 	return safeWrite((void *)&number,sizeof(long),sec,usec);
 }
 
 ssize_t filedescriptor::write(float number, long sec, long usec) {
+	DEBUG_WRITE_FLOAT("float",number);
 	return safeWrite((void *)&number,sizeof(float),sec,usec);
 }
 
 ssize_t filedescriptor::write(double number, long sec, long usec) {
+	DEBUG_WRITE_FLOAT("double",number);
 	return safeWrite((void *)&number,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned char character, long sec, long usec) {
+	DEBUG_WRITE_CHAR("uchar",character);
 	return safeWrite((void *)&character,sizeof(unsigned char),sec,usec);
 }
 
 ssize_t filedescriptor::write(bool value, long sec, long usec) {
+	DEBUG_WRITE_INT("bool",value);
 	return safeWrite((void *)&value,sizeof(bool),sec,usec);
 }
 
 ssize_t filedescriptor::write(char character, long sec, long usec) {
+	DEBUG_WRITE_CHAR("char",character);
 	return safeWrite((void *)&character,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size,
 							long sec, long usec) {
+	DEBUG_WRITE_STRING("ustring",string,size);
 	return safeWrite((void *)string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size,
 							long sec, long usec) {
+	DEBUG_WRITE_STRING("string",string,size);
 	return safeWrite((void *)string,size,sec,usec);
+}
+
+ssize_t filedescriptor::write(const unsigned char *string,
+							long sec, long usec) {
+	DEBUG_WRITE_STRING("ustring",string,strlen((char *)string));
+	return safeWrite((void *)string,strlen((char *)string),sec,usec);
+}
+
+ssize_t filedescriptor::write(const char *string, long sec, long usec) {
+	DEBUG_WRITE_STRING("string",string,strlen(string));
+	return safeWrite((void *)string,strlen(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
 							long sec, long usec) {
+	DEBUG_WRITE_VOID("void",buffer,size);
 	return safeWrite((void *)buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned short *buffer) {
-	return read((void *)buffer,sizeof(unsigned short),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(unsigned long *buffer) {
-	return read((void *)buffer,sizeof(unsigned long),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(short *buffer) {
@@ -410,7 +483,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 	int	copytoterm;
 
 	// loop, getting 1 character at a time
-	while (1) {
+	for (;;) {
 
 		// read from the file descriptor
 		if ((sizeread=safeRead((void *)&charbuffer,
@@ -494,6 +567,9 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 						long sec, long usec) {
+	#ifdef DEBUG_READ
+	printf("%d: safeRead(%d,",getpid(),fd);
+	#endif
 
 	// The result of SSL_read may be undefined if count=0
 	#ifdef RUDIMENTS_HAS_SSL
@@ -520,9 +596,16 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 			// return error or timeout
 			if (selectresult<0) {
+				#ifdef DEBUG_READ
+				printf(")\n");
+				#endif
 				return selectresult;
 			}
 		}
+
+		// set a pointer to the position in the buffer that we need
+		// to read data into
+		void	*ptr=(void *)((unsigned char *)buf+totalread);
 
 		// read...
 		errno=0;
@@ -530,9 +613,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		if (ssl) {
 			for (bool done=false; !done ;) {
 
-				actualread=SSL_read(ssl,
-						(void *)((long)buf+totalread),
-						sizetoread);
+				actualread=SSL_read(ssl,ptr,sizetoread);
 				sslresult=actualread;
 
 				switch (SSL_get_error(ssl,actualread)) {
@@ -551,8 +632,12 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			}
 		} else {
 		#endif
-			actualread=::read(fd,(void *)((long)buf+totalread),
-								sizetoread);
+			actualread=::read(fd,ptr,sizetoread);
+			#ifdef DEBUG_READ
+			for (int i=0; i<sizetoread; i++) {
+				printf("0x%02x ",((unsigned char *)ptr)[i]);
+			}
+			#endif
 		#ifdef RUDIMENTS_HAS_SSL
 		}
 		#endif
@@ -574,6 +659,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				break;
 			} else if (actualread==-1) {
 				// error condition
+				#ifdef DEBUG_READ
+				printf(")\n");
+				#endif
 				return -1;
 			}
 		}
@@ -586,6 +674,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 	}
 
+	#ifdef DEBUG_READ
+	printf(",%d)\n",totalread);
+	#endif
 	return totalread;
 }
 
@@ -708,23 +799,6 @@ int filedescriptor::safeSelect(long sec, long usec, bool read, bool write) {
 
 		return selectresult;
 	}
-}
-
-ssize_t filedescriptor::write(const unsigned char *string) {
-	return safeWrite((void *)string,strlen((char *)string),-1,-1);
-}
-
-ssize_t filedescriptor::write(const char *string) {
-	return safeWrite((void *)string,strlen(string),-1,-1);
-}
-
-ssize_t filedescriptor::write(const unsigned char *string,
-							long sec, long usec) {
-	return safeWrite((void *)string,strlen((char *)string),sec,usec);
-}
-
-ssize_t filedescriptor::write(const char *string, long sec, long usec) {
-	return safeWrite((void *)string,strlen(string),sec,usec);
 }
 
 unsigned short filedescriptor::hostToNet(unsigned short value) const {
