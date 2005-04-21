@@ -1,3 +1,5 @@
+0.28.2 - filedescriptor desctructor removes the read buffer now
+
 0.28.1 - fixed a bug in bufferedWrite()
 
 0.28 - added strtou(l|ll) wrappers to charstring class
