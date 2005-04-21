@@ -154,6 +154,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 }
 
 filedescriptor::~filedescriptor() {
+	delete[] readbuffer;
 	delete[] writebuffer;
 	close();
 #ifdef RUDIMENTS_HAS_SSL
