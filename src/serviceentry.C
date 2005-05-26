@@ -17,7 +17,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R))
-pthread_mutex_t	*serviceentry::semutex;
+mutex	*serviceentry::semutex;
 #endif
 
 
@@ -71,9 +71,9 @@ bool serviceentry::needsMutex() {
 	#endif
 }
 
-void serviceentry::setMutex(pthread_mutex_t *mutex) {
+void serviceentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
-		semutex=mutex;
+		semutex=mtx;
 	#endif
 }
 #endif
@@ -136,11 +136,11 @@ bool serviceentry::initialize(const char *servicename, int port,
 	#else
 		se=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(semutex && pthread_mutex_lock(semutex)) &&
+		return (!(semutex && !semutex->lock()) &&
 			((se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL) &&
-			!(semutex && pthread_mutex_unlock(semutex)));
+			!(semutex && !semutex->unlock()));
 		#else
 		return ((se=((servicename)
 				?getservbyname(servicename,protocol)

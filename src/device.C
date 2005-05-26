@@ -2,8 +2,11 @@
 // See the COPYING file for more information
 
 #include <rudiments/device.h>
+#include <rudiments/error.h>
 
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -32,7 +35,11 @@ bool device::createDeviceNode(const char *filename, bool blockdevice,
 				mode_t perms) {
 	mode_t	mode=perms|((blockdevice)?S_IFBLK:S_IFCHR);
 	dev_t	dev=(major<<8|minor);
-	return !mknod(filename,mode,dev);
+	int	result;
+	do {
+		result=mknod(filename,mode,dev);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

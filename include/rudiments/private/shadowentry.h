@@ -10,5 +10,5 @@
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			!defined(HAVE_GETSPNAM_R)
-			static	pthread_mutex_t	*spmutex;
+			static	mutex	*spmutex;
 		#endif

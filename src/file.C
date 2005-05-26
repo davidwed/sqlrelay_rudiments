@@ -12,7 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <sys/time.h>
 #ifdef HAVE_XATTRS
 	#include <sys/xattr.h>
@@ -146,11 +148,19 @@ ssize_t file::createFile(const char *name, mode_t perms,
 }
 
 int file::openInternal(const char *name, int flags) {
-	return ::open(name,flags);
+	int	result;
+	do {
+		result=::open(name,flags);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 int file::openInternal(const char *name, int flags, mode_t perms) {
-	return ::open(name,flags,perms);
+	int	result;
+	do {
+		result=::open(name,flags,perms);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 bool file::open(const char *name, int flags) {
@@ -369,73 +379,61 @@ bool file::checkLockRemainderFromEnd(short type, off_t start,
 }
 
 bool file::sequentialAccess(off_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
-	return !posix_fadvise(fd,start,len,POSIX_FADV_SEQUENTIAL);
-	#else
-	return true;
-	#endif
+	return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
 }
 
 bool file::randomAccess(off_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
-	return !posix_fadvise(fd,start,len,POSIX_FADV_RANDOM);
-	#else
-	return true;
-	#endif
+	return posixFadvise(start,len,POSIX_FADV_RANDOM);
 }
 
 bool file::onlyOnce(off_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
-	return !posix_fadvise(fd,start,len,POSIX_FADV_NOREUSE);
-	#else
-	return true;
-	#endif
+	return posixFadvise(start,len,POSIX_FADV_NOREUSE);
 }
 
 bool file::willNeed(off_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
-	return !posix_fadvise(fd,start,len,POSIX_FADV_WILLNEED);
-	#else
-	return true;
-	#endif
+	return posixFadvise(start,len,POSIX_FADV_WILLNEED);
 }
 
 bool file::wontNeed(off_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
-	return !posix_fadvise(fd,start,len,POSIX_FADV_DONTNEED);
-	#else
-	return true;
-	#endif
+	return posixFadvise(start,len,POSIX_FADV_DONTNEED);
 }
 
 bool file::normalAccess(off_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
-	return !posix_fadvise(fd,start,len,POSIX_FADV_NORMAL);
-	#else
-	return true;
-	#endif
+	return posixFadvise(start,len,POSIX_FADV_NORMAL);
 }
 
 #ifdef HAVE_POSIX_FALLOCATE
 bool file::reserve(off_t start, size_t len) const {
-	return !posix_fallocate(fd,start,len);
+	int	result;
+	do {
+		result=posix_fallocate(fd,start,len);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 #endif
 
 bool file::truncate(const char *filename) {
-	return !::truncate(filename,0);
+	return truncate(filename,0);
 }
 
 bool file::truncate(const char *filename, off_t length) {
-	return !::truncate(filename,length);
+	int	result;
+	do {
+		result=::truncate(filename,length);
+	} while (result==-1 && error::getErrorNumber()==-1);
+	return !result;
 }
 
 bool file::truncate() const {
-	return !::ftruncate(fd,0);
+	return ftruncate(fd,0);
 }
 
 bool file::truncate(off_t length) const {
-	return !::ftruncate(fd,length);
+	int	result;
+	do {
+		result=::ftruncate(fd,length);
+	} while (result==-1 && error::getErrorNumber()==-1);
+	return !result;
 }
 
 bool file::unlockRemainderFromEnd() const {
@@ -487,16 +485,28 @@ bool file::executable(const char *filename) {
 }
 
 bool file::accessible(const char *filename, int mode) {
-	return !access(filename,mode);
+	int	result;
+	do {
+		result=access(filename,mode);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::getCurrentProperties() {
-	return (fstat(fd,&st)!=-1);
+	int	result;
+	do {
+		result=fstat(fd,&st);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #define STAT(filename,out,member) \
 	struct stat st; \
-	if (stat(filename,&st)==-1) { \
+	int	result; \
+	do { \
+		result=stat(filename,&st); \
+	} while (result==-1 && error::getErrorNumber()==EINTR); \
+	if (result==-1) { \
 		return false; \
 	} \
 	*out=st.member; \
@@ -812,27 +822,43 @@ bool file::changeOwnerGroupId(const char *filename, gid_t gid) {
 }
 
 bool file::canChangeOwner(const char *filename) {
-	return !pathconf(filename,_PC_CHOWN_RESTRICTED);
+	return !pathConf(filename,_PC_CHOWN_RESTRICTED);
 }
 
 bool file::canChangeOwner() const {
-	return !fpathconf(fd,_PC_CHOWN_RESTRICTED);
+	return !fpathConf(_PC_CHOWN_RESTRICTED);
 }
 
 bool file::rename(const char *oldpath, const char *newpath) {
-	return !::rename(oldpath,newpath);
+	int	result;
+	do {
+		result=::rename(oldpath,newpath);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::remove(const char *filename) {
-	return !unlink(filename);
+	int	result;
+	do {
+		result=unlink(filename);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::createHardLink(const char *oldpath, const char *newpath) {
-	return !link(oldpath,newpath);
+	int	result;
+	do {
+		result=link(oldpath,newpath);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
-	return !symlink(oldpath,newpath);
+	int	result;
+	do {
+		result=symlink(oldpath,newpath);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 char *file::resolveSymbolicLink(const char *filename) {
@@ -844,7 +870,10 @@ char *file::resolveSymbolicLink(const char *filename) {
 		char	*buffer=new char[buffersize];
 
 		// read the path into the buffer
-		int	len=::readlink(filename,buffer,buffersize);
+		int	len;
+		do {
+			len=::readlink(filename,buffer,buffersize);
+		} while (len==-1 && error::getErrorNumber()==EINTR);
 
 		if (len==-1) {
 
@@ -876,12 +905,20 @@ char *file::resolveSymbolicLink(const char *filename) {
 }
 
 bool file::sync() const {
-	return !fsync(fd);
+	int	result;
+	do {
+		result=fsync(fd);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #ifdef HAVE_FDATASYNC
 bool file::dataSync() const {
-	return !fdatasync(fd);
+	int	result;
+	do {
+		result=fdatasync(fd);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 #endif
 
@@ -915,19 +952,35 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 	tv[0].tv_usec=0;
 	tv[1].tv_sec=static_cast<long>(lastmodtime);
 	tv[1].tv_usec=0;
-	return !utimes(filename,tv);
+	int	result;
+	do {
+		result=utimes(filename,tv);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::setLastAccessAndModificationTimes(const char *filename) {
-	return !utimes(filename,NULL);
+	int	result;
+	do {
+		result=utimes(filename,NULL);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::createFifo(const char *filename, mode_t perms) {
-	return !mkfifo(filename,perms);
+	int	result;
+	do {
+		result=mkfifo(filename,perms);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 int file::createTemporaryFile(char *templatefilename) {
-	return mkstemp(templatefilename);
+	int	result;
+	do {
+		result=mkstemp(templatefilename);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 #ifdef HAVE_XATTRS
@@ -948,7 +1001,10 @@ const char * const *file::listAttributes() const {
 		buffer=new char[size];
 
 		// attempt to read the attribute into the buffer
-		ssize_t	newsize=flistxattr(fd,buffer,size);
+		ssize_t	newsize;
+		do {
+			newsize=flistxattr(fd,buffer,size);
+		} while (newsize==-1 && error::getErrorNumber()==EINTR);
 
 		// it's possible that someone changed the attribute between
 		// the previous 2 calls to fgetxattr and increased the size
@@ -1106,7 +1162,10 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 		(*buffer)=static_cast<void *>(new unsigned char[(*size)]);
 
 		// attempt to read the attribute into the buffer
-		ssize_t	newsize=fgetxattr(fd,name,(*buffer),(*size));
+		ssize_t	newsize;
+		do {
+			newsize=fgetxattr(fd,name,(*buffer),(*size));
+		} while (newsize==-1 && error::getErrorNumber()==EINTR);
 
 		// it's possible that someone changed the attribute between
 		// the previous 2 calls to fgetxattr and increased the size
@@ -1308,11 +1367,19 @@ bool file::setAttribute(const char *name, const void *value,
 
 bool file::setAttribute(const char *name, const void *value,
 						size_t size, int flags) const {
-	return fsetxattr(fd,name,value,size,flags);
+	ssize_t	result;
+	do {
+		result=fsetxattr(fd,name,value,size,flags);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool file::removeAttribute(const char *name) const {
-	return fremovexattr(fd,name);
+	ssize_t	result;
+	do {
+		result=fremovexattr(fd,name);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 const char * const *file::attributeArray(const char *buffer,
@@ -1406,11 +1473,39 @@ key_t file::generateKey(const char *filename, int id) {
 }
 
 long file::maxLinks(const char *filename) {
-	return pathconf(filename,_PC_LINK_MAX);
+	return pathConf(filename,_PC_LINK_MAX);
 }
 
 long file::maxLinks() const {
-	return fpathconf(fd,_PC_LINK_MAX);
+	return fpathConf(_PC_LINK_MAX);
+}
+
+bool file::posixFadvise(off_t offset, off_t len, int advice) const {
+	#ifdef HAVE_POSIX_FADVISE
+	int	result;
+	do {
+		result=posix_fadvise(fd,offset,len,advice);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
+	#else
+	return true;
+	#endif
+}
+
+long file::pathConf(const char *path, int name) {
+	long	result;
+	do {
+		result=pathconf(path,name);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
+}
+
+long file::fpathConf(int name) const {
+	long	result;
+	do {
+		result=fpathconf(fd,name);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

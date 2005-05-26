@@ -23,7 +23,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
-pthread_mutex_t	*rpcentry::remutex;
+mutex	*rpcentry::remutex;
 #endif
 
 
@@ -62,9 +62,9 @@ bool rpcentry::needsMutex() {
 	#endif
 }
 
-void rpcentry::setMutex(pthread_mutex_t *mutex) {
+void rpcentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
-		remutex=mutex;
+		remutex=mtx;
 	#endif
 }
 #endif
@@ -122,11 +122,11 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 	#else
 		re=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(remutex && pthread_mutex_lock(remutex)) &&
+		return (!(remutex && !remutex->lock()) &&
 			((re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL) &&
-			!(remutex && pthread_mutex_unlock(remutex)));
+			!(remutex && !remutex->unlock()));
 		#else
 		return ((re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))

@@ -10,7 +10,7 @@
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
-			static	pthread_mutex_t	*pemutex;
+			static	mutex	*pemutex;
 		#endif
 
 		bool	initialize(const char *username, uid_t userid);

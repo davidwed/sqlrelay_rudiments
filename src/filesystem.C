@@ -3,11 +3,14 @@
 
 #include <rudiments/filesystem.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -43,7 +46,10 @@ filesystem::~filesystem() {
 bool filesystem::initialize(const char *path) {
 	close();
 	closeflag=true;
-	return ((fd=::open(path,O_RDONLY))!=-1 && getCurrentProperties());
+	do {
+		fd=::open(path,O_RDONLY);
+	} while (fd==-1 && error::getErrorNumber()==EINTR);
+	return (fd!=-1 && getCurrentProperties());
 }
 
 bool filesystem::initialize(int fd) {
@@ -53,25 +59,38 @@ bool filesystem::initialize(int fd) {
 	return getCurrentProperties();
 }
 
-void filesystem::close() {
+bool filesystem::close() {
 	if (fd>-1 && closeflag) {
-		::close(fd);
+		int	result;
+		do {
+			result=::close(fd);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
 		fd=-1;
+		return !result;
 	}
+	return true;
 }
 
 bool filesystem::getCurrentProperties() {
-#ifdef HAVE_STATVFS
-	return (fstatvfs(fd,&st)!=-1);
-#else
-	return (fstatfs(fd,&st)!=-1);
-#endif
+	int	result;
+	do {
+		#ifdef HAVE_STATVFS
+		result=fstatvfs(fd,&st);
+		#else
+		result=fstatfs(fd,&st);
+		#endif
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #ifdef HAVE_STATVFS
 	#define STATFS(path,out,member) \
 		struct statvfs st; \
-		if (::statvfs(path,&st)==-1) { \
+		int	result; \
+		do { \
+			result=::statvfs(path,&st); \
+		} while (result==-1 && error::getErrorNumber()==EINTR); \
+		if (result==-1) { \
 			return false; \
 		} \
 		*out=st.member; \
@@ -79,7 +98,11 @@ bool filesystem::getCurrentProperties() {
 
 	#define FSTATFS(fd,out,member) \
 		struct statvfs st; \
-		if (fstatvfs(fd,&st)==-1) { \
+		int	result; \
+		do { \
+			result=fstatvfs(fd,&st); \
+		} while (result==-1 && error::getErrorNumber()==EINTR); \
+		if (result==-1) { \
 			return false; \
 		} \
 		*out=st.member; \
@@ -87,7 +110,11 @@ bool filesystem::getCurrentProperties() {
 #else
 	#define STATFS(path,out,member) \
 		struct statfs st; \
-		if (::statfs(path,&st)==-1) { \
+		int	result; \
+		do { \
+			result=::statfs(path,&st); \
+		} while (result==-1 && error::getErrorNumber()==EINTR); \
+		if (result==-1) { \
 			return false; \
 		} \
 		*out=st.member; \
@@ -95,7 +122,11 @@ bool filesystem::getCurrentProperties() {
 
 	#define FSTATFS(fd,out,member) \
 		struct statfs st; \
-		if (fstatfs(fd,&st)==-1) { \
+		int	result; \
+		do { \
+			result=fstatfs(fd,&st); \
+		} while (result==-1 && error::getErrorNumber()==EINTR); \
+		if (result==-1) { \
 			return false; \
 		} \
 		*out=st.member; \
@@ -858,7 +889,11 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 	#else
 		#if defined(HAVE_LINUX_STATFS)
 			struct statfs st;
-			if (::statfs(path,&st)==-1) {
+			int	result;
+			do {
+				result=::statfs(path,&st);
+			} while (result==-1 && error::getErrorNumber()==EINTR);
+			if (result==-1) {
 				return false;
 			}
 			*name=filesystem::getFsTypeName(st.f_type);
@@ -883,7 +918,11 @@ bool filesystem::getTypeName(int fd, const char **name) {
 	#else
 		#if defined(HAVE_LINUX_STATFS)
 			struct statfs st;
-			if (fstatfs(fd,&st)==-1) {
+			int	result;
+			do {
+				result=fstatfs(fd,&st);
+			} while (result==-1 && error::getErrorNumber()==EINTR);
+			if (result==-1) {
 				return false;
 			}
 			*name=filesystem::getFsTypeName(st.f_type);

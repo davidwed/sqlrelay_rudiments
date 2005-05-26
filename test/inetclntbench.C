@@ -18,12 +18,22 @@ using namespace rudiments;
 int main(int argc, const char **argv) {
 
 	if (argc<3) {
-		printf("usage: inetclntbench [buffer size] [iterations]\n");
+		printf("usage: inetclntbench [buffer size] [bytesperiteration] [iterations]\n");
 		exit(0);
 	}
 
 	unsigned long	buffersize=charstring::toUnsignedLong(argv[1]);
-	unsigned long	iterations=charstring::toUnsignedLong(argv[2]);
+	unsigned long	bytesperiteration=charstring::toUnsignedLong(argv[2]);
+	unsigned long	iterations=charstring::toUnsignedLong(argv[3]);
+
+	char	*bytes=new char[bytesperiteration];
+	if (!bytes) {
+		printf("buffer allocation failed\n");
+		exit(0);
+	}
+	for (unsigned long i=0; i<bytesperiteration; i++) {
+		bytes[i]='C';
+	}
 
 	// create an inet socket client
 	inetclientsocket	clnt;
@@ -38,7 +48,7 @@ int main(int argc, const char **argv) {
 
 	time_t	start=time(NULL);
 	for (unsigned long i=0; i<iterations; i++) {
-		clnt.write('h');
+		clnt.write(bytes,bytesperiteration);
 	}
 	clnt.flushWriteBuffer(-1,-1);
 	time_t	end=time(NULL);

@@ -413,6 +413,22 @@ AC_SUBST(PTHREADLIB)
 ])
 
 
+dnl check for pthread_mutex_t
+AC_DEFUN([FW_CHECK_PTHREAD_MUTEX_T],
+[
+	AC_MSG_CHECKING(for pthread_mutex_t)
+	FW_TRY_LINK([#include <pthread.h>],[pthread_mutex_t mut;],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+])
+
+
+dnl check for CreateMutex
+AC_DEFUN([FW_CHECK_CREATE_MUTEX],
+[
+	AC_MSG_CHECKING(for CreateMutex)
+	FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+])
+
+
 
 dnl checks for the ssl library
 dnl requires:  SSLPATH, RPATHFLAG, cross_compiling
@@ -463,6 +479,16 @@ then
 		then
 			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
 			AC_MSG_RESULT(yes)
+
+			AC_MSG_CHECKING(SSL_read/write can use a void * parameter)
+			FW_TRY_LINK([#include <openssl/ssl.h>],[void *buf; SSL_read(NULL,buf,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[SSL_VOID_PTR="yes"],[])
+			if ( test -n "$SSL_VOID_PTR" )
+			then
+				AC_MSG_RESULT(yes)
+				AC_DEFINE(SSL_VOID_PTR,1,SSL_read/write can use a void * parameter instead of char *)
+			else
+				AC_MSG_RESULT(no)
+			fi
 		else
 			AC_MSG_RESULT(no)
 		fi
@@ -995,9 +1021,21 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 	AC_LANG(C)
 	SOCKETLIBS=""
 	DONE=""
-	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet"
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32"
 	do
-		FW_TRY_LINK([#include <stdlib.h>],[connect(0,NULL,0); listen(0,0); bind(0,NULL,0); accept(0,NULL,0); send(0,NULL,0,0); sendto(0,NULL,0,0,NULL,0); sendmsg(0,NULL,0); gethostbyname(NULL);],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
+		FW_TRY_LINK([#include <stdlib.h>
+#ifdef __MINGW32__
+#include <winsock2.h>
+#endif],[connect(0,NULL,0);
+listen(0,0);
+bind(0,NULL,0);
+accept(0,NULL,0);
+send(0,NULL,0,0);
+sendto(0,NULL,0,0,NULL,0);
+#ifndef __MINGW32__
+sendmsg(0,NULL,0);
+#endif
+gethostbyname(NULL);],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
 		if ( test -n "$DONE" )
 		then
 			break

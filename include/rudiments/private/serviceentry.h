@@ -12,7 +12,7 @@
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETSERVBYNAME_R) || \
 				!defined(HAVE_GETSERVBYPORT_R))
-			static	pthread_mutex_t	*semutex;
+			static	mutex	*semutex;
 		#endif
 
 		bool	initialize(const char *servicename, int port,

@@ -18,7 +18,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
-pthread_mutex_t	*hostentry::hemutex;
+mutex	*hostentry::hemutex;
 #endif
 
 
@@ -76,9 +76,9 @@ bool hostentry::needsMutex() {
 	#endif
 }
 
-void hostentry::setMutex(pthread_mutex_t *mutex) {
+void hostentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
-		hemutex=mutex;
+		hemutex=mtx;
 	#endif
 }
 #endif
@@ -138,11 +138,11 @@ bool hostentry::initialize(const char *hostname, const char *address,
 	#else
 		he=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(hemutex && pthread_mutex_lock(hemutex)) &&
+		return (!(hemutex && !hemutex->lock()) &&
 			((he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL) &&
-			!(hemutex && pthread_mutex_unlock(hemutex)));
+			!(hemutex && !hemutex->unlock()));
 		#else
 		return ((he=((hostname)
 				?gethostbyname(hostname)

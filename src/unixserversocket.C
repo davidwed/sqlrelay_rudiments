@@ -6,6 +6,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/file.h>
+#include <rudiments/error.h>
 
 // need for umask...
 #include <sys/stat.h>
@@ -53,7 +54,10 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	charstring::copy(sockaddrun.sun_path,filename);
 
 	// create the socket
-	return ((fd=::socket(AF_UNIX,SOCK_STREAM,0))>-1);
+	do {
+		fd=::socket(AF_UNIX,SOCK_STREAM,0);
+	} while (fd==-1 && error::getErrorNumber()==EINTR);
+	return (fd!=-1);
 }
 
 bool unixserversocket::listen(const char *filename, mode_t mask, int backlog) {
@@ -68,8 +72,13 @@ bool unixserversocket::bind() {
 
 	// bind the socket
 	bool	retval=true;
-	if (::bind(fd,reinterpret_cast<struct sockaddr *>(&sockaddrun),
-						sizeof(sockaddrun))==-1) {
+	int	result;
+	do {
+		result=::bind(fd,
+			reinterpret_cast<struct sockaddr *>(&sockaddrun),
+				sizeof(sockaddrun));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (result==-1) {
 		retval=false;
 	}
 
@@ -80,7 +89,11 @@ bool unixserversocket::bind() {
 }
 
 bool unixserversocket::listen(int backlog) {
-	return !::listen(fd,backlog);
+	int	result;
+	do {
+		result=::listen(fd,backlog);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 filedescriptor *unixserversocket::accept() {
@@ -91,10 +104,13 @@ filedescriptor *unixserversocket::accept() {
 	rawbuffer::zero(&clientsun,sizeof(clientsun));
 
 	// accept on the socket
-	int		clientsock;
-	if ((clientsock=::accept(fd,
+	int	clientsock;
+	do {
+		clientsock=::accept(fd,
 				reinterpret_cast<struct sockaddr *>(&clientsun),
-				&size))==-1) {
+				&size);
+	} while (clientsock==-1 && error::getErrorNumber()==EINTR);
+	if (clientsock==-1) {
 		return NULL;
 	}
 

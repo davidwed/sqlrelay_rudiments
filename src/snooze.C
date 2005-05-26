@@ -9,8 +9,12 @@
 	#include <time.h>
 #else
 	#include <sys/types.h>
-	#include <sys/select.h>
-	#include <unistd.h>
+	#ifdef HAVE_SYS_SELECT_H
+		#include <sys/select.h>
+	#endif
+	#ifdef HAVE_UNISTD_H
+		#include <unistd.h>
+	#endif
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE

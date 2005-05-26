@@ -4,7 +4,9 @@
 #include <rudiments/rawbuffer.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef MUST_DEFINE_SWAB
 extern "C" void swab(const void *from, void *to, ssize_t n);

@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	private:
-		void	close();
+		bool	close();
 #if defined(HAVE_LINUX_STATFS)
 		static	const char	*getFsTypeName(long type);
 #endif

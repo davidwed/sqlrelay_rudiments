@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/shmfile.h>
+#include <rudiments/error.h>
 #include <sys/types.h>
 #include <sys/mman.h>
 
@@ -23,15 +24,27 @@ shmfile &shmfile::operator=(const shmfile &s) {
 shmfile::~shmfile() {}
 
 int shmfile::openInternal(const char *name, int flags) {
-	return shm_open(name,flags,0);
+	int	result;
+	do {
+		result=shm_open(name,flags,0);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 int shmfile::openInternal(const char *name, int flags, mode_t perms) {
-	return shm_open(name,flags,perms);
+	int	result;
+	do {
+		result=shm_open(name,flags,perms);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 bool shmfile::remove(const char *filename) {
-	return !shm_unlink(filename);
+	int	result;
+	do {
+		result=shm_unlink(filename);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

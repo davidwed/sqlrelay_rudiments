@@ -12,7 +12,7 @@
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETHOSTBYNAME_R) || \
 				!defined(HAVE_GETHOSTBYADDR_R))
-			static	pthread_mutex_t	*hemutex;
+			static	mutex	*hemutex;
 		#endif
 
 		bool	initialize(const char *hostname,

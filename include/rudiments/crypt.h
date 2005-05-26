@@ -35,7 +35,7 @@ class crypt {
 			// This method returns true if this class needs a mutex
 			// to operate safely in a threaded environment and false
 			// otherwise.
-		static	void	setMutex(pthread_mutex_t *mutex);
+		static	void	setMutex(mutex *mtx);
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.

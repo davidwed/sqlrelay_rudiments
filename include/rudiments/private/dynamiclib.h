@@ -5,7 +5,7 @@
 			void	*handle;
 
 			#ifdef RUDIMENTS_HAS_THREADS
-			static pthread_mutex_t	*errormutex;
+			static mutex	*errormutex;
 			#endif
 
 					dynamiclib(const dynamiclib &d);

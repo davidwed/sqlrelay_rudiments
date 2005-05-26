@@ -17,7 +17,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
-pthread_mutex_t	*protocolentry::pemutex;
+mutex	*protocolentry::pemutex;
 #endif
 
 protocolentry::protocolentry() {
@@ -66,9 +66,9 @@ bool protocolentry::needsMutex() {
 	#endif
 }
 
-void protocolentry::setMutex(pthread_mutex_t *mutex) {
+void protocolentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
-		pemutex=mutex;
+		pemutex=mtx;
 	#endif
 }
 #endif
@@ -126,11 +126,11 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 	#else
 		pe=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(pemutex && pthread_mutex_lock(pemutex)) &&
+		return (!(pemutex && !pemutex->lock())) &&
 			((pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
-			!(pemutex && pthread_mutex_unlock(pemutex)));
+			!(pemutex && !pemutex->unlock());
 		#else
 		return ((pe=((protocolname)
 				?getprotobyname(protocolname)

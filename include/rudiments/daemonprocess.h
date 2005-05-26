@@ -36,7 +36,7 @@ class daemonprocess {
 			// changes directories to "/".  Returns true on
 			// success and false on failure.
 
-		void	detach() const;
+		bool	detach() const;
 			// Detach from the controlling terminal and
 			// process and run in the background.  Also
 			// change directories to "/" and set the file

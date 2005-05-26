@@ -11,7 +11,9 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <string.h>
 
 #ifdef RUDIMENTS_NAMESPACE

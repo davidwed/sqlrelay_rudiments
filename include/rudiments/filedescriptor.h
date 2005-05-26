@@ -113,9 +113,13 @@ class filedescriptor {
 				// Write "number" to the file descriptor.
 		ssize_t	write(unsigned long number) const;
 				// Write "number" to the file descriptor.
+		ssize_t	write(unsigned long long number) const;
+				// Write "number" to the file descriptor.
 		ssize_t	write(short number) const;
 				// Write "number" to the file descriptor.
 		ssize_t	write(long number) const;
+				// Write "number" to the file descriptor.
+		ssize_t	write(long long number) const;
 				// Write "number" to the file descriptor.
 		ssize_t	write(float number) const;
 				// Write "number" to the file descriptor.
@@ -157,9 +161,14 @@ class filedescriptor {
 				// Write "number" to the file descriptor.
 		ssize_t	write(unsigned long number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
+		ssize_t	write(unsigned long long number,
+					long sec, long usec) const;
+				// Write "number" to the file descriptor.
 		ssize_t	write(short number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
 		ssize_t	write(long number, long sec, long usec) const;
+				// Write "number" to the file descriptor.
+		ssize_t	write(long long number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
 		ssize_t	write(float number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
@@ -206,11 +215,17 @@ class filedescriptor {
 		ssize_t	read(unsigned long *buffer) const;
 				// Reads sizeof(unsigned long) bytes
 				// from the file descriptor into "buffer".
+		ssize_t	read(unsigned long long *buffer) const;
+				// Reads sizeof(unsigned long long) bytes
+				// from the file descriptor into "buffer".
 		ssize_t	read(short *buffer) const;
 				// Reads sizeof(short) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(long *buffer) const;
 				// Reads sizeof(long) bytes
+				// from the file descriptor into "buffer".
+		ssize_t	read(long long *buffer) const;
+				// Reads sizeof(long long) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(float *buffer) const;
 				// Reads sizeof(float) bytes from the file
@@ -254,11 +269,18 @@ class filedescriptor {
 		ssize_t	read(unsigned long *buffer, long sec, long usec) const;
 				// Reads sizeof(unsigned long) bytes
 				// from the file descriptor into "buffer".
+		ssize_t	read(unsigned long long *buffer,
+					long sec, long usec) const;
+				// Reads sizeof(unsigned long long) bytes
+				// from the file descriptor into "buffer".
 		ssize_t	read(short *buffer, long sec, long usec) const;
 				// Reads sizeof(short) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(long *buffer, long sec, long usec) const;
 				// Reads sizeof(long) bytes
+				// from the file descriptor into "buffer".
+		ssize_t	read(long long *buffer, long sec, long usec) const;
+				// Reads sizeof(long long) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(float *buffer, long sec, long usec) const;
 				// Reads sizeof(float) bytes from the file
@@ -434,18 +456,23 @@ class filedescriptor {
 			// Interfaces for performing varions miscellaneous
 			// operations on the file descriptor.
 
-		bool	bufferWrites();
+		bool	useNaglesAlgorithm();
 			// Causes small write()'s to be collected up and
 			// sent together when the buffer is full or when
 			// a maximum of 0.2 seconds has gone by.  This is
 			// the default. (enables Nagle's algorithm)
 			//
 			// Returns true on success and false on failure.
-		bool	dontBufferWrites();
+		bool	dontUseNaglesAlgorithm();
 			// Causes all write()'s to be sent immediately.
 			// (disables Nagle's algorithm)
 			//
 			// Returns true on success and false on failure.
+
+		bool	getTcpWriteBufferSize(int *size);
+		bool	setTcpWriteBufferSize(int size);
+		bool	getTcpReadBufferSize(int *size);
+		bool	setTcpReadBufferSize(int size);
 
 		const char	*getType() const;
 

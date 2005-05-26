@@ -7,5 +7,5 @@
 		#endif
 
 		#ifdef RUDIMENTS_HAS_THREADS
-			static	pthread_mutex_t	*envmutex;
+			static	mutex	*envmutex;
 		#endif

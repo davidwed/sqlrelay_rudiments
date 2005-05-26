@@ -3,6 +3,7 @@
 
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -12,11 +13,19 @@ namespace rudiments {
 #endif
 
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
-	return (!chmod(filename,perms));
+	int	result;
+	do {
+		result=chmod(filename,perms);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool permissions::setFilePermissions(int fd, mode_t perms) {
-	return (!fchmod(fd,perms));
+	int	result;
+	do {
+		result=fchmod(fd,perms);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 mode_t permissions::everyoneReadWrite() {

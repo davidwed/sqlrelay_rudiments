@@ -5,9 +5,12 @@
 #include <rudiments/datetime.h>
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -45,11 +48,17 @@ void filedestination::write(const char *string) {
 }
 
 void stdoutdestination::write(const char *string) {
-	::write(1,string,charstring::length(string));
+	int	result;
+	do {
+		result=::write(1,string,charstring::length(string));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
 void stderrdestination::write(const char *string) {
-	::write(2,string,charstring::length(string));
+	int	result;
+	do {
+		result=::write(2,string,charstring::length(string));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
 syslogdestination::syslogdestination() : logdestination() {}

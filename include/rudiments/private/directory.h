@@ -7,10 +7,12 @@
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			!defined(HAVE_READDIR_R)
-			static	pthread_mutex_t	*rdmutex;
+			static	mutex	*rdmutex;
 		#endif
 
 		// how do we effectively make a copy of a DIR?
 		// since I don't know how, for now, these are private
 				directory(const directory &d);
 		directory	&operator=(const directory &d);
+
+		static	long	pathConf(const char *pathname, int name);

@@ -7,7 +7,9 @@
 	// for getsid()
 	#define __USE_XOPEN_EXTENDED
 #endif
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -58,7 +60,11 @@ uid_t process::getEffectiveUserId() {
 }
 
 bool process::setUserId(uid_t uid) {
-	return !setuid(uid);
+	#ifdef HAVE_SETUID
+		return !setuid(uid);
+	#else
+		return true;
+	#endif
 }
 
 bool process::setEffectiveUserId(uid_t uid) {
@@ -78,7 +84,11 @@ gid_t process::getEffectiveGroupId() {
 }
 
 bool process::setGroupId(gid_t gid) {
-	return !setgid(gid);
+	#ifdef HAVE_SETGID
+		return !setgid(gid);
+	#else
+		return true;
+	#endif
 }
 
 bool process::setEffectiveGroupId(gid_t gid) {

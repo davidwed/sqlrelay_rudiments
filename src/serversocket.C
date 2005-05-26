@@ -2,8 +2,11 @@
 // See the COPYING file for more information
 
 #include <rudiments/serversocket.h>
+#include <rudiments/error.h>
 
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -54,20 +57,24 @@ bool serversocket::setLingerOnClose(int timeout, int onoff) {
 	struct	linger	ling;
 	ling.l_onoff=onoff;
 	ling.l_linger=timeout;
-	return !setsockopt(fd,SOL_SOCKET,SO_LINGER,
+	return !setSockOpt(SOL_SOCKET,SO_LINGER,
 				(SETSOCKOPT_OPTVAL_TYPE)&ling,
 					sizeof(struct linger));
 }
 
 bool serversocket::setReuseAddresses(int onoff) {
 	int	value=onoff;
-	return !setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,
+	return !setSockOpt(SOL_SOCKET,SO_REUSEADDR,
 				(SETSOCKOPT_OPTVAL_TYPE)&value,
 					(socklen_t)sizeof(int));
 }
 
 bool serversocket::listen(int backlog) {
-	return !::listen(fd,backlog);
+	int	result;
+	do {
+		result=::listen(fd,backlog);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 #ifdef RUDIMENTS_HAS_SSL

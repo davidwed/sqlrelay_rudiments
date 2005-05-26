@@ -20,7 +20,7 @@ namespace rudiments {
 #endif
 
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_RAND_R)
-	pthread_mutex_t	*randomnumber::rnmutex;
+mutex	*randomnumber::rnmutex;
 #endif
 
 int randomnumber::generateNumber(int seed) {
@@ -33,7 +33,7 @@ int randomnumber::generateNumber(int seed) {
 		return rand_r(&useed);
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rnmutex && pthread_mutex_lock(rnmutex)) {
+		if (rnmutex && !rnmutex->lock()) {
 			return -1;
 		}
 		#endif
@@ -41,7 +41,7 @@ int randomnumber::generateNumber(int seed) {
 		int	retval=GETRANDOM();
 		#ifdef RUDIMENTS_HAS_THREADS
 		if (rnmutex) {
-			pthread_mutex_unlock(rnmutex);
+			rnmutex->unlock();
 		}
 		#endif
 		return retval;
@@ -71,9 +71,9 @@ bool randomnumber::needsMutex() {
 	#endif
 }
 
-void randomnumber::setMutex(pthread_mutex_t *mutex) {
+void randomnumber::setMutex(mutex *mtx) {
 	#if !defined(HAVE_RAND_R)
-		rnmutex=mutex;
+		rnmutex=mtx;
 	#endif
 }
 #endif

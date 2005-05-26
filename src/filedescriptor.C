@@ -1,32 +1,61 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
+//#define DEBUG_PASSFD 1
+//#define DEBUG_WRITE 1
+//#define DEBUG_READ 1
+
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/rawbuffer.h>
-#include <rudiments/process.h>
+#if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || defined(DEBUG_READ)
+	#include <rudiments/process.h>
+#endif
 #include <rudiments/error.h>
 
+#ifdef HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif
 #include <stdio.h>
 #include <sys/time.h>
-#include <sys/select.h>
-#include <unistd.h>
+#ifdef HAVE_SYS_SELECT_H
+	#include <sys/select.h>
+#endif
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <sys/fcntl.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <sys/socket.h>
-#include <sys/uio.h>
+#ifdef HAVE_IOCTL
+	#include <sys/ioctl.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef HAVE_NETINET_TCP_H
+	#include <netinet/tcp.h>
+#endif
+#ifdef HAVE_SYS_UIO_H
+	#include <sys/uio.h>
+#endif
 #include <limits.h>
-#include <arpa/inet.h>
+#ifdef HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif
+#ifdef HAVE_BYTESWAP_H
+	#include <byteswap.h>
+#endif
 
 // for FD_SET (macro that uses memset) on solaris
 #include <string.h>
-
-//#define DEBUG_PASSFD 1
 
 #ifdef NEED_XNET_PROTOTYPES
 extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
@@ -38,9 +67,6 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #ifndef SSIZE_MAX
 	#define SSIZE_MAX 32767
 #endif
-
-//#define DEBUG_WRITE 1
-//#define DEBUG_READ 1
 
 #ifdef DEBUG_WRITE
 	#define DEBUG_WRITE_INT(type,number) \
@@ -54,16 +80,22 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 			process::getProcessId(),type,fd,character);
 	#define DEBUG_WRITE_STRING(type,string,size) \
 		printf("%d: %s write(%d,",process::getProcessId(),type,fd); \
-		for (size_t i=0; i<size; i++) { \
+		for (size_t i=0; i<((size<=160)?size:160); i++) { \
 			printf("%c",string[i]); \
+		} \
+		if (size>160) { \
+			printf("..."); \
 		} \
 		printf(",%d)\n",size);
 	#define DEBUG_WRITE_VOID(type,buffer,size) \
 		const unsigned char *ptr=\
 			static_cast<const unsigned char *>(buffer); \
 		printf("%d: %s write(%d,",process::getProcessId(),type,fd); \
-		for (size_t i=0; i<size; i++) { \
+		for (size_t i=0; i<((size<=160)?size:160); i++) { \
 			printf("0x%02x ",ptr[i]); \
+		} \
+		if (size>160) { \
+			printf("..."); \
 		} \
 		printf(",%d)\n",size);
 #else
@@ -100,8 +132,12 @@ void filedescriptor::filedescriptorInit() {
 	retryinterruptedreads=false;
 	retryinterruptedwrites=false;
 	retryinterruptedwaits=true;
+#ifdef HAVE_FCNTL
 	retryinterruptedfcntl=true;
+#endif
+#ifdef HAVE_IOCTL
 	retryinterruptedioctl=true;
+#endif
 	allowshortreads=false;
 	lstnr=NULL;
 	uselistenerinsidereads=false;
@@ -128,8 +164,12 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	retryinterruptedreads=f.retryinterruptedreads;
 	retryinterruptedwrites=f.retryinterruptedwrites;
 	retryinterruptedwaits=f.retryinterruptedwaits;
+#ifdef HAVE_FCNTL
 	retryinterruptedfcntl=f.retryinterruptedfcntl;
+#endif
+#ifdef HAVE_IOCTL
 	retryinterruptedioctl=f.retryinterruptedioctl;
+#endif
 	allowshortreads=f.allowshortreads;
 	lstnr=f.lstnr;
 	uselistenerinsidereads=f.uselistenerinsidereads;
@@ -154,6 +194,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 }
 
 filedescriptor::~filedescriptor() {
+	delete[] readbuffer;
 	delete[] writebuffer;
 	close();
 #ifdef RUDIMENTS_HAS_SSL
@@ -257,15 +298,27 @@ BIO *filedescriptor::newSSLBIO() const {
 #endif
 
 bool filedescriptor::useNonBlockingMode() const {
-	return (fcntl(F_SETFL,fcntl(F_GETFL,0)|O_NONBLOCK)!=-1);
+	#if defined(HAVE_FCNTL) && defined(F_SETFL) && defined (F_GETFL)
+		return (fcntl(F_SETFL,fcntl(F_GETFL,0)|O_NONBLOCK)!=-1);
+	#else
+		return false;
+	#endif
 }
 
 bool filedescriptor::useBlockingMode() const {
-	return (fcntl(F_SETFL,fcntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
+	#if defined(HAVE_FCNTL) && defined(F_SETFL) && defined (F_GETFL)
+		return (fcntl(F_SETFL,fcntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
+	#else
+		return false;
+	#endif
 }
 
 bool filedescriptor::isUsingNonBlockingMode() const {
-	return (fcntl(F_GETFL,0)&O_NONBLOCK);
+	#if defined(HAVE_FCNTL) && defined(F_GETFL)
+		return (fcntl(F_GETFL,0)&O_NONBLOCK);
+	#else
+		return false;
+	#endif
 }
 
 ssize_t filedescriptor::write(unsigned short number) const {
@@ -273,6 +326,10 @@ ssize_t filedescriptor::write(unsigned short number) const {
 }
 
 ssize_t filedescriptor::write(unsigned long number) const {
+	return write(number,-1,-1);
+}
+
+ssize_t filedescriptor::write(unsigned long long number) const {
 	return write(number,-1,-1);
 }
 
@@ -284,6 +341,11 @@ ssize_t filedescriptor::write(short number) const {
 ssize_t filedescriptor::write(long number) const {
 	DEBUG_WRITE_INT("long",number);
 	return bufferedWrite(&number,sizeof(long),-1,-1);
+}
+
+ssize_t filedescriptor::write(long long number) const {
+	DEBUG_WRITE_INT("long long",number);
+	return bufferedWrite(&number,sizeof(long long),-1,-1);
 }
 
 ssize_t filedescriptor::write(float number) const {
@@ -348,6 +410,13 @@ ssize_t filedescriptor::write(unsigned long number,
 	DEBUG_WRITE_INT("ulong",number);
 	number=hostToNet(number);
 	return bufferedWrite(&number,sizeof(unsigned long),sec,usec);
+}
+
+ssize_t filedescriptor::write(unsigned long long number,
+					long sec, long usec) const {
+	DEBUG_WRITE_INT("ulonglong",number);
+	number=hostToNet(number);
+	return bufferedWrite(&number,sizeof(unsigned long long),sec,usec);
 }
 
 ssize_t filedescriptor::write(short number, long sec, long usec) const {
@@ -423,12 +492,20 @@ ssize_t filedescriptor::read(unsigned long *buffer) const {
 	return read(buffer,-1,-1);
 }
 
+ssize_t filedescriptor::read(unsigned long long *buffer) const {
+	return read(buffer,-1,-1);
+}
+
 ssize_t filedescriptor::read(short *buffer) const {
 	return bufferedRead(buffer,sizeof(short),-1,-1);
 }
 
 ssize_t filedescriptor::read(long *buffer) const {
 	return bufferedRead(buffer,sizeof(long),-1,-1);
+}
+
+ssize_t filedescriptor::read(long long *buffer) const {
+	return bufferedRead(buffer,sizeof(long long),-1,-1);
 }
 
 ssize_t filedescriptor::read(float *buffer) const {
@@ -476,6 +553,13 @@ ssize_t filedescriptor::read(unsigned short *buffer,
 
 ssize_t filedescriptor::read(unsigned long *buffer, long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(unsigned long),sec,usec);
+	*buffer=netToHost(*buffer);
+	return retval;
+}
+
+ssize_t filedescriptor::read(unsigned long long *buffer,
+				long sec, long usec) const {
+	ssize_t	retval=bufferedRead(buffer,sizeof(unsigned long long),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
@@ -567,19 +651,27 @@ void filedescriptor::dontRetryInterruptedWaits() {
 }
 
 void filedescriptor::retryInterruptedFcntl() {
+	#ifdef HAVE_FCNTL
 	retryinterruptedfcntl=true;
+	#endif
 }
 
 void filedescriptor::dontRetryInterruptedFcntl() {
+	#ifdef HAVE_FCNTL
 	retryinterruptedfcntl=true;
+	#endif
 }
 
 void filedescriptor::retryInterruptedIoctl() {
+	#ifdef HAVE_IOCTL
 	retryinterruptedioctl=true;
+	#endif
 }
 
 void filedescriptor::dontRetryInterruptedIoctl() {
+	#ifdef HAVE_IOCTL
 	retryinterruptedioctl=true;
+	#endif
 }
 
 void filedescriptor::allowShortReads() {
@@ -912,7 +1004,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		if (ssl) {
 			for (bool done=false; !done ;) {
 
+				#ifdef SSL_VOID_PTR
 				actualread=SSL_read(ssl,ptr,sizetoread);
+				#else
+				actualread=SSL_read(ssl,
+						static_cast<char *>(ptr),
+						sizetoread);
+				#endif
 				sslresult=actualread;
 
 				switch (SSL_get_error(ssl,actualread)) {
@@ -1012,6 +1110,9 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	const unsigned char	*data=
 		reinterpret_cast<const unsigned char *>(buf);
 
+	ssize_t	initialwritebuffersize=writebufferptr-writebuffer;
+	bool	first=true;
+
 	ssize_t	byteswritten=0;
 	ssize_t	bytesunwritten=count;
 	while (byteswritten<count) {
@@ -1047,9 +1148,8 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			ssize_t	result=safeWrite(writebuffer,
 					writebuffersize+writebufferspace,
 					sec,usec);
-			// FIXME: if result!=writebufferspace then
-			// we got a short write, how do we handle that?
 			if (result!=writebuffersize+writebufferspace) {
+				// FIXME: handle this better...
 				printf("aaaaah, short write!!!!!\n");
 			}
 			if (result<0) {
@@ -1057,9 +1157,17 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			}
 
 			writebufferptr=writebuffer;
-			byteswritten=byteswritten+writebufferspace;
-			data=data+byteswritten;
-			bytesunwritten=bytesunwritten-byteswritten;
+			// The first time the buffer is written, the number of
+			// bytes that were already in the buffer need to be
+			// taken into account when calculating byteswritten,
+			// bytesunwritten and data.
+			ssize_t	adjustment=(first)?initialwritebuffersize:0;
+			if (first) {
+				first=false;
+			}
+			byteswritten=byteswritten+result-adjustment;
+			bytesunwritten=bytesunwritten-result+adjustment;
+			data=data+result-adjustment;
 		}
 	}
 
@@ -1112,7 +1220,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		if (ssl) {
 			for (bool done=false; !done ;) {
 
+				#ifdef SSL_VOID_PTR
 				retval=::SSL_write(ssl,buf,count);
+				#else
+				retval=::SSL_write(ssl,
+						static_cast<const char *>(buf),
+						count);
+				#endif
 				sslresult=retval;
 
 				switch (SSL_get_error(ssl,retval)) {
@@ -1225,12 +1339,28 @@ unsigned long filedescriptor::hostToNet(unsigned long value) const {
 	return (translatebyteorder)?htonl(value):value;
 }
 
+unsigned long long filedescriptor::hostToNet(unsigned long long value) const {
+	#if __BYTE_ORDER == __BIG_ENDIAN
+		return value;
+	#else
+		return __bswap_64(value);
+	#endif
+}
+
 unsigned short filedescriptor::netToHost(unsigned short value) const {
 	return (translatebyteorder)?ntohs(value):value;
 }
 
 unsigned long filedescriptor::netToHost(unsigned long value) const {
 	return (translatebyteorder)?ntohl(value):value;
+}
+
+unsigned long long filedescriptor::netToHost(unsigned long long value) const {
+	#if __BYTE_ORDER == __BIG_ENDIAN
+		return value;
+	#else
+		return __bswap_64(value);
+	#endif
 }
 
 #ifdef RUDIMENTS_HAS_SSL
@@ -1240,23 +1370,40 @@ int filedescriptor::getSSLResult() const {
 #endif
 
 int filedescriptor::fcntl(int cmd, long arg) const {
-	int	result;
-	do {
-		result=::fcntl(fd,cmd,arg);
-	} while (retryinterruptedfcntl && result==-1 &&
-			error::getErrorNumber()==EINTR);
-	return result;
+	#ifdef HAVE_FCNTL
+		int	result;
+		do {
+			result=::fcntl(fd,cmd,arg);
+		} while (retryinterruptedfcntl && result==-1 &&
+				error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		return -1;
+	#endif
 }
 
 int filedescriptor::ioctl(int cmd, void *arg) const {
-	int	result;
-	do {
-		result=::ioctl(fd,cmd,arg);
-	} while (retryinterruptedioctl && result==-1 &&
-			error::getErrorNumber()==EINTR);
-	return result;
+	#ifdef HAVE_IOCTL
+		int	result;
+		do {
+			result=::ioctl(fd,cmd,arg);
+		} while (retryinterruptedioctl && result==-1 &&
+				error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		return -1;
+	#endif
 }
 
+#ifdef __MINGW32__
+bool filedescriptor::passFileDescriptor(int filedesc) const {
+	return false;
+}
+
+bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
+	return false;
+}
+#else
 bool filedescriptor::passFileDescriptor(int filedesc) const {
 
 	// have to use sendmsg to pass a file descriptor. 
@@ -1400,7 +1547,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 			*filedesc=*(reinterpret_cast<int *>(CMSG_DATA(cmptr)));
 			return true;
 		}
-#ifdef DEBUG_PASSFD
+		#ifdef DEBUG_PASSFD
 		else {
 
 			// if we got bad data, be specific about what was
@@ -1444,7 +1591,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 				}
 			}
 		}
-#endif
+		#endif
 	#else
 		if (messageheader.msg_accrightslen==sizeof(int)) {
 			*filedesc=newfiledesc;
@@ -1455,20 +1602,47 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	// if we're here then we must have received some bad data
 	return false;
 }
+#endif
 
-bool filedescriptor::bufferWrites() {
+bool filedescriptor::useNaglesAlgorithm() {
 	return setNoDelay(0);
 }
 
-bool filedescriptor::dontBufferWrites() {
+bool filedescriptor::dontUseNaglesAlgorithm() {
 	return setNoDelay(1);
 }
 
 bool filedescriptor::setNoDelay(int onoff) {
 	int	value=onoff;
-	return !setsockopt(fd,IPPROTO_TCP,TCP_NODELAY,
+	return !setSockOpt(IPPROTO_TCP,TCP_NODELAY,
 				(SETSOCKOPT_OPTVAL_TYPE)&value,
-					(socklen_t)sizeof(int));
+				(socklen_t)sizeof(int));
+}
+
+bool filedescriptor::getTcpWriteBufferSize(int *size) {
+	socklen_t	intsize=sizeof(int);
+	return getSockOpt(SOL_SOCKET,SO_SNDBUF,
+					(GETSOCKOPT_OPTVAL_TYPE)size,
+					&intsize)!=-1;
+}
+
+bool filedescriptor::setTcpWriteBufferSize(int size) {
+	return !setSockOpt(SOL_SOCKET,SO_SNDBUF,
+					(SETSOCKOPT_OPTVAL_TYPE)&size,
+					static_cast<socklen_t>(sizeof(int)));
+}
+
+bool filedescriptor::getTcpReadBufferSize(int *size) {
+	socklen_t	intsize=sizeof(int);
+	return getSockOpt(SOL_SOCKET,SO_RCVBUF,
+					(GETSOCKOPT_OPTVAL_TYPE)size,
+					&intsize)!=-1;
+}
+
+bool filedescriptor::setTcpReadBufferSize(int size) {
+	return setSockOpt(SOL_SOCKET,SO_RCVBUF,
+				(SETSOCKOPT_OPTVAL_TYPE)&size,
+				static_cast<socklen_t>(sizeof(int)))!=-1;
 }
 
 const char *filedescriptor::getType() const {
@@ -1483,13 +1657,36 @@ char *filedescriptor::getPeerAddress() const {
 	rawbuffer::zero(&clientsin,sizeof(clientsin));
 
 	// get the peer address
-	if (getpeername(fd,reinterpret_cast<struct sockaddr *>(&clientsin),
-								&size)==-1) {
+	int	result;
+	do {
+		result=getpeername(fd,
+				reinterpret_cast<struct sockaddr *>(&clientsin),
+				&size);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (result==-1) {
 		return NULL;
 	}
 
 	// convert the address to a string and return a copy of it
 	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
+}
+
+int filedescriptor::getSockOpt(int level, int optname,
+				void *optval, socklen_t *optlen) {
+	int	result;
+	do {
+		result=getsockopt(fd,level,optname,optval,optlen);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
+}
+
+int filedescriptor::setSockOpt(int level, int optname,
+				const void *optval, socklen_t optlen) {
+	int	result;
+	do {
+		result=setsockopt(fd,level,optname,optval,optlen);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

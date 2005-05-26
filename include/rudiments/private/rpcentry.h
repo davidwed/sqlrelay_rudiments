@@ -12,7 +12,7 @@
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			(!defined(HAVE_GETRPCBYNAME_R) || \
 				!defined(HAVE_GETRPCBYNUMBER_R))
-			static	pthread_mutex_t	*remutex;
+			static	mutex	*remutex;
 		#endif
 
 		bool	initialize(const char *name, int number);

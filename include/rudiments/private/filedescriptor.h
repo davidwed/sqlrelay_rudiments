@@ -8,8 +8,12 @@
 
 		virtual	unsigned short	hostToNet(unsigned short value) const;
 		virtual	unsigned long	hostToNet(unsigned long value) const;
+		virtual	unsigned long long
+				hostToNet(unsigned long long value) const;
 		virtual	unsigned short	netToHost(unsigned short value) const;
 		virtual	unsigned long	netToHost(unsigned long value) const;
+		virtual	unsigned long long
+				netToHost(unsigned long long value) const;
 
 		virtual	ssize_t	bufferedRead(void *buf, ssize_t count,
 						long sec, long usec) const;
@@ -27,8 +31,12 @@
 		bool	retryinterruptedreads;
 		bool	retryinterruptedwrites;
 		bool	retryinterruptedwaits;
+		#ifdef HAVE_FCNTL
 		bool	retryinterruptedfcntl;
+		#endif
+		#ifdef HAVE_IOCTL
 		bool	retryinterruptedioctl;
+		#endif
 		mutable bool	allowshortreads;
 		bool	translatebyteorder;
 
@@ -54,3 +62,9 @@
 		mutable unsigned char	*readbufferend;
 		mutable unsigned char	*readbufferhead;
 		mutable unsigned char	*readbuffertail;
+
+
+		int	getSockOpt(int level, int optname,
+					void *optval, socklen_t *optlen);
+		int	setSockOpt(int level, int optname,
+					const void *optval, socklen_t optlen);

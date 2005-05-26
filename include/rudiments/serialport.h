@@ -51,6 +51,8 @@ class serialport : public filedescriptor {
 
 		bool	sendBreak(int duration);
 			// tcsendbreak()
+
+	#include <rudiments/private/serialport.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

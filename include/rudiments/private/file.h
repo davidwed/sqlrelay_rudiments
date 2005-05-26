@@ -28,3 +28,9 @@
 		#endif
 
 		void	fileClone(const file &f);
+
+
+			bool	posixFadvise(off_t offset, off_t len,
+							int advice) const;
+		static	long	pathConf(const char *path, int name);
+			long	fpathConf(int name) const;

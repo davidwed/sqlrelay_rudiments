@@ -17,7 +17,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	defined(__GNUC__) && !defined(HAVE_GETSPNAM_R)
-pthread_mutex_t	*shadowentry::spmutex;
+mutex	*shadowentry::spmutex;
 #endif
 
 
@@ -107,9 +107,9 @@ bool shadowentry::needsMutex() {
 	#endif
 }
 
-void shadowentry::setMutex(pthread_mutex_t *mutex) {
+void shadowentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETSPNAM_R)
-		spmutex=mutex;
+		spmutex=mtx;
 	#endif
 }
 #endif
@@ -149,9 +149,9 @@ bool shadowentry::initialize(const char *username) {
 	#else
 		sp=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(spmutex && pthread_mutex_lock(spmutex)) &&
+		return (!(spmutex && !spmutex->lock()) &&
 			((sp=getspnam(const_cast<char *>(username)))!=NULL) &&
-			!(spmutex && pthread_mutex_unlock(spmutex)));
+			!(spmutex && !spmutex->unlock()));
 		#else
 		return ((sp=getspnam(const_cast<char *>(username)))!=NULL);
 		#endif

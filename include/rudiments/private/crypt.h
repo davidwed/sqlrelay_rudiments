@@ -3,7 +3,7 @@
 
 	private:
 			#ifdef RUDIMENTS_HAS_THREADS
-			static pthread_mutex_t	*cryptmutex;
+			static mutex	*cryptmutex;
 			#endif
 
 		crypt();

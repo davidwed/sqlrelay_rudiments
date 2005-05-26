@@ -3,9 +3,12 @@
 
 #include <rudiments/signalclasses.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stddef.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -41,15 +44,27 @@ sigset_t *signalset::getSignalSet() {
 
 // signalmanager methods
 bool signalmanager::sendSignal(pid_t processid, int signum) {
-	return !kill(processid,signum);
+	int	result;
+	do {
+		result=kill(processid,signum);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool signalmanager::raiseSignal(int signum) {
-	return !raise(signum);
+	int	result;
+	do {
+		result=raise(signum);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool signalmanager::ignoreSignals(const sigset_t *sigset) {
-	return !sigprocmask(SIG_SETMASK,sigset,NULL);
+	int	result;
+	do {
+		result=sigprocmask(SIG_SETMASK,sigset,NULL);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool signalmanager::waitForSignals(const sigset_t *sigset) {
@@ -57,7 +72,11 @@ bool signalmanager::waitForSignals(const sigset_t *sigset) {
 }
 
 bool signalmanager::examineBlockedSignals(sigset_t *sigset) {
-	return !sigpending(sigset);
+	int	result;
+	do {
+		result=sigpending(sigset);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 
@@ -124,16 +143,23 @@ int signalhandler::getFlags() const {
 }
 
 bool signalhandler::handleSignal(int signum) {
-	return !sigaction(signum,&handlerstruct,
+	int	result;
+	do {
+		result=sigaction(signum,&handlerstruct,
 				static_cast<struct sigaction *>(NULL));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	struct sigaction	oldaction;
-	bool	retval=!sigaction(signum,&handlerstruct,&oldaction);
+	int			result;
+	do {
+		result=sigaction(signum,&handlerstruct,&oldaction);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
 	rawbuffer::copy(&oldhandler->handlerstruct,&oldaction,
 					sizeof(struct sigaction));
-	return retval;
+	return !result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

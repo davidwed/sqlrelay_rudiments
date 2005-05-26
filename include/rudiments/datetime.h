@@ -206,7 +206,7 @@ class datetime {
 		//
 		// If you don't supply a mutex, the methods in this class
 		// will still work, but will not be thread-safe.
-		static	void	setTimeMutex(pthread_mutex_t *mutex);
+		static	void	setTimeMutex(mutex *mtx);
 				// Allows you to supply a mutex to regulate
 				// access to the non-reentrant functions.
 #endif

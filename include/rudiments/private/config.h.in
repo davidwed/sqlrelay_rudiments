@@ -3,6 +3,9 @@
 /* Use inline functions or not */
 #undef ENABLE_RUDIMENTS_INLINES
 
+/* getsockopt takes a void * on most systems */
+#undef GETSOCKOPT_OPTVAL_TYPE
+
 /* Some systems use _timezone instead of timezone */
 #undef HAS_TIMEZONE
 
@@ -24,11 +27,17 @@
 /* Some systems define __tm_zone in their struct tm */
 #undef HAS___TM_ZONE
 
+/* Some systems have arpa/inet.h */
+#undef HAVE_ARPA_INET_H
+
 /* Some systems don't have st_blocks in struct stat */
 #undef HAVE_BLKCNT_T
 
 /* Some systems don't have st_blksize in struct stat */
 #undef HAVE_BLKSIZE_T
+
+/* Some systems have byteswap.h */
+#undef HAVE_BYTESWAP_H
 
 /* Some systems have clock_nanosleep */
 #undef HAVE_CLOCK_NANOSLEEP
@@ -38,6 +47,12 @@
 
 /* Some systems have CMSG_SPACE */
 #undef HAVE_CMSG_SPACE
+
+/* Some systems have CreateFileMapping */
+#undef HAVE_CREATE_FILE_MAPPING
+
+/* CreateMutex function exists */
+#undef HAVE_CREATE_MUTEX
 
 /* Some systems have crypt */
 #undef HAVE_CRYPT
@@ -63,6 +78,9 @@
 
 /* Some systems define environ in unistd.h */
 #undef HAVE_ENVIRON
+
+/* Some systems have fcntl */
+#undef HAVE_FCNTL
 
 /* Some systems have fdatasync */
 #undef HAVE_FDATASYNC
@@ -108,9 +126,6 @@
 
 /* Some systems have gethostbyname_r */
 #undef HAVE_GETHOSTBYNAME_R_6
-
-/* Define to 1 if you have the `getpagesize' function. */
-#undef HAVE_GETPAGESIZE
 
 /* Some systems have getprotobyname_r */
 #undef HAVE_GETPROTOBYNAME_R
@@ -199,8 +214,17 @@
 /* Some systems have getspnam_r */
 #undef HAVE_GETSPNAM_R_5
 
+/* Some systems have GetSystemTime */
+#undef HAVE_GETSYSTEMTIME
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Some systems have ioctl */
+#undef HAVE_IOCTL
+
+/* Some systems have io.h */
+#undef HAVE_IO_H
 
 /* Linux style statfs */
 #undef HAVE_LINUX_STATFS
@@ -232,17 +256,23 @@
 /* Some systems have mlockall */
 #undef HAVE_MLOCKALL
 
-/* Define to 1 if you have a working `mmap' system call. */
+/* Some systems have mmap */
 #undef HAVE_MMAP
 
 /* Some systems use caddr_t argument for mmap functions */
 #undef HAVE_MMAP_CADDR_T
+
+/* Some systems have mprotect */
+#undef HAVE_MPROTECT
 
 /* Some msghdr structs have a msg_controllen member */
 #undef HAVE_MSGHDR_MSG_CONTROLLEN
 
 /* Some msghdr structs have a msg_flags member */
 #undef HAVE_MSGHDR_MSG_FLAGS
+
+/* Some systems have msync */
+#undef HAVE_MSYNC
 
 /* Some systems have munlock */
 #undef HAVE_MUNLOCK
@@ -262,6 +292,12 @@
 /* Some systems have netdb.h */
 #undef HAVE_NETDB_H
 
+/* Some systems have netinet/in.h */
+#undef HAVE_NETINET_IN_H
+
+/* Some systems have netinet/tcp.h */
+#undef HAVE_NETINET_TCP_H
+
 /* Some systems define _NSGetEnviron in crt_externs.h */
 #undef HAVE_NSGETENVIRON
 
@@ -276,6 +312,9 @@
 
 /* Some systems have pselect */
 #undef HAVE_PSELECT
+
+/* pthread_mutex_t type exists */
+#undef HAVE_PTHREAD_MUTEX_T
 
 /* Some systems have putenv */
 #undef HAVE_PUTENV
@@ -372,11 +411,20 @@
    */
 #undef HAVE_SYS_NDIR_H
 
+/* Some systems have sys/select.h */
+#undef HAVE_SYS_SELECT_H
+
+/* Some systems have sys/socket.h */
+#undef HAVE_SYS_SOCKET_H
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
+
+/* Some systems have sys/uio.h */
+#undef HAVE_SYS_UIO_H
 
 /* Some systems don't have S_ISSOCK */
 #undef HAVE_S_ISSOCK
@@ -394,6 +442,12 @@
 
 /* Some systems have unsetenv */
 #undef HAVE_UNSETENV
+
+/* Some systems have windows.h */
+#undef HAVE_WINDOWS_H
+
+/* Some systems have winsock2.h */
+#undef HAVE_WINSOCK2_H
 
 /* Some systems have extended filesystem attributes */
 #undef HAVE_XATTRS
@@ -446,8 +500,38 @@
 /* Most systems define signal handlers with an integer parameter */
 #undef SIGNAL_HANDLER_INT
 
+/* The size of a `double', as computed by sizeof. */
+#undef SIZEOF_DOUBLE
+
+/* The size of a `float', as computed by sizeof. */
+#undef SIZEOF_FLOAT
+
+/* The size of a `int16_t', as computed by sizeof. */
+#undef SIZEOF_INT16_T
+
+/* The size of a `int32_t', as computed by sizeof. */
+#undef SIZEOF_INT32_T
+
+/* The size of a `int64_t', as computed by sizeof. */
+#undef SIZEOF_INT64_T
+
+/* The size of a `long double', as computed by sizeof. */
+#undef SIZEOF_LONG_DOUBLE
+
+/* The size of a `uint16_t', as computed by sizeof. */
+#undef SIZEOF_UINT16_T
+
+/* The size of a `uint32_t', as computed by sizeof. */
+#undef SIZEOF_UINT32_T
+
+/* The size of a `uint64_t', as computed by sizeof. */
+#undef SIZEOF_UINT64_T
+
 /* Use small rather than fast code */
 #undef SMALL_CODE
+
+/* SSL_read/write can use a void * parameter instead of char * */
+#undef SSL_VOID_PTR
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

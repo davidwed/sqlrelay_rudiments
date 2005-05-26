@@ -1,15 +1,6 @@
 use (u)intXX_t types
 
-document: cygwin needs "file" command to be able to build dll's
-
-some platforms may need -D_THREAD_SAFE like solaris needs -D_REENTRANT
-
-document error.h
-
-make sure all system calls that can be interrupted are restarted if they're
-	interrupted by a signal
-	(or at least have the option of being restarted)
-
+get a mingw port working
 --------------------------------------------------------------------------------
 
 use const's instead of #defines
@@ -152,9 +143,12 @@ environment class:
 	wrap clearenv()
 	make all members static
 
+document error.h
 document shmfile class
 document sleep class
 document modem*/chat classes
+
+document: cygwin needs "file" command to be able to build dll's
 
 freebsd IPV6_V6ONLY??? socket option
 sysctl on netbsd?
@@ -205,11 +199,6 @@ tests for:
 	memorymap
 	mutex
 	serialportprofile
-
-need to use internally:
-	mutex class instead of pthread_mutex_*()
-
-get a mingw port working
 
 --------------------------------------------------------------------------------
 

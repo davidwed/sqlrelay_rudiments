@@ -1,3 +1,7 @@
+0.29 - added check for whether SSL_read/write takes void * or char * parameter
+
+0.28.1 - fixed a bug in bufferedWrite()
+
 0.28 - added strtou(l|ll) wrappers to charstring class
 	added append(long|unsigned long|double...) methods to charstring class
 	implemented ignoreParityErrors in serialportprofile class

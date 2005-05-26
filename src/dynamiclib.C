@@ -3,6 +3,7 @@
 
 #include <rudiments/dynamiclib.h>
 #include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <dlfcn.h>
 #include <stdlib.h>
@@ -12,7 +13,7 @@ namespace rudiments {
 #endif
 
 #ifdef RUDIMENTS_HAS_THREADS
-pthread_mutex_t	*dynamiclib::errormutex;
+mutex	*dynamiclib::errormutex;
 #endif
 
 dynamiclib::dynamiclib() {
@@ -31,40 +32,53 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 	if (global) {
 		flag|=RTLD_GLOBAL;
 	}
-	handle=dlopen(library,flag);
+	do {
+		handle=dlopen(library,flag);
+	} while (!handle && error::getErrorNumber()==EINTR);
 	return (handle!=NULL);
 }
 
 bool dynamiclib::close() {
-	return !dlclose(handle);
+	int	result;
+	do {
+		result=!dlclose(handle);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 void *dynamiclib::getSymbol(const char *symbol) const {
-	return (handle)?dlsym(handle,symbol):NULL;
+	void	*symhandle;
+	do {
+		symhandle=dlsym(handle,symbol);
+	} while (!symhandle && error::getErrorNumber()==EINTR);
+	return (handle)?symhandle:NULL;
 }
 
 char *dynamiclib::getError() const {
 #ifdef RUDIMENTS_HAS_THREADS
-	if (errormutex && pthread_mutex_lock(errormutex)) {
+	if (errormutex && !errormutex->lock()) {
 		return NULL;
 	}
 #endif
-	const char	*error=dlerror();
+	const char	*err;
+	do {
+		err=dlerror();
+	} while (!err && error::getErrorNumber()==EINTR);
 	char		*retval=NULL;
-	if (error) {
-		retval=charstring::duplicate(error);
+	if (err) {
+		retval=charstring::duplicate(err);
 	}
 #ifdef RUDIMENTS_HAS_THREADS
 	if (errormutex) {
-		pthread_mutex_unlock(errormutex);
+		errormutex->unlock();
 	}
 #endif
 	return retval;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
-void dynamiclib::setErrorMutex(pthread_mutex_t *mutex) {
-	errormutex=mutex;
+void dynamiclib::setErrorMutex(mutex *mtx) {
+	errormutex=mtx;
 }
 #endif
 

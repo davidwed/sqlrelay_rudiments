@@ -5,6 +5,7 @@
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/charstring.h>
 #include <rudiments/snooze.h>
+#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -79,8 +80,10 @@ int unixclientsocket::connect() {
 	charstring::copy(sockaddrun.sun_path,filename);
 
 	// create a unix socket
-	if ((fd=::socket(AF_UNIX,SOCK_STREAM,0))==-1) {
-		fd=-1;
+	do {
+		fd=::socket(AF_UNIX,SOCK_STREAM,0);
+	} while (fd==-1 && error::getErrorNumber()==EINTR);
+	if (fd==-1) {
 		return RESULT_ERROR;
 	}
 

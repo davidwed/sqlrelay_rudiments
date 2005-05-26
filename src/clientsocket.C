@@ -6,7 +6,9 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -76,6 +78,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		// call connect()
 		if (::connect(fd,addr,addrlen)==-1) {
 
+			// FIXME: handle errno is EINTR...
 			// if connect() fails and errno is set to one of these
 			// values, then the connection is in progress
 			if (error::getErrorNumber()==EINPROGRESS ||
@@ -106,7 +109,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 				// Some platforms cause getsockopt() to fail
 				// and set errno to the error that caused
 				// connect() to fail.
-				if (getsockopt(fd,SOL_SOCKET,SO_ERROR,
+				if (getSockOpt(SOL_SOCKET,SO_ERROR,
 						&error,&errorsize)==-1) {
 					return RESULT_ERROR;
 				}
@@ -125,8 +128,14 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 				// connect was unsuccessful.
 				struct sockaddr	peeraddr;
 				socklen_t	size=sizeof(peeraddr);
-				rawbuffer::zero(&peeraddr,sizeof(peeraddr));
-				if (getpeername(fd,&peeraddr,&size)==-1) {
+				int	result;
+				do {
+					rawbuffer::zero(&peeraddr,
+							sizeof(peeraddr));
+					result=getpeername(fd,&peeraddr,&size);
+				} while (result==-1 &&
+						error::getErrorNumber()==EINTR);
+				if (result==-1) {
 
 					// On some platforms, getpeername()
 					// will fail and set errno to the

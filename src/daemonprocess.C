@@ -7,12 +7,15 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/snooze.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
 #include <stdlib.h>
 
 // for fork/getpid/exit...
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 // for wait...
 #include <sys/wait.h>
@@ -67,10 +70,20 @@ long daemonprocess::checkForPidFile(const char *filename) const {
 	return retval;
 }
 
-void daemonprocess::detach() const {
+bool daemonprocess::detach() const {
 
-	// fork and let the parent process exit
-	if (fork()) {
+	// fork off a child process
+	int	result;
+	do {
+		result=fork();
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+
+	if (result==-1) {
+		return false;
+	}
+
+	// let the parent process exit
+	if (result) {
 		// cygwin needs a sleep or both processes will exit
 		#ifdef __CYGWIN__
 		snooze::macrosnooze(1);
@@ -83,13 +96,15 @@ void daemonprocess::detach() const {
 	setsid();
 
 	// change directory to root to avoid keeping any directories in use
-	chdir("/");
+	do {} while (chdir("/")==-1 && error::getErrorNumber()==EINTR);
 
 	// Set umask such that files are created 666 and directories 777.
 	// This way we can change them to whatever we like using chmod().
 	// We want to avoid inheriting a umask which wouldn't give us write
 	// permissions to files we create.
 	umask(0);
+
+	return true;
 }
 
 void daemonprocess::handleShutDown(void *shutdownfunction) {
@@ -107,18 +122,6 @@ void daemonprocess::handleCrash(void *crashfunction) {
 
 	crashhandler.setHandler((void *)crash);
 	crashhandler.handleSignal(SIGSEGV);
-}
-
-int daemonprocess::runAsUser(const char *username) const {
-	uid_t	userid;
-	return (passwdentry::getUserId(username,&userid))?
-					runAsUserId(userid):1;
-}
-
-int daemonprocess::runAsGroup(const char *groupname) const {
-	gid_t	groupid;
-	return (groupentry::getGroupId(groupname,&groupid))?
-					runAsGroupId(groupid):1;
 }
 
 void daemonprocess::waitForChildrenToExit() {
@@ -182,20 +185,24 @@ void daemonprocess::dontWaitForChildren() {
 	deadchildhandler.handleSignal(SIGCHLD);
 }
 
+int daemonprocess::runAsUser(const char *username) const {
+	uid_t	userid;
+	return (passwdentry::getUserId(username,&userid))?
+					runAsUserId(userid):1;
+}
+
+int daemonprocess::runAsGroup(const char *groupname) const {
+	gid_t	groupid;
+	return (groupentry::getGroupId(groupname,&groupid))?
+					runAsGroupId(groupid):1;
+}
+
 int daemonprocess::runAsUserId(uid_t uid) const {
-	#ifdef HAVE_SETUID
-		return !setuid(uid);
-	#else
-		return 1;
-	#endif
+	return process::setUserId(uid);
 }
 
 int daemonprocess::runAsGroupId(gid_t gid) const {
-	#ifdef HAVE_SETGID
-		return !setgid(gid);
-	#else
-		return 1;
-	#endif
+	return process::setGroupId(gid);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

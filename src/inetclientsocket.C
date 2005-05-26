@@ -8,6 +8,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/snooze.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,8 +108,10 @@ int inetclientsocket::connect() {
 		sin.sin_port=htons(port);
 
 		// create an inet socket
-		if ((fd=::socket(AF_INET,SOCK_STREAM,pe.getNumber()))==-1) {
-			fd=-1;
+		do {
+			fd=::socket(AF_INET,SOCK_STREAM,pe.getNumber());
+		} while (fd==-1 && error::getErrorNumber()==EINTR);
+		if (fd==-1) {
 			return RESULT_ERROR;
 		}
 
@@ -131,11 +134,14 @@ int inetclientsocket::connect() {
 
 		// get the address info for the given address/port
 		addrinfo	*ai;
-		if (getaddrinfo(address,portstr,&hints,&ai)) {
-			delete[] portstr;
+		int		result;
+		do {
+			result=getaddrinfo(address,portstr,&hints,&ai);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		delete[] portstr;
+		if (result==-1) {
 			return RESULT_ERROR;
 		}
-		delete[] portstr;
 
 	#endif
 
@@ -182,9 +188,13 @@ int inetclientsocket::connect() {
 			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
 
 				// create an inet socket
-				if ((fd=::socket(ai->ai_family,
-						ai->ai_socktype,
-						ai->ai_protocol))==-1) {
+				do {
+					fd=::socket(ai->ai_family,
+							ai->ai_socktype,
+							ai->ai_protocol);
+				} while (fd==-1 &&
+					error::getErrorNumber()==EINTR);
+				if (fd==-1) {
 					continue;
 				}
 

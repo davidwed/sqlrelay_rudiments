@@ -52,7 +52,7 @@ class dynamiclib {
 		//
 		// If you don't supply a mutex, getError() will still work, but
 		// will not be thread-safe.
-		static	void	setErrorMutex(pthread_mutex_t *mutex);
+		static	void	setErrorMutex(mutex *mtx);
 				// Allows you to supply a mutex to regulate
 				// access to getError().
 #endif

@@ -11,9 +11,11 @@
 	#endif
 #endif
 #ifdef HAVE_CRYPT_H
-#include <crypt.h>
+	#include <crypt.h>
 #else
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #endif
 #include <stdlib.h>
 
@@ -22,7 +24,7 @@ namespace rudiments {
 #endif
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
-pthread_mutex_t	*crypt::cryptmutex;
+mutex	*crypt::cryptmutex;
 #endif
 
 char *crypt::encrypt(const char *password, const char *salt) {
@@ -34,7 +36,7 @@ char *crypt::encrypt(const char *password, const char *salt) {
 			charstring::duplicate(encryptedpassword):NULL;
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (cryptmutex && pthread_mutex_lock(cryptmutex)) {
+		if (cryptmutex && !cryptmutex->lock()) {
 			return NULL;
 		}
 		#endif
@@ -43,7 +45,7 @@ char *crypt::encrypt(const char *password, const char *salt) {
 				charstring::duplicate(encryptedpassword):NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
 		if (cryptmutex) {
-			pthread_mutex_unlock(cryptmutex);
+			cryptmutex->unlock();
 		}
 		#endif
 		return retval;
@@ -59,9 +61,9 @@ bool crypt::needsMutex() {
 	#endif
 }
 
-void crypt::setMutex(pthread_mutex_t *mutex) {
+void crypt::setMutex(mutex *mtx) {
 	#if !defined(HAVE_CRYPT_R)
-		cryptmutex=mutex;
+		cryptmutex=mtx;
 	#endif
 }
 #endif

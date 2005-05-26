@@ -243,7 +243,7 @@ ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
 endif
 ifeq ($(INCLUDE_SERIALPORT),1)
 	HEADERS += serialport.h
-	PRIVATEHEADERS += serialportincludes.h
+	PRIVATEHEADERS += serialport.h serialportincludes.h
 endif
 ifeq ($(INCLUDE_CHAT),1)
 	HEADERS += chat.h

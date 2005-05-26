@@ -4,7 +4,7 @@
 #include <rudiments/private/config.h>
 
 #ifdef RUDIMENTS_HAS_THREADS
-	#include <pthread.h>
+	#include <rudiments/mutex.h>
 #endif
 
 #include <netdb.h>

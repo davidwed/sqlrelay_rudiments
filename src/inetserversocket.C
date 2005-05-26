@@ -5,6 +5,7 @@
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -61,14 +62,21 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	}
 
 	// create the socket
-	return ((fd=::socket(AF_INET,SOCK_STREAM,0))>-1);
+	do {
+		fd=::socket(AF_INET,SOCK_STREAM,0);
+	} while (fd==-1 && error::getErrorNumber()==EINTR);
+	return (fd!=-1);
 }
 
 bool inetserversocket::bind() {
 
 	// bind the socket
-	if (::bind(fd,reinterpret_cast<struct sockaddr *>(&sin),
-						sizeof(sin))==-1) {
+	int	result;
+	do {
+		result=::bind(fd,reinterpret_cast<struct sockaddr *>(&sin),
+								sizeof(sin));
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (result==-1) {
 		return false;
 	}
 
@@ -80,9 +88,14 @@ bool inetserversocket::bind() {
 		socklen_t	size=sizeof(socknamesin);
 		rawbuffer::zero(&socknamesin,sizeof(socknamesin));
 
-		if (getsockname(fd,
-			reinterpret_cast<struct sockaddr *>(&socknamesin),
-			&size)>-1) {
+		int	result;
+		do {
+			result=getsockname(fd,
+				reinterpret_cast<struct sockaddr *>
+							(&socknamesin),
+				&size);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result!=-1) {
 			port=(unsigned short int)ntohs(socknamesin.sin_port);
 		}
 	}
@@ -90,7 +103,11 @@ bool inetserversocket::bind() {
 }
 
 bool inetserversocket::listen(int backlog) {
-	return !::listen(fd,backlog);
+	int	result;
+	do {
+		result=::listen(fd,backlog);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 filedescriptor *inetserversocket::accept() {
@@ -101,10 +118,13 @@ filedescriptor *inetserversocket::accept() {
 	rawbuffer::zero(&clientsin,sizeof(clientsin));
 
 	// accept on the socket
-	int		clientsock;
-	if ((clientsock=::accept(fd,
+	int	clientsock;
+	do {
+		clientsock=::accept(fd,
 				reinterpret_cast<struct sockaddr *>(&clientsin),
-				&size))==-1) {
+				&size);
+	} while (clientsock==-1 && error::getErrorNumber()==EINTR);
+	if (clientsock==-1) {
 		return NULL;
 	}
 

@@ -9,5 +9,5 @@
 	#include <direct.h>
 #endif
 #ifdef RUDIMENTS_HAS_THREADS
-	#include <pthread.h>
+	#include <rudiments/mutex.h>
 #endif

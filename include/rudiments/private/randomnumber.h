@@ -4,5 +4,5 @@
 	private:
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			!defined(HAVE_RAND_R)
-			static	pthread_mutex_t	*rnmutex;
+			static	mutex	*rnmutex;
 		#endif

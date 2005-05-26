@@ -20,7 +20,7 @@ namespace rudiments {
 #endif
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
-	pthread_mutex_t	*datetime::timemutex;
+mutex	*datetime::timemutex;
 #endif
 
 static const char monthname[][10]={
@@ -38,63 +38,94 @@ static const char monthabbr[][4]={
 };
 
 datetime::datetime() {
-	sec=0;
-	min=0;
-	hour=0;
-	mday=0;
-	mon=0;
-	year=0;
-	wday=0;
-	yday=0;
-	isdst=0;
-	zone=NULL;
-	gmtoff=0;
-	timestring=NULL;
-	structtm=NULL;
-	epoch=0;
+	#ifdef HAVE_GETSYSTEMTIME
+		rawbuffer::zero(st,sizeof(SYSTEMTIME));
+		rawbuffer::zero(tzi,sizeof(TIME_ZONE_INFORMATION));
+	#else
+		sec=0;
+		min=0;
+		hour=0;
+		mday=0;
+		mon=0;
+		year=0;
+		wday=0;
+		yday=0;
+		isdst=0;
+		zone=NULL;
+		gmtoff=0;
+		timestring=NULL;
+		structtm=NULL;
+		epoch=0;
+	#endif
 	#ifdef RUDIMENTS_HAS_THREADS
 	timemutex=NULL;
 	#endif
 }
 
 datetime::~datetime() {
-	delete[] zone;
-	delete[] timestring;
-	delete structtm;
+	#ifndef HAVE_GETSYSTEMTIME
+		delete[] zone;
+		delete[] timestring;
+		delete structtm;
+	#endif
 }
 
 bool datetime::initialize(const char *tmstring) {
 
 	// get the date
 	const char	*ptr=tmstring;
+	#ifdef HAVE_GETSYSTEMTIME
+	st.wMonth=charstring::toShort(ptr);
+	#else
 	mon=charstring::toLong(ptr)-1;
+	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	#ifdef HAVE_GETSYSTEMTIME
+	st.wDay=charstring::toShort(ptr);
+	#else
 	mday=charstring::toLong(ptr);
+	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	#ifdef HAVE_GETSYSTEMTIME
+	st.wYear=charstring::toShort(ptr);
+	#else
 	year=charstring::toLong(ptr)-1900;
+	#endif
 
 	// get the time
 	ptr=charstring::findFirst(ptr,' ')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	#ifdef HAVE_GETSYSTEMTIME
+	st.wHour=charstring::toShort(ptr);
+	#else
 	hour=charstring::toLong(ptr);
+	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	#ifdef HAVE_GETSYSTEMTIME
+	st.wMinute=charstring::toShort(ptr);
+	#else
 	min=charstring::toLong(ptr);
+	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	#ifdef HAVE_GETSYSTEMTIME
+	st.wSecond=charstring::toShort(ptr);
+	#else
 	sec=charstring::toLong(ptr);
+	#endif
 
 	// initialize the daylight savings time flag
 	isdst=-1;
@@ -293,8 +324,8 @@ bool datetime::addYears(long years) {
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
-void datetime::setTimeMutex(pthread_mutex_t *mutex) {
-	timemutex=mutex;
+void datetime::setTimeMutex(mutex *mtx) {
+	timemutex=mtx;
 }
 #endif
 
@@ -608,11 +639,11 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
 #ifdef RUDIMENTS_HAS_THREADS
 bool datetime::acquireLock() {
-	return !(timemutex && pthread_mutex_lock(timemutex));
+	return !(timemutex && !timemutex->lock());
 }
 
 bool datetime::releaseLock() {
-	return !(timemutex && pthread_mutex_unlock(timemutex));
+	return !(timemutex && !timemutex->unlock());
 }
 #endif
 

@@ -3,9 +3,12 @@
 
 #include <rudiments/directory.h>
 #include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <stdlib.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <sys/stat.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -13,7 +16,7 @@ namespace rudiments {
 #endif
 
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_READDIR_R)
-pthread_mutex_t	*directory::rdmutex;
+mutex	*directory::rdmutex;
 #endif
 
 directory::directory() {
@@ -26,13 +29,18 @@ directory::~directory() {
 }
 
 bool directory::open(const char *path) {
-	return ((dir=opendir(path))!=NULL);
+	do {
+		dir=opendir(path);
+	} while (dir==NULL && error::getErrorNumber()==EINTR);
+	return (dir!=NULL);
 }
 
 bool directory::close() {
 	bool	retval=true;
 	if (dir) {
-		retval=!closedir(dir);
+		do {
+			retval=!closedir(dir);
+		} while (!retval && error::getErrorNumber()==EINTR);
 		dir=NULL;
 		currentindex=0;
 	}
@@ -58,7 +66,12 @@ char *directory::getChildName(unsigned long index) {
 			dirent	*result;
 		#endif
 		for (unsigned long i=currentindex; i<actualindex; i++) {
-			if (readdir_r(dir,&entry,&result) || !result) {
+			int	rdresult;
+			do {
+				rdresult=readdir_r(dir,&entry,&result);
+			} while (rdresult==-1 &&
+					error::getErrorNumber()==EINTR);
+			if (rdresult || !result) {
 				return NULL;
 			}
 			currentindex++;
@@ -71,12 +84,15 @@ char *directory::getChildName(unsigned long index) {
 			direct	*entry;
 		#endif
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rdmutex && pthread_mutex_lock(rdmutex)) {
+		if (rdmutex && !rdmutex->lock()) {
 			return NULL;
 		}
 		#endif
 		for (unsigned long i=currentindex; i<actualindex; i++) {
-			if (!(entry=readdir(dir))) {
+			do {
+				entry=readdir(dir);
+			} while (!entry && error::getErrorNumber()==EINTR);
+			if (!entry) {
 				return NULL;
 			}
 			currentindex++;
@@ -84,7 +100,7 @@ char *directory::getChildName(unsigned long index) {
 		char	*retval=charstring::duplicate(entry->d_name);
 		#ifdef RUDIMENTS_HAS_THREADS
 		if (rdmutex) {
-			pthread_mutex_unlock(rdmutex);
+			rdmutex->unlock();
 		}
 		#endif
 		return retval;
@@ -92,18 +108,30 @@ char *directory::getChildName(unsigned long index) {
 }
 
 bool directory::create(const char *path, mode_t perms) {
-	return !mkdir(path,perms);
+	int	result;
+	do {
+		result=mkdir(path,perms);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool directory::remove(const char *path) {
-	return !rmdir(path);
+	int	result;
+	do {
+		result=rmdir(path);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 char *directory::getCurrentWorkingDirectory() {
 	size_t	size=1024;
 	for (;;) {
 		char	*buffer=new char[size];
-		if (getcwd(buffer,size)) {
+		char	*result;
+		do {
+			result=getcwd(buffer,size);
+		} while (!result && error::getErrorNumber()==EINTR);
+		if (result) {
 			return buffer;
 		} else {
 			delete[] buffer;
@@ -116,11 +144,19 @@ char *directory::getCurrentWorkingDirectory() {
 }
 
 bool directory::changeDirectory(const char *path) {
-	return !chdir(path);
+	int	result;
+	do {
+		result=chdir(path);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool directory::changeRoot(const char *path) {
-	return !chroot(path);
+	int	result;
+	do {
+		result=chroot(path);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -132,23 +168,31 @@ bool directory::needsMutex() {
 	#endif
 }
 
-void directory::setMutex(pthread_mutex_t *mutex) {
+void directory::setMutex(mutex *mtx) {
 	#if !defined(HAVE_READDIR_R)
-		rdmutex=mutex;
+		rdmutex=mtx;
 	#endif
 }
 #endif
 
 long directory::maxFileNameLength(const char *pathname) {
-	return pathconf(pathname,_PC_NAME_MAX);
+	return pathConf(pathname,_PC_NAME_MAX);
 }
 
 long directory::maxPathLength(const char *pathname) {
-	return pathconf(pathname,_PC_PATH_MAX);
+	return pathConf(pathname,_PC_PATH_MAX);
 }
 
 bool directory::canAccessLongFileNames(const char *pathname) {
-	return !pathconf(pathname,_PC_NO_TRUNC);
+	return !pathConf(pathname,_PC_NO_TRUNC);
+}
+
+long directory::pathConf(const char *pathname, int name) {
+	long	result;
+	do {
+		result=pathconf(pathname,name);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

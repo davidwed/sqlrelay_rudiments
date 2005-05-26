@@ -17,7 +17,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
-pthread_mutex_t	*groupentry::gemutex;
+mutex	*groupentry::gemutex;
 #endif
 
 groupentry::groupentry() {
@@ -70,9 +70,9 @@ bool groupentry::needsMutex() {
 	#endif
 }
 
-void groupentry::setMutex(pthread_mutex_t *mutex) {
+void groupentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
-		gemutex=mutex;
+		gemutex=mtx;
 	#endif
 }
 #endif
@@ -131,11 +131,11 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 	#else
 		grp=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(gemutex && pthread_mutex_lock(gemutex)) &&
+		return (!(gemutex && !gemutex->lock()) &&
 			((grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
-			!(gemutex && pthread_mutex_unlock(gemutex)));
+			!(gemutex && !gemutex->unlock()));
 		#else
 		return ((grp=((groupname)
 				?getgrnam(groupname)

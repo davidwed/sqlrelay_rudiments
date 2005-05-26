@@ -17,7 +17,7 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
 	(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
-pthread_mutex_t	*passwdentry::pemutex;
+mutex	*passwdentry::pemutex;
 #endif
 
 
@@ -83,9 +83,9 @@ bool passwdentry::needsMutex() {
 	#endif
 }
 
-void passwdentry::setMutex(pthread_mutex_t *mutex) {
+void passwdentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
-		pemutex=mutex;
+		pemutex=mtx;
 	#endif
 }
 #endif
@@ -143,11 +143,11 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 	#else
 		pwd=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(pemutex && pthread_mutex_lock(pemutex)) &&
+		return (!(pemutex && !pemutex->lock()) &&
 			((pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL) &&
-			!(pemutex && pthread_mutex_unlock(pemutex)));
+			!(pemutex && !pemutex->unlock()));
 		#else
 		return (((pwd=((username)
 				?getpwnam(username)

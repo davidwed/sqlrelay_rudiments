@@ -9,8 +9,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -29,7 +27,7 @@ sharedmemory::~sharedmemory() {
 }
 
 bool sharedmemory::forceRemove() {
-	return !shmctl(shmid,IPC_RMID,NULL);
+	return shmControl(IPC_RMID,NULL);
 }
 
 void sharedmemory::dontRemove() {
@@ -47,24 +45,24 @@ void *sharedmemory::getPointer() const {
 bool sharedmemory::setUserId(uid_t uid) {
 	shmid_ds	setds;
 	setds.shm_perm.uid=uid;
-	return !shmctl(shmid,IPC_SET,&setds);
+	return shmControl(IPC_SET,&setds);
 }
 
 bool sharedmemory::setGroupId(gid_t gid) {
 	shmid_ds	setds;
 	setds.shm_perm.gid=gid;
-	return !shmctl(shmid,IPC_SET,&setds);
+	return shmControl(IPC_SET,&setds);
 }
 
 bool sharedmemory::setPermissions(mode_t permissions) {
 	shmid_ds	setds;
 	setds.shm_perm.mode=permissions;
-	return !shmctl(shmid,IPC_SET,&setds);
+	return shmControl(IPC_SET,&setds);
 }
 
 uid_t sharedmemory::getUserId() {
 	shmid_ds	getds;
-	if (!shmctl(shmid,IPC_STAT,&getds)) {
+	if (shmControl(IPC_STAT,&getds)) {
 		return getds.shm_perm.uid;
 	}
 	return 0;
@@ -72,7 +70,7 @@ uid_t sharedmemory::getUserId() {
 
 gid_t sharedmemory::getGroupId() {
 	shmid_ds	getds;
-	if (!shmctl(shmid,IPC_STAT,&getds)) {
+	if (shmControl(IPC_STAT,&getds)) {
 		return getds.shm_perm.gid;
 	}
 	return 0;
@@ -80,7 +78,7 @@ gid_t sharedmemory::getGroupId() {
 
 mode_t sharedmemory::getPermissions() {
 	shmid_ds	getds;
-	if (!shmctl(shmid,IPC_STAT,&getds)) {
+	if (shmControl(IPC_STAT,&getds)) {
 		return getds.shm_perm.mode;
 	}
 	return 0;
@@ -96,7 +94,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 
 		// attach to the segment, remove the
 		// segment and return 0 on failure
-		shmptr=shmat(shmid,0,0);
+		shmptr=shmAttach();
 		if (reinterpret_cast<long>(shmptr)==-1) {
 			forceRemove();
 			return false;
@@ -128,21 +126,21 @@ bool sharedmemory::attach(key_t key) {
 	// it needs to be compared to -1.  So, we cast it to a signed integer
 	// to see if it's not -1, but allow that it could very well be less
 	// than -1 and still be valid.
-	return ((shmid=shmget(key,0,0))!=-1 &&
-			reinterpret_cast<long>(shmptr=shmat(shmid,0,0))!=-1);
+	return ((shmid=shmGet(key,0,0))!=-1 &&
+			reinterpret_cast<long>(shmptr=shmAttach())!=-1);
 }
 
 bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
-	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
+	if ((shmid=shmGet(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// mark for removal
 		created=true;
 
 		// attach to the segment, remove the
 		// segment and return 0 on failure
-		shmptr=shmat(shmid,0,0);
+		shmptr=shmAttach();
 		if (reinterpret_cast<long>(shmptr)==-1) {
 			forceRemove();
 			return false;
@@ -153,10 +151,10 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 		return true;
 		
 	} else if (error::getErrorNumber()==EEXIST &&
-			(shmid=shmget(key,0,permissions))!=-1) {
+			(shmid=shmGet(key,0,permissions))!=-1) {
 
 		// attach to the segment, return 1 on success and 0 on failure
-		shmptr=shmat(shmid,0,0);
+		shmptr=shmAttach();
 		return (reinterpret_cast<long>(shmptr)!=-1);
 
 	}
@@ -167,7 +165,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 const char *sharedmemory::getUserName() {
 	shmid_ds	getds;
 	char		*name;
-	if (!shmctl(shmid,IPC_STAT,&getds) &&
+	if (shmControl(IPC_STAT,&getds) &&
 			passwdentry::getName(getds.shm_perm.uid,&name)) {
 		return name;
 	}
@@ -177,7 +175,7 @@ const char *sharedmemory::getUserName() {
 const char *sharedmemory::getGroupName() {
 	shmid_ds	getds;
 	char		*name;
-	if (!shmctl(shmid,IPC_STAT,&getds) &&
+	if (shmControl(IPC_STAT,&getds) &&
 			groupentry::getName(getds.shm_perm.gid,&name)) {
 		return name;
 	}
@@ -194,6 +192,31 @@ bool sharedmemory::setGroupName(const char *groupname) {
 	gid_t	groupid;
 	return (groupentry::getGroupId(groupname,&groupid) &&
 						setGroupId(groupid));
+}
+
+int sharedmemory::shmGet(key_t key, size_t size, int shmflag) {
+	int	result;
+	do {
+		result=shmget(key,size,shmflag);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
+}
+
+void *sharedmemory::shmAttach() {
+	void	*result;
+	do {
+		result=shmat(shmid,0,0);
+	} while (reinterpret_cast<long>(result)==-1 &&
+			error::getErrorNumber()==EINTR);
+	return result;
+}
+
+bool sharedmemory::shmControl(int cmd, shmid_ds *buf) {
+	int	result;
+	do {
+		result=shmctl(shmid,cmd,buf);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

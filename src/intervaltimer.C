@@ -4,6 +4,7 @@
 #include <rudiments/private/config.h>
 #include <rudiments/intervaltimer.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -92,19 +93,26 @@ bool intervaltimer::start() const {
 
 bool intervaltimer::start(itimerval *itv) const {
 	// Solaris 8 complains if the 2nd argument isn't cast
-	return !setitimer(which,const_cast<itimerval *>(&values),itv);
+	int	result;
+	do {
+		result=setitimer(which,const_cast<itimerval *>(&values),itv);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
 bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
 	itimerval	val;
-	bool	retval=getitimer(which,&val);
+	int	result;
+	do {
+		result=getitimer(which,&val);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (seconds) {
 		*seconds=val.it_value.tv_sec;
 	}
 	if (microseconds) {
 		*microseconds=val.it_value.tv_usec;
 	}
-	return retval;
+	return !result;
 }
 
 bool intervaltimer::getTimeRemaining(timeval *tv) const {

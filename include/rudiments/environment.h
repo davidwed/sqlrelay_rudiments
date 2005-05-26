@@ -34,7 +34,7 @@ class environment {
 			// of the form NAME=VALUE.
 
 #ifdef RUDIMENTS_HAS_THREADS
-		static	void	setMutex(pthread_mutex_t *mutex);
+		static	void	setMutex(mutex *mtx);
 			// Allows you to supply a mutex if the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
