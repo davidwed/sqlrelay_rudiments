@@ -321,31 +321,31 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#endif
 }
 
-ssize_t filedescriptor::write(unsigned short number) const {
+ssize_t filedescriptor::write(uint16_t number) const {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned long number) const {
+ssize_t filedescriptor::write(uint32_t number) const {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned long long number) const {
+ssize_t filedescriptor::write(uint64_t number) const {
 	return write(number,-1,-1);
 }
 
-ssize_t filedescriptor::write(short number) const {
-	DEBUG_WRITE_INT("short",number);
-	return bufferedWrite(&number,sizeof(short),-1,-1);
+ssize_t filedescriptor::write(int16_t number) const {
+	DEBUG_WRITE_INT("int16_t",number);
+	return bufferedWrite(&number,sizeof(int16_t),-1,-1);
 }
 
-ssize_t filedescriptor::write(long number) const {
-	DEBUG_WRITE_INT("long",number);
-	return bufferedWrite(&number,sizeof(long),-1,-1);
+ssize_t filedescriptor::write(int32_t number) const {
+	DEBUG_WRITE_INT("int32_t",number);
+	return bufferedWrite(&number,sizeof(int32_t),-1,-1);
 }
 
-ssize_t filedescriptor::write(long long number) const {
-	DEBUG_WRITE_INT("long long",number);
-	return bufferedWrite(&number,sizeof(long long),-1,-1);
+ssize_t filedescriptor::write(int64_t number) const {
+	DEBUG_WRITE_INT("int64_t",number);
+	return bufferedWrite(&number,sizeof(int64_t),-1,-1);
 }
 
 ssize_t filedescriptor::write(float number) const {
@@ -398,35 +398,37 @@ ssize_t filedescriptor::write(const void *buffer, size_t size) const {
 	return bufferedWrite(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(unsigned short number,
-					long sec, long usec) const {
-	DEBUG_WRITE_INT("ushort",number);
+ssize_t filedescriptor::write(uint16_t number, long sec, long usec) const {
+	DEBUG_WRITE_INT("uint16_t",number);
 	number=hostToNet(number);
-	return bufferedWrite(&number,sizeof(unsigned short),sec,usec);
+	return bufferedWrite(&number,sizeof(uint16_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(unsigned long number,
-					long sec, long usec) const {
-	DEBUG_WRITE_INT("ulong",number);
+ssize_t filedescriptor::write(uint32_t number, long sec, long usec) const {
+	DEBUG_WRITE_INT("uint32_t",number);
 	number=hostToNet(number);
-	return bufferedWrite(&number,sizeof(unsigned long),sec,usec);
+	return bufferedWrite(&number,sizeof(uint32_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(unsigned long long number,
-					long sec, long usec) const {
-	DEBUG_WRITE_INT("ulonglong",number);
+ssize_t filedescriptor::write(uint64_t number, long sec, long usec) const {
+	DEBUG_WRITE_INT("uint64_t",number);
 	number=hostToNet(number);
-	return bufferedWrite(&number,sizeof(unsigned long long),sec,usec);
+	return bufferedWrite(&number,sizeof(uint64_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(short number, long sec, long usec) const {
-	DEBUG_WRITE_INT("short",number);
-	return bufferedWrite(&number,sizeof(short),sec,usec);
+ssize_t filedescriptor::write(int16_t number, long sec, long usec) const {
+	DEBUG_WRITE_INT("int16_t",number);
+	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(long number, long sec, long usec) const {
-	DEBUG_WRITE_INT("long",number);
-	return bufferedWrite(&number,sizeof(long),sec,usec);
+ssize_t filedescriptor::write(int32_t number, long sec, long usec) const {
+	DEBUG_WRITE_INT("int32_t",number);
+	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
+}
+
+ssize_t filedescriptor::write(int64_t number, long sec, long usec) const {
+	DEBUG_WRITE_INT("int64_t",number);
+	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(float number, long sec, long usec) const {
@@ -484,28 +486,28 @@ ssize_t filedescriptor::write(const void *buffer, size_t size,
 	return bufferedWrite(buffer,size,sec,usec);
 }
 
-ssize_t filedescriptor::read(unsigned short *buffer) const {
+ssize_t filedescriptor::read(uint16_t *buffer) const {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned long *buffer) const {
+ssize_t filedescriptor::read(uint32_t *buffer) const {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned long long *buffer) const {
+ssize_t filedescriptor::read(uint64_t *buffer) const {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(short *buffer) const {
-	return bufferedRead(buffer,sizeof(short),-1,-1);
+ssize_t filedescriptor::read(int16_t *buffer) const {
+	return bufferedRead(buffer,sizeof(int16_t),-1,-1);
 }
 
-ssize_t filedescriptor::read(long *buffer) const {
-	return bufferedRead(buffer,sizeof(long),-1,-1);
+ssize_t filedescriptor::read(int32_t *buffer) const {
+	return bufferedRead(buffer,sizeof(int32_t),-1,-1);
 }
 
-ssize_t filedescriptor::read(long long *buffer) const {
-	return bufferedRead(buffer,sizeof(long long),-1,-1);
+ssize_t filedescriptor::read(int64_t *buffer) const {
+	return bufferedRead(buffer,sizeof(int64_t),-1,-1);
 }
 
 ssize_t filedescriptor::read(float *buffer) const {
@@ -544,32 +546,34 @@ ssize_t filedescriptor::read(char **buffer, char *terminator) const {
 	return read(buffer,terminator,-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned short *buffer,
-					long sec, long usec) const {
-	ssize_t	retval=bufferedRead(buffer,sizeof(unsigned short),sec,usec);
+ssize_t filedescriptor::read(uint16_t *buffer, long sec, long usec) const {
+	ssize_t	retval=bufferedRead(buffer,sizeof(uint16_t),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(unsigned long *buffer, long sec, long usec) const {
-	ssize_t	retval=bufferedRead(buffer,sizeof(unsigned long),sec,usec);
+ssize_t filedescriptor::read(uint32_t *buffer, long sec, long usec) const {
+	ssize_t	retval=bufferedRead(buffer,sizeof(uint32_t),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(unsigned long long *buffer,
-				long sec, long usec) const {
-	ssize_t	retval=bufferedRead(buffer,sizeof(unsigned long long),sec,usec);
+ssize_t filedescriptor::read(uint64_t *buffer, long sec, long usec) const {
+	ssize_t	retval=bufferedRead(buffer,sizeof(uint64_t),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(short *buffer, long sec, long usec) const {
-	return bufferedRead(buffer,sizeof(short),sec,usec);
+ssize_t filedescriptor::read(int16_t *buffer, long sec, long usec) const {
+	return bufferedRead(buffer,sizeof(int16_t),sec,usec);
 }
 
-ssize_t filedescriptor::read(long *buffer, long sec, long usec) const {
-	return bufferedRead(buffer,sizeof(long),sec,usec);
+ssize_t filedescriptor::read(int32_t *buffer, long sec, long usec) const {
+	return bufferedRead(buffer,sizeof(int32_t),sec,usec);
+}
+
+ssize_t filedescriptor::read(int64_t *buffer, long sec, long usec) const {
+	return bufferedRead(buffer,sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(float *buffer, long sec, long usec) const {
@@ -1331,15 +1335,15 @@ void filedescriptor::dontTranslateByteOrder() {
 	translatebyteorder=false;
 }
 
-unsigned short filedescriptor::hostToNet(unsigned short value) const {
+uint16_t filedescriptor::hostToNet(uint16_t value) const {
 	return (translatebyteorder)?htons(value):value;
 }
 
-unsigned long filedescriptor::hostToNet(unsigned long value) const {
+uint32_t filedescriptor::hostToNet(uint32_t value) const {
 	return (translatebyteorder)?htonl(value):value;
 }
 
-unsigned long long filedescriptor::hostToNet(unsigned long long value) const {
+uint64_t filedescriptor::hostToNet(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
@@ -1347,15 +1351,15 @@ unsigned long long filedescriptor::hostToNet(unsigned long long value) const {
 	#endif
 }
 
-unsigned short filedescriptor::netToHost(unsigned short value) const {
+uint16_t filedescriptor::netToHost(uint16_t value) const {
 	return (translatebyteorder)?ntohs(value):value;
 }
 
-unsigned long filedescriptor::netToHost(unsigned long value) const {
+uint32_t filedescriptor::netToHost(uint32_t value) const {
 	return (translatebyteorder)?ntohl(value):value;
 }
 
-unsigned long long filedescriptor::netToHost(unsigned long long value) const {
+uint64_t filedescriptor::netToHost(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else

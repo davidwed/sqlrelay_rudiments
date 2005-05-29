@@ -18,3 +18,5 @@
 	#endif
 	#include <sys/socket.h>
 #endif
+
+#include <stdint.h>

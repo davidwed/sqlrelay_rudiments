@@ -4,3 +4,4 @@
 #include <rudiments/variablebuffer.h>
 
 #include <sys/types.h>
+#include <stdint.h>

@@ -6,18 +6,18 @@
 			SYSTEMTIME		st;
 			TIME_ZONE_INFORMATION	tzi;
 		#else
-			long	sec;
-			long	min;
-			long	hour;
-			long	mday;
-			long	mon;
-			long	year;
-			long	wday;
-			long	yday;
-			long	isdst;
+			int32_t	sec;
+			int32_t	min;
+			int32_t	hour;
+			int32_t	mday;
+			int32_t	mon;
+			int32_t	year;
+			int32_t	wday;
+			int32_t	yday;
+			int32_t	isdst;
 
 			char	*zone;
-			long	gmtoff;
+			int32_t	gmtoff;
 
 			char		*timestring;
 			struct tm	*structtm;

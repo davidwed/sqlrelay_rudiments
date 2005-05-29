@@ -109,17 +109,17 @@ class filedescriptor {
 		// Write methods - write data to the file descriptor.
 		// These methods return the number of bytes that were
 		// successfully written or RESULT_ERROR if an error occurred.
-		ssize_t	write(unsigned short number) const;
+		ssize_t	write(uint16_t number) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(unsigned long number) const;
+		ssize_t	write(uint32_t number) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(unsigned long long number) const;
+		ssize_t	write(uint64_t number) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(short number) const;
+		ssize_t	write(int16_t number) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(long number) const;
+		ssize_t	write(int32_t number) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(long long number) const;
+		ssize_t	write(int64_t number) const;
 				// Write "number" to the file descriptor.
 		ssize_t	write(float number) const;
 				// Write "number" to the file descriptor.
@@ -157,18 +157,17 @@ class filedescriptor {
 		// These methods return the number of bytes that were
 		// successfully written, RESULT_ERROR if an error occurred or
 		// RESULT_TIMEOUT if a timeout occurred.
-		ssize_t	write(unsigned short number, long sec, long usec) const;
+		ssize_t	write(uint16_t number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(unsigned long number, long sec, long usec) const;
+		ssize_t	write(uint32_t number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(unsigned long long number,
-					long sec, long usec) const;
+		ssize_t	write(uint64_t number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(short number, long sec, long usec) const;
+		ssize_t	write(int16_t number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(long number, long sec, long usec) const;
+		ssize_t	write(int32_t number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
-		ssize_t	write(long long number, long sec, long usec) const;
+		ssize_t	write(int64_t number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
 		ssize_t	write(float number, long sec, long usec) const;
 				// Write "number" to the file descriptor.
@@ -209,22 +208,22 @@ class filedescriptor {
 		// Read methods - read data from the file descriptor.
 		// These methods return the number of bytes that were
 		// successfully read or RESULT_ERROR if an error occurred.
-		ssize_t	read(unsigned short *buffer) const;
+		ssize_t	read(uint16_t *buffer) const;
 				// Reads sizeof(unsigned short) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(unsigned long *buffer) const;
+		ssize_t	read(uint32_t *buffer) const;
 				// Reads sizeof(unsigned long) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(unsigned long long *buffer) const;
+		ssize_t	read(uint64_t *buffer) const;
 				// Reads sizeof(unsigned long long) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(short *buffer) const;
+		ssize_t	read(int16_t *buffer) const;
 				// Reads sizeof(short) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(long *buffer) const;
+		ssize_t	read(int32_t *buffer) const;
 				// Reads sizeof(long) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(long long *buffer) const;
+		ssize_t	read(int64_t *buffer) const;
 				// Reads sizeof(long long) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(float *buffer) const;
@@ -263,23 +262,22 @@ class filedescriptor {
 		// These methods return the number of bytes that were
 		// successfully read, RESULT_ERROR if an error occurred or
 		// RESULT_TIMEOUT if a timeout occurred.
-		ssize_t	read(unsigned short *buffer, long sec, long usec) const;
+		ssize_t	read(uint16_t *buffer, long sec, long usec) const;
 				// Reads sizeof(unsigned short) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(unsigned long *buffer, long sec, long usec) const;
+		ssize_t	read(uint32_t *buffer, long sec, long usec) const;
 				// Reads sizeof(unsigned long) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(unsigned long long *buffer,
-					long sec, long usec) const;
+		ssize_t	read(uint64_t *buffer, long sec, long usec) const;
 				// Reads sizeof(unsigned long long) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(short *buffer, long sec, long usec) const;
+		ssize_t	read(int16_t *buffer, long sec, long usec) const;
 				// Reads sizeof(short) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(long *buffer, long sec, long usec) const;
+		ssize_t	read(int32_t *buffer, long sec, long usec) const;
 				// Reads sizeof(long) bytes
 				// from the file descriptor into "buffer".
-		ssize_t	read(long long *buffer, long sec, long usec) const;
+		ssize_t	read(int64_t *buffer, long sec, long usec) const;
 				// Reads sizeof(long long) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(float *buffer, long sec, long usec) const;

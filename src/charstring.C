@@ -371,11 +371,11 @@ int charstring::countTrailingSpaces(const char *str, int length) {
 	return trailingspaces;
 }
 
-char *charstring::parseNumber(short number) {
+char *charstring::parseNumber(int16_t number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(short number,
+char *charstring::parseNumber(int16_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
@@ -383,11 +383,11 @@ char *charstring::parseNumber(short number,
 	return str;
 }
 
-char *charstring::parseNumber(unsigned short number) {
+char *charstring::parseNumber(uint16_t number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(unsigned short number,
+char *charstring::parseNumber(uint16_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
@@ -395,35 +395,35 @@ char *charstring::parseNumber(unsigned short number,
 	return str;
 }
 
-char *charstring::parseNumber(long number) {
+char *charstring::parseNumber(int32_t number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(long number,
+char *charstring::parseNumber(int32_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*ld",zeropadding,number);
+	sprintf(str,"%0*d",zeropadding,number);
 	return str;
 }
 
-char *charstring::parseNumber(unsigned long number) {
+char *charstring::parseNumber(uint32_t number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(unsigned long number,
+char *charstring::parseNumber(uint32_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*ld",zeropadding,number);
+	sprintf(str,"%0*d",zeropadding,number);
 	return str;
 }
 
-char *charstring::parseNumber(long long number) {
+char *charstring::parseNumber(int64_t number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(long long number,
+char *charstring::parseNumber(int64_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
@@ -431,11 +431,11 @@ char *charstring::parseNumber(long long number,
 	return str;
 }
 
-char *charstring::parseNumber(unsigned long long number) {
+char *charstring::parseNumber(uint64_t number) {
 	return parseNumber(number,0);
 }
 
-char *charstring::parseNumber(unsigned long long number,
+char *charstring::parseNumber(uint64_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
 	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
@@ -496,49 +496,49 @@ void charstring::bothTrim(char *string, char character) {
 	rightTrim(string,character);
 }
 
-int charstring::integerLength(short number) {
+int charstring::integerLength(int16_t number) {
 	int	length=(number>0)?0:1;
-	for (short num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(long number) {
+int charstring::integerLength(int32_t number) {
 	int	length=(number>0)?0:1;
-	for (long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(long long number) {
+int charstring::integerLength(int64_t number) {
 	int	length=(number>0)?0:1;
-	for (long long num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(unsigned short number) {
+int charstring::integerLength(uint16_t number) {
 	int	length=0;
-	for (unsigned short num=number; num>0; num=num/10) {
+	for (uint16_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(unsigned long number) {
+int charstring::integerLength(uint32_t number) {
 	int	length=0;
-	for (unsigned long num=number; num>0; num=num/10) {
+	for (uint32_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(unsigned long long number) {
+int charstring::integerLength(uint64_t number) {
 	int	length=0;
-	for (unsigned long long num=number; num>0; num=num/10) {
+	for (uint64_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
@@ -565,14 +565,14 @@ char *charstring::append(char *dest, const char *source, size_t size) {
 	return (dest && source)?strncat(dest,source,size):NULL;
 }
 
-char *charstring::append(char *dest, long number) {
+char *charstring::append(char *dest, int32_t number) {
 	char	*str=charstring::parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char *charstring::append(char *dest, unsigned long number) {
+char *charstring::append(char *dest, uint32_t number) {
 	char	*str=charstring::parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;

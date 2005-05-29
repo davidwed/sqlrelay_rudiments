@@ -110,16 +110,17 @@ class logger {
 
 		// These methods write log entries to each
 		// logdestination in sequence.
-		void	write(const char *header, int tabs, const char *string);
+		void	write(const char *header, int32_t tabs,
+							const char *string);
 			// Writes "header", followed by "tabs" tabs, followed
 			// by "string" as a single log entry.
-		void	write(const char *header, int tabs, char character);
+		void	write(const char *header, int32_t tabs, char character);
 			// Writes "header", followed by "tabs" tabs, followed
 			// by "character" as a single log entry.
-		void	write(const char *header, int tabs, long number);
+		void	write(const char *header, int32_t tabs, int32_t number);
 			// Writes "header", followed by "tabs" tabs, followed
 			// by "number" as a single log entry.
-		void	write(const char *header, int tabs, double number);
+		void	write(const char *header, int32_t tabs, double number);
 			// Writes "header", followed by "tabs" tabs, followed
 			// by "number" as a single log entry.
 

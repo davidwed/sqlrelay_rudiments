@@ -120,41 +120,41 @@ char *logger::logHeader(const char *name) {
 	return retval;
 }
 
-void logger::write(const char *header, int tabs, const char *string) {
+void logger::write(const char *header, int32_t tabs, const char *string) {
 	char	logentry[charstring::length(header)+3+tabs+
 				charstring::length(string)+2+1];
 	sprintf(logentry,"%s : ",header);
-	for (int i=0; i<tabs; i++) {
+	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%s\n\n",logentry,string);
 	write(logentry);
 }
 
-void logger::write(const char *header, int tabs, char character) {
+void logger::write(const char *header, int32_t tabs, char character) {
 	char	logentry[charstring::length(header)+3+tabs+1+2+1];
 	sprintf(logentry,"%s : ",header);
-	for (int i=0; i<tabs; i++) {
+	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%c\n\n",logentry,character);
 	write(logentry);
 }
 
-void logger::write(const char *header, int tabs, long number) {
+void logger::write(const char *header, int32_t tabs, int32_t number) {
 	char	logentry[charstring::length(header)+3+tabs+20+2+1];
 	sprintf(logentry,"%s : ",header);
-	for (int i=0; i<tabs; i++) {
+	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%ld\n\n",logentry,number);
 	write(logentry);
 }
 
-void logger::write(const char *header, int tabs, double number) {
+void logger::write(const char *header, int32_t tabs, double number) {
 	char	logentry[charstring::length(header)+3+tabs+21+2+1];
 	sprintf(logentry,"%s : ",header);
-	for (int i=0; i<tabs; i++) {
+	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%f\n\n",logentry,number);

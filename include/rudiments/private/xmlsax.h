@@ -26,7 +26,7 @@
 			#ifdef HAVE_MMAP
 			memorymap	mm;
 			#endif
-			long		line;
+			uint32_t	line;
 			bool		allowtrailingtext;
 			stringbuffer	err;
 

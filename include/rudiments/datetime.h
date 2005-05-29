@@ -116,16 +116,16 @@ class datetime {
 
 
 		// These methods return commonly needed time/date values
-		long		getHour() const;
-		long		getMinutes() const;
-		long		getSeconds() const;
-		long		getMonth() const;
+		int32_t		getHour() const;
+		int32_t		getMinutes() const;
+		int32_t		getSeconds() const;
+		int32_t		getMonth() const;
 		const char	*getMonthName() const;
 		const char	*getMonthAbbreviation() const;
-		long		getDayOfMonth() const;
-		long		getDayOfWeek() const;
-		long		getDayOfYear() const;
-		long		getYear() const;
+		int32_t		getDayOfMonth() const;
+		int32_t		getDayOfWeek() const;
+		int32_t		getDayOfYear() const;
+		int32_t		getYear() const;
 
 		bool	isDaylightSavingsTime() const;
 			// returns 1 if daylight savings time is currently
@@ -135,7 +135,7 @@ class datetime {
 			// returns a 3 character string representing the
 			// time zone
 
-		long	getTimeZoneOffset() const;
+		int32_t	getTimeZoneOffset() const;
 			// returns the offset from GMT (in seconds)
 			
 		bool	adjustTimeZone(const char *newtz);
@@ -165,12 +165,12 @@ class datetime {
 
 		// These methods allow you to add discrete time intervals to
 		// the time currently represented in the class.
-		bool	addSeconds(long seconds);
-		bool	addMinutes(long minutes);
-		bool	addHours(long hours);
-		bool	addDays(long days);
-		bool	addMonths(long months);
-		bool	addYears(long years);
+		bool	addSeconds(int32_t seconds);
+		bool	addMinutes(int32_t minutes);
+		bool	addHours(int32_t hours);
+		bool	addDays(int32_t days);
+		bool	addMonths(int32_t months);
+		bool	addYears(int32_t years);
 
 
 		// These methods output conversions to other date/time
@@ -190,7 +190,7 @@ class datetime {
 		static const char * const	*getTimeZoneAbbreviations();
 				// Returns a NULL terminated array of timezone
 				// abbreviations.
-		static const long		*getTimeZoneOffsets();
+		static const int32_t		*getTimeZoneOffsets();
 				// Returns an array of timezone offsets from
 				// GMT (in seconds).  Each element of this
 				// array corresponds to an element of the

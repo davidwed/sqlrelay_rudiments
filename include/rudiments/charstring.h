@@ -38,12 +38,12 @@ class charstring {
 			// that there is enough room remaining in "dest" to
 			// accommodate the new string.
 			// Returns a pointer to "dest".
-		static	char	*append(char *dest, long number);
+		static	char	*append(char *dest, int32_t number);
 			// Converts "number" to a string and appends it to
 			// "dest".  Assumes that there is enough room remaining
 			// in "dest" to accommodate the new string.
 			// Returns a pointer to "dest".
-		static	char	*append(char *dest, unsigned long number);
+		static	char	*append(char *dest, uint32_t number);
 			// Converts "number" to a string and appends it to
 			// "dest".  Assumes that there is enough room remaining
 			// in "dest" to accommodate the new string.
@@ -179,12 +179,12 @@ class charstring {
 		static	void	strip(char *str1, const char *str2);
 			// Strips all instances of "str2" from "str1".
 
-		static	int	integerLength(short number);
-		static	int	integerLength(long number);
-		static	int	integerLength(long long number);
-		static	int	integerLength(unsigned short number);
-		static	int	integerLength(unsigned long number);
-		static	int	integerLength(unsigned long long number);
+		static	int	integerLength(int16_t number);
+		static	int	integerLength(int32_t number);
+		static	int	integerLength(int64_t number);
+		static	int	integerLength(uint16_t number);
+		static	int	integerLength(uint32_t number);
+		static	int	integerLength(uint64_t number);
 			// Returns the number of characters needed to represent
 			// "number" as a string.
 
@@ -197,23 +197,23 @@ class charstring {
 		static	bool	isNumber(const char *val, int size);
 			// Returns true the string "val" is a number and false
 			// if it is not a number
-		static	char	*parseNumber(short number);
-		static	char	*parseNumber(unsigned short number);
-		static	char	*parseNumber(short number,
+		static	char	*parseNumber(int16_t number);
+		static	char	*parseNumber(uint16_t number);
+		static	char	*parseNumber(int16_t number,
 						unsigned short zeropadding);
-		static	char	*parseNumber(unsigned short number,
+		static	char	*parseNumber(uint16_t number,
 						unsigned short zeropadding);
-		static	char	*parseNumber(long number);
-		static	char	*parseNumber(unsigned long number);
-		static	char	*parseNumber(long number,
+		static	char	*parseNumber(int32_t number);
+		static	char	*parseNumber(uint32_t number);
+		static	char	*parseNumber(int32_t number,
 						unsigned short zeropadding);
-		static	char	*parseNumber(unsigned long number,
+		static	char	*parseNumber(uint32_t number,
 						unsigned short zeropadding);
-		static	char	*parseNumber(long long number);
-		static	char	*parseNumber(unsigned long long number);
-		static	char	*parseNumber(long long number,
+		static	char	*parseNumber(int64_t number);
+		static	char	*parseNumber(uint64_t number);
+		static	char	*parseNumber(int64_t number,
 						unsigned short zeropadding);
-		static	char	*parseNumber(unsigned long long number,
+		static	char	*parseNumber(uint64_t number,
 						unsigned short zeropadding);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted

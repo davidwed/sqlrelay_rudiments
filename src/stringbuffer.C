@@ -100,45 +100,52 @@ stringbuffer *stringbuffer::append(char character) {
 	return this;
 }
 
-stringbuffer *stringbuffer::append(short number) {
+stringbuffer *stringbuffer::append(int16_t number) {
 	return append(number,0);
 }
 
-stringbuffer *stringbuffer::append(long number) {
+stringbuffer *stringbuffer::append(int32_t number) {
 	return append(number,0);
 }
 
-stringbuffer *stringbuffer::append(long long number) {
+stringbuffer *stringbuffer::append(int64_t number) {
 	return append(number,0);
 }
 
-stringbuffer *stringbuffer::append(unsigned short number) {
+stringbuffer *stringbuffer::append(uint16_t number) {
 	return append(number,0);
 }
 
-stringbuffer *stringbuffer::append(unsigned long number) {
+stringbuffer *stringbuffer::append(uint32_t number) {
 	return append(number,0);
 }
 
-stringbuffer *stringbuffer::append(unsigned long long number) {
+stringbuffer *stringbuffer::append(uint64_t number) {
 	return append(number,0);
 }
 
-stringbuffer *stringbuffer::append(short number, unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(int16_t number, unsigned short zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(long number, unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(int32_t number, unsigned short zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(long long number,
+stringbuffer *stringbuffer::append(int64_t number, unsigned short zeropadding) {
+	char	*numstr=charstring::parseNumber(number,zeropadding);
+	variablebuffer::append(numstr,charstring::length(numstr));
+	delete[] numstr;
+	return this;
+}
+
+stringbuffer *stringbuffer::append(uint16_t number,
 					unsigned short zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
@@ -146,7 +153,7 @@ stringbuffer *stringbuffer::append(long long number,
 	return this;
 }
 
-stringbuffer *stringbuffer::append(unsigned short number,
+stringbuffer *stringbuffer::append(uint32_t number,
 					unsigned short zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
@@ -154,15 +161,7 @@ stringbuffer *stringbuffer::append(unsigned short number,
 	return this;
 }
 
-stringbuffer *stringbuffer::append(unsigned long number,
-					unsigned short zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
-	return this;
-}
-
-stringbuffer *stringbuffer::append(unsigned long long number,
+stringbuffer *stringbuffer::append(uint64_t number,
 					unsigned short zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
@@ -233,21 +232,21 @@ stringbuffer *stringbuffer::write(char character) {
 	return this;
 }
 
-stringbuffer *stringbuffer::write(short number) {
+stringbuffer *stringbuffer::write(int16_t number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::write(long number) {
+stringbuffer *stringbuffer::write(int32_t number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::write(long long number) {
+stringbuffer *stringbuffer::write(int64_t number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
@@ -259,21 +258,21 @@ stringbuffer *stringbuffer::write(unsigned char character) {
 	return this;
 }
 
-stringbuffer *stringbuffer::write(unsigned short number) {
+stringbuffer *stringbuffer::write(uint16_t number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::write(unsigned long number) {
+stringbuffer *stringbuffer::write(uint32_t number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::write(unsigned long long number) {
+stringbuffer *stringbuffer::write(uint64_t number) {
 	char	*numstr=charstring::parseNumber(number);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;

@@ -44,13 +44,13 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*write(const char *string);
 		stringbuffer	*write(const char *string, size_t size);
 		stringbuffer	*write(char character);
-		stringbuffer	*write(short number);
-		stringbuffer	*write(long number);
-		stringbuffer	*write(long long number);
+		stringbuffer	*write(int16_t number);
+		stringbuffer	*write(int32_t number);
+		stringbuffer	*write(int64_t number);
 		stringbuffer	*write(unsigned char number);
-		stringbuffer	*write(unsigned short number);
-		stringbuffer	*write(unsigned long number);
-		stringbuffer	*write(unsigned long long number);
+		stringbuffer	*write(uint16_t number);
+		stringbuffer	*write(uint32_t number);
+		stringbuffer	*write(uint64_t number);
 		stringbuffer	*write(float number);
 		stringbuffer	*write(float number,
 						unsigned short scale);
@@ -72,24 +72,24 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*append(const char *string);
 		stringbuffer	*append(const char *string, size_t size);
 		stringbuffer	*append(char character);
-		stringbuffer	*append(short character);
-		stringbuffer	*append(long number);
-		stringbuffer	*append(long long number);
+		stringbuffer	*append(int16_t character);
+		stringbuffer	*append(int32_t number);
+		stringbuffer	*append(int64_t number);
 		stringbuffer	*append(unsigned char number);
-		stringbuffer	*append(unsigned short number);
-		stringbuffer	*append(unsigned long number);
-		stringbuffer	*append(unsigned long long number);
-		stringbuffer	*append(short number,
+		stringbuffer	*append(uint16_t number);
+		stringbuffer	*append(uint32_t number);
+		stringbuffer	*append(uint64_t number);
+		stringbuffer	*append(int16_t number,
 					unsigned short zeropadding);
-		stringbuffer	*append(long number,
+		stringbuffer	*append(int32_t number,
 					unsigned short zeropadding);
-		stringbuffer	*append(long long number,
+		stringbuffer	*append(int64_t number,
 					unsigned short zeropadding);
-		stringbuffer	*append(unsigned short number,
+		stringbuffer	*append(uint16_t number,
 					unsigned short zeropadding);
-		stringbuffer	*append(unsigned long number,
+		stringbuffer	*append(uint32_t number,
 					unsigned short zeropadding);
-		stringbuffer	*append(unsigned long long number,
+		stringbuffer	*append(uint64_t number,
 					unsigned short zeropadding);
 		stringbuffer	*append(float number);
 		stringbuffer	*append(float number,

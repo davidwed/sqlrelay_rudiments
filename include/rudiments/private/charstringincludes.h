@@ -5,3 +5,4 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 #include <sys/types.h>
+#include <stdint.h>

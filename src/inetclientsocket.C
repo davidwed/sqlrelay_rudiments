@@ -130,7 +130,7 @@ int inetclientsocket::connect() {
 		hints.ai_socktype=SOCK_STREAM;
 
 		// get a string representing the port number
-		char	*portstr=charstring::parseNumber((long)port);
+		char	*portstr=charstring::parseNumber(port);
 
 		// get the address info for the given address/port
 		addrinfo	*ai;

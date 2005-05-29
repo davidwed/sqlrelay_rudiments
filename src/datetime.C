@@ -205,19 +205,19 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	return normalizeBrokenDownTime(true);
 }
 
-long datetime::getHour() const {
+int32_t datetime::getHour() const {
 	return hour;
 }
 
-long datetime::getMinutes() const {
+int32_t datetime::getMinutes() const {
 	return min;
 }
 
-long datetime::getSeconds() const {
+int32_t datetime::getSeconds() const {
 	return sec;
 }
 
-long datetime::getMonth() const {
+int32_t datetime::getMonth() const {
 	return mon+1;
 }
 
@@ -229,19 +229,19 @@ const char *datetime::getMonthAbbreviation() const {
 	return monthabbr[mon];
 }
 
-long datetime::getDayOfMonth() const {
+int32_t datetime::getDayOfMonth() const {
 	return mday;
 }
 
-long datetime::getDayOfWeek() const {
+int32_t datetime::getDayOfWeek() const {
 	return wday+1;
 }
 
-long datetime::getDayOfYear() const {
+int32_t datetime::getDayOfYear() const {
 	return yday+1;
 }
 
-long datetime::getYear() const {
+int32_t datetime::getYear() const {
 	return year+1900;
 }
 
@@ -253,7 +253,7 @@ const char *datetime::getTimeZoneString() const {
 	return zone;
 }
 
-long datetime::getTimeZoneOffset() const {
+int32_t datetime::getTimeZoneOffset() const {
 	return gmtoff;
 }
 
@@ -293,32 +293,32 @@ struct tm *datetime::getTm() {
 	return structtm;
 }
 
-bool datetime::addSeconds(long seconds) {
+bool datetime::addSeconds(int32_t seconds) {
 	sec=sec+seconds;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addMinutes(long minutes) {
+bool datetime::addMinutes(int32_t minutes) {
 	min=min+minutes;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addHours(long hours) {
+bool datetime::addHours(int32_t hours) {
 	hour=hour+hours;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addDays(long days) {
+bool datetime::addDays(int32_t days) {
 	hour=yday+days;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addMonths(long months) {
+bool datetime::addMonths(int32_t months) {
 	hour=mon+months;
 	return normalizeBrokenDownTime(true);
 }
 
-bool datetime::addYears(long years) {
+bool datetime::addYears(int32_t years) {
 	hour=year+years;
 	return normalizeBrokenDownTime(true);
 }
@@ -331,11 +331,10 @@ void datetime::setTimeMutex(mutex *mtx) {
 
 const char *datetime::getString() {
 	delete[] timestring;
-	timestring=new char[2+1+2+1+charstring::integerLength(
-					static_cast<long>(getYear()))+1+
+	timestring=new char[2+1+2+1+charstring::integerLength(getYear())+1+
 				2+1+2+1+2+1+
 				charstring::length(getTimeZoneString())];
-	sprintf(timestring,"%02ld/%02ld/%ld %02ld:%02ld:%02ld %s",
+	sprintf(timestring,"%02d/%02d/%d %02d:%02d:%02d %s",
 			getMonth(),getDayOfMonth(),getYear(),
 			getHour(),getMinutes(),getSeconds(),
 			getTimeZoneString());
@@ -742,7 +741,7 @@ static const char * const timezones[]={
 	""
 };
 
-static const long	timezoneoffsets[]={
+static const int32_t	timezoneoffsets[]={
 
 	34200,	// Australian Central Standard Time	UTC + 9:30 hours
 	37800,	// Australian Central Daylight Time	UTC + 10:30 hours
@@ -841,7 +840,7 @@ const char * const *datetime::getTimeZoneAbbreviations() {
 	return timezones;
 }
 
-const long *datetime::getTimeZoneOffsets() {
+const int32_t *datetime::getTimeZoneOffsets() {
 	return timezoneoffsets;
 }
 

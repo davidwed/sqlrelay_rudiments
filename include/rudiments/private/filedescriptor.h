@@ -6,14 +6,12 @@
 		void	filedescriptorInit();
 		void	filedescriptorClone(const filedescriptor &f);
 
-		virtual	unsigned short	hostToNet(unsigned short value) const;
-		virtual	unsigned long	hostToNet(unsigned long value) const;
-		virtual	unsigned long long
-				hostToNet(unsigned long long value) const;
-		virtual	unsigned short	netToHost(unsigned short value) const;
-		virtual	unsigned long	netToHost(unsigned long value) const;
-		virtual	unsigned long long
-				netToHost(unsigned long long value) const;
+		virtual	uint16_t	hostToNet(uint16_t value) const;
+		virtual	uint32_t	hostToNet(uint32_t value) const;
+		virtual	uint64_t	hostToNet(uint64_t value) const;
+		virtual	uint16_t	netToHost(uint16_t value) const;
+		virtual	uint32_t	netToHost(uint32_t value) const;
+		virtual	uint64_t	netToHost(uint64_t value) const;
 
 		virtual	ssize_t	bufferedRead(void *buf, ssize_t count,
 						long sec, long usec) const;
