@@ -50,8 +50,13 @@ void client::clientClone(const client &c) {
 	connecterror=charstring::duplicate(c.connecterror);
 }
 
-char *client::getVerboseConnectError() {
+const char *client::getVerboseConnectError() {
 	return connecterror;
+}
+
+void client::setVerboseConnectError(const char *error) {
+	delete[] connecterror;
+	connecterror=charstring::duplicate(error);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

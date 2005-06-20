@@ -380,18 +380,16 @@ bool xmldomnode::appendAttribute(const char *name, const char *value) {
 	return insertAttribute(name,value,getAttributeCount());
 }
 
-namevaluepairs *xmldomnode::getAttributes() const {
+constnamevaluepairs *xmldomnode::getAttributes() const {
 
 	if (isnullnode) {
 		return NULL;
 	}
 
-	namevaluepairs	*nvp=new namevaluepairs();
+	constnamevaluepairs	*nvp=new constnamevaluepairs();
 	for (int i=0; i<attributecount; i++) {
-		// FIXME: this isn't really safe, if we return a namevaluepairs
-		// object, then users can delete[] the name, value...
-		nvp->setData(const_cast<char *>(getAttribute(i)->getName()),
-			const_cast<char *>(getAttribute(i)->getValue()));
+		nvp->setData(getAttribute(i)->getName(),
+				getAttribute(i)->getValue());
 	}
 	return nvp;
 }
@@ -598,10 +596,10 @@ xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 			node=node->getChild(name.getString());
 
 			// now skip until we get the specified index
-			unsigned long	index=
-				charstring::toUnsignedLong(
+			uint64_t	index=
+				charstring::toUnsignedInteger(
 						indexstring.getString());
-			for (unsigned long i=0; i<index; i++) {
+			for (uint64_t i=0; i<index; i++) {
 				node=node->getNextTagSibling(name.getString());
 			}
 

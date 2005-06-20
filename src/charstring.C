@@ -675,107 +675,44 @@ void charstring::bothTrim(char *string) {
 	bothTrim(string,' ');
 }
 
-long charstring::toLong(const char *string) {
-	return (string)?strtol(string,NULL,10):0;
+int64_t charstring::toInteger(const char *string) {
+	return toInteger(string,NULL,10);
 }
 
-long charstring::toLong(const char *string, char **endptr) {
-	return (string)?strtol(string,endptr,10):0;
+int64_t charstring::toInteger(const char *string, char **endptr) {
+	return toInteger(string,endptr,10);
 }
 
-long charstring::toLong(const char *string, int base) {
-	return (string)?strtol(string,NULL,base):0;
+int64_t charstring::toInteger(const char *string, int base) {
+	return toInteger(string,NULL,base);
 }
 
-long charstring::toLong(const char *string, char **endptr, int base) {
-	return (string)?strtol(string,endptr,base):0;
-}
-
-unsigned long charstring::toUnsignedLong(const char *string) {
-	return (string)?strtoul(string,NULL,10):0;
-}
-
-unsigned long charstring::toUnsignedLong(const char *string, char **endptr) {
-	return (string)?strtoul(string,endptr,10):0;
-}
-
-unsigned long charstring::toUnsignedLong(const char *string, int base) {
-	return (string)?strtoul(string,NULL,base):0;
-}
-
-unsigned long charstring::toUnsignedLong(const char *string,
-						char **endptr, int base) {
-	return (string)?strtoul(string,endptr,base):0;
-}
-
-long long charstring::toLongLong(const char *string) {
-	return (string)?strtoll(string,NULL,10):0;
-}
-
-long long charstring::toLongLong(const char *string, char **endptr) {
-	return (string)?strtoll(string,endptr,10):0;
-}
-
-long long charstring::toLongLong(const char *string, int base) {
-	return (string)?strtoll(string,NULL,base):0;
-}
-
-long long charstring::toLongLong(const char *string, char **endptr, int base) {
+int64_t charstring::toInteger(const char *string, char **endptr, int base) {
 	return (string)?strtoll(string,endptr,base):0;
 }
 
-unsigned long long charstring::toUnsignedLongLong(const char *string) {
-	return (string)?strtoull(string,NULL,10):0;
+uint64_t charstring::toUnsignedInteger(const char *string) {
+	return toUnsignedInteger(string,NULL,10);
 }
 
-unsigned long long charstring::toUnsignedLongLong(const char *string,
-							char **endptr) {
-	return (string)?strtoull(string,endptr,10):0;
+uint64_t charstring::toUnsignedInteger(const char *string, char **endptr) {
+	return toUnsignedInteger(string,endptr,10);
 }
 
-unsigned long long charstring::toUnsignedLongLong(const char *string,
-								int base) {
-	return (string)?strtoull(string,NULL,base):0;
+uint64_t charstring::toUnsignedInteger(const char *string, int base) {
+	return toUnsignedInteger(string,NULL,base);
 }
 
-unsigned long long charstring::toUnsignedLongLong(const char *string,
+uint64_t charstring::toUnsignedInteger(const char *string,
 						char **endptr, int base) {
 	return (string)?strtoull(string,endptr,base):0;
 }
 
-float charstring::toFloat(const char *string) {
-	#ifdef HAVE_STRTOF
-	return (string)?strtof(string,NULL):0.0;
-	#else
-	return (string)?static_cast<float>(strtod(string,NULL)):0.0;
-	#endif
+long double charstring::toFloat(const char *string) {
+	return toFloat(string,NULL);
 }
 
-float charstring::toFloat(const char *string, char **endptr) {
-	#ifdef HAVE_STRTOF
-	return (string)?strtof(string,endptr):0.0;
-	#else
-	return (string)?static_cast<float>(strtod(string,endptr)):0.0;
-	#endif
-}
-
-double charstring::toDouble(const char *string) {
-	return (string)?strtod(string,NULL):0.0;
-}
-
-double charstring::toDouble(const char *string, char **endptr) {
-	return (string)?strtod(string,endptr):0.0;
-}
-
-long double charstring::toLongDouble(const char *string) {
-	#ifdef HAVE_STRTOLD
-	return (string)?strtold(string,NULL):0.0;
-	#else
-	return (string)?static_cast<long double>(strtod(string,NULL)):0.0;
-	#endif
-}
-
-long double charstring::toLongDouble(const char *string, char **endptr) {
+long double charstring::toFloat(const char *string, char **endptr) {
 	#ifdef HAVE_STRTOLD
 	return (string)?strtold(string,endptr):0.0;
 	#else

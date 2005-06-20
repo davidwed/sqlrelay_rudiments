@@ -88,7 +88,7 @@ class chat {
 			// "abort" is allocated and set to the abort string
 			// from the script that caught the condition.
 		int	runScript(const char *script, char **abort,
-						namevaluepairs *variables);
+						constnamevaluepairs *variables);
 			// Runs "script" as runScript() above does, but also
 			// looks through "script" for variables of format:
 			//	$(variable)

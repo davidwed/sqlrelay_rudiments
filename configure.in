@@ -393,7 +393,8 @@ AC_TRY_COMPILE([#include <netinet/in.h>],
 [],AC_DEFINE(HAVE_NETINET_IN_H, 1, Some systems have netinet/in.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for netinet/tcp.h)
-AC_TRY_COMPILE([#include <netinet/tcp.h>],
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <netinet/tcp.h>],
 [],AC_DEFINE(HAVE_NETINET_TCP_H, 1, Some systems have netinet/tcp.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sys/socket.h)

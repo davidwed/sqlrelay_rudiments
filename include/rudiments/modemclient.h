@@ -20,7 +20,7 @@ class modemclient : public client, private modemutil {
 		modemclient	&operator=(const modemclient &m);
 		virtual		~modemclient();
 
-		void	initialize(namevaluepairs *cd);
+		void	initialize(constnamevaluepairs *cd);
 			// Initializes the class to use "device",
 			// "baud, "connectscript", "phonenumber",
 			// "disconnectscript", "retrywait" and

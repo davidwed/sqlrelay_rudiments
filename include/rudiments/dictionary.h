@@ -126,6 +126,38 @@ class stringdictionary : public dictionary< char *, datatype,
 		virtual	~stringdictionary();
 };
 
+// A set of classes for storing dictionaries who's keys are const strings are
+// provided here for convenience.
+template <class datatype>
+class conststringdictionarynode :
+		public dictionarynode< const char *,datatype > {
+	public:
+		virtual	~conststringdictionarynode();
+};
+
+template <class datatype>
+class conststringdictionarylistnode :
+		public dictionarylistnode< const char *, datatype > {
+	public:
+		virtual	~conststringdictionarylistnode();
+};
+
+template <class datatype>
+class conststringdictionarylist :
+		public dictionarylist< const char *, datatype > {
+	public:
+		virtual	~conststringdictionarylist();
+};
+
+template <class datatype>
+class conststringdictionary : public dictionary< const char *, datatype,
+				conststringdictionarynode<datatype>,
+				conststringdictionarylistnode<datatype>,
+				conststringdictionarylist<datatype> > {
+	public:
+		virtual	~conststringdictionary();
+};
+
 
 
 // A set of classes for storing dictionaries who's keys are long integers are
@@ -167,6 +199,15 @@ typedef stringdictionarynode< char * >		namevaluepairsnode;
 typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
 typedef stringdictionarylist< char * >		namevaluepairslist;
 typedef stringdictionary< char * >		namevaluepairs;
+
+typedef conststringdictionarynode< const char * >
+				constnamevaluepairsnode;
+typedef conststringdictionarylistnode< const char * >
+				constnamevaluepairslistnode;
+typedef conststringdictionarylist< const char * >
+				constnamevaluepairslist;
+typedef conststringdictionary< const char * >
+				constnamevaluepairs;
 
 #ifdef RUDIMENTS_NAMESPACE
 }

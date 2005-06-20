@@ -22,16 +22,16 @@ int main(int argc, const char **argv) {
 		exit(0);
 	}
 
-	unsigned long	buffersize=charstring::toUnsignedLong(argv[1]);
-	unsigned long	bytesperiteration=charstring::toUnsignedLong(argv[2]);
-	unsigned long	iterations=charstring::toUnsignedLong(argv[3]);
+	uint32_t	buffersize=charstring::toUnsignedInt32(argv[1]);
+	uint32_t	bytesperiteration=charstring::toUnsignedInt32(argv[2]);
+	uint32_t	iterations=charstring::toUnsignedInt32(argv[3]);
 
 	char	*bytes=new char[bytesperiteration];
 	if (!bytes) {
 		printf("buffer allocation failed\n");
 		exit(0);
 	}
-	for (unsigned long i=0; i<bytesperiteration; i++) {
+	for (uint32_t i=0; i<bytesperiteration; i++) {
 		bytes[i]='C';
 	}
 
@@ -47,7 +47,7 @@ int main(int argc, const char **argv) {
 	clnt.setWriteBufferSize(buffersize);
 
 	time_t	start=time(NULL);
-	for (unsigned long i=0; i<iterations; i++) {
+	for (uint32_t i=0; i<iterations; i++) {
 		clnt.write(bytes,bytesperiteration);
 	}
 	clnt.flushWriteBuffer(-1,-1);

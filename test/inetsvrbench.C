@@ -14,7 +14,7 @@
 using namespace rudiments;
 #endif
 
-unsigned long	buffersize;
+uint32_t	buffersize;
 
 class myserver : public daemonprocess, public inetserversocket {
 	public:
@@ -85,7 +85,7 @@ int main(int argc, const char **argv) {
 		exit(1);
 	}
 
-	buffersize=charstring::toUnsignedLong(argv[1]);
+	buffersize=charstring::toUnsignedInt32(argv[1]);
 
 	mysvr=new myserver();
 

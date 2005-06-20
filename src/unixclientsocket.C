@@ -51,25 +51,26 @@ void unixclientsocket::initialize(const char *filename,
 	this->retrycount=retrycount;
 }
 
-void unixclientsocket::initialize(namevaluepairs *cd) {
+void unixclientsocket::initialize(constnamevaluepairs *cd) {
 
 	if (cd) {
-		char	*filename;
+		const char	*filename;
 		cd->getData("filename",&filename);
-		char	*timeoutsec;
+		const char	*timeoutsec;
 		cd->getData("timeoutsec",&timeoutsec);
-		char	*timeoutusec;
+		const char	*timeoutusec;
 		cd->getData("timeoutusec",&timeoutusec);
-		char	*retrywait;
+		const char	*retrywait;
 		cd->getData("retrywait",&retrywait);
-		char	*retrycount;
+		const char	*retrycount;
 		cd->getData("retrycount",&retrycount);
 
 		initialize(filename?filename:"",
-			charstring::toLong(timeoutsec?timeoutsec:"0"),
-			charstring::toLong(timeoutusec?timeoutusec:"0"),
-			charstring::toUnsignedLong(retrywait?retrywait:"0"),
-			charstring::toUnsignedLong(retrycount?retrycount:"0"));
+			charstring::toInteger(timeoutsec?timeoutsec:"0"),
+			charstring::toInteger(timeoutusec?timeoutusec:"0"),
+			charstring::toUnsignedInteger(retrywait?retrywait:"0"),
+			charstring::toUnsignedInteger(retrycount?
+							retrycount:"0"));
 	}
 }
 

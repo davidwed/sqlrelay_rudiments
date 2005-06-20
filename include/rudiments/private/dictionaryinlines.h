@@ -127,6 +127,24 @@ stringdictionary<datatype>::~stringdictionary() {}
 
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
+conststringdictionarynode<datatype>::~conststringdictionarynode() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+conststringdictionarylistnode<datatype>::~conststringdictionarylistnode() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+conststringdictionarylist<datatype>::~conststringdictionarylist() {}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+conststringdictionary<datatype>::~conststringdictionary() {}
+
+
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
 numericdictionarynode<datatype>::~numericdictionarynode() {}
 
 template <class datatype>

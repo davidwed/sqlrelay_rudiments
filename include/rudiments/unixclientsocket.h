@@ -44,7 +44,7 @@ class unixclientsocket : public clientsocket, private unixsocketutil {
 
 		// These methods are split up in case you need to use them
 		// seperately.
-		void	initialize(namevaluepairs *cd);
+		void	initialize(constnamevaluepairs *cd);
 			// Queries namevaluepairs "cd" for "filename",
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount".  Initializes the class to use the

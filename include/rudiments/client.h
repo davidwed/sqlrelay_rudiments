@@ -21,7 +21,7 @@ class client : public filedescriptor {
 		client	&operator=(const client &c);
 		virtual ~client();
 
-		virtual void	initialize(namevaluepairs *cd)=0;
+		virtual void	initialize(constnamevaluepairs *cd)=0;
 		virtual int	connect()=0;
 				// This method return an int instead of a bool
 				// because we want child classes that have non
@@ -29,7 +29,9 @@ class client : public filedescriptor {
 				// modem) to be able to implement return codes
 				// other than success or failure (such as
 				// abort).
-		virtual	char	*getVerboseConnectError();
+		virtual	const char	*getVerboseConnectError();
+		virtual	void		setVerboseConnectError(
+						const char *error);
 
 	#include <rudiments/private/client.h>
 };

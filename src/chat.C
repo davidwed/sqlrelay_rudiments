@@ -26,7 +26,7 @@ int chat::runScript(const char *script, char **abort) {
 }
 
 int chat::runScript(const char *script, char **abort,
-				namevaluepairs *variables) {
+				constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
 	printf("runScript(\"%s\")\n",script);
@@ -58,7 +58,7 @@ int chat::runScript(const char *script, char **abort,
 
 		int	result=RESULT_SUCCESS;
 		if (!charstring::compare(node->getName(),"timeout")) {
-			timeout=charstring::toLong(
+			timeout=charstring::toInteger(
 				node->getAttributeValue("seconds"));
 		} else if (!charstring::compare(node->getName(),"abort")) {
 			appendAbortString(node->getAttributeValue("string"));
@@ -70,6 +70,8 @@ int chat::runScript(const char *script, char **abort,
 								variables);
 		} else if (!charstring::compare(node->getName(),"expect")) {
 			result=expect(node->getAttributeValue("string"),abort);
+		} else if (!charstring::compare(node->getName(),"flush")) {
+			flush();
 		}
 
 		if (result!=RESULT_SUCCESS) {
@@ -129,6 +131,38 @@ void chat::clearAbortStrings() {
 		delete[] abortstring;
 	}
 	aborts.clear();
+}
+
+void chat::flush() {
+	#ifdef DEBUG_CHAT
+	printf("flushing...\n");
+	#endif
+	bool	wasusingnonblocking=readfd->isUsingNonBlockingMode();
+	if (wasusingnonblocking) {
+		readfd->useNonBlockingMode();
+	}
+	// some devices don't support non-blocking mode,
+	// bail if we have encountered one of them
+	if (!readfd->isUsingNonBlockingMode()) {
+		#ifdef DEBUG_CHAT
+		printf("device doesn't support non-blocking mode, bailing\n");
+		#endif
+		return;
+	}
+	char	buffer[80];
+	for (;;) {
+		ssize_t	bytesread=readfd->read(buffer,sizeof(buffer));
+		#ifdef DEBUG_CHAT
+		charstring::safePrint(buffer,bytesread);
+		printf("\n");
+		#endif
+		if (bytesread!=sizeof(buffer)) {
+			break;
+		}
+	}
+	if (!wasusingnonblocking) {
+		readfd->useBlockingMode();
+	}
 }
 
 int chat::expect(const char *string, char **abort) {
@@ -220,7 +254,7 @@ int chat::expect(const char *string, char **abort) {
 	}
 }
 
-int chat::send(const char *string, namevaluepairs *variables) {
+int chat::send(const char *string, constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
 	printf("sending:\n");
@@ -241,6 +275,7 @@ int chat::send(const char *string, namevaluepairs *variables) {
 			char	ch=*ptr;
 			if (ch=='\\') {
 				ptr++;
+				ch=*ptr;
 				if (!ch) {
 					break;
 				} else if (ch=='b') {
@@ -341,20 +376,20 @@ int chat::send(const char *string, namevaluepairs *variables) {
 }
 
 
-int chat::substituteVariables(const char **ch, namevaluepairs *variables) {
+int chat::substituteVariables(const char **ch, constnamevaluepairs *variables) {
 			
 	// look for $(variable), make sure we don't just have $(\0
 	const char	*str=*ch;
 	if (charstring::compare(str,"$(") && *(str+2)) {
 
-		for (namevaluepairslistnode *nln=
-			(namevaluepairslistnode *)
-				variables->getList()->getNodeByIndex(0); nln;
-				nln=(namevaluepairslistnode *)nln->getNext()) {
+		for (constnamevaluepairslistnode *nln=
+			(constnamevaluepairslistnode *)
+			variables->getList()->getNodeByIndex(0); nln;
+			nln=(constnamevaluepairslistnode *)nln->getNext()) {
 
-			char	*variable=nln->getData()->getKey();
+			const char	*variable=nln->getData()->getKey();
 			ssize_t	varlen=charstring::length(variable);
-			char	*value=nln->getData()->getData();
+			const char	*value=nln->getData()->getData();
 			if (!charstring::compare(variable,str+2,varlen) &&
 							*(str+2+varlen)==')') {
 				ssize_t	result=writefd->write(value);

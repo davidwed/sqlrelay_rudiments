@@ -28,5 +28,7 @@
 
 		int	semGet(key_t key, int nsems, int semflg);
 		int	semControl(int semnum, int cmd, semun semctlun);
+		#ifdef HAVE_SEMTIMEDOP
 		bool	semTimedOp(struct sembuf *sops, timespec *ts);
+		#endif
 		bool	semOp(struct sembuf *sops);

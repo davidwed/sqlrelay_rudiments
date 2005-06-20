@@ -77,7 +77,7 @@ bool datetime::initialize(const char *tmstring) {
 	#ifdef HAVE_GETSYSTEMTIME
 	st.wMonth=charstring::toShort(ptr);
 	#else
-	mon=charstring::toLong(ptr)-1;
+	mon=charstring::toInteger(ptr)-1;
 	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
@@ -86,7 +86,7 @@ bool datetime::initialize(const char *tmstring) {
 	#ifdef HAVE_GETSYSTEMTIME
 	st.wDay=charstring::toShort(ptr);
 	#else
-	mday=charstring::toLong(ptr);
+	mday=charstring::toInteger(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
@@ -95,7 +95,7 @@ bool datetime::initialize(const char *tmstring) {
 	#ifdef HAVE_GETSYSTEMTIME
 	st.wYear=charstring::toShort(ptr);
 	#else
-	year=charstring::toLong(ptr)-1900;
+	year=charstring::toInteger(ptr)-1900;
 	#endif
 
 	// get the time
@@ -106,7 +106,7 @@ bool datetime::initialize(const char *tmstring) {
 	#ifdef HAVE_GETSYSTEMTIME
 	st.wHour=charstring::toShort(ptr);
 	#else
-	hour=charstring::toLong(ptr);
+	hour=charstring::toInteger(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
@@ -115,7 +115,7 @@ bool datetime::initialize(const char *tmstring) {
 	#ifdef HAVE_GETSYSTEMTIME
 	st.wMinute=charstring::toShort(ptr);
 	#else
-	min=charstring::toLong(ptr);
+	min=charstring::toInteger(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
@@ -124,7 +124,7 @@ bool datetime::initialize(const char *tmstring) {
 	#ifdef HAVE_GETSYSTEMTIME
 	st.wSecond=charstring::toShort(ptr);
 	#else
-	sec=charstring::toLong(ptr);
+	sec=charstring::toInteger(ptr);
 	#endif
 
 	// initialize the daylight savings time flag

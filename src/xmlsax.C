@@ -621,7 +621,7 @@ int xmlsax::getGeneralEntity(char breakchar, char **buffer) {
 	} else {
 		// handle numeric general entities
 		if ((*buffer)[1]=='#') {
-			long	number=charstring::toLong((*buffer)+2);
+			long	number=charstring::toInteger((*buffer)+2);
 			if (number>127) {
 				number=127;
 			}

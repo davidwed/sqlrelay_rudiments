@@ -60,29 +60,30 @@ void inetclientsocket::initialize(const char *host,
 	this->retrycount=retrycount;
 }
 
-void inetclientsocket::initialize(namevaluepairs *cd) {
+void inetclientsocket::initialize(constnamevaluepairs *cd) {
 
 	if (cd) {
 
-		char	*host;
+		const char	*host;
 		cd->getData("host",&host);
-		char	*port;
+		const char	*port;
 		cd->getData("port",&port);
-		char	*timeoutsec;
+		const char	*timeoutsec;
 		cd->getData("timeoutsec",&timeoutsec);
-		char	*timeoutusec;
+		const char	*timeoutusec;
 		cd->getData("timeoutusec",&timeoutusec);
-		char	*retrywait;
+		const char	*retrywait;
 		cd->getData("retrywait",&retrywait);
-		char	*retrycount;
+		const char	*retrycount;
 		cd->getData("retrycount",&retrycount);
 	
 		initialize(host?host:"",
-			charstring::toLong(port?port:"0"),
-			charstring::toLong(timeoutsec?timeoutsec:"-1"),
-			charstring::toLong(timeoutusec?timeoutusec:"-1"),
-			charstring::toUnsignedLong(retrywait?retrywait:"0"),
-			charstring::toUnsignedLong(retrycount?retrycount:"0"));
+			charstring::toInteger(port?port:"0"),
+			charstring::toInteger(timeoutsec?timeoutsec:"-1"),
+			charstring::toInteger(timeoutusec?timeoutusec:"-1"),
+			charstring::toUnsignedInteger(retrywait?retrywait:"0"),
+			charstring::toUnsignedInteger(retrycount?
+							retrycount:"0"));
 	}
 }
 

@@ -379,27 +379,51 @@ bool file::checkLockRemainderFromEnd(short type, off_t start,
 }
 
 bool file::sequentialAccess(off_t start, size_t len) const {
+	#ifdef HAVE_POSIX_FADVISE
 	return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
+	#else
+	return true;
+	#endif
 }
 
 bool file::randomAccess(off_t start, size_t len) const {
+	#ifdef HAVE_POSIX_FADVISE
 	return posixFadvise(start,len,POSIX_FADV_RANDOM);
+	#else
+	return true;
+	#endif
 }
 
 bool file::onlyOnce(off_t start, size_t len) const {
+	#ifdef HAVE_POSIX_FADVISE
 	return posixFadvise(start,len,POSIX_FADV_NOREUSE);
+	#else
+	return true;
+	#endif
 }
 
 bool file::willNeed(off_t start, size_t len) const {
+	#ifdef HAVE_POSIX_FADVISE
 	return posixFadvise(start,len,POSIX_FADV_WILLNEED);
+	#else
+	return true;
+	#endif
 }
 
 bool file::wontNeed(off_t start, size_t len) const {
+	#ifdef HAVE_POSIX_FADVISE
 	return posixFadvise(start,len,POSIX_FADV_DONTNEED);
+	#else
+	return true;
+	#endif
 }
 
 bool file::normalAccess(off_t start, size_t len) const {
+	#ifdef HAVE_POSIX_FADVISE
 	return posixFadvise(start,len,POSIX_FADV_NORMAL);
+	#else
+	return true;
+	#endif
 }
 
 #ifdef HAVE_POSIX_FALLOCATE

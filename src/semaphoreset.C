@@ -329,6 +329,7 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 	return !result;
 }
 
+#ifdef HAVE_SEMTIMEDOP
 bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
 	int	result;
 	do {
@@ -336,6 +337,7 @@ bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 }

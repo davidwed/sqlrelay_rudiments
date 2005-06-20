@@ -1,4 +1,7 @@
 0.29 - added check for whether SSL_read/write takes void * or char * parameter
+	added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix
+
+0.28.2 - filedescriptor desctructor removes the read buffer now
 
 0.28.1 - fixed a bug in bufferedWrite()
 

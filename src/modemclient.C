@@ -52,24 +52,19 @@ modemclient::~modemclient() {
 	close();
 }
 
-void modemclient::initialize(namevaluepairs *cd) {
+void modemclient::initialize(constnamevaluepairs *cd) {
 	if (cd) {
-		cd->getData("device",
-			const_cast<char **>(&devicename));
-		cd->getData("baud",
-			const_cast<char **>(&baud));
-		cd->getData("connectscript",
-			const_cast<char **>(&connectscript));
-		cd->getData("phonenumber",
-			const_cast<char **>(&phonenumber));
-		cd->getData("disconnectscript",
-			const_cast<char **>(&disconnectscript));
-		char	*rwstr;
+		cd->getData("device",&devicename);
+		cd->getData("baud",&baud);
+		cd->getData("connectscript",&connectscript);
+		cd->getData("phonenumber",&phonenumber);
+		cd->getData("disconnectscript",&disconnectscript);
+		const char	*rwstr;
 		cd->getData("retrywait",&rwstr);
-		retrywait=charstring::toLong(rwstr);
-		char	*rcstr;
+		retrywait=charstring::toInteger(rwstr);
+		const char	*rcstr;
 		cd->getData("retrycount",&rcstr);
-		retrycount=charstring::toLong(rcstr);
+		retrycount=charstring::toInteger(rcstr);
 	}
 }
 
@@ -89,7 +84,7 @@ void modemclient::initialize(const char *devicename, const char *baud,
 
 int modemclient::connect() {
 
-	namevaluepairs	phnvp;
+	constnamevaluepairs	phnvp;
 	phnvp.setData("phonenumber",const_cast<char *>(phonenumber));
 
 	unsigned long	whichtry=0;

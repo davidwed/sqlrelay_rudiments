@@ -47,11 +47,17 @@ void filedestination::write(const char *string) {
 	logfile.write(string);
 }
 
+stdoutdestination::~stdoutdestination() {
+}
+
 void stdoutdestination::write(const char *string) {
 	int	result;
 	do {
 		result=::write(1,string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
+}
+
+stderrdestination::~stderrdestination() {
 }
 
 void stderrdestination::write(const char *string) {
@@ -147,7 +153,7 @@ void logger::write(const char *header, int32_t tabs, int32_t number) {
 	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
-	sprintf(logentry,"%s%ld\n\n",logentry,number);
+	sprintf(logentry,"%s%d\n\n",logentry,number);
 	write(logentry);
 }
 

@@ -65,7 +65,7 @@ bool daemonprocess::createPidFile(const char *filename, mode_t permissions)
 long daemonprocess::checkForPidFile(const char *filename) const {
 	char	*pidstring=file::getContents(filename);
 	long	retval=(pidstring && pidstring[0])?
-				charstring::toLong(pidstring):-1;
+				charstring::toInteger(pidstring):-1;
 	delete[] pidstring;
 	return retval;
 }

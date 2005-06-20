@@ -43,8 +43,8 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 
 		// These methods are split up in case you need to use them
 		// seperately.
-		void	initialize(namevaluepairs *cd);
-			// Queries namevaluepairs "cd" for "host", "port",
+		void	initialize(constnamevaluepairs *cd);
+			// Queries constnamevaluepairs "cd" for "host", "port",
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount".  Initializes the class to use the
 			// result when connect() is called.
