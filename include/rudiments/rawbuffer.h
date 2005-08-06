@@ -18,6 +18,10 @@ namespace rudiments {
 class rawbuffer {
 	public:
 
+		static void	*duplicate(const void *src, size_t size);
+				// Allocates a buffer of "size" bytes,
+				// copies "size" bytes of "src" into it
+				// and returns the buffer.
 		static void	*copy(void *dest, const void *src,
 							size_t size);
 				// Copies "size" bytes from "src" into "dest".

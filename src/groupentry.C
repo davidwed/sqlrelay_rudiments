@@ -15,7 +15,7 @@
 namespace rudiments {
 #endif
 
-#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
 mutex	*groupentry::gemutex;
 #endif

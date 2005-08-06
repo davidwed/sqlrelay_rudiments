@@ -21,7 +21,7 @@
 namespace rudiments {
 #endif
 
-#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
 mutex	*rpcentry::remutex;
 #endif

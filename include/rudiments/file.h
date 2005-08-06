@@ -101,7 +101,7 @@ class file : public filedescriptor {
 		bool	truncate() const;
 			// Truncates all data in the file, resulting in
 			// a file of zero length.
-		bool	truncate(off_t length) const;
+		bool	truncate(off64_t length) const;
 			// Truncates all data beyond the first "length"
 			// bytes, resulting in a file of "length" bytes.
 
@@ -110,16 +110,16 @@ class file : public filedescriptor {
 		// the next read or write will occur.  Each returns the position
 		// relative to the beginning of the file on success or -1 on
 		// failure.
-		off_t	getCurrentPosition() const;
+		off64_t	getCurrentPosition() const;
 			// Returns the position at which the next read or
 			// write will occur.
-		off_t	setPositionRelativeToBeginning(off_t offset) const;
+		off64_t	setPositionRelativeToBeginning(off64_t offset) const;
 			// Sets the position to the beginning of the
 			// file + "offset" bytes.
-		off_t	setPositionRelativeToCurrent(off_t offset) const;
+		off64_t	setPositionRelativeToCurrent(off64_t offset) const;
 			// Sets the position to the current
 			// position + "offset" bytes.
-		off_t	setPositionRelativeToEnd(off_t offset) const;
+		off64_t	setPositionRelativeToEnd(off64_t offset) const;
 			// Sets the position to the end of the
 			// file + "offset" bytes.
 
@@ -151,75 +151,82 @@ class file : public filedescriptor {
 
 		// These methods allow you to lock an arbitrary
 		// region of the file.
-		bool	tryLockRegion(short type, off_t start, off_t len) const;
-		bool	lockRegion(short type, off_t start, off_t len) const;
-		bool	checkLockRegion(short type, off_t start, off_t len,
+		bool	tryLockRegion(short type, off64_t start,
+							off64_t len) const;
+		bool	lockRegion(short type, off64_t start,
+							off64_t len) const;
+		bool	checkLockRegion(short type, off64_t start,
+						off64_t len,
 						struct flock *lck) const;
-		bool	unlockRegion(off_t start, off_t len) const;
+		bool	unlockRegion(off64_t start, off64_t len) const;
 
 		// These methods allow you to lock an arbitrary region of the
 		// file relative to the current position.
-		bool	tryLockFromCurrent(short type, off_t len) const;
-		bool	tryLockFromCurrent(short type, off_t start,
-							off_t len) const;
-		bool	lockFromCurrent(short type, off_t len) const;
-		bool	lockFromCurrent(short type, off_t start,
-							off_t len) const;
-		bool	checkLockFromCurrent(short type, off_t len,
+		bool	tryLockFromCurrent(short type, off64_t len) const;
+		bool	tryLockFromCurrent(short type, off64_t start,
+							off64_t len) const;
+		bool	lockFromCurrent(short type, off64_t len) const;
+		bool	lockFromCurrent(short type, off64_t start,
+							off64_t len) const;
+		bool	checkLockFromCurrent(short type, off64_t len,
 						struct flock *lck) const;
-		bool	checkLockFromCurrent(short type, off_t start, off_t len,
+		bool	checkLockFromCurrent(short type, off64_t start,
+						off64_t len,
 						struct flock *lck) const;
-		bool	unlockFromCurrent(off_t len) const;
-		bool	unlockFromCurrent(off_t start, off_t len) const;
+		bool	unlockFromCurrent(off64_t len) const;
+		bool	unlockFromCurrent(off64_t start, off64_t len) const;
 
 		// These methods allow you to lock an arbitrary region of the
 		// file relative to the end of the file.
-		bool	tryLockFromEnd(short type, off_t len) const;
-		bool	tryLockFromEnd(short type, off_t start,
-						off_t len) const;
-		bool	lockFromEnd(short type, off_t len) const;
-		bool	lockFromEnd(short type, off_t start, off_t len) const;
-		bool	checkLockFromEnd(short type, off_t len,
+		bool	tryLockFromEnd(short type, off64_t len) const;
+		bool	tryLockFromEnd(short type, off64_t start,
+						off64_t len) const;
+		bool	lockFromEnd(short type, off64_t len) const;
+		bool	lockFromEnd(short type, off64_t start,
+						off64_t len) const;
+		bool	checkLockFromEnd(short type, off64_t len,
 						struct flock *lck) const;
-		bool	checkLockFromEnd(short type, off_t start, off_t len,
+		bool	checkLockFromEnd(short type, off64_t start,
+						off64_t len,
 						struct flock *lck) const;
-		bool	unlockFromEnd(off_t len) const;
-		bool	unlockFromEnd(off_t start, off_t len) const;
+		bool	unlockFromEnd(off64_t len) const;
+		bool	unlockFromEnd(off64_t start, off64_t len) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// starting at a given offset.
-		bool	tryLockRemainder(short type, off_t start) const;
-		bool	lockRemainder(short type, off_t start) const;
-		bool	checkLockRemainder(short type, off_t start,
+		bool	tryLockRemainder(short type, off64_t start) const;
+		bool	lockRemainder(short type, off64_t start) const;
+		bool	checkLockRemainder(short type, off64_t start,
 						struct flock *lck) const;
-		bool	unlockRemainder(off_t start) const;
+		bool	unlockRemainder(off64_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// relative to the current position.
 		bool	tryLockRemainderFromCurrent(short type) const;
 		bool	tryLockRemainderFromCurrent(short type,
-							off_t start) const;
+							off64_t start) const;
 		bool	lockRemainderFromCurrent(short type) const;
-		bool	lockRemainderFromCurrent(short type, off_t start) const;
+		bool	lockRemainderFromCurrent(short type,
+							off64_t start) const;
 		bool	checkLockRemainderFromCurrent(short type,
 						struct flock *lck) const;
-		bool	checkLockRemainderFromCurrent(short type, off_t start,
+		bool	checkLockRemainderFromCurrent(short type, off64_t start,
 						struct flock *lck) const;
 		bool	unlockRemainderFromCurrent() const;
-		bool	unlockRemainderFromCurrent(off_t start) const;
+		bool	unlockRemainderFromCurrent(off64_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// relative to the end of the file.
 		bool	tryLockRemainderFromEnd(short type) const;
-		bool	tryLockRemainderFromEnd(short type, off_t start) const;
+		bool	tryLockRemainderFromEnd(short type, off64_t start) const;
 		bool	lockRemainderFromEnd(short type) const;
-		bool	lockRemainderFromEnd(short type, off_t start) const;
+		bool	lockRemainderFromEnd(short type, off64_t start) const;
 		bool	checkLockRemainderFromEnd(short type,
 						struct flock *lck) const;
-		bool	checkLockRemainderFromEnd(short type, off_t start,
+		bool	checkLockRemainderFromEnd(short type, off64_t start,
 						struct flock *lck) const;
 		bool	unlockRemainderFromEnd() const;
-		bool	unlockRemainderFromEnd(off_t start) const;
+		bool	unlockRemainderFromEnd(off64_t start) const;
 
 
 		// These methods allow you to advise the kernel that you are
@@ -233,23 +240,23 @@ class file : public filedescriptor {
 		//
 		// On operating systems don't support these methods, they
 		// return true but don't actually do anything.
-		bool	sequentialAccess(off_t start, size_t len) const;
+		bool	sequentialAccess(off64_t start, size_t len) const;
 			// The region will be accessed in sequential order.
-		bool	randomAccess(off_t start, size_t len) const;
+		bool	randomAccess(off64_t start, size_t len) const;
 			// The region will be accessed in random order.
-		bool	onlyOnce(off_t start, size_t len) const;
+		bool	onlyOnce(off64_t start, size_t len) const;
 			// The region will be only be accessed once.
-		bool	willNeed(off_t start, size_t len) const;
+		bool	willNeed(off64_t start, size_t len) const;
 			// The region will be accessed in the near future.
-		bool	wontNeed(off_t start, size_t len) const;
+		bool	wontNeed(off64_t start, size_t len) const;
 			// The region will not be accessed in the near future.
-		bool	normalAccess(off_t start, size_t len) const;
+		bool	normalAccess(off64_t start, size_t len) const;
 			// Removes any advice that has previously been applied
 			// to the region.
 
 
 		#ifdef HAVE_POSIX_FALLOCATE
-		bool	reserve(off_t start, size_t len) const;
+		bool	reserve(off64_t start, size_t len) const;
 			// Reserves space on the storage medium such that a
 			// write to the region starting at "start" and
 			// continuing for "len" bytes will not fail due to
@@ -297,7 +304,7 @@ class file : public filedescriptor {
 				// returns the user id of the file's owner
 		gid_t		getOwnerGroupId() const;
 				// returns the group id of the file's owner
-		off_t		getSize() const;
+		off64_t		getSize() const;
 				// returns the number of bytes in the file
 		blksize_t	getBlockSize() const;
 				// returns the blocksize to use for most
@@ -595,7 +602,7 @@ class file : public filedescriptor {
 		// These methods truncate the file.
 		// They return true on success and false on failure.
 		static	bool	truncate(const char *filename);
-		static	bool	truncate(const char *filename, off_t length);
+		static	bool	truncate(const char *filename, off64_t length);
 
 
 		// These methods read the contents of the file into a buffer.
@@ -654,7 +661,7 @@ class file : public filedescriptor {
 		static bool	getOwnerGroupId(const char *filename,
 						gid_t *gid);
 		static bool	getSize(const char *filename,
-						off_t *size);
+						off64_t *size);
 		static bool	getBlockSize(const char *filename,
 						blksize_t *size);
 		static bool	getBlockCount(const char *filename,

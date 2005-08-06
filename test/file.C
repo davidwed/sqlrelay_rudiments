@@ -56,7 +56,7 @@ int main(int argc, const char **argv) {
 
 
 	// display the size of the file in bytes
-	off_t	size=fl.getSize();
+	off64_t	size=fl.getSize();
 	printf("	size       : %ld\n",size);
 
 

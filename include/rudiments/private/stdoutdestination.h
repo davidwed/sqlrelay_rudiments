@@ -2,6 +2,5 @@
 // See the COPYING file for more information.
 
 	friend class logger;
-		virtual	~stdoutdestination();
 	private:
 		void	write(const char *string);

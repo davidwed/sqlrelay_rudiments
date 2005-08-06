@@ -16,7 +16,7 @@
 namespace rudiments {
 #endif
 
-#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__) && \
+#if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
 mutex	*hostentry::hemutex;
 #endif

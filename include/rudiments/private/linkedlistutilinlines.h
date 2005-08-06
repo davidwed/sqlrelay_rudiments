@@ -33,7 +33,20 @@ void linkedlistutil<char *>::print(char *data) const {
 
 template <>
 RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<const char *>::print(const char *data) const {
+	printf("%s",data);
+}
+
+template <>
+RUDIMENTS_TEMPLATE_INLINE
 int linkedlistutil<char *>::compare(char *data1, char *data2) const {
+	return charstring::compare(data1,data2);
+}
+
+template <>
+RUDIMENTS_TEMPLATE_INLINE
+int linkedlistutil<const char *>::compare(const char *data1,
+						const char *data2) const {
 	return charstring::compare(data1,data2);
 }
 

@@ -640,7 +640,7 @@ bool charstring::contains(const char *haystack, const char *needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
-bool charstring::contains(const char *haystack, const char needle) {
+bool charstring::contains(const char *haystack, char needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
@@ -648,11 +648,11 @@ char *charstring::findFirst(const char *haystack, const char *needle) {
 	return (haystack && needle)?strstr(haystack,needle):NULL;
 }
 
-char *charstring::findFirst(const char *haystack, const char needle) {
+char *charstring::findFirst(const char *haystack, char needle) {
 	return (haystack)?strchr(haystack,needle):NULL;
 }
 
-char *charstring::findLast(const char *haystack, const char needle) {
+char *charstring::findLast(const char *haystack, char needle) {
 	return (haystack)?strrchr(haystack,needle):NULL;
 }
 
@@ -743,30 +743,33 @@ void charstring::safePrint(const char *string) {
 }
 
 void charstring::split(const char *string, const char *delimiter,
+				bool collapse,
 				char ***list, unsigned long *listlength) {
 	split(string,charstring::length(string),
 			delimiter,charstring::length(delimiter),
-			list,listlength);
+			collapse,list,listlength);
 }
 
 void charstring::split(const char *string, ssize_t stringlength,
-				const char *delimiter,
+				const char *delimiter, bool collapse,
 				char ***list, unsigned long *listlength) {
 	split(string,stringlength,
 			delimiter,charstring::length(delimiter),
-			list,listlength);
+			collapse,list,listlength);
 }
 
 void charstring::split(const char *string, 
 				const char *delimiter, ssize_t delimiterlength,
+				bool collapse,
 				char ***list, unsigned long *listlength) {
 	split(string,charstring::length(string),
 			delimiter,delimiterlength,
-			list,listlength);
+			collapse,list,listlength);
 }
 
 void charstring::split(const char *string, ssize_t stringlength,
 				const char *delimiter, ssize_t delimiterlength,
+				bool collapse,
 				char ***list, unsigned long *listlength) {
 
 	// handle degenerate cases
@@ -807,7 +810,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 							delimiterlength)) {
 
 				// handle cases of multiple delimiters in a row
-				if (current!=start) {
+				if (current!=start || !collapse) {
 
 					// if we're on the second pass...
 					if (pass) {

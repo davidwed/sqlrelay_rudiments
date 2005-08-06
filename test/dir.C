@@ -25,7 +25,7 @@ int main(int argc, const char **argv) {
 	d.open("testdir");
 
 	char	*name;
-	for (off_t index=0; (name=d.getChildName(index)); index++) {
+	for (off64_t index=0; (name=d.getChildName(index)); index++) {
 		printf("%d: %s\n",index,name);
 		delete[] name;
 	}

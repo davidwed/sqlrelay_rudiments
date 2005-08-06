@@ -1,3 +1,5 @@
+file descriptor passing doesn't work on openbsd, possibly netbsd
+
 use (u)intXX_t types
 
 get a mingw port working

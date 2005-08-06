@@ -16,6 +16,8 @@
 namespace rudiments {
 #endif
 
+logdestination::~logdestination() {}
+
 filedestination::filedestination() : logdestination() {}
 
 filedestination::filedestination(const filedestination &f) :
@@ -47,17 +49,11 @@ void filedestination::write(const char *string) {
 	logfile.write(string);
 }
 
-stdoutdestination::~stdoutdestination() {
-}
-
 void stdoutdestination::write(const char *string) {
 	int	result;
 	do {
 		result=::write(1,string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-}
-
-stderrdestination::~stderrdestination() {
 }
 
 void stderrdestination::write(const char *string) {
@@ -127,7 +123,7 @@ char *logger::logHeader(const char *name) {
 }
 
 void logger::write(const char *header, int32_t tabs, const char *string) {
-	char	logentry[charstring::length(header)+3+tabs+
+	char	*logentry=new char[charstring::length(header)+3+tabs+
 				charstring::length(string)+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int32_t i=0; i<tabs; i++) {
@@ -135,36 +131,40 @@ void logger::write(const char *header, int32_t tabs, const char *string) {
 	}
 	sprintf(logentry,"%s%s\n\n",logentry,string);
 	write(logentry);
+	delete[] logentry;
 }
 
 void logger::write(const char *header, int32_t tabs, char character) {
-	char	logentry[charstring::length(header)+3+tabs+1+2+1];
+	char	*logentry=new char[charstring::length(header)+3+tabs+1+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%c\n\n",logentry,character);
 	write(logentry);
+	delete[] logentry;
 }
 
 void logger::write(const char *header, int32_t tabs, int32_t number) {
-	char	logentry[charstring::length(header)+3+tabs+20+2+1];
+	char	*logentry=new char[charstring::length(header)+3+tabs+20+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%d\n\n",logentry,number);
 	write(logentry);
+	delete[] logentry;
 }
 
 void logger::write(const char *header, int32_t tabs, double number) {
-	char	logentry[charstring::length(header)+3+tabs+21+2+1];
+	char	*logentry=new char[charstring::length(header)+3+tabs+21+2+1];
 	sprintf(logentry,"%s : ",header);
 	for (int32_t i=0; i<tabs; i++) {
 		sprintf(logentry,"%s%c",logentry,'	');
 	}
 	sprintf(logentry,"%s%f\n\n",logentry,number);
 	write(logentry);
+	delete[] logentry;
 }
 
 void logger::write(const char *logentry) {

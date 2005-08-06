@@ -16,7 +16,7 @@ namespace rudiments {
 #endif
 
 #if defined(RUDIMENTS_HAS_THREADS) && \
-	defined(__GNUC__) && !defined(HAVE_GETSPNAM_R)
+	!defined(HAVE_GETSPNAM_R)
 mutex	*shadowentry::spmutex;
 #endif
 

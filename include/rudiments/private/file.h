@@ -11,13 +11,13 @@
 		bool		getcurrentpropertiesonopen;
 		bool		retryinterruptedlockops;
 
-		off_t	lseek(off_t offset, int whence) const;
+		off64_t	lseek(off64_t offset, int whence) const;
 		bool	lock(int method, short type, short whence,
-						off_t start, off_t len) const;
+					off64_t start, off64_t len) const;
 		bool	checkLock(short type, short whence,
-						off_t start, off_t len,
+						off64_t start, off64_t len,
 						struct flock *retlck) const;
-		bool	unlock(short whence, off_t start, off_t len) const;
+		bool	unlock(short whence, off64_t start, off64_t len) const;
 
 		#ifdef HAVE_XATTRS
 		bool	setAttribute(const char *name,
@@ -30,7 +30,7 @@
 		void	fileClone(const file &f);
 
 
-			bool	posixFadvise(off_t offset, off_t len,
+			bool	posixFadvise(off64_t offset, off64_t len,
 							int advice) const;
 		static	long	pathConf(const char *path, int name);
 			long	fpathConf(int name) const;

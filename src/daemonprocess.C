@@ -24,13 +24,11 @@
 namespace rudiments {
 #endif
 
-#ifdef __GNUC__
 signalhandler	daemonprocess::deadchildhandler;
 signalhandler	daemonprocess::shutdownhandler;
 signalhandler	daemonprocess::crashhandler;
 void		(*daemonprocess::shutdownfunc)(int);
 void		(*daemonprocess::crashfunc)(int);
-#endif
 
 daemonprocess::daemonprocess() {
 
@@ -53,8 +51,7 @@ daemonprocess::daemonprocess() {
 daemonprocess::~daemonprocess() {
 }
 
-bool daemonprocess::createPidFile(const char *filename, mode_t permissions)
-									const {
+bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
 	char	*pid=charstring::parseNumber(getpid());
 	bool	retval=(file::createFile(filename,permissions,pid)==
 					(ssize_t)charstring::length(pid));
@@ -62,7 +59,7 @@ bool daemonprocess::createPidFile(const char *filename, mode_t permissions)
 	return retval;
 }
 
-long daemonprocess::checkForPidFile(const char *filename) const {
+long daemonprocess::checkForPidFile(const char *filename) {
 	char	*pidstring=file::getContents(filename);
 	long	retval=(pidstring && pidstring[0])?
 				charstring::toInteger(pidstring):-1;

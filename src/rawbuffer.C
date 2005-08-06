@@ -16,6 +16,14 @@ extern "C" void swab(const void *from, void *to, ssize_t n);
 namespace rudiments {
 #endif
 
+void *rawbuffer::duplicate(const void *src, size_t size) {
+	if (!src || !size) {
+		return NULL;
+	}
+	unsigned char	*buffer=new unsigned char[size];
+	return copy(static_cast<void *>(buffer),src,size);
+}
+
 void *rawbuffer::copy(void *dest, const void *src, size_t size) {
 	return (dest && src)?memcpy(dest,src,size):NULL;
 }

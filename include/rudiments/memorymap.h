@@ -20,7 +20,7 @@ class memorymap {
 			~memorymap();
 			// destroys the memorymap, detaching if necessary
 
-		bool	attach(int fd, off_t offset, size_t len,
+		bool	attach(int fd, off64_t offset, size_t len,
 						int protection, int flags);
 			// Attaches the memorymap to file descriptor "fd" at
 			// "offset" for "len" bytes.
@@ -64,7 +64,7 @@ class memorymap {
 		bool	setProtection(int protection);
 			// Sets the protection of the entire memory map to
 			// "protection".  See protect() below for more info.
-		bool	setProtection(off_t offset, size_t len, int protection);
+		bool	setProtection(off64_t offset, size_t len, int protection);
 			// Sets the protection of the memory map to "protection"
 			// for "len" bytes, starting at "offset".
 			//
@@ -91,7 +91,7 @@ class memorymap {
 			// Make sure that changes made to the memory map have
 			// been copied to the storage mediam that the mapped
 			// file resides on.  See sync() below for more info.
-		bool	sync(off_t offset, size_t len,
+		bool	sync(off64_t offset, size_t len,
 				bool immediate, bool invalidate);
 			// Make sure that changes made to the memory map for
 			// "len" bytes, starting at "offset" have been copied
@@ -117,15 +117,15 @@ class memorymap {
 		// and continues for "len" bytes.
 		//
 		// These methods return true on success and false on failure.
-		bool	sequentialAccess(off_t offset, size_t len);
+		bool	sequentialAccess(off64_t offset, size_t len);
 			// The region will be accessed in sequential order.
-		bool	randomAccess(off_t offset, size_t len);
+		bool	randomAccess(off64_t offset, size_t len);
 			// The region will be accessed in random order.
-		bool	willNeed(off_t offset, size_t len);
+		bool	willNeed(off64_t offset, size_t len);
 			// The region will be accessed in the near future.
-		bool	wontNeed(off_t offset, size_t len);
+		bool	wontNeed(off64_t offset, size_t len);
 			// The region will not be accessed in the near future.
-		bool	normalAccess(off_t offset, size_t len);
+		bool	normalAccess(off64_t offset, size_t len);
 			// Removes any advice that has previously been applied
 			// to the region.
 
@@ -133,7 +133,7 @@ class memorymap {
 		bool	lock();
 			// Disables paging of the entire memory map.
 			// Returns true on success and false on failure.
-		bool	lock(off_t offset, size_t len);
+		bool	lock(off64_t offset, size_t len);
 			// Disables paging of data in the memory map, starting
 			// at "offset", for "len" bytes.
 			// Returns true on success and false on failure.
@@ -143,7 +143,7 @@ class memorymap {
 		bool	unlock();
 			// Enables paging of the entire memory map.
 			// Returns true on success and false on failure.
-		bool	unlock(off_t offset, size_t len);
+		bool	unlock(off64_t offset, size_t len);
 			// Enables paging of data in the memory map, starting
 			// at "offset", for "len" bytes.
 			// Returns true on success and false on failure.
@@ -154,7 +154,7 @@ class memorymap {
 			// Returns true if all pages of the memory map are
 			// currently cached in system ram.
 			// Returns true on success and false on failure.
-		bool	inMemory(off_t offset, size_t len);
+		bool	inMemory(off64_t offset, size_t len);
 			// Returns true if all pages of the memory map starting
 			// at "offset", for "len" bytes are currently cached in
 			// system ram.

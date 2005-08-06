@@ -541,8 +541,8 @@ stringbuffer *xmldomnode::getPath() const {
 	}
 
 	// create pointers to the names of each parent node
-	const char	*names[ancestors];
-	uint32_t	indices[ancestors];
+	const char	**names=new const char *[ancestors];
+	uint32_t	*indices=new uint32_t[ancestors];
 	node=this;
 	for (int index=ancestors-1; index>=0; index--) {
 
@@ -570,6 +570,9 @@ stringbuffer *xmldomnode::getPath() const {
 		path->append('/')->append(names[index]);
 		path->append('[')->append(indices[index])->append(']');
 	}
+
+	delete[] names;
+	delete[] indices;
 
 	return path;
 }

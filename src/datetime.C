@@ -19,7 +19,7 @@
 namespace rudiments {
 #endif
 
-#if defined(RUDIMENTS_HAS_THREADS) && defined(__GNUC__)
+#if defined(RUDIMENTS_HAS_THREADS)
 mutex	*datetime::timemutex;
 #endif
 

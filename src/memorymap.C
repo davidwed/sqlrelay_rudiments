@@ -31,7 +31,7 @@ memorymap::~memorymap() {
 	detach();
 }
 
-bool memorymap::attach(int fd, off_t offset, size_t len,
+bool memorymap::attach(int fd, off64_t offset, size_t len,
 					int protection, int flags) {
 	length=len;
 	#if defined(HAVE_MMAP)
@@ -81,7 +81,7 @@ bool memorymap::setProtection(int protection) {
 	return setProtection(0,length,protection);
 }
 
-bool memorymap::setProtection(off_t offset, size_t len, int protection) {
+bool memorymap::setProtection(off64_t offset, size_t len, int protection) {
 	#ifdef HAVE_MPROTECT
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	int	result;
@@ -106,7 +106,7 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 	return sync(0,length,immediate,invalidate);
 }
 
-bool memorymap::sync(off_t offset, size_t len,
+bool memorymap::sync(off64_t offset, size_t len,
 			bool immediate, bool invalidate) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	#ifdef HAVE_MSYNC
@@ -122,7 +122,7 @@ bool memorymap::sync(off_t offset, size_t len,
 	#endif
 }
 
-bool memorymap::sequentialAccess(off_t offset, size_t len) {
+bool memorymap::sequentialAccess(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	return mAdvise(ptr,len,MADV_SEQUENTIAL);
@@ -131,7 +131,7 @@ bool memorymap::sequentialAccess(off_t offset, size_t len) {
 	#endif
 }
 
-bool memorymap::randomAccess(off_t offset, size_t len) {
+bool memorymap::randomAccess(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	return mAdvise(ptr,len,MADV_RANDOM);
@@ -140,7 +140,7 @@ bool memorymap::randomAccess(off_t offset, size_t len) {
 	#endif
 }
 
-bool memorymap::willNeed(off_t offset, size_t len) {
+bool memorymap::willNeed(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	return mAdvise(ptr,len,MADV_WILLNEED);
@@ -149,7 +149,7 @@ bool memorymap::willNeed(off_t offset, size_t len) {
 	#endif
 }
 
-bool memorymap::wontNeed(off_t offset, size_t len) {
+bool memorymap::wontNeed(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	return mAdvise(ptr,len,MADV_DONTNEED);
@@ -158,7 +158,7 @@ bool memorymap::wontNeed(off_t offset, size_t len) {
 	#endif
 }
 
-bool memorymap::normalAccess(off_t offset, size_t len) {
+bool memorymap::normalAccess(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	return mAdvise(ptr,len,MADV_NORMAL);
@@ -172,7 +172,7 @@ bool memorymap::lock() {
 	return lock(0,length);
 }
 
-bool memorymap::lock(off_t offset, size_t len) {
+bool memorymap::lock(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	int	result;
 	do {
@@ -187,7 +187,7 @@ bool memorymap::unlock() {
 	return unlock(0,length);
 }
 
-bool memorymap::unlock(off_t offset, size_t len) {
+bool memorymap::unlock(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
 	int	result;
 	do {
@@ -202,15 +202,15 @@ bool memorymap::inMemory() {
 	return inMemory(0,length);
 }
 
-bool memorymap::inMemory(off_t offset, size_t len) {
+bool memorymap::inMemory(off64_t offset, size_t len) {
 
 	// create an array of char's, 1 for each page
 	int		pagesize=getpagesize();
 	int		tmplen=(len+pagesize-1)/pagesize;
 	#ifdef HAVE_MINCORE_CHAR
-	char		tmp[tmplen];
+	char		*tmp=new char[tmplen];
 	#else
-	unsigned char	tmp[tmplen];
+	unsigned char	*tmp=new unsigned char[tmplen];
 	#endif
 
 	// call mincore to fill the array
@@ -220,6 +220,7 @@ bool memorymap::inMemory(off_t offset, size_t len) {
 		result=mincore(reinterpret_cast<ADDRCAST>(ptr),len,tmp);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result) {
+		delete[] tmp;
 		return false;
 	}
 
@@ -227,9 +228,11 @@ bool memorymap::inMemory(off_t offset, size_t len) {
 	// pages aren't in memory, return false
 	for (int i=0; i<tmplen; i++) {
 		if (tmp[i]) {
+			delete[] tmp;
 			return false;
 		}
 	}
+	delete[] tmp;
 	return true;
 }
 #endif
