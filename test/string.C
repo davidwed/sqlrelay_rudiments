@@ -73,7 +73,8 @@ int main(int argc, const char **argv) {
 	// split
 	char		**list;
 	unsigned long	listlength;
-	charstring::split("hello||hi||bye||goodbye","||",&list,&listlength);
+	charstring::split("hello||hi||bye||goodbye","||",false,
+						&list,&listlength);
 	printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
 	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
@@ -82,7 +83,8 @@ int main(int argc, const char **argv) {
 	}
 	delete[] list;
 
-	charstring::split("hello||hi||bye||goodbye||","||",&list,&listlength);
+	charstring::split("hello||hi||bye||goodbye||","||",false,
+						&list,&listlength);
 	printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
 	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
@@ -91,7 +93,8 @@ int main(int argc, const char **argv) {
 	}
 	delete[] list;
 
-	charstring::split("||hello||hi||bye||goodbye||","||",&list,&listlength);
+	charstring::split("||hello||hi||bye||goodbye||","||",false,
+						&list,&listlength);
 	printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
 	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
@@ -100,7 +103,7 @@ int main(int argc, const char **argv) {
 	}
 	delete[] list;
 
-	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",
+	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",false,
 							&list,&listlength);
 	printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
 	printf("%ld items\n",listlength);
@@ -110,7 +113,7 @@ int main(int argc, const char **argv) {
 	}
 	delete[] list;
 
-	charstring::split("||||||||||","||",&list,&listlength);
+	charstring::split("||||||||||","||",false,&list,&listlength);
 	printf("split(\"||||||||||\",\"||\")\n");
 	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
@@ -119,7 +122,7 @@ int main(int argc, const char **argv) {
 	}
 	delete[] list;
 
-	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",&list,&listlength);
+	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",false,&list,&listlength);
 	printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
 	printf("%ld items\n",listlength);
 	for (unsigned long i=0; i<listlength; i++) {
@@ -127,4 +130,13 @@ int main(int argc, const char **argv) {
 		delete[] list[i];
 	}
 	delete[] list;
+
+	char	str[]="hello'\"\\hello'\"\\";
+	char	*escapedstr=charstring::escape(str,"\"'");
+	char	*unescapedstr=charstring::unescape(escapedstr);
+	printf("str		: %s\n",str);
+	printf("escapedstr	: %s\n",escapedstr);
+	printf("unescapedstr	: %s\n",unescapedstr);
+	delete[] unescapedstr;
+	delete[] escapedstr;
 }

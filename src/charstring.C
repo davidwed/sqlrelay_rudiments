@@ -267,6 +267,98 @@ char *charstring::httpEscape(const char *input) {
 	return output;
 }
 
+char *charstring::escape(const char *input, const char *characters) {
+	char		*output;
+	uint64_t	outputsize;
+	escape(input,charstring::length(input),
+			&output,&outputsize,characters);
+	return output;
+}
+
+void charstring::escape(const char *input, uint64_t inputsize,
+				char **output, uint64_t *outputsize,
+						const char *characters) {
+
+	(*output)=NULL;
+	(*outputsize)=0;
+
+	if (!input) {
+		return;
+	}
+
+	for (uint16_t pass=0; pass<2; pass++) {
+
+		uint64_t	outputindex=0;
+		for (uint64_t inputindex=0;
+				inputindex<inputsize;
+				inputindex++) {
+			if (charstring::contains(characters,
+						input[inputindex]) ||
+					input[inputindex]=='\\') {
+				if (pass==0) {
+					(*outputsize)++;
+				} else {
+					(*output)[outputindex]='\\';
+					outputindex++;
+				}
+			}
+			if (pass==0) {
+				(*outputsize)++;
+			} else {
+				(*output)[outputindex]=input[inputindex];
+			}
+			outputindex++;
+		}
+		if (pass==0) {
+			(*output)=new char[(*outputsize)+1];
+			(*output)[(*outputsize)]='\0';
+		}
+	}
+}
+
+char *charstring::unescape(const char *input) {
+	char		*output;
+	uint64_t	outputsize;
+	unescape(input,charstring::length(input),&output,&outputsize);
+	return output;
+}
+
+void charstring::unescape(const char *input, uint64_t inputsize,
+				char **output, uint64_t *outputsize) {
+
+	(*output)=NULL;
+	(*outputsize)=0;
+
+	if (!input) {
+		return;
+	}
+
+	for (uint16_t pass=0; pass<2; pass++) {
+
+		bool		escaped=false;
+		uint64_t	outputindex=0;
+		for (uint64_t inputindex=0;
+				inputindex<inputsize;
+				inputindex++) {
+			if (!escaped && input[inputindex]=='\\') {
+				escaped=true;
+				continue;
+			}
+			if (pass==0) {
+				(*outputsize)++;
+			} else {
+				(*output)[outputindex]=input[inputindex];
+			}
+			outputindex++;
+			escaped=false;
+		}
+		if (pass==0) {
+			(*output)=new char[(*outputsize)+1];
+			(*output)[(*outputsize)]='\0';
+		}
+	}
+}
+
 void charstring::leftJustify(char *str, int length) {
 
 	if (!str) {
@@ -372,7 +464,7 @@ int charstring::countTrailingSpaces(const char *str, int length) {
 }
 
 char *charstring::parseNumber(int16_t number) {
-	return parseNumber(number,0);
+	return parseNumber(number,1);
 }
 
 char *charstring::parseNumber(int16_t number,
@@ -384,7 +476,7 @@ char *charstring::parseNumber(int16_t number,
 }
 
 char *charstring::parseNumber(uint16_t number) {
-	return parseNumber(number,0);
+	return parseNumber(number,1);
 }
 
 char *charstring::parseNumber(uint16_t number,
@@ -396,7 +488,7 @@ char *charstring::parseNumber(uint16_t number,
 }
 
 char *charstring::parseNumber(int32_t number) {
-	return parseNumber(number,0);
+	return parseNumber(number,1);
 }
 
 char *charstring::parseNumber(int32_t number,
@@ -408,7 +500,7 @@ char *charstring::parseNumber(int32_t number,
 }
 
 char *charstring::parseNumber(uint32_t number) {
-	return parseNumber(number,0);
+	return parseNumber(number,1);
 }
 
 char *charstring::parseNumber(uint32_t number,
@@ -420,7 +512,7 @@ char *charstring::parseNumber(uint32_t number,
 }
 
 char *charstring::parseNumber(int64_t number) {
-	return parseNumber(number,0);
+	return parseNumber(number,1);
 }
 
 char *charstring::parseNumber(int64_t number,
@@ -432,7 +524,7 @@ char *charstring::parseNumber(int64_t number,
 }
 
 char *charstring::parseNumber(uint64_t number) {
-	return parseNumber(number,0);
+	return parseNumber(number,1);
 }
 
 char *charstring::parseNumber(uint64_t number,

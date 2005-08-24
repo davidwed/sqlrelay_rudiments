@@ -56,8 +56,7 @@ bool file::create(const char *name, mode_t perms) {
 	return open(name,O_CREAT|O_TRUNC|O_RDWR,perms);
 }
 
-ssize_t file::create(const char *name, mode_t perms,
-						unsigned short number) {
+ssize_t file::create(const char *name, mode_t perms, unsigned short number) {
 	return create(name,perms,&number,sizeof(unsigned short));
 }
 

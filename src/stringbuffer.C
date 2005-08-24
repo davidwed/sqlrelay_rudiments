@@ -101,27 +101,32 @@ stringbuffer *stringbuffer::append(char character) {
 }
 
 stringbuffer *stringbuffer::append(int16_t number) {
-	return append(number,0);
+	return append(number,1);
 }
 
 stringbuffer *stringbuffer::append(int32_t number) {
-	return append(number,0);
+	return append(number,1);
 }
 
 stringbuffer *stringbuffer::append(int64_t number) {
-	return append(number,0);
+	return append(number,1);
+}
+
+stringbuffer *stringbuffer::append(unsigned char character) {
+	variablebuffer::append(character);
+	return this;
 }
 
 stringbuffer *stringbuffer::append(uint16_t number) {
-	return append(number,0);
+	return append(number,1);
 }
 
 stringbuffer *stringbuffer::append(uint32_t number) {
-	return append(number,0);
+	return append(number,1);
 }
 
 stringbuffer *stringbuffer::append(uint64_t number) {
-	return append(number,0);
+	return append(number,1);
 }
 
 stringbuffer *stringbuffer::append(int16_t number, unsigned short zeropadding) {

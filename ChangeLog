@@ -12,6 +12,8 @@
 	removed #ifdef __GNUC__ around static variable definitions, I'll add
 		#ifndefs for compilers that don't allow them (like SCO's) if
 		necessary
+	added -D__EXTENSIONS__ to CPPFLAGS
+	added charstring::escape/unescape
 
 0.28.2 - filedescriptor desctructor removes the read buffer now
 

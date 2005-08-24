@@ -52,7 +52,7 @@ daemonprocess::~daemonprocess() {
 }
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
-	char	*pid=charstring::parseNumber(getpid());
+	char	*pid=charstring::parseNumber((uint64_t)getpid());
 	bool	retval=(file::createFile(filename,permissions,pid)==
 					(ssize_t)charstring::length(pid));
 	delete[] pid;

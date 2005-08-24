@@ -4,3 +4,4 @@
 #include <rudiments/private/config.h>
 
 #include <sys/types.h>
+#include <stdint.h>

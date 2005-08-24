@@ -105,19 +105,19 @@ variablebuffer *variablebuffer::write(char character) {
 								sizeof(char));
 }
 
-variablebuffer *variablebuffer::write(short number) {
+variablebuffer *variablebuffer::write(int16_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(short));
+							sizeof(int16_t));
 }
 
-variablebuffer *variablebuffer::write(long number) {
+variablebuffer *variablebuffer::write(int32_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(long));
+							sizeof(int32_t));
 }
 
-variablebuffer *variablebuffer::write(long long number) {
+variablebuffer *variablebuffer::write(int64_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(long long));
+							sizeof(int64_t));
 }
 
 variablebuffer *variablebuffer::write(unsigned char character) {
@@ -125,19 +125,19 @@ variablebuffer *variablebuffer::write(unsigned char character) {
 							sizeof(unsigned char));
 }
 
-variablebuffer *variablebuffer::write(unsigned short number) {
+variablebuffer *variablebuffer::write(uint16_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(unsigned short));
+							sizeof(uint16_t));
 }
 
-variablebuffer *variablebuffer::write(unsigned long number) {
+variablebuffer *variablebuffer::write(uint32_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(unsigned long));
+							sizeof(uint32_t));
 }
 
-variablebuffer *variablebuffer::write(unsigned long long number) {
+variablebuffer *variablebuffer::write(uint64_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
-						sizeof(unsigned long long));
+							sizeof(uint64_t));
 }
 
 variablebuffer *variablebuffer::write(float number) {
@@ -220,19 +220,19 @@ variablebuffer *variablebuffer::append(char character) {
 								sizeof(char));
 }
 
-variablebuffer *variablebuffer::append(short number) {
+variablebuffer *variablebuffer::append(int16_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(short));
+							sizeof(int16_t));
 }
 
-variablebuffer *variablebuffer::append(long number) {
+variablebuffer *variablebuffer::append(int32_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
-								sizeof(long));
+							sizeof(int32_t));
 }
 
-variablebuffer *variablebuffer::append(long long number) {
+variablebuffer *variablebuffer::append(int64_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(long long));
+							sizeof(int64_t));
 }
 
 variablebuffer *variablebuffer::append(unsigned char character) {
@@ -240,19 +240,19 @@ variablebuffer *variablebuffer::append(unsigned char character) {
 							sizeof(unsigned char));
 }
 
-variablebuffer *variablebuffer::append(unsigned short number) {
+variablebuffer *variablebuffer::append(uint16_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(unsigned short));
+							sizeof(uint16_t));
 }
 
-variablebuffer *variablebuffer::append(unsigned long number) {
+variablebuffer *variablebuffer::append(uint32_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
-							sizeof(unsigned long));
+							sizeof(uint32_t));
 }
 
-variablebuffer *variablebuffer::append(unsigned long long number) {
+variablebuffer *variablebuffer::append(uint64_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
-						sizeof(unsigned long long));
+							sizeof(uint64_t));
 }
 
 variablebuffer *variablebuffer::append(float number) {

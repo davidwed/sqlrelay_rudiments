@@ -284,6 +284,30 @@ class charstring {
 			// allocated inside the function.  This buffer must be
 			// deleted by the calling program.
 
+		static	char	*escape(const char *input,
+					const char *characters);
+			// escapes all characters in "characters" found in
+			// "input" using \'s and returns it in a buffer
+			// allocated inside the function.  This buffer must be
+			// deleted by the calling program.
+		static	char	*unescape(const char *input);
+			// unescapes all \-escaped characters found in
+			// "input" and returns the result in a buffer
+			// allocated inside the function.  This buffer must be
+			// deleted by the calling program.
+
+		static	void	escape(const char *input, uint64_t inputsize,
+					char **output, uint64_t *outputsize,
+					const char *characters);
+			// similar to escape() above, but takes an "inputsize"
+			// parameter and returns the result in "output" and
+			// "outputsize" rather than in a return value
+		static	void	unescape(const char *input, uint64_t inputsize,
+					char **output, uint64_t *outputsize);
+			// similar to unescape() above, but takes an "inputsize"
+			// parameter and returns the result in "output" and
+			// "outputsize" rather than in a return value
+
 		static	void	leftJustify(char *str, int length);
 			// Moves leading spaces to the end of "str" for
 			// "length" characters.

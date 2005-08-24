@@ -42,13 +42,13 @@ class variablebuffer {
 		variablebuffer	*write(const char *string);
 		variablebuffer	*write(const char *string, size_t size);
 		variablebuffer	*write(char character);
-		variablebuffer	*write(short number);
-		variablebuffer	*write(long number);
-		variablebuffer	*write(long long number);
+		variablebuffer	*write(int16_t number);
+		variablebuffer	*write(int32_t number);
+		variablebuffer	*write(int64_t number);
 		variablebuffer	*write(unsigned char character);
-		variablebuffer	*write(unsigned short number);
-		variablebuffer	*write(unsigned long number);
-		variablebuffer	*write(unsigned long long number);
+		variablebuffer	*write(uint16_t number);
+		variablebuffer	*write(uint32_t number);
+		variablebuffer	*write(uint64_t number);
 		variablebuffer	*write(float number);
 		variablebuffer	*write(double number);
 			// Writes "data" to the variablebuffer at the current
@@ -58,13 +58,13 @@ class variablebuffer {
 		variablebuffer	*append(const char *string);
 		variablebuffer	*append(const char *string, size_t size);
 		variablebuffer	*append(char character);
-		variablebuffer	*append(short number);
-		variablebuffer	*append(long number);
-		variablebuffer	*append(long long number);
+		variablebuffer	*append(int16_t number);
+		variablebuffer	*append(int32_t number);
+		variablebuffer	*append(int64_t number);
 		variablebuffer	*append(unsigned char character);
-		variablebuffer	*append(unsigned short number);
-		variablebuffer	*append(unsigned long number);
-		variablebuffer	*append(unsigned long long number);
+		variablebuffer	*append(uint16_t number);
+		variablebuffer	*append(uint32_t number);
+		variablebuffer	*append(uint64_t number);
 		variablebuffer	*append(float number);
 		variablebuffer	*append(double number);
 			// Appends "data" to the variablebuffer.  The buffer
