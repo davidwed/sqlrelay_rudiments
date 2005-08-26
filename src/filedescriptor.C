@@ -139,6 +139,7 @@ void filedescriptor::filedescriptorInit() {
 	retryinterruptedioctl=true;
 #endif
 	allowshortreads=false;
+	allowshortwrites=false;
 	lstnr=NULL;
 	uselistenerinsidereads=false;
 	uselistenerinsidewrites=false;
@@ -171,6 +172,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	retryinterruptedioctl=f.retryinterruptedioctl;
 #endif
 	allowshortreads=f.allowshortreads;
+	allowshortwrites=f.allowshortwrites;
 	lstnr=f.lstnr;
 	uselistenerinsidereads=f.uselistenerinsidereads;
 	uselistenerinsidewrites=f.uselistenerinsidewrites;
@@ -686,6 +688,14 @@ void filedescriptor::dontAllowShortReads() {
 	allowshortreads=false;
 }
 
+void filedescriptor::allowShortWrites() {
+	allowshortwrites=true;
+}
+
+void filedescriptor::dontAllowShortWrites() {
+	allowshortwrites=false;
+}
+
 void filedescriptor::useListener(listener *lstnr) {
 	this->lstnr=lstnr;
 }
@@ -1149,14 +1159,14 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 
 			rawbuffer::copy(writebufferptr,data,writebufferspace);
 
+			bool	saveasw=allowshortwrites;
+			allowshortwrites=true;
 			ssize_t	result=safeWrite(writebuffer,
 					writebuffersize+writebufferspace,
 					sec,usec);
+			allowshortwrites=saveasw;
+
 			if (result!=writebuffersize+writebufferspace) {
-				// FIXME: handle this better...
-				printf("aaaaah, short write!!!!!\n");
-			}
-			if (result<0) {
 				return result;
 			}
 
@@ -1192,8 +1202,14 @@ bool filedescriptor::flushWriteBuffer(long sec, long usec) const {
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 						long sec, long usec) const {
 
+	// FIXME: is this what we want to do?
+	// maybe we should set some kind of error condition too
+	if (!buf) {
+		return 0;
+	}
+
 	#ifdef DEBUG_WRITE
-	printf("safeWrite of %d bytes\n",count);
+	printf("%d: safeWrite(%d,",process::getProcessId(),fd);
 	#endif
 
 	// The result of SSL_write may be undefined if count=0
@@ -1203,8 +1219,16 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	}
 	#endif
 
-	ssize_t	retval;
-	for (;;) {
+	ssize_t	totalwrite=0;
+	ssize_t	sizetowrite;
+	ssize_t	actualwrite;
+	while (totalwrite<count) {
+
+		// only write SSIZE_MAX at a time
+		sizetowrite=count-totalwrite;
+		if (sizetowrite>SSIZE_MAX) {
+			sizetowrite=SSIZE_MAX;
+		}
 
 		// if necessary, select
 		if (sec>-1 && usec>-1 || uselistenerinsidewrites) {
@@ -1215,9 +1239,18 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 			// return error or timeout
 			if (selectresult<0) {
+				#ifdef DEBUG_WRITE
+				printf(")\n");
+				#endif
 				return selectresult;
 			}
 		}
+
+		// set a pointer to the position in the buffer that we need
+		// to write data from
+		const void	*ptr=static_cast<const void *>(
+				static_cast<const unsigned char *>(buf)+
+				totalwrite);
 
 		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
@@ -1225,20 +1258,21 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			for (bool done=false; !done ;) {
 
 				#ifdef SSL_VOID_PTR
-				retval=::SSL_write(ssl,buf,count);
+				actualwrite=::SSL_write(ssl,ptr,count);
 				#else
-				retval=::SSL_write(ssl,
-						static_cast<const char *>(buf),
-						count);
+				actualwrite=::SSL_write(ssl,
+						static_cast<const char *>(ptr),
+						sizetowrite);
 				#endif
-				sslresult=retval;
+				sslresult=actualwrite;
 
-				switch (SSL_get_error(ssl,retval)) {
+				switch (SSL_get_error(ssl,actualwrite)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 						continue;
 					case SSL_ERROR_WANT_X509_LOOKUP:
 					case SSL_ERROR_SSL:
+						actualwrite=-1;
 					case SSL_ERROR_ZERO_RETURN:
 					case SSL_ERROR_SYSCALL:
 					case SSL_ERROR_NONE:
@@ -1249,21 +1283,66 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		} else {
 		#endif
 
-			retval=::write(fd,buf,count);
+			actualwrite=::write(fd,ptr,sizetowrite);
+			#ifdef DEBUG_WRITE
+			for (int i=0; i<actualwrite; i++) {
+				character::safePrint(
+					(static_cast<unsigned char *>(ptr))[i]);
+			}
+			printf("(%ld bytes) ",actualwrite);
+			fflush(stdout);
+			#endif
 
 		#ifdef RUDIMENTS_HAS_SSL
 		}
 		#endif
 
-		if (retval!=count) {
-			if (retryinterruptedwrites &&
-				error::getErrorNumber()==EINTR) {
-				continue;
+		// if we didn't read the number of bytes we expected to,
+		// handle that...
+		if (actualwrite!=sizetowrite) {
+			if (error::getErrorNumber()==EINTR) {
+				#ifdef DEBUG_WRITE
+				printf(" EINTR ");
+				#endif
+				// if we got an EINTR, then we may need to
+				// retry the write
+				if (retryinterruptedwrites) {
+					continue;
+				} else {
+					totalwrite=totalwrite+actualwrite;
+					break;
+				}
+			} else if (actualwrite==0 &&
+					error::getErrorNumber()==0) {
+				// eof condition
+				#ifdef DEBUG_WRITE
+				printf(" EOF ");
+				#endif
+				break;
+			} else if (actualwrite==-1) {
+				// error condition
+				#ifdef DEBUG_WRITE
+				printf(")\n");
+				#endif
+				return RESULT_ERROR;
 			}
 		}
-		break;
+
+		totalwrite=totalwrite+actualwrite;
+
+		// if we want to allow short writes, then break out here
+		if (allowshortwrites) {
+			#ifdef DEBUG_WRITE
+			printf(" SHORTWRITE ");
+			#endif
+			break;
+		}
 	}
-	return retval;
+
+	#ifdef DEBUG_WRITE
+	printf(",%d)\n",totalwrite);
+	#endif
+	return totalwrite;
 }
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) const {

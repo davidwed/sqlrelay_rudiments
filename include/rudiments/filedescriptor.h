@@ -419,6 +419,22 @@ class filedescriptor {
 			// number of bytes from the file descriptor, in several
 			// passes if necessary.
 
+		// By default, write() will attempt to write the specified
+		// number of bytes from the file descriptor, in several passes
+		// if necessary.  No single pass will try to read more than
+		// SSIZE_MAX bytes.  These methods override that behavior.
+		void	allowShortWrites();
+			// Causes a write to return the number of bytes that
+			// were written in a single pass from the file
+			// descriptor.  Note that writes longer than SSIZE_MAX
+			// will always return SSIZE_MAX or fewer bytes.  This
+			// is useful, for example, when writing to devices
+			// which block rather than returning 0 for EOF.
+		void	dontAllowShortWrites();
+			// Causes a write to attempt to write the specified
+			// number of bytes from the file descriptor, in several
+			// passes if necessary.
+
 
 		// By default, calls to waitForNonBlockingRead() and
 		// waitForNonBlockingWrite() will wait using the select()

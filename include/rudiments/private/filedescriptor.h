@@ -36,6 +36,7 @@
 		bool	retryinterruptedioctl;
 		#endif
 		mutable bool	allowshortreads;
+		mutable bool	allowshortwrites;
 		bool	translatebyteorder;
 
 		listener	*lstnr;
