@@ -19,6 +19,8 @@
 		nothing rather than 0, but printf("%0*ld\n",0,(int32_t)0);
 		prints 0.  Using 1 instead of 0 for the number of 0's works
 		in all cases.
+	solaris's strchr/strrchr return const char *,
+		so I made charstring::findFirst/findLast return const char *
 
 0.28.2 - filedescriptor desctructor removes the read buffer now
 

@@ -26,7 +26,7 @@
 namespace rudiments {
 #endif
 
-char *charstring::findLast(const char *haystack, const char *needle) {
+const char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
 		return NULL;
@@ -41,7 +41,7 @@ char *charstring::findLast(const char *haystack, const char *needle) {
 	const char	*ptr=haystack+haystacklen-needlelen;
 	while (ptr>haystack) {
 		if (!compare(ptr,needle)) {
-			return const_cast<char *>(ptr);
+			return ptr;
 		}
 		ptr--;
 	}
@@ -736,16 +736,40 @@ bool charstring::contains(const char *haystack, char needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }
 
-char *charstring::findFirst(const char *haystack, const char *needle) {
+const char *charstring::findFirst(const char *haystack, const char *needle) {
 	return (haystack && needle)?strstr(haystack,needle):NULL;
 }
 
-char *charstring::findFirst(const char *haystack, char needle) {
+const char *charstring::findFirst(const char *haystack, char needle) {
 	return (haystack)?strchr(haystack,needle):NULL;
 }
 
-char *charstring::findLast(const char *haystack, char needle) {
+const char *charstring::findLast(const char *haystack, char needle) {
 	return (haystack)?strrchr(haystack,needle):NULL;
+}
+
+char *charstring::findFirst(char *haystack, const char *needle) {
+	return const_cast<char *>(findFirst(
+					const_cast<const char *>(haystack),
+					needle));
+}
+
+char *charstring::findFirst(char *haystack, char needle) {
+	return const_cast<char *>(findFirst(
+					const_cast<const char *>(haystack),
+					needle));
+}
+
+char *charstring::findLast(char *haystack, const char *needle) {
+	return const_cast<char *>(findLast(
+					const_cast<const char *>(haystack),
+					needle));
+}
+
+char *charstring::findLast(char *haystack, char needle) {
+	return const_cast<char *>(findLast(
+					const_cast<const char *>(haystack),
+					needle));
 }
 
 char *charstring::duplicate(const char *str) {

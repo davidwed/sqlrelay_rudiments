@@ -122,18 +122,34 @@ class charstring {
 		static	bool	contains(const char *haystack, char needle);
 			// Returns true if "haystack" contains "needle" or
 			// false otherwise.
-		static	char	*findFirst(const char *haystack,
+
+		static	const char	*findFirst(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*findFirst(const char *haystack, char needle);
+		static	const char	*findFirst(const char *haystack,
+							char needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*findLast(const char *haystack,
+		static	const char	*findLast(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
-		static	char	*findLast(const char *haystack, char needle);
+		static	const char	*findLast(const char *haystack,
+							char needle);
+			// Returns a pointer to the last occurrance of "needle"
+			// in "haystack" or NULL if not found.
+
+		static	char	*findFirst(char *haystack, const char *needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or NULL if not found.
+		static	char	*findFirst(char *haystack, char needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or NULL if not found.
+		static	char	*findLast(char *haystack, const char *needle);
+			// Returns a pointer to the last occurrance of "needle"
+			// in "haystack" or NULL if not found.
+		static	char	*findLast(char *haystack, char needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
 
