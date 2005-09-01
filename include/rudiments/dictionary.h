@@ -160,30 +160,30 @@ class conststringdictionary : public dictionary< const char *, datatype,
 
 
 
-// A set of classes for storing dictionaries who's keys are long integers are
+// A set of classes for storing dictionaries who's keys are int32_t integers are
 // provided here for convenience.
 template <class datatype>
 class numericdictionarynode :
-		public dictionarynode< long, datatype > {
+		public dictionarynode< int32_t, datatype > {
 	public:
 		virtual	~numericdictionarynode();
 };
 
 template <class datatype>
 class numericdictionarylistnode :
-		public dictionarylistnode< long, datatype > {
+		public dictionarylistnode< int32_t, datatype > {
 	public:
 		virtual	~numericdictionarylistnode();
 };
 
 template <class datatype>
-class numericdictionarylist : public dictionarylist< long, datatype > {
+class numericdictionarylist : public dictionarylist< int32_t, datatype > {
 	public:
 		virtual	~numericdictionarylist();
 };
 
 template <class datatype>
-class numericdictionary : public dictionary< long, datatype,
+class numericdictionary : public dictionary< int32_t, datatype,
 				numericdictionarynode<datatype>,
 				numericdictionarylistnode<datatype>,
 				numericdictionarylist<datatype> > {

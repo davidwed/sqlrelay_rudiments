@@ -22,7 +22,7 @@ class directory {
 			// opens directory "path"
 		bool	close();
 			// closes the currently open directory
-		char	*getChildName(unsigned long index);
+		char	*getChildName(uint64_t index);
 			// Returns the name of the file/subdirectory at "index".
 			//
 			// This methods allocates a buffer internally and
@@ -47,11 +47,11 @@ class directory {
 		static bool	changeRoot(const char *path);
 				// changes root to "path"
 
-		static long	maxFileNameLength(const char *pathname);
+		static int64_t	maxFileNameLength(const char *pathname);
 				// Returns the length of the longest file name
 				// that can be created in directory "pathname".
 
-		static long	maxPathLength(const char *pathname);
+		static int64_t	maxPathLength(const char *pathname);
 				// Returns the length of the longest relative
 				// path name that can be created under the
 				// directory "pathname".

@@ -860,7 +860,7 @@ void charstring::safePrint(const char *string) {
 
 void charstring::split(const char *string, const char *delimiter,
 				bool collapse,
-				char ***list, unsigned long *listlength) {
+				char ***list, uint64_t *listlength) {
 	split(string,charstring::length(string),
 			delimiter,charstring::length(delimiter),
 			collapse,list,listlength);
@@ -868,7 +868,7 @@ void charstring::split(const char *string, const char *delimiter,
 
 void charstring::split(const char *string, ssize_t stringlength,
 				const char *delimiter, bool collapse,
-				char ***list, unsigned long *listlength) {
+				char ***list, uint64_t *listlength) {
 	split(string,stringlength,
 			delimiter,charstring::length(delimiter),
 			collapse,list,listlength);
@@ -877,7 +877,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 void charstring::split(const char *string, 
 				const char *delimiter, ssize_t delimiterlength,
 				bool collapse,
-				char ***list, unsigned long *listlength) {
+				char ***list, uint64_t *listlength) {
 	split(string,charstring::length(string),
 			delimiter,delimiterlength,
 			collapse,list,listlength);
@@ -886,7 +886,7 @@ void charstring::split(const char *string,
 void charstring::split(const char *string, ssize_t stringlength,
 				const char *delimiter, ssize_t delimiterlength,
 				bool collapse,
-				char ***list, unsigned long *listlength) {
+				char ***list, uint64_t *listlength) {
 
 	// handle degenerate cases
 	if (!string || !string[0] || !stringlength ||

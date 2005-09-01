@@ -54,7 +54,7 @@ void LINKEDLIST_CLASS::append(linkedlistnodetype *node) {
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
+bool LINKEDLIST_CLASS::insert(uint64_t index, datatype data) {
 	linkedlistnodetype	*node=new linkedlistnodetype();
 	node->setData(data);
 	return insert(index,node);
@@ -62,7 +62,7 @@ bool LINKEDLIST_CLASS::insert(unsigned long index, datatype data) {
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool LINKEDLIST_CLASS::insert(unsigned long index, linkedlistnodetype *node) {
+bool LINKEDLIST_CLASS::insert(uint64_t index, linkedlistnodetype *node) {
 
 	// handle invalid index
 	if (index>length) {
@@ -99,8 +99,7 @@ bool LINKEDLIST_CLASS::insert(unsigned long index, linkedlistnodetype *node) {
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool LINKEDLIST_CLASS::setDataByIndex(unsigned long index,
-							datatype data) {
+bool LINKEDLIST_CLASS::setDataByIndex(uint64_t index, datatype data) {
 	linkedlistnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		current->setData(data);
@@ -111,7 +110,7 @@ bool LINKEDLIST_CLASS::setDataByIndex(unsigned long index,
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool LINKEDLIST_CLASS::removeByIndex(unsigned long index) {
+bool LINKEDLIST_CLASS::removeByIndex(uint64_t index) {
 	return removeNode(getNodeByIndex(index));
 }
 
@@ -119,7 +118,7 @@ LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::removeByData(datatype data) {
 	linkedlistnodetype	*current=first;
-	for (unsigned long i=0; i<length; i++) {
+	for (uint64_t i=0; i<length; i++) {
 		if (!current->compare(data)) {
 			return removeNode(current);
 		}
@@ -134,7 +133,7 @@ bool LINKEDLIST_CLASS::removeAllByData(datatype data) {
 
 	linkedlistnodetype	*current=first;
 	linkedlistnodetype	*next;
-	for (unsigned long i=0; i<length; i++) {
+	for (uint64_t i=0; i<length; i++) {
 		if (!current->compare(data)) {
 			next=(linkedlistnodetype *)current->getNext();
 			if (!removeNode(current)) {
@@ -173,8 +172,7 @@ bool LINKEDLIST_CLASS::removeNode(linkedlistnodetype *node) {
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool LINKEDLIST_CLASS::getDataByIndex(unsigned long index,
-						datatype *data) {
+bool LINKEDLIST_CLASS::getDataByIndex(uint64_t index, datatype *data) {
 	linkedlistnodetype	*current=getNodeByIndex(index);
 	if (current) {
 		*data=current->getData();
@@ -185,18 +183,18 @@ bool LINKEDLIST_CLASS::getDataByIndex(unsigned long index,
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-unsigned long LINKEDLIST_CLASS::getLength() const {
+uint64_t LINKEDLIST_CLASS::getLength() const {
 	return length;
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(unsigned long index) {
+linkedlistnodetype *LINKEDLIST_CLASS::getNodeByIndex(uint64_t index) {
 	if (index>=length) {
 		return NULL;
 	}
 	linkedlistnodetype	*current=(linkedlistnodetype *)first;
-	for (unsigned long i=0; i<index; i++) {
+	for (uint64_t i=0; i<index; i++) {
 		current=(linkedlistnodetype *)current->getNext();
 	}
 	return current;
@@ -228,7 +226,7 @@ RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::clear() {
 	linkedlistnodetype	*current=first;
 	linkedlistnodetype	*next;
-	for (unsigned long i=0; i<length; i++) {
+	for (uint64_t i=0; i<length; i++) {
 		next=(linkedlistnodetype *)current->getNext();
 		delete current;
 		current=next;
@@ -242,8 +240,8 @@ LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::print() const {
 	linkedlistnodetype	*current=first;
-	for (unsigned long i=0; i<length; i++) {
-		printf("index %ld: ",i);
+	for (uint64_t i=0; i<length; i++) {
+		printf("index %lld: ",i);
 		current->print();
 		printf("\n");
 		current=(linkedlistnodetype *)current->getNext();

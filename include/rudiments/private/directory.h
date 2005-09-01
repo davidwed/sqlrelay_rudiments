@@ -3,7 +3,7 @@
 
 	private:
 		DIR		*dir;
-		unsigned long	currentindex;
+		uint64_t	currentindex;
 
 		#if defined(RUDIMENTS_HAS_THREADS) && \
 			!defined(HAVE_READDIR_R)
@@ -15,4 +15,4 @@
 				directory(const directory &d);
 		directory	&operator=(const directory &d);
 
-		static	long	pathConf(const char *pathname, int name);
+		static	int64_t	pathConf(const char *pathname, int name);

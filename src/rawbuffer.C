@@ -61,12 +61,12 @@ int rawbuffer::compare(const void *s1, const void *s2, size_t size) {
 	return (s1 && s1)?memcmp(s1,s2,size):NULL;
 }
 
-void *rawbuffer::findFirst(const void *haystack,
+const void *rawbuffer::findFirst(const void *haystack,
 				unsigned char needle, size_t size) {
 	return (haystack && needle)?memchr(haystack,needle,size):NULL;
 }
 
-void *rawbuffer::findLast(const void *haystack,
+const void *rawbuffer::findLast(const void *haystack,
 				unsigned char needle, size_t size) {
 	#ifdef HAVE_MEMRCHR
 		return (haystack && needle)?
@@ -80,8 +80,7 @@ void *rawbuffer::findLast(const void *haystack,
 				ptr>=haystack; ptr--) {
 			
 				if (*ptr==realneedle) {
-					return const_cast<void *>(
-						static_cast<const void *>(ptr));
+					return static_cast<const void *>(ptr);
 				}
 			}
 		}
@@ -89,8 +88,8 @@ void *rawbuffer::findLast(const void *haystack,
 	#endif
 }
 
-void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
-				const void *needle, size_t needlesize) {
+const void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
+					const void *needle, size_t needlesize) {
 	#ifdef HAVE_MEMMEM
 		return (haystack && needle)?
 			memmem(haystack,haystacksize,needle,needlesize):NULL;
@@ -106,8 +105,7 @@ void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
 				ptr<endptr; ptr++) {
 
 				if (!memcmp(ptr,needle,needlesize)) {
-					return const_cast<void *>(
-						static_cast<const void *>(ptr));
+					return static_cast<const void *>(ptr);
 				}
 			}
 		}
@@ -115,8 +113,8 @@ void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
 	#endif
 }
 
-void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
-				const void *needle, size_t needlesize) {
+const void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
+					const void *needle, size_t needlesize) {
 
 	if (haystack && needle) {
 		for (const unsigned char *ptr=
@@ -131,6 +129,36 @@ void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
 		}
 	}
 	return NULL;
+}
+
+void *rawbuffer::findFirst(void *haystack,
+				unsigned char needle, size_t size) {
+	return const_cast<void *>(findFirst(
+					const_cast<const void *>(haystack),
+					needle,size));
+}
+
+void *rawbuffer::findLast(void *haystack,
+				unsigned char needle, size_t size) {
+	return const_cast<void *>(findLast(
+					const_cast<const void *>(haystack),
+					needle,size));
+}
+
+void *rawbuffer::findFirst(void *haystack, size_t haystacksize,
+				const void *needle, size_t needlesize) {
+	return const_cast<void *>(findFirst(
+					const_cast<const void *>(haystack),
+					haystacksize,
+					needle,needlesize));
+}
+
+void *rawbuffer::findLast(void *haystack, size_t haystacksize,
+				const void *needle, size_t needlesize) {
+	return const_cast<void *>(findLast(
+					const_cast<const void *>(haystack),
+					haystacksize,
+					needle,needlesize));
 }
 
 #ifdef RUDIMENTS_NAMESPACE

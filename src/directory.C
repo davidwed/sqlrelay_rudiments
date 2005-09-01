@@ -47,10 +47,10 @@ bool directory::close() {
 	return retval;
 }
 
-char *directory::getChildName(unsigned long index) {
+char *directory::getChildName(uint64_t index) {
 
 	// directory entries are 1-based
-	unsigned long	actualindex=index+1;
+	uint64_t	actualindex=index+1;
 
 	if (actualindex<currentindex) {
 		rewinddir(dir);
@@ -65,7 +65,7 @@ char *directory::getChildName(unsigned long index) {
 			direct	entry;
 			dirent	*result;
 		#endif
-		for (unsigned long i=currentindex; i<actualindex; i++) {
+		for (uint64_t i=currentindex; i<actualindex; i++) {
 			int	rdresult;
 			do {
 				rdresult=readdir_r(dir,&entry,&result);
@@ -88,7 +88,7 @@ char *directory::getChildName(unsigned long index) {
 			return NULL;
 		}
 		#endif
-		for (unsigned long i=currentindex; i<actualindex; i++) {
+		for (uint64_t i=currentindex; i<actualindex; i++) {
 			do {
 				entry=readdir(dir);
 			} while (!entry && error::getErrorNumber()==EINTR);
@@ -175,11 +175,11 @@ void directory::setMutex(mutex *mtx) {
 }
 #endif
 
-long directory::maxFileNameLength(const char *pathname) {
+int64_t directory::maxFileNameLength(const char *pathname) {
 	return pathConf(pathname,_PC_NAME_MAX);
 }
 
-long directory::maxPathLength(const char *pathname) {
+int64_t directory::maxPathLength(const char *pathname) {
 	return pathConf(pathname,_PC_PATH_MAX);
 }
 
@@ -187,8 +187,8 @@ bool directory::canAccessLongFileNames(const char *pathname) {
 	return !pathConf(pathname,_PC_NO_TRUNC);
 }
 
-long directory::pathConf(const char *pathname, int name) {
-	long	result;
+int64_t directory::pathConf(const char *pathname, int name) {
+	int64_t	result;
 	do {
 		result=pathconf(pathname,name);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

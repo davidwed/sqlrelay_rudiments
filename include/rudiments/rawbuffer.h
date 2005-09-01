@@ -67,14 +67,46 @@ class rawbuffer {
 				// less than, equal to or greater than "size"
 				// bytes of "s2".
 
-		static void	*findFirst(const void *haystack,
+		static void	*findFirst(void *haystack,
+						unsigned char needle,
+						size_t size);
+				// Returns a pointer to the first occurrance
+				// of "needle" in the first "size" bytes of
+				// "haystack".
+				// Returns NULL if no match is found.
+		static void	*findLast(void *haystack,
+						unsigned char needle,
+						size_t size);
+				// Returns a pointer to the last occurrance
+				// of "needle" in the first "size" bytes of
+				// "haystack".
+				// Returns NULL if no match is found.
+
+		static void	*findFirst(void *haystack,
+						size_t haystacksize,
+						const void *needle, 
+						size_t needleize);
+				// Returns a pointer to the first occurrance
+				// of "needle" in the first "size" bytes of
+				// "haystack".
+				// Returns NULL if no match is found.
+		static void	*findLast(void *haystack,
+						size_t haystacksize,
+						const void *needle, 
+						size_t needleize);
+				// Returns a pointer to the last occurrance
+				// of "needle" in the first "size" bytes of
+				// "haystack".
+				// Returns NULL if no match is found.
+
+		static const void	*findFirst(const void *haystack,
 							unsigned char needle,
 							size_t size);
 				// Returns a pointer to the first occurrance
 				// of "needle" in the first "size" bytes of
 				// "haystack".
 				// Returns NULL if no match is found.
-		static void	*findLast(const void *haystack,
+		static const void	*findLast(const void *haystack,
 							unsigned char needle,
 							size_t size);
 				// Returns a pointer to the last occurrance
@@ -82,7 +114,7 @@ class rawbuffer {
 				// "haystack".
 				// Returns NULL if no match is found.
 
-		static void	*findFirst(const void *haystack,
+		static const void	*findFirst(const void *haystack,
 							size_t haystacksize,
 							const void *needle, 
 							size_t needleize);
@@ -90,7 +122,7 @@ class rawbuffer {
 				// of "needle" in the first "size" bytes of
 				// "haystack".
 				// Returns NULL if no match is found.
-		static void	*findLast(const void *haystack,
+		static const void	*findLast(const void *haystack,
 							size_t haystacksize,
 							const void *needle, 
 							size_t needleize);

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/config.h>
+#include <stdint.h>
 #include <sys/types.h>
 #ifdef HAVE_DIRENT_H
 	#include <dirent.h>

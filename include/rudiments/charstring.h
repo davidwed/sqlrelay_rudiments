@@ -365,24 +365,24 @@ class charstring {
 					ssize_t delimiterlength,
 					bool collapse,
 					char ***list,
-					unsigned long *listlength);
+					uint64_t *listlength);
 		static void	split(const char *string,
 					const char *delimiter,
 					ssize_t delimiterlength,
 					bool collapse,
 					char ***list,
-					unsigned long *listlength);
+					uint64_t *listlength);
 		static void	split(const char *string,
 					ssize_t stringlength,
 					const char *delimiter,
 					bool collapse,
 					char ***list,
-					unsigned long *listlength);
+					uint64_t *listlength);
 		static void	split(const char *string,
 					const char *delimiter,
 					bool collapse,
 					char ***list,
-					unsigned long *listlength);
+					uint64_t *listlength);
 
 
 

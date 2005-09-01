@@ -209,22 +209,22 @@ class filedescriptor {
 		// These methods return the number of bytes that were
 		// successfully read or RESULT_ERROR if an error occurred.
 		ssize_t	read(uint16_t *buffer) const;
-				// Reads sizeof(unsigned short) bytes
+				// Reads sizeof(uint16_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(uint32_t *buffer) const;
-				// Reads sizeof(unsigned long) bytes
+				// Reads sizeof(uint32_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(uint64_t *buffer) const;
-				// Reads sizeof(unsigned long long) bytes
+				// Reads sizeof(uint64_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(int16_t *buffer) const;
-				// Reads sizeof(short) bytes
+				// Reads sizeof(int16_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(int32_t *buffer) const;
-				// Reads sizeof(long) bytes
+				// Reads sizeof(int32_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(int64_t *buffer) const;
-				// Reads sizeof(long long) bytes
+				// Reads sizeof(int64_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(float *buffer) const;
 				// Reads sizeof(float) bytes from the file
@@ -263,22 +263,22 @@ class filedescriptor {
 		// successfully read, RESULT_ERROR if an error occurred or
 		// RESULT_TIMEOUT if a timeout occurred.
 		ssize_t	read(uint16_t *buffer, long sec, long usec) const;
-				// Reads sizeof(unsigned short) bytes
+				// Reads sizeof(uint16_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(uint32_t *buffer, long sec, long usec) const;
-				// Reads sizeof(unsigned long) bytes
+				// Reads sizeof(uint32_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(uint64_t *buffer, long sec, long usec) const;
-				// Reads sizeof(unsigned long long) bytes
+				// Reads sizeof(uint64_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(int16_t *buffer, long sec, long usec) const;
-				// Reads sizeof(short) bytes
+				// Reads sizeof(int16_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(int32_t *buffer, long sec, long usec) const;
-				// Reads sizeof(long) bytes
+				// Reads sizeof(int32_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(int64_t *buffer, long sec, long usec) const;
-				// Reads sizeof(long long) bytes
+				// Reads sizeof(int64_t) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(float *buffer, long sec, long usec) const;
 				// Reads sizeof(float) bytes from the file

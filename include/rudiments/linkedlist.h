@@ -71,18 +71,18 @@ class linkedlist {
 		void	append(linkedlistnodetype *node);
 			// Appends already created linkedlistnode "node" to the
 			// linkedlist.
-		bool	insert(unsigned long index, datatype data);
+		bool	insert(uint64_t index, datatype data);
 			// Creates a new linkedlistnode containing "data" and
 			// inserts it into the linkedlist at "index".
 			//
 			// Returns true on success and false on failure.
-		bool	insert(unsigned long index, linkedlistnodetype *node);
+		bool	insert(uint64_t index, linkedlistnodetype *node);
 			// Inserts already created linkedlistnode "node" into
 			// the linkedlist at "index".
 			//
 			// Returns true on success and false on failure.
 
-		bool	removeByIndex(unsigned long index);
+		bool	removeByIndex(uint64_t index);
 			// Deletes the linkedlistnode at "index".
 			//
 			// Returns true on success and false on failure.
@@ -99,23 +99,23 @@ class linkedlist {
 			//
 			// Returns true on success and false on failure.
 
-		bool	setDataByIndex(unsigned long index,
+		bool	setDataByIndex(uint64_t index,
 						datatype data);
 			// Sets the data contained in the linkedlistnode at
 			// "index" to "data".
 			//
 			// Returns true on success and false on failure.
-		bool	getDataByIndex(unsigned long index,
+		bool	getDataByIndex(uint64_t index,
 						datatype *data);
 			// Returns the data contained in the linkedlistnode at
 			// "index".
 			//
 			// Returns true on success and false on failure.
 
-		unsigned long	getLength() const;
+		uint64_t	getLength() const;
 				// Returns the length of the linkedlist.
 
-		linkedlistnodetype	*getNodeByIndex(unsigned long index);
+		linkedlistnodetype	*getNodeByIndex(uint64_t index);
 				// Returns a pointer to the linkedlistnode at
 				// "index".
 		linkedlistnodetype	*getNodeByData(datatype data);
