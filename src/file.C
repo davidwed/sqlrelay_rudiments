@@ -795,13 +795,9 @@ bool file::changeOwner(const char *filename, const char *newuser,
 }
 
 bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
-	int	result;
-	do {
-		result=chown(filename,uid,gid);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	file	fl;
+	return (fl.open(filename,O_RDWR) && fl.changeOwner(uid,gid));
 }
-
 
 bool file::changeOwnerUserId(const char *newuser) const {
 	uid_t	uid;

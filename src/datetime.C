@@ -331,10 +331,11 @@ void datetime::setTimeMutex(mutex *mtx) {
 
 const char *datetime::getString() {
 	delete[] timestring;
-	timestring=new char[2+1+2+1+charstring::integerLength(getYear())+1+
+	size_t	timestringlen=2+1+2+1+charstring::integerLength(getYear())+1+
 				2+1+2+1+2+1+
-				charstring::length(getTimeZoneString())];
-	sprintf(timestring,"%02d/%02d/%d %02d:%02d:%02d %s",
+				charstring::length(getTimeZoneString());
+	timestring=new char[timestringlen];
+	snprintf(timestring,timestringlen,"%02d/%02d/%d %02d:%02d:%02d %s",
 			getMonth(),getDayOfMonth(),getYear(),
 			getHour(),getMinutes(),getSeconds(),
 			getTimeZoneString());

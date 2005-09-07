@@ -21,6 +21,8 @@
 		in all cases.
 	solaris's strchr/strrchr return const char *,
 		so I made charstring::findFirst/findLast return const char *
+	use snprintf's rather than sprintf's now
+	uses fchmod/fchown rather than chmod/chown now
 
 0.28.2 - filedescriptor desctructor removes the read buffer now
 

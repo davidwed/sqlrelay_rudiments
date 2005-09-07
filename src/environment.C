@@ -53,9 +53,10 @@ bool environment::setValue(const char *variable, const char *value) {
 	if (envstrings.getData(const_cast<char *>(variable),&pestr)) {
 		delete[] pestr;
 	}
-	pestr=new char[charstring::length(variable)+
-			charstring::length(value)+2];
-	sprintf(pestr,"%s=%s",variable,value);
+	size_t	pestrlen=charstring::length(variable)+
+				charstring::length(value)+2;
+	pestr=new char[pestrlen];
+	snprintf(pestr,pestrlen,"%s=%s",variable,value);
 	int	result;
 	do {
 		result=putenv(pestr);

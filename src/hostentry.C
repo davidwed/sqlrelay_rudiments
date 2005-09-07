@@ -152,12 +152,14 @@ bool hostentry::initialize(const char *hostname, const char *address,
 }
 
 char *hostentry::getAddressString(int index) const {
-	char	*address=new char[(getAddressLength()*4)+1];
+	size_t	addresslen=(getAddressLength()*4)+1;
+	char	*address=new char[addresslen];
 	address[0]='\0';
 	for (int byte=0; byte<getAddressLength(); byte++) {
-		sprintf(address,"%s%d",address,getAddressList()[index][byte]);
+		snprintf(address,addresslen,
+			"%s%d",address,getAddressList()[index][byte]);
 		if (byte<getAddressLength()-1) {
-			sprintf(address,"%s.",address);
+			snprintf(address,addresslen,"%s.",address);
 		}
 	}
 	return address;

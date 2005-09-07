@@ -148,7 +148,7 @@ void charstring::strip(char *str1, const char *str2) {
 		return;
 	}
 
-	int	str2len=strlen(str2);
+	int	str2len=length(str2);
 	int	index=0;
 	int	total=0;
 
@@ -244,7 +244,8 @@ char *charstring::httpEscape(const char *input) {
 		return NULL;
 	}
 
-	char		*output=new char[strlen(input)*3+1];
+	size_t		outputlen=length(input)*3+1;
+	char		*output=new char[outputlen];
 	char		*outptr=output;
 	const char	*ptr=input;
 	
@@ -256,10 +257,12 @@ char *charstring::httpEscape(const char *input) {
 				(*ptr>='0' && *ptr<='9')) {
 			(*outptr)=*ptr;
 		} else {
-			sprintf(outptr,"%c%02X",'%',*ptr);
+			snprintf(outptr,outputlen,"%c%02X",'%',*ptr);
 			outptr=outptr+2;
+			outputlen=outputlen-2;
 		}
 		outptr++;
+		outputlen--;
 		ptr++;
 	}
 	(*outptr)='\0';
@@ -470,8 +473,9 @@ char *charstring::parseNumber(int16_t number) {
 char *charstring::parseNumber(int16_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
-	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*hd",zeropadding,number);
+	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%0*hd",zeropadding,number);
 	return str;
 }
 
@@ -482,8 +486,9 @@ char *charstring::parseNumber(uint16_t number) {
 char *charstring::parseNumber(uint16_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
-	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*hd",zeropadding,number);
+	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%0*hd",zeropadding,number);
 	return str;
 }
 
@@ -494,8 +499,9 @@ char *charstring::parseNumber(int32_t number) {
 char *charstring::parseNumber(int32_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
-	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*d",zeropadding,number);
+	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%0*d",zeropadding,number);
 	return str;
 }
 
@@ -506,8 +512,9 @@ char *charstring::parseNumber(uint32_t number) {
 char *charstring::parseNumber(uint32_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
-	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*d",zeropadding,number);
+	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%0*d",zeropadding,number);
 	return str;
 }
 
@@ -518,8 +525,9 @@ char *charstring::parseNumber(int64_t number) {
 char *charstring::parseNumber(int64_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
-	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*lld",zeropadding,number);
+	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%0*lld",zeropadding,number);
 	return str;
 }
 
@@ -530,15 +538,16 @@ char *charstring::parseNumber(uint64_t number) {
 char *charstring::parseNumber(uint64_t number,
 				unsigned short zeropadding) {
 	int	len=integerLength(number);
-	char	*str=new char[((zeropadding>len)?zeropadding:len)+1];
-	sprintf(str,"%0*lld",zeropadding,number);
+	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%0*lld",zeropadding,number);
 	return str;
 }
 
 char *charstring::parseNumber(float number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	sprintf(str,"%f",number);
+	snprintf(str,22,"%f",number);
 	return str;
 }
 
@@ -546,7 +555,7 @@ char *charstring::parseNumber(float number,
 				unsigned short scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	sprintf(str,"%.*f",scale,number);
+	snprintf(str,22,"%.*f",scale,number);
 	return str;
 }
 
@@ -554,15 +563,16 @@ char *charstring::parseNumber(float number,
 				unsigned short precision,
 				unsigned short scale) {
 	// FIXME: use (e|f|g)cvt(_r)?
-	char	*str=new char[precision+3];
-	sprintf(str,"%*.*f",precision,scale,number);
+	size_t	strlength=precision+3;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%*.*f",precision,scale,number);
 	return str;
 }
 
 char *charstring::parseNumber(double number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	sprintf(str,"%f",number);
+	snprintf(str,22,"%f",number);
 	return str;
 }
 
@@ -570,7 +580,7 @@ char *charstring::parseNumber(double number,
 				unsigned short scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	sprintf(str,"%.*f",scale,number);
+	snprintf(str,22,"%.*f",scale,number);
 	return str;
 }
 
@@ -578,8 +588,9 @@ char *charstring::parseNumber(double number,
 				unsigned short precision,
 				unsigned short scale) {
 	// FIXME: use (e|f|g)cvt(_r)?
-	char	*str=new char[precision+3];
-	sprintf(str,"%*.*f",precision,scale,number);
+	size_t	strlength=precision+3;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%*.*f",precision,scale,number);
 	return str;
 }
 
