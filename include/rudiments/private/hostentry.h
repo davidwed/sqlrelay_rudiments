@@ -2,19 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		hostent	*he;
-		#if defined(HAVE_GETHOSTBYNAME_R) && \
-				defined(HAVE_GETHOSTBYADDR_R)
-			hostent		hebuffer;
-			char		*buffer;
-		#endif
-
-		#if defined(RUDIMENTS_HAS_THREADS) && \
-			(!defined(HAVE_GETHOSTBYNAME_R) || \
-				!defined(HAVE_GETHOSTBYADDR_R))
-			static	mutex	*hemutex;
-		#endif
-
 		bool	initialize(const char *hostname,
 					const char *address,
 					int len, int type);
+		hostentryprivate	*pvt;

@@ -17,6 +17,8 @@
 namespace rudiments {
 #endif
 
+class shmfileprivate;
+
 class shmfile : public file {
 	public:
 

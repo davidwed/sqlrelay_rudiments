@@ -5,3 +5,4 @@
 		virtual	int	openInternal(const char *name, int flags);
 		virtual	int	openInternal(const char *name,
 						int flags, mode_t perms);
+		shmfileprivate	*pvt;

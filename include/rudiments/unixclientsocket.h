@@ -21,6 +21,8 @@
 namespace rudiments {
 #endif
 
+class unixclientsocketprivate;
+
 class unixclientsocket : public clientsocket, private unixsocketutil {
 	public:
 
@@ -78,6 +80,7 @@ class unixclientsocket : public clientsocket, private unixsocketutil {
 			// Returns RESULT_SUCCESS on success and RESULT_ERROR
 			// on failure.
 
+	#include <rudiments/private/unixclientsocket.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

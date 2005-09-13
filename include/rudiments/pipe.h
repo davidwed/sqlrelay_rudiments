@@ -17,6 +17,8 @@
 namespace rudiments {
 #endif
 
+class pipeprivate;
+
 class pipe : public filedescriptor {
 	public:
 

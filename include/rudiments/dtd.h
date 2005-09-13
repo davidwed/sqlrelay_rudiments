@@ -12,9 +12,12 @@
 namespace rudiments {
 #endif
 
+class dtdprivate;
+
 class dtd {
 	public:
 				dtd();
+				~dtd();
 
 		bool		parseFile(const char *filename);
 				// Parse file "filename" and generate a

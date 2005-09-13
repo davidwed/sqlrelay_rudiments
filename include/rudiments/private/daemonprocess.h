@@ -6,13 +6,6 @@
 		static	void	defaultCrash();
 		static	void	shutDown();
 		static	void	crash();
+		static	void	waitForChildrenToExit();
 
-		static	signalhandler	shutdownhandler;
-		static	void		(*shutdownfunc)(int);
-
-		static	signalhandler	crashhandler;
-		static	void		(*crashfunc)(int);
-
-		static	signalhandler	deadchildhandler;
-
-		static	void		waitForChildrenToExit();
+		daemonprocessprivate	*pvt;

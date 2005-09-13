@@ -10,6 +10,8 @@
 namespace rudiments {
 #endif
 
+class serversocketprivate;
+
 class serversocket : public server {
 	public:
 				serversocket();

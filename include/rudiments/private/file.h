@@ -7,10 +7,6 @@
 						int flags, mode_t perms);
 
 	private:
-		struct	stat	st;
-		bool		getcurrentpropertiesonopen;
-		bool		retryinterruptedlockops;
-
 		off64_t	lseek(off64_t offset, int whence) const;
 		bool	lock(int method, short type, short whence,
 					off64_t start, off64_t len) const;
@@ -34,3 +30,5 @@
 							int advice) const;
 		static	long	pathConf(const char *path, int name);
 			long	fpathConf(int name) const;
+
+		fileprivate	*pvt;

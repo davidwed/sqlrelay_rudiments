@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class groupentryprivate;
+
 class groupentry {
 	public:
 

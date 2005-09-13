@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class rpcentryprivate;
+
 class rpcentry {
 	public:
 

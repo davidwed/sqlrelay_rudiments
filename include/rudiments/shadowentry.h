@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class shadowentryprivate;
+
 class shadowentry {
 	public:
 

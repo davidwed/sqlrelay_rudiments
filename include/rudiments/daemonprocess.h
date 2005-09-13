@@ -17,6 +17,8 @@
 namespace rudiments {
 #endif
 
+class daemonprocessprivate;
+
 class daemonprocess {
 	public:
 			daemonprocess();

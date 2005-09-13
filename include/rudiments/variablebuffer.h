@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class variablebufferprivate;
+
 class variablebuffer {
 	public:
 			variablebuffer(size_t initialsize, size_t increment);

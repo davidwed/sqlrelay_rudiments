@@ -23,8 +23,11 @@ namespace rudiments {
 // A signalset it just a collection of signals.  Many signal-related functions
 // take signalsets for arguments.  The signalset class makes signalsets
 // easy to manage.
+class signalsetprivate;
 class signalset {
 	public:
+			signalset();
+			~signalset();
 		bool	addSignal(int signum);
 			// Add the signal "signum" to the set.
 			// Returns true on success and false on failure.
@@ -75,12 +78,14 @@ class signalmanager {
 
 
 // The signalhandler class provides methods for catching and handling signals.
+class signalhandlerprivate;
 class signalhandler {
 	public:
 			signalhandler();
 			signalhandler(int signum, void *handler);
 			// Calls the setHandler() and handleSignal() methods
 			// below during instantiation.
+			~signalhandler();
 
 		void	setHandler(void *handler);
 			// Sets the function to call when the process

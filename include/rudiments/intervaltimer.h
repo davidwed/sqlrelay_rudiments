@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class intervaltimerprivate;
+
 class intervaltimer {
 	public:
 			intervaltimer(int which);
@@ -25,6 +27,8 @@ class intervaltimer {
 			// ITIMER_PROF - decrements when the process is 
 			//			executing or and during system
 			//			calls, raises SIGPROF
+
+			~intervaltimer();
 
 		void	initialize();
 			// Sets (or resets) the initial and periodic intervals

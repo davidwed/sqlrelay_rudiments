@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class deviceprivate;
+
 class device : public file {
 	public:
 
@@ -35,6 +37,8 @@ class device : public file {
 			// permissions "perms".
 			//
 			// Returns true on success and false on failure.
+
+	#include <rudiments/private/device.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

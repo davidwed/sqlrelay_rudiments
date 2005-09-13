@@ -12,10 +12,7 @@
 			bool	comment(const char *string);
 			bool	cdata(const char *string);
 
-			xmldomnode	*nullnode;
-			xmldomnode	*rootnode;
-			xmldomnode	*currentparent;
-			xmldomnode	*currentattribute;
-
 				xmldom(const xmldom &x);
 			xmldom	&operator=(const xmldom &x);
+
+			xmldomprivate	*pvt;

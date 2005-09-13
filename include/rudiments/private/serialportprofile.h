@@ -2,6 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		termios	tio;
-
 		baudrate_t	translateBaudString(const char *baud);
+		serialportprofileprivate	*pvt;

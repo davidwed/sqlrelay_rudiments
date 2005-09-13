@@ -1,8 +1,8 @@
 	protected:
-		const char	*connectscript;
-		const char	*disconnectscript;
-		const char	*phonenumber;
-		unsigned long	retrywait;
-		unsigned long	retrycount;
+		const char	*_connectscript();
+		const char	*_disconnectscript();
+		const char	*_phonenumber();
 
 		void	modemclientClone(const modemclient &m);
+	private:
+		modemclientprivate	*pvt;

@@ -10,3 +10,5 @@
 	private:
 		bool	setLingerOnClose(int timeout, int onoff);
 		bool	setReuseAddresses(int onoff);
+
+		serversocketprivate	*pvt;

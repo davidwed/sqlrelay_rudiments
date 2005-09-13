@@ -33,6 +33,8 @@
 namespace rudiments {
 #endif
 
+class systemprivate;
+
 class system {
 	public:
 

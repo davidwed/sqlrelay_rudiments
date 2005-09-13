@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class datetimeprivate;
+
 class datetime {
 	public:
 

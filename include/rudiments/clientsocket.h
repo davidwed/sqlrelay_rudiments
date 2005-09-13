@@ -10,6 +10,8 @@
 namespace rudiments {
 #endif
 
+class clientsocketprivate;
+
 class clientsocket : public client {
 	public:
 				clientsocket();

@@ -28,6 +28,7 @@ class logdestination {
 
 
 // The syslogdestination class writes log data to syslog.
+class syslogdestinationprivate;
 class syslogdestination : public logdestination {
 	public:
 				syslogdestination();
@@ -43,6 +44,7 @@ class syslogdestination : public logdestination {
 
 
 // The filedestination class writes log data to a file.
+class filedestinationprivate;
 class filedestination : public logdestination {
 	public:
 				filedestination();
@@ -73,6 +75,7 @@ typedef linkedlistnode<logdestination *>	loggerlistnode;
 
 // The logger class provides methods for managing
 // logdestinations and writing log entries.
+class loggerprivate;
 class logger {
 	public:
 			logger();

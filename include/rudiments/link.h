@@ -18,6 +18,8 @@
 namespace rudiments {
 #endif
 
+class linkprivate;
+
 class link : public file {
 	public:
 

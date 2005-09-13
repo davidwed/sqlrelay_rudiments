@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class hostentryprivate;
+
 class hostentry {
 	public:
 

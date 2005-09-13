@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class clientprivate;
+
 class client : public filedescriptor {
 	public:
 

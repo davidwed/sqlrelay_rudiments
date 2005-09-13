@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class commandlineprivate;
+
 class commandline {
 	public:
 		commandline(int argc, const char **argv);

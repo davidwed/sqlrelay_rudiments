@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class dynamiclibprivate;
+
 class dynamiclib {
 	public:
 			dynamiclib();

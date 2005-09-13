@@ -2,17 +2,11 @@
 // See the COPYING file for more information
 
 	private:
-		DIR		*dir;
-		uint64_t	currentindex;
-
-		#if defined(RUDIMENTS_HAS_THREADS) && \
-			!defined(HAVE_READDIR_R)
-			static	mutex	*rdmutex;
-		#endif
-
 		// how do we effectively make a copy of a DIR?
 		// since I don't know how, for now, these are private
 				directory(const directory &d);
 		directory	&operator=(const directory &d);
 
 		static	int64_t	pathConf(const char *pathname, int name);
+
+		directoryprivate	*pvt;

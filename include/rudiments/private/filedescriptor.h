@@ -25,7 +25,32 @@
 						bool read, bool write) const;
 		bool		setNoDelay(int onoff);
 
-		int	fd;
+		#ifdef RUDIMENTS_HAS_SSL
+		virtual	BIO	*newSSLBIO() const;
+		#endif
+
+		int	getSockOpt(int level, int optname,
+					void *optval, socklen_t *optlen);
+		int	setSockOpt(int level, int optname,
+					const void *optval, socklen_t optlen);
+
+		const char	*type() const;
+		void		type(const char *tp);
+
+		int	fd() const;
+		void	fd(int filedes);
+
+		#ifdef RUDIMENTS_HAS_SSL
+		SSL_CTX	*ctx();
+		SSL	*ssl();
+		int	sslresult();
+		void	sslresult(int sslrslt);
+		#endif
+
+	private:
+		filedescriptorprivate	*pvt;
+
+		/*int	fd;
 		bool	retryinterruptedreads;
 		bool	retryinterruptedwrites;
 		bool	retryinterruptedwaits;
@@ -44,7 +69,6 @@
 		bool		uselistenerinsidewrites;
 
 		#ifdef RUDIMENTS_HAS_SSL
-		virtual	BIO	*newSSLBIO() const;
 			SSL_CTX	*ctx;
 			SSL	*ssl;
 			BIO	*bio;
@@ -60,10 +84,4 @@
 		mutable unsigned char	*readbuffer;
 		mutable unsigned char	*readbufferend;
 		mutable unsigned char	*readbufferhead;
-		mutable unsigned char	*readbuffertail;
-
-
-		int	getSockOpt(int level, int optname,
-					void *optval, socklen_t *optlen);
-		int	setSockOpt(int level, int optname,
-					const void *optval, socklen_t optlen);
+		mutable unsigned char	*readbuffertail;*/

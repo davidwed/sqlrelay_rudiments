@@ -2,9 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-		namevaluepairs	nvp;
-		char		delim;
-
 		int		countPairs(const char *paramstring);
 		const char	*parseName(const char *data, char **outbuffer);
 		const char	*parseValue(const char *data, char **outbuffer);
@@ -20,3 +17,5 @@
 		// FIXME: it should be possible to copy a parameterstring
 				parameterstring(const parameterstring &p);
 		parameterstring	&operator=(const parameterstring &p);
+
+		parameterstringprivate	*pvt;

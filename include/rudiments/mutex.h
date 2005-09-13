@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class mutexprivate;
+
 class mutex {
 	public:
 			mutex();

@@ -18,6 +18,8 @@
 namespace rudiments {
 #endif
 
+class parameterstringprivate;
+
 class parameterstring {
 	public:
 

@@ -46,6 +46,8 @@
 namespace rudiments {
 #endif
 
+class semaphoresetprivate;
+
 class semaphoreset {
 	public:
 			semaphoreset();

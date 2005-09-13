@@ -74,8 +74,6 @@ class randomnumber {
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
 #endif
-
-	#include <rudiments/private/randomnumber.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

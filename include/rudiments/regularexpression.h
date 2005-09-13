@@ -16,6 +16,8 @@
 namespace rudiments {
 #endif
 
+class regularexpressionprivate;
+
 class regularexpression {
 	public:
 

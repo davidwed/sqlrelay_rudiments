@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class messagequeueprivate;
+
 class messagequeue {
 	public:
 

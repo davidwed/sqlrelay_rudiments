@@ -23,6 +23,8 @@
 namespace rudiments {
 #endif
 
+class ttyprivate;
+
 class tty : public filedescriptor {
 	public:
 

@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class serialportprofileprivate;
+
 class serialportprofile {
 	public:
 

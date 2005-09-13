@@ -2,10 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-			#ifdef RUDIMENTS_HAS_THREADS
-			static mutex	*cryptmutex;
-			#endif
-
 		crypt();
 		crypt(const crypt &c);
 		crypt	&operator=(const crypt &c);

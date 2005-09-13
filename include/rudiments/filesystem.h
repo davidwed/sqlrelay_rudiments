@@ -20,6 +20,8 @@
 namespace rudiments {
 #endif
 
+class filesystemprivate;
+
 class filesystem {
 	public:
 				filesystem();

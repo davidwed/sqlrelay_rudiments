@@ -10,6 +10,8 @@
 namespace rudiments {
 #endif
 
+class unixsocketutilprivate;
+
 class unixsocketutil {
 	public:
 			unixsocketutil();

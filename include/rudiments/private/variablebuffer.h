@@ -6,11 +6,13 @@
 				size_t initialsize, size_t increment);
 		void	extend(size_t size);
 
-		unsigned char	*buffer;
-		size_t		initialsize;
-		size_t		increment;
-		size_t		buffersize;
-		size_t		position;
-		size_t		endofbuffer;
-
 		void	variablebufferClone(const variablebuffer &v);
+
+		unsigned char	*_buffer();
+		size_t		_endofbuffer();
+		void		_endofbuffer(size_t eob);
+		size_t		_position();
+		void		_position(size_t pos);
+
+	private:
+		variablebufferprivate	*pvt;

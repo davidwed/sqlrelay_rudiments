@@ -116,6 +116,8 @@ enum xmldomnodetype {
 	CDATA_XMLDOMNODETYPE
 };
 
+class xmldomnodeprivate;
+
 class xmldomnode {
 	public:
 			xmldomnode(xmldomnode *nullnode);

@@ -21,6 +21,8 @@
 namespace rudiments {
 #endif
 
+class fileprivate;
+
 class file : public filedescriptor {
 	public:
 

@@ -20,15 +20,7 @@
 			char	skipWhitespace(char current);
 			char	getCharacter();
 
-			const char	*string;
-			const char	*ptr;
-			file		fl;
-			#ifdef HAVE_MMAP
-			memorymap	mm;
-			#endif
-			uint32_t	line;
-			bool		allowtrailingtext;
-			stringbuffer	err;
+				xmlsax(const xmlsax &x);
+			xmlsax	&operator=(const xmlsax &x);
 
-			xmlsax(const xmlsax &x);
-		xmlsax	&operator=(const xmlsax &x);
+			xmlsaxprivate	*pvt;

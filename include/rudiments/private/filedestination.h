@@ -4,4 +4,4 @@
 	friend class logger;
 	private:
 		void	write(const char *string);
-		file	logfile;
+		filedestinationprivate	*pvt;

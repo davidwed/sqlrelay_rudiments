@@ -2,11 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-			void	*handle;
-
-			#ifdef RUDIMENTS_HAS_THREADS
-			static mutex	*errormutex;
-			#endif
-
-					dynamiclib(const dynamiclib &d);
-			dynamiclib	&operator=(const dynamiclib &d);
+				dynamiclib(const dynamiclib &d);
+		dynamiclib	&operator=(const dynamiclib &d);
+		dynamiclibprivate	*pvt;

@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class memorymapprivate;
+
 class memorymap {
 	public:
 			memorymap();

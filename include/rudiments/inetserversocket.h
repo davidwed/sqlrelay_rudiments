@@ -21,6 +21,8 @@
 namespace rudiments {
 #endif
 
+class inetserversocketprivate;
+
 class inetserversocket : public serversocket, private inetsocketutil {
 	public:
 				inetserversocket();
@@ -83,6 +85,8 @@ class inetserversocket : public serversocket, private inetsocketutil {
 				// returned instead.
 				// Writes the address of the client at
 				// the other end of "sock" to "buffer".
+
+	#include <rudiments/private/inetserversocket.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

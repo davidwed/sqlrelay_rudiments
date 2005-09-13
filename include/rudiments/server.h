@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class serverprivate;
+
 class server : public filedescriptor {
 	public:
 			server();
@@ -23,6 +25,8 @@ class server : public filedescriptor {
 		virtual	bool	bind()=0;
 		virtual	bool	listen(int backlog)=0;
 		virtual	filedescriptor	*accept()=0;
+
+	#include <rudiments/private/server.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

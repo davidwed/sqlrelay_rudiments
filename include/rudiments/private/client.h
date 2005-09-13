@@ -2,16 +2,18 @@
 // See the COPYING file for more information.
 
 	protected:
-		char		*connecterror;
-		long		timeoutsec;
-		long		timeoutusec;
-		unsigned long	retrywait;
-		unsigned long	retrycount;
+		char		**_connecterror();
+		long		_timeoutsec();
+		long		_timeoutusec();
+		unsigned long	_retrywait();
+		unsigned long	_retrycount();
 
-	private:
-		void	clientInit(char *connecterror,
+		void	initialize(char *connecterror,
 					long timeoutsec,
 					long timeoutusec,
 					unsigned long retrywait,
 					unsigned long retrycount);
 		void	clientClone(const client &c);
+
+	private:
+		clientprivate	*pvt;

@@ -24,6 +24,8 @@
 namespace rudiments {
 #endif
 
+class loginrecordprivate;
+
 class loginrecord {
 	public:
 

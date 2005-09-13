@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class modemclientprivate;
+
 class modemclient : public client, private modemutil {
 	public:
 				modemclient();

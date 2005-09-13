@@ -64,7 +64,7 @@ ifeq ($(INCLUDE_SHMFILE),1)
 endif
 ifeq ($(INCLUDE_DEVICE),1)
 	HEADERS += device.h
-	PRIVATEHEADERS += deviceincludes.h
+	PRIVATEHEADERS += device.h deviceincludes.h
 endif
 ifeq ($(INCLUDE_FILESYSTEM),1)
 	HEADERS += filesystem.h
@@ -84,11 +84,11 @@ ifeq ($(INCLUDE_HOSTENTRY),1)
 endif
 ifeq ($(INCLUDE_INETCLIENT),1)
 	HEADERS += inetclientsocket.h
-	PRIVATEHEADERS += inetclientsocketincludes.h
+	PRIVATEHEADERS += inetclientsocket.h inetclientsocketincludes.h
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
 	HEADERS += inetserversocket.h
-	PRIVATEHEADERS += inetserversocketincludes.h
+	PRIVATEHEADERS += inetserversocket.h inetserversocketincludes.h
 endif
 ifeq ($(INCLUDE_LISTENER),1)
 	HEADERS += listener.h
@@ -109,7 +109,7 @@ ifeq ($(INCLUDE_LOGGER),1)
 endif
 ifeq ($(INCLUDE_MEMORYPOOL),1)
 	HEADERS += memorypool.h
-	PRIVATEHEADERS += memorypool.h memorypoolnode.h memorypoolincludes.h
+	PRIVATEHEADERS += memorypool.h memorypoolincludes.h
 endif
 ifeq ($(INCLUDE_PASSWDENTRY),1)
 	HEADERS += passwdentry.h
@@ -125,7 +125,7 @@ ifeq ($(INCLUDE_PROTOCOLENTRY),1)
 endif
 ifeq ($(INCLUDE_RANDOMNUMBER),1)
 	HEADERS += randomnumber.h
-	PRIVATEHEADERS += randomnumber.h randomnumberincludes.h
+	PRIVATEHEADERS += randomnumberincludes.h
 endif
 ifeq ($(INCLUDE_CONTAINER),1)
 	HEADERS += container.h
@@ -145,7 +145,7 @@ ifeq ($(INCLUDE_SEMAPHORESET),1)
 endif
 ifeq ($(INCLUDE_SERVER),1)
 	HEADERS += server.h
-	PRIVATEHEADERS += serverincludes.h
+	PRIVATEHEADERS += server.h serverincludes.h
 endif
 ifeq ($(INCLUDE_SERVICEENTRY),1)
 	HEADERS += serviceentry.h
@@ -177,7 +177,7 @@ ifeq ($(INCLUDE_CHARACTER),1)
 endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	HEADERS += unixclientsocket.h
-	PRIVATEHEADERS += unixclientsocketincludes.h
+	PRIVATEHEADERS += unixclientsocket.h unixclientsocketincludes.h
 endif
 ifeq ($(INCLUDE_MODEMCLIENT),1)
 	HEADERS += modemclient.h
@@ -247,7 +247,7 @@ ifeq ($(INCLUDE_SERIALPORT),1)
 endif
 ifeq ($(INCLUDE_CHAT),1)
 	HEADERS += chat.h
-	PRIVATEHEADERS += chatincludes.h
+	PRIVATEHEADERS += chat.h chatincludes.h
 endif
 ifeq ($(INCLUDE_ERROR),1)
 	HEADERS += error.h

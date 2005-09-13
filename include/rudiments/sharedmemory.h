@@ -21,6 +21,8 @@
 namespace rudiments {
 #endif
 
+class sharedmemoryprivate;
+
 class sharedmemory {
 	public:
 			sharedmemory();

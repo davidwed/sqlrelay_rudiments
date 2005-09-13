@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class stringbufferprivate;
+
 class stringbuffer : public variablebuffer {
 	public:
 				stringbuffer();

@@ -43,6 +43,8 @@
 namespace rudiments {
 #endif
 
+class shellcommandprivate;
+
 class shellcommand {
 	public:
 		int	run(const char *command);
@@ -70,10 +72,6 @@ class shellcommand {
 
 #ifdef RUDIMENTS_NAMESPACE
 }
-#endif
-
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/shellcommandinlines.h>
 #endif
 
 #endif

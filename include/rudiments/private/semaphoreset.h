@@ -4,16 +4,6 @@
 	private:
 			void	createOperations();
 
-			int	semid;
-			bool	created;
-			int	semcount;
-		struct	sembuf	**waitop;
-		struct	sembuf	**waitwithundoop;
-		struct	sembuf	**signalop;
-		struct	sembuf	**signalwithundoop;
-
-			key_t	key;
-
 		#ifndef HAVE_SEMUN
 		union semun {
 			int	val;
@@ -32,3 +22,5 @@
 		bool	semTimedOp(struct sembuf *sops, timespec *ts);
 		#endif
 		bool	semOp(struct sembuf *sops);
+
+		semaphoresetprivate	*pvt;

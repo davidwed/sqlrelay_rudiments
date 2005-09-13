@@ -15,6 +15,8 @@ namespace rudiments {
 
 class listener;
 
+class filedescriptorprivate;
+
 class filedescriptor {
 	public:
 			filedescriptor();
@@ -181,26 +183,27 @@ class filedescriptor {
 		ssize_t	write(bool value, long sec, long usec) const;
 				// Write "value" to the file descriptor.
 		ssize_t	write(const unsigned char *string,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Write "string" to the file descriptor.  Note
 				// that "string" must be NULL-terminated.
-		ssize_t	write(const char *string, long sec, long usec) const;
+		ssize_t	write(const char *string,
+					long sec, long usec) const;
 				// Write "string" to the file descriptor.  Note
 				// that "string" must be NULL-terminated.
 		ssize_t	write(const unsigned char *string, size_t size,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Write "size" bytes from "string" to the file
 				// descriptor.  Note that it is possible to
 				// write beyond the string's NULL terminator
 				// using this method.
 		ssize_t	write(const char *string, size_t size,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Write "size" bytes from "string" to the file
 				// descriptor.  Note that it is possible to
 				// write beyond the string's NULL terminator
 				// using this method.
 		ssize_t	write(const void *buffer, size_t size,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Write "size" bytes from "buffer" to the file
 				// descriptor.
 
@@ -286,7 +289,8 @@ class filedescriptor {
 		ssize_t	read(double *buffer, long sec, long usec) const;
 				// Reads sizeof(double) bytes from the file
 				// descriptor into "buffer".
-		ssize_t	read(unsigned char *buffer, long sec, long usec) const;
+		ssize_t	read(unsigned char *buffer,
+					long sec, long usec) const;
 				// Reads sizeof(unsigned char) bytes
 				// from the file descriptor into "buffer".
 		ssize_t	read(char *buffer, long sec, long usec) const;
@@ -296,19 +300,19 @@ class filedescriptor {
 				// Reads sizeof(bool) bytes from the
 				// file descriptor into "buffer".
 		ssize_t	read(unsigned char *buffer, size_t size,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
 		ssize_t	read(char *buffer, size_t size,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
 		ssize_t	read(void *buf, size_t size,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
 		ssize_t	read(char **buffer, char *terminator,
-						long sec, long usec) const;
+					long sec, long usec) const;
 				// Reads from the file desciptor into "buffer"
 				// until "terminator" is encountered.  Note
 				// that "buffer" is allocated internally and

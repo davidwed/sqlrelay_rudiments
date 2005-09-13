@@ -28,6 +28,8 @@
 namespace rudiments {
 #endif
 
+class unixserversocketprivate;
+
 class unixserversocket : public serversocket, private unixsocketutil {
 	public:
 				unixserversocket();

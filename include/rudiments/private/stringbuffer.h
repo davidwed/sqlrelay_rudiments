@@ -3,3 +3,4 @@
 
 	private:
 		void	terminate();
+		stringbufferprivate	*pvt;

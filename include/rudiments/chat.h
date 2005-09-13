@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class chatprivate;
+
 class chat {
 	public:
 		chat(const filedescriptor *fd);

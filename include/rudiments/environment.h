@@ -13,8 +13,11 @@
 namespace rudiments {
 #endif
 
+class environmentprivate;
+
 class environment {
 	public:
+			environment();
 			~environment();
 
 		const char	*getValue(const char *variable) const;

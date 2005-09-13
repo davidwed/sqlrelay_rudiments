@@ -12,6 +12,8 @@
 namespace rudiments {
 #endif
 
+class threadprivate;
+
 class thread {
 	public:
 

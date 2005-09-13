@@ -16,6 +16,8 @@ typedef listnode< networkinterface * >	networkinterfacelistnode;
 typedef list< networkinterface *, networkinterfacelistnode >
 						networkinterfacelist;
 
+class networkinterfaceprivate;
+
 class networkinterface {
 	public:
 		sockaddr	getAddress();
@@ -38,17 +40,16 @@ class networkinterface {
 	#include <rudiments/private/networkinterface.h>
 };
 
+class networkinterfacesprivate;
+
 class networkinterfaces {
 	public:
 		static	networkinterfacelist	*getList();
+	#include <rudiments/private/networkinterfaces.h>
 }
 
 #ifdef RUDIMENTS_NAMESPACE
 }
-#endif
-
-#ifdef ENABLE_RUDIMENTS_INLINES
-	#include <rudiments/private/networkinterfaceinlines.h>
 #endif
 
 #endif

@@ -10,6 +10,8 @@
 namespace rudiments {
 #endif
 
+class modemutilprivate;
+
 class modemutil {
 	public:
 			modemutil();
@@ -18,10 +20,13 @@ class modemutil {
 		void	initialize(const char *device, const char *baud);
 
 	protected:
-		const char	*devicename;
-		const char	*baud;
+		const char	*_devicename();
+		const char	*_baud();
 
 		bool	configureSerialPort(int fd, const char *baud);
+
+	private:
+		modemutilprivate	*pvt;
 
 };
 

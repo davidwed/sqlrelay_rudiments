@@ -13,6 +13,8 @@
 namespace rudiments {
 #endif
 
+class timezonefileprivate;
+
 struct ttinfo {
 	long		tt_gmtoff;
 	int		tt_isdst;

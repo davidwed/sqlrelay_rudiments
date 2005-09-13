@@ -15,6 +15,8 @@ typedef linkedlistnode<filedescriptor *>	listenerlistnode;
 
 // The listener class listens on a pool of file descriptors.
 
+class listenerprivate;
+
 class listener {
 	public:
 			listener();

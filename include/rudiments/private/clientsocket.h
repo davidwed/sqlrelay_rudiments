@@ -7,3 +7,5 @@
 #endif
 		int	connect(const struct sockaddr *addr,
 				socklen_t addrlen, long sec, long usec);
+
+		clientsocketprivate	*pvt;

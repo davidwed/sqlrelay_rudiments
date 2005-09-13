@@ -21,6 +21,8 @@
 namespace rudiments {
 #endif
 
+class pseudottyprivate;
+
 class pseudotty : public filedescriptor {
 	public:
 

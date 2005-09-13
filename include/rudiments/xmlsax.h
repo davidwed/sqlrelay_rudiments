@@ -14,6 +14,8 @@
 namespace rudiments {
 #endif
 
+class xmlsaxprivate;
+
 class xmlsax {
 	public:
 
