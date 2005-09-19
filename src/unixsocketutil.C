@@ -10,27 +10,46 @@
 namespace rudiments {
 #endif
 
+class unixsocketutilprivate {
+	friend class unixsocketutil;
+	private:
+		const char	*_filename;
+		sockaddr_un	_sun;
+};
+
 unixsocketutil::unixsocketutil() {
+	pvt=new unixsocketutilprivate;
 	initialize(NULL);
 }
 
 unixsocketutil::unixsocketutil(const unixsocketutil &u) {
-	filename=u.filename;
-	sockaddrun=u.sockaddrun;
+	pvt=new unixsocketutilprivate;
+	pvt->_filename=u.pvt->_filename;
+	pvt->_sun=u.pvt->_sun;
 }
 
 unixsocketutil &unixsocketutil::operator=(const unixsocketutil &u) {
 	if (this!=&u) {
-		filename=u.filename;
-		sockaddrun=u.sockaddrun;
+		pvt->_filename=u.pvt->_filename;
+		pvt->_sun=u.pvt->_sun;
 	}
 	return *this;
 }
 
-unixsocketutil::~unixsocketutil() {}
+unixsocketutil::~unixsocketutil() {
+	delete pvt;
+}
 
 void unixsocketutil::initialize(const char *filename) {
-	this->filename=filename;
+	pvt->_filename=filename;
+}
+
+const char *unixsocketutil::_filename() {
+	return pvt->_filename;
+}
+
+sockaddr_un *unixsocketutil::_sun() {
+	return &pvt->_sun;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

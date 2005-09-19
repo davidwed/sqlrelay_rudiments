@@ -15,20 +15,34 @@
 namespace rudiments {
 #endif
 
+class protocolentryprivate {
+	friend class protocolentry;
+	private:
+		protoent	*_pe;
+		#if defined(HAVE_GETPROTOBYNAME_R) || \
+				defined(HAVE_GETPROTOBYNUMBER_R)
+			protoent	_pebuffer;
+			char		*_buffer;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
-mutex	*protocolentry::pemutex;
+static mutex	*_pemutex;
 #endif
 
 protocolentry::protocolentry() {
-	pe=NULL;
+	pvt=new protocolentryprivate;
+	pvt->_pe=NULL;
 	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
-		rawbuffer::zero(&pebuffer,sizeof(pebuffer));
-		buffer=NULL;
+		rawbuffer::zero(&pvt->_pebuffer,sizeof(pvt->_pebuffer));
+		pvt->_buffer=NULL;
 	#endif
 }
 
 protocolentry::protocolentry(const protocolentry &p) {
+	pvt=new protocolentryprivate;
 	initialize(p.getName());
 }
 
@@ -41,20 +55,21 @@ protocolentry &protocolentry::operator=(const protocolentry &p) {
 
 protocolentry::~protocolentry() {
 	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
-		delete[] buffer;
+		delete[] pvt->_buffer;
 	#endif
+	delete pvt;
 }
 
 const char *protocolentry::getName() const {
-	return pe->p_name;
+	return pvt->_pe->p_name;
 }
 
 const char * const *protocolentry::getAliasList() const {
-	return pe->p_aliases;
+	return pvt->_pe->p_aliases;
 }
 
 int protocolentry::getNumber() const {
-	return pe->p_proto;
+	return pvt->_pe->p_proto;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -68,7 +83,7 @@ bool protocolentry::needsMutex() {
 
 void protocolentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
-		pemutex=mtx;
+		_pemutex=mtx;
 	#endif
 }
 #endif
@@ -84,10 +99,10 @@ bool protocolentry::initialize(int number) {
 bool protocolentry::initialize(const char *protocolname, int number) {
 
 	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
-		if (pe) {
-			pe=NULL;
-			delete[] buffer;
-			buffer=NULL;
+		if (pvt->_pe) {
+			pvt->_pe=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
 		}
 		// getprotobyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
@@ -95,44 +110,50 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
+			pvt->_buffer=new char[size];
 			#if defined(HAVE_GETPROTOBYNAME_R_5) && \
 				defined(HAVE_GETPROTOBYNUMBER_R_5)
 			if (!((protocolname)
-				?(getprotobyname_r(protocolname,&pebuffer,
-							buffer,size,&pe))
-				:(getprotobynumber_r(number,&pebuffer,
-							buffer,size,&pe)))) {
-				return (pe!=NULL);
+				?(getprotobyname_r(protocolname,
+							&pvt->_pebuffer,
+							pvt->_buffer,size,
+							&pvt->_pe))
+				:(getprotobynumber_r(number,
+							&pvt->_pebuffer,
+							pvt->_buffer,size,
+							&pvt->_pe)))) {
+				return (pvt->_pe!=NULL);
 			}
 			#elif defined(HAVE_GETPROTOBYNAME_R_4) && \
 				defined(HAVE_GETPROTOBYNUMBER_R_4)
 			if ((protocolname)
-				?(pe=getprotobyname_r(protocolname,&pebuffer,
-							buffer,size))
-				:(pe=getprotobynumber_r(number,&pebuffer,
-							buffer,size))) {
+				?(pe=getprotobyname_r(protocolname,
+							&pvt->_pebuffer,
+							pvt->_buffer,size))
+				:(pe=getprotobynumber_r(number,
+							&pvt->_pebuffer,
+							pvt->_buffer,size))) {
 				return true;
 			}
 			#endif
-			delete[] buffer;
-			buffer=NULL;
-			pe=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
+			pvt->_pe=NULL;
 			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
 		return false;
 	#else
-		pe=NULL;
+		pvt->_pe=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(pemutex && !pemutex->lock())) &&
-			((pe=((protocolname)
+		return (!(_pemutex && !_pemutex->lock())) &&
+			((pvt->_pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
-			!(pemutex && !pemutex->unlock());
+			!(_pemutex && !_pemutex->unlock());
 		#else
-		return ((pe=((protocolname)
+		return ((pvt->_pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL);
 		#endif
@@ -191,7 +212,7 @@ bool protocolentry::getAliasList(int number, char ***aliaslist) {
 
 void protocolentry::print() const {
 
-	if (!pe) {
+	if (!pvt->_pe) {
 		return;
 	}
 

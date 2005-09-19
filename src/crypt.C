@@ -23,8 +23,9 @@
 namespace rudiments {
 #endif
 
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS)
-mutex	*crypt::cryptmutex;
+static mutex	*_cryptmutex;
 #endif
 
 char *crypt::encrypt(const char *password, const char *salt) {
@@ -36,7 +37,7 @@ char *crypt::encrypt(const char *password, const char *salt) {
 			charstring::duplicate(encryptedpassword):NULL;
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (cryptmutex && !cryptmutex->lock()) {
+		if (_cryptmutex && !_cryptmutex->lock()) {
 			return NULL;
 		}
 		#endif
@@ -44,8 +45,8 @@ char *crypt::encrypt(const char *password, const char *salt) {
 		char	*retval=(encryptedpassword)?
 				charstring::duplicate(encryptedpassword):NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (cryptmutex) {
-			cryptmutex->unlock();
+		if (_cryptmutex) {
+			_cryptmutex->unlock();
 		}
 		#endif
 		return retval;
@@ -63,7 +64,7 @@ bool crypt::needsMutex() {
 
 void crypt::setMutex(mutex *mtx) {
 	#if !defined(HAVE_CRYPT_R)
-		cryptmutex=mtx;
+		_cryptmutex=mtx;
 	#endif
 }
 #endif

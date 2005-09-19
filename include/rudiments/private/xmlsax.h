@@ -19,6 +19,7 @@
 			void	parseTextFailed();
 			char	skipWhitespace(char current);
 			char	getCharacter();
+			bool	mapFile();
 
 				xmlsax(const xmlsax &x);
 			xmlsax	&operator=(const xmlsax &x);

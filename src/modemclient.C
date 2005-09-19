@@ -17,18 +17,26 @@
 namespace rudiments {
 #endif
 
+class modemclientprivate {
+	friend class modemclient;
+	private:
+		const char	*_connectscript;
+		const char	*_disconnectscript;
+		const char	*_phonenumber;
+};
+
 modemclient::modemclient() : client(), modemutil() {
-	connectscript="";
-	disconnectscript="";
-	phonenumber="";
-	retrywait=0;
-	retrycount=0;
-	type="modemclient";
+	pvt=new modemclientprivate;
+	pvt->_connectscript="";
+	pvt->_disconnectscript="";
+	pvt->_phonenumber="";
+	type("modemclient");
 }
 
 modemclient::modemclient(const modemclient &m) : client(m), modemutil(m) {
+	pvt=new modemclientprivate;
 	modemclientClone(m);
-	type="modemclient";
+	type("modemclient");
 }
 
 modemclient &modemclient::operator=(const modemclient &m) {
@@ -41,30 +49,36 @@ modemclient &modemclient::operator=(const modemclient &m) {
 }
 
 void modemclient::modemclientClone(const modemclient &m) {
-	connectscript=m.connectscript;
-	phonenumber=m.phonenumber;
-	disconnectscript=m.disconnectscript;
-	retrywait=m.retrywait;
-	retrycount=m.retrycount;
+	pvt->_connectscript=m.pvt->_connectscript;
+	pvt->_phonenumber=m.pvt->_phonenumber;
+	pvt->_disconnectscript=m.pvt->_disconnectscript;
 }
 
 modemclient::~modemclient() {
 	close();
+	delete pvt;
 }
 
 void modemclient::initialize(constnamevaluepairs *cd) {
 	if (cd) {
+		const char	*devicename;
 		cd->getData("device",&devicename);
+		const char	*baud;
 		cd->getData("baud",&baud);
+		const char	*connectscript;
 		cd->getData("connectscript",&connectscript);
+		const char	*phonenumber;
 		cd->getData("phonenumber",&phonenumber);
+		const char	*disconnectscript;
 		cd->getData("disconnectscript",&disconnectscript);
 		const char	*rwstr;
 		cd->getData("retrywait",&rwstr);
-		retrywait=charstring::toInteger(rwstr);
 		const char	*rcstr;
 		cd->getData("retrycount",&rcstr);
-		retrycount=charstring::toInteger(rcstr);
+		initialize(devicename,baud,connectscript,phonenumber,
+				disconnectscript,
+				charstring::toInteger(rwstr),
+				charstring::toInteger(rcstr));
 	}
 }
 
@@ -75,29 +89,28 @@ void modemclient::initialize(const char *devicename, const char *baud,
 				unsigned long retrywait,
 				unsigned long retrycount) {
 	modemutil::initialize(devicename,baud);
-	this->connectscript=connectscript;
-	this->phonenumber=phonenumber;
-	this->disconnectscript=disconnectscript;
-	this->retrywait=retrywait;
-	this->retrycount=retrycount;
+	pvt->_connectscript=connectscript;
+	pvt->_phonenumber=phonenumber;
+	pvt->_disconnectscript=disconnectscript;
+	client::initialize("",-1,-1,retrywait,retrycount);
 }
 
 int modemclient::connect() {
 
 	constnamevaluepairs	phnvp;
-	phnvp.setData("phonenumber",const_cast<char *>(phonenumber));
+	phnvp.setData("phonenumber",const_cast<char *>(pvt->_phonenumber));
 
 	unsigned long	whichtry=0;
 	for (;;) {
 
-		delete[] connecterror;
-		connecterror=NULL;
+		delete[] *(_connecterror());
+		*(_connecterror())=NULL;
 
 		// open the serial port
 		// this is kind of lame, this class should somehow
 		// inherit from device
 		device	modem;
-		if (!modem.open(devicename,O_RDWR|O_NOCTTY)) {
+		if (!modem.open(_devicename(),O_RDWR|O_NOCTTY)) {
 			return RESULT_ERROR;
 		}
 		setFileDescriptor(modem.getFileDescriptor());
@@ -106,15 +119,15 @@ int modemclient::connect() {
 		modem.setFileDescriptor(-1);
 
 		// configure the serial port
-		if (!configureSerialPort(fd,baud)) {
+		if (!configureSerialPort(fd(),_baud())) {
 			filedescriptor::close();
 			return RESULT_ERROR;
 		}
 
 		// run connectscript here...
 		chat	ch(this);
-		int	result=ch.runScript(connectscript,
-						&connecterror,&phnvp);
+		int	result=ch.runScript(pvt->_connectscript,
+						_connecterror(),&phnvp);
 
 		// runScript() will return RESULT_(SUCCESS|ABORT|TIMEOUT|ERROR)
 		// or a number >= 2 indicating that one of the abort conditions
@@ -126,7 +139,7 @@ int modemclient::connect() {
 		// handle retry
 		close();
 		whichtry++;
-		if (whichtry==retrycount) {
+		if (whichtry==_retrycount()) {
 			// return the last thing that caused us to retry
 			return result;
 		}
@@ -134,7 +147,7 @@ int modemclient::connect() {
 		// even though the modem's file descriptor is closed here,
 		// we use waitForNonBlockingRead to pause between retrys,
 		// in case we're using a listener which could return an abort
-		int	waitresult=waitForNonBlockingRead(retrywait,0);
+		int	waitresult=waitForNonBlockingRead(_retrywait(),0);
 		if (waitresult==RESULT_ABORT || waitresult==RESULT_ERROR) {
 			return waitresult;
 		}
@@ -143,9 +156,9 @@ int modemclient::connect() {
 
 bool modemclient::close() {
 
-	if (fd!=-1) {
+	if (fd()!=-1) {
 		chat	ch(this);
-		ch.runScript(disconnectscript,NULL);
+		ch.runScript(pvt->_disconnectscript,NULL);
 		return filedescriptor::close();
 	}
 	return true;

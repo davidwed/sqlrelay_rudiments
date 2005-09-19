@@ -7,12 +7,19 @@
 namespace rudiments {
 #endif
 
+class serverprivate {
+	friend class server;
+	private:
+};
+
 server::server() : filedescriptor() {
-	type="server";
+	pvt=new serverprivate;
+	type("server");
 }
 
 server::server(const server &s) : filedescriptor(s) {
-	type="server";
+	pvt=new serverprivate;
+	type("server");
 }
 
 server &server::operator=(const server &s) {
@@ -22,7 +29,9 @@ server &server::operator=(const server &s) {
 	return *this;
 }
 
-server::~server() {}
+server::~server() {
+	delete pvt;
+}
 
 #ifdef RUDIMENTS_NAMESPACE
 }

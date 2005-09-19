@@ -110,108 +110,155 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 namespace rudiments {
 #endif
 
+class filedescriptorprivate {
+	friend class filedescriptor;
+	private:
+		int	_fd;
+		bool	_retryinterruptedreads;
+		bool	_retryinterruptedwrites;
+		bool	_retryinterruptedwaits;
+		#ifdef HAVE_FCNTL
+		bool	_retryinterruptedfcntl;
+		#endif
+		#ifdef HAVE_IOCTL
+		bool	_retryinterruptedioctl;
+		#endif
+		bool	_allowshortreads;
+		bool	_allowshortwrites;
+		bool	_translatebyteorder;
+
+		listener	*_lstnr;
+		bool		_uselistenerinsidereads;
+		bool		_uselistenerinsidewrites;
+
+		#ifdef RUDIMENTS_HAS_SSL
+		SSL_CTX	*_ctx;
+		SSL	*_ssl;
+		BIO	*_bio;
+		int	_sslresult;
+		#endif
+
+		const char	*_type;
+
+		unsigned char	*_writebuffer;
+		unsigned char	*_writebufferend;
+		unsigned char	*_writebufferptr;
+
+		unsigned char	*_readbuffer;
+		unsigned char	*_readbufferend;
+		unsigned char	*_readbufferhead;
+		unsigned char	*_readbuffertail;
+};
+
 filedescriptor::filedescriptor() {
+	pvt=new filedescriptorprivate;
 	filedescriptorInit();
 }
 
 filedescriptor::filedescriptor(const filedescriptor &f) {
+	pvt=new filedescriptorprivate;
 	filedescriptorClone(f);
 }
 
 filedescriptor &filedescriptor::operator=(const filedescriptor &f) {
 	if (this!=&f) {
-		delete[] writebuffer;
+		delete[] pvt->_writebuffer;
 		filedescriptorClone(f);
 	}
 	return *this;
 }
 
 void filedescriptor::filedescriptorInit() {
-	fd=-1;
-	translatebyteorder=false;
-	retryinterruptedreads=false;
-	retryinterruptedwrites=false;
-	retryinterruptedwaits=true;
+	pvt->_fd=-1;
+	pvt->_translatebyteorder=false;
+	pvt->_retryinterruptedreads=false;
+	pvt->_retryinterruptedwrites=false;
+	pvt->_retryinterruptedwaits=true;
 #ifdef HAVE_FCNTL
-	retryinterruptedfcntl=true;
+	pvt->_retryinterruptedfcntl=true;
 #endif
 #ifdef HAVE_IOCTL
-	retryinterruptedioctl=true;
+	pvt->_retryinterruptedioctl=true;
 #endif
-	allowshortreads=false;
-	allowshortwrites=false;
-	lstnr=NULL;
-	uselistenerinsidereads=false;
-	uselistenerinsidewrites=false;
+	pvt->_allowshortreads=false;
+	pvt->_allowshortwrites=false;
+	pvt->_lstnr=NULL;
+	pvt->_uselistenerinsidereads=false;
+	pvt->_uselistenerinsidewrites=false;
 #ifdef RUDIMENTS_HAS_SSL
-	ctx=NULL;
-	bio=NULL;
-	ssl=NULL;
-	sslresult=1;
+	pvt->_ctx=NULL;
+	pvt->_bio=NULL;
+	pvt->_ssl=NULL;
+	pvt->_sslresult=1;
 #endif
-	type="filedescriptor";
-	writebuffer=NULL;
-	writebufferend=NULL;
-	writebufferptr=NULL;
-	readbuffer=NULL;
-	readbufferend=NULL;
-	readbufferhead=NULL;
-	readbuffertail=NULL;
+	pvt->_type="filedescriptor";
+	pvt->_writebuffer=NULL;
+	pvt->_writebufferend=NULL;
+	pvt->_writebufferptr=NULL;
+	pvt->_readbuffer=NULL;
+	pvt->_readbufferend=NULL;
+	pvt->_readbufferhead=NULL;
+	pvt->_readbuffertail=NULL;
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
-	fd=f.fd;
-	translatebyteorder=f.translatebyteorder;
-	retryinterruptedreads=f.retryinterruptedreads;
-	retryinterruptedwrites=f.retryinterruptedwrites;
-	retryinterruptedwaits=f.retryinterruptedwaits;
+	pvt->_fd=f.pvt->_fd;
+	pvt->_translatebyteorder=f.pvt->_translatebyteorder;
+	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
+	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
+	pvt->_retryinterruptedwaits=f.pvt->_retryinterruptedwaits;
 #ifdef HAVE_FCNTL
-	retryinterruptedfcntl=f.retryinterruptedfcntl;
+	pvt->_retryinterruptedfcntl=f.pvt->_retryinterruptedfcntl;
 #endif
 #ifdef HAVE_IOCTL
-	retryinterruptedioctl=f.retryinterruptedioctl;
+	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
 #endif
-	allowshortreads=f.allowshortreads;
-	allowshortwrites=f.allowshortwrites;
-	lstnr=f.lstnr;
-	uselistenerinsidereads=f.uselistenerinsidereads;
-	uselistenerinsidewrites=f.uselistenerinsidewrites;
+	pvt->_allowshortreads=f.pvt->_allowshortreads;
+	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
+	pvt->_lstnr=f.pvt->_lstnr;
+	pvt->_uselistenerinsidereads=f.pvt->_uselistenerinsidereads;
+	pvt->_uselistenerinsidewrites=f.pvt->_uselistenerinsidewrites;
 #ifdef RUDIMENTS_HAS_SSL
-	ctx=f.ctx;
-	bio=f.bio;
-	ssl=f.ssl;
-	sslresult=f.sslresult;
+	pvt->_ctx=f.pvt->_ctx;
+	pvt->_bio=f.pvt->_bio;
+	pvt->_ssl=f.pvt->_ssl;
+	pvt->_sslresult=f.pvt->_sslresult;
 #endif
-	if (f.writebuffer) {
-		ssize_t	writebuffersize=f.writebufferend-f.writebuffer;
-		writebuffer=new unsigned char[writebuffersize];
-		rawbuffer::copy(writebuffer,f.writebuffer,writebuffersize);
-		writebufferend=writebuffer+writebuffersize;
-		writebufferptr=writebuffer+(f.writebufferptr-f.writebuffer);
+	if (f.pvt->_writebuffer) {
+		ssize_t	writebuffersize=f.pvt->_writebufferend-
+						f.pvt->_writebuffer;
+		pvt->_writebuffer=new unsigned char[writebuffersize];
+		rawbuffer::copy(pvt->_writebuffer,
+				f.pvt->_writebuffer,
+				writebuffersize);
+		pvt->_writebufferend=pvt->_writebuffer+writebuffersize;
+		pvt->_writebufferptr=pvt->_writebuffer+
+				(f.pvt->_writebufferptr-f.pvt->_writebuffer);
 	} else {
-		writebuffer=NULL;
-		writebufferend=NULL;
-		writebufferptr=NULL;
+		pvt->_writebuffer=NULL;
+		pvt->_writebufferend=NULL;
+		pvt->_writebufferptr=NULL;
 	}
 }
 
 filedescriptor::~filedescriptor() {
-	delete[] readbuffer;
-	delete[] writebuffer;
+	delete[] pvt->_readbuffer;
+	delete[] pvt->_writebuffer;
 	close();
 #ifdef RUDIMENTS_HAS_SSL
 	setSSLContext(NULL);
 #endif
+	delete pvt;
 }
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 	if (size<0) {
 		return false;
 	}
-	delete[] writebuffer;
-	writebuffer=(size)?new unsigned char[size]:NULL;
-	writebufferend=writebuffer+size;
-	writebufferptr=writebuffer;
+	delete[] pvt->_writebuffer;
+	pvt->_writebuffer=(size)?new unsigned char[size]:NULL;
+	pvt->_writebufferend=pvt->_writebuffer+size;
+	pvt->_writebufferptr=pvt->_writebuffer;
 	return true;
 }
 
@@ -219,26 +266,26 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 	if (size<0) {
 		return false;
 	}
-	delete[] readbuffer;
-	readbuffer=(size)?new unsigned char[size]:NULL;
-	readbufferend=readbuffer+size;
-	readbufferhead=readbuffer;
-	readbuffertail=readbuffer;
+	delete[] pvt->_readbuffer;
+	pvt->_readbuffer=(size)?new unsigned char[size]:NULL;
+	pvt->_readbufferend=pvt->_readbuffer+size;
+	pvt->_readbufferhead=pvt->_readbuffer;
+	pvt->_readbuffertail=pvt->_readbuffer;
 	return true;
 }
 
 int filedescriptor::getFileDescriptor() const {
-	return fd;
+	return pvt->_fd;
 }
 
 void filedescriptor::setFileDescriptor(int filedesc) {
-	fd=filedesc;
+	pvt->_fd=filedesc;
 }
 
 int filedescriptor::duplicate() const {
 	int	result;
 	do {
-		result=dup(fd);
+		result=dup(pvt->_fd);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -246,7 +293,7 @@ int filedescriptor::duplicate() const {
 bool filedescriptor::duplicate(int newfd) const {
 	int	result;
 	do {
-		result=dup2(fd,newfd);
+		result=dup2(pvt->_fd,newfd);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return (result==newfd);
 }
@@ -256,46 +303,46 @@ void filedescriptor::setSSLContext(SSL_CTX *ctx) {
 	if (!ctx) {
 		deInitializeSSL();
 	}
-	this->ctx=ctx;
+	pvt->_ctx=ctx;
 }
 
 SSL_CTX *filedescriptor::getSSLContext() {
-	return ctx;
+	return pvt->_ctx;
 }
 
 bool filedescriptor::initializeSSL() {
-	if (fd==-1) {
+	if (pvt->_fd==-1) {
 		return false;
 	}
 	deInitializeSSL();
-	if (ctx) {
-		bio=newSSLBIO();
-		ssl=SSL_new(ctx);
-		SSL_set_bio(ssl,bio,bio);
+	if (pvt->_ctx) {
+		pvt->_bio=newSSLBIO();
+		pvt->_ssl=SSL_new(pvt->_ctx);
+		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
 	}
 	return true;
 }
 
 void filedescriptor::deInitializeSSL() {
-	if (ssl) {
-		SSL_free(ssl);
-		ssl=NULL;
+	if (pvt->_ssl) {
+		SSL_free(pvt->_ssl);
+		pvt->_ssl=NULL;
 	}
-	if (bio) {
+	if (pvt->_bio) {
 		// BIO_free causes a segfault, and none of the example code
 		// that I've seen calls it, but the function exists so
 		// presumably it has a purpose.
-		//BIO_free(bio);
-		bio=NULL;
+		//BIO_free(pvt->_bio);
+		pvt->_bio=NULL;
 	}
 }
 
 SSL *filedescriptor::getSSL() const {
-	return ssl;
+	return pvt->_ssl;
 }
 
 BIO *filedescriptor::newSSLBIO() const {
-	return BIO_new_fd(fd,BIO_NOCLOSE);
+	return BIO_new_fd(pvt->_fd,BIO_NOCLOSE);
 }
 #endif
 
@@ -400,90 +447,101 @@ ssize_t filedescriptor::write(const void *buffer, size_t size) const {
 	return bufferedWrite(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::write(uint16_t number, long sec, long usec) const {
+ssize_t filedescriptor::write(uint16_t number,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("uint16_t",number);
 	number=hostToNet(number);
 	return bufferedWrite(&number,sizeof(uint16_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(uint32_t number, long sec, long usec) const {
+ssize_t filedescriptor::write(uint32_t number,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("uint32_t",number);
 	number=hostToNet(number);
 	return bufferedWrite(&number,sizeof(uint32_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(uint64_t number, long sec, long usec) const {
+ssize_t filedescriptor::write(uint64_t number,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("uint64_t",number);
 	number=hostToNet(number);
 	return bufferedWrite(&number,sizeof(uint64_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(int16_t number, long sec, long usec) const {
+ssize_t filedescriptor::write(int16_t number,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("int16_t",number);
 	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(int32_t number, long sec, long usec) const {
+ssize_t filedescriptor::write(int32_t number,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("int32_t",number);
 	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(int64_t number, long sec, long usec) const {
+ssize_t filedescriptor::write(int64_t number,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("int64_t",number);
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
-ssize_t filedescriptor::write(float number, long sec, long usec) const {
+ssize_t filedescriptor::write(float number,
+				long sec,long usec) const {
 	DEBUG_WRITE_FLOAT("float",number);
 	return bufferedWrite(&number,sizeof(float),sec,usec);
 }
 
-ssize_t filedescriptor::write(double number, long sec, long usec) const {
+ssize_t filedescriptor::write(double number,
+				long sec, long usec) const {
 	DEBUG_WRITE_FLOAT("double",number);
 	return bufferedWrite(&number,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned char character,
-						long sec, long usec) const {
+				long sec, long usec) const {
 	DEBUG_WRITE_CHAR("uchar",character);
 	return bufferedWrite(&character,sizeof(unsigned char),sec,usec);
 }
 
-ssize_t filedescriptor::write(bool value, long sec, long usec) const {
+ssize_t filedescriptor::write(bool value,
+				long sec, long usec) const {
 	DEBUG_WRITE_INT("bool",value);
 	return bufferedWrite(&value,sizeof(bool),sec,usec);
 }
 
-ssize_t filedescriptor::write(char character, long sec, long usec) const {
+ssize_t filedescriptor::write(char character,
+				long sec, long usec) const {
 	DEBUG_WRITE_CHAR("char",character);
 	return bufferedWrite(&character,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	DEBUG_WRITE_STRING("ustring",string,size);
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	DEBUG_WRITE_STRING("string",string,size);
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	DEBUG_WRITE_STRING("ustring",string,charstring::length(string));
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
-ssize_t filedescriptor::write(const char *string, long sec, long usec) const {
+ssize_t filedescriptor::write(const char *string,
+					long sec, long usec) const {
 	DEBUG_WRITE_STRING("string",string,charstring::length(string));
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	DEBUG_WRITE_VOID("void",buffer,size);
 	return bufferedWrite(buffer,size,sec,usec);
 }
@@ -548,184 +606,195 @@ ssize_t filedescriptor::read(char **buffer, char *terminator) const {
 	return read(buffer,terminator,-1,-1);
 }
 
-ssize_t filedescriptor::read(uint16_t *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(uint16_t *buffer,
+				long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint16_t),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(uint32_t *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(uint32_t *buffer,
+				long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint32_t),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(uint64_t *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(uint64_t *buffer,
+				long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint64_t),sec,usec);
 	*buffer=netToHost(*buffer);
 	return retval;
 }
 
-ssize_t filedescriptor::read(int16_t *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(int16_t *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(int16_t),sec,usec);
 }
 
-ssize_t filedescriptor::read(int32_t *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(int32_t *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(int32_t),sec,usec);
 }
 
-ssize_t filedescriptor::read(int64_t *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(int64_t *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(int64_t),sec,usec);
 }
 
-ssize_t filedescriptor::read(float *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(float *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(float),sec,usec);
 }
 
-ssize_t filedescriptor::read(double *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(double *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(double),sec,usec);
 }
 
-ssize_t filedescriptor::read(unsigned char *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(unsigned char *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(unsigned char),sec,usec);
 }
 
-ssize_t filedescriptor::read(bool *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(bool *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(bool),sec,usec);
 }
 
-ssize_t filedescriptor::read(char *buffer, long sec, long usec) const {
+ssize_t filedescriptor::read(char *buffer,
+				long sec, long usec) const {
 	return bufferedRead(buffer,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer, size_t size,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(char *buffer, size_t size,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 bool filedescriptor::close() {
 #ifdef RUDIMENTS_HAS_SSL
-	if (ssl) {
-		sslresult=SSL_shutdown(ssl);
+	if (pvt->_ssl) {
+		pvt->_sslresult=SSL_shutdown(pvt->_ssl);
 	}
 #endif
-	if (fd!=-1) {
+	if (pvt->_fd!=-1) {
 		int	result;
 		do {
-			result=::close(fd);
+			result=::close(pvt->_fd);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		if (result==-1) {
 			return false;
 		}
-		fd=-1;
+		pvt->_fd=-1;
 	}
 	return true;
 }
 
 void filedescriptor::retryInterruptedReads() {
-	retryinterruptedreads=true;
+	pvt->_retryinterruptedreads=true;
 }
 
 void filedescriptor::dontRetryInterruptedReads() {
-	retryinterruptedreads=false;
+	pvt->_retryinterruptedreads=false;
 }
 
 void filedescriptor::retryInterruptedWrites() {
-	retryinterruptedwrites=true;
+	pvt->_retryinterruptedwrites=true;
 }
 
 void filedescriptor::dontRetryInterruptedWrites() {
-	retryinterruptedwrites=false;
+	pvt->_retryinterruptedwrites=false;
 }
 
 void filedescriptor::retryInterruptedWaits() {
-	retryinterruptedwaits=true;
+	pvt->_retryinterruptedwaits=true;
 }
 
 void filedescriptor::dontRetryInterruptedWaits() {
-	retryinterruptedwaits=false;
+	pvt->_retryinterruptedwaits=false;
 }
 
 void filedescriptor::retryInterruptedFcntl() {
 	#ifdef HAVE_FCNTL
-	retryinterruptedfcntl=true;
+	pvt->_retryinterruptedfcntl=true;
 	#endif
 }
 
 void filedescriptor::dontRetryInterruptedFcntl() {
 	#ifdef HAVE_FCNTL
-	retryinterruptedfcntl=true;
+	pvt->_retryinterruptedfcntl=true;
 	#endif
 }
 
 void filedescriptor::retryInterruptedIoctl() {
 	#ifdef HAVE_IOCTL
-	retryinterruptedioctl=true;
+	pvt->_retryinterruptedioctl=true;
 	#endif
 }
 
 void filedescriptor::dontRetryInterruptedIoctl() {
 	#ifdef HAVE_IOCTL
-	retryinterruptedioctl=true;
+	pvt->_retryinterruptedioctl=true;
 	#endif
 }
 
 void filedescriptor::allowShortReads() {
-	allowshortreads=true;
+	pvt->_allowshortreads=true;
 }
 
 void filedescriptor::dontAllowShortReads() {
-	allowshortreads=false;
+	pvt->_allowshortreads=false;
 }
 
 void filedescriptor::allowShortWrites() {
-	allowshortwrites=true;
+	pvt->_allowshortwrites=true;
 }
 
 void filedescriptor::dontAllowShortWrites() {
-	allowshortwrites=false;
+	pvt->_allowshortwrites=false;
 }
 
 void filedescriptor::useListener(listener *lstnr) {
-	this->lstnr=lstnr;
+	pvt->_lstnr=lstnr;
 }
 
 void filedescriptor::useListenerInsideReads() {
-	uselistenerinsidereads=true;
+	pvt->_uselistenerinsidereads=true;
 }
 
 void filedescriptor::dontUseListenerInsideReads() {
-	uselistenerinsidereads=false;
+	pvt->_uselistenerinsidereads=false;
 }
 
 void filedescriptor::useListenerInsideWrites() {
-	uselistenerinsidewrites=true;
+	pvt->_uselistenerinsidewrites=true;
 }
 
 void filedescriptor::dontUseListenerInsideWrites() {
-	uselistenerinsidewrites=false;
+	pvt->_uselistenerinsidewrites=false;
 }
 
 void filedescriptor::dontUseListener() {
-	lstnr=NULL;
+	pvt->_lstnr=NULL;
 }
 
 listener *filedescriptor::getListener() {
-	return lstnr;
+	return pvt->_lstnr;
 }
 
 ssize_t filedescriptor::read(char **buffer, char *terminator,
-						long sec, long usec) const {
+					long sec, long usec) const {
 
 	// initialize a buffer
 	int	buffersize=512;
@@ -835,7 +904,7 @@ ssize_t filedescriptor::read(char **buffer, char *terminator,
 }
 
 ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
-						long sec, long usec) const {
+					long sec, long usec) const {
 
 	#ifdef DEBUG_READ
 	printf("bufferedRead of %d bytes\n",count);
@@ -845,7 +914,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		return 0;
 	}
 
-	if (!readbuffer) {
+	if (!pvt->_readbuffer) {
 		#ifdef DEBUG_READ
 		printf("no read buffer...\n");
 		#endif
@@ -859,7 +928,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 	for (;;) {
 
 		// copy what we can from the buffer
-		ssize_t	bytesavailabletocopy=readbuffertail-readbufferhead;
+		ssize_t	bytesavailabletocopy=pvt->_readbuffertail-
+						pvt->_readbufferhead;
 		if (bytesavailabletocopy) {
 
 			#ifdef DEBUG_READ
@@ -876,10 +946,10 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 								bytestocopy);
 			#endif
 
-			rawbuffer::copy(data,readbufferhead,bytestocopy);
+			rawbuffer::copy(data,pvt->_readbufferhead,bytestocopy);
 			data=data+bytestocopy;
 			bytesread=bytesread+bytestocopy;
-			readbufferhead=readbufferhead+bytestocopy;
+			pvt->_readbufferhead=pvt->_readbufferhead+bytestocopy;
 			bytesunread=bytesunread-bytestocopy;
 
 			// if we've read enough, break out
@@ -896,24 +966,25 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		}
 
 		// if we've copied out everything in the buffer, read some more
-		if (readbufferhead==readbuffertail) {
+		if (pvt->_readbufferhead==pvt->_readbuffertail) {
 
 			#ifdef DEBUG_READ
 			printf("attempting to fill read buffer, ");
 			printf("reading %d bytes...\n",
-				readbufferend-readbuffer);
+				pvt->_readbufferend-pvt->_readbuffer);
 			#endif
 
-			bool	saveasr=allowshortreads;
-			allowshortreads=true;
-			ssize_t	result=safeRead(readbuffer,
-						readbufferend-readbuffer,
+			bool	saveasr=pvt->_allowshortreads;
+			pvt->_allowshortreads=true;
+			ssize_t	result=safeRead(pvt->_readbuffer,
+						pvt->_readbufferend-
+						pvt->_readbuffer,
 						sec,usec);
-			allowshortreads=saveasr;
+			pvt->_allowshortreads=saveasr;
 
 			if (!result) {
 
-				if (allowshortreads) {
+				if (pvt->_allowshortreads) {
 					#ifdef DEBUG_READ
 					printf("EOF\n");
 					#endif
@@ -924,8 +995,9 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				printf("still need %d bytes, reading...\n",
 								bytesunread);
 				#endif
-				result=safeRead(readbuffer,bytesunread,
-								sec,usec);
+				result=safeRead(pvt->_readbuffer,
+						bytesunread,
+						sec,usec);
 
 				if (result>-1 && result!=bytesunread) {
 					#ifdef DEBUG_READ
@@ -942,8 +1014,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				return result;
 			}
 
-			readbufferhead=readbuffer;
-			readbuffertail=readbuffer+result;
+			pvt->_readbufferhead=pvt->_readbuffer;
+			pvt->_readbuffertail=pvt->_readbuffer+result;
 
 			#ifdef DEBUG_READ
 			printf("read %d bytes\n",result);
@@ -953,7 +1025,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
-						long sec, long usec) const {
+					long sec, long usec) const {
 
 	// FIXME: is this what we want to do?
 	// maybe we should set some kind of error condition too
@@ -962,7 +1034,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	printf("%d: safeRead(%d,",process::getProcessId(),fd);
+	printf("%d: safeRead(%d,",process::getProcessId(),pvt->_fd);
 	#endif
 
 	// The result of SSL_read may be undefined if count=0
@@ -984,9 +1056,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 
 		// if necessary, select
-		if (sec>-1 && usec>-1 || uselistenerinsidereads) {
+		if (sec>-1 && usec>-1 || pvt->_uselistenerinsidereads) {
 
-			int	selectresult=(uselistenerinsidereads)?
+			int	selectresult=(pvt->_uselistenerinsidereads)?
 					waitForNonBlockingRead(sec,usec):
 					safeSelect(sec,usec,true,false);
 
@@ -1015,19 +1087,19 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// read...
 		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
-		if (ssl) {
+		if (pvt->_ssl) {
 			for (bool done=false; !done ;) {
 
 				#ifdef SSL_VOID_PTR
-				actualread=SSL_read(ssl,ptr,sizetoread);
+				actualread=SSL_read(pvt->_ssl,ptr,sizetoread);
 				#else
-				actualread=SSL_read(ssl,
+				actualread=SSL_read(pvt->_ssl,
 						static_cast<char *>(ptr),
 						sizetoread);
 				#endif
-				sslresult=actualread;
+				pvt->_sslresult=actualread;
 
-				switch (SSL_get_error(ssl,actualread)) {
+				switch (SSL_get_error(pvt->_ssl,actualread)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 						continue;
@@ -1043,7 +1115,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			}
 		} else {
 		#endif
-			actualread=::read(fd,ptr,sizetoread);
+			actualread=::read(pvt->_fd,ptr,sizetoread);
 			#ifdef DEBUG_READ
 			for (int i=0; i<actualread; i++) {
 				character::safePrint(
@@ -1065,7 +1137,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the read
-				if (retryinterruptedreads) {
+				if (pvt->_retryinterruptedreads) {
 					continue;
 				} else {
 					totalread=totalread+actualread;
@@ -1090,7 +1162,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		totalread=totalread+actualread;
 
 		// if we want to allow short reads, then break out here
-		if (allowshortreads) {
+		if (pvt->_allowshortreads) {
 			#ifdef DEBUG_READ
 			printf(" SHORTREAD ");
 			#endif
@@ -1105,7 +1177,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
-						long sec, long usec) const {
+					long sec, long usec) const {
 	#ifdef DEBUG_WRITE
 	printf("bufferedWrite of %d bytes\n",count);
 	#endif
@@ -1114,7 +1186,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		return 0;
 	}
 
-	if (!writebuffer) {
+	if (!pvt->_writebuffer) {
 		#ifdef DEBUG_WRITE
 		printf("no write buffer...\n");
 		#endif
@@ -1124,15 +1196,17 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	const unsigned char	*data=
 		reinterpret_cast<const unsigned char *>(buf);
 
-	ssize_t	initialwritebuffersize=writebufferptr-writebuffer;
+	ssize_t	initialwritebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
 	bool	first=true;
 
 	ssize_t	byteswritten=0;
 	ssize_t	bytesunwritten=count;
 	while (byteswritten<count) {
 
-		ssize_t	writebuffersize=writebufferptr-writebuffer;
-		ssize_t	writebufferspace=writebufferend-writebufferptr;
+		ssize_t	writebuffersize=pvt->_writebufferptr-
+						pvt->_writebuffer;
+		ssize_t	writebufferspace=pvt->_writebufferend-
+						pvt->_writebufferptr;
 
 		#ifdef DEBUG_WRITE
 		printf("	writebuffersize=%d\n",writebuffersize);
@@ -1147,8 +1221,10 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			printf("buffering %d bytes\n",bytesunwritten);
 			#endif
 
-			rawbuffer::copy(writebufferptr,data,bytesunwritten);
-			writebufferptr=writebufferptr+bytesunwritten;
+			rawbuffer::copy(pvt->_writebufferptr,
+					data,bytesunwritten);
+			pvt->_writebufferptr=pvt->_writebufferptr+
+							bytesunwritten;
 			byteswritten=byteswritten+bytesunwritten;
 
 		} else {
@@ -1157,20 +1233,21 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			printf("just buffering %d bytes\n",writebufferspace);
 			#endif
 
-			rawbuffer::copy(writebufferptr,data,writebufferspace);
+			rawbuffer::copy(pvt->_writebufferptr,
+					data,writebufferspace);
 
-			bool	saveasw=allowshortwrites;
-			allowshortwrites=true;
-			ssize_t	result=safeWrite(writebuffer,
+			bool	saveasw=pvt->_allowshortwrites;
+			pvt->_allowshortwrites=true;
+			ssize_t	result=safeWrite(pvt->_writebuffer,
 					writebuffersize+writebufferspace,
 					sec,usec);
-			allowshortwrites=saveasw;
+			pvt->_allowshortwrites=saveasw;
 
 			if (result!=writebuffersize+writebufferspace) {
 				return result;
 			}
 
-			writebufferptr=writebuffer;
+			pvt->_writebufferptr=pvt->_writebuffer;
 			// The first time the buffer is written, the number of
 			// bytes that were already in the buffer need to be
 			// taken into account when calculating byteswritten,
@@ -1189,18 +1266,18 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 }
 
 bool filedescriptor::flushWriteBuffer(long sec, long usec) const {
-	if (!writebuffer) {
+	if (!pvt->_writebuffer) {
 		return true;
 	}
-	ssize_t	writebuffersize=writebufferptr-writebuffer;
-	bool	retval=(safeWrite(writebuffer,writebuffersize,
-					sec,usec)==writebuffersize);
-	writebufferptr=writebuffer;
+	ssize_t	writebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
+	bool	retval=(safeWrite(pvt->_writebuffer,writebuffersize,
+						sec,usec)==writebuffersize);
+	pvt->_writebufferptr=pvt->_writebuffer;
 	return retval;
 }
 
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
-						long sec, long usec) const {
+					long sec, long usec) const {
 
 	// FIXME: is this what we want to do?
 	// maybe we should set some kind of error condition too
@@ -1209,7 +1286,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_WRITE
-	printf("%d: safeWrite(%d,",process::getProcessId(),fd);
+	printf("%d: safeWrite(%d,",process::getProcessId(),pvt->_fd);
 	#endif
 
 	// The result of SSL_write may be undefined if count=0
@@ -1231,9 +1308,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		}
 
 		// if necessary, select
-		if (sec>-1 && usec>-1 || uselistenerinsidewrites) {
+		if (sec>-1 && usec>-1 || pvt->_uselistenerinsidewrites) {
 
-			int	selectresult=(uselistenerinsidewrites)?
+			int	selectresult=(pvt->_uselistenerinsidewrites)?
 					waitForNonBlockingWrite(sec,usec):
 					safeSelect(sec,usec,false,true);
 
@@ -1254,19 +1331,19 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
-		if (ssl) {
+		if (pvt->_ssl) {
 			for (bool done=false; !done ;) {
 
 				#ifdef SSL_VOID_PTR
-				actualwrite=::SSL_write(ssl,ptr,count);
+				actualwrite=::SSL_write(pvt->_ssl,ptr,count);
 				#else
-				actualwrite=::SSL_write(ssl,
+				actualwrite=::SSL_write(pvt->_ssl,
 						static_cast<const char *>(ptr),
 						sizetowrite);
 				#endif
-				sslresult=actualwrite;
+				pvt->_sslresult=actualwrite;
 
-				switch (SSL_get_error(ssl,actualwrite)) {
+				switch (SSL_get_error(pvt->_ssl,actualwrite)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 						continue;
@@ -1283,7 +1360,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		} else {
 		#endif
 
-			actualwrite=::write(fd,ptr,sizetowrite);
+			actualwrite=::write(pvt->_fd,ptr,sizetowrite);
 			#ifdef DEBUG_WRITE
 			for (int i=0; i<actualwrite; i++) {
 				character::safePrint(
@@ -1306,7 +1383,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the write
-				if (retryinterruptedwrites) {
+				if (pvt->_retryinterruptedwrites) {
 					continue;
 				} else {
 					totalwrite=totalwrite+actualwrite;
@@ -1331,7 +1408,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		totalwrite=totalwrite+actualwrite;
 
 		// if we want to allow short writes, then break out here
-		if (allowshortwrites) {
+		if (pvt->_allowshortwrites) {
 			#ifdef DEBUG_WRITE
 			printf(" SHORTWRITE ");
 			#endif
@@ -1346,20 +1423,20 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 }
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) const {
-	return (lstnr)?lstnr->waitForNonBlockingRead(sec,usec):
-			safeSelect(sec,usec,true,false);
+	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingRead(sec,usec):
+				safeSelect(sec,usec,true,false);
 }
 
 int filedescriptor::waitForNonBlockingWrite(long sec, long usec) const {
-	return (lstnr)?lstnr->waitForNonBlockingWrite(sec,usec):
-			safeSelect(sec,usec,false,true);
+	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
+				safeSelect(sec,usec,false,true);
 }
 
 int filedescriptor::safeSelect(long sec, long usec,
 				bool read, bool write) const {
 
 	#ifdef RUDIMENTS_HAS_SSL
-		if (read && ssl && SSL_pending(ssl)) {
+		if (read && pvt->_ssl && SSL_pending(pvt->_ssl)) {
 			return 1;
 		}
 	#endif
@@ -1379,10 +1456,10 @@ int filedescriptor::safeSelect(long sec, long usec,
 		// so the list has to be rebuilt every time...
 		fd_set	fdlist;
 		FD_ZERO(&fdlist);
-		FD_SET(fd,&fdlist);
+		FD_SET(pvt->_fd,&fdlist);
 
 		// wait for data to be available on the file descriptor
-		int	selectresult=select(fd+1,(read)?&fdlist:NULL,
+		int	selectresult=select(pvt->_fd+1,(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
 						NULL,tvptr);
 	
@@ -1390,7 +1467,7 @@ int filedescriptor::safeSelect(long sec, long usec,
 		if (selectresult==-1) {
 
 			// if a signal caused the select to fall through, retry
-			if (retryinterruptedwaits &&
+			if (pvt->_retryinterruptedwaits &&
 				error::getErrorNumber()==EINTR) {
 				continue;
 			}
@@ -1407,19 +1484,19 @@ int filedescriptor::safeSelect(long sec, long usec,
 }
 
 void filedescriptor::translateByteOrder() {
-	translatebyteorder=true;
+	pvt->_translatebyteorder=true;
 }
 
 void filedescriptor::dontTranslateByteOrder() {
-	translatebyteorder=false;
+	pvt->_translatebyteorder=false;
 }
 
 uint16_t filedescriptor::hostToNet(uint16_t value) const {
-	return (translatebyteorder)?htons(value):value;
+	return (pvt->_translatebyteorder)?htons(value):value;
 }
 
 uint32_t filedescriptor::hostToNet(uint32_t value) const {
-	return (translatebyteorder)?htonl(value):value;
+	return (pvt->_translatebyteorder)?htonl(value):value;
 }
 
 uint64_t filedescriptor::hostToNet(uint64_t value) const {
@@ -1431,11 +1508,11 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 }
 
 uint16_t filedescriptor::netToHost(uint16_t value) const {
-	return (translatebyteorder)?ntohs(value):value;
+	return (pvt->_translatebyteorder)?ntohs(value):value;
 }
 
 uint32_t filedescriptor::netToHost(uint32_t value) const {
-	return (translatebyteorder)?ntohl(value):value;
+	return (pvt->_translatebyteorder)?ntohl(value):value;
 }
 
 uint64_t filedescriptor::netToHost(uint64_t value) const {
@@ -1448,7 +1525,7 @@ uint64_t filedescriptor::netToHost(uint64_t value) const {
 
 #ifdef RUDIMENTS_HAS_SSL
 int filedescriptor::getSSLResult() const {
-	return sslresult;
+	return pvt->_sslresult;
 }
 #endif
 
@@ -1456,8 +1533,8 @@ int filedescriptor::fcntl(int cmd, long arg) const {
 	#ifdef HAVE_FCNTL
 		int	result;
 		do {
-			result=::fcntl(fd,cmd,arg);
-		} while (retryinterruptedfcntl && result==-1 &&
+			result=::fcntl(pvt->_fd,cmd,arg);
+		} while (pvt->_retryinterruptedfcntl && result==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
 	#else
@@ -1469,8 +1546,8 @@ int filedescriptor::ioctl(int cmd, void *arg) const {
 	#ifdef HAVE_IOCTL
 		int	result;
 		do {
-			result=::ioctl(fd,cmd,arg);
-		} while (retryinterruptedioctl && result==-1 &&
+			result=::ioctl(pvt->_fd,cmd,arg);
+		} while (pvt->_retryinterruptedioctl && result==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
 	#else
@@ -1549,7 +1626,7 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 	// finally, send the msghdr
 	int	result;
 	do {
-		result=sendmsg(fd,&messageheader,0);
+		result=sendmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return (result!=-1);
 }
@@ -1604,7 +1681,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	// receive the msghdr
 	int	result;
 	do {
-		result=recvmsg(fd,&messageheader,0);
+		result=recvmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {
 		return false;
@@ -1729,7 +1806,7 @@ bool filedescriptor::setTcpReadBufferSize(int size) {
 }
 
 const char *filedescriptor::getType() const {
-	return type;
+	return pvt->_type;
 }
 
 char *filedescriptor::getPeerAddress() const {
@@ -1742,7 +1819,7 @@ char *filedescriptor::getPeerAddress() const {
 	// get the peer address
 	int	result;
 	do {
-		result=getpeername(fd,
+		result=getpeername(pvt->_fd,
 				reinterpret_cast<struct sockaddr *>(&clientsin),
 				&size);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1758,7 +1835,7 @@ int filedescriptor::getSockOpt(int level, int optname,
 				void *optval, socklen_t *optlen) {
 	int	result;
 	do {
-		result=getsockopt(fd,level,optname,optval,optlen);
+		result=getsockopt(pvt->_fd,level,optname,optval,optlen);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -1767,10 +1844,44 @@ int filedescriptor::setSockOpt(int level, int optname,
 				const void *optval, socklen_t optlen) {
 	int	result;
 	do {
-		result=setsockopt(fd,level,optname,optval,optlen);
+		result=setsockopt(pvt->_fd,level,optname,optval,optlen);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
+
+const char *filedescriptor::type() const {
+	return pvt->_type;
+}
+
+void filedescriptor::type(const char *tp) {
+	pvt->_type=tp;
+}
+
+int filedescriptor::fd() const {
+	return pvt->_fd;
+}
+
+void filedescriptor::fd(int filedes) {
+	pvt->_fd=filedes;
+}
+
+#ifdef RUDIMENTS_HAS_SSL
+SSL_CTX *filedescriptor::ctx() {
+	return pvt->_ctx;
+}
+
+SSL *filedescriptor::ssl() {
+	return pvt->_ssl;
+}
+
+int filedescriptor::sslresult() {
+	return pvt->_sslresult;
+}
+
+void filedescriptor::sslresult(int sslrslt) {
+	pvt->_sslresult=sslrslt;
+}
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 }

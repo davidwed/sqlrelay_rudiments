@@ -11,25 +11,36 @@
 namespace rudiments {
 #endif
 
+class parameterstringprivate {
+	friend class parameterstring;
+	private:
+		namevaluepairs	_nvp;
+		char		_delim;
+};
+
 parameterstring::parameterstring() {
-	delim=';';
+	pvt=new parameterstringprivate;
+	pvt->_delim=';';
 }
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
-	for (unsigned long i=0; i<nvp.getList()->getLength(); i++) {
-		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getKey();
-		delete[] nvp.getList()->getNodeByIndex(i)->getData()->getData();
+	for (unsigned long i=0; i<pvt->_nvp.getList()->getLength(); i++) {
+		delete[] pvt->_nvp.getList()->
+				getNodeByIndex(i)->getData()->getKey();
+		delete[] pvt->_nvp.getList()->
+				getNodeByIndex(i)->getData()->getData();
 	}
+	delete pvt;
 }
 
 void parameterstring::setDelimiter(char delim) {
-	this->delim=delim;
+	pvt->_delim=delim;
 }
 
 bool parameterstring::parse(const char *paramstring) {
 
-	nvp.getList()->clear();
+	pvt->_nvp.getList()->clear();
 
 	int	paircount=countPairs(paramstring);
 
@@ -44,15 +55,15 @@ bool parameterstring::parse(const char *paramstring) {
 		if (*ptr=='=') {
 			ptr++;
 		} else {
-			nvp.setData(namebuffer,NULL);
+			pvt->_nvp.setData(namebuffer,NULL);
 			return false;
 		}
 
 		ptr=parseValue(ptr,&valuebuffer);
 
-		nvp.setData(namebuffer,valuebuffer);
+		pvt->_nvp.setData(namebuffer,valuebuffer);
 
-		if (*ptr==delim) {
+		if (*ptr==pvt->_delim) {
 			ptr++;
 		} else if (!*ptr) {
 			break;
@@ -66,11 +77,12 @@ bool parameterstring::parse(const char *paramstring) {
 
 const char *parameterstring::getValue(const char *name) {
 	char	*retval;
-	return (nvp.getData(const_cast<char *>(name),&retval))?retval:NULL;
+	return (pvt->_nvp.getData(const_cast<char *>(name),&retval))?
+								retval:NULL;
 }
 
 void parameterstring::clear() {
-	nvp.clear();
+	pvt->_nvp.clear();
 }
 
 int parameterstring::countPairs(const char *paramstring) {
@@ -93,13 +105,13 @@ int parameterstring::countPairs(const char *paramstring) {
 			continue;
 		}
 
-		if (!inquotes && *ptr==delim) {
+		if (!inquotes && *ptr==pvt->_delim) {
 			paircount++;
 		}
 	}
 
 	// handle case where final character wasn't a ;
-	if (*(ptr-1)!=delim) {
+	if (*(ptr-1)!=pvt->_delim) {
 		paircount++;
 	}
 
@@ -188,7 +200,7 @@ const char *parameterstring::parseName(const char *data, char **outbuffer) {
 }
 
 const char *parameterstring::parseValue(const char *data, char **outbuffer) {
-	return parsePart(parseValueLength(data),delim,data,outbuffer,1,1);
+	return parsePart(parseValueLength(data),pvt->_delim,data,outbuffer,1,1);
 }
 
 int parameterstring::parseNameLength(const char *data) {
@@ -196,7 +208,7 @@ int parameterstring::parseNameLength(const char *data) {
 }
 
 int parameterstring::parseValueLength(const char *data) {
-	return parsePartLength(data,delim,1,1);
+	return parsePartLength(data,pvt->_delim,1,1);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

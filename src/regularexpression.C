@@ -16,6 +16,27 @@
 namespace rudiments {
 #endif
 
+class regularexpressionprivate {
+	friend class regularexpression;
+	private:
+		#ifdef RUDIMENTS_HAS_PCRE
+			pcre		*_expr;
+			pcre_extra	*_extra;
+		#else
+			regex_t	_expr;
+		#endif
+	
+		#define RUDIMENTS_REGEX_MATCHES 128
+		int		_matchcount;
+		const char	*_str;
+
+		#ifdef RUDIMENTS_HAS_PCRE
+		int		_matches[RUDIMENTS_REGEX_MATCHES*3];
+		#else
+		regmatch_t	_matches[RUDIMENTS_REGEX_MATCHES];
+		#endif
+};
+
 regularexpression::regularexpression() {
 	regularexpressionInit();
 }
@@ -26,55 +47,57 @@ regularexpression::regularexpression(const char *pattern) {
 }
 
 void regularexpression::regularexpressionInit() {
+	pvt=new regularexpressionprivate;
 	#ifdef RUDIMENTS_HAS_PCRE
-		expr=NULL;
-		extra=NULL;
+		pvt->_expr=NULL;
+		pvt->_extra=NULL;
 	#else
-		rawbuffer::zero(&expr,sizeof(expr));
+		rawbuffer::zero(&pvt->_expr,sizeof(pvt->_expr));
 	#endif
 }
 
 regularexpression::~regularexpression() {
 	#ifdef RUDIMENTS_HAS_PCRE
-		if (expr) {
-			pcre_free(expr);
+		if (pvt->_expr) {
+			pcre_free(pvt->_expr);
 		}
-		if (extra) {
-			delete extra;
+		if (pvt->_extra) {
+			delete pvt->_extra;
 		}
 	#else
-		regfree(&expr);
+		regfree(&pvt->_expr);
 	#endif
+	delete pvt;
 }
 
 bool regularexpression::compile(const char *pattern) {
 
 	#ifdef RUDIMENTS_HAS_PCRE
-		if (expr) {
-			pcre_free(expr);
+		if (pvt->_expr) {
+			pcre_free(pvt->_expr);
 		}
-		if (extra) {
-			delete extra;
-			extra=NULL;
+		if (pvt->_extra) {
+			delete pvt->_extra;
+			pvt->_extra=NULL;
 		}
 		const char	*error;
 		int		erroroffset;
-		return (expr=pcre_compile(pattern,0,&error,
+		return (pvt->_expr=pcre_compile(pattern,0,&error,
 						&erroroffset,NULL))!=NULL;
 	#else
-		regfree(&expr);
-		return !regcomp(&expr,pattern,REG_EXTENDED);
+		regfree(&pvt->_expr);
+		return !regcomp(&pvt->_expr,pattern,REG_EXTENDED);
 	#endif
 }
 
 bool regularexpression::study() {
 	#ifdef RUDIMENTS_HAS_PCRE
 		const char	*error;
-		if (extra) {
-			delete extra;
+		if (pvt->_extra) {
+			delete pvt->_extra;
 		}
-		extra=pcre_study(expr,0,&error);
-		return (!extra && error)?false:true;
+		pvt->_extra=pcre_study(pvt->_expr,0,&error);
+		return (!pvt->_extra && error)?false:true;
 	#else
 		return true;
 	#endif
@@ -87,64 +110,68 @@ bool regularexpression::match(const char *str) {
 	}
 
 	#ifdef RUDIMENTS_HAS_PCRE
-		this->str=str;
-		return (expr && (matchcount=pcre_exec(expr,extra,
-						str,charstring::length(str),
-						0,0,matches,
+		pvt->_str=str;
+		return (pvt->_expr &&
+			(pvt->_matchcount=pcre_exec(pvt->_expr,
+						pvt->_extra,
+						pvt->_str,
+						charstring::length(pvt->_str),
+						0,0,pvt->_matches,
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
 	#else
-		this->str=str;
-		matchcount=-1;
-		return (!regexec(&expr,str,RUDIMENTS_REGEX_MATCHES,matches,0));
+		pvt->_str=str;
+		pvt->_matchcount=-1;
+		return (!regexec(&pvt->_expr,pvt->_str,
+				RUDIMENTS_REGEX_MATCHES,pvt->_matches,0));
 	#endif
 }
 
 int regularexpression::getSubstringCount() {
 	#ifdef RUDIMENTS_HAS_PCRE
-		return matchcount;
+		return pvt->_matchcount;
 	#else
-		if (matchcount==-1) {
+		if (pvt->_matchcount==-1) {
 			for (int i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
-				if (matches[i].rm_so==-1) {
-					matchcount=i;
+				if (pvt->_matches[i].rm_so==-1) {
+					pvt->_matchcount=i;
 					break;
 				}
 			}
 		}
-		return matchcount;
+		return pvt->_matchcount;
 	#endif
 }
 
 int regularexpression::getSubstringStartOffset(int index) {
-	if (index<0 || index>matchcount) {
+	if (index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAS_PCRE
-		return matches[index*2];
+		return pvt->_matches[index*2];
 	#else
-		return matches[index].rm_so;
+		return pvt->_matches[index].rm_so;
 	#endif
 }
 
 int regularexpression::getSubstringEndOffset(int index) {
-	if (index<0 || index>matchcount) {
+	if (index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAS_PCRE
-		return matches[index*2+1];
+		return pvt->_matches[index*2+1];
 	#else
-		return matches[index].rm_eo;
+		return pvt->_matches[index].rm_eo;
 	#endif
 }
 
 char *regularexpression::getSubstringStart(int index) {
 	int	offset=getSubstringStartOffset(index);
-	return (offset>-1)?(const_cast<char *>(str+offset)):NULL;
+	return (offset>-1)?(const_cast<char *>(pvt->_str+offset)):NULL;
 }
 
 char *regularexpression::getSubstringEnd(int index) {
 	int	offset=getSubstringEndOffset(index);
-	return (offset>-1)?(const_cast<char *>(str+offset)):NULL;
+	return (offset>-1)?(const_cast<char *>(pvt->_str+offset)):NULL;
 }
 
 bool regularexpression::match(const char *str, const char *pattern) {

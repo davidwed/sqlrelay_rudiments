@@ -4,6 +4,8 @@
 #include <rudiments/memorymap.h>
 #include <rudiments/error.h>
 
+#include <stdio.h>
+
 // for getpagesize()...
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
@@ -22,34 +24,47 @@
 namespace rudiments {
 #endif
 
+class memorymapprivate {
+	friend class memorymap;
+	private:
+		void	*_data;
+		#ifdef HAVE_CREATE_FILE_MAPPING
+		HANDLE	_map;
+		#endif
+		size_t	_length;
+};
+
 memorymap::memorymap() {
-	data=NULL;
-	length=0;
+	pvt=new memorymapprivate;
+	pvt->_data=NULL;
+	pvt->_length=0;
 }
 
 memorymap::~memorymap() {
 	detach();
+	delete pvt;
 }
 
 bool memorymap::attach(int fd, off64_t offset, size_t len,
 					int protection, int flags) {
-	length=len;
+	pvt->_length=len;
 	#if defined(HAVE_MMAP)
 		do {
-			data=mmap(NULL,len,protection,flags,fd,offset);
-		} while (data==MAP_FAILED && error::getErrorNumber()==EINTR);
-		return (data!=MAP_FAILED);
+			pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
+		} while (pvt->_data==MAP_FAILED &&
+				error::getErrorNumber()==EINTR);
+		return (pvt->_data!=MAP_FAILED);
 	#elif defined(HAVE_CREATE_FILE_MAPPING)
 		DWORD	mapprot=(protection|PROT_WRITE)?
 					PAGE_READONLY:PAGE_READWRITE;
-		map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
+		pvt->_map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
 					NULL,mapprot,0,len,NULL);
-		if (map) {
+		if (pvt->_map) {
 			DWORD	viewprot=(protection|PROT_WRITE)?
 						FILE_MAP_READ:FILE_MAP_WRITE;
-			data=MapViewOfFile(map,viewprot,0,0,len);
-			if (!data) {
-				CloseHandle(map);
+			pvt->_data=MapViewOfFile(pvt->_map,viewprot,0,0,len);
+			if (!pvt->_data) {
+				CloseHandle(pvt->_map);
 				return false;
 			}
 			return true;
@@ -63,27 +78,28 @@ bool memorymap::detach() {
 		int	result;
 		do {
 			#ifdef HAVE_MMAP_CADDR_T
-			result=munmap((caddr_t)data,length);
+			result=munmap((caddr_t)pvt->_data,pvt->_length);
 			#else
-			result=munmap(data,length);
+			result=munmap(pvt->_data,pvt->_length);
 			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		bool	retval=!result;
 	#elif defined(HAVE_CREATE_FILE_MAPPING)
-		bool	retval=(UnmapViewOfFile(data) && CloseHandle(map));
+		bool	retval=(UnmapViewOfFile(pvt->_data) &&
+						CloseHandle(pvt->_map));
 	#endif
-	data=NULL;
-	length=0;
+	pvt->_data=NULL;
+	pvt->_length=0;
 	return retval;
 }
 
 bool memorymap::setProtection(int protection) {
-	return setProtection(0,length,protection);
+	return setProtection(0,pvt->_length,protection);
 }
 
 bool memorymap::setProtection(off64_t offset, size_t len, int protection) {
 	#ifdef HAVE_MPROTECT
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
 		result=mprotect(reinterpret_cast<ADDRCAST>(ptr),len,protection);
@@ -95,20 +111,20 @@ bool memorymap::setProtection(off64_t offset, size_t len, int protection) {
 }
 
 void *memorymap::getData() {
-	return data;
+	return pvt->_data;
 }
 
 size_t memorymap::getLength() {
-	return length;
+	return pvt->_length;
 }
 
 bool memorymap::sync(bool immediate, bool invalidate) {
-	return sync(0,length,immediate,invalidate);
+	return sync(0,pvt->_length,immediate,invalidate);
 }
 
 bool memorymap::sync(off64_t offset, size_t len,
 			bool immediate, bool invalidate) {
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	#ifdef HAVE_MSYNC
 	int	result;
 	do {
@@ -124,7 +140,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 
 bool memorymap::sequentialAccess(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_SEQUENTIAL);
 	#else
 	return true;
@@ -133,7 +149,7 @@ bool memorymap::sequentialAccess(off64_t offset, size_t len) {
 
 bool memorymap::randomAccess(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_RANDOM);
 	#else
 	return true;
@@ -142,7 +158,7 @@ bool memorymap::randomAccess(off64_t offset, size_t len) {
 
 bool memorymap::willNeed(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_WILLNEED);
 	#else
 	return true;
@@ -151,7 +167,7 @@ bool memorymap::willNeed(off64_t offset, size_t len) {
 
 bool memorymap::wontNeed(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_DONTNEED);
 	#else
 	return true;
@@ -160,7 +176,7 @@ bool memorymap::wontNeed(off64_t offset, size_t len) {
 
 bool memorymap::normalAccess(off64_t offset, size_t len) {
 	#ifdef HAVE_MADVISE
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_NORMAL);
 	#else
 	return true;
@@ -169,11 +185,11 @@ bool memorymap::normalAccess(off64_t offset, size_t len) {
 
 #ifdef HAVE_MLOCK
 bool memorymap::lock() {
-	return lock(0,length);
+	return lock(0,pvt->_length);
 }
 
 bool memorymap::lock(off64_t offset, size_t len) {
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
 		result=mlock(reinterpret_cast<ADDRCAST>(ptr),len);
@@ -184,11 +200,11 @@ bool memorymap::lock(off64_t offset, size_t len) {
 
 #ifdef HAVE_MUNLOCK
 bool memorymap::unlock() {
-	return unlock(0,length);
+	return unlock(0,pvt->_length);
 }
 
 bool memorymap::unlock(off64_t offset, size_t len) {
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
 		result=munlock(reinterpret_cast<ADDRCAST>(ptr),len);
@@ -199,7 +215,7 @@ bool memorymap::unlock(off64_t offset, size_t len) {
 
 #ifdef HAVE_MINCORE
 bool memorymap::inMemory() {
-	return inMemory(0,length);
+	return inMemory(0,pvt->_length);
 }
 
 bool memorymap::inMemory(off64_t offset, size_t len) {
@@ -214,7 +230,7 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 	#endif
 
 	// call mincore to fill the array
-	unsigned char	*ptr=(static_cast<unsigned char *>(data))+offset;
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int		result;
 	do {
 		result=mincore(reinterpret_cast<ADDRCAST>(ptr),len,tmp);

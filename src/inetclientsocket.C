@@ -17,14 +17,21 @@
 namespace rudiments {
 #endif
 
+class inetclientsocketprivate {
+	friend class inetclientsocket;
+	private:
+};
+
 inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
+	pvt=new inetclientsocketprivate;
 	translateByteOrder();
-	type="inetclientsocket";
+	type("inetclientsocket");
 }
 
 inetclientsocket::inetclientsocket(const inetclientsocket &i) :
 					clientsocket(i), inetsocketutil(i) {
-	type="inetclientsocket";
+	pvt=new inetclientsocketprivate;
+	type("inetclientsocket");
 }
 
 inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
@@ -35,7 +42,9 @@ inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
 	return *this;
 }
 
-inetclientsocket::~inetclientsocket() {}
+inetclientsocket::~inetclientsocket() {
+	delete pvt;
+}
 
 int inetclientsocket::connect(const char *host,
 						unsigned short port,
@@ -54,10 +63,7 @@ void inetclientsocket::initialize(const char *host,
 						unsigned long retrywait,
 						unsigned long retrycount) {
 	inetsocketutil::initialize(host,port);
-	this->timeoutsec=timeoutsec;
-	this->timeoutusec=timeoutusec;
-	this->retrywait=retrywait;
-	this->retrycount=retrycount;
+	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
 }
 
 void inetclientsocket::initialize(constnamevaluepairs *cd) {
@@ -93,7 +99,7 @@ int inetclientsocket::connect() {
 
 		// get the host entry
 		hostentry	he;
-		if (!he.initialize(address)) {
+		if (!he.initialize(_address())) {
 			return RESULT_ERROR;
 		}
 
@@ -104,15 +110,15 @@ int inetclientsocket::connect() {
 		}
 
 		// set the address type and port to connect to
-		rawbuffer::zero(&sin,sizeof(sin));
-		sin.sin_family=he.getAddressType();
-		sin.sin_port=htons(port);
+		rawbuffer::zero(_sin(),sizeof(sockaddr_in));
+		_sin()->sin_family=he.getAddressType();
+		_sin()->sin_port=htons(*_port());
 
 		// create an inet socket
 		do {
-			fd=::socket(AF_INET,SOCK_STREAM,pe.getNumber());
-		} while (fd==-1 && error::getErrorNumber()==EINTR);
-		if (fd==-1) {
+			fd(::socket(AF_INET,SOCK_STREAM,pe.getNumber()));
+		} while (fd()==-1 && error::getErrorNumber()==EINTR);
+		if (fd()==-1) {
 			return RESULT_ERROR;
 		}
 
@@ -131,13 +137,13 @@ int inetclientsocket::connect() {
 		hints.ai_socktype=SOCK_STREAM;
 
 		// get a string representing the port number
-		char	*portstr=charstring::parseNumber(port);
+		char	*portstr=charstring::parseNumber(*_port());
 
 		// get the address info for the given address/port
 		addrinfo	*ai;
 		int		result;
 		do {
-			result=getaddrinfo(address,portstr,&hints,&ai);
+			result=getaddrinfo(_address(),portstr,&hints,&ai);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		delete[] portstr;
 		if (result==-1) {
@@ -150,12 +156,12 @@ int inetclientsocket::connect() {
 
 	// try to connect, over and over for the specified number of times
 	for (unsigned long counter=0;
-			counter<retrycount || !retrycount; counter++) {
+			counter<_retrycount() || !_retrycount(); counter++) {
 
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			snooze::macrosnooze(retrywait);
+			snooze::macrosnooze(_retrywait());
 		}
 
 		#ifndef HAVE_GETADDRINFO
@@ -167,17 +173,17 @@ int inetclientsocket::connect() {
 					addressindex++) {
 
 				// set which host to connect to
-				rawbuffer::copy(&sin.sin_addr,
+				rawbuffer::copy(&_sin()->sin_addr,
 					he.getAddressList()[addressindex],
 					he.getAddressLength());
 	
 				// attempt to connect
 				if (clientsocket::connect(
 					reinterpret_cast<struct sockaddr *>(
-									&sin),
-					sizeof(sin),
-					timeoutsec,
-					timeoutusec)==RESULT_SUCCESS) {
+									_sin()),
+					sizeof(sockaddr_in),
+					_timeoutsec(),
+					_timeoutusec())==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
 				}
 			}
@@ -190,12 +196,12 @@ int inetclientsocket::connect() {
 
 				// create an inet socket
 				do {
-					fd=::socket(ai->ai_family,
+					fd(::socket(ai->ai_family,
 							ai->ai_socktype,
-							ai->ai_protocol);
-				} while (fd==-1 &&
+							ai->ai_protocol));
+				} while (fd()==-1 &&
 					error::getErrorNumber()==EINTR);
-				if (fd==-1) {
+				if (fd()==-1) {
 					continue;
 				}
 
@@ -204,8 +210,9 @@ int inetclientsocket::connect() {
 					reinterpret_cast<struct sockaddr *>(
 								ainfo->ai_addr),
 						ainfo->ai_addrlen,
-						timeoutsec,
-						timeoutusec)==RESULT_SUCCESS) {
+						_timeoutsec(),
+						_timeoutusec())==
+							RESULT_SUCCESS) {
 					freeaddrinfo(ai);
 					return RESULT_SUCCESS;
 				} else {

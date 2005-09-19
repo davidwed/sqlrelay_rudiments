@@ -23,6 +23,7 @@
 		so I made charstring::findFirst/findLast return const char *
 	use snprintf's rather than sprintf's now
 	uses fchmod/fchown rather than chmod/chown now
+	made envelope classes out of all classes
 
 0.28.2 - filedescriptor desctructor removes the read buffer now
 

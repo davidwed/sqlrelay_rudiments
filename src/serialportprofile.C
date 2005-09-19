@@ -12,79 +12,87 @@
 namespace rudiments {
 #endif
 
+class serialportprofileprivate {
+	friend class serialportprofile;
+	private:
+		termios	_tio;
+};
+
 serialportprofile::serialportprofile() {
+	pvt=new serialportprofileprivate;
 	defaultOptions();
 }
 
 serialportprofile::~serialportprofile() {
+	delete pvt;
 }
 
 void serialportprofile::setControlOptions(tcflag_t flags) {
-	tio.c_cflag=flags;
+	pvt->_tio.c_cflag=flags;
 }
 
 void serialportprofile::setLocalOptions(tcflag_t flags) {
-	tio.c_lflag=flags;
+	pvt->_tio.c_lflag=flags;
 }
 
 void serialportprofile::setInputOptions(tcflag_t flags) {
-	tio.c_iflag=flags;
+	pvt->_tio.c_iflag=flags;
 }
 
 void serialportprofile::setOutputOptions(tcflag_t flags) {
-	tio.c_oflag=flags;
+	pvt->_tio.c_oflag=flags;
 }
 
 void serialportprofile::setControlCharacters(const cc_t *c_cc) {
-	rawbuffer::copy(&tio.c_cc,c_cc,sizeof(cc_t)*NCCS);
+	rawbuffer::copy(&pvt->_tio.c_cc,c_cc,sizeof(cc_t)*NCCS);
 }
 
 void serialportprofile::setOptions(const termios *newtio) {
-	rawbuffer::copy(&tio,newtio,sizeof(tio));
+	rawbuffer::copy(&pvt->_tio,newtio,sizeof(pvt->_tio));
 }
 
 void serialportprofile::defaultControlOptions() {
-	tio.c_cflag=0;
+	pvt->_tio.c_cflag=0;
 }
 
 void serialportprofile::defaultLocalOptions() {
-	tio.c_lflag=0;
+	pvt->_tio.c_lflag=0;
 }
 
 void serialportprofile::defaultInputOptions() {
-	tio.c_iflag=0;
+	pvt->_tio.c_iflag=0;
 }
 
 void serialportprofile::defaultOutputOptions() {
-	tio.c_oflag=0;
+	pvt->_tio.c_oflag=0;
 }
 
 void serialportprofile::defaultControlCharacters() {
-	rawbuffer::zero(&tio.c_cc,sizeof(tio.c_cc));
+	rawbuffer::zero(&pvt->_tio.c_cc,sizeof(pvt->_tio.c_cc));
 }
 
 void serialportprofile::defaultOptions() {
-	rawbuffer::zero(&tio,sizeof(tio));
+	rawbuffer::zero(&pvt->_tio,sizeof(pvt->_tio));
 }
 
 bool serialportprofile::inputBaud(serialportprofile::baudrate_t baudrate) {
-	return !cfsetispeed(&tio,(tcflag_t)baudrate);
+	return !cfsetispeed(&pvt->_tio,(tcflag_t)baudrate);
 }
 
 bool serialportprofile::outputBaud(serialportprofile::baudrate_t baudrate) {
-	return !cfsetospeed(&tio,(tcflag_t)baudrate);
+	return !cfsetospeed(&pvt->_tio,(tcflag_t)baudrate);
 }
 
 void serialportprofile::baud(serialportprofile::baudrate_t baudrate) {
 
 	#ifdef CBAUD
 		#ifdef CBAUDEX
-		tio.c_cflag&=~(CBAUD|CBAUDEX);
+		pvt->_tio.c_cflag&=~(CBAUD|CBAUDEX);
 		#else
-		tio.c_cflag&=~CBAUD;
+		pvt->_tio.c_cflag&=~CBAUD;
 		#endif
 	#else
-		tio.c_cflag&=~(B0|B50|B75|B110|B134|B150|B200|B300|
+		pvt->_tio.c_cflag&=~(B0|B50|B75|B110|B134|B150|B200|B300|
 				B600|B1200|B1800|B2400|B4800|B9600
 				#if defined(B19200)
 				|B19200
@@ -146,23 +154,23 @@ void serialportprofile::baud(serialportprofile::baudrate_t baudrate) {
 				#endif
 				);
 	#endif
-	tio.c_cflag|=(tcflag_t)baudrate;
+	pvt->_tio.c_cflag|=(tcflag_t)baudrate;
 }
 
 void serialportprofile::characterSize(serialportprofile::charsize_t size) {
-	tio.c_cflag&=~CSIZE;
-	tio.c_cflag|=(tcflag_t)size;
+	pvt->_tio.c_cflag&=~CSIZE;
+	pvt->_tio.c_cflag|=(tcflag_t)size;
 }
 
 #define SET_FLAG(truefalse,flag,value) \
-	if (truefalse) { tio.flag|=value; } else { tio.flag&=~value; }
+	if (truefalse) { pvt->_tio.flag|=value; } else { pvt->_tio.flag&=~value; }
 
 #define SET_CHAR(character,value) \
-	tio.c_cc[character]=value;
+	pvt->_tio.c_cc[character]=value;
 
-#define GET_FLAG(flag,value) (tio.flag&value)
+#define GET_FLAG(flag,value) (pvt->_tio.flag&value)
 
-#define GET_CHAR(character) (tio.c_cc[character])
+#define GET_CHAR(character) (pvt->_tio.c_cc[character])
 
 void serialportprofile::twoStopBits(bool truefalse) {
 	SET_FLAG(truefalse,c_cflag,CSTOPB)
@@ -282,11 +290,11 @@ serialportprofile::baudrate_t serialportprofile::baud() {
 }
 
 serialportprofile::baudrate_t serialportprofile::inputBaud() {
-	return (serialportprofile::baudrate_t)cfgetispeed(&tio);
+	return (serialportprofile::baudrate_t)cfgetispeed(&pvt->_tio);
 }
 
 serialportprofile::baudrate_t serialportprofile::outputBaud() {
-	return (serialportprofile::baudrate_t)cfgetospeed(&tio);
+	return (serialportprofile::baudrate_t)cfgetospeed(&pvt->_tio);
 }
 
 serialportprofile::charsize_t serialportprofile::characterSize() {
@@ -639,48 +647,48 @@ void serialportprofile::expandTabToSpaces(bool truefalse) {
 #ifdef NLDLY
 void serialportprofile::delayAfterNewLine(
 		serialportprofile::newlinedelay_t nldelay) {
-	tio.c_oflag&=~NLDLY;
-	tio.c_oflag|=(tcflag_t)nldelay;
+	pvt->_tio.c_oflag&=~NLDLY;
+	pvt->_tio.c_oflag|=(tcflag_t)nldelay;
 }
 #endif
 
 #ifdef CRDLY
 void serialportprofile::delayAfterCarriageReturn(
 		serialportprofile::carriagereturndelay_t crdelay) {
-	tio.c_oflag&=~CRDLY;
-	tio.c_oflag|=(tcflag_t)crdelay;
+	pvt->_tio.c_oflag&=~CRDLY;
+	pvt->_tio.c_oflag|=(tcflag_t)crdelay;
 }
 #endif
 
 #ifdef TABDLY
 void serialportprofile::delayAfterTab(
 		serialportprofile::tabdelay_t tabdelay) {
-	tio.c_oflag&=~TABDLY;
-	tio.c_oflag|=(tcflag_t)tabdelay;
+	pvt->_tio.c_oflag&=~TABDLY;
+	pvt->_tio.c_oflag|=(tcflag_t)tabdelay;
 }
 #endif
 
 #ifdef BSDLY
 void serialportprofile::delayAfterBackSpace(
 		serialportprofile::backspacedelay_t bsdelay) {
-	tio.c_oflag&=~BSDLY;
-	tio.c_oflag|=(tcflag_t)bsdelay;
+	pvt->_tio.c_oflag&=~BSDLY;
+	pvt->_tio.c_oflag|=(tcflag_t)bsdelay;
 }
 #endif
 
 #ifdef VTDLY
 void serialportprofile::delayAfterVerticalTab(
 		serialportprofile::verticaltabdelay_t vtdelay) {
-	tio.c_oflag&=~VTDLY;
-	tio.c_oflag|=(tcflag_t)vtdelay;
+	pvt->_tio.c_oflag&=~VTDLY;
+	pvt->_tio.c_oflag|=(tcflag_t)vtdelay;
 }
 #endif
 
 #ifdef FFDLY
 void serialportprofile::delayAfterFormFeed(
 		serialportprofile::formfeeddelay_t ffdelay) {
-	tio.c_oflag&=~FFDLY;
-	tio.c_oflag|=(tcflag_t)ffdelay;
+	pvt->_tio.c_oflag&=~FFDLY;
+	pvt->_tio.c_oflag|=(tcflag_t)ffdelay;
 }
 #endif
 
@@ -960,7 +968,7 @@ cc_t serialportprofile::readTimeout() {
 }
 
 termios *serialportprofile::getTermios() {
-	return &tio;
+	return &pvt->_tio;
 }
 
 serialportprofile::baudrate_t serialportprofile::translateBaudString(

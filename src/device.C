@@ -12,13 +12,20 @@
 namespace rudiments {
 #endif
 
+class deviceprivate {
+	friend class device;
+	private:
+};
+
 device::device() : file() {
+	pvt=new deviceprivate;
 	dontGetCurrentPropertiesOnOpen();
-	type="device";
+	type("device");
 }
 
 device::device(const device &d) : file(d) {
-	type="device";
+	pvt=new deviceprivate;
+	type("device");
 }
 
 device &device::operator=(const device &d) {
@@ -28,7 +35,9 @@ device &device::operator=(const device &d) {
 	return *this;
 }
 
-device::~device() {}
+device::~device() {
+	delete pvt;
+}
 
 bool device::createDeviceNode(const char *filename, bool blockdevice,
 				unsigned short major, unsigned short minor,

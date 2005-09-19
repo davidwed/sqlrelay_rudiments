@@ -14,12 +14,19 @@
 namespace rudiments {
 #endif
 
+class clientsocketprivate {
+	friend class clientsocket;
+	private:
+};
+
 clientsocket::clientsocket() : client() {
-	type="clientsocket";
+	pvt=new clientsocketprivate;
+	type("clientsocket");
 }
 
 clientsocket::clientsocket(const clientsocket &c) : client(c) {
-	type="clientsocket";
+	pvt=new clientsocketprivate;
+	type("clientsocket");
 }
 
 clientsocket &clientsocket::operator=(const clientsocket &c) {
@@ -29,7 +36,9 @@ clientsocket &clientsocket::operator=(const clientsocket &c) {
 	return *this;
 }
 
-clientsocket::~clientsocket() {}
+clientsocket::~clientsocket() {
+	delete pvt;
+}
 
 #ifdef FIONBIO
 bool clientsocket::useNonBlockingMode() const {
@@ -45,7 +54,7 @@ bool clientsocket::useBlockingMode() const {
 
 #ifdef RUDIMENTS_HAS_SSL
 BIO *clientsocket::newSSLBIO() const {
-	return BIO_new_socket(fd,BIO_NOCLOSE);
+	return BIO_new_socket(fd(),BIO_NOCLOSE);
 }
 #endif
 
@@ -55,7 +64,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 	if (sec==-1 || usec==-1) {
 
 		// if no timeout was passed in, just do a plain vanilla connect
-		retval=(::connect(fd,addr,addrlen)==-1)?
+		retval=(::connect(fd(),addr,addrlen)==-1)?
 				RESULT_ERROR:RESULT_SUCCESS;
 
 		// FIXME: handle errno is EINTR...
@@ -76,7 +85,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		}
 
 		// call connect()
-		if (::connect(fd,addr,addrlen)==-1) {
+		if (::connect(fd(),addr,addrlen)==-1) {
 
 			// FIXME: handle errno is EINTR...
 			// if connect() fails and errno is set to one of these
@@ -132,7 +141,8 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 				do {
 					rawbuffer::zero(&peeraddr,
 							sizeof(peeraddr));
-					result=getpeername(fd,&peeraddr,&size);
+					result=getpeername(fd(),
+							&peeraddr,&size);
 				} while (result==-1 &&
 						error::getErrorNumber()==EINTR);
 				if (result==-1) {
@@ -150,7 +160,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 					// and not set errno.
 					if (error::getErrorNumber()==ENOTCONN) {
 						char	ch;
-						::read(fd,&ch,sizeof(ch));
+						::read(fd(),&ch,sizeof(ch));
 					}
 					return RESULT_ERROR;
 				}
@@ -172,9 +182,14 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 	#ifdef RUDIMENTS_HAS_SSL
 	if (retval==RESULT_SUCCESS) {
-		if (!ctx || (initializeSSL() &&
-				(sslresult=SSL_connect(ssl))==1)) {
+		if (!ctx()) {
 			return RESULT_SUCCESS;
+		}
+		if (initializeSSL()) {
+			sslresult(SSL_connect(ssl()));
+			if (sslresult()==1) {
+				return RESULT_SUCCESS;
+			}
 		}
 		close();
 		return RESULT_ERROR;

@@ -13,4 +13,172 @@
 &amp&lt&gt&apos&quot
 &&&&&
 <![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
+	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text
+	<tag2 name21="value21" name22="value22"> start tag2 text
+		<tag3 name31="value31" name32="value32"> start tag3 text
+			<tag4 name41="value41" name42="value42" /> end tag4 end text
+		</tag3> end tag3 text
+<!-- test comment -->
+<?target test="test1"?>
+	</tag2> end tag2 text
+&amp;&lt;&gt;&apos;&quot;
+&amp&lt&gt&apos&quot
+&&&&&
+<![CDATA[ test [ test [ test [test]]]]]>
 </test>

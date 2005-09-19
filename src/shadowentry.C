@@ -15,25 +15,39 @@
 namespace rudiments {
 #endif
 
+class shadowentryprivate {
+	friend class shadowentry;
+	private:
+		spwd	*_sp;
+		#if defined(HAVE_GETSPNAM_R)
+			spwd	_spbuffer;
+			char	*_buffer;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	!defined(HAVE_GETSPNAM_R)
-mutex	*shadowentry::spmutex;
+static mutex	*_spmutex;
 #endif
 
 
 shadowentry::shadowentry() {
-	sp=NULL;
+	pvt=new shadowentryprivate;
+	pvt->_sp=NULL;
 	#ifdef HAVE_GETSPNAM_R
-		rawbuffer::zero(&spbuffer,sizeof(spbuffer));
-		buffer=NULL;
+		rawbuffer::zero(&pvt->_spbuffer,sizeof(pvt->_spbuffer));
+		pvt->_buffer=NULL;
 	#endif
 }
 
 shadowentry::shadowentry(const shadowentry &s) {
+	pvt=new shadowentryprivate;
 	initialize(s.getName());
 }
 
 shadowentry &shadowentry::operator=(const shadowentry &s) {
+	pvt=new shadowentryprivate;
 	if (this!=&s) {
 		initialize(s.getName());
 	}
@@ -42,33 +56,34 @@ shadowentry &shadowentry::operator=(const shadowentry &s) {
 
 shadowentry::~shadowentry() {
 	#ifdef HAVE_GETSPNAM_R
-		delete[] buffer;
+		delete[] pvt->_buffer;
 	#endif
+	delete pvt;
 }
 
 const char *shadowentry::getName() const {
-	return sp->sp_namp;
+	return pvt->_sp->sp_namp;
 }
 
 const char *shadowentry::getEncryptedPassword() const {
-	return sp->sp_pwdp;
+	return pvt->_sp->sp_pwdp;
 }
 
 long shadowentry::getLastChangeDate() const {
-	return sp->sp_lstchg;
+	return pvt->_sp->sp_lstchg;
 }
 
 int shadowentry::getDaysBeforeChangeAllowed() const {
-	return sp->sp_min;
+	return pvt->_sp->sp_min;
 }
 
 int shadowentry::getDaysBeforeChangeRequired() const {
-	return sp->sp_max;
+	return pvt->_sp->sp_max;
 }
 
 int shadowentry::getDaysBeforeExpirationWarning() const {
 #ifdef HAVE_SP_WARN
-	return sp->sp_warn;
+	return pvt->_sp->sp_warn;
 #else
 	return -1;
 #endif
@@ -76,7 +91,7 @@ int shadowentry::getDaysBeforeExpirationWarning() const {
 
 int shadowentry::getDaysOfInactivityAllowed() const {
 #ifdef HAVE_SP_INACT
-	return sp->sp_inact;
+	return pvt->_sp->sp_inact;
 #else
 	return -1;
 #endif
@@ -84,7 +99,7 @@ int shadowentry::getDaysOfInactivityAllowed() const {
 
 int shadowentry::getExpirationDate() const {
 #ifdef HAVE_SP_EXPIRE
-	return sp->sp_expire;
+	return pvt->_sp->sp_expire;
 #else
 	return -1;
 #endif
@@ -92,7 +107,7 @@ int shadowentry::getExpirationDate() const {
 
 int shadowentry::getFlag() const {
 #ifdef HAVE_SP_FLAG
-	return sp->sp_flag;
+	return pvt->_sp->sp_flag;
 #else
 	return -1;
 #endif
@@ -109,7 +124,7 @@ bool shadowentry::needsMutex() {
 
 void shadowentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETSPNAM_R)
-		spmutex=mtx;
+		_spmutex=mtx;
 	#endif
 }
 #endif
@@ -117,10 +132,10 @@ void shadowentry::setMutex(mutex *mtx) {
 bool shadowentry::initialize(const char *username) {
 
 	#ifdef HAVE_GETSPNAM_R
-		if (sp) {
-			sp=NULL;
-			delete[] buffer;
-			buffer=NULL;
+		if (pvt->_sp) {
+			pvt->_sp=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
 		}
 		// getspnam_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
@@ -128,32 +143,36 @@ bool shadowentry::initialize(const char *username) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
+			pvt->_buffer=new char[size];
 			#if defined(HAVE_GETSPNAM_R_5)
-			if (!getspnam_r(username,&spbuffer,buffer,size,&sp)) {
-				return (sp!=NULL);
+			if (!getspnam_r(username,&pvt->_spbuffer,
+					pvt->_buffer,size,&pvt->_sp)) {
+				return (pvt->_sp!=NULL);
 			}
 			#elif defined(HAVE_GETSPNAM_R_4)
-			if ((sp=getspnam_r(username,&spbuffer,buffer,size))) {
+			if ((pvt->_sp=getspnam_r(username,
+					&pvt->_spbuffer,pvt->_buffer,size))) {
 				return true;
 			}
 			#endif
-			delete[] buffer;
-			buffer=NULL;
-			sp=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
+			pvt->_sp=NULL;
 			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
 		return false;
 	#else
-		sp=NULL;
+		pvt->_sp=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(spmutex && !spmutex->lock()) &&
-			((sp=getspnam(const_cast<char *>(username)))!=NULL) &&
-			!(spmutex && !spmutex->unlock()));
+		return (!(_spmutex && !_spmutex->lock()) &&
+			((pvt->_sp=getspnam(
+				const_cast<char *>(username)))!=NULL) &&
+			!(_spmutex && !_spmutex->unlock()));
 		#else
-		return ((sp=getspnam(const_cast<char *>(username)))!=NULL);
+		return ((pvt->_sp=getspnam(
+				const_cast<char *>(username)))!=NULL);
 		#endif
 	#endif
 }
@@ -253,7 +272,7 @@ bool shadowentry::getFlag(const char *username, int *flag) {
 
 void shadowentry::print() const {
 
-	if (!sp) {
+	if (!pvt->_sp) {
 		return;
 	}
 

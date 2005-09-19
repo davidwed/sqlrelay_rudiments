@@ -16,13 +16,27 @@
 namespace rudiments {
 #endif
 
+class filesystemprivate {
+	friend class filesystem;
+	private:
+#ifdef HAVE_STATVFS
+		struct	statvfs	_st;
+#else
+		struct	statfs	_st;
+#endif
+		int	_fd;
+		bool	_closeflag;
+};
+
 filesystem::filesystem() {
-	fd=-1;
-	closeflag=false;
-	rawbuffer::zero(&st,sizeof(st));
+	pvt=new filesystemprivate;
+	pvt->_fd=-1;
+	pvt->_closeflag=false;
+	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
 }
 
 filesystem::filesystem(const filesystem &f) {
+	pvt=new filesystemprivate;
 	filesystemClone(f);
 }
 
@@ -34,38 +48,39 @@ filesystem &filesystem::operator=(const filesystem &f) {
 }
 
 void filesystem::filesystemClone(const filesystem &f) {
-	fd=f.fd;
-	closeflag=f.closeflag;
-	st=f.st;
+	pvt->_fd=f.pvt->_fd;
+	pvt->_closeflag=f.pvt->_closeflag;
+	pvt->_st=f.pvt->_st;
 }
 
 filesystem::~filesystem() {
 	close();
+	delete pvt;
 }
 
 bool filesystem::initialize(const char *path) {
 	close();
-	closeflag=true;
+	pvt->_closeflag=true;
 	do {
-		fd=::open(path,O_RDONLY);
-	} while (fd==-1 && error::getErrorNumber()==EINTR);
-	return (fd!=-1 && getCurrentProperties());
+		pvt->_fd=::open(path,O_RDONLY);
+	} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR);
+	return (pvt->_fd!=-1 && getCurrentProperties());
 }
 
 bool filesystem::initialize(int fd) {
 	close();
-	closeflag=false;
-	this->fd=fd;
+	pvt->_closeflag=false;
+	pvt->_fd=fd;
 	return getCurrentProperties();
 }
 
 bool filesystem::close() {
-	if (fd>-1 && closeflag) {
+	if (pvt->_fd>-1 && pvt->_closeflag) {
 		int	result;
 		do {
-			result=::close(fd);
+			result=::close(pvt->_fd);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-		fd=-1;
+		pvt->_fd=-1;
 		return !result;
 	}
 	return true;
@@ -75,9 +90,9 @@ bool filesystem::getCurrentProperties() {
 	int	result;
 	do {
 		#ifdef HAVE_STATVFS
-		result=fstatvfs(fd,&st);
+		result=fstatvfs(pvt->_fd,&pvt->_st);
 		#else
-		result=fstatfs(fd,&st);
+		result=fstatfs(pvt->_fd,&pvt->_st);
 		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
@@ -165,7 +180,7 @@ long filesystem::getType() const {
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS)
-	return st.f_type;
+	return pvt->_st.f_type;
 #else
 	return 0;
 #endif
@@ -214,10 +229,10 @@ long filesystem::getBlockSize() const {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS)
-	return st.f_bsize;
+	return pvt->_st.f_bsize;
 #else
 	#ifdef HAVE_STATVFS
-		return st.f_frsize;
+		return pvt->_st.f_frsize;
 	#else
 		return 0;
 	#endif
@@ -265,13 +280,13 @@ long filesystem::getOptimumTransferBlockSize() const {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS)
-	return st.f_bsize;
+	return pvt->_st.f_bsize;
 #else
 	#if defined(HAVE_FREEBSD_STATFS) || \
 		defined(HAVE_NETBSD_STATFS) || \
 		defined(HAVE_OPENBSD_STATFS) || \
 		defined(HAVE_DARWIN_STATFS)
-		return st.f_iosize;
+		return pvt->_st.f_iosize;
 	#else
 		return 0;
 	#endif
@@ -316,7 +331,7 @@ long filesystem::getTotalBlocks() const {
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS)
-	return st.f_blocks;
+	return pvt->_st.f_blocks;
 #else
 	return 0;
 #endif
@@ -360,7 +375,7 @@ long filesystem::getFreeBlocks() const {
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS)
-	return st.f_bfree;
+	return pvt->_st.f_bfree;
 #else
 	return 0;
 #endif
@@ -404,7 +419,7 @@ long filesystem::getAvailableBlocks() const {
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS)
-	return st.f_bavail;
+	return pvt->_st.f_bavail;
 #else
 	return 0;
 #endif
@@ -448,7 +463,7 @@ long filesystem::getTotalFileNodes() const {
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS)
-	return st.f_files;
+	return pvt->_st.f_files;
 #else
 	return 0;
 #endif
@@ -492,7 +507,7 @@ long filesystem::getFreeFileNodes() const {
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
 	defined(HAVE_STATVFS)
-	return st.f_ffree;
+	return pvt->_st.f_ffree;
 #else
 	return 0;
 #endif
@@ -518,7 +533,7 @@ bool filesystem::getAvailableFileNodes(int fd, long *nodes) {
 
 long filesystem::getAvailableFileNodes() const {
 #ifdef HAVE_STATVFS
-	return st.f_ffree;
+	return pvt->_st.f_ffree;
 #else
 	return 0;
 #endif
@@ -534,7 +549,7 @@ long filesystem::getAvailableFileNodes() const {
 	}
 
 	long filesystem::getFileSystemId() const {
-		return st.f_fsid;
+		return pvt->_st.f_fsid;
 	}
 #else
 	bool filesystem::getFileSystemId(const char *path, fsid_t *id) {
@@ -572,7 +587,7 @@ long filesystem::getAvailableFileNodes() const {
 		defined(HAVE_OPENBSD_STATFS) || \
 		defined(HAVE_DARWIN_STATFS) || \
 		defined(HAVE_CYGWIN_STATFS)
-		return st.f_fsid;
+		return pvt->_st.f_fsid;
 	#else
 		return 0;
 	#endif
@@ -611,10 +626,10 @@ bool filesystem::getMaximumFileNameLength(int fd, long *length) {
 long filesystem::getMaximumFileNameLength() const {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS)
-	return st.f_namelen;
+	return pvt->_st.f_namelen;
 #else
 	#ifdef HAVE_STATVFS
-		return st.f_namemax;
+		return pvt->_st.f_namemax;
 	#else
 		return 0;
 	#endif
@@ -650,7 +665,7 @@ uid_t filesystem::getOwner() const {
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return st.f_owner;
+	return pvt->_st.f_owner;
 #else
 	return 0;
 #endif
@@ -682,7 +697,7 @@ long filesystem::getSyncWrites() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS)
-	return st.f_syncwrites;
+	return pvt->_st.f_syncwrites;
 #else
 	return 0;
 #endif
@@ -714,7 +729,7 @@ long filesystem::getAsyncWrites() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS)
-	return st.f_asyncwrites;
+	return pvt->_st.f_asyncwrites;
 #else
 	return 0;
 #endif
@@ -749,7 +764,7 @@ const char *filesystem::getMountPoint() const {
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return (const char *)st.f_mntonname;
+	return (const char *)pvt->_st.f_mntonname;
 #else
 	return NULL;
 #endif
@@ -775,7 +790,7 @@ bool filesystem::getSyncReads(int fd, long *sreads) {
 
 long filesystem::getSyncReads() const {
 #if defined(HAVE_FREEBSD_STATFS)
-	return st.f_syncreads;
+	return pvt->_st.f_syncreads;
 #else
 	return 0;
 #endif
@@ -801,7 +816,7 @@ bool filesystem::getAsyncReads(int fd, long *asreads) {
 
 long filesystem::getAsyncReads() const {
 #if defined(HAVE_FREEBSD_STATFS)
-	return st.f_asyncreads;
+	return pvt->_st.f_asyncreads;
 #else
 	return 0;
 #endif
@@ -833,7 +848,7 @@ const char *filesystem::getDeviceName() const {
 #if defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return (const char *)st.f_mntfromname;
+	return (const char *)pvt->_st.f_mntfromname;
 #else
 	return NULL;
 #endif
@@ -860,7 +875,7 @@ bool filesystem::getFilesystemSpecificString(int fd, const char **str) {
 
 const char *filesystem::getFilesystemSpecificString() const {
 #ifdef HAVE_STATVFS
-	return (const char *)st.f_fstr;
+	return (const char *)pvt->_st.f_fstr;
 #else
 	return NULL;
 #endif
@@ -869,11 +884,11 @@ const char *filesystem::getFilesystemSpecificString() const {
 
 #ifdef HAVE_STATVFS
 struct statvfs *filesystem::getStatfs() {
-	return &st;
+	return &pvt->_st;
 }
 #else
 struct statfs *filesystem::getStatfs() {
-	return &st;
+	return &pvt->_st;
 }
 #endif
 
@@ -940,13 +955,13 @@ const char *filesystem::getTypeName() const {
 	defined(HAVE_NETBSD_STATFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
-	return (const char *)st.f_fstypename;
+	return (const char *)pvt->_st.f_fstypename;
 #else
 	#ifdef HAVE_STATVFS
-		return (const char *)st.f_basetype;
+		return (const char *)pvt->_st.f_basetype;
 	#else
 		#if defined(HAVE_LINUX_STATFS)
-			return filesystem::getFsTypeName(st.f_type);
+			return filesystem::getFsTypeName(pvt->_st.f_type);
 		#else
 			return NULL;
 		#endif

@@ -14,38 +14,45 @@
 namespace rudiments {
 #endif
 
-/*#ifndef HAVE_SEMUN
-union semun {
-	int	val;
-	struct	semid_ds	*buf;
-	ushort	*array;
+class semaphoresetprivate {
+	friend class semaphoreset;
+	private:
+			int	_semid;
+			bool	_created;
+			int	_semcount;
+		struct	sembuf	**_waitop;
+		struct	sembuf	**_waitwithundoop;
+		struct	sembuf	**_signalop;
+		struct	sembuf	**_signalwithundoop;
 };
-#endif*/
 
 semaphoreset::semaphoreset() {
-	waitop=NULL;
-	created=false;
-	semid=-1;
+	pvt=new semaphoresetprivate;
+	pvt->_waitop=NULL;
+	pvt->_created=false;
+	pvt->_semid=-1;
 }
 
 semaphoreset::~semaphoreset() {
 
-	if (waitop) {
-		for (int i=0; i<semcount; i++) {
-			delete[] waitop[i];
-			delete[] waitwithundoop[i];
-			delete[] signalop[i];
-			delete[] signalwithundoop[i];
+	if (pvt->_waitop) {
+		for (int i=0; i<pvt->_semcount; i++) {
+			delete[] pvt->_waitop[i];
+			delete[] pvt->_waitwithundoop[i];
+			delete[] pvt->_signalop[i];
+			delete[] pvt->_signalwithundoop[i];
 		}
-		delete[] waitop;
-		delete[] waitwithundoop;
-		delete[] signalop;
-		delete[] signalwithundoop;
+		delete[] pvt->_waitop;
+		delete[] pvt->_waitwithundoop;
+		delete[] pvt->_signalop;
+		delete[] pvt->_signalwithundoop;
 	}
 
-	if (created) {
+	if (pvt->_created) {
 		forceRemove();
 	}
+
+	delete pvt;
 }
 
 bool semaphoreset::forceRemove() {
@@ -54,15 +61,15 @@ bool semaphoreset::forceRemove() {
 }
 
 void semaphoreset::dontRemove() {
-	created=false;
+	pvt->_created=false;
 }
 
 int semaphoreset::getId() const {
-	return semid;
+	return pvt->_semid;
 }
 
 bool semaphoreset::wait(int index) {
-	return semOp(waitop[index]);
+	return semOp(pvt->_waitop[index]);
 }
 
 #ifdef HAVE_SEMTIMEDOP
@@ -70,12 +77,12 @@ bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
 	timespec	ts;
 	ts.tv_sec=seconds;
 	ts.tv_nsec=nanoseconds;
-	return semTimedOp(waitop[index],&ts);
+	return semTimedOp(pvt->_waitop[index],&ts);
 }
 #endif
 
 bool semaphoreset::waitWithUndo(int index) {
-	return semOp(waitwithundoop[index]);
+	return semOp(pvt->_waitwithundoop[index]);
 }
 
 #ifdef HAVE_SEMTIMEDOP
@@ -83,16 +90,16 @@ bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
 	timespec	ts;
 	ts.tv_sec=seconds;
 	ts.tv_nsec=nanoseconds;
-	return semTimedOp(waitwithundoop[index],&ts);
+	return semTimedOp(pvt->_waitwithundoop[index],&ts);
 }
 #endif
 
 bool semaphoreset::signal(int index) {
-	return semOp(signalop[index]);
+	return semOp(pvt->_signalop[index]);
 }
 
 bool semaphoreset::signalWithUndo(int index) {
-	return semOp(signalwithundoop[index]);
+	return semOp(pvt->_signalwithundoop[index]);
 }
 
 int semaphoreset::getValue(int index) {
@@ -119,10 +126,11 @@ int semaphoreset::getWaitingForIncrement(int index) {
 bool semaphoreset::create(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
-	this->semcount=semcount;
+	pvt->_semcount=semcount;
 
 	// create the semaphore
-	if ((semid=semGet(key,semcount,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
+	if ((pvt->_semid=semGet(key,semcount,
+				IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// if creation succeeded, initialize the semaphore
 		if (values) {
@@ -132,7 +140,7 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 		}
 
 		// mark for removal
-		created=true;
+		pvt->_created=true;
 
 		createOperations();
 		return true;
@@ -143,9 +151,9 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 
 bool semaphoreset::attach(key_t key, int semcount) {
 
-	this->semcount=semcount;
+	pvt->_semcount=semcount;
 
-	if ((semid=semGet(key,semcount,0))!=-1) {
+	if ((pvt->_semid=semGet(key,semcount,0))!=-1) {
 		createOperations();
 		return true;
 	}
@@ -156,10 +164,11 @@ bool semaphoreset::attach(key_t key, int semcount) {
 bool semaphoreset::createOrAttach(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
-	this->semcount=semcount;
+	pvt->_semcount=semcount;
 
 	// create the semaphore
-	if ((semid=semGet(key,semcount,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
+	if ((pvt->_semid=semGet(key,semcount,
+				IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// if creation succeeded, initialize the semaphore
 		if (values) {
@@ -169,10 +178,10 @@ bool semaphoreset::createOrAttach(key_t key, mode_t permissions,
 		}
 
 		// mark for removal
-		created=true;
+		pvt->_created=true;
 		
 	} else if (!(error::getErrorNumber()==EEXIST && 
-				(semid=semGet(key,semcount,permissions))!=-1)) {
+			(pvt->_semid=semGet(key,semcount,permissions))!=-1)) {
 
 		return false;
 	}
@@ -182,36 +191,36 @@ bool semaphoreset::createOrAttach(key_t key, mode_t permissions,
 
 void semaphoreset::createOperations() {
 
-	waitop=new sembuf *[semcount];
-	waitwithundoop=new sembuf *[semcount];
-	signalop=new sembuf *[semcount];
-	signalwithundoop=new sembuf *[semcount];
+	pvt->_waitop=new sembuf *[pvt->_semcount];
+	pvt->_waitwithundoop=new sembuf *[pvt->_semcount];
+	pvt->_signalop=new sembuf *[pvt->_semcount];
+	pvt->_signalwithundoop=new sembuf *[pvt->_semcount];
 
-	for (int i=0; i<semcount; i++) {
+	for (int i=0; i<pvt->_semcount; i++) {
 
 		// wait without undo
-		waitop[i]=new sembuf[1];
-		waitop[i][0].sem_num=(short)i;
-		waitop[i][0].sem_op=-1;
-		waitop[i][0].sem_flg=0;
+		pvt->_waitop[i]=new sembuf[1];
+		pvt->_waitop[i][0].sem_num=(short)i;
+		pvt->_waitop[i][0].sem_op=-1;
+		pvt->_waitop[i][0].sem_flg=0;
 
 		// wait with undo
-		waitwithundoop[i]=new sembuf[1];
-		waitwithundoop[i][0].sem_num=(short)i;
-		waitwithundoop[i][0].sem_op=-1;
-		waitwithundoop[i][0].sem_flg=SEM_UNDO;
+		pvt->_waitwithundoop[i]=new sembuf[1];
+		pvt->_waitwithundoop[i][0].sem_num=(short)i;
+		pvt->_waitwithundoop[i][0].sem_op=-1;
+		pvt->_waitwithundoop[i][0].sem_flg=SEM_UNDO;
 
 		// signal without undo
-		signalop[i]=new sembuf[1];
-		signalop[i][0].sem_num=(short)i;
-		signalop[i][0].sem_op=1;
-		signalop[i][0].sem_flg=0;
+		pvt->_signalop[i]=new sembuf[1];
+		pvt->_signalop[i][0].sem_num=(short)i;
+		pvt->_signalop[i][0].sem_op=1;
+		pvt->_signalop[i][0].sem_flg=0;
 
 		// signal with undo
-		signalwithundoop[i]=new sembuf[1];
-		signalwithundoop[i][0].sem_num=(short)i;
-		signalwithundoop[i][0].sem_op=1;
-		signalwithundoop[i][0].sem_flg=SEM_UNDO;
+		pvt->_signalwithundoop[i]=new sembuf[1];
+		pvt->_signalwithundoop[i][0].sem_num=(short)i;
+		pvt->_signalwithundoop[i][0].sem_op=1;
+		pvt->_signalwithundoop[i][0].sem_flg=SEM_UNDO;
 	}
 }
 
@@ -316,7 +325,7 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 int semaphoreset::semControl(int semnum, int cmd, semun semctlun) {
 	int	result;
 	do {
-		result=semctl(semid,semnum,cmd,semctlun);
+		result=semctl(pvt->_semid,semnum,cmd,semctlun);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -324,7 +333,7 @@ int semaphoreset::semControl(int semnum, int cmd, semun semctlun) {
 bool semaphoreset::semOp(struct sembuf *sops) {
 	int	result;
 	do {
-		result=semop(semid,sops,1);
+		result=semop(pvt->_semid,sops,1);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -333,7 +342,7 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
 	int	result;
 	do {
-		result=semtimedop(semid,sops,1,ts);
+		result=semtimedop(pvt->_semid,sops,1,ts);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }

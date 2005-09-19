@@ -6,22 +6,47 @@
 
 #include <stdlib.h>
 
+// for getpagesize()
+#include <unistd.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+class xmlsaxprivate {
+	friend class xmlsax;
+	private:
+		const char	*_string;
+		const char	*_ptr;
+		file		_fl;
+		#ifdef HAVE_MMAP
+		memorymap	_mm;
+		off64_t		_filesize;
+		off64_t		_fileoffset;
+		const char	*_endptr;
+		#endif
+		uint32_t	_line;
+		stringbuffer	_err;
+};
+
 xmlsax::xmlsax() {
+	pvt=new xmlsaxprivate;
 	reset();
 }
 
 xmlsax::~xmlsax() {
 	close();
+	delete pvt;
 }
 
 void xmlsax::reset() {
-	string=NULL;
-	ptr=NULL;
-	line=1;
+	pvt->_string=NULL;
+	pvt->_ptr=NULL;
+#ifdef HAVE_MMAP
+	pvt->_filesize=0;
+	pvt->_endptr=NULL;
+#endif
+	pvt->_line=1;
 }
 
 bool xmlsax::tagStart(const char *name) {
@@ -70,22 +95,20 @@ bool xmlsax::parseFile(const char *filename) {
 #ifdef HAVE_MMAP
 	// open the file
 	bool retval;
-	if ((retval=fl.open(filename,O_RDONLY))) {
+	if ((retval=pvt->_fl.open(filename,O_RDONLY))) {
 		// Try to memorymap the file.  If it fails, that's ok, ptr will
 		// be set to NULL from the previous call to reset() and will
 		// cause getCharacter() to read from the file.
-		if (mm.attach(fl.getFileDescriptor(),0,fl.getSize(),
-						PROT_READ,MAP_PRIVATE)) {
-			string=static_cast<char *>(mm.getData());
-			ptr=string;
-		}
+		pvt->_filesize=pvt->_fl.getSize();
+		pvt->_fileoffset=0;
+		mapFile();
 		retval=parse();
-		if (ptr) {
-			mm.detach();
+		if (pvt->_ptr) {
+			pvt->_mm.detach();
 		}
 	}
 #else
-	bool	retval=(fl.open(filename,O_RDONLY) && parse());
+	bool	retval=(pvt->_fl.open(filename,O_RDONLY) && parse());
 #endif
 	close();
 	return retval;
@@ -100,7 +123,7 @@ bool xmlsax::parseString(const char *string) {
 	reset();
 
 	// set string pointers
-	ptr=this->string=string;
+	pvt->_ptr=pvt->_string=string;
 
 	return parse();
 }
@@ -111,7 +134,7 @@ void xmlsax::close() {
 	reset();
 
 	// close any previously opened files
-	fl.close();
+	pvt->_fl.close();
 }
 
 bool xmlsax::parse() {
@@ -269,10 +292,10 @@ bool xmlsax::parseTagName(char current, stringbuffer *name, char *next) {
 
 			// we should not run into a NULL or EOF here, if we
 			// do then it's an error
-			err.clear();
-			err.append("error: parseTagName() ");
-			err.append("failed at line ");
-			err.append(line);
+			pvt->_err.clear();
+			pvt->_err.append("error: parseTagName() ");
+			pvt->_err.append("failed at line ");
+			pvt->_err.append(pvt->_line);
 			return false;
 
 		} else if (ch=='[') {
@@ -742,46 +765,77 @@ char xmlsax::getCharacter() {
 	// get a character from the string or file, whichever is appropriate,
 	// if the character is an EOF, return a NULL
 	char	ch;
-	if (string) {
+	if (pvt->_string) {
 		// If you've come here chasing valgrind errors...
 		// ptr may be set to the return value of mmap() which is
 		// neither on the stack nor in the heap.  There's no actual
 		// error here, valgrind just doesn't know about variables that
 		// aren't on the stack or in the heap and it thinks it's
 		// uninitialized.
-		ch=*ptr;
-		ptr++;
+		if (pvt->_ptr==pvt->_endptr) {
+			if (!mapFile()) {
+				return '\0';
+			}
+		}
+		ch=*(pvt->_ptr);
+		(pvt->_ptr)++;
+		pvt->_fileoffset++;
 	} else {
-		if (fl.read(&ch)!=sizeof(char)) {
-			ch='\0';
+		if (pvt->_fl.read(&ch)!=sizeof(char)) {
+			return '\0';
 		}
 	}
 	if (ch=='\n') {
-		line++;
+		(pvt->_line)++;
 	}
 	return ch;
 }
 
 void xmlsax::parseTagFailed() {
-	err.clear();
-	err.append("error: parseTagFailed() failed at line ");
-	err.append(line);
+	pvt->_err.clear();
+	pvt->_err.append("error: parseTagFailed() failed at line ");
+	pvt->_err.append(pvt->_line);
 }
 
 void xmlsax::parseAttributeFailed() {
-	err.clear();
-	err.append("error: parseAttributeFailed() failed at line ");
-	err.append(line);
+	pvt->_err.clear();
+	pvt->_err.append("error: parseAttributeFailed() failed at line ");
+	pvt->_err.append(pvt->_line);
 }
 
 void xmlsax::parseTextFailed() {
-	err.clear();
-	err.append("error: parseText() failed at line ");
-	err.append(line);
+	pvt->_err.clear();
+	pvt->_err.append("error: parseText() failed at line ");
+	pvt->_err.append(pvt->_line);
 }
 
 const char *xmlsax::getError() {
-	return err.getString();
+	return pvt->_err.getString();
+}
+
+
+bool xmlsax::mapFile() {
+
+	if (pvt->_fileoffset) {
+		pvt->_mm.detach();
+	}
+
+	off64_t	len=pvt->_filesize-pvt->_fileoffset;
+	if (len>getpagesize()) {
+		len=getpagesize();
+	}
+	if (!len) {
+		return false;
+	}
+
+	if (pvt->_mm.attach(pvt->_fl.getFileDescriptor(),
+				pvt->_fileoffset,len,PROT_READ,MAP_PRIVATE)) {
+		pvt->_string=static_cast<char *>(pvt->_mm.getData());
+		pvt->_ptr=pvt->_string;	
+		pvt->_endptr=pvt->_ptr+len;
+		return true;
+	}
+	return false;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

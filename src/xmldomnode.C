@@ -11,65 +11,87 @@
 namespace rudiments {
 #endif
 
+class xmldomnodeprivate {
+	friend class xmldomnode;
+	private:
+		bool		_cascade;
+		xmldomnodetype	_type;
+		char		*_nodename;
+		char		*_nodevalue;
+		xmldomnode	*_parent;
+		xmldomnode	*_next;
+		xmldomnode	*_previous;
+		int		_childcount;
+		xmldomnode	*_firstchild;
+		xmldomnode	*_lastchild;
+		int		_attributecount;
+		xmldomnode	*_firstattribute;
+		xmldomnode	*_lastattribute;
+		xmldomnode	*_nullnode;
+		bool		_isnullnode;
+};
+
 xmldomnode::xmldomnode(xmldomnode *nullnode) {
 	init(nullnode);
-	type=NULL_XMLDOMNODETYPE;
-	nodename=NULL;
-	nodevalue=NULL;
+	pvt->_type=NULL_XMLDOMNODETYPE;
+	pvt->_nodename=NULL;
+	pvt->_nodevalue=NULL;
 }
 
 xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
 				const char *name, const char *value) {
 	init(nullnode);
-	this->type=type;
-	nodename=(name)?charstring::duplicate(name):NULL;
-	nodevalue=(value)?charstring::duplicate(value):NULL;
+	pvt->_type=type;
+	pvt->_nodename=(name)?charstring::duplicate(name):NULL;
+	pvt->_nodevalue=(value)?charstring::duplicate(value):NULL;
 }
 
 void xmldomnode::init(xmldomnode *nullnode) {
-	this->nullnode=nullnode;
-	parent=nullnode;
-	next=nullnode;
-	previous=nullnode;
-	firstchild=NULL;
-	lastchild=NULL;
-	childcount=0;
-	firstattribute=NULL;
-	lastattribute=NULL;
-	attributecount=0;
-	cascade=true;
-	isnullnode=false;
+	pvt=new xmldomnodeprivate;
+	pvt->_nullnode=nullnode;
+	pvt->_parent=nullnode;
+	pvt->_next=nullnode;
+	pvt->_previous=nullnode;
+	pvt->_firstchild=NULL;
+	pvt->_lastchild=NULL;
+	pvt->_childcount=0;
+	pvt->_firstattribute=NULL;
+	pvt->_lastattribute=NULL;
+	pvt->_attributecount=0;
+	pvt->_cascade=true;
+	pvt->_isnullnode=false;
 }
 
 xmldomnode::~xmldomnode() {
-	delete[] nodename;
-	delete[] nodevalue;
+	delete[] pvt->_nodename;
+	delete[] pvt->_nodevalue;
 	xmldomnode	*current;
-	if (cascade) {
+	if (pvt->_cascade) {
 		// delete child nodes
-		current=firstchild;
+		current=pvt->_firstchild;
 		while (current && !current->isNullNode()) {
-			lastchild=current->next;
+			pvt->_lastchild=current->pvt->_next;
 			delete current;
-			current=lastchild;
+			current=pvt->_lastchild;
 		}
 	}
 	// delete attributes
-	current=firstattribute;
+	current=pvt->_firstattribute;
 	while (current && !current->isNullNode()) {
-		lastattribute=current->next;
+		pvt->_lastattribute=current->pvt->_next;
 		delete current;
-		current=lastattribute;
+		current=pvt->_lastattribute;
 	}
+	delete pvt;
 }
 
 xmldomnode *xmldomnode::createNullNode() {
 	xmldomnode	*nn=new xmldomnode(NULL);
-	nn->parent=nn;
-	nn->next=nn;
-	nn->previous=nn;
-	nn->isnullnode=true;
-	nn->nullnode=nn;
+	nn->pvt->_parent=nn;
+	nn->pvt->_next=nn;
+	nn->pvt->_previous=nn;
+	nn->pvt->_isnullnode=true;
+	nn->pvt->_nullnode=nn;
 	return nn;
 }
 
@@ -90,7 +112,7 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name) const {
 			return current;
 		}
 	}
-	return nullnode;
+	return pvt->_nullnode;
 }
 
 xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
@@ -110,7 +132,7 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 			}
 		}
 	}
-	return nullnode;
+	return pvt->_nullnode;
 }
 
 xmldomnode *xmldomnode::getNextTagSibling() const {
@@ -130,7 +152,7 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name) const {
 			return current;
 		}
 	}
-	return nullnode;
+	return pvt->_nullnode;
 }
 
 xmldomnode *xmldomnode::getNextTagSibling(const char *name,
@@ -150,7 +172,7 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 			}
 		}
 	}
-	return nullnode;
+	return pvt->_nullnode;
 }
 
 xmldomnode *xmldomnode::getFirstTagChild() const {
@@ -176,9 +198,9 @@ xmldomnode *xmldomnode::getFirstTagChild(const char *name,
 xmldomnode *xmldomnode::getChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
-	for (xmldomnode *current=firstchild;
+	for (xmldomnode *current=pvt->_firstchild;
 			current && !current->isNullNode();
-				current=current->next) {
+				current=current->pvt->_next) {
 		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			const char	*value=current->
@@ -190,24 +212,28 @@ xmldomnode *xmldomnode::getChild(const char *name,
 			}
 		}
 	}
-	return nullnode;
+	return pvt->_nullnode;
 }
 
 bool xmldomnode::insertText(const char *value, int position) {
-	xmldomnode	*text=new xmldomnode(nullnode);
+	xmldomnode	*text=new xmldomnode(pvt->_nullnode);
 	text->setName("text");
 	text->setValue(value);
 	return insertNode(text,position,TEXT_XMLDOMNODETYPE,
-				&firstchild,&lastchild,&childcount);
+				&pvt->_firstchild,&pvt->_lastchild,
+				&pvt->_childcount);
 }
 
 bool xmldomnode::insertAttribute(const char *name, const char *value,
 								int position) {
-	xmldomnode	*attribute=new xmldomnode(nullnode);
+	xmldomnode	*attribute=new xmldomnode(pvt->_nullnode);
 	attribute->setName(name);
 	attribute->setValue(value);
-	return insertNode(attribute,position,ATTRIBUTE_XMLDOMNODETYPE,
-			&firstattribute,&lastattribute,&attributecount);
+	return insertNode(attribute,position,
+				ATTRIBUTE_XMLDOMNODETYPE,
+				&pvt->_firstattribute,
+				&pvt->_lastattribute,
+				&pvt->_attributecount);
 }
 
 stringbuffer *xmldomnode::xml(stringbuffer *string) const {
@@ -216,60 +242,60 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 		output=new stringbuffer();
 	}
 	xmldomnode	*current;
-	if (type==ROOT_XMLDOMNODETYPE) {
-		current=firstchild;
-		for (int i=0; i<childcount; i++) {
+	if (pvt->_type==ROOT_XMLDOMNODETYPE) {
+		current=pvt->_firstchild;
+		for (int i=0; i<pvt->_childcount; i++) {
 			current->xml(output);
-			current=current->next;
+			current=current->pvt->_next;
 		}
-	} else if (type==TAG_XMLDOMNODETYPE) {
+	} else if (pvt->_type==TAG_XMLDOMNODETYPE) {
 		output->append("<");
-		output->append(nodename);
-		current=firstattribute;
-		for (int i=0; i<attributecount; i++) {
+		output->append(pvt->_nodename);
+		current=pvt->_firstattribute;
+		for (int i=0; i<pvt->_attributecount; i++) {
 			output->append(" ");
 			current->xml(output);
-			current=current->next;
+			current=current->pvt->_next;
 		}
-		if (childcount) {
+		if (pvt->_childcount) {
 			output->append(">");
-			current=firstchild;
-			for (int i=0; i<childcount; i++) {
+			current=pvt->_firstchild;
+			for (int i=0; i<pvt->_childcount; i++) {
 				current->xml(output);
-				current=current->next;
+				current=current->pvt->_next;
 			}
 			output->append("</");
-			output->append(nodename);
+			output->append(pvt->_nodename);
 			output->append(">");
 		} else {
-			if (nodename[0]=='?') {
+			if (pvt->_nodename[0]=='?') {
 				output->append("?>");
-			} else if (nodename[0]=='!') {
+			} else if (pvt->_nodename[0]=='!') {
 				output->append(">");
 			} else {
 				output->append("/>");
 			}
 		}
-	} else if (type==TEXT_XMLDOMNODETYPE) {
-		output->append(nodevalue);
-	} else if (type==ATTRIBUTE_XMLDOMNODETYPE) {
-		if (parent->nodename[0]=='!') {
+	} else if (pvt->_type==TEXT_XMLDOMNODETYPE) {
+		output->append(pvt->_nodevalue);
+	} else if (pvt->_type==ATTRIBUTE_XMLDOMNODETYPE) {
+		if (pvt->_parent->pvt->_nodename[0]=='!') {
 			output->append("\"");
-			output->append(nodevalue);
+			output->append(pvt->_nodevalue);
 			output->append("\"");
 		} else {
-			output->append(nodename);
+			output->append(pvt->_nodename);
 			output->append("=\"");
-			output->append(nodevalue);
+			output->append(pvt->_nodevalue);
 			output->append("\"");
 		}
-	} else if (type==COMMENT_XMLDOMNODETYPE) {
+	} else if (pvt->_type==COMMENT_XMLDOMNODETYPE) {
 		output->append("<!--");
-		output->append(nodevalue);
+		output->append(pvt->_nodevalue);
 		output->append("-->");
-	} else if (type==CDATA_XMLDOMNODETYPE) {
+	} else if (pvt->_type==CDATA_XMLDOMNODETYPE) {
 		output->append("<![CDATA[");
-		output->append(nodevalue);
+		output->append(pvt->_nodevalue);
 		output->append("]]>");
 	}
 	return output;
@@ -278,19 +304,20 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,
 					const char *name, int count) const {
 	if (!first || position>=count) {
-		return nullnode;
+		return pvt->_nullnode;
 	}
 	xmldomnode	*current=first;
 	if (name) {
 		for (int i=0; i<count; i++) {
-			if (!charstring::compare(current->nodename,name)) {
+			if (!charstring::compare(
+					current->pvt->_nodename,name)) {
 				break;
 			}
-			current=current->next;
+			current=current->pvt->_next;
 		}
 	} else {
 		for (int i=0; i<position; i++) {
-			current=current->next;
+			current=current->pvt->_next;
 		}
 	}
 	return current;
@@ -303,17 +330,17 @@ bool xmldomnode::insertNode(xmldomnode *node, int position,
 	if (position>(*count)) {
 		return false;
 	}
-	node->parent=this;
-	node->type=type;
+	node->pvt->_parent=this;
+	node->pvt->_type=type;
 	xmldomnode	*atpos=getNode(*first,position,NULL,*count);
 	xmldomnode	*beforepos=getNode(*first,position-1,NULL,*count);
 	if (atpos) {
-		node->next=atpos;
-		atpos->previous=node;
+		node->pvt->_next=atpos;
+		atpos->pvt->_previous=node;
 	}
 	if (beforepos) {
-		node->previous=beforepos;
-		beforepos->next=node;
+		node->pvt->_previous=beforepos;
+		beforepos->pvt->_next=node;
 	}
 	if (position==0) {
 		(*first)=node;
@@ -335,27 +362,29 @@ bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 	xmldomnode	*current=*first;
 	if (node || name) {
 		while (current &&
-			(name && charstring::compare(current->nodename,name)) ||
+			(name && charstring::compare(
+					current->pvt->_nodename,name)) ||
 			(node && current!=node)) {
-			current=current->next;
+			current=current->pvt->_next;
 		}
 	} else {
 		for (int i=0; i<position; i++) {
-			current=current->next;
+			current=current->pvt->_next;
 		}
 	}
 	if (current) {
-		if (current->previous) {
-			current->previous->next=current->next;
+		if (current->pvt->_previous) {
+			current->pvt->_previous->pvt->_next=current->pvt->_next;
 		}
-		if (current->next) {
-			current->next->previous=current->previous;
+		if (current->pvt->_next) {
+			current->pvt->_next->pvt->_previous=
+					current->pvt->_previous;
 		}
 		if (current==*first) {
-			*first=current->next;
+			*first=current->pvt->_next;
 		}
 		if (current==*last) {
-			*last=current->previous;
+			*last=current->pvt->_previous;
 		}
 		delete current;
 		(*count)--;
@@ -382,12 +411,12 @@ bool xmldomnode::appendAttribute(const char *name, const char *value) {
 
 constnamevaluepairs *xmldomnode::getAttributes() const {
 
-	if (isnullnode) {
+	if (pvt->_isnullnode) {
 		return NULL;
 	}
 
 	constnamevaluepairs	*nvp=new constnamevaluepairs();
-	for (int i=0; i<attributecount; i++) {
+	for (int i=0; i<pvt->_attributecount; i++) {
 		nvp->setData(getAttribute(i)->getName(),
 				getAttribute(i)->getValue());
 	}
@@ -395,67 +424,67 @@ constnamevaluepairs *xmldomnode::getAttributes() const {
 }
 
 void xmldomnode::cascadeOnDelete() {
-	cascade=true;
+	pvt->_cascade=true;
 }
 
 void xmldomnode::dontCascadeOnDelete() {
-	cascade=false;
+	pvt->_cascade=false;
 }
 
 xmldomnodetype xmldomnode::getType() const {
-	return type;
+	return pvt->_type;
 }
 
 const char *xmldomnode::getName() const {
-	return nodename;
+	return pvt->_nodename;
 }
 
 const char *xmldomnode::getValue() const {
-	return nodevalue;
+	return pvt->_nodevalue;
 }
 
 xmldomnode *xmldomnode::getParent() const {
-	return parent;
+	return pvt->_parent;
 }
 
 xmldomnode *xmldomnode::getPreviousSibling() const {
-	return previous;
+	return pvt->_previous;
 }
 
 xmldomnode *xmldomnode::getNextSibling() const {
-	return next;
+	return pvt->_next;
 }
 
 xmldomnode *xmldomnode::getNullNode() const {
-	return nullnode;
+	return pvt->_nullnode;
 }
 
 bool xmldomnode::isNullNode() const {
-	return isnullnode;
+	return pvt->_isnullnode;
 }
 
 int xmldomnode::getChildCount() const {
-	return childcount;
+	return pvt->_childcount;
 }
 
 xmldomnode *xmldomnode::getChild(int position) const {
-	return getNode(firstchild,position,NULL,childcount);
+	return getNode(pvt->_firstchild,position,NULL,pvt->_childcount);
 }
 
 xmldomnode *xmldomnode::getChild(const char *name) const {
-	return getNode(firstchild,0,name,childcount);
+	return getNode(pvt->_firstchild,0,name,pvt->_childcount);
 }
 
 int xmldomnode::getAttributeCount() const {
-	return attributecount;
+	return pvt->_attributecount;
 }
 
 xmldomnode *xmldomnode::getAttribute(int position) const {
-	return getNode(firstattribute,position,NULL,attributecount);
+	return getNode(pvt->_firstattribute,position,NULL,pvt->_attributecount);
 }
 
 xmldomnode *xmldomnode::getAttribute(const char *name) const {
-	return getNode(firstattribute,0,name,attributecount);
+	return getNode(pvt->_firstattribute,0,name,pvt->_attributecount);
 }
 
 const char *xmldomnode::getAttributeValue(int position) const {
@@ -467,61 +496,78 @@ const char *xmldomnode::getAttributeValue(const char *name) const {
 }
 
 void xmldomnode::setType(xmldomnodetype type) {
-	this->type=type;
+	pvt->_type=type;
 }
 
 void xmldomnode::setName(const char *name) {
-	nodename=(name)?charstring::duplicate(name):NULL;
+	pvt->_nodename=(name)?charstring::duplicate(name):NULL;
 }
 
 void xmldomnode::setValue(const char *value) {
-	nodevalue=(value)?charstring::duplicate(value):NULL;
+	pvt->_nodevalue=(value)?charstring::duplicate(value):NULL;
 }
 
 void xmldomnode::setParent(xmldomnode *parent) {
-	this->parent=parent;
+	pvt->_parent=parent;
 }
 
 void xmldomnode::setPreviousSibling(xmldomnode *previous) {
-	this->previous=previous;
+	pvt->_previous=previous;
 }
 
 void xmldomnode::setNextSibling(xmldomnode *next) {
-	this->next=next;
+	pvt->_next=next;
 }
 
 bool xmldomnode::insertChild(xmldomnode *child, int position) {
-	return insertNode(child,position,child->type,
-				&firstchild,&lastchild,&childcount);
+	return insertNode(child,position,
+				child->pvt->_type,
+				&pvt->_firstchild,
+				&pvt->_lastchild,
+				&pvt->_childcount);
 }
 
 bool xmldomnode::insertAttribute(xmldomnode *attribute, int position) {
-	return insertNode(attribute,position,ATTRIBUTE_XMLDOMNODETYPE,
-			&firstattribute,&lastattribute,&attributecount);
+	return insertNode(attribute,position,
+				ATTRIBUTE_XMLDOMNODETYPE,
+				&pvt->_firstattribute,
+				&pvt->_lastattribute,
+				&pvt->_attributecount);
 }
 
 bool xmldomnode::deleteChild(int position) {
 	return deleteNode(NULL,position,NULL,
-				&firstchild,&lastchild,&childcount);
+				&pvt->_firstchild,
+				&pvt->_lastchild,
+				&pvt->_childcount);
 }
 
 bool xmldomnode::deleteChild(xmldomnode *child) {
-	return deleteNode(child,0,NULL,&firstchild,&lastchild,&childcount);
+	return deleteNode(child,0,NULL,
+				&pvt->_firstchild,
+				&pvt->_lastchild,
+				&pvt->_childcount);
 }
 
 bool xmldomnode::deleteAttribute(int position) {
 	return deleteNode(NULL,position,NULL,
-			&firstattribute,&lastattribute,&attributecount);
+				&pvt->_firstattribute,
+				&pvt->_lastattribute,
+				&pvt->_attributecount);
 }
 
 bool xmldomnode::deleteAttribute(const char *name) {
 	return deleteNode(NULL,0,name,
-			&firstattribute,&lastattribute,&attributecount);
+				&pvt->_firstattribute,
+				&pvt->_lastattribute,
+				&pvt->_attributecount);
 }
 
 bool xmldomnode::deleteAttribute(xmldomnode *attribute) {
 	return deleteNode(attribute,0,NULL,
-			&firstattribute,&lastattribute,&attributecount);
+				&pvt->_firstattribute,
+				&pvt->_lastattribute,
+				&pvt->_attributecount);
 }
 
 stringbuffer *xmldomnode::xml() const {

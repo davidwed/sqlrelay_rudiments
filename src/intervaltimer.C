@@ -14,31 +14,43 @@
 namespace rudiments {
 #endif
 
+class intervaltimerprivate {
+	friend class intervaltimer;
+	public:
+		int		_which;
+		itimerval	_values;
+};
+
 intervaltimer::intervaltimer(int which) {
-	this->which=which;
+	pvt=new intervaltimerprivate;
+	pvt->_which=which;
 	initialize();
 }
 
+intervaltimer::~intervaltimer() {
+	delete pvt;
+}
+
 void intervaltimer::initialize() {
-	rawbuffer::zero(&values,sizeof(values));
+	rawbuffer::zero(&pvt->_values,sizeof(pvt->_values));
 }
 
 void intervaltimer::setInitialInterval(long seconds, long microseconds) {
-	values.it_value.tv_sec=seconds;
-	values.it_value.tv_usec=microseconds;
+	pvt->_values.it_value.tv_sec=seconds;
+	pvt->_values.it_value.tv_usec=microseconds;
 }
 
 void intervaltimer::setInitialInterval(const timeval *tv) {
-	values.it_value=*tv;
+	pvt->_values.it_value=*tv;
 }
 
 void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
-	values.it_interval.tv_sec=seconds;
-	values.it_interval.tv_usec=microseconds;
+	pvt->_values.it_interval.tv_sec=seconds;
+	pvt->_values.it_interval.tv_usec=microseconds;
 }
 
 void intervaltimer::setPeriodicInterval(const timeval *tv) {
-	values.it_interval=*tv;
+	pvt->_values.it_interval=*tv;
 }
 
 void intervaltimer::setIntervals(long seconds, long microseconds) {
@@ -52,39 +64,39 @@ void intervaltimer::setIntervals(const timeval *tv) {
 }
 
 void intervaltimer::setIntervals(const itimerval *itv) {
-	values=*itv;
+	pvt->_values=*itv;
 }
 
 void intervaltimer::getInitialInterval(long *seconds,
 					long *microseconds) const {
 	if (seconds) {
-		*seconds=values.it_value.tv_sec;
+		*seconds=pvt->_values.it_value.tv_sec;
 	}
 	if (microseconds) {
-		*microseconds=values.it_value.tv_usec;
+		*microseconds=pvt->_values.it_value.tv_usec;
 	}
 }
 
 void intervaltimer::getInitialInterval(timeval *tv) const {
-	*tv=values.it_value;
+	*tv=pvt->_values.it_value;
 }
 
 void intervaltimer::getPeriodicInterval(long *seconds,
 					long *microseconds) const {
 	if (seconds) {
-		*seconds=values.it_interval.tv_sec;
+		*seconds=pvt->_values.it_interval.tv_sec;
 	}
 	if (microseconds) {
-		*microseconds=values.it_interval.tv_usec;
+		*microseconds=pvt->_values.it_interval.tv_usec;
 	}
 }
 
 void intervaltimer::getPeriodicInterval(timeval *tv) const {
-	*tv=values.it_interval;
+	*tv=pvt->_values.it_interval;
 }
 
 void intervaltimer::getIntervals(itimerval *itv) const {
-	*itv=values;
+	*itv=pvt->_values;
 }
 
 bool intervaltimer::start() const {
@@ -95,7 +107,8 @@ bool intervaltimer::start(itimerval *itv) const {
 	// Solaris 8 complains if the 2nd argument isn't cast
 	int	result;
 	do {
-		result=setitimer(which,const_cast<itimerval *>(&values),itv);
+		result=setitimer(pvt->_which,
+				const_cast<itimerval *>(&pvt->_values),itv);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -104,7 +117,7 @@ bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
 	itimerval	val;
 	int	result;
 	do {
-		result=getitimer(which,&val);
+		result=getitimer(pvt->_which,&val);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (seconds) {
 		*seconds=val.it_value.tv_sec;

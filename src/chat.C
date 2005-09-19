@@ -14,12 +14,33 @@
 namespace rudiments {
 #endif
 
-chat::chat(const filedescriptor *fd) : readfd(fd), writefd(fd), timeout(45) {}
+class chatprivate {
+	friend class chat;
+	private:
+		const filedescriptor	*_readfd;
+		const filedescriptor	*_writefd;
 
-chat::chat(const filedescriptor *rfd, const filedescriptor *wfd) :
-				 readfd(rfd), writefd(wfd), timeout(45) {}
+		long		_timeout;
+		stringlist	_aborts;
+};
 
-chat::~chat() {}
+chat::chat(const filedescriptor *fd) {
+	pvt=new chatprivate;
+	pvt->_readfd=fd;
+	pvt->_writefd=fd;
+	pvt->_timeout=45;
+}
+
+chat::chat(const filedescriptor *rfd, const filedescriptor *wfd) {
+	pvt=new chatprivate;
+	pvt->_readfd=rfd;
+	pvt->_writefd=wfd;
+	pvt->_timeout=45;
+}
+
+chat::~chat() {
+	delete pvt;
+}
 
 int chat::runScript(const char *script, char **abort) {
 	return runScript(script,abort,NULL);
@@ -58,7 +79,7 @@ int chat::runScript(const char *script, char **abort,
 
 		int	result=RESULT_SUCCESS;
 		if (!charstring::compare(node->getName(),"timeout")) {
-			timeout=charstring::toInteger(
+			pvt->_timeout=charstring::toInteger(
 				node->getAttributeValue("seconds"));
 		} else if (!charstring::compare(node->getName(),"abort")) {
 			appendAbortString(node->getAttributeValue("string"));
@@ -121,29 +142,29 @@ void chat::appendAbortString(const char *string) {
 	}
 	newstring[index]='\0';
 
-	aborts.append(newstring);
+	pvt->_aborts.append(newstring);
 }
 
 void chat::clearAbortStrings() {
-	for (stringlistnode *sln=aborts.getNodeByIndex(0);
+	for (stringlistnode *sln=pvt->_aborts.getNodeByIndex(0);
 					sln; sln=sln->getNext()) {
 		char	*abortstring=sln->getData();
 		delete[] abortstring;
 	}
-	aborts.clear();
+	pvt->_aborts.clear();
 }
 
 void chat::flush() {
 	#ifdef DEBUG_CHAT
 	printf("flushing...\n");
 	#endif
-	bool	wasusingnonblocking=readfd->isUsingNonBlockingMode();
+	bool	wasusingnonblocking=pvt->_readfd->isUsingNonBlockingMode();
 	if (wasusingnonblocking) {
-		readfd->useNonBlockingMode();
+		pvt->_readfd->useNonBlockingMode();
 	}
 	// some devices don't support non-blocking mode,
 	// bail if we have encountered one of them
-	if (!readfd->isUsingNonBlockingMode()) {
+	if (!pvt->_readfd->isUsingNonBlockingMode()) {
 		#ifdef DEBUG_CHAT
 		printf("device doesn't support non-blocking mode, bailing\n");
 		#endif
@@ -151,7 +172,7 @@ void chat::flush() {
 	}
 	char	buffer[80];
 	for (;;) {
-		ssize_t	bytesread=readfd->read(buffer,sizeof(buffer));
+		ssize_t	bytesread=pvt->_readfd->read(buffer,sizeof(buffer));
 		#ifdef DEBUG_CHAT
 		charstring::safePrint(buffer,bytesread);
 		printf("\n");
@@ -161,7 +182,7 @@ void chat::flush() {
 		}
 	}
 	if (!wasusingnonblocking) {
-		readfd->useBlockingMode();
+		pvt->_readfd->useBlockingMode();
 	}
 }
 
@@ -172,7 +193,8 @@ int chat::expect(const char *string, char **abort) {
 	}
 
 	#ifdef DEBUG_CHAT
-	printf("expecting \"%s\" (%ld second timeout)...\n",string,timeout);
+	printf("expecting \"%s\" (%ld second timeout)...\n",
+						string,pvt->_timeout);
 	#endif
 
 	stringbuffer	response;
@@ -183,7 +205,7 @@ int chat::expect(const char *string, char **abort) {
 	for (;;) {
 
 		// read a character
-		int	result=readfd->read(&ch,timeout,0);
+		int	result=pvt->_readfd->read(&ch,pvt->_timeout,0);
 
 		#ifdef DEBUG_CHAT
 		character::safePrint(ch);
@@ -218,7 +240,7 @@ int chat::expect(const char *string, char **abort) {
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
 		int	index=2;
-		for (stringlistnode *sln=aborts.getNodeByIndex(0);
+		for (stringlistnode *sln=pvt->_aborts.getNodeByIndex(0);
 						sln; sln=sln->getNext()) {
 
 			char	*abortstring=sln->getData();
@@ -341,6 +363,7 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 					printf("\ndecisleep\n");
 					#endif
 					snooze::microsnooze(0,100000);
+					continue;
 				} else if (ch=='d') {
 					#ifdef DEBUG_CHAT
 					printf("\nsleep\n");
@@ -359,7 +382,7 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 			#endif
 			}
 
-			result=writefd->write(ch);
+			result=pvt->_writefd->write(ch);
 			if (result!=sizeof(ch)) {
 				#ifdef DEBUG_CHAT
 				printf("\n");
@@ -392,7 +415,7 @@ int chat::substituteVariables(const char **ch, constnamevaluepairs *variables) {
 			const char	*value=nln->getData()->getData();
 			if (!charstring::compare(variable,str+2,varlen) &&
 							*(str+2+varlen)==')') {
-				ssize_t	result=writefd->write(value);
+				ssize_t	result=pvt->_writefd->write(value);
 				#ifdef DEBUG_CHAT
 				printf("%s",value);
 				#endif

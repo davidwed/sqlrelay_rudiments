@@ -10,12 +10,27 @@
 namespace rudiments {
 #endif
 
-dtd::dtd() {}
+class dtdprivate {
+	friend class dtd;
+	private:
+		xmldom	_xmld;
+		xmldom	_xmldtd;
+
+		stringbuffer	_err;
+};
+
+dtd::dtd() {
+	pvt=new dtdprivate;
+}
+
+dtd::~dtd() {
+	delete pvt;
+}
 
 bool dtd::parseFile(const char *filename) {
-	if (!xmld.parseFile(filename)) {
-		err.clear();
-		err.append(xmld.getError());
+	if (!pvt->_xmld.parseFile(filename)) {
+		pvt->_err.clear();
+		pvt->_err.append(pvt->_xmld.getError());
 		return false;
 	}
 	if (!parseDtd()) {
@@ -25,9 +40,9 @@ bool dtd::parseFile(const char *filename) {
 }
 
 bool dtd::parseString(const char *string) {
-	if (!xmld.parseString(string)) {
-		err.clear();
-		err.append(xmld.getError());
+	if (!pvt->_xmld.parseString(string)) {
+		pvt->_err.clear();
+		pvt->_err.append(pvt->_xmld.getError());
 		return false;
 	}
 	if (!parseDtd()) {
@@ -39,14 +54,14 @@ bool dtd::parseString(const char *string) {
 bool dtd::parseDtd() {
 
 	// create the new tree
-	xmldtd.createRootNode();
-	xmldtd.getRootNode()->cascadeOnDelete();
-	xmldtd.getRootNode()->appendChild(
-			new xmldomnode(xmldtd.getRootNode()->getNullNode(),
+	pvt->_xmldtd.createRootNode();
+	pvt->_xmldtd.getRootNode()->cascadeOnDelete();
+	pvt->_xmldtd.getRootNode()->appendChild(
+		new xmldomnode(pvt->_xmldtd.getRootNode()->getNullNode(),
 						TAG_XMLDOMNODETYPE,"dtd",NULL));
 
 	// step through tags
-	xmldomnode	*root=xmld.getRootNode();
+	xmldomnode	*root=pvt->_xmld.getRootNode();
 	xmldomnode	*currentnode=root->getFirstTagChild();
 	while (!currentnode->isNullNode()) {
 
@@ -78,7 +93,7 @@ bool dtd::newElement(xmldomnode *node) {
 	}
 
 	// append a carriage return just for looks
-	xmldomnode	*dtdnode=xmldtd.getRootNode()->getChild("dtd");
+	xmldomnode	*dtdnode=pvt->_xmldtd.getRootNode()->getChild("dtd");
 	dtdnode->appendText("\n");
 
 	// create an "element" element and add it to the tree
@@ -165,7 +180,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 
 			// create a new element and add it to the tree
 			xmldomnode	*newtag=new xmldomnode(
-					xmldtd.getRootNode()->getNullNode(),
+				pvt->_xmldtd.getRootNode()->getNullNode(),
 					TAG_XMLDOMNODETYPE,name,NULL);
 			newtag->cascadeOnDelete();
 			if (!node->appendChild(newtag)) {
@@ -208,8 +223,10 @@ bool dtd::newAttribute(xmldomnode *node) {
 	}
 
 	// get the appropriate element to add this attribute to
-	xmldomnode	*element=xmldtd.getRootNode()->getChild("dtd")->
-		getChild("element","name",node->getAttribute(0)->getName());
+	xmldomnode	*element=pvt->_xmldtd.getRootNode()->getChild("dtd")->
+						getChild("element","name",
+							node->getAttribute(0)->
+								getName());
 	if (element->isNullNode()) {
 		nodeError(node);
 		return false;
@@ -218,7 +235,8 @@ bool dtd::newAttribute(xmldomnode *node) {
 	// create a new "attribute" element and add it to the tree
 	element->appendText("\n	");
 	xmldomnode	*attribute=new xmldomnode(
-					xmldtd.getRootNode()->getNullNode(),
+					pvt->_xmldtd.getRootNode()->
+							getNullNode(),
 					TAG_XMLDOMNODETYPE,"attribute",NULL);
 	attribute->cascadeOnDelete();
 	if (!element->appendChild(attribute)) {
@@ -248,17 +266,17 @@ bool dtd::newAttribute(xmldomnode *node) {
 }
 
 xmldomnode *dtd::xml() {
-	return xmldtd.getRootNode();
+	return pvt->_xmldtd.getRootNode();
 }
 
 const char *dtd::getError() {
-	return err.getString();
+	return pvt->_err.getString();
 }
 
 void dtd::nodeError(xmldomnode *node) {
 	stringbuffer	*xml=node->xml();
-	err.append("error processing:\n");
-	err.append(xml->getString());
+	pvt->_err.append("error processing:\n");
+	pvt->_err.append(xml->getString());
 	delete xml;
 }
 

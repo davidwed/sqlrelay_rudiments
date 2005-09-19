@@ -15,32 +15,42 @@
 namespace rudiments {
 #endif
 
+class unixserversocketprivate {
+	friend class unixserversocket;
+	private:
+		mode_t	_mask;
+};
+
 unixserversocket::unixserversocket() : serversocket(), unixsocketutil() {
-	mask=0;
-	type="unixserversocket";
+	pvt=new unixserversocketprivate;
+	pvt->_mask=0;
+	type("unixserversocket");
 }
 
 unixserversocket::unixserversocket(const unixserversocket &u) :
 				serversocket(u), unixsocketutil(u) {
-	mask=u.mask;
-	type="unixserversocket";
+	pvt=new unixserversocketprivate;
+	pvt->_mask=u.pvt->_mask;
+	type("unixserversocket");
 }
 
 unixserversocket &unixserversocket::operator=(const unixserversocket &u) {
 	if (this!=&u) {
 		serversocket::operator=(u);
 		unixsocketutil::operator=(u);
-		mask=u.mask;
+		pvt->_mask=u.pvt->_mask;
 	}
 	return *this;
 }
 
-unixserversocket::~unixserversocket() {}
+unixserversocket::~unixserversocket() {
+	delete pvt;
+}
 
 bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	unixsocketutil::initialize(filename);
-	this->mask=mask;
+	pvt->_mask=mask;
 
 	// if a null or blank port was specified, return an error
 	if (!filename || (filename && !filename[0])) {
@@ -49,15 +59,15 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	file::remove(filename);
-	rawbuffer::zero(&sockaddrun,sizeof(sockaddrun));
-	sockaddrun.sun_family=AF_UNIX;
-	charstring::copy(sockaddrun.sun_path,filename);
+	rawbuffer::zero(_sun(),sizeof(sockaddr_un));
+	_sun()->sun_family=AF_UNIX;
+	charstring::copy(_sun()->sun_path,filename);
 
 	// create the socket
 	do {
-		fd=::socket(AF_UNIX,SOCK_STREAM,0);
-	} while (fd==-1 && error::getErrorNumber()==EINTR);
-	return (fd!=-1);
+		fd(::socket(AF_UNIX,SOCK_STREAM,0));
+	} while (fd()==-1 && error::getErrorNumber()==EINTR);
+	return (fd()!=-1);
 }
 
 bool unixserversocket::listen(const char *filename, mode_t mask, int backlog) {
@@ -68,15 +78,15 @@ bool unixserversocket::listen(const char *filename, mode_t mask, int backlog) {
 bool unixserversocket::bind() {
 
 	// set umask and store old umask
-	mode_t	oldmask=umask(mask);
+	mode_t	oldmask=umask(pvt->_mask);
 
 	// bind the socket
 	bool	retval=true;
 	int	result;
 	do {
-		result=::bind(fd,
-			reinterpret_cast<struct sockaddr *>(&sockaddrun),
-				sizeof(sockaddrun));
+		result=::bind(fd(),
+			reinterpret_cast<struct sockaddr *>(_sun()),
+				sizeof(sockaddr_un));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {
 		retval=false;
@@ -91,7 +101,7 @@ bool unixserversocket::bind() {
 bool unixserversocket::listen(int backlog) {
 	int	result;
 	do {
-		result=::listen(fd,backlog);
+		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -106,7 +116,7 @@ filedescriptor *unixserversocket::accept() {
 	// accept on the socket
 	int	clientsock;
 	do {
-		clientsock=::accept(fd,
+		clientsock=::accept(fd(),
 				reinterpret_cast<struct sockaddr *>(&clientsun),
 				&size);
 	} while (clientsock==-1 && error::getErrorNumber()==EINTR);

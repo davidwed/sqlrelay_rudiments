@@ -15,29 +15,43 @@
 namespace rudiments {
 #endif
 
+class signalsetprivate {
+	friend class signalset;
+	private:
+		sigset_t	_sigset;
+};
+
 // signalset methods
+signalset::signalset() {
+	pvt=new signalsetprivate;
+}
+
+signalset::~signalset() {
+	delete pvt;
+}
+
 bool signalset::addSignal(int signum) {
-	return !sigaddset(&sigset,signum);
+	return !sigaddset(&pvt->_sigset,signum);
 }
 
 bool signalset::addAllSignals() {
-	return !sigfillset(&sigset);
+	return !sigfillset(&pvt->_sigset);
 }
 
 bool signalset::removeSignal(int signum) {
-	return !sigdelset(&sigset,signum);
+	return !sigdelset(&pvt->_sigset,signum);
 }
 
 bool signalset::removeAllSignals() {
-	return !sigemptyset(&sigset);
+	return !sigemptyset(&pvt->_sigset);
 }
 
 int signalset::signalIsInSet(int signum) const {
-	return sigismember(&sigset,signum);
+	return sigismember(&pvt->_sigset,signum);
 }
 
 sigset_t *signalset::getSignalSet() {
-	return &sigset;
+	return &pvt->_sigset;
 }
 
 
@@ -80,72 +94,83 @@ bool signalmanager::examineBlockedSignals(sigset_t *sigset) {
 }
 
 
+class signalhandlerprivate {
+	friend class signalhandler;
+	private:
+		struct	sigaction	_handlerstruct;
+};
 
 // signalhandler methods
 signalhandler::signalhandler() {
+	pvt=new signalhandlerprivate;
 	removeAllSignalsFromMask();
 	removeAllFlags();
 }
 
 signalhandler::signalhandler(int signum, void *handler) {
+	pvt=new signalhandlerprivate;
 	removeAllSignalsFromMask();
 	removeAllFlags();
 	setHandler(handler);
 	handleSignal(signum);
 }
 
+signalhandler::~signalhandler() {
+	delete pvt;
+}
+
 void signalhandler::setHandler(void *handler) {
 	#ifdef SIGNAL_HANDLER_INT
-		handlerstruct.sa_handler=(void(*)(int))handler;
+		pvt->_handlerstruct.sa_handler=(void(*)(int))handler;
 	#else
-		handlerstruct.sa_handler=(void(*)(void))handler;
+		pvt->_handlerstruct.sa_handler=(void(*)(void))handler;
 	#endif
 }
 
 void *signalhandler::getHandler() {
-	return (void *)handlerstruct.sa_handler;
+	return (void *)pvt->_handlerstruct.sa_handler;
 }
 
 void signalhandler::removeAllFlags() {
-	handlerstruct.sa_flags=0;
+	pvt->_handlerstruct.sa_flags=0;
 }
 
 void signalhandler::addFlag(int flag) {
-	handlerstruct.sa_flags|=flag;
+	pvt->_handlerstruct.sa_flags|=flag;
 }
 
 bool signalhandler::addAllSignalsToMask() {
-	return !sigfillset(&handlerstruct.sa_mask);
+	return !sigfillset(&pvt->_handlerstruct.sa_mask);
 }
 
 bool signalhandler::addSignalToMask(int signum) {
-	return !sigaddset(&handlerstruct.sa_mask,signum);
+	return !sigaddset(&pvt->_handlerstruct.sa_mask,signum);
 }
 
 bool signalhandler::removeSignalFromMask(int signum) {
-	return !sigdelset(&handlerstruct.sa_mask,signum);
+	return !sigdelset(&pvt->_handlerstruct.sa_mask,signum);
 }
 
 bool signalhandler::removeAllSignalsFromMask() {
-	return !sigemptyset(&handlerstruct.sa_mask);
+	return !sigemptyset(&pvt->_handlerstruct.sa_mask);
 }
 
 int signalhandler::signalIsInMask(int signum) const {
-	return sigismember(&handlerstruct.sa_mask,signum);
+	return sigismember(&pvt->_handlerstruct.sa_mask,signum);
 }
 
 sigset_t signalhandler::getMask() const {
-	return handlerstruct.sa_mask;
+	return pvt->_handlerstruct.sa_mask;
 }
 
 int signalhandler::getFlags() const {
-	return handlerstruct.sa_flags;
+	return pvt->_handlerstruct.sa_flags;
 }
 
 bool signalhandler::handleSignal(int signum) {
 	int	result;
 	do {
-		result=sigaction(signum,&handlerstruct,
+		result=sigaction(signum,&pvt->_handlerstruct,
 				static_cast<struct sigaction *>(NULL));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
@@ -155,9 +180,9 @@ bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	struct sigaction	oldaction;
 	int			result;
 	do {
-		result=sigaction(signum,&handlerstruct,&oldaction);
+		result=sigaction(signum,&pvt->_handlerstruct,&oldaction);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-	rawbuffer::copy(&oldhandler->handlerstruct,&oldaction,
+	rawbuffer::copy(&oldhandler->pvt->_handlerstruct,&oldaction,
 					sizeof(struct sigaction));
 	return !result;
 }

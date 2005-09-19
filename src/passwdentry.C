@@ -15,21 +15,34 @@
 namespace rudiments {
 #endif
 
+class passwdentryprivate {
+	friend class passwdentry;
+	private:
+		passwd	*_pwd;
+		#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+			passwd	_pwdbuffer;
+			char	*_buffer;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
-mutex	*passwdentry::pemutex;
+static mutex	*pemutex;
 #endif
 
 
 passwdentry::passwdentry() {
-	pwd=NULL;
+	pvt=new passwdentryprivate;
+	pvt->_pwd=NULL;
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
-		rawbuffer::zero(&pwdbuffer,sizeof(pwdbuffer));
-		buffer=NULL;
+		rawbuffer::zero(&pvt->_pwdbuffer,sizeof(pvt->_pwdbuffer));
+		pvt->_buffer=NULL;
 	#endif
 }
 
 passwdentry::passwdentry(const passwdentry &p) {
+	pvt=new passwdentryprivate;
 	initialize(p.getName());
 }
 
@@ -42,36 +55,37 @@ passwdentry &passwdentry::operator=(const passwdentry &p) {
 
 passwdentry::~passwdentry() {
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
-		delete[] buffer;
+		delete[] pvt->_buffer;
 	#endif
+	delete pvt;
 }
 
 const char *passwdentry::getName() const {
-	return pwd->pw_name;
+	return pvt->_pwd->pw_name;
 }
 
 const char *passwdentry::getPassword() const {
-	return pwd->pw_passwd;
+	return pvt->_pwd->pw_passwd;
 }
 
 uid_t passwdentry::getUserId() const {
-	return pwd->pw_uid;
+	return pvt->_pwd->pw_uid;
 }
 
 gid_t passwdentry::getPrimaryGroupId() const {
-	return pwd->pw_gid;
+	return pvt->_pwd->pw_gid;
 }
 
 const char *passwdentry::getRealName() const {
-	return pwd->pw_gecos;
+	return pvt->_pwd->pw_gecos;
 }
 
 const char *passwdentry::getHomeDirectory() const {
-	return pwd->pw_dir;
+	return pvt->_pwd->pw_dir;
 }
 
 const char *passwdentry::getShell() const {
-	return pwd->pw_shell;
+	return pvt->_pwd->pw_shell;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -101,10 +115,10 @@ bool passwdentry::initialize(uid_t userid) {
 bool passwdentry::initialize(const char *username, uid_t userid) {
 
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
-		if (pwd) {
-			pwd=NULL;
-			delete[] buffer;
-			buffer=NULL;
+		if (pvt->_pwd) {
+			pvt->_pwd=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
 		}
 		// getpwnam_r and getpwuid_r are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
@@ -112,44 +126,50 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		// buffer is too small, they returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
+			pvt->_buffer=new char[size];
 			#if defined(HAVE_GETPWNAM_R_5) && \
 				defined(HAVE_GETPWUID_R_5)
 			if (!((username)
-				?(getpwnam_r(username,&pwdbuffer,
-							buffer,size,&pwd))
-				:(getpwuid_r(userid,&pwdbuffer,
-							buffer,size,&pwd)))) {
-				return (pwd!=NULL);
+				?(getpwnam_r(username,
+						&pvt->_pwdbuffer,
+						pvt->_buffer,size,
+						&pvt->_pwd))
+				:(getpwuid_r(userid,
+						&pvt->_pwdbuffer,
+						pvt->_buffer,size,
+						&pvt->_pwd)))) {
+				return (pvt->_pwd!=NULL);
 			}
 			#elif defined(HAVE_GETPWNAM_R_4) && \
 				defined(HAVE_GETPWUID_R_4)
 			if ((username)
-				?(pwd=getpwnam_r(username,&pwdbuffer,
-							buffer,size))
-				:(pwd=getpwuid_r(userid,&pwdbuffer,
-							buffer,size))) {
+				?(pvt->_pwd=getpwnam_r(username,
+							&pvt->_pwdbuffer,
+							pvt->_buffer,size))
+				:(pvt->_pwd=getpwuid_r(userid,
+							&pvt->_pwdbuffer,
+							pvt->_buffer,size))) {
 				return true;
 			}
 			#endif
-			delete[] buffer;
-			buffer=NULL;
-			pwd=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
+			pvt->_pwd=NULL;
 			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
 		return false;
 	#else
-		pwd=NULL;
+		pvt->_pwd=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(pemutex && !pemutex->lock()) &&
-			((pwd=((username)
+			((pvt->_pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL) &&
 			!(pemutex && !pemutex->unlock()));
 		#else
-		return (((pwd=((username)
+		return (((pvt->_pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL));
 		#endif
@@ -266,7 +286,7 @@ bool passwdentry::getShell(const char *username, char **shell) {
 
 void passwdentry::print() const {
 
-	if (!pwd) {
+	if (!pvt->_pwd) {
 		return;
 	}
 

@@ -20,16 +20,26 @@
 namespace rudiments {
 #endif
 
+class modemutilprivate {
+	friend class modemutil;
+	private:
+		const char	*_devicename;
+		const char	*_baud;
+};
+
 modemutil::modemutil() {
-	devicename="";
-	baud="";
+	pvt=new modemutilprivate;
+	pvt->_devicename="";
+	pvt->_baud="";
 }
 
-modemutil::~modemutil() {}
+modemutil::~modemutil() {
+	delete pvt;
+}
 
 void modemutil::initialize(const char *device, const char *baud) {
-	this->devicename=device;
-	this->baud=baud;
+	pvt->_devicename=device;
+	pvt->_baud=baud;
 }
 
 bool modemutil::configureSerialPort(int fd, const char *baud) {
@@ -53,6 +63,14 @@ bool modemutil::configureSerialPort(int fd, const char *baud) {
 	// closed when the instance of serialport goes away
 	sp.setFileDescriptor(-1);
 	return retval;
+}
+
+const char *modemutil::_devicename() {
+	return pvt->_devicename;
+}
+
+const char *modemutil::_baud() {
+	return pvt->_baud;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

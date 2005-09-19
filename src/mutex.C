@@ -8,31 +8,46 @@
 namespace rudiments {
 #endif
 
+class mutexprivate {
+	friend class mutex;
+	private:
+		#ifdef HAVE_PTHREAD_MUTEX_T
+		pthread_mutex_t	*_mut;
+		#endif
+		#ifdef HAVE_CREATE_MUTEX
+		HANDLE		_mut;
+		#endif
+		bool		_destroy;
+};
+
 #ifdef HAVE_PTHREAD_MUTEX_T
 mutex::mutex() {
-	mut=new pthread_mutex_t;
-	do {} while (pthread_mutex_init(mut,NULL)==-1 &&
+	pvt=new mutexprivate;
+	pvt->_mut=new pthread_mutex_t;
+	do {} while (pthread_mutex_init(pvt->_mut,NULL)==-1 &&
 				error::getErrorNumber()==EINTR);
-	destroy=true;
+	pvt->_destroy=true;
 }
 
 mutex::mutex(pthread_mutex_t *mut) {
-	this->mut=mut;
-	destroy=false;
+	pvt=new mutexprivate;
+	pvt->_mut=mut;
+	pvt->_destroy=false;
 }
 
 mutex::~mutex() {
-	do {} while (pthread_mutex_destroy(mut)==-1 &&
+	do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
 				error::getErrorNumber()==EINTR);
-	if (destroy) {
-		delete mut;
+	if (pvt->_destroy) {
+		delete pvt->_mut;
 	}
+	delete pvt;
 }
 
 bool mutex::lock() {
 	int	result;
 	do {
-		result=pthread_mutex_lock(mut);
+		result=pthread_mutex_lock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -40,7 +55,7 @@ bool mutex::lock() {
 bool mutex::tryLock() {
 	int	result;
 	do {
-		result=pthread_mutex_trylock(mut);
+		result=pthread_mutex_trylock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -48,47 +63,50 @@ bool mutex::tryLock() {
 bool mutex::unlock() {
 	int	result;
 	do {
-		result=pthread_mutex_unlock(mut);
+		result=pthread_mutex_unlock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
 
 pthread_mutex_t *mutex::getMutex() {
-	return mut;
+	return pvt->_mut;
 }
 #endif
 
 #ifdef HAVE_CREATE_MUTEX
 mutex::mutex() {
-	mut=CreateMutex(NULL,FALSE,NULL);
-	destroy=true;
+	pvt=new mutexprivate;
+	pvt->_mut=CreateMutex(NULL,FALSE,NULL);
+	pvt->_destroy=true;
 }
 
 mutex::mutex(HANDLE mut) {
-	this->mut=mut;
-	destroy=false;
+	pvt=new mutexprivate;
+	pvt->_mut=mut;
+	pvt->_destroy=false;
 }
 
 mutex::~mutex() {
-	if (destroy) {
-		CloseHandle(mut);
+	if (pvt->_destroy) {
+		CloseHandle(pvt->_mut);
 	}
+	delete pvt;
 }
 
 bool mutex::lock() {
-	return WaitForSingleObject(mut,INFINITE);
+	return WaitForSingleObject(pvt->_mut,INFINITE);
 }
 
 bool mutex::tryLock() {
-	return WaitForSingleObject(mut,0);
+	return WaitForSingleObject(pvt->_mut,0);
 }
 
 bool mutex::unlock() {
-	return ReleaseMutex(mut);
+	return ReleaseMutex(pvt->_mut);
 }
 
 HANDLE mutex::getMutex() {
-	return mut;
+	return pvt->_mut;
 }
 #endif
 

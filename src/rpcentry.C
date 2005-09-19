@@ -21,36 +21,50 @@
 namespace rudiments {
 #endif
 
+class rpcentryprivate {
+	friend class rpcentry;
+	private:
+		rpcent	*_re;
+		#if defined(HAVE_GETRPCBYNAME_R) && \
+				defined(HAVE_GETRPCBYNUMBER_R)
+			rpcent	_rebuffer;
+			char	*_buffer;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
-mutex	*rpcentry::remutex;
+static mutex	*_remutex;
 #endif
 
 
 rpcentry::rpcentry() {
-	re=NULL;
+	pvt=new rpcentryprivate;
+	pvt->_re=NULL;
 	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
-		rawbuffer::zero(&rebuffer,sizeof(rebuffer));
-		buffer=NULL;
+		rawbuffer::zero(&pvt->_rebuffer,sizeof(pvt->_rebuffer));
+		pvt->_buffer=NULL;
 	#endif
 }
 
 rpcentry::~rpcentry() {
 	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
-		delete[] buffer;
+		delete[] pvt->_buffer;
 	#endif
+	delete pvt;
 }
 
 const char *rpcentry::getName() const {
-	return re->r_name;
+	return pvt->_re->r_name;
 }
 
 int rpcentry::getNumber() const {
-	return re->r_number;
+	return pvt->_re->r_number;
 }
 
 const char * const *rpcentry::getAliasList() const {
-	return re->r_aliases;
+	return pvt->_re->r_aliases;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -64,7 +78,7 @@ bool rpcentry::needsMutex() {
 
 void rpcentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
-		remutex=mtx;
+		_remutex=mtx;
 	#endif
 }
 #endif
@@ -80,10 +94,10 @@ bool rpcentry::initialize(int number) {
 bool rpcentry::initialize(const char *rpcname, int number) {
 
 	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
-		if (re) {
-			re=NULL;
-			delete[] buffer;
-			buffer=NULL;
+		if (pvt->_re) {
+			pvt->_re=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
 		}
 		// getrpcbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
@@ -91,44 +105,48 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
+			pvt->_buffer=new char[size];
 			#if defined(HAVE_GETRPCBYNAME_R_5) && \
 				defined(HAVE_GETRPCBYNUMBER_R_5)
 			if (!((rpcname)
-				?(getrpcbyname_r(rpcname,&rebuffer,
-							buffer,size,&re))
-				:(getrpcbynumber_r(number,&rebuffer,
-							buffer,size,&re)))) {
-				return (re!=NULL);
+				?(getrpcbyname_r(rpcname,&pvt->_rebuffer,
+							pvt->_buffer,size,
+							&pvt->_re))
+				:(getrpcbynumber_r(number,&pvt->_rebuffer,
+							pvt->_buffer,size,
+							&pvt->_re)))) {
+				return (pvt->_re!=NULL);
 			}
 			#elif defined(HAVE_GETRPCBYNAME_R_4) && \
 				defined(HAVE_GETRPCBYNUMBER_R_4)
 			if ((rpcname)
-				?(re=getrpcbyname_r(rpcname,&rebuffer,
-							buffer,size))
-				:(re=getrpcbynumber_r(number,&rebuffer,
-							buffer,size))) {
+				?(pvt->_re=getrpcbyname_r(rpcname,
+							&pvt->_rebuffer,
+							pvt->_buffer,size))
+				:(pvt->_re=getrpcbynumber_r(number,
+							&pvt->_rebuffer,
+							pvt->_buffer,size))) {
 				return true;
 			}
 			#endif
-			delete[] buffer;
-			buffer=NULL;
-			re=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
+			pvt->_re=NULL;
 			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
 		return false;
 	#else
-		re=NULL;
+		pvt->_re=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(remutex && !remutex->lock()) &&
-			((re=((rpcname)
+			((pvt->_re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && !remutex->unlock()));
 		#else
-		return ((re=((rpcname)
+		return ((pvt->_re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL);
 		#endif
@@ -178,7 +196,7 @@ bool rpcentry::getAliasList(int number, char ***aliaslist) {
 
 void rpcentry::print() const {
 
-	if (!re) {
+	if (!pvt->_re) {
 		return;
 	}
 

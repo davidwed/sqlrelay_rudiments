@@ -14,16 +14,26 @@
 namespace rudiments {
 #endif
 
+class modemserverprivate {
+	friend class modemserver;
+	private:
+		const char	*_listenscript;
+		const char	*_acceptscript;
+		const char	*_disconnectscript;
+};
+
 modemserver::modemserver() : server(), modemutil() {
-	listenscript="";
-	acceptscript="";
-	disconnectscript="";
-	type="modemserver";
+	pvt=new modemserverprivate;
+	pvt->_listenscript="";
+	pvt->_acceptscript="";
+	pvt->_disconnectscript="";
+	type("modemserver");
 }
 
 modemserver::modemserver(const modemserver &m) : server(m), modemutil(m) {
+	pvt=new modemserverprivate;
 	modemserverClone(m);
-	type="modemserver";
+	type("modemserver");
 }
 
 modemserver &modemserver::operator=(const modemserver &m) {
@@ -36,13 +46,14 @@ modemserver &modemserver::operator=(const modemserver &m) {
 }
 
 void modemserver::modemserverClone(const modemserver &m) {
-	listenscript=m.listenscript;
-	acceptscript=m.acceptscript;
-	disconnectscript=m.disconnectscript;
+	pvt->_listenscript=m.pvt->_listenscript;
+	pvt->_acceptscript=m.pvt->_acceptscript;
+	pvt->_disconnectscript=m.pvt->_disconnectscript;
 }
 
 modemserver::~modemserver() {
 	close();
+	delete pvt;
 }
 
 void modemserver::initialize(const char *device, const char *baud,
@@ -50,9 +61,9 @@ void modemserver::initialize(const char *device, const char *baud,
 					const char *acceptscript,
 					const char *disconnectscript) {
 	modemutil::initialize(device,baud);
-	this->listenscript=listenscript;
-	this->acceptscript=acceptscript;
-	this->disconnectscript=disconnectscript;
+	pvt->_listenscript=pvt->_listenscript;
+	pvt->_acceptscript=pvt->_acceptscript;
+	pvt->_disconnectscript=pvt->_disconnectscript;
 }
 
 bool modemserver::listen(const char *device, const char *baud,
@@ -74,7 +85,7 @@ bool modemserver::listen(int backlog) {
 	// this is kind of lame, this class should somehow
 	// inherit from device
 	device	modem;
-	if (!modem.open(devicename,O_RDWR|O_NOCTTY)) {
+	if (!modem.open(_devicename(),O_RDWR|O_NOCTTY)) {
 		return false;
 	}
 	setFileDescriptor(modem.getFileDescriptor());
@@ -83,13 +94,13 @@ bool modemserver::listen(int backlog) {
 	modem.setFileDescriptor(-1);
 
 	// configure the serial port
-	if (!configureSerialPort(fd,baud)) {
+	if (!configureSerialPort(fd(),_baud())) {
 		filedescriptor::close();
 		return false;
 	}
 
 	chat	ch(this);
-	if (ch.runScript(listenscript,NULL)!=RESULT_SUCCESS) {
+	if (ch.runScript(pvt->_listenscript,NULL)!=RESULT_SUCCESS) {
 		close();
 		return false;
 	}
@@ -99,9 +110,9 @@ bool modemserver::listen(int backlog) {
 filedescriptor *modemserver::accept() {
 
 	chat	ch(this);
-	if (ch.runScript(acceptscript,NULL)==RESULT_SUCCESS) {
+	if (ch.runScript(pvt->_acceptscript,NULL)==RESULT_SUCCESS) {
 		filedescriptor	*retval=new filedescriptor;
-		retval->setFileDescriptor(fd);
+		retval->setFileDescriptor(fd());
 		return retval;
 	}
 	return NULL;
@@ -109,7 +120,7 @@ filedescriptor *modemserver::accept() {
 
 bool modemserver::close() {
 	chat	ch(this);
-	ch.runScript(disconnectscript,NULL);
+	ch.runScript(pvt->_disconnectscript,NULL);
 	return filedescriptor::close();
 }
 

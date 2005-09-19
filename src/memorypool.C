@@ -11,44 +11,74 @@
 namespace rudiments {
 #endif
 
+class memorypoolnode {
+	friend class memorypool;
+	private:
+			memorypoolnode(size_t size);
+			~memorypoolnode();
+
+		unsigned char	*_buffer;
+		size_t		_size;
+		size_t		_remaining;
+		size_t		_position;
+};
+
+typedef	linkedlist<memorypoolnode *>		memorypoollist;
+typedef	linkedlistnode<memorypoolnode *>	memorypoollistnode;
+
 memorypoolnode::memorypoolnode(size_t size) {
-	buffer=new unsigned char[size];
-	position=0;
-	remaining=size;
-	this->size=size;
+	_buffer=new unsigned char[size];
+	_position=0;
+	_remaining=size;
+	_size=size;
 }
 
 memorypoolnode::~memorypoolnode() {
-	delete[] buffer;
+	delete[] _buffer;
 }
+
+class memorypoolprivate {
+	friend class memorypool;
+	private:
+		memorypoollist	_nodelist;
+
+		size_t	_initialsize;
+		size_t	_increment;
+
+		size_t	_freecounter;
+		size_t	_resizeinterval;
+		size_t	_totalusedsize;
+};
 
 memorypool::memorypool(size_t initialsize,
 			size_t increment,
 			size_t resizeinterval) {
-	this->initialsize=initialsize;
-	this->increment=increment;
-	this->resizeinterval=resizeinterval;
-	totalusedsize=0;
-	freecounter=0;
+	pvt=new memorypoolprivate;
+	pvt->_initialsize=initialsize;
+	pvt->_increment=increment;
+	pvt->_resizeinterval=resizeinterval;
+	pvt->_totalusedsize=0;
+	pvt->_freecounter=0;
 
-	nodelist.append(new memorypoolnode(initialsize));
+	pvt->_nodelist.append(new memorypoolnode(pvt->_initialsize));
 }
 
 memorypool::~memorypool() {
 	free();
-	delete nodelist.getNodeByIndex(0)->getData();
+	delete pvt->_nodelist.getNodeByIndex(0)->getData();
+	delete pvt;
 }
 
 unsigned char *memorypool::malloc(size_t length) { 
 	// add the length to the total size
-	totalusedsize=totalusedsize+length;
+	pvt->_totalusedsize=pvt->_totalusedsize+length;
 
 	// look for a node with enough memory remaining
-	memorypoollistnode	*node=nodelist.getNodeByIndex(0);
+	memorypoollistnode	*node=pvt->_nodelist.getNodeByIndex(0);
 	memorypoolnode		*memnode;
 	while (node) {
 		memnode=node->getData();
-		if (memnode->remaining>=length) {
+		if (memnode->_remaining>=length) {
 			break;
 		}
 		node=(memorypoollistnode *)node->getNext();
@@ -57,14 +87,15 @@ unsigned char *memorypool::malloc(size_t length) {
 	// if we didn't find a node with enough memory remaining,
 	// create a new one at the end of the list
 	if (!node) {
-		memnode=new memorypoolnode((length>increment)?length:increment);
-		nodelist.append(memnode);
+		memnode=new memorypoolnode((length>pvt->_increment)?
+						length:pvt->_increment);
+		pvt->_nodelist.append(memnode);
 	}
 
 	// return the buffer
-	unsigned char	*buffer=memnode->buffer+memnode->position;
-	memnode->position=memnode->position+length;
-	memnode->remaining=memnode->remaining-length;
+	unsigned char	*buffer=memnode->_buffer+memnode->_position;
+	memnode->_position=memnode->_position+length;
+	memnode->_remaining=memnode->_remaining-length;
 	return buffer;
 }
 
@@ -76,30 +107,30 @@ unsigned char *memorypool::calloc(size_t length) {
 
 void memorypool::free() {
 
-	memorypoollistnode	*firstlistnode=nodelist.getNodeByIndex(0);
+	memorypoollistnode	*firstlistnode=pvt->_nodelist.getNodeByIndex(0);
 	memorypoolnode		*first=firstlistnode->getData();
 
 	// if it's time to re-evaluate and re-size of the first node, do that
-	freecounter++;
-	if (freecounter>resizeinterval) {
+	pvt->_freecounter++;
+	if (pvt->_freecounter>pvt->_resizeinterval) {
 
 		// find average amount of memory allocated between free's
-		initialsize=totalusedsize/freecounter;
+		pvt->_initialsize=pvt->_totalusedsize/pvt->_freecounter;
 
 		// reset totalusedsize and freecounter
-		totalusedsize=0;
-		freecounter=0;
+		pvt->_totalusedsize=0;
+		pvt->_freecounter=0;
 
 		// resize the first buffer to this size
-		delete[] first->buffer;
-		first->buffer=new unsigned char[initialsize];
-		first->size=initialsize;
-		first->remaining=initialsize;
+		delete[] first->_buffer;
+		first->_buffer=new unsigned char[pvt->_initialsize];
+		first->_size=pvt->_initialsize;
+		first->_remaining=pvt->_initialsize;
 	}
 
 	// reset position and remaining on the first node
-	first->position=0;
-	first->remaining=initialsize;
+	first->_position=0;
+	first->_remaining=pvt->_initialsize;
 
 	// delete all nodes beyond the first node
 	memorypoollistnode	*currentlistnode=
@@ -110,27 +141,27 @@ void memorypool::free() {
 		delete currentlistnode->getData();
 		currentlistnode=nextlistnode;
 	}
-	nodelist.clear();
-	nodelist.append(first);
+	pvt->_nodelist.clear();
+	pvt->_nodelist.append(first);
 }
 
 void memorypool::print() {
 
 	long		segmentindex=0;
-	memorypoollistnode	*listnode=nodelist.getNodeByIndex(0);
+	memorypoollistnode	*listnode=pvt->_nodelist.getNodeByIndex(0);
 	memorypoolnode		*memnode;
 
 	while (listnode) {
 		memnode=listnode->getData();
 		printf("segment %ld(%lx): (%d,%d)\n",
 				segmentindex,(unsigned long)memnode,
-				(int)memnode->size,(int)memnode->position);
-		for (unsigned long i=0; i<memnode->position; i++) {
-			if (memnode->buffer[i]>=' ' && 
-				memnode->buffer[i]<='~') {
-				printf("'%c'",memnode->buffer[i]);
+				(int)memnode->_size,(int)memnode->_position);
+		for (unsigned long i=0; i<memnode->_position; i++) {
+			if (memnode->_buffer[i]>=' ' && 
+				memnode->_buffer[i]<='~') {
+				printf("'%c'",memnode->_buffer[i]);
 			} else {
-				printf("%3d",(int)memnode->buffer[i]);
+				printf("%3d",(int)memnode->_buffer[i]);
 			}
 			if (!((i+1)%20)) {
 				printf("\n");

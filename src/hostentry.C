@@ -16,21 +16,35 @@
 namespace rudiments {
 #endif
 
+class hostentryprivate {
+	friend class hostentry;
+	private:
+		hostent	*_he;
+		#if defined(HAVE_GETHOSTBYNAME_R) && \
+				defined(HAVE_GETHOSTBYADDR_R)
+			hostent		_hebuffer;
+			char		*_buffer;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R))
-mutex	*hostentry::hemutex;
+static mutex	*_hemutex;
 #endif
 
 
 hostentry::hostentry() {
-	he=NULL;
+	pvt=new hostentryprivate;
+	pvt->_he=NULL;
 	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
-		rawbuffer::zero(&hebuffer,sizeof(hebuffer));
-		buffer=NULL;
+		rawbuffer::zero(&pvt->_hebuffer,sizeof(pvt->_hebuffer));
+		pvt->_buffer=NULL;
 	#endif
 }
 
 hostentry::hostentry(const hostentry &h) {
+	pvt=new hostentryprivate;
 	initialize(h.getName());
 }
 
@@ -43,28 +57,29 @@ hostentry &hostentry::operator=(const hostentry &h) {
 
 hostentry::~hostentry() {
 	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
-		delete[] buffer;
+		delete[] pvt->_buffer;
 	#endif
+	delete pvt;
 }
 
 const char *hostentry::getName() const {
-	return he->h_name;
+	return pvt->_he->h_name;
 }
 
 const char * const *hostentry::getAliasList() const {
-	return he->h_aliases;
+	return pvt->_he->h_aliases;
 }
 
 int hostentry::getAddressType() const {
-	return he->h_addrtype;
+	return pvt->_he->h_addrtype;
 }
 
 int hostentry::getAddressLength() const {
-	return he->h_length;
+	return pvt->_he->h_length;
 }
 
 const char * const *hostentry::getAddressList() const {
-	return he->h_addr_list;
+	return pvt->_he->h_addr_list;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -78,7 +93,7 @@ bool hostentry::needsMutex() {
 
 void hostentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETHOSTBYNAME_R) || !defined(HAVE_GETHOSTBYADDR_R)
-		hemutex=mtx;
+		_hemutex=mtx;
 	#endif
 }
 #endif
@@ -95,10 +110,10 @@ bool hostentry::initialize(const char *hostname, const char *address,
 							int len, int type) {
 
 	#if defined(HAVE_GETHOSTBYNAME_R) && defined(HAVE_GETHOSTBYADDR_R)
-		if (he) {
-			he=NULL;
-			delete[] buffer;
-			buffer=NULL;
+		if (pvt->_he) {
+			pvt->_he=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
 		}
 		// gethostbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
@@ -107,44 +122,52 @@ bool hostentry::initialize(const char *hostname, const char *address,
 		// just make the buffer bigger and try again.
 		int	errnop=0;
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
-			buffer=new char[size];
+			pvt->_buffer=new char[size];
 			#if defined(HAVE_GETHOSTBYNAME_R_6) && \
 					defined(HAVE_GETHOSTBYADDR_R_8)
 			if (!((hostname)
-				?(gethostbyname_r(hostname,&hebuffer,
-						buffer,size,&he,&errnop))
-				:(gethostbyaddr_r(address,len,type,&hebuffer,
-						buffer,size,&he,&errnop)))) {
-				return (he!=NULL);
+				?(gethostbyname_r(hostname,
+						&pvt->_hebuffer,
+						pvt->_buffer,size,
+						&pvt->_he,&errnop))
+				:(gethostbyaddr_r(address,len,type,
+						&pvt->_hebuffer,
+						pvt->_buffer,size,
+						&pvt->_he,&errnop)))) {
+				return (pvt->_he!=NULL);
 			}
 			#elif defined(HAVE_GETHOSTBYNAME_R_5) && \
 					defined(HAVE_GETHOSTBYADDR_R_7)
 			if ((hostname)
-				?(he=gethostbyname_r(hostname,&hebuffer,
-						buffer,size,&errnop))
-				:(he=gethostbyaddr_r(address,len,type,&hebuffer,
-						buffer,size,&errnop))) {
+				?(pvt->_he=gethostbyname_r(hostname,
+						&pvt->_hebuffer,
+						pvt->_buffer,size,
+						&errnop))
+				:(pvt->_he=gethostbyaddr_r(address,len,type,
+						&pvt->_hebuffer,
+						pvt->_buffer,size,
+						&errnop))) {
 				return true;
 			}
 			#endif
-			delete[] buffer;
-			buffer=NULL;
-			he=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
+			pvt->_he=NULL;
 			if (errnop!=ENOMEM) {
 				return false;
 			}
 		}
 		return false;
 	#else
-		he=NULL;
+		pvt->_he=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(hemutex && !hemutex->lock()) &&
-			((he=((hostname)
+		return (!(_hemutex && !_hemutex->lock()) &&
+			((pvt->_he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL) &&
-			!(hemutex && !hemutex->unlock()));
+			!(_hemutex && !_hemutex->unlock()));
 		#else
-		return ((he=((hostname)
+		return ((pvt->_he=((hostname)
 				?gethostbyname(hostname)
 				:gethostbyaddr(address,len,type)))!=NULL);
 		#endif
@@ -281,7 +304,7 @@ bool hostentry::getAddressString(const char *address, int len, int type,
 
 void hostentry::print() const {
 
-	if (!he) {
+	if (!pvt->_he) {
 		return;
 	}
 

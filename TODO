@@ -1,14 +1,21 @@
 sun compiler compatibility updates
 
+envelope classes
+	filedescriptor
+	dictionary?
+	dictionarynode?
+	linkedlist?
+	linkedlistnode?
+
 find some way to create a short write condition,
 	make sure bufferedWrite works the way it should
 
 file descriptor passing doesn't work on openbsd, possibly netbsd
 
-use (u)intXX_t types:
-	instead of longs in sec/usec in filedescriptor class
-
 get a mingw port working
+
+xmlsax needs to mmap a window and move it through the file rather than mmapping
+	the whole file
 --------------------------------------------------------------------------------
 
 use const's instead of #defines
@@ -68,34 +75,6 @@ they're declared in the inheritance list and in the class.
 
 	foo::foo(const string &a, const string &b) :
 			foo(), baz(), a(str1), b(str2) {}
-
---------------------------------------------------------------------------------
-
-Split all classes into:
-
-foo.h
-	class foodata;
-
-	class foo {
-		public:
-			foo();
-			~foo();
-		private:
-			foodata	*fd;
-	};
-
-foo.C
-	class foodata {
-		...
-	};
-
-	foo::foo() {
-		fd=new foodata();
-	}
-
-	foo::~foo() {
-		delete fd;
-	}
 
 --------------------------------------------------------------------------------
 

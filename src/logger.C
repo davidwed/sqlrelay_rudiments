@@ -18,35 +18,45 @@ namespace rudiments {
 
 logdestination::~logdestination() {}
 
-filedestination::filedestination() : logdestination() {}
+class filedestinationprivate {
+	friend class filedestination;
+	private:
+		file	_logfile;
+};
+
+filedestination::filedestination() : logdestination() {
+	pvt=new filedestinationprivate;
+}
 
 filedestination::filedestination(const filedestination &f) :
 						logdestination(f) {
-	logfile=f.logfile;
+	pvt=new filedestinationprivate;
+	pvt->_logfile=f.pvt->_logfile;
 }
 
 filedestination &filedestination::operator=(const filedestination &f) {
 	if (this!=&f) {
-		logfile=f.logfile;
+		pvt->_logfile=f.pvt->_logfile;
 	}
 	return *this;
 }
 
 filedestination::~filedestination() {
 	close();
+	delete pvt;
 }
 
 bool filedestination::open(const char *filename) {
-	return logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,
+	return pvt->_logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,
 				permissions::ownerReadWrite());
 }
 
 void filedestination::close() {
-	logfile.close();
+	pvt->_logfile.close();
 }
 
 void filedestination::write(const char *string) {
-	logfile.write(string);
+	pvt->_logfile.write(string);
 }
 
 void stdoutdestination::write(const char *string) {
@@ -63,26 +73,37 @@ void stderrdestination::write(const char *string) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
-syslogdestination::syslogdestination() : logdestination() {}
+class syslogdestinationprivate {
+	friend class syslogdestination;
+	private:
+		int	_priority;
+};
+
+syslogdestination::syslogdestination() : logdestination() {
+	pvt=new syslogdestinationprivate;
+}
 
 syslogdestination::syslogdestination(const syslogdestination &s) :
-						logdestination(s) {}
+						logdestination(s) {
+	pvt=new syslogdestinationprivate;
+}
 
 syslogdestination &syslogdestination::operator=(const syslogdestination &s) {
 	if (this!=&s) {
-		priority=s.priority;
+		pvt->_priority=s.pvt->_priority;
 	}
 	return *this;
 }
 
 syslogdestination::~syslogdestination() {
 	close();
+	delete pvt;
 }
 
 void syslogdestination::open(const char *ident, int option,
 					int facility, int priority) {
 	openlog(ident,option,facility);
-	this->priority=priority;
+	pvt->_priority=priority;
 }
 
 void syslogdestination::close() {
@@ -90,26 +111,34 @@ void syslogdestination::close() {
 }
 
 void syslogdestination::write(const char *string) {
-	syslog(priority,string);
+	syslog(pvt->_priority,string);
 }
 
+class loggerprivate {
+	friend class logger;
+	private:
+		loggerlist	_logdestlist;
+};
+
 logger::logger() {
+	pvt=new loggerprivate;
 }
 
 logger::~logger() {
 	removeAllLogDestinations();
+	delete pvt;
 }
 
 void logger::addLogDestination(logdestination *logdest) {
-	logdestlist.append(logdest);
+	pvt->_logdestlist.append(logdest);
 }
 
 void logger::removeLogDestination(logdestination *logdest) {
-	logdestlist.removeByData(logdest);
+	pvt->_logdestlist.removeByData(logdest);
 }
 
 void logger::removeAllLogDestinations() {
-	logdestlist.clear();
+	pvt->_logdestlist.clear();
 }
 
 char *logger::logHeader(const char *name) {
@@ -173,7 +202,7 @@ void logger::write(const char *header, int32_t tabs, double number) {
 }
 
 void logger::write(const char *logentry) {
-	loggerlistnode	*current=logdestlist.getNodeByIndex(0);
+	loggerlistnode	*current=pvt->_logdestlist.getNodeByIndex(0);
 	while (current) {
 		current->getData()->write(logentry);
 		current=(loggerlistnode *)current->getNext();

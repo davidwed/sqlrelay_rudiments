@@ -12,12 +12,19 @@
 namespace rudiments {
 #endif
 
+class serversocketprivate {
+	friend class serversocket;
+	private:
+};
+
 serversocket::serversocket() : server() {
-	type="serversocket";
+	pvt=new serversocketprivate;
+	type("serversocket");
 }
 
 serversocket::serversocket(const serversocket &s) : server(s) {
-	type="serversocket";
+	pvt=new serversocketprivate;
+	type("serversocket");
 }
 
 serversocket &serversocket::operator=(const serversocket &s) {
@@ -27,7 +34,9 @@ serversocket &serversocket::operator=(const serversocket &s) {
 	return *this;
 }
 
-serversocket::~serversocket() {}
+serversocket::~serversocket() {
+	delete pvt;
+}
 
 #ifdef FIONBIO
 bool serversocket::useNonBlockingMode() const {
@@ -72,21 +81,24 @@ bool serversocket::setReuseAddresses(int onoff) {
 bool serversocket::listen(int backlog) {
 	int	result;
 	do {
-		result=::listen(fd,backlog);
+		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
 
 #ifdef RUDIMENTS_HAS_SSL
 BIO *serversocket::newSSLBIO() const {
-	return BIO_new_socket(fd,BIO_NOCLOSE);
+	return BIO_new_socket(fd(),BIO_NOCLOSE);
 }
 
 bool serversocket::sslAccept(filedescriptor *sock) {
-	if (ctx) {
-		sock->setSSLContext(ctx);
-		if (!sock->initializeSSL() ||
-			(sslresult=SSL_accept(sock->getSSL()))!=1) {
+	if (ctx()) {
+		sock->setSSLContext(ctx());
+		if (!sock->initializeSSL()) {
+			return false;
+		}
+		sslresult(SSL_accept(sock->getSSL()));
+		if (sslresult()!=1) {
 			return false;
 		}
 	}

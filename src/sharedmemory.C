@@ -14,16 +14,26 @@
 namespace rudiments {
 #endif
 
+class sharedmemoryprivate {
+	friend class sharedmemory;
+	private:
+		int	_shmid;
+		bool	_created;
+		void	*_shmptr;
+};
+
 sharedmemory::sharedmemory() {
-	created=false;
-	shmptr=NULL;
-	shmid=-1;
+	pvt=new sharedmemoryprivate;
+	pvt->_created=false;
+	pvt->_shmptr=NULL;
+	pvt->_shmid=-1;
 }
 
 sharedmemory::~sharedmemory() {
-	if (created) {
+	if (pvt->_created) {
 		forceRemove();
 	}
+	delete pvt;
 }
 
 bool sharedmemory::forceRemove() {
@@ -31,15 +41,15 @@ bool sharedmemory::forceRemove() {
 }
 
 void sharedmemory::dontRemove() {
-	created=false;
+	pvt->_created=false;
 }
 
 int sharedmemory::getId() const {
-	return shmid;
+	return pvt->_shmid;
 }
 
 void *sharedmemory::getPointer() const {
-	return shmptr;
+	return pvt->_shmptr;
 }
 
 bool sharedmemory::setUserId(uid_t uid) {
@@ -87,21 +97,21 @@ mode_t sharedmemory::getPermissions() {
 bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
-	if ((shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
+	if ((pvt->_shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// mark for removal
-		created=true;
+		pvt->_created=true;
 
 		// attach to the segment, remove the
 		// segment and return 0 on failure
-		shmptr=shmAttach();
-		if (reinterpret_cast<long>(shmptr)==-1) {
+		pvt->_shmptr=shmAttach();
+		if (reinterpret_cast<long>(pvt->_shmptr)==-1) {
 			forceRemove();
 			return false;
 		}
 
 		// init the segment to zero's
-		rawbuffer::zero(shmptr,size);
+		rawbuffer::zero(pvt->_shmptr,size);
 		return true;
 	}
 
@@ -126,36 +136,36 @@ bool sharedmemory::attach(key_t key) {
 	// it needs to be compared to -1.  So, we cast it to a signed integer
 	// to see if it's not -1, but allow that it could very well be less
 	// than -1 and still be valid.
-	return ((shmid=shmGet(key,0,0))!=-1 &&
-			reinterpret_cast<long>(shmptr=shmAttach())!=-1);
+	return ((pvt->_shmid=shmGet(key,0,0))!=-1 &&
+			reinterpret_cast<long>(pvt->_shmptr=shmAttach())!=-1);
 }
 
 bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 	// create the shared memory segment
-	if ((shmid=shmGet(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
+	if ((pvt->_shmid=shmGet(key,size,IPC_CREAT|IPC_EXCL|permissions))!=-1) {
 
 		// mark for removal
-		created=true;
+		pvt->_created=true;
 
 		// attach to the segment, remove the
 		// segment and return 0 on failure
-		shmptr=shmAttach();
-		if (reinterpret_cast<long>(shmptr)==-1) {
+		pvt->_shmptr=shmAttach();
+		if (reinterpret_cast<long>(pvt->_shmptr)==-1) {
 			forceRemove();
 			return false;
 		}
 
 		// init the segment to zero's
-		rawbuffer::zero(shmptr,size);
+		rawbuffer::zero(pvt->_shmptr,size);
 		return true;
 		
 	} else if (error::getErrorNumber()==EEXIST &&
-			(shmid=shmGet(key,0,permissions))!=-1) {
+			(pvt->_shmid=shmGet(key,0,permissions))!=-1) {
 
 		// attach to the segment, return 1 on success and 0 on failure
-		shmptr=shmAttach();
-		return (reinterpret_cast<long>(shmptr)!=-1);
+		pvt->_shmptr=shmAttach();
+		return (reinterpret_cast<long>(pvt->_shmptr)!=-1);
 
 	}
 
@@ -205,7 +215,7 @@ int sharedmemory::shmGet(key_t key, size_t size, int shmflag) {
 void *sharedmemory::shmAttach() {
 	void	*result;
 	do {
-		result=shmat(shmid,0,0);
+		result=shmat(pvt->_shmid,0,0);
 	} while (reinterpret_cast<long>(result)==-1 &&
 			error::getErrorNumber()==EINTR);
 	return result;
@@ -214,7 +224,7 @@ void *sharedmemory::shmAttach() {
 bool sharedmemory::shmControl(int cmd, shmid_ds *buf) {
 	int	result;
 	do {
-		result=shmctl(shmid,cmd,buf);
+		result=shmctl(pvt->_shmid,cmd,buf);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }

@@ -19,18 +19,47 @@
 namespace rudiments {
 #endif
 
+class datetimeprivate {
+	friend class datetime;
+	private:
+		#ifdef HAVE_GETSYSTEMTIME
+			SYSTEMTIME		_st;
+			TIME_ZONE_INFORMATION	_tzi;
+		#else
+			int32_t	_sec;
+			int32_t	_min;
+			int32_t	_hour;
+			int32_t	_mday;
+			int32_t	_mon;
+			int32_t	_year;
+			int32_t	_wday;
+			int32_t	_yday;
+			int32_t	_isdst;
+
+			char	*_zone;
+			int32_t	_gmtoff;
+
+			char		*_timestring;
+			struct tm	*_structtm;
+
+			time_t	_epoch;
+
+			environment	_env;
+		#endif
+};
+
 #if defined(RUDIMENTS_HAS_THREADS)
-mutex	*datetime::timemutex;
+static mutex	*_timemutex;
 #endif
 
-static const char monthname[][10]={
+static const char _monthname[][10]={
 	"January","February","March",
 	"April","May","June",
 	"July","August","September",
 	"October","November","December"
 };
 
-static const char monthabbr[][4]={
+static const char _monthabbr[][4]={
 	"Jan","Feb","Mar",
 	"Apr","May","Jun",
 	"Jul","Aug","Sep",
@@ -38,36 +67,38 @@ static const char monthabbr[][4]={
 };
 
 datetime::datetime() {
+	pvt=new datetimeprivate;
 	#ifdef HAVE_GETSYSTEMTIME
-		rawbuffer::zero(st,sizeof(SYSTEMTIME));
-		rawbuffer::zero(tzi,sizeof(TIME_ZONE_INFORMATION));
+		rawbuffer::zero(pvt->_st,sizeof(SYSTEMTIME));
+		rawbuffer::zero(pvt->_tzi,sizeof(TIME_ZONE_INFORMATION));
 	#else
-		sec=0;
-		min=0;
-		hour=0;
-		mday=0;
-		mon=0;
-		year=0;
-		wday=0;
-		yday=0;
-		isdst=0;
-		zone=NULL;
-		gmtoff=0;
-		timestring=NULL;
-		structtm=NULL;
-		epoch=0;
+		pvt->_sec=0;
+		pvt->_min=0;
+		pvt->_hour=0;
+		pvt->_mday=0;
+		pvt->_mon=0;
+		pvt->_year=0;
+		pvt->_wday=0;
+		pvt->_yday=0;
+		pvt->_isdst=0;
+		pvt->_zone=NULL;
+		pvt->_gmtoff=0;
+		pvt->_timestring=NULL;
+		pvt->_structtm=NULL;
+		pvt->_epoch=0;
 	#endif
 	#ifdef RUDIMENTS_HAS_THREADS
-	timemutex=NULL;
+	_timemutex=NULL;
 	#endif
 }
 
 datetime::~datetime() {
 	#ifndef HAVE_GETSYSTEMTIME
-		delete[] zone;
-		delete[] timestring;
-		delete structtm;
+		delete[] pvt->_zone;
+		delete[] pvt->_timestring;
+		delete pvt->_structtm;
 	#endif
+	delete pvt;
 }
 
 bool datetime::initialize(const char *tmstring) {
@@ -75,27 +106,27 @@ bool datetime::initialize(const char *tmstring) {
 	// get the date
 	const char	*ptr=tmstring;
 	#ifdef HAVE_GETSYSTEMTIME
-	st.wMonth=charstring::toShort(ptr);
+	pvt->_st.wMonth=charstring::toShort(ptr);
 	#else
-	mon=charstring::toInteger(ptr)-1;
+	pvt->_mon=charstring::toInteger(ptr)-1;
 	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	#ifdef HAVE_GETSYSTEMTIME
-	st.wDay=charstring::toShort(ptr);
+	pvt->_st.wDay=charstring::toShort(ptr);
 	#else
-	mday=charstring::toInteger(ptr);
+	pvt->_mday=charstring::toInteger(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	#ifdef HAVE_GETSYSTEMTIME
-	st.wYear=charstring::toShort(ptr);
+	pvt->_st.wYear=charstring::toShort(ptr);
 	#else
-	year=charstring::toInteger(ptr)-1900;
+	pvt->_year=charstring::toInteger(ptr)-1900;
 	#endif
 
 	// get the time
@@ -104,39 +135,39 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	#ifdef HAVE_GETSYSTEMTIME
-	st.wHour=charstring::toShort(ptr);
+	pvt->_st.wHour=charstring::toShort(ptr);
 	#else
-	hour=charstring::toInteger(ptr);
+	pvt->_hour=charstring::toInteger(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	#ifdef HAVE_GETSYSTEMTIME
-	st.wMinute=charstring::toShort(ptr);
+	pvt->_st.wMinute=charstring::toShort(ptr);
 	#else
-	min=charstring::toInteger(ptr);
+	pvt->_min=charstring::toInteger(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
 	#ifdef HAVE_GETSYSTEMTIME
-	st.wSecond=charstring::toShort(ptr);
+	pvt->_st.wSecond=charstring::toShort(ptr);
 	#else
-	sec=charstring::toInteger(ptr);
+	pvt->_sec=charstring::toInteger(ptr);
 	#endif
 
 	// initialize the daylight savings time flag
-	isdst=-1;
+	pvt->_isdst=-1;
 
 	// get the time zone if it was provided
-	delete[] zone;
+	delete[] pvt->_zone;
 	if ((ptr=charstring::findFirst(ptr,' '))) {
 		ptr=ptr+sizeof(char);
-		zone=(ptr && ptr[0])?charstring::duplicate(ptr):NULL;
+		pvt->_zone=(ptr && ptr[0])?charstring::duplicate(ptr):NULL;
 	} else {
-		zone=NULL;
+		pvt->_zone=NULL;
 	}
 
 	// normalize, string and epoch
@@ -144,32 +175,32 @@ bool datetime::initialize(const char *tmstring) {
 }
 
 bool datetime::initialize(time_t seconds) {
-	epoch=seconds;
+	pvt->_epoch=seconds;
 	return getBrokenDownTimeFromEpoch(true);
 }
 
 bool datetime::initialize(const struct tm *tmstruct) {
 
-	sec=tmstruct->tm_sec;
-	min=tmstruct->tm_min;
-	hour=tmstruct->tm_hour;
-	mday=tmstruct->tm_mday;
-	mon=tmstruct->tm_mon;
-	year=tmstruct->tm_year;
-	wday=tmstruct->tm_wday;
-	yday=tmstruct->tm_yday;
-	isdst=tmstruct->tm_isdst;
+	pvt->_sec=tmstruct->tm_sec;
+	pvt->_min=tmstruct->tm_min;
+	pvt->_hour=tmstruct->tm_hour;
+	pvt->_mday=tmstruct->tm_mday;
+	pvt->_mon=tmstruct->tm_mon;
+	pvt->_year=tmstruct->tm_year;
+	pvt->_wday=tmstruct->tm_wday;
+	pvt->_yday=tmstruct->tm_yday;
+	pvt->_isdst=tmstruct->tm_isdst;
 	// FIXME: what if the zone/offset are garbage, is there a good way to
 	// tell?
 	#ifdef HAS___TM_ZONE
-		zone=charstring::duplicate(tmstruct->__tm_zone);
+		pvt->_zone=charstring::duplicate(tmstruct->__tm_zone);
 	#elif HAS_TM_ZONE
-		zone=charstring::duplicate(tmstruct->tm_zone);
+		pvt->_zone=charstring::duplicate(tmstruct->tm_zone);
 	#elif HAS_TM_NAME
-		zone=charstring::duplicate(tmstruct->tm_name);
+		pvt->_zone=charstring::duplicate(tmstruct->tm_name);
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-			if (timemutex && !acquireLock()) {
+			if (_timemutex && !acquireLock()) {
 				return false;
 			}
 		#endif
@@ -181,20 +212,20 @@ bool datetime::initialize(const struct tm *tmstruct) {
 		#endif
 	#endif
 	#ifdef HAS___TM_GMTOFF
-		gmtoff=tmstruct->__tm_gmtoff;
+		pvt->_gmtoff=tmstruct->__tm_gmtoff;
 	#elif HAS_TM_GMTOFF
-		gmtoff=tmstruct->tm_gmtoff;
+		pvt->_gmtoff=tmstruct->tm_gmtoff;
 	#elif HAS_TM_TZADJ
-		gmtoff=-tmstruct->tm_tzadj;
+		pvt->_gmtoff=-tmstruct->tm_tzadj;
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-			if (timemutex && !acquireLock()) {
+			if (_timemutex && !acquireLock()) {
 				return false;
 			}
 		#endif
 		tzset();
 		#ifdef HAS_TIMEZONE
-			gmtoff=-timezone;
+			pvt->_gmtoff=-timezone;
 		#else
 			gmtoff=-_timezone;
 		#endif
@@ -206,140 +237,143 @@ bool datetime::initialize(const struct tm *tmstruct) {
 }
 
 int32_t datetime::getHour() const {
-	return hour;
+	return pvt->_hour;
 }
 
 int32_t datetime::getMinutes() const {
-	return min;
+	return pvt->_min;
 }
 
 int32_t datetime::getSeconds() const {
-	return sec;
+	return pvt->_sec;
 }
 
 int32_t datetime::getMonth() const {
-	return mon+1;
+	return pvt->_mon+1;
 }
 
 const char *datetime::getMonthName() const {
-	return monthname[mon];
+	return _monthname[pvt->_mon];
 }
 
 const char *datetime::getMonthAbbreviation() const {
-	return monthabbr[mon];
+	return _monthabbr[pvt->_mon];
 }
 
 int32_t datetime::getDayOfMonth() const {
-	return mday;
+	return pvt->_mday;
 }
 
 int32_t datetime::getDayOfWeek() const {
-	return wday+1;
+	return pvt->_wday+1;
 }
 
 int32_t datetime::getDayOfYear() const {
-	return yday+1;
+	return pvt->_yday+1;
 }
 
 int32_t datetime::getYear() const {
-	return year+1900;
+	return pvt->_year+1900;
 }
 
 bool datetime::isDaylightSavingsTime() const {
-	return isdst;
+	return pvt->_isdst;
 }
 
 const char *datetime::getTimeZoneString() const {
-	return zone;
+	return pvt->_zone;
 }
 
 int32_t datetime::getTimeZoneOffset() const {
-	return gmtoff;
+	return pvt->_gmtoff;
 }
 
 time_t datetime::getEpoch() const {
-	return epoch;
+	return pvt->_epoch;
 }
 
 struct tm *datetime::getTm() {
 
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (timemutex && !acquireLock()) {
+		if (_timemutex && !acquireLock()) {
 			return NULL;
 		}
 	#endif
 
-	delete structtm;
-	structtm=new struct tm;
-	structtm->tm_mon=mon;
-	structtm->tm_mday=mday;
-	structtm->tm_year=year;
-	structtm->tm_hour=hour;
-	structtm->tm_min=min;
-	structtm->tm_sec=sec;
-	structtm->tm_isdst=isdst;
+	delete pvt->_structtm;
+	pvt->_structtm=new struct tm;
+	pvt->_structtm->tm_mon=pvt->_mon;
+	pvt->_structtm->tm_mday=pvt->_mday;
+	pvt->_structtm->tm_year=pvt->_year;
+	pvt->_structtm->tm_hour=pvt->_hour;
+	pvt->_structtm->tm_min=pvt->_min;
+	pvt->_structtm->tm_sec=pvt->_sec;
+	pvt->_structtm->tm_isdst=pvt->_isdst;
 
 	// FIXME: lookup combined zone here too
 	char	*oldzone;
-	if ((zone && zone[0] && !setTimeZoneEnvVar(zone,&oldzone,false)) ||
-		(mktime(structtm)==-1) ||
-		(zone && zone[0] && !restoreTimeZoneEnvVar(oldzone))) {
+	if ((pvt->_zone && pvt->_zone[0] &&
+			!setTimeZoneEnvVar(pvt->_zone,&oldzone,false)) ||
+		(mktime(pvt->_structtm)==-1) ||
+		(pvt->_zone && pvt->_zone[0] &&
+			!restoreTimeZoneEnvVar(oldzone))) {
 		return NULL;
 	}
 
 	#ifdef RUDIMENTS_HAS_THREADS
 		releaseLock();
 	#endif
-	return structtm;
+	return pvt->_structtm;
 }
 
 bool datetime::addSeconds(int32_t seconds) {
-	sec=sec+seconds;
+	pvt->_sec=pvt->_sec+seconds;
 	return normalizeBrokenDownTime(true);
 }
 
 bool datetime::addMinutes(int32_t minutes) {
-	min=min+minutes;
+	pvt->_min=pvt->_min+minutes;
 	return normalizeBrokenDownTime(true);
 }
 
 bool datetime::addHours(int32_t hours) {
-	hour=hour+hours;
+	pvt->_hour=pvt->_hour+hours;
 	return normalizeBrokenDownTime(true);
 }
 
 bool datetime::addDays(int32_t days) {
-	hour=yday+days;
+	pvt->_yday=pvt->_yday+days;
 	return normalizeBrokenDownTime(true);
 }
 
 bool datetime::addMonths(int32_t months) {
-	hour=mon+months;
+	pvt->_mon=pvt->_mon+months;
 	return normalizeBrokenDownTime(true);
 }
 
 bool datetime::addYears(int32_t years) {
-	hour=year+years;
+	pvt->_year=pvt->_year+years;
 	return normalizeBrokenDownTime(true);
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
 void datetime::setTimeMutex(mutex *mtx) {
-	timemutex=mtx;
+	_timemutex=mtx;
 }
 #endif
 
 const char *datetime::getString() {
-	delete[] timestring;
+	delete[] pvt->_timestring;
 	size_t	timestringlen=2+1+2+1+charstring::integerLength(getYear())+1+
 				2+1+2+1+2+1+
 				charstring::length(getTimeZoneString());
-	timestring=new char[timestringlen];
-	snprintf(timestring,timestringlen,"%02d/%02d/%d %02d:%02d:%02d %s",
+	pvt->_timestring=new char[timestringlen];
+	snprintf(pvt->_timestring,timestringlen,
+			"%02d/%02d/%d %02d:%02d:%02d %s",
 			getMonth(),getDayOfMonth(),getYear(),
 			getHour(),getMinutes(),getSeconds(),
 			getTimeZoneString());
-	return timestring;
+	return pvt->_timestring;
 }
 
 
@@ -349,7 +383,7 @@ bool datetime::getSystemDateAndTime() {
 
 bool datetime::setSystemDateAndTime() {
 	timeval	tv;
-	tv.tv_sec=epoch;
+	tv.tv_sec=pvt->_epoch;
 	tv.tv_usec=0;
 	// FIXME: should set /etc/localtime (or /etc/TZ) and TZ env var too...
 	return !settimeofday(&tv,NULL);
@@ -373,14 +407,14 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 		devrtc.close();
 
 		// set the local values
-		mon=rt.tm_mon;
-		mday=rt.tm_mday;
-		year=rt.tm_year;
-		hour=rt.tm_hour;
-		min=rt.tm_min;
-		sec=rt.tm_sec;
-		isdst=rt.tm_isdst;
-		zone=charstring::duplicate(hwtz);
+		pvt->_mon=rt.tm_mon;
+		pvt->_mday=rt.tm_mday;
+		pvt->_year=rt.tm_year;
+		pvt->_hour=rt.tm_hour;
+		pvt->_min=rt.tm_min;
+		pvt->_sec=rt.tm_sec;
+		pvt->_isdst=rt.tm_isdst;
+		pvt->_zone=charstring::duplicate(hwtz);
 
 		return normalizeBrokenDownTime(true);
 	#else
@@ -409,15 +443,15 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
 		// set the values to be stored in the rtc
 		rtc_time rt;
-		rt.tm_mon=mon;
-		rt.tm_mday=mday;
-		rt.tm_year=year;
-		rt.tm_hour=hour;
-		rt.tm_min=min;
-		rt.tm_sec=sec;
-		rt.tm_wday=wday;
-		rt.tm_yday=yday;
-		rt.tm_isdst=isdst;
+		rt.tm_mon=pvt->_mon;
+		rt.tm_mday=pvt->_mday;
+		rt.tm_year=pvt->_year;
+		rt.tm_hour=pvt->_hour;
+		rt.tm_min=pvt->_min;
+		rt.tm_sec=pvt->_sec;
+		rt.tm_wday=pvt->_wday;
+		rt.tm_yday=pvt->_yday;
+		rt.tm_isdst=pvt->_isdst;
 
 		// set the rtc and clean up
 		bool	retval=(devrtc.ioctl(RTC_SET_TIME,&rt)!=-1);
@@ -443,8 +477,8 @@ bool datetime::adjustTimeZone(const char *newtz, bool ignoredst) {
 
 	// Clear out the zone so getBrokenDownTimeFromEpoch() won't try to
 	// preserve it.
-	delete[] zone;
-	zone=NULL;
+	delete[] pvt->_zone;
+	pvt->_zone=NULL;
 
 	// Change the time zone, get the broken down time relative to the
 	// current epoch, in the new time zone.
@@ -502,22 +536,22 @@ bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone,
 		realzone=combinedzone;
 	}
 
-	const char	*tz=env.getValue("TZ");
+	const char	*tz=pvt->_env.getValue("TZ");
 	if (tz) {
 		*oldzone=charstring::duplicate(tz);
 	} else {
 		*oldzone=NULL;
 	}
-	return env.setValue("TZ",realzone);
+	return pvt->_env.setValue("TZ",realzone);
 }
 
 bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 	if (oldzone) {
-		bool	retval=env.setValue("TZ",oldzone);
+		bool	retval=pvt->_env.setValue("TZ",oldzone);
 		delete[] oldzone;
 		return retval;
 	}
-	env.remove("TZ");
+	pvt->_env.remove("TZ");
 	return true;
 }
 
@@ -533,14 +567,14 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 	#endif
 	bool	retval=false;
 	struct tm	*tms;
-	if ((tms=localtime(&epoch))) {
-		sec=tms->tm_sec;
-		min=tms->tm_min;
-		hour=tms->tm_hour;
-		mday=tms->tm_mday;
-		mon=tms->tm_mon;
-		year=tms->tm_year;
-		isdst=tms->tm_isdst;
+	if ((tms=localtime(&pvt->_epoch))) {
+		pvt->_sec=tms->tm_sec;
+		pvt->_min=tms->tm_min;
+		pvt->_hour=tms->tm_hour;
+		pvt->_mday=tms->tm_mday;
+		pvt->_mon=tms->tm_mon;
+		pvt->_year=tms->tm_year;
+		pvt->_isdst=tms->tm_isdst;
 		retval=normalizeBrokenDownTime(false);
 	}
 	#ifdef RUDIMENTS_HAS_THREADS
@@ -562,7 +596,8 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 	// If a time zone was passed in, use it.
 	char	*oldzone=NULL;
 
-	if (zone && zone[0] && !setTimeZoneEnvVar(zone,&oldzone,false)) {
+	if (pvt->_zone && pvt->_zone[0] &&
+			!setTimeZoneEnvVar(pvt->_zone,&oldzone,false)) {
 		#ifdef RUDIMENTS_HAS_THREADS
 			if (needmutex) {
 				releaseLock();
@@ -575,13 +610,13 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
 	// copy relevent values into a struct tm
 	struct tm	tms;
-	tms.tm_sec=sec;
-	tms.tm_min=min;
-	tms.tm_hour=hour;
-	tms.tm_mday=mday;
-	tms.tm_mon=mon;
-	tms.tm_year=year;
-	tms.tm_isdst=isdst;
+	tms.tm_sec=pvt->_sec;
+	tms.tm_min=pvt->_min;
+	tms.tm_hour=pvt->_hour;
+	tms.tm_mday=pvt->_mday;
+	tms.tm_mon=pvt->_mon;
+	tms.tm_year=pvt->_year;
+	tms.tm_isdst=pvt->_isdst;
 
 	// mktime() will get the epoch, set wday, yday, isdst
 	// and normalize other values
@@ -591,36 +626,36 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 	} else {
 
 		// store the epoch
-		epoch=ep;
+		pvt->_epoch=ep;
 
 		// copy values back out of struct tm
-		sec=tms.tm_sec;
-		min=tms.tm_min;
-		hour=tms.tm_hour;
-		mday=tms.tm_mday;
-		mon=tms.tm_mon;
-		year=tms.tm_year;
-		isdst=tms.tm_isdst;
-		wday=tms.tm_wday;
-		yday=tms.tm_yday;
+		pvt->_sec=tms.tm_sec;
+		pvt->_min=tms.tm_min;
+		pvt->_hour=tms.tm_hour;
+		pvt->_mday=tms.tm_mday;
+		pvt->_mon=tms.tm_mon;
+		pvt->_year=tms.tm_year;
+		pvt->_isdst=tms.tm_isdst;
+		pvt->_wday=tms.tm_wday;
+		pvt->_yday=tms.tm_yday;
 	
 		// Use tzset to get the timezone name
 		tzset();
-		delete[] zone;
-		zone=charstring::duplicate(tzname[isdst]);
+		delete[] pvt->_zone;
+		pvt->_zone=charstring::duplicate(tzname[pvt->_isdst]);
 
 		// Get the offset from the struct tm if we can, otherwise get
 		// it from the value set by tzset()
 		#ifdef HAS___TM_GMTOFF
-			gmtoff=tms.__tm_gmtoff;
+			pvt->_gmtoff=tms.__tm_gmtoff;
 		#elif HAS_TM_GMTOFF
-			gmtoff=tms.tm_gmtoff;
+			pvt->_gmtoff=tms.tm_gmtoff;
 		#elif HAS_TM_TZADJ
-			gmtoff=-tms.tm_tzadj;
+			pvt->_gmtoff=-tms.tm_tzadj;
 		#elif HAS_TIMEZONE
-			gmtoff=-timezone;
+			pvt->_gmtoff=-timezone;
 		#else
-			gmtoff=-_timezone;
+			pvt->_gmtoff=-_timezone;
 		#endif
 	}
 
@@ -639,15 +674,15 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
 #ifdef RUDIMENTS_HAS_THREADS
 bool datetime::acquireLock() {
-	return !(timemutex && !timemutex->lock());
+	return !(_timemutex && !_timemutex->lock());
 }
 
 bool datetime::releaseLock() {
-	return !(timemutex && !timemutex->unlock());
+	return !(_timemutex && !_timemutex->unlock());
 }
 #endif
 
-static const char * const timezones[]={
+static const char * const _timezones[]={
 
 	"ACST",	// Australian Central Standard Time	UTC + 9:30 hours
 	"ACDT",	// Australian Central Daylight Time	UTC + 10:30 hours
@@ -742,7 +777,7 @@ static const char * const timezones[]={
 	""
 };
 
-static const int32_t	timezoneoffsets[]={
+static const int32_t	_timezoneoffsets[]={
 
 	34200,	// Australian Central Standard Time	UTC + 9:30 hours
 	37800,	// Australian Central Daylight Time	UTC + 10:30 hours
@@ -838,11 +873,11 @@ static const int32_t	timezoneoffsets[]={
 };
 
 const char * const *datetime::getTimeZoneAbbreviations() {
-	return timezones;
+	return _timezones;
 }
 
 const int32_t *datetime::getTimeZoneOffsets() {
-	return timezoneoffsets;
+	return _timezoneoffsets;
 }
 
 // FIXME: this is kind of lame.  There must be a better way to do this than
@@ -855,10 +890,10 @@ const char *datetime::lookupCombinedTimeZone(const char *zn) const {
 	// run through the list of timezones that observe daylight
 	// savings time, if "zn" is in that list, return the
 	// combined zone name, otherwise just return "zn"
-	for (int index=0; timezones[index][0]; index=index+3) {
-		if (!charstring::compare(zn,timezones[index]) ||
-			!charstring::compare(zn,timezones[index+1])) {
-			return timezones[index+2];
+	for (int index=0; _timezones[index][0]; index=index+3) {
+		if (!charstring::compare(zn,_timezones[index]) ||
+			!charstring::compare(zn,_timezones[index+1])) {
+			return _timezones[index+2];
 		}
 	}
 	return zn;
@@ -869,8 +904,8 @@ bool datetime::daylightZone(const char *zn) const {
 	// run through the list of timezones that observe daylight
 	// savings time, if "zn" is in that list, return true,
 	// otherwise return false
-	for (int index=0; timezones[index][0]; index=index+3) {
-		if (!charstring::compare(zn,timezones[index+1])) {
+	for (int index=0; _timezones[index][0]; index=index+3) {
+		if (!charstring::compare(zn,_timezones[index+1])) {
 			return true;
 		}
 	}

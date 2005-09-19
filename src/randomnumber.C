@@ -19,8 +19,9 @@
 namespace rudiments {
 #endif
 
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_RAND_R)
-mutex	*randomnumber::rnmutex;
+static mutex	*_rnmutex;
 #endif
 
 int randomnumber::generateNumber(int seed) {
@@ -33,15 +34,15 @@ int randomnumber::generateNumber(int seed) {
 		return rand_r(&useed);
 	#else
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rnmutex && !rnmutex->lock()) {
+		if (_rnmutex && !_rnmutex->lock()) {
 			return -1;
 		}
 		#endif
 		SEEDRANDOM(seed);
 		int	retval=GETRANDOM();
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rnmutex) {
-			rnmutex->unlock();
+		if (_rnmutex) {
+			_rnmutex->unlock();
 		}
 		#endif
 		return retval;
@@ -73,7 +74,7 @@ bool randomnumber::needsMutex() {
 
 void randomnumber::setMutex(mutex *mtx) {
 	#if !defined(HAVE_RAND_R)
-		rnmutex=mtx;
+		_rnmutex=mtx;
 	#endif
 }
 #endif

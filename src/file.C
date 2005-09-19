@@ -24,16 +24,24 @@
 namespace rudiments {
 #endif
 
+class fileprivate {
+	friend class file;
+	private:
+		struct	stat	_st;
+		bool		_getcurrentpropertiesonopen;
+};
+
 file::file() : filedescriptor() {
-	rawbuffer::zero(&st,sizeof(st));
-	getcurrentpropertiesonopen=true;
-	retryinterruptedlockops=true;
-	type="file";
+	pvt=new fileprivate;
+	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
+	pvt->_getcurrentpropertiesonopen=true;
+	type("file");
 }
 
 file::file(const file &f) : filedescriptor(f) {
+	pvt=new fileprivate;
 	fileClone(f);
-	type="file";
+	type("file");
 }
 
 file &file::operator=(const file &f) {
@@ -45,12 +53,13 @@ file &file::operator=(const file &f) {
 }
 
 void file::fileClone(const file &f) {
-	st=f.st;
-	getcurrentpropertiesonopen=f.getcurrentpropertiesonopen;
-	retryinterruptedlockops=f.retryinterruptedlockops;
+	pvt->_st=f.pvt->_st;
+	pvt->_getcurrentpropertiesonopen=f.pvt->_getcurrentpropertiesonopen;
 }
 
-file::~file() {}
+file::~file() {
+	delete pvt;
+}
 
 bool file::create(const char *name, mode_t perms) {
 	return open(name,O_CREAT|O_TRUNC|O_RDWR,perms);
@@ -89,9 +98,11 @@ ssize_t file::create(const char *name, mode_t perms, const char *string) {
 ssize_t file::create(const char *name, mode_t perms,
 					const void *data, size_t size) {
 	size_t	retval;
-	if (((fd=openInternal(name,O_CREAT|O_TRUNC|O_RDWR,perms))!=-1) &&
+	fd(openInternal(name,O_CREAT|O_TRUNC|O_RDWR,perms));
+	if (fd()!=-1 &&
 		((retval=write(data,size))==size) &&
-		((getcurrentpropertiesonopen)?getCurrentProperties():true)) {
+		((pvt->_getcurrentpropertiesonopen)?
+				getCurrentProperties():true)) {
 		return retval;
 	}
 	close();
@@ -163,17 +174,21 @@ int file::openInternal(const char *name, int flags, mode_t perms) {
 }
 
 bool file::open(const char *name, int flags) {
-	return ((fd=openInternal(name,flags))!=-1 &&
-		((getcurrentpropertiesonopen)?getCurrentProperties():true));
+	fd(openInternal(name,flags));
+	return (fd()!=-1 &&
+		((pvt->_getcurrentpropertiesonopen)?
+				getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int flags, mode_t perms) {
-	return ((fd=openInternal(name,flags,perms))!=-1 &&
-		((getcurrentpropertiesonopen)?getCurrentProperties():true));
+	fd(openInternal(name,flags,perms));
+	return (fd()!=-1 &&
+		((pvt->_getcurrentpropertiesonopen)?
+				getCurrentProperties():true));
 }
 
 char *file::getContents() {
-	off64_t	size=(fd>-1)?st.st_size:0;
+	off64_t	size=(fd()>-1)?pvt->_st.st_size:0;
 	char	*contents=new char[size+1];
 	contents[size]='\0';
 	return (size==0 || read(contents,size)==size)?contents:NULL;
@@ -429,7 +444,7 @@ bool file::normalAccess(off64_t start, size_t len) const {
 bool file::reserve(off64_t start, size_t len) const {
 	int	result;
 	do {
-		result=posix_fallocate(fd,start,len);
+		result=posix_fallocate(fd(),start,len);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -448,13 +463,13 @@ bool file::truncate(const char *filename, off64_t length) {
 }
 
 bool file::truncate() const {
-	return ftruncate(fd,0);
+	return ftruncate(fd(),0);
 }
 
 bool file::truncate(off64_t length) const {
 	int	result;
 	do {
-		result=::ftruncate(fd,length);
+		result=::ftruncate(fd(),length);
 	} while (result==-1 && error::getErrorNumber()==-1);
 	return !result;
 }
@@ -486,7 +501,7 @@ off64_t file::getCurrentPosition() const {
 off64_t file::lseek(off64_t offset, int whence) const {
 	int	result;
 	do {
-		result=::lseek(fd,offset,whence);
+		result=::lseek(fd(),offset,whence);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -518,7 +533,7 @@ bool file::accessible(const char *filename, int mode) {
 bool file::getCurrentProperties() {
 	int	result;
 	do {
-		result=fstat(fd,&st);
+		result=fstat(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -637,25 +652,25 @@ bool file::getNumberOfHardLinks(const char *filename, nlink_t *nlink) {
 }
 
 mode_t file::getPermissions() const {
-	return st.st_mode;
+	return pvt->_st.st_mode;
 }
 
 uid_t file::getOwnerUserId() const {
-	return st.st_uid;
+	return pvt->_st.st_uid;
 }
 
 gid_t file::getOwnerGroupId() const {
-	return st.st_gid;
+	return pvt->_st.st_gid;
 }
 
 off64_t file::getSize() const {
-	return st.st_size;
+	return pvt->_st.st_size;
 }
 
 
 blksize_t file::getBlockSize() const {
 #ifdef HAVE_BLKSIZE_T
-	return st.st_blksize;
+	return pvt->_st.st_blksize;
 #else
 	return -1;
 #endif
@@ -663,79 +678,79 @@ blksize_t file::getBlockSize() const {
 
 blkcnt_t file::getBlockCount() const {
 #ifdef HAVE_BLKCNT_T
-	return st.st_blocks;
+	return pvt->_st.st_blocks;
 #else
 	return -1;
 #endif
 }
 
 int file::isSocket() const {
-	return S_ISSOCK(st.st_mode);
+	return S_ISSOCK(pvt->_st.st_mode);
 }
 
 int file::isSymbolicLink() const {
-	return S_ISLNK(st.st_mode);
+	return S_ISLNK(pvt->_st.st_mode);
 }
 
 int file::isRegularFile() const {
-	return S_ISREG(st.st_mode);
+	return S_ISREG(pvt->_st.st_mode);
 }
 
 int file::isBlockDevice() const {
-	return S_ISBLK(st.st_mode);
+	return S_ISBLK(pvt->_st.st_mode);
 }
 
 int file::isDirectory() const {
-	return S_ISDIR(st.st_mode);
+	return S_ISDIR(pvt->_st.st_mode);
 }
 
 int file::isCharacterDevice() const {
-	return S_ISCHR(st.st_mode);
+	return S_ISCHR(pvt->_st.st_mode);
 }
 
 int file::isFifo() const {
-	return S_ISFIFO(st.st_mode);
+	return S_ISFIFO(pvt->_st.st_mode);
 }
 
 time_t file::getLastAccessTime() const {
-	return st.st_atime;
+	return pvt->_st.st_atime;
 }
 
 time_t file::getLastModificationTime() const {
-	return st.st_mtime;
+	return pvt->_st.st_mtime;
 }
 
 time_t file::getLastChangeTime() const {
-	return st.st_ctime;
+	return pvt->_st.st_ctime;
 }
 
 
 dev_t file::getDevice() const {
-	return st.st_dev;
+	return pvt->_st.st_dev;
 }
 
 dev_t file::getDeviceType() const {
-	return st.st_rdev;
+	return pvt->_st.st_rdev;
 }
 
 ino_t file::getInode() const {
-	return st.st_ino;
+	return pvt->_st.st_ino;
 }
 
 nlink_t file::getNumberOfHardLinks() const {
-	return st.st_nlink;
+	return pvt->_st.st_nlink;
 }
 
 struct stat *file::getStat() {
-	return &st;
+	return &pvt->_st;
 }
 
 void file::getCurrentPropertiesOnOpen() {
-	getcurrentpropertiesonopen=true;
+	pvt->_getcurrentpropertiesonopen=true;
 }
 
 void file::dontGetCurrentPropertiesOnOpen() {
-	getcurrentpropertiesonopen=false;
+	pvt->_getcurrentpropertiesonopen=false;
 }
 
 bool file::lock(int method, short type, short whence,
@@ -780,7 +795,7 @@ bool file::changeOwner(const char *newuser, const char *newgroup) const {
 bool file::changeOwner(uid_t uid, gid_t gid) const {
 	int	result;
 	do {
-		result=fchown(fd,uid,gid);
+		result=fchown(fd(),uid,gid);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -926,7 +941,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 bool file::sync() const {
 	int	result;
 	do {
-		result=fsync(fd);
+		result=fsync(fd());
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -935,7 +950,7 @@ bool file::sync() const {
 bool file::dataSync() const {
 	int	result;
 	do {
-		result=fdatasync(fd);
+		result=fdatasync(fd());
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -1022,7 +1037,7 @@ const char * const *file::listAttributes() const {
 		// attempt to read the attribute into the buffer
 		ssize_t	newsize;
 		do {
-			newsize=flistxattr(fd,buffer,size);
+			newsize=flistxattr(fd(),buffer,size);
 		} while (newsize==-1 && error::getErrorNumber()==EINTR);
 
 		// it's possible that someone changed the attribute between
@@ -1183,7 +1198,7 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 		// attempt to read the attribute into the buffer
 		ssize_t	newsize;
 		do {
-			newsize=fgetxattr(fd,name,(*buffer),(*size));
+			newsize=fgetxattr(fd(),name,(*buffer),(*size));
 		} while (newsize==-1 && error::getErrorNumber()==EINTR);
 
 		// it's possible that someone changed the attribute between
@@ -1388,7 +1403,7 @@ bool file::setAttribute(const char *name, const void *value,
 						size_t size, int flags) const {
 	ssize_t	result;
 	do {
-		result=fsetxattr(fd,name,value,size,flags);
+		result=fsetxattr(fd(),name,value,size,flags);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -1396,7 +1411,7 @@ bool file::setAttribute(const char *name, const void *value,
 bool file::removeAttribute(const char *name) const {
 	ssize_t	result;
 	do {
-		result=fremovexattr(fd,name);
+		result=fremovexattr(fd(),name);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -1503,7 +1518,7 @@ bool file::posixFadvise(off64_t offset, off64_t len, int advice) const {
 	#ifdef HAVE_POSIX_FADVISE
 	int	result;
 	do {
-		result=posix_fadvise(fd,offset,len,advice);
+		result=posix_fadvise(fd(),offset,len,advice);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
@@ -1522,7 +1537,7 @@ long file::pathConf(const char *path, int name) {
 long file::fpathConf(int name) const {
 	long	result;
 	do {
-		result=fpathconf(fd,name);
+		result=fpathconf(fd(),name);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }

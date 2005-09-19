@@ -24,13 +24,21 @@
 namespace rudiments {
 #endif
 
-signalhandler	daemonprocess::deadchildhandler;
-signalhandler	daemonprocess::shutdownhandler;
-signalhandler	daemonprocess::crashhandler;
-void		(*daemonprocess::shutdownfunc)(int);
-void		(*daemonprocess::crashfunc)(int);
+class daemonprocessprivate {
+	friend class daemonprocess;
+	private:
+};
+
+// LAME: not in class
+static	signalhandler	_deadchildhandler;
+static	signalhandler	_shutdownhandler;
+static	signalhandler	_crashhandler;
+static	void		(*_shutdownfunc)(int);
+static	void		(*_crashfunc)(int);
 
 daemonprocess::daemonprocess() {
+
+	pvt=new daemonprocessprivate;
 
 	// FIXME: setting static members in the constructor???
 
@@ -38,17 +46,18 @@ daemonprocess::daemonprocess() {
 	// so register some default shutdown/crash handlers that only do that
 	// FIXME: it should be possible to use one of the C++ casting operators
 	// here (and elsewhere in this class), but I'm not really sure how...
-	shutdownhandler.setHandler((void *)defaultShutDown);
-	shutdownhandler.handleSignal(SIGINT);
-	shutdownhandler.handleSignal(SIGTERM);
+	_shutdownhandler.setHandler((void *)defaultShutDown);
+	_shutdownhandler.handleSignal(SIGINT);
+	_shutdownhandler.handleSignal(SIGTERM);
 
-	crashhandler.setHandler((void *)defaultCrash);
-	crashhandler.handleSignal(SIGSEGV);
+	_crashhandler.setHandler((void *)defaultCrash);
+	_crashhandler.handleSignal(SIGSEGV);
 
 	waitForChildren();
 }
 
 daemonprocess::~daemonprocess() {
+	delete pvt;
 }
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
@@ -106,19 +115,19 @@ bool daemonprocess::detach() const {
 
 void daemonprocess::handleShutDown(void *shutdownfunction) {
 
-	shutdownfunc=(void(*)(int))shutdownfunction;
+	_shutdownfunc=(void(*)(int))shutdownfunction;
 
-	shutdownhandler.setHandler((void *)shutDown);
-	shutdownhandler.handleSignal(SIGINT);
-	shutdownhandler.handleSignal(SIGTERM);
+	_shutdownhandler.setHandler((void *)shutDown);
+	_shutdownhandler.handleSignal(SIGINT);
+	_shutdownhandler.handleSignal(SIGTERM);
 }
 
 void daemonprocess::handleCrash(void *crashfunction) {
 
-	crashfunc=(void(*)(int))crashfunction;
+	_crashfunc=(void(*)(int))crashfunction;
 
-	crashhandler.setHandler((void *)crash);
-	crashhandler.handleSignal(SIGSEGV);
+	_crashhandler.setHandler((void *)crash);
+	_crashhandler.handleSignal(SIGSEGV);
 }
 
 void daemonprocess::waitForChildrenToExit() {
@@ -152,12 +161,12 @@ void daemonprocess::waitForChildrenToExit() {
 
 void daemonprocess::shutDown() {
 	waitForChildren();
-	(*shutdownfunc)(0);
+	(*_shutdownfunc)(0);
 }
 
 void daemonprocess::crash() {
 	waitForChildren();
-	(*crashfunc)(0);
+	(*_crashfunc)(0);
 }
 
 void daemonprocess::defaultShutDown() {
@@ -171,15 +180,15 @@ void daemonprocess::defaultCrash() {
 }
 
 void daemonprocess::waitForChildren() {
-	deadchildhandler.setHandler((void *)waitForChildrenToExit);
-	deadchildhandler.addFlag(SA_NOCLDSTOP);
-	deadchildhandler.handleSignal(SIGCHLD);
+	_deadchildhandler.setHandler((void *)waitForChildrenToExit);
+	_deadchildhandler.addFlag(SA_NOCLDSTOP);
+	_deadchildhandler.handleSignal(SIGCHLD);
 }
 
 void daemonprocess::dontWaitForChildren() {
-	deadchildhandler.setHandler((void *)SIG_DFL);
-	deadchildhandler.removeAllFlags();
-	deadchildhandler.handleSignal(SIGCHLD);
+	_deadchildhandler.setHandler((void *)SIG_DFL);
+	_deadchildhandler.removeAllFlags();
+	_deadchildhandler.handleSignal(SIGCHLD);
 }
 
 int daemonprocess::runAsUser(const char *username) const {

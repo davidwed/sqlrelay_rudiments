@@ -26,11 +26,11 @@ int main(int argc, const char **argv) {
 
 
 	// append some long integers to the buffer
-	str->append((long)1)->append(" ");
-	str->append((long)2)->append(" ");
-	str->append((long)3)->append(" ");
-	str->append((long)4)->append(" ");
-	str->append((long)5)->append(" ");
+	str->append((int32_t)1)->append(" ");
+	str->append((int32_t)2)->append(" ");
+	str->append((int32_t)3)->append(" ");
+	str->append((int32_t)4)->append(" ");
+	str->append((int32_t)5)->append(" ");
 
 	// display the length and contents of the buffer
 	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());

@@ -11,6 +11,17 @@
 namespace rudiments {
 #endif
 
+class variablebufferprivate {
+	friend class variablebuffer;
+	private:
+		unsigned char	*_buffer;
+		size_t		_initialsize;
+		size_t		_increment;
+		size_t		_buffersize;
+		size_t		_position;
+		size_t		_endofbuffer;
+};
+
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
 	init(new unsigned char[initialsize],initialsize,increment);
 }
@@ -22,12 +33,13 @@ variablebuffer::variablebuffer(unsigned char *initialcontents,
 
 void variablebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
-	buffer=initialcontents;
-	buffersize=initialsize;
-	this->initialsize=initialsize;
-	this->increment=increment;
-	position=0;
-	endofbuffer=0;
+	pvt=new variablebufferprivate;
+	pvt->_buffer=initialcontents;
+	pvt->_buffersize=initialsize;
+	pvt->_initialsize=initialsize;
+	pvt->_increment=increment;
+	pvt->_position=0;
+	pvt->_endofbuffer=0;
 }
 
 variablebuffer::variablebuffer(const variablebuffer &v) {
@@ -36,37 +48,40 @@ variablebuffer::variablebuffer(const variablebuffer &v) {
 
 variablebuffer &variablebuffer::operator=(const variablebuffer &v) {
 	if (this!=&v) {
-		delete[] buffer;
+		delete[] pvt->_buffer;
+		delete pvt;
 		variablebufferClone(v);
 	}
 	return *this;
 }
 
 variablebuffer::~variablebuffer() {
-	delete[] buffer;
+	delete[] pvt->_buffer;
+	delete pvt;
 }
 
 void variablebuffer::variablebufferClone(const variablebuffer &v) {
-	initialsize=v.initialsize;
-	increment=v.increment;
-	buffersize=v.buffersize;
-	position=v.position;
-	endofbuffer=v.endofbuffer;
-	buffer=new unsigned char[v.buffersize];
-	rawbuffer::copy(buffer,v.buffer,buffersize);
+	pvt=new variablebufferprivate;
+	pvt->_initialsize=v.pvt->_initialsize;
+	pvt->_increment=v.pvt->_increment;
+	pvt->_buffersize=v.pvt->_buffersize;
+	pvt->_position=v.pvt->_position;
+	pvt->_endofbuffer=v.pvt->_endofbuffer;
+	pvt->_buffer=new unsigned char[v.pvt->_buffersize];
+	rawbuffer::copy(pvt->_buffer,v.pvt->_buffer,pvt->_buffersize);
 }
 
 ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 
 	size_t	bytestoread=size;
-	if (position>endofbuffer) {
+	if (pvt->_position>pvt->_endofbuffer) {
 		bytestoread=0;
-	} else if (position+size>endofbuffer) {
-		bytestoread=endofbuffer-position;
+	} else if (pvt->_position+size>pvt->_endofbuffer) {
+		bytestoread=pvt->_endofbuffer-pvt->_position;
 	}
 
-	rawbuffer::copy(data,buffer+position,bytestoread);
-	position=position+bytestoread;
+	rawbuffer::copy(data,pvt->_buffer+pvt->_position,bytestoread);
+	pvt->_position=pvt->_position+bytestoread;
 
 	return bytestoread;
 }
@@ -74,19 +89,19 @@ ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 
 	// if the buffer is too small, extend it
-	if (position>=buffersize) {
-		extend(position-buffersize+size);
-	} else if (size>=buffersize-position) {
-		extend(buffersize-position+size);
+	if (pvt->_position>=pvt->_buffersize) {
+		extend(pvt->_position-pvt->_buffersize+size);
+	} else if (size>=pvt->_buffersize-pvt->_position) {
+		extend(pvt->_buffersize-pvt->_position+size);
 	}
 
 	// copy the data into the buffer
-	rawbuffer::copy(buffer+position,data,size);
+	rawbuffer::copy(pvt->_buffer+pvt->_position,data,size);
 
 	// increment the position indices
-	position=position+size;
-	if (position>endofbuffer) {
-		endofbuffer=position;
+	pvt->_position=pvt->_position+size;
+	if (pvt->_position>pvt->_endofbuffer) {
+		pvt->_endofbuffer=pvt->_position;
 	}
 	return this;
 }
@@ -151,58 +166,59 @@ variablebuffer *variablebuffer::write(double number) {
 }
 
 void variablebuffer::clear() {
-	delete[] buffer;
-	buffer=new unsigned char[initialsize];
-	buffersize=initialsize;
-	position=0;
-	endofbuffer=0;
+	delete[] pvt->_buffer;
+	pvt->_buffer=new unsigned char[pvt->_initialsize];
+	pvt->_buffersize=pvt->_initialsize;
+	pvt->_position=0;
+	pvt->_endofbuffer=0;
 }
 
 void variablebuffer::extend(size_t size) {
-	size_t	newbuffersize=buffersize+((size/increment)*increment)+
-					(((size%increment)>0)*increment);
+	size_t	newbuffersize=pvt->_buffersize+
+				((size/pvt->_increment)*pvt->_increment)+
+				(((size%pvt->_increment)>0)*pvt->_increment);
 	unsigned char	*newbuffer=new unsigned char[newbuffersize];
-	rawbuffer::copy(newbuffer,buffer,buffersize);
-	delete[] buffer;
-	buffer=newbuffer;
-	buffersize=newbuffersize;
+	rawbuffer::copy(newbuffer,pvt->_buffer,pvt->_buffersize);
+	delete[] pvt->_buffer;
+	pvt->_buffer=newbuffer;
+	pvt->_buffersize=newbuffersize;
 }
 
 const unsigned char *variablebuffer::getBuffer() {
-	return buffer;
+	return pvt->_buffer;
 }
 
 unsigned char *variablebuffer::detachBuffer() {
-	unsigned char	*retval=buffer;
-	buffer=new unsigned char[initialsize];
-	buffersize=initialsize;
-	position=0;
-	endofbuffer=0;
+	unsigned char	*retval=pvt->_buffer;
+	pvt->_buffer=new unsigned char[pvt->_initialsize];
+	pvt->_buffersize=pvt->_initialsize;
+	pvt->_position=0;
+	pvt->_endofbuffer=0;
 	return retval;
 }
 
 size_t variablebuffer::getSize() {
-	return endofbuffer;
+	return pvt->_endofbuffer;
 }
 
 size_t variablebuffer::getPosition() {
-	return position;
+	return pvt->_position;
 }
 
 size_t variablebuffer::getEnd() {
-	return endofbuffer;
+	return pvt->_endofbuffer;
 }
 
 size_t variablebuffer::getActualSize() {
-	return buffersize;
+	return pvt->_buffersize;
 }
 
 void variablebuffer::setPosition(size_t pos) {
-	position=pos;
+	pvt->_position=pos;
 }
 
 variablebuffer *variablebuffer::append(const unsigned char *data, size_t size) {
-	position=endofbuffer;
+	pvt->_position=pvt->_endofbuffer;
 	return write(data,size);
 }
 
@@ -263,6 +279,26 @@ variablebuffer *variablebuffer::append(float number) {
 variablebuffer *variablebuffer::append(double number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(double));
+}
+
+unsigned char *variablebuffer::_buffer() {
+	return pvt->_buffer;
+}
+
+size_t variablebuffer::_endofbuffer() {
+	return pvt->_endofbuffer;
+}
+
+void variablebuffer::_endofbuffer(size_t eob) {
+	pvt->_endofbuffer=eob;
+}
+
+size_t variablebuffer::_position() {
+	return pvt->_position;
+}
+
+void variablebuffer::_position(size_t pos) {
+	pvt->_position=pos;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

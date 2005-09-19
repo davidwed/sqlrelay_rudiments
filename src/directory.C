@@ -15,34 +15,44 @@
 namespace rudiments {
 #endif
 
+class directoryprivate {
+	friend class directory;
+	private:
+		DIR		*_dir;
+		uint64_t	_currentindex;
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_READDIR_R)
-mutex	*directory::rdmutex;
+static mutex	*_rdmutex;
 #endif
 
 directory::directory() {
-	dir=NULL;
-	currentindex=0;
+	pvt=new directoryprivate;
+	pvt->_dir=NULL;
+	pvt->_currentindex=0;
 }
 
 directory::~directory() {
 	close();
+	delete pvt;
 }
 
 bool directory::open(const char *path) {
 	do {
-		dir=opendir(path);
-	} while (dir==NULL && error::getErrorNumber()==EINTR);
-	return (dir!=NULL);
+		pvt->_dir=opendir(path);
+	} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
+	return (pvt->_dir!=NULL);
 }
 
 bool directory::close() {
 	bool	retval=true;
-	if (dir) {
+	if (pvt->_dir) {
 		do {
-			retval=!closedir(dir);
+			retval=!closedir(pvt->_dir);
 		} while (!retval && error::getErrorNumber()==EINTR);
-		dir=NULL;
-		currentindex=0;
+		pvt->_dir=NULL;
+		pvt->_currentindex=0;
 	}
 	return retval;
 }
@@ -52,9 +62,9 @@ char *directory::getChildName(uint64_t index) {
 	// directory entries are 1-based
 	uint64_t	actualindex=index+1;
 
-	if (actualindex<currentindex) {
-		rewinddir(dir);
-		currentindex=0;
+	if (actualindex<pvt->_currentindex) {
+		rewinddir(pvt->_dir);
+		pvt->_currentindex=0;
 	}
 
 	#ifdef HAVE_READDIR_R
@@ -65,16 +75,16 @@ char *directory::getChildName(uint64_t index) {
 			direct	entry;
 			dirent	*result;
 		#endif
-		for (uint64_t i=currentindex; i<actualindex; i++) {
+		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
 			int	rdresult;
 			do {
-				rdresult=readdir_r(dir,&entry,&result);
+				rdresult=readdir_r(pvt->_dir,&entry,&result);
 			} while (rdresult==-1 &&
 					error::getErrorNumber()==EINTR);
 			if (rdresult || !result) {
 				return NULL;
 			}
-			currentindex++;
+			pvt->_currentindex++;
 		}
 		return charstring::duplicate(entry.d_name);
 	#else
@@ -84,23 +94,23 @@ char *directory::getChildName(uint64_t index) {
 			direct	*entry;
 		#endif
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rdmutex && !rdmutex->lock()) {
+		if (_rdmutex && !_rdmutex->lock()) {
 			return NULL;
 		}
 		#endif
-		for (uint64_t i=currentindex; i<actualindex; i++) {
+		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
 			do {
-				entry=readdir(dir);
+				entry=readdir(pvt->_dir);
 			} while (!entry && error::getErrorNumber()==EINTR);
 			if (!entry) {
 				return NULL;
 			}
-			currentindex++;
+			pvt->_currentindex++;
 		}
 		char	*retval=charstring::duplicate(entry->d_name);
 		#ifdef RUDIMENTS_HAS_THREADS
-		if (rdmutex) {
-			rdmutex->unlock();
+		if (_rdmutex) {
+			_rdmutex->unlock();
 		}
 		#endif
 		return retval;
@@ -170,7 +180,7 @@ bool directory::needsMutex() {
 
 void directory::setMutex(mutex *mtx) {
 	#if !defined(HAVE_READDIR_R)
-		rdmutex=mtx;
+		_rdmutex=mtx;
 	#endif
 }
 #endif

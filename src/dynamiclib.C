@@ -12,19 +12,25 @@
 namespace rudiments {
 #endif
 
+class dynamiclibprivate {
+	friend class dynamiclib;
+	private:
+		void	*_handle;
+};
+
+// LAME: not in the class
 #ifdef RUDIMENTS_HAS_THREADS
-mutex	*dynamiclib::errormutex;
+static	mutex	*_errormutex=NULL;
 #endif
 
 dynamiclib::dynamiclib() {
-	handle=NULL;
-#ifdef RUDIMENTS_HAS_THREADS
-	errormutex=NULL;
-#endif
+	pvt=new dynamiclibprivate;
+	pvt->_handle=NULL;
 }
 
 dynamiclib::~dynamiclib() {
 	close();
+	delete pvt;
 }
 
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
@@ -33,15 +39,15 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		flag|=RTLD_GLOBAL;
 	}
 	do {
-		handle=dlopen(library,flag);
-	} while (!handle && error::getErrorNumber()==EINTR);
-	return (handle!=NULL);
+		pvt->_handle=dlopen(library,flag);
+	} while (!pvt->_handle && error::getErrorNumber()==EINTR);
+	return (pvt->_handle!=NULL);
 }
 
 bool dynamiclib::close() {
 	int	result;
 	do {
-		result=!dlclose(handle);
+		result=!dlclose(pvt->_handle);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -49,14 +55,14 @@ bool dynamiclib::close() {
 void *dynamiclib::getSymbol(const char *symbol) const {
 	void	*symhandle;
 	do {
-		symhandle=dlsym(handle,symbol);
+		symhandle=dlsym(pvt->_handle,symbol);
 	} while (!symhandle && error::getErrorNumber()==EINTR);
-	return (handle)?symhandle:NULL;
+	return (pvt->_handle)?symhandle:NULL;
 }
 
 char *dynamiclib::getError() const {
 #ifdef RUDIMENTS_HAS_THREADS
-	if (errormutex && !errormutex->lock()) {
+	if (_errormutex && !_errormutex->lock()) {
 		return NULL;
 	}
 #endif
@@ -69,8 +75,8 @@ char *dynamiclib::getError() const {
 		retval=charstring::duplicate(err);
 	}
 #ifdef RUDIMENTS_HAS_THREADS
-	if (errormutex) {
-		errormutex->unlock();
+	if (_errormutex) {
+		_errormutex->unlock();
 	}
 #endif
 	return retval;
@@ -78,7 +84,7 @@ char *dynamiclib::getError() const {
 
 #ifdef RUDIMENTS_HAS_THREADS
 void dynamiclib::setErrorMutex(mutex *mtx) {
-	errormutex=mtx;
+	_errormutex=mtx;
 }
 #endif
 

@@ -11,13 +11,20 @@
 namespace rudiments {
 #endif
 
+class unixclientsocketprivate {
+	friend class unixclientsocket;
+	private:
+};
+
 unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {
-	type="unixclientsocket";
+	pvt=new unixclientsocketprivate;
+	type("unixclientsocket");
 }
 
 unixclientsocket::unixclientsocket(const unixclientsocket &u) :
 					clientsocket(u), unixsocketutil(u) {
-	type="unixclientsocket";
+	pvt=new unixclientsocketprivate;
+	type("unixclientsocket");
 }
 
 unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
@@ -28,7 +35,9 @@ unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
 	return *this;
 }
 
-unixclientsocket::~unixclientsocket() {}
+unixclientsocket::~unixclientsocket() {
+	delete pvt;
+}
 
 int unixclientsocket::connect(const char *filename,
 						long timeoutsec,
@@ -45,10 +54,7 @@ void unixclientsocket::initialize(const char *filename,
 						unsigned long retrywait,
 						unsigned long retrycount) {
 	unixsocketutil::initialize(filename);
-	this->timeoutsec=timeoutsec;
-	this->timeoutusec=timeoutusec;
-	this->retrywait=retrywait;
-	this->retrycount=retrycount;
+	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
 }
 
 void unixclientsocket::initialize(constnamevaluepairs *cd) {
@@ -77,32 +83,32 @@ void unixclientsocket::initialize(constnamevaluepairs *cd) {
 int unixclientsocket::connect() {
 
 	// set the filename to connect to
-	sockaddrun.sun_family=AF_UNIX;
-	charstring::copy(sockaddrun.sun_path,filename);
+	_sun()->sun_family=AF_UNIX;
+	charstring::copy(_sun()->sun_path,_filename());
 
 	// create a unix socket
 	do {
-		fd=::socket(AF_UNIX,SOCK_STREAM,0);
-	} while (fd==-1 && error::getErrorNumber()==EINTR);
-	if (fd==-1) {
+		fd(::socket(AF_UNIX,SOCK_STREAM,0));
+	} while (fd()==-1 && error::getErrorNumber()==EINTR);
+	if (fd()==-1) {
 		return RESULT_ERROR;
 	}
 
 	// try to connect, over and over for the specified number of times
 	for (unsigned long counter=0;
-			counter<retrycount || !retrycount; counter++) {
+			counter<_retrycount() || !_retrycount(); counter++) {
 
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
 		if (counter) {
-			snooze::macrosnooze(retrywait);
+			snooze::macrosnooze(_retrywait());
 		}
 
 		// attempt to connect
 		if (clientsocket::connect(
-			reinterpret_cast<struct sockaddr *>(&sockaddrun),
-			sizeof(sockaddrun),
-			timeoutsec,timeoutusec)==RESULT_SUCCESS) {
+			reinterpret_cast<struct sockaddr *>(_sun()),
+			sizeof(sockaddr_un),
+			_timeoutsec(),_timeoutusec())==RESULT_SUCCESS) {
 			return RESULT_SUCCESS;
 		}
 	}

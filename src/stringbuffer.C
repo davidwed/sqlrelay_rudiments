@@ -10,9 +10,18 @@
 namespace rudiments {
 #endif
 
-stringbuffer::stringbuffer() : variablebuffer(128,32) {}
+class stringbufferprivate {
+	friend class stringbuffer;
+	private:
+};
 
-stringbuffer::stringbuffer(const stringbuffer &s) : variablebuffer(s) {}
+stringbuffer::stringbuffer() : variablebuffer(128,32) {
+	pvt=new stringbufferprivate;
+}
+
+stringbuffer::stringbuffer(const stringbuffer &s) : variablebuffer(s) {
+	pvt=new stringbufferprivate;
+}
 
 stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
 	if (this!=&s) {
@@ -26,9 +35,11 @@ stringbuffer::stringbuffer(char *initialcontents,
 			variablebuffer(reinterpret_cast<unsigned char *>(
 							initialcontents),
 							initialsize,increment) {
+	pvt=new stringbufferprivate;
 }
 
 stringbuffer::~stringbuffer() {
+	delete pvt;
 }
 
 void stringbuffer::setPosition(size_t pos) {
@@ -64,10 +75,10 @@ void stringbuffer::terminate() {
 	// doesn't matter if buffer[endofbuffer] has had a NULL written to it
 	// of if it just happens to have a NULL in it already.  Valgrind is
 	// being a bit over cautious.
-	if (buffer[endofbuffer]!=(unsigned char)NULL) {
+	if (_buffer()[_endofbuffer()]!=(unsigned char)NULL) {
 		variablebuffer::append((unsigned char)NULL);
-		endofbuffer--;
-		position--;
+		_endofbuffer(_endofbuffer()-1);
+		_position(_position()-1);
 	}
 }
 

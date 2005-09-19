@@ -26,31 +26,43 @@
 namespace rudiments {
 #endif
 
+class environmentprivate {
+	public:
+		#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
+			namevaluepairs	_envstrings;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS)
-mutex	*environment::envmutex;
+static mutex	*_envmutex;
 #endif
 
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
+environment::environment() {
+	pvt=new environmentprivate;
+}
 
 environment::~environment() {
 	for (namevaluepairslistnode *node=
 			(namevaluepairslistnode *)
-				envstrings.getList()->getNodeByIndex(0);
+				pvt->_envstrings.getList()->getNodeByIndex(0);
 			node;
 			node=(namevaluepairslistnode *)node->getNext()) {
 		delete[] node->getData()->getData();
 	}
+	delete pvt;
 }
 
 bool environment::setValue(const char *variable, const char *value) {
 	bool	retval=false;
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex && !envmutex->lock()) {
+		if (_envmutex && !_envmutex->lock()) {
 			return retval;
 		}
 	#endif
 	char	*pestr;
-	if (envstrings.getData(const_cast<char *>(variable),&pestr)) {
+	if (pvt->_envstrings.getData(const_cast<char *>(variable),&pestr)) {
 		delete[] pestr;
 	}
 	size_t	pestrlen=charstring::length(variable)+
@@ -62,16 +74,16 @@ bool environment::setValue(const char *variable, const char *value) {
 		result=putenv(pestr);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result!=-1) {
-		envstrings.setData(const_cast<char *>(variable),pestr);
+		pvt->_envstrings.setData(const_cast<char *>(variable),pestr);
 		retval=true;
 	} else {
 		delete[] pestr;
-		envstrings.removeData(const_cast<char *>(variable));
+		pvt->_envstrings.removeData(const_cast<char *>(variable));
 		retval=false;
 	}
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex) {
-			envmutex->unlock();
+		if (_envmutex) {
+			_envmutex->unlock();
 		}
 	#endif
 	return retval;
@@ -80,6 +92,9 @@ bool environment::setValue(const char *variable, const char *value) {
 
 
 #ifdef HAVE_SETENV
+environment::environment() {
+}
+
 environment::~environment() {
 }
 #endif
@@ -87,7 +102,7 @@ environment::~environment() {
 const char *environment::getValue(const char *variable) const {
 	char	*retval=NULL;
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex && !envmutex->lock()) {
+		if (_envmutex && !_envmutex->lock()) {
 			return retval;
 		}
 	#endif
@@ -95,8 +110,8 @@ const char *environment::getValue(const char *variable) const {
 		retval=getenv(variable);
 	} while (!retval && error::getErrorNumber()==EINTR);
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex) {
-			envmutex->unlock();
+		if (_envmutex) {
+			_envmutex->unlock();
 		}
 	#endif
 	return retval;
@@ -106,7 +121,7 @@ const char *environment::getValue(const char *variable) const {
 bool environment::setValue(const char *variable, const char *value) {
 	bool	retval=false;
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex && !envmutex->lock()) {
+		if (_envmutex && !_envmutex->lock()) {
 			return retval;
 		}
 	#endif
@@ -114,8 +129,8 @@ bool environment::setValue(const char *variable, const char *value) {
 		retval=!setenv(variable,value,1);
 	} while (!retval && error::getErrorNumber()==EINTR);
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex) {
-			envmutex->unlock();
+		if (_envmutex) {
+			_envmutex->unlock();
 		}
 	#endif
 	return retval;
@@ -126,15 +141,15 @@ bool environment::remove(const char *variable) {
 #ifdef HAVE_UNSETENV
 	bool	retval=false;
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex && !envmutex->lock()) {
+		if (_envmutex && !_envmutex->lock()) {
 			return retval;
 		}
 	#endif
 	unsetenv(variable);
 	retval=true;
 	#ifdef RUDIMENTS_HAS_THREADS
-		if (envmutex) {
-			envmutex->unlock();
+		if (_envmutex) {
+			_envmutex->unlock();
 		}
 	#endif
 	return retval;
@@ -151,7 +166,7 @@ const char * const *environment::variables() {
 
 #ifdef RUDIMENTS_HAS_THREADS
 void environment::setMutex(mutex *mtx) {
-	envmutex=mtx;
+	_envmutex=mtx;
 }
 #endif
 

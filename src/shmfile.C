@@ -10,9 +10,20 @@
 namespace rudiments {
 #endif
 
-shmfile::shmfile() : file() {}
+class shmfileprivate {
+	friend class shmfile;
+	private:
+};
 
-shmfile::shmfile(const shmfile &s) : file(s) {}
+shmfile::shmfile() : file() {
+	pvt=new shmfileprivate;
+	type("shmfile");
+}
+
+shmfile::shmfile(const shmfile &s) : file(s) {
+	pvt=new shmfileprivate;
+	type("shmfile");
+}
 
 shmfile &shmfile::operator=(const shmfile &s) {
 	if (this!=&s) {
@@ -21,7 +32,9 @@ shmfile &shmfile::operator=(const shmfile &s) {
 	return *this;
 }
 
-shmfile::~shmfile() {}
+shmfile::~shmfile() {
+	delete pvt;
+}
 
 int shmfile::openInternal(const char *name, int flags) {
 	int	result;

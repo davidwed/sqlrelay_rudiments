@@ -20,32 +20,42 @@
 namespace rudiments {
 #endif
 
+class listenerprivate {
+	friend class listener;
+	private:
+		listenerlist	_filedescriptorlist;
+		listenerlist	_readylist;
+		bool		_retryinterruptedwaits;
+};
+
 listener::listener() {
-	retryinterruptedwaits=true;
+	pvt=new listenerprivate;
+	pvt->_retryinterruptedwaits=true;
 }
 
 listener::~listener() {
 	removeAllFileDescriptors();
+	delete pvt;
 }
 
 void listener::retryInterruptedWaits() {
-	retryinterruptedwaits=true;
+	pvt->_retryinterruptedwaits=true;
 }
 
 void listener::dontRetryInterruptedWaits() {
-	retryinterruptedwaits=false;
+	pvt->_retryinterruptedwaits=false;
 }
 
 void listener::addFileDescriptor(filedescriptor *fd) {
-	filedescriptorlist.append(fd);
+	pvt->_filedescriptorlist.append(fd);
 }
 
 void listener::removeFileDescriptor(filedescriptor *fd) {
-	filedescriptorlist.removeByData(fd);
+	pvt->_filedescriptorlist.removeByData(fd);
 }
 
 void listener::removeAllFileDescriptors() {
-	filedescriptorlist.clear();
+	pvt->_filedescriptorlist.clear();
 }
 
 int listener::waitForNonBlockingRead(long sec, long usec) {
@@ -57,7 +67,7 @@ int listener::waitForNonBlockingWrite(long sec, long usec) {
 }
 
 listenerlist *listener::getReadyList() {
-	return &readylist;
+	return &pvt->_readylist;
 }
 
 int listener::safeSelect(long sec, long usec, bool read, bool write) {
@@ -73,7 +83,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		// select altogether and just return those filedescriptors
 		// in the ready list immediately
 		#ifdef RUDIMENTS_HAS_SSL
-			readylist.clear();
+			pvt->_readylist.clear();
 		#endif
 		int	selectresult=0;
 
@@ -88,7 +98,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		int	largest=-1;
 		FD_ZERO(&fdlist);
 		listenerlistnode	*current=
-				filedescriptorlist.getNodeByIndex(0);
+				pvt->_filedescriptorlist.getNodeByIndex(0);
 		while (current) {
 
 			if (current->getData()->getFileDescriptor()>largest) {
@@ -102,7 +112,8 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 			#ifdef RUDIMENTS_HAS_SSL
 				SSL	*ssl=current->getData()->getSSL();
 				if (ssl && SSL_pending(ssl)) {
-					readylist.append(current->getData());
+					pvt->_readylist.append(
+						current->getData());
 					selectresult++;
 				}
 			#endif
@@ -126,7 +137,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		if (selectresult==-1) {
 
 			// if a signal caused the select to fall through, retry
-			if (retryinterruptedwaits &&
+			if (pvt->_retryinterruptedwaits &&
 				error::getErrorNumber()==EINTR) {
 				continue;
 			}
@@ -141,13 +152,13 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		// build the list of file descriptors that
 		// caused the select() to fall through
 		#ifndef RUDIMENTS_HAS_SSL
-			readylist.clear();
+			pvt->_readylist.clear();
 		#endif
-		current=filedescriptorlist.getNodeByIndex(0);
+		current=pvt->_filedescriptorlist.getNodeByIndex(0);
 		while (current) {
 			if (FD_ISSET(current->getData()->getFileDescriptor(),
 					&fdlist)) {
-				readylist.append(current->getData());
+				pvt->_readylist.append(current->getData());
 			}
 			current=current->getNext();
 		}

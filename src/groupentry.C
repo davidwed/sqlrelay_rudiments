@@ -15,20 +15,33 @@
 namespace rudiments {
 #endif
 
+class groupentryprivate {
+	friend class groupentry;
+	private:
+		group		*_grp;
+		#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+			group		_grpbuffer;
+			char		*_buffer;
+		#endif
+};
+
+// LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS) && \
 	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
-mutex	*groupentry::gemutex;
+static mutex	*_gemutex;
 #endif
 
 groupentry::groupentry() {
-	grp=NULL;
+	pvt=new groupentryprivate;
+	pvt->_grp=NULL;
 	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
-		rawbuffer::zero(&grpbuffer,sizeof(grpbuffer));
-		buffer=NULL;
+		rawbuffer::zero(&pvt->_grpbuffer,sizeof(pvt->_grpbuffer));
+		pvt->_buffer=NULL;
 	#endif
 }
 
 groupentry::groupentry(const groupentry &g) {
+	pvt=new groupentryprivate;
 	initialize(g.getName());
 }
 
@@ -41,24 +54,25 @@ groupentry &groupentry::operator=(const groupentry &g) {
 
 groupentry::~groupentry() {
 	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
-		delete[] buffer;
+		delete[] pvt->_buffer;
 	#endif
+	delete pvt;
 }
 
 const char *groupentry::getName() const {
-	return grp->gr_name;
+	return pvt->_grp->gr_name;
 }
 
 const char *groupentry::getPassword() const {
-	return grp->gr_passwd;
+	return pvt->_grp->gr_passwd;
 }
 
 gid_t groupentry::getGroupId() const {
-	return grp->gr_gid;
+	return pvt->_grp->gr_gid;
 }
 
 const char * const *groupentry::getMembers() const {
-	return grp->gr_mem;
+	return pvt->_grp->gr_mem;
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -72,7 +86,7 @@ bool groupentry::needsMutex() {
 
 void groupentry::setMutex(mutex *mtx) {
 	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
-		gemutex=mtx;
+		_gemutex=mtx;
 	#endif
 }
 #endif
@@ -88,10 +102,10 @@ bool groupentry::initialize(gid_t groupid) {
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
 	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
-		if (grp) {
-			grp=NULL;
-			delete[] buffer;
-			buffer=NULL;
+		if (pvt->_grp) {
+			pvt->_grp=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
 		}
 		// getgrnam_r and getgrgid_t are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
@@ -100,44 +114,50 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 
-			buffer=new char[size];
+			pvt->_buffer=new char[size];
 			#if defined(HAVE_GETGRNAM_R_5) && \
 						 defined(HAVE_GETGRGID_R_5)
 			if (!((groupname)
-				?(getgrnam_r(groupname,&grpbuffer,
-						buffer,size,&grp))
-				:(getgrgid_r(groupid,&grpbuffer,
-						buffer,size,&grp)))) {
-				return (grp!=NULL);
+				?(getgrnam_r(groupname,
+						&pvt->_grpbuffer,
+						pvt->_buffer,size,
+						&pvt->_grp))
+				:(getgrgid_r(groupid,
+						&pvt->_grpbuffer,
+						pvt->_buffer,size,
+						&pvt->_grp)))) {
+				return (pvt->_grp!=NULL);
 			}
 			#elif defined(HAVE_GETGRNAM_R_4) && \
 						 defined(HAVE_GETGRGID_R_4)
 			if ((groupname)
-				?(grp=getgrnam_r(groupname,&grpbuffer,
+				?(pvt->_grp=getgrnam_r(groupname,
+							&pvt->_grpbuffer,
 							buffer,size))
-				:(grp=getgrgid_r(groupid,&grpbuffer,
+				:(pvt->_grp=getgrgid_r(groupid,
+							&pvt->_grpbuffer,
 							buffer,size))) {
 				return true;
 			}
 			#endif
-			delete[] buffer;
-			buffer=NULL;
-			grp=NULL;
+			delete[] pvt->_buffer;
+			pvt->_buffer=NULL;
+			pvt->_grp=NULL;
 			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
 		return false;
 	#else
-		grp=NULL;
+		pvt->_grp=NULL;
 		#ifdef RUDIMENTS_HAS_THREADS
-		return (!(gemutex && !gemutex->lock()) &&
-			((grp=((groupname)
+		return (!(_gemutex && !_gemutex->lock()) &&
+			((pvt->_grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
-			!(gemutex && !gemutex->unlock()));
+			!(_gemutex && !_gemutex->unlock()));
 		#else
-		return ((grp=((groupname)
+		return ((pvt->_grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL);
 		#endif
@@ -214,7 +234,7 @@ bool groupentry::getMembers(gid_t groupid, char ***members) {
 
 void groupentry::print() const {
 
-	if (!grp) {
+	if (!pvt->_grp) {
 		return;
 	}
 
