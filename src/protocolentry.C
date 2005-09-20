@@ -127,10 +127,10 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 			#elif defined(HAVE_GETPROTOBYNAME_R_4) && \
 				defined(HAVE_GETPROTOBYNUMBER_R_4)
 			if ((protocolname)
-				?(pe=getprotobyname_r(protocolname,
+				?(pvt->_pe=getprotobyname_r(protocolname,
 							&pvt->_pebuffer,
 							pvt->_buffer,size))
-				:(pe=getprotobynumber_r(number,
+				:(pvt->_pe=getprotobynumber_r(number,
 							&pvt->_pebuffer,
 							pvt->_buffer,size))) {
 				return true;

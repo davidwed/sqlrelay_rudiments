@@ -133,10 +133,10 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 			if ((groupname)
 				?(pvt->_grp=getgrnam_r(groupname,
 							&pvt->_grpbuffer,
-							buffer,size))
+							pvt->_buffer,size))
 				:(pvt->_grp=getgrgid_r(groupid,
 							&pvt->_grpbuffer,
-							buffer,size))) {
+							pvt->_buffer,size))) {
 				return true;
 			}
 			#endif

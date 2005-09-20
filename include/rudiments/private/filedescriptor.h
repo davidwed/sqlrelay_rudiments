@@ -49,39 +49,3 @@
 
 	private:
 		filedescriptorprivate	*pvt;
-
-		/*int	fd;
-		bool	retryinterruptedreads;
-		bool	retryinterruptedwrites;
-		bool	retryinterruptedwaits;
-		#ifdef HAVE_FCNTL
-		bool	retryinterruptedfcntl;
-		#endif
-		#ifdef HAVE_IOCTL
-		bool	retryinterruptedioctl;
-		#endif
-		mutable bool	allowshortreads;
-		mutable bool	allowshortwrites;
-		bool	translatebyteorder;
-
-		listener	*lstnr;
-		bool		uselistenerinsidereads;
-		bool		uselistenerinsidewrites;
-
-		#ifdef RUDIMENTS_HAS_SSL
-			SSL_CTX	*ctx;
-			SSL	*ssl;
-			BIO	*bio;
-		mutable	int	sslresult;
-		#endif
-
-		const char	*type;
-
-		mutable unsigned char	*writebuffer;
-		mutable unsigned char	*writebufferend;
-		mutable unsigned char	*writebufferptr;
-
-		mutable unsigned char	*readbuffer;
-		mutable unsigned char	*readbufferend;
-		mutable unsigned char	*readbufferhead;
-		mutable unsigned char	*readbuffertail;*/

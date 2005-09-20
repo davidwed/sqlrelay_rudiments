@@ -1,6 +1,6 @@
 // FIXME: implement this class
 
-// Copyright (c) 2003 David Muse
+// Copyright (c) 2005 David Muse
 // See the COPYING file for more information.
 
 #ifndef RUDIMENTS_NETWORKINTERFACES_H
@@ -20,31 +20,33 @@ class networkinterfaceprivate;
 
 class networkinterface {
 	public:
+			networkinterface();
+			~networkinterface();
+
 		sockaddr	getAddress();
 		sockaddr	getDestinationAddress();
 		sockaddr	getBroadcastAddress();
 		sockaddr	getNetmask();
 		sockaddr	getHardwareAddress();
 
-		short	getFlags();
-		int	getMetric();
-		int	getMaximumTransmitUnit();
-		ifmap	getDeviceMap();
-		int	getSlaveDevice();
-		int	getForUseByInterfaceData();
-		int	getIndex();
-		int	getLinkBandwidth();
-		int	getQueueLength();
-		char	*getNewName();
+		short		getFlags();
+		int		getMetric();
+		int		getMaximumTransmitUnit();
+		ifmap		getDeviceMap();
+		int		getSlaveDevice();
+		int		getForUseByInterfaceData();
+		int		getIndex();
+		int		getLinkBandwidth();
+		int		getQueueLength();
+		const char	*getNewName();
 
 	#include <rudiments/private/networkinterface.h>
 };
 
-class networkinterfacesprivate;
-
 class networkinterfaces {
 	public:
 		static	networkinterfacelist	*getList();
+		static	networkinterface	*getInterface(const char *name);
 	#include <rudiments/private/networkinterfaces.h>
 }
 

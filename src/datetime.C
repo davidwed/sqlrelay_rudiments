@@ -205,8 +205,9 @@ bool datetime::initialize(const struct tm *tmstruct) {
 			}
 		#endif
 		tzset();
-		zone=charstring::duplicate((tzname[isdst] && tzname[isdst][0])?
-							tzname[isdst]:"UCT");
+		pvt->_zone=charstring::duplicate(
+				(tzname[pvt->_isdst] && tzname[pvt->_isdst][0])?
+						tzname[pvt->_isdst]:"UCT");
 		#ifdef RUDIMENTS_HAS_THREADS
 			releaseLock();
 		#endif
