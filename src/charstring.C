@@ -815,7 +815,11 @@ int64_t charstring::toInteger(const char *string, int base) {
 }
 
 int64_t charstring::toInteger(const char *string, char **endptr, int base) {
+	#ifdef HAVE_STRTOLL
 	return (string)?strtoll(string,endptr,base):0;
+	#else
+	return (string)?strtol(string,endptr,base):0;
+	#endif
 }
 
 uint64_t charstring::toUnsignedInteger(const char *string) {
@@ -832,7 +836,11 @@ uint64_t charstring::toUnsignedInteger(const char *string, int base) {
 
 uint64_t charstring::toUnsignedInteger(const char *string,
 						char **endptr, int base) {
+	#ifdef HAVE_STRTOULL
 	return (string)?strtoull(string,endptr,base):0;
+	#else
+	return (string)?strtoul(string,endptr,base):0;
+	#endif
 }
 
 long double charstring::toFloat(const char *string) {

@@ -24,6 +24,20 @@
 	use snprintf's rather than sprintf's now
 	uses fchmod/fchown rather than chmod/chown now
 	made envelope classes out of all classes
+	added a configure test for ftok that takes a char * argument
+	switched a bunch of AC_TRY_LINK's to AC_TRY_COMPILE's in configure
+		script
+	configure script does less work looking for getpwnam_r and cousins now
+	if pthread libs can't be found, configure also tries just plain -pthread
+	added #ifdefs for individual POSIX_FADV_* and MADV_* macros
+	in configure script, for cygwin, tests for w32api files and functions
+		are omitted
+	configure tests for strtoll/strtoull now
+	configure tests for caddr_t types for all mmap-related functions
+		individually now
+	unsupported memorymap methods return false now rather than not existing
+	added -pthread when compiling as well as linking
+	fixed a time-remaining-related bug in snooze class
 
 0.28.2 - filedescriptor desctructor removes the read buffer now
 

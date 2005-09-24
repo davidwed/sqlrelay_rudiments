@@ -6,7 +6,7 @@ include ../features.mk
 .PHONY: install uninstall
 
 HEADERS = resultcodes.h
-PRIVATEHEADERS = config.h rudimentsinlines.h
+PRIVATEHEADERS = config.h rudimentsinlines.h inttypes.h
 
 ifeq ($(INCLUDE_CLIENT),1)
 	HEADERS += client.h

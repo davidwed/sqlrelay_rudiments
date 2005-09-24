@@ -129,10 +129,13 @@ bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
 }
 
 bool intervaltimer::getTimeRemaining(timeval *tv) const {
-	// Some systems define tv_usec as something other than long so we need
-	// to get a long and then let it auto-cast during assignment below.
+	// Some systems define tv_sec and/or tv_usec as something other than
+	// long so we need to get longs and then let them auto-cast during
+	// assignment below.
+	long	sec;
 	long	usec;
-	bool	retval=getTimeRemaining(&(tv->tv_sec),&usec);
+	bool	retval=getTimeRemaining(&sec,&usec);
+	tv->tv_sec=sec;
 	tv->tv_usec=usec;
 	return retval;
 }

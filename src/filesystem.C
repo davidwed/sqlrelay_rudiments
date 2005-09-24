@@ -539,59 +539,51 @@ long filesystem::getAvailableFileNodes() const {
 #endif
 }
 
-#ifdef HAVE_STATVFS
-	bool filesystem::getFileSystemId(const char *path, long *id) {
-		STATFS(path,id,f_fsid)
-	}
+#if defined(HAVE_LINUX_STATFS) || \
+	defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_OPENBSD_STATFS) || \
+	defined(HAVE_DARWIN_STATFS)
+bool filesystem::getFileSystemId(const char *path, fsid_t *id) {
+	STATFS(path,id,f_fsid)
+}
 
-	bool filesystem::getFileSystemId(int fd, long *id) {
-		FSTATFS(fd,id,f_fsid)
-	}
+bool filesystem::getFileSystemId(int fd, fsid_t *id) {
+	FSTATFS(fd,id,f_fsid)
+}
 
-	long filesystem::getFileSystemId() const {
-		return pvt->_st.f_fsid;
-	}
+fsid_t filesystem::getFileSystemId() const {
+	return pvt->_st.f_fsid;
+}
 #else
-	bool filesystem::getFileSystemId(const char *path, fsid_t *id) {
-	#if defined(HAVE_LINUX_STATFS) || \
-		defined(HAVE_FREEBSD_STATFS) || \
-		defined(HAVE_NETBSD_STATFS) || \
-		defined(HAVE_OPENBSD_STATFS) || \
-		defined(HAVE_DARWIN_STATFS) || \
-		defined(HAVE_CYGWIN_STATFS)
-		STATFS(path,id,f_fsid)
-	#else
-		*id=0;
-		return true;
-	#endif
-	}
+bool filesystem::getFileSystemId(const char *path, long *id) {
+#if defined(HAVE_STATVFS) || \
+	defined(HAVE_CYGWIN_STATFS)
+	STATFS(path,id,f_fsid)
+#else
+	*id=0;
+	return true;
+#endif
+}
 
-	bool filesystem::getFileSystemId(int fd, fsid_t *id) {
-	#if defined(HAVE_LINUX_STATFS) || \
-		defined(HAVE_FREEBSD_STATFS) || \
-		defined(HAVE_NETBSD_STATFS) || \
-		defined(HAVE_OPENBSD_STATFS) || \
-		defined(HAVE_DARWIN_STATFS) || \
-		defined(HAVE_CYGWIN_STATFS)
-		FSTATFS(fd,id,f_fsid)
-	#else
-		*id=0;
-		return true;
-	#endif
-	}
+bool filesystem::getFileSystemId(int fd, long *id) {
+#if defined(HAVE_STATVFS) || \
+	defined(HAVE_CYGWIN_STATFS)
+	FSTATFS(fd,id,f_fsid)
+#else
+	*id=0;
+	return true;
+#endif
+}
 
-	fsid_t filesystem::getFileSystemId() const {
-	#if defined(HAVE_LINUX_STATFS) || \
-		defined(HAVE_FREEBSD_STATFS) || \
-		defined(HAVE_NETBSD_STATFS) || \
-		defined(HAVE_OPENBSD_STATFS) || \
-		defined(HAVE_DARWIN_STATFS) || \
-		defined(HAVE_CYGWIN_STATFS)
-		return pvt->_st.f_fsid;
-	#else
-		return 0;
-	#endif
-	}
+long filesystem::getFileSystemId() const {
+#if defined(HAVE_STATVFS) || \
+	defined(HAVE_CYGWIN_STATFS)
+	return pvt->_st.f_fsid;
+#else
+	return 0;
+#endif
+}
 #endif
 
 bool filesystem::getMaximumFileNameLength(const char *path,

@@ -11,16 +11,15 @@ namespace rudiments {
 class mutexprivate {
 	friend class mutex;
 	private:
-		#ifdef HAVE_PTHREAD_MUTEX_T
+		#if defined(HAVE_PTHREAD_MUTEX_T)
 		pthread_mutex_t	*_mut;
-		#endif
-		#ifdef HAVE_CREATE_MUTEX
+		#elif defined(HAVE_CREATE_MUTEX)
 		HANDLE		_mut;
 		#endif
 		bool		_destroy;
 };
 
-#ifdef HAVE_PTHREAD_MUTEX_T
+#if defined(HAVE_PTHREAD_MUTEX_T)
 mutex::mutex() {
 	pvt=new mutexprivate;
 	pvt->_mut=new pthread_mutex_t;
@@ -71,9 +70,9 @@ bool mutex::unlock() {
 pthread_mutex_t *mutex::getMutex() {
 	return pvt->_mut;
 }
-#endif
 
-#ifdef HAVE_CREATE_MUTEX
+#elif defined(HAVE_CREATE_MUTEX)
+
 mutex::mutex() {
 	pvt=new mutexprivate;
 	pvt->_mut=CreateMutex(NULL,FALSE,NULL);

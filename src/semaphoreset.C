@@ -57,6 +57,7 @@ semaphoreset::~semaphoreset() {
 
 bool semaphoreset::forceRemove() {
 	semun	semctlun;
+	semctlun.buf=NULL;
 	return !semControl(0,IPC_RMID,semctlun);
 }
 
@@ -104,22 +105,26 @@ bool semaphoreset::signalWithUndo(int index) {
 
 int semaphoreset::getValue(int index) {
 	semun	semctlun;
+	semctlun.buf=NULL;
 	return semControl(index,GETVAL,semctlun);
 }
 
 bool semaphoreset::setValue(int index, int value) {
 	semun	semctlun;
 	semctlun.val=value;
+	semctlun.buf=NULL;
 	return !semControl(index,SETVAL,semctlun);
 }
 
 int semaphoreset::getWaitingForZero(int index) {
 	semun	semctlun;
+	semctlun.buf=NULL;
 	return semControl(index,GETZCNT,semctlun);
 }
 
 int semaphoreset::getWaitingForIncrement(int index) {
 	semun	semctlun;
+	semctlun.buf=NULL;
 	return semControl(index,GETNCNT,semctlun);
 }
 

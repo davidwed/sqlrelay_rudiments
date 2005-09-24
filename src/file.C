@@ -393,7 +393,7 @@ bool file::checkLockRemainderFromEnd(short type, off64_t start,
 }
 
 bool file::sequentialAccess(off64_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_SEQUENTIAL)
 	return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
 	#else
 	return true;
@@ -401,7 +401,7 @@ bool file::sequentialAccess(off64_t start, size_t len) const {
 }
 
 bool file::randomAccess(off64_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_RANDOM)
 	return posixFadvise(start,len,POSIX_FADV_RANDOM);
 	#else
 	return true;
@@ -409,7 +409,7 @@ bool file::randomAccess(off64_t start, size_t len) const {
 }
 
 bool file::onlyOnce(off64_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_NOREUSE)
 	return posixFadvise(start,len,POSIX_FADV_NOREUSE);
 	#else
 	return true;
@@ -417,7 +417,7 @@ bool file::onlyOnce(off64_t start, size_t len) const {
 }
 
 bool file::willNeed(off64_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_WILLNEED)
 	return posixFadvise(start,len,POSIX_FADV_WILLNEED);
 	#else
 	return true;
@@ -425,7 +425,7 @@ bool file::willNeed(off64_t start, size_t len) const {
 }
 
 bool file::wontNeed(off64_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_DONTNEED)
 	return posixFadvise(start,len,POSIX_FADV_DONTNEED);
 	#else
 	return true;
@@ -433,7 +433,7 @@ bool file::wontNeed(off64_t start, size_t len) const {
 }
 
 bool file::normalAccess(off64_t start, size_t len) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_NORMAL)
 	return posixFadvise(start,len,POSIX_FADV_NORMAL);
 	#else
 	return true;
@@ -1503,7 +1503,11 @@ char *file::basename(const char *filename, const char *suffix) {
 }
 
 key_t file::generateKey(const char *filename, int id) {
+#ifdef HAVE_CONST_CHAR_FTOK
 	return ::ftok(filename,id);
+#else
+	return ::ftok(const_cast<char *>(filename),id);
+#endif
 }
 
 long file::maxLinks(const char *filename) {

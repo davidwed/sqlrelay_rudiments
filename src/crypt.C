@@ -24,7 +24,7 @@ namespace rudiments {
 #endif
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS)
+#if !defined(HAVE_CRYPT_R) && defined(RUDIMENTS_HAS_THREADS)
 static mutex	*_cryptmutex;
 #endif
 

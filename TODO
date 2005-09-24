@@ -1,3 +1,8 @@
+-pthread has to be in CFLAGS/CXXFLAGS as well as LDFLAGS, at least on Tru64
+
+in configure script, when using -no-cygwin $CYGWIN is still defined, so w32api
+	tests don't get run
+
 find some way to create a short write condition,
 	make sure bufferedWrite works the way it should
 

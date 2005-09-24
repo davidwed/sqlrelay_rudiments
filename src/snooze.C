@@ -33,7 +33,7 @@ bool snooze::macrosnooze(long seconds, long *remainingseconds) {
 	nanotimetosnooze.tv_sec=seconds;
 	nanotimetosnooze.tv_nsec=0;
 	timespec	nanotimeremaining;
-	bool	retval=nanosnooze(&nanotimetosnooze);
+	bool	retval=nanosnooze(&nanotimetosnooze,&nanotimeremaining);
 	*remainingseconds=nanotimeremaining.tv_sec;
 	return retval;
 }

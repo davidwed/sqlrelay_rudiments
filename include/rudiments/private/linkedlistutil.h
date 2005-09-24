@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_LINKEDLIST_UTIL_H
 #define RUDIMENTS_LINKEDLIST_UTIL_H
 
-#include <rudiments/private/config.h>
+#include <rudiments/private/inttypes.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		#ifndef HAVE_GETSYSTEMTIME
+		#ifdef HAVE_MKTIME
 			bool	getBrokenDownTimeFromEpoch(bool needmutex);
 			bool	normalizeBrokenDownTime(bool needmutex);
 

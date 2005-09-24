@@ -22,10 +22,7 @@ namespace rudiments {
 class datetimeprivate {
 	friend class datetime;
 	private:
-		#ifdef HAVE_GETSYSTEMTIME
-			SYSTEMTIME		_st;
-			TIME_ZONE_INFORMATION	_tzi;
-		#else
+		#if defined(HAVE_MKTIME)
 			int32_t	_sec;
 			int32_t	_min;
 			int32_t	_hour;
@@ -45,6 +42,9 @@ class datetimeprivate {
 			time_t	_epoch;
 
 			environment	_env;
+		#elif defined(HAVE_GETSYSTEMTIME)
+			SYSTEMTIME		_st;
+			TIME_ZONE_INFORMATION	_tzi;
 		#endif
 };
 
@@ -68,10 +68,7 @@ static const char _monthabbr[][4]={
 
 datetime::datetime() {
 	pvt=new datetimeprivate;
-	#ifdef HAVE_GETSYSTEMTIME
-		rawbuffer::zero(pvt->_st,sizeof(SYSTEMTIME));
-		rawbuffer::zero(pvt->_tzi,sizeof(TIME_ZONE_INFORMATION));
-	#else
+	#if defined(HAVE_MKTIME)
 		pvt->_sec=0;
 		pvt->_min=0;
 		pvt->_hour=0;
@@ -86,6 +83,9 @@ datetime::datetime() {
 		pvt->_timestring=NULL;
 		pvt->_structtm=NULL;
 		pvt->_epoch=0;
+	#elif defined(HAVE_GETSYSTEMTIME)
+		rawbuffer::zero(pvt->_st,sizeof(SYSTEMTIME));
+		rawbuffer::zero(pvt->_tzi,sizeof(TIME_ZONE_INFORMATION));
 	#endif
 	#ifdef RUDIMENTS_HAS_THREADS
 	_timemutex=NULL;
@@ -93,7 +93,7 @@ datetime::datetime() {
 }
 
 datetime::~datetime() {
-	#ifndef HAVE_GETSYSTEMTIME
+	#if defined(HAVE_MKTIME)
 		delete[] pvt->_zone;
 		delete[] pvt->_timestring;
 		delete pvt->_structtm;
@@ -105,28 +105,28 @@ bool datetime::initialize(const char *tmstring) {
 
 	// get the date
 	const char	*ptr=tmstring;
-	#ifdef HAVE_GETSYSTEMTIME
-	pvt->_st.wMonth=charstring::toShort(ptr);
-	#else
+	#if defined(HAVE_MKTIME)
 	pvt->_mon=charstring::toInteger(ptr)-1;
+	#elif defined(HAVE_GETSYSTEMTIME)
+	pvt->_st.wMonth=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	#ifdef HAVE_GETSYSTEMTIME
-	pvt->_st.wDay=charstring::toShort(ptr);
-	#else
+	#if defined(HAVE_MKTIME)
 	pvt->_mday=charstring::toInteger(ptr);
+	#elif defined(HAVE_GETSYSTEMTIME)
+	pvt->_st.wDay=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	#ifdef HAVE_GETSYSTEMTIME
-	pvt->_st.wYear=charstring::toShort(ptr);
-	#else
+	#if defined(HAVE_MKTIME)
 	pvt->_year=charstring::toInteger(ptr)-1900;
+	#elif defined(HAVE_GETSYSTEMTIME)
+	pvt->_st.wYear=charstring::toShort(ptr);
 	#endif
 
 	// get the time
@@ -134,28 +134,28 @@ bool datetime::initialize(const char *tmstring) {
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	#ifdef HAVE_GETSYSTEMTIME
-	pvt->_st.wHour=charstring::toShort(ptr);
-	#else
+	#if defined(HAVE_MKTIME)
 	pvt->_hour=charstring::toInteger(ptr);
+	#elif defined(HAVE_GETSYSTEMTIME)
+	pvt->_st.wHour=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	#ifdef HAVE_GETSYSTEMTIME
-	pvt->_st.wMinute=charstring::toShort(ptr);
-	#else
+	#if defined(HAVE_MKTIME)
 	pvt->_min=charstring::toInteger(ptr);
+	#elif defined(HAVE_GETSYSTEMTIME)
+	pvt->_st.wMinute=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':')+sizeof(char);
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
-	#ifdef HAVE_GETSYSTEMTIME
-	pvt->_st.wSecond=charstring::toShort(ptr);
-	#else
+	#if defined(HAVE_MKTIME)
 	pvt->_sec=charstring::toInteger(ptr);
+	#elif defined(HAVE_GETSYSTEMTIME)
+	pvt->_st.wSecond=charstring::toShort(ptr);
 	#endif
 
 	// initialize the daylight savings time flag
@@ -228,7 +228,7 @@ bool datetime::initialize(const struct tm *tmstruct) {
 		#ifdef HAS_TIMEZONE
 			pvt->_gmtoff=-timezone;
 		#else
-			gmtoff=-_timezone;
+			pvt->_gmtoff=-_timezone;
 		#endif
 		#ifdef RUDIMENTS_HAS_THREADS
 			releaseLock();

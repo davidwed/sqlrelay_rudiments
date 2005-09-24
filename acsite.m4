@@ -38,6 +38,14 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 ])
 
+AC_DEFUN([FW_TRY_COMPILE],
+[
+SAVECPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$3"
+AC_TRY_COMPILE([$1],[$2],[$4],[$5])
+CPPFLAGS="$SAVECPPFLAGS"
+])
+
 
 AC_DEFUN([FW_CHECK_LIB],
 [
@@ -243,6 +251,21 @@ AC_SUBST(WALL)
 ])
 
 
+
+dnl checks to see if -pthread option works or not during compile
+AC_DEFUN([FW_CHECK_PTHREAD_COMPILE],
+[
+AC_MSG_CHECKING(if gcc -pthread works during compile phase)
+FW_TRY_COMPILE([#include <stdio.h>],[printf("hello");],[-pthread],[PTHREAD_COMPILE="-pthread"],[PTHREAD_COMPILE=""])
+if ( test -n "$PTHREAD_COMPILE" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+])
+
+
 dnl Determines what extension shared object files have
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
@@ -308,7 +331,7 @@ dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
 AC_DEFUN([FW_CHECK_INLINE],
 [
-AC_MSG_CHECKING(inline)
+AC_MSG_CHECKING(for inline)
 INLINE="inline"
 dnl intel optimizing compiler doesn't have inlines, assume that CC doesn't
 dnl either even though it might, this test needs to be more robust
@@ -337,7 +360,7 @@ AC_DEFUN([FW_CXX_NAMESPACES],
 	AC_LANG_SAVE
 	AC_LANG_CPLUSPLUS
 	RUDIMENTS_NAMESPACE=""
-	AC_MSG_CHECKING(namespace support)
+	AC_MSG_CHECKING(for namespace support)
 	AC_TRY_COMPILE([namespace Outer { namespace Inner { int i = 0; }}],[using namespace Outer::Inner; return i;],[RUDIMENTS_NAMESPACE="yes"],[])
 	AC_LANG_RESTORE
 	if ( test "$RUDIMENTS_NAMESPACE" = yes )
@@ -371,10 +394,11 @@ then
 		echo "cross compiling"
 		if ( test -n "$PTHREADPATH" )
 		then
-			PTHREADINCLUDES="-I$PTHREADPATH/include"
-			PTHREADLIB="-L$PTHREADPATH/lib -lpthread"
+			PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
+			PTHREADLIB="-L$PTHREADPATH/lib -lpthread -phtread"
 		else
-			PTHREADLIB="-lpthread"
+			PTHREADINCLUDES="$PTHREAD_COMPILE"
+			PTHREADLIB="-lpthread -pthread"
 		fi
 		HAVE_PTHREAD="yes"
 
@@ -392,8 +416,18 @@ then
 				break
 			fi
 		done
+
+		if ( test -z "$PTHREADLIB" )
+		then
+			dnl if we couldn't find the appropriate libraries, just
+			dnl try including pthread.h and using -lpthread, it
+			dnl works on some systems
+			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
+		fi
+
 		if ( test -n "$PTHREADLIB" )
 		then
+			PTHREADINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDES"
 			HAVE_PTHREAD="yes"
 		fi
 
@@ -429,19 +463,18 @@ AC_SUBST(PTHREADLIB)
 ])
 
 
-dnl check for pthread_mutex_t
-AC_DEFUN([FW_CHECK_PTHREAD_MUTEX_T],
+AC_DEFUN([FW_CHECK_MUTEX],
 [
+	dnl check for pthread_mutex_t
 	AC_MSG_CHECKING(for pthread_mutex_t)
 	FW_TRY_LINK([#include <pthread.h>],[pthread_mutex_t mut;],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-])
 
-
-dnl check for CreateMutex
-AC_DEFUN([FW_CHECK_CREATE_MUTEX],
-[
-	AC_MSG_CHECKING(for CreateMutex)
-	FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	dnl check for CreateMutex
+	if ( test -z "$CYGWIN" )
+	then
+		AC_MSG_CHECKING(for CreateMutex)
+		FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	fi
 ])
 
 
@@ -467,7 +500,7 @@ then
 
 	else
 
-		AC_MSG_CHECKING(openssl)
+		AC_MSG_CHECKING(for openssl)
 		if ( test -z "$SSLLIBS" -a -z "$SSLINCLUDES" )
 		then
 			SSLLIBS=`pkg-config openssl --libs 2> /dev/null`
@@ -496,7 +529,7 @@ then
 			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
 			AC_MSG_RESULT(yes)
 
-			AC_MSG_CHECKING(SSL_read/write can use a void * parameter)
+			AC_MSG_CHECKING(whether SSL_read/write can use a void * parameter)
 			FW_TRY_LINK([#include <openssl/ssl.h>],[void *buf; SSL_read(NULL,buf,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[SSL_VOID_PTR="yes"],[])
 			if ( test -n "$SSL_VOID_PTR" )
 			then
@@ -547,7 +580,7 @@ then
 
 	else
 
-		AC_MSG_CHECKING(pcre)
+		AC_MSG_CHECKING(for pcre)
 		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
 		then
 			PCRELIBS=`pcre-config --libs 2> /dev/null`
@@ -588,56 +621,60 @@ dnl checks for rpc entry functions and header files
 AC_DEFUN([FW_CHECK_RPC],
 [
 
-HAVE_GETRPCBYNAME_R="no"
-AC_MSG_CHECKING(getrpcbyname_r with 5 parameters in netdb.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_5,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+HAVE_GETRPCBYNAME_R=""
 
-AC_MSG_CHECKING(getrpcbyname_r with 5 parameters in rpc/rpcent.h)
-AC_TRY_LINK([#include <netdb.h>
+AC_MSG_CHECKING(for getrpcbyname_r with 5 parameters in netdb.h)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVE_GETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_5,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getrpcbyname_r with 5 parameters in rpc/rpcent.h)
+AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_5,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVE_GETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_5,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbyname_r with 5 parameters in rpc/rpc.h)
-AC_TRY_LINK([#include <netdb.h>
+AC_MSG_CHECKING(for getrpcbyname_r with 5 parameters in rpc/rpc.h)
+AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
-getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_5,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname_r(NULL,NULL,NULL,0,NULL);,HAVE_GETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_5,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbyname_r with 4 parameters in netdb.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>],
-getrpcbyname_r(NULL,NULL,NULL,0);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_4,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(getrpcbyname_r with 4 parameters in rpc/rpcent.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>
-#include <rpc/rpcent.h>],
-getrpcbyname_r(NULL,NULL,NULL,0);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_4,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(getrpcbyname_r with 4 parameters in rpc/rpc.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>
-#include <rpc/rpc.h>],
-getrpcbyname_r(NULL,NULL,NULL,0);,HAVEGETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_4,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-if ( test -z "$HAVEGETRPCBYNAME_R" )
+if ( test -z "$HAVE_GETRPCBYNAME_R" )
 then
-	AC_MSG_CHECKING(getrpcbyname in netdb)
-	AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(for getrpcbyname_r with 4 parameters in netdb.h)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getrpcbyname_r(NULL,NULL,NULL,0);,HAVE_GETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_4,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for getrpcbyname_r with 4 parameters in rpc/rpcent.h)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpcent.h>],
+getrpcbyname_r(NULL,NULL,NULL,0);,HAVE_GETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_4,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for getrpcbyname_r with 4 parameters in rpc/rpc.h)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpc.h>],
+getrpcbyname_r(NULL,NULL,NULL,0);,HAVE_GETRPCBYNAME_R="yes"; AC_DEFINE(HAVE_GETRPCBYNAME_R_4,1,Some systems have getrpcbyname_r) AC_DEFINE(HAVE_GETRPCBYNAME_R,1, Some systems have getrpcbyname_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+if ( test -z "$HAVE_GETRPCBYNAME_R" )
+then
+	AC_MSG_CHECKING(for getrpcbyname in netdb)
+	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>],
 getrpcbyname(NULL);,AC_DEFINE(HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(getrpcbyname in rpc/rpcent.h)
-	AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(for getrpcbyname in rpc/rpcent.h)
+	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
 getrpcbyname(NULL);,AC_DEFINE(HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(getrpcbyname in rpc/rpc.h)
-	AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(for getrpcbyname in rpc/rpc.h)
+	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
 getrpcbyname(NULL);,AC_DEFINE(HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -646,56 +683,61 @@ fi
 
 
 
-HAVEGETRPCBYNUMBER_R="no"
-AC_MSG_CHECKING(getrpcbynumber_r with 5 parameters in netdb.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+HAVE_GETRPCBYNUMBER_R="no"
 
-AC_MSG_CHECKING(getrpcbynumber_r with 5 parameters in rpc/rpcent.h)
-AC_TRY_LINK([#include <netdb.h>
+AC_MSG_CHECKING(for getrpcbynumber_r with 5 parameters in netdb.h)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getrpcbynumber_r with 5 parameters in rpc/rpcent.h)
+AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbynumber_r with 5 parameters in rpc/rpc.h)
-AC_TRY_LINK([#include <netdb.h>
+AC_MSG_CHECKING(for getrpcbynumber_r with 5 parameters in rpc/rpc.h)
+AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getrpcbynumber_r with 4 parameters in netdb.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>],
-getrpcbynumber_r(0,NULL,NULL,0);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_4,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(getrpcbynumber_r with 4 parameters in rpc/rpcent.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>
-#include <rpc/rpcent.h>],
-getrpcbynumber_r(0,NULL,NULL,0);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_4,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(getrpcbynumber_r with 4 parameters in rpc/rpc.h)
-AC_TRY_LINK([#include <netdb.h>
-#include <stdlib.h>
-#include <rpc/rpc.h>],
-getrpcbynumber_r(0,NULL,NULL,0);,HAVEGETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_4,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-if ( test -z "$HAVEGETRPCBYNUMBER_R" )
+if ( test -z "$HAVE_GETRPCBYNUMBER_R" )
 then
-	AC_MSG_CHECKING(getrpcbynumber in netdb)
-	AC_TRY_LINK([#include <netdb.h>
+
+	AC_MSG_CHECKING(for getrpcbynumber_r with 4 parameters in netdb.h)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getrpcbynumber_r(0,NULL,NULL,0);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_4,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for getrpcbynumber_r with 4 parameters in rpc/rpcent.h)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpcent.h>],
+getrpcbynumber_r(0,NULL,NULL,0);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_4,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for getrpcbynumber_r with 4 parameters in rpc/rpc.h)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>
+#include <rpc/rpc.h>],
+getrpcbynumber_r(0,NULL,NULL,0);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(HAVE_GETRPCBYNUMBER_R_4,1,Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+if ( test -z "$HAVE_GETRPCBYNUMBER_R" )
+then
+	AC_MSG_CHECKING(for getrpcbynumber in netdb)
+	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>],
 getrpcbynumber(0);,AC_DEFINE(HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(getrpcbynumber in rpc/rpcent.h)
-	AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(for getrpcbynumber in rpc/rpcent.h)
+	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
 getrpcbynumber(0);,AC_DEFINE(HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(getrpcbynumber in rpc/rpc.h)
-	AC_TRY_LINK([#include <netdb.h>
+	AC_MSG_CHECKING(for getrpcbynumber in rpc/rpc.h)
+	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
 getrpcbynumber(0);,AC_DEFINE(HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -709,48 +751,371 @@ AC_DEFUN([FW_CHECK_SHADOW],
 
 INCLUDE_SHADOWENTRY="0"
 
-AC_MSG_CHECKING(getspnam_r with 5 parameters)
-AC_TRY_LINK([#include <shadow.h>
-#include <stdlib.h>],
-getspnam_r(NULL,NULL,NULL,0,NULL);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(HAVE_GETSPNAM_R_5,1,Some systems have getspnam_r) AC_DEFINE(HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+HAVE_GETSPNAM_R=""
 
-AC_MSG_CHECKING(getspnam_r with 4 parameters)
-AC_TRY_LINK([#include <shadow.h>
+AC_MSG_CHECKING(for getspnam_r with 5 parameters)
+AC_TRY_COMPILE([#include <shadow.h>
 #include <stdlib.h>],
-getspnam_r(NULL,NULL,NULL,0);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(HAVE_GETSPNAM_R_4,1,Some systems have getspnam_r) AC_DEFINE(HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getspnam_r(NULL,NULL,NULL,0,NULL);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(HAVE_GETSPNAM_R_5,1,Some systems have getspnam_r) AC_DEFINE(HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes); HAVE_GETSPNAM_R="yes", AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(getspnam)
-AC_TRY_LINK([#include <shadow.h>
+if ( test -z "$HAVE_GETSPNAM_R" )
+then
+
+	AC_MSG_CHECKING(for getspnam_r with 4 parameters)
+	AC_TRY_COMPILE([#include <shadow.h>
+#include <stdlib.h>],
+getspnam_r(NULL,NULL,NULL,0);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(HAVE_GETSPNAM_R_4,1,Some systems have getspnam_r) AC_DEFINE(HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes); HAVE_GETSPNAM_R="yes", AC_MSG_RESULT(no))
+fi
+
+if ( test -z "$HAVE_GETSPNAM_R" )
+then
+	AC_MSG_CHECKING(for getspnam)
+	AC_TRY_COMPILE([#include <shadow.h>
 #include <stdlib.h>],
 getspnam(NULL);,INCLUDE_SHADOWENTRY="1"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
 
 if ( test "$INCLUDE_SHADOWENTRY" = "1" )
 then
 
-AC_MSG_CHECKING(spwd has sp_warn)
-AC_TRY_LINK([#include <shadow.h>
+AC_MSG_CHECKING(for spwd has sp_warn)
+AC_TRY_COMPILE([#include <shadow.h>
 #include <stdlib.h>],
 struct spwd sp; sp.sp_warn=0;,AC_DEFINE(HAVE_SP_WARN,1,struct spwd has sp_warn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(spwd has sp_inact)
-AC_TRY_LINK([#include <shadow.h>
+AC_MSG_CHECKING(for spwd has sp_inact)
+AC_TRY_COMPILE([#include <shadow.h>
 #include <stdlib.h>],
 struct spwd sp; sp.sp_inact=0;,AC_DEFINE(HAVE_SP_INACT,1,struct spwd has sp_inact)
 AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(spwd has sp_expire)
-AC_TRY_LINK([#include <shadow.h>
+AC_MSG_CHECKING(for spwd has sp_expire)
+AC_TRY_COMPILE([#include <shadow.h>
 #include <stdlib.h>],
 struct spwd sp; sp.sp_expire=0;,AC_DEFINE(HAVE_SP_EXPIRE,1,struct spwd has sp_expire) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(spwd has sp_flag)
-AC_TRY_LINK([#include <shadow.h>
+AC_MSG_CHECKING(for spwd has sp_flag)
+AC_TRY_COMPILE([#include <shadow.h>
 #include <stdlib.h>],
 struct spwd sp; sp.sp_flag=0;,AC_DEFINE(HAVE_SP_FLAG,1,struct spwd has sp_flag) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 fi 
 
 AC_SUBST(INCLUDE_SHADOWENTRY)
+])
+
+dnl checks for password entry functions and header files
+AC_DEFUN([FW_CHECK_PWD],
+[
+
+HAVE_GETPWNAM_R=""
+
+AC_MSG_CHECKING(for getpwnam_r with 5 parameters)
+AC_TRY_COMPILE([#include <pwd.h>
+#include <stdlib.h>],
+getpwnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWNAM_R_5,1,Some systems have getpwnam_r) AC_DEFINE(HAVE_GETPWNAM_R,1,Some systems have getpwnam_r) AC_MSG_RESULT(yes); HAVE_GETPWNAM_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETPWNAM_R" )
+then
+	AC_MSG_CHECKING(for getpwnam_r with 4 parameters)
+	AC_TRY_COMPILE([#include <pwd.h>
+#include <stdlib.h>],
+getpwnam_r(NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETPWNAM_R_4,1,Some systems have getpwnam_r) AC_DEFINE(HAVE_GETPWNAM_R,1,Some systems have getpwnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+HAVE_GETPWUID_R=""
+
+AC_MSG_CHECKING(for getpwuid_r with 5 parameters)
+AC_TRY_COMPILE([#include <pwd.h>
+#include <stdlib.h>],
+getpwuid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPWUID_R_5,1,Some systems have getpwuid_r) AC_DEFINE(HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes); HAVE_GETPWUID_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETPWUID_R" )
+then
+	AC_MSG_CHECKING(for getpwuid_r with 4 parameters)
+	AC_TRY_COMPILE([#include <pwd.h>
+#include <stdlib.h>],
+getpwuid_r(0,NULL,NULL,0);,AC_DEFINE(HAVE_GETPWUID_R_4,1,Some systems have getpwuid_r) AC_DEFINE(HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+])
+
+
+
+dnl checks for group entry functions and header files
+AC_DEFUN([FW_CHECK_GRP],
+[
+
+HAVE_GETGRNAM_R=""
+
+AC_MSG_CHECKING(for getgrnam_r with 5 parameters)
+AC_TRY_COMPILE([#include <grp.h>
+#include <stdlib.h>],
+getgrnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRNAM_R_5,1,Some systems have getgrnam_r) AC_DEFINE(HAVE_GETGRNAM_R,1,Some systems have getgrnam_r) AC_MSG_RESULT(yes); HAVE_GETGRNAM_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETGRNAM_R" )
+then
+	AC_MSG_CHECKING(for getgrnam_r with 4 parameters)
+	AC_TRY_COMPILE([#include <grp.h>
+#include <stdlib.h>],
+getgrnam_r(NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETGRNAM_R_4,1,Some systems have getgrnam_r) AC_DEFINE(HAVE_GETGRNAM_R,1,Some systems have getgrnam_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+HAVE_GETGRGID_R=""
+
+AC_MSG_CHECKING(for getgrgid_r with 5 parameters)
+AC_TRY_COMPILE([#include <grp.h>
+#include <stdlib.h>],
+getgrgid_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETGRGID_R_5,1,Some systems have getgrgid_r) AC_DEFINE(HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes); HAVE_GETGRGID_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETGRGID_R" )
+then
+	AC_MSG_CHECKING(for getgrgid_r with 4 parameters)
+	AC_TRY_COMPILE([#include <grp.h>
+#include <stdlib.h>],
+getgrgid_r(0,NULL,NULL,0);,AC_DEFINE(HAVE_GETGRGID_R_4,1,Some systems have getgrgid_r) AC_DEFINE(HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+])
+
+
+dnl checks for host entry functions and header files
+AC_DEFUN([FW_CHECK_HOST],
+[
+
+AC_MSG_CHECKING(for getaddrinfo)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getaddrinfo(NULL,NULL,NULL,NULL);,AC_DEFINE(HAVE_GETADDRINFO,1,Some systems have getaddrinfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+HAVE_GETHOSTBYNAME_R=""
+
+AC_MSG_CHECKING(for gethostbyname_r with 6 parameters)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1,Some systems have gethostbyname_r) AC_DEFINE(HAVE_GETHOSTBYNAME_R_6,1,Some systems have gethostbyname_r) AC_MSG_RESULT(yes); HAVE_GETHOSTBYNAME_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETHOSTBYNAME_R" )
+then
+	AC_MSG_CHECKING(for gethostbyname_r with 5 parameters)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+gethostbyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETHOSTBYNAME_R,1,Some systems have gethostbyname_r) AC_DEFINE(HAVE_GETHOSTBYNAME_R_5,1,Some systems have gethostbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+HAVE_GETHOSTBYADDR_R=""
+
+AC_MSG_CHECKING(for gethostbyaddr_r with 8 parameters)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_DEFINE(HAVE_GETHOSTBYADDR_R_8,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes); HAVE_GETHOSTBYADDR_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETHOSTBYADDR_R" )
+then
+	AC_MSG_CHECKING(for gethostbyaddr_r with 7 parameters)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_DEFINE(HAVE_GETHOSTBYADDR_R_7,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+])
+
+
+dnl checks for proto entry functions and header files
+AC_DEFUN([FW_CHECK_PROTO],
+[
+
+HAVE_GETPROTOBYNAME_R=""
+
+AC_MSG_CHECKING(for getprotobyname_r with 5 parameters)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNAME_R_5,1,Some systems have getprotobyname_r) AC_DEFINE(HAVE_GETPROTOBYNAME_R,1,Some systems have getprotobyname_r) AC_MSG_RESULT(yes); HAVE_GETPROTOBYNAME_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETPROTOBYNAME_R" )
+then
+	AC_MSG_CHECKING(for getprotobyname_r with 4 parameters)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getprotobyname_r(NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETPROTOBYNAME_R_4,1,Some systems have getprotobyname_r) AC_DEFINE(HAVE_GETPROTOBYNAME_R,1,Some systems have getprotobyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+HAVE_GETPROTOBYNUMBER_R=""
+
+AC_MSG_CHECKING(for getprotobynumber_r with 5 parameters)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R_5,1,Some systems have getprotobynumber_r) AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1,Some systems have getprotobynumber_r) AC_MSG_RESULT(yes); HAVE_GETPROTOBYNUMBER_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETPROTOBYNUMBER_R" )
+then
+	AC_MSG_CHECKING(for getprotobynumber_r with 4 parameters)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getprotobynumber_r(0,NULL,NULL,0);,AC_DEFINE(HAVE_GETPROTOBYNUMBER_R_4,1,Some systems have getprotobynumber_r) AC_DEFINE(HAVE_GETPROTOBYNUMBER_R,1,Some systems have getprotobynumber_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+])
+
+
+dnl checks for service entry functions and header files
+AC_DEFUN([FW_CHECK_SVC],
+[
+
+HAVE_GETSERVBYNAME_R=""
+
+AC_MSG_CHECKING(for getservbyname_r with 6 parameters)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYNAME_R_6,1,Some systems have getservbyname_r) AC_DEFINE(HAVE_GETSERVBYNAME_R,1,Some systems have getservbyname_r) AC_MSG_RESULT(yes); HAVE_GETSERVBYNAME_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETSERVBYNAME_R" )
+then
+	AC_MSG_CHECKING(for getservbyname_r with 5 parameters)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getservbyname_r(NULL,NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETSERVBYNAME_R_5,1,Some systems have getservbyname_r) AC_DEFINE(HAVE_GETSERVBYNAME_R,1,Some systems have getservbyname_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+HAVE_GETSERVBYPORT_R=""
+
+AC_MSG_CHECKING(for getservbyport_r with 6 parameters)
+AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(HAVE_GETSERVBYPORT_R_6,1,Some systems have getservbyport_r) AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes); HAVE_GETSERVBYPORT_R="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$HAVE_GETSERVBYPORT_R" )
+then
+	AC_MSG_CHECKING(for getservbyport_r with 5 parameters)
+	AC_TRY_COMPILE([#include <netdb.h>
+#include <stdlib.h>],
+getservbyport_r(0,NULL,NULL,NULL,0);,AC_DEFINE(HAVE_GETSERVBYPORT_R_5,1,Some systems have getservbyport_r) AC_DEFINE(HAVE_GETSERVBYPORT_R,1,Some systems have getservbyport_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+])
+
+
+dnl checks for mmap-related functions and header files
+AC_DEFUN([FW_CHECK_MMAP],
+[
+
+HAS_MEMORYMAP="no"
+
+AC_MSG_CHECKING(for mmap)
+AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/mman.h>],
+mmap(NULL,0,0,0,0,0);,AC_DEFINE(HAVE_MMAP,1,Some systems have mmap) AC_MSG_RESULT(yes); HAS_MEMORYMAP="yes", AC_MSG_RESULT(no))
+
+if ( test -z "$CYGWIN" )
+then
+	AC_MSG_CHECKING(for CreateFileMapping)
+	AC_TRY_COMPILE([#include <windows.h>],
+HANDLE map=CreateFileMapping(INVALID_HANDLE_VALUE,NULL,PAGE_READWRITE,0,1,NULL);,AC_DEFINE(HAVE_CREATE_FILE_MAPPING,1,Some systems have CreateFileMapping) AC_MSG_RESULT(yes); HAS_MEMORYMAP="yes", AC_MSG_RESULT(no))
+fi
+
+AC_SUBST(HAS_MEMORYMAP)
+
+if ( test "$HAS_MEMORYMAP" = "yes" )
+then
+
+	AC_MSG_CHECKING(if munmap takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; munmap(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MUNMAP_CADDR_T,1,Some systems use caddr_t argument for munmap) AC_MSG_RESULT(yes))
+
+	AC_MSG_CHECKING(for mincore with char * argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(HAVE_MINCORE_CHAR,1,Some systems have mincore with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for mincore with unsigned char * argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+unsigned char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(HAVE_MINCORE,1,Some systems have mincore) AC_DEFINE(HAVE_MINCORE_UCHAR,1,Some systems have mincore with unsigned char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(if mincore takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; mincore(ptr,0,NULL);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MINCORE_CADDR_T,1,Some systems use caddr_t argument for mincore) AC_MSG_RESULT(yes))
+
+	AC_MSG_CHECKING(for mprotect)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+mprotect(NULL,0,0);,AC_DEFINE(HAVE_MPROTECT,1,Some systems have mprotect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(if mprotect takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; mprotect(ptr,0,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MPROTECT_CADDR_T,1,Some systems use caddr_t argument for mprotect) AC_MSG_RESULT(yes))
+
+	AC_MSG_CHECKING(for msync)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+msync(NULL,0,0);,AC_DEFINE(HAVE_MSYNC,1,Some systems have msync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(if msync takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; msync(ptr,0,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MSYNC_CADDR_T,1,Some systems use caddr_t argument for msync) AC_MSG_RESULT(yes))
+
+	AC_MSG_CHECKING(for mlock)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+mlock(NULL,0);,AC_DEFINE(HAVE_MLOCK,1,Some systems have mlock) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(if mlock takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; mlock(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MLOCK_CADDR_T,1,Some systems use caddr_t argument for mlock) AC_MSG_RESULT(yes))
+
+	AC_MSG_CHECKING(for mlockall)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+mlockall(0);,AC_DEFINE(HAVE_MLOCKALL,1,Some systems have mlockall) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for munlock)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+munlock(NULL,0);,AC_DEFINE(HAVE_MUNLOCK,1,Some systems have munlock) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(if munlock takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; munlock(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MUNLOCK_CADDR_T,1,Some systems use caddr_t argument for munlock) AC_MSG_RESULT(yes))
+
+	AC_MSG_CHECKING(for munlockall)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+munlockall();,AC_DEFINE(HAVE_MUNLOCKALL,1,Some systems have munlockall) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for madvise)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+madvise(NULL,0,MADV_NORMAL);,AC_DEFINE(HAVE_MADVISE,1,Some systems have madvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(if madvise takes caddr_t argument)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>],
+void *ptr; madvise(ptr,0,MADV_NORMAL);,AC_MSG_RESULT(no), AC_DEFINE(HAVE_MADVISE_CADDR_T,1,Some systems use caddr_t argument for madvise) AC_MSG_RESULT(yes))
+
+fi
+
 ])
 
 
@@ -760,9 +1125,9 @@ AC_DEFUN([FW_STATFS],
 
 STATFS_STYLE="unknown"
 
-AC_MSG_CHECKING(statfs/statvfs)
+AC_MSG_CHECKING(for statfs/statvfs)
 
-AC_TRY_LINK([#include <sys/vfs.h>],
+AC_TRY_COMPILE([#include <sys/vfs.h>],
 [struct statfs sfs;
 sfs.f_type=0;
 sfs.f_bsize=0;
@@ -779,7 +1144,7 @@ statfs("/",&sfs);]
 dnl cygwin is like linux but f_fsid is just a long
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_LINK([#include <sys/vfs.h>],
+AC_TRY_COMPILE([#include <sys/vfs.h>],
 [struct statfs sfs;
 sfs.f_type=0;
 sfs.f_bsize=0;
@@ -797,7 +1162,7 @@ fi
 dnl freebsd is very different from linux
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_LINK([#include <sys/param.h>
+AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
 [struct statfs sfs;
 sfs.f_bsize=0;
@@ -825,7 +1190,7 @@ fi
 dnl netbsd is like freebsd but lacks a few fields
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_LINK([#include <sys/param.h>
+AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
 [struct statfs sfs;
 sfs.f_type=0;
@@ -852,7 +1217,7 @@ dnl openbsd is like netbsd but with an additional mount_info union and without
 dnl an f_type field
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_LINK([#include <sys/param.h>
+AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
 [struct statfs sfs;
 sfs.f_flags=0;
@@ -879,7 +1244,7 @@ dnl darwin is similar to the other bsd's but with a few extra and a few missing
 dnl fields
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_LINK([#include <sys/param.h>
+AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
 [struct statfs sfs;
 sfs.f_otype=0;
@@ -905,7 +1270,7 @@ fi
 dnl SCO and Solaris both have statvfs
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_LINK([#include <sys/types.h>
+AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/statvfs.h>],
 [struct statvfs sfs;
 sfs.f_bsize=0;
@@ -925,9 +1290,7 @@ statvfs("/",&sfs);]
 fi
 
 AC_MSG_RESULT($STATFS_STYLE)
-
 ])
-
 
 dnl checks for __xnet_*
 AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
@@ -945,7 +1308,7 @@ dnl check to see if nanosleep is available
 AC_DEFUN([FW_CHECK_NANOSLEEP],
 [
 
-	AC_MSG_CHECKING(nanosleep)
+	AC_MSG_CHECKING(for nanosleep)
 
 	DONE=""
 	for i in "" "-lrt"
@@ -973,7 +1336,7 @@ dnl check to see if clock_nanosleep is available
 AC_DEFUN([FW_CHECK_CLOCK_NANOSLEEP],
 [
 
-	AC_MSG_CHECKING(clock_nanosleep)
+	AC_MSG_CHECKING(for clock_nanosleep)
 
 	DONE=""
 	for i in "" "-lrt"
@@ -1002,7 +1365,7 @@ AC_DEFUN([FW_CHECK_SHM_OPEN],
 [
 
 	HAS_SHM_OPEN="no"
-	AC_MSG_CHECKING(shm_open)
+	AC_MSG_CHECKING(for shm_open)
 
 	DONE=""
 	for i in "" "-lrt"
@@ -1102,7 +1465,7 @@ LIBS="$HACKLIBS $LIBS"
 
 AC_DEFUN([FW_CHECK_CRYPT_R],
 [
-	AC_MSG_CHECKING(crypt.h)
+	AC_MSG_CHECKING(for crypt.h)
 	FW_TRY_LINK([#include <crypt.h>],[int a=0;],[$CPPFLAGS],[],[],[CRYPT_H="#include <crypt.h>"],[CRYPT_H="#include <unistd.h>"])
 	if ( test "$CRYPT_H" = "#include <crypt.h>" )
 	then
@@ -1112,7 +1475,7 @@ AC_DEFUN([FW_CHECK_CRYPT_R],
 		AC_MSG_RESULT(no)
 	fi
 
-	AC_MSG_CHECKING(crypt)
+	AC_MSG_CHECKING(for crypt)
 	HAVE_CRYPT=""
 	for i in "" "-lcrypt"
 	do
@@ -1130,7 +1493,7 @@ $CRYPT_H],[crypt(NULL,NULL);],[$CPPFLAGS],[$i],[],[HAVE_CRYPT="yes"; CRYPTLIB="$
 		AC_MSG_RESULT(no)
 	fi
 
-	AC_MSG_CHECKING(crypt_r)
+	AC_MSG_CHECKING(for crypt_r)
 	HAVE_CRYPT_R=""
 	for i in "" "-lcrypt"
 	do
@@ -1148,10 +1511,13 @@ $CRYPT_H],[crypt_data cd; crypt_r(NULL,NULL,NULL);],[$CPPFLAGS],[$i],[],[HAVE_CR
 		AC_MSG_RESULT(no)
 	fi
 
-	INCLUDE_CRYPTLIB="0"
-	if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
+	if ( test "$INCLUDE_CRYPT" = 1 )
 	then
-		INCLUDE_CRYPT="1"
+		INCLUDE_CRYPT="0"
+		if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
+		then
+			INCLUDE_CRYPT="1"
+		fi
 	fi
 
 	AC_SUBST(INCLUDE_CRYPT)
