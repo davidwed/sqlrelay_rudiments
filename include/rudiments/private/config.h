@@ -49,6 +49,9 @@
 /* Some systems have CMSG_SPACE */
 #define HAVE_CMSG_SPACE 1
 
+/* Most systems have ftok(const char *, int) */
+#define HAVE_CONST_CHAR_FTOK 1
+
 /* Some systems have CreateFileMapping */
 /* #undef HAVE_CREATE_FILE_MAPPING */
 
@@ -218,7 +221,7 @@
 /* Some systems have GetSystemTime */
 /* #undef HAVE_GETSYSTEMTIME */
 
-/* Define to 1 if you have the <inttypes.h> header file. */
+/* Some systems have inttypes.h */
 #define HAVE_INTTYPES_H 1
 
 /* Some systems have ioctl */
@@ -239,11 +242,17 @@
 /* Some systems have madvise */
 #define HAVE_MADVISE 1
 
+/* Some systems use caddr_t argument for madvise */
+/* #undef HAVE_MADVISE_CADDR_T */
+
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
 /* Some systems have mincore */
 #define HAVE_MINCORE 1
+
+/* Some systems use caddr_t argument for mincore */
+/* #undef HAVE_MINCORE_CADDR_T */
 
 /* Some systems have mincore with char argument */
 /* #undef HAVE_MINCORE_CHAR */
@@ -251,20 +260,26 @@
 /* Some systems have mincore with unsigned char argument */
 #define HAVE_MINCORE_UCHAR 1
 
+/* Some systems have mktime */
+#define HAVE_MKTIME 1
+
 /* Some systems have mlock */
 #define HAVE_MLOCK 1
 
 /* Some systems have mlockall */
 #define HAVE_MLOCKALL 1
 
+/* Some systems use caddr_t argument for mlock */
+/* #undef HAVE_MLOCK_CADDR_T */
+
 /* Some systems have mmap */
 #define HAVE_MMAP 1
 
-/* Some systems use caddr_t argument for mmap functions */
-/* #undef HAVE_MMAP_CADDR_T */
-
 /* Some systems have mprotect */
 #define HAVE_MPROTECT 1
+
+/* Some systems use caddr_t argument for mprotect */
+/* #undef HAVE_MPROTECT_CADDR_T */
 
 /* Some msghdr structs have a msg_controllen member */
 #define HAVE_MSGHDR_MSG_CONTROLLEN 1
@@ -275,11 +290,20 @@
 /* Some systems have msync */
 #define HAVE_MSYNC 1
 
+/* Some systems use caddr_t argument for msync */
+/* #undef HAVE_MSYNC_CADDR_T */
+
 /* Some systems have munlock */
 #define HAVE_MUNLOCK 1
 
 /* Some systems have munlockall */
 #define HAVE_MUNLOCKALL 1
+
+/* Some systems use caddr_t argument for munlock */
+/* #undef HAVE_MUNLOCK_CADDR_T */
+
+/* Some systems use caddr_t argument for munmap */
+/* #undef HAVE_MUNMAP_CADDR_T */
 
 /* Some systems have nanosleep */
 #define HAVE_NANOSLEEP 1
@@ -380,7 +404,7 @@
 /* statvfs */
 /* #undef HAVE_STATVFS */
 
-/* Define to 1 if you have the <stdint.h> header file. */
+/* Some systems have stdint.h */
 #define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
@@ -398,11 +422,17 @@
 /* Some systems have strtold */
 #define HAVE_STRTOLD 1
 
-/* Define to 1 if `tm_zone' is member of `struct tm'. */
-#define HAVE_STRUCT_TM_TM_ZONE 1
+/* Some systems have strtoll */
+#define HAVE_STRTOLL 1
+
+/* Some systems have strtoull */
+#define HAVE_STRTOULL 1
 
 /* Some systems have swab with a char * argument */
 /* #undef HAVE_SWAB_CHAR */
+
+/* Some systems have sys/bitypes.h */
+#define HAVE_SYS_BITYPES_H 1
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
@@ -429,14 +459,6 @@
 
 /* Some systems don't have S_ISSOCK */
 #define HAVE_S_ISSOCK 1
-
-/* Define to 1 if your `struct tm' has `tm_zone'. Deprecated, use
-   `HAVE_STRUCT_TM_TM_ZONE' instead. */
-#define HAVE_TM_ZONE 1
-
-/* Define to 1 if you don't have `tm_zone' but do have the external array
-   `tzname'. */
-/* #undef HAVE_TZNAME */
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
@@ -501,33 +523,6 @@
 /* Most systems define signal handlers with an integer parameter */
 #define SIGNAL_HANDLER_INT 1
 
-/* The size of a `double', as computed by sizeof. */
-#define SIZEOF_DOUBLE 8
-
-/* The size of a `float', as computed by sizeof. */
-#define SIZEOF_FLOAT 4
-
-/* The size of a `int16_t', as computed by sizeof. */
-#define SIZEOF_INT16_T 2
-
-/* The size of a `int32_t', as computed by sizeof. */
-#define SIZEOF_INT32_T 4
-
-/* The size of a `int64_t', as computed by sizeof. */
-#define SIZEOF_INT64_T 8
-
-/* The size of a `long double', as computed by sizeof. */
-#define SIZEOF_LONG_DOUBLE 12
-
-/* The size of a `uint16_t', as computed by sizeof. */
-#define SIZEOF_UINT16_T 2
-
-/* The size of a `uint32_t', as computed by sizeof. */
-#define SIZEOF_UINT32_T 4
-
-/* The size of a `uint64_t', as computed by sizeof. */
-#define SIZEOF_UINT64_T 8
-
 /* Use small rather than fast code */
 /* #undef SMALL_CODE */
 
@@ -536,12 +531,6 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 /* #undef STDC_HEADERS */
-
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#define TIME_WITH_SYS_TIME 1
-
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
-/* #undef TM_IN_SYS_TIME */
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -557,6 +546,9 @@
 
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef mode_t */
+
+/* Some systems don't have off64_t */
+/* #undef off64_t */
 
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef pid_t */

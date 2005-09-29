@@ -867,7 +867,7 @@ char *charstring::duplicate(const char *str, size_t length) {
 
 void charstring::safePrint(const char *string, int length) {
 	const char	*ch=string;
-	for (int i=0; i<length && *ch; i++) {
+	for (int i=0; i<length; i++) {
 		character::safePrint(*ch);
 		ch++;
 	}

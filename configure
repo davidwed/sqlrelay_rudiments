@@ -19896,7 +19896,7 @@ fi
 fi
 
 
-if ( test -z "$CYGWIN" )
+if ( test -n "$MINGW32" )
 then
 	echo "$as_me:$LINENO: checking for windows.h" >&5
 echo $ECHO_N "checking for windows.h... $ECHO_C" >&6
@@ -21072,7 +21072,7 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-		if ( test -z "$CYGWIN" )
+		if ( test -n "$MINGW32" )
 	then
 		echo "$as_me:$LINENO: checking for CreateMutex" >&5
 echo $ECHO_N "checking for CreateMutex... $ECHO_C" >&6
@@ -23848,7 +23848,7 @@ echo "******************************"
 echo
 echo "***** Time Structure *********"
 
-if ( test -z "$CYGWIN" )
+if ( test -n "$MINGW32" )
 then
 	echo "$as_me:$LINENO: checking GetSystemTime" >&5
 echo $ECHO_N "checking GetSystemTime... $ECHO_C" >&6
@@ -29024,7 +29024,7 @@ echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -z "$CYGWIN" )
+if ( test -n "$MINGW32" )
 then
 	echo "$as_me:$LINENO: checking for CreateFileMapping" >&5
 echo $ECHO_N "checking for CreateFileMapping... $ECHO_C" >&6

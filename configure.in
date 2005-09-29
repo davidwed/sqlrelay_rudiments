@@ -359,7 +359,7 @@ echo
 echo "***** Headers ****************"
 AC_HEADER_DIRENT
 
-if ( test -z "$CYGWIN" )
+if ( test -n "$MINGW32" )
 then
 	AC_MSG_CHECKING(for windows.h)
 	AC_TRY_COMPILE([#include <windows.h>],
@@ -530,7 +530,7 @@ dnl Checks associated with time structure
 echo
 echo "***** Time Structure *********"
 
-if ( test -z "$CYGWIN" )
+if ( test -n "$MINGW32" )
 then
 	AC_MSG_CHECKING(GetSystemTime)
 	AC_TRY_COMPILE([#include <windows.h>

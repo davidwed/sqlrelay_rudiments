@@ -470,7 +470,7 @@ AC_DEFUN([FW_CHECK_MUTEX],
 	FW_TRY_LINK([#include <pthread.h>],[pthread_mutex_t mut;],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 	dnl check for CreateMutex
-	if ( test -z "$CYGWIN" )
+	if ( test -n "$MINGW32" )
 	then
 		AC_MSG_CHECKING(for CreateMutex)
 		FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
@@ -1006,7 +1006,7 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/mman.h>],
 mmap(NULL,0,0,0,0,0);,AC_DEFINE(HAVE_MMAP,1,Some systems have mmap) AC_MSG_RESULT(yes); HAS_MEMORYMAP="yes", AC_MSG_RESULT(no))
 
-if ( test -z "$CYGWIN" )
+if ( test -n "$MINGW32" )
 then
 	AC_MSG_CHECKING(for CreateFileMapping)
 	AC_TRY_COMPILE([#include <windows.h>],
