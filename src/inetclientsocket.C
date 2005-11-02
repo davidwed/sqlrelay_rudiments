@@ -152,7 +152,7 @@ int inetclientsocket::connect() {
 
 	#endif
 
-	// if create failed, show this error
+	int	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
 	for (unsigned long counter=0;
@@ -178,12 +178,13 @@ int inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
-				if (clientsocket::connect(
+				retval=clientsocket::connect(
 					reinterpret_cast<struct sockaddr *>(
 									_sin()),
 					sizeof(sockaddr_in),
 					_timeoutsec(),
-					_timeoutusec())==RESULT_SUCCESS) {
+					_timeoutusec());
+				if (retval==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
 				}
 			}
@@ -206,13 +207,13 @@ int inetclientsocket::connect() {
 				}
 
 				// attempt to connect to the socket
-				if (clientsocket::connect(
+				retval=clientsocket::connect(
 					reinterpret_cast<struct sockaddr *>(
 								ainfo->ai_addr),
 						ainfo->ai_addrlen,
 						_timeoutsec(),
-						_timeoutusec())==
-							RESULT_SUCCESS) {
+						_timeoutusec());
+				if (retval==RESULT_SUCCESS) {
 					freeaddrinfo(ai);
 					return RESULT_SUCCESS;
 				} else {
@@ -230,7 +231,7 @@ int inetclientsocket::connect() {
 		close();
 	#endif
 
-	return RESULT_ERROR;
+	return retval;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

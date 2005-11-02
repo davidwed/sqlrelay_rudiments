@@ -1,3 +1,7 @@
+add a "print environment" method to environment class
+
+apply Ben Hutchings' readdir_r patch
+
 mingw32 configure still finds ssl/pcre/etc.
 
 find some way to create a short write condition,

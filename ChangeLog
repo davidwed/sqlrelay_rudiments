@@ -38,6 +38,7 @@
 	unsupported memorymap methods return false now rather than not existing
 	added -pthread when compiling as well as linking
 	fixed a time-remaining-related bug in snooze class
+	fixed a bug where the date/time string buffer could easily be overrun
 
 0.28.2 - filedescriptor desctructor removes the read buffer now
 

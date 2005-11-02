@@ -110,19 +110,21 @@ bool datetime::initialize(const char *tmstring) {
 	#elif defined(HAVE_GETSYSTEMTIME)
 	pvt->_st.wMonth=charstring::toShort(ptr);
 	#endif
-	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
+	ptr=charstring::findFirst(ptr,'/');
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	ptr=ptr+sizeof(char);
 	#if defined(HAVE_MKTIME)
 	pvt->_mday=charstring::toInteger(ptr);
 	#elif defined(HAVE_GETSYSTEMTIME)
 	pvt->_st.wDay=charstring::toShort(ptr);
 	#endif
-	ptr=charstring::findFirst(ptr,'/')+sizeof(char);
+	ptr=charstring::findFirst(ptr,'/');
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	ptr=ptr+sizeof(char);
 	#if defined(HAVE_MKTIME)
 	pvt->_year=charstring::toInteger(ptr)-1900;
 	#elif defined(HAVE_GETSYSTEMTIME)
@@ -130,28 +132,31 @@ bool datetime::initialize(const char *tmstring) {
 	#endif
 
 	// get the time
-	ptr=charstring::findFirst(ptr,' ')+sizeof(char);
+	ptr=charstring::findFirst(ptr,' ');
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	ptr=ptr+sizeof(char);
 	#if defined(HAVE_MKTIME)
 	pvt->_hour=charstring::toInteger(ptr);
 	#elif defined(HAVE_GETSYSTEMTIME)
 	pvt->_st.wHour=charstring::toShort(ptr);
 	#endif
-	ptr=charstring::findFirst(ptr,':')+sizeof(char);
+	ptr=charstring::findFirst(ptr,':');
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	ptr=ptr+sizeof(char);
 	#if defined(HAVE_MKTIME)
 	pvt->_min=charstring::toInteger(ptr);
 	#elif defined(HAVE_GETSYSTEMTIME)
 	pvt->_st.wMinute=charstring::toShort(ptr);
 	#endif
-	ptr=charstring::findFirst(ptr,':')+sizeof(char);
+	ptr=charstring::findFirst(ptr,':');
 	if (!ptr || !ptr[0]) {
 		return false;
 	}
+	ptr=ptr+sizeof(char);
 	#if defined(HAVE_MKTIME)
 	pvt->_sec=charstring::toInteger(ptr);
 	#elif defined(HAVE_GETSYSTEMTIME)
@@ -367,7 +372,7 @@ const char *datetime::getString() {
 	delete[] pvt->_timestring;
 	size_t	timestringlen=2+1+2+1+charstring::integerLength(getYear())+1+
 				2+1+2+1+2+1+
-				charstring::length(getTimeZoneString());
+				charstring::length(getTimeZoneString()+1);
 	pvt->_timestring=new char[timestringlen];
 	snprintf(pvt->_timestring,timestringlen,
 			"%02d/%02d/%d %02d:%02d:%02d %s",

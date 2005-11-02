@@ -71,15 +71,16 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #ifdef DEBUG_WRITE
 	#define DEBUG_WRITE_INT(type,number) \
 		printf("%d: %s write(%d,%d)\n", \
-			process::getProcessId(),type,fd,number);
+			process::getProcessId(),type,pvt->_fd,number);
 	#define DEBUG_WRITE_FLOAT(type,number) \
 		printf("%d: %s write(%d,%f)\n", \
-			process::getProcessId(),type,fd,number);
+			process::getProcessId(),type,pvt->_fd,number);
 	#define DEBUG_WRITE_CHAR(type,character) \
 		printf("%d: %s write(%d,%d)\n", \
-			process::getProcessId(),type,fd,character);
+			process::getProcessId(),type,pvt->_fd,character);
 	#define DEBUG_WRITE_STRING(type,string,size) \
-		printf("%d: %s write(%d,",process::getProcessId(),type,fd); \
+		printf("%d: %s write(%d,",process::getProcessId(), \
+							type,pvt->_fd); \
 		for (size_t i=0; i<((size<=160)?size:160); i++) { \
 			printf("%c",string[i]); \
 		} \
@@ -90,7 +91,8 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define DEBUG_WRITE_VOID(type,buffer,size) \
 		const unsigned char *ptr=\
 			static_cast<const unsigned char *>(buffer); \
-		printf("%d: %s write(%d,",process::getProcessId(),type,fd); \
+		printf("%d: %s write(%d,",process::getProcessId(), \
+							type,pvt->_fd); \
 		for (size_t i=0; i<((size<=160)?size:160); i++) { \
 			printf("0x%02x ",ptr[i]); \
 		} \
@@ -1364,7 +1366,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			#ifdef DEBUG_WRITE
 			for (int i=0; i<actualwrite; i++) {
 				character::safePrint(
-					(static_cast<unsigned char *>(ptr))[i]);
+				(static_cast<const unsigned char *>(ptr))[i]);
 			}
 			printf("(%ld bytes) ",actualwrite);
 			fflush(stdout);
@@ -1434,6 +1436,11 @@ int filedescriptor::waitForNonBlockingWrite(long sec, long usec) const {
 
 int filedescriptor::safeSelect(long sec, long usec,
 				bool read, bool write) const {
+
+	// FD_SET will crash if you pass it -1 on some systems, just bail here
+	if (pvt->_fd==-1) {
+		return RESULT_ERROR;
+	}
 
 	#ifdef RUDIMENTS_HAS_SSL
 		if (read && pvt->_ssl && SSL_pending(pvt->_ssl)) {

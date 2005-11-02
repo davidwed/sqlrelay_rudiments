@@ -94,6 +94,8 @@ int unixclientsocket::connect() {
 		return RESULT_ERROR;
 	}
 
+	int	retval=RESULT_ERROR;
+
 	// try to connect, over and over for the specified number of times
 	for (unsigned long counter=0;
 			counter<_retrycount() || !_retrycount(); counter++) {
@@ -105,17 +107,18 @@ int unixclientsocket::connect() {
 		}
 
 		// attempt to connect
-		if (clientsocket::connect(
+		retval=clientsocket::connect(
 			reinterpret_cast<struct sockaddr *>(_sun()),
 			sizeof(sockaddr_un),
-			_timeoutsec(),_timeoutusec())==RESULT_SUCCESS) {
+			_timeoutsec(),_timeoutusec());
+		if (retval==RESULT_SUCCESS) {
 			return RESULT_SUCCESS;
 		}
 	}
 
 	// if we're here, the connect failed
 	close();
-	return RESULT_ERROR;
+	return retval;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

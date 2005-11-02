@@ -79,8 +79,9 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		// if a timeout was passed in then we need to do some more
 		// complex stuff...
 
-		// put the socket in non-blocking mode
-		if (!useNonBlockingMode()) {
+		// put the socket in non-blocking mode, if necessary
+		bool	wasusingnonblockingmode=isUsingNonBlockingMode();
+		if (!wasusingnonblockingmode && !useNonBlockingMode()) {
 			return RESULT_ERROR;
 		}
 
@@ -96,6 +97,8 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 				// Wait for the socket to become writable.  If
 				// the select() errors or times out then return
 				// the error or timeout.
+				// FIXME: use waitForNonBlockingWrite() and
+				// add a useListenerInsideConnect() method?
 				if ((retval=safeSelect(sec,usec,
 							false,true))<0) {
 					return retval;
@@ -175,7 +178,8 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		} else {
 			retval=RESULT_SUCCESS;
 		}
-		if (!useBlockingMode()) {
+		// restore blocking mode, if necessary
+		if (!wasusingnonblockingmode && !useBlockingMode()) {
 			return RESULT_ERROR;
 		}
 	}
