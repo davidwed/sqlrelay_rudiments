@@ -1,7 +1,3 @@
-add a "print environment" method to environment class
-
-apply Ben Hutchings' readdir_r patch
-
 mingw32 configure still finds ssl/pcre/etc.
 
 find some way to create a short write condition,
@@ -11,6 +7,10 @@ file descriptor passing doesn't work on openbsd, possibly netbsd
 
 get a mingw port working
 --------------------------------------------------------------------------------
+
+add a "print environment" method to environment class
+
+apply Ben Hutchings' readdir_r patch
 
 use const's instead of #defines
 	const unsigned long	MAX_QUERY_LENGTH=32768;

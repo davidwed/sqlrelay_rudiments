@@ -64,8 +64,12 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 
 	// if a specific address was passed in, bind to it only,
 	// otherwise bind to all addresses
-	if (address && address[0]) {
-		_sin()->sin_addr.s_addr=htonl(inet_addr(address));
+	if (address && address[0] && charstring::compare(address,"0.0.0.0")) {
+		in_addr	ia;
+		if (!inet_aton(address,&ia)) {
+			return false;
+		}
+		_sin()->sin_addr.s_addr=ia.s_addr;
 	} else {
 		_sin()->sin_addr.s_addr=htonl(INADDR_ANY);
 	}
