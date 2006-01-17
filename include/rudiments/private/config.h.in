@@ -313,6 +313,9 @@
 /* NetBSD style statfs */
 #undef HAVE_NETBSD_STATFS
 
+/* NetBSD-3.0 style statvfs */
+#undef HAVE_NETBSD_STATVFS
+
 /* Some systems have netdb.h */
 #undef HAVE_NETDB_H
 

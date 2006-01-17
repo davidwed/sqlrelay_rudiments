@@ -19,7 +19,7 @@ namespace rudiments {
 class filesystemprivate {
 	friend class filesystem;
 	private:
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		struct	statvfs	_st;
 #else
 		struct	statfs	_st;
@@ -89,7 +89,7 @@ bool filesystem::close() {
 bool filesystem::getCurrentProperties() {
 	int	result;
 	do {
-		#ifdef HAVE_STATVFS
+		#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		result=fstatvfs(pvt->_fd,&pvt->_st);
 		#else
 		result=fstatfs(pvt->_fd,&pvt->_st);
@@ -98,7 +98,7 @@ bool filesystem::getCurrentProperties() {
 	return !result;
 }
 
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 	#define STATFS(path,out,member) \
 		struct statvfs st; \
 		int	result; \
@@ -195,7 +195,7 @@ bool filesystem::getBlockSize(const char *path, long *size) {
 	defined(HAVE_CYGWIN_STATFS)
 	STATFS(path,size,f_bsize)
 #else
-	#ifdef HAVE_STATVFS
+	#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		STATFS(path,size,f_frsize)
 	#else
 		*size=0;
@@ -213,7 +213,7 @@ bool filesystem::getBlockSize(int fd, long *size) {
 	defined(HAVE_CYGWIN_STATFS)
 	FSTATFS(fd,size,f_bsize)
 #else
-	#ifdef HAVE_STATVFS
+	#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		FSTATFS(fd,size,f_frsize)
 	#else
 		*size=0;
@@ -231,7 +231,7 @@ long filesystem::getBlockSize() const {
 	defined(HAVE_CYGWIN_STATFS)
 	return pvt->_st.f_bsize;
 #else
-	#ifdef HAVE_STATVFS
+	#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		return pvt->_st.f_frsize;
 	#else
 		return 0;
@@ -243,7 +243,8 @@ bool filesystem::getOptimumTransferBlockSize(const char *path,
 						long *size) {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS) 
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) 
 	STATFS(path,size,f_bsize)
 #else
 	#if defined(HAVE_FREEBSD_STATFS) || \
@@ -261,7 +262,8 @@ bool filesystem::getOptimumTransferBlockSize(const char *path,
 bool filesystem::getOptimumTransferBlockSize(int fd, long *size) {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) 
 	FSTATFS(fd,size,f_bsize)
 #else
 	#if defined(HAVE_FREEBSD_STATFS) || \
@@ -279,7 +281,8 @@ bool filesystem::getOptimumTransferBlockSize(int fd, long *size) {
 long filesystem::getOptimumTransferBlockSize() const {
 #if defined(HAVE_LINUX_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) 
 	return pvt->_st.f_bsize;
 #else
 	#if defined(HAVE_FREEBSD_STATFS) || \
@@ -300,7 +303,8 @@ bool filesystem::getTotalBlocks(const char *path, long *blocks) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,blocks,f_blocks)
 #else
 	*blocks=0;
@@ -315,7 +319,8 @@ bool filesystem::getTotalBlocks(int fd, long *blocks) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,blocks,f_blocks)
 #else
 	*blocks=0;
@@ -330,7 +335,8 @@ long filesystem::getTotalBlocks() const {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_blocks;
 #else
 	return 0;
@@ -344,7 +350,8 @@ bool filesystem::getFreeBlocks(const char *path, long *blocks) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,blocks,f_bfree)
 #else
 	*blocks=0;
@@ -359,7 +366,8 @@ bool filesystem::getFreeBlocks(int fd, long *blocks) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,blocks,f_bfree)
 #else
 	*blocks=0;
@@ -374,7 +382,8 @@ long filesystem::getFreeBlocks() const {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_bfree;
 #else
 	return 0;
@@ -388,7 +397,8 @@ bool filesystem::getAvailableBlocks(const char *path, long *blocks) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,blocks,f_bavail)
 #else
 	*blocks=0;
@@ -403,7 +413,8 @@ bool filesystem::getAvailableBlocks(int fd, long *blocks) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,blocks,f_bavail)
 #else
 	*blocks=0;
@@ -418,7 +429,8 @@ long filesystem::getAvailableBlocks() const {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_bavail;
 #else
 	return 0;
@@ -432,7 +444,8 @@ bool filesystem::getTotalFileNodes(const char *path, long *nodes) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,nodes,f_files)
 #else
 	*nodes=0;
@@ -447,7 +460,8 @@ bool filesystem::getTotalFileNodes(int fd, long *nodes) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,nodes,f_files)
 #else
 	*nodes=0;
@@ -462,7 +476,8 @@ long filesystem::getTotalFileNodes() const {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_files;
 #else
 	return 0;
@@ -476,7 +491,8 @@ bool filesystem::getFreeFileNodes(const char *path, long *nodes) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,nodes,f_ffree)
 #else
 	*nodes=0;
@@ -491,7 +507,8 @@ bool filesystem::getFreeFileNodes(int fd, long *nodes) {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,nodes,f_ffree)
 #else
 	*nodes=0;
@@ -506,7 +523,8 @@ long filesystem::getFreeFileNodes() const {
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS) || \
 	defined(HAVE_CYGWIN_STATFS) || \
-	defined(HAVE_STATVFS)
+	defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_ffree;
 #else
 	return 0;
@@ -514,7 +532,7 @@ long filesystem::getFreeFileNodes() const {
 }
 
 bool filesystem::getAvailableFileNodes(const char *path, long *nodes) {
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,nodes,f_ffree)
 #else
 	*nodes=0;
@@ -523,7 +541,7 @@ bool filesystem::getAvailableFileNodes(const char *path, long *nodes) {
 }
 
 bool filesystem::getAvailableFileNodes(int fd, long *nodes) {
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,nodes,f_ffree)
 #else
 	*nodes=0;
@@ -532,7 +550,7 @@ bool filesystem::getAvailableFileNodes(int fd, long *nodes) {
 }
 
 long filesystem::getAvailableFileNodes() const {
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_ffree;
 #else
 	return 0;
@@ -558,6 +576,7 @@ fsid_t filesystem::getFileSystemId() const {
 #else
 bool filesystem::getFileSystemId(const char *path, long *id) {
 #if defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_CYGWIN_STATFS)
 	STATFS(path,id,f_fsid)
 #else
@@ -568,6 +587,7 @@ bool filesystem::getFileSystemId(const char *path, long *id) {
 
 bool filesystem::getFileSystemId(int fd, long *id) {
 #if defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_CYGWIN_STATFS)
 	FSTATFS(fd,id,f_fsid)
 #else
@@ -578,6 +598,7 @@ bool filesystem::getFileSystemId(int fd, long *id) {
 
 long filesystem::getFileSystemId() const {
 #if defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_CYGWIN_STATFS)
 	return pvt->_st.f_fsid;
 #else
@@ -592,7 +613,7 @@ bool filesystem::getMaximumFileNameLength(const char *path,
 	defined(HAVE_CYGWIN_STATFS)
 	STATFS(path,length,f_namelen)
 #else
-	#ifdef HAVE_STATVFS
+	#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		STATFS(path,length,f_namemax)
 	#else
 		*length=0;
@@ -606,7 +627,7 @@ bool filesystem::getMaximumFileNameLength(int fd, long *length) {
 	defined(HAVE_CYGWIN_STATFS)
 	FSTATFS(fd,length,f_namelen)
 #else
-	#ifdef HAVE_STATVFS
+	#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		FSTATFS(fd,length,f_namemax)
 	#else
 		*length=0;
@@ -620,7 +641,7 @@ long filesystem::getMaximumFileNameLength() const {
 	defined(HAVE_CYGWIN_STATFS)
 	return pvt->_st.f_namelen;
 #else
-	#ifdef HAVE_STATVFS
+	#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		return pvt->_st.f_namemax;
 	#else
 		return 0;
@@ -631,6 +652,7 @@ long filesystem::getMaximumFileNameLength() const {
 bool filesystem::getOwner(const char *path, uid_t *owner) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	STATFS(path,owner,f_owner)
@@ -643,6 +665,7 @@ bool filesystem::getOwner(const char *path, uid_t *owner) {
 bool filesystem::getOwner(int fd, uid_t *owner) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	FSTATFS(fd,owner,f_owner)
@@ -655,6 +678,7 @@ bool filesystem::getOwner(int fd, uid_t *owner) {
 uid_t filesystem::getOwner() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	return pvt->_st.f_owner;
@@ -666,6 +690,7 @@ uid_t filesystem::getOwner() const {
 bool filesystem::getSyncWrites(const char *path, long *swrites) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	STATFS(path,swrites,f_syncwrites)
 #else
@@ -677,6 +702,7 @@ bool filesystem::getSyncWrites(const char *path, long *swrites) {
 bool filesystem::getSyncWrites(int fd, long *swrites) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	FSTATFS(fd,swrites,f_syncwrites)
 #else
@@ -688,6 +714,7 @@ bool filesystem::getSyncWrites(int fd, long *swrites) {
 long filesystem::getSyncWrites() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	return pvt->_st.f_syncwrites;
 #else
@@ -698,6 +725,7 @@ long filesystem::getSyncWrites() const {
 bool filesystem::getAsyncWrites(const char *path, long *aswrites) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	STATFS(path,aswrites,f_asyncwrites)
 #else
@@ -709,6 +737,7 @@ bool filesystem::getAsyncWrites(const char *path, long *aswrites) {
 bool filesystem::getAsyncWrites(int fd, long *aswrites) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	FSTATFS(fd,aswrites,f_asyncwrites)
 #else
@@ -720,6 +749,7 @@ bool filesystem::getAsyncWrites(int fd, long *aswrites) {
 long filesystem::getAsyncWrites() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS)
 	return pvt->_st.f_asyncwrites;
 #else
@@ -730,6 +760,7 @@ long filesystem::getAsyncWrites() const {
 bool filesystem::getMountPoint(const char *path, const char **mtpt) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	STATFS(path,mtpt,f_mntonname)
@@ -742,6 +773,7 @@ bool filesystem::getMountPoint(const char *path, const char **mtpt) {
 bool filesystem::getMountPoint(int fd, const char **mtpt) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	FSTATFS(fd,mtpt,f_mntonname)
@@ -754,6 +786,7 @@ bool filesystem::getMountPoint(int fd, const char **mtpt) {
 const char *filesystem::getMountPoint() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	return (const char *)pvt->_st.f_mntonname;
@@ -763,7 +796,8 @@ const char *filesystem::getMountPoint() const {
 }
 
 bool filesystem::getSyncReads(const char *path, long *sreads) {
-#if defined(HAVE_FREEBSD_STATFS)
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,sreads,f_syncreads)
 #else
 	*sreads=0;
@@ -772,7 +806,8 @@ bool filesystem::getSyncReads(const char *path, long *sreads) {
 }
 
 bool filesystem::getSyncReads(int fd, long *sreads) {
-#if defined(HAVE_FREEBSD_STATFS)
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,sreads,f_syncreads)
 #else
 	*sreads=0;
@@ -781,7 +816,8 @@ bool filesystem::getSyncReads(int fd, long *sreads) {
 }
 
 long filesystem::getSyncReads() const {
-#if defined(HAVE_FREEBSD_STATFS)
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_syncreads;
 #else
 	return 0;
@@ -789,7 +825,8 @@ long filesystem::getSyncReads() const {
 }
 
 bool filesystem::getAsyncReads(const char *path, long *asreads) {
-#if defined(HAVE_FREEBSD_STATFS)
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	STATFS(path,asreads,f_asyncreads)
 #else
 	*asreads=0;
@@ -798,7 +835,8 @@ bool filesystem::getAsyncReads(const char *path, long *asreads) {
 }
 
 bool filesystem::getAsyncReads(int fd, long *asreads) {
-#if defined(HAVE_FREEBSD_STATFS)
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,asreads,f_asyncreads)
 #else
 	*asreads=0;
@@ -807,7 +845,8 @@ bool filesystem::getAsyncReads(int fd, long *asreads) {
 }
 
 long filesystem::getAsyncReads() const {
-#if defined(HAVE_FREEBSD_STATFS)
+#if defined(HAVE_FREEBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_asyncreads;
 #else
 	return 0;
@@ -816,6 +855,7 @@ long filesystem::getAsyncReads() const {
 
 bool filesystem::getDeviceName(const char *path, const char **devname) {
 #if defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	STATFS(path,devname,f_mntfromname)
@@ -827,6 +867,7 @@ bool filesystem::getDeviceName(const char *path, const char **devname) {
 
 bool filesystem::getDeviceName(int fd, const char **devname) {
 #if defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	FSTATFS(fd,devname,f_mntfromname)
@@ -838,6 +879,7 @@ bool filesystem::getDeviceName(int fd, const char **devname) {
 
 const char *filesystem::getDeviceName() const {
 #if defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	return (const char *)pvt->_st.f_mntfromname;
@@ -874,7 +916,7 @@ const char *filesystem::getFilesystemSpecificString() const {
 }
 
 
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 struct statvfs *filesystem::getStatfs() {
 	return &pvt->_st;
 }
@@ -887,6 +929,7 @@ struct statfs *filesystem::getStatfs() {
 bool filesystem::getTypeName(const char *path, const char **name) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	STATFS(path,name,f_fstypename)
@@ -916,6 +959,7 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 bool filesystem::getTypeName(int fd, const char **name) {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	FSTATFS(fd,name,f_fstypename)
@@ -945,6 +989,7 @@ bool filesystem::getTypeName(int fd, const char **name) {
 const char *filesystem::getTypeName() const {
 #if defined(HAVE_FREEBSD_STATFS) || \
 	defined(HAVE_NETBSD_STATFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
 	defined(HAVE_OPENBSD_STATFS) || \
 	defined(HAVE_DARWIN_STATFS)
 	return (const char *)pvt->_st.f_fstypename;

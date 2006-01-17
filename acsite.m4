@@ -1128,7 +1128,8 @@ STATFS_STYLE="unknown"
 AC_MSG_CHECKING(for statfs/statvfs)
 
 AC_TRY_COMPILE([#include <sys/vfs.h>],
-[struct statfs sfs;
+[/* linux style */
+struct statfs sfs;
 sfs.f_type=0;
 sfs.f_bsize=0;
 sfs.f_blocks=0;
@@ -1145,7 +1146,8 @@ dnl cygwin is like linux but f_fsid is just a long
 if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/vfs.h>],
-[struct statfs sfs;
+[/* cygwin style */
+struct statfs sfs;
 sfs.f_type=0;
 sfs.f_bsize=0;
 sfs.f_blocks=0;
@@ -1164,7 +1166,8 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
-[struct statfs sfs;
+[/* freebsd style */
+struct statfs sfs;
 sfs.f_bsize=0;
 sfs.f_iosize=0;
 sfs.f_blocks=0;
@@ -1192,7 +1195,8 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
-[struct statfs sfs;
+[/* netbsd style */
+struct statfs sfs;
 sfs.f_type=0;
 sfs.f_bsize=0;
 sfs.f_iosize=0;
@@ -1210,7 +1214,39 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(HAVE_NETBSD_STATFS,1,NetBSD style statfs) STATFS_STYLE="netbsd style")
+,AC_DEFINE(HAVE_NETBSD_STATFS,1,NetBSD style statfs) STATFS_STYLE="old netbsd style")
+fi
+
+dnl netbsd-3.0 is called statvfs and is different from real statvfs
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_COMPILE([#include <sys/statvfs.h>],
+[/* netbsd-3.0 style */
+struct statvfs sfs;
+sfs.f_flag=0;
+sfs.f_bsize=0;
+sfs.f_frsize=0;
+sfs.f_iosize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_bresvd=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_favail=0;
+sfs.f_syncreads=0;
+sfs.f_syncwrites=0;
+sfs.f_asyncreads=0;
+sfs.f_asyncwrites=0;
+sfs.f_fsidx.__fsid_val[0]=0;
+sfs.f_fsid=0;
+sfs.f_namemax=0;
+sfs.f_owner=0;
+sfs.f_fstypename[0]=0;
+sfs.f_mntonname[0]=0;
+sfs.f_mntfromname[0]=0;
+statvfs("/",&sfs);]
+,AC_DEFINE(HAVE_NETBSD_STATVFS,1,NetBSD-3.0 style statvfs) STATFS_STYLE="netbsd-3.0 style")
 fi
 
 dnl openbsd is like netbsd but with an additional mount_info union and without
@@ -1219,7 +1255,8 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
-[struct statfs sfs;
+[/* openbsd style */
+struct statfs sfs;
 sfs.f_flags=0;
 sfs.f_bsize=0;
 sfs.f_iosize=0;
@@ -1246,7 +1283,8 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/param.h>
 #include <sys/mount.h>],
-[struct statfs sfs;
+[/* darwin style */
+struct statfs sfs;
 sfs.f_otype=0;
 sfs.f_oflags=0;
 sfs.f_bsize=0;
@@ -1272,7 +1310,8 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/statvfs.h>],
-[struct statvfs sfs;
+[/* statvfs style */
+struct statvfs sfs;
 sfs.f_bsize=0;
 sfs.f_frsize=0;
 sfs.f_blocks=0;

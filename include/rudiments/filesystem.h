@@ -130,7 +130,9 @@ class filesystem {
 								long *nodes);
 		static bool	getAvailableFileNodes(int fd, long *nodes);
 
-#if defined(HAVE_STATVFS) || defined(HAVE_CYGWIN_STATFS)
+#if defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS) || \
+	defined(HAVE_CYGWIN_STATFS)
 		// These methods return the file system id.
 		// (works on SCO OSR5, Solaris)
 		//
@@ -269,7 +271,7 @@ class filesystem {
 
 		// This method returns a pointer to the statfs structure
 		// used internally.
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)
 		struct statvfs	*getStatfs();
 #else
 		struct statfs	*getStatfs();

@@ -16,7 +16,8 @@
 	#include <sys/param.h>
 	#include <sys/mount.h>
 #endif
-#ifdef HAVE_STATVFS
+#if defined(HAVE_STATVFS) || \
+	defined(HAVE_NETBSD_STATVFS)
 	#include <sys/types.h>
 	#include <sys/statvfs.h>
 #endif
