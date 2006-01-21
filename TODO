@@ -1,11 +1,10 @@
+some systems need -pthread in CFLAGS, other's don't like it
+
 netbsd-3.0 statvfs:
 	f_flag
 	f_bsize/f_frsize/f_iosize seperately
 	f_bresvd
 	f_fsidx
-
-
-mingw32 configure still finds ssl/pcre/etc.
 
 find some way to create a short write condition,
 	make sure bufferedWrite works the way it should
