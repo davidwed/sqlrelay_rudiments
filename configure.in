@@ -274,10 +274,6 @@ AC_ARG_ENABLE(randomnumber,
 	[  --disable-randomnumber  Don't build randomnumber],
 	INCLUDE_RANDOMNUMBER="0",
 	INCLUDE_RANDOMNUMBER="1")
-AC_ARG_ENABLE(container,
-	[  --disable-container     Don't build container],
-	INCLUDE_CONTAINER="0",
-	INCLUDE_CONTAINER="1")
 AC_ARG_ENABLE(chat,
 	[  --disable-chat          Don't build chat],
 	INCLUDE_CHAT="0",

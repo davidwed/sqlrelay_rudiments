@@ -131,7 +131,6 @@
 	reworked filedescriptor/client/server heirarchy to reduce size of
 		library's data segment
 	added test for crypt.h
-	added container class
 	made charstring/rawbuffer classes NULL-safe
 	added zero method to rawbuffer class
 	no stripping is done at compile, link or install time now

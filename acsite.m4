@@ -313,7 +313,6 @@ AC_SUBST(MINGW32)
 AC_SUBST(CYGWIN)
 AC_SUBST(UWIN)
 
-dnl Hack so "make install" will work on windows.
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
