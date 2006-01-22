@@ -74,5 +74,8 @@ SHMOPENLIB = @SHMOPENLIB@
 # crypt library
 CRYPTLIB = @CRYPTLIB@
 
+# inet_aton library
+INETATONLIB = @INETATONLIB@
+
 # dl library
 DLLIB = @DLLIB@

@@ -817,6 +817,11 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/ipc.h>],
 const char *var=NULL; ftok(var,0);,AC_DEFINE(HAVE_CONST_CHAR_FTOK,1,Most systems have ftok(const char *, int)) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(whether inet_aton needs -lresolv)
+AC_TRY_LINK([#include <stdlib.h>
+#include <arpa/inet.h>],
+inet_aton(NULL,NULL);,AC_SUBST(INETATONLIB,) AC_MSG_RESULT(no), AC_SUBST(INETATONLIB,-lresolv) AC_MSG_RESULT(yes))
+
 echo "******************************"
 
 

@@ -1,4 +1,4 @@
-solaris 9 - inet_aton undefined symbol
+solaris 9/10 - inet_aton undefined symbol
 
 some systems need -pthread in CFLAGS, other's don't like it
 
