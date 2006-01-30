@@ -624,7 +624,7 @@ int charstring::integerLength(int64_t number) {
 }
 
 int charstring::integerLength(uint16_t number) {
-	int	length=0;
+	int	length=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
 		length++;
 	}
@@ -632,7 +632,7 @@ int charstring::integerLength(uint16_t number) {
 }
 
 int charstring::integerLength(uint32_t number) {
-	int	length=0;
+	int	length=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
 		length++;
 	}
@@ -640,7 +640,7 @@ int charstring::integerLength(uint32_t number) {
 }
 
 int charstring::integerLength(uint64_t number) {
-	int	length=0;
+	int	length=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
 		length++;
 	}

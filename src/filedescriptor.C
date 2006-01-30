@@ -1510,7 +1510,11 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
-		return __bswap_64(value);
+		#ifdef HAVE_BSWAP_64
+			return bswap_64(value);
+		#else
+			return __bswap_64(value);
+		#endif
 	#endif
 }
 
@@ -1526,7 +1530,11 @@ uint64_t filedescriptor::netToHost(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
-		return __bswap_64(value);
+		#ifdef HAVE_BSWAP_64
+			return bswap_64(value);
+		#else
+			return __bswap_64(value);
+		#endif
 	#endif
 }
 

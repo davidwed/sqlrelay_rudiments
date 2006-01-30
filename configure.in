@@ -822,6 +822,13 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <arpa/inet.h>],
 inet_aton(NULL,NULL);,AC_SUBST(INETATONLIB,) AC_MSG_RESULT(no), AC_SUBST(INETATONLIB,-lresolv) AC_MSG_RESULT(yes))
 
+AC_MSG_CHECKING(for bswap_64)
+AC_TRY_LINK([#include <stdlib.h>
+#ifdef HAVE_BYTESWAP_H
+#include <byteswap.h>
+#endif],
+bswap_64(0);,AC_DEFINE(HAVE_BSWAP_64,1,Some systems have bswap_64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
