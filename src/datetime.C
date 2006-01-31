@@ -372,7 +372,7 @@ const char *datetime::getString() {
 	delete[] pvt->_timestring;
 	size_t	timestringlen=2+1+2+1+charstring::integerLength(getYear())+1+
 				2+1+2+1+2+1+
-				charstring::length(getTimeZoneString()+1);
+				charstring::length(getTimeZoneString())+1;
 	pvt->_timestring=new char[timestringlen];
 	snprintf(pvt->_timestring,timestringlen,
 			"%02d/%02d/%d %02d:%02d:%02d %s",

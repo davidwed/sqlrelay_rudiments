@@ -6,6 +6,7 @@
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
+#include <rudiments/process.h>
 
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
@@ -144,11 +145,13 @@ void logger::removeAllLogDestinations() {
 char *logger::logHeader(const char *name) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
+	pid_t		pid=process::getProcessId();
 	const char	*dtstring=dt.getString();
-	size_t		retvallen=charstring::length(dtstring)+
-					charstring::length(name)+16;
+	size_t		retvallen=charstring::length(dtstring)+1+
+				charstring::length(name)+2+
+				charstring::integerLength((uint64_t)pid)+2;
 	char		*retval=new char[retvallen];
-	snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,getpid());
+	snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,pid);
 	return retval;
 }
 
