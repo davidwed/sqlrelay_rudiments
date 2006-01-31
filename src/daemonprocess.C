@@ -144,10 +144,8 @@ void daemonprocess::waitForChildrenToExit() {
 	// back and be restarted.
 	// If it returns -1 then there was some other error and the loop should
 	// exit.
-printf("got SIGCHLD\n");
 	for (;;) {
 		int pid=waitpid(-1,NULL,WNOHANG);
-printf("pid=%d\n",pid);
 		if (pid==0 || (pid==-1 && error::getErrorNumber()!=EINTR)) {
 			break;
 		}
