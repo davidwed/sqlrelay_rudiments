@@ -4,7 +4,13 @@
 #include <rudiments/private/inttypes.h>
 
 #include <sys/types.h>
-#include <pwd.h>
+
+#ifdef MINGW32
+	#include <windows.h>
+	#include <lm.h>
+#else
+	#include <pwd.h>
+#endif
 
 #ifdef RUDIMENTS_HAS_THREADS
 	#include <rudiments/mutex.h>

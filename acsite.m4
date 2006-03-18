@@ -318,6 +318,11 @@ if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
 	MICROSOFT="yes"
 fi
+
+if ( test "$MINGW32" )
+then
+	AC_DEFINE(MINGW32,1,Mingw32 environment)
+fi
 ])
 
 
@@ -403,7 +408,7 @@ then
 
 	else
 
-		for i in "pthread" "c_r" "gthreads"
+		for i in "pthread" "c_r" "thread"
 		do
 			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
 			if ( test -n "$PTHREADLIB" )
@@ -415,6 +420,12 @@ then
 				break
 			fi
 		done
+
+		dnl FSU pthreads check
+		if ( test -z "$PTHREADLIB" )
+		then
+			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[FSU],[pthread.h],[gthreads],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
+		fi
 
 		if ( test -z "$PTHREADLIB" )
 		then

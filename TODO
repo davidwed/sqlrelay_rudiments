@@ -1,4 +1,26 @@
-solaris 9/10 - inet_aton undefined symbol
+update commandline class to accept "-arg value" and "--arg=value" syntaxes
+
+update programming docs!
+
+SCO openserver -
+	native CC doesn't support 64-bit integers
+	gcc doesn't produce working code
+
+SCO openunix -
+	unistd.h isn't detected when using C++ because the test program
+		thinks I'm trying to re-declare std::exit(int) rather than
+		call exit(int)
+
+get a mingw port working
+	(can I use libgw32?)
+
+apply Ben Hutchings' readdir_r patch
+
+add to chat class:
+	\K-BREAK
+	^C-control character represented by C
+
+--------------------------------------------------------------------------------
 
 some systems need -pthread in CFLAGS, other's don't like it
 
@@ -13,12 +35,9 @@ find some way to create a short write condition,
 
 file descriptor passing doesn't work on openbsd, cygwin, possibly netbsd
 
-get a mingw port working
---------------------------------------------------------------------------------
-
 add a "print environment" method to environment class
 
-apply Ben Hutchings' readdir_r patch
+--------------------------------------------------------------------------------
 
 use const's instead of #defines
 	const unsigned long	MAX_QUERY_LENGTH=32768;
@@ -108,10 +127,6 @@ fix math class
 a bunch of static methods can probably be inlined
 	
 probably can combine memorypool and variablebuffer classes
-
-add to chat class:
-	\K-BREAK
-	^C-control character represented by C
 
 xml:
 	should be able to validate an xml document against the dtd

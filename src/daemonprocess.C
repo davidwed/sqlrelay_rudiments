@@ -12,13 +12,15 @@
 
 #include <stdlib.h>
 
-// for fork/getpid/exit...
+// for fork/exit...
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 
-// for wait...
-#include <sys/wait.h>
+#ifndef MINGW32
+	// for wait...
+	#include <sys/wait.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -61,7 +63,7 @@ daemonprocess::~daemonprocess() {
 }
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
-	char	*pid=charstring::parseNumber((uint64_t)getpid());
+	char	*pid=charstring::parseNumber((uint64_t)process::getProcessId());
 	bool	retval=(file::createFile(filename,permissions,pid)==
 					(ssize_t)charstring::length(pid));
 	delete[] pid;
@@ -76,6 +78,7 @@ int64_t daemonprocess::checkForPidFile(const char *filename) {
 	return retval;
 }
 
+#ifndef MINGW32
 bool daemonprocess::detach() const {
 
 	// fork off a child process
@@ -112,6 +115,12 @@ bool daemonprocess::detach() const {
 
 	return true;
 }
+#else
+bool daemonprocess::detach() const {
+	// FIXME: implement this
+	return true;
+}
+#endif
 
 void daemonprocess::handleShutDown(void *shutdownfunction) {
 
@@ -130,6 +139,7 @@ void daemonprocess::handleCrash(void *crashfunction) {
 	_crashhandler.handleSignal(SIGSEGV);
 }
 
+#ifndef MINGW32
 void daemonprocess::waitForChildrenToExit() {
 
 	// Some systems generate a single SIGCHLD even if more than 1 child
@@ -158,6 +168,12 @@ void daemonprocess::waitForChildrenToExit() {
 	// handler, we don't need to reinstall the signal handler here, it will
 	// be done automatically.
 }
+#else
+void daemonprocess::waitForChildrenToExit() {
+	// FIXME: implement this...
+	// Use ChildStart()
+}
+#endif
 
 void daemonprocess::shutDown() {
 	waitForChildren();
@@ -179,6 +195,7 @@ void daemonprocess::defaultCrash() {
 	exit(1);
 }
 
+#ifndef MINGW32
 void daemonprocess::waitForChildren() {
 	_deadchildhandler.setHandler((void *)waitForChildrenToExit);
 	_deadchildhandler.addFlag(SA_NOCLDSTOP);
@@ -190,6 +207,14 @@ void daemonprocess::dontWaitForChildren() {
 	_deadchildhandler.removeAllFlags();
 	_deadchildhandler.handleSignal(SIGCHLD);
 }
+#else
+void daemonprocess::waitForChildren() {
+	// FIXME: implement this
+}
+void daemonprocess::dontWaitForChildren() {
+	// FIXME: implement this
+}
+#endif
 
 int daemonprocess::runAsUser(const char *username) const {
 	uid_t	userid;

@@ -94,6 +94,9 @@
 /* FreeBSD style statfs */
 #undef HAVE_FREEBSD_STATFS
 
+/* Most systems have ftok() */
+#undef HAVE_FTOK
+
 /* Some systems have getaddrinfo */
 #undef HAVE_GETADDRINFO
 
@@ -433,6 +436,9 @@
 /* Some systems have strtoull */
 #undef HAVE_STRTOULL
 
+/* Some systems have struct timespec */
+#undef HAVE_STRUCT_TIMESPEC
+
 /* Some systems have swab with a char * argument */
 #undef HAVE_SWAB_CHAR
 
@@ -482,6 +488,9 @@
 
 /* iov_base is char * */
 #undef IOV_BASE_TYPE
+
+/* Mingw32 environment */
+#undef MINGW32
 
 /* Some systems have swab but don't define it */
 #undef MUST_DEFINE_SWAB
@@ -549,8 +558,14 @@
 #undef inline
 #endif
 
+/* Some systems don't have key_t */
+#undef key_t
+
 /* Define to `int' if <sys/types.h> does not define. */
 #undef mode_t
+
+/* Some systems don't have nlink_t */
+#undef nlink_t
 
 /* Some systems don't have off64_t */
 #undef off64_t

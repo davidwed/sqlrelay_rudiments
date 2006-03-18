@@ -127,6 +127,15 @@ bool snooze::nanosnooze(timespec *timetosnooze, timespec *timeremaining) {
 	#elif HAVE_CLOCK_NANOSLEEP
 	return !clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
 					timetosnooze,timeremaining);
+	#elif MINGW32
+		// on windows, we only have millisecond resolution and we
+		// can't the remaining time back
+		sleep(timetosnooze->tv_sec*1000+timetosnooze->tv_nsec/1000000);
+
+		// set timeremaining to 0
+		timeremaining->tv_sec=0;
+		timeremaining->tv_nsec=0;
+		return true;
 	#else
 
 		// use regular sleep command to handle the whole seconds

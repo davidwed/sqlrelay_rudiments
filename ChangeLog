@@ -1,3 +1,5 @@
+0.30 - changed commandline::value() to commandline::getValue()
+
 0.29 - added check for whether SSL_read/write takes void * or char * parameter
 	added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix
 	added collapse argument to charstring::split

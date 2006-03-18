@@ -1503,10 +1503,20 @@ char *file::basename(const char *filename, const char *suffix) {
 }
 
 key_t file::generateKey(const char *filename, int id) {
-#ifdef HAVE_CONST_CHAR_FTOK
-	return ::ftok(filename,id);
+#ifdef HAVE_FTOK
+	#ifdef HAVE_CONST_CHAR_FTOK
+		return ::ftok(filename,id);
+	#else
+		return ::ftok(const_cast<char *>(filename),id);
+	#endif
 #else
-	return ::ftok(const_cast<char *>(filename),id);
+	file	f;
+	if (!f.open(filename,O_RDONLY)) {
+		return -1;
+	}
+	return (key_t)((f.getInode() & 0xffff) |
+			((f.getDevice() & 0xff) << 16) |
+			((id & 0xff)  << 24));
 #endif
 }
 

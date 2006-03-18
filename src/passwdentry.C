@@ -18,10 +18,16 @@ namespace rudiments {
 class passwdentryprivate {
 	friend class passwdentry;
 	private:
-		passwd	*_pwd;
+		#ifndef MINGW32
+			passwd	*_pwd;
 		#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
 			passwd	_pwdbuffer;
 			char	*_buffer;
+		#endif
+		#else
+			LPUSER_INFO_23	_buffer;
+			char		*_name;
+			char		*_fullname;
 		#endif
 };
 
@@ -34,11 +40,17 @@ static mutex	*pemutex;
 
 passwdentry::passwdentry() {
 	pvt=new passwdentryprivate;
+#ifndef MINGW32
 	pvt->_pwd=NULL;
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
 		rawbuffer::zero(&pvt->_pwdbuffer,sizeof(pvt->_pwdbuffer));
 		pvt->_buffer=NULL;
 	#endif
+#else
+	pvr->_buffer=NULL;
+	pvr->_name=NULL;
+	pvr->_fullname=NULL;
+#endif
 }
 
 passwdentry::passwdentry(const passwdentry &p) {
@@ -54,38 +66,79 @@ passwdentry &passwdentry::operator=(const passwdentry &p) {
 }
 
 passwdentry::~passwdentry() {
+#ifndef MINGW32
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
+#else
+	if (pvt->_buffer) {
+		NetApiBufferFree(pvt->_buffer);
+	}
+	delete[] pvt->_name;
+	delete[] pvt->_fullname;
+#endif
 }
 
 const char *passwdentry::getName() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_name;
+#else
+	return pvt->_name;
+#endif
 }
 
 const char *passwdentry::getPassword() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_passwd;
+#else
+	// FIXME:
+	return "";
+#endif
 }
 
 uid_t passwdentry::getUserId() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_uid;
+#else
+	// FIXME:
+	return 0;
+#endif
 }
 
 gid_t passwdentry::getPrimaryGroupId() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_gid;
+#else
+	// FIXME:
+	return 0;
+#endif
 }
 
 const char *passwdentry::getRealName() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_gecos;
+#else
+	return pvt->_fullname;
+#endif
 }
 
 const char *passwdentry::getHomeDirectory() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_dir;
+#else
+	// FIXME:
+	return "";
+#endif
 }
 
 const char *passwdentry::getShell() const {
+#ifndef MINGW32
 	return pvt->_pwd->pw_shell;
+#else
+	// FIXME:
+	return "";
+#endif
 }
 
 #ifdef RUDIMENTS_HAS_THREADS
@@ -112,6 +165,7 @@ bool passwdentry::initialize(uid_t userid) {
 	return initialize(NULL,userid);
 }
 
+#ifndef MINGW32
 bool passwdentry::initialize(const char *username, uid_t userid) {
 
 	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
@@ -175,6 +229,35 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		#endif
 	#endif
 }
+#else
+bool passwdentry::initialize(const char *username, uid_t userid) {
+
+	if (pvt->_buffer) {
+		NetApiBufferFree(pvt->_buffer);
+	}
+	delete[] pvt->_name;
+	pvt->_name=NULL;
+	delete[] pvt->_fullname;
+	pvt->_fullname=NULL;
+
+	if (username) {	
+		if (NetUserGetInfo(NULL,username,23,
+				reinterpret_cast<LPBYTE *>(&pvt->_buffer))!=
+				NERR_SUCCESS) {
+			return false;
+		}
+		pvt->_name=new char[charstring::length(
+					pvt->_buffer->usri23_name)]+1;
+		pvt->_fullname=new char[charstring::length(
+					pvt->_buffer->usri23_full_name)]+1;
+		wsprintf(pvt->_name,"%s",pvt->_buffer->usri23_name);
+		wsprintf(pvt->_fullname,"%s",pvt->_buffer->usri23_fullname);
+	} else {
+#error implement me...
+	}
+	return true;
+}
+#endif
 
 bool passwdentry::getName(uid_t userid, char **name) {
 	passwdentry	pwd;

@@ -25,7 +25,7 @@ commandline::~commandline() {
 	delete pvt;
 }
 
-const char *commandline::value(const char *arg) const {
+const char *commandline::getValue(const char *arg) const {
 
 	if (arg && arg[0]) {
 		for (int i=1; i<pvt->_argc-1; i++) {

@@ -19,7 +19,7 @@ class commandline {
 		commandline(int argc, const char **argv);
 		~commandline();
 
-		const char	*value(const char *arg) const;
+		const char	*getValue(const char *arg) const;
 				// Returns the value of "arg" (which is assumed
 				// to be the next item on the command line
 				// after "arg").
