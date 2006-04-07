@@ -165,6 +165,16 @@ class datetime {
 			// Returns true on success and false on failure.
 
 
+		// These methods allow you to change the time currently
+		// represented in the class.
+		bool	setSeconds(int32_t seconds);
+		bool	setMinutes(int32_t minutes);
+		bool	setHours(int32_t hours);
+		bool	setDays(int32_t days);
+		bool	setMonths(int32_t months);
+		bool	setYears(int32_t years);
+
+
 		// These methods allow you to add discrete time intervals to
 		// the time currently represented in the class.
 		bool	addSeconds(int32_t seconds);

@@ -332,6 +332,36 @@ struct tm *datetime::getTm() {
 	return pvt->_structtm;
 }
 
+bool datetime::setSeconds(int32_t seconds) {
+	pvt->_sec=seconds;
+	return normalizeBrokenDownTime(true);
+}
+
+bool datetime::setMinutes(int32_t minutes) {
+	pvt->_min=minutes;
+	return normalizeBrokenDownTime(true);
+}
+
+bool datetime::setHours(int32_t hours) {
+	pvt->_hour=hours;
+	return normalizeBrokenDownTime(true);
+}
+
+bool datetime::setDays(int32_t days) {
+	pvt->_yday=days;
+	return normalizeBrokenDownTime(true);
+}
+
+bool datetime::setMonths(int32_t months) {
+	pvt->_mon=months;
+	return normalizeBrokenDownTime(true);
+}
+
+bool datetime::setYears(int32_t years) {
+	pvt->_year=years;
+	return normalizeBrokenDownTime(true);
+}
+
 bool datetime::addSeconds(int32_t seconds) {
 	pvt->_sec=pvt->_sec+seconds;
 	return normalizeBrokenDownTime(true);

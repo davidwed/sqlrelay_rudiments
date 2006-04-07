@@ -37,6 +37,9 @@
 /* Some systems don't have st_blksize in struct stat */
 #define HAVE_BLKSIZE_T 1
 
+/* Some systems have bswap_64 */
+#define HAVE_BSWAP_64 1
+
 /* Some systems have byteswap.h */
 #define HAVE_BYTESWAP_H 1
 
@@ -91,6 +94,9 @@
 
 /* FreeBSD style statfs */
 /* #undef HAVE_FREEBSD_STATFS */
+
+/* Most systems have ftok() */
+#define HAVE_FTOK 1
 
 /* Some systems have getaddrinfo */
 #define HAVE_GETADDRINFO 1
@@ -314,6 +320,9 @@
 /* NetBSD style statfs */
 /* #undef HAVE_NETBSD_STATFS */
 
+/* NetBSD-3.0 style statvfs */
+/* #undef HAVE_NETBSD_STATVFS */
+
 /* Some systems have netdb.h */
 #define HAVE_NETDB_H 1
 
@@ -428,6 +437,9 @@
 /* Some systems have strtoull */
 #define HAVE_STRTOULL 1
 
+/* Some systems have struct timespec */
+#define HAVE_STRUCT_TIMESPEC 1
+
 /* Some systems have swab with a char * argument */
 /* #undef HAVE_SWAB_CHAR */
 
@@ -478,6 +490,9 @@
 /* iov_base is char * */
 #define IOV_BASE_TYPE void *
 
+/* Mingw32 environment */
+/* #undef MINGW32 */
+
 /* Some systems have swab but don't define it */
 /* #undef MUST_DEFINE_SWAB */
 
@@ -515,7 +530,7 @@
 #define RUDIMENTS_NAMESPACE 1
 
 /* Version */
-#define RUDIMENTS_VERSION "0.29"
+#define RUDIMENTS_VERSION "0.30"
 
 /* setsockopt takes a const void * on most systems */
 #define SETSOCKOPT_OPTVAL_TYPE const void *
@@ -544,8 +559,14 @@
 /* #undef inline */
 #endif
 
+/* Some systems don't have key_t */
+/* #undef key_t */
+
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef mode_t */
+
+/* Some systems don't have nlink_t */
+/* #undef nlink_t */
 
 /* Some systems don't have off64_t */
 /* #undef off64_t */

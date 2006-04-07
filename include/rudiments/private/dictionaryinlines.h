@@ -30,6 +30,12 @@ DICTIONARY_CLASS::dictionary() {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 DICTIONARY_CLASS::~dictionary() {
+	dictionarylistnodetype	*node=
+			(dictionarylistnodetype *)dict.getNodeByIndex(0);
+	while (node) {
+		delete node->getData();
+		node=(dictionarylistnodetype *)node->getNext();
+	}
 }
 
 DICTIONARY_TEMPLATE
