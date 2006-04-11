@@ -26,7 +26,7 @@ int main(int argc, const char **argv) {
 
 	char	*name;
 	for (off64_t index=0; (name=d.getChildName(index)); index++) {
-		printf("%d: %s\n",index,name);
+		printf("%lld: %s\n",index,name);
 		delete[] name;
 	}
 

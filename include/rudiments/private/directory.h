@@ -10,3 +10,7 @@
 		static	int64_t	pathConf(const char *pathname, int name);
 
 		directoryprivate	*pvt;
+
+		#ifdef HAVE_READDIR_R
+		size_t	bufferSize(DIR *dirp);
+		#endif

@@ -11,6 +11,8 @@
 #endif
 #include <sys/stat.h>
 
+#include <stdio.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -57,6 +59,35 @@ bool directory::close() {
 	return retval;
 }
 
+#ifdef HAVE_READDIR_R
+size_t directory::bufferSize(DIR *dirp) {
+	long name_max;
+	#if defined(HAVE_FPATHCONF) && defined(HAVE_DIRFD) \
+					&& defined(_PC_NAME_MAX)
+		name_max = fpathconf(dirfd(dirp), _PC_NAME_MAX);
+		if (name_max == -1) {
+			#if defined(NAME_MAX)
+				name_max = NAME_MAX;
+			#else
+				return (size_t)(-1);
+			#endif
+		}
+	#else
+		#if defined(NAME_MAX)
+			name_max = NAME_MAX;
+		#else
+			#error "buffer size for readdir_r cannot be determined"
+		#endif
+	#endif
+	#ifdef HAVE_DIRENT_H
+        	//return (size_t)offsetof(struct dirent, d_name) + name_max + 1;
+        	return (size_t)sizeof(struct dirent) + name_max + 1;
+	#else
+        	return (size_t)sizeof(struct direct) + name_max + 1;
+	#endif
+}
+#endif
+
 char *directory::getChildName(uint64_t index) {
 
 	// directory entries are 1-based
@@ -68,25 +99,35 @@ char *directory::getChildName(uint64_t index) {
 	}
 
 	#ifdef HAVE_READDIR_R
+		// get the size of the buffer
+		size_t	size=bufferSize(pvt->_dir);
+		if (size==-1) {
+			return NULL;
+		}
 		#ifdef HAVE_DIRENT_H
-			dirent	entry;
+			dirent	*entry=reinterpret_cast<dirent *>(
+						new unsigned char[size]);
 			dirent	*result;
 		#else
-			direct	entry;
+			direct	*entry=reinterpret_cast<direct *>(
+						new unsigned char[size]);
 			dirent	*result;
 		#endif
 		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
 			int	rdresult;
 			do {
-				rdresult=readdir_r(pvt->_dir,&entry,&result);
+				rdresult=readdir_r(pvt->_dir,entry,&result);
 			} while (rdresult==-1 &&
 					error::getErrorNumber()==EINTR);
 			if (rdresult || !result) {
+				delete[] entry;
 				return NULL;
 			}
 			pvt->_currentindex++;
 		}
-		return charstring::duplicate(entry.d_name);
+		char	*retval=charstring::duplicate(result->d_name);
+		delete[] entry;
+		return retval;
 	#else
 		#ifdef HAVE_DIRENT_H
 			dirent	*entry;

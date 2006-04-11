@@ -1,4 +1,7 @@
 0.30 - changed commandline::value() to commandline::getValue()
+	fixed a memory leak in dictionary
+	added setHour/Minute/Second/etc. methods to datetime
+	fixed readdir_r vulnerability
 
 0.29 - added check for whether SSL_read/write takes void * or char * parameter
 	added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix

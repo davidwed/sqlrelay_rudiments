@@ -48,7 +48,8 @@ unixclnt: unixclnt.C unixclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclnt.lo -all-static $(LIBS)
 
 dir: dir.C dir.lo 
-	$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo -all-static $(LIBS)
+	#$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo -all-static $(LIBS)
+	$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo $(LIBS) -lefence
 
 dmn: dmn.C dmn.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dmn.lo -all-static $(LIBS)
