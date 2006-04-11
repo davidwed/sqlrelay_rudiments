@@ -30,6 +30,20 @@ class directory {
 			// This methods allocates a buffer internally and
 			// returns it.  The calling program must deallocate the
 			// buffer.
+		int64_t	maxFileNameLength();
+			// Returns the length of the longest file name
+			// that can be created in directory "pathname".
+		int64_t	maxPathLength();
+			// Returns the length of the longest relative
+			// path name that can be created under the
+			// directory "pathname".
+		bool	canAccessLongFileNames();
+			// Returns true if an attempt to access a
+			// file in directory "pathname" longer than the
+			// length returned by maxFileNameLength() will
+			// succeed or false if it will fail.
+
+
 
 		static bool	create(const char *path, mode_t perms);
 				// creates a new directory "path" with 

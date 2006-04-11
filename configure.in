@@ -692,17 +692,6 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #include <dirent.h>],
 readdir_r(NULL,NULL,NULL);,AC_DEFINE(HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for fpathconf)
-AC_TRY_COMPILE([#include <stdlib.h>
-#include <unistd.h>],
-fpathconf(0,0);,AC_DEFINE(HAVE_FPATHCONF,1,Some systems have fpathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for dirfd)
-AC_TRY_COMPILE([#include <stdlib.h>
-#include <sys/types.h>
-#include <dirent.h>],
-dirfd(0);,AC_DEFINE(HAVE_DIRFD,1,Some systems have dirfd) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for fdatasync)
 AC_TRY_COMPILE([#include <stdlib.h>
 #include <unistd.h>],

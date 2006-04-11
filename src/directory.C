@@ -60,30 +60,16 @@ bool directory::close() {
 }
 
 #ifdef HAVE_READDIR_R
-size_t directory::bufferSize(DIR *dirp) {
-	long name_max;
-	#if defined(HAVE_FPATHCONF) && defined(HAVE_DIRFD) \
-					&& defined(_PC_NAME_MAX)
-		name_max = fpathconf(dirfd(dirp), _PC_NAME_MAX);
-		if (name_max == -1) {
-			#if defined(NAME_MAX)
-				name_max = NAME_MAX;
-			#else
-				return (size_t)(-1);
-			#endif
-		}
-	#else
-		#if defined(NAME_MAX)
-			name_max = NAME_MAX;
-		#else
-			#error "buffer size for readdir_r cannot be determined"
-		#endif
-	#endif
+int64_t directory::bufferSize(DIR *dirp) {
+	int64_t	name_max=maxFileNameLength();
+	if (name_max==-1) {
+		return -1;
+	}
 	#ifdef HAVE_DIRENT_H
-        	//return (size_t)offsetof(struct dirent, d_name) + name_max + 1;
-        	return (size_t)sizeof(struct dirent) + name_max + 1;
+        	//return offsetof(struct dirent, d_name)+name_max+1;
+        	return sizeof(struct dirent)+name_max+1;
 	#else
-        	return (size_t)sizeof(struct direct) + name_max + 1;
+        	return sizeof(struct direct)+name_max+1;
 	#endif
 }
 #endif
@@ -100,7 +86,7 @@ char *directory::getChildName(uint64_t index) {
 
 	#ifdef HAVE_READDIR_R
 		// get the size of the buffer
-		size_t	size=bufferSize(pvt->_dir);
+		int64_t	size=bufferSize(pvt->_dir);
 		if (size==-1) {
 			return NULL;
 		}
@@ -227,7 +213,13 @@ void directory::setMutex(mutex *mtx) {
 #endif
 
 int64_t directory::maxFileNameLength(const char *pathname) {
-	return pathConf(pathname,_PC_NAME_MAX);
+	int64_t	retval=pathConf(pathname,_PC_NAME_MAX);
+	#if defined(NAME_MAX)
+	if (retval==-1) {
+		retval = NAME_MAX;
+	}
+	#endif
+	return retval;
 }
 
 int64_t directory::maxPathLength(const char *pathname) {
@@ -242,6 +234,32 @@ int64_t directory::pathConf(const char *pathname, int name) {
 	int64_t	result;
 	do {
 		result=pathconf(pathname,name);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
+}
+
+int64_t directory::maxFileNameLength() {
+	int64_t	retval=fpathConf(_PC_NAME_MAX);
+	#if defined(NAME_MAX)
+	if (retval==-1) {
+		retval = NAME_MAX;
+	}
+	#endif
+	return retval;
+}
+
+int64_t directory::maxPathLength() {
+	return fpathConf(_PC_PATH_MAX);
+}
+
+bool directory::canAccessLongFileNames() {
+	return !fpathConf(_PC_NO_TRUNC);
+}
+
+int64_t directory::fpathConf(int name) {
+	int64_t	result;
+	do {
+		result=fpathconf(dirfd(pvt->_dir),name);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }

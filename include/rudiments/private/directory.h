@@ -9,8 +9,10 @@
 
 		static	int64_t	pathConf(const char *pathname, int name);
 
+		int64_t		fpathConf(int name);
+
 		directoryprivate	*pvt;
 
 		#ifdef HAVE_READDIR_R
-		size_t	bufferSize(DIR *dirp);
+		int64_t	bufferSize(DIR *dirp);
 		#endif
