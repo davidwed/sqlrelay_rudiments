@@ -1,5 +1,3 @@
-update commandline class to accept "-arg value" and "--arg=value" syntaxes
-
 update programming docs!
 
 SCO openserver -
@@ -13,8 +11,6 @@ SCO openunix -
 
 get a mingw port working
 	(can I use libgw32?)
-
-apply Ben Hutchings' readdir_r patch
 
 add to chat class:
 	\K-BREAK

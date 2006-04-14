@@ -23,8 +23,8 @@ int main(int argc, const char **argv) {
 	// If -divisor and -dividend are supplied, use them.  Otherwise
 	// display an error message.
 	if (cmdline.found("-divisor") && cmdline.found("-dividend")) {
-		double	divisor=atof(cmdline.value("-divisor"));
-		double	dividend=atof(cmdline.value("-dividend"));
+		double	divisor=atof(cmdline.getValue("-divisor"));
+		double	dividend=atof(cmdline.getValue("-dividend"));
 		printf("%0.2f\n",divisor/dividend);
 	} else {
 		printf("You must supply a divisor and a dividend.\n");

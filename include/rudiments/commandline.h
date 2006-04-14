@@ -20,13 +20,24 @@ class commandline {
 		~commandline();
 
 		const char	*getValue(const char *arg) const;
-				// Returns the value of "arg" (which is assumed
-				// to be the next item on the command line
-				// after "arg").
+				// Looks for either:
+				//	-arg value
+				// or
+				//	--arg=value
+				// on the command line and returns value.
+				//
+				// The "arg" parameter may be specified as
+				// any of "arg", "-arg" or "--arg".
+
 		bool		found(const char *arg) const;
-				// Returns 1 if "arg" was found and 0 
-				// if it was not found.  This is useful for
-				// processing command line switches.
+				// Returns true if "-arg", "-arg value",
+				// "--arg" or "--arg=value" was found on the
+				// command line and false if it was not found.
+				// This is useful for processing command line
+				// switches.
+				//
+				// The "arg" parameter may be specified as
+				// any of "arg", "-arg" or "--arg".
 
 	#include <rudiments/private/commandline.h>
 

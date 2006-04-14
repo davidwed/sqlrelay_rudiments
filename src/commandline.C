@@ -4,6 +4,8 @@
 #include <rudiments/commandline.h>
 #include <rudiments/charstring.h>
 
+#include <stdio.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -28,9 +30,34 @@ commandline::~commandline() {
 const char *commandline::getValue(const char *arg) const {
 
 	if (arg && arg[0]) {
-		for (int i=1; i<pvt->_argc-1; i++) {
-			if (!charstring::compare(arg,pvt->_argv[i])) {
+
+		const char	*realarg=arg;
+
+		// arg can be "arg" "-arg" or "--arg"
+		if (realarg[0]=='-') {
+			realarg=realarg+1;
+		}
+		if (realarg[0]=='-') {
+			realarg=realarg+1;
+		}
+		size_t	realarglen=charstring::length(realarg);
+
+		for (int i=1; i<pvt->_argc; i++) {
+
+			// look for "-arg value" or "--arg=value"
+			if (i<pvt->_argc-1 &&
+				pvt->_argv[i][0]=='-' &&
+				!charstring::compare(pvt->_argv[i]+1,realarg)) {
 				return pvt->_argv[i+1];
+			} else if (charstring::length(pvt->_argv[i])>=
+							realarglen+3 &&
+					!charstring::compare(pvt->_argv[i],
+								"--",2) &&
+					!charstring::compare(pvt->_argv[i]+2,
+								realarg,
+								realarglen) &&
+					pvt->_argv[i][2+realarglen]=='=') {
+				return pvt->_argv[i]+2+realarglen+1;
 			}
 		}
 	}
@@ -40,8 +67,32 @@ const char *commandline::getValue(const char *arg) const {
 bool commandline::found(const char *arg) const {
 
 	if (arg && arg[0]) {
+
+		const char	*realarg=arg;
+
+		// arg can be "arg" "-arg" or "--arg"
+		if (realarg[0]=='-') {
+			realarg=realarg+1;
+		}
+		if (realarg[0]=='-') {
+			realarg=realarg+1;
+		}
+		size_t	realarglen=charstring::length(realarg);
+
 		for (int i=1; i<pvt->_argc; i++) {
-			if (!charstring::compare(arg,pvt->_argv[i])) {
+
+			// look for "-arg value" or "--arg=value"
+			if ((pvt->_argv[i][0]=='-' &&
+				!charstring::compare(
+						pvt->_argv[i]+1,realarg)) ||
+				(charstring::length(pvt->_argv[i])>=
+							realarglen+3 &&
+					!charstring::compare(pvt->_argv[i],
+								"--",2) &&
+					!charstring::compare(pvt->_argv[i]+2,
+								realarg,
+								realarglen) &&
+					pvt->_argv[i][2+realarglen]=='=')) {
 				return true;
 			}
 		}

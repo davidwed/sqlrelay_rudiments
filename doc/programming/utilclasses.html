@@ -89,10 +89,12 @@ variable TEST.</p>
 <span class="heading">Using the Command Line Class</span><br><br>
 
 <p>Most programs take command line options in the option/value pair format:</p>
-<p>program -option value -option value ...</p>
+<blockquote>program -option value -option value ...</blockquote>
+<p>or</p>
+<blockquote>program --option=value --option=value ...</blockquote>
 <p>The commandline class makes it easy to deal with command line options of
-this format.  Below is some code illustrating the use of the commandline 
-class.</p>
+either of these formats.  Below is some code illustrating the use of the
+commandline class.</p>
 
 <pre>
 <font color="#0000f8">// Copyright (c) 2001  David Muse</font>
@@ -118,8 +120,8 @@ class.</p>
         <font color="#0000f8">// If -divisor and -dividend are supplied, use them.  Otherwise</font>
         <font color="#0000f8">// display an error message.</font>
         <font color="#a02828"><b>if</b></font> (cmdline.found(<font color="#f800f8">&quot;-divisor&quot;</font>) &amp;&amp; cmdline.found(<font color="#f800f8">&quot;-dividend&quot;</font>)) {
-                <font color="#288850"><b>double</b></font>  divisor=atof(cmdline.value(<font color="#f800f8">&quot;-divisor&quot;</font>));
-                <font color="#288850"><b>double</b></font>  dividend=atof(cmdline.value(<font color="#f800f8">&quot;-dividend&quot;</font>));
+                <font color="#288850"><b>double</b></font>  divisor=atof(cmdline.getValue(<font color="#f800f8">&quot;-divisor&quot;</font>));
+                <font color="#288850"><b>double</b></font>  dividend=atof(cmdline.getValue(<font color="#f800f8">&quot;-dividend&quot;</font>));
                 printf(<font color="#f800f8">&quot;</font><font color="#6858c8">%0.2f</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>,divisor/dividend);
         } <font color="#a02828"><b>else</b></font> {
                 printf(<font color="#f800f8">&quot;You must supply a divisor and a dividend.</font><font color="#6858c8">\n</font><font color="#f800f8">&quot;</font>);
