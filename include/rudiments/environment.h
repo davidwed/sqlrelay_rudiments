@@ -36,6 +36,10 @@ class environment {
 			// environment variables.  Each entry in the list is
 			// of the form NAME=VALUE.
 
+		static	void	print();
+				// Prints the environment variable list to
+				// stdout.
+
 #ifdef RUDIMENTS_HAS_THREADS
 		static	void	setMutex(mutex *mtx);
 			// Allows you to supply a mutex if the class needs it.

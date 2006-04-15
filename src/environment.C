@@ -164,6 +164,13 @@ const char * const *environment::variables() {
 	return environ;
 }
 
+void environment::print() {
+	const char * const *env=variables();
+	for (uint64_t index=0; env[index]; index++) {
+		printf("%s\n",env[index]);
+	}
+}
+
 #ifdef RUDIMENTS_HAS_THREADS
 void environment::setMutex(mutex *mtx) {
 	_envmutex=mtx;

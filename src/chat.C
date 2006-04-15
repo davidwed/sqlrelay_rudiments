@@ -7,6 +7,7 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/snooze.h>
 #include <rudiments/character.h>
+#include <rudiments/serialport.h>
 
 #define DEBUG_CHAT 1
 
@@ -285,6 +286,12 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 	// write the string, character at a time, processing special characters
 	int	result=RESULT_SUCCESS;
 	if (string) {
+
+		// set up an instance of the serial port class, just in case
+		// we need to send a break sequence
+		serialport	sp;
+		sp.setFileDescriptor(pvt->_writefd->getFileDescriptor());
+
 		for (const char *ptr=string; *ptr; ptr++) {
 
 			if (variables) {
@@ -299,6 +306,9 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 				ptr++;
 				ch=*ptr;
 				if (!ch) {
+					#ifdef DEBUG_CHAT
+					printf("\n");
+					#endif
 					break;
 				} else if (ch=='b') {
 					// backspace
@@ -307,14 +317,19 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 					printf("\\b");
 					fflush(stdout);
 					#endif
-				/* } else if (ch=='K') {
-					// FIXME: break
-					ch=
+				} else if (ch=='K') {
+					// break
 					#ifdef DEBUG_CHAT
 					printf("\\K");
 					fflush(stdout);
 					#endif
-				*/
+					if (!sp.sendBreak(0)) {
+						#ifdef DEBUG_CHAT
+						printf("\n");
+						#endif
+						break;
+					}
+					continue;
 				} else if (ch>='0' && ch<='8') {
 					// octal digits
 					#ifdef DEBUG_CHAT
@@ -371,10 +386,22 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 					snooze::macrosnooze(1);
 					continue;
 				}
-			/*} else if (ptr=='^') {
+			} else if (*ptr=='^') {
+				// control characters
 				ptr++;
-				// FIXME: control characters
-			*/
+				if (!*ptr) {
+					#ifdef DEBUG_CHAT
+					printf("\n");
+					#endif
+				}
+				ch=*ptr-'A'+1;
+				if (ch<0) {
+					ch=0;
+				}
+				#ifdef DEBUG_CHAT
+				printf("^%c",*ptr);
+				fflush(stdout);
+				#endif
 			#ifdef DEBUG_CHAT
 			} else {
 				printf("%c",ch);

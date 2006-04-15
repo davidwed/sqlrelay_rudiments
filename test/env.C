@@ -36,4 +36,7 @@ int main(int argc, const char **argv) {
 
 	// print the (non-existent) environment variable "TEST"
 	printf("TEST=%s\n",env.getValue("TEST"));
+
+	printf("\n\n");
+	environment::print();
 }

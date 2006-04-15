@@ -12,10 +12,6 @@ SCO openunix -
 get a mingw port working
 	(can I use libgw32?)
 
-add to chat class:
-	\K-BREAK
-	^C-control character represented by C
-
 --------------------------------------------------------------------------------
 
 some systems need -pthread in CFLAGS, other's don't like it
@@ -30,8 +26,6 @@ find some way to create a short write condition,
 	make sure bufferedWrite works the way it should
 
 file descriptor passing doesn't work on openbsd, cygwin, possibly netbsd
-
-add a "print environment" method to environment class
 
 --------------------------------------------------------------------------------
 
@@ -137,7 +131,6 @@ implement these classes:
 	directorylisting
 	link
 	pipe
-	serialport
 	tty
 	pseudotty
 	shellcommand
