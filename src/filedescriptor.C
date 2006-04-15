@@ -1898,6 +1898,18 @@ void filedescriptor::sslresult(int sslrslt) {
 }
 #endif
 
+bool filedescriptor::closeOnExec() {
+	return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
+}
+
+bool filedescriptor::dontCloseOnExec() {
+	return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
+}
+
+bool filedescriptor::getCloseOnExec() {
+	return fcntl(F_GETFD,FD_CLOEXEC);
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

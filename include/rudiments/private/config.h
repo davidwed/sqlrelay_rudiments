@@ -80,9 +80,6 @@
    */
 #define HAVE_DIRENT_H 1
 
-/* Some systems have dirfd */
-#define HAVE_DIRFD 1
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
 
@@ -94,9 +91,6 @@
 
 /* Some systems have fdatasync */
 #define HAVE_FDATASYNC 1
-
-/* Some systems have fpathconf */
-#define HAVE_FPATHCONF 1
 
 /* FreeBSD style statfs */
 /* #undef HAVE_FREEBSD_STATFS */

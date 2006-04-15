@@ -349,7 +349,6 @@ timer class:
 
 filedescriptor class:
 	fcntl.h - fcntl()
-			F_GET/SETFD - get/set close-on-exec bit
 			F_GET/SETFL - get/set flags
 				O_APPEND,O_NONBLOCK,O_ASYNC,O_DIRECT
 			F_GET/SETOWN - get/set process group that will receive

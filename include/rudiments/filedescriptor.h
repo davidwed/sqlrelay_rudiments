@@ -526,6 +526,18 @@ class filedescriptor {
 
 		bool		setReadBufferSize(ssize_t size) const;
 
+		// These methods manipulate or return the close-on-exec status
+		// of the file descriptor.  If close-on-exec is false (the
+		// default), then the file descriptor will remain open across
+		// an execve() call, otherwise it will be closed.
+		bool		closeOnExec();
+				// sets the close-on-exec status to true
+		bool		dontCloseOnExec();
+				// sets the close-on-exec status to false
+		bool		getCloseOnExec();
+				// Returns true if the close-on-exec status
+				// is set true and false otherwise.
+
 	#include <rudiments/private/filedescriptor.h>
 };
 
