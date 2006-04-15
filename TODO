@@ -335,10 +335,6 @@ filesystem class:
 	linux only -
 		sys/mount.h - mount(),umount(),umount2()
 
-commandline class:
-	getopt.h - make sure commandline class has full functionality
-			getopt(),getopt_long(),getopt_long_only()
-
 timer class:
 	not on many systems -
 		time.h and sys/time.h -
@@ -373,11 +369,6 @@ filedescriptor class:
 		aio.h - aio_init(),aio_read(),aio_write(),lio_listio(),
 			aio_error(),aio_return(),aio_cancel(),
 			aio_suspend(),aio_fsync()
-
-errors:
-	errno.h	- errno
-	stdio.h - perror()
-	string.h - strerror(_r)()
 
 signals:
 	stdlib.h - abort(), atexit(), exit(), _Exit()

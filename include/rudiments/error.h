@@ -34,6 +34,10 @@ class error {
 		static	const char	*getErrorString();
 					// Returns a string representation
 					// of the current system call error.
+					//
+					// Note: this method returns a pointer
+					// to an internal buffer which may be
+					// overwritten at any time.
 };
 
 #ifdef RUDIMENTS_NAMESPACE
