@@ -22,82 +22,11 @@ netbsd-3.0 statvfs:
 	f_bresvd
 	f_fsidx
 
-find some way to create a short write condition,
-	make sure bufferedWrite works the way it should
-
 file descriptor passing doesn't work on openbsd, cygwin, possibly netbsd
 
 --------------------------------------------------------------------------------
 
-use const's instead of #defines
-	const unsigned long	MAX_QUERY_LENGTH=32768;
-
-for class specific #defines
-	class A {
-		private:
-			static const unsigned long	NUM_ELEMENTS;
-			int	elements[NUM_ELEMENTS];
-	};
-
-	const unsigned long A::NUM_ELEMENTS=5;
-
---------------------------------------------------------------------------------
-
-memory pool class might be re-implemented like in item 10 in effective c++
-
---------------------------------------------------------------------------------
-
-use initialization list to initialize variables when posssible
-
-initialization list MUST be used for const or reference types
-
-also, use initialization list for non-primitive types.  This will cause just
-the copy constructor to be called rather than the constructor and then
-= operator:
-
-	class A {
-		public:
-			A(const string &str1, const string &str2);
-		private:
-			string a;
-			string b;
-	};
-
-	A::A() : a(str1), b(str2) {}
-instead of
-	A::A() { a=str1; b=str2; }
-
---------------------------------------------------------------------------------
-
-Base classes are instantiated in the order they're inherited from, member
-classes are instantiated in the order they're declared in the class.
-Everything is destroyed in the opposite order.
-
-To help make sense of this, keep objects in init list in same order that
-they're declared in the inheritance list and in the class.
-
-	class foo : public foo, public baz {
-		public:
-			foo(const string &str1, const string &str2);
-		private:
-			string	a;
-			string	b;
-	};
-
-	foo::foo(const string &a, const string &b) :
-			foo(), baz(), a(str1), b(str2) {}
-
---------------------------------------------------------------------------------
-
-make sure all constructors initialize all member variables
-	
-use STL classes instead of linkedlist, dictionary
-
 daemonprocess constructor initializes static members, this is lame and messy
-
-environment class:
-	wrap clearenv()
-	make all members static
 
 document error.h
 document shmfile class
@@ -138,7 +67,6 @@ implement these classes:
 	loginrecord
 	messagequeue
 	thread
-	sslcontext
 	table (dynamic 2d array)
 	generic parser/lexer classes, use them for xmlsax
 
@@ -310,21 +238,20 @@ filedescriptor
 --------------------------------------------------------------------------------
 
 charstring class:
-	stdio.h - sprintf()
 	string.h/strings.h -
-		strxfrm(_l)()
-		strcspn(),strspn(),strpbrk()
-	wordexp.h - wordexp()/wordfree() - word expansion???
-	gnu extensions -
-		stdio.h - asprintf(), open_memstream(), obstack_printf()
-		obstack.h - lots of object stack macros for
-				building strings char at a time
-	not in bsd - 
-		monetary.h - strfmon(_l)()
+		strxfrm(_l)(), strcoll()
 
-filesystem class:
+wordexpansion class:
+	wordexp.h - wordexp()/wordfree() -
+			shell-like word expansion (~,?,*,etc.)
+	fnmatch.h - fnmatch()
+	glob.h - glob()/globfree()
+
+quota class:
 	bsd/linux only (solaris uses an ioctl) - 
 		sys/quota.h - quotactl() function, macros, defines
+
+filesystem class:
 	bsd/linux only - 
 		fstab.h - /etc/fstab parser
 			getfsent(),getfsspec(),getfsfile(),setfsent(),endfsent()
@@ -349,8 +276,11 @@ timer class:
 
 filedescriptor class:
 	fcntl.h - fcntl()
-			F_GET/SETFL - get/set flags
-				O_APPEND,O_NONBLOCK,O_ASYNC,O_DIRECT
+			F_GETFL - get flags
+				O_RDONLY,O_WRONLY,O_RDWR,O_CREAT,O_EXCL,O_TRUNC,
+				O_APPEND,O_ASYNC,O_DIRECT,O_NOATIME,O_NONBLOCK
+			F_SETFL - set flags
+				O_APPEND,O_ASYNC,O_DIRECT,O_NOATIME,O_NONBLOCK
 			F_GET/SETOWN - get/set process group that will receive
 					signals on i/o availability
 			F_GET/SETSIG - get/set what signal to send to process
@@ -358,8 +288,6 @@ filedescriptor class:
 	sys/select.h - select(),pselect()
 	sys/poll.h - poll()
 	sys/uio.h - readv()/writev()
-	gnu extensions - 
-		stdio.h - dprintf()
 	linux only - 
 		sys/sendfile.h - sendfile()
 	not in many systems - 

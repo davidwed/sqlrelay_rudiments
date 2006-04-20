@@ -783,6 +783,60 @@ char *charstring::findLast(char *haystack, char needle) {
 					needle));
 }
 
+const char *charstring::findFirstOfSet(const char *haystack, const char *set) {
+	return const_cast<char *>(findFirstOfSet(
+					const_cast<char *>(haystack),set));
+}
+
+char *charstring::findFirstOfSet(char *haystack, const char *set) {
+	#ifdef HAVE_STRPBRK
+	return (haystack && set)?strpbrk(haystack,set):NULL;
+	#else
+	if (!haystack || !set) {
+		return NULL;
+	}
+	char	*retval=haystack;
+	while (*retval) {
+		if (contains(set,*retval)) {
+			return retval;
+		}
+		retval++;
+	}
+	return NULL;
+	#endif
+}
+
+size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
+	#ifdef HAVE_STRTOLL
+	return (haystack && set)?strspn(haystack,set):0;
+	#else
+	if (!haystack || !set) {
+		return 0;
+	}
+	size_t	index=0;
+	while (contains(set,haystack[index])) {
+		index++;
+	}
+	return index;
+	#endif
+}
+
+size_t charstring::lengthNotContainingSet(const char *haystack,
+						const char *set) {
+	#ifdef HAVE_STRTOLL
+	return (haystack && set)?strcspn(haystack,set):0;
+	#else
+	if (!haystack || !set) {
+		return 0;
+	}
+	size_t	index=0;
+	while (!contains(set,haystack[index])) {
+		index++;
+	}
+	return index;
+	#endif
+}
+
 char *charstring::duplicate(const char *str) {
 	if (!str) {
 		return NULL;

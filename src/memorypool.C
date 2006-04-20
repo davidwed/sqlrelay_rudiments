@@ -28,9 +28,9 @@ typedef	linkedlistnode<memorypoolnode *>	memorypoollistnode;
 
 memorypoolnode::memorypoolnode(size_t size) {
 	_buffer=new unsigned char[size];
-	_position=0;
-	_remaining=size;
 	_size=size;
+	_remaining=size;
+	_position=0;
 }
 
 memorypoolnode::~memorypoolnode() {
@@ -56,9 +56,9 @@ memorypool::memorypool(size_t initialsize,
 	pvt=new memorypoolprivate;
 	pvt->_initialsize=initialsize;
 	pvt->_increment=increment;
+	pvt->_freecounter=0;
 	pvt->_resizeinterval=resizeinterval;
 	pvt->_totalusedsize=0;
-	pvt->_freecounter=0;
 
 	pvt->_nodelist.append(new memorypoolnode(pvt->_initialsize));
 }

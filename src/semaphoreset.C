@@ -28,9 +28,12 @@ class semaphoresetprivate {
 
 semaphoreset::semaphoreset() {
 	pvt=new semaphoresetprivate;
-	pvt->_waitop=NULL;
-	pvt->_created=false;
 	pvt->_semid=-1;
+	pvt->_created=false;
+	pvt->_waitop=NULL;
+	pvt->_waitwithundoop=NULL;
+	pvt->_signalop=NULL;
+	pvt->_signalwithundoop=NULL;
 }
 
 semaphoreset::~semaphoreset() {

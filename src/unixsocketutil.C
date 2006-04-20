@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/unixsocketutil.h>
+#include <rudiments/rawbuffer.h>
 
 // for NULL
 #include <stdlib.h>
@@ -42,6 +43,7 @@ unixsocketutil::~unixsocketutil() {
 
 void unixsocketutil::initialize(const char *filename) {
 	pvt->_filename=filename;
+	rawbuffer::zero(&pvt->_sun,sizeof(pvt->_sun));
 }
 
 const char *unixsocketutil::_filename() {

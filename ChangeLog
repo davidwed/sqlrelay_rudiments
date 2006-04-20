@@ -5,6 +5,7 @@
 	added support for either "-arg value" or "--arg=value" to commandline
 	added support for break and control characters to chat class
 	added print method to environment class
+	added close-on-exec methods to filedescriptor class
 
 0.29 - added check for whether SSL_read/write takes void * or char * parameter
 	added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix

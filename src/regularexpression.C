@@ -2,9 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/regularexpression.h>
-#ifndef RUDIMENTS_HAS_PCRE
-	#include <rudiments/rawbuffer.h>
-#endif
+#include <rudiments/rawbuffer.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -54,6 +52,9 @@ void regularexpression::regularexpressionInit() {
 	#else
 		rawbuffer::zero(&pvt->_expr,sizeof(pvt->_expr));
 	#endif
+	pvt->_matchcount=0;
+	pvt->_str=NULL;
+	rawbuffer::zero(pvt->_matches,sizeof(pvt->_matches));
 }
 
 regularexpression::~regularexpression() {

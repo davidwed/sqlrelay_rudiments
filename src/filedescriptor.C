@@ -172,7 +172,6 @@ filedescriptor &filedescriptor::operator=(const filedescriptor &f) {
 
 void filedescriptor::filedescriptorInit() {
 	pvt->_fd=-1;
-	pvt->_translatebyteorder=false;
 	pvt->_retryinterruptedreads=false;
 	pvt->_retryinterruptedwrites=false;
 	pvt->_retryinterruptedwaits=true;
@@ -184,6 +183,7 @@ void filedescriptor::filedescriptorInit() {
 #endif
 	pvt->_allowshortreads=false;
 	pvt->_allowshortwrites=false;
+	pvt->_translatebyteorder=false;
 	pvt->_lstnr=NULL;
 	pvt->_uselistenerinsidereads=false;
 	pvt->_uselistenerinsidewrites=false;

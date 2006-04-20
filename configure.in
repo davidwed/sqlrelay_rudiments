@@ -767,6 +767,39 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #include <string.h>],
 strtoull(NULL,NULL,0);,AC_DEFINE(HAVE_STRTOULL,1,Some systems have strtoull) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for strspn)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+#define __USE_ISOC9X
+#endif
+#include <stdlib.h>
+#include <string.h>],
+strspn(NULL,NULL);,AC_DEFINE(HAVE_STRSPN,1,Some systems have strspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strcspn)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+#define __USE_ISOC9X
+#endif
+#include <stdlib.h>
+#include <string.h>],
+strcspn(NULL,NULL);,AC_DEFINE(HAVE_STRCSPN,1,Some systems have strcspn) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strpbrk)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+#define __USE_ISOC9X
+#endif
+#include <stdlib.h>
+#include <string.h>],
+strpbrk(NULL,NULL);,AC_DEFINE(HAVE_STRPBRK,1,Some systems have strpbrk) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined in unistd.h)
 AC_TRY_COMPILE([#include <stdlib.h>
@@ -792,6 +825,10 @@ AC_MSG_CHECKING(for environ)
 AC_TRY_COMPILE([#include <stdlib.h>
 #include <unistd.h>],
 char **env=environ;,AC_DEFINE(HAVE_ENVIRON,1,Some systems define environ in unistd.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for clearenv)
+AC_TRY_COMPILE([#include <stdlib.h>],
+clearenv();,AC_DEFINE(HAVE_CLEARENV,1,Some systems have clearenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for ioctl)
 AC_TRY_COMPILE([#include <stdlib.h>

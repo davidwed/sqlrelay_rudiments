@@ -12,31 +12,35 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	environment	env;
-
 	// print the environment variable "TEST"
-	printf("TEST=%s\n",env.getValue("TEST"));
+	printf("TEST=%s\n",environment::getValue("TEST"));
 
 	// set the value of "TEST" to "value"
-	if (env.setValue("TEST","value")) {
-		printf("TEST=%s\n",env.getValue("TEST"));
+	if (environment::setValue("TEST","value")) {
+		printf("TEST=%s\n",environment::getValue("TEST"));
 	} else {
 		printf("setValue() failed\n");
 	}
 
 	// set the value of "TEST" to "newvalue"
-	if (env.setValue("TEST","newvalue")) {
-		printf("TEST=%s\n",env.getValue("TEST"));
+	if (environment::setValue("TEST","newvalue")) {
+		printf("TEST=%s\n",environment::getValue("TEST"));
 	} else {
 		printf("setValue() failed\n");
 	}
 
 	// remove "TEST" from the environment
-	env.remove("TEST");
+	environment::remove("TEST");
 
 	// print the (non-existent) environment variable "TEST"
-	printf("TEST=%s\n",env.getValue("TEST"));
+	printf("TEST=%s\n",environment::getValue("TEST"));
 
 	printf("\n\n");
+	environment::print();
+
+	printf("\n\n");
+	environment::clear();
+
+	printf("\n\nclear?\n");
 	environment::print();
 }

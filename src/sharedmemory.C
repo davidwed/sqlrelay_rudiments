@@ -24,9 +24,9 @@ class sharedmemoryprivate {
 
 sharedmemory::sharedmemory() {
 	pvt=new sharedmemoryprivate;
+	pvt->_shmid=-1;
 	pvt->_created=false;
 	pvt->_shmptr=NULL;
-	pvt->_shmid=-1;
 }
 
 sharedmemory::~sharedmemory() {

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetsocketutil.h>
+#include <rudiments/rawbuffer.h>
 
 // for NULL
 #include <stdlib.h>
@@ -42,6 +43,7 @@ inetsocketutil::~inetsocketutil() {
 void inetsocketutil::initialize(const char *address, unsigned short port) {
 	pvt->_address=address;
 	pvt->_port=port;
+	rawbuffer::zero(&pvt->_sin,sizeof(pvt->_sin));
 }
 
 const char *inetsocketutil::_address() {

@@ -153,6 +153,27 @@ class charstring {
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
 
+		static const char	*findFirstOfSet(const char *haystack,
+							const char *set);
+			// Returns a pointer to the first occurence in
+			// "haystack" of any of the characters in "set".
+		static char		*findFirstOfSet(char *haystack,
+							const char *set);
+			// Returns a pointer to the first occurence in
+			// "haystack" of any of the characters in "set".
+
+
+		static size_t	lengthContainingSet(const char *haystack,
+							const char *set);
+			// Returns the number of characters, starting at the
+			// beginning of "haystack" which consists entirely of
+			// characters in "set".
+		static size_t	lengthNotContainingSet(const char *haystack,
+							const char *set);
+			// Returns the number of characters, starting at the
+			// beginning of "haystack" which consists entirely of
+			// characters not in "set".
+
 
 		static	char	*duplicate(const char *str);
 			// Creates a duplicate of "str" and returns a pointer

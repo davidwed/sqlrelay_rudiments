@@ -17,24 +17,28 @@ class environmentprivate;
 
 class environment {
 	public:
-			environment();
-			~environment();
-
-		const char	*getValue(const char *variable) const;
-				// Returns the value of "variable".
-		bool		setValue(const char *variable,
+		static	const char	*getValue(const char *variable);
+					// Returns the value of "variable".
+		static	bool		setValue(const char *variable,
 						const char *value);
-				// Sets the value of "variable" to "value",
-				// Overwriting any value that "variable"
-				// previously had.
-				// Returns true on success and false on failure.
-		bool		remove(const char *variable);
-				// Removes "variable" from the environment.
+					// Sets the value of "variable" to
+					// "value", overwriting any value that
+					// "variable" previously had.
+					// Returns true on success and false on
+					// failure.
+		static	bool		remove(const char *variable);
+					// Removes "variable" from the
+					// environment.
 
 		static	const char * const	*variables();
 			// Returns a NULL terminated list of all
 			// environment variables.  Each entry in the list is
 			// of the form NAME=VALUE.
+
+		static	bool	clear();
+				// Clears the environment of all name-value
+				// pairs.  After calling this, variables()
+				// will return NULL.
 
 		static	void	print();
 				// Prints the environment variable list to
@@ -46,9 +50,6 @@ class environment {
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
 #endif
-
-	#include <rudiments/private/environment.h>
-
 };
 
 #ifdef RUDIMENTS_NAMESPACE

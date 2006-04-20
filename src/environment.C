@@ -26,34 +26,15 @@
 namespace rudiments {
 #endif
 
-class environmentprivate {
-	public:
-		#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
-			namevaluepairs	_envstrings;
-		#endif
-};
-
 // LAME: not in the class
 #if defined(RUDIMENTS_HAS_THREADS)
 static mutex	*_envmutex;
 #endif
+#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
+static namevaluepairs	_envstrings;
+#endif
 
 #if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
-environment::environment() {
-	pvt=new environmentprivate;
-}
-
-environment::~environment() {
-	for (namevaluepairslistnode *node=
-			(namevaluepairslistnode *)
-				pvt->_envstrings.getList()->getNodeByIndex(0);
-			node;
-			node=(namevaluepairslistnode *)node->getNext()) {
-		delete[] node->getData()->getData();
-	}
-	delete pvt;
-}
-
 bool environment::setValue(const char *variable, const char *value) {
 	bool	retval=false;
 	#ifdef RUDIMENTS_HAS_THREADS
@@ -62,7 +43,7 @@ bool environment::setValue(const char *variable, const char *value) {
 		}
 	#endif
 	char	*pestr;
-	if (pvt->_envstrings.getData(const_cast<char *>(variable),&pestr)) {
+	if (_envstrings.getData(const_cast<char *>(variable),&pestr)) {
 		delete[] pestr;
 	}
 	size_t	pestrlen=charstring::length(variable)+
@@ -74,11 +55,11 @@ bool environment::setValue(const char *variable, const char *value) {
 		result=putenv(pestr);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result!=-1) {
-		pvt->_envstrings.setData(const_cast<char *>(variable),pestr);
+		_envstrings.setData(const_cast<char *>(variable),pestr);
 		retval=true;
 	} else {
 		delete[] pestr;
-		pvt->_envstrings.removeData(const_cast<char *>(variable));
+		_envstrings.removeData(const_cast<char *>(variable));
 		retval=false;
 	}
 	#ifdef RUDIMENTS_HAS_THREADS
@@ -91,15 +72,7 @@ bool environment::setValue(const char *variable, const char *value) {
 #endif
 
 
-#ifdef HAVE_SETENV
-environment::environment() {
-}
-
-environment::~environment() {
-}
-#endif
-
-const char *environment::getValue(const char *variable) const {
+const char *environment::getValue(const char *variable) {
 	char	*retval=NULL;
 	#ifdef RUDIMENTS_HAS_THREADS
 		if (_envmutex && !_envmutex->lock()) {
@@ -166,9 +139,22 @@ const char * const *environment::variables() {
 
 void environment::print() {
 	const char * const *env=variables();
-	for (uint64_t index=0; env[index]; index++) {
+	for (uint64_t index=0; env && env[index]; index++) {
 		printf("%s\n",env[index]);
 	}
+}
+
+bool environment::clear() {
+	#ifdef HAVE_CLEARENV
+		return !clearenv();
+	#else
+		#ifndef HAVE_NSGETENVIRON
+			environ=NULL;
+			return true;
+		#else
+			#error no way to clear environment
+		#endif
+	#endif
 }
 
 #ifdef RUDIMENTS_HAS_THREADS

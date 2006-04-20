@@ -43,6 +43,9 @@
 /* Some systems have byteswap.h */
 #define HAVE_BYTESWAP_H 1
 
+/* Some systems have clearenv */
+#define HAVE_CLEARENV 1
+
 /* Some systems have clock_nanosleep */
 #define HAVE_CLOCK_NANOSLEEP 1
 
@@ -419,11 +422,20 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
 
+/* Some systems have strcspn */
+#define HAVE_STRCSPN 1
+
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
+
+/* Some systems have strpbrk */
+#define HAVE_STRPBRK 1
+
+/* Some systems have strspn */
+#define HAVE_STRSPN 1
 
 /* Some systems have strtof */
 #define HAVE_STRTOF 1

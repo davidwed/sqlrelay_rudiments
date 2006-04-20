@@ -24,6 +24,7 @@ class signalsetprivate {
 // signalset methods
 signalset::signalset() {
 	pvt=new signalsetprivate;
+	rawbuffer::zero(&pvt->_sigset,sizeof(pvt->_sigset));
 }
 
 signalset::~signalset() {

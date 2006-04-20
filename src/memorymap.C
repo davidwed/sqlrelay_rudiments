@@ -73,6 +73,9 @@ class memorymapprivate {
 memorymap::memorymap() {
 	pvt=new memorymapprivate;
 	pvt->_data=NULL;
+	#ifdef HAVE_CREATE_FILE_MAPPING
+	pvt->_map=NULL;
+	#endif
 	pvt->_length=0;
 }
 

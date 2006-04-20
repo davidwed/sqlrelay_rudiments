@@ -72,12 +72,12 @@ int main(int argc, const char **argv) {
 
 	// split
 	char		**list;
-	unsigned long	listlength;
+	uint64_t	listlength;
 	charstring::split("hello||hi||bye||goodbye","||",false,
 						&list,&listlength);
 	printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
-	printf("%ld items\n",listlength);
-	for (unsigned long i=0; i<listlength; i++) {
+	printf("%lld items\n",listlength);
+	for (uint64_t i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -86,8 +86,8 @@ int main(int argc, const char **argv) {
 	charstring::split("hello||hi||bye||goodbye||","||",false,
 						&list,&listlength);
 	printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
-	printf("%ld items\n",listlength);
-	for (unsigned long i=0; i<listlength; i++) {
+	printf("%lld items\n",listlength);
+	for (uint64_t i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -96,8 +96,8 @@ int main(int argc, const char **argv) {
 	charstring::split("||hello||hi||bye||goodbye||","||",false,
 						&list,&listlength);
 	printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
-	printf("%ld items\n",listlength);
-	for (unsigned long i=0; i<listlength; i++) {
+	printf("%lld items\n",listlength);
+	for (uint64_t i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -106,8 +106,8 @@ int main(int argc, const char **argv) {
 	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",false,
 							&list,&listlength);
 	printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
-	printf("%ld items\n",listlength);
-	for (unsigned long i=0; i<listlength; i++) {
+	printf("%lld items\n",listlength);
+	for (uint64_t i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -115,8 +115,8 @@ int main(int argc, const char **argv) {
 
 	charstring::split("||||||||||","||",false,&list,&listlength);
 	printf("split(\"||||||||||\",\"||\")\n");
-	printf("%ld items\n",listlength);
-	for (unsigned long i=0; i<listlength; i++) {
+	printf("%lld items\n",listlength);
+	for (uint64_t i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -124,8 +124,8 @@ int main(int argc, const char **argv) {
 
 	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",false,&list,&listlength);
 	printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
-	printf("%ld items\n",listlength);
-	for (unsigned long i=0; i<listlength; i++) {
+	printf("%lld items\n",listlength);
+	for (uint64_t i=0; i<listlength; i++) {
 		printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -139,4 +139,16 @@ int main(int argc, const char **argv) {
 	printf("unescapedstr	: %s\n",unescapedstr);
 	delete[] unescapedstr;
 	delete[] escapedstr;
+
+	
+	const char	*alphabet="aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";
+	printf("lengthContainingSet(\"%s\",\"gfedcba\")=%d\n",
+		alphabet,charstring::lengthContainingSet(alphabet,"gfedcba"));
+	printf("lengthNotContainingSet(\"%s\",\"hijklmnopqrstuvwxyz\")=%d\n",
+		alphabet,charstring::lengthNotContainingSet(alphabet,
+						"hijklmnopqrstuvwxyz"));
+
+
+	printf("findFirstOfSet(\"%s\",\"mlk\")=\"%s\"\n",
+		alphabet,charstring::findFirstOfSet(alphabet,"klm"));
 }

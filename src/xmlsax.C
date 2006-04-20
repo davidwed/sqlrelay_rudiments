@@ -44,6 +44,7 @@ void xmlsax::reset() {
 	pvt->_ptr=NULL;
 #ifdef HAVE_MMAP
 	pvt->_filesize=0;
+	pvt->_fileoffset=0;
 	pvt->_endptr=NULL;
 #endif
 	pvt->_line=1;

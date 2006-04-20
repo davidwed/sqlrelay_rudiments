@@ -15,9 +15,9 @@ class variablebufferprivate {
 	friend class variablebuffer;
 	private:
 		unsigned char	*_buffer;
+		size_t		_buffersize;
 		size_t		_initialsize;
 		size_t		_increment;
-		size_t		_buffersize;
 		size_t		_position;
 		size_t		_endofbuffer;
 };
