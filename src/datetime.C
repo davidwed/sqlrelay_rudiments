@@ -923,6 +923,11 @@ const int32_t *datetime::getTimeZoneOffsets() {
 // comment and knows the answer, please let me know.
 const char *datetime::lookupCombinedTimeZone(const char *zn) const {
 
+	// if the zone name is longer than 4 chars, then it's a combined zone
+	if (charstring::length(zn)>4) {
+		return zn;
+	}
+
 	// run through the list of timezones that observe daylight
 	// savings time, if "zn" is in that list, return the
 	// combined zone name, otherwise just return "zn"

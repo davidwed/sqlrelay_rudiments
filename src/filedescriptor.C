@@ -53,6 +53,16 @@
 #ifdef HAVE_BYTESWAP_H
 	#include <byteswap.h>
 #endif
+#ifdef HAVE_MACHINE_ENDIAN_H
+	#include <machine/endian.h>
+#endif
+
+#ifndef __BYTE_ORDER
+	#define __BYTE_ORDER BYTE_ORDER
+#endif
+#ifndef __BIG_ENDIAN
+	#define __BIG_ENDIAN BIG_ENDIAN
+#endif
 
 // for FD_SET (macro that uses memset) on solaris
 #include <string.h>
@@ -1510,10 +1520,12 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
-		#ifdef HAVE_BSWAP_64
+		#if defined(HAVE_BSWAP_64)
 			return bswap_64(value);
+		#elif defined(HAVE___BSWAP64)
+			return __bswap64(value);
 		#else
-			return __bswap_64(value);
+			#error no bswap64() or anything like it
 		#endif
 	#endif
 }
@@ -1530,10 +1542,12 @@ uint64_t filedescriptor::netToHost(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
-		#ifdef HAVE_BSWAP_64
+		#if defined(HAVE_BSWAP_64)
 			return bswap_64(value);
+		#elif defined(HAVE___BSWAP64)
+			return __bswap64(value);
 		#else
-			return __bswap_64(value);
+			#error no bswap64() or anything like it
 		#endif
 	#endif
 }

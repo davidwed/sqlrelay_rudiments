@@ -247,6 +247,9 @@
 /* Some systems have lrand48 */
 #undef HAVE_LRAND48
 
+/* Some systems have machine/endian.h */
+#undef HAVE_MACHINE_ENDIAN_H
+
 /* Some systems have madvise */
 #undef HAVE_MADVISE
 
@@ -497,6 +500,9 @@
 
 /* Some systems have extended filesystem attributes */
 #undef HAVE_XATTRS
+
+/* Some systems have __bswap64 */
+#undef HAVE___BSWAP64
 
 /* iov_base is char * */
 #undef IOV_BASE_TYPE

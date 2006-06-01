@@ -48,7 +48,7 @@ ifeq ($(INCLUDE_DTD),1)
 endif
 ifeq ($(INCLUDE_ENVIRONMENT),1)
 	HEADERS += environment.h
-	PRIVATEHEADERS += environment.h environmentincludes.h
+	PRIVATEHEADERS += environmentincludes.h
 endif
 ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
 	HEADERS += filedescriptor.h

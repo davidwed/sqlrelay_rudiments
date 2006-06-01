@@ -372,6 +372,10 @@ AC_MSG_CHECKING(for byteswap.h)
 AC_TRY_COMPILE([#include <byteswap.h>],
 [],AC_DEFINE(HAVE_BYTESWAP_H, 1, Some systems have byteswap.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for machine/endian.h)
+AC_TRY_COMPILE([#include <machine/endian.h>],
+[],AC_DEFINE(HAVE_MACHINE_ENDIAN_H, 1, Some systems have machine/endian.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sys/select.h)
 AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/select.h>],
@@ -875,6 +879,13 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <byteswap.h>
 #endif],
 bswap_64(0);,AC_DEFINE(HAVE_BSWAP_64,1,Some systems have bswap_64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for __bswap64)
+AC_TRY_LINK([#include <stdlib.h>
+#ifdef HAVE_MACHINE_ENDIAN_H
+#include <macine/endian.h>
+#endif],
+__bswap64(0);,AC_DEFINE(HAVE___BSWAP64,1,Some systems have __bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 

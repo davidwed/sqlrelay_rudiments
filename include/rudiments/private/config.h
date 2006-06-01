@@ -248,6 +248,9 @@
 /* Some systems have lrand48 */
 #define HAVE_LRAND48 1
 
+/* Some systems have machine/endian.h */
+/* #undef HAVE_MACHINE_ENDIAN_H */
+
 /* Some systems have madvise */
 #define HAVE_MADVISE 1
 
@@ -498,6 +501,9 @@
 
 /* Some systems have extended filesystem attributes */
 #define HAVE_XATTRS 1
+
+/* Some systems have __bswap64 */
+/* #undef HAVE___BSWAP64 */
 
 /* iov_base is char * */
 #define IOV_BASE_TYPE void *
