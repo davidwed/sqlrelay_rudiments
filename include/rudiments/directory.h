@@ -24,12 +24,19 @@ class directory {
 			// opens directory "path"
 		bool	close();
 			// closes the currently open directory
+
+		uint64_t	getChildCount();
+			// Returns the number of files/subdirectories inside
+			// the open directory.
+
 		char	*getChildName(uint64_t index);
 			// Returns the name of the file/subdirectory at "index".
 			//
 			// This methods allocates a buffer internally and
 			// returns it.  The calling program must deallocate the
 			// buffer.
+
+
 		int64_t	maxFileNameLength();
 			// Returns the length of the longest file name
 			// that can be created in directory "pathname".

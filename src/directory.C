@@ -74,7 +74,79 @@ int64_t directory::bufferSize(DIR *dirp) {
 }
 #endif
 
+uint64_t directory::getChildCount() {
+
+	// handle unopened directory
+	if (!pvt->_dir) {
+		return 0;
+	}
+
+	// rewind
+	rewinddir(pvt->_dir);
+	pvt->_currentindex=0;
+
+	#ifdef HAVE_READDIR_R
+		// get the size of the buffer
+		int64_t	size=bufferSize(pvt->_dir);
+		if (size==-1) {
+			return 0;
+		}
+		#ifdef HAVE_DIRENT_H
+			dirent	*entry=reinterpret_cast<dirent *>(
+						new unsigned char[size]);
+			dirent	*result;
+		#else
+			direct	*entry=reinterpret_cast<direct *>(
+						new unsigned char[size]);
+			dirent	*result;
+		#endif
+		for (;;) {
+			int	rdresult;
+			do {
+				rdresult=readdir_r(pvt->_dir,entry,&result);
+			} while (rdresult==-1 &&
+					error::getErrorNumber()==EINTR);
+			if (!result) {
+				delete[] entry;
+				return pvt->_currentindex;
+			}
+			pvt->_currentindex++;
+		}
+	#else
+		#ifdef HAVE_DIRENT_H
+			dirent	*entry;
+		#else
+			direct	*entry;
+		#endif
+		#ifdef RUDIMENTS_HAS_THREADS
+		if (_rdmutex && !_rdmutex->lock()) {
+			return 0;
+		}
+		#endif
+		uint64_t	count=0;
+		for (;;) {
+			do {
+				entry=readdir(pvt->_dir);
+			} while (!entry && error::getErrorNumber()==EINTR);
+			if (!entry) {
+				#ifdef RUDIMENTS_HAS_THREADS
+				if (_rdmutex) {
+					_rdmutex->unlock();
+				}
+				#endif
+				return pvt->_currentindex;
+			}
+			pvt->_currentindex++;
+		}
+	#endif
+}
+
 char *directory::getChildName(uint64_t index) {
+
+	// handle unopened directory
+	if (!pvt->_dir) {
+		return NULL;
+	}
 
 	// directory entries are 1-based
 	uint64_t	actualindex=index+1;

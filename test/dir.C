@@ -30,6 +30,8 @@ int main(int argc, const char **argv) {
 		delete[] name;
 	}
 
+	printf("%d entries\n",d.getChildCount());
+
 	char	*cwd=directory::getCurrentWorkingDirectory();
 	printf("cwd=%s\n",cwd);
 	delete[] cwd;
