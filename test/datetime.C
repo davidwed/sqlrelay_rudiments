@@ -62,4 +62,14 @@ int main(int argc, const char **argv) {
 	// switch time zones
 	dt.adjustTimeZone("MST");
 	printf("Adjusting time zone to Mountain time: %s\n",dt.getString());
+
+	// valid date
+	const char	*str="02/20/1974 12:00:00";
+	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	str="02/30/1974 12:00:00";
+	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	str="02/20/1974 12:00:00 EST5EDT";
+	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	str="02/30/1974 12:00:00 EST5EDT";
+	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
 }

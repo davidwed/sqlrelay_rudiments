@@ -953,6 +953,27 @@ bool datetime::daylightZone(const char *zn) const {
 	return false;
 }
 
+bool datetime::validDateTime(const char *string) {
+
+	// must at least be 19 chars long (format: "00/00/0000 00:00:00")
+	if (charstring::length(string)<19) {
+		return false;
+	}
+
+	// truncate timezone
+	char	*newstring=charstring::duplicate(string,19);
+
+	// Initialize a new instance of datetime using the string, then
+	// compare it to the string returned by the instance of datetime
+	// (ignoring the timezone).
+	// If they're the same then it was a valid date.
+	datetime	dt;
+	bool	result=(dt.initialize(newstring) &&
+			!charstring::compare(newstring,dt.getString(),19));
+	delete[] newstring;
+	return result;
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

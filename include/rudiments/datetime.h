@@ -208,6 +208,15 @@ class datetime {
 				// array corresponds to an element of the
 				// array returned b getTimeZoneAbbreviations().
 
+		static bool	validDateTime(const char *string);
+				// Returns true if string represents a valid
+				// date/time and false otherwise.
+				//
+				// "string" should be formatted like:
+				// 00/00/0000 00:00:00
+				// and may optionally be followed by a space
+				// and a timezone.
+
 
 #ifdef RUDIMENTS_HAS_THREADS
 		// Many of the functions that the datetime class uses internally
