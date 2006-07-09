@@ -74,6 +74,10 @@ bool signalmanager::raiseSignal(int signum) {
 	return !result;
 }
 
+unsigned int signalmanager::alarm(unsigned int seconds) {
+	return ::alarm(seconds);
+}
+
 bool signalmanager::ignoreSignals(const sigset_t *sigset) {
 	int	result;
 	do {

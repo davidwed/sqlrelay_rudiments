@@ -57,11 +57,21 @@ class signalset {
 class signalmanager {
 	public:
 		static	bool	sendSignal(pid_t processid, int signum);
-				// Send singal "signum" to process "processid".
+				// Send signal "signum" to process "processid".
 				// Returns true on success and false on failure.
 		static	bool	raiseSignal(int signum);
-				// Send singal "signum" to self.
+				// Send signal "signum" to self.
 				// Returns true on success and false on failure.
+		static	unsigned int	alarm(unsigned int seconds);
+				// Sends signal SIGALRM to self after "seconds"
+				// have elapsed.  If "seconds" is 0, the alarm
+				// is disabled.  Calling this method cancels
+				// any previously set alarm.
+				//
+				// Returns the number of seconds that were
+				// remaining until any previously scheduled
+				// alarm was to be delivered or 0 if there
+				// was no previously scheduled alarm.
 		static	bool	ignoreSignals(const sigset_t *sigset);
 				// Ignore signal "signum".
 				// Returns true on success and false on failure.

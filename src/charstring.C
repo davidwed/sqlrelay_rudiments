@@ -40,7 +40,7 @@ const char *charstring::findLast(const char *haystack, const char *needle) {
 	
 	const char	*ptr=haystack+haystacklen-needlelen;
 	while (ptr>haystack) {
-		if (!compare(ptr,needle)) {
+		if (!compare(ptr,needle,needlelen)) {
 			return ptr;
 		}
 		ptr--;

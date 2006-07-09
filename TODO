@@ -1,3 +1,8 @@
+implement semaphoreset::wait() with timeout for systems without semtimedop by
+	using alarm()
+
+add alarm() to signalclasses
+
 directory class rewind/next/previous/end iterators
 
 update programming docs!
