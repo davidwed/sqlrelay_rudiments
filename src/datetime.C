@@ -794,7 +794,7 @@ static const char * const _timezones[]={
 
 	"MEZ",	// Mitteleuropäische Zeit	UTC + 1 hour
 	"MESZ",	// Mitteleuropäische Sommerzeit	UTC + 2 hours
-	"MEZ-1MESZ"
+	"MEZ-1MESZ",
 
 	"NST",	// Newfoundland Standard Time	UTC - 3:30 hours
 	"NDT",	// Newfoundland Daylight Time	UTC - 2:30 hours
