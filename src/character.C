@@ -93,7 +93,7 @@ void character::safePrint(char c) {
 	} else if (c>=' ' && c<='~') {
 		printf("%c",c);
 	} else {
-		printf("(0x%02x)",c);
+		printf("(0x%02x)",(unsigned int)c);
 	}
 }
 
