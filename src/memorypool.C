@@ -70,6 +70,7 @@ memorypool::~memorypool() {
 }
 
 unsigned char *memorypool::malloc(size_t length) { 
+
 	// add the length to the total size
 	pvt->_totalusedsize=pvt->_totalusedsize+length;
 

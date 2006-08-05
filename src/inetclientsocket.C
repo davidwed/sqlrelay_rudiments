@@ -144,9 +144,9 @@ int inetclientsocket::connect() {
 		int		result;
 		do {
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==EAI_SYSTEM && error::getErrorNumber()==EINTR);
 		delete[] portstr;
-		if (result==-1) {
+		if (result) {
 			return RESULT_ERROR;
 		}
 
