@@ -887,6 +887,12 @@ AC_TRY_LINK([#include <stdlib.h>
 #endif],
 __bswap64(0);,AC_DEFINE(HAVE___BSWAP64,1,Some systems have __bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for bswap64)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>
+#include <machine/bswap.h>],
+bswap64(0);,AC_DEFINE(HAVE_BSWAP64,1,Some systems have bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

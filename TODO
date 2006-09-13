@@ -1,7 +1,10 @@
+fix bswap64 on netbsd
+
+regularexpression without pcre doesn't work right, create temp table in sqlrelay
+	exposes it
+
 implement semaphoreset::wait() with timeout for systems without semtimedop by
 	using alarm()
-
-add alarm() to signalclasses
 
 directory class rewind/next/previous/end iterators
 

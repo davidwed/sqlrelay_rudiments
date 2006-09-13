@@ -4,6 +4,7 @@
 #define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/xmldomnode.h>
 #include <rudiments/charstring.h>
+#include <rudiments/xmldom.h>
 
 #include <stdio.h>
 
@@ -14,10 +15,11 @@ namespace rudiments {
 class xmldomnodeprivate {
 	friend class xmldomnode;
 	private:
+		xmldom		*_dom;
 		bool		_cascade;
 		xmldomnodetype	_type;
-		char		*_nodename;
-		char		*_nodevalue;
+		const char	*_nodename;
+		const char	*_nodevalue;
 		xmldomnode	*_parent;
 		xmldomnode	*_next;
 		xmldomnode	*_previous;
@@ -31,19 +33,22 @@ class xmldomnodeprivate {
 		bool		_isnullnode;
 };
 
-xmldomnode::xmldomnode(xmldomnode *nullnode) {
+xmldomnode::xmldomnode(xmldom *dom, xmldomnode *nullnode) {
 	init(nullnode);
+	pvt->_dom=dom;
 	pvt->_type=NULL_XMLDOMNODETYPE;
 	pvt->_nodename=NULL;
 	pvt->_nodevalue=NULL;
 }
 
-xmldomnode::xmldomnode(xmldomnode *nullnode, xmldomnodetype type,
-				const char *name, const char *value) {
+xmldomnode::xmldomnode(xmldom *dom,
+			xmldomnode *nullnode, xmldomnodetype type,
+			const char *name, const char *value) {
 	init(nullnode);
+	pvt->_dom=dom;
 	pvt->_type=type;
-	pvt->_nodename=(name)?charstring::duplicate(name):NULL;
-	pvt->_nodevalue=(value)?charstring::duplicate(value):NULL;
+	setName(name);
+	setValue(value);
 }
 
 void xmldomnode::init(xmldomnode *nullnode) {
@@ -63,8 +68,6 @@ void xmldomnode::init(xmldomnode *nullnode) {
 }
 
 xmldomnode::~xmldomnode() {
-	delete[] pvt->_nodename;
-	delete[] pvt->_nodevalue;
 	xmldomnode	*current;
 	if (pvt->_cascade) {
 		// delete child nodes
@@ -85,8 +88,8 @@ xmldomnode::~xmldomnode() {
 	delete pvt;
 }
 
-xmldomnode *xmldomnode::createNullNode() {
-	xmldomnode	*nn=new xmldomnode(NULL);
+xmldomnode *xmldomnode::createNullNode(xmldom *dom) {
+	xmldomnode	*nn=new xmldomnode(dom,NULL);
 	nn->pvt->_parent=nn;
 	nn->pvt->_next=nn;
 	nn->pvt->_previous=nn;
@@ -216,7 +219,7 @@ xmldomnode *xmldomnode::getChild(const char *name,
 }
 
 bool xmldomnode::insertText(const char *value, int position) {
-	xmldomnode	*text=new xmldomnode(pvt->_nullnode);
+	xmldomnode	*text=new xmldomnode(pvt->_dom,pvt->_nullnode);
 	text->setName("text");
 	text->setValue(value);
 	return insertNode(text,position,TEXT_XMLDOMNODETYPE,
@@ -226,7 +229,7 @@ bool xmldomnode::insertText(const char *value, int position) {
 
 bool xmldomnode::insertAttribute(const char *name, const char *value,
 								int position) {
-	xmldomnode	*attribute=new xmldomnode(pvt->_nullnode);
+	xmldomnode	*attribute=new xmldomnode(pvt->_dom,pvt->_nullnode);
 	attribute->setName(name);
 	attribute->setValue(value);
 	return insertNode(attribute,position,
@@ -500,11 +503,11 @@ void xmldomnode::setType(xmldomnodetype type) {
 }
 
 void xmldomnode::setName(const char *name) {
-	pvt->_nodename=(name)?charstring::duplicate(name):NULL;
+	pvt->_nodename=pvt->_dom->cacheString(name);
 }
 
 void xmldomnode::setValue(const char *value) {
-	pvt->_nodevalue=(value)?charstring::duplicate(value):NULL;
+	pvt->_nodevalue=pvt->_dom->cacheString(value);
 }
 
 void xmldomnode::setParent(xmldomnode *parent) {

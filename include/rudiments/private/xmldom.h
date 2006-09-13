@@ -1,6 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
+	friend class xmldomnode;
 	private:
 			void	reset();
 
@@ -14,5 +15,7 @@
 
 				xmldom(const xmldom &x);
 			xmldom	&operator=(const xmldom &x);
+
+			const char	*cacheString(const char *string);
 
 			xmldomprivate	*pvt;

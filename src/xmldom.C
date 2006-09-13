@@ -3,6 +3,7 @@
 
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
+#include <rudiments/linkedlist.h>
 
 #include <stdlib.h>
 
@@ -17,11 +18,12 @@ class xmldomprivate {
 		xmldomnode	*_rootnode;
 		xmldomnode	*_currentparent;
 		xmldomnode	*_currentattribute;
+		stringlist	_strlist;
 };
 
 xmldom::xmldom() : xmlsax() {
 	pvt=new xmldomprivate;
-	pvt->_nullnode=xmldomnode::createNullNode();
+	pvt->_nullnode=xmldomnode::createNullNode(this);
 	pvt->_rootnode=pvt->_nullnode;
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
@@ -32,6 +34,10 @@ xmldom::~xmldom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
+	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
+					node; node=node->getNext()) {
+		delete[] node->getData();
+	}
 	delete pvt;
 }
 
@@ -73,7 +79,7 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 }
 
 void xmldom::createRootNode() {
-	pvt->_rootnode=new xmldomnode(pvt->_nullnode);
+	pvt->_rootnode=new xmldomnode(this,pvt->_nullnode);
 	pvt->_rootnode->setName("document");
 	pvt->_rootnode->setType(ROOT_XMLDOMNODETYPE);
 	pvt->_currentparent=pvt->_rootnode;
@@ -88,7 +94,7 @@ bool xmldom::tagStart(const char *name) {
 	if (pvt->_rootnode->isNullNode()) {
 		createRootNode();
 	}
-	xmldomnode	*tagnode=new xmldomnode(pvt->_nullnode);
+	xmldomnode	*tagnode=new xmldomnode(this,pvt->_nullnode);
 	tagnode->setName(name);
 	tagnode->setType(TAG_XMLDOMNODETYPE);
 	pvt->_currentparent->insertChild(tagnode,
@@ -98,7 +104,7 @@ bool xmldom::tagStart(const char *name) {
 }
 
 bool xmldom::attributeName(const char *name) {
-	pvt->_currentattribute=new xmldomnode(pvt->_nullnode);
+	pvt->_currentattribute=new xmldomnode(this,pvt->_nullnode);
 	pvt->_currentattribute->setName(name);
 	pvt->_currentattribute->setType(ATTRIBUTE_XMLDOMNODETYPE);
 	pvt->_currentparent->insertAttribute(pvt->_currentattribute,
@@ -119,7 +125,7 @@ bool xmldom::attributeValue(const char *value) {
 
 bool xmldom::text(const char *string) {
 	pvt->_currentattribute=NULL;
-	xmldomnode	*textnode=new xmldomnode(pvt->_nullnode);
+	xmldomnode	*textnode=new xmldomnode(this,pvt->_nullnode);
 	textnode->setName("text");
 	textnode->setValue(string);
 	textnode->setType(TEXT_XMLDOMNODETYPE);
@@ -136,7 +142,7 @@ bool xmldom::tagEnd(const char *name) {
 
 bool xmldom::comment(const char *string) {
 	pvt->_currentattribute=NULL;
-	xmldomnode	*commentnode=new xmldomnode(pvt->_nullnode);
+	xmldomnode	*commentnode=new xmldomnode(this,pvt->_nullnode);
 	commentnode->setName("comment");
 	commentnode->setValue(string);
 	commentnode->setType(COMMENT_XMLDOMNODETYPE);
@@ -147,13 +153,30 @@ bool xmldom::comment(const char *string) {
 
 bool xmldom::cdata(const char *string) {
 	pvt->_currentattribute=NULL;
-	xmldomnode	*cdatanode=new xmldomnode(pvt->_nullnode);
+	xmldomnode	*cdatanode=new xmldomnode(this,pvt->_nullnode);
 	cdatanode->setName("cdata");
 	cdatanode->setValue(string);
 	cdatanode->setType(CDATA_XMLDOMNODETYPE);
 	pvt->_currentparent->insertChild(cdatanode,
 				pvt->_currentparent->getChildCount());
 	return true;
+}
+
+// FIXME: there is no way to detect or remove unused strings from the stringlist
+const char *xmldom::cacheString(const char *string) {
+	if (!string) {
+		return NULL;
+	}
+	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
+					node; node=node->getNext()) {
+		const char	*data=node->getData();
+		if (!charstring::compare(string,data)) {
+			return data;
+		}
+	}
+	char	*copy=charstring::duplicate(string);
+	pvt->_strlist.append(copy);
+	return copy;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

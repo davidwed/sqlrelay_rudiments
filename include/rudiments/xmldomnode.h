@@ -116,11 +116,12 @@ enum xmldomnodetype {
 	CDATA_XMLDOMNODETYPE
 };
 
+class xmldom;
 class xmldomnodeprivate;
 
 class xmldomnode {
 	public:
-			xmldomnode(xmldomnode *nullnode);
+			xmldomnode(xmldom *dom, xmldomnode *nullnode);
 				// Creates a new node and intializes its
 				// member variables to NULL.
 				//
@@ -136,7 +137,8 @@ class xmldomnode {
 				// from causing the program to crash trying to
 				// dereference a NULL pointer if, for example,
 				// "node2" doesn't exist.
-			xmldomnode(xmldomnode *nullnode,
+			xmldomnode(xmldom *dom,
+					xmldomnode *nullnode,
 					xmldomnodetype type,
 					const char *name, const char *value);
 				// Creates a new node (as above) and intializes
@@ -147,7 +149,7 @@ class xmldomnode {
 
 
 
-		static	xmldomnode	*createNullNode();
+		static	xmldomnode	*createNullNode(xmldom *dom);
 					// Creates a special "null node" whose
 					// parent, next sibling and previous
 					// siblings point back to itself.

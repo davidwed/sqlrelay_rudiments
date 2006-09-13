@@ -36,6 +36,9 @@
 /* Some systems don't have st_blksize in struct stat */
 #undef HAVE_BLKSIZE_T
 
+/* Some systems have bswap64 */
+#undef HAVE_BSWAP64
+
 /* Some systems have bswap_64 */
 #undef HAVE_BSWAP_64
 

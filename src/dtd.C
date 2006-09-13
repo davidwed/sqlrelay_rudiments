@@ -57,7 +57,8 @@ bool dtd::parseDtd() {
 	pvt->_xmldtd.createRootNode();
 	pvt->_xmldtd.getRootNode()->cascadeOnDelete();
 	pvt->_xmldtd.getRootNode()->appendChild(
-		new xmldomnode(pvt->_xmldtd.getRootNode()->getNullNode(),
+		new xmldomnode(&pvt->_xmldtd,
+				pvt->_xmldtd.getRootNode()->getNullNode(),
 						TAG_XMLDOMNODETYPE,"dtd",NULL));
 
 	// step through tags
@@ -97,7 +98,8 @@ bool dtd::newElement(xmldomnode *node) {
 	dtdnode->appendText("\n");
 
 	// create an "element" element and add it to the tree
-	xmldomnode	*element=new xmldomnode(dtdnode->getNullNode(),
+	xmldomnode	*element=new xmldomnode(&pvt->_xmldtd,
+					dtdnode->getNullNode(),
 					TAG_XMLDOMNODETYPE,"element",NULL);
 	element->cascadeOnDelete();
 	if (!dtdnode->appendChild(element)) {
@@ -180,7 +182,9 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 
 			// create a new element and add it to the tree
 			xmldomnode	*newtag=new xmldomnode(
-				pvt->_xmldtd.getRootNode()->getNullNode(),
+					&pvt->_xmldtd,
+					pvt->_xmldtd.getRootNode()->
+							getNullNode(),
 					TAG_XMLDOMNODETYPE,name,NULL);
 			newtag->cascadeOnDelete();
 			if (!node->appendChild(newtag)) {
@@ -235,6 +239,7 @@ bool dtd::newAttribute(xmldomnode *node) {
 	// create a new "attribute" element and add it to the tree
 	element->appendText("\n	");
 	xmldomnode	*attribute=new xmldomnode(
+					&pvt->_xmldtd,
 					pvt->_xmldtd.getRootNode()->
 							getNullNode(),
 					TAG_XMLDOMNODETYPE,"attribute",NULL);
