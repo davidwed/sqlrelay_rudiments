@@ -14,11 +14,12 @@ namespace rudiments {
 class xmldomprivate {
 	friend class xmldom;
 	private:
-		xmldomnode	*_nullnode;
-		xmldomnode	*_rootnode;
-		xmldomnode	*_currentparent;
-		xmldomnode	*_currentattribute;
-		stringlist	_strlist;
+		xmldomnode			*_nullnode;
+		xmldomnode			*_rootnode;
+		xmldomnode			*_currentparent;
+		xmldomnode			*_currentattribute;
+		stringlist			_strlist;
+		linkedlist<unsigned long>	_refcountlist;
 };
 
 xmldom::xmldom() : xmlsax() {
@@ -162,21 +163,48 @@ bool xmldom::cdata(const char *string) {
 	return true;
 }
 
-// FIXME: there is no way to detect or remove unused strings from the stringlist
 const char *xmldom::cacheString(const char *string) {
 	if (!string) {
 		return NULL;
 	}
+	unsigned long	index=0;
 	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
 					node; node=node->getNext()) {
 		const char	*data=node->getData();
 		if (!charstring::compare(string,data)) {
+			linkedlistnode<unsigned long>	*refnode=
+				pvt->_refcountlist.getNodeByIndex(index);
+			refnode->setData(refnode->getData()+1);
 			return data;
 		}
+		index++;
 	}
 	char	*copy=charstring::duplicate(string);
 	pvt->_strlist.append(copy);
+	pvt->_refcountlist.append(1);
 	return copy;
+}
+
+void xmldom::unCacheString(const char *string) {
+	if (!string) {
+		return;
+	}
+	unsigned long	index=0;
+	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
+					node; node=node->getNext()) {
+		const char	*data=node->getData();
+		if (!charstring::compare(string,data)) {
+			linkedlistnode<unsigned long>	*refnode=
+				pvt->_refcountlist.getNodeByIndex(index);
+			refnode->setData(refnode->getData()-1);
+			if (refnode->getData()<=0) {
+				pvt->_refcountlist.removeByIndex(index);
+				pvt->_strlist.removeByIndex(index);
+				return;
+			}
+		}
+		index++;
+	}
 }
 
 #ifdef RUDIMENTS_NAMESPACE

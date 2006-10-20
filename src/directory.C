@@ -331,7 +331,17 @@ bool directory::canAccessLongFileNames() {
 int64_t directory::fpathConf(int name) {
 	int64_t	result;
 	do {
-		result=fpathconf(dirfd(pvt->_dir),name);
+		result=fpathconf(
+				#if defined(HAVE_DIRFD)
+					dirfd(pvt->_dir)
+				#elif defined(HAVE_DIR_DD_FD)
+					pvt->_dir->dd_fd
+				#elif defined(HAVE_DIR_D_FD)
+					pvt->_dir->d_fd
+				#else
+					#error need dirfd replacement
+				#endif
+				,name);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }

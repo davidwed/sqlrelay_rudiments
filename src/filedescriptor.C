@@ -1526,6 +1526,8 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 			return __bswap64(value);
 		#elif defined(HAVE_BSWAP64)
 			return bswap64(value);
+		#elif defined(HAVE_SWAP64)
+			return swap64(value);
 		#else
 			#error no bswap64() or anything like it
 		#endif
@@ -1550,6 +1552,8 @@ uint64_t filedescriptor::netToHost(uint64_t value) const {
 			return __bswap64(value);
 		#elif defined(HAVE_BSWAP64)
 			return bswap64(value);
+		#elif defined(HAVE_SWAP64)
+			return swap64(value);
 		#else
 			#error no bswap64() or anything like it
 		#endif

@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	friend class xmldomnode;
-	private:
+	protected:
 			void	reset();
 
 			bool	tagStart(const char *name);
@@ -17,5 +17,6 @@
 			xmldom	&operator=(const xmldom &x);
 
 			const char	*cacheString(const char *string);
+			void		unCacheString(const char *string);
 
 			xmldomprivate	*pvt;

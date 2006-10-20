@@ -85,6 +85,15 @@
    */
 #undef HAVE_DIRENT_H
 
+/* Some systems have dirfd */
+#undef HAVE_DIRFD
+
+/* Some systems have DIR.dd_fd */
+#undef HAVE_DIR_DD_FD
+
+/* Some systems have DIR.d_fd */
+#undef HAVE_DIR_D_FD
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
@@ -459,6 +468,9 @@
 
 /* Some systems have swab with a char * argument */
 #undef HAVE_SWAB_CHAR
+
+/* Some systems have swap64 */
+#undef HAVE_SWAP64
 
 /* Some systems have sys/bitypes.h */
 #undef HAVE_SYS_BITYPES_H

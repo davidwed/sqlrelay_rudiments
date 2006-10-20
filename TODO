@@ -1,5 +1,3 @@
-fix bswap64 on netbsd
-
 regularexpression without pcre doesn't work right, create temp table in sqlrelay
 	exposes it
 

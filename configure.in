@@ -515,7 +515,7 @@ CMSG_LEN(0);,AC_DEFINE(HAVE_CMSG_LEN,1,Some systems have CMSG_LEN) AC_MSG_RESULT
 FW_STATFS
 
 AC_MSG_CHECKING(for struct timespec)
-AC_TRY_COMPILE([#include <time.h>],
+AC_TRY_COMPILE([#include <sys/time.h>],
 struct timespec a;,AC_DEFINE(HAVE_STRUCT_TIMESPEC,1,Some systems have struct timespec) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
@@ -877,13 +877,16 @@ AC_MSG_CHECKING(for bswap_64)
 AC_TRY_LINK([#include <stdlib.h>
 #ifdef HAVE_BYTESWAP_H
 #include <byteswap.h>
+#endif
+#ifdef HAVE_MACHINE_ENDIAN_H
+#include <machine/endian.h>
 #endif],
 bswap_64(0);,AC_DEFINE(HAVE_BSWAP_64,1,Some systems have bswap_64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for __bswap64)
 AC_TRY_LINK([#include <stdlib.h>
 #ifdef HAVE_MACHINE_ENDIAN_H
-#include <macine/endian.h>
+#include <machine/endian.h>
 #endif],
 __bswap64(0);,AC_DEFINE(HAVE___BSWAP64,1,Some systems have __bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
@@ -892,6 +895,38 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <sys/types.h>
 #include <machine/bswap.h>],
 bswap64(0);,AC_DEFINE(HAVE_BSWAP64,1,Some systems have bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for swap64)
+AC_TRY_LINK([#include <stdlib.h>
+#include <sys/types.h>],
+swap64(0);,AC_DEFINE(HAVE_SWAP64,1,Some systems have swap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for dirfd)
+AC_TRY_LINK([#include <sys/types.h>
+#ifdef HAVE_DIRENT_H
+#include <dirent.h>
+#else
+#include <direct.h>
+#endif],
+DIR *d; dirfd(d);,AC_DEFINE(HAVE_DIRFD,1,Some systems have dirfd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for DIR.dd_fd)
+AC_TRY_LINK([#include <sys/types.h>
+#ifdef HAVE_DIRENT_H
+#include <dirent.h>
+#else
+#include <direct.h>
+#endif],
+DIR d; d.dd_fd=1;,AC_DEFINE(HAVE_DIR_DD_FD,1,Some systems have DIR.dd_fd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for DIR.d_fd)
+AC_TRY_LINK([#include <sys/types.h>
+#ifdef HAVE_DIRENT_H
+#include <dirent.h>
+#else
+#include <direct.h>
+#endif],
+DIR d; d.d_fd=1;,AC_DEFINE(HAVE_DIR_D_FD,1,Some systems have DIR.d_fd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 

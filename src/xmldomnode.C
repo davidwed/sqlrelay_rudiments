@@ -85,6 +85,8 @@ xmldomnode::~xmldomnode() {
 		delete current;
 		current=pvt->_lastattribute;
 	}
+	pvt->_dom->unCacheString(pvt->_nodename);
+	pvt->_dom->unCacheString(pvt->_nodevalue);
 	delete pvt;
 }
 
@@ -503,10 +505,12 @@ void xmldomnode::setType(xmldomnodetype type) {
 }
 
 void xmldomnode::setName(const char *name) {
+	pvt->_dom->unCacheString(pvt->_nodename);
 	pvt->_nodename=pvt->_dom->cacheString(name);
 }
 
 void xmldomnode::setValue(const char *value) {
+	pvt->_dom->unCacheString(pvt->_nodevalue);
 	pvt->_nodevalue=pvt->_dom->cacheString(value);
 }
 

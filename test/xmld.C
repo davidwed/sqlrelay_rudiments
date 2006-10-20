@@ -14,6 +14,10 @@ int main(int argc, const char **argv) {
 	// display the contents of xmls.xml
 	xmldom	x;
 	x.parseFile("xmls.xml");
+
+	xmldomnode	*testnode=x.getRootNode()->getFirstTagChild("test");
+	testnode->deleteChild(1);
+
 	stringbuffer	*xml=x.getRootNode()->xml();
 	printf("%s\n",xml->getString());
 	x.getRootNode()->cascadeOnDelete();
