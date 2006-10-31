@@ -121,6 +121,9 @@ bool regularexpression::match(const char *str) {
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
 	#else
 		pvt->_str=str;
+		for (int i=0; i<pvt->_matchcount; i++) {
+			pvt->_matches[i].rm_so=-1;
+		}
 		pvt->_matchcount=-1;
 		return (!regexec(&pvt->_expr,pvt->_str,
 				RUDIMENTS_REGEX_MATCHES,pvt->_matches,0));

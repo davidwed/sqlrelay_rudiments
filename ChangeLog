@@ -17,6 +17,7 @@
 		and stores pointers to them in the xmldomnodes to reduce
 		memory usage in xml files that have lots of duplicated strings
 	added configure tests for dirfd/DIR.dd_fd/DIR.d_fd 
+	initialize addrinfo struct pointer to NULL in inetclientsocket.C
 
 0.29 - added check for whether SSL_read/write takes void * or char * parameter
 	added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix

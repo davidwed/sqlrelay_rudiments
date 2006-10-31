@@ -140,7 +140,7 @@ int inetclientsocket::connect() {
 		char	*portstr=charstring::parseNumber(*_port());
 
 		// get the address info for the given address/port
-		addrinfo	*ai;
+		addrinfo	*ai=NULL;
 		int		result;
 		do {
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
