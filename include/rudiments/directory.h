@@ -25,6 +25,10 @@ class directory {
 		bool	close();
 			// closes the currently open directory
 
+		void	rewind();
+			// Resets the current file/subdirectory inside the
+			// open directory to the first one.
+
 		uint64_t	getChildCount();
 			// Returns the number of files/subdirectories inside
 			// the open directory.

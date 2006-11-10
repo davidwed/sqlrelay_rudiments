@@ -143,15 +143,17 @@ uint64_t directory::getChildCount() {
 
 char *directory::getChildName(uint64_t index) {
 
-	// handle unopened directory
-	if (!pvt->_dir) {
-		return NULL;
-	}
-
 	// directory entries are 1-based
 	uint64_t	actualindex=index+1;
 
 	if (actualindex<pvt->_currentindex) {
+
+		// handle unopened directory
+		if (!pvt->_dir) {
+			return NULL;
+		}
+
+		// rewind
 		rewinddir(pvt->_dir);
 		pvt->_currentindex=0;
 	}

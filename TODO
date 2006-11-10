@@ -1,11 +1,3 @@
-regularexpression without pcre doesn't work right, create temp table in sqlrelay
-	exposes it
-
-implement semaphoreset::wait() with timeout for systems without semtimedop by
-	using alarm()
-
-directory class rewind/next/previous/end iterators
-
 update programming docs!
 
 SCO openserver -
