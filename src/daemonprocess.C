@@ -154,6 +154,7 @@ void daemonprocess::waitForChildrenToExit() {
 	// back and be restarted.
 	// If it returns -1 then there was some other error and the loop should
 	// exit.
+printf("%d: waiting for children\n",getpid());
 	for (;;) {
 		int pid=waitpid(-1,NULL,WNOHANG);
 		if (pid==0 || (pid==-1 && error::getErrorNumber()!=EINTR)) {
