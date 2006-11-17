@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/inetsocketutil.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/inetsocketutil.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,33 +9,35 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_INETSOCKETUTIL_H</font>
-<font color="#a520f7">#define RUDIMENTS_INETSOCKETUTIL_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_INETSOCKETUTIL_H</font>
+<font color="#a020f0">#define RUDIMENTS_INETSOCKETUTIL_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/inetsocketutilincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/inetsocketutilincludes.h&gt;</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> inetsocketutil {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> inetsocketutilprivate;
+
+<font color="#2e8b57"><b>class</b></font> inetsocketutil {
+        <font color="#a52a2a"><b>public</b></font>:
                                 inetsocketutil();
-                                inetsocketutil(<font color="#298a52"><b>const</b></font> inetsocketutil &amp;i);
-                inetsocketutil  &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> inetsocketutil &amp;i);
-                <font color="#298a52"><b>virtual</b></font>         ~inetsocketutil();
+                                inetsocketutil(<font color="#2e8b57"><b>const</b></font> inetsocketutil &amp;i);
+                inetsocketutil  &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> inetsocketutil &amp;i);
+                <font color="#2e8b57"><b>virtual</b></font>               ~inetsocketutil();
 
-                <font color="#298a52"><b>void</b></font>            initialize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *address,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> port);
+                <font color="#2e8b57"><b>void</b></font>          initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *address,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> port);
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/inetsocketutil.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/inetsocketutil.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

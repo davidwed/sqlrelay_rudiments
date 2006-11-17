@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/shadowentry.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/shadowentry.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,73 +9,75 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_SHADOWENTRY_H</font>
-<font color="#a520f7">#define RUDIMENTS_SHADOWENTRY_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_SHADOWENTRY_H</font>
+<font color="#a020f0">#define RUDIMENTS_SHADOWENTRY_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/shadowentryincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/shadowentryincludes.h&gt;</font>
 
 <font color="#0000ff">// The shadowentry class provides methods for retrieving</font>
 <font color="#0000ff">// entries from /etc/shadow</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> shadowentry {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> shadowentryprivate;
+
+<font color="#2e8b57"><b>class</b></font> shadowentry {
+        <font color="#a52a2a"><b>public</b></font>:
 
                 <font color="#0000ff">// If you need to quickly look up ap specific field, use one</font>
                 <font color="#0000ff">// of these mthods.</font>
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// These methods return true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getEncryptedPassword(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>char</b></font> **password);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getLastChangeDate(
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>long</b></font> *lstchg);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getDaysBeforeChangeAllowed(
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>int</b></font> *min);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getDaysBeforeChangeRequired(
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>int</b></font> *max);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getDaysBeforeExpirationWarning(
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>int</b></font> *warn);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getDaysOfInactivityAllowed(
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>int</b></font> *inact);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getExpirationDate(
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username,
-                                                        <font color="#298a52"><b>int</b></font> *expire);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getFlag(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username, <font color="#298a52"><b>int</b></font> *flag);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getEncryptedPassword(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>char</b></font> **password);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getLastChangeDate(
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>long</b></font> *lstchg);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getDaysBeforeChangeAllowed(
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>int</b></font> *min);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getDaysBeforeChangeRequired(
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>int</b></font> *max);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getDaysBeforeExpirationWarning(
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>int</b></font> *warn);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getDaysOfInactivityAllowed(
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>int</b></font> *inact);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getExpirationDate(
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username,
+                                                        <font color="#2e8b57"><b>int</b></font> *expire);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getFlag(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username, <font color="#2e8b57"><b>int</b></font> *flag);
 
                 <font color="#0000ff">// If you need to look up a shadow entry and refer to multiple</font>
                 <font color="#0000ff">// fields, use these methods.</font>
                                 shadowentry();
-                                shadowentry(<font color="#298a52"><b>const</b></font> shadowentry &amp;s);
-                shadowentry     &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> shadowentry &amp;s);
+                                shadowentry(<font color="#2e8b57"><b>const</b></font> shadowentry &amp;s);
+                shadowentry     &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> shadowentry &amp;s);
                                 ~shadowentry();
 
-                <font color="#298a52"><b>bool</b></font>    initialize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *username);
+                <font color="#2e8b57"><b>bool</b></font>  initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *username);
                         <font color="#0000ff">// Looks up a shadow entry by name.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getName() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getEncryptedPassword() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getLastChangeDate() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>             getDaysBeforeChangeAllowed() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>             getDaysBeforeChangeRequired() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>             getDaysBeforeExpirationWarning() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>             getDaysOfInactivityAllowed() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>             getExpirationDate() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>int</b></font>             getFlag() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getEncryptedPassword() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>long</b></font>          getLastChangeDate() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           getDaysBeforeChangeAllowed() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           getDaysBeforeChangeRequired() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           getDaysBeforeExpirationWarning() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           getDaysOfInactivityAllowed() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           getExpirationDate() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           getFlag() <font color="#2e8b57"><b>const</b></font>;
 
-                <font color="#298a52"><b>void</b></font>    print() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>void</b></font>  print() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Prints out the shadow entry.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_HAS_THREADS</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    needsMutex();
+<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>bool</b></font>   needsMutex();
                         <font color="#0000ff">// If your system doesn't support getpwnam_r() and</font>
                         <font color="#0000ff">// getpwuid_r() then this class needs a mutex to assure</font>
                         <font color="#0000ff">// thread safety.</font>
@@ -83,20 +85,20 @@
                         <font color="#0000ff">// This method returns true if this class needs a mutex</font>
                         <font color="#0000ff">// to operate safely in a threaded environment and false</font>
                         <font color="#0000ff">// otherwise.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    setMutex(pthread_mutex_t *mutex);
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>void</b></font>   setMutex(mutex *mtx);
                         <font color="#0000ff">// Allows you to supply a mutex is the class needs it.</font>
                         <font color="#0000ff">// If your application is not multithreaded, then</font>
                         <font color="#0000ff">// there is no need to supply a mutex.</font>
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/shadowentry.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/shadowentry.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/parameterstring.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/parameterstring.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 2003 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_PARAMETERSTRING_H</font>
-<font color="#a520f7">#define RUDIMENTS_PARAMETERSTRING_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_PARAMETERSTRING_H</font>
+<font color="#a020f0">#define RUDIMENTS_PARAMETERSTRING_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/parameterstringincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/parameterstringincludes.h&gt;</font>
 
 <font color="#0000ff">// The string class provides methods for parsing and accessing strings</font>
 <font color="#0000ff">// formatted like this:</font>
@@ -22,29 +22,31 @@
 <font color="#0000ff">// These are often used as parameterstrings for databases or other similar</font>
 <font color="#0000ff">// uses.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> parameterstring {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> parameterstringprivate;
+
+<font color="#2e8b57"><b>class</b></font> parameterstring {
+        <font color="#a52a2a"><b>public</b></font>:
 
                         parameterstring();
                         ~parameterstring();
 
-                <font color="#298a52"><b>void</b></font>            setDelimiter(<font color="#298a52"><b>char</b></font> delim);
-                <font color="#298a52"><b>bool</b></font>            parse(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getValue(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name);
-                <font color="#298a52"><b>void</b></font>            clear();
+                <font color="#2e8b57"><b>void</b></font>          setDelimiter(<font color="#2e8b57"><b>char</b></font> delim);
+                <font color="#2e8b57"><b>bool</b></font>          parse(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getValue(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>void</b></font>          clear();
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/parameterstring.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/parameterstring.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

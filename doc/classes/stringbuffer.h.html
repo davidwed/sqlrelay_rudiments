@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/stringbuffer.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/stringbuffer.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,31 +9,33 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_STRINGBUFFER_H</font>
-<font color="#a520f7">#define RUDIMENTS_STRINGBUFFER_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_STRINGBUFFER_H</font>
+<font color="#a020f0">#define RUDIMENTS_STRINGBUFFER_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/stringbufferincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/stringbufferincludes.h&gt;</font>
 
 <font color="#0000ff">// The stringbuffer class can be used to store strings of arbitrary length.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> stringbuffer : <font color="#a52829"><b>public</b></font> variablebuffer {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> stringbufferprivate;
+
+<font color="#2e8b57"><b>class</b></font> stringbuffer : <font color="#a52a2a"><b>public</b></font> variablebuffer {
+        <font color="#a52a2a"><b>public</b></font>:
                                 stringbuffer();
-                                stringbuffer(<font color="#298a52"><b>char</b></font> *initialcontents,
-                                                <font color="#298a52"><b>size_t</b></font> initialsize,
-                                                <font color="#298a52"><b>size_t</b></font> increment);
+                                stringbuffer(<font color="#2e8b57"><b>char</b></font> *initialcontents,
+                                                <font color="#2e8b57"><b>size_t</b></font> initialsize,
+                                                <font color="#2e8b57"><b>size_t</b></font> increment);
                                 <font color="#0000ff">// Creates a new buffer which will grow as</font>
                                 <font color="#0000ff">// necessary to accomodate the string written</font>
                                 <font color="#0000ff">// to it.</font>
-                                stringbuffer(<font color="#298a52"><b>const</b></font> stringbuffer &amp;s);
-                stringbuffer    &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> stringbuffer &amp;s);
+                                stringbuffer(<font color="#2e8b57"><b>const</b></font> stringbuffer &amp;s);
+                stringbuffer    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> stringbuffer &amp;s);
                                 ~stringbuffer();
 
-                <font color="#298a52"><b>void</b></font>    setPosition(<font color="#298a52"><b>size_t</b></font> pos);
+                <font color="#2e8b57"><b>void</b></font>  setPosition(<font color="#2e8b57"><b>size_t</b></font> pos);
                         <font color="#0000ff">// Sets the position at which the next write will</font>
                         <font color="#0000ff">// occur to &quot;pos&quot;.  If the position is set beyond the</font>
                         <font color="#0000ff">// end of the buffer, the buffer will grow but the data</font>
@@ -43,85 +45,85 @@
                 <font color="#0000ff">// The write() and append() methods return a pointer to the</font>
                 <font color="#0000ff">// variablebuffer instance.  This enables chaining:</font>
                 <font color="#0000ff">//</font>
-                <font color="#0000ff">//      sb-&gt;write(&quot;numbers: &quot;)-&gt;write(5)-&gt;write(5.5);</font>
-                <font color="#0000ff">//              or</font>
-                <font color="#0000ff">//      sb-&gt;append(&quot;numbers: &quot;)-&gt;append(5)-&gt;append(5.5);</font>
-                stringbuffer    *write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string);
-                stringbuffer    *write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                        <font color="#298a52"><b>size_t</b></font> size);
-                stringbuffer    *write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
-                stringbuffer    *write(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size);
-                stringbuffer    *write(<font color="#298a52"><b>char</b></font> character);
-                stringbuffer    *write(<font color="#298a52"><b>short</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>float</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>float</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                stringbuffer    *write(<font color="#298a52"><b>float</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> precision,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                stringbuffer    *write(<font color="#298a52"><b>double</b></font> number);
-                stringbuffer    *write(<font color="#298a52"><b>double</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                stringbuffer    *write(<font color="#298a52"><b>double</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> precision,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
+                <font color="#0000ff">//    sb-&gt;write(&quot;numbers: &quot;)-&gt;write(5)-&gt;write(5.5);</font>
+                <font color="#0000ff">//            or</font>
+                <font color="#0000ff">//    sb-&gt;append(&quot;numbers: &quot;)-&gt;append(5)-&gt;append(5.5);</font>
+                stringbuffer    *write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                stringbuffer    *write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
+                stringbuffer    *write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                stringbuffer    *write(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
+                stringbuffer    *write(<font color="#2e8b57"><b>char</b></font> character);
+                stringbuffer    *write(<font color="#2e8b57"><b>int16_t</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>int32_t</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>int64_t</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>uint16_t</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>uint32_t</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>uint64_t</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>float</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>float</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                stringbuffer    *write(<font color="#2e8b57"><b>float</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                stringbuffer    *write(<font color="#2e8b57"><b>double</b></font> number);
+                stringbuffer    *write(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                stringbuffer    *write(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
                         <font color="#0000ff">// Writes the data to the stringbuffer at the current</font>
                         <font color="#0000ff">// position.  If necessary, the buffer will grow to</font>
                         <font color="#0000ff">// accommodate the new data.</font>
-                stringbuffer    *append(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string);
-                stringbuffer    *append(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                        <font color="#298a52"><b>size_t</b></font> size);
-                stringbuffer    *append(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
-                stringbuffer    *append(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size);
-                stringbuffer    *append(<font color="#298a52"><b>char</b></font> character);
-                stringbuffer    *append(<font color="#298a52"><b>short</b></font> character);
-                stringbuffer    *append(<font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>short</b></font> number,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> zeropadding);
-                stringbuffer    *append(<font color="#298a52"><b>long</b></font> number,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> zeropadding);
-                stringbuffer    *append(<font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font> number,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> zeropadding);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> zeropadding);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> zeropadding);
-                stringbuffer    *append(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> <font color="#298a52"><b>long</b></font> number,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> zeropadding);
-                stringbuffer    *append(<font color="#298a52"><b>float</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>float</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                stringbuffer    *append(<font color="#298a52"><b>float</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> precision,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                stringbuffer    *append(<font color="#298a52"><b>double</b></font> number);
-                stringbuffer    *append(<font color="#298a52"><b>double</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
-                stringbuffer    *append(<font color="#298a52"><b>double</b></font> number,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> precision,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> scale);
+                stringbuffer    *append(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                stringbuffer    *append(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                        <font color="#2e8b57"><b>size_t</b></font> size);
+                stringbuffer    *append(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                stringbuffer    *append(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
+                stringbuffer    *append(<font color="#2e8b57"><b>char</b></font> character);
+                stringbuffer    *append(<font color="#2e8b57"><b>int16_t</b></font> character);
+                stringbuffer    *append(<font color="#2e8b57"><b>int32_t</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>int64_t</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>uint16_t</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>uint32_t</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>uint64_t</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>int16_t</b></font> number,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                stringbuffer    *append(<font color="#2e8b57"><b>int32_t</b></font> number,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                stringbuffer    *append(<font color="#2e8b57"><b>int64_t</b></font> number,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                stringbuffer    *append(<font color="#2e8b57"><b>uint16_t</b></font> number,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                stringbuffer    *append(<font color="#2e8b57"><b>uint32_t</b></font> number,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                stringbuffer    *append(<font color="#2e8b57"><b>uint64_t</b></font> number,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> zeropadding);
+                stringbuffer    *append(<font color="#2e8b57"><b>float</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>float</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                stringbuffer    *append(<font color="#2e8b57"><b>float</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                stringbuffer    *append(<font color="#2e8b57"><b>double</b></font> number);
+                stringbuffer    *append(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
+                stringbuffer    *append(<font color="#2e8b57"><b>double</b></font> number,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> precision,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> scale);
                         <font color="#0000ff">// Appends the data to the stringbuffer.  The buffer</font>
                         <font color="#0000ff">// will grow to accommodate the new data.</font>
 
-                <font color="#298a52"><b>void</b></font>    clear();
+                <font color="#2e8b57"><b>void</b></font>  clear();
                         <font color="#0000ff">// Empties the stringbuffer.</font>
 
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getString();
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getString();
                                 <font color="#0000ff">// Returns the string currently stored in the</font>
                                 <font color="#0000ff">// stringbuffer.</font>
 
-                <font color="#298a52"><b>char</b></font>    *detachString();
+                <font color="#2e8b57"><b>char</b></font>  *detachString();
                         <font color="#0000ff">// Returns a pointer to the string currently stored</font>
                         <font color="#0000ff">// in the stringbuffer, then resets the stringbuffer</font>
                         <font color="#0000ff">// such that it will no longer use that string.</font>
@@ -129,22 +131,22 @@
                         <font color="#0000ff">// The calling program must deallocate the string</font>
                         <font color="#0000ff">// returned from this method.</font>
 
-                <font color="#298a52"><b>size_t</b></font>  getStringLength();
+                <font color="#2e8b57"><b>size_t</b></font>        getStringLength();
                         <font color="#0000ff">// Returns the length of the string currently stored</font>
                         <font color="#0000ff">// in the stringbuffer.</font>
 
-                <font color="#298a52"><b>size_t</b></font>  getPosition();
+                <font color="#2e8b57"><b>size_t</b></font>        getPosition();
                         <font color="#0000ff">// Returns the position in the buffer at which</font>
                         <font color="#0000ff">// the next write will occur.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/stringbuffer.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/stringbuffer.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

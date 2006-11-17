@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/listener.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/listener.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,30 +9,32 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_LISTENER_H</font>
-<font color="#a520f7">#define RUDIMENTS_LISTENER_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_LISTENER_H</font>
+<font color="#a020f0">#define RUDIMENTS_LISTENER_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/listenerincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/listenerincludes.h&gt;</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>typedef</b></font> linkedlist&lt;filedescriptor *&gt;            listenerlist;
-<font color="#298a52"><b>typedef</b></font> linkedlistnode&lt;filedescriptor *&gt;        listenerlistnode;
+<font color="#2e8b57"><b>typedef</b></font> linkedlist&lt;filedescriptor *&gt;            listenerlist;
+<font color="#2e8b57"><b>typedef</b></font> linkedlistnode&lt;filedescriptor *&gt;        listenerlistnode;
 
 <font color="#0000ff">// The listener class listens on a pool of file descriptors.</font>
 
-<font color="#298a52"><b>class</b></font> listener {
-        <font color="#a52829"><b>public</b></font>:
-                        listener();
-                <font color="#298a52"><b>virtual</b></font> ~listener();
+<font color="#2e8b57"><b>class</b></font> listenerprivate;
 
-                <font color="#298a52"><b>void</b></font>    addFileDescriptor(filedescriptor *fd);
+<font color="#2e8b57"><b>class</b></font> listener {
+        <font color="#a52a2a"><b>public</b></font>:
+                        listener();
+                <font color="#2e8b57"><b>virtual</b></font>       ~listener();
+
+                <font color="#2e8b57"><b>void</b></font>  addFileDescriptor(filedescriptor *fd);
                                 <font color="#0000ff">// Adds the specified file descriptor to</font>
                                 <font color="#0000ff">// the pool that the listener is listening on.</font>
 
-                <font color="#298a52"><b>int</b></font>     waitForNonBlockingRead(<font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>int</b></font>   waitForNonBlockingRead(<font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Causes the application to wait until a read()</font>
                                 <font color="#0000ff">// will proceed without blocking or until &quot;sec&quot;</font>
                                 <font color="#0000ff">// seconds and &quot;usec&quot; microseconds have elapsed.</font>
@@ -49,7 +51,7 @@
                                 <font color="#0000ff">// on timeout and otherwise returns the number</font>
                                 <font color="#0000ff">// of file descriptors that are ready to be</font>
                                 <font color="#0000ff">// read from.</font>
-                <font color="#298a52"><b>int</b></font>     waitForNonBlockingWrite(<font color="#298a52"><b>long</b></font> sec, <font color="#298a52"><b>long</b></font> usec);
+                <font color="#2e8b57"><b>int</b></font>   waitForNonBlockingWrite(<font color="#2e8b57"><b>long</b></font> sec, <font color="#2e8b57"><b>long</b></font> usec);
                                 <font color="#0000ff">// Causes the application to wait until a</font>
                                 <font color="#0000ff">// write() will proceed without blocking or</font>
                                 <font color="#0000ff">// until &quot;sec&quot; seconds and &quot;usec&quot; microseconds</font>
@@ -75,32 +77,32 @@
                                 <font color="#0000ff">// write after the last call to</font>
                                 <font color="#0000ff">// waitForNonBlockingWrite().</font>
 
-                <font color="#298a52"><b>void</b></font>    removeFileDescriptor(filedescriptor *fd);
+                <font color="#2e8b57"><b>void</b></font>  removeFileDescriptor(filedescriptor *fd);
                                 <font color="#0000ff">// Removes the specified file descriptor from</font>
                                 <font color="#0000ff">// the pool.</font>
 
-                <font color="#298a52"><b>void</b></font>    removeAllFileDescriptors();
+                <font color="#2e8b57"><b>void</b></font>  removeAllFileDescriptors();
                                 <font color="#0000ff">// Removes all file descriptors from the pool.</font>
 
 
                 <font color="#0000ff">// By default, if a wait is occurring and a signal interrupts</font>
                 <font color="#0000ff">// it, the read or write returns with errno set to EINTR and</font>
                 <font color="#0000ff">// must be retried.  These methods override that behavior.</font>
-                <font color="#298a52"><b>void</b></font>    retryInterruptedWaits();
+                <font color="#2e8b57"><b>void</b></font>  retryInterruptedWaits();
                         <font color="#0000ff">// Causes waits to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.  This is the default.</font>
-                <font color="#298a52"><b>void</b></font>    dontRetryInterruptedWaits();
+                <font color="#2e8b57"><b>void</b></font>  dontRetryInterruptedWaits();
                         <font color="#0000ff">// Causes waits not to automatically retry if</font>
                         <font color="#0000ff">// interrupted by a signal.  This is the default.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/listener.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/listener.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

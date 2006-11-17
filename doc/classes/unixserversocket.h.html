@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/unixserversocket.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/unixserversocket.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_UNIXSERVERSOCKET_H</font>
-<font color="#a520f7">#define RUDIMENTS_UNIXSERVERSOCKET_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_UNIXSERVERSOCKET_H</font>
+<font color="#a020f0">#define RUDIMENTS_UNIXSERVERSOCKET_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/unixserversocketincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/unixserversocketincludes.h&gt;</font>
 
 <font color="#0000ff">// The unixserversocket class allows you to write programs that can talk to</font>
 <font color="#0000ff">// other programs on the same machine over TCP stream sockets.</font>
@@ -32,20 +32,22 @@
 <font color="#0000ff">// unixserversocket class (and possibly the unixserversocket class) in</font>
 <font color="#0000ff">// conjunction with the listener class.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> unixserversocket : <font color="#a52829"><b>public</b></font> serversocket, <font color="#a52829"><b>private</b></font> unixsocketutil {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> unixserversocketprivate;
+
+<font color="#2e8b57"><b>class</b></font> unixserversocket : <font color="#a52a2a"><b>public</b></font> serversocket, <font color="#a52a2a"><b>private</b></font> unixsocketutil {
+        <font color="#a52a2a"><b>public</b></font>:
                                 unixserversocket();
-                                unixserversocket(<font color="#298a52"><b>const</b></font> unixserversocket &amp;u);
-                unixserversocket        &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> unixserversocket &amp;u);
-                <font color="#298a52"><b>virtual</b></font>         ~unixserversocket();
+                                unixserversocket(<font color="#2e8b57"><b>const</b></font> unixserversocket &amp;u);
+                unixserversocket        &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> unixserversocket &amp;u);
+                <font color="#2e8b57"><b>virtual</b></font>               ~unixserversocket();
 
-                <font color="#298a52"><b>bool</b></font>    listen(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>bool</b></font>  listen(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                         mode_t mask,
-                                        <font color="#298a52"><b>int</b></font> backlog);
+                                        <font color="#2e8b57"><b>int</b></font> backlog);
                                 <font color="#0000ff">// Listen on &quot;filename&quot; and allow &quot;backlog&quot;</font>
                                 <font color="#0000ff">// connections to pile up before refusing them.</font>
                                 <font color="#0000ff">// Set the permissions on &quot;filename&quot; using</font>
@@ -61,18 +63,18 @@
                 <font color="#0000ff">// If you need to set socket options or do anything special</font>
                 <font color="#0000ff">// between the discrete steps of socket initialization, you</font>
                 <font color="#0000ff">// should use a combination of these methods.</font>
-                <font color="#298a52"><b>bool</b></font>    initialize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, mode_t mask);
+                <font color="#2e8b57"><b>bool</b></font>  initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, mode_t mask);
                         <font color="#0000ff">// Creates the actual socket and initializes the class</font>
                         <font color="#0000ff">// to use &quot;filename&quot; when bind() is called.  The</font>
                         <font color="#0000ff">// permissions on &quot;filename&quot; will be set using umask</font>
                         <font color="#0000ff">// &quot;mask&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    bind();
+                <font color="#2e8b57"><b>bool</b></font>  bind();
                         <font color="#0000ff">// Associates the socket with an address.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    listen(<font color="#298a52"><b>int</b></font> backlog);
+                <font color="#2e8b57"><b>bool</b></font>  listen(<font color="#2e8b57"><b>int</b></font> backlog);
                         <font color="#0000ff">// Waits until a client connects then places</font>
                         <font color="#0000ff">// that connection in queue.  Up to &quot;backlog&quot;</font>
                         <font color="#0000ff">// connections may be queued before future</font>
@@ -90,14 +92,14 @@
                                 <font color="#0000ff">// Returns an inetsocket on success and NULL</font>
                                 <font color="#0000ff">// on failure.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/unixserversocket.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/unixserversocket.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

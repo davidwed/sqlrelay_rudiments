@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/datetime.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/datetime.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,36 +9,38 @@
 <font color="#0000ff">// Copyright (c) 2000-2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_DATETIME_H</font>
-<font color="#a520f7">#define RUDIMENTS_DATETIME_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_DATETIME_H</font>
+<font color="#a020f0">#define RUDIMENTS_DATETIME_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/datetimeincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/datetimeincludes.h&gt;</font>
 
 <font color="#0000ff">// The datetime class provides methods for converting date/time formats and</font>
 <font color="#0000ff">// accessing various date/time values.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> datetime {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> datetimeprivate;
+
+<font color="#2e8b57"><b>class</b></font> datetime {
+        <font color="#a52a2a"><b>public</b></font>:
 
                 <font color="#0000ff">// if you need a quick conversion, use one of these methods</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>char</b></font>     *getString(<font color="#298a52"><b>time_t</b></font> seconds);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>char</b></font>     *getString(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>struct</b></font> tm *tmstruct);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>char</b></font>   *getString(<font color="#2e8b57"><b>time_t</b></font> seconds);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>char</b></font>   *getString(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>struct</b></font> tm *tmstruct);
                         <font color="#0000ff">// returns &quot;mm/dd/yyyy hh:mm:ss TZN&quot;</font>
                         <font color="#0000ff">// Note that this method allocates a buffer to return</font>
                         <font color="#0000ff">// the string in which must be deleted by the calling</font>
                         <font color="#0000ff">// program.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>time_t</b></font>   getEpoch(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *datestring);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>time_t</b></font> getEpoch(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *datestring);
                         <font color="#0000ff">// parses &quot;mm/dd/yyyy hh:mm:ss TZN&quot; and returns the</font>
                         <font color="#0000ff">// number of seconds since 1970.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Note that TZN must be a valid timezone.  Otherwise</font>
                         <font color="#0000ff">// GMT is assumed.</font>
                         <font color="#0000ff">//</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>time_t</b></font>   getEpoch(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>struct</b></font> tm *tmstruct);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>time_t</b></font> getEpoch(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>struct</b></font> tm *tmstruct);
                         <font color="#0000ff">// converts &quot;tmstruct&quot; to the number of seconds</font>
                         <font color="#0000ff">// since 1970.</font>
                         <font color="#0000ff">//</font>
@@ -52,7 +54,7 @@
                 datetime();
                 ~datetime();
 
-                <font color="#298a52"><b>bool</b></font>    initialize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *tmstring);
+                <font color="#2e8b57"><b>bool</b></font>  initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *tmstring);
                         <font color="#0000ff">// Parses &quot;tmstring&quot; and sets the date and time</font>
                         <font color="#0000ff">// represented in the class to that time.</font>
                         <font color="#0000ff">// Datestring must be &quot;mm/dd/yyyy hh:mm:ss TZN&quot;.</font>
@@ -61,14 +63,14 @@
                         <font color="#0000ff">// GMT is assumed.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    initialize(<font color="#298a52"><b>time_t</b></font> seconds);
+                <font color="#2e8b57"><b>bool</b></font>  initialize(<font color="#2e8b57"><b>time_t</b></font> seconds);
                         <font color="#0000ff">// Processes &quot;seconds&quot; and sets the date and time</font>
                         <font color="#0000ff">// represented in the class to that time.</font>
                         <font color="#0000ff">// &quot;seconds&quot; is the number of seconds since 1970;</font>
                         <font color="#0000ff">// output by many standard time functions.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    initialize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>struct</b></font> tm *tmstruct);
+                <font color="#2e8b57"><b>bool</b></font>  initialize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>struct</b></font> tm *tmstruct);
                         <font color="#0000ff">// Processes &quot;tmstruct&quot; and sets the date and time</font>
                         <font color="#0000ff">// represented in the class to that time.</font>
                         <font color="#0000ff">// &quot;tmstruct&quot; is a (struct tm *); output by </font>
@@ -81,12 +83,12 @@
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
 
-                <font color="#298a52"><b>bool</b></font>    getSystemDateAndTime();
+                <font color="#2e8b57"><b>bool</b></font>  getSystemDateAndTime();
                         <font color="#0000ff">// Sets the date and time represented in the class to</font>
                         <font color="#0000ff">// the date and time stored in the system clock.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    getHardwareDateAndTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *hwtz);
+                <font color="#2e8b57"><b>bool</b></font>  getHardwareDateAndTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *hwtz);
                         <font color="#0000ff">// This method only works if your system has a working</font>
                         <font color="#0000ff">// real-time clock at /dev/rtc.</font>
                         <font color="#0000ff">//</font>
@@ -97,7 +99,7 @@
                         <font color="#0000ff">// clock is using.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    getAdjustedHardwareDateAndTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *hwtz);
+                <font color="#2e8b57"><b>bool</b></font>  getAdjustedHardwareDateAndTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *hwtz);
                         <font color="#0000ff">// This method only works if your system has a working</font>
                         <font color="#0000ff">// real-time clock at /dev/rtc.</font>
                         <font color="#0000ff">//</font>
@@ -105,12 +107,12 @@
                         <font color="#0000ff">// then adjusts it to the timezone used by the system.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    setSystemDateAndTime();
+                <font color="#2e8b57"><b>bool</b></font>  setSystemDateAndTime();
                         <font color="#0000ff">// Sets the system clock's date and time to the date</font>
                         <font color="#0000ff">// and time currently represented in the class.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    setHardwareDateAndTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *hwtz);
+                <font color="#2e8b57"><b>bool</b></font>  setHardwareDateAndTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *hwtz);
                         <font color="#0000ff">// This method only works if your system has a working</font>
                         <font color="#0000ff">// real-time clock at /dev/rtc.</font>
                         <font color="#0000ff">//</font>
@@ -124,29 +126,29 @@
 
 
                 <font color="#0000ff">// These methods return commonly needed time/date values</font>
-                <font color="#298a52"><b>long</b></font>            getHour() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getMinutes() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getSeconds() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getMonth() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getMonthName() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getMonthAbbreviation() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getDayOfMonth() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getDayOfWeek() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getDayOfYear() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>long</b></font>            getYear() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getHour() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getMinutes() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getSeconds() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getMonth() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getMonthName() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getMonthAbbreviation() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getDayOfMonth() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getDayOfWeek() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getDayOfYear() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>               getYear() <font color="#2e8b57"><b>const</b></font>;
 
-                <font color="#298a52"><b>bool</b></font>    isDaylightSavingsTime() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  isDaylightSavingsTime() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// returns 1 if daylight savings time is currently</font>
                         <font color="#0000ff">// in effect and 0 if it isn't</font>
 
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getTimeZoneString() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getTimeZoneString() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// returns a 3 character string representing the</font>
                         <font color="#0000ff">// time zone</font>
 
-                <font color="#298a52"><b>long</b></font>    getTimeZoneOffset() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int32_t</b></font>       getTimeZoneOffset() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// returns the offset from GMT (in seconds)</font>
 
-                <font color="#298a52"><b>bool</b></font>    adjustTimeZone(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newtz);
+                <font color="#2e8b57"><b>bool</b></font>  adjustTimeZone(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newtz);
                         <font color="#0000ff">// Recalculates the time currently represented in the</font>
                         <font color="#0000ff">// class to correspond to the time zone &quot;newtz&quot;.</font>
                         <font color="#0000ff">//</font>
@@ -158,7 +160,7 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
-                <font color="#298a52"><b>bool</b></font>    adjustTimeZone(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newtz, <font color="#298a52"><b>bool</b></font> ignoredst);
+                <font color="#2e8b57"><b>bool</b></font>  adjustTimeZone(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newtz, <font color="#2e8b57"><b>bool</b></font> ignoredst);
                         <font color="#0000ff">// Recalculates the time currently represented in the</font>
                         <font color="#0000ff">// class to correspond to the time zone &quot;newtz&quot;.</font>
                         <font color="#0000ff">//</font>
@@ -171,41 +173,60 @@
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
 
+                <font color="#0000ff">// These methods allow you to change the time currently</font>
+                <font color="#0000ff">// represented in the class.</font>
+                <font color="#2e8b57"><b>bool</b></font>  setSeconds(<font color="#2e8b57"><b>int32_t</b></font> seconds);
+                <font color="#2e8b57"><b>bool</b></font>  setMinutes(<font color="#2e8b57"><b>int32_t</b></font> minutes);
+                <font color="#2e8b57"><b>bool</b></font>  setHours(<font color="#2e8b57"><b>int32_t</b></font> hours);
+                <font color="#2e8b57"><b>bool</b></font>  setDays(<font color="#2e8b57"><b>int32_t</b></font> days);
+                <font color="#2e8b57"><b>bool</b></font>  setMonths(<font color="#2e8b57"><b>int32_t</b></font> months);
+                <font color="#2e8b57"><b>bool</b></font>  setYears(<font color="#2e8b57"><b>int32_t</b></font> years);
+
+
                 <font color="#0000ff">// These methods allow you to add discrete time intervals to</font>
                 <font color="#0000ff">// the time currently represented in the class.</font>
-                <font color="#298a52"><b>bool</b></font>    addSeconds(<font color="#298a52"><b>long</b></font> seconds);
-                <font color="#298a52"><b>bool</b></font>    addMinutes(<font color="#298a52"><b>long</b></font> minutes);
-                <font color="#298a52"><b>bool</b></font>    addHours(<font color="#298a52"><b>long</b></font> hours);
-                <font color="#298a52"><b>bool</b></font>    addDays(<font color="#298a52"><b>long</b></font> days);
-                <font color="#298a52"><b>bool</b></font>    addMonths(<font color="#298a52"><b>long</b></font> months);
-                <font color="#298a52"><b>bool</b></font>    addYears(<font color="#298a52"><b>long</b></font> years);
+                <font color="#2e8b57"><b>bool</b></font>  addSeconds(<font color="#2e8b57"><b>int32_t</b></font> seconds);
+                <font color="#2e8b57"><b>bool</b></font>  addMinutes(<font color="#2e8b57"><b>int32_t</b></font> minutes);
+                <font color="#2e8b57"><b>bool</b></font>  addHours(<font color="#2e8b57"><b>int32_t</b></font> hours);
+                <font color="#2e8b57"><b>bool</b></font>  addDays(<font color="#2e8b57"><b>int32_t</b></font> days);
+                <font color="#2e8b57"><b>bool</b></font>  addMonths(<font color="#2e8b57"><b>int32_t</b></font> months);
+                <font color="#2e8b57"><b>bool</b></font>  addYears(<font color="#2e8b57"><b>int32_t</b></font> years);
 
 
                 <font color="#0000ff">// These methods output conversions to other date/time</font>
                 <font color="#0000ff">// formats.</font>
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font>      *getString();
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>    *getString();
                         <font color="#0000ff">// returns &quot;mm/dd/yyyy hh:mm:ss TZN&quot;</font>
                         <font color="#0000ff">// (Note that this method returns a pointer to an</font>
                         <font color="#0000ff">// internal string which will be deleted if the</font>
                         <font color="#0000ff">// class instance is deleted.)</font>
-                <font color="#298a52"><b>time_t</b></font>          getEpoch() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>time_t</b></font>                getEpoch() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// returns the number of seconds since 1970</font>
-                <font color="#298a52"><b>struct</b></font> tm       *getTm();
+                <font color="#2e8b57"><b>struct</b></font> tm     *getTm();
                         <font color="#0000ff">// returns a pointer to the internal &quot;struct tm&quot;</font>
 
 
                 <font color="#0000ff">// These methods return timezone data</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> * <font color="#298a52"><b>const</b></font>       *getTimeZoneAbbreviations();
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>     *getTimeZoneAbbreviations();
                                 <font color="#0000ff">// Returns a NULL terminated array of timezone</font>
                                 <font color="#0000ff">// abbreviations.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>long</b></font>               *getTimeZoneOffsets();
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>int32_t</b></font>          *getTimeZoneOffsets();
                                 <font color="#0000ff">// Returns an array of timezone offsets from</font>
                                 <font color="#0000ff">// GMT (in seconds).  Each element of this</font>
                                 <font color="#0000ff">// array corresponds to an element of the</font>
                                 <font color="#0000ff">// array returned b getTimeZoneAbbreviations().</font>
 
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   validDateTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
+                                <font color="#0000ff">// Returns true if string represents a valid</font>
+                                <font color="#0000ff">// date/time and false otherwise.</font>
+                                <font color="#0000ff">//</font>
+                                <font color="#0000ff">// &quot;string&quot; should be formatted like:</font>
+                                <font color="#0000ff">// 00/00/0000 00:00:00</font>
+                                <font color="#0000ff">// and may optionally be followed by a space</font>
+                                <font color="#0000ff">// and a timezone.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_HAS_THREADS</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
                 <font color="#0000ff">// Many of the functions that the datetime class uses internally</font>
                 <font color="#0000ff">// are not reentrant and thus not thread-safe.  Indeed, for</font>
                 <font color="#0000ff">// some functions, there is no thread-safe version.  If your</font>
@@ -214,19 +235,19 @@
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// If you don't supply a mutex, the methods in this class</font>
                 <font color="#0000ff">// will still work, but will not be thread-safe.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>void</b></font>    setTimeMutex(pthread_mutex_t *mutex);
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>void</b></font>   setTimeMutex(mutex *mtx);
                                 <font color="#0000ff">// Allows you to supply a mutex to regulate</font>
                                 <font color="#0000ff">// access to the non-reentrant functions.</font>
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/datetime.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/datetime.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

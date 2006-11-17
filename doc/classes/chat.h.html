@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/chat.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/chat.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,24 +9,26 @@
 <font color="#0000ff">// Copyright (c) 2004 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_CHAT_H</font>
-<font color="#a520f7">#define RUDIMENTS_CHAT_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_CHAT_H</font>
+<font color="#a020f0">#define RUDIMENTS_CHAT_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/chatincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/chatincludes.h&gt;</font>
 
 <font color="#0000ff">// The chat class implements methods for chatting with something (such as</font>
 <font color="#0000ff">// a modem) over a file descriptor or set of file descriptors.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> chat {
-        <font color="#a52829"><b>public</b></font>:
-                chat(<font color="#298a52"><b>const</b></font> filedescriptor *fd);
+<font color="#2e8b57"><b>class</b></font> chatprivate;
+
+<font color="#2e8b57"><b>class</b></font> chat {
+        <font color="#a52a2a"><b>public</b></font>:
+                chat(<font color="#2e8b57"><b>const</b></font> filedescriptor *fd);
                 <font color="#0000ff">// Initializes an instance of chat.  Data will be</font>
                 <font color="#0000ff">// written to and read from &quot;fd&quot;.</font>
-                chat(<font color="#298a52"><b>const</b></font> filedescriptor *rfd, <font color="#298a52"><b>const</b></font> filedescriptor *wfd);
+                chat(<font color="#2e8b57"><b>const</b></font> filedescriptor *rfd, <font color="#2e8b57"><b>const</b></font> filedescriptor *wfd);
                 <font color="#0000ff">// Initializes an instance of chat.  Data will be</font>
                 <font color="#0000ff">// written to &quot;wfd&quot; and read from &quot;rfd&quot;.</font>
                 ~chat();
@@ -35,17 +37,17 @@
                 <font color="#0000ff">// a chunk of XML of the following format:</font>
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// &lt;script&gt;</font>
-                <font color="#0000ff">//      &lt;timeout seconds=&quot;2&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;abort string=&quot;ERROR&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;send string=&quot;AT Z\p\p\p\r\n&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;expect string=&quot;OK&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;clearabort/&gt;</font>
-                <font color="#0000ff">//      &lt;abort string=&quot;(NO DIALTONE|NO DIAL TONE)&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;abort string=&quot;NO CARRIER&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;abort string=&quot;BUSY&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;timeout seconds=&quot;30&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;send string=&quot;ATDT18005555555\r\n&quot;/&gt;</font>
-                <font color="#0000ff">//      &lt;expect string=&quot;CONNECT&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;timeout seconds=&quot;2&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;abort string=&quot;ERROR&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;send string=&quot;AT Z\p\p\p\r\n&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;expect string=&quot;OK&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;clearabort/&gt;</font>
+                <font color="#0000ff">//    &lt;abort string=&quot;(NO DIALTONE|NO DIAL TONE)&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;abort string=&quot;NO CARRIER&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;abort string=&quot;BUSY&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;timeout seconds=&quot;30&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;send string=&quot;ATDT18005555555\r\n&quot;/&gt;</font>
+                <font color="#0000ff">//    &lt;expect string=&quot;CONNECT&quot;/&gt;</font>
                 <font color="#0000ff">// &lt;/script&gt;</font>
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// runScript() processes each tag sequentially and may abort</font>
@@ -54,17 +56,17 @@
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// The &lt;send&gt; tag specifies data to be written.  The following</font>
                 <font color="#0000ff">// escape sequences are recognized:</font>
-                <font color="#0000ff">//      \d - 1 second pause</font>
-                <font color="#0000ff">//      \p - 1/10th of a second pause</font>
-                <font color="#0000ff">//      \r - carriage return</font>
-                <font color="#0000ff">//      \n - new line</font>
-                <font color="#0000ff">//      \b - backspace</font>
-                <font color="#0000ff">//      \000 - an octal sequence</font>
-                <font color="#0000ff">//              (where 000 is replaced with 3 numbers &lt;=8)</font>
-                <font color="#0000ff">//      \N - null</font>
+                <font color="#0000ff">//    \d - 1 second pause</font>
+                <font color="#0000ff">//    \p - 1/10th of a second pause</font>
+                <font color="#0000ff">//    \r - carriage return</font>
+                <font color="#0000ff">//    \n - new line</font>
+                <font color="#0000ff">//    \b - backspace</font>
+                <font color="#0000ff">//    \000 - an octal sequence</font>
+                <font color="#0000ff">//            (where 000 is replaced with 3 numbers &lt;=8)</font>
+                <font color="#0000ff">//    \N - null</font>
                 <font color="#0000ff">// If a filedescriptor-level error occurs writing data, then</font>
                 <font color="#0000ff">// runScript() will return RESULT_ERROR.</font>
-                <font color="#0000ff">//      </font>
+                <font color="#0000ff">//    </font>
                 <font color="#0000ff">// The &lt;timeout&gt; tag specified the number of seconds to wait</font>
                 <font color="#0000ff">// for a response after a &lt;send&gt; tag has been fully processed</font>
                 <font color="#0000ff">// before runScript() will fail, returning a RESULT_TIMEOUT.</font>
@@ -91,27 +93,27 @@
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// If runScript() successfully processes all tags then it</font>
                 <font color="#0000ff">// returns RESULT_SUCCESS.</font>
-                <font color="#298a52"><b>int</b></font>     runScript(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *script, <font color="#298a52"><b>char</b></font> **abort);
+                <font color="#2e8b57"><b>int</b></font>   runScript(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *script, <font color="#2e8b57"><b>char</b></font> **abort);
                         <font color="#0000ff">// Runs &quot;script&quot;, if an abort condition is met, the</font>
                         <font color="#0000ff">// &quot;abort&quot; is allocated and set to the abort string</font>
                         <font color="#0000ff">// from the script that caught the condition.</font>
-                <font color="#298a52"><b>int</b></font>     runScript(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *script, <font color="#298a52"><b>char</b></font> **abort,
-                                                namevaluepairs *variables);
+                <font color="#2e8b57"><b>int</b></font>   runScript(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *script, <font color="#2e8b57"><b>char</b></font> **abort,
+                                                constnamevaluepairs *variables);
                         <font color="#0000ff">// Runs &quot;script&quot; as runScript() above does, but also</font>
                         <font color="#0000ff">// looks through &quot;script&quot; for variables of format:</font>
-                        <font color="#0000ff">//      $(variable)</font>
+                        <font color="#0000ff">//   $(variable)</font>
                         <font color="#0000ff">// For each variable that it finds, if there is a</font>
                         <font color="#0000ff">// matching name/value pair in &quot;variables&quot;, the value</font>
                         <font color="#0000ff">// is substituted in for the variable.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/chat.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/chat.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>

@@ -32,6 +32,6 @@ html:
 	do \
 		BASENAME=`/bin/basename $$i`; \
 		echo "processing $$BASENAME"; \
-		/usr/X11R6/bin/gvim $$i +":runtime! syntax/2html.vim" +"colorscheme default" +":x! ./$$BASENAME.html" +"q!"; \
+		gvim $$i +":runtime! syntax/2html.vim" +"colorscheme default" +":x! ./$$BASENAME.html" +"q!"; \
 		sleep 2; \
 	done

@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.28/include/rudiments/file.h.html</title>
-<meta name="Generator" content="Vim/6.3">
+<title>~/src/firstworks/rudiments-0.30/include/rudiments/file.h.html</title>
+<meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor="#ffffff" text="#000000">
@@ -9,10 +9,10 @@
 <font color="#0000ff">// Copyright (c) 2002 David Muse</font>
 <font color="#0000ff">// See the COPYING file for more information.</font>
 
-<font color="#a520f7">#ifndef RUDIMENTS_FILE_H</font>
-<font color="#a520f7">#define RUDIMENTS_FILE_H</font>
+<font color="#a020f0">#ifndef RUDIMENTS_FILE_H</font>
+<font color="#a020f0">#define RUDIMENTS_FILE_H</font>
 
-<font color="#a520f7">#include </font><font color="#ff00ff">&lt;rudiments/private/fileincludes.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/fileincludes.h&gt;</font>
 
 <font color="#0000ff">// The file class provides methods for interacting with files and for </font>
 <font color="#0000ff">// discovering the properties associated with a file such as permissions,</font>
@@ -25,24 +25,26 @@
 <font color="#0000ff">// create an instance of the class, call open(), then use the non-static</font>
 <font color="#0000ff">// methods.</font>
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
-<font color="#298a52"><b>namespace</b></font> rudiments {
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#2e8b57"><b>namespace</b></font> rudiments {
+<font color="#a020f0">#endif</font>
 
-<font color="#298a52"><b>class</b></font> file : <font color="#a52829"><b>public</b></font> filedescriptor {
-        <font color="#a52829"><b>public</b></font>:
+<font color="#2e8b57"><b>class</b></font> fileprivate;
+
+<font color="#2e8b57"><b>class</b></font> file : <font color="#a52a2a"><b>public</b></font> filedescriptor {
+        <font color="#a52a2a"><b>public</b></font>:
 
                         file();
                         <font color="#0000ff">// Creates an uninitialized instance of the file class.</font>
-                        file(<font color="#298a52"><b>const</b></font> file &amp;f);
-                file    &amp;<font color="#a52829"><b>operator</b></font>=(<font color="#298a52"><b>const</b></font> file &amp;f);
-                <font color="#298a52"><b>virtual</b></font> ~file();
+                        file(<font color="#2e8b57"><b>const</b></font> file &amp;f);
+                file    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> file &amp;f);
+                <font color="#2e8b57"><b>virtual</b></font>       ~file();
 
 
                 <font color="#0000ff">// These methods open the file &quot;name&quot; using &quot;flags&quot;.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    open(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>int</b></font> flags);
-                <font color="#298a52"><b>bool</b></font>    open(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>int</b></font> flags, mode_t perms);
+                <font color="#2e8b57"><b>bool</b></font>  open(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>int</b></font> flags);
+                <font color="#2e8b57"><b>bool</b></font>  open(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>int</b></font> flags, mode_t perms);
                         <font color="#0000ff">// If flags contains O_CREAT and the file doesn't</font>
                         <font color="#0000ff">// already exist, it will be created with permissions</font>
                         <font color="#0000ff">// &quot;perms&quot;.</font>
@@ -50,41 +52,41 @@
 
                 <font color="#0000ff">// These methods creates the file &quot;name&quot; with permissions</font>
                 <font color="#0000ff">// &quot;perms&quot;.  If the file already exists, it will be truncated.</font>
-                <font color="#298a52"><b>bool</b></font>    create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms);
+                <font color="#2e8b57"><b>bool</b></font>  create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms);
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms, <font color="#298a52"><b>float</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms, <font color="#2e8b57"><b>float</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms, <font color="#298a52"><b>double</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms, <font color="#2e8b57"><b>double</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms, <font color="#298a52"><b>char</b></font> number);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms, <font color="#2e8b57"><b>char</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Sets the initial contents to &quot;string&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Sets the initial contents to &quot;string&quot; of size &quot;size&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>ssize_t</b></font> create(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *data, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>ssize_t</b></font>       create(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *data, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Sets the initial contents to &quot;data&quot; of size &quot;size&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
 
 
                 <font color="#0000ff">// These methods read the contents of the file into a buffer.</font>
-                <font color="#298a52"><b>char</b></font>    *getContents();
+                <font color="#2e8b57"><b>char</b></font>  *getContents();
                         <font color="#0000ff">// Allocates a string large enough to accommodate the</font>
                         <font color="#0000ff">// contents of the currently opened file, reads the</font>
                         <font color="#0000ff">// contents of the file into the string and returns the</font>
@@ -94,7 +96,7 @@
                         <font color="#0000ff">// If the file contains no data, then a string of length</font>
                         <font color="#0000ff">// zero is returned.  If an error occurs then a NULL</font>
                         <font color="#0000ff">// is returned.</font>
-                <font color="#298a52"><b>ssize_t</b></font> getContents(<font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> buffersize);
+                <font color="#2e8b57"><b>ssize_t</b></font>       getContents(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> buffersize);
                         <font color="#0000ff">// Reads the contents of the currently open file into</font>
                         <font color="#0000ff">// &quot;buffer&quot; of length &quot;buffersize&quot;.  If the file is</font>
                         <font color="#0000ff">// larger than &quot;buffersize&quot; then only &quot;buffersize&quot; bytes</font>
@@ -106,10 +108,10 @@
 
                 <font color="#0000ff">// These methods truncate the file.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    truncate() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  truncate() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Truncates all data in the file, resulting in</font>
                         <font color="#0000ff">// a file of zero length.</font>
-                <font color="#298a52"><b>bool</b></font>    truncate(off_t length) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  truncate(off64_t length) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Truncates all data beyond the first &quot;length&quot;</font>
                         <font color="#0000ff">// bytes, resulting in a file of &quot;length&quot; bytes.</font>
 
@@ -118,16 +120,16 @@
                 <font color="#0000ff">// the next read or write will occur.  Each returns the position</font>
                 <font color="#0000ff">// relative to the beginning of the file on success or -1 on</font>
                 <font color="#0000ff">// failure.</font>
-                off_t   getCurrentPosition() <font color="#298a52"><b>const</b></font>;
+                off64_t getCurrentPosition() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Returns the position at which the next read or</font>
                         <font color="#0000ff">// write will occur.</font>
-                off_t   setPositionRelativeToBeginning(off_t offset) <font color="#298a52"><b>const</b></font>;
+                off64_t setPositionRelativeToBeginning(off64_t offset) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Sets the position to the beginning of the</font>
                         <font color="#0000ff">// file + &quot;offset&quot; bytes.</font>
-                off_t   setPositionRelativeToCurrent(off_t offset) <font color="#298a52"><b>const</b></font>;
+                off64_t setPositionRelativeToCurrent(off64_t offset) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Sets the position to the current</font>
                         <font color="#0000ff">// position + &quot;offset&quot; bytes.</font>
-                off_t   setPositionRelativeToEnd(off_t offset) <font color="#298a52"><b>const</b></font>;
+                off64_t setPositionRelativeToEnd(off64_t offset) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Sets the position to the end of the</font>
                         <font color="#0000ff">// file + &quot;offset&quot; bytes.</font>
 
@@ -152,82 +154,89 @@
                 <font color="#0000ff">// error.</font>
 
                 <font color="#0000ff">// These methods allow you to lock the entire file.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockFile(<font color="#298a52"><b>short</b></font> type) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockFile(<font color="#298a52"><b>short</b></font> type) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockFile(<font color="#298a52"><b>short</b></font> type, <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockFile() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockFile(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockFile(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockFile(<font color="#2e8b57"><b>short</b></font> type, <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockFile() <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock an arbitrary</font>
                 <font color="#0000ff">// region of the file.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockRegion(<font color="#298a52"><b>short</b></font> type, off_t start, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockRegion(<font color="#298a52"><b>short</b></font> type, off_t start, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockRegion(<font color="#298a52"><b>short</b></font> type, off_t start, off_t len,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockRegion(off_t start, off_t len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockRegion(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                        off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockRegion(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                        off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockRegion(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                off64_t len,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockRegion(off64_t start, off64_t len) <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock an arbitrary region of the</font>
                 <font color="#0000ff">// file relative to the current position.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    tryLockFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t start,
-                                                        off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t start,
-                                                        off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t len,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t start, off_t len,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockFromCurrent(off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockFromCurrent(off_t start, off_t len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                        off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                        off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t len,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                off64_t len,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockFromCurrent(off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockFromCurrent(off64_t start, off64_t len) <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock an arbitrary region of the</font>
                 <font color="#0000ff">// file relative to the end of the file.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockFromEnd(<font color="#298a52"><b>short</b></font> type, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    tryLockFromEnd(<font color="#298a52"><b>short</b></font> type, off_t start,
-                                                off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockFromEnd(<font color="#298a52"><b>short</b></font> type, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockFromEnd(<font color="#298a52"><b>short</b></font> type, off_t start, off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockFromEnd(<font color="#298a52"><b>short</b></font> type, off_t len,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockFromEnd(<font color="#298a52"><b>short</b></font> type, off_t start, off_t len,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockFromEnd(off_t len) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockFromEnd(off_t start, off_t len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t len,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                off64_t len,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockFromEnd(off64_t len) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockFromEnd(off64_t start, off64_t len) <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock &quot;the remainder&quot; of a file</font>
                 <font color="#0000ff">// starting at a given offset.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockRemainder(<font color="#298a52"><b>short</b></font> type, off_t start) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockRemainder(<font color="#298a52"><b>short</b></font> type, off_t start) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockRemainder(<font color="#298a52"><b>short</b></font> type, off_t start,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockRemainder(off_t start) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockRemainder(<font color="#2e8b57"><b>short</b></font> type, off64_t start) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockRemainder(<font color="#2e8b57"><b>short</b></font> type, off64_t start) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockRemainder(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockRemainder(off64_t start) <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock &quot;the remainder&quot; of a file</font>
                 <font color="#0000ff">// relative to the current position.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockRemainderFromCurrent(<font color="#298a52"><b>short</b></font> type) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    tryLockRemainderFromCurrent(<font color="#298a52"><b>short</b></font> type,
-                                                        off_t start) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockRemainderFromCurrent(<font color="#298a52"><b>short</b></font> type) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockRemainderFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t start) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockRemainderFromCurrent(<font color="#298a52"><b>short</b></font> type,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockRemainderFromCurrent(<font color="#298a52"><b>short</b></font> type, off_t start,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockRemainderFromCurrent() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockRemainderFromCurrent(off_t start) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type,
+                                                        off64_t start) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type,
+                                                        off64_t start) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockRemainderFromCurrent(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockRemainderFromCurrent() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockRemainderFromCurrent(off64_t start) <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allow you to lock &quot;the remainder&quot; of a file</font>
                 <font color="#0000ff">// relative to the end of the file.</font>
-                <font color="#298a52"><b>bool</b></font>    tryLockRemainderFromEnd(<font color="#298a52"><b>short</b></font> type) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    tryLockRemainderFromEnd(<font color="#298a52"><b>short</b></font> type, off_t start) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockRemainderFromEnd(<font color="#298a52"><b>short</b></font> type) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    lockRemainderFromEnd(<font color="#298a52"><b>short</b></font> type, off_t start) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockRemainderFromEnd(<font color="#298a52"><b>short</b></font> type,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    checkLockRemainderFromEnd(<font color="#298a52"><b>short</b></font> type, off_t start,
-                                                <font color="#298a52"><b>struct</b></font> flock *lck) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockRemainderFromEnd() <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    unlockRemainderFromEnd(off_t start) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  tryLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t start) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  lockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t start) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  checkLockRemainderFromEnd(<font color="#2e8b57"><b>short</b></font> type, off64_t start,
+                                                <font color="#2e8b57"><b>struct</b></font> flock *lck) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockRemainderFromEnd() <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  unlockRemainderFromEnd(off64_t start) <font color="#2e8b57"><b>const</b></font>;
 
 
                 <font color="#0000ff">// These methods allow you to advise the kernel that you are</font>
@@ -241,23 +250,23 @@
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// On operating systems don't support these methods, they</font>
                 <font color="#0000ff">// return true but don't actually do anything.</font>
-                <font color="#298a52"><b>bool</b></font>    sequentialAccess(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  sequentialAccess(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// The region will be accessed in sequential order.</font>
-                <font color="#298a52"><b>bool</b></font>    randomAccess(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  randomAccess(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// The region will be accessed in random order.</font>
-                <font color="#298a52"><b>bool</b></font>    onlyOnce(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  onlyOnce(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// The region will be only be accessed once.</font>
-                <font color="#298a52"><b>bool</b></font>    willNeed(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  willNeed(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// The region will be accessed in the near future.</font>
-                <font color="#298a52"><b>bool</b></font>    wontNeed(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  wontNeed(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// The region will not be accessed in the near future.</font>
-                <font color="#298a52"><b>bool</b></font>    normalAccess(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  normalAccess(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Removes any advice that has previously been applied</font>
                         <font color="#0000ff">// to the region.</font>
 
 
-<font color="#a520f7">                #ifdef HAVE_POSIX_FALLOCATE</font>
-                <font color="#298a52"><b>bool</b></font>    reserve(off_t start, <font color="#298a52"><b>size_t</b></font> len) <font color="#298a52"><b>const</b></font>;
+<font color="#a020f0">                #ifdef HAVE_POSIX_FALLOCATE</font>
+                <font color="#2e8b57"><b>bool</b></font>  reserve(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Reserves space on the storage medium such that a</font>
                         <font color="#0000ff">// write to the region starting at &quot;start&quot; and</font>
                         <font color="#0000ff">// continuing for &quot;len&quot; bytes will not fail due to</font>
@@ -265,7 +274,7 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true if the region can be reserved and</font>
                         <font color="#0000ff">// false otherwise.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
 
                 <font color="#0000ff">// Changes to files are often cached in system ram, these</font>
@@ -278,84 +287,84 @@
                 <font color="#0000ff">// enabled, this method only assures that the changes</font>
                 <font color="#0000ff">// has been copied into the disk's write cache, not</font>
                 <font color="#0000ff">// necessarily to the disk itself.</font>
-                <font color="#298a52"><b>bool</b></font>    sync() <font color="#298a52"><b>const</b></font> ;
-<font color="#a520f7">                #ifdef HAVE_FDATASYNC</font>
-                <font color="#298a52"><b>bool</b></font>    dataSync() <font color="#298a52"><b>const</b></font> ;
+                <font color="#2e8b57"><b>bool</b></font>  sync() <font color="#2e8b57"><b>const</b></font> ;
+<font color="#a020f0">                #ifdef HAVE_FDATASYNC</font>
+                <font color="#2e8b57"><b>bool</b></font>  dataSync() <font color="#2e8b57"><b>const</b></font> ;
                         <font color="#0000ff">// Similar to sync() but does not wait for the file's</font>
                         <font color="#0000ff">// last-access or last-modification times to be copied.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
 
                 <font color="#0000ff">// By default, the open() and create() methods call </font>
                 <font color="#0000ff">// getCurrentProperties() so the other methods of this class</font>
                 <font color="#0000ff">// will return valid data about the file immediately.  These</font>
                 <font color="#0000ff">// methods alter that behaviour.</font>
-                <font color="#298a52"><b>void</b></font>    getCurrentPropertiesOnOpen();
-                <font color="#298a52"><b>void</b></font>    dontGetCurrentPropertiesOnOpen();
+                <font color="#2e8b57"><b>void</b></font>  getCurrentPropertiesOnOpen();
+                <font color="#2e8b57"><b>void</b></font>  dontGetCurrentPropertiesOnOpen();
 
-                <font color="#298a52"><b>bool</b></font>    getCurrentProperties();
+                <font color="#2e8b57"><b>bool</b></font>  getCurrentProperties();
                         <font color="#0000ff">// Get the current file properties.</font>
                         <font color="#0000ff">// </font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
 
                 <font color="#0000ff">// These methods return various file properties.</font>
-                mode_t          getPermissions() <font color="#298a52"><b>const</b></font>;
+                mode_t          getPermissions() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the permissions</font>
-                uid_t           getOwnerUserId() <font color="#298a52"><b>const</b></font>;
+                uid_t           getOwnerUserId() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the user id of the file's owner</font>
-                gid_t           getOwnerGroupId() <font color="#298a52"><b>const</b></font>;
+                gid_t           getOwnerGroupId() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the group id of the file's owner</font>
-                off_t           getSize() <font color="#298a52"><b>const</b></font>;
+                off64_t         getSize() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the number of bytes in the file</font>
-                blksize_t       getBlockSize() <font color="#298a52"><b>const</b></font>;
+                blksize_t       getBlockSize() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the blocksize to use for most</font>
                                 <font color="#0000ff">// efficient I/O with the file or -1 for</font>
                                 <font color="#0000ff">// systems don't support this</font>
-                blkcnt_t        getBlockCount() <font color="#298a52"><b>const</b></font>;
+                blkcnt_t        getBlockCount() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the number of blocks allocated for</font>
                                 <font color="#0000ff">// the file or -1 for systems don't support this</font>
-                <font color="#298a52"><b>int</b></font>             isSocket() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isSocket() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a socket,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>int</b></font>             isSymbolicLink() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isSymbolicLink() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a symbolic link,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>int</b></font>             isRegularFile() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isRegularFile() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a regular file,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>int</b></font>             isBlockDevice() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isBlockDevice() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a block device,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>int</b></font>             isDirectory() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isDirectory() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a directory,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>int</b></font>             isCharacterDevice() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isCharacterDevice() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a character device,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>int</b></font>             isFifo() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>int</b></font>           isFifo() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns 1 if the file is a fifo,</font>
                                 <font color="#0000ff">// 0 if it's not or -1 on error.</font>
-                <font color="#298a52"><b>time_t</b></font>          getLastAccessTime() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>time_t</b></font>                getLastAccessTime() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the time of last access</font>
-                <font color="#298a52"><b>time_t</b></font>          getLastModificationTime() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>time_t</b></font>                getLastModificationTime() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the time of last modification</font>
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Modification time IS NOT affected by chmod,</font>
                                 <font color="#0000ff">// chown, or creating links.</font>
-                <font color="#298a52"><b>time_t</b></font>          getLastChangeTime() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>time_t</b></font>                getLastChangeTime() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// returns the time of last change</font>
                                 <font color="#0000ff">//</font>
                                 <font color="#0000ff">// Change time IS affected by chmod, chown and</font>
                                 <font color="#0000ff">// creating links.</font>
-                dev_t           getDevice() <font color="#298a52"><b>const</b></font>;
+                dev_t           getDevice() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// return the device of the file</font>
-                dev_t           getDeviceType() <font color="#298a52"><b>const</b></font>;
+                dev_t           getDeviceType() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// return the device type of the file</font>
-                ino_t           getInode() <font color="#298a52"><b>const</b></font>;
+                ino_t           getInode() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// return the inode of the file</font>
-                nlink_t         getNumberOfHardLinks() <font color="#298a52"><b>const</b></font>;
+                nlink_t         getNumberOfHardLinks() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// return the number of hard links to the file</font>
-                <font color="#298a52"><b>struct</b></font> stat     *getStat();
+                <font color="#2e8b57"><b>struct</b></font> stat   *getStat();
                                 <font color="#0000ff">// returns a pointer to the stat structure</font>
                                 <font color="#0000ff">// used internally</font>
 
@@ -363,31 +372,31 @@
                 <font color="#0000ff">// that owns the file.</font>
                 <font color="#0000ff">//</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    changeOwner(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newuser,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newgroup) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    changeOwner(uid_t uid, gid_t gid) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    changeOwnerUserId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newuser) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    changeOwnerUserId(uid_t uid) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    changeOwnerGroupId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newgroup) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    changeOwnerGroupId(gid_t gid) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  changeOwner(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newuser,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newgroup) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  changeOwner(uid_t uid, gid_t gid) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  changeOwnerUserId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newuser) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  changeOwnerUserId(uid_t uid) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  changeOwnerGroupId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newgroup) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  changeOwnerGroupId(gid_t gid) <font color="#2e8b57"><b>const</b></font>;
 
-                <font color="#298a52"><b>bool</b></font>    canChangeOwner() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  canChangeOwner() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Returns true if any of the changeOwner()</font>
                         <font color="#0000ff">// methods are allowed on &quot;filename&quot; and</font>
                         <font color="#0000ff">// false otherwise.</font>
 
-                <font color="#298a52"><b>long</b></font>    maxLinks() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>long</b></font>  maxLinks() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Returns the maximum number of links that can be</font>
                         <font color="#0000ff">// created to &quot;filename&quot;.</font>
 
 
-<font color="#a520f7">                #ifdef HAVE_XATTRS</font>
+<font color="#a020f0">                #ifdef HAVE_XATTRS</font>
 
                 <font color="#0000ff">// Some filesystems support extended file attributes.  These</font>
                 <font color="#0000ff">// methods provide an interface for getting and setting those</font>
                 <font color="#0000ff">// attributes.</font>
 
-                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> * <font color="#298a52"><b>const</b></font>      *listAttributes() <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> * <font color="#2e8b57"><b>const</b></font>    *listAttributes() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Returns a NULL terminated array of attributes or</font>
                         <font color="#0000ff">// NULL if an error occurred.</font>
 
@@ -395,176 +404,176 @@
                 <font color="#0000ff">// These methods reads the value of the named attribute into</font>
                 <font color="#0000ff">// the supplied (preallocated) buffer.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> *number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> *number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>short</b></font> *number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>long</b></font> *number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>float</b></font> *number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>double</b></font> *number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>char</b></font> *character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>bool</b></font> *value) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> *number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> *number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>short</b></font> *number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>long</b></font> *number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>float</b></font> *number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>double</b></font> *number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>char</b></font> *character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>bool</b></font> *value) <font color="#2e8b57"><b>const</b></font>;
 
                 <font color="#0000ff">// These methods allocate a buffer, read the value into it</font>
                 <font color="#0000ff">// and return the allocated buffer.  Some of these methods also</font>
                 <font color="#0000ff">// return the size of the buffer.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> **string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>char</b></font> **string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> **string,
-                                        <font color="#298a52"><b>size_t</b></font> *size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>char</b></font> **string, <font color="#298a52"><b>size_t</b></font> *size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    getAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>void</b></font> **buffer, <font color="#298a52"><b>size_t</b></font> *size) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> **string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>char</b></font> **string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> **string,
+                                        <font color="#2e8b57"><b>size_t</b></font> *size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>char</b></font> **string, <font color="#2e8b57"><b>size_t</b></font> *size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  getAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>void</b></font> **buffer, <font color="#2e8b57"><b>size_t</b></font> *size) <font color="#2e8b57"><b>const</b></font>;
 
 
                 <font color="#0000ff">// These methods create a new attribute.</font>
                 <font color="#0000ff">// They return true on success and false on failure and will</font>
                 <font color="#0000ff">// fail if the attribute already exists.</font>
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>short</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>long</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>float</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>double</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>char</b></font> character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>bool</b></font> value) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    createAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *buffer, <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>short</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>long</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>float</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>double</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>char</b></font> character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>bool</b></font> value) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  createAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *buffer, <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
 
 
                 <font color="#0000ff">// These method replace an existing attribute.</font>
                 <font color="#0000ff">// They return true on success and false on failure and will</font>
                 <font color="#0000ff">// fail if the attribute doesn't already exist.</font>
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>short</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>long</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>float</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>double</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>char</b></font> character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>bool</b></font> value) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    replaceAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *buffer,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>short</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>long</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>float</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>double</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>char</b></font> character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>bool</b></font> value) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  replaceAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *buffer,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
 
 
                 <font color="#0000ff">// These methods create new attributes or replace existing</font>
                 <font color="#0000ff">// attributes.  They returns true on success and false on</font>
                 <font color="#0000ff">// failure.</font>
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>short</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>long</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>float</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>double</b></font> number) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>char</b></font> character) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, <font color="#298a52"><b>bool</b></font> value) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
-                <font color="#298a52"><b>bool</b></font>    setAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *buffer,
-                                                <font color="#298a52"><b>size_t</b></font> size) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>short</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>long</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>float</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>double</b></font> number) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>char</b></font> character) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, <font color="#2e8b57"><b>bool</b></font> value) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  setAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *buffer,
+                                                <font color="#2e8b57"><b>size_t</b></font> size) <font color="#2e8b57"><b>const</b></font>;
 
 
-                <font color="#298a52"><b>bool</b></font>    removeAttribute(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name) <font color="#298a52"><b>const</b></font>;
+                <font color="#2e8b57"><b>bool</b></font>  removeAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Removes attribute &quot;name&quot;.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a520f7">                #endif</font>
+<font color="#a020f0">                #endif</font>
 
 
                 <font color="#0000ff">// These methods creates the file &quot;name&quot; with permissions</font>
                 <font color="#0000ff">// &quot;perms&quot;.  If the file already exists, it will be truncated.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms);
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>short</b></font> number);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>long</b></font> number);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>float</b></font> number);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>float</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>double</b></font> number);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>double</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>char</b></font> number);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>char</b></font> number);
                         <font color="#0000ff">// Sets the initial contents to &quot;number&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string);
                         <font color="#0000ff">// Sets the initial contents to &quot;string&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *string, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *string, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Sets the initial contents to &quot;string&quot; of size &quot;size&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>ssize_t</b></font>  createFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name, mode_t perms,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>void</b></font> *data, <font color="#298a52"><b>size_t</b></font> size);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>ssize_t</b></font>        createFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name, mode_t perms,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>void</b></font> *data, <font color="#2e8b57"><b>size_t</b></font> size);
                         <font color="#0000ff">// Sets the initial contents to &quot;data&quot; of size &quot;size&quot;.</font>
                         <font color="#0000ff">// Returns the number of bytes written or -1 on error.</font>
 
 
                 <font color="#0000ff">// These methods allow you to create special kinds of files.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     createFifo(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, mode_t perms);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   createFifo(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, mode_t perms);
                         <font color="#0000ff">// Creates a fifo called &quot;filename&quot; with permissions</font>
                         <font color="#0000ff">// &quot;perms&quot;.</font>
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      createTemporaryFile(<font color="#298a52"><b>char</b></font> *templatefilename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    createTemporaryFile(<font color="#2e8b57"><b>char</b></font> *templatefilename);
                         <font color="#0000ff">// Creates a temporary file using &quot;templatefilename&quot;</font>
                         <font color="#0000ff">// as a template.  The last 6 characters of</font>
                         <font color="#0000ff">// &quot;templatefilename&quot; must be XXXXXX and</font>
@@ -573,16 +582,16 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Opens and returns the file descriptor handle of the</font>
                         <font color="#0000ff">// file on success and -1 on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     createHardLink(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *oldpath,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newpath);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   createHardLink(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *oldpath,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newpath);
                         <font color="#0000ff">// Creates a hard link between &quot;oldpath&quot; and &quot;newpath&quot;.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     createSymbolicLink(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *oldpath,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newpath);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   createSymbolicLink(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *oldpath,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newpath);
                         <font color="#0000ff">// Creates a symbolic link between &quot;oldpath&quot; and</font>
                         <font color="#0000ff">// &quot;newpath&quot;. Returns true on success and false on</font>
                         <font color="#0000ff">// failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>char</b></font>     *resolveSymbolicLink(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>char</b></font>   *resolveSymbolicLink(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Returns the pathname of the file that the symbolic</font>
                         <font color="#0000ff">// link &quot;filename&quot; points to.  Returns NULL on failure.</font>
                         <font color="#0000ff">//</font>
@@ -591,23 +600,23 @@
                         <font color="#0000ff">// must deallocate this buffer.</font>
 
 
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     rename(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *oldpath,
-                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newpath);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   rename(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *oldpath,
+                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newpath);
                         <font color="#0000ff">// Renames &quot;oldpath&quot; to &quot;newpath&quot;.  Returns true on</font>
                         <font color="#0000ff">// success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     remove(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   remove(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Removes file &quot;filename&quot;.  Returns true on success</font>
                         <font color="#0000ff">// and false on failure.  (Will not remove a directory).</font>
 
 
                 <font color="#0000ff">// These methods truncate the file.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    truncate(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>bool</b></font>    truncate(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, off_t length);
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>bool</b></font>   truncate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>bool</b></font>   truncate(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, off64_t length);
 
 
                 <font color="#0000ff">// These methods read the contents of the file into a buffer.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>char</b></font>    *getContents(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>char</b></font>   *getContents(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name);
                         <font color="#0000ff">// Allocates a string large enough to accommodate the</font>
                         <font color="#0000ff">// contents of the file &quot;name&quot; , reads the contents of</font>
                         <font color="#0000ff">// the file into the string, terminates it with a NULL</font>
@@ -617,9 +626,9 @@
                         <font color="#0000ff">// If the file contains no data, then a string of length</font>
                         <font color="#0000ff">// zero is returned.  If an error occurs then a NULL</font>
                         <font color="#0000ff">// is returned.</font>
-                <font color="#298a52"><b>static</b></font>  <font color="#298a52"><b>ssize_t</b></font> getContents(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *name,
-                                                <font color="#298a52"><b>unsigned</b></font> <font color="#298a52"><b>char</b></font> *buffer,
-                                                <font color="#298a52"><b>size_t</b></font> buffersize);
+                <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>ssize_t</b></font>        getContents(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name,
+                                                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *buffer,
+                                                <font color="#2e8b57"><b>size_t</b></font> buffersize);
                         <font color="#0000ff">// Reads the contents of the file &quot;name&quot; into</font>
                         <font color="#0000ff">// &quot;buffer&quot; of length &quot;buffersize&quot;.  If the file is</font>
                         <font color="#0000ff">// larger than &quot;buffersize&quot; then only &quot;buffersize&quot; bytes</font>
@@ -630,18 +639,18 @@
 
 
                 <font color="#0000ff">// These methods allow you to check various access statuses.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     exists(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   exists(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Returns true if the file exists and false otherwise.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     readable(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   readable(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Returns true if &quot;filename&quot; is readable by the user</font>
                         <font color="#0000ff">// or false otherwise.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     writeable(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   writeable(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Returns true if &quot;filename&quot; is writeable by the user</font>
                         <font color="#0000ff">// or false otherwise.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     executable(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   executable(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Returns true if &quot;filename&quot; is executable by the user</font>
                         <font color="#0000ff">// or false otherwise.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     accessible(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, <font color="#298a52"><b>int</b></font> mode);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   accessible(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, <font color="#2e8b57"><b>int</b></font> mode);
                         <font color="#0000ff">// Checks to see if &quot;filename&quot; exists, is readable,</font>
                         <font color="#0000ff">// is writeable and/or is executable by the user, based</font>
                         <font color="#0000ff">// on the value of &quot;mode&quot;.  Mode should be an or'ed</font>
@@ -655,52 +664,52 @@
                 <font color="#0000ff">// These methods return various file properties into the</font>
                 <font color="#0000ff">// supplied buffers.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getPermissions(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getPermissions(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 mode_t *perms);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getOwnerUserId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getOwnerUserId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 uid_t *uid);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getOwnerGroupId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getOwnerGroupId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 gid_t *gid);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getSize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                off_t *size);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getBlockSize(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getSize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                off64_t *size);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getBlockSize(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 blksize_t *size);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getBlockCount(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getBlockCount(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 blkcnt_t *blocks);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isSocket(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isSymbolicLink(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isRegularFile(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isBlockDevice(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isDirectory(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isCharacterDevice(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>int</b></font>      isFifo(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getLastAccessTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>time_t</b></font> *atime);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getLastModificationTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>time_t</b></font> *mtime);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getLastChangeTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>time_t</b></font> *ctime);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getDevice(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, dev_t *dev);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getDeviceType(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isSocket(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isSymbolicLink(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isRegularFile(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isBlockDevice(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isDirectory(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isCharacterDevice(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>int</b></font>    isFifo(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getLastAccessTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> *atime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getLastModificationTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> *mtime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getLastChangeTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> *ctime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getDevice(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, dev_t *dev);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getDeviceType(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                         dev_t *devtype);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getInode(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, ino_t *inode);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     getNumberOfHardLinks(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getInode(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, ino_t *inode);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getNumberOfHardLinks(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                         nlink_t *nlink);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     changeOwner(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newuser,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newgroup);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     changeOwner(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   changeOwner(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newuser,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newgroup);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   changeOwner(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                 uid_t uid, gid_t gid);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     changeOwnerUserId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newuser);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     changeOwnerUserId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   changeOwnerUserId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newuser);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   changeOwnerUserId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                         uid_t uid);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     changeOwnerGroupId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *newgroup);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     changeOwnerGroupId(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   changeOwnerGroupId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *newgroup);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   changeOwnerGroupId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
                                                         gid_t gid);
 
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     canChangeOwner(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   canChangeOwner(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                                 <font color="#0000ff">// Returns true if any of the changeOwner()</font>
                                 <font color="#0000ff">// methods are allowed on &quot;filename&quot; and</font>
                                 <font color="#0000ff">// false otherwise.</font>
@@ -709,33 +718,33 @@
                 <font color="#0000ff">// These methods allow you to override the last access and/or</font>
                 <font color="#0000ff">// modification time of a file.</font>
                 <font color="#0000ff">// They return true on success and false on failure.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setLastAccessTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>time_t</b></font> lastaccesstime);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setLastModificationTime(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>time_t</b></font> lastmodtime);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setLastAccessAndModificationTimes(
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                        <font color="#298a52"><b>time_t</b></font> lastaccesstime,
-                                                        <font color="#298a52"><b>time_t</b></font> lastmodtime);
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>bool</b></font>     setLastAccessAndModificationTimes(
-                                                        <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   setLastAccessTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> lastaccesstime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   setLastModificationTime(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> lastmodtime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   setLastAccessAndModificationTimes(
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                        <font color="#2e8b57"><b>time_t</b></font> lastaccesstime,
+                                                        <font color="#2e8b57"><b>time_t</b></font> lastmodtime);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   setLastAccessAndModificationTimes(
+                                                        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                         <font color="#0000ff">// Sets the last access and modification times of</font>
                         <font color="#0000ff">// &quot;filename&quot; to now.</font>
 
 
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>char</b></font>     *dirname(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>char</b></font>   *dirname(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                                 <font color="#0000ff">// Returns the directory portion of &quot;filename&quot;.</font>
                                 <font color="#0000ff">// This method allocates a buffer internally</font>
                                 <font color="#0000ff">// and returns it.  The calling program must</font>
                                 <font color="#0000ff">// deallocate the buffer.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>char</b></font>     *basename(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>char</b></font>   *basename(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                                 <font color="#0000ff">// Returns the non-directory portion of</font>
                                 <font color="#0000ff">// &quot;filename&quot;.</font>
                                 <font color="#0000ff">// This method allocates a buffer internally</font>
                                 <font color="#0000ff">// and returns it.  The calling program must</font>
                                 <font color="#0000ff">// deallocate the buffer.</font>
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>char</b></font>     *basename(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename,
-                                                <font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *suffix);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>char</b></font>   *basename(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename,
+                                                <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *suffix);
                                 <font color="#0000ff">// Returns the non-directory portion of</font>
                                 <font color="#0000ff">// &quot;filename&quot;, truncating &quot;suffix&quot;.</font>
                                 <font color="#0000ff">// This method allocates a buffer internally</font>
@@ -743,25 +752,25 @@
                                 <font color="#0000ff">// deallocate the buffer.</font>
 
 
-                <font color="#298a52"><b>static</b></font> key_t    generateKey(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename, <font color="#298a52"><b>int</b></font> id);
+                <font color="#2e8b57"><b>static</b></font> key_t  generateKey(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename, <font color="#2e8b57"><b>int</b></font> id);
                                 <font color="#0000ff">// Generates a key based on &quot;filename&quot; and the</font>
                                 <font color="#0000ff">// least signifigant 8 bits of id (which must</font>
                                 <font color="#0000ff">// be non-zero) suitable for use with</font>
                                 <font color="#0000ff">// semaphores, shared memory segments and</font>
                                 <font color="#0000ff">// message queues.</font>
 
-                <font color="#298a52"><b>static</b></font> <font color="#298a52"><b>long</b></font>     maxLinks(<font color="#298a52"><b>const</b></font> <font color="#298a52"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>long</b></font>   maxLinks(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *filename);
                                 <font color="#0000ff">// Returns the maximum number of links that</font>
                                 <font color="#0000ff">// can be created to &quot;filename&quot;.</font>
 
-<font color="#a520f7">        #include </font><font color="#ff00ff">&lt;rudiments/private/file.h&gt;</font>
+<font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/file.h&gt;</font>
 };
 
-<font color="#a520f7">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 }
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 
-<font color="#a520f7">#endif</font>
+<font color="#a020f0">#endif</font>
 </pre>
 </body>
 </html>
