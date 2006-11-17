@@ -23,6 +23,11 @@ utility classes, others are designed to be base classes for software.</p>
 	<li><b><a href="classes/filedescriptor.h.html">filedescriptor</a></b> - base class for classes that need to interact with file descriptors
 	<ul>
 		<li><b><a href="classes/file.h.html">file</a></b> - base class for classes that need to interact with files
+		<ul>
+			<li><b><a href="classes/device.h.html">device</a></b> - base class for classes that need to interact with device files (files in /dev)
+			<li><b><a href="classes/serialport.h.html">serialport</a></b> - base class for classes that need to interact with serial ports
+			<li><b><a href="classes/shmfile.h.html">shmfile</a></b> - base class for classes that need to interact with shared memory segments as files
+		</ul>
 		<li><b><a href="classes/clientserverfactory.h.html">clientserverfactory</a></b> - class for generating instances of clients and servers
 		<ul>
 			<li><b><a href="classes/client.h.html">client</a></b> - base class for clients
@@ -31,6 +36,7 @@ utility classes, others are designed to be base classes for software.</p>
 				<ul>
 					<li><b><a href="classes/inetclientsocket.h.html">inetclientsocket</a></b> - base class for inet tcp stream clients
 					<li><b><a href="classes/unixclientsocket.h.html">unixclientsocket</a></b> - base class for unix tcp stream clients
+					<li><b><a href="classes/modemclient.h.html">modemclient</a></b> - base class for modem clients
 				</ul>
 			</ul>
 			<li><b><a href="classes/server.h.html">server</a></b> - base class for servers
@@ -39,6 +45,7 @@ utility classes, others are designed to be base classes for software.</p>
 				<ul>
 					<li><b><a href="classes/inetserversocket.h.html">inetserversocket</a></b> - base class for inet tcp stream servers
 					<li><b><a href="classes/unixserversocket.h.html">unixserversocket</a></b> - base class for unix tcp stream servers
+					<li><b><a href="classes/modemserver.h.html">modemserver</a></b> - base class for modem servers
 				</ul>
 			</ul>
 		</ul>
@@ -52,11 +59,22 @@ utility classes, others are designed to be base classes for software.</p>
 	<li><b><a href="classes/parameterstring.h.html">parameterstring</a></b> - parameter string processing class
 	<li><b><a href="classes/datetime.h.html">datetime</a></b> - date/time processing class
 	<li><b><a href="classes/timezonefile.h.html">timezonefile</a></b> - class for parsing timezone files
+	<li><b><a href="classes/directory.h.html">directory</a></b> - class for opening/closing a directory and traversing it's files and subdirectories
 	<li><b><a href="classes/filesystem.h.html">filesystem</a></b> - class for gathering filesystem statistics
 	<li><b><a href="classes/logger.h.html">logger</a></b> - class for generating log messages
 	<li><b><a href="classes/permissions.h.html">permissions</a></b> - class for generating file permissions
 	<li><b><a href="classes/randomnumber.h.html">randomnumber</a></b> - class for generating random numbers
 	<li><b><a href="classes/regularexpression.h.html">regularexpression</a></b> - class for dealing with regular expressions
+	<li><b><a href="classes/chat.h.html">chat</a></b> - class for chatting with something (such as a modem) over a ste of file descriptors
+	<li><b><a href="classes/crypt.h.html">crypt</a></b> - class for password encryption
+	<li><b><a href="classes/dynamiclib.h.html">dynamiclib</a></b> - class for loading, unloading and calling functions from dynamically linked libraries
+	<li><b><a href="classes/error.h.html">error</a></b> - class for retrieving errors that system calls can generate
+	<li><b><a href="classes/intervaltimer.h.html">intervaltimer</a></b> - class for interfacing with interval timers
+	<li><b><a href="classes/math.h.html">math</a></b> - class for performing various math operations
+	<li><b><a href="classes/mutex.h.html">mutex</a></b> - class providing an interface to pthreads mutual exclusion locks
+	<li><b><a href="classes/process.h.html">process</a></b> - class for getting and setting process permissions
+	<li><b><a href="classes/serialportprofile.h.html">serialportprofile</a></b> - termios wrapper
+	<li><b><a href="classes/snooze.h.html">snooze</a></b> - class for suspending process execution
 	</ul>
 
 	<ul>
@@ -66,10 +84,13 @@ utility classes, others are designed to be base classes for software.</p>
 	</ul>
 
 	<ul>
+	<li><b><a href="classes/memorymap.h.html">memorymap</a></b> - class for mapping a file descriptor to a region of memory and manipulating it
 	<li><b><a href="classes/memorypool.h.html">memorypool</a></b> - class that implements a memory pool
 	<li><b><a href="classes/variablebuffer.h.html">variablebuffer</a></b> - class for storing arbitrary length data
 	<li><b><a href="classes/stringbuffer.h.html">stringbuffer</a></b> - class for storing arbitrary length strings
-	<li><b><a href="classes/string.h.html">string</a></b> - string processing and evaluation class
+	<li><b><a href="classes/character.h.html">character</a></b> - class for evaluating and manipulating characters
+	<li><b><a href="classes/charstring.h.html">charstring</a></b> -class for manipulating strings
+	<li><b><a href="classes/rawbuffer.h.html">rawbuffer</a></b> - class for operating on raw memory buffers
 	</ul>
 
 	<ul>
@@ -90,7 +111,7 @@ utility classes, others are designed to be base classes for software.</p>
 	</ul>
 
 	<ul>
-	<li><b><a href="classes/list.h.html">list</a></b> - class for storing data in a doubly linked list
+	<li><b><a href="classes/linkedlist.h.html">linkedlist</a></b> - class for storing data in a doubly linked list
 	<li><b><a href="classes/dictionary.h.html">dictionary</a></b> - class for storing lists of key/data pairs
 	</ul>
 </blockquote>
