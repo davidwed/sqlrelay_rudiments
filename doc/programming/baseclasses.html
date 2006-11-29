@@ -8,16 +8,20 @@
 <span class="heading">Programming with Rudiments using the Base Classes</span><br><br>
 
 <ul>
-<li><a href="#daemon">Using the Daemon Class</a></li>
-<li><a href="#filedescriptor">Using the File Descriptor Class</a></li>
-<li><a href="#file">Using the File Class</a></li>
-<li><a href="#server">Using the Server Socket Classes</a></li>
-<li><a href="#client">Using the Client Socket Classes</a></li>
-<li><a href="#complex">Using the Complex Socket Initialization methods of the Server Classes</a></li>
+<li><a href="#daemon">Using the daemon Class</a></li>
+<li><a href="#filedescriptor">Using the filedescriptor Class</a></li>
+<li><a href="#file">Using the file Class</a></li>
+<li><a href="#device">Using the device Class</a></li>
+<li><a href="#serialport">Using the serialport Class</a></li>
+<li><a href="#shmfile">Using the shmfile Class</a></li>
+<li><a href="#server">Using the Server Classes</a></li>
+<li><a href="#client">Using the Client Classes</a></li>
+<li><a href="#complex">Using the Complex Initialization methods of the Server Classes</a></li>
+<li><a href="#listener">Using the listener Class</a></li>
 </ul>
 
 <a name="daemon"></a>
-<span class="heading">Using the Daemon Class</span><br><br>
+<span class="heading">Using the daemon Class</span><br><br>
 
 <p>Here is some sample code for a daemon process that writes "hello" every 2
 seconds.  Most daemons don't write anything to the console, but this one does
@@ -68,17 +72,32 @@ main() {
 
 
 <a name="#filedescriptor">
-<span class="heading">Using the File Descriptor Class</span><br><br>
+<span class="heading">Using the filedescriptor Class</span><br><br>
 
 <p>...</p>
 
 <a name="#file">
-<span class="heading">Using the File Class</span><br><br>
+<span class="heading">Using the file Class</span><br><br>
+
+<p>...</p>
+
+<a name="#device">
+<span class="heading">Using the device Class</span><br><br>
+
+<p>...</p>
+
+<a name="#serialport">
+<span class="heading">Using the serialport Class</span><br><br>
+
+<p>...</p>
+
+<a name="#shmfile">
+<span class="heading">Using the shmfile Class</span><br><br>
 
 <p>...</p>
 
 <a name="server"></a>
-<span class="heading">Using the Server Socket Classes</span><br><br>
+<span class="heading">Using the Server Classes</span><br><br>
 
 <p>Daemons are commonly used to serve data to clients on the same machine or
 over a network.  Below is an example combining the daemon and listener classes.
@@ -210,7 +229,7 @@ servers on the same machine could talk over inet ports, unix ports are much
 faster and use fewer system resources.</p>
 
 <a name="client"></a>
-<span class="heading">Using the Client Socket Classes</span><br><br>
+<span class="heading">Using the Client Classes</span><br><br>
 
 <p>Here's the code for a client that can talk to the server above.  This client
 sends a string to the server, reads what the server sends back and prints it
@@ -274,14 +293,14 @@ main() {
 </PRE>
 
 <a name="complex"></a>
-<span class="heading">Using the Complex Socket Initialization methods of the
+<span class="heading">Using the Complex Initialization methods of the
 Server Classes</span><br><br>
 
 <p>Setting up a server to listen on a socket is actually a multi-step process. 
 The listen() methods simplify this process but some applications may
 require a more flexible interface.  If you need to set socket options or
 perform additional actions between the steps of socket initialization, you can
-use the Complex Socket Inititalization methods of the server classes.</p>
+use the Complex Inititalization methods of the server classes.</p>
 
 <p>Below is an alternative implementation of the myserver constructor in
 which some socket options are set.</p>
@@ -318,6 +337,11 @@ myserver::myserver() : daemonprocess(), listener() {
         addFileDescriptor(unixsocket.getFileDescriptor());
 }
 </PRE>
+
+<a name="#listener">
+<span class="heading">Using the listener Class</span><br><br>
+
+<p>...</p>
 
 </body>
 </html>
