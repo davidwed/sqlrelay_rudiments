@@ -1,13 +1,5 @@
 update programming docs!
-
-SCO openserver -
-	native CC doesn't support 64-bit integers
-	gcc doesn't produce working code
-
-SCO openunix -
-	unistd.h isn't detected when using C++ because the test program
-		thinks I'm trying to re-declare std::exit(int) rather than
-		call exit(int)
+document all classes
 
 get a mingw port working
 	(can I use libgw32?)
@@ -28,11 +20,6 @@ file descriptor passing doesn't work on openbsd, cygwin, possibly netbsd
 
 daemonprocess constructor initializes static members, this is lame and messy
 
-document error.h
-document shmfile class
-document sleep class
-document modem*/chat classes
-
 document: cygwin needs "file" command to be able to build dll's
 
 freebsd IPV6_V6ONLY??? socket option
@@ -44,8 +31,6 @@ should be able to associate a zlib handle with a file descriptor and read/write
 fix math class
 
 a bunch of static methods can probably be inlined
-	
-probably can combine memorypool and variablebuffer classes
 
 xml:
 	should be able to validate an xml document against the dtd
