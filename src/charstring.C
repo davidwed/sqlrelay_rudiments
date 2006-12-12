@@ -384,26 +384,43 @@ void charstring::leftJustify(char *str, int length) {
 	}
 }
 
-void charstring::rightJustify(char *str, int length) {
+
+void charstring::rightPad(char *str, int lngth, char padchar, bool fill) {
 
 	if (!str) {
 		return;
 	}
+	
+	if (fill) {
+		int valuelength = charstring::length(str);
+		for(; valuelength<lngth; valuelength++){
+			str[valuelength]=' ';
+		}
+		str[valuelength]='\0';
+	}
 
 	// count trailing spaces
-	int	spaces=countTrailingSpaces(str,length);
+	int	spaces=countTrailingSpaces(str,lngth);
+	if (spaces==0){
+		return;
+	}
 
 	// replace characters
 	int	index;
 	int	stop=spaces-1;
-	for (index=length-1; index>stop; index--) {
+	for (index=lngth-1; index>stop; index--) {
 		str[index]=str[index-spaces];
 	}
 
 	// right-pad with spaces
 	for (; index>-1; index--) {
-		str[index]=' ';
+		str[index]=padchar;
 	}
+}
+
+void charstring::rightJustify(char *str, int length) {
+
+	rightPad(str,length,' ',false);
 }
 
 void charstring::center(char *str, int length) {

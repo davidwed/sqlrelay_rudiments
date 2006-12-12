@@ -351,6 +351,20 @@ class charstring {
 			// 
 			// Example:
 			//	"   hello   " -> "hello      "
+		static  void    rightPad(char *str, int lngth,
+					char padchar, bool fill);
+			// Moves trailing spaces to the beginning of "str" for
+			// "length" characters and replaces them with the
+			// padchar.
+			//
+			// Example when padchar is X:
+			//      "hello      " -> "XXXXXXhello"
+			// Example when padchar is X and lngth is 10 and fill
+			// is true
+			//	"hello" -> "XXXXhello"
+			// Example when padchar is X and lngth is 10 and fill
+			// is false
+			//      "hello " -> " hello"
 		static	void	rightJustify(char *str, int length);
 			// Moves trailing spaces to the beginning of "str" for
 			// "length" characters.
