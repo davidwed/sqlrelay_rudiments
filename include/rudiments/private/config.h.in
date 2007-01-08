@@ -355,6 +355,12 @@
 /* OpenBSD style statfs */
 #undef HAVE_OPENBSD_STATFS
 
+/* Some systems have OSSwapHostToLittleInt64 */
+#undef HAVE_OSSWAPHOSTTOLITTLEINT64
+
+/* Some systems have OSSwapLittleToHostInt64 */
+#undef HAVE_OSSWAPLITTLETOHOSTINT64
+
 /* Some systems have posix_fadvise */
 #undef HAVE_POSIX_FADVISE
 

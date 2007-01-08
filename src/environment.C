@@ -148,12 +148,8 @@ bool environment::clear() {
 	#ifdef HAVE_CLEARENV
 		return !clearenv();
 	#else
-		#ifndef HAVE_NSGETENVIRON
-			environ=NULL;
-			return true;
-		#else
-			#error no way to clear environment
-		#endif
+		environ[0]=NULL;
+		return true;
 	#endif
 }
 

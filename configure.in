@@ -901,6 +901,16 @@ AC_TRY_LINK([#include <stdlib.h>
 #include <sys/types.h>],
 swap64(0);,AC_DEFINE(HAVE_SWAP64,1,Some systems have swap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for OSSwapLittleToHostInt64)
+AC_TRY_LINK([#include <stdlib.h>
+#include <libkern/OSByteOrder.h>],
+OSSwapLittleToHostInt64(0);,AC_DEFINE(HAVE_OSSWAPLITTLETOHOSTINT64,1,Some systems have OSSwapLittleToHostInt64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for OSSwapHostToLittleInt64)
+AC_TRY_LINK([#include <stdlib.h>
+#include <libkern/OSByteOrder.h>],
+OSSwapHostToLittleInt64(0);,AC_DEFINE(HAVE_OSSWAPHOSTTOLITTLEINT64,1,Some systems have OSSwapHostToLittleInt64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for dirfd)
 AC_TRY_LINK([#include <sys/types.h>
 #ifdef HAVE_DIRENT_H
