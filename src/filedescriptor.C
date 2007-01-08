@@ -1532,7 +1532,7 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 		#elif defined(HAVE_SWAP64)
 			return swap64(value);
 		#elif defined(HAVE_HAVE_OSSWAPHOSTTOLITTLEINT64)
-			return OsSwapHostToLittleInt64(value);
+			return OSSwapHostToLittleInt64(value);
 		#else
 			#error no bswap64() or anything like it
 		#endif
@@ -1560,7 +1560,7 @@ uint64_t filedescriptor::netToHost(uint64_t value) const {
 		#elif defined(HAVE_SWAP64)
 			return swap64(value);
 		#elif defined(HAVE_HAVE_OSSWAPLITTLETOHOSTINT64)
-			return OsSwapLittleToHostInt64(value);
+			return OSSwapLittleToHostInt64(value);
 		#else
 			#error no bswap64() or anything like it
 		#endif
