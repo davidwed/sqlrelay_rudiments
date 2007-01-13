@@ -1,3 +1,5 @@
+fix non-pcre code per Tim Bunce's suggestions
+
 update programming docs!
 
 get a mingw port working

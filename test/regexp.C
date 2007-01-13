@@ -9,10 +9,11 @@ using namespace rudiments;
 #endif
 
 void printMatches(regularexpression *re) {
-	printf("%d matches\n",re->getSubstringCount());
-	for (int i=0; i<re->getSubstringCount(); i++) {
+	printf("match 0: \"%s\"\n",re->getSubstringStart(0));
+	for (int i=1; i<re->getSubstringCount(); i++) {
 		printf("match: \"%s\"\n",re->getSubstringStart(i));
 	}
+	printf("%d matches\n",re->getSubstringCount());
 }
 
 int main(int argc, const char **argv) {
@@ -98,6 +99,13 @@ int main(int argc, const char **argv) {
 	printMatches(&re);
 
         if (re.match("See ya later!")) {
+                printf("The string contains Dave\n");
+        } else {
+                printf("The string doesn't contain Dave\n");
+	}
+	printMatches(&re);
+
+        if (re.match("Dave, Dave, Dave!")) {
                 printf("The string contains Dave\n");
         } else {
                 printf("The string doesn't contain Dave\n");
