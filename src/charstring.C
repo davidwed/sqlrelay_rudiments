@@ -1056,6 +1056,17 @@ void charstring::split(const char *string, ssize_t stringlength,
 	}
 }
 
+char *charstring::subString(const char *str, size_t start, size_t end) {
+
+	// handle end<start
+	if (end<start) {
+		size_t	temp=end;
+		end=start;
+		start=temp;
+	}
+	return duplicate(str+start,end-start+1);
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

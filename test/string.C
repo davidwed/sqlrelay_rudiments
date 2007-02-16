@@ -64,10 +64,16 @@ int main(int argc, const char **argv) {
 
 	// duplicate the string and display the duplicated string
 	char	*hello=charstring::duplicate(s);
-	printf("%s\n",hello);
+	char	*ell=charstring::subString(hello,1,3);
+	char	*lle=charstring::subString(hello,3,1);
+	printf("hello: %s\n",hello);
+	printf("ell: %s\n",ell);
+	printf("ell: %s\n",lle);
 
 	// make sure to clean up what duplicate() returns
 	delete[] hello;
+	delete[] ell;
+	delete[] lle;
 
 
 	// split

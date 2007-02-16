@@ -419,7 +419,10 @@ class charstring {
 					char ***list,
 					uint64_t *listlength);
 
-
+		static char	*subString(const char *str,
+						size_t start, size_t end);
+				// Returns a copy of the segment of "str"
+				// between string indices "start" and "end".
 
 	#include <rudiments/private/charstring.h>
 };

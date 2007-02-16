@@ -1,6 +1,7 @@
 0.31 - added OSSwapLittleToHost/OSSwapHostToLittle for Mac OS X
 	modified environment::clear() for mac os x
 	regularexpression wasn't setting the match count correctly, fixed that
+	added charstring::subString() method
 
 0.30 - changed commandline::value() to commandline::getValue()
 	fixed a memory leak in dictionary
