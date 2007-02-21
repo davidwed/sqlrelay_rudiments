@@ -3,6 +3,9 @@
 
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
+#include <rudiments/process.h>
+#include <rudiments/file.h>
+#include <rudiments/snooze.h>
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -18,11 +21,11 @@ daemonprocess	*dmn;
 // define a function to shut down the process cleanly
 RETSIGTYPE	shutDown() {
 
-	printf("%d: shutting down\n",getpid());
+	printf("%d: shutting down\n",process::getProcessId());
 
 	// clean up
 	delete dmn;
-	unlink("/tmp/dmn.pidfile");
+	file::remove("/tmp/dmn.pidfile");
 	exit(0);
 }
 
@@ -55,14 +58,16 @@ int main(int argc, const char **argv) {
 
 	if (!fork()) {
 		for (;;) {
-			printf("%d: child looping...\n",getpid());
-			sleep(1);
+			printf("%d: child looping...\n",
+				process::getProcessId());
+			snooze::macrosnooze(1);
 		}
 	}
 
 	// loop, printing "looping..." once per second
 	for (;;) {
-		printf("%d: parent looping...\n",getpid());
-		sleep(1);
+		printf("%d: parent looping...\n",
+				process::getProcessId());
+		snooze::macrosnooze(1);
 	}
 }

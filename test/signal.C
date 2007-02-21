@@ -3,7 +3,6 @@
 
 #include <rudiments/signalclasses.h>
 #include <stdio.h>
-#include <unistd.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -27,7 +26,7 @@ int main(int argc, const char **argv) {
 	// Loop forever, each time waiting for a signal not in the ignoreset
 	// to be sent. Since SIGUSR1 is the only signal not in the ignoreset,
 	// waitForSignals will fall through only when SIGUSR1 is received.
-        while(1) {
+        for (;;) {
                 signalmanager::waitForSignals(ignoreset.getSignalSet());
         }
 }

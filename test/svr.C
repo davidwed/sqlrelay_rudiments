@@ -4,9 +4,7 @@
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
 #include <rudiments/inetserversocket.h>
-
-#include <stdlib.h>
-#include <unistd.h>
+#include <rudiments/file.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -75,7 +73,7 @@ RETSIGTYPE	shutDown() {
 	printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
-	unlink("/tmp/svr.pidfile");
+	file::remove("/tmp/svr.pidfile");
 	exit(0);
 }
 

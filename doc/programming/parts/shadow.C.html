@@ -1,0 +1,53 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/shadowentry.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+
+        <font color="#0000ff">// get the shadow entry for &quot;root&quot;</font>
+        shadowentry     spent;
+        spent.initialize(<font color="#ff00ff">&quot;root&quot;</font>);
+
+        <font color="#0000ff">// print the components individually</font>
+        printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getName());
+        printf(<font color="#ff00ff">&quot;       Encrypted Password: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getEncryptedPassword());
+        printf(<font color="#ff00ff">&quot;       Last Change: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                        spent.getLastChangeDate());
+        printf(<font color="#ff00ff">&quot;       Days Before Change Allowed: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                        spent.getDaysBeforeChangeAllowed());
+        printf(<font color="#ff00ff">&quot;       Days Before Change Required: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                        spent.getDaysBeforeChangeRequired());
+        printf(<font color="#ff00ff">&quot;       Days Before Expiration Warning: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                        spent.getDaysBeforeExpirationWarning());
+        printf(<font color="#ff00ff">&quot;       Days Of Inactivity Allowed: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                        spent.getDaysOfInactivityAllowed());
+        printf(<font color="#ff00ff">&quot;       Expiration Date: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                        spent.getExpirationDate());
+        printf(<font color="#ff00ff">&quot;       Flag: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getFlag());
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// use the built in print method</font>
+        printf(<font color="#ff00ff">&quot;Built In...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        spent.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+}
+</pre>
+
+

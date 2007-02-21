@@ -6,7 +6,6 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/datetime.h>
-#include <unistd.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -17,7 +16,7 @@ int main(int argc, const char **argv) {
 
 
 	// remove the file (in case it already exists)
-	unlink("testfile");
+	file::remove("testfile");
 
 
 	// create a new file called "testfile" with rw-rw---- permissions

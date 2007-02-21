@@ -1,0 +1,170 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/charstring.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// create a new string 50 bytes long</font>
+        <font color="#2e8b57"><b>char</b></font>   s[<font color="#ff00ff">50</font>];
+
+
+        <font color="#0000ff">// set every byte in the string to NULL</font>
+        charstring::zero(s,<font color="#ff00ff">50</font>);
+
+
+        <font color="#0000ff">// Append &quot;hello there dave&quot; to the string and display it.</font>
+        <font color="#0000ff">// The 3rd call to append() only appends the first 4 bytes of &quot;dave !!!&quot;</font>
+        charstring::append(s,<font color="#ff00ff">&quot;hello &quot;</font>);
+        charstring::append(s,<font color="#ff00ff">&quot;there &quot;</font>);
+        charstring::append(s,<font color="#ff00ff">&quot;dave !!!&quot;</font>,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,s);
+
+
+        <font color="#0000ff">// Replace the contents of the string and display it over and over.</font>
+        <font color="#0000ff">// Note that the 2nd and 4th call to copy() only copy part of the</font>
+        <font color="#0000ff">// string passed into them.</font>
+        charstring::copy(s,<font color="#ff00ff">&quot;what's &quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,s);
+        charstring::copy(s,<font color="#ff00ff">&quot;up !!!&quot;</font>,<font color="#ff00ff">2</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,s);
+        charstring::copy(s,<font color="#ff00ff">2</font>,<font color="#ff00ff">&quot; !!!&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,s);
+        charstring::copy(s,<font color="#ff00ff">6</font>,<font color="#ff00ff">&quot;!!!!!!&quot;</font>,<font color="#ff00ff">1</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,s);
+
+
+        <font color="#0000ff">// clear the string again.</font>
+        charstring::zero(s,<font color="#ff00ff">50</font>);
+
+
+        <font color="#0000ff">// Append &quot;hello&quot; to the string.</font>
+        charstring::append(s,<font color="#ff00ff">&quot;hello&quot;</font>);
+
+        <font color="#0000ff">// perform several comparisons, all of which should return 0</font>
+        printf(<font color="#ff00ff">&quot;compare: </font><font color="#6a5acd">%d</font><font color="#ff00ff">=0</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::compare(s,<font color="#ff00ff">&quot;hello&quot;</font>));
+        printf(<font color="#ff00ff">&quot;compare: </font><font color="#6a5acd">%d</font><font color="#ff00ff">=0</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::compare(s,<font color="#ff00ff">&quot;hello&quot;</font>,<font color="#ff00ff">3</font>));
+        printf(<font color="#ff00ff">&quot;compare: </font><font color="#6a5acd">%d</font><font color="#ff00ff">=0</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::compareIgnoringCase(s,<font color="#ff00ff">&quot;HELLO&quot;</font>));
+        printf(<font color="#ff00ff">&quot;compare: </font><font color="#6a5acd">%d</font><font color="#ff00ff">=0</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::compareIgnoringCase(s,<font color="#ff00ff">&quot;HELLO&quot;</font>,<font color="#ff00ff">3</font>));
+
+        <font color="#0000ff">// perform several contains() comparisons</font>
+        printf(<font color="#ff00ff">&quot;findFirst: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">=llo</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::findFirst(s,<font color="#ff00ff">&quot;llo&quot;</font>));
+        printf(<font color="#ff00ff">&quot;contains: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::contains(s,<font color="#ff00ff">&quot;llo&quot;</font>));
+        printf(<font color="#ff00ff">&quot;findFirst: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">=llo</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::findFirst(s,<font color="#ff00ff">'l'</font>));
+        printf(<font color="#ff00ff">&quot;contains: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::contains(s,<font color="#ff00ff">&quot;llo&quot;</font>));
+
+
+
+        <font color="#0000ff">// duplicate the string and display the duplicated string</font>
+        <font color="#2e8b57"><b>char</b></font>   *hello=charstring::duplicate(s);
+        <font color="#2e8b57"><b>char</b></font>   *ell=charstring::subString(hello,<font color="#ff00ff">1</font>,<font color="#ff00ff">3</font>);
+        <font color="#2e8b57"><b>char</b></font>   *lle=charstring::subString(hello,<font color="#ff00ff">3</font>,<font color="#ff00ff">1</font>);
+        printf(<font color="#ff00ff">&quot;hello: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        printf(<font color="#ff00ff">&quot;ell: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,ell);
+        printf(<font color="#ff00ff">&quot;ell: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,lle);
+
+        <font color="#0000ff">// make sure to clean up what duplicate() returns</font>
+        <font color="#a52a2a"><b>delete</b></font>[] hello;
+        <font color="#a52a2a"><b>delete</b></font>[] ell;
+        <font color="#a52a2a"><b>delete</b></font>[] lle;
+
+
+        <font color="#0000ff">// split</font>
+        <font color="#2e8b57"><b>char</b></font>           **list;
+        <font color="#2e8b57"><b>uint64_t</b></font>       listlength;
+        charstring::split(<font color="#ff00ff">&quot;hello||hi||bye||goodbye&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hello||hi||bye||goodbye</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;hello||hi||bye||goodbye||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hello||hi||bye||goodbye||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;||hello||hi||bye||goodbye||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||hello||hi||bye||goodbye||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;||||hello||||hi||||bye||||goodbye||||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                        &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||||hello||||hi||||bye||||goodbye||||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;||||||||||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,&amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||||||||||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;<a href="http://www.firstworks.com/application/app.cgi/skin/module/template.html">http://www.firstworks.com/application/app.cgi/skin/module/template.html</a>&quot;</font>,<font color="#ff00ff">&quot;/&quot;</font>,<font color="#ff00ff">false</font>,&amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff"><a href="http://www.firstworks.com/application/app.cgi/skin/module/template.html">http://www.firstworks.com/application/app.cgi/skin/module/template.html</a></font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">/</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        <font color="#2e8b57"><b>char</b></font>   str[]=<font color="#ff00ff">&quot;hello'</font><font color="#6a5acd">\&quot;\\</font><font color="#ff00ff">hello'</font><font color="#6a5acd">\&quot;\\</font><font color="#ff00ff">&quot;</font>;
+        <font color="#2e8b57"><b>char</b></font>   *escapedstr=charstring::escape(str,<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">'&quot;</font>);
+        <font color="#2e8b57"><b>char</b></font>   *unescapedstr=charstring::unescape(escapedstr);
+        printf(<font color="#ff00ff">&quot;str            : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str);
+        printf(<font color="#ff00ff">&quot;escapedstr     : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,escapedstr);
+        printf(<font color="#ff00ff">&quot;unescapedstr   : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,unescapedstr);
+        <font color="#a52a2a"><b>delete</b></font>[] unescapedstr;
+        <font color="#a52a2a"><b>delete</b></font>[] escapedstr;
+
+
+        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>     *alphabet=<font color="#ff00ff">&quot;aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz&quot;</font>;
+        printf(<font color="#ff00ff">&quot;lengthContainingSet(</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">gfedcba</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                alphabet,charstring::lengthContainingSet(alphabet,<font color="#ff00ff">&quot;gfedcba&quot;</font>));
+        printf(<font color="#ff00ff">&quot;lengthNotContainingSet(</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hijklmnopqrstuvwxyz</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                alphabet,charstring::lengthNotContainingSet(alphabet,
+                                                <font color="#ff00ff">&quot;hijklmnopqrstuvwxyz&quot;</font>));
+
+
+        printf(<font color="#ff00ff">&quot;findFirstOfSet(</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">mlk</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)=</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,
+                alphabet,charstring::findFirstOfSet(alphabet,<font color="#ff00ff">&quot;klm&quot;</font>));
+}
+</pre>
+
+

@@ -1,0 +1,85 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// set current time zone to America/New_York</font>
+        printf(<font color="#ff00ff">&quot;setting TZ=America/New_York...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        environment     env;
+        env.setValue(<font color="#ff00ff">&quot;TZ&quot;</font>,<font color="#ff00ff">&quot;America/New_York&quot;</font>);
+
+        <font color="#0000ff">// get the current date</font>
+        datetime        dt;
+        dt.getSystemDateAndTime();
+
+        <font color="#0000ff">// Write out the different parts of the date.</font>
+        printf(<font color="#ff00ff">&quot;Hour       : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getHour());
+        printf(<font color="#ff00ff">&quot;Minutes    : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getMinutes());
+        printf(<font color="#ff00ff">&quot;Seconds           : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getSeconds());
+        printf(<font color="#ff00ff">&quot;Month      : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getMonth());
+        printf(<font color="#ff00ff">&quot;DayOfMonth : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getDayOfMonth());
+        printf(<font color="#ff00ff">&quot;DayOfWeek  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getDayOfWeek());
+        printf(<font color="#ff00ff">&quot;DayOfYear  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getDayOfYear());
+        printf(<font color="#ff00ff">&quot;Year       : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getYear());
+        printf(<font color="#ff00ff">&quot;Daylight Savings Time : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.isDaylightSavingsTime());
+        printf(<font color="#ff00ff">&quot;Time Zone            : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getTimeZoneString());
+        printf(<font color="#ff00ff">&quot;Offset from GMT       : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getTimeZoneOffset());
+        printf(<font color="#ff00ff">&quot;Seconds since 1970    : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getEpoch());
+        printf(<font color="#ff00ff">&quot;Date String          : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
+
+        <font color="#0000ff">// use static methods to translate between formats</font>
+        <font color="#2e8b57"><b>char</b></font>   *string=datetime::getString(dt.getEpoch());
+        printf(<font color="#ff00ff">&quot;String from Epoch     : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
+        <font color="#a52a2a"><b>delete</b></font>[] string;
+        string=datetime::getString(dt.getTm());
+        printf(<font color="#ff00ff">&quot;String from tm        : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
+
+        <font color="#0000ff">// use static methods to translate between formats</font>
+        <font color="#2e8b57"><b>time_t</b></font> epoch=datetime::getEpoch(string);
+        printf(<font color="#ff00ff">&quot;Epoch from String     : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,epoch);
+        <font color="#a52a2a"><b>delete</b></font>[] string;
+        epoch=datetime::getEpoch(dt.getTm());
+        printf(<font color="#ff00ff">&quot;Epoch from tm         : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,epoch);
+
+        <font color="#0000ff">// get time from hardware clock</font>
+        printf(<font color="#ff00ff">&quot;Hardware Clock (assuming GMT): </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                (dt.getHardwareDateAndTime(<font color="#ff00ff">&quot;GMT&quot;</font>))?
+                                        dt.getString():<font color="#ff00ff">&quot;failed&quot;</font>);
+
+        <font color="#0000ff">// get time from hardware clock adjusting for timezone</font>
+        printf(<font color="#ff00ff">&quot;Adjusted Hardware Clock      : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                (dt.getAdjustedHardwareDateAndTime(<font color="#ff00ff">&quot;GMT&quot;</font>))?
+                                        dt.getString():<font color="#ff00ff">&quot;failed&quot;</font>);
+
+        <font color="#0000ff">// switch time zones</font>
+        dt.adjustTimeZone(<font color="#ff00ff">&quot;MST&quot;</font>);
+        printf(<font color="#ff00ff">&quot;Adjusting time zone to Mountain time: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
+
+        <font color="#0000ff">// valid date</font>
+        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>     *str=<font color="#ff00ff">&quot;02/20/1974 12:00:00&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+        str=<font color="#ff00ff">&quot;02/30/1974 12:00:00&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+        str=<font color="#ff00ff">&quot;02/20/1974 12:00:00 EST5EDT&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+        str=<font color="#ff00ff">&quot;02/30/1974 12:00:00 EST5EDT&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+}
+</pre>
+
+

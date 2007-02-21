@@ -2,8 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/commandline.h>
+#include <rudiments/charstring.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -23,8 +23,10 @@ int main(int argc, const char **argv) {
 	// If -divisor and -dividend are supplied, use them.  Otherwise
 	// display an error message.
 	if (cmdline.found("-divisor") && cmdline.found("-dividend")) {
-		double	divisor=atof(cmdline.getValue("-divisor"));
-		double	dividend=atof(cmdline.getValue("-dividend"));
+		double	divisor=charstring::toFloat(
+					cmdline.getValue("-divisor"));
+		double	dividend=charstring::toFloat(
+					cmdline.getValue("-dividend"));
 		printf("%0.2f\n",divisor/dividend);
 	} else {
 		printf("You must supply a divisor and a dividend.\n");

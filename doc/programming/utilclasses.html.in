@@ -1,0 +1,861 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the Utility Classes</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Programming with Rudiments using the Utility Classes</span><br><br>
+
+<ul>
+<li><a href="#environment">Using the environment Class</a></li>
+<li><a href="#commandline">Using the commandline Class</a></li>
+<li><a href="#parameterstring">Using the parameterstring Class</a></li>
+<li><a href="#datetime">Using the datetime Class</a></li>
+<li><a href="#timezonefile">Using the timezonefile Class</a></li>
+<li><a href="#directory">Using the directory Class</a></li>
+<li><a href="#filesystem">Using the filesystem Class</a></li>
+<li><a href="#logger">Using the logger Class</a></li>
+<li><a href="#permissions">Using the permissions Class</a></li>
+<li><a href="#randomnumber">Using the randomnumber Class</a></li>
+<li><a href="#regularexpression">Using the regularexpression Class</a></li>
+<li><a href="#chat">Using the chat Class</a></li>
+<li><a href="#crypt">Using the crypt Class</a></li>
+<li><a href="#dynamiclib">Using the dynamiclib Class</a></li>
+<li><a href="#error">Using the error Class</a></li>
+<li><a href="#intervaltimer">Using the intervaltimer Class</a></li>
+<li><a href="#math">Using the math Class</a></li>
+<li><a href="#mutex">Using the mutex Class</a></li>
+<li><a href="#process">Using the process Class</a></li>
+<li><a href="#serialportprofile">Using the serialportprofile Class</a></li>
+<li><a href="#snooze">Using the snooze Class</a></li>
+<li><a href="#signal">Using the Signal Classes</a></li>
+<li><a href="#sharedmemory">Using the sharedmemory Class</a></li>
+<li><a href="#semaphoreset">Using the semaphoreset Class</a></li>
+<li><a href="#memorymap">Using the memorymap Class</a></li>
+<li><a href="#memorypool">Using the memorypool Class</a></li>
+<li><a href="#variablebuffer">Using the variablebuffer Class</a></li>
+<li><a href="#stringbuffer">Using the stringbuffer Class</a></li>
+<li><a href="#character">Using the character Class</a></li>
+<li><a href="#charstring">Using the charstring Class</a></li>
+<li><a href="#rawbuffer">Using the rawbuffer Class</a></li>
+<li><a href="#xmldom">Using the xmldom Classes</a></li>
+<li><a href="#xmlsax">Using the xmlsax Class</a></li>
+<li><a href="#dtd">Using the dtd Class</a></li>
+<li><a href="#passwdentry">Using the passwdentry Class</a></li>
+<li><a href="#shadowentry">Using the shadowentry Class</a></li>
+<li><a href="#groupentry">Using the groupentry Class</a></li>
+<li><a href="#hostentry">Using the hostentry Class</a></li>
+<li><a href="#protocolentry">Using the protocolentry Class</a></li>
+<li><a href="#serviceentry">Using the serviceentry Class</a></li>
+<li><a href="#rpcentry">Using the rpcentry Class</a></li>
+<li><a href="#linkedlist">Using the linkedlist Class</a></li>
+<li><a href="#dictionary">Using the dictionary Class</a></li>
+</ul>
+
+<a name="environment"></a>
+<span class="heading">Using the environment Class</span><br><br>
+
+<p>The environment class allows you to get or set the value of environment
+variables.  The following example gets, sets and resets the environment
+variable TEST.</p>
+
+@env.C.html@
+
+<a name="commandline"></a>
+<span class="heading">Using the commandline Class</span><br><br>
+
+<p>Most programs take command line options in the option/value pair format:</p>
+<blockquote>program -option value -option value ...</blockquote>
+<p>or</p>
+<blockquote>program --option=value --option=value ...</blockquote>
+<p>The commandline class makes it easy to deal with command line options of
+either of these formats.  Below is some code illustrating the use of the
+commandline class.</p>
+
+@cmdline.C.html@
+
+<a name="parameterstring"></a>
+<span class="heading">Using the parameterstring Class</span><br><br>
+
+<p>Sometimes a function needs to take an arbitrary set of parameters.  For
+example, a function for connecting to a database may need host, port, socket,
+username and password, any of which could be omitted depending on the
+database.  Though C++ support methods which take an arbitrary number of
+parameters, sometimes it is more convenient to for the method to accept a
+single string parameter with name/value pairs in it instead.</p>
+
+<p>The parameterstring class provides methods for parsing and accessing
+a parameter string of the following form:</p>
+
+<blockquote>
+name1='value1';name2='value2';name3='value3'
+</blockquote>
+
+<p>The single quotes are optional.  If a parameter needs to contain a single
+quote, then it can be escaped as follows:</p>
+
+<blockquote>
+name='\'value\''
+</blockquote>
+
+<p>Backslashes can be similarly escaped:</p>
+
+<blockquote>
+name='\\value\\'
+</blockquote>
+
+<pre>
+...
+</pre>
+
+@paramstr.C.html@
+
+<a name="datetime"></a>
+<span class="heading">Using the datetime Class</span><br><br>
+
+<p>One of the most difficult things to do in a Unix environment is deal with
+dates and times.  The "standard" functions and structures associated with 
+dates and times are complex, vary widely from platform to platform and in
+many cases are not thread safe.  The datetime class attempts to rectify this
+situation.</p>
+
+<p>The datetime class allows you to query and set the system clock. If your
+platform has a working real-time-clock (/dev/rtc), then you can query or set
+the hardware clock as well.  Note that your program must run as root in order
+to set the system or hardware clock.  Since it is common for the system clock
+to be set to the local time zone and the hardware clock to be set to GMT,
+a method is provided for converting the hardware clock time to the system's
+time zone.</p>
+
+<p>Additionally there is a method for switching the time zone of the time
+currently represented in the class.</p>
+
+<p>The datetime class also provides methods for converting between several
+common ways of representing time.  Such as a formatted string, the number of
+seconds since 1970 and "struct tm".</p>
+
+<p>There are also methods for adding discrete amounts of time to the time
+currently stored in the class.  You can, for example add 150 seconds to 
+"12:30:50 01/02/2003 EST" and get "12:32:20 01/02/2003 EST".  You can add
+negative numbers to subtract time.</p>
+
+<p>Below is some code illustrating the use of the datetime class.</p>
+
+@datetime.C.html@
+
+<a name="timezonefile"></a>
+<span class="heading">Using the timezonefile Class</span><br><br>
+
+<p>While I was working on timezone support in the datetime class I originally
+thought that it might be useful to be able to parse timezone files.  I could not
+find any standard C functions for parsing them, so I wrote a class that parses
+them.</p>
+
+<p>It turned out to be of very limited value, but it works and I never removed
+it.  So, if you need such functionality, it exists.</p>
+
+@tzf.C.html@
+
+<a name="directory"></a>
+<span class="heading">Using the directory Class</span><br><br>
+
+@dir.C.html@
+
+<a name="filesystem"></a>
+<span class="heading">Using the filesystem Class</span><br><br>
+
+<p>The filesystem class provides methods for collecting statistics about a
+filesystem.  The "standard" function for getting filesystem statistics
+is either statfs or statvfs.  Few operating systems implement statvfs and the
+structure returned by statfs varies greatly between operating systems.  The
+filesystem class attempts to remedy this situation.  However, no operating
+system supports every method in the filesystem class.</p>
+
+@filesystem.C.html@
+
+<a name="logger"></a>
+<span class="heading">Using the logger Class</span><br><br>
+
+<p>The logger class and associated logdestination classes provide a framework
+for generating log messages from applications.  An application can define a set
+of logdestinations and attach them to an instance of the logger class.  Then,
+when the application calls one of the write() methods of the logger class, the
+log message is written to each of the logdestinations.  For example, an
+application could simultaneously log to stderr and to a file.  Currently stdout,
+stderr, file and syslog logdestinations are supported.  If an application needs
+to send one set of log messages to one destination and another set to a
+different destinations, it can create two instances of the logger class and use
+one for each set of messages.</p>
+
+<p>The following example illustrates use of the logger class.</p>
+
+@log.C.html@
+
+<a name="permissions"></a>
+<span class="heading">Using the permissions Class</span><br><br>
+
+<p>The permissions class provides simple methods for generating permissions.
+The output of these methods can be used whenever a function takes an argument
+of type mode_t.  Below is some code illustrating the use of the permissions
+class.</p>
+
+@permissions.C.html@
+
+<a name="randomnumber"></a>
+<span class="heading">Using the randomnumber Class</span><br><br>
+
+<p>Functions for generating random numbers vary from platform to platform.  
+The randomnumber class attempts to rectify this situation.  Below is some code
+illustrating the use of the randomnumber class.</p>
+
+@random.C.html@
+
+<a name="regularexpression"></a>
+<span class="heading">Using the regularexpression Class</span><br><br>
+
+<p>Regular expressions allow a programmer to perform complex string matching 
+but methods for using regular expressions vary from platform to platform.  The
+regularexpression class attempts to rectify this situation.  Below is some code
+illustrating the use of the regularexpression class.</p>
+
+@regexp.C.html@
+
+<a name="chat"></a>
+<span class="heading">Using the chat Class</span><br><br>
+
+<p>...</p>
+
+@chat.C.html@
+
+<a name="crypt"></a>
+<span class="heading">Using the crypt Class</span><br><br>
+
+<p>...</p>
+
+@crypt.C.html@
+
+<a name="dynamiclib"></a>
+<span class="heading">Using the dynamiclib Class</span><br><br>
+
+<p>...</p>
+
+@dynamiclib.C.html@
+
+<a name="error"></a>
+<span class="heading">Using the error Class</span><br><br>
+
+<p>...</p>
+
+@error.C.html@
+
+<a name="intervaltimer"></a>
+<span class="heading">Using the intervaltimer Class</span><br><br>
+
+<p>...</p>
+
+@timer.C.html@
+
+<a name="math"></a>
+<span class="heading">Using the math Class</span><br><br>
+
+<p>...</p>
+
+@math.C.html@
+
+<a name="mutex"></a>
+<span class="heading">Using the mutex Class</span><br><br>
+
+<p>...</p>
+
+@mutex.C.html@
+
+<a name="process"></a>
+<span class="heading">Using the process Class</span><br><br>
+
+<p>...</p>
+
+@process.C.html@
+
+<a name="serialportprofile"></a>
+<span class="heading">Using the serialportprofile Class</span><br><br>
+
+<p>...</p>
+
+@serialportprofile.C.html@
+
+<a name="snooze"></a>
+<span class="heading">Using the snooze Class</span><br><br>
+
+<p>...</p>
+
+@snooze.C.html@
+
+<a name="signal"></a>
+<span class="heading">Using the Signal Classes</span><br><br>
+
+<p>Signals allow processes to interrupt the execution of other processes.
+Signal handlers allow processes to intercept and react to the signals sent to 
+them.</p>
+
+<p>Rudiments provides 3 classes for working with signals: signalset, 
+signalmanager and signalhandler.
+
+<p>A signalset is just a collection of signals.  The signalset class allows 
+a programmer to build up a collection of signals.</p>
+
+<p>The signalmanager class provides methods for sending signals, ignoring
+signals, waiting for signals and examining blocked signals.</p>
+
+<p>The signalhandler class provides methods for catching and handling 
+signals.</p>
+
+<p>Below is some code illustrating the use of all three classes.  Note that
+you'll have to kill this program with a -9.</p>
+
+@snooze.C.html@
+
+<a name="sharedmemory"></a>
+<span class="heading">Using the sharedmemory Class</span><br><br>
+
+<p>Shared memory allows seperate processes to access a common block of memory.
+The standard functions and structures for managing shared memory segments are 
+complex.  The sharedmemory class attempts to rectify this situation.  Below is
+some code illustrating the use of the sharedmemory class.</p>
+
+<p>There are methods in the sharedmemory class that allow you to get and
+set user/group ownership and permissions of a segment that are not 
+documented here, but they are straightforward and rarely used.</p>
+
+<p>This program puts some data into shared memory then goes to sleep, giving
+another program time to access the segment.</p>
+
+@shm1.C.html@
+
+<p>This program reads the data from shared memory.</p>
+
+@shm2.C.html@
+
+<a name="semaphoreset"></a>
+<span class="heading">Using the semaphoreset Class</span><br><br>
+
+<p>Semaphores allow seperate processes or threads to synchronize activities.
+The standard functions and structures for managing semaphores are complex.  
+The sempahoreset class attempts to rectify this situation.  Below is some code
+illustrating the use of the semaphoreset class.</p>
+
+<p>There are methods in the semaphoreset class that allow you to get and
+set user/group ownership and permissions of a semaphore set that are not 
+documented here, but they are straightforward and rarely used.</p>
+
+<p>The first program prints out 1 and 3, the second program prints out 2 and 4.
+They use a set of 2 semaphores to synchronize these activities.  No matter
+what order the programs are started in, they will always print out 
+
+<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
+
+<p>These programs must both be run to the background.</p>
+
+@sem1.C.html@
+
+@sem2.C.html@
+
+<a name="memorymap"></a>
+<span class="heading">Using the memorymap Class</span><br><br>
+
+<p>...</p>
+
+@memorymap.C.html@
+
+<a name="memorypool"></a>
+<span class="heading">Using the memorypool Class</span><br><br>
+
+<p>The memorypool class implements a pool of memory that starts with an
+initial buffer and grows dynamically as needed.  Each time the pool is freed,
+the dynamic buffers are deallocated.  After a configurable number of free's,
+the initial buffer is resized to the average amount of memory that was
+requested between free's since the last time it resized.</p>
+
+<p>The memorypool class is especially useful for applications that do the same
+task over and over where varying amounts of memory are required during each
+iteration.  The class is particularly efficient in cases where memory
+requirements are fairly constant between iterations with sporadic requirements
+for lots of memory or where the memory requirements steadily get larger or 
+smaller across iterations.</p>
+
+<p>Using a memorypool can be faster than allocating memory on demand, then
+deallocating it later and more efficient than using static buffers that are
+large enough to contain the largest possible data.</p>
+
+<p>The following code connects to a server on the local machine and reads
+variable/value pairs from it.</p>
+
+@mem.C.html@
+
+<a name="variablebuffer"></a>
+<span class="heading">Using the variablebuffer Class</span><br><br>
+
+<p>The variablebuffer class allows you to manipulate a buffer of arbitrary
+length containing binary data.  You can append data to a variablebuffer or
+write data at arbitrary positions in the buffer.</p>
+
+@vbuf.C.html@
+
+<a name="stringbuffer"></a>
+<span class="heading">Using the stringbuffer Class</span><br><br>
+
+<p>The stringbuffer class allows you to manipulate strings of arbitrary length.
+You can append data to a stringbuffer or write data at arbitrary positions in
+the buffer.</p>
+
+@string.C.html@
+
+<a name="character"></a>
+<span class="heading">Using the character Class</span><br><br>
+
+<p>...</p>
+
+@character.C.html@
+
+<a name="charstring"></a>
+<span class="heading">Using the charstring Class</span><br><br>
+
+<p>The charstring class contains some commonly needed string manipulation and
+evaluation functions.  Below is some code illustrating the use of the string
+class.</p>
+
+@text.C.html@
+
+<a name="rawbuffer"></a>
+<span class="heading">Using the rawbuffer Class</span><br><br>
+
+<p>...</p>
+
+@rawbuffer.C.html@
+
+<a name="xmldom"></a>
+<span class="heading">Using the xmldom Class</span><br><br>
+
+<p>The xmldom and xmldomnode classes provide a framework for DOM parsing of
+XML documents.  The xmldom class provides methods for parsing the document
+and accessing it's root node.  Each node of the document is represented by an
+instance of the xmldomnode class.  The xmldomnode class provides methods for
+accessing a node's data, attributes, child nodes, parent nodes and sibling
+nodes.  Since the xmldom class creates a representation of the XML document
+in memory, it should not be used to process arbitrarily large documents which
+could exhaust system memory.</p>
+
+<p>The following XML file contains an address book.</p>
+
+<PRE>
+<font color="#0000f8">&lt;?</font><font color="#288850"><b>xml</b></font><font color="#288850"><b> </b></font><font color="#288850"><b>version</b></font>=<font color="#f800f8">&quot;1.0&quot;</font><font color="#0000f8">?&gt;</font>
+<font color="#008888">&lt;!</font><font color="#a02828"><b>DOCTYPE</b></font> instances <font color="#a02828"><b>SYSTEM</b></font> <font color="#f800f8">&quot;adbook.dtd&quot;</font><font color="#008888">&gt;</font>
+<font color="#008888">&lt;</font><font color="#008888">addressbook</font><font color="#008888">&gt;</font>
+        <font color="#008888">&lt;</font><font color="#008888">person</font><font color="#008888"> </font><font color="#288850"><b>firstname</b></font>=<font color="#f800f8">&quot;David&quot;</font><font color="#008888"> </font><font color="#288850"><b>middlename</b></font>=<font color="#f800f8">&quot;Lee&quot;</font><font color="#008888"> </font><font color="#288850"><b>lastname</b></font>=<font color="#f800f8">&quot;Muse&quot;</font><font color="#008888">&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">phones</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-222-333-4444&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-333-444-5555&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;mobile&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-444-555-6666&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/phones&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">addresses</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;1234 homestreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;12345&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;2345 workstreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;23456&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/addresses&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">emails</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@firstworks.com&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@workemail.com&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/emails&gt;</font>
+        <font color="#008888">&lt;/person&gt;</font>
+<font color="#008888">&lt;/addressbook&gt;</font>
+</PRE>
+
+<p>The following program parses the addressbook and prints it to the screen.</p>
+
+<pre>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/xmldom.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;iostream&gt;</font>
+
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> std;
+
+<font color="#2e8b57"><b>int</b></font>     main() {
+
+        xmldom  x;
+        x.parseFile(<font color="#ff00ff">&quot;addressbook.xml&quot;</font>);
+        x.getRootNode()-&gt;cascadeOnDelete();
+
+
+        xmldomnode      *addressbook=x.getRootNode()-&gt;getChild(<font color="#ff00ff">&quot;addressbook&quot;</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;addressbook-&gt;getChildCount(); i++) {
+
+                xmldomnode      *person=addressbook-&gt;getChild(i);
+                <font color="#a52a2a"><b>if</b></font> (person-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                        <font color="#a52a2a"><b>continue</b></font>;
+                }
+
+                cout &lt;&lt; person-&gt;getAttribute(<font color="#ff00ff">&quot;firstname&quot;</font>)-&gt;getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
+                cout &lt;&lt; person-&gt;getAttribute(<font color="#ff00ff">&quot;middlename&quot;</font>)-&gt;getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
+                cout &lt;&lt; person-&gt;getAttribute(<font color="#ff00ff">&quot;lastname&quot;</font>)-&gt;getValue() &lt;&lt; endl;
+
+                xmldomnode      *phones=person-&gt;getChild(<font color="#ff00ff">&quot;phones&quot;</font>);
+                cout &lt;&lt; <font color="#ff00ff">&quot;Phones:&quot;</font> &lt;&lt; endl;
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;phones-&gt;getChildCount(); j++) {
+
+                        xmldomnode      *phone=phones-&gt;getChild(j);
+                        <font color="#a52a2a"><b>if</b></font> (phone-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                                <font color="#a52a2a"><b>continue</b></font>;
+                        }
+                        cout &lt;&lt; <font color="#ff00ff">&quot;       &quot;</font>;
+                        cout &lt;&lt; phone-&gt;getAttribute(<font color="#ff00ff">&quot;location&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;: &quot;</font>;
+                        cout &lt;&lt; phone-&gt;getAttribute(<font color="#ff00ff">&quot;number&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; endl;
+                }
+                cout &lt;&lt; endl;
+
+                xmldomnode      *addresses=person-&gt;getChild(<font color="#ff00ff">&quot;addresses&quot;</font>);
+                cout &lt;&lt; <font color="#ff00ff">&quot;Addresses:&quot;</font> &lt;&lt; endl;
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;addresses-&gt;getChildCount(); j++) {
+
+                        xmldomnode      *address=addresses-&gt;getChild(j);
+                        <font color="#a52a2a"><b>if</b></font> (address-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                                <font color="#a52a2a"><b>continue</b></font>;
+                        }
+                        cout &lt;&lt; <font color="#ff00ff">&quot;       &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;location&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;: &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;address&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;city&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;, &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;state&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
+                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;zip&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; endl;
+                }
+                cout &lt;&lt; endl;
+
+                xmldomnode      *emails=person-&gt;getChild(<font color="#ff00ff">&quot;emails&quot;</font>);
+                cout &lt;&lt; <font color="#ff00ff">&quot;Emails:&quot;</font> &lt;&lt; endl;
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;emails-&gt;getChildCount(); j++) {
+
+                        xmldomnode      *email=emails-&gt;getChild(j);
+                        <font color="#a52a2a"><b>if</b></font> (email-&gt;getType()!=TAG_XMLDOMNODETYPE) {
+                                <font color="#a52a2a"><b>continue</b></font>;
+                        }
+                        cout &lt;&lt; <font color="#ff00ff">&quot;       &quot;</font>;
+                        cout &lt;&lt; email-&gt;getAttribute(<font color="#ff00ff">&quot;location&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;: &quot;</font>;
+                        cout &lt;&lt; email-&gt;getAttribute(<font color="#ff00ff">&quot;address&quot;</font>)-&gt;
+                                                        getValue() &lt;&lt; endl;
+                }
+                cout &lt;&lt; endl;
+        }
+}
+</pre>
+
+<p>Here is the output of the program above.</p>
+
+<blockquote>
+<PRE>
+David Lee Muse
+Phones:
+        home: 1-222-333-4444
+        work: 1-333-444-5555
+        mobile: 1-444-555-6666
+
+Addresses:
+        home: 1234 homestreet dr. mycity, GA 12345
+        work: 2345 workstreet dr. mycity, GA 23456
+
+Emails:
+        home: dmuse@firstworks.com
+        work: dmuse@workemail.com
+</PRE>
+</blockquote>
+
+<a name="xmlsax"></a>
+<span class="heading">Using the xmlsax Class</span><br><br>
+
+<p>The xmlsax class provides a callback-based framework for parsing XML
+documents.  The xmlsax class provides methods for parsing strings of XML or 
+XML files.  When it encounters a tag, attribute or other XML component, it
+calls one of it's callback methods.  These methods may be overridden by
+a child class to perform specific tasks.  The xmlsax class is especially useful
+if you can't afford to load the entire document into memory and use the xmldom
+class, or if you just need to extract specific data from an XML file.</p>
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/xmlsax.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+
+<font color="#2e8b57"><b>class</b></font> myxmlsax : <font color="#a52a2a"><b>public</b></font> xmlsax {
+        <font color="#a52a2a"><b>public</b></font>:
+                        myxmlsax();
+        <font color="#a52a2a"><b>private</b></font>:
+                <font color="#2e8b57"><b>int</b></font>     xmlVersionStart();
+                <font color="#2e8b57"><b>int</b></font>     xmlVersionEnd();
+                <font color="#2e8b57"><b>int</b></font>     doctypeStart(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>int</b></font>     externalSubset(<font color="#2e8b57"><b>char</b></font> *filename);
+                <font color="#2e8b57"><b>int</b></font>     doctypeEnd();
+                <font color="#2e8b57"><b>int</b></font>     tagStart(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>int</b></font>     attributeName(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>int</b></font>     attributeValue(<font color="#2e8b57"><b>char</b></font> *value);
+                <font color="#2e8b57"><b>int</b></font>     text(<font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>int</b></font>     tagEnd(<font color="#2e8b57"><b>char</b></font> *name);
+                <font color="#2e8b57"><b>int</b></font>     comment(<font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>int</b></font>     cdata(<font color="#2e8b57"><b>char</b></font> *string);
+                <font color="#2e8b57"><b>void</b></font>    indent(<font color="#2e8b57"><b>int</b></font> spaces);
+                <font color="#2e8b57"><b>int</b></font>     ind;
+};
+
+myxmlsax::myxmlsax() : xmlsax() {
+        ind=<font color="#ff00ff">0</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::xmlVersionStart() {
+        printf(<font color="#ff00ff">&quot;XML version start:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::xmlVersionEnd() {
+        printf(<font color="#ff00ff">&quot;XML version end:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::doctypeStart(<font color="#2e8b57"><b>char</b></font> *name) {
+        printf(<font color="#ff00ff">&quot;DOCTYPE start: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::externalSubset(<font color="#2e8b57"><b>char</b></font> *filename) {
+        printf(<font color="#ff00ff">&quot;        external subset: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,filename);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::doctypeEnd() {
+        printf(<font color="#ff00ff">&quot;DOCTYPE end:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>void</b></font>    myxmlsax::indent(<font color="#2e8b57"><b>int</b></font> spaces) {
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;spaces; i++) {
+                printf(<font color="#ff00ff">&quot;  &quot;</font>);
+        }
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::tagStart(<font color="#2e8b57"><b>char</b></font> *name) {
+        indent(ind);
+        printf(<font color="#ff00ff">&quot;tagStart: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
+        ind++;
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::attributeName(<font color="#2e8b57"><b>char</b></font> *name) {
+        indent(ind+<font color="#ff00ff">1</font>);
+        printf(<font color="#ff00ff">&quot;attribute name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::attributeValue(<font color="#2e8b57"><b>char</b></font> *value) {
+        indent(ind+<font color="#ff00ff">1</font>);
+        printf(<font color="#ff00ff">&quot;attribute value: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,value);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::text(<font color="#2e8b57"><b>char</b></font> *string) {
+        indent(ind+<font color="#ff00ff">1</font>);
+        printf(<font color="#ff00ff">&quot;text: </font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::tagEnd(<font color="#2e8b57"><b>char</b></font> *name) {
+        ind--;
+        indent(ind);
+        printf(<font color="#ff00ff">&quot;tagEnd: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::comment(<font color="#2e8b57"><b>char</b></font> *string) {
+        indent(ind);
+        printf(<font color="#ff00ff">&quot;comment: </font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+<font color="#2e8b57"><b>int</b></font>     myxmlsax::cdata(<font color="#2e8b57"><b>char</b></font> *string) {
+        indent(ind);
+        printf(<font color="#ff00ff">&quot;cdata: </font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
+        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
+}
+
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+        myxmlsax        x;
+        x.parseFile(<font color="#ff00ff">&quot;xmls.xml&quot;</font>);
+}
+</pre>
+
+<a name="dtd"></a>
+<span class="heading">Using the dtd Class</span><br><br>
+
+<p>The dtd class provides methods for parsing an XML DTD.  The result is an
+XML DOM tree representing the DTD.  Once parsed, the tree can be accessed
+using the xmldom and xmldomnode classes.</p>
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/dtd.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+        <font color="#0000ff">// display the contents of dtd.dtd</font>
+        dtd     d;
+        d.parseFile(<font color="#ff00ff">&quot;dtd.dtd&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,d.xml()-&gt;xml()-&gt;getString());
+}
+</pre>
+
+<a name="passwdentry"></a>
+<span class="heading">Using the passwdentry Class</span><br><br>
+
+<p>The passwdentry class allows you to look up entries from /etc/passwd or
+from elsewhere if you're using the Name Service Switch.</p>
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/passwdentry.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+
+        <font color="#0000ff">// get the password entry for &quot;root&quot;</font>
+        passwdentry     pwent;
+        pwent.initialize(<font color="#ff00ff">&quot;root&quot;</font>);
+
+        <font color="#0000ff">// print the components individually</font>
+        printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getName());
+        printf(<font color="#ff00ff">&quot;        Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPassword());
+        printf(<font color="#ff00ff">&quot;        User Id:        </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getUserId());
+        printf(<font color="#ff00ff">&quot;        Primary Group:  </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPrimaryGroupId());
+        printf(<font color="#ff00ff">&quot;        Real Name:      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getRealName());
+        printf(<font color="#ff00ff">&quot;        Home Directory: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getHomeDirectory());
+        printf(<font color="#ff00ff">&quot;        Shell:          </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getShell());
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// use the built in print method</font>
+        printf(<font color="#ff00ff">&quot;Built In...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        pwent.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+
+        <font color="#0000ff">// get the password entry for user id 0</font>
+        pwent.initialize((uid_t)<font color="#ff00ff">0</font>);
+
+        <font color="#0000ff">// print the components individually</font>
+        printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getName());
+        printf(<font color="#ff00ff">&quot;        Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPassword());
+        printf(<font color="#ff00ff">&quot;        User Id:        </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getUserId());
+        printf(<font color="#ff00ff">&quot;        Primary Group:  </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPrimaryGroupId());
+        printf(<font color="#ff00ff">&quot;        Real Name:      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getRealName());
+        printf(<font color="#ff00ff">&quot;        Home Directory: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getHomeDirectory());
+        printf(<font color="#ff00ff">&quot;        Shell:          </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getShell());
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// use the built in print method</font>
+        printf(<font color="#ff00ff">&quot;Built In...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        pwent.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+}
+</pre>
+
+<a name="shadowentry"></a>
+<span class="heading">Using the shadowentry Class</span><br><br>
+
+<p>The shadowentry class allows you to look up entries from /etc/shadow or
+from elsewhere if you're using the Name Service Switch.</p>
+
+@shadow.C.html@
+
+<a name="groupentry"></a>
+<span class="heading">Using the groupentry Class</span><br><br>
+
+<p>The groupentry class allows you to look up entries from /etc/group or
+from elsewhere if you're using the Name Service Switch.</p>
+
+@group.C.html@
+
+<a name="hostentry"></a>
+<span class="heading">Using the hostentry Class</span><br><br>
+
+<p>The hostentry class allows you to look up entries from /etc/hosts or
+from elsewhere if you're using the Name Service Switch.</p>
+
+@host.C.html@
+
+<a name="protocolentry"></a>
+<span class="heading">Using the protocolentry Class</span><br><br>
+
+<p>The protocolentry class allows you to look up entries from /etc/protocols
+or from elsewhere if you're using the Name Service Switch.</p>
+
+@protocol.C.html@
+
+<a name="serviceentry"></a>
+<span class="heading">Using the serviceentry Class</span><br><br>
+
+<p>The serviceentry class allows you to look up entries from /etc/services
+or from elsewhere if you're using the Name Service Switch.</p>
+
+@service.C.html@
+
+<a name="rpcentry"></a>
+<span class="heading">Using the rpcentry Class</span><br><br>
+
+<p>The rpcentry class allows you to look up entries from /etc/rpc
+or from elsewhere if you're using the Name Service Switch.</p>
+
+@rpc.C.html@
+
+<a name="linkedlist"></a>
+<span class="heading">Using the linkedlist Class</span><br><br>
+
+<p>The linkedlist class allows you to store arbitrary data in a doubly-linked
+list.</p>
+
+<p>Since lists of strings are commonly used, a stringlist typedef is
+provided for convenience.</p>
+
+@list.C.html@
+
+<a name="dictionary"></a>
+<span class="heading">Using the dictionary Class</span><br><br>
+
+<p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
+
+<p>Since dictionaries with string and long integer keys and dictionaries with
+string keys and values are commonly used, convenience classes are provided
+for each.</p>
+
+@dict.C.html@
+
+</body>
+</html>

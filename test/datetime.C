@@ -3,7 +3,6 @@
 
 #include <rudiments/datetime.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

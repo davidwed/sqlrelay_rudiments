@@ -2,10 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/permissions.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <rudiments/file.h>
+#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -15,29 +13,35 @@ int main(int argc, const char **argv) {
 
 
         // Create a file with rw-r--r-- permissions
-        int     fd=open("/tmp/tempfile",O_RDWR|O_CREAT,
+        file	fd;
+	fd.open("/tmp/tempfile",O_RDWR|O_CREAT,
                                 permissions::evalPermString("rw-r--r--"));
+	system("ls -l /tmp/tempfile");
 
 
         // change the permissions to rw-rw-r--
-        permissions::setFilePermissions(fd,
+        permissions::setFilePermissions(fd.getFileDescriptor(),
                                 permissions::evalPermString("rw-rw-r--"));
+	system("ls -l /tmp/tempfile");
 
 
         // close and delete the file
-        close(fd);
-        unlink("/tmp/tempfile");
+        fd.close();
+        file::remove("/tmp/tempfile");
 
 
         // do the same as above using different methods
-        fd=open("/tmp/tempfile",O_RDWR|O_CREAT,
+        fd.open("/tmp/tempfile",O_RDWR|O_CREAT,
                                 permissions::ownerReadWrite()|
                                 permissions::groupRead()|
                                 permissions::othersRead());
-        permissions::setFilePermissions(fd,
+	system("ls -l /tmp/tempfile");
+
+        permissions::setFilePermissions(fd.getFileDescriptor(),
                                 permissions::ownerReadWrite()|
                                 permissions::groupReadWrite()|
                                 permissions::othersRead());
-        close(fd);
-        unlink("/tmp/tempfile");
+	system("ls -l /tmp/tempfile");
+        fd.close();
+        file::remove("/tmp/tempfile");
 }

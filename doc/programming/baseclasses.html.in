@@ -1,0 +1,148 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the Base Classes</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Programming with Rudiments using the Base Classes</span><br><br>
+
+<ul>
+<li><a href="#daemon">Using the daemonprocess Class</a></li>
+<li><a href="#filedescriptor">Using the filedescriptor Class</a></li>
+<li><a href="#file">Using the file Class</a></li>
+<li><a href="#device">Using the device Class</a></li>
+<li><a href="#serialport">Using the serialport Class</a></li>
+<li><a href="#shmfile">Using the shmfile Class</a></li>
+<li><a href="#server">Using the Server Classes</a></li>
+<li><a href="#client">Using the Client Classes</a></li>
+<li><a href="#complex">Using the Complex Initialization methods of the Server Classes</a></li>
+<li><a href="#listener">Using the listener Class</a></li>
+</ul>
+
+<a name="daemon"></a>
+<span class="heading">Using the daemonprocess Class</span><br><br>
+
+<p>Here is some sample code for a daemon process that writes "hello" every 2
+seconds.  Most daemons don't write anything to the console, but this one does
+for purposes of demonstration.</p>
+
+@dmn.C.html@
+
+<a name="#filedescriptor">
+<span class="heading">Using the filedescriptor Class</span><br><br>
+
+<p>...</p>
+
+@filedescriptor.C.html@
+
+<a name="#file">
+<span class="heading">Using the file Class</span><br><br>
+
+<p>...</p>
+
+@file.C.html@
+
+<a name="#device">
+<span class="heading">Using the device Class</span><br><br>
+
+<p>...</p>
+
+@device.C.html@
+
+<a name="#serialport">
+<span class="heading">Using the serialport Class</span><br><br>
+
+<p>...</p>
+
+@serialport.C.html@
+
+<a name="#shmfile">
+<span class="heading">Using the shmfile Class</span><br><br>
+
+<p>...</p>
+
+@shmfile.C.html@
+
+<a name="server"></a>
+<span class="heading">Using the Server Classes</span><br><br>
+
+<p>Daemons are commonly used to serve data to clients on the same machine or
+over a network.  Below is an example combining the daemon and listener classes.
+This server listens on unix and inet sockets for a client connection, receives
+a string from the client and writes the same string back to the client.</p>
+
+@svr.C.html@
+
+<p>Notice that this server listens on both inet and unix ports.  Inet ports
+allow clients and servers to talk across a network.  Unix ports allow clients
+and servers on the same machine to talk through a pipe.  Though clients and
+servers on the same machine could talk over inet ports, unix ports are much
+faster and use fewer system resources.</p>
+
+<a name="client"></a>
+<span class="heading">Using the Client Classes</span><br><br>
+
+<p>Here's the code for a client that can talk to the server above.  This client
+sends a string to the server, reads what the server sends back and prints it
+out.  It does this once over an inet port and once over a unix port.</p>
+
+@inetclnt.C.html@
+
+@unixclnt.C.html@
+
+<a name="complex"></a>
+<span class="heading">Using the Complex Initialization methods of the
+Server Classes</span><br><br>
+
+<p>Setting up a server to listen on a socket is actually a multi-step process. 
+The listen() methods simplify this process but some applications may
+require a more flexible interface.  If you need to set socket options or
+perform additional actions between the steps of socket initialization, you can
+use the Complex Inititalization methods of the server classes.</p>
+
+<p>Below is an alternative implementation of the myserver constructor in
+which some socket options are set.</p>
+
+<pre>
+myserver::myserver() : daemonprocess(), listener() {
+
+        <font color="#0000ff">// run as a different user/group</font>
+        runAsUser(<font color="#ff00ff">&quot;nobody&quot;</font>);
+        runAsGroup(<font color="#ff00ff">&quot;nobody&quot;</font>);
+
+        <font color="#0000ff">// detach from the controlling tty</font>
+        detach();
+
+        <font color="#0000ff">// initialize the ports</font>
+        inetsocket.initialize(<font color="#ff00ff">NULL</font>,<font color="#ff00ff">8040</font>);
+        unixsocket.initialize(<font color="#ff00ff">&quot;/tmp/mysocket&quot;</font>,S_IRUSR|S_IWUSR);
+
+        <font color="#0000ff">// set some socket options</font>
+        inetsocket.lingerOnClose(<font color="#ff00ff">10</font>);
+        inetsocket.reuseAddresses();
+        unixsocket.lingerOnClose(<font color="#ff00ff">10</font>);
+
+        <font color="#0000ff">// bind to the ports</font>
+        inetsocket.bind();
+        unixsocket.bind();
+
+        <font color="#0000ff">// listen on the ports</font>
+        inetsocket.listen(<font color="#ff00ff">15</font>);
+        unixsocket.listen(<font color="#ff00ff">15</font>);
+
+        <font color="#0000ff">// add sockets to the pool</font>
+        addFileDescriptor(&amp;inetsocket);
+        addFileDescriptor(&amp;unixsocket);
+}
+</pre>
+
+<a name="#listener">
+<span class="heading">Using the listener Class</span><br><br>
+
+<p>...</p>
+
+@lsnr.C.html@
+
+</body>
+</html>

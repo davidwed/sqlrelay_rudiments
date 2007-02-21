@@ -2,13 +2,9 @@
 // See the file COPYING for more information
 
 #include <rudiments/inetclientsocket.h>
+#include <rudiments/error.h>
 
 #include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <errno.h>
 #include <time.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -40,7 +36,7 @@ int main(int argc, const char **argv) {
 
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect("localhost",8000,-1,-1,1,1)<0) {
-		printf("connect failed: %s\n",strerror(errno));
+		printf("connect failed: %s\n",error::getErrorString());
 		exit(1);
 	}
 

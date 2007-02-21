@@ -4,9 +4,9 @@
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
 #include <rudiments/inetserversocket.h>
-
+#include <rudiments/snooze.h>
+#include <rudiments/file.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -59,7 +59,7 @@ void	myserver::listen() {
 	clientsock->write("hello",5);
 
 	// sleep so the client can test it's timeout
-	sleep(5);
+	snooze::macrosnooze(5);
 
 	// close the socket and clean up
 	clientsock->close();
@@ -74,7 +74,7 @@ RETSIGTYPE	shutDown() {
 	printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
-	unlink("/tmp/svr.pidfile");
+	file::remove("/tmp/svr.pidfile");
 	exit(0);
 }
 

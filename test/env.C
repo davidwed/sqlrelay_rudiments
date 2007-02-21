@@ -3,8 +3,6 @@
 
 #include <rudiments/environment.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

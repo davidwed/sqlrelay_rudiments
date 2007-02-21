@@ -2,7 +2,6 @@
 // See the file COPYING for more information
 
 #include <rudiments/shadowentry.h>
-
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE

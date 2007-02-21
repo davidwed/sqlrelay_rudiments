@@ -1,7 +1,7 @@
 #include <rudiments/intervaltimer.h>
 #include <rudiments/signalclasses.h>
+#include <rudiments/snooze.h>
 #include <stdio.h>
-#include <unistd.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -27,7 +27,7 @@ void	waitForTimer(intervaltimer *t) {
 		if (gtv.tv_sec==0 && gtv.tv_usec==0) {
 			break;
 		}
-		sleep(1);
+		snooze::macrosnooze(1);
 	}
 }
 

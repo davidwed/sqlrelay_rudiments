@@ -2,13 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/unixclientsocket.h>
-
-#include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <errno.h>
+#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -21,7 +15,7 @@ int main(int argc, const char **argv) {
 
 	// connect to a server listening on /tmp/lsnr.socket
 	if (clnt.connect("/tmp/lsnr.socket",-1,-1,1,1)<0) {
-		printf("connect failed: %s\n",strerror(errno));
+		printf("connect failed: %s\n",error::getErrorString());
 		exit(0);
 	}
 

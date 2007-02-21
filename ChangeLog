@@ -2,6 +2,7 @@
 	modified environment::clear() for mac os x
 	regularexpression wasn't setting the match count correctly, fixed that
 	added charstring::subString() method
+	added missing lingerOnClose(), fixed dontLingerOnClose()
 
 0.30 - changed commandline::value() to commandline::getValue()
 	fixed a memory leak in dictionary

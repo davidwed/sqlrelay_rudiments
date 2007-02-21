@@ -2,9 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/inetclientsocket.h>
-
 #include <stdio.h>
-
 #include <time.h>
 
 #ifdef RUDIMENTS_NAMESPACE

@@ -1,7 +1,6 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
-#include <errno.h>
-#include <string.h>
+#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -23,7 +22,7 @@ int main(int argc, char **argv) {
 			printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",strerror(errno));
+		printf("Error: %s\n",error::getErrorString());
 	}
 	printf("-------------------------------\n");
 
@@ -42,7 +41,7 @@ int main(int argc, char **argv) {
 			printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",strerror(errno));
+		printf("Error: %s\n",error::getErrorString());
 	}
 	printf("-------------------------------\n");
 
@@ -61,7 +60,7 @@ int main(int argc, char **argv) {
 			printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",strerror(errno));
+		printf("Error: %s\n",error::getErrorString());
 	}
 	printf("-------------------------------\n");
 
@@ -80,7 +79,7 @@ int main(int argc, char **argv) {
 			printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",strerror(errno));
+		printf("Error: %s\n",error::getErrorString());
 	}
 	printf("-------------------------------\n");
 
@@ -99,7 +98,7 @@ int main(int argc, char **argv) {
 			printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",strerror(errno));
+		printf("Error: %s\n",error::getErrorString());
 	}
 
 	testfile.close();

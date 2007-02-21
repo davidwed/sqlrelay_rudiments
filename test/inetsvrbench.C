@@ -5,9 +5,8 @@
 #include <rudiments/permissions.h>
 #include <rudiments/inetserversocket.h>
 #include <rudiments/charstring.h>
-
+#include <rudiments/file.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -73,7 +72,7 @@ RETSIGTYPE	shutDown() {
 	printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
-	unlink("/tmp/svr.pidfile");
+	file::remove("/tmp/svr.pidfile");
 	exit(0);
 }
 
@@ -85,7 +84,7 @@ int main(int argc, const char **argv) {
 		exit(1);
 	}
 
-	buffersize=charstring::toUnsignedInt32(argv[1]);
+	buffersize=charstring::toUnsignedInteger(argv[1]);
 
 	mysvr=new myserver();
 

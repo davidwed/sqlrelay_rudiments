@@ -3,7 +3,6 @@
 
 #include <rudiments/hostentry.h>
 #include <stdio.h>
-#include <sys/socket.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

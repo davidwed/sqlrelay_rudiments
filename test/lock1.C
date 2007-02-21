@@ -3,7 +3,7 @@
 
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
-#include <unistd.h>
+#include <rudiments/snooze.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -19,5 +19,5 @@ int main(int argc, const char **argv) {
 	printf("locked=%d\n",fl.lockFile(F_RDLCK|F_WRLCK));
 
 	printf("sleeping\n");
-	sleep(100);
+	snooze::macrosnooze(100);
 }

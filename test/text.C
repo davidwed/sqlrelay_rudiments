@@ -3,7 +3,6 @@
 
 #include <rudiments/charstring.h>
 #include <stdio.h>
-#include <string.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

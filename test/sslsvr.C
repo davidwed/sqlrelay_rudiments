@@ -4,27 +4,20 @@
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
 #include <rudiments/inetserversocket.h>
-#include <rudiments/private/config.h>
+#include <rudiments/charstring.h>
+#include <rudiments/error.h>
+#include <rudiments/file.h>
 
 #include <openssl/err.h>
-
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <errno.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
 #endif
 
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
-	strncpy(buf,(char *)userdata,size);
+	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;
-	return strlen(buf);
+	return charstring::length(buf);
 }
 
 class myserver : public daemonprocess, public inetserversocket {
@@ -152,7 +145,8 @@ void	myserver::listen() {
 			X509_NAME_get_text_by_NID(
 					X509_get_subject_name(certificate),
 					NID_commonName,commonname,256);
-			if (strcasecmp(commonname,"client.localdomain")) {
+			if (charstring::compareIgnoringCase(commonname,
+							"client.localdomain")) {
 				printf("%s!=client.localdomain\n",commonname);
 				clientsock->close();
 				delete clientsock;
@@ -173,7 +167,8 @@ void	myserver::listen() {
 			// if errno>0 then we got a system error, otherwise we
 			// got an SSL-specific error
 			if (errno) {
-				printf("accept failed: %s\n",strerror(errno));
+				printf("accept failed: %s\n",
+					error::getErrorString());
 			} else {
 				printf("accept failed: ");
 				ERR_print_errors_fp(stdout);
@@ -195,7 +190,7 @@ RETSIGTYPE	shutDown() {
 	printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
-	unlink("/tmp/svr.pidfile");
+	file::remove("/tmp/svr.pidfile");
 	exit(0);
 }
 

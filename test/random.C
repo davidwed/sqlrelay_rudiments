@@ -1,7 +1,6 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <stdlib.h>
 #include <rudiments/datetime.h>
 #include <rudiments/randomnumber.h>
 #include <stdio.h>
@@ -15,6 +14,7 @@ int main(int argc, const char **argv) {
         // it's common to seed a random number generator with the number of
         // seconds since 1970 (the epoch), so we'll get the current date.
         datetime        dt;
+	dt.getSystemDateAndTime();
 
         printf("A random number between 0 and %d: ",RAND_MAX);
         printf("%d",randomnumber::generateNumber(dt.getEpoch()));

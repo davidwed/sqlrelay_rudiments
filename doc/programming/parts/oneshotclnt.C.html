@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/inetclientsocket.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// create an inet socket client</font>
+        inetclientsocket        clnt;
+
+        <font color="#0000ff">// connect to a server on localhost, listening on port 8000</font>
+        clnt.connect(<font color="#ff00ff">&quot;localhost&quot;</font>,<font color="#ff00ff">8000</font>,-<font color="#ff00ff">1</font>,-<font color="#ff00ff">1</font>,<font color="#ff00ff">1</font>,<font color="#ff00ff">0</font>);
+
+        <font color="#0000ff">// write &quot;hello&quot; to the server</font>
+        clnt.write(<font color="#ff00ff">&quot;hello&quot;</font>,<font color="#ff00ff">5</font>);
+
+        <font color="#0000ff">// read 5 bytes from the server and display them</font>
+        <font color="#2e8b57"><b>char</b></font>   buffer[<font color="#ff00ff">6</font>];
+        <font color="#2e8b57"><b>int</b></font>    sizeread=clnt.read(buffer,<font color="#ff00ff">5</font>);
+        buffer[sizeread]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+        <font color="#0000ff">// since the oneshotsvr will only send 1 message, then wait, we</font>
+        <font color="#0000ff">// can test read-with-timeout here</font>
+        <font color="#a52a2a"><b>if</b></font> (clnt.read(buffer,<font color="#ff00ff">10</font>,<font color="#ff00ff">1</font>,<font color="#ff00ff">0</font>)==-<font color="#ff00ff">1</font>) {
+                printf(<font color="#ff00ff">&quot;timeout!!!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;timeout failed!!!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+
+        <font color="#0000ff">// close the connection to the server</font>
+        clnt.close();
+}
+</pre>
+
+

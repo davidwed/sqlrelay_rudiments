@@ -2,7 +2,6 @@
 // See the file COPYING for more information
 
 #include <rudiments/dictionary.h>
-
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -13,6 +12,7 @@ int main(int argc, const char **argv) {
 
 	// create a dictionary containing string keys and string values
 	namevaluepairs	dict;
+	printf("string keys, string values:\n");
 
 	// add values to the dictionary
 	dict.setData("1","one");
@@ -45,6 +45,7 @@ int main(int argc, const char **argv) {
 
 	// create a dictionary containing long integer keys and string values
 	numericdictionary<char *>	numdict;
+	printf("integer keys, string values:\n");
 
 	// add values to the dictionary
 	numdict.setData(1,"one");
@@ -79,6 +80,7 @@ int main(int argc, const char **argv) {
 	// create a dictionary containing double precision
 	// floating point keys and string values
 	dictionary<double,char *>	doubledict;
+	printf("floating point keys, string values:\n");
 
 	// add values to the dictionary
 	doubledict.setData(1.1,"one point one");

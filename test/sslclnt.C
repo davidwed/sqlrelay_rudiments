@@ -2,13 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/inetclientsocket.h>
-
-#include <stdio.h>
-#include <string.h>
-#ifdef HAVE_STRINGS_H
-	#include <strings.h>
-#endif
-#include <errno.h>
+#include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <openssl/err.h>
 
@@ -17,9 +12,9 @@ using namespace rudiments;
 #endif
 
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
-	strncpy(buf,(char *)userdata,size);
+	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;
-	return strlen(buf);
+	return charstring::length(buf);
 }
 
 int main(int argc, const char **argv) {
@@ -62,7 +57,7 @@ int main(int argc, const char **argv) {
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect("localhost",8000,-1,-1,1,1)<0) {
 		if (errno) {
-			printf("connect failed: %s\n",strerror(errno));
+			printf("connect failed: %s\n",error::getErrorString());
 		} else {
 			printf("connect failed: ");
 			ERR_print_errors_fp(stdout);
@@ -96,7 +91,7 @@ int main(int argc, const char **argv) {
 	char	commonname[256];
 	X509_NAME_get_text_by_NID(X509_get_subject_name(certificate),
 					NID_commonName,commonname,256);
-	if (strcasecmp(commonname,"server.localdomain")) {
+	if (charstring::compareIgnoringCase(commonname,"server.localdomain")) {
 		printf("%s!=server.localdomain\n",commonname);
 		clnt.close();
 		exit(1);

@@ -1,0 +1,123 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/dictionary.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// create a dictionary containing string keys and string values</font>
+        namevaluepairs  dict;
+        printf(<font color="#ff00ff">&quot;string keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// add values to the dictionary</font>
+        dict.setData(<font color="#ff00ff">&quot;1&quot;</font>,<font color="#ff00ff">&quot;one&quot;</font>);
+        dict.setData(<font color="#ff00ff">&quot;2&quot;</font>,<font color="#ff00ff">&quot;two&quot;</font>);
+        dict.setData(<font color="#ff00ff">&quot;3&quot;</font>,<font color="#ff00ff">&quot;three&quot;</font>);
+        dict.setData(<font color="#ff00ff">&quot;4&quot;</font>,<font color="#ff00ff">&quot;four&quot;</font>);
+
+        <font color="#0000ff">// display the length and contents of the dictionary</font>
+        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dict.getList()-&gt;getLength());
+        dict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// remove values, displaying the dictionary after each removal</font>
+        dict.removeData(<font color="#ff00ff">&quot;3&quot;</font>);
+        dict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        dict.removeData(<font color="#ff00ff">&quot;2&quot;</font>);
+        dict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        dict.removeData(<font color="#ff00ff">&quot;4&quot;</font>);
+        dict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        dict.removeData(<font color="#ff00ff">&quot;1&quot;</font>);
+        dict.print();
+
+
+
+        <font color="#0000ff">// create a dictionary containing long integer keys and string values</font>
+        numericdictionary&lt;<font color="#2e8b57"><b>char</b></font> *&gt;      numdict;
+        printf(<font color="#ff00ff">&quot;integer keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// add values to the dictionary</font>
+        numdict.setData(<font color="#ff00ff">1</font>,<font color="#ff00ff">&quot;one&quot;</font>);
+        numdict.setData(<font color="#ff00ff">2</font>,<font color="#ff00ff">&quot;two&quot;</font>);
+        numdict.setData(<font color="#ff00ff">3</font>,<font color="#ff00ff">&quot;three&quot;</font>);
+        numdict.setData(<font color="#ff00ff">4</font>,<font color="#ff00ff">&quot;four&quot;</font>);
+
+        <font color="#0000ff">// display the length and contents of the dictionary</font>
+        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,numdict.getList()-&gt;getLength());
+        numdict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// remove values, displaying the dictionary after each removal</font>
+        numdict.removeData(<font color="#ff00ff">3</font>);
+        numdict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        numdict.removeData(<font color="#ff00ff">2</font>);
+        numdict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        numdict.removeData(<font color="#ff00ff">4</font>);
+        numdict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        numdict.removeData(<font color="#ff00ff">1</font>);
+        numdict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+
+        <font color="#0000ff">// create a dictionary containing double precision</font>
+        <font color="#0000ff">// floating point keys and string values</font>
+        dictionary&lt;<font color="#2e8b57"><b>double</b></font>,<font color="#2e8b57"><b>char</b></font> *&gt;      doubledict;
+        printf(<font color="#ff00ff">&quot;floating point keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// add values to the dictionary</font>
+        doubledict.setData(<font color="#ff00ff">1.1</font>,<font color="#ff00ff">&quot;one point one&quot;</font>);
+        doubledict.setData(<font color="#ff00ff">2.2</font>,<font color="#ff00ff">&quot;two point two&quot;</font>);
+        doubledict.setData(<font color="#ff00ff">3.3</font>,<font color="#ff00ff">&quot;three point three&quot;</font>);
+        doubledict.setData(<font color="#ff00ff">4.4</font>,<font color="#ff00ff">&quot;four point four&quot;</font>);
+
+        <font color="#0000ff">// display the length and contents of the dictionary</font>
+        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,doubledict.getList()-&gt;getLength());
+        doubledict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// remove values, displaying the dictionary after each removal</font>
+        doubledict.removeData(<font color="#ff00ff">3.3</font>);
+        doubledict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        doubledict.removeData(<font color="#ff00ff">2.2</font>);
+        doubledict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        doubledict.removeData(<font color="#ff00ff">4.4</font>);
+        doubledict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        doubledict.removeData(<font color="#ff00ff">1.1</font>);
+        doubledict.print();
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+}
+</pre>
+
+

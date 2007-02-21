@@ -60,6 +60,13 @@
 variables.  The following example gets, sets and resets the environment
 variable TEST.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -67,36 +74,47 @@ variable TEST.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/environment.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
-
-        environment     env;
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// print the environment variable &quot;TEST&quot;</font>
-        printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,env.getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
+        printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,environment::getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
 
         <font color="#0000ff">// set the value of &quot;TEST&quot; to &quot;value&quot;</font>
-        <font color="#a52a2a"><b>if</b></font> (env.setValue(<font color="#ff00ff">&quot;TEST&quot;</font>,<font color="#ff00ff">&quot;value&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,env.getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
+        <font color="#a52a2a"><b>if</b></font> (environment::setValue(<font color="#ff00ff">&quot;TEST&quot;</font>,<font color="#ff00ff">&quot;value&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,environment::getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
         } <font color="#a52a2a"><b>else</b></font> {
                 printf(<font color="#ff00ff">&quot;setValue() failed</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         }
 
         <font color="#0000ff">// set the value of &quot;TEST&quot; to &quot;newvalue&quot;</font>
-        <font color="#a52a2a"><b>if</b></font> (env.setValue(<font color="#ff00ff">&quot;TEST&quot;</font>,<font color="#ff00ff">&quot;newvalue&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,env.getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
+        <font color="#a52a2a"><b>if</b></font> (environment::setValue(<font color="#ff00ff">&quot;TEST&quot;</font>,<font color="#ff00ff">&quot;newvalue&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,environment::getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
         } <font color="#a52a2a"><b>else</b></font> {
                 printf(<font color="#ff00ff">&quot;setValue() failed</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         }
 
         <font color="#0000ff">// remove &quot;TEST&quot; from the environment</font>
-        env.remove(<font color="#ff00ff">&quot;TEST&quot;</font>);
+        environment::remove(<font color="#ff00ff">&quot;TEST&quot;</font>);
 
         <font color="#0000ff">// print the (non-existent) environment variable &quot;TEST&quot;</font>
-        printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,env.getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
+        printf(<font color="#ff00ff">&quot;TEST=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,environment::getValue(<font color="#ff00ff">&quot;TEST&quot;</font>));
+
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);
+        environment::print();
+
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);
+        environment::clear();
+
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">clear?</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        environment::print();
 }
 </pre>
+
+
 
 <a name="commandline"></a>
 <span class="heading">Using the commandline Class</span><br><br>
@@ -109,6 +127,13 @@ variable TEST.</p>
 either of these formats.  Below is some code illustrating the use of the
 commandline class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -118,11 +143,13 @@ commandline class.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdlib.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
-        commandline     cmdline(argv,argc);
+        commandline     cmdline(argc,argv);
 
         <font color="#0000ff">// if -help was specified, display a usage message</font>
         <font color="#a52a2a"><b>if</b></font> (cmdline.found(<font color="#ff00ff">&quot;-help&quot;</font>)) {
@@ -133,9 +160,9 @@ commandline class.</p>
         <font color="#0000ff">// If -divisor and -dividend are supplied, use them.  Otherwise</font>
         <font color="#0000ff">// display an error message.</font>
         <font color="#a52a2a"><b>if</b></font> (cmdline.found(<font color="#ff00ff">&quot;-divisor&quot;</font>) &amp;&amp; cmdline.found(<font color="#ff00ff">&quot;-dividend&quot;</font>)) {
-                <font color="#2e8b57"><b>double</b></font>  divisor=charstring::toFloat(
+                <font color="#2e8b57"><b>double</b></font>        divisor=charstring::toFloat(
                                         cmdline.getValue(<font color="#ff00ff">&quot;-divisor&quot;</font>));
-                <font color="#2e8b57"><b>double</b></font>  dividend=charstring::toFloat(
+                <font color="#2e8b57"><b>double</b></font>        dividend=charstring::toFloat(
                                         cmdline.getValue(<font color="#ff00ff">&quot;-dividend&quot;</font>));
                 printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%0.2f</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,divisor/dividend);
         } <font color="#a52a2a"><b>else</b></font> {
@@ -143,6 +170,8 @@ commandline class.</p>
         }
 }
 </pre>
+
+
 
 <a name="parameterstring"></a>
 <span class="heading">Using the parameterstring Class</span><br><br>
@@ -179,6 +208,40 @@ name='\\value\\'
 </pre>
 
 
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/parameterstring.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        parameterstring pstr;
+
+        pstr.parse(<font color="#ff00ff">&quot;name1=value1;name2='value2';name3='</font><font color="#6a5acd">\\</font><font color="#ff00ff">'value3</font><font color="#6a5acd">\\</font><font color="#ff00ff">'';name4=</font><font color="#6a5acd">\\\\</font><font color="#ff00ff">value4</font><font color="#6a5acd">\\\\</font><font color="#ff00ff">&quot;</font>);
+
+        printf(<font color="#ff00ff">&quot;By Name:</font><font color="#6a5acd">\n</font><font color="#ff00ff">name1=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name2=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name3=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name4=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name5=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                pstr.getValue(<font color="#ff00ff">&quot;name1&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name2&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name3&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name4&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name5&quot;</font>));
+}
+</pre>
+
+
+
 <a name="datetime"></a>
 <span class="heading">Using the datetime Class</span><br><br>
 
@@ -210,6 +273,13 @@ negative numbers to subtract time.</p>
 
 <p>Below is some code illustrating the use of the datetime class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -217,9 +287,11 @@ negative numbers to subtract time.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// set current time zone to America/New_York</font>
         printf(<font color="#ff00ff">&quot;setting TZ=America/New_York...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
@@ -233,45 +305,59 @@ negative numbers to subtract time.</p>
         <font color="#0000ff">// Write out the different parts of the date.</font>
         printf(<font color="#ff00ff">&quot;Hour       : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getHour());
         printf(<font color="#ff00ff">&quot;Minutes    : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getMinutes());
-        printf(<font color="#ff00ff">&quot;Seconds    : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getSeconds());
+        printf(<font color="#ff00ff">&quot;Seconds           : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getSeconds());
         printf(<font color="#ff00ff">&quot;Month      : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getMonth());
         printf(<font color="#ff00ff">&quot;DayOfMonth : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getDayOfMonth());
         printf(<font color="#ff00ff">&quot;DayOfWeek  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getDayOfWeek());
         printf(<font color="#ff00ff">&quot;DayOfYear  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getDayOfYear());
         printf(<font color="#ff00ff">&quot;Year       : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getYear());
         printf(<font color="#ff00ff">&quot;Daylight Savings Time : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.isDaylightSavingsTime());
-        printf(<font color="#ff00ff">&quot;Time Zone             : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getTimeZoneString());
-        printf(<font color="#ff00ff">&quot;Offset from GMT       : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getTimeZoneOffset());
-        printf(<font color="#ff00ff">&quot;Seconds since 1970    : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getEpoch());
-        printf(<font color="#ff00ff">&quot;Date String           : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
+        printf(<font color="#ff00ff">&quot;Time Zone            : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getTimeZoneString());
+        printf(<font color="#ff00ff">&quot;Offset from GMT       : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getTimeZoneOffset());
+        printf(<font color="#ff00ff">&quot;Seconds since 1970    : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getEpoch());
+        printf(<font color="#ff00ff">&quot;Date String          : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
 
         <font color="#0000ff">// use static methods to translate between formats</font>
-        <font color="#2e8b57"><b>char</b></font>    *string=datetime::getString(dt.getEpoch());
+        <font color="#2e8b57"><b>char</b></font>   *string=datetime::getString(dt.getEpoch());
         printf(<font color="#ff00ff">&quot;String from Epoch     : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
         <font color="#a52a2a"><b>delete</b></font>[] string;
         string=datetime::getString(dt.getTm());
         printf(<font color="#ff00ff">&quot;String from tm        : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
 
         <font color="#0000ff">// use static methods to translate between formats</font>
-        <font color="#2e8b57"><b>time_t</b></font>  epoch=datetime::getEpoch(string);
-        printf(<font color="#ff00ff">&quot;Epoch from String     : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,epoch);
+        <font color="#2e8b57"><b>time_t</b></font> epoch=datetime::getEpoch(string);
+        printf(<font color="#ff00ff">&quot;Epoch from String     : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,epoch);
         <font color="#a52a2a"><b>delete</b></font>[] string;
         epoch=datetime::getEpoch(dt.getTm());
-        printf(<font color="#ff00ff">&quot;Epoch from tm         : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,epoch);
+        printf(<font color="#ff00ff">&quot;Epoch from tm         : </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,epoch);
 
         <font color="#0000ff">// get time from hardware clock</font>
-        dt.getHardwareDateAndTime(<font color="#ff00ff">&quot;GMT&quot;</font>);
-        printf(<font color="#ff00ff">&quot;Hardware Clock (assuming GMT): </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
+        printf(<font color="#ff00ff">&quot;Hardware Clock (assuming GMT): </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                (dt.getHardwareDateAndTime(<font color="#ff00ff">&quot;GMT&quot;</font>))?
+                                        dt.getString():<font color="#ff00ff">&quot;failed&quot;</font>);
 
         <font color="#0000ff">// get time from hardware clock adjusting for timezone</font>
-        dt.getAdjustedHardwareDateAndTime(<font color="#ff00ff">&quot;GMT&quot;</font>);
-        printf(<font color="#ff00ff">&quot;Adjusted Hardware Clock      : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
+        printf(<font color="#ff00ff">&quot;Adjusted Hardware Clock      : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                (dt.getAdjustedHardwareDateAndTime(<font color="#ff00ff">&quot;GMT&quot;</font>))?
+                                        dt.getString():<font color="#ff00ff">&quot;failed&quot;</font>);
 
         <font color="#0000ff">// switch time zones</font>
         dt.adjustTimeZone(<font color="#ff00ff">&quot;MST&quot;</font>);
         printf(<font color="#ff00ff">&quot;Adjusting time zone to Mountain time: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dt.getString());
+
+        <font color="#0000ff">// valid date</font>
+        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>     *str=<font color="#ff00ff">&quot;02/20/1974 12:00:00&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+        str=<font color="#ff00ff">&quot;02/30/1974 12:00:00&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+        str=<font color="#ff00ff">&quot;02/20/1974 12:00:00 EST5EDT&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
+        str=<font color="#ff00ff">&quot;02/30/1974 12:00:00 EST5EDT&quot;</font>;
+        printf(<font color="#ff00ff">&quot;valid date?  </font><font color="#6a5acd">%s</font><font color="#ff00ff">  : </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str,datetime::validDateTime(str));
 }
 </pre>
+
+
 
 <a name="timezonefile"></a>
 <span class="heading">Using the timezonefile Class</span><br><br>
@@ -284,6 +370,13 @@ them.</p>
 <p>It turned out to be of very limited value, but it works and I never removed
 it.  So, if you need such functionality, it exists.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -292,13 +385,16 @@ it.  So, if you need such functionality, it exists.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdlib.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
 <font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// parse the timezone file specified in the first argument</font>
         timezonefile    tz;
         <font color="#a52a2a"><b>if</b></font> (!tz.parseFile(argv[<font color="#ff00ff">1</font>])) {
+                printf(<font color="#ff00ff">&quot;usage: tzn file</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
                 exit(<font color="#ff00ff">1</font>);
         }
 
@@ -313,7 +409,7 @@ it.  So, if you need such functionality, it exists.</p>
         printf(<font color="#ff00ff">&quot;timecnt: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,tz.getTimeCount());
         printf(<font color="#ff00ff">&quot;typecnt: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,tz.getTypeCount());
         printf(<font color="#ff00ff">&quot;charcnt: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,tz.getCharacterCount());
-        <font color="#2e8b57"><b>int</b></font>     i;
+        <font color="#2e8b57"><b>int</b></font>    i;
         <font color="#a52a2a"><b>for</b></font> (i=<font color="#ff00ff">0</font>; i&lt;tz.getTimeCount(); i++) {
                 printf(<font color="#ff00ff">&quot;transitiontime[</font><font color="#6a5acd">%d</font><font color="#ff00ff">]: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,i,tz.getTransitionTime(i));
         }
@@ -322,11 +418,11 @@ it.  So, if you need such functionality, it exists.</p>
         }
         <font color="#a52a2a"><b>for</b></font> (i=<font color="#ff00ff">0</font>; i&lt;tz.getTypeCount(); i++) {
                 printf(<font color="#ff00ff">&quot;ttinfo[</font><font color="#6a5acd">%d</font><font color="#ff00ff">] {</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,i);
-                printf(<font color="#ff00ff">&quot;        tt_gmtoff: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                printf(<font color="#ff00ff">&quot;      tt_gmtoff: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         tz.getTimeTypeInfo(i)-&gt;tt_gmtoff);
-                printf(<font color="#ff00ff">&quot;        tt_isdst: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                printf(<font color="#ff00ff">&quot;      tt_isdst: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         tz.getTimeTypeInfo(i)-&gt;tt_isdst);
-                printf(<font color="#ff00ff">&quot;        tt_abbrind: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                printf(<font color="#ff00ff">&quot;      tt_abbrind: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         tz.getTimeTypeInfo(i)-&gt;tt_abbrind);
                 printf(<font color="#ff00ff">&quot;}</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         }
@@ -359,10 +455,83 @@ it.  So, if you need such functionality, it exists.</p>
 }
 </pre>
 
+
+
 <a name="directory"></a>
 <span class="heading">Using the directory Class</span><br><br>
 
-<p>...</p>
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2004  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/directory.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        directory::create(<font color="#ff00ff">&quot;testdir&quot;</font>,permissions::evalPermString(<font color="#ff00ff">&quot;rwxr-xr-x&quot;</font>));
+        file    f;
+        f.create(<font color="#ff00ff">&quot;testdir/testfile1&quot;</font>,permissions::evalPermString(<font color="#ff00ff">&quot;rw-r--r--&quot;</font>));
+        f.close();
+        f.create(<font color="#ff00ff">&quot;testdir/testfile2&quot;</font>,permissions::evalPermString(<font color="#ff00ff">&quot;rw-r--r--&quot;</font>));
+        f.close();
+
+
+        printf(<font color="#ff00ff">&quot;Contents of testdir:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        directory       d;
+        d.open(<font color="#ff00ff">&quot;testdir&quot;</font>);
+
+        <font color="#2e8b57"><b>char</b></font>   *name;
+        <font color="#a52a2a"><b>for</b></font> (off64_t index=<font color="#ff00ff">0</font>; (name=d.getChildName(index)); index++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff">: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,index,name);
+                <font color="#a52a2a"><b>delete</b></font>[] name;
+        }
+
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff"> entries</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,d.getChildCount());
+
+        <font color="#2e8b57"><b>char</b></font>   *cwd=directory::getCurrentWorkingDirectory();
+        printf(<font color="#ff00ff">&quot;cwd=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,cwd);
+        <font color="#a52a2a"><b>delete</b></font>[] cwd;
+
+        directory::changeDirectory(<font color="#ff00ff">&quot;testdir&quot;</font>);
+
+        cwd=directory::getCurrentWorkingDirectory();
+        printf(<font color="#ff00ff">&quot;cwd=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,cwd);
+        <font color="#a52a2a"><b>delete</b></font>[] cwd;
+
+        directory::changeDirectory(<font color="#ff00ff">&quot;..&quot;</font>);
+
+        cwd=directory::getCurrentWorkingDirectory();
+        printf(<font color="#ff00ff">&quot;cwd=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,cwd);
+        <font color="#a52a2a"><b>delete</b></font>[] cwd;
+
+        file::remove(<font color="#ff00ff">&quot;testdir/testfile1&quot;</font>);
+        file::remove(<font color="#ff00ff">&quot;testdir/testfile2&quot;</font>);
+        directory::remove(<font color="#ff00ff">&quot;testdir&quot;</font>);
+
+        printf(<font color="#ff00ff">&quot;maxFileNameLength(/usr/local)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                        directory::maxFileNameLength(<font color="#ff00ff">&quot;/usr/local&quot;</font>));
+        printf(<font color="#ff00ff">&quot;maxPathLength(/usr/local)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                        directory::maxPathLength(<font color="#ff00ff">&quot;/usr/local&quot;</font>));
+        printf(<font color="#ff00ff">&quot;canAccessLongFileNames(/usr/local)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                        directory::canAccessLongFileNames(<font color="#ff00ff">&quot;/usr/local&quot;</font>));
+}
+</pre>
+
+
 
 <a name="filesystem"></a>
 <span class="heading">Using the filesystem Class</span><br><br>
@@ -374,6 +543,13 @@ structure returned by statfs varies greatly between operating systems.  The
 filesystem class attempts to remedy this situation.  However, no operating
 system supports every method in the filesystem class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -381,56 +557,60 @@ system supports every method in the filesystem class.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/filesystem.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         filesystem      fs;
         fs.initialize(<font color="#ff00ff">&quot;/&quot;</font>);
 
         printf(<font color="#ff00ff">&quot;root fileststem stats:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        type:                           0x</font><font color="#6a5acd">%08x</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       type:                           0x</font><font color="#6a5acd">%08x</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getType());
-        printf(<font color="#ff00ff">&quot;        block size:                     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       block size:                     </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getBlockSize());
-        printf(<font color="#ff00ff">&quot;        optimum tranfer block size:     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       optimum tranfer block size:     </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getOptimumTransferBlockSize());
-        printf(<font color="#ff00ff">&quot;        total blocks:                   </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       total blocks:                   </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getTotalBlocks());
-        printf(<font color="#ff00ff">&quot;        free blocks:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       free blocks:                    </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getFreeBlocks());
-        printf(<font color="#ff00ff">&quot;        available blocks:               </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       available blocks:               </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getAvailableBlocks());
-        printf(<font color="#ff00ff">&quot;        total nodes:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       total nodes:                    </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getTotalFileNodes());
-        printf(<font color="#ff00ff">&quot;        free nodes:                     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       free nodes:                     </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getFreeFileNodes());
-        printf(<font color="#ff00ff">&quot;        available nodes:                </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       available nodes:                </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getAvailableFileNodes());
-        printf(<font color="#ff00ff">&quot;        filesystem id:                  </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       filesystem id:                  </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getFileSystemId());
-        printf(<font color="#ff00ff">&quot;        maximum file name length:       </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       maximum file name length:       </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getMaximumFileNameLength());
-        printf(<font color="#ff00ff">&quot;        owner:                          </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       owner:                          </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getOwner());
-        printf(<font color="#ff00ff">&quot;        sync writes:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       sync writes:                    </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getSyncWrites());
-        printf(<font color="#ff00ff">&quot;        async writes:                   </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       async writes:                   </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getAsyncWrites());
-        printf(<font color="#ff00ff">&quot;        fs type name:                   </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       fs type name:                   </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getTypeName());
-        printf(<font color="#ff00ff">&quot;        mount point:                    </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       mount point:                    </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getMountPoint());
-        printf(<font color="#ff00ff">&quot;        sync reads:                     </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       sync reads:                     </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getSyncReads());
-        printf(<font color="#ff00ff">&quot;        async reads:                    </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       async reads:                    </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getAsyncReads());
-        printf(<font color="#ff00ff">&quot;        device name:                    </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       device name:                    </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getDeviceName());
-        printf(<font color="#ff00ff">&quot;        fs specific string:             </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       fs specific string:             </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                 fs.getFilesystemSpecificString());
 }
 </pre>
+
+
 
 <a name="logger"></a>
 <span class="heading">Using the logger Class</span><br><br>
@@ -448,15 +628,24 @@ one for each set of messages.</p>
 
 <p>The following example illustrates use of the logger class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/logger.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         logger                  lg;
 
@@ -481,10 +670,10 @@ one for each set of messages.</p>
 
         <font color="#0000ff">// write a string, character, long and float value to the log, along</font>
         <font color="#0000ff">// with a standard log header for each</font>
-        <font color="#2e8b57"><b>char</b></font>    *header=logger::logHeader(<font color="#ff00ff">&quot;logtest&quot;</font>);
+        <font color="#2e8b57"><b>char</b></font>   *header=logger::logHeader(<font color="#ff00ff">&quot;logtest&quot;</font>);
         lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">&quot;test&quot;</font>);
         lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">'t'</font>);
-        lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">12345</font>);
+        lg.write(header,<font color="#ff00ff">0</font>,(<font color="#2e8b57"><b>long</b></font>)<font color="#ff00ff">12345</font>);
         lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">123.45</font>);
         <font color="#a52a2a"><b>delete</b></font>[] header;
 
@@ -512,6 +701,8 @@ one for each set of messages.</p>
 }
 </pre>
 
+
+
 <a name="permissions"></a>
 <span class="heading">Using the permissions Class</span><br><br>
 
@@ -520,49 +711,64 @@ The output of these methods can be used whenever a function takes an argument
 of type mode_t.  Below is some code illustrating the use of the permissions
 class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;sys/types.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;sys/stat.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;fcntl.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;unistd.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdlib.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// Create a file with rw-r--r-- permissions</font>
-        <font color="#2e8b57"><b>int</b></font>     fd=open(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>,O_RDWR|O_CREAT,
+        file    fd;
+        fd.open(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>,O_RDWR|O_CREAT,
                                 permissions::evalPermString(<font color="#ff00ff">&quot;rw-r--r--&quot;</font>));
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
 
 
         <font color="#0000ff">// change the permissions to rw-rw-r--</font>
-        permissions::setFilePermissions(fd,
+        permissions::setFilePermissions(fd.getFileDescriptor(),
                                 permissions::evalPermString(<font color="#ff00ff">&quot;rw-rw-r--&quot;</font>));
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
 
 
         <font color="#0000ff">// close and delete the file</font>
-        close(fd);
-        unlink(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>);
+        fd.close();
+        file::remove(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>);
 
 
         <font color="#0000ff">// do the same as above using different methods</font>
-        fd=open(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>,O_RDWR|O_CREAT,
+        fd.open(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>,O_RDWR|O_CREAT,
                                 permissions::ownerReadWrite()|
                                 permissions::groupRead()|
                                 permissions::othersRead());
-        permissions::setFilePermissions(fd,
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
+
+        permissions::setFilePermissions(fd.getFileDescriptor(),
                                 permissions::ownerReadWrite()|
                                 permissions::groupReadWrite()|
                                 permissions::othersRead());
-        close(fd);
-        unlink(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>);
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
+        fd.close();
+        file::remove(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>);
 }
 </pre>
+
+
 
 <a name="randomnumber"></a>
 <span class="heading">Using the randomnumber Class</span><br><br>
@@ -571,24 +777,31 @@ class.</p>
 The randomnumber class attempts to rectify this situation.  Below is some code
 illustrating the use of the randomnumber class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/private/config.h&gt;</font>
-
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/randomnumber.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdlib.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// it's common to seed a random number generator with the number of</font>
         <font color="#0000ff">// seconds since 1970 (the epoch), so we'll get the current date.</font>
         datetime        dt;
+        dt.getSystemDateAndTime();
 
         printf(<font color="#ff00ff">&quot;A random number between 0 and </font><font color="#6a5acd">%d</font><font color="#ff00ff">: &quot;</font>,<font color="#ff00ff">RAND_MAX</font>);
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&quot;</font>,randomnumber::generateNumber(dt.getEpoch()));
@@ -627,6 +840,8 @@ illustrating the use of the randomnumber class.</p>
 }
 </pre>
 
+
+
 <a name="regularexpression"></a>
 <span class="heading">Using the regularexpression Class</span><br><br>
 
@@ -635,6 +850,13 @@ but methods for using regular expressions vary from platform to platform.  The
 regularexpression class attempts to rectify this situation.  Below is some code
 illustrating the use of the regularexpression class.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -642,85 +864,253 @@ illustrating the use of the regularexpression class.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/regularexpression.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>void</b></font> printMatches(regularexpression *re) {
+        printf(<font color="#ff00ff">&quot;match 0: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,re-&gt;getSubstringStart(<font color="#ff00ff">0</font>));
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">1</font>; i&lt;re-&gt;getSubstringCount(); i++) {
+                printf(<font color="#ff00ff">&quot;match: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,re-&gt;getSubstringStart(i));
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff"> matches</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re-&gt;getSubstringCount());
+}
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// A quick match...</font>
+        <font color="#a52a2a"><b>if</b></font> (regularexpression::match(<font color="#ff00ff">&quot;Hello!&quot;</font>,<font color="#ff00ff">&quot;.*Dave.*&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+
         <font color="#a52a2a"><b>if</b></font> (regularexpression::match(<font color="#ff00ff">&quot;Hello Dave!&quot;</font>,<font color="#ff00ff">&quot;.*Dave.*&quot;</font>)) {
                 printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         }
 
         <font color="#0000ff">// If you need to match over and over...</font>
-        regularexpression       re(<font color="#ff00ff">&quot;.*Dave.*&quot;</font>);
-        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Hello Dave!&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        regularexpression       re(<font color="#ff00ff">&quot;Dave&quot;</font>);
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Hello!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         }
-        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Goodbye Dave!&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        }
-        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Dave is a jerk!&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        }
-        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Dave writes cool software!&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        }
-        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;See ya later Dave!&quot;</font>)) {
-                printf(<font color="#ff00ff">&quot;The string contains .*Dave.*</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        }
+        printMatches(&amp;re);
 
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Hello Dave!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        re.study();
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Goodbye!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Goodbye Dave!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        re.study();
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;He is a jerk!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Dave is a jerk!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;He writes cool software!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Dave writes cool software!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;See ya later Dave!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;See ya later!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
+
+        <font color="#a52a2a"><b>if</b></font> (re.match(<font color="#ff00ff">&quot;Dave, Dave, Dave!&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;The string contains Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        } <font color="#a52a2a"><b>else</b></font> {
+                printf(<font color="#ff00ff">&quot;The string doesn't contain Dave</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        printMatches(&amp;re);
 }
 </pre>
+
+
 
 <a name="chat"></a>
 <span class="heading">Using the chat Class</span><br><br>
 
 <p>...</p>
 
+
 <a name="crypt"></a>
 <span class="heading">Using the crypt Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="dynamiclib"></a>
 <span class="heading">Using the dynamiclib Class</span><br><br>
 
 <p>...</p>
 
+
 <a name="error"></a>
 <span class="heading">Using the error Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="intervaltimer"></a>
 <span class="heading">Using the intervaltimer Class</span><br><br>
 
 <p>...</p>
 
+
+
+
+
+
+
+
+<pre>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/intervaltimer.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/signalclasses.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/snooze.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+RETSIGTYPE      alarmhandler() {
+        printf(<font color="#ff00ff">&quot;alarm!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+}
+
+<font color="#2e8b57"><b>void</b></font>    waitForTimer(intervaltimer *t) {
+
+        itimerval       itv;
+        t-&gt;getIntervals(&amp;itv);
+        printf(<font color="#ff00ff">&quot;initial: </font><font color="#6a5acd">%d</font><font color="#ff00ff">sec </font><font color="#6a5acd">%d</font><font color="#ff00ff">usec   &quot;</font>,
+                itv.it_value.tv_sec,itv.it_value.tv_usec);
+        printf(<font color="#ff00ff">&quot;interval: </font><font color="#6a5acd">%d</font><font color="#ff00ff">sec </font><font color="#6a5acd">%d</font><font color="#ff00ff">usec</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                itv.it_interval.tv_sec,itv.it_interval.tv_usec);
+
+        <font color="#a52a2a"><b>for</b></font> (;;) {
+                timeval gtv;
+                t-&gt;getTimeRemaining(&amp;gtv);
+                printf(<font color="#ff00ff">&quot;time remaining: </font><font color="#6a5acd">%d</font><font color="#ff00ff">sec </font><font color="#6a5acd">%d</font><font color="#ff00ff">usec</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,gtv.tv_sec,gtv.tv_usec);
+                <font color="#a52a2a"><b>if</b></font> (gtv.tv_sec==<font color="#ff00ff">0</font> &amp;&amp; gtv.tv_usec==<font color="#ff00ff">0</font>) {
+                        <font color="#a52a2a"><b>break</b></font>;
+                }
+                snooze::macrosnooze(<font color="#ff00ff">1</font>);
+        }
+}
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        signalhandler   ah;
+        ah.setHandler((<font color="#2e8b57"><b>void</b></font> *)alarmhandler);
+        ah.handleSignal(<font color="#ff00ff">SIGALRM</font>);
+
+        intervaltimer   t(ITIMER_REAL);
+
+        t.setInitialInterval(<font color="#ff00ff">2</font>,<font color="#ff00ff">0</font>);
+        t.start();
+        waitForTimer(&amp;t);
+
+        t.setInitialInterval(<font color="#ff00ff">2</font>,<font color="#ff00ff">500000</font>);
+        t.start();
+        waitForTimer(&amp;t);
+
+        timeval tv;
+        tv.tv_sec=<font color="#ff00ff">2</font>;
+        tv.tv_usec=<font color="#ff00ff">500000</font>;
+        t.setInitialInterval(&amp;tv);
+        t.start();
+        waitForTimer(&amp;t);
+
+        itimerval       stv;
+        stv.it_value.tv_sec=<font color="#ff00ff">2</font>;
+        stv.it_value.tv_usec=<font color="#ff00ff">0</font>;
+        stv.it_interval.tv_sec=<font color="#ff00ff">0</font>;
+        stv.it_interval.tv_usec=<font color="#ff00ff">0</font>;
+        t.setIntervals(&amp;stv);
+        t.start();
+        waitForTimer(&amp;t);
+}
+</pre>
+
+
+
 <a name="math"></a>
 <span class="heading">Using the math Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="mutex"></a>
 <span class="heading">Using the mutex Class</span><br><br>
 
 <p>...</p>
 
+
 <a name="process"></a>
 <span class="heading">Using the process Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="serialportprofile"></a>
 <span class="heading">Using the serialportprofile Class</span><br><br>
 
 <p>...</p>
 
+
 <a name="snooze"></a>
 <span class="heading">Using the snooze Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="signal"></a>
 <span class="heading">Using the Signal Classes</span><br><br>
@@ -744,38 +1134,6 @@ signals.</p>
 <p>Below is some code illustrating the use of all three classes.  Note that
 you'll have to kill this program with a -9.</p>
 
-<pre>
-<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
-<font color="#0000ff">// See the file COPYING for more information</font>
-
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/signalclasses.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
-
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
-
-<font color="#2e8b57"><b>void</b></font>    handleSigusr1() {
-        printf(<font color="#ff00ff">&quot;Got a SIGUSR1!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-}
-
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
-
-        <font color="#0000ff">// this program will ignore all signals except SIGUSR1</font>
-        signalset       ignoreset;
-        ignoreset.addAllSignals();
-        ignoreset.removeSignal(<font color="#ff00ff">SIGUSR1</font>);
-        signalmanager::ignoreSignals(ignoreset.getSignalSet());
-
-        <font color="#0000ff">// when it gets a SIGUSR1, it will run the handleSigusr1() function</font>
-        signalhandler   shandler(<font color="#ff00ff">SIGUSR1</font>,(<font color="#2e8b57"><b>void</b></font> *)&amp;handleSigusr1);
-
-        <font color="#0000ff">// Loop forever, each time waiting for a signal not in the ignoreset</font>
-        <font color="#0000ff">// to be sent. Since SIGUSR1 is the only signal not in the ignoreset,</font>
-        <font color="#0000ff">// waitForSignals will fall through only when SIGUSR1 is received.</font>
-        <font color="#a52a2a"><b>while</b></font>(<font color="#ff00ff">1</font>) {
-                signalmanager::waitForSignals(ignoreset.getSignalSet());
-        }
-}
-</pre>
 
 <a name="sharedmemory"></a>
 <span class="heading">Using the sharedmemory Class</span><br><br>
@@ -792,19 +1150,27 @@ documented here, but they are straightforward and rarely used.</p>
 <p>This program puts some data into shared memory then goes to sleep, giving
 another program time to access the segment.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/sharedmemory.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/snooze.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;string.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/snooze.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// create a file called /tmp/shm</font>
         file::remove(<font color="#ff00ff">&quot;/tmp/shm&quot;</font>);
@@ -814,7 +1180,7 @@ another program time to access the segment.</p>
 
         <font color="#0000ff">// create a shared memory segment, keyed to /tmp/shm, 128 bytes long</font>
         sharedmemory    shm;
-        shm.create(file::generateKey(<font color="#ff00ff">&quot;/tmp/shm&quot;</font>,<font color="#ff00ff">0</font>),<font color="#ff00ff">128</font>,
+        shm.create(file::generateKey(<font color="#ff00ff">&quot;/tmp/shm&quot;</font>,<font color="#ff00ff">1</font>),<font color="#ff00ff">128</font>,
                                 permissions::evalPermString(<font color="#ff00ff">&quot;rw-------&quot;</font>));
 
         <font color="#0000ff">// write a string into the shared memory</font>
@@ -826,7 +1192,16 @@ another program time to access the segment.</p>
 }
 </pre>
 
+
+
 <p>This program reads the data from shared memory.</p>
+
+
+
+
+
+
+
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
@@ -837,19 +1212,23 @@ another program time to access the segment.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// attach to a shared memory segment keyed to /tmp/shm</font>
         sharedmemory    shm;
-        shm.attach(file::generateKey(<font color="#ff00ff">&quot;/tmp/shm&quot;</font>,<font color="#ff00ff">0</font>));
+        shm.attach(file::generateKey(<font color="#ff00ff">&quot;/tmp/shm&quot;</font>,<font color="#ff00ff">1</font>));
 
         <font color="#0000ff">// display the data contained in the shared memory segment</font>
         <font color="#2e8b57"><b>char</b></font>    *shmptr=(<font color="#2e8b57"><b>char</b></font> *)shm.getPointer();
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,shmptr);
 }
 </pre>
+
+
 
 <a name="semaphoreset"></a>
 <span class="heading">Using the semaphoreset Class</span><br><br>
@@ -871,18 +1250,28 @@ what order the programs are started in, they will always print out
 
 <p>These programs must both be run to the background.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/semaphoreset.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// create a file called /tmp/sem</font>
         file::remove(<font color="#ff00ff">&quot;/tmp/sem&quot;</font>);
@@ -894,7 +1283,7 @@ what order the programs are started in, they will always print out
         <font color="#0000ff">// semaphores.  Initialize them to 0 and 1 respectively.</font>
         <font color="#2e8b57"><b>int</b></font>     vals[<font color="#ff00ff">2</font>]={<font color="#ff00ff">0</font>,<font color="#ff00ff">1</font>};
         semaphoreset    sem;
-        sem.create(file::generateKey(<font color="#ff00ff">&quot;/tmp/sem&quot;</font>,<font color="#ff00ff">0</font>),
+        sem.create(file::generateKey(<font color="#ff00ff">&quot;/tmp/sem&quot;</font>,<font color="#ff00ff">1</font>),
                         permissions::evalPermString(<font color="#ff00ff">&quot;rw-------&quot;</font>),<font color="#ff00ff">2</font>,vals);
 
         <font color="#0000ff">// loop 10 times, printing 2 and 4, synchronizing with another process</font>
@@ -911,6 +1300,15 @@ what order the programs are started in, they will always print out
 }
 </pre>
 
+
+
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2001  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -920,13 +1318,15 @@ what order the programs are started in, they will always print out
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// attach to the semaphore set keyed to /tmp/sem containing 2 semaphores</font>
         semaphoreset    sem;
-        sem.attach(file::generateKey(<font color="#ff00ff">&quot;/tmp/sem&quot;</font>,<font color="#ff00ff">0</font>),<font color="#ff00ff">2</font>);
+        sem.attach(file::generateKey(<font color="#ff00ff">&quot;/tmp/sem&quot;</font>,<font color="#ff00ff">1</font>),<font color="#ff00ff">2</font>);
 
         <font color="#0000ff">// loop 10 times, printing 1 and 2, synchronizing with another process</font>
         <font color="#0000ff">// using the semaphores</font>
@@ -944,10 +1344,13 @@ what order the programs are started in, they will always print out
 }
 </pre>
 
+
+
 <a name="memorymap"></a>
 <span class="heading">Using the memorymap Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="memorypool"></a>
 <span class="heading">Using the memorypool Class</span><br><br>
@@ -972,91 +1375,126 @@ large enough to contain the largest possible data.</p>
 <p>The following code connects to a server on the local machine and reads
 variable/value pairs from it.</p>
 
+
+
+
+
+
+
+
 <pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/memorypool.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/inetclientsocket.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#a020f0">#define OPTIMISTIC_VARIABLE_COUNT       </font><font color="#ff00ff">5</font>
-<font color="#a020f0">#define OPTIMISTIC_VARIABLE_LENGTH      </font><font color="#ff00ff">10</font>
-<font color="#a020f0">#define OPTIMISTIC_VALUE_LENGTH         </font><font color="#ff00ff">20</font>
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
-main() {
+        memorypool      *mp=<font color="#a52a2a"><b>new</b></font> memorypool(<font color="#ff00ff">32</font>,<font color="#ff00ff">16</font>,<font color="#ff00ff">10</font>);
 
-        <font color="#0000ff">// calculate an optimistic initial size for the memory pool</font>
-        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>   initialsize=OPTIMISTIC_VARIABLE_COUNT*
-                                        ((<font color="#ff00ff">2</font>*<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>char</b></font> *))+
-                                        OPTIMISTIC_VARIABLE_LENGTH+<font color="#ff00ff">1</font>+
-                                        OPTIMISTIC_VALUE_LENGTH+<font color="#ff00ff">1</font>);
-
-        <font color="#0000ff">// create a memory pool: grow by 50 bytes when necessary and</font>
-        <font color="#0000ff">// re-evaluate the initial size every 10 iterations</font>
-        memorypool      *mp=<font color="#a52a2a"><b>new</b></font> memorypool(initialsize,<font color="#ff00ff">50</font>,<font color="#ff00ff">10</font>);
-
-        <font color="#0000ff">// create an inet client socket, connect to localhost on port 1000</font>
-        inetclientsocket        *cis=<font color="#a52a2a"><b>new</b></font> inetclientsocket();
-        cis-&gt;connect(<font color="#ff00ff">&quot;localhost&quot;</font>,<font color="#ff00ff">1000</font>,-<font color="#ff00ff">1</font>,-<font color="#ff00ff">1</font>,<font color="#ff00ff">0</font>,<font color="#ff00ff">1</font>);
-
-        <font color="#a52a2a"><b>for</b></font> (;;) {
-
-                <font color="#0000ff">// get the number of fields</font>
-                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font>  fieldcount;
-                <font color="#a52a2a"><b>if</b></font> (cis-&gt;read(&amp;fieldcount)!=<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>)) {
-                        <font color="#a52a2a"><b>break</b></font>;
+        printf(<font color="#ff00ff">&quot;first run...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {
+                <font color="#2e8b57"><b>char</b></font>  *segment=(<font color="#2e8b57"><b>char</b></font> *)mp-&gt;malloc(<font color="#ff00ff">6</font>);
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">6</font>; j++) {
+                        segment[j]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">'a'</font>+i;
                 }
+        }
+        mp-&gt;print();
 
-                <font color="#0000ff">// if the fieldcount is 0, that's the end</font>
-                <font color="#a52a2a"><b>if</b></font> (fieldcount==<font color="#ff00ff">0</font>) {
-                        mp-&gt;free();
-                        <font color="#a52a2a"><b>break</b></font>;
+        printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        mp-&gt;free();
+        mp-&gt;print();
+
+        printf(<font color="#ff00ff">&quot;second run...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        <font color="#2e8b57"><b>char</b></font>   *segment=(<font color="#2e8b57"><b>char</b></font> *)mp-&gt;malloc(<font color="#ff00ff">40</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">40</font>; j++) {
+                segment[j]=<font color="#ff00ff">'z'</font>;
+        }
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {
+                <font color="#2e8b57"><b>char</b></font>  *segment=(<font color="#2e8b57"><b>char</b></font> *)mp-&gt;malloc(<font color="#ff00ff">6</font>);
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">6</font>; j++) {
+                        segment[j]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">'a'</font>+i;
                 }
-
-                <font color="#0000ff">// create arrays of pointers to the variables/values</font>
-                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font>    **vars=(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> **)mp-&gt;malloc(fieldcount*<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *));
-                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font>    **vals=(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> **)mp-&gt;malloc(fieldcount*<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *));
-
-                <font color="#0000ff">// get the fields</font>
-                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>short</b></font> i=<font color="#ff00ff">0</font>; i&lt;fieldcount; i++) {
-
-                        <font color="#0000ff">// get the length of the variable</font>
-                        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>short</b></font>  length;
-                        <font color="#a52a2a"><b>if</b></font> (cis-&gt;read(&amp;length)!=<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>)) {
-                                <font color="#a52a2a"><b>break</b></font>;
-                        }
-
-                        <font color="#0000ff">// get the variable and null-terminate it</font>
-                        vars[i]=mp-&gt;malloc(length+<font color="#ff00ff">1</font>);
-                        <font color="#a52a2a"><b>if</b></font> (cis-&gt;read(vars[i],length)!=length) {
-                                <font color="#a52a2a"><b>break</b></font>;
-                        }
-                        vars[i][length]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;
-
-                        <font color="#0000ff">// get the length of the value</font>
-                        <font color="#a52a2a"><b>if</b></font> (cis-&gt;read(&amp;length)!=<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>)) {
-                                <font color="#a52a2a"><b>break</b></font>;
-                        }
-
-                        <font color="#0000ff">// get the value and null-terminate it</font>
-                        vals[i]=mp-&gt;malloc(length+<font color="#ff00ff">1</font>);
-                        <font color="#a52a2a"><b>if</b></font> (cis-&gt;read(vals[i],length)!=length) {
-                                <font color="#a52a2a"><b>break</b></font>;
-                        }
-                        vals[i][length]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;
+        }
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {
+                <font color="#2e8b57"><b>char</b></font>  *segment=(<font color="#2e8b57"><b>char</b></font> *)mp-&gt;malloc(<font color="#ff00ff">2</font>);
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">6</font>; j++) {
+                        segment[j]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">'A'</font>+i;
                 }
+        }
+        mp-&gt;print();
 
-                <font color="#0000ff">// do something interesting with the variable/value pairs here...</font>
+        printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        mp-&gt;free();
+        mp-&gt;print();
 
-                <font color="#0000ff">// free the memory pool</font>
-                mp-&gt;free();
+        printf(<font color="#ff00ff">&quot;short/long/float/double...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#2e8b57"><b>short</b></font>  *sp=(<font color="#2e8b57"><b>short</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>));
+        <font color="#2e8b57"><b>long</b></font>   *lp=(<font color="#2e8b57"><b>long</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>));
+        <font color="#2e8b57"><b>float</b></font>  *fp=(<font color="#2e8b57"><b>float</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>float</b></font>));
+        <font color="#2e8b57"><b>double</b></font> *dp=(<font color="#2e8b57"><b>double</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>double</b></font>));
+        *sp=<font color="#ff00ff">1</font>;
+        *lp=<font color="#ff00ff">1</font>;
+        *fp=<font color="#ff00ff">1.1</font>;
+        *dp=<font color="#ff00ff">1.1</font>;
+
+        printf(<font color="#ff00ff">&quot;sp: </font><font color="#6a5acd">%d</font><font color="#ff00ff">  lp: </font><font color="#6a5acd">%ld</font><font color="#ff00ff"> &quot;</font>,*sp,*lp);
+        printf(<font color="#ff00ff">&quot;fp: </font><font color="#6a5acd">%f</font><font color="#ff00ff">  dp: </font><font color="#6a5acd">%f</font><font color="#ff00ff"> </font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*fp,*dp);
+        mp-&gt;print();
+
+        printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        mp-&gt;free();
+        mp-&gt;print();
+
+        printf(<font color="#ff00ff">&quot;short/long/float/double arrays...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#2e8b57"><b>short</b></font>  *spa=(<font color="#2e8b57"><b>short</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>)*<font color="#ff00ff">10</font>);
+        <font color="#2e8b57"><b>long</b></font>   *lpa=(<font color="#2e8b57"><b>long</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>)*<font color="#ff00ff">10</font>);
+        <font color="#2e8b57"><b>float</b></font>  *fpa=(<font color="#2e8b57"><b>float</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>float</b></font>)*<font color="#ff00ff">10</font>);
+        <font color="#2e8b57"><b>double</b></font> *dpa=(<font color="#2e8b57"><b>double</b></font> *)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>double</b></font>)*<font color="#ff00ff">10</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">10</font>; i++) {
+                spa[i]=i;
+                lpa[i]=i;
+                fpa[i]=i+((<font color="#2e8b57"><b>float</b></font>)i/<font color="#ff00ff">10.0</font>);
+                dpa[i]=i+((<font color="#2e8b57"><b>float</b></font>)i/<font color="#ff00ff">10.0</font>);
         }
 
-        cis-&gt;close();
-        <font color="#a52a2a"><b>delete</b></font> cis;
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">10</font>; i++) {
+                printf(<font color="#ff00ff">&quot;sp: </font><font color="#6a5acd">%d</font><font color="#ff00ff">  lp: </font><font color="#6a5acd">%ld</font><font color="#ff00ff"> &quot;</font>,spa[i],lpa[i]);
+                printf(<font color="#ff00ff">&quot;fp: </font><font color="#6a5acd">%f</font><font color="#ff00ff">  dp: </font><font color="#6a5acd">%f</font><font color="#ff00ff"> </font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,fpa[i],dpa[i]);
+        }
+        mp-&gt;print();
+
+        printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        mp-&gt;free();
+        mp-&gt;print();
+
+        <font color="#a52a2a"><b>delete</b></font> mp;
+
+
+        mp=<font color="#a52a2a"><b>new</b></font> memorypool(<font color="#ff00ff">32</font>,<font color="#ff00ff">16</font>,<font color="#ff00ff">10</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">10</font>; i++) {
+                <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> total=<font color="#ff00ff">0</font>;
+                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">11</font>; j++) {
+                        total=total+i+j;
+                        mp-&gt;malloc(i+j);
+                        mp-&gt;free();
+                }
+                printf(<font color="#ff00ff">&quot;should be: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,total/<font color="#ff00ff">11</font>);
+                mp-&gt;print();
+        }
 
         <font color="#a52a2a"><b>delete</b></font> mp;
 }
 </pre>
+
+
 
 <a name="variablebuffer"></a>
 <span class="heading">Using the variablebuffer Class</span><br><br>
@@ -1065,6 +1503,13 @@ main() {
 length containing binary data.  You can append data to a variablebuffer or
 write data at arbitrary positions in the buffer.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -1072,62 +1517,124 @@ write data at arbitrary positions in the buffer.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/variablebuffer.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
-        <font color="#0000ff">// create a variablebuffer</font>
-        variablebuffer  varb(<font color="#ff00ff">5</font>,<font color="#ff00ff">5</font>);
+        <font color="#0000ff">// create a buffer</font>
+        variablebuffer  *vb=<font color="#a52a2a"><b>new</b></font> variablebuffer(<font color="#ff00ff">10</font>,<font color="#ff00ff">10</font>);
 
-        <font color="#0000ff">// append some string data to the buffer</font>
-        varb.append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;hello there, goodbye</font><font color="#6a5acd">\0</font><font color="#ff00ff">&quot;</font>,<font color="#ff00ff">21</font>);
-
-        <font color="#0000ff">// display the buffer size and data</font>
-        printf(<font color="#ff00ff">&quot;Size: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,varb.getSize());
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,varb.getBuffer());
-
-        <font color="#0000ff">// clear the buffer</font>
-        varb.clear();
-
-        <font color="#0000ff">// append 12345 to the buffer</font>
-        varb.append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
-
-        <font color="#0000ff">// set position to 10 and write 12345 again, this will leave a gap</font>
-        <font color="#0000ff">// in the buffer between positions 5 and 10 with garbage in it</font>
-        varb.setPosition(<font color="#ff00ff">10</font>);
-        varb.write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
-
-        <font color="#0000ff">// display the buffer size and the buffer</font>
-        printf(<font color="#ff00ff">&quot;Size: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,varb.getSize());
-        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">15</font>; i++) {
-                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,varb.getBuffer()[i]);
+        <font color="#0000ff">// append some string sequences to the buffer and display the contents</font>
+        <font color="#0000ff">// of the buffer byte by byte</font>
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
-        <font color="#0000ff">// clear the buffer</font>
-        varb.clear();
 
-        <font color="#0000ff">// append an integer to the buffer</font>
-        <font color="#2e8b57"><b>long</b></font>    number=<font color="#ff00ff">1</font>;
-        varb.append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)&amp;number,<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>));
+        <font color="#0000ff">// write 66666 to the buffer at position 0 and display it's contents</font>
+        <font color="#0000ff">// byte by byte (the first 5 bytes should be overwritten)</font>
+        vb-&gt;setPosition(<font color="#ff00ff">0</font>);
+        vb-&gt;write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
-        <font color="#0000ff">// append a character to the buffer</font>
-        <font color="#2e8b57"><b>char</b></font>    character=<font color="#ff00ff">'a'</font>;
-        varb.append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)&amp;character,<font color="#a52a2a"><b>sizeof</b></font>(character));
 
-        <font color="#0000ff">// append a floating point number to the buffer</font>
-        <font color="#2e8b57"><b>double</b></font>  doublenumber=<font color="#ff00ff">2.2</font>;
-        varb.append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)&amp;doublenumber,<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>double</b></font>));
+        <font color="#0000ff">// write 66666 to the buffer at position 30 and display it's contents</font>
+        <font color="#0000ff">// byte by byte, displaying nonprintable characters as .'s</font>
+        <font color="#0000ff">// (there should be a gap in the buffer now containing random data)</font>
+        vb-&gt;setPosition(<font color="#ff00ff">30</font>);
+        vb-&gt;write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                <font color="#a52a2a"><b>if</b></font> (vb-&gt;getBuffer()[i]&gt;=<font color="#ff00ff">' '</font> &amp;&amp; vb-&gt;getBuffer()[i]&lt;=<font color="#ff00ff">'~'</font>) {
+                        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+                } <font color="#a52a2a"><b>else</b></font> {
+                        printf(<font color="#ff00ff">&quot;.&quot;</font>);
+                }
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
-        <font color="#0000ff">// display the size and data</font>
-        printf(<font color="#ff00ff">&quot;Size: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,varb.getSize());
-        <font color="#2e8b57"><b>long</b></font>    *numptr=(<font color="#2e8b57"><b>long</b></font> *)(varb.getBuffer());
-        <font color="#2e8b57"><b>char</b></font>    *charptr=(<font color="#2e8b57"><b>char</b></font> *)(varb.getBuffer()+<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>));
-        <font color="#2e8b57"><b>double</b></font>  *doubleptr=(<font color="#2e8b57"><b>double</b></font> *)(varb.getBuffer()+
-                                        <font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>)+<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>char</b></font>));
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff"> </font><font color="#6a5acd">%c</font><font color="#ff00ff"> </font><font color="#6a5acd">%f</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*numptr,*charptr,*doubleptr);
+
+        <font color="#0000ff">// set the current position to 50</font>
+        vb-&gt;setPosition(<font color="#ff00ff">50</font>);
+
+        <font color="#0000ff">// Append 12345 to the buffer and display it's contents byte by byte,</font>
+        <font color="#0000ff">// displaying nonprintable characters as .'s</font>
+        <font color="#0000ff">// Since we used append() instead of write(), the data should not be</font>
+        <font color="#0000ff">// written at position 50, but rather just at the current end of</font>
+        <font color="#0000ff">// the buffer.</font>
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                <font color="#a52a2a"><b>if</b></font> (vb-&gt;getBuffer()[i]&gt;=<font color="#ff00ff">' '</font> &amp;&amp; vb-&gt;getBuffer()[i]&lt;=<font color="#ff00ff">'~'</font>) {
+                        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+                } <font color="#a52a2a"><b>else</b></font> {
+                        printf(<font color="#ff00ff">&quot;.&quot;</font>);
+                }
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// Write 12345 to the buffer at the current position and display it's</font>
+        <font color="#0000ff">// contents byte by byte, displaying nonprintable characters as .'s</font>
+        <font color="#0000ff">// The current position should just be the end of the buffer, since</font>
+        <font color="#0000ff">// we just appended.  So calling write() here is equivalent to calling</font>
+        <font color="#0000ff">// append.</font>
+        vb-&gt;write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                <font color="#a52a2a"><b>if</b></font> (vb-&gt;getBuffer()[i]&gt;=<font color="#ff00ff">' '</font> &amp;&amp; vb-&gt;getBuffer()[i]&lt;=<font color="#ff00ff">'~'</font>) {
+                        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+                } <font color="#a52a2a"><b>else</b></font> {
+                        printf(<font color="#ff00ff">&quot;.&quot;</font>);
+                }
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#0000ff">// read 4 bytes from position 0 of the buffer and display them</font>
+        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font>  buffer[<font color="#ff00ff">5</font>];
+        buffer[<font color="#ff00ff">4</font>]=(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;
+        vb-&gt;setPosition(<font color="#ff00ff">0</font>);
+        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>  sizeread=vb-&gt;read(buffer,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">: &quot;</font>,sizeread);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> i=<font color="#ff00ff">0</font>; i&lt;sizeread; i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,buffer[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// read 4 bytes from position 5 of the buffer and display them</font>
+        vb-&gt;setPosition(<font color="#ff00ff">5</font>);
+        sizeread=vb-&gt;read(buffer,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">: &quot;</font>,sizeread);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> i=<font color="#ff00ff">0</font>; i&lt;sizeread; i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,buffer[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// read 4 bytes from position 60 of the buffer and display them</font>
+        <font color="#0000ff">// (since this is off of the end of the buffer, nothing should be</font>
+        <font color="#0000ff">// displayed)</font>
+        vb-&gt;setPosition(<font color="#ff00ff">60</font>);
+        sizeread=vb-&gt;read(buffer,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">: &quot;</font>,sizeread);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> i=<font color="#ff00ff">0</font>; i&lt;sizeread; i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,buffer[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#a52a2a"><b>delete</b></font> vb;
 }
 </pre>
+
+
 
 <a name="stringbuffer"></a>
 <span class="heading">Using the stringbuffer Class</span><br><br>
@@ -1136,78 +1643,12 @@ write data at arbitrary positions in the buffer.</p>
 You can append data to a stringbuffer or write data at arbitrary positions in
 the buffer.</p>
 
-<pre>
-<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
-<font color="#0000ff">// See the file COPYING for more information</font>
 
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/stringbuffer.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
 
-        <font color="#0000ff">// create a stringbuffer</font>
-        stringbuffer    strb;
 
-        <font color="#0000ff">// append some data to it</font>
-        strb.append(<font color="#ff00ff">&quot;hello &quot;</font>)-&gt;append(<font color="#ff00ff">&quot;there, &quot;</font>)-&gt;append(<font color="#ff00ff">&quot;goodbye&quot;</font>);
 
-        <font color="#0000ff">// display the string length and data</font>
-        printf(<font color="#ff00ff">&quot;Length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,strb.getStringLength());
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,strb.getString());
-
-        <font color="#0000ff">// clear the stringbuffer</font>
-        strb.clear();
-
-        <font color="#0000ff">// append 12345 to the string</font>
-        strb.append(<font color="#ff00ff">&quot;12345&quot;</font>);
-
-        <font color="#0000ff">// set position to 10 and write 12345 again, this will leave a gap</font>
-        <font color="#0000ff">// in the string between positions 5 and 10 with garbage in it</font>
-        strb.setPosition(<font color="#ff00ff">10</font>);
-        strb.write(<font color="#ff00ff">&quot;12345&quot;</font>);
-
-        <font color="#0000ff">// display the string length and the string</font>
-        printf(<font color="#ff00ff">&quot;Length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,strb.getStringLength());
-        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">15</font>; i++) {
-                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,strb.getString()[i]);
-        }
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-
-        <font color="#0000ff">// clear the stringbuffer</font>
-        strb.clear();
-
-        <font color="#0000ff">// append an integer to the stringbuffer</font>
-        strb.append((<font color="#2e8b57"><b>long</b></font>)<font color="#ff00ff">1</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);
-
-        <font color="#0000ff">// append a character to the stringbuffer</font>
-        strb.append(<font color="#ff00ff">'a'</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);
-
-        <font color="#0000ff">// append a floating point number to the stringbuffer</font>
-        strb.append((<font color="#2e8b57"><b>double</b></font>)<font color="#ff00ff">2.2</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);
-
-        <font color="#0000ff">// append a floating point number to the stringbuffer with precision</font>
-        <font color="#0000ff">// and scale</font>
-        strb.append(<font color="#ff00ff">2.2</font>,<font color="#ff00ff">2</font>,<font color="#ff00ff">3</font>);
-
-        <font color="#0000ff">// display the string length and data</font>
-        printf(<font color="#ff00ff">&quot;Length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,strb.getStringLength());
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,strb.getString());
-}
-</pre>
-
-<a name="character"></a>
-<span class="heading">Using the character Class</span><br><br>
-
-<p>...</p>
-
-<a name="charstring"></a>
-<span class="heading">Using the charstring Class</span><br><br>
-
-<p>The charstring class contains some commonly needed string manipulation and
-evaluation functions.  Below is some code illustrating the use of the string
-class.</p>
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
@@ -1216,12 +1657,15 @@ class.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/charstring.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// create a new string 50 bytes long</font>
-        <font color="#2e8b57"><b>char</b></font>    s[<font color="#ff00ff">50</font>];
+        <font color="#2e8b57"><b>char</b></font>   s[<font color="#ff00ff">50</font>];
 
 
         <font color="#0000ff">// set every byte in the string to NULL</font>
@@ -1237,7 +1681,7 @@ class.</p>
 
 
         <font color="#0000ff">// Replace the contents of the string and display it over and over.</font>
-        <font color="#0000ff">// Note that the 2nd and 4th call to copyInto() only copy part of the</font>
+        <font color="#0000ff">// Note that the 2nd and 4th call to copy() only copy part of the</font>
         <font color="#0000ff">// string passed into them.</font>
         charstring::copy(s,<font color="#ff00ff">&quot;what's &quot;</font>);
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,s);
@@ -1263,24 +1707,277 @@ class.</p>
         printf(<font color="#ff00ff">&quot;compare: </font><font color="#6a5acd">%d</font><font color="#ff00ff">=0</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::compareIgnoringCase(s,<font color="#ff00ff">&quot;HELLO&quot;</font>,<font color="#ff00ff">3</font>));
 
         <font color="#0000ff">// perform several contains() comparisons</font>
-        printf(<font color="#ff00ff">&quot;contains: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">=llo</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::findFirst(s,<font color="#ff00ff">&quot;llo&quot;</font>));
-        printf(<font color="#ff00ff">&quot;contains: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">=llo</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::findFirst(s,<font color="#ff00ff">'l'</font>));
+        printf(<font color="#ff00ff">&quot;findFirst: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">=llo</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::findFirst(s,<font color="#ff00ff">&quot;llo&quot;</font>));
+        printf(<font color="#ff00ff">&quot;contains: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::contains(s,<font color="#ff00ff">&quot;llo&quot;</font>));
+        printf(<font color="#ff00ff">&quot;findFirst: </font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">=llo</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::findFirst(s,<font color="#ff00ff">'l'</font>));
+        printf(<font color="#ff00ff">&quot;contains: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::contains(s,<font color="#ff00ff">&quot;llo&quot;</font>));
 
 
 
         <font color="#0000ff">// duplicate the string and display the duplicated string</font>
-        <font color="#2e8b57"><b>char</b></font>    *hello=charstring::duplicate(s);
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        <font color="#2e8b57"><b>char</b></font>   *hello=charstring::duplicate(s);
+        <font color="#2e8b57"><b>char</b></font>   *ell=charstring::subString(hello,<font color="#ff00ff">1</font>,<font color="#ff00ff">3</font>);
+        <font color="#2e8b57"><b>char</b></font>   *lle=charstring::subString(hello,<font color="#ff00ff">3</font>,<font color="#ff00ff">1</font>);
+        printf(<font color="#ff00ff">&quot;hello: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        printf(<font color="#ff00ff">&quot;ell: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,ell);
+        printf(<font color="#ff00ff">&quot;ell: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,lle);
 
         <font color="#0000ff">// make sure to clean up what duplicate() returns</font>
         <font color="#a52a2a"><b>delete</b></font>[] hello;
+        <font color="#a52a2a"><b>delete</b></font>[] ell;
+        <font color="#a52a2a"><b>delete</b></font>[] lle;
+
+
+        <font color="#0000ff">// split</font>
+        <font color="#2e8b57"><b>char</b></font>           **list;
+        <font color="#2e8b57"><b>uint64_t</b></font>       listlength;
+        charstring::split(<font color="#ff00ff">&quot;hello||hi||bye||goodbye&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hello||hi||bye||goodbye</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;hello||hi||bye||goodbye||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hello||hi||bye||goodbye||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;||hello||hi||bye||goodbye||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||hello||hi||bye||goodbye||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;||||hello||||hi||||bye||||goodbye||||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,
+                                                        &amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||||hello||||hi||||bye||||goodbye||||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;||||||||||&quot;</font>,<font color="#ff00ff">&quot;||&quot;</font>,<font color="#ff00ff">false</font>,&amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||||||||||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">||</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        charstring::split(<font color="#ff00ff">&quot;<a href="http://www.firstworks.com/application/app.cgi/skin/module/template.html">http://www.firstworks.com/application/app.cgi/skin/module/template.html</a>&quot;</font>,<font color="#ff00ff">&quot;/&quot;</font>,<font color="#ff00ff">false</font>,&amp;list,&amp;listlength);
+        printf(<font color="#ff00ff">&quot;split(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff"><a href="http://www.firstworks.com/application/app.cgi/skin/module/template.html">http://www.firstworks.com/application/app.cgi/skin/module/template.html</a></font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">/</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%lld</font><font color="#ff00ff"> items</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,listlength);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint64_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;listlength; i++) {
+                printf(<font color="#ff00ff">&quot;      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,list[i]);
+                <font color="#a52a2a"><b>delete</b></font>[] list[i];
+        }
+        <font color="#a52a2a"><b>delete</b></font>[] list;
+
+        <font color="#2e8b57"><b>char</b></font>   str[]=<font color="#ff00ff">&quot;hello'</font><font color="#6a5acd">\&quot;\\</font><font color="#ff00ff">hello'</font><font color="#6a5acd">\&quot;\\</font><font color="#ff00ff">&quot;</font>;
+        <font color="#2e8b57"><b>char</b></font>   *escapedstr=charstring::escape(str,<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">'&quot;</font>);
+        <font color="#2e8b57"><b>char</b></font>   *unescapedstr=charstring::unescape(escapedstr);
+        printf(<font color="#ff00ff">&quot;str            : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str);
+        printf(<font color="#ff00ff">&quot;escapedstr     : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,escapedstr);
+        printf(<font color="#ff00ff">&quot;unescapedstr   : </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,unescapedstr);
+        <font color="#a52a2a"><b>delete</b></font>[] unescapedstr;
+        <font color="#a52a2a"><b>delete</b></font>[] escapedstr;
+
+
+        <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font>     *alphabet=<font color="#ff00ff">&quot;aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz&quot;</font>;
+        printf(<font color="#ff00ff">&quot;lengthContainingSet(</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">gfedcba</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                alphabet,charstring::lengthContainingSet(alphabet,<font color="#ff00ff">&quot;gfedcba&quot;</font>));
+        printf(<font color="#ff00ff">&quot;lengthNotContainingSet(</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hijklmnopqrstuvwxyz</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                alphabet,charstring::lengthNotContainingSet(alphabet,
+                                                <font color="#ff00ff">&quot;hijklmnopqrstuvwxyz&quot;</font>));
+
+
+        printf(<font color="#ff00ff">&quot;findFirstOfSet(</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">,</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">mlk</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">)=</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,
+                alphabet,charstring::findFirstOfSet(alphabet,<font color="#ff00ff">&quot;klm&quot;</font>));
 }
 </pre>
+
+
+
+<a name="character"></a>
+<span class="heading">Using the character Class</span><br><br>
+
+<p>...</p>
+
+
+<a name="charstring"></a>
+<span class="heading">Using the charstring Class</span><br><br>
+
+<p>The charstring class contains some commonly needed string manipulation and
+evaluation functions.  Below is some code illustrating the use of the string
+class.</p>
+
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/charstring.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// initialize a text buffer and print it out</font>
+        <font color="#2e8b57"><b>char</b></font>    buffer[<font color="#ff00ff">100</font>];
+        charstring::copy(buffer,<font color="#ff00ff">&quot;     hello there buddy     &quot;</font>);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// trim the spaces off of the right hand side</font>
+        charstring::rightTrim(buffer);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// trim the spaces off of the left hand side</font>
+        charstring::leftTrim(buffer);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// strip the spaces out</font>
+        charstring::copy(buffer,<font color="#ff00ff">&quot;   hello      there   buddy  &quot;</font>);
+        charstring::strip(buffer,<font color="#ff00ff">' '</font>);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// strip the &quot;   &quot; out</font>
+        charstring::copy(buffer,<font color="#ff00ff">&quot;   hello       there  buddy  &quot;</font>);
+        charstring::strip(buffer,<font color="#ff00ff">&quot;   &quot;</font>);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// convert buffer to uppercase</font>
+        charstring::upper(buffer);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// convert buffer to lowercase</font>
+        charstring::lower(buffer);
+        printf(<font color="#ff00ff">&quot;!</font><font color="#6a5acd">%s</font><font color="#ff00ff">!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,buffer);
+
+
+        <font color="#0000ff">// http escape the buffer</font>
+        <font color="#2e8b57"><b>char</b></font>    *escbuffer=charstring::httpEscape(<font color="#ff00ff">&quot;!@#$%^&amp;*()hello-+&quot;</font>);
+        printf(<font color="#ff00ff">&quot;!@#$</font><font color="#6a5acd">\\</font><font color="#ff00ff">%^&amp;*()hello-+  http escaped is  </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,escbuffer);
+        <font color="#a52a2a"><b>delete</b></font> escbuffer;
+
+
+        <font color="#0000ff">// evaluate a string to see if it's a number</font>
+        <font color="#a52a2a"><b>if</b></font> (charstring::isNumber(<font color="#ff00ff">&quot;-100.5&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;-100.5 is a number</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        <font color="#a52a2a"><b>if</b></font> (!charstring::isNumber(<font color="#ff00ff">&quot;-100.5.10&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;-100.5.10 is not a number</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+
+
+        <font color="#0000ff">// evaluate a string to see if it's an integer</font>
+        <font color="#a52a2a"><b>if</b></font> (charstring::isInteger(<font color="#ff00ff">&quot;-100&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;-100 is an integer</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+        <font color="#a52a2a"><b>if</b></font> (!charstring::isInteger(<font color="#ff00ff">&quot;-100.5&quot;</font>)) {
+                printf(<font color="#ff00ff">&quot;-100.5.10 is not an integer</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        }
+
+
+        <font color="#0000ff">// create a new string containing text surrounded by spaces</font>
+        <font color="#2e8b57"><b>char</b></font>   hello[<font color="#ff00ff">16</font>];
+        charstring::copy(hello,<font color="#ff00ff">&quot;     hello     &quot;</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+
+        <font color="#0000ff">// left justify the text</font>
+        charstring::leftJustify(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+
+        <font color="#0000ff">// right justify the text</font>
+        charstring::rightJustify(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+
+
+        <font color="#0000ff">// center the text over and over...</font>
+        charstring::copy(hello,<font color="#ff00ff">&quot;hello          &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot; hello         &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;  hello        &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;   hello       &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;    hello      &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;     hello     &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;      hello    &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;       hello   &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;        hello  &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;         hello &quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+        charstring::copy(hello,<font color="#ff00ff">&quot;          hello&quot;</font>);
+        charstring::center(hello,<font color="#ff00ff">15</font>);
+        printf(<font color="#ff00ff">&quot;|</font><font color="#6a5acd">%s</font><font color="#ff00ff">|</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,hello);
+
+
+        <font color="#0000ff">// print the number of bytes necessary to store each number as a string</font>
+        printf(<font color="#ff00ff">&quot;size of 1 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)<font color="#ff00ff">1</font>));
+        printf(<font color="#ff00ff">&quot;size of 10 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)<font color="#ff00ff">10</font>));
+        printf(<font color="#ff00ff">&quot;size of 100 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)<font color="#ff00ff">100</font>));
+        printf(<font color="#ff00ff">&quot;size of 1000 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)<font color="#ff00ff">1000</font>));
+        printf(<font color="#ff00ff">&quot;size of -1 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)-<font color="#ff00ff">1</font>));
+        printf(<font color="#ff00ff">&quot;size of -10 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)-<font color="#ff00ff">10</font>));
+        printf(<font color="#ff00ff">&quot;size of -100 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)-<font color="#ff00ff">100</font>));
+        printf(<font color="#ff00ff">&quot;size of -1000 is: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,charstring::integerLength((<font color="#2e8b57"><b>long</b></font>)-<font color="#ff00ff">1000</font>));
+}
+</pre>
+
+
 
 <a name="rawbuffer"></a>
 <span class="heading">Using the rawbuffer Class</span><br><br>
 
 <p>...</p>
+
 
 <a name="xmldom"></a>
 <span class="heading">Using the xmldom Class</span><br><br>
@@ -1642,6 +2339,13 @@ from elsewhere if you're using the Name Service Switch.</p>
 <p>The shadowentry class allows you to look up entries from /etc/shadow or
 from elsewhere if you're using the Name Service Switch.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -1649,9 +2353,12 @@ from elsewhere if you're using the Name Service Switch.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/shadowentry.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// get the shadow entry for &quot;root&quot;</font>
@@ -1660,21 +2367,21 @@ from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getName());
-        printf(<font color="#ff00ff">&quot;        Encrypted Password: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getEncryptedPassword());
-        printf(<font color="#ff00ff">&quot;        Last Change: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getName());
+        printf(<font color="#ff00ff">&quot;       Encrypted Password: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getEncryptedPassword());
+        printf(<font color="#ff00ff">&quot;       Last Change: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         spent.getLastChangeDate());
-        printf(<font color="#ff00ff">&quot;        Days Before Change Allowed: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       Days Before Change Allowed: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         spent.getDaysBeforeChangeAllowed());
-        printf(<font color="#ff00ff">&quot;        Days Before Change Required: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       Days Before Change Required: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         spent.getDaysBeforeChangeRequired());
-        printf(<font color="#ff00ff">&quot;        Days Before Expiration Warning: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       Days Before Expiration Warning: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         spent.getDaysBeforeExpirationWarning());
-        printf(<font color="#ff00ff">&quot;        Days Of Inactivity Allowed: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       Days Of Inactivity Allowed: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         spent.getDaysOfInactivityAllowed());
-        printf(<font color="#ff00ff">&quot;        Expiration Date: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+        printf(<font color="#ff00ff">&quot;       Expiration Date: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
                                         spent.getExpirationDate());
-        printf(<font color="#ff00ff">&quot;        Flag: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getFlag());
+        printf(<font color="#ff00ff">&quot;       Flag: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,spent.getFlag());
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
         <font color="#0000ff">// use the built in print method</font>
@@ -1684,11 +2391,20 @@ from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
+
+
 <a name="groupentry"></a>
 <span class="heading">Using the groupentry Class</span><br><br>
 
 <p>The groupentry class allows you to look up entries from /etc/group or
 from elsewhere if you're using the Name Service Switch.</p>
+
+
+
+
+
+
+
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
@@ -1697,9 +2413,11 @@ from elsewhere if you're using the Name Service Switch.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/groupentry.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// get the group entry for &quot;bin&quot;</font>
@@ -1708,12 +2426,12 @@ from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getName());
-        printf(<font color="#ff00ff">&quot;        Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getPassword());
-        printf(<font color="#ff00ff">&quot;        Group Id:       </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getGroupId());
-        printf(<font color="#ff00ff">&quot;        Members:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getName());
+        printf(<font color="#ff00ff">&quot;       Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getPassword());
+        printf(<font color="#ff00ff">&quot;       Group Id:       </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getGroupId());
+        printf(<font color="#ff00ff">&quot;       Members:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; grent.getMembers()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getMembers()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getMembers()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -1729,12 +2447,12 @@ from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getName());
-        printf(<font color="#ff00ff">&quot;        Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getPassword());
-        printf(<font color="#ff00ff">&quot;        Group Id:       </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getGroupId());
-        printf(<font color="#ff00ff">&quot;        Members:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getName());
+        printf(<font color="#ff00ff">&quot;       Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getPassword());
+        printf(<font color="#ff00ff">&quot;       Group Id:       </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getGroupId());
+        printf(<font color="#ff00ff">&quot;       Members:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; grent.getMembers()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getMembers()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,grent.getMembers()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -1745,11 +2463,20 @@ from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
+
+
 <a name="hostentry"></a>
 <span class="heading">Using the hostentry Class</span><br><br>
 
 <p>The hostentry class allows you to look up entries from /etc/hosts or
 from elsewhere if you're using the Name Service Switch.</p>
+
+
+
+
+
+
+
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
@@ -1758,11 +2485,13 @@ from elsewhere if you're using the Name Service Switch.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/hostentry.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
 <font color="#0000ff">// this function takes addr[]={127,1,1,0} and returns &quot;127.1.1.0&quot;</font>
 <font color="#2e8b57"><b>char</b></font> *getAddressString(<font color="#2e8b57"><b>int</b></font> length, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *addr) {
-        <font color="#2e8b57"><b>char</b></font>    *address=<font color="#a52a2a"><b>new</b></font> <font color="#2e8b57"><b>char</b></font>[(length*<font color="#ff00ff">4</font>)+<font color="#ff00ff">1</font>];
+        <font color="#2e8b57"><b>char</b></font>   *address=<font color="#a52a2a"><b>new</b></font> <font color="#2e8b57"><b>char</b></font>[(length*<font color="#ff00ff">4</font>)+<font color="#ff00ff">1</font>];
         address[<font color="#ff00ff">0</font>]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> byte=<font color="#ff00ff">0</font>; byte&lt;length; byte++) {
                 sprintf(address,<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s%d</font><font color="#ff00ff">&quot;</font>,address,addr[byte]);
@@ -1773,7 +2502,7 @@ from elsewhere if you're using the Name Service Switch.</p>
         <font color="#a52a2a"><b>return</b></font> address;
 }
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// get the host information for &quot;localhost&quot;</font>
@@ -1782,18 +2511,18 @@ from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getName());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getName());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; he.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAliasList()[i]);
         }
-        printf(<font color="#ff00ff">&quot;        Address type: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressType());
-        printf(<font color="#ff00ff">&quot;        Address length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressLength());
-        printf(<font color="#ff00ff">&quot;        Address list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Address type: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressType());
+        printf(<font color="#ff00ff">&quot;       Address length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressLength());
+        printf(<font color="#ff00ff">&quot;       Address list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; he.getAddressList()[i]; i++) {
-                <font color="#2e8b57"><b>char</b></font>    *addr=getAddressString(he.getAddressLength(),
+                <font color="#2e8b57"><b>char</b></font>  *addr=getAddressString(he.getAddressLength(),
                                                 he.getAddressList()[i]);
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,addr);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,addr);
                 <font color="#a52a2a"><b>delete</b></font>[] addr;
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
@@ -1806,23 +2535,23 @@ from elsewhere if you're using the Name Service Switch.</p>
 
 
         <font color="#0000ff">// get the host information for &quot;127.0.0.1&quot;</font>
-        <font color="#2e8b57"><b>char</b></font>    address[]={<font color="#ff00ff">127</font>,<font color="#ff00ff">0</font>,<font color="#ff00ff">0</font>,<font color="#ff00ff">1</font>};
+        <font color="#2e8b57"><b>char</b></font>   address[]={<font color="#ff00ff">127</font>,<font color="#ff00ff">0</font>,<font color="#ff00ff">0</font>,<font color="#ff00ff">1</font>};
         he.initialize(address,<font color="#ff00ff">4</font>,AF_INET);
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getName());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getName());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; he.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAliasList()[i]);
         }
-        printf(<font color="#ff00ff">&quot;        Address type: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressType());
-        printf(<font color="#ff00ff">&quot;        Address length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressLength());
-        printf(<font color="#ff00ff">&quot;        Address list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Address type: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressType());
+        printf(<font color="#ff00ff">&quot;       Address length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,he.getAddressLength());
+        printf(<font color="#ff00ff">&quot;       Address list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; he.getAddressList()[i]; i++) {
-                <font color="#2e8b57"><b>char</b></font>    *addr=getAddressString(he.getAddressLength(),
+                <font color="#2e8b57"><b>char</b></font>  *addr=getAddressString(he.getAddressLength(),
                                                 he.getAddressList()[i]);
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,addr);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,addr);
                 <font color="#a52a2a"><b>delete</b></font>[] addr;
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
@@ -1834,11 +2563,20 @@ from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
+
+
 <a name="protocolentry"></a>
 <span class="heading">Using the protocolentry Class</span><br><br>
 
 <p>The protocolentry class allows you to look up entries from /etc/protocols
 or from elsewhere if you're using the Name Service Switch.</p>
+
+
+
+
+
+
+
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
@@ -1847,9 +2585,11 @@ or from elsewhere if you're using the Name Service Switch.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/protocolentry.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// get the protocol information for &quot;tcp&quot;</font>
@@ -1858,12 +2598,12 @@ or from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getName());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getName());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; pe.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getAliasList()[i]);
         }
-        printf(<font color="#ff00ff">&quot;        Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getNumber());
+        printf(<font color="#ff00ff">&quot;       Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getNumber());
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
         <font color="#0000ff">// use the built in print method</font>
@@ -1878,12 +2618,12 @@ or from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getName());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getName());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; pe.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getAliasList()[i]);
         }
-        printf(<font color="#ff00ff">&quot;        Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getNumber());
+        printf(<font color="#ff00ff">&quot;       Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pe.getNumber());
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
         <font color="#0000ff">// use the built in print method</font>
@@ -1893,11 +2633,20 @@ or from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
+
+
 <a name="serviceentry"></a>
 <span class="heading">Using the serviceentry Class</span><br><br>
 
 <p>The serviceentry class allows you to look up entries from /etc/services
 or from elsewhere if you're using the Name Service Switch.</p>
+
+
+
+
+
+
+
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
@@ -1906,9 +2655,11 @@ or from elsewhere if you're using the Name Service Switch.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/serviceentry.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// get the service information for &quot;smtp&quot;,&quot;tcp&quot;</font>
@@ -1917,12 +2668,12 @@ or from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getName());
-        printf(<font color="#ff00ff">&quot;        Port:           </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getPort());
-        printf(<font color="#ff00ff">&quot;        Protocol:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getProtocol());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getName());
+        printf(<font color="#ff00ff">&quot;       Port:           </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getPort());
+        printf(<font color="#ff00ff">&quot;       Protocol:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getProtocol());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; se.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getAliasList()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -1938,12 +2689,12 @@ or from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getName());
-        printf(<font color="#ff00ff">&quot;        Port:           </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getPort());
-        printf(<font color="#ff00ff">&quot;        Protocol:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getProtocol());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getName());
+        printf(<font color="#ff00ff">&quot;       Port:           </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getPort());
+        printf(<font color="#ff00ff">&quot;       Protocol:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getProtocol());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; se.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,se.getAliasList()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -1954,11 +2705,20 @@ or from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
+
+
 <a name="rpcentry"></a>
 <span class="heading">Using the rpcentry Class</span><br><br>
 
 <p>The rpcentry class allows you to look up entries from /etc/rpc
 or from elsewhere if you're using the Name Service Switch.</p>
+
+
+
+
+
+
+
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
@@ -1967,9 +2727,11 @@ or from elsewhere if you're using the Name Service Switch.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/rpcentry.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
 
         <font color="#0000ff">// get the rpc information for &quot;portmap&quot;</font>
@@ -1978,11 +2740,11 @@ or from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getName());
-        printf(<font color="#ff00ff">&quot;        Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getNumber());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getName());
+        printf(<font color="#ff00ff">&quot;       Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getNumber());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; re.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getAliasList()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -1998,11 +2760,11 @@ or from elsewhere if you're using the Name Service Switch.</p>
 
         <font color="#0000ff">// print the components individually</font>
         printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getName());
-        printf(<font color="#ff00ff">&quot;        Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getNumber());
-        printf(<font color="#ff00ff">&quot;        Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+        printf(<font color="#ff00ff">&quot;       Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getName());
+        printf(<font color="#ff00ff">&quot;       Number:         </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getNumber());
+        printf(<font color="#ff00ff">&quot;       Alias list:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
         <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; re.getAliasList()[i]; i++) {
-                printf(<font color="#ff00ff">&quot;                </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getAliasList()[i]);
+                printf(<font color="#ff00ff">&quot;              </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,re.getAliasList()[i]);
         }
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -2013,6 +2775,8 @@ or from elsewhere if you're using the Name Service Switch.</p>
 }
 </pre>
 
+
+
 <a name="linkedlist"></a>
 <span class="heading">Using the linkedlist Class</span><br><br>
 
@@ -2022,6 +2786,13 @@ list.</p>
 <p>Since lists of strings are commonly used, a stringlist typedef is
 provided for convenience.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -2029,12 +2800,14 @@ provided for convenience.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/linkedlist.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
 <font color="#2e8b57"><b>int</b></font>     main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// create a list of integers</font>
-        linkedlist&lt;<font color="#2e8b57"><b>int</b></font>&gt;       intl;
+        linkedlist&lt;<font color="#2e8b57"><b>int</b></font>&gt;        intl;
 
         <font color="#0000ff">// append values to the list, displaying the list after each append</font>
         printf(<font color="#ff00ff">&quot;append(0)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
@@ -2119,6 +2892,8 @@ provided for convenience.</p>
 }
 </pre>
 
+
+
 <a name="dictionary"></a>
 <span class="heading">Using the dictionary Class</span><br><br>
 
@@ -2128,6 +2903,13 @@ provided for convenience.</p>
 string keys and values are commonly used, convenience classes are provided
 for each.</p>
 
+
+
+
+
+
+
+
 <pre>
 <font color="#0000ff">// Copyright (c) 2003  David Muse</font>
 <font color="#0000ff">// See the file COPYING for more information</font>
@@ -2135,12 +2917,15 @@ for each.</p>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/dictionary.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
 <font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
 
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
 
         <font color="#0000ff">// create a dictionary containing string keys and string values</font>
         namevaluepairs  dict;
+        printf(<font color="#ff00ff">&quot;string keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
         <font color="#0000ff">// add values to the dictionary</font>
         dict.setData(<font color="#ff00ff">&quot;1&quot;</font>,<font color="#ff00ff">&quot;one&quot;</font>);
@@ -2149,7 +2934,7 @@ for each.</p>
         dict.setData(<font color="#ff00ff">&quot;4&quot;</font>,<font color="#ff00ff">&quot;four&quot;</font>);
 
         <font color="#0000ff">// display the length and contents of the dictionary</font>
-        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dict.getList()-&gt;getLength());
+        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dict.getList()-&gt;getLength());
         dict.print();
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -2172,7 +2957,8 @@ for each.</p>
 
 
         <font color="#0000ff">// create a dictionary containing long integer keys and string values</font>
-        numericdictionary&lt;<font color="#2e8b57"><b>char</b></font> *&gt;       numdict;
+        numericdictionary&lt;<font color="#2e8b57"><b>char</b></font> *&gt;      numdict;
+        printf(<font color="#ff00ff">&quot;integer keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
         <font color="#0000ff">// add values to the dictionary</font>
         numdict.setData(<font color="#ff00ff">1</font>,<font color="#ff00ff">&quot;one&quot;</font>);
@@ -2181,7 +2967,7 @@ for each.</p>
         numdict.setData(<font color="#ff00ff">4</font>,<font color="#ff00ff">&quot;four&quot;</font>);
 
         <font color="#0000ff">// display the length and contents of the dictionary</font>
-        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,numdict.getList()-&gt;getLength());
+        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,numdict.getList()-&gt;getLength());
         numdict.print();
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -2206,7 +2992,8 @@ for each.</p>
 
         <font color="#0000ff">// create a dictionary containing double precision</font>
         <font color="#0000ff">// floating point keys and string values</font>
-        dictionary&lt;<font color="#2e8b57"><b>double</b></font>,<font color="#2e8b57"><b>char</b></font> *&gt;       doubledict;
+        dictionary&lt;<font color="#2e8b57"><b>double</b></font>,<font color="#2e8b57"><b>char</b></font> *&gt;      doubledict;
+        printf(<font color="#ff00ff">&quot;floating point keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
         <font color="#0000ff">// add values to the dictionary</font>
         doubledict.setData(<font color="#ff00ff">1.1</font>,<font color="#ff00ff">&quot;one point one&quot;</font>);
@@ -2215,7 +3002,7 @@ for each.</p>
         doubledict.setData(<font color="#ff00ff">4.4</font>,<font color="#ff00ff">&quot;four point four&quot;</font>);
 
         <font color="#0000ff">// display the length and contents of the dictionary</font>
-        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,doubledict.getList()-&gt;getLength());
+        printf(<font color="#ff00ff">&quot;length: </font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,doubledict.getList()-&gt;getLength());
         doubledict.print();
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 
@@ -2237,6 +3024,8 @@ for each.</p>
         printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
 }
 </pre>
+
+
 
 </body>
 </html>

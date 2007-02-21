@@ -50,8 +50,12 @@ bool serversocket::useBlockingMode() const {
 }
 #endif
 
+bool serversocket::lingerOnClose(int timeout) {
+	return setLingerOnClose(timeout,1);
+}
+
 bool serversocket::dontLingerOnClose() {
-	return setLingerOnClose(0,1);
+	return setLingerOnClose(0,0);
 }
 
 bool serversocket::reuseAddresses() {

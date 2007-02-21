@@ -3,7 +3,6 @@
 
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/permissions.h>
-#include <errno.h>
 #include <strings.h>
 
 #ifdef RUDIMENTS_NAMESPACE
