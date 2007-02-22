@@ -1,0 +1,74 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/logger.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        logger                  lg;
+
+        syslogdestination       sd;
+        filedestination         fd;
+        stdoutdestination       sod;
+        stderrdestination       sed;
+
+        <font color="#0000ff">// initialize and add a syslog log destination</font>
+        sd.open(<font color="#ff00ff">&quot;logtest&quot;</font>,LOG_CONS,LOG_USER,LOG_INFO);
+        lg.addLogDestination(&amp;sd);
+
+        <font color="#0000ff">// initialize and add a file log destination</font>
+        fd.open(<font color="#ff00ff">&quot;test.log&quot;</font>);
+        lg.addLogDestination(&amp;fd);
+
+        <font color="#0000ff">// add a standard output log destination</font>
+        lg.addLogDestination(&amp;sod);
+
+        <font color="#0000ff">// add a standard error log destination</font>
+        lg.addLogDestination(&amp;sed);
+
+        <font color="#0000ff">// write a string, character, long and float value to the log, along</font>
+        <font color="#0000ff">// with a standard log header for each</font>
+        <font color="#2e8b57"><b>char</b></font>   *header=logger::logHeader(<font color="#ff00ff">&quot;logtest&quot;</font>);
+        lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">&quot;test&quot;</font>);
+        lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">'t'</font>);
+        lg.write(header,<font color="#ff00ff">0</font>,(<font color="#2e8b57"><b>int32_t</b></font>)<font color="#ff00ff">12345</font>);
+        lg.write(header,<font color="#ff00ff">0</font>,<font color="#ff00ff">123.45</font>);
+        <font color="#a52a2a"><b>delete</b></font>[] header;
+
+        <font color="#0000ff">// remove all log destinations</font>
+        lg.removeAllLogDestinations();
+
+        <font color="#0000ff">// add each of the log destinations back</font>
+        lg.addLogDestination(&amp;sd);
+        lg.addLogDestination(&amp;fd);
+        lg.addLogDestination(&amp;sod);
+        lg.addLogDestination(&amp;sed);
+
+        <font color="#0000ff">// remove them one by one</font>
+        lg.removeLogDestination(&amp;sd);
+        lg.removeLogDestination(&amp;fd);
+        lg.removeLogDestination(&amp;sod);
+        lg.removeLogDestination(&amp;sed);
+        lg.removeAllLogDestinations();
+
+        <font color="#0000ff">// close the syslog log destination</font>
+        sd.close();
+
+        <font color="#0000ff">// close the file log destination</font>
+        fd.close();
+}
+</pre>
+
+

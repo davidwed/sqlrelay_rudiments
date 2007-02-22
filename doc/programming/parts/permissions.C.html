@@ -1,0 +1,58 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/permissions.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/file.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdlib.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+
+        <font color="#0000ff">// Create a file with rw-r--r-- permissions</font>
+        file    fd;
+        fd.open(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>,O_RDWR|O_CREAT,
+                                permissions::evalPermString(<font color="#ff00ff">&quot;rw-r--r--&quot;</font>));
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
+
+
+        <font color="#0000ff">// change the permissions to rw-rw-r--</font>
+        permissions::setFilePermissions(fd.getFileDescriptor(),
+                                permissions::evalPermString(<font color="#ff00ff">&quot;rw-rw-r--&quot;</font>));
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
+
+
+        <font color="#0000ff">// close and delete the file</font>
+        fd.close();
+        file::remove(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>);
+
+
+        <font color="#0000ff">// do the same as above using different methods</font>
+        fd.open(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>,O_RDWR|O_CREAT,
+                                permissions::ownerReadWrite()|
+                                permissions::groupRead()|
+                                permissions::othersRead());
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
+
+        permissions::setFilePermissions(fd.getFileDescriptor(),
+                                permissions::ownerReadWrite()|
+                                permissions::groupReadWrite()|
+                                permissions::othersRead());
+        system(<font color="#ff00ff">&quot;ls -l /tmp/tempfile&quot;</font>);
+        fd.close();
+        file::remove(<font color="#ff00ff">&quot;/tmp/tempfile&quot;</font>);
+}
+</pre>
+
+

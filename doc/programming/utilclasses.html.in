@@ -60,7 +60,7 @@
 variables.  The following example gets, sets and resets the environment
 variable TEST.</p>
 
-@env.C.html@
+@environment.C.html@
 
 <a name="commandline"></a>
 <span class="heading">Using the commandline Class</span><br><br>
@@ -73,7 +73,7 @@ variable TEST.</p>
 either of these formats.  Below is some code illustrating the use of the
 commandline class.</p>
 
-@cmdline.C.html@
+@commandline.C.html@
 
 <a name="parameterstring"></a>
 <span class="heading">Using the parameterstring Class</span><br><br>
@@ -109,7 +109,7 @@ name='\\value\\'
 ...
 </pre>
 
-@paramstr.C.html@
+@parameterstring.C.html@
 
 <a name="datetime"></a>
 <span class="heading">Using the datetime Class</span><br><br>
@@ -155,12 +155,12 @@ them.</p>
 <p>It turned out to be of very limited value, but it works and I never removed
 it.  So, if you need such functionality, it exists.</p>
 
-@tzf.C.html@
+@timezonefile.C.html@
 
 <a name="directory"></a>
 <span class="heading">Using the directory Class</span><br><br>
 
-@dir.C.html@
+@directory.C.html@
 
 <a name="filesystem"></a>
 <span class="heading">Using the filesystem Class</span><br><br>
@@ -190,7 +190,7 @@ one for each set of messages.</p>
 
 <p>The following example illustrates use of the logger class.</p>
 
-@log.C.html@
+@logger.C.html@
 
 <a name="permissions"></a>
 <span class="heading">Using the permissions Class</span><br><br>
@@ -209,7 +209,7 @@ class.</p>
 The randomnumber class attempts to rectify this situation.  Below is some code
 illustrating the use of the randomnumber class.</p>
 
-@random.C.html@
+@randomnumber.C.html@
 
 <a name="regularexpression"></a>
 <span class="heading">Using the regularexpression Class</span><br><br>
@@ -219,7 +219,7 @@ but methods for using regular expressions vary from platform to platform.  The
 regularexpression class attempts to rectify this situation.  Below is some code
 illustrating the use of the regularexpression class.</p>
 
-@regexp.C.html@
+@regularexpression.C.html@
 
 <a name="chat"></a>
 <span class="heading">Using the chat Class</span><br><br>
@@ -254,7 +254,7 @@ illustrating the use of the regularexpression class.</p>
 
 <p>...</p>
 
-@timer.C.html@
+@intervaltimer.C.html@
 
 <a name="math"></a>
 <span class="heading">Using the math Class</span><br><br>
@@ -313,7 +313,7 @@ signals.</p>
 <p>Below is some code illustrating the use of all three classes.  Note that
 you'll have to kill this program with a -9.</p>
 
-@snooze.C.html@
+@signal.C.html@
 
 <a name="sharedmemory"></a>
 <span class="heading">Using the sharedmemory Class</span><br><br>
@@ -330,11 +330,11 @@ documented here, but they are straightforward and rarely used.</p>
 <p>This program puts some data into shared memory then goes to sleep, giving
 another program time to access the segment.</p>
 
-@shm1.C.html@
+@sharedmemory1.C.html@
 
 <p>This program reads the data from shared memory.</p>
 
-@shm2.C.html@
+@sharedmemory2.C.html@
 
 <a name="semaphoreset"></a>
 <span class="heading">Using the semaphoreset Class</span><br><br>
@@ -356,9 +356,9 @@ what order the programs are started in, they will always print out
 
 <p>These programs must both be run to the background.</p>
 
-@sem1.C.html@
+@sharedmemory1.C.html@
 
-@sem2.C.html@
+@sharedmemory2.C.html@
 
 <a name="memorymap"></a>
 <span class="heading">Using the memorymap Class</span><br><br>
@@ -390,7 +390,7 @@ large enough to contain the largest possible data.</p>
 <p>The following code connects to a server on the local machine and reads
 variable/value pairs from it.</p>
 
-@mem.C.html@
+@memorypool.C.html@
 
 <a name="variablebuffer"></a>
 <span class="heading">Using the variablebuffer Class</span><br><br>
@@ -399,7 +399,7 @@ variable/value pairs from it.</p>
 length containing binary data.  You can append data to a variablebuffer or
 write data at arbitrary positions in the buffer.</p>
 
-@vbuf.C.html@
+@variablebuffer.C.html@
 
 <a name="stringbuffer"></a>
 <span class="heading">Using the stringbuffer Class</span><br><br>
@@ -408,7 +408,7 @@ write data at arbitrary positions in the buffer.</p>
 You can append data to a stringbuffer or write data at arbitrary positions in
 the buffer.</p>
 
-@string.C.html@
+@stringbuffer.C.html@
 
 <a name="character"></a>
 <span class="heading">Using the character Class</span><br><br>
@@ -424,7 +424,7 @@ the buffer.</p>
 evaluation functions.  Below is some code illustrating the use of the string
 class.</p>
 
-@text.C.html@
+@charstring.C.html@
 
 <a name="rawbuffer"></a>
 <span class="heading">Using the rawbuffer Class</span><br><br>
@@ -732,60 +732,7 @@ using the xmldom and xmldomnode classes.</p>
 <p>The passwdentry class allows you to look up entries from /etc/passwd or
 from elsewhere if you're using the Name Service Switch.</p>
 
-<pre>
-<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
-<font color="#0000ff">// See the file COPYING for more information</font>
-
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/passwdentry.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
-
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
-
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
-
-
-        <font color="#0000ff">// get the password entry for &quot;root&quot;</font>
-        passwdentry     pwent;
-        pwent.initialize(<font color="#ff00ff">&quot;root&quot;</font>);
-
-        <font color="#0000ff">// print the components individually</font>
-        printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getName());
-        printf(<font color="#ff00ff">&quot;        Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPassword());
-        printf(<font color="#ff00ff">&quot;        User Id:        </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getUserId());
-        printf(<font color="#ff00ff">&quot;        Primary Group:  </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPrimaryGroupId());
-        printf(<font color="#ff00ff">&quot;        Real Name:      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getRealName());
-        printf(<font color="#ff00ff">&quot;        Home Directory: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getHomeDirectory());
-        printf(<font color="#ff00ff">&quot;        Shell:          </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getShell());
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-
-        <font color="#0000ff">// use the built in print method</font>
-        printf(<font color="#ff00ff">&quot;Built In...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        pwent.print();
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-
-
-
-        <font color="#0000ff">// get the password entry for user id 0</font>
-        pwent.initialize((uid_t)<font color="#ff00ff">0</font>);
-
-        <font color="#0000ff">// print the components individually</font>
-        printf(<font color="#ff00ff">&quot;Individually...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        printf(<font color="#ff00ff">&quot;        Name:           </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getName());
-        printf(<font color="#ff00ff">&quot;        Password:       </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPassword());
-        printf(<font color="#ff00ff">&quot;        User Id:        </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getUserId());
-        printf(<font color="#ff00ff">&quot;        Primary Group:  </font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getPrimaryGroupId());
-        printf(<font color="#ff00ff">&quot;        Real Name:      </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getRealName());
-        printf(<font color="#ff00ff">&quot;        Home Directory: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getHomeDirectory());
-        printf(<font color="#ff00ff">&quot;        Shell:          </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pwent.getShell());
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-
-        <font color="#0000ff">// use the built in print method</font>
-        printf(<font color="#ff00ff">&quot;Built In...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        pwent.print();
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-}
-</pre>
+@passwdentry.C.html@
 
 <a name="shadowentry"></a>
 <span class="heading">Using the shadowentry Class</span><br><br>
@@ -793,7 +740,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <p>The shadowentry class allows you to look up entries from /etc/shadow or
 from elsewhere if you're using the Name Service Switch.</p>
 
-@shadow.C.html@
+@shadowentry.C.html@
 
 <a name="groupentry"></a>
 <span class="heading">Using the groupentry Class</span><br><br>
@@ -801,7 +748,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <p>The groupentry class allows you to look up entries from /etc/group or
 from elsewhere if you're using the Name Service Switch.</p>
 
-@group.C.html@
+@groupentry.C.html@
 
 <a name="hostentry"></a>
 <span class="heading">Using the hostentry Class</span><br><br>
@@ -809,7 +756,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <p>The hostentry class allows you to look up entries from /etc/hosts or
 from elsewhere if you're using the Name Service Switch.</p>
 
-@host.C.html@
+@hostentry.C.html@
 
 <a name="protocolentry"></a>
 <span class="heading">Using the protocolentry Class</span><br><br>
@@ -817,7 +764,7 @@ from elsewhere if you're using the Name Service Switch.</p>
 <p>The protocolentry class allows you to look up entries from /etc/protocols
 or from elsewhere if you're using the Name Service Switch.</p>
 
-@protocol.C.html@
+@protocolentry.C.html@
 
 <a name="serviceentry"></a>
 <span class="heading">Using the serviceentry Class</span><br><br>
@@ -825,7 +772,7 @@ or from elsewhere if you're using the Name Service Switch.</p>
 <p>The serviceentry class allows you to look up entries from /etc/services
 or from elsewhere if you're using the Name Service Switch.</p>
 
-@service.C.html@
+@serviceentry.C.html@
 
 <a name="rpcentry"></a>
 <span class="heading">Using the rpcentry Class</span><br><br>
@@ -833,7 +780,7 @@ or from elsewhere if you're using the Name Service Switch.</p>
 <p>The rpcentry class allows you to look up entries from /etc/rpc
 or from elsewhere if you're using the Name Service Switch.</p>
 
-@rpc.C.html@
+@rpcentry.C.html@
 
 <a name="linkedlist"></a>
 <span class="heading">Using the linkedlist Class</span><br><br>
@@ -844,7 +791,7 @@ list.</p>
 <p>Since lists of strings are commonly used, a stringlist typedef is
 provided for convenience.</p>
 
-@list.C.html@
+@linkedlist.C.html@
 
 <a name="dictionary"></a>
 <span class="heading">Using the dictionary Class</span><br><br>
@@ -855,7 +802,7 @@ provided for convenience.</p>
 string keys and values are commonly used, convenience classes are provided
 for each.</p>
 
-@dict.C.html@
+@dictionary.C.html@
 
 </body>
 </html>

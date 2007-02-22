@@ -9,7 +9,6 @@
 
 <ul>
 <li><a href="#daemon">Using the daemonprocess Class</a></li>
-<li><a href="#filedescriptor">Using the filedescriptor Class</a></li>
 <li><a href="#file">Using the file Class</a></li>
 <li><a href="#device">Using the device Class</a></li>
 <li><a href="#serialport">Using the serialport Class</a></li>
@@ -27,37 +26,30 @@
 seconds.  Most daemons don't write anything to the console, but this one does
 for purposes of demonstration.</p>
 
-@dmn.C.html@
+@daemonprocess.C.html@
 
-<a name="#filedescriptor">
-<span class="heading">Using the filedescriptor Class</span><br><br>
-
-<p>...</p>
-
-@filedescriptor.C.html@
-
-<a name="#file">
+<a name="file">
 <span class="heading">Using the file Class</span><br><br>
 
 <p>...</p>
 
 @file.C.html@
 
-<a name="#device">
+<a name="device">
 <span class="heading">Using the device Class</span><br><br>
 
 <p>...</p>
 
 @device.C.html@
 
-<a name="#serialport">
+<a name="serialport">
 <span class="heading">Using the serialport Class</span><br><br>
 
 <p>...</p>
 
 @serialport.C.html@
 
-<a name="#shmfile">
+<a name="shmfile">
 <span class="heading">Using the shmfile Class</span><br><br>
 
 <p>...</p>
@@ -72,7 +64,7 @@ over a network.  Below is an example combining the daemon and listener classes.
 This server listens on unix and inet sockets for a client connection, receives
 a string from the client and writes the same string back to the client.</p>
 
-@svr.C.html@
+@server.C.html@
 
 <p>Notice that this server listens on both inet and unix ports.  Inet ports
 allow clients and servers to talk across a network.  Unix ports allow clients
@@ -87,9 +79,9 @@ faster and use fewer system resources.</p>
 sends a string to the server, reads what the server sends back and prints it
 out.  It does this once over an inet port and once over a unix port.</p>
 
-@inetclnt.C.html@
+@inetclientsocket.C.html@
 
-@unixclnt.C.html@
+@unixclientsocket.C.html@
 
 <a name="complex"></a>
 <span class="heading">Using the Complex Initialization methods of the
@@ -137,12 +129,12 @@ myserver::myserver() : daemonprocess(), listener() {
 }
 </pre>
 
-<a name="#listener">
+<a name="listener">
 <span class="heading">Using the listener Class</span><br><br>
 
 <p>...</p>
 
-@lsnr.C.html@
+@listener.C.html@
 
 </body>
 </html>

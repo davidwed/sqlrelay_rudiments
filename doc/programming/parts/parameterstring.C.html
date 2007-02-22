@@ -1,0 +1,34 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/parameterstring.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        parameterstring pstr;
+
+        pstr.parse(<font color="#ff00ff">&quot;name1=value1;name2='value2';name3='</font><font color="#6a5acd">\\</font><font color="#ff00ff">'value3</font><font color="#6a5acd">\\</font><font color="#ff00ff">'';name4=</font><font color="#6a5acd">\\\\</font><font color="#ff00ff">value4</font><font color="#6a5acd">\\\\</font><font color="#ff00ff">&quot;</font>);
+
+        printf(<font color="#ff00ff">&quot;By Name:</font><font color="#6a5acd">\n</font><font color="#ff00ff">name1=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name2=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name3=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name4=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name5=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,
+                                pstr.getValue(<font color="#ff00ff">&quot;name1&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name2&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name3&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name4&quot;</font>),
+                                pstr.getValue(<font color="#ff00ff">&quot;name5&quot;</font>));
+}
+</pre>
+
+

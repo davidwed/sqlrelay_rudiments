@@ -1,0 +1,69 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/inetclientsocket.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/error.h&gt;</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;time.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#a52a2a"><b>if</b></font> (argc&lt;<font color="#ff00ff">3</font>) {
+                printf(<font color="#ff00ff">&quot;usage: inetclntbench [buffer size] [bytesperiteration] [iterations]</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+                exit(<font color="#ff00ff">0</font>);
+        }
+
+        <font color="#2e8b57"><b>uint32_t</b></font>       buffersize=
+                                charstring::toUnsignedInteger(argv[<font color="#ff00ff">1</font>]);
+        <font color="#2e8b57"><b>uint32_t</b></font>       bytesperiteration=
+                                charstring::toUnsignedInteger(argv[<font color="#ff00ff">2</font>]);
+        <font color="#2e8b57"><b>uint32_t</b></font>       iterations=
+                                charstring::toUnsignedInteger(argv[<font color="#ff00ff">3</font>]);
+
+        <font color="#2e8b57"><b>char</b></font>   *bytes=<font color="#a52a2a"><b>new</b></font> <font color="#2e8b57"><b>char</b></font>[bytesperiteration];
+        <font color="#a52a2a"><b>if</b></font> (!bytes) {
+                printf(<font color="#ff00ff">&quot;buffer allocation failed</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+                exit(<font color="#ff00ff">0</font>);
+        }
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint32_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;bytesperiteration; i++) {
+                bytes[i]=<font color="#ff00ff">'C'</font>;
+        }
+
+        <font color="#0000ff">// create an inet socket client</font>
+        inetclientsocket        clnt;
+
+        <font color="#0000ff">// connect to a server on localhost, listening on port 8000</font>
+        <font color="#a52a2a"><b>if</b></font> (clnt.connect(<font color="#ff00ff">&quot;localhost&quot;</font>,<font color="#ff00ff">8000</font>,-<font color="#ff00ff">1</font>,-<font color="#ff00ff">1</font>,<font color="#ff00ff">1</font>,<font color="#ff00ff">1</font>)&lt;<font color="#ff00ff">0</font>) {
+                printf(<font color="#ff00ff">&quot;connect failed: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,error::getErrorString());
+                exit(<font color="#ff00ff">1</font>);
+        }
+
+        clnt.setWriteBufferSize(buffersize);
+
+        <font color="#2e8b57"><b>time_t</b></font> start=time(<font color="#ff00ff">NULL</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>uint32_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;iterations; i++) {
+                clnt.write(bytes,bytesperiteration);
+        }
+        clnt.flushWriteBuffer(-<font color="#ff00ff">1</font>,-<font color="#ff00ff">1</font>);
+        <font color="#2e8b57"><b>time_t</b></font> end=time(<font color="#ff00ff">NULL</font>);
+        printf(<font color="#ff00ff">&quot;total time=</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,end-start);
+
+        <font color="#0000ff">// close the connection to the server</font>
+        clnt.close();
+}
+</pre>
+
+

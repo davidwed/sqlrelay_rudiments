@@ -1,0 +1,43 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2001  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/signalclasses.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>void</b></font>    handleSigusr1() {
+        printf(<font color="#ff00ff">&quot;Got a SIGUSR1!</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+}
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// this program will ignore all signals except SIGUSR1</font>
+        signalset       ignoreset;
+        ignoreset.addAllSignals();
+        ignoreset.removeSignal(<font color="#ff00ff">SIGUSR1</font>);
+        signalmanager::ignoreSignals(ignoreset.getSignalSet());
+
+        <font color="#0000ff">// when it gets a SIGUSR1, it will run the handleSigusr1() function</font>
+        signalhandler   shandler(<font color="#ff00ff">SIGUSR1</font>,(<font color="#2e8b57"><b>void</b></font> *)&amp;handleSigusr1);
+
+        <font color="#0000ff">// Loop forever, each time waiting for a signal not in the ignoreset</font>
+        <font color="#0000ff">// to be sent. Since SIGUSR1 is the only signal not in the ignoreset,</font>
+        <font color="#0000ff">// waitForSignals will fall through only when SIGUSR1 is received.</font>
+        <font color="#a52a2a"><b>for</b></font> (;;) {
+                signalmanager::waitForSignals(ignoreset.getSignalSet());
+        }
+}
+</pre>
+
+

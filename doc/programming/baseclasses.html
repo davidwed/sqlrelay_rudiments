@@ -9,7 +9,6 @@
 
 <ul>
 <li><a href="#daemon">Using the daemonprocess Class</a></li>
-<li><a href="#filedescriptor">Using the filedescriptor Class</a></li>
 <li><a href="#file">Using the file Class</a></li>
 <li><a href="#device">Using the device Class</a></li>
 <li><a href="#serialport">Using the serialport Class</a></li>
@@ -112,13 +111,7 @@ RETSIGTYPE      shutDown() {
 
 
 
-<a name="#filedescriptor">
-<span class="heading">Using the filedescriptor Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="#file">
+<a name="file">
 <span class="heading">Using the file Class</span><br><br>
 
 <p>...</p>
@@ -271,22 +264,94 @@ RETSIGTYPE      shutDown() {
 
 
 
-<a name="#device">
+<a name="device">
 <span class="heading">Using the device Class</span><br><br>
 
 <p>...</p>
 
 
-<a name="#serialport">
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// </font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: implement this...</font>
+}
+</pre>
+
+
+
+<a name="serialport">
 <span class="heading">Using the serialport Class</span><br><br>
 
 <p>...</p>
 
 
-<a name="#shmfile">
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// </font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: implement this...</font>
+}
+</pre>
+
+
+
+<a name="shmfile">
 <span class="heading">Using the shmfile Class</span><br><br>
 
 <p>...</p>
+
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2003  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// </font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: implement this...</font>
+}
+</pre>
+
 
 
 <a name="server"></a>
@@ -424,6 +489,7 @@ out.  It does this once over an inet port and once over a unix port.</p>
 <font color="#0000ff">// See the file COPYING for more information</font>
 
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/inetclientsocket.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/error.h&gt;</font>
 <font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
 
 <font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
@@ -548,7 +614,7 @@ myserver::myserver() : daemonprocess(), listener() {
 }
 </pre>
 
-<a name="#listener">
+<a name="listener">
 <span class="heading">Using the listener Class</span><br><br>
 
 <p>...</p>

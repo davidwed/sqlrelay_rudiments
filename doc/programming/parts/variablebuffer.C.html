@@ -1,0 +1,132 @@
+
+
+
+
+
+
+
+<pre>
+<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
+<font color="#0000ff">// See the file COPYING for more information</font>
+
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/variablebuffer.h&gt;</font>
+<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
+
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font>
+<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
+<font color="#a020f0">#endif</font>
+
+<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argc, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argv) {
+
+        <font color="#0000ff">// create a buffer</font>
+        variablebuffer  *vb=<font color="#a52a2a"><b>new</b></font> variablebuffer(<font color="#ff00ff">10</font>,<font color="#ff00ff">10</font>);
+
+        <font color="#0000ff">// append some string sequences to the buffer and display the contents</font>
+        <font color="#0000ff">// of the buffer byte by byte</font>
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#0000ff">// write 66666 to the buffer at position 0 and display it's contents</font>
+        <font color="#0000ff">// byte by byte (the first 5 bytes should be overwritten)</font>
+        vb-&gt;setPosition(<font color="#ff00ff">0</font>);
+        vb-&gt;write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#0000ff">// write 66666 to the buffer at position 30 and display it's contents</font>
+        <font color="#0000ff">// byte by byte, displaying nonprintable characters as .'s</font>
+        <font color="#0000ff">// (there should be a gap in the buffer now containing random data)</font>
+        vb-&gt;setPosition(<font color="#ff00ff">30</font>);
+        vb-&gt;write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                <font color="#a52a2a"><b>if</b></font> (vb-&gt;getBuffer()[i]&gt;=<font color="#ff00ff">' '</font> &amp;&amp; vb-&gt;getBuffer()[i]&lt;=<font color="#ff00ff">'~'</font>) {
+                        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+                } <font color="#a52a2a"><b>else</b></font> {
+                        printf(<font color="#ff00ff">&quot;.&quot;</font>);
+                }
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#0000ff">// set the current position to 50</font>
+        vb-&gt;setPosition(<font color="#ff00ff">50</font>);
+
+        <font color="#0000ff">// Append 12345 to the buffer and display it's contents byte by byte,</font>
+        <font color="#0000ff">// displaying nonprintable characters as .'s</font>
+        <font color="#0000ff">// Since we used append() instead of write(), the data should not be</font>
+        <font color="#0000ff">// written at position 50, but rather just at the current end of</font>
+        <font color="#0000ff">// the buffer.</font>
+        vb-&gt;append((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                <font color="#a52a2a"><b>if</b></font> (vb-&gt;getBuffer()[i]&gt;=<font color="#ff00ff">' '</font> &amp;&amp; vb-&gt;getBuffer()[i]&lt;=<font color="#ff00ff">'~'</font>) {
+                        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+                } <font color="#a52a2a"><b>else</b></font> {
+                        printf(<font color="#ff00ff">&quot;.&quot;</font>);
+                }
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// Write 12345 to the buffer at the current position and display it's</font>
+        <font color="#0000ff">// contents byte by byte, displaying nonprintable characters as .'s</font>
+        <font color="#0000ff">// The current position should just be the end of the buffer, since</font>
+        <font color="#0000ff">// we just appended.  So calling write() here is equivalent to calling</font>
+        <font color="#0000ff">// append.</font>
+        vb-&gt;write((<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font> *)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>size_t</b></font> i=<font color="#ff00ff">0</font>; i&lt;vb-&gt;getSize(); i++) {
+                <font color="#a52a2a"><b>if</b></font> (vb-&gt;getBuffer()[i]&gt;=<font color="#ff00ff">' '</font> &amp;&amp; vb-&gt;getBuffer()[i]&lt;=<font color="#ff00ff">'~'</font>) {
+                        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,vb-&gt;getBuffer()[i]);
+                } <font color="#a52a2a"><b>else</b></font> {
+                        printf(<font color="#ff00ff">&quot;.&quot;</font>);
+                }
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#0000ff">// read 4 bytes from position 0 of the buffer and display them</font>
+        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font>  buffer[<font color="#ff00ff">5</font>];
+        buffer[<font color="#ff00ff">4</font>]=(<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;
+        vb-&gt;setPosition(<font color="#ff00ff">0</font>);
+        <font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font>  sizeread=vb-&gt;read(buffer,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">: &quot;</font>,sizeread);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> i=<font color="#ff00ff">0</font>; i&lt;sizeread; i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,buffer[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// read 4 bytes from position 5 of the buffer and display them</font>
+        vb-&gt;setPosition(<font color="#ff00ff">5</font>);
+        sizeread=vb-&gt;read(buffer,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">: &quot;</font>,sizeread);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> i=<font color="#ff00ff">0</font>; i&lt;sizeread; i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,buffer[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+        <font color="#0000ff">// read 4 bytes from position 60 of the buffer and display them</font>
+        <font color="#0000ff">// (since this is off of the end of the buffer, nothing should be</font>
+        <font color="#0000ff">// displayed)</font>
+        vb-&gt;setPosition(<font color="#ff00ff">60</font>);
+        sizeread=vb-&gt;read(buffer,<font color="#ff00ff">4</font>);
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">: &quot;</font>,sizeread);
+        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>unsigned</b></font> <font color="#2e8b57"><b>long</b></font> i=<font color="#ff00ff">0</font>; i&lt;sizeread; i++) {
+                printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,buffer[i]);
+        }
+        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
+
+
+        <font color="#a52a2a"><b>delete</b></font> vb;
+}
+</pre>
+
+
