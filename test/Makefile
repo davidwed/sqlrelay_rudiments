@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: server sslsvr listener inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sem2 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld intervaltimer inetclntbench inetsvrbench server.pem device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze
+all: server sslsvr listener inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sharedmemory2 sharedmemory2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 memorypool randomnumber sharedmemory1 sharedmemory1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench server.pem device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sem1 sem2 shm1 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze
+	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sharedmemory1 sharedmemory2 sharedmemory1 sharedmemory2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 memorypool randomnumber signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -89,8 +89,8 @@ lock1: lock1.C lock1.lo
 lock2: lock2.C lock2.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lock2.lo $(ALLSTATIC) $(LIBS)
 
-mem: mem.C mem.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ mem.lo $(ALLSTATIC) $(LIBS)
+memorypool: memorypool.C memorypool.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ memorypool.lo $(ALLSTATIC) $(LIBS)
 
 oneshotclnt: oneshotclnt.C oneshotclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ oneshotclnt.lo $(ALLSTATIC) $(LIBS)
@@ -119,17 +119,17 @@ regularexpression: regularexpression.C regularexpression.lo
 rpc: rpc.C rpc.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ rpc.lo $(ALLSTATIC) $(LIBS)
 
-sem1: sem1.C sem1.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ sem1.lo $(ALLSTATIC) $(LIBS)
+sharedmemory1: sharedmemory1.C sharedmemory1.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory1.lo $(ALLSTATIC) $(LIBS)
 
-sem2: sem2.C sem2.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ sem2.lo $(ALLSTATIC) $(LIBS)
+sharedmemory2: sharedmemory2.C sharedmemory2.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory2.lo $(ALLSTATIC) $(LIBS)
 
-shm1: shm1.C shm1.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ shm1.lo $(ALLSTATIC) $(LIBS)
+sharedmemory1: sharedmemory1.C sharedmemory1.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory1.lo $(ALLSTATIC) $(LIBS)
 
-shm2: shm2.C shm2.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ shm2.lo $(ALLSTATIC) $(LIBS)
+sharedmemory2: sharedmemory2.C sharedmemory2.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory2.lo $(ALLSTATIC) $(LIBS)
 
 text: text.C text.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ text.lo $(ALLSTATIC) $(LIBS)
@@ -176,8 +176,8 @@ nonhandoff2: nonhandoff2.C nonhandoff2.lo
 nonhandoffclient: nonhandoffclient.C nonhandoffclient.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ nonhandoffclient.lo $(ALLSTATIC) $(LIBS)
 
-vbuf: vbuf.C vbuf.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ vbuf.lo $(ALLSTATIC) $(LIBS)
+variablebuffer: variablebuffer.C variablebuffer.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ variablebuffer.lo $(ALLSTATIC) $(LIBS)
 
 xattr: xattr.C xattr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xattr.lo $(ALLSTATIC) $(LIBS)
@@ -232,6 +232,9 @@ serialportprofile: serialportprofile.C serialportprofile.lo
 
 snooze: snooze.C snooze.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ snooze.lo $(ALLSTATIC) $(LIBS)
+
+memorymap: memorymap.C memorymap.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ memorymap.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
 	$(MAKE) -C certificates
