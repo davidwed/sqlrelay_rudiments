@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: server sslsvr listener inetclientsocket sslclnt unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger oneshotclnt oneshotsvr passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry sharedmemory2 sharedmemory2 charstring datetime timezonefile dict dtd environment file filesystem list lock1 lock2 memorypool randomnumber sharedmemory1 sharedmemory1 signal stringbuffer strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench server.pem device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer
+all: server listener inetclientsocket unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry sharedmemory2 sharedmemory2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist memorypool randomnumber sharedmemory1 sharedmemory1 signal stringbuffer handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench server.pem device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer sslsvr sslclnt oneshotclnt oneshotsvr lock1 lock2
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger oneshotclnt oneshotsvr passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry sharedmemory1 sharedmemory2 sharedmemory1 sharedmemory2 charstring datetime timezonefile dict dtd environment file filesystem list lock1 lock2 memorypool randomnumber signal stringbuffer strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer
+	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger oneshotclnt oneshotsvr passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry sharedmemory1 sharedmemory2 sharedmemory1 sharedmemory2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist lock1 lock2 memorypool randomnumber signal stringbuffer handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -80,8 +80,8 @@ groupentry: groupentry.C groupentry.lo
 hostentry: hostentry.C hostentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ hostentry.lo $(ALLSTATIC) $(LIBS)
 
-list: list.C list.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ list.lo $(ALLSTATIC) $(LIBS)
+linkedlist: linkedlist.C linkedlist.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ linkedlist.lo $(ALLSTATIC) $(LIBS)
 
 lock1: lock1.C lock1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lock1.lo $(ALLSTATIC) $(LIBS)
@@ -140,8 +140,8 @@ datetime: datetime.C datetime.lo
 timezonefile: timezonefile.C timezonefile.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ timezonefile.lo $(ALLSTATIC) $(LIBS)
 
-dict: dict.C dict.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ dict.lo $(ALLSTATIC) $(LIBS)
+dictionary: dictionary.C dictionary.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ dictionary.lo $(ALLSTATIC) $(LIBS)
 
 dtd: dtd.C dtd.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dtd.lo $(ALLSTATIC) $(LIBS)
@@ -154,9 +154,6 @@ signal: signal.C signal.lo
 
 stringbuffer: stringbuffer.C stringbuffer.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ stringbuffer.lo $(ALLSTATIC) $(LIBS)
-
-strbuf: strbuf.C strbuf.lo 
-	$(LIBTOOL) --mode=link $(CXX) -o $@ strbuf.lo $(ALLSTATIC) $(LIBS)
 
 handoff1: handoff1.C handoff1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ handoff1.lo $(ALLSTATIC) $(LIBS)

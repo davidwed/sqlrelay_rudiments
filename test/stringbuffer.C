@@ -1,7 +1,7 @@
-// Copyright (c) 2003  David Muse
+// Copyright (c) 2002  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/charstring.h>
+#include <rudiments/stringbuffer.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -11,149 +11,142 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	// create a new string 50 bytes long
-	char	s[50];
+	// create a new string buffer
+	stringbuffer	*str=new stringbuffer();
+
+	// append a NULL to the buffer
+	str->append((char *)NULL);
+
+	// append "hello there world" to the buffer in 3 parts
+	str->append("hello ")->append("there ")->append("world ");
+
+	// display the length and contents of the buffer
+	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());
 
 
-	// set every byte in the string to NULL
-	charstring::zero(s,50);
+	// append some long integers to the buffer
+	str->append((int32_t)1)->append(" ");
+	str->append((int32_t)2)->append(" ");
+	str->append((int32_t)3)->append(" ");
+	str->append((int32_t)4)->append(" ");
+	str->append((int32_t)5)->append(" ");
+
+	// display the length and contents of the buffer
+	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());
+
+	str->append(" ");
 
 
-	// Append "hello there dave" to the string and display it.
-	// The 3rd call to append() only appends the first 4 bytes of "dave !!!"
-	charstring::append(s,"hello ");
-	charstring::append(s,"there ");
-	charstring::append(s,"dave !!!",4);
-	printf("\"%s\"\n",s);
+	// append some floating point numbers to the buffer
+	str->append(1.1,1,0)->append(" ");
+	str->append(2.02,2,0)->append(" ");
+	str->append(3.003,3,0)->append(" ");
+	str->append(4.0004,4,0)->append(" ");
+	str->append(5.00005,5,0)->append(" ");
+
+	// display the length and contents of the buffer
+	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());
 
 
-	// Replace the contents of the string and display it over and over.
-	// Note that the 2nd and 4th call to copy() only copy part of the
-	// string passed into them.
-	charstring::copy(s,"what's ");
-	printf("\"%s\"\n",s);
-	charstring::copy(s,"up !!!",2);
-	printf("\"%s\"\n",s);
-	charstring::copy(s,2," !!!");
-	printf("\"%s\"\n",s);
-	charstring::copy(s,6,"!!!!!!",1);
-	printf("\"%s\"\n",s);
+	// clear the buffer
+	str->clear();
 
 
-	// clear the string again.
-	charstring::zero(s,50);
-
-
-	// Append "hello" to the string.
-	charstring::append(s,"hello");
-
-	// perform several comparisons, all of which should return 0
-	printf("compare: %d=0\n",charstring::compare(s,"hello"));
-	printf("compare: %d=0\n",charstring::compare(s,"hello",3));
-	printf("compare: %d=0\n",charstring::compareIgnoringCase(s,"HELLO"));
-	printf("compare: %d=0\n",charstring::compareIgnoringCase(s,"HELLO",3));
-
-	// perform several contains() comparisons
-	printf("findFirst: \"%s\"=llo\n",charstring::findFirst(s,"llo"));
-	printf("contains: %d\n",charstring::contains(s,"llo"));
-	printf("findFirst: \"%s\"=llo\n",charstring::findFirst(s,'l'));
-	printf("contains: %d\n",charstring::contains(s,"llo"));
-
-
-
-	// duplicate the string and display the duplicated string
-	char	*hello=charstring::duplicate(s);
-	char	*ell=charstring::subString(hello,1,3);
-	char	*lle=charstring::subString(hello,3,1);
-	printf("hello: %s\n",hello);
-	printf("ell: %s\n",ell);
-	printf("ell: %s\n",lle);
-
-	// make sure to clean up what duplicate() returns
-	delete[] hello;
-	delete[] ell;
-	delete[] lle;
-
-
-	// split
-	char		**list;
-	uint64_t	listlength;
-	charstring::split("hello||hi||bye||goodbye","||",false,
-						&list,&listlength);
-	printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
-	printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
-		printf("	%s\n",list[i]);
-		delete[] list[i];
+	// append 1024 *'s to the buffer and display it's length and contents
+	for (int i=0; i<1024; i++) {
+		str->append('*');
 	}
-	delete[] list;
+	printf("length: %d\n%s\n",str->getStringLength(),str->getString());
 
-	charstring::split("hello||hi||bye||goodbye||","||",false,
-						&list,&listlength);
-	printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
-	printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
-		printf("	%s\n",list[i]);
-		delete[] list[i];
+	// delete the buffer
+	delete str;
+
+
+
+
+	// create another buffer
+	stringbuffer	*sb=new stringbuffer();
+
+	// append some string sequences to the buffer and display the contents
+	// of the buffer byte by byte
+	sb->append("12345");
+	sb->append("12345");
+	sb->append("12345");
+	sb->append("12345");
+	sb->append("12345");
+	for (unsigned int i=0; i<sb->getStringLength(); i++) {
+		printf("%c",sb->getString()[i]);
 	}
-	delete[] list;
+	printf("\n");
 
-	charstring::split("||hello||hi||bye||goodbye||","||",false,
-						&list,&listlength);
-	printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
-	printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
-		printf("	%s\n",list[i]);
-		delete[] list[i];
+
+	// write 66666 to the buffer at position 0 and display it's contents
+	// byte by byte (the first 5 bytes should be overwritten)
+	sb->setPosition(0);
+	sb->write("66666");
+	for (unsigned int i=0; i<sb->getStringLength(); i++) {
+		printf("%c",sb->getString()[i]);
 	}
-	delete[] list;
+	printf("\n");
 
-	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",false,
-							&list,&listlength);
-	printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
-	printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
-		printf("	%s\n",list[i]);
-		delete[] list[i];
+
+	// write 66666 to the buffer at position 30 and display it's contents
+	// byte by byte, displaying nonprintable characters as .'s
+	// (there should be a gap in the buffer now containing random data)
+	sb->setPosition(30);
+	sb->write("66666");
+	for (int i=0; i<35; i++) {
+		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
+			printf("%c",sb->getString()[i]);
+		} else {
+			printf(".");
+		}
 	}
-	delete[] list;
+	printf("\n");
 
-	charstring::split("||||||||||","||",false,&list,&listlength);
-	printf("split(\"||||||||||\",\"||\")\n");
-	printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
-		printf("	%s\n",list[i]);
-		delete[] list[i];
+
+	// set the current position to 50
+	sb->setPosition(50);
+
+	// Append 12345 to the buffer and display it's contents byte by byte,
+	// displaying nonprintable characters as .'s
+	// Since we used append() instead of write(), the data should not be
+	// written at position 50, but rather just at the current end of
+	// the buffer.
+	sb->append("12345");
+	for (int i=0; i<55; i++) {
+		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
+			printf("%c",sb->getString()[i]);
+		} else {
+			printf(".");
+		}
 	}
-	delete[] list;
+	printf("\n");
 
-	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",false,&list,&listlength);
-	printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
-	printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
-		printf("	%s\n",list[i]);
-		delete[] list[i];
+	// Write 12345 to the buffer at the current position and display it's
+	// contents byte by byte, displaying nonprintable characters as .'s
+	// The current position should just be the end of the buffer, since
+	// we just appended.  So calling write() here is equivalent to calling
+	// append.
+	sb->write("12345");
+	for (int i=0; i<55; i++) {
+		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
+			printf("%c",sb->getString()[i]);
+		} else {
+			printf(".");
+		}
 	}
-	delete[] list;
-
-	char	str[]="hello'\"\\hello'\"\\";
-	char	*escapedstr=charstring::escape(str,"\"'");
-	char	*unescapedstr=charstring::unescape(escapedstr);
-	printf("str		: %s\n",str);
-	printf("escapedstr	: %s\n",escapedstr);
-	printf("unescapedstr	: %s\n",unescapedstr);
-	delete[] unescapedstr;
-	delete[] escapedstr;
-
-	
-	const char	*alphabet="aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";
-	printf("lengthContainingSet(\"%s\",\"gfedcba\")=%d\n",
-		alphabet,charstring::lengthContainingSet(alphabet,"gfedcba"));
-	printf("lengthNotContainingSet(\"%s\",\"hijklmnopqrstuvwxyz\")=%d\n",
-		alphabet,charstring::lengthNotContainingSet(alphabet,
-						"hijklmnopqrstuvwxyz"));
+	printf("\n");
 
 
-	printf("findFirstOfSet(\"%s\",\"mlk\")=\"%s\"\n",
-		alphabet,charstring::findFirstOfSet(alphabet,"klm"));
+	// clear the buffer
+	sb->clear();
+
+	// append 1024 0's to the buffer and display it's length and contents
+	for (int i=0; i<1024; i++) {
+		sb->append("0");
+	}
+	printf("length: %d\n%s\n",str->getStringLength(),str->getString());
+
+	delete sb;
 }
