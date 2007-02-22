@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: server sslsvr listener inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sem2 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld intervaltimer sleep inetclntbench inetsvrbench server.pem device serialport shmfile chat crypt dynamiclib error
+all: server sslsvr listener inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sem2 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld intervaltimer inetclntbench inetsvrbench server.pem device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sem1 sem2 shm1 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld intervaltimer sleep inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error
+	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regularexpression rpc sem1 sem2 shm1 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -191,9 +191,6 @@ xmld: xmld.C xmld.lo
 intervaltimer: intervaltimer.C intervaltimer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ intervaltimer.lo $(ALLSTATIC) $(LIBS)
 
-sleep: sleep.C sleep.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ sleep.lo $(ALLSTATIC) $(LIBS)
-
 inetclntbench: inetclntbench.C inetclntbench.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclntbench.lo $(ALLSTATIC) $(LIBS)
 
@@ -220,6 +217,21 @@ dynamiclib: dynamiclib.C dynamiclib.lo
 
 error: error.C error.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ error.lo $(ALLSTATIC) $(LIBS)
+
+math: math.C math.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ math.lo $(ALLSTATIC) $(LIBS)
+
+mutex: mutex.C mutex.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ mutex.lo $(ALLSTATIC) $(LIBS)
+
+process: process.C process.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ process.lo $(ALLSTATIC) $(LIBS)
+
+serialportprofile: serialportprofile.C serialportprofile.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ serialportprofile.lo $(ALLSTATIC) $(LIBS)
+
+snooze: snooze.C snooze.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ snooze.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
 	$(MAKE) -C certificates
