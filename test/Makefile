@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: svr sslsvr lsnr inetclnt sslclnt unixclnt dir dmn group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem
+all: server sslsvr lsnr inetclientsocket sslclnt unixclientsocket dir daemonprocess group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) lsnr svr sslsvr inetclnt sslclnt unixclnt dir dmn group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench
+	$(LIBTOOL) --mode=clean $(RM) lsnr server sslsvr inetclientsocket sslclnt unixclientsocket dir daemonprocess group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -31,8 +31,8 @@ rebuild: clean all
 .C.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
 
-svr: svr.C svr.lo 
-	$(LIBTOOL) --mode=link $(CXX) -o $@ svr.lo $(ALLSTATIC) $(LIBS)
+server: server.C server.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)
 
 sslsvr: sslsvr.C sslsvr.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslsvr.lo $(ALLSTATIC) $(LIBS)
@@ -40,21 +40,21 @@ sslsvr: sslsvr.C sslsvr.lo
 lsnr: lsnr.C lsnr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lsnr.lo $(ALLSTATIC) $(LIBS)
 
-inetclnt: inetclnt.C inetclnt.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclnt.lo $(ALLSTATIC) $(LIBS)
+inetclientsocket: inetclientsocket.C inetclientsocket.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclientsocket.lo $(ALLSTATIC) $(LIBS)
 
 sslclnt: sslclnt.C sslclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslclnt.lo $(ALLSTATIC) $(LIBS)
 
-unixclnt: unixclnt.C unixclnt.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclnt.lo $(ALLSTATIC) $(LIBS)
+unixclientsocket: unixclientsocket.C unixclientsocket.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclientsocket.lo $(ALLSTATIC) $(LIBS)
 
 dir: dir.C dir.lo 
 	#$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo $(ALLSTATIC) $(LIBS)
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo $(LIBS) -lefence
 
-dmn: dmn.C dmn.lo 
-	$(LIBTOOL) --mode=link $(CXX) -o $@ dmn.lo $(ALLSTATIC) $(LIBS)
+daemonprocess: daemonprocess.C daemonprocess.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ daemonprocess.lo $(ALLSTATIC) $(LIBS)
 
 cmdline: cmdline.C cmdline.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ cmdline.lo $(ALLSTATIC) $(LIBS)
