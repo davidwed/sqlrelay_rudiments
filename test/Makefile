@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: server sslsvr listener inetclientsocket sslclnt unixclientsocket dir daemonprocess group commandline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd environment file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem device serialport shmfile
+all: server sslsvr listener inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem device serialport shmfile
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket dir daemonprocess group commandline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd environment file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench device serialport shmfile
+	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess group commandline parameterstring host logger oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime timezonefile dict dtd environment file filesystem list lock1 lock2 mem randomnumber signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench device serialport shmfile
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -49,9 +49,9 @@ sslclnt: sslclnt.C sslclnt.lo
 unixclientsocket: unixclientsocket.C unixclientsocket.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclientsocket.lo $(ALLSTATIC) $(LIBS)
 
-dir: dir.C dir.lo 
-	#$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo $(ALLSTATIC) $(LIBS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ dir.lo $(LIBS) -lefence
+directory: directory.C directory.lo 
+	#$(LIBTOOL) --mode=link $(CXX) -o $@ directory.lo $(ALLSTATIC) $(LIBS)
+	$(LIBTOOL) --mode=link $(CXX) -o $@ directory.lo $(LIBS) -lefence
 
 daemonprocess: daemonprocess.C daemonprocess.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ daemonprocess.lo $(ALLSTATIC) $(LIBS)
@@ -59,11 +59,11 @@ daemonprocess: daemonprocess.C daemonprocess.lo
 commandline: commandline.C commandline.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ commandline.lo $(ALLSTATIC) $(LIBS)
 
-paramstr: paramstr.C paramstr.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ paramstr.lo $(ALLSTATIC) $(LIBS)
+parameterstring: parameterstring.C parameterstring.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ parameterstring.lo $(ALLSTATIC) $(LIBS)
 
-log: log.C log.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ log.lo $(ALLSTATIC) $(LIBS)
+logger: logger.C logger.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ logger.lo $(ALLSTATIC) $(LIBS)
 
 environment: environment.C environment.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ environment.lo $(ALLSTATIC) $(LIBS)
@@ -137,8 +137,8 @@ text: text.C text.lo
 datetime: datetime.C datetime.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ datetime.lo $(ALLSTATIC) $(LIBS)
 
-tzf: tzf.C tzf.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ tzf.lo $(ALLSTATIC) $(LIBS)
+timezonefile: timezonefile.C timezonefile.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ timezonefile.lo $(ALLSTATIC) $(LIBS)
 
 dict: dict.C dict.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dict.lo $(ALLSTATIC) $(LIBS)
@@ -146,8 +146,8 @@ dict: dict.C dict.lo
 dtd: dtd.C dtd.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dtd.lo $(ALLSTATIC) $(LIBS)
 
-random: random.C random.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ random.lo $(ALLSTATIC) $(LIBS)
+randomnumber: randomnumber.C randomnumber.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ randomnumber.lo $(ALLSTATIC) $(LIBS)
 
 signal: signal.C signal.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ signal.lo $(ALLSTATIC) $(LIBS)
