@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: server sslsvr lsnr inetclientsocket sslclnt unixclientsocket dir daemonprocess group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem
+all: server sslsvr listener inetclientsocket sslclnt unixclientsocket dir daemonprocess group commandline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem2 shm2 text datetime tzf dict dtd environment file filesystem list lock1 lock2 mem random sem1 shm1 signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench server.pem device serialport shmfile
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) lsnr server sslsvr inetclientsocket sslclnt unixclientsocket dir daemonprocess group cmdline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd env file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench
+	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket dir daemonprocess group commandline paramstr host log oneshotclnt oneshotsvr passwd service shadow permissions protocol regexp rpc sem1 sem2 shm1 shm2 text datetime tzf dict dtd environment file filesystem list lock1 lock2 mem random signal string strbuf handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient vbuf xattr xmls xmld timer sleep inetclntbench inetsvrbench device serialport shmfile
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -37,8 +37,8 @@ server: server.C server.lo
 sslsvr: sslsvr.C sslsvr.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslsvr.lo $(ALLSTATIC) $(LIBS)
 
-lsnr: lsnr.C lsnr.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ lsnr.lo $(ALLSTATIC) $(LIBS)
+listener: listener.C listener.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ listener.lo $(ALLSTATIC) $(LIBS)
 
 inetclientsocket: inetclientsocket.C inetclientsocket.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclientsocket.lo $(ALLSTATIC) $(LIBS)
@@ -56,8 +56,8 @@ dir: dir.C dir.lo
 daemonprocess: daemonprocess.C daemonprocess.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ daemonprocess.lo $(ALLSTATIC) $(LIBS)
 
-cmdline: cmdline.C cmdline.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ cmdline.lo $(ALLSTATIC) $(LIBS)
+commandline: commandline.C commandline.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ commandline.lo $(ALLSTATIC) $(LIBS)
 
 paramstr: paramstr.C paramstr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ paramstr.lo $(ALLSTATIC) $(LIBS)
@@ -65,8 +65,8 @@ paramstr: paramstr.C paramstr.lo
 log: log.C log.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ log.lo $(ALLSTATIC) $(LIBS)
 
-env: env.C env.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ env.lo $(ALLSTATIC) $(LIBS)
+environment: environment.C environment.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ environment.lo $(ALLSTATIC) $(LIBS)
 
 file: file.C file.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ file.lo $(ALLSTATIC) $(LIBS)
@@ -199,6 +199,15 @@ inetclntbench: inetclntbench.C inetclntbench.lo
 
 inetsvrbench: inetsvrbench.C inetsvrbench.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsvrbench.lo $(ALLSTATIC) $(LIBS)
+
+device: device.C device.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ device.lo $(ALLSTATIC) $(LIBS)
+
+serialport: serialport.C serialport.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ serialport.lo $(ALLSTATIC) $(LIBS)
+
+serialport: shmfile.C shmfile.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ shmfile.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
 	$(MAKE) -C certificates
