@@ -1067,6 +1067,220 @@ char *charstring::subString(const char *str, size_t start, size_t end) {
 	return duplicate(str+start,end-start+1);
 }
 
+char *charstring::base64Encode(const unsigned char *input) {
+	return base64Encode(input,charstring::length(input));
+}
+
+ char *charstring::base64Encode(const unsigned char *input,
+						uint64_t inputsize) {
+	char		*retval=NULL;
+	uint64_t	retvalsize=0;
+	base64Encode(input,inputsize,&retval,&retvalsize);
+	return retval;
+}
+
+static char	b64code[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+				"abcdefghijklmnopqrstuvwxyz0123456789+/";
+static unsigned char	b64dcode[]={
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 0-9
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 10-19
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// etc.
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+				-1,-1,-1,62,-1,-1,-1,63,52,53,
+				54,55,56,57,58,59,60,61,-1,-1,
+				-1,0,-1,-1,-1,0,1,2,3,4,
+				5,6,7,8,9,10,11,12,13,14,
+				15,16,17,18,19,20,21,22,23,24,
+				25,-1,-1,-1,-1,-1,-1,26,27,28,
+				29,30,31,32,33,34,35,36,37,38,
+				39,40,41,42,43,44,45,46,47,48,
+				49,50,51,-1,-1,-1,-1,-1};
+
+void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
+				char **output, uint64_t *outputsize) {
+
+	// handle null input
+	if (!input) {
+		*output=NULL;
+		*outputsize=0;
+		return;
+	}
+
+	// handle 0-length input
+	if (!inputsize) {
+		*output=charstring::duplicate("");
+		*outputsize=0;
+		return;
+	}
+
+	// handle real input...
+
+	// figure out the output size:
+	//
+	// let x = inputsize
+	// let y = outputsize
+	//
+	// (I know this sequence is true by
+	//  observation of input vs output sizes)
+	// x   y
+	// -----
+	// 9   12 = (x*4/3)+0
+	// 8   12 = (x*4/3)+2
+	// 7   12 = (x*4/3)+3
+	// 6   8  = (x*4/3)+0
+	// 5   8  = (x*4/3)+2
+	// 4   8  = (x*4/3)+3
+	// 3   4  = (x*4/3)+0
+	// 2   4  = (x*4/3)+2
+	// 1   4  = (x*4/3)+3
+	//
+	// y=((x*4/3)+z)
+	//
+	// x   z
+	// -----
+	// 9   0 = 9-x+0
+	// 8   2 = 9-x+1
+	// 7   3 = 9-x+1
+	// 6   0 = 6-x+0
+	// 5   2 = 6-x+1
+	// 4   3 = 6-x+1
+	// 3   0 = 3-x+0
+	// 2   2 = 3-x+1
+	// 1   3 = 3-x+1
+	//
+	// z=(a-x+b)
+	//
+	// x   a
+	// -----
+	// 9   9 = ((x+2)/3)*3
+	// 8   9 = ((x+2)/3)*3
+	// 7   9 = ((x+2)/3)*3
+	// 6   6 = ((x+2)/3)*3
+	// 5   6 = ((x+2)/3)*3
+	// 4   6 = ((x+2)/3)*3
+	// 3   3 = ((x+2)/3)*3
+	// 2   3 = ((x+2)/3)*3
+	// 1   3 = ((x+2)/3)*3
+	//
+	// a=(((x+2)/3)*3)
+	//
+	// x   b
+	// -----
+	// 9   0 = 1-((x+2)%3/2)
+	// 8   1 = 1-((x+2)%3/2)
+	// 7   1 = 1-((x+2)%3/2)
+	// 6   0 = 1-((x+2)%3/2)
+	// 5   1 = 1-((x+2)%3/2)
+	// 4   1 = 1-((x+2)%3/2)
+	// 3   0 = 1-((x+2)%3/2)
+	// 2   1 = 1-((x+2)%3/2)
+	// 1   1 = 1-((x+2)%3/2)
+	//
+	// b=(1-((x+2)%3/2))
+	//
+	// z=(a-x+b)
+	// z=(a-x+(1-((x+2)%3/2)))
+	// a=(((x+2)/3)*3)
+	// z=((((x+2)/3)*3)-x+(1-((x+2)%3/2)))
+	// y=((x*4/3)+z)
+	// y=((x*4/3)+((((x+2)/3)*3)-x+(1-((x+2)%3/2))))
+	//
+	// yay!
+	*outputsize=((inputsize*4/3)+((((inputsize+2)/3)*3)-
+				inputsize+(1-((inputsize+2)%3/2))));
+	*output=new char [(*outputsize)+1];
+
+	uint64_t	outputindex=0;
+	unsigned char	data[3];
+	uint64_t	bytesremaining=0;
+	for (uint64_t inputindex=0;
+			inputindex<inputsize;
+			inputindex=inputindex+3) {
+
+		bytesremaining=inputsize-inputindex;
+		if (bytesremaining>=3) {
+			rawbuffer::copy(data,input+inputindex,3);
+		} else {
+			rawbuffer::copy(data,input+inputindex,bytesremaining);
+			rawbuffer::zero(data+bytesremaining,3-(bytesremaining));
+		}
+
+		(*output)[outputindex++]=b64code[data[0]>>2];
+		(*output)[outputindex++]=b64code[(data[0]<<4|data[1]>>4)&0x3F];
+		(*output)[outputindex++]=b64code[(data[1]<<2|data[2]>>6)&0x3F];
+		(*output)[outputindex++]=b64code[data[2]&0x3F];
+	}
+	(*output)[outputindex]='\0';
+
+	// convert any excess A's to ='s
+	uint64_t	excess=3-bytesremaining;
+	for (uint64_t i=0; i<excess; i++) {
+		if ((*output)[--outputindex]=='A') {
+			(*output)[outputindex]='=';
+		}
+	}
+}
+
+unsigned char *charstring::base64Decode(const char *input) {
+	return base64Decode(input,charstring::length(input));
+}
+
+unsigned char *charstring::base64Decode(const char *input,
+						uint64_t inputsize) {
+	unsigned char	*retval=NULL;
+	uint64_t	retvalsize=0;
+	base64Decode(input,inputsize,&retval,&retvalsize);
+	return retval;
+}
+
+void charstring::base64Decode(const char *input, uint64_t inputsize,
+				unsigned char **output, uint64_t *outputsize) {
+
+	// handle null input
+	if (!input) {
+		*output=NULL;
+		*outputsize=0;
+		return;
+	}
+
+	// handle 0-length input
+	if (!inputsize) {
+		*output=(unsigned char *)charstring::duplicate("");
+		*outputsize=0;
+		return;
+	}
+
+	// handle real input...
+	*outputsize=inputsize*3/4;
+	*output=new unsigned char [(*outputsize)+1];
+	uint64_t	outputindex=0;
+	unsigned char	data[4];
+	uint64_t	inputindex=0;
+	while (inputindex<inputsize) {
+
+		data[0]=b64dcode[(int)input[inputindex++]];
+		data[1]=b64dcode[(int)input[inputindex++]];
+		data[2]=b64dcode[(int)input[inputindex++]];
+		data[3]=b64dcode[(int)input[inputindex++]];
+
+		(*output)[outputindex++]=data[0]<<2|data[1]>>4;
+		(*output)[outputindex++]=(data[1]&0x0F)<<4|data[2]>>2;
+		(*output)[outputindex++]=(data[2]&0x03)<<6|data[3];
+	}
+	(*output)[outputindex]='\0';
+
+	// the output could contain some trailing \0's that are artifacts of
+	// the ='s in the encoded data, no big deal if the decoded data is
+	// supposed to be a string, but not ok for binary data.  Reduce
+	// outputsize accordingly.
+
+	// there can be at most 2 trailing ='s, each equal represents an
+	// additional trailing NULL, reduce outputsize accordingly
+	(*outputsize)-=(input[--inputindex]=='=')+
+				(input[--inputindex]=='=');
+}
+
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

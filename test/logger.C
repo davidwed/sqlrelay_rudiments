@@ -35,7 +35,7 @@ int main(int argc, const char **argv) {
 	char	*header=logger::logHeader("logtest");
 	lg.write(header,0,"test");
 	lg.write(header,0,'t');
-	lg.write(header,0,(long)12345);
+	lg.write(header,0,(int32_t)12345);
 	lg.write(header,0,123.45);
 	delete[] header;
 

@@ -3,6 +3,7 @@
 
 #include <rudiments/charstring.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -62,15 +63,15 @@ int main(int argc, const char **argv) {
 
 
 	// duplicate the string and display the duplicated string
-	char	*hello=charstring::duplicate(s);
-	char	*ell=charstring::subString(hello,1,3);
-	char	*lle=charstring::subString(hello,3,1);
-	printf("hello: %s\n",hello);
+	char	*hellothere=charstring::duplicate(s);
+	char	*ell=charstring::subString(hellothere,1,3);
+	char	*lle=charstring::subString(hellothere,3,1);
+	printf("hello: %s\n",hellothere);
 	printf("ell: %s\n",ell);
 	printf("ell: %s\n",lle);
 
 	// make sure to clean up what duplicate() returns
-	delete[] hello;
+	delete[] hellothere;
 	delete[] ell;
 	delete[] lle;
 
@@ -144,6 +145,130 @@ int main(int argc, const char **argv) {
 	printf("unescapedstr	: %s\n",unescapedstr);
 	delete[] unescapedstr;
 	delete[] escapedstr;
+
+	// from Thomas Hobbes's Leviathan...
+	unsigned char	base64str1[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.";
+	unsigned char	base64str2[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure";
+	unsigned char	base64str3[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasur";
+	unsigned char	base64str4[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasu";
+
+	char	*encoded1=charstring::base64Encode(base64str1);
+	printf("str:\n%s\n",base64str1);
+	printf("encoded:\n%s\n",encoded1);
+	unsigned char	*decoded1=charstring::base64Decode(encoded1);
+	printf("decoded:\n%s\n",decoded1);
+	printf("same as original? %d\n",
+		!charstring::compare((char *)decoded1,(char *)base64str1));
+	delete[] encoded1;
+	delete[] decoded1;
+
+	char	*encoded2=charstring::base64Encode(base64str2);
+	printf("str:\n%s\n",base64str2);
+	printf("encoded:\n%s\n",encoded2);
+	unsigned char	*decoded2=charstring::base64Decode(encoded2);
+	printf("decoded:\n%s\n",decoded2);
+	printf("same as original? %d\n",
+		!charstring::compare((char *)decoded2,(char *)base64str2));
+	delete[] encoded2;
+	delete[] decoded2;
+
+	char	*encoded3=charstring::base64Encode(base64str3);
+	printf("str:\n%s\n",base64str3);
+	printf("encoded:\n%s\n",encoded3);
+	unsigned char	*decoded3=charstring::base64Decode(encoded3);
+	printf("decoded:\n%s\n",decoded3);
+	printf("same as original? %d\n",
+		!charstring::compare((char *)decoded3,(char *)base64str3));
+	delete[] encoded3;
+	delete[] decoded3;
+
+	char	*encoded4=charstring::base64Encode(base64str4);
+	printf("str:\n%s\n",base64str4);
+	printf("encoded:\n%s\n",encoded4);
+	unsigned char	*decoded4=charstring::base64Decode(encoded4);
+	printf("decoded:\n%s\n",decoded4);
+	printf("same as original? %d\n",
+		!charstring::compare((char *)decoded4,(char *)base64str4));
+	delete[] encoded4;
+	delete[] decoded4;
+
+	unsigned char	bytes[6]={0x00,0x00,0x00,0x00,0x00,0x00};
+	char		*encodedbytes;
+	uint64_t	encodedlen;
+	unsigned char	*decodedbytes;
+	uint64_t	decodedlen;
+	charstring::base64Encode(bytes,6,&encodedbytes,&encodedlen);
+	charstring::base64Decode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	printf("bytes: \"");
+	charstring::safePrint((char *)bytes,6);
+	printf("\"\n");
+	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("decoded bytes: \"");
+	charstring::safePrint((char *)decodedbytes,decodedlen);
+	printf("\"\n");
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+	charstring::base64Encode(bytes,5,&encodedbytes,&encodedlen);
+	charstring::base64Decode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	printf("bytes: \"");
+	charstring::safePrint((char *)bytes,5);
+	printf("\"\n");
+	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("decoded bytes: \"");
+	charstring::safePrint((char *)decodedbytes,decodedlen);
+	printf("\"\n");
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+	charstring::base64Encode(bytes,4,&encodedbytes,&encodedlen);
+	charstring::base64Decode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	printf("bytes: \"");
+	charstring::safePrint((char *)bytes,4);
+	printf("\"\n");
+	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("decoded bytes: \"");
+	charstring::safePrint((char *)decodedbytes,decodedlen);
+	printf("\"\n");
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+	charstring::base64Encode(bytes,3,&encodedbytes,&encodedlen);
+	charstring::base64Decode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	printf("bytes: \"");
+	charstring::safePrint((char *)bytes,3);
+	printf("\"\n");
+	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("decoded bytes: \"");
+	charstring::safePrint((char *)decodedbytes,decodedlen);
+	printf("\"\n");
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+	charstring::base64Encode(bytes,2,&encodedbytes,&encodedlen);
+	charstring::base64Decode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	printf("bytes: \"");
+	charstring::safePrint((char *)bytes,2);
+	printf("\"\n");
+	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("decoded bytes: \"");
+	charstring::safePrint((char *)decodedbytes,decodedlen);
+	printf("\"\n");
+	delete[] encodedbytes;
+	delete[] decodedbytes;
+	charstring::base64Encode(bytes,1,&encodedbytes,&encodedlen);
+	charstring::base64Decode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	printf("bytes: \"");
+	charstring::safePrint((char *)bytes,1);
+	printf("\"\n");
+	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("decoded bytes: \"");
+	charstring::safePrint((char *)decodedbytes,decodedlen);
+	printf("\"\n");
+	delete[] encodedbytes;
+	delete[] decodedbytes;
 
 	
 	const char	*alphabet="aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";

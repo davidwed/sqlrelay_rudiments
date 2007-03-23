@@ -18,9 +18,12 @@ int main(int argc, const char **argv) {
 		exit(0);
 	}
 
-	uint32_t	buffersize=charstring::toUnsignedInt32(argv[1]);
-	uint32_t	bytesperiteration=charstring::toUnsignedInt32(argv[2]);
-	uint32_t	iterations=charstring::toUnsignedInt32(argv[3]);
+	uint32_t	buffersize=
+				charstring::toUnsignedInteger(argv[1]);
+	uint32_t	bytesperiteration=
+				charstring::toUnsignedInteger(argv[2]);
+	uint32_t	iterations=
+				charstring::toUnsignedInteger(argv[3]);
 
 	char	*bytes=new char[bytesperiteration];
 	if (!bytes) {

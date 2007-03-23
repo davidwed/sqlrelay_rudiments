@@ -345,6 +345,38 @@ class charstring {
 			// parameter and returns the result in "output" and
 			// "outputsize" rather than in a return value
 
+		static	char	*base64Encode(const unsigned char *input);
+			// base64-encodes "input" and returns it in a buffer
+			// allocated inside the function.  This buffer must be
+			// deleted by the calling program.
+		static	char	*base64Encode(const unsigned char *input,
+						uint64_t inputsize);
+			// similar to base64Encode above but only encodes
+			// the first "inputsize" characters of "input"
+		static	void	base64Encode(const unsigned char *input,
+						uint64_t inputsize,
+						char **output,
+						uint64_t *outputsize);
+			// similar to base64Encode() above, but returns the
+			// result in "output" and "outputsize" rather than in a
+			// return value
+
+		static	unsigned char	*base64Decode(const char *input);
+			// base64-decodes "input" and returns it in a buffer
+			// allocated inside the function.  This buffer must be
+			// deleted by the calling program.
+		static	unsigned char	*base64Decode(const char *input,
+							uint64_t inputsize);
+			// similar to base64Decode above but only decodes
+			// the first "inputsize" characters of "input"
+		static	void	base64Decode(const char *input,
+						uint64_t inputsize,
+						unsigned char **output,
+						uint64_t *outputsize);
+			// similar to base64Decode() above, but returns the
+			// result in "output" and "outputsize" rather than in a
+			// return value
+
 		static	void	leftJustify(char *str, int length);
 			// Moves leading spaces to the end of "str" for
 			// "length" characters.

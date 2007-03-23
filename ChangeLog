@@ -3,6 +3,7 @@
 	regularexpression wasn't setting the match count correctly, fixed that
 	added charstring::subString() method
 	added missing lingerOnClose(), fixed dontLingerOnClose()
+	added base64 encode/decode methods
 
 0.30 - changed commandline::value() to commandline::getValue()
 	fixed a memory leak in dictionary

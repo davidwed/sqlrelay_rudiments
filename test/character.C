@@ -10,7 +10,7 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	for (unsigned char c=0; c<128; c++) {
+	for (char c=0; (unsigned char)c<128; c++) {
 
 		printf("Character: \"%c\" (%d)\n",c,c);
 
