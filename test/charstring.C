@@ -404,4 +404,72 @@ int main(int argc, const char **argv) {
 	printf("size of -10 is: %d\n",charstring::integerLength((long)-10));
 	printf("size of -100 is: %d\n",charstring::integerLength((long)-100));
 	printf("size of -1000 is: %d\n",charstring::integerLength((long)-1000));
+
+
+	uint64_t	testuint64=18446744073709551615;
+	char		*teststr=charstring::parseNumber(testuint64);
+	printf("18446744073709551615=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testuint64,40);
+	printf("18446744073709551615=%s\n",teststr);
+	delete[] teststr;
+
+	int64_t		testint64=9223372036854775807;
+	teststr=charstring::parseNumber(testint64);
+	printf("9223372036854775807=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testint64,40);
+	printf("9223372036854775807=%s\n",teststr);
+	testint64=-9223372036854775807;
+	teststr=charstring::parseNumber(testint64);
+	printf("-9223372036854775807=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testint64,40);
+	printf("-9223372036854775807=%s\n",teststr);
+	delete[] teststr;
+
+
+	uint32_t	testuint32=4294967295;
+	teststr=charstring::parseNumber(testuint32);
+	printf("4294967295=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testuint32,40);
+	printf("4294967295=%s\n",teststr);
+	delete[] teststr;
+
+	int32_t		testint32=2147483647;
+	teststr=charstring::parseNumber(testint32);
+	printf("2147483647=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testint32,40);
+	printf("2147483647=%s\n",teststr);
+	testint32=-2147483647;
+	teststr=charstring::parseNumber(testint32);
+	printf("-2147483647=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testint32,40);
+	printf("-2147483647=%s\n",teststr);
+	delete[] teststr;
+
+	uint16_t	testuint16=65535;
+	teststr=charstring::parseNumber(testuint16);
+	printf("65535=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testuint16,40);
+	printf("65535=%s\n",teststr);
+	delete[] teststr;
+
+	int16_t		testint16=32767;
+	teststr=charstring::parseNumber(testint16);
+	printf("32767=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testint16,40);
+	printf("32767=%s\n",teststr);
+	testint16=-32767;
+	teststr=charstring::parseNumber(testint16);
+	printf("-32767=%s\n",teststr);
+	delete[] teststr;
+	teststr=charstring::parseNumber(testint16,40);
+	printf("-32767=%s\n",teststr);
+	delete[] teststr;
 }

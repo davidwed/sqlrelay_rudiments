@@ -505,7 +505,15 @@ char *charstring::parseNumber(uint16_t number,
 	int	len=integerLength(number);
 	int	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*hd",zeropadding,number);
+	int	strindex=strlength-1;
+	str[strindex--]='\0';
+	while (number) {
+		str[strindex--]='0'+number%10;
+		number/=10;
+	}
+	while (strindex>-1) {
+		str[strindex--]='0';
+	}
 	return str;
 }
 
@@ -531,7 +539,15 @@ char *charstring::parseNumber(uint32_t number,
 	int	len=integerLength(number);
 	int	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*d",zeropadding,number);
+	int	strindex=strlength-1;
+	str[strindex--]='\0';
+	while (number) {
+		str[strindex--]='0'+number%10;
+		number/=10;
+	}
+	while (strindex>-1) {
+		str[strindex--]='0';
+	}
 	return str;
 }
 
@@ -544,7 +560,7 @@ char *charstring::parseNumber(int64_t number,
 	int	len=integerLength(number);
 	int	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*lld",zeropadding,number);
+	snprintf(str,strlength,"%0*lld",zeropadding,(long long)number);
 	return str;
 }
 
@@ -557,7 +573,15 @@ char *charstring::parseNumber(uint64_t number,
 	int	len=integerLength(number);
 	int	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*lld",zeropadding,number);
+	int	strindex=strlength-1;
+	str[strindex--]='\0';
+	while (number) {
+		str[strindex--]='0'+number%10;
+		number/=10;
+	}
+	while (strindex>-1) {
+		str[strindex--]='0';
+	}
 	return str;
 }
 

@@ -4,6 +4,7 @@
 	added charstring::subString() method
 	added missing lingerOnClose(), fixed dontLingerOnClose()
 	added base64 encode/decode methods
+	fixed charstring::parseNumber() for unsigned int's
 
 0.30 - changed commandline::value() to commandline::getValue()
 	fixed a memory leak in dictionary
