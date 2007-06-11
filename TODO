@@ -1,3 +1,5 @@
+QNX doesn't have sys/fcntl.h
+
 printbits for 8,16,32,64 bit-long values
 
 add missing programming docs

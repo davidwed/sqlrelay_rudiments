@@ -33,7 +33,9 @@
 	#include <unistd.h>
 #endif
 #include <fcntl.h>
-#include <sys/fcntl.h>
+#ifdef HAVE_SYS_FCNTL_H
+	#include <sys/fcntl.h>
+#endif
 #ifdef HAVE_IOCTL
 	#include <sys/ioctl.h>
 #endif

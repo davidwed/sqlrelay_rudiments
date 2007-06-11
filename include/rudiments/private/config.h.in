@@ -472,6 +472,9 @@
 /* Some systems have struct timespec */
 #undef HAVE_STRUCT_TIMESPEC
 
+/* Some systems have struct timespec in sys/siginfo.h */
+#undef HAVE_STRUCT_TIMESPEC_IN_SIGINFO
+
 /* Some systems have swab with a char * argument */
 #undef HAVE_SWAB_CHAR
 
@@ -484,6 +487,9 @@
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
 #undef HAVE_SYS_DIR_H
+
+/* Some systems have sys/fcntl.h */
+#undef HAVE_SYS_FCNTL_H
 
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */

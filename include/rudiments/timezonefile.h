@@ -32,19 +32,19 @@ class timezonefile {
 				// Parses "filename".  Returns true on success
 				// and false on failure.
 
-		long		getTimeCount();
+		unsigned long	getTimeCount();
 				// Returns the number of transition times or
 				// local times stored in the file.
-		long		*getTransitionTimes();
+		unsigned long	*getTransitionTimes();
 				// Returns an array of transition times.
-		long		getTransitionTime(int index);
+		unsigned long	getTransitionTime(int index);
 				// Returns the transition time at "index".
 		unsigned char	*getLocalTimes();
 				// Returns an array of local times.
 		unsigned char	getLocalTimes(int index);
 				// Returns the local time at "index".
 
-		long		getTypeCount();
+		unsigned long	getTypeCount();
 				// Returns the number of time type info's
 				// stored in the file.
 		ttinfo		**getTimeTypeInfos();
@@ -52,19 +52,19 @@ class timezonefile {
 		ttinfo		*getTimeTypeInfo(int index);
 				// Returns the time type info at "index".
 
-		long		getLeapCount();
+		unsigned long	getLeapCount();
 				// Returns the number of leap second times or
 				// total leap seconds in the file.
-		long		*getLeapSecondTimes();
+		unsigned long	*getLeapSecondTimes();
 				// Returns an array of leap second times.
-		long		getLeapSecondTime(int index);
+		unsigned long	getLeapSecondTime(int index);
 				// Returns the leap second time at "index".
-		long		*getTotalLeapSeconds();
+		unsigned long	*getTotalLeapSeconds();
 				// Returns an array of total leap seconds.
-		long		getTotalLeapSeconds(int index);
+		unsigned long	getTotalLeapSeconds(int index);
 				// Returns the total leap seconds at "index".
 
-		long		getIsSTDCount();
+		unsigned long	getIsSTDCount();
 				// Returns the number of standard or wall
 				// indicators in the file.
 		unsigned char	*getStandardOrWallIndicators();
@@ -74,7 +74,7 @@ class timezonefile {
 				// Returns the standard or wall indicator at
 				// "index".
 
-		long		getIsGMTCount();
+		unsigned long	getIsGMTCount();
 				// Returns the number of GMT/UTC or local
 				// indicators in the file.
 		unsigned char	*getUTCOrLocalIndicators();
@@ -83,7 +83,7 @@ class timezonefile {
 				// Returns the UTC or local indicator at
 				// "index".
 
-		long		getCharacterCount();
+		unsigned long	getCharacterCount();
 				// Returns the number of characters in the
 				// raw time zone string.
 		unsigned char	*getRawTimeZoneString();

@@ -5,7 +5,12 @@
 
 #include <sys/time.h>
 
-#ifndef HAVE_STRUCT_TIMESPEC
+#ifdef HAVE_STRUCT_TIMESPEC_IN_SIGINFO
+	#include <sys/siginfo.h>
+#endif
+
+
+#if !defined(HAVE_STRUCT_TIMESPEC) && !defined(HAVE_STRUCT_TIMESPEC_IN_SIGINFO)
 struct timespec {
 	time_t	tv_sec;
 	long	tv_nsec;
