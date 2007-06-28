@@ -25,7 +25,7 @@ class directoryprivate {
 };
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_READDIR_R)
+#if !defined(RUDIMENTS_HAVE_READDIR_R)
 static mutex	*_rdmutex;
 #endif
 
@@ -59,8 +59,10 @@ bool directory::close() {
 	return retval;
 }
 
-#ifdef HAVE_READDIR_R
 int64_t directory::bufferSize(DIR *dirp) {
+#ifdef RUDIMENTS_HAVE_READDIR_R
+	return 0;
+#else
 	int64_t	name_max=maxFileNameLength();
 	if (name_max==-1) {
 		return -1;
@@ -71,8 +73,8 @@ int64_t directory::bufferSize(DIR *dirp) {
 	#else
         	return sizeof(struct direct)+name_max+1;
 	#endif
-}
 #endif
+}
 
 uint64_t directory::getChildCount() {
 
@@ -85,7 +87,7 @@ uint64_t directory::getChildCount() {
 	rewinddir(pvt->_dir);
 	pvt->_currentindex=0;
 
-	#ifdef HAVE_READDIR_R
+	#ifdef RUDIMENTS_HAVE_READDIR_R
 		// get the size of the buffer
 		int64_t	size=bufferSize(pvt->_dir);
 		if (size==-1) {
@@ -118,22 +120,18 @@ uint64_t directory::getChildCount() {
 		#else
 			direct	*entry;
 		#endif
-		#ifdef RUDIMENTS_HAS_THREADS
 		if (_rdmutex && !_rdmutex->lock()) {
 			return 0;
 		}
-		#endif
 		uint64_t	count=0;
 		for (;;) {
 			do {
 				entry=readdir(pvt->_dir);
 			} while (!entry && error::getErrorNumber()==EINTR);
 			if (!entry) {
-				#ifdef RUDIMENTS_HAS_THREADS
 				if (_rdmutex) {
 					_rdmutex->unlock();
 				}
-				#endif
 				return pvt->_currentindex;
 			}
 			pvt->_currentindex++;
@@ -158,7 +156,7 @@ char *directory::getChildName(uint64_t index) {
 		pvt->_currentindex=0;
 	}
 
-	#ifdef HAVE_READDIR_R
+	#ifdef RUDIMENTS_HAVE_READDIR_R
 		// get the size of the buffer
 		int64_t	size=bufferSize(pvt->_dir);
 		if (size==-1) {
@@ -194,11 +192,9 @@ char *directory::getChildName(uint64_t index) {
 		#else
 			direct	*entry;
 		#endif
-		#ifdef RUDIMENTS_HAS_THREADS
 		if (_rdmutex && !_rdmutex->lock()) {
 			return NULL;
 		}
-		#endif
 		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
 			do {
 				entry=readdir(pvt->_dir);
@@ -209,11 +205,9 @@ char *directory::getChildName(uint64_t index) {
 			pvt->_currentindex++;
 		}
 		char	*retval=charstring::duplicate(entry->d_name);
-		#ifdef RUDIMENTS_HAS_THREADS
 		if (_rdmutex) {
 			_rdmutex->unlock();
 		}
-		#endif
 		return retval;
 	#endif
 }
@@ -270,9 +264,8 @@ bool directory::changeRoot(const char *path) {
 	return !result;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool directory::needsMutex() {
-	#if !defined(HAVE_READDIR_R)
+	#if !defined(RUDIMENTS_HAVE_READDIR_R)
 		return true;
 	#else
 		return false;
@@ -280,11 +273,10 @@ bool directory::needsMutex() {
 }
 
 void directory::setMutex(mutex *mtx) {
-	#if !defined(HAVE_READDIR_R)
+	#if !defined(RUDIMENTS_HAVE_READDIR_R)
 		_rdmutex=mtx;
 	#endif
 }
-#endif
 
 int64_t directory::maxFileNameLength(const char *pathname) {
 	int64_t	retval=pathConf(pathname,_PC_NAME_MAX);
@@ -334,11 +326,11 @@ int64_t directory::fpathConf(int name) {
 	int64_t	result;
 	do {
 		result=fpathconf(
-				#if defined(HAVE_DIRFD)
+				#if defined(RUDIMENTS_HAVE_DIRFD)
 					dirfd(pvt->_dir)
-				#elif defined(HAVE_DIR_DD_FD)
+				#elif defined(RUDIMENTS_HAVE_DIR_DD_FD)
 					pvt->_dir->dd_fd
-				#elif defined(HAVE_DIR_D_FD)
+				#elif defined(RUDIMENTS_HAVE_DIR_D_FD)
 					pvt->_dir->d_fd
 				#else
 					#error need dirfd replacement

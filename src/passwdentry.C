@@ -20,7 +20,8 @@ class passwdentryprivate {
 	private:
 		#ifndef MINGW32
 			passwd	*_pwd;
-		#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+		#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
+			defined(RUDIMENTS_HAVE_GETPWUID_R)
 			passwd	_pwdbuffer;
 			char	*_buffer;
 		#endif
@@ -32,8 +33,7 @@ class passwdentryprivate {
 };
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && \
-	(!defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R))
+#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || !defined(RUDIMENTS_HAVE_GETPWUID_R))
 static mutex	*pemutex;
 #endif
 
@@ -42,7 +42,8 @@ passwdentry::passwdentry() {
 	pvt=new passwdentryprivate;
 #ifndef MINGW32
 	pvt->_pwd=NULL;
-	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		rawbuffer::zero(&pvt->_pwdbuffer,sizeof(pvt->_pwdbuffer));
 		pvt->_buffer=NULL;
 	#endif
@@ -67,7 +68,8 @@ passwdentry &passwdentry::operator=(const passwdentry &p) {
 
 passwdentry::~passwdentry() {
 #ifndef MINGW32
-	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
@@ -141,9 +143,9 @@ const char *passwdentry::getShell() const {
 #endif
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool passwdentry::needsMutex() {
-	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+	#if !defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETPWUID_R)
 		return true;
 	#else
 		return false;
@@ -151,11 +153,11 @@ bool passwdentry::needsMutex() {
 }
 
 void passwdentry::setMutex(mutex *mtx) {
-	#if !defined(HAVE_GETPWNAM_R) || !defined(HAVE_GETPWUID_R)
+	#if !defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETPWUID_R)
 		pemutex=mtx;
 	#endif
 }
-#endif
 
 bool passwdentry::initialize(const char *username) {
 	return initialize(username,0);
@@ -168,7 +170,8 @@ bool passwdentry::initialize(uid_t userid) {
 #ifndef MINGW32
 bool passwdentry::initialize(const char *username, uid_t userid) {
 
-	#if defined(HAVE_GETPWNAM_R) && defined(HAVE_GETPWUID_R)
+	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		if (pvt->_pwd) {
 			pvt->_pwd=NULL;
 			delete[] pvt->_buffer;
@@ -181,8 +184,8 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
-			#if defined(HAVE_GETPWNAM_R_5) && \
-				defined(HAVE_GETPWUID_R_5)
+			#if defined(RUDIMENTS_HAVE_GETPWNAM_R_5) && \
+				defined(RUDIMENTS_HAVE_GETPWUID_R_5)
 			if (!((username)
 				?(getpwnam_r(username,
 						&pvt->_pwdbuffer,
@@ -194,8 +197,8 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 						&pvt->_pwd)))) {
 				return (pvt->_pwd!=NULL);
 			}
-			#elif defined(HAVE_GETPWNAM_R_4) && \
-				defined(HAVE_GETPWUID_R_4)
+			#elif defined(RUDIMENTS_HAVE_GETPWNAM_R_4) && \
+				defined(RUDIMENTS_HAVE_GETPWUID_R_4)
 			if ((username)
 				?(pvt->_pwd=getpwnam_r(username,
 							&pvt->_pwdbuffer,
@@ -216,17 +219,11 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		return false;
 	#else
 		pvt->_pwd=NULL;
-		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(pemutex && !pemutex->lock()) &&
 			((pvt->_pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL) &&
 			!(pemutex && !pemutex->unlock()));
-		#else
-		return (((pvt->_pwd=((username)
-				?getpwnam(username)
-				:getpwuid(userid)))!=NULL));
-		#endif
 	#endif
 }
 #else

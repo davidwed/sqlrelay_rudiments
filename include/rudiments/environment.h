@@ -44,12 +44,10 @@ class environment {
 				// Prints the environment variable list to
 				// stdout.
 
-#ifdef RUDIMENTS_HAS_THREADS
 		static	void	setMutex(mutex *mtx);
 			// Allows you to supply a mutex if the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
-#endif
 };
 
 #ifdef RUDIMENTS_NAMESPACE

@@ -12,6 +12,4 @@
 	#include <grp.h>
 #endif
 
-#ifdef RUDIMENTS_HAS_THREADS
-	#include <rudiments/mutex.h>
-#endif
+#include <rudiments/mutex.h>

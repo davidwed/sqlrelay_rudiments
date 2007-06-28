@@ -15,13 +15,11 @@
 						struct flock *retlck) const;
 		bool	unlock(short whence, off64_t start, off64_t len) const;
 
-		#ifdef HAVE_XATTRS
 		bool	setAttribute(const char *name,
 						const void *value,
 						size_t size, int flags) const;
 		const char * const	*attributeArray(const char *buffer,
 							size_t size) const;
-		#endif
 
 		void	fileClone(const file &f);
 

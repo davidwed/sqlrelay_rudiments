@@ -218,7 +218,6 @@ class datetime {
 				// and a timezone.
 
 
-#ifdef RUDIMENTS_HAS_THREADS
 		// Many of the functions that the datetime class uses internally
 		// are not reentrant and thus not thread-safe.  Indeed, for
 		// some functions, there is no thread-safe version.  If your
@@ -230,7 +229,6 @@ class datetime {
 		static	void	setTimeMutex(mutex *mtx);
 				// Allows you to supply a mutex to regulate
 				// access to the non-reentrant functions.
-#endif
 
 	#include <rudiments/private/datetime.h>
 };

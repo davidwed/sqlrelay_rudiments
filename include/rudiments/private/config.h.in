@@ -27,423 +27,27 @@
 /* Some systems define __tm_zone in their struct tm */
 #undef HAS___TM_ZONE
 
-/* Some systems have arpa/inet.h */
-#undef HAVE_ARPA_INET_H
-
-/* Some systems don't have st_blocks in struct stat */
-#undef HAVE_BLKCNT_T
-
-/* Some systems don't have st_blksize in struct stat */
-#undef HAVE_BLKSIZE_T
-
-/* Some systems have bswap64 */
-#undef HAVE_BSWAP64
-
-/* Some systems have bswap_64 */
-#undef HAVE_BSWAP_64
-
-/* Some systems have byteswap.h */
-#undef HAVE_BYTESWAP_H
-
-/* Some systems have clearenv */
-#undef HAVE_CLEARENV
-
-/* Some systems have clock_nanosleep */
-#undef HAVE_CLOCK_NANOSLEEP
-
-/* Some systems have CMSG_LEN */
-#undef HAVE_CMSG_LEN
-
-/* Some systems have CMSG_SPACE */
-#undef HAVE_CMSG_SPACE
-
-/* Most systems have ftok(const char *, int) */
-#undef HAVE_CONST_CHAR_FTOK
-
-/* Some systems have CreateFileMapping */
-#undef HAVE_CREATE_FILE_MAPPING
-
-/* CreateMutex function exists */
-#undef HAVE_CREATE_MUTEX
-
-/* Some systems have crypt */
-#undef HAVE_CRYPT
-
-/* Some systems have crypt.h */
-#undef HAVE_CRYPT_H
-
-/* Some systems have crypt_r */
-#undef HAVE_CRYPT_R
-
-/* Cygwin style statfs */
-#undef HAVE_CYGWIN_STATFS
-
-/* Darwin style statfs */
-#undef HAVE_DARWIN_STATFS
-
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H
 
-/* Some systems have dirfd */
-#undef HAVE_DIRFD
-
-/* Some systems have DIR.dd_fd */
-#undef HAVE_DIR_DD_FD
-
-/* Some systems have DIR.d_fd */
-#undef HAVE_DIR_D_FD
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Some systems define environ in unistd.h */
-#undef HAVE_ENVIRON
-
-/* Some systems have fcntl */
-#undef HAVE_FCNTL
-
-/* Some systems have fdatasync */
-#undef HAVE_FDATASYNC
-
-/* FreeBSD style statfs */
-#undef HAVE_FREEBSD_STATFS
-
-/* Most systems have ftok() */
-#undef HAVE_FTOK
-
-/* Some systems have getaddrinfo */
-#undef HAVE_GETADDRINFO
-
-/* Some systems have getgrgid_r */
-#undef HAVE_GETGRGID_R
-
-/* Some systems have getgrgid_r */
-#undef HAVE_GETGRGID_R_4
-
-/* Some systems have getgrgid_r */
-#undef HAVE_GETGRGID_R_5
-
-/* Some systems have getgrnam_r */
-#undef HAVE_GETGRNAM_R
-
-/* Some systems have getgrnam_r */
-#undef HAVE_GETGRNAM_R_4
-
-/* Some systems have getgrnam_r */
-#undef HAVE_GETGRNAM_R_5
-
-/* Some systems have gethostbyaddr_r */
-#undef HAVE_GETHOSTBYADDR_R
-
-/* Some systems have gethostbyaddr_r */
-#undef HAVE_GETHOSTBYADDR_R_7
-
-/* Some systems have gethostbyaddr_r */
-#undef HAVE_GETHOSTBYADDR_R_8
-
-/* Some systems have gethostbyname_r */
-#undef HAVE_GETHOSTBYNAME_R
-
-/* Some systems have gethostbyname_r */
-#undef HAVE_GETHOSTBYNAME_R_5
-
-/* Some systems have gethostbyname_r */
-#undef HAVE_GETHOSTBYNAME_R_6
-
-/* Some systems have getprotobyname_r */
-#undef HAVE_GETPROTOBYNAME_R
-
-/* Some systems have getprotobyname_r */
-#undef HAVE_GETPROTOBYNAME_R_4
-
-/* Some systems have getprotobyname_r */
-#undef HAVE_GETPROTOBYNAME_R_5
-
-/* Some systems have getprotobynumber_r */
-#undef HAVE_GETPROTOBYNUMBER_R
-
-/* Some systems have getprotobynumber_r */
-#undef HAVE_GETPROTOBYNUMBER_R_4
-
-/* Some systems have getprotobynumber_r */
-#undef HAVE_GETPROTOBYNUMBER_R_5
-
-/* Some systems have getpwnam_r */
-#undef HAVE_GETPWNAM_R
-
-/* Some systems have getpwnam_r */
-#undef HAVE_GETPWNAM_R_4
-
-/* Some systems have getpwnam_r */
-#undef HAVE_GETPWNAM_R_5
-
-/* Some systems have getpwuid_r */
-#undef HAVE_GETPWUID_R
-
-/* Some systems have getpwuid_r */
-#undef HAVE_GETPWUID_R_4
-
-/* Some systems have getpwuid_r */
-#undef HAVE_GETPWUID_R_5
-
-/* Some systems have getrpcbyname */
-#undef HAVE_GETRPCBYNAME
-
-/* Some systems have getrpcbyname_r */
-#undef HAVE_GETRPCBYNAME_R
-
-/* Some systems have getrpcbyname_r */
-#undef HAVE_GETRPCBYNAME_R_4
-
-/* Some systems have getrpcbyname_r */
-#undef HAVE_GETRPCBYNAME_R_5
-
-/* Some systems have getrpcbynumber */
-#undef HAVE_GETRPCBYNUMBER
-
-/* Some systems have getrpcbynumber_r */
-#undef HAVE_GETRPCBYNUMBER_R
-
-/* Some systems have getrpcbynumber_r */
-#undef HAVE_GETRPCBYNUMBER_R_4
-
-/* Some systems have getrpcbynumber_r */
-#undef HAVE_GETRPCBYNUMBER_R_5
-
-/* Some systems have getservbyname_r */
-#undef HAVE_GETSERVBYNAME_R
-
-/* Some systems have getservbyname_r */
-#undef HAVE_GETSERVBYNAME_R_5
-
-/* Some systems have getservbyname_r */
-#undef HAVE_GETSERVBYNAME_R_6
-
-/* Some systems have getservbyport_r */
-#undef HAVE_GETSERVBYPORT_R
-
-/* Some systems have getservbyport_r */
-#undef HAVE_GETSERVBYPORT_R_5
-
-/* Some systems have getservbyport_r */
-#undef HAVE_GETSERVBYPORT_R_6
-
-/* Some systems have getspnam_r */
-#undef HAVE_GETSPNAM_R
-
-/* Some systems have getspnam_r */
-#undef HAVE_GETSPNAM_R_4
-
-/* Some systems have getspnam_r */
-#undef HAVE_GETSPNAM_R_5
-
-/* Some systems have GetSystemTime */
-#undef HAVE_GETSYSTEMTIME
-
-/* Some systems have inttypes.h */
+/* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
-
-/* Some systems have ioctl */
-#undef HAVE_IOCTL
-
-/* Some systems have io.h */
-#undef HAVE_IO_H
-
-/* Linux style statfs */
-#undef HAVE_LINUX_STATFS
-
-/* Some systems have localtime_r */
-#undef HAVE_LOCALTIME_R
-
-/* Some systems have lrand48 */
-#undef HAVE_LRAND48
-
-/* Some systems have machine/endian.h */
-#undef HAVE_MACHINE_ENDIAN_H
-
-/* Some systems have madvise */
-#undef HAVE_MADVISE
-
-/* Some systems use caddr_t argument for madvise */
-#undef HAVE_MADVISE_CADDR_T
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Some systems have mincore */
-#undef HAVE_MINCORE
-
-/* Some systems use caddr_t argument for mincore */
-#undef HAVE_MINCORE_CADDR_T
-
-/* Some systems have mincore with char argument */
-#undef HAVE_MINCORE_CHAR
-
-/* Some systems have mincore with unsigned char argument */
-#undef HAVE_MINCORE_UCHAR
-
-/* Some systems have mktime */
-#undef HAVE_MKTIME
-
-/* Some systems have mlock */
-#undef HAVE_MLOCK
-
-/* Some systems have mlockall */
-#undef HAVE_MLOCKALL
-
-/* Some systems use caddr_t argument for mlock */
-#undef HAVE_MLOCK_CADDR_T
-
-/* Some systems have mmap */
-#undef HAVE_MMAP
-
-/* Some systems have mprotect */
-#undef HAVE_MPROTECT
-
-/* Some systems use caddr_t argument for mprotect */
-#undef HAVE_MPROTECT_CADDR_T
-
-/* Some msghdr structs have a msg_controllen member */
-#undef HAVE_MSGHDR_MSG_CONTROLLEN
-
-/* Some msghdr structs have a msg_flags member */
-#undef HAVE_MSGHDR_MSG_FLAGS
-
-/* Some systems have msync */
-#undef HAVE_MSYNC
-
-/* Some systems use caddr_t argument for msync */
-#undef HAVE_MSYNC_CADDR_T
-
-/* Some systems have munlock */
-#undef HAVE_MUNLOCK
-
-/* Some systems have munlockall */
-#undef HAVE_MUNLOCKALL
-
-/* Some systems use caddr_t argument for munlock */
-#undef HAVE_MUNLOCK_CADDR_T
-
-/* Some systems use caddr_t argument for munmap */
-#undef HAVE_MUNMAP_CADDR_T
-
-/* Some systems have nanosleep */
-#undef HAVE_NANOSLEEP
-
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
 
-/* NetBSD style statfs */
-#undef HAVE_NETBSD_STATFS
-
-/* NetBSD-3.0 style statvfs */
-#undef HAVE_NETBSD_STATVFS
-
-/* Some systems have netdb.h */
-#undef HAVE_NETDB_H
-
-/* Some systems have netinet/in.h */
-#undef HAVE_NETINET_IN_H
-
-/* Some systems have netinet/tcp.h */
-#undef HAVE_NETINET_TCP_H
-
-/* Some systems define _NSGetEnviron in crt_externs.h */
-#undef HAVE_NSGETENVIRON
-
-/* OpenBSD style statfs */
-#undef HAVE_OPENBSD_STATFS
-
-/* Some systems have OSSwapHostToLittleInt64 */
-#undef HAVE_OSSWAPHOSTTOLITTLEINT64
-
-/* Some systems have OSSwapLittleToHostInt64 */
-#undef HAVE_OSSWAPLITTLETOHOSTINT64
-
-/* Some systems have posix_fadvise */
-#undef HAVE_POSIX_FADVISE
-
-/* Some systems have posix_fallocate */
-#undef HAVE_POSIX_FALLOCATE
-
-/* Some systems have pselect */
-#undef HAVE_PSELECT
-
-/* pthread_mutex_t type exists */
-#undef HAVE_PTHREAD_MUTEX_T
-
-/* Some systems have putenv */
-#undef HAVE_PUTENV
-
-/* Some systems have rand */
-#undef HAVE_RAND
-
-/* Some systems have rand_r */
-#undef HAVE_RAND_R
-
-/* Some systems have readdir_r */
-#undef HAVE_READDIR_R
-
-/* Some systems have regcomp */
-#undef HAVE_REGCOMP
-
-/* Some systems have rpc/rpcent.h */
-#undef HAVE_RPCENT_H
-
-/* Some systems have rpc/rpc.h */
-#undef HAVE_RPC_H
-
-/* Do we have a real-time-clock */
-#undef HAVE_RTC
-
-/* Some systems have semtimedop */
-#undef HAVE_SEMTIMEDOP
-
-/* Some systems define union semun */
-#undef HAVE_SEMUN
-
-/* Some systems have setenv */
-#undef HAVE_SETENV
-
-/* Some systems have setgid */
-#undef HAVE_SETGID
-
-/* Some systems have setuid */
-#undef HAVE_SETUID
-
-/* Some systems have shm_open */
-#undef HAVE_SHM_OPEN
-
-/* struct spwd has sp_expire */
-#undef HAVE_SP_EXPIRE
-
-/* struct spwd has sp_flag */
-#undef HAVE_SP_FLAG
-
-/* struct spwd has sp_inact */
-#undef HAVE_SP_INACT
-
-/* struct spwd has sp_warn */
-#undef HAVE_SP_WARN
-
-/* Some systems have srand */
-#undef HAVE_SRAND
-
-/* Some systems have srand48 */
-#undef HAVE_SRAND48
-
-/* statvfs */
-#undef HAVE_STATVFS
-
-/* Some systems have stdint.h */
+/* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
-
-/* Some systems have strcspn */
-#undef HAVE_STRCSPN
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
@@ -451,55 +55,13 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Some systems have strpbrk */
-#undef HAVE_STRPBRK
-
-/* Some systems have strspn */
-#undef HAVE_STRSPN
-
-/* Some systems have strtof */
-#undef HAVE_STRTOF
-
-/* Some systems have strtold */
-#undef HAVE_STRTOLD
-
-/* Some systems have strtoll */
-#undef HAVE_STRTOLL
-
-/* Some systems have strtoull */
-#undef HAVE_STRTOULL
-
-/* Some systems have struct timespec */
-#undef HAVE_STRUCT_TIMESPEC
-
-/* Some systems have struct timespec in sys/siginfo.h */
-#undef HAVE_STRUCT_TIMESPEC_IN_SIGINFO
-
-/* Some systems have swab with a char * argument */
-#undef HAVE_SWAB_CHAR
-
-/* Some systems have swap64 */
-#undef HAVE_SWAP64
-
-/* Some systems have sys/bitypes.h */
-#undef HAVE_SYS_BITYPES_H
-
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
 #undef HAVE_SYS_DIR_H
 
-/* Some systems have sys/fcntl.h */
-#undef HAVE_SYS_FCNTL_H
-
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */
 #undef HAVE_SYS_NDIR_H
-
-/* Some systems have sys/select.h */
-#undef HAVE_SYS_SELECT_H
-
-/* Some systems have sys/socket.h */
-#undef HAVE_SYS_SOCKET_H
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
@@ -507,38 +69,14 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* Some systems have sys/uio.h */
-#undef HAVE_SYS_UIO_H
-
-/* Some systems don't have S_ISSOCK */
-#undef HAVE_S_ISSOCK
-
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* Some systems have unsetenv */
-#undef HAVE_UNSETENV
-
-/* Some systems have windows.h */
-#undef HAVE_WINDOWS_H
-
-/* Some systems have winsock2.h */
-#undef HAVE_WINSOCK2_H
-
-/* Some systems have extended filesystem attributes */
-#undef HAVE_XATTRS
-
-/* Some systems have __bswap64 */
-#undef HAVE___BSWAP64
 
 /* iov_base is char * */
 #undef IOV_BASE_TYPE
 
 /* Mingw32 environment */
 #undef MINGW32
-
-/* Some systems have swab but don't define it */
-#undef MUST_DEFINE_SWAB
 
 /* Solaris 2.6 has a few missing function prototypes */
 #undef NEED_XNET_PROTOTYPES
@@ -570,11 +108,473 @@
 /* Rudiments supports threads */
 #undef RUDIMENTS_HAS_THREADS
 
+/* Some systems have arpa/inet.h */
+#undef RUDIMENTS_HAVE_ARPA_INET_H
+
+/* Some systems don't have st_blocks in struct stat */
+#undef RUDIMENTS_HAVE_BLKCNT_T
+
+/* Some systems don't have st_blksize in struct stat */
+#undef RUDIMENTS_HAVE_BLKSIZE_T
+
+/* Some systems have bswap64 */
+#undef RUDIMENTS_HAVE_BSWAP64
+
+/* Some systems have bswap_64 */
+#undef RUDIMENTS_HAVE_BSWAP_64
+
+/* Some systems have byteswap.h */
+#undef RUDIMENTS_HAVE_BYTESWAP_H
+
+/* Some systems have clearenv */
+#undef RUDIMENTS_HAVE_CLEARENV
+
+/* Some systems have clock_nanosleep */
+#undef RUDIMENTS_HAVE_CLOCK_NANOSLEEP
+
+/* Some systems have CMSG_LEN */
+#undef RUDIMENTS_HAVE_CMSG_LEN
+
+/* Some systems have CMSG_SPACE */
+#undef RUDIMENTS_HAVE_CMSG_SPACE
+
+/* Most systems have ftok(const char *, int) */
+#undef RUDIMENTS_HAVE_CONST_CHAR_FTOK
+
+/* Some systems have CreateFileMapping */
+#undef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+
+/* CreateMutex function exists */
+#undef RUDIMENTS_HAVE_CREATE_MUTEX
+
+/* Some systems have crypt */
+#undef RUDIMENTS_HAVE_CRYPT
+
+/* Some systems have crypt.h */
+#undef RUDIMENTS_HAVE_CRYPT_H
+
+/* Some systems have crypt_r */
+#undef RUDIMENTS_HAVE_CRYPT_R
+
+/* Cygwin style statfs */
+#undef RUDIMENTS_HAVE_CYGWIN_STATFS
+
+/* Darwin style statfs */
+#undef RUDIMENTS_HAVE_DARWIN_STATFS
+
+/* Some systems have dirfd */
+#undef RUDIMENTS_HAVE_DIRFD
+
+/* Some systems have DIR.dd_fd */
+#undef RUDIMENTS_HAVE_DIR_DD_FD
+
+/* Some systems have DIR.d_fd */
+#undef RUDIMENTS_HAVE_DIR_D_FD
+
+/* Some systems define environ in unistd.h */
+#undef RUDIMENTS_HAVE_ENVIRON
+
+/* Some systems have fcntl */
+#undef RUDIMENTS_HAVE_FCNTL
+
+/* Some systems have fdatasync */
+#undef RUDIMENTS_HAVE_FDATASYNC
+
+/* FreeBSD style statfs */
+#undef RUDIMENTS_HAVE_FREEBSD_STATFS
+
+/* Most systems have ftok() */
+#undef RUDIMENTS_HAVE_FTOK
+
+/* Some systems have getaddrinfo */
+#undef RUDIMENTS_HAVE_GETADDRINFO
+
+/* Some systems have getgrgid_r */
+#undef RUDIMENTS_HAVE_GETGRGID_R
+
+/* Some systems have getgrgid_r */
+#undef RUDIMENTS_HAVE_GETGRGID_R_4
+
+/* Some systems have getgrgid_r */
+#undef RUDIMENTS_HAVE_GETGRGID_R_5
+
+/* Some systems have getgrnam_r */
+#undef RUDIMENTS_HAVE_GETGRNAM_R
+
+/* Some systems have getgrnam_r */
+#undef RUDIMENTS_HAVE_GETGRNAM_R_4
+
+/* Some systems have getgrnam_r */
+#undef RUDIMENTS_HAVE_GETGRNAM_R_5
+
+/* Some systems have gethostbyaddr_r */
+#undef RUDIMENTS_HAVE_GETHOSTBYADDR_R
+
+/* Some systems have gethostbyaddr_r */
+#undef RUDIMENTS_HAVE_GETHOSTBYADDR_R_7
+
+/* Some systems have gethostbyaddr_r */
+#undef RUDIMENTS_HAVE_GETHOSTBYADDR_R_8
+
+/* Some systems have gethostbyname_r */
+#undef RUDIMENTS_HAVE_GETHOSTBYNAME_R
+
+/* Some systems have gethostbyname_r */
+#undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_5
+
+/* Some systems have gethostbyname_r */
+#undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_6
+
+/* Some systems have getprotobyname_r */
+#undef RUDIMENTS_HAVE_GETPROTOBYNAME_R
+
+/* Some systems have getprotobyname_r */
+#undef RUDIMENTS_HAVE_GETPROTOBYNAME_R_4
+
+/* Some systems have getprotobyname_r */
+#undef RUDIMENTS_HAVE_GETPROTOBYNAME_R_5
+
+/* Some systems have getprotobynumber_r */
+#undef RUDIMENTS_HAVE_GETPROTOBYNUMBER_R
+
+/* Some systems have getprotobynumber_r */
+#undef RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_4
+
+/* Some systems have getprotobynumber_r */
+#undef RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_5
+
+/* Some systems have getpwnam_r */
+#undef RUDIMENTS_HAVE_GETPWNAM_R
+
+/* Some systems have getpwnam_r */
+#undef RUDIMENTS_HAVE_GETPWNAM_R_4
+
+/* Some systems have getpwnam_r */
+#undef RUDIMENTS_HAVE_GETPWNAM_R_5
+
+/* Some systems have getpwuid_r */
+#undef RUDIMENTS_HAVE_GETPWUID_R
+
+/* Some systems have getpwuid_r */
+#undef RUDIMENTS_HAVE_GETPWUID_R_4
+
+/* Some systems have getpwuid_r */
+#undef RUDIMENTS_HAVE_GETPWUID_R_5
+
+/* Some systems have getrpcbyname */
+#undef RUDIMENTS_HAVE_GETRPCBYNAME
+
+/* Some systems have getrpcbyname_r */
+#undef RUDIMENTS_HAVE_GETRPCBYNAME_R
+
+/* Some systems have getrpcbyname_r */
+#undef RUDIMENTS_HAVE_GETRPCBYNAME_R_4
+
+/* Some systems have getrpcbyname_r */
+#undef RUDIMENTS_HAVE_GETRPCBYNAME_R_5
+
+/* Some systems have getrpcbynumber */
+#undef RUDIMENTS_HAVE_GETRPCBYNUMBER
+
+/* Some systems have getrpcbynumber_r */
+#undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R
+
+/* Some systems have getrpcbynumber_r */
+#undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4
+
+/* Some systems have getrpcbynumber_r */
+#undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5
+
+/* Some systems have getservbyname_r */
+#undef RUDIMENTS_HAVE_GETSERVBYNAME_R
+
+/* Some systems have getservbyname_r */
+#undef RUDIMENTS_HAVE_GETSERVBYNAME_R_5
+
+/* Some systems have getservbyname_r */
+#undef RUDIMENTS_HAVE_GETSERVBYNAME_R_6
+
+/* Some systems have getservbyport_r */
+#undef RUDIMENTS_HAVE_GETSERVBYPORT_R
+
+/* Some systems have getservbyport_r */
+#undef RUDIMENTS_HAVE_GETSERVBYPORT_R_5
+
+/* Some systems have getservbyport_r */
+#undef RUDIMENTS_HAVE_GETSERVBYPORT_R_6
+
+/* Some systems have getspnam_r */
+#undef RUDIMENTS_HAVE_GETSPNAM_R
+
+/* Some systems have getspnam_r */
+#undef RUDIMENTS_HAVE_GETSPNAM_R_4
+
+/* Some systems have getspnam_r */
+#undef RUDIMENTS_HAVE_GETSPNAM_R_5
+
+/* Some systems have GetSystemTime */
+#undef RUDIMENTS_HAVE_GETSYSTEMTIME
+
+/* Some systems have inttypes.h */
+#undef RUDIMENTS_HAVE_INTTYPES_H
+
+/* Some systems have ioctl */
+#undef RUDIMENTS_HAVE_IOCTL
+
+/* Some systems have io.h */
+#undef RUDIMENTS_HAVE_IO_H
+
+/* Linux style statfs */
+#undef RUDIMENTS_HAVE_LINUX_STATFS
+
+/* Some systems have localtime_r */
+#undef RUDIMENTS_HAVE_LOCALTIME_R
+
+/* Some systems have lrand48 */
+#undef RUDIMENTS_HAVE_LRAND48
+
+/* Some systems have machine/endian.h */
+#undef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
+
+/* Some systems have madvise */
+#undef RUDIMENTS_HAVE_MADVISE
+
+/* Some systems use caddr_t argument for madvise */
+#undef RUDIMENTS_HAVE_MADVISE_CADDR_T
+
+/* Some systems have mincore */
+#undef RUDIMENTS_HAVE_MINCORE
+
+/* Some systems use caddr_t argument for mincore */
+#undef RUDIMENTS_HAVE_MINCORE_CADDR_T
+
+/* Some systems have mincore with char argument */
+#undef RUDIMENTS_HAVE_MINCORE_CHAR
+
+/* Some systems have mincore with unsigned char argument */
+#undef RUDIMENTS_HAVE_MINCORE_UCHAR
+
+/* Some systems have mktime */
+#undef RUDIMENTS_HAVE_MKTIME
+
+/* Some systems have mlock */
+#undef RUDIMENTS_HAVE_MLOCK
+
+/* Some systems have mlockall */
+#undef RUDIMENTS_HAVE_MLOCKALL
+
+/* Some systems use caddr_t argument for mlock */
+#undef RUDIMENTS_HAVE_MLOCK_CADDR_T
+
+/* Some systems have mmap */
+#undef RUDIMENTS_HAVE_MMAP
+
+/* Some systems have mprotect */
+#undef RUDIMENTS_HAVE_MPROTECT
+
+/* Some systems use caddr_t argument for mprotect */
+#undef RUDIMENTS_HAVE_MPROTECT_CADDR_T
+
+/* Some msghdr structs have a msg_controllen member */
+#undef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
+
+/* Some msghdr structs have a msg_flags member */
+#undef RUDIMENTS_HAVE_MSGHDR_MSG_FLAGS
+
+/* Some systems have msync */
+#undef RUDIMENTS_HAVE_MSYNC
+
+/* Some systems use caddr_t argument for msync */
+#undef RUDIMENTS_HAVE_MSYNC_CADDR_T
+
+/* Some systems have munlock */
+#undef RUDIMENTS_HAVE_MUNLOCK
+
+/* Some systems have munlockall */
+#undef RUDIMENTS_HAVE_MUNLOCKALL
+
+/* Some systems use caddr_t argument for munlock */
+#undef RUDIMENTS_HAVE_MUNLOCK_CADDR_T
+
+/* Some systems use caddr_t argument for munmap */
+#undef RUDIMENTS_HAVE_MUNMAP_CADDR_T
+
+/* Some systems have nanosleep */
+#undef RUDIMENTS_HAVE_NANOSLEEP
+
+/* NetBSD style statfs */
+#undef RUDIMENTS_HAVE_NETBSD_STATFS
+
+/* NetBSD-3.0 style statvfs */
+#undef RUDIMENTS_HAVE_NETBSD_STATVFS
+
+/* Some systems have netdb.h */
+#undef RUDIMENTS_HAVE_NETDB_H
+
+/* Some systems have netinet/in.h */
+#undef RUDIMENTS_HAVE_NETINET_IN_H
+
+/* Some systems have netinet/tcp.h */
+#undef RUDIMENTS_HAVE_NETINET_TCP_H
+
+/* Some systems define _NSGetEnviron in crt_externs.h */
+#undef RUDIMENTS_HAVE_NSGETENVIRON
+
+/* OpenBSD style statfs */
+#undef RUDIMENTS_HAVE_OPENBSD_STATFS
+
+/* Some systems have OSSwapHostToLittleInt64 */
+#undef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
+
+/* Some systems have OSSwapLittleToHostInt64 */
+#undef RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64
+
+/* Some systems have posix_fadvise */
+#undef RUDIMENTS_HAVE_POSIX_FADVISE
+
+/* Some systems have posix_fallocate */
+#undef RUDIMENTS_HAVE_POSIX_FALLOCATE
+
+/* Some systems have pselect */
+#undef RUDIMENTS_HAVE_PSELECT
+
+/* pthread_mutex_t type exists */
+#undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T
+
+/* Some systems have putenv */
+#undef RUDIMENTS_HAVE_PUTENV
+
+/* Some systems have rand */
+#undef RUDIMENTS_HAVE_RAND
+
+/* Some systems have rand_r */
+#undef RUDIMENTS_HAVE_RAND_R
+
+/* Some systems have readdir_r */
+#undef RUDIMENTS_HAVE_READDIR_R
+
+/* Some systems have rpc/rpcent.h */
+#undef RUDIMENTS_HAVE_RPCENT_H
+
+/* Some systems have rpc/rpc.h */
+#undef RUDIMENTS_HAVE_RPC_H
+
+/* Do we have a real-time-clock */
+#undef RUDIMENTS_HAVE_RTC
+
+/* Some systems have semtimedop */
+#undef RUDIMENTS_HAVE_SEMTIMEDOP
+
+/* Some systems have setenv */
+#undef RUDIMENTS_HAVE_SETENV
+
+/* Some systems have setgid */
+#undef RUDIMENTS_HAVE_SETGID
+
+/* Some systems have setuid */
+#undef RUDIMENTS_HAVE_SETUID
+
+/* Some systems have shm_open */
+#undef RUDIMENTS_HAVE_SHM_OPEN
+
+/* struct spwd has sp_expire */
+#undef RUDIMENTS_HAVE_SP_EXPIRE
+
+/* struct spwd has sp_flag */
+#undef RUDIMENTS_HAVE_SP_FLAG
+
+/* struct spwd has sp_inact */
+#undef RUDIMENTS_HAVE_SP_INACT
+
+/* struct spwd has sp_warn */
+#undef RUDIMENTS_HAVE_SP_WARN
+
+/* Some systems have srand */
+#undef RUDIMENTS_HAVE_SRAND
+
+/* Some systems have srand48 */
+#undef RUDIMENTS_HAVE_SRAND48
+
+/* statvfs */
+#undef RUDIMENTS_HAVE_STATVFS
+
+/* Some systems have stdint.h */
+#undef RUDIMENTS_HAVE_STDINT_H
+
+/* Some systems have strcspn */
+#undef RUDIMENTS_HAVE_STRCSPN
+
+/* Some systems have strpbrk */
+#undef RUDIMENTS_HAVE_STRPBRK
+
+/* Some systems have strspn */
+#undef RUDIMENTS_HAVE_STRSPN
+
+/* Some systems have strtold */
+#undef RUDIMENTS_HAVE_STRTOLD
+
+/* Some systems have strtoll */
+#undef RUDIMENTS_HAVE_STRTOLL
+
+/* Some systems have strtoull */
+#undef RUDIMENTS_HAVE_STRTOULL
+
+/* Some systems have struct timespec */
+#undef RUDIMENTS_HAVE_STRUCT_TIMESPEC
+
+/* Some systems have struct timespec in sys/siginfo.h */
+#undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO
+
+/* Some systems have swab with a char * argument */
+#undef RUDIMENTS_HAVE_SWAB_CHAR
+
+/* Some systems have swap64 */
+#undef RUDIMENTS_HAVE_SWAP64
+
+/* Some systems have sys/bitypes.h */
+#undef RUDIMENTS_HAVE_SYS_BITYPES_H
+
+/* Some systems have sys/fcntl.h */
+#undef RUDIMENTS_HAVE_SYS_FCNTL_H
+
+/* Some systems have sys/select.h */
+#undef RUDIMENTS_HAVE_SYS_SELECT_H
+
+/* Some systems have sys/socket.h */
+#undef RUDIMENTS_HAVE_SYS_SOCKET_H
+
+/* Some systems have sys/uio.h */
+#undef RUDIMENTS_HAVE_SYS_UIO_H
+
+/* Some systems don't have S_ISSOCK */
+#undef RUDIMENTS_HAVE_S_ISSOCK
+
+/* Some systems have unsetenv */
+#undef RUDIMENTS_HAVE_UNSETENV
+
+/* Some systems have windows.h */
+#undef RUDIMENTS_HAVE_WINDOWS_H
+
+/* Some systems have winsock2.h */
+#undef RUDIMENTS_HAVE_WINSOCK2_H
+
+/* Some systems have extended filesystem attributes */
+#undef RUDIMENTS_HAVE_XATTRS
+
+/* Some systems have __bswap64 */
+#undef RUDIMENTS_HAVE___BSWAP64
+
+/* Some systems have swab but don't define it */
+#undef RUDIMENTS_MUST_DEFINE_SWAB
+
 /* Compiler supports namespaces */
 #undef RUDIMENTS_NAMESPACE
 
 /* Version */
 #undef RUDIMENTS_VERSION
+
+/* Some systems define union semun */
+#undef RUIMENTS_HAVE_SEMUN
 
 /* setsockopt takes a const void * on most systems */
 #undef SETSOCKOPT_OPTVAL_TYPE

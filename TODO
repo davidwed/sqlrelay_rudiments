@@ -1,3 +1,10 @@
+configure script missing RUDIMENTS_HAVE_MEMRCHR
+configure script missing RUDIMENTS_HAVE_MEMMEM
+
+get rid of config.h references in headers
+
+use filedescriptor methods rather than htons/l and friends
+
 QNX doesn't have sys/fcntl.h
 
 printbits for 8,16,32,64 bit-long values

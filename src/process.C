@@ -92,7 +92,7 @@ uid_t process::getEffectiveUserId() {
 }
 
 bool process::setUserId(uid_t uid) {
-#ifdef HAVE_SETUID
+#ifdef RUDIMENTS_HAVE_SETUID
 	return !setuid(uid);
 #else
 	return true;
@@ -132,7 +132,7 @@ gid_t process::getEffectiveGroupId() {
 }
 
 bool process::setGroupId(gid_t gid) {
-#ifdef HAVE_SETGID
+#ifdef RUDIMENTS_HAVE_SETGID
 	return !setgid(gid);
 #else
 	return true;

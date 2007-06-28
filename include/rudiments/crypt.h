@@ -27,7 +27,6 @@ class crypt {
 				// internally and returns it.  The calling
 				// program must deallocate this buffer.
 
-#ifdef RUDIMENTS_HAS_THREADS
 		static	bool	needsMutex();
 			// If your system doesn't support crypt_r() then this
 			// class needs a mutex to assure thread safety.
@@ -39,7 +38,6 @@ class crypt {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
-#endif
 
 	#include <rudiments/private/crypt.h>
 };

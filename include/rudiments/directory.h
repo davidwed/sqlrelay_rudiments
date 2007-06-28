@@ -90,7 +90,6 @@ class directory {
 				// succeed or false if it will fail.
 
 
-#ifdef RUDIMENTS_HAS_THREADS
 		static bool	needsMutex();
 			// If your system doesn't support readdir_r()
 			// then this class needs a mutex to assure thread
@@ -103,7 +102,6 @@ class directory {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
-#endif
 
 	#include <rudiments/private/directory.h>
 };

@@ -2,15 +2,11 @@
 // See the COPYING file for more information.
 
 #include <rudiments/environment.h>
-#ifdef HAVE_GETSYSTEMTIME
-	#include <rudiments/rawbuffer.h>
-#endif
+#include <rudiments/rawbuffer.h>
 
-#ifdef HAVE_WINDOWS_H
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
 #include <time.h>
 #include <sys/types.h>
-#ifdef RUDIMENTS_HAS_THREADS
-	#include <rudiments/mutex.h>
-#endif
+#include <rudiments/mutex.h>

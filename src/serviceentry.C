@@ -19,16 +19,16 @@ class serviceentryprivate {
 	friend class serviceentry;
 	private:
 		servent		*_se;
-		#if defined(HAVE_GETSERVBYNAME_R) || \
-				defined(HAVE_GETSERVBYPORT_R)
+		#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
+				defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 			servent		_sebuffer;
 			char		*_buffer;
 		#endif
 };
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && \
-	(!defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R))
+#if (!defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
+	!defined(RUDIMENTS_HAVE_GETSERVBYPORT_R))
 static mutex	*_semutex;
 #endif
 
@@ -36,7 +36,8 @@ static mutex	*_semutex;
 serviceentry::serviceentry() {
 	pvt=new serviceentryprivate;
 	pvt->_se=NULL;
-	#if defined(HAVE_GETSERVBYNAME_R) && defined(HAVE_GETSERVBYPORT_R)
+	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		rawbuffer::zero(&pvt->_sebuffer,sizeof(pvt->_sebuffer));
 		pvt->_buffer=NULL;
 	#endif
@@ -55,7 +56,8 @@ serviceentry &serviceentry::operator=(const serviceentry &s) {
 }
 
 serviceentry::~serviceentry() {
-	#if defined(HAVE_GETSERVBYNAME_R) && defined(HAVE_GETSERVBYPORT_R)
+	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
@@ -77,9 +79,9 @@ const char * const *serviceentry::getAliasList() const {
 	return pvt->_se->s_aliases;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool serviceentry::needsMutex() {
-	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
+	#if !defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		return true;
 	#else
 		return false;
@@ -87,11 +89,11 @@ bool serviceentry::needsMutex() {
 }
 
 void serviceentry::setMutex(mutex *mtx) {
-	#if !defined(HAVE_GETSERVBYNAME_R) || !defined(HAVE_GETSERVBYPORT_R)
+	#if !defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		_semutex=mtx;
 	#endif
 }
-#endif
 
 bool serviceentry::initialize(const char *servicename, const char *protocol) {
 	return initialize(servicename,0,protocol);
@@ -104,7 +106,8 @@ bool serviceentry::initialize(int port, const char *protocol) {
 bool serviceentry::initialize(const char *servicename, int port,
 						const char *protocol) {
 
-	#if defined(HAVE_GETSERVBYNAME_R) && defined(HAVE_GETSERVBYPORT_R)
+	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		if (pvt->_se) {
 			pvt->_se=NULL;
 			delete[] pvt->_buffer;
@@ -117,8 +120,8 @@ bool serviceentry::initialize(const char *servicename, int port,
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
-			#if defined(HAVE_GETSERVBYNAME_R_6) && \
-				defined(HAVE_GETSERVBYPORT_R_6)
+			#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R_6) && \
+				defined(RUDIMENTS_HAVE_GETSERVBYPORT_R_6)
 			if (!((servicename)
 				?(getservbyname_r(servicename,protocol,
 							&pvt->_sebuffer,
@@ -130,8 +133,8 @@ bool serviceentry::initialize(const char *servicename, int port,
 							&pvt->_se)))) {
 				return (pvt->_se!=NULL);
 			}
-			#elif defined(HAVE_GETSERVBYNAME_R_5) && \
-				defined(HAVE_GETSERVBYPORT_R_5)
+			#elif defined(RUDIMENTS_HAVE_GETSERVBYNAME_R_5) && \
+				defined(RUDIMENTS_HAVE_GETSERVBYPORT_R_5)
 			if ((servicename)
 				?(pvt->_se=getservbyname_r(servicename,protocol,
 							&pvt->_sebuffer,
@@ -152,17 +155,11 @@ bool serviceentry::initialize(const char *servicename, int port,
 		return false;
 	#else
 		pvt->_se=NULL;
-		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(_semutex && !_semutex->lock()) &&
 			((pvt->_se=((servicename)
 				?getservbyname(servicename,protocol)
 				:getservbyport(htons(port),protocol)))!=NULL) &&
 			!(_semutex && !_semutex->unlock()));
-		#else
-		return ((pvt->_se=((servicename)
-				?getservbyname(servicename,protocol)
-				:getservbyport(htons(port),protocol)))!=NULL);
-		#endif
 	#endif
 }
 

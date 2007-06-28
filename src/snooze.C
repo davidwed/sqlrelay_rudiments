@@ -5,11 +5,11 @@
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
-#if defined(HAVE_NANOSLEEP) || defined (HAVE_CLOCK_NANOSLEEP)
+#if defined(RUDIMENTS_HAVE_NANOSLEEP) || defined(RUDIMENTS_HAVE_CLOCK_NANOSLEEP)
 	#include <time.h>
 #else
 	#include <sys/types.h>
-	#ifdef HAVE_SYS_SELECT_H
+	#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
 		#include <sys/select.h>
 	#endif
 	#ifdef HAVE_UNISTD_H
@@ -122,9 +122,9 @@ bool snooze::nanosnooze(timespec *timetosnooze) {
 
 bool snooze::nanosnooze(timespec *timetosnooze, timespec *timeremaining) {
 
-	#ifdef HAVE_NANOSLEEP
+	#ifdef RUDIMENTS_HAVE_NANOSLEEP
 	return !::nanosleep(timetosnooze,timeremaining);
-	#elif HAVE_CLOCK_NANOSLEEP
+	#elif RUDIMENTS_HAVE_CLOCK_NANOSLEEP
 	return !clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
 					timetosnooze,timeremaining);
 	#elif MINGW32
@@ -164,7 +164,7 @@ bool snooze::nanosnooze(timespec *timetosnooze, timespec *timeremaining) {
 		// So, when using select/pselect, we can't return the number of
 		// nanoseconds that were left if a signal interrupts the call.
 		// But, at least we can return the number of seconds.
-		#ifdef HAVE_PSELECT
+		#ifdef RUDIMENTS_HAVE_PSELECT
 		timespec	ts;
 		ts.tv_sec=0;
 		ts.tv_nsec=timetosnooze->tv_nsec;

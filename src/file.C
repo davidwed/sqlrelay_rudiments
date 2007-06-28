@@ -16,7 +16,7 @@
 	#include <unistd.h>
 #endif
 #include <sys/time.h>
-#ifdef HAVE_XATTRS
+#ifdef RUDIMENTS_HAVE_XATTRS
 	#include <sys/xattr.h>
 #endif
 
@@ -393,7 +393,8 @@ bool file::checkLockRemainderFromEnd(short type, off64_t start,
 }
 
 bool file::sequentialAccess(off64_t start, size_t len) const {
-	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_SEQUENTIAL)
+	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
+			defined(POSIX_FADV_SEQUENTIAL)
 	return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
 	#else
 	return true;
@@ -401,7 +402,8 @@ bool file::sequentialAccess(off64_t start, size_t len) const {
 }
 
 bool file::randomAccess(off64_t start, size_t len) const {
-	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_RANDOM)
+	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
+			defined(POSIX_FADV_RANDOM)
 	return posixFadvise(start,len,POSIX_FADV_RANDOM);
 	#else
 	return true;
@@ -409,7 +411,8 @@ bool file::randomAccess(off64_t start, size_t len) const {
 }
 
 bool file::onlyOnce(off64_t start, size_t len) const {
-	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_NOREUSE)
+	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
+			defined(POSIX_FADV_NOREUSE)
 	return posixFadvise(start,len,POSIX_FADV_NOREUSE);
 	#else
 	return true;
@@ -417,7 +420,8 @@ bool file::onlyOnce(off64_t start, size_t len) const {
 }
 
 bool file::willNeed(off64_t start, size_t len) const {
-	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_WILLNEED)
+	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
+			defined(POSIX_FADV_WILLNEED)
 	return posixFadvise(start,len,POSIX_FADV_WILLNEED);
 	#else
 	return true;
@@ -425,7 +429,8 @@ bool file::willNeed(off64_t start, size_t len) const {
 }
 
 bool file::wontNeed(off64_t start, size_t len) const {
-	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_DONTNEED)
+	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
+			defined(POSIX_FADV_DONTNEED)
 	return posixFadvise(start,len,POSIX_FADV_DONTNEED);
 	#else
 	return true;
@@ -433,22 +438,25 @@ bool file::wontNeed(off64_t start, size_t len) const {
 }
 
 bool file::normalAccess(off64_t start, size_t len) const {
-	#if defined(HAVE_POSIX_FADVISE) && defined(POSIX_FADV_NORMAL)
+	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
+			defined(POSIX_FADV_NORMAL)
 	return posixFadvise(start,len,POSIX_FADV_NORMAL);
 	#else
 	return true;
 	#endif
 }
 
-#ifdef HAVE_POSIX_FALLOCATE
 bool file::reserve(off64_t start, size_t len) const {
+	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
 	int	result;
 	do {
 		result=posix_fallocate(fd(),start,len);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+	#else
+	return false;
+	#endif
 }
-#endif
 
 bool file::truncate(const char *filename) {
 	return truncate(filename,0);
@@ -567,7 +575,7 @@ bool file::getSize(const char *filename, off64_t *size) {
 }
 
 bool file::getBlockSize(const char *filename, blksize_t *size) {
-#ifdef HAVE_BLKSIZE_T
+#ifdef RUDIMENTS_HAVE_BLKSIZE_T
 	STAT(filename,size,st_blksize)
 #else
 	*size=-1;
@@ -576,7 +584,7 @@ bool file::getBlockSize(const char *filename, blksize_t *size) {
 }
 
 bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
-#ifdef HAVE_BLKCNT_T
+#ifdef RUDIMENTS_HAVE_BLKCNT_T
 	STAT(filename,blocks,st_blocks)
 #else
 	*blocks=-1;
@@ -584,7 +592,7 @@ bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 #endif
 }
 
-#ifndef HAVE_S_ISSOCK
+#ifndef RUDIMENTS_HAVE_S_ISSOCK
 	#define S_ISSOCK(m) ((m&040000==040000)?1:0)
 #endif
 
@@ -669,7 +677,7 @@ off64_t file::getSize() const {
 
 
 blksize_t file::getBlockSize() const {
-#ifdef HAVE_BLKSIZE_T
+#ifdef RUDIMENTS_HAVE_BLKSIZE_T
 	return pvt->_st.st_blksize;
 #else
 	return -1;
@@ -677,7 +685,7 @@ blksize_t file::getBlockSize() const {
 }
 
 blkcnt_t file::getBlockCount() const {
-#ifdef HAVE_BLKCNT_T
+#ifdef RUDIMENTS_HAVE_BLKCNT_T
 	return pvt->_st.st_blocks;
 #else
 	return -1;
@@ -946,15 +954,17 @@ bool file::sync() const {
 	return !result;
 }
 
-#ifdef HAVE_FDATASYNC
 bool file::dataSync() const {
+	#ifdef RUDIMENTS_HAVE_FDATASYNC
 	int	result;
 	do {
 		result=fdatasync(fd());
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+	#else
+	return sync();
+	#endif
 }
-#endif
 
 bool file::setLastAccessTime(const char *filename,
 					time_t lastaccesstime) {
@@ -1017,8 +1027,11 @@ int file::createTemporaryFile(char *templatefilename) {
 	return result;
 }
 
-#ifdef HAVE_XATTRS
 const char * const *file::listAttributes() const {
+
+	#ifndef RUDIMENTS_HAVE_XATTRS
+	return NULL;
+	#else
 
 	// The flistxattr interface is designed such that you have to guess the
 	// size of the buffer that it will need, call flistxattr, then see if
@@ -1060,6 +1073,7 @@ const char * const *file::listAttributes() const {
 
 	// if we couldn't get the attribute after 100 tries, give up
 	return NULL;
+	#endif
 }
 
 bool file::getAttribute(const char *name, unsigned short *number) const {
@@ -1068,8 +1082,10 @@ bool file::getAttribute(const char *name, unsigned short *number) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(number,buffer,sizeof(unsigned short));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(unsigned short));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1079,8 +1095,10 @@ bool file::getAttribute(const char *name, unsigned long *number) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(number,buffer,sizeof(unsigned long));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(unsigned long));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1090,8 +1108,10 @@ bool file::getAttribute(const char *name, short *number) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(number,buffer,sizeof(short));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(short));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1101,8 +1121,10 @@ bool file::getAttribute(const char *name, long *number) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(number,buffer,sizeof(long));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(long));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1112,8 +1134,10 @@ bool file::getAttribute(const char *name, float *number) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(number,buffer,sizeof(float));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(float));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1123,8 +1147,10 @@ bool file::getAttribute(const char *name, double *number) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(number,buffer,sizeof(double));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(double));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1134,8 +1160,10 @@ bool file::getAttribute(const char *name, unsigned char *character) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(character,buffer,sizeof(unsigned char));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(character,buffer,sizeof(unsigned char));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1145,8 +1173,10 @@ bool file::getAttribute(const char *name, char *character) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(character,buffer,sizeof(char));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(character,buffer,sizeof(char));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1156,8 +1186,10 @@ bool file::getAttribute(const char *name, bool *value) const {
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
-	rawbuffer::copy(value,buffer,sizeof(bool));
-	delete[] buffer;
+	if (retval) {
+		rawbuffer::copy(value,buffer,sizeof(bool));
+		delete[] buffer;
+	}
 	return retval;
 }
 
@@ -1181,6 +1213,12 @@ bool file::getAttribute(const char *name, char **string, size_t *size) const {
 }
 
 bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
+
+	#ifndef RUDIMENTS_HAVE_XATTRS
+	*buffer=NULL;
+	*size=0;
+	return false;
+	#else
 
 	// The fgetxattr interface is designed such that you have to guess the
 	// size of the buffer that it will need, call fgetxattr, then see if
@@ -1218,6 +1256,8 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 
 	// if we couldn't get the attribute after 100 tries, give up
 	return false;
+
+	#endif
 }
 
 bool file::createAttribute(const char *name, unsigned short number) const {
@@ -1275,6 +1315,9 @@ bool file::createAttribute(const char *name, const char *string,
 	return createAttribute(name,static_cast<const void *>(string),size);
 }
 
+#ifndef XATTR_CREATE
+#define XATTR_CREATE 0
+#endif
 bool file::createAttribute(const char *name, const void *value,
 							size_t size) const {
 	return setAttribute(name,value,size,XATTR_CREATE);
@@ -1335,6 +1378,9 @@ bool file::replaceAttribute(const char *name, const char *string,
 	return replaceAttribute(name,static_cast<const void *>(string),size);
 }
 
+#ifndef XATTR_REPLACE
+#define XATTR_REPLACE 0
+#endif
 bool file::replaceAttribute(const char *name, const void *value,
 							size_t size) const {
 	return setAttribute(name,value,size,XATTR_REPLACE);
@@ -1401,23 +1447,42 @@ bool file::setAttribute(const char *name, const void *value,
 
 bool file::setAttribute(const char *name, const void *value,
 						size_t size, int flags) const {
+
+	#ifndef RUDIMENTS_HAVE_XATTRS
+	return false;
+	#else
+
 	ssize_t	result;
 	do {
 		result=fsetxattr(fd(),name,value,size,flags);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+
+	#endif
 }
 
 bool file::removeAttribute(const char *name) const {
+
+	#ifndef RUDIMENTS_HAVE_XATTRS
+	return false;
+	#else
+
 	ssize_t	result;
 	do {
 		result=fremovexattr(fd(),name);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+
+	#endif
 }
 
 const char * const *file::attributeArray(const char *buffer,
 						size_t size) const {
+
+	#ifndef RUDIMENTS_HAVE_XATTRS
+	return NULL;
+	#else
+
 
 	// count the number of attributes
 	int	counter=0;
@@ -1446,8 +1511,9 @@ const char * const *file::attributeArray(const char *buffer,
 
 	// return the array
 	return attributes;
+
+	#endif
 }
-#endif
 
 char *file::dirname(const char *filename) {
 
@@ -1503,8 +1569,8 @@ char *file::basename(const char *filename, const char *suffix) {
 }
 
 key_t file::generateKey(const char *filename, int id) {
-#ifdef HAVE_FTOK
-	#ifdef HAVE_CONST_CHAR_FTOK
+#ifdef RUDIMENTS_HAVE_FTOK
+	#ifdef RUDIMENTS_HAVE_CONST_CHAR_FTOK
 		return ::ftok(filename,id);
 	#else
 		return ::ftok(const_cast<char *>(filename),id);
@@ -1529,7 +1595,7 @@ long file::maxLinks() const {
 }
 
 bool file::posixFadvise(off64_t offset, off64_t len, int advice) const {
-	#ifdef HAVE_POSIX_FADVISE
+	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
 	int	result;
 	do {
 		result=posix_fadvise(fd(),offset,len,advice);

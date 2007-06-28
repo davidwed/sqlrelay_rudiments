@@ -19,9 +19,7 @@ class dynamiclibprivate {
 };
 
 // LAME: not in the class
-#ifdef RUDIMENTS_HAS_THREADS
 static	mutex	*_errormutex=NULL;
-#endif
 
 dynamiclib::dynamiclib() {
 	pvt=new dynamiclibprivate;
@@ -61,11 +59,9 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 }
 
 char *dynamiclib::getError() const {
-#ifdef RUDIMENTS_HAS_THREADS
 	if (_errormutex && !_errormutex->lock()) {
 		return NULL;
 	}
-#endif
 	const char	*err;
 	do {
 		err=dlerror();
@@ -74,19 +70,15 @@ char *dynamiclib::getError() const {
 	if (err) {
 		retval=charstring::duplicate(err);
 	}
-#ifdef RUDIMENTS_HAS_THREADS
 	if (_errormutex) {
 		_errormutex->unlock();
 	}
-#endif
 	return retval;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 void dynamiclib::setErrorMutex(mutex *mtx) {
 	_errormutex=mtx;
 }
-#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 }

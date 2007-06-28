@@ -13,6 +13,6 @@
 #ifndef HAVE_BLKCNT_T
 	typedef long blkcnt_t;
 #endif
-#ifndef HAVE_BLKSIZE_T
+#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	typedef long blksize_t;
 #endif

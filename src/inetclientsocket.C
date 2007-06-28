@@ -95,7 +95,7 @@ void inetclientsocket::initialize(constnamevaluepairs *cd) {
 
 int inetclientsocket::connect() {
 
-	#ifndef HAVE_GETADDRINFO
+	#ifndef RUDIMENTS_HAVE_GETADDRINFO
 
 		// get the host entry
 		hostentry	he;
@@ -164,7 +164,7 @@ int inetclientsocket::connect() {
 			snooze::macrosnooze(_retrywait());
 		}
 
-		#ifndef HAVE_GETADDRINFO
+		#ifndef RUDIMENTS_HAVE_GETADDRINFO
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
@@ -225,7 +225,7 @@ int inetclientsocket::connect() {
 	}
 
 	// if we're here, the connect failed
-	#ifdef HAVE_GETADDRINFO
+	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 		freeaddrinfo(ai);
 	#else
 		close();

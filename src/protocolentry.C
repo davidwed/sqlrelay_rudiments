@@ -19,23 +19,24 @@ class protocolentryprivate {
 	friend class protocolentry;
 	private:
 		protoent	*_pe;
-		#if defined(HAVE_GETPROTOBYNAME_R) || \
-				defined(HAVE_GETPROTOBYNUMBER_R)
+		#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
+				defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 			protoent	_pebuffer;
 			char		*_buffer;
 		#endif
 };
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && \
-	(!defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R))
+#if (!defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
+	!defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R))
 static mutex	*_pemutex;
 #endif
 
 protocolentry::protocolentry() {
 	pvt=new protocolentryprivate;
 	pvt->_pe=NULL;
-	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
+	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		rawbuffer::zero(&pvt->_pebuffer,sizeof(pvt->_pebuffer));
 		pvt->_buffer=NULL;
 	#endif
@@ -54,7 +55,8 @@ protocolentry &protocolentry::operator=(const protocolentry &p) {
 }
 
 protocolentry::~protocolentry() {
-	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
+	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
@@ -72,9 +74,9 @@ int protocolentry::getNumber() const {
 	return pvt->_pe->p_proto;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool protocolentry::needsMutex() {
-	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+	#if !defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		return true;
 	#else
 		return false;
@@ -82,11 +84,11 @@ bool protocolentry::needsMutex() {
 }
 
 void protocolentry::setMutex(mutex *mtx) {
-	#if !defined(HAVE_GETPROTOBYNAME_R) || !defined(HAVE_GETPROTOBYNUMBER_R)
+	#if !defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		_pemutex=mtx;
 	#endif
 }
-#endif
 
 bool protocolentry::initialize(const char *protocolname) {
 	return initialize(protocolname,0);
@@ -98,7 +100,8 @@ bool protocolentry::initialize(int number) {
 
 bool protocolentry::initialize(const char *protocolname, int number) {
 
-	#if defined(HAVE_GETPROTOBYNAME_R) && defined(HAVE_GETPROTOBYNUMBER_R)
+	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		if (pvt->_pe) {
 			pvt->_pe=NULL;
 			delete[] pvt->_buffer;
@@ -111,8 +114,8 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
-			#if defined(HAVE_GETPROTOBYNAME_R_5) && \
-				defined(HAVE_GETPROTOBYNUMBER_R_5)
+			#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R_5) && \
+				defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_5)
 			if (!((protocolname)
 				?(getprotobyname_r(protocolname,
 							&pvt->_pebuffer,
@@ -124,8 +127,8 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 							&pvt->_pe)))) {
 				return (pvt->_pe!=NULL);
 			}
-			#elif defined(HAVE_GETPROTOBYNAME_R_4) && \
-				defined(HAVE_GETPROTOBYNUMBER_R_4)
+			#elif defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R_4) && \
+				defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_4)
 			if ((protocolname)
 				?(pvt->_pe=getprotobyname_r(protocolname,
 							&pvt->_pebuffer,
@@ -146,17 +149,11 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		return false;
 	#else
 		pvt->_pe=NULL;
-		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(_pemutex && !_pemutex->lock())) &&
 			((pvt->_pe=((protocolname)
 				?getprotobyname(protocolname)
 				:getprotobynumber(number)))!=NULL) &&
 			!(_pemutex && !_pemutex->unlock());
-		#else
-		return ((pvt->_pe=((protocolname)
-				?getprotobyname(protocolname)
-				:getprotobynumber(number)))!=NULL);
-		#endif
 	#endif
 }
 

@@ -9,12 +9,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef HAVE_ENVIRON
+#ifdef RUDIMENTS_HAVE_ENVIRON
 	#ifdef HAVE_UNISTD_H
 		#include <unistd.h>
 	#endif
 #else
-	#ifdef HAVE_NSGETENVIRON
+	#ifdef RUDIMENTS_HAVE_NSGETENVIRON
 		#include <crt_externs.h>
 		#define environ (*_NSGetEnviron())
 	#else
@@ -27,21 +27,17 @@ namespace rudiments {
 #endif
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS)
 static mutex	*_envmutex;
-#endif
-#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
+#if defined(RUDIMENTS_HAVE_PUTENV) && !defined(RUDIMENTS_HAVE_SETENV)
 static namevaluepairs	_envstrings;
 #endif
 
-#if defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
+#if defined(RUDIMENTS_HAVE_PUTENV) && !defined(RUDIMENTS_HAVE_SETENV)
 bool environment::setValue(const char *variable, const char *value) {
 	bool	retval=false;
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex && !_envmutex->lock()) {
-			return retval;
-		}
-	#endif
+	if (_envmutex && !_envmutex->lock()) {
+		return retval;
+	}
 	char	*pestr;
 	if (_envstrings.getData(const_cast<char *>(variable),&pestr)) {
 		delete[] pestr;
@@ -62,11 +58,9 @@ bool environment::setValue(const char *variable, const char *value) {
 		_envstrings.removeData(const_cast<char *>(variable));
 		retval=false;
 	}
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex) {
-			_envmutex->unlock();
-		}
-	#endif
+	if (_envmutex) {
+		_envmutex->unlock();
+	}
 	return retval;
 }
 #endif
@@ -74,57 +68,45 @@ bool environment::setValue(const char *variable, const char *value) {
 
 const char *environment::getValue(const char *variable) {
 	char	*retval=NULL;
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex && !_envmutex->lock()) {
-			return retval;
-		}
-	#endif
+	if (_envmutex && !_envmutex->lock()) {
+		return retval;
+	}
 	do {
 		retval=getenv(variable);
 	} while (!retval && error::getErrorNumber()==EINTR);
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex) {
-			_envmutex->unlock();
-		}
-	#endif
+	if (_envmutex) {
+		_envmutex->unlock();
+	}
 	return retval;
 }
 
-#ifdef HAVE_SETENV
+#ifdef RUDIMENTS_HAVE_SETENV
 bool environment::setValue(const char *variable, const char *value) {
 	bool	retval=false;
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex && !_envmutex->lock()) {
-			return retval;
-		}
-	#endif
+	if (_envmutex && !_envmutex->lock()) {
+		return retval;
+	}
 	do {
 		retval=!setenv(variable,value,1);
 	} while (!retval && error::getErrorNumber()==EINTR);
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex) {
-			_envmutex->unlock();
-		}
-	#endif
+	if (_envmutex) {
+		_envmutex->unlock();
+	}
 	return retval;
 }
 #endif
 
 bool environment::remove(const char *variable) {
-#ifdef HAVE_UNSETENV
+#ifdef RUDIMENTS_HAVE_UNSETENV
 	bool	retval=false;
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex && !_envmutex->lock()) {
-			return retval;
-		}
-	#endif
+	if (_envmutex && !_envmutex->lock()) {
+		return retval;
+	}
 	unsetenv(variable);
 	retval=true;
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_envmutex) {
-			_envmutex->unlock();
-		}
-	#endif
+	if (_envmutex) {
+		_envmutex->unlock();
+	}
 	return retval;
 #else
 	// I know this isn't the same as calling unsetenv, but as far as I
@@ -145,7 +127,7 @@ void environment::print() {
 }
 
 bool environment::clear() {
-	#ifdef HAVE_CLEARENV
+	#ifdef RUDIMENTS_HAVE_CLEARENV
 		return !clearenv();
 	#else
 		environ[0]=NULL;
@@ -153,11 +135,9 @@ bool environment::clear() {
 	#endif
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 void environment::setMutex(mutex *mtx) {
 	_envmutex=mtx;
 }
-#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 }

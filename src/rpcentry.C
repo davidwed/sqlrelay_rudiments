@@ -9,8 +9,10 @@
 // Some systems (notably cygwin 1.5.7-1) define getrpcbyname and getrpcbynumber
 // in their header files but then either don't implement them or don't export
 // the symbols.
-#if (defined(HAVE_GETRPCBYNAME_R) || defined(HAVE_GETRPCBYNAME)) \
-	&& (defined(HAVE_GETRPCBYNUMBER_R) || defined(HAVE_GETRPCBYNUMBER)) \
+#if (defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
+	defined(RUDIMENTS_HAVE_GETRPCBYNAME)) && \
+	(defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R) || \
+	defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)) \
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,16 +27,16 @@ class rpcentryprivate {
 	friend class rpcentry;
 	private:
 		rpcent	*_re;
-		#if defined(HAVE_GETRPCBYNAME_R) && \
-				defined(HAVE_GETRPCBYNUMBER_R)
+		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 			rpcent	_rebuffer;
 			char	*_buffer;
 		#endif
 };
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && \
-	(!defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R))
+#if (!defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
+	!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
 static mutex	*_remutex;
 #endif
 
@@ -42,14 +44,16 @@ static mutex	*_remutex;
 rpcentry::rpcentry() {
 	pvt=new rpcentryprivate;
 	pvt->_re=NULL;
-	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
+	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 		rawbuffer::zero(&pvt->_rebuffer,sizeof(pvt->_rebuffer));
 		pvt->_buffer=NULL;
 	#endif
 }
 
 rpcentry::~rpcentry() {
-	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
+	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
@@ -67,9 +71,9 @@ const char * const *rpcentry::getAliasList() const {
 	return pvt->_re->r_aliases;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool rpcentry::needsMutex() {
-	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
+	#if !defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 		return true;
 	#else
 		return false;
@@ -77,11 +81,11 @@ bool rpcentry::needsMutex() {
 }
 
 void rpcentry::setMutex(mutex *mtx) {
-	#if !defined(HAVE_GETRPCBYNAME_R) || !defined(HAVE_GETRPCBYNUMBER_R)
+	#if !defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 		_remutex=mtx;
 	#endif
 }
-#endif
 
 bool rpcentry::initialize(const char *name) {
 	return initialize(name,0);
@@ -93,7 +97,8 @@ bool rpcentry::initialize(int number) {
 
 bool rpcentry::initialize(const char *rpcname, int number) {
 
-	#if defined(HAVE_GETRPCBYNAME_R) && defined(HAVE_GETRPCBYNUMBER_R)
+	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 		if (pvt->_re) {
 			pvt->_re=NULL;
 			delete[] pvt->_buffer;
@@ -106,8 +111,8 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		// just make the buffer bigger and try again.
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
-			#if defined(HAVE_GETRPCBYNAME_R_5) && \
-				defined(HAVE_GETRPCBYNUMBER_R_5)
+			#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R_5) && \
+				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5)
 			if (!((rpcname)
 				?(getrpcbyname_r(rpcname,&pvt->_rebuffer,
 							pvt->_buffer,size,
@@ -117,8 +122,8 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 							&pvt->_re)))) {
 				return (pvt->_re!=NULL);
 			}
-			#elif defined(HAVE_GETRPCBYNAME_R_4) && \
-				defined(HAVE_GETRPCBYNUMBER_R_4)
+			#elif defined(RUDIMENTS_HAVE_GETRPCBYNAME_R_4) && \
+				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4)
 			if ((rpcname)
 				?(pvt->_re=getrpcbyname_r(rpcname,
 							&pvt->_rebuffer,
@@ -139,17 +144,11 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		return false;
 	#else
 		pvt->_re=NULL;
-		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(remutex && !remutex->lock()) &&
 			((pvt->_re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && !remutex->unlock()));
-		#else
-		return ((pvt->_re=((rpcname)
-				?getrpcbyname(const_cast<char *>(rpcname))
-				:getrpcbynumber(number)))!=NULL);
-		#endif
 	#endif
 }
 

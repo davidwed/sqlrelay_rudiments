@@ -15,50 +15,50 @@
 #endif
 #include <rudiments/error.h>
 
-#ifdef HAVE_WINDOWS_H
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
-#ifdef HAVE_WINSOCK2_H
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #endif
-#ifdef HAVE_IO_H
+#ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
 #include <stdio.h>
 #include <sys/time.h>
-#ifdef HAVE_SYS_SELECT_H
+#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
 	#include <sys/select.h>
 #endif
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #include <fcntl.h>
-#ifdef HAVE_SYS_FCNTL_H
+#ifdef HAVE_RUDIMENTS_SYS_FCNTL_H
 	#include <sys/fcntl.h>
 #endif
-#ifdef HAVE_IOCTL
+#ifdef RUDIMENTS_HAVE_IOCTL
 	#include <sys/ioctl.h>
 #endif
-#ifdef HAVE_NETINET_IN_H
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
 	#include <netinet/in.h>
 #endif
-#ifdef HAVE_NETINET_TCP_H
+#ifdef RUDIMENTS_HAVE_NETINET_TCP_H
 	#include <netinet/tcp.h>
 #endif
-#ifdef HAVE_SYS_UIO_H
+#ifdef RUDIMENTS_HAVE_SYS_UIO_H
 	#include <sys/uio.h>
 #endif
 #include <limits.h>
-#ifdef HAVE_ARPA_INET_H
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
 	#include <arpa/inet.h>
 #endif
-#ifdef HAVE_BYTESWAP_H
+#ifdef RUDIMENTS_HAVE_BYTESWAP_H
 	#include <byteswap.h>
 #endif
-#ifdef HAVE_MACHINE_ENDIAN_H
+#ifdef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
 	#include <machine/endian.h>
 #endif
-#ifdef HAVE_OSSWAPHOSTTOLITTLEINT64
+#ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
 	#include <libkern/OSByteOrder.h>
 #endif
 
@@ -134,10 +134,10 @@ class filedescriptorprivate {
 		bool	_retryinterruptedreads;
 		bool	_retryinterruptedwrites;
 		bool	_retryinterruptedwaits;
-		#ifdef HAVE_FCNTL
+		#ifdef RUDIMENTS_HAVE_FCNTL
 		bool	_retryinterruptedfcntl;
 		#endif
-		#ifdef HAVE_IOCTL
+		#ifdef RUDIMENTS_HAVE_IOCTL
 		bool	_retryinterruptedioctl;
 		#endif
 		bool	_allowshortreads;
@@ -190,10 +190,10 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_retryinterruptedreads=false;
 	pvt->_retryinterruptedwrites=false;
 	pvt->_retryinterruptedwaits=true;
-#ifdef HAVE_FCNTL
+#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=true;
 #endif
-#ifdef HAVE_IOCTL
+#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=true;
 #endif
 	pvt->_allowshortreads=false;
@@ -224,10 +224,10 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
 	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
 	pvt->_retryinterruptedwaits=f.pvt->_retryinterruptedwaits;
-#ifdef HAVE_FCNTL
+#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=f.pvt->_retryinterruptedfcntl;
 #endif
-#ifdef HAVE_IOCTL
+#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
 #endif
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
@@ -364,7 +364,8 @@ BIO *filedescriptor::newSSLBIO() const {
 #endif
 
 bool filedescriptor::useNonBlockingMode() const {
-	#if defined(HAVE_FCNTL) && defined(F_SETFL) && defined (F_GETFL)
+	#if defined(RUDIMENTS_HAVE_FCNTL) && \
+		defined(F_SETFL) && defined (F_GETFL)
 		return (fcntl(F_SETFL,fcntl(F_GETFL,0)|O_NONBLOCK)!=-1);
 	#else
 		return false;
@@ -372,7 +373,8 @@ bool filedescriptor::useNonBlockingMode() const {
 }
 
 bool filedescriptor::useBlockingMode() const {
-	#if defined(HAVE_FCNTL) && defined(F_SETFL) && defined (F_GETFL)
+	#if defined(RUDIMENTS_HAVE_FCNTL) && \
+		defined(F_SETFL) && defined (F_GETFL)
 		return (fcntl(F_SETFL,fcntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
 	#else
 		return false;
@@ -380,7 +382,7 @@ bool filedescriptor::useBlockingMode() const {
 }
 
 bool filedescriptor::isUsingNonBlockingMode() const {
-	#if defined(HAVE_FCNTL) && defined(F_GETFL)
+	#if defined(RUDIMENTS_HAVE_FCNTL) && defined(F_GETFL)
 		return (fcntl(F_GETFL,0)&O_NONBLOCK);
 	#else
 		return false;
@@ -743,25 +745,25 @@ void filedescriptor::dontRetryInterruptedWaits() {
 }
 
 void filedescriptor::retryInterruptedFcntl() {
-	#ifdef HAVE_FCNTL
+	#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=true;
 	#endif
 }
 
 void filedescriptor::dontRetryInterruptedFcntl() {
-	#ifdef HAVE_FCNTL
+	#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=true;
 	#endif
 }
 
 void filedescriptor::retryInterruptedIoctl() {
-	#ifdef HAVE_IOCTL
+	#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=true;
 	#endif
 }
 
 void filedescriptor::dontRetryInterruptedIoctl() {
-	#ifdef HAVE_IOCTL
+	#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=true;
 	#endif
 }
@@ -1525,15 +1527,15 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
-		#if defined(HAVE_BSWAP_64)
+		#if defined(RUDIMENTS_HAVE_BSWAP_64)
 			return bswap_64(value);
-		#elif defined(HAVE___BSWAP64)
+		#elif defined(RUDIMENTS_HAVE___BSWAP64)
 			return __bswap64(value);
-		#elif defined(HAVE_BSWAP64)
+		#elif defined(RUDIMENTS_HAVE_BSWAP64)
 			return bswap64(value);
-		#elif defined(HAVE_SWAP64)
+		#elif defined(RUDIMENTS_HAVE_SWAP64)
 			return swap64(value);
-		#elif defined(HAVE_OSSWAPHOSTTOLITTLEINT64)
+		#elif defined(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64)
 			return OSSwapHostToLittleInt64(value);
 		#else
 			#error no bswap64() or anything like it
@@ -1553,15 +1555,15 @@ uint64_t filedescriptor::netToHost(uint64_t value) const {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
-		#if defined(HAVE_BSWAP_64)
+		#if defined(RUDIMENTS_HAVE_BSWAP_64)
 			return bswap_64(value);
-		#elif defined(HAVE___BSWAP64)
+		#elif defined(RUDIMENTS_HAVE___BSWAP64)
 			return __bswap64(value);
-		#elif defined(HAVE_BSWAP64)
+		#elif defined(RUDIMENTS_HAVE_BSWAP64)
 			return bswap64(value);
-		#elif defined(HAVE_SWAP64)
+		#elif defined(RUDIMENTS_HAVE_SWAP64)
 			return swap64(value);
-		#elif defined(HAVE_OSSWAPLITTLETOHOSTINT64)
+		#elif defined(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64)
 			return OSSwapLittleToHostInt64(value);
 		#else
 			#error no bswap64() or anything like it
@@ -1576,7 +1578,7 @@ int filedescriptor::getSSLResult() const {
 #endif
 
 int filedescriptor::fcntl(int cmd, long arg) const {
-	#ifdef HAVE_FCNTL
+	#ifdef RUDIMENTS_HAVE_FCNTL
 		int	result;
 		do {
 			result=::fcntl(pvt->_fd,cmd,arg);
@@ -1589,7 +1591,7 @@ int filedescriptor::fcntl(int cmd, long arg) const {
 }
 
 int filedescriptor::ioctl(int cmd, void *arg) const {
-	#ifdef HAVE_IOCTL
+	#ifdef RUDIMENTS_HAVE_IOCTL
 		int	result;
 		do {
 			result=::ioctl(pvt->_fd,cmd,arg);
@@ -1620,7 +1622,7 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 	messageheader.msg_name=NULL;
 	messageheader.msg_namelen=0;
 
-	#ifdef HAVE_MSGHDR_MSG_FLAGS
+	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_FLAGS
 	// initialize flags to 0
 	messageheader.msg_flags=0;
 	#endif
@@ -1633,11 +1635,11 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 	messageheader.msg_iovlen=1;
 
 	// use other parts of the msghdr structure to send the descriptor
-	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
+	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 
 		// new-style:
 		// The descriptor is passed in the msg_control
-		//#ifdef HAVE_CMSG_SPACE
+		//#ifdef RUDIMENTS_HAVE_CMSG_SPACE
 		//union {
 			//struct cmsghdr	cm;
 			//char		control[CMSG_SPACE(sizeof(int))];
@@ -1653,7 +1655,7 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 		cmptr=CMSG_FIRSTHDR(&messageheader);
 		cmptr->cmsg_level=SOL_SOCKET;
 		cmptr->cmsg_type=SCM_RIGHTS;
-		//#ifdef HAVE_CMSG_LEN
+		//#ifdef RUDIMENTS_HAVE_CMSG_LEN
 		//cmptr->cmsg_len=CMSG_LEN(sizeof(int));
 		//#else
 		cmptr->cmsg_len=sizeof(control);
@@ -1687,7 +1689,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	messageheader.msg_name=NULL;
 	messageheader.msg_namelen=0;
 
-	#ifdef HAVE_MSGHDR_MSG_FLAGS
+	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_FLAGS
 	// initialize flags to 0
 	messageheader.msg_flags=0;
 	#endif
@@ -1702,10 +1704,10 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	messageheader.msg_iov=iovector;
 	messageheader.msg_iovlen=1;
 
-	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
+	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 		// new-style:
 		// The descriptor is received in the msg_control
-		//#ifdef HAVE_CMSG_SPACE
+		//#ifdef RUDIMENTS_HAVE_CMSG_SPACE
 		//union {
 			//struct cmsghdr	cm;
 			//char		control[CMSG_SPACE(sizeof(int))];
@@ -1736,11 +1738,11 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 
 	// if we got valid data, set the passed-in descriptor to the 
 	// descriptor we received and return success
-	#ifdef HAVE_MSGHDR_MSG_CONTROLLEN
+	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 
 		struct cmsghdr  *cmptr=CMSG_FIRSTHDR(&messageheader);
 		if (cmptr && cmptr->cmsg_len==
-			//#ifdef HAVE_CMSG_LEN
+			//#ifdef RUDIMENTS_HAVE_CMSG_LEN
 			//CMSG_LEN(sizeof(int)) &&
 			//#else
 			//(sizeof(struct cmsghdr)+sizeof(int)) &&
@@ -1763,7 +1765,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 				printf("%d: ",process::getProcessId());
 				printf("null cmptr\n");
 			} else {
-				//#ifdef HAVE_CMSG_LEN
+				//#ifdef RUDIMENTS_HAVE_CMSG_LEN
 				/*if (cmptr->cmsg_len!=CMSG_LEN(sizeof(int))) {
 					printf("%d: ",process::getProcessId());
 					printf("got cmsg_len=");

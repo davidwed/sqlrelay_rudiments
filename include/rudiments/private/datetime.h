@@ -2,23 +2,18 @@
 // See the COPYING file for more information.
 
 	private:
-		#ifdef HAVE_MKTIME
-			bool	getBrokenDownTimeFromEpoch(bool needmutex);
-			bool	normalizeBrokenDownTime(bool needmutex);
+		bool	getBrokenDownTimeFromEpoch(bool needmutex);
+		bool	normalizeBrokenDownTime(bool needmutex);
 
-			bool	setTimeZoneEnvVar(const char *zone,
-							char **oldzone,
-							bool ignoredst);
-			bool	restoreTimeZoneEnvVar(const char *oldzone);
+		bool	setTimeZoneEnvVar(const char *zone,
+						char **oldzone,
+						bool ignoredst);
+		bool	restoreTimeZoneEnvVar(const char *oldzone);
 
-			const char	*lookupCombinedTimeZone(
-							const char *zone) const;
-			bool		daylightZone(const char *zone) const;
-		#endif
+		const char	*lookupCombinedTimeZone(const char *zone) const;
+		bool		daylightZone(const char *zone) const;
 
-		#ifdef RUDIMENTS_HAS_THREADS
-			bool	acquireLock();
-			bool	releaseLock();
-		#endif
+		bool	acquireLock();
+		bool	releaseLock();
 
 		datetimeprivate	*pvt;

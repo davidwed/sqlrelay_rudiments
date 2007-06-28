@@ -3,6 +3,4 @@
 
 #include <rudiments/private/inttypes.h>
 
-#ifdef RUDIMENTS_HAS_THREADS
-	#include <rudiments/mutex.h>
-#endif
+#include <rudiments/mutex.h>

@@ -58,6 +58,10 @@ class semaphoreset {
 				// createOrAttach() below.  If the semaphore
 				// was just attached to, it is not removed.
 
+		bool	supportsTimedSemaphoreOperations();
+				// Returns true if the system supports timed
+				// semaphore operations or false otherwise.
+
 		bool	create(key_t key, mode_t permissions, 
 					int semcount, const int *values);
 				// Creates a semaphore set identified by "key"
@@ -97,12 +101,12 @@ class semaphoreset {
 
 		bool	wait(int index);
 			// wait on the "index"'th semaphore in the set
-		#ifdef HAVE_SEMTIMEDOP
 		bool	wait(int index, long seconds, long nanoseconds);
 			// Wait on the "index"'th semaphore in the set until
 			// "seconds" and "nanoseconds" elapse.  Returns false
 			// and sets errno to EAGAIN if a timeout occurs.
-		#endif
+			// Returns false if the system doesn't support timed
+			// semaphore operations.
 		bool	signal(int index);
 			// signal on the "index"'th semaphore in the set
 
@@ -110,13 +114,13 @@ class semaphoreset {
 		bool	waitWithUndo(int index);
 			// wait on the "index"'th semaphore in the set and
 			// undo the wait when the program exits
-		#ifdef HAVE_SEMTIMEDOP
 		bool	waitWithUndo(int index, long seconds, long nanoseconds);
 			// Wait on the "index"'th semaphore in the set until
 			// "seconds" and "nanoseconds" elapse.  Undo the wait
 			// when the program exits.  Returns false and sets
 			// errno to EAGAIN if a timeout occurs.
-		#endif
+			// Returns false if the system doesn't support timed
+			// semaphore operations.
 		bool	signalWithUndo(int index);
 			// signal on the "index"'th semaphore in the set and
 			// undo the signal when the program exits

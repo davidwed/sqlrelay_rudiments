@@ -46,7 +46,6 @@ class dynamiclib {
 			// returns it.  The calling program must deallocate
 			// the buffer.
 		
-#ifdef RUDIMENTS_HAS_THREADS
 		// getError() is not reentrant and thus not thread safe.  If
 		// your application is multi-threaded and you use getError(),
 		// you must use this method to supply a mutex and ensure thread
@@ -57,7 +56,6 @@ class dynamiclib {
 		static	void	setErrorMutex(mutex *mtx);
 				// Allows you to supply a mutex to regulate
 				// access to getError().
-#endif
 
 	#include <rudiments/private/dynamiclib.h>
 };

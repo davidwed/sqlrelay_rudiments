@@ -11,7 +11,7 @@
 	#include <openssl/ssl.h>
 #endif
 
-#ifdef HAVE_SYS_SOCKET_H
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	// IRIX appears to need this but OpenBSD can't
 	// find select() if it's still defined later
 	#ifndef _XOPEN_SOURCE

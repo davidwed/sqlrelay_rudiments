@@ -5,10 +5,10 @@
 
 #include <stdlib.h>
 
-#if defined(HAVE_SRAND) && defined(HAVE_RAND)
+#if defined(RUDIMENTS_HAVE_SRAND) && defined(RUDIMENTS_HAVE_RAND)
 	#define SEEDRANDOM srand
 	#define GETRANDOM rand
-#elif defined(HAVE_SRAND48) && defined(HAVE_LRAND48)
+#elif defined(RUDIMENTS_HAVE_SRAND48) && defined(RUDIMENTS_HAVE_LRAND48)
 	#define SEEDRANDOM srand48
 	#define GETRANDOM lrand48
 #else
@@ -20,7 +20,7 @@ namespace rudiments {
 #endif
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && !defined(HAVE_RAND_R)
+#if !defined(RUDIMENTS_HAVE_RAND_R)
 static mutex	*_rnmutex;
 #endif
 
@@ -29,22 +29,18 @@ int randomnumber::generateNumber(int seed) {
 	// FIXME: use random(_r)()/srandom(_r)()/
 	//		initstate(_r)()/setstate(_r)() instead?
 
-	#ifdef HAVE_RAND_R
+	#ifdef RUDIMENTS_HAVE_RAND_R
 		unsigned int	useed=seed;
 		return rand_r(&useed);
 	#else
-		#ifdef RUDIMENTS_HAS_THREADS
 		if (_rnmutex && !_rnmutex->lock()) {
 			return -1;
 		}
-		#endif
 		SEEDRANDOM(seed);
 		int	retval=GETRANDOM();
-		#ifdef RUDIMENTS_HAS_THREADS
 		if (_rnmutex) {
 			_rnmutex->unlock();
 		}
-		#endif
 		return retval;
 	#endif
 }
@@ -63,9 +59,8 @@ int randomnumber::getRandMax() {
 	return RAND_MAX;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool randomnumber::needsMutex() {
-	#if !defined(HAVE_RAND_R)
+	#if !defined(RUDIMENTS_HAVE_RAND_R)
 		return true;
 	#else
 		return false;
@@ -73,11 +68,10 @@ bool randomnumber::needsMutex() {
 }
 
 void randomnumber::setMutex(mutex *mtx) {
-	#if !defined(HAVE_RAND_R)
+	#if !defined(RUDIMENTS_HAVE_RAND_R)
 		_rnmutex=mtx;
 	#endif
 }
-#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 }

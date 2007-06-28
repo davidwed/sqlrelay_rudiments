@@ -3,14 +3,14 @@
 
 #include <rudiments/datetime.h>
 #include <rudiments/charstring.h>
-#ifdef HAVE_RTC
+#ifdef RUDIMENTS_HAVE_RTC
 	#include <rudiments/file.h>
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#ifdef HAVE_RTC
+#ifdef RUDIMENTS_HAVE_RTC
 	#include <linux/rtc.h>
 	#include <sys/ioctl.h>
 #endif
@@ -22,7 +22,7 @@ namespace rudiments {
 class datetimeprivate {
 	friend class datetime;
 	private:
-		#if defined(HAVE_MKTIME)
+		#if defined(RUDIMENTS_HAVE_MKTIME)
 			int32_t	_sec;
 			int32_t	_min;
 			int32_t	_hour;
@@ -42,15 +42,13 @@ class datetimeprivate {
 			time_t	_epoch;
 
 			environment	_env;
-		#elif defined(HAVE_GETSYSTEMTIME)
+		#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 			SYSTEMTIME		_st;
 			TIME_ZONE_INFORMATION	_tzi;
 		#endif
 };
 
-#if defined(RUDIMENTS_HAS_THREADS)
 static mutex	*_timemutex;
-#endif
 
 static const char _monthname[][10]={
 	"January","February","March",
@@ -68,7 +66,7 @@ static const char _monthabbr[][4]={
 
 datetime::datetime() {
 	pvt=new datetimeprivate;
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 		pvt->_sec=0;
 		pvt->_min=0;
 		pvt->_hour=0;
@@ -83,17 +81,15 @@ datetime::datetime() {
 		pvt->_timestring=NULL;
 		pvt->_structtm=NULL;
 		pvt->_epoch=0;
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 		rawbuffer::zero(pvt->_st,sizeof(SYSTEMTIME));
 		rawbuffer::zero(pvt->_tzi,sizeof(TIME_ZONE_INFORMATION));
 	#endif
-	#ifdef RUDIMENTS_HAS_THREADS
 	_timemutex=NULL;
-	#endif
 }
 
 datetime::~datetime() {
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 		delete[] pvt->_zone;
 		delete[] pvt->_timestring;
 		delete pvt->_structtm;
@@ -105,9 +101,9 @@ bool datetime::initialize(const char *tmstring) {
 
 	// get the date
 	const char	*ptr=tmstring;
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 	pvt->_mon=charstring::toInteger(ptr)-1;
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 	pvt->_st.wMonth=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,'/');
@@ -115,9 +111,9 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 	pvt->_mday=charstring::toInteger(ptr);
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 	pvt->_st.wDay=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,'/');
@@ -125,9 +121,9 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 	pvt->_year=charstring::toInteger(ptr)-1900;
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 	pvt->_st.wYear=charstring::toShort(ptr);
 	#endif
 
@@ -137,9 +133,9 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 	pvt->_hour=charstring::toInteger(ptr);
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 	pvt->_st.wHour=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':');
@@ -147,9 +143,9 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 	pvt->_min=charstring::toInteger(ptr);
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 	pvt->_st.wMinute=charstring::toShort(ptr);
 	#endif
 	ptr=charstring::findFirst(ptr,':');
@@ -157,9 +153,9 @@ bool datetime::initialize(const char *tmstring) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
-	#if defined(HAVE_MKTIME)
+	#if defined(RUDIMENTS_HAVE_MKTIME)
 	pvt->_sec=charstring::toInteger(ptr);
-	#elif defined(HAVE_GETSYSTEMTIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 	pvt->_st.wSecond=charstring::toShort(ptr);
 	#endif
 
@@ -204,18 +200,14 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	#elif HAS_TM_NAME
 		pvt->_zone=charstring::duplicate(tmstruct->tm_name);
 	#else
-		#ifdef RUDIMENTS_HAS_THREADS
-			if (_timemutex && !acquireLock()) {
-				return false;
-			}
-		#endif
+		if (_timemutex && !acquireLock()) {
+			return false;
+		}
 		tzset();
 		pvt->_zone=charstring::duplicate(
 				(tzname[pvt->_isdst] && tzname[pvt->_isdst][0])?
 						tzname[pvt->_isdst]:"UCT");
-		#ifdef RUDIMENTS_HAS_THREADS
-			releaseLock();
-		#endif
+		releaseLock();
 	#endif
 	#ifdef HAS___TM_GMTOFF
 		pvt->_gmtoff=tmstruct->__tm_gmtoff;
@@ -224,20 +216,16 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	#elif HAS_TM_TZADJ
 		pvt->_gmtoff=-tmstruct->tm_tzadj;
 	#else
-		#ifdef RUDIMENTS_HAS_THREADS
-			if (_timemutex && !acquireLock()) {
-				return false;
-			}
-		#endif
+		if (_timemutex && !acquireLock()) {
+			return false;
+		}
 		tzset();
 		#ifdef HAS_TIMEZONE
 			pvt->_gmtoff=-timezone;
 		#else
 			pvt->_gmtoff=-_timezone;
 		#endif
-		#ifdef RUDIMENTS_HAS_THREADS
-			releaseLock();
-		#endif
+		releaseLock();
 	#endif
 	return normalizeBrokenDownTime(true);
 }
@@ -300,11 +288,9 @@ time_t datetime::getEpoch() const {
 
 struct tm *datetime::getTm() {
 
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (_timemutex && !acquireLock()) {
-			return NULL;
-		}
-	#endif
+	if (_timemutex && !acquireLock()) {
+		return NULL;
+	}
 
 	delete pvt->_structtm;
 	pvt->_structtm=new struct tm;
@@ -326,9 +312,7 @@ struct tm *datetime::getTm() {
 		return NULL;
 	}
 
-	#ifdef RUDIMENTS_HAS_THREADS
-		releaseLock();
-	#endif
+	releaseLock();
 	return pvt->_structtm;
 }
 
@@ -392,11 +376,9 @@ bool datetime::addYears(int32_t years) {
 	return normalizeBrokenDownTime(true);
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 void datetime::setTimeMutex(mutex *mtx) {
 	_timemutex=mtx;
 }
-#endif
 
 const char *datetime::getString() {
 	delete[] pvt->_timestring;
@@ -427,7 +409,7 @@ bool datetime::setSystemDateAndTime() {
 
 bool datetime::getHardwareDateAndTime(const char *hwtz) {
 
-	#ifdef HAVE_RTC
+	#ifdef RUDIMENTS_HAVE_RTC
 		// open the rtc
 		file	devrtc;
 		if (!devrtc.open("/dev/rtc",O_RDONLY)) {
@@ -464,7 +446,7 @@ bool datetime::getAdjustedHardwareDateAndTime(const char *hwtz) {
 
 bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
-	#ifdef HAVE_RTC
+	#ifdef RUDIMENTS_HAVE_RTC
 		// open the rtc
 		file	devrtc;
 		if (!devrtc.open("/dev/rtc",O_WRONLY)) {
@@ -505,11 +487,9 @@ bool datetime::adjustTimeZone(const char *newtz) {
 
 bool datetime::adjustTimeZone(const char *newtz, bool ignoredst) {
 
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (!acquireLock()) {
-			return false;
-		}
-	#endif
+	if (!acquireLock()) {
+		return false;
+	}
 
 	// Clear out the zone so getBrokenDownTimeFromEpoch() won't try to
 	// preserve it.
@@ -528,9 +508,7 @@ bool datetime::adjustTimeZone(const char *newtz, bool ignoredst) {
 		retval=false;
 	}
 
-	#ifdef RUDIMENTS_HAS_THREADS
-		releaseLock();
-	#endif
+	releaseLock();
 	return retval;
 }
 
@@ -596,11 +574,9 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 	// I'm using localtime here instead of localtime_r because
 	// localtime_r doesn't appear to handle the timezone properly,
 	// at least, not in glibc-2.3
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (needmutex && !acquireLock()) {
-			return false;
-		}
-	#endif
+	if (needmutex && !acquireLock()) {
+		return false;
+	}
 	bool	retval=false;
 	struct tm	*tms;
 	if ((tms=localtime(&pvt->_epoch))) {
@@ -613,32 +589,26 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 		pvt->_isdst=tms->tm_isdst;
 		retval=normalizeBrokenDownTime(false);
 	}
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (needmutex) {
-			releaseLock();
-		}
-	#endif
+	if (needmutex) {
+		releaseLock();
+	}
 	return retval;
 }
 
 bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (needmutex && !acquireLock()) {
-			return false;
-		}
-	#endif
+	if (needmutex && !acquireLock()) {
+		return false;
+	}
 
 	// If a time zone was passed in, use it.
 	char	*oldzone=NULL;
 
 	if (pvt->_zone && pvt->_zone[0] &&
 			!setTimeZoneEnvVar(pvt->_zone,&oldzone,false)) {
-		#ifdef RUDIMENTS_HAS_THREADS
-			if (needmutex) {
-				releaseLock();
-			}
-		#endif
+		if (needmutex) {
+			releaseLock();
+		}
 		return false;
 	}
 
@@ -699,16 +669,13 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		retval=(retval && restoreTimeZoneEnvVar(oldzone));
 	}
 
-	#ifdef RUDIMENTS_HAS_THREADS
-		if (needmutex) {
-			releaseLock();
-		}
-	#endif
+	if (needmutex) {
+		releaseLock();
+	}
 
 	return retval;
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool datetime::acquireLock() {
 	return !(_timemutex && !_timemutex->lock());
 }
@@ -716,7 +683,6 @@ bool datetime::acquireLock() {
 bool datetime::releaseLock() {
 	return !(_timemutex && !_timemutex->unlock());
 }
-#endif
 
 static const char * const _timezones[]={
 

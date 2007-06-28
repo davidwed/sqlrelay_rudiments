@@ -6,15 +6,15 @@
 
 #include <rudiments/private/config.h>
 
-#if defined(HAVE_STDINT_H)
+#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
-#elif defined(HAVE_SYS_BITYPES_H)
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
 	// Tru64 needs __arch64__ for int64_t and uint64_t typedefs
 	#ifndef __arch64__
 		#define __arch64__
 	#endif
 	#include <sys/bitypes.h>
-#elif defined(HAVE_INTTYPES_H)
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
 	#include <inttypes.h>
 #endif
 

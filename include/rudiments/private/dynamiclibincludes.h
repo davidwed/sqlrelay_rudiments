@@ -6,6 +6,4 @@
 // FIXME: can this be moved into dynamiclib.C
 #include <dlfcn.h>
 
-#ifdef RUDIMENTS_HAS_THREADS
-	#include <rudiments/mutex.h>
-#endif
+#include <rudiments/mutex.h>

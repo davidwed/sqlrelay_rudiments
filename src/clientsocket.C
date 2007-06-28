@@ -40,17 +40,31 @@ clientsocket::~clientsocket() {
 	delete pvt;
 }
 
+bool clientsocket::supportsBlockingNonBlockingModes() {
 #ifdef FIONBIO
+	return true;
+#else
+	return false;
+#endif
+}
+
 bool clientsocket::useNonBlockingMode() const {
+	#ifdef FIONBIO
 	int	nonblocking=1;
 	return (ioctl(FIONBIO,&nonblocking)!=-1);
+	#else
+	return false;
+	#endif
 }
 
 bool clientsocket::useBlockingMode() const {
+	#ifdef FIONBIO
 	int	nonblocking=0;
 	return (ioctl(FIONBIO,&nonblocking)!=-1);
+	#else
+	return false;
+	#endif
 }
-#endif
 
 #ifdef RUDIMENTS_HAS_SSL
 BIO *clientsocket::newSSLBIO() const {

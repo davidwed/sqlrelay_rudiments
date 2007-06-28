@@ -8,7 +8,7 @@
 	#include <unistd.h>
 #endif
 
-#ifdef MUST_DEFINE_SWAB
+#ifdef RUDIMENTS_MUST_DEFINE_SWAB
 extern "C" void swab(const void *from, void *to, ssize_t n);
 #endif
 
@@ -39,7 +39,7 @@ void *rawbuffer::copyUntil(void *dest, const void *src,
 
 void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 	if (dest && src) {
-		#ifdef HAVE_SWAB_CHAR
+		#ifdef RUDIMENTS_HAVE_SWAB_CHAR
 		swab(static_cast<const char *>(src),
 			static_cast<char *>(dest),size);
 		#else
@@ -68,7 +68,7 @@ const void *rawbuffer::findFirst(const void *haystack,
 
 const void *rawbuffer::findLast(const void *haystack,
 				unsigned char needle, size_t size) {
-	#ifdef HAVE_MEMRCHR
+	#ifdef RUDIMENTS_HAVE_MEMRCHR
 		return (haystack && needle)?
 			memrchr(haystack,needle.size):NULL;
 	#else
@@ -90,7 +90,7 @@ const void *rawbuffer::findLast(const void *haystack,
 
 const void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
 					const void *needle, size_t needlesize) {
-	#ifdef HAVE_MEMMEM
+	#ifdef RUDIMENTS_HAVE_MEMMEM
 		return (haystack && needle)?
 			memmem(haystack,haystacksize,needle,needlesize):NULL;
 	#else

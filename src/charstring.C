@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-// for strtof and strtold
+// for strtold
 #ifndef __USE_GNU
 	#define __USE_GNU
 #endif
@@ -830,7 +830,7 @@ const char *charstring::findFirstOfSet(const char *haystack, const char *set) {
 }
 
 char *charstring::findFirstOfSet(char *haystack, const char *set) {
-	#ifdef HAVE_STRPBRK
+	#ifdef RUDIMENTS_HAVE_STRPBRK
 	return (haystack && set)?strpbrk(haystack,set):NULL;
 	#else
 	if (!haystack || !set) {
@@ -848,7 +848,7 @@ char *charstring::findFirstOfSet(char *haystack, const char *set) {
 }
 
 size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
-	#ifdef HAVE_STRTOLL
+	#ifdef RUDIMENTS_HAVE_STRSPN
 	return (haystack && set)?strspn(haystack,set):0;
 	#else
 	if (!haystack || !set) {
@@ -864,7 +864,7 @@ size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
 
 size_t charstring::lengthNotContainingSet(const char *haystack,
 						const char *set) {
-	#ifdef HAVE_STRTOLL
+	#ifdef RUDIMENTS_HAVE_STRCSPN
 	return (haystack && set)?strcspn(haystack,set):0;
 	#else
 	if (!haystack || !set) {
@@ -910,7 +910,7 @@ int64_t charstring::toInteger(const char *string, int base) {
 }
 
 int64_t charstring::toInteger(const char *string, char **endptr, int base) {
-	#ifdef HAVE_STRTOLL
+	#ifdef RUDIMENTS_HAVE_STRTOLL
 	return (string)?strtoll(string,endptr,base):0;
 	#else
 	return (string)?strtol(string,endptr,base):0;
@@ -931,7 +931,7 @@ uint64_t charstring::toUnsignedInteger(const char *string, int base) {
 
 uint64_t charstring::toUnsignedInteger(const char *string,
 						char **endptr, int base) {
-	#ifdef HAVE_STRTOULL
+	#ifdef RUDIMENTS_HAVE_STRTOULL
 	return (string)?strtoull(string,endptr,base):0;
 	#else
 	return (string)?strtoul(string,endptr,base):0;
@@ -943,7 +943,7 @@ long double charstring::toFloat(const char *string) {
 }
 
 long double charstring::toFloat(const char *string, char **endptr) {
-	#ifdef HAVE_STRTOLD
+	#ifdef RUDIMENTS_HAVE_STRTOLD
 	return (string)?strtold(string,endptr):0.0;
 	#else
 	return (string)?static_cast<long double>(strtod(string,endptr)):0.0;

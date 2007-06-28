@@ -3,10 +3,10 @@
 
 #include <rudiments/private/inttypes.h>
 #include <sys/types.h>
-#ifdef HAVE_MMAP
+#ifdef RUDIMENTS_HAVE_MMAP
 	#include <sys/mman.h>
 #endif
-#ifdef HAVE_CREATE_FILE_MAPPING
+#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 	#include <windows.h>
 	#define	PROT_NONE	0
 	#define	PROT_EXEC	1

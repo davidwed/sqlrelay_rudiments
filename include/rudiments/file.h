@@ -257,7 +257,6 @@ class file : public filedescriptor {
 			// to the region.
 
 
-		#ifdef HAVE_POSIX_FALLOCATE
 		bool	reserve(off64_t start, size_t len) const;
 			// Reserves space on the storage medium such that a
 			// write to the region starting at "start" and
@@ -266,7 +265,6 @@ class file : public filedescriptor {
 			//
 			// Returns true if the region can be reserved and
 			// false otherwise.
-		#endif
 
 
 		// Changes to files are often cached in system ram, these
@@ -280,11 +278,9 @@ class file : public filedescriptor {
 		// has been copied into the disk's write cache, not
 		// necessarily to the disk itself.
 		bool	sync() const ;
-		#ifdef HAVE_FDATASYNC
 		bool	dataSync() const ;
 			// Similar to sync() but does not wait for the file's
 			// last-access or last-modification times to be copied.
-		#endif
 
 
 		// By default, the open() and create() methods call 
@@ -381,8 +377,6 @@ class file : public filedescriptor {
 			// Returns the maximum number of links that can be
 			// created to "filename".
 
-
-		#ifdef HAVE_XATTRS
 
 		// Some filesystems support extended file attributes.  These
 		// methods provide an interface for getting and setting those
@@ -518,7 +512,6 @@ class file : public filedescriptor {
 		bool	removeAttribute(const char *name) const;
 			// Removes attribute "name".
 			// Returns true on success and false on failure.
-		#endif
 
 
 		// These methods creates the file "name" with permissions

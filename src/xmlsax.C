@@ -19,7 +19,7 @@ class xmlsaxprivate {
 		const char	*_string;
 		const char	*_ptr;
 		file		_fl;
-		#ifdef HAVE_MMAP
+		#ifdef RUDIMENTS_HAVE_MMAP
 		memorymap	_mm;
 		off64_t		_filesize;
 		off64_t		_fileoffset;
@@ -42,7 +42,7 @@ xmlsax::~xmlsax() {
 void xmlsax::reset() {
 	pvt->_string=NULL;
 	pvt->_ptr=NULL;
-#ifdef HAVE_MMAP
+#ifdef RUDIMENTS_HAVE_MMAP
 	pvt->_filesize=0;
 	pvt->_fileoffset=0;
 	pvt->_endptr=NULL;
@@ -93,7 +93,7 @@ bool xmlsax::parseFile(const char *filename) {
 	// close any previously opened files, open the file, parse it, close
 	// it again
 	close();
-#ifdef HAVE_MMAP
+#ifdef RUDIMENTS_HAVE_MMAP
 	// open the file
 	bool retval;
 	if ((retval=pvt->_fl.open(filename,O_RDONLY))) {

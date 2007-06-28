@@ -13,6 +13,4 @@
 
 		directoryprivate	*pvt;
 
-		#ifdef HAVE_READDIR_R
 		int64_t	bufferSize(DIR *dirp);
-		#endif

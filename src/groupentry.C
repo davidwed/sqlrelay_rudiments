@@ -20,7 +20,8 @@ class groupentryprivate {
 	private:
 		#ifndef MINGW32
 			group		*_grp;
-			#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+			#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
+				defined(RUDIMENTS_HAVE_GETGRGID_R)
 				group		_grpbuffer;
 				char		*_buffer;
 			#endif
@@ -31,8 +32,7 @@ class groupentryprivate {
 };
 
 // LAME: not in the class
-#if defined(RUDIMENTS_HAS_THREADS) && \
-	(!defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R))
+#if (!defined(RUDIMENTS_HAVE_GETGRNAM_R) || !defined(RUDIMENTS_HAVE_GETGRUID_R))
 static mutex	*_gemutex;
 #endif
 
@@ -40,7 +40,8 @@ groupentry::groupentry() {
 	pvt=new groupentryprivate;
 	pvt->_grp=NULL;
 #ifndef MINGW32
-	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		rawbuffer::zero(&pvt->_grpbuffer,sizeof(pvt->_grpbuffer));
 		pvt->_buffer=NULL;
 	#endif
@@ -64,7 +65,8 @@ groupentry &groupentry::operator=(const groupentry &g) {
 
 groupentry::~groupentry() {
 #ifndef MINGW32
-	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
@@ -115,9 +117,9 @@ const char * const *groupentry::getMembers() const {
 #endif
 }
 
-#ifdef RUDIMENTS_HAS_THREADS
 bool groupentry::needsMutex() {
-	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+	#if !defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETGRUID_R)
 		return true;
 	#else
 		return false;
@@ -125,11 +127,11 @@ bool groupentry::needsMutex() {
 }
 
 void groupentry::setMutex(mutex *mtx) {
-	#if !defined(HAVE_GETGRNAM_R) || !defined(HAVE_GETGRUID_R)
+	#if !defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETGRUID_R)
 		_gemutex=mtx;
 	#endif
 }
-#endif
 
 bool groupentry::initialize(const char *groupname) {
 	return initialize(groupname,0);
@@ -142,7 +144,8 @@ bool groupentry::initialize(gid_t groupid) {
 #ifndef MINGW32
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
-	#if defined(HAVE_GETGRNAM_R) && defined(HAVE_GETGRGID_R)
+	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		if (pvt->_grp) {
 			pvt->_grp=NULL;
 			delete[] pvt->_buffer;
@@ -156,8 +159,8 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		for (int size=1024; size<MAXBUFFER; size=size+1024) {
 
 			pvt->_buffer=new char[size];
-			#if defined(HAVE_GETGRNAM_R_5) && \
-						 defined(HAVE_GETGRGID_R_5)
+			#if defined(RUDIMENTS_HAVE_GETGRNAM_R_5) && \
+				defined(RUDIMENTS_HAVE_GETGRGID_R_5)
 			if (!((groupname)
 				?(getgrnam_r(groupname,
 						&pvt->_grpbuffer,
@@ -169,8 +172,8 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 						&pvt->_grp)))) {
 				return (pvt->_grp!=NULL);
 			}
-			#elif defined(HAVE_GETGRNAM_R_4) && \
-						 defined(HAVE_GETGRGID_R_4)
+			#elif defined(RUDIMENTS_HAVE_GETGRNAM_R_4) && \
+				defined(RUDIMENTS_HAVE_GETGRGID_R_4)
 			if ((groupname)
 				?(pvt->_grp=getgrnam_r(groupname,
 							&pvt->_grpbuffer,
@@ -191,17 +194,11 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		return false;
 	#else
 		pvt->_grp=NULL;
-		#ifdef RUDIMENTS_HAS_THREADS
 		return (!(_gemutex && !_gemutex->lock()) &&
 			((pvt->_grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
 			!(_gemutex && !_gemutex->unlock()));
-		#else
-		return ((pvt->_grp=((groupname)
-				?getgrnam(groupname)
-				:getgrgid(groupid)))!=NULL);
-		#endif
 	#endif
 }
 #else

@@ -20922,7 +20922,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_WINDOWS_H 1
+#define RUDIMENTS_HAVE_WINDOWS_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -20976,7 +20976,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_WINSOCK2_H 1
+#define RUDIMENTS_HAVE_WINSOCK2_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21030,7 +21030,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_IO_H 1
+#define RUDIMENTS_HAVE_IO_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21085,7 +21085,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_BYTESWAP_H 1
+#define RUDIMENTS_HAVE_BYTESWAP_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21139,7 +21139,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MACHINE_ENDIAN_H 1
+#define RUDIMENTS_HAVE_MACHINE_ENDIAN_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21194,7 +21194,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SYS_SELECT_H 1
+#define RUDIMENTS_HAVE_SYS_SELECT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21249,7 +21249,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETINET_IN_H 1
+#define RUDIMENTS_HAVE_NETINET_IN_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21304,7 +21304,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETINET_TCP_H 1
+#define RUDIMENTS_HAVE_NETINET_TCP_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21359,7 +21359,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SYS_SOCKET_H 1
+#define RUDIMENTS_HAVE_SYS_SOCKET_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21414,7 +21414,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SYS_UIO_H 1
+#define RUDIMENTS_HAVE_SYS_UIO_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21469,7 +21469,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_ARPA_INET_H 1
+#define RUDIMENTS_HAVE_ARPA_INET_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21523,7 +21523,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STDINT_H 1
+#define RUDIMENTS_HAVE_STDINT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21577,7 +21577,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SYS_BITYPES_H 1
+#define RUDIMENTS_HAVE_SYS_BITYPES_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21631,7 +21631,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_INTTYPES_H 1
+#define RUDIMENTS_HAVE_INTTYPES_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -21685,7 +21685,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SYS_FCNTL_H 1
+#define RUDIMENTS_HAVE_SYS_FCNTL_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -22389,7 +22389,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_PTHREAD_MUTEX_T 1
+#define RUDIMENTS_HAVE_PTHREAD_MUTEX_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -22459,7 +22459,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CREATE_MUTEX 1
+#define RUDIMENTS_HAVE_CREATE_MUTEX 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24233,7 +24233,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "union semun" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SEMUN 1
+#define RUIMENTS_HAVE_SEMUN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24286,7 +24286,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MSGHDR_MSG_CONTROLLEN 1
+#define RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24341,7 +24341,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MSGHDR_MSG_FLAGS 1
+#define RUDIMENTS_HAVE_MSGHDR_MSG_FLAGS 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24398,7 +24398,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_BLKSIZE_T 1
+#define RUDIMENTS_HAVE_BLKSIZE_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24455,7 +24455,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_BLKCNT_T 1
+#define RUDIMENTS_HAVE_BLKCNT_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24511,7 +24511,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_S_ISSOCK 1
+#define RUDIMENTS_HAVE_S_ISSOCK 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24534,7 +24534,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <sys/types.h>
 #include <sys/socket.h>
-#ifdef HAVE_SYS_UIO_H
+#ifdef RUDIMENTS_HAVE_SYS_UIO_H
 #include <sys/uio.h>
 #endif
 int
@@ -24628,7 +24628,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CMSG_SPACE 1
+#define RUDIMENTS_HAVE_CMSG_SPACE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24683,7 +24683,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CMSG_LEN 1
+#define RUDIMENTS_HAVE_CMSG_LEN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24754,7 +24754,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_LINUX_STATFS 1
+#define RUDIMENTS_HAVE_LINUX_STATFS 1
 _ACEOF
  STATFS_STYLE="linux style"
 else
@@ -24817,7 +24817,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CYGWIN_STATFS 1
+#define RUDIMENTS_HAVE_CYGWIN_STATFS 1
 _ACEOF
  STATFS_STYLE="cygwin style"
 else
@@ -24891,7 +24891,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_FREEBSD_STATFS 1
+#define RUDIMENTS_HAVE_FREEBSD_STATFS 1
 _ACEOF
  STATFS_STYLE="freebsd style"
 else
@@ -24963,7 +24963,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETBSD_STATFS 1
+#define RUDIMENTS_HAVE_NETBSD_STATFS 1
 _ACEOF
  STATFS_STYLE="old netbsd style"
 else
@@ -25040,7 +25040,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETBSD_STATVFS 1
+#define RUDIMENTS_HAVE_NETBSD_STATVFS 1
 _ACEOF
  STATFS_STYLE="netbsd-3.0 style"
 else
@@ -25112,7 +25112,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_OPENBSD_STATFS 1
+#define RUDIMENTS_HAVE_OPENBSD_STATFS 1
 _ACEOF
  STATFS_STYLE="openbsd style"
 else
@@ -25184,7 +25184,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_DARWIN_STATFS 1
+#define RUDIMENTS_HAVE_DARWIN_STATFS 1
 _ACEOF
  STATFS_STYLE="darwin style"
 else
@@ -25252,7 +25252,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STATVFS 1
+#define RUDIMENTS_HAVE_STATVFS 1
 _ACEOF
  STATFS_STYLE="statvfs"
 else
@@ -25308,7 +25308,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRUCT_TIMESPEC 1
+#define RUDIMENTS_HAVE_STRUCT_TIMESPEC 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25362,7 +25362,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRUCT_TIMESPEC_IN_SIGINFO 1
+#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25551,7 +25551,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSYSTEMTIME 1
+#define RUDIMENTS_HAVE_GETSYSTEMTIME 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25811,7 +25811,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RTC 1
+#define RUDIMENTS_HAVE_RTC 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25865,7 +25865,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MKTIME 1
+#define RUDIMENTS_HAVE_MKTIME 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25920,7 +25920,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_LOCALTIME_R 1
+#define RUDIMENTS_HAVE_LOCALTIME_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25980,7 +25980,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SETENV 1
+#define RUDIMENTS_HAVE_SETENV 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26034,7 +26034,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_PUTENV 1
+#define RUDIMENTS_HAVE_PUTENV 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26088,7 +26088,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_UNSETENV 1
+#define RUDIMENTS_HAVE_UNSETENV 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26145,11 +26145,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  HAVE_REGCOMP="yes";
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_REGCOMP 1
-_ACEOF
- echo "$as_me:$LINENO: result: yes" >&5
+  HAVE_REGCOMP="yes"; echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
   echo "$as_me: failed program was:" >&5
@@ -26159,7 +26155,6 @@ echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
 fi
 
 INCLUDE_REGULAREXPRESSION="0"
@@ -26178,7 +26173,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
-#ifdef HAVE_WINSOCK2_H
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 #include <winsock2.h>
 #else
 #include <sys/types.h>
@@ -26242,7 +26237,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
-#ifdef HAVE_WINSOCK2_H
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 #include <winsock2.h>
 #else
 #include <sys/types.h>
@@ -26338,7 +26333,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SRAND48 1
+#define RUDIMENTS_HAVE_SRAND48 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26392,7 +26387,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_LRAND48 1
+#define RUDIMENTS_HAVE_LRAND48 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26446,7 +26441,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SRAND 1
+#define RUDIMENTS_HAVE_SRAND 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26500,7 +26495,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RAND 1
+#define RUDIMENTS_HAVE_RAND 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26554,7 +26549,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RAND_R 1
+#define RUDIMENTS_HAVE_RAND_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26609,7 +26604,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SETUID 1
+#define RUDIMENTS_HAVE_SETUID 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26664,7 +26659,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SETGID 1
+#define RUDIMENTS_HAVE_SETGID 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26901,11 +26896,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWNAM_R_5 1
+#define RUDIMENTS_HAVE_GETPWNAM_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWNAM_R 1
+#define RUDIMENTS_HAVE_GETPWNAM_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETPWNAM_R="yes"
@@ -26962,11 +26957,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWNAM_R_4 1
+#define RUDIMENTS_HAVE_GETPWNAM_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWNAM_R 1
+#define RUDIMENTS_HAVE_GETPWNAM_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27024,11 +27019,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWUID_R_5 1
+#define RUDIMENTS_HAVE_GETPWUID_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWUID_R 1
+#define RUDIMENTS_HAVE_GETPWUID_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETPWUID_R="yes"
@@ -27085,11 +27080,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWUID_R_4 1
+#define RUDIMENTS_HAVE_GETPWUID_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPWUID_R 1
+#define RUDIMENTS_HAVE_GETPWUID_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27152,11 +27147,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   INCLUDE_SHADOWENTRY="1";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSPNAM_R_5 1
+#define RUDIMENTS_HAVE_GETSPNAM_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSPNAM_R 1
+#define RUDIMENTS_HAVE_GETSPNAM_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETSPNAM_R="yes"
@@ -27214,11 +27209,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   INCLUDE_SHADOWENTRY="1";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSPNAM_R_4 1
+#define RUDIMENTS_HAVE_GETSPNAM_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSPNAM_R 1
+#define RUDIMENTS_HAVE_GETSPNAM_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETSPNAM_R="yes"
@@ -27331,7 +27326,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SP_WARN 1
+#define RUDIMENTS_HAVE_SP_WARN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27386,7 +27381,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SP_INACT 1
+#define RUDIMENTS_HAVE_SP_INACT 1
 _ACEOF
 
 echo "$as_me:$LINENO: result: yes" >&5
@@ -27442,7 +27437,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SP_EXPIRE 1
+#define RUDIMENTS_HAVE_SP_EXPIRE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27497,7 +27492,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SP_FLAG 1
+#define RUDIMENTS_HAVE_SP_FLAG 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27560,11 +27555,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRNAM_R_5 1
+#define RUDIMENTS_HAVE_GETGRNAM_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRNAM_R 1
+#define RUDIMENTS_HAVE_GETGRNAM_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETGRNAM_R="yes"
@@ -27621,11 +27616,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRNAM_R_4 1
+#define RUDIMENTS_HAVE_GETGRNAM_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRNAM_R 1
+#define RUDIMENTS_HAVE_GETGRNAM_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27683,11 +27678,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRGID_R_5 1
+#define RUDIMENTS_HAVE_GETGRGID_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRGID_R 1
+#define RUDIMENTS_HAVE_GETGRGID_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETGRGID_R="yes"
@@ -27744,11 +27739,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRGID_R_4 1
+#define RUDIMENTS_HAVE_GETGRGID_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETGRGID_R 1
+#define RUDIMENTS_HAVE_GETGRGID_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27807,7 +27802,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETADDRINFO 1
+#define RUDIMENTS_HAVE_GETADDRINFO 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27864,11 +27859,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYNAME_R 1
+#define RUDIMENTS_HAVE_GETHOSTBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYNAME_R_6 1
+#define RUDIMENTS_HAVE_GETHOSTBYNAME_R_6 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETHOSTBYNAME_R="yes"
@@ -27925,11 +27920,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYNAME_R 1
+#define RUDIMENTS_HAVE_GETHOSTBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYNAME_R_5 1
+#define RUDIMENTS_HAVE_GETHOSTBYNAME_R_5 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -27987,11 +27982,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYADDR_R 1
+#define RUDIMENTS_HAVE_GETHOSTBYADDR_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYADDR_R_8 1
+#define RUDIMENTS_HAVE_GETHOSTBYADDR_R_8 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETHOSTBYADDR_R="yes"
@@ -28048,11 +28043,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYADDR_R 1
+#define RUDIMENTS_HAVE_GETHOSTBYADDR_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETHOSTBYADDR_R_7 1
+#define RUDIMENTS_HAVE_GETHOSTBYADDR_R_7 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28113,11 +28108,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNAME_R_5 1
+#define RUDIMENTS_HAVE_GETPROTOBYNAME_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNAME_R 1
+#define RUDIMENTS_HAVE_GETPROTOBYNAME_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETPROTOBYNAME_R="yes"
@@ -28174,11 +28169,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNAME_R_4 1
+#define RUDIMENTS_HAVE_GETPROTOBYNAME_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNAME_R 1
+#define RUDIMENTS_HAVE_GETPROTOBYNAME_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28236,11 +28231,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNUMBER_R_5 1
+#define RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETPROTOBYNUMBER_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETPROTOBYNUMBER_R="yes"
@@ -28297,11 +28292,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNUMBER_R_4 1
+#define RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETPROTOBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETPROTOBYNUMBER_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28362,11 +28357,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYNAME_R_6 1
+#define RUDIMENTS_HAVE_GETSERVBYNAME_R_6 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYNAME_R 1
+#define RUDIMENTS_HAVE_GETSERVBYNAME_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETSERVBYNAME_R="yes"
@@ -28423,11 +28418,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYNAME_R_5 1
+#define RUDIMENTS_HAVE_GETSERVBYNAME_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYNAME_R 1
+#define RUDIMENTS_HAVE_GETSERVBYNAME_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28485,11 +28480,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYPORT_R_6 1
+#define RUDIMENTS_HAVE_GETSERVBYPORT_R_6 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYPORT_R 1
+#define RUDIMENTS_HAVE_GETSERVBYPORT_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAVE_GETSERVBYPORT_R="yes"
@@ -28546,11 +28541,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYPORT_R_5 1
+#define RUDIMENTS_HAVE_GETSERVBYPORT_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETSERVBYPORT_R 1
+#define RUDIMENTS_HAVE_GETSERVBYPORT_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28610,7 +28605,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SEMTIMEDOP 1
+#define RUDIMENTS_HAVE_SEMTIMEDOP 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28665,7 +28660,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_XATTRS 1
+#define RUDIMENTS_HAVE_XATTRS 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28720,7 +28715,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_READDIR_R 1
+#define RUDIMENTS_HAVE_READDIR_R 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28775,7 +28770,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_FDATASYNC 1
+#define RUDIMENTS_HAVE_FDATASYNC 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -28865,7 +28860,7 @@ export LD_LIBRARY_PATH
 	then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NANOSLEEP 1
+#define RUDIMENTS_HAVE_NANOSLEEP 1
 _ACEOF
 
 		echo "$as_me:$LINENO: result: yes" >&5
@@ -28954,7 +28949,7 @@ export LD_LIBRARY_PATH
 	then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CLOCK_NANOSLEEP 1
+#define RUDIMENTS_HAVE_CLOCK_NANOSLEEP 1
 _ACEOF
 
 		echo "$as_me:$LINENO: result: yes" >&5
@@ -29046,7 +29041,7 @@ export LD_LIBRARY_PATH
 	then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SHM_OPEN 1
+#define RUDIMENTS_HAVE_SHM_OPEN 1
 _ACEOF
 
 		echo "$as_me:$LINENO: result: yes" >&5
@@ -29106,15 +29101,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNAME_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R_5 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETDB_H 1
+#define RUDIMENTS_HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29170,15 +29165,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNAME_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R_5 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPCENT_H 1
+#define RUDIMENTS_HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29234,15 +29229,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNAME_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R_5 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29299,15 +29294,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNAME_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R_4 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETDB_H 1
+#define RUDIMENTS_HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29363,15 +29358,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNAME_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R_4 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPCENT_H 1
+#define RUDIMENTS_HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29427,15 +29422,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNAME_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R_4 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29493,11 +29488,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETDB_H 1
+#define RUDIMENTS_HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29553,11 +29548,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPCENT_H 1
+#define RUDIMENTS_HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29613,11 +29608,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNAME 1
+#define RUDIMENTS_HAVE_GETRPCBYNAME 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29676,17 +29671,17 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  HAVE_GETRPCBYNUMBER_R="yes";
+  RUDIMENTS_HAVE_GETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R_5 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETDB_H 1
+#define RUDIMENTS_HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29742,15 +29737,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R_5 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPCENT_H 1
+#define RUDIMENTS_HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29806,15 +29801,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R_5 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29872,15 +29867,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R_4 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NETDB_H 1
+#define RUDIMENTS_HAVE_NETDB_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -29936,15 +29931,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R_4 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPCENT_H 1
+#define RUDIMENTS_HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30000,15 +29995,15 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
   HAVE_GETRPCBYNUMBER_R="yes";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R_4 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER_R 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER_R 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30066,11 +30061,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30126,11 +30121,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPCENT_H 1
+#define RUDIMENTS_HAVE_RPCENT_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30186,11 +30181,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_GETRPCBYNUMBER 1
+#define RUDIMENTS_HAVE_GETRPCBYNUMBER 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_RPC_H 1
+#define RUDIMENTS_HAVE_RPC_H 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30251,7 +30246,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_PSELECT 1
+#define RUDIMENTS_HAVE_PSELECT 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30305,7 +30300,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_POSIX_FADVISE 1
+#define RUDIMENTS_HAVE_POSIX_FADVISE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30359,7 +30354,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_POSIX_FALLOCATE 1
+#define RUDIMENTS_HAVE_POSIX_FALLOCATE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30440,7 +30435,7 @@ export LD_LIBRARY_PATH
 echo "${ECHO_T}yes" >&6
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CRYPT_H 1
+#define RUDIMENTS_HAVE_CRYPT_H 1
 _ACEOF
 
 	else
@@ -30501,7 +30496,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   HAVE_CRYPT="yes"; CRYPTLIB="$i";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CRYPT 1
+#define RUDIMENTS_HAVE_CRYPT 1
 _ACEOF
 
 else
@@ -30581,9 +30576,9 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  HAVE_CRYPT_R="yes"; CRYPTLIB="$i";
+  RUDIMENTS_HAVE_CRYPT_R="yes"; CRYPTLIB="$i";
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CRYPT_R 1
+#define RUDIMENTS_HAVE_CRYPT_R 1
 _ACEOF
 
 else
@@ -30670,7 +30665,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MMAP 1
+#define RUDIMENTS_HAVE_MMAP 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAS_MEMORYMAP="yes"
@@ -30726,7 +30721,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CREATE_FILE_MAPPING 1
+#define RUDIMENTS_HAVE_CREATE_FILE_MAPPING 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; HAS_MEMORYMAP="yes"
@@ -30794,7 +30789,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MUNMAP_CADDR_T 1
+#define RUDIMENTS_HAVE_MUNMAP_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30844,11 +30839,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MINCORE 1
+#define RUDIMENTS_HAVE_MINCORE 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MINCORE_CHAR 1
+#define RUDIMENTS_HAVE_MINCORE_CHAR 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30904,11 +30899,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MINCORE 1
+#define RUDIMENTS_HAVE_MINCORE 1
 _ACEOF
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MINCORE_UCHAR 1
+#define RUDIMENTS_HAVE_MINCORE_UCHAR 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -30970,7 +30965,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MINCORE_CADDR_T 1
+#define RUDIMENTS_HAVE_MINCORE_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31020,7 +31015,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MPROTECT 1
+#define RUDIMENTS_HAVE_MPROTECT 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31082,7 +31077,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MPROTECT_CADDR_T 1
+#define RUDIMENTS_HAVE_MPROTECT_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31132,7 +31127,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MSYNC 1
+#define RUDIMENTS_HAVE_MSYNC 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31194,7 +31189,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MSYNC_CADDR_T 1
+#define RUDIMENTS_HAVE_MSYNC_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31244,7 +31239,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MLOCK 1
+#define RUDIMENTS_HAVE_MLOCK 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31306,7 +31301,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MLOCK_CADDR_T 1
+#define RUDIMENTS_HAVE_MLOCK_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31356,7 +31351,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MLOCKALL 1
+#define RUDIMENTS_HAVE_MLOCKALL 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31412,7 +31407,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MUNLOCK 1
+#define RUDIMENTS_HAVE_MUNLOCK 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31474,7 +31469,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MUNLOCK_CADDR_T 1
+#define RUDIMENTS_HAVE_MUNLOCK_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31524,7 +31519,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MUNLOCKALL 1
+#define RUDIMENTS_HAVE_MUNLOCKALL 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31580,7 +31575,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MADVISE 1
+#define RUDIMENTS_HAVE_MADVISE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31642,7 +31637,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MADVISE_CADDR_T 1
+#define RUDIMENTS_HAVE_MADVISE_CADDR_T 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31652,67 +31647,6 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 
 
-
-echo "$as_me:$LINENO: checking for strtof" >&5
-echo $ECHO_N "checking for strtof... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#ifndef __USE_GNU
-#define __USE_GNU
-#endif
-#ifndef __USE_ISOC9X
-#define __USE_ISOC9X
-#endif
-#include <stdlib.h>
-#include <string.h>
-int
-main ()
-{
-strtof(NULL,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOF 1
-_ACEOF
- echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
 echo "$as_me:$LINENO: checking for strtold" >&5
 echo $ECHO_N "checking for strtold... $ECHO_C" >&6
@@ -31762,7 +31696,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOLD 1
+#define RUDIMENTS_HAVE_STRTOLD 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31823,7 +31757,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOLL 1
+#define RUDIMENTS_HAVE_STRTOLL 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31884,7 +31818,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRTOULL 1
+#define RUDIMENTS_HAVE_STRTOULL 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31945,7 +31879,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRSPN 1
+#define RUDIMENTS_HAVE_STRSPN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32006,7 +31940,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRCSPN 1
+#define RUDIMENTS_HAVE_STRCSPN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32067,7 +32001,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRPBRK 1
+#define RUDIMENTS_HAVE_STRPBRK 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32130,7 +32064,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define MUST_DEFINE_SWAB 1
+#define RUDIMENTS_MUST_DEFINE_SWAB 1
 _ACEOF
  echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -32188,7 +32122,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SWAB_CHAR 1
+#define RUDIMENTS_HAVE_SWAB_CHAR 1
 _ACEOF
  echo "$as_me:$LINENO: result: char *" >&5
 echo "${ECHO_T}char *" >&6
@@ -32238,7 +32172,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_NSGETENVIRON 1
+#define RUDIMENTS_HAVE_NSGETENVIRON 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32293,7 +32227,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_ENVIRON 1
+#define RUDIMENTS_HAVE_ENVIRON 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32347,7 +32281,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CLEARENV 1
+#define RUDIMENTS_HAVE_CLEARENV 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32402,7 +32336,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_IOCTL 1
+#define RUDIMENTS_HAVE_IOCTL 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32423,7 +32357,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#ifdef HAVE_WINDOWS_H
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -32461,7 +32395,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_FCNTL 1
+#define RUDIMENTS_HAVE_FCNTL 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32586,7 +32520,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_FTOK 1
+#define RUDIMENTS_HAVE_FTOK 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32642,7 +32576,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_CONST_CHAR_FTOK 1
+#define RUDIMENTS_HAVE_CONST_CHAR_FTOK 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32717,10 +32651,10 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
-#ifdef HAVE_BYTESWAP_H
+#ifdef RUDIMENTS_HAVE_BYTESWAP_H
 #include <byteswap.h>
 #endif
-#ifdef HAVE_MACHINE_ENDIAN_H
+#ifdef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
 #include <machine/endian.h>
 #endif
 int
@@ -32755,7 +32689,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_BSWAP_64 1
+#define RUDIMENTS_HAVE_BSWAP_64 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32778,7 +32712,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <stdlib.h>
-#ifdef HAVE_MACHINE_ENDIAN_H
+#ifdef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
 #include <machine/endian.h>
 #endif
 int
@@ -32813,7 +32747,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE___BSWAP64 1
+#define RUDIMENTS_HAVE___BSWAP64 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32870,7 +32804,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_BSWAP64 1
+#define RUDIMENTS_HAVE_BSWAP64 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32926,7 +32860,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_SWAP64 1
+#define RUDIMENTS_HAVE_SWAP64 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -32982,7 +32916,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_OSSWAPLITTLETOHOSTINT64 1
+#define RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -33038,7 +32972,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_OSSWAPHOSTTOLITTLEINT64 1
+#define RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -33098,7 +33032,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_DIRFD 1
+#define RUDIMENTS_HAVE_DIRFD 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -33158,7 +33092,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_DIR_DD_FD 1
+#define RUDIMENTS_HAVE_DIR_DD_FD 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -33218,7 +33152,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_DIR_D_FD 1
+#define RUDIMENTS_HAVE_DIR_D_FD 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6

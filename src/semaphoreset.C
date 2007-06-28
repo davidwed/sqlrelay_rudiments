@@ -15,8 +15,7 @@ namespace rudiments {
 #endif
 
 class semaphoresetprivate {
-	friend class semaphoreset;
-	private:
+	public:
 			int	_semid;
 			bool	_created;
 			int	_semcount;
@@ -25,6 +24,25 @@ class semaphoresetprivate {
 		struct	sembuf	**_signalop;
 		struct	sembuf	**_signalwithundoop;
 };
+
+#ifndef RUDIMENTS_HAVE_SEMUN
+union semun {
+	int	val;
+	struct	semid_ds	*buf;
+	ushort	*array;
+};
+#endif
+
+// lame that this isn't part of the class, but I can't think of another way to
+// keep #ifndef RUDIMENTS_HAVE_SEMUN out of the header file
+static int semControl(semaphoresetprivate *pvt, int semnum,
+						int cmd, semun semctlun) {
+	int	result;
+	do {
+		result=semctl(pvt->_semid,semnum,cmd,semctlun);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
+}
 
 semaphoreset::semaphoreset() {
 	pvt=new semaphoresetprivate;
@@ -60,7 +78,7 @@ semaphoreset::~semaphoreset() {
 
 bool semaphoreset::forceRemove() {
 	semun	semctlun;
-	return !semControl(0,IPC_RMID,semctlun);
+	return !semControl(pvt,0,IPC_RMID,semctlun);
 }
 
 void semaphoreset::dontRemove() {
@@ -75,27 +93,23 @@ bool semaphoreset::wait(int index) {
 	return semOp(pvt->_waitop[index]);
 }
 
-#ifdef HAVE_SEMTIMEDOP
 bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
 	timespec	ts;
 	ts.tv_sec=seconds;
 	ts.tv_nsec=nanoseconds;
 	return semTimedOp(pvt->_waitop[index],&ts);
 }
-#endif
 
 bool semaphoreset::waitWithUndo(int index) {
 	return semOp(pvt->_waitwithundoop[index]);
 }
 
-#ifdef HAVE_SEMTIMEDOP
 bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
 	timespec	ts;
 	ts.tv_sec=seconds;
 	ts.tv_nsec=nanoseconds;
 	return semTimedOp(pvt->_waitwithundoop[index],&ts);
 }
-#endif
 
 bool semaphoreset::signal(int index) {
 	return semOp(pvt->_signalop[index]);
@@ -107,23 +121,23 @@ bool semaphoreset::signalWithUndo(int index) {
 
 int semaphoreset::getValue(int index) {
 	semun	semctlun;
-	return semControl(index,GETVAL,semctlun);
+	return semControl(pvt,index,GETVAL,semctlun);
 }
 
 bool semaphoreset::setValue(int index, int value) {
 	semun	semctlun;
 	semctlun.val=value;
-	return !semControl(index,SETVAL,semctlun);
+	return !semControl(pvt,index,SETVAL,semctlun);
 }
 
 int semaphoreset::getWaitingForZero(int index) {
 	semun	semctlun;
-	return semControl(index,GETZCNT,semctlun);
+	return semControl(pvt,index,GETZCNT,semctlun);
 }
 
 int semaphoreset::getWaitingForIncrement(int index) {
 	semun	semctlun;
-	return semControl(index,GETNCNT,semctlun);
+	return semControl(pvt,index,GETNCNT,semctlun);
 }
 
 bool semaphoreset::create(key_t key, mode_t permissions, 
@@ -232,7 +246,7 @@ bool semaphoreset::setUserId(uid_t uid) {
 	setds.sem_perm.uid=uid;
 	semun	semctlun;
 	semctlun.buf=&setds;
-	return !semControl(0,IPC_SET,semctlun);
+	return !semControl(pvt,0,IPC_SET,semctlun);
 }
 
 bool semaphoreset::setGroupId(gid_t gid) {
@@ -240,7 +254,7 @@ bool semaphoreset::setGroupId(gid_t gid) {
 	setds.sem_perm.gid=gid;
 	semun	semctlun;
 	semctlun.buf=&setds;
-	return !semControl(0,IPC_SET,semctlun);
+	return !semControl(pvt,0,IPC_SET,semctlun);
 }
 
 bool semaphoreset::setUserName(const char *username) {
@@ -260,7 +274,7 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 	setds.sem_perm.mode=permissions;
 	semun	semctlun;
 	semctlun.buf=&setds;
-	return !semControl(0,IPC_SET,semctlun);
+	return !semControl(pvt,0,IPC_SET,semctlun);
 }
 
 const char *semaphoreset::getUserName() {
@@ -268,7 +282,7 @@ const char *semaphoreset::getUserName() {
 	semun		semctlun;
 	semctlun.buf=&getds;
 	char		*name;
-	if (!semControl(0,IPC_STAT,semctlun) &&
+	if (!semControl(pvt,0,IPC_STAT,semctlun) &&
 			passwdentry::getName(getds.sem_perm.uid,&name)) {
 		return name;
 	}
@@ -279,7 +293,7 @@ uid_t semaphoreset::getUserId() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;
-	if (!semControl(0,IPC_STAT,semctlun)) {
+	if (!semControl(pvt,0,IPC_STAT,semctlun)) {
 		return (short)getds.sem_perm.uid;
 	}
 	return 0;
@@ -290,7 +304,7 @@ const char *semaphoreset::getGroupName() {
 	semun		semctlun;
 	semctlun.buf=&getds;
 	char		*name;
-	if (!semControl(0,IPC_STAT,semctlun) &&
+	if (!semControl(pvt,0,IPC_STAT,semctlun) &&
 			groupentry::getName(getds.sem_perm.gid,&name)) {
 		return name;
 	}
@@ -301,7 +315,7 @@ gid_t semaphoreset::getGroupId() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;
-	if (!semControl(0,IPC_STAT,semctlun)) {
+	if (!semControl(pvt,0,IPC_STAT,semctlun)) {
 		return (short)getds.sem_perm.gid;
 	}
 	return 0;
@@ -311,7 +325,7 @@ mode_t semaphoreset::getPermissions() {
 	semid_ds	getds;
 	semun		semctlun;
 	semctlun.buf=&getds;
-	if (!semControl(0,IPC_STAT,semctlun)) {
+	if (!semControl(pvt,0,IPC_STAT,semctlun)) {
 		return getds.sem_perm.mode;
 	}
 	return 0;
@@ -325,14 +339,6 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 	return result;
 }
 
-int semaphoreset::semControl(int semnum, int cmd, semun semctlun) {
-	int	result;
-	do {
-		result=semctl(pvt->_semid,semnum,cmd,semctlun);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
-}
-
 bool semaphoreset::semOp(struct sembuf *sops) {
 	int	result;
 	do {
@@ -341,15 +347,25 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 	return !result;
 }
 
-#ifdef HAVE_SEMTIMEDOP
 bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
+#ifdef RUDIMENTS_HAVE_SEMTIMEDOP
 	int	result;
 	do {
 		result=semtimedop(pvt->_semid,sops,1,ts);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
-}
+#else
+	return false;
 #endif
+}
+
+bool semaphoreset::supportsTimedSemaphoreOperations() {
+#ifdef RUDIMENTS_HAVE_SEMTIMEDOP
+	return true;
+#else
+	return false;
+#endif
+}
 
 #ifdef RUDIMENTS_NAMESPACE
 }

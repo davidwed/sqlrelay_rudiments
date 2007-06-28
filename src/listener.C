@@ -9,7 +9,7 @@
 // some systems need string.h to provide memset() for FD_ZERO/FD_SET
 #include <string.h>
 #include <sys/time.h>
-#ifdef HAVE_SYS_SELECT_H
+#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
 	#include <sys/select.h>
 #endif
 #ifdef HAVE_UNISTD_H

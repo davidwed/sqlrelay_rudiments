@@ -59,7 +59,6 @@ class serviceentry {
 		void	print() const;
 			// Prints out the service entry.
 
-#ifdef RUDIMENTS_HAS_THREADS
 		static	bool	needsMutex();
 			// If your system doesn't support getservbyname_r()
 			// and getservbyport_r() then this class needs a
@@ -72,7 +71,6 @@ class serviceentry {
 			// Allows you to supply a mutex is the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
-#endif
 
 	#include <rudiments/private/serviceentry.h>
 };

@@ -5,52 +5,55 @@
 #include <rudiments/error.h>
 
 #include <stdio.h>
+#ifdef RUDIMENTS_HAVE_MMAP
+	#include <sys/mman.h>
+#endif
 
 // for getpagesize()...
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_WINDOWS_H
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
 
-#ifdef HAVE_MUNMAP_CADDR_T
+#ifdef RUDIMENTS_HAVE_MUNMAP_CADDR_T
 	#define MUNMAP_ADDRCAST caddr_t
 #else
 	#define MUNMAP_ADDRCAST void *
 #endif
 
-#ifdef HAVE_MINCORE_CADDR_T
+#ifdef RUDIMENTS_HAVE_MINCORE_CADDR_T
 	#define MINCORE_ADDRCAST caddr_t
 #else
 	#define MINCORE_ADDRCAST void *
 #endif
 
-#ifdef HAVE_MPROTECT_CADDR_T
+#ifdef RUDIMENTS_HAVE_MPROTECT_CADDR_T
 	#define MPROTECT_ADDRCAST caddr_t
 #else
 	#define MPROTECT_ADDRCAST void *
 #endif
 
-#ifdef HAVE_MSYNC_CADDR_T
+#ifdef RUDIMENTS_HAVE_MSYNC_CADDR_T
 	#define MSYNC_ADDRCAST caddr_t
 #else
 	#define MSYNC_ADDRCAST void *
 #endif
 
-#ifdef HAVE_MLOCK_CADDR_T
+#ifdef RUDIMENTS_HAVE_MLOCK_CADDR_T
 	#define MLOCK_ADDRCAST caddr_t
 #else
 	#define MLOCK_ADDRCAST void *
 #endif
 
-#ifdef HAVE_MUNLOCK_CADDR_T
+#ifdef RUDIMENTS_HAVE_MUNLOCK_CADDR_T
 	#define MUNLOCK_ADDRCAST caddr_t
 #else
 	#define MUNLOCK_ADDRCAST void *
 #endif
 
-#ifdef HAVE_MADVISE_CADDR_T
+#ifdef RUDIMENTS_HAVE_MADVISE_CADDR_T
 	#define MADVISE_ADDRCAST caddr_t
 #else
 	#define MADVISE_ADDRCAST void *
@@ -64,7 +67,7 @@ class memorymapprivate {
 	friend class memorymap;
 	private:
 		void	*_data;
-		#ifdef HAVE_CREATE_FILE_MAPPING
+		#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 		HANDLE	_map;
 		#endif
 		size_t	_length;
@@ -73,7 +76,7 @@ class memorymapprivate {
 memorymap::memorymap() {
 	pvt=new memorymapprivate;
 	pvt->_data=NULL;
-	#ifdef HAVE_CREATE_FILE_MAPPING
+	#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 	pvt->_map=NULL;
 	#endif
 	pvt->_length=0;
@@ -87,13 +90,13 @@ memorymap::~memorymap() {
 bool memorymap::attach(int fd, off64_t offset, size_t len,
 					int protection, int flags) {
 	pvt->_length=len;
-	#if defined(HAVE_MMAP)
+	#if defined(RUDIMENTS_HAVE_MMAP)
 	do {
 		pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
 	} while (pvt->_data==MAP_FAILED &&
 			error::getErrorNumber()==EINTR);
 	return (pvt->_data!=MAP_FAILED);
-	#elif defined(HAVE_CREATE_FILE_MAPPING)
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 	DWORD	mapprot=(protection|PROT_WRITE)?
 				PAGE_READONLY:PAGE_READWRITE;
 	pvt->_map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
@@ -115,15 +118,16 @@ bool memorymap::attach(int fd, off64_t offset, size_t len,
 }
 
 bool memorymap::detach() {
-	#if defined(HAVE_MMAP) || defined(HAVE_CREATE_FILE_MAPPING)
-		#if defined(HAVE_MMAP)
+	#if defined(RUDIMENTS_HAVE_MMAP) || \
+		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+		#if defined(RUDIMENTS_HAVE_MMAP)
 		int	result;
 		do {
 			result=munmap(reinterpret_cast<MUNMAP_ADDRCAST>
 						(pvt->_data),pvt->_length);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		bool	retval=!result;
-		#elif defined(HAVE_CREATE_FILE_MAPPING)
+		#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		bool	retval=(UnmapViewOfFile(pvt->_data) &&
 						CloseHandle(pvt->_map));
 		#endif
@@ -140,7 +144,7 @@ bool memorymap::setProtection(int protection) {
 }
 
 bool memorymap::setProtection(off64_t offset, size_t len, int protection) {
-	#ifdef HAVE_MPROTECT
+	#ifdef RUDIMENTS_HAVE_MPROTECT
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
@@ -168,7 +172,7 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 bool memorymap::sync(off64_t offset, size_t len,
 			bool immediate, bool invalidate) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	#ifdef HAVE_MSYNC
+	#ifdef RUDIMENTS_HAVE_MSYNC
 	int	result;
 	do {
 		result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
@@ -176,7 +180,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 					((invalidate)?MS_INVALIDATE:0));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
-	#elif defined(HAVE_CREATE_FILE_MAPPING)
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 	return FlushViewOfFile(reinterpret_cast<void *>(ptr),len);
 	#else
 	return true;
@@ -184,7 +188,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 }
 
 bool memorymap::sequentialAccess(off64_t offset, size_t len) {
-	#if defined(HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_SEQUENTIAL);
 	#else
@@ -193,7 +197,7 @@ bool memorymap::sequentialAccess(off64_t offset, size_t len) {
 }
 
 bool memorymap::randomAccess(off64_t offset, size_t len) {
-	#if defined(HAVE_MADVISE) && defined(MADV_RANDOM)
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_RANDOM)
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_RANDOM);
 	#else
@@ -202,7 +206,7 @@ bool memorymap::randomAccess(off64_t offset, size_t len) {
 }
 
 bool memorymap::willNeed(off64_t offset, size_t len) {
-	#if defined(HAVE_MADVISE) && defined(MADV_WILLNEED)
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_WILLNEED)
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_WILLNEED);
 	#else
@@ -211,7 +215,7 @@ bool memorymap::willNeed(off64_t offset, size_t len) {
 }
 
 bool memorymap::wontNeed(off64_t offset, size_t len) {
-	#if defined(HAVE_MADVISE) && defined(MADV_DONTNEED)
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_DONTNEED)
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_DONTNEED);
 	#else
@@ -220,7 +224,7 @@ bool memorymap::wontNeed(off64_t offset, size_t len) {
 }
 
 bool memorymap::normalAccess(off64_t offset, size_t len) {
-	#if defined(HAVE_MADVISE) && defined(MADV_NORMAL)
+	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_NORMAL)
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_NORMAL);
 	#else
@@ -233,7 +237,7 @@ bool memorymap::lock() {
 }
 
 bool memorymap::lock(off64_t offset, size_t len) {
-	#ifdef HAVE_MLOCK
+	#ifdef RUDIMENTS_HAVE_MLOCK
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
@@ -250,7 +254,7 @@ bool memorymap::unlock() {
 }
 
 bool memorymap::unlock(off64_t offset, size_t len) {
-	#ifdef HAVE_MUNLOCK
+	#ifdef RUDIMENTS_HAVE_MUNLOCK
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
@@ -268,12 +272,12 @@ bool memorymap::inMemory() {
 
 bool memorymap::inMemory(off64_t offset, size_t len) {
 
-	#ifdef HAVE_MINCORE
+	#ifdef RUDIMENTS_HAVE_MINCORE
 
 	// create an array of char's, 1 for each page
 	int		pagesize=getpagesize();
 	int		tmplen=(len+pagesize-1)/pagesize;
-	#ifdef HAVE_MINCORE_CHAR
+	#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
 	char		*tmp=new char[tmplen];
 	#else
 	unsigned char	*tmp=new unsigned char[tmplen];
@@ -330,7 +334,7 @@ bool memorymap::lockAllFuture() {
 }
 
 bool memorymap::unlockAll() {
-	#ifdef HAVE_MUNLOCKALL
+	#ifdef RUDIMENTS_HAVE_MUNLOCKALL
 	int	result;
 	do {
 		result=munlockall();
@@ -342,7 +346,7 @@ bool memorymap::unlockAll() {
 }
 
 bool memorymap::mAdvise(unsigned char *start, size_t length, int advice) {
-	#if defined(HAVE_MADVISE)
+	#if defined(RUDIMENTS_HAVE_MADVISE)
 	int	result;
 	do {
 		result=madvise(reinterpret_cast<MADVISE_ADDRCAST>(start),
@@ -355,7 +359,7 @@ bool memorymap::mAdvise(unsigned char *start, size_t length, int advice) {
 }
 
 bool memorymap::mLockAll(int flags) {
-	#ifdef HAVE_MLOCKALL
+	#ifdef RUDIMENTS_HAVE_MLOCKALL
 	int	result;
 	do {
 		result=mlockall(flags);
