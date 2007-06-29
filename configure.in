@@ -291,7 +291,7 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
 
 if ( test -n "$SMALLCODE" ); then
-	AC_DEFINE_UNQUOTED(SMALL_CODE,1,Use small rather than fast code)
+	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
 fi
 
 
@@ -466,7 +466,7 @@ AC_MSG_CHECKING(for socklen_t)
 AC_EGREP_CPP(socklen_t,[#include <sys/socket.h>],AC_MSG_RESULT(yes),AC_MSG_RESULT(no); AC_DEFINE(socklen_t, int, Some systems don't define socklen_t))
 
 AC_MSG_CHECKING(for union semun)
-AC_EGREP_CPP(union semun,[#include <sys/sem.h>],AC_DEFINE(RUIMENTS_HAVE_SEMUN,1,Some systems define union semun) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(union semun,[#include <sys/sem.h>],AC_DEFINE(RUDIMENTS_HAVE_SEMUN,1,Some systems define union semun) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for struct msghdr.msg_controllen)
 AC_TRY_COMPILE([#include <sys/types.h>
@@ -504,7 +504,7 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #ifdef RUDIMENTS_HAVE_SYS_UIO_H
 #include <sys/uio.h>
 #endif],
-struct iovec iov; iov.iov_base=(void *)" ";,AC_DEFINE(IOV_BASE_TYPE,void *,iov_base is void *) AC_MSG_RESULT(void *), AC_DEFINE(IOV_BASE_TYPE,char *,iov_base is char *) AC_MSG_RESULT(char *))
+struct iovec iov; iov.iov_base=(void *)" ";,AC_DEFINE(RUDIMENTS_IOV_BASE_TYPE,void *,iov_base is void *) AC_MSG_RESULT(void *), AC_DEFINE(RUDIMENTS_IOV_BASE_TYPE,char *,iov_base is char *) AC_MSG_RESULT(char *))
 
 AC_MSG_CHECKING(CMSG_SPACE)
 AC_TRY_COMPILE([#include <sys/types.h>
@@ -534,7 +534,7 @@ echo "***** Signal Handlers ********"
 AC_TYPE_SIGNAL
 AC_MSG_CHECKING(signal handler parameter)
 AC_TRY_COMPILE([#include <signal.h>],
-void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
+void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(RUDIMENTS_SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
 echo "******************************"
 
 
@@ -551,26 +551,26 @@ GetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMTIME,1,Some systems have 
 fi
 
 AC_MSG_CHECKING(for tm_zone)
-AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(HAS_TM_ZONE,1,Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_ZONE,1,Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for tm_gmtoff)
-AC_EGREP_CPP(tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS_TM_GMTOFF,1,Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_gmtoff,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_GMTOFF,1,Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for __tm_zone)
-AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(HAS___TM_ZONE,1,Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS___TM_ZONE,1,Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for __tm_gmtoff)
-AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(HAS___TM_GMTOFF,1,Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS___TM_GMTOFF,1,Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for timezone)
 AC_TRY_COMPILE([#include <time.h>],
-long	t=-timezone;,AC_DEFINE(HAS_TIMEZONE,1,Some systems use _timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+long	t=-timezone;,AC_DEFINE(RUDIMENTS_HAS_TIMEZONE,1,Some systems use _timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for tm_name)
-AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(HAS_TM_NAME,1,Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_NAME,1,Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for tm_tzadj)
-AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for real-time-clock support)
 AC_TRY_COMPILE([#include <linux/rtc.h>
@@ -631,7 +631,7 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #endif],
-setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
+setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(if getsockopt takes a void * parameter)
 AC_TRY_COMPILE([#include <stdlib.h>
@@ -641,7 +641,7 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #endif],
-void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(no))
+void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for srand48)
 AC_TRY_COMPILE([#include <stdlib.h>],

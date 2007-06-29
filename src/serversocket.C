@@ -86,14 +86,14 @@ bool serversocket::setLingerOnClose(int timeout, int onoff) {
 	ling.l_onoff=onoff;
 	ling.l_linger=timeout;
 	return !setSockOpt(SOL_SOCKET,SO_LINGER,
-				(SETSOCKOPT_OPTVAL_TYPE)&ling,
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&ling,
 					sizeof(struct linger));
 }
 
 bool serversocket::setReuseAddresses(int onoff) {
 	int	value=onoff;
 	return !setSockOpt(SOL_SOCKET,SO_REUSEADDR,
-				(SETSOCKOPT_OPTVAL_TYPE)&value,
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 					(socklen_t)sizeof(int));
 }
 

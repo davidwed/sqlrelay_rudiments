@@ -125,7 +125,7 @@ signalhandler::~signalhandler() {
 }
 
 void signalhandler::setHandler(void *handler) {
-	#ifdef SIGNAL_HANDLER_INT
+	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 		pvt->_handlerstruct.sa_handler=(void(*)(int))handler;
 	#else
 		pvt->_handlerstruct.sa_handler=(void(*)(void))handler;

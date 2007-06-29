@@ -2062,7 +2062,7 @@ CXXFLAGS="$SMALLCODE $CXXFLAGS"
 if ( test -n "$SMALLCODE" ); then
 
 cat >>confdefs.h <<_ACEOF
-#define SMALL_CODE 1
+#define RUDIMENTS_SMALL_CODE 1
 _ACEOF
 
 fi
@@ -23085,7 +23085,7 @@ export LD_LIBRARY_PATH
 echo "${ECHO_T}yes" >&6
 
 cat >>confdefs.h <<\_ACEOF
-#define SSL_VOID_PTR 1
+#define RUDIMENTS_SSL_VOID_PTR 1
 _ACEOF
 
 			else
@@ -24233,7 +24233,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "union semun" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define RUIMENTS_HAVE_SEMUN 1
+#define RUDIMENTS_HAVE_SEMUN 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -24569,7 +24569,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define IOV_BASE_TYPE void *
+#define RUDIMENTS_IOV_BASE_TYPE void *
 _ACEOF
  echo "$as_me:$LINENO: result: void *" >&5
 echo "${ECHO_T}void *" >&6
@@ -24579,7 +24579,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define IOV_BASE_TYPE char *
+#define RUDIMENTS_IOV_BASE_TYPE char *
 _ACEOF
  echo "$as_me:$LINENO: result: char *" >&5
 echo "${ECHO_T}char *" >&6
@@ -25489,7 +25489,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define SIGNAL_HANDLER_INT 1
+#define RUDIMENTS_SIGNAL_HANDLER_INT 1
 _ACEOF
  echo "$as_me:$LINENO: result: int" >&5
 echo "${ECHO_T}int" >&6
@@ -25579,7 +25579,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "tm_zone" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS_TM_ZONE 1
+#define RUDIMENTS_HAS_TM_ZONE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25604,7 +25604,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "tm_gmtoff" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS_TM_GMTOFF 1
+#define RUDIMENTS_HAS_TM_GMTOFF 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25629,7 +25629,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "__tm_zone" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS___TM_ZONE 1
+#define RUDIMENTS_HAS___TM_ZONE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25654,7 +25654,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "__tm_gmtoff" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS___TM_GMTOFF 1
+#define RUDIMENTS_HAS___TM_GMTOFF 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25706,7 +25706,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS_TIMEZONE 1
+#define RUDIMENTS_HAS_TIMEZONE 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25733,7 +25733,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "tm_name" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS_TM_NAME 1
+#define RUDIMENTS_HAS_TM_NAME 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -25758,7 +25758,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "tm_tzadj" >/dev/null 2>&1; then
 
 cat >>confdefs.h <<\_ACEOF
-#define HAS_TM_TZADJ 1
+#define RUDIMENTS_HAS_TM_TZADJ 1
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26211,7 +26211,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define SETSOCKOPT_OPTVAL_TYPE const void *
+#define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const void *
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26221,7 +26221,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define SETSOCKOPT_OPTVAL_TYPE const char *
+#define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const char *
 _ACEOF
  echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -26275,7 +26275,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (exit $ac_status); }; }; then
 
 cat >>confdefs.h <<\_ACEOF
-#define GETSOCKOPT_OPTVAL_TYPE void *
+#define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE void *
 _ACEOF
  echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26285,7 +26285,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define GETSOCKOPT_OPTVAL_TYPE char *
+#define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 _ACEOF
  echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -26723,7 +26723,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 
 cat >>confdefs.h <<\_ACEOF
-#define NEED_XNET_PROTOTYPES 1
+#define RUDIMENTS_NEED_XNET_PROTOTYPES 1
 _ACEOF
  echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6

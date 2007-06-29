@@ -193,11 +193,11 @@ bool datetime::initialize(const struct tm *tmstruct) {
 	pvt->_isdst=tmstruct->tm_isdst;
 	// FIXME: what if the zone/offset are garbage, is there a good way to
 	// tell?
-	#ifdef HAS___TM_ZONE
+	#ifdef RUDIMENTS_HAS___TM_ZONE
 		pvt->_zone=charstring::duplicate(tmstruct->__tm_zone);
-	#elif HAS_TM_ZONE
+	#elif RUDIMENTS_HAS_TM_ZONE
 		pvt->_zone=charstring::duplicate(tmstruct->tm_zone);
-	#elif HAS_TM_NAME
+	#elif RUDIMENTS_HAS_TM_NAME
 		pvt->_zone=charstring::duplicate(tmstruct->tm_name);
 	#else
 		if (_timemutex && !acquireLock()) {
@@ -209,18 +209,18 @@ bool datetime::initialize(const struct tm *tmstruct) {
 						tzname[pvt->_isdst]:"UCT");
 		releaseLock();
 	#endif
-	#ifdef HAS___TM_GMTOFF
+	#ifdef RUDIMENTS_HAS___TM_GMTOFF
 		pvt->_gmtoff=tmstruct->__tm_gmtoff;
-	#elif HAS_TM_GMTOFF
+	#elif RUDIMENTS_HAS_TM_GMTOFF
 		pvt->_gmtoff=tmstruct->tm_gmtoff;
-	#elif HAS_TM_TZADJ
+	#elif RUDIMENTS_HAS_TM_TZADJ
 		pvt->_gmtoff=-tmstruct->tm_tzadj;
 	#else
 		if (_timemutex && !acquireLock()) {
 			return false;
 		}
 		tzset();
-		#ifdef HAS_TIMEZONE
+		#ifdef RUDIMENTS_HAS_TIMEZONE
 			pvt->_gmtoff=-timezone;
 		#else
 			pvt->_gmtoff=-_timezone;
@@ -652,13 +652,13 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 
 		// Get the offset from the struct tm if we can, otherwise get
 		// it from the value set by tzset()
-		#ifdef HAS___TM_GMTOFF
+		#ifdef RUDIMENTS_HAS___TM_GMTOFF
 			pvt->_gmtoff=tms.__tm_gmtoff;
-		#elif HAS_TM_GMTOFF
+		#elif RUDIMENTS_HAS_TM_GMTOFF
 			pvt->_gmtoff=tms.tm_gmtoff;
-		#elif HAS_TM_TZADJ
+		#elif RUDIMENTS_HAS_TM_TZADJ
 			pvt->_gmtoff=-tms.tm_tzadj;
-		#elif HAS_TIMEZONE
+		#elif RUDIMENTS_HAS_TIMEZONE
 			pvt->_gmtoff=-timezone;
 		#else
 			pvt->_gmtoff=-_timezone;

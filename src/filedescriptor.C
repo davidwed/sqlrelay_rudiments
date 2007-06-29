@@ -72,7 +72,7 @@
 // for FD_SET (macro that uses memset) on solaris
 #include <string.h>
 
-#ifdef NEED_XNET_PROTOTYPES
+#ifdef RUDIMENTS_NEED_XNET_PROTOTYPES
 extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
@@ -1109,7 +1109,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		if (pvt->_ssl) {
 			for (bool done=false; !done ;) {
 
-				#ifdef SSL_VOID_PTR
+				#ifdef RUDIMENTS_SSL_VOID_PTR
 				actualread=SSL_read(pvt->_ssl,ptr,sizetoread);
 				#else
 				actualread=SSL_read(pvt->_ssl,
@@ -1353,7 +1353,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		if (pvt->_ssl) {
 			for (bool done=false; !done ;) {
 
-				#ifdef SSL_VOID_PTR
+				#ifdef RUDIMENTS_SSL_VOID_PTR
 				actualwrite=::SSL_write(pvt->_ssl,ptr,count);
 				#else
 				actualwrite=::SSL_write(pvt->_ssl,
@@ -1629,7 +1629,7 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 
 	// must send at least 1 iovector with 1 byte of real data
 	struct iovec	iovector[1];
-	iovector[0].iov_base=(IOV_BASE_TYPE)" ";
+	iovector[0].iov_base=(RUDIMENTS_IOV_BASE_TYPE)" ";
 	iovector[0].iov_len=sizeof(char);
 	messageheader.msg_iov=iovector;
 	messageheader.msg_iovlen=1;
@@ -1699,7 +1699,7 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	// so we'll receive that too
 	struct iovec	iovector[1];
 	char		ptr;
-	iovector[0].iov_base=(IOV_BASE_TYPE)&ptr;
+	iovector[0].iov_base=(RUDIMENTS_IOV_BASE_TYPE)&ptr;
 	iovector[0].iov_len=sizeof(char);
 	messageheader.msg_iov=iovector;
 	messageheader.msg_iovlen=1;
@@ -1823,33 +1823,33 @@ bool filedescriptor::dontUseNaglesAlgorithm() {
 bool filedescriptor::setNoDelay(int onoff) {
 	int	value=onoff;
 	return !setSockOpt(IPPROTO_TCP,TCP_NODELAY,
-				(SETSOCKOPT_OPTVAL_TYPE)&value,
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 				(socklen_t)sizeof(int));
 }
 
 bool filedescriptor::getTcpWriteBufferSize(int *size) {
 	socklen_t	intsize=sizeof(int);
 	return getSockOpt(SOL_SOCKET,SO_SNDBUF,
-					(GETSOCKOPT_OPTVAL_TYPE)size,
-					&intsize)!=-1;
+				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)size,
+				&intsize)!=-1;
 }
 
 bool filedescriptor::setTcpWriteBufferSize(int size) {
 	return !setSockOpt(SOL_SOCKET,SO_SNDBUF,
-					(SETSOCKOPT_OPTVAL_TYPE)&size,
-					static_cast<socklen_t>(sizeof(int)));
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
+				static_cast<socklen_t>(sizeof(int)));
 }
 
 bool filedescriptor::getTcpReadBufferSize(int *size) {
 	socklen_t	intsize=sizeof(int);
 	return getSockOpt(SOL_SOCKET,SO_RCVBUF,
-					(GETSOCKOPT_OPTVAL_TYPE)size,
-					&intsize)!=-1;
+				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)size,
+				&intsize)!=-1;
 }
 
 bool filedescriptor::setTcpReadBufferSize(int size) {
 	return setSockOpt(SOL_SOCKET,SO_RCVBUF,
-				(SETSOCKOPT_OPTVAL_TYPE)&size,
+				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
 				static_cast<socklen_t>(sizeof(int)))!=-1;
 }
 

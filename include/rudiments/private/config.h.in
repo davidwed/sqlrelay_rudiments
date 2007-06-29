@@ -3,30 +3,6 @@
 /* Use inline functions or not */
 #undef ENABLE_RUDIMENTS_INLINES
 
-/* getsockopt takes a void * on most systems */
-#undef GETSOCKOPT_OPTVAL_TYPE
-
-/* Some systems use _timezone instead of timezone */
-#undef HAS_TIMEZONE
-
-/* Some systems define tm_gmtoff in their struct tm */
-#undef HAS_TM_GMTOFF
-
-/* Some systems define tm_name in their struct tm */
-#undef HAS_TM_NAME
-
-/* Some systems define tm_tzadj in their struct tm */
-#undef HAS_TM_TZADJ
-
-/* Some systems define tm_zone in their struct tm */
-#undef HAS_TM_ZONE
-
-/* Some systems define __tm_gmtoff in their struct tm */
-#undef HAS___TM_GMTOFF
-
-/* Some systems define __tm_zone in their struct tm */
-#undef HAS___TM_ZONE
-
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H
@@ -72,14 +48,8 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* iov_base is char * */
-#undef IOV_BASE_TYPE
-
 /* Mingw32 environment */
 #undef MINGW32
-
-/* Solaris 2.6 has a few missing function prototypes */
-#undef NEED_XNET_PROTOTYPES
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
@@ -99,6 +69,9 @@
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
 
+/* getsockopt takes a void * on most systems */
+#undef RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE
+
 /* Rudiments supports PCRE */
 #undef RUDIMENTS_HAS_PCRE
 
@@ -107,6 +80,27 @@
 
 /* Rudiments supports threads */
 #undef RUDIMENTS_HAS_THREADS
+
+/* Some systems use _timezone instead of timezone */
+#undef RUDIMENTS_HAS_TIMEZONE
+
+/* Some systems define tm_gmtoff in their struct tm */
+#undef RUDIMENTS_HAS_TM_GMTOFF
+
+/* Some systems define tm_name in their struct tm */
+#undef RUDIMENTS_HAS_TM_NAME
+
+/* Some systems define tm_tzadj in their struct tm */
+#undef RUDIMENTS_HAS_TM_TZADJ
+
+/* Some systems define tm_zone in their struct tm */
+#undef RUDIMENTS_HAS_TM_ZONE
+
+/* Some systems define __tm_gmtoff in their struct tm */
+#undef RUDIMENTS_HAS___TM_GMTOFF
+
+/* Some systems define __tm_zone in their struct tm */
+#undef RUDIMENTS_HAS___TM_ZONE
 
 /* Some systems have arpa/inet.h */
 #undef RUDIMENTS_HAVE_ARPA_INET_H
@@ -465,6 +459,9 @@
 /* Some systems have semtimedop */
 #undef RUDIMENTS_HAVE_SEMTIMEDOP
 
+/* Some systems define union semun */
+#undef RUDIMENTS_HAVE_SEMUN
+
 /* Some systems have setenv */
 #undef RUDIMENTS_HAVE_SETENV
 
@@ -564,29 +561,32 @@
 /* Some systems have __bswap64 */
 #undef RUDIMENTS_HAVE___BSWAP64
 
+/* iov_base is char * */
+#undef RUDIMENTS_IOV_BASE_TYPE
+
 /* Some systems have swab but don't define it */
 #undef RUDIMENTS_MUST_DEFINE_SWAB
 
 /* Compiler supports namespaces */
 #undef RUDIMENTS_NAMESPACE
 
-/* Version */
-#undef RUDIMENTS_VERSION
-
-/* Some systems define union semun */
-#undef RUIMENTS_HAVE_SEMUN
+/* Solaris 2.6 has a few missing function prototypes */
+#undef RUDIMENTS_NEED_XNET_PROTOTYPES
 
 /* setsockopt takes a const void * on most systems */
-#undef SETSOCKOPT_OPTVAL_TYPE
+#undef RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE
 
 /* Most systems define signal handlers with an integer parameter */
-#undef SIGNAL_HANDLER_INT
+#undef RUDIMENTS_SIGNAL_HANDLER_INT
 
 /* Use small rather than fast code */
-#undef SMALL_CODE
+#undef RUDIMENTS_SMALL_CODE
 
 /* SSL_read/write can use a void * parameter instead of char * */
-#undef SSL_VOID_PTR
+#undef RUDIMENTS_SSL_VOID_PTR
+
+/* Version */
+#undef RUDIMENTS_VERSION
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

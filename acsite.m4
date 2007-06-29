@@ -544,7 +544,7 @@ then
 			if ( test -n "$SSL_VOID_PTR" )
 			then
 				AC_MSG_RESULT(yes)
-				AC_DEFINE(SSL_VOID_PTR,1,SSL_read/write can use a void * parameter instead of char *)
+				AC_DEFINE(RUDIMENTS_SSL_VOID_PTR,1,SSL_read/write can use a void * parameter instead of char *)
 			else
 				AC_MSG_RESULT(no)
 			fi
@@ -1349,7 +1349,7 @@ AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
 		AC_MSG_CHECKING(for sendmsg prototype)
 		AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/socket.h>],
-sendmsg(0,NULL,0);,AC_MSG_RESULT(yes), AC_DEFINE(NEED_XNET_PROTOTYPES, 1, Solaris 2.6 has a few missing function prototypes) AC_MSG_RESULT(no))
+sendmsg(0,NULL,0);,AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_NEED_XNET_PROTOTYPES, 1, Solaris 2.6 has a few missing function prototypes) AC_MSG_RESULT(no))
 	fi
 ])
 
