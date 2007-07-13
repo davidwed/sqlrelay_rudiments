@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/file.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/file.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -265,7 +265,6 @@
                         <font color="#0000ff">// to the region.</font>
 
 
-<font color="#a020f0">                #ifdef HAVE_POSIX_FALLOCATE</font>
                 <font color="#2e8b57"><b>bool</b></font>  reserve(off64_t start, <font color="#2e8b57"><b>size_t</b></font> len) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Reserves space on the storage medium such that a</font>
                         <font color="#0000ff">// write to the region starting at &quot;start&quot; and</font>
@@ -274,7 +273,6 @@
                         <font color="#0000ff">//</font>
                         <font color="#0000ff">// Returns true if the region can be reserved and</font>
                         <font color="#0000ff">// false otherwise.</font>
-<font color="#a020f0">                #endif</font>
 
 
                 <font color="#0000ff">// Changes to files are often cached in system ram, these</font>
@@ -288,11 +286,9 @@
                 <font color="#0000ff">// has been copied into the disk's write cache, not</font>
                 <font color="#0000ff">// necessarily to the disk itself.</font>
                 <font color="#2e8b57"><b>bool</b></font>  sync() <font color="#2e8b57"><b>const</b></font> ;
-<font color="#a020f0">                #ifdef HAVE_FDATASYNC</font>
                 <font color="#2e8b57"><b>bool</b></font>  dataSync() <font color="#2e8b57"><b>const</b></font> ;
                         <font color="#0000ff">// Similar to sync() but does not wait for the file's</font>
                         <font color="#0000ff">// last-access or last-modification times to be copied.</font>
-<font color="#a020f0">                #endif</font>
 
 
                 <font color="#0000ff">// By default, the open() and create() methods call </font>
@@ -364,9 +360,6 @@
                                 <font color="#0000ff">// return the inode of the file</font>
                 nlink_t         getNumberOfHardLinks() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// return the number of hard links to the file</font>
-                <font color="#2e8b57"><b>struct</b></font> stat   *getStat();
-                                <font color="#0000ff">// returns a pointer to the stat structure</font>
-                                <font color="#0000ff">// used internally</font>
 
                 <font color="#0000ff">// These methods change the user and/or group</font>
                 <font color="#0000ff">// that owns the file.</font>
@@ -389,8 +382,6 @@
                         <font color="#0000ff">// Returns the maximum number of links that can be</font>
                         <font color="#0000ff">// created to &quot;filename&quot;.</font>
 
-
-<font color="#a020f0">                #ifdef HAVE_XATTRS</font>
 
                 <font color="#0000ff">// Some filesystems support extended file attributes.  These</font>
                 <font color="#0000ff">// methods provide an interface for getting and setting those</font>
@@ -526,7 +517,10 @@
                 <font color="#2e8b57"><b>bool</b></font>  removeAttribute(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *name) <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Removes attribute &quot;name&quot;.</font>
                         <font color="#0000ff">// Returns true on success and false on failure.</font>
-<font color="#a020f0">                #endif</font>
+
+                <font color="#2e8b57"><b>struct</b></font> stat   *getStat();
+                                <font color="#0000ff">// Returns a pointer to the &quot;stat&quot; struct</font>
+                                <font color="#0000ff">// used internally.</font>
 
 
                 <font color="#0000ff">// These methods creates the file &quot;name&quot; with permissions</font>

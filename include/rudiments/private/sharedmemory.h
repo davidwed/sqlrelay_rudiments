@@ -7,8 +7,8 @@
 		sharedmemory	&operator=(const sharedmemory &s);
 
 
-			int	shmGet(key_t key, size_t size, int shmflag);
-			void	*shmAttach();
-			bool	shmControl(int cmd, shmid_ds *buf);
+		int	shmGet(key_t key, size_t size, int shmflag);
+		void	*shmAttach();
+		bool	shmControl(int cmd, shmid_ds *buf);
 
 		sharedmemoryprivate	*pvt;

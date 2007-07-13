@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/filesystem.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/filesystem.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -138,9 +138,6 @@
                                                                 <font color="#2e8b57"><b>long</b></font> *nodes);
                 <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getAvailableFileNodes(<font color="#2e8b57"><b>int</b></font> fd, <font color="#2e8b57"><b>long</b></font> *nodes);
 
-<font color="#a020f0">#if defined(HAVE_STATVFS) || \</font>
-<font color="#a020f0">        defined(HAVE_NETBSD_STATVFS) || \</font>
-<font color="#a020f0">        defined(HAVE_CYGWIN_STATFS)</font>
                 <font color="#0000ff">// These methods return the file system id.</font>
                 <font color="#0000ff">// (works on SCO OSR5, Solaris)</font>
                 <font color="#0000ff">//</font>
@@ -149,16 +146,6 @@
                 <font color="#2e8b57"><b>long</b></font>          getFileSystemId() <font color="#2e8b57"><b>const</b></font>;
                 <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getFileSystemId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path, <font color="#2e8b57"><b>long</b></font> *id);
                 <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getFileSystemId(<font color="#2e8b57"><b>int</b></font> fd, <font color="#2e8b57"><b>long</b></font> *id);
-<font color="#a020f0">#else</font>
-                <font color="#0000ff">// These methods return the file system id.</font>
-                <font color="#0000ff">// (works on Linux, Net/Open/FreeBSD)</font>
-                <font color="#0000ff">//</font>
-                <font color="#0000ff">// The static methods return true on success and false on</font>
-                <font color="#0000ff">// failure.</font>
-                fsid_t          getFileSystemId() <font color="#2e8b57"><b>const</b></font>;
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getFileSystemId(<font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> *path, fsid_t *id);
-                <font color="#2e8b57"><b>static</b></font> <font color="#2e8b57"><b>bool</b></font>   getFileSystemId(<font color="#2e8b57"><b>int</b></font> fd, fsid_t *id);
-<font color="#a020f0">#endif</font>
 
                 <font color="#0000ff">// These methods return the maximum length of filenames.</font>
                 <font color="#0000ff">// (works on Linux, SCO OSR5, Solaris)</font>
@@ -279,7 +266,7 @@
 
                 <font color="#0000ff">// This method returns a pointer to the statfs structure</font>
                 <font color="#0000ff">// used internally.</font>
-<font color="#a020f0">#if defined(HAVE_STATVFS) || defined(HAVE_NETBSD_STATVFS)</font>
+<font color="#a020f0">#if defined(RUDIMENTS_HAVE_STATVFS) || defined(RUDIMENTS_HAVE_NETBSD_STATVFS)</font>
                 <font color="#2e8b57"><b>struct</b></font> statvfs        *getStatfs();
 <font color="#a020f0">#else</font>
                 <font color="#2e8b57"><b>struct</b></font> statfs *getStatfs();

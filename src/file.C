@@ -8,11 +8,10 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ipc.h>
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #include <sys/time.h>
@@ -747,10 +746,6 @@ ino_t file::getInode() const {
 
 nlink_t file::getNumberOfHardLinks() const {
 	return pvt->_st.st_nlink;
-}
-
-struct stat *file::getStat() {
-	return &pvt->_st;
 }
 
 void file::getCurrentPropertiesOnOpen() {
@@ -1513,6 +1508,10 @@ const char * const *file::attributeArray(const char *buffer,
 	return attributes;
 
 	#endif
+}
+
+struct stat *file::getStat() {
+	return &(pvt->_st);
 }
 
 char *file::dirname(const char *filename) {

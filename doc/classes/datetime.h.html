@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/datetime.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/datetime.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -226,7 +226,6 @@
                                 <font color="#0000ff">// and a timezone.</font>
 
 
-<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
                 <font color="#0000ff">// Many of the functions that the datetime class uses internally</font>
                 <font color="#0000ff">// are not reentrant and thus not thread-safe.  Indeed, for</font>
                 <font color="#0000ff">// some functions, there is no thread-safe version.  If your</font>
@@ -238,7 +237,6 @@
                 <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>void</b></font>   setTimeMutex(mutex *mtx);
                                 <font color="#0000ff">// Allows you to supply a mutex to regulate</font>
                                 <font color="#0000ff">// access to the non-reentrant functions.</font>
-<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/datetime.h&gt;</font>
 };

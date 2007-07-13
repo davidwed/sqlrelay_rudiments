@@ -4,5 +4,4 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/file.h>
 
-// FIXME: can this be moved into logger.C
 #include <syslog.h>

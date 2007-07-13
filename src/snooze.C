@@ -12,7 +12,7 @@
 	#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
 		#include <sys/select.h>
 	#endif
-	#ifdef HAVE_UNISTD_H
+	#ifdef RUDIMENTS_HAVE_UNISTD_H
 		#include <unistd.h>
 	#endif
 #endif

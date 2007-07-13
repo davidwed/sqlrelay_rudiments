@@ -6,6 +6,15 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+#ifdef MINGW32
+	// for LPGROUP_INFO_3, functions
+	#include <windows.h>
+	#include <lm.h>
+#else
+	// for group, functions
+	#include <grp.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -104,7 +113,7 @@ gid_t groupentry::getGroupId() const {
 #endif
 }
 
-#ifndef MINGW32
+#ifdef MINGW32
 static char *members[]={NULL};
 #endif
 

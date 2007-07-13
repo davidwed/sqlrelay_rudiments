@@ -6,6 +6,7 @@
 #include <rudiments/character.h>
 #include <rudiments/charstring.h>
 
+#include <unistd.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE

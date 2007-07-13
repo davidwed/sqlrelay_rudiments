@@ -31,7 +31,6 @@ class character {
 		static bool	isDigit(int c);
 		static bool	isHexDigit(int c);
 
-		static bool	isSpace(int c);
 		static bool	isBlank(int c);
 		static bool	isWhitespace(int c);
 

@@ -10,6 +10,9 @@
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
+// for addrinfo
+#include <netdb.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 

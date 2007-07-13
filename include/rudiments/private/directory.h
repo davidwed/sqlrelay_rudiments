@@ -12,5 +12,3 @@
 		int64_t		fpathConf(int name);
 
 		directoryprivate	*pvt;
-
-		int64_t	bufferSize(DIR *dirp);

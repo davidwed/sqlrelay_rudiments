@@ -6,7 +6,7 @@
 #include <rudiments/error.h>
 
 #include <stddef.h>
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #include <stdlib.h>

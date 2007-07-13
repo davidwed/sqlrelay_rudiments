@@ -6,6 +6,15 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+#ifdef MINGW32
+	// for LPUSER_INFO_23, functions
+	#include <windows.h>
+	#include <lm.h>
+#else
+	// for passwd, functions
+	#include <pwd.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 

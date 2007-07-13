@@ -5,7 +5,7 @@
 #include <rudiments/error.h>
 
 // for strerror
-#ifdef HAVE_STRINGS_H
+#ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
 #include <string.h>

@@ -3,6 +3,5 @@
 
 #include <rudiments/private/inttypes.h>
 
-#include <netdb.h>
-#include <sys/types.h>
+// for sockaddr_in
 #include <netinet/in.h>

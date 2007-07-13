@@ -3,13 +3,7 @@
 
 #include <rudiments/private/inttypes.h>
 
+// for gid_t
 #include <sys/types.h>
-
-#ifdef MINGW32
-	#include <windows.h>
-	#include <lm.h>
-#else
-	#include <grp.h>
-#endif
 
 #include <rudiments/mutex.h>

@@ -13,7 +13,7 @@
 #ifdef RUDIMENTS_HAVE_CRYPT_H
 	#include <crypt.h>
 #else
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #endif

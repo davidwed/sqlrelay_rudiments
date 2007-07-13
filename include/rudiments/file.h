@@ -352,9 +352,6 @@ class file : public filedescriptor {
 				// return the inode of the file
 		nlink_t		getNumberOfHardLinks() const;
 				// return the number of hard links to the file
-		struct stat	*getStat();
-				// returns a pointer to the stat structure
-				// used internally
 
 		// These methods change the user and/or group
 		// that owns the file.
@@ -512,6 +509,10 @@ class file : public filedescriptor {
 		bool	removeAttribute(const char *name) const;
 			// Removes attribute "name".
 			// Returns true on success and false on failure.
+
+		struct stat	*getStat();
+				// Returns a pointer to the "stat" struct
+				// used internally.
 
 
 		// These methods creates the file "name" with permissions

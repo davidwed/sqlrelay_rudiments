@@ -1124,6 +1124,17 @@ madvise(NULL,0,MADV_NORMAL);,AC_DEFINE(RUDIMENTS_HAVE_MADVISE,1,Some systems hav
 #include <sys/mman.h>],
 void *ptr; madvise(ptr,0,MADV_NORMAL);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MADVISE_CADDR_T,1,Some systems use caddr_t argument for madvise) AC_MSG_RESULT(yes))
 
+	AC_MSG_CHECKING(for memrchr)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <string.h>],
+memrchr(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMRCHR,1,Some systems have memrchr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for memmem)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#define _GNU_SOURCE
+#include <string.h>],
+memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memmem) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 fi
 
 ])

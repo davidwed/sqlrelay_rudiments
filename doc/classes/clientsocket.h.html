@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/clientsocket.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/clientsocket.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -27,16 +27,23 @@
                 clientsocket    &amp;<font color="#a52a2a"><b>operator</b></font>=(<font color="#2e8b57"><b>const</b></font> clientsocket &amp;c);
                 <font color="#2e8b57"><b>virtual</b></font>               ~clientsocket();
 
-<font color="#a020f0">#ifdef FIONBIO</font>
+                <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>  supportsBlockingNonBlockingModes();
+                                <font color="#0000ff">// Returns false if the system doesn't support</font>
+                                <font color="#0000ff">// blocking/nonblocking modes and true</font>
+                                <font color="#0000ff">// otherwise.</font>
+
                 <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>  useNonBlockingMode() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Puts the file descriptor in non-blocking</font>
                                 <font color="#0000ff">// mode.  Returns true on success and false on</font>
                                 <font color="#0000ff">// failure.</font>
+                                <font color="#0000ff">// Returns false if the system doesn't support</font>
+                                <font color="#0000ff">// blocking/nonblocking modes.</font>
                 <font color="#2e8b57"><b>virtual</b></font> <font color="#2e8b57"><b>bool</b></font>  useBlockingMode() <font color="#2e8b57"><b>const</b></font>;
                                 <font color="#0000ff">// Puts the file descriptor in blocking mode.</font>
                                 <font color="#0000ff">// Returns true on success and false on</font>
                                 <font color="#0000ff">// failure.</font>
-<font color="#a020f0">#endif</font>
+                                <font color="#0000ff">// Returns false if the system doesn't support</font>
+                                <font color="#0000ff">// blocking/nonblocking modes.</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/clientsocket.h&gt;</font>
 };

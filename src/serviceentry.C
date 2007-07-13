@@ -6,6 +6,10 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+// for servent, functions
+#include <netdb.h>
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 

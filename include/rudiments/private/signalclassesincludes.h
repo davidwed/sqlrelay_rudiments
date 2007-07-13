@@ -3,7 +3,5 @@
 
 #include <rudiments/private/inttypes.h>
 
-// FIXME: can this be moved into signalclasses.C
 #include <signal.h>
-
 #include <sys/types.h>

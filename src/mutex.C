@@ -16,7 +16,7 @@ class mutexprivate {
 		#elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
 		HANDLE		_mut;
 		#endif
-		bool		_destroy;
+		bool			_destroy;
 };
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)

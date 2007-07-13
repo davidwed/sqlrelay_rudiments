@@ -6,6 +6,9 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+// for spwd, functions
+#include <shadow.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 

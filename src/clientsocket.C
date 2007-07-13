@@ -6,7 +6,9 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#ifdef HAVE_UNISTD_H
+#include <sys/ioctl.h>
+
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 

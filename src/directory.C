@@ -5,8 +5,15 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
+// for DIR
+#ifdef RUDIMENTS_HAVE_DIRENT_H
+	#include <dirent.h>
+#else
+	#include <direct.h>
+#endif
+
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #include <sys/stat.h>
@@ -27,6 +34,24 @@ class directoryprivate {
 // LAME: not in the class
 #if !defined(RUDIMENTS_HAVE_READDIR_R)
 static mutex	*_rdmutex;
+#endif
+
+
+// lame that this isn't part of the class, but I can't think of another way to
+// keep #ifndef RUDIMENTS_HAVE_DIRENT_H out of the header file
+#ifdef RUDIMENTS_HAVE_READDIR_R
+static int64_t bufferSize(directory *d, DIR *dirp) {
+	int64_t	name_max=d->maxFileNameLength();
+	if (name_max==-1) {
+		return -1;
+	}
+	#ifdef RUDIMENTS_HAVE_DIRENT_H
+        	//return offsetof(struct dirent, d_name)+name_max+1;
+        	return sizeof(struct dirent)+name_max+1;
+	#else
+        	return sizeof(struct direct)+name_max+1;
+	#endif
+}
 #endif
 
 directory::directory() {
@@ -59,23 +84,6 @@ bool directory::close() {
 	return retval;
 }
 
-int64_t directory::bufferSize(DIR *dirp) {
-#ifdef RUDIMENTS_HAVE_READDIR_R
-	return 0;
-#else
-	int64_t	name_max=maxFileNameLength();
-	if (name_max==-1) {
-		return -1;
-	}
-	#ifdef HAVE_DIRENT_H
-        	//return offsetof(struct dirent, d_name)+name_max+1;
-        	return sizeof(struct dirent)+name_max+1;
-	#else
-        	return sizeof(struct direct)+name_max+1;
-	#endif
-#endif
-}
-
 uint64_t directory::getChildCount() {
 
 	// handle unopened directory
@@ -89,11 +97,11 @@ uint64_t directory::getChildCount() {
 
 	#ifdef RUDIMENTS_HAVE_READDIR_R
 		// get the size of the buffer
-		int64_t	size=bufferSize(pvt->_dir);
+		int64_t	size=bufferSize(this,pvt->_dir);
 		if (size==-1) {
 			return 0;
 		}
-		#ifdef HAVE_DIRENT_H
+		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry=reinterpret_cast<dirent *>(
 						new unsigned char[size]);
 			dirent	*result;
@@ -115,7 +123,7 @@ uint64_t directory::getChildCount() {
 			pvt->_currentindex++;
 		}
 	#else
-		#ifdef HAVE_DIRENT_H
+		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry;
 		#else
 			direct	*entry;
@@ -123,7 +131,6 @@ uint64_t directory::getChildCount() {
 		if (_rdmutex && !_rdmutex->lock()) {
 			return 0;
 		}
-		uint64_t	count=0;
 		for (;;) {
 			do {
 				entry=readdir(pvt->_dir);
@@ -158,11 +165,11 @@ char *directory::getChildName(uint64_t index) {
 
 	#ifdef RUDIMENTS_HAVE_READDIR_R
 		// get the size of the buffer
-		int64_t	size=bufferSize(pvt->_dir);
+		int64_t	size=bufferSize(this,pvt->_dir);
 		if (size==-1) {
 			return NULL;
 		}
-		#ifdef HAVE_DIRENT_H
+		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry=reinterpret_cast<dirent *>(
 						new unsigned char[size]);
 			dirent	*result;
@@ -187,7 +194,7 @@ char *directory::getChildName(uint64_t index) {
 		delete[] entry;
 		return retval;
 	#else
-		#ifdef HAVE_DIRENT_H
+		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry;
 		#else
 			direct	*entry;

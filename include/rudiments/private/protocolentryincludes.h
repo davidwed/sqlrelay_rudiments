@@ -4,5 +4,3 @@
 #include <rudiments/private/inttypes.h>
 
 #include <rudiments/mutex.h>
-
-#include <netdb.h>

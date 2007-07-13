@@ -4,4 +4,6 @@
 #include <rudiments/private/inttypes.h>
 
 #include <sys/types.h>
+
+// for struct sembuf
 #include <sys/sem.h>

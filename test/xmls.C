@@ -10,7 +10,8 @@ using namespace rudiments;
 
 class myxmlsax : public xmlsax {
 	public:
-			myxmlsax();
+				myxmlsax();
+		const char	*getString();
 	private:
 		bool	xmlVersionStart();
 		bool	xmlVersionEnd();
@@ -26,6 +27,8 @@ class myxmlsax : public xmlsax {
 		bool	cdata(const char *string);
 		void	indent(int spaces);
 		int	ind;
+
+		stringbuffer	str;
 };
 
 myxmlsax::myxmlsax() : xmlsax() {
@@ -33,78 +36,82 @@ myxmlsax::myxmlsax() : xmlsax() {
 }
 
 bool	myxmlsax::xmlVersionStart() {
-	printf("XML version start:\n");
+	str.append("XML version start:\n");
 	return true;
 }
 
 bool	myxmlsax::xmlVersionEnd() {
-	printf("XML version end:\n");
+	str.append("XML version end:\n");
 	return true;
 }
 
 bool	myxmlsax::doctypeStart(const char *name) {
-	printf("DOCTYPE start: %s\n",name);
+	str.append("DOCTYPE start: ")->append(name)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::externalSubset(const char *filename) {
-	printf("	external subset: %s\n",filename);
+	str.append("	external subset: ")->append(filename)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::doctypeEnd() {
-	printf("DOCTYPE end:\n");
+	str.append("DOCTYPE end:\n");
 	return true;
 }
 
 void	myxmlsax::indent(int spaces) {
 	for (int i=0; i<spaces; i++) {
-		printf("  ");
+		str.append("  ");
 	}
 }
 
 bool	myxmlsax::tagStart(const char *name) {
 	indent(ind);
-	printf("tagStart: %s\n",name);
+	str.append("tagStart: ")->append(name)->append("\n");
 	ind++;
 	return true;
 }
 
 bool	myxmlsax::attributeName(const char *name) {
 	indent(ind+1);
-	printf("attribute name: %s\n",name);
+	str.append("attribute name: ")->append(name)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::attributeValue(const char *value) {
 	indent(ind+1);
-	printf("attribute value: %s\n",value);
+	str.append("attribute value: ")->append(value)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::text(const char *string) {
 	indent(ind+1);
-	printf("text: \n%s\n",string);
+	str.append("text: \n")->append(string)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::tagEnd(const char *name) {
 	ind--;
 	indent(ind);
-	printf("tagEnd: %s\n",name);
+	str.append("tagEnd: ")->append(name)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::comment(const char *string) {
 	indent(ind);
-	printf("comment: \n%s\n",string);
+	str.append("comment: \n")->append(string)->append("\n");
 	return true;
 }
 
 bool	myxmlsax::cdata(const char *string) {
 	indent(ind);
-	printf("cdata: \n%s\n",string);
+	str.append("cdata: \n")->append(string)->append("\n");
 	return true;
+}
+
+const char	*myxmlsax::getString() {
+	return str.getString();
 }
 
 
@@ -132,4 +139,5 @@ int main(int argc, const char **argv) {
 ");
 	printf("=====================================================\n");
 	x.parseFile("xmls.xml");
+	printf("%s\n",x.getString());
 }

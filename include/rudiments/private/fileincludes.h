@@ -5,14 +5,15 @@
 
 #include <sys/types.h>
 
-// FIXME: can these be put in file.C 
-#include <sys/stat.h>
+// for open flags
 #include <fcntl.h>
-#include <stdlib.h>
 
-#ifndef HAVE_BLKCNT_T
-	typedef long blkcnt_t;
-#endif
+// for struct stat
+#include <sys/stat.h>
+
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	typedef long blksize_t;
+#endif
+#ifndef RUDIMENTS_HAVE_BLKCNT_T
+	typedef long blkcnt_t;
 #endif

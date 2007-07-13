@@ -3,7 +3,7 @@
 
 #include <rudiments/private/inttypes.h>
 
+// for uid_t
 #include <sys/types.h>
-#include <shadow.h>
 
 #include <rudiments/mutex.h>

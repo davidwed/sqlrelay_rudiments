@@ -2,8 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/charstring.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "test.C"
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

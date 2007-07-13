@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #ifdef RUDIMENTS_HAVE_ENVIRON
-	#ifdef HAVE_UNISTD_H
+	#ifdef RUDIMENTS_HAVE_UNISTD_H
 		#include <unistd.h>
 	#endif
 #else

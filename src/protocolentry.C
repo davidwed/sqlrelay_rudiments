@@ -6,6 +6,9 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+// for protoent, functions
+#include <netdb.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 

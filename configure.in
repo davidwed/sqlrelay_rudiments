@@ -350,8 +350,18 @@ echo "******************************"
 dnl Checks for header files.
 echo
 echo "***** Headers ****************"
-AC_HEADER_DIRENT
-AC_HEADER_STDC
+
+AC_MSG_CHECKING(for dirent.h)
+AC_TRY_COMPILE([#include <dirent.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_DIRENT_H, 1, Some systems have dirent.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strings.h)
+AC_TRY_COMPILE([#include <strings.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_STRINGS_H, 1, Some systems have strings.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for unistd.h)
+AC_TRY_COMPILE([#include <unistd.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_UNISTD_H, 1, Some systems have unistd.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 if ( test -n "$MINGW32" )
 then
@@ -909,7 +919,7 @@ OSSwapHostToLittleInt64(0);,AC_DEFINE(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64,1,S
 
 AC_MSG_CHECKING(for dirfd)
 AC_TRY_LINK([#include <sys/types.h>
-#ifdef HAVE_DIRENT_H
+#ifdef RUDIMENTS_HAVE_DIRENT_H
 #include <dirent.h>
 #else
 #include <direct.h>
@@ -918,7 +928,7 @@ DIR *d; dirfd(d);,AC_DEFINE(RUDIMENTS_HAVE_DIRFD,1,Some systems have dirfd) AC_M
 
 AC_MSG_CHECKING(for DIR.dd_fd)
 AC_TRY_LINK([#include <sys/types.h>
-#ifdef HAVE_DIRENT_H
+#ifdef RUDIMENTS_HAVE_DIRENT_H
 #include <dirent.h>
 #else
 #include <direct.h>
@@ -927,7 +937,7 @@ DIR d; d.dd_fd=1;,AC_DEFINE(RUDIMENTS_HAVE_DIR_DD_FD,1,Some systems have DIR.dd_
 
 AC_MSG_CHECKING(for DIR.d_fd)
 AC_TRY_LINK([#include <sys/types.h>
-#ifdef HAVE_DIRENT_H
+#ifdef RUDIMENTS_HAVE_DIRENT_H
 #include <dirent.h>
 #else
 #include <direct.h>

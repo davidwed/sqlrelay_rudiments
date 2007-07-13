@@ -137,7 +137,7 @@ ifeq ($(INCLUDE_RPCENTRY),1)
 endif
 ifeq ($(INCLUDE_SEMAPHORESET),1)
 	HEADERS += semaphoreset.h
-	PRIVATEHEADERS += semaphoreset.h semaphoresetincludes.h semaphoreset_semun.h
+	PRIVATEHEADERS += semaphoreset.h semaphoresetincludes.h
 endif
 ifeq ($(INCLUDE_SERVER),1)
 	HEADERS += server.h

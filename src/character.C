@@ -43,10 +43,6 @@ bool character::isPunctuation(int c) {
 	return ispunct(c)!=0;
 }
 
-bool character::isSpace(int c) {
-	return isspace(c)!=0;
-}
-
 bool character::isUpperCase(int c) {
 	return isupper(c)!=0;
 }
@@ -59,11 +55,11 @@ bool character::isBlank(int c) {
 	// don't be tempted to use isblank() here, it's too challenging to get
 	// it to work on every platform without a bunch of confusing #defines
 	// before including ctype.h
-	return (isSpace(c) || c=='	');
+	return (c==' ' || c=='	');
 }
 
 bool character::isWhitespace(int c) {
-	return (isBlank(c) || c=='\n' || c=='\r');
+	return isspace(c)!=0;
 }
 
 bool character::isAscii(int c) {

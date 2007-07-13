@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/hostentry.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/hostentry.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -81,7 +81,6 @@
                 <font color="#2e8b57"><b>void</b></font>  print() <font color="#2e8b57"><b>const</b></font>;
                         <font color="#0000ff">// Prints out the host entry.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
                 <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>bool</b></font>   needsMutex();
                         <font color="#0000ff">// If your system doesn't support gethostbyname_r()</font>
                         <font color="#0000ff">// and gethostbyaddr_r() then this class needs a</font>
@@ -94,7 +93,6 @@
                         <font color="#0000ff">// Allows you to supply a mutex is the class needs it.</font>
                         <font color="#0000ff">// If your application is not multithreaded, then</font>
                         <font color="#0000ff">// there is no need to supply a mutex.</font>
-<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/hostentry.h&gt;</font>
 };

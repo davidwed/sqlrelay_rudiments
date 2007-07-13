@@ -7,7 +7,7 @@
 	// for getsid()
 	#define __USE_XOPEN_EXTENDED
 #endif
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 

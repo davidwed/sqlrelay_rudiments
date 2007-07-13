@@ -10,10 +10,14 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 
+// for umask
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include <stdlib.h>
 
 // for fork/exit...
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 

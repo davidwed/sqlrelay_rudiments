@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/semaphoreset.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/semaphoreset.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -66,6 +66,10 @@
                                 <font color="#0000ff">// createOrAttach() below.  If the semaphore</font>
                                 <font color="#0000ff">// was just attached to, it is not removed.</font>
 
+                <font color="#2e8b57"><b>bool</b></font>  supportsTimedSemaphoreOperations();
+                                <font color="#0000ff">// Returns true if the system supports timed</font>
+                                <font color="#0000ff">// semaphore operations or false otherwise.</font>
+
                 <font color="#2e8b57"><b>bool</b></font>  create(key_t key, mode_t permissions,
                                         <font color="#2e8b57"><b>int</b></font> semcount, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>int</b></font> *values);
                                 <font color="#0000ff">// Creates a semaphore set identified by &quot;key&quot;</font>
@@ -105,12 +109,12 @@
 
                 <font color="#2e8b57"><b>bool</b></font>  wait(<font color="#2e8b57"><b>int</b></font> index);
                         <font color="#0000ff">// wait on the &quot;index&quot;'th semaphore in the set</font>
-<font color="#a020f0">                #ifdef HAVE_SEMTIMEDOP</font>
                 <font color="#2e8b57"><b>bool</b></font>  wait(<font color="#2e8b57"><b>int</b></font> index, <font color="#2e8b57"><b>long</b></font> seconds, <font color="#2e8b57"><b>long</b></font> nanoseconds);
                         <font color="#0000ff">// Wait on the &quot;index&quot;'th semaphore in the set until</font>
                         <font color="#0000ff">// &quot;seconds&quot; and &quot;nanoseconds&quot; elapse.  Returns false</font>
                         <font color="#0000ff">// and sets errno to EAGAIN if a timeout occurs.</font>
-<font color="#a020f0">                #endif</font>
+                        <font color="#0000ff">// Returns false if the system doesn't support timed</font>
+                        <font color="#0000ff">// semaphore operations.</font>
                 <font color="#2e8b57"><b>bool</b></font>  signal(<font color="#2e8b57"><b>int</b></font> index);
                         <font color="#0000ff">// signal on the &quot;index&quot;'th semaphore in the set</font>
 
@@ -118,13 +122,13 @@
                 <font color="#2e8b57"><b>bool</b></font>  waitWithUndo(<font color="#2e8b57"><b>int</b></font> index);
                         <font color="#0000ff">// wait on the &quot;index&quot;'th semaphore in the set and</font>
                         <font color="#0000ff">// undo the wait when the program exits</font>
-<font color="#a020f0">                #ifdef HAVE_SEMTIMEDOP</font>
                 <font color="#2e8b57"><b>bool</b></font>  waitWithUndo(<font color="#2e8b57"><b>int</b></font> index, <font color="#2e8b57"><b>long</b></font> seconds, <font color="#2e8b57"><b>long</b></font> nanoseconds);
                         <font color="#0000ff">// Wait on the &quot;index&quot;'th semaphore in the set until</font>
                         <font color="#0000ff">// &quot;seconds&quot; and &quot;nanoseconds&quot; elapse.  Undo the wait</font>
                         <font color="#0000ff">// when the program exits.  Returns false and sets</font>
                         <font color="#0000ff">// errno to EAGAIN if a timeout occurs.</font>
-<font color="#a020f0">                #endif</font>
+                        <font color="#0000ff">// Returns false if the system doesn't support timed</font>
+                        <font color="#0000ff">// semaphore operations.</font>
                 <font color="#2e8b57"><b>bool</b></font>  signalWithUndo(<font color="#2e8b57"><b>int</b></font> index);
                         <font color="#0000ff">// signal on the &quot;index&quot;'th semaphore in the set and</font>
                         <font color="#0000ff">// undo the signal when the program exits</font>

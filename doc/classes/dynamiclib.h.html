@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>~/src/firstworks/rudiments-0.30/include/rudiments/dynamiclib.h.html</title>
+<title>~/src/firstworks/rudiments-0.31/include/rudiments/dynamiclib.h.html</title>
 <meta name="Generator" content="Vim/7.0">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
@@ -54,7 +54,6 @@
                         <font color="#0000ff">// returns it.  The calling program must deallocate</font>
                         <font color="#0000ff">// the buffer.</font>
 
-<font color="#a020f0">#ifdef RUDIMENTS_HAS_THREADS</font>
                 <font color="#0000ff">// getError() is not reentrant and thus not thread safe.  If</font>
                 <font color="#0000ff">// your application is multi-threaded and you use getError(),</font>
                 <font color="#0000ff">// you must use this method to supply a mutex and ensure thread</font>
@@ -65,7 +64,6 @@
                 <font color="#2e8b57"><b>static</b></font>        <font color="#2e8b57"><b>void</b></font>   setErrorMutex(mutex *mtx);
                                 <font color="#0000ff">// Allows you to supply a mutex to regulate</font>
                                 <font color="#0000ff">// access to getError().</font>
-<font color="#a020f0">#endif</font>
 
 <font color="#a020f0">        #include </font><font color="#ff00ff">&lt;rudiments/private/dynamiclib.h&gt;</font>
 };

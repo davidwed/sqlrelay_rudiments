@@ -2,5 +2,4 @@
 // See the COPYING file for more information.
 
 #include <rudiments/dictionary.h>
-
 #include <rudiments/mutex.h>

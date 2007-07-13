@@ -4,7 +4,7 @@
 #include <rudiments/rawbuffer.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 
@@ -58,7 +58,13 @@ void *rawbuffer::zero(void *dest, size_t size) {
 }
 
 int rawbuffer::compare(const void *s1, const void *s2, size_t size) {
-	return (s1 && s1)?memcmp(s1,s2,size):NULL;
+	if (!s1 && !s2) {
+		return 0;
+	}
+	if (s1 && s2) {
+		return memcmp(s1,s2,size);
+	}
+	return 1;
 }
 
 const void *rawbuffer::findFirst(const void *haystack,
@@ -70,7 +76,7 @@ const void *rawbuffer::findLast(const void *haystack,
 				unsigned char needle, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MEMRCHR
 		return (haystack && needle)?
-			memrchr(haystack,needle.size):NULL;
+			memrchr(haystack,needle,size):NULL;
 	#else
 		if (haystack && needle) {
 			unsigned char	realneedle=needle;
