@@ -5,6 +5,8 @@
 	added missing lingerOnClose(), fixed dontLingerOnClose()
 	added base64 encode/decode methods
 	fixed charstring::parseNumber() for unsigned int's
+	added /opt/csw to configure script's search path
+	fixed a memory leak in xmldom::unCacheString()
 
 0.30 - changed commandline::value() to commandline::getValue()
 	fixed a memory leak in dictionary

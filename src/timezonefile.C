@@ -16,17 +16,17 @@ namespace rudiments {
 class timezonefileprivate {
 	friend class timezonefile;
 	private:
-		unsigned long	_ttisgmtcnt;
-		unsigned long	_ttisstdcnt;
-		unsigned long	_leapcnt;
-		unsigned long	_timecnt;
-		unsigned long	_typecnt;
-		unsigned long	_charcnt;
-		unsigned long	*_transitiontime;
+		uint64_t	_ttisgmtcnt;
+		uint64_t	_ttisstdcnt;
+		uint64_t	_leapcnt;
+		uint64_t	_timecnt;
+		uint64_t	_typecnt;
+		uint64_t	_charcnt;
+		uint64_t	*_transitiontime;
 		unsigned char	*_localtime;
 		ttinfo		*_ti;
-		unsigned long	*_leapsecondtime;
-		unsigned long	*_totalleapseconds;
+		uint64_t	*_leapsecondtime;
+		uint64_t	*_totalleapseconds;
 		unsigned char	*_transstdwall;
 		unsigned char	*_transutclocal;
 		unsigned char	*_rawtimezonestring;
@@ -85,36 +85,36 @@ void timezonefile::timezonefileClone(const timezonefile &t) {
 	pvt->_timecnt=t.pvt->_timecnt;
 	pvt->_typecnt=t.pvt->_typecnt;
 	pvt->_charcnt=t.pvt->_charcnt;
-	pvt->_transitiontime=new unsigned long[pvt->_timecnt];
+	pvt->_transitiontime=new uint64_t[pvt->_timecnt];
 	pvt->_localtime=new unsigned char[pvt->_timecnt];
-	for (unsigned long i=0; i<pvt->_timecnt; i++) {
+	for (uint64_t i=0; i<pvt->_timecnt; i++) {
 		pvt->_transitiontime[i]=t.pvt->_transitiontime[i];
 		pvt->_localtime[i]=t.pvt->_localtime[i];
 	}
 	pvt->_ti=new ttinfo[pvt->_typecnt];
-	for (unsigned long i=0; i<pvt->_timecnt; i++) {
+	for (uint64_t i=0; i<pvt->_timecnt; i++) {
 		pvt->_ti[i]=t.pvt->_ti[i];
 	}
-	pvt->_leapsecondtime=new unsigned long[pvt->_leapcnt];
-	pvt->_totalleapseconds=new unsigned long[pvt->_leapcnt];
-	for (unsigned long i=0; i<pvt->_leapcnt; i++) {
+	pvt->_leapsecondtime=new uint64_t[pvt->_leapcnt];
+	pvt->_totalleapseconds=new uint64_t[pvt->_leapcnt];
+	for (uint64_t i=0; i<pvt->_leapcnt; i++) {
 		pvt->_leapsecondtime[i]=t.pvt->_leapsecondtime[i];
 		pvt->_totalleapseconds[i]=t.pvt->_totalleapseconds[i];
 	}
 	pvt->_transstdwall=new unsigned char[pvt->_ttisstdcnt];
-	for (unsigned long i=0; i<pvt->_ttisstdcnt; i++) {
+	for (uint64_t i=0; i<pvt->_ttisstdcnt; i++) {
 		pvt->_transstdwall[i]=t.pvt->_transstdwall[i];
 	}
 	pvt->_transutclocal=new unsigned char[pvt->_ttisgmtcnt];
-	for (unsigned long i=0; i<pvt->_ttisgmtcnt; i++) {
+	for (uint64_t i=0; i<pvt->_ttisgmtcnt; i++) {
 		pvt->_transutclocal[i]=t.pvt->_transutclocal[i];
 	}
 	pvt->_rawtimezonestring=new unsigned char[pvt->_charcnt+1];
-	for (unsigned long i=0; i<pvt->_charcnt+1; i++) {
+	for (uint64_t i=0; i<pvt->_charcnt+1; i++) {
 		pvt->_rawtimezonestring[i]=t.pvt->_rawtimezonestring[i];
 	}
 	pvt->_timezonestrings=new unsigned char *[pvt->_typecnt];
-	for (unsigned long i=0; i<pvt->_typecnt; i++) {
+	for (uint64_t i=0; i<pvt->_typecnt; i++) {
 		pvt->_timezonestrings[i]=
 			&pvt->_rawtimezonestring[pvt->_ti[i].tt_abbrind];
 	}
@@ -147,59 +147,53 @@ bool timezonefile::parseFile(const char *filename) {
 		printf("read future failed\n");
 		return false;
 	}
-	
-	if (tzfile.read(&pvt->_ttisgmtcnt,sizeof(unsigned long))!=
-						sizeof(unsigned long)) {
+
+	unsigned long	tmp;	
+	if (tzfile.read(&tmp,sizeof(unsigned long))!=sizeof(unsigned long)) {
 		printf("read ttisgmtcnt failed\n");
 		return false;
 	}
-	pvt->_ttisgmtcnt=tzfile.netToHost(pvt->_ttisgmtcnt);
+	pvt->_ttisgmtcnt=tzfile.netToHost((uint64_t)tmp);
 
-	if (tzfile.read(&pvt->_ttisstdcnt,sizeof(unsigned long))!=
-						sizeof(unsigned long)) {
+	if (tzfile.read(&tmp,sizeof(unsigned long))!=sizeof(unsigned long)) {
 		printf("read ttisstdcnt failed\n");
 		return false;
 	}
-	pvt->_ttisstdcnt=tzfile.netToHost(pvt->_ttisstdcnt);
+	pvt->_ttisstdcnt=tzfile.netToHost((uint64_t)tmp);
 
-	if (tzfile.read(&pvt->_leapcnt,sizeof(unsigned long))!=
-						sizeof(unsigned long)) {
+	if (tzfile.read(&tmp,sizeof(unsigned long))!=sizeof(unsigned long)) {
 		printf("read leapcnt failed\n");
 		return false;
 	}
-	pvt->_leapcnt=tzfile.netToHost(pvt->_leapcnt);
+	pvt->_leapcnt=tzfile.netToHost((uint64_t)tmp);
 
-	if (tzfile.read(&pvt->_timecnt,sizeof(unsigned long))!=
-						sizeof(unsigned long)) {
+	if (tzfile.read(&tmp,sizeof(unsigned long))!=sizeof(unsigned long)) {
 		printf("read timecnt failed\n");
 		return false;
 	}
-	pvt->_timecnt=tzfile.netToHost(pvt->_timecnt);
+	pvt->_timecnt=tzfile.netToHost((uint64_t)tmp);
 
-	if (tzfile.read(&pvt->_typecnt,sizeof(unsigned long))!=
-						sizeof(unsigned long)) {
+	if (tzfile.read(&tmp,sizeof(unsigned long))!=sizeof(unsigned long)) {
 		printf("read typecnt failed\n");
 		return false;
 	}
-	pvt->_typecnt=tzfile.netToHost(pvt->_typecnt);
+	pvt->_typecnt=tzfile.netToHost((uint64_t)tmp);
 
-	if (tzfile.read(&pvt->_charcnt,sizeof(unsigned long))!=
-						sizeof(unsigned long)) {
+	if (tzfile.read(&tmp,sizeof(unsigned long))!=sizeof(unsigned long)) {
 		printf("read charcnt failed\n");
 		return false;
 	}
-	pvt->_charcnt=tzfile.netToHost(pvt->_charcnt);
+	pvt->_charcnt=tzfile.netToHost((uint64_t)tmp);
 
-	unsigned long	i;
-	pvt->_transitiontime=new unsigned long[pvt->_timecnt];
+	uint64_t	i;
+	pvt->_transitiontime=new uint64_t[pvt->_timecnt];
 	for (i=0; i<pvt->_timecnt; i++) {
-		if (tzfile.read(&pvt->_transitiontime[i],
+		if (tzfile.read(&tmp,
 				sizeof(unsigned long))!=sizeof(unsigned long)) {
 			printf("read transitiontime[%ld] failed\n",i);
 			return false;
 		}
-		pvt->_transitiontime[i]=tzfile.netToHost(
-						pvt->_transitiontime[i]);
+		pvt->_transitiontime[i]=tzfile.netToHost((uint64_t)tmp);
 	}
 
 	pvt->_localtime=new unsigned char[pvt->_timecnt];
@@ -213,13 +207,13 @@ bool timezonefile::parseFile(const char *filename) {
 
 	pvt->_ti=new ttinfo[pvt->_typecnt];
 	for (i=0; i<pvt->_typecnt; i++) {
-		if (tzfile.read(&pvt->_ti[i].tt_gmtoff,
-					sizeof(long))!=sizeof(long)) {
+		long	signedtmp;
+		if (tzfile.read(&signedtmp,sizeof(long))!=sizeof(long)) {
 			printf("read ttinfo.tt_gmtoff[%ld] failed\n",i);
 			return false;
 		}
-		pvt->_ti[i].tt_gmtoff=tzfile.netToHost(
-					(unsigned long)pvt->_ti[i].tt_gmtoff);
+		pvt->_ti[i].tt_gmtoff=(int64_t)tzfile.netToHost(
+						(uint64_t)signedtmp);
 		if (tzfile.read(&pvt->_ti[i].tt_isdst,
 					sizeof(char))!=sizeof(char)) {
 			printf("read ttinfo.tt_isdst[%ld] failed\n",i);
@@ -233,7 +227,7 @@ bool timezonefile::parseFile(const char *filename) {
 	}
 
 	pvt->_rawtimezonestring=new unsigned char[pvt->_charcnt+1];
-	if ((unsigned long)tzfile.read(pvt->_rawtimezonestring,pvt->_charcnt)!=
+	if ((uint64_t)tzfile.read(pvt->_rawtimezonestring,pvt->_charcnt)!=
 								pvt->_charcnt) {
 		printf("read rawtimezonestring failed\n");
 		return false;
@@ -242,29 +236,26 @@ bool timezonefile::parseFile(const char *filename) {
 
 	// set pointers to the timezones
 	pvt->_timezonestrings=new unsigned char *[pvt->_typecnt];
-	unsigned long	counter;
+	uint64_t	counter;
 	for (counter=0; counter<pvt->_typecnt; counter++) {
 		pvt->_timezonestrings[counter]=
 			&pvt->_rawtimezonestring[pvt->_ti[counter].tt_abbrind];
 	}
 
-	pvt->_leapsecondtime=new unsigned long[pvt->_leapcnt];
-	pvt->_totalleapseconds=new unsigned long[pvt->_leapcnt];
+	pvt->_leapsecondtime=new uint64_t[pvt->_leapcnt];
+	pvt->_totalleapseconds=new uint64_t[pvt->_leapcnt];
 	for (i=0; i<pvt->_leapcnt; i++) {
-		if (tzfile.read(&pvt->_leapsecondtime[i],
-				sizeof(unsigned long))!=sizeof(unsigned long)) {
+		if (tzfile.read(&tmp,sizeof(uint64_t))!=sizeof(uint64_t)) {
 			printf("read leapsecondtime[%ld] failed\n",i);
 			return false;
 		}
-		pvt->_leapsecondtime[i]=tzfile.netToHost(
-						pvt->_leapsecondtime[i]);
+		pvt->_leapsecondtime[i]=tzfile.netToHost((uint64_t)tmp);
 		if (tzfile.read(&pvt->_totalleapseconds[i],
-				sizeof(unsigned long))!=sizeof(unsigned long)) {
+				sizeof(uint64_t))!=sizeof(uint64_t)) {
 			printf("read totalleapseconds[%ld] failed\n",i);
 			return false;
 		}
-		pvt->_totalleapseconds[i]=tzfile.netToHost(
-						pvt->_totalleapseconds[i]);
+		pvt->_totalleapseconds[i]=tzfile.netToHost((uint64_t)tmp);
 	}
 
 	pvt->_transstdwall=new unsigned char[pvt->_ttisstdcnt];
@@ -291,35 +282,35 @@ bool timezonefile::parseFile(const char *filename) {
 }
 
 
-unsigned long timezonefile::getIsGMTCount() {
+uint64_t timezonefile::getIsGMTCount() {
 	return pvt->_ttisgmtcnt;
 }
 
-unsigned long timezonefile::getIsSTDCount() {
+uint64_t timezonefile::getIsSTDCount() {
 	return pvt->_ttisstdcnt;
 }
 
-unsigned long timezonefile::getLeapCount() {
+uint64_t timezonefile::getLeapCount() {
 	return pvt->_leapcnt;
 }
 
-unsigned long timezonefile::getTimeCount() {
+uint64_t timezonefile::getTimeCount() {
 	return pvt->_timecnt;
 }
 
-unsigned long timezonefile::getTypeCount() {
+uint64_t timezonefile::getTypeCount() {
 	return pvt->_typecnt;
 }
 
-unsigned long timezonefile::getCharacterCount() {
+uint64_t timezonefile::getCharacterCount() {
 	return pvt->_charcnt;
 }
 
-unsigned long *timezonefile::getTransitionTimes() {
+uint64_t *timezonefile::getTransitionTimes() {
 	return pvt->_transitiontime;
 }
 
-unsigned long timezonefile::getTransitionTime(int index) {
+uint64_t timezonefile::getTransitionTime(int index) {
 	return pvt->_transitiontime[index];
 }
 
@@ -339,19 +330,19 @@ ttinfo *timezonefile::getTimeTypeInfo(int index) {
 	return &pvt->_ti[index];
 }
 
-unsigned long *timezonefile::getLeapSecondTimes() {
+uint64_t *timezonefile::getLeapSecondTimes() {
 	return pvt->_leapsecondtime;
 }
 
-unsigned long timezonefile::getLeapSecondTime(int index) {
+uint64_t timezonefile::getLeapSecondTime(int index) {
 	return pvt->_leapsecondtime[index];
 }
 
-unsigned long *timezonefile::getTotalLeapSeconds() {
+uint64_t *timezonefile::getTotalLeapSeconds() {
 	return pvt->_totalleapseconds;
 }
 
-unsigned long timezonefile::getTotalLeapSeconds(int index) {
+uint64_t timezonefile::getTotalLeapSeconds(int index) {
 	return pvt->_totalleapseconds[index];
 }
 
@@ -390,7 +381,7 @@ void timezonefile::print() {
 	printf("timecnt: %ld\n",pvt->_timecnt);
 	printf("typecnt: %ld\n",pvt->_typecnt);
 	printf("charcnt: %ld\n",pvt->_charcnt);
-	unsigned long	i;
+	uint64_t	i;
 	for (i=0; i<pvt->_timecnt; i++) {
 		printf("transitiontime[%ld]: %ld\n",i,pvt->_transitiontime[i]);
 	}
@@ -405,7 +396,7 @@ void timezonefile::print() {
 		printf("}\n");
 	}
 	printf("rawtimezonestring: ");
-	for (unsigned long i=0; i<pvt->_charcnt; i++) {
+	for (uint64_t i=0; i<pvt->_charcnt; i++) {
 		if (pvt->_rawtimezonestring[i]=='\0') {
 			printf(" ");
 		}
@@ -418,7 +409,7 @@ void timezonefile::print() {
 		printf("totalleapseconds[%ld]: %ld\n",i,
 					pvt->_totalleapseconds[i]);
 	}
-	for (unsigned long counter=0; counter<pvt->_typecnt; counter++) {
+	for (uint64_t counter=0; counter<pvt->_typecnt; counter++) {
 		printf("timezonestrings[%ld]=%s\n",counter,
 					pvt->_timezonestrings[counter]);
 	}

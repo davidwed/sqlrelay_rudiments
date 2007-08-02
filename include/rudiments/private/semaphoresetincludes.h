@@ -3,6 +3,9 @@
 
 #include <rudiments/private/inttypes.h>
 
+// for struct timespec
+#include <rudiments/private/snoozeincludes.h>
+
 #include <sys/types.h>
 
 // for struct sembuf

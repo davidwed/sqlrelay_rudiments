@@ -192,7 +192,7 @@ void xmldom::unCacheString(const char *string) {
 	unsigned long	index=0;
 	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
 					node; node=node->getNext()) {
-		const char	*data=node->getData();
+		char	*data=node->getData();
 		if (!charstring::compare(string,data)) {
 			linkedlistnode<unsigned long>	*refnode=
 				pvt->_refcountlist.getNodeByIndex(index);
@@ -200,6 +200,7 @@ void xmldom::unCacheString(const char *string) {
 			if (refnode->getData()<=0) {
 				pvt->_refcountlist.removeByIndex(index);
 				pvt->_strlist.removeByIndex(index);
+				delete[] data;
 				return;
 			}
 		}

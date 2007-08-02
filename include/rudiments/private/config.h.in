@@ -498,6 +498,12 @@
 /* Some systems have strings.h */
 #undef RUDIMENTS_HAVE_STRINGS_H
 
+/* Some systems have strlcat */
+#undef RUDIMENTS_HAVE_STRLCAT
+
+/* Some systems have strlcpy */
+#undef RUDIMENTS_HAVE_STRLCPY
+
 /* Some systems have strpbrk */
 #undef RUDIMENTS_HAVE_STRPBRK
 

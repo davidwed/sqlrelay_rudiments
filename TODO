@@ -1,3 +1,6 @@
+use strlcpy, strlcmp, etc. when available (on openbsd, maybe others)
+	configure script already tests for them
+
 use filedescriptor methods rather than htons/l and friends
 
 QNX doesn't have sys/fcntl.h

@@ -5,6 +5,7 @@
 #define RUDIMENTS_TIMEZONEFILE_H
 
 #include <rudiments/private/config.h>
+#include <rudiments/private/inttypes.h>
 
 // The timezonefile class provides methods for parsing and accessing timezone
 // files such as are typically found in /usr/share/zoneinfo.
@@ -16,7 +17,7 @@ namespace rudiments {
 class timezonefileprivate;
 
 struct ttinfo {
-	long		tt_gmtoff;
+	int64_t		tt_gmtoff;
 	int		tt_isdst;
 	unsigned int	tt_abbrind;
 };
@@ -32,19 +33,19 @@ class timezonefile {
 				// Parses "filename".  Returns true on success
 				// and false on failure.
 
-		unsigned long	getTimeCount();
+		uint64_t	getTimeCount();
 				// Returns the number of transition times or
 				// local times stored in the file.
-		unsigned long	*getTransitionTimes();
+		uint64_t	*getTransitionTimes();
 				// Returns an array of transition times.
-		unsigned long	getTransitionTime(int index);
+		uint64_t	getTransitionTime(int index);
 				// Returns the transition time at "index".
 		unsigned char	*getLocalTimes();
 				// Returns an array of local times.
 		unsigned char	getLocalTimes(int index);
 				// Returns the local time at "index".
 
-		unsigned long	getTypeCount();
+		uint64_t	getTypeCount();
 				// Returns the number of time type info's
 				// stored in the file.
 		ttinfo		**getTimeTypeInfos();
@@ -52,19 +53,19 @@ class timezonefile {
 		ttinfo		*getTimeTypeInfo(int index);
 				// Returns the time type info at "index".
 
-		unsigned long	getLeapCount();
+		uint64_t	getLeapCount();
 				// Returns the number of leap second times or
 				// total leap seconds in the file.
-		unsigned long	*getLeapSecondTimes();
+		uint64_t	*getLeapSecondTimes();
 				// Returns an array of leap second times.
-		unsigned long	getLeapSecondTime(int index);
+		uint64_t	getLeapSecondTime(int index);
 				// Returns the leap second time at "index".
-		unsigned long	*getTotalLeapSeconds();
+		uint64_t	*getTotalLeapSeconds();
 				// Returns an array of total leap seconds.
-		unsigned long	getTotalLeapSeconds(int index);
+		uint64_t	getTotalLeapSeconds(int index);
 				// Returns the total leap seconds at "index".
 
-		unsigned long	getIsSTDCount();
+		uint64_t	getIsSTDCount();
 				// Returns the number of standard or wall
 				// indicators in the file.
 		unsigned char	*getStandardOrWallIndicators();
@@ -74,7 +75,7 @@ class timezonefile {
 				// Returns the standard or wall indicator at
 				// "index".
 
-		unsigned long	getIsGMTCount();
+		uint64_t	getIsGMTCount();
 				// Returns the number of GMT/UTC or local
 				// indicators in the file.
 		unsigned char	*getUTCOrLocalIndicators();
@@ -83,7 +84,7 @@ class timezonefile {
 				// Returns the UTC or local indicator at
 				// "index".
 
-		unsigned long	getCharacterCount();
+		uint64_t	getCharacterCount();
 				// Returns the number of characters in the
 				// raw time zone string.
 		unsigned char	*getRawTimeZoneString();
