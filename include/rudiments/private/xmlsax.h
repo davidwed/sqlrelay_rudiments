@@ -13,7 +13,7 @@
 			char	parseComment(char current);
 			char	parseCData(char current);
 			char	parseAttribute(char current, char standalone);
-			int	getGeneralEntity(char breakchar, char **buffer);
+			int	getGeneralEntity(char breakchar);
 			void	parseAttributeFailed();
 			bool	parseText(char current, char *next);
 			void	parseTextFailed();

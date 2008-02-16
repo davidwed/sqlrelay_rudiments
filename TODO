@@ -1,3 +1,5 @@
+reduce heap fragmentation where possible
+
 use strlcpy, strlcmp, etc. when available (on openbsd, maybe others)
 	configure script already tests for them
 

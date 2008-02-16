@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/xmldom.h>
+#include <rudiments/permissions.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -21,4 +22,6 @@ int main(int argc, const char **argv) {
 	printf("%s\n",xml->getString());
 	x.getRootNode()->cascadeOnDelete();
 	delete xml;
+
+	x.writeFile("test.xml",permissions::evalPermString("rw-r--r--"));
 }

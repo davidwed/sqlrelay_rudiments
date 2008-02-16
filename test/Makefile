@@ -25,6 +25,7 @@ clean:
 	$(RMTREE) .libs
 	$(RM) testfile
 	$(MAKE) -C certificates clean
+	$(RM) test.xml
 
 rebuild: clean all
 

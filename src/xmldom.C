@@ -4,8 +4,12 @@
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
 #include <rudiments/linkedlist.h>
+#include <rudiments/filesystem.h>
 
 #include <stdlib.h>
+
+// for getpagesize()
+#include <unistd.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -63,16 +67,25 @@ void xmldom::reset() {
 }
 
 bool xmldom::writeFile(const char *filename, mode_t perms) const {
+	filesystem	fs;
+	off64_t	optblocksize;
+	if (fs.initialize(filename)) {
+		optblocksize=fs.getOptimumTransferBlockSize();
+	} else {
+		optblocksize=getpagesize();
+	}
 	file	fl;
 	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {
 		return false;
 	}
+	fl.setWriteBufferSize(optblocksize);
 	stringbuffer	*xml=pvt->_rootnode->xml();
 	bool	retval=true;
 	int	length=charstring::length(xml->getString());
 	if (fl.write(xml->getString(),length)!=length) {
 		retval=false;
 	}
+	fl.flushWriteBuffer(-1,-1);
 	if (!fl.close()) {
 		retval=false;
 	}
