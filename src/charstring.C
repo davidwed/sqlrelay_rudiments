@@ -270,6 +270,55 @@ char *charstring::httpEscape(const char *input) {
 	return output;
 }
 
+char *charstring::httpUnescape(const char *input) {
+
+	if (!input) {
+		return NULL;
+	}
+
+	char		*output=new char[length(input)+1];
+	char		*outptr=output;
+	const char	*ptr=input;
+	
+	while (*ptr) {
+		if (*ptr=='+') {
+			(*outptr)=' ';
+		} else if (*ptr=='%') {
+			*ptr++;
+			char	hex[5];
+			hex[0]='0';
+			hex[2]='x';
+			if (*ptr) {
+				hex[0]=*ptr;
+				ptr++;
+				if (*ptr) {
+					hex[1]=*ptr;
+				} else {
+					(*outptr)='%';
+					outptr++;
+					(*outptr)=*ptr;
+					outptr++;
+					break;
+				}
+				hex[2]='\0';
+				char	ch=charstring::toInteger(hex,16);
+				(*outptr)=ch;
+			} else {
+				(*outptr)='%';
+				outptr++;
+				break;
+			}
+		} else {
+			(*outptr)=*ptr;
+		}
+		outptr++;
+		ptr++;
+	}
+	(*outptr)='\0';
+
+	return output;
+}
+
 char *charstring::escape(const char *input, const char *characters) {
 	char		*output;
 	uint64_t	outputsize;

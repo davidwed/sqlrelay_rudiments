@@ -320,6 +320,10 @@ class charstring {
 			// http escapes "input" and returns it in a buffer
 			// allocated inside the function.  This buffer must be
 			// deleted by the calling program.
+		static	char	*httpUnescape(const char *input);
+			// http unescapes "input" and returns it in a buffer
+			// allocated inside the function.  This buffer must be
+			// deleted by the calling program.
 
 		static	char	*escape(const char *input,
 					const char *characters);

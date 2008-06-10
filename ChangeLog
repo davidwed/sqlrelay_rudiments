@@ -1,6 +1,7 @@
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now
 	added DESTDIR= to rudiments.pc.in
+	added charstring::httpUnescape
 
 0.31 - added OSSwapLittleToHost/OSSwapHostToLittle for Mac OS X
 	modified environment::clear() for mac os x

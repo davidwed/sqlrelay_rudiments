@@ -323,7 +323,10 @@ int main(int argc, const char **argv) {
 	// http escape the buffer
 	char    *escbuffer=charstring::httpEscape("!@#$%^&*()hello-+");
 	printf("!@#$\\%^&*()hello-+  http escaped is  %s\n",escbuffer);
+	char	*unescbuffer=charstring::httpUnescape(escbuffer);
+	printf("http unescaped is  %s\n",unescbuffer);
 	delete escbuffer;
+	delete unescbuffer;
 	
 
 	// evaluate a string to see if it's a number

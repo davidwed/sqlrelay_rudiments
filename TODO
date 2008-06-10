@@ -1,3 +1,5 @@
+use pthread_sigmask insetad of sigprocmask when possible
+
 reduce heap fragmentation where possible
 
 use strlcpy, strlcmp, etc. when available (on openbsd, maybe others)
