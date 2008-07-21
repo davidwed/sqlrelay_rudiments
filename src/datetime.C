@@ -665,9 +665,7 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		#endif
 	}
 
-	if (oldzone) {
-		retval=(retval && restoreTimeZoneEnvVar(oldzone));
-	}
+	retval=(retval && restoreTimeZoneEnvVar(oldzone));
 
 	if (needmutex) {
 		releaseLock();

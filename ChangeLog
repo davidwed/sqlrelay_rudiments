@@ -2,6 +2,8 @@
 	xmlsax/dom classes use optimal read and write buffers now
 	added DESTDIR= to rudiments.pc.in
 	added charstring::httpUnescape
+	fixed a bug in datetime that would cause TZ to remain after doing a
+		timezone conversion if TZ was unset to begin with
 
 0.31 - added OSSwapLittleToHost/OSSwapHostToLittle for Mac OS X
 	modified environment::clear() for mac os x
