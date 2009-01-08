@@ -11,7 +11,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 .SUFFIXES: .lo
 
-all: server listener inetclientsocket unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry semaphoreset2 semaphoreset2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist memorypool randomnumber sharedmemory1 sharedmemory1 signal stringbuffer variablebuffer intervaltimer device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer sslsvr sslclnt oneshotclnt oneshotsvr lock1 lock2 handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient xattr xmls xmld inetclntbench inetsvrbench server.pem
+all: server listener inetclientsocket unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry semaphoreset2 semaphoreset2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist memorypool randomnumber sharedmemory1 sharedmemory1 signal stringbuffer variablebuffer intervaltimer device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer sslsvr sslclnt oneshotclnt oneshotsvr lock1 lock2 handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient xattr xmls xmld inetclntbench inetsvrbench server.pem nullserver
 
 clean:
 	$(LIBTOOL) --mode=clean $(RM) ca.pem
@@ -20,7 +20,7 @@ clean:
 	$(LIBTOOL) --mode=clean $(RM) *.lo
 	$(LIBTOOL) --mode=clean $(RM) *.o
 	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger oneshotclnt oneshotsvr passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry semaphoreset1 semaphoreset2 sharedmemory1 sharedmemory2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist lock1 lock2 memorypool randomnumber signal stringbuffer handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer
+	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger oneshotclnt oneshotsvr passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry semaphoreset1 semaphoreset2 sharedmemory1 sharedmemory2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist lock1 lock2 memorypool randomnumber signal stringbuffer handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer nullserver
 	$(RM) test.log
 	$(RMTREE) .libs
 	$(RM) testfile
@@ -34,6 +34,9 @@ rebuild: clean all
 
 server: server.C server.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)
+
+nullserver: nullserver.C nullserver.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ nullserver.lo $(ALLSTATIC) $(LIBS)
 
 sslsvr: sslsvr.C sslsvr.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslsvr.lo $(ALLSTATIC) $(LIBS)

@@ -1,3 +1,6 @@
+redhat-5.2 doesn't have uint32_t
+
+
 use pthread_sigmask insetad of sigprocmask when possible
 
 reduce heap fragmentation where possible

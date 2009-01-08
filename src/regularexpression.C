@@ -102,6 +102,7 @@ bool regularexpression::study() {
 		const char	*error;
 		if (pvt->_extra) {
 			delete pvt->_extra;
+			pvt->_extra=NULL;
 		}
 		pvt->_extra=pcre_study(pvt->_expr,0,&error);
 		return (!pvt->_extra && error)?false:true;
