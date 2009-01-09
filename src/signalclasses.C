@@ -81,7 +81,11 @@ unsigned int signalmanager::alarm(unsigned int seconds) {
 bool signalmanager::ignoreSignals(const sigset_t *sigset) {
 	int	result;
 	do {
-		result=sigprocmask(SIG_SETMASK,sigset,NULL);
+		#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
+			result=pthread_sigmask(SIG_SETMASK,sigset,NULL);
+		#else
+			result=sigprocmask(SIG_SETMASK,sigset,NULL);
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }

@@ -469,21 +469,27 @@ ssize_t filedescriptor::write(const void *buffer, size_t size) const {
 ssize_t filedescriptor::write(uint16_t number,
 				long sec, long usec) const {
 	DEBUG_WRITE_INT("uint16_t",number);
-	number=hostToNet(number);
+	if (pvt->_translatebyteorder) {
+		number=hostToNet(number);
+	}
 	return bufferedWrite(&number,sizeof(uint16_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(uint32_t number,
 				long sec, long usec) const {
 	DEBUG_WRITE_INT("uint32_t",number);
-	number=hostToNet(number);
+	if (pvt->_translatebyteorder) {
+		number=hostToNet(number);
+	}
 	return bufferedWrite(&number,sizeof(uint32_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(uint64_t number,
 				long sec, long usec) const {
 	DEBUG_WRITE_INT("uint64_t",number);
-	number=hostToNet(number);
+	if (pvt->_translatebyteorder) {
+		number=hostToNet(number);
+	}
 	return bufferedWrite(&number,sizeof(uint64_t),sec,usec);
 }
 
@@ -628,21 +634,27 @@ ssize_t filedescriptor::read(char **buffer, char *terminator) const {
 ssize_t filedescriptor::read(uint16_t *buffer,
 				long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint16_t),sec,usec);
-	*buffer=netToHost(*buffer);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost(*buffer);
+	}
 	return retval;
 }
 
 ssize_t filedescriptor::read(uint32_t *buffer,
 				long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint32_t),sec,usec);
-	*buffer=netToHost(*buffer);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost(*buffer);
+	}
 	return retval;
 }
 
 ssize_t filedescriptor::read(uint64_t *buffer,
 				long sec, long usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint64_t),sec,usec);
-	*buffer=netToHost(*buffer);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost(*buffer);
+	}
 	return retval;
 }
 
@@ -1075,7 +1087,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 
 		// if necessary, select
-		if (sec>-1 && usec>-1 || pvt->_uselistenerinsidereads) {
+		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidereads) {
 
 			int	selectresult=(pvt->_uselistenerinsidereads)?
 					waitForNonBlockingRead(sec,usec):
@@ -1327,7 +1339,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		}
 
 		// if necessary, select
-		if (sec>-1 && usec>-1 || pvt->_uselistenerinsidewrites) {
+		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidewrites) {
 
 			int	selectresult=(pvt->_uselistenerinsidewrites)?
 					waitForNonBlockingWrite(sec,usec):
@@ -1515,15 +1527,15 @@ void filedescriptor::dontTranslateByteOrder() {
 	pvt->_translatebyteorder=false;
 }
 
-uint16_t filedescriptor::hostToNet(uint16_t value) const {
-	return (pvt->_translatebyteorder)?htons(value):value;
+uint16_t filedescriptor::hostToNet(uint16_t value) {
+	return htons(value);
 }
 
-uint32_t filedescriptor::hostToNet(uint32_t value) const {
-	return (pvt->_translatebyteorder)?htonl(value):value;
+uint32_t filedescriptor::hostToNet(uint32_t value) {
+	return htonl(value);
 }
 
-uint64_t filedescriptor::hostToNet(uint64_t value) const {
+uint64_t filedescriptor::hostToNet(uint64_t value) {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else
@@ -1543,15 +1555,15 @@ uint64_t filedescriptor::hostToNet(uint64_t value) const {
 	#endif
 }
 
-uint16_t filedescriptor::netToHost(uint16_t value) const {
-	return (pvt->_translatebyteorder)?ntohs(value):value;
+uint16_t filedescriptor::netToHost(uint16_t value) {
+	return ntohs(value);
 }
 
-uint32_t filedescriptor::netToHost(uint32_t value) const {
-	return (pvt->_translatebyteorder)?ntohl(value):value;
+uint32_t filedescriptor::netToHost(uint32_t value) {
+	return ntohl(value);
 }
 
-uint64_t filedescriptor::netToHost(uint64_t value) const {
+uint64_t filedescriptor::netToHost(uint64_t value) {
 	#if __BYTE_ORDER == __BIG_ENDIAN
 		return value;
 	#else

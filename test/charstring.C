@@ -2,6 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/charstring.h>
+#include <rudiments/filedescriptor.h>
+#include <limits.h>
 #include "test.C"
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -398,17 +400,17 @@ int main(int argc, const char **argv) {
 
 
 	// print the number of bytes necessary to store each number as a string
-	printf("size of 1 is: %d\n",charstring::integerLength((long)1));
-	printf("size of 10 is: %d\n",charstring::integerLength((long)10));
-	printf("size of 100 is: %d\n",charstring::integerLength((long)100));
-	printf("size of 1000 is: %d\n",charstring::integerLength((long)1000));
-	printf("size of -1 is: %d\n",charstring::integerLength((long)-1));
-	printf("size of -10 is: %d\n",charstring::integerLength((long)-10));
-	printf("size of -100 is: %d\n",charstring::integerLength((long)-100));
-	printf("size of -1000 is: %d\n",charstring::integerLength((long)-1000));
+	printf("size of 1 is: %d\n",charstring::integerLength((int64_t)1));
+	printf("size of 10 is: %d\n",charstring::integerLength((int64_t)10));
+	printf("size of 100 is: %d\n",charstring::integerLength((int64_t)100));
+	printf("size of 1000 is: %d\n",charstring::integerLength((int64_t)1000));
+	printf("size of -1 is: %d\n",charstring::integerLength((int64_t)-1));
+	printf("size of -10 is: %d\n",charstring::integerLength((int64_t)-10));
+	printf("size of -100 is: %d\n",charstring::integerLength((int64_t)-100));
+	printf("size of -1000 is: %d\n",charstring::integerLength((int64_t)-1000));
 
 
-	uint64_t	testuint64=18446744073709551615;
+	uint64_t	testuint64=ULONG_MAX;
 	char		*teststr=charstring::parseNumber(testuint64);
 	printf("18446744073709551615=%s\n",teststr);
 	delete[] teststr;
@@ -416,13 +418,13 @@ int main(int argc, const char **argv) {
 	printf("18446744073709551615=%s\n",teststr);
 	delete[] teststr;
 
-	int64_t		testint64=9223372036854775807;
+	int64_t		testint64=LONG_MAX;
 	teststr=charstring::parseNumber(testint64);
 	printf("9223372036854775807=%s\n",teststr);
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint64,40);
 	printf("9223372036854775807=%s\n",teststr);
-	testint64=-9223372036854775807;
+	testint64=-1*LONG_MAX;
 	teststr=charstring::parseNumber(testint64);
 	printf("-9223372036854775807=%s\n",teststr);
 	delete[] teststr;
@@ -431,7 +433,7 @@ int main(int argc, const char **argv) {
 	delete[] teststr;
 
 
-	uint32_t	testuint32=4294967295;
+	uint32_t	testuint32=4294967295UL;
 	teststr=charstring::parseNumber(testuint32);
 	printf("4294967295=%s\n",teststr);
 	delete[] teststr;
@@ -474,4 +476,38 @@ int main(int argc, const char **argv) {
 	teststr=charstring::parseNumber(testint16,40);
 	printf("-32767=%s\n",teststr);
 	delete[] teststr;
+
+	unsigned char	v8=0xC0;
+	uint16_t	v16=filedescriptor::hostToNet(
+						(uint16_t)0xC0C0);
+	uint32_t	v32=filedescriptor::hostToNet(
+						(uint32_t)0xC0C0C0C0);
+	uint64_t	v64=filedescriptor::hostToNet(
+					(uint64_t)0xC0C0C0C0C0C0C0C0ULL);
+	char	sv8=-1*0x01;
+	int16_t	sv16=filedescriptor::hostToNet((uint16_t)
+						(int16_t)(-1*0x0101));
+	int32_t	sv32=filedescriptor::hostToNet((uint32_t)
+						(int32_t)(-1*0x01010101));
+	int64_t	sv64=filedescriptor::hostToNet((uint64_t)
+					(int64_t)(-1*0x0101010101010101LL));
+	unsigned char	v8s[]={0xC0,0xC0,0xC0,0xC0};
+	charstring::printBits(v8);
+	printf("\n");
+	charstring::printBits(v16);
+	printf("\n");
+	charstring::printBits(v32);
+	printf("\n");
+	charstring::printBits(v64);
+	printf("\n");
+	charstring::printBits(sv8);
+	printf("\n");
+	charstring::printBits(sv16);
+	printf("\n");
+	charstring::printBits(sv32);
+	printf("\n");
+	charstring::printBits(sv64);
+	printf("\n");
+	charstring::printBits(v8s,sizeof(v8s));
+	printf("\n");
 }

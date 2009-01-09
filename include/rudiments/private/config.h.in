@@ -429,6 +429,9 @@
 /* pthread_mutex_t type exists */
 #undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T
 
+/* pthread_sigmask exists */
+#undef RUDIMENTS_HAVE_PTHREAD_SIGMASK
+
 /* Some systems have putenv */
 #undef RUDIMENTS_HAVE_PUTENV
 
@@ -497,12 +500,6 @@
 
 /* Some systems have strings.h */
 #undef RUDIMENTS_HAVE_STRINGS_H
-
-/* Some systems have strlcat */
-#undef RUDIMENTS_HAVE_STRLCAT
-
-/* Some systems have strlcpy */
-#undef RUDIMENTS_HAVE_STRLCPY
 
 /* Some systems have strpbrk */
 #undef RUDIMENTS_HAVE_STRPBRK
@@ -624,7 +621,7 @@
 /* Define to `int' if <sys/types.h> does not define. */
 #undef pid_t
 
-/* Define to `unsigned' if <sys/types.h> does not define. */
+/* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
 
 /* Some systems don't define socklen_t */

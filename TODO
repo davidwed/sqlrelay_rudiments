@@ -1,18 +1,10 @@
+uclibc leaks when setting TZ over and over
+
 redhat-5.2 doesn't have uint32_t
-
-
-use pthread_sigmask insetad of sigprocmask when possible
 
 reduce heap fragmentation where possible
 
-use strlcpy, strlcmp, etc. when available (on openbsd, maybe others)
-	configure script already tests for them
-
-use filedescriptor methods rather than htons/l and friends
-
 QNX doesn't have sys/fcntl.h
-
-printbits for 8,16,32,64 bit-long values
 
 add missing programming docs
 

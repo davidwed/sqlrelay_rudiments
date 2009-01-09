@@ -1021,6 +1021,55 @@ void charstring::safePrint(const char *string) {
 	safePrint(string,charstring::length(string));
 }
 
+void charstring::printBits(unsigned char value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(uint16_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(uint32_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(uint64_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(char value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(int16_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(int32_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(int64_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void charstring::printBits(unsigned char *bits, uint64_t size) {
+	for (uint64_t i=0; i<size; i++) {
+		unsigned char byte=bits[i];
+		for (int8_t j=7; j>=0; j--) {
+			printf("%d",(byte>>j)&0x01);
+		}
+	}
+}
+
 void charstring::split(const char *string, const char *delimiter,
 				bool collapse,
 				char ***list, uint64_t *listlength) {

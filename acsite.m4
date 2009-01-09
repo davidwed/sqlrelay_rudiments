@@ -488,6 +488,14 @@ AC_DEFUN([FW_CHECK_MUTEX],
 ])
 
 
+AC_DEFUN([FW_CHECK_PTHREAD_SIGMASK],
+[
+	dnl check for pthread_sigmask
+	AC_MSG_CHECKING(for pthread_sigmask)
+	FW_TRY_LINK([#include <signal.h>],[pthread_sigmask(1,0,0);],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_SIGMASK,1,pthread_sigmask exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+])
+
+
 
 dnl checks for the ssl library
 dnl requires:  SSLPATH, RPATHFLAG, cross_compiling

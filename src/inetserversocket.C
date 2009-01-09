@@ -60,7 +60,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	// initialize a socket address structure
 	rawbuffer::zero(_sin(),sizeof(sockaddr_in));
 	_sin()->sin_family=AF_INET;
-	_sin()->sin_port=htons(port);
+	_sin()->sin_port=hostToNet(port);
 
 	// if a specific address was passed in, bind to it only,
 	// otherwise bind to all addresses
@@ -71,7 +71,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 		}
 		_sin()->sin_addr.s_addr=ia.s_addr;
 	} else {
-		_sin()->sin_addr.s_addr=htonl(INADDR_ANY);
+		_sin()->sin_addr.s_addr=hostToNet((uint32_t)INADDR_ANY);
 	}
 
 	// create the socket

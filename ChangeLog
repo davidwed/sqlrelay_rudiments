@@ -1,3 +1,12 @@
+0.33 - removed configure tests for strlcpy and strlcat
+	added test for pvt->_translatebyteorder to hostToNet/netToHost for
+		64bit numbers
+	made filedescriptor::hostToNet/netToHost public and static, moved
+		translatebyteorder flag test out of them
+	serviceentry and inet*socket classes use
+		filedescriptor::hostToNet/netToHost rather than htonl/htons
+	added charstring::printBits methods
+
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now
 	added DESTDIR= to rudiments.pc.in

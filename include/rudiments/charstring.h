@@ -420,7 +420,19 @@ class charstring {
 			// carriage returns, line feeds and tabs are printed
 			// as \n, \r and \t.
 		static void	safePrint(const char *str, int length);
-			// safePrint()'s "length" characters of "str" 
+			// safePrint()'s "length" characters of "str"
+
+
+		// these methods print out the bits in each value
+		static void	printBits(unsigned char value);
+		static void	printBits(uint16_t value);
+		static void	printBits(uint32_t value);
+		static void	printBits(uint64_t value);
+		static void	printBits(char value);
+		static void	printBits(int16_t value);
+		static void	printBits(int32_t value);
+		static void	printBits(int64_t value);
+		static void	printBits(unsigned char *bits, uint64_t size);
 
 
 		// These methods parse "string" delimited by "delimiter"

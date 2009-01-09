@@ -538,6 +538,15 @@ class filedescriptor {
 				// Returns true if the close-on-exec status
 				// is set true and false otherwise.
 
+		// These methods convert from host to
+		// net byte order and vice-versa.
+		static	uint16_t	hostToNet(uint16_t value);
+		static	uint32_t	hostToNet(uint32_t value);
+		static	uint64_t	hostToNet(uint64_t value);
+		static	uint16_t	netToHost(uint16_t value);
+		static	uint32_t	netToHost(uint32_t value);
+		static	uint64_t	netToHost(uint64_t value);
+
 	#include <rudiments/private/filedescriptor.h>
 };
 

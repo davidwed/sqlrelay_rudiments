@@ -4,6 +4,7 @@
 #include <rudiments/serviceentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/filedescriptor.h>
 #include <rudiments/error.h>
 
 // for servent, functions
@@ -131,7 +132,10 @@ bool serviceentry::initialize(const char *servicename, int port,
 							&pvt->_sebuffer,
 							pvt->_buffer,size,
 							&pvt->_se))
-				:(getservbyport_r(htons(port),protocol,
+				:(getservbyport_r(
+					filedescriptor::hostToNet(
+							(uint16_t)port),
+							protocol,
 							&pvt->_sebuffer,
 							pvt->_buffer,size,
 							&pvt->_se)))) {
@@ -143,7 +147,10 @@ bool serviceentry::initialize(const char *servicename, int port,
 				?(pvt->_se=getservbyname_r(servicename,protocol,
 							&pvt->_sebuffer,
 							pvt->_buffer,size))
-				:(pvt->_se=getservbyport_r(htons(port),protocol,
+				:(pvt->_se=getservbyport_r(
+					filedescriptor::hostToNet(
+							(uint16_t)port),
+							protocol,
 							&pvt->_sebuffer,
 							pvt->_buffer,size))) {
 				return true;
@@ -162,7 +169,9 @@ bool serviceentry::initialize(const char *servicename, int port,
 		return (!(_semutex && !_semutex->lock()) &&
 			((pvt->_se=((servicename)
 				?getservbyname(servicename,protocol)
-				:getservbyport(htons(port),protocol)))!=NULL) &&
+				:getservbyport(filedescriptor::hostToNet(
+						(uint16_t)port),
+						protocol)))!=NULL) &&
 			!(_semutex && !_semutex->unlock()));
 	#endif
 }

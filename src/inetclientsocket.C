@@ -115,7 +115,7 @@ int inetclientsocket::connect() {
 		// set the address type and port to connect to
 		rawbuffer::zero(_sin(),sizeof(sockaddr_in));
 		_sin()->sin_family=he.getAddressType();
-		_sin()->sin_port=htons(*_port());
+		_sin()->sin_port=hostToNet(*_port());
 
 		// create an inet socket
 		do {

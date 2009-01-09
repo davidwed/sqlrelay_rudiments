@@ -439,6 +439,7 @@ echo
 echo "***** threads ****************"
 FW_CHECK_PTHREAD
 FW_CHECK_MUTEX
+FW_CHECK_PTHREAD_SIGMASK
 echo "******************************"
 
 
@@ -744,18 +745,6 @@ posix_fallocate(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FALLOCATE,1,Some systems 
 FW_CHECK_CRYPT_R
 FW_CHECK_MMAP
 
-AC_MSG_CHECKING(for strlcat)
-AC_TRY_COMPILE([
-#include <stdlib.h>
-#include <string.h>],
-strlcat(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRLCAT,1,Some systems have strlcat) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for strlcpy)
-AC_TRY_COMPILE([
-#include <stdlib.h>
-#include <string.h>],
-strlcpy(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRLCPY,1,Some systems have strlcpy) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for strtold)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 #define __USE_GNU
@@ -961,7 +950,7 @@ echo "******************************"
 
 
 dnl Default build variables.
-RUDIMENTS_VERSION="0.32"
+RUDIMENTS_VERSION="0.33"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 dnl rules for CURRENT:REVISION:AGE version info:
