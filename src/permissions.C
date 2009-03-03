@@ -20,21 +20,45 @@ bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 }
 
 bool permissions::setFilePermissions(int fd, mode_t perms) {
-	int	result;
-	do {
-		result=fchmod(fd,perms);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_FCHMOD)
+		int	result;
+		do {
+			result=fchmod(fd,perms);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(MINGW32)
+		// windows doesn't support anything like this
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#else
+		// other platforms should support something like this
+		#error no fchmod or anything like it
+	#endif
 }
 
 mode_t permissions::everyoneReadWrite() {
-	return S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH;
+	return S_IRUSR|S_IWUSR
+	#if defined(S_IRGRP) && \
+		defined(S_IWGRP) && \
+		defined(S_IROTH) && \
+		defined(S_IWOTH)
+		|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH
+	#endif
+	;
 }
 
 mode_t permissions::everyoneReadWriteExecute() {
-	return S_IRUSR|S_IWUSR|S_IXUSR|
-		S_IRGRP|S_IWGRP|S_IXGRP|
-		S_IROTH|S_IWOTH|S_IXOTH;
+	return S_IRUSR|S_IWUSR|S_IXUSR
+	#if defined(S_IRGRP) && \
+		defined(S_IWGRP) && \
+		defined(S_IXGRP) && \
+		defined(S_IROTH) && \
+		defined(S_IWOTH) && \
+		defined(S_IXOTH)
+		|S_IRGRP|S_IWGRP|S_IXGRP
+		|S_IROTH|S_IWOTH|S_IXOTH
+	#endif
+	;
 }
 
 mode_t permissions::ownerRead() {
@@ -62,63 +86,123 @@ mode_t permissions::ownerReadWriteExecute() {
 }
 
 mode_t permissions::groupRead() {
-	return S_IRGRP;
+	#ifdef S_IRGRP
+		return S_IRGRP;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::groupWrite() {
-	return S_IWGRP;
+	#ifdef S_IWGRP
+		return S_IWGRP;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::groupExecute() {
-	return S_IXGRP;
+	#ifdef S_IXGRP
+		return S_IXGRP;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::groupReadWrite() {
-	return S_IRGRP|S_IWGRP;
+	#if defined(S_IRGRP) && defined(S_IWGRP)
+		return S_IRGRP|S_IWGRP;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::groupReadExecute() {
-	return S_IRGRP|S_IXGRP;
+	#if defined(S_IRGRP) && defined(S_IXGRP)
+		return S_IRGRP|S_IXGRP;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::groupReadWriteExecute() {
-	return S_IRGRP|S_IWGRP|S_IXGRP;
+	#if defined(S_IRGRP) && defined(S_IWGRP) && defined(S_IXGRP)
+		return S_IRGRP|S_IWGRP|S_IXGRP;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::othersRead() {
-	return S_IROTH;
+	#if defined(S_IROTH)
+		return S_IROTH;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::othersWrite() {
-	return S_IWOTH;
+	#if defined(S_IWOTH)
+		return S_IWOTH;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::othersExecute() {
-	return S_IXOTH;
+	#if defined(S_IXOTH)
+		return S_IXOTH;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::othersReadWrite() {
-	return S_IROTH|S_IWOTH;
+	#if defined(S_IROTH) && defined(S_IWOTH)
+		return S_IROTH|S_IWOTH;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::othersReadExecute() {
-	return S_IROTH|S_IXOTH;
+	#if defined(S_IROTH) && defined(S_IXOTH)
+		return S_IROTH|S_IXOTH;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::othersReadWriteExecute() {
-	return S_IROTH|S_IWOTH|S_IXOTH;
+	#if defined(S_IROTH) && defined(S_IWOTH) && defined(S_IXOTH)
+		return S_IROTH|S_IWOTH|S_IXOTH;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::saveInSwapSpace() {
-	return S_ISVTX;
+	#ifdef S_ISVTX
+		return S_ISVTX;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::setUserId() {
-	return S_ISUID;
+	#ifdef S_ISUID
+		return S_ISUID;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::setGroupId() {
-	return S_ISGID;
+	#ifdef S_ISGID
+		return S_ISGID;
+	#else
+		return 0;
+	#endif
 }
 
 mode_t permissions::evalPermString(const char *permstring) {
@@ -127,44 +211,44 @@ mode_t permissions::evalPermString(const char *permstring) {
 
 		// handle user permissions
 		if (permstring[0]=='r') {
-			retval=retval|S_IRUSR;
+			retval=retval|ownerRead();
 		}
 		if (permstring[1]=='w') {
-			retval=retval|S_IWUSR;
+			retval=retval|ownerWrite();
 		}
 		if (permstring[2]=='x') {
-			retval=retval|S_IXUSR;
+			retval=retval|ownerExecute();
 		} else if (permstring[2]=='X' || permstring[2]=='S') {
-			retval=retval|S_IXUSR;
-			retval=retval|S_ISUID;
+			retval=retval|ownerExecute();
+			retval=retval|setUserId();
 		}
 
 		// handle group permissions
 		if (permstring[3]=='r') {
-			retval=retval|S_IRGRP;
+			retval=retval|groupRead();
 		}
 		if (permstring[4]=='w') {
-			retval=retval|S_IWGRP;
+			retval=retval|groupWrite();
 		}
 		if (permstring[5]=='x') {
-			retval=retval|S_IXGRP;
+			retval=retval|groupExecute();
 		} else if (permstring[5]=='X' || permstring[5]=='S') {
-			retval=retval|S_IXGRP;
+			retval=retval|groupExecute();
 		}
 
 		// handle others permissions
 		if (permstring[6]=='r') {
-			retval=retval|S_IROTH;
+			retval=retval|othersRead();
 		}
 		if (permstring[7]=='w') {
-			retval=retval|S_IWOTH;
+			retval=retval|othersWrite();
 		}
 		if (permstring[8]=='x') {
-			retval=retval|S_IXOTH;
+			retval=retval|othersExecute();
 
 		// handle sticky bit
 		} else if (permstring[5]=='t') {
-			retval=retval|S_ISVTX;
+			retval=retval|saveInSwapSpace();
 		}
 	}
 	return retval;

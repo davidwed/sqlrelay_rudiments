@@ -363,6 +363,18 @@ AC_MSG_CHECKING(for unistd.h)
 AC_TRY_COMPILE([#include <unistd.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_UNISTD_H, 1, Some systems have unistd.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for netdb.h)
+AC_TRY_COMPILE([#include <netdb.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_NETDB_H, 1, Some systems have netdb.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for netinet/in.h)
+AC_TRY_COMPILE([#include <netinet/in.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_NETINET_IN_H, 1, Some systems have netinet/in.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/un.h)
+AC_TRY_COMPILE([#include <sys/un.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_UN_H, 1, Some systems have sys/un.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 if ( test -n "$MINGW32" )
 then
 	AC_MSG_CHECKING(for windows.h)
@@ -376,6 +388,13 @@ then
 	AC_MSG_CHECKING(for io.h)
 	AC_TRY_COMPILE([#include <io.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_IO_H, 1, Some systems have io.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for tlhelp32.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <tlhelp32.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for byteswap.h)
@@ -406,6 +425,11 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/socket.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_SOCKET_H, 1, Some systems have sys/socket.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for arpa/inet.h)
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <arpa/inet.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_ARPA_INET_H, 1, Some systems have arpa/inet.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sys/uio.h)
 AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/uio.h>],
@@ -431,6 +455,14 @@ AC_TRY_COMPILE([#include <inttypes.h>],
 AC_MSG_CHECKING(for sys/fcntl.h)
 AC_TRY_COMPILE([#include <sys/fcntl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_FCNTL_H, 1, Some systems have sys/fcntl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/ipc.h)
+AC_TRY_COMPILE([#include <sys/ipc.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_IPC_H, 1, Some systems have sys/ipc.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for syslog.h)
+AC_TRY_LINK([#include <syslog.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYSLOG_H,1,Some systems have syslog.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -509,6 +541,12 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #include <unistd.h>],
 S_ISSOCK(0);,AC_DEFINE(RUDIMENTS_HAVE_S_ISSOCK,1,Some systems don't have S_ISSOCK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(if S_ISLNK exists)
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>],
+S_ISLNK(0);,AC_DEFINE(RUDIMENTS_HAVE_S_ISLNK,1,Some systems don't have S_ISLNK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(type of iovec.iov_base)
 AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/socket.h>
@@ -536,18 +574,52 @@ struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC,1,Some systems have 
 AC_MSG_CHECKING(for struct timespec in sys/siginfo.h)
 AC_TRY_COMPILE([#include <sys/siginfo.h>],
 struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO,1,Some systems have struct timespec in sys/siginfo.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for in_addr_t type)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif],
+[in_addr_t i=0;],AC_DEFINE(RUDIMENTS_HAVE_IN_ADDR_T,1,Some systems have in_addr_t type) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sockaddr_un type)
+AC_TRY_COMPILE([#include <sys/types.h>
+#ifdef RUDIMENTS_HAVE_SYS_UN_H
+	#include <sys/un.h>
+#endif],
+[struct sockaddr_un a;],AC_DEFINE(RUDIMENTS_HAVE_SOCKADDR_UN,1,Some systems have sockaddr_un) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
+
+if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
+then
 
 dnl Checks associated with signal handlers
 echo
 echo "***** Signal Handlers ********"
+
 AC_TYPE_SIGNAL
+
+AC_MSG_CHECKING(for sigaction)
+AC_TRY_COMPILE([#include <signal.h>
+#include <stdlib.h>],
+sigaction(0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGACTION,1,Some systems have sigaction) AC_MSG_RESULT(yes), INCLUDE_SIGNALCLASSES="0"; AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(signal handler parameter)
 AC_TRY_COMPILE([#include <signal.h>],
 void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(RUDIMENTS_SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
+
 echo "******************************"
 
+fi
 
 dnl Checks associated with time structure
 echo
@@ -555,10 +627,15 @@ echo "***** Time Structure *********"
 
 if ( test -n "$MINGW32" )
 then
-	AC_MSG_CHECKING(GetSystemTime)
+	AC_MSG_CHECKING(for GetSystemTime)
 	AC_TRY_COMPILE([#include <windows.h>
 #include <stdlib.h>],
 GetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMTIME,1,Some systems have GetSystemTime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for SetSystemTime)
+	AC_TRY_COMPILE([#include <windows.h>
+#include <stdlib.h>],
+SetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETSYSTEMTIME,1,Some systems have SetSystemTime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for tm_zone)
@@ -597,6 +674,11 @@ AC_TRY_COMPILE([#include <time.h>
 #include <stdlib.h>],
 localtime_r(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_R,1,Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for setsystemtime)
+AC_TRY_LINK([#include <sys/time.h>
+#include <stdlib.h>],
+settimeofday(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETTIMEOFDAY,1,Some systems have settimeofday) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
@@ -624,15 +706,15 @@ then
 	AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/types.h>
 #include <regex.h>],
-regcomp(NULL,NULL,0);,HAVE_REGCOMP="yes"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+regcomp(NULL,NULL,0);,HAVE_REGCOMP="yes"; AC_DEFINE(RUDIMENTS_HAVE_REGCOMP,1,some systems have regcomp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
-INCLUDE_REGULAREXPRESSION="0"
-if ( test -n "$HAVE_PCRE" -o -n "$HAVE_REGCOMP" )
+USE_BUILT_IN_REGULAREXPRESSION="0"
+if ( test -z "$HAVE_PCRE" -a -z "$HAVE_REGCOMP" )
 then
-	INCLUDE_REGULAREXPRESSION="1"
+	USE_BUILT_IN_REGULAREXPRESSION="1"
 fi
-AC_SUBST(INCLUDE_REGULAREXPRESSION)
+AC_SUBST(USE_BUILT_IN_REGULAREXPRESSION)
 
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
 AC_TRY_COMPILE([#include <stdlib.h>
@@ -654,6 +736,39 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #endif],
 void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(no))
 
+HAVE_INET_ATON="no"
+AC_MSG_CHECKING(for inet_aton)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif
+#include <stdlib.h>],
+inet_aton(0,NULL);,HAVE_INET_ATON="yes"; AC_DEFINE(RUDIMENTS_HAVE_INET_ATON,1,Some systems have inet_aton) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for inet_addr)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif
+#include <stdlib.h>],
+inet_addr(0);,AC_DEFINE(RUDIMENTS_HAVE_INET_ADDR,1,Some systems have inet_addr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for srand48)
 AC_TRY_COMPILE([#include <stdlib.h>],
 srand48(0);,AC_DEFINE(RUDIMENTS_HAVE_SRAND48,1,Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -674,16 +789,6 @@ AC_MSG_CHECKING(for rand_r)
 AC_TRY_COMPILE([#include <stdlib.h>],
 rand_r(0);,AC_DEFINE(RUDIMENTS_HAVE_RAND_R,1,Some systems have rand_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for setuid)
-AC_TRY_COMPILE([#include <sys/types.h>
-#include <unistd.h>],
-setuid(0);,AC_DEFINE(RUDIMENTS_HAVE_SETUID,1,Some systems have setuid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for setgid)
-AC_TRY_COMPILE([#include <sys/types.h>
-#include <unistd.h>],
-setgid(0);,AC_DEFINE(RUDIMENTS_HAVE_SETGID,1,Some systems have setgid) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 FW_CHECK_XNET_PROTOTYPES
 FW_CHECK_SOCKET_LIBS
 
@@ -697,12 +802,46 @@ FW_CHECK_HOST
 FW_CHECK_PROTO
 FW_CHECK_SVC
 
-AC_MSG_CHECKING(for semtimedop)
-AC_TRY_COMPILE([#include <stdlib.h>
+if ( test "$INCLUDE_SEMAPHORESET" = "1" )
+then
+
+	AC_MSG_CHECKING(for semget)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>],
+semget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMGET,1,Some systems have semget) AC_MSG_RESULT(yes), INCLUDE_SEMAPHORESET="0"; AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for semtimedop)
+	AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>],
 semtimedop(0,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+fi
+
+if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
+then
+
+	AC_MSG_CHECKING(for shmget)
+	AC_TRY_COMPILE([#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>],
+shmget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SHMGET,1,Some systems have shmget) AC_MSG_RESULT(yes), INCLUDE_SHAREDMEMORY="0"; AC_MSG_RESULT(no))
+
+fi
+
+if ( test "$INCLUDE_SERIALPORT" = "1" -o "$INCLUDE_SERIALPORTPROFILE" = "1" )
+then
+
+	AC_MSG_CHECKING(for tcsetattr)
+	AC_TRY_COMPILE([#include <termios.h>
+#include <unistd.h>],
+tcsetattr(0,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_TCSETATTR,1,Some systems have tcsetattr) AC_MSG_RESULT(yes), INCLUDE_SERIALPORT="0"; INCLUDE_SERIALPORTPROFILE="0"; AC_MSG_RESULT(no))
+
+fi
 
 AC_MSG_CHECKING(for xattr)
 AC_TRY_COMPILE([#include <stdlib.h>
@@ -721,6 +860,10 @@ fdatasync(0);,AC_DEFINE(RUDIMENTS_HAVE_FDATASYNC,1,Some systems have fdatasync) 
 
 FW_CHECK_NANOSLEEP
 FW_CHECK_CLOCK_NANOSLEEP
+
+AC_MSG_CHECKING(for Sleep)
+AC_TRY_COMPILE([#include <windows.h>],
+Sleep(0);,AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_SLEEP,1,Some systems have Sleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_SHM_OPEN
 
@@ -855,6 +998,115 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #include <fcntl.h>],
 fcntl(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCNTL,1,Some systems have fcntl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+if ( test -n "$MINGW32" )
+then
+	AC_MSG_CHECKING(for LockFileEx)
+	AC_TRY_COMPILE([#include <windows.h>],
+	LockFileEx(0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_LOCKFILEEX,1,Some systems have LockFileEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for FD_CLOEXEC)
+AC_TRY_COMPILE([#include <unistd.h>
+#include <fcntl.h>],
+long a=FD_CLOEXEC;,AC_DEFINE(RUDIMENTS_HAVE_FD_CLOEXEC,1,Some systems have FD_CLOEXEC) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -n "$MINGW32" )
+then
+	AC_MSG_CHECKING(for HANDLE_FLAG_INHERIT)
+	AC_TRY_COMPILE([#include <windows.h>],
+DWORD a=HANDLE_FLAG_INHERIT;,AC_DEFINE(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT,1,Some systems have HANDLE_FLAG_INHERIT) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for truncate)
+AC_TRY_COMPILE([#include <unistd.h>
+#include <sys/types.h>],
+truncate("",0);,AC_DEFINE(RUDIMENTS_HAVE_TRUNCATE,1,Some systems have truncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for link)
+AC_TRY_COMPILE([#include <unistd.h>],
+link("","");,AC_DEFINE(RUDIMENTS_HAVE_LINK,1,Some systems have link) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -n "$MINGW32" )
+then
+	AC_MSG_CHECKING(for LoadLibrary)
+	AC_TRY_COMPILE([#include <windows.h>],
+	LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for LoadLibraryEx)
+	AC_TRY_COMPILE([#include <windows.h>],
+	LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for symlink)
+AC_TRY_COMPILE([#include <unistd.h>],
+symlink("","");,AC_DEFINE(RUDIMENTS_HAVE_SYMLINK,1,Some systems have symlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for readlink)
+AC_TRY_COMPILE([#include <unistd.h>],
+readlink("","",0);,AC_DEFINE(RUDIMENTS_HAVE_READLINK,1,Some systems have readlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for fchown)
+AC_TRY_COMPILE([#include <unistd.h>],
+fchown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCHOWN,1,Some systems have fchown) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for fchmod)
+AC_TRY_COMPILE([#include <sys/stat.h>
+#include <unistd.h>],
+fchmod(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCHMOD,1,Some systems have fchmod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for mkfifo)
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/stat.h>],
+mkfifo("",0);,AC_DEFINE(RUDIMENTS_HAVE_MKFIFO,1,Some systems have mkfifo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -n "$MINGW32" )
+then
+	AC_MSG_CHECKING(for CreateNamedPipe)
+	AC_TRY_COMPILE([#include <windows.h>],
+	CreateNamedPipe("",0,0,0,0,0,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_CREATENAMEDPIPE,1,Some systems have CreateNamedPipe) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for pathconf)
+AC_TRY_COMPILE([#include <unistd.h>],
+pathconf("",0);,AC_DEFINE(RUDIMENTS_HAVE_PATHCONF,1,Some systems have pathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for fpathconf)
+AC_TRY_COMPILE([#include <unistd.h>],
+fpathconf(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FPATHCONF,1,Some systems have fpathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for mkstemp)
+AC_TRY_COMPILE([#include <stdlib.h>],
+mkstemp("");,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for fsync)
+AC_TRY_COMPILE([#include <unistd.h>],
+fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_FSYNC,1,Some systems have fsync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -n "$MINGW32" )
+then
+	AC_MSG_CHECKING(for _commit)
+	AC_TRY_COMPILE([#include <io.h>],
+	_commit(0);,AC_DEFINE(RUDIMENTS_HAVE_COMMIT,1,Some systems have _commit) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for utimes)
+AC_TRY_COMPILE([#include <sys/time.h>],
+utimes("",0);,AC_DEFINE(RUDIMENTS_HAVE_UTIMES,1,Some systems have utimes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -n "$MINGW32" )
+then
+	AC_MSG_CHECKING(for SetFileTime)
+	AC_TRY_COMPILE([#include <windows.h>],
+	SetFileTime(0,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETFILETIME,1,Some systems have SetFileTime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+AC_MSG_CHECKING(for mknod)
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>],
+mknod("",0,0);,AC_DEFINE(RUDIMENTS_HAVE_MKNOD,1,Some systems have mknod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then
 	AC_MSG_CHECKING(whether we can link against -ldl)
@@ -875,10 +1127,13 @@ AC_TRY_COMPILE([#include <stdlib.h>
 #include <sys/ipc.h>],
 const char *var=NULL; ftok(var,0);,AC_DEFINE(RUDIMENTS_HAVE_CONST_CHAR_FTOK,1,Most systems have ftok(const char *, int)) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(whether inet_aton needs -lresolv)
-AC_TRY_LINK([#include <stdlib.h>
+if ( test "$HAVE_INET_ATON" = "yes" )
+then
+	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
+	AC_TRY_LINK([#include <stdlib.h>
 #include <arpa/inet.h>],
 inet_aton(NULL,NULL);,AC_SUBST(INETATONLIB,) AC_MSG_RESULT(no), AC_SUBST(INETATONLIB,-lresolv) AC_MSG_RESULT(yes))
+fi
 
 AC_MSG_CHECKING(for bswap_64)
 AC_TRY_LINK([#include <stdlib.h>
@@ -945,6 +1200,127 @@ AC_TRY_LINK([#include <sys/types.h>
 #endif],
 DIR d; d.d_fd=1;,AC_DEFINE(RUDIMENTS_HAVE_DIR_D_FD,1,Some systems have DIR.d_fd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for mkdir with 2 arguments)
+AC_TRY_LINK([#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef RUDIMENTS_HAVE_IO_H
+#include <io.h>
+#endif],
+mkdir("",0),AC_DEFINE(RUDIMENTS_HAVE_MKDIR_2,1,Some systems have mkdir) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for mkdir with 1 argument)
+AC_TRY_LINK([#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef RUDIMENTS_HAVE_IO_H
+#include <io.h>
+#endif],
+mkdir(""),AC_DEFINE(RUDIMENTS_HAVE_MKDIR_1,1,Some systems have mkdir) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for chroot)
+AC_TRY_LINK([#include <unistd.h>],
+chroot(""),AC_DEFINE(RUDIMENTS_HAVE_CHROOT,1,Some systems have chroot) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getpid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getpid(),AC_DEFINE(RUDIMENTS_HAVE_GETPID,1,Some systems have getpid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _getpid)
+AC_TRY_LINK([#include <windows.h>],
+_getpid(),AC_DEFINE(RUDIMENTS_HAVE__GETPID,1,Some systems have _getpid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getppid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getppid(),AC_DEFINE(RUDIMENTS_HAVE_GETPPID,1,Some systems have getppid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for Process32First)
+AC_TRY_LINK([#include <windows.h>
+#include <tlhelp32.h>],
+Process32First(0,NULL),AC_DEFINE(RUDIMENTS_HAVE_PROCESS32FIRST,1,Some systems have Process32First) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getpgid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getpgid(0),AC_DEFINE(RUDIMENTS_HAVE_GETPGID,1,Some systems have getpgid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setpgid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setpgid(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETPGID,1,Some systems have setpgid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getsid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getsid(0),AC_DEFINE(RUDIMENTS_HAVE_GETSID,1,Some systems have getsid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getuid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getuid(),AC_DEFINE(RUDIMENTS_HAVE_GETUID,1,Some systems have getuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for geteuid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+geteuid(),AC_DEFINE(RUDIMENTS_HAVE_GETEUID,1,Some systems have geteuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setuid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETUID,1,Some systems have setuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for seteuid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setreuid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setreuid(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETREUID,1,Some systems have setreuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getgid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getgid(),AC_DEFINE(RUDIMENTS_HAVE_GETGID,1,Some systems have getgid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getegid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getegid(),AC_DEFINE(RUDIMENTS_HAVE_GETEGID,1,Some systems have getegid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setgid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setgid(0),AC_DEFINE(RUDIMENTS_HAVE_SETGID,1,Some systems have setgid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setegid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setregid)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+setregid(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETREGID,1,Some systems have setregid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getpagesize)
+AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>],
+getpagesize(),AC_DEFINE(RUDIMENTS_HAVE_GETPAGESIZE,1,Some systems have getpagesize) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GetSystemInfo)
+AC_TRY_LINK([#include <windows.h>],
+GetSystemInfo(NULL),AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMINFO,1,Some systems have GetSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+if ( test "$INCLUDE_INTERVALTIMER" = "1" )
+then
+	AC_MSG_CHECKING(for setitimer)
+	AC_TRY_LINK([#include <stdlib.h>
+#include <sys/time.h>],
+setitimer(0,NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),INCLUDE_INTERVALTIMER="0"; AC_MSG_RESULT(no))
+fi
+
 echo "******************************"
 
 
@@ -963,9 +1339,7 @@ SONAME_VERSION_INFO="1:0:0"
 AC_SUBST(SONAME_VERSION_INFO)
 AC_PREFIX_DEFAULT(/usr/local/firstworks)
 
-
-
-dnl   perform substitutions for disable options
+dnl perform substitutions for disable options
 AC_SUBST(INCLUDE_CHARSTRING)
 AC_SUBST(INCLUDE_CHARACTER)
 AC_SUBST(INCLUDE_INTERVALTIMER)

@@ -5,8 +5,14 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
-#include <dlfcn.h>
+#ifdef HAVE_DLFCN_H
+	#include <dlfcn.h>
+#endif
 #include <stdlib.h>
+
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -15,7 +21,11 @@ namespace rudiments {
 class dynamiclibprivate {
 	friend class dynamiclib;
 	private:
-		void	*_handle;
+		#ifdef RUDIMENTS_HAVE_LOADLIBRARYEX
+			HINSTANCE	_handle;
+		#else
+			void		*_handle;
+		#endif
 };
 
 // LAME: not in the class
@@ -32,6 +42,7 @@ dynamiclib::~dynamiclib() {
 }
 
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
+#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
 	int	flag=(loaddependencies)?RTLD_NOW:RTLD_LAZY;
 	if (global) {
 		flag|=RTLD_GLOBAL;
@@ -40,25 +51,39 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		pvt->_handle=dlopen(library,flag);
 	} while (!pvt->_handle && error::getErrorNumber()==EINTR);
 	return (pvt->_handle!=NULL);
+#else
+	pvt->_handle=LoadLibraryEx(library,NULL,
+			(loaddependencies)?DONT_RESOLVE_DLL_REFERENCES:0);
+	return (pvt->_handle)?true:false;
+#endif
 }
 
 bool dynamiclib::close() {
+#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
 	int	result;
 	do {
 		result=!dlclose(pvt->_handle);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+#else
+	return FreeLibrary(pvt->_handle);
+#endif
 }
 
 void *dynamiclib::getSymbol(const char *symbol) const {
+#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
 	void	*symhandle;
 	do {
 		symhandle=dlsym(pvt->_handle,symbol);
 	} while (!symhandle && error::getErrorNumber()==EINTR);
 	return (pvt->_handle)?symhandle:NULL;
+#else
+	return (void *)GetProcAddress(pvt->_handle,symbol);
+#endif
 }
 
 char *dynamiclib::getError() const {
+#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
 	if (_errormutex && !_errormutex->lock()) {
 		return NULL;
 	}
@@ -74,6 +99,20 @@ char *dynamiclib::getError() const {
 		_errormutex->unlock();
 	}
 	return retval;
+#else
+	char	*retval;
+	FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM|
+			FORMAT_MESSAGE_IGNORE_INSERTS|
+			FORMAT_MESSAGE_MAX_WIDTH_MASK|
+			FORMAT_MESSAGE_ALLOCATE_BUFFER,
+			NULL,
+			GetLastError(),
+			MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
+			(char *)&retval,
+			0,
+			NULL);
+	return retval;
+#endif
 }
 
 void dynamiclib::setErrorMutex(mutex *mtx) {

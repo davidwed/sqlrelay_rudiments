@@ -7,8 +7,19 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#include <arpa/inet.h>
-#include <netdb.h>
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETDB_H
+	#include <netdb.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+
+#ifndef RUDIMENTS_HAVE_IN_ADDR_T
+typedef unsigned long	in_addr_t;
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -65,11 +76,21 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 	// if a specific address was passed in, bind to it only,
 	// otherwise bind to all addresses
 	if (address && address[0] && charstring::compare(address,"0.0.0.0")) {
-		in_addr	ia;
-		if (!inet_aton(address,&ia)) {
-			return false;
-		}
-		_sin()->sin_addr.s_addr=ia.s_addr;
+		#if defined(RUDIMENTS_HAVE_INET_ATON)
+			in_addr	ia;
+			if (!inet_aton(address,&ia)) {
+				return false;
+			}
+			_sin()->sin_addr.s_addr=ia.s_addr;
+		#elif defined(RUDIMENTS_HAVE_INET_ADDR)
+			in_addr_t	saddr=inet_addr(address);
+			if (saddr==INADDR_NONE) {
+				return false;
+			}
+			_sin()->sin_addr.s_addr=saddr;
+		#else
+			#error no inet_aton or anything like it
+		#endif
 	} else {
 		_sin()->sin_addr.s_addr=hostToNet((uint32_t)INADDR_ANY);
 	}

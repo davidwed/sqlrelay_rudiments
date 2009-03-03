@@ -3,5 +3,3 @@
 
 #include <rudiments/linkedlist.h>
 #include <rudiments/file.h>
-
-#include <syslog.h>

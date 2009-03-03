@@ -7,10 +7,20 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#ifndef RUDIMENTS_HAVE_UTIMES
+	#include <rudiments/datetime.h>
+#endif
+#ifndef RUDIMENTS_HAVE_MKSTEMP
+	#include <rudiments/datetime.h>
+	#include <rudiments/randomnumber.h>
+	#include <rudiments/permissions.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/ipc.h>
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -19,6 +29,31 @@
 	#include <sys/xattr.h>
 #endif
 
+#ifdef MINGW32
+	#include <windows.h>
+	// windows doesn't define these, but we need them
+	// internally to this file
+	#ifndef F_GETLK	
+		#define F_GETLK		0
+	#endif
+	#ifndef F_SETLK	
+		#define F_SETLK		1
+	#endif
+	#ifndef F_SETLKW	
+		#define F_SETLKW	2
+	#endif
+	#ifndef _PC_LINK_MAX
+		#define _PC_LINK_MAX		0
+	#endif
+	#ifndef _PC_CHOWN_RESTRICTED
+		#define _PC_CHOWN_RESTRICTED	1
+	#endif
+#endif
+
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
+	
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -462,11 +497,16 @@ bool file::truncate(const char *filename) {
 }
 
 bool file::truncate(const char *filename, off64_t length) {
-	int	result;
-	do {
-		result=::truncate(filename,length);
-	} while (result==-1 && error::getErrorNumber()==-1);
-	return !result;
+	#ifdef RUDIMENTS_HAVE_TRUNCATE
+		int	result;
+		do {
+			result=::truncate(filename,length);
+		} while (result==-1 && error::getErrorNumber()==-1);
+		return !result;
+	#else
+		file	f;
+		return f.open(filename,O_WRONLY) && f.truncate(length);
+	#endif
 }
 
 bool file::truncate() const {
@@ -592,13 +632,17 @@ bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 }
 
 #ifndef RUDIMENTS_HAVE_S_ISSOCK
-	#define S_ISSOCK(m) ((m&040000==040000)?1:0)
+	#define S_ISSOCK(m) ((m&0140000==0140000)?1:0)
 #endif
 
 int file::isSocket(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISSOCK(st.st_mode):-1;
 }
+
+#ifndef RUDIMENTS_HAVE_S_ISLNK
+	#define S_ISLNK(m) ((m&0120000==0120000)?1:0)
+#endif
 
 int file::isSymbolicLink(const char *filename) {
 	struct stat	st;
@@ -758,33 +802,96 @@ void file::dontGetCurrentPropertiesOnOpen() {
 
 bool file::lock(int method, short type, short whence,
 				off64_t start, off64_t len) const {
-	struct flock	lck;
-	lck.l_type=type;
-	lck.l_whence=whence;
-	lck.l_start=start;
-	lck.l_len=len;
-	return !fcntl(method,reinterpret_cast<long>(&lck));
+	#if defined(RUDIMENTS_HAVE_FCNTL)
+		struct flock	lck;
+		lck.l_type=type;
+		lck.l_whence=whence;
+		lck.l_start=start;
+		lck.l_len=len;
+		return !fcntl(method,reinterpret_cast<long>(&lck));
+	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
+		// how do I specify read vs. write/write?
+		off64_t	cur=getCurrentPosition();
+		if (cur==-1) {
+			return false;
+		}
+		LARGE_INTEGER	lockstart;
+		lockstart.QuadPart=lseek(start,whence);
+		if (lockstart.QuadPart==-1) {
+			return false;
+		}
+		if (setPositionRelativeToBeginning(cur)==-1) {
+			return false;
+		}
+		OVERLAPPED	ol;
+		rawbuffer::zero((void *)&ol,sizeof(ol));
+		ol.Offset=lockstart.LowPart;
+		ol.OffsetHigh=lockstart.HighPart;
+		LARGE_INTEGER	locklength;
+		locklength.QuadPart=len;
+		return LockFileEx((HANDLE)_get_osfhandle(fd()),
+					(method==F_SETLK)?
+						LOCKFILE_FAIL_IMMEDIATELY:0,
+					0,
+					locklength.LowPart,
+					locklength.HighPart,
+					&ol);
+	#else
+		#error no fcntl, LockFile or anything like it
+	#endif
 }
 
 bool file::checkLock(short type, short whence, off64_t start, off64_t len,
 						struct flock *retlck) const {
-	struct flock	lck;
-	lck.l_type=type;
-	lck.l_whence=whence;
-	lck.l_start=start;
-	lck.l_len=len;
-	int	result=fcntl(F_SETLKW,reinterpret_cast<long>(&lck));
-	*retlck=lck;
-	return !result;
+	#if defined(RUDIMENTS_HAVE_FCNTL)
+		struct flock	lck;
+		lck.l_type=type;
+		lck.l_whence=whence;
+		lck.l_start=start;
+		lck.l_len=len;
+		int	result=fcntl(F_GETLK,reinterpret_cast<long>(&lck));
+		*retlck=lck;
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
+		// Windows doesn't appear to support this at all.
+		// I guess we'll return false, meaning not locked.
+		return false;
+	#else
+		#error no fcntl(F_GETLK), LockFile or anything like it
+	#endif
 }
 
 bool file::unlock(short whence, off64_t start, off64_t len) const {
-	struct flock	lck;
-	lck.l_type=F_UNLCK;
-	lck.l_whence=whence;
-	lck.l_start=start;
-	lck.l_len=len;
-	return !fcntl(F_SETLK,reinterpret_cast<long>(&lck));
+	#if defined(RUDIMENTS_HAVE_FCNTL)
+		struct flock	lck;
+		lck.l_type=F_UNLCK;
+		lck.l_whence=whence;
+		lck.l_start=start;
+		lck.l_len=len;
+		return !fcntl(F_SETLK,reinterpret_cast<long>(&lck));
+	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
+		off64_t	cur=getCurrentPosition();
+		if (cur==-1) {
+			return false;
+		}
+		LARGE_INTEGER	lockstart;
+		lockstart.QuadPart=lseek(start,whence);
+		if (lockstart.QuadPart==-1) {
+			return false;
+		}
+		if (setPositionRelativeToBeginning(cur)==-1) {
+			return false;
+		}
+		LARGE_INTEGER	locklength;
+		locklength.QuadPart=len;
+		return UnlockFile((HANDLE)_get_osfhandle(fd()),
+					lockstart.LowPart,
+					lockstart.HighPart,
+					locklength.LowPart,
+					locklength.HighPart);
+	#else
+		#error no fcntl, UnlockFile or anything like it
+	#endif
 }
 
 bool file::changeOwner(const char *newuser, const char *newgroup) const {
@@ -796,11 +903,20 @@ bool file::changeOwner(const char *newuser, const char *newgroup) const {
 }
 
 bool file::changeOwner(uid_t uid, gid_t gid) const {
-	int	result;
-	do {
-		result=fchown(fd(),uid,gid);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_FCHOWN)
+		int	result;
+		do {
+			result=fchown(fd(),uid,gid);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(MINGW32)
+		// windows doesn't support anything like this
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#else
+		// other platforms should support something like this
+		#error no fchown or anything like it
+	#endif
 }
 
 bool file::changeOwner(const char *filename, const char *newuser,
@@ -883,81 +999,128 @@ bool file::remove(const char *filename) {
 }
 
 bool file::createHardLink(const char *oldpath, const char *newpath) {
-	int	result;
-	do {
-		result=link(oldpath,newpath);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_LINK)
+		int	result;
+		do {
+			result=link(oldpath,newpath);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_LOADLIBRARY)
+		bool	retval=false;
+		HMODULE	lib=LoadLibrary("KERNEL32");
+		if (lib) {
+			bool	(*proc)(LPCSTR,LPCSTR,
+					LPSECURITY_ATTRIBUTES)=
+				(bool (*)(LPCSTR,LPCSTR,
+					LPSECURITY_ATTRIBUTES))
+					GetProcAddress(lib,"CreateHardLinkA");
+			if (proc) {
+				retval=proc(newpath,oldpath,NULL);
+			}
+			FreeLibrary(lib);
+		}
+		return retval;
+	#else
+		#error no link or anything like it
+	#endif
 }
 
 bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
-	int	result;
-	do {
-		result=symlink(oldpath,newpath);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_SYMLINK)
+		int	result;
+		do {
+			result=symlink(oldpath,newpath);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(MINGW32)
+		// windows doesn't support symlinks
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#else
+		// other platforms should support symlinks,
+		// so something may be wrong
+		#error no symlink or anything like it
+	#endif
 }
 
 char *file::resolveSymbolicLink(const char *filename) {
 
-	size_t	buffersize=1024;
-	for (;;) {
+	#if defined(RUDIMENTS_HAVE_READLINK)
+		size_t	buffersize=1024;
+		for (;;) {
 
-		// create a buffer to store the path
-		char	*buffer=new char[buffersize];
+			// create a buffer to store the path
+			char	*buffer=new char[buffersize];
 
-		// read the path into the buffer
-		int	len;
-		do {
-			len=::readlink(filename,buffer,buffersize);
-		} while (len==-1 && error::getErrorNumber()==EINTR);
+			// read the path into the buffer
+			int	len;
+			do {
+				len=::readlink(filename,buffer,buffersize);
+			} while (len==-1 && error::getErrorNumber()==EINTR);
 
-		if (len==-1) {
+			if (len==-1) {
 
-			// if the call to readlink failed, delete the buffer
-			// and return NULL
-			delete[] buffer;
-			return NULL;
-
-		} else if ((size_t)len==buffersize) {
-
-			// if the length of the path was the same as the buffer
-			// size the we didn't get the entire path, increase the
-			// size of the buffer and try again
-			delete[] buffer;
-			buffersize=buffersize+1024;
-
-			// if the buffer size exceeds 10k then return failure
-			if (buffersize>10240) {
+				// if the call to readlink failed, delete the
+				// buffer and return NULL
+				delete[] buffer;
 				return NULL;
-			}
 
-		} else {
-			// NULL-terminate the buffer, readlink()
-			// doesn't do this for us
-			buffer[len]='\0';
-			return buffer;
+			} else if ((size_t)len==buffersize) {
+
+				// if the length of the path was the same as
+				// the buffer size the we didn't get the entire
+				// path, increase the size of the buffer and
+				// try again
+				delete[] buffer;
+				buffersize=buffersize+1024;
+
+				// if the buffer size exceeds 10k
+				// then return failure
+				if (buffersize>10240) {
+					return NULL;
+				}
+
+			} else {
+				// NULL-terminate the buffer, readlink()
+				// doesn't do this for us
+				buffer[len]='\0';
+				return buffer;
+			}
 		}
-	}
+	#elif defined(MINGW32)
+		// windows doesn't support symlinks
+		error::setErrorNumber(ENOSYS);
+		return NULL;
+	#else
+		// other platforms should support symlinks,
+		// so something may be wrong
+		#error no readlink or anything like it
+	#endif
 }
 
 bool file::sync() const {
-	int	result;
-	do {
-		result=fsync(fd());
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_FSYNC)
+		int	result;
+		do {
+			result=fsync(fd());
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_COMMIT)
+		return _commit(fd());
+	#else
+		#error no fsync or anything like it
+	#endif
 }
 
 bool file::dataSync() const {
 	#ifdef RUDIMENTS_HAVE_FDATASYNC
-	int	result;
-	do {
-		result=fdatasync(fd());
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		int	result;
+		do {
+			result=fdatasync(fd());
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	return sync();
+		return sync();
 	#endif
 }
 
@@ -986,40 +1149,159 @@ bool file::setLastModificationTime(const char *filename,
 bool file::setLastAccessAndModificationTimes(const char *filename,
 						time_t lastaccesstime,
 						time_t lastmodtime) {
-	timeval	tv[2];
-	tv[0].tv_sec=static_cast<long>(lastaccesstime);
-	tv[0].tv_usec=0;
-	tv[1].tv_sec=static_cast<long>(lastmodtime);
-	tv[1].tv_usec=0;
-	int	result;
-	do {
-		result=utimes(filename,tv);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_UTIMES)
+		timeval	tv[2];
+		tv[0].tv_sec=static_cast<long>(lastaccesstime);
+		tv[0].tv_usec=0;
+		tv[1].tv_sec=static_cast<long>(lastmodtime);
+		tv[1].tv_usec=0;
+		int	result;
+		do {
+			result=utimes(filename,tv);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_SETFILETIME)
+
+		// open the file
+		HANDLE	handle=CreateFile(filename,
+						FILE_WRITE_ATTRIBUTES,
+						FILE_SHARE_DELETE|
+						FILE_SHARE_READ|
+						FILE_SHARE_WRITE,
+						NULL,
+						OPEN_EXISTING,
+						FILE_ATTRIBUTE_NORMAL|
+						FILE_FLAG_BACKUP_SEMANTICS,
+						NULL);
+		if (handle==INVALID_HANDLE_VALUE) {
+			return false;
+		}
+
+		// windows time starts at 1/1/1601
+		// unix time starts at 1/1/1970
+		// this is the number of seconds between those dates
+		#define	timediff	11644473600LLU
+
+		// convert the times from unix to windows format
+		ULARGE_INTEGER	lastaccessfiletime;
+		lastaccessfiletime.QuadPart=(lastaccesstime+timediff)*10000000;
+		ULARGE_INTEGER	lastmodfiletime;
+		lastmodfiletime.QuadPart=(lastmodtime+timediff)*10000000;
+
+		// set the file times
+		bool	retval=SetFileTime(handle,NULL,
+						(FILETIME *)&lastaccesstime,
+						(FILETIME *)&lastmodtime);
+
+		// close the file
+		CloseHandle(handle);
+
+		// return the result
+		return retval;
+	#else
+		#error no utimes or anything like it
+	#endif
 }
 
 bool file::setLastAccessAndModificationTimes(const char *filename) {
-	int	result;
-	do {
-		result=utimes(filename,NULL);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_UTIMES)
+		int	result;
+		do {
+			result=utimes(filename,NULL);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		datetime	dt;
+		dt.getSystemDateAndTime();
+		return setLastAccessAndModificationTimes(filename,
+							dt.getEpoch(),
+							dt.getEpoch());
+	#endif
 }
 
 bool file::createFifo(const char *filename, mode_t perms) {
-	int	result;
-	do {
-		result=mkfifo(filename,perms);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_MKFIFO)
+		int	result;
+		do {
+			result=mkfifo(filename,perms);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_CREATENAMEDPIPE)
+		HANDLE	handle=CreateNamedPipe(filename,0,0,1,
+						1024,1024,5000,NULL);
+		if (handle==INVALID_HANDLE_VALUE) {
+			return false;
+		}
+		CloseHandle(handle);
+		return true;
+	#else
+		#error no mkfifo or anything like it
+	#endif
 }
 
 int file::createTemporaryFile(char *templatefilename) {
-	int	result;
-	do {
-		result=mkstemp(templatefilename);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#if defined(RUDIMENTS_HAVE_MKSTEMP)
+		int	result;
+		do {
+			result=mkstemp(templatefilename);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		// sanity check on templatefilename
+		char	*lastsix=templatefilename+
+				charstring::length(templatefilename)-6;
+		if (charstring::compare(lastsix,"XXXXXX")) {
+			error::setErrorNumber(EINVAL);
+			return -1;
+		}
+
+		// replace X's with random characters...
+
+		// seed the random number
+		// (NOTE: this is insecure as it will create predictable
+		// file names, come up with a better way)
+		datetime	dt;
+		dt.getSystemDateAndTime();
+		int	seed=dt.getEpoch();
+
+		// for each of the 6 characters...
+		for (uint8_t i=0; i<6; i++) {
+
+			// get a random number, scale it to 0-60
+			seed=randomnumber::generateNumber(seed);
+			char	ch=(char)randomnumber::scaleNumber(seed,0,59);
+
+			// translate...
+			//  0-9  -> '0' - '9'
+			// 10-34 -> 'A' - 'Z'
+			// 35-59 -> 'a' - 'z'
+			if (ch<10) {
+				ch=ch+'0';
+			} else if (ch<35) {
+				ch=ch-10+'A';
+			} else {
+				ch=ch-35+'a';
+			}
+
+			// set character
+			lastsix[i]=ch;
+		}
+
+		// create the file
+		file	f;
+		if (!f.create(templatefilename,
+				permissions::evalPermString("rw-r--r--"))) {
+			return -1;
+		}
+
+		// fake it out so the file won't get
+		// closed when f is deallocated
+		int	fdesc=f.getFileDescriptor();
+		f.setFileDescriptor(-1);
+
+		// return the file descriptor
+		return fdesc;
+	#endif
 }
 
 const char * const *file::listAttributes() const {
@@ -1595,30 +1877,48 @@ long file::maxLinks() const {
 
 bool file::posixFadvise(off64_t offset, off64_t len, int advice) const {
 	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
-	int	result;
-	do {
-		result=posix_fadvise(fd(),offset,len,advice);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		int	result;
+		do {
+			result=posix_fadvise(fd(),offset,len,advice);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	return true;
+		// on platforms that don't support this, it's ok to just return
+		// success since really it only gives the filesystem hints
+		return true;
 	#endif
 }
 
 long file::pathConf(const char *path, int name) {
-	long	result;
-	do {
-		result=pathconf(path,name);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#if defined(RUDIMENTS_HAVE_PATHCONF)
+		long	result;
+		do {
+			result=pathconf(path,name);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#elif defined(MINGW32)
+		// no idea how to support this on windows
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#else
+		#error no pathconf or anything like it
+	#endif
 }
 
 long file::fpathConf(int name) const {
-	long	result;
-	do {
-		result=fpathconf(fd(),name);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#if defined(RUDIMENTS_HAVE_FPATHCONF)
+		long	result;
+		do {
+			result=fpathconf(fd(),name);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#elif defined(MINGW32)
+		// no idea how to support this on windows
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#else
+		#error no fpathconf or anything like it
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

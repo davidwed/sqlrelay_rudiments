@@ -11,6 +11,10 @@
 // need for umask...
 #include <sys/stat.h>
 
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -117,7 +121,8 @@ filedescriptor *unixserversocket::accept() {
 	int	clientsock;
 	do {
 		clientsock=::accept(fd(),
-				reinterpret_cast<struct sockaddr *>(&clientsun),
+				reinterpret_cast<struct sockaddr *>(
+								&clientsun),
 				&size);
 	} while (clientsock==-1 && error::getErrorNumber()==EINTR);
 	if (clientsock==-1) {

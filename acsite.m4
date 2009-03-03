@@ -252,16 +252,20 @@ AC_SUBST(WALL)
 
 
 
-dnl checks to see if -pthread option works or not during compile
+dnl checks to see if -pthread option works or not during compile,
+dnl execpt on mingw, it definitely doesn't use it
 AC_DEFUN([FW_CHECK_PTHREAD_COMPILE],
 [
-AC_MSG_CHECKING(if gcc -pthread works during compile phase)
-FW_TRY_COMPILE([#include <stdio.h>],[printf("hello");],[-pthread],[PTHREAD_COMPILE="-pthread"],[PTHREAD_COMPILE=""])
-if ( test -n "$PTHREAD_COMPILE" )
+if ( test -z "$MINGW32" )
 then
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
+	AC_MSG_CHECKING(if gcc -pthread works during compile phase)
+	FW_TRY_COMPILE([#include <stdio.h>],[printf("hello");],[-pthread],[PTHREAD_COMPILE="-pthread"],[PTHREAD_COMPILE=""])
+	if ( test -n "$PTHREAD_COMPILE" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
 fi
 ])
 
@@ -309,6 +313,7 @@ case $host_os in
 	*mingw32* ) MINGW32="yes";;
 	*uwin* ) UWIN="yes";;
 esac
+EXE=""
 AC_SUBST(MINGW32)
 AC_SUBST(CYGWIN)
 AC_SUBST(UWIN)
@@ -317,11 +322,18 @@ MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
 	MICROSOFT="yes"
+	EXE=".exe"
 fi
+
+AC_SUBST(EXE)
+AC_SUBST(MICROSOFT)
 
 if ( test "$MINGW32" )
 then
 	AC_DEFINE(MINGW32,1,Mingw32 environment)
+
+	dnl if we're building mingw32, we're cross-compiling by definition
+	cross_compiling="yes"
 fi
 ])
 
@@ -396,13 +408,19 @@ then
 
 		dnl cross compiling
 		echo "cross compiling"
-		if ( test -n "$PTHREADPATH" )
+
+		dnl disable pthread for mingw but
+		dnl hardcode it for other platforms
+		if ( test -z "$MINGW32" )
 		then
-			PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
-			PTHREADLIB="-L$PTHREADPATH/lib -lpthread -phtread"
-		else
-			PTHREADINCLUDES="$PTHREAD_COMPILE"
-			PTHREADLIB="-lpthread -pthread"
+			if ( test -n "$PTHREADPATH" )
+			then
+				PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
+				PTHREADLIB="-L$PTHREADPATH/lib -lpthread -phtread"
+			else
+				PTHREADINCLUDES="$PTHREAD_COMPILE"
+				PTHREADLIB="-lpthread -pthread"
+			fi
 		fi
 		HAVE_PTHREAD="yes"
 
@@ -639,7 +657,15 @@ dnl checks for rpc entry functions and header files
 AC_DEFUN([FW_CHECK_RPC],
 [
 
-HAVE_GETRPCBYNAME_R=""
+if ( test "$INCLUDE_RPCENTRY" = "1" )
+then
+
+INCLUDE_RPCENTRY="0"
+
+HAVE_GETRPCBYNAME_R="no"
+HAVE_GETRPCBYNAME="no"
+HAVE_GETRPCBYNUMBER_R="no"
+HAVE_GETRPCBYNUMBER="no"
 
 AC_MSG_CHECKING(for getrpcbyname_r with 5 parameters in netdb.h)
 AC_TRY_COMPILE([#include <netdb.h>
@@ -683,30 +709,26 @@ then
 	AC_MSG_CHECKING(for getrpcbyname in netdb)
 	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbyname(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(RUDIMENTS_HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname(NULL);,HAVE_GETRPCBYNAME="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(RUDIMENTS_HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for getrpcbyname in rpc/rpcent.h)
 	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbyname(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(RUDIMENTS_HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname(NULL);,HAVE_GETRPCBYNAME="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(RUDIMENTS_HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for getrpcbyname in rpc/rpc.h)
 	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
-getrpcbyname(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbyname(NULL);,HAVE_GETRPCBYNAME="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNAME,1, Some systems have getrpcbyname) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 fi
-
-
-
-HAVE_GETRPCBYNUMBER_R="no"
 
 AC_MSG_CHECKING(for getrpcbynumber_r with 5 parameters in netdb.h)
 AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbynumber_r(0,NULL,NULL,0,NULL);,RUDIMENTS_HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(RUDIMENTS_HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber_r(0,NULL,NULL,0,NULL);,HAVE_GETRPCBYNUMBER_R="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5,1,Some systems have getrpcbynumber_r) AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER_R,1, Some systems have getrpcbynumber_r) AC_DEFINE(RUDIMENTS_HAVE_NETDB_H,1, Some systems have netdb.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for getrpcbynumber_r with 5 parameters in rpc/rpcent.h)
 AC_TRY_COMPILE([#include <netdb.h>
@@ -746,19 +768,29 @@ then
 	AC_MSG_CHECKING(for getrpcbynumber in netdb)
 	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>],
-getrpcbynumber(0);,AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber(0);,HAVE_GETRPCBYNUMBER="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for getrpcbynumber in rpc/rpcent.h)
 	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpcent.h>],
-getrpcbynumber(0);,AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber(0);,HAVE_GETRPCBYNUMBER="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPCENT_H,1, Some systems have rpc/rpcent.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for getrpcbynumber in rpc/rpc.h)
 	AC_TRY_COMPILE([#include <netdb.h>
 #include <stdlib.h>
 #include <rpc/rpc.h>],
-getrpcbynumber(0);,AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getrpcbynumber(0);,HAVE_GETRPCBYNUMBER="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
+
+dnl decide whether or not to include the rpcentry class
+if ( test "$HAVE_GETRPCBYNAME_R" = "yes" -o "$HAVE_GETRPCBYNAME" = "yes" )
+then
+	if ( test "$HAVE_GETRPCBYNUMBER_R" = "yes" -o "$HAVE_GETRPCBYNUMBER" = "yes" )
+	then
+		INCLUDE_RPCENTRY="1"
+	fi
+fi
 
 fi
 ])
@@ -766,6 +798,9 @@ fi
 dnl checks for shadow entry functions and header files
 AC_DEFUN([FW_CHECK_SHADOW],
 [
+
+if ( test "$INCLUDE_SHADOWENTRY" = "1" )
+then
 
 INCLUDE_SHADOWENTRY="0"
 
@@ -819,7 +854,7 @@ struct spwd sp; sp.sp_flag=0;,AC_DEFINE(RUDIMENTS_HAVE_SP_FLAG,1,struct spwd has
 
 fi 
 
-AC_SUBST(INCLUDE_SHADOWENTRY)
+fi
 ])
 
 dnl checks for password entry functions and header files
@@ -855,6 +890,11 @@ then
 #include <stdlib.h>],
 getpwuid_r(0,NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GETPWUID_R_4,1,Some systems have getpwuid_r) AC_DEFINE(RUDIMENTS_HAVE_GETPWUID_R,1,Some systems have getpwuid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
+
+AC_MSG_CHECKING(for NetUserGetInfo)
+AC_TRY_COMPILE([#include <windows.h>
+#include <lm.h>],
+NetUserGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETUSERGETINFO,1,Some systems have NetUserGetInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 ])
 
@@ -893,6 +933,11 @@ then
 #include <stdlib.h>],
 getgrgid_r(0,NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GETGRGID_R_4,1,Some systems have getgrgid_r) AC_DEFINE(RUDIMENTS_HAVE_GETGRGID_R,1,Some systems have getgrgid_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
+
+AC_MSG_CHECKING(for NetGroupGetInfo)
+AC_TRY_COMPILE([#include <windows.h>
+#include <lm.h>],
+NetGroupGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETGROUPGETINFO,1,Some systems have NetGroupGetInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 ])
 
@@ -1169,7 +1214,7 @@ sfs.f_ffree=0;
 sfs.f_fsid.__val[0]=0;
 sfs.f_namelen=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_LINUX_STATFS,1,Linux style statfs) STATFS_STYLE="linux style")
+,AC_DEFINE(RUDIMENTS_HAVE_LINUX_STATFS,1,Linux style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="linux style")
 
 dnl cygwin is like linux but f_fsid is just a long
 if ( test "$STATFS_STYLE" = "unknown" )
@@ -1187,7 +1232,7 @@ sfs.f_ffree=0;
 sfs.f_fsid=0;
 sfs.f_namelen=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_CYGWIN_STATFS,1,Cygwin style statfs) STATFS_STYLE="cygwin style")
+,AC_DEFINE(RUDIMENTS_HAVE_CYGWIN_STATFS,1,Cygwin style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="cygwin style")
 fi
 
 dnl freebsd is very different from linux
@@ -1216,7 +1261,7 @@ sfs.f_syncreads=0;
 sfs.f_asyncreads=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) STATFS_STYLE="freebsd style")
+,AC_DEFINE(RUDIMENTS_HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="freebsd style")
 fi
 
 dnl netbsd is like freebsd but lacks a few fields
@@ -1243,7 +1288,7 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATFS,1,NetBSD style statfs) STATFS_STYLE="old netbsd style")
+,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATFS,1,NetBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="old netbsd style")
 fi
 
 dnl netbsd-3.0 is called statvfs and is different from real statvfs
@@ -1275,7 +1320,7 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statvfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATVFS,1,NetBSD-3.0 style statvfs) STATFS_STYLE="netbsd-3.0 style")
+,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATVFS,1,NetBSD-3.0 style statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some stype of statvfs) STATFS_STYLE="netbsd-3.0 style")
 fi
 
 dnl openbsd is like netbsd but with an additional mount_info union and without
@@ -1303,7 +1348,7 @@ sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 sfs.mount_info.ufs_args.fspec=NULL;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_OPENBSD_STATFS,1,OpenBSD style statfs) STATFS_STYLE="openbsd style")
+,AC_DEFINE(RUDIMENTS_HAVE_OPENBSD_STATFS,1,OpenBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="openbsd style")
 fi
 
 dnl darwin is similar to the other bsd's but with a few extra and a few missing
@@ -1331,7 +1376,7 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_DARWIN_STATFS,1,Darwin style statfs) STATFS_STYLE="darwin style")
+,AC_DEFINE(RUDIMENTS_HAVE_DARWIN_STATFS,1,Darwin style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="darwin style")
 fi
 
 dnl SCO and Solaris both have statvfs
@@ -1354,8 +1399,15 @@ sfs.f_basetype[0]=0;
 sfs.f_flag=0;
 sfs.f_fstr[0]=0;
 statvfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_STATVFS,1,statvfs) STATFS_STYLE="statvfs")
+,AC_DEFINE(RUDIMENTS_HAVE_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some stype of statvfs) STATFS_STYLE="statvfs")
 fi
+
+dnl Windows has it's own way of doing it
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_COMPILE([#include <windows.h>],[GetDiskFreeSpace(NULL,NULL,NULL,NULL,NULL);],AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE,1,GetDiskFreeSpace) STATFS_STYLE="windows")
+fi
+
 
 AC_MSG_RESULT($STATFS_STYLE)
 ])
@@ -1468,7 +1520,7 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 	AC_LANG(C)
 	SOCKETLIBS=""
 	DONE=""
-	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32"
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lnetapi32"
 	do
 		FW_TRY_LINK([#include <stdlib.h>
 #ifdef __MINGW32__
@@ -1533,6 +1585,9 @@ LIBS="$HACKLIBS $LIBS"
 
 AC_DEFUN([FW_CHECK_CRYPT_R],
 [
+if ( test "$INCLUDE_CRYPT" = 1 )
+then
+
 	AC_MSG_CHECKING(for crypt.h)
 	FW_TRY_LINK([#include <crypt.h>],[int a=0;],[$CPPFLAGS],[],[],[CRYPT_H="#include <crypt.h>"],[CRYPT_H="#include <unistd.h>"])
 	if ( test "$CRYPT_H" = "#include <crypt.h>" )
@@ -1579,15 +1634,13 @@ $CRYPT_H],[crypt_data cd; crypt_r(NULL,NULL,NULL);],[$CPPFLAGS],[$i],[],[RUDIMEN
 		AC_MSG_RESULT(no)
 	fi
 
-	if ( test "$INCLUDE_CRYPT" = 1 )
+	INCLUDE_CRYPT="0"
+	if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
 	then
-		INCLUDE_CRYPT="0"
-		if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
-		then
-			INCLUDE_CRYPT="1"
-		fi
+		INCLUDE_CRYPT="1"
 	fi
+fi
 
-	AC_SUBST(INCLUDE_CRYPT)
-	AC_SUBST(CRYPTLIB)
+AC_SUBST(INCLUDE_CRYPT)
+AC_SUBST(CRYPTLIB)
 ])

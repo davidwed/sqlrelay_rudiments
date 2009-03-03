@@ -15,7 +15,7 @@
 #endif
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
+#ifdef MINGW32
 	#include <windows.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -33,7 +33,7 @@
 	#include <unistd.h>
 #endif
 #include <fcntl.h>
-#ifdef HAVE_RUDIMENTS_SYS_FCNTL_H
+#ifdef RUDIMENTS_HAVE_SYS_FCNTL_H
 	#include <sys/fcntl.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IOCTL
@@ -1615,12 +1615,14 @@ int filedescriptor::ioctl(int cmd, void *arg) const {
 	#endif
 }
 
-#ifdef __MINGW32__
+#ifdef MINGW32
 bool filedescriptor::passFileDescriptor(int filedesc) const {
+	error::setErrorNumber(ENOSYS);
 	return false;
 }
 
 bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
+	error::setErrorNumber(ENOSYS);
 	return false;
 }
 #else
@@ -1895,7 +1897,8 @@ int filedescriptor::getSockOpt(int level, int optname,
 				void *optval, socklen_t *optlen) {
 	int	result;
 	do {
-		result=getsockopt(pvt->_fd,level,optname,optval,optlen);
+		result=getsockopt(pvt->_fd,level,optname,
+			(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,optlen);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -1904,7 +1907,8 @@ int filedescriptor::setSockOpt(int level, int optname,
 				const void *optval, socklen_t optlen) {
 	int	result;
 	do {
-		result=setsockopt(pvt->_fd,level,optname,optval,optlen);
+		result=setsockopt(pvt->_fd,level,optname,
+			(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)optval,optlen);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -1944,15 +1948,41 @@ void filedescriptor::sslresult(int sslrslt) {
 #endif
 
 bool filedescriptor::closeOnExec() {
-	return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
+	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
+		return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
+	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
+		return SetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
+							HANDLE_FLAG_INHERIT,0);
+	#else
+		#error no FD_CLOEXEC or anything like it
+	#endif
 }
 
 bool filedescriptor::dontCloseOnExec() {
-	return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
+	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
+		return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
+	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
+		return SetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
+							HANDLE_FLAG_INHERIT,
+							HANDLE_FLAG_INHERIT);
+	#else
+		#error no FD_CLOEXEC or anything like it
+	#endif
 }
 
 bool filedescriptor::getCloseOnExec() {
-	return fcntl(F_GETFD,FD_CLOEXEC);
+	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
+		return fcntl(F_GETFD,FD_CLOEXEC);
+	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
+		DWORD	inherit;
+		if (GetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
+								&inherit)) {
+			return (bool)(inherit&HANDLE_FLAG_INHERIT);
+		}
+		return false;
+	#else
+		#error no FD_CLOEXEC or anything like it
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

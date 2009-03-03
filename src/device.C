@@ -42,13 +42,21 @@ device::~device() {
 bool device::createDeviceNode(const char *filename, bool blockdevice,
 				unsigned short major, unsigned short minor,
 				mode_t perms) {
-	mode_t	mode=perms|((blockdevice)?S_IFBLK:S_IFCHR);
-	dev_t	dev=(major<<8|minor);
-	int	result;
-	do {
-		result=mknod(filename,mode,dev);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_MKNOD)
+		mode_t	mode=perms|((blockdevice)?S_IFBLK:S_IFCHR);
+		dev_t	dev=(major<<8|minor);
+		int	result;
+		do {
+			result=mknod(filename,mode,dev);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(MINGW32)
+		// windows doesn't support device nodes
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#else
+		#error no mknod or anything like it
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

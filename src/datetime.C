@@ -400,11 +400,26 @@ bool datetime::getSystemDateAndTime() {
 }
 
 bool datetime::setSystemDateAndTime() {
-	timeval	tv;
-	tv.tv_sec=pvt->_epoch;
-	tv.tv_usec=0;
 	// FIXME: should set /etc/localtime (or /etc/TZ) and TZ env var too...
-	return !settimeofday(&tv,NULL);
+	#if defined(RUDIMENTS_HAVE_SETTIMEOFDAY)
+		timeval	tv;
+		tv.tv_sec=pvt->_epoch;
+		tv.tv_usec=0;
+		return !settimeofday(&tv,NULL);
+	#elif defined(RUDIMENTS_HAVE_SETSYSTEMTIME)
+		SYSTEMTIME	st;
+		st.wYear=pvt->_year+1900;
+		st.wMonth=pvt->_mon+1;
+		st.wDayOfWeek=pvt->_wday;
+		st.wDay=pvt->_mday;
+		st.wHour=pvt->_hour;
+		st.wMinute=pvt->_min;
+		st.wSecond=pvt->_sec;
+		st.wMilliseconds=0;
+		return SetSystemTime(&st);
+	#else
+		#error no settimeofday or anything like it
+	#endif
 }
 
 bool datetime::getHardwareDateAndTime(const char *hwtz) {

@@ -13,6 +13,7 @@ datadir = @datadir@
 docdir = ${datadir}/doc/rudiments
 
 # compiler to use
+CC = @CC@
 CXX = @CXX@
 
 # archiver to use
@@ -53,8 +54,9 @@ UWIN = @UWIN@
 # ssl library
 SSLLIBS = @SSLLIBS@
 
-# pcre library
+# regular expression library
 PCRELIBS = @PCRELIBS@
+USE_BUILT_IN_REGULAREXPRESSION = @USE_BUILT_IN_REGULAREXPRESSION@
 
 # socket library
 SOCKETLIBS = @SOCKETLIBS@
@@ -79,3 +81,6 @@ INETATONLIB = @INETATONLIB@
 
 # dl library
 DLLIB = @DLLIB@
+
+# Microsoft-specific stuff
+EXE = @EXE@

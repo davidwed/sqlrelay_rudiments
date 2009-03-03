@@ -19,13 +19,14 @@ class xmlsaxprivate {
 	private:
 		const char	*_string;
 		const char	*_ptr;
+		const char	*_endptr;
 		file		_fl;
+		bool		_mmapped;
 		#ifdef RUDIMENTS_HAVE_MMAP
 		memorymap	_mm;
 		off64_t		_optblocksize;
 		off64_t		_filesize;
 		off64_t		_fileoffset;
-		const char	*_endptr;
 		#endif
 		uint32_t	_line;
 		stringbuffer	_err;
@@ -52,11 +53,12 @@ xmlsax::~xmlsax() {
 void xmlsax::reset() {
 	pvt->_string=NULL;
 	pvt->_ptr=NULL;
+	pvt->_endptr=NULL;
 #ifdef RUDIMENTS_HAVE_MMAP
 	pvt->_filesize=0;
 	pvt->_fileoffset=0;
-	pvt->_endptr=NULL;
 #endif
+	pvt->_mmapped=false;
 	pvt->_line=1;
 }
 
@@ -114,13 +116,22 @@ bool xmlsax::parseFile(const char *filename) {
 		if (fs.initialize(filename)) {
 			pvt->_optblocksize=fs.getOptimumTransferBlockSize();
 		} else {
-			pvt->_optblocksize=getpagesize();
+			#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
+				pvt->_optblocksize=getpagesize();
+			#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+				SYSTEM_INFO	systeminfo;
+				GetSystemInfo(&systeminfo);
+				pvt->_optblocksize=systeminfo.dwPageSize;
+			#else
+				#error no getpagesize or anything like it
+			#endif
 		}
 		pvt->_fl.setReadBufferSize(pvt->_optblocksize);
 		pvt->_filesize=pvt->_fl.getSize();
 		pvt->_fileoffset=0;
 		pvt->_fl.sequentialAccess(0,pvt->_filesize);
 		pvt->_fl.onlyOnce(0,pvt->_filesize);
+		pvt->_mmapped=true;
 		mapFile();
 		retval=parse();
 		if (pvt->_ptr) {
@@ -144,6 +155,8 @@ bool xmlsax::parseString(const char *string) {
 
 	// set string pointers
 	pvt->_ptr=pvt->_string=string;
+	pvt->_endptr=pvt->_string+charstring::length(string);
+	pvt->_mmapped=false;
 
 	return parse();
 }
@@ -787,13 +800,20 @@ char xmlsax::getCharacter() {
 		// aren't on the stack or in the heap and it thinks it's
 		// uninitialized.
 		if (pvt->_ptr==pvt->_endptr) {
-			if (!mapFile()) {
+			// if we're not parsing a memory-mapped file, we're done
+			// if we're parsing a memory-mapped file,
+			// we need to try to re-map it, if we can't we're done
+			if (!pvt->_mmapped || !mapFile()) {
 				return '\0';
 			}
 		}
 		ch=*(pvt->_ptr);
 		(pvt->_ptr)++;
-		pvt->_fileoffset++;
+		#ifdef RUDIMENTS_HAVE_MMAP
+		if (pvt->_mmapped) {
+			pvt->_fileoffset++;
+		}
+		#endif
 	} else {
 		if (pvt->_fl.read(&ch)!=sizeof(char)) {
 			return '\0';
@@ -830,6 +850,7 @@ const char *xmlsax::getError() {
 
 bool xmlsax::mapFile() {
 
+#ifdef RUDIMENTS_HAVE_MMAP
 	if (pvt->_fileoffset) {
 		pvt->_mm.detach();
 	}
@@ -849,6 +870,7 @@ bool xmlsax::mapFile() {
 		pvt->_endptr=pvt->_ptr+len;
 		return true;
 	}
+#endif
 	return false;
 }
 

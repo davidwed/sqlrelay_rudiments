@@ -4,6 +4,9 @@
 #include <rudiments/directory.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
+#ifdef RUDIMENTS_HAVE_MKDIR_1
+	#include <rudiments/permissions.h>
+#endif
 
 // for DIR
 #ifdef RUDIMENTS_HAVE_DIRENT_H
@@ -17,6 +20,21 @@
 	#include <unistd.h>
 #endif
 #include <sys/stat.h>
+
+#ifdef MINGW32
+	#include <windows.h>
+	// windows doesn't define these, but we need them
+	// internally to this file
+	#ifndef _PC_NAME_MAX
+		#define _PC_NAME_MAX	0
+	#endif
+	#ifndef _PC_NO_TRUNC
+		#define _PC_NO_TRUNC	1
+	#endif
+	#ifndef _PC_PATH_MAX
+		#define _PC_PATH_MAX	2
+	#endif
+#endif
 
 #include <stdio.h>
 
@@ -222,9 +240,21 @@ char *directory::getChildName(uint64_t index) {
 bool directory::create(const char *path, mode_t perms) {
 	int	result;
 	do {
-		result=mkdir(path,perms);
+		#if defined(RUDIMENTS_HAVE_MKDIR_2)
+			result=mkdir(path,perms);
+		#elif defined(RUDIMENTS_HAVE_MKDIR_1)
+			result=mkdir(path);
+		#else
+			#error no mkdir or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_MKDIR_2)
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_MKDIR_1)
+		return !result && permissions::setFilePermissions(path,perms);
+	#else
+		#error no mkdir or anything like it
+	#endif
 }
 
 bool directory::remove(const char *path) {
@@ -264,11 +294,20 @@ bool directory::changeDirectory(const char *path) {
 }
 
 bool directory::changeRoot(const char *path) {
-	int	result;
-	do {
-		result=chroot(path);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#ifdef RUDIMENTS_HAVE_CHROOT
+		int	result;
+		do {
+			result=chroot(path);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(MINGW32)
+		// windows just doesn't support this
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#else
+		// other platforms should support this
+		#error no chroot or anything like it
+	#endif
 }
 
 bool directory::needsMutex() {
@@ -304,11 +343,19 @@ bool directory::canAccessLongFileNames(const char *pathname) {
 }
 
 int64_t directory::pathConf(const char *pathname, int name) {
-	int64_t	result;
-	do {
-		result=pathconf(pathname,name);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#if defined(RUDIMENTS_HAVE_PATHCONF)
+		long	result;
+		do {
+			result=pathconf(pathname,name);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#elif defined(MINGW32)
+		// no idea how to support this on windows
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#else
+		#error no pathconf or anything like it
+	#endif
 }
 
 int64_t directory::maxFileNameLength() {
@@ -330,21 +377,29 @@ bool directory::canAccessLongFileNames() {
 }
 
 int64_t directory::fpathConf(int name) {
-	int64_t	result;
-	do {
-		result=fpathconf(
-				#if defined(RUDIMENTS_HAVE_DIRFD)
-					dirfd(pvt->_dir)
-				#elif defined(RUDIMENTS_HAVE_DIR_DD_FD)
-					pvt->_dir->dd_fd
-				#elif defined(RUDIMENTS_HAVE_DIR_D_FD)
-					pvt->_dir->d_fd
-				#else
-					#error need dirfd replacement
-				#endif
-				,name);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#if defined(RUDIMENTS_HAVE_FPATHCONF)
+		int64_t	result;
+		do {
+			result=fpathconf(
+					#if defined(RUDIMENTS_HAVE_DIRFD)
+						dirfd(pvt->_dir)
+					#elif defined(RUDIMENTS_HAVE_DIR_DD_FD)
+						pvt->_dir->dd_fd
+					#elif defined(RUDIMENTS_HAVE_DIR_D_FD)
+						pvt->_dir->d_fd
+					#else
+						#error need dirfd replacement
+					#endif
+					,name);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#elif defined(MINGW32)
+		// no idea how to support this on windows
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#else
+		#error no pathconf or anything like it
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

@@ -17,6 +17,10 @@
 	#endif
 #endif
 
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -127,10 +131,10 @@ bool snooze::nanosnooze(timespec *timetosnooze, timespec *timeremaining) {
 	#elif RUDIMENTS_HAVE_CLOCK_NANOSLEEP
 	return !clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
 					timetosnooze,timeremaining);
-	#elif MINGW32
+	#elif RUDIMENTS_HAVE_WINDOWS_SLEEP
 		// on windows, we only have millisecond resolution and we
 		// can't the remaining time back
-		sleep(timetosnooze->tv_sec*1000+timetosnooze->tv_nsec/1000000);
+		Sleep(timetosnooze->tv_sec*1000+timetosnooze->tv_nsec/1000000);
 
 		// set timeremaining to 0
 		timeremaining->tv_sec=0;

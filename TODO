@@ -1,19 +1,34 @@
-uclibc leaks when setting TZ over and over
+remove #ifdef's from .h files, just make methods return failure and set errno to
+	ERNOSYS or ERNOTSUP or something
+
+uclibc leaks when setting TZ over and over - use putenv in favor of setenv
 
 redhat-5.2 doesn't have uint32_t
 
 reduce heap fragmentation where possible
 
-QNX doesn't have sys/fcntl.h
+QNX doesn't have:
+	statfs, statvfs or anything like it
+	sys/fcntl.h
 
 add missing programming docs
 
 get a mingw port working
-	(can I use libgw32?)
+	how do I specify a read,write or read/write lock with LockFileEx
+		F_RDLCK, F_WRLCK, etc. need to be
+			exposed in header file or something
+	how do I F_GETLK
+	chown http://www.perlmonks.org/?node_id=70562
+	crypt
+	ssl/pcre
+	use dynamiclib rather than LoadLibrary in file, filesystem classes
+
+randomnumber class needs getSeed() method which gets a seed from /dev/urandom
+	or something, need to use it in file::createTemporaryFile
+
+INCLUDE_xxx's are initialized to 0 rather than whatever the config opts say
 
 --------------------------------------------------------------------------------
-
-some systems need -pthread in CFLAGS, other's don't like it
 
 netbsd-3.0 statvfs:
 	f_flag

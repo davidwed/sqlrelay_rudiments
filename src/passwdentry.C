@@ -6,8 +6,8 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#ifdef MINGW32
-	// for LPUSER_INFO_23, functions
+#ifdef RUDIMENTS_HAVE_NETUSERGETINFO
+	// for USER_INFO_2, functions
 	#include <windows.h>
 	#include <lm.h>
 #else
@@ -24,20 +24,42 @@
 namespace rudiments {
 #endif
 
+#ifdef RUDIMENTS_HAVE_NETUSERGETINFO
+CHAR *unicodeToAscii(WCHAR *in) {
+
+	BOOL	useddefaultchar;
+	int	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,
+						"?",&useddefaultchar);
+	if (size==0) {
+		return NULL;
+	}
+
+	CHAR	*out=new char[size];
+	if (!WideCharToMultiByte(CP_ACP,0,in,-1,out,size,
+						"?",&useddefaultchar)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+#endif
+
 class passwdentryprivate {
 	friend class passwdentry;
 	private:
-		#ifndef MINGW32
+		#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 			passwd	*_pwd;
-		#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
-			defined(RUDIMENTS_HAVE_GETPWUID_R)
-			passwd	_pwdbuffer;
-			char	*_buffer;
-		#endif
+			#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
+				defined(RUDIMENTS_HAVE_GETPWUID_R)
+				passwd	_pwdbuffer;
+				char	*_buffer;
+			#endif
 		#else
-			LPUSER_INFO_23	_buffer;
+			USER_INFO_2	*_buffer;
 			char		*_name;
-			char		*_fullname;
+			char		*_password;
+			char		*_realname;
+			char		*_homedir;
 		#endif
 };
 
@@ -49,7 +71,7 @@ static mutex	*pemutex;
 
 passwdentry::passwdentry() {
 	pvt=new passwdentryprivate;
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	pvt->_pwd=NULL;
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
@@ -57,9 +79,11 @@ passwdentry::passwdentry() {
 		pvt->_buffer=NULL;
 	#endif
 #else
-	pvr->_buffer=NULL;
-	pvr->_name=NULL;
-	pvr->_fullname=NULL;
+	pvt->_buffer=NULL;
+	pvt->_name=NULL;
+	pvt->_password=NULL;
+	pvt->_realname=NULL;
+	pvt->_homedir=NULL;
 #endif
 }
 
@@ -76,7 +100,7 @@ passwdentry &passwdentry::operator=(const passwdentry &p) {
 }
 
 passwdentry::~passwdentry() {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		delete[] pvt->_buffer;
@@ -87,12 +111,14 @@ passwdentry::~passwdentry() {
 		NetApiBufferFree(pvt->_buffer);
 	}
 	delete[] pvt->_name;
-	delete[] pvt->_fullname;
+	delete[] pvt->_password;
+	delete[] pvt->_realname;
+	delete[] pvt->_homedir;
 #endif
 }
 
 const char *passwdentry::getName() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_name;
 #else
 	return pvt->_name;
@@ -100,54 +126,64 @@ const char *passwdentry::getName() const {
 }
 
 const char *passwdentry::getPassword() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_passwd;
 #else
-	// FIXME:
-	return "";
+	return pvt->_password;
 #endif
 }
 
 uid_t passwdentry::getUserId() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_uid;
 #else
-	// FIXME:
-	return 0;
+	// Windows user id's aren't numbers, they're undefined, odd, variable
+	// length structures.  There's probably soem way to get one, but
+	// returning it is another matter.  You'd need to figure out it's
+	// length, bytewise copy it out and return it's length too.  It doesn't
+	// fit well into this paradigm so for now at least we'll call this
+	// unsupported.
+	return -1;
 #endif
 }
 
 gid_t passwdentry::getPrimaryGroupId() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_gid;
 #else
-	// FIXME:
-	return 0;
+	// Windows group id's aren't numbers, they're undefined, odd, variable
+	// length structures.  There's probably soem way to get one, but
+	// returning it is another matter.  You'd need to figure out it's
+	// length, bytewise copy it out and return it's length too.  It doesn't
+	// fit well into this paradigm so for now at least we'll call this
+	// unsupported.
+	return -1;
 #endif
 }
 
 const char *passwdentry::getRealName() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_gecos;
 #else
-	return pvt->_fullname;
+	return pvt->_realname;
 #endif
 }
 
 const char *passwdentry::getHomeDirectory() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_dir;
 #else
-	// FIXME:
-	return "";
+	return pvt->_homedir;
 #endif
 }
 
 const char *passwdentry::getShell() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_shell;
 #else
-	// FIXME:
+	// Under windows, users don't have default shells.  As far as I know,
+	// the command line is always the same.  You can run other shells
+	// but they're not tied to a user.
 	return "";
 #endif
 }
@@ -176,8 +212,8 @@ bool passwdentry::initialize(uid_t userid) {
 	return initialize(NULL,userid);
 }
 
-#ifndef MINGW32
 bool passwdentry::initialize(const char *username, uid_t userid) {
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
@@ -234,36 +270,71 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 				:getpwuid(userid)))!=NULL) &&
 			!(pemutex && !pemutex->unlock()));
 	#endif
-}
+
 #else
-bool passwdentry::initialize(const char *username, uid_t userid) {
 
 	if (pvt->_buffer) {
 		NetApiBufferFree(pvt->_buffer);
 	}
 	delete[] pvt->_name;
 	pvt->_name=NULL;
-	delete[] pvt->_fullname;
-	pvt->_fullname=NULL;
+	delete[] pvt->_realname;
+	pvt->_realname=NULL;
+	delete[] pvt->_password;
+	pvt->_password=NULL;
+	delete[] pvt->_realname;
+	pvt->_realname=NULL;
+	delete[] pvt->_homedir;
+	pvt->_homedir=NULL;
 
 	if (username) {	
-		if (NetUserGetInfo(NULL,username,23,
-				reinterpret_cast<LPBYTE *>(&pvt->_buffer))!=
-				NERR_SUCCESS) {
+
+		// convert username to unicode...
+
+		// get the size of the unicode buffer
+		int	usernamewsize=MultiByteToWideChar(CP_ACP,
+							MB_PRECOMPOSED,
+							username,
+							-1,NULL,0);
+		if (!usernamewsize) {
 			return false;
 		}
-		pvt->_name=new char[charstring::length(
-					pvt->_buffer->usri23_name)]+1;
-		pvt->_fullname=new char[charstring::length(
-					pvt->_buffer->usri23_full_name)]+1;
-		wsprintf(pvt->_name,"%s",pvt->_buffer->usri23_name);
-		wsprintf(pvt->_fullname,"%s",pvt->_buffer->usri23_fullname);
+
+		// create the buffer
+		WCHAR	*usernamew=new WCHAR[usernamewsize];
+
+		// perform the actual conversion
+		usernamewsize=MultiByteToWideChar(CP_ACP,
+							MB_PRECOMPOSED,
+							username,-1,
+							usernamew,
+							usernamewsize);
+		if (!usernamewsize) {
+			delete[] usernamew;
+			return false;
+		}
+
+
+		if (NetUserGetInfo(NULL,usernamew,1,
+				reinterpret_cast<BYTE **>(&pvt->_buffer))!=
+				NERR_Success) {
+			delete[] usernamew;
+			return false;
+		}
+
+		// convert the unicode values to ascii
+		pvt->_name=unicodeToAscii(pvt->_buffer->usri2_name);
+		pvt->_password=unicodeToAscii(pvt->_buffer->usri2_password);
+		pvt->_realname=unicodeToAscii(pvt->_buffer->usri2_full_name);
+		pvt->_homedir=unicodeToAscii(pvt->_buffer->usri2_home_dir);
 	} else {
-#error implement me...
+		// windows doesn't appear to support this
+		error::setErrorNumber(ENOSYS);
+		return false;
 	}
 	return true;
-}
 #endif
+}
 
 bool passwdentry::getName(uid_t userid, char **name) {
 	passwdentry	pwd;
@@ -375,9 +446,15 @@ bool passwdentry::getShell(const char *username, char **shell) {
 
 void passwdentry::print() const {
 
+#ifdef RUDIMENTS_HAVE_NETUSERGETINFO
+	if (!pvt->_buffer) {
+		return;
+	}
+#else
 	if (!pvt->_pwd) {
 		return;
 	}
+#endif
 
 	printf("Name: %s\n",getName());
 	printf("Password: %s\n",getPassword());

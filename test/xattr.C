@@ -1,6 +1,7 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/error.h>
+#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

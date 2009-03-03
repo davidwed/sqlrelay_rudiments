@@ -14,6 +14,7 @@
 using namespace rudiments;
 #endif
 
+#ifdef RUDIMENTS_HAS_SSL
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;
@@ -193,10 +194,11 @@ RETSIGTYPE	shutDown() {
 	file::remove("/tmp/svr.pidfile");
 	exit(0);
 }
-
+#endif
 
 int main(int argc, const char **argv) {
 
+#ifdef RUDIMENTS_HAS_SSL
 	mysvr=new myserver();
 
 	// set up signal handlers for clean shutdown
@@ -204,4 +206,7 @@ int main(int argc, const char **argv) {
 	mysvr->handleCrash((RETSIGTYPE *)shutDown);
 
 	mysvr->listen();
+#else
+	printf("rudiments built without ssl support\n");
+#endif
 }

@@ -5,4 +5,9 @@
 
 // for sockaddr_in
 #include <sys/types.h>
-#include <netinet/in.h>
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif

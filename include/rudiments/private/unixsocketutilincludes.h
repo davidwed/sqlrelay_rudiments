@@ -4,4 +4,14 @@
 #include <rudiments/private/inttypes.h>
 
 #include <sys/types.h>
-#include <sys/un.h>
+#include <sys/param.h>
+#ifdef RUDIMENTS_HAVE_SYS_UN_H
+	#include <sys/un.h>
+#endif
+
+#ifndef RUDIMENTS_HAVE_SOCKADDR_UN
+	struct sockaddr_un {
+		short   sun_family;
+		char    sun_path[MAXPATHLEN];
+	};
+#endif

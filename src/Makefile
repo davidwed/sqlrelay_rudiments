@@ -80,10 +80,12 @@ endif
 ifeq ($(INCLUDE_INETCLIENT),1)
 	SRCS += inetclientsocket.C
 	LOBJS += inetclientsocket.lo
+	CPPFLAGS += -DINCLUDE_INETCLIENT
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
 	SRCS += inetserversocket.C
 	LOBJS += inetserversocket.lo
+	CPPFLAGS += -DINCLUDE_INETSERVER
 endif
 ifeq ($(INCLUDE_LISTENER),1)
 	SRCS += listener.C
@@ -116,6 +118,10 @@ endif
 ifeq ($(INCLUDE_REGULAREXPRESSION),1)
 	SRCS += regularexpression.C
 	LOBJS += regularexpression.lo
+endif
+ifeq ($(USE_BUILT_IN_REGULAREXPRESSION),1)
+	SRCS += regex.c
+	LOBJS += regex.lo
 endif
 ifeq ($(INCLUDE_RPCENTRY),1)
 	SRCS += rpcentry.C
@@ -160,6 +166,7 @@ endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
 	SRCS += unixclientsocket.C
 	LOBJS += unixclientsocket.lo
+	CPPFLAGS += -DINCLUDE_UNIXCLIENT
 endif
 ifeq ($(INCLUDE_MODEMCLIENT),1)
 	SRCS += modemclient.C
@@ -168,10 +175,12 @@ endif
 ifeq ($(INCLUDE_MODEMSERVER),1)
 	SRCS += modemserver.C
 	LOBJS += modemserver.lo
+	CPPFLAGS += -DINCLUDE_MODEMSERVER
 endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
 	SRCS += unixserversocket.C
 	LOBJS += unixserversocket.lo
+	CPPFLAGS += -DINCLUDE_UNIXSERVER
 endif
 ifeq ($(INCLUDE_VARIABLEBUFFER),1)
 	SRCS += variablebuffer.C
@@ -242,6 +251,7 @@ else
 	ifeq ($(INCLUDE_MODEMCLIENT),1)
 		SRCS += modemutil.C
 		LOBJS += modemutil.lo
+		CPPFLAGS += -DINCLUDE_MODEMCLIENT
 	endif
 endif
 
@@ -315,6 +325,9 @@ else
 endif
 	
 .SUFFIXES: .lo
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(CC) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 .C.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@

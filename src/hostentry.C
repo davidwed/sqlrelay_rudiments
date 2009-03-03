@@ -9,6 +9,12 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETDB_H
+	#include <netdb.h>
+#endif
 
 #define MAXBUFFER	(32*1024)
 

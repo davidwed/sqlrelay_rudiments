@@ -4,11 +4,14 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/rawbuffer.h>
 
-#ifdef RUDIMENTS_HAS_PCRE
+#if defined(RUDIMENTS_HAS_PCRE)
 	#include <pcre.h>
-#else
+#elif defined(RUDIMENTS_HAVE_REGCOMP)
 	#include <sys/types.h>
 	#include <regex.h>
+#else
+	#include <sys/types.h>
+	#include "regex.h"
 #endif
 
 #include <stdlib.h>

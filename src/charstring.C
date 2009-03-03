@@ -684,6 +684,31 @@ char *charstring::parseNumber(double number,
 	return str;
 }
 
+char *charstring::parseNumber(long double number) {
+	// FIXME: use (q)(e|f|g)cvt(_r)?
+	char	*str=new char[22];
+	snprintf(str,22,"%lf",number);
+	return str;
+}
+
+char *charstring::parseNumber(long double number,
+				unsigned short scale) {
+	// FIXME: use (q)(e|f|g)cvt(_r)?
+	char	*str=new char[22];
+	snprintf(str,22,"%.*lf",scale,number);
+	return str;
+}
+
+char *charstring::parseNumber(long double number,
+				unsigned short precision,
+				unsigned short scale) {
+	// FIXME: use (e|f|g)cvt(_r)?
+	size_t	strlength=precision+3;
+	char	*str=new char[strlength];
+	snprintf(str,strlength,"%*.*lf",precision,scale,number);
+	return str;
+}
+
 void charstring::bothTrim(char *string, char character) {
 	leftTrim(string,character);
 	rightTrim(string,character);

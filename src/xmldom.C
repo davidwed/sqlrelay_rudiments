@@ -9,7 +9,14 @@
 #include <stdlib.h>
 
 // for getpagesize()
-#include <unistd.h>
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+
+// for GetSystemInfo
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -72,7 +79,15 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	if (fs.initialize(filename)) {
 		optblocksize=fs.getOptimumTransferBlockSize();
 	} else {
-		optblocksize=getpagesize();
+		#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
+			optblocksize=getpagesize();
+		#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+			SYSTEM_INFO	systeminfo;
+			GetSystemInfo(&systeminfo);
+			optblocksize=systeminfo.dwPageSize;
+		#else
+			#error no getpagesize or anything like it
+		#endif
 	}
 	file	fl;
 	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {

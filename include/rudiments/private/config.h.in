@@ -105,6 +105,9 @@
 /* Some systems have byteswap.h */
 #undef RUDIMENTS_HAVE_BYTESWAP_H
 
+/* Some systems have chroot */
+#undef RUDIMENTS_HAVE_CHROOT
+
 /* Some systems have clearenv */
 #undef RUDIMENTS_HAVE_CLEARENV
 
@@ -117,8 +120,14 @@
 /* Some systems have CMSG_SPACE */
 #undef RUDIMENTS_HAVE_CMSG_SPACE
 
+/* Some systems have _commit */
+#undef RUDIMENTS_HAVE_COMMIT
+
 /* Most systems have ftok(const char *, int) */
 #undef RUDIMENTS_HAVE_CONST_CHAR_FTOK
+
+/* Some systems have CreateNamedPipe */
+#undef RUDIMENTS_HAVE_CREATENAMEDPIPE
 
 /* Some systems have CreateFileMapping */
 #undef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
@@ -156,20 +165,44 @@
 /* Some systems define environ in unistd.h */
 #undef RUDIMENTS_HAVE_ENVIRON
 
+/* Some systems have fchmod */
+#undef RUDIMENTS_HAVE_FCHMOD
+
+/* Some systems have fchown */
+#undef RUDIMENTS_HAVE_FCHOWN
+
 /* Some systems have fcntl */
 #undef RUDIMENTS_HAVE_FCNTL
 
 /* Some systems have fdatasync */
 #undef RUDIMENTS_HAVE_FDATASYNC
 
+/* Some systems have FD_CLOEXEC */
+#undef RUDIMENTS_HAVE_FD_CLOEXEC
+
+/* Some systems have fpathconf */
+#undef RUDIMENTS_HAVE_FPATHCONF
+
 /* FreeBSD style statfs */
 #undef RUDIMENTS_HAVE_FREEBSD_STATFS
+
+/* Some systems have fsync */
+#undef RUDIMENTS_HAVE_FSYNC
 
 /* Most systems have ftok() */
 #undef RUDIMENTS_HAVE_FTOK
 
 /* Some systems have getaddrinfo */
 #undef RUDIMENTS_HAVE_GETADDRINFO
+
+/* Some systems have getegid */
+#undef RUDIMENTS_HAVE_GETEGID
+
+/* Some systems have geteuid */
+#undef RUDIMENTS_HAVE_GETEUID
+
+/* Some systems have getgid */
+#undef RUDIMENTS_HAVE_GETGID
 
 /* Some systems have getgrgid_r */
 #undef RUDIMENTS_HAVE_GETGRGID_R
@@ -206,6 +239,18 @@
 
 /* Some systems have gethostbyname_r */
 #undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_6
+
+/* Some systems have getpagesize */
+#undef RUDIMENTS_HAVE_GETPAGESIZE
+
+/* Some systems have getpgid */
+#undef RUDIMENTS_HAVE_GETPGID
+
+/* Some systems have getpid */
+#undef RUDIMENTS_HAVE_GETPID
+
+/* Some systems have getppid */
+#undef RUDIMENTS_HAVE_GETPPID
 
 /* Some systems have getprotobyname_r */
 #undef RUDIMENTS_HAVE_GETPROTOBYNAME_R
@@ -285,6 +330,9 @@
 /* Some systems have getservbyport_r */
 #undef RUDIMENTS_HAVE_GETSERVBYPORT_R_6
 
+/* Some systems have getsid */
+#undef RUDIMENTS_HAVE_GETSID
+
 /* Some systems have getspnam_r */
 #undef RUDIMENTS_HAVE_GETSPNAM_R
 
@@ -294,11 +342,29 @@
 /* Some systems have getspnam_r */
 #undef RUDIMENTS_HAVE_GETSPNAM_R_5
 
+/* Some systems have GetSystemInfo */
+#undef RUDIMENTS_HAVE_GETSYSTEMINFO
+
 /* Some systems have GetSystemTime */
 #undef RUDIMENTS_HAVE_GETSYSTEMTIME
 
+/* Some systems have getuid */
+#undef RUDIMENTS_HAVE_GETUID
+
+/* Some systems have HANDLE_FLAG_INHERIT */
+#undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT
+
+/* Some systems have inet_addr */
+#undef RUDIMENTS_HAVE_INET_ADDR
+
+/* Some systems have inet_aton */
+#undef RUDIMENTS_HAVE_INET_ATON
+
 /* Some systems have inttypes.h */
 #undef RUDIMENTS_HAVE_INTTYPES_H
+
+/* Some systems have in_addr_t type */
+#undef RUDIMENTS_HAVE_IN_ADDR_T
 
 /* Some systems have ioctl */
 #undef RUDIMENTS_HAVE_IOCTL
@@ -306,11 +372,23 @@
 /* Some systems have io.h */
 #undef RUDIMENTS_HAVE_IO_H
 
+/* Some systems have link */
+#undef RUDIMENTS_HAVE_LINK
+
 /* Linux style statfs */
 #undef RUDIMENTS_HAVE_LINUX_STATFS
 
+/* Some systems have LoadLibrary */
+#undef RUDIMENTS_HAVE_LOADLIBRARY
+
+/* Some systems have LoadLibraryEx */
+#undef RUDIMENTS_HAVE_LOADLIBRARYEX
+
 /* Some systems have localtime_r */
 #undef RUDIMENTS_HAVE_LOCALTIME_R
+
+/* Some systems have LockFileEx */
+#undef RUDIMENTS_HAVE_LOCKFILEEX
 
 /* Some systems have lrand48 */
 #undef RUDIMENTS_HAVE_LRAND48
@@ -341,6 +419,21 @@
 
 /* Some systems have mincore with unsigned char argument */
 #undef RUDIMENTS_HAVE_MINCORE_UCHAR
+
+/* Some systems have mkdir */
+#undef RUDIMENTS_HAVE_MKDIR_1
+
+/* Some systems have mkdir */
+#undef RUDIMENTS_HAVE_MKDIR_2
+
+/* Some systems have mkfifo */
+#undef RUDIMENTS_HAVE_MKFIFO
+
+/* Some systems have mknod */
+#undef RUDIMENTS_HAVE_MKNOD
+
+/* Some systems have mkstemp */
+#undef RUDIMENTS_HAVE_MKSTEMP
 
 /* Some systems have mktime */
 #undef RUDIMENTS_HAVE_MKTIME
@@ -399,11 +492,17 @@
 /* Some systems have netdb.h */
 #undef RUDIMENTS_HAVE_NETDB_H
 
+/* Some systems have NetGroupGetInfo */
+#undef RUDIMENTS_HAVE_NETGROUPGETINFO
+
 /* Some systems have netinet/in.h */
 #undef RUDIMENTS_HAVE_NETINET_IN_H
 
 /* Some systems have netinet/tcp.h */
 #undef RUDIMENTS_HAVE_NETINET_TCP_H
+
+/* Some systems have NetUserGetInfo */
+#undef RUDIMENTS_HAVE_NETUSERGETINFO
 
 /* Some systems define _NSGetEnviron in crt_externs.h */
 #undef RUDIMENTS_HAVE_NSGETENVIRON
@@ -417,11 +516,17 @@
 /* Some systems have OSSwapLittleToHostInt64 */
 #undef RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64
 
+/* Some systems have pathconf */
+#undef RUDIMENTS_HAVE_PATHCONF
+
 /* Some systems have posix_fadvise */
 #undef RUDIMENTS_HAVE_POSIX_FADVISE
 
 /* Some systems have posix_fallocate */
 #undef RUDIMENTS_HAVE_POSIX_FALLOCATE
+
+/* Some systems have Process32First */
+#undef RUDIMENTS_HAVE_PROCESS32FIRST
 
 /* Some systems have pselect */
 #undef RUDIMENTS_HAVE_PSELECT
@@ -444,6 +549,12 @@
 /* Some systems have readdir_r */
 #undef RUDIMENTS_HAVE_READDIR_R
 
+/* Some systems have readlink */
+#undef RUDIMENTS_HAVE_READLINK
+
+/* some systems have regcomp */
+#undef RUDIMENTS_HAVE_REGCOMP
+
 /* Some systems have rpc/rpcent.h */
 #undef RUDIMENTS_HAVE_RPCENT_H
 
@@ -453,23 +564,68 @@
 /* Do we have a real-time-clock */
 #undef RUDIMENTS_HAVE_RTC
 
+/* Some systems have semget */
+#undef RUDIMENTS_HAVE_SEMGET
+
 /* Some systems have semtimedop */
 #undef RUDIMENTS_HAVE_SEMTIMEDOP
 
 /* Some systems define union semun */
 #undef RUDIMENTS_HAVE_SEMUN
 
+/* Some systems have setegid */
+#undef RUDIMENTS_HAVE_SETEGID
+
 /* Some systems have setenv */
 #undef RUDIMENTS_HAVE_SETENV
+
+/* Some systems have seteuid */
+#undef RUDIMENTS_HAVE_SETEUID
+
+/* Some systems have SetFileTime */
+#undef RUDIMENTS_HAVE_SETFILETIME
 
 /* Some systems have setgid */
 #undef RUDIMENTS_HAVE_SETGID
 
+/* Some systems have setitimer */
+#undef RUDIMENTS_HAVE_SETITIMER
+
+/* Some systems have setpgid */
+#undef RUDIMENTS_HAVE_SETPGID
+
+/* Some systems have setregid */
+#undef RUDIMENTS_HAVE_SETREGID
+
+/* Some systems have setreuid */
+#undef RUDIMENTS_HAVE_SETREUID
+
+/* Some systems have SetSystemTime */
+#undef RUDIMENTS_HAVE_SETSYSTEMTIME
+
+/* Some systems have settimeofday */
+#undef RUDIMENTS_HAVE_SETTIMEOFDAY
+
 /* Some systems have setuid */
 #undef RUDIMENTS_HAVE_SETUID
 
+/* Some systems have shmget */
+#undef RUDIMENTS_HAVE_SHMGET
+
 /* Some systems have shm_open */
 #undef RUDIMENTS_HAVE_SHM_OPEN
+
+/* Some systems have sigaction */
+#undef RUDIMENTS_HAVE_SIGACTION
+
+/* Some systems have sockaddr_un */
+#undef RUDIMENTS_HAVE_SOCKADDR_UN
+
+/* some stype of statfs */
+#undef RUDIMENTS_HAVE_SOME_KIND_OF_STATFS
+
+/* some stype of statvfs */
+#undef RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS
 
 /* struct spwd has sp_expire */
 #undef RUDIMENTS_HAVE_SP_EXPIRE
@@ -528,11 +684,20 @@
 /* Some systems have swap64 */
 #undef RUDIMENTS_HAVE_SWAP64
 
+/* Some systems have symlink */
+#undef RUDIMENTS_HAVE_SYMLINK
+
+/* Some systems have syslog.h */
+#undef RUDIMENTS_HAVE_SYSLOG_H
+
 /* Some systems have sys/bitypes.h */
 #undef RUDIMENTS_HAVE_SYS_BITYPES_H
 
 /* Some systems have sys/fcntl.h */
 #undef RUDIMENTS_HAVE_SYS_FCNTL_H
+
+/* Some systems have sys/ipc.h */
+#undef RUDIMENTS_HAVE_SYS_IPC_H
 
 /* Some systems have sys/select.h */
 #undef RUDIMENTS_HAVE_SYS_SELECT_H
@@ -543,8 +708,23 @@
 /* Some systems have sys/uio.h */
 #undef RUDIMENTS_HAVE_SYS_UIO_H
 
+/* Some systems have sys/un.h */
+#undef RUDIMENTS_HAVE_SYS_UN_H
+
+/* Some systems don't have S_ISLNK */
+#undef RUDIMENTS_HAVE_S_ISLNK
+
 /* Some systems don't have S_ISSOCK */
 #undef RUDIMENTS_HAVE_S_ISSOCK
+
+/* Some systems have tcsetattr */
+#undef RUDIMENTS_HAVE_TCSETATTR
+
+/* Some systems have tlhelp32.h */
+#undef RUDIMENTS_HAVE_TLHELP32_H
+
+/* Some systems have truncate */
+#undef RUDIMENTS_HAVE_TRUNCATE
 
 /* Some systems have unistd.h */
 #undef RUDIMENTS_HAVE_UNISTD_H
@@ -552,14 +732,26 @@
 /* Some systems have unsetenv */
 #undef RUDIMENTS_HAVE_UNSETENV
 
+/* Some systems have utimes */
+#undef RUDIMENTS_HAVE_UTIMES
+
+/* GetDiskFreeSpace */
+#undef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+
 /* Some systems have windows.h */
 #undef RUDIMENTS_HAVE_WINDOWS_H
+
+/* Some systems have Sleep */
+#undef RUDIMENTS_HAVE_WINDOWS_SLEEP
 
 /* Some systems have winsock2.h */
 #undef RUDIMENTS_HAVE_WINSOCK2_H
 
 /* Some systems have extended filesystem attributes */
 #undef RUDIMENTS_HAVE_XATTRS
+
+/* Some systems have _getpid */
+#undef RUDIMENTS_HAVE__GETPID
 
 /* Some systems have __bswap64 */
 #undef RUDIMENTS_HAVE___BSWAP64

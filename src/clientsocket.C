@@ -6,10 +6,22 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#include <sys/ioctl.h>
-
+#ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
+	#include <sys/ioctl.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+
+#ifndef EWOULDBLOCK
+	#define EWOULDBLOCK	WSAEWOULDBLOCK
+#endif
+
+#ifndef EINPROGRESS
+	#define EINPROGRESS	WSAEINPROGRESS
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -80,8 +92,9 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 	if (sec==-1 || usec==-1) {
 
 		// if no timeout was passed in, just do a plain vanilla connect
-		retval=(::connect(fd(),addr,addrlen)==-1)?
-				RESULT_ERROR:RESULT_SUCCESS;
+		retval=(::connect(fd(),
+			reinterpret_cast<const struct sockaddr *>(addr),
+				addrlen)==-1)?RESULT_ERROR:RESULT_SUCCESS;
 
 		// FIXME: handle errno is EINTR...
 		// on non-linux systems the connect is still in progress and we
@@ -102,7 +115,9 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		}
 
 		// call connect()
-		if (::connect(fd(),addr,addrlen)==-1) {
+		if (::connect(fd(),
+			reinterpret_cast<const struct sockaddr *>(addr),
+				addrlen)==-1) {
 
 			// FIXME: handle errno is EINTR...
 			// if connect() fails and errno is set to one of these

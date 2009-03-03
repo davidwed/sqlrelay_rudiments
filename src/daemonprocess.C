@@ -122,7 +122,8 @@ bool daemonprocess::detach() const {
 #else
 bool daemonprocess::detach() const {
 	// FIXME: implement this
-	return true;
+	error::setErrorNumber(ENOSYS);
+	return false;
 }
 #endif
 

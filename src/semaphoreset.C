@@ -8,7 +8,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/ipc.h>
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

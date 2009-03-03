@@ -10,6 +10,11 @@
 	#include <unistd.h>
 #endif
 
+// windows doesn't have O_NOCTTY, set it to a benign value
+#ifndef O_NOCTTY
+	#define O_NOCTTY	0
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif

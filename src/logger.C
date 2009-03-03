@@ -13,6 +13,11 @@
 	#include <unistd.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
+	#include <syslog.h>
+#endif
+
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -103,16 +108,22 @@ syslogdestination::~syslogdestination() {
 
 void syslogdestination::open(const char *ident, int option,
 					int facility, int priority) {
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	openlog(ident,option,facility);
+#endif
 	pvt->_priority=priority;
 }
 
 void syslogdestination::close() {
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	closelog();
+#endif
 }
 
 void syslogdestination::write(const char *string) {
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	syslog(pvt->_priority,string);
+#endif
 }
 
 class loggerprivate {

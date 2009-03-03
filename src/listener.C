@@ -16,6 +16,11 @@
 	#include <unistd.h>
 #endif
 
+// for FD_ZERO/FD_SET on windows
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif

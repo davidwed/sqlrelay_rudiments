@@ -7,21 +7,15 @@
 #include <rudiments/error.h>
 
 // for rpcent, functions
-#include <netdb.h>
+#ifdef RUDIMENTS_HAVE_NETDB_H
+	#include <netdb.h>
+#endif
 #ifdef RUDIMENTS_HAVE_RPCENT_H
 	#include <rpc/rpcent.h>
 #endif
 #ifdef RUDIMENTS_HAVE_RPC_H
 	#include <rpc/rpc.h>
 #endif
-
-// Some systems (notably cygwin 1.5.7-1) define getrpcbyname and getrpcbynumber
-// in their header files but then either don't implement them or don't export
-// the symbols.
-#if (defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
-	defined(RUDIMENTS_HAVE_GETRPCBYNAME)) && \
-	(defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R) || \
-	defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)) \
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -218,6 +212,4 @@ void rpcentry::print() const {
 
 #ifdef RUDIMENTS_NAMESPACE
 }
-#endif
-
 #endif

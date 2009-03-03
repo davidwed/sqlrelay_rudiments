@@ -5,20 +5,25 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
+#ifdef RUDIMENTS_HAS_SSL
 #include <openssl/err.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
 #endif
 
+#ifdef RUDIMENTS_HAS_SSL
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;
 	return charstring::length(buf);
 }
+#endif
 
 int main(int argc, const char **argv) {
 
+#ifdef RUDIMENTS_HAS_SSL
 	// initialize the SSL context
 	SSL_library_init();
 	SSL_load_error_strings();
@@ -108,4 +113,7 @@ int main(int argc, const char **argv) {
 
 	// close the connection to the server
 	clnt.close();
+#else
+	printf("rudiments built without ssl support\n");
+#endif
 }

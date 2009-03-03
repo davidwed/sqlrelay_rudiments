@@ -3,6 +3,4 @@
 
 #include <rudiments/private/inttypes.h>
 
-#include <netdb.h>
-
 #include <rudiments/mutex.h>

@@ -4,7 +4,15 @@
 #include <rudiments/serversocket.h>
 #include <rudiments/error.h>
 
-#include <sys/ioctl.h>
+#ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
+	#include <sys/ioctl.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>

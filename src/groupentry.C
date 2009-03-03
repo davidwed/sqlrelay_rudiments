@@ -6,8 +6,8 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#ifdef MINGW32
-	// for LPGROUP_INFO_3, functions
+#ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
+	// for structs, functions
 	#include <windows.h>
 	#include <lm.h>
 #else
@@ -27,7 +27,7 @@ namespace rudiments {
 class groupentryprivate {
 	friend class groupentry;
 	private:
-		#ifndef MINGW32
+		#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 			group		*_grp;
 			#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 				defined(RUDIMENTS_HAVE_GETGRGID_R)
@@ -35,8 +35,11 @@ class groupentryprivate {
 				char		*_buffer;
 			#endif
 		#else
-			LPGROUP_INFO_3	_buffer;
-			char		*_name;
+			GROUP_INFO_2		*_buffer;
+			char			*_name;
+			GROUP_USERS_INFO_0	*_membersbuffer;
+			char			**_members;
+			DWORD			_membercount;
 		#endif
 };
 
@@ -47,8 +50,7 @@ static mutex	*_gemutex;
 
 groupentry::groupentry() {
 	pvt=new groupentryprivate;
-	pvt->_grp=NULL;
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		rawbuffer::zero(&pvt->_grpbuffer,sizeof(pvt->_grpbuffer));
@@ -56,7 +58,9 @@ groupentry::groupentry() {
 	#endif
 #else
 	pvt->_buffer=NULL;
-	pvb->_name=NULL;
+	pvt->_name=NULL;
+	pvt->_members=NULL;
+	pvt->_membercount=0;
 #endif
 }
 
@@ -73,7 +77,7 @@ groupentry &groupentry::operator=(const groupentry &g) {
 }
 
 groupentry::~groupentry() {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		delete[] pvt->_buffer;
@@ -84,11 +88,15 @@ groupentry::~groupentry() {
 		NetApiBufferFree(pvt->_buffer);
 	}
 	delete[] pvt->_name;
+	for (DWORD i=0; i<pvt->_membercount; i++) {
+		delete[] pvt->_members[i];
+	}
+	delete[] pvt->_members;
 #endif
 }
 
 const char *groupentry::getName() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return pvt->_grp->gr_name;
 #else
 	return pvt->_name;
@@ -96,33 +104,26 @@ const char *groupentry::getName() const {
 }
 
 const char *groupentry::getPassword() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return pvt->_grp->gr_passwd;
 #else
-	// FIXME:
 	return "";
 #endif
 }
 
 gid_t groupentry::getGroupId() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return pvt->_grp->gr_gid;
 #else
-	// FIXME:
-	return 0;
+	return pvt->_buffer->grpi2_group_id;
 #endif
 }
 
-#ifdef MINGW32
-static char *members[]={NULL};
-#endif
-
 const char * const *groupentry::getMembers() const {
-#ifndef MINGW32
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return pvt->_grp->gr_mem;
 #else
-	// FIXME:
-	return members;
+	return pvt->_members;
 #endif
 }
 
@@ -150,8 +151,8 @@ bool groupentry::initialize(gid_t groupid) {
 	return initialize(NULL,groupid);
 }
 
-#ifndef MINGW32
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
@@ -209,31 +210,116 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 				:getgrgid(groupid)))!=NULL) &&
 			!(_gemutex && !_gemutex->unlock()));
 	#endif
-}
-#else
-bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
+#else
+
+	// clear old buffers
 	if (pvt->_buffer) {
 		NetApiBufferFree(pvt->_buffer);
 	}
 	delete[] pvt->_name;
 	pvt->_name=NULL;
+	for (DWORD i=0; i<pvt->_membercount; i++) {
+		delete[] pvt->_members[i];
+	}
+	delete[] pvt->_members;
+	pvt->_membercount=0;
 
-	if (groupname) {	
-		if (NetGroupGetInfo(NULL,groupname,3,
-				reinterpret_cast<LPBYTE *>(&pvt->_buffer))!=
-				NERR_SUCCESS) {
+	if (groupname) {
+
+		// convert groupname to unicode...
+
+		// get the size of the unicode buffer
+		int	groupnamewsize=MultiByteToWideChar(CP_ACP,
+							MB_PRECOMPOSED,
+							groupname,
+							-1,NULL,0);
+		if (!groupnamewsize) {
 			return false;
 		}
-		pvt->_name=new char[charstring::length(
-					pvt->_buffer->usri23_name)]+1;
-		wsprintf(pvt->_name,"%s",pvt->_buffer->usri23_name);
+
+		// create the buffer
+		WCHAR	*groupnamew=new WCHAR[groupnamewsize];
+
+		// perform the actual conversion
+		groupnamewsize=MultiByteToWideChar(CP_ACP,
+							MB_PRECOMPOSED,
+							groupname,-1,
+							groupnamew,
+							groupnamewsize);
+		if (!groupnamewsize) {
+			delete[] groupnamew;
+			return false;
+		}
+
+		// get the group info
+		if (NetGroupGetInfo(NULL,groupnamew,2,
+				reinterpret_cast<LPBYTE *>(&pvt->_buffer))!=
+				NERR_Success) {
+			delete[] groupnamew;
+			return false;
+		}
+
+		// convert the name back to ascii
+		pvt->_name=new char[groupnamewsize];
+		BOOL	useddefaultchar;
+		if (!WideCharToMultiByte(CP_ACP,0,
+						pvt->_buffer->grpi2_name,
+						groupnamewsize,
+						pvt->_name,
+						groupnamewsize,
+						"?",
+						&useddefaultchar)) {
+			delete[] pvt->_name;
+			pvt->_name=NULL;
+			delete[] groupnamew;
+			return false;
+		}
+
+		// get group members
+		DWORD	totalentries;
+		if (!NetGroupGetUsers(NULL,groupnamew,0,
+				reinterpret_cast<LPBYTE *>(
+						&pvt->_membersbuffer),
+				MAX_PREFERRED_LENGTH,
+				&pvt->_membercount,
+				&totalentries,
+				NULL)) {
+			delete[] groupnamew;
+			return false;
+		}
+		delete[] groupnamew;
+
+		// copy unicode members to ascii members buffer
+		pvt->_members=new char *[pvt->_membercount+1];
+		pvt->_members[pvt->_membercount]=NULL;
+		for (DWORD i=0; i<pvt->_membercount; i++) {
+			size_t	len=charstring::length(
+					reinterpret_cast<char *>(
+					pvt->_membersbuffer[i].grui0_name));
+			pvt->_members[i]=new char[len+1];
+			if (!WideCharToMultiByte(CP_ACP,0,
+						pvt->_membersbuffer[i].
+								grui0_name,
+						len,
+						pvt->_members[i],
+						len,
+						"?",
+						&useddefaultchar)) {
+				return false;
+			}
+		}
+
+		return true;
+		
 	} else {
-#error implement me...
+		// windows doesn't appear to support this
+		error::setErrorNumber(ENOSYS);
+		return false;
 	}
 	return true;
-}
 #endif
+}
 
 bool groupentry::getPassword(const char *groupname, char **password) {
 	groupentry	grp;
@@ -305,9 +391,15 @@ bool groupentry::getMembers(gid_t groupid, char ***members) {
 
 void groupentry::print() const {
 
+#ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
+	if (!pvt->_buffer) {
+		return;
+	}
+#else
 	if (!pvt->_grp) {
 		return;
 	}
+#endif
 
 	printf("Name: %s\n",getName());
 	printf("Password: %s\n",getPassword());
