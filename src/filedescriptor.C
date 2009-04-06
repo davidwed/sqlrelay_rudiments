@@ -36,7 +36,7 @@
 #ifdef RUDIMENTS_HAVE_SYS_FCNTL_H
 	#include <sys/fcntl.h>
 #endif
-#ifdef RUDIMENTS_HAVE_IOCTL
+#ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
 #ifdef RUDIMENTS_HAVE_NETINET_IN_H
@@ -627,7 +627,7 @@ ssize_t filedescriptor::read(void *buffer, size_t size) const {
 	return bufferedRead(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::read(char **buffer, char *terminator) const {
+ssize_t filedescriptor::read(char **buffer, const char *terminator) const {
 	return read(buffer,terminator,-1,-1);
 }
 
@@ -824,8 +824,8 @@ listener *filedescriptor::getListener() {
 	return pvt->_lstnr;
 }
 
-ssize_t filedescriptor::read(char **buffer, char *terminator,
-					long sec, long usec) const {
+ssize_t filedescriptor::read(char **buffer, const char *terminator,
+						long sec, long usec) const {
 
 	// initialize a buffer
 	int	buffersize=512;

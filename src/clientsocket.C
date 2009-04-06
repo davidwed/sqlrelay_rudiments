@@ -55,11 +55,11 @@ clientsocket::~clientsocket() {
 }
 
 bool clientsocket::supportsBlockingNonBlockingModes() {
-#ifdef FIONBIO
+	#ifdef FIONBIO
 	return true;
-#else
+	#else
 	return false;
-#endif
+	#endif
 }
 
 bool clientsocket::useNonBlockingMode() const {

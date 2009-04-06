@@ -253,7 +253,7 @@ class filedescriptor {
 		ssize_t	read(void *buf, size_t size) const;
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
-		ssize_t	read(char **buffer, char *terminator) const;
+		ssize_t	read(char **buffer, const char *terminator) const;
 				// Reads from the file desciptor into "buffer"
 				// until "terminator" is encountered.  Note
 				// that "buffer" is allocated internally and
@@ -311,7 +311,7 @@ class filedescriptor {
 					long sec, long usec) const;
 				// Reads "size" bytes from the file descriptor
 				// into "buffer".
-		ssize_t	read(char **buffer, char *terminator,
+		ssize_t	read(char **buffer, const char *terminator,
 					long sec, long usec) const;
 				// Reads from the file desciptor into "buffer"
 				// until "terminator" is encountered.  Note

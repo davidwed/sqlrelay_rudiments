@@ -463,6 +463,10 @@ AC_TRY_COMPILE([#include <sys/ipc.h>],
 AC_MSG_CHECKING(for syslog.h)
 AC_TRY_LINK([#include <syslog.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYSLOG_H,1,Some systems have syslog.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/ioctl.h)
+AC_TRY_LINK([#include <sys/ioctl.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_IOCTL_H,1,Some systems have sys/ioctl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 

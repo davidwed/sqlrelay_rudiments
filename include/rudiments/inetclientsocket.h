@@ -69,8 +69,8 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 			// times.
 			//
 			// Setting "retrycount" to 0 will cause it to try to 
-			// connect indefinitely.  Setting "retrywait" to 0
-			// will cause it to try to connect over and over
+			// connect indefinitely.  Setting "retrywait" to
+			// 0 will cause it to try to connect over and over
 			// as fast as possible (not recommended).
 			//
 			// Each attempt to connect will wait "timeoutsec"

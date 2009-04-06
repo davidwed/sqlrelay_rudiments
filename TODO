@@ -1,3 +1,6 @@
+xmldomnode::insertAttribute doesn't appear to work properly, but append does
+xmldomnode constructor with 5 params appears to be broken, causes a crash
+
 remove #ifdef's from .h files, just make methods return failure and set errno to
 	ERNOSYS or ERNOTSUP or something
 
