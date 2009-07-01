@@ -1,3 +1,5 @@
+add http client class
+
 xmldomnode::insertAttribute doesn't appear to work properly, but append does
 xmldomnode constructor with 5 params appears to be broken, causes a crash
 
