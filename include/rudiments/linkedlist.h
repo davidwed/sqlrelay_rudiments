@@ -115,6 +115,11 @@ class linkedlist {
 		uint64_t	getLength() const;
 				// Returns the length of the linkedlist.
 
+		linkedlistnodetype	*getFirstNode();
+				// Returns the first node in the linkedlist.
+		linkedlistnodetype	*getLastNode();
+				// Returns the last node in the linkedlist.
+
 		linkedlistnodetype	*getNodeByIndex(uint64_t index);
 				// Returns a pointer to the linkedlistnode at
 				// "index".

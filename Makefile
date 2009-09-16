@@ -5,7 +5,7 @@ include config.mk
 PWD=$(shell pwd)
 
 .PHONY: all testprogs clean rebuild install-libs install-includes install-bin \
-	 install-doc install-pc install uninstall unconfig distclean slackware
+	 install-doc install-man install-pc install uninstall unconfig distclean slackware
 
 all:
 	cd src; $(MAKE) all
@@ -33,17 +33,21 @@ install-bin:
 install-doc:
 	cd doc; $(MAKE) install
 
+install-man:
+	cd man; $(MAKE) install
+
 install-pc:
 	$(MKINSTALLDIRS) $(libdir)/pkgconfig
 	$(INSTALL) -m 0644 rudiments.pc $(libdir)/pkgconfig/rudiments.pc
 
-install: install-libs install-includes install-bin install-doc install-pc
+install: install-libs install-includes install-bin install-doc install-man install-pc
 
 uninstall:
 	cd src; $(MAKE) uninstall
 	cd include; $(MAKE) uninstall
 	cd bin; $(MAKE) uninstall
 	cd doc; $(MAKE) uninstall
+	cd man; $(MAKE) uninstall
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
 unconfig: clean

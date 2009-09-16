@@ -103,7 +103,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		int	largest=-1;
 		FD_ZERO(&fdlist);
 		listenerlistnode	*current=
-				pvt->_filedescriptorlist.getNodeByIndex(0);
+				pvt->_filedescriptorlist.getFirstNode();
 		while (current) {
 
 			if (current->getData()->getFileDescriptor()>largest) {
@@ -159,7 +159,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		#ifndef RUDIMENTS_HAS_SSL
 			pvt->_readylist.clear();
 		#endif
-		current=pvt->_filedescriptorlist.getNodeByIndex(0);
+		current=pvt->_filedescriptorlist.getFirstNode();
 		while (current) {
 			if (FD_ISSET(current->getData()->getFileDescriptor(),
 					&fdlist)) {

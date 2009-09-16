@@ -46,7 +46,7 @@ xmldom::~xmldom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
-	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
+	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
 		delete[] node->getData();
 	}
@@ -196,7 +196,7 @@ const char *xmldom::cacheString(const char *string) {
 		return NULL;
 	}
 	unsigned long	index=0;
-	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
+	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
 		const char	*data=node->getData();
 		if (!charstring::compare(string,data)) {
@@ -218,7 +218,7 @@ void xmldom::unCacheString(const char *string) {
 		return;
 	}
 	unsigned long	index=0;
-	for (stringlistnode *node=pvt->_strlist.getNodeByIndex(0);
+	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
 		char	*data=node->getData();
 		if (!charstring::compare(string,data)) {

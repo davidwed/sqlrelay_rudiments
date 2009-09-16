@@ -147,7 +147,7 @@ void chat::appendAbortString(const char *string) {
 }
 
 void chat::clearAbortStrings() {
-	for (stringlistnode *sln=pvt->_aborts.getNodeByIndex(0);
+	for (stringlistnode *sln=pvt->_aborts.getFirstNode();
 					sln; sln=sln->getNext()) {
 		char	*abortstring=sln->getData();
 		delete[] abortstring;
@@ -241,7 +241,7 @@ int chat::expect(const char *string, char **abort) {
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
 		int	index=2;
-		for (stringlistnode *sln=pvt->_aborts.getNodeByIndex(0);
+		for (stringlistnode *sln=pvt->_aborts.getFirstNode();
 						sln; sln=sln->getNext()) {
 
 			char	*abortstring=sln->getData();
@@ -434,7 +434,7 @@ int chat::substituteVariables(const char **ch, constnamevaluepairs *variables) {
 
 		for (constnamevaluepairslistnode *nln=
 			(constnamevaluepairslistnode *)
-			variables->getList()->getNodeByIndex(0); nln;
+			variables->getList()->getFirstNode(); nln;
 			nln=(constnamevaluepairslistnode *)nln->getNext()) {
 
 			const char	*variable=nln->getData()->getKey();

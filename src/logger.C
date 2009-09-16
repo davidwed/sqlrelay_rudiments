@@ -216,7 +216,7 @@ void logger::write(const char *header, int32_t tabs, double number) {
 }
 
 void logger::write(const char *logentry) {
-	loggerlistnode	*current=pvt->_logdestlist.getNodeByIndex(0);
+	loggerlistnode	*current=pvt->_logdestlist.getFirstNode();
 	while (current) {
 		current->getData()->write(logentry);
 		current=(loggerlistnode *)current->getNext();

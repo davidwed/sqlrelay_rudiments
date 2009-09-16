@@ -65,7 +65,7 @@ memorypool::memorypool(size_t initialsize,
 
 memorypool::~memorypool() {
 	free();
-	delete pvt->_nodelist.getNodeByIndex(0)->getData();
+	delete pvt->_nodelist.getFirstNode()->getData();
 	delete pvt;
 }
 
@@ -75,7 +75,7 @@ unsigned char *memorypool::malloc(size_t length) {
 	pvt->_totalusedsize=pvt->_totalusedsize+length;
 
 	// look for a node with enough memory remaining
-	memorypoollistnode	*node=pvt->_nodelist.getNodeByIndex(0);
+	memorypoollistnode	*node=pvt->_nodelist.getFirstNode();
 	memorypoolnode		*memnode;
 	while (node) {
 		memnode=node->getData();
@@ -108,7 +108,7 @@ unsigned char *memorypool::calloc(size_t length) {
 
 void memorypool::free() {
 
-	memorypoollistnode	*firstlistnode=pvt->_nodelist.getNodeByIndex(0);
+	memorypoollistnode	*firstlistnode=pvt->_nodelist.getFirstNode();
 	memorypoolnode		*first=firstlistnode->getData();
 
 	// if it's time to re-evaluate and re-size of the first node, do that
@@ -149,7 +149,7 @@ void memorypool::free() {
 void memorypool::print() {
 
 	long		segmentindex=0;
-	memorypoollistnode	*listnode=pvt->_nodelist.getNodeByIndex(0);
+	memorypoollistnode	*listnode=pvt->_nodelist.getFirstNode();
 	memorypoolnode		*memnode;
 
 	while (listnode) {

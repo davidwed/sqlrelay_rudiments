@@ -22,10 +22,10 @@ class xmlsaxprivate {
 		const char	*_endptr;
 		file		_fl;
 		bool		_mmapped;
+		off64_t		_filesize;
 		#ifdef RUDIMENTS_HAVE_MMAP
 		memorymap	_mm;
 		off64_t		_optblocksize;
-		off64_t		_filesize;
 		off64_t		_fileoffset;
 		#endif
 		uint32_t	_line;
@@ -54,8 +54,8 @@ void xmlsax::reset() {
 	pvt->_string=NULL;
 	pvt->_ptr=NULL;
 	pvt->_endptr=NULL;
-#ifdef RUDIMENTS_HAVE_MMAP
 	pvt->_filesize=0;
+#ifdef RUDIMENTS_HAVE_MMAP
 	pvt->_fileoffset=0;
 #endif
 	pvt->_mmapped=false;
@@ -105,7 +105,6 @@ bool xmlsax::parseFile(const char *filename) {
 	// close any previously opened files, open the file, parse it, close
 	// it again
 	close();
-#ifdef RUDIMENTS_HAVE_MMAP
 	// open the file
 	bool retval;
 	if ((retval=pvt->_fl.open(filename,O_RDONLY))) {
@@ -128,19 +127,20 @@ bool xmlsax::parseFile(const char *filename) {
 		}
 		pvt->_fl.setReadBufferSize(pvt->_optblocksize);
 		pvt->_filesize=pvt->_fl.getSize();
-		pvt->_fileoffset=0;
 		pvt->_fl.sequentialAccess(0,pvt->_filesize);
 		pvt->_fl.onlyOnce(0,pvt->_filesize);
+#ifdef RUDIMENTS_HAVE_MMAP
+		pvt->_fileoffset=0;
 		pvt->_mmapped=true;
 		mapFile();
+#endif
 		retval=parse();
+#ifdef RUDIMENTS_HAVE_MMAP
 		if (pvt->_ptr) {
 			pvt->_mm.detach();
 		}
-	}
-#else
-	bool	retval=(pvt->_fl.open(filename,O_RDONLY) && parse());
 #endif
+	}
 	close();
 	return retval;
 }

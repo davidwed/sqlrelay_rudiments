@@ -25,11 +25,11 @@ parameterstring::parameterstring() {
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
-	for (unsigned long i=0; i<pvt->_nvp.getList()->getLength(); i++) {
-		delete[] pvt->_nvp.getList()->
-				getNodeByIndex(i)->getData()->getKey();
-		delete[] pvt->_nvp.getList()->
-				getNodeByIndex(i)->getData()->getData();
+	for (dictionarylistnode< char *, char * > *node=
+			pvt->_nvp.getList()->getFirstNode(); node;
+		node=(dictionarylistnode< char *, char* > *)node->getNext()) {
+		delete[] node->getData()->getKey();
+		delete[] node->getData()->getData();
 	}
 	delete pvt;
 }

@@ -30,11 +30,10 @@ DICTIONARY_CLASS::dictionary() {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 DICTIONARY_CLASS::~dictionary() {
-	dictionarylistnodetype	*node=
-			(dictionarylistnodetype *)dict.getNodeByIndex(0);
-	while (node) {
+	for (dictionarylistnodetype *node=
+			(dictionarylistnodetype *)dict.getFirstNode();
+			node; node=(dictionarylistnodetype *)node->getNext()) {
 		delete node->getData();
-		node=(dictionarylistnodetype *)node->getNext();
 	}
 }
 
@@ -76,13 +75,12 @@ bool DICTIONARY_CLASS::removeData(keytype key) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 dictionarylistnodetype *DICTIONARY_CLASS::findNode(keytype key) {
-	dictionarylistnodetype	*node=
-			(dictionarylistnodetype *)dict.getNodeByIndex(0);
-	while (node) {
+	for (dictionarylistnodetype *node=
+			(dictionarylistnodetype *)dict.getFirstNode();
+			node; node=(dictionarylistnodetype *)node->getNext()) {
 		if (!node->getData()->compare(key)) {
 			return node;
 		}
-		node=(dictionarylistnodetype *)node->getNext();
 	}
 	return NULL;
 }
@@ -102,12 +100,11 @@ void DICTIONARY_CLASS::clear() {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::print() {
-	dictionarylistnodetype	*node=
-			(dictionarylistnodetype *)dict.getNodeByIndex(0);
-	while (node) {
+	for (dictionarylistnodetype *node=
+			(dictionarylistnodetype *)dict.getFirstNode();
+			node; node=(dictionarylistnodetype *)node->getNext()) {
 		node->getData()->print();
 		printf("\n");
-		node=(dictionarylistnodetype *)node->getNext();
 	}
 }
 
