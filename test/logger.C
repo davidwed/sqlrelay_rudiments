@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/logger.h>
+#include <sys/syslog.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

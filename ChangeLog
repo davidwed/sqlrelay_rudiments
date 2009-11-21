@@ -8,6 +8,7 @@
 	added charstring::printBits methods
 	xmlsax class uses optimizations even when not using mmap now
 	updated linkedlist class a good bit
+	applied Renat Sabitov's logger patch
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

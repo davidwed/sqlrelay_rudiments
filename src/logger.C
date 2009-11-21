@@ -167,14 +167,15 @@ char *logger::logHeader(const char *name) {
 }
 
 void logger::write(const char *header, int32_t tabs, const char *string) {
-	size_t	logentrylen=charstring::length(header)+3+tabs+
-				charstring::length(string)+2+1;
+	size_t	headlen=charstring::length(header)+3;
+	size_t	headtablen=headlen+tabs;
+	size_t	logentrylen=headtablen+charstring::length(string)+2+1;
 	char	*logentry=new char[logentrylen];
 	snprintf(logentry,logentrylen,"%s : ",header);
 	for (int32_t i=0; i<tabs; i++) {
-		snprintf(logentry,logentrylen,"%s%c",logentry,'	');
+		snprintf(logentry+headlen+i,logentrylen-headlen-i,"%c",'	');
 	}
-	snprintf(logentry,logentrylen,"%s%s\n\n",logentry,string);
+	snprintf(logentry+headtablen,logentrylen-headtablen,"%s\n\n",string);
 	write(logentry);
 	delete[] logentry;
 }
