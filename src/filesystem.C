@@ -274,6 +274,14 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	} \
 	*out=(int64_t)st.member; \
 	return true;
+#define CHARFSTATFS(fd,out,member) \
+	struct statvfs st; \
+	int	result=getCurrentPropertiesInternal(fd,(void *)&st); \
+	if (!result) { \
+		return false; \
+	} \
+	*out=st.member; \
+	return true;
 #else
 #define FSTATFS(fd,out,member) \
 	struct statfs st; \
@@ -282,6 +290,14 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 		return false; \
 	} \
 	*out=(int64_t)st.member; \
+	return true;
+#define CHARFSTATFS(fd,out,member) \
+	struct statfs st; \
+	int	result=getCurrentPropertiesInternal(fd,(void *)&st); \
+	if (!result) { \
+		return false; \
+	} \
+	*out=st.member; \
 	return true;
 #endif
 
@@ -294,6 +310,14 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	} \
 	*out=(int64_t)st.member; \
 	return true;
+#define CHARSTATFS(path,out,member) \
+	struct statvfs st; \
+	int	result=getCurrentPropertiesInternal(path,(void *)&st); \
+	if (!result) { \
+		return false; \
+	} \
+	*out=st.member; \
+	return true;
 #else
 #define STATFS(path,out,member) \
 	struct statfs st; \
@@ -302,6 +326,14 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 		return false; \
 	} \
 	*out=(int64_t)st.member; \
+	return true;
+#define CHARSTATFS(path,out,member) \
+	struct statfs st; \
+	int	result=getCurrentPropertiesInternal(path,(void *)&st); \
+	if (!result) { \
+		return false; \
+	} \
+	*out=st.member; \
 	return true;
 #endif
 
@@ -938,7 +970,7 @@ bool filesystem::getMountPoint(const char *path, const char **mtpt) {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	STATFS(path,mtpt,f_mntonname)
+	CHARSTATFS(path,mtpt,f_mntonname)
 #else
 	*mtpt=NULL;
 	return true;
@@ -951,7 +983,7 @@ bool filesystem::getMountPoint(int fd, const char **mtpt) {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	FSTATFS(fd,mtpt,f_mntonname)
+	CHARFSTATFS(fd,mtpt,f_mntonname)
 #else
 	*mtpt=NULL;
 	return true;
@@ -1033,7 +1065,7 @@ bool filesystem::getDeviceName(const char *path, const char **devname) {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	STATFS(path,devname,f_mntfromname)
+	CHARSTATFS(path,devname,f_mntfromname)
 #else
 	*devname=NULL;
 	return true;
@@ -1045,7 +1077,7 @@ bool filesystem::getDeviceName(int fd, const char **devname) {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	FSTATFS(fd,devname,f_mntfromname)
+	CHARFSTATFS(fd,devname,f_mntfromname)
 #else
 	*devname=NULL;
 	return true;
@@ -1107,10 +1139,10 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	STATFS(path,name,f_fstypename)
+	CHARSTATFS(path,name,f_fstypename)
 #else
 	#ifdef RUDIMENTS_HAVE_STATVFS
-		STATFS(path,name,f_basetype)
+		CHARSTATFS(path,name,f_basetype)
 	#else
 		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
 			struct statfs st;
@@ -1137,7 +1169,7 @@ bool filesystem::getTypeName(int fd, const char **name) {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	FSTATFS(fd,name,f_fstypename)
+	CHARFSTATFS(fd,name,f_fstypename)
 #else
 	#ifdef RUDIMENTS_HAVE_STATVFS
 		FSTATFS(fd,name,f_basetype)
