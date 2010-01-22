@@ -467,6 +467,14 @@ AC_TRY_LINK([#include <syslog.h>],
 AC_MSG_CHECKING(for sys/ioctl.h)
 AC_TRY_LINK([#include <sys/ioctl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_IOCTL_H,1,Some systems have sys/ioctl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for os/kernel/OS.h)
+AC_TRY_LINK([#include <os/kernel/OS.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_OS_KERNEL_OS_H,1,Some systems have os/kernel/OS.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for os/support/ByteOrder.h)
+AC_TRY_LINK([#include <os/support/ByteOrder.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H,1,Some systems have os/support/ByteOrder.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -678,10 +686,14 @@ AC_TRY_COMPILE([#include <time.h>
 #include <stdlib.h>],
 localtime_r(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_R,1,Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for setsystemtime)
+AC_MSG_CHECKING(for settimeofday)
 AC_TRY_LINK([#include <sys/time.h>
 #include <stdlib.h>],
 settimeofday(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETTIMEOFDAY,1,Some systems have settimeofday) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for set_real_time_clock)
+AC_TRY_LINK([#include <os/kernel/OS.h>],
+set_real_time_clock(0);,AC_DEFINE(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK,1,Some systems have set_real_time_clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 
@@ -1176,6 +1188,10 @@ AC_MSG_CHECKING(for OSSwapHostToLittleInt64)
 AC_TRY_LINK([#include <stdlib.h>
 #include <libkern/OSByteOrder.h>],
 OSSwapHostToLittleInt64(0);,AC_DEFINE(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64,1,Some systems have OSSwapHostToLittleInt64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for __swap_int64)
+AC_TRY_LINK([#include <os/support/ByteOrder.h>],
+__swap_int64(0);,AC_DEFINE(RUDIMENTS_HAVE_SWAP_INT64,1,Some systems have __swap_int64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dirfd)
 AC_TRY_LINK([#include <sys/types.h>

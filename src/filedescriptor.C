@@ -61,6 +61,9 @@
 #ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
 	#include <libkern/OSByteOrder.h>
 #endif
+#ifdef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H
+	#include <os/support/ByteOrder.h>
+#endif
 
 #ifndef __BYTE_ORDER
 	#define __BYTE_ORDER BYTE_ORDER
@@ -1545,8 +1548,8 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 			return __bswap64(value);
 		#elif defined(RUDIMENTS_HAVE_BSWAP64)
 			return bswap64(value);
-		#elif defined(RUDIMENTS_HAVE_SWAP64)
-			return swap64(value);
+		#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
+			return __swap_int64(value);
 		#elif defined(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64)
 			return OSSwapHostToLittleInt64(value);
 		#else
@@ -1573,8 +1576,8 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 			return __bswap64(value);
 		#elif defined(RUDIMENTS_HAVE_BSWAP64)
 			return bswap64(value);
-		#elif defined(RUDIMENTS_HAVE_SWAP64)
-			return swap64(value);
+		#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
+			return __swap_int64(value);
 		#elif defined(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64)
 			return OSSwapLittleToHostInt64(value);
 		#else

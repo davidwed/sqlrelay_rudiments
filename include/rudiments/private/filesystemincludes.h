@@ -17,6 +17,7 @@
 	#include <sys/mount.h>
 #endif
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
+	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 	#include <sys/types.h>
 	#include <sys/statvfs.h>

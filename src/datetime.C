@@ -15,6 +15,10 @@
 	#include <sys/ioctl.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_OS_KERNEL_OS_H
+	#include <os/kernel/OS.h>
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -406,6 +410,9 @@ bool datetime::setSystemDateAndTime() {
 		tv.tv_sec=pvt->_epoch;
 		tv.tv_usec=0;
 		return !settimeofday(&tv,NULL);
+	#elif defined(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK)
+		set_real_time_clock(pvt->_epoch);
+		return true;
 	#elif defined(RUDIMENTS_HAVE_SETSYSTEMTIME)
 		SYSTEMTIME	st;
 		st.wYear=pvt->_year+1900;

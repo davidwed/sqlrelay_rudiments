@@ -120,7 +120,7 @@ then
 fi
 
 
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/usr/local/firstworks"
+for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/Haiku/common" "/usr/local/firstworks"
 do
 	if ( test -n "$path" -a -d "$path" )
 	then
@@ -1214,7 +1214,7 @@ sfs.f_ffree=0;
 sfs.f_fsid.__val[0]=0;
 sfs.f_namelen=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_LINUX_STATFS,1,Linux style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="linux style")
+,AC_DEFINE(RUDIMENTS_HAVE_LINUX_STATFS,1,Linux style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="linux style")
 
 dnl cygwin is like linux but f_fsid is just a long
 if ( test "$STATFS_STYLE" = "unknown" )
@@ -1232,7 +1232,7 @@ sfs.f_ffree=0;
 sfs.f_fsid=0;
 sfs.f_namelen=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_CYGWIN_STATFS,1,Cygwin style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="cygwin style")
+,AC_DEFINE(RUDIMENTS_HAVE_CYGWIN_STATFS,1,Cygwin style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="cygwin style")
 fi
 
 dnl freebsd is very different from linux
@@ -1261,7 +1261,7 @@ sfs.f_syncreads=0;
 sfs.f_asyncreads=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="freebsd style")
+,AC_DEFINE(RUDIMENTS_HAVE_FREEBSD_STATFS,1,FreeBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="freebsd style")
 fi
 
 dnl netbsd is like freebsd but lacks a few fields
@@ -1288,7 +1288,7 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATFS,1,NetBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="old netbsd style")
+,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATFS,1,NetBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="old netbsd style")
 fi
 
 dnl netbsd-3.0 is called statvfs and is different from real statvfs
@@ -1320,7 +1320,7 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statvfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATVFS,1,NetBSD-3.0 style statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some stype of statvfs) STATFS_STYLE="netbsd-3.0 style")
+,AC_DEFINE(RUDIMENTS_HAVE_NETBSD_STATVFS,1,NetBSD-3.0 style statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="netbsd-3.0 style")
 fi
 
 dnl openbsd is like netbsd but with an additional mount_info union and without
@@ -1348,7 +1348,7 @@ sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 sfs.mount_info.ufs_args.fspec=NULL;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_OPENBSD_STATFS,1,OpenBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="openbsd style")
+,AC_DEFINE(RUDIMENTS_HAVE_OPENBSD_STATFS,1,OpenBSD style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="openbsd style")
 fi
 
 dnl darwin is similar to the other bsd's but with a few extra and a few missing
@@ -1376,7 +1376,7 @@ sfs.f_fstypename[0]=0;
 sfs.f_mntonname[0]=0;
 sfs.f_mntfromname[0]=0;
 statfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_DARWIN_STATFS,1,Darwin style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some stype of statfs) STATFS_STYLE="darwin style")
+,AC_DEFINE(RUDIMENTS_HAVE_DARWIN_STATFS,1,Darwin style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="darwin style")
 fi
 
 dnl SCO and Solaris both have statvfs
@@ -1399,7 +1399,29 @@ sfs.f_basetype[0]=0;
 sfs.f_flag=0;
 sfs.f_fstr[0]=0;
 statvfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some stype of statvfs) STATFS_STYLE="statvfs")
+,AC_DEFINE(RUDIMENTS_HAVE_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="statvfs")
+fi
+
+dnl Haiku has statvfs too, but with fewer members
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/statvfs.h>],
+[/* statvfs style */
+struct statvfs sfs;
+sfs.f_bsize=0;
+sfs.f_frsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_favail=0;
+sfs.f_fsid=0;
+sfs.f_flag=0;
+sfs.f_namemax=0;
+statvfs("/",&sfs);]
+,AC_DEFINE(RUDIMENTS_HAVE_HAIKU_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="haiku style")
 fi
 
 dnl Windows has it's own way of doing it
@@ -1520,7 +1542,7 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 	AC_LANG(C)
 	SOCKETLIBS=""
 	DONE=""
-	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lnetapi32"
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lnetapi32" "-lnetwork"
 	do
 		FW_TRY_LINK([#include <stdlib.h>
 #ifdef __MINGW32__

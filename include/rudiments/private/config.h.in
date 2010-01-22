@@ -351,6 +351,9 @@
 /* Some systems have getuid */
 #undef RUDIMENTS_HAVE_GETUID
 
+/* statvfs */
+#undef RUDIMENTS_HAVE_HAIKU_STATVFS
+
 /* Some systems have HANDLE_FLAG_INHERIT */
 #undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT
 
@@ -516,6 +519,12 @@
 /* Some systems have OSSwapLittleToHostInt64 */
 #undef RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64
 
+/* Some systems have os/kernel/OS.h */
+#undef RUDIMENTS_HAVE_OS_KERNEL_OS_H
+
+/* Some systems have os/support/ByteOrder.h */
+#undef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H
+
 /* Some systems have pathconf */
 #undef RUDIMENTS_HAVE_PATHCONF
 
@@ -609,6 +618,9 @@
 /* Some systems have setuid */
 #undef RUDIMENTS_HAVE_SETUID
 
+/* Some systems have set_real_time_clock */
+#undef RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK
+
 /* Some systems have shmget */
 #undef RUDIMENTS_HAVE_SHMGET
 
@@ -621,10 +633,10 @@
 /* Some systems have sockaddr_un */
 #undef RUDIMENTS_HAVE_SOCKADDR_UN
 
-/* some stype of statfs */
+/* some type of statfs */
 #undef RUDIMENTS_HAVE_SOME_KIND_OF_STATFS
 
-/* some stype of statvfs */
+/* some type of statvfs */
 #undef RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS
 
 /* struct spwd has sp_expire */
@@ -683,6 +695,9 @@
 
 /* Some systems have swap64 */
 #undef RUDIMENTS_HAVE_SWAP64
+
+/* Some systems have __swap_int64 */
+#undef RUDIMENTS_HAVE_SWAP_INT64
 
 /* Some systems have symlink */
 #undef RUDIMENTS_HAVE_SYMLINK

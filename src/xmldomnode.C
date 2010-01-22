@@ -367,9 +367,9 @@ bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 	xmldomnode	*current=*first;
 	if (node || name) {
 		while (current &&
-			(name && charstring::compare(
+			((name && charstring::compare(
 					current->pvt->_nodename,name)) ||
-			(node && current!=node)) {
+			(node && current!=node))) {
 			current=current->pvt->_next;
 		}
 	} else {

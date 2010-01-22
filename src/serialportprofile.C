@@ -378,9 +378,11 @@ void serialportprofile::extendedFunctions(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,IEXTEN)
 }
 
+#ifdef ECHOCTL
 void serialportprofile::echoControlCharacters(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOCTL)
 }
+#endif
 
 #ifdef ECHOPRT
 void serialportprofile::echoErasedCharacter(bool truefalse) {
@@ -388,9 +390,11 @@ void serialportprofile::echoErasedCharacter(bool truefalse) {
 }
 #endif
 
+#ifdef ECHOKE
 void serialportprofile::emulateKill(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHOKE)
 }
+#endif
 
 void serialportprofile::noFlushAfterInterruptOrQuit(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,NOFLSH)
@@ -440,9 +444,11 @@ bool serialportprofile::extendedFunctions() {
 	return GET_FLAG(c_lflag,IEXTEN);
 }
 
+#ifdef ECHOCTL
 bool serialportprofile::echoControlCharacters() {
 	return GET_FLAG(c_lflag,ECHOCTL);
 }
+#endif
 
 #ifdef ECHOPRT
 bool serialportprofile::echoErasedCharacter() {
@@ -450,9 +456,11 @@ bool serialportprofile::echoErasedCharacter() {
 }
 #endif
 
+#ifdef ECHOKE
 bool serialportprofile::emulateKill() {
 	return GET_FLAG(c_lflag,ECHOKE);
 }
+#endif
 
 bool serialportprofile::noFlushAfterInterruptOrQuit() {
 	return GET_FLAG(c_lflag,NOFLSH);
@@ -522,9 +530,11 @@ void serialportprofile::lowerCase(bool truefalse) {
 }
 #endif
 
+#ifdef IMAXBEL
 void serialportprofile::bellIfLineTooLong(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,IMAXBEL)
 }
+#endif
 
 bool serialportprofile::inputParityCheck() {
 	return GET_FLAG(c_iflag,INPCK);
@@ -580,9 +590,11 @@ bool serialportprofile::lowerCase() {
 }
 #endif
 
+#ifdef IMAXBEL
 bool serialportprofile::bellIfLineTooLong() {
 	return GET_FLAG(c_iflag,IMAXBEL);
 }
+#endif
 
 void serialportprofile::postProcessOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OPOST)
@@ -851,22 +863,30 @@ void serialportprofile::delayedSuspendCharacter(cc_t character) {
 }
 #endif
 
+#ifdef VLNEXT
 void serialportprofile::literalNextCharcter(cc_t character) {
 	SET_CHAR(VLNEXT,character)
 }
+#endif
 
+#ifdef VWERASE
 void serialportprofile::wordEraseCharcter(cc_t character) {
 	SET_CHAR(VWERASE,character)
 }
+#endif
 
 
+#ifdef VREPRINT
 void serialportprofile::reprintCharacter(cc_t character) {
 	SET_CHAR(VREPRINT,character)
 }
+#endif
 
+#ifdef VDISCARD
 void serialportprofile::discardPendingOutputCharacter(cc_t character) {
 	SET_CHAR(VDISCARD,character)
 }
+#endif
 
 #ifdef VSTATUS
 void serialportprofile::statusRequestCharacter(cc_t character) {
@@ -938,21 +958,29 @@ cc_t serialportprofile::delayedSuspendCharacter() {
 }
 #endif
 
+#ifdef VLNEXT
 cc_t serialportprofile::literalNextCharcter() {
 	return GET_CHAR(VLNEXT);
 }
+#endif
 
+#ifdef VWERASE
 cc_t serialportprofile::wordEraseCharcter() {
 	return GET_CHAR(VWERASE);
 }
+#endif
 
+#ifdef VREPRINT
 cc_t serialportprofile::reprintCharacter() {
 	return GET_CHAR(VREPRINT);
 }
+#endif
 
+#ifdef VDISCARD
 cc_t serialportprofile::discardPendingOutputCharacter() {
 	return GET_CHAR(VDISCARD);
 }
+#endif
 
 #ifdef VSTATUS
 cc_t serialportprofile::statusRequestCharacter() {

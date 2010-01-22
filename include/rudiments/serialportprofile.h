@@ -357,17 +357,20 @@ class serialportprofile {
 			// reprintCharacter() and wordEraseCharacter().  Also
 			// enables lowerCase().
 			// termios flag: IEXTEN
+		#ifdef ECHOCTL
 		void	echoControlCharacters(bool truefalse);
 			// If echoInput() is also set true, control characters
 			// are echoed as ^X where X is the ascii code for the
 			// character plus 0x40.
 			// termios flag: ECHOCTL
+		#endif
 		#ifdef ECHOPRT
 		void	echoErasedCharacter(bool truefalse);
 			// If cannonicalInput() and echoInput() are also set
 			// true, characters are printed as they are erased.
 			// termios flag: ECHOPRT
 		#endif
+		#ifdef ECHOKE
 		void	emulateKill(bool truefalse);
 			// If cannonicalInput() is also set, the character set
 			// using killCharacter() causes the line to be erased
@@ -375,6 +378,7 @@ class serialportprofile {
 			// (useful when a terminal doesn't support the KILL
 			// character but does support the ERASE character)
 			// termios flag: ECHOKE
+		#endif
 		void	noFlushAfterInterruptOrQuit(bool truefalse);
 			// Disables flushing of the input/output queues when
 			// generating SIGINT, SIGQUIT or SIGSUSP signals.
@@ -426,19 +430,23 @@ class serialportprofile {
 			// secondEndOfLineCharacter(), reprintCharacter() and
 			// wordEraseCharacter() are enabled and lowerCase() is
 			// enabled
+		#ifdef ECHOCTL
 		bool	echoControlCharacters();
 			// returns true if control characters are being echoed
 			// as ^X where X is the ascii code for the character
 			// plus 0x40
+		#endif
 		#ifdef ECHOPRT
 		bool	echoErasedCharacter();
 			// returns true if characters are being printed as they
 			// are erased
 		#endif
+		#ifdef ECHOKE
 		bool	emulateKill();
 			// returns true if the character set using
 			// killCharacter() causes the line to be erased
 			// by erasing each character on the line
+		#endif
 		bool	noFlushAfterInterruptOrQuit();
 			// returns true if flushing of the input/output queues
 			// when generating SIGINT, SIGQUIT or SIGSUSP signals
@@ -512,9 +520,11 @@ class serialportprofile {
 			// map uppercase characters to lowercase on input
 			// termios flag: IUCLC
 		#endif
+		#ifdef IMAXBEL
 		void	bellIfLineTooLong(bool truefalse);
 			// ring bell when input queue is full
 			// termios flag: IMAXBEL
+		#endif
 
 		// getters...
 		bool	inputParityCheck();
@@ -558,9 +568,11 @@ class serialportprofile {
 			// returns true if uppercase characters are mapped to
 			// lowercase on input
 		#endif
+		#ifdef IMAXBEL
 		bool	bellIfLineTooLong();
 			// returns true if the bell will be rung when the input
 			// queue is full
+		#endif
 
 
 
@@ -767,26 +779,34 @@ class serialportprofile {
 			// extendedFunctions() are set true
 			// termios flag: VDSUSP
 		#endif
+		#ifdef VLNEXT
 		void	literalNextCharcter(cc_t character);
 			// set the character that "quotes" the next character,
 			// depriving it of special meaning, recognized when
 			// extendedFunctions() is set true
 			// termios flag: VLNEXT
+		#endif
+		#ifdef VWERASE
 		void	wordEraseCharcter(cc_t character);
 			// set the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
 			// termios flag: VWERASE
+		#endif
 
+		#ifdef VREPRINT
 		void	reprintCharacter(cc_t character);
 			// set the character that causes unread characters to
 			// be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
 			// termios flag: VREPRINT
+		#endif
+		#ifdef VDISCARD
 		void	discardPendingOutputCharacter(cc_t character);
 			// set the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
 			// termios flag: VDISCARD
+		#endif
 
 		#ifdef VSTATUS
 		void	statusRequestCharacter(cc_t character);
@@ -848,23 +868,31 @@ class serialportprofile {
 			// sent to the process when generateSignals() and
 			// extendedFunctions() are set true
 		#endif
+		#ifdef VLNEXT
 		cc_t	literalNextCharcter();
 			// returns the character that "quotes" the next
 			// character, depriving it of special meaning,
 			// recognized when extendedFunctions() is set true
+		#endif
+		#ifdef VWERASE
 		cc_t	wordEraseCharcter();
 			// returns the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
+		#endif
 
 
+		#ifdef VREPRINT
 		cc_t	reprintCharacter();
 			// returns the character that causes unread characters
 			// to be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
+		#endif
+		#ifdef VDISCARD
 		cc_t	discardPendingOutputCharacter();
 			// returns the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
+		#endif
 
 		cc_t	statusRequestCharacter();
 			// returns the status request character

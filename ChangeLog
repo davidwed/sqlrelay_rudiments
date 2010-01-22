@@ -11,6 +11,7 @@
 	applied Renat Sabitov's logger patch
 	fixed some bugs where filesystem.C wouldn't compile on platforms where
 		statfs can return some strings
+	haiku port
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now
