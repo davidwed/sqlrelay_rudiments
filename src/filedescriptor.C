@@ -1548,12 +1548,16 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 			return __bswap64(value);
 		#elif defined(RUDIMENTS_HAVE_BSWAP64)
 			return bswap64(value);
+		#elif defined(RUDIMENTS_HAVE_SWAP64)
+			return swap64(value);
 		#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
 			return __swap_int64(value);
 		#elif defined(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64)
 			return OSSwapHostToLittleInt64(value);
 		#else
-			#error no bswap64() or anything like it
+			return
+			(((uint64_t)hostToNet((uint32_t)(value&0x00000000FFFFFFFFLLU)))<<32)|
+			((uint64_t)hostToNet((uint32_t)((value&0xFFFFFFFF00000000LLU)>>32)));
 		#endif
 	#endif
 }
@@ -1576,12 +1580,16 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 			return __bswap64(value);
 		#elif defined(RUDIMENTS_HAVE_BSWAP64)
 			return bswap64(value);
+		#elif defined(RUDIMENTS_HAVE_SWAP64)
+			return swap64(value);
 		#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
 			return __swap_int64(value);
 		#elif defined(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64)
 			return OSSwapLittleToHostInt64(value);
 		#else
-			#error no bswap64() or anything like it
+			return
+			(((uint64_t)netToHost((uint32_t)(value&0x00000000FFFFFFFFLLU)))<<32)|
+			((uint64_t)netToHost((uint32_t)((value&0xFFFFFFFF00000000LLU)>>32)));
 		#endif
 	#endif
 }

@@ -1,3 +1,6 @@
+configure inet_aton test fails on openbsd 4.6
+
+
 add http client class
 
 xmldomnode::insertAttribute doesn't appear to work properly, but append does

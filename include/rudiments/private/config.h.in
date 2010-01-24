@@ -744,6 +744,9 @@
 /* Some systems have truncate */
 #undef RUDIMENTS_HAVE_TRUNCATE
 
+/* Some systems have uint32_t */
+#undef RUDIMENTS_HAVE_UINT32_T
+
 /* Some systems have unistd.h */
 #undef RUDIMENTS_HAVE_UNISTD_H
 
