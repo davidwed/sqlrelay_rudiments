@@ -2,6 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/randomnumber.h>
+#include <rudiments/device.h>
+#include <rudiments/datetime.h>
 
 #include <stdlib.h>
 
@@ -23,6 +25,23 @@ namespace rudiments {
 #if !defined(RUDIMENTS_HAVE_RAND_R)
 static mutex	*_rnmutex;
 #endif
+
+int randomnumber::getSeed() {
+
+	// first try /dev/urandom
+	device	d;
+	if (d.open("/dev/urandom",O_RDONLY)) {
+		int	retval=0;
+		if (d.read((void *)&retval,sizeof(retval))==sizeof(retval)) {
+			return retval;
+		}
+	}
+
+	// if that fails, use epoch
+	datetime	dt;
+	dt.getSystemDateAndTime();
+	return (int)dt.getEpoch();
+}
 
 int randomnumber::generateNumber(int seed) {
 

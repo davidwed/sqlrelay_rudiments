@@ -1,6 +1,3 @@
-configure inet_aton test fails on openbsd 4.6
-
-
 add http client class
 
 xmldomnode::insertAttribute doesn't appear to work properly, but append does
@@ -10,8 +7,6 @@ remove #ifdef's from .h files, just make methods return failure and set errno to
 	ERNOSYS or ERNOTSUP or something
 
 uclibc leaks when setting TZ over and over - use putenv in favor of setenv
-
-redhat-5.2 doesn't have uint32_t
 
 reduce heap fragmentation where possible
 
@@ -30,11 +25,6 @@ get a mingw port working
 	crypt
 	ssl/pcre
 	use dynamiclib rather than LoadLibrary in file, filesystem classes
-
-randomnumber class needs getSeed() method which gets a seed from /dev/urandom
-	or something, need to use it in file::createTemporaryFile
-
-INCLUDE_xxx's are initialized to 0 rather than whatever the config opts say
 
 --------------------------------------------------------------------------------
 

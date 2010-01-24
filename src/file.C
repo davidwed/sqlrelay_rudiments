@@ -1258,11 +1258,7 @@ int file::createTemporaryFile(char *templatefilename) {
 		// replace X's with random characters...
 
 		// seed the random number
-		// (NOTE: this is insecure as it will create predictable
-		// file names, come up with a better way)
-		datetime	dt;
-		dt.getSystemDateAndTime();
-		int	seed=dt.getEpoch();
+		int	seed=randomnumber::getSeed();
 
 		// for each of the 6 characters...
 		for (uint8_t i=0; i<6; i++) {

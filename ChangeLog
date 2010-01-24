@@ -17,6 +17,7 @@
 	fixed detection of several things on modern openbsd systems
 	added definitions of (u)int(8|16|32|64)_t for systems that don't have
 		them
+	added randomnumber::getSeed() that uses /dev/urandom if available
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

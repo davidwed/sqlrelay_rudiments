@@ -9,11 +9,6 @@
 // The randomnumber class provides methods for generating and scaling 
 // random numbers.
 //
-// A common practice for generating random number sequences is to seed the
-// first call to generateNumber() with the number of seconds since 1970 (see
-// the datetime class) and seed each successive call with the previously
-// generated number.
-//
 // Superfluous background:
 //
 // Random numbers are actually just a highly divergent series.  There is
@@ -31,6 +26,10 @@ namespace rudiments {
 
 class randomnumber {
 	public:
+		static	int	getSeed();
+			// Generates a random number seed by first attempting
+			// to get one from /dev/urandom and if that fails,
+			// getting the number of seconds since 1970.
 		static	int	generateNumber(int seed);
 			// Generates a random number between 0 and 2^32, based
 			// on seed, and returns it.  
