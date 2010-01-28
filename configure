@@ -34090,7 +34090,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-memrchr(NULL,0,0);
+void *a=NULL; memrchr(a,0,0);
   ;
   return 0;
 }
@@ -34521,7 +34521,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-strpbrk(NULL,NULL);
+char *a=NULL; strpbrk(a,NULL);
   ;
   return 0;
 }

@@ -22,6 +22,7 @@
 		leak that can occur when using setenv to set an environment
 		variable over and over
 	fixed 2 memory leaks in environment class
+	fixed memrchr and strpbrk tests in configure script
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

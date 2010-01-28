@@ -1168,7 +1168,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifdef HAVE_STRING_H
 	#include <string.h>
 #endif],
-strpbrk(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRPBRK,1,Some systems have strpbrk) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+char *a=NULL; strpbrk(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRPBRK,1,Some systems have strpbrk) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined in unistd.h)
