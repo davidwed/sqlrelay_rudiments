@@ -1,12 +1,15 @@
-add http client class
+AC_TRY_COMPILE's for various functions might succeed even when that function
+is not available, you get "warning: implicit declaration of function ..." but
+it still compiles
+
+backport chat class changes
+backport new charstring methods
 
 xmldomnode::insertAttribute doesn't appear to work properly, but append does
 xmldomnode constructor with 5 params appears to be broken, causes a crash
 
-remove #ifdef's from .h files, just make methods return failure and set errno to
-	ERNOSYS or ERNOTSUP or something
-
-uclibc leaks when setting TZ over and over - use putenv in favor of setenv
+in serialportprofile class, remove #ifdef's from .h files, just make methods
+	return failure and set errno to ERNOSYS or ERNOTSUP or something
 
 reduce heap fragmentation where possible
 
@@ -17,6 +20,7 @@ QNX doesn't have:
 add missing programming docs
 
 get a mingw port working
+	printf("%lld",...) doesn't work, it doesn't like the double-l
 	how do I specify a read,write or read/write lock with LockFileEx
 		F_RDLCK, F_WRLCK, etc. need to be
 			exposed in header file or something

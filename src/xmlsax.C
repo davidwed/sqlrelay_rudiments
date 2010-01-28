@@ -23,9 +23,9 @@ class xmlsaxprivate {
 		file		_fl;
 		bool		_mmapped;
 		off64_t		_filesize;
+		off64_t		_optblocksize;
 		#ifdef RUDIMENTS_HAVE_MMAP
 		memorymap	_mm;
-		off64_t		_optblocksize;
 		off64_t		_fileoffset;
 		#endif
 		uint32_t	_line;

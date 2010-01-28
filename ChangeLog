@@ -18,6 +18,10 @@
 	added definitions of (u)int(8|16|32|64)_t for systems that don't have
 		them
 	added randomnumber::getSeed() that uses /dev/urandom if available
+	environment class prefers putenv to setenv to work around a memory
+		leak that can occur when using setenv to set an environment
+		variable over and over
+	fixed 2 memory leaks in environment class
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

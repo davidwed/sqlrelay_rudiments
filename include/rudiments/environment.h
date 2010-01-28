@@ -17,6 +17,8 @@ class environmentprivate;
 
 class environment {
 	public:
+			~environment();
+
 		static	const char	*getValue(const char *variable);
 					// Returns the value of "variable".
 		static	bool		setValue(const char *variable,
