@@ -252,6 +252,7 @@ AC_SUBST(WALL)
 
 
 
+
 dnl checks to see if -pthread option works or not during compile,
 dnl execpt on mingw, it definitely doesn't use it
 AC_DEFUN([FW_CHECK_PTHREAD_COMPILE],
@@ -495,7 +496,7 @@ AC_DEFUN([FW_CHECK_MUTEX],
 [
 	dnl check for pthread_mutex_t
 	AC_MSG_CHECKING(for pthread_mutex_t)
-	FW_TRY_LINK([#include <pthread.h>],[pthread_mutex_t mut;],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 	dnl check for CreateMutex
 	if ( test -n "$MINGW32" )
@@ -566,7 +567,7 @@ then
 			AC_MSG_RESULT(yes)
 
 			AC_MSG_CHECKING(whether SSL_read/write can use a void * parameter)
-			FW_TRY_LINK([#include <openssl/ssl.h>],[void *buf; SSL_read(NULL,buf,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[SSL_VOID_PTR="yes"],[])
+			FW_TRY_LINK([#include <openssl/ssl.h>],[void *buf=0; SSL_read(NULL,buf,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[SSL_VOID_PTR="yes"],[])
 			if ( test -n "$SSL_VOID_PTR" )
 			then
 				AC_MSG_RESULT(yes)
@@ -1611,7 +1612,9 @@ AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
 		AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#include <sys/socket.h>],
+#ifdef HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif],
 sendmsg(0,NULL,0);,AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_NEED_XNET_PROTOTYPES, 1, Solaris 2.6 has a few missing function prototypes) AC_MSG_RESULT(no))
 	fi
 ])
@@ -1724,6 +1727,12 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 	do
 		FW_TRY_LINK([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
 #endif
 #ifdef __MINGW32__
 	#include <winsock2.h>

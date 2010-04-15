@@ -1,6 +1,29 @@
+Claudio Freire's memory pool patch to get better performance...
+
+diff -wur rudiments-0.32.orig/src/memorypool.C rudiments-0.32/src/memorypool.C
+--- rudiments-0.32.orig/src/memorypool.C    2006-08-05 01:34:47.000000000 -0300
++++ rudiments-0.32/src/memorypool.C    2009-08-31 18:54:28.000000000 -0300
+@@ -88,8 +88,11 @@
+     // if we didn't find a node with enough memory remaining,
+     // create a new one at the end of the list
+     if (!node) {
+-        memnode=new memorypoolnode((length>pvt->_increment)?
+-                        length:pvt->_increment);
++        size_t incr = pvt->_increment;
++        size_t tot = pvt->_totalusedsize;
++        if (incr < (tot/10))
++            incr = (tot/10);
++        memnode=new memorypoolnode((length>incr)?length:incr);
+         pvt->_nodelist.append(memnode);
+     }
+
+
+on redhat 5.2
 AC_TRY_COMPILE's for various functions might succeed even when that function
 is not available, you get "warning: implicit declaration of function ..." but
 it still compiles
+could use FW_TRY_LINK but would need to include all libs or something...
+	not easy
 
 backport chat class changes
 backport new charstring methods
@@ -28,7 +51,6 @@ get a mingw port working
 	chown http://www.perlmonks.org/?node_id=70562
 	crypt
 	ssl/pcre
-	use dynamiclib rather than LoadLibrary in file, filesystem classes
 
 --------------------------------------------------------------------------------
 

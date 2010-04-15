@@ -17,8 +17,6 @@ class environmentprivate;
 
 class environment {
 	public:
-			~environment();
-
 		static	const char	*getValue(const char *variable);
 					// Returns the value of "variable".
 		static	bool		setValue(const char *variable,
@@ -50,6 +48,8 @@ class environment {
 			// Allows you to supply a mutex if the class needs it.
 			// If your application is not multithreaded, then
 			// there is no need to supply a mutex.
+
+	#include <rudiments/private/environment.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE
