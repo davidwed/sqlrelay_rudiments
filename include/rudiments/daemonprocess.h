@@ -68,7 +68,7 @@ class daemonprocess {
 		int	runAsUserId(uid_t uid) const;
 		int	runAsGroupId(gid_t gid) const;
 
-		static	void	handleShutDown(void *shutdownfunction);
+		static	void	handleShutDown(void (*shutdownfunction)(int));
 				// This method allows you to designate a
 				// function to run when the daemon is killed.
 

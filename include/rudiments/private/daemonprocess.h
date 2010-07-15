@@ -2,10 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		static	void	defaultShutDown();
-		static	void	defaultCrash();
-		static	void	shutDown();
-		static	void	crash();
-		static	void	waitForChildrenToExit();
+		static	void	waitForChildrenToExit(int signum);
 
 		daemonprocessprivate	*pvt;

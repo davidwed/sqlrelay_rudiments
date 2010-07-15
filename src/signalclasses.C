@@ -116,7 +116,7 @@ signalhandler::signalhandler() {
 	removeAllFlags();
 }
 
-signalhandler::signalhandler(int signum, void *handler) {
+signalhandler::signalhandler(int signum, void (*handler)(int)) {
 	pvt=new signalhandlerprivate;
 	removeAllSignalsFromMask();
 	removeAllFlags();
@@ -128,9 +128,9 @@ signalhandler::~signalhandler() {
 	delete pvt;
 }
 
-void signalhandler::setHandler(void *handler) {
+void signalhandler::setHandler(void (*handler)(int)) {
 	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-		pvt->_handlerstruct.sa_handler=(void(*)(int))handler;
+		pvt->_handlerstruct.sa_handler=handler;
 	#else
 		pvt->_handlerstruct.sa_handler=(void(*)(void))handler;
 	#endif
@@ -195,6 +195,15 @@ bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 					sizeof(struct sigaction));
 	return !result;
 }
+
+bool signalhandler::isSignalHandlerInt() {
+#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
+	return true;
+#else
+	return false;
+#endif
+}
+
 
 #ifdef RUDIMENTS_NAMESPACE
 }

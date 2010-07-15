@@ -92,12 +92,12 @@ class signalhandlerprivate;
 class signalhandler {
 	public:
 			signalhandler();
-			signalhandler(int signum, void *handler);
+			signalhandler(int signum, void (*handler)(int));
 			// Calls the setHandler() and handleSignal() methods
 			// below during instantiation.
 			~signalhandler();
 
-		void	setHandler(void *handler);
+		void	setHandler(void (*handler)(int));
 			// Sets the function to call when the process
 			// receives the signal.
 		void	*getHandler();
@@ -156,6 +156,9 @@ class signalhandler {
 				// Explicitly sets the mask to "sigset".
 		sigset_t	getMask() const;
 				// Returns the set of signals currently masked.
+
+		static	bool	isSignalHandlerInt();
+			// Check if setHandler gets handler with int arg.
 
 	#include <rudiments/private/signalhandler.h>
 

@@ -61,6 +61,11 @@
 #ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
 	#include <libkern/OSByteOrder.h>
 #endif
+#ifdef HAVE_SYS_POLL_H
+	#include <sys/poll.h>
+#elif  HAVE_POLL_H
+	#include <poll.h>
+#endif
 #ifdef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H
 	#include <os/support/ByteOrder.h>
 #endif
@@ -1754,6 +1759,16 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	// receive the msghdr
 	int	result;
 	do {
+#ifdef RUDIMENTS_HAVE_POLL
+		struct pollfd	fds;
+		fds.fd=pvt->_fd;
+		fds.events=POLLIN;
+
+		// wait for data to come in
+		if (poll(&fds,1,FILEDESCRIPTOR_TIMEOUT)<1) {
+			return false;
+		}
+#endif
 		result=recvmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {

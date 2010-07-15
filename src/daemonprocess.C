@@ -1,6 +1,7 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information
 
+#include <rudiments/private/config.h>
 #include <rudiments/daemonprocess.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
@@ -42,6 +43,34 @@ static	signalhandler	_crashhandler;
 static	void		(*_shutdownfunc)(int);
 static	void		(*_crashfunc)(int);
 
+static void shutDown(int signum) {
+	daemonprocess::waitForChildren();
+#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
+	(*_shutdownfunc)(signum);
+#else
+	(*_shutdownfunc)(0);
+#endif
+}
+
+static void crash(int signum) {
+	daemonprocess::waitForChildren();
+#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
+	(*_crashfunc)(signum);
+#else
+	(*_crashfunc)(0);
+#endif
+}
+
+static void defaultShutDown(int signum) {
+	daemonprocess::waitForChildren();
+	exit(0);
+}
+
+static void defaultCrash(int signum) {
+	daemonprocess::waitForChildren();
+	exit(1);
+}
+
 daemonprocess::daemonprocess() {
 
 	pvt=new daemonprocessprivate;
@@ -52,11 +81,11 @@ daemonprocess::daemonprocess() {
 	// so register some default shutdown/crash handlers that only do that
 	// FIXME: it should be possible to use one of the C++ casting operators
 	// here (and elsewhere in this class), but I'm not really sure how...
-	_shutdownhandler.setHandler((void *)defaultShutDown);
+	_shutdownhandler.setHandler(defaultShutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
 
-	_crashhandler.setHandler((void *)defaultCrash);
+	_crashhandler.setHandler(defaultCrash);
 	_crashhandler.handleSignal(SIGSEGV);
 
 	waitForChildren();
@@ -127,11 +156,11 @@ bool daemonprocess::detach() const {
 }
 #endif
 
-void daemonprocess::handleShutDown(void *shutdownfunction) {
+void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {
 
-	_shutdownfunc=(void(*)(int))shutdownfunction;
+	_shutdownfunc=shutdownfunction;
 
-	_shutdownhandler.setHandler((void *)shutDown);
+	_shutdownhandler.setHandler(shutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
 }
@@ -140,12 +169,12 @@ void daemonprocess::handleCrash(void *crashfunction) {
 
 	_crashfunc=(void(*)(int))crashfunction;
 
-	_crashhandler.setHandler((void *)crash);
+	_crashhandler.setHandler(crash);
 	_crashhandler.handleSignal(SIGSEGV);
 }
 
 #ifndef MINGW32
-void daemonprocess::waitForChildrenToExit() {
+void daemonprocess::waitForChildrenToExit(int signum) {
 
 	// Some systems generate a single SIGCHLD even if more than 1 child
 	// has entered it's exit state, so we need to loop here and catch
@@ -174,41 +203,21 @@ void daemonprocess::waitForChildrenToExit() {
 	// be done automatically.
 }
 #else
-void daemonprocess::waitForChildrenToExit() {
+void daemonprocess::waitForChildrenToExit(int signum) {
 	// FIXME: implement this...
 	// Use ChildStart()
 }
 #endif
 
-void daemonprocess::shutDown() {
-	waitForChildren();
-	(*_shutdownfunc)(0);
-}
-
-void daemonprocess::crash() {
-	waitForChildren();
-	(*_crashfunc)(0);
-}
-
-void daemonprocess::defaultShutDown() {
-	waitForChildren();
-	exit(0);
-}
-
-void daemonprocess::defaultCrash() {
-	waitForChildren();
-	exit(1);
-}
-
 #ifndef MINGW32
 void daemonprocess::waitForChildren() {
-	_deadchildhandler.setHandler((void *)waitForChildrenToExit);
+	_deadchildhandler.setHandler(waitForChildrenToExit);
 	_deadchildhandler.addFlag(SA_NOCLDSTOP);
 	_deadchildhandler.handleSignal(SIGCHLD);
 }
 
 void daemonprocess::dontWaitForChildren() {
-	_deadchildhandler.setHandler((void *)SIG_DFL);
+	_deadchildhandler.setHandler((void (*)(int))SIG_DFL);
 	_deadchildhandler.removeAllFlags();
 	_deadchildhandler.handleSignal(SIGCHLD);
 }
