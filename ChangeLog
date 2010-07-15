@@ -26,6 +26,8 @@
 	fixed a logger dependency on the permissions class in features.mk.in
 	updated environment class to use malloc and free
 	fixed reference-after-free by putenv in environment class
+	applied patches from Renat Sabitov
+	updated signalhandlers to have (void *)(int) signature
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now
