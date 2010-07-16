@@ -99,7 +99,7 @@ void modemclient::initialize(const char *devicename, const char *baud,
 	pvt->_connectscript=connectscript;
 	pvt->_phonenumber=phonenumber;
 	pvt->_disconnectscript=disconnectscript;
-	client::initialize("",-1,-1,retrywait,retrycount);
+	client::initialize(NULL,-1,-1,retrywait,retrycount);
 }
 
 int modemclient::connect() {

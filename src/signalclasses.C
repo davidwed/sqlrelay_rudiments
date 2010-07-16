@@ -196,7 +196,7 @@ bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	return !result;
 }
 
-bool signalhandler::isSignalHandlerInt() {
+bool signalhandler::isSignalHandlerIntUsed() {
 #ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 	return true;
 #else

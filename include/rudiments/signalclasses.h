@@ -157,8 +157,21 @@ class signalhandler {
 		sigset_t	getMask() const;
 				// Returns the set of signals currently masked.
 
-		static	bool	isSignalHandlerInt();
-			// Check if setHandler gets handler with int arg.
+		static	bool	isSignalHandlerIntUsed();
+				// The function that you pass into setHandler()
+				// must have a  void (*)(int) signature.
+				//
+				// This method will return true if the
+				// platform's signal handling framework allows
+				// this class to pass the signal number
+				// into the int parameter of that function
+				// and false otherwise.
+				//
+				// In the event that the platform's signal
+				// handling framework does not allow this
+				// class to pass the signal number into the
+				// int parameter of that function, a 0 will
+				// be passed in.
 
 	#include <rudiments/private/signalhandler.h>
 
