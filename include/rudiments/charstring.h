@@ -476,7 +476,13 @@ class charstring {
 		static char	*subString(const char *str,
 						size_t start, size_t end);
 				// Returns a copy of the segment of "str"
-				// between string indices "start" and "end".
+				// between string indices "start" and "end",
+				// inclusive.
+
+		static char	*subString(const char *str, size_t start);
+				// Returns a copy of the segment of "str"
+				// between string index "start" and the end
+				// of the string, inclusive.
 
 	#include <rudiments/private/charstring.h>
 };

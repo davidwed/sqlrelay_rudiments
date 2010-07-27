@@ -1214,6 +1214,10 @@ char *charstring::subString(const char *str, size_t start, size_t end) {
 	return duplicate(str+start,end-start+1);
 }
 
+char *charstring::subString(const char *str, size_t start) {
+	return subString(str,start,charstring::length(str)-1);
+}
+
 char *charstring::base64Encode(const unsigned char *input) {
 	return base64Encode(input,charstring::length(input));
 }
