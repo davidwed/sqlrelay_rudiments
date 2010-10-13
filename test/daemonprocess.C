@@ -19,7 +19,7 @@ using namespace rudiments;
 daemonprocess	*dmn;
 
 // define a function to shut down the process cleanly
-RETSIGTYPE	shutDown() {
+void shutDown(int sig) {
 
 	printf("%d: shutting down\n",process::getProcessId());
 
@@ -34,8 +34,8 @@ int main(int argc, const char **argv) {
 	dmn=new daemonprocess();
 
 	// set up signal handlers for clean shutdown
-	dmn->handleShutDown((RETSIGTYPE *)shutDown);
-	dmn->handleCrash((RETSIGTYPE *)shutDown);
+	dmn->handleShutDown(shutDown);
+	dmn->handleCrash(shutDown);
 
 	// change the user/group that the daemon is running as
 	dmn->runAsUser("nobody");

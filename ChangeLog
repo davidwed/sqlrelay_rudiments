@@ -29,6 +29,7 @@
 	applied patches from Renat Sabitov
 	updated signalhandlers to have (void *)(int) signature
 	added charstring::subString without an end parameter
+	applied patch by Claudio Freire
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

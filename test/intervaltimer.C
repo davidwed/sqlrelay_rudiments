@@ -7,11 +7,11 @@
 using namespace rudiments;
 #endif
 
-RETSIGTYPE	alarmhandler() {
+void alarmhandler(int sig) {
 	printf("alarm!\n");
 }
 
-void	waitForTimer(intervaltimer *t) {
+void waitForTimer(intervaltimer *t) {
 
 	itimerval	itv;
 	t->getIntervals(&itv);
@@ -34,7 +34,7 @@ void	waitForTimer(intervaltimer *t) {
 int main(int argc, char **argv) {
 
 	signalhandler	ah;
-	ah.setHandler((void *)alarmhandler);
+	ah.setHandler(alarmhandler);
 	ah.handleSignal(SIGALRM);
 
 	intervaltimer	t(ITIMER_REAL);

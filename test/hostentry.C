@@ -2,6 +2,9 @@
 // See the file COPYING for more information
 
 #include <rudiments/hostentry.h>
+
+// for AF_INET
+#include <netdb.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE

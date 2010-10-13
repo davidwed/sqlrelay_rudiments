@@ -22,7 +22,7 @@ class myserver : public daemonprocess, public inetserversocket {
 };
 
 
-void	myserver::listen() {
+void myserver::listen() {
 
 
 	// make sure that only one instance is running
@@ -68,7 +68,7 @@ void	myserver::listen() {
 myserver	*mysvr;
 
 // define a function to shut down the process cleanly
-RETSIGTYPE	shutDown() {
+void shutDown(int sig) {
 	printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
@@ -89,8 +89,8 @@ int main(int argc, const char **argv) {
 	mysvr=new myserver();
 
 	// set up signal handlers for clean shutdown
-	mysvr->handleShutDown((RETSIGTYPE *)shutDown);
-	mysvr->handleCrash((RETSIGTYPE *)shutDown);
+	mysvr->handleShutDown(shutDown);
+	mysvr->handleCrash(shutDown);
 
 	mysvr->listen();
 }
