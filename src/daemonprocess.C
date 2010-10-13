@@ -165,9 +165,9 @@ void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {
 	_shutdownhandler.handleSignal(SIGTERM);
 }
 
-void daemonprocess::handleCrash(void *crashfunction) {
+void daemonprocess::handleCrash(void (*crashfunction)(int)) {
 
-	_crashfunc=(void(*)(int))crashfunction;
+	_crashfunc=crashfunction;
 
 	_crashhandler.setHandler(crash);
 	_crashhandler.handleSignal(SIGSEGV);

@@ -88,8 +88,14 @@ unsigned char *memorypool::malloc(size_t length) {
 	// if we didn't find a node with enough memory remaining,
 	// create a new one at the end of the list
 	if (!node) {
-		memnode=new memorypoolnode((length>pvt->_increment)?
-						length:pvt->_increment);
+		// increase size by increments of at least 10% for better
+		// performance and 10% max memory usage penalty - Claudio Freire
+		size_t	incr=pvt->_increment;
+		size_t	tot=pvt->_totalusedsize;
+		if (incr<(tot/10)) {
+			incr=(tot/10);
+		}
+		memnode=new memorypoolnode((length>incr)?length:incr);
 		pvt->_nodelist.append(memnode);
 	}
 
