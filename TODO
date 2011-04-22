@@ -1,3 +1,8 @@
+add "customatcommands" thing to modemclient class
+
+xmldom::writeFile() doesn't translate &'s into &amp; or handle other entities
+	either
+
 on redhat 5.2
 AC_TRY_COMPILE's for various functions might succeed even when that function
 is not available, you get "warning: implicit declaration of function ..." but
@@ -403,3 +408,4 @@ internationalization:
 	iconv.h - character set conversion
 	libintl.h - gettext functions
 	stdlib.h - rpmatch() - response match
+	libicu

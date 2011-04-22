@@ -66,6 +66,7 @@ size_t stringbuffer::getPosition() {
 
 void stringbuffer::clear() {
 	variablebuffer::clear();
+	_buffer()[0]='\0';
 }
 
 void stringbuffer::terminate() {

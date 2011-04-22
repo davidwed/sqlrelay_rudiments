@@ -192,6 +192,9 @@ class charstring {
 			// Converts "str" to uppercase.
 		static	void	lower(char *str); 
 			// Converts "str" to lowercase.
+		static void	capitalize(char *str);
+			// Captitalizes "str", converting characters to upper
+			// or lower case as necessary.
 
 		static	void	rightTrim(char *str);
 			// Rrims all spaces off of the right hand side of "str".

@@ -37,8 +37,6 @@ xmldomnode::xmldomnode(xmldom *dom, xmldomnode *nullnode) {
 	init(nullnode);
 	pvt->_dom=dom;
 	pvt->_type=NULL_XMLDOMNODETYPE;
-	pvt->_nodename=NULL;
-	pvt->_nodevalue=NULL;
 }
 
 xmldomnode::xmldomnode(xmldom *dom,
@@ -65,6 +63,8 @@ void xmldomnode::init(xmldomnode *nullnode) {
 	pvt->_attributecount=0;
 	pvt->_cascade=true;
 	pvt->_isnullnode=false;
+	pvt->_nodename=NULL;
+	pvt->_nodevalue=NULL;
 }
 
 xmldomnode::~xmldomnode() {

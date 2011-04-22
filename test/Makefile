@@ -3,7 +3,7 @@ top_builddir = ..
 include ../config.mk
 include ../features.mk
 
-.PHONY: all clean rebuild
+.PHONY: all clean
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(DLLIB)
@@ -430,8 +430,6 @@ clean:
 	$(RM) testfile
 	$(MAKE) -C certificates clean
 	$(RM) test.xml
-
-rebuild: clean all
 
 .C.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@

@@ -74,6 +74,23 @@ void charstring::lower(char *str) {
 	}
 }
 
+void charstring::capitalize(char *str) {
+
+	bool	cap=true;
+	for (char *ch=str; *ch; ch++) {
+		char	c=*ch;
+		if (cap) {
+			*ch=character::toUpperCase(c);
+			cap=false;
+		} else {
+			*ch=character::toLowerCase(c);
+		}
+		if (c==' ' || c=='\'' || c=='"' || c=='-') {
+			cap=true;
+		}
+	}
+}
+
 void charstring::rightTrim(char *str, char character) {
 
 	if (str && str[0]) {
@@ -687,7 +704,7 @@ char *charstring::parseNumber(double number,
 char *charstring::parseNumber(long double number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%lf",number);
+	snprintf(str,22,"%Lf",number);
 	return str;
 }
 
@@ -695,7 +712,7 @@ char *charstring::parseNumber(long double number,
 				unsigned short scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%.*lf",scale,number);
+	snprintf(str,22,"%.*Lf",scale,number);
 	return str;
 }
 
@@ -705,7 +722,7 @@ char *charstring::parseNumber(long double number,
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*lf",precision,scale,number);
+	snprintf(str,strlength,"%*.*Lf",precision,scale,number);
 	return str;
 }
 
@@ -1430,7 +1447,6 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	(*outputsize)-=(input[--inputindex]=='=')+
 				(input[--inputindex]=='=');
 }
-
 
 #ifdef RUDIMENTS_NAMESPACE
 }

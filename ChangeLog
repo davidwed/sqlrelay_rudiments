@@ -30,6 +30,11 @@
 	updated signalhandlers to have (void *)(int) signature
 	added charstring::subString without an end parameter
 	applied patch by Claudio Freire
+	changed several %lf's to %Lf's in charstring long double parsers
+	fixed uninitiaized nodename/nodevalue in xmldomnode
+	fixed unterminated buffer after clear in stringbuffer
+	removed "rebuild" target from all Makefiles
+	added charstring::capitalize method
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

@@ -4,8 +4,8 @@ include config.mk
 
 PWD=$(shell pwd)
 
-.PHONY: all testprogs clean rebuild install-libs install-includes install-bin \
-	 install-doc install-man install-pc install uninstall unconfig distclean slackware
+.PHONY: all testprogs clean install-libs install-includes install-bin \
+	 install-doc install-man install-pc install uninstall unconfig distclean
 
 all:
 	cd src; $(MAKE) all
@@ -17,9 +17,6 @@ clean:
 	cd src; $(MAKE) clean
 	cd test; $(MAKE) clean
 	$(RMTREE) .pics */.pics */*/.pics
-
-rebuild:
-	cd src; $(MAKE) rebuild
 
 install-libs:
 	cd src; $(MAKE) install
@@ -50,18 +47,9 @@ uninstall:
 	cd man; $(MAKE) uninstall
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
-unconfig: clean
+distclean: clean
 	$(RM) config.mk config.cache config.h config.log config.status include/rudiments/private/config.h include/rudiments/private/config.h.in~ features.mk
 	$(RM) bin/rudiments-config
 	$(RM) libtool
 	$(RMTREE) autom4te.cache
 	$(RM) rudiments.pc
-
-distclean: unconfig
-
-slackware: all
-	mkdir /tmp/rudiments-$(RUDIMENTS_VERSION)
-	make prefix=/tmp/rudiments-$(RUDIMENTS_VERSION)/$(prefix) install
-	cd /tmp/rudiments-$(RUDIMENTS_VERSION); makepkg rudiments-$(RUDIMENTS_VERSION).tgz
-	mv /tmp/rudiments-$(RUDIMENTS_VERSION)/rudiments-$(RUDIMENTS_VERSION).tgz $(PWD)
-	$(RMTREE) /tmp/rudiments-$(RUDIMENTS_VERSION)
