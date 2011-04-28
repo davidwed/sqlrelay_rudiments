@@ -129,9 +129,18 @@ class serialportprofile {
 
 		#ifdef TABDLY
 		enum	tabdelay_t {
-			td_none=TAB0,
-			td_depends=TAB1,
-			td_100=TAB2
+			#ifdef TAB0
+			td_0=TAB0,
+			#endif
+			#ifdef TAB1
+			td_1=TAB1,
+			#endif
+			#ifdef TAB2
+			td_2=TAB2,
+			#endif
+			#ifdef TAB3
+			td_xtabs=TAB3
+			#endif
 		};
 		#endif
 
