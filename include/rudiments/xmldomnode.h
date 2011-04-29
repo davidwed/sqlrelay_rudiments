@@ -233,12 +233,12 @@ class xmldomnode {
 				// nullnode is returned.
 
 
-		int		getChildCount() const;
+		uint64_t	getChildCount() const;
 				// Returns the number of immediate child nodes.
 		xmldomnode	*getChild(const char *name) const;
 				// Returns the child node named "name"
 				// or the nullnode if not found.
-		xmldomnode	*getChild(int position) const;
+		xmldomnode	*getChild(uint64_t position) const;
 				// Returns the child node at index "position"
 				// or the nullnode if not found.
 		xmldomnode	*getChild(const char *name,
@@ -276,18 +276,18 @@ class xmldomnode {
 				// nullnode is returned.
 
 
-		int		getAttributeCount() const;
+		uint64_t	getAttributeCount() const;
 				// Returns the number of attributes.
 		xmldomnode	*getAttribute(const char *name) const;
 				// Returns the attribute named "name"
 				// or the nullnode if not found.
-		xmldomnode	*getAttribute(int position) const;
+		xmldomnode	*getAttribute(uint64_t position) const;
 				// Returns the attribute node at index
 				// "position" or the nullnode if not found.
 		const char	*getAttributeValue(const char *name) const;
 				// Returns the value of the attribute named
 				// "name" or the nullnode if not found.
-		const char	*getAttributeValue(int position) const;
+		const char	*getAttributeValue(uint64_t position) const;
 				// Returns the value of the attribute node at
 				// index "position" or the nullnode if not
 				// found.
@@ -299,6 +299,22 @@ class xmldomnode {
 				// calling program.  Returns NULL if the node
 				// is a nullNode and an empty dictionary if the
 				// node has no attributes.
+
+		void		setAttributeValue(const char *name,
+							const char *value);
+				// Sets the value of the attribute named
+				// "name" to "value".  Creates attribute
+				// "name" if it didn't previously exist.
+		void		setAttributeValue(const char *name,
+							int64_t value);
+				// Sets the value of the attribute named
+				// "name" to "value".  Creates attribute
+				// "name" if it didn't previously exist.
+		void		setAttributeValue(const char *name,
+							uint64_t value);
+				// Sets the value of the attribute named
+				// "name" to "value".  Creates attribute
+				// "name" if it didn't previously exist.
 
 		xmldomnode	*getNullNode() const;
 				// Returns the nullnode used by this node.
@@ -324,13 +340,13 @@ class xmldomnode {
 		void	setNextSibling(xmldomnode *next);
 			// Sets the next sibling of the node to "next".
 
-		bool	insertChild(xmldomnode *child, int position);
+		bool	insertChild(xmldomnode *child, uint64_t position);
 			// Inserts "child" into the list of child nodes at
 			// "position".  The position of the next sibling
 			// (and all successive siblings) is incremented.
 		bool	appendChild(xmldomnode *child);
 			// Appends "child" to the list of child nodes.
-		bool	deleteChild(int position);
+		bool	deleteChild(uint64_t position);
 			// Deletes the child node at "position".  The position
 			// of the next sibling (and all successive siblings)
 			// is decremented.
@@ -339,7 +355,7 @@ class xmldomnode {
 			// deletes it.  The position of the next sibling (and
 			// all successive siblings) is decremented.
 
-		bool	insertText(const char *value, int position);
+		bool	insertText(const char *value, uint64_t position);
 			// Inserts a child node of type TEXT_XMLDOMNODE with
 			// value "value" into the list of child nodes at
 			// "position".  The position of the next sibling
@@ -348,14 +364,15 @@ class xmldomnode {
 			// Appends a child node of type TEXT_XMLDOMNODE with
 			// value "value" to the list of child nodes.
 
-		bool	insertAttribute(xmldomnode *attribute, int position);
+		bool	insertAttribute(xmldomnode *attribute,
+							uint64_t position);
 			// Inserts "attribute" into the list of attributes at
 			// "position".  The position of the next attribute
 			// (and all successive attributes) is incremented.
 		bool	appendAttribute(xmldomnode *attribute);
 			// Appends "attribute" to the list of attributes.
 		bool	insertAttribute(const char *name, const char *value,
-					int position);
+							uint64_t position);
 			// Creates an attribute node with "name" and "value"
 			// and inserts it into the list of attributes at
 			// "position".  The position of the next attribute
@@ -363,7 +380,7 @@ class xmldomnode {
 		bool	appendAttribute(const char *name, const char *value);
 			// Creates an attribute node with "name" and "value"
 			// and appends it to the list of attributes.
-		bool	deleteAttribute(int position);
+		bool	deleteAttribute(uint64_t position);
 			// Deletes the attribute at "position".  The position
 			// of the next attribute (and all successive attributes)
 			// is decremented.
@@ -404,7 +421,7 @@ class xmldomnode {
 				// Returns the null node if the specified
 				// element was not found.
 		xmldomnode	*getAttributeByPath(const char *path,
-							int position) const;
+						uint64_t position) const;
 				// Returns the attribute node at index
 				// "position" of the child element with "path"
 				// of the form:
@@ -423,7 +440,7 @@ class xmldomnode {
 				// Returns the null node if the specified
 				// element was not found.
 		const char	*getAttributeValueByPath(const char *path,
-							int position) const;
+						uint64_t position) const;
 				// Returns the value of the attribute at index
 				// "position" of the child element with "path"
 				// of the form:

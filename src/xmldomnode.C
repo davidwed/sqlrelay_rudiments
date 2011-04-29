@@ -23,10 +23,10 @@ class xmldomnodeprivate {
 		xmldomnode	*_parent;
 		xmldomnode	*_next;
 		xmldomnode	*_previous;
-		int		_childcount;
+		uint64_t	_childcount;
 		xmldomnode	*_firstchild;
 		xmldomnode	*_lastchild;
-		int		_attributecount;
+		uint64_t	_attributecount;
 		xmldomnode	*_firstattribute;
 		xmldomnode	*_lastattribute;
 		xmldomnode	*_nullnode;
@@ -181,7 +181,7 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 }
 
 xmldomnode *xmldomnode::getFirstTagChild() const {
-	xmldomnode	*node=getChild(0);
+	xmldomnode	*node=getChild((uint64_t)0);
 	return (node->getType()==TAG_XMLDOMNODETYPE)?
 					node:node->getNextTagSibling();
 }
@@ -220,7 +220,7 @@ xmldomnode *xmldomnode::getChild(const char *name,
 	return pvt->_nullnode;
 }
 
-bool xmldomnode::insertText(const char *value, int position) {
+bool xmldomnode::insertText(const char *value, uint64_t position) {
 	xmldomnode	*text=new xmldomnode(pvt->_dom,pvt->_nullnode);
 	text->setName("text");
 	text->setValue(value);
@@ -230,7 +230,7 @@ bool xmldomnode::insertText(const char *value, int position) {
 }
 
 bool xmldomnode::insertAttribute(const char *name, const char *value,
-								int position) {
+							uint64_t position) {
 	xmldomnode	*attribute=new xmldomnode(pvt->_dom,pvt->_nullnode);
 	attribute->setName(name);
 	attribute->setValue(value);
@@ -249,7 +249,7 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 	xmldomnode	*current;
 	if (pvt->_type==ROOT_XMLDOMNODETYPE) {
 		current=pvt->_firstchild;
-		for (int i=0; i<pvt->_childcount; i++) {
+		for (uint64_t i=0; i<pvt->_childcount; i++) {
 			current->xml(output);
 			current=current->pvt->_next;
 		}
@@ -257,7 +257,7 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 		output->append("<");
 		output->append(pvt->_nodename);
 		current=pvt->_firstattribute;
-		for (int i=0; i<pvt->_attributecount; i++) {
+		for (uint64_t i=0; i<pvt->_attributecount; i++) {
 			output->append(" ");
 			current->xml(output);
 			current=current->pvt->_next;
@@ -265,7 +265,7 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 		if (pvt->_childcount) {
 			output->append(">");
 			current=pvt->_firstchild;
-			for (int i=0; i<pvt->_childcount; i++) {
+			for (uint64_t i=0; i<pvt->_childcount; i++) {
 				current->xml(output);
 				current=current->pvt->_next;
 			}
@@ -306,14 +306,14 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 	return output;
 }
 
-xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,
-					const char *name, int count) const {
+xmldomnode *xmldomnode::getNode(xmldomnode *first, uint64_t position,
+				const char *name, uint64_t count) const {
 	if (!first || position>=count) {
 		return pvt->_nullnode;
 	}
 	xmldomnode	*current=first;
 	if (name) {
-		for (int i=0; i<count; i++) {
+		for (uint64_t i=0; i<count; i++) {
 			if (!charstring::compare(
 					current->pvt->_nodename,name)) {
 				break;
@@ -321,17 +321,17 @@ xmldomnode *xmldomnode::getNode(xmldomnode *first, int position,
 			current=current->pvt->_next;
 		}
 	} else {
-		for (int i=0; i<position; i++) {
+		for (uint64_t i=0; i<position; i++) {
 			current=current->pvt->_next;
 		}
 	}
 	return current;
 }
 
-bool xmldomnode::insertNode(xmldomnode *node, int position,
+bool xmldomnode::insertNode(xmldomnode *node, uint64_t position,
 				xmldomnodetype type,
 				xmldomnode **first, xmldomnode **last,
-				int *count) {
+				uint64_t *count) {
 	if (position>(*count)) {
 		return false;
 	}
@@ -357,9 +357,10 @@ bool xmldomnode::insertNode(xmldomnode *node, int position,
 	return true;
 }
 
-bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
+bool xmldomnode::deleteNode(xmldomnode *node,
+				uint64_t position, const char *name,
 				xmldomnode **first, xmldomnode **last,
-				int *count) {
+				uint64_t *count) {
 
 	if (position>(*count)) {
 		return false;
@@ -373,7 +374,7 @@ bool xmldomnode::deleteNode(xmldomnode *node, int position, const char *name,
 			current=current->pvt->_next;
 		}
 	} else {
-		for (int i=0; i<position; i++) {
+		for (uint64_t i=0; i<position; i++) {
 			current=current->pvt->_next;
 		}
 	}
@@ -421,11 +422,32 @@ constnamevaluepairs *xmldomnode::getAttributes() const {
 	}
 
 	constnamevaluepairs	*nvp=new constnamevaluepairs();
-	for (int i=0; i<pvt->_attributecount; i++) {
+	for (uint64_t i=0; i<pvt->_attributecount; i++) {
 		nvp->setData(getAttribute(i)->getName(),
 				getAttribute(i)->getValue());
 	}
 	return nvp;
+}
+
+void xmldomnode::setAttributeValue(const char *name, const char *value) {
+	xmldomnode	*attr=getAttribute(name);
+	if (attr) {
+		attr->setValue(value);
+	} else {
+		appendAttribute(name,value);
+	}
+}
+
+void xmldomnode::setAttributeValue(const char *name, int64_t value) {
+	char	*valuestr=charstring::parseNumber(value);
+	setAttributeValue(name,valuestr);
+	delete[] valuestr;
+}
+
+void xmldomnode::setAttributeValue(const char *name, uint64_t value) {
+	char	*valuestr=charstring::parseNumber(value);
+	setAttributeValue(name,valuestr);
+	delete[] valuestr;
 }
 
 void xmldomnode::cascadeOnDelete() {
@@ -468,11 +490,11 @@ bool xmldomnode::isNullNode() const {
 	return pvt->_isnullnode;
 }
 
-int xmldomnode::getChildCount() const {
+uint64_t xmldomnode::getChildCount() const {
 	return pvt->_childcount;
 }
 
-xmldomnode *xmldomnode::getChild(int position) const {
+xmldomnode *xmldomnode::getChild(uint64_t position) const {
 	return getNode(pvt->_firstchild,position,NULL,pvt->_childcount);
 }
 
@@ -480,11 +502,11 @@ xmldomnode *xmldomnode::getChild(const char *name) const {
 	return getNode(pvt->_firstchild,0,name,pvt->_childcount);
 }
 
-int xmldomnode::getAttributeCount() const {
+uint64_t xmldomnode::getAttributeCount() const {
 	return pvt->_attributecount;
 }
 
-xmldomnode *xmldomnode::getAttribute(int position) const {
+xmldomnode *xmldomnode::getAttribute(uint64_t position) const {
 	return getNode(pvt->_firstattribute,position,NULL,pvt->_attributecount);
 }
 
@@ -492,7 +514,7 @@ xmldomnode *xmldomnode::getAttribute(const char *name) const {
 	return getNode(pvt->_firstattribute,0,name,pvt->_attributecount);
 }
 
-const char *xmldomnode::getAttributeValue(int position) const {
+const char *xmldomnode::getAttributeValue(uint64_t position) const {
 	return getAttribute(position)->getValue();
 }
 
@@ -526,7 +548,7 @@ void xmldomnode::setNextSibling(xmldomnode *next) {
 	pvt->_next=next;
 }
 
-bool xmldomnode::insertChild(xmldomnode *child, int position) {
+bool xmldomnode::insertChild(xmldomnode *child, uint64_t position) {
 	return insertNode(child,position,
 				child->pvt->_type,
 				&pvt->_firstchild,
@@ -534,7 +556,7 @@ bool xmldomnode::insertChild(xmldomnode *child, int position) {
 				&pvt->_childcount);
 }
 
-bool xmldomnode::insertAttribute(xmldomnode *attribute, int position) {
+bool xmldomnode::insertAttribute(xmldomnode *attribute, uint64_t position) {
 	return insertNode(attribute,position,
 				ATTRIBUTE_XMLDOMNODETYPE,
 				&pvt->_firstattribute,
@@ -542,7 +564,7 @@ bool xmldomnode::insertAttribute(xmldomnode *attribute, int position) {
 				&pvt->_attributecount);
 }
 
-bool xmldomnode::deleteChild(int position) {
+bool xmldomnode::deleteChild(uint64_t position) {
 	return deleteNode(NULL,position,NULL,
 				&pvt->_firstchild,
 				&pvt->_lastchild,
@@ -556,7 +578,7 @@ bool xmldomnode::deleteChild(xmldomnode *child) {
 				&pvt->_childcount);
 }
 
-bool xmldomnode::deleteAttribute(int position) {
+bool xmldomnode::deleteAttribute(uint64_t position) {
 	return deleteNode(NULL,position,NULL,
 				&pvt->_firstattribute,
 				&pvt->_lastattribute,
@@ -586,7 +608,7 @@ stringbuffer *xmldomnode::getPath() const {
 	// Path: /element[index]/...
 
 	// run up the tree, counting parent nodes
-	int	ancestors=0;
+	uint64_t	ancestors=0;
 	const xmldomnode	*node=this;
 	while (!node->isNullNode() && node->getType()!=ROOT_XMLDOMNODETYPE) {
 		ancestors++;
@@ -595,9 +617,9 @@ stringbuffer *xmldomnode::getPath() const {
 
 	// create pointers to the names of each parent node
 	const char	**names=new const char *[ancestors];
-	uint32_t	*indices=new uint32_t[ancestors];
+	uint64_t	*indices=new uint64_t[ancestors];
 	node=this;
-	for (int index=ancestors-1; index>=0; index--) {
+	for (uint64_t index=ancestors-1; index>=0; index--) {
 
 		// get the name
 		names[index]=node->getName();
@@ -619,7 +641,7 @@ stringbuffer *xmldomnode::getPath() const {
 	// run through the list of parent node names and indices,
 	// append them all to the path
 	stringbuffer	*path=new stringbuffer();
-	for (int index=0; index<ancestors; index++) {
+	for (uint64_t index=0; index<ancestors; index++) {
 		path->append('/')->append(names[index]);
 		path->append('[')->append(indices[index])->append(']');
 	}
@@ -674,7 +696,7 @@ xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 }
 
 xmldomnode *xmldomnode::getAttributeByPath(const char *path,
-						int position) const {
+						uint64_t position) const {
 	return getChildByPath(path)->getAttribute(position);
 }
 
@@ -684,7 +706,7 @@ xmldomnode *xmldomnode::getAttributeByPath(const char *path,
 }
 
 const char *xmldomnode::getAttributeValueByPath(const char *path,
-						int position) const {
+						uint64_t position) const {
 	return getChildByPath(path)->getAttributeValue(position);
 }
 

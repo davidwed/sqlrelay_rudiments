@@ -96,7 +96,7 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	fl.setWriteBufferSize(optblocksize);
 	stringbuffer	*xml=pvt->_rootnode->xml();
 	bool	retval=true;
-	int	length=charstring::length(xml->getString());
+	ssize_t	length=charstring::length(xml->getString());
 	if (fl.write(xml->getString(),length)!=length) {
 		retval=false;
 	}

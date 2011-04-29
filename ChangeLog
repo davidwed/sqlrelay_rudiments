@@ -35,6 +35,7 @@
 	fixed unterminated buffer after clear in stringbuffer
 	removed "rebuild" target from all Makefiles
 	added charstring::capitalize method
+	made stringbuffer::terminate append a \0 unconditionally
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

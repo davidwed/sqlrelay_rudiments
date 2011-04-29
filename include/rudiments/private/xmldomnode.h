@@ -4,16 +4,16 @@
 	private:
 		void		init(xmldomnode *nullnode);
 		xmldomnode	*getNode(xmldomnode *first,
-					int position, const char *name,
-					int count) const;
-		bool		insertNode(xmldomnode *node, int position,
+					uint64_t position, const char *name,
+					uint64_t count) const;
+		bool		insertNode(xmldomnode *node, uint64_t position,
 					xmldomnodetype type,
 					xmldomnode **first, xmldomnode **last,
-					int *count);
-		bool		deleteNode(xmldomnode *node, int position,
+					uint64_t *count);
+		bool		deleteNode(xmldomnode *node, uint64_t position,
 					const char *name,
 					xmldomnode **first, xmldomnode **last,
-					int *count);
+					uint64_t *count);
 		stringbuffer	*xml(stringbuffer *string) const;
 
 

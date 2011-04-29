@@ -1,3 +1,6 @@
+freebsd has TABDLY but no TAB0 or TAB1
+there is now a TAB2 and TAB3 on some platforms
+
 add "customatcommands" thing to modemclient class
 
 xmldom::writeFile() doesn't translate &'s into &amp; or handle other entities

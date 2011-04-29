@@ -109,7 +109,7 @@ bool dtd::newElement(xmldomnode *node) {
 	}
 
 	// add a name attribute to the element
-	const char	*name=node->getAttribute(0)->getName();
+	const char	*name=node->getAttribute((uint64_t)0)->getName();
 	if (!element->appendAttribute("name",name)) {
 		nodeError(node);
 		return false;
@@ -227,10 +227,12 @@ bool dtd::newAttribute(xmldomnode *node) {
 	}
 
 	// get the appropriate element to add this attribute to
-	xmldomnode	*element=pvt->_xmldtd.getRootNode()->getChild("dtd")->
-						getChild("element","name",
-							node->getAttribute(0)->
-								getName());
+	xmldomnode	*element=
+			pvt->_xmldtd.getRootNode()->
+				getChild("dtd")->
+				getChild("element","name",
+					node->getAttribute((uint64_t)0)->
+					getName());
 	if (element->isNullNode()) {
 		nodeError(node);
 		return false;
