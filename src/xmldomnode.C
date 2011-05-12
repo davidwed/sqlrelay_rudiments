@@ -182,13 +182,13 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 
 xmldomnode *xmldomnode::getFirstTagChild() const {
 	xmldomnode	*node=getChild((uint64_t)0);
-	return (node->getType()==TAG_XMLDOMNODETYPE)?
-					node:node->getNextTagSibling();
+	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
+						node:node->getNextTagSibling();
 }
 
 xmldomnode *xmldomnode::getFirstTagChild(const char *name) const {
 	xmldomnode	*node=getChild(name);
-	return (node->getType()==TAG_XMLDOMNODETYPE)?
+	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
 					node:node->getNextTagSibling(name);
 }
 
@@ -196,7 +196,7 @@ xmldomnode *xmldomnode::getFirstTagChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
 	xmldomnode	*node=getChild(name,attributename,attributevalue);
-	return (node->getType()==TAG_XMLDOMNODETYPE)?
+	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
 		node:node->getNextTagSibling(name,attributename,attributevalue);
 }
 
