@@ -361,9 +361,22 @@ bool xmldomnode::deleteNode(xmldomnode *node,
 				uint64_t position, const char *name,
 				xmldomnode **first, xmldomnode **last,
 				uint64_t *count) {
+	xmldomnode	*current=unlinkNode(node,position,name,
+						first,last,count);
+	if (!current) {
+		return false;
+	}
+	delete current;
+	return true;
+}
+
+xmldomnode *xmldomnode::unlinkNode(xmldomnode *node,
+				uint64_t position, const char *name,
+				xmldomnode **first, xmldomnode **last,
+				uint64_t *count) {
 
 	if (position>(*count)) {
-		return false;
+		return NULL;
 	}
 	xmldomnode	*current=*first;
 	if (node || name) {
@@ -392,11 +405,28 @@ bool xmldomnode::deleteNode(xmldomnode *node,
 		if (current==*last) {
 			*last=current->pvt->_previous;
 		}
-		delete current;
 		(*count)--;
-		return true;
+		return current;
 	}
-	return false;
+	return NULL;
+}
+
+bool xmldomnode::moveChild(xmldomnode *child,
+				xmldomnode *parent, uint64_t position) {
+	if (!parent || parent->isNullNode()) {
+		return false;
+	}
+printf("before:\n%s\n\n",xml()->getString());
+	xmldomnode *current=unlinkNode(child,0,NULL,
+					&pvt->_firstchild,
+					&pvt->_lastchild,
+					&pvt->_childcount);
+	if (!current) {
+		return false;
+	}
+	bool	retval=parent->insertChild(current,position);
+printf("after:\n%s\n\n",parent->xml()->getString());
+	return retval;
 }
 
 bool xmldomnode::appendChild(xmldomnode *child) {

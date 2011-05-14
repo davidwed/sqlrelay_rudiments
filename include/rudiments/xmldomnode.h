@@ -346,6 +346,10 @@ class xmldomnode {
 			// (and all successive siblings) is incremented.
 		bool	appendChild(xmldomnode *child);
 			// Appends "child" to the list of child nodes.
+		bool	moveChild(xmldomnode *child,
+					xmldomnode *parent, uint64_t position);
+			// Moves "child" from its current position into the
+			// list of child nodes for "parent" at "position".
 		bool	deleteChild(uint64_t position);
 			// Deletes the child node at "position".  The position
 			// of the next sibling (and all successive siblings)

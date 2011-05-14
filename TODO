@@ -1,17 +1,7 @@
-freebsd has TABDLY but no TAB0 or TAB1
-there is now a TAB2 and TAB3 on some platforms
-
 add "customatcommands" thing to modemclient class
 
 xmldom::writeFile() doesn't translate &'s into &amp; or handle other entities
 	either
-
-on redhat 5.2
-AC_TRY_COMPILE's for various functions might succeed even when that function
-is not available, you get "warning: implicit declaration of function ..." but
-it still compiles
-could use FW_TRY_LINK but would need to include all libs or something...
-	not easy
 
 backport chat class changes
 backport new charstring methods
@@ -24,13 +14,10 @@ in serialportprofile class, remove #ifdef's from .h files, just make methods
 
 reduce heap fragmentation where possible
 
-QNX doesn't have:
-	statfs, statvfs or anything like it
-	sys/fcntl.h
-
 add missing programming docs
 
 get a mingw port working
+	poll function missing?
 	printf("%lld",...) doesn't work, it doesn't like the double-l
 	how do I specify a read,write or read/write lock with LockFileEx
 		F_RDLCK, F_WRLCK, etc. need to be
@@ -56,8 +43,8 @@ daemonprocess constructor initializes static members, this is lame and messy
 
 document: cygwin needs "file" command to be able to build dll's
 
-freebsd IPV6_V6ONLY??? socket option
-sysctl on netbsd?
+freebsd IPV6_V6ONLY socket option
+sysctl on netbsd
 
 should be able to associate a zlib handle with a file descriptor and read/write
 	compressed data, just like ssl
@@ -67,7 +54,7 @@ fix math class
 a bunch of static methods can probably be inlined
 
 xml:
-	should be able to validate an xml document against the dtd
+	should be able to validate an xml document against a dtd or schema
 	test invalid xml
 	handle CDATA/internal subsets better
 	xml classes need to support entities defined in the DOCTYPE declaration

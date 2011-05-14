@@ -14,6 +14,10 @@
 					const char *name,
 					xmldomnode **first, xmldomnode **last,
 					uint64_t *count);
+		xmldomnode	*unlinkNode(xmldomnode *node, uint64_t position,
+					const char *name,
+					xmldomnode **first, xmldomnode **last,
+					uint64_t *count);
 		stringbuffer	*xml(stringbuffer *string) const;
 
 

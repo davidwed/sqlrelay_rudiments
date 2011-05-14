@@ -37,6 +37,8 @@
 	added charstring::capitalize method
 	made stringbuffer::terminate append a \0 unconditionally
 	made stringbuffer::clear() terminate the buffer at position 0
+	fixed a bug where xmldomnode::getFirstXXX() could crash if there was
+		no first XXX
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now
