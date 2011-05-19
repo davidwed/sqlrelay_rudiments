@@ -51,6 +51,7 @@ static mutex	*_gemutex;
 groupentry::groupentry() {
 	pvt=new groupentryprivate;
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
+	pvt->_grp=NULL;
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		rawbuffer::zero(&pvt->_grpbuffer,sizeof(pvt->_grpbuffer));
