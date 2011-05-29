@@ -73,7 +73,7 @@ regularexpression::~regularexpression() {
 			pcre_free(pvt->_expr);
 		}
 		if (pvt->_extra) {
-			delete pvt->_extra;
+			pcre_free(pvt->_extra);
 		}
 	#else
 		regfree(&pvt->_expr);
@@ -87,7 +87,7 @@ bool regularexpression::compile(const char *pattern) {
 			pcre_free(pvt->_expr);
 		}
 		if (pvt->_extra) {
-			delete pvt->_extra;
+			pcre_free(pvt->_extra);
 			pvt->_extra=NULL;
 		}
 		const char	*error;
@@ -104,7 +104,7 @@ bool regularexpression::study() {
 	#ifdef RUDIMENTS_HAS_PCRE
 		const char	*error;
 		if (pvt->_extra) {
-			delete pvt->_extra;
+			pcre_free(pvt->_extra);
 			pvt->_extra=NULL;
 		}
 		pvt->_extra=pcre_study(pvt->_expr,0,&error);
