@@ -54,14 +54,14 @@ class charstring {
 			// in "dest" to accommodate the new string.
 			// Returns a pointer to "dest".
 		static	char	*append(char *dest, double number,
-							unsigned short scale);
+							uint16_t scale);
 			// Converts "number" to a string using "scale" and
 			// appends it to "dest".  Assumes that there is enough
 			// room remaining in "dest" to accommodate the new
 			// string.  Returns a pointer to "dest".
 		static	char	*append(char *dest, double number,
-						unsigned short precision,
-						unsigned short scale);
+						uint16_t precision,
+						uint16_t scale);
 			// Converts "number" to a string using "precision" and
 			// "scale" and appends it to "dest".  Assumes that there
 			// is enough room remaining in "dest" to accommodate
@@ -219,12 +219,12 @@ class charstring {
 		static	void	strip(char *str1, const char *str2);
 			// Strips all instances of "str2" from "str1".
 
-		static	int	integerLength(int16_t number);
-		static	int	integerLength(int32_t number);
-		static	int	integerLength(int64_t number);
-		static	int	integerLength(uint16_t number);
-		static	int	integerLength(uint32_t number);
-		static	int	integerLength(uint64_t number);
+		static	uint16_t	integerLength(int16_t number);
+		static	uint16_t	integerLength(int32_t number);
+		static	uint16_t	integerLength(int64_t number);
+		static	uint16_t	integerLength(uint16_t number);
+		static	uint16_t	integerLength(uint32_t number);
+		static	uint16_t	integerLength(uint64_t number);
 			// Returns the number of characters needed to represent
 			// "number" as a string.
 
@@ -240,42 +240,42 @@ class charstring {
 		static	char	*parseNumber(int16_t number);
 		static	char	*parseNumber(uint16_t number);
 		static	char	*parseNumber(int16_t number,
-						unsigned short zeropadding);
+						uint16_t zeropadding);
 		static	char	*parseNumber(uint16_t number,
-						unsigned short zeropadding);
+						uint16_t zeropadding);
 		static	char	*parseNumber(int32_t number);
 		static	char	*parseNumber(uint32_t number);
 		static	char	*parseNumber(int32_t number,
-						unsigned short zeropadding);
+						uint16_t zeropadding);
 		static	char	*parseNumber(uint32_t number,
-						unsigned short zeropadding);
+						uint16_t zeropadding);
 		static	char	*parseNumber(int64_t number);
 		static	char	*parseNumber(uint64_t number);
 		static	char	*parseNumber(int64_t number,
-						unsigned short zeropadding);
+						uint16_t zeropadding);
 		static	char	*parseNumber(uint64_t number,
-						unsigned short zeropadding);
+						uint16_t zeropadding);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted
 			// by the calling program.
 		static	char	*parseNumber(float number);
 		static	char	*parseNumber(float number,
-						unsigned short scale);
+						uint16_t scale);
 		static	char	*parseNumber(float number,
-						unsigned short precision,
-						unsigned short scale);
+						uint16_t precision,
+						uint16_t scale);
 		static	char	*parseNumber(double number);
 		static	char	*parseNumber(double number,
-						unsigned short scale);
+						uint16_t scale);
 		static	char	*parseNumber(double number,
-						unsigned short precision,
-						unsigned short scale);
+						uint16_t precision,
+						uint16_t scale);
 		static	char	*parseNumber(long double number);
 		static	char	*parseNumber(long double number,
-						unsigned short scale);
+						uint16_t scale);
 		static	char	*parseNumber(long double number,
-						unsigned short precision,
-						unsigned short scale);
+						uint16_t precision,
+						uint16_t scale);
 			// Returns a string representing "number".  The string
 			// is allocated inside the function and must be deleted
 			// by the calling program.

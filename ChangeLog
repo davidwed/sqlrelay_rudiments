@@ -42,6 +42,9 @@
 	added xmldomnode::moveChild
 	regularexpression class uses pcre_free rather than delete to free
 		pcre_extra block now
+	fixed printf %lld's in timezonefile class
+	made several unsigned shorts use uint16_t in charstring class
+	changed integerLength to return uint16_t rather than int
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

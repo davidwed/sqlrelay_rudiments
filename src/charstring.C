@@ -301,7 +301,7 @@ char *charstring::httpUnescape(const char *input) {
 		if (*ptr=='+') {
 			(*outptr)=' ';
 		} else if (*ptr=='%') {
-			*ptr++;
+			ptr++;
 			char	hex[5];
 			hex[0]='0';
 			hex[2]='x';
@@ -554,9 +554,9 @@ char *charstring::parseNumber(int16_t number) {
 }
 
 char *charstring::parseNumber(int16_t number,
-				unsigned short zeropadding) {
-	int	len=integerLength(number);
-	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+				uint16_t zeropadding) {
+	uint16_t	len=integerLength(number);
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
 	snprintf(str,strlength,"%0*hd",zeropadding,number);
 	return str;
@@ -566,10 +566,10 @@ char *charstring::parseNumber(uint16_t number) {
 	return parseNumber(number,1);
 }
 
-char *charstring::parseNumber(uint16_t number,
-				unsigned short zeropadding) {
-	int	len=integerLength(number);
-	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+char *charstring::parseNumber(uint16_t number, uint16_t zeropadding) {
+	uint16_t	len=integerLength(number);
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
+printf("strlength=%d\n",strlength);
 	char	*str=new char[strlength];
 	int	strindex=strlength-1;
 	str[strindex--]='\0';
@@ -587,10 +587,9 @@ char *charstring::parseNumber(int32_t number) {
 	return parseNumber(number,1);
 }
 
-char *charstring::parseNumber(int32_t number,
-				unsigned short zeropadding) {
-	int	len=integerLength(number);
-	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+char *charstring::parseNumber(int32_t number, uint16_t zeropadding) {
+	uint16_t	len=integerLength(number);
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
 	snprintf(str,strlength,"%0*d",zeropadding,number);
 	return str;
@@ -600,10 +599,9 @@ char *charstring::parseNumber(uint32_t number) {
 	return parseNumber(number,1);
 }
 
-char *charstring::parseNumber(uint32_t number,
-				unsigned short zeropadding) {
-	int	len=integerLength(number);
-	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+char *charstring::parseNumber(uint32_t number, uint16_t zeropadding) {
+	uint16_t	len=integerLength(number);
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
 	int	strindex=strlength-1;
 	str[strindex--]='\0';
@@ -621,10 +619,9 @@ char *charstring::parseNumber(int64_t number) {
 	return parseNumber(number,1);
 }
 
-char *charstring::parseNumber(int64_t number,
-				unsigned short zeropadding) {
-	int	len=integerLength(number);
-	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
+	uint16_t	len=integerLength(number);
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
 	snprintf(str,strlength,"%0*lld",zeropadding,(long long)number);
 	return str;
@@ -634,10 +631,9 @@ char *charstring::parseNumber(uint64_t number) {
 	return parseNumber(number,1);
 }
 
-char *charstring::parseNumber(uint64_t number,
-				unsigned short zeropadding) {
-	int	len=integerLength(number);
-	int	strlength=((zeropadding>len)?zeropadding:len)+1;
+char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
+	uint16_t	len=integerLength(number);
+	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
 	int	strindex=strlength-1;
 	str[strindex--]='\0';
@@ -658,8 +654,7 @@ char *charstring::parseNumber(float number) {
 	return str;
 }
 
-char *charstring::parseNumber(float number,
-				unsigned short scale) {
+char *charstring::parseNumber(float number, uint16_t scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
 	snprintf(str,22,"%.*f",scale,number);
@@ -667,8 +662,7 @@ char *charstring::parseNumber(float number,
 }
 
 char *charstring::parseNumber(float number,
-				unsigned short precision,
-				unsigned short scale) {
+				uint16_t precision, uint16_t scale) {
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
@@ -684,7 +678,7 @@ char *charstring::parseNumber(double number) {
 }
 
 char *charstring::parseNumber(double number,
-				unsigned short scale) {
+				uint16_t scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
 	snprintf(str,22,"%.*f",scale,number);
@@ -692,8 +686,7 @@ char *charstring::parseNumber(double number,
 }
 
 char *charstring::parseNumber(double number,
-				unsigned short precision,
-				unsigned short scale) {
+				uint16_t precision, uint16_t scale) {
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
@@ -708,8 +701,7 @@ char *charstring::parseNumber(long double number) {
 	return str;
 }
 
-char *charstring::parseNumber(long double number,
-				unsigned short scale) {
+char *charstring::parseNumber(long double number, uint16_t scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
 	snprintf(str,22,"%.*Lf",scale,number);
@@ -717,8 +709,7 @@ char *charstring::parseNumber(long double number,
 }
 
 char *charstring::parseNumber(long double number,
-				unsigned short precision,
-				unsigned short scale) {
+				uint16_t precision, uint16_t scale) {
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
@@ -731,48 +722,48 @@ void charstring::bothTrim(char *string, char character) {
 	rightTrim(string,character);
 }
 
-int charstring::integerLength(int16_t number) {
-	int	length=(number>0)?0:1;
+uint16_t charstring::integerLength(int16_t number) {
+	uint16_t	length=(number>0)?0:1;
 	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(int32_t number) {
-	int	length=(number>0)?0:1;
+uint16_t charstring::integerLength(int32_t number) {
+	uint16_t	length=(number>0)?0:1;
 	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(int64_t number) {
-	int	length=(number>0)?0:1;
+uint16_t charstring::integerLength(int64_t number) {
+	uint16_t	length=(number>0)?0:1;
 	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(uint16_t number) {
-	int	length=(number>0)?0:1;
+uint16_t charstring::integerLength(uint16_t number) {
+	uint16_t	length=(number>0)?0:1;
 	for (uint16_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(uint32_t number) {
-	int	length=(number>0)?0:1;
+uint16_t charstring::integerLength(uint32_t number) {
+	uint16_t	length=(number>0)?0:1;
 	for (uint32_t num=number; num>0; num=num/10) {
 		length++;
 	}
 	return length;
 }
 
-int charstring::integerLength(uint64_t number) {
-	int	length=(number>0)?0:1;
+uint16_t charstring::integerLength(uint64_t number) {
+	uint16_t	length=(number>0)?0:1;
 	for (uint64_t num=number; num>0; num=num/10) {
 		length++;
 	}
@@ -821,15 +812,15 @@ char *charstring::append(char *dest, double number) {
 	return retval;
 }
 
-char *charstring::append(char *dest, double number, unsigned short scale) {
+char *charstring::append(char *dest, double number, uint16_t scale) {
 	char	*str=charstring::parseNumber(number,scale);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char *charstring::append(char *dest, double number, unsigned short precision,
-							unsigned short scale) {
+char *charstring::append(char *dest, double number, uint16_t precision,
+							uint16_t scale) {
 	char	*str=charstring::parseNumber(number,precision,scale);
 	char	*retval=append(dest,str);
 	delete[] str;
