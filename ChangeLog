@@ -40,6 +40,7 @@
 	fixed a bug where xmldomnode::getFirstXXX() could crash if there was
 		no first XXX
 	added xmldomnode::moveChild
+	fixed uninitialized _grp in groupentry class
 	regularexpression class uses pcre_free rather than delete to free
 		pcre_extra block now
 	fixed printf %lld's in timezonefile class

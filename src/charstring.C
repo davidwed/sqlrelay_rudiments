@@ -569,7 +569,6 @@ char *charstring::parseNumber(uint16_t number) {
 char *charstring::parseNumber(uint16_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-printf("strlength=%d\n",strlength);
 	char	*str=new char[strlength];
 	int	strindex=strlength-1;
 	str[strindex--]='\0';
