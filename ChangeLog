@@ -46,6 +46,7 @@
 	fixed printf %lld's in timezonefile class
 	made several unsigned shorts use uint16_t in charstring class
 	changed integerLength to return uint16_t rather than int
+	added man page to rpm spec file
 
 0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
 	xmlsax/dom classes use optimal read and write buffers now

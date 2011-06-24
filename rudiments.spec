@@ -37,6 +37,14 @@ Group: Development/Libraries
 Documentation for rudiments.
 
 
+%package man
+Summary: Man pages for rudiments
+Group: Development/Libraries
+
+%description man
+Man pages for rudiments.
+
+
 %prep
 %setup -q
 
@@ -71,6 +79,9 @@ rm -rf %{buildroot}
 
 %files doc
 %{docdir}
+
+%files man
+%{_mandir}
 
 %changelog
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
