@@ -1126,7 +1126,7 @@ const char *filesystem::getDeviceName() const {
 bool filesystem::getFilesystemSpecificString(const char *path,
 						const char **str) {
 #ifdef RUDIMENTS_HAVE_STATVFS
-	STATFS(path,str,f_fstr)
+	CHARSTATFS(path,str,f_fstr)
 #else
 	*str=NULL;
 	return true;
@@ -1135,7 +1135,7 @@ bool filesystem::getFilesystemSpecificString(const char *path,
 
 bool filesystem::getFilesystemSpecificString(int fd, const char **str) {
 #ifdef RUDIMENTS_HAVE_STATVFS
-	FSTATFS(fd,str,f_fstr)
+	CHARFSTATFS(fd,str,f_fstr)
 #else
 	*str=NULL;
 	return true;
@@ -1200,7 +1200,7 @@ bool filesystem::getTypeName(int fd, const char **name) {
 	CHARFSTATFS(fd,name,f_fstypename)
 #else
 	#ifdef RUDIMENTS_HAVE_STATVFS
-		FSTATFS(fd,name,f_basetype)
+		CHARFSTATFS(fd,name,f_basetype)
 	#else
 		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
 			struct statfs st;
