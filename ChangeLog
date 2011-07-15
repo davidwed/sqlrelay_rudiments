@@ -1,5 +1,4 @@
 0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
-	added -Werror to -pthreads test in configure script
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for

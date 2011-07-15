@@ -260,7 +260,7 @@ AC_DEFUN([FW_CHECK_PTHREAD_COMPILE],
 if ( test -z "$MINGW32" )
 then
 	AC_MSG_CHECKING(if gcc -pthread works during compile phase)
-	FW_TRY_COMPILE([#include <stdio.h>],[printf("hello");],[-Werror -pthread],[PTHREAD_COMPILE="-pthread"],[PTHREAD_COMPILE=""])
+	FW_TRY_COMPILE([#include <stdio.h>],[printf("hello");],[-pthread],[PTHREAD_COMPILE="-pthread"],[PTHREAD_COMPILE=""])
 	if ( test -n "$PTHREAD_COMPILE" )
 	then
 		AC_MSG_RESULT(yes)
