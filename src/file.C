@@ -1165,7 +1165,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_UTIME)
-		utimebuf	tb;
+		utimbuf	tb;
 		tb.actime=static_cast<time_t>(lastaccesstime);
 		tb.modtime=static_cast<time_t>(lastmodtime);
 		int	result;
