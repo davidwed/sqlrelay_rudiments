@@ -361,6 +361,10 @@ AC_MSG_CHECKING(for unistd.h)
 AC_TRY_COMPILE([#include <unistd.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_UNISTD_H, 1, Some systems have unistd.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for utime.h)
+AC_TRY_COMPILE([#include <utime.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_UTIME_H, 1, Some systems have utime.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for netdb.h)
 AC_TRY_COMPILE([#include <netdb.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_NETDB_H, 1, Some systems have netdb.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -1339,8 +1343,18 @@ then
 	_commit(0);,AC_DEFINE(RUDIMENTS_HAVE_COMMIT,1,Some systems have _commit) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
+AC_MSG_CHECKING(for utime)
+AC_TRY_COMPILE([#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_UTIME_H
+	#include <utime.h>
+#endif],
+utime("",0);,AC_DEFINE(RUDIMENTS_HAVE_UTIME,1,Some systems have utime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for utimes)
-AC_TRY_COMPILE([#include <sys/time.h>],
+AC_TRY_COMPILE([#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_UTIME_H
+	#include <utime.h>
+#endif],
 utimes("",0);,AC_DEFINE(RUDIMENTS_HAVE_UTIMES,1,Some systems have utimes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test -n "$MINGW32" )

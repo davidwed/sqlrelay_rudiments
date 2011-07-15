@@ -7,6 +7,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+
 #ifndef RUDIMENTS_HAVE_UTIMES
 	#include <rudiments/datetime.h>
 #endif
@@ -27,6 +28,9 @@
 #include <sys/time.h>
 #ifdef RUDIMENTS_HAVE_XATTRS
 	#include <sys/xattr.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UTIME_H
+	#include <utime.h>
 #endif
 
 #ifdef MINGW32
@@ -1158,6 +1162,15 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		int	result;
 		do {
 			result=utimes(filename,tv);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#elif defined(RUDIMENTS_HAVE_UTIME)
+		utimebuf	tb;
+		tb.actime=static_cast<time_t>(lastaccesstime);
+		tb.modtime=static_cast<time_t>(lastmodtime);
+		int	result;
+		do {
+			result=utime(filename,&tb);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETFILETIME)

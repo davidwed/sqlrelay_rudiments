@@ -1,4 +1,6 @@
 0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
+	added test for utime and utime.h
+	utime is used on platforms that don't have utimes
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for
