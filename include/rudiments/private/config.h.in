@@ -541,7 +541,7 @@
 /* Some systems have pathconf */
 #undef RUDIMENTS_HAVE_PATHCONF
 
-/* Define if poll is available in <poll.h> or <sys/poll.h>. */
+/* Some systems have poll */
 #undef RUDIMENTS_HAVE_POLL
 
 /* Some systems have posix_fadvise */

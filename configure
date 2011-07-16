@@ -24379,9 +24379,6 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 fi
 
-#
-# Checking poll()
-#
 for ac_header in poll.h sys/poll.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -24421,20 +24418,15 @@ poll(fds, 1, 1000);
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
-  enableval=yes
-else
-  enableval=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enableval" >&5
-$as_echo "$enableval" >&6; }
-if test "${enableval}" = "yes"; then
 
 $as_echo "#define RUDIMENTS_HAVE_POLL 1" >>confdefs.h
-
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 else
-as_fn_error $? "System MUST support poll(2)" "$LINENO" 5
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 echo "******************************"
