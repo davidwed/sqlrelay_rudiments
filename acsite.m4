@@ -1355,7 +1355,8 @@ memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memme
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#include <sys/mman.h>],
+#define _GNU_SOURCE
+#include <string.h>],
 char *tmp; memccpy(tmp,NULL,1);,AC_DEFINE(RUDIMENTS_HAVE_MEMCCPY_CHAR,1,Some systems have memccpy with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 fi
