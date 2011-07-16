@@ -92,12 +92,17 @@ bool serversocket::dontReuseAddresses() {
 }
 
 bool serversocket::setLingerOnClose(int timeout, int onoff) {
-	struct	linger	ling;
-	ling.l_onoff=onoff;
-	ling.l_linger=timeout;
-	return !setSockOpt(SOL_SOCKET,SO_LINGER,
+	#ifdef SO_LINGER
+		struct	linger	ling;
+		ling.l_onoff=onoff;
+		ling.l_linger=timeout;
+		return !setSockOpt(SOL_SOCKET,SO_LINGER,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&ling,
 					sizeof(struct linger));
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 bool serversocket::setReuseAddresses(int onoff) {
