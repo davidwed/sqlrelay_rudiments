@@ -80,7 +80,8 @@ const char *serviceentry::getName() const {
 }
 
 int serviceentry::getPort() const {
-	return filedescriptor::netToHost((uint16_t)pvt->_se->s_port);
+	return filedescriptor::netToHost(
+			static_cast<uint16_t>(pvt->_se->s_port));
 }
 
 const char *serviceentry::getProtocol() const {
