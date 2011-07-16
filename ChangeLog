@@ -1,6 +1,11 @@
 0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
 	added test for utime and utime.h
 	utime is used on platforms that don't have utimes
+	updated process class methods to return -1 and set ENOSUPP for
+		process-group related calls on systems that don't have the
+		concept of process-groups
+	added a call to select() instead of poll() for file-descriptor passing
+		for systems that don't support poll()
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for

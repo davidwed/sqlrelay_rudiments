@@ -1759,16 +1759,26 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	// receive the msghdr
 	int	result;
 	do {
-#ifdef RUDIMENTS_HAVE_POLL
-		struct pollfd	fds;
-		fds.fd=pvt->_fd;
-		fds.events=POLLIN;
-
 		// wait for data to come in
-		if (poll(&fds,1,FILEDESCRIPTOR_TIMEOUT)<1) {
-			return false;
-		}
-#endif
+		// This code was contributed.  There may be some magic in using
+		// poll rather than select so I didn't replace the call to poll,
+		// but some systems (such as most versions of windows) don't
+		// have poll, so for those, we'll try to use an equivalent
+		// call to select.
+		#ifdef RUDIMENTS_HAVE_POLL
+			// FIXME: move this into a signal-safe safePoll() method
+			struct pollfd	fds;
+			fds.fd=pvt->_fd;
+			fds.events=POLLIN;
+			if (poll(&fds,1,FILEDESCRIPTOR_TIMEOUT)<1) {
+				return false;
+			}
+		#else
+			if (safeSelect(0,FILEDESCRIPTOR_TIMEOUT*1000,
+							false,true)<1) {
+				return false;
+			}
+		#endif
 		result=recvmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {
