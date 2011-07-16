@@ -29,9 +29,9 @@ class semaphoresetprivate {
 
 #ifndef RUDIMENTS_HAVE_SEMUN
 union semun {
-	int	val;
+	int			val;
 	struct	semid_ds	*buf;
-	ushort	*array;
+	unsigned short		*array;
 };
 #endif
 
