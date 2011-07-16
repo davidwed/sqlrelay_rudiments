@@ -343,6 +343,16 @@ AC_DEFUN([FW_CHECK_OSX],
 [
 ])
 
+dnl Checks for minix and adds some macros if it is
+AC_DEFUN([FW_CHECK_MINIX],
+[
+case $host_os in
+	*minix* )
+		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE"
+		;;
+esac
+])
+
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
