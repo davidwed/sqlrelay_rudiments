@@ -30,78 +30,40 @@ class serialportprofile {
 		};
 
 		enum	baudrate_t {
-			baud_0=B0,
-			baud_50=B50,
-			baud_75=B75,
-			baud_110=B110,
-			baud_134=B134,
-			baud_150=B150,
-			baud_200=B200,
-			baud_300=B300,
-			baud_600=B600,
-			baud_1200=B1200,
-			baud_1800=B1800,
-			baud_2400=B2400,
-			baud_4800=B4800,
-			baud_9600=B9600,
-			#if defined(B57600)
-			baud_19200=B19200,
-			#elif defined(EXTA)
-			baud_19200=EXTA,
-			#endif
-			#if defined(B38400)
-			baud_38400=B38400,
-			#elif defined(EXTB)
-			baud_38400=EXTB,
-			#endif
-			#ifdef B57600
-			baud_57600=B57600,
-			#endif
-			#ifdef B76800
-			baud_76800=B76800,
-			#endif
-			#ifdef B115200
-			baud_115200=B115200,
-			#endif
-			#ifdef B230400
-			baud_230400=B230400,
-			#endif
-			#ifdef B460800
-			baud_460800=B460800,
-			#endif
-			#ifdef B500000
-			baud_500000=B500000,
-			#endif
-			#ifdef B576000
-			baud_576000=B576000,
-			#endif
-			#ifdef B921600
-			baud_921600=B921600,
-			#endif
-			#ifdef B1000000
-			baud_1000000=B1000000,
-			#endif
-			#ifdef B1142000
-			baud_1152000=B1152000,
-			#endif
-			#ifdef B1500000
-			baud_1500000=B1500000,
-			#endif
-			#ifdef B2000000
-			baud_2000000=B2000000,
-			#endif
-			#ifdef B2500000
-			baud_2500000=B2500000,
-			#endif
-			#ifdef B3000000
-			baud_3000000=B3000000,
-			#endif
-			#ifdef B3500000
-			baud_3500000=B3500000,
-			#endif
-			#ifdef B4000000
-			baud_4000000=B4000000,
-			#endif
+			baud_0=0,
+			baud_50,
+			baud_75,
+			baud_110,
+			baud_134,
+			baud_150,
+			baud_200,
+			baud_300,
+			baud_600,
+			baud_1200,
+			baud_1800,
+			baud_2400,
+			baud_4800,
+			baud_9600,
+			baud_19200,
+			exta,
+			baud_38400,
+			extb,
+			baud_57600,
+			baud_76800,
+			baud_115200,
+			baud_230400,
+			baud_460800,
+			baud_500000,
+			baud_576000,
+			baud_921600,
+			baud_1000000,
+			baud_1152000,
+			baud_1500000,
+			baud_2000000,
+			baud_2500000,
+			baud_3000000,
+			baud_3500000,
+			baud_4000000
 		};
 
 		enum	charsize_t {
@@ -111,59 +73,39 @@ class serialportprofile {
 			cs_8=CS8
 		};
 
-		#ifdef NLDLY
 		enum	newlinedelay_t {
-			nl_none=NL0,
-			nl_100=NL1
+			nl_none=0,
+			nl_100
 		};
-		#endif
 
-		#ifdef CRDLY
 		enum	carriagereturndelay_t {
-			cr_none=CR0,
-			cr_depends=CR1,
-			cr_100=CR2,
-			cr_150=CR3
+			cr_none=0,
+			cr_depends,
+			cr_100,
+			cr_150
 		};
-		#endif
 
-		#ifdef TABDLY
 		enum	tabdelay_t {
-			#ifdef TAB0
-			td_0=TAB0,
-			#endif
-			#ifdef TAB1
-			td_1=TAB1,
-			#endif
-			#ifdef TAB2
-			td_2=TAB2,
-			#endif
-			#ifdef TAB3
-			td_xtabs=TAB3
-			#endif
+			td_0=0,
+			td_1,
+			td_2,
+			td_xtabs
 		};
-		#endif
 
-		#ifdef BSDLY
 		enum	backspacedelay_t {
-			bs_none=BS0,
-			bs_50=BS1
+			bs_none=0,
+			bs_50
 		};
-		#endif
 
-		#ifdef VTDLY
 		enum	verticaltabdelay_t {
-			vt_none=VT0,
-			vt_2=VT1
+			vt_none=0,
+			vt_2
 		};
-		#endif
 
-		#ifdef FFDLY
 		enum	formfeeddelay_t {
-			ff_none=FF0,
-			ff_2=FF1
+			ff_none=0,
+			ff_2
 		};
-		#endif
 
 			serialportprofile();
 			~serialportprofile();
@@ -269,12 +211,10 @@ class serialportprofile {
 			// with a device connected directly to the computer as
 			// opposed to over a modem)
 			// termios flag: CLOCAL
-		#ifdef LOBLK
 		void	blockJobControlOutput(bool truefalse);
 			// block output from a nonconcurrent shell layer
 			// default is not to block
 			// termios flag: LOBLK
-		#endif
 		void	hardwareFlowControl(bool truefalse);
 			// use RTS/CTS flow control
 			// default is not to use RTS/CTS flow control
@@ -328,7 +268,6 @@ class serialportprofile {
 			// default is not to enable the special characters and
 			// not buffer by lines
 			// termios flag: ICANON
-		#ifdef XCASE
 		void	escapedUpperCase(bool truefalse);
 			// If cannonicalInput() is also set true, converts
 			// characters from input to lower case unless they are
@@ -340,7 +279,6 @@ class serialportprofile {
 			// can display upper or lower case, but only transmit/
 			// receive upper case)
 			// termios flag: XCASE
-		#endif
 		void	echoInput(bool truefalse);
 			// If cannonicalInput() is also set true then echo
 			// input.
@@ -366,20 +304,15 @@ class serialportprofile {
 			// reprintCharacter() and wordEraseCharacter().  Also
 			// enables lowerCase().
 			// termios flag: IEXTEN
-		#ifdef ECHOCTL
 		void	echoControlCharacters(bool truefalse);
 			// If echoInput() is also set true, control characters
 			// are echoed as ^X where X is the ascii code for the
 			// character plus 0x40.
 			// termios flag: ECHOCTL
-		#endif
-		#ifdef ECHOPRT
 		void	echoErasedCharacter(bool truefalse);
 			// If cannonicalInput() and echoInput() are also set
 			// true, characters are printed as they are erased.
 			// termios flag: ECHOPRT
-		#endif
-		#ifdef ECHOKE
 		void	emulateKill(bool truefalse);
 			// If cannonicalInput() is also set, the character set
 			// using killCharacter() causes the line to be erased
@@ -387,17 +320,14 @@ class serialportprofile {
 			// (useful when a terminal doesn't support the KILL
 			// character but does support the ERASE character)
 			// termios flag: ECHOKE
-		#endif
 		void	noFlushAfterInterruptOrQuit(bool truefalse);
 			// Disables flushing of the input/output queues when
 			// generating SIGINT, SIGQUIT or SIGSUSP signals.
 			// termios flag: NOFLSH
-		#ifdef PENDIN
 		void	retypePendingCharacters(bool truefalse);
 			// All characters in the input queue are reprinted when
 			// the next character is read.
 			// termios flag: PENDIN
-		#endif
 		void	sendSignalForBackgroundOutput(bool truefalse);
 			// Send the SIGTTOU signal to the process group of a
 			// background process which tries to write to its
@@ -413,14 +343,12 @@ class serialportprofile {
 			// returns true if special characters EOF, EOL, EOL2,
 			// ERASE, KILL, LNEXT, REPRINT, STATUS and WERASE are
 			// enabled and buffering is being done by lines
-		#ifdef XCASE
 		bool	escapedUpperCase();
 			// Returns true if on input, characters are being
 			// converted from upper to lower case unless they are
 			// preceeded by a \ and on output lower case characters
 			// are being converted to upper case and upper case
 			// characters are being preceeded with a \.
-		#endif
 		bool	echoInput();
 			// returns true if input characters are being echoed
 		bool	eraseCharactersOn();
@@ -439,32 +367,24 @@ class serialportprofile {
 			// secondEndOfLineCharacter(), reprintCharacter() and
 			// wordEraseCharacter() are enabled and lowerCase() is
 			// enabled
-		#ifdef ECHOCTL
 		bool	echoControlCharacters();
 			// returns true if control characters are being echoed
 			// as ^X where X is the ascii code for the character
 			// plus 0x40
-		#endif
-		#ifdef ECHOPRT
 		bool	echoErasedCharacter();
 			// returns true if characters are being printed as they
 			// are erased
-		#endif
-		#ifdef ECHOKE
 		bool	emulateKill();
 			// returns true if the character set using
 			// killCharacter() causes the line to be erased
 			// by erasing each character on the line
-		#endif
 		bool	noFlushAfterInterruptOrQuit();
 			// returns true if flushing of the input/output queues
 			// when generating SIGINT, SIGQUIT or SIGSUSP signals
 			// is enabled
-		#ifdef PENDIN
 		bool	retypePendingCharacters();
 			// returns true if all characters in the input queue
 			// are reprinted when the next character is read
-		#endif
 		bool	sendSignalForBackgroundOutput();
 			// returns true if the SIGTTOU signal is being sent
 			// to the process group of a background process which
@@ -514,26 +434,20 @@ class serialportprofile {
 		void	mapNewLineToCarriageReturnOnInput(bool truefalse);
 			// translate new line to carriage return on input
 			// termios flag: INLCR
-		#ifdef ONOEOT
 		void	discardEndOfTransmission(bool truefalse);
 			// termios flat: ONOEOT
-		#endif
 		void	ignoreCarriageReturn(bool truefalse);
 			// ignore carriage return on input
 			// termios flag: IGNCR
 		void	mapCarriageReturnToNewLineOnInput(bool truefalse);
 			// translate carriage return to new line on input
 			// termios flag: ICRNL
-		#ifdef IUCLC
 		void	lowerCase(bool truefalse);
 			// map uppercase characters to lowercase on input
 			// termios flag: IUCLC
-		#endif
-		#ifdef IMAXBEL
 		void	bellIfLineTooLong(bool truefalse);
 			// ring bell when input queue is full
 			// termios flag: IMAXBEL
-		#endif
 
 		// getters...
 		bool	inputParityCheck();
@@ -564,24 +478,18 @@ class serialportprofile {
 		bool	mapNewLineToCarriageReturnOnInput();
 			// returns true if new lines are mapped to carriage
 			// returns on input
-		#ifdef ONOEOT
 		bool	discardEndOfTransmission();
-		#endif
 		bool	ignoreCarriageReturn();
 			// returns true if carriage returns are ignored on input
 		bool	mapCarriageReturnToNewLineOnInput();
 			// returns true if carriage returns are mapped to new
 			// lines on input
-		#ifdef IUCLC
 		bool	lowerCase();
 			// returns true if uppercase characters are mapped to
 			// lowercase on input
-		#endif
-		#ifdef IMAXBEL
 		bool	bellIfLineTooLong();
 			// returns true if the bell will be rung when the input
 			// queue is full
-		#endif
 
 
 
@@ -590,147 +498,99 @@ class serialportprofile {
 		void	postProcessOutput(bool truefalse);
 			// enables implementation-defined output processing
 			// termios flag: OPOST
-		#ifdef OLCUC
 		void	outputUpperCase(bool truefalse);
 			// map lowercase characters to uppercase on output
 			// termios flag: OLCUC
-		#endif
 		void	mapNewLineToCarriageReturnNewLineOnOutput(
 							bool truefalse);
 			// map new line to carriage return/new line on
 			// output
 			// termios flag: ONLCR
-		#ifdef OCRNL
 		void	mapCarriageReturnToNewLineOnOutput(bool truefalse);
 			// map carriage return to new line on output
 			// termios flag: OCRNL
-		#endif
-		#ifdef ONOCR
 		void	dontOutputCarriageReturnAtColumnZero(bool truefalse);
 			// don't output carriage return at column 0
 			// termios flag: ONOCR
-		#endif
-		#ifdef ONLRET
 		void	mapNewLineToCarriageReturnOnOutput(bool truefalse);
 			// map new line to carriage return on output
 			// termios flag: ONLRET
-		#endif
-		#ifdef OFILL
 		void	useFillCharactersForDelay(bool truefalse);
 			// send fill characters for delay instead of using a
 			// timed delay
 			// termios flag: OFILL
-		#endif
-		#ifdef OFDEL
 		void	useDelForFill(bool truefalse);
 			// use the DEL character instead of NULL for the fill
 			// character
 			// termios flag: OFDEL
-		#endif
 		void	expandTabToSpaces(bool truefalse);
 			// map tabs to spaces
 			// termios flag: XTAGS/OXTABS/TAB3
 
-		#ifdef NLDLY
 		void	delayAfterNewLine(newlinedelay_t nldelay);
 			// send a delay after each new line character
 			// termios flag: NLDLY
-		#endif
-		#ifdef CRDLY
 		void	delayAfterCarriageReturn(carriagereturndelay_t crdelay);
 			// send a delay after each carriage return character
 			// termios flag: CRDLY
-		#endif
-		#ifdef TABDLY
 		void	delayAfterTab(tabdelay_t tabdelay);
 			// send a delay after each tab character
 			// termios flag: TABDLY
-		#endif
-		#ifdef BSDLY
 		void	delayAfterBackSpace(backspacedelay_t bsdelay);
 			// send a delay after each backspace character
 			// termios flag: BSDLY
-		#endif
-		#ifdef VTDLY
 		void	delayAfterVerticalTab(verticaltabdelay_t vtdelay);
 			// send a delay after each vertical tab character
 			// termios flag: VTDLY
-		#endif
-		#ifdef FFDLY
 		void	delayAfterFormFeed(formfeeddelay_t ffdelay);
 			// send a delay after each form feed character
 			// termios flag: FFDLY
-		#endif
 
 
 		// getters...
 		bool	postProcessOutput();
 			// returns true if implementation-defined output
 			// processing is enabled
-		#ifdef OLCUC
 		bool	outputUpperCase();
 			// returns true if lowercase characters are mapped to
 			// uppercase on output
-		#endif
 		bool	mapNewLineToCarriageReturnNewLineOnOutput();
 			// returns true if new lines are mapped to carriage
 			// return/new line on output
-		#ifdef OCRNL
 		bool	mapCarriageReturnToNewLineOnOutput();
 			// returns true if carriage returns are mapped to new
 			// lines on output
-		#endif
-		#ifdef ONOCR
 		bool	dontOutputCarriageReturnAtColumnZero();
 			// returns true if carriage returns aren't sent at
 			// column 0
-		#endif
-		#ifdef ONLRET
 		bool	mapNewLineToCarriageReturnOnOutput();
 			// returns true if new lines are mapped to carriage
 			// returns on output
-		#endif
-		#ifdef OFILL
 		bool	useFillCharactersForDelay();
 			// returns true if fill characters are sent for delay
 			// instead of using a timed delay
-		#endif
-		#ifdef OFDEL
 		bool	useDelForFill();
 			// returns true if the DEL character is used instead of
 			// NULL for the fill character
-		#endif
 		bool	expandTabToSpaces();
 			// returns true if the tabs are mapped to spaces
-		#ifdef NLDLY
 		newlinedelay_t		delayAfterNewLine();
 			// returns the delay that is sent after new line
 			// characters
-		#endif
-		#ifdef CRDLY
 		carriagereturndelay_t	delayAfterCarriageReturn();
 			// returns the delay that is sent after carriage return
 			// characters
-		#endif
-		#ifdef TABDLY
 		tabdelay_t		delayAfterTab();
 			// returns the delay that is sent after tab characters
-		#endif
-		#ifdef BSDLY
 		backspacedelay_t	delayAfterBackSpace();
 			// returns the delay that is sent after backspace
 			// characters
-		#endif
-		#ifdef VTDLY
 		verticaltabdelay_t	delayAfterVerticalTab();
 			// returns the delay that is sent after vertical tab
 			// characters
-		#endif
-		#ifdef FFDLY
 		formfeeddelay_t		delayAfterFormFeed();
 			// returns the delay that is sent after form feed
 			// characters
-		#endif
 
 
 
@@ -763,12 +623,10 @@ class serialportprofile {
 			// set the end-of-line character, recognized when 
 			// canonicalInput() is set to true
 			// termios flag: VEOL
-		#ifdef VEOL2
 		void	secondEndOfLineCharacter(cc_t character);
 			// set the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
 			// termios flag: VEOL2
-		#endif
 		void	switchCharacer(cc_t character);
 			// set the switch character
 			// termios flag: VSWTCH/VSWTC
@@ -783,47 +641,35 @@ class serialportprofile {
 			// sent to the process when generateSignals() is set
 			// true
 			// termios flag: VSUSP
-		#ifdef VDSUSP
 		void	delayedSuspendCharacter(cc_t character);
 			// set the character that will cause a SIGTSTP to be
 			// sent to the process when generateSignals() and
 			// extendedFunctions() are set true
 			// termios flag: VDSUSP
-		#endif
-		#ifdef VLNEXT
 		void	literalNextCharcter(cc_t character);
 			// set the character that "quotes" the next character,
 			// depriving it of special meaning, recognized when
 			// extendedFunctions() is set true
 			// termios flag: VLNEXT
-		#endif
-		#ifdef VWERASE
 		void	wordEraseCharcter(cc_t character);
 			// set the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
 			// termios flag: VWERASE
-		#endif
 
-		#ifdef VREPRINT
 		void	reprintCharacter(cc_t character);
 			// set the character that causes unread characters to
 			// be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
 			// termios flag: VREPRINT
-		#endif
-		#ifdef VDISCARD
 		void	discardPendingOutputCharacter(cc_t character);
 			// set the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
 			// termios flag: VDISCARD
-		#endif
 
-		#ifdef VSTATUS
 		void	statusRequestCharacter(cc_t character);
 			// set the status request character
 			// termios flag: VSTATUS
-		#endif
 
 		void	readThreshold(cc_t count);
 			// set the number of characters that must be read
@@ -860,11 +706,9 @@ class serialportprofile {
 		cc_t	endOfLineCharacter();
 			// returns the end-of-line character, recognized when 
 			// canonicalInput() is set to true
-		#ifdef VEOL2
 		cc_t	secondEndOfLineCharacter();
 			// returns the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
-		#endif
 		cc_t	switchCharacer();
 			// returns the switch character
 		cc_t	startCharacter();
@@ -875,37 +719,27 @@ class serialportprofile {
 			// returns the character that will cause a SIGSUSP to be
 			// sent to the process when generateSignals() is set
 			// true
-		#ifdef VDSUSP
 		cc_t	delayedSuspendCharacter();
 			// returns the character that will cause a SIGTSTP to be
 			// sent to the process when generateSignals() and
 			// extendedFunctions() are set true
-		#endif
-		#ifdef VLNEXT
 		cc_t	literalNextCharcter();
 			// returns the character that "quotes" the next
 			// character, depriving it of special meaning,
 			// recognized when extendedFunctions() is set true
-		#endif
-		#ifdef VWERASE
 		cc_t	wordEraseCharcter();
 			// returns the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
-		#endif
 
 
-		#ifdef VREPRINT
 		cc_t	reprintCharacter();
 			// returns the character that causes unread characters
 			// to be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
-		#endif
-		#ifdef VDISCARD
 		cc_t	discardPendingOutputCharacter();
 			// returns the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
-		#endif
 
 		cc_t	statusRequestCharacter();
 			// returns the status request character

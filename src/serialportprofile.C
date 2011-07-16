@@ -5,6 +5,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/character.h>
 #include <rudiments/charstring.h>
+#include <rudiments/error.h>
 
 #include <unistd.h>
 #include <stdio.h>
@@ -76,12 +77,87 @@ void serialportprofile::defaultOptions() {
 	rawbuffer::zero(&pvt->_tio,sizeof(pvt->_tio));
 }
 
+static tcflag_t	br[]={
+	B0,
+	B50,
+	B75,
+	B110,
+	B134,
+	B150,
+	B200,
+	B300,
+	B600,
+	B1200,
+	B1800,
+	B2400,
+	B4800,
+	B9600,
+	#if defined(B19200)
+	B19200,
+	#elif defined(EXTA)
+	EXTA,
+	#endif
+	#if defined(B38400)
+	B38400,
+	#elif defined(EXTB)
+	EXTB,
+	#endif
+	#ifdef B57600
+	B57600,
+	#endif
+	#ifdef B76800
+	B76800,
+	#endif
+	#ifdef B115200
+	B115200,
+	#endif
+	#ifdef B230400
+	B230400,
+	#endif
+	#ifdef B460800
+	B460800,
+	#endif
+	#ifdef B500000
+	B500000,
+	#endif
+	#ifdef B576000
+	B576000,
+	#endif
+	#ifdef B921600
+	B921600,
+	#endif
+	#ifdef B1000000
+	B1000000,
+	#endif
+	#ifdef B1142000
+	B1152000,
+	#endif
+	#ifdef B1500000
+	B1500000,
+	#endif
+	#ifdef B2000000
+	B2000000,
+	#endif
+	#ifdef B2500000
+	B2500000,
+	#endif
+	#ifdef B3000000
+	B3000000,
+	#endif
+	#ifdef B3500000
+	B3500000,
+	#endif
+	#ifdef B4000000
+	B4000000,
+	#endif
+};
+
 bool serialportprofile::inputBaud(serialportprofile::baudrate_t baudrate) {
-	return !cfsetispeed(&pvt->_tio,(tcflag_t)baudrate);
+	return !cfsetispeed(&pvt->_tio,br[baudrate]);
 }
 
 bool serialportprofile::outputBaud(serialportprofile::baudrate_t baudrate) {
-	return !cfsetospeed(&pvt->_tio,(tcflag_t)baudrate);
+	return !cfsetospeed(&pvt->_tio,br[baudrate]);
 }
 
 void serialportprofile::baud(serialportprofile::baudrate_t baudrate) {
@@ -155,7 +231,7 @@ void serialportprofile::baud(serialportprofile::baudrate_t baudrate) {
 				#endif
 				);
 	#endif
-	pvt->_tio.c_cflag|=(tcflag_t)baudrate;
+	pvt->_tio.c_cflag|=br[baudrate];
 }
 
 void serialportprofile::characterSize(serialportprofile::charsize_t size) {
@@ -197,11 +273,11 @@ void serialportprofile::ignoreModemControlLines(bool truefalse) {
 	SET_FLAG(truefalse,c_cflag,CLOCAL)
 }
 
-#ifdef LOBLK
 void serialportprofile::blockJobControlOutput(bool truefalse) {
-	SET_FLAG(truefalse,c_cflag,LOBLK)
+	#ifdef LOBLK
+		SET_FLAG(truefalse,c_cflag,LOBLK)
+	#endif
 }
-#endif
 
 void serialportprofile::hardwareFlowControl(bool truefalse) {
 	#if defined(CRTSCTS)
@@ -326,11 +402,14 @@ bool serialportprofile::ignoreModemControlLines() {
 	return GET_FLAG(c_cflag,CLOCAL);
 }
 
-#ifdef LOBLK
 bool serialportprofile::blockJobControlOutput() {
-	return GET_FLAG(c_cflag,LOBLK);
+	#ifdef LOBLK
+		return GET_FLAG(c_cflag,LOBLK);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
 bool serialportprofile::hardwareFlowControl() {
 	#if defined(CRTSCTS)
@@ -341,6 +420,9 @@ bool serialportprofile::hardwareFlowControl() {
 		return GET_FLAG(c_cflag,CRTS_IFLOW);
 	#elif defined(CCTS_OFLOW)
 		return GET_FLAG(c_cflag,CRTS_OFLOW);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -352,11 +434,11 @@ void serialportprofile::canonicalInput(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ICANON)
 }
 
-#ifdef XCASE
 void serialportprofile::escapedUpperCase(bool truefalse) {
-	SET_FLAG(truefalse,c_lflag,XCASE)
+	#ifdef XCASE
+		SET_FLAG(truefalse,c_lflag,XCASE)
+	#endif
 }
-#endif
 
 void serialportprofile::echoInput(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,ECHO)
@@ -378,33 +460,33 @@ void serialportprofile::extendedFunctions(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,IEXTEN)
 }
 
-#ifdef ECHOCTL
 void serialportprofile::echoControlCharacters(bool truefalse) {
-	SET_FLAG(truefalse,c_lflag,ECHOCTL)
+	#ifdef ECHOCTL
+		SET_FLAG(truefalse,c_lflag,ECHOCTL)
+	#endif
 }
-#endif
 
-#ifdef ECHOPRT
 void serialportprofile::echoErasedCharacter(bool truefalse) {
-	SET_FLAG(truefalse,c_lflag,ECHOPRT)
+	#ifdef ECHOPRT
+		SET_FLAG(truefalse,c_lflag,ECHOPRT)
+	#endif
 }
-#endif
 
-#ifdef ECHOKE
 void serialportprofile::emulateKill(bool truefalse) {
-	SET_FLAG(truefalse,c_lflag,ECHOKE)
+	#ifdef ECHOKE
+		SET_FLAG(truefalse,c_lflag,ECHOKE)
+	#endif
 }
-#endif
 
 void serialportprofile::noFlushAfterInterruptOrQuit(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,NOFLSH)
 }
 
-#ifdef PENDIN
 void serialportprofile::retypePendingCharacters(bool truefalse) {
-	SET_FLAG(truefalse,c_lflag,PENDIN)
+	#ifdef PENDIN
+		SET_FLAG(truefalse,c_lflag,PENDIN)
+	#endif
 }
-#endif
 
 void serialportprofile::sendSignalForBackgroundOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_lflag,TOSTOP)
@@ -418,11 +500,14 @@ bool serialportprofile::canonicalInput() {
 	return GET_FLAG(c_lflag,ICANON);
 }
 
-#ifdef XCASE
 bool serialportprofile::escapedUpperCase() {
-	return GET_FLAG(c_lflag,XCASE);
+	#ifdef XCASE
+		return GET_FLAG(c_lflag,XCASE);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
 bool serialportprofile::echoInput() {
 	return GET_FLAG(c_lflag,ECHO);
@@ -444,33 +529,45 @@ bool serialportprofile::extendedFunctions() {
 	return GET_FLAG(c_lflag,IEXTEN);
 }
 
-#ifdef ECHOCTL
 bool serialportprofile::echoControlCharacters() {
-	return GET_FLAG(c_lflag,ECHOCTL);
+	#ifdef ECHOCTL
+		return GET_FLAG(c_lflag,ECHOCTL);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef ECHOPRT
 bool serialportprofile::echoErasedCharacter() {
-	return GET_FLAG(c_lflag,ECHOPRT);
+	#ifdef ECHOPRT
+		return GET_FLAG(c_lflag,ECHOPRT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef ECHOKE
 bool serialportprofile::emulateKill() {
-	return GET_FLAG(c_lflag,ECHOKE);
+	#ifdef ECHOKE
+		return GET_FLAG(c_lflag,ECHOKE);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
 bool serialportprofile::noFlushAfterInterruptOrQuit() {
 	return GET_FLAG(c_lflag,NOFLSH);
 }
 
-#ifdef PENDIN
 bool serialportprofile::retypePendingCharacters() {
-	return GET_FLAG(c_lflag,PENDIN);
+	#ifdef PENDIN
+		return GET_FLAG(c_lflag,PENDIN);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
 bool serialportprofile::sendSignalForBackgroundOutput() {
 	return GET_FLAG(c_lflag,TOSTOP);
@@ -524,17 +621,17 @@ void serialportprofile::mapCarriageReturnToNewLineOnInput(bool truefalse) {
 	SET_FLAG(truefalse,c_iflag,ICRNL)
 }
 
-#ifdef IUCLC
 void serialportprofile::lowerCase(bool truefalse) {
-	SET_FLAG(truefalse,c_iflag,IUCLC)
+	#ifdef IUCLC
+		SET_FLAG(truefalse,c_iflag,IUCLC)
+	#endif
 }
-#endif
 
-#ifdef IMAXBEL
 void serialportprofile::bellIfLineTooLong(bool truefalse) {
-	SET_FLAG(truefalse,c_iflag,IMAXBEL)
+	#ifdef IMAXBEL
+		SET_FLAG(truefalse,c_iflag,IMAXBEL)
+	#endif
 }
-#endif
 
 bool serialportprofile::inputParityCheck() {
 	return GET_FLAG(c_iflag,INPCK);
@@ -584,68 +681,68 @@ bool serialportprofile::mapCarriageReturnToNewLineOnInput() {
 	return GET_FLAG(c_iflag,ICRNL);
 }
 
-#ifdef IUCLC
 bool serialportprofile::lowerCase() {
-	return GET_FLAG(c_iflag,IUCLC);
+	#ifdef IUCLC
+		return GET_FLAG(c_iflag,IUCLC);
+	#endif
 }
-#endif
 
-#ifdef IMAXBEL
 bool serialportprofile::bellIfLineTooLong() {
-	return GET_FLAG(c_iflag,IMAXBEL);
+	#ifdef IMAXBEL
+		return GET_FLAG(c_iflag,IMAXBEL);
+	#endif
 }
-#endif
 
 void serialportprofile::postProcessOutput(bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,OPOST)
 }
 
-#ifdef OLCUC
 void serialportprofile::outputUpperCase(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,OLCUC)
+	#ifdef OLCUC
+		SET_FLAG(truefalse,c_oflag,OLCUC)
+	#endif
 }
-#endif
 
 void serialportprofile::mapNewLineToCarriageReturnNewLineOnOutput(
 							bool truefalse) {
 	SET_FLAG(truefalse,c_oflag,ONLCR)
 }
 
-#ifdef ONOEOT
 void serialportprofile::discardEndOfTransmission(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,ONOEOT)
+	#ifdef ONOEOT
+		SET_FLAG(truefalse,c_oflag,ONOEOT)
+	#endif
 }
-#endif
 
-#ifdef OCRNL
 void serialportprofile::mapCarriageReturnToNewLineOnOutput(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,OCRNL)
+	#ifdef OCRNL
+		SET_FLAG(truefalse,c_oflag,OCRNL)
+	#endif
 }
-#endif
 
-#ifdef ONOCR
 void serialportprofile::dontOutputCarriageReturnAtColumnZero(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,ONOCR)
+	#ifdef ONOCR
+		SET_FLAG(truefalse,c_oflag,ONOCR)
+	#endif
 }
-#endif
 
-#ifdef ONLRET
 void serialportprofile::mapNewLineToCarriageReturnOnOutput(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,ONLRET)
+	#ifdef ONLRET
+		SET_FLAG(truefalse,c_oflag,ONLRET)
+	#endif
 }
-#endif
 
-#ifdef OFILL
 void serialportprofile::useFillCharactersForDelay(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,OFILL)
+	#ifdef OFILL
+		SET_FLAG(truefalse,c_oflag,OFILL)
+	#endif
 }
-#endif
 
-#ifdef OFDEL
 void serialportprofile::useDelForFill(bool truefalse) {
-	SET_FLAG(truefalse,c_oflag,OFDEL)
+	#ifdef OFDEL
+		SET_FLAG(truefalse,c_oflag,OFDEL)
+	#endif
 }
-#endif
 
 void serialportprofile::expandTabToSpaces(bool truefalse) {
 	#if defined(XTABS)
@@ -657,103 +754,143 @@ void serialportprofile::expandTabToSpaces(bool truefalse) {
 	#endif
 }
 
-#ifdef NLDLY
 void serialportprofile::delayAfterNewLine(
 		serialportprofile::newlinedelay_t nldelay) {
-	pvt->_tio.c_oflag&=~NLDLY;
-	pvt->_tio.c_oflag|=(tcflag_t)nldelay;
+	#ifdef NLDLY
+		static tcflag_t	nld[]={NL0,NL1};
+		pvt->_tio.c_oflag&=~NLDLY;
+		pvt->_tio.c_oflag|=nld[nldelay];
+	#endif
 }
-#endif
 
-#ifdef CRDLY
 void serialportprofile::delayAfterCarriageReturn(
 		serialportprofile::carriagereturndelay_t crdelay) {
-	pvt->_tio.c_oflag&=~CRDLY;
-	pvt->_tio.c_oflag|=(tcflag_t)crdelay;
+	#ifdef CRDLY
+		static tcflag_t	crd[]={CR0,CR1,CR2,CR3};
+		pvt->_tio.c_oflag&=~CRDLY;
+		pvt->_tio.c_oflag|=crd[crdelay];
+	#endif
 }
-#endif
 
-#ifdef TABDLY
 void serialportprofile::delayAfterTab(
 		serialportprofile::tabdelay_t tabdelay) {
-	pvt->_tio.c_oflag&=~TABDLY;
-	pvt->_tio.c_oflag|=(tcflag_t)tabdelay;
+	#ifdef TABDLY
+		static tcflag_t td[]={
+			#ifdef TAB0
+			TAB0,
+			#endif
+			#ifdef TAB1
+			TAB1,
+			#endif
+			#ifdef TAB2
+			TAB2,
+			#endif
+			#ifdef TAB3
+			TAB3
+			#endif
+			};
+		pvt->_tio.c_oflag&=~TABDLY;
+		pvt->_tio.c_oflag|=td[tabdelay];
+	#endif
 }
-#endif
 
-#ifdef BSDLY
 void serialportprofile::delayAfterBackSpace(
 		serialportprofile::backspacedelay_t bsdelay) {
-	pvt->_tio.c_oflag&=~BSDLY;
-	pvt->_tio.c_oflag|=(tcflag_t)bsdelay;
+	#ifdef BSDLY
+		static tcflag_t	bsd[]={BS0,BS1};
+		pvt->_tio.c_oflag&=~BSDLY;
+		pvt->_tio.c_oflag|=bsd[bsdelay];
+	#endif
 }
-#endif
 
-#ifdef VTDLY
 void serialportprofile::delayAfterVerticalTab(
 		serialportprofile::verticaltabdelay_t vtdelay) {
-	pvt->_tio.c_oflag&=~VTDLY;
-	pvt->_tio.c_oflag|=(tcflag_t)vtdelay;
+	#ifdef VTDLY
+		static tcflag_t	vtd[]={VT0,VT1};
+		pvt->_tio.c_oflag&=~VTDLY;
+		pvt->_tio.c_oflag|=vtd[vtdelay];
+	#endif
 }
-#endif
 
-#ifdef FFDLY
 void serialportprofile::delayAfterFormFeed(
 		serialportprofile::formfeeddelay_t ffdelay) {
-	pvt->_tio.c_oflag&=~FFDLY;
-	pvt->_tio.c_oflag|=(tcflag_t)ffdelay;
+	#ifdef FFDLY
+		static tcflag_t	ffd[]={FF0,FF1};
+		pvt->_tio.c_oflag&=~FFDLY;
+		pvt->_tio.c_oflag|=ffd[ffdelay];
+	#endif
 }
-#endif
 
 bool serialportprofile::postProcessOutput() {
 	return GET_FLAG(c_oflag,OPOST);
 }
 
-#ifdef OLCUC
 bool serialportprofile::outputUpperCase() {
-	return GET_FLAG(c_oflag,OLCUC);
+	#ifdef OLCUC
+		return GET_FLAG(c_oflag,OLCUC);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
 bool serialportprofile::mapNewLineToCarriageReturnNewLineOnOutput() {
 	return GET_FLAG(c_oflag,ONLCR);
 }
 
-#ifdef ONOEOT
 bool serialportprofile::discardEndOfTransmission() {
-	return GET_FLAG(c_oflag,ONOEOT);
+	#ifdef ONOEOT
+		return GET_FLAG(c_oflag,ONOEOT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef OCRNL
 bool serialportprofile::mapCarriageReturnToNewLineOnOutput() {
-	return GET_FLAG(c_oflag,OCRNL);
+	#ifdef OCRNL
+		return GET_FLAG(c_oflag,OCRNL);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef ONOCR
 bool serialportprofile::dontOutputCarriageReturnAtColumnZero() {
-	return GET_FLAG(c_oflag,ONOCR);
+	#ifdef ONOCR
+		return GET_FLAG(c_oflag,ONOCR);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef ONLRET
 bool serialportprofile::mapNewLineToCarriageReturnOnOutput() {
-	return GET_FLAG(c_oflag,ONLRET);
+	#ifdef ONLRET
+		return GET_FLAG(c_oflag,ONLRET);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef OFILL
 bool serialportprofile::useFillCharactersForDelay() {
-	return GET_FLAG(c_oflag,OFILL);
+	#ifdef OFILL
+		return GET_FLAG(c_oflag,OFILL);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
-#ifdef OFDEL
 bool serialportprofile::useDelForFill() {
-	return GET_FLAG(c_oflag,OFDEL);
+	#ifdef OFDEL
+		return GET_FLAG(c_oflag,OFDEL);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
-#endif
 
 bool serialportprofile::expandTabToSpaces() {
 	#if defined(XTABS)
@@ -765,47 +902,103 @@ bool serialportprofile::expandTabToSpaces() {
 	#endif
 }
 
-#ifdef NLDLY
 serialportprofile::newlinedelay_t
 		serialportprofile::delayAfterNewLine() {
-	return (newlinedelay_t)GET_FLAG(c_cflag,NLDLY);
+	#ifdef NLDLY
+		switch (GET_FLAG(c_cflag,NLDLY)) {
+			case NL1:
+				return nl_100;
+			default:
+				return nl_none;
+		}
+	#else
+		return nl_none;
+	#endif
 }
-#endif
 
-#ifdef CRDLY
 serialportprofile::carriagereturndelay_t
 		serialportprofile::delayAfterCarriageReturn() {
-	return (carriagereturndelay_t)GET_FLAG(c_cflag,CRDLY);
+	#ifdef CRDLY
+		switch (GET_FLAG(c_cflag,CRDLY)) {
+			case CR1:
+				return cr_depends;
+			case CR2:
+				return cr_100;
+			case CR3:
+				return cr_150;
+			default:
+				return cr_none;
+		}
+	#else
+		return cr_none;
+	#endif
 }
-#endif
 
-#ifdef TABDLY
 serialportprofile::tabdelay_t
 		serialportprofile::delayAfterTab() {
-	return (tabdelay_t)GET_FLAG(c_cflag,TABDLY);
+	#ifdef TABDLY
+		switch (GET_FLAG(c_cflag,TABDLY)) {
+			#ifdef TAB1
+			case TAB1:
+				return td_1;
+			#endif
+			#ifdef TAB2
+			case TAB2:
+				return td_2;
+			#endif
+			#ifdef TAB3
+			case TAB3:
+				return td_xtabs;
+			#endif
+			default:
+				return td_0;
+		}
+	#else
+		return td_0;
+	#endif
 }
-#endif
 
-#ifdef BSDLY
 serialportprofile::backspacedelay_t
 		serialportprofile::delayAfterBackSpace() {
-	return (backspacedelay_t)GET_FLAG(c_cflag,BSDLY);
+	#ifdef BSDLY
+		switch (GET_FLAG(c_cflag,BSDLY)) {
+			case BS1:
+				return bs_50;
+			default:
+				return bs_none;
+		}
+	#else
+		return bs_none;
+	#endif
 }
-#endif
 
-#ifdef VTDLY
 serialportprofile::verticaltabdelay_t
 		serialportprofile::delayAfterVerticalTab() {
-	return (verticaltabdelay_t)GET_FLAG(c_cflag,VTDLY);
+	#ifdef VTDLY
+		switch (GET_FLAG(c_cflag,VTDLY)) {
+			case VT1:
+				return vt_2;
+			default:
+				return vt_none;
+		}
+	#else
+		return vt_none;
+	#endif
 }
-#endif
 
-#ifdef FFDLY
 serialportprofile::formfeeddelay_t
 		serialportprofile::delayAfterFormFeed() {
-	return (formfeeddelay_t)GET_FLAG(c_cflag,FFDLY);
+	#ifdef FFDLY
+		switch (GET_FLAG(c_cflag,FFDLY)) {
+			case FF1:
+				return ff_2;
+			default:
+				return ff_none;
+		}
+	#else
+		return ff_none;
+	#endif
 }
-#endif
 
 void serialportprofile::interruptCharacter(cc_t character) {
 	SET_CHAR(VINTR,character)
@@ -831,21 +1024,19 @@ void serialportprofile::endOfLineCharacter(cc_t character) {
 	SET_CHAR(VEOL,character)
 }
 
-#ifdef VEOL2
 void serialportprofile::secondEndOfLineCharacter(cc_t character) {
-	SET_CHAR(VEOL2,character)
-}
-#endif
-
-#if defined(VSWTCH) || defined(VSWTC)
-void serialportprofile::switchCharacer(cc_t character) {
-	#ifdef VSWTCH
-	SET_CHAR(VSWTCH,character)
-	#else
-	SET_CHAR(VSWTC,character)
+	#ifdef VEOL2
+		SET_CHAR(VEOL2,character)
 	#endif
 }
-#endif
+
+void serialportprofile::switchCharacer(cc_t character) {
+	#if defined(VSWTCH)
+		SET_CHAR(VSWTCH,character)
+	#elif defined(VSWTC)
+		SET_CHAR(VSWTC,character)
+	#endif
+}
 
 void serialportprofile::startCharacter(cc_t character) {
 	SET_CHAR(VSTART,character)
@@ -859,42 +1050,42 @@ void serialportprofile::suspendCharacter(cc_t character) {
 	SET_CHAR(VSUSP,character)
 }
 
-#ifdef VDSUSP
 void serialportprofile::delayedSuspendCharacter(cc_t character) {
-	SET_CHAR(VDSUSP,character)
+	#ifdef VDSUSP
+		SET_CHAR(VDSUSP,character)
+	#endif
 }
-#endif
 
-#ifdef VLNEXT
 void serialportprofile::literalNextCharcter(cc_t character) {
-	SET_CHAR(VLNEXT,character)
+	#ifdef VLNEXT
+		SET_CHAR(VLNEXT,character)
+	#endif
 }
-#endif
 
-#ifdef VWERASE
 void serialportprofile::wordEraseCharcter(cc_t character) {
-	SET_CHAR(VWERASE,character)
+	#ifdef VWERASE
+		SET_CHAR(VWERASE,character)
+	#endif
 }
-#endif
 
 
-#ifdef VREPRINT
 void serialportprofile::reprintCharacter(cc_t character) {
-	SET_CHAR(VREPRINT,character)
+	#ifdef VREPRINT
+		SET_CHAR(VREPRINT,character)
+	#endif
 }
-#endif
 
-#ifdef VDISCARD
 void serialportprofile::discardPendingOutputCharacter(cc_t character) {
-	SET_CHAR(VDISCARD,character)
+	#ifdef VDISCARD
+		SET_CHAR(VDISCARD,character)
+	#endif
 }
-#endif
 
-#ifdef VSTATUS
 void serialportprofile::statusRequestCharacter(cc_t character) {
-	SET_CHAR(VSTATUS,character)
+	#ifdef VSTATUS
+		SET_CHAR(VSTATUS,character)
+	#endif
 }
-#endif
 
 void serialportprofile::readThreshold(cc_t count) {
 	SET_CHAR(VMIN,count)
@@ -928,21 +1119,25 @@ cc_t serialportprofile::endOfLineCharacter() {
 	return GET_CHAR(VEOL);
 }
 
-#ifdef VEOL2
 cc_t serialportprofile::secondEndOfLineCharacter() {
-	return GET_CHAR(VEOL2);
-}
-#endif
-
-#if defined(VSWTCH) || defined(VSWTC)
-cc_t serialportprofile::switchCharacer() {
-	#ifdef VSWTCH
-	return GET_CHAR(VSWTCH);
+	#ifdef VEOL2
+		return GET_CHAR(VEOL2);
 	#else
-	return GET_CHAR(VSWTC);
+		error::setErrorNumber(ENOSYS);
+		return 0;
 	#endif
 }
-#endif
+
+cc_t serialportprofile::switchCharacer() {
+	#if defined(VSWTCH)
+		return GET_CHAR(VSWTCH);
+	#elif defined(VSWTC)
+		return GET_CHAR(VSWTC);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
+}
 
 cc_t serialportprofile::startCharacter() {
 	return GET_CHAR(VSTART);
@@ -956,41 +1151,59 @@ cc_t serialportprofile::suspendCharacter() {
 	return GET_CHAR(VSUSP);
 }
 
-#ifdef VDSUSP
 cc_t serialportprofile::delayedSuspendCharacter() {
-	return GET_CHAR(VDSUSP);
+	#ifdef VDSUSP
+		return GET_CHAR(VDSUSP);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
-#endif
 
-#ifdef VLNEXT
 cc_t serialportprofile::literalNextCharcter() {
-	return GET_CHAR(VLNEXT);
+	#ifdef VLNEXT
+		return GET_CHAR(VLNEXT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
-#endif
 
-#ifdef VWERASE
 cc_t serialportprofile::wordEraseCharcter() {
-	return GET_CHAR(VWERASE);
+	#ifdef VWERASE
+		return GET_CHAR(VWERASE);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
-#endif
 
-#ifdef VREPRINT
 cc_t serialportprofile::reprintCharacter() {
-	return GET_CHAR(VREPRINT);
+	#ifdef VREPRINT
+		return GET_CHAR(VREPRINT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
-#endif
 
-#ifdef VDISCARD
 cc_t serialportprofile::discardPendingOutputCharacter() {
-	return GET_CHAR(VDISCARD);
+	#ifdef VDISCARD
+		return GET_CHAR(VDISCARD);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
-#endif
 
-#ifdef VSTATUS
 cc_t serialportprofile::statusRequestCharacter() {
-	return GET_CHAR(VSTATUS);
+	#ifdef VSTATUS
+		return GET_CHAR(VSTATUS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
-#endif
 
 cc_t serialportprofile::readThreshold() {
 	return GET_CHAR(VMIN);
@@ -1035,7 +1248,7 @@ serialportprofile::baudrate_t serialportprofile::translateBaudString(
 		return baud_4800;
 	} else if (!charstring::compare(baudrate,"9600")) {
 		return baud_9600;
-	#if defined(B57600)
+	#if defined(B19200)
 	} else if (!charstring::compare(baudrate,"19200")) {
 		return baud_19200;
 	#elif defined(EXTA)
