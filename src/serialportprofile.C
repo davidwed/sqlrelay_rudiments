@@ -831,9 +831,11 @@ void serialportprofile::endOfLineCharacter(cc_t character) {
 	SET_CHAR(VEOL,character)
 }
 
+#ifdef VEOL2
 void serialportprofile::secondEndOfLineCharacter(cc_t character) {
 	SET_CHAR(VEOL2,character)
 }
+#endif
 
 #if defined(VSWTCH) || defined(VSWTC)
 void serialportprofile::switchCharacer(cc_t character) {
@@ -926,9 +928,11 @@ cc_t serialportprofile::endOfLineCharacter() {
 	return GET_CHAR(VEOL);
 }
 
+#ifdef VEOL2
 cc_t serialportprofile::secondEndOfLineCharacter() {
 	return GET_CHAR(VEOL2);
 }
+#endif
 
 #if defined(VSWTCH) || defined(VSWTC)
 cc_t serialportprofile::switchCharacer() {

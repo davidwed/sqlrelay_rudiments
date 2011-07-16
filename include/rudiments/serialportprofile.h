@@ -763,10 +763,12 @@ class serialportprofile {
 			// set the end-of-line character, recognized when 
 			// canonicalInput() is set to true
 			// termios flag: VEOL
+		#ifdef VEOL2
 		void	secondEndOfLineCharacter(cc_t character);
 			// set the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
 			// termios flag: VEOL2
+		#endif
 		void	switchCharacer(cc_t character);
 			// set the switch character
 			// termios flag: VSWTCH/VSWTC
@@ -858,9 +860,11 @@ class serialportprofile {
 		cc_t	endOfLineCharacter();
 			// returns the end-of-line character, recognized when 
 			// canonicalInput() is set to true
+		#ifdef VEOL2
 		cc_t	secondEndOfLineCharacter();
 			// returns the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
+		#endif
 		cc_t	switchCharacer();
 			// returns the switch character
 		cc_t	startCharacter();
