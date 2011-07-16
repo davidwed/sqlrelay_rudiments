@@ -14718,6 +14718,13 @@ fi
 
 
 
+case $host_os in
+	*minix* )
+		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE"
+		;;
+esac
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dynamic library extension" >&5
 $as_echo_n "checking for dynamic library extension... " >&6; }
 if ( test -n "$CYGWIN" )
