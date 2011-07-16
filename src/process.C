@@ -2,9 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/process.h>
-#ifdef MINGW32
-	#include <rudiments/error.h>
-#endif
+#include <rudiments/error.h>
 
 #ifndef __USE_XOPEN_EXTENDED
 	// for getsid()
@@ -63,12 +61,10 @@ pid_t process::getProcessGroupId() {
 pid_t process::getProcessGroupId(pid_t pid) {
 	#if defined(RUDIMENTS_HAVE_GETPGID)
 		return getpgid(pid);
-	#elif defined(MINGW32)
-		// windows doesn't have the notion of process groups
+	#else
+		// windows and minix don't have the notion of process groups
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no getpgid or anything like it
 	#endif
 }
 
@@ -83,12 +79,10 @@ bool process::setProcessGroupId(pid_t pgid) {
 bool process::setProcessGroupId(pid_t pid, pid_t pgid) {
 	#if defined(RUDIMENTS_HAVE_SETPGID)
 		return !setpgid(pid,pgid);
-	#elif defined(MINGW32)
-		// windows doesn't have the notion of process groups
+	#else
+		// windows and minix don't have the notion of process groups
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		#error no getpgid or anything like it
 	#endif
 }
 
@@ -99,12 +93,10 @@ pid_t process::getSessionId() {
 pid_t process::getSessionId(pid_t pid) {
 	#if defined(RUDIMENTS_HAVE_GETSID)
 		return getsid(pid);
-	#elif defined(MINGW32)
-		// windows doesn't have the notion of sessions
+	#else
+		// windows and minix don't have the notion of sessions
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no getpgid or anything like it
 	#endif
 }
 

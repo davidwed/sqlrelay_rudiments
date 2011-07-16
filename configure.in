@@ -1707,9 +1707,6 @@ then
 setitimer(0,NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),INCLUDE_INTERVALTIMER="0"; AC_MSG_RESULT(no))
 fi
 
-#
-# Checking poll()
-#
 AC_CHECK_HEADERS(poll.h sys/poll.h)
 AC_MSG_CHECKING([for poll])
 AC_TRY_COMPILE([
@@ -1724,13 +1721,8 @@ fds[0].fd = 0;
 fds[0].events = POLLIN | POLLOUT | POLLERR | POLLHUP | POLLNVAL;
 
 poll(fds, 1, 1000);
-], enableval=yes, enableval=no)
-AC_MSG_RESULT($enableval)
-if test "${enableval}" = "yes"; then
-AC_DEFINE(RUDIMENTS_HAVE_POLL, 1, [Define if poll is available in <poll.h> or <sys/poll.h>.])
-else
-AC_MSG_ERROR([System MUST support poll(2)])
-fi
+],
+AC_DEFINE(RUDIMENTS_HAVE_POLL,1,Some systems have poll) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 
 echo "******************************"

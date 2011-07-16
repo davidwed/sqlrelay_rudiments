@@ -81,10 +81,10 @@ class process {
 		static	pid_t	getSessionId(pid_t pid);
 				// returns the session id of the process pid
 
-		static	gid_t	getRealUserId();
+		static	uid_t	getRealUserId();
 				// returns the real user id of the
 				// current process
-		static	gid_t	getEffectiveUserId();
+		static	uid_t	getEffectiveUserId();
 				// returns the effective user id of the
 				// current process
 
