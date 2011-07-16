@@ -410,18 +410,13 @@ then
 		dnl cross compiling
 		echo "cross compiling"
 
-		dnl disable pthread for mingw but
-		dnl hardcode it for other platforms
-		if ( test -z "$MINGW32" )
+		if ( test -n "$PTHREADPATH" )
 		then
-			if ( test -n "$PTHREADPATH" )
-			then
-				PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
-				PTHREADLIB="-L$PTHREADPATH/lib -lpthread -phtread"
-			else
-				PTHREADINCLUDES="$PTHREAD_COMPILE"
-				PTHREADLIB="-lpthread -pthread"
-			fi
+			PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
+			PTHREADLIB="-L$PTHREADPATH/lib -lpthread -phtread"
+		else
+			PTHREADINCLUDES="$PTHREAD_COMPILE"
+			PTHREADLIB="-lpthread -pthread"
 		fi
 		HAVE_PTHREAD="yes"
 
