@@ -1348,6 +1348,16 @@ void *a=NULL; memrchr(a,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMRCHR,1,Some systems ha
 #include <string.h>],
 memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memmem) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+	AC_MSG_CHECKING(for memccpy with char * argument)
+	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/mman.h>],
+char *tmp; memccpy(tmp,NULL,1);,AC_DEFINE(RUDIMENTS_HAVE_MEMCCPY_CHAR,1,Some systems have memccpy with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 fi
 
 ])

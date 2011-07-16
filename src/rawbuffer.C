@@ -34,7 +34,15 @@ void *rawbuffer::copyWithOverlap(void *dest, const void *src, size_t size) {
 
 void *rawbuffer::copyUntil(void *dest, const void *src,
 				unsigned char character, size_t size) {
-	return (dest && src)?memccpy(dest,src,(int)character,size):NULL;
+	#ifdef RUDIMENTS_HAVE_MEMCCPY_CHAR
+		return (dest && src)?static_cast<void *>(
+					memccpy(static_cast<char *>(dest),
+					static_cast<const char *>(src),
+					static_cast<int>(character),size)):NULL;
+	#else
+		return (dest && src)?memccpy(dest,src,
+					static_cast<int>(character),size):NULL;
+	#endif
 }
 
 void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {

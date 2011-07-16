@@ -418,6 +418,9 @@
 /* Some systems use caddr_t argument for madvise */
 #undef RUDIMENTS_HAVE_MADVISE_CADDR_T
 
+/* Some systems have memccpy with char argument */
+#undef RUDIMENTS_HAVE_MEMCCPY_CHAR
+
 /* Some systems have memmem */
 #undef RUDIMENTS_HAVE_MEMMEM
 
