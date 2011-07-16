@@ -684,12 +684,18 @@ bool serialportprofile::mapCarriageReturnToNewLineOnInput() {
 bool serialportprofile::lowerCase() {
 	#ifdef IUCLC
 		return GET_FLAG(c_iflag,IUCLC);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool serialportprofile::bellIfLineTooLong() {
 	#ifdef IMAXBEL
 		return GET_FLAG(c_iflag,IMAXBEL);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
