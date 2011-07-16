@@ -9,6 +9,10 @@
 	#include <sys/siginfo.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD
+	#include <pthread.h>
+#endif
+
 
 #if !defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC) && \
 	!defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO) && \
