@@ -171,8 +171,8 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 
 bool memorymap::sync(off64_t offset, size_t len,
 			bool immediate, bool invalidate) {
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	#ifdef RUDIMENTS_HAVE_MSYNC
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	int	result;
 	do {
 		result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
@@ -181,6 +181,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return FlushViewOfFile(reinterpret_cast<void *>(ptr),len);
 	#else
 	return true;
