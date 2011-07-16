@@ -657,7 +657,7 @@ AC_TRY_COMPILE([#include <sys/siginfo.h>],
 struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO,1,Some systems have struct timespec in sys/siginfo.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for struct timespec in pthread.h)
-AC_TRY_COMPILE([#include <ptherad.h>],
+AC_TRY_COMPILE([#include <pthread.h>],
 struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD,1,Some systems have struct timespec in pthread.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for in_addr_t type)

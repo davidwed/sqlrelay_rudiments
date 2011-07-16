@@ -18379,7 +18379,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for struct timespec in pthread.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <ptherad.h>
+#include <pthread.h>
 int
 main ()
 {
