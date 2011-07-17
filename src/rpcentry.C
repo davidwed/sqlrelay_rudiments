@@ -29,11 +29,16 @@ namespace rudiments {
 class rpcentryprivate {
 	friend class rpcentry;
 	private:
+		#if (defined(RUDIMENTS_HAVE_GETRPCBYNAME) && \
+			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)) || \
+			(defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
 		rpcent	*_re;
 		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
-				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
-			rpcent	_rebuffer;
-			char	*_buffer;
+			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
+		rpcent	_rebuffer;
+		char	*_buffer;
+		#endif
 		#endif
 };
 
