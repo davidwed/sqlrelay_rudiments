@@ -6,8 +6,14 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-// for spwd, functions
-#include <shadow.h>
+#if defined(RUDIMENTS_HAVE_GETSPNAM) || defined(RUDIMENTS_HAVE_GETSPNAM_R)
+	#define RUDIMENTS_HAVE_SHADOW
+#endif
+
+#ifdef RUDIMENTS_HAVE_SHADOW
+	// for spwd, functions
+	#include <shadow.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,10 +22,6 @@
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
-#endif
-
-#if defined(RUDIMENTS_HAVE_GETSPNAM) || defined(RUDIMENTS_HAVE_GETSPNAM_R)
-	#define RUDIMENTS_HAVE_SHADOW
 #endif
 
 #ifdef RUDIMENTS_HAVE_SHADOW
