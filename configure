@@ -18330,8 +18330,32 @@ fi
 $as_echo "$STATFS_STYLE" >&6; }
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for struct timespec" >&5
-$as_echo_n "checking for struct timespec... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for struct timespec in time.h" >&5
+$as_echo_n "checking for struct timespec in time.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <time.h>
+int
+main ()
+{
+struct timespec a;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_STRUCT_TIMESPEC 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for struct timespec in sys/time.h" >&5
+$as_echo_n "checking for struct timespec in sys/time.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/time.h>
@@ -18345,7 +18369,7 @@ struct timespec a;
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_STRUCT_TIMESPEC 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
