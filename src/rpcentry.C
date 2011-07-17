@@ -110,7 +110,8 @@ bool rpcentry::needsMutex() {
 }
 
 void rpcentry::setMutex(mutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
+	#if defined(RUDIMENTS_HAVE_RPC) && \
+		!defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 		!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
 		_remutex=mtx;
 	#endif
