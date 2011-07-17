@@ -26,57 +26,78 @@
 namespace rudiments {
 #endif
 
+#if (defined(RUDIMENTS_HAVE_GETRPCBYNAME) && \
+	defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)) || \
+	(defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
+	#define RUDIMENTS_HAVE_RPC
+#endif
+
+#ifdef RUDIMENTS_HAVE_RPC
 class rpcentryprivate {
 	friend class rpcentry;
 	private:
-		#if (defined(RUDIMENTS_HAVE_GETRPCBYNAME) && \
-			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)) || \
-			(defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
-				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
 		rpcent	*_re;
 		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
-		rpcent	_rebuffer;
-		char	*_buffer;
-		#endif
+			rpcent	_rebuffer;
+			char	*_buffer;
 		#endif
 };
+#endif
 
 // LAME: not in the class
-#if (!defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
-	!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
+#if defined(RUDIMENTS_HAVE_RPC) && \
+	(!defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
+		!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
 static mutex	*_remutex;
 #endif
 
 
 rpcentry::rpcentry() {
-	pvt=new rpcentryprivate;
-	pvt->_re=NULL;
-	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
-		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
-		rawbuffer::zero(&pvt->_rebuffer,sizeof(pvt->_rebuffer));
-		pvt->_buffer=NULL;
+	#ifdef RUDIMENTS_HAVE_RPC
+		pvt=new rpcentryprivate;
+		pvt->_re=NULL;
+		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
+			rawbuffer::zero(&pvt->_rebuffer,sizeof(pvt->_rebuffer));
+			pvt->_buffer=NULL;
+		#endif
 	#endif
 }
 
 rpcentry::~rpcentry() {
-	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
-		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
-		delete[] pvt->_buffer;
+	#ifdef RUDIMENTS_HAVE_RPC
+		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
+			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
+			delete[] pvt->_buffer;
+		#endif
+		delete pvt;
 	#endif
-	delete pvt;
 }
 
 const char *rpcentry::getName() const {
-	return pvt->_re->r_name;
+	#ifdef RUDIMENTS_HAVE_RPC
+		return pvt->_re->r_name;
+	#else
+		return NULL;
+	#endif
 }
 
 int rpcentry::getNumber() const {
-	return pvt->_re->r_number;
+	#ifdef RUDIMENTS_HAVE_RPC
+		return pvt->_re->r_number;
+	#else
+		return -1;
+	#endif
 }
 
 const char * const *rpcentry::getAliasList() const {
-	return pvt->_re->r_aliases;
+	#ifdef RUDIMENTS_HAVE_RPC
+		return pvt->_re->r_aliases;
+	#else
+		return NULL;
+	#endif
 }
 
 bool rpcentry::needsMutex() {
@@ -159,62 +180,74 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && !remutex->unlock()));
 	#else
-		#error no getrpcbyname/number or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
-	rpcentry	re;
-	if (re.initialize(name)) {
-		int	counter;
-		for (counter=0; re.getAliasList()[counter]; counter++);
-		char	**alias=new char *[counter+1];
-		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
-			alias[i]=charstring::duplicate(re.getAliasList()[i]);
+	#ifdef RUDIMENTS_HAVE_RPC
+		rpcentry	re;
+		if (re.initialize(name)) {
+			int	counter;
+			for (counter=0; re.getAliasList()[counter]; counter++);
+			char	**alias=new char *[counter+1];
+			alias[counter]=NULL;
+			for (int i=0; i<counter; i++) {
+				alias[i]=charstring::duplicate(
+						re.getAliasList()[i]);
+			}
+			*aliaslist=alias;
+			return true;
 		}
-		*aliaslist=alias;
-		return true;
-	}
+	#endif
 	return false;
 }
 
 bool rpcentry::getName(int number, char **name) {
-	rpcentry	re;
-	if (re.initialize(number)) {
-		*name=charstring::duplicate(re.getName());
-		return true;
-	}
+	#ifdef RUDIMENTS_HAVE_RPC
+		rpcentry	re;
+		if (re.initialize(number)) {
+			*name=charstring::duplicate(re.getName());
+			return true;
+		}
+	#endif
 	return false;
 }
 
 bool rpcentry::getAliasList(int number, char ***aliaslist) {
-	rpcentry	re;
-	if (re.initialize(number)) {
-		int	counter;
-		for (counter=0; re.getAliasList()[counter]; counter++);
-		char	**alias=new char *[counter+1];
-		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
-			alias[i]=charstring::duplicate(re.getAliasList()[i]);
+	#ifdef RUDIMENTS_HAVE_RPC
+		rpcentry	re;
+		if (re.initialize(number)) {
+			int	counter;
+			for (counter=0; re.getAliasList()[counter]; counter++);
+			char	**alias=new char *[counter+1];
+			alias[counter]=NULL;
+			for (int i=0; i<counter; i++) {
+				alias[i]=charstring::duplicate(
+						re.getAliasList()[i]);
+			}
+			*aliaslist=alias;
+			return true;
 		}
-		*aliaslist=alias;
-		return true;
-	}
+	#endif
 	return false;
 }
 
 void rpcentry::print() const {
 
+	#ifdef RUDIMENTS_HAVE_RPC
 	if (!pvt->_re) {
 		return;
 	}
+	#endif
 
 	printf("Name: %s\n",getName());
 	printf("Number: %d\n",getNumber());
 	printf("Alias list:\n");
-	for (int i=0; getAliasList()[i]; i++) {
-		printf("	%s\n",getAliasList()[i]);
+	const char * const *aliaslist=getAliasList();
+	for (int i=0; aliaslist && aliaslist[i]; i++) {
+		printf("	%s\n",aliaslist[i]);
 	}
 }
 
