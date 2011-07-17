@@ -8,6 +8,9 @@
 		for systems that don't support poll()
 	added tests for timespec in various header files
 	added test for dlopen
+	updated configure script not to outright disable classes if the
+		functions they're dependent on aren't found, but rather for
+		the methods to return erros and set errno to ENOSYS
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for
