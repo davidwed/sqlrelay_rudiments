@@ -42,7 +42,7 @@ dynamiclib::~dynamiclib() {
 }
 
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
-#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
+#if defined(RUDIMENTS_HAVE_DLOPEN)
 	int	flag=(loaddependencies)?RTLD_NOW:RTLD_LAZY;
 	if (global) {
 		flag|=RTLD_GLOBAL;
@@ -51,39 +51,45 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		pvt->_handle=dlopen(library,flag);
 	} while (!pvt->_handle && error::getErrorNumber()==EINTR);
 	return (pvt->_handle!=NULL);
-#else
+#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 	pvt->_handle=LoadLibraryEx(library,NULL,
 			(loaddependencies)?DONT_RESOLVE_DLL_REFERENCES:0);
 	return (pvt->_handle)?true:false;
+#else
+	#error no dlopen or anything like it
 #endif
 }
 
 bool dynamiclib::close() {
-#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
+#if defined(RUDIMENTS_HAVE_DLOPEN)
 	int	result;
 	do {
 		result=!dlclose(pvt->_handle);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
-#else
+#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 	return FreeLibrary(pvt->_handle);
+#else
+	#error no dlclose or anything like it
 #endif
 }
 
 void *dynamiclib::getSymbol(const char *symbol) const {
-#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
+#if defined(RUDIMENTS_HAVE_DLOPEN)
 	void	*symhandle;
 	do {
 		symhandle=dlsym(pvt->_handle,symbol);
 	} while (!symhandle && error::getErrorNumber()==EINTR);
 	return (pvt->_handle)?symhandle:NULL;
-#else
+#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 	return (void *)GetProcAddress(pvt->_handle,symbol);
+#else
+	#error no dlsym or anything like it
 #endif
 }
 
 char *dynamiclib::getError() const {
-#ifndef RUDIMENTS_HAVE_LOADLIBRARYEX
+#if defined(RUDIMENTS_HAVE_DLOPEN)
 	if (_errormutex && !_errormutex->lock()) {
 		return NULL;
 	}
@@ -99,7 +105,7 @@ char *dynamiclib::getError() const {
 		_errormutex->unlock();
 	}
 	return retval;
-#else
+#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 	char	*retval;
 	FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM|
 			FORMAT_MESSAGE_IGNORE_INSERTS|
@@ -112,6 +118,8 @@ char *dynamiclib::getError() const {
 			0,
 			NULL);
 	return retval;
+#else
+	#error no dlsym or anything like it
 #endif
 }
 

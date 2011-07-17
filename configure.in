@@ -1279,12 +1279,12 @@ AC_MSG_CHECKING(for link)
 AC_TRY_COMPILE([#include <unistd.h>],
 link("","");,AC_DEFINE(RUDIMENTS_HAVE_LINK,1,Some systems have link) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for dlopen)
+AC_TRY_COMPILE([#include <dlfcn.h>],
+dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 if ( test -n "$MINGW32" )
 then
-	AC_MSG_CHECKING(for LoadLibrary)
-	AC_TRY_COMPILE([#include <windows.h>],
-	LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 	AC_MSG_CHECKING(for LoadLibraryEx)
 	AC_TRY_COMPILE([#include <windows.h>],
 	LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1389,10 +1389,7 @@ mknod("",0,0);,AC_DEFINE(RUDIMENTS_HAVE_MKNOD,1,Some systems have mknod) AC_MSG_
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then
 	AC_MSG_CHECKING(whether we can link against -ldl)
-	FW_TRY_LINK([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <dlfcn.h>],[dlopen(NULL,0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
+	FW_TRY_LINK([#include <dlfcn.h>],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
 fi
 AC_SUBST(DLLIB)
 

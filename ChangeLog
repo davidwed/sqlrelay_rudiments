@@ -6,6 +6,8 @@
 		concept of process-groups
 	added a call to select() instead of poll() for file-descriptor passing
 		for systems that don't support poll()
+	added tests for timespec in various header files
+	added test for dlopen
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for

@@ -175,6 +175,9 @@
 /* Some systems have DIR.d_fd */
 #undef RUDIMENTS_HAVE_DIR_D_FD
 
+/* Some systems have dlopen */
+#undef RUDIMENTS_HAVE_DLOPEN
+
 /* Some systems define environ in unistd.h */
 #undef RUDIMENTS_HAVE_ENVIRON
 
@@ -393,9 +396,6 @@
 
 /* Linux style statfs */
 #undef RUDIMENTS_HAVE_LINUX_STATFS
-
-/* Some systems have LoadLibrary */
-#undef RUDIMENTS_HAVE_LOADLIBRARY
 
 /* Some systems have LoadLibraryEx */
 #undef RUDIMENTS_HAVE_LOADLIBRARYEX
