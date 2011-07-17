@@ -18,6 +18,11 @@
 namespace rudiments {
 #endif
 
+#if defined(RUDIMENTS_HAVE_GETSPNAM) || defined(RUDIMENTS_HAVE_GETSPNAM_R)
+	#define RUDIMENTS_HAVE_SHADOW
+#endif
+
+#ifdef RUDIMENTS_HAVE_SHADOW
 class shadowentryprivate {
 	friend class shadowentry;
 	private:
@@ -27,29 +32,36 @@ class shadowentryprivate {
 			char	*_buffer;
 		#endif
 };
+#endif
 
 // LAME: not in the class
-#if !defined(RUDIMENTS_HAVE_GETSPNAM_R)
+#if defined(RUDIMENTS_HAVE_SHADOW) && !defined(RUDIMENTS_HAVE_GETSPNAM_R)
 static mutex	*_spmutex;
 #endif
 
 
 shadowentry::shadowentry() {
-	pvt=new shadowentryprivate;
-	pvt->_sp=NULL;
-	#ifdef RUDIMENTS_HAVE_GETSPNAM_R
-		rawbuffer::zero(&pvt->_spbuffer,sizeof(pvt->_spbuffer));
-		pvt->_buffer=NULL;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		pvt=new shadowentryprivate;
+		pvt->_sp=NULL;
+		#ifdef RUDIMENTS_HAVE_GETSPNAM_R
+			rawbuffer::zero(&pvt->_spbuffer,sizeof(pvt->_spbuffer));
+			pvt->_buffer=NULL;
+		#endif
 	#endif
 }
 
 shadowentry::shadowentry(const shadowentry &s) {
-	pvt=new shadowentryprivate;
-	initialize(s.getName());
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		pvt=new shadowentryprivate;
+		initialize(s.getName());
+	#endif
 }
 
 shadowentry &shadowentry::operator=(const shadowentry &s) {
-	pvt=new shadowentryprivate;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		pvt=new shadowentryprivate;
+	#endif
 	if (this!=&s) {
 		initialize(s.getName());
 	}
@@ -57,34 +69,56 @@ shadowentry &shadowentry::operator=(const shadowentry &s) {
 }
 
 shadowentry::~shadowentry() {
-	#ifdef RUDIMENTS_HAVE_GETSPNAM_R
-		delete[] pvt->_buffer;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		#ifdef RUDIMENTS_HAVE_GETSPNAM_R
+			delete[] pvt->_buffer;
+		#endif
+		delete pvt;
 	#endif
-	delete pvt;
 }
 
 const char *shadowentry::getName() const {
-	return pvt->_sp->sp_namp;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return pvt->_sp->sp_namp;
+	#else
+		return NULL;
+	#endif
 }
 
 const char *shadowentry::getEncryptedPassword() const {
-	return pvt->_sp->sp_pwdp;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return pvt->_sp->sp_pwdp;
+	#else
+		return NULL;
+	#endif
 }
 
 long shadowentry::getLastChangeDate() const {
-	return pvt->_sp->sp_lstchg;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return pvt->_sp->sp_lstchg;
+	#else
+		return -1;
+	#endif
 }
 
 int shadowentry::getDaysBeforeChangeAllowed() const {
-	return pvt->_sp->sp_min;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return pvt->_sp->sp_min;
+	#else
+		return -1;
+	#endif
 }
 
 int shadowentry::getDaysBeforeChangeRequired() const {
-	return pvt->_sp->sp_max;
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return pvt->_sp->sp_max;
+	#else
+		return -1;
+	#endif
 }
 
 int shadowentry::getDaysBeforeExpirationWarning() const {
-	#ifdef RUDIMENTS_HAVE_SP_WARN
+	#if defined(RUDIMENTS_HAVE_SP_WARN)
 		return pvt->_sp->sp_warn;
 	#else
 		return -1;
@@ -92,7 +126,7 @@ int shadowentry::getDaysBeforeExpirationWarning() const {
 }
 
 int shadowentry::getDaysOfInactivityAllowed() const {
-	#ifdef RUDIMENTS_HAVE_SP_INACT
+	#if defined(RUDIMENTS_HAVE_SP_INACT)
 		return pvt->_sp->sp_inact;
 	#else
 		return -1;
@@ -100,7 +134,7 @@ int shadowentry::getDaysOfInactivityAllowed() const {
 }
 
 int shadowentry::getExpirationDate() const {
-	#ifdef RUDIMENTS_HAVE_SP_EXPIRE
+	#if defined(RUDIMENTS_HAVE_SP_EXPIRE)
 		return pvt->_sp->sp_expire;
 	#else
 		return -1;
@@ -108,7 +142,7 @@ int shadowentry::getExpirationDate() const {
 }
 
 int shadowentry::getFlag() const {
-	#ifdef RUDIMENTS_HAVE_SP_FLAG
+	#if defined(RUDIMENTS_HAVE_SP_FLAG)
 		return pvt->_sp->sp_flag;
 	#else
 		return -1;
@@ -124,7 +158,8 @@ bool shadowentry::needsMutex() {
 }
 
 void shadowentry::setMutex(mutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_GETSPNAM_R)
+	#if defined(RUDIMENTS_HAVE_SHADOW) && \
+		!defined(RUDIMENTS_HAVE_GETSPNAM_R)
 		_spmutex=mtx;
 	#endif
 }
@@ -170,43 +205,53 @@ bool shadowentry::initialize(const char *username) {
 				const_cast<char *>(username)))!=NULL) &&
 			!(_spmutex && !_spmutex->unlock()));
 	#else
-		#error no getspnam or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool shadowentry::getEncryptedPassword(const char *username, char **password) {
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*password=charstring::duplicate(sp.getEncryptedPassword());
-		return true;
-	}
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*password=charstring::duplicate(
+					sp.getEncryptedPassword());
+			return true;
+		}
+	#endif
 	return false;
 }
 
 bool shadowentry::getLastChangeDate(const char *username, long *lstchg) {
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*lstchg=sp.getLastChangeDate();
-		return true;
-	}
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*lstchg=sp.getLastChangeDate();
+			return true;
+		}
+	#endif
 	return false;
 }
 
 bool shadowentry::getDaysBeforeChangeAllowed(const char *username, int *min) {
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*min=sp.getDaysBeforeChangeAllowed();
-		return true;
-	}
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*min=sp.getDaysBeforeChangeAllowed();
+			return true;
+		}
+	#endif
 	return false;
 }
 
 bool shadowentry::getDaysBeforeChangeRequired(const char *username, int *max) {
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*max=sp.getDaysBeforeChangeRequired();
-		return true;
-	}
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*max=sp.getDaysBeforeChangeRequired();
+			return true;
+		}
+	#endif
 	return false;
 }
 
@@ -217,7 +262,7 @@ bool shadowentry::getDaysBeforeExpirationWarning(const char *username,
 		if (sp.initialize(username)) {
 			*warn=sp.getDaysBeforeExpirationWarning();
 			return true;
-	}
+		}
 		return false;
 	#else
 		*warn=-1;
@@ -269,9 +314,11 @@ bool shadowentry::getFlag(const char *username, int *flag) {
 
 void shadowentry::print() const {
 
+	#ifdef RUDIMENTS_HAVE_SP_WARN
 	if (!pvt->_sp) {
 		return;
 	}
+	#endif
 
 	printf("Name: %s\n",getName());
 	printf("Encrypted Password: %s\n",getEncryptedPassword());
