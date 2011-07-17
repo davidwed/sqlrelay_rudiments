@@ -29,13 +29,13 @@ static mutex	*_cryptmutex;
 #endif
 
 char *crypt::encrypt(const char *password, const char *salt) {
-	#ifdef RUDIMENTS_HAVE_CRYPT_R
+	#if defined(RUDIMENTS_HAVE_CRYPT_R)
 		crypt_data	cd;
 		rawbuffer::zero(&cd,sizeof(cd));
 		char	*encryptedpassword=crypt_r(password,salt,&cd);
 		return (encryptedpassword)?
 			charstring::duplicate(encryptedpassword):NULL;
-	#else
+	#elif defined(RUDIMENTS_HAVE_CRYPT)
 		if (_cryptmutex && !_cryptmutex->lock()) {
 			return NULL;
 		}
@@ -46,14 +46,16 @@ char *crypt::encrypt(const char *password, const char *salt) {
 			_cryptmutex->unlock();
 		}
 		return retval;
+	#else
+		#error no crypt or anything like it
 	#endif
 }
 
 bool crypt::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_CRYPT_R)
-		return true;
-	#else
+	#if defined(RUDIMENTS_HAVE_CRYPT_R)
 		return false;
+	#elif !defined(RUDIMENTS_HAVE_CRYPT)
+		return true;
 	#endif
 }
 

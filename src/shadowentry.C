@@ -84,35 +84,35 @@ int shadowentry::getDaysBeforeChangeRequired() const {
 }
 
 int shadowentry::getDaysBeforeExpirationWarning() const {
-#ifdef RUDIMENTS_HAVE_SP_WARN
-	return pvt->_sp->sp_warn;
-#else
-	return -1;
-#endif
+	#ifdef RUDIMENTS_HAVE_SP_WARN
+		return pvt->_sp->sp_warn;
+	#else
+		return -1;
+	#endif
 }
 
 int shadowentry::getDaysOfInactivityAllowed() const {
-#ifdef RUDIMENTS_HAVE_SP_INACT
-	return pvt->_sp->sp_inact;
-#else
-	return -1;
-#endif
+	#ifdef RUDIMENTS_HAVE_SP_INACT
+		return pvt->_sp->sp_inact;
+	#else
+		return -1;
+	#endif
 }
 
 int shadowentry::getExpirationDate() const {
-#ifdef RUDIMENTS_HAVE_SP_EXPIRE
-	return pvt->_sp->sp_expire;
-#else
-	return -1;
-#endif
+	#ifdef RUDIMENTS_HAVE_SP_EXPIRE
+		return pvt->_sp->sp_expire;
+	#else
+		return -1;
+	#endif
 }
 
 int shadowentry::getFlag() const {
-#ifdef RUDIMENTS_HAVE_SP_FLAG
-	return pvt->_sp->sp_flag;
-#else
-	return -1;
-#endif
+	#ifdef RUDIMENTS_HAVE_SP_FLAG
+		return pvt->_sp->sp_flag;
+	#else
+		return -1;
+	#endif
 }
 
 bool shadowentry::needsMutex() {
@@ -131,7 +131,7 @@ void shadowentry::setMutex(mutex *mtx) {
 
 bool shadowentry::initialize(const char *username) {
 
-	#ifdef RUDIMENTS_HAVE_GETSPNAM_R
+	#if defined(RUDIMENTS_HAVE_GETSPNAM_R)
 		if (pvt->_sp) {
 			pvt->_sp=NULL;
 			delete[] pvt->_buffer;
@@ -163,12 +163,14 @@ bool shadowentry::initialize(const char *username) {
 			}
 		}
 		return false;
-	#else
+	#elif defined(RUDIMENTS_HAVE_GETSPNAM) 
 		pvt->_sp=NULL;
 		return (!(_spmutex && !_spmutex->lock()) &&
 			((pvt->_sp=getspnam(
 				const_cast<char *>(username)))!=NULL) &&
 			!(_spmutex && !_spmutex->unlock()));
+	#else
+		#error no getspnam or anything like it
 	#endif
 }
 
@@ -210,59 +212,59 @@ bool shadowentry::getDaysBeforeChangeRequired(const char *username, int *max) {
 
 bool shadowentry::getDaysBeforeExpirationWarning(const char *username,
 								int *warn) {
-#ifdef RUDIMENTS_HAVE_SP_WARN
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*warn=sp.getDaysBeforeExpirationWarning();
-		return true;
+	#ifdef RUDIMENTS_HAVE_SP_WARN
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*warn=sp.getDaysBeforeExpirationWarning();
+			return true;
 	}
-	return false;
-#else
-	*warn=-1;
-	return true;
-#endif
+		return false;
+	#else
+		*warn=-1;
+		return true;
+	#endif
 }
 
 bool shadowentry::getDaysOfInactivityAllowed(const char *username, int *inact) {
-#ifdef RUDIMENTS_HAVE_SP_INACT
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*inact=sp.getDaysOfInactivityAllowed();
+	#ifdef RUDIMENTS_HAVE_SP_INACT
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*inact=sp.getDaysOfInactivityAllowed();
+			return true;
+		}
+		return false;
+	#else
+		*inact=-1;
 		return true;
-	}
-	return false;
-#else
-	*inact=-1;
-	return true;
-#endif
+	#endif
 }
 
 bool shadowentry::getExpirationDate(const char *username, int *expire) {
-#ifdef RUDIMENTS_HAVE_SP_EXPIRE
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*expire=sp.getExpirationDate();
+	#ifdef RUDIMENTS_HAVE_SP_EXPIRE
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*expire=sp.getExpirationDate();
+			return true;
+		}
+		return false;
+	#else
+		*expire=-1;
 		return true;
-	}
-	return false;
-#else
-	*expire=-1;
-	return true;
-#endif
+	#endif
 }
 
 bool shadowentry::getFlag(const char *username, int *flag) {
-#ifdef RUDIMENTS_HAVE_SP_FLAG
-	shadowentry	sp;
-	if (sp.initialize(username)) {
-		*flag=sp.getFlag();
+	#ifdef RUDIMENTS_HAVE_SP_FLAG
+		shadowentry	sp;
+		if (sp.initialize(username)) {
+			*flag=sp.getFlag();
+			return true;
+		}
+		return false;
+	#else
+		*flag=-1;
 		return true;
-	}
-	return false;
-#else
-	*flag=-1;
-	return true;
-#endif
+	#endif
 }
 
 void shadowentry::print() const {

@@ -778,6 +778,7 @@ INCLUDE_XMLDOM
 INCLUDE_XMLSAX
 INCLUDE_STRINGBUFFER
 INCLUDE_VARIABLEBUFFER
+INCLUDE_CRYPT
 INCLUDE_DYNAMICLIB
 INCLUDE_HOSTENTRY
 INCLUDE_PROTOCOLENTRY
@@ -807,7 +808,6 @@ INETATONLIB
 DLLIB
 HAS_MEMORYMAP
 CRYPTLIB
-INCLUDE_CRYPT
 HAS_SHM_OPEN
 SHMOPENLIB
 CLOCKNANOSLEEPLIB
@@ -19651,8 +19651,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 if ( test "$INCLUDE_SHADOWENTRY" = "1" )
 then
 
-INCLUDE_SHADOWENTRY="0"
-
 HAVE_GETSPNAM_R=""
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for getspnam_r with 5 parameters" >&5
@@ -19672,7 +19670,7 @@ getspnam_r(NULL,NULL,NULL,0,NULL);
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
-  INCLUDE_SHADOWENTRY="1";
+
 $as_echo "#define RUDIMENTS_HAVE_GETSPNAM_R_5 1" >>confdefs.h
 
 $as_echo "#define RUDIMENTS_HAVE_GETSPNAM_R 1" >>confdefs.h
@@ -19704,7 +19702,7 @@ getspnam_r(NULL,NULL,NULL,0);
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
-  INCLUDE_SHADOWENTRY="1";
+
 $as_echo "#define RUDIMENTS_HAVE_GETSPNAM_R_4 1" >>confdefs.h
 
 $as_echo "#define RUDIMENTS_HAVE_GETSPNAM_R 1" >>confdefs.h
@@ -19736,7 +19734,9 @@ getspnam(NULL);
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
-  INCLUDE_SHADOWENTRY="1"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+
+$as_echo "#define RUDIMENTS_HAVE_GETSPNAM 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -19744,9 +19744,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
-
-if ( test "$INCLUDE_SHADOWENTRY" = "1" )
-then
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for spwd has sp_warn" >&5
 $as_echo_n "checking for spwd has sp_warn... " >&6; }
@@ -19856,8 +19853,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
 
 fi
 
@@ -20874,8 +20869,6 @@ $as_echo "no" >&6; }
 if ( test "$INCLUDE_RPCENTRY" = "1" )
 then
 
-INCLUDE_RPCENTRY="0"
-
 HAVE_GETRPCBYNAME_R="no"
 HAVE_GETRPCBYNAME="no"
 HAVE_GETRPCBYNUMBER_R="no"
@@ -21453,14 +21446,6 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 
-if ( test "$HAVE_GETRPCBYNAME_R" = "yes" -o "$HAVE_GETRPCBYNAME" = "yes" )
-then
-	if ( test "$HAVE_GETRPCBYNUMBER_R" = "yes" -o "$HAVE_GETRPCBYNUMBER" = "yes" )
-	then
-		INCLUDE_RPCENTRY="1"
-	fi
-fi
-
 fi
 
 
@@ -21702,14 +21687,7 @@ $as_echo "yes" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	fi
-
-	INCLUDE_CRYPT="0"
-	if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
-	then
-		INCLUDE_CRYPT="1"
-	fi
 fi
-
 
 
 

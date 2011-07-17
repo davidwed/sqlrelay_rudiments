@@ -668,8 +668,6 @@ AC_DEFUN([FW_CHECK_RPC],
 if ( test "$INCLUDE_RPCENTRY" = "1" )
 then
 
-INCLUDE_RPCENTRY="0"
-
 HAVE_GETRPCBYNAME_R="no"
 HAVE_GETRPCBYNAME="no"
 HAVE_GETRPCBYNUMBER_R="no"
@@ -827,15 +825,6 @@ getrpcbynumber(0);,HAVE_GETRPCBYNUMBER="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYN
 getrpcbynumber(0);,HAVE_GETRPCBYNUMBER="yes"; AC_DEFINE(RUDIMENTS_HAVE_GETRPCBYNUMBER,1, Some systems have getrpcbynumber) AC_DEFINE(RUDIMENTS_HAVE_RPC_H,1, Some systems have rpc/rpc.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
-dnl decide whether or not to include the rpcentry class
-if ( test "$HAVE_GETRPCBYNAME_R" = "yes" -o "$HAVE_GETRPCBYNAME" = "yes" )
-then
-	if ( test "$HAVE_GETRPCBYNUMBER_R" = "yes" -o "$HAVE_GETRPCBYNUMBER" = "yes" )
-	then
-		INCLUDE_RPCENTRY="1"
-	fi
-fi
-
 fi
 ])
 
@@ -846,8 +835,6 @@ AC_DEFUN([FW_CHECK_SHADOW],
 if ( test "$INCLUDE_SHADOWENTRY" = "1" )
 then
 
-INCLUDE_SHADOWENTRY="0"
-
 HAVE_GETSPNAM_R=""
 
 AC_MSG_CHECKING(for getspnam_r with 5 parameters)
@@ -855,7 +842,7 @@ AC_TRY_COMPILE([#include <shadow.h>
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-getspnam_r(NULL,NULL,NULL,0,NULL);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R_5,1,Some systems have getspnam_r) AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes); HAVE_GETSPNAM_R="yes", AC_MSG_RESULT(no))
+getspnam_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R_5,1,Some systems have getspnam_r) AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes); HAVE_GETSPNAM_R="yes", AC_MSG_RESULT(no))
 
 if ( test -z "$HAVE_GETSPNAM_R" )
 then
@@ -865,7 +852,7 @@ then
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-getspnam_r(NULL,NULL,NULL,0);,INCLUDE_SHADOWENTRY="1"; AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R_4,1,Some systems have getspnam_r) AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes); HAVE_GETSPNAM_R="yes", AC_MSG_RESULT(no))
+getspnam_r(NULL,NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R_4,1,Some systems have getspnam_r) AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM_R,1, Some systems have getspnam_r) AC_MSG_RESULT(yes); HAVE_GETSPNAM_R="yes", AC_MSG_RESULT(no))
 fi
 
 if ( test -z "$HAVE_GETSPNAM_R" )
@@ -875,11 +862,8 @@ then
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-getspnam(NULL);,INCLUDE_SHADOWENTRY="1"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+getspnam(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSPNAM,1,Some systems have getspnam) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
-
-if ( test "$INCLUDE_SHADOWENTRY" = "1" )
-then
 
 AC_MSG_CHECKING(for spwd has sp_warn)
 AC_TRY_COMPILE([#include <shadow.h>
@@ -909,8 +893,6 @@ AC_TRY_COMPILE([#include <shadow.h>
 	#include <stdlib.h>
 #endif],
 struct spwd sp; sp.sp_flag=0;,AC_DEFINE(RUDIMENTS_HAVE_SP_FLAG,1,struct spwd has sp_flag) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-fi 
 
 fi
 ])
@@ -1868,14 +1850,7 @@ $CRYPT_H],[crypt_data cd; crypt_r(NULL,NULL,NULL);],[$CPPFLAGS],[$i],[],[RUDIMEN
 	else
 		AC_MSG_RESULT(no)
 	fi
-
-	INCLUDE_CRYPT="0"
-	if ( test -n "$HAVE_CRYPT" -o -n "$HAVE_CRYPT_R" )
-	then
-		INCLUDE_CRYPT="1"
-	fi
 fi
 
-AC_SUBST(INCLUDE_CRYPT)
 AC_SUBST(CRYPTLIB)
 ])

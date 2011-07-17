@@ -145,13 +145,16 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 			}
 		}
 		return false;
-	#else
+	#elif defined(RUDIMENTS_HAVE_GETRPCBYNAME) && \
+		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)
 		pvt->_re=NULL;
 		return (!(remutex && !remutex->lock()) &&
 			((pvt->_re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && !remutex->unlock()));
+	#else
+		#error no getrpcbyname/number or anything like it
 	#endif
 }
 

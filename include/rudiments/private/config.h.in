@@ -349,6 +349,9 @@
 /* Some systems have getsid */
 #undef RUDIMENTS_HAVE_GETSID
 
+/* Some systems have getspnam */
+#undef RUDIMENTS_HAVE_GETSPNAM
+
 /* Some systems have getspnam_r */
 #undef RUDIMENTS_HAVE_GETSPNAM_R
 
