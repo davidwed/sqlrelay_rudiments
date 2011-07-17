@@ -651,7 +651,7 @@ FW_STATFS
 
 AC_MSG_CHECKING(for struct timespec in time.h)
 AC_TRY_COMPILE([#include <time.h>],
-struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC,1,Some systems have struct timespec in time.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H,1,Some systems have struct timespec in time.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for struct timespec in sys/time.h)
 AC_TRY_COMPILE([#include <sys/time.h>],

@@ -18345,7 +18345,7 @@ struct timespec a;
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_STRUCT_TIMESPEC 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else

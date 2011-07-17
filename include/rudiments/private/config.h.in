@@ -703,9 +703,6 @@
 /* Some systems have strtoull */
 #undef RUDIMENTS_HAVE_STRTOULL
 
-/* Some systems have struct timespec in time.h */
-#undef RUDIMENTS_HAVE_STRUCT_TIMESPEC
-
 /* Some systems have struct timespec in pthread.h */
 #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD
 
@@ -714,6 +711,9 @@
 
 /* Some systems have struct timespec in sys/time.h */
 #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H
+
+/* Some systems have struct timespec in time.h */
+#undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H
 
 /* Some systems have swab with a char * argument */
 #undef RUDIMENTS_HAVE_SWAB_CHAR
