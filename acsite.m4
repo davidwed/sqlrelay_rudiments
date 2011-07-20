@@ -1590,7 +1590,7 @@ sfs.f_fsid=0;
 sfs.f_flag=0;
 sfs.f_namemax=0;
 statvfs("/",&sfs);]
-,AC_DEFINE(RUDIMENTS_HAVE_HAIKU_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="haiku style")
+,AC_DEFINE(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="minix/haiku style")
 fi
 
 dnl Windows has it's own way of doing it

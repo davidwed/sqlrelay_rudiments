@@ -390,7 +390,7 @@ bool filesystem::getBlockSize(const char *path, int64_t *size) {
 #else
 	#if defined(RUDIMENTS_HAVE_STATVFS) || \
 		defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-		defined(RUDIMENTS_HAVE_HAIKU_STATVFS)
+		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 		STATFS(path,size,f_frsize)
 	#else
 		*size=0;
@@ -507,7 +507,7 @@ bool filesystem::getTotalBlocks(const char *path, int64_t *blocks) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,blocks,f_blocks)
 #else
@@ -525,7 +525,7 @@ bool filesystem::getTotalBlocks(int fd, int64_t *blocks) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,blocks,f_blocks)
 #else
@@ -543,7 +543,7 @@ int64_t filesystem::getTotalBlocks() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_blocks;
 #else
@@ -560,7 +560,7 @@ bool filesystem::getFreeBlocks(const char *path, int64_t *blocks) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,blocks,f_bfree)
 #else
@@ -578,7 +578,7 @@ bool filesystem::getFreeBlocks(int fd, int64_t *blocks) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,blocks,f_bfree)
 #else
@@ -596,7 +596,7 @@ int64_t filesystem::getFreeBlocks() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_bfree;
 #else
@@ -613,7 +613,7 @@ bool filesystem::getAvailableBlocks(const char *path, int64_t *blocks) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,blocks,f_bavail)
 #else
@@ -631,7 +631,7 @@ bool filesystem::getAvailableBlocks(int fd, int64_t *blocks) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,blocks,f_bavail)
 #else
@@ -649,7 +649,7 @@ int64_t filesystem::getAvailableBlocks() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_bavail;
 #else
@@ -666,7 +666,7 @@ bool filesystem::getTotalFileNodes(const char *path, int64_t *nodes) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,nodes,f_files)
 #else
@@ -684,7 +684,7 @@ bool filesystem::getTotalFileNodes(int fd, int64_t *nodes) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,nodes,f_files)
 #else
@@ -702,7 +702,7 @@ int64_t filesystem::getTotalFileNodes() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_files;
 #else
@@ -719,7 +719,7 @@ bool filesystem::getFreeFileNodes(const char *path, int64_t *nodes) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,nodes,f_ffree)
 #else
@@ -737,7 +737,7 @@ bool filesystem::getFreeFileNodes(int fd, int64_t *nodes) {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,nodes,f_ffree)
 #else
@@ -755,7 +755,7 @@ int64_t filesystem::getFreeFileNodes() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_ffree;
 #else
@@ -766,7 +766,7 @@ int64_t filesystem::getFreeFileNodes() const {
 bool filesystem::getAvailableFileNodes(const char *path, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS)
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 	STATFS(path,nodes,f_ffree)
 #else
 	*nodes=0;
@@ -777,7 +777,7 @@ bool filesystem::getAvailableFileNodes(const char *path, int64_t *nodes) {
 bool filesystem::getAvailableFileNodes(int fd, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS)
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 	FSTATFS(fd,nodes,f_ffree)
 #else
 	*nodes=0;
@@ -788,7 +788,7 @@ bool filesystem::getAvailableFileNodes(int fd, int64_t *nodes) {
 int64_t filesystem::getAvailableFileNodes() const {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS)
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 	return pvt->_st.f_ffree;
 #else
 	return 0;
@@ -798,7 +798,7 @@ int64_t filesystem::getAvailableFileNodes() const {
 bool filesystem::getFileSystemId(const char *path, int64_t *id) {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,id,f_fsid)
@@ -811,7 +811,7 @@ bool filesystem::getFileSystemId(const char *path, int64_t *id) {
 bool filesystem::getFileSystemId(int fd, int64_t *id) {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,id,f_fsid)
@@ -824,7 +824,7 @@ bool filesystem::getFileSystemId(int fd, int64_t *id) {
 int64_t filesystem::getFileSystemId() const {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return (int64_t)pvt->_st.f_fsid;
@@ -841,7 +841,7 @@ bool filesystem::getMaximumFileNameLength(const char *path,
 	STATFS(path,length,f_namelen)
 #else
 	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 		STATFS(path,length,f_namemax)
 	#else
@@ -858,7 +858,7 @@ bool filesystem::getMaximumFileNameLength(int fd, int64_t *length) {
 	FSTATFS(fd,length,f_namelen)
 #else
 	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 		FSTATFS(fd,length,f_namemax)
 	#else
@@ -875,7 +875,7 @@ int64_t filesystem::getMaximumFileNameLength() const {
 	return pvt->_st.f_namelen;
 #else
 	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_HAIKU_STATVFS) || \
+		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 		return pvt->_st.f_namemax;
 	#else

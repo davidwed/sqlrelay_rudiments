@@ -370,9 +370,6 @@
 /* Some systems have getuid */
 #undef RUDIMENTS_HAVE_GETUID
 
-/* statvfs */
-#undef RUDIMENTS_HAVE_HAIKU_STATVFS
-
 /* Some systems have HANDLE_FLAG_INHERIT */
 #undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT
 
@@ -441,6 +438,9 @@
 
 /* Some systems have mincore with unsigned char argument */
 #undef RUDIMENTS_HAVE_MINCORE_UCHAR
+
+/* statvfs */
+#undef RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS
 
 /* Some systems have mkdir */
 #undef RUDIMENTS_HAVE_MKDIR_1

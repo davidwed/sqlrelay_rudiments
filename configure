@@ -18297,10 +18297,10 @@ statvfs("/",&sfs);
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_HAIKU_STATVFS 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS 1" >>confdefs.h
 
 $as_echo "#define RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS 1" >>confdefs.h
- STATFS_STYLE="haiku style"
+ STATFS_STYLE="minix/haiku style"
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
