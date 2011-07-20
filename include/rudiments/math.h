@@ -60,7 +60,9 @@ class math {
 		static float	naturalExponent(float x);
 		static float	naturalLog(float x);
 		static float	naturalExponentMinusOne(float x);
-		static float	naturalLogOfPlusOne(float x);
+		static float	naturalLogPlusOne(float x);
+
+		static float	exponent(float x);
 
 		static float	normalize(float x, int *exp);
 
@@ -114,11 +116,11 @@ class math {
 		static float	multiplyAndAdd(float x, float y, float z);
 		static float	positiveDifference(float x, float y);
 
-		static float	argument(float complex z);
-		static float	conjugate(float complex z);
-		static float	project(float complex z);
-		static float	imaginary(float complex z);
-		static float	real(float complex z);
+		static float		argument(float complex z);
+		static float complex	conjugate(float complex z);
+		static float complex	project(float complex z);
+		static float		imaginary(float complex z);
+		static float		real(float complex z);
 
 
 
@@ -162,7 +164,9 @@ class math {
 		static double	naturalExponent(double x);
 		static double	naturalLog(double x);
 		static double	naturalExponentMinusOne(double x);
-		static double	naturalLogOfPlusOne(double x);
+		static double	naturalLogPlusOne(double x);
+
+		static double	exponent(double x);
 
 		static double	normalize(double x, int *exp);
 
@@ -216,11 +220,11 @@ class math {
 		static double	multiplyAndAdd(double x, double y, double z);
 		static double	positiveDifference(double x, double y);
 
-		static double	argument(double complex z);
-		static double	conjugate(double complex z);
-		static double	project(double complex z);
-		static double	imaginary(double complex z);
-		static double	real(double complex z);
+		static double		argument(double complex z);
+		static double complex	conjugate(double complex z);
+		static double complex	project(double complex z);
+		static double		imaginary(double complex z);
+		static double		real(double complex z);
 
 
 		// long double methods
@@ -264,7 +268,9 @@ class math {
 		static long double	naturalExponent(long double x);
 		static long double	naturalLog(long double x);
 		static long double	naturalExponentMinusOne(long double x);
-		static long double	naturalLogOfPlusOne(long double x);
+		static long double	naturalLogPlusOne(long double x);
+
+		static long double	exponent(long double x);
 
 		static long double	normalize(long double x, int *exp);
 
@@ -333,11 +339,11 @@ class math {
 		static long double	positiveDifference(long double x,
 								long double y);
 
-		static long double	argument(long double complex z);
-		static long double	conjugate(long double complex z);
-		static long double	project(long double complex z);
-		static long double	imaginary(long double complex z);
-		static long double	real(long double complex z);
+		static long double		argument(long double complex z);
+		static long double complex	conjugate(long double complex z);
+		static long double complex	project(long double complex z);
+		static long double		imaginary(long double complex z);
+		static long double		real(long double complex z);
 
 
 //	may not be in solaris - 

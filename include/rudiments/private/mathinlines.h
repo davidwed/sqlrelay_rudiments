@@ -1,3 +1,9 @@
+#include <math.h>
+#include <tgmath.h>
+#undef remainder
+#undef floor
+#undef round
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -40,7 +46,7 @@ RUDIMENTS_INLINE bool math::isNormal(float x) {
 }
 
 RUDIMENTS_INLINE bool math::isSubNormal(float x) {
-	return (fpclassify()==FP_SUBNORMAL);
+	return (fpclassify(x)==FP_SUBNORMAL);
 }
 
 RUDIMENTS_INLINE bool math::isNaN(float x) {
@@ -155,7 +161,7 @@ RUDIMENTS_INLINE float math::naturalLogPlusOne(float x) {
 	return log1pf(x);
 }
 
-RUDIMENTS_INLINE float math::logbf(float x) {
+RUDIMENTS_INLINE float math::exponent(float x) {
 	return logbf(x);
 }
 
@@ -172,7 +178,7 @@ RUDIMENTS_INLINE float math::power(float x, float y) {
 }
 
 RUDIMENTS_INLINE float math::squareRoot(float x) {
-	return sqrt(x);
+	return sqrtf(x);
 }
 
 RUDIMENTS_INLINE float math::hypotenuse(float x, float y) {
@@ -264,15 +270,15 @@ RUDIMENTS_INLINE float math::nextToward(float x, float y) {
 }
 
 RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, float n) {
-	return scalbf(x,n) {
+	return scalbf(x,n);
 }
 
 RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, int n) {
-	return scalbnf(x,n) {
+	return scalbnf(x,n);
 }
 
 RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, long n) {
-	return scalblnf(x,n) {
+	return scalblnf(x,n);
 }
 
 RUDIMENTS_INLINE int math::integralExponent(float x) {
@@ -299,11 +305,11 @@ RUDIMENTS_INLINE float math::argument(float complex z) {
 	return cargf(z);
 }
 
-RUDIMENTS_INLINE float math::conjugate(float complex z) {
+RUDIMENTS_INLINE float complex math::conjugate(float complex z) {
 	return conjf(z);
 }
 
-RUDIMENTS_INLINE float math::project(float complex z) {
+RUDIMENTS_INLINE float complex math::project(float complex z) {
 	return cprojf(z);
 }
 
@@ -328,7 +334,7 @@ RUDIMENTS_INLINE bool math::isNormal(double x) {
 }
 
 RUDIMENTS_INLINE bool math::isSubNormal(double x) {
-	return (fpclassify()==FP_SUBNORMAL);
+	return (fpclassify(x)==FP_SUBNORMAL);
 }
 
 RUDIMENTS_INLINE bool math::isNaN(double x) {
@@ -336,7 +342,7 @@ RUDIMENTS_INLINE bool math::isNaN(double x) {
 }
 
 RUDIMENTS_INLINE bool math::isInfinite(double x) {
-	return isin(x);
+	return isinf(x);
 }
 
 RUDIMENTS_INLINE bool math::isGreater(double x, double y) {
@@ -443,7 +449,7 @@ RUDIMENTS_INLINE double math::naturalLogPlusOne(double x) {
 	return log1p(x);
 }
 
-RUDIMENTS_INLINE double math::logb(double x) {
+RUDIMENTS_INLINE double math::exponent(double x) {
 	return logb(x);
 }
 
@@ -552,15 +558,15 @@ RUDIMENTS_INLINE double math::nextToward(double x, double y) {
 }
 
 RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, double n) {
-	return scalb(x,n) {
+	return scalb(x,n);
 }
 
 RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, int n) {
-	return scalbn(x,n) {
+	return scalbn(x,n);
 }
 
 RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, long n) {
-	return scalbln(x,n) {
+	return scalbln(x,n);
 }
 
 RUDIMENTS_INLINE int math::integralExponent(double x) {
@@ -587,11 +593,11 @@ RUDIMENTS_INLINE double math::argument(double complex z) {
 	return carg(z);
 }
 
-RUDIMENTS_INLINE double math::conjugate(double complex z) {
+RUDIMENTS_INLINE double complex math::conjugate(double complex z) {
 	return conj(z);
 }
 
-RUDIMENTS_INLINE double math::project(double complex z) {
+RUDIMENTS_INLINE double complex math::project(double complex z) {
 	return cproj(z);
 }
 
@@ -604,7 +610,7 @@ RUDIMENTS_INLINE double math::real(double complex z) {
 }
 
 
-// long long double methods
+// long double methods
 
 RUDIMENTS_INLINE bool math::isFinite(long double x) {
 	return isfinite(x);
@@ -615,7 +621,7 @@ RUDIMENTS_INLINE bool math::isNormal(long double x) {
 }
 
 RUDIMENTS_INLINE bool math::isSubNormal(long double x) {
-	return (fpclassify()==FP_SUBNORMAL);
+	return (fpclassify(x)==FP_SUBNORMAL);
 }
 
 RUDIMENTS_INLINE bool math::isNaN(long double x) {
@@ -623,7 +629,7 @@ RUDIMENTS_INLINE bool math::isNaN(long double x) {
 }
 
 RUDIMENTS_INLINE bool math::isInfinite(long double x) {
-	return isin(x);
+	return isinf(x);
 }
 
 RUDIMENTS_INLINE bool math::isGreater(long double x, long double y) {
@@ -730,7 +736,7 @@ RUDIMENTS_INLINE long double math::naturalLogPlusOne(long double x) {
 	return log1pl(x);
 }
 
-RUDIMENTS_INLINE long double math::logb(long double x) {
+RUDIMENTS_INLINE long double math::exponent(long double x) {
 	return logbl(x);
 }
 
@@ -841,15 +847,15 @@ RUDIMENTS_INLINE long double math::nextToward(long double x, long double y) {
 
 RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x,
 							long double n) {
-	return scalbl(x,n) {
+	return scalbl(x,n);
 }
 
 RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x, int n) {
-	return scalbnl(x,n) {
+	return scalbnl(x,n);
 }
 
 RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x, long n) {
-	return scalblnl(x,n) {
+	return scalblnl(x,n);
 }
 
 RUDIMENTS_INLINE int math::integralExponent(long double x) {
@@ -878,11 +884,11 @@ RUDIMENTS_INLINE long double math::argument(long double complex z) {
 	return cargl(z);
 }
 
-RUDIMENTS_INLINE long double math::conjugate(long double complex z) {
+RUDIMENTS_INLINE long double complex math::conjugate(long double complex z) {
 	return conjl(z);
 }
 
-RUDIMENTS_INLINE long double math::project(long double complex z) {
+RUDIMENTS_INLINE long double complex math::project(long double complex z) {
 	return cprojl(z);
 }
 
