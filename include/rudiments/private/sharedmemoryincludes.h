@@ -4,7 +4,7 @@
 #include <rudiments/private/inttypes.h>
 
 #include <sys/types.h>
-#ifndef RUDIMENTS_HAVE_SHMGET
+#ifdef RUDIMENTS_HAVE_SHMGET
 	#include <sys/ipc.h>
 	#include <sys/shm.h>
 #endif
