@@ -255,7 +255,7 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 		}
 	} else if (pvt->_type==TAG_XMLDOMNODETYPE) {
 		output->append("<");
-		output->append(pvt->_nodename);
+		safeAppend(output,pvt->_nodename);
 		current=pvt->_firstattribute;
 		for (uint64_t i=0; i<pvt->_attributecount; i++) {
 			output->append(" ");
@@ -270,7 +270,7 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 				current=current->pvt->_next;
 			}
 			output->append("</");
-			output->append(pvt->_nodename);
+			safeAppend(output,pvt->_nodename);
 			output->append(">");
 		} else {
 			if (pvt->_nodename[0]=='?') {
@@ -282,28 +282,48 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 			}
 		}
 	} else if (pvt->_type==TEXT_XMLDOMNODETYPE) {
-		output->append(pvt->_nodevalue);
+		safeAppend(output,pvt->_nodevalue);
 	} else if (pvt->_type==ATTRIBUTE_XMLDOMNODETYPE) {
 		if (pvt->_parent->pvt->_nodename[0]=='!') {
 			output->append("\"");
-			output->append(pvt->_nodevalue);
+			safeAppend(output,pvt->_nodevalue);
 			output->append("\"");
 		} else {
-			output->append(pvt->_nodename);
+			safeAppend(output,pvt->_nodename);
 			output->append("=\"");
-			output->append(pvt->_nodevalue);
+			safeAppend(output,pvt->_nodevalue);
 			output->append("\"");
 		}
 	} else if (pvt->_type==COMMENT_XMLDOMNODETYPE) {
 		output->append("<!--");
-		output->append(pvt->_nodevalue);
+		safeAppend(output,pvt->_nodevalue);
 		output->append("-->");
 	} else if (pvt->_type==CDATA_XMLDOMNODETYPE) {
 		output->append("<![CDATA[");
-		output->append(pvt->_nodevalue);
+		safeAppend(output,pvt->_nodevalue);
 		output->append("]]>");
 	}
 	return output;
+}
+
+void xmldomnode::safeAppend(stringbuffer *output, const char *str) const {
+
+	for (const char *ch=str; *ch; ch++) {
+		if (*ch=='&') {
+			output->append("&amp;");
+		} else if (*ch=='<') {
+			output->append("&lt;");
+		} else if (*ch=='>') {
+			output->append("&gt;");
+		} else if (*ch=='\'') {
+			output->append("&apos;");
+		} else if (*ch=='"') {
+			output->append("&quot;");
+		} else {
+			// FIXME: what about other entities?
+			output->append(*ch);
+		}
+	}
 }
 
 xmldomnode *xmldomnode::getNode(xmldomnode *first, uint64_t position,

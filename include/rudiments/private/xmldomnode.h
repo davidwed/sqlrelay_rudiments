@@ -19,6 +19,8 @@
 					xmldomnode **first, xmldomnode **last,
 					uint64_t *count);
 		stringbuffer	*xml(stringbuffer *string) const;
+		void		safeAppend(stringbuffer *output,
+						const char *str) const;
 
 
 				xmldomnode(const xmldomnode &x);
