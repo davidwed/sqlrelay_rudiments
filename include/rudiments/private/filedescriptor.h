@@ -17,6 +17,8 @@
 						long sec, long usec) const;
 		virtual	int	safeSelect(long sec, long usec,
 						bool read, bool write) const;
+		virtual	int	safePoll(long sec, long usec,
+						bool read, bool write) const;
 		bool		setNoDelay(int onoff);
 
 		#ifdef RUDIMENTS_HAS_SSL

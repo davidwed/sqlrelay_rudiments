@@ -23,6 +23,3 @@
 		#undef _XOPEN_SOURCE
 	#endif
 #endif
-
-// timeout 120 sec waiting for filedescriptor
-#define FILEDESCRIPTOR_TIMEOUT 120000

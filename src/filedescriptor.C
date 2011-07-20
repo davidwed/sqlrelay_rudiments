@@ -1506,7 +1506,6 @@ int filedescriptor::safeSelect(long sec, long usec,
 		int	selectresult=select(pvt->_fd+1,(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
 						NULL,tvptr);
-	
 
 		if (selectresult==-1) {
 
@@ -1525,6 +1524,64 @@ int filedescriptor::safeSelect(long sec, long usec,
 
 		return selectresult;
 	}
+}
+
+int filedescriptor::safePoll(long sec, long usec,
+				bool read, bool write) const {
+
+	#ifdef RUDIMENTS_HAVE_POLL
+
+		// bail immediately if the file descriptor is invalid
+		if (pvt->_fd==-1) {
+			return RESULT_ERROR;
+		}
+
+		#ifdef RUDIMENTS_HAS_SSL
+			if (read && pvt->_ssl && SSL_pending(pvt->_ssl)) {
+				return 1;
+			}
+		#endif
+
+		// set up the fd's to be monitored, and how to monitor them
+		struct pollfd	fds;
+		fds.fd=pvt->_fd;
+		fds.events=0;
+		if (read) {
+			fds.events|=POLLIN;
+		}
+		if (write) {
+			fds.events|=POLLOUT;
+		}
+
+		// calculate the timeout
+		int	timeout=(sec*1000)+(usec/1000);
+
+		for (;;) {
+
+			// poll...
+			int	pollresult=poll(&fds,1,timeout);
+
+			if (pollresult==-1) {
+
+				// if a signal caused the poll
+				// to fall through, retry
+				if (pvt->_retryinterruptedwaits &&
+					error::getErrorNumber()==EINTR) {
+					continue;
+				}
+				return RESULT_ERROR;
+
+			} else if (!pollresult) {
+
+				// timeout
+				return RESULT_TIMEOUT;
+			}
+
+			return pollresult;
+		}
+	#else
+		return safeSelect(sec,usec,read,write);
+	#endif
 }
 
 void filedescriptor::translateByteOrder() {
@@ -1759,26 +1816,11 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	// receive the msghdr
 	int	result;
 	do {
-		// wait for data to come in
-		// This code was contributed.  There may be some magic in using
-		// poll rather than select so I didn't replace the call to poll,
-		// but some systems (such as most versions of windows) don't
-		// have poll, so for those, we'll try to use an equivalent
-		// call to select.
-		#ifdef RUDIMENTS_HAVE_POLL
-			// FIXME: move this into a signal-safe safePoll() method
-			struct pollfd	fds;
-			fds.fd=pvt->_fd;
-			fds.events=POLLIN;
-			if (poll(&fds,1,FILEDESCRIPTOR_TIMEOUT)<1) {
-				return false;
-			}
-		#else
-			if (safeSelect(0,FILEDESCRIPTOR_TIMEOUT*1000,
-							false,true)<1) {
-				return false;
-			}
-		#endif
+		// wait 120 seconds for data to come in
+		// FIXME: this should be configurable
+		if (safePoll(120,0,false,true)<1) {
+			return false;
+		}
 		result=recvmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {
