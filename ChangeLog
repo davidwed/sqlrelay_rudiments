@@ -11,6 +11,7 @@
 	updated configure script not to outright disable classes if the
 		functions they're dependent on aren't found, but rather for
 		the methods to return erros and set errno to ENOSYS
+	added netapi32 on mingw
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for

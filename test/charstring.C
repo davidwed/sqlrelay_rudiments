@@ -13,12 +13,21 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
+	printf("charstring:\n");
+
 	// create a new string 50 bytes long
 	char	s[50];
 
 
 	// set every byte in the string to NULL
 	charstring::zero(s,50);
+	bool	zeros=true;
+	for (int i=0; i<50; i++) {
+		if (s[i]!=0) {
+			zeros=false;
+		}
+	}
+	test("zeros",zeros);
 
 
 	// Append "hello there dave" to the string and display it.

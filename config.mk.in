@@ -80,6 +80,9 @@ CRYPTLIB = @CRYPTLIB@
 # inet_aton library
 INETATONLIB = @INETATONLIB@
 
+# netapi32 library
+NETAPI32LIB = @NETAPI32LIB@
+
 # dl library
 DLLIB = @DLLIB@
 

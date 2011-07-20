@@ -993,7 +993,7 @@ fi
 AC_MSG_CHECKING(for NetGroupGetInfo)
 AC_TRY_COMPILE([#include <windows.h>
 #include <lm.h>],
-NetGroupGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETGROUPGETINFO,1,Some systems have NetGroupGetInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+NetGroupGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETGROUPGETINFO,1,Some systems have NetGroupGetInfo) AC_SUBST(NETAPI32LIB, -lnetapi32) AC_MSG_RESULT(yes), AC_MSG_RESULT(no) AC_SUBST(NETAPI32LIB, -lnetapi32))
 
 ])
 

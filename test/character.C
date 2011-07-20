@@ -268,7 +268,7 @@ int main(int argc, const char **argv) {
 
 	printf("character:\n");
 
-	for (char c=0; (unsigned char)c<128; c++) {
+	for (unsigned char c=0; c<128; c++) {
 
 		printf("\tsafePrint: ");
 		character::safePrint(c);
