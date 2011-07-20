@@ -1879,7 +1879,7 @@ echo "***** Summary ****************"
 
 echo " Version      : $RUDIMENTS_VERSION"
 
-PCREEBUILD="no "
+PCREBUILD="no "
 if ( test -n "$HAVE_PCRE" )
 then
 	PCREBUILD="yes"
