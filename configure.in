@@ -1420,11 +1420,13 @@ const char *var=NULL; ftok(var,0);,AC_DEFINE(RUDIMENTS_HAVE_CONST_CHAR_FTOK,1,Mo
 if ( test "$HAVE_INET_ATON" = "yes" )
 then
 	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
+	INETATONLIB=""
 	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <arpa/inet.h>],
-inet_aton(NULL,NULL);,AC_SUBST(INETATONLIB,) AC_MSG_RESULT(no), AC_SUBST(INETATONLIB,-lresolv) AC_MSG_RESULT(yes))
+inet_aton(NULL,NULL);,AC_MSG_RESULT(no), INETATONLIB="-lresolv"; AC_MSG_RESULT(yes))
+AC_SUBST(INETATONLIB)
 fi
 
 AC_MSG_CHECKING(for bswap_64)

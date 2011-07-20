@@ -19987,6 +19987,7 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for NetGroupGetInfo" >&5
 $as_echo_n "checking for NetGroupGetInfo... " >&6; }
+NETAPI32LIB=""
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <windows.h>
@@ -20002,15 +20003,14 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_NETGROUPGETINFO 1" >>confdefs.h
- NETAPI32LIB=-lnetapi32
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ NETAPI32LIB="-lnetapi32"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; } NETAPI32LIB=-lnetapi32
-
+$as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 
 
 
@@ -23434,6 +23434,7 @@ if ( test "$HAVE_INET_ATON" = "yes" )
 then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether inet_aton needs -lresolv" >&5
 $as_echo_n "checking whether inet_aton needs -lresolv... " >&6; }
+	INETATONLIB=""
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #ifdef HAVE_STDLIB_H
@@ -23449,15 +23450,15 @@ inet_aton(NULL,NULL);
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 else
-  INETATONLIB=-lresolv
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  INETATONLIB="-lresolv"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for bswap_64" >&5
