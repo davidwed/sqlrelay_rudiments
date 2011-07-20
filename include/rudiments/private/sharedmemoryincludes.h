@@ -7,4 +7,6 @@
 #ifdef RUDIMENTS_HAVE_SHMGET
 	#include <sys/ipc.h>
 	#include <sys/shm.h>
+#else
+	typedef void shmid_ds;
 #endif
