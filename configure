@@ -27072,3 +27072,33 @@ fi
 chmod 755 bin/rudiments-config
 echo "******************************"
 echo
+
+
+echo
+echo "***** Summary ****************"
+
+echo " Version      : $RUDIMENTS_VERSION"
+
+PCREEBUILD="no "
+if ( test -n "$HAVE_PCRE" )
+then
+	PCREBUILD="yes"
+fi
+
+SSLBUILD="no "
+if ( test -n "$SSLLIBS" )
+then
+	SSLBUILD="yes"
+fi
+
+echo " Features     : PCRE    $PCREBUILD"
+echo "                SSL     $SSLBUILD"
+echo "******************************"
+echo
+echo "If you expected a feature that doesn't show up in the Summary"
+echo "then the configure script probably couldn't find a package it needed to"
+echo "build it.  You can manually specify package locations using command line"
+echo "options."
+echo
+echo "Type:  configure --help   for a list of options."
+echo
