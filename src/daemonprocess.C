@@ -17,8 +17,8 @@
 
 #include <stdlib.h>
 
-// for fork/exit...
 #ifdef RUDIMENTS_HAVE_UNISTD_H
+	// for fork/exit...
 	#include <unistd.h>
 #endif
 
@@ -34,59 +34,64 @@ namespace rudiments {
 class daemonprocessprivate {
 	friend class daemonprocess;
 	private:
+		static	signalhandler	_deadchildhandler;
+		static	signalhandler	_shutdownhandler;
+		static	signalhandler	_crashhandler;
+		static	void		(*_shutdownfunc)(int);
+		static	void		(*_crashfunc)(int);
 };
 
-// LAME: not in class
-static	signalhandler	_deadchildhandler;
-static	signalhandler	_shutdownhandler;
-static	signalhandler	_crashhandler;
-static	void		(*_shutdownfunc)(int);
-static	void		(*_crashfunc)(int);
+signalhandler	daemonprocessprivate::_deadchildhandler;
+signalhandler	daemonprocessprivate::_shutdownhandler;
+signalhandler	daemonprocessprivate::_crashhandler;
+void		(*daemonprocessprivate::_shutdownfunc)(int);
+void		(*daemonprocessprivate::_crashfunc)(int);
 
-static void shutDown(int signum) {
-	daemonprocess::waitForChildren();
+daemonprocessprivate	*daemonprocess::pvt=NULL;
+
+void daemonprocess::shutDown(int signum) {
+	waitForChildren();
 #ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-	(*_shutdownfunc)(signum);
+	(*pvt->_shutdownfunc)(signum);
 #else
-	(*_shutdownfunc)(0);
+	(*pvt->_shutdownfunc)(0);
 #endif
 }
 
-static void crash(int signum) {
-	daemonprocess::waitForChildren();
+void daemonprocess::crash(int signum) {
+	waitForChildren();
 #ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-	(*_crashfunc)(signum);
+	(*pvt->_crashfunc)(signum);
 #else
-	(*_crashfunc)(0);
+	(*pvt->_crashfunc)(0);
 #endif
 }
 
-static void defaultShutDown(int signum) {
-	daemonprocess::waitForChildren();
+void daemonprocess::defaultShutDown(int signum) {
+	waitForChildren();
 	exit(0);
 }
 
-static void defaultCrash(int signum) {
-	daemonprocess::waitForChildren();
+void daemonprocess::defaultCrash(int signum) {
+	waitForChildren();
 	exit(1);
 }
 
 daemonprocess::daemonprocess() {
 
+	// FIXME: initializing static member here?
+	// We don't want the signal handlers to be set up unless we call this
+	// constructor, but there's got to be a cleaner way.
 	pvt=new daemonprocessprivate;
-
-	// FIXME: setting static members in the constructor???
 
 	// we want daemons to wait for children to die before shutting down,
 	// so register some default shutdown/crash handlers that only do that
-	// FIXME: it should be possible to use one of the C++ casting operators
-	// here (and elsewhere in this class), but I'm not really sure how...
-	_shutdownhandler.setHandler(defaultShutDown);
-	_shutdownhandler.handleSignal(SIGINT);
-	_shutdownhandler.handleSignal(SIGTERM);
+	pvt->_shutdownhandler.setHandler(defaultShutDown);
+	pvt->_shutdownhandler.handleSignal(SIGINT);
+	pvt->_shutdownhandler.handleSignal(SIGTERM);
 
-	_crashhandler.setHandler(defaultCrash);
-	_crashhandler.handleSignal(SIGSEGV);
+	pvt->_crashhandler.setHandler(defaultCrash);
+	pvt->_crashhandler.handleSignal(SIGSEGV);
 
 	waitForChildren();
 }
@@ -158,19 +163,19 @@ bool daemonprocess::detach() const {
 
 void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {
 
-	_shutdownfunc=shutdownfunction;
+	pvt->_shutdownfunc=shutdownfunction;
 
-	_shutdownhandler.setHandler(shutDown);
-	_shutdownhandler.handleSignal(SIGINT);
-	_shutdownhandler.handleSignal(SIGTERM);
+	pvt->_shutdownhandler.setHandler(shutDown);
+	pvt->_shutdownhandler.handleSignal(SIGINT);
+	pvt->_shutdownhandler.handleSignal(SIGTERM);
 }
 
 void daemonprocess::handleCrash(void (*crashfunction)(int)) {
 
-	_crashfunc=crashfunction;
+	pvt->_crashfunc=crashfunction;
 
-	_crashhandler.setHandler(crash);
-	_crashhandler.handleSignal(SIGSEGV);
+	pvt->_crashhandler.setHandler(crash);
+	pvt->_crashhandler.handleSignal(SIGSEGV);
 }
 
 #ifndef MINGW32
@@ -211,15 +216,15 @@ void daemonprocess::waitForChildrenToExit(int signum) {
 
 #ifndef MINGW32
 void daemonprocess::waitForChildren() {
-	_deadchildhandler.setHandler(waitForChildrenToExit);
-	_deadchildhandler.addFlag(SA_NOCLDSTOP);
-	_deadchildhandler.handleSignal(SIGCHLD);
+	pvt->_deadchildhandler.setHandler(waitForChildrenToExit);
+	pvt->_deadchildhandler.addFlag(SA_NOCLDSTOP);
+	pvt->_deadchildhandler.handleSignal(SIGCHLD);
 }
 
 void daemonprocess::dontWaitForChildren() {
-	_deadchildhandler.setHandler((void (*)(int))SIG_DFL);
-	_deadchildhandler.removeAllFlags();
-	_deadchildhandler.handleSignal(SIGCHLD);
+	pvt->_deadchildhandler.setHandler((void (*)(int))SIG_DFL);
+	pvt->_deadchildhandler.removeAllFlags();
+	pvt->_deadchildhandler.handleSignal(SIGCHLD);
 }
 #else
 void daemonprocess::waitForChildren() {

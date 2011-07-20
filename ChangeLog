@@ -14,6 +14,8 @@
 	added netapi32 on mingw
 	updated vfstab detection to reflect minix/haiku-style rather than just
 		haiku
+	moved non-member variables and methods into daemonprocess class and
+		its private class
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for
