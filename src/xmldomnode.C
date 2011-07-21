@@ -308,7 +308,8 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 
 void xmldomnode::safeAppend(stringbuffer *output, const char *str) const {
 
-	for (const char *ch=str; *ch; ch++) {
+	for (const unsigned char *ch=
+		reinterpret_cast<const unsigned char *>(str); *ch; ch++) {
 		if (*ch=='&') {
 			output->append("&amp;");
 		} else if (*ch=='<') {
@@ -319,6 +320,10 @@ void xmldomnode::safeAppend(stringbuffer *output, const char *str) const {
 			output->append("&apos;");
 		} else if (*ch=='"') {
 			output->append("&quot;");
+		} else if (*ch>127) {
+			output->append("&#");
+			output->append((uint16_t)*ch);
+			output->append(";");
 		} else {
 			// FIXME: what about other entities?
 			output->append(*ch);

@@ -17,6 +17,8 @@
 	moved non-member variables and methods into daemonprocess class and
 		its private class
 	updated xmldomnode to output xml entities rather than raw characters
+	fixed a bug that caused numeric xml entities greater than 127 to get
+		set to 127
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for

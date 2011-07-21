@@ -674,10 +674,10 @@ int xmlsax::getGeneralEntity(char breakchar) {
 	} else {
 		// handle numeric general entities
 		if (pvt->_entitybuffer[1]=='#') {
-			long	number=charstring::toInteger(
+			int64_t	number=charstring::toInteger(
 							pvt->_entitybuffer+2);
-			if (number>127) {
-				number=127;
+			if (number>255) {
+				number=255;
 			}
 			pvt->_entitybuffer[0]=static_cast<char>(number);
 			pvt->_entitybuffer[1]='\0';
