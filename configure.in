@@ -486,6 +486,13 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #include <sys/ipc.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_IPC_H, 1, Some systems have sys/ipc.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for sys/sem.h)
+AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/sem.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_SEM_H, 1, Some systems have sys/sem.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for syslog.h)
 AC_TRY_LINK([#include <syslog.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYSLOG_H,1,Some systems have syslog.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

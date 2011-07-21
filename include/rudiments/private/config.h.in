@@ -751,6 +751,9 @@
 /* Some systems have sys/select.h */
 #undef RUDIMENTS_HAVE_SYS_SELECT_H
 
+/* Some systems have sys/sem.h */
+#undef RUDIMENTS_HAVE_SYS_SEM_H
+
 /* Some systems have sys/socket.h */
 #undef RUDIMENTS_HAVE_SYS_SOCKET_H
 
