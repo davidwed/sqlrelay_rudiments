@@ -308,27 +308,41 @@ stringbuffer *xmldomnode::xml(stringbuffer *string) const {
 
 void xmldomnode::safeAppend(stringbuffer *output, const char *str) const {
 
-	for (const unsigned char *ch=
-		reinterpret_cast<const unsigned char *>(str); *ch; ch++) {
+	const char	*start=str;
+	const char	*ch=start;
+	const char	*entity=NULL;
+	uint16_t	num=0;
+
+	for (; *ch; ch++) {
 		if (*ch=='&') {
-			output->append("&amp;");
+			entity="&amp;";
 		} else if (*ch=='<') {
-			output->append("&lt;");
+			entity="&lt;";
 		} else if (*ch=='>') {
-			output->append("&gt;");
+			entity="&gt;";
 		} else if (*ch=='\'') {
-			output->append("&apos;");
+			entity="&apos;";
 		} else if (*ch=='"') {
-			output->append("&quot;");
-		} else if (*ch>127) {
-			output->append("&#");
-			output->append((uint16_t)*ch);
-			output->append(";");
-		} else {
-			// FIXME: what about other entities?
-			output->append(*ch);
+			entity="&quot;";
+		} else if (*ch<0) {
+			num=static_cast<uint16_t>(
+					static_cast<unsigned char>(*ch));
+		}
+		if (entity || num) {
+			output->append(start,ch-start);
+			if (entity) {
+				output->append(entity);
+				entity=NULL;
+			} else {
+				output->append("&#");
+				output->append(num);
+				output->append(";");
+				num=0;
+			}
+			start=ch+1;
 		}
 	}
+	output->append(start,ch-start);
 }
 
 xmldomnode *xmldomnode::getNode(xmldomnode *first, uint64_t position,
