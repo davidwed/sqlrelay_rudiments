@@ -397,6 +397,9 @@
 /* Linux style statfs */
 #undef RUDIMENTS_HAVE_LINUX_STATFS
 
+/* Some systems have LoadLibrary */
+#undef RUDIMENTS_HAVE_LOADLIBRARY
+
 /* Some systems have LoadLibraryEx */
 #undef RUDIMENTS_HAVE_LOADLIBRARYEX
 
