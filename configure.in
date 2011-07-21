@@ -1285,6 +1285,10 @@ dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG
 
 if ( test -n "$MINGW32" )
 then
+	AC_MSG_CHECKING(for LoadLibrary)
+	AC_TRY_COMPILE([#include <windows.h>],
+	LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 	AC_MSG_CHECKING(for LoadLibraryEx)
 	AC_TRY_COMPILE([#include <windows.h>],
 	LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
