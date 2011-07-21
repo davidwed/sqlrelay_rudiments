@@ -14,5 +14,5 @@
 		uint16_t	sem_num;
 		int16_t		sem_op;
 		int16_t		sem_flg;
-	}
+	};
 #endif
