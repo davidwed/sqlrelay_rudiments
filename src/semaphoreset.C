@@ -6,6 +6,10 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/error.h>
 
+#ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
+	#include <rudiments/charsring.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
@@ -532,16 +536,16 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 
 		// FIXME: delete first?
-		pvt->_semaphoreset=new HANDLE[nsems];
+		pvt->_sems=new HANDLE[nsems];
 		pvt->_securityattrs=new SECURITY_ATTRIBUTES *[nsems];
-		pvt->_semname=new char *[nsems];
+		pvt->_semnames=new char *[nsems];
 
 		for (int i=0; i<nsems; i++) {
 
 			// set the semaphore name
 			int	semnamelen=11+charstring::integerLength(key)+1+
 							integerLength(nsems)+1;
-			pvt->_semname[i]=new char[semnamelen];
+			pvt->_semnames[i]=new char[semnamelen];
 			snprintf(semname,semnamelen,
 				"rudiments::%d-%d\n",key,nsems);
 
@@ -560,7 +564,7 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 				HANDLE	sem=CreateSemaphore(
 						pvt->_securityattrs[i],
 						0,(2^31)-1,
-						pvt->_semname[i]);
+						pvt->_semnames[i]);
 
 				// failure...
 				if (!sem) {
@@ -575,7 +579,7 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 				}
 
 				// success...
-				pvt->_semaphoreset[i]=sem;
+				pvt->_sems[i]=sem;
 				return true;
 
 			} else {
@@ -585,7 +589,7 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 						// FIXME: set this for real...
 						0,
 						TRUE,
-						pvt->_semname[i]);
+						pvt->_semnames[i]);
 
 				// failure...
 				if (!sem) {
@@ -595,7 +599,7 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 				}
 
 				// success...
-				pvt->_semaphoreset[i]=sem;
+				pvt->_sems[i]=sem;
 				return true;
 			}
 		}
