@@ -57,6 +57,11 @@
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
+
+// Some implementations of pthreads use macros to redefine read and write
+// with __pthread_read and __pthread_write.  We don't want that here.
+#undef read
+#undef write
 	
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
