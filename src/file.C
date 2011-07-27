@@ -641,7 +641,7 @@ bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 }
 
 #ifndef RUDIMENTS_HAVE_S_ISSOCK
-	#define S_ISSOCK(m) ((m&0140000==0140000)?1:0)
+	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
 #endif
 
 int file::isSocket(const char *filename) {
@@ -650,7 +650,7 @@ int file::isSocket(const char *filename) {
 }
 
 #ifndef RUDIMENTS_HAVE_S_ISLNK
-	#define S_ISLNK(m) ((m&0120000==0120000)?1:0)
+	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
 #endif
 
 int file::isSymbolicLink(const char *filename) {

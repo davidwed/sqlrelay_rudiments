@@ -35,8 +35,8 @@
 #endif
 
 #ifndef RUDIMENTS_HAVE_SEMGET
-	#define	IPC_CREAT	1;
-	#define	IPC_EXCL 	2;
+	#define	IPC_CREAT	1
+	#define	IPC_EXCL 	2
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -96,12 +96,12 @@ semaphoreset::~semaphoreset() {
 		if (pvt->_sems) {
 			for (int i=0; i<pvt->_semcount; i++) {
 				CloseHandle(pvt->_sems[i]);
-				delete[] pvt->_secutityattrs[i];
-				delete[] pvt->_semname[i];
+				delete[] pvt->_securityattrs[i];
+				delete[] pvt->_semnames[i];
 			}
-			delete[] pvt->_semaphores;
+			delete[] pvt->_sems;
 			delete[] pvt->_securityattrs;
-			delete[] pvt->_semname;
+			delete[] pvt->_semnames;
 		}
 	#endif
 
@@ -192,7 +192,7 @@ bool semaphoreset::signal(int index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return ReleaseSemaphore(pvt->_semaphores[index],1,NULL);
+		return ReleaseSemaphore(pvt->_sems[index],1,NULL);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -204,7 +204,7 @@ bool semaphoreset::signalWithUndo(int index) {
 		return semOp(pvt->_signalwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return ReleaseSemaphore(pvt->_semaphores[index],1,NULL);
+		return ReleaseSemaphore(pvt->_sems[index],1,NULL);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
