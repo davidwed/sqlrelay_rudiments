@@ -17,8 +17,14 @@ namespace rudiments {
 
 class signalsetprivate {
 	friend class signalset;
+	friend class signalmanager;
+	friend class signalhandler;
 	private:
-		sigset_t	_sigset;
+		#if defined(RUDIMENTS_HAVE_SIGACTION)
+			sigset_t	_sigset;
+		#else
+			
+		#endif
 };
 
 // signalset methods
@@ -51,10 +57,6 @@ int signalset::signalIsInSet(int signum) const {
 	return sigismember(&pvt->_sigset,signum);
 }
 
-sigset_t *signalset::getSignalSet() {
-	return &pvt->_sigset;
-}
-
 
 
 // signalmanager methods
@@ -78,26 +80,28 @@ unsigned int signalmanager::alarm(unsigned int seconds) {
 	return ::alarm(seconds);
 }
 
-bool signalmanager::ignoreSignals(const sigset_t *sigset) {
+bool signalmanager::ignoreSignals(const signalset *sset) {
 	int	result;
 	do {
 		#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
-			result=pthread_sigmask(SIG_SETMASK,sigset,NULL);
+			result=pthread_sigmask(SIG_SETMASK,
+						&sset->pvt->_sigset,NULL);
 		#else
-			result=sigprocmask(SIG_SETMASK,sigset,NULL);
+			result=sigprocmask(SIG_SETMASK,
+						&sset->pvt->_sigset,NULL);
 		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
 
-bool signalmanager::waitForSignals(const sigset_t *sigset) {
-	return (sigsuspend(sigset)==-1);
+bool signalmanager::waitForSignals(const signalset *sset) {
+	return (sigsuspend(&sset->pvt->_sigset)==-1);
 }
 
-bool signalmanager::examineBlockedSignals(sigset_t *sigset) {
+bool signalmanager::examineBlockedSignals(signalset *sset) {
 	int	result;
 	do {
-		result=sigpending(sigset);
+		result=sigpending(&sset->pvt->_sigset);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -168,8 +172,12 @@ int signalhandler::signalIsInMask(int signum) const {
 	return sigismember(&pvt->_handlerstruct.sa_mask,signum);
 }
 
-sigset_t signalhandler::getMask() const {
-	return pvt->_handlerstruct.sa_mask;
+void signalhandler::setMask(const signalset *sset) {
+	pvt->_handlerstruct.sa_mask=sset->pvt->_sigset;
+}
+
+void signalhandler::getMask(signalset *sset) const {
+	sset->pvt->_sigset=pvt->_handlerstruct.sa_mask;
 }
 
 int signalhandler::getFlags() const {

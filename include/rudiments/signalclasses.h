@@ -25,6 +25,8 @@ namespace rudiments {
 // easy to manage.
 class signalsetprivate;
 class signalset {
+	friend class signalmanager;
+	friend class signalhandler;
 	public:
 			signalset();
 			~signalset();
@@ -43,9 +45,6 @@ class signalset {
 		int	signalIsInSet(int signum) const;
 			// Returns 1 if the signal "signum" is in the 
 			// set, 0 if it is not and -1 on error.
-
-		sigset_t	*getSignalSet();
-				// returns the set of signals
 
 	#include <rudiments/private/signalset.h>
 };
@@ -72,15 +71,15 @@ class signalmanager {
 				// remaining until any previously scheduled
 				// alarm was to be delivered or 0 if there
 				// was no previously scheduled alarm.
-		static	bool	ignoreSignals(const sigset_t *sigset);
+		static	bool	ignoreSignals(const signalset *sset);
 				// Ignore signal "signum".
 				// Returns true on success and false on failure.
-		static	bool	waitForSignals(const sigset_t *mask);
+		static	bool	waitForSignals(const signalset *mask);
 				// Wait until a signal NOT in the signal set 
 				// "mask" is received.
 				// Returns true on success and false on failure.
-		static	bool	examineBlockedSignals(sigset_t *sigset);
-				// Sets "sigset" to the set of signals that
+		static	bool	examineBlockedSignals(signalset *sset);
+				// Sets "sset" to the set of signals that
 				// were raised, but blocked during a call to 
 				// waitForSignals().
 				// Returns true on success and false on failure.
@@ -152,10 +151,11 @@ class signalhandler {
 		int		signalIsInMask(int signum) const;
 				// Returns 1 if the signal "signum" is in the 
 				// set, 0 if it is not and -1 on error.
-		void		setMask(sigset_t sigset);
-				// Explicitly sets the mask to "sigset".
-		sigset_t	getMask() const;
-				// Returns the set of signals currently masked.
+		void		setMask(const signalset *sset);
+				// Explicitly sets the mask to "sset".
+		void		getMask(signalset *sset) const;
+				// Sets "sset" to the set of signals currently
+				// masked.
 
 		static	bool	isSignalHandlerIntUsed();
 				// The function that you pass into setHandler()

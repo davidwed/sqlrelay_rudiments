@@ -740,7 +740,7 @@ void (*handler)(int);
 #if defined(RUDIMENTS_HAVE_SIGACTION)
 	struct sigaction test;
 	test.sa_handler=handler;
-#elif defined(RUDIMENTS_HAVE_SIGACTION)
+#elif defined(RUDIMENTS_HAVE_SIGNAL)
 	signal(0,handler);
 #else
 	#error neither sigaction nor signal was found
