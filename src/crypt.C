@@ -47,7 +47,8 @@ char *crypt::encrypt(const char *password, const char *salt) {
 		}
 		return retval;
 	#else
-		#error no crypt or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 

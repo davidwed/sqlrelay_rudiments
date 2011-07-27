@@ -727,9 +727,25 @@ AC_TRY_COMPILE([#include <signal.h>
 #endif],
 sigaction(0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGACTION,1,Some systems have sigaction) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for signal)
+AC_TRY_COMPILE([#include <signal.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+signal(0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGNAL,1,Some systems have signal) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(signal handler parameter)
 AC_TRY_COMPILE([#include <signal.h>],
-void (*handler)(int); struct sigaction test; test.sa_handler=handler;,AC_DEFINE(RUDIMENTS_SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
+void (*handler)(int);
+#if defined(RUDIMENTS_HAVE_SIGACTION)
+	struct sigaction test;
+	test.sa_handler=handler;
+#elif defined(RUDIMENTS_HAVE_SIGACTION)
+	signal(0,handler);
+#else
+	#error neither sigaction nor signal was found
+#endif
+,AC_DEFINE(RUDIMENTS_SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
 
 echo "******************************"
 

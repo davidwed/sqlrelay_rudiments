@@ -658,6 +658,9 @@
 /* Some systems have sigaction */
 #undef RUDIMENTS_HAVE_SIGACTION
 
+/* Some systems have signal */
+#undef RUDIMENTS_HAVE_SIGNAL
+
 /* Some systems have sockaddr_un */
 #undef RUDIMENTS_HAVE_SOCKADDR_UN
 
