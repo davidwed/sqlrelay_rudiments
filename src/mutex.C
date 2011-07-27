@@ -16,7 +16,7 @@ class mutexprivate {
 		#elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
 		HANDLE		_mut;
 		#endif
-		bool			_destroy;
+		bool		_destroy;
 };
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
@@ -106,6 +106,32 @@ bool mutex::unlock() {
 
 HANDLE mutex::getMutex() {
 	return pvt->_mut;
+}
+
+#else
+
+mutex::mutex() {
+}
+
+mutex::mutex(pthread_mutex_t *mut) {
+}
+
+mutex::~mutex() {
+}
+
+bool mutex::lock() {
+	error::setErrorNumber(ENOSYS);
+	return false;
+}
+
+bool mutex::tryLock() {
+	error::setErrorNumber(ENOSYS);
+	return false;
+}
+
+bool mutex::unlock() {
+	error::setErrorNumber(ENOSYS);
+	return false;
 }
 #endif
 
