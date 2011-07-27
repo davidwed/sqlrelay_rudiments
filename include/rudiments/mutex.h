@@ -39,13 +39,9 @@ class mutex {
 			// Unlock the mutex.
 			// Returns true on success and false if an error occurs.
 
-		#if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 		pthread_mutex_t	*getMutex();
-		#elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
-		HANDLE		getMutex();
-		#endif
-				// Returns the mutex used by
-				// the class internally.
+			// Returns the mutex used by
+			// the class internally.
 
 	#include <rudiments/private/mutex.h>
 };

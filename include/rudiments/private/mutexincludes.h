@@ -3,10 +3,11 @@
 
 #include <rudiments/private/inttypes.h>
 
-#ifdef RUDIMENTS_HAVE_PTHREAD_MUTEX_T
+#if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 	#include <pthread.h>
-#endif
-
-#ifdef RUDIMENTS_HAVE_CREATE_MUTEX
+#elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
 	#include <windows.h>
+	typedef HANDLE pthread_mutex_t *;
+#else
+	typedef void pthread_mutex_t;
 #endif

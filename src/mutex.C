@@ -79,7 +79,7 @@ mutex::mutex() {
 	pvt->_destroy=true;
 }
 
-mutex::mutex(HANDLE mut) {
+mutex::mutex(pthread_mutex_t *mut) {
 	pvt=new mutexprivate;
 	pvt->_mut=mut;
 	pvt->_destroy=false;
@@ -104,8 +104,8 @@ bool mutex::unlock() {
 	return ReleaseMutex(pvt->_mut);
 }
 
-HANDLE mutex::getMutex() {
-	return pvt->_mut;
+pthread_mutex_t *mutex::getMutex() {
+	return (pthread_mutex_t *)(pvt->_mut);
 }
 
 #else
