@@ -19,6 +19,8 @@
 	updated xmldomnode to output xml entities rather than raw characters
 	fixed a bug that caused numeric xml entities greater than 127 to get
 		set to 127
+	updated mutex class to show a consistent interface on all platforms
+	updated configure script to detect pthreads properly on minix
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for
