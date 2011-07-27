@@ -20458,6 +20458,35 @@ fi
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
 
+if ( test -n "$MINGW32" )
+then
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateSemaphore" >&5
+$as_echo_n "checking for CreateSemaphore... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+int
+main ()
+{
+CreateSemaphore(NULL,0,0,"");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CREATESEMAPHORE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semget" >&5
 $as_echo_n "checking for semget... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -20483,72 +20512,6 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_SEMGET 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semctl" >&5
-$as_echo_n "checking for semctl... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/sem.h>
-int
-main ()
-{
-semctl(0,0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SEMCTL 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semop" >&5
-$as_echo_n "checking for semop... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/sem.h>
-int
-main ()
-{
-semop(0,NULL,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SEMOP 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -20589,6 +20552,7 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
 
 fi
 

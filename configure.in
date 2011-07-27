@@ -975,6 +975,15 @@ FW_CHECK_SVC
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
 
+if ( test -n "$MINGW32" )
+then
+
+	AC_MSG_CHECKING(for CreateSemaphore)
+	AC_TRY_COMPILE([#include <windows.h>],
+	CreateSemaphore(NULL,0,0,"");,AC_DEFINE(RUDIMENTS_HAVE_CREATESEMAPHORE,1,Some systems have CreateSemaphore) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+else
+
 	AC_MSG_CHECKING(for semget)
 	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -988,32 +997,6 @@ then
 #include <sys/sem.h>],
 semget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMGET,1,Some systems have semget) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(for semctl)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/sem.h>],
-semctl(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMCTL,1,Some systems have semctl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-	AC_MSG_CHECKING(for semop)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/sem.h>],
-semop(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMOP,1,Some systems have semop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 	AC_MSG_CHECKING(for semtimedop)
 	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -1026,6 +1009,7 @@ semop(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMOP,1,Some systems have semop) AC_MS
 #endif
 #include <sys/sem.h>],
 semtimedop(0,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
 
 fi
 
