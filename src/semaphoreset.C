@@ -11,6 +11,9 @@
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_SYS_SEM_H
 	// for struct sembuf
@@ -31,6 +34,11 @@
 	};
 #endif
 
+#ifndef RUDIMENTS_HAVE_SEMGET
+	#define	IPC_CREAT	1;
+	#define	IPC_EXCL 	2;
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -46,7 +54,9 @@ class semaphoresetprivate {
 			struct	sembuf	**_signalop;
 			struct	sembuf	**_signalwithundoop;
 		#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-			HANDLE	*_semaphores;
+			HANDLE			*_sems;
+			SECURITY_ATTRIBUTES	**_securityattrs;
+			char			**_semnames;
 		#endif
 };
 
@@ -61,7 +71,9 @@ semaphoreset::semaphoreset() {
 		pvt->_signalop=NULL;
 		pvt->_signalwithundoop=NULL;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		pvt->_semaphores=NULL;
+		pvt->_sems=NULL;
+		pvt->_securityattrs=NULL;
+		pvt->_semnames=NULL;
 	#endif
 }
 
@@ -81,11 +93,15 @@ semaphoreset::~semaphoreset() {
 			delete[] pvt->_signalwithundoop;
 		}
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		if (pvt->_semaphores) {
+		if (pvt->_sems) {
 			for (int i=0; i<pvt->_semcount; i++) {
-				CloseHandle(pvt->_semaphores[i]);
+				CloseHandle(pvt->_sems[i]);
+				delete[] pvt->_secutityattrs[i];
+				delete[] pvt->_semname[i];
 			}
 			delete[] pvt->_semaphores;
+			delete[] pvt->_securityattrs;
+			delete[] pvt->_semname;
 		}
 	#endif
 
@@ -101,7 +117,9 @@ bool semaphoreset::forceRemove() {
 		semun	semctlun;
 		return !semControl(pvt,0,IPC_RMID,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// this isn't possible on windows, the semaphore will be
+		// destroyed when the last process that held it open exits
+		return true;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -120,7 +138,7 @@ bool semaphoreset::wait(int index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_waitop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		return WaitForSingleObject(pvt->_sems[index],INFINITE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -134,7 +152,8 @@ bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
 		ts.tv_nsec=nanoseconds;
 		return semTimedOp(pvt->_waitop[index],&ts);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		return WaitForSingleObject(pvt->_sems[index],
+					seconds*1000+nanoseconds/1000000);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -145,7 +164,8 @@ bool semaphoreset::waitWithUndo(int index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_waitwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// no such thing as undo on windows
+		return WaitForSingleObject(pvt->_sems[index],INFINITE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -159,7 +179,9 @@ bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
 		ts.tv_nsec=nanoseconds;
 		return semTimedOp(pvt->_waitwithundoop[index],&ts);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// no such thing as undo on windows
+		return WaitForSingleObject(pvt->_sems[index],
+					seconds*1000+nanoseconds/1000000);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -170,7 +192,7 @@ bool semaphoreset::signal(int index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		return ReleaseSemaphore(pvt->_semaphores[index],1,NULL);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -181,7 +203,8 @@ bool semaphoreset::signalWithUndo(int index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// no such thing as undo on windows
+		return ReleaseSemaphore(pvt->_semaphores[index],1,NULL);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -193,7 +216,9 @@ int semaphoreset::getValue(int index) {
 		semun	semctlun;
 		return semControl(pvt,index,GETVAL,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -206,7 +231,9 @@ bool semaphoreset::setValue(int index, int value) {
 		semctlun.val=value;
 		return !semControl(pvt,index,SETVAL,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -218,7 +245,9 @@ int semaphoreset::getWaitingForZero(int index) {
 		semun	semctlun;
 		return semControl(pvt,index,GETZCNT,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -230,7 +259,9 @@ int semaphoreset::getWaitingForIncrement(int index) {
 		semun	semctlun;
 		return semControl(pvt,index,GETNCNT,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -240,24 +271,14 @@ int semaphoreset::getWaitingForIncrement(int index) {
 bool semaphoreset::create(key_t key, mode_t permissions, 
 					int semcount, const int *values) {
 
-	#if !defined(RUDIMENTS_HAVE_SEMGET) && \
-		!defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+	pvt->_semcount=semcount;
 
-		error::setErrorNumber(ENOSYS);
-		return false;
-
-	#else
-
-		pvt->_semcount=semcount;
+	#if defined(RUDIMENTS_HAVE_SEMGET) || \
+		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 
 		// create the semaphore
-		#if defined(RUDIMENTS_HAVE_SEMGET)
-			if ((pvt->_semid=semGet(key,semcount,
+		if ((pvt->_semid=semGet(key,semcount,
 					IPC_CREAT|IPC_EXCL|permissions))!=-1) {
-		#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-			#error not sure what to do here...
-			if (true) {
-		#endif
 	
 			// if creation succeeded, initialize the semaphore
 			if (values) {
@@ -276,23 +297,30 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	
 			return true;
 		}
-
-		return false;
+	#else
+		error::setErrorNumber(ENOSYS);
 	#endif
+
+	return false;
 }
 
 bool semaphoreset::attach(key_t key, int semcount) {
 
 	pvt->_semcount=semcount;
 
-	// attach to the semaphore
-	#if defined(RUDIMENTS_HAVE_SEMGET)
-	if ((pvt->_semid=semGet(key,semcount,0))!=-1) {
-		createOperations();
-		return true;
-	}
-	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+	#if defined(RUDIMENTS_HAVE_SEMGET) || \
+		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+
+		// attach to the semaphore
+		if ((pvt->_semid=semGet(key,semcount,0))!=-1) {
+
+			#if defined(RUDIMENTS_HAVE_SEMGET)
+				// create the signal/wait operations
+				createOperations();
+			#endif
+
+			return true;
+		}
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
@@ -356,7 +384,9 @@ bool semaphoreset::setUserId(uid_t uid) {
 		semctlun.buf=&setds;
 		return !semControl(pvt,0,IPC_SET,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -371,7 +401,9 @@ bool semaphoreset::setGroupId(gid_t gid) {
 		semctlun.buf=&setds;
 		return !semControl(pvt,0,IPC_SET,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -398,7 +430,9 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 		semctlun.buf=&setds;
 		return !semControl(pvt,0,IPC_SET,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -406,22 +440,15 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 }
 
 const char *semaphoreset::getUserName() {
-	#if defined(RUDIMENTS_HAVE_SEMGET)
-		semid_ds	getds;
-		semun		semctlun;
-		semctlun.buf=&getds;
-		char		*name;
-		if (!semControl(pvt,0,IPC_STAT,&semctlun) &&
-			passwdentry::getName(getds.sem_perm.uid,&name)) {
+	uid_t	uid=getUserId();
+	if (uid!=(uid_t)-1) {
+		// FIXME: memory leak here
+		char	*name;
+		if (passwdentry::getName(uid,&name)) {
 			return name;
 		}
-		return NULL;
-	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
+	}
+	return NULL;
 }
 
 uid_t semaphoreset::getUserId() {
@@ -432,32 +459,27 @@ uid_t semaphoreset::getUserId() {
 		if (!semControl(pvt,0,IPC_STAT,&semctlun)) {
 			return (short)getds.sem_perm.uid;
 		}
-		return 0;
+		return (uid_t)-1;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return (uid_t)-1;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return (uid_t)-1;
 	#endif
 }
 
 const char *semaphoreset::getGroupName() {
-	#if defined(RUDIMENTS_HAVE_SEMGET)
-		semid_ds	getds;
-		semun		semctlun;
-		semctlun.buf=&getds;
-		char		*name;
-		if (!semControl(pvt,0,IPC_STAT,&semctlun) &&
-				groupentry::getName(getds.sem_perm.gid,&name)) {
+	gid_t	gid=getUserId();
+	if (gid!=(gid_t)-1) {
+		// FIXME: memory leak here
+		char	*name;
+		if (groupentry::getName(gid,&name)) {
 			return name;
 		}
-		return NULL;
-	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
+	}
+	return NULL;
 }
 
 gid_t semaphoreset::getGroupId() {
@@ -468,12 +490,14 @@ gid_t semaphoreset::getGroupId() {
 		if (!semControl(pvt,0,IPC_STAT,&semctlun)) {
 			return (short)getds.sem_perm.gid;
 		}
-		return 0;
+		return (uid_t)-1;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return (gid_t)-1;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return (uid_t)-1;
 	#endif
 }
 
@@ -487,22 +511,95 @@ mode_t semaphoreset::getPermissions() {
 		}
 		return 0;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		// FIXME: there's got to be a way to do this...
+		error::setErrorNumber(ENOSYS);
+		return 0;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return 0;
 	#endif
 }
 
 int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
+
 		int	result;
 		do {
 			result=semget(key,nsems,semflg);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
+
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+
+		// FIXME: delete first?
+		pvt->_semaphoreset=new HANDLE[nsems];
+		pvt->_securityattrs=new SECURITY_ATTRIBUTES *[nsems];
+		pvt->_semname=new char *[nsems];
+
+		for (int i=0; i<nsems; i++) {
+
+			// set the semaphore name
+			int	semnamelen=11+charstring::integerLength(key)+1+
+							integerLength(nsems)+1;
+			pvt->_semname[i]=new char[semnamelen];
+			snprintf(semname,semnamelen,
+				"rudiments::%d-%d\n",key,nsems);
+
+			// set up the security attributes
+			pvt->_securityattrs[i]=new SECURITY_ATTRIBUTES;
+			pvt->_securityattrs[i]->nLength=
+						sizeof(SECURITY_ATTRIBUTES);
+			// FIXME: set up security descriptor
+			pvt->_securityattrs[i]->lpSecurityDescriptor=NULL;
+			pvt->_securityattrs[i]->bInheritHandle=TRUE;
+			
+
+			if (semflg&(IPC_CREAT|IPC_EXCL)) {
+
+				// create a new semaphore
+				HANDLE	sem=CreateSemaphore(
+						pvt->_securityattrs[i],
+						0,(2^31)-1,
+						pvt->_semname[i]);
+
+				// failure...
+				if (!sem) {
+					// see if this semaphore already exists
+					if (GetLastError()==
+						ERROR_ALREADY_EXISTS) {
+						error::setErrorNumber(EEXIST);
+					}
+					// FIXME: clean up previously created
+					// semaphores...
+					return false;
+				}
+
+				// success...
+				pvt->_semaphoreset[i]=sem;
+				return true;
+
+			} else {
+
+				// attach to existing semaphore
+				HANDLE	sem=OpenSemaphore(
+						// FIXME: set this for real...
+						0,
+						TRUE,
+						pvt->_semname[i]);
+
+				// failure...
+				if (!sem) {
+					// FIXME: clean up previously created
+					// semaphores...
+					return false;
+				}
+
+				// success...
+				pvt->_semaphoreset[i]=sem;
+				return true;
+			}
+		}
+
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -518,7 +615,7 @@ int semaphoreset::semControl(semaphoresetprivate *pvt, int semnum,
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		return 1;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -533,7 +630,7 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		return 1;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -548,7 +645,7 @@ bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		#error not sure what to do here...
+		return 1;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
