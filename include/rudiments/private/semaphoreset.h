@@ -9,6 +9,8 @@
 		semaphoreset	&operator=(const semaphoreset &s);
 
 		int	semGet(key_t key, int nsems, int semflg);
+		int	semControl(semaphoresetprivate *pvt, int semnum,
+						int cmd, semun *semctlun);
 		bool	semTimedOp(struct sembuf *sops, timespec *ts);
 		bool	semOp(struct sembuf *sops);
 

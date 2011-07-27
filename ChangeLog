@@ -21,6 +21,7 @@
 		set to 127
 	updated mutex class to show a consistent interface on all platforms
 	updated configure script to detect pthreads properly on minix
+	cleaned up semaphoreset class
 
 0.33 - removed configure tests for strlcpy and strlcat
 	added test for pvt->_translatebyteorder to hostToNet/netToHost for

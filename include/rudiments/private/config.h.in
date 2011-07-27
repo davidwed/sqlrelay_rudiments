@@ -598,8 +598,14 @@
 /* Do we have a real-time-clock */
 #undef RUDIMENTS_HAVE_RTC
 
+/* Some systems have semctl */
+#undef RUDIMENTS_HAVE_SEMCTL
+
 /* Some systems have semget */
 #undef RUDIMENTS_HAVE_SEMGET
+
+/* Some systems have semop */
+#undef RUDIMENTS_HAVE_SEMOP
 
 /* Some systems have semtimedop */
 #undef RUDIMENTS_HAVE_SEMTIMEDOP
