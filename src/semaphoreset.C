@@ -24,11 +24,11 @@
 #endif
 
 #ifndef RUDIMENTS_HAVE_SEMUN
-union semun {
-	int			val;
-	struct	semid_ds	*buf;
-	unsigned short		*array;
-};
+	union semun {
+		int			val;
+		struct	semid_ds	*buf;
+		unsigned short		*array;
+	};
 #endif
 
 // for platforms that don't support semctl, these won't be defined either
@@ -40,12 +40,34 @@ union semun {
 	#define SETVAL		4
 	#define GETZCNT		5
 	#define GETNCNT		6
+
+	struct ipc_perm {
+		key_t		__key;
+		uid_t		uid;
+		gid_t		gid;
+		uid_t		cuid;
+		uid_t		cgid;
+		uint16_t	mode;
+		uint16_t	__seq;
+	};
+
+	struct semid_ds {
+		struct ipc_perm	sem_perm;
+		time_t		sem_otime;
+		time_t		sem_ctime;
+		uint16_t	sem_nsems;
+	};
 #endif
 
 // for platforms that don't support semget, these won't be defined either
 #ifndef RUDIMENTS_HAVE_SEMGET
 	#define IPC_CREAT	1
 	#define IPC_EXCL	2
+#endif
+
+// for platforms that don't support semop, these won't be defined either
+#ifndef RUDIMENTS_HAVE_SEMOP
+	#define SEM_UNDO 	1
 #endif
 
 
