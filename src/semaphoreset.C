@@ -7,7 +7,7 @@
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
-	#include <rudiments/charsring.h>
+	#include <rudiments/charstring.h>
 #endif
 
 #include <stdio.h>
@@ -543,10 +543,11 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 		for (int i=0; i<nsems; i++) {
 
 			// set the semaphore name
-			int	semnamelen=11+charstring::integerLength(key)+1+
-							integerLength(nsems)+1;
+			int	semnamelen=
+					11+charstring::integerLength(key)+1+
+					charstring::integerLength(nsems)+1;
 			pvt->_semnames[i]=new char[semnamelen];
-			snprintf(semname,semnamelen,
+			snprintf(pvt->_semnames[i],semnamelen,
 				"rudiments::%d-%d\n",key,nsems);
 
 			// set up the security attributes
