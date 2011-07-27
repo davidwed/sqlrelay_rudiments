@@ -18,12 +18,10 @@ class mutex {
 	public:
 			mutex();
 			// Initialize a mutex.
-			#if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
+
 			mutex(pthread_mutex_t *mut);
-			#elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
-			mutex(HANDLE mut);
-			#endif
 			// Attach already initialized "mut" to this instance.
+
 			~mutex();
 			// Destroy the mutex.
 
