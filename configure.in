@@ -747,6 +747,27 @@ void (*handler)(int);
 #endif
 ,AC_DEFINE(RUDIMENTS_SIGNAL_HANDLER_INT,1,Most systems define signal handlers with an integer parameter) AC_MSG_RESULT(int),AC_MSG_RESULT(void))
 
+AC_MSG_CHECKING(for kill)
+AC_TRY_COMPILE([#include <signal.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+kill(0,0);,AC_DEFINE(RUDIMENTS_HAVE_KILL,1,Some systems have kill) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sigsuspend)
+AC_TRY_COMPILE([#include <signal.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+sigsuspend(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGSUSPEND,1,Some systems have sigsuspend) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sigpending)
+AC_TRY_COMPILE([#include <signal.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+sigpending(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGPENDING,1,Some systems have sigpending) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 fi

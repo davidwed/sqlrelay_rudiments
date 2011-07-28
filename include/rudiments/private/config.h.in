@@ -394,6 +394,9 @@
 /* Some systems have io.h */
 #undef RUDIMENTS_HAVE_IO_H
 
+/* Some systems have kill */
+#undef RUDIMENTS_HAVE_KILL
+
 /* Some systems have link */
 #undef RUDIMENTS_HAVE_LINK
 
@@ -660,6 +663,12 @@
 
 /* Some systems have signal */
 #undef RUDIMENTS_HAVE_SIGNAL
+
+/* Some systems have sigpending */
+#undef RUDIMENTS_HAVE_SIGPENDING
+
+/* Some systems have sigsuspend */
+#undef RUDIMENTS_HAVE_SIGSUSPEND
 
 /* Some systems have sockaddr_un */
 #undef RUDIMENTS_HAVE_SOCKADDR_UN

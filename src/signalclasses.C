@@ -227,11 +227,21 @@ int signalset::signalIsInSet(int signum) const {
 
 // signalmanager methods
 bool signalmanager::sendSignal(pid_t processid, int signum) {
-	int	result;
-	do {
-		result=kill(processid,signum);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#ifdef RUDIMENTS_HAVE_KILL
+		int	result;
+		do {
+			result=kill(processid,signum);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		// Windows doesn't support sending an arbitrary signal to
+		// another process.  In fact, all signal handling is faked
+		// in windows.  Windows sends messages between processes,
+		// some of which correspond to what would be signals on unix.
+		// It might be possible to implement this that way.
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 bool signalmanager::raiseSignal(int signum) {
@@ -272,15 +282,27 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 }
 
 bool signalmanager::waitForSignals(const signalset *sset) {
-	return (sigsuspend(&sset->pvt->_sigset)==-1);
+	#ifdef RUDIMENTS_HAVE_KILL
+		return (sigsuspend(&sset->pvt->_sigset)==-1);
+	#else
+		// see sendSignal above...
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 bool signalmanager::examineBlockedSignals(signalset *sset) {
-	int	result;
-	do {
-		result=sigpending(&sset->pvt->_sigset);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#ifdef RUDIMENTS_HAVE_KILL
+		int	result;
+		do {
+			result=sigpending(&sset->pvt->_sigset);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		// see sendSignal above...
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 
