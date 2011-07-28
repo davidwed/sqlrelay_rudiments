@@ -790,6 +790,9 @@
 /* Some systems have tcsetattr */
 #undef RUDIMENTS_HAVE_TCSETATTR
 
+/* Some systems have termios.h */
+#undef RUDIMENTS_HAVE_TERMIOS_H
+
 /* Some systems have tlhelp32.h */
 #undef RUDIMENTS_HAVE_TLHELP32_H
 
