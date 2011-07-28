@@ -14716,6 +14716,13 @@ $as_echo "#define MINGW32 1" >>confdefs.h
 fi
 
 
+if ( test -n "$MINGW32" )
+then
+	INCLUDE_SERIALPORT="0"
+	INCLUDE_SERIALPORTPROFILE="0"
+fi
+
+
 
 
 case $host_os in

@@ -334,6 +334,14 @@ dnl Checks for platform-specific stuff
 echo
 echo "***** Platform ***************"
 FW_CHECK_MICROSOFT
+
+dnl for mingw32, disable serialport and serialportprofile classes
+if ( test -n "$MINGW32" )
+then
+	INCLUDE_SERIALPORT="0"
+	INCLUDE_SERIALPORTPROFILE="0"
+fi
+
 FW_CHECK_OSX
 FW_CHECK_MINIX
 FW_CHECK_SO_EXT
