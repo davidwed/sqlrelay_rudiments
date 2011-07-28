@@ -370,10 +370,15 @@ serialportprofile::baudrate_t serialportprofile::outputBaud() {
 
 serialportprofile::charsize_t serialportprofile::characterSize() {
 	switch (GET_FLAG(c_cflag,CSIZE)) {
+		// Haiku only supports CS7/CS8 and defines CS5,6 and 7 to 0x00
+		#if CS5!=CS6
 		case CS5:
 			return cs_5;
+		#endif
+		#if CS6!=CS7
 		case CS6:
 			return cs_6;
+		#endif
 		case CS7:
 			return cs_7;
 	}
