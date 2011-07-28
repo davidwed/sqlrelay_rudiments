@@ -4,6 +4,7 @@
 #include <rudiments/crypt.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_CRYPT_R
 	#ifndef __USE_GNU
