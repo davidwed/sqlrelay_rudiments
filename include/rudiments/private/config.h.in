@@ -100,6 +100,9 @@
 /* Some systems define __tm_zone in their struct tm */
 #undef RUDIMENTS_HAS___TM_ZONE
 
+/* Some systems have alarm */
+#undef RUDIMENTS_HAVE_ALARM
+
 /* Some systems have arpa/inet.h */
 #undef RUDIMENTS_HAVE_ARPA_INET_H
 

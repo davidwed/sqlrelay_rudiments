@@ -201,7 +201,7 @@ bool signalset::removeSignal(int signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigdelset(&pvt->_sigset,signum);
 	#else
-		pvt->_siglist.removeByData();
+		pvt->_siglist.removeByData(signum);
 		return true;
 	#endif
 }
@@ -253,7 +253,12 @@ bool signalmanager::raiseSignal(int signum) {
 }
 
 unsigned int signalmanager::alarm(unsigned int seconds) {
-	return ::alarm(seconds);
+	#ifdef RUDIMENTS_HAVE_ALARM
+		return ::alarm(seconds);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
 
 bool signalmanager::ignoreSignals(const signalset *sset) {

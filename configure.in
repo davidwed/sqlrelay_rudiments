@@ -768,6 +768,12 @@ AC_TRY_COMPILE([#include <signal.h>
 #endif],
 sigpending(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGPENDING,1,Some systems have sigpending) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for alarm)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+alarm(0);,AC_DEFINE(RUDIMENTS_HAVE_ALARM,1,Some systems have alarm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 fi
