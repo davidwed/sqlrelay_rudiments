@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 		delete[] name;
 	}
 
-	printf("%d entries\n",d.getChildCount());
+	printf("%lld entries\n",d.getChildCount());
 
 	char	*cwd=directory::getCurrentWorkingDirectory();
 	printf("cwd=%s\n",cwd);
@@ -52,9 +52,9 @@ int main(int argc, const char **argv) {
 	file::remove("testdir/testfile2");
 	directory::remove("testdir");
 
-	printf("maxFileNameLength(/usr/local)=%d\n",
+	printf("maxFileNameLength(/usr/local)=%lld\n",
 			directory::maxFileNameLength("/usr/local"));
-	printf("maxPathLength(/usr/local)=%d\n",
+	printf("maxPathLength(/usr/local)=%lld\n",
 			directory::maxPathLength("/usr/local"));
 	printf("canAccessLongFileNames(/usr/local)=%d\n",
 			directory::canAccessLongFileNames("/usr/local"));

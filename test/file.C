@@ -56,7 +56,7 @@ int main(int argc, const char **argv) {
 
 	// display the size of the file in bytes
 	off64_t	size=fl.getSize();
-	printf("	size       : %ld\n",size);
+	printf("	size       : %lld\n",size);
 
 
 	// display the size of the file in blocks
@@ -97,25 +97,25 @@ int main(int argc, const char **argv) {
 
 	// display the device that the file resides on
 	dev_t	dev=fl.getDevice();
-	printf("	device           : %d\n",dev);
+	printf("	device           : %lld\n",dev);
 
 
 	// display the type of the device that the file resides on
 	dev_t	devtype=fl.getDeviceType();
-	printf("	device type      : %d\n",devtype);
+	printf("	device type      : %lld\n",devtype);
 
 
 	// display the file's first inode
 	ino_t	inode=fl.getInode();
-	printf("	inode            : %d\n",inode);
+	printf("	inode            : %ld\n",inode);
 
 
 	// display the number of hard links to the file
 	nlink_t	nlink=fl.getNumberOfHardLinks();
-	printf("	hard links : %ld\n",nlink);
+	printf("	hard links : %d\n",nlink);
 
 
-	char	*path="/usr/local/firstworks/include/rudiments/file.h";
+	const char	*path="/usr/local/firstworks/include/rudiments/file.h";
 	char	*dirname=file::dirname(path);
 	printf("dirname(%s)=%s\n",path,dirname);
 	delete[] dirname;
@@ -130,7 +130,7 @@ int main(int argc, const char **argv) {
 
 	printf("key=%d\n",file::generateKey("/",1));
 
-	printf("maxLinks(%s)=%d\n",path,file::maxLinks(path));
+	printf("maxLinks(%s)=%ld\n",path,file::maxLinks(path));
 
 	printf("canChangeOwner(%s)=%d\n",path,file::canChangeOwner(path));
 }

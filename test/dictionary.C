@@ -11,7 +11,7 @@ using namespace rudiments;
 int main(int argc, const char **argv) {
 
 	// create a dictionary containing string keys and string values
-	namevaluepairs	dict;
+	dictionary< const char *, const char * >	dict;
 	printf("string keys, string values:\n");
 
 	// add values to the dictionary
@@ -21,7 +21,7 @@ int main(int argc, const char **argv) {
 	dict.setData("4","four");
 
 	// display the length and contents of the dictionary
-	printf("length: %ld\n",dict.getList()->getLength());
+	printf("length: %lld\n",dict.getList()->getLength());
 	dict.print();
 	printf("\n");
 
@@ -44,7 +44,7 @@ int main(int argc, const char **argv) {
 
 
 	// create a dictionary containing long integer keys and string values
-	numericdictionary<char *>	numdict;
+	numericdictionary< const char * >	numdict;
 	printf("integer keys, string values:\n");
 
 	// add values to the dictionary
@@ -54,7 +54,7 @@ int main(int argc, const char **argv) {
 	numdict.setData(4,"four");
 
 	// display the length and contents of the dictionary
-	printf("length: %ld\n",numdict.getList()->getLength());
+	printf("length: %lld\n",numdict.getList()->getLength());
 	numdict.print();
 	printf("\n");
 
@@ -79,7 +79,7 @@ int main(int argc, const char **argv) {
 
 	// create a dictionary containing double precision
 	// floating point keys and string values
-	dictionary<double,char *>	doubledict;
+	dictionary< double, const char * >	doubledict;
 	printf("floating point keys, string values:\n");
 
 	// add values to the dictionary
@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
 	doubledict.setData(4.4,"four point four");
 
 	// display the length and contents of the dictionary
-	printf("length: %ld\n",doubledict.getList()->getLength());
+	printf("length: %lld\n",doubledict.getList()->getLength());
 	doubledict.print();
 	printf("\n");
 

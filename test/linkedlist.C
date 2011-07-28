@@ -55,7 +55,7 @@ int	main(int argc, char **argv) {
 
 
 	// create a list of strings
-	stringlist	strl;
+	linkedlist< const char * >	strl;
 
 	// append values to the list, displaying the list after each append
 	printf("append(zero)\n");

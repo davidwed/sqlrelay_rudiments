@@ -213,7 +213,7 @@ int main(int argc, const char **argv) {
 	printf("bytes: \"");
 	charstring::safePrint((char *)bytes,6);
 	printf("\"\n");
-	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
 	charstring::safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
@@ -225,7 +225,7 @@ int main(int argc, const char **argv) {
 	printf("bytes: \"");
 	charstring::safePrint((char *)bytes,5);
 	printf("\"\n");
-	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
 	charstring::safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
@@ -237,7 +237,7 @@ int main(int argc, const char **argv) {
 	printf("bytes: \"");
 	charstring::safePrint((char *)bytes,4);
 	printf("\"\n");
-	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
 	charstring::safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
@@ -249,7 +249,7 @@ int main(int argc, const char **argv) {
 	printf("bytes: \"");
 	charstring::safePrint((char *)bytes,3);
 	printf("\"\n");
-	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
 	charstring::safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
@@ -261,7 +261,7 @@ int main(int argc, const char **argv) {
 	printf("bytes: \"");
 	charstring::safePrint((char *)bytes,2);
 	printf("\"\n");
-	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
 	charstring::safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
@@ -273,7 +273,7 @@ int main(int argc, const char **argv) {
 	printf("bytes: \"");
 	charstring::safePrint((char *)bytes,1);
 	printf("\"\n");
-	printf("encoded bytes: (%d) \"%s\"\n",encodedlen,encodedbytes);
+	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
 	charstring::safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
@@ -333,7 +333,7 @@ int main(int argc, const char **argv) {
 
 	// http escape the buffer
 	char    *escbuffer=charstring::httpEscape("!@#$%^&*()hello-+");
-	printf("!@#$\\%^&*()hello-+  http escaped is  %s\n",escbuffer);
+	printf("!@#$%%^&*()hello-+  http escaped is  %s\n",escbuffer);
 	char	*unescbuffer=charstring::httpUnescape(escbuffer);
 	printf("http unescaped is  %s\n",unescbuffer);
 	delete escbuffer;

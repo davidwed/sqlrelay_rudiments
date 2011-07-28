@@ -8,7 +8,7 @@ include ../features.mk
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(DLLIB)
 
-ALLSTATIC=-all-static
+#ALLSTATIC=-all-static
 
 .SUFFIXES: .lo
 

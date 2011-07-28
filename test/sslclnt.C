@@ -83,7 +83,7 @@ int main(int argc, const char **argv) {
 	// make sure the certificate was valid
 	long	result=SSL_get_verify_result(clnt.getSSL());
 	if (result!=X509_V_OK) {
-		printf("SSL_get_verify_result failed: %d\n",result);
+		printf("SSL_get_verify_result failed: %ld\n",result);
 		clnt.close();
 		exit(1);
 	}

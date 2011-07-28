@@ -19,15 +19,15 @@ void waitForTimer(intervaltimer *t) {
 	long	pusec;
 	t->getInitialInterval(&isec,&iusec);
 	t->getPeriodicInterval(&psec,&pusec);
-	printf("initial: %dsec %dusec   ",isec,iusec);
-	printf("periodic: %dsec %dusec\n",psec,pusec);
+	printf("initial: %ldsec %ldusec   ",isec,iusec);
+	printf("periodic: %ldsec %ldusec\n",psec,pusec);
 		
 
 	for (;;) {
 		long	sec;
 		long	usec;
 		t->getTimeRemaining(&sec,&usec);
-		printf("time remaining: %dsec %dusec\n",sec,usec);
+		printf("time remaining: %ldsec %ldusec\n",sec,usec);
 		if (sec==0 && usec==0) {
 			break;
 		}

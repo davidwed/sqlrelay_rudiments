@@ -130,7 +130,7 @@ void myserver::listen() {
 			long	result=SSL_get_verify_result(
 						clientsock->getSSL());
 			if (result!=X509_V_OK) {
-				printf("SSL_get_verify_result failed: %d\n",
+				printf("SSL_get_verify_result failed: %ld\n",
 									result);
 				clientsock->close();
 				continue;

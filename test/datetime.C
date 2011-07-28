@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 	printf("Year       : %d\n",dt.getYear());
 	printf("Daylight Savings Time : %d\n",dt.isDaylightSavingsTime());
 	printf("Time Zone	      : %s\n",dt.getTimeZoneString());
-	printf("Offset from GMT       : %ld\n",dt.getTimeZoneOffset());
+	printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
 	printf("Seconds since 1970    : %ld\n",dt.getEpoch());
 	printf("Date String	      : %s\n",dt.getString());
 

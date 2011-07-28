@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
 	}
 	clnt.flushWriteBuffer(-1,-1);
 	time_t	end=time(NULL);
-	printf("total time=%d\n",end-start);
+	printf("total time=%ld\n",end-start);
 
 	// close the connection to the server
 	clnt.close();

@@ -58,7 +58,7 @@ void	myserver::listen() {
 			printf("%s\n",buffer);
 			delete[] buffer;
 
-			char	response[]={0x02,'B','A','D','R','E','S','P','O','N','S','E',0x03};
+			//char	response[]={0x02,'B','A','D','R','E','S','P','O','N','S','E',0x03};
 			//for (int i=0; i<sizeof(response); i++) {
 			for (;;) {
 				//clientsock->write(response[i]);

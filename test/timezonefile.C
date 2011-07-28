@@ -23,22 +23,23 @@ int main(int argc, char **argv) {
 	printf("\n\n");
 
 	// print manually
-	printf("ttisgmtcnt: %ld\n",tz.getIsGMTCount());
-	printf("ttisstdcnt: %ld\n",tz.getIsSTDCount());
-	printf("leapcnt: %ld\n",tz.getLeapCount());
-	printf("timecnt: %ld\n",tz.getTimeCount());
-	printf("typecnt: %ld\n",tz.getTypeCount());
-	printf("charcnt: %ld\n",tz.getCharacterCount());
-	int	i;
+	printf("ttisgmtcnt: %lld\n",tz.getIsGMTCount());
+	printf("ttisstdcnt: %lld\n",tz.getIsSTDCount());
+	printf("leapcnt: %lld\n",tz.getLeapCount());
+	printf("timecnt: %lld\n",tz.getTimeCount());
+	printf("typecnt: %lld\n",tz.getTypeCount());
+	printf("charcnt: %lld\n",tz.getCharacterCount());
+	uint64_t	i;
 	for (i=0; i<tz.getTimeCount(); i++) {
-		printf("transitiontime[%d]: %ld\n",i,tz.getTransitionTime(i));
+		printf("transitiontime[%lld]: %lld\n",
+					i,tz.getTransitionTime(i));
 	}
 	for (i=0; i<tz.getTimeCount(); i++) {
-		printf("localtime[%d]: %d\n",i,tz.getLocalTimes(i));
+		printf("localtime[%lld]: %d\n",i,tz.getLocalTimes(i));
 	}
 	for (i=0; i<tz.getTypeCount(); i++) {
-		printf("ttinfo[%d] {\n",i);
-		printf("	tt_gmtoff: %ld\n",
+		printf("ttinfo[%lld] {\n",i);
+		printf("	tt_gmtoff: %lld\n",
 					tz.getTimeTypeInfo(i)->tt_gmtoff);
 		printf("	tt_isdst: %d\n",
 					tz.getTimeTypeInfo(i)->tt_isdst);
@@ -47,7 +48,7 @@ int main(int argc, char **argv) {
 		printf("}\n");
 	}
 	printf("rawtimezonestring: ");
-	for (int i=0; i<tz.getCharacterCount(); i++) {
+	for (i=0; i<tz.getCharacterCount(); i++) {
 		if (tz.getRawTimeZoneString()[i]==(char)NULL) {
 			printf(" ");
 		}
@@ -55,21 +56,21 @@ int main(int argc, char **argv) {
 	}
 	printf("\n");
 	for (i=0; i<tz.getLeapCount(); i++) {
-		printf("leapsecondtime[%d]: %ld\n",i,
+		printf("leapsecondtime[%lld]: %lld\n",i,
 					tz.getLeapSecondTime(i));
-		printf("totalleapseconds[%d]: %ld\n",i,
+		printf("totalleapseconds[%lld]: %lld\n",i,
 					tz.getTotalLeapSeconds(i));
 	}
-	for (int counter=0; counter<tz.getTypeCount(); counter++) {
-		printf("timezonestrings[%d]=%s\n",counter,
+	for (uint64_t counter=0; counter<tz.getTypeCount(); counter++) {
+		printf("timezonestrings[%lld]=%s\n",counter,
 					tz.getTimeZoneString(counter));
 	}
 	for (i=0; i<tz.getIsSTDCount(); i++) {
-		printf("transstdwall[%d]: %d\n",i,
+		printf("transstdwall[%lld]: %d\n",i,
 					tz.getStandardOrWallIndicator(i));
 	}
 	for (i=0; i<tz.getIsGMTCount(); i++) {
-		printf("transutclocal[%d]: %d\n",i,
+		printf("transutclocal[%lld]: %d\n",i,
 					tz.getUTCOrLocalIndicator(i));
 	}
 }
