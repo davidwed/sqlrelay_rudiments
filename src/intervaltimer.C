@@ -15,6 +15,13 @@
 namespace rudiments {
 #endif
 
+#ifndef RUDIMENTS_HAVE_SETITIMER
+	struct itimerval {
+		struct timeval	it_interval;
+		struct timeval	it_value;
+	};
+#endif
+
 class intervaltimerprivate {
 	friend class intervaltimer;
 	public:

@@ -527,13 +527,6 @@ FW_CHECK_SSL
 echo "******************************"
 
 
-dnl Checks for pcre library.
-echo
-echo "***** pcre *******************"
-FW_CHECK_PCRE
-echo "******************************"
-
-
 dnl Checks for typedefs, structures, and compiler characteristics.
 echo
 echo "***** Structures *************"
@@ -714,9 +707,9 @@ echo "******************************"
 if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
 then
 
-dnl Checks associated with signal handlers
+dnl Checks associated with signal handling
 echo
-echo "***** Signal Handlers ********"
+echo "***** Signal Handling ********"
 
 AC_TYPE_SIGNAL
 
@@ -853,10 +846,9 @@ set_real_time_clock(0);,AC_DEFINE(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK,1,Some syst
 echo "******************************"
 
 
-dnl Checks for library functions.
+dnl Checks for environment functions.
 echo
-echo "***** Functions **************"
-dnl AC_FUNC_MMAP
+echo "***** Environment ************"
 
 AC_MSG_CHECKING(for setenv)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
@@ -875,6 +867,37 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 unsetenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_UNSETENV,1,Some systems have unsetenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _NSGetEnviron)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <crt_externs.h>],
+char **env=(*_NSGetEnviron());,AC_DEFINE(RUDIMENTS_HAVE_NSGETENVIRON,1,Some systems define _NSGetEnviron in crt_externs.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for environ)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+char **env=environ;,AC_DEFINE(RUDIMENTS_HAVE_ENVIRON,1,Some systems define environ in unistd.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for clearenv)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+clearenv();,AC_DEFINE(RUDIMENTS_HAVE_CLEARENV,1,Some systems have clearenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+echo "******************************"
+
+
+dnl Checks for regular expression functions.
+echo
+echo "***** Regular Expressions ****"
+
+FW_CHECK_PCRE
 
 if ( test -z "$HAVE_PCRE" )
 then
@@ -896,6 +919,13 @@ then
 	USE_BUILT_IN_REGULAREXPRESSION="1"
 fi
 AC_SUBST(USE_BUILT_IN_REGULAREXPRESSION)
+
+echo "******************************"
+
+
+dnl Checks for networking functions.
+echo
+echo "***** Networking *************"
 
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
@@ -951,6 +981,18 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #endif],
 inet_aton(0,NULL);,HAVE_INET_ATON="yes"; AC_DEFINE(RUDIMENTS_HAVE_INET_ATON,1,Some systems have inet_aton) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+if ( test "$HAVE_INET_ATON" = "yes" )
+then
+	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
+	INETATONLIB=""
+	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <arpa/inet.h>],
+inet_aton(NULL,NULL);,AC_MSG_RESULT(no), INETATONLIB="-lresolv"; AC_MSG_RESULT(yes))
+AC_SUBST(INETATONLIB)
+fi
+
 AC_MSG_CHECKING(for inet_addr)
 AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -971,6 +1013,34 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 	#include <stdlib.h>
 #endif],
 inet_addr(0);,AC_DEFINE(RUDIMENTS_HAVE_INET_ADDR,1,Some systems have inet_addr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+FW_CHECK_XNET_PROTOTYPES
+FW_CHECK_SOCKET_LIBS
+
+OLDLIBS="$LIBS"
+LIBS="$LIBS $SOCKETLIBS"
+
+echo "******************************"
+
+
+dnl Checks for nss functions.
+echo
+echo "***** Name Service Switch ****"
+
+FW_CHECK_PWD
+FW_CHECK_SHADOW
+FW_CHECK_GRP
+FW_CHECK_HOST
+FW_CHECK_PROTO
+FW_CHECK_SVC
+FW_CHECK_RPC
+
+echo "******************************"
+
+
+dnl Checks for random number generators
+echo
+echo "** Random Number Generators **"
 
 AC_MSG_CHECKING(for srand48)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
@@ -1002,18 +1072,12 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 #endif],
 rand_r(0);,AC_DEFINE(RUDIMENTS_HAVE_RAND_R,1,Some systems have rand_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-FW_CHECK_XNET_PROTOTYPES
-FW_CHECK_SOCKET_LIBS
+echo "******************************"
 
-OLDLIBS="$LIBS"
-LIBS="$LIBS $SOCKETLIBS"
 
-FW_CHECK_PWD
-FW_CHECK_SHADOW
-FW_CHECK_GRP
-FW_CHECK_HOST
-FW_CHECK_PROTO
-FW_CHECK_SVC
+dnl Checks for semaphore functions
+echo
+echo "***** Semaphore Functions ****"
 
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
@@ -1056,6 +1120,13 @@ fi
 
 fi
 
+echo "******************************"
+
+
+dnl Checks for shared memory functions
+echo
+echo "*** Shared Memory Functions **"
+
 if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
 then
 
@@ -1074,6 +1145,13 @@ shmget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SHMGET,1,Some systems have shmget) AC_MS
 
 fi
 
+echo "******************************"
+
+
+dnl Checks for serial port functions
+echo
+echo "***** Serial Port Functions **"
+
 if ( test "$INCLUDE_SERIALPORT" = "1" -o "$INCLUDE_SERIALPORTPROFILE" = "1" )
 then
 
@@ -1086,32 +1164,12 @@ tcsetattr(0,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_TCSETATTR,1,Some systems have tcse
 
 fi
 
-AC_MSG_CHECKING(for xattr)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <sys/xattr.h>],
-setxattr(NULL,NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_XATTRS,1,Some systems have extended filesystem attributes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+echo "******************************"
 
-AC_MSG_CHECKING(for readdir_r)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
-	#include <dirent.h>
-#else
-	#include <direct.h>
-#endif],
-readdir_r(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for fdatasync)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif],
-fdatasync(0);,AC_DEFINE(RUDIMENTS_HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+dnl Checks for file functions
+echo
+echo "***** Timer Functions ********"
 
 FW_CHECK_NANOSLEEP
 FW_CHECK_CLOCK_NANOSLEEP
@@ -1120,36 +1178,39 @@ AC_MSG_CHECKING(for Sleep)
 AC_TRY_COMPILE([#include <windows.h>],
 Sleep(0);,AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_SLEEP,1,Some systems have Sleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-FW_CHECK_SHM_OPEN
-
-FW_CHECK_RPC
-
-AC_MSG_CHECKING(for pselect)
-AC_TRY_COMPILE([#include <sys/time.h>
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
-	#include <sys/select.h>
-#endif
-#ifdef HAVE_STDLIB_H
+if ( test "$INCLUDE_INTERVALTIMER" = "1" )
+then
+	AC_MSG_CHECKING(for setitimer)
+	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
-#endif],
-pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_PSELECT,1,Some systems have pselect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+#endif
+#include <sys/time.h>],
+setitimer(0,NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
-AC_MSG_CHECKING(for posix_fadvise)
-AC_TRY_COMPILE([#include <fcntl.h>],
-posix_fadvise(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FADVISE,1,Some systems have posix_fadvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+echo "******************************"
 
-AC_MSG_CHECKING(for posix_fallocate)
-AC_TRY_COMPILE([#include <fcntl.h>],
-posix_fallocate(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FALLOCATE,1,Some systems have posix_fallocate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+dnl Checks for crypt functions
+echo
+echo "***** Crypt Functions ********"
 
 FW_CHECK_CRYPT_R
+
+echo "******************************"
+
+
+dnl Checks for memory map functions
+echo
+echo "***** Memory Map Functions ***"
 FW_CHECK_MMAP
+
+echo "******************************"
+
+
+dnl Checks for string functions
+echo
+echo "***** String Functions *******"
 
 AC_MSG_CHECKING(for strtold)
 AC_TRY_COMPILE([#ifndef __USE_GNU
@@ -1269,27 +1330,71 @@ then
 void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(void *), AC_DEFINE(RUDIMENTS_HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument) AC_MSG_RESULT(char *))
 fi
 
-AC_MSG_CHECKING(for _NSGetEnviron)
+echo "******************************"
+
+
+dnl Checks for file functions
+echo
+echo "***** File Functions *********"
+
+AC_MSG_CHECKING(for xattr)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <crt_externs.h>],
-char **env=(*_NSGetEnviron());,AC_DEFINE(RUDIMENTS_HAVE_NSGETENVIRON,1,Some systems define _NSGetEnviron in crt_externs.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+#include <sys/xattr.h>],
+setxattr(NULL,NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_XATTRS,1,Some systems have extended filesystem attributes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for environ)
+AC_MSG_CHECKING(for fdatasync)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
-char **env=environ;,AC_DEFINE(RUDIMENTS_HAVE_ENVIRON,1,Some systems define environ in unistd.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fdatasync(0);,AC_DEFINE(RUDIMENTS_HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for clearenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_MSG_CHECKING(for posix_fadvise)
+AC_TRY_COMPILE([#include <fcntl.h>],
+posix_fadvise(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FADVISE,1,Some systems have posix_fadvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for posix_fallocate)
+AC_TRY_COMPILE([#include <fcntl.h>],
+posix_fallocate(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FALLOCATE,1,Some systems have posix_fallocate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for pselect)
+AC_TRY_COMPILE([#include <sys/time.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
+	#include <sys/select.h>
+#endif
+#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-clearenv();,AC_DEFINE(RUDIMENTS_HAVE_CLEARENV,1,Some systems have clearenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_PSELECT,1,Some systems have pselect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_CHECK_HEADERS(poll.h sys/poll.h)
+AC_MSG_CHECKING([for poll])
+AC_TRY_COMPILE([
+#if defined(HAVE_POLL_H)
+#include <poll.h>
+#elif defined(HAVE_SYS_POLL_H)
+#include <sys/poll.h>
+#endif
+],[
+struct pollfd fds[1];
+fds[0].fd = 0;
+fds[0].events = POLLIN | POLLOUT | POLLERR | POLLHUP | POLLNVAL;
+
+poll(fds, 1, 1000);
+],
+AC_DEFINE(RUDIMENTS_HAVE_POLL,1,Some systems have poll) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+FW_CHECK_SHM_OPEN
 
 AC_MSG_CHECKING(for ioctl)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
@@ -1338,21 +1443,6 @@ truncate("",0);,AC_DEFINE(RUDIMENTS_HAVE_TRUNCATE,1,Some systems have truncate) 
 AC_MSG_CHECKING(for link)
 AC_TRY_COMPILE([#include <unistd.h>],
 link("","");,AC_DEFINE(RUDIMENTS_HAVE_LINK,1,Some systems have link) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for dlopen)
-AC_TRY_COMPILE([#include <dlfcn.h>],
-dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for LoadLibrary)
-	AC_TRY_COMPILE([#include <windows.h>],
-	LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-	AC_MSG_CHECKING(for LoadLibraryEx)
-	AC_TRY_COMPILE([#include <windows.h>],
-	LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
 
 AC_MSG_CHECKING(for symlink)
 AC_TRY_COMPILE([#include <unistd.h>],
@@ -1450,13 +1540,6 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #endif],
 mknod("",0,0);,AC_DEFINE(RUDIMENTS_HAVE_MKNOD,1,Some systems have mknod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test "$INCLUDE_DYNAMICLIB" = "1" )
-then
-	AC_MSG_CHECKING(whether we can link against -ldl)
-	FW_TRY_LINK([#include <dlfcn.h>],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
-fi
-AC_SUBST(DLLIB)
-
 AC_MSG_CHECKING(for ftok)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -1481,17 +1564,41 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 #endif],
 const char *var=NULL; ftok(var,0);,AC_DEFINE(RUDIMENTS_HAVE_CONST_CHAR_FTOK,1,Most systems have ftok(const char *, int)) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test "$HAVE_INET_ATON" = "yes" )
+echo "******************************"
+
+
+dnl Checks for dynamic loader functions
+echo
+echo "***** Dynamic Loader *********"
+
+AC_MSG_CHECKING(for dlopen)
+AC_TRY_COMPILE([#include <dlfcn.h>],
+dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+if ( test -n "$MINGW32" )
 then
-	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
-	INETATONLIB=""
-	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <arpa/inet.h>],
-inet_aton(NULL,NULL);,AC_MSG_RESULT(no), INETATONLIB="-lresolv"; AC_MSG_RESULT(yes))
-AC_SUBST(INETATONLIB)
+	AC_MSG_CHECKING(for LoadLibrary)
+	AC_TRY_COMPILE([#include <windows.h>],
+	LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for LoadLibraryEx)
+	AC_TRY_COMPILE([#include <windows.h>],
+	LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
+
+if ( test "$INCLUDE_DYNAMICLIB" = "1" )
+then
+	AC_MSG_CHECKING(whether we can link against -ldl)
+	FW_TRY_LINK([#include <dlfcn.h>],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
+fi
+AC_SUBST(DLLIB)
+
+echo "******************************"
+
+
+dnl Checks for byte swap functions
+echo
+echo "***** Byte Swap Functions ****"
 
 AC_MSG_CHECKING(for bswap_64)
 AC_TRY_LINK([#ifdef HAVE_STDLIB_H
@@ -1550,6 +1657,24 @@ OSSwapHostToLittleInt64(0);,AC_DEFINE(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64,1,S
 AC_MSG_CHECKING(for __swap_int64)
 AC_TRY_LINK([#include <os/support/ByteOrder.h>],
 __swap_int64(0);,AC_DEFINE(RUDIMENTS_HAVE_SWAP_INT64,1,Some systems have __swap_int64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+echo "******************************"
+
+
+dnl Checks for directory functions
+echo
+echo "***** Directory Functions ****"
+
+AC_MSG_CHECKING(for readdir_r)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_DIRENT_H
+	#include <dirent.h>
+#else
+	#include <direct.h>
+#endif],
+readdir_r(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dirfd)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
@@ -1611,6 +1736,13 @@ mkdir(""),AC_DEFINE(RUDIMENTS_HAVE_MKDIR_1,1,Some systems have mkdir) AC_MSG_RES
 AC_MSG_CHECKING(for chroot)
 AC_TRY_LINK([#include <unistd.h>],
 chroot(""),AC_DEFINE(RUDIMENTS_HAVE_CHROOT,1,Some systems have chroot) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+echo "******************************"
+
+
+dnl Checks for process functions
+echo
+echo "***** Process Functions ******"
 
 AC_MSG_CHECKING(for getpid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
@@ -1756,6 +1888,13 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #endif],
 setregid(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETREGID,1,Some systems have setregid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+echo "******************************"
+
+
+dnl Checks for page size functions
+echo
+echo "***** Page Size Functions ****"
+
 AC_MSG_CHECKING(for getpagesize)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1768,34 +1907,6 @@ getpagesize(),AC_DEFINE(RUDIMENTS_HAVE_GETPAGESIZE,1,Some systems have getpagesi
 AC_MSG_CHECKING(for GetSystemInfo)
 AC_TRY_LINK([#include <windows.h>],
 GetSystemInfo(NULL),AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMINFO,1,Some systems have GetSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-if ( test "$INCLUDE_INTERVALTIMER" = "1" )
-then
-	AC_MSG_CHECKING(for setitimer)
-	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <sys/time.h>],
-setitimer(0,NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-fi
-
-AC_CHECK_HEADERS(poll.h sys/poll.h)
-AC_MSG_CHECKING([for poll])
-AC_TRY_COMPILE([
-#if defined(HAVE_POLL_H)
-#include <poll.h>
-#elif defined(HAVE_SYS_POLL_H)
-#include <sys/poll.h>
-#endif
-],[
-struct pollfd fds[1];
-fds[0].fd = 0;
-fds[0].events = POLLIN | POLLOUT | POLLERR | POLLHUP | POLLNVAL;
-
-poll(fds, 1, 1000);
-],
-AC_DEFINE(RUDIMENTS_HAVE_POLL,1,Some systems have poll) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 
 echo "******************************"
 

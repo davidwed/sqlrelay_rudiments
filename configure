@@ -804,16 +804,16 @@ INCLUDE_CHARACTER
 INCLUDE_CHARSTRING
 SONAME_VERSION_INFO
 RUDIMENTS_VERSION
-INETATONLIB
 DLLIB
-HAS_MEMORYMAP
-CRYPTLIB
 HAS_SHM_OPEN
 SHMOPENLIB
+HAS_MEMORYMAP
+CRYPTLIB
 CLOCKNANOSLEEPLIB
 NANOSLEEPLIB
 NETAPI32LIB
 SOCKETLIBS
+INETATONLIB
 USE_BUILT_IN_REGULAREXPRESSION
 PCRELIBS
 PCREINCLUDES
@@ -17028,354 +17028,6 @@ echo "******************************"
 
 
 echo
-echo "***** pcre *******************"
-
-
-HAVE_PCRE=""
-if ( test "$ENABLE_RUDIMENTS_PCRE" = "yes" )
-then
-
-	if ( test "$cross_compiling" = "yes" )
-	then
-
-				echo "cross compiling"
-		if ( test -n "$PCRELIBS" -o -n "$PCREINCLUDES" )
-		then
-
-$as_echo "#define RUDIMENTS_HAS_PCRE 1" >>confdefs.h
-
-		fi
-
-	else
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pcre" >&5
-$as_echo_n "checking for pcre... " >&6; }
-		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
-		then
-			PCRELIBS=`pcre-config --libs 2> /dev/null`
-			if ( test -n "$PCRELIBS" )
-			then
-				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
-			fi
-		fi
-
-		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
-		then
-
-
-SEARCHPATH=/usr
-NAME=pcre
-HEADER=pcre/pcre.h
-LIBNAME=pcre
-LINKSTATIC=""
-LINKRPATH=""
-USEFULLLIBPATH=
-INCLUDESTRING=""
-LIBSTRING=""
-LIBPATH=""
-STATIC=""
-HEADERSANDLIBSPATH=""
-
-eval "PCREINCLUDES=\"\""
-eval "PCRELIBS=\"\""
-eval "PCRELIBPATH=\"\""
-eval "PCRESTATIC=\"\""
-if ( test -n "" )
-then
-	eval "=\"\""
-fi
-
-
-for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/Haiku/common" "/usr/local/firstworks"
-do
-	if ( test -n "$path" -a -d "$path" )
-	then
-
-		if ( test "$path" = "/" )
-		then
-						if ( test "$USEFULLLIBPATH" = "yes" )
-			then
-
-FOUNDHEADER=""
-FOUNDLIB=""
-
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
-if ( test -r "/$LIBDIR/lib$LIBNAME.$SOSUFFIX" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-if ( test -n "$FOUNDLIB" )
-then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-	then
-		eval ""
-		eval "LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"/$LIBDIR/lib$LIBNAME.$SOSUFFIX\""
-	fi
-else
-	if ( test -n "/$LIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
-
-if ( test -r "/$LIBDIR/lib$LIBNAME.a" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-		then
-			eval ""
-			eval "LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
-		fi
-	fi
-fi
-
-			else
-
-FOUNDHEADER=""
-FOUNDLIB=""
-
-if ( test -r "/usr/include/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
-if ( test -r "/$LIBDIR/lib$LIBNAME.$SOSUFFIX" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-if ( test -n "$FOUNDLIB" )
-then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-	then
-		eval ""
-		eval "LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
-	fi
-else
-	if ( test -n "/$LIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
-
-if ( test -r "/$LIBDIR/lib$LIBNAME.a" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-		then
-			eval ""
-			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
-		fi
-	fi
-fi
-
-			fi
-
-						path=""
-		fi
-
-
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
-		do
-
-			if ( test -n "$LIBSTRING" )
-			then
-				break
-			fi
-
-			for includepath in "$path/include" "$path/include/$NAME"
-			do
-
-				if ( test -n "$LIBSTRING" )
-				then
-					break
-				fi
-
-								if ( test "$USEFULLLIBPATH" = "yes" )
-				then
-
-FOUNDHEADER=""
-FOUNDLIB=""
-
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
-if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-if ( test -n "$FOUNDLIB" )
-then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-	then
-		eval "INCLUDESTRING=\"-I$includepath\""
-		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"$libpath/lib$LIBNAME.$SOSUFFIX\""
-	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
-	then
-
-if ( test -r "$libpath/lib$LIBNAME.a" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-		then
-			eval "INCLUDESTRING=\"-I$includepath\""
-			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
-		fi
-	fi
-fi
-
-				else
-
-FOUNDHEADER=""
-FOUNDLIB=""
-
-if ( test -r "$includepath/$HEADER" )
-then
-	eval "FOUNDHEADER=\"yes\""
-fi
-
-
-if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-if ( test -n "$FOUNDLIB" )
-then
-	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-	then
-		eval "INCLUDESTRING=\"-I$includepath\""
-		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
-	fi
-else
-	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
-	then
-
-if ( test -r "$libpath/lib$LIBNAME.a" )
-then
-	eval "FOUNDLIB=\"yes\""
-fi
-
-		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
-		then
-			eval "INCLUDESTRING=\"-I$includepath\""
-			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
-		fi
-	fi
-fi
-
-				fi
-			done
-		done
-
-		if ( test -n "$LIBSTRING" )
-		then
-			HEADERSANDLIBSPATH="$path"
-			break
-		fi
-	fi
-done
-
-INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
-LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
-LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
-
-eval "PCREINCLUDES=\"$INCLUDESTRING\""
-eval "PCRELIBS=\"$LIBSTRING\""
-eval "PCRELIBPATH=\"$LIBPATH\""
-eval "PCRESTATIC=\"$STATIC\""
-if ( test -n "" )
-then
-	eval "=\"$HEADERSANDLIBSPATH\""
-fi
-
-		fi
-
-		if ( test -n "$PCRELIBS" )
-		then
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $PCREINCLUDES"
-LIBS="$HACKLIBS $PCRELIBS"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-				#include <stdlib.h>
-#endif
-#include <pcre.h>
-int
-main ()
-{
-pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  HAVE_PCRE="yes";
-$as_echo "#define RUDIMENTS_HAS_PCRE 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  PCREINCLUDES=""; PCRELIBS=""; { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-		else
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		fi
-	fi
-
-
-if ( test -n "$PCREINCLUDES" )
-then
-	echo "pcre includes... $PCREINCLUDES"
-fi
-
-
-if ( test -n "$PCRELIBS" )
-then
-	echo "pcre libs... $PCRELIBS"
-fi
-
-
-else
-
-	echo "disabled"
-
-fi
-
-
-
-
-echo "******************************"
-
-
-echo
 echo "***** Structures *************"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for an ANSI C-conforming const" >&5
 $as_echo_n "checking for an ANSI C-conforming const... " >&6; }
@@ -18557,7 +18209,7 @@ if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
 then
 
 echo
-echo "***** Signal Handlers ********"
+echo "***** Signal Handling ********"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking return type of signal handlers" >&5
 $as_echo_n "checking return type of signal handlers... " >&6; }
@@ -19124,7 +18776,7 @@ echo "******************************"
 
 
 echo
-echo "***** Functions **************"
+echo "***** Environment ************"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for setenv" >&5
 $as_echo_n "checking for setenv... " >&6; }
@@ -19204,6 +18856,438 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _NSGetEnviron" >&5
+$as_echo_n "checking for _NSGetEnviron... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <crt_externs.h>
+int
+main ()
+{
+char **env=(*_NSGetEnviron());
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_NSGETENVIRON 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for environ" >&5
+$as_echo_n "checking for environ... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+int
+main ()
+{
+char **env=environ;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_ENVIRON 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for clearenv" >&5
+$as_echo_n "checking for clearenv... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+clearenv();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CLEARENV 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+echo "******************************"
+
+
+echo
+echo "***** Regular Expressions ****"
+
+
+
+HAVE_PCRE=""
+if ( test "$ENABLE_RUDIMENTS_PCRE" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+				echo "cross compiling"
+		if ( test -n "$PCRELIBS" -o -n "$PCREINCLUDES" )
+		then
+
+$as_echo "#define RUDIMENTS_HAS_PCRE 1" >>confdefs.h
+
+		fi
+
+	else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pcre" >&5
+$as_echo_n "checking for pcre... " >&6; }
+		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+		then
+			PCRELIBS=`pcre-config --libs 2> /dev/null`
+			if ( test -n "$PCRELIBS" )
+			then
+				PCREINCLUDES=`pcre-config --cflags 2> /dev/null`
+			fi
+		fi
+
+		if ( test -z "$PCRELIBS" -a -z "$PCREINCLUDES" )
+		then
+
+
+SEARCHPATH=/usr
+NAME=pcre
+HEADER=pcre/pcre.h
+LIBNAME=pcre
+LINKSTATIC=""
+LINKRPATH=""
+USEFULLLIBPATH=
+INCLUDESTRING=""
+LIBSTRING=""
+LIBPATH=""
+STATIC=""
+HEADERSANDLIBSPATH=""
+
+eval "PCREINCLUDES=\"\""
+eval "PCRELIBS=\"\""
+eval "PCRELIBPATH=\"\""
+eval "PCRESTATIC=\"\""
+if ( test -n "" )
+then
+	eval "=\"\""
+fi
+
+
+for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/Haiku/common" "/usr/local/firstworks"
+do
+	if ( test -n "$path" -a -d "$path" )
+	then
+
+		if ( test "$path" = "/" )
+		then
+						if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"/$LIBDIR/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "/$LIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/$LIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+						path=""
+		fi
+
+
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
+		do
+
+			if ( test -n "$LIBSTRING" )
+			then
+				break
+			fi
+
+			for includepath in "$path/include" "$path/include/$NAME"
+			do
+
+				if ( test -n "$LIBSTRING" )
+				then
+					break
+				fi
+
+								if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"$libpath/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				fi
+			done
+		done
+
+		if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+	fi
+done
+
+INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
+
+eval "PCREINCLUDES=\"$INCLUDESTRING\""
+eval "PCRELIBS=\"$LIBSTRING\""
+eval "PCRELIBPATH=\"$LIBPATH\""
+eval "PCRESTATIC=\"$STATIC\""
+if ( test -n "" )
+then
+	eval "=\"$HEADERSANDLIBSPATH\""
+fi
+
+		fi
+
+		if ( test -n "$PCRELIBS" )
+		then
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $PCREINCLUDES"
+LIBS="$HACKLIBS $PCRELIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+				#include <stdlib.h>
+#endif
+#include <pcre.h>
+int
+main ()
+{
+pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  HAVE_PCRE="yes";
+$as_echo "#define RUDIMENTS_HAS_PCRE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  PCREINCLUDES=""; PCRELIBS=""; { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
+	fi
+
+
+if ( test -n "$PCREINCLUDES" )
+then
+	echo "pcre includes... $PCREINCLUDES"
+fi
+
+
+if ( test -n "$PCRELIBS" )
+then
+	echo "pcre libs... $PCRELIBS"
+fi
+
+
+else
+
+	echo "disabled"
+
+fi
+
+
+
+
+
 if ( test -z "$HAVE_PCRE" )
 then
 	HAVE_REGCOMP=""
@@ -19244,6 +19328,12 @@ then
 	USE_BUILT_IN_REGULAREXPRESSION="1"
 fi
 
+
+echo "******************************"
+
+
+echo
+echo "***** Networking *************"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if setsockopt takes a const void * parameter" >&5
 $as_echo_n "checking if setsockopt takes a const void * parameter... " >&6; }
@@ -19363,6 +19453,37 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+if ( test "$HAVE_INET_ATON" = "yes" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether inet_aton needs -lresolv" >&5
+$as_echo_n "checking whether inet_aton needs -lresolv... " >&6; }
+	INETATONLIB=""
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <arpa/inet.h>
+int
+main ()
+{
+inet_aton(NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+  INETATONLIB="-lresolv"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_addr" >&5
 $as_echo_n "checking for inet_addr... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19396,136 +19517,6 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_INET_ADDR 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for srand48" >&5
-$as_echo_n "checking for srand48... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-int
-main ()
-{
-srand48(0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SRAND48 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for lrand48" >&5
-$as_echo_n "checking for lrand48... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-int
-main ()
-{
-lrand48();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_LRAND48 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for srand" >&5
-$as_echo_n "checking for srand... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-int
-main ()
-{
-srand(0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SRAND 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rand" >&5
-$as_echo_n "checking for rand... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-int
-main ()
-{
-rand();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_RAND 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rand_r" >&5
-$as_echo_n "checking for rand_r... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-int
-main ()
-{
-rand_r(0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_RAND_R 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -19662,6 +19653,12 @@ $as_echo "$SOCKETLIBS" >&6; }
 
 OLDLIBS="$LIBS"
 LIBS="$LIBS $SOCKETLIBS"
+
+echo "******************************"
+
+
+echo
+echo "***** Name Service Switch ****"
 
 
 
@@ -20598,476 +20595,6 @@ fi
 
 
 
-if ( test "$INCLUDE_SEMAPHORESET" = "1" )
-then
-
-if ( test -n "$MINGW32" )
-then
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateSemaphore" >&5
-$as_echo_n "checking for CreateSemaphore... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <windows.h>
-int
-main ()
-{
-CreateSemaphore(NULL,0,0,"");
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_CREATESEMAPHORE 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-else
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semget" >&5
-$as_echo_n "checking for semget... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/sem.h>
-int
-main ()
-{
-semget(0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SEMGET 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semtimedop" >&5
-$as_echo_n "checking for semtimedop... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/sem.h>
-int
-main ()
-{
-semtimedop(0,NULL,0,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SEMTIMEDOP 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-
-fi
-
-if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
-then
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for shmget" >&5
-$as_echo_n "checking for shmget... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
-#include <sys/shm.h>
-int
-main ()
-{
-shmget(0,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SHMGET 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-if ( test "$INCLUDE_SERIALPORT" = "1" -o "$INCLUDE_SERIALPORTPROFILE" = "1" )
-then
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for tcsetattr" >&5
-$as_echo_n "checking for tcsetattr... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <termios.h>
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-int
-main ()
-{
-tcsetattr(0,0,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_TCSETATTR 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for xattr" >&5
-$as_echo_n "checking for xattr... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <sys/xattr.h>
-int
-main ()
-{
-setxattr(NULL,NULL,NULL,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_XATTRS 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for readdir_r" >&5
-$as_echo_n "checking for readdir_r... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
-	#include <dirent.h>
-#else
-	#include <direct.h>
-#endif
-int
-main ()
-{
-readdir_r(NULL,NULL,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_READDIR_R 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for fdatasync" >&5
-$as_echo_n "checking for fdatasync... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-int
-main ()
-{
-fdatasync(0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_FDATASYNC 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nanosleep" >&5
-$as_echo_n "checking for nanosleep... " >&6; }
-
-	DONE=""
-	for i in "" "-lrt"
-	do
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS"
-LIBS="$HACKLIBS $i"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <time.h>
-int
-main ()
-{
-nanosleep(NULL,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  NANOSLEEPLIB="$i"; DONE="yes"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-		if ( test -n "$DONE" )
-		then
-			break
-		fi
-	done
-
-	if ( test -n "$DONE" )
-	then
-
-$as_echo "#define RUDIMENTS_HAVE_NANOSLEEP 1" >>confdefs.h
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	fi
-
-
-
-
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for clock_nanosleep" >&5
-$as_echo_n "checking for clock_nanosleep... " >&6; }
-
-	DONE=""
-	for i in "" "-lrt"
-	do
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS"
-LIBS="$HACKLIBS $i"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <time.h>
-int
-main ()
-{
-clock_nanosleep(0,0,NULL,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  CLOCKNANOSLEEPLIB="$i"; DONE="yes"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-		if ( test -n "$DONE" )
-		then
-			break
-		fi
-	done
-
-	if ( test -n "$DONE" )
-	then
-
-$as_echo "#define RUDIMENTS_HAVE_CLOCK_NANOSLEEP 1" >>confdefs.h
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	fi
-
-
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Sleep" >&5
-$as_echo_n "checking for Sleep... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <windows.h>
-int
-main ()
-{
-Sleep(0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_WINDOWS_SLEEP 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-
-	HAS_SHM_OPEN="no"
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for shm_open" >&5
-$as_echo_n "checking for shm_open... " >&6; }
-
-	DONE=""
-	for i in "" "-lrt"
-	do
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS"
-LIBS="$HACKLIBS $i"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#include <sys/mman.h>
-int
-main ()
-{
-shm_open(NULL,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  SHMOPENLIB="$i"; DONE="yes"; HAS_SHM_OPEN="yes"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-		if ( test -n "$DONE" )
-		then
-			break
-		fi
-	done
-
-	if ( test -n "$DONE" )
-	then
-
-$as_echo "#define RUDIMENTS_HAVE_SHM_OPEN 1" >>confdefs.h
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	fi
-
-
-
-
-
-
 
 if ( test "$INCLUDE_RPCENTRY" = "1" )
 then
@@ -21652,34 +21179,30 @@ fi
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pselect" >&5
-$as_echo_n "checking for pselect... " >&6; }
+echo "******************************"
+
+
+echo
+echo "** Random Number Generators **"
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for srand48" >&5
+$as_echo_n "checking for srand48... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <sys/time.h>
-#ifdef HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
-	#include <sys/select.h>
-#endif
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 int
 main ()
 {
-pselect(0,NULL,NULL,NULL,NULL,NULL);
+srand48(0);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_PSELECT 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_SRAND48 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -21688,22 +21211,24 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for posix_fadvise" >&5
-$as_echo_n "checking for posix_fadvise... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for lrand48" >&5
+$as_echo_n "checking for lrand48... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <fcntl.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 int
 main ()
 {
-posix_fadvise(0,0,0,0);
+lrand48();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_POSIX_FADVISE 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_LRAND48 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -21712,22 +21237,24 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for posix_fallocate" >&5
-$as_echo_n "checking for posix_fallocate... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for srand" >&5
+$as_echo_n "checking for srand... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <fcntl.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 int
 main ()
 {
-posix_fallocate(0,0,0);
+srand(0);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_POSIX_FALLOCATE 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_SRAND 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -21735,6 +21262,435 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rand" >&5
+$as_echo_n "checking for rand... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+rand();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_RAND 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rand_r" >&5
+$as_echo_n "checking for rand_r... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+rand_r(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_RAND_R 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+echo "******************************"
+
+
+echo
+echo "***** Semaphore Functions ****"
+
+if ( test "$INCLUDE_SEMAPHORESET" = "1" )
+then
+
+if ( test -n "$MINGW32" )
+then
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateSemaphore" >&5
+$as_echo_n "checking for CreateSemaphore... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+int
+main ()
+{
+CreateSemaphore(NULL,0,0,"");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CREATESEMAPHORE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+else
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semget" >&5
+$as_echo_n "checking for semget... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
+#include <sys/sem.h>
+int
+main ()
+{
+semget(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SEMGET 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semtimedop" >&5
+$as_echo_n "checking for semtimedop... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
+#include <sys/sem.h>
+int
+main ()
+{
+semtimedop(0,NULL,0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SEMTIMEDOP 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+
+fi
+
+echo "******************************"
+
+
+echo
+echo "*** Shared Memory Functions **"
+
+if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
+then
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for shmget" >&5
+$as_echo_n "checking for shmget... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
+#include <sys/shm.h>
+int
+main ()
+{
+shmget(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SHMGET 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+
+echo "******************************"
+
+
+echo
+echo "***** Serial Port Functions **"
+
+if ( test "$INCLUDE_SERIALPORT" = "1" -o "$INCLUDE_SERIALPORTPROFILE" = "1" )
+then
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for tcsetattr" >&5
+$as_echo_n "checking for tcsetattr... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <termios.h>
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+int
+main ()
+{
+tcsetattr(0,0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_TCSETATTR 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+
+echo "******************************"
+
+
+echo
+echo "***** Timer Functions ********"
+
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nanosleep" >&5
+$as_echo_n "checking for nanosleep... " >&6; }
+
+	DONE=""
+	for i in "" "-lrt"
+	do
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS"
+LIBS="$HACKLIBS $i"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>
+int
+main ()
+{
+nanosleep(NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  NANOSLEEPLIB="$i"; DONE="yes"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		if ( test -n "$DONE" )
+		then
+			break
+		fi
+	done
+
+	if ( test -n "$DONE" )
+	then
+
+$as_echo "#define RUDIMENTS_HAVE_NANOSLEEP 1" >>confdefs.h
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	fi
+
+
+
+
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for clock_nanosleep" >&5
+$as_echo_n "checking for clock_nanosleep... " >&6; }
+
+	DONE=""
+	for i in "" "-lrt"
+	do
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS"
+LIBS="$HACKLIBS $i"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>
+int
+main ()
+{
+clock_nanosleep(0,0,NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  CLOCKNANOSLEEPLIB="$i"; DONE="yes"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		if ( test -n "$DONE" )
+		then
+			break
+		fi
+	done
+
+	if ( test -n "$DONE" )
+	then
+
+$as_echo "#define RUDIMENTS_HAVE_CLOCK_NANOSLEEP 1" >>confdefs.h
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	fi
+
+
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Sleep" >&5
+$as_echo_n "checking for Sleep... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+int
+main ()
+{
+Sleep(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WINDOWS_SLEEP 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test "$INCLUDE_INTERVALTIMER" = "1" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for setitimer" >&5
+$as_echo_n "checking for setitimer... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <sys/time.h>
+int
+main ()
+{
+setitimer(0,NULL,NULL)
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SETITIMER 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+
+echo "******************************"
+
+
+echo
+echo "***** Crypt Functions ********"
 
 
 if ( test "$INCLUDE_CRYPT" = 1 )
@@ -21894,6 +21850,12 @@ fi
 
 
 
+
+echo "******************************"
+
+
+echo
+echo "***** Memory Map Functions ***"
 
 
 HAS_MEMORYMAP="no"
@@ -22531,6 +22493,12 @@ fi
 
 
 
+echo "******************************"
+
+
+echo
+echo "***** String Functions *******"
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for strtold" >&5
 $as_echo_n "checking for strtold... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -22809,25 +22777,31 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _NSGetEnviron" >&5
-$as_echo_n "checking for _NSGetEnviron... " >&6; }
+echo "******************************"
+
+
+echo
+echo "***** File Functions *********"
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for xattr" >&5
+$as_echo_n "checking for xattr... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <crt_externs.h>
+#include <sys/xattr.h>
 int
 main ()
 {
-char **env=(*_NSGetEnviron());
+setxattr(NULL,NULL,NULL,0,0);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_NSGETENVIRON 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_XATTRS 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -22836,8 +22810,8 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for environ" >&5
-$as_echo_n "checking for environ... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for fdatasync" >&5
+$as_echo_n "checking for fdatasync... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #ifdef HAVE_STDLIB_H
@@ -22849,14 +22823,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-char **env=environ;
+fdatasync(0);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_ENVIRON 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_FDATASYNC 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -22865,24 +22839,82 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for clearenv" >&5
-$as_echo_n "checking for clearenv... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for posix_fadvise" >&5
+$as_echo_n "checking for posix_fadvise... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#include <fcntl.h>
+int
+main ()
+{
+posix_fadvise(0,0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_POSIX_FADVISE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for posix_fallocate" >&5
+$as_echo_n "checking for posix_fallocate... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <fcntl.h>
+int
+main ()
+{
+posix_fallocate(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_POSIX_FALLOCATE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pselect" >&5
+$as_echo_n "checking for pselect... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/time.h>
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
+	#include <sys/select.h>
+#endif
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 int
 main ()
 {
-clearenv();
+pselect(0,NULL,NULL,NULL,NULL,NULL);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAVE_CLEARENV 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAVE_PSELECT 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -22890,6 +22922,121 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+for ac_header in poll.h sys/poll.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for poll" >&5
+$as_echo_n "checking for poll... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#if defined(HAVE_POLL_H)
+#include <poll.h>
+#elif defined(HAVE_SYS_POLL_H)
+#include <sys/poll.h>
+#endif
+
+int
+main ()
+{
+
+struct pollfd fds[1];
+fds[0].fd = 0;
+fds[0].events = POLLIN | POLLOUT | POLLERR | POLLHUP | POLLNVAL;
+
+poll(fds, 1, 1000);
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_POLL 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+
+	HAS_SHM_OPEN="no"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for shm_open" >&5
+$as_echo_n "checking for shm_open... " >&6; }
+
+	DONE=""
+	for i in "" "-lrt"
+	do
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS"
+LIBS="$HACKLIBS $i"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/mman.h>
+int
+main ()
+{
+shm_open(NULL,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  SHMOPENLIB="$i"; DONE="yes"; HAS_SHM_OPEN="yes"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		if ( test -n "$DONE" )
+		then
+			break
+		fi
+	done
+
+	if ( test -n "$DONE" )
+	then
+
+$as_echo "#define RUDIMENTS_HAVE_SHM_OPEN 1" >>confdefs.h
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	fi
+
+
+
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ioctl" >&5
 $as_echo_n "checking for ioctl... " >&6; }
@@ -23078,81 +23225,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen" >&5
-$as_echo_n "checking for dlopen... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <dlfcn.h>
-int
-main ()
-{
-dlopen("",0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_DLOPEN 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibrary" >&5
-$as_echo_n "checking for LoadLibrary... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <windows.h>
-int
-main ()
-{
-LoadLibrary("");
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_LOADLIBRARY 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibraryEx" >&5
-$as_echo_n "checking for LoadLibraryEx... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <windows.h>
-int
-main ()
-{
-LoadLibraryEx("",NULL,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_LOADLIBRARYEX 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for symlink" >&5
 $as_echo_n "checking for symlink... " >&6; }
@@ -23550,46 +23622,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test "$INCLUDE_DYNAMICLIB" = "1" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we can link against -ldl" >&5
-$as_echo_n "checking whether we can link against -ldl... " >&6; }
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS"
-LIBS="$HACKLIBS -ldl"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <dlfcn.h>
-int
-main ()
-{
-dlopen("",0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  DLLIB="-ldl"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  DLLIB=""; { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-fi
-
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ftok" >&5
 $as_echo_n "checking for ftok... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -23654,36 +23686,132 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test "$HAVE_INET_ATON" = "yes" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether inet_aton needs -lresolv" >&5
-$as_echo_n "checking whether inet_aton needs -lresolv... " >&6; }
-	INETATONLIB=""
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+echo "******************************"
+
+
+echo
+echo "***** Dynamic Loader *********"
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen" >&5
+$as_echo_n "checking for dlopen... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <arpa/inet.h>
+#include <dlfcn.h>
 int
 main ()
 {
-inet_aton(NULL,NULL);
+dlopen("",0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_DLOPEN 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+if ( test -n "$MINGW32" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibrary" >&5
+$as_echo_n "checking for LoadLibrary... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+int
+main ()
+{
+LoadLibrary("");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_LOADLIBRARY 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibraryEx" >&5
+$as_echo_n "checking for LoadLibraryEx... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+int
+main ()
+{
+LoadLibraryEx("",NULL,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_LOADLIBRARYEX 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+
+if ( test "$INCLUDE_DYNAMICLIB" = "1" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we can link against -ldl" >&5
+$as_echo_n "checking whether we can link against -ldl... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS"
+LIBS="$HACKLIBS -ldl"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <dlfcn.h>
+int
+main ()
+{
+dlopen("",0);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-  INETATONLIB="-lresolv"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+  DLLIB="-ldl"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+else
+  DLLIB=""; { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
 
 fi
+
+
+echo "******************************"
+
+
+echo
+echo "***** Byte Swap Functions ****"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for bswap_64" >&5
 $as_echo_n "checking for bswap_64... " >&6; }
@@ -23890,6 +24018,43 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+echo "******************************"
+
+
+echo
+echo "***** Directory Functions ****"
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for readdir_r" >&5
+$as_echo_n "checking for readdir_r... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_DIRENT_H
+	#include <dirent.h>
+#else
+	#include <direct.h>
+#endif
+int
+main ()
+{
+readdir_r(NULL,NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_READDIR_R 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dirfd" >&5
 $as_echo_n "checking for dirfd... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -24076,6 +24241,12 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+
+echo "******************************"
+
+
+echo
+echo "***** Process Functions ******"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for getpid" >&5
 $as_echo_n "checking for getpid... " >&6; }
@@ -24578,6 +24749,12 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+echo "******************************"
+
+
+echo
+echo "***** Page Size Functions ****"
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for getpagesize" >&5
 $as_echo_n "checking for getpagesize... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -24632,87 +24809,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-if ( test "$INCLUDE_INTERVALTIMER" = "1" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for setitimer" >&5
-$as_echo_n "checking for setitimer... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <sys/time.h>
-int
-main ()
-{
-setitimer(0,NULL,NULL)
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_SETITIMER 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-fi
-
-for ac_header in poll.h sys/poll.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for poll" >&5
-$as_echo_n "checking for poll... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#if defined(HAVE_POLL_H)
-#include <poll.h>
-#elif defined(HAVE_SYS_POLL_H)
-#include <sys/poll.h>
-#endif
-
-int
-main ()
-{
-
-struct pollfd fds[1];
-fds[0].fd = 0;
-fds[0].events = POLLIN | POLLOUT | POLLERR | POLLHUP | POLLNVAL;
-
-poll(fds, 1, 1000);
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-$as_echo "#define RUDIMENTS_HAVE_POLL 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
 
 echo "******************************"
 
