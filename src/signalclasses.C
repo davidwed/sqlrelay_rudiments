@@ -2,8 +2,8 @@
 // See the COPYING file for more information
 
 #include <rudiments/signalclasses.h>
-#include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/rawbuffer.h>
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
 	#include <rudiments/linkedlist.h>
 #endif
@@ -13,6 +13,8 @@
 	#include <unistd.h>
 #endif
 #include <stdlib.h>
+
+#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -26,7 +28,6 @@ class signalsetprivate {
 		#if defined(RUDIMENTS_HAVE_SIGACTION)
 			sigset_t	_sigset;
 		#else
-			bool			_allsignals;
 			linkedlist< int >	_siglist;
 		#endif
 };
@@ -34,9 +35,7 @@ class signalsetprivate {
 // signalset methods
 signalset::signalset() {
 	pvt=new signalsetprivate;
-	#if defined(RUDIMENTS_HAVE_SIGACTION)
-		rawbuffer::zero(&pvt->_sigset,sizeof(pvt->_sigset));
-	#endif
+	removeAllSignals();
 }
 
 signalset::~signalset() {
@@ -382,7 +381,13 @@ bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		struct sigaction	oldaction;
 		int			result;
-		pvt->_handlerstruct.sa_mask=pvt->_sset->pvt->_sigset;
+		if (pvt->_sset) {
+			rawbuffer::copy(&pvt->_handlerstruct.sa_mask,
+						&pvt->_sset->pvt->_sigset,
+						sizeof(sigset_t));
+		} else {
+			sigemptyset(&pvt->_handlerstruct.sa_mask);
+		}
 		pvt->_handlerstruct.sa_flags=pvt->_flags;
 		pvt->_handlerstruct.sa_handler=pvt->_handler;
 		do {
