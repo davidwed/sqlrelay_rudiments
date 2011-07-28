@@ -399,10 +399,6 @@ endif
 endif
 endif
 
-ifeq ($(INCLUDE_INETSERVER),1)
-	PROGS += server.pem
-endif
-
 ifeq ($(INCLUDE_DAEMONPROCESS),1)
 ifeq ($(INCLUDE_PERMISSIONS),1)
 ifeq ($(INCLUDE_INETSERVER),1)
@@ -413,6 +409,10 @@ endif
 endif
 endif
 endif
+endif
+
+ifeq ($(INCLUDE_INETSERVER),1)
+	PROGS += server.pem
 endif
 
 all: $(PROGS)
