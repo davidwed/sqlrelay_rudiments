@@ -67,10 +67,10 @@ class serialportprofile {
 		};
 
 		enum	charsize_t {
-			cs_5=CS5,
-			cs_6=CS6,
-			cs_7=CS7,
-			cs_8=CS8
+			cs_5=0,
+			cs_6,
+			cs_7,
+			cs_8
 		};
 
 		enum	newlinedelay_t {
@@ -110,22 +110,6 @@ class serialportprofile {
 			serialportprofile();
 			~serialportprofile();
 
-		void	setControlOptions(tcflag_t flags);
-			// set control options to "flags"
-		void	setLocalOptions(tcflag_t flags);
-			// set local options to "flags"
-		void	setInputOptions(tcflag_t flags);
-			// set input options to "flags"
-		void	setOutputOptions(tcflag_t flags);
-			// set output options to "flags"
-		void	setControlCharacters(const cc_t *c_cc);
-			// Set control characters to the values pointed to by
-			// "c_cc".  Note that c_cc must be an array of length
-			// NCCS.
-		void	setOptions(const termios *newtio);
-			// set all options and control characters to
-			// the values set in "newtio"
-
 		void	defaultControlOptions();
 			// set the control options to system defaults
 		void	defaultLocalOptions();
@@ -139,6 +123,11 @@ class serialportprofile {
 		void	defaultOptions();
 			// set all options and control characters to
 			// system defaults
+
+		void	setControlCharacters(const unsigned char *c_cc);
+			// Set control characters to the values pointed to by
+			// "c_cc".  Note that c_cc must be an array of length
+			// NCCS.
 
 		void	evalOptionsString(const char *string);
 			// Serial port configuration requirements are often
@@ -595,88 +584,88 @@ class serialportprofile {
 
 
 		// control characters
-		void	interruptCharacter(cc_t character);
+		void	interruptCharacter(unsigned char character);
 			// set the character that will cause a SIGINT to be
 			// sent to the process when generateSignals() is set
 			// true
 			// termios flag: VINTR
-		void	quitCharacter(cc_t character);
+		void	quitCharacter(unsigned char character);
 			// set the character that will cause a SIGQUIT to be
 			// sent to the process when generateSignals() is set
 			// true
 			// termios flag: VQUIT
-		void	eraseCharacter(cc_t character);
+		void	eraseCharacter(unsigned char character);
 			// set the character that will cause a character erase
 			// when canonicalInput() is set to true
 			// termios flag: VERASE
-		void	killCharacter(cc_t character);
+		void	killCharacter(unsigned char character);
 			// set the character that will cause a line erase
 			// when canonicalInput() is set to true
 			// termios flag: VKILL
-		void	endOfFileCharacter(cc_t character);
+		void	endOfFileCharacter(unsigned char character);
 			// set the character that will cause the pending tty
 			// buffer to be sent to the program without waiting for
 			// end-of-line and read()'s to return 0 when
 			// canonicalInput() is set to true
 			// termios flag: VEOF
-		void	endOfLineCharacter(cc_t character);
+		void	endOfLineCharacter(unsigned char character);
 			// set the end-of-line character, recognized when 
 			// canonicalInput() is set to true
 			// termios flag: VEOL
-		void	secondEndOfLineCharacter(cc_t character);
+		void	secondEndOfLineCharacter(unsigned char character);
 			// set the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
 			// termios flag: VEOL2
-		void	switchCharacer(cc_t character);
+		void	switchCharacer(unsigned char character);
 			// set the switch character
 			// termios flag: VSWTCH/VSWTC
-		void	startCharacter(cc_t character);
+		void	startCharacter(unsigned char character);
 			// set the start character for XON/XOFF flow control
 			// termios flag: VSTART
-		void	stopCharacter(cc_t character);
+		void	stopCharacter(unsigned char character);
 			// set the stop character for XON/XOFF flow control
 			// termios flag: VSTOP
-		void	suspendCharacter(cc_t character);
+		void	suspendCharacter(unsigned char character);
 			// set the character that will cause a SIGSUSP to be
 			// sent to the process when generateSignals() is set
 			// true
 			// termios flag: VSUSP
-		void	delayedSuspendCharacter(cc_t character);
+		void	delayedSuspendCharacter(unsigned char character);
 			// set the character that will cause a SIGTSTP to be
 			// sent to the process when generateSignals() and
 			// extendedFunctions() are set true
 			// termios flag: VDSUSP
-		void	literalNextCharcter(cc_t character);
+		void	literalNextCharcter(unsigned char character);
 			// set the character that "quotes" the next character,
 			// depriving it of special meaning, recognized when
 			// extendedFunctions() is set true
 			// termios flag: VLNEXT
-		void	wordEraseCharcter(cc_t character);
+		void	wordEraseCharcter(unsigned char character);
 			// set the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
 			// termios flag: VWERASE
 
-		void	reprintCharacter(cc_t character);
+		void	reprintCharacter(unsigned char character);
 			// set the character that causes unread characters to
 			// be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
 			// termios flag: VREPRINT
-		void	discardPendingOutputCharacter(cc_t character);
+		void	discardPendingOutputCharacter(unsigned char character);
 			// set the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
 			// termios flag: VDISCARD
 
-		void	statusRequestCharacter(cc_t character);
+		void	statusRequestCharacter(unsigned char character);
 			// set the status request character
 			// termios flag: VSTATUS
 
-		void	readThreshold(cc_t count);
+		void	readThreshold(unsigned char count);
 			// set the number of characters that must be read
 			// before a read() will begin waiting for readTimeout()
 			// deciseconds before falling through
 			// termios flag: VMIN
-		void	readTimeout(cc_t deciseconds);
+		void	readTimeout(unsigned char deciseconds);
 			// set the number of deciseconds that a read() will
 			// wait after reading readThreshold() characters before
 			// falling through
@@ -684,80 +673,74 @@ class serialportprofile {
 
 
 		// getters...
-		cc_t	interruptCharacter();
+		unsigned char	interruptCharacter();
 			// returns the character that will cause a SIGINT to be
 			// sent to the process when generateSignals() is set
 			// true
-		cc_t	quitCharacter();
+		unsigned char	quitCharacter();
 			// returns the character that will cause a SIGQUIT to be
 			// sent to the process when generateSignals() is set
 			// true
-		cc_t	eraseCharacter();
+		unsigned char	eraseCharacter();
 			// returns the character that will cause a character
 			// erase when canonicalInput() is set to true
-		cc_t	killCharacter();
+		unsigned char	killCharacter();
 			// returns the character that will cause a line erase
 			// when canonicalInput() is set to true
-		cc_t	endOfFileCharacter();
+		unsigned char	endOfFileCharacter();
 			// returns the character that will cause the pending tty
 			// buffer to be sent to the program without waiting for
 			// end-of-line and read()'s to return 0 when
 			// canonicalInput() is set to true
-		cc_t	endOfLineCharacter();
+		unsigned char	endOfLineCharacter();
 			// returns the end-of-line character, recognized when 
 			// canonicalInput() is set to true
-		cc_t	secondEndOfLineCharacter();
+		unsigned char	secondEndOfLineCharacter();
 			// returns the "other" end-of-line character, recognized
 			// when canonicalInput() is set to true
-		cc_t	switchCharacer();
+		unsigned char	switchCharacer();
 			// returns the switch character
-		cc_t	startCharacter();
+		unsigned char	startCharacter();
 			// returns the start character for XON/XOFF flow control
-		cc_t	stopCharacter();
+		unsigned char	stopCharacter();
 			// returns the stop character for XON/XOFF flow control
-		cc_t	suspendCharacter();
+		unsigned char	suspendCharacter();
 			// returns the character that will cause a SIGSUSP to be
 			// sent to the process when generateSignals() is set
 			// true
-		cc_t	delayedSuspendCharacter();
+		unsigned char	delayedSuspendCharacter();
 			// returns the character that will cause a SIGTSTP to be
 			// sent to the process when generateSignals() and
 			// extendedFunctions() are set true
-		cc_t	literalNextCharcter();
+		unsigned char	literalNextCharcter();
 			// returns the character that "quotes" the next
 			// character, depriving it of special meaning,
 			// recognized when extendedFunctions() is set true
-		cc_t	wordEraseCharcter();
+		unsigned char	wordEraseCharcter();
 			// returns the word erase character, recognized when
 			// canonicalInput() and extendedFunctions() are set true
 
 
-		cc_t	reprintCharacter();
+		unsigned char	reprintCharacter();
 			// returns the character that causes unread characters
 			// to be reprinted, recognized when canonicalInput() and
 			// extendedFunctions() are set true
-		cc_t	discardPendingOutputCharacter();
+		unsigned char	discardPendingOutputCharacter();
 			// returns the character that toggles discarding pending
 			// output, recognized when extendedFunctions() is set
 			// true
 
-		cc_t	statusRequestCharacter();
+		unsigned char	statusRequestCharacter();
 			// returns the status request character
 
-		cc_t	readThreshold();
+		unsigned char	readThreshold();
 			// returns the number of characters that must be read
 			// before a read() will begin waiting for readTimeout()
 			// deciseconds before falling through
-		cc_t	readTimeout();
+		unsigned char	readTimeout();
 			// returns the number of deciseconds that a read() will
 			// wait after reading readThreshold() characters before
 			// falling through
-
-
-
-
-		termios	*getTermios();
-			// returns the struct termios used internally
 
 	#include <rudiments/private/serialportprofile.h>
 };
