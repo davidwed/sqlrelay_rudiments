@@ -18,15 +18,17 @@ int main(int argc, const char **argv) {
 	signalset	ignoreset;
 	ignoreset.addAllSignals();
 	ignoreset.removeSignal(SIGUSR1);
-	signalmanager::ignoreSignals(ignoreset.getSignalSet());
+	signalmanager::ignoreSignals(&ignoreset);
 
 	// when it gets a SIGUSR1, it will run the handleSigusr1() function
-	signalhandler	shandler(SIGUSR1,handleSigusr1);
+	signalhandler	shandler;
+	shandler.setHandler(handleSigusr1);
+	shandler.handleSignal(SIGUSR1);
 
 	// Loop forever, each time waiting for a signal not in the ignoreset
 	// to be sent. Since SIGUSR1 is the only signal not in the ignoreset,
 	// waitForSignals will fall through only when SIGUSR1 is received.
 	for (;;) {
-		signalmanager::waitForSignals(ignoreset.getSignalSet());
+		signalmanager::waitForSignals(&ignoreset);
 	}
 }

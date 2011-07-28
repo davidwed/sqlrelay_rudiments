@@ -13,18 +13,22 @@ void alarmhandler(int sig) {
 
 void waitForTimer(intervaltimer *t) {
 
-	itimerval	itv;
-	t->getIntervals(&itv);
-	printf("initial: %dsec %dusec   ",
-		itv.it_value.tv_sec,itv.it_value.tv_usec);
-	printf("interval: %dsec %dusec\n",
-		itv.it_interval.tv_sec,itv.it_interval.tv_usec);
+	long	isec;
+	long	iusec;
+	long	psec;
+	long	pusec;
+	t->getInitialInterval(&isec,&iusec);
+	t->getPeriodicInterval(&psec,&pusec);
+	printf("initial: %dsec %dusec   ",isec,iusec);
+	printf("periodic: %dsec %dusec\n",psec,pusec);
+		
 
 	for (;;) {
-		timeval	gtv;
-		t->getTimeRemaining(&gtv);
-		printf("time remaining: %dsec %dusec\n",gtv.tv_sec,gtv.tv_usec);
-		if (gtv.tv_sec==0 && gtv.tv_usec==0) {
+		long	sec;
+		long	usec;
+		t->getTimeRemaining(&sec,&usec);
+		printf("time remaining: %dsec %dusec\n",sec,usec);
+		if (sec==0 && usec==0) {
 			break;
 		}
 		snooze::macrosnooze(1);
@@ -44,22 +48,6 @@ int main(int argc, char **argv) {
 	waitForTimer(&t);
 
 	t.setInitialInterval(2,500000);
-	t.start();
-	waitForTimer(&t);
-
-	timeval	tv;
-	tv.tv_sec=2;
-	tv.tv_usec=500000;
-	t.setInitialInterval(&tv);
-	t.start();
-	waitForTimer(&t);
-
-	itimerval	stv;
-	stv.it_value.tv_sec=2;
-	stv.it_value.tv_usec=0;
-	stv.it_interval.tv_sec=0;
-	stv.it_interval.tv_usec=0;
-	t.setIntervals(&stv);
 	t.start();
 	waitForTimer(&t);
 }
