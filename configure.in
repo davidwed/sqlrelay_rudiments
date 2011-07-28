@@ -1900,6 +1900,13 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #endif],
 setregid(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETREGID,1,Some systems have setregid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for fork)
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+fork(),AC_DEFINE(RUDIMENTS_HAVE_FORK,1,Some systems have fork) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

@@ -280,6 +280,15 @@ bool process::setRealAndEffectiveGroupId(gid_t gid, gid_t egid) {
 	#endif
 }
 
+pid_t process::fork() {
+	#if defined(RUDIMENTS_HAVE_FORK)
+		return ::fork();
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

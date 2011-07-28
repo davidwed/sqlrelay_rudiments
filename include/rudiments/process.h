@@ -10,7 +10,7 @@
 //	unistd.h - nice()
 //			setsid()
 //			getgroups()
-//			fork(),vfork()
+//			vfork()
 //			profil()
 //			acct()
 //			getdtablesize()
@@ -138,6 +138,17 @@ class process {
 				// previous real group id, the saved group id is
 				// set to the new effective group id.
 				// Returns true on success and false on failure.
+
+		static pid_t	fork();
+				// Creates a child process.  The child is a
+				// duplicate of the parent inheriting file
+				// descriptors and a copy of the parent's
+				// address space.  The child does not have
+				// access to the parent's address space.
+				// In the parent process, the process id of
+				// the child is returned.  In the child
+				// process, 0 is returned.  -1 is returned if
+				// an error occurred and no child is forked.
 };
 
 #ifdef RUDIMENTS_NAMESPACE

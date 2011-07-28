@@ -51,20 +51,12 @@ daemonprocessprivate	*daemonprocess::pvt=NULL;
 
 void daemonprocess::shutDown(int signum) {
 	waitForChildren();
-#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 	(*pvt->_shutdownfunc)(signum);
-#else
-	(*pvt->_shutdownfunc)(0);
-#endif
 }
 
 void daemonprocess::crash(int signum) {
 	waitForChildren();
-#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 	(*pvt->_crashfunc)(signum);
-#else
-	(*pvt->_crashfunc)(0);
-#endif
 }
 
 void daemonprocess::defaultShutDown(int signum) {
@@ -116,13 +108,12 @@ int64_t daemonprocess::checkForPidFile(const char *filename) {
 	return retval;
 }
 
-#ifndef MINGW32
 bool daemonprocess::detach() const {
 
 	// fork off a child process
 	int	result;
 	do {
-		result=fork();
+		result=process::fork();
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 
 	if (result==-1) {
@@ -153,13 +144,6 @@ bool daemonprocess::detach() const {
 
 	return true;
 }
-#else
-bool daemonprocess::detach() const {
-	// FIXME: implement this
-	error::setErrorNumber(ENOSYS);
-	return false;
-}
-#endif
 
 void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {
 

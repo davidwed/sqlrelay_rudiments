@@ -202,6 +202,9 @@
 /* Some systems have FD_CLOEXEC */
 #undef RUDIMENTS_HAVE_FD_CLOEXEC
 
+/* Some systems have fork */
+#undef RUDIMENTS_HAVE_FORK
+
 /* Some systems have fpathconf */
 #undef RUDIMENTS_HAVE_FPATHCONF
 

@@ -13,10 +13,12 @@ using namespace rudiments;
 
 class myserver : public daemonprocess, public inetserversocket {
 	public:
-			myserver() : daemonprocess(), inetserversocket() {}
+			myserver();
 		void	listen();
 };
 
+myserver::myserver() : daemonprocess(), inetserversocket() {
+}
 
 void myserver::listen() {
 
@@ -27,10 +29,6 @@ void myserver::listen() {
 		printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
 	}
-
-
-	// detach from the controlling terminal
-	//detach();
 
 
 	// create a pid file which is used to make sure that only one instance
