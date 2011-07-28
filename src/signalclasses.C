@@ -4,6 +4,9 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#if !defined(RUDIMENTS_HAVE_SIGACTION)
+	#include <rudiments/linekdlist.h>
+#endif
 
 #include <stddef.h>
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -23,38 +26,201 @@ class signalsetprivate {
 		#if defined(RUDIMENTS_HAVE_SIGACTION)
 			sigset_t	_sigset;
 		#else
-			
+			bool			_allsignals;
+			linkedlist< int >	_siglist;
 		#endif
 };
 
 // signalset methods
 signalset::signalset() {
 	pvt=new signalsetprivate;
-	rawbuffer::zero(&pvt->_sigset,sizeof(pvt->_sigset));
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		rawbuffer::zero(&pvt->_sigset,sizeof(pvt->_sigset));
+	#endif
 }
 
 signalset::~signalset() {
+	#if !defined(RUDIMENTS_HAVE_SIGACTION)
+		pvt->_siglist->clear();
+	#endif
 	delete pvt;
 }
 
 bool signalset::addSignal(int signum) {
-	return !sigaddset(&pvt->_sigset,signum);
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		return !sigaddset(&pvt->_sigset,signum);
+	#else
+		if (!pvt->_siglist->getNodeByData(signum)) {
+			pvt->_siglist->append(signum);
+		}
+		return true;
+	#endif
 }
 
 bool signalset::addAllSignals() {
-	return !sigfillset(&pvt->_sigset);
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		return !sigfillset(&pvt->_sigset);
+	#else
+		#ifdef HAVE_SIGHUP
+			addSignal(SIGHUP);
+		#endif
+		#ifdef HAVE_SIGINT
+			addSignal(SIGINT);
+		#endif
+		#ifdef HAVE_SIGQUIT
+			addSignal(SIGQUIT);
+		#endif
+		#ifdef HAVE_SIGILL
+			addSignal(SIGILL);
+		#endif
+		#ifdef HAVE_SIGTRAP
+			addSignal(SIGTRAP);
+		#endif
+		#ifdef HAVE_SIGABRT
+			addSignal(SIGABRT);
+		#endif
+		#ifdef HAVE_SIGIOT
+			addSignal(SIGIOT);
+		#endif
+		#ifdef HAVE_SIGBUS
+			addSignal(SIGBUS);
+		#endif
+		#ifdef HAVE_SIGFPE
+			addSignal(SIGFPE);
+		#endif
+		#ifdef HAVE_SIGUSR1
+			addSignal(SIGUSR1);
+		#endif
+		#ifdef HAVE_SIGSEGV
+			addSignal(SIGSEGV);
+		#endif
+		#ifdef HAVE_SIGUSR2
+			addSignal(SIGUSR2);
+		#endif
+		#ifdef HAVE_SIGPIPE
+			addSignal(SIGPIPE);
+		#endif
+		#ifdef HAVE_SIGALRM
+			addSignal(SIGALRM);
+		#endif
+		#ifdef HAVE_SIGTERM
+			addSignal(SIGTERM);
+		#endif
+		#ifdef HAVE_SIGSTKFLT
+			addSignal(SIGSTKFLT);
+		#endif
+		#ifdef HAVE_SIGCHLD
+			addSignal(SIGCHLD);
+		#endif
+		#ifdef HAVE_SIGCONT
+			addSignal(SIGCONT);
+		#endif
+		#ifdef HAVE_SIGSTOP
+			addSignal(SIGSTOP);
+		#endif
+		#ifdef HAVE_SIGTSTP
+			addSignal(SIGTSTP);
+		#endif
+		#ifdef HAVE_SIGTTIN
+			addSignal(SIGTTIN);
+		#endif
+		#ifdef HAVE_SIGTTOU
+			addSignal(SIGTTOU);
+		#endif
+		#ifdef HAVE_SIGURG
+			addSignal(SIGURG);
+		#endif
+		#ifdef HAVE_SIGXCPU
+			addSignal(SIGXCPU);
+		#endif
+		#ifdef HAVE_SIGXFSZ
+			addSignal(SIGXFSZ);
+		#endif
+		#ifdef HAVE_SIGVTALRM
+			addSignal(SIGVTALRM);
+		#endif
+		#ifdef HAVE_SIGPROF
+			addSignal(SIGPROF);
+		#endif
+		#ifdef HAVE_SIGWINCH
+			addSignal(SIGWINCH);
+		#endif
+		#ifdef HAVE_SIGIO
+			addSignal(SIGIO);
+		#endif
+		#ifdef HAVE_SIGPOLL
+			addSignal(SIGPOLL);
+		#endif
+		#ifdef HAVE_SIGPWR
+			addSignal(SIGPWR);
+		#endif
+		#ifdef HAVE_SIGUNUSED
+			addSignal(SIGUNUSED);
+		#endif
+		#ifdef HAVE_SIGEMT
+			addSignal(SIGEMT);
+		#endif
+		#ifdef HAVE_SIGSYS
+			addSignal(SIGSYS);
+		#endif
+		#ifdef HAVE_SIGWAITING
+			addSignal(SIGWAITING);
+		#endif
+		#ifdef HAVE_SIGLWP
+			addSignal(SIGLWP);
+		#endif
+		#ifdef HAVE_SIGFREEZE
+			addSignal(SIGFREEZE);
+		#endif
+		#ifdef HAVE_SIGTHAW
+			addSignal(SIGTHAW);
+		#endif
+		#ifdef HAVE_SIGCANCEL
+			addSignal(SIGCANCEL);
+		#endif
+		#ifdef HAVE_SIGLOST
+			addSignal(SIGLOST);
+		#endif
+		#ifdef HAVE__SIGRTMIN
+			addSignal(_SIGRTMIN);
+		#endif
+		#ifdef HAVE__SIGRTMAX
+			addSignal(_SIGRTMAX);
+		#endif
+		#ifdef HAVE_SIGRTMIN
+			addSignal(SIGRTMIN);
+		#endif
+		#ifdef HAVE_SIGRTMAX
+			addSignal(SIGRTMAX);
+		#endif
+		return false;
+	#endif
 }
 
 bool signalset::removeSignal(int signum) {
-	return !sigdelset(&pvt->_sigset,signum);
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		return !sigdelset(&pvt->_sigset,signum);
+	#else
+		pvt->_siglist->removeByData();
+		return true;
+	#endif
 }
 
 bool signalset::removeAllSignals() {
-	return !sigemptyset(&pvt->_sigset);
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		return !sigemptyset(&pvt->_sigset);
+	#else
+		pvt->_siglist->clear();
+		return true;
+	#endif
 }
 
 int signalset::signalIsInSet(int signum) const {
-	return sigismember(&pvt->_sigset,signum);
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		return sigismember(&pvt->_sigset,signum);
+	#else
+		return (pvt->_siglist->getNodeByData(signum)!=NULL);
+	#endif
 }
 
 
@@ -81,17 +247,27 @@ unsigned int signalmanager::alarm(unsigned int seconds) {
 }
 
 bool signalmanager::ignoreSignals(const signalset *sset) {
-	int	result;
-	do {
-		#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
-			result=pthread_sigmask(SIG_SETMASK,
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		int	result;
+		do {
+			#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
+				result=pthread_sigmask(SIG_SETMASK,
 						&sset->pvt->_sigset,NULL);
-		#else
-			result=sigprocmask(SIG_SETMASK,
+			#else
+				result=sigprocmask(SIG_SETMASK,
 						&sset->pvt->_sigset,NULL);
-		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+			#endif
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		bool	result=true;
+		for (linkedlistnode< int > *node=pvt->_siglist->getFirstNode();
+						node; node->node->getNext()) {
+			result=(result &&
+				(signal(node->getData(),SIG_IGN)!=SIG_ERR));
+		}
+		return result;
+	#endif
 }
 
 bool signalmanager::waitForSignals(const signalset *sset) {
@@ -110,22 +286,24 @@ bool signalmanager::examineBlockedSignals(signalset *sset) {
 class signalhandlerprivate {
 	friend class signalhandler;
 	private:
-		struct	sigaction	_handlerstruct;
+		const signalset	*_sset;
+		int		_flags;
+		#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
+			void		(*_handler)(int);
+		#else
+			void		(*_handler)(void);
+		#endif
+		#if defined(RUDIMENTS_HAVE_SIGACTION)
+			struct sigaction	_handlerstruct;
+		#endif
 };
 
 // signalhandler methods
 signalhandler::signalhandler() {
 	pvt=new signalhandlerprivate;
-	removeAllSignalsFromMask();
-	removeAllFlags();
-}
-
-signalhandler::signalhandler(int signum, void (*handler)(int)) {
-	pvt=new signalhandlerprivate;
-	removeAllSignalsFromMask();
-	removeAllFlags();
-	setHandler(handler);
-	handleSignal(signum);
+	pvt->_sset=NULL;
+	pvt->_flags=0;
+	pvt->_handler=NULL;
 }
 
 signalhandler::~signalhandler() {
@@ -134,82 +312,74 @@ signalhandler::~signalhandler() {
 
 void signalhandler::setHandler(void (*handler)(int)) {
 	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-		pvt->_handlerstruct.sa_handler=handler;
+		pvt->_handler=handler;
 	#else
-		pvt->_handlerstruct.sa_handler=(void(*)(void))handler;
+		pvt->_handler=(void(*)(void))handler;
 	#endif
 }
 
-void *signalhandler::getHandler() {
-	return (void *)pvt->_handlerstruct.sa_handler;
+void (*signalhandler::getHandler())(int) {
+	return pvt->_handler;
 }
 
 void signalhandler::removeAllFlags() {
-	pvt->_handlerstruct.sa_flags=0;
+	pvt->_flags=0;
 }
 
 void signalhandler::addFlag(int flag) {
-	pvt->_handlerstruct.sa_flags|=flag;
+	pvt->_flags|=flag;
 }
 
-bool signalhandler::addAllSignalsToMask() {
-	return !sigfillset(&pvt->_handlerstruct.sa_mask);
-}
-
-bool signalhandler::addSignalToMask(int signum) {
-	return !sigaddset(&pvt->_handlerstruct.sa_mask,signum);
-}
-
-bool signalhandler::removeSignalFromMask(int signum) {
-	return !sigdelset(&pvt->_handlerstruct.sa_mask,signum);
-}
-
-bool signalhandler::removeAllSignalsFromMask() {
-	return !sigemptyset(&pvt->_handlerstruct.sa_mask);
-}
-
-int signalhandler::signalIsInMask(int signum) const {
-	return sigismember(&pvt->_handlerstruct.sa_mask,signum);
-}
-
-void signalhandler::setMask(const signalset *sset) {
-	pvt->_handlerstruct.sa_mask=sset->pvt->_sigset;
-}
-
-void signalhandler::getMask(signalset *sset) const {
-	sset->pvt->_sigset=pvt->_handlerstruct.sa_mask;
+void signalhandler::removeFlag(int flag) {
+	pvt->_flags&=(~flag);
 }
 
 int signalhandler::getFlags() const {
-	return pvt->_handlerstruct.sa_flags;
+	return pvt->_flags;
+}
+
+void signalhandler::setMask(const signalset *sset) {
+	pvt->_sset=sset;
+}
+
+const signalset *signalhandler::getMask() const {
+	return pvt->_sset;
 }
 
 bool signalhandler::handleSignal(int signum) {
-	int	result;
-	do {
-		result=sigaction(signum,&pvt->_handlerstruct,
-				static_cast<struct sigaction *>(NULL));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	return handleSignal(signum,NULL);
 }
 
 bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
-	struct sigaction	oldaction;
-	int			result;
-	do {
-		result=sigaction(signum,&pvt->_handlerstruct,&oldaction);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	rawbuffer::copy(&oldhandler->pvt->_handlerstruct,&oldaction,
-					sizeof(struct sigaction));
-	return !result;
+	#if defined(RUDIMENTS_HAVE_SIGACTION)
+		struct sigaction	oldaction;
+		int			result;
+		pvt->_handlerstruct.sa_mask=pvt->_sset->pvt->_sigset;
+		pvt->_handlerstruct.sa_flags=pvt->_flags;
+		pvt->_handlerstruct.sa_handler=pvt->_handler;
+		do {
+			result=sigaction(signum,&pvt->_handlerstruct,
+								&oldaction);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (oldhandler) {
+			oldhandler->pvt->_handlerstruct=oldaction;
+		}
+		return !result;
+	#else
+		void (*prev)(int)=signal(signum,pvt->_handler);
+		if (oldhandler) {
+			oldhandler->pvt->_handler=prev;
+		}
+		return (prev!=SIG_ERR);
+	#endif
 }
 
 bool signalhandler::isSignalHandlerIntUsed() {
-#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-	return true;
-#else
-	return false;
-#endif
+	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
+		return true;
+	#else
+		return false;
+	#endif
 }
 
 

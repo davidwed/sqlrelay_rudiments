@@ -91,15 +91,12 @@ class signalhandlerprivate;
 class signalhandler {
 	public:
 			signalhandler();
-			signalhandler(int signum, void (*handler)(int));
-			// Calls the setHandler() and handleSignal() methods
-			// below during instantiation.
 			~signalhandler();
 
 		void	setHandler(void (*handler)(int));
 			// Sets the function to call when the process
 			// receives the signal.
-		void	*getHandler();
+		void    (*getHandler())(int);
 			// Returns a pointer to the function that will be
 			// called when the process receives the signal.
 
@@ -127,6 +124,9 @@ class signalhandler {
 		void	addFlag(int flag);
 			// Add "flag" to the set of flags modifying the
 	 		// behavior of this signal handler.
+		void	removeFlag(int flag);
+			// Remove "flag" from the set of flags modifying the
+	 		// behavior of this signal handler.
 		int	getFlags() const;
 			// Return the set of flags modifying the behavior of 
 			// this signal handler.
@@ -136,26 +136,10 @@ class signalhandler {
 		// the signal handler function is being called.  Masking
 		// signals can ensure that the function executes without
 		// interruption.
-		bool		addSignalToMask(int signum);
-				// Add the signal "signum" to the mask.
-				// Returns true on success and false on failure.
-		bool		addAllSignalsToMask();
-				// Mask all signals.
-				// Returns true on success and false on failure.
-		bool		removeSignalFromMask(int signum);
-				// Remove the signal "signum" from the mask.
-				// Returns true on success and false on failure.
-		bool		removeAllSignalsFromMask();
-				// Mask no signals.
-				// Returns true on success and false on failure.
-		int		signalIsInMask(int signum) const;
-				// Returns 1 if the signal "signum" is in the 
-				// set, 0 if it is not and -1 on error.
 		void		setMask(const signalset *sset);
 				// Explicitly sets the mask to "sset".
-		void		getMask(signalset *sset) const;
-				// Sets "sset" to the set of signals currently
-				// masked.
+		const signalset	*getMask() const;
+				// Returns the current signal mask.
 
 		static	bool	isSignalHandlerIntUsed();
 				// The function that you pass into setHandler()
