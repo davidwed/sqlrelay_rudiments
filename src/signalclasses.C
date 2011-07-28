@@ -5,7 +5,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
-	#include <rudiments/linekdlist.h>
+	#include <rudiments/linkedlist.h>
 #endif
 
 #include <stddef.h>
