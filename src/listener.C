@@ -4,6 +4,9 @@
 #include <rudiments/listener.h>
 #include <rudiments/error.h>
 
+// for FD_ZERO/FD_SET on windows
+#include <rudiments/private/winsock.h>
+
 #include <stdlib.h>
 
 // some systems need string.h to provide memset() for FD_ZERO/FD_SET
@@ -14,11 +17,6 @@
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
-#endif
-
-// for FD_ZERO/FD_SET on windows
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE

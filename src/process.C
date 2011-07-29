@@ -3,6 +3,8 @@
 
 #include <rudiments/process.h>
 #include <rudiments/error.h>
+#include <rudiments/snooze.h>
+#include <rudiments/directory.h>
 
 #ifndef __USE_XOPEN_EXTENDED
 	// for getsid()
@@ -18,6 +20,9 @@
 #ifdef RUDIMENTS_HAVE_TLHELP32_H
 	#include <tlhelp32.h>
 #endif
+
+// for umask
+#include <sys/stat.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -280,13 +285,56 @@ bool process::setRealAndEffectiveGroupId(gid_t gid, gid_t egid) {
 	#endif
 }
 
+mode_t process::setFileCreationMask(mode_t mask) {
+	return ::umask(mask);
+}
+
 pid_t process::fork() {
 	#if defined(RUDIMENTS_HAVE_FORK)
-		return ::fork();
+		pid_t	result;
+		do {
+			result=::fork();
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
+}
+
+bool process::detach() {
+
+	// fork off a child process
+	pid_t	result=fork();
+	if (result==-1) {
+		return false;
+	}
+
+	// let the parent process exit
+	if (result) {
+		// cygwin needs a sleep or both processes will exit
+		#ifdef __CYGWIN__
+			snooze::macrosnooze(1);
+		#endif
+		_exit(0);
+	}
+	
+	#ifdef RUDIMENTS_HAVE_SETSID
+		// become process group and session group leader 
+		// with no controlling terminal
+		setsid();
+	#endif
+
+	// change directory to root to avoid keeping any directories in use
+	directory::changeDirectory("/");
+
+	// Set umask such that files are created 666 and directories 777.
+	// This way we can change them to whatever we like using chmod().
+	// We want to avoid inheriting a umask which wouldn't give us write
+	// permissions to files we create.
+	process::setFileCreationMask(0);
+
+	return true;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

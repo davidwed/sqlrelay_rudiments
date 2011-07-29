@@ -4,16 +4,14 @@
 #include <rudiments/serversocket.h>
 #include <rudiments/error.h>
 
+#include <rudiments/private/winsock.h>
+
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
-
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -29,11 +27,13 @@ class serversocketprivate {
 
 serversocket::serversocket() : server() {
 	pvt=new serversocketprivate;
+	winsock::initWinsock();
 	type("serversocket");
 }
 
 serversocket::serversocket(const serversocket &s) : server(s) {
 	pvt=new serversocketprivate;
+	winsock::initWinsock();
 	type("serversocket");
 }
 
@@ -139,6 +139,34 @@ bool serversocket::sslAccept(filedescriptor *sock) {
 	return true;
 }
 #endif
+
+ssize_t serversocket::lowLevelRead(void *buf, ssize_t count) const {
+	return ::recv(fd(),
+			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
+			buf,
+			#else
+			(char *)buf,
+			#endif
+			count,0);
+}
+
+ssize_t serversocket::lowLevelWrite(const void *buf, ssize_t count) const {
+	return ::send(fd(),
+			#ifdef RUDIMENTS_HAVE_SEND_WITH_VOID
+			buf,
+			#else
+			(char *)buf,
+			#endif
+			count,0);
+}
+
+int serversocket::lowLevelClose() {
+	#ifdef RUDIMENTS_HAVE_CLOSESOCKET
+		return closesocket(fd());
+	#else
+		return ::close(fd());
+	#endif
+}
 
 #ifdef RUDIMENTS_NAMESPACE
 }

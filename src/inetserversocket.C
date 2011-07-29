@@ -7,14 +7,13 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+#include <rudiments/private/winsock.h>
+
 #ifdef RUDIMENTS_HAVE_ARPA_INET_H
 	#include <arpa/inet.h>
 #endif
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
 #endif
 
 #ifndef RUDIMENTS_HAVE_IN_ADDR_T

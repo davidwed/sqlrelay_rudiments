@@ -130,6 +130,9 @@
 /* Some systems have clock_nanosleep */
 #undef RUDIMENTS_HAVE_CLOCK_NANOSLEEP
 
+/* some systems have closesocket */
+#undef RUDIMENTS_HAVE_CLOSESOCKET
+
 /* Some systems have CMSG_LEN */
 #undef RUDIMENTS_HAVE_CMSG_LEN
 
@@ -598,6 +601,9 @@
 /* Some systems have readlink */
 #undef RUDIMENTS_HAVE_READLINK
 
+/* recv takes a void * on most systems */
+#undef RUDIMENTS_HAVE_RECV_WITH_VOID
+
 /* some systems have regcomp */
 #undef RUDIMENTS_HAVE_REGCOMP
 
@@ -618,6 +624,9 @@
 
 /* Some systems define union semun */
 #undef RUDIMENTS_HAVE_SEMUN
+
+/* send takes a const void * on most systems */
+#undef RUDIMENTS_HAVE_SEND_WITH_VOID
 
 /* Some systems have setegid */
 #undef RUDIMENTS_HAVE_SETEGID
@@ -645,6 +654,9 @@
 
 /* Some systems have setreuid */
 #undef RUDIMENTS_HAVE_SETREUID
+
+/* Some systems have setsid */
+#undef RUDIMENTS_HAVE_SETSID
 
 /* Some systems have SetSystemTime */
 #undef RUDIMENTS_HAVE_SETSYSTEMTIME

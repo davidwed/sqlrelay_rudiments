@@ -939,6 +939,45 @@ dnl Checks for networking functions.
 echo
 echo "***** Networking *************"
 
+AC_MSG_CHECKING(for closesocket)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif],
+closesocket(0);,AC_DEFINE(RUDIMENTS_HAVE_CLOSESOCKET,1,some systems have closesocket) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(if send takes a const void * parameter)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#else
+	#ifdef HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+#endif],
+send(0,(const void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEND_WITH_VOID,1, send takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(if recv takes a void * parameter)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#else
+	#ifdef HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+#endif],
+recv(0,(void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_RECV_WITH_VOID,1, recv takes a void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -1906,6 +1945,13 @@ AC_TRY_LINK([
 	#include <unistd.h>
 #endif],
 fork(),AC_DEFINE(RUDIMENTS_HAVE_FORK,1,Some systems have fork) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setsid)
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+setsid(),AC_DEFINE(RUDIMENTS_HAVE_SETSID,1,Some systems have setsid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 

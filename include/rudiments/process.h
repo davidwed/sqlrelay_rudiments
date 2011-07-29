@@ -29,7 +29,6 @@
 //				getrlimit(),setrlimit()
 //				getrusage()
 //				getpriority(),setpriority()
-//	sys/stat.h - umask()
 //	sys/times.h - times() - function for getting process times
 //	not in solaris -
 //		unistd.h - daemon()
@@ -139,6 +138,11 @@ class process {
 				// set to the new effective group id.
 				// Returns true on success and false on failure.
 
+		static mode_t	setFileCreationMask(mode_t mask);
+				// Set file/directory creation mode mask to
+				// "mask".  Returns the mask that was previously
+				// in effect.
+
 		static pid_t	fork();
 				// Creates a child process.  The child is a
 				// duplicate of the parent inheriting file
@@ -149,6 +153,16 @@ class process {
 				// the child is returned.  In the child
 				// process, 0 is returned.  -1 is returned if
 				// an error occurred and no child is forked.
+
+		static bool	detach();
+				// Detaches the current process from the
+				// controlling tty, creates a new session,
+				// changes directory to / and sets the file
+				// creation mask to 0.
+				// Use this method to "fork your process into
+				// the background."
+				// Returns true on success and false upon
+				// failure.
 };
 
 #ifdef RUDIMENTS_NAMESPACE

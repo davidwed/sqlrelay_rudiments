@@ -7,15 +7,14 @@
 #include <rudiments/filedescriptor.h>
 #include <rudiments/error.h>
 
+#include <rudiments/private/winsock.h>
+
 // for servent, functions
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>
 #endif
 #ifdef RUDIMENTS_HAVE_NETINET_IN_H
 	#include <netinet/in.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
 #endif
 
 #include <stdio.h>

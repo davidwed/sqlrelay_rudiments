@@ -6,14 +6,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/file.h>
+#include <rudiments/process.h>
 #include <rudiments/error.h>
 
-// need for umask...
-#include <sys/stat.h>
-
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
+#include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -82,7 +78,7 @@ bool unixserversocket::listen(const char *filename, mode_t mask, int backlog) {
 bool unixserversocket::bind() {
 
 	// set umask and store old umask
-	mode_t	oldmask=umask(pvt->_mask);
+	mode_t	oldmask=process::setFileCreationMask(pvt->_mask);
 
 	// bind the socket
 	bool	retval=true;
@@ -97,7 +93,7 @@ bool unixserversocket::bind() {
 	}
 
 	// restore old umask
-	umask(oldmask);
+	process::setFileCreationMask(oldmask);
 
 	return retval;
 }

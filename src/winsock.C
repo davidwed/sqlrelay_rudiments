@@ -1,0 +1,39 @@
+// Copyright (c) 2011 David Muse
+// See the COPYING file for more information
+
+#include <rudiments/private/winsock.h>
+
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	mutex	winsock::_winsockmutex;
+	bool	winsock::_initialized=false;
+	WSADATA	winsock::_wsadata;
+#endif
+
+bool winsock::initWinsock() {
+	#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+		_winsockmutex.lock();
+		if (!_initialized) {
+			int	result=WSAStartup(MAKEWORD(2,0),&_wsadata);
+			if (!result) {
+				if (LOBYTE(_wsadata.wVersion)!=2 ||
+					HIBYTE(_wsadata.wVersion)!=0) {
+					WSACleanup();
+					result=1;
+				}
+			}
+			_initialized=true;
+			_winsockmutex.unlock();
+			return !result;
+		}
+		_winsockmutex.unlock();
+	#endif
+	return true;
+}
+
+#ifdef RUDIMENTS_NAMESPACE
+}
+#endif

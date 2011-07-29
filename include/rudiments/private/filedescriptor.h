@@ -30,6 +30,12 @@
 		int	setSockOpt(int level, int optname,
 					const void *optval, socklen_t optlen);
 
+		virtual	ssize_t	lowLevelRead(void *buf,
+						ssize_t count) const;
+		virtual	ssize_t	lowLevelWrite(const void *buf,
+						ssize_t count) const;
+		virtual int	lowLevelClose();
+
 		const char	*type() const;
 		void		type(const char *tp);
 

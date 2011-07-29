@@ -7,20 +7,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
-#include <rudiments/snooze.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 
-// for umask
-#include <sys/types.h>
-#include <sys/stat.h>
-
 #include <stdlib.h>
-
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	// for fork/exit...
-	#include <unistd.h>
-#endif
 
 #ifndef MINGW32
 	// for wait...
@@ -109,40 +99,7 @@ int64_t daemonprocess::checkForPidFile(const char *filename) {
 }
 
 bool daemonprocess::detach() const {
-
-	// fork off a child process
-	int	result;
-	do {
-		result=process::fork();
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-
-	if (result==-1) {
-		return false;
-	}
-
-	// let the parent process exit
-	if (result) {
-		// cygwin needs a sleep or both processes will exit
-		#ifdef __CYGWIN__
-		snooze::macrosnooze(1);
-		#endif
-		_exit(0);
-	}
-	
-	// become process group and session group leader 
-	// with no controlling terminal
-	setsid();
-
-	// change directory to root to avoid keeping any directories in use
-	do {} while (chdir("/")==-1 && error::getErrorNumber()==EINTR);
-
-	// Set umask such that files are created 666 and directories 777.
-	// This way we can change them to whatever we like using chmod().
-	// We want to avoid inheriting a umask which wouldn't give us write
-	// permissions to files we create.
-	umask(0);
-
-	return true;
+	return process::detach();
 }
 
 void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {

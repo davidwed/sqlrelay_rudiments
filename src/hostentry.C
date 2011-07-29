@@ -5,13 +5,12 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 
+#include <rudiments/private/winsock.h>
+
 // for ENOMEM
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>
 #endif
@@ -42,6 +41,7 @@ static mutex	*_hemutex;
 
 hostentry::hostentry() {
 	pvt=new hostentryprivate;
+	winsock::initWinsock();
 	pvt->_he=NULL;
 	#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
@@ -52,6 +52,7 @@ hostentry::hostentry() {
 
 hostentry::hostentry(const hostentry &h) {
 	pvt=new hostentryprivate;
+	winsock::initWinsock();
 	initialize(h.getName());
 }
 

@@ -6,14 +6,15 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+#include <stdio.h>
+
+#include <rudiments/private/winsock.h>
+
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
 #endif
 
 #ifndef EWOULDBLOCK
@@ -36,11 +37,13 @@ class clientsocketprivate {
 clientsocket::clientsocket() : client() {
 	pvt=new clientsocketprivate;
 	type("clientsocket");
+	winsock::initWinsock();
 }
 
 clientsocket::clientsocket(const clientsocket &c) : client(c) {
 	pvt=new clientsocketprivate;
 	type("clientsocket");
+	winsock::initWinsock();
 }
 
 clientsocket &clientsocket::operator=(const clientsocket &c) {
@@ -88,6 +91,7 @@ BIO *clientsocket::newSSLBIO() const {
 
 int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 							long sec, long usec) {
+
 	int	retval;
 	if (sec==-1 || usec==-1) {
 
@@ -232,6 +236,34 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 	#endif
 
 	return retval;
+}
+
+ssize_t clientsocket::lowLevelRead(void *buf, ssize_t count) const {
+	return ::recv(fd(),
+			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
+			buf,
+			#else
+			(char *)buf,
+			#endif
+			count,0);
+}
+
+ssize_t clientsocket::lowLevelWrite(const void *buf, ssize_t count) const {
+	return ::send(fd(),
+			#ifdef RUDIMENTS_HAVE_SEND_WITH_VOID
+			buf,
+			#else
+			(char *)buf,
+			#endif
+			count,0);
+}
+
+int clientsocket::lowLevelClose() {
+	#ifdef RUDIMENTS_HAVE_CLOSESOCKET
+		return closesocket(fd());
+	#else
+		return ::close(fd());
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

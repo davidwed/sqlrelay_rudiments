@@ -6,7 +6,7 @@ include ../features.mk
 .PHONY: install uninstall
 
 HEADERS = resultcodes.h
-PRIVATEHEADERS = config.h rudimentsinlines.h inttypes.h
+PRIVATEHEADERS = config.h rudimentsinlines.h inttypes.h winsock.h
 
 ifeq ($(INCLUDE_CLIENT),1)
 	HEADERS += client.h
@@ -371,4 +371,5 @@ uninstall:
 	$(RM) $(includedir)/private/signalhandler.h
 	$(RM) $(includedir)/private/signalset.h
 	$(RM) $(includedir)/private/datetime.h
+	$(RM) $(includedir)/private/winsock.h
 	$(RMTREE) $(includedir)/rudiments

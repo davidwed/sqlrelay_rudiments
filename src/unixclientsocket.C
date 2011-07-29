@@ -7,9 +7,7 @@
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
+#include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

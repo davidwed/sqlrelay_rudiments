@@ -15,12 +15,8 @@
 #endif
 #include <rudiments/error.h>
 
-#ifdef MINGW32
-	#include <windows.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
+#include <rudiments/private/winsock.h>
+
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
@@ -730,7 +726,7 @@ bool filedescriptor::close() {
 	if (pvt->_fd!=-1) {
 		int	result;
 		do {
-			result=::close(pvt->_fd);
+			result=lowLevelClose();
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		if (result==-1) {
 			return false;
@@ -738,6 +734,10 @@ bool filedescriptor::close() {
 		pvt->_fd=-1;
 	}
 	return true;
+}
+
+int filedescriptor::lowLevelClose() {
+	return ::close(pvt->_fd);
 }
 
 void filedescriptor::retryInterruptedReads() {
@@ -1154,13 +1154,16 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			}
 		} else {
 		#endif
-			actualread=::read(pvt->_fd,ptr,sizetoread);
+			actualread=lowLevelRead(ptr,sizetoread);
 			#ifdef DEBUG_READ
 			for (int i=0; i<actualread; i++) {
 				character::safePrint(
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
 			printf("(%ld bytes) ",actualread);
+			if (actualread==-1) {
+				printf("%s ",error::getErrorString());
+			}
 			fflush(stdout);
 			#endif
 		#ifdef RUDIMENTS_HAS_SSL
@@ -1213,6 +1216,10 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	printf(",%d)\n",totalread);
 	#endif
 	return totalread;
+}
+
+ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
+	return ::read(pvt->_fd,buf,count);
 }
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
@@ -1399,13 +1406,16 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		} else {
 		#endif
 
-			actualwrite=::write(pvt->_fd,ptr,sizetowrite);
+			actualwrite=lowLevelWrite(ptr,sizetowrite);
 			#ifdef DEBUG_WRITE
 			for (int i=0; i<actualwrite; i++) {
 				character::safePrint(
 				(static_cast<const unsigned char *>(ptr))[i]);
 			}
 			printf("(%ld bytes) ",actualwrite);
+			if (actualwrite==-1) {
+				printf("%s ",error::getErrorString());
+			}
 			fflush(stdout);
 			#endif
 
@@ -1459,6 +1469,10 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	printf(",%d)\n",totalwrite);
 	#endif
 	return totalwrite;
+}
+
+ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
+	return ::write(pvt->_fd,buf,count);
 }
 
 int filedescriptor::waitForNonBlockingRead(long sec, long usec) const {
