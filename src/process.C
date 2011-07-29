@@ -14,6 +14,9 @@
 	#include <unistd.h>
 #endif
 
+// for exit()
+#include <stdlib.h>
+
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
@@ -340,6 +343,10 @@ bool process::detach() {
 	process::setFileCreationMask(0);
 
 	return true;
+}
+
+void process::exit(int status) {
+	::exit(status);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

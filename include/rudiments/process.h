@@ -8,7 +8,6 @@
 
 // wrap:
 //	unistd.h - nice()
-//			setsid()
 //			getgroups()
 //			vfork()
 //			profil()
@@ -30,8 +29,6 @@
 //				getrusage()
 //				getpriority(),setpriority()
 //	sys/times.h - times() - function for getting process times
-//	not in solaris -
-//		unistd.h - daemon()
 //	not in many systems - 
 //		unistd.h - group_member()
 //				getresuid(),getresgid()
@@ -163,6 +160,10 @@ class process {
 				// the background."
 				// Returns true on success and false upon
 				// failure.
+
+		static void	exit(int status);
+				// Terminates the calling process and sets the
+				// exit status to "status".
 };
 
 #ifdef RUDIMENTS_NAMESPACE
