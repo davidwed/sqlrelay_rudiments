@@ -24,6 +24,11 @@
 // for umask
 #include <sys/stat.h>
 
+// Some implementations of pthreads use macros to redefine fork
+// with __pthread_fork.  We don't want that here.
+#undef fork
+
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
