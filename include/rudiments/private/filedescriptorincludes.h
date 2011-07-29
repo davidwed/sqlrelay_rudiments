@@ -23,3 +23,10 @@
 		#undef _XOPEN_SOURCE
 	#endif
 #endif
+
+// so STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO will be defined if they need
+// to be used by the calling program...
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#include <stdio.h>
