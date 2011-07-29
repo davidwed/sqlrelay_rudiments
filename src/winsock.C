@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/winsock.h>
-#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
