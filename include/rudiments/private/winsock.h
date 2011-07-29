@@ -22,6 +22,7 @@ namespace rudiments {
 class winsock {
 	public:
 		static	bool	initWinsock();
+		static	void	shutDownWinsock();
 	private:
 		#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 			static	bool	_initialized;

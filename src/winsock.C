@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/winsock.h>
+#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -18,20 +19,30 @@ bool winsock::initWinsock() {
 		_winsockmutex.lock();
 		if (!_initialized) {
 			int	result=WSAStartup(MAKEWORD(2,0),&_wsadata);
+			_initialized=true;
 			if (!result) {
 				if (LOBYTE(_wsadata.wVersion)!=2 ||
 					HIBYTE(_wsadata.wVersion)!=0) {
 					WSACleanup();
 					result=1;
+				} else {
+					atexit(winsock::shutDownWinsock);
 				}
 			}
-			_initialized=true;
 			_winsockmutex.unlock();
 			return !result;
 		}
 		_winsockmutex.unlock();
 	#endif
 	return true;
+}
+
+void winsock::shutDownWinsock() {
+	#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+		if (_initialized) {
+			WSACleanup();
+		}
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE
