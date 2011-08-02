@@ -3,7 +3,9 @@
 
 #include <rudiments/process.h>
 #include <rudiments/error.h>
-#include <rudiments/snooze.h>
+#ifdef __CYGWIN__
+	#include <rudiments/snooze.h>
+#endif
 #include <rudiments/directory.h>
 
 #ifndef __USE_XOPEN_EXTENDED
