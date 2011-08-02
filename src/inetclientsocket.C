@@ -20,10 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Some implementations of pthreads use a macro to redefine connect
-// as __pthread_connect.  We don't want that here.
-#undef connect
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
