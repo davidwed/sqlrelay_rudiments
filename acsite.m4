@@ -493,14 +493,14 @@ then
 #endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - disabling thread support); PTHREAD_MACROS="yes"])
 		if ( test -n "$PTHREAD_MACROS" )
 		then
-			HAS_THREADS="no"
 			PTHREADLIB=""
 			PTHREADINCLUDES=""
 		else
 			AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
-			HAS_THREADS="yes"
 		fi
 	fi
+
+	HAS_THREADS="yes"
 
 else
 
