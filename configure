@@ -16449,6 +16449,42 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
+
+		PTHREAD_MACROS=""
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread macros" >&5
+$as_echo_n "checking for pthread macros... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+CPPFLAGS="-pthread"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <pthread.h>
+int
+main ()
+{
+#ifndef __pthread_fork
+	#error pthread macros in use
+#endif
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; PTHREAD_MACROS="yes"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+
+	if ( test -n "$PTHREAD_MACROS" )
+	then
+		PTHREADLIBS=""
+		PTHREADINCLUDES+""
+	fi
+
 echo "******************************"
 
 

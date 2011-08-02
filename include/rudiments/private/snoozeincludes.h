@@ -12,6 +12,7 @@
 #elif defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO)
 	#include <sys/siginfo.h>
 #elif defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD)
+	// for mingw32
 	#include <pthread.h>
 #elif !defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H)
 	struct timespec {

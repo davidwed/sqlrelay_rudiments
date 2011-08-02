@@ -520,6 +520,23 @@ AC_DEFUN([FW_CHECK_PTHREAD_SIGMASK],
 ])
 
 
+AC_DEFUN([FW_CHECK_PTHREAD_MACROS],
+[
+	dnl check for pthread macros
+	PTHREAD_MACROS=""
+	AC_MSG_CHECKING(for pthread macros)
+	FW_TRY_COMPILE([#include <pthread.h>],
+[#ifndef __pthread_fork
+	#error pthread macros in use
+#endif],[-pthread],[AC_MSG_RESULT(yes, disabling thread support); PTHREAD_MACROS="yes"],[AC_MSG_RESULT(no)])
+	if ( test -n "$PTHREAD_MACROS" )
+	then
+		PTHREADLIBS=""
+		PTHREADINCLUDES+""
+	fi
+])
+
+
 
 dnl checks for the ssl library
 dnl requires:  SSLPATH, RPATHFLAG, cross_compiling
