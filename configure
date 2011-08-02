@@ -16473,8 +16473,8 @@ if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; PTHREAD_MACROS="yes"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes - disabling thread support" >&5
+$as_echo "yes - disabling thread support" >&6; }; PTHREAD_MACROS="yes"
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CPPFLAGS="$SAVECPPFLAGS"

@@ -528,7 +528,7 @@ AC_DEFUN([FW_CHECK_PTHREAD_MACROS],
 	FW_TRY_COMPILE([#include <pthread.h>],
 [#ifdef __pthread_fork
 	#error pthread macros in use
-#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes, disabling thread support); PTHREAD_MACROS="yes"])
+#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - disabling thread support); PTHREAD_MACROS="yes"])
 	if ( test -n "$PTHREAD_MACROS" )
 	then
 		PTHREADLIBS=""
