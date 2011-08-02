@@ -529,7 +529,6 @@ echo "***** threads ****************"
 FW_CHECK_PTHREAD
 FW_CHECK_MUTEX
 FW_CHECK_PTHREAD_SIGMASK
-FW_CHECK_PTHREAD_MACROS
 echo "******************************"
 
 

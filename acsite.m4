@@ -479,15 +479,33 @@ then
 	then
 		AC_MSG_ERROR(pthread library not found.  Rudiments requires this package.)
 		exit
-	fi
 
-	AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
-	HAS_THREADS="yes"
+	else
+
+		dnl check for pthread macros - for now we're disabling
+		dnl thread support on systems that use them, they cause
+		dnl innumerable problems
+		PTHREAD_MACROS=""
+		AC_MSG_CHECKING(for pthread macros)
+		FW_TRY_COMPILE([#include <pthread.h>],
+[#ifdef __pthread_fork
+	#error pthread macros in use
+#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - disabling thread support); PTHREAD_MACROS="yes"])
+		if ( test -n "$PTHREAD_MACROS" )
+		then
+			HAS_THREADS="no"
+			PTHREADLIB=""
+			PTHREADINCLUDES=""
+		else
+			AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
+			HAS_THREADS="yes"
+		fi
+	fi
 
 else
 
 	echo "disabled"
-	HAS_THREADS="yes"
+	HAS_THREADS="no"
 
 fi
 
@@ -499,15 +517,19 @@ AC_SUBST(PTHREADLIB)
 
 AC_DEFUN([FW_CHECK_MUTEX],
 [
-	dnl check for pthread_mutex_t
-	AC_MSG_CHECKING(for pthread_mutex_t)
-	FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
-	dnl check for CreateMutex
-	if ( test -n "$MINGW32" )
+	if ( test $HAS_THREADS = "yes")
 	then
-		AC_MSG_CHECKING(for CreateMutex)
-		FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		dnl check for pthread_mutex_t
+		AC_MSG_CHECKING(for pthread_mutex_t)
+		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		dnl check for CreateMutex
+		if ( test -n "$MINGW32" )
+		then
+			AC_MSG_CHECKING(for CreateMutex)
+			FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		fi
 	fi
 ])
 
@@ -517,23 +539,6 @@ AC_DEFUN([FW_CHECK_PTHREAD_SIGMASK],
 	dnl check for pthread_sigmask
 	AC_MSG_CHECKING(for pthread_sigmask)
 	FW_TRY_LINK([#include <signal.h>],[pthread_sigmask(1,0,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_SIGMASK,1,pthread_sigmask exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-])
-
-
-AC_DEFUN([FW_CHECK_PTHREAD_MACROS],
-[
-	dnl check for pthread macros
-	PTHREAD_MACROS=""
-	AC_MSG_CHECKING(for pthread macros)
-	FW_TRY_COMPILE([#include <pthread.h>],
-[#ifdef __pthread_fork
-	#error pthread macros in use
-#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - disabling thread support); PTHREAD_MACROS="yes"])
-	if ( test -n "$PTHREAD_MACROS" )
-	then
-		PTHREADLIB=""
-		PTHREADINCLUDES=""
-	fi
 ])
 
 
