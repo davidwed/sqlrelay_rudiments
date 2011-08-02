@@ -16462,7 +16462,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-#ifndef __pthread_fork
+#ifdef __pthread_fork
 	#error pthread macros in use
 #endif
   ;
