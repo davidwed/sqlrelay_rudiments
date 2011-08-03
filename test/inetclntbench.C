@@ -38,7 +38,7 @@ int main(int argc, const char **argv) {
 	inetclientsocket	clnt;
 
 	// connect to a server on localhost, listening on port 8000
-	if (clnt.connect("localhost",8000,-1,-1,1,1)<0) {
+	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
 		printf("connect failed: %s\n",error::getErrorString());
 		exit(1);
 	}

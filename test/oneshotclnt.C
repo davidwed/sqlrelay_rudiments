@@ -14,7 +14,7 @@ int main(int argc, const char **argv) {
 	inetclientsocket	clnt;
 
 	// connect to a server on localhost, listening on port 8000
-	clnt.connect("localhost",8000,-1,-1,1,0);
+	clnt.connect("127.0.0.1",8000,-1,-1,1,0);
 
 	// write "hello" to the server
 	clnt.write("hello",5);

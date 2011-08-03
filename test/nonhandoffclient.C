@@ -18,11 +18,11 @@ int main(int argc, const char **argv) {
 	time_t	starttime=time(NULL);
 
 	for (int i=0; i<100000; i++) {
-		clnt.connect("localhost",10000,-1,-1,0,1);
+		clnt.connect("127.0.0.1",10000,-1,-1,0,1);
 		clnt.read(&port);
 		clnt.close();
 
-		clnt.connect("localhost",port,-1,-1,0,1);
+		clnt.connect("127.0.0.1",port,-1,-1,0,1);
 		clnt.read(buffer,5);
 		clnt.close();
 	}
