@@ -1,4 +1,4 @@
-0.35 -
+0.35 - added ( to set of chars to capitalize after
 
 0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
 	added test for utime and utime.h
