@@ -85,7 +85,7 @@ void charstring::capitalize(char *str) {
 		} else {
 			*ch=character::toLowerCase(c);
 		}
-		if (c==' ' || c=='\'' || c=='"' || c=='-') {
+		if (c==' ' || c=='\'' || c=='"' || c=='-' || c=='(') {
 			cap=true;
 		}
 	}
