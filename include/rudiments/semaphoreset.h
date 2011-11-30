@@ -204,6 +204,18 @@ class semaphoreset {
 			// returns the number of processes that
 			// are waiting for the semaphore to increment
 
+		// By default, if an operation is occurring and a signal
+		// interrupts it, the operation is retried.  These operations
+		// override that behavior.
+		void	retryInterruptedOperations();
+			// Causes operations to automatically be retired if
+			// interrupted by a signal.  This is the default
+			// behiavior.
+		void	dontRetryInterruptedOperations();
+			// Causes operations not to automatically be retired
+			// if interrupted by a signal.  This is the default
+			// behiavior.
+
 	#include <rudiments/private/semaphoreset.h>
 
 };

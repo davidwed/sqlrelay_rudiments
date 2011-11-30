@@ -52,6 +52,7 @@ class semaphoresetprivate {
 		int	_semid;
 		bool	_created;
 		int	_semcount;
+		bool	_retryinterruptedoperations;
 		#if defined(RUDIMENTS_HAVE_SEMGET)
 			struct	sembuf	**_waitop;
 			struct	sembuf	**_waitwithundoop;
@@ -69,6 +70,7 @@ semaphoreset::semaphoreset() {
 	pvt->_semid=-1;
 	pvt->_created=false;
 	pvt->_semcount=0;
+	pvt->_retryinterruptedoperations=true;
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		pvt->_waitop=NULL;
 		pvt->_waitwithundoop=NULL;
@@ -530,7 +532,9 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 		int	result;
 		do {
 			result=semget(key,nsems,semflg);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 &&
+				error::getErrorNumber()==EINTR &&
+				pvt->_retryinterruptedoperations);
 		return result;
 
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -617,7 +621,9 @@ int semaphoreset::semControl(semaphoresetprivate *pvt, int semnum,
 		int	result;
 		do {
 			result=semctl(pvt->_semid,semnum,cmd,*semctlun);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 &&
+				error::getErrorNumber()==EINTR &&
+				pvt->_retryinterruptedoperations);
 		return result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;
@@ -632,7 +638,9 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 		int	result;
 		do {
 			result=semop(pvt->_semid,sops,1);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 &&
+				error::getErrorNumber()==EINTR &&
+				pvt->_retryinterruptedoperations);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;
@@ -647,7 +655,9 @@ bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
 		int	result;
 		do {
 			result=semtimedop(pvt->_semid,sops,1,ts);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
+		} while (result==-1 &&
+				error::getErrorNumber()==EINTR &&
+				pvt->_retryinterruptedoperations);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;
@@ -663,6 +673,14 @@ bool semaphoreset::supportsTimedSemaphoreOperations() {
 	#else
 		return false;
 	#endif
+}
+
+void semaphoreset::retryInterruptedOperations() {
+	pvt->_retryinterruptedoperations=true;
+}
+
+void semaphoreset::dontRetryInterruptedOperations() {
+	pvt->_retryinterruptedoperations=false;
 }
 
 #ifdef RUDIMENTS_NAMESPACE
