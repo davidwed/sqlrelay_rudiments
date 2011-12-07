@@ -131,6 +131,11 @@ class charstring {
 							char needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
+		static	const char	*findFirstOrEnd(const char *haystack,
+							char needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or a pointer to the NULL terminator
+			// at the end of the string if not found.
 		static	const char	*findLast(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the last occurrance of "needle"

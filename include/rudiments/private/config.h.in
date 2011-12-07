@@ -721,6 +721,9 @@
 /* Some systems have stdint.h */
 #undef RUDIMENTS_HAVE_STDINT_H
 
+/* Some systems have strchrnul */
+#undef RUDIMENTS_HAVE_STRCHRNUL
+
 /* Some systems have strcspn */
 #undef RUDIMENTS_HAVE_STRCSPN
 

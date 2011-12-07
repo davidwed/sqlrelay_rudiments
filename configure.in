@@ -1353,6 +1353,21 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #endif],
 char *a=NULL; strpbrk(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRPBRK,1,Some systems have strpbrk) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for strchrnul)
+AC_TRY_COMPILE([#ifndef __USE_GNU
+	#define __USE_GNU
+#endif
+#ifndef __USE_ISOC9X
+	#define __USE_ISOC9X
+#endif
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+char *a=NULL; strchrnul(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCHRNUL,1,Some systems have strchrnul) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined in unistd.h)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H

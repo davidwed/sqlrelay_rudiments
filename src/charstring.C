@@ -877,6 +877,24 @@ const char *charstring::findFirst(const char *haystack, char needle) {
 	return (haystack)?strchr(haystack,needle):NULL;
 }
 
+const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
+	#ifdef RUDIMENTS_HAVE_STRCHRNUL
+	return (haystack)?strchrnul(haystack,needle):NULL;
+	#else
+	if (!haystack) {
+		return NULL;
+	}
+	char	*retval=haystack;
+	while (*retval) {
+		if (*retval==needle) {
+			return retval;
+		}
+		retval++;
+	}
+	return retval;
+	#endif
+}
+
 const char *charstring::findLast(const char *haystack, char needle) {
 	return (haystack)?strrchr(haystack,needle):NULL;
 }

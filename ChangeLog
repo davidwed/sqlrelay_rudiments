@@ -1,6 +1,7 @@
 0.35 - added ( to set of chars to capitalize after
 	added methods to control whether semaphoreset operations are retried
 		after they have been interrupted by a signal
+	added charstring::findFirstOrEnd
 
 0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
 	added test for utime and utime.h
