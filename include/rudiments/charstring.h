@@ -136,6 +136,11 @@ class charstring {
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or a pointer to the NULL terminator
 			// at the end of the string if not found.
+		static	const char	*findFirstOrEnd(const char *haystack,
+							const char *needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or a pointer to the NULL terminator
+			// at the end of the string if not found.
 		static	const char	*findLast(const char *haystack,
 							const char *needle);
 			// Returns a pointer to the last occurrance of "needle"
@@ -151,6 +156,11 @@ class charstring {
 		static	char	*findFirst(char *haystack, char needle);
 			// Returns a pointer to the first occurrance of "needle"
 			// in "haystack" or NULL if not found.
+		static	char	*findFirstOrEnd(char *haystack,
+							const char *needle);
+			// Returns a pointer to the first occurrance of "needle"
+			// in "haystack" or a pointer to the NULL terminator
+			// at the end of the string if not found.
 		static	char	*findLast(char *haystack, const char *needle);
 			// Returns a pointer to the last occurrance of "needle"
 			// in "haystack" or NULL if not found.
@@ -161,11 +171,27 @@ class charstring {
 		static const char	*findFirstOfSet(const char *haystack,
 							const char *set);
 			// Returns a pointer to the first occurence in
-			// "haystack" of any of the characters in "set".
+			// "haystack" of any of the characters in "set"
+			// or NULL if not found.
 		static char		*findFirstOfSet(char *haystack,
 							const char *set);
 			// Returns a pointer to the first occurence in
+			// "haystack" of any of the characters in "set"
+			// or NULL if not found.
+		static const char	*findFirstOfSetOrEnd(
+							const char *haystack,
+							const char *set);
+			// Returns a pointer to the first occurence in
+			// "haystack" of any of the characters in "set"
+			// or a pointer to the NULL terminator at the end
+			// of the string if not found.
+		static char		*findFirstOfSetOrEnd(
+							char *haystack,
+							const char *set);
+			// Returns a pointer to the first occurence in
 			// "haystack" of any of the characters in "set".
+			// or a pointer to the NULL terminator at the end
+			// of the string if not found.
 
 
 		static size_t	lengthContainingSet(const char *haystack,

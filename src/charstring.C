@@ -895,6 +895,28 @@ const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	#endif
 }
 
+const char *charstring::findFirstOrEnd(const char *haystack,
+						const char *needle) {
+	if (!haystack || !needle) {
+		return NULL;
+	}
+	const char	*retval=haystack;
+	size_t	needlelen=length(needle);
+	while (*retval) {
+		if (!compare(retval,needle,needlelen)) {
+			return retval;
+		}
+		retval++;
+	}
+	return retval;
+}
+
+char *charstring::findFirstOrEnd(char *haystack, const char *needle) {
+	return const_cast<char *>(findFirstOrEnd(
+					const_cast<const char *>(haystack),
+					needle));
+}
+
 const char *charstring::findLast(const char *haystack, char needle) {
 	return (haystack)?strrchr(haystack,needle):NULL;
 }
@@ -944,6 +966,26 @@ char *charstring::findFirstOfSet(char *haystack, const char *set) {
 	}
 	return NULL;
 	#endif
+}
+
+const char *charstring::findFirstOfSetOrEnd(const char *haystack,
+							const char *set) {
+	return const_cast<char *>(findFirstOfSetOrEnd(
+					const_cast<char *>(haystack),set));
+}
+
+char *charstring::findFirstOfSetOrEnd(char *haystack, const char *set) {
+	if (!haystack || !set) {
+		return NULL;
+	}
+	char	*retval=haystack;
+	while (*retval) {
+		if (contains(set,*retval)) {
+			return retval;
+		}
+		retval++;
+	}
+	return retval;
 }
 
 size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
