@@ -884,7 +884,7 @@ const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	if (!haystack) {
 		return NULL;
 	}
-	char	*retval=haystack;
+	const char	*retval=haystack;
 	while (*retval) {
 		if (*retval==needle) {
 			return retval;
