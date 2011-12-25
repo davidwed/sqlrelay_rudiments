@@ -29,6 +29,12 @@
 // for umask
 #include <sys/stat.h>
 
+// for syscall(SYS_seteuid) and syscall(SYS_setegid)
+#if defined(RUDIMENTS_HAVE_SYSCALL_SETEUID) || \
+	defined(RUDIMENTS_HAVE_SYSCALL_SETEGID)
+	#include <sys/syscall.h>
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif

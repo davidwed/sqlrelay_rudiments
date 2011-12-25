@@ -24736,6 +24736,7 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+SETEUID=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for seteuid" >&5
 $as_echo_n "checking for seteuid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -24761,14 +24762,16 @@ $as_echo "#define RUDIMENTS_HAVE_SETEUID 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+$as_echo "no" >&6; }; SETEUID="no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for syscall SYS_seteuid" >&5
+if ( test -n "$SETEUID" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for syscall SYS_seteuid" >&5
 $as_echo_n "checking for syscall SYS_seteuid... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/syscall.h>
 int
@@ -24790,6 +24793,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for setreuid" >&5
 $as_echo_n "checking for setreuid... " >&6; }
@@ -24911,6 +24915,7 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+SETEGID=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for setegid" >&5
 $as_echo_n "checking for setegid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -24936,14 +24941,16 @@ $as_echo "#define RUDIMENTS_HAVE_SETEGID 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+$as_echo "no" >&6; }; SETEGID="no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for syscall SYS_setegid" >&5
+if ( test -n "$SETEGID" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for syscall SYS_setegid" >&5
 $as_echo_n "checking for syscall SYS_setegid... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/syscall.h>
 int
@@ -24965,6 +24972,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for setregid" >&5
 $as_echo_n "checking for setregid... " >&6; }
