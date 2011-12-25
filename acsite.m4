@@ -28,7 +28,7 @@ SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 CPPFLAGS="$3"
-LIBS="$HACKLIBS $4"
+LIBS="$4"
 LD_LIBRARY_PATH="$5"
 export LD_LIBRARY_PATH
 AC_TRY_LINK([$1],[$2],[$6],[$7])
@@ -384,12 +384,9 @@ AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers don't support the inline keywor
 
 AC_DEFUN([FW_CXX_NAMESPACES],
 [
-	AC_LANG_SAVE
-	AC_LANG_CPLUSPLUS
 	RUDIMENTS_NAMESPACE=""
 	AC_MSG_CHECKING(for namespace support)
 	AC_TRY_COMPILE([namespace Outer { namespace Inner { int i = 0; }}],[using namespace Outer::Inner; return i;],[RUDIMENTS_NAMESPACE="yes"],[])
-	AC_LANG_RESTORE
 	if ( test "$RUDIMENTS_NAMESPACE" = yes )
 	then
 		AC_MSG_RESULT(yes)
@@ -1742,6 +1739,7 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 
 	AC_MSG_CHECKING(for socket libraries)
 
+	AC_LANG_SAVE
 	AC_LANG(C)
 	SOCKETLIBS=""
 	DONE=""
@@ -1773,7 +1771,7 @@ gethostbyname(NULL);],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
 			break
 		fi
 	done
-	AC_LANG(C++)
+	AC_LANG_RESTORE
 
 	if ( test -z "$DONE" )
 	then
@@ -1790,35 +1788,37 @@ gethostbyname(NULL);],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
 	AC_SUBST(SOCKETLIBS)
 ])
 
-AC_DEFUN([FW_CHECK_SCO_HACK],
+AC_DEFUN([FW_CHECK_SCO_CFRONT_HACK],
 [
-	AC_LANG(C)
+	AC_MSG_CHECKING(whether SCO _CFRONT_3_0 hack is needed)
 	LINKOK=""
-	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
-		#include <stdlib.h>
+	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif],exit(0);,LINKOK="yes")
 	if ( test -z "$LINKOK" )
 	then
-		OLDLIBS="$LIBS"
-		LIBS="/usr/ccs/lib/crti.o $LIBS"
+		OLDCPPFLAGS="$CPPFLAGS"
+		CPPFLAGS="-D_CFRONT_3_0 $CPPFLAGS"
 		AC_TRY_LINK([#ifdef HAVE_STDLIB_H
-			#include <stdlib.h>
+		#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif],exit(0);,LINKOK="yes")
-		if ( test -n "$LINKOK" )
+		if ( test -z "$LINKOK" )
 		then
-			HACKLIBS="$HACKLIBS /usr/ccs/lib/crti.o"
+			AC_MSG_RESULT(no)
+			CPPFLAGS="$OLDCPPFLAGS"
+		else
+			AC_MSG_RESULT(yes)
 		fi
-		LIBS="$OLDLIBS"
+	else
+		AC_MSG_RESULT(no)
 	fi
 ])
-
-AC_DEFUN([FW_CHECK_HACKS],
-[
-HACKLIBS=""
-FW_CHECK_SCO_HACK
-LIBS="$HACKLIBS $LIBS"
-])
-
 
 AC_DEFUN([FW_CHECK_CRYPT_R],
 [

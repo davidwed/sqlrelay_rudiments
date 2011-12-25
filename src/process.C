@@ -209,6 +209,8 @@ bool process::setUserId(uid_t uid) {
 bool process::setEffectiveUserId(uid_t uid) {
 	#if defined(RUDIMENTS_HAVE_SETEUID)
 		return !seteuid(uid);
+	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEUID)
+		return !syscall(SYS_seteuid,uid);
 	#elif defined(MINGW32)
 		// windows doesn't have the notion of effective user id's
 		error::setErrorNumber(ENOSYS);
@@ -273,6 +275,8 @@ bool process::setGroupId(gid_t gid) {
 bool process::setEffectiveGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETEUID)
 		return !setegid(gid);
+	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEGID)
+		return !syscall(SYS_setegid,gid);
 	#elif defined(MINGW32)
 		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);

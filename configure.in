@@ -295,10 +295,6 @@ if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 fi
 
 
-dnl check for hacks here
-FW_CHECK_HACKS
-
-
 dnl Checks for programs.
 echo
 echo "***** Programs ***************"
@@ -353,7 +349,6 @@ FW_CHECK_WALL
 FW_CHECK_PTHREAD_COMPILE
 echo "******************************"
 
-
 dnl Checks for header files.
 echo
 echo "***** Headers ****************"
@@ -369,6 +364,8 @@ AC_TRY_COMPILE([#include <strings.h>],
 AC_MSG_CHECKING(for unistd.h)
 AC_TRY_COMPILE([#include <unistd.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_UNISTD_H, 1, Some systems have unistd.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+FW_CHECK_SCO_CFRONT_HACK
 
 AC_MSG_CHECKING(for utime.h)
 AC_TRY_COMPILE([#include <utime.h>],
@@ -1900,6 +1897,10 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #endif],
 seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for syscall SYS_seteuid)
+AC_TRY_LINK([#include <sys/syscall.h>],
+syscall(SYS_seteuid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEUID,1,Some systems have seteuid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for setreuid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1944,6 +1945,10 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <unistd.h>
 #endif],
 setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for syscall SYS_setegid)
+AC_TRY_LINK([#include <sys/syscall.h>],
+syscall(SYS_setegid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEGID,1,Some systems have setegid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for setregid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
