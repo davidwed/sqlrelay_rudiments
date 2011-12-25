@@ -1888,6 +1888,7 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #endif],
 setuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETUID,1,Some systems have setuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+SETEUID=""
 AC_MSG_CHECKING(for seteuid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1895,11 +1896,14 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
-seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); SETEUID="no")
 
-AC_MSG_CHECKING(for syscall SYS_seteuid)
-AC_TRY_LINK([#include <sys/syscall.h>],
+if ( test -n "$SETEUID" )
+then
+	AC_MSG_CHECKING(for syscall SYS_seteuid)
+	AC_TRY_LINK([#include <sys/syscall.h>],
 syscall(SYS_seteuid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEUID,1,Some systems have seteuid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for setreuid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
@@ -1937,6 +1941,7 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #endif],
 setgid(0),AC_DEFINE(RUDIMENTS_HAVE_SETGID,1,Some systems have setgid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+SETEGID=""
 AC_MSG_CHECKING(for setegid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1944,11 +1949,14 @@ AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
-setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no); SETEGID="no")
 
-AC_MSG_CHECKING(for syscall SYS_setegid)
-AC_TRY_LINK([#include <sys/syscall.h>],
+if ( test -n "$SETEGID" )
+then
+	AC_MSG_CHECKING(for syscall SYS_setegid)
+	AC_TRY_LINK([#include <sys/syscall.h>],
 syscall(SYS_setegid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEGID,1,Some systems have setegid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for setregid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
