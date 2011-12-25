@@ -894,6 +894,9 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* Hack for gcc on SCO OSR6 */
+#undef _CFRONT_3_0
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 

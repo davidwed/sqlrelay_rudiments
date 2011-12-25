@@ -1808,11 +1808,12 @@ AC_DEFUN([FW_CHECK_SCO_CFRONT_HACK],
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],exit(0);,LINKOK="yes")
+		CPPFLAGS="$OLDCPPFLAGS"
 		if ( test -z "$LINKOK" )
 		then
 			AC_MSG_RESULT(no)
-			CPPFLAGS="$OLDCPPFLAGS"
 		else
+			AC_DEFINE(_CFRONT_3_0, 1, Hack for gcc on SCO OSR6)
 			AC_MSG_RESULT(yes)
 		fi
 	else
