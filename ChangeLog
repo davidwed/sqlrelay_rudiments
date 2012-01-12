@@ -2,6 +2,7 @@
 	added methods to control whether semaphoreset operations are retried
 		after they have been interrupted by a signal
 	added charstring::findFirstOrEnd
+	added character::inSet
 
 0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
 	added test for utime and utime.h

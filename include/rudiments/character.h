@@ -40,6 +40,8 @@ class character {
 		static int	toLowerCase(int c);
 		static int	toAscii(int c);
 
+		static bool	inSet(char c, const char *set);
+
 		static void	safePrint(char c);
 };
 

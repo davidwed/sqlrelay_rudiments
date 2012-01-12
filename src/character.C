@@ -79,6 +79,15 @@ int character::toAscii(int c) {
 	return toascii(c);
 }
 
+bool character::inSet(char c, const char *set) {
+	for (uint16_t i=0; set[i]; i++) {
+		if (set[i]==c) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void character::safePrint(char c) {
 	if (c=='\r') {
 		printf("\\r");
