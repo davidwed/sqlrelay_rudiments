@@ -24989,7 +24989,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 if ( test -n "$SETEUID" )
 then
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for seteuid (not defined in any header)" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for seteuid (not defined in any header)" >&5
 $as_echo_n "checking for seteuid (not defined in any header)... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -25177,7 +25177,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 if ( test -n "$SETEGID" )
 then
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for setegid (not defined in any header)" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for setegid (not defined in any header)" >&5
 $as_echo_n "checking for setegid (not defined in any header)... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */

@@ -1971,9 +1971,6 @@ seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_
 
 if ( test -n "$SETEUID" )
 then
-	dnl AC_MSG_CHECKING(for syscall SYS_seteuid)
-	dnl AC_TRY_LINK([#include <sys/syscall.h>],
-dnl syscall(SYS_seteuid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEUID,1,Some systems have seteuid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 	AC_MSG_CHECKING(for seteuid (not defined in any header))
 	AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -2034,9 +2031,6 @@ setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_
 
 if ( test -n "$SETEGID" )
 then
-	dnl AC_MSG_CHECKING(for syscall SYS_setegid)
-	dnl AC_TRY_LINK([#include <sys/syscall.h>],
-dnl syscall(SYS_setegid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEGID,1,Some systems have setegid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 	AC_MSG_CHECKING(for setegid (not defined in any header))
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>

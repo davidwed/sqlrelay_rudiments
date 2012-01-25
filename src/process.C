@@ -29,12 +29,6 @@
 // for umask
 #include <sys/stat.h>
 
-// for syscall(SYS_seteuid) and syscall(SYS_setegid)
-#if defined(RUDIMENTS_HAVE_SYSCALL_SETEUID) || \
-	defined(RUDIMENTS_HAVE_SYSCALL_SETEGID)
-	#include <sys/syscall.h>
-#endif
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -289,8 +283,6 @@ extern "C" int setegid(gid_t egid);
 bool process::setEffectiveGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETEGID)
 		return !setegid(gid);
-	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEGID)
-		return !syscall(SYS_setegid,gid);
 	#elif defined(MINGW32)
 		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);
