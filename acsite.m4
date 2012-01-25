@@ -353,16 +353,6 @@ case $host_os in
 esac
 ])
 
-dnl Checks for SCO and adds some macros if it is
-AC_DEFUN([FW_CHECK_SCO],
-[
-case $host_os in
-	*sco* )
-		CPPFLAGS="$CPPFLAGS -DSCO"
-		;;
-esac
-])
-
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
