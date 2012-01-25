@@ -379,7 +379,7 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
-AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers don't support the inline keyword)
+AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers dont support the inline keyword)
 ])
 
 AC_DEFUN([FW_CXX_NAMESPACES],

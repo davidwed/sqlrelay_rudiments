@@ -17107,6 +17107,48 @@ echo "******************************"
 
 echo
 echo "***** Structures *************"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inline" >&5
+$as_echo_n "checking for inline... " >&6; }
+if test "${ac_cv_c_inline+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_cv_c_inline=no
+for ac_kw in inline __inline__ __inline; do
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __cplusplus
+typedef int foo_t;
+static $ac_kw foo_t static_foo () {return 0; }
+$ac_kw foo_t foo () {return 0; }
+#endif
+
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  ac_cv_c_inline=$ac_kw
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  test "$ac_cv_c_inline" != no && break
+done
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_c_inline" >&5
+$as_echo "$ac_cv_c_inline" >&6; }
+
+case $ac_cv_c_inline in
+  inline | yes) ;;
+  *)
+    case $ac_cv_c_inline in
+      no) ac_val=;;
+      *) ac_val=$ac_cv_c_inline;;
+    esac
+    cat >>confdefs.h <<_ACEOF
+#ifndef __cplusplus
+#define inline $ac_val
+#endif
+_ACEOF
+    ;;
+esac
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for an ANSI C-conforming const" >&5
 $as_echo_n "checking for an ANSI C-conforming const... " >&6; }
 if test "${ac_cv_c_const+set}" = set; then :
@@ -17218,48 +17260,6 @@ $as_echo "#define gid_t int" >>confdefs.h
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inline" >&5
-$as_echo_n "checking for inline... " >&6; }
-if test "${ac_cv_c_inline+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_cv_c_inline=no
-for ac_kw in inline __inline__ __inline; do
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifndef __cplusplus
-typedef int foo_t;
-static $ac_kw foo_t static_foo () {return 0; }
-$ac_kw foo_t foo () {return 0; }
-#endif
-
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  ac_cv_c_inline=$ac_kw
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  test "$ac_cv_c_inline" != no && break
-done
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_c_inline" >&5
-$as_echo "$ac_cv_c_inline" >&6; }
-
-case $ac_cv_c_inline in
-  inline | yes) ;;
-  *)
-    case $ac_cv_c_inline in
-      no) ac_val=;;
-      *) ac_val=$ac_cv_c_inline;;
-    esac
-    cat >>confdefs.h <<_ACEOF
-#ifndef __cplusplus
-#define inline $ac_val
-#endif
-_ACEOF
-    ;;
-esac
-
 ac_fn_cxx_check_type "$LINENO" "mode_t" "ac_cv_type_mode_t" "$ac_includes_default"
 if test "x$ac_cv_type_mode_t" = x""yes; then :
 
@@ -17293,6 +17293,26 @@ _ACEOF
 
 fi
 
+ac_fn_cxx_check_type "$LINENO" "ssize_t" "ac_cv_type_ssize_t" "$ac_includes_default"
+if test "x$ac_cv_type_ssize_t" = x""yes; then :
+
+else
+
+cat >>confdefs.h <<_ACEOF
+#define ssize_t int
+_ACEOF
+
+fi
+
+
+ac_fn_cxx_check_type "$LINENO" "bool" "ac_cv_type_bool" "$ac_includes_default"
+if test "x$ac_cv_type_bool" = x""yes; then :
+
+else
+
+$as_echo "#define bool unsigned char" >>confdefs.h
+
+fi
 
 ac_fn_cxx_check_type "$LINENO" "off64_t" "ac_cv_type_off64_t" "$ac_includes_default"
 if test "x$ac_cv_type_off64_t" = x""yes; then :

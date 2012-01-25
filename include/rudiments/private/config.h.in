@@ -106,10 +106,10 @@
 /* Some systems have arpa/inet.h */
 #undef RUDIMENTS_HAVE_ARPA_INET_H
 
-/* Some systems don't have st_blocks in struct stat */
+/* Some systems dont have st_blocks in struct stat */
 #undef RUDIMENTS_HAVE_BLKCNT_T
 
-/* Some systems don't have st_blksize in struct stat */
+/* Some systems dont have st_blksize in struct stat */
 #undef RUDIMENTS_HAVE_BLKSIZE_T
 
 /* Some systems have bswap64 */
@@ -817,10 +817,10 @@
 /* Some systems have sys/un.h */
 #undef RUDIMENTS_HAVE_SYS_UN_H
 
-/* Some systems don't have S_ISLNK */
+/* Some systems dont have S_ISLNK */
 #undef RUDIMENTS_HAVE_S_ISLNK
 
-/* Some systems don't have S_ISSOCK */
+/* Some systems dont have S_ISSOCK */
 #undef RUDIMENTS_HAVE_S_ISSOCK
 
 /* Some systems have tcsetattr */
@@ -886,7 +886,7 @@
 /* iov_base is char * */
 #undef RUDIMENTS_IOV_BASE_TYPE
 
-/* Some systems have swab but don't define it */
+/* Some systems have swab but dont define it */
 #undef RUDIMENTS_MUST_DEFINE_SWAB
 
 /* Compiler supports namespaces */
@@ -916,6 +916,9 @@
 /* Hack for gcc on SCO OSR6 */
 #undef _CFRONT_3_0
 
+/* Some systems dont have bool */
+#undef bool
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
@@ -928,16 +931,16 @@
 #undef inline
 #endif
 
-/* Some systems don't have key_t */
+/* Some systems dont have key_t */
 #undef key_t
 
 /* Define to `int' if <sys/types.h> does not define. */
 #undef mode_t
 
-/* Some systems don't have nlink_t */
+/* Some systems dont have nlink_t */
 #undef nlink_t
 
-/* Some systems don't have off64_t */
+/* Some systems dont have off64_t */
 #undef off64_t
 
 /* Define to `int' if <sys/types.h> does not define. */
@@ -946,8 +949,11 @@
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
 
-/* Some systems don't define socklen_t */
+/* Some systems dont define socklen_t */
 #undef socklen_t
+
+/* Define to `int' if <sys/types.h> does not define. */
+#undef ssize_t
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #undef uid_t
