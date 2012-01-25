@@ -212,6 +212,10 @@ bool process::setUserId(uid_t uid) {
 	#endif
 }
 
+#ifdef RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED
+extern "C" int seteuid(uid_t euid);
+#endif
+
 bool process::setEffectiveUserId(uid_t uid) {
 	#if defined(RUDIMENTS_HAVE_SETEUID)
 		return !seteuid(uid);
@@ -278,8 +282,12 @@ bool process::setGroupId(gid_t gid) {
 	#endif
 }
 
+#ifdef RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED
+extern "C" int setegid(gid_t egid);
+#endif
+
 bool process::setEffectiveGroupId(gid_t gid) {
-	#if defined(RUDIMENTS_HAVE_SETEUID)
+	#if defined(RUDIMENTS_HAVE_SETEGID)
 		return !setegid(gid);
 	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEGID)
 		return !syscall(SYS_setegid,gid);

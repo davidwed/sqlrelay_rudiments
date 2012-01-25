@@ -340,6 +340,7 @@ fi
 
 FW_CHECK_OSX
 FW_CHECK_MINIX
+FW_CHECK_SCO
 FW_CHECK_SO_EXT
 FW_CHECK_LIBDIR
 
@@ -701,6 +702,56 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #endif],
 [struct sockaddr_un a;],AC_DEFINE(RUDIMENTS_HAVE_SOCKADDR_UN,1,Some systems have sockaddr_un) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for int8_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[int8_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT8_T,1,Some systems have int8_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for uint8_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[uint8_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT8_T,1,Some systems have uint8_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for int16_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[int16_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT16_T,1,Some systems have int16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for uint16_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[uint16_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT16_T,1,Some systems have uint16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for int32_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[int32_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT32_T,1,Some systems have int32_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for uint32_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
@@ -710,6 +761,26 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <inttypes.h>
 #endif],
 [uint32_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT32_T,1,Some systems have uint32_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for int64_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[int64_t i;],AC_DEFINE(RUDIMENTS_HAVE_INT64_T,1,Some systems have int64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for uint64_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif],
+[uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -1900,9 +1971,19 @@ seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_
 
 if ( test -n "$SETEUID" )
 then
-	AC_MSG_CHECKING(for syscall SYS_seteuid)
-	AC_TRY_LINK([#include <sys/syscall.h>],
-syscall(SYS_seteuid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEUID,1,Some systems have seteuid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+	dnl AC_MSG_CHECKING(for syscall SYS_seteuid)
+	dnl AC_TRY_LINK([#include <sys/syscall.h>],
+dnl syscall(SYS_seteuid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEUID,1,Some systems have seteuid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+	AC_MSG_CHECKING(for seteuid (not defined in any header))
+	AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+extern "C" int seteuid(uid_t euid);
+],
+seteuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED,1,Some systems have seteuid but dont define it in a header file) AC_DEFINE(RUDIMENTS_HAVE_SETEUID,1,Some systems have seteuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for setreuid)
@@ -1953,9 +2034,19 @@ setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_
 
 if ( test -n "$SETEGID" )
 then
-	AC_MSG_CHECKING(for syscall SYS_setegid)
-	AC_TRY_LINK([#include <sys/syscall.h>],
-syscall(SYS_setegid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEGID,1,Some systems have setegid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+	dnl AC_MSG_CHECKING(for syscall SYS_setegid)
+	dnl AC_TRY_LINK([#include <sys/syscall.h>],
+dnl syscall(SYS_setegid,0),AC_DEFINE(RUDIMENTS_HAVE_SYSCALL_SETEGID,1,Some systems have setegid but dont define it in a header file so it has to be called through syscall) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+	AC_MSG_CHECKING(for setegid (not defined in any header))
+AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+extern "C" int setegid(gid_t egid);
+],
+setegid(0),AC_DEFINE(RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED,1,Some systems have setegid but dont define it in a header file) AC_DEFINE(RUDIMENTS_HAVE_SETEGID,1,Some systems have setegid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for setregid)

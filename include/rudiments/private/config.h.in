@@ -391,6 +391,18 @@
 /* Some systems have inet_aton */
 #undef RUDIMENTS_HAVE_INET_ATON
 
+/* Some systems have int16_t */
+#undef RUDIMENTS_HAVE_INT16_T
+
+/* Some systems have int32_t */
+#undef RUDIMENTS_HAVE_INT32_T
+
+/* Some systems have int64_t */
+#undef RUDIMENTS_HAVE_INT64_T
+
+/* Some systems have int8_t */
+#undef RUDIMENTS_HAVE_INT8_T
+
 /* Some systems have inttypes.h */
 #undef RUDIMENTS_HAVE_INTTYPES_H
 
@@ -631,11 +643,17 @@
 /* Some systems have setegid */
 #undef RUDIMENTS_HAVE_SETEGID
 
+/* Some systems have setegid but dont define it in a header file */
+#undef RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED
+
 /* Some systems have setenv */
 #undef RUDIMENTS_HAVE_SETENV
 
 /* Some systems have seteuid */
 #undef RUDIMENTS_HAVE_SETEUID
+
+/* Some systems have seteuid but dont define it in a header file */
+#undef RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED
 
 /* Some systems have SetFileTime */
 #undef RUDIMENTS_HAVE_SETFILETIME
@@ -769,14 +787,6 @@
 /* Some systems have symlink */
 #undef RUDIMENTS_HAVE_SYMLINK
 
-/* Some systems have setegid but dont define it in a header file so it has to
-   be called through syscall */
-#undef RUDIMENTS_HAVE_SYSCALL_SETEGID
-
-/* Some systems have seteuid but dont define it in a header file so it has to
-   be called through syscall */
-#undef RUDIMENTS_HAVE_SYSCALL_SETEUID
-
 /* Some systems have syslog.h */
 #undef RUDIMENTS_HAVE_SYSLOG_H
 
@@ -825,8 +835,17 @@
 /* Some systems have truncate */
 #undef RUDIMENTS_HAVE_TRUNCATE
 
+/* Some systems have uint16_t */
+#undef RUDIMENTS_HAVE_UINT16_T
+
 /* Some systems have uint32_t */
 #undef RUDIMENTS_HAVE_UINT32_T
+
+/* Some systems have uint64_t */
+#undef RUDIMENTS_HAVE_UINT64_T
+
+/* Some systems have uint8_t */
+#undef RUDIMENTS_HAVE_UINT8_T
 
 /* Some systems have unistd.h */
 #undef RUDIMENTS_HAVE_UNISTD_H
