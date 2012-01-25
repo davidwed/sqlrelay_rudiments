@@ -440,7 +440,7 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 
 		// get the time from the rtc
 		rtc_time rt;
-		if (devrtc.ioctl(RTC_RD_TIME,&rt)==-1) {
+		if (devrtc.ioCtl(RTC_RD_TIME,&rt)==-1) {
 			devrtc.close();
 			return false;
 		}
@@ -494,7 +494,7 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 		rt.tm_isdst=pvt->_isdst;
 
 		// set the rtc and clean up
-		bool	retval=(devrtc.ioctl(RTC_SET_TIME,&rt)!=-1);
+		bool	retval=(devrtc.ioCtl(RTC_SET_TIME,&rt)!=-1);
 		devrtc.close();
 
 		return retval;

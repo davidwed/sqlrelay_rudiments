@@ -68,7 +68,7 @@ bool clientsocket::supportsBlockingNonBlockingModes() {
 bool clientsocket::useNonBlockingMode() const {
 	#ifdef FIONBIO
 	int	nonblocking=1;
-	return (ioctl(FIONBIO,&nonblocking)!=-1);
+	return (ioCtl(FIONBIO,&nonblocking)!=-1);
 	#else
 	return false;
 	#endif
@@ -77,7 +77,7 @@ bool clientsocket::useNonBlockingMode() const {
 bool clientsocket::useBlockingMode() const {
 	#ifdef FIONBIO
 	int	nonblocking=0;
-	return (ioctl(FIONBIO,&nonblocking)!=-1);
+	return (ioCtl(FIONBIO,&nonblocking)!=-1);
 	#else
 	return false;
 	#endif

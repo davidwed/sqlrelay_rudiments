@@ -370,7 +370,7 @@ BIO *filedescriptor::newSSLBIO() const {
 bool filedescriptor::useNonBlockingMode() const {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
-		return (fcntl(F_SETFL,fcntl(F_GETFL,0)|O_NONBLOCK)!=-1);
+		return (fCntl(F_SETFL,fCntl(F_GETFL,0)|O_NONBLOCK)!=-1);
 	#else
 		return false;
 	#endif
@@ -379,7 +379,7 @@ bool filedescriptor::useNonBlockingMode() const {
 bool filedescriptor::useBlockingMode() const {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)
-		return (fcntl(F_SETFL,fcntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
+		return (fCntl(F_SETFL,fCntl(F_GETFL,0)&(~O_NONBLOCK))!=-1);
 	#else
 		return false;
 	#endif
@@ -387,7 +387,7 @@ bool filedescriptor::useBlockingMode() const {
 
 bool filedescriptor::isUsingNonBlockingMode() const {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && defined(F_GETFL)
-		return (fcntl(F_GETFL,0)&O_NONBLOCK);
+		return (fCntl(F_GETFL,0)&O_NONBLOCK);
 	#else
 		return false;
 	#endif
@@ -1676,11 +1676,11 @@ int filedescriptor::getSSLResult() const {
 }
 #endif
 
-int filedescriptor::fcntl(int cmd, long arg) const {
+int filedescriptor::fCntl(int cmd, long arg) const {
 	#ifdef RUDIMENTS_HAVE_FCNTL
 		int	result;
 		do {
-			result=::fcntl(pvt->_fd,cmd,arg);
+			result=fcntl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedfcntl && result==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
@@ -1689,11 +1689,11 @@ int filedescriptor::fcntl(int cmd, long arg) const {
 	#endif
 }
 
-int filedescriptor::ioctl(int cmd, void *arg) const {
+int filedescriptor::ioCtl(int cmd, void *arg) const {
 	#ifdef RUDIMENTS_HAVE_IOCTL
 		int	result;
 		do {
-			result=::ioctl(pvt->_fd,cmd,arg);
+			result=ioctl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedioctl && result==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
@@ -2041,7 +2041,7 @@ void filedescriptor::sslresult(int sslrslt) {
 
 bool filedescriptor::closeOnExec() {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
-		return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
+		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		return SetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
 							HANDLE_FLAG_INHERIT,0);
@@ -2052,7 +2052,7 @@ bool filedescriptor::closeOnExec() {
 
 bool filedescriptor::dontCloseOnExec() {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
-		return !fcntl(F_SETFD,fcntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
+		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		return SetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
 							HANDLE_FLAG_INHERIT,
@@ -2064,7 +2064,7 @@ bool filedescriptor::dontCloseOnExec() {
 
 bool filedescriptor::getCloseOnExec() {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
-		return fcntl(F_GETFD,FD_CLOEXEC);
+		return fCntl(F_GETFD,FD_CLOEXEC);
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		DWORD	inherit;
 		if (GetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),

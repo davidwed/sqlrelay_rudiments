@@ -812,7 +812,7 @@ bool file::lock(int method, short type, short whence,
 		lck.l_whence=whence;
 		lck.l_start=start;
 		lck.l_len=len;
-		return !fcntl(method,reinterpret_cast<long>(&lck));
+		return !fCntl(method,reinterpret_cast<long>(&lck));
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
 		// how do I specify read vs. write/write?
 		off64_t	cur=getCurrentPosition();
@@ -853,7 +853,7 @@ bool file::checkLock(short type, short whence, off64_t start, off64_t len,
 		lck.l_whence=whence;
 		lck.l_start=start;
 		lck.l_len=len;
-		int	result=fcntl(F_GETLK,reinterpret_cast<long>(&lck));
+		int	result=fCntl(F_GETLK,reinterpret_cast<long>(&lck));
 		*retlck=lck;
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
@@ -872,7 +872,7 @@ bool file::unlock(short whence, off64_t start, off64_t len) const {
 		lck.l_whence=whence;
 		lck.l_start=start;
 		lck.l_len=len;
-		return !fcntl(F_SETLK,reinterpret_cast<long>(&lck));
+		return !fCntl(F_SETLK,reinterpret_cast<long>(&lck));
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
 		off64_t	cur=getCurrentPosition();
 		if (cur==-1) {

@@ -469,8 +469,8 @@ class filedescriptor {
 		void	translateByteOrder();
 		void	dontTranslateByteOrder();
 
-		int	fcntl(int command, long arg) const;
-		int	ioctl(int command, void *arg) const;
+		int	fCntl(int command, long arg) const;
+		int	ioCtl(int command, void *arg) const;
 			// Interfaces for performing varions miscellaneous
 			// operations on the file descriptor.
 
