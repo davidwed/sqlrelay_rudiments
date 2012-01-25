@@ -25,62 +25,62 @@ int linkedlistutil<datatype>::compare(datatype data1, datatype data2) const {
 	}
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<char *>::print(char *data) const {
 	printf("%s",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<const char *>::print(const char *data) const {
 	printf("%s",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 int linkedlistutil<char *>::compare(char *data1, char *data2) const {
 	return charstring::compare(data1,data2);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 int linkedlistutil<const char *>::compare(const char *data1,
 						const char *data2) const {
 	return charstring::compare(data1,data2);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<char>::print(char data) const {
 	printf("%c",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<int>::print(int data) const {
 	printf("%d",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<short>::print(short data) const {
 	printf("%hd",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<long>::print(long data) const {
 	printf("%ld",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<float>::print(float data) const {
 	printf("%f",data);
 }
 
-template <>
+RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<double>::print(double data) const {
 	printf("%f",data);

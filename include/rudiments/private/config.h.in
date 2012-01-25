@@ -67,6 +67,9 @@
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
 
+/* Most modern systems support template <> */
+#undef RUDIMENTS_EXPLICIT_SPECIALIZATION
+
 /* getsockopt takes a void * on most systems */
 #undef RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE
 

@@ -73,7 +73,7 @@ int LINKEDLISTNODE_CLASS::compare(datatype data) const {
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLISTNODE_CLASS::print() const {
-	return datautil.print(data);
+	datautil.print(data);
 }
 
 #ifdef RUDIMENTS_NAMESPACE
