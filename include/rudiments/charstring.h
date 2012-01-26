@@ -250,6 +250,16 @@ class charstring {
 		static	void	strip(char *str1, const char *str2);
 			// Strips all instances of "str2" from "str1".
 
+		static	void	replace(char *str,
+					char oldchar, char newchar);
+			// Replaces all instances of "oldchar"
+			// in "str" with "newchar"
+
+		static	void	replace(char *str,
+					const char *oldchars, char newchar);
+			// Replaces all instances of any of the characters in
+			// the set "oldchar" in "str" with "newchar"
+
 		static	uint16_t	integerLength(int16_t number);
 		static	uint16_t	integerLength(int32_t number);
 		static	uint16_t	integerLength(int64_t number);

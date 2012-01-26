@@ -51,7 +51,7 @@ AC_ARG_WITH(pcre-libs,
 	PCRELIBS="$withval",
 	PCRELIBS="")
 AC_ARG_ENABLE(threads,
-	[  --disable-threads       Disable thread support],
+	o  --disable-threads       Disable thread support],
 	ENABLE_RUDIMENTS_THREADS="no",
 	ENABLE_RUDIMENTS_THREADS="yes")
 
@@ -2110,7 +2110,7 @@ echo "******************************"
 
 
 dnl Default build variables.
-RUDIMENTS_VERSION="0.35"
+RUDIMENTS_VERSION="0.36"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 dnl rules for CURRENT:REVISION:AGE version info:

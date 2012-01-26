@@ -1623,7 +1623,7 @@ Optional Features:
   --enable-inlines        use inline methods
   --disable-ssl           Disable SSL support
   --disable-pcre          Don't use PCRE for regular expressions
-  --disable-threads       Disable thread support
+o  --disable-threads       Disable thread support]
   --disable-charstring    Don't build charstring class
   --disable-character     Don't build character class
   --disable-intervaltimer Don't build intervaltimer class
@@ -25475,7 +25475,7 @@ echo "******************************"
 
 
 
-RUDIMENTS_VERSION="0.35"
+RUDIMENTS_VERSION="0.36"
 
 
 cat >>confdefs.h <<_ACEOF

@@ -1,3 +1,9 @@
+0.36 - various fixes for SCO and Ultrix
+	renamed some methods to avoid collisions with macros
+	modified methods that take or return internal structures to take or
+		return void pointers instead
+	added charstring::replace methods
+
 0.35 - added ( to set of chars to capitalize after
 	added methods to control whether semaphoreset operations are retried
 		after they have been interrupted by a signal

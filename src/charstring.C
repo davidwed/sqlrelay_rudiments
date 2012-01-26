@@ -183,6 +183,22 @@ void charstring::strip(char *str1, const char *str2) {
 	str1[index-total]='\0';
 }
 
+void charstring::replace(char *str, char oldchar, char newchar) {
+	for (char *ptr=str; *ptr; ptr++) {
+		if (*ptr==oldchar) {
+			*ptr=newchar;
+		}
+	}
+}
+
+void charstring::replace(char *str, const char *oldchars, char newchar) {
+	for (char *ptr=str; *ptr; ptr++) {
+		if (character::inSet(*ptr,oldchars)) {
+			*ptr=newchar;
+		}
+	}
+}
+
 bool charstring::isInteger(const char *str) {
 
 	if (!str) {
