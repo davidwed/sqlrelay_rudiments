@@ -850,6 +850,9 @@
 /* Some systems have uint8_t */
 #undef RUDIMENTS_HAVE_UINT8_T
 
+/* Ultrix style statfs */
+#undef RUDIMENTS_HAVE_ULTRIX_STATFS
+
 /* Some systems have unistd.h */
 #undef RUDIMENTS_HAVE_UNISTD_H
 
