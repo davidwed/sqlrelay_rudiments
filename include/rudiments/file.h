@@ -510,9 +510,9 @@ class file : public filedescriptor {
 			// Removes attribute "name".
 			// Returns true on success and false on failure.
 
-		struct stat	*getStat();
-				// Returns a pointer to the "stat" struct
-				// used internally.
+		void 	*getInternalFileStatisticsStructure();
+			// Returns a pointer to the file stats structure
+			// used internally.
 
 
 		// These methods creates the file "name" with permissions

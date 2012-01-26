@@ -20,11 +20,15 @@ class datetime {
 
 		// if you need a quick conversion, use one of these methods
 		static char	*getString(time_t seconds);
-		static char	*getString(const struct tm *tmstruct);
+		static char	*getString(const void *tmstruct);
 			// returns "mm/dd/yyyy hh:mm:ss TZN"
+			//
 			// Note that this method allocates a buffer to return
 			// the string in which must be deleted by the calling
 			// program.
+			//
+			// "tmstruct" should be a pointer to a platform-specific
+			// time structure (struct tm * on unix)
 		static time_t	getEpoch(const char *datestring);
 			// parses "mm/dd/yyyy hh:mm:ss TZN" and returns the
 			// number of seconds since 1970.
@@ -32,13 +36,16 @@ class datetime {
 			// Note that TZN must be a valid timezone.  Otherwise
 			// GMT is assumed.
 			//
-		static time_t	getEpoch(const struct tm *tmstruct);
+		static time_t	getEpoch(const void *tmstruct);
 			// converts "tmstruct" to the number of seconds
 			// since 1970.
 			//
 			// Note that in "tmstruct", the timezone and GMT offset
 			// must be set to valid values.  Otherwise GMT is
 			// assumed.
+			//
+			// "tmstruct" should be a pointer to a platform-specific
+			// time structure (struct tm * on unix)
 
 
 		// if you need anything other than a quick conversion,
@@ -62,11 +69,12 @@ class datetime {
 			// output by many standard time functions.
 			//
 			// Returns true on success and false on failure.
-		bool	initialize(const struct tm *tmstruct);
+		bool	initialize(const void *tmstruct);
 			// Processes "tmstruct" and sets the date and time
 			// represented in the class to that time.
-			// "tmstruct" is a (struct tm *); output by 
-			// many standard time functions.
+			//
+			// "tmstruct" should be a pointer to a platform-specific
+			// time structure (struct tm * on unix)
 			//
 			// Note that in "tmstruct", the timezone and GMT offset
 			// must be set to valid values.  Otherwise GMT is
@@ -194,8 +202,9 @@ class datetime {
 			// class instance is deleted.)
 		time_t		getEpoch() const;
 			// returns the number of seconds since 1970
-		struct tm	*getTm();
-			// returns a pointer to the internal "struct tm"
+		const void	*getInternalTimeStructure();
+			// returns a pointer to the internal platform-specific
+			// time structure (struct tm * on unix)
 
 
 		// These methods return timezone data

@@ -1150,16 +1150,9 @@ const char *filesystem::getFilesystemSpecificString() const {
 #endif
 }
 
-
-#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-struct statvfs *filesystem::getStatfs() {
-	return &pvt->_st;
+void *filesystem::getInternalFilesystemStatisticsStructure() {
+	return (void *)&pvt->_st;
 }
-#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
-struct statfs *filesystem::getStatfs() {
-	return &pvt->_st;
-}
-#endif
 
 bool filesystem::getTypeName(const char *path, const char **name) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \

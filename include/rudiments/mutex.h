@@ -37,8 +37,8 @@ class mutex {
 			// Unlock the mutex.
 			// Returns true on success and false if an error occurs.
 
-		void	*getMutex();
-			// Returns the mutex used by
+		void	*getInternalMutexStructure();
+			// Returns the mutex structure used by
 			// the class internally.
 
 	#include <rudiments/private/mutex.h>

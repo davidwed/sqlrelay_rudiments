@@ -4,6 +4,9 @@
 #include <rudiments/device.h>
 #include <rudiments/error.h>
 
+// for mknod
+#include <sys/stat.h>
+
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif

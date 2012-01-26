@@ -77,7 +77,7 @@ bool mutex::unlock() {
 	return !result;
 }
 
-void *mutex::getMutex() {
+void *mutex::getInternalMutexStructure() {
 	return (void *)pvt->_mut;
 }
 
@@ -114,7 +114,7 @@ bool mutex::unlock() {
 	return ReleaseMutex(pvt->_mut);
 }
 
-void *mutex::getMutex() {
+void *mutex::getInternalMutexStructure() {
 	return (void *)(pvt->_mut);
 }
 
@@ -144,7 +144,7 @@ bool mutex::unlock() {
 	return false;
 }
 
-void *mutex::getMutex() {
+void *mutex::getInternalMutexStructure() {
 	return NULL;
 }
 #endif

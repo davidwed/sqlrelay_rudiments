@@ -184,25 +184,27 @@ bool datetime::initialize(time_t seconds) {
 	return getBrokenDownTimeFromEpoch(true);
 }
 
-bool datetime::initialize(const struct tm *tmstruct) {
+bool datetime::initialize(const void *tmstruct) {
 
-	pvt->_sec=tmstruct->tm_sec;
-	pvt->_min=tmstruct->tm_min;
-	pvt->_hour=tmstruct->tm_hour;
-	pvt->_mday=tmstruct->tm_mday;
-	pvt->_mon=tmstruct->tm_mon;
-	pvt->_year=tmstruct->tm_year;
-	pvt->_wday=tmstruct->tm_wday;
-	pvt->_yday=tmstruct->tm_yday;
-	pvt->_isdst=tmstruct->tm_isdst;
+	const struct tm	*tms=(const struct tm *)tmstruct;
+
+	pvt->_sec=tms->tm_sec;
+	pvt->_min=tms->tm_min;
+	pvt->_hour=tms->tm_hour;
+	pvt->_mday=tms->tm_mday;
+	pvt->_mon=tms->tm_mon;
+	pvt->_year=tms->tm_year;
+	pvt->_wday=tms->tm_wday;
+	pvt->_yday=tms->tm_yday;
+	pvt->_isdst=tms->tm_isdst;
 	// FIXME: what if the zone/offset are garbage, is there a good way to
 	// tell?
 	#ifdef RUDIMENTS_HAS___TM_ZONE
-		pvt->_zone=charstring::duplicate(tmstruct->__tm_zone);
+		pvt->_zone=charstring::duplicate(tms->__tm_zone);
 	#elif RUDIMENTS_HAS_TM_ZONE
-		pvt->_zone=charstring::duplicate(tmstruct->tm_zone);
+		pvt->_zone=charstring::duplicate(tms->tm_zone);
 	#elif RUDIMENTS_HAS_TM_NAME
-		pvt->_zone=charstring::duplicate(tmstruct->tm_name);
+		pvt->_zone=charstring::duplicate(tms->tm_name);
 	#else
 		if (_timemutex && !acquireLock()) {
 			return false;
@@ -214,11 +216,11 @@ bool datetime::initialize(const struct tm *tmstruct) {
 		releaseLock();
 	#endif
 	#ifdef RUDIMENTS_HAS___TM_GMTOFF
-		pvt->_gmtoff=tmstruct->__tm_gmtoff;
+		pvt->_gmtoff=tms->__tm_gmtoff;
 	#elif RUDIMENTS_HAS_TM_GMTOFF
-		pvt->_gmtoff=tmstruct->tm_gmtoff;
+		pvt->_gmtoff=tms->tm_gmtoff;
 	#elif RUDIMENTS_HAS_TM_TZADJ
-		pvt->_gmtoff=-tmstruct->tm_tzadj;
+		pvt->_gmtoff=-tms->tm_tzadj;
 	#else
 		if (_timemutex && !acquireLock()) {
 			return false;
@@ -290,7 +292,7 @@ time_t datetime::getEpoch() const {
 	return pvt->_epoch;
 }
 
-struct tm *datetime::getTm() {
+const void *datetime::getInternalTimeStructure() {
 
 	if (_timemutex && !acquireLock()) {
 		return NULL;
@@ -317,7 +319,7 @@ struct tm *datetime::getTm() {
 	}
 
 	releaseLock();
-	return pvt->_structtm;
+	return (void *)pvt->_structtm;
 }
 
 bool datetime::setSeconds(int32_t seconds) {
@@ -540,7 +542,7 @@ char *datetime::getString(time_t seconds) {
 		charstring::duplicate(dt.getString()):NULL);
 }
 
-char *datetime::getString(const struct tm *tmstruct) {
+char *datetime::getString(const void *tmstruct) {
 	datetime	dt;
 	return ((dt.initialize(tmstruct))?
 		charstring::duplicate(dt.getString()):NULL);
@@ -551,7 +553,7 @@ time_t datetime::getEpoch(const char *datestring) {
 	return ((dt.initialize(datestring))?dt.getEpoch():-1);
 }
 
-time_t datetime::getEpoch(const struct tm *tmstruct) {
+time_t datetime::getEpoch(const void *tmstruct) {
 	datetime	dt;
 	return ((dt.initialize(tmstruct))?dt.getEpoch():-1);
 }

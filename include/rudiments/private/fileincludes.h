@@ -8,9 +8,6 @@
 // for open flags
 #include <fcntl.h>
 
-// for struct stat
-#include <sys/stat.h>
-
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	typedef long blksize_t;
 #endif

@@ -8,6 +8,9 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+// for struct stat
+#include <sys/stat.h>
+
 #ifndef RUDIMENTS_HAVE_UTIMES
 	#include <rudiments/datetime.h>
 #endif
@@ -1801,8 +1804,8 @@ const char * const *file::attributeArray(const char *buffer,
 	#endif
 }
 
-struct stat *file::getStat() {
-	return &(pvt->_st);
+void *file::getInternalFileStatisticsStructure() {
+	return (void *)&(pvt->_st);
 }
 
 char *file::dirname(const char *filename) {

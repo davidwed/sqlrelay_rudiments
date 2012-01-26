@@ -263,11 +263,7 @@ class filesystem {
 
 		// This method returns a pointer to the statfs structure
 		// used internally.
-#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-		struct statvfs	*getStatfs();
-#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
-		struct statfs	*getStatfs();
-#endif
+		void	*getInternalFilesystemStatisticsStructure();
 
 	#include <rudiments/private/filesystem.h>
 };
