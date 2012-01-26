@@ -1591,14 +1591,14 @@ statvfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="statvfs")
 fi
 
-dnl Haiku has statvfs too, but with fewer members
+dnl Minix and Haiku have statvfs too, but with fewer members
 if ( test "$STATFS_STYLE" = "unknown" )
 then
 AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/statvfs.h>],
-[/* statvfs style */
+[/* minix/haiku style */
 struct statvfs sfs;
 sfs.f_bsize=0;
 sfs.f_frsize=0;
@@ -1614,6 +1614,38 @@ sfs.f_namemax=0;
 statvfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="minix/haiku style")
 fi
+
+dnl Ultrix has statfs too, but with an odd struct
+if ( test "$STATFS_STYLE" = "unknown" )
+then
+AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/param.h>
+#include <sys/mount.h>],
+[/* ultrix style */
+struct fs_data sfs;
+sfs.fd_req.flags=0;
+sfs.fd_req.mtsize=0;
+sfs.fd_req.otsize=0;
+sfs.fd_req.bsize=0;
+sfs.fd_req.fstype=0;
+sfs.fd_req.gtot=0;
+sfs.fd_req.gfree=0;
+sfs.fd_req.btot=0;
+sfs.fd_req.bfree=0;
+sfs.fd_req.bfreen=0;
+sfs.fd_req.pgthresh=0;
+sfs.fd_req.uid=0;
+sfs.fd_req.dev=0;
+sfs.fd_req.exroot=0;
+sfs.fd_req.devname[0]=0;
+sfs.fd_req.path[0]=0;
+sfs.fd_req.nupdate=0;
+statfs("/",&sfs);]
+,AC_DEFINE(RUDIMENTS_HAVE_ULTRIX_STATFS,1,Ultrix style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="ultrix style")
+fi
+
 
 dnl Windows has it's own way of doing it
 if ( test "$STATFS_STYLE" = "unknown" )
