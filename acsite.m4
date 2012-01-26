@@ -492,12 +492,12 @@ then
 		then
 			PTHREADLIB=""
 			PTHREADINCLUDES=""
+			HAS_THREADS="no"
 		else
 			AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
+			HAS_THREADS="yes"
 		fi
 	fi
-
-	HAS_THREADS="yes"
 
 else
 
