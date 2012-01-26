@@ -487,26 +487,24 @@ then
 		FW_TRY_COMPILE([#include <pthread.h>],
 [#ifdef __pthread_fork
 	#error pthread macros in use
-#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - disabling thread support); PTHREAD_MACROS="yes"])
+#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - stubbing thread support); PTHREAD_MACROS="yes"])
 		if ( test -n "$PTHREAD_MACROS" )
 		then
 			PTHREADLIB=""
 			PTHREADINCLUDES=""
-			HAS_THREADS="no"
 		else
 			AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
-			HAS_THREADS="yes"
 		fi
 	fi
+
+	HAS_THREADS="yes"
 
 else
 
 	echo "disabled"
-	HAS_THREADS="no"
 
 fi
 
-AC_SUBST(HAS_THREADS)
 AC_SUBST(PTHREADINCLUDES)
 AC_SUBST(PTHREADLIB)
 ])

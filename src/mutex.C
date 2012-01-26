@@ -4,6 +4,16 @@
 #include <rudiments/mutex.h>
 #include <rudiments/error.h>
 
+#if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
+	// to disable pthread macros on minix, for now
+	#define _PTHREAD_PRIVATE
+	#include <pthread.h>
+#elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
+	#include <windows.h>
+#else
+	#include <stdlib.h>
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -28,9 +38,9 @@ mutex::mutex() {
 	pvt->_destroy=true;
 }
 
-mutex::mutex(pthread_mutex_t *mut) {
+mutex::mutex(void *mut) {
 	pvt=new mutexprivate;
-	pvt->_mut=mut;
+	pvt->_mut=(pthread_mutex_t *)mut;
 	pvt->_destroy=false;
 }
 
@@ -67,8 +77,8 @@ bool mutex::unlock() {
 	return !result;
 }
 
-pthread_mutex_t *mutex::getMutex() {
-	return pvt->_mut;
+void *mutex::getMutex() {
+	return (void *)pvt->_mut;
 }
 
 #elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
@@ -79,9 +89,9 @@ mutex::mutex() {
 	pvt->_destroy=true;
 }
 
-mutex::mutex(pthread_mutex_t *mut) {
+mutex::mutex(void *mut) {
 	pvt=new mutexprivate;
-	pvt->_mut=mut;
+	pvt->_mut=(HANDLE)mut;
 	pvt->_destroy=false;
 }
 
@@ -104,8 +114,8 @@ bool mutex::unlock() {
 	return ReleaseMutex(pvt->_mut);
 }
 
-pthread_mutex_t *mutex::getMutex() {
-	return (pthread_mutex_t *)(pvt->_mut);
+void *mutex::getMutex() {
+	return (void *)(pvt->_mut);
 }
 
 #else
@@ -113,7 +123,7 @@ pthread_mutex_t *mutex::getMutex() {
 mutex::mutex() {
 }
 
-mutex::mutex(pthread_mutex_t *mut) {
+mutex::mutex(void *mut) {
 }
 
 mutex::~mutex() {
@@ -132,6 +142,10 @@ bool mutex::tryLock() {
 bool mutex::unlock() {
 	error::setErrorNumber(ENOSYS);
 	return false;
+}
+
+void *mutex::getMutex() {
+	return NULL;
 }
 #endif
 

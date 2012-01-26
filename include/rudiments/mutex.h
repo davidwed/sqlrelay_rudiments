@@ -19,7 +19,7 @@ class mutex {
 			mutex();
 			// Initialize a mutex.
 
-			mutex(pthread_mutex_t *mut);
+			mutex(void *mut);
 			// Attach already initialized "mut" to this instance.
 
 			~mutex();
@@ -37,7 +37,7 @@ class mutex {
 			// Unlock the mutex.
 			// Returns true on success and false if an error occurs.
 
-		pthread_mutex_t	*getMutex();
+		void	*getMutex();
 			// Returns the mutex used by
 			// the class internally.
 
