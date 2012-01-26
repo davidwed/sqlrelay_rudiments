@@ -1171,6 +1171,9 @@ AC_MSG_CHECKING(for mmap)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
 #include <sys/mman.h>],
 mmap(NULL,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MMAP,1,Some systems have mmap) AC_MSG_RESULT(yes); HAS_MEMORYMAP="yes", AC_MSG_RESULT(no))
 

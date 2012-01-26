@@ -22313,6 +22313,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
 #include <sys/mman.h>
 int
 main ()
