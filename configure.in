@@ -2122,7 +2122,12 @@ dnl if interfaces added,                      c:r:a -> c:r:a+1
 dnl if interfaces removed,                    c:r:a -> c:r:0
 SONAME_VERSION_INFO="1:0:0"
 AC_SUBST(SONAME_VERSION_INFO)
-AC_PREFIX_DEFAULT(/usr/local/firstworks)
+if ( test "$HAIKU" = "yes" )
+then
+	AC_PREFIX_DEFAULT(/boot/common)
+else
+	AC_PREFIX_DEFAULT(/usr/local/firstworks)
+fi
 
 dnl perform substitutions for disable options
 AC_SUBST(INCLUDE_CHARSTRING)

@@ -14664,16 +14664,33 @@ fi
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for minix" >&5
+$as_echo_n "checking for minix... " >&6; }
 case $host_os in
 	*minix* )
 		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		;;
+	* )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 		;;
 esac
 
 
+HAIKU="no"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for haiku" >&5
+$as_echo_n "checking for haiku... " >&6; }
 case $host_os in
 	*haiku* )
-
+		HAIKU="yes"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		;;
+	* )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 		;;
 esac
 
@@ -25489,7 +25506,12 @@ _ACEOF
 
 SONAME_VERSION_INFO="1:0:0"
 
+if ( test "$HAIKU" = "yes" )
+then
 
+else
+
+fi
 
 
 
