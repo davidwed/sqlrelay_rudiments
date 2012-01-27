@@ -476,25 +476,8 @@ then
 	then
 		AC_MSG_ERROR(pthread library not found.  Rudiments requires this package.)
 		exit
-
 	else
-
-		dnl check for pthread macros - for now we're disabling
-		dnl thread support on systems that use them, they cause
-		dnl innumerable problems
-		PTHREAD_MACROS=""
-		AC_MSG_CHECKING(for pthread macros)
-		FW_TRY_COMPILE([#include <pthread.h>],
-[#ifdef __pthread_fork
-	#error pthread macros in use
-#endif],[-pthread],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(yes - stubbing thread support); PTHREAD_MACROS="yes"])
-		if ( test -n "$PTHREAD_MACROS" )
-		then
-			PTHREADLIB=""
-			PTHREADINCLUDES=""
-		else
-			AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
-		fi
+		AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
 	fi
 
 	HAS_THREADS="yes"
@@ -517,7 +500,8 @@ AC_DEFUN([FW_CHECK_MUTEX],
 
 		dnl check for pthread_mutex_t
 		AC_MSG_CHECKING(for pthread_mutex_t)
-		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#define _TIMESTRUC_T
+#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		dnl check for CreateMutex
 		if ( test -n "$MINGW32" )

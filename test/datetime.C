@@ -38,14 +38,14 @@ int main(int argc, const char **argv) {
 	char	*string=datetime::getString(dt.getEpoch());
 	printf("String from Epoch     : %s\n",string);
 	delete[] string;
-	string=datetime::getString(dt.getTm());
+	string=datetime::getString(dt.getInternalTimeStructure());
 	printf("String from tm        : %s\n",string);
 
 	// use static methods to translate between formats
 	time_t	epoch=datetime::getEpoch(string);
 	printf("Epoch from String     : %ld\n",epoch);
 	delete[] string;
-	epoch=datetime::getEpoch(dt.getTm());
+	epoch=datetime::getEpoch(dt.getInternalTimeStructure());
 	printf("Epoch from tm         : %ld\n",epoch);
 
 	// get time from hardware clock
