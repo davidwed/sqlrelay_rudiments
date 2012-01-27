@@ -5,8 +5,6 @@
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
-	// to disable pthread macros on minix, for now
-	#define _PTHREAD_PRIVATE
 	// to fix an odd situation on SCO with FSU pthreads
 	#define _TIMESTRUC_T
 	#include <pthread.h>
