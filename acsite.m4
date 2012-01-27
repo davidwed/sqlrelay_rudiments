@@ -361,11 +361,13 @@ esac
 dnl Checks for haiku and adds some macros if it is
 AC_DEFUN([FW_CHECK_HAIKU],
 [
-HAIKU="no"
 AC_MSG_CHECKING(for haiku)
 case $host_os in
 	*haiku* )
-		HAIKU="yes"
+		if ( test "$prefix" = "NONE" )
+		then
+			prefix="/Haiku/common"
+		fi
 		AC_MSG_RESULT(yes)
 		;;
 	* )
