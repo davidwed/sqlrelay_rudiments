@@ -353,6 +353,16 @@ case $host_os in
 esac
 ])
 
+dnl Checks for haiku and adds some macros if it is
+AC_DEFUN([FW_CHECK_HAIKU],
+[
+case $host_os in
+	*haiku* )
+		AC_PREFIX_DEFAULT(/boot/common)
+		;;
+esac
+])
+
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
