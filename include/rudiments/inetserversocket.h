@@ -32,7 +32,7 @@ class inetserversocket : public serversocket, private inetsocketutil {
 
 		bool	listen(const char *address,
 					unsigned short port,
-					int backlog);
+					int32_t backlog);
 				// Listen on "address" and "port" and allow
 				// "backlog" connections to pile up before
 				// refusing them.
@@ -61,7 +61,7 @@ class inetserversocket : public serversocket, private inetsocketutil {
 			// Associates the socket with an address.
 			//
 			// Returns true on success and false on failure.
-		bool	listen(int backlog);
+		bool	listen(int32_t backlog);
 			// Waits until a client connects then places
 			// that connection in queue.  Up to "backlog"
 			// connections may be queued before future

@@ -24,27 +24,27 @@ class hostentry {
 		static	bool	getAliasList(const char *hostname,
 						char ***aliaslist);
 		static	bool	getAddressType(const char *hostname,
-						int *addresstype);
+						int32_t *addresstype);
 		static	bool	getAddressLength(const char *hostname,
-						int *addresslength);
+						int32_t *addresslength);
 		static	bool	getAddressList(const char *hostname,
 						char ***addresslist);
 		static	bool	getAddressString(const char *hostname,
-						int index,
+						int32_t index,
 						char **addressstring);
 
 		static	bool	getName(const char *address,
-						int len, int type,
+						int32_t len, int32_t type,
 						char **name);
 		static	bool	getAliasList(const char *address,
-						int len, int type,
+						int32_t len, int32_t type,
 						char ***aliaslist);
 		static	bool	getAddressList(const char *address,
-						int len, int type,
+						int32_t len, int32_t type,
 						char ***addresslist);
 		static	bool	getAddressString(const char *address,
-						int len, int type,
-						int index,
+						int32_t len, int32_t type,
+						int32_t index,
 						char **addressstring);
 
 		// If you need to look up a host entry and refer to multiple
@@ -56,15 +56,16 @@ class hostentry {
 
 		bool	initialize(const char *hostname);
 			// Looks up a host entry by name.
-		bool	initialize(const char *address, int len, int type);
+		bool	initialize(const char *address,
+					int32_t len, int32_t type);
 			// Looks up a host entry by address.
 
 		const char		*getName() const;
 		const char * const	*getAliasList() const;
-		int			getAddressType() const;
-		int			getAddressLength() const;
+		int32_t			getAddressType() const;
+		int32_t			getAddressLength() const;
 		const char * const	*getAddressList() const;
-		char			*getAddressString(int index) const;
+		char			*getAddressString(int32_t index) const;
 					// This method allocates a buffer
 					// internally and returns it.  The
 					// calling program must deallocate the

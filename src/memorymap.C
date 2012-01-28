@@ -87,8 +87,8 @@ memorymap::~memorymap() {
 	delete pvt;
 }
 
-bool memorymap::attach(int fd, off64_t offset, size_t len,
-					int protection, int flags) {
+bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
+					int32_t protection, int32_t flags) {
 	pvt->_length=len;
 	#if defined(RUDIMENTS_HAVE_MMAP)
 	do {
@@ -121,7 +121,7 @@ bool memorymap::detach() {
 	#if defined(RUDIMENTS_HAVE_MMAP) || \
 		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		#if defined(RUDIMENTS_HAVE_MMAP)
-		int	result;
+		int32_t	result;
 		do {
 			result=munmap(reinterpret_cast<MUNMAP_ADDRCAST>
 						(pvt->_data),pvt->_length);
@@ -139,14 +139,14 @@ bool memorymap::detach() {
 	#endif
 }
 
-bool memorymap::setProtection(int protection) {
+bool memorymap::setProtection(int32_t protection) {
 	return setProtection(0,pvt->_length,protection);
 }
 
-bool memorymap::setProtection(off64_t offset, size_t len, int protection) {
+bool memorymap::setProtection(off64_t offset, size_t len, int32_t protection) {
 	#ifdef RUDIMENTS_HAVE_MPROTECT
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int	result;
+	int32_t	result;
 	do {
 		result=mprotect(reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
 							len,protection);
@@ -173,7 +173,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 			bool immediate, bool invalidate) {
 	#ifdef RUDIMENTS_HAVE_MSYNC
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int	result;
+	int32_t	result;
 	do {
 		result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
 				((immediate)?MS_SYNC:MS_ASYNC)|
@@ -240,7 +240,7 @@ bool memorymap::lock() {
 bool memorymap::lock(off64_t offset, size_t len) {
 	#ifdef RUDIMENTS_HAVE_MLOCK
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int	result;
+	int32_t	result;
 	do {
 		result=mlock(reinterpret_cast<MLOCK_ADDRCAST>(ptr),len);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -257,7 +257,7 @@ bool memorymap::unlock() {
 bool memorymap::unlock(off64_t offset, size_t len) {
 	#ifdef RUDIMENTS_HAVE_MUNLOCK
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int	result;
+	int32_t	result;
 	do {
 		result=munlock(reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),len);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -276,8 +276,8 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 	#ifdef RUDIMENTS_HAVE_MINCORE
 
 	// create an array of char's, 1 for each page
-	int		pagesize=getpagesize();
-	int		tmplen=(len+pagesize-1)/pagesize;
+	int32_t		pagesize=getpagesize();
+	int32_t		tmplen=(len+pagesize-1)/pagesize;
 	#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
 	char		*tmp=new char[tmplen];
 	#else
@@ -286,7 +286,7 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 
 	// call mincore to fill the array
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int		result;
+	int32_t		result;
 	do {
 		result=mincore(reinterpret_cast<MINCORE_ADDRCAST>(ptr),len,tmp);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -297,7 +297,7 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 
 	// look through the array, if any of the
 	// pages aren't in memory, return false
-	for (int i=0; i<tmplen; i++) {
+	for (int32_t i=0; i<tmplen; i++) {
 		if (tmp[i]) {
 			delete[] tmp;
 			return false;
@@ -336,7 +336,7 @@ bool memorymap::lockAllFuture() {
 
 bool memorymap::unlockAll() {
 	#ifdef RUDIMENTS_HAVE_MUNLOCKALL
-	int	result;
+	int32_t	result;
 	do {
 		result=munlockall();
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -346,9 +346,9 @@ bool memorymap::unlockAll() {
 	#endif
 }
 
-bool memorymap::mAdvise(unsigned char *start, size_t length, int advice) {
+bool memorymap::mAdvise(unsigned char *start, size_t length, int32_t advice) {
 	#if defined(RUDIMENTS_HAVE_MADVISE)
-	int	result;
+	int32_t	result;
 	do {
 		result=madvise(reinterpret_cast<MADVISE_ADDRCAST>(start),
 								length,advice);
@@ -359,9 +359,9 @@ bool memorymap::mAdvise(unsigned char *start, size_t length, int advice) {
 	#endif
 }
 
-bool memorymap::mLockAll(int flags) {
+bool memorymap::mLockAll(int32_t flags) {
 	#ifdef RUDIMENTS_HAVE_MLOCKALL
-	int	result;
+	int32_t	result;
 	do {
 		result=mlockall(flags);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

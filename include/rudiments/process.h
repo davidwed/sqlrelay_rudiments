@@ -161,7 +161,7 @@ class process {
 				// Returns true on success and false upon
 				// failure.
 
-		static void	exit(int status);
+		static void	exit(int32_t status);
 				// Terminates the calling process and sets the
 				// exit status to "status".
 };

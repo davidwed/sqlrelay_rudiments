@@ -28,7 +28,7 @@ class signalsetprivate {
 		#if defined(RUDIMENTS_HAVE_SIGACTION)
 			sigset_t	_sigset;
 		#else
-			linkedlist< int >	_siglist;
+			linkedlist< int32_t >	_siglist;
 		#endif
 };
 
@@ -45,7 +45,7 @@ signalset::~signalset() {
 	delete pvt;
 }
 
-bool signalset::addSignal(int signum) {
+bool signalset::addSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigaddset(&pvt->_sigset,signum);
 	#else
@@ -196,7 +196,7 @@ bool signalset::addAllSignals() {
 	#endif
 }
 
-bool signalset::removeSignal(int signum) {
+bool signalset::removeSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigdelset(&pvt->_sigset,signum);
 	#else
@@ -214,7 +214,7 @@ bool signalset::removeAllSignals() {
 	#endif
 }
 
-int signalset::signalIsInSet(int signum) const {
+int32_t signalset::signalIsInSet(int32_t signum) const {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return sigismember(&pvt->_sigset,signum);
 	#else
@@ -225,7 +225,7 @@ int signalset::signalIsInSet(int signum) const {
 
 
 // signalmanager methods
-bool signalmanager::sendSignal(pid_t processid, int signum) {
+bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 	#ifdef RUDIMENTS_HAVE_KILL
 		int	result;
 		do {
@@ -243,7 +243,7 @@ bool signalmanager::sendSignal(pid_t processid, int signum) {
 	#endif
 }
 
-bool signalmanager::raiseSignal(int signum) {
+bool signalmanager::raiseSignal(int32_t signum) {
 	int	result;
 	do {
 		result=raise(signum);
@@ -251,7 +251,7 @@ bool signalmanager::raiseSignal(int signum) {
 	return !result;
 }
 
-unsigned int signalmanager::alarm(unsigned int seconds) {
+uint32_t signalmanager::alarm(uint32_t seconds) {
 	#ifdef RUDIMENTS_HAVE_ALARM
 		return ::alarm(seconds);
 	#else
@@ -275,7 +275,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 		return !result;
 	#else
 		bool	result=true;
-		for (linkedlistnode< int > *node=
+		for (linkedlistnode< int32_t > *node=
 				sset->pvt->_siglist.getFirstNode();
 					node; node->getNext()) {
 			result=(result &&
@@ -353,15 +353,15 @@ void signalhandler::removeAllFlags() {
 	pvt->_flags=0;
 }
 
-void signalhandler::addFlag(int flag) {
+void signalhandler::addFlag(int32_t flag) {
 	pvt->_flags|=flag;
 }
 
-void signalhandler::removeFlag(int flag) {
+void signalhandler::removeFlag(int32_t flag) {
 	pvt->_flags&=(~flag);
 }
 
-int signalhandler::getFlags() const {
+int32_t signalhandler::getFlags() const {
 	return pvt->_flags;
 }
 
@@ -373,11 +373,11 @@ const signalset *signalhandler::getMask() const {
 	return pvt->_sset;
 }
 
-bool signalhandler::handleSignal(int signum) {
+bool signalhandler::handleSignal(int32_t signum) {
 	return handleSignal(signum,NULL);
 }
 
-bool signalhandler::handleSignal(int signum, signalhandler *oldhandler) {
+bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		struct sigaction	oldaction;
 		int			result;

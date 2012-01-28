@@ -14,7 +14,7 @@ template <class datatype>
 class linkedlistutil {
 	public:
 		void	print(datatype data) const;
-		int	compare(datatype data1, datatype data2) const;
+		int32_t	compare(datatype data1, datatype data2) const;
 };
 
 #ifdef RUDIMENTS_NAMESPACE

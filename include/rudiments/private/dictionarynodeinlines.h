@@ -52,7 +52,7 @@ datatype DICTIONARYNODE_CLASS::getData() const {
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-int DICTIONARYNODE_CLASS::compare(keytype testkey) const {
+int32_t DICTIONARYNODE_CLASS::compare(keytype testkey) const {
 	return keyutil.compare(key,testkey);
 }
 

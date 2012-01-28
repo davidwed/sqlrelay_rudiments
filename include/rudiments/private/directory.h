@@ -7,8 +7,8 @@
 				directory(const directory &d);
 		directory	&operator=(const directory &d);
 
-		static	int64_t	pathConf(const char *pathname, int name);
+		static	int64_t	pathConf(const char *pathname, int32_t name);
 
-		int64_t		fpathConf(int name);
+		int64_t		fpathConf(int32_t name);
 
 		directoryprivate	*pvt;

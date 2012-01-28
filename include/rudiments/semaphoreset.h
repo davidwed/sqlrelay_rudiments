@@ -13,7 +13,7 @@
 // 
 // The operations are analagous to:
 //
-// int	semaphore;
+// int32_t	semaphore;
 //
 // void	signal() {
 // 	semaphore++;		// increment the semaphore
@@ -63,7 +63,7 @@ class semaphoreset {
 				// semaphore operations or false otherwise.
 
 		bool	create(key_t key, mode_t permissions, 
-					int semcount, const int *values);
+				int32_t semcount, const int32_t *values);
 				// Creates a semaphore set identified by "key"
 				//      containing "semcount" semaphores.
 				// "key" should be generated using the ftok 
@@ -73,12 +73,12 @@ class semaphoreset {
 				// "values" should be an array of starting 
 				// 	values for each of the semaphores 
 				// 	in the set.
-		bool	attach(key_t key, int semcount);
+		bool	attach(key_t key, int32_t semcount);
 				// Attaches to an already existing semaphore set
 				// identified by "key", containing "semcount" 
 				// semaphores.
 		bool	createOrAttach(key_t key, mode_t permissions, 
-					int semcount, const int *values);
+				int32_t semcount, const int32_t *values);
 				// Attempts to create the semaphore set 
 				// identified by "key".  If this fails, it 
 				// attempts to attach to a semaphore set
@@ -96,39 +96,40 @@ class semaphoreset {
 			// Removes the semaphore set, whether it
 			// was created or attached to.
 
-		int	getId() const;
+		int32_t	getId() const;
 			// Returns the internal id for the semaphore set.
 
-		bool	wait(int index);
+		bool	wait(int32_t index);
 			// wait on the "index"'th semaphore in the set
-		bool	wait(int index, long seconds, long nanoseconds);
+		bool	wait(int32_t index, long seconds, long nanoseconds);
 			// Wait on the "index"'th semaphore in the set until
 			// "seconds" and "nanoseconds" elapse.  Returns false
 			// and sets errno to EAGAIN if a timeout occurs.
 			// Returns false if the system doesn't support timed
 			// semaphore operations.
-		bool	signal(int index);
+		bool	signal(int32_t index);
 			// signal on the "index"'th semaphore in the set
 
 
-		bool	waitWithUndo(int index);
+		bool	waitWithUndo(int32_t index);
 			// wait on the "index"'th semaphore in the set and
 			// undo the wait when the program exits
-		bool	waitWithUndo(int index, long seconds, long nanoseconds);
+		bool	waitWithUndo(int32_t index,
+					long seconds, long nanoseconds);
 			// Wait on the "index"'th semaphore in the set until
 			// "seconds" and "nanoseconds" elapse.  Undo the wait
 			// when the program exits.  Returns false and sets
 			// errno to EAGAIN if a timeout occurs.
 			// Returns false if the system doesn't support timed
 			// semaphore operations.
-		bool	signalWithUndo(int index);
+		bool	signalWithUndo(int32_t index);
 			// signal on the "index"'th semaphore in the set and
 			// undo the signal when the program exits
 
 
-		bool	setValue(int index, int value);
+		bool	setValue(int32_t index, int32_t value);
 			// set the "index"'th semaphore in the set to "value"
-		int	getValue(int index);
+		int32_t	getValue(int32_t index);
 			// return the value of the "index"'th 
 			// semaphore in the set
 
@@ -197,10 +198,10 @@ class semaphoreset {
 			// semaphore set
 
 
-		int	getWaitingForZero(int index);
+		int32_t	getWaitingForZero(int32_t index);
 			// returns the number of processes that
 			// are waiting for the semaphore to become 0
-		int	getWaitingForIncrement(int index);
+		int32_t	getWaitingForIncrement(int32_t index);
 			// returns the number of processes that
 			// are waiting for the semaphore to increment
 

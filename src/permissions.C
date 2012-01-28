@@ -19,7 +19,7 @@ bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 		setFilePermissions(fl.getFileDescriptor(),perms));
 }
 
-bool permissions::setFilePermissions(int fd, mode_t perms) {
+bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_FCHMOD)
 		int	result;
 		do {
@@ -260,8 +260,8 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 	permstring[9]='\0';
 
 	mode_t	shift=permoctal;
-	for (int i=8; i>=0; i--) {
-		int	pos=i%3;
+	for (uint8_t i=8; i>=0; i--) {
+		uint8_t	pos=i%3;
 		permstring[i]=(shift&1)?((pos==2)?'x':(pos==1)?'w':'r'):'-';
 		shift=shift>>1;
 	}

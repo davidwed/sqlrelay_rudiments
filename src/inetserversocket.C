@@ -58,7 +58,7 @@ unsigned short inetserversocket::getPort() {
 }
 
 bool inetserversocket::listen(const char *address, unsigned short port,
-								int backlog) {
+							int32_t backlog) {
 	initialize(address,port);
 	return (bind() && listen(backlog));
 }
@@ -136,7 +136,7 @@ bool inetserversocket::bind() {
 	return true;
 }
 
-bool inetserversocket::listen(int backlog) {
+bool inetserversocket::listen(int32_t backlog) {
 	int	result;
 	do {
 		result=::listen(fd(),backlog);

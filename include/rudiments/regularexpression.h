@@ -57,23 +57,23 @@ class regularexpression {
 			// Returns true if the match was successful and
 			// false if it was not.
 
-		int	getSubstringCount();
+		int32_t	getSubstringCount();
 			// Returns the number of substrings of "str" passed into
 			// match() that match "pattern" passed into compile().
 
-		char	*getSubstringStart(int index);
+		char	*getSubstringStart(int32_t index);
 			// Returns the "index"'th matching substring or NULL
 			// if index is invalid.
 
-		char	*getSubstringEnd(int index);
+		char	*getSubstringEnd(int32_t index);
 			// Returns the data directly after the "index"'th
 			// matching substring or NULL if index is invalid.
 
-		int	getSubstringStartOffset(int index);
+		int32_t	getSubstringStartOffset(int32_t index);
 			// Returns the offset of the "index"'th matching
 			// substring or -1 if index is invalid.
 
-		int	getSubstringEndOffset(int index);
+		int32_t	getSubstringEndOffset(int32_t index);
 			// Returns the offset of the data directly after the
 			// "index"'th matching substring or -1 if index is
 			// invalid.

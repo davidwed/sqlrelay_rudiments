@@ -13,11 +13,11 @@ namespace rudiments {
 class commandlineprivate {
 	friend class commandline;
 	private:
-		int	_argc;
+		int32_t	_argc;
 		char	**_argv;
 };
 
-commandline::commandline(int argc, const char **argv) {
+commandline::commandline(int32_t argc, const char **argv) {
 	pvt=new commandlineprivate;
 	pvt->_argc=argc;
 	pvt->_argv=(char **)argv;
@@ -42,7 +42,7 @@ const char *commandline::getValue(const char *arg) const {
 		}
 		size_t	realarglen=charstring::length(realarg);
 
-		for (int i=1; i<pvt->_argc; i++) {
+		for (int32_t i=1; i<pvt->_argc; i++) {
 
 			// look for "-arg value" or "--arg=value"
 			if (i<pvt->_argc-1 &&
@@ -79,7 +79,7 @@ bool commandline::found(const char *arg) const {
 		}
 		size_t	realarglen=charstring::length(realarg);
 
-		for (int i=1; i<pvt->_argc; i++) {
+		for (int32_t i=1; i<pvt->_argc; i++) {
 
 			// look for "-arg value" or "--arg=value"
 			if ((pvt->_argv[i][0]=='-' &&

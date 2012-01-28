@@ -198,30 +198,30 @@ ssize_t file::createFile(const char *name, mode_t perms,
 	return fl.create(name,perms,data,size);
 }
 
-int file::openInternal(const char *name, int flags) {
-	int	result;
+int32_t file::openInternal(const char *name, int32_t flags) {
+	int32_t	result;
 	do {
 		result=::open(name,flags);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
 
-int file::openInternal(const char *name, int flags, mode_t perms) {
-	int	result;
+int32_t file::openInternal(const char *name, int32_t flags, mode_t perms) {
+	int32_t	result;
 	do {
 		result=::open(name,flags,perms);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
 
-bool file::open(const char *name, int flags) {
+bool file::open(const char *name, int32_t flags) {
 	fd(openInternal(name,flags));
 	return (fd()!=-1 &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
 
-bool file::open(const char *name, int flags, mode_t perms) {
+bool file::open(const char *name, int32_t flags, mode_t perms) {
 	fd(openInternal(name,flags,perms));
 	return (fd()!=-1 &&
 		((pvt->_getcurrentpropertiesonopen)?
@@ -489,7 +489,7 @@ bool file::normalAccess(off64_t start, size_t len) const {
 
 bool file::reserve(off64_t start, size_t len) const {
 	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
-	int	result;
+	int32_t	result;
 	do {
 		result=posix_fallocate(fd(),start,len);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -505,7 +505,7 @@ bool file::truncate(const char *filename) {
 
 bool file::truncate(const char *filename, off64_t length) {
 	#ifdef RUDIMENTS_HAVE_TRUNCATE
-		int	result;
+		int32_t	result;
 		do {
 			result=::truncate(filename,length);
 		} while (result==-1 && error::getErrorNumber()==-1);
@@ -521,7 +521,7 @@ bool file::truncate() const {
 }
 
 bool file::truncate(off64_t length) const {
-	int	result;
+	int32_t	result;
 	do {
 		result=::ftruncate(fd(),length);
 	} while (result==-1 && error::getErrorNumber()==-1);
@@ -552,8 +552,8 @@ off64_t file::getCurrentPosition() const {
 	return lseek(0,SEEK_CUR);
 }
 
-off64_t file::lseek(off64_t offset, int whence) const {
-	int	result;
+off64_t file::lseek(off64_t offset, int32_t whence) const {
+	int32_t	result;
 	do {
 		result=::lseek(fd(),offset,whence);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -576,8 +576,8 @@ bool file::executable(const char *filename) {
 	return accessible(filename,X_OK);
 }
 
-bool file::accessible(const char *filename, int mode) {
-	int	result;
+bool file::accessible(const char *filename, int32_t mode) {
+	int32_t	result;
 	do {
 		result=access(filename,mode);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -585,7 +585,7 @@ bool file::accessible(const char *filename, int mode) {
 }
 
 bool file::getCurrentProperties() {
-	int	result;
+	int32_t	result;
 	do {
 		result=fstat(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -594,7 +594,7 @@ bool file::getCurrentProperties() {
 
 #define STAT(filename,out,member) \
 	struct stat st; \
-	int	result; \
+	int32_t	result; \
 	do { \
 		result=stat(filename,&st); \
 	} while (result==-1 && error::getErrorNumber()==EINTR); \
@@ -642,7 +642,7 @@ bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
 #endif
 
-int file::isSocket(const char *filename) {
+int32_t file::isSocket(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISSOCK(st.st_mode):-1;
 }
@@ -651,32 +651,32 @@ int file::isSocket(const char *filename) {
 	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
 #endif
 
-int file::isSymbolicLink(const char *filename) {
+int32_t file::isSymbolicLink(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISLNK(st.st_mode):-1;
 }
 
-int file::isRegularFile(const char *filename) {
+int32_t file::isRegularFile(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISREG(st.st_mode):-1;
 }
 
-int file::isBlockDevice(const char *filename) {
+int32_t file::isBlockDevice(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISBLK(st.st_mode):-1;
 }
 
-int file::isDirectory(const char *filename) {
+int32_t file::isDirectory(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISDIR(st.st_mode):-1;
 }
 
-int file::isCharacterDevice(const char *filename) {
+int32_t file::isCharacterDevice(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISCHR(st.st_mode):-1;
 }
 
-int file::isFifo(const char *filename) {
+int32_t file::isFifo(const char *filename) {
 	struct stat	st;
 	return (stat(filename,&st)>-1)?S_ISFIFO(st.st_mode):-1;
 }
@@ -742,31 +742,31 @@ blkcnt_t file::getBlockCount() const {
 #endif
 }
 
-int file::isSocket() const {
+int32_t file::isSocket() const {
 	return S_ISSOCK(pvt->_st.st_mode);
 }
 
-int file::isSymbolicLink() const {
+int32_t file::isSymbolicLink() const {
 	return S_ISLNK(pvt->_st.st_mode);
 }
 
-int file::isRegularFile() const {
+int32_t file::isRegularFile() const {
 	return S_ISREG(pvt->_st.st_mode);
 }
 
-int file::isBlockDevice() const {
+int32_t file::isBlockDevice() const {
 	return S_ISBLK(pvt->_st.st_mode);
 }
 
-int file::isDirectory() const {
+int32_t file::isDirectory() const {
 	return S_ISDIR(pvt->_st.st_mode);
 }
 
-int file::isCharacterDevice() const {
+int32_t file::isCharacterDevice() const {
 	return S_ISCHR(pvt->_st.st_mode);
 }
 
-int file::isFifo() const {
+int32_t file::isFifo() const {
 	return S_ISFIFO(pvt->_st.st_mode);
 }
 
@@ -807,7 +807,7 @@ void file::dontGetCurrentPropertiesOnOpen() {
 	pvt->_getcurrentpropertiesonopen=false;
 }
 
-bool file::lock(int method, short type, short whence,
+bool file::lock(int32_t method, short type, short whence,
 				off64_t start, off64_t len) const {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
@@ -856,7 +856,7 @@ bool file::checkLock(short type, short whence, off64_t start, off64_t len,
 		lck.l_whence=whence;
 		lck.l_start=start;
 		lck.l_len=len;
-		int	result=fCntl(F_GETLK,reinterpret_cast<long>(&lck));
+		int32_t	result=fCntl(F_GETLK,reinterpret_cast<long>(&lck));
 		*retlck=lck;
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
@@ -911,7 +911,7 @@ bool file::changeOwner(const char *newuser, const char *newgroup) const {
 
 bool file::changeOwner(uid_t uid, gid_t gid) const {
 	#if defined(RUDIMENTS_HAVE_FCHOWN)
-		int	result;
+		int32_t	result;
 		do {
 			result=fchown(fd(),uid,gid);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -990,7 +990,7 @@ bool file::canChangeOwner() const {
 }
 
 bool file::rename(const char *oldpath, const char *newpath) {
-	int	result;
+	int32_t	result;
 	do {
 		result=::rename(oldpath,newpath);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -998,7 +998,7 @@ bool file::rename(const char *oldpath, const char *newpath) {
 }
 
 bool file::remove(const char *filename) {
-	int	result;
+	int32_t	result;
 	do {
 		result=unlink(filename);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1007,7 +1007,7 @@ bool file::remove(const char *filename) {
 
 bool file::createHardLink(const char *oldpath, const char *newpath) {
 	#if defined(RUDIMENTS_HAVE_LINK)
-		int	result;
+		int32_t	result;
 		do {
 			result=link(oldpath,newpath);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1034,7 +1034,7 @@ bool file::createHardLink(const char *oldpath, const char *newpath) {
 
 bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 	#if defined(RUDIMENTS_HAVE_SYMLINK)
-		int	result;
+		int32_t	result;
 		do {
 			result=symlink(oldpath,newpath);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1060,7 +1060,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 			char	*buffer=new char[buffersize];
 
 			// read the path into the buffer
-			int	len;
+			int32_t	len;
 			do {
 				len=::readlink(filename,buffer,buffersize);
 			} while (len==-1 && error::getErrorNumber()==EINTR);
@@ -1107,7 +1107,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 
 bool file::sync() const {
 	#if defined(RUDIMENTS_HAVE_FSYNC)
-		int	result;
+		int32_t	result;
 		do {
 			result=fsync(fd());
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1121,7 +1121,7 @@ bool file::sync() const {
 
 bool file::dataSync() const {
 	#ifdef RUDIMENTS_HAVE_FDATASYNC
-		int	result;
+		int32_t	result;
 		do {
 			result=fdatasync(fd());
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1162,7 +1162,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		tv[0].tv_usec=0;
 		tv[1].tv_sec=static_cast<long>(lastmodtime);
 		tv[1].tv_usec=0;
-		int	result;
+		int32_t	result;
 		do {
 			result=utimes(filename,tv);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1171,7 +1171,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		utimbuf	tb;
 		tb.actime=static_cast<time_t>(lastaccesstime);
 		tb.modtime=static_cast<time_t>(lastmodtime);
-		int	result;
+		int32_t	result;
 		do {
 			result=utime(filename,&tb);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1221,7 +1221,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 
 bool file::setLastAccessAndModificationTimes(const char *filename) {
 	#if defined(RUDIMENTS_HAVE_UTIMES)
-		int	result;
+		int32_t	result;
 		do {
 			result=utimes(filename,NULL);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1237,7 +1237,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename) {
 
 bool file::createFifo(const char *filename, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_MKFIFO)
-		int	result;
+		int32_t	result;
 		do {
 			result=mkfifo(filename,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1255,9 +1255,9 @@ bool file::createFifo(const char *filename, mode_t perms) {
 	#endif
 }
 
-int file::createTemporaryFile(char *templatefilename) {
+int32_t file::createTemporaryFile(char *templatefilename) {
 	#if defined(RUDIMENTS_HAVE_MKSTEMP)
-		int	result;
+		int32_t	result;
 		do {
 			result=mkstemp(templatefilename);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1274,7 +1274,7 @@ int file::createTemporaryFile(char *templatefilename) {
 		// replace X's with random characters...
 
 		// seed the random number
-		int	seed=randomnumber::getSeed();
+		int32_t	seed=randomnumber::getSeed();
 
 		// for each of the 6 characters...
 		for (uint8_t i=0; i<6; i++) {
@@ -1308,7 +1308,7 @@ int file::createTemporaryFile(char *templatefilename) {
 
 		// fake it out so the file won't get
 		// closed when f is deallocated
-		int	fdesc=f.getFileDescriptor();
+		int32_t	fdesc=f.getFileDescriptor();
 		f.setFileDescriptor(-1);
 
 		// return the file descriptor
@@ -1331,7 +1331,7 @@ const char * const *file::listAttributes() const {
 	char	*buffer;
 
 	// try 100 times...
-	for (int i=0; i<100; i++) {
+	for (int32_t i=0; i<100; i++) {
 
 		// allocate a buffer
 		buffer=new char[size];
@@ -1517,7 +1517,7 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 	(*size)=8;
 
 	// try 100 times...
-	for (int i=0; i<100; i++) {
+	for (int32_t i=0; i<100; i++) {
 
 		// allocate a buffer
 		(*buffer)=static_cast<void *>(new unsigned char[(*size)]);
@@ -1735,7 +1735,7 @@ bool file::setAttribute(const char *name, const void *value,
 }
 
 bool file::setAttribute(const char *name, const void *value,
-						size_t size, int flags) const {
+					size_t size, int32_t flags) const {
 
 	#ifndef RUDIMENTS_HAVE_XATTRS
 	return false;
@@ -1774,7 +1774,7 @@ const char * const *file::attributeArray(const char *buffer,
 
 
 	// count the number of attributes
-	int	counter=0;
+	int32_t	counter=0;
 	for (size_t index=0; index<size; index++) {
 		if (!buffer[index]) {
 			counter++;
@@ -1861,7 +1861,7 @@ char *file::basename(const char *filename, const char *suffix) {
 	return retval;
 }
 
-key_t file::generateKey(const char *filename, int id) {
+key_t file::generateKey(const char *filename, int32_t id) {
 #ifdef RUDIMENTS_HAVE_FTOK
 	#ifdef RUDIMENTS_HAVE_CONST_CHAR_FTOK
 		return ::ftok(filename,id);
@@ -1887,9 +1887,9 @@ long file::maxLinks() const {
 	return fpathConf(_PC_LINK_MAX);
 }
 
-bool file::posixFadvise(off64_t offset, off64_t len, int advice) const {
+bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) const {
 	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
-		int	result;
+		int32_t	result;
 		do {
 			result=posix_fadvise(fd(),offset,len,advice);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1901,7 +1901,7 @@ bool file::posixFadvise(off64_t offset, off64_t len, int advice) const {
 	#endif
 }
 
-long file::pathConf(const char *path, int name) {
+long file::pathConf(const char *path, int32_t name) {
 	#if defined(RUDIMENTS_HAVE_PATHCONF)
 		long	result;
 		do {
@@ -1917,7 +1917,7 @@ long file::pathConf(const char *path, int name) {
 	#endif
 }
 
-long file::fpathConf(int name) const {
+long file::fpathConf(int32_t name) const {
 	#if defined(RUDIMENTS_HAVE_FPATHCONF)
 		long	result;
 		do {

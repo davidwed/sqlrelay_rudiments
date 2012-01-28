@@ -12,8 +12,8 @@ namespace rudiments {
 
 class math {
 	public:
-		static int	absoluteValue(int j);
-		static div_t	divide(int numer, int denom);
+		static int	absoluteValue(int32_t j);
+		static div_t	divide(int32_t numer, int32_t denom);
 
 		static long	absoluteValue(long j);
 		static ldiv_t	divide(long numer, long denom);
@@ -64,7 +64,7 @@ class math {
 
 		static float	exponent(float x);
 
-		static float	normalize(float x, int *exp);
+		static float	normalize(float x, int32_t *exp);
 
 		static float	logBase10(float x);
 
@@ -80,14 +80,14 @@ class math {
 
 		static float	computeExponent(float x);
 		static int	integralExponent(float x);
-		static float 	loadExponent(float x, int exp);
+		static float 	loadExponent(float x, int32_t exp);
 
 		static float	ceiling(float x);
 		static float	floor(float x);
 		static float	absoluteValue(float x);
 
 		static float	remainder(float x, float y);
-		static float	remainder(float x, float y, int *quo);
+		static float	remainder(float x, float y, int32_t *quo);
 
 		static float	truncate(float x);
 		static float	nearbyInteger(float x);
@@ -107,7 +107,7 @@ class math {
 		static float	naturalLogGamma(float x);
 
 		static float	scaleByRadixToPower(float x, float n);
-		static float	scaleByRadixToPower(float x, int n);
+		static float	scaleByRadixToPower(float x, int32_t n);
 		static float	scaleByRadixToPower(float x, long n);
 
 		static float	larger(float x, float y);
@@ -168,7 +168,7 @@ class math {
 
 		static double	exponent(double x);
 
-		static double	normalize(double x, int *exp);
+		static double	normalize(double x, int32_t *exp);
 
 		static double	logBase10(double x);
 
@@ -184,14 +184,14 @@ class math {
 
 		static double	computeExponent(double x);
 		static int	integralExponent(double x);
-		static double 	loadExponent(double x, int exp);
+		static double 	loadExponent(double x, int32_t exp);
 
 		static double	ceiling(double x);
 		static double	floor(double x);
 		static double	absoluteValue(double x);
 
 		static double	remainder(double x, double y);
-		static double	remainder(double x, double y, int *quo);
+		static double	remainder(double x, double y, int32_t *quo);
 
 		static double	truncate(double x);
 		static double	nearbyInteger(double x);
@@ -211,7 +211,7 @@ class math {
 		static double	naturalLogGamma(double x);
 
 		static double	scaleByRadixToPower(double x, double n);
-		static double	scaleByRadixToPower(double x, int n);
+		static double	scaleByRadixToPower(double x, int32_t n);
 		static double	scaleByRadixToPower(double x, long n);
 
 		static double	larger(double x, double y);
@@ -272,7 +272,7 @@ class math {
 
 		static long double	exponent(long double x);
 
-		static long double	normalize(long double x, int *exp);
+		static long double	normalize(long double x, int32_t *exp);
 
 		static long double	logBase10(long double x);
 
@@ -289,7 +289,8 @@ class math {
 
 		static long double	computeExponent(long double x);
 		static int		integralExponent(long double x);
-		static long double 	loadExponent(long double x, int exp);
+		static long double 	loadExponent(long double x,
+							int32_t exp);
 
 		static long double	ceiling(long double x);
 		static long double	floor(long double x);
@@ -299,7 +300,7 @@ class math {
 							long double y);
 		static long double	remainder(long double x,
 							long double y,
-							int *quo);
+							int32_t *quo);
 
 		static long double	truncate(long double x);
 		static long double	nearbyInteger(long double x);
@@ -326,7 +327,7 @@ class math {
 		static long double	scaleByRadixToPower(long double x,
 								long double n);
 		static long double	scaleByRadixToPower(long double x,
-								int n);
+								int32_t n);
 		static long double	scaleByRadixToPower(long double x,
 								long n);
 

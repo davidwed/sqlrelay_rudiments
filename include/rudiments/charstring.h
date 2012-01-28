@@ -95,19 +95,19 @@ class charstring {
 			// Returns a pointer to "dest".
 
 
-		static	int	compare(const char *str1, const char *str2);
+		static	int32_t	compare(const char *str1, const char *str2);
 			// Returns -1,0 or 1 if "str1" is greater than, 
 			// equal to or less than "str2".
-		static	int	compare(const char *str1, const char *str2,
+		static	int32_t	compare(const char *str1, const char *str2,
 								size_t size);
 			// Returns -1,0 or 1 if "size" bytes of "str1" are
 			// greater than, equal to or less than "size" bytes of
 			// "str2".
-		static	int	compareIgnoringCase(const char *str1,
+		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2);
 			// Returns -1,0 or 1 if "str1" is greater than, 
 			// equal to or less than "str2", ignoring case.
-		static	int	compareIgnoringCase(const char *str1,
+		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2,
 							size_t size);
 			// Returns -1,0 or 1 if "size" bytes of "str1" are
@@ -270,12 +270,12 @@ class charstring {
 			// "number" as a string.
 
 		static	bool	isInteger(const char *val);
-		static	bool	isInteger(const char *val, int size);
+		static	bool	isInteger(const char *val, int32_t size);
 			// Returns true if the string "val" is an integer and
 			// false if it is not an integer.
 
 		static	bool	isNumber(const char *val);
-		static	bool	isNumber(const char *val, int size);
+		static	bool	isNumber(const char *val, int32_t size);
 			// Returns true the string "val" is a number and false
 			// if it is not a number
 		static	char	*parseNumber(int16_t number);
@@ -328,10 +328,10 @@ class charstring {
 			// Converts "string" to a 64-bit integer.  If non-NULL,
 			// endptr will be set to the first character in the
 			// string after the number.
-		static	int64_t	toInteger(const char *string, int base);
+		static	int64_t	toInteger(const char *string, int32_t base);
 			// Converts "string" to a 64-bit integer of base "base".
 		static	int64_t	toInteger(const char *string,
-					char **endptr, int base);
+					char **endptr, int32_t base);
 			// Converts "string" to a 64-bit integer of base "base".
 			// If non-NULL, endptr will be set to the first
 			// character in the string after the number.
@@ -345,12 +345,12 @@ class charstring {
 			// non-NULL, endptr will be set to the first character
 			// in the string after the number.
 		static	uint64_t	toUnsignedInteger(const char *string,
-								int base);
+								int32_t base);
 			// Converts "string" to a 64-bit unsigned integer of
 			// base "base".
 		static	uint64_t	toUnsignedInteger(const char *string,
 							char **endptr,
-							int base);
+							int32_t base);
 			// Converts "string" to a 64-bit unsigned integer of
 			// base "base".
 			// If non-NULL, endptr will be set to the first
@@ -431,13 +431,13 @@ class charstring {
 			// result in "output" and "outputsize" rather than in a
 			// return value
 
-		static	void	leftJustify(char *str, int length);
+		static	void	leftJustify(char *str, int32_t length);
 			// Moves leading spaces to the end of "str" for
 			// "length" characters.
 			// 
 			// Example:
 			//	"   hello   " -> "hello      "
-		static  void    rightPad(char *str, int lngth,
+		static  void    rightPad(char *str, int32_t lngth,
 					char padchar, bool fill);
 			// Moves trailing spaces to the beginning of "str" for
 			// "length" characters and replaces them with the
@@ -451,13 +451,13 @@ class charstring {
 			// Example when padchar is X and lngth is 10 and fill
 			// is false
 			//      "hello " -> " hello"
-		static	void	rightJustify(char *str, int length);
+		static	void	rightJustify(char *str, int32_t length);
 			// Moves trailing spaces to the beginning of "str" for
 			// "length" characters.
 			// 
 			// Example:
 			//	"   hello   " -> "      hello"
-		static	void	center(char *str, int length);
+		static	void	center(char *str, int32_t length);
 			// Centers the text of "str" for "length" characters.
 			// 
 			// Example:
@@ -469,7 +469,7 @@ class charstring {
 			// are printed as hex values of the format: (0x0a) and
 			// carriage returns, line feeds and tabs are printed
 			// as \n, \r and \t.
-		static void	safePrint(const char *str, int length);
+		static void	safePrint(const char *str, int32_t length);
 			// safePrint()'s "length" characters of "str"
 
 

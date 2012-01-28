@@ -352,7 +352,7 @@ bool process::detach() {
 	return true;
 }
 
-void process::exit(int status) {
+void process::exit(int32_t status) {
 	::exit(status);
 }
 

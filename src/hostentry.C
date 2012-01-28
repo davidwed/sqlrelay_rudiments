@@ -79,11 +79,11 @@ const char * const *hostentry::getAliasList() const {
 	return pvt->_he->h_aliases;
 }
 
-int hostentry::getAddressType() const {
+int32_t hostentry::getAddressType() const {
 	return pvt->_he->h_addrtype;
 }
 
-int hostentry::getAddressLength() const {
+int32_t hostentry::getAddressLength() const {
 	return pvt->_he->h_length;
 }
 
@@ -111,12 +111,12 @@ bool hostentry::initialize(const char *hostname) {
 	return initialize(hostname,NULL,0,0);
 }
 
-bool hostentry::initialize(const char *address, int len, int type) {
+bool hostentry::initialize(const char *address, int32_t len, int32_t type) {
 	return initialize(NULL,address,len,type);
 }
 
 bool hostentry::initialize(const char *hostname, const char *address,
-							int len, int type) {
+						int32_t len, int32_t type) {
 
 	#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
@@ -130,8 +130,8 @@ bool hostentry::initialize(const char *hostname, const char *address,
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		int	errnop=0;
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		int32_t	errnop=0;
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R_6) && \
 				defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R_8)
@@ -178,11 +178,11 @@ bool hostentry::initialize(const char *hostname, const char *address,
 	#endif
 }
 
-char *hostentry::getAddressString(int index) const {
+char *hostentry::getAddressString(int32_t index) const {
 	size_t	addresslen=(getAddressLength()*4)+1;
 	char	*address=new char[addresslen];
 	address[0]='\0';
-	for (int byte=0; byte<getAddressLength(); byte++) {
+	for (int32_t byte=0; byte<getAddressLength(); byte++) {
 		snprintf(address,addresslen,
 			"%s%d",address,getAddressList()[index][byte]);
 		if (byte<getAddressLength()-1) {
@@ -195,11 +195,11 @@ char *hostentry::getAddressString(int index) const {
 bool hostentry::getAliasList(const char *hostname, char ***aliaslist) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; he.getAliasList()[counter]; counter++);
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			alias[i]=charstring::duplicate(he.getAliasList()[i]);
 		}
 		*aliaslist=alias;
@@ -208,7 +208,7 @@ bool hostentry::getAliasList(const char *hostname, char ***aliaslist) {
 	return false;
 }
 
-bool hostentry::getAddressType(const char *hostname, int *addresstype) {
+bool hostentry::getAddressType(const char *hostname, int32_t *addresstype) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addresstype=he.getAddressType();
@@ -217,7 +217,7 @@ bool hostentry::getAddressType(const char *hostname, int *addresstype) {
 	return false;
 }
 
-bool hostentry::getAddressLength(const char *hostname, int *addresslength) {
+bool hostentry::getAddressLength(const char *hostname, int32_t *addresslength) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
 		*addresslength=he.getAddressLength();
@@ -229,11 +229,11 @@ bool hostentry::getAddressLength(const char *hostname, int *addresslength) {
 bool hostentry::getAddressList(const char *hostname, char ***addresslist) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; he.getAddressList()[counter]; counter++);
 		char	**addr=new char *[counter+1];
 		addr[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			addr[i]=charstring::duplicate(he.getAddressList()[i]);
 		}
 		*addresslist=addr;
@@ -242,7 +242,7 @@ bool hostentry::getAddressList(const char *hostname, char ***addresslist) {
 	return false;
 }
 
-bool hostentry::getAddressString(const char *hostname, int index,
+bool hostentry::getAddressString(const char *hostname, int32_t index,
 							char **addressstring) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
@@ -253,7 +253,8 @@ bool hostentry::getAddressString(const char *hostname, int index,
 }
 
 
-bool hostentry::getName(const char *address, int len, int type, char **name) {
+bool hostentry::getName(const char *address, int32_t len,
+						int32_t type, char **name) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
 		*name=charstring::duplicate(he.getName());
@@ -262,15 +263,15 @@ bool hostentry::getName(const char *address, int len, int type, char **name) {
 	return false;
 }
 
-bool hostentry::getAliasList(const char *address, int len, int type,
+bool hostentry::getAliasList(const char *address, int32_t len, int32_t type,
 							char ***aliaslist) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; he.getAliasList()[counter]; counter++);
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			alias[i]=charstring::duplicate(he.getAliasList()[i]);
 		}
 		*aliaslist=alias;
@@ -279,15 +280,15 @@ bool hostentry::getAliasList(const char *address, int len, int type,
 	return false;
 }
 
-bool hostentry::getAddressList(const char *address, int len, int type,
+bool hostentry::getAddressList(const char *address, int32_t len, int32_t type,
 							char ***addresslist) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; he.getAddressList()[counter]; counter++);
 		char	**addr=new char *[counter+1];
 		addr[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			addr[i]=charstring::duplicate(he.getAddressList()[i]);
 		}
 		*addresslist=addr;
@@ -296,8 +297,8 @@ bool hostentry::getAddressList(const char *address, int len, int type,
 	return false;
 }
 
-bool hostentry::getAddressString(const char *address, int len, int type,
-					int index, char **addressstring) {
+bool hostentry::getAddressString(const char *address, int32_t len, int32_t type,
+					int32_t index, char **addressstring) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
 		*addressstring=he.getAddressString(index);
@@ -314,13 +315,13 @@ void hostentry::print() const {
 
 	printf("Name: %s\n",getName());
 	printf("Alias list:\n");
-	for (int i=0; getAliasList()[i]; i++) {
+	for (int32_t i=0; getAliasList()[i]; i++) {
 		printf("	%s\n",getAliasList()[i]);
 	}
 	printf("Address type: %d\n",getAddressType());
 	printf("Address length: %d\n",getAddressLength());
 	printf("Address list:\n");
-	for (int i=0; getAddressList()[i]; i++) {
+	for (int32_t i=0; getAddressList()[i]; i++) {
 		char	*addr=getAddressString(i);
 		printf("	%s\n",addr);
 		delete[] addr;

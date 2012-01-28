@@ -34,7 +34,7 @@ class modemserver : public server, private modemutil {
 			// Returns true on success and false on failure.
 		bool	bind();
 			// Returns true on success and false on failure.
-		bool	listen(int backlog);
+		bool	listen(int32_t backlog);
 			// Returns true on success and false on failure.
 
 		filedescriptor	*accept();

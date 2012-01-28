@@ -32,13 +32,13 @@ class filedescriptor {
 				// Closes the file descriptor.
 				// Returns true on success and false on failure.
 
-		int	getFileDescriptor() const;
+		int32_t	getFileDescriptor() const;
 				// Returns the file descriptor.
-		void	setFileDescriptor(int filedesc);
+		void	setFileDescriptor(int32_t filedesc);
 				// Sets the file descriptor associated with
 				// the class to "filedesc".
 
-		int	duplicate() const;
+		int32_t	duplicate() const;
 				// Duplicates the file descriptor and returns
 				// the handle of the duplicate descriptor.  The
 				// old and new descriptors may be used
@@ -48,7 +48,7 @@ class filedescriptor {
 				//
 				// Returns the lowest-numbered unused descriptor
 				// on success or -1 on failure.
-		bool	duplicate(int newfd) const;
+		bool	duplicate(int32_t newfd) const;
 				// Sets file descriptor handle "newfd" to be a
 				// duplicate of this file descriptor.  If
 				// "newfd" is already open, it will be closed
@@ -87,7 +87,7 @@ class filedescriptor {
 				// without the accompanying SSL-specific
 				// functions.
 
-		int	getSSLResult() const;
+		int32_t	getSSLResult() const;
 				// Returns the result code of the previously
 				// executed SSL command.  If a method fails
 				// but errno is 0 then an SSL-related error
@@ -320,7 +320,7 @@ class filedescriptor {
 
 
 		// Wait methods.
-		int	waitForNonBlockingRead(long sec, long usec) const;
+		int32_t	waitForNonBlockingRead(long sec, long usec) const;
 				// Causes the application to wait until a read()
 				// will proceed without blocking or until "sec"
 				// seconds and "usec" microseconds have elapsed.
@@ -344,7 +344,7 @@ class filedescriptor {
 				// greater than 1, indicating that a set of
 				// file descriptors that the listener is
 				// listening on are all ready to be read from.
-		int	waitForNonBlockingWrite(long sec, long usec) const;
+		int32_t	waitForNonBlockingWrite(long sec, long usec) const;
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
 				// until "sec" seconds and "usec" microseconds
@@ -463,14 +463,16 @@ class filedescriptor {
 			// FIXME: document this
 
 
-		virtual bool	passFileDescriptor(int descriptor) const;
-		virtual bool	receiveFileDescriptor(int *descriptor) const;
+		virtual bool	passFileDescriptor(
+						int32_t descriptor) const;
+		virtual bool	receiveFileDescriptor(
+						int32_t *descriptor) const;
 
 		void	translateByteOrder();
 		void	dontTranslateByteOrder();
 
-		int	fCntl(int command, long arg) const;
-		int	ioCtl(int command, void *arg) const;
+		int32_t	fCntl(int32_t command, long arg) const;
+		int32_t	ioCtl(int32_t command, void *arg) const;
 			// Interfaces for performing varions miscellaneous
 			// operations on the file descriptor.
 
@@ -487,10 +489,10 @@ class filedescriptor {
 			//
 			// Returns true on success and false on failure.
 
-		bool	getTcpWriteBufferSize(int *size);
-		bool	setTcpWriteBufferSize(int size);
-		bool	getTcpReadBufferSize(int *size);
-		bool	setTcpReadBufferSize(int size);
+		bool	getTcpWriteBufferSize(int32_t *size);
+		bool	setTcpWriteBufferSize(int32_t size);
+		bool	getTcpReadBufferSize(int32_t *size);
+		bool	setTcpReadBufferSize(int32_t size);
 
 		const char	*getType() const;
 

@@ -84,7 +84,7 @@ const char *rpcentry::getName() const {
 	#endif
 }
 
-int rpcentry::getNumber() const {
+int32_t rpcentry::getNumber() const {
 	#ifdef RUDIMENTS_HAVE_RPC
 		return pvt->_re->r_number;
 	#else
@@ -121,11 +121,11 @@ bool rpcentry::initialize(const char *name) {
 	return initialize(name,0);
 }
 
-bool rpcentry::initialize(int number) {
+bool rpcentry::initialize(int32_t number) {
 	return initialize(NULL,number);
 }
 
-bool rpcentry::initialize(const char *rpcname, int number) {
+bool rpcentry::initialize(const char *rpcname, int32_t number) {
 
 	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
@@ -139,7 +139,7 @@ bool rpcentry::initialize(const char *rpcname, int number) {
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R_5) && \
 				defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5)
@@ -190,11 +190,11 @@ bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
 	#ifdef RUDIMENTS_HAVE_RPC
 		rpcentry	re;
 		if (re.initialize(name)) {
-			int	counter;
+			int32_t	counter;
 			for (counter=0; re.getAliasList()[counter]; counter++);
 			char	**alias=new char *[counter+1];
 			alias[counter]=NULL;
-			for (int i=0; i<counter; i++) {
+			for (int32_t i=0; i<counter; i++) {
 				alias[i]=charstring::duplicate(
 						re.getAliasList()[i]);
 			}
@@ -205,7 +205,7 @@ bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
 	return false;
 }
 
-bool rpcentry::getName(int number, char **name) {
+bool rpcentry::getName(int32_t number, char **name) {
 	#ifdef RUDIMENTS_HAVE_RPC
 		rpcentry	re;
 		if (re.initialize(number)) {
@@ -216,15 +216,15 @@ bool rpcentry::getName(int number, char **name) {
 	return false;
 }
 
-bool rpcentry::getAliasList(int number, char ***aliaslist) {
+bool rpcentry::getAliasList(int32_t number, char ***aliaslist) {
 	#ifdef RUDIMENTS_HAVE_RPC
 		rpcentry	re;
 		if (re.initialize(number)) {
-			int	counter;
+			int32_t	counter;
 			for (counter=0; re.getAliasList()[counter]; counter++);
 			char	**alias=new char *[counter+1];
 			alias[counter]=NULL;
-			for (int i=0; i<counter; i++) {
+			for (int32_t i=0; i<counter; i++) {
 				alias[i]=charstring::duplicate(
 						re.getAliasList()[i]);
 			}
@@ -247,7 +247,7 @@ void rpcentry::print() const {
 	printf("Number: %d\n",getNumber());
 	printf("Alias list:\n");
 	const char * const *aliaslist=getAliasList();
-	for (int i=0; aliaslist && aliaslist[i]; i++) {
+	for (int32_t i=0; aliaslist && aliaslist[i]; i++) {
 		printf("	%s\n",aliaslist[i]);
 	}
 }

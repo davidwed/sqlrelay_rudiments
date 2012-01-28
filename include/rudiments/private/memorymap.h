@@ -7,7 +7,7 @@
 		memorymap	&operator=(const memorymap &m);
 
 			bool	mAdvise(unsigned char *start,
-					size_t length, int advice);
-		static	bool	mLockAll(int flags);
+					size_t length, int32_t advice);
+		static	bool	mLockAll(int32_t flags);
 
 		memorymapprivate	*pvt;

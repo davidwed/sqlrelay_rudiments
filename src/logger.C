@@ -65,14 +65,14 @@ void filedestination::write(const char *string) {
 }
 
 void stdoutdestination::write(const char *string) {
-	int	result;
+	int32_t	result;
 	do {
 		result=::write(1,string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
 void stderrdestination::write(const char *string) {
-	int	result;
+	int32_t	result;
 	do {
 		result=::write(2,string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -81,7 +81,7 @@ void stderrdestination::write(const char *string) {
 class syslogdestinationprivate {
 	friend class syslogdestination;
 	private:
-		int	_priority;
+		int32_t	_priority;
 };
 
 syslogdestination::syslogdestination() : logdestination() {
@@ -105,8 +105,8 @@ syslogdestination::~syslogdestination() {
 	delete pvt;
 }
 
-void syslogdestination::open(const char *ident, int option,
-					int facility, int priority) {
+void syslogdestination::open(const char *ident, int32_t option,
+					int32_t facility, int32_t priority) {
 #ifdef RUDIMENTS_HAVE_SYSLOG_H
 	openlog(ident,option,facility);
 #endif

@@ -35,7 +35,7 @@ class dictionarynode {
 		datatype	getData() const;
 				// Returns the data stored in the node.
 
-		int	compare(keytype testkey) const;
+		int32_t	compare(keytype testkey) const;
 			// Returns -1,0 or 1 if the key stored in the
 			// node is less than, equal to or greater than
 			// "testkey".

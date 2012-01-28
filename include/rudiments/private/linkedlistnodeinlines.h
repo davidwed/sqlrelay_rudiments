@@ -66,7 +66,7 @@ LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() {
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-int LINKEDLISTNODE_CLASS::compare(datatype data) const {
+int32_t LINKEDLISTNODE_CLASS::compare(datatype data) const {
 	return datautil.compare(this->data,data);
 }
 

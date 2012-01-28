@@ -23,7 +23,7 @@ class server : public filedescriptor {
 		virtual	~server();
 
 		virtual	bool	bind()=0;
-		virtual	bool	listen(int backlog)=0;
+		virtual	bool	listen(int32_t backlog)=0;
 		virtual	filedescriptor	*accept()=0;
 
 	#include <rudiments/private/server.h>

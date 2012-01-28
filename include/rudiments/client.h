@@ -25,9 +25,9 @@ class client : public filedescriptor {
 
 		virtual void	initialize(constnamevaluepairs *cd)=0;
 		virtual int	connect()=0;
-				// This method return an int instead of a bool
-				// because we want child classes that have non
-				// atomic connection procedures (such as a
+				// This method return an int32_t instead of a
+				// bool because we want child classes that have
+				// non atomic connection procedures (such as a
 				// modem) to be able to implement return codes
 				// other than success or failure (such as
 				// abort).

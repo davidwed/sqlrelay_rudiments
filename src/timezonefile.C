@@ -310,7 +310,7 @@ uint64_t *timezonefile::getTransitionTimes() {
 	return pvt->_transitiontime;
 }
 
-uint64_t timezonefile::getTransitionTime(int index) {
+uint64_t timezonefile::getTransitionTime(int32_t index) {
 	return pvt->_transitiontime[index];
 }
 
@@ -318,7 +318,7 @@ unsigned char *timezonefile::getLocalTimes() {
 	return pvt->_localtime;
 }
 
-unsigned char timezonefile::getLocalTimes(int index) {
+unsigned char timezonefile::getLocalTimes(int32_t index) {
 	return pvt->_localtime[index];
 }
 
@@ -326,7 +326,7 @@ ttinfo **timezonefile::getTimeTypeInfos() {
 	return &pvt->_ti;
 }
 
-ttinfo *timezonefile::getTimeTypeInfo(int index) {
+ttinfo *timezonefile::getTimeTypeInfo(int32_t index) {
 	return &pvt->_ti[index];
 }
 
@@ -334,7 +334,7 @@ uint64_t *timezonefile::getLeapSecondTimes() {
 	return pvt->_leapsecondtime;
 }
 
-uint64_t timezonefile::getLeapSecondTime(int index) {
+uint64_t timezonefile::getLeapSecondTime(int32_t index) {
 	return pvt->_leapsecondtime[index];
 }
 
@@ -342,7 +342,7 @@ uint64_t *timezonefile::getTotalLeapSeconds() {
 	return pvt->_totalleapseconds;
 }
 
-uint64_t timezonefile::getTotalLeapSeconds(int index) {
+uint64_t timezonefile::getTotalLeapSeconds(int32_t index) {
 	return pvt->_totalleapseconds[index];
 }
 
@@ -350,7 +350,7 @@ unsigned char *timezonefile::getStandardOrWallIndicators() {
 	return pvt->_transstdwall;
 }
 
-unsigned char timezonefile::getStandardOrWallIndicator(int index) {
+unsigned char timezonefile::getStandardOrWallIndicator(int32_t index) {
 	return pvt->_transstdwall[index];
 }
 
@@ -358,7 +358,7 @@ unsigned char *timezonefile::getUTCOrLocalIndicators() {
 	return pvt->_transutclocal;
 }
 
-unsigned char timezonefile::getUTCOrLocalIndicator(int index) {
+unsigned char timezonefile::getUTCOrLocalIndicator(int32_t index) {
 	return pvt->_transutclocal[index];
 }
 
@@ -370,7 +370,7 @@ unsigned char **timezonefile::getTimeZoneStrings() {
 	return pvt->_timezonestrings;
 }
 
-unsigned char *timezonefile::getTimeZoneString(int index) {
+unsigned char *timezonefile::getTimeZoneString(int32_t index) {
 	return pvt->_timezonestrings[index];
 }
 

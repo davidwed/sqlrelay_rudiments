@@ -35,7 +35,7 @@ class filesystem {
 			// Initializes the instance to use filesystem "path".
 			//
 			// Returns true on success and false on failure.
-		bool	initialize(int fd);
+		bool	initialize(int32_t fd);
 			// Initializes the instance to use already open file
 			// descriptor "fd".
 			//
@@ -48,7 +48,7 @@ class filesystem {
 		// failure.
 		int64_t		getType() const;
 		static bool	getType(const char *path, int64_t *type);
-		static bool	getType(int fd, int64_t *type);
+		static bool	getType(int32_t fd, int64_t *type);
 
 		// These methods return the fundamental block size of the
 		// filesystem.
@@ -58,7 +58,7 @@ class filesystem {
 		// failure.
 		int64_t		getBlockSize() const;
 		static bool	getBlockSize(const char *path, int64_t *size);
-		static bool	getBlockSize(int fd, int64_t *size);
+		static bool	getBlockSize(int32_t fd, int64_t *size);
 
 		// These methods return the optimum transfer block size.
 		// (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris)
@@ -68,7 +68,7 @@ class filesystem {
 		int64_t		getOptimumTransferBlockSize() const;
 		static bool	getOptimumTransferBlockSize(const char *path,
 								int64_t *size);
-		static bool	getOptimumTransferBlockSize(int fd,
+		static bool	getOptimumTransferBlockSize(int32_t fd,
 								int64_t *size);
 
 		// These methods return the total number of blocks.
@@ -79,7 +79,7 @@ class filesystem {
 		int64_t		getTotalBlocks() const;
 		static bool	getTotalBlocks(const char *path,
 							int64_t *blocks);
-		static bool	getTotalBlocks(int fd, int64_t *blocks);
+		static bool	getTotalBlocks(int32_t fd, int64_t *blocks);
 
 		// These methods return the number of free blocks.
 		// (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris)
@@ -89,7 +89,7 @@ class filesystem {
 		int64_t		getFreeBlocks() const;
 		static bool	getFreeBlocks(const char *path,
 							int64_t *blocks);
-		static bool	getFreeBlocks(int fd, int64_t *blocks);
+		static bool	getFreeBlocks(int32_t fd, int64_t *blocks);
 
 		// These methods return the number of blocks available to 
 		// non-superuser accounts.
@@ -100,7 +100,7 @@ class filesystem {
 		int64_t		getAvailableBlocks() const;
 		static bool	getAvailableBlocks(const char *path,
 							int64_t *blocks);
-		static bool	getAvailableBlocks(int fd, int64_t *blocks);
+		static bool	getAvailableBlocks(int32_t fd, int64_t *blocks);
 
 		// These methods return the number of file nodes.
 		// (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris)
@@ -110,7 +110,7 @@ class filesystem {
 		int64_t		getTotalFileNodes() const;
 		static bool	getTotalFileNodes(const char *path,
 							int64_t *nodes);
-		static bool	getTotalFileNodes(int fd, int64_t *nodes);
+		static bool	getTotalFileNodes(int32_t fd, int64_t *nodes);
 
 		// These methods return the number of free file nodes.
 		// (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris)
@@ -120,7 +120,7 @@ class filesystem {
 		int64_t		getFreeFileNodes() const;
 		static bool	getFreeFileNodes(const char *path,
 							int64_t *nodes);
-		static bool	getFreeFileNodes(int fd, int64_t *nodes);
+		static bool	getFreeFileNodes(int32_t fd, int64_t *nodes);
 
 		// These methods return the number of file nodes available to 
 		// non-superuser accounts.
@@ -131,7 +131,7 @@ class filesystem {
 		int64_t		getAvailableFileNodes() const;
 		static bool	getAvailableFileNodes(const char *path,
 								int64_t *nodes);
-		static bool	getAvailableFileNodes(int fd, int64_t *nodes);
+		static bool	getAvailableFileNodes(int32_t fd, int64_t *nodes);
 
 		// These methods return the file system id.
 		// (works on SCO OSR5, Solaris)
@@ -140,7 +140,7 @@ class filesystem {
 		// failure.
 		int64_t		getFileSystemId() const;
 		static bool	getFileSystemId(const char *path, int64_t *id);
-		static bool	getFileSystemId(int fd, int64_t *id);
+		static bool	getFileSystemId(int32_t fd, int64_t *id);
 
 		// These methods return the maximum length of filenames.
 		// (works on Linux, SCO OSR5, Solaris)
@@ -150,7 +150,7 @@ class filesystem {
 		int64_t		getMaximumFileNameLength() const;
 		static bool	getMaximumFileNameLength(const char *path,
 							int64_t *length);
-		static bool	getMaximumFileNameLength(int fd,
+		static bool	getMaximumFileNameLength(int32_t fd,
 							int64_t *length);
 
 		// These methods return the user that mounted the filesystem.
@@ -160,7 +160,7 @@ class filesystem {
 		// failure.
 		uid_t		getOwner() const;
 		static bool	getOwner(const char *path, uid_t *owner);
-		static bool	getOwner(int fd, uid_t *owner);
+		static bool	getOwner(int32_t fd, uid_t *owner);
 
 		// These methods return the number of synchronous writes that
 		// have occurred since the filesytem was mounted.
@@ -171,7 +171,7 @@ class filesystem {
 		int64_t		getSyncWrites() const;
 		static bool	getSyncWrites(const char *path,
 							int64_t *swrites);
-		static bool	getSyncWrites(int fd, int64_t *swrites);
+		static bool	getSyncWrites(int32_t fd, int64_t *swrites);
 
 		// These methods return the number of asynchronous writes that
 		// have occurred since the filesytem was mounted.
@@ -182,7 +182,7 @@ class filesystem {
 		int64_t		getAsyncWrites() const;
 		static bool	getAsyncWrites(const char *path,
 							int64_t *aswrites);
-		static bool	getAsyncWrites(int fd, int64_t *aswrites);
+		static bool	getAsyncWrites(int32_t fd, int64_t *aswrites);
 
 		// These methods return the name of the filesystem type.
 		// (works on Net/Open/FreeBSD, SCO OSR5, Solaris)
@@ -192,9 +192,9 @@ class filesystem {
 		const char	*getTypeName() const;
 		static bool	getTypeName(const char *path,
 						const char **name);
-		static bool	getTypeName(int fd, const char **name);
+		static bool	getTypeName(int32_t fd, const char **name);
 
-		// These methods return the mount point of the filesystem.
+		// These methods return the mount point32_t of the filesystem.
 		// (works on Net/Open/FreeBSD)
 		//
 		// The static methods return true on success and false on
@@ -202,7 +202,7 @@ class filesystem {
 		const char	*getMountPoint() const;
 		static bool	getMountPoint(const char *path,
 							const char **mtpt);
-		static bool	getMountPoint(int fd, const char **mtpt);
+		static bool	getMountPoint(int32_t fd, const char **mtpt);
 
 		// These methods return the number of synchronous reads that
 		// have occurred since the filesytem was mounted.
@@ -212,7 +212,7 @@ class filesystem {
 		// failure.
 		int64_t		getSyncReads() const;
 		static bool	getSyncReads(const char *path, int64_t *sreads);
-		static bool	getSyncReads(int fd, int64_t *sreads);
+		static bool	getSyncReads(int32_t fd, int64_t *sreads);
 
 		// These methods return the number of asynchronous reads that
 		// have occurred since the filesytem was mounted.
@@ -223,7 +223,7 @@ class filesystem {
 		int64_t		getAsyncReads() const;
 		static bool	getAsyncReads(const char *path,
 							int64_t *asreads);
-		static bool	getAsyncReads(int fd, int64_t *asreads);
+		static bool	getAsyncReads(int32_t fd, int64_t *asreads);
 
 		// These methods return the name of the device file for the
 		// filesystem.
@@ -234,7 +234,7 @@ class filesystem {
 		const char	*getDeviceName() const;
 		static bool	getDeviceName(const char *path,
 							const char **devname);
-		static bool	getDeviceName(int fd, const char **devname);
+		static bool	getDeviceName(int32_t fd, const char **devname);
 
 		// These methods return the filesystem-specific string.
 		// (works on SCO OSR5, Solaris)
@@ -244,14 +244,14 @@ class filesystem {
 		const char	*getFilesystemSpecificString() const;
 		static bool	getFilesystemSpecificString(const char *path,
 							const char **str);
-		static bool	getFilesystemSpecificString(int fd,
+		static bool	getFilesystemSpecificString(int32_t fd,
 							const char **str);
 
 
 		// NetBSD: u_short f_oflags - deprecated copy of mount flags
 		// NetBSD: u_short f_flags - mount flags
 		// OpenBSD: union mount_info mount_info - per fs mount options
-		// FreeBSD: int f_flags - mount flags
+		// FreeBSD: int32_t f_flags - mount flags
 		// SCO OSR5: unsigned long f_flag - mount flags
 		// solaris: u_long f_flag - mount flags
 

@@ -35,11 +35,11 @@ class regularexpressionprivate {
 		#endif
 	
 		#define RUDIMENTS_REGEX_MATCHES 128
-		int		_matchcount;
+		int32_t		_matchcount;
 		const char	*_str;
 
 		#ifdef RUDIMENTS_HAS_PCRE
-		int		_matches[RUDIMENTS_REGEX_MATCHES*3];
+		int32_t		_matches[RUDIMENTS_REGEX_MATCHES*3];
 		#else
 		regmatch_t	_matches[RUDIMENTS_REGEX_MATCHES];
 		#endif
@@ -91,7 +91,7 @@ bool regularexpression::compile(const char *pattern) {
 			pvt->_extra=NULL;
 		}
 		const char	*error;
-		int		erroroffset;
+		int32_t		erroroffset;
 		return (pvt->_expr=pcre_compile(pattern,0,&error,
 						&erroroffset,NULL))!=NULL;
 	#else
@@ -130,7 +130,7 @@ bool regularexpression::match(const char *str) {
 						RUDIMENTS_REGEX_MATCHES*3))>-1);
 	#else
 		pvt->_str=str;
-		for (int i=0; i<pvt->_matchcount; i++) {
+		for (int32_t i=0; i<pvt->_matchcount; i++) {
 			pvt->_matches[i].rm_so=-1;
 		}
 		pvt->_matchcount=-1;
@@ -141,10 +141,10 @@ bool regularexpression::match(const char *str) {
 	#endif
 }
 
-int regularexpression::getSubstringCount() {
+int32_t regularexpression::getSubstringCount() {
 	#ifndef RUDIMENTS_HAS_PCRE
 		if (pvt->_matchcount==-1) {
-			for (int i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
+			for (int32_t i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
 				if (pvt->_matches[i].rm_so==-1) {
 					pvt->_matchcount=i;
 					break;
@@ -158,7 +158,7 @@ int regularexpression::getSubstringCount() {
 	return pvt->_matchcount;
 }
 
-int regularexpression::getSubstringStartOffset(int index) {
+int32_t regularexpression::getSubstringStartOffset(int32_t index) {
 	if (index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
@@ -169,7 +169,7 @@ int regularexpression::getSubstringStartOffset(int index) {
 	#endif
 }
 
-int regularexpression::getSubstringEndOffset(int index) {
+int32_t regularexpression::getSubstringEndOffset(int32_t index) {
 	if (index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
@@ -180,13 +180,13 @@ int regularexpression::getSubstringEndOffset(int index) {
 	#endif
 }
 
-char *regularexpression::getSubstringStart(int index) {
-	int	offset=getSubstringStartOffset(index);
+char *regularexpression::getSubstringStart(int32_t index) {
+	int32_t	offset=getSubstringStartOffset(index);
 	return (offset>-1)?(const_cast<char *>(pvt->_str+offset)):NULL;
 }
 
-char *regularexpression::getSubstringEnd(int index) {
-	int	offset=getSubstringEndOffset(index);
+char *regularexpression::getSubstringEnd(int32_t index) {
+	int32_t	offset=getSubstringEndOffset(index);
 	return (offset>-1)?(const_cast<char *>(pvt->_str+offset)):NULL;
 }
 

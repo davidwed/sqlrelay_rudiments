@@ -11,71 +11,71 @@
 namespace rudiments {
 #endif
 
-bool character::isAlphanumeric(int c) {
+bool character::isAlphanumeric(int32_t c) {
 	return isalnum(c)!=0;
 }
 
-bool character::isAlphabetical(int c) {
+bool character::isAlphabetical(int32_t c) {
 	return isalpha(c)!=0;
 }
 
-bool character::isControlCharacter(int c) {
+bool character::isControlCharacter(int32_t c) {
 	return iscntrl(c)!=0;
 }
 
-bool character::isDigit(int c) {
+bool character::isDigit(int32_t c) {
 	return isdigit(c)!=0;
 }
 
-bool character::isLowerCase(int c) {
+bool character::isLowerCase(int32_t c) {
 	return islower(c)!=0;
 }
 
-bool character::isPrintableNonSpace(int c) {
+bool character::isPrintableNonSpace(int32_t c) {
 	return isgraph(c)!=0;
 }
 
-bool character::isPrintable(int c) {
+bool character::isPrintable(int32_t c) {
 	return isprint(c)!=0;
 }
 
-bool character::isPunctuation(int c) {
+bool character::isPunctuation(int32_t c) {
 	return ispunct(c)!=0;
 }
 
-bool character::isUpperCase(int c) {
+bool character::isUpperCase(int32_t c) {
 	return isupper(c)!=0;
 }
 
-bool character::isHexDigit(int c) {
+bool character::isHexDigit(int32_t c) {
 	return isxdigit(c)!=0;
 }
 
-bool character::isBlank(int c) {
+bool character::isBlank(int32_t c) {
 	// don't be tempted to use isblank() here, it's too challenging to get
 	// it to work on every platform without a bunch of confusing #defines
 	// before including ctype.h
 	return (c==' ' || c=='	');
 }
 
-bool character::isWhitespace(int c) {
+bool character::isWhitespace(int32_t c) {
 	return isspace(c)!=0;
 }
 
-bool character::isAscii(int c) {
+bool character::isAscii(int32_t c) {
 	return isascii(c)!=0;
 }
 
 
-int character::toUpperCase(int c) {
+int32_t character::toUpperCase(int32_t c) {
 	return toupper(c);
 }
 
-int character::toLowerCase(int c) {
+int32_t character::toLowerCase(int32_t c) {
 	return tolower(c);
 }
 
-int character::toAscii(int c) {
+int32_t character::toAscii(int32_t c) {
 	return toascii(c);
 }
 
@@ -98,7 +98,7 @@ void character::safePrint(char c) {
 	} else if (c>=' ' && c<='~') {
 		printf("%c",c);
 	} else {
-		printf("(0x%02x)",(unsigned int)c);
+		printf("(0x%02x)",(uint32_t)c);
 	}
 }
 

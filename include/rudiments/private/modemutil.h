@@ -23,7 +23,7 @@ class modemutil {
 		const char	*_devicename();
 		const char	*_baud();
 
-		bool	configureSerialPort(int fd, const char *baud);
+		bool	configureSerialPort(int32_t fd, const char *baud);
 
 	private:
 		modemutilprivate	*pvt;

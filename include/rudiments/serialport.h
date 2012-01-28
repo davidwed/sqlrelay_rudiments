@@ -51,7 +51,7 @@ class serialport : public filedescriptor {
 		bool	transmitStart();
 			// tcflow(TCION)
 
-		bool	sendBreak(int duration);
+		bool	sendBreak(int32_t duration);
 			// tcsendbreak()
 
 	#include <rudiments/private/serialport.h>

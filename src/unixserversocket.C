@@ -70,7 +70,8 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	return (fd()!=-1);
 }
 
-bool unixserversocket::listen(const char *filename, mode_t mask, int backlog) {
+bool unixserversocket::listen(const char *filename, mode_t mask,
+							int32_t backlog) {
 	initialize(filename,mask);
 	return (bind() && listen(backlog));
 }
@@ -98,7 +99,7 @@ bool unixserversocket::bind() {
 	return retval;
 }
 
-bool unixserversocket::listen(int backlog) {
+bool unixserversocket::listen(int32_t backlog) {
 	int	result;
 	do {
 		result=::listen(fd(),backlog);

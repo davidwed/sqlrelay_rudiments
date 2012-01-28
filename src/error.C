@@ -18,11 +18,11 @@ void error::clearError() {
 	errno=0;
 }
 
-void error::setErrorNumber(int err) {
+void error::setErrorNumber(int32_t err) {
 	errno=err;
 }
 
-int error::getErrorNumber() {
+int32_t error::getErrorNumber() {
 	return errno;
 }
 

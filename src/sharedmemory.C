@@ -17,7 +17,7 @@ namespace rudiments {
 class sharedmemoryprivate {
 	friend class sharedmemory;
 	private:
-		int	_shmid;
+		int32_t	_shmid;
 		bool	_created;
 		void	*_shmptr;
 };
@@ -49,7 +49,7 @@ void sharedmemory::dontRemove() {
 	pvt->_created=false;
 }
 
-int sharedmemory::getId() const {
+int32_t sharedmemory::getId() const {
 	return pvt->_shmid;
 }
 
@@ -270,9 +270,9 @@ bool sharedmemory::setGroupName(const char *groupname) {
 	#endif
 }
 
-int sharedmemory::shmGet(key_t key, size_t size, int shmflag) {
+int32_t sharedmemory::shmGet(key_t key, size_t size, int32_t shmflag) {
 	#ifdef RUDIMENTS_HAVE_SHMGET
-		int	result;
+		int32_t	result;
 		do {
 			result=shmget(key,size,shmflag);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -297,9 +297,9 @@ void *sharedmemory::shmAttach() {
 	#endif
 }
 
-bool sharedmemory::shmControl(int cmd, shmid_ds *buf) {
+bool sharedmemory::shmControl(int32_t cmd, shmid_ds *buf) {
 	#ifdef RUDIMENTS_HAVE_SHMGET
-		int	result;
+		int32_t	result;
 		do {
 			result=shmctl(pvt->_shmid,cmd,buf);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

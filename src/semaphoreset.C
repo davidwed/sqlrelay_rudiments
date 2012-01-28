@@ -32,7 +32,7 @@
 
 #ifndef RUDIMENTS_HAVE_SEMUN
 	union semun {
-		int			val;
+		int32_t			val;
 		struct	semid_ds	*buf;
 		unsigned short		*array;
 	};
@@ -49,9 +49,9 @@ namespace rudiments {
 
 class semaphoresetprivate {
 	public:
-		int	_semid;
+		int32_t	_semid;
 		bool	_created;
-		int	_semcount;
+		int32_t	_semcount;
 		bool	_retryinterruptedoperations;
 		#if defined(RUDIMENTS_HAVE_SEMGET)
 			struct	sembuf	**_waitop;
@@ -87,7 +87,7 @@ semaphoreset::~semaphoreset() {
 
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		if (pvt->_waitop) {
-			for (int i=0; i<pvt->_semcount; i++) {
+			for (int32_t i=0; i<pvt->_semcount; i++) {
 				delete[] pvt->_waitop[i];
 				delete[] pvt->_waitwithundoop[i];
 				delete[] pvt->_signalop[i];
@@ -100,7 +100,7 @@ semaphoreset::~semaphoreset() {
 		}
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		if (pvt->_sems) {
-			for (int i=0; i<pvt->_semcount; i++) {
+			for (int32_t i=0; i<pvt->_semcount; i++) {
 				CloseHandle(pvt->_sems[i]);
 				delete[] pvt->_securityattrs[i];
 				delete[] pvt->_semnames[i];
@@ -136,11 +136,11 @@ void semaphoreset::dontRemove() {
 	pvt->_created=false;
 }
 
-int semaphoreset::getId() const {
+int32_t semaphoreset::getId() const {
 	return pvt->_semid;
 }
 
-bool semaphoreset::wait(int index) {
+bool semaphoreset::wait(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_waitop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -151,7 +151,7 @@ bool semaphoreset::wait(int index) {
 	#endif
 }
 
-bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
+bool semaphoreset::wait(int32_t index, long seconds, long nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		timespec	ts;
 		ts.tv_sec=seconds;
@@ -166,7 +166,7 @@ bool semaphoreset::wait(int index, long seconds, long nanoseconds) {
 	#endif
 }
 
-bool semaphoreset::waitWithUndo(int index) {
+bool semaphoreset::waitWithUndo(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_waitwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -178,7 +178,7 @@ bool semaphoreset::waitWithUndo(int index) {
 	#endif
 }
 
-bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
+bool semaphoreset::waitWithUndo(int32_t index, long seconds, long nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		timespec	ts;
 		ts.tv_sec=seconds;
@@ -194,7 +194,7 @@ bool semaphoreset::waitWithUndo(int index, long seconds, long nanoseconds) {
 	#endif
 }
 
-bool semaphoreset::signal(int index) {
+bool semaphoreset::signal(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -205,7 +205,7 @@ bool semaphoreset::signal(int index) {
 	#endif
 }
 
-bool semaphoreset::signalWithUndo(int index) {
+bool semaphoreset::signalWithUndo(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -217,7 +217,7 @@ bool semaphoreset::signalWithUndo(int index) {
 	#endif
 }
 
-int semaphoreset::getValue(int index) {
+int32_t semaphoreset::getValue(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
 		return semControl(pvt,index,GETVAL,&semctlun);
@@ -231,7 +231,7 @@ int semaphoreset::getValue(int index) {
 	#endif
 }
 
-bool semaphoreset::setValue(int index, int value) {
+bool semaphoreset::setValue(int32_t index, int32_t value) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
 		semctlun.val=value;
@@ -246,7 +246,7 @@ bool semaphoreset::setValue(int index, int value) {
 	#endif
 }
 
-int semaphoreset::getWaitingForZero(int index) {
+int32_t semaphoreset::getWaitingForZero(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
 		return semControl(pvt,index,GETZCNT,&semctlun);
@@ -260,7 +260,7 @@ int semaphoreset::getWaitingForZero(int index) {
 	#endif
 }
 
-int semaphoreset::getWaitingForIncrement(int index) {
+int32_t semaphoreset::getWaitingForIncrement(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
 		return semControl(pvt,index,GETNCNT,&semctlun);
@@ -275,7 +275,7 @@ int semaphoreset::getWaitingForIncrement(int index) {
 }
 
 bool semaphoreset::create(key_t key, mode_t permissions, 
-					int semcount, const int *values) {
+				int32_t semcount, const int32_t *values) {
 
 	pvt->_semcount=semcount;
 
@@ -288,7 +288,7 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	
 			// if creation succeeded, initialize the semaphore
 			if (values) {
-				for (int i=0; i<semcount; i++) {
+				for (int32_t i=0; i<semcount; i++) {
 					setValue(i,values[i]);
 				}
 			}
@@ -310,7 +310,7 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	return false;
 }
 
-bool semaphoreset::attach(key_t key, int semcount) {
+bool semaphoreset::attach(key_t key, int32_t semcount) {
 
 	pvt->_semcount=semcount;
 
@@ -335,7 +335,7 @@ bool semaphoreset::attach(key_t key, int semcount) {
 }
 
 bool semaphoreset::createOrAttach(key_t key, mode_t permissions, 
-					int semcount, const int *values) {
+				int32_t semcount, const int32_t *values) {
 	if (create(key,permissions,semcount,values)) {
 		return true;
 	}
@@ -353,7 +353,7 @@ void semaphoreset::createOperations() {
 		pvt->_signalop=new sembuf *[pvt->_semcount];
 		pvt->_signalwithundoop=new sembuf *[pvt->_semcount];
 
-		for (int i=0; i<pvt->_semcount; i++) {
+		for (int32_t i=0; i<pvt->_semcount; i++) {
 
 			// wait without undo
 			pvt->_waitop[i]=new sembuf[1];
@@ -526,10 +526,10 @@ mode_t semaphoreset::getPermissions() {
 	#endif
 }
 
-int semaphoreset::semGet(key_t key, int nsems, int semflg) {
+int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 
-		int	result;
+		int32_t	result;
 		do {
 			result=semget(key,nsems,semflg);
 		} while (result==-1 &&
@@ -544,10 +544,10 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 		pvt->_securityattrs=new SECURITY_ATTRIBUTES *[nsems];
 		pvt->_semnames=new char *[nsems];
 
-		for (int i=0; i<nsems; i++) {
+		for (int32_t i=0; i<nsems; i++) {
 
 			// set the semaphore name
-			int	semnamelen=
+			int32_t	semnamelen=
 					11+charstring::integerLength(key)+1+
 					charstring::integerLength(nsems)+1;
 			pvt->_semnames[i]=new char[semnamelen];
@@ -615,10 +615,10 @@ int semaphoreset::semGet(key_t key, int nsems, int semflg) {
 	#endif
 }
 
-int semaphoreset::semControl(semaphoresetprivate *pvt, int semnum,
-						int cmd, semun *semctlun) {
+int32_t semaphoreset::semControl(semaphoresetprivate *pvt, int32_t semnum,
+						int32_t cmd, semun *semctlun) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
-		int	result;
+		int32_t	result;
 		do {
 			result=semctl(pvt->_semid,semnum,cmd,*semctlun);
 		} while (result==-1 &&
@@ -635,7 +635,7 @@ int semaphoreset::semControl(semaphoresetprivate *pvt, int semnum,
 
 bool semaphoreset::semOp(struct sembuf *sops) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
-		int	result;
+		int32_t	result;
 		do {
 			result=semop(pvt->_semid,sops,1);
 		} while (result==-1 &&
@@ -652,7 +652,7 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 
 bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
 	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP)
-		int	result;
+		int32_t	result;
 		do {
 			result=semtimedop(pvt->_semid,sops,1,ts);
 		} while (result==-1 &&

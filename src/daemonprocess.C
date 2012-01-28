@@ -39,22 +39,22 @@ void		(*daemonprocessprivate::_crashfunc)(int);
 
 daemonprocessprivate	*daemonprocess::pvt=NULL;
 
-void daemonprocess::shutDown(int signum) {
+void daemonprocess::shutDown(int32_t signum) {
 	waitForChildren();
 	(*pvt->_shutdownfunc)(signum);
 }
 
-void daemonprocess::crash(int signum) {
+void daemonprocess::crash(int32_t signum) {
 	waitForChildren();
 	(*pvt->_crashfunc)(signum);
 }
 
-void daemonprocess::defaultShutDown(int signum) {
+void daemonprocess::defaultShutDown(int32_t signum) {
 	waitForChildren();
 	exit(0);
 }
 
-void daemonprocess::defaultCrash(int signum) {
+void daemonprocess::defaultCrash(int32_t signum) {
 	waitForChildren();
 	exit(1);
 }
@@ -120,7 +120,7 @@ void daemonprocess::handleCrash(void (*crashfunction)(int)) {
 }
 
 #ifndef MINGW32
-void daemonprocess::waitForChildrenToExit(int signum) {
+void daemonprocess::waitForChildrenToExit(int32_t signum) {
 
 	// Some systems generate a single SIGCHLD even if more than 1 child
 	// has entered it's exit state, so we need to loop here and catch
@@ -135,7 +135,7 @@ void daemonprocess::waitForChildrenToExit(int signum) {
 	// If it returns -1 then there was some other error and the loop should
 	// exit.
 	for (;;) {
-		int pid=waitpid(-1,NULL,WNOHANG);
+		int32_t pid=waitpid(-1,NULL,WNOHANG);
 		if (pid==0 || (pid==-1 && error::getErrorNumber()!=EINTR)) {
 			break;
 		}
@@ -149,7 +149,7 @@ void daemonprocess::waitForChildrenToExit(int signum) {
 	// be done automatically.
 }
 #else
-void daemonprocess::waitForChildrenToExit(int signum) {
+void daemonprocess::waitForChildrenToExit(int32_t signum) {
 	// FIXME: implement this...
 	// Use ChildStart()
 }
@@ -176,23 +176,23 @@ void daemonprocess::dontWaitForChildren() {
 }
 #endif
 
-int daemonprocess::runAsUser(const char *username) const {
+int32_t daemonprocess::runAsUser(const char *username) const {
 	uid_t	userid;
 	return (passwdentry::getUserId(username,&userid))?
 					runAsUserId(userid):1;
 }
 
-int daemonprocess::runAsGroup(const char *groupname) const {
+int32_t daemonprocess::runAsGroup(const char *groupname) const {
 	gid_t	groupid;
 	return (groupentry::getGroupId(groupname,&groupid))?
 					runAsGroupId(groupid):1;
 }
 
-int daemonprocess::runAsUserId(uid_t uid) const {
+int32_t daemonprocess::runAsUserId(uid_t uid) const {
 	return process::setUserId(uid);
 }
 
-int daemonprocess::runAsGroupId(gid_t gid) const {
+int32_t daemonprocess::runAsGroupId(gid_t gid) const {
 	return process::setGroupId(gid);
 }
 

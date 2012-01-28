@@ -129,7 +129,7 @@ uint64_t directory::getChildCount() {
 			dirent	*result;
 		#endif
 		for (;;) {
-			int	rdresult;
+			int32_t	rdresult;
 			do {
 				rdresult=readdir_r(pvt->_dir,entry,&result);
 			} while (rdresult==-1 &&
@@ -197,7 +197,7 @@ char *directory::getChildName(uint64_t index) {
 			dirent	*result;
 		#endif
 		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
-			int	rdresult;
+			int32_t	rdresult;
 			do {
 				rdresult=readdir_r(pvt->_dir,entry,&result);
 			} while (rdresult==-1 &&
@@ -238,7 +238,7 @@ char *directory::getChildName(uint64_t index) {
 }
 
 bool directory::create(const char *path, mode_t perms) {
-	int	result;
+	int32_t	result;
 	do {
 		#if defined(RUDIMENTS_HAVE_MKDIR_2)
 			result=mkdir(path,perms);
@@ -258,7 +258,7 @@ bool directory::create(const char *path, mode_t perms) {
 }
 
 bool directory::remove(const char *path) {
-	int	result;
+	int32_t	result;
 	do {
 		result=rmdir(path);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -286,7 +286,7 @@ char *directory::getCurrentWorkingDirectory() {
 }
 
 bool directory::changeDirectory(const char *path) {
-	int	result;
+	int32_t	result;
 	do {
 		result=chdir(path);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -295,7 +295,7 @@ bool directory::changeDirectory(const char *path) {
 
 bool directory::changeRoot(const char *path) {
 	#ifdef RUDIMENTS_HAVE_CHROOT
-		int	result;
+		int32_t	result;
 		do {
 			result=chroot(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -342,7 +342,7 @@ bool directory::canAccessLongFileNames(const char *pathname) {
 	return !pathConf(pathname,_PC_NO_TRUNC);
 }
 
-int64_t directory::pathConf(const char *pathname, int name) {
+int64_t directory::pathConf(const char *pathname, int32_t name) {
 	#if defined(RUDIMENTS_HAVE_PATHCONF)
 		long	result;
 		do {
@@ -376,7 +376,7 @@ bool directory::canAccessLongFileNames() {
 	return !fpathConf(_PC_NO_TRUNC);
 }
 
-int64_t directory::fpathConf(int name) {
+int64_t directory::fpathConf(int32_t name) {
 	#if defined(RUDIMENTS_HAVE_FPATHCONF)
 		int64_t	result;
 		do {

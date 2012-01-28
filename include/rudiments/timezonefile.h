@@ -18,8 +18,8 @@ class timezonefileprivate;
 
 struct ttinfo {
 	int64_t		tt_gmtoff;
-	int		tt_isdst;
-	unsigned int	tt_abbrind;
+	int32_t		tt_isdst;
+	uint32_t	tt_abbrind;
 };
 
 class timezonefile {
@@ -38,11 +38,11 @@ class timezonefile {
 				// local times stored in the file.
 		uint64_t	*getTransitionTimes();
 				// Returns an array of transition times.
-		uint64_t	getTransitionTime(int index);
+		uint64_t	getTransitionTime(int32_t index);
 				// Returns the transition time at "index".
 		unsigned char	*getLocalTimes();
 				// Returns an array of local times.
-		unsigned char	getLocalTimes(int index);
+		unsigned char	getLocalTimes(int32_t index);
 				// Returns the local time at "index".
 
 		uint64_t	getTypeCount();
@@ -50,7 +50,7 @@ class timezonefile {
 				// stored in the file.
 		ttinfo		**getTimeTypeInfos();
 				// Returns an array of time type info's.
-		ttinfo		*getTimeTypeInfo(int index);
+		ttinfo		*getTimeTypeInfo(int32_t index);
 				// Returns the time type info at "index".
 
 		uint64_t	getLeapCount();
@@ -58,11 +58,11 @@ class timezonefile {
 				// total leap seconds in the file.
 		uint64_t	*getLeapSecondTimes();
 				// Returns an array of leap second times.
-		uint64_t	getLeapSecondTime(int index);
+		uint64_t	getLeapSecondTime(int32_t index);
 				// Returns the leap second time at "index".
 		uint64_t	*getTotalLeapSeconds();
 				// Returns an array of total leap seconds.
-		uint64_t	getTotalLeapSeconds(int index);
+		uint64_t	getTotalLeapSeconds(int32_t index);
 				// Returns the total leap seconds at "index".
 
 		uint64_t	getIsSTDCount();
@@ -71,7 +71,7 @@ class timezonefile {
 		unsigned char	*getStandardOrWallIndicators();
 				// Returns an array of standard or wall
 				// indicators.
-		unsigned char	getStandardOrWallIndicator(int index);
+		unsigned char	getStandardOrWallIndicator(int32_t index);
 				// Returns the standard or wall indicator at
 				// "index".
 
@@ -80,7 +80,7 @@ class timezonefile {
 				// indicators in the file.
 		unsigned char	*getUTCOrLocalIndicators();
 				// Returns an array of UTC or local indicators.
-		unsigned char	getUTCOrLocalIndicator(int index);
+		unsigned char	getUTCOrLocalIndicator(int32_t index);
 				// Returns the UTC or local indicator at
 				// "index".
 
@@ -91,7 +91,7 @@ class timezonefile {
 				// Returns the raw time zone string.
 		unsigned char	**getTimeZoneStrings();
 				// Returns an array of time zone strings.
-		unsigned char	*getTimeZoneString(int index);
+		unsigned char	*getTimeZoneString(int32_t index);
 				// Returns the time zone string at "index".
 
 		void		print();

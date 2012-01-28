@@ -27,11 +27,11 @@ class serviceentry {
 						char ***aliaslist);
 		static	bool	getPort(const char *servicename,
 						const char *protocol,
-						int *port);
+						int32_t *port);
 
-		static	bool	getName(int port, const char *protocol,
+		static	bool	getName(int32_t port, const char *protocol,
 						char **name);
-		static	bool	getAliasList(int port, const char *protocol,
+		static	bool	getAliasList(int32_t port, const char *protocol,
 						char ***aliaslist);
 
 
@@ -46,13 +46,13 @@ class serviceentry {
 					const char *protocol);
 			// Looks up a service entry by name and protocol.
 			// Returns true on success and false on failure.
-		bool	initialize(int port,
+		bool	initialize(int32_t port,
 					const char *protocol);
 			// Looks up a service entry by port and protocol.
 			// Returns true on success and false on failure.
 
 		const char		*getName() const;
-		int			getPort() const;
+		int32_t			getPort() const;
 		const char		*getProtocol() const;
 		const char * const *	getAliasList() const;
 

@@ -36,7 +36,7 @@ shmfile::~shmfile() {
 	delete pvt;
 }
 
-int shmfile::openInternal(const char *name, int flags) {
+int32_t shmfile::openInternal(const char *name, int32_t flags) {
 	int	result;
 	do {
 		result=shm_open(name,flags,0);
@@ -44,7 +44,7 @@ int shmfile::openInternal(const char *name, int flags) {
 	return result;
 }
 
-int shmfile::openInternal(const char *name, int flags, mode_t perms) {
+int32_t shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
 	int	result;
 	do {
 		result=shm_open(name,flags,perms);

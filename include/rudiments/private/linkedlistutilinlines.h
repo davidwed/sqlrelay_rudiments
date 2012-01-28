@@ -15,7 +15,8 @@ namespace rudiments {
 
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
-int linkedlistutil<datatype>::compare(datatype data1, datatype data2) const {
+int32_t linkedlistutil<datatype>::compare(datatype data1,
+					datatype data2) const {
 	if (data1<data2) {
 		return -1;
 	} else if (data1==data2) {
@@ -39,13 +40,13 @@ void linkedlistutil<const char *>::print(const char *data) const {
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
-int linkedlistutil<char *>::compare(char *data1, char *data2) const {
+int32_t linkedlistutil<char *>::compare(char *data1, char *data2) const {
 	return charstring::compare(data1,data2);
 }
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
-int linkedlistutil<const char *>::compare(const char *data1,
+int32_t linkedlistutil<const char *>::compare(const char *data1,
 						const char *data2) const {
 	return charstring::compare(data1,data2);
 }
@@ -58,20 +59,20 @@ void linkedlistutil<char>::print(char data) const {
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
-void linkedlistutil<int>::print(int data) const {
+void linkedlistutil<int32_t>::print(int32_t data) const {
 	printf("%d",data);
 }
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
-void linkedlistutil<short>::print(short data) const {
+void linkedlistutil<int16_t>::print(int16_t data) const {
 	printf("%hd",data);
 }
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
-void linkedlistutil<long>::print(long data) const {
-	printf("%ld",data);
+void linkedlistutil<int64_t>::print(int64_t data) const {
+	printf("%lld",data);
 }
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
@@ -89,7 +90,7 @@ void linkedlistutil<double>::print(double data) const {
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<datatype>::print(datatype data) const {
-	printf("%lx",(unsigned long)data);
+	printf("%llx",(uint64_t)data);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

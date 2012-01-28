@@ -25,10 +25,10 @@ class protocolentry {
 		static	bool	getAliasList(const char *protocolname,
 						char ***aliaslist);
 		static	bool	getNumber(const char *protocolname,
-						int *number);
+						int32_t *number);
 
-		static	bool	getName(int number, char **name);
-		static	bool	getAliasList(int number, char ***aliaslist);
+		static	bool	getName(int32_t number, char **name);
+		static	bool	getAliasList(int32_t number, char ***aliaslist);
 
 
 		// If you need to look up a protocol entry and refer to multiple
@@ -41,13 +41,13 @@ class protocolentry {
 		bool	initialize(const char *protocolname);
 			// Looks up a protocol entry by name.
 			// Returns true on success and false on failure.
-		bool	initialize(int number);
+		bool	initialize(int32_t number);
 			// Looks up a protocol entry by number.
 			// Returns true on success and false on failure.
 
 		const char		*getName() const;
 		const char * const	*getAliasList() const;
-		int			getNumber() const;
+		int32_t			getNumber() const;
 
 		void	print() const;
 			// Prints out the protocol entry.

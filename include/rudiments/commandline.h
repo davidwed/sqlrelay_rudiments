@@ -16,7 +16,7 @@ class commandlineprivate;
 
 class commandline {
 	public:
-		commandline(int argc, const char **argv);
+		commandline(int32_t argc, const char **argv);
 		~commandline();
 
 		const char	*getValue(const char *arg) const;

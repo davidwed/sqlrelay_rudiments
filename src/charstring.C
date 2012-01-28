@@ -54,7 +54,7 @@ void charstring::upper(char *str) {
 		return;
 	}
 
-	for (int i=0; str[i]; i++) {
+	for (int32_t i=0; str[i]; i++) {
 		if (str[i]>='a' && str[i]<='z') {
 			str[i]=str[i]-32;
 		}
@@ -67,7 +67,7 @@ void charstring::lower(char *str) {
 		return;
 	}
 
-	for (int i=0; str[i]; i++) {
+	for (int32_t i=0; str[i]; i++) {
 		if (str[i]>='A' && str[i]<='Z') {
 			str[i]=str[i]+32;
 		}
@@ -95,7 +95,7 @@ void charstring::rightTrim(char *str, char character) {
 
 	if (str && str[0]) {
 
-		int	i=0;
+		int32_t	i=0;
 
 		// advance to the last character in the string
 		while (str[i]) {
@@ -118,8 +118,8 @@ void charstring::leftTrim(char *str, char character) {
 
 	if (str && str[0]) {
 
-		int	i=0;
-		int	j=0;
+		int32_t	i=0;
+		int32_t	j=0;
 
 		// advance past all of the characters we want to replace
 		while (str[i]==character) {
@@ -143,8 +143,8 @@ void charstring::strip(char *str, char character) {
 		return;
 	}
 
-	int	index=0;
-	int	total=0;
+	int32_t	index=0;
+	int32_t	total=0;
 
 	while (str[index]) {
 		if (str[index]==character) {
@@ -165,9 +165,9 @@ void charstring::strip(char *str1, const char *str2) {
 		return;
 	}
 
-	int	str2len=length(str2);
-	int	index=0;
-	int	total=0;
+	int32_t	str2len=length(str2);
+	int32_t	index=0;
+	int32_t	total=0;
 
 	while (str1[index]) {
 		if (!strncmp(str1+index,str2,str2len)) {
@@ -214,14 +214,14 @@ bool charstring::isInteger(const char *str) {
 	return true;
 }
 
-bool charstring::isInteger(const char *str, int size) {
+bool charstring::isInteger(const char *str, int32_t size) {
 
 	if (!str) {
 		return false;
 	}
 
 	const char	*ptr=str;
-	for (int index=0; index<size; index++) {
+	for (int32_t index=0; index<size; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
 			return false;
@@ -237,7 +237,7 @@ bool charstring::isNumber(const char *str) {
 		return false;
 	}
 
-	int	decimal=0;
+	int32_t	decimal=0;
 	for (const char *ptr=str; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
@@ -250,15 +250,15 @@ bool charstring::isNumber(const char *str) {
 	return true;
 }
 
-bool charstring::isNumber(const char *str, int size) {
+bool charstring::isNumber(const char *str, int32_t size) {
 
 	if (!str) {
 		return false;
 	}
 
 	const char	*ptr=str;
-	int		decimal=0;
-	for (int index=0; index<size; index++) {
+	int32_t		decimal=0;
+	for (int32_t index=0; index<size; index++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
 			return false;
@@ -444,18 +444,18 @@ void charstring::unescape(const char *input, uint64_t inputsize,
 	}
 }
 
-void charstring::leftJustify(char *str, int length) {
+void charstring::leftJustify(char *str, int32_t length) {
 
 	if (!str) {
 		return;
 	}
 
 	// count leading spaces
-	int	spaces=countLeadingSpaces(str,length);
+	int32_t	spaces=countLeadingSpaces(str,length);
 
 	// replace characters
-	int	index;
-	int	stop=length-spaces;
+	int32_t	index;
+	int32_t	stop=length-spaces;
 	for (index=0; index<stop; index++) {
 		str[index]=str[index+spaces];
 	}
@@ -467,14 +467,14 @@ void charstring::leftJustify(char *str, int length) {
 }
 
 
-void charstring::rightPad(char *str, int lngth, char padchar, bool fill) {
+void charstring::rightPad(char *str, int32_t lngth, char padchar, bool fill) {
 
 	if (!str) {
 		return;
 	}
 	
 	if (fill) {
-		int valuelength = charstring::length(str);
+		int32_t valuelength = charstring::length(str);
 		for(; valuelength<lngth; valuelength++){
 			str[valuelength]=' ';
 		}
@@ -482,14 +482,14 @@ void charstring::rightPad(char *str, int lngth, char padchar, bool fill) {
 	}
 
 	// count trailing spaces
-	int	spaces=countTrailingSpaces(str,lngth);
+	int32_t	spaces=countTrailingSpaces(str,lngth);
 	if (spaces==0){
 		return;
 	}
 
 	// replace characters
-	int	index;
-	int	stop=spaces-1;
+	int32_t	index;
+	int32_t	stop=spaces-1;
 	for (index=lngth-1; index>stop; index--) {
 		str[index]=str[index-spaces];
 	}
@@ -500,26 +500,26 @@ void charstring::rightPad(char *str, int lngth, char padchar, bool fill) {
 	}
 }
 
-void charstring::rightJustify(char *str, int length) {
+void charstring::rightJustify(char *str, int32_t length) {
 
 	rightPad(str,length,' ',false);
 }
 
-void charstring::center(char *str, int length) {
+void charstring::center(char *str, int32_t length) {
 
 	if (!str) {
 		return;
 	}
 
-	int	leadingspaces=countLeadingSpaces(str,length);
-	int	trailingspaces=countTrailingSpaces(str,length);
+	int32_t	leadingspaces=countLeadingSpaces(str,length);
+	int32_t	trailingspaces=countTrailingSpaces(str,length);
 
-	int	leftpad=(leadingspaces+trailingspaces)/2;
+	int32_t	leftpad=(leadingspaces+trailingspaces)/2;
 
 	if (leftpad>leadingspaces) {
 		// shift everything right
-		int	difference=leftpad-leadingspaces;
-		int	index;
+		int32_t	difference=leftpad-leadingspaces;
+		int32_t	index;
 		for (index=length-1; index>difference-1; index--) {
 			str[index]=str[index-difference];
 		}
@@ -528,8 +528,8 @@ void charstring::center(char *str, int length) {
 		}
 	} else if (leftpad<leadingspaces) {
 		// shift everything left
-		int	difference=leadingspaces-leftpad;
-		int	index;
+		int32_t	difference=leadingspaces-leftpad;
+		int32_t	index;
 		for (index=0; index<length-difference; index++) {
 			str[index]=str[index+difference];
 		}
@@ -539,27 +539,27 @@ void charstring::center(char *str, int length) {
 	}
 }
 
-int charstring::countLeadingSpaces(const char *str, int length) {
+int32_t charstring::countLeadingSpaces(const char *str, int32_t length) {
 
 	if (!str) {
 		return 0;
 	}
 
-	int	leadingspaces=0;
-	for (int index=0; str[index]==' ' && index<length; index++) {
+	int32_t	leadingspaces=0;
+	for (int32_t index=0; str[index]==' ' && index<length; index++) {
 		leadingspaces++;
 	}
 	return leadingspaces;
 }
 
-int charstring::countTrailingSpaces(const char *str, int length) {
+int32_t charstring::countTrailingSpaces(const char *str, int32_t length) {
 
 	if (!str) {
 		return 0;
 	}
 
-	int	trailingspaces=0;
-	for (int index=length-1; str[index]==' ' && index>-1; index--) {
+	int32_t	trailingspaces=0;
+	for (int32_t index=length-1; str[index]==' ' && index>-1; index--) {
 		trailingspaces++;
 	}
 	return trailingspaces;
@@ -586,7 +586,7 @@ char *charstring::parseNumber(uint16_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	int	strindex=strlength-1;
+	int32_t	strindex=strlength-1;
 	str[strindex--]='\0';
 	while (number) {
 		str[strindex--]='0'+number%10;
@@ -618,7 +618,7 @@ char *charstring::parseNumber(uint32_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	int	strindex=strlength-1;
+	int32_t	strindex=strlength-1;
 	str[strindex--]='\0';
 	while (number) {
 		str[strindex--]='0'+number%10;
@@ -650,7 +650,7 @@ char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	int	strindex=strlength-1;
+	int32_t	strindex=strlength-1;
 	str[strindex--]='\0';
 	while (number) {
 		str[strindex--]='0'+number%10;
@@ -859,20 +859,20 @@ char *charstring::copy(char *dest, size_t location,
 	return (dest && source)?strncpy(dest+location,source,size):NULL;
 }
 
-int charstring::compare(const char *str1, const char *str2) {
+int32_t charstring::compare(const char *str1, const char *str2) {
 	// FIXME: use strcoll?
 	return (str1 && str2)?strcmp(str1,str2):(str1!=str2);
 }
 
-int charstring::compare(const char *str1, const char *str2, size_t size) {
+int32_t charstring::compare(const char *str1, const char *str2, size_t size) {
 	return (str1 && str2)?strncmp(str1,str2,size):(str1!=str2);
 }
 
-int charstring::compareIgnoringCase(const char *str1, const char *str2) {
+int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
 	return (str1 && str2)?strcasecmp(str1,str2):(str1!=str2);
 }
 
-int charstring::compareIgnoringCase(const char *str1,
+int32_t charstring::compareIgnoringCase(const char *str1,
 						const char *str2, size_t size) {
 	return (str1 && str2)?strncasecmp(str1,str2,size):(str1!=str2);
 }
@@ -1062,11 +1062,11 @@ int64_t charstring::toInteger(const char *string, char **endptr) {
 	return toInteger(string,endptr,10);
 }
 
-int64_t charstring::toInteger(const char *string, int base) {
+int64_t charstring::toInteger(const char *string, int32_t base) {
 	return toInteger(string,NULL,base);
 }
 
-int64_t charstring::toInteger(const char *string, char **endptr, int base) {
+int64_t charstring::toInteger(const char *string, char **endptr, int32_t base) {
 	#ifdef RUDIMENTS_HAVE_STRTOLL
 	return (string)?strtoll(string,endptr,base):0;
 	#else
@@ -1082,12 +1082,12 @@ uint64_t charstring::toUnsignedInteger(const char *string, char **endptr) {
 	return toUnsignedInteger(string,endptr,10);
 }
 
-uint64_t charstring::toUnsignedInteger(const char *string, int base) {
+uint64_t charstring::toUnsignedInteger(const char *string, int32_t base) {
 	return toUnsignedInteger(string,NULL,base);
 }
 
 uint64_t charstring::toUnsignedInteger(const char *string,
-						char **endptr, int base) {
+						char **endptr, int32_t base) {
 	#ifdef RUDIMENTS_HAVE_STRTOULL
 	return (string)?strtoull(string,endptr,base):0;
 	#else
@@ -1117,9 +1117,9 @@ char *charstring::duplicate(const char *str, size_t length) {
 	return buffer;
 }
 
-void charstring::safePrint(const char *string, int length) {
+void charstring::safePrint(const char *string, int32_t length) {
 	const char	*ch=string;
-	for (int i=0; i<length; i++) {
+	for (int32_t i=0; i<length; i++) {
 		character::safePrint(*ch);
 		ch++;
 	}
@@ -1219,7 +1219,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 	// 2 passes,
 	// 1 to count the number of chunks to split the string into,
 	// 1 to actually split the string
-	for (int pass=0; pass<2; pass++) {
+	for (int32_t pass=0; pass<2; pass++) {
 
 		// set pointers to the beginning and end of the string
 		const char	*start=string;

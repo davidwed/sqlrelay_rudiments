@@ -26,32 +26,35 @@ namespace rudiments {
 
 class randomnumber {
 	public:
-		static	int	getSeed();
+		static	int32_t	getSeed();
 			// Generates a random number seed by first attempting
 			// to get one from /dev/urandom and if that fails,
 			// getting the number of seconds since 1970.
-		static	int	generateNumber(int seed);
+		static	int32_t	generateNumber(int32_t seed);
 			// Generates a random number between 0 and 2^32, based
 			// on seed, and returns it.  
 			//
 			// It is ok to use the result of this method as the 
 			// seed for the next number.
-		static	int	generateScaledNumber(int seed, 
-							int lower, int upper);
+		static	int32_t	generateScaledNumber(int32_t seed, 
+							int32_t lower,
+							int32_t upper);
 			// Generates a random number between 0 and 2^32, based
 			// on seed, scales that value to be between
 			// lower and upper and returns it.
 			//
 			// It is NOT ok to use the result of this method as 
 			// the seed for the next number.
-		static	int	scaleNumber(int number, int lower, int upper);
+		static	int32_t	scaleNumber(int32_t number,
+						int32_t lower,
+						int32_t upper);
 			// Scales number to be between lower and upper and 
 			// returns it.
 			//
 			// It is NOT ok to use the result of this method as 
 			// the seed for the next number.
 
-		static	int	getRandMax();
+		static	int32_t	getRandMax();
 			// Operating systems can generate random numbers
 			// between 0 and RAND_MAX.
 			// This method returns RAND_MAX.

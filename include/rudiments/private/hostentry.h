@@ -4,5 +4,5 @@
 	private:
 		bool	initialize(const char *hostname,
 					const char *address,
-					int len, int type);
+					int32_t len, int32_t type);
 		hostentryprivate	*pvt;

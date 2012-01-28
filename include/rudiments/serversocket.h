@@ -37,7 +37,7 @@ class serversocket : public server {
 				// Returns false if the system doesn't support
 				// blocking/nonblocking modes.
 
-		bool	lingerOnClose(int timeout);
+		bool	lingerOnClose(int32_t timeout);
 			// Instructs the socket to stay open for
 			// "timeout" seconds even after close() is
 			// called to allow it to receive any data that
@@ -62,7 +62,7 @@ class serversocket : public server {
 			//
 			// Returns true on success and false on failure.
 
-		virtual	bool	listen(int backlog);
+		virtual	bool	listen(int32_t backlog);
 			// Waits until a client connects then places
 			// that connection in queue.  Up to "backlog"
 			// connections may be queued before future

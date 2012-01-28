@@ -17,7 +17,7 @@ class intervaltimerprivate;
 
 class intervaltimer {
 	public:
-			intervaltimer(int which);
+			intervaltimer(int32_t which);
 			// Initialize the interval timer.  "which" must be one
 			// of:
 			// ITIMER_REAL - decrements in real time, raises SIGALRM

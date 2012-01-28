@@ -47,7 +47,7 @@ class filesystemprivate {
 #else
 	#error no statvfs, statfs or anything like it
 #endif
-		int	_fd;
+		int32_t	_fd;
 		bool	_closeflag;
 };
 
@@ -90,7 +90,7 @@ bool filesystem::initialize(const char *path) {
 	return (pvt->_fd!=-1 && getCurrentProperties());
 }
 
-bool filesystem::initialize(int fd) {
+bool filesystem::initialize(int32_t fd) {
 	close();
 	pvt->_closeflag=false;
 	pvt->_fd=fd;
@@ -99,7 +99,7 @@ bool filesystem::initialize(int fd) {
 
 bool filesystem::close() {
 	if (pvt->_fd>-1 && pvt->_closeflag) {
-		int	result;
+		int32_t	result;
 		do {
 			result=::close(pvt->_fd);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -114,10 +114,10 @@ bool filesystem::getCurrentProperties() {
 				pvt->_fd,(void *)&pvt->_st);
 }
 
-bool filesystem::getCurrentPropertiesInternal(int fd, void *st) {
+bool filesystem::getCurrentPropertiesInternal(int32_t fd, void *st) {
 	#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
 			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
-		int	result;
+		int32_t	result;
 		do {
 			#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
 				result=fstatvfs(fd,(struct statvfs *)st);
@@ -138,7 +138,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
 			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
 
-		int	result;
+		int32_t	result;
 		do {
 			#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
 				result=::statvfs(path,(struct statvfs *)st);
@@ -268,7 +268,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 #if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
 #define FSTATFS(fd,out,member) \
 	struct statvfs st; \
-	int	result=getCurrentPropertiesInternal(fd,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -276,7 +276,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	return true;
 #define CHARFSTATFS(fd,out,member) \
 	struct statvfs st; \
-	int	result=getCurrentPropertiesInternal(fd,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -285,7 +285,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 #else
 #define FSTATFS(fd,out,member) \
 	struct statfs st; \
-	int	result=getCurrentPropertiesInternal(fd,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -293,7 +293,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	return true;
 #define CHARFSTATFS(fd,out,member) \
 	struct statfs st; \
-	int	result=getCurrentPropertiesInternal(fd,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -304,7 +304,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 #if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
 #define STATFS(path,out,member) \
 	struct statvfs st; \
-	int	result=getCurrentPropertiesInternal(path,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -312,7 +312,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	return true;
 #define CHARSTATFS(path,out,member) \
 	struct statvfs st; \
-	int	result=getCurrentPropertiesInternal(path,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -321,7 +321,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 #else
 #define STATFS(path,out,member) \
 	struct statfs st; \
-	int	result=getCurrentPropertiesInternal(path,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -329,7 +329,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 	return true;
 #define CHARSTATFS(path,out,member) \
 	struct statfs st; \
-	int	result=getCurrentPropertiesInternal(path,(void *)&st); \
+	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
 	if (!result) { \
 		return false; \
 	} \
@@ -351,7 +351,7 @@ bool filesystem::getType(const char *path, int64_t *type) {
 #endif
 }
 
-bool filesystem::getType(int fd, int64_t *type) {
+bool filesystem::getType(int32_t fd, int64_t *type) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -399,7 +399,7 @@ bool filesystem::getBlockSize(const char *path, int64_t *size) {
 #endif
 }
 
-bool filesystem::getBlockSize(int fd, int64_t *size) {
+bool filesystem::getBlockSize(int32_t fd, int64_t *size) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -459,7 +459,7 @@ bool filesystem::getOptimumTransferBlockSize(const char *path,
 #endif
 }
 
-bool filesystem::getOptimumTransferBlockSize(int fd, int64_t *size) {
+bool filesystem::getOptimumTransferBlockSize(int32_t fd, int64_t *size) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
@@ -516,7 +516,7 @@ bool filesystem::getTotalBlocks(const char *path, int64_t *blocks) {
 #endif
 }
 
-bool filesystem::getTotalBlocks(int fd, int64_t *blocks) {
+bool filesystem::getTotalBlocks(int32_t fd, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -569,7 +569,7 @@ bool filesystem::getFreeBlocks(const char *path, int64_t *blocks) {
 #endif
 }
 
-bool filesystem::getFreeBlocks(int fd, int64_t *blocks) {
+bool filesystem::getFreeBlocks(int32_t fd, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -622,7 +622,7 @@ bool filesystem::getAvailableBlocks(const char *path, int64_t *blocks) {
 #endif
 }
 
-bool filesystem::getAvailableBlocks(int fd, int64_t *blocks) {
+bool filesystem::getAvailableBlocks(int32_t fd, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -675,7 +675,7 @@ bool filesystem::getTotalFileNodes(const char *path, int64_t *nodes) {
 #endif
 }
 
-bool filesystem::getTotalFileNodes(int fd, int64_t *nodes) {
+bool filesystem::getTotalFileNodes(int32_t fd, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -728,7 +728,7 @@ bool filesystem::getFreeFileNodes(const char *path, int64_t *nodes) {
 #endif
 }
 
-bool filesystem::getFreeFileNodes(int fd, int64_t *nodes) {
+bool filesystem::getFreeFileNodes(int32_t fd, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -774,7 +774,7 @@ bool filesystem::getAvailableFileNodes(const char *path, int64_t *nodes) {
 #endif
 }
 
-bool filesystem::getAvailableFileNodes(int fd, int64_t *nodes) {
+bool filesystem::getAvailableFileNodes(int32_t fd, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
@@ -808,7 +808,7 @@ bool filesystem::getFileSystemId(const char *path, int64_t *id) {
 #endif
 }
 
-bool filesystem::getFileSystemId(int fd, int64_t *id) {
+bool filesystem::getFileSystemId(int32_t fd, int64_t *id) {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
@@ -851,7 +851,7 @@ bool filesystem::getMaximumFileNameLength(const char *path,
 #endif
 }
 
-bool filesystem::getMaximumFileNameLength(int fd, int64_t *length) {
+bool filesystem::getMaximumFileNameLength(int32_t fd, int64_t *length) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
@@ -897,7 +897,7 @@ bool filesystem::getOwner(const char *path, uid_t *owner) {
 #endif
 }
 
-bool filesystem::getOwner(int fd, uid_t *owner) {
+bool filesystem::getOwner(int32_t fd, uid_t *owner) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -934,7 +934,7 @@ bool filesystem::getSyncWrites(const char *path, int64_t *swrites) {
 #endif
 }
 
-bool filesystem::getSyncWrites(int fd, int64_t *swrites) {
+bool filesystem::getSyncWrites(int32_t fd, int64_t *swrites) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -969,7 +969,7 @@ bool filesystem::getAsyncWrites(const char *path, int64_t *aswrites) {
 #endif
 }
 
-bool filesystem::getAsyncWrites(int fd, int64_t *aswrites) {
+bool filesystem::getAsyncWrites(int32_t fd, int64_t *aswrites) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -1005,7 +1005,7 @@ bool filesystem::getMountPoint(const char *path, const char **mtpt) {
 #endif
 }
 
-bool filesystem::getMountPoint(int fd, const char **mtpt) {
+bool filesystem::getMountPoint(int32_t fd, const char **mtpt) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -1040,7 +1040,7 @@ bool filesystem::getSyncReads(const char *path, int64_t *sreads) {
 #endif
 }
 
-bool filesystem::getSyncReads(int fd, int64_t *sreads) {
+bool filesystem::getSyncReads(int32_t fd, int64_t *sreads) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,sreads,f_syncreads)
@@ -1069,7 +1069,7 @@ bool filesystem::getAsyncReads(const char *path, int64_t *asreads) {
 #endif
 }
 
-bool filesystem::getAsyncReads(int fd, int64_t *asreads) {
+bool filesystem::getAsyncReads(int32_t fd, int64_t *asreads) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 	FSTATFS(fd,asreads,f_asyncreads)
@@ -1100,7 +1100,7 @@ bool filesystem::getDeviceName(const char *path, const char **devname) {
 #endif
 }
 
-bool filesystem::getDeviceName(int fd, const char **devname) {
+bool filesystem::getDeviceName(int32_t fd, const char **devname) {
 #if defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -1133,7 +1133,7 @@ bool filesystem::getFilesystemSpecificString(const char *path,
 #endif
 }
 
-bool filesystem::getFilesystemSpecificString(int fd, const char **str) {
+bool filesystem::getFilesystemSpecificString(int32_t fd, const char **str) {
 #ifdef RUDIMENTS_HAVE_STATVFS
 	CHARFSTATFS(fd,str,f_fstr)
 #else
@@ -1167,7 +1167,7 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 	#else
 		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
 			struct statfs st;
-			int	result;
+			int32_t	result;
 			do {
 				result=::statfs(path,&st);
 			} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1184,7 +1184,7 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 #endif
 }
 
-bool filesystem::getTypeName(int fd, const char **name) {
+bool filesystem::getTypeName(int32_t fd, const char **name) {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -1197,7 +1197,7 @@ bool filesystem::getTypeName(int fd, const char **name) {
 	#else
 		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
 			struct statfs st;
-			int	result;
+			int32_t	result;
 			do {
 				result=fstatfs(fd,&st);
 			} while (result==-1 && error::getErrorNumber()==EINTR);

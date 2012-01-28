@@ -25,11 +25,11 @@ namespace rudiments {
 class intervaltimerprivate {
 	friend class intervaltimer;
 	public:
-		int		_which;
+		int32_t		_which;
 		itimerval	_values;
 };
 
-intervaltimer::intervaltimer(int which) {
+intervaltimer::intervaltimer(int32_t which) {
 	pvt=new intervaltimerprivate;
 	pvt->_which=which;
 	initialize();
@@ -85,7 +85,7 @@ bool intervaltimer::start() const {
 bool intervaltimer::start(long *seconds, long *microseconds) const {
 	#ifdef RUDIMENTS_HAVE_SETITIMER
 		itimerval	oldval;
-		int		result;
+		int32_t		result;
 		do {
 			// Solaris 8 complains if the 2nd argument isn't cast
 			result=setitimer(pvt->_which,
@@ -108,7 +108,7 @@ bool intervaltimer::start(long *seconds, long *microseconds) const {
 bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
 	#ifdef RUDIMENTS_HAVE_SETITIMER
 		itimerval	val;
-		int	result;
+		int32_t	result;
 		do {
 			result=getitimer(pvt->_which,&val);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

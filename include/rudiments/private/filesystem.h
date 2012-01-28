@@ -6,7 +6,7 @@
 		static	const char	*getFsTypeName(int64_t type);
 		void	filesystemClone(const filesystem &f);
 		static	bool	getCurrentPropertiesInternal(
-						int fd, void *st);
+						int32_t fd, void *st);
 		static	bool	getCurrentPropertiesInternal(
 					const char *path, void *st);
 		filesystemprivate	*pvt;

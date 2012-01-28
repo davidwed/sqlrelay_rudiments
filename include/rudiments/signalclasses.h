@@ -30,19 +30,19 @@ class signalset {
 	public:
 			signalset();
 			~signalset();
-		bool	addSignal(int signum);
+		bool	addSignal(int32_t signum);
 			// Add the signal "signum" to the set.
 			// Returns true on success and false on failure.
 		bool	addAllSignals();
 			// Add all signals to the set.
 			// Returns true on success and false on failure.
-		bool	removeSignal(int signum);
+		bool	removeSignal(int32_t signum);
 			// Remove the signal "signum" from the set.
 			// Returns true on success and false on failure.
 		bool	removeAllSignals();
 			// Remove all signals from the set.
 			// Returns true on success and false on failure.
-		int	signalIsInSet(int signum) const;
+		int32_t	signalIsInSet(int32_t signum) const;
 			// Returns 1 if the signal "signum" is in the 
 			// set, 0 if it is not and -1 on error.
 
@@ -55,13 +55,13 @@ class signalset {
 // for signals.
 class signalmanager {
 	public:
-		static	bool	sendSignal(pid_t processid, int signum);
+		static	bool	sendSignal(pid_t processid, int32_t signum);
 				// Send signal "signum" to process "processid".
 				// Returns true on success and false on failure.
-		static	bool	raiseSignal(int signum);
+		static	bool	raiseSignal(int32_t signum);
 				// Send signal "signum" to self.
 				// Returns true on success and false on failure.
-		static	unsigned int	alarm(unsigned int seconds);
+		static	uint32_t	alarm(uint32_t seconds);
 				// Sends signal SIGALRM to self after "seconds"
 				// have elapsed.  If "seconds" is 0, the alarm
 				// is disabled.  Calling this method cancels
@@ -100,14 +100,14 @@ class signalhandler {
 			// Returns a pointer to the function that will be
 			// called when the process receives the signal.
 
-		bool	handleSignal(int signum);
+		bool	handleSignal(int32_t signum);
 			// Instructs the program to handle "signum" by calling
 			// the handler set previously in setHandler().  May
 			// be called multiple times to associate the same
 			// handler with several signals.
 			//
 			// Returns true on success and false on failure.
-		bool	handleSignal(int signum, signalhandler *oldhandler);
+		bool	handleSignal(int32_t signum, signalhandler *oldhandler);
 			// Instructs the program to handle "signum" by calling
 			// the handler set previously in setHandler().  May
 			// be called multiple times to associate the same
@@ -121,13 +121,13 @@ class signalhandler {
 		// process.
 		void	removeAllFlags();
 			// Remove all flags.
-		void	addFlag(int flag);
+		void	addFlag(int32_t flag);
 			// Add "flag" to the set of flags modifying the
 	 		// behavior of this signal handler.
-		void	removeFlag(int flag);
+		void	removeFlag(int32_t flag);
 			// Remove "flag" from the set of flags modifying the
 	 		// behavior of this signal handler.
-		int	getFlags() const;
+		int32_t	getFlags() const;
 			// Return the set of flags modifying the behavior of 
 			// this signal handler.
 

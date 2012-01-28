@@ -39,7 +39,7 @@ class unixserversocket : public serversocket, private unixsocketutil {
 
 		bool	listen(const char *filename,
 					mode_t mask,
-					int backlog);
+					int32_t backlog);
 				// Listen on "filename" and allow "backlog"
 				// connections to pile up before refusing them.
 				// Set the permissions on "filename" using
@@ -66,7 +66,7 @@ class unixserversocket : public serversocket, private unixsocketutil {
 			// Associates the socket with an address.
 			//
 			// Returns true on success and false on failure.
-		bool	listen(int backlog);
+		bool	listen(int32_t backlog);
 			// Waits until a client connects then places
 			// that connection in queue.  Up to "backlog"
 			// connections may be queued before future

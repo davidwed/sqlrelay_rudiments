@@ -22,8 +22,8 @@ class memorymap {
 			~memorymap();
 			// destroys the memorymap, detaching if necessary
 
-		bool	attach(int fd, off64_t offset, size_t len,
-						int protection, int flags);
+		bool	attach(int32_t fd, off64_t offset, size_t len,
+					int32_t protection, int32_t flags);
 			// Attaches the memorymap to file descriptor "fd" at
 			// "offset" for "len" bytes.
 			//
@@ -63,10 +63,11 @@ class memorymap {
 			//
 			// Returns true on success and false on failure.
 
-		bool	setProtection(int protection);
+		bool	setProtection(int32_t protection);
 			// Sets the protection of the entire memory map to
 			// "protection".  See protect() below for more info.
-		bool	setProtection(off64_t offset, size_t len, int protection);
+		bool	setProtection(off64_t offset, size_t len,
+							int32_t protection);
 			// Sets the protection of the memory map to "protection"
 			// for "len" bytes, starting at "offset".
 			//

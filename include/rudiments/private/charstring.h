@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	private:
-		static	int	countLeadingSpaces(const char *string,
-								int length);
-		static	int	countTrailingSpaces(const char *string,
-								int length);
+		static	int32_t	countLeadingSpaces(const char *string,
+								int32_t length);
+		static	int32_t	countTrailingSpaces(const char *string,
+								int32_t length);

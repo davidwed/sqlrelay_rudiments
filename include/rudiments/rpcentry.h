@@ -21,12 +21,12 @@ class rpcentry {
 		// these methods.
 		//
 		// These methods return true on success and false on failure.
-		static	bool	getNumber(const char *name, int *number);
+		static	bool	getNumber(const char *name, int32_t *number);
 		static	bool	getAliasList(const char *name,
 						char ***aliaslist);
 
-		static	bool	getName(int number, char **name);
-		static	bool	getAliasList(int number, char ***aliaslist);
+		static	bool	getName(int32_t number, char **name);
+		static	bool	getAliasList(int32_t number, char ***aliaslist);
 
 		// If you need to look up a rpc entry and refer to multiple
 		// fields, use these methods.
@@ -38,12 +38,12 @@ class rpcentry {
 		bool	initialize(const char *name);
 			// Looks up a rpc entry by name.
 			// Returns true on success and false on failure.
-		bool	initialize(int number);
+		bool	initialize(int32_t number);
 			// Looks up a rpc entry by number.
 			// Returns true on success and false on failure.
 
 		const char		*getName() const;
-		int			getNumber() const;
+		int32_t			getNumber() const;
 		const char * const	*getAliasList() const;
 
 		void	print() const;

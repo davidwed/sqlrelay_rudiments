@@ -36,8 +36,8 @@ class syslogdestination : public logdestination {
 		syslogdestination	&operator=(const syslogdestination &f);
 		virtual		~syslogdestination();
 
-		void	open(const char *ident, int option,
-					int facility, int priority);
+		void	open(const char *ident, int32_t option,
+					int32_t facility, int32_t priority);
 		void	close();
 	#include <rudiments/private/syslogdestination.h>
 };

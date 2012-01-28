@@ -75,7 +75,7 @@ bool serversocket::useBlockingMode() const {
 #endif
 }
 
-bool serversocket::lingerOnClose(int timeout) {
+bool serversocket::lingerOnClose(int32_t timeout) {
 	return setLingerOnClose(timeout,1);
 }
 
@@ -91,7 +91,7 @@ bool serversocket::dontReuseAddresses() {
 	return setReuseAddresses(0);
 }
 
-bool serversocket::setLingerOnClose(int timeout, int onoff) {
+bool serversocket::setLingerOnClose(int32_t timeout, int32_t onoff) {
 	#ifdef SO_LINGER
 		struct	linger	ling;
 		ling.l_onoff=onoff;
@@ -105,14 +105,14 @@ bool serversocket::setLingerOnClose(int timeout, int onoff) {
 	#endif
 }
 
-bool serversocket::setReuseAddresses(int onoff) {
+bool serversocket::setReuseAddresses(int32_t onoff) {
 	int	value=onoff;
 	return !setSockOpt(SOL_SOCKET,SO_REUSEADDR,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 					(socklen_t)sizeof(int));
 }
 
-bool serversocket::listen(int backlog) {
+bool serversocket::listen(int32_t backlog) {
 	int	result;
 	do {
 		result=::listen(fd(),backlog);
@@ -160,7 +160,7 @@ ssize_t serversocket::lowLevelWrite(const void *buf, ssize_t count) const {
 			count,0);
 }
 
-int serversocket::lowLevelClose() {
+int32_t serversocket::lowLevelClose() {
 	#ifdef RUDIMENTS_HAVE_CLOSESOCKET
 		return closesocket(fd());
 	#else

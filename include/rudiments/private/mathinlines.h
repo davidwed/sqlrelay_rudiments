@@ -8,11 +8,11 @@
 namespace rudiments {
 #endif
 
-RUDIMENTS_INLINE int math::absoluteValue(int j) {
+RUDIMENTS_INLINE int32_t math::absoluteValue(int32_t j) {
 	return abs(j);
 }
 
-RUDIMENTS_INLINE div_t math::divide(int numer, int denom) {
+RUDIMENTS_INLINE div_t math::divide(int32_t numer, int32_t denom) {
 	return div(numer,denom);
 }
 
@@ -141,7 +141,7 @@ RUDIMENTS_INLINE float math::naturalExponent(float x) {
 	return expf(x);
 }
 
-RUDIMENTS_INLINE float math::normalize(float x, int *exp) {
+RUDIMENTS_INLINE float math::normalize(float x, int32_t *exp) {
 	return frexpf(x,exp);
 }
 
@@ -217,7 +217,7 @@ RUDIMENTS_INLINE float math::truncate(float x) {
 	return truncf(x);
 }
 
-RUDIMENTS_INLINE float math::remainder(float x, float y, int *quo) {
+RUDIMENTS_INLINE float math::remainder(float x, float y, int32_t *quo) {
 	return remquof(x,y,quo);
 }
 
@@ -273,7 +273,7 @@ RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, float n) {
 	return scalbf(x,n);
 }
 
-RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, int n) {
+RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, int32_t n) {
 	return scalbnf(x,n);
 }
 
@@ -281,7 +281,7 @@ RUDIMENTS_INLINE float math::scaleByRadixToPower(float x, long n) {
 	return scalblnf(x,n);
 }
 
-RUDIMENTS_INLINE int math::integralExponent(float x) {
+RUDIMENTS_INLINE int32_t math::integralExponent(float x) {
 	return ilogbf(x);
 }
 
@@ -429,7 +429,7 @@ RUDIMENTS_INLINE double math::naturalExponent(double x) {
 	return exp(x);
 }
 
-RUDIMENTS_INLINE double math::normalize(double x, int *exp) {
+RUDIMENTS_INLINE double math::normalize(double x, int32_t *exp) {
 	return frexp(x,exp);
 }
 
@@ -505,7 +505,7 @@ RUDIMENTS_INLINE double math::truncate(double x) {
 	return trunc(x);
 }
 
-RUDIMENTS_INLINE double math::remainder(double x, double y, int *quo) {
+RUDIMENTS_INLINE double math::remainder(double x, double y, int32_t *quo) {
 	return remquo(x,y,quo);
 }
 
@@ -561,7 +561,7 @@ RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, double n) {
 	return scalb(x,n);
 }
 
-RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, int n) {
+RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, int32_t n) {
 	return scalbn(x,n);
 }
 
@@ -569,7 +569,7 @@ RUDIMENTS_INLINE double math::scaleByRadixToPower(double x, long n) {
 	return scalbln(x,n);
 }
 
-RUDIMENTS_INLINE int math::integralExponent(double x) {
+RUDIMENTS_INLINE int32_t math::integralExponent(double x) {
 	return ilogb(x);
 }
 
@@ -716,7 +716,7 @@ RUDIMENTS_INLINE long double math::naturalExponent(long double x) {
 	return expl(x);
 }
 
-RUDIMENTS_INLINE long double math::normalize(long double x, int *exp) {
+RUDIMENTS_INLINE long double math::normalize(long double x, int32_t *exp) {
 	return frexpl(x,exp);
 }
 
@@ -793,7 +793,7 @@ RUDIMENTS_INLINE long double math::truncate(long double x) {
 }
 
 RUDIMENTS_INLINE long double math::remainder(long double x,
-						long double y, int *quo) {
+						long double y, int32_t *quo) {
 	return remquol(x,y,quo);
 }
 
@@ -850,7 +850,8 @@ RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x,
 	return scalbl(x,n);
 }
 
-RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x, int n) {
+RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x,
+								int32_t n) {
 	return scalbnl(x,n);
 }
 
@@ -858,7 +859,7 @@ RUDIMENTS_INLINE long double math::scaleByRadixToPower(long double x, long n) {
 	return scalblnl(x,n);
 }
 
-RUDIMENTS_INLINE int math::integralExponent(long double x) {
+RUDIMENTS_INLINE int32_t math::integralExponent(long double x) {
 	return ilogbl(x);
 }
 
@@ -900,15 +901,15 @@ RUDIMENTS_INLINE long double math::real(long double complex z) {
 	return creall(z);
 }
 
-RUDIMENTS_INLINE float math::loadExponent(float x, int exp) {
+RUDIMENTS_INLINE float math::loadExponent(float x, int32_t exp) {
 	return ldexpf(x,exp);
 }
 
-RUDIMENTS_INLINE double math::loadExponent(double x, int exp) {
+RUDIMENTS_INLINE double math::loadExponent(double x, int32_t exp) {
 	return ldexp(x,exp);
 }
 
-RUDIMENTS_INLINE long double math::loadExponent(long double x, int exp) {
+RUDIMENTS_INLINE long double math::loadExponent(long double x, int32_t exp) {
 	return ldexpl(x,exp);
 }
 

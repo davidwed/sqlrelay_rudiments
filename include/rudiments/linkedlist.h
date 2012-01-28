@@ -33,7 +33,7 @@ class linkedlistnode {
 		datatype	getData() const;
 				// Return the data stored in the node.
 
-		int	compare(datatype data) const;
+		int32_t	compare(datatype data) const;
 			// Returns -1,0 or 1 if the data stored in the
 			// node is less than, equal to or greater than
 			// "data".

@@ -77,7 +77,7 @@ const char * const *protocolentry::getAliasList() const {
 	return pvt->_pe->p_aliases;
 }
 
-int protocolentry::getNumber() const {
+int32_t protocolentry::getNumber() const {
 	return pvt->_pe->p_proto;
 }
 
@@ -101,11 +101,11 @@ bool protocolentry::initialize(const char *protocolname) {
 	return initialize(protocolname,0);
 }
 
-bool protocolentry::initialize(int number) {
+bool protocolentry::initialize(int32_t number) {
 	return initialize(NULL,number);
 }
 
-bool protocolentry::initialize(const char *protocolname, int number) {
+bool protocolentry::initialize(const char *protocolname, int32_t number) {
 
 	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
@@ -119,7 +119,7 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R_5) && \
 				defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R_5)
@@ -167,11 +167,11 @@ bool protocolentry::initialize(const char *protocolname, int number) {
 bool protocolentry::getAliasList(const char *protocolname, char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; pe.getAliasList()[counter]; counter++);
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			alias[i]=charstring::duplicate(pe.getAliasList()[i]);
 		}
 		*aliaslist=alias;
@@ -180,7 +180,7 @@ bool protocolentry::getAliasList(const char *protocolname, char ***aliaslist) {
 	return false;
 }
 
-bool protocolentry::getNumber(const char *protocolname, int *number) {
+bool protocolentry::getNumber(const char *protocolname, int32_t *number) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
 		*number=pe.getNumber();
@@ -189,7 +189,7 @@ bool protocolentry::getNumber(const char *protocolname, int *number) {
 	return false;
 }
 
-bool protocolentry::getName(int number, char **name) {
+bool protocolentry::getName(int32_t number, char **name) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		*name=charstring::duplicate(pe.getName());
@@ -198,14 +198,14 @@ bool protocolentry::getName(int number, char **name) {
 	return false;
 }
 
-bool protocolentry::getAliasList(int number, char ***aliaslist) {
+bool protocolentry::getAliasList(int32_t number, char ***aliaslist) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; pe.getAliasList()[counter]; counter++);
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			alias[i]=charstring::duplicate(pe.getAliasList()[i]);
 		}
 		*aliaslist=alias;
@@ -222,7 +222,7 @@ void protocolentry::print() const {
 
 	printf("Name: %s\n",getName());
 	printf("Alias list:\n");
-	for (int i=0; getAliasList()[i]; i++) {
+	for (int32_t i=0; getAliasList()[i]; i++) {
 		printf("	%s\n",getAliasList()[i]);
 	}
 	printf("Number: %d\n",getNumber());

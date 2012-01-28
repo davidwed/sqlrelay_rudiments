@@ -103,7 +103,7 @@ long shadowentry::getLastChangeDate() const {
 	#endif
 }
 
-int shadowentry::getDaysBeforeChangeAllowed() const {
+int32_t shadowentry::getDaysBeforeChangeAllowed() const {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		return pvt->_sp->sp_min;
 	#else
@@ -111,7 +111,7 @@ int shadowentry::getDaysBeforeChangeAllowed() const {
 	#endif
 }
 
-int shadowentry::getDaysBeforeChangeRequired() const {
+int32_t shadowentry::getDaysBeforeChangeRequired() const {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		return pvt->_sp->sp_max;
 	#else
@@ -119,7 +119,7 @@ int shadowentry::getDaysBeforeChangeRequired() const {
 	#endif
 }
 
-int shadowentry::getDaysBeforeExpirationWarning() const {
+int32_t shadowentry::getDaysBeforeExpirationWarning() const {
 	#if defined(RUDIMENTS_HAVE_SP_WARN)
 		return pvt->_sp->sp_warn;
 	#else
@@ -127,7 +127,7 @@ int shadowentry::getDaysBeforeExpirationWarning() const {
 	#endif
 }
 
-int shadowentry::getDaysOfInactivityAllowed() const {
+int32_t shadowentry::getDaysOfInactivityAllowed() const {
 	#if defined(RUDIMENTS_HAVE_SP_INACT)
 		return pvt->_sp->sp_inact;
 	#else
@@ -135,7 +135,7 @@ int shadowentry::getDaysOfInactivityAllowed() const {
 	#endif
 }
 
-int shadowentry::getExpirationDate() const {
+int32_t shadowentry::getExpirationDate() const {
 	#if defined(RUDIMENTS_HAVE_SP_EXPIRE)
 		return pvt->_sp->sp_expire;
 	#else
@@ -143,7 +143,7 @@ int shadowentry::getExpirationDate() const {
 	#endif
 }
 
-int shadowentry::getFlag() const {
+int32_t shadowentry::getFlag() const {
 	#if defined(RUDIMENTS_HAVE_SP_FLAG)
 		return pvt->_sp->sp_flag;
 	#else
@@ -179,7 +179,7 @@ bool shadowentry::initialize(const char *username) {
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETSPNAM_R_5)
 			if (!getspnam_r(username,&pvt->_spbuffer,
@@ -235,7 +235,8 @@ bool shadowentry::getLastChangeDate(const char *username, long *lstchg) {
 	return false;
 }
 
-bool shadowentry::getDaysBeforeChangeAllowed(const char *username, int *min) {
+bool shadowentry::getDaysBeforeChangeAllowed(const char *username,
+							int32_t *min) {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		shadowentry	sp;
 		if (sp.initialize(username)) {
@@ -246,7 +247,8 @@ bool shadowentry::getDaysBeforeChangeAllowed(const char *username, int *min) {
 	return false;
 }
 
-bool shadowentry::getDaysBeforeChangeRequired(const char *username, int *max) {
+bool shadowentry::getDaysBeforeChangeRequired(const char *username,
+							int32_t *max) {
 	#ifdef RUDIMENTS_HAVE_SHADOW
 		shadowentry	sp;
 		if (sp.initialize(username)) {
@@ -258,7 +260,7 @@ bool shadowentry::getDaysBeforeChangeRequired(const char *username, int *max) {
 }
 
 bool shadowentry::getDaysBeforeExpirationWarning(const char *username,
-								int *warn) {
+							int32_t *warn) {
 	#ifdef RUDIMENTS_HAVE_SP_WARN
 		shadowentry	sp;
 		if (sp.initialize(username)) {
@@ -272,7 +274,8 @@ bool shadowentry::getDaysBeforeExpirationWarning(const char *username,
 	#endif
 }
 
-bool shadowentry::getDaysOfInactivityAllowed(const char *username, int *inact) {
+bool shadowentry::getDaysOfInactivityAllowed(const char *username,
+							int32_t *inact) {
 	#ifdef RUDIMENTS_HAVE_SP_INACT
 		shadowentry	sp;
 		if (sp.initialize(username)) {
@@ -286,7 +289,7 @@ bool shadowentry::getDaysOfInactivityAllowed(const char *username, int *inact) {
 	#endif
 }
 
-bool shadowentry::getExpirationDate(const char *username, int *expire) {
+bool shadowentry::getExpirationDate(const char *username, int32_t *expire) {
 	#ifdef RUDIMENTS_HAVE_SP_EXPIRE
 		shadowentry	sp;
 		if (sp.initialize(username)) {
@@ -300,7 +303,7 @@ bool shadowentry::getExpirationDate(const char *username, int *expire) {
 	#endif
 }
 
-bool shadowentry::getFlag(const char *username, int *flag) {
+bool shadowentry::getFlag(const char *username, int32_t *flag) {
 	#ifdef RUDIMENTS_HAVE_SP_FLAG
 		shadowentry	sp;
 		if (sp.initialize(username)) {

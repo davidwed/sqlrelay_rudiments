@@ -78,7 +78,7 @@ const char *serviceentry::getName() const {
 	return pvt->_se->s_name;
 }
 
-int serviceentry::getPort() const {
+int32_t serviceentry::getPort() const {
 	return filedescriptor::netToHost(
 			static_cast<uint16_t>(pvt->_se->s_port));
 }
@@ -111,11 +111,11 @@ bool serviceentry::initialize(const char *servicename, const char *protocol) {
 	return initialize(servicename,0,protocol);
 }
 
-bool serviceentry::initialize(int port, const char *protocol) {
+bool serviceentry::initialize(int32_t port, const char *protocol) {
 	return initialize(NULL,port,protocol);
 }
 
-bool serviceentry::initialize(const char *servicename, int port,
+bool serviceentry::initialize(const char *servicename, int32_t port,
 						const char *protocol) {
 
 	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
@@ -130,7 +130,7 @@ bool serviceentry::initialize(const char *servicename, int port,
 		// requires that you pass it a pre-allocated buffer.  If the
 		// buffer is too small, it returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R_6) && \
 				defined(RUDIMENTS_HAVE_GETSERVBYPORT_R_6)
@@ -188,11 +188,11 @@ bool serviceentry::getAliasList(const char *servicename,
 							char ***aliaslist) {
 	serviceentry	se;
 	if (se.initialize(servicename,protocol)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; se.getAliasList()[counter]; counter++);
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			alias[i]=charstring::duplicate(se.getAliasList()[i]);
 		}
 		*aliaslist=alias;
@@ -202,7 +202,7 @@ bool serviceentry::getAliasList(const char *servicename,
 }
 
 bool serviceentry::getPort(const char *servicename, const char *protocol,
-								int *port) {
+								int32_t *port) {
 	serviceentry	se;
 	if (se.initialize(servicename,protocol)) {
 		*port=se.getPort();
@@ -211,7 +211,7 @@ bool serviceentry::getPort(const char *servicename, const char *protocol,
 	return false;
 }
 
-bool serviceentry::getName(int port, const char *protocol, char **name) {
+bool serviceentry::getName(int32_t port, const char *protocol, char **name) {
 	serviceentry	se;
 	if (se.initialize(port,protocol)) {
 		*name=charstring::duplicate(se.getName());
@@ -220,15 +220,15 @@ bool serviceentry::getName(int port, const char *protocol, char **name) {
 	return false;
 }
 
-bool serviceentry::getAliasList(int port, const char *protocol,
+bool serviceentry::getAliasList(int32_t port, const char *protocol,
 							char ***aliaslist) {
 	serviceentry	se;
 	if (se.initialize(port,protocol)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; se.getAliasList()[counter]; counter++);
 		char	**alias=new char *[counter+1];
 		alias[counter]=NULL;
-		for (int i=0; i<counter; i++) {
+		for (int32_t i=0; i<counter; i++) {
 			alias[i]=charstring::duplicate(se.getAliasList()[i]);
 		}
 		*aliaslist=alias;
@@ -247,7 +247,7 @@ void serviceentry::print() const {
 	printf("Port: %d\n",getPort());
 	printf("Protocol: %s\n",getProtocol());
 	printf("Alias list:\n");
-	for (int i=0; getAliasList()[i]; i++) {
+	for (int32_t i=0; getAliasList()[i]; i++) {
 		printf("	%s\n",getAliasList()[i]);
 	}
 }

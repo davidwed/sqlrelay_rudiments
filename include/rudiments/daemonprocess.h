@@ -53,20 +53,20 @@ class daemonprocess {
 		//
 		// These methods return 1 on success, 0 on failure and
 		// -1 on error.
-		int	runAsUser(const char *username) const;
+		int32_t	runAsUser(const char *username) const;
 			// Note that runAsUser() uses the passwdentry
 			// class.  If you are using this method in a
 			// multithreaded application, you may need to
 			// supply the passwdentry classes a mutex.
 			// See passwdentry.h for more detail.
-		int	runAsGroup(const char *groupname) const;
+		int32_t	runAsGroup(const char *groupname) const;
 			// Note that runAsGroup() uses the groupentry
 			// class.  If you are using this method in a
 			// multithreaded application, you may need to
 			// supply the groupentry classes a mutex.
 			// See groupentry.h for more detail.
-		int	runAsUserId(uid_t uid) const;
-		int	runAsGroupId(gid_t gid) const;
+		int32_t	runAsUserId(uid_t uid) const;
+		int32_t	runAsGroupId(gid_t gid) const;
 
 		static	void	handleShutDown(void (*shutdownfunction)(int));
 				// This method allows you to designate a

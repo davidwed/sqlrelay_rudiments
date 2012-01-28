@@ -42,7 +42,7 @@ void modemutil::initialize(const char *device, const char *baud) {
 	pvt->_baud=baud;
 }
 
-bool modemutil::configureSerialPort(int fd, const char *baud) {
+bool modemutil::configureSerialPort(int32_t fd, const char *baud) {
 
 	serialportprofile	spp;
 	spp.baud(baud);

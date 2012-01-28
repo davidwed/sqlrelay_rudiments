@@ -15,38 +15,38 @@
 						long sec, long usec) const;
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
 						long sec, long usec) const;
-		virtual	int	safeSelect(long sec, long usec,
+		virtual	int32_t	safeSelect(long sec, long usec,
 						bool read, bool write) const;
-		virtual	int	safePoll(long sec, long usec,
+		virtual	int32_t	safePoll(long sec, long usec,
 						bool read, bool write) const;
-		bool		setNoDelay(int onoff);
+		bool		setNoDelay(int32_t onoff);
 
 		#ifdef RUDIMENTS_HAS_SSL
 		virtual	BIO	*newSSLBIO() const;
 		#endif
 
-		int	getSockOpt(int level, int optname,
+		int32_t	getSockOpt(int32_t level, int32_t optname,
 					void *optval, socklen_t *optlen);
-		int	setSockOpt(int level, int optname,
+		int32_t	setSockOpt(int32_t level, int32_t optname,
 					const void *optval, socklen_t optlen);
 
 		virtual	ssize_t	lowLevelRead(void *buf,
 						ssize_t count) const;
 		virtual	ssize_t	lowLevelWrite(const void *buf,
 						ssize_t count) const;
-		virtual int	lowLevelClose();
+		virtual int32_t	lowLevelClose();
 
 		const char	*type() const;
 		void		type(const char *tp);
 
-		int	fd() const;
-		void	fd(int filedes);
+		int32_t	fd() const;
+		void	fd(int32_t filedes);
 
 		#ifdef RUDIMENTS_HAS_SSL
 		SSL_CTX	*ctx();
 		SSL	*ssl();
-		int	sslresult();
-		void	sslresult(int sslrslt);
+		int32_t	sslresult();
+		void	sslresult(int32_t sslrslt);
 		#endif
 
 	private:

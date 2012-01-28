@@ -134,7 +134,7 @@ namespace rudiments {
 class filedescriptorprivate {
 	friend class filedescriptor;
 	private:
-		int	_fd;
+		int32_t	_fd;
 		bool	_retryinterruptedreads;
 		bool	_retryinterruptedwrites;
 		bool	_retryinterruptedwaits;
@@ -156,7 +156,7 @@ class filedescriptorprivate {
 		SSL_CTX	*_ctx;
 		SSL	*_ssl;
 		BIO	*_bio;
-		int	_sslresult;
+		int32_t	_sslresult;
 		#endif
 
 		const char	*_type;
@@ -295,24 +295,24 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 	return true;
 }
 
-int filedescriptor::getFileDescriptor() const {
+int32_t filedescriptor::getFileDescriptor() const {
 	return pvt->_fd;
 }
 
-void filedescriptor::setFileDescriptor(int filedesc) {
+void filedescriptor::setFileDescriptor(int32_t filedesc) {
 	pvt->_fd=filedesc;
 }
 
-int filedescriptor::duplicate() const {
-	int	result;
+int32_t filedescriptor::duplicate() const {
+	int32_t	result;
 	do {
 		result=dup(pvt->_fd);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
 
-bool filedescriptor::duplicate(int newfd) const {
-	int	result;
+bool filedescriptor::duplicate(int32_t newfd) const {
+	int32_t	result;
 	do {
 		result=dup2(pvt->_fd,newfd);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -724,7 +724,7 @@ bool filedescriptor::close() {
 	}
 #endif
 	if (pvt->_fd!=-1) {
-		int	result;
+		int32_t	result;
 		do {
 			result=lowLevelClose();
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -736,7 +736,7 @@ bool filedescriptor::close() {
 	return true;
 }
 
-int filedescriptor::lowLevelClose() {
+int32_t filedescriptor::lowLevelClose() {
 	return ::close(pvt->_fd);
 }
 
@@ -836,25 +836,25 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 						long sec, long usec) const {
 
 	// initialize a buffer
-	int	buffersize=512;
+	int32_t	buffersize=512;
 	if (buffer) {
 		*buffer=new char[buffersize];
 	}
 
 	// initialize termination detector
-	int	termlen=charstring::length(terminator);
+	int32_t	termlen=charstring::length(terminator);
 	char	*term=new char[termlen];
-	for (int i=0; i<termlen; i++) {
+	for (int32_t i=0; i<termlen; i++) {
 		term[i]='\0';
 	}
 
 	// initialize some variables
 	char	charbuffer;
-	int	sizeread;
-	int	totalread=0;
-	int	escaped=0;
-	int	copytobuffer;
-	int	copytoterm;
+	int32_t	sizeread;
+	int32_t	totalread=0;
+	int32_t	escaped=0;
+	int32_t	copytobuffer;
+	int32_t	copytoterm;
 
 	// loop, getting 1 character at a time
 	for (;;) {
@@ -914,7 +914,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 			if (copytoterm) {
 
 				// update terminator detector
-				for (int i=0; i<termlen-1; i++) {
+				for (int32_t i=0; i<termlen-1; i++) {
 					term[i]=term[i+1];
 				}
 				term[termlen-1]=charbuffer;
@@ -928,7 +928,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 			} else {
 
 				// clear terminator
-				for (int i=0; i<termlen; i++) {
+				for (int32_t i=0; i<termlen; i++) {
 					term[i]='\0';
 				}
 			}
@@ -1097,7 +1097,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if necessary, select
 		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidereads) {
 
-			int	selectresult=(pvt->_uselistenerinsidereads)?
+			int32_t	selectresult=(pvt->_uselistenerinsidereads)?
 					waitForNonBlockingRead(sec,usec):
 					safeSelect(sec,usec,true,false);
 
@@ -1156,7 +1156,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		#endif
 			actualread=lowLevelRead(ptr,sizetoread);
 			#ifdef DEBUG_READ
-			for (int i=0; i<actualread; i++) {
+			for (int32_t i=0; i<actualread; i++) {
 				character::safePrint(
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
@@ -1356,7 +1356,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		// if necessary, select
 		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidewrites) {
 
-			int	selectresult=(pvt->_uselistenerinsidewrites)?
+			int32_t	selectresult=(pvt->_uselistenerinsidewrites)?
 					waitForNonBlockingWrite(sec,usec):
 					safeSelect(sec,usec,false,true);
 
@@ -1408,7 +1408,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 			actualwrite=lowLevelWrite(ptr,sizetowrite);
 			#ifdef DEBUG_WRITE
-			for (int i=0; i<actualwrite; i++) {
+			for (int32_t i=0; i<actualwrite; i++) {
 				character::safePrint(
 				(static_cast<const unsigned char *>(ptr))[i]);
 			}
@@ -1475,17 +1475,17 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 	return ::write(pvt->_fd,buf,count);
 }
 
-int filedescriptor::waitForNonBlockingRead(long sec, long usec) const {
+int32_t filedescriptor::waitForNonBlockingRead(long sec, long usec) const {
 	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingRead(sec,usec):
 				safeSelect(sec,usec,true,false);
 }
 
-int filedescriptor::waitForNonBlockingWrite(long sec, long usec) const {
+int32_t filedescriptor::waitForNonBlockingWrite(long sec, long usec) const {
 	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
 				safeSelect(sec,usec,false,true);
 }
 
-int filedescriptor::safeSelect(long sec, long usec,
+int32_t filedescriptor::safeSelect(long sec, long usec,
 				bool read, bool write) const {
 
 	// FD_SET will crash if you pass it -1 on some systems, just bail here
@@ -1517,7 +1517,7 @@ int filedescriptor::safeSelect(long sec, long usec,
 		FD_SET(pvt->_fd,&fdlist);
 
 		// wait for data to be available on the file descriptor
-		int	selectresult=select(pvt->_fd+1,(read)?&fdlist:NULL,
+		int32_t	selectresult=select(pvt->_fd+1,(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
 						NULL,tvptr);
 
@@ -1540,7 +1540,7 @@ int filedescriptor::safeSelect(long sec, long usec,
 	}
 }
 
-int filedescriptor::safePoll(long sec, long usec,
+int32_t filedescriptor::safePoll(long sec, long usec,
 				bool read, bool write) const {
 
 	#ifdef RUDIMENTS_HAVE_POLL
@@ -1568,12 +1568,12 @@ int filedescriptor::safePoll(long sec, long usec,
 		}
 
 		// calculate the timeout
-		int	timeout=(sec*1000)+(usec/1000);
+		int32_t	timeout=(sec*1000)+(usec/1000);
 
 		for (;;) {
 
 			// poll...
-			int	pollresult=poll(&fds,1,timeout);
+			int32_t	pollresult=poll(&fds,1,timeout);
 
 			if (pollresult==-1) {
 
@@ -1671,14 +1671,14 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-int filedescriptor::getSSLResult() const {
+int32_t filedescriptor::getSSLResult() const {
 	return pvt->_sslresult;
 }
 #endif
 
-int filedescriptor::fCntl(int cmd, long arg) const {
+int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
 	#ifdef RUDIMENTS_HAVE_FCNTL
-		int	result;
+		int32_t	result;
 		do {
 			result=fcntl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedfcntl && result==-1 &&
@@ -1689,9 +1689,9 @@ int filedescriptor::fCntl(int cmd, long arg) const {
 	#endif
 }
 
-int filedescriptor::ioCtl(int cmd, void *arg) const {
+int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#ifdef RUDIMENTS_HAVE_IOCTL
-		int	result;
+		int32_t	result;
 		do {
 			result=ioctl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedioctl && result==-1 &&
@@ -1703,17 +1703,17 @@ int filedescriptor::ioCtl(int cmd, void *arg) const {
 }
 
 #ifdef MINGW32
-bool filedescriptor::passFileDescriptor(int filedesc) const {
+bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
 	error::setErrorNumber(ENOSYS);
 	return false;
 }
 
-bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
+bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
 	error::setErrorNumber(ENOSYS);
 	return false;
 }
 #else
-bool filedescriptor::passFileDescriptor(int filedesc) const {
+bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
 
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
@@ -1761,7 +1761,7 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 		//#else
 		cmptr->cmsg_len=sizeof(control);
 		//#endif
-		*(reinterpret_cast<int *>(CMSG_DATA(cmptr)))=filedesc;
+		*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)))=filedesc;
 
 		// FIXME: is this necessary???
 		messageheader.msg_controllen=cmptr->cmsg_len;
@@ -1773,14 +1773,14 @@ bool filedescriptor::passFileDescriptor(int filedesc) const {
 	#endif
 
 	// finally, send the msghdr
-	int	result;
+	int32_t	result;
 	do {
 		result=sendmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return (result!=-1);
 }
 
-bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
+bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr
@@ -1822,13 +1822,13 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 	#else
 		// old-style
 		// The descriptor is received in the accrights
-		int	newfiledesc;
+		int32_t	newfiledesc;
 		messageheader.msg_accrights=(caddr_t)&newfiledesc;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
 
 	// receive the msghdr
-	int	result;
+	int32_t	result;
 	do {
 		// wait 120 seconds for data to come in
 		// FIXME: this should be configurable
@@ -1858,7 +1858,8 @@ bool filedescriptor::receiveFileDescriptor(int *filedesc) const {
 			cmptr->cmsg_type==SCM_RIGHTS) {
 
 			// if we got good data, set the descriptor and return
-			*filedesc=*(reinterpret_cast<int *>(CMSG_DATA(cmptr)));
+			*filedesc=
+			*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)));
 			return true;
 		}
 		#ifdef DEBUG_PASSFD
@@ -1926,34 +1927,34 @@ bool filedescriptor::dontUseNaglesAlgorithm() {
 	return setNoDelay(1);
 }
 
-bool filedescriptor::setNoDelay(int onoff) {
-	int	value=onoff;
+bool filedescriptor::setNoDelay(int32_t onoff) {
+	int32_t	value=onoff;
 	return !setSockOpt(IPPROTO_TCP,TCP_NODELAY,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 				(socklen_t)sizeof(int));
 }
 
-bool filedescriptor::getTcpWriteBufferSize(int *size) {
+bool filedescriptor::getTcpWriteBufferSize(int32_t *size) {
 	socklen_t	intsize=sizeof(int);
 	return getSockOpt(SOL_SOCKET,SO_SNDBUF,
 				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)size,
 				&intsize)!=-1;
 }
 
-bool filedescriptor::setTcpWriteBufferSize(int size) {
+bool filedescriptor::setTcpWriteBufferSize(int32_t size) {
 	return !setSockOpt(SOL_SOCKET,SO_SNDBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
 				static_cast<socklen_t>(sizeof(int)));
 }
 
-bool filedescriptor::getTcpReadBufferSize(int *size) {
+bool filedescriptor::getTcpReadBufferSize(int32_t *size) {
 	socklen_t	intsize=sizeof(int);
 	return getSockOpt(SOL_SOCKET,SO_RCVBUF,
 				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)size,
 				&intsize)!=-1;
 }
 
-bool filedescriptor::setTcpReadBufferSize(int size) {
+bool filedescriptor::setTcpReadBufferSize(int32_t size) {
 	return setSockOpt(SOL_SOCKET,SO_RCVBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
 				static_cast<socklen_t>(sizeof(int)))!=-1;
@@ -1971,7 +1972,7 @@ char *filedescriptor::getPeerAddress() const {
 	rawbuffer::zero(&clientsin,sizeof(clientsin));
 
 	// get the peer address
-	int	result;
+	int32_t	result;
 	do {
 		result=getpeername(pvt->_fd,
 				reinterpret_cast<struct sockaddr *>(&clientsin),
@@ -1985,9 +1986,9 @@ char *filedescriptor::getPeerAddress() const {
 	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
 }
 
-int filedescriptor::getSockOpt(int level, int optname,
+int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
 				void *optval, socklen_t *optlen) {
-	int	result;
+	int32_t	result;
 	do {
 		result=getsockopt(pvt->_fd,level,optname,
 			(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,optlen);
@@ -1995,9 +1996,9 @@ int filedescriptor::getSockOpt(int level, int optname,
 	return result;
 }
 
-int filedescriptor::setSockOpt(int level, int optname,
+int32_t filedescriptor::setSockOpt(int32_t level, int32_t optname,
 				const void *optval, socklen_t optlen) {
-	int	result;
+	int32_t	result;
 	do {
 		result=setsockopt(pvt->_fd,level,optname,
 			(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)optval,optlen);
@@ -2013,11 +2014,11 @@ void filedescriptor::type(const char *tp) {
 	pvt->_type=tp;
 }
 
-int filedescriptor::fd() const {
+int32_t filedescriptor::fd() const {
 	return pvt->_fd;
 }
 
-void filedescriptor::fd(int filedes) {
+void filedescriptor::fd(int32_t filedes) {
 	pvt->_fd=filedes;
 }
 
@@ -2030,11 +2031,11 @@ SSL *filedescriptor::ssl() {
 	return pvt->_ssl;
 }
 
-int filedescriptor::sslresult() {
+int32_t filedescriptor::sslresult() {
 	return pvt->_sslresult;
 }
 
-void filedescriptor::sslresult(int sslrslt) {
+void filedescriptor::sslresult(int32_t sslrslt) {
 	pvt->_sslresult=sslrslt;
 }
 #endif

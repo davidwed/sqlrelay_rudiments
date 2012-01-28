@@ -3,9 +3,9 @@
 
 	private:
 
-		bool	tcSetAttr(int optional_actions,
+		bool	tcSetAttr(int32_t optional_actions,
 					termios *termios_p);
-		bool	tcFlush(int queue_selector);
-		bool	tcFlow(int action);
+		bool	tcFlush(int32_t queue_selector);
+		bool	tcFlow(int32_t action);
 
 		serialportprivate	*pvt;

@@ -26,12 +26,12 @@ namespace rudiments {
 static mutex	*_rnmutex;
 #endif
 
-int randomnumber::getSeed() {
+int32_t randomnumber::getSeed() {
 
 	// first try /dev/urandom
 	device	d;
 	if (d.open("/dev/urandom",O_RDONLY)) {
-		int	retval=0;
+		int32_t	retval=0;
 		if (d.read((void *)&retval,sizeof(retval))==sizeof(retval)) {
 			return retval;
 		}
@@ -40,23 +40,23 @@ int randomnumber::getSeed() {
 	// if that fails, use epoch
 	datetime	dt;
 	dt.getSystemDateAndTime();
-	return (int)dt.getEpoch();
+	return (int32_t)dt.getEpoch();
 }
 
-int randomnumber::generateNumber(int seed) {
+int32_t randomnumber::generateNumber(int32_t seed) {
 
 	// FIXME: use random(_r)()/srandom(_r)()/
 	//		initstate(_r)()/setstate(_r)() instead?
 
 	#ifdef RUDIMENTS_HAVE_RAND_R
-		unsigned int	useed=seed;
+		uint32_t	useed=seed;
 		return rand_r(&useed);
 	#else
 		if (_rnmutex && !_rnmutex->lock()) {
 			return -1;
 		}
 		SEEDRANDOM(seed);
-		int	retval=GETRANDOM();
+		int32_t	retval=GETRANDOM();
 		if (_rnmutex) {
 			_rnmutex->unlock();
 		}
@@ -64,17 +64,20 @@ int randomnumber::generateNumber(int seed) {
 	#endif
 }
 
-int randomnumber::generateScaledNumber(int seed, int lower, int upper) {
-	return lower+(int)(((float)generateNumber(seed)*(float)(upper-lower))/
+int32_t randomnumber::generateScaledNumber(int32_t seed,
+					int32_t lower, int32_t upper) {
+	return lower+
+		(int32_t)(((float)generateNumber(seed)*
+				(float)(upper-lower))/float(RAND_MAX));
+}
+
+int32_t randomnumber::scaleNumber(int32_t number,
+					int32_t lower, int32_t upper) {
+	return lower+(int32_t)(((float)number*(float)(upper-lower))/
 							float(RAND_MAX));
 }
 
-int randomnumber::scaleNumber(int number, int lower, int upper) {
-	return lower+(int)(((float)number*(float)(upper-lower))/
-							float(RAND_MAX));
-}
-
-int randomnumber::getRandMax() {
+int32_t randomnumber::getRandMax() {
 	return RAND_MAX;
 }
 

@@ -2,6 +2,6 @@
 // See the COPYING file for more information.
 
 	private:
-		bool	initialize(const char *servicename, int port,
-						const char *protocol);
+		bool	initialize(const char *servicename, int32_t port,
+							const char *protocol);
 		serviceentryprivate	*pvt;

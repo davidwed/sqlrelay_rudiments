@@ -125,7 +125,7 @@ bool dtd::newElement(xmldomnode *node) {
 }
 
 bool dtd::parseList(const char *list, xmldomnode *node,
-					int checkcount, int indent,
+					int32_t checkcount, int32_t indent,
 					char delimiter,
 					const char *name) {
 
@@ -139,7 +139,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 		// parse the list, it should be "delimiter" seperated values
 		const char	*ptr1=list;
 		const char	*ptr2;
-		int	length;
+		int32_t	length;
 		char	*value;
 		char	count[2];
 		count[1]='\0';
@@ -176,7 +176,7 @@ bool dtd::parseList(const char *list, xmldomnode *node,
 			node->appendText("\n");
 
 			// indent for looks as well
-			for (int i=0; i<indent; i++) {
+			for (int32_t i=0; i<indent; i++) {
 				node->appendText("	");
 			}
 

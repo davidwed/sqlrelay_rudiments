@@ -26,23 +26,24 @@ class shadowentry {
 							char **password);
 		static bool	getLastChangeDate(
 						const char *username,
-							long *lstchg);
+						long *lstchg);
 		static bool	getDaysBeforeChangeAllowed(
 						const char *username,
-							int *min);
+						int32_t *min);
 		static bool	getDaysBeforeChangeRequired(
 						const char *username,
-							int *max);
+						int32_t *max);
 		static bool	getDaysBeforeExpirationWarning(
 						const char *username,
-							int *warn);
+						int32_t *warn);
 		static bool	getDaysOfInactivityAllowed(
 						const char *username,
-							int *inact);
+						int32_t *inact);
 		static bool	getExpirationDate(
 						const char *username,
-							int *expire);
-		static bool	getFlag(const char *username, int *flag);
+						int32_t *expire);
+		static bool	getFlag(const char *username,
+						int32_t *flag);
 
 		// If you need to look up a shadow entry and refer to multiple
 		// fields, use these methods.
@@ -58,12 +59,12 @@ class shadowentry {
 		const char	*getName() const;
 		const char	*getEncryptedPassword() const;
 		long		getLastChangeDate() const;
-		int		getDaysBeforeChangeAllowed() const;
-		int		getDaysBeforeChangeRequired() const;
-		int		getDaysBeforeExpirationWarning() const;
-		int		getDaysOfInactivityAllowed() const;
-		int		getExpirationDate() const;
-		int		getFlag() const;
+		int32_t		getDaysBeforeChangeAllowed() const;
+		int32_t		getDaysBeforeChangeRequired() const;
+		int32_t		getDaysBeforeExpirationWarning() const;
+		int32_t		getDaysOfInactivityAllowed() const;
+		int32_t		getExpirationDate() const;
+		int32_t		getFlag() const;
 
 		void	print() const;
 			// Prints out the shadow entry.

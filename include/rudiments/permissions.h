@@ -37,7 +37,7 @@ class permissions {
 				// Set the permissions on "filename" to "perms".
 				//
 				// Returns true on success and false on failure.
-		static	bool	setFilePermissions(int fd, mode_t perms);
+		static	bool	setFilePermissions(int32_t fd, mode_t perms);
 				// Set the permissions on the file associated
 				// with file descriptor "fd" to "perms".
 				// 

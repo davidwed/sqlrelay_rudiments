@@ -42,10 +42,10 @@ bool parameterstring::parse(const char *paramstring) {
 
 	pvt->_nvp.getList()->clear();
 
-	int	paircount=countPairs(paramstring);
+	int32_t	paircount=countPairs(paramstring);
 
 	const char	*ptr=paramstring;
-	for (int i=0; i<paircount; i++) {
+	for (int32_t i=0; i<paircount; i++) {
 
 		char	*namebuffer;
 		char	*valuebuffer;
@@ -85,12 +85,12 @@ void parameterstring::clear() {
 	pvt->_nvp.clear();
 }
 
-int parameterstring::countPairs(const char *paramstring) {
+int32_t parameterstring::countPairs(const char *paramstring) {
 
 	// count ;'s that are not inside of quotes
 	const char	*ptr;
-	int		paircount=0;
-	int		inquotes=0;
+	int32_t		paircount=0;
+	int32_t		inquotes=0;
 	for (ptr=paramstring; (*ptr); ptr++) {
 
 		// handle quotes
@@ -118,18 +118,18 @@ int parameterstring::countPairs(const char *paramstring) {
 	return paircount;
 }
 
-const char *parameterstring::parsePart(int len, char delimiter,
+const char *parameterstring::parsePart(int32_t len, char delimiter,
 					const char *data,
 					char **outbuffer,
-					int quotes, int escapedchars) {
+					int32_t quotes, int32_t escapedchars) {
 
 	const char	*ptr=data;
 
 	char	*buffer=new char[len+1];
 	buffer[len]='\0';
 
-	int	inquotes=0;
-	int	index=0;
+	int32_t	inquotes=0;
+	int32_t	index=0;
 	while (*ptr && *ptr!=delimiter) {
 
 		// handle quotes
@@ -161,13 +161,13 @@ const char *parameterstring::parsePart(int len, char delimiter,
 	return ptr;
 }
 
-int parameterstring::parsePartLength(const char *data, char delimiter,
-					int quotes, int escapedchars) {
+int32_t parameterstring::parsePartLength(const char *data, char delimiter,
+					int32_t quotes, int32_t escapedchars) {
 
 	const char	*ptr=data;
-	int		counter=0;
+	int32_t		counter=0;
 
-	int	inquotes=0;
+	int32_t	inquotes=0;
 	while (*ptr && *ptr!=delimiter) {
 
 		// handle quotes
@@ -203,11 +203,11 @@ const char *parameterstring::parseValue(const char *data, char **outbuffer) {
 	return parsePart(parseValueLength(data),pvt->_delim,data,outbuffer,1,1);
 }
 
-int parameterstring::parseNameLength(const char *data) {
+int32_t parameterstring::parseNameLength(const char *data) {
 	return parsePartLength(data,'=',0,0);
 }
 
-int parameterstring::parseValueLength(const char *data) {
+int32_t parameterstring::parseValueLength(const char *data) {
 	return parsePartLength(data,pvt->_delim,1,1);
 }
 

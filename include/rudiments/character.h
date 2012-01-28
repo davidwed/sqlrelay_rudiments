@@ -15,30 +15,30 @@ namespace rudiments {
 
 class character {
 	public:
-		static bool	isAlphanumeric(int c);
-		static bool	isAlphabetical(int c);
+		static bool	isAlphanumeric(int32_t c);
+		static bool	isAlphabetical(int32_t c);
 
-		static bool	isLowerCase(int c);
-		static bool	isUpperCase(int c);
+		static bool	isLowerCase(int32_t c);
+		static bool	isUpperCase(int32_t c);
 
-		static bool	isPunctuation(int c);
+		static bool	isPunctuation(int32_t c);
 
-		static bool	isPrintable(int c);
-		static bool	isPrintableNonSpace(int c);
+		static bool	isPrintable(int32_t c);
+		static bool	isPrintableNonSpace(int32_t c);
 
-		static bool	isControlCharacter(int c);
+		static bool	isControlCharacter(int32_t c);
 
-		static bool	isDigit(int c);
-		static bool	isHexDigit(int c);
+		static bool	isDigit(int32_t c);
+		static bool	isHexDigit(int32_t c);
 
-		static bool	isBlank(int c);
-		static bool	isWhitespace(int c);
+		static bool	isBlank(int32_t c);
+		static bool	isWhitespace(int32_t c);
 
-		static bool	isAscii(int c);
+		static bool	isAscii(int32_t c);
 
-		static int	toUpperCase(int c);
-		static int	toLowerCase(int c);
-		static int	toAscii(int c);
+		static int32_t	toUpperCase(int32_t c);
+		static int32_t	toLowerCase(int32_t c);
+		static int32_t	toAscii(int32_t c);
 
 		static bool	inSet(char c, const char *set);
 

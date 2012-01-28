@@ -35,8 +35,8 @@ class file : public filedescriptor {
 
 		// These methods open the file "name" using "flags".
 		// They return true on success and false on failure.
-		bool	open(const char *name, int flags);
-		bool	open(const char *name, int flags, mode_t perms);
+		bool	open(const char *name, int32_t flags);
+		bool	open(const char *name, int32_t flags, mode_t perms);
 			// If flags contains O_CREAT and the file doesn't
 			// already exist, it will be created with permissions
 			// "perms".
@@ -311,25 +311,25 @@ class file : public filedescriptor {
 		blkcnt_t	getBlockCount() const;
 				// returns the number of blocks allocated for
 				// the file or -1 for systems don't support this
-		int		isSocket() const;
+		int32_t		isSocket() const;
 				// returns 1 if the file is a socket,
 				// 0 if it's not or -1 on error.
-		int		isSymbolicLink() const;
+		int32_t		isSymbolicLink() const;
 				// returns 1 if the file is a symbolic link,
 				// 0 if it's not or -1 on error.
-		int		isRegularFile() const;
+		int32_t		isRegularFile() const;
 				// returns 1 if the file is a regular file,
 				// 0 if it's not or -1 on error.
-		int		isBlockDevice() const;
+		int32_t		isBlockDevice() const;
 				// returns 1 if the file is a block device,
 				// 0 if it's not or -1 on error.
-		int		isDirectory() const;
+		int32_t		isDirectory() const;
 				// returns 1 if the file is a directory,
 				// 0 if it's not or -1 on error.
-		int		isCharacterDevice() const;
+		int32_t		isCharacterDevice() const;
 				// returns 1 if the file is a character device,
 				// 0 if it's not or -1 on error.
-		int		isFifo() const;
+		int32_t		isFifo() const;
 				// returns 1 if the file is a fifo,
 				// 0 if it's not or -1 on error.
 		time_t		getLastAccessTime() const;
@@ -559,7 +559,7 @@ class file : public filedescriptor {
 			// "perms".
 			//
 			// Returns true on success and false on failure.
-		static int	createTemporaryFile(char *templatefilename);
+		static int32_t	createTemporaryFile(char *templatefilename);
 			// Creates a temporary file using "templatefilename"
 			// as a template.  The last 6 characters of
 			// "templatefilename" must be XXXXXX and
@@ -636,7 +636,7 @@ class file : public filedescriptor {
 		static bool	executable(const char *filename);
 			// Returns true if "filename" is executable by the user
 			// or false otherwise.
-		static bool	accessible(const char *filename, int mode);
+		static bool	accessible(const char *filename, int32_t mode);
 			// Checks to see if "filename" exists, is readable,
 			// is writeable and/or is executable by the user, based
 			// on the value of "mode".  Mode should be an or'ed
@@ -662,13 +662,13 @@ class file : public filedescriptor {
 						blksize_t *size);
 		static bool	getBlockCount(const char *filename,
 						blkcnt_t *blocks);
-		static int	isSocket(const char *filename);
-		static int	isSymbolicLink(const char *filename);
-		static int	isRegularFile(const char *filename);
-		static int	isBlockDevice(const char *filename);
-		static int	isDirectory(const char *filename);
-		static int	isCharacterDevice(const char *filename);
-		static int	isFifo(const char *filename);
+		static int32_t	isSocket(const char *filename);
+		static int32_t	isSymbolicLink(const char *filename);
+		static int32_t	isRegularFile(const char *filename);
+		static int32_t	isBlockDevice(const char *filename);
+		static int32_t	isDirectory(const char *filename);
+		static int32_t	isCharacterDevice(const char *filename);
+		static int32_t	isFifo(const char *filename);
 		static bool	getLastAccessTime(const char *filename,
 							time_t *atime);
 		static bool	getLastModificationTime(const char *filename,
@@ -738,7 +738,7 @@ class file : public filedescriptor {
 				// deallocate the buffer.
 
 
-		static key_t	generateKey(const char *filename, int id);
+		static key_t	generateKey(const char *filename, int32_t id);
 				// Generates a key based on "filename" and the
 				// least signifigant 8 bits of id (which must
 				// be non-zero) suitable for use with
