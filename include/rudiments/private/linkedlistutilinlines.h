@@ -72,7 +72,8 @@ void linkedlistutil<int16_t>::print(int16_t data) const {
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<int64_t>::print(int64_t data) const {
-	printf("%lld",data);
+	// compilers complain if this isn't cast to a long long
+	printf("%lld",(long long)data);
 }
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
