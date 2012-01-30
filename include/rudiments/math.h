@@ -18,9 +18,8 @@ class math {
 		static long	absoluteValue(long j);
 		static ldiv_t	divide(long numer, long denom);
 
-		static long long	absoluteValue(long long j);
-		static lldiv_t		divide(long long numer,
-						long long denom);
+		static int64_t	absoluteValue(int64_t j);
+		static lldiv_t	divide(int64_t numer, int64_t denom);
 
 		static bool	isFinite(float x);
 		static bool	isInfinite(float x);
@@ -93,10 +92,10 @@ class math {
 		static float	nearbyInteger(float x);
 		static float	round(float x);
 		static float	roundInexact(float x);
-		static long		roundToLong(float x);
-		static long long	roundToLongLong(float x);
-		static long		roundAwayFromZeroToLong(float x);
-		static long long	roundAwayFromZeroToLongLong(float x);
+		static long	roundToLong(float x);
+		static int64_t	roundToLongLong(float x);
+		static long	roundAwayFromZeroToLong(float x);
+		static int64_t	roundAwayFromZeroToLongLong(float x);
 		static float	nextAfter(float x, float y);
 		static float	nextToward(float x, float y);
 
@@ -197,10 +196,10 @@ class math {
 		static double	nearbyInteger(double x);
 		static double	round(double x);
 		static double	roundInexact(double x);
-		static long		roundToLong(double x);
-		static long long	roundToLongLong(double x);
-		static long		roundAwayFromZeroToLong(double x);
-		static long long	roundAwayFromZeroToLongLong(double x);
+		static long	roundToLong(double x);
+		static int64_t	roundToLongLong(double x);
+		static long	roundAwayFromZeroToLong(double x);
+		static int64_t	roundAwayFromZeroToLongLong(double x);
 		static double	nextAfter(double x, double y);
 		static double	nextToward(double x, double y);
 
@@ -307,9 +306,9 @@ class math {
 		static long double	round(long double x);
 		static long double	roundInexact(long double x);
 		static long		roundToLong(long double x);
-		static long long	roundToLongLong(long double x);
+		static int64_t		roundToLongLong(long double x);
 		static long		roundAwayFromZeroToLong(long double x);
-		static long long	roundAwayFromZeroToLongLong(
+		static int64_t		roundAwayFromZeroToLongLong(
 								long double x);
 		static long double	nextAfter(long double x,
 							long double y);

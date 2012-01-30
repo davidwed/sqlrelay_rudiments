@@ -24,11 +24,11 @@ RUDIMENTS_INLINE ldiv_t math::divide(long numer, long denom) {
 	return ldiv(numer,denom);
 }
 
-RUDIMENTS_INLINE long long math::absoluteValue(long long j) {
+RUDIMENTS_INLINE int64_t math::absoluteValue(int64_t j) {
 	return llabs(j);
 }
 
-RUDIMENTS_INLINE lldiv_t math::divide(long long numer, long long denom) {
+RUDIMENTS_INLINE lldiv_t math::divide(int64_t numer, int64_t denom) {
 	return lldiv(numer,denom);
 }
 
@@ -225,7 +225,7 @@ RUDIMENTS_INLINE long math::roundToLong(float x) {
 	return lrintf(x);
 }
 
-RUDIMENTS_INLINE long long math::roundToLongLong(float x) {
+RUDIMENTS_INLINE int64_t math::roundToLongLong(float x) {
 	return llrintf(x);
 }
 
@@ -233,7 +233,7 @@ RUDIMENTS_INLINE long math::roundAwayFromZeroToLong(float x) {
 	return lroundf(x);
 }
 
-RUDIMENTS_INLINE long long math::roundAwayFromZeroToLongLong(float x) {
+RUDIMENTS_INLINE int64_t math::roundAwayFromZeroToLongLong(float x) {
 	return llroundf(x);
 }
 
@@ -513,7 +513,7 @@ RUDIMENTS_INLINE long math::roundToLong(double x) {
 	return lrint(x);
 }
 
-RUDIMENTS_INLINE long long math::roundToLongLong(double x) {
+RUDIMENTS_INLINE int64_t math::roundToLongLong(double x) {
 	return llrint(x);
 }
 
@@ -521,7 +521,7 @@ RUDIMENTS_INLINE long math::roundAwayFromZeroToLong(double x) {
 	return lround(x);
 }
 
-RUDIMENTS_INLINE long long math::roundAwayFromZeroToLongLong(double x) {
+RUDIMENTS_INLINE int64_t math::roundAwayFromZeroToLongLong(double x) {
 	return llround(x);
 }
 
@@ -801,7 +801,7 @@ RUDIMENTS_INLINE long math::roundToLong(long double x) {
 	return lrintl(x);
 }
 
-RUDIMENTS_INLINE long long math::roundToLongLong(long double x) {
+RUDIMENTS_INLINE int64_t math::roundToLongLong(long double x) {
 	return llrintl(x);
 }
 
@@ -809,7 +809,7 @@ RUDIMENTS_INLINE long math::roundAwayFromZeroToLong(long double x) {
 	return lroundl(x);
 }
 
-RUDIMENTS_INLINE long long math::roundAwayFromZeroToLongLong(long double x) {
+RUDIMENTS_INLINE int64_t math::roundAwayFromZeroToLongLong(long double x) {
 	return llroundl(x);
 }
 
