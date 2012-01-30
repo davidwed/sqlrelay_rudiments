@@ -26,7 +26,7 @@ class listener {
                         	// Adds the specified file descriptor to
 				// the pool that the listener is listening on.
 
-		int	waitForNonBlockingRead(long sec, long usec);
+		int32_t	waitForNonBlockingRead(long sec, long usec);
 				// Causes the application to wait until a read()
 				// will proceed without blocking or until "sec"
 				// seconds and "usec" microseconds have elapsed.
@@ -43,7 +43,7 @@ class listener {
 				// on timeout and otherwise returns the number
 				// of file descriptors that are ready to be
 				// read from.
-		int	waitForNonBlockingWrite(long sec, long usec);
+		int32_t	waitForNonBlockingWrite(long sec, long usec);
 				// Causes the application to wait until a
 				// write() will proceed without blocking or
 				// until "sec" seconds and "usec" microseconds

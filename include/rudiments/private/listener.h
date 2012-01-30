@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	protected:
-		virtual	int	safeSelect(long sec, long usec,
+		virtual	int32_t	safeSelect(long sec, long usec,
 						bool read, bool write);
 
 		// FIXME: it should be possible to copy a listener

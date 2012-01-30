@@ -37,7 +37,7 @@ shmfile::~shmfile() {
 }
 
 int32_t shmfile::openInternal(const char *name, int32_t flags) {
-	int	result;
+	int32_t	result;
 	do {
 		result=shm_open(name,flags,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -45,7 +45,7 @@ int32_t shmfile::openInternal(const char *name, int32_t flags) {
 }
 
 int32_t shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
-	int	result;
+	int32_t	result;
 	do {
 		result=shm_open(name,flags,perms);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -53,7 +53,7 @@ int32_t shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
 }
 
 bool shmfile::remove(const char *filename) {
-	int	result;
+	int32_t	result;
 	do {
 		result=shm_unlink(filename);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

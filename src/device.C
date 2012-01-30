@@ -43,12 +43,11 @@ device::~device() {
 }
 
 bool device::createDeviceNode(const char *filename, bool blockdevice,
-				unsigned short major, unsigned short minor,
-				mode_t perms) {
+				uint16_t major, uint16_t minor, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_MKNOD)
 		mode_t	mode=perms|((blockdevice)?S_IFBLK:S_IFCHR);
 		dev_t	dev=(major<<8|minor);
-		int	result;
+		int32_t	result;
 		do {
 			result=mknod(filename,mode,dev);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

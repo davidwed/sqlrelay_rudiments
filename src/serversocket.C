@@ -59,7 +59,7 @@ bool serversocket::supportsBlockingNonBlockingModes() {
 
 bool serversocket::useNonBlockingMode() const {
 #ifdef FIONBIO
-	int	nonblocking=1;
+	int32_t	nonblocking=1;
 	return (ioCtl(FIONBIO,&nonblocking)!=-1);
 #else
 	return false;
@@ -68,7 +68,7 @@ bool serversocket::useNonBlockingMode() const {
 
 bool serversocket::useBlockingMode() const {
 #ifdef FIONBIO
-	int	nonblocking=0;
+	int32_t	nonblocking=0;
 	return (ioCtl(FIONBIO,&nonblocking)!=-1);
 #else
 	return false;
@@ -106,14 +106,14 @@ bool serversocket::setLingerOnClose(int32_t timeout, int32_t onoff) {
 }
 
 bool serversocket::setReuseAddresses(int32_t onoff) {
-	int	value=onoff;
+	int32_t	value=onoff;
 	return !setSockOpt(SOL_SOCKET,SO_REUSEADDR,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 					(socklen_t)sizeof(int));
 }
 
 bool serversocket::listen(int32_t backlog) {
-	int	result;
+	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

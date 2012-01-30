@@ -12,7 +12,7 @@ namespace rudiments {
 
 class math {
 	public:
-		static int	absoluteValue(int32_t j);
+		static int32_t	absoluteValue(int32_t j);
 		static div_t	divide(int32_t numer, int32_t denom);
 
 		static long	absoluteValue(long j);
@@ -79,7 +79,7 @@ class math {
 		static float	hypotenuse(float x, float y);
 
 		static float	computeExponent(float x);
-		static int	integralExponent(float x);
+		static int32_t	integralExponent(float x);
 		static float 	loadExponent(float x, int32_t exp);
 
 		static float	ceiling(float x);
@@ -183,7 +183,7 @@ class math {
 		static double	hypotenuse(double x, double y);
 
 		static double	computeExponent(double x);
-		static int	integralExponent(double x);
+		static int32_t	integralExponent(double x);
 		static double 	loadExponent(double x, int32_t exp);
 
 		static double	ceiling(double x);
@@ -288,7 +288,7 @@ class math {
 							long double y);
 
 		static long double	computeExponent(long double x);
-		static int		integralExponent(long double x);
+		static int32_t		integralExponent(long double x);
 		static long double 	loadExponent(long double x,
 							int32_t exp);
 

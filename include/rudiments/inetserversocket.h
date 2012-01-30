@@ -31,7 +31,7 @@ class inetserversocket : public serversocket, private inetsocketutil {
 		virtual		~inetserversocket();
 
 		bool	listen(const char *address,
-					unsigned short port,
+					uint16_t port,
 					int32_t backlog);
 				// Listen on "address" and "port" and allow
 				// "backlog" connections to pile up before
@@ -52,7 +52,7 @@ class inetserversocket : public serversocket, private inetsocketutil {
 		// If you need to set socket options or do anything special
 		// between the discrete steps of socket initialization, you
 		// should use a combination of these methods.
-		bool	initialize(const char *address, unsigned short port);
+		bool	initialize(const char *address, uint16_t port);
 			// Creates the actual socket and Initializes the class
 			// to use "address" and "port" when bind() is called.
 			//
@@ -78,7 +78,7 @@ class inetserversocket : public serversocket, private inetsocketutil {
 				// Returns an inetsocket on success and NULL
 				// on failure.
 
-		unsigned short	getPort();
+		uint16_t	getPort();
 				// Returns the inet port number that
 				// the socket is listening on.  If the
 				// port has not been set, 0 is 

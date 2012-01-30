@@ -102,7 +102,7 @@ void modemclient::initialize(const char *devicename, const char *baud,
 	client::initialize(NULL,-1,-1,retrywait,retrycount);
 }
 
-int modemclient::connect() {
+int32_t modemclient::connect() {
 
 	constnamevaluepairs	phnvp;
 	phnvp.setData("phonenumber",const_cast<char *>(pvt->_phonenumber));
@@ -133,7 +133,7 @@ int modemclient::connect() {
 
 		// run connectscript here...
 		chat	ch(this);
-		int	result=ch.runScript(pvt->_connectscript,
+		int32_t	result=ch.runScript(pvt->_connectscript,
 						_connecterror(),&phnvp);
 
 		// runScript() will return RESULT_(SUCCESS|ABORT|TIMEOUT|ERROR)
@@ -154,7 +154,7 @@ int modemclient::connect() {
 		// even though the modem's file descriptor is closed here,
 		// we use waitForNonBlockingRead to pause between retrys,
 		// in case we're using a listener which could return an abort
-		int	waitresult=waitForNonBlockingRead(_retrywait(),0);
+		int32_t	waitresult=waitForNonBlockingRead(_retrywait(),0);
 		if (waitresult==RESULT_ABORT || waitresult==RESULT_ERROR) {
 			return waitresult;
 		}

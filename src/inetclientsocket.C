@@ -53,8 +53,8 @@ inetclientsocket::~inetclientsocket() {
 	delete pvt;
 }
 
-int inetclientsocket::connect(const char *host,
-						unsigned short port,
+int32_t inetclientsocket::connect(const char *host,
+						uint16_t port,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
@@ -64,7 +64,7 @@ int inetclientsocket::connect(const char *host,
 }
 
 void inetclientsocket::initialize(const char *host,
-						unsigned short port,
+						uint16_t port,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
@@ -100,7 +100,7 @@ void inetclientsocket::initialize(constnamevaluepairs *cd) {
 	}
 }
 
-int inetclientsocket::connect() {
+int32_t inetclientsocket::connect() {
 
 	#ifndef RUDIMENTS_HAVE_GETADDRINFO
 
@@ -148,7 +148,7 @@ int inetclientsocket::connect() {
 
 		// get the address info for the given address/port
 		addrinfo	*ai=NULL;
-		int		result;
+		int32_t		result;
 		do {
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
 		} while (result==EAI_SYSTEM && error::getErrorNumber()==EINTR);
@@ -159,7 +159,7 @@ int inetclientsocket::connect() {
 
 	#endif
 
-	int	retval=RESULT_ERROR;
+	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
 	for (unsigned long counter=0;
@@ -175,7 +175,7 @@ int inetclientsocket::connect() {
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
-			for (int addressindex=0;
+			for (int32_t addressindex=0;
 					he.getAddressList()[addressindex];
 					addressindex++) {
 

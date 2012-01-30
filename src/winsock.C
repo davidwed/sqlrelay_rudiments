@@ -17,7 +17,7 @@ bool winsock::initWinsock() {
 	#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 		_winsockmutex.lock();
 		if (!_initialized) {
-			int	result=WSAStartup(MAKEWORD(2,0),&_wsadata);
+			int32_t	result=WSAStartup(MAKEWORD(2,0),&_wsadata);
 			_initialized=true;
 			if (!result) {
 				if (LOBYTE(_wsadata.wVersion)!=2 ||

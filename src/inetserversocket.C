@@ -53,17 +53,17 @@ inetserversocket::~inetserversocket() {
 	delete pvt;
 }
 
-unsigned short inetserversocket::getPort() {
+uint16_t inetserversocket::getPort() {
 	return *_port();
 }
 
-bool inetserversocket::listen(const char *address, unsigned short port,
+bool inetserversocket::listen(const char *address, uint16_t port,
 							int32_t backlog) {
 	initialize(address,port);
 	return (bind() && listen(backlog));
 }
 
-bool inetserversocket::initialize(const char *address, unsigned short port) {
+bool inetserversocket::initialize(const char *address, uint16_t port) {
 
 	inetsocketutil::initialize(address,port);
 
@@ -104,7 +104,7 @@ bool inetserversocket::initialize(const char *address, unsigned short port) {
 bool inetserversocket::bind() {
 
 	// bind the socket
-	int	result;
+	int32_t	result;
 	do {
 		result=::bind(fd(),reinterpret_cast<struct sockaddr *>(_sin()),
 							sizeof(sockaddr_in));
@@ -121,7 +121,7 @@ bool inetserversocket::bind() {
 		socklen_t	size=sizeof(socknamesin);
 		rawbuffer::zero(&socknamesin,sizeof(socknamesin));
 
-		int	result;
+		int32_t	result;
 		do {
 			result=getsockname(fd(),
 				reinterpret_cast<struct sockaddr *>
@@ -129,7 +129,7 @@ bool inetserversocket::bind() {
 				&size);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		if (result!=-1) {
-			*_port()=static_cast<unsigned short int>(
+			*_port()=static_cast<uint16_t>(
 						ntohs(socknamesin.sin_port));
 		}
 	}
@@ -137,7 +137,7 @@ bool inetserversocket::bind() {
 }
 
 bool inetserversocket::listen(int32_t backlog) {
-	int	result;
+	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -152,7 +152,7 @@ filedescriptor *inetserversocket::accept() {
 	rawbuffer::zero(&clientsin,sizeof(clientsin));
 
 	// accept on the socket
-	int	clientsock;
+	int32_t	clientsock;
 	do {
 		clientsock=::accept(fd(),
 				reinterpret_cast<struct sockaddr *>(&clientsin),

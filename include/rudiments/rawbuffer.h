@@ -60,7 +60,7 @@ class rawbuffer {
 				// Sets "size" bytes of "dest" to NULL.
 				// Returns a pointer to "dest".
 
-		static int	compare(const void *s1, const void *s2,
+		static int32_t	compare(const void *s1, const void *s2,
 							size_t size);
 				// Returns an integer less than, equal to or
 				// greater than 0 if "size" bytes of "s1" are

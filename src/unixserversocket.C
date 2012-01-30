@@ -83,7 +83,7 @@ bool unixserversocket::bind() {
 
 	// bind the socket
 	bool	retval=true;
-	int	result;
+	int32_t	result;
 	do {
 		result=::bind(fd(),
 			reinterpret_cast<struct sockaddr *>(_sun()),
@@ -100,7 +100,7 @@ bool unixserversocket::bind() {
 }
 
 bool unixserversocket::listen(int32_t backlog) {
-	int	result;
+	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -115,7 +115,7 @@ filedescriptor *unixserversocket::accept() {
 	rawbuffer::zero(&clientsun,sizeof(clientsun));
 
 	// accept on the socket
-	int	clientsock;
+	int32_t	clientsock;
 	do {
 		clientsock=::accept(fd(),
 				reinterpret_cast<struct sockaddr *>(

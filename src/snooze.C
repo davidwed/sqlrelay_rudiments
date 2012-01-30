@@ -144,7 +144,7 @@ bool snooze::nanosnooze(timespec *timetosnooze, timespec *timeremaining) {
 
 		// use regular sleep command to handle the whole seconds
 		if (timetosnooze->tv_sec) {
-			unsigned int	remainder=::sleep(timetosnooze->tv_sec);
+			uint32_t	remainder=::sleep(timetosnooze->tv_sec);
 			if (remainder) {
 				timeremaining->tv_sec=remainder;
 				timeremaining->tv_nsec=timetosnooze->tv_nsec;

@@ -39,7 +39,7 @@ class modemclient : public client, private modemutil {
 			// "disconnectscript", "retrywait" and
 			// "retrycount" when connect() is called.
 
-		int	connect();
+		int32_t	connect();
 			// Dial the modem and attempt to establish a connection.
 			// If the connection fails, it will retry "retrycount"
 			// times, waiting "retrywait" seconds between

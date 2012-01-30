@@ -85,11 +85,11 @@ class chat {
 		//
 		// If runScript() successfully processes all tags then it
 		// returns RESULT_SUCCESS.
-		int	runScript(const char *script, char **abort);
+		int32_t	runScript(const char *script, char **abort);
 			// Runs "script", if an abort condition is met, the
 			// "abort" is allocated and set to the abort string
 			// from the script that caught the condition.
-		int	runScript(const char *script, char **abort,
+		int32_t	runScript(const char *script, char **abort,
 						constnamevaluepairs *variables);
 			// Runs "script" as runScript() above does, but also
 			// looks through "script" for variables of format:

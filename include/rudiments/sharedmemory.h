@@ -62,7 +62,7 @@ class sharedmemory {
 			// Removes the shared memory segment whether it was
 			// created or just attached to.
 
-		int	getId() const;
+		int32_t	getId() const;
 			// Returns the internal id for the 
 			// shared memory segment.
 

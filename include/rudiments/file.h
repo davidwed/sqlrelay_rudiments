@@ -46,8 +46,7 @@ class file : public filedescriptor {
 		// "perms".  If the file already exists, it will be truncated.
 		bool	create(const char *name, mode_t perms);
 			// Returns true on success and false on failure.
-		ssize_t	create(const char *name, mode_t perms,
-						unsigned short number);
+		ssize_t	create(const char *name, mode_t perms, uint16_t number);
 			// Sets the initial contents to "number".
 			// Returns the number of bytes written or -1 on error.
 		ssize_t	create(const char *name, mode_t perms,
@@ -146,33 +145,33 @@ class file : public filedescriptor {
 		// error.
 
 		// These methods allow you to lock the entire file.
-		bool	tryLockFile(short type) const;
-		bool	lockFile(short type) const;
-		bool	checkLockFile(short type, struct flock *lck) const;
+		bool	tryLockFile(int16_t type) const;
+		bool	lockFile(int16_t type) const;
+		bool	checkLockFile(int16_t type, struct flock *lck) const;
 		bool	unlockFile() const;
 
 		// These methods allow you to lock an arbitrary
 		// region of the file.
-		bool	tryLockRegion(short type, off64_t start,
+		bool	tryLockRegion(int16_t type, off64_t start,
 							off64_t len) const;
-		bool	lockRegion(short type, off64_t start,
+		bool	lockRegion(int16_t type, off64_t start,
 							off64_t len) const;
-		bool	checkLockRegion(short type, off64_t start,
+		bool	checkLockRegion(int16_t type, off64_t start,
 						off64_t len,
 						struct flock *lck) const;
 		bool	unlockRegion(off64_t start, off64_t len) const;
 
 		// These methods allow you to lock an arbitrary region of the
 		// file relative to the current position.
-		bool	tryLockFromCurrent(short type, off64_t len) const;
-		bool	tryLockFromCurrent(short type, off64_t start,
+		bool	tryLockFromCurrent(int16_t type, off64_t len) const;
+		bool	tryLockFromCurrent(int16_t type, off64_t start,
 							off64_t len) const;
-		bool	lockFromCurrent(short type, off64_t len) const;
-		bool	lockFromCurrent(short type, off64_t start,
+		bool	lockFromCurrent(int16_t type, off64_t len) const;
+		bool	lockFromCurrent(int16_t type, off64_t start,
 							off64_t len) const;
-		bool	checkLockFromCurrent(short type, off64_t len,
+		bool	checkLockFromCurrent(int16_t type, off64_t len,
 						struct flock *lck) const;
-		bool	checkLockFromCurrent(short type, off64_t start,
+		bool	checkLockFromCurrent(int16_t type, off64_t start,
 						off64_t len,
 						struct flock *lck) const;
 		bool	unlockFromCurrent(off64_t len) const;
@@ -180,15 +179,15 @@ class file : public filedescriptor {
 
 		// These methods allow you to lock an arbitrary region of the
 		// file relative to the end of the file.
-		bool	tryLockFromEnd(short type, off64_t len) const;
-		bool	tryLockFromEnd(short type, off64_t start,
+		bool	tryLockFromEnd(int16_t type, off64_t len) const;
+		bool	tryLockFromEnd(int16_t type, off64_t start,
 						off64_t len) const;
-		bool	lockFromEnd(short type, off64_t len) const;
-		bool	lockFromEnd(short type, off64_t start,
+		bool	lockFromEnd(int16_t type, off64_t len) const;
+		bool	lockFromEnd(int16_t type, off64_t start,
 						off64_t len) const;
-		bool	checkLockFromEnd(short type, off64_t len,
+		bool	checkLockFromEnd(int16_t type, off64_t len,
 						struct flock *lck) const;
-		bool	checkLockFromEnd(short type, off64_t start,
+		bool	checkLockFromEnd(int16_t type, off64_t start,
 						off64_t len,
 						struct flock *lck) const;
 		bool	unlockFromEnd(off64_t len) const;
@@ -196,36 +195,39 @@ class file : public filedescriptor {
 
 		// These methods allow you to lock "the remainder" of a file
 		// starting at a given offset.
-		bool	tryLockRemainder(short type, off64_t start) const;
-		bool	lockRemainder(short type, off64_t start) const;
-		bool	checkLockRemainder(short type, off64_t start,
+		bool	tryLockRemainder(int16_t type, off64_t start) const;
+		bool	lockRemainder(int16_t type, off64_t start) const;
+		bool	checkLockRemainder(int16_t type, off64_t start,
 						struct flock *lck) const;
 		bool	unlockRemainder(off64_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// relative to the current position.
-		bool	tryLockRemainderFromCurrent(short type) const;
-		bool	tryLockRemainderFromCurrent(short type,
+		bool	tryLockRemainderFromCurrent(int16_t type) const;
+		bool	tryLockRemainderFromCurrent(int16_t type,
 							off64_t start) const;
-		bool	lockRemainderFromCurrent(short type) const;
-		bool	lockRemainderFromCurrent(short type,
+		bool	lockRemainderFromCurrent(int16_t type) const;
+		bool	lockRemainderFromCurrent(int16_t type,
 							off64_t start) const;
-		bool	checkLockRemainderFromCurrent(short type,
+		bool	checkLockRemainderFromCurrent(int16_t type,
 						struct flock *lck) const;
-		bool	checkLockRemainderFromCurrent(short type, off64_t start,
+		bool	checkLockRemainderFromCurrent(int16_t type,
+						off64_t start,
 						struct flock *lck) const;
 		bool	unlockRemainderFromCurrent() const;
 		bool	unlockRemainderFromCurrent(off64_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
 		// relative to the end of the file.
-		bool	tryLockRemainderFromEnd(short type) const;
-		bool	tryLockRemainderFromEnd(short type, off64_t start) const;
-		bool	lockRemainderFromEnd(short type) const;
-		bool	lockRemainderFromEnd(short type, off64_t start) const;
-		bool	checkLockRemainderFromEnd(short type,
+		bool	tryLockRemainderFromEnd(int16_t type) const;
+		bool	tryLockRemainderFromEnd(int16_t type,
+						off64_t start) const;
+		bool	lockRemainderFromEnd(int16_t type) const;
+		bool	lockRemainderFromEnd(int16_t type, off64_t start) const;
+		bool	checkLockRemainderFromEnd(int16_t type,
 						struct flock *lck) const;
-		bool	checkLockRemainderFromEnd(short type, off64_t start,
+		bool	checkLockRemainderFromEnd(int16_t type,
+						off64_t start,
 						struct flock *lck) const;
 		bool	unlockRemainderFromEnd() const;
 		bool	unlockRemainderFromEnd(off64_t start) const;
@@ -388,10 +390,10 @@ class file : public filedescriptor {
 		// the supplied (preallocated) buffer.
 		// They return true on success and false on failure.
 		bool	getAttribute(const char *name,
-						unsigned short *number) const;
+						uint16_t *number) const;
 		bool	getAttribute(const char *name,
 						unsigned long *number) const;
-		bool	getAttribute(const char *name, short *number) const;
+		bool	getAttribute(const char *name, int16_t *number) const;
 		bool	getAttribute(const char *name, long *number) const;
 		bool	getAttribute(const char *name, float *number) const;
 		bool	getAttribute(const char *name, double *number) const;
@@ -421,10 +423,10 @@ class file : public filedescriptor {
 		// They return true on success and false on failure and will
 		// fail if the attribute already exists.
 		bool	createAttribute(const char *name,
-						unsigned short number) const;
+						uint16_t number) const;
 		bool	createAttribute(const char *name,
 						unsigned long number) const;
-		bool	createAttribute(const char *name, short number) const;
+		bool	createAttribute(const char *name, int16_t number) const;
 		bool	createAttribute(const char *name, long number) const;
 		bool	createAttribute(const char *name, float number) const;
 		bool	createAttribute(const char *name, double number) const;
@@ -449,10 +451,11 @@ class file : public filedescriptor {
 		// They return true on success and false on failure and will
 		// fail if the attribute doesn't already exist.
 		bool	replaceAttribute(const char *name,
-						unsigned short number) const;
+						uint16_t number) const;
 		bool	replaceAttribute(const char *name,
 						unsigned long number) const;
-		bool	replaceAttribute(const char *name, short number) const;
+		bool	replaceAttribute(const char *name,
+						int16_t number) const;
 		bool	replaceAttribute(const char *name, long number) const;
 		bool	replaceAttribute(const char *name, float number) const;
 		bool	replaceAttribute(const char *name, double number) const;
@@ -480,10 +483,10 @@ class file : public filedescriptor {
 		// attributes.  They returns true on success and false on
 		// failure.
 		bool	setAttribute(const char *name,
-						unsigned short number) const;
+						uint16_t number) const;
 		bool	setAttribute(const char *name,
 						unsigned long number) const;
-		bool	setAttribute(const char *name, short number) const;
+		bool	setAttribute(const char *name, int16_t number) const;
 		bool	setAttribute(const char *name, long number) const;
 		bool	setAttribute(const char *name, float number) const;
 		bool	setAttribute(const char *name, double number) const;
@@ -519,8 +522,9 @@ class file : public filedescriptor {
 		// "perms".  If the file already exists, it will be truncated.
 		static bool	createFile(const char *name, mode_t perms);
 			// Returns true on success and false on failure.
-		static ssize_t	createFile(const char *name, mode_t perms,
-						unsigned short number);
+		static ssize_t	createFile(const char *name,
+						mode_t perms,
+						uint16_t number);
 			// Sets the initial contents to "number".
 			// Returns the number of bytes written or -1 on error.
 		static ssize_t	createFile(const char *name, mode_t perms,

@@ -61,11 +61,11 @@ void listener::removeAllFileDescriptors() {
 	pvt->_filedescriptorlist.clear();
 }
 
-int listener::waitForNonBlockingRead(long sec, long usec) {
+int32_t listener::waitForNonBlockingRead(long sec, long usec) {
 	return safeSelect(sec,usec,true,false);
 }
 
-int listener::waitForNonBlockingWrite(long sec, long usec) {
+int32_t listener::waitForNonBlockingWrite(long sec, long usec) {
 	return safeSelect(sec,usec,false,true);
 }
 
@@ -73,7 +73,7 @@ listenerlist *listener::getReadyList() {
 	return &pvt->_readylist;
 }
 
-int listener::safeSelect(long sec, long usec, bool read, bool write) {
+int32_t listener::safeSelect(long sec, long usec, bool read, bool write) {
 
 	// set up the timeout
 	timeval	tv;
@@ -88,7 +88,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		#ifdef RUDIMENTS_HAS_SSL
 			pvt->_readylist.clear();
 		#endif
-		int	selectresult=0;
+		int32_t	selectresult=0;
 
 		// some versions of select modify the timeout, so reset it
 		// every time
@@ -98,7 +98,7 @@ int listener::safeSelect(long sec, long usec, bool read, bool write) {
 		// select() will modify the list every time it's called
 		// so the list has to be rebuilt every time...
 		fd_set	fdlist;
-		int	largest=-1;
+		int32_t	largest=-1;
 		FD_ZERO(&fdlist);
 		listenerlistnode	*current=
 				pvt->_filedescriptorlist.getFirstNode();

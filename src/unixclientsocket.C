@@ -41,7 +41,7 @@ unixclientsocket::~unixclientsocket() {
 	delete pvt;
 }
 
-int unixclientsocket::connect(const char *filename,
+int32_t unixclientsocket::connect(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
@@ -82,7 +82,7 @@ void unixclientsocket::initialize(constnamevaluepairs *cd) {
 	}
 }
 
-int unixclientsocket::connect() {
+int32_t unixclientsocket::connect() {
 
 	// set the filename to connect to
 	_sun()->sun_family=AF_UNIX;
@@ -96,7 +96,7 @@ int unixclientsocket::connect() {
 		return RESULT_ERROR;
 	}
 
-	int	retval=RESULT_ERROR;
+	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
 	for (unsigned long counter=0;

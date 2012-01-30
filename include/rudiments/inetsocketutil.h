@@ -19,8 +19,7 @@ class inetsocketutil {
 		inetsocketutil	&operator=(const inetsocketutil &i);
 		virtual		~inetsocketutil();
 
-		void		initialize(const char *address,
-						unsigned short port);
+		void		initialize(const char *address, uint16_t port);
 
 	#include <rudiments/private/inetsocketutil.h>
 };

@@ -65,7 +65,7 @@ void *rawbuffer::zero(void *dest, size_t size) {
 	return set(dest,0,size);
 }
 
-int rawbuffer::compare(const void *s1, const void *s2, size_t size) {
+int32_t rawbuffer::compare(const void *s1, const void *s2, size_t size) {
 	if (!s1 && !s2) {
 		return 0;
 	}

@@ -67,7 +67,7 @@ bool clientsocket::supportsBlockingNonBlockingModes() {
 
 bool clientsocket::useNonBlockingMode() const {
 	#ifdef FIONBIO
-	int	nonblocking=1;
+	int32_t	nonblocking=1;
 	return (ioCtl(FIONBIO,&nonblocking)!=-1);
 	#else
 	return false;
@@ -76,7 +76,7 @@ bool clientsocket::useNonBlockingMode() const {
 
 bool clientsocket::useBlockingMode() const {
 	#ifdef FIONBIO
-	int	nonblocking=0;
+	int32_t	nonblocking=0;
 	return (ioCtl(FIONBIO,&nonblocking)!=-1);
 	#else
 	return false;
@@ -89,10 +89,10 @@ BIO *clientsocket::newSSLBIO() const {
 }
 #endif
 
-int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
+int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 							long sec, long usec) {
 
-	int	retval;
+	int32_t	retval;
 	if (sec==-1 || usec==-1) {
 
 		// if no timeout was passed in, just do a plain vanilla connect
@@ -150,7 +150,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 				// Check for an error using
 				// getsockopt(,,SO_ERROR,,)
-				int		error=0;
+				int32_t		error=0;
 				socklen_t	errorsize=sizeof(error);
 
 				// Some platforms cause getsockopt() to fail
@@ -175,7 +175,7 @@ int clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 				// connect was unsuccessful.
 				struct sockaddr	peeraddr;
 				socklen_t	size=sizeof(peeraddr);
-				int	result;
+				int32_t	result;
 				do {
 					rawbuffer::zero(&peeraddr,
 							sizeof(peeraddr));
@@ -258,7 +258,7 @@ ssize_t clientsocket::lowLevelWrite(const void *buf, ssize_t count) const {
 			count,0);
 }
 
-int clientsocket::lowLevelClose() {
+int32_t clientsocket::lowLevelClose() {
 	#ifdef RUDIMENTS_HAVE_CLOSESOCKET
 		return closesocket(fd());
 	#else

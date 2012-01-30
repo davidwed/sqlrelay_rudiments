@@ -54,17 +54,13 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*write(uint32_t number);
 		stringbuffer	*write(uint64_t number);
 		stringbuffer	*write(float number);
-		stringbuffer	*write(float number,
-						unsigned short scale);
-		stringbuffer	*write(float number,
-						unsigned short precision,
-						unsigned short scale);
+		stringbuffer	*write(float number, uint16_t scale);
+		stringbuffer	*write(float number, uint16_t precision,
+							uint16_t scale);
 		stringbuffer	*write(double number);
-		stringbuffer	*write(double number,
-						unsigned short scale);
-		stringbuffer	*write(double number,
-						unsigned short precision,
-						unsigned short scale);
+		stringbuffer	*write(double number, uint16_t scale);
+		stringbuffer	*write(double number, uint16_t precision,
+							uint16_t scale);
 			// Writes the data to the stringbuffer at the current
 			// position.  If necessary, the buffer will grow to
 			// accommodate the new data.
@@ -81,30 +77,20 @@ class stringbuffer : public variablebuffer {
 		stringbuffer	*append(uint16_t number);
 		stringbuffer	*append(uint32_t number);
 		stringbuffer	*append(uint64_t number);
-		stringbuffer	*append(int16_t number,
-					unsigned short zeropadding);
-		stringbuffer	*append(int32_t number,
-					unsigned short zeropadding);
-		stringbuffer	*append(int64_t number,
-					unsigned short zeropadding);
-		stringbuffer	*append(uint16_t number,
-					unsigned short zeropadding);
-		stringbuffer	*append(uint32_t number,
-					unsigned short zeropadding);
-		stringbuffer	*append(uint64_t number,
-					unsigned short zeropadding);
+		stringbuffer	*append(int16_t number, uint16_t zeropadding);
+		stringbuffer	*append(int32_t number, uint16_t zeropadding);
+		stringbuffer	*append(int64_t number, uint16_t zeropadding);
+		stringbuffer	*append(uint16_t number, uint16_t zeropadding);
+		stringbuffer	*append(uint32_t number, uint16_t zeropadding);
+		stringbuffer	*append(uint64_t number, uint16_t zeropadding);
 		stringbuffer	*append(float number);
-		stringbuffer	*append(float number,
-						unsigned short scale);
-		stringbuffer	*append(float number,
-						unsigned short precision,
-						unsigned short scale);
+		stringbuffer	*append(float number, uint16_t scale);
+		stringbuffer	*append(float number, uint16_t precision,
+							uint16_t scale);
 		stringbuffer	*append(double number);
-		stringbuffer	*append(double number,
-						unsigned short scale);
-		stringbuffer	*append(double number,
-						unsigned short precision,
-						unsigned short scale);
+		stringbuffer	*append(double number, uint16_t scale);
+		stringbuffer	*append(double number, uint16_t precision,
+							uint16_t scale);
 			// Appends the data to the stringbuffer.  The buffer
 			// will grow to accommodate the new data.
 

@@ -29,15 +29,15 @@ class networkinterface {
 		sockaddr	getNetmask();
 		sockaddr	getHardwareAddress();
 
-		short		getFlags();
-		int		getMetric();
-		int		getMaximumTransmitUnit();
+		int16_t		getFlags();
+		int32_t		getMetric();
+		int32_t		getMaximumTransmitUnit();
 		ifmap		getDeviceMap();
-		int		getSlaveDevice();
-		int		getForUseByInterfaceData();
-		int		getIndex();
-		int		getLinkBandwidth();
-		int		getQueueLength();
+		int32_t		getSlaveDevice();
+		int32_t		getForUseByInterfaceData();
+		int32_t		getIndex();
+		int32_t		getLinkBandwidth();
+		int32_t		getQueueLength();
 		const char	*getNewName();
 
 	#include <rudiments/private/networkinterface.h>

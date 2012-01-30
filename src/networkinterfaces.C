@@ -36,31 +36,31 @@ sockaddr networkinterface::getHardwareAddress() {
 }
 
 
-short networkinterface::getFlags() {
+int16_t networkinterface::getFlags() {
 }
 
-int networkinterface::getMetric() {
+int32_t networkinterface::getMetric() {
 }
 
-int networkinterface::getMaximumTransmitUnit() {
+int32_t networkinterface::getMaximumTransmitUnit() {
 }
 
 ifmap networkinterface::getDeviceMap() {
 }
 
-int networkinterface::getSlaveDevice() {
+int32_t networkinterface::getSlaveDevice() {
 }
 
-int networkinterface::getForUseByInterfaceData() {
+int32_t networkinterface::getForUseByInterfaceData() {
 }
 
-int networkinterface::getIndex() {
+int32_t networkinterface::getIndex() {
 }
 
-int networkinterface::getLinkBandwidth() {
+int32_t networkinterface::getLinkBandwidth() {
 }
 
-int networkinterface::getQueueLength() {
+int32_t networkinterface::getQueueLength() {
 }
 
 const char *networkinterface::getNewName() {

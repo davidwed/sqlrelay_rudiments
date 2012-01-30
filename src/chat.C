@@ -43,11 +43,11 @@ chat::~chat() {
 	delete pvt;
 }
 
-int chat::runScript(const char *script, char **abort) {
+int32_t chat::runScript(const char *script, char **abort) {
 	return runScript(script,abort,NULL);
 }
 
-int chat::runScript(const char *script, char **abort,
+int32_t chat::runScript(const char *script, char **abort,
 				constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
@@ -78,7 +78,7 @@ int chat::runScript(const char *script, char **abort,
 			!node->isNullNode();
 			node=node->getNextTagSibling()) {
 
-		int	result=RESULT_SUCCESS;
+		int32_t	result=RESULT_SUCCESS;
 		if (!charstring::compare(node->getName(),"timeout")) {
 			pvt->_timeout=charstring::toInteger(
 				node->getAttributeValue("seconds"));
@@ -123,7 +123,7 @@ void chat::appendAbortString(const char *string) {
 	char	*newstring=new char[charstring::length(string)+1];
 
 	// replace \\r and \\n
-	int	index=0;
+	int32_t	index=0;
 	for (const char *ptr=string; *ptr; ptr++) {
 		if (*ptr=='\\') {
 			ptr++;
@@ -187,7 +187,7 @@ void chat::flush() {
 	}
 }
 
-int chat::expect(const char *string, char **abort) {
+int32_t chat::expect(const char *string, char **abort) {
 
 	if (abort) {
 		*abort=NULL;
@@ -206,7 +206,7 @@ int chat::expect(const char *string, char **abort) {
 	for (;;) {
 
 		// read a character
-		int	result=pvt->_readfd->read(&ch,pvt->_timeout,0);
+		int32_t	result=pvt->_readfd->read(&ch,pvt->_timeout,0);
 
 		#ifdef DEBUG_CHAT
 		character::safePrint(ch);
@@ -240,7 +240,7 @@ int chat::expect(const char *string, char **abort) {
 
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
-		int	index=2;
+		int32_t	index=2;
 		for (stringlistnode *sln=pvt->_aborts.getFirstNode();
 						sln; sln=sln->getNext()) {
 
@@ -277,14 +277,14 @@ int chat::expect(const char *string, char **abort) {
 	}
 }
 
-int chat::send(const char *string, constnamevaluepairs *variables) {
+int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
 	printf("sending:\n");
 	#endif
 
 	// write the string, character at a time, processing special characters
-	int	result=RESULT_SUCCESS;
+	int32_t	result=RESULT_SUCCESS;
 	if (string) {
 
 		// set up an instance of the serial port class, just in case
@@ -426,7 +426,8 @@ int chat::send(const char *string, constnamevaluepairs *variables) {
 }
 
 
-int chat::substituteVariables(const char **ch, constnamevaluepairs *variables) {
+int32_t chat::substituteVariables(const char **ch,
+					constnamevaluepairs *variables) {
 			
 	// look for $(variable), make sure we don't just have $(\0
 	const char	*str=*ch;

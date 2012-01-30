@@ -26,8 +26,8 @@ class device : public file {
 
 		static bool	createDeviceNode(const char *filename,
 						bool blockdevice,
-						unsigned short major,
-						unsigned short minor,
+						uint16_t major,
+						uint16_t minor,
 						mode_t perms);
 			// Creates device node "filename" with major number
 			// "major" and minor number "minor".  The device node

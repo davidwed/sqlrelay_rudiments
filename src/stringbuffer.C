@@ -133,45 +133,42 @@ stringbuffer *stringbuffer::append(uint64_t number) {
 	return append(number,1);
 }
 
-stringbuffer *stringbuffer::append(int16_t number, unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(int16_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(int32_t number, unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(int32_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(int64_t number, unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(int64_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(uint16_t number,
-					unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(uint16_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(uint32_t number,
-					unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(uint32_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(uint64_t number,
-					unsigned short zeropadding) {
+stringbuffer *stringbuffer::append(uint64_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
@@ -182,15 +179,15 @@ stringbuffer *stringbuffer::append(float number) {
 	return append(number,4);
 }
 
-stringbuffer *stringbuffer::append(float number, unsigned short scale) {
+stringbuffer *stringbuffer::append(float number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(float number, unsigned short precision,
-							unsigned short scale) {
+stringbuffer *stringbuffer::append(float number, uint16_t precision,
+							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
@@ -201,15 +198,15 @@ stringbuffer *stringbuffer::append(double number) {
 	return append(number,4);
 }
 
-stringbuffer *stringbuffer::append(double number, unsigned short scale) {
+stringbuffer *stringbuffer::append(double number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::append(double number, unsigned short precision,
-							unsigned short scale) {
+stringbuffer *stringbuffer::append(double number, uint16_t precision,
+							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
 	variablebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
@@ -292,15 +289,15 @@ stringbuffer *stringbuffer::write(float number) {
 	return write(number,4);
 }
 
-stringbuffer *stringbuffer::write(float number, unsigned short scale) {
+stringbuffer *stringbuffer::write(float number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::write(float number, unsigned short precision,
-							unsigned short scale) {
+stringbuffer *stringbuffer::write(float number, uint16_t precision,
+							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
@@ -311,15 +308,15 @@ stringbuffer *stringbuffer::write(double number) {
 	return write(number,4);
 }
 
-stringbuffer *stringbuffer::write(double number, unsigned short scale) {
+stringbuffer *stringbuffer::write(double number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
-stringbuffer *stringbuffer::write(double number, unsigned short precision,
-							unsigned short scale) {
+stringbuffer *stringbuffer::write(double number, uint16_t precision,
+							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
 	variablebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;

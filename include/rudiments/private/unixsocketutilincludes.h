@@ -11,7 +11,7 @@
 
 #ifndef RUDIMENTS_HAVE_SOCKADDR_UN
 	struct sockaddr_un {
-		short   sun_family;
-		char    sun_path[MAXPATHLEN];
+		int16_t	sun_family;
+		char	sun_path[MAXPATHLEN];
 	};
 #endif

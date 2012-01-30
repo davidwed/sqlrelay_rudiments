@@ -31,7 +31,7 @@ class unixclientsocket : public clientsocket, private unixsocketutil {
 		unixclientsocket	&operator=(const unixclientsocket &u);
 		virtual		~unixclientsocket();
 
-		int	connect(const char *filename,
+		int32_t	connect(const char *filename,
 					long timeoutsec,
 					long timeoutusec,
 					unsigned long retrywait,
@@ -60,7 +60,7 @@ class unixclientsocket : public clientsocket, private unixsocketutil {
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount" when connect() is called.
 
-		int	connect();
+		int32_t	connect();
 			// Attempts to connect to the "filename" set earlier.
 			// If the connection fails, it will retry "retrycount"
 			// times, waiting "retrywait" seconds between tries.

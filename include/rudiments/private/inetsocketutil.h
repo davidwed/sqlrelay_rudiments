@@ -3,7 +3,7 @@
 
 	protected:
 		const char	*_address();
-		unsigned short	*_port();
+		uint16_t	*_port();
 		sockaddr_in	*_sin();
 	private:
 		inetsocketutilprivate	*pvt;

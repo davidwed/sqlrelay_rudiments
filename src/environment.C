@@ -61,7 +61,7 @@ bool environment::setValue(const char *variable, const char *value) {
 				charstring::length(value)+2;
 	char	*pestr=(char *)malloc(pestrlen*sizeof(char));
 	snprintf(pestr,pestrlen,"%s=%s",variable,value);
-	int	result;
+	int32_t	result;
 	do {
 		result=putenv(pestr);
 	} while (result && error::getErrorNumber()==EINTR);

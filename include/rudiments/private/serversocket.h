@@ -8,7 +8,7 @@
 #endif
 		ssize_t	lowLevelRead(void *buf, ssize_t count) const;
 		ssize_t	lowLevelWrite(const void *buf, ssize_t count) const;
-		int	lowLevelClose();
+		int32_t	lowLevelClose();
 
 	private:
 		bool	setLingerOnClose(int32_t timeout, int32_t onoff);

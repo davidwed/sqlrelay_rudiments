@@ -8,12 +8,13 @@
 
 	private:
 		off64_t	lseek(off64_t offset, int32_t whence) const;
-		bool	lock(int32_t method, short type, short whence,
+		bool	lock(int32_t method, int16_t type, int16_t whence,
 					off64_t start, off64_t len) const;
-		bool	checkLock(short type, short whence,
+		bool	checkLock(int16_t type, int16_t whence,
 						off64_t start, off64_t len,
 						struct flock *retlck) const;
-		bool	unlock(short whence, off64_t start, off64_t len) const;
+		bool	unlock(int16_t whence,
+					off64_t start, off64_t len) const;
 
 		bool	setAttribute(const char *name,
 						const void *value,

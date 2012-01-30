@@ -54,7 +54,7 @@ mutex::~mutex() {
 }
 
 bool mutex::lock() {
-	int	result;
+	int32_t	result;
 	do {
 		result=pthread_mutex_lock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -62,7 +62,7 @@ bool mutex::lock() {
 }
 
 bool mutex::tryLock() {
-	int	result;
+	int32_t	result;
 	do {
 		result=pthread_mutex_trylock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -70,7 +70,7 @@ bool mutex::tryLock() {
 }
 
 bool mutex::unlock() {
-	int	result;
+	int32_t	result;
 	do {
 		result=pthread_mutex_unlock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

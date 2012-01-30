@@ -15,7 +15,7 @@ class inetsocketutilprivate {
 	friend class inetsocketutil;
 	private:
 		const char	*_address;
-		unsigned short	_port;
+		uint16_t	_port;
 		sockaddr_in	_sin;
 };
 
@@ -40,7 +40,7 @@ inetsocketutil::~inetsocketutil() {
 	delete pvt;
 }
 
-void inetsocketutil::initialize(const char *address, unsigned short port) {
+void inetsocketutil::initialize(const char *address, uint16_t port) {
 	pvt->_address=address;
 	pvt->_port=port;
 	rawbuffer::zero(&pvt->_sin,sizeof(pvt->_sin));
@@ -50,7 +50,7 @@ const char *inetsocketutil::_address() {
 	return pvt->_address;
 }
 
-unsigned short *inetsocketutil::_port() {
+uint16_t *inetsocketutil::_port() {
 	return &pvt->_port;
 }
 

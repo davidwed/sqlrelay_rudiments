@@ -106,8 +106,8 @@ bool file::create(const char *name, mode_t perms) {
 	return open(name,O_CREAT|O_TRUNC|O_RDWR,perms);
 }
 
-ssize_t file::create(const char *name, mode_t perms, unsigned short number) {
-	return create(name,perms,&number,sizeof(unsigned short));
+ssize_t file::create(const char *name, mode_t perms, uint16_t number) {
+	return create(name,perms,&number,sizeof(uint16_t));
 }
 
 ssize_t file::create(const char *name, mode_t perms, unsigned long number) {
@@ -155,8 +155,7 @@ bool file::createFile(const char *name, mode_t perms) {
 	return fl.create(name,perms);
 }
 
-ssize_t file::createFile(const char *name, mode_t perms,
-						unsigned short number) {
+ssize_t file::createFile(const char *name, mode_t perms, uint16_t number) {
 	file	fl;
 	return fl.create(name,perms,number);
 }
@@ -257,15 +256,15 @@ ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
 }
 
 
-bool file::tryLockFile(short type) const {
+bool file::tryLockFile(int16_t type) const {
 	return tryLockRegion(type,0,0);
 }
 
-bool file::lockFile(short type) const {
+bool file::lockFile(int16_t type) const {
 	return lockRegion(type,0,0);
 }
 
-bool file::checkLockFile(short type, struct flock *retlck) const {
+bool file::checkLockFile(int16_t type, struct flock *retlck) const {
 	return checkLockRegion(type,0,0,retlck);
 }
 
@@ -273,15 +272,15 @@ bool file::unlockFile() const {
 	return unlockRegion(0,0);
 }
 
-bool file::tryLockRegion(short type, off64_t start, off64_t len) const {
+bool file::tryLockRegion(int16_t type, off64_t start, off64_t len) const {
 	return lock(F_SETLK,type,SEEK_SET,start,len);
 }
 
-bool file::lockRegion(short type, off64_t start, off64_t len) const {
+bool file::lockRegion(int16_t type, off64_t start, off64_t len) const {
 	return lock(F_SETLKW,type,SEEK_SET,start,len);
 }
 
-bool file::checkLockRegion(short type, off64_t start, off64_t len,
+bool file::checkLockRegion(int16_t type, off64_t start, off64_t len,
 						struct flock *retlck) const {
 	return checkLock(type,SEEK_SET,start,len,retlck);
 }
@@ -290,28 +289,28 @@ bool file::unlockRegion(off64_t start, off64_t len) const {
 	return unlock(SEEK_SET,start,len);
 }
 
-bool file::tryLockFromCurrent(short type, off64_t len) const {
+bool file::tryLockFromCurrent(int16_t type, off64_t len) const {
 	return tryLockFromCurrent(type,0,len);
 }
 
-bool file::tryLockFromCurrent(short type, off64_t start, off64_t len) const {
+bool file::tryLockFromCurrent(int16_t type, off64_t start, off64_t len) const {
 	return lock(F_SETLK,type,SEEK_CUR,start,len);
 }
 
-bool file::lockFromCurrent(short type, off64_t len) const {
+bool file::lockFromCurrent(int16_t type, off64_t len) const {
 	return lockFromCurrent(type,0,len);
 }
 
-bool file::lockFromCurrent(short type, off64_t start, off64_t len) const {
+bool file::lockFromCurrent(int16_t type, off64_t start, off64_t len) const {
 	return lock(F_SETLKW,type,SEEK_CUR,start,len);
 }
 
-bool file::checkLockFromCurrent(short type, off64_t len,
+bool file::checkLockFromCurrent(int16_t type, off64_t len,
 				struct flock *retlck) const {
 	return checkLockFromCurrent(type,0,len,retlck);
 }
 
-bool file::checkLockFromCurrent(short type, off64_t start, off64_t len,
+bool file::checkLockFromCurrent(int16_t type, off64_t start, off64_t len,
 						struct flock *retlck) const {
 	return checkLock(type,SEEK_CUR,start,len,retlck);
 }
@@ -324,27 +323,28 @@ bool file::unlockFromCurrent(off64_t start, off64_t len) const {
 	return unlock(SEEK_CUR,start,len);
 }
 
-bool file::tryLockFromEnd(short type, off64_t len) const {
+bool file::tryLockFromEnd(int16_t type, off64_t len) const {
 	return tryLockFromEnd(type,0,len);
 }
 
-bool file::tryLockFromEnd(short type, off64_t start, off64_t len) const {
+bool file::tryLockFromEnd(int16_t type, off64_t start, off64_t len) const {
 	return lock(F_SETLK,type,SEEK_END,start,len);
 }
 
-bool file::lockFromEnd(short type, off64_t len) const {
+bool file::lockFromEnd(int16_t type, off64_t len) const {
 	return lockFromEnd(type,0,len);
 }
 
-bool file::lockFromEnd(short type, off64_t start, off64_t len) const {
+bool file::lockFromEnd(int16_t type, off64_t start, off64_t len) const {
 	return lock(F_SETLKW,type,SEEK_END,start,len);
 }
 
-bool file::checkLockFromEnd(short type, off64_t len, struct flock *retlck) const {
+bool file::checkLockFromEnd(int16_t type, off64_t len,
+					struct flock *retlck) const {
 	return checkLockFromEnd(type,0,len,retlck);
 }
 
-bool file::checkLockFromEnd(short type, off64_t start, off64_t len,
+bool file::checkLockFromEnd(int16_t type, off64_t start, off64_t len,
 						struct flock *retlck) const {
 	return checkLock(type,SEEK_END,start,len,retlck);
 }
@@ -357,15 +357,15 @@ bool file::unlockFromEnd(off64_t start, off64_t len) const {
 	return unlock(SEEK_END,start,len);
 }
 
-bool file::tryLockRemainder(short type, off64_t start) const {
+bool file::tryLockRemainder(int16_t type, off64_t start) const {
 	return lock(F_SETLK,type,SEEK_SET,start,0);
 }
 
-bool file::lockRemainder(short type, off64_t start) const {
+bool file::lockRemainder(int16_t type, off64_t start) const {
 	return lock(F_SETLKW,type,SEEK_SET,start,0);
 }
 
-bool file::checkLockRemainder(short type, off64_t start,
+bool file::checkLockRemainder(int16_t type, off64_t start,
 					struct flock *retlck) const {
 	return checkLock(type,SEEK_SET,start,0,retlck);
 }
@@ -374,28 +374,28 @@ bool file::unlockRemainder(off64_t start) const {
 	return unlock(SEEK_SET,start,0);
 }
 
-bool file::tryLockRemainderFromCurrent(short type) const {
+bool file::tryLockRemainderFromCurrent(int16_t type) const {
 	return tryLockRemainderFromCurrent(type,0);
 }
 
-bool file::tryLockRemainderFromCurrent(short type, off64_t start) const {
+bool file::tryLockRemainderFromCurrent(int16_t type, off64_t start) const {
 	return lock(F_SETLK,type,SEEK_CUR,start,0);
 }
 
-bool file::lockRemainderFromCurrent(short type) const {
+bool file::lockRemainderFromCurrent(int16_t type) const {
 	return lockRemainderFromCurrent(type,0);
 }
 
-bool file::lockRemainderFromCurrent(short type, off64_t start) const {
+bool file::lockRemainderFromCurrent(int16_t type, off64_t start) const {
 	return lock(F_SETLKW,type,SEEK_CUR,start,0);
 }
 
-bool file::checkLockRemainderFromCurrent(short type,
+bool file::checkLockRemainderFromCurrent(int16_t type,
 					struct flock *retlck) const {
 	return checkLockRemainderFromCurrent(type,0,retlck);
 }
 
-bool file::checkLockRemainderFromCurrent(short type, off64_t start,
+bool file::checkLockRemainderFromCurrent(int16_t type, off64_t start,
 					struct flock *retlck) const {
 	return checkLock(type,SEEK_CUR,start,0,retlck);
 }
@@ -408,27 +408,27 @@ bool file::unlockRemainderFromCurrent(off64_t start) const {
 	return unlock(SEEK_CUR,start,0);
 }
 
-bool file::tryLockRemainderFromEnd(short type) const {
+bool file::tryLockRemainderFromEnd(int16_t type) const {
 	return tryLockRemainderFromEnd(type,0);
 }
 
-bool file::tryLockRemainderFromEnd(short type, off64_t start) const {
+bool file::tryLockRemainderFromEnd(int16_t type, off64_t start) const {
 	return lock(F_SETLK,type,SEEK_END,start,0);
 }
 
-bool file::lockRemainderFromEnd(short type) const {
+bool file::lockRemainderFromEnd(int16_t type) const {
 	return lockRemainderFromEnd(type,0);
 }
 
-bool file::lockRemainderFromEnd(short type, off64_t start) const {
+bool file::lockRemainderFromEnd(int16_t type, off64_t start) const {
 	return lock(F_SETLKW,type,SEEK_END,start,0);
 }
 
-bool file::checkLockRemainderFromEnd(short type, struct flock *retlck) const {
+bool file::checkLockRemainderFromEnd(int16_t type, struct flock *retlck) const {
 	return checkLockRemainderFromEnd(type,0,retlck);
 }
 
-bool file::checkLockRemainderFromEnd(short type, off64_t start,
+bool file::checkLockRemainderFromEnd(int16_t type, off64_t start,
 						struct flock *retlck) const {
 	return checkLock(type,SEEK_END,start,0,retlck);
 }
@@ -807,7 +807,7 @@ void file::dontGetCurrentPropertiesOnOpen() {
 	pvt->_getcurrentpropertiesonopen=false;
 }
 
-bool file::lock(int32_t method, short type, short whence,
+bool file::lock(int32_t method, int16_t type, int16_t whence,
 				off64_t start, off64_t len) const {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
@@ -848,7 +848,7 @@ bool file::lock(int32_t method, short type, short whence,
 	#endif
 }
 
-bool file::checkLock(short type, short whence, off64_t start, off64_t len,
+bool file::checkLock(int16_t type, int16_t whence, off64_t start, off64_t len,
 						struct flock *retlck) const {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
@@ -868,7 +868,7 @@ bool file::checkLock(short type, short whence, off64_t start, off64_t len,
 	#endif
 }
 
-bool file::unlock(short whence, off64_t start, off64_t len) const {
+bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
 		lck.l_type=F_UNLCK;
@@ -1365,14 +1365,14 @@ const char * const *file::listAttributes() const {
 	#endif
 }
 
-bool file::getAttribute(const char *name, unsigned short *number) const {
+bool file::getAttribute(const char *name, uint16_t *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
 	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(unsigned short));
+		rawbuffer::copy(number,buffer,sizeof(uint16_t));
 		delete[] buffer;
 	}
 	return retval;
@@ -1391,14 +1391,14 @@ bool file::getAttribute(const char *name, unsigned long *number) const {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, short *number) const {
+bool file::getAttribute(const char *name, int16_t *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
 	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(short));
+		rawbuffer::copy(number,buffer,sizeof(int16_t));
 		delete[] buffer;
 	}
 	return retval;
@@ -1549,7 +1549,7 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 	#endif
 }
 
-bool file::createAttribute(const char *name, unsigned short number) const {
+bool file::createAttribute(const char *name, uint16_t number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
@@ -1557,7 +1557,7 @@ bool file::createAttribute(const char *name, unsigned long number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, short number) const {
+bool file::createAttribute(const char *name, int16_t number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
@@ -1612,7 +1612,7 @@ bool file::createAttribute(const char *name, const void *value,
 	return setAttribute(name,value,size,XATTR_CREATE);
 }
 
-bool file::replaceAttribute(const char *name, unsigned short number) const {
+bool file::replaceAttribute(const char *name, uint16_t number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
@@ -1620,7 +1620,7 @@ bool file::replaceAttribute(const char *name, unsigned long number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, short number) const {
+bool file::replaceAttribute(const char *name, int16_t number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
@@ -1675,7 +1675,7 @@ bool file::replaceAttribute(const char *name, const void *value,
 	return setAttribute(name,value,size,XATTR_REPLACE);
 }
 
-bool file::setAttribute(const char *name, unsigned short number) const {
+bool file::setAttribute(const char *name, uint16_t number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 
@@ -1683,7 +1683,7 @@ bool file::setAttribute(const char *name, unsigned long number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, short number) const {
+bool file::setAttribute(const char *name, int16_t number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 

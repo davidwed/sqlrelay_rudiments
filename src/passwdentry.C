@@ -28,7 +28,7 @@ namespace rudiments {
 CHAR *unicodeToAscii(WCHAR *in) {
 
 	BOOL	useddefaultchar;
-	int	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,
+	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,
 						"?",&useddefaultchar);
 	if (size==0) {
 		return NULL;
@@ -292,7 +292,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		// convert username to unicode...
 
 		// get the size of the unicode buffer
-		int	usernamewsize=MultiByteToWideChar(CP_ACP,
+		int32_t	usernamewsize=MultiByteToWideChar(CP_ACP,
 							MB_PRECOMPOSED,
 							username,
 							-1,NULL,0);

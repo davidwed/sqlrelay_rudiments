@@ -231,7 +231,7 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		// convert groupname to unicode...
 
 		// get the size of the unicode buffer
-		int	groupnamewsize=MultiByteToWideChar(CP_ACP,
+		int32_t	groupnamewsize=MultiByteToWideChar(CP_ACP,
 							MB_PRECOMPOSED,
 							groupname,
 							-1,NULL,0);
@@ -343,7 +343,7 @@ bool groupentry::getGroupId(const char *groupname, gid_t *groupid) {
 bool groupentry::getMembers(const char *groupname, char ***members) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; grp.getMembers()[counter]; counter++);
 		char	**memb=new char *[counter+1];
 		memb[counter]=NULL;
@@ -377,7 +377,7 @@ bool groupentry::getPassword(gid_t groupid, char **password) {
 bool groupentry::getMembers(gid_t groupid, char ***members) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
-		int	counter;
+		int32_t	counter;
 		for (counter=0; grp.getMembers()[counter]; counter++);
 		char	**memb=new char *[counter+1];
 		memb[counter]=NULL;

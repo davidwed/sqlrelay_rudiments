@@ -26,8 +26,8 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 		inetclientsocket	&operator=(const inetclientsocket &i);
 		virtual		~inetclientsocket();
 
-		int	connect(const char *host,
-					unsigned short port,
+		int32_t	connect(const char *host,
+					uint16_t port,
 					long timeoutsec,
 					long timeoutusec,
 					unsigned long retrywait,
@@ -51,7 +51,7 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 			// "retrycount".  Initializes the class to use the
 			// result when connect() is called.
 		void	initialize(const char *host,
-						unsigned short port,
+						uint16_t port,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
@@ -60,7 +60,7 @@ class inetclientsocket : public clientsocket, private inetsocketutil  {
 			// "timeoutsec", "timeoutusec", "retrywait" and
 			// "retrycount" when connect() is called.
 
-		int	connect();
+		int32_t	connect();
 			// Attempts to connect to the "host" and "port" set
 			// earlier.  If the connection fails, it will retry
 			// "retrycount" times, waiting "retrywait" seconds

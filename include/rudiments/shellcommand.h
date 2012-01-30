@@ -47,22 +47,22 @@ class shellcommandprivate;
 
 class shellcommand {
 	public:
-		int	run(const char *command);
+		int32_t	run(const char *command);
 			// Runs "command".
 
-		int	getStandardInput();
+		int32_t	getStandardInput();
 			// If run() succeeded, returns the file descriptor
 			// of the standard input of the command or 0 otherwise.
 
-		int	getStandardOutput();
+		int32_t	getStandardOutput();
 			// If run() succeeded, returns the file descriptor
 			// of the standard output of the command or 0 otherwise.
 
-		int	getStandardError();
+		int32_t	getStandardError();
 			// If run() succeeded, returns the file descriptor
 			// of the standard error of the command or 0 otherwise.
 
-		int	close();
+		int32_t	close();
 			// Closes the previously run command.
 			//
 			// Returns 1 on success and 0 on failure.

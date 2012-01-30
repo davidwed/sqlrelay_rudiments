@@ -227,7 +227,7 @@ int32_t signalset::signalIsInSet(int32_t signum) const {
 // signalmanager methods
 bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 	#ifdef RUDIMENTS_HAVE_KILL
-		int	result;
+		int32_t	result;
 		do {
 			result=kill(processid,signum);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -244,7 +244,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 }
 
 bool signalmanager::raiseSignal(int32_t signum) {
-	int	result;
+	int32_t	result;
 	do {
 		result=raise(signum);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -262,7 +262,7 @@ uint32_t signalmanager::alarm(uint32_t seconds) {
 
 bool signalmanager::ignoreSignals(const signalset *sset) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
-		int	result;
+		int32_t	result;
 		do {
 			#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
 				result=pthread_sigmask(SIG_SETMASK,
@@ -297,7 +297,7 @@ bool signalmanager::waitForSignals(const signalset *sset) {
 
 bool signalmanager::examineBlockedSignals(signalset *sset) {
 	#ifdef RUDIMENTS_HAVE_KILL
-		int	result;
+		int32_t	result;
 		do {
 			result=sigpending(&sset->pvt->_sigset);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -314,7 +314,7 @@ class signalhandlerprivate {
 	friend class signalhandler;
 	private:
 		const signalset	*_sset;
-		int		_flags;
+		int32_t		_flags;
 		#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 			void		(*_handler)(int);
 		#else
@@ -380,7 +380,7 @@ bool signalhandler::handleSignal(int32_t signum) {
 bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		struct sigaction	oldaction;
-		int			result;
+		int32_t			result;
 		if (pvt->_sset) {
 			rawbuffer::copy(&pvt->_handlerstruct.sa_mask,
 						&pvt->_sset->pvt->_sigset,

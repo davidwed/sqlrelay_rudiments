@@ -213,7 +213,7 @@ bool xmlsax::parseTag(char current, char *next) {
 	}
 
 	// is this a standalone tag or end-tag?
-	int	endtag=0;
+	int32_t	endtag=0;
 	char	standalone='\0';
 	if (ch=='!' || ch=='?') {
 		standalone=ch;
@@ -315,7 +315,7 @@ bool xmlsax::parseTag(char current, char *next) {
 
 bool xmlsax::parseTagName(char current, stringbuffer *name, char *next) {
 
-	int	bracketcount=0;
+	int32_t	bracketcount=0;
 
 	// get characters and put them in the buffer
 	char	ch=current;
@@ -410,7 +410,7 @@ char xmlsax::parseCData(char current) {
 	// create a buffer to store the comment
 	pvt->_cdatatext.clear();
 	char		ch=current;
-	int		nest=0;
+	int32_t		nest=0;
 
 	for (;;) {
 
@@ -526,7 +526,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 
 	// get the attribute value
 	pvt->_attrdata.clear();
-	int	nest=0;
+	int32_t	nest=0;
 	for (;;) {
 
 		if (standalone=='!' &&
@@ -562,7 +562,7 @@ char xmlsax::parseAttribute(char current, char standalone) {
 			if (ch=='&') {
 
 				// handle general entities
-				int	result=getGeneralEntity(delimiter);
+				int32_t	result=getGeneralEntity(delimiter);
 
 				if (!result) {
 
@@ -613,13 +613,13 @@ char xmlsax::parseAttribute(char current, char standalone) {
 	return getCharacter();
 }
 
-int xmlsax::getGeneralEntity(char breakchar) {
+int32_t xmlsax::getGeneralEntity(char breakchar) {
 
 	// create a buffer and set the first character to &
 	pvt->_entitybuffer[0]='&';
 
 	// get until a ; or the next 5 characters, whatever is smaller
-	int	i;
+	int32_t	i;
 	for (i=1; i<6; i++) {
 
 		pvt->_entitybuffer[i]=getCharacter();
@@ -715,7 +715,7 @@ bool xmlsax::parseText(char current, char *next) {
 		if (ch=='&') {
 
 			// handle general entities
-			int	result=getGeneralEntity('<');
+			int32_t	result=getGeneralEntity('<');
 
 			if (!result) {
 
@@ -756,7 +756,7 @@ bool xmlsax::parseText(char current, char *next) {
 char xmlsax::skipWhitespace(char current) {
 
 	char	ch=current;
-	int	first=1;
+	int32_t	first=1;
 
 	for (;;) {
 
