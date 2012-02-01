@@ -387,6 +387,10 @@ AC_MSG_CHECKING(for sys/un.h)
 AC_TRY_COMPILE([#include <sys/un.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_UN_H, 1, Some systems have sys/un.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for sys/param.h)
+AC_TRY_COMPILE([#include <sys/param.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_PARAM_H, 1, Some systems have sys/param.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sys/time.h)
 AC_TRY_COMPILE([#include <sys/time.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_TIME_H, 1, Some systems have sys/time.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

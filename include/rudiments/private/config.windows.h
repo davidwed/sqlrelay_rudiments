@@ -809,6 +809,9 @@
 /* Some systems have sys/ipc.h */
 /* #undef RUDIMENTS_HAVE_SYS_IPC_H */
 
+/* Some systems have sys/param.h */
+/* #undef RUDIMENTS_HAVE_SYS_PARAM_H */
+
 /* Some systems have sys/select.h */
 /* #undef RUDIMENTS_HAVE_SYS_SELECT_H */
 

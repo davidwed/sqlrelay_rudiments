@@ -4,7 +4,9 @@
 #include <rudiments/private/inttypes.h>
 
 #include <sys/types.h>
-#include <sys/param.h>
+#ifdef RUDIMENTS_HAVE_SYS_PARAM_H
+	#include <sys/param.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_UN_H
 	#include <sys/un.h>
 #endif

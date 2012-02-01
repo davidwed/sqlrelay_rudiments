@@ -4,7 +4,9 @@
 #include <rudiments/private/inttypes.h>
 
 // for timeval
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 
 // for timespec
 #if defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H)
