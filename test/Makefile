@@ -431,220 +431,220 @@ clean:
 	$(MAKE) -C certificates clean
 	$(RM) test.xml
 
-.C.lo:
+.cpp.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
 
-server$(EXE): server.C server.lo 
+server$(EXE): server.cpp server.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)
 
-nullserver$(EXE): nullserver.C nullserver.lo 
+nullserver$(EXE): nullserver.cpp nullserver.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ nullserver.lo $(ALLSTATIC) $(LIBS)
 
-sslsvr$(EXE): sslsvr.C sslsvr.lo 
+sslsvr$(EXE): sslsvr.cpp sslsvr.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslsvr.lo $(ALLSTATIC) $(LIBS)
 
-listener$(EXE): listener.C listener.lo
+listener$(EXE): listener.cpp listener.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ listener.lo $(ALLSTATIC) $(LIBS)
 
-inetclientsocket$(EXE): inetclientsocket.C inetclientsocket.lo
+inetclientsocket$(EXE): inetclientsocket.cpp inetclientsocket.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclientsocket.lo $(ALLSTATIC) $(LIBS)
 
-sslclnt$(EXE): sslclnt.C sslclnt.lo
+sslclnt$(EXE): sslclnt.cpp sslclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslclnt.lo $(ALLSTATIC) $(LIBS)
 
-unixclientsocket$(EXE): unixclientsocket.C unixclientsocket.lo
+unixclientsocket$(EXE): unixclientsocket.cpp unixclientsocket.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclientsocket.lo $(ALLSTATIC) $(LIBS)
 
-directory$(EXE): directory.C directory.lo 
+directory$(EXE): directory.cpp directory.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ directory.lo $(ALLSTATIC) $(LIBS)
 
-daemonprocess$(EXE): daemonprocess.C daemonprocess.lo 
+daemonprocess$(EXE): daemonprocess.cpp daemonprocess.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ daemonprocess.lo $(ALLSTATIC) $(LIBS)
 
-commandline$(EXE): commandline.C commandline.lo
+commandline$(EXE): commandline.cpp commandline.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ commandline.lo $(ALLSTATIC) $(LIBS)
 
-parameterstring$(EXE): parameterstring.C parameterstring.lo
+parameterstring$(EXE): parameterstring.cpp parameterstring.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ parameterstring.lo $(ALLSTATIC) $(LIBS)
 
-logger$(EXE): logger.C logger.lo
+logger$(EXE): logger.cpp logger.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ logger.lo $(ALLSTATIC) $(LIBS)
 
-environment$(EXE): environment.C environment.lo
+environment$(EXE): environment.cpp environment.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ environment.lo $(ALLSTATIC) $(LIBS)
 
-file$(EXE): file.C file.lo
+file$(EXE): file.cpp file.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ file.lo $(ALLSTATIC) $(LIBS)
 
-filesystem$(EXE): filesystem.C filesystem.lo
+filesystem$(EXE): filesystem.cpp filesystem.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ filesystem.lo $(ALLSTATIC) $(LIBS)
 
-groupentry$(EXE): groupentry.C groupentry.lo
+groupentry$(EXE): groupentry.cpp groupentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ groupentry.lo $(ALLSTATIC) $(LIBS)
 
-hostentry$(EXE): hostentry.C hostentry.lo
+hostentry$(EXE): hostentry.cpp hostentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ hostentry.lo $(ALLSTATIC) $(LIBS)
 
-linkedlist$(EXE): linkedlist.C linkedlist.lo
+linkedlist$(EXE): linkedlist.cpp linkedlist.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ linkedlist.lo $(ALLSTATIC) $(LIBS)
 
-lock1$(EXE): lock1.C lock1.lo
+lock1$(EXE): lock1.cpp lock1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lock1.lo $(ALLSTATIC) $(LIBS)
 
-lock2$(EXE): lock2.C lock2.lo
+lock2$(EXE): lock2.cpp lock2.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lock2.lo $(ALLSTATIC) $(LIBS)
 
-memorypool$(EXE): memorypool.C memorypool.lo
+memorypool$(EXE): memorypool.cpp memorypool.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ memorypool.lo $(ALLSTATIC) $(LIBS)
 
-oneshotclnt$(EXE): oneshotclnt.C oneshotclnt.lo
+oneshotclnt$(EXE): oneshotclnt.cpp oneshotclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ oneshotclnt.lo $(ALLSTATIC) $(LIBS)
 
-oneshotsvr$(EXE): oneshotsvr.C oneshotsvr.lo
+oneshotsvr$(EXE): oneshotsvr.cpp oneshotsvr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ oneshotsvr.lo $(ALLSTATIC) $(LIBS)
 
-passwdentry$(EXE): passwdentry.C passwdentry.lo
+passwdentry$(EXE): passwdentry.cpp passwdentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ passwdentry.lo $(ALLSTATIC) $(LIBS)
 
-serviceentry$(EXE): serviceentry.C serviceentry.lo
+serviceentry$(EXE): serviceentry.cpp serviceentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ serviceentry.lo $(ALLSTATIC) $(LIBS)
 
-shadowentry$(EXE): shadowentry.C shadowentry.lo
+shadowentry$(EXE): shadowentry.cpp shadowentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ shadowentry.lo $(ALLSTATIC) $(LIBS)
 
-permissions$(EXE): permissions.C permissions.lo
+permissions$(EXE): permissions.cpp permissions.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ permissions.lo $(ALLSTATIC) $(LIBS)
 
-protocolentry$(EXE): protocolentry.C protocolentry.lo
+protocolentry$(EXE): protocolentry.cpp protocolentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ protocolentry.lo $(ALLSTATIC) $(LIBS)
 
-regularexpression$(EXE): regularexpression.C regularexpression.lo
+regularexpression$(EXE): regularexpression.cpp regularexpression.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ regularexpression.lo $(ALLSTATIC) $(LIBS)
 
-rpcentry$(EXE): rpcentry.C rpcentry.lo
+rpcentry$(EXE): rpcentry.cpp rpcentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ rpcentry.lo $(ALLSTATIC) $(LIBS)
 
-semaphoreset1$(EXE): semaphoreset1.C semaphoreset1.lo
+semaphoreset1$(EXE): semaphoreset1.cpp semaphoreset1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ semaphoreset1.lo $(ALLSTATIC) $(LIBS)
 
-semaphoreset2$(EXE): semaphoreset2.C semaphoreset2.lo
+semaphoreset2$(EXE): semaphoreset2.cpp semaphoreset2.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ semaphoreset2.lo $(ALLSTATIC) $(LIBS)
 
-sharedmemory1$(EXE): sharedmemory1.C sharedmemory1.lo
+sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory1.lo $(ALLSTATIC) $(LIBS)
 
-sharedmemory2$(EXE): sharedmemory2.C sharedmemory2.lo
+sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory2.lo $(ALLSTATIC) $(LIBS)
 
-charstring$(EXE): charstring.C charstring.lo
+charstring$(EXE): charstring.cpp charstring.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ charstring.lo $(ALLSTATIC) $(LIBS)
 
-datetime$(EXE): datetime.C datetime.lo
+datetime$(EXE): datetime.cpp datetime.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ datetime.lo $(ALLSTATIC) $(LIBS)
 
-timezonefile$(EXE): timezonefile.C timezonefile.lo
+timezonefile$(EXE): timezonefile.cpp timezonefile.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ timezonefile.lo $(ALLSTATIC) $(LIBS)
 
-dictionary$(EXE): dictionary.C dictionary.lo
+dictionary$(EXE): dictionary.cpp dictionary.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dictionary.lo $(ALLSTATIC) $(LIBS)
 
-dtd$(EXE): dtd.C dtd.lo
+dtd$(EXE): dtd.cpp dtd.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dtd.lo $(ALLSTATIC) $(LIBS)
 
-randomnumber$(EXE): randomnumber.C randomnumber.lo
+randomnumber$(EXE): randomnumber.cpp randomnumber.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ randomnumber.lo $(ALLSTATIC) $(LIBS)
 
-signal$(EXE): signal.C signal.lo
+signal$(EXE): signal.cpp signal.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ signal.lo $(ALLSTATIC) $(LIBS)
 
-stringbuffer$(EXE): stringbuffer.C stringbuffer.lo 
+stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ stringbuffer.lo $(ALLSTATIC) $(LIBS)
 
-handoff1$(EXE): handoff1.C handoff1.lo
+handoff1$(EXE): handoff1.cpp handoff1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ handoff1.lo $(ALLSTATIC) $(LIBS)
 
-handoff2$(EXE): handoff2.C handoff2.lo
+handoff2$(EXE): handoff2.cpp handoff2.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ handoff2.lo $(ALLSTATIC) $(LIBS)
 
-handoffclient$(EXE): handoffclient.C handoffclient.lo
+handoffclient$(EXE): handoffclient.cpp handoffclient.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ handoffclient.lo $(ALLSTATIC) $(LIBS)
 
-nonhandoff1$(EXE): nonhandoff1.C nonhandoff1.lo
+nonhandoff1$(EXE): nonhandoff1.cpp nonhandoff1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ nonhandoff1.lo $(ALLSTATIC) $(LIBS)
 
-nonhandoff2$(EXE): nonhandoff2.C nonhandoff2.lo
+nonhandoff2$(EXE): nonhandoff2.cpp nonhandoff2.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ nonhandoff2.lo $(ALLSTATIC) $(LIBS)
 
-nonhandoffclient$(EXE): nonhandoffclient.C nonhandoffclient.lo
+nonhandoffclient$(EXE): nonhandoffclient.cpp nonhandoffclient.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ nonhandoffclient.lo $(ALLSTATIC) $(LIBS)
 
-variablebuffer$(EXE): variablebuffer.C variablebuffer.lo
+variablebuffer$(EXE): variablebuffer.cpp variablebuffer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ variablebuffer.lo $(ALLSTATIC) $(LIBS)
 
-xattr$(EXE): xattr.C xattr.lo
+xattr$(EXE): xattr.cpp xattr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xattr.lo $(ALLSTATIC) $(LIBS)
 
-xmls$(EXE): xmls.C xmls.lo
+xmls$(EXE): xmls.cpp xmls.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmls.lo $(ALLSTATIC) $(LIBS)
 
-xmld$(EXE): xmld.C xmld.lo
+xmld$(EXE): xmld.cpp xmld.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmld.lo $(ALLSTATIC) $(LIBS)
 
-xmlentities$(EXE): xmlentities.C xmlentities.lo
+xmlentities$(EXE): xmlentities.cpp xmlentities.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmlentities.lo $(ALLSTATIC) $(LIBS)
 
-intervaltimer$(EXE): intervaltimer.C intervaltimer.lo
+intervaltimer$(EXE): intervaltimer.cpp intervaltimer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ intervaltimer.lo $(ALLSTATIC) $(LIBS)
 
-inetclntbench$(EXE): inetclntbench.C inetclntbench.lo 
+inetclntbench$(EXE): inetclntbench.cpp inetclntbench.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclntbench.lo $(ALLSTATIC) $(LIBS)
 
-inetsvrbench$(EXE): inetsvrbench.C inetsvrbench.lo 
+inetsvrbench$(EXE): inetsvrbench.cpp inetsvrbench.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsvrbench.lo $(ALLSTATIC) $(LIBS)
 
-device$(EXE): device.C device.lo 
+device$(EXE): device.cpp device.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ device.lo $(ALLSTATIC) $(LIBS)
 
-serialport$(EXE): serialport.C serialport.lo 
+serialport$(EXE): serialport.cpp serialport.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ serialport.lo $(ALLSTATIC) $(LIBS)
 
-shmfile$(EXE): shmfile.C shmfile.lo 
+shmfile$(EXE): shmfile.cpp shmfile.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ shmfile.lo $(ALLSTATIC) $(LIBS)
 
-chat$(EXE): chat.C chat.lo 
+chat$(EXE): chat.cpp chat.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ chat.lo $(ALLSTATIC) $(LIBS)
 
-crypt$(EXE): crypt.C crypt.lo 
+crypt$(EXE): crypt.cpp crypt.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ crypt.lo $(ALLSTATIC) $(LIBS)
 
-dynamiclib$(EXE): dynamiclib.C dynamiclib.lo 
+dynamiclib$(EXE): dynamiclib.cpp dynamiclib.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dynamiclib.lo $(ALLSTATIC) $(LIBS)
 
-error$(EXE): error.C error.lo 
+error$(EXE): error.cpp error.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ error.lo $(ALLSTATIC) $(LIBS)
 
-math$(EXE): math.C math.lo 
+math$(EXE): math.cpp math.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ math.lo $(ALLSTATIC) $(LIBS)
 
-mutex$(EXE): mutex.C mutex.lo 
+mutex$(EXE): mutex.cpp mutex.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ mutex.lo $(ALLSTATIC) $(LIBS)
 
-process$(EXE): process.C process.lo 
+process$(EXE): process.cpp process.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ process.lo $(ALLSTATIC) $(LIBS)
 
-serialportprofile$(EXE): serialportprofile.C serialportprofile.lo 
+serialportprofile$(EXE): serialportprofile.cpp serialportprofile.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ serialportprofile.lo $(ALLSTATIC) $(LIBS)
 
-snooze$(EXE): snooze.C snooze.lo 
+snooze$(EXE): snooze.cpp snooze.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ snooze.lo $(ALLSTATIC) $(LIBS)
 
-memorymap$(EXE): memorymap.C memorymap.lo 
+memorymap$(EXE): memorymap.cpp memorymap.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ memorymap.lo $(ALLSTATIC) $(LIBS)
 
-character$(EXE): character.C character.lo 
+character$(EXE): character.cpp character.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ character.lo $(ALLSTATIC) $(LIBS)
 
-rawbuffer$(EXE): rawbuffer.C rawbuffer.lo 
+rawbuffer$(EXE): rawbuffer.cpp rawbuffer.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ rawbuffer.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:

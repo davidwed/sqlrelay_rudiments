@@ -3,7 +3,7 @@
 
 #include <rudiments/variablebuffer.h>
 #include <rudiments/rawbuffer.h>
-#include "test.C"
+#include "test.cpp"
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

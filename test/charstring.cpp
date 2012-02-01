@@ -4,7 +4,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/filedescriptor.h>
 #include <limits.h>
-#include "test.C"
+#include "test.cpp"
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

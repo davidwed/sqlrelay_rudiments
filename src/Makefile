@@ -7,116 +7,116 @@ include ../features.mk
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
-SRCS = namevaluepairs.C winsock.C
+SRCS = namevaluepairs.cpp winsock.cpp
 LOBJS = namevaluepairs.lo winsock.lo
 ifeq ($(INCLUDE_CLIENT),1)
-	SRCS += client.C
+	SRCS += client.cpp
 	LOBJS += client.lo
 endif
 ifeq ($(INCLUDE_COMMANDLINE),1)
-	SRCS += commandline.C
+	SRCS += commandline.cpp
 	LOBJS += commandline.lo
 endif
 ifeq ($(INCLUDE_PARAMETERSTRING),1)
-	SRCS += parameterstring.C
+	SRCS += parameterstring.cpp
 	LOBJS += parameterstring.lo
 endif
 ifeq ($(INCLUDE_DAEMONPROCESS),1)
-	SRCS += daemonprocess.C
+	SRCS += daemonprocess.cpp
 	LOBJS += daemonprocess.lo
 endif
 ifeq ($(INCLUDE_PROCESS),1)
-	SRCS += process.C
+	SRCS += process.cpp
 	LOBJS += process.lo
 endif
 ifeq ($(INCLUDE_DATETIME),1)
-	SRCS += datetime.C
+	SRCS += datetime.cpp
 	LOBJS += datetime.lo
 endif
 ifeq ($(INCLUDE_TIMEZONEFILE),1)
-	SRCS += timezonefile.C
+	SRCS += timezonefile.cpp
 	LOBJS += timezonefile.lo
 endif
 ifeq ($(INCLUDE_DTD),1)
-	SRCS += dtd.C
+	SRCS += dtd.cpp
 	LOBJS += dtd.lo
 endif
 ifeq ($(INCLUDE_ENVIRONMENT),1)
-	SRCS += environment.C
+	SRCS += environment.cpp
 	LOBJS += environment.lo
 endif
 ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
-	SRCS += filedescriptor.C
+	SRCS += filedescriptor.cpp
 	LOBJS += filedescriptor.lo
 endif
 ifeq ($(INCLUDE_FILE),1)
-	SRCS += file.C
+	SRCS += file.cpp
 	LOBJS += file.lo
 endif
 ifeq ($(INCLUDE_SHMFILE),1)
-	SRCS += shmfile.C
+	SRCS += shmfile.cpp
 	LOBJS += shmfile.lo
 endif
 ifeq ($(INCLUDE_DEVICE),1)
-	SRCS += device.C
+	SRCS += device.cpp
 	LOBJS += device.lo
 endif
 ifeq ($(INCLUDE_FILESYSTEM),1)
-	SRCS += filesystem.C
+	SRCS += filesystem.cpp
 	LOBJS += filesystem.lo
 endif
 ifeq ($(INCLUDE_DIRECTORY),1)
-	SRCS += directory.C
+	SRCS += directory.cpp
 	LOBJS += directory.lo
 endif
 ifeq ($(INCLUDE_GROUPENTRY),1)
-	SRCS += groupentry.C
+	SRCS += groupentry.cpp
 	LOBJS += groupentry.lo
 endif
 ifeq ($(INCLUDE_HOSTENTRY),1)
-	SRCS += hostentry.C
+	SRCS += hostentry.cpp
 	LOBJS += hostentry.lo
 endif
 ifeq ($(INCLUDE_INETCLIENT),1)
-	SRCS += inetclientsocket.C
+	SRCS += inetclientsocket.cpp
 	LOBJS += inetclientsocket.lo
 	CPPFLAGS += -DINCLUDE_INETCLIENT
 endif
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += inetserversocket.C
+	SRCS += inetserversocket.cpp
 	LOBJS += inetserversocket.lo
 	CPPFLAGS += -DINCLUDE_INETSERVER
 endif
 ifeq ($(INCLUDE_LISTENER),1)
-	SRCS += listener.C
+	SRCS += listener.cpp
 	LOBJS += listener.lo
 endif
 ifeq ($(INCLUDE_LOGGER),1)
-	SRCS += logger.C
+	SRCS += logger.cpp
 	LOBJS += logger.lo
 endif
 ifeq ($(INCLUDE_MEMORYPOOL),1)
-	SRCS += memorypool.C
+	SRCS += memorypool.cpp
 	LOBJS += memorypool.lo
 endif
 ifeq ($(INCLUDE_PASSWDENTRY),1)
-	SRCS += passwdentry.C
+	SRCS += passwdentry.cpp
 	LOBJS += passwdentry.lo
 endif
 ifeq ($(INCLUDE_PERMISSIONS),1)
-	SRCS += permissions.C
+	SRCS += permissions.cpp
 	LOBJS += permissions.lo
 endif
 ifeq ($(INCLUDE_PROTOCOLENTRY),1)
-	SRCS += protocolentry.C
+	SRCS += protocolentry.cpp
 	LOBJS += protocolentry.lo
 endif
 ifeq ($(INCLUDE_RANDOMNUMBER),1)
-	SRCS += randomnumber.C
+	SRCS += randomnumber.cpp
 	LOBJS += randomnumber.lo
 endif
 ifeq ($(INCLUDE_REGULAREXPRESSION),1)
-	SRCS += regularexpression.C
+	SRCS += regularexpression.cpp
 	LOBJS += regularexpression.lo
 endif
 ifeq ($(USE_BUILT_IN_REGULAREXPRESSION),1)
@@ -124,177 +124,177 @@ ifeq ($(USE_BUILT_IN_REGULAREXPRESSION),1)
 	LOBJS += regex.lo
 endif
 ifeq ($(INCLUDE_RPCENTRY),1)
-	SRCS += rpcentry.C
+	SRCS += rpcentry.cpp
 	LOBJS += rpcentry.lo
 endif
 ifeq ($(INCLUDE_SEMAPHORESET),1)
-	SRCS += semaphoreset.C
+	SRCS += semaphoreset.cpp
 	LOBJS += semaphoreset.lo
 endif
 ifeq ($(INCLUDE_SERVER),1)
-	SRCS += server.C
+	SRCS += server.cpp
 	LOBJS += server.lo
 endif
 ifeq ($(INCLUDE_SERVICEENTRY),1)
-	SRCS += serviceentry.C
+	SRCS += serviceentry.cpp
 	LOBJS += serviceentry.lo
 endif
 ifeq ($(INCLUDE_SHADOWENTRY),1)
-	SRCS += shadowentry.C
+	SRCS += shadowentry.cpp
 	LOBJS += shadowentry.lo
 endif
 ifeq ($(INCLUDE_SHAREDMEMORY),1)
-	SRCS += sharedmemory.C
+	SRCS += sharedmemory.cpp
 	LOBJS += sharedmemory.lo
 endif
 ifeq ($(INCLUDE_SIGNALCLASSES),1)
-	SRCS += signalclasses.C
+	SRCS += signalclasses.cpp
 	LOBJS += signalclasses.lo
 endif
 ifeq ($(INCLUDE_CHARSTRING),1)
-	SRCS += charstring.C
+	SRCS += charstring.cpp
 	LOBJS += charstring.lo
 endif
 ifeq ($(INCLUDE_CHARACTER),1)
-	SRCS += character.C
+	SRCS += character.cpp
 	LOBJS += character.lo
 endif
 ifeq ($(INCLUDE_STRINGBUFFER),1)
-	SRCS += stringbuffer.C
+	SRCS += stringbuffer.cpp
 	LOBJS += stringbuffer.lo
 endif
 ifeq ($(INCLUDE_UNIXCLIENT),1)
-	SRCS += unixclientsocket.C
+	SRCS += unixclientsocket.cpp
 	LOBJS += unixclientsocket.lo
 	CPPFLAGS += -DINCLUDE_UNIXCLIENT
 endif
 ifeq ($(INCLUDE_MODEMCLIENT),1)
-	SRCS += modemclient.C
+	SRCS += modemclient.cpp
 	LOBJS += modemclient.lo
 endif
 ifeq ($(INCLUDE_MODEMSERVER),1)
-	SRCS += modemserver.C
+	SRCS += modemserver.cpp
 	LOBJS += modemserver.lo
 	CPPFLAGS += -DINCLUDE_MODEMSERVER
 endif
 ifeq ($(INCLUDE_UNIXSERVER),1)
-	SRCS += unixserversocket.C
+	SRCS += unixserversocket.cpp
 	LOBJS += unixserversocket.lo
 	CPPFLAGS += -DINCLUDE_UNIXSERVER
 endif
 ifeq ($(INCLUDE_VARIABLEBUFFER),1)
-	SRCS += variablebuffer.C
+	SRCS += variablebuffer.cpp
 	LOBJS += variablebuffer.lo
 endif
 ifeq ($(INCLUDE_XMLDOM),1)
-	SRCS += xmldom.C xmldomnode.C
+	SRCS += xmldom.cpp xmldomnode.cpp
 	LOBJS += xmldom.lo xmldomnode.lo
 endif
 ifeq ($(INCLUDE_XMLSAX),1)
-	SRCS += xmlsax.C
+	SRCS += xmlsax.cpp
 	LOBJS += xmlsax.lo
 endif
 ifeq ($(INCLUDE_INTERVALTIMER),1)
-	SRCS += intervaltimer.C
+	SRCS += intervaltimer.cpp
 	LOBJS += intervaltimer.lo
 endif
 ifeq ($(INCLUDE_SNOOZE),1)
-	SRCS += snooze.C
+	SRCS += snooze.cpp
 	LOBJS += snooze.lo
 endif
 ifeq ($(INCLUDE_DYNAMICLIB),1)
-	SRCS += dynamiclib.C
+	SRCS += dynamiclib.cpp
 	LOBJS += dynamiclib.lo
 endif
 ifeq ($(INCLUDE_CRYPT),1)
-	SRCS += crypt.C
+	SRCS += crypt.cpp
 	LOBJS += crypt.lo
 endif
 ifeq ($(INCLUDE_MATH),1)
-	SRCS += math.C
+	SRCS += math.cpp
 	LOBJS += math.lo
 endif
 ifeq ($(INCLUDE_RAWBUFFER),1)
-	SRCS += rawbuffer.C
+	SRCS += rawbuffer.cpp
 	LOBJS += rawbuffer.lo
 endif
 ifeq ($(INCLUDE_MEMORYMAP),1)
-	SRCS += memorymap.C
+	SRCS += memorymap.cpp
 	LOBJS += memorymap.lo
 endif
 ifeq ($(INCLUDE_MUTEX),1)
-	SRCS += mutex.C
+	SRCS += mutex.cpp
 	LOBJS += mutex.lo
 endif
 ifeq ($(INCLUDE_SERIALPORTPROFILE),1)
-	SRCS += serialportprofile.C
+	SRCS += serialportprofile.cpp
 	LOBJS += serialportprofile.lo
 endif
 ifeq ($(INCLUDE_SERIALPORT),1)
-	SRCS += serialport.C
+	SRCS += serialport.cpp
 	LOBJS += serialport.lo
 endif
 ifeq ($(INCLUDE_CHAT),1)
-	SRCS += chat.C
+	SRCS += chat.cpp
 	LOBJS += chat.lo
 endif
 ifeq ($(INCLUDE_ERROR),1)
-	SRCS += error.C
+	SRCS += error.cpp
 	LOBJS += error.lo
 endif
 
-# if either modemserver or modemclient are defined, include modemutil.C
+# if either modemserver or modemclient are defined, include modemutil.cpp
 ifeq ($(INCLUDE_MODEMSERVER),1)
-	SRCS += modemutil.C
+	SRCS += modemutil.cpp
 	LOBJS += modemutil.lo
 else
 	ifeq ($(INCLUDE_MODEMCLIENT),1)
-		SRCS += modemutil.C
+		SRCS += modemutil.cpp
 		LOBJS += modemutil.lo
 		CPPFLAGS += -DINCLUDE_MODEMCLIENT
 	endif
 endif
 
-# if either inetserver or inetclient are defined, include inetsocketutil.C
+# if either inetserver or inetclient are defined, include inetsocketutil.cpp
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += inetsocketutil.C
+	SRCS += inetsocketutil.cpp
 	LOBJS += inetsocketutil.lo
 else
 	ifeq ($(INCLUDE_INETCLIENT),1)
-		SRCS += inetsocketutil.C
+		SRCS += inetsocketutil.cpp
 		LOBJS += inetsocketutil.lo
 	endif
 endif
 
-# if either unixserver or unixclient are defined, include unixsocketutil.C
+# if either unixserver or unixclient are defined, include unixsocketutil.cpp
 ifeq ($(INCLUDE_UNIXSERVER),1)
-	SRCS += unixsocketutil.C
+	SRCS += unixsocketutil.cpp
 	LOBJS += unixsocketutil.lo
 else
 	ifeq ($(INCLUDE_UNIXCLIENT),1)
-		SRCS += unixsocketutil.C
+		SRCS += unixsocketutil.cpp
 		LOBJS += unixsocketutil.lo
 	endif
 endif
 
-# if inet/unix server are defined, include serversocket.C
+# if inet/unix server are defined, include serversocket.cpp
 ifeq ($(INCLUDE_INETSERVER),1)
-	SRCS += serversocket.C
+	SRCS += serversocket.cpp
 	LOBJS += serversocket.lo
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
-		SRCS += serversocket.C
+		SRCS += serversocket.cpp
 		LOBJS += serversocket.lo
 	endif
 endif
 
-# if inet/unix client are defined, include clientsocket.C
+# if inet/unix client are defined, include clientsocket.cpp
 ifeq ($(INCLUDE_INETCLIENT),1)
-	SRCS += clientsocket.C
+	SRCS += clientsocket.cpp
 	LOBJS += clientsocket.lo
 else
 	ifeq ($(INCLUDE_UNIXCLIENT),1)
-		SRCS += clientsocket.C
+		SRCS += clientsocket.cpp
 		LOBJS += clientsocket.lo
 	endif
 endif
@@ -302,22 +302,22 @@ endif
 # if any server and client are defined, include clientserverfactory
 ifeq ($(INCLUDE_INETSERVER),1)
 	ifeq ($(INCLUDE_INETCLIENT),1)
-		SRCS += clientserverfactory.C
+		SRCS += clientserverfactory.cpp
 		LOBJS += clientserverfactory.lo
 	else
 		ifeq ($(INCLUDE_UNIXCLIENT),1)
-			SRCS += clientserverfactory.C
+			SRCS += clientserverfactory.cpp
 			LOBJS += clientserverfactory.lo
 		endif
 	endif
 else
 	ifeq ($(INCLUDE_UNIXSERVER),1)
 		ifeq ($(INCLUDE_INETCLIENT),1)
-			SRCS += clientserverfactory.C
+			SRCS += clientserverfactory.cpp
 			LOBJS += clientserverfactory.lo
 		else
 			ifeq ($(INCLUDE_UNIXCLIENT),1)
-				SRCS += clientserverfactory.C
+				SRCS += clientserverfactory.cpp
 				LOBJS += clientserverfactory.lo
 			endif
 		endif
@@ -329,7 +329,7 @@ endif
 .c.lo:
 	$(LIBTOOL) --mode=compile $(CC) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
-.C.lo:
+.cpp.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 all: librudiments.la

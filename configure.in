@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/daemonprocess.C)
+AC_INIT(src/daemonprocess.cpp)
 
 
 AC_ARG_ENABLE(small-code,
@@ -2238,7 +2238,7 @@ dnl Output files.
 echo
 echo "***** Output Files ***********"
 AC_CONFIG_HEADER(include/rudiments/private/config.h)
-AC_CONFIG_SRCDIR(test/xmls.C)
+AC_CONFIG_SRCDIR(test/xmls.cpp)
 AC_CONFIG_FILES(config.mk bin/rudiments-config features.mk rudiments.pc)
 AC_OUTPUT
 chmod 755 bin/rudiments-config

@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/character.h>
-#include "test.C"
+#include "test.cpp"
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

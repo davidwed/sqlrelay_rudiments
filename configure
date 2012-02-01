@@ -703,7 +703,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="src/daemonprocess.C"
+ac_unique_file="src/daemonprocess.cpp"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -741,7 +741,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=/usr/local/firstworks
-ac_unique_file="test/xmls.C"
+ac_unique_file="test/xmls.cpp"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 INCLUDE_ERROR
