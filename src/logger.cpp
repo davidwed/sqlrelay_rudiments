@@ -161,7 +161,11 @@ char *logger::logHeader(const char *name) {
 				charstring::length(name)+2+
 				charstring::integerLength((uint64_t)pid)+2;
 	char		*retval=new char[retvallen];
-	snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,pid);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,pid);
+	#else
+		sprintf(retval,"%s %s [%d]",dtstring,name,pid);
+	#endif
 	return retval;
 }
 
@@ -170,9 +174,18 @@ void logger::write(const char *header, int32_t tabs, const char *string) {
 	size_t	headtablen=headlen+tabs;
 	size_t	logentrylen=headtablen+charstring::length(string)+2+1;
 	char	*logentry=new char[logentrylen];
-	snprintf(logentry,logentrylen,"%s : ",header);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(logentry,logentrylen,"%s : ",header);
+	#else
+		sprintf(logentry,"%s : ",header);
+	#endif
 	for (int32_t i=0; i<tabs; i++) {
-		snprintf(logentry+headlen+i,logentrylen-headlen-i,"%c",'	');
+		#ifdef RUDIMENTS_HAVE_SNPRINTF
+			snprintf(logentry+headlen+i,
+				logentrylen-headlen-i,"%c",'	');
+		#else
+			sprintf(logentry+headlen+i,"%c",'	');
+		#endif
 	}
 	snprintf(logentry+headtablen,logentrylen-headtablen,"%s\n\n",string);
 	write(logentry);

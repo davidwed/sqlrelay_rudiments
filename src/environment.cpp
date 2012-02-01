@@ -60,7 +60,11 @@ bool environment::setValue(const char *variable, const char *value) {
 	size_t	pestrlen=charstring::length(variable)+
 				charstring::length(value)+2;
 	char	*pestr=(char *)malloc(pestrlen*sizeof(char));
-	snprintf(pestr,pestrlen,"%s=%s",variable,value);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(pestr,pestrlen,"%s=%s",variable,value);
+	#else
+		sprintf(pestr,"%s=%s",variable,value);
+	#endif
 	int32_t	result;
 	do {
 		result=putenv(pestr);

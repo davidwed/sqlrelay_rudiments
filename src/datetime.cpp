@@ -394,11 +394,19 @@ const char *datetime::getString() {
 				2+1+2+1+2+1+
 				charstring::length(getTimeZoneString())+1;
 	pvt->_timestring=new char[timestringlen];
-	snprintf(pvt->_timestring,timestringlen,
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(pvt->_timestring,timestringlen,
 			"%02d/%02d/%d %02d:%02d:%02d %s",
 			getMonth(),getDayOfMonth(),getYear(),
 			getHour(),getMinutes(),getSeconds(),
 			getTimeZoneString());
+	#else
+		sprintf(pvt->_timestring,
+			"%02d/%02d/%d %02d:%02d:%02d %s",
+			getMonth(),getDayOfMonth(),getYear(),
+			getHour(),getMinutes(),getSeconds(),
+			getTimeZoneString());
+	#endif
 	return pvt->_timestring;
 }
 

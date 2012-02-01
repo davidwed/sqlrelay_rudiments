@@ -290,7 +290,11 @@ char *charstring::httpEscape(const char *input) {
 				(*ptr>='0' && *ptr<='9')) {
 			(*outptr)=*ptr;
 		} else {
-			snprintf(outptr,outputlen,"%c%02X",'%',*ptr);
+			#ifdef RUDIMENTS_HAVE_SNPRINTF
+				snprintf(outptr,outputlen,"%c%02X",'%',*ptr);
+			#else
+				sprintf(outptr,"%c%02X",'%',*ptr);
+			#endif
 			outptr=outptr+2;
 			outputlen=outputlen-2;
 		}
@@ -574,7 +578,11 @@ char *charstring::parseNumber(int16_t number,
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*hd",zeropadding,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,strlength,"%0*hd",zeropadding,number);
+	#else
+		sprintf(str,"%0*hd",zeropadding,number);
+	#endif
 	return str;
 }
 
@@ -606,7 +614,11 @@ char *charstring::parseNumber(int32_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*d",zeropadding,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,strlength,"%0*d",zeropadding,number);
+	#else
+		sprintf(str,"%0*d",zeropadding,number);
+	#endif
 	return str;
 }
 
@@ -638,7 +650,11 @@ char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*lld",zeropadding,(long long)number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,strlength,"%0*lld",zeropadding,(long long)number);
+	#else
+		sprintf(str,"%0*lld",zeropadding,(long long)number);
+	#endif
 	return str;
 }
 
@@ -665,14 +681,22 @@ char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 char *charstring::parseNumber(float number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%f",number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,22,"%f",number);
+	#else
+		sprintf(str,"%f",number);
+	#endif
 	return str;
 }
 
 char *charstring::parseNumber(float number, uint16_t scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%.*f",scale,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,22,"%.*f",scale,number);
+	#else
+		sprintf(str,"%.*f",scale,number);
+	#endif
 	return str;
 }
 
@@ -681,14 +705,22 @@ char *charstring::parseNumber(float number,
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*f",precision,scale,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,strlength,"%*.*f",precision,scale,number);
+	#else
+		sprintf(str,"%*.*f",precision,scale,number);
+	#endif
 	return str;
 }
 
 char *charstring::parseNumber(double number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%f",number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,22,"%f",number);
+	#else
+		sprintf(str,"%f",number);
+	#endif
 	return str;
 }
 
@@ -696,7 +728,11 @@ char *charstring::parseNumber(double number,
 				uint16_t scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%.*f",scale,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,22,"%.*f",scale,number);
+	#else
+		sprintf(str,"%.*f",scale,number);
+	#endif
 	return str;
 }
 
@@ -705,21 +741,33 @@ char *charstring::parseNumber(double number,
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*f",precision,scale,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,strlength,"%*.*f",precision,scale,number);
+	#else
+		sprintf(str,"%*.*f",precision,scale,number);
+	#endif
 	return str;
 }
 
 char *charstring::parseNumber(long double number) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%Lf",number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,22,"%Lf",number);
+	#else
+		sprintf(str,"%Lf",number);
+	#endif
 	return str;
 }
 
 char *charstring::parseNumber(long double number, uint16_t scale) {
 	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%.*Lf",scale,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,22,"%.*Lf",scale,number);
+	#else
+		sprintf(str,"%.*Lf",scale,number);
+	#endif
 	return str;
 }
 
@@ -728,7 +776,11 @@ char *charstring::parseNumber(long double number,
 	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*Lf",precision,scale,number);
+	#ifdef RUDIMENTS_HAVE_SNPRINTF
+		snprintf(str,strlength,"%*.*Lf",precision,scale,number);
+	#else
+		sprintf(str,"%*.*Lf",precision,scale,number);
+	#endif
 	return str;
 }
 

@@ -709,6 +709,9 @@
 /* Some systems have sigsuspend */
 #undef RUDIMENTS_HAVE_SIGSUSPEND
 
+/* Some systems have snprintf */
+#undef RUDIMENTS_HAVE_SNPRINTF
+
 /* Some systems have sockaddr_un */
 #undef RUDIMENTS_HAVE_SOCKADDR_UN
 

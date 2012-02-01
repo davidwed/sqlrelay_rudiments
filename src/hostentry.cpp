@@ -183,10 +183,19 @@ char *hostentry::getAddressString(int32_t index) const {
 	char	*address=new char[addresslen];
 	address[0]='\0';
 	for (int32_t byte=0; byte<getAddressLength(); byte++) {
-		snprintf(address,addresslen,
-			"%s%d",address,getAddressList()[index][byte]);
+		#ifdef RUDIMENTS_HAVE_SNPRINTF
+			snprintf(address,addresslen,
+				"%s%d",address,getAddressList()[index][byte]);
+		#else
+			sprintf(address,
+				"%s%d",address,getAddressList()[index][byte]);
+		#endif
 		if (byte<getAddressLength()-1) {
-			snprintf(address,addresslen,"%s.",address);
+			#ifdef RUDIMENTS_HAVE_SNPRINTF
+				snprintf(address,addresslen,"%s.",address);
+			#else
+				sprintf(address,"%s.",address);
+			#endif
 		}
 	}
 	return address;

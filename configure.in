@@ -1355,6 +1355,13 @@ dnl Checks for string functions
 echo
 echo "***** String Functions *******"
 
+AC_MSG_CHECKING(for snprintf)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <stdio.h>],
+snprintf(NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SNPRINTF,1,Some systems have snprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strtold)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 	#define __USE_GNU

@@ -551,8 +551,13 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 					11+charstring::integerLength(key)+1+
 					charstring::integerLength(nsems)+1;
 			pvt->_semnames[i]=new char[semnamelen];
-			snprintf(pvt->_semnames[i],semnamelen,
-				"rudiments::%d-%d\n",key,nsems);
+			#ifdef RUDIMENTS_HAVE_SNPRINTF
+				snprintf(pvt->_semnames[i],semnamelen,
+					"rudiments::%d-%d\n",key,nsems);
+			#else
+				sprintf(pvt->_semnames[i],
+					"rudiments::%d-%d\n",key,nsems);
+			#endif
 
 			// set up the security attributes
 			pvt->_securityattrs[i]=new SECURITY_ATTRIBUTES;
