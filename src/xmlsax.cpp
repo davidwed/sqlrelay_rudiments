@@ -8,7 +8,9 @@
 #include <stdlib.h>
 
 // for getpagesize()
-#include <unistd.h>
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
