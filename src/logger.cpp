@@ -8,7 +8,8 @@
 #include <rudiments/error.h>
 #include <rudiments/process.h>
 
-#include <stdio.h>
+#include <rudiments/private/snprintf.h>
+
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -161,11 +162,7 @@ char *logger::logHeader(const char *name) {
 				charstring::length(name)+2+
 				charstring::integerLength((uint64_t)pid)+2;
 	char		*retval=new char[retvallen];
-	#ifdef RUDIMENTS_HAVE_SNPRINTF
-		snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,pid);
-	#else
-		sprintf(retval,"%s %s [%d]",dtstring,name,pid);
-	#endif
+	snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,pid);
 	return retval;
 }
 
@@ -174,18 +171,10 @@ void logger::write(const char *header, int32_t tabs, const char *string) {
 	size_t	headtablen=headlen+tabs;
 	size_t	logentrylen=headtablen+charstring::length(string)+2+1;
 	char	*logentry=new char[logentrylen];
-	#ifdef RUDIMENTS_HAVE_SNPRINTF
-		snprintf(logentry,logentrylen,"%s : ",header);
-	#else
-		sprintf(logentry,"%s : ",header);
-	#endif
+	snprintf(logentry,logentrylen,"%s : ",header);
 	for (int32_t i=0; i<tabs; i++) {
-		#ifdef RUDIMENTS_HAVE_SNPRINTF
-			snprintf(logentry+headlen+i,
+		snprintf(logentry+headlen+i,
 				logentrylen-headlen-i,"%c",'	');
-		#else
-			sprintf(logentry+headlen+i,"%c",'	');
-		#endif
 	}
 	snprintf(logentry+headtablen,logentrylen-headtablen,"%s\n\n",string);
 	write(logentry);

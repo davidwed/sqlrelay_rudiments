@@ -892,6 +892,9 @@
 /* Some systems have _getpid */
 #undef RUDIMENTS_HAVE__GETPID
 
+/* Some systems have _snprintf */
+#undef RUDIMENTS_HAVE__SNPRINTF
+
 /* Some systems have __bswap64 */
 #undef RUDIMENTS_HAVE___BSWAP64
 

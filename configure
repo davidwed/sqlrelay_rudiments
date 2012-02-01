@@ -23040,6 +23040,7 @@ echo "******************************"
 echo
 echo "***** String Functions *******"
 
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for snprintf" >&5
 $as_echo_n "checking for snprintf... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -23059,6 +23060,33 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_SNPRINTF 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _snprintf" >&5
+$as_echo_n "checking for _snprintf... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <stdio.h>
+int
+main ()
+{
+_snprintf(NULL,0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE__SNPRINTF 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else

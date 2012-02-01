@@ -710,6 +710,9 @@
 /* Some systems have sigsuspend */
 /* #undef RUDIMENTS_HAVE_SIGSUSPEND */
 
+/* Some systems have snprintf */
+/* #undef RUDIMENTS_HAVE_SNPRINTF */
+
 /* Some systems have sockaddr_un */
 /* #undef RUDIMENTS_HAVE_SOCKADDR_UN */
 
@@ -889,6 +892,9 @@
 
 /* Some systems have _getpid */
 /* #undef RUDIMENTS_HAVE__GETPID */
+
+/* Some systems have _snprintf */
+#define RUDIMENTS_HAVE__SNPRINTF 1
 
 /* Some systems have __bswap64 */
 /* #undef RUDIMENTS_HAVE___BSWAP64 */

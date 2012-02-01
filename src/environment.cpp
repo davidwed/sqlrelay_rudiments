@@ -6,7 +6,8 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
-#include <stdio.h>
+#include <rudiments/private/snprintf.h>
+
 #include <stdlib.h>
 
 #ifdef RUDIMENTS_HAVE_ENVIRON
@@ -60,11 +61,7 @@ bool environment::setValue(const char *variable, const char *value) {
 	size_t	pestrlen=charstring::length(variable)+
 				charstring::length(value)+2;
 	char	*pestr=(char *)malloc(pestrlen*sizeof(char));
-	#ifdef RUDIMENTS_HAVE_SNPRINTF
-		snprintf(pestr,pestrlen,"%s=%s",variable,value);
-	#else
-		sprintf(pestr,"%s=%s",variable,value);
-	#endif
+	snprintf(pestr,pestrlen,"%s=%s",variable,value);
 	int32_t	result;
 	do {
 		result=putenv(pestr);
