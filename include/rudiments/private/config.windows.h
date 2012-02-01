@@ -951,7 +951,7 @@
 #define nlink_t short
 
 /* Some systems dont have off64_t */
-/* #undef off64_t */
+#define off64_t int64_t
 
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef pid_t */
