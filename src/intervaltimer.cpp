@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

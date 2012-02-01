@@ -28,7 +28,9 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_XATTRS
 	#include <sys/xattr.h>
 #endif
