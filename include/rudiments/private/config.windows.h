@@ -23,7 +23,7 @@
 #define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
+/* #undef HAVE_STRINGS_H */
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
@@ -38,7 +38,7 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 1
+/* #undef HAVE_UNISTD_H */
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
@@ -750,7 +750,7 @@
 #define RUDIMENTS_HAVE_STRCSPN 1
 
 /* Some systems have strings.h */
-#define RUDIMENTS_HAVE_STRINGS_H 1
+/* #undef RUDIMENTS_HAVE_STRINGS_H */
 
 /* Some systems have strpbrk */
 #define RUDIMENTS_HAVE_STRPBRK 1
@@ -855,7 +855,7 @@
 /* #undef RUDIMENTS_HAVE_ULTRIX_STATFS */
 
 /* Some systems have unistd.h */
-#define RUDIMENTS_HAVE_UNISTD_H 1
+/* #undef RUDIMENTS_HAVE_UNISTD_H */
 
 /* Some systems have unsetenv */
 /* #undef RUDIMENTS_HAVE_UNSETENV */
