@@ -7,7 +7,9 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
-#include <unistd.h>
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
