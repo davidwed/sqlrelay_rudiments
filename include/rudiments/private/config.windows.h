@@ -815,6 +815,9 @@
 /* Some systems have sys/socket.h */
 /* #undef RUDIMENTS_HAVE_SYS_SOCKET_H */
 
+/* Some systems have sys/time.h */
+/* #undef RUDIMENTS_HAVE_SYS_TIME_H */
+
 /* Some systems have sys/uio.h */
 /* #undef RUDIMENTS_HAVE_SYS_UIO_H */
 
