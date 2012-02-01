@@ -942,7 +942,7 @@
 #define key_t int
 
 /* Define to `int' if <sys/types.h> does not define. */
-/* #undef mode_t */
+#define mode_t int
 
 /* Some systems dont have nlink_t */
 #define nlink_t short
