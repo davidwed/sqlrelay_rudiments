@@ -771,7 +771,7 @@
 #define RUDIMENTS_HAVE_STRTOULL 1
 
 /* Some systems have struct timespec in pthread.h */
-#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD 1
+/* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD */
 
 /* Some systems have struct timespec in sys/siginfo.h */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO */
@@ -963,7 +963,7 @@
 #define off64_t int64_t
 
 /* Define to `int' if <sys/types.h> does not define. */
-/* #undef pid_t */
+#define pid_t int
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
