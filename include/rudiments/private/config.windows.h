@@ -876,7 +876,7 @@
 /* #undef RUDIMENTS_HAVE_UTIMES */
 
 /* Some systems have utime.h */
-#define RUDIMENTS_HAVE_UTIME_H 1
+/* #undef RUDIMENTS_HAVE_UTIME_H */
 
 /* GetDiskFreeSpace */
 #define RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE 1
