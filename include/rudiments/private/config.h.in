@@ -757,8 +757,23 @@
 /* Some systems have strchrnul */
 #undef RUDIMENTS_HAVE_STRCHRNUL
 
+/* Some systems have strcpy */
+#undef RUDIMENTS_HAVE_STRCPY
+
+/* Some systems have strcpy_s */
+#undef RUDIMENTS_HAVE_STRCPY_S
+
 /* Some systems have strcspn */
 #undef RUDIMENTS_HAVE_STRCSPN
+
+/* Some systems have strerror */
+#undef RUDIMENTS_HAVE_STRERROR
+
+/* Some systems have strerror_r */
+#undef RUDIMENTS_HAVE_STRERROR_R
+
+/* Some systems have strerror_s */
+#undef RUDIMENTS_HAVE_STRERROR_S
 
 /* Some systems have strings.h */
 #undef RUDIMENTS_HAVE_STRINGS_H
@@ -771,6 +786,12 @@
 
 /* Some systems have strncat_s */
 #undef RUDIMENTS_HAVE_STRNCAT_S
+
+/* Some systems have strncpy */
+#undef RUDIMENTS_HAVE_STRNCPY
+
+/* Some systems have strncpy_s */
+#undef RUDIMENTS_HAVE_STRNCPY_S
 
 /* Some systems have strpbrk */
 #undef RUDIMENTS_HAVE_STRPBRK

@@ -1410,6 +1410,78 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 #endif],
 strncat_s(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRNCAT_S,1,Some systems have strncat_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for strcpy)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strcpy(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCPY,1,Some systems have strcpy) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strcpy_s)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strcpy_s(NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCPY_S,1,Some systems have strcpy_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strncpy)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strncpy(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRNCPY,1,Some systems have strncpy) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strncpy_s)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strncpy_s(NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRNCPY_S,1,Some systems have strncpy_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strerror)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strerror(0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR,1,Some systems have strerror) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strerror_r)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR_R,1,Some systems have strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strerror_s)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strerror_s(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR_S,1,Some systems have strerror_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strcasecmp)
 AC_TRY_COMPILE([
 #ifdef HAVE_STDLIB_H

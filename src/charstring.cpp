@@ -855,20 +855,42 @@ char *charstring::append(char *dest, double number, uint16_t precision,
 }
 
 char *charstring::copy(char *dest, const char *source) {
-	return (dest && source)?strcpy(dest,source):NULL;
+	return (dest && source)?
+		#if defined(RUDIMENTS_HAVE_STRCPY_S)
+			// this isn't secure at all, but it approximates what
+			// strcpy would do and keeps the compiler from
+			// complaining about using strcpy
+			strcpy_s(dest,length(source)+1,source):
+		#elif defined(RUDIMENTS_HAVE_STRCPY)
+			strcpy(dest,source):
+		#else
+			#error no strcpy or anything like it
+		#endif
+		NULL;
 }
 
 char *charstring::copy(char *dest, const char *source, size_t size) {
-	return (dest && source)?strncpy(dest,source,size):NULL;
+	return (dest && source)?
+		#if defined(RUDIMENTS_HAVE_STRNCPY_S)
+			// this isn't secure at all, but it approximates what
+			// strncpy would do and keeps the compiler from
+			// complaining about using strncpy
+			strncpy_s(dest,size+1,source,size):
+		#elif defined(RUDIMENTS_HAVE_STRNCPY)
+			strncpy(dest,source,size):
+		#else
+			#error no strcpy or anything like it
+		#endif
+		NULL;
 }
 
 char *charstring::copy(char *dest, size_t location, const char *source) {
-	return (dest && source)?strcpy(dest+location,source):NULL;
+	return copy(dest+location,source);
 }
 
 char *charstring::copy(char *dest, size_t location,
 					const char *source, size_t size) {
-	return (dest && source)?strncpy(dest+location,source,size):NULL;
+	return copy(dest+location,source,size);
 }
 
 int32_t charstring::compare(const char *str1, const char *str2) {

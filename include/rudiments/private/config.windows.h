@@ -761,6 +761,15 @@
 /* Some systems have strcspn */
 #define RUDIMENTS_HAVE_STRCSPN 1
 
+/* Some systems have strerror */
+/* #undef RUDIMENTS_HAVE_STRERROR */
+
+/* Some systems have strerror_r */
+/* #undef RUDIMENTS_HAVE_STRERROR_R */
+
+/* Some systems have strerror_s */
+#define RUDIMENTS_HAVE_STRERROR_S 1
+
 /* Some systems have strings.h */
 /* #undef RUDIMENTS_HAVE_STRINGS_H */
 
