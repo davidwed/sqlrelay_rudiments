@@ -789,32 +789,31 @@ void charstring::zero(char *str, size_t size) {
 }
 
 char *charstring::append(char *dest, const char *source) {
-	return (dest && source)?
-		#if defined(RUDIMENTS_HAVE_STRCAT_S)
-			// this isn't secure at all, but it approximates what
-			// strcat would do and keeps the compiler from
-			// complaining about using strcat
-			strcat_s(dest,length(source)+1,source):NULL;
-		#elif defined(RUDIMENTS_HAVE_STRCAT)
-			strcat(dest,source):(char *)NULL;
-		#else
-			#error no strcat or anything like it
-		#endif
+	#if defined(RUDIMENTS_HAVE_STRCAT_S)
+		// this isn't secure at all, but it approximates what
+		// strcat would do and keeps the compiler from
+		// complaining about using strcat
+		return (dest && source &&
+			!strcat_s(dest,length(source)+1,source))?dest:NULL;
+	#elif defined(RUDIMENTS_HAVE_STRCAT)
+		return (dest && source)?strcat(dest,source):NULL;
+	#else
+		#error no strcat or anything like it
+	#endif
 }
 
 char *charstring::append(char *dest, const char *source, size_t size) {
-	return (dest && source)?
-		#if defined(RUDIMENTS_HAVE_STRNCAT_S)
-			// this isn't secure at all, but it approximates what
-			// strncat would do and keeps the compiler from
-			// complaining about using strncat
-			strncat_s(dest,size+1,source,size):
-		#elif defined(RUDIMENTS_HAVE_STRNCAT)
-			strncat(dest,source,size):
-		#else
-			#error no strcat or anything like it
-		#endif
-		NULL;
+	#if defined(RUDIMENTS_HAVE_STRNCAT_S)
+		// this isn't secure at all, but it approximates what
+		// strncat would do and keeps the compiler from
+		// complaining about using strncat
+		return (dest && source &&
+			!strncat_s(dest,size+1,source,size))?dest:NULL;
+	#elif defined(RUDIMENTS_HAVE_STRNCAT)
+		return (dest && source)?strncat(dest,source,size):NULL;
+	#else
+		#error no strcat or anything like it
+	#endif
 }
 
 char *charstring::append(char *dest, int64_t number) {
@@ -854,31 +853,31 @@ char *charstring::append(char *dest, double number, uint16_t precision,
 }
 
 char *charstring::copy(char *dest, const char *source) {
-	return (dest && source)?
-		#if defined(RUDIMENTS_HAVE_STRCPY_S)
-			// this isn't secure at all, but it approximates what
-			// strcpy would do and keeps the compiler from
-			// complaining about using strcpy
-			strcpy_s(dest,length(source)+1,source):NULL;
-		#elif defined(RUDIMENTS_HAVE_STRCPY)
-			strcpy(dest,source):(char *)NULL;
-		#else
-			#error no strcpy or anything like it
-		#endif
+	#if defined(RUDIMENTS_HAVE_STRCPY_S)
+		// this isn't secure at all, but it approximates what
+		// strcpy would do and keeps the compiler from
+		// complaining about using strcpy
+		return (dest && source &&
+			!strcpy_s(dest,length(source)+1,source))?dest:NULL;
+	#elif defined(RUDIMENTS_HAVE_STRCPY)
+		return (dest && source)?strcpy(dest,source):NULL;
+	#else
+		#error no strcpy or anything like it
+	#endif
 }
 
 char *charstring::copy(char *dest, const char *source, size_t size) {
-	return (dest && source)?
-		#if defined(RUDIMENTS_HAVE_STRNCPY_S)
-			// this isn't secure at all, but it approximates what
-			// strncpy would do and keeps the compiler from
-			// complaining about using strncpy
-			strncpy_s(dest,size+1,source,size):NULL;
-		#elif defined(RUDIMENTS_HAVE_STRNCPY)
-			strncpy(dest,source,size):(char *)NULL;
-		#else
-			#error no strncpy or anything like it
-		#endif
+	#if defined(RUDIMENTS_HAVE_STRNCPY_S)
+		// this isn't secure at all, but it approximates what
+		// strncpy would do and keeps the compiler from
+		// complaining about using strncpy
+		return (dest && source &&
+			!strncpy_s(dest,size+1,source,size)):dest:NULL;
+	#elif defined(RUDIMENTS_HAVE_STRNCPY)
+		return (dest && source)?strncpy(dest,source,size):NULL;
+	#else
+		#error no strncpy or anything like it
+	#endif
 }
 
 char *charstring::copy(char *dest, size_t location, const char *source) {
