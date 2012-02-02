@@ -711,7 +711,7 @@
 /* #undef RUDIMENTS_HAVE_SIGSUSPEND */
 
 /* Some systems have snprintf */
-/* #undef RUDIMENTS_HAVE_SNPRINTF */
+#define RUDIMENTS_HAVE_SNPRINTF 1
 
 /* Some systems have sockaddr_un */
 /* #undef RUDIMENTS_HAVE_SOCKADDR_UN */
@@ -750,7 +750,7 @@
 /* #undef RUDIMENTS_HAVE_STRCASECMP */
 
 /* Some systems have strcat */
-/* #undef RUDIMENTS_HAVE_STRCAT */
+#define RUDIMENTS_HAVE_STRCAT 1
 
 /* Some systems have strcat_s */
 #define RUDIMENTS_HAVE_STRCAT_S 1
@@ -758,11 +758,17 @@
 /* Some systems have strchrnul */
 /* #undef RUDIMENTS_HAVE_STRCHRNUL */
 
+/* Some systems have strcpy */
+#define RUDIMENTS_HAVE_STRCPY 1
+
+/* Some systems have strcpy_s */
+#define RUDIMENTS_HAVE_STRCPY_S 1
+
 /* Some systems have strcspn */
 #define RUDIMENTS_HAVE_STRCSPN 1
 
 /* Some systems have strerror */
-/* #undef RUDIMENTS_HAVE_STRERROR */
+#define RUDIMENTS_HAVE_STRERROR 1
 
 /* Some systems have strerror_r */
 /* #undef RUDIMENTS_HAVE_STRERROR_R */
@@ -777,7 +783,7 @@
 /* #undef RUDIMENTS_HAVE_STRNCASECMP */
 
 /* Some systems have strncat */
-/* #undef RUDIMENTS_HAVE_STRNCAT */
+#define RUDIMENTS_HAVE_STRNCAT 1
 
 /* Some systems have strncat_s */
 #define RUDIMENTS_HAVE_STRNCAT_S 1
