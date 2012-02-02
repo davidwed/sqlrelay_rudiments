@@ -877,8 +877,8 @@ int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
 		const char	*ptr2=str2;
 		int32_t		diff=0;
 		while (*ptr1 && *ptr2) {
-			diff=charstring::toUpper(*ptr1)-
-				charstring::toUpper(*ptr2);
+			diff=character::toUpperCase(*ptr1)-
+				character::toUpperCase(*ptr2);
 			if (diff) {
 				return diff;
 			}
@@ -899,8 +899,8 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 		const char	*ptr2=str2;
 		int32_t		diff=0;
 		while (*ptr1 && *ptr2 && count<size) {
-			diff=charstring::toUpper(*ptr1)-
-				charstring::toUpper(*ptr2);
+			diff=character::toUpperCase(*ptr1)-
+				character::toUpperCase(*ptr2);
 			if (diff) {
 				return diff;
 			}
