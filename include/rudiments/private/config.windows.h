@@ -870,7 +870,7 @@
 /* #undef RUDIMENTS_HAVE_UNSETENV */
 
 /* Some systems have utime */
-#define RUDIMENTS_HAVE_UTIME 1
+/* #undef RUDIMENTS_HAVE_UTIME */
 
 /* Some systems have utimes */
 /* #undef RUDIMENTS_HAVE_UTIMES */
