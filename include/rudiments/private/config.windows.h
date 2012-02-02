@@ -177,7 +177,7 @@
 /* #undef RUDIMENTS_HAVE_DARWIN_STATFS */
 
 /* Some systems have dirent.h */
-#define RUDIMENTS_HAVE_DIRENT_H 1
+/* #undef RUDIMENTS_HAVE_DIRENT_H */
 
 /* Some systems have dirfd */
 /* #undef RUDIMENTS_HAVE_DIRFD */
