@@ -12,12 +12,11 @@
 #endif
 
 #ifndef RUDIMENTS_HAVE_SOCKADDR_UN
-	//#ifndef MAXPATHLEN
-		//#define MAXPATHLEN 1024
-	//#endif
+	#ifdef RUDIMENTS_HAVE_LIMITS_H
+		#include <limits.h>
+	#endif
 	struct sockaddr_un {
 		int16_t	sun_family;
-		//char	sun_path[MAXPATHLEN];
 		char	sun_path[PATH_MAX];
 	};
 #endif
