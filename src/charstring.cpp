@@ -872,7 +872,7 @@ char *charstring::copy(char *dest, const char *source, size_t size) {
 		// strncpy would do and keeps the compiler from
 		// complaining about using strncpy
 		return (dest && source &&
-			!strncpy_s(dest,size+1,source,size)):dest:NULL;
+			!strncpy_s(dest,size+1,source,size))?dest:NULL;
 	#elif defined(RUDIMENTS_HAVE_STRNCPY)
 		return (dest && source)?strncpy(dest,source,size):NULL;
 	#else
