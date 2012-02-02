@@ -794,13 +794,12 @@ char *charstring::append(char *dest, const char *source) {
 			// this isn't secure at all, but it approximates what
 			// strcat would do and keeps the compiler from
 			// complaining about using strcat
-			strcat_s(dest,length(source)+1,source):
+			strcat_s(dest,length(source)+1,source):NULL;
 		#elif defined(RUDIMENTS_HAVE_STRCAT)
-			strcat(dest,source):
+			strcat(dest,source):(char *)NULL;
 		#else
 			#error no strcat or anything like it
 		#endif
-		NULL;
 }
 
 char *charstring::append(char *dest, const char *source, size_t size) {
@@ -860,13 +859,12 @@ char *charstring::copy(char *dest, const char *source) {
 			// this isn't secure at all, but it approximates what
 			// strcpy would do and keeps the compiler from
 			// complaining about using strcpy
-			strcpy_s(dest,length(source)+1,source):
+			strcpy_s(dest,length(source)+1,source):NULL;
 		#elif defined(RUDIMENTS_HAVE_STRCPY)
-			strcpy(dest,source):
+			strcpy(dest,source):(char *)NULL;
 		#else
 			#error no strcpy or anything like it
 		#endif
-		NULL;
 }
 
 char *charstring::copy(char *dest, const char *source, size_t size) {
@@ -875,13 +873,12 @@ char *charstring::copy(char *dest, const char *source, size_t size) {
 			// this isn't secure at all, but it approximates what
 			// strncpy would do and keeps the compiler from
 			// complaining about using strncpy
-			strncpy_s(dest,size+1,source,size):
+			strncpy_s(dest,size+1,source,size):NULL;
 		#elif defined(RUDIMENTS_HAVE_STRNCPY)
-			strncpy(dest,source,size):
+			strncpy(dest,source,size):(char *)NULL;
 		#else
-			#error no strcpy or anything like it
+			#error no strncpy or anything like it
 		#endif
-		NULL;
 }
 
 char *charstring::copy(char *dest, size_t location, const char *source) {

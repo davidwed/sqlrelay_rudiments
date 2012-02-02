@@ -788,6 +788,12 @@
 /* Some systems have strncat_s */
 #define RUDIMENTS_HAVE_STRNCAT_S 1
 
+/* Some systems have strncpy */
+#define RUDIMENTS_HAVE_STRNCPY 1
+
+/* Some systems have strncpy_s */
+#define RUDIMENTS_HAVE_STRNCPY_S 1
+
 /* Some systems have strpbrk */
 #define RUDIMENTS_HAVE_STRPBRK 1
 
