@@ -203,6 +203,9 @@
 /* Some systems have fcntl */
 /* #undef RUDIMENTS_HAVE_FCNTL */
 
+/* Some systems have fcntl.h */
+#define RUDIMENTS_HAVE_FCNTL_H 1
+
 /* Some systems have fdatasync */
 /* #undef RUDIMENTS_HAVE_FDATASYNC */
 

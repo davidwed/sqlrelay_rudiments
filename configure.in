@@ -489,6 +489,10 @@ AC_MSG_CHECKING(for inttypes.h)
 AC_TRY_COMPILE([#include <inttypes.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_INTTYPES_H, 1, Some systems have inttypes.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for fcntl.h)
+AC_TRY_COMPILE([#include <fcntl.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_FCNTL_H, 1, Some systems have fcntl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sys/fcntl.h)
 AC_TRY_COMPILE([#include <sys/fcntl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_FCNTL_H, 1, Some systems have sys/fcntl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -1659,11 +1663,15 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 fdatasync(0);,AC_DEFINE(RUDIMENTS_HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for posix_fadvise)
-AC_TRY_COMPILE([#include <fcntl.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif],
 posix_fadvise(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FADVISE,1,Some systems have posix_fadvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for posix_fallocate)
-AC_TRY_COMPILE([#include <fcntl.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif],
 posix_fallocate(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FALLOCATE,1,Some systems have posix_fallocate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for pselect)
@@ -1713,10 +1721,13 @@ ioctl(0,0);,AC_DEFINE(RUDIMENTS_HAVE_IOCTL,1,Some systems have ioctl) AC_MSG_RES
 AC_MSG_CHECKING(for fcntl)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
-#else
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#include <fcntl.h>],
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif],
 fcntl(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCNTL,1,Some systems have fcntl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test -n "$MINGW32" )
@@ -1727,8 +1738,12 @@ then
 fi
 
 AC_MSG_CHECKING(for FD_CLOEXEC)
-AC_TRY_COMPILE([#include <unistd.h>
-#include <fcntl.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif],
 long a=FD_CLOEXEC;,AC_DEFINE(RUDIMENTS_HAVE_FD_CLOEXEC,1,Some systems have FD_CLOEXEC) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test -n "$MINGW32" )
@@ -1739,26 +1754,36 @@ DWORD a=HANDLE_FLAG_INHERIT;,AC_DEFINE(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT,1,Some
 fi
 
 AC_MSG_CHECKING(for truncate)
-AC_TRY_COMPILE([#include <unistd.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif],
 truncate("",0);,AC_DEFINE(RUDIMENTS_HAVE_TRUNCATE,1,Some systems have truncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for link)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 link("","");,AC_DEFINE(RUDIMENTS_HAVE_LINK,1,Some systems have link) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for symlink)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 symlink("","");,AC_DEFINE(RUDIMENTS_HAVE_SYMLINK,1,Some systems have symlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for readlink)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 readlink("","",0);,AC_DEFINE(RUDIMENTS_HAVE_READLINK,1,Some systems have readlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fchown)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 fchown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCHOWN,1,Some systems have fchown) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fchmod)
@@ -1787,11 +1812,15 @@ then
 fi
 
 AC_MSG_CHECKING(for pathconf)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 pathconf("",0);,AC_DEFINE(RUDIMENTS_HAVE_PATHCONF,1,Some systems have pathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fpathconf)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 fpathconf(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FPATHCONF,1,Some systems have fpathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for mkstemp)
@@ -1801,7 +1830,9 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 mkstemp("");,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fsync)
-AC_TRY_COMPILE([#include <unistd.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 fsync(0);,AC_DEFINE(RUDIMENTS_HAVE_FSYNC,1,Some systems have fsync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test -n "$MINGW32" )
@@ -1839,7 +1870,9 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #ifdef HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
-#include <fcntl.h>
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
@@ -2039,7 +2072,9 @@ AC_TRY_LINK([#ifdef HAVE_SYS_STAT_H
 mkdir(""),AC_DEFINE(RUDIMENTS_HAVE_MKDIR_1,1,Some systems have mkdir) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for chroot)
-AC_TRY_LINK([#include <unistd.h>],
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
 chroot(""),AC_DEFINE(RUDIMENTS_HAVE_CHROOT,1,Some systems have chroot) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"

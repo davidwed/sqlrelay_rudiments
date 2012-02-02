@@ -6,7 +6,9 @@
 #include <sys/types.h>
 
 // for open flags
-#include <fcntl.h>
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
 
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	typedef long blksize_t;

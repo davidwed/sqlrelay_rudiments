@@ -158,7 +158,7 @@ char *logger::logHeader(const char *name) {
 	stringbuffer	str;
 	str.append(dt.getString())->append(" ");
 	str.append(name)->append(" [");
-	str.append(process::getProcessId())->append("]");
+	str.append((uint64_t)process::getProcessId())->append("]");
 	return str.detachString();
 }
 

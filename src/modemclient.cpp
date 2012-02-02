@@ -9,7 +9,9 @@
 #include <rudiments/charstring.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
 #include <string.h>
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
