@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 // to get the more portable XSI-compliant strerror_r rather than the GNU version
-#define __USE_XOPEN2K
 #undef __USE_GNU
 
 // for strerror (or similar)

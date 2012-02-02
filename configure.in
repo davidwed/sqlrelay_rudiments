@@ -354,10 +354,6 @@ dnl Checks for header files.
 echo
 echo "***** Headers ****************"
 
-AC_MSG_CHECKING(for limits.h)
-AC_TRY_COMPILE([#include <limits.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_LIMITS_H, 1, Some systems have limits.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for dirent.h)
 AC_TRY_COMPILE([#include <dirent.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DIRENT_H, 1, Some systems have dirent.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

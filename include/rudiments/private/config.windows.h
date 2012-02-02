@@ -422,9 +422,6 @@
 /* Some systems have kill */
 /* #undef RUDIMENTS_HAVE_KILL */
 
-/* Some systems have limits.h */
-#define RUDIMENTS_HAVE_LIMITS_H 1
-
 /* Some systems have link */
 /* #undef RUDIMENTS_HAVE_LINK */
 
