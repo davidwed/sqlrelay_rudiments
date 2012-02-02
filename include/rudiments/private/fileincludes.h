@@ -7,6 +7,8 @@
 
 // for open flags
 #ifdef RUDIMENTS_HAVE_FCNTL_H
+	// for windows
+	#define _POSIX_
 	#include <fcntl.h>
 #endif
 
