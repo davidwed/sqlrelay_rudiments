@@ -7,11 +7,10 @@
 
 #include <rudiments/private/winsock.h>
 
-#include <rudiments/private/snprintf.h>
-
 // for ENOMEM
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>
 #endif
@@ -184,10 +183,10 @@ char *hostentry::getAddressString(int32_t index) const {
 	char	*address=new char[addresslen];
 	address[0]='\0';
 	for (int32_t byte=0; byte<getAddressLength(); byte++) {
-		snprintf(address,addresslen,
-			"%s%d",address,getAddressList()[index][byte]);
+		charstring::append(address,
+				(int64_t)getAddressList()[index][byte]);
 		if (byte<getAddressLength()-1) {
-			snprintf(address,addresslen,"%s.",address);
+			charstring::append(address,".");
 		}
 	}
 	return address;

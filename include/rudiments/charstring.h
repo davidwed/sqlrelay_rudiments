@@ -38,12 +38,12 @@ class charstring {
 			// that there is enough room remaining in "dest" to
 			// accommodate the new string.
 			// Returns a pointer to "dest".
-		static	char	*append(char *dest, int32_t number);
+		static	char	*append(char *dest, int64_t number);
 			// Converts "number" to a string and appends it to
 			// "dest".  Assumes that there is enough room remaining
 			// in "dest" to accommodate the new string.
 			// Returns a pointer to "dest".
-		static	char	*append(char *dest, uint32_t number);
+		static	char	*append(char *dest, uint64_t number);
 			// Converts "number" to a string and appends it to
 			// "dest".  Assumes that there is enough room remaining
 			// in "dest" to accommodate the new string.

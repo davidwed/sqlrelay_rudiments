@@ -3,11 +3,10 @@
 
 #include <rudiments/datetime.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stringbuffer.h>
 #ifdef RUDIMENTS_HAVE_RTC
 	#include <rudiments/file.h>
 #endif
-
-#include <rudiments/private/snprintf.h>
 
 #include <stdlib.h>
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
@@ -391,15 +390,15 @@ void datetime::setTimeMutex(mutex *mtx) {
 
 const char *datetime::getString() {
 	delete[] pvt->_timestring;
-	size_t	timestringlen=2+1+2+1+charstring::integerLength(getYear())+1+
-				2+1+2+1+2+1+
-				charstring::length(getTimeZoneString())+1;
-	pvt->_timestring=new char[timestringlen];
-	snprintf(pvt->_timestring,timestringlen,
-			"%02d/%02d/%d %02d:%02d:%02d %s",
-			getMonth(),getDayOfMonth(),getYear(),
-			getHour(),getMinutes(),getSeconds(),
-			getTimeZoneString());
+	stringbuffer	timestr;
+	timestr.append(getMonth(),2)->append('/');
+	timestr.append(getDayOfMonth(),2)->append('/');
+	timestr.append(getYear())->append(' ');
+	timestr.append(getHour(),2)->append(':');
+	timestr.append(getMinutes(),2)->append(':');
+	timestr.append(getSeconds())->append(' ');
+	timestr.append(getTimeZoneString());
+	pvt->_timestring=timestr.detachString();
 	return pvt->_timestring;
 }
 

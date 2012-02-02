@@ -441,7 +441,6 @@ int main(int argc, const char **argv) {
 	printf("-9223372036854775807=%s\n",teststr);
 	delete[] teststr;
 
-
 	uint32_t	testuint32=4294967295UL;
 	teststr=charstring::parseNumber(testuint32);
 	printf("4294967295=%s\n",teststr);
@@ -519,4 +518,5 @@ int main(int argc, const char **argv) {
 	printf("\n");
 	charstring::printBits(v8s,sizeof(v8s));
 	printf("\n");
+
 }

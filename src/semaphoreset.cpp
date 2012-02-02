@@ -10,8 +10,6 @@
 	#include <rudiments/charstring.h>
 #endif
 
-#include <rudiments/private/snprintf.h>
-
 #include <stdlib.h>
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
@@ -552,8 +550,10 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 					11+charstring::integerLength(key)+1+
 					charstring::integerLength(nsems)+1;
 			pvt->_semnames[i]=new char[semnamelen];
-			snprintf(pvt->_semnames[i],semnamelen,
-					"rudiments::%d-%d\n",key,nsems);
+			charstring::append(pvt->_semnames[i],"rudiments::");
+			charstring::append(pvt->_semnames[i],key);
+			charstring::append(pvt->_semnames[i],"-");
+			charstring::append(pvt->_semnames[i],nsems);
 
 			// set up the security attributes
 			pvt->_securityattrs[i]=new SECURITY_ATTRIBUTES;

@@ -5,10 +5,9 @@
 #include <rudiments/datetime.h>
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/process.h>
-
-#include <rudiments/private/snprintf.h>
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
@@ -156,65 +155,51 @@ void logger::removeAllLogDestinations() {
 char *logger::logHeader(const char *name) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
-	pid_t		pid=process::getProcessId();
-	const char	*dtstring=dt.getString();
-	size_t		retvallen=charstring::length(dtstring)+1+
-				charstring::length(name)+2+
-				charstring::integerLength((uint64_t)pid)+2;
-	char		*retval=new char[retvallen];
-	snprintf(retval,retvallen,"%s %s [%d]",dtstring,name,pid);
-	return retval;
+	stringbuffer	str;
+	str.append(dt.getString())->append(" ");
+	str.append(name)->append(" [");
+	str.append(process::getProcessId())->append("]");
+	return str.detachString();
 }
 
 void logger::write(const char *header, int32_t tabs, const char *string) {
-	size_t	headlen=charstring::length(header)+3;
-	size_t	headtablen=headlen+tabs;
-	size_t	logentrylen=headtablen+charstring::length(string)+2+1;
-	char	*logentry=new char[logentrylen];
-	snprintf(logentry,logentrylen,"%s : ",header);
+	stringbuffer	str;
+	str.append(header)->append(" : ");
 	for (int32_t i=0; i<tabs; i++) {
-		snprintf(logentry+headlen+i,
-				logentrylen-headlen-i,"%c",'	');
+		str.append('	');
 	}
-	snprintf(logentry+headtablen,logentrylen-headtablen,"%s\n\n",string);
-	write(logentry);
-	delete[] logentry;
+	str.append(string)->append("\n\n");
+	write(str.getString());
 }
 
 void logger::write(const char *header, int32_t tabs, char character) {
-	size_t	logentrylen=charstring::length(header)+3+tabs+1+2+1;
-	char	*logentry=new char[logentrylen];
-	snprintf(logentry,logentrylen,"%s : ",header);
+	stringbuffer	str;
+	str.append(header)->append(" : ");
 	for (int32_t i=0; i<tabs; i++) {
-		snprintf(logentry,logentrylen,"%s%c",logentry,'	');
+		str.append('	');
 	}
-	snprintf(logentry,logentrylen,"%s%c\n\n",logentry,character);
-	write(logentry);
-	delete[] logentry;
+	str.append(character)->append("\n\n");
+	write(str.getString());
 }
 
 void logger::write(const char *header, int32_t tabs, int32_t number) {
-	size_t	logentrylen=charstring::length(header)+3+tabs+20+2+1;
-	char	*logentry=new char[logentrylen];
-	snprintf(logentry,logentrylen,"%s : ",header);
+	stringbuffer	str;
+	str.append(header)->append(" : ");
 	for (int32_t i=0; i<tabs; i++) {
-		snprintf(logentry,logentrylen,"%s%c",logentry,'	');
+		str.append('	');
 	}
-	snprintf(logentry,logentrylen,"%s%d\n\n",logentry,number);
-	write(logentry);
-	delete[] logentry;
+	str.append(number)->append("\n\n");
+	write(str.getString());
 }
 
 void logger::write(const char *header, int32_t tabs, double number) {
-	size_t	logentrylen=charstring::length(header)+3+tabs+21+2+1;
-	char	*logentry=new char[logentrylen];
-	snprintf(logentry,logentrylen,"%s : ",header);
+	stringbuffer	str;
+	str.append(header)->append(" : ");
 	for (int32_t i=0; i<tabs; i++) {
-		snprintf(logentry,logentrylen,"%s%c",logentry,'	');
+		str.append('	');
 	}
-	snprintf(logentry,logentrylen,"%s%f\n\n",logentry,number);
-	write(logentry);
-	delete[] logentry;
+	str.append(number)->append("\n\n");
+	write(str.getString());
 }
 
 void logger::write(const char *logentry) {

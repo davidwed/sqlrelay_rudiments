@@ -767,6 +767,12 @@
 /* Some systems have strncasecmp */
 /* #undef RUDIMENTS_HAVE_STRNCASECMP */
 
+/* Some systems have strncat */
+/* #undef RUDIMENTS_HAVE_STRNCAT */
+
+/* Some systems have strncat_s */
+#define RUDIMENTS_HAVE_STRNCAT_S 1
+
 /* Some systems have strpbrk */
 #define RUDIMENTS_HAVE_STRPBRK 1
 

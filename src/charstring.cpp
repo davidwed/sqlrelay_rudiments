@@ -5,8 +5,6 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/character.h>
 
-#include <rudiments/private/snprintf.h>
-
 #include <stdio.h>
 
 // for strtold
@@ -291,9 +289,23 @@ char *charstring::httpEscape(const char *input) {
 				(*ptr>='0' && *ptr<='9')) {
 			(*outptr)=*ptr;
 		} else {
-			snprintf(outptr,outputlen,"%c%02X",'%',*ptr);
-			outptr=outptr+2;
-			outputlen=outputlen-2;
+			(*outptr)='%';
+			outptr++;
+			outputlen--;
+			char	upper=(*ptr)>>4;
+			if (upper<9) {
+				*outptr=upper+'0';
+			} else {
+				*outptr=upper-10+'A';
+			}
+			outptr++;
+			outputlen--;
+			char	lower=(*ptr)&0x0F;
+			if (lower<9) {
+				*outptr=lower+'0';
+			} else {
+				*outptr=lower-10+'A';
+			}
 		}
 		outptr++;
 		outputlen--;
@@ -567,68 +579,36 @@ int32_t charstring::countTrailingSpaces(const char *str, int32_t length) {
 }
 
 char *charstring::parseNumber(int16_t number) {
-	return parseNumber(number,1);
+	return parseNumber((int64_t)number,1);
 }
 
 char *charstring::parseNumber(int16_t number,
 				uint16_t zeropadding) {
-	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*hd",zeropadding,number);
-	return str;
+	return parseNumber((int64_t)number,zeropadding);
 }
 
 char *charstring::parseNumber(uint16_t number) {
-	return parseNumber(number,1);
+	return parseNumber((uint64_t)number,1);
 }
 
 char *charstring::parseNumber(uint16_t number, uint16_t zeropadding) {
-	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-	char	*str=new char[strlength];
-	int32_t	strindex=strlength-1;
-	str[strindex--]='\0';
-	while (number) {
-		str[strindex--]='0'+number%10;
-		number/=10;
-	}
-	while (strindex>-1) {
-		str[strindex--]='0';
-	}
-	return str;
+	return parseNumber((uint64_t)number,zeropadding);
 }
 
 char *charstring::parseNumber(int32_t number) {
-	return parseNumber(number,1);
+	return parseNumber((int64_t)number,1);
 }
 
 char *charstring::parseNumber(int32_t number, uint16_t zeropadding) {
-	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*d",zeropadding,number);
-	return str;
+	return parseNumber((int64_t)number,zeropadding);
 }
 
 char *charstring::parseNumber(uint32_t number) {
-	return parseNumber(number,1);
+	return parseNumber((uint64_t)number,1);
 }
 
 char *charstring::parseNumber(uint32_t number, uint16_t zeropadding) {
-	uint16_t	len=integerLength(number);
-	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
-	char	*str=new char[strlength];
-	int32_t	strindex=strlength-1;
-	str[strindex--]='\0';
-	while (number) {
-		str[strindex--]='0'+number%10;
-		number/=10;
-	}
-	while (strindex>-1) {
-		str[strindex--]='0';
-	}
-	return str;
+	return parseNumber((uint64_t)number,zeropadding);
 }
 
 char *charstring::parseNumber(int64_t number) {
@@ -639,7 +619,20 @@ char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	uint16_t	len=integerLength(number);
 	uint16_t	strlength=((zeropadding>len)?zeropadding:len)+1;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%0*lld",zeropadding,(long long)number);
+	int32_t	strindex=strlength-1;
+	str[strindex--]='\0';
+	int64_t	posnumber=(number>=0)?number:-1*number;
+	while (posnumber) {
+		str[strindex--]='0'+posnumber%10;
+		posnumber/=10;
+	}
+	int32_t	finish=(number>=0)?-1:0;
+	while (strindex>finish) {
+		str[strindex--]='0';
+	}
+	if (number<0) {
+		str[strindex]='-';
+	}
 	return str;
 }
 
@@ -664,72 +657,68 @@ char *charstring::parseNumber(uint64_t number, uint16_t zeropadding) {
 }
 
 char *charstring::parseNumber(float number) {
-	// FIXME: use (q)(e|f|g)cvt(_r)?
-	char	*str=new char[22];
-	snprintf(str,22,"%f",number);
-	return str;
+	return parseNumber((long double)number);
 }
 
 char *charstring::parseNumber(float number, uint16_t scale) {
-	// FIXME: use (q)(e|f|g)cvt(_r)?
-	char	*str=new char[22];
-	snprintf(str,22,"%.*f",scale,number);
-	return str;
+	return parseNumber((long double)number,scale);
 }
 
 char *charstring::parseNumber(float number,
 				uint16_t precision, uint16_t scale) {
-	// FIXME: use (e|f|g)cvt(_r)?
-	size_t	strlength=precision+3;
-	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*f",precision,scale,number);
-	return str;
+	return parseNumber((long double)number,precision,scale);
 }
 
 char *charstring::parseNumber(double number) {
-	// FIXME: use (q)(e|f|g)cvt(_r)?
-	char	*str=new char[22];
-	snprintf(str,22,"%f",number);
-	return str;
+	return parseNumber((long double)number);
 }
 
 char *charstring::parseNumber(double number,
 				uint16_t scale) {
-	// FIXME: use (q)(e|f|g)cvt(_r)?
-	char	*str=new char[22];
-	snprintf(str,22,"%.*f",scale,number);
-	return str;
+	return parseNumber((long double)number,scale);
 }
 
 char *charstring::parseNumber(double number,
 				uint16_t precision, uint16_t scale) {
-	// FIXME: use (e|f|g)cvt(_r)?
-	size_t	strlength=precision+3;
-	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*f",precision,scale,number);
-	return str;
+	return parseNumber((long double)number,precision,scale);
 }
 
 char *charstring::parseNumber(long double number) {
-	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%Lf",number);
+	#if defined(RUDIMENTS_HAVE__SNPRINTF_S)
+		_snprintf_s(str,22,_TRUNCATE,"%Lf",number);
+	#elif defined(RUDIMENTS_HAVE_SNPRINTF)
+		snprintf(str,22,"%Lf",number);
+	#else
+		#error no snprintf or anything like it
+	#endif
 	return str;
 }
 
 char *charstring::parseNumber(long double number, uint16_t scale) {
-	// FIXME: use (q)(e|f|g)cvt(_r)?
 	char	*str=new char[22];
-	snprintf(str,22,"%.*Lf",scale,number);
+	#if defined(RUDIMENTS_HAVE__SNPRINTF_S)
+		_snprintf_s(str,22,_TRUNCATE,"%.*Lf",scale,number);
+	#elif defined(RUDIMENTS_HAVE_SNPRINTF)
+		snprintf(str,22,"%.*Lf",scale,number);
+	#else
+		#error no snprintf or anything like it
+	#endif
 	return str;
 }
 
 char *charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
-	// FIXME: use (e|f|g)cvt(_r)?
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	snprintf(str,strlength,"%*.*Lf",precision,scale,number);
+	#if defined(RUDIMENTS_HAVE__SNPRINTF_S)
+		_snprintf_s(str,strlength,_TRUNCATE,
+				"%*.*Lf",precision,scale,number);
+	#elif defined(RUDIMENTS_HAVE_SNPRINTF)
+		snprintf(str,strlength,"%*.*Lf",precision,scale,number);
+	#else
+		#error no snprintf or anything like it
+	#endif
 	return str;
 }
 
@@ -800,21 +789,43 @@ void charstring::zero(char *str, size_t size) {
 }
 
 char *charstring::append(char *dest, const char *source) {
-	return (dest && source)?strcat(dest,source):NULL;
+	return (dest && source)?
+		#if defined(RUDIMENTS_HAVE_STRCAT_S)
+			// this isn't secure at all, but it approximates what
+			// strcat would do and keeps the compiler from
+			// complaining about using strcat
+			strcat_s(dest,length(source)+1,source):
+		#elif defined(RUDIMENTS_HAVE_STRCAT)
+			strcat(dest,source):
+		#else
+			#error no strcat or anything like it
+		#endif
+		NULL;
 }
 
 char *charstring::append(char *dest, const char *source, size_t size) {
-	return (dest && source)?strncat(dest,source,size):NULL;
+	return (dest && source)?
+		#if defined(RUDIMENTS_HAVE_STRNCAT_S)
+			// this isn't secure at all, but it approximates what
+			// strncat would do and keeps the compiler from
+			// complaining about using strncat
+			strncat_s(dest,size+1,source,size):
+		#elif defined(RUDIMENTS_HAVE_STRNCAT)
+			strncat(dest,source,size):
+		#else
+			#error no strcat or anything like it
+		#endif
+		NULL;
 }
 
-char *charstring::append(char *dest, int32_t number) {
+char *charstring::append(char *dest, int64_t number) {
 	char	*str=charstring::parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;
 	return retval;
 }
 
-char *charstring::append(char *dest, uint32_t number) {
+char *charstring::append(char *dest, uint64_t number) {
 	char	*str=charstring::parseNumber(number);
 	char	*retval=append(dest,str);
 	delete[] str;
