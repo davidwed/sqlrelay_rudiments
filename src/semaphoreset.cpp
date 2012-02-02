@@ -610,6 +610,8 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 			}
 		}
 
+		return false;
+
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
