@@ -1374,6 +1374,26 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 #include <stdio.h>],
 _snprintf(NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE__SNPRINTF,1,Some systems have _snprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for strcasecmp)
+AC_TRY_COMPILE([
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strcasecmp(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCASECMP,1,Some systems have strcasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for strncasecmp)
+AC_TRY_COMPILE([
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+strncasecmp(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRNCASECMP,1,Some systems have strncasecmp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for strtold)
 AC_TRY_COMPILE([#ifndef __USE_GNU
 	#define __USE_GNU

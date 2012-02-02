@@ -746,6 +746,9 @@
 /* Some systems have stdint.h */
 #define RUDIMENTS_HAVE_STDINT_H 1
 
+/* Some systems have strcasecmp */
+/* #undef RUDIMENTS_HAVE_STRCASECMP */
+
 /* Some systems have strchrnul */
 /* #undef RUDIMENTS_HAVE_STRCHRNUL */
 
@@ -754,6 +757,9 @@
 
 /* Some systems have strings.h */
 /* #undef RUDIMENTS_HAVE_STRINGS_H */
+
+/* Some systems have strncasecmp */
+/* #undef RUDIMENTS_HAVE_STRNCASECMP */
 
 /* Some systems have strpbrk */
 #define RUDIMENTS_HAVE_STRPBRK 1

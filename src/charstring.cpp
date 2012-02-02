@@ -870,12 +870,46 @@ int32_t charstring::compare(const char *str1, const char *str2, size_t size) {
 }
 
 int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
-	return (str1 && str2)?strcasecmp(str1,str2):(str1!=str2);
+	#ifdef RUDIMENTS_HAVE_STRCASECMP
+		return (str1 && str2)?strcasecmp(str1,str2):(str1!=str2);
+	#else
+		const char	*ptr1=str1;
+		const char	*ptr2=str2;
+		int32_t		diff=0;
+		while (*ptr1 && *ptr2) {
+			diff=charstring::toUpper(*ptr1)-
+				charstring::toUpper(*ptr2);
+			if (diff) {
+				return diff;
+			}
+			ptr1++;
+			ptr2++;
+		}
+		return diff;
+	#endif
 }
 
 int32_t charstring::compareIgnoringCase(const char *str1,
 						const char *str2, size_t size) {
-	return (str1 && str2)?strncasecmp(str1,str2,size):(str1!=str2);
+	#ifdef RUDIMENTS_HAVE_STRNCASECMP
+		return (str1 && str2)?strncasecmp(str1,str2,size):(str1!=str2);
+	#else
+		size_t		count=0;
+		const char	*ptr1=str1;
+		const char	*ptr2=str2;
+		int32_t		diff=0;
+		while (*ptr1 && *ptr2 && count<size) {
+			diff=charstring::toUpper(*ptr1)-
+				charstring::toUpper(*ptr2);
+			if (diff) {
+				return diff;
+			}
+			ptr1++;
+			ptr2++;
+			count++;
+		}
+		return diff;
+	#endif
 }
 
 bool charstring::contains(const char *haystack, const char *needle) {
