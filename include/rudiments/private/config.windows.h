@@ -749,6 +749,12 @@
 /* Some systems have strcasecmp */
 /* #undef RUDIMENTS_HAVE_STRCASECMP */
 
+/* Some systems have strcat */
+/* #undef RUDIMENTS_HAVE_STRCAT */
+
+/* Some systems have strcat_s */
+#define RUDIMENTS_HAVE_STRCAT_S 1
+
 /* Some systems have strchrnul */
 /* #undef RUDIMENTS_HAVE_STRCHRNUL */
 
@@ -903,7 +909,7 @@
 /* #undef RUDIMENTS_HAVE__GETPID */
 
 /* Some systems have _snprintf */
-#define RUDIMENTS_HAVE__SNPRINTF 1
+#define RUDIMENTS_HAVE__SNPRINTF_S 1
 
 /* Some systems have __bswap64 */
 /* #undef RUDIMENTS_HAVE___BSWAP64 */
