@@ -18,7 +18,9 @@
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <windows.h>
-	#include <sys/param.h>
+	#ifdef RUDIMENTS_HAVE_SYS_PARAM_H
+		#include <sys/param.h>
+	#endif
 	struct	statfs {
 		int64_t	f_type;
 		DWORD	f_bsize;

@@ -801,7 +801,7 @@
 /* #undef RUDIMENTS_HAVE_SYS_BITYPES_H */
 
 /* Some systems have sys/fcntl.h */
-#define RUDIMENTS_HAVE_SYS_FCNTL_H 1
+/* #undef RUDIMENTS_HAVE_SYS_FCNTL_H */
 
 /* Some systems have sys/ioctl.h */
 /* #undef RUDIMENTS_HAVE_SYS_IOCTL_H */

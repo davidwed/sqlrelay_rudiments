@@ -30,7 +30,9 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#include <fcntl.h>
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_FCNTL_H
 	#include <sys/fcntl.h>
 #endif
