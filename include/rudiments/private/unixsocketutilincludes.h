@@ -13,6 +13,8 @@
 
 #ifndef RUDIMENTS_HAVE_SOCKADDR_UN
 	#ifdef RUDIMENTS_HAVE_LIMITS_H
+		// for PATH_MAX
+		#define _POSIX_
 		#include <limits.h>
 	#endif
 	struct sockaddr_un {
