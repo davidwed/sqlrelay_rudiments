@@ -762,13 +762,13 @@
 #define RUDIMENTS_HAVE_STRSPN 1
 
 /* Some systems have strtold */
-#define RUDIMENTS_HAVE_STRTOLD 1
+/* #undef RUDIMENTS_HAVE_STRTOLD */
 
 /* Some systems have strtoll */
-#define RUDIMENTS_HAVE_STRTOLL 1
+/* #undef RUDIMENTS_HAVE_STRTOLL */
 
 /* Some systems have strtoull */
-#define RUDIMENTS_HAVE_STRTOULL 1
+/* #undef RUDIMENTS_HAVE_STRTOULL */
 
 /* Some systems have struct timespec in pthread.h */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD */
