@@ -62,7 +62,7 @@ bool environment::setValue(const char *variable, const char *value) {
 	char	*pestr=(char *)malloc(pestrlen*sizeof(char));
 	charstring::append(pestr,variable);
 	charstring::append(pestr,"=");
-	charstring::append(pestr,"value");
+	charstring::append(pestr,value);
 	int32_t	result;
 	do {
 		result=putenv(pestr);
