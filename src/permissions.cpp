@@ -37,235 +37,360 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 }
 
 mode_t permissions::everyoneReadWrite() {
-	return S_IRUSR|S_IWUSR
-	#if defined(S_IRGRP) && \
-		defined(S_IWGRP) && \
-		defined(S_IROTH) && \
-		defined(S_IWOTH)
-		|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IRUSR|S_IWUSR
+		#if defined(S_IRGRP) && \
+			defined(S_IWGRP) && \
+			defined(S_IROTH) && \
+			defined(S_IWOTH)
+			|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH
+		#endif
+		;
 	#endif
-	;
 }
 
 mode_t permissions::everyoneReadWriteExecute() {
-	return S_IRUSR|S_IWUSR|S_IXUSR
-	#if defined(S_IRGRP) && \
-		defined(S_IWGRP) && \
-		defined(S_IXGRP) && \
-		defined(S_IROTH) && \
-		defined(S_IWOTH) && \
-		defined(S_IXOTH)
-		|S_IRGRP|S_IWGRP|S_IXGRP
-		|S_IROTH|S_IWOTH|S_IXOTH
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IRUSR|S_IWUSR|S_IXUSR
+		#if defined(S_IRGRP) && \
+			defined(S_IWGRP) && \
+			defined(S_IXGRP) && \
+			defined(S_IROTH) && \
+			defined(S_IWOTH) && \
+			defined(S_IXOTH)
+			|S_IRGRP|S_IWGRP|S_IXGRP
+			|S_IROTH|S_IWOTH|S_IXOTH
+		#endif
+		;
 	#endif
-	;
 }
 
 mode_t permissions::ownerRead() {
-	return S_IRUSR;
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IRUSR;
+	#endif
 }
 
 mode_t permissions::ownerWrite() {
-	return S_IWUSR;
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IWUSR;
+	#endif
 }
 
 mode_t permissions::ownerExecute() {
-	return S_IXUSR;
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IXUSR;
+	#endif
 }
 
 mode_t permissions::ownerReadWrite() {
-	return S_IRUSR|S_IWUSR;
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IRUSR|S_IWUSR;
+	#endif
 }
 
 mode_t permissions::ownerReadExecute() {
-	return S_IRUSR|S_IXUSR;
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IRUSR|S_IXUSR;
+	#endif
 }
 
 mode_t permissions::ownerReadWriteExecute() {
-	return S_IRUSR|S_IWUSR|S_IXUSR;
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		return S_IRUSR|S_IWUSR|S_IXUSR;
+	#endif
 }
 
 mode_t permissions::groupRead() {
-	#ifdef S_IRGRP
-		return S_IRGRP;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#ifdef S_IRGRP
+			return S_IRGRP;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::groupWrite() {
-	#ifdef S_IWGRP
-		return S_IWGRP;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#ifdef S_IWGRP
+			return S_IWGRP;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::groupExecute() {
-	#ifdef S_IXGRP
-		return S_IXGRP;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#ifdef S_IXGRP
+			return S_IXGRP;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::groupReadWrite() {
-	#if defined(S_IRGRP) && defined(S_IWGRP)
-		return S_IRGRP|S_IWGRP;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IRGRP) && defined(S_IWGRP)
+			return S_IRGRP|S_IWGRP;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::groupReadExecute() {
-	#if defined(S_IRGRP) && defined(S_IXGRP)
-		return S_IRGRP|S_IXGRP;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IRGRP) && defined(S_IXGRP)
+			return S_IRGRP|S_IXGRP;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::groupReadWriteExecute() {
-	#if defined(S_IRGRP) && defined(S_IWGRP) && defined(S_IXGRP)
-		return S_IRGRP|S_IWGRP|S_IXGRP;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IRGRP) && defined(S_IWGRP) && defined(S_IXGRP)
+			return S_IRGRP|S_IWGRP|S_IXGRP;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::othersRead() {
-	#if defined(S_IROTH)
-		return S_IROTH;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IROTH)
+			return S_IROTH;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::othersWrite() {
-	#if defined(S_IWOTH)
-		return S_IWOTH;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IWOTH)
+			return S_IWOTH;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::othersExecute() {
-	#if defined(S_IXOTH)
-		return S_IXOTH;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IXOTH)
+			return S_IXOTH;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::othersReadWrite() {
-	#if defined(S_IROTH) && defined(S_IWOTH)
-		return S_IROTH|S_IWOTH;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IROTH) && defined(S_IWOTH)
+			return S_IROTH|S_IWOTH;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::othersReadExecute() {
-	#if defined(S_IROTH) && defined(S_IXOTH)
-		return S_IROTH|S_IXOTH;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IROTH) && defined(S_IXOTH)
+			return S_IROTH|S_IXOTH;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::othersReadWriteExecute() {
-	#if defined(S_IROTH) && defined(S_IWOTH) && defined(S_IXOTH)
-		return S_IROTH|S_IWOTH|S_IXOTH;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#if defined(S_IROTH) && defined(S_IWOTH) && defined(S_IXOTH)
+			return S_IROTH|S_IWOTH|S_IXOTH;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::saveInSwapSpace() {
-	#ifdef S_ISVTX
-		return S_ISVTX;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#ifdef S_ISVTX
+			return S_ISVTX;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::setUserId() {
-	#ifdef S_ISUID
-		return S_ISUID;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#ifdef S_ISUID
+			return S_ISUID;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::setGroupId() {
-	#ifdef S_ISGID
-		return S_ISGID;
-	#else
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
 		return 0;
+	#else
+		#ifdef S_ISGID
+			return S_ISGID;
+		#else
+			return 0;
+		#endif
 	#endif
 }
 
 mode_t permissions::evalPermString(const char *permstring) {
-	mode_t	retval=0;
-	if (charstring::length(permstring)==9) {
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		mode_t	retval=0;
+		if (charstring::length(permstring)==9) {
 
-		// handle user permissions
-		if (permstring[0]=='r') {
-			retval=retval|ownerRead();
+			// handle user permissions
+			if (permstring[0]=='r') {
+				retval=retval|ownerRead();
+			}
+			if (permstring[1]=='w') {
+				retval=retval|ownerWrite();
+			}
+			if (permstring[2]=='x') {
+				retval=retval|ownerExecute();
+			} else if (permstring[2]=='X' || permstring[2]=='S') {
+				retval=retval|ownerExecute();
+				retval=retval|setUserId();
+			}
+	
+			// handle group permissions
+			if (permstring[3]=='r') {
+				retval=retval|groupRead();
+			}
+			if (permstring[4]=='w') {
+				retval=retval|groupWrite();
+			}
+			if (permstring[5]=='x') {
+				retval=retval|groupExecute();
+			} else if (permstring[5]=='X' || permstring[5]=='S') {
+				retval=retval|groupExecute();
+			}
+	
+			// handle others permissions
+			if (permstring[6]=='r') {
+				retval=retval|othersRead();
+			}
+			if (permstring[7]=='w') {
+				retval=retval|othersWrite();
+			}
+			if (permstring[8]=='x') {
+				retval=retval|othersExecute();
+	
+			// handle sticky bit
+			} else if (permstring[5]=='t') {
+				retval=retval|saveInSwapSpace();
+			}
 		}
-		if (permstring[1]=='w') {
-			retval=retval|ownerWrite();
-		}
-		if (permstring[2]=='x') {
-			retval=retval|ownerExecute();
-		} else if (permstring[2]=='X' || permstring[2]=='S') {
-			retval=retval|ownerExecute();
-			retval=retval|setUserId();
-		}
-
-		// handle group permissions
-		if (permstring[3]=='r') {
-			retval=retval|groupRead();
-		}
-		if (permstring[4]=='w') {
-			retval=retval|groupWrite();
-		}
-		if (permstring[5]=='x') {
-			retval=retval|groupExecute();
-		} else if (permstring[5]=='X' || permstring[5]=='S') {
-			retval=retval|groupExecute();
-		}
-
-		// handle others permissions
-		if (permstring[6]=='r') {
-			retval=retval|othersRead();
-		}
-		if (permstring[7]=='w') {
-			retval=retval|othersWrite();
-		}
-		if (permstring[8]=='x') {
-			retval=retval|othersExecute();
-
-		// handle sticky bit
-		} else if (permstring[5]=='t') {
-			retval=retval|saveInSwapSpace();
-		}
-	}
-	return retval;
+		return retval;
+	#endif
 }
 
 char *permissions::evalPermOctal(mode_t permoctal) {
+	#if defined(_WIN32)
+		// windows doesn't support anything like this
+		return 0;
+	#else
+		char	*permstring=new char[10];
+		permstring[9]='\0';
 
-	char	*permstring=new char[10];
-	permstring[9]='\0';
-
-	mode_t	shift=permoctal;
-	for (uint8_t i=8; i>=0; i--) {
-		uint8_t	pos=i%3;
-		permstring[i]=(shift&1)?((pos==2)?'x':(pos==1)?'w':'r'):'-';
-		shift=shift>>1;
-	}
-	return permstring;
+		mode_t	shift=permoctal;
+		for (uint8_t i=8; i>=0; i--) {
+			uint8_t	pos=i%3;
+			permstring[i]=(shift&1)?((pos==2)?'x':
+						(pos==1)?'w':'r'):'-';
+			shift=shift>>1;
+		}
+		return permstring;
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE
