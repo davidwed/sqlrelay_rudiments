@@ -23809,8 +23809,8 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 SWAB_DEFINED=""
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether swab is defined in unistd.h" >&5
-$as_echo_n "checking whether swab is defined in unistd.h... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether swab is defined" >&5
+$as_echo_n "checking whether swab is defined... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #ifdef HAVE_STDLIB_H
@@ -23843,8 +23843,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 if ( test -n "$SWAB_DEFINED" )
 then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking swab arguments" >&5
-$as_echo_n "checking swab arguments... " >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking swab const char * argument" >&5
+$as_echo_n "checking swab const char * argument... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #ifdef HAVE_STDLIB_H
@@ -23859,19 +23859,83 @@ $as_echo_n "checking swab arguments... " >&6; }
 int
 main ()
 {
-void *from; void *to; swab(from,to,0);
+const char *from; char *to; swab(from,to,0);
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: void *" >&5
-$as_echo "void *" >&6; }
-else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+$as_echo "#define RUDIMENTS_HAVE_SWAB_CONST_CHAR 1" >>confdefs.h
 
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking swab char * argument" >&5
+$as_echo_n "checking swab char * argument... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif
+int
+main ()
+{
+char *from; char *to; swab(from,to,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 $as_echo "#define RUDIMENTS_HAVE_SWAB_CHAR 1" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: char *" >&5
-$as_echo "char *" >&6; }
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking swab const void * argument" >&5
+$as_echo_n "checking swab const void * argument... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif
+int
+main ()
+{
+const void *from; void *to; swab(from,to,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+$as_echo "#define RUDIMENTS_HAVE_SWAB_CONST_VOID 1" >>confdefs.h
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi

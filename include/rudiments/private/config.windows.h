@@ -831,7 +831,13 @@
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H */
 
 /* Some systems have swab with a char * argument */
-/* #undef RUDIMENTS_HAVE_SWAB_CHAR */
+#define RUDIMENTS_HAVE_SWAB_CHAR 1
+
+/* Some systems have swab with a const char * argument */
+/* #undef RUDIMENTS_HAVE_SWAB_CONST_CHAR */
+
+/* Some systems have swab with a const void * argument */
+/* #undef RUDIMENTS_HAVE_SWAB_CONST_VOID */
 
 /* Some systems have swap64 */
 /* #undef RUDIMENTS_HAVE_SWAP64 */
