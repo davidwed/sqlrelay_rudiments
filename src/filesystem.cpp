@@ -18,6 +18,11 @@
 	#include <unistd.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_IO_H
+	#undef _POSIX_
+	#include <io.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <windows.h>
 	#ifdef RUDIMENTS_HAVE_SYS_PARAM_H
@@ -34,6 +39,10 @@
 		int64_t	f_fsid;
 		DWORD	f_namelen;
 	};
+#endif
+
+#ifndef PATH_MAX
+	#define PATH_MAX 1024
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
