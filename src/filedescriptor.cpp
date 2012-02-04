@@ -1706,7 +1706,7 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#endif
 }
 
-#ifdef MINGW32
+#ifdef _WIN32
 bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
 	error::setErrorNumber(ENOSYS);
 	return false;

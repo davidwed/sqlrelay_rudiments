@@ -52,7 +52,7 @@ bool device::createDeviceNode(const char *filename, bool blockdevice,
 			result=mknod(filename,mode,dev);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't support device nodes
 		error::setErrorNumber(ENOSYS);
 		return false;

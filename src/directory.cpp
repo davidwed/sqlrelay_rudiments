@@ -21,7 +21,7 @@
 #endif
 #include <sys/stat.h>
 
-#ifdef MINGW32
+#ifdef _WIN32
 	#include <windows.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
@@ -300,7 +300,7 @@ bool directory::changeRoot(const char *path) {
 			result=chroot(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows just doesn't support this
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -349,7 +349,7 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 			result=pathconf(pathname,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// no idea how to support this on windows
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -393,7 +393,7 @@ int64_t directory::fpathConf(int32_t name) {
 					,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// no idea how to support this on windows
 		error::setErrorNumber(ENOSYS);
 		return -1;

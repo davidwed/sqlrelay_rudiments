@@ -38,7 +38,11 @@
 	#include <utime.h>
 #endif
 
-#ifdef MINGW32
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
+
+#ifdef _WIN32
 	#include <windows.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
@@ -57,10 +61,20 @@
 	#ifndef _PC_CHOWN_RESTRICTED
 		#define _PC_CHOWN_RESTRICTED	1
 	#endif
-#endif
-
-#ifdef RUDIMENTS_HAVE_IO_H
-	#include <io.h>
+	#ifndef F_OK
+		#define F_OK	0
+	#endif
+	#ifndef W_OK
+		#define W_OK	2
+	#endif
+	#ifndef R_OK
+		#define R_OK	4
+	#endif
+	#ifndef X_OK
+		// no such thing on windows, so we'll
+		// just set this to be the same as F_OK
+		#define X_OK	0
+	#endif
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -918,7 +932,7 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 			result=fchown(fd(),uid,gid);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't support anything like this
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -1041,7 +1055,7 @@ bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 			result=symlink(oldpath,newpath);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't support symlinks
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -1096,7 +1110,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 				return buffer;
 			}
 		}
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't support symlinks
 		error::setErrorNumber(ENOSYS);
 		return NULL;
@@ -1910,7 +1924,7 @@ long file::pathConf(const char *path, int32_t name) {
 			result=pathconf(path,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// no idea how to support this on windows
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -1926,7 +1940,7 @@ long file::fpathConf(int32_t name) const {
 			result=fpathconf(fd(),name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// no idea how to support this on windows
 		error::setErrorNumber(ENOSYS);
 		return -1;

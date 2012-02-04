@@ -45,7 +45,7 @@
 #define LT_OBJDIR ".libs/"
 
 /* Mingw32 environment */
-#define MINGW32 1
+/* #undef MINGW32 */
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""

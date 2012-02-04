@@ -12,7 +12,7 @@
 
 #include <stdlib.h>
 
-#ifndef MINGW32
+#ifndef _WIN32
 	// for wait...
 	#include <sys/wait.h>
 #endif
@@ -119,7 +119,7 @@ void daemonprocess::handleCrash(void (*crashfunction)(int)) {
 	pvt->_crashhandler.handleSignal(SIGSEGV);
 }
 
-#ifndef MINGW32
+#ifndef _WIN32
 void daemonprocess::waitForChildrenToExit(int32_t signum) {
 
 	// Some systems generate a single SIGCHLD even if more than 1 child
@@ -155,7 +155,7 @@ void daemonprocess::waitForChildrenToExit(int32_t signum) {
 }
 #endif
 
-#ifndef MINGW32
+#ifndef _WIN32
 void daemonprocess::waitForChildren() {
 	pvt->_deadchildhandler.setHandler(waitForChildrenToExit);
 	pvt->_deadchildhandler.addFlag(SA_NOCLDSTOP);

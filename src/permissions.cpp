@@ -26,7 +26,7 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 			result=fchmod(fd,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't support anything like this
 		error::setErrorNumber(ENOSYS);
 		return false;

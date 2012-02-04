@@ -113,7 +113,7 @@ pid_t process::getSessionId(pid_t pid) {
 uid_t process::getRealUserId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getuid();
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		/*
 		// get the process handle
 		HANDLE	snap=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
@@ -183,7 +183,7 @@ uid_t process::getRealUserId() {
 uid_t process::getEffectiveUserId() {
 	#if defined(RUDIMENTS_HAVE_GETEUID)
 		return geteuid();
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't have the notion of effective user id's
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -195,7 +195,7 @@ uid_t process::getEffectiveUserId() {
 bool process::setUserId(uid_t uid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
 		return !setuid(uid);
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// There may be some obsure way to do this under windows,
 		// but it would surprise me.  Plus, user id's are odd variable-
 		// length structures in windows.  See getUserId above.
@@ -215,7 +215,7 @@ bool process::setEffectiveUserId(uid_t uid) {
 		return !seteuid(uid);
 	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEUID)
 		return !syscall(SYS_seteuid,uid);
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't have the notion of effective user id's
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -235,7 +235,7 @@ bool process::setRealAndEffectiveUserId(uid_t uid, uid_t euid) {
 gid_t process::getRealGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getgid();
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// You could get the group id using code similar to the code
 		// commented out for getUserId() above, but use
 		// TokenPrimaryGroup and an instance of PTOKEN_GROUPS in
@@ -253,7 +253,7 @@ gid_t process::getRealGroupId() {
 gid_t process::getEffectiveGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETEGID)
 		return getegid();
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -265,7 +265,7 @@ gid_t process::getEffectiveGroupId() {
 bool process::setGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
 		return !setgid(gid);
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// There may be some obsure way to do this under windows,
 		// but it would surprise me.  Plus, group id's are odd variable-
 		// length structures in windows.  See getRealGroupId above.
@@ -283,7 +283,7 @@ extern "C" int setegid(gid_t egid);
 bool process::setEffectiveGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETEGID)
 		return !setegid(gid);
-	#elif defined(MINGW32)
+	#elif defined(_WIN32)
 		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);
 		return -1;
