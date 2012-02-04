@@ -595,10 +595,10 @@ bool file::executable(const char *filename) {
 bool file::accessible(const char *filename, int32_t mode) {
 	int32_t	result;
 	do {
-		#if defined(RUDIMENTS_HAVE_ACCESS)
-			result=access(filename,mode);
-		#elif defined(RUDIMENTS_HAVE__ACCESS_S)
+		#if defined(RUDIMENTS_HAVE__ACCESS_S)
 			result=_access_s(filename,mode);
+		#elif defined(RUDIMENTS_HAVE_ACCESS)
+			result=access(filename,mode);
 		#else
 			#error no access or anything like it
 		#endif
