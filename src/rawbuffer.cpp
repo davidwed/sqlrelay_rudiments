@@ -48,14 +48,14 @@ void *rawbuffer::copyUntil(void *dest, const void *src,
 void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 	if (dest && src) {
 		#if defined(RUDIMENTS_HAVE_SWAB_CONST_CHAR)
-			swab(static_cast<const char *>(src),
-				static_cast<char *>(dest),size);
+			swab(reinterpret_cast<const char *>(src),
+				reinterpret_cast<char *>(dest),size);
 		#elif defined(RUDIMENTS_HAVE_SWAB_CHAR)
-			swab(static_cast<char *>(src),
-				static_cast<char *>(dest),size);
+			swab(reinterpret_cast<char *>(src),
+				reinterpret_cast<char *>(dest),size);
 		#elif defined(RUDIMENTS_HAVE_SWAB_CONST_VOID)
-			swab(static_cast<const void *>(src),
-				static_cast<void *>(dest),size);
+			swab(reinterpret_cast<const void *>(src),
+				reinterpret_cast<void *>(dest),size);
 		#else
 			swab(src,dest,size);
 		#endif
