@@ -666,7 +666,16 @@ bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 
 int32_t file::isSocket(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISSOCK(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFSOCK)
+			return ((st.st_mode&_S_IFSOCK)==_S_IFSOCK);
+		#elif defined(S_IFSOCK)
+			return ((st.st_mode&S_IFSOCK)==S_IFSOCK);
+		#else
+			return S_ISSOCK(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 #ifndef RUDIMENTS_HAVE_S_ISLNK
@@ -675,32 +684,86 @@ int32_t file::isSocket(const char *filename) {
 
 int32_t file::isSymbolicLink(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISLNK(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFLNK)
+			return ((st.st_mode&_S_IFLNK)==_S_IFLNK);
+		#elif defined(S_IFLNK)
+			return ((st.st_mode&S_IFLNK)==S_IFLNK);
+		#else
+			return S_ISLNK(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 int32_t file::isRegularFile(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISREG(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFREG)
+			return ((st.st_mode&_S_IFREG)==_S_IFREG);
+		#elif defined(S_IFREG)
+			return ((st.st_mode&S_IFREG)==S_IFREG);
+		#else
+			return S_ISREG(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 int32_t file::isBlockDevice(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISBLK(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFBLK)
+			return ((st.st_mode&_S_IFBLK)==_S_IFBLK);
+		#elif defined(S_IFBLK)
+			return ((st.st_mode&S_IFBLK)==S_IFBLK);
+		#else
+			return S_ISBLK(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 int32_t file::isDirectory(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISDIR(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFDIR)
+			return ((st.st_mode&_S_IFDIR)==_S_IFDIR);
+		#elif defined(S_IFDIR)
+			return ((st.st_mode&S_IFDIR)==S_IFDIR);
+		#else
+			return S_ISDIR(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 int32_t file::isCharacterDevice(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISCHR(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFCHR)
+			return ((st.st_mode&_S_IFCHR)==_S_IFCHR);
+		#elif defined(S_IFCHR)
+			return ((st.st_mode&S_IFCHR)==S_IFCHR);
+		#else
+			return S_ISCHR(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 int32_t file::isFifo(const char *filename) {
 	struct stat	st;
-	return (stat(filename,&st)>-1)?S_ISFIFO(st.st_mode):-1;
+	if (stat(filename,&st)>-1) {
+		#if defined(_S_IFIFO)
+			return ((st.st_mode&_S_IFIFO)==_S_IFIFO);
+		#elif defined(S_IFIFO)
+			return ((st.st_mode&S_IFIFO)==S_IFIFO);
+		#else
+			return S_ISFIFO(st.st_mode);
+		#endif
+	}
+	return -1;
 }
 
 bool file::getLastAccessTime(const char *filename, time_t *atime) {
@@ -765,31 +828,73 @@ blkcnt_t file::getBlockCount() const {
 }
 
 int32_t file::isSocket() const {
-	return S_ISSOCK(pvt->_st.st_mode);
+	#if defined(_S_IFSOCK)
+		return ((pvt->_st.st_mode&_S_IFSOCK)==_S_IFSOCK);
+	#elif defined(S_IFSOCK)
+		return ((pvt->_st.st_mode&S_IFSOCK)==S_IFSOCK);
+	#else
+		return S_ISSOCK(pvt->_st.st_mode);
+	#endif
 }
 
 int32_t file::isSymbolicLink() const {
-	return S_ISLNK(pvt->_st.st_mode);
+	#if defined(_S_IFLNK)
+		return ((pvt->_st.st_mode&_S_IFLNK)==_S_IFLNK);
+	#elif defined(S_IFLNK)
+		return ((pvt->_st.st_mode&S_IFLNK)==S_IFLNK);
+	#else
+		return S_ISLNK(pvt->_st.st_mode);
+	#endif
 }
 
 int32_t file::isRegularFile() const {
-	return S_ISREG(pvt->_st.st_mode);
+	#if defined(_S_IFREG)
+		return ((pvt->_st.st_mode&_S_IFREG)==_S_IFREG);
+	#elif defined(S_IFREG)
+		return ((pvt->_st.st_mode&S_IFREG)==S_IFREG);
+	#else
+		return S_ISREG(pvt->_st.st_mode);
+	#endif
 }
 
 int32_t file::isBlockDevice() const {
-	return S_ISBLK(pvt->_st.st_mode);
+	#if defined(_S_IFBLK)
+		return ((pvt->_st.st_mode&_S_IFBLK)==_S_IFBLK);
+	#elif defined(S_IFBLK)
+		return ((pvt->_st.st_mode&S_IFBLK)==S_IFBLK);
+	#else
+		return S_ISBLK(pvt->_st.st_mode);
+	#endif
 }
 
 int32_t file::isDirectory() const {
-	return S_ISDIR(pvt->_st.st_mode);
+	#if defined(_S_IFDIR)
+		return ((pvt->_st.st_mode&_S_IFDIR)==_S_IFDIR);
+	#elif defined(S_IFDIR)
+		return ((pvt->_st.st_mode&S_IFDIR)==S_IFDIR);
+	#else
+		return S_ISDIR(pvt->_st.st_mode);
+	#endif
 }
 
 int32_t file::isCharacterDevice() const {
-	return S_ISCHR(pvt->_st.st_mode);
+	#if defined(_S_IFCHR)
+		return ((pvt->_st.st_mode&_S_IFCHR)==_S_IFCHR);
+	#elif defined(S_IFCHR)
+		return ((pvt->_st.st_mode&S_IFCHR)==S_IFCHR);
+	#else
+		return S_ISCHR(pvt->_st.st_mode);
+	#endif
 }
 
 int32_t file::isFifo() const {
-	return S_ISFIFO(pvt->_st.st_mode);
+	#if defined(_S_IFIFO)
+		return ((pvt->_st.st_mode&_S_IFIFO)==_S_IFIFO);
+	#elif defined(S_IFIFO)
+		return ((pvt->_st.st_mode&S_IFIFO)==S_IFIFO);
+	#else
+		return S_ISFIFO(pvt->_st.st_mode);
+	#endif
 }
 
 time_t file::getLastAccessTime() const {
