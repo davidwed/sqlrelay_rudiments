@@ -39,6 +39,7 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_IO_H
+	#undef _POSIX_
 	#include <io.h>
 #endif
 
@@ -533,7 +534,7 @@ bool file::truncate(const char *filename, off64_t length) {
 }
 
 bool file::truncate() const {
-	return truncate(0);
+	return file::truncate(0);
 }
 
 bool file::truncate(off64_t length) const {
