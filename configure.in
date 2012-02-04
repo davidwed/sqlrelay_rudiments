@@ -645,6 +645,18 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #endif],
 S_ISLNK(0);,AC_DEFINE(RUDIMENTS_HAVE_S_ISLNK,1,Some systems dont have S_ISLNK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(if S_ISBLK exists)
+AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+S_ISBLK(0);,AC_DEFINE(RUDIMENTS_HAVE_S_ISBLK,1,Some systems dont have S_ISBLK) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(type of iovec.iov_base)
 AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>

@@ -710,6 +710,10 @@ int32_t file::isRegularFile(const char *filename) {
 	return -1;
 }
 
+#ifndef RUDIMENTS_HAVE_S_ISBLK
+	#define S_ISBLK(m) (((m&0060000)==0060000)?1:0)
+#endif
+
 int32_t file::isBlockDevice(const char *filename) {
 	struct stat	st;
 	if (stat(filename,&st)>-1) {

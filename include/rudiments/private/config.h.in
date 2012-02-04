@@ -874,6 +874,9 @@
 /* Some systems have sys/un.h */
 #undef RUDIMENTS_HAVE_SYS_UN_H
 
+/* Some systems dont have S_ISBLK */
+#undef RUDIMENTS_HAVE_S_ISBLK
+
 /* Some systems dont have S_ISLNK */
 #undef RUDIMENTS_HAVE_S_ISLNK
 
