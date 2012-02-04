@@ -534,7 +534,7 @@ bool file::truncate(const char *filename, off64_t length) {
 }
 
 bool file::truncate() const {
-	return file::truncate(0);
+	return truncate((off64_t)0);
 }
 
 bool file::truncate(off64_t length) const {
