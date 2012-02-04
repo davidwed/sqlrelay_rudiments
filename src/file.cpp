@@ -541,7 +541,7 @@ bool file::truncate(off64_t length) const {
 	do {
 		#if defined(RUDIMENTS_HAVE_FTRUNCATE)
 			result=::ftruncate(fd(),length);
-		#elif defined(RUDIMENTS_HAVE_FTRUNCATE)
+		#elif defined(RUDIMENTS_HAVE__CHSIZE_S)
 			result=_chsize_s(fd(),length);
 		#else
 			#error no ftruncate or anything like it
