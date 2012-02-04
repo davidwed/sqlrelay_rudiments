@@ -539,7 +539,13 @@ bool file::truncate() const {
 bool file::truncate(off64_t length) const {
 	int32_t	result;
 	do {
-		result=::ftruncate(fd(),length);
+		#if defined(RUDIMENTS_HAVE_FTRUNCATE)
+			result=::ftruncate(fd(),length);
+		#elif defined(RUDIMENTS_HAVE_FTRUNCATE)
+			result=_chsize_s(fd(),length);
+		#else
+			#error no ftruncate or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==-1);
 	return !result;
 }

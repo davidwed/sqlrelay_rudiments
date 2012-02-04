@@ -1774,6 +1774,22 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 truncate("",0);,AC_DEFINE(RUDIMENTS_HAVE_TRUNCATE,1,Some systems have truncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for ftruncate)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif],
+ftruncate(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FTRUNCATE,1,Some systems have ftruncate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _chsize_s)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_chsize_s(0,0);,AC_DEFINE(RUDIMENTS_HAVE__CHSIZE_S,1,Some systems have _chsize_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for link)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>

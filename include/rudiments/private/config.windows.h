@@ -230,6 +230,9 @@
 /* Most systems have ftok() */
 /* #undef RUDIMENTS_HAVE_FTOK */
 
+/* Some systems have ftruncate */
+/* #undef RUDIMENTS_HAVE_FTRUNCATE */
+
 /* Some systems have getaddrinfo */
 /* #undef RUDIMENTS_HAVE_GETADDRINFO */
 
@@ -943,6 +946,9 @@
 
 /* Some systems have _access_s() */
 #define RUDIMENTS_HAVE__ACCESS_S 1
+
+/* Some systems have _chsize_s */
+#define RUDIMENTS_HAVE__CHSIZE_S 1
 
 /* Some systems have _getpid */
 /* #undef RUDIMENTS_HAVE__GETPID */
