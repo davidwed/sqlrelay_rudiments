@@ -1902,6 +1902,27 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 #endif],
 const char *var=NULL; ftok(var,0);,AC_DEFINE(RUDIMENTS_HAVE_CONST_CHAR_FTOK,1,Most systems have ftok(const char *, int)) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for access)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+access(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_ACCESS,1,Most systems have access()) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _access_s)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_access_s(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE__ACCESS_S,1,Some systems have _access_s()) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

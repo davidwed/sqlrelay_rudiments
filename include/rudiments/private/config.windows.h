@@ -104,6 +104,9 @@
 /* Some systems define __tm_zone in their struct tm */
 /* #undef RUDIMENTS_HAS___TM_ZONE */
 
+/* Most systems have access() */
+/* #undef RUDIMENTS_HAVE_ACCESS */
+
 /* Some systems have alarm */
 /* #undef RUDIMENTS_HAVE_ALARM */
 
@@ -934,6 +937,9 @@
 
 /* Some systems have extended filesystem attributes */
 /* #undef RUDIMENTS_HAVE_XATTRS */
+
+/* Some systems have _access_s() */
+#define RUDIMENTS_HAVE__ACCESS_S 1
 
 /* Some systems have _getpid */
 /* #undef RUDIMENTS_HAVE__GETPID */
