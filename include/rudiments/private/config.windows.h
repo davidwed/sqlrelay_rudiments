@@ -606,7 +606,7 @@
 /* #undef RUDIMENTS_HAVE_PSELECT */
 
 /* pthread_mutex_t type exists */
-#define RUDIMENTS_HAVE_PTHREAD_MUTEX_T 1
+/* #undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T */
 
 /* pthread_sigmask exists */
 /* #undef RUDIMENTS_HAVE_PTHREAD_SIGMASK */
