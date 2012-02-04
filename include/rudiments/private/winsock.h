@@ -6,13 +6,14 @@
 
 #include <rudiments/private/config.h>
 
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <rudiments/mutex.h>
 	#include <winsock2.h>
+#endif
+
+// must be included after winsock2.h
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
