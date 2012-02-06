@@ -10,5 +10,7 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	snooze::macrosnooze(5);
+	long	timeleft;
+	bool	success=snooze::macrosnooze(5,&timeleft);
+	printf("success=%d timeleft=%d\n",success,timeleft);
 }
