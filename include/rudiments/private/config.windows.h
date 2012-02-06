@@ -830,9 +830,6 @@
 /* Some systems have struct timespec in time.h */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H */
 
-/* Some systems have struct timeval */
-#define RUDIMENTS_HAVE_STRUCT_TIMEVAL 1
-
 /* Some systems have swab with a char * argument */
 #define RUDIMENTS_HAVE_SWAB_CHAR 1
 

@@ -25,13 +25,6 @@
 	#include <sys/time.h>
 #endif
 
-#ifndef RUDIMENTS_HAVE_STRUCT_TIMEVAL
-	struct timeval {
-		long	tv_sec;
-		long	tv_usec;
-	};
-#endif
-
 #if defined(RUDIMENTS_HAVE_NANOSLEEP) || defined(RUDIMENTS_HAVE_CLOCK_NANOSLEEP)
 	#include <time.h>
 #else
