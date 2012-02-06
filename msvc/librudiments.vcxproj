@@ -55,6 +55,10 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>ws2_32.lib;netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cd ..\include\rudiments\private
+copy /Y config.windows.h config.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

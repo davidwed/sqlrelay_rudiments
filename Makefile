@@ -16,6 +16,7 @@ testprogs:
 clean:
 	cd src; $(MAKE) clean
 	cd test; $(MAKE) clean
+	cd msvc; $(RMTREE) Debug
 	$(RMTREE) .pics */.pics */*/.pics
 
 install-libs:
@@ -53,3 +54,4 @@ distclean: clean
 	$(RM) libtool
 	$(RMTREE) autom4te.cache
 	$(RM) rudiments.pc
+	$(RM) msvc/librudiments.opensdf msvc/librudiments.sdf msvc/librudiments.suo
