@@ -1334,7 +1334,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		// windows time starts at 1/1/1601
 		// unix time starts at 1/1/1970
 		// this is the number of seconds between those dates
-		#define	timediff	11644473600LLU
+		#define	timediff	11644473600
 
 		// convert the times from unix to windows format
 		ULARGE_INTEGER	lastaccessfiletime;
