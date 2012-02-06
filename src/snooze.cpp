@@ -5,6 +5,33 @@
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
+// for timespec
+#if defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H)
+	#include <time.h>
+#elif defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SIGINFO)
+	#include <sys/siginfo.h>
+#elif defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD)
+	// for mingw32
+	#include <pthread.h>
+#elif !defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H)
+	struct timespec {
+		time_t	tv_sec;
+		long	tv_nsec;
+	};
+#endif
+
+// for timeval
+#if defined(RUDIMENTS_HAVE_SYS_TIME_H)
+	#include <sys/time.h>
+#endif
+
+#ifndef RUDIMENTS_HAVE_STRUCT_TIMEVAL
+	struct timeval {
+		long	tv_sec;
+		long	tv_usec;
+	};
+#endif
+
 #if defined(RUDIMENTS_HAVE_NANOSLEEP) || defined(RUDIMENTS_HAVE_CLOCK_NANOSLEEP)
 	#include <time.h>
 #else
@@ -26,78 +53,106 @@ namespace rudiments {
 #endif
 
 bool snooze::macrosnooze(long seconds) {
-	timespec	nanotimetosnooze;
-	nanotimetosnooze.tv_sec=seconds;
-	nanotimetosnooze.tv_nsec=0;
-	return nanosnooze(&nanotimetosnooze);
+	return nanosnooze(seconds,0,NULL,NULL);
 }
 
 bool snooze::macrosnooze(long seconds, long *remainingseconds) {
-	timespec	nanotimetosnooze;
-	nanotimetosnooze.tv_sec=seconds;
-	nanotimetosnooze.tv_nsec=0;
-	timespec	nanotimeremaining;
-	bool	retval=nanosnooze(&nanotimetosnooze,&nanotimeremaining);
-	*remainingseconds=nanotimeremaining.tv_sec;
-	return retval;
+	return nanosnooze(seconds,0,remainingseconds,NULL);
 }
 
 bool snooze::microsnooze(long seconds, long microseconds) {
-	timeval		timetosnooze;
-	timetosnooze.tv_sec=seconds;
-	timetosnooze.tv_usec=microseconds;
-	return microsnooze(&timetosnooze);
+	return nanosnooze(seconds,microseconds*1000,NULL,NULL);
 }
 
 bool snooze::microsnooze(long seconds, long microseconds,
 		long *secondsremaining, long *microsecondsremaining) {
-	timeval		timetosnooze;
-	timetosnooze.tv_sec=seconds;
-	timetosnooze.tv_usec=microseconds;
-	timeval		timeremaining;
-	bool	retval=microsnooze(&timetosnooze,&timeremaining);
-	if (secondsremaining) {
-		*secondsremaining=timeremaining.tv_sec;
-	}
+	bool	retval=nanosnooze(seconds,microseconds*1000,
+					secondsremaining,microsecondsremaining);
 	if (microsecondsremaining) {
-		*microsecondsremaining=timeremaining.tv_usec;
+		*microsecondsremaining=(*microsecondsremaining)/1000;
 	}
-	return retval;
-}
-
-bool snooze::microsnooze(timeval *timetosnooze) {
-	timespec	nanotimetosnooze;
-	nanotimetosnooze.tv_sec=timetosnooze->tv_sec;
-	nanotimetosnooze.tv_nsec=timetosnooze->tv_usec*1000;
-	return nanosnooze(&nanotimetosnooze);
-}
-
-bool snooze::microsnooze(timeval *timetosnooze, timeval *timeremaining) {
-	timespec	nanotimetosnooze;
-	nanotimetosnooze.tv_sec=timetosnooze->tv_sec;
-	nanotimetosnooze.tv_nsec=timetosnooze->tv_usec*1000;
-	timespec	nanotimeremaining;
-	bool	retval=nanosnooze(&nanotimetosnooze,&nanotimeremaining);
-	timeremaining->tv_sec=nanotimeremaining.tv_sec;
-	timeremaining->tv_usec=nanotimeremaining.tv_nsec/1000;
 	return retval;
 }
 
 bool snooze::nanosnooze(long seconds, long nanoseconds) {
-	timespec	timetosnooze;
-	timetosnooze.tv_sec=seconds;
-	timetosnooze.tv_nsec=nanoseconds;
-	return nanosnooze(&timetosnooze);
+	return nanosnooze(seconds,nanoseconds,NULL,NULL);
 }
 
 bool snooze::nanosnooze(long seconds, long nanoseconds,
 				long *secondsremaining,
 				long *nanosecondsremaining) {
+
 	timespec	timetosnooze;
 	timetosnooze.tv_sec=seconds;
 	timetosnooze.tv_nsec=nanoseconds;
+
 	timespec	timeremaining;
-	bool	retval=nanosnooze(&timetosnooze,&timeremaining);
+
+	bool	retval=false;
+	#ifdef RUDIMENTS_HAVE_NANOSLEEP
+		retval=!::nanosleep(&timetosnooze,&timeremaining);
+	#elif RUDIMENTS_HAVE_CLOCK_NANOSLEEP
+		retval=!clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
+					&timetosnooze,&timeremaining);
+	#elif RUDIMENTS_HAVE_WINDOWS_SLEEP
+		// on windows, we only have millisecond resolution and we
+		// can't send the remaining time back
+		Sleep(timetosnooze.tv_sec*1000+timetosnooze.tv_nsec/1000000);
+
+		// set timeremaining to 0
+		timeremaining.tv_sec=0;
+		timeremaining.tv_nsec=0;
+		retval=true;
+	#else
+
+		// use regular sleep command to handle the whole seconds
+		bool	keepgoing=true;
+		if (timetosnooze.tv_sec) {
+			uint32_t	remainder=timetosnooze.tv_sec;
+			do {
+				remainder=::sleep(remainder);
+			} while (error::getErrorNumber()==EINTR);
+			if (remainder) {
+				timeremaining.tv_sec=remainder;
+				timeremaining.tv_nsec=timetosnooze.tv_nsec;
+				keepgoing=false;
+			}
+		}
+
+		if (keepgoing) {
+
+			// set timeremaining to 0
+			timeremaining.tv_sec=0;
+			timeremaining.tv_nsec=0;
+	
+			// Use select or pselect to wait for the remaining time.
+			//
+			// It's tempting just to use select/pselect to sleep
+			// the entire interval.  But on many platforms, select()
+			// doesn't modify it's time struct to indicate how much
+			// time was left when it timed out.  And on the
+			// platforms that it does do that, if an error occurs
+			// such as being interrupted by a signal, then the
+			// values in the time struct are undefined anyway.
+			//
+			// So, when using select/pselect, we can't return the
+			// number of nanoseconds that were left if a signal
+			// interrupts the call.  But, at least we can return
+			// the number of seconds.
+			#ifdef RUDIMENTS_HAVE_PSELECT
+				timespec	ts;
+				ts.tv_sec=0;
+				ts.tv_nsec=timetosnooze.tv_nsec;
+				retval=(pselect(0,NULL,NULL,NULL,&ts,NULL)!=-1);
+			#else
+				timeval		tv;
+				tv.tv_sec=0;
+				tv.tv_usec=timetosnooze.tv_nsec/1000;
+				retval=(select(0,NULL,NULL,NULL,&tv)!=-1);
+			#endif
+
+	#endif
+
 	if (secondsremaining) {
 		*secondsremaining=timeremaining.tv_sec;
 	}
@@ -105,82 +160,6 @@ bool snooze::nanosnooze(long seconds, long nanoseconds,
 		*nanosecondsremaining=timeremaining.tv_nsec;
 	}
 	return retval;
-}
-
-bool snooze::nanosnooze(timespec *timetosnooze) {
-
-	timespec	snoozetime;
-	snoozetime.tv_sec=timetosnooze->tv_sec;
-	snoozetime.tv_nsec=timetosnooze->tv_nsec;
-	timespec	remaining;
-	for (;;) {
-		if (nanosnooze(&snoozetime,&remaining)) {
-			return true;
-		} else if (error::getErrorNumber()!=EINTR) {
-			return false;
-		}
-		snoozetime.tv_sec=remaining.tv_sec;
-		snoozetime.tv_nsec=remaining.tv_nsec;
-	}
-}
-
-bool snooze::nanosnooze(timespec *timetosnooze, timespec *timeremaining) {
-
-	#ifdef RUDIMENTS_HAVE_NANOSLEEP
-	return !::nanosleep(timetosnooze,timeremaining);
-	#elif RUDIMENTS_HAVE_CLOCK_NANOSLEEP
-	return !clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
-					timetosnooze,timeremaining);
-	#elif RUDIMENTS_HAVE_WINDOWS_SLEEP
-		// on windows, we only have millisecond resolution and we
-		// can't the remaining time back
-		Sleep(timetosnooze->tv_sec*1000+timetosnooze->tv_nsec/1000000);
-
-		// set timeremaining to 0
-		timeremaining->tv_sec=0;
-		timeremaining->tv_nsec=0;
-		return true;
-	#else
-
-		// use regular sleep command to handle the whole seconds
-		if (timetosnooze->tv_sec) {
-			uint32_t	remainder=::sleep(timetosnooze->tv_sec);
-			if (remainder) {
-				timeremaining->tv_sec=remainder;
-				timeremaining->tv_nsec=timetosnooze->tv_nsec;
-				return false;
-			}
-		}
-
-		// set timeremaining to 0
-		timeremaining->tv_sec=0;
-		timeremaining->tv_nsec=0;
-
-		// Use select or pselect to wait for the remaining time.
-		//
-		// It's tempting just to use select/pselect to sleep the entire
-		// interval.  But on many platforms, select() doesn't modify
-		// it's time struct to indicate how much time was left when it
-		// timed out.  And on the platforms that it does do that, if
-		// an error occurs such as being interrupted by a signal, then
-		// the values in the time struct are undefined anyway.
-		//
-		// So, when using select/pselect, we can't return the number of
-		// nanoseconds that were left if a signal interrupts the call.
-		// But, at least we can return the number of seconds.
-		#ifdef RUDIMENTS_HAVE_PSELECT
-		timespec	ts;
-		ts.tv_sec=0;
-		ts.tv_nsec=timetosnooze->tv_nsec;
-		return (pselect(0,NULL,NULL,NULL,&ts,NULL)!=-1);
-		#else
-		timeval		tv;
-		tv.tv_sec=0;
-		tv.tv_usec=timetosnooze->tv_nsec/1000;
-		return (select(0,NULL,NULL,NULL,&tv)!=-1);
-		#endif
-
-	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

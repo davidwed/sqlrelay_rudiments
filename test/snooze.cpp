@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <stdio.h>
+#include <rudiments/snooze.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -9,5 +10,5 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	// FIXME: implement this...
+	snooze::macrosnooze(5);
 }

@@ -43,17 +43,6 @@ class snooze {
 				// number of seconds that were not slept and
 				// "remainingmicroseconds" is populated with the
 				// number of microseconds that were not slept.
-		static bool	microsnooze(timeval *timetosnooze);
-				// Suspend execution for the number of seconds
-				// and microseconds specified in "timetosnooze".
-		static bool	microsnooze(timeval *timetosnooze,
-						timeval *timeremaining);
-				// Suspend execution for the number of seconds
-				// and microseconds specified in "timetosnooze".
-				// If a signal interrupts the snooze,
-				// "timeremaining" is populated with the number
-				// of seconds and microseconds that were not
-				// slept.
 
 
 		// These methods allow you to snooze for very small amounts
@@ -74,17 +63,6 @@ class snooze {
 				// number of seconds that were not slept and
 				// "remainingnanoseconds" is populated with the
 				// number of nanoseconds that were not slept.
-		static bool	nanosnooze(timespec *timetosnooze);
-				// Suspend execution for the number of seconds
-				// and nanoseconds specified in "timetosnooze".
-		static bool	nanosnooze(timespec *timetosnooze,
-						timespec *timeremaining);
-				// Suspend execution for the number of seconds
-				// and nanoseconds specified in "timetosnooze".
-				// If a signal interrupts the snooze,
-				// "timeremaining" is populated with the number
-				// of seconds and nanoseconds that were not
-				// slept.
 };
 
 #ifdef RUDIMENTS_NAMESPACE
