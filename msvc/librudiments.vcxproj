@@ -89,7 +89,7 @@
     <ClCompile Include="..\src\groupentry.cpp" />
     <ClCompile Include="..\src\hostentry.cpp" />
     <ClCompile Include="..\src\inetclientsocket.cpp" />
-    <ClCompile Include="..\src\inetserversocket.cpp" />
+    <ClCompile Include="..\src\inetsocketutil.cpp" />
     <ClCompile Include="..\src\listener.cpp" />
     <ClCompile Include="..\src\mutex.cpp" />
     <ClCompile Include="..\src\namevaluepairs.cpp" />
