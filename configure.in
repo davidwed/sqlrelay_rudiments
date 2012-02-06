@@ -689,6 +689,12 @@ CMSG_LEN(0);,AC_DEFINE(RUDIMENTS_HAVE_CMSG_LEN,1,Some systems have CMSG_LEN) AC_
 
 FW_STATFS
 
+AC_MSG_CHECKING(for struct timeval)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif],
+struct timeval a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMEVAL,1,Some systems have struct timeval) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for struct timespec in time.h)
 AC_TRY_COMPILE([#include <time.h>],
 struct timespec a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H,1,Some systems have struct timespec in time.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))

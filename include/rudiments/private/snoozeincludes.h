@@ -8,6 +8,13 @@
 	#include <sys/time.h>
 #endif
 
+#ifndef RUDIMENTS_HAVE_STRUCT_TIMEVAL
+	struct timeval {
+		long	tv_sec;
+		long	tv_usec;
+	};
+#endif
+
 // for timespec
 #if defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H)
 	#include <time.h>
