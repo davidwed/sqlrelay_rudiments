@@ -328,14 +328,15 @@ void shadowentry::print() const {
 	printf("Name: %s\n",getName());
 	printf("Encrypted Password: %s\n",getEncryptedPassword());
 	printf("Last Change: %ld\n",getLastChangeDate());
+	// some compilers complain without these casts
 	printf("Days Before Change Allowed: %d\n",
-				getDaysBeforeChangeAllowed());
+				(int)getDaysBeforeChangeAllowed());
 	printf("Days Before Change Required: %d\n",
-				getDaysBeforeChangeRequired());
+				(int)getDaysBeforeChangeRequired());
 	printf("Days Before Expiration Warning: %d\n",
-				getDaysBeforeExpirationWarning());
+				(int)getDaysBeforeExpirationWarning());
 	printf("Days Of Inactivity Allowed: %d\n",
-				getDaysOfInactivityAllowed());
+				(int)getDaysOfInactivityAllowed());
 	printf("Expiration Date: %d\n",getExpirationDate());
 	printf("Flag: %d\n",getFlag());
 }

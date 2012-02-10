@@ -318,8 +318,9 @@ void hostentry::print() const {
 	for (int32_t i=0; getAliasList()[i]; i++) {
 		printf("	%s\n",getAliasList()[i]);
 	}
-	printf("Address type: %d\n",getAddressType());
-	printf("Address length: %d\n",getAddressLength());
+	// some compilers complain without these casts
+	printf("Address type: %d\n",(int)getAddressType());
+	printf("Address length: %d\n",(int)getAddressLength());
 	printf("Address list:\n");
 	for (int32_t i=0; getAddressList()[i]; i++) {
 		char	*addr=getAddressString(i);

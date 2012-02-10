@@ -416,9 +416,9 @@ void timezonefile::print() {
 		printf("	tt_gmtoff: %lld\n",
 					(long long)pvt->_ti[i].tt_gmtoff);
 		printf("	tt_isdst: %d\n",
-					pvt->_ti[i].tt_isdst);
+					(int)pvt->_ti[i].tt_isdst);
 		printf("	tt_abbrind: %d\n",
-					pvt->_ti[i].tt_abbrind);
+					(int)pvt->_ti[i].tt_abbrind);
 		printf("}\n");
 	}
 	printf("rawtimezonestring: ");

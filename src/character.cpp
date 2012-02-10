@@ -98,7 +98,8 @@ void character::safePrint(char c) {
 	} else if (c>=' ' && c<='~') {
 		printf("%c",c);
 	} else {
-		printf("(0x%02x)",(uint32_t)c);
+		// some compilers complain without this cast
+		printf("(0x%02x)",(unsigned int)c);
 	}
 }
 

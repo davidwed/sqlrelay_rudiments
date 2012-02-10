@@ -244,7 +244,8 @@ void serviceentry::print() const {
 	}
 
 	printf("Name: %s\n",getName());
-	printf("Port: %d\n",getPort());
+	// some compilers complain without this cast
+	printf("Port: %d\n",(int)getPort());
 	printf("Protocol: %s\n",getProtocol());
 	printf("Alias list:\n");
 	for (int32_t i=0; getAliasList()[i]; i++) {

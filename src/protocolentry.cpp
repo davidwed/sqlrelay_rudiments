@@ -225,7 +225,8 @@ void protocolentry::print() const {
 	for (int32_t i=0; getAliasList()[i]; i++) {
 		printf("	%s\n",getAliasList()[i]);
 	}
-	printf("Number: %d\n",getNumber());
+	// some compilers complain without this cast
+	printf("Number: %d\n",(int)getNumber());
 }
 
 #ifdef RUDIMENTS_NAMESPACE

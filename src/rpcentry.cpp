@@ -244,7 +244,8 @@ void rpcentry::print() const {
 	#endif
 
 	printf("Name: %s\n",getName());
-	printf("Number: %d\n",getNumber());
+	// some compilers complain without this cast
+	printf("Number: %d\n",(int)getNumber());
 	printf("Alias list:\n");
 	const char * const *aliaslist=getAliasList();
 	for (int32_t i=0; aliaslist && aliaslist[i]; i++) {
