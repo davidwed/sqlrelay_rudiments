@@ -143,7 +143,7 @@ bool snooze::nanosnooze(long seconds, long nanoseconds,
 				tv.tv_usec=timetosnooze.tv_nsec/1000;
 				retval=(select(0,NULL,NULL,NULL,&tv)!=-1);
 			#endif
-
+		}
 	#endif
 
 	if (secondsremaining) {
