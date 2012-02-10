@@ -93,10 +93,10 @@ class signalhandler {
 			signalhandler();
 			~signalhandler();
 
-		void	setHandler(void (*handler)(int));
+		void	setHandler(void (*handler)(int32_t));
 			// Sets the function to call when the process
 			// receives the signal.
-		void    (*getHandler())(int);
+		void    (*getHandler())(int32_t);
 			// Returns a pointer to the function that will be
 			// called when the process receives the signal.
 
@@ -143,7 +143,7 @@ class signalhandler {
 
 		static	bool	isSignalHandlerIntUsed();
 				// The function that you pass into setHandler()
-				// must have a  void (*)(int) signature.
+				// must have a  void (*)(int32_t) signature.
 				//
 				// This method will return true if the
 				// platform's signal handling framework allows

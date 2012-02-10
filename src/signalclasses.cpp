@@ -316,7 +316,7 @@ class signalhandlerprivate {
 		const signalset	*_sset;
 		int32_t		_flags;
 		#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-			void		(*_handler)(int);
+			void		(*_handler)(int32_t);
 		#else
 			void		(*_handler)(void);
 		#endif
@@ -337,7 +337,7 @@ signalhandler::~signalhandler() {
 	delete pvt;
 }
 
-void signalhandler::setHandler(void (*handler)(int)) {
+void signalhandler::setHandler(void (*handler)(int32_t)) {
 	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
 		pvt->_handler=handler;
 	#else
@@ -345,7 +345,7 @@ void signalhandler::setHandler(void (*handler)(int)) {
 	#endif
 }
 
-void (*signalhandler::getHandler())(int) {
+void (*signalhandler::getHandler())(int32_t) {
 	return pvt->_handler;
 }
 

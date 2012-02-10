@@ -27,15 +27,15 @@ class daemonprocessprivate {
 		static	signalhandler	_deadchildhandler;
 		static	signalhandler	_shutdownhandler;
 		static	signalhandler	_crashhandler;
-		static	void		(*_shutdownfunc)(int);
-		static	void		(*_crashfunc)(int);
+		static	void		(*_shutdownfunc)(int32_t);
+		static	void		(*_crashfunc)(int32_t);
 };
 
 signalhandler	daemonprocessprivate::_deadchildhandler;
 signalhandler	daemonprocessprivate::_shutdownhandler;
 signalhandler	daemonprocessprivate::_crashhandler;
-void		(*daemonprocessprivate::_shutdownfunc)(int);
-void		(*daemonprocessprivate::_crashfunc)(int);
+void		(*daemonprocessprivate::_shutdownfunc)(int32_t);
+void		(*daemonprocessprivate::_crashfunc)(int32_t);
 
 daemonprocessprivate	*daemonprocess::pvt=NULL;
 
@@ -102,7 +102,7 @@ bool daemonprocess::detach() const {
 	return process::detach();
 }
 
-void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {
+void daemonprocess::handleShutDown(void (*shutdownfunction)(int32_t)) {
 
 	pvt->_shutdownfunc=shutdownfunction;
 
@@ -111,7 +111,7 @@ void daemonprocess::handleShutDown(void (*shutdownfunction)(int)) {
 	pvt->_shutdownhandler.handleSignal(SIGTERM);
 }
 
-void daemonprocess::handleCrash(void (*crashfunction)(int)) {
+void daemonprocess::handleCrash(void (*crashfunction)(int32_t)) {
 
 	pvt->_crashfunc=crashfunction;
 
@@ -163,7 +163,7 @@ void daemonprocess::waitForChildren() {
 }
 
 void daemonprocess::dontWaitForChildren() {
-	pvt->_deadchildhandler.setHandler((void (*)(int))SIG_DFL);
+	pvt->_deadchildhandler.setHandler((void (*)(int32_t))SIG_DFL);
 	pvt->_deadchildhandler.removeAllFlags();
 	pvt->_deadchildhandler.handleSignal(SIGCHLD);
 }
