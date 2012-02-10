@@ -223,7 +223,8 @@ int32_t chat::expect(const char *string, char **abort) {
 			} else if (result==RESULT_ERROR) {
 				printf("error...\n");
 			} else {
-				printf("result was: %d\n",result);
+				// some compilers complain without this cast
+				printf("result was: %d\n",(int)result);
 			}
 			#endif
 			return result;

@@ -58,6 +58,8 @@ bool crypt::needsMutex() {
 		return false;
 	#elif !defined(RUDIMENTS_HAVE_CRYPT)
 		return true;
+	#else
+		return false;
 	#endif
 }
 
