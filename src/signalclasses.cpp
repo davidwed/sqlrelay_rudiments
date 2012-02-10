@@ -315,11 +315,7 @@ class signalhandlerprivate {
 	private:
 		const signalset	*_sset;
 		int32_t		_flags;
-		#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-			void		(*_handler)(int32_t);
-		#else
-			void		(*_handler)(void);
-		#endif
+		void		(*_handler)(int32_t);
 		#if defined(RUDIMENTS_HAVE_SIGACTION)
 			struct sigaction	_handlerstruct;
 		#endif
@@ -338,11 +334,7 @@ signalhandler::~signalhandler() {
 }
 
 void signalhandler::setHandler(void (*handler)(int32_t)) {
-	#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
-		pvt->_handler=handler;
-	#else
-		pvt->_handler=(void(*)(void))handler;
-	#endif
+	pvt->_handler=handler;
 }
 
 void (*signalhandler::getHandler())(int32_t) {
@@ -389,7 +381,13 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 			sigemptyset(&pvt->_handlerstruct.sa_mask);
 		}
 		pvt->_handlerstruct.sa_flags=pvt->_flags;
-		pvt->_handlerstruct.sa_handler=pvt->_handler;
+		#ifdef RUDIMENTS_SIGNAL_HANDLER_INT
+			pvt->_handlerstruct.sa_handler=
+					(void(*)(int))pvt->_handler;
+		#else
+			pvt->_handlerstruct.sa_handler=
+					(void(*)(void))pvt->_handler;
+		#endif
 		do {
 			result=sigaction(signum,&pvt->_handlerstruct,
 								&oldaction);
