@@ -3,7 +3,7 @@
 	modified methods that take or return internal structures to take or
 		return void pointers instead
 	added charstring::replace methods
-	renamed all .C files to .cpp
+	renamed all .C files to .cpp for windows
 
 0.35 - added ( to set of chars to capitalize after
 	added methods to control whether semaphoreset operations are retried
