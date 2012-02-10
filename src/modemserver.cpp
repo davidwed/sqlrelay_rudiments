@@ -86,7 +86,7 @@ bool modemserver::bind() {
 	return true;
 }
 
-bool modemserver::listen(int backlog) {
+bool modemserver::listen(int32_t backlog) {
 
 	// open the serial port
 	// this is kind of lame, this class should somehow
