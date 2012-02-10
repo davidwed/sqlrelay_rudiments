@@ -152,10 +152,7 @@ bool semaphoreset::wait(int32_t index) {
 
 bool semaphoreset::wait(int32_t index, long seconds, long nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
-		timespec	ts;
-		ts.tv_sec=seconds;
-		ts.tv_nsec=nanoseconds;
-		return semTimedOp(pvt->_waitop[index],&ts);
+		return semTimedOp(pvt->_waitop[index],seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return WaitForSingleObject(pvt->_sems[index],
 					seconds*1000+nanoseconds/1000000);
@@ -179,10 +176,8 @@ bool semaphoreset::waitWithUndo(int32_t index) {
 
 bool semaphoreset::waitWithUndo(int32_t index, long seconds, long nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
-		timespec	ts;
-		ts.tv_sec=seconds;
-		ts.tv_nsec=nanoseconds;
-		return semTimedOp(pvt->_waitwithundoop[index],&ts);
+		return semTimedOp(pvt->_waitwithundoop[index],
+						seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
 		return WaitForSingleObject(pvt->_sems[index],
@@ -653,11 +648,15 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 	#endif
 }
 
-bool semaphoreset::semTimedOp(struct sembuf *sops, timespec *ts) {
+bool semaphoreset::semTimedOp(struct sembuf *sops,
+				long seconds, long nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP)
 		int32_t	result;
+		timespec	ts;
+		ts.tv_sec=seconds;
+		ts.tv_nsec=nanoseconds;
 		do {
-			result=semtimedop(pvt->_semid,sops,1,ts);
+			result=semtimedop(pvt->_semid,sops,1,&ts);
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
 				pvt->_retryinterruptedoperations);
