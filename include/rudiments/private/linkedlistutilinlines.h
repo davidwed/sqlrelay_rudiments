@@ -60,7 +60,8 @@ void linkedlistutil<char>::print(char data) const {
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<int32_t>::print(int32_t data) const {
-	printf("%d",data);
+	// some compilers complain without this cast
+	printf("%d",(int)data);
 }
 
 RUDIMENTS_EXPLICIT_SPECIALIZATION
