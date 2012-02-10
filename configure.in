@@ -942,6 +942,13 @@ AC_TRY_COMPILE([#include <time.h>
 #endif],
 localtime_r(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_R,1,Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for localtime_s)
+AC_TRY_COMPILE([#include <time.h>
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+localtime_s(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_S,1,Some systems have localtime_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for settimeofday)
 AC_TRY_LINK([#include <sys/time.h>
 #ifdef HAVE_STDLIB_H
@@ -952,6 +959,24 @@ settimeofday(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETTIMEOFDAY,1,Some systems ha
 AC_MSG_CHECKING(for set_real_time_clock)
 AC_TRY_LINK([#include <os/kernel/OS.h>],
 set_real_time_clock(0);,AC_DEFINE(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK,1,Some systems have set_real_time_clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _tzset)
+AC_TRY_COMPILE([#include <time.h>],
+_tzset();,AC_DEFINE(RUDIMENTS_HAS__TZSET,1,Some systems have _tzset instead of tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _get_tzname)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>],
+_get_tzname(NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAS__GET_TZNAME,1,Some systems have _get_tzname instead of tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _get_timezone)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>],
+_get_timezone(NULL);,AC_DEFINE(RUDIMENTS_HAS__GET_TIMEZONE,1,Some systems have _get_timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 

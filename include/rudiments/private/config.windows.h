@@ -98,6 +98,15 @@
 /* Some systems define tm_zone in their struct tm */
 /* #undef RUDIMENTS_HAS_TM_ZONE */
 
+/* Some systems have _get_timezone instead of timezone */
+#define RUDIMENTS_HAS__GET_TIMEZONE 1
+
+/* Some systems have _get_tzname instead of tzname */
+#define RUDIMENTS_HAS__GET_TZNAME 1
+
+/* Some systems have _tzset instead of tzset */
+#define RUDIMENTS_HAS__TZSET 1
+
 /* Some systems define __tm_gmtoff in their struct tm */
 /* #undef RUDIMENTS_HAS___TM_GMTOFF */
 
@@ -445,6 +454,9 @@
 
 /* Some systems have localtime_r */
 /* #undef RUDIMENTS_HAVE_LOCALTIME_R */
+
+/* Some systems have localtime_s */
+#define RUDIMENTS_HAVE_LOCALTIME_S 1
 
 /* Some systems have LockFileEx */
 #define RUDIMENTS_HAVE_LOCKFILEEX 1
