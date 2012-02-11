@@ -103,15 +103,15 @@ mutex::~mutex() {
 }
 
 bool mutex::lock() {
-	return WaitForSingleObject(pvt->_mut,INFINITE);
+	return WaitForSingleObject(pvt->_mut,INFINITE)!=0;
 }
 
 bool mutex::tryLock() {
-	return WaitForSingleObject(pvt->_mut,0);
+	return WaitForSingleObject(pvt->_mut,0)!=0;
 }
 
 bool mutex::unlock() {
-	return ReleaseMutex(pvt->_mut);
+	return ReleaseMutex(pvt->_mut)!=0;
 }
 
 void *mutex::getInternalMutexStructure() {

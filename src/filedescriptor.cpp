@@ -2048,8 +2048,9 @@ bool filedescriptor::closeOnExec() {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
 		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
-		return SetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
-							HANDLE_FLAG_INHERIT,0);
+		return SetHandleInformation(
+				(HANDLE)_get_osfhandle(pvt->_fd),
+				HANDLE_FLAG_INHERIT,0)!=0;
 	#else
 		#error no FD_CLOEXEC or anything like it
 	#endif
@@ -2059,9 +2060,10 @@ bool filedescriptor::dontCloseOnExec() {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
 		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
-		return SetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
-							HANDLE_FLAG_INHERIT,
-							HANDLE_FLAG_INHERIT);
+		return SetHandleInformation(
+				(HANDLE)_get_osfhandle(pvt->_fd),
+				HANDLE_FLAG_INHERIT,
+				HANDLE_FLAG_INHERIT)!=0;
 	#else
 		#error no FD_CLOEXEC or anything like it
 	#endif

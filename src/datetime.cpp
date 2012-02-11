@@ -301,7 +301,7 @@ int32_t datetime::getYear() const {
 }
 
 bool datetime::isDaylightSavingsTime() const {
-	return pvt->_isdst;
+	return pvt->_isdst!=0;
 }
 
 const char *datetime::getTimeZoneString() const {
@@ -449,7 +449,7 @@ bool datetime::setSystemDateAndTime() {
 		st.wMinute=pvt->_min;
 		st.wSecond=pvt->_sec;
 		st.wMilliseconds=0;
-		return SetSystemTime(&st);
+		return SetSystemTime(&st)!=0;
 	#else
 		#error no settimeofday or anything like it
 	#endif

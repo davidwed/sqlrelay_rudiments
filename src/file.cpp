@@ -980,7 +980,7 @@ bool file::lock(int32_t method, int16_t type, int16_t whence,
 					0,
 					locklength.LowPart,
 					locklength.HighPart,
-					&ol);
+					&ol)!=0;
 	#else
 		#error no fcntl, LockFile or anything like it
 	#endif
@@ -1033,7 +1033,7 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 					lockstart.LowPart,
 					lockstart.HighPart,
 					locklength.LowPart,
-					locklength.HighPart);
+					locklength.HighPart)!=0;
 	#else
 		#error no fcntl, UnlockFile or anything like it
 	#endif
@@ -1345,7 +1345,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		// set the file times
 		bool	retval=SetFileTime(handle,NULL,
 						(FILETIME *)&lastaccesstime,
-						(FILETIME *)&lastmodtime);
+						(FILETIME *)&lastmodtime)!=0;
 
 		// close the file
 		CloseHandle(handle);
