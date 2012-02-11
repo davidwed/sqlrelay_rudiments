@@ -47,6 +47,10 @@ class datetimeprivate {
 
 			time_t	_epoch;
 
+			#if defined(RUDIMENTS_HAVE__GET_TZNAME)
+				char	_timezonename[16];
+			#endif
+
 			environment	_env;
 		#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIME)
 			SYSTEMTIME		_st;
@@ -201,37 +205,55 @@ bool datetime::initialize(const void *tmstruct) {
 	pvt->_isdst=tms->tm_isdst;
 	// FIXME: what if the zone/offset are garbage, is there a good way to
 	// tell?
-	#ifdef RUDIMENTS_HAS___TM_ZONE
+	#if defined(RUDIMENTS_HAS___TM_ZONE)
 		pvt->_zone=charstring::duplicate(tms->__tm_zone);
-	#elif RUDIMENTS_HAS_TM_ZONE
+	#elif defined(RUDIMENTS_HAS_TM_ZONE)
 		pvt->_zone=charstring::duplicate(tms->tm_zone);
-	#elif RUDIMENTS_HAS_TM_NAME
+	#elif defined(RUDIMENTS_HAS_TM_NAME)
 		pvt->_zone=charstring::duplicate(tms->tm_name);
 	#else
 		if (_timemutex && !acquireLock()) {
 			return false;
 		}
-		tzset();
-		pvt->_zone=charstring::duplicate(
-				(tzname[pvt->_isdst] && tzname[pvt->_isdst][0])?
-						tzname[pvt->_isdst]:"UCT");
+		#if defined(RUDIMENTS_HAS__TZSET)
+			_tzset();
+		#elif defined(RUDIMENTS_HAS_TZSET)
+			tzset();
+		#else
+			#error no tzset or anything like it
+		#endif
+		const char	*tzn=getTzName(pvt->_isdst);
+		pvt->_zone=charstring::duplicate((tzn && tzn[0])?tzn:"UCT");
 		releaseLock();
 	#endif
-	#ifdef RUDIMENTS_HAS___TM_GMTOFF
+
+	#if defined(RUDIMENTS_HAS___TM_GMTOFF)
 		pvt->_gmtoff=tms->__tm_gmtoff;
-	#elif RUDIMENTS_HAS_TM_GMTOFF
+	#elif defined(RUDIMENTS_HAS_TM_GMTOFF)
 		pvt->_gmtoff=tms->tm_gmtoff;
-	#elif RUDIMENTS_HAS_TM_TZADJ
+	#elif defined(RUDIMENTS_HAS_TM_TZADJ)
 		pvt->_gmtoff=-tms->tm_tzadj;
 	#else
 		if (_timemutex && !acquireLock()) {
 			return false;
 		}
-		tzset();
-		#ifdef RUDIMENTS_HAS_TIMEZONE
-			pvt->_gmtoff=-timezone;
+		#if defined(RUDIMENTS_HAS__TZSET)
+			_tzset();
+		#elif defined(RUDIMENTS_HAS_TZSET)
+			tzset();
 		#else
+			#error no tzset or anything like it
+		#endif
+		#if defined(RUDIMENTS_HAS__GET_TIMEZONE)
+			int	seconds;
+			_get_timezone(&seconds);
+			pvt->_gmtoff=seconds;
+		#elif defined(RUDIMENTS_HAS_TIMEZONE)
+			pvt->_gmtoff=-timezone;
+		#elif defined(RUDIMENTS_HAS_TIMEZONE)
 			pvt->_gmtoff=-_timezone;
+		#else
+			#error no timezone or anything like it
 		#endif
 		releaseLock();
 	#endif
@@ -597,28 +619,44 @@ bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 
 bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 
-	// I'm using localtime here instead of localtime_r because
-	// localtime_r doesn't appear to handle the timezone properly,
-	// at least, not in glibc-2.3
-	if (needmutex && !acquireLock()) {
-		return false;
-	}
-	bool	retval=false;
-	struct tm	*tms;
-	if ((tms=localtime(&pvt->_epoch))) {
-		pvt->_sec=tms->tm_sec;
-		pvt->_min=tms->tm_min;
-		pvt->_hour=tms->tm_hour;
-		pvt->_mday=tms->tm_mday;
-		pvt->_mon=tms->tm_mon;
-		pvt->_year=tms->tm_year;
-		pvt->_isdst=tms->tm_isdst;
-		retval=normalizeBrokenDownTime(false);
-	}
-	if (needmutex) {
-		releaseLock();
-	}
-	return retval;
+	#ifdef RUDIMENTS_HAS_LOCALTIME_S
+		bool	retval=false;
+		struct tm	tms;
+		if (!localtime_s(&tms,&pvt->_epoch)) {
+			pvt->_sec=tms.tm_sec;
+			pvt->_min=tms.tm_min;
+			pvt->_hour=tms.tm_hour;
+			pvt->_mday=tms.tm_mday;
+			pvt->_mon=tms.tm_mon;
+			pvt->_year=tms.tm_year;
+			pvt->_isdst=tms.tm_isdst;
+			retval=normalizeBrokenDownTime(false);
+		}
+		return retval;
+	#else
+		// I'm using localtime here instead of localtime_r because
+		// localtime_r doesn't appear to handle the timezone properly,
+		// at least, not in glibc-2.3
+		if (needmutex && !acquireLock()) {
+			return false;
+		}
+		bool	retval=false;
+		struct tm	*tms;
+		if ((tms=localtime(&pvt->_epoch))) {
+			pvt->_sec=tms->tm_sec;
+			pvt->_min=tms->tm_min;
+			pvt->_hour=tms->tm_hour;
+			pvt->_mday=tms->tm_mday;
+			pvt->_mon=tms->tm_mon;
+			pvt->_year=tms->tm_year;
+			pvt->_isdst=tms->tm_isdst;
+			retval=normalizeBrokenDownTime(false);
+		}
+		if (needmutex) {
+			releaseLock();
+		}
+		return retval;
+	#endif
 }
 
 bool datetime::normalizeBrokenDownTime(bool needmutex) {
@@ -672,22 +710,34 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		pvt->_yday=tms.tm_yday;
 	
 		// Use tzset to get the timezone name
-		tzset();
+		#if defined(RUDIMENTS_HAS__TZSET)
+			_tzset();
+		#elif defined(RUDIMENTS_HAS_TZSET)
+			tzset();
+		#else
+			#error no tzset or anything like it
+		#endif
 		delete[] pvt->_zone;
-		pvt->_zone=charstring::duplicate(tzname[pvt->_isdst]);
+		pvt->_zone=charstring::duplicate(getTzName(pvt->_isdst));
 
 		// Get the offset from the struct tm if we can, otherwise get
 		// it from the value set by tzset()
-		#ifdef RUDIMENTS_HAS___TM_GMTOFF
+		#if defined(RUDIMENTS_HAS___TM_GMTOFF)
 			pvt->_gmtoff=tms.__tm_gmtoff;
-		#elif RUDIMENTS_HAS_TM_GMTOFF
+		#elif defined(RUDIMENTS_HAS_TM_GMTOFF)
 			pvt->_gmtoff=tms.tm_gmtoff;
-		#elif RUDIMENTS_HAS_TM_TZADJ
+		#elif defined(RUDIMENTS_HAS_TM_TZADJ)
 			pvt->_gmtoff=-tms.tm_tzadj;
-		#elif RUDIMENTS_HAS_TIMEZONE
+		#elif defined(RUDIMENTS_HAS__GET_TIMEZONE)
+			int	seconds;
+			_get_timezone(&seconds);
+			pvt->_gmtoff=seconds;
+		#elif defined(RUDIMENTS_HAS_TIMEZONE)
 			pvt->_gmtoff=-timezone;
-		#else
+		#elif defined(RUDIMENTS_HAS__TIMEZONE)
 			pvt->_gmtoff=-_timezone;
+		#else
+			#error no timezone or anything like it
 		#endif
 	}
 
@@ -962,6 +1012,21 @@ bool datetime::validDateTime(const char *string) {
 			!charstring::compare(newstring,dt.getString(),19));
 	delete[] newstring;
 	return result;
+}
+
+const char *datetime::getTzName(uint8_t index) {
+	#if defined(RUDIMENTS_HAS__GET_TZNAME)
+		size_t	timezonenamelen;
+		_get_tzname(&timezonenamelen,
+				pvt->_timezonename,
+				sizeof(pvt->_timezonename),
+				index);
+		retur
+	#elif defined(RUDIMENTS_HAS_TZNAME)
+		return tzname[index];
+	#else
+		#error no tzname or anything like it
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE

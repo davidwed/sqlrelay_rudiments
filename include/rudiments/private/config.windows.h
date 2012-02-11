@@ -83,7 +83,7 @@
 /* Rudiments supports threads */
 #define RUDIMENTS_HAS_THREADS 1
 
-/* Some systems use _timezone instead of timezone */
+/* Some systems have timezone */
 #define RUDIMENTS_HAS_TIMEZONE 1
 
 /* Some systems define tm_gmtoff in their struct tm */
@@ -98,13 +98,22 @@
 /* Some systems define tm_zone in their struct tm */
 /* #undef RUDIMENTS_HAS_TM_ZONE */
 
-/* Some systems have _get_timezone instead of timezone */
+/* Some systems have tzname */
+/* #undef RUDIMENTS_HAS_TZNAME */
+
+/* Some systems have tzset */
+/* #undef RUDIMENTS_HAS_TZSET */
+
+/* Some systems have _get_timezone */
 #define RUDIMENTS_HAS__GET_TIMEZONE 1
 
-/* Some systems have _get_tzname instead of tzname */
+/* Some systems have _get_tzname */
 #define RUDIMENTS_HAS__GET_TZNAME 1
 
-/* Some systems have _tzset instead of tzset */
+/* Some systems have _timezone */
+/* #undef RUDIMENTS_HAS__TIMEZONE */
+
+/* Some systems have _tzset */
 #define RUDIMENTS_HAS__TZSET 1
 
 /* Some systems define __tm_gmtoff in their struct tm */
@@ -971,7 +980,7 @@
 /* Some systems have _getpid */
 /* #undef RUDIMENTS_HAVE__GETPID */
 
-/* Some systems have _snprintf */
+/* Some systems have _snprintf_s */
 #define RUDIMENTS_HAVE__SNPRINTF_S 1
 
 /* Some systems have __bswap64 */

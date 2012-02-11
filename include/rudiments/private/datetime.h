@@ -13,6 +13,8 @@
 		const char	*lookupCombinedTimeZone(const char *zone) const;
 		bool		daylightZone(const char *zone) const;
 
+		const char	*getTzName(uint8_t index);
+
 		bool	acquireLock();
 		bool	releaseLock();
 

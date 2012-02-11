@@ -881,9 +881,9 @@ echo "******************************"
 
 fi
 
-dnl Checks associated with time structure
+dnl Checks associated with date and time
 echo
-echo "***** Time Structure *********"
+echo "***** Date and Time **********"
 
 if ( test -n "$MINGW32" )
 then
@@ -916,7 +916,18 @@ AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS___TM_GMTOFF
 
 AC_MSG_CHECKING(for timezone)
 AC_TRY_COMPILE([#include <time.h>],
-long	t=-timezone;,AC_DEFINE(RUDIMENTS_HAS_TIMEZONE,1,Some systems use _timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+long	t=-timezone;,AC_DEFINE(RUDIMENTS_HAS_TIMEZONE,1,Some systems have timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _timezone)
+AC_TRY_COMPILE([#include <time.h>],
+long	t=-_timezone;,AC_DEFINE(RUDIMENTS_HAS__TIMEZONE,1,Some systems have _timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _get_timezone)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>],
+_get_timezone(NULL);,AC_DEFINE(RUDIMENTS_HAS__GET_TIMEZONE,1,Some systems have _get_timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for tm_name)
 AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_NAME,1,Some systems define tm_name in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -960,23 +971,24 @@ AC_MSG_CHECKING(for set_real_time_clock)
 AC_TRY_LINK([#include <os/kernel/OS.h>],
 set_real_time_clock(0);,AC_DEFINE(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK,1,Some systems have set_real_time_clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for tzset)
+AC_TRY_COMPILE([#include <time.h>],
+tzset();,AC_DEFINE(RUDIMENTS_HAS_TZSET,1,Some systems have tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for _tzset)
 AC_TRY_COMPILE([#include <time.h>],
-_tzset();,AC_DEFINE(RUDIMENTS_HAS__TZSET,1,Some systems have _tzset instead of tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+_tzset();,AC_DEFINE(RUDIMENTS_HAS__TZSET,1,Some systems have _tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for tzname)
+AC_TRY_COMPILE([#include <time.h>],
+const char * const *c=tzname;,AC_DEFINE(RUDIMENTS_HAS_TZNAME,1,Some systems have tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _get_tzname)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <time.h>],
-_get_tzname(NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAS__GET_TZNAME,1,Some systems have _get_tzname instead of tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for _get_timezone)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <time.h>],
-_get_timezone(NULL);,AC_DEFINE(RUDIMENTS_HAS__GET_TIMEZONE,1,Some systems have _get_timezone instead of timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+_get_tzname(NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAS__GET_TZNAME,1,Some systems have _get_tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 
