@@ -65,7 +65,13 @@ bool environment::setValue(const char *variable, const char *value) {
 	charstring::append(pestr,value);
 	int32_t	result;
 	do {
-		result=putenv(pestr);
+		#if defined(RUDIMENTS_HAVE__PUTENV)
+			result=_putenv(pestr);
+		#elif defined(RUDIMENTS_HAVE_PUTENV)
+			result=putenv(pestr);
+		#else
+			#error no putenv or anything like it
+		#endif
 	} while (result && error::getErrorNumber()==EINTR);
 	if (!result) {
 		char	*oldpestr;
@@ -94,6 +100,9 @@ void environment::init() {
 }
 #endif
 
+#ifdef RUDIMENTS_HAVE__DUPENV_S
+	static	char	*envval=NULL;
+#endif
 
 const char *environment::getValue(const char *variable) {
 	char	*retval=NULL;
@@ -101,7 +110,19 @@ const char *environment::getValue(const char *variable) {
 		return retval;
 	}
 	do {
-		retval=getenv(variable);
+		#if defined(RUDIMENTS_HAVE__DUPENV_S)
+			// FIXME: _dupenv_s is meant to be thread-safe and this
+			// usage certainly isn't.  This just emulates the
+			// behavior of getenv and suppresses compiler warnings.
+			size_t	len;
+			if (!_dupenv_s(&envval,&len,variable)) {
+				retval=envval;
+			}
+		#elif defined(RUDIMENTS_HAVE_GETENV)
+			retval=getenv(variable);
+		#else
+			#error no getenv or anything like it
+		#endif
 	} while (!retval && error::getErrorNumber()==EINTR);
 	if (_envmutex) {
 		_envmutex->unlock();

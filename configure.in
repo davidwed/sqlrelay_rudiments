@@ -1009,6 +1009,24 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 #endif],
 putenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_PUTENV,1,Some systems have putenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for _putenv)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+_putenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE__PUTENV,1,Some systems have _putenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getenv)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+getenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETENV,1,Some systems have getenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _dupenv_s)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+_dupenv_s(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE__DUPENV_S,1,Some systems have _dupenv_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for unsetenv)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>

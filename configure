@@ -19512,6 +19512,84 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _putenv" >&5
+$as_echo_n "checking for _putenv... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+_putenv(NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE__PUTENV 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for getenv" >&5
+$as_echo_n "checking for getenv... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+getenv(NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_GETENV 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _dupenv_s" >&5
+$as_echo_n "checking for _dupenv_s... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+_dupenv_s(NULL,NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE__DUPENV_S 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for unsetenv" >&5
 $as_echo_n "checking for unsetenv... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

@@ -256,6 +256,9 @@
 /* Some systems have getegid */
 #undef RUDIMENTS_HAVE_GETEGID
 
+/* Some systems have getenv */
+#undef RUDIMENTS_HAVE_GETENV
+
 /* Some systems have geteuid */
 #undef RUDIMENTS_HAVE_GETEUID
 
@@ -976,8 +979,14 @@
 /* Some systems have _chsize_s */
 #undef RUDIMENTS_HAVE__CHSIZE_S
 
+/* Some systems have _dupenv_s */
+#undef RUDIMENTS_HAVE__DUPENV_S
+
 /* Some systems have _getpid */
 #undef RUDIMENTS_HAVE__GETPID
+
+/* Some systems have _putenv */
+#undef RUDIMENTS_HAVE__PUTENV
 
 /* Some systems have _snprintf_s */
 #undef RUDIMENTS_HAVE__SNPRINTF_S
