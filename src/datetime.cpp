@@ -47,7 +47,7 @@ class datetimeprivate {
 
 			time_t	_epoch;
 
-			#if defined(RUDIMENTS_HAVE__GET_TZNAME)
+			#if defined(RUDIMENTS_HAS__GET_TZNAME)
 				char	_timezonename[16];
 			#endif
 
@@ -245,7 +245,7 @@ bool datetime::initialize(const void *tmstruct) {
 			#error no tzset or anything like it
 		#endif
 		#if defined(RUDIMENTS_HAS__GET_TIMEZONE)
-			int	seconds;
+			long	seconds;
 			_get_timezone(&seconds);
 			pvt->_gmtoff=seconds;
 		#elif defined(RUDIMENTS_HAS_TIMEZONE)
@@ -619,7 +619,7 @@ bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
 
 bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 
-	#ifdef RUDIMENTS_HAS_LOCALTIME_S
+	#ifdef RUDIMENTS_HAVE_LOCALTIME_S
 		bool	retval=false;
 		struct tm	tms;
 		if (!localtime_s(&tms,&pvt->_epoch)) {
@@ -729,7 +729,7 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		#elif defined(RUDIMENTS_HAS_TM_TZADJ)
 			pvt->_gmtoff=-tms.tm_tzadj;
 		#elif defined(RUDIMENTS_HAS__GET_TIMEZONE)
-			int	seconds;
+			long	seconds;
 			_get_timezone(&seconds);
 			pvt->_gmtoff=seconds;
 		#elif defined(RUDIMENTS_HAS_TIMEZONE)
@@ -1021,7 +1021,7 @@ const char *datetime::getTzName(uint8_t index) {
 				pvt->_timezonename,
 				sizeof(pvt->_timezonename),
 				index);
-		retur
+		return pvt->_timezonename;
 	#elif defined(RUDIMENTS_HAS_TZNAME)
 		return tzname[index];
 	#else
