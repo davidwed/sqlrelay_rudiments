@@ -23,7 +23,7 @@ namespace rudiments {
 
 class fileprivate;
 
-class file : public filedescriptor {
+class DLLSPEC file : public filedescriptor {
 	public:
 
 			file();

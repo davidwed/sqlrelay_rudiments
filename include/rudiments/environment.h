@@ -15,7 +15,7 @@ namespace rudiments {
 
 class environmentprivate;
 
-class environment {
+class DLLSPEC environment {
 	public:
 		static	const char	*getValue(const char *variable);
 					// Returns the value of "variable".

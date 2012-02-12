@@ -14,7 +14,7 @@ namespace rudiments {
 
 class variablebufferprivate;
 
-class variablebuffer {
+class DLLSPEC variablebuffer {
 	public:
 			variablebuffer(size_t initialsize, size_t increment);
 			variablebuffer(unsigned char *initialcontents,

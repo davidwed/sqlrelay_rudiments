@@ -25,7 +25,7 @@ namespace rudiments {
 
 class ttyprivate;
 
-class tty : public filedescriptor {
+class DLLSPEC tty : public filedescriptor {
 	public:
 
 	#include <rudiments/private/tty.h>

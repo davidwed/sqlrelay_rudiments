@@ -34,7 +34,7 @@ ifeq ($(INCLUDE_DATETIME),1)
 endif
 ifeq ($(INCLUDE_TIMEZONEFILE),1)
 	HEADERS += timezonefile.h
-	PRIVATEHEADERS += timezonefile.h
+	PRIVATEHEADERS += timezonefile.h timezonefileincludes.h
 endif
 #ifeq ($(INCLUDE_DICTIONARY),1)
 	HEADERS += dictionary.h
@@ -247,6 +247,7 @@ ifeq ($(INCLUDE_CHAT),1)
 endif
 ifeq ($(INCLUDE_ERROR),1)
 	HEADERS += error.h
+	PRIVATEHEADERS += errorincludes.h
 endif
 
 # if either modemserver or modemclient are defined, include modemutil.h

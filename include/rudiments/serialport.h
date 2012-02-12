@@ -15,7 +15,7 @@ namespace rudiments {
 
 class serialportprivate;
 
-class serialport : public filedescriptor {
+class DLLSPEC serialport : public filedescriptor {
 	public:
 
 				serialport();

@@ -15,7 +15,7 @@ namespace rudiments {
 
 class passwdentryprivate;
 
-class passwdentry {
+class DLLSPEC passwdentry {
 	public:
 
 		// If you need to quickly look up ap specific field, use one

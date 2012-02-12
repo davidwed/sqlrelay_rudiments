@@ -24,7 +24,7 @@ namespace rudiments {
 // take signalsets for arguments.  The signalset class makes signalsets
 // easy to manage.
 class signalsetprivate;
-class signalset {
+class DLLSPEC signalset {
 	friend class signalmanager;
 	friend class signalhandler;
 	public:
@@ -53,7 +53,7 @@ class signalset {
 
 // The signalmanager class provides methods for sending, blocking and waiting 
 // for signals.
-class signalmanager {
+class DLLSPEC signalmanager {
 	public:
 		static	bool	sendSignal(pid_t processid, int32_t signum);
 				// Send signal "signum" to process "processid".
@@ -88,7 +88,7 @@ class signalmanager {
 
 // The signalhandler class provides methods for catching and handling signals.
 class signalhandlerprivate;
-class signalhandler {
+class DLLSPEC signalhandler {
 	public:
 			signalhandler();
 			~signalhandler();

@@ -20,7 +20,7 @@ namespace rudiments {
 
 class parameterstringprivate;
 
-class parameterstring {
+class DLLSPEC parameterstring {
 	public:
 
 			parameterstring();

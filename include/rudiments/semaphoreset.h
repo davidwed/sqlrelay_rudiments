@@ -48,7 +48,7 @@ namespace rudiments {
 
 class semaphoresetprivate;
 
-class semaphoreset {
+class DLLSPEC semaphoreset {
 	public:
 			semaphoreset();
 				// Creates a semaphore set.

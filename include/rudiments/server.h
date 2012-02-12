@@ -15,7 +15,7 @@ namespace rudiments {
 
 class serverprivate;
 
-class server : public filedescriptor {
+class DLLSPEC server : public filedescriptor {
 	public:
 			server();
 			server(const server &s);

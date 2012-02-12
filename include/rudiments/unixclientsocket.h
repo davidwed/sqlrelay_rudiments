@@ -23,7 +23,7 @@ namespace rudiments {
 
 class unixclientsocketprivate;
 
-class unixclientsocket : public clientsocket, private unixsocketutil {
+class DLLSPEC unixclientsocket : public clientsocket, private unixsocketutil {
 	public:
 
 				unixclientsocket();

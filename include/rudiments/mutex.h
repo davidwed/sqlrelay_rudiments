@@ -14,7 +14,7 @@ namespace rudiments {
 
 class mutexprivate;
 
-class mutex {
+class DLLSPEC mutex {
 	public:
 			mutex();
 			// Initialize a mutex.

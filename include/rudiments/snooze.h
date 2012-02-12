@@ -12,7 +12,7 @@
 namespace rudiments {
 #endif
 
-class snooze {
+class DLLSPEC snooze {
 	public:
 
 		// These methods allow you to suspend execution of the process

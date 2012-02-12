@@ -20,7 +20,7 @@ namespace rudiments {
 
 class memorypoolprivate;
 
-class memorypool {
+class DLLSPEC memorypool {
 	public:
 			memorypool(size_t initialsize,
 					size_t increment,

@@ -15,7 +15,7 @@ namespace rudiments {
 
 class shadowentryprivate;
 
-class shadowentry {
+class DLLSPEC shadowentry {
 	public:
 
 		// If you need to quickly look up ap specific field, use one

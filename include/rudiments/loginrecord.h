@@ -26,7 +26,7 @@ namespace rudiments {
 
 class loginrecordprivate;
 
-class loginrecord {
+class DLLSPEC loginrecord {
 	public:
 
 	#include <rudiments/private/loginrecord.h>

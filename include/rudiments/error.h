@@ -4,8 +4,7 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include <errno.h>
-#include <rudiments/private/inttypes.h>
+#include <rudiments/private/errorincludes.h>
 
 // The error class provides an interface to the errors that system calls
 // can generate.
@@ -14,7 +13,7 @@
 namespace rudiments {
 #endif
 
-class error {
+class DLLSPEC error {
 	public:
 		static	void		clearError();
 					// Set the current system call error to

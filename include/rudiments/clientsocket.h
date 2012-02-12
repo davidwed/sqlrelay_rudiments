@@ -12,7 +12,7 @@ namespace rudiments {
 
 class clientsocketprivate;
 
-class clientsocket : public client {
+class DLLSPEC clientsocket : public client {
 	public:
 				clientsocket();
 				clientsocket(const clientsocket &c);

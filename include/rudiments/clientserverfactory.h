@@ -13,7 +13,7 @@
 namespace rudiments {
 #endif
 
-class clientserverfactory {
+class DLLSPEC clientserverfactory {
 	public:
 		static client	*getClient(const char *type);
 			// Returns an instance of a child of the client

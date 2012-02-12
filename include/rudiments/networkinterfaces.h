@@ -18,7 +18,7 @@ typedef list< networkinterface *, networkinterfacelistnode >
 
 class networkinterfaceprivate;
 
-class networkinterface {
+class DLLSPEC networkinterface {
 	public:
 			networkinterface();
 			~networkinterface();
@@ -43,7 +43,7 @@ class networkinterface {
 	#include <rudiments/private/networkinterface.h>
 };
 
-class networkinterfaces {
+class DLLSPEC networkinterfaces {
 	public:
 		static	networkinterfacelist	*getList();
 		static	networkinterface	*getInterface(const char *name);

@@ -15,7 +15,7 @@ namespace rudiments {
 
 class protocolentryprivate;
 
-class protocolentry {
+class DLLSPEC protocolentry {
 	public:
 
 		// If you need to quickly look up a specific field, use one of

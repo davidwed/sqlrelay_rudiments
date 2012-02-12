@@ -13,7 +13,7 @@
 namespace rudiments {
 #endif
 
-class character {
+class DLLSPEC character {
 	public:
 		static bool	isAlphanumeric(int32_t c);
 		static bool	isAlphabetical(int32_t c);

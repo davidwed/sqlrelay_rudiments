@@ -19,7 +19,7 @@ namespace rudiments {
 
 class shmfileprivate;
 
-class shmfile : public file {
+class DLLSPEC shmfile : public file {
 	public:
 
 			shmfile();

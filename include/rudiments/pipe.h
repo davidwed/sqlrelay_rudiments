@@ -19,7 +19,7 @@ namespace rudiments {
 
 class pipeprivate;
 
-class pipe : public filedescriptor {
+class DLLSPEC pipe : public filedescriptor {
 	public:
 
 	#include <rudiments/private/pipe.h>

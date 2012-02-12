@@ -15,7 +15,7 @@ namespace rudiments {
 
 class messagequeueprivate;
 
-class messagequeue {
+class DLLSPEC messagequeue {
 	public:
 
 	#include <rudiments/private/messagequeue.h>

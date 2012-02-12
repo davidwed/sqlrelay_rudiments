@@ -15,7 +15,7 @@ namespace rudiments {
 
 class dynamiclibprivate;
 
-class dynamiclib {
+class DLLSPEC dynamiclib {
 	public:
 			dynamiclib();
 			~dynamiclib();

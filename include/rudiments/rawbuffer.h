@@ -15,7 +15,7 @@
 namespace rudiments {
 #endif
 
-class rawbuffer {
+class DLLSPEC rawbuffer {
 	public:
 
 		static void	*duplicate(const void *src, size_t size);

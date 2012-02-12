@@ -19,7 +19,7 @@ namespace rudiments {
 
 class daemonprocessprivate;
 
-class daemonprocess {
+class DLLSPEC daemonprocess {
 	public:
 			daemonprocess();
 		virtual	~daemonprocess();

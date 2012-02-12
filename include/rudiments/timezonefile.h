@@ -4,8 +4,7 @@
 #ifndef RUDIMENTS_TIMEZONEFILE_H
 #define RUDIMENTS_TIMEZONEFILE_H
 
-#include <rudiments/private/config.h>
-#include <rudiments/private/inttypes.h>
+#include <rudiments/private/timezonefileincludes.h>
 
 // The timezonefile class provides methods for parsing and accessing timezone
 // files such as are typically found in /usr/share/zoneinfo.
@@ -22,7 +21,7 @@ struct ttinfo {
 	uint32_t	tt_abbrind;
 };
 
-class timezonefile {
+class DLLSPEC timezonefile {
 	public:
 				timezonefile();
 				timezonefile(const timezonefile &t);

@@ -15,7 +15,7 @@ namespace rudiments {
 
 class serviceentryprivate;
 
-class serviceentry {
+class DLLSPEC serviceentry {
 	public:
 
 		// If you need to quickly look up a specific field, use one of

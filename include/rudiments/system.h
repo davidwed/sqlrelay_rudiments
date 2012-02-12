@@ -35,7 +35,7 @@ namespace rudiments {
 
 class systemprivate;
 
-class system {
+class DLLSPEC system {
 	public:
 
 	#include <rudiments/private/system.h>

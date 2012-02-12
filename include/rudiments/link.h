@@ -20,7 +20,7 @@ namespace rudiments {
 
 class linkprivate;
 
-class link : public file {
+class DLLSPEC link : public file {
 	public:
 
 	#include <rudiments/private/link.h>

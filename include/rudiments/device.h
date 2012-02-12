@@ -14,7 +14,7 @@ namespace rudiments {
 
 class deviceprivate;
 
-class device : public file {
+class DLLSPEC device : public file {
 	public:
 
 			device();

@@ -12,7 +12,7 @@
 namespace rudiments {
 #endif
 
-class crypt {
+class DLLSPEC crypt {
 	public:
 		static char	*encrypt(const char *password,
 						const char *salt);

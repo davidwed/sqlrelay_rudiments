@@ -22,7 +22,7 @@ namespace rudiments {
 
 class filesystemprivate;
 
-class filesystem {
+class DLLSPEC filesystem {
 	public:
 				filesystem();
 				// Creates an uninitialized instance of the
