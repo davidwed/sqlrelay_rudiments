@@ -5,7 +5,7 @@
 #define RUDIMENTS_DLL_H
 
 #ifdef _WIN32
-	#ifdef BUILDING_RUDIMENTS
+	#ifdef LIBRUDIMENTS_EXPORTS
 		#define DLLSPEC __declspec(dllexport)
 	#else
 		#define DLLSPEC __declspec(dllimport)

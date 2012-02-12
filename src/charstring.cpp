@@ -789,7 +789,7 @@ void charstring::zero(char *str, size_t size) {
 }
 
 char *charstring::append(char *dest, const char *source) {
-	return append(dest,source,length(source));
+	return append(dest,source,length(source)+1);
 }
 
 char *charstring::append(char *dest, const char *source, size_t size) {
@@ -833,7 +833,7 @@ char *charstring::append(char *dest, double number, uint16_t precision,
 }
 
 char *charstring::copy(char *dest, const char *source) {
-	return copy(dest,source,length(source));
+	return copy(dest,source,length(source)+1);
 }
 
 char *charstring::copy(char *dest, const char *source, size_t size) {

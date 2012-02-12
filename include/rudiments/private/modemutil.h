@@ -12,7 +12,7 @@ namespace rudiments {
 
 class modemutilprivate;
 
-class modemutil {
+class DLLSPEC modemutil {
 	public:
 			modemutil();
 		virtual	~modemutil();
