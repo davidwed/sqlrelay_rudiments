@@ -202,7 +202,7 @@ endif
 ifeq ($(INCLUDE_INTERVALTIMER),1)
 ifeq ($(INCLUDE_SIGNALCLASSES),1)
 ifeq ($(INCLUDE_SNOOZE),1)
-	PROGS += intervaltimer$(EXE)
+	#PROGS += intervaltimer$(EXE)
 endif
 endif
 endif

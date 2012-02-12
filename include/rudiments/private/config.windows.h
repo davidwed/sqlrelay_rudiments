@@ -782,20 +782,8 @@
 /* Some systems have strcasecmp */
 /* #undef RUDIMENTS_HAVE_STRCASECMP */
 
-/* Some systems have strcat */
-#define RUDIMENTS_HAVE_STRCAT 1
-
-/* Some systems have strcat_s */
-#define RUDIMENTS_HAVE_STRCAT_S 1
-
 /* Some systems have strchrnul */
 /* #undef RUDIMENTS_HAVE_STRCHRNUL */
-
-/* Some systems have strcpy */
-#define RUDIMENTS_HAVE_STRCPY 1
-
-/* Some systems have strcpy_s */
-#define RUDIMENTS_HAVE_STRCPY_S 1
 
 /* Some systems have strcspn */
 #define RUDIMENTS_HAVE_STRCSPN 1
@@ -814,18 +802,6 @@
 
 /* Some systems have strncasecmp */
 /* #undef RUDIMENTS_HAVE_STRNCASECMP */
-
-/* Some systems have strncat */
-#define RUDIMENTS_HAVE_STRNCAT 1
-
-/* Some systems have strncat_s */
-#define RUDIMENTS_HAVE_STRNCAT_S 1
-
-/* Some systems have strncpy */
-#define RUDIMENTS_HAVE_STRNCPY 1
-
-/* Some systems have strncpy_s */
-#define RUDIMENTS_HAVE_STRNCPY_S 1
 
 /* Some systems have strpbrk */
 #define RUDIMENTS_HAVE_STRPBRK 1
