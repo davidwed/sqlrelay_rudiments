@@ -114,6 +114,7 @@ const char *environment::getValue(const char *variable) {
 			// FIXME: _dupenv_s is meant to be thread-safe and this
 			// usage certainly isn't.  This just emulates the
 			// behavior of getenv and suppresses compiler warnings.
+			free((void *)envval);
 			size_t	len;
 			if (!_dupenv_s(&envval,&len,variable)) {
 				retval=envval;
