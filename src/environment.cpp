@@ -35,7 +35,14 @@ static namevaluepairs	*_envstrings;
 #ifdef RUDIMENTS_HAVE_PUTENV
 void environment::init() {
 	_envstrings=new namevaluepairs;
-	atexit((void (*)(void))environment::exit);
+
+	// On windows, the entire rudiments dll appears to have been unloaded
+	// before atexit functions are called, and it leads to all kinds of
+	// chaos.  Ideally this should be called when the dll is unloaded but
+	// that's tricky to do too.  For now it's just disabled.
+	#ifndef _WIN32
+		atexit((void (*)(void))environment::exit);
+	#endif
 }
 
 void environment::exit() {
