@@ -79,7 +79,6 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\character.cpp" />
     <ClCompile Include="..\src\charstring.cpp" />
     <ClCompile Include="..\src\client.cpp" />
-    <ClCompile Include="..\src\clientserverfactory.cpp" />
     <ClCompile Include="..\src\clientsocket.cpp" />
     <ClCompile Include="..\src\commandline.cpp" />
     <ClCompile Include="..\src\datetime.cpp" />

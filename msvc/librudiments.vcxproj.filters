@@ -27,9 +27,6 @@
     <ClCompile Include="..\src\permissions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\clientserverfactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\clientsocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
