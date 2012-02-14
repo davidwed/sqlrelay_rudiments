@@ -59,6 +59,15 @@
       <Command>cd ..\include\rudiments\private
 copy /Y config.windows.h config.h</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>mkdir c:\"Program Files"\Firstworks\lib
+mkdir c:\"Program Files"\Firstworks\include\rudiments\private
+mkdir c:\"Program Files"\Firstworks\bin
+copy Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy ..\include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
+copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
