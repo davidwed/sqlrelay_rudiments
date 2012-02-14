@@ -129,5 +129,8 @@
     <ClCompile Include="..\src\regex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\process.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

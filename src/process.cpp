@@ -200,7 +200,7 @@ bool process::setUserId(uid_t uid) {
 		// but it would surprise me.  Plus, user id's are odd variable-
 		// length structures in windows.  See getUserId above.
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#else
 		#error no setuid or anything like it
 	#endif
@@ -218,7 +218,7 @@ bool process::setEffectiveUserId(uid_t uid) {
 	#elif defined(_WIN32)
 		// windows doesn't have the notion of effective user id's
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#else
 		#error no seteuid or anything like it
 	#endif
@@ -270,7 +270,7 @@ bool process::setGroupId(gid_t gid) {
 		// but it would surprise me.  Plus, group id's are odd variable-
 		// length structures in windows.  See getRealGroupId above.
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#else
 		#error no setgid or anything like it
 	#endif
@@ -286,7 +286,7 @@ bool process::setEffectiveGroupId(gid_t gid) {
 	#elif defined(_WIN32)
 		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#else
 		#error no setegid or anything like it
 	#endif

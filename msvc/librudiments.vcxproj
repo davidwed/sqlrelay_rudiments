@@ -109,6 +109,7 @@ copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudi
     <ClCompile Include="..\src\parameterstring.cpp" />
     <ClCompile Include="..\src\passwdentry.cpp" />
     <ClCompile Include="..\src\permissions.cpp" />
+    <ClCompile Include="..\src\process.cpp" />
     <ClCompile Include="..\src\protocolentry.cpp" />
     <ClCompile Include="..\src\randomnumber.cpp" />
     <ClCompile Include="..\src\rawbuffer.cpp" />

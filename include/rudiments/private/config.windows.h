@@ -318,7 +318,7 @@
 /* #undef RUDIMENTS_HAVE_GETPGID */
 
 /* Some systems have getpid */
-#define RUDIMENTS_HAVE_GETPID 1
+/* #define RUDIMENTS_HAVE_GETPID 1 */
 
 /* Some systems have getppid */
 /* #undef RUDIMENTS_HAVE_GETPPID */
@@ -993,7 +993,7 @@
 #define RUDIMENTS_HAVE__DUPENV_S 1
 
 /* Some systems have _getpid */
-/* #undef RUDIMENTS_HAVE__GETPID */
+#define RUDIMENTS_HAVE__GETPID 1
 
 /* Some systems have _lseek */
 #define RUDIMENTS_HAVE__LSEEK 1
