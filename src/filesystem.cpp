@@ -98,7 +98,13 @@ bool filesystem::initialize(const char *path) {
 	close();
 	pvt->_closeflag=true;
 	do {
-		pvt->_fd=::open(path,O_RDONLY);
+		#if defined(RUDIMENTS_HAVE__OPEN)
+			pvt->_fd=_open(path,O_RDONLY);
+		#elif defined(RUDIMENTS_HAVE_OPEN)
+			pvt->_fd=::open(path,O_RDONLY);
+		#else
+			#error no open or anything like it
+		#endif
 	} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR);
 	return (pvt->_fd!=-1 && getCurrentProperties());
 }
