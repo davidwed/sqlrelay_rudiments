@@ -310,7 +310,13 @@ void filedescriptor::setFileDescriptor(int32_t filedesc) {
 int32_t filedescriptor::duplicate() const {
 	int32_t	result;
 	do {
-		result=dup(pvt->_fd);
+		#if defined(RUDIMENTS_HAVE__DUP)
+			result=_dup(pvt->_fd);
+		#elif defined(RUDIMENTS_HAVE_DUP)
+			result=dup(pvt->_fd);
+		#else
+			#error no dup or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -318,7 +324,13 @@ int32_t filedescriptor::duplicate() const {
 bool filedescriptor::duplicate(int32_t newfd) const {
 	int32_t	result;
 	do {
-		result=dup2(pvt->_fd,newfd);
+		#if defined(RUDIMENTS_HAVE__DUP2)
+			result=_dup2(pvt->_fd,newfd);
+		#elif defined(RUDIMENTS_HAVE_DUP2)
+			result=dup2(pvt->_fd,newfd);
+		#else
+			#error no dup2 or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return (result==newfd);
 }

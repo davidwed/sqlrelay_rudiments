@@ -212,6 +212,12 @@
 /* Some systems have dlopen */
 /* #undef RUDIMENTS_HAVE_DLOPEN */
 
+/* Some systems have dup */
+/* #undef RUDIMENTS_HAVE_DUP */
+
+/* Some systems have dup2 */
+/* #undef RUDIMENTS_HAVE_DUP2 */
+
 /* Some systems define environ in unistd.h */
 #define RUDIMENTS_HAVE_ENVIRON 1
 
@@ -955,6 +961,12 @@
 
 /* Some systems have _chsize_s */
 #define RUDIMENTS_HAVE__CHSIZE_S 1
+
+/* Some systems have _dup */
+#define RUDIMENTS_HAVE__DUP 1
+
+/* Some systems have _dup2 */
+#define RUDIMENTS_HAVE__DUP2 1
 
 /* Some systems have _dupenv_s */
 #define RUDIMENTS_HAVE__DUPENV_S 1

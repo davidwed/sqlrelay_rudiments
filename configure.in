@@ -1677,6 +1677,42 @@ dnl Checks for file functions
 echo
 echo "***** File Functions *********"
 
+AC_MSG_CHECKING(for dup)
+AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif],
+dup(0);,AC_DEFINE(RUDIMENTS_HAVE_DUP,1,Some systems have dup) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _dup)
+AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif],
+_dup(0);,AC_DEFINE(RUDIMENTS_HAVE__DUP,1,Some systems have _dup) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for dup2)
+AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif],
+dup2(0,0);,AC_DEFINE(RUDIMENTS_HAVE_DUP2,1,Some systems have dup2) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _dup2)
+AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif],
+_dup2(0,0);,AC_DEFINE(RUDIMENTS_HAVE__DUP2,1,Some systems have _dup2) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for xattr)
 AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
