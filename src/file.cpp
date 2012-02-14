@@ -1263,7 +1263,7 @@ bool file::sync() const {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_COMMIT)
-		return _commit(fd());
+		return _commit(fd())==0;
 	#else
 		#error no fsync or anything like it
 	#endif
