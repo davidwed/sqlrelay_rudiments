@@ -154,6 +154,9 @@
 /* Some systems have clock_nanosleep */
 #undef RUDIMENTS_HAVE_CLOCK_NANOSLEEP
 
+/* Some systems have close */
+#undef RUDIMENTS_HAVE_CLOSE
+
 /* some systems have closesocket */
 #undef RUDIMENTS_HAVE_CLOSESOCKET
 
@@ -963,6 +966,9 @@
 
 /* Some systems have _chsize_s */
 #undef RUDIMENTS_HAVE__CHSIZE_S
+
+/* Some systems have _close */
+#undef RUDIMENTS_HAVE__CLOSE
 
 /* Some systems have _dup */
 #undef RUDIMENTS_HAVE__DUP

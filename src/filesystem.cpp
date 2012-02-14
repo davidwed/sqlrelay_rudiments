@@ -120,7 +120,13 @@ bool filesystem::close() {
 	if (pvt->_fd>-1 && pvt->_closeflag) {
 		int32_t	result;
 		do {
-			result=::close(pvt->_fd);
+			#if defined(RUDIMENTS_HAVE__CLOSE)
+				result=_close(pvt->_fd);
+			#elif defined(RUDIMENTS_HAVE_CLOSE)
+				result=::close(pvt->_fd);
+			#else
+				#error no close or anything like it
+			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		pvt->_fd=-1;
 		return !result;

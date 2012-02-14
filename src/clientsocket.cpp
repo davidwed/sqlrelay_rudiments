@@ -259,10 +259,14 @@ ssize_t clientsocket::lowLevelWrite(const void *buf, ssize_t count) const {
 }
 
 int32_t clientsocket::lowLevelClose() {
-	#ifdef RUDIMENTS_HAVE_CLOSESOCKET
+	#if defined(RUDIMENTS_HAVE_CLOSESOCKET)
 		return closesocket(fd());
-	#else
+	#elif defined(RUDIMENTS_HAVE__CLOSE)
+		return _close(fd());
+	#elif defined(RUDIMENTS_HAVE_CLOSE)
 		return ::close(fd());
+	#else
+		#error no closesocket, close or anything like it
 	#endif
 }
 

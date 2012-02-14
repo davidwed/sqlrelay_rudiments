@@ -753,7 +753,13 @@ bool filedescriptor::close() {
 }
 
 int32_t filedescriptor::lowLevelClose() {
-	return ::close(pvt->_fd);
+	#if defined(RUDIMENTS_HAVE__CLOSE)
+		return _close(pvt->_fd);
+	#elif defined(RUDIMENTS_HAVE_CLOSE)
+		return ::close(pvt->_fd);
+	#else
+		#error no close or anything like it
+	#endif
 }
 
 void filedescriptor::retryInterruptedReads() {
