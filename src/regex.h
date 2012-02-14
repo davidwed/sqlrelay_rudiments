@@ -445,8 +445,11 @@ typedef struct
 
 #else /* not __STDC__ */
 
-/*# define _RE_ARGS(args) ()*/
-# define _RE_ARGS(args) args
+# ifdef _WIN32
+#  define _RE_ARGS(args) args
+# else /* not _WIN32 */
+#  define _RE_ARGS(args) ()
+# endif
 
 #endif /* not __STDC__ */
 
