@@ -445,7 +445,8 @@ typedef struct
 
 #else /* not __STDC__ */
 
-# define _RE_ARGS(args) ()
+/*# define _RE_ARGS(args) ()*/
+# define _RE_ARGS(args) args
 
 #endif /* not __STDC__ */
 

@@ -322,6 +322,8 @@ typedef unsigned long int uintptr_t;
    not functions -- `alloca'-allocated space disappears at the end of the
    function it is called in.  */
 
+/* always use malloc */
+# define REGEX_MALLOC
 # ifdef REGEX_MALLOC
 
 #  define REGEX_ALLOCATE malloc
