@@ -24029,6 +24029,82 @@ echo "******************************"
 echo
 echo "***** File Functions *********"
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for open" >&5
+$as_echo_n "checking for open... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif
+int
+main ()
+{
+open(NULL,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_OPEN 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _open" >&5
+$as_echo_n "checking for _open... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif
+int
+main ()
+{
+_open(NULL,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE__OPEN 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dup" >&5
 $as_echo_n "checking for dup... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

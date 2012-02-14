@@ -601,6 +601,9 @@
 /* Some systems define _NSGetEnviron in crt_externs.h */
 #undef RUDIMENTS_HAVE_NSGETENVIRON
 
+/* Some systems have open */
+#undef RUDIMENTS_HAVE_OPEN
+
 /* OpenBSD style statfs */
 #undef RUDIMENTS_HAVE_OPENBSD_STATFS
 
@@ -975,6 +978,9 @@
 
 /* Some systems have _memccpy */
 #undef RUDIMENTS_HAVE__MEMCCPY
+
+/* Some systems have _open */
+#undef RUDIMENTS_HAVE__OPEN
 
 /* Some systems have _putenv */
 #undef RUDIMENTS_HAVE__PUTENV

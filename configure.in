@@ -1677,6 +1677,42 @@ dnl Checks for file functions
 echo
 echo "***** File Functions *********"
 
+AC_MSG_CHECKING(for open)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif],
+open(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_OPEN,1,Some systems have open) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _open)
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_FCNTL_H
+	#include <fcntl.h>
+#endif
+#ifdef HAVE_IO_H
+	#include <io.h>
+#endif],
+_open(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE__OPEN,1,Some systems have _open) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for dup)
 AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
 	#include <unistd.h>

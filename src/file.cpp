@@ -217,7 +217,13 @@ ssize_t file::createFile(const char *name, mode_t perms,
 int32_t file::openInternal(const char *name, int32_t flags) {
 	int32_t	result;
 	do {
-		result=::open(name,flags);
+		#if defined(RUDIMENTS_HAVE__OPEN)
+			result=_open(name,flags);
+		#elif defined(RUDIMENTS_HAVE_OPEN)
+			result=::open(name,flags);
+		#else
+			#error no open or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
@@ -225,7 +231,13 @@ int32_t file::openInternal(const char *name, int32_t flags) {
 int32_t file::openInternal(const char *name, int32_t flags, mode_t perms) {
 	int32_t	result;
 	do {
-		result=::open(name,flags,perms);
+		#if defined(RUDIMENTS_HAVE__OPEN)
+			result=_open(name,flags,perms);
+		#elif defined(RUDIMENTS_HAVE_OPEN)
+			result=::open(name,flags,perms);
+		#else
+			#error no open or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
