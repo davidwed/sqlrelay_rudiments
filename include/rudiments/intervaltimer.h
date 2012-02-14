@@ -15,7 +15,7 @@ namespace rudiments {
 
 class intervaltimerprivate;
 
-class DLLSPEC intervaltimer {
+class RUDIMENTS_DLLSPEC intervaltimer {
 	public:
 			intervaltimer(int32_t which);
 			// Initialize the interval timer.  "which" must be one

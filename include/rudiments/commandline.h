@@ -14,7 +14,7 @@ namespace rudiments {
 
 class commandlineprivate;
 
-class DLLSPEC commandline {
+class RUDIMENTS_DLLSPEC commandline {
 	public:
 		commandline(int32_t argc, const char **argv);
 		~commandline();

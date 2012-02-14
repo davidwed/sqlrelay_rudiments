@@ -46,7 +46,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC process {
+class RUDIMENTS_DLLSPEC process {
 	public:
 
 		static	pid_t	getProcessId();

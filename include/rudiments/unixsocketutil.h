@@ -12,7 +12,7 @@ namespace rudiments {
 
 class unixsocketutilprivate;
 
-class DLLSPEC unixsocketutil {
+class RUDIMENTS_DLLSPEC unixsocketutil {
 	public:
 			unixsocketutil();
 			unixsocketutil(const unixsocketutil &u);

@@ -14,7 +14,7 @@ namespace rudiments {
 
 class dtdprivate;
 
-class DLLSPEC dtd {
+class RUDIMENTS_DLLSPEC dtd {
 	public:
 				dtd();
 				~dtd();

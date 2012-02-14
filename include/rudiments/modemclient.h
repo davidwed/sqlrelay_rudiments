@@ -15,7 +15,7 @@ namespace rudiments {
 
 class modemclientprivate;
 
-class DLLSPEC modemclient : public client, private modemutil {
+class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 	public:
 				modemclient();
 				modemclient(const modemclient &m);

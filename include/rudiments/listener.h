@@ -17,7 +17,7 @@ typedef linkedlistnode<filedescriptor *>	listenerlistnode;
 
 class listenerprivate;
 
-class DLLSPEC listener {
+class RUDIMENTS_DLLSPEC listener {
 	public:
 			listener();
 		virtual	~listener();

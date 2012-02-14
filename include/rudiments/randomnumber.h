@@ -24,7 +24,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC randomnumber {
+class RUDIMENTS_DLLSPEC randomnumber {
 	public:
 		static	int32_t	getSeed();
 			// Generates a random number seed by first attempting

@@ -10,7 +10,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC math {
+class RUDIMENTS_DLLSPEC math {
 	public:
 		static int32_t	absoluteValue(int32_t j);
 		static div_t	divide(int32_t numer, int32_t denom);

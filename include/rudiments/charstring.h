@@ -15,7 +15,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC charstring {
+class RUDIMENTS_DLLSPEC charstring {
 	public:
 
 		static	size_t	length(const char *string);

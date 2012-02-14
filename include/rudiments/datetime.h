@@ -15,7 +15,7 @@ namespace rudiments {
 
 class datetimeprivate;
 
-class DLLSPEC datetime {
+class RUDIMENTS_DLLSPEC datetime {
 	public:
 
 		// if you need a quick conversion, use one of these methods

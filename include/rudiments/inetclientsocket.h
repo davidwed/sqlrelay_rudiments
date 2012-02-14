@@ -19,7 +19,7 @@ namespace rudiments {
 
 class inetclientsocketprivate;
 
-class DLLSPEC inetclientsocket : public clientsocket, private inetsocketutil  {
+class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsocketutil  {
 	public:
 				inetclientsocket();
 				inetclientsocket(const inetclientsocket &i);

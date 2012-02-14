@@ -15,7 +15,7 @@ namespace rudiments {
 
 class directoryprivate;
 
-class DLLSPEC directory {
+class RUDIMENTS_DLLSPEC directory {
 	public:
 				directory();
 				~directory();

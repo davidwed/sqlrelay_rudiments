@@ -30,7 +30,7 @@ namespace rudiments {
 
 class unixserversocketprivate;
 
-class DLLSPEC unixserversocket : public serversocket, private unixsocketutil {
+class RUDIMENTS_DLLSPEC unixserversocket : public serversocket, private unixsocketutil {
 	public:
 				unixserversocket();
 				unixserversocket(const unixserversocket &u);

@@ -29,7 +29,7 @@ class logdestination {
 
 // The syslogdestination class writes log data to syslog.
 class syslogdestinationprivate;
-class DLLSPEC syslogdestination : public logdestination {
+class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 	public:
 				syslogdestination();
 				syslogdestination(const syslogdestination &f);
@@ -45,7 +45,7 @@ class DLLSPEC syslogdestination : public logdestination {
 
 // The filedestination class writes log data to a file.
 class filedestinationprivate;
-class DLLSPEC filedestination : public logdestination {
+class RUDIMENTS_DLLSPEC filedestination : public logdestination {
 	public:
 				filedestination();
 				filedestination(const filedestination &f);
@@ -59,13 +59,13 @@ class DLLSPEC filedestination : public logdestination {
 
 
 // The stdoutdestination class writes log data to standard output.
-class DLLSPEC stdoutdestination : public logdestination {
+class RUDIMENTS_DLLSPEC stdoutdestination : public logdestination {
 	#include <rudiments/private/stdoutdestination.h>
 };
 
 
 // The stderrdestination class writes log data to standard error.
-class DLLSPEC stderrdestination : public logdestination {
+class RUDIMENTS_DLLSPEC stderrdestination : public logdestination {
 	#include <rudiments/private/stderrdestination.h>
 };
 
@@ -76,7 +76,7 @@ typedef linkedlistnode<logdestination *>	loggerlistnode;
 // The logger class provides methods for managing
 // logdestinations and writing log entries.
 class loggerprivate;
-class DLLSPEC logger {
+class RUDIMENTS_DLLSPEC logger {
 	public:
 			logger();
 			~logger();

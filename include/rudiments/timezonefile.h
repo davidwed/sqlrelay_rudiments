@@ -21,7 +21,7 @@ struct ttinfo {
 	uint32_t	tt_abbrind;
 };
 
-class DLLSPEC timezonefile {
+class RUDIMENTS_DLLSPEC timezonefile {
 	public:
 				timezonefile();
 				timezonefile(const timezonefile &t);

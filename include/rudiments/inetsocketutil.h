@@ -12,7 +12,7 @@ namespace rudiments {
 
 class inetsocketutilprivate;
 
-class DLLSPEC inetsocketutil {
+class RUDIMENTS_DLLSPEC inetsocketutil {
 	public:
 				inetsocketutil();
 				inetsocketutil(const inetsocketutil &i);

@@ -15,7 +15,7 @@ namespace rudiments {
 
 class chatprivate;
 
-class DLLSPEC chat {
+class RUDIMENTS_DLLSPEC chat {
 	public:
 		chat(const filedescriptor *fd);
 		// Initializes an instance of chat.  Data will be

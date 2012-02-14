@@ -14,7 +14,7 @@ namespace rudiments {
 
 class hostentryprivate;
 
-class DLLSPEC hostentry {
+class RUDIMENTS_DLLSPEC hostentry {
 	public:
 
 		// If you need to quickly look up a specific field, use one of

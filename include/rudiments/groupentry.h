@@ -14,7 +14,7 @@ namespace rudiments {
 
 class groupentryprivate;
 
-class DLLSPEC groupentry {
+class RUDIMENTS_DLLSPEC groupentry {
 	public:
 
 		// If you need to quickly look up a specific field, use one of

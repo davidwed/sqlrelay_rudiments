@@ -23,7 +23,7 @@ namespace rudiments {
 
 class sharedmemoryprivate;
 
-class DLLSPEC sharedmemory {
+class RUDIMENTS_DLLSPEC sharedmemory {
 	public:
 			sharedmemory();
 			// Creates a shared memory segment.

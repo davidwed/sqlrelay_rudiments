@@ -119,7 +119,7 @@ enum xmldomnodetype {
 class xmldom;
 class xmldomnodeprivate;
 
-class DLLSPEC xmldomnode {
+class RUDIMENTS_DLLSPEC xmldomnode {
 	public:
 			xmldomnode(xmldom *dom, xmldomnode *nullnode);
 				// Creates a new node and intializes its

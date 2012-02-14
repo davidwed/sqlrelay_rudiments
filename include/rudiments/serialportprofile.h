@@ -15,7 +15,7 @@ namespace rudiments {
 
 class serialportprofileprivate;
 
-class DLLSPEC serialportprofile {
+class RUDIMENTS_DLLSPEC serialportprofile {
 	public:
 
 		enum	inputmode_t {

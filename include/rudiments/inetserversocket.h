@@ -23,7 +23,7 @@ namespace rudiments {
 
 class inetserversocketprivate;
 
-class DLLSPEC inetserversocket : public serversocket, private inetsocketutil {
+class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsocketutil {
 	public:
 				inetserversocket();
 				inetserversocket(const inetserversocket &i);

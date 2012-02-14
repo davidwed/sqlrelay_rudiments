@@ -15,7 +15,7 @@ namespace rudiments {
 
 class clientprivate;
 
-class DLLSPEC client : public filedescriptor {
+class RUDIMENTS_DLLSPEC client : public filedescriptor {
 	public:
 
 			client();

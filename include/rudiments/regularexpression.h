@@ -18,7 +18,7 @@ namespace rudiments {
 
 class regularexpressionprivate;
 
-class DLLSPEC regularexpression {
+class RUDIMENTS_DLLSPEC regularexpression {
 	public:
 
 		// if you need to do a quick comparison, use this method

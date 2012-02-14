@@ -14,7 +14,7 @@ namespace rudiments {
 
 class threadprivate;
 
-class DLLSPEC thread {
+class RUDIMENTS_DLLSPEC thread {
 	public:
 
 	#include <rudiments/private/thread.h>

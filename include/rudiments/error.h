@@ -13,7 +13,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC error {
+class RUDIMENTS_DLLSPEC error {
 	public:
 		static	void		clearError();
 					// Set the current system call error to

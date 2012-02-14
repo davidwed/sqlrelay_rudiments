@@ -23,7 +23,7 @@ namespace rudiments {
 
 class pseudottyprivate;
 
-class DLLSPEC pseudotty : public filedescriptor {
+class RUDIMENTS_DLLSPEC pseudotty : public filedescriptor {
 	public:
 
 	#include <rudiments/private/pseudotty.h>

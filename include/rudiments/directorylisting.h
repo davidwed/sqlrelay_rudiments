@@ -15,7 +15,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC directorylisting {
+class RUDIMENTS_DLLSPEC directorylisting {
 	public:
 
 	#include <rudiments/private/directorylisting.h>

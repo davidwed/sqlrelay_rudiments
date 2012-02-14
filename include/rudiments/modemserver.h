@@ -12,7 +12,7 @@ namespace rudiments {
 
 class modemserverprivate;
 
-class DLLSPEC modemserver : public server, private modemutil {
+class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 	public:
 				modemserver();
 				modemserver(const modemserver &m);

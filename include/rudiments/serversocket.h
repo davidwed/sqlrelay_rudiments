@@ -12,7 +12,7 @@ namespace rudiments {
 
 class serversocketprivate;
 
-class DLLSPEC serversocket : public server {
+class RUDIMENTS_DLLSPEC serversocket : public server {
 	public:
 				serversocket();
 				serversocket(const serversocket &s);

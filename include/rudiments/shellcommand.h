@@ -45,7 +45,7 @@ namespace rudiments {
 
 class shellcommandprivate;
 
-class DLLSPEC shellcommand {
+class RUDIMENTS_DLLSPEC shellcommand {
 	public:
 		int32_t	run(const char *command);
 			// Runs "command".

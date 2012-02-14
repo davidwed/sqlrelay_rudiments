@@ -17,7 +17,7 @@ class listener;
 
 class filedescriptorprivate;
 
-class DLLSPEC filedescriptor {
+class RUDIMENTS_DLLSPEC filedescriptor {
 	public:
 			filedescriptor();
 				// Creates an uninitialized filedescriptor.

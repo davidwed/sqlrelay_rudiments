@@ -14,7 +14,7 @@ namespace rudiments {
 
 class xmldomprivate;
 
-class DLLSPEC xmldom : public xmlsax {
+class RUDIMENTS_DLLSPEC xmldom : public xmlsax {
 	public:
 
 			xmldom();

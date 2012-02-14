@@ -15,7 +15,7 @@ namespace rudiments {
 
 class memorymapprivate;
 
-class DLLSPEC memorymap {
+class RUDIMENTS_DLLSPEC memorymap {
 	public:
 			memorymap();
 			// creates an unattached memorymap

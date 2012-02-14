@@ -6,12 +6,12 @@
 
 #ifdef _WIN32
 	#ifdef LIBRUDIMENTS_EXPORTS
-		#define DLLSPEC __declspec(dllexport)
+		#define RUDIMENTS_DLLSPEC __declspec(dllexport)
 	#else
-		#define DLLSPEC __declspec(dllimport)
+		#define RUDIMENTS_DLLSPEC __declspec(dllimport)
 	#endif
 #else
-	#define DLLSPEC
+	#define RUDIMENTS_DLLSPEC
 #endif
 
 #endif

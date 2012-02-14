@@ -14,7 +14,7 @@ namespace rudiments {
 
 class stringbufferprivate;
 
-class DLLSPEC stringbuffer : public variablebuffer {
+class RUDIMENTS_DLLSPEC stringbuffer : public variablebuffer {
 	public:
 				stringbuffer();
 				stringbuffer(char *initialcontents,

@@ -14,7 +14,7 @@ namespace rudiments {
 
 class rpcentryprivate;
 
-class DLLSPEC rpcentry {
+class RUDIMENTS_DLLSPEC rpcentry {
 	public:
 
 		// If you need to quickly look up a specific field, use one of

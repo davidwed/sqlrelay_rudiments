@@ -30,7 +30,7 @@
 namespace rudiments {
 #endif
 
-class DLLSPEC permissions {
+class RUDIMENTS_DLLSPEC permissions {
 	public:
 		static	bool	setFilePermissions(const char *filename,
 							mode_t perms);
