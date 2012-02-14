@@ -22,7 +22,7 @@ namespace rudiments {
  
 // The logdestination class is a virtual base class that just defines methods
 // that the real logdestination classes must implement.
-class logdestination {
+class RUDIMENTS_DLLSPEC logdestination {
 	#include <rudiments/private/logdestination.h>
 };
 
