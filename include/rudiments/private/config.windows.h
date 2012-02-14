@@ -485,6 +485,9 @@
 /* Some systems have lrand48 */
 /* #undef RUDIMENTS_HAVE_LRAND48 */
 
+/* Some systems have lseek */
+/* #undef RUDIMENTS_HAVE_LSEEK */
+
 /* Some systems have machine/endian.h */
 /* #undef RUDIMENTS_HAVE_MACHINE_ENDIAN_H */
 
@@ -985,6 +988,9 @@
 
 /* Some systems have _getpid */
 /* #undef RUDIMENTS_HAVE__GETPID */
+
+/* Some systems have _lseek */
+#define RUDIMENTS_HAVE__LSEEK 1
 
 /* Some systems have _memccpy */
 #define RUDIMENTS_HAVE__MEMCCPY 1

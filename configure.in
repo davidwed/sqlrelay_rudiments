@@ -1749,6 +1749,30 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 _unlink(0);,AC_DEFINE(RUDIMENTS_HAVE__UNLINK,1,Some systems have _unlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for lseek)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+lseek(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_LSEEK,1,Some systems have lseek) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _lseek)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_lseek(0);,AC_DEFINE(RUDIMENTS_HAVE__LSEEK,1,Some systems have _lseek) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for dup)
 AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
 	#include <unistd.h>

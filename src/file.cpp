@@ -590,7 +590,13 @@ off64_t file::getCurrentPosition() const {
 off64_t file::lseek(off64_t offset, int32_t whence) const {
 	int32_t	result;
 	do {
-		result=::lseek(fd(),offset,whence);
+		#if defined(RUDIMENTS_HAVE__LSEEK)
+			result=_lseek(fd(),offset,whence);
+		#elif defined(RUDIMENTS_HAVE_LSEEK)
+			result=::lseek(fd(),offset,whence);
+		#else
+			#error no lseek or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return result;
 }
