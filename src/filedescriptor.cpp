@@ -1241,7 +1241,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
-	return ::read(pvt->_fd,buf,count);
+	#if defined(RUDIMENTS_HAVE__READ)
+		return _read(pvt->_fd,buf,count);
+	#elif defined(RUDIMENTS_HAVE_READ)
+		return ::read(pvt->_fd,buf,count);
+	#else
+		#error no read or anything like it
+	#endif
 }
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
@@ -1494,7 +1500,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
-	return ::write(pvt->_fd,buf,count);
+	#if defined(RUDIMENTS_HAVE__WRITE)
+		return _write(pvt->_fd,buf,count);
+	#elif defined(RUDIMENTS_HAVE_WRITE)
+		return ::write(pvt->_fd,buf,count);
+	#else
+		#error no write or anything like it
+	#endif
 }
 
 int32_t filedescriptor::waitForNonBlockingRead(long sec, long usec) const {

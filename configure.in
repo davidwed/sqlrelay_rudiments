@@ -1731,6 +1731,54 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 _close(0);,AC_DEFINE(RUDIMENTS_HAVE__CLOSE,1,Some systems have _close) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for read)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+read(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_READ,1,Some systems have read) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _read)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_read(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE__READ,1,Some systems have _read) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for write)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+write(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WRITE,1,Some systems have write) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _write)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_write(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE__WRITE,1,Some systems have _write) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for unlink)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
@@ -1771,7 +1819,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif],
-_lseek(0);,AC_DEFINE(RUDIMENTS_HAVE__LSEEK,1,Some systems have _lseek) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+_lseek(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE__LSEEK,1,Some systems have _lseek) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dup)
 AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H

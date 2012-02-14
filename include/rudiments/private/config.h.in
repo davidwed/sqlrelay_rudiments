@@ -658,6 +658,9 @@
 /* Some systems have rand_r */
 #undef RUDIMENTS_HAVE_RAND_R
 
+/* Some systems have read */
+#undef RUDIMENTS_HAVE_READ
+
 /* Some systems have readdir_r */
 #undef RUDIMENTS_HAVE_READDIR_R
 
@@ -964,6 +967,9 @@
 /* Some systems have winsock2.h */
 #undef RUDIMENTS_HAVE_WINSOCK2_H
 
+/* Some systems have write */
+#undef RUDIMENTS_HAVE_WRITE
+
 /* Some systems have extended filesystem attributes */
 #undef RUDIMENTS_HAVE_XATTRS
 
@@ -1000,6 +1006,9 @@
 /* Some systems have _putenv */
 #undef RUDIMENTS_HAVE__PUTENV
 
+/* Some systems have _read */
+#undef RUDIMENTS_HAVE__READ
+
 /* Some systems have _snprintf_s */
 #undef RUDIMENTS_HAVE__SNPRINTF_S
 
@@ -1008,6 +1017,9 @@
 
 /* Some systems have _unlink */
 #undef RUDIMENTS_HAVE__UNLINK
+
+/* Some systems have _write */
+#undef RUDIMENTS_HAVE__WRITE
 
 /* Some systems have __bswap64 */
 #undef RUDIMENTS_HAVE___BSWAP64
