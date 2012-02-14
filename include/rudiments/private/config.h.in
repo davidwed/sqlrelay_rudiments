@@ -961,11 +961,17 @@
 /* Some systems have _getpid */
 #undef RUDIMENTS_HAVE__GETPID
 
+/* Some systems have _memccpy */
+#undef RUDIMENTS_HAVE__MEMCCPY
+
 /* Some systems have _putenv */
 #undef RUDIMENTS_HAVE__PUTENV
 
 /* Some systems have _snprintf_s */
 #undef RUDIMENTS_HAVE__SNPRINTF_S
+
+/* Some systems have _swab */
+#undef RUDIMENTS_HAVE__SWAB
 
 /* Some systems have __bswap64 */
 #undef RUDIMENTS_HAVE___BSWAP64

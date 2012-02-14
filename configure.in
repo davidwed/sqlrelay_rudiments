@@ -1656,6 +1656,18 @@ char *from; char *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_H
 	#include <string.h>
 #endif],
 const void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_SWAB_CONST_VOID,1,Some systems have swab with a const void * argument), AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(_swab)
+	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef HAVE_STRING_H
+	#include <string.h>
+#endif],
+_swab(NULL,NULL,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE__SWAB,1,Some systems have _swab), AC_MSG_RESULT(no))
 fi
 
 echo "******************************"

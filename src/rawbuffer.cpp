@@ -34,7 +34,10 @@ void *rawbuffer::copyWithOverlap(void *dest, const void *src, size_t size) {
 
 void *rawbuffer::copyUntil(void *dest, const void *src,
 				unsigned char character, size_t size) {
-	#ifdef RUDIMENTS_HAVE_MEMCCPY_CHAR
+	#if defined(RUDIMENTS_HAVE__MEMCCPY)
+		return (dest && src)?_memccpy(dest,src,
+					static_cast<int>(character),size):NULL;
+	#elif defined(RUDIMENTS_HAVE_MEMCCPY_CHAR)
 		return (dest && src)?static_cast<void *>(
 					memccpy(static_cast<char *>(dest),
 					static_cast<const char *>(src),
@@ -47,7 +50,9 @@ void *rawbuffer::copyUntil(void *dest, const void *src,
 
 void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 	if (dest && src) {
-		#if defined(RUDIMENTS_HAVE_SWAB_CONST_CHAR)
+		#if defined(RUDIMENTS_HAVE__SWAB)
+			_swab((char *)src,(char *)dest,size);
+		#elif defined(RUDIMENTS_HAVE_SWAB_CONST_CHAR)
 			swab((const char *)src,(char *)dest,size);
 		#elif defined(RUDIMENTS_HAVE_SWAB_CHAR)
 			swab((char *)src,(char *)dest,size);

@@ -1387,6 +1387,14 @@ memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memme
 #include <string.h>],
 char *tmp; memccpy(tmp,NULL,1,1);,AC_DEFINE(RUDIMENTS_HAVE_MEMCCPY_CHAR,1,Some systems have memccpy with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+	AC_MSG_CHECKING(for _memccpy)
+	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#define _GNU_SOURCE
+#include <string.h>],
+_memccpy(NULL,NULL,1,1);,AC_DEFINE(RUDIMENTS_HAVE__MEMCCPY,1,Some systems have _memccpy) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 fi
 
 ])
