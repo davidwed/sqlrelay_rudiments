@@ -935,6 +935,9 @@
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */
 
+/* Some systems have unlink */
+#define RUDIMENTS_HAVE_UNLINK 1
+
 /* Some systems have unsetenv */
 /* #undef RUDIMENTS_HAVE_UNSETENV */
 
@@ -997,6 +1000,9 @@
 
 /* Some systems have _swab */
 #define RUDIMENTS_HAVE__SWAB 1
+
+/* Some systems have _unlink */
+#define RUDIMENTS_HAVE__UNLINK 1
 
 /* Some systems have __bswap64 */
 /* #undef RUDIMENTS_HAVE___BSWAP64 */

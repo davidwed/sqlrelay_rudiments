@@ -24163,6 +24163,64 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for unlink" >&5
+$as_echo_n "checking for unlink... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
+int
+main ()
+{
+unlink(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_UNLINK 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _unlink" >&5
+$as_echo_n "checking for _unlink... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
+int
+main ()
+{
+_unlink(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE__UNLINK 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dup" >&5
 $as_echo_n "checking for dup... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

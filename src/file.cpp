@@ -1150,7 +1150,13 @@ bool file::rename(const char *oldpath, const char *newpath) {
 bool file::remove(const char *filename) {
 	int32_t	result;
 	do {
-		result=unlink(filename);
+		#if defined(RUDIMENTS_HAVE__UNLINK)
+			result=_unlink(filename);
+		#elif defined(RUDIMENTS_HAVE_UNLINK)
+			result=unlink(filename);
+		#else
+			#error no unlink or anything like it
+		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
