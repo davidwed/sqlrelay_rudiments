@@ -103,6 +103,7 @@ copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudi
     <ClCompile Include="..\src\inetclientsocket.cpp" />
     <ClCompile Include="..\src\inetsocketutil.cpp" />
     <ClCompile Include="..\src\listener.cpp" />
+    <ClCompile Include="..\src\memorypool.cpp" />
     <ClCompile Include="..\src\mutex.cpp" />
     <ClCompile Include="..\src\namevaluepairs.cpp" />
     <ClCompile Include="..\src\passwdentry.cpp" />
