@@ -318,7 +318,7 @@
 /* #undef RUDIMENTS_HAVE_GETPGID */
 
 /* Some systems have getpid */
-/* #define RUDIMENTS_HAVE_GETPID 1 */
+/* #undef RUDIMENTS_HAVE_GETPID */
 
 /* Some systems have getppid */
 /* #undef RUDIMENTS_HAVE_GETPPID */
@@ -641,6 +641,9 @@
 /* Some systems have Process32First */
 #define RUDIMENTS_HAVE_PROCESS32FIRST 1
 
+/* Some systems have process.h */
+#define RUDIMENTS_HAVE_PROCESS_H 1
+
 /* Some systems have pselect */
 /* #undef RUDIMENTS_HAVE_PSELECT */
 
@@ -937,6 +940,9 @@
 
 /* Ultrix style statfs */
 /* #undef RUDIMENTS_HAVE_ULTRIX_STATFS */
+
+/* Some systems have umask */
+/* #undef RUDIMENTS_HAVE_UMASK */
 
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */

@@ -27,7 +27,14 @@
 #endif
 
 // for umask
-#include <sys/stat.h>
+#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+
+// for _getpid on windows
+#ifdef RUDIMENTS_HAVE_PROCESS_H
+	#include <process.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -301,7 +308,12 @@ bool process::setRealAndEffectiveGroupId(gid_t gid, gid_t egid) {
 }
 
 mode_t process::setFileCreationMask(mode_t mask) {
-	return ::umask(mask);
+	#if defined(RUDIMENTS_HAVE_UMASK)
+		return ::umask(mask);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return 0;
+	#endif
 }
 
 pid_t process::fork() {

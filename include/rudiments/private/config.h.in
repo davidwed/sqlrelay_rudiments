@@ -640,6 +640,9 @@
 /* Some systems have Process32First */
 #undef RUDIMENTS_HAVE_PROCESS32FIRST
 
+/* Some systems have process.h */
+#undef RUDIMENTS_HAVE_PROCESS_H
+
 /* Some systems have pselect */
 #undef RUDIMENTS_HAVE_PSELECT
 
@@ -936,6 +939,9 @@
 
 /* Ultrix style statfs */
 #undef RUDIMENTS_HAVE_ULTRIX_STATFS
+
+/* Some systems have umask */
+#undef RUDIMENTS_HAVE_UMASK
 
 /* Some systems have unistd.h */
 #undef RUDIMENTS_HAVE_UNISTD_H

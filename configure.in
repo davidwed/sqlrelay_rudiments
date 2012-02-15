@@ -395,28 +395,6 @@ AC_MSG_CHECKING(for sys/time.h)
 AC_TRY_COMPILE([#include <sys/time.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_TIME_H, 1, Some systems have sys/time.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for windows.h)
-	AC_TRY_COMPILE([#include <windows.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_H, 1, Some systems have windows.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-	AC_MSG_CHECKING(for winsock2.h)
-	AC_TRY_COMPILE([#include <winsock2.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_WINSOCK2_H, 1, Some systems have winsock2.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-	AC_MSG_CHECKING(for io.h)
-	AC_TRY_COMPILE([#include <io.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_IO_H, 1, Some systems have io.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-	AC_MSG_CHECKING(for tlhelp32.h)
-	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#include <tlhelp32.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-fi
-
 AC_MSG_CHECKING(for byteswap.h)
 AC_TRY_COMPILE([#include <byteswap.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_BYTESWAP_H, 1, Some systems have byteswap.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -530,6 +508,29 @@ AC_TRY_LINK([#include <os/support/ByteOrder.h>],
 AC_MSG_CHECKING(for termios.h)
 AC_TRY_COMPILE([#include <termios.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_TERMIOS_H, 1, Some systems have termios.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for windows.h)
+AC_TRY_COMPILE([#include <windows.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_H, 1, Some systems have windows.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for winsock2.h)
+AC_TRY_COMPILE([#include <winsock2.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_WINSOCK2_H, 1, Some systems have winsock2.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for io.h)
+AC_TRY_COMPILE([#include <io.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_IO_H, 1, Some systems have io.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for tlhelp32.h)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <tlhelp32.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for process.h)
+AC_TRY_COMPILE([#include <process.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_PROCESS_H, 1, Some systems have process.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -1732,7 +1733,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 _close(0);,AC_DEFINE(RUDIMENTS_HAVE__CLOSE,1,Some systems have _close) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for read)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1744,7 +1745,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 read(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_READ,1,Some systems have read) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _read)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1756,7 +1757,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 _read(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE__READ,1,Some systems have _read) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for write)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1768,7 +1769,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 write(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WRITE,1,Some systems have write) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _write)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -2331,6 +2332,12 @@ echo "******************************"
 dnl Checks for process functions
 echo
 echo "***** Process Functions ******"
+
+AC_MSG_CHECKING(for umask)
+AC_TRY_LINK([#ifdef HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif],
+umask(0),AC_DEFINE(RUDIMENTS_HAVE_UMASK,1,Some systems have umask) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for getpid)
 AC_TRY_LINK([#ifdef HAVE_SYS_TYPES_H
