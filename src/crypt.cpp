@@ -6,17 +6,13 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_HAVE_CRYPT_R
-	#ifndef __USE_GNU
-		#define __USE_GNU
-	#endif
+#if defined(RUDIMENTS_HAVE_CRYPT_R) && !defined(__USE_GNU)
+	#define __USE_GNU
 #endif
-#ifdef RUDIMENTS_HAVE_CRYPT_H
+#if defined(RUDIMENTS_HAVE_CRYPT_H)
 	#include <crypt.h>
-#else
-	#ifdef RUDIMENTS_HAVE_UNISTD_H
-		#include <unistd.h>
-	#endif
+#elif defined(RUDIMENTS_HAVE_UNISTD_H)
+	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>

@@ -8,7 +8,9 @@
 #include <rudiments/private/winsock.h>
 
 // for ENOMEM
-#include <errno.h>
+#ifdef RUDIMENTS_HAVE_ERRNO_H
+	#include <errno.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif

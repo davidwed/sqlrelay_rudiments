@@ -13,7 +13,9 @@
 #ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
-#include <sys/wait.h>
+#ifdef RUDIMENTS_HAVE_SYS_WAIT_H
+	#include <sys/wait.h>
+#endif
 #ifdef RUDIMENTS_HAVE_FCNTL_H
 	#include <fcntl.h>
 #endif

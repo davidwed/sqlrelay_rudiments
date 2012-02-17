@@ -17,7 +17,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif

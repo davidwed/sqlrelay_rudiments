@@ -9,9 +9,9 @@
 #endif
 
 // for DIR
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif
 
@@ -26,7 +26,9 @@
 #endif
 
 #ifdef _WIN32
-	#include <windows.h>
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef _PC_NAME_MAX

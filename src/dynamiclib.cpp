@@ -11,7 +11,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif

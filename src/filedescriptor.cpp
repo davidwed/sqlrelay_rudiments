@@ -48,7 +48,9 @@
 #ifdef RUDIMENTS_HAVE_SYS_UIO_H
 	#include <sys/uio.h>
 #endif
-#include <limits.h>
+#ifdef RUDIMENTS_HAVE_LIMITS_H
+	#include <limits.h>
+#endif
 #ifdef RUDIMENTS_HAVE_ARPA_INET_H
 	#include <arpa/inet.h>
 #endif

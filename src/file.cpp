@@ -48,7 +48,9 @@
 #endif
 
 #ifdef _WIN32
-	#include <windows.h>
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef F_GETLK	

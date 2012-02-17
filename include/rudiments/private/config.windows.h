@@ -13,9 +13,6 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
-/* Define to 1 if you have the <poll.h> header file. */
-/* #undef HAVE_POLL_H */
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 
@@ -27,9 +24,6 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
-
-/* Define to 1 if you have the <sys/poll.h> header file. */
-/* #undef HAVE_SYS_POLL_H */
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
@@ -64,9 +58,6 @@
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
-
-/* Define as the return type of signal handlers (`int' or `void'). */
-#define RETSIGTYPE void
 
 /* Most modern systems support template <> */
 #define RUDIMENTS_EXPLICIT_SPECIALIZATION template <>
@@ -194,11 +185,17 @@
 /* Some systems have crypt_r */
 /* #undef RUDIMENTS_HAVE_CRYPT_R */
 
+/* Some systems have ctype.h */
+#define RUDIMENTS_HAVE_CTYPE_H 1
+
 /* Cygwin style statfs */
 /* #undef RUDIMENTS_HAVE_CYGWIN_STATFS */
 
 /* Darwin style statfs */
 /* #undef RUDIMENTS_HAVE_DARWIN_STATFS */
+
+/* Some systems have direct.h */
+#define RUDIMENTS_HAVE_DIRECT_H 1
 
 /* Some systems have dirent.h */
 /* #undef RUDIMENTS_HAVE_DIRENT_H */
@@ -226,6 +223,9 @@
 
 /* Some systems define environ in unistd.h */
 #define RUDIMENTS_HAVE_ENVIRON 1
+
+/* Some systems have errno.h */
+#define RUDIMENTS_HAVE_ERRNO_H 1
 
 /* Some systems have fchmod */
 /* #undef RUDIMENTS_HAVE_FCHMOD */
@@ -464,8 +464,14 @@
 /* Some systems have kill */
 /* #undef RUDIMENTS_HAVE_KILL */
 
+/* Some systems have limits.h */
+#define RUDIMENTS_HAVE_LIMITS_H 1
+
 /* Some systems have link */
 /* #undef RUDIMENTS_HAVE_LINK */
+
+/* Some systems have linux/rtc.h */
+/* #undef RUDIMENTS_HAVE_LINUX_RTC_H */
 
 /* Linux style statfs */
 /* #undef RUDIMENTS_HAVE_LINUX_STATFS */
@@ -925,6 +931,9 @@
 
 /* Some systems have sys/un.h */
 /* #undef RUDIMENTS_HAVE_SYS_UN_H */
+
+/* Some systems have sys/wait.h */
+/* #undef RUDIMENTS_HAVE_SYS_WAIT_H */
 
 /* Some systems dont have S_ISBLK */
 /* #undef RUDIMENTS_HAVE_S_ISBLK */

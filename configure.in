@@ -382,9 +382,21 @@ AC_MSG_CHECKING(for sys/types.h)
 AC_TRY_COMPILE([#include <sys/types.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_TYPES_H, 1, Some systems have sys/types.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for ctype.h)
+AC_TRY_COMPILE([#include <ctype.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_CTYPE_H, 1, Some systems have ctype.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/wait.h)
+AC_TRY_COMPILE([#include <sys/wait.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_WAIT_H, 1, Some systems have sys/wait.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for dirent.h)
 AC_TRY_COMPILE([#include <dirent.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DIRENT_H, 1, Some systems have dirent.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for direct.h)
+AC_TRY_COMPILE([#include <direct.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_DIRECT_H, 1, Some systems have direct.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strings.h)
 AC_TRY_COMPILE([#include <strings.h>],
@@ -495,6 +507,10 @@ AC_MSG_CHECKING(for inttypes.h)
 AC_TRY_COMPILE([#include <inttypes.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_INTTYPES_H, 1, Some systems have inttypes.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for limits.h)
+AC_TRY_COMPILE([#include <limits.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_LIMITS_H, 1, Some systems have limits.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for fcntl.h)
 AC_TRY_COMPILE([#include <fcntl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_FCNTL_H, 1, Some systems have fcntl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -520,6 +536,14 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 AC_MSG_CHECKING(for syslog.h)
 AC_TRY_LINK([#include <syslog.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYSLOG_H,1,Some systems have syslog.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for errno.h)
+AC_TRY_LINK([#include <errno.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_ERRNO_H,1,Some systems have errno.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for linux/rtc.h)
+AC_TRY_COMPILE([#include <linux/rtc.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_LINUX_RTC_H, 1, Some systems have linux/rtc.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sys/ioctl.h)
 AC_TRY_LINK([#include <sys/ioctl.h>],
@@ -582,6 +606,8 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 echo
 echo "***** Structures *************"
 
+FW_CXX_NAMESPACES
+
 AC_C_INLINE
 AC_C_CONST
 
@@ -597,8 +623,6 @@ AC_CHECK_TYPE([bool],[],[AC_DEFINE(bool,unsigned char,Some systems dont have boo
 AC_CHECK_TYPE([off64_t],[],[AC_DEFINE(off64_t,off_t,Some systems dont have off64_t)])
 AC_CHECK_TYPE([nlink_t],[],[AC_DEFINE(nlink_t,short,Some systems dont have nlink_t)])
 AC_CHECK_TYPE([key_t],[],[AC_DEFINE(key_t,int,Some systems dont have key_t)])
-
-FW_CXX_NAMESPACES
 
 AC_MSG_CHECKING(for socklen_t)
 AC_EGREP_CPP(socklen_t,[#include <sys/socket.h>],AC_MSG_RESULT(yes),AC_MSG_RESULT(no); AC_DEFINE(socklen_t, int, Some systems dont define socklen_t))
@@ -850,8 +874,6 @@ dnl Checks associated with signal handling
 echo
 echo "***** Signal Handling ********"
 
-AC_TYPE_SIGNAL
-
 AC_MSG_CHECKING(for sigaction)
 AC_TRY_COMPILE([#include <signal.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -965,7 +987,9 @@ AC_MSG_CHECKING(for tm_tzadj)
 AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for real-time-clock support)
-AC_TRY_COMPILE([#include <linux/rtc.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
+	#include <linux/rtc.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif],
@@ -1851,7 +1875,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 _lseek(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE__LSEEK,1,Some systems have _lseek) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dup)
-AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -1860,7 +1884,7 @@ AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
 dup(0);,AC_DEFINE(RUDIMENTS_HAVE_DUP,1,Some systems have dup) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _dup)
-AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -1869,7 +1893,7 @@ AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
 _dup(0);,AC_DEFINE(RUDIMENTS_HAVE__DUP,1,Some systems have _dup) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dup2)
-AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -1878,7 +1902,7 @@ AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
 dup2(0,0);,AC_DEFINE(RUDIMENTS_HAVE_DUP2,1,Some systems have dup2) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _dup2)
-AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -1930,7 +1954,6 @@ AC_TRY_COMPILE([#include <sys/time.h>
 #endif],
 pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_PSELECT,1,Some systems have pselect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_CHECK_HEADERS(poll.h sys/poll.h)
 AC_MSG_CHECKING([for poll])
 AC_TRY_COMPILE([
 #if defined(RUDIMENTS_HAVE_POLL_H)
@@ -2288,9 +2311,9 @@ AC_MSG_CHECKING(for readdir_r)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif],
 readdir_r(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -2299,9 +2322,9 @@ AC_MSG_CHECKING(for dirfd)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif],
 DIR *d; dirfd(d);,AC_DEFINE(RUDIMENTS_HAVE_DIRFD,1,Some systems have dirfd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -2310,9 +2333,9 @@ AC_MSG_CHECKING(for DIR.dd_fd)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif],
 DIR d; d.dd_fd=1;,AC_DEFINE(RUDIMENTS_HAVE_DIR_DD_FD,1,Some systems have DIR.dd_fd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -2321,9 +2344,9 @@ AC_MSG_CHECKING(for DIR.d_fd)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif],
 DIR d; d.d_fd=1;,AC_DEFINE(RUDIMENTS_HAVE_DIR_D_FD,1,Some systems have DIR.d_fd) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

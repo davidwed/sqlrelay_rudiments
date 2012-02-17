@@ -1183,7 +1183,7 @@ AC_MSG_CHECKING(for mmap)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1205,7 +1205,7 @@ then
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1215,7 +1215,7 @@ void *ptr; munmap(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MUNMAP_CAD
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1225,7 +1225,7 @@ char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(RUDIMENTS_HAVE_MINCORE,1,Some systems 
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1235,7 +1235,7 @@ unsigned char *tmp; mincore(NULL,0,tmp);,AC_DEFINE(RUDIMENTS_HAVE_MINCORE,1,Some
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1245,7 +1245,7 @@ void *ptr; mincore(ptr,0,NULL);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MINC
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1255,7 +1255,7 @@ mprotect(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MPROTECT,1,Some systems have mprote
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1265,7 +1265,7 @@ void *ptr; mprotect(ptr,0,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MPROTE
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1275,7 +1275,7 @@ msync(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MSYNC,1,Some systems have msync) AC_MS
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1285,7 +1285,7 @@ void *ptr; msync(ptr,0,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MSYNC_CAD
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1295,7 +1295,7 @@ mlock(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MLOCK,1,Some systems have mlock) AC_MSG_
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1305,7 +1305,7 @@ void *ptr; mlock(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MLOCK_CADDR
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1315,7 +1315,7 @@ mlockall(0);,AC_DEFINE(RUDIMENTS_HAVE_MLOCKALL,1,Some systems have mlockall) AC_
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1325,7 +1325,7 @@ munlock(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MUNLOCK,1,Some systems have munlock) A
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1335,7 +1335,7 @@ void *ptr; munlock(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MUNLOCK_C
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1345,7 +1345,7 @@ munlockall();,AC_DEFINE(RUDIMENTS_HAVE_MUNLOCKALL,1,Some systems have munlockall
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1355,7 +1355,7 @@ madvise(NULL,0,MADV_NORMAL);,AC_DEFINE(RUDIMENTS_HAVE_MADVISE,1,Some systems hav
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],
@@ -1380,7 +1380,7 @@ memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memme
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #define _GNU_SOURCE
@@ -1589,7 +1589,7 @@ fi
 dnl SCO and Solaris both have statvfs
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/statvfs.h>],
@@ -1614,7 +1614,7 @@ fi
 dnl Minix and Haiku have statvfs too, but with fewer members
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/statvfs.h>],
@@ -1638,7 +1638,7 @@ fi
 dnl Ultrix has statfs too, but with an odd struct
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/param.h>
@@ -1683,10 +1683,10 @@ AC_DEFUN([FW_CHECK_XNET_PROTOTYPES],
 	if ( test -n "$XNETLIB" )
 	then
 		AC_MSG_CHECKING(for sendmsg prototype)
-		AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
+		AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_SOCKET_H
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif],
 sendmsg(0,NULL,0);,AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_NEED_XNET_PROTOTYPES, 1, Solaris 2.6 has a few missing function prototypes) AC_MSG_RESULT(no))
@@ -1766,7 +1766,7 @@ AC_DEFUN([FW_CHECK_SHM_OPEN],
 		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>],[shm_open(NULL,0,0);],[$CPPFLAGS],[$i],[],[SHMOPENLIB="$i"; DONE="yes"; HAS_SHM_OPEN="yes"],[])
@@ -1803,10 +1803,10 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_SOCKET_H
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
 #ifdef __MINGW32__

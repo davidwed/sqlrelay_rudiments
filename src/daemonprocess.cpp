@@ -14,8 +14,8 @@
 	#include <stdlib.h>
 #endif
 
-#ifndef _WIN32
-	// for wait...
+// for wait...
+#if !defined(_WIN32) && defined(RUDIMENTS_HAVE_SYS_WAIT_H)
 	#include <sys/wait.h>
 #endif
 

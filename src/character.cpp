@@ -3,7 +3,9 @@
 
 #include <rudiments/character.h>
 
-#include <ctype.h>
+#ifdef RUDIMENTS_HAVE_CTYPE_H
+	#include <ctype.h>
+#endif
 
 #include <stdio.h>
 

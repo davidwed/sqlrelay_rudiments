@@ -15,8 +15,12 @@
 	#include <sys/time.h>
 #endif
 #ifdef RUDIMENTS_HAVE_RTC
-	#include <linux/rtc.h>
-	#include <sys/ioctl.h>
+	#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
+		#include <linux/rtc.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
+		#include <sys/ioctl.h>
+	#endif
 #endif
 
 #ifdef RUDIMENTS_HAVE_OS_KERNEL_OS_H

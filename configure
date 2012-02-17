@@ -2088,93 +2088,6 @@ $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; test "x$as_lineno_stack" = x && { as_lineno=; unset as_lineno;}
 
 } # ac_fn_cxx_check_type
-
-# ac_fn_cxx_check_header_mongrel LINENO HEADER VAR INCLUDES
-# ---------------------------------------------------------
-# Tests whether HEADER exists, giving a warning if it cannot be compiled using
-# the include files in INCLUDES and setting the cache variable VAR
-# accordingly.
-ac_fn_cxx_check_header_mongrel ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  if eval "test \"\${$3+set}\"" = set; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval "test \"\${$3+set}\"" = set; then :
-  $as_echo_n "(cached) " >&6
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-else
-  # Is the header compilable?
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 usability" >&5
-$as_echo_n "checking $2 usability... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-#include <$2>
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  ac_header_compiler=yes
-else
-  ac_header_compiler=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_compiler" >&5
-$as_echo "$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 presence" >&5
-$as_echo_n "checking $2 presence... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <$2>
-_ACEOF
-if ac_fn_cxx_try_cpp "$LINENO"; then :
-  ac_header_preproc=yes
-else
-  ac_header_preproc=no
-fi
-rm -f conftest.err conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_preproc" >&5
-$as_echo "$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in #((
-  yes:no: )
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&5
-$as_echo "$as_me: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
-    ;;
-  no:yes:* )
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: present but cannot be compiled" >&5
-$as_echo "$as_me: WARNING: $2: present but cannot be compiled" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     check for missing prerequisite headers?" >&5
-$as_echo "$as_me: WARNING: $2:     check for missing prerequisite headers?" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: see the Autoconf documentation" >&5
-$as_echo "$as_me: WARNING: $2: see the Autoconf documentation" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&5
-$as_echo "$as_me: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
-    ;;
-esac
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval "test \"\${$3+set}\"" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  eval "$3=\$ac_header_compiler"
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-fi
-  eval $as_lineno_stack; test "x$as_lineno_stack" = x && { as_lineno=; unset as_lineno;}
-
-} # ac_fn_cxx_check_header_mongrel
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -15005,6 +14918,54 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ctype.h" >&5
+$as_echo_n "checking for ctype.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <ctype.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CTYPE_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/wait.h" >&5
+$as_echo_n "checking for sys/wait.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/wait.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SYS_WAIT_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dirent.h" >&5
 $as_echo_n "checking for dirent.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -15021,6 +14982,30 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_DIRENT_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for direct.h" >&5
+$as_echo_n "checking for direct.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <direct.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_DIRECT_H 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -15603,6 +15588,30 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for limits.h" >&5
+$as_echo_n "checking for limits.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <limits.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_LIMITS_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for fcntl.h" >&5
 $as_echo_n "checking for fcntl.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -15729,6 +15738,55 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for errno.h" >&5
+$as_echo_n "checking for errno.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <errno.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_ERRNO_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for linux/rtc.h" >&5
+$as_echo_n "checking for linux/rtc.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <linux/rtc.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_LINUX_RTC_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/ioctl.h" >&5
 $as_echo_n "checking for sys/ioctl.h... " >&6; }
@@ -17329,6 +17387,38 @@ echo "******************************"
 echo
 echo "***** Structures *************"
 
+
+	RUDIMENTS_NAMESPACE=""
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for namespace support" >&5
+$as_echo_n "checking for namespace support... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+namespace Outer { namespace Inner { int i = 0; }}
+int
+main ()
+{
+using namespace Outer::Inner; return i;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  RUDIMENTS_NAMESPACE="yes"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	if ( test "$RUDIMENTS_NAMESPACE" = yes )
+	then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+$as_echo "#define RUDIMENTS_NAMESPACE 1" >>confdefs.h
+
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	fi
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inline" >&5
 $as_echo_n "checking for inline... " >&6; }
 if test "${ac_cv_c_inline+set}" = set; then :
@@ -17599,38 +17689,6 @@ else
 $as_echo "#define key_t int" >>confdefs.h
 
 fi
-
-
-
-	RUDIMENTS_NAMESPACE=""
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for namespace support" >&5
-$as_echo_n "checking for namespace support... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-namespace Outer { namespace Inner { int i = 0; }}
-int
-main ()
-{
-using namespace Outer::Inner; return i;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  RUDIMENTS_NAMESPACE="yes"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-	if ( test "$RUDIMENTS_NAMESPACE" = yes )
-	then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define RUDIMENTS_NAMESPACE 1" >>confdefs.h
-
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	fi
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for socklen_t" >&5
@@ -18283,7 +18341,7 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/statvfs.h>
@@ -18324,7 +18382,7 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/statvfs.h>
@@ -18364,7 +18422,7 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/param.h>
@@ -18845,40 +18903,6 @@ then
 echo
 echo "***** Signal Handling ********"
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking return type of signal handlers" >&5
-$as_echo_n "checking return type of signal handlers... " >&6; }
-if test "${ac_cv_type_signal+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <sys/types.h>
-#include <signal.h>
-
-int
-main ()
-{
-return *(signal (0, 0)) (0) == 1;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  ac_cv_type_signal=int
-else
-  ac_cv_type_signal=void
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_type_signal" >&5
-$as_echo "$ac_cv_type_signal" >&6; }
-
-cat >>confdefs.h <<_ACEOF
-#define RETSIGTYPE $ac_cv_type_signal
-_ACEOF
-
-
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sigaction" >&5
 $as_echo_n "checking for sigaction... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19330,7 +19354,9 @@ rm -f conftest*
 $as_echo_n "checking for real-time-clock support... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <linux/rtc.h>
+#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
+	#include <linux/rtc.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
@@ -20533,10 +20559,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sendmsg prototype... " >&6; }
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_SOCKET_H
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
 int
@@ -20588,10 +20614,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_SOCKET_H
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
 #ifdef __MINGW32__
@@ -22869,7 +22895,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -22931,7 +22957,7 @@ $as_echo_n "checking if munmap takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -22961,7 +22987,7 @@ $as_echo_n "checking for mincore with char * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -22993,7 +23019,7 @@ $as_echo_n "checking for mincore with unsigned char * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23025,7 +23051,7 @@ $as_echo_n "checking if mincore takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23055,7 +23081,7 @@ $as_echo_n "checking for mprotect... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23085,7 +23111,7 @@ $as_echo_n "checking if mprotect takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23115,7 +23141,7 @@ $as_echo_n "checking for msync... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23145,7 +23171,7 @@ $as_echo_n "checking if msync takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23175,7 +23201,7 @@ $as_echo_n "checking for mlock... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23205,7 +23231,7 @@ $as_echo_n "checking if mlock takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23235,7 +23261,7 @@ $as_echo_n "checking for mlockall... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23265,7 +23291,7 @@ $as_echo_n "checking for munlock... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23295,7 +23321,7 @@ $as_echo_n "checking if munlock takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23325,7 +23351,7 @@ $as_echo_n "checking for munlockall... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23355,7 +23381,7 @@ $as_echo_n "checking for madvise... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23385,7 +23411,7 @@ $as_echo_n "checking if madvise takes caddr_t argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -23470,7 +23496,7 @@ $as_echo_n "checking for memccpy with char * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #define _GNU_SOURCE
@@ -24546,7 +24572,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for dup... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -24575,7 +24601,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for _dup... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -24604,7 +24630,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for dup2... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -24633,7 +24659,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for _dup2... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -24802,19 +24828,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-for ac_header in poll.h sys/poll.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for poll" >&5
 $as_echo_n "checking for poll... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -24873,7 +24886,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/mman.h>
@@ -26056,9 +26069,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif
 int
@@ -26087,9 +26100,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif
 int
@@ -26119,9 +26132,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif
 int
@@ -26151,9 +26164,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DIRENT_H
+#if defined(RUDIMENTS_HAVE_DIRENT_H)
 	#include <dirent.h>
-#else
+#elif defined(RUDIMENTS_HAVE_DIRECT_H)
 	#include <direct.h>
 #endif
 int
