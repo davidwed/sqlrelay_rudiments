@@ -10,7 +10,9 @@
 #include <stdlib.h>
 
 // some systems need string.h to provide memset() for FD_ZERO/FD_SET
-#include <string.h>
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif

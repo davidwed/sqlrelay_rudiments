@@ -2,8 +2,12 @@
 // See the COPYING file for more information
 
 #include <rudiments/rawbuffer.h>
-#include <string.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif

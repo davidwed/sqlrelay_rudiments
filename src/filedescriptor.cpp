@@ -78,7 +78,9 @@
 #endif
 
 // for FD_SET (macro that uses memset) on solaris
-#include <string.h>
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
 
 #ifdef RUDIMENTS_NEED_XNET_PROTOTYPES
 extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);

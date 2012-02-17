@@ -14861,6 +14861,30 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for string.h" >&5
+$as_echo_n "checking for string.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <string.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_STRING_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlfcn.h" >&5
 $as_echo_n "checking for dlfcn.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -23498,10 +23522,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRINGS_H
+#ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23530,10 +23554,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRINGS_H
+#ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23562,10 +23586,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRINGS_H
+#ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23595,7 +23619,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23625,7 +23649,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23660,7 +23684,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23695,7 +23719,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23730,7 +23754,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23765,7 +23789,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23800,7 +23824,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23835,7 +23859,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23870,7 +23894,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23903,7 +23927,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23937,7 +23961,7 @@ $as_echo_n "checking swab const char * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -23969,7 +23993,7 @@ $as_echo_n "checking swab char * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -24001,7 +24025,7 @@ $as_echo_n "checking swab const void * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int
@@ -24033,7 +24057,7 @@ $as_echo_n "checking _swab... " >&6; }
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_STRING_H
+#ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
 int

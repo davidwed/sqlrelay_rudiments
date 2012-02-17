@@ -830,6 +830,9 @@
 /* Some systems have strings.h */
 /* #undef RUDIMENTS_HAVE_STRINGS_H */
 
+/* Some systems have string.h */
+#define RUDIMENTS_HAVE_STRING_H 1
+
 /* Some systems have strncasecmp */
 /* #undef RUDIMENTS_HAVE_STRNCASECMP */
 

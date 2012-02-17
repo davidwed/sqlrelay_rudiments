@@ -12,7 +12,9 @@
 #ifdef RUDIMENTS_HAVE_FCNTL_H
 	#include <fcntl.h>
 #endif
-#include <string.h>
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif

@@ -154,7 +154,7 @@ char *realloc ();
    This is used in most programs--a few other programs avoid this
    by defining INHIBIT_STRING_HEADER.  */
 #  ifndef INHIBIT_STRING_HEADER
-#   if defined HAVE_STRING_H || defined STDC_HEADERS || defined _LIBC
+#   if defined RUDIMENTS_HAVE_STRING_H || defined STDC_HEADERS || defined _LIBC
 #    include <string.h>
 #    ifndef bzero
 #     ifndef _LIBC

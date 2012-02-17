@@ -16,7 +16,9 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#include <string.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <string.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

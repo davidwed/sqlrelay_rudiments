@@ -7,8 +7,12 @@
 #include <rudiments/error.h>
 
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif

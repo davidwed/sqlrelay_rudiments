@@ -13,7 +13,9 @@
 #ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
-#include <string.h>
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
