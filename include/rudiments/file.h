@@ -137,7 +137,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		// The checkLock() methods check to see if a lock can be
 		// established but do not actually lock anything.  If a lock
 		// can be established, they return true. Otherwise they return
-		// false and populate the fields in the supplied flock struct
+		// false and populate the fields in the supplied fields
 		// with information about one of the conflicting locks.
 		//
 		// The unlock() methods attempt to release a previosly
@@ -147,7 +147,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		// These methods allow you to lock the entire file.
 		bool	tryLockFile(int16_t type) const;
 		bool	lockFile(int16_t type) const;
-		bool	checkLockFile(int16_t type, struct flock *lck) const;
+		bool	checkLockFile(int16_t type,
+					int16_t *conftype,
+					int16_t *confwhence,
+					off64_t *confstart,
+					off64_t *conflen) const;
 		bool	unlockFile() const;
 
 		// These methods allow you to lock an arbitrary
@@ -156,9 +160,13 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							off64_t len) const;
 		bool	lockRegion(int16_t type, off64_t start,
 							off64_t len) const;
-		bool	checkLockRegion(int16_t type, off64_t start,
-						off64_t len,
-						struct flock *lck) const;
+		bool	checkLockRegion(int16_t type,
+					off64_t start,
+					off64_t len,
+					int16_t *conftype,
+					int16_t *confwhence,
+					off64_t *confstart,
+					off64_t *conflen) const;
 		bool	unlockRegion(off64_t start, off64_t len) const;
 
 		// These methods allow you to lock an arbitrary region of the
@@ -170,10 +178,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		bool	lockFromCurrent(int16_t type, off64_t start,
 							off64_t len) const;
 		bool	checkLockFromCurrent(int16_t type, off64_t len,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	checkLockFromCurrent(int16_t type, off64_t start,
 						off64_t len,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	unlockFromCurrent(off64_t len) const;
 		bool	unlockFromCurrent(off64_t start, off64_t len) const;
 
@@ -186,10 +200,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		bool	lockFromEnd(int16_t type, off64_t start,
 						off64_t len) const;
 		bool	checkLockFromEnd(int16_t type, off64_t len,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	checkLockFromEnd(int16_t type, off64_t start,
 						off64_t len,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	unlockFromEnd(off64_t len) const;
 		bool	unlockFromEnd(off64_t start, off64_t len) const;
 
@@ -198,7 +218,10 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		bool	tryLockRemainder(int16_t type, off64_t start) const;
 		bool	lockRemainder(int16_t type, off64_t start) const;
 		bool	checkLockRemainder(int16_t type, off64_t start,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	unlockRemainder(off64_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
@@ -210,10 +233,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		bool	lockRemainderFromCurrent(int16_t type,
 							off64_t start) const;
 		bool	checkLockRemainderFromCurrent(int16_t type,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	checkLockRemainderFromCurrent(int16_t type,
 						off64_t start,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	unlockRemainderFromCurrent() const;
 		bool	unlockRemainderFromCurrent(off64_t start) const;
 
@@ -225,10 +254,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		bool	lockRemainderFromEnd(int16_t type) const;
 		bool	lockRemainderFromEnd(int16_t type, off64_t start) const;
 		bool	checkLockRemainderFromEnd(int16_t type,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	checkLockRemainderFromEnd(int16_t type,
 						off64_t start,
-						struct flock *lck) const;
+						int16_t *conftype,
+						int16_t *confwhence,
+						off64_t *confstart,
+						off64_t *conflen) const;
 		bool	unlockRemainderFromEnd() const;
 		bool	unlockRemainderFromEnd(off64_t start) const;
 

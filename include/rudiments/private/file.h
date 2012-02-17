@@ -10,9 +10,14 @@
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 		bool	lock(int32_t method, int16_t type, int16_t whence,
 					off64_t start, off64_t len) const;
-		bool	checkLock(int16_t type, int16_t whence,
-						off64_t start, off64_t len,
-						struct flock *retlck) const;
+		bool	checkLock(int16_t type,
+					int16_t whence,
+					off64_t start,
+					off64_t len,
+					int16_t *conftype,
+					int16_t *confwhence,
+					off64_t *confstart,
+					off64_t *conflen) const;
 		bool	unlock(int16_t whence,
 					off64_t start, off64_t len) const;
 

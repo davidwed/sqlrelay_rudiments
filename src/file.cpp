@@ -293,8 +293,10 @@ bool file::lockFile(int16_t type) const {
 	return lockRegion(type,0,0);
 }
 
-bool file::checkLockFile(int16_t type, struct flock *retlck) const {
-	return checkLockRegion(type,0,0,retlck);
+bool file::checkLockFile(int16_t type,
+			int16_t *conftype, int16_t *confwhence,
+			off64_t *confstart, off64_t *conflen) const {
+	return checkLockRegion(type,0,0,conftype,confwhence,confstart,conflen);
 }
 
 bool file::unlockFile() const {
@@ -310,8 +312,10 @@ bool file::lockRegion(int16_t type, off64_t start, off64_t len) const {
 }
 
 bool file::checkLockRegion(int16_t type, off64_t start, off64_t len,
-						struct flock *retlck) const {
-	return checkLock(type,SEEK_SET,start,len,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLock(type,SEEK_SET,start,len,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::unlockRegion(off64_t start, off64_t len) const {
@@ -335,13 +339,17 @@ bool file::lockFromCurrent(int16_t type, off64_t start, off64_t len) const {
 }
 
 bool file::checkLockFromCurrent(int16_t type, off64_t len,
-				struct flock *retlck) const {
-	return checkLockFromCurrent(type,0,len,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLockFromCurrent(type,0,len,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockFromCurrent(int16_t type, off64_t start, off64_t len,
-						struct flock *retlck) const {
-	return checkLock(type,SEEK_CUR,start,len,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLock(type,SEEK_CUR,start,len,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::unlockFromCurrent(off64_t len) const {
@@ -369,13 +377,17 @@ bool file::lockFromEnd(int16_t type, off64_t start, off64_t len) const {
 }
 
 bool file::checkLockFromEnd(int16_t type, off64_t len,
-					struct flock *retlck) const {
-	return checkLockFromEnd(type,0,len,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLockFromEnd(type,0,len,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockFromEnd(int16_t type, off64_t start, off64_t len,
-						struct flock *retlck) const {
-	return checkLock(type,SEEK_END,start,len,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLock(type,SEEK_END,start,len,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::unlockFromEnd(off64_t len) const {
@@ -395,8 +407,10 @@ bool file::lockRemainder(int16_t type, off64_t start) const {
 }
 
 bool file::checkLockRemainder(int16_t type, off64_t start,
-					struct flock *retlck) const {
-	return checkLock(type,SEEK_SET,start,0,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLock(type,SEEK_SET,start,0,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::unlockRemainder(off64_t start) const {
@@ -420,13 +434,17 @@ bool file::lockRemainderFromCurrent(int16_t type, off64_t start) const {
 }
 
 bool file::checkLockRemainderFromCurrent(int16_t type,
-					struct flock *retlck) const {
-	return checkLockRemainderFromCurrent(type,0,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLockRemainderFromCurrent(type,0,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockRemainderFromCurrent(int16_t type, off64_t start,
-					struct flock *retlck) const {
-	return checkLock(type,SEEK_CUR,start,0,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLock(type,SEEK_CUR,start,0,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::unlockRemainderFromCurrent() const {
@@ -453,13 +471,18 @@ bool file::lockRemainderFromEnd(int16_t type, off64_t start) const {
 	return lock(F_SETLKW,type,SEEK_END,start,0);
 }
 
-bool file::checkLockRemainderFromEnd(int16_t type, struct flock *retlck) const {
-	return checkLockRemainderFromEnd(type,0,retlck);
+bool file::checkLockRemainderFromEnd(int16_t type,
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLockRemainderFromEnd(type,0,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::checkLockRemainderFromEnd(int16_t type, off64_t start,
-						struct flock *retlck) const {
-	return checkLock(type,SEEK_END,start,0,retlck);
+				int16_t *conftype, int16_t *confwhence,
+				off64_t *confstart, off64_t *conflen) const {
+	return checkLock(type,SEEK_END,start,0,
+				conftype,confwhence,confstart,conflen);
 }
 
 bool file::sequentialAccess(off64_t start, size_t len) const {
@@ -963,8 +986,8 @@ void file::dontGetCurrentPropertiesOnOpen() {
 	pvt->_getcurrentpropertiesonopen=false;
 }
 
-bool file::lock(int32_t method, int16_t type, int16_t whence,
-				off64_t start, off64_t len) const {
+bool file::lock(int32_t method, int16_t type,
+			int16_t whence, off64_t start, off64_t len) const {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
 		lck.l_type=type;
@@ -1004,8 +1027,10 @@ bool file::lock(int32_t method, int16_t type, int16_t whence,
 	#endif
 }
 
-bool file::checkLock(int16_t type, int16_t whence, off64_t start, off64_t len,
-						struct flock *retlck) const {
+bool file::checkLock(int16_t type, int16_t whence,
+			off64_t start, off64_t len,
+			int16_t *conftype, int16_t *confwhence,
+			off64_t *confstart, off64_t *conflen) const {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
 		struct flock	lck;
 		lck.l_type=type;
@@ -1013,7 +1038,10 @@ bool file::checkLock(int16_t type, int16_t whence, off64_t start, off64_t len,
 		lck.l_start=start;
 		lck.l_len=len;
 		int32_t	result=fCntl(F_GETLK,reinterpret_cast<long>(&lck));
-		*retlck=lck;
+		*conftype=lck.l_type;
+		*confwhence=lck.l_whence;
+		*confstart=lck.l_start;
+		*conflen=lck.l_len;
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
 		// Windows doesn't appear to support this at all.
