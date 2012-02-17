@@ -18,101 +18,103 @@ namespace rudiments {
 class RUDIMENTS_DLLSPEC charstring {
 	public:
 
+		/** Returns the length of "string". */
 		static	size_t	length(const char *string);
-			// Returns the length of "string".
 
+		/** Returns the length of "string". */
 		static	size_t	length(const unsigned char *string);
-			// Returns the length of "string".
 
+		/** Sets "size" bytes of "str" to NULL. */
 		static	void	zero(char *str, size_t size);
-			// Sets "size" bytes of "str" to NULL.
 
+		/** Appends "source" to "dest".  Assumes that there is
+		 *  enough room remaining in "dest" to accommodate the new
+		 *  string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, const char *source);
-			// Appends "source" to "dest".  Assumes that there
-			// is enough room remaining in "dest" to accommodate
-			// the new string.
-			// Returns a pointer to "dest".
+
+		/** Appends "size" bytes of "source" to "dest".  Assumes
+		 *  that there is enough room remaining in "dest" to
+		 *  accommodate the new string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, const char *source,
 								size_t size);
-			// Appends "size" bytes of "source" to "dest".  Assumes
-			// that there is enough room remaining in "dest" to
-			// accommodate the new string.
-			// Returns a pointer to "dest".
+
+		/** Converts "number" to a string and appends it to "dest".
+		 *  Assumes that there is enough room remaining in "dest" to
+		 *  accommodate the new string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, int64_t number);
-			// Converts "number" to a string and appends it to
-			// "dest".  Assumes that there is enough room remaining
-			// in "dest" to accommodate the new string.
-			// Returns a pointer to "dest".
+
+		/** Converts "number" to a string and appends it to "dest".
+		 *  Assumes that there is enough room remaining in "dest" to
+		 *  accommodate the new string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, uint64_t number);
-			// Converts "number" to a string and appends it to
-			// "dest".  Assumes that there is enough room remaining
-			// in "dest" to accommodate the new string.
-			// Returns a pointer to "dest".
+
+		/** Converts "number" to a string and appends it to "dest".
+		 *  Assumes that there is enough room remaining in "dest" to
+		 *  accommodate the new string.  Returns a pointer to "dest". */
 		static	char	*append(char *dest, double number);
-			// Converts "number" to a string and appends it to
-			// "dest".  Assumes that there is enough room remaining
-			// in "dest" to accommodate the new string.
-			// Returns a pointer to "dest".
+
+		/** Converts "number" to a string using "scale" and appends it
+		 *  to "dest".  Assumes that there is enough room remaining in
+		 *  "dest" to accommodate the new string.  Returns a pointer to
+		 *  "dest". */
 		static	char	*append(char *dest, double number,
 							uint16_t scale);
-			// Converts "number" to a string using "scale" and
-			// appends it to "dest".  Assumes that there is enough
-			// room remaining in "dest" to accommodate the new
-			// string.  Returns a pointer to "dest".
+
+		/** Converts "number" to a string using "precision" and "scale"
+		 *  and appends it to "dest".  Assumes that there is enough
+		 *  room remaining in "dest" to accommodate the new string.
+		 *  Returns a pointer to "dest". */
 		static	char	*append(char *dest, double number,
 						uint16_t precision,
 						uint16_t scale);
-			// Converts "number" to a string using "precision" and
-			// "scale" and appends it to "dest".  Assumes that there
-			// is enough room remaining in "dest" to accommodate
-			// the new string.  Returns a pointer to "dest".
 
 
 
+		/** Replaces "dest" with "source".  Assumes that there is
+		 *  enough room in "dest" to accommodate "source".  Returns a
+		 *  pointer to "dest". */
 		static	char	*copy(char *dest, const char *source);
-			// Replaces "dest" with "source".  Assumes that there
-			// is enough room in "dest" to accommodate "source".
-			// Returns a pointer to "dest".
+
+		/** Replaces the first "size" bytes of "dest" with "source".
+		 *  Assumes that "dest" is at least "size" bytes long.
+		 *  Returns a pointer to "dest". */
 		static	char	*copy(char *dest,
 					const char *source, size_t size);
-			// Replaces the first "size" bytes of "dest" with
-			// "source".  Assumes that "dest" is at least "size"
-			// bytes long.
-			// Returns a pointer to "dest".
+
+		/** Replaces "dest" with "source", starting "location" bytes
+		 *  into "dest".  Assumes that there is enough room in "dest"
+		 *  (after "location" bytes) to accommodate "source".  Returns
+		 *  a pointer to "dest". */
 		static	char	*copy(char *dest, size_t location,
 						const char *source);
-			// Replaces "dest" with "source", starting "location"
-			// bytes into "dest".  Assumes that there is enough
-			// room in "dest" (after "location" bytes) to
-			// accommodate "source".
-			// Returns a pointer to "dest".
+
+		/** Replaces "size" bytes of "dest" with "source", starting
+		 *  "location" bytes into "dest".  Assumes that there are
+		 *  "size" bytes in "dest" (after "location" bytes).  Returns a
+		 *  pointer to "dest". */
 		static	char	*copy(char *dest, size_t location,
 					const char *source, size_t size);
-			// Replaces "size" bytes of "dest" with "source",
-			// starting "location" bytes into "dest".  Assumes that
-			// there are "size" bytes in "dest" (after "location"
-			// bytes).
-			// Returns a pointer to "dest".
 
-
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2". */
 		static	int32_t	compare(const char *str1, const char *str2);
-			// Returns -1,0 or 1 if "str1" is greater than, 
-			// equal to or less than "str2".
+
+		/** Returns -1,0 or 1 if "size" bytes of "str1" are greater
+		 * than, equal to or less than "size" bytes of "str2". */
 		static	int32_t	compare(const char *str1, const char *str2,
 								size_t size);
-			// Returns -1,0 or 1 if "size" bytes of "str1" are
-			// greater than, equal to or less than "size" bytes of
-			// "str2".
+
+		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
+		 * less than "str2", ignoring case. */
 		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2);
-			// Returns -1,0 or 1 if "str1" is greater than, 
-			// equal to or less than "str2", ignoring case.
+
+		/** Returns -1,0 or 1 if "size" bytes of "str1" are greater
+		 *  than, equal to or less than "size" bytes of "str2",
+		 *  ignoring case. */
 		static	int32_t	compareIgnoringCase(const char *str1,
 							const char *str2,
 							size_t size);
-			// Returns -1,0 or 1 if "size" bytes of "str1" are
-			// greater than, equal to or less than "size" bytes of
-			// "str2", ignoring case.
 
 
 		static	bool	contains(const char *haystack,
