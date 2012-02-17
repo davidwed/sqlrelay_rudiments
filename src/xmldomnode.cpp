@@ -500,7 +500,7 @@ constnamevaluepairs *xmldomnode::getAttributes() const {
 
 void xmldomnode::setAttributeValue(const char *name, const char *value) {
 	xmldomnode	*attr=getAttribute(name);
-	if (attr) {
+	if (!attr->isNullNode()) {
 		attr->setValue(value);
 	} else {
 		appendAttribute(name,value);
