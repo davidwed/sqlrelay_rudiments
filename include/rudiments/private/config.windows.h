@@ -212,6 +212,9 @@
 /* Some systems have DIR.d_fd */
 /* #undef RUDIMENTS_HAVE_DIR_D_FD */
 
+/* Some systems have dlfcn.h */
+/* #undef RUDIMENTS_HAVE_DLFCN_H */
+
 /* Some systems have dlopen */
 /* #undef RUDIMENTS_HAVE_DLOPEN */
 
@@ -632,6 +635,9 @@
 /* Some systems have poll */
 /* #undef RUDIMENTS_HAVE_POLL */
 
+/* Some systems have poll.h */
+/* #undef RUDIMENTS_HAVE_POLL_H */
+
 /* Some systems have posix_fadvise */
 /* #undef RUDIMENTS_HAVE_POSIX_FADVISE */
 
@@ -799,6 +805,9 @@
 
 /* Some systems have stdint.h */
 #define RUDIMENTS_HAVE_STDINT_H 1
+
+/* Some systems have stdlib.h */
+#define RUDIMENTS_HAVE_STDLIB_H 1
 
 /* Some systems have strcasecmp */
 /* #undef RUDIMENTS_HAVE_STRCASECMP */

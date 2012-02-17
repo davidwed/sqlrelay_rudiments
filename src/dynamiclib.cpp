@@ -5,7 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
-#ifdef HAVE_DLFCN_H
+#ifdef RUDIMENTS_HAVE_DLFCN_H
 	#include <dlfcn.h>
 #endif
 #include <stdlib.h>

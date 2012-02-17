@@ -61,9 +61,9 @@
 #ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
 	#include <libkern/OSByteOrder.h>
 #endif
-#ifdef HAVE_SYS_POLL_H
+#if defined(HAVE_SYS_POLL_H)
 	#include <sys/poll.h>
-#elif  HAVE_POLL_H
+#elif defined(RUDIMENTS_HAVE_POLL_H)
 	#include <poll.h>
 #endif
 #ifdef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H

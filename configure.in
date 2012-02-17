@@ -354,6 +354,18 @@ dnl Checks for header files.
 echo
 echo "***** Headers ****************"
 
+AC_MSG_CHECKING(for stdlib.h)
+AC_TRY_COMPILE([#include <stdlib.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_STDLIB_H, 1, Some systems have stdlib.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for dlfcn.h)
+AC_TRY_COMPILE([#include <dlfcn.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_DLFCN_H, 1, Some systems have dlfcn.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for poll.h)
+AC_TRY_COMPILE([#include <poll.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_POLL_H, 1, Some systems have poll.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for dirent.h)
 AC_TRY_COMPILE([#include <dirent.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_DIRENT_H, 1, Some systems have dirent.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -826,14 +838,14 @@ AC_TYPE_SIGNAL
 
 AC_MSG_CHECKING(for sigaction)
 AC_TRY_COMPILE([#include <signal.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 sigaction(0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGACTION,1,Some systems have sigaction) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for signal)
 AC_TRY_COMPILE([#include <signal.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 signal(0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGNAL,1,Some systems have signal) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -853,21 +865,21 @@ void (*handler)(int);
 
 AC_MSG_CHECKING(for kill)
 AC_TRY_COMPILE([#include <signal.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 kill(0,0);,AC_DEFINE(RUDIMENTS_HAVE_KILL,1,Some systems have kill) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sigsuspend)
 AC_TRY_COMPILE([#include <signal.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 sigsuspend(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGSUSPEND,1,Some systems have sigsuspend) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sigpending)
 AC_TRY_COMPILE([#include <signal.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 sigpending(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGPENDING,1,Some systems have sigpending) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -890,14 +902,14 @@ if ( test -n "$MINGW32" )
 then
 	AC_MSG_CHECKING(for GetSystemTime)
 	AC_TRY_COMPILE([#include <windows.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 GetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMTIME,1,Some systems have GetSystemTime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for SetSystemTime)
 	AC_TRY_COMPILE([#include <windows.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 SetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETSYSTEMTIME,1,Some systems have SetSystemTime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -924,7 +936,7 @@ AC_TRY_COMPILE([#include <time.h>],
 long	t=-_timezone;,AC_DEFINE(RUDIMENTS_HAS__TIMEZONE,1,Some systems have _timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _get_timezone)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <time.h>],
@@ -949,21 +961,21 @@ mktime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKTIME,1,Some systems have mktime) AC_MSG
 
 AC_MSG_CHECKING(for localtime_r)
 AC_TRY_COMPILE([#include <time.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 localtime_r(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_R,1,Some systems have localtime_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for localtime_s)
 AC_TRY_COMPILE([#include <time.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 localtime_s(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_S,1,Some systems have localtime_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for settimeofday)
 AC_TRY_LINK([#include <sys/time.h>
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 settimeofday(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETTIMEOFDAY,1,Some systems have settimeofday) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -985,7 +997,7 @@ AC_TRY_COMPILE([#include <time.h>],
 const char * const *c=tzname;,AC_DEFINE(RUDIMENTS_HAS_TZNAME,1,Some systems have tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _get_tzname)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <time.h>],
@@ -999,50 +1011,50 @@ echo
 echo "***** Environment ************"
 
 AC_MSG_CHECKING(for setenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 setenv(NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_SETENV,1,Some systems have setenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for putenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 putenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_PUTENV,1,Some systems have putenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _putenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 _putenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE__PUTENV,1,Some systems have _putenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for getenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 getenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETENV,1,Some systems have getenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _dupenv_s)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 _dupenv_s(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE__DUPENV_S,1,Some systems have _dupenv_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for unsetenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 unsetenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_UNSETENV,1,Some systems have unsetenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _NSGetEnviron)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <crt_externs.h>],
 char **env=(*_NSGetEnviron());,AC_DEFINE(RUDIMENTS_HAVE_NSGETENVIRON,1,Some systems define _NSGetEnviron in crt_externs.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for environ)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1051,7 +1063,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 char **env=environ;,AC_DEFINE(RUDIMENTS_HAVE_ENVIRON,1,Some systems define environ in unistd.h) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for clearenv)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 clearenv();,AC_DEFINE(RUDIMENTS_HAVE_CLEARENV,1,Some systems have clearenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1069,7 +1081,7 @@ if ( test -z "$HAVE_PCRE" )
 then
 	HAVE_REGCOMP=""
 	AC_MSG_CHECKING(for regcomp)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -1101,7 +1113,7 @@ AC_TRY_COMPILE([
 closesocket(0);,AC_DEFINE(RUDIMENTS_HAVE_CLOSESOCKET,1,some systems have closesocket) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(if send takes a const void * parameter)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -1117,7 +1129,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 send(0,(const void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEND_WITH_VOID,1, send takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(if recv takes a void * parameter)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -1133,7 +1145,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 recv(0,(void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_RECV_WITH_VOID,1, recv takes a void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -1149,7 +1161,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(if getsockopt takes a void * parameter)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -1181,7 +1193,7 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_ARPA_INET_H
 	#include <arpa/inet.h>
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 inet_aton(0,NULL);,HAVE_INET_ATON="yes"; AC_DEFINE(RUDIMENTS_HAVE_INET_ATON,1,Some systems have inet_aton) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1205,7 +1217,7 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_ARPA_INET_H
 	#include <arpa/inet.h>
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 inet_aton(0,NULL);,AC_MSG_RESULT(no), INETATONLIB="-lresolv"; AC_MSG_RESULT(yes))
@@ -1228,7 +1240,7 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_ARPA_INET_H
 	#include <arpa/inet.h>
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 inet_addr(0);,AC_DEFINE(RUDIMENTS_HAVE_INET_ADDR,1,Some systems have inet_addr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1262,31 +1274,31 @@ echo
 echo "** Random Number Generators **"
 
 AC_MSG_CHECKING(for srand48)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 srand48(0);,AC_DEFINE(RUDIMENTS_HAVE_SRAND48,1,Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for lrand48)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 lrand48();,AC_DEFINE(RUDIMENTS_HAVE_LRAND48,1,Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for srand)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 srand(0);,AC_DEFINE(RUDIMENTS_HAVE_SRAND,1,Some systems have srand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for rand)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 rand();,AC_DEFINE(RUDIMENTS_HAVE_RAND,1,Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for rand_r)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 rand_r(0);,AC_DEFINE(RUDIMENTS_HAVE_RAND_R,1,Some systems have rand_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1311,7 +1323,7 @@ then
 else
 
 	AC_MSG_CHECKING(for semget)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -1324,7 +1336,7 @@ else
 semget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMGET,1,Some systems have semget) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for semtimedop)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -1350,7 +1362,7 @@ if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
 then
 
 	AC_MSG_CHECKING(for shmget)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -1400,7 +1412,7 @@ Sleep(0);,AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_SLEEP,1,Some systems have Sleep) AC_M
 if ( test "$INCLUDE_INTERVALTIMER" = "1" )
 then
 	AC_MSG_CHECKING(for setitimer)
-	AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <sys/time.h>],
@@ -1433,21 +1445,21 @@ echo "***** String Functions *******"
 
 
 AC_MSG_CHECKING(for snprintf)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <stdio.h>],
 snprintf(NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SNPRINTF,1,Some systems have snprintf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _snprintf_s)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <stdio.h>],
 _snprintf_s(NULL,0,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE__SNPRINTF_S,1,Some systems have _snprintf_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strerror)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRINGS_H
@@ -1459,7 +1471,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 strerror(0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR,1,Some systems have strerror) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strerror_r)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRINGS_H
@@ -1471,7 +1483,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR_R,1,Some systems have strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strerror_s)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRINGS_H
@@ -1484,7 +1496,7 @@ strerror_s(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR_S,1,Some systems have st
 
 AC_MSG_CHECKING(for strcasecmp)
 AC_TRY_COMPILE([
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1494,7 +1506,7 @@ strcasecmp(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCASECMP,1,Some systems have s
 
 AC_MSG_CHECKING(for strncasecmp)
 AC_TRY_COMPILE([
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1509,7 +1521,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1524,7 +1536,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1539,7 +1551,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1554,7 +1566,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1569,7 +1581,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1584,7 +1596,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1599,7 +1611,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_STRING_H
@@ -1609,7 +1621,7 @@ char *a=NULL; strchrnul(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCHRNUL,1,Some syste
 
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1623,7 +1635,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 if ( test -n "$SWAB_DEFINED" )
 then
 	AC_MSG_CHECKING(swab const char * argument)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1635,7 +1647,7 @@ then
 const char *from; char *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_SWAB_CONST_CHAR,1,Some systems have swab with a const char * argument), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(swab char * argument)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1647,7 +1659,7 @@ const char *from; char *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIM
 char *from; char *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_SWAB_CHAR,1,Some systems have swab with a char * argument), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(swab const void * argument)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1659,7 +1671,7 @@ char *from; char *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_H
 const void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_SWAB_CONST_VOID,1,Some systems have swab with a const void * argument), AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(_swab)
-	AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1679,7 +1691,7 @@ echo
 echo "***** File Functions *********"
 
 AC_MSG_CHECKING(for open)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -1697,7 +1709,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 open(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_OPEN,1,Some systems have open) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _open)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -1733,7 +1745,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 _close(0);,AC_DEFINE(RUDIMENTS_HAVE__CLOSE,1,Some systems have _close) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for read)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1745,7 +1757,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 read(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_READ,1,Some systems have read) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _read)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1757,7 +1769,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 _read(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE__READ,1,Some systems have _read) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for write)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1769,7 +1781,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 write(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_WRITE,1,Some systems have write) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _write)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1859,14 +1871,14 @@ AC_TRY_COMPILE([#ifdef HAVE_UNISTD_H
 _dup2(0,0);,AC_DEFINE(RUDIMENTS_HAVE__DUP2,1,Some systems have _dup2) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for xattr)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <sys/xattr.h>],
 setxattr(NULL,NULL,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_XATTRS,1,Some systems have extended filesystem attributes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fdatasync)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1897,7 +1909,7 @@ AC_TRY_COMPILE([#include <sys/time.h>
 #ifdef RUDIMENTS_HAVE_SYS_SELECT_H
 	#include <sys/select.h>
 #endif
-#ifdef HAVE_STDLIB_H
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_PSELECT,1,Some systems have pselect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1905,10 +1917,10 @@ pselect(0,NULL,NULL,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_PSELECT,1,Some sys
 AC_CHECK_HEADERS(poll.h sys/poll.h)
 AC_MSG_CHECKING([for poll])
 AC_TRY_COMPILE([
-#if defined(HAVE_POLL_H)
-#include <poll.h>
+#if defined(RUDIMENTS_HAVE_POLL_H)
+	#include <poll.h>
 #elif defined(HAVE_SYS_POLL_H)
-#include <sys/poll.h>
+	#include <sys/poll.h>
 #endif
 ],[
 struct pollfd fds[1];
@@ -1922,7 +1934,7 @@ AC_DEFINE(RUDIMENTS_HAVE_POLL,1,Some systems have poll) AC_MSG_RESULT(yes), AC_M
 FW_CHECK_SHM_OPEN
 
 AC_MSG_CHECKING(for ioctl)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
@@ -2052,7 +2064,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 fpathconf(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FPATHCONF,1,Some systems have fpathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for mkstemp)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 mkstemp("");,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -2107,7 +2119,7 @@ AC_TRY_COMPILE([#ifdef HAVE_SYS_TYPES_H
 mknod("",0,0);,AC_DEFINE(RUDIMENTS_HAVE_MKNOD,1,Some systems have mknod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for ftok)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -2119,7 +2131,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 ftok(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_FTOK,1,Most systems have ftok()) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(if ftok takes const char * parameter)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -2131,7 +2143,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 const char *var=NULL; ftok(var,0);,AC_DEFINE(RUDIMENTS_HAVE_CONST_CHAR_FTOK,1,Most systems have ftok(const char *, int)) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for access)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -2143,7 +2155,7 @@ AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
 access(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_ACCESS,1,Most systems have access()) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _access_s)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -2159,7 +2171,9 @@ echo
 echo "***** Dynamic Loader *********"
 
 AC_MSG_CHECKING(for dlopen)
-AC_TRY_COMPILE([#include <dlfcn.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_DLFCN_H
+	#include <dlfcn.h>
+#endif],
 dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test -n "$MINGW32" )
@@ -2176,7 +2190,9 @@ fi
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then
 	AC_MSG_CHECKING(whether we can link against -ldl)
-	FW_TRY_LINK([#include <dlfcn.h>],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
+	FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_DLFCN_H
+	#include <dlfcn.h>
+#endif],[dlopen("",0);],[$CPPFLAGS],[-ldl],[],[DLLIB="-ldl"; AC_MSG_RESULT(yes)],[DLLIB=""; AC_MSG_RESULT(no)])
 fi
 AC_SUBST(DLLIB)
 
@@ -2188,7 +2204,7 @@ echo
 echo "***** Byte Swap Functions ****"
 
 AC_MSG_CHECKING(for bswap_64)
-AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_BYTESWAP_H
@@ -2200,7 +2216,7 @@ AC_TRY_LINK([#ifdef HAVE_STDLIB_H
 bswap_64(0);,AC_DEFINE(RUDIMENTS_HAVE_BSWAP_64,1,Some systems have bswap_64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for __bswap64)
-AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_MACHINE_ENDIAN_H
@@ -2209,7 +2225,7 @@ AC_TRY_LINK([#ifdef HAVE_STDLIB_H
 __bswap64(0);,AC_DEFINE(RUDIMENTS_HAVE___BSWAP64,1,Some systems have __bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for bswap64)
-AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -2219,7 +2235,7 @@ AC_TRY_LINK([#ifdef HAVE_STDLIB_H
 bswap64(0);,AC_DEFINE(RUDIMENTS_HAVE_BSWAP64,1,Some systems have bswap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for swap64)
-AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef HAVE_SYS_TYPES_H
@@ -2228,14 +2244,14 @@ AC_TRY_LINK([#ifdef HAVE_STDLIB_H
 swap64(0);,AC_DEFINE(RUDIMENTS_HAVE_SWAP64,1,Some systems have swap64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for OSSwapLittleToHostInt64)
-AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <libkern/OSByteOrder.h>],
 OSSwapLittleToHostInt64(0);,AC_DEFINE(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64,1,Some systems have OSSwapLittleToHostInt64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for OSSwapHostToLittleInt64)
-AC_TRY_LINK([#ifdef HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <libkern/OSByteOrder.h>],
@@ -2253,7 +2269,7 @@ echo
 echo "***** Directory Functions ****"
 
 AC_MSG_CHECKING(for readdir_r)
-AC_TRY_COMPILE([#ifdef HAVE_STDLIB_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_DIRENT_H
