@@ -8,7 +8,9 @@
 #ifdef RUDIMENTS_HAVE_DLFCN_H
 	#include <dlfcn.h>
 #endif
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>

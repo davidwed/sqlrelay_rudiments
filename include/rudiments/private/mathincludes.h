@@ -5,5 +5,7 @@
 #include <rudiments/private/inttypes.h>
 #include <rudiments/private/rudimentsinlines.h>
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #include <complex.h>

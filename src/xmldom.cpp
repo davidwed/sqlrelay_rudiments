@@ -6,7 +6,9 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/filesystem.h>
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 // for getpagesize()
 #ifdef RUDIMENTS_HAVE_UNISTD_H

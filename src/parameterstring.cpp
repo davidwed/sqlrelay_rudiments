@@ -5,7 +5,9 @@
 #include <rudiments/parameterstring.h>
 
 // for NULL
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

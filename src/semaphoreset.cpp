@@ -10,7 +10,9 @@
 	#include <rudiments/charstring.h>
 #endif
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif

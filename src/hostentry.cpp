@@ -9,7 +9,9 @@
 
 // for ENOMEM
 #include <errno.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #include <stdio.h>
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>

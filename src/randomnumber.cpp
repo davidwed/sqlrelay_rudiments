@@ -5,7 +5,9 @@
 #include <rudiments/device.h>
 #include <rudiments/datetime.h>
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #if defined(RUDIMENTS_HAVE_SRAND) && defined(RUDIMENTS_HAVE_RAND)
 	#define SEEDRANDOM srand

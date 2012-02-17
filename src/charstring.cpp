@@ -14,7 +14,9 @@
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>

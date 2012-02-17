@@ -7,7 +7,9 @@
 // for FD_ZERO/FD_SET on windows
 #include <rudiments/private/winsock.h>
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 // some systems need string.h to provide memset() for FD_ZERO/FD_SET
 #ifdef RUDIMENTS_HAVE_STRING_H

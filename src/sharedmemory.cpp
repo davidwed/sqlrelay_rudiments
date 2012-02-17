@@ -8,7 +8,9 @@
 #include <rudiments/error.h>
 
 #include <stdio.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

@@ -8,7 +8,9 @@
 
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
 	// for structs, functions
-	#include <windows.h>
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
 	#include <lm.h>
 #else
 	// for group, functions
@@ -16,7 +18,9 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #define MAXBUFFER (32*1024)
 

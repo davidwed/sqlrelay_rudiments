@@ -7,14 +7,20 @@
 #if defined(RUDIMENTS_HAS_PCRE)
 	#include <pcre.h>
 #elif defined(RUDIMENTS_HAVE_REGCOMP)
-	#include <sys/types.h>
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
 	#include <regex.h>
 #else
-	#include <sys/types.h>
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
 	#include "regex.h"
 #endif
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #include <stdio.h>
 #ifdef RUDIMENTS_HAS_PCRE
 	#include <rudiments/charstring.h>

@@ -14,7 +14,9 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #define MAXBUFFER	(32*1024)
 

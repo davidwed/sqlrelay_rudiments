@@ -6,8 +6,12 @@
 #include <rudiments/error.h>
 #include <rudiments/file.h>
 
-#include <stdlib.h>
-#include <sys/stat.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

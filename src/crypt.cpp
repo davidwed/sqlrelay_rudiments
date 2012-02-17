@@ -14,11 +14,13 @@
 #ifdef RUDIMENTS_HAVE_CRYPT_H
 	#include <crypt.h>
 #else
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
+	#ifdef RUDIMENTS_HAVE_UNISTD_H
+		#include <unistd.h>
+	#endif
 #endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
 #endif
-#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

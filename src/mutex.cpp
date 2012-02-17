@@ -9,9 +9,13 @@
 	#define _TIMESTRUC_T
 	#include <pthread.h>
 #elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
-	#include <windows.h>
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
 #else
-	#include <stdlib.h>
+	#ifdef RUDIMENTS_HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE

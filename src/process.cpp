@@ -17,7 +17,9 @@
 #endif
 
 // for exit()
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
@@ -27,7 +29,7 @@
 #endif
 
 // for umask
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 

@@ -10,7 +10,9 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #ifndef _WIN32
 	// for wait...

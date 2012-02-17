@@ -7,8 +7,12 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/file.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
 #include <sys/wait.h>
 #ifdef RUDIMENTS_HAVE_FCNTL_H
 	#include <fcntl.h>

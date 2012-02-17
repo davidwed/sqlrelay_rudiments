@@ -13,7 +13,7 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef _WIN32
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
 

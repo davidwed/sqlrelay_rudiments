@@ -14933,6 +14933,78 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/poll.h" >&5
+$as_echo_n "checking for sys/poll.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/poll.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SYS_POLL_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/stat.h" >&5
+$as_echo_n "checking for sys/stat.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/stat.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SYS_STAT_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/types.h" >&5
+$as_echo_n "checking for sys/types.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/types.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SYS_TYPES_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dirent.h" >&5
 $as_echo_n "checking for dirent.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -15124,7 +15196,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for netinet/in.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <netinet/in.h>
@@ -15247,7 +15319,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for machine/endian.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <machine/endian.h>
@@ -15274,7 +15346,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sys/select.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/select.h>
@@ -15301,7 +15373,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for netinet/in.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <netinet/in.h>
@@ -15328,7 +15400,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for netinet/tcp.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <netinet/tcp.h>
@@ -15355,7 +15427,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sys/socket.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/socket.h>
@@ -15382,7 +15454,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for arpa/inet.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <arpa/inet.h>
@@ -15409,7 +15481,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sys/uio.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/uio.h>
@@ -15436,7 +15508,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for arpa/inet.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <arpa/inet.h>
@@ -15583,7 +15655,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sys/ipc.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/ipc.h>
@@ -15610,7 +15682,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sys/sem.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <sys/sem.h>
@@ -17603,7 +17675,7 @@ rm -f conftest*
 $as_echo_n "checking for struct msghdr.msg_controllen... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -17632,7 +17704,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for struct msghdr.msg_flags... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -17661,10 +17733,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking if struct stat contains st_blksize... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -17694,10 +17766,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking if struct stat contains st_blocks... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -17727,10 +17799,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking if S_ISSOCK exists... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -17759,10 +17831,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking if S_ISLNK exists... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -17791,10 +17863,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking if S_ISBLK exists... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -17823,7 +17895,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking type of iovec.iov_base... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -17857,7 +17929,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking CMSG_SPACE... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -17886,7 +17958,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking CMSG_LEN... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -18462,7 +18534,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for in_addr_t type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -18500,7 +18572,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sockaddr_un type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_UN_H
@@ -20115,7 +20187,7 @@ $as_echo_n "checking for regcomp... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <regex.h>
@@ -20189,7 +20261,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #else
-	#ifdef HAVE_SYS_TYPES_H
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -20225,7 +20297,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #else
-	#ifdef HAVE_SYS_TYPES_H
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -20261,7 +20333,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #else
-	#ifdef HAVE_SYS_TYPES_H
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -20299,7 +20371,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #else
-	#ifdef HAVE_SYS_TYPES_H
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -20332,7 +20404,7 @@ HAVE_INET_ATON="no"
 $as_echo_n "checking for inet_aton... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -20376,7 +20448,7 @@ $as_echo_n "checking whether inet_aton needs -lresolv... " >&6; }
 	INETATONLIB=""
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -20417,7 +20489,7 @@ fi
 $as_echo_n "checking for inet_addr... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
@@ -22290,7 +22362,7 @@ $as_echo_n "checking for semget... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
@@ -22323,7 +22395,7 @@ $as_echo_n "checking for semtimedop... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
@@ -22368,7 +22440,7 @@ $as_echo_n "checking for shmget... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
@@ -24093,10 +24165,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_FCNTL_H
@@ -24131,10 +24203,10 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_FCNTL_H
@@ -24699,7 +24771,7 @@ $as_echo_n "checking for pselect... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/time.h>
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -24750,7 +24822,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 #if defined(RUDIMENTS_HAVE_POLL_H)
 	#include <poll.h>
-#elif defined(HAVE_SYS_POLL_H)
+#elif defined(RUDIMENTS_HAVE_SYS_POLL_H)
 	#include <sys/poll.h>
 #endif
 
@@ -24996,7 +25068,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 int
@@ -25025,7 +25097,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 int
@@ -25182,7 +25254,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for fchmod... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -25211,10 +25283,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for mkfifo... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 int
@@ -25479,10 +25551,10 @@ fi
 $as_echo_n "checking for mknod... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_FCNTL_H
@@ -25517,7 +25589,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
@@ -25549,7 +25621,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
@@ -25836,7 +25908,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #include <machine/bswap.h>
@@ -25867,7 +25939,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 int
@@ -26012,7 +26084,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for dirfd... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_DIRENT_H
@@ -26044,7 +26116,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for DIR.dd_fd... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_DIRENT_H
@@ -26076,7 +26148,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for DIR.d_fd... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_DIRENT_H
@@ -26108,10 +26180,10 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for mkdir with 2 arguments... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -26141,10 +26213,10 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for mkdir with 1 argument... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -26207,7 +26279,7 @@ echo "***** Process Functions ******"
 $as_echo_n "checking for umask... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_STAT_H
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 int
@@ -26234,7 +26306,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getpid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26289,7 +26361,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getppid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26345,7 +26417,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getpgid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26375,7 +26447,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for setpgid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26405,7 +26477,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getsid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26435,7 +26507,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getuid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26465,7 +26537,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for geteuid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26495,7 +26567,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for setuid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26526,7 +26598,7 @@ SETEUID=""
 $as_echo_n "checking for seteuid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26558,7 +26630,7 @@ then
 $as_echo_n "checking for seteuid (not defined in any header)... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26593,7 +26665,7 @@ fi
 $as_echo_n "checking for setreuid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26623,7 +26695,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getgid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26653,7 +26725,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for getegid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26683,7 +26755,7 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for setgid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26714,7 +26786,7 @@ SETEGID=""
 $as_echo_n "checking for setegid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26746,7 +26818,7 @@ then
 $as_echo_n "checking for setegid (not defined in any header)... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26781,7 +26853,7 @@ fi
 $as_echo_n "checking for setregid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -26873,7 +26945,7 @@ echo "***** Page Size Functions ****"
 $as_echo_n "checking for getpagesize... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef HAVE_SYS_TYPES_H
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H

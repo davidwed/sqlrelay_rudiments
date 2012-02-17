@@ -3,7 +3,11 @@
 
 #include <rudiments/shmfile.h>
 #include <rudiments/error.h>
-#include <sys/types.h>
+
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+
 #include <sys/mman.h>
 
 #ifdef RUDIMENTS_NAMESPACE

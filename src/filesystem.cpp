@@ -8,9 +8,15 @@
 	#include <rudiments/charstring.h>
 #endif
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #ifdef RUDIMENTS_HAVE_FCNTL_H
 	#include <fcntl.h>
 #endif
@@ -24,7 +30,9 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-	#include <windows.h>
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_PARAM_H
 		#include <sys/param.h>
 	#endif

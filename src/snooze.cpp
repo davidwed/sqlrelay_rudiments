@@ -28,7 +28,9 @@
 #if defined(RUDIMENTS_HAVE_NANOSLEEP) || defined(RUDIMENTS_HAVE_CLOCK_NANOSLEEP)
 	#include <time.h>
 #else
-	#include <sys/types.h>
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
 		#include <sys/select.h>
 	#endif

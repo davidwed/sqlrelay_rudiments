@@ -5,7 +5,9 @@
 #include <rudiments/error.h>
 
 // for mknod
-#include <sys/stat.h>
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>

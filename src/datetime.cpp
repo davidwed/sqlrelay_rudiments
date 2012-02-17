@@ -8,7 +8,9 @@
 	#include <rudiments/file.h>
 #endif
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif

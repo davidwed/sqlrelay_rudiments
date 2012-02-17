@@ -9,7 +9,9 @@
 #include <rudiments/error.h>
 
 // for struct stat
-#include <sys/stat.h>
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
 
 #ifndef RUDIMENTS_HAVE_UTIMES
 	#include <rudiments/datetime.h>
@@ -21,7 +23,9 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif

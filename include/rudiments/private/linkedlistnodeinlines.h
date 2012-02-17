@@ -3,7 +3,9 @@
 
 #ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #include <rudiments/private/rudimentsinlines.h>
 

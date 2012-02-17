@@ -8,7 +8,9 @@
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 	// for USER_INFO_2, functions
-	#include <windows.h>
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
 	#include <lm.h>
 #else
 	// for passwd, functions
@@ -16,7 +18,9 @@
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 
 #define MAXBUFFER	(32*1024)
 
