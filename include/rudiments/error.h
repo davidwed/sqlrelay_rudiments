@@ -6,8 +6,8 @@
 
 #include <rudiments/private/errorincludes.h>
 
-// The error class provides an interface to the errors that system calls
-// can generate.
+/** The error class provides an interface to the errors that system calls
+ *  can generate. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

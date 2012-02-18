@@ -6,8 +6,8 @@
 
 #include <rudiments/private/clientincludes.h>
 
-// The client class provides a base class for classes that implement the client
-// side of a client-server communication model.
+/** The client class provides a base class for classes that implement the
+ *  client side of a client-server communication model. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -17,23 +17,42 @@ class clientprivate;
 
 class RUDIMENTS_DLLSPEC client : public filedescriptor {
 	public:
-
+		/** Creates an instance of the client class. */
 		client();
+
+		/** Creates an instance of the client class
+		 *  that is a copy of "c". */
 		client(const client &c);
+
+		/** Makes this instance of the client class
+		 *  identical to "c". */
 		client	&operator=(const client &c);
+
+		/** Deletes this instance of the client class. */
 		virtual ~client();
 
+		/** This method must be implemented by a child class to
+		 *  initialize this instance with the parameters defined in
+		 *  "cd". */
 		virtual void	initialize(constnamevaluepairs *cd)=0;
 
-		/** This method return an int32_t instead of a bool because we
-		 *  want child classes that have non atomic connection
-		 *  procedures (such as a modem) to be able to implement return
-		 *  codes other than success or failure (such as abort). */
+		/** This method must be implemnted by a child class to open a
+		 *  connection to a server, presumably specified in the "cd"
+		 *  parameter of the initalize() method.
+		 *
+		 *  This method return an int32_t instead of a bool so child
+		 *  classes that have non atomic connection procedures (such
+		 *  as a modem) can implement return codes other than success
+		 *  or failure (such as abort). */
 		virtual int32_t	connect()=0;
 
+		/** This method returns NULL by default but may be implemented
+		 *  by a child class to return a detailed reason for a connect
+		 *  failure. */
 		virtual	const char	*getVerboseConnectError();
-		virtual	void		setVerboseConnectError(
-						const char *error);
+
+		/** This method may be used to set the verbose connect error. */
+		virtual	void	setVerboseConnectError(const char *error);
 
 	#include <rudiments/private/client.h>
 };

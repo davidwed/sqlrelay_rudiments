@@ -6,8 +6,8 @@
 
 #include <rudiments/private/environmentincludes.h>
 
-// The environment class provides methods for accessing and manipulating
-// environment variables.
+/** The environment class provides methods for accessing and manipulating
+ *  environment variables. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

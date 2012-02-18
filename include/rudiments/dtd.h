@@ -6,7 +6,7 @@
 
 #include <rudiments/private/dtdincludes.h>
 
-// The dtd class implements a minimal XML DTD parser.
+/** The dtd class implements a minimal XML DTD parser. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

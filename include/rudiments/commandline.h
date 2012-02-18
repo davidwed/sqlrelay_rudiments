@@ -6,7 +6,8 @@
 
 #include <rudiments/private/commandlineincludes.h>
 
-// The commandline class provides methods for parsing command line arguments.
+/** The commandline class provides methods for parsing command line
+ *  arguments. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -16,7 +17,11 @@ class commandlineprivate;
 
 class RUDIMENTS_DLLSPEC commandline {
 	public:
+
+		/** Creates an instance of the commandline class. */
 		commandline(int32_t argc, const char **argv);
+
+		/** Deletes this instance of the commandline class. */
 		~commandline();
 
 		/** Looks for either:

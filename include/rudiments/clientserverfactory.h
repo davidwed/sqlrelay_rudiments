@@ -6,8 +6,8 @@
 
 #include <rudiments/private/clientserverfactoryincludes.h>
 
-// The clientserverfactory class provides factory methods for getting clients
-// and servers.
+/** The clientserverfactory class provides factory methods for creating
+ *  clients and servers. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

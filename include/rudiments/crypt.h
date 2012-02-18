@@ -6,7 +6,8 @@
 
 #include <rudiments/private/cryptincludes.h>
 
-// The crypt class provides a method that is useful for password encryption.
+/** The crypt class provides an encryption method that is commonly used for
+ *  password encryption. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -14,6 +15,7 @@ namespace rudiments {
 
 class RUDIMENTS_DLLSPEC crypt {
 	public:
+
 		/** Encrypts "password" using the des algorithm
 		 *  and "salt" (which should be a 2 character
 		 *  string from the set [a-zA-Z0-9./].

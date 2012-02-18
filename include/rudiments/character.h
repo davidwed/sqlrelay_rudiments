@@ -6,8 +6,8 @@
 
 #include <rudiments/private/characterincludes.h>
 
-// The character class provides methods for evaluating and manipulating
-// characters.
+/** The character class provides methods for evaluating and manipulating
+ *  characters. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

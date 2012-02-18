@@ -6,8 +6,9 @@
 
 #include <rudiments/private/datetimeincludes.h>
 
-// The datetime class provides methods for converting date/time formats and
-// accessing various date/time values.
+/** The datetime class represents a date/time combination and provides methods
+ *  for getting and setting dates and times, converting date/time formats and
+ *  accessing various date/time values. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -51,10 +52,10 @@ class RUDIMENTS_DLLSPEC datetime {
 		static time_t	getEpoch(const void *tmstruct);
 
 
-		/** Creates an instance of the datetime class */
+		/** Creates an instance of the datetime class. */
 		datetime();
 
-		/** Destroys an instance of the datetime class */
+		/** Destroys this instance of the datetime class. */
 		~datetime();
 
 		/** Parses "tmstring" and sets the date and time

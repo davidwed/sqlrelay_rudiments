@@ -6,12 +6,14 @@
 
 #include <rudiments/private/daemonprocessincludes.h>
 
-// Daemons are long running processes which often detach themselves from
-// the controlling terminal and run in the background.  They are frequently
-// started at boot time and run until the machine is shut down.
-//
-// Daemons typically perform "housecleaning" tasks or serve data to client
-// programs.  See the server class.
+/** The daemonprocess class provides methods that are useful to daemons.
+ *
+ *  Daemons are long running processes which often detach themselves from
+ *  the controlling terminal and run in the background.  They are frequently
+ *  started at boot time and run in the background.
+ * 
+ *  Daemons typically perform "housecleaning" tasks or serve data to client
+ *  programs.  See the server class. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

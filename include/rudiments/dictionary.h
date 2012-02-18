@@ -6,12 +6,15 @@
 
 #include <rudiments/private/dictionaryincludes.h>
 
-// The dictionary class allows you to store arbitrary numbers of key/value
-// pairs.  Since the dictionary class is template-based, you can store
-// arbitrary types of keys and values.
-//
-// Each dictionary is composed of a list of dictionarynode's.  Each
-// dictionarynode contains the key and value.
+/** The dictionary class allows you to store arbitrary numbers of key/value
+ *  pairs.
+ * 
+ *  Each dictionary is composed of a list of dictionarynode's.  Each
+ *  dictionarynode contains the key and value.
+ *
+ *  Internally, the dictionary class uses a linkedlist to store the values
+ *  though this is potentially inefficient and may change in a future
+ *  version. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -20,13 +23,10 @@ namespace rudiments {
 template <class keytype, class datatype>
 class dictionarynode {
 	public:
-		/** Creates a new dictionary node, initializing the
-		 *  key and data to 0. */
+		/** Creates an empty instance of the dictionary node class. */
 		dictionarynode();
 
-		/** Deletes this instance of dictionary node.
-		 *  Note however, that neither key nor data are deleted by
-		 *  this call. */
+		/** Deletes this instance of the dictionarynode class. */
 		virtual	~dictionarynode();
 
 		/** Sets the key stored in the node to "key". */
@@ -41,12 +41,13 @@ class dictionarynode {
 		/** Returns the data stored in the node. */
 		datatype	getData() const;
 
-		/** Returns -1,0 or 1 if the key stored in the
-		 *  node is less than, equal to or greater than
-		 *  "testkey". */
+		/** Returns a negative number,0 or a positive number depending
+		 *  on whether the key stored in the node is respectively
+		 *  less than, equal to or greater than "testkey". */
 		int32_t	compare(keytype testkey) const;
 
-		/** Prints the key and data stored in the node. */
+		/** Prints a representation of the key and
+		 *  data stored in the node. */
 		void	print() const;
 
 	#include <rudiments/private/dictionarynode.h>
@@ -67,12 +68,13 @@ template <class keytype, class datatype,
 	class dictionarylisttype=dictionarylist<keytype,datatype> >
 class dictionary {
 	public:
-		/** Creates an empty dictionary. */
+		/** Creates an empty instance of the dictionary class. */
 		dictionary();
 
-		/** Deletes the dictionary and all of its dictionarynodes.
-		 *  Note however, that neither the key nor data of each
-		 *  dictionarynode are deleted by this call. */
+		/** Deletes this instance of the dictionary class and all
+		 *  of its dictionarynodes.  Note however, that neither the
+		 *  key nor data stored in each dictionarynode are deleted
+		 *  by this call. */
 		virtual ~dictionary();
 
 		/** Sets the data associated with "key" to "data".
@@ -104,8 +106,8 @@ class dictionary {
 
 
 
-// A set of classes for storing dictionaries who's keys are strings are
-// provided here for convenience.
+/** A set of classes for storing dictionaries who's keys are strings are
+ *  provided here for convenience. */
 template <class datatype>
 class stringdictionarynode :
 		public dictionarynode< char *,datatype > {
@@ -135,8 +137,8 @@ class stringdictionary : public dictionary< char *, datatype,
 		virtual	~stringdictionary();
 };
 
-// A set of classes for storing dictionaries who's keys are const strings are
-// provided here for convenience.
+/** A set of classes for storing dictionaries who's keys are const strings are
+ *  provided here for convenience. */
 template <class datatype>
 class conststringdictionarynode :
 		public dictionarynode< const char *,datatype > {
@@ -169,8 +171,8 @@ class conststringdictionary : public dictionary< const char *, datatype,
 
 
 
-// A set of classes for storing dictionaries who's keys are int32_t integers are
-// provided here for convenience.
+/** A set of classes for storing dictionaries who's keys are int32_t integers
+ *  are provided here for convenience. */
 template <class datatype>
 class numericdictionarynode :
 		public dictionarynode< int32_t, datatype > {
@@ -202,8 +204,8 @@ class numericdictionary : public dictionary< int32_t, datatype,
 
 
 
-// A set of classes for storing dictionaries who's keys and values are both
-// strings are provided here for convenience.
+/** A set of classes for storing dictionaries who's keys and values are both
+ *  strings are provided here for convenience. */
 typedef stringdictionarynode< char * >		namevaluepairsnode;
 typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
 typedef stringdictionarylist< char * >		namevaluepairslist;

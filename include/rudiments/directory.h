@@ -6,8 +6,8 @@
 
 #include <rudiments/private/directoryincludes.h>
 
-// The directory class provides methods for opening/closing a directory and
-// traversing it's files and subdirectories.
+/** The directory class provides methods for opening/closing a directory and
+ *  traversing it's files and subdirectories. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

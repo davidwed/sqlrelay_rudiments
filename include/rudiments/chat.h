@@ -6,8 +6,8 @@
 
 #include <rudiments/private/chatincludes.h>
 
-// The chat class implements methods for chatting with something (such as
-// a modem) over a file descriptor or set of file descriptors.
+/** The chat class implements methods for chatting with something
+ * (such as a modem) over a file descriptor or set of file descriptors. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -17,15 +17,15 @@ class chatprivate;
 
 class RUDIMENTS_DLLSPEC chat {
 	public:
-		/** Initializes an instance of the chat class.  Data will be
+		/** Creates an instance of the chat class.  Data will be
 		 *  written to and read from "fd". */
 		chat(const filedescriptor *fd);
 
-		/** Initializes an instance of the chat class.  Data will be
+		/** Creates an instance of the chat class.  Data will be
 		 *  read from "rfd" and written to "wfd". */
 		chat(const filedescriptor *rfd, const filedescriptor *wfd);
 
-		/** Destroys an instance of the chat class. */
+		/** Deletes this instance of the chat class. */
 		~chat();
 
 		/** Runs "script" which is expected to be a chunk of XML of the

@@ -6,10 +6,10 @@
 
 #include <rudiments/private/charstringincludes.h>
 
-// The charstring class provides methods for manipulating strings.
-//
-// Unlike the functions in string.h, these methods are NULL safe.  If any of
-// the pointer arguments are NULL, your application will not crash.
+/** The charstring class provides methods for manipulating strings.
+ * 
+ *  Unlike the functions in string.h, these methods are NULL safe.  If any of
+ *  the pointer arguments are NULL, your application will not crash. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {

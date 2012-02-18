@@ -6,7 +6,13 @@
 
 #include <rudiments/private/deviceincludes.h>
 
-// The device class provides methods for interacting with devices.
+/** The device class provides methods for interacting with devices.
+ *
+ *  It is different from the file class only in that it provides a method
+ *  to create a device node and that by default, the device class does not
+ *  query the device for parameters (such as size) when it is opened but
+ *  the file class does.  Querying a device node for parameters can
+ *  have unexpected effects. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -17,17 +23,18 @@ class deviceprivate;
 class RUDIMENTS_DLLSPEC device : public file {
 	public:
 
-		/** Creates an uninitialized instance of the device class. */
+		/** Creates an instance of the device class. */
 		device();
 
-		/** Create an instance of the device
-		 *  class that is a copy of "d". */
+		/** Creates an instance of the device class
+		 *  that is a copy of "d". */
 		device(const device &d);
 
-		/** Sets this instance equal to "d". */
+		/** Makes this instance of the device class
+		 *  identical to "d". */
 		device	&operator=(const device &d);
 
-		/** Destroys this instance of the device class. */
+		/** Deletes this instance of the device class. */
 		virtual	~device();
 
 		/** Creates device node "filename" with major number "major" and

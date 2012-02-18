@@ -6,8 +6,8 @@
 
 #include <rudiments/private/filedescriptorincludes.h>
 
-// The filedescriptor class is a base class for other classes that utilize
-// file descriptors.
+/** The filedescriptor class is a base class for other classes that utilize
+ *  file descriptors. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -19,17 +19,20 @@ class filedescriptorprivate;
 
 class RUDIMENTS_DLLSPEC filedescriptor {
 	public:
-		/** Creates an uninitialized filedescriptor. */
+		/** Creates an instance of the filedescriptor class. */
 		filedescriptor();
 
+		/** Creates an instance of the filedescriptor class
+		 *  that is a copy of "f". */
 		filedescriptor(const filedescriptor &f);
 
+		/** Makes this instance of the filedescriptor class
+		 *  identical to "f". */
 		filedescriptor	&operator=(const filedescriptor &f);
 
 		/** Deletes this instance of the filedescriptor class.
 		 *  Calls close() if it hasn't already been called. */
 		virtual	~filedescriptor();
-
 
 		/** Closes the file descriptor.
 		 *  Returns true on success and false on failure. */
