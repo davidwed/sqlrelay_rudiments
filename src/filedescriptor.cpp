@@ -1751,7 +1751,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
 	return false;
 }
 #else
-bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
+bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
@@ -1799,14 +1799,14 @@ bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
 		//#else
 		cmptr->cmsg_len=sizeof(control);
 		//#endif
-		*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)))=filedesc;
+		*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)))=fd;
 
 		// FIXME: is this necessary???
 		messageheader.msg_controllen=cmptr->cmsg_len;
 	#else
 		// old-style:
 		// The descriptor is passed in the accrights
-		messageheader.msg_accrights=(caddr_t)&filedesc;
+		messageheader.msg_accrights=(caddr_t)&fd;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
 
@@ -1818,7 +1818,7 @@ bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
 	return (result!=-1);
 }
 
-bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
+bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr
@@ -1860,8 +1860,8 @@ bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
 	#else
 		// old-style
 		// The descriptor is received in the accrights
-		int32_t	newfiledesc;
-		messageheader.msg_accrights=(caddr_t)&newfiledesc;
+		int32_t	newfd;
+		messageheader.msg_accrights=(caddr_t)&newfd;
 		messageheader.msg_accrightslen=sizeof(int);
 	#endif
 
@@ -1896,8 +1896,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
 			cmptr->cmsg_type==SCM_RIGHTS) {
 
 			// if we got good data, set the descriptor and return
-			*filedesc=
-			*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)));
+			*fd=*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)));
 			return true;
 		}
 		#ifdef DEBUG_PASSFD
@@ -1947,7 +1946,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
 		#endif
 	#else
 		if (messageheader.msg_accrightslen==sizeof(int)) {
-			*filedesc=newfiledesc;
+			*fd=newfd;
 			return true;
 		}
 	#endif

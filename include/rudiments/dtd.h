@@ -16,25 +16,27 @@ class dtdprivate;
 
 class RUDIMENTS_DLLSPEC dtd {
 	public:
-				dtd();
-				~dtd();
 
+		/** Creates an instance of the dtd class. */
+		dtd();
+
+		/** Deletes this instance of the dtd class. */
+		~dtd();
+
+		/** Parse file "filename" and generate DTD tree.
+	 	 *  Returns true on success and false on failure. */
 		bool		parseFile(const char *filename);
-				// Parse file "filename" and generate a
-				// DTD tree.
-				//
-				// Returns true on success and false on failure
-		bool		parseString(const char *string);
-				// Parse string "string" and generate a
-				// DTD tree.
-				//
-				// Returns true on success and false on failure
-		const char	*getError();
-				// if parseFile() or parseString() fails,
-				// returns the error that caused the failure
 
+		/** Parse string "string" and generate a DTD tree.
+		 *  Returns true on success and false on failure. */
+		bool		parseString(const char *string);
+
+		/** If parseFile() or parseString() fails,
+		 *  returns the error that caused the failure. */
+		const char	*getError();
+
+		/** Returns an XML representation of the DTD. */
 		xmldomnode	*xml();
-				// Returns an XML representation of the DTD.
 
 	#include <rudiments/private/dtd.h>
 };

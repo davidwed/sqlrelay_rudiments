@@ -18,19 +18,19 @@ class clientprivate;
 class RUDIMENTS_DLLSPEC client : public filedescriptor {
 	public:
 
-			client();
-			client(const client &c);
+		client();
+		client(const client &c);
 		client	&operator=(const client &c);
 		virtual ~client();
 
 		virtual void	initialize(constnamevaluepairs *cd)=0;
+
+		/** This method return an int32_t instead of a bool because we
+		 *  want child classes that have non atomic connection
+		 *  procedures (such as a modem) to be able to implement return
+		 *  codes other than success or failure (such as abort). */
 		virtual int32_t	connect()=0;
-				// This method return an int32_t instead of a
-				// bool because we want child classes that have
-				// non atomic connection procedures (such as a
-				// modem) to be able to implement return codes
-				// other than success or failure (such as
-				// abort).
+
 		virtual	const char	*getVerboseConnectError();
 		virtual	void		setVerboseConnectError(
 						const char *error);

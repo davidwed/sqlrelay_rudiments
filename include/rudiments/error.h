@@ -15,29 +15,22 @@ namespace rudiments {
 
 class RUDIMENTS_DLLSPEC error {
 	public:
+		/** Set the current system call error to 0, "Success". */
 		static	void		clearError();
-					// Set the current system call error to
-					// 0, "Success".
 
+		/** Set the current system call error to "err".  "err" should
+		 *  be one of the errors defined in error.h such as EINTR,
+		 *  ENOMEM, etc. */
 		static	void		setErrorNumber(int32_t err);
-					// Set the current system call error to
-					// "err".  "err" should be one of the
-					// errors defined in error.h such as
-					// EINTR, ENOMEM, etc.
 
+		/** Returns the current system call error.  Will match one of
+		 *  the errors defined in error.h such as EINTR, ENOMEM, etc. */
 		static	int32_t		getErrorNumber();
-					// Returns the current system call
-					// error.  Will match one of the errors
-					// defined in error.h such as EINTR,
-					// ENOMEM, etc.
 
+		/** Returns a string representation of the current system
+		 *  error.  Note: this method returns a pointer to an internal
+		 *  buffer which may be overwritten at any time. */
 		static	const char	*getErrorString();
-					// Returns a string representation
-					// of the current system call error.
-					//
-					// Note: this method returns a pointer
-					// to an internal buffer which may be
-					// overwritten at any time.
 };
 
 #ifdef RUDIMENTS_NAMESPACE

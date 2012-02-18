@@ -15,23 +15,25 @@ namespace rudiments {
 
 class RUDIMENTS_DLLSPEC clientserverfactory {
 	public:
+		/** Returns an instance of a child of the client
+		 *  class as follows:
+		 *	
+		 *     type              class
+		 *  "inet"             inetclientsocket
+		 *  "unix"             unixclientsocket
+		 *  "modem"            modemclient
+		 *  anything else      NULL */
 		static client	*getClient(const char *type);
-			// Returns an instance of a child of the client
-			// class as follows:
-			//
-			//    type              class
-			// "inet"             inetclientsocket
-			// "unix"             unixclientsocket
-			// anything else      NULL
 
+		/** Returns an instance of a child of the server
+		 *  class as follows:
+		 * 
+		 *     type              class
+		 *  "inet"             inetserversocket
+		 *  "unix"             unixserversocket
+		 *  "modem"            modemserver
+		 *  anything else      NULL */
 		static server	*getServer(const char *type);
-			// Returns an instance of a child of the server
-			// class as follows:
-			//
-			//    type              class
-			// "inet"             inetserversocket
-			// "unix"             unixserversocket
-			// anything else      NULL
 };
 
 #ifdef RUDIMENTS_NAMESPACE

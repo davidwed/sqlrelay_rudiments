@@ -20,28 +20,34 @@ namespace rudiments {
 template <class keytype, class datatype>
 class dictionarynode {
 	public:
-			dictionarynode();
-			// Creates a new dictionary node, initializing the
-			// key and data to 0.
+		/** Creates a new dictionary node, initializing the
+		 *  key and data to 0. */
+		dictionarynode();
+
+		/** Deletes this instance of dictionary node.
+		 *  Note however, that neither key nor data are deleted by
+		 *  this call. */
 		virtual	~dictionarynode();
 
+		/** Sets the key stored in the node to "key". */
 		void	setKey(keytype key);
-			// Sets the key stored in the node to "key".
+
+		/** Sets the data stored in the node to "data". */
 		void	setData(datatype data);
-			// Sets the data stored in the node to "data".
 
+		/** Returns the key stored in the node. */
 		keytype		getKey() const;
-				// Returns the key stored in the node.
+
+		/** Returns the data stored in the node. */
 		datatype	getData() const;
-				// Returns the data stored in the node.
 
+		/** Returns -1,0 or 1 if the key stored in the
+		 *  node is less than, equal to or greater than
+		 *  "testkey". */
 		int32_t	compare(keytype testkey) const;
-			// Returns -1,0 or 1 if the key stored in the
-			// node is less than, equal to or greater than
-			// "testkey".
 
+		/** Prints the key and data stored in the node. */
 		void	print() const;
-			// Prints the key and data stored in the node.
 
 	#include <rudiments/private/dictionarynode.h>
 };
@@ -61,34 +67,37 @@ template <class keytype, class datatype,
 	class dictionarylisttype=dictionarylist<keytype,datatype> >
 class dictionary {
 	public:
-			dictionary();
-			// Creates an empty dictionary
+		/** Creates an empty dictionary. */
+		dictionary();
+
+		/** Deletes the dictionary and all of its dictionarynodes.
+		 *  Note however, that neither the key nor data of each
+		 *  dictionarynode are deleted by this call. */
 		virtual ~dictionary();
-			// Deletes the dictionary and all of it's
-			// dictionarynodes.
 
+		/** Sets the data associated with "key" to "data".
+		 *  If "key" already exists, the data currently
+		 *  accociated with it is replaced with "data". */
 		void	setData(keytype key, datatype data);
-			// Sets the data associated with "key" to "data".
-			// If "key" already exists, the data currently
-			// accociated with it is replaced with "data".
+
+		/** Sets "data" to the data associated with "key".
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
 		bool	getData(keytype key, datatype *data);
-			// Sets "data" to the data associated with "key".
-			// Returns true on success or false if "key" wasn't
-			// found.
+
+		/** Removes the dictionarynode with "key".
+		 *  Returns true on success or false if "key" wasn't
+		 *  found. */
 		bool	removeData(keytype key);
-			// Removes the dictionarynode with "key".
-			// Returns true on success or false if "key" wasn't
-			// found.
 
+		/** Returns the list used internally. */
 		dictionarylisttype	*getList();
-					// Returns the list used internally.
 
+		/** Deletes all dictionarynodes currently in the dictionary. */
 		void	clear();
-			// Deletes all dictionarynodes currently in the
-			// dictionary.
 
+		/** Prints out a representation of the dictionary. */
 		void	print();
-			// Prints out a representation of the dictionary.
 
 	#include <rudiments/private/dictionary.h>
 };
