@@ -6,16 +6,16 @@
 
 #include <rudiments/private/fileincludes.h>
 
-// The file class provides methods for interacting with files and for 
-// discovering the properties associated with a file such as permissions,
-// ownership, size, etc.
-//
-// Many of the static methods are just provided for convenience.  Use them
-// if you need to get a a single property or perform a single operation.
-//
-// If you need to get multiple properties or perform multiple operations,
-// create an instance of the class, call open(), then use the non-static
-// methods.
+/** The file class provides methods for interacting with files and for 
+ *  discovering the properties associated with a file such as permissions,
+ *  ownership, size, etc.
+ * 
+ *  Many of the static methods are just provided for convenience.  Use them
+ *  if you need to get a a single property or perform a single operation.
+ * 
+ *  If you need to get multiple properties or perform multiple operations,
+ *  create an instance of the class, call open(), then use the non-static
+ *  methods. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -26,140 +26,212 @@ class fileprivate;
 class RUDIMENTS_DLLSPEC file : public filedescriptor {
 	public:
 
-			file();
-			// Creates an uninitialized instance of the file class.
-			file(const file &f);
+		/** Creates an instance of the file class. */
+		file();
+
+		/** Creates an instance of the file class
+		 *  that is a copy of "f". */
+		file(const file &f);
+
+		/** Makes this instance of the file class
+		 *  identical to "f". */
 		file	&operator=(const file &f);
+
+		/** Deletes this instance of the file class. */
 		virtual	~file();
 
-
-		// These methods open the file "name" using "flags".
-		// They return true on success and false on failure.
+		/** Opens the file "name" using "flags".  Returns true on
+		 *  success and false on failure. */
 		bool	open(const char *name, int32_t flags);
+
+		/** Opens the file "name" using "flags".  If "flags" contains
+		 *  O_CREAT and the file doesn't already exist, it will be
+		 *  created with permissions "perms".  Returns true on success
+		 *  and false on failure. */
 		bool	open(const char *name, int32_t flags, mode_t perms);
-			// If flags contains O_CREAT and the file doesn't
-			// already exist, it will be created with permissions
-			// "perms".
 
-
-		// These methods creates the file "name" with permissions
-		// "perms".  If the file already exists, it will be truncated.
+		/** Creates the file "name" with permissions "perms".  If the
+		 *  file already exists, it will be truncated.  Returns true on
+		 *  success and false on failure. */
 		bool	create(const char *name, mode_t perms);
-			// Returns true on success and false on failure.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "number".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
 		ssize_t	create(const char *name, mode_t perms, uint16_t number);
-			// Sets the initial contents to "number".
-			// Returns the number of bytes written or -1 on error.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "number".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
 		ssize_t	create(const char *name, mode_t perms,
 						unsigned long number);
-			// Sets the initial contents to "number".
-			// Returns the number of bytes written or -1 on error.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "number".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
 		ssize_t	create(const char *name, mode_t perms, float number);
-			// Sets the initial contents to "number".
-			// Returns the number of bytes written or -1 on error.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "number".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
 		ssize_t	create(const char *name, mode_t perms, double number);
-			// Sets the initial contents to "number".
-			// Returns the number of bytes written or -1 on error.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "number".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
 		ssize_t	create(const char *name, mode_t perms, char number);
-			// Sets the initial contents to "number".
-			// Returns the number of bytes written or -1 on error.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "string".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
 		ssize_t	create(const char *name, mode_t perms,
-					const char *string);
-			// Sets the initial contents to "string".
-			// Returns the number of bytes written or -1 on error.
+						const char *string);
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to the first "size" bytes of "string".
+		 * Returns the number of bytes written or -1 on error.  If the
+		 * file already exists, it will be truncated.  Returns the
+		 * number of bytes written or -1 on error. */
 		ssize_t	create(const char *name, mode_t perms,
 					const char *string, size_t size);
-			// Sets the initial contents to "string" of size "size".
-			// Returns the number of bytes written or -1 on error.
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to the first "size" bytes of "data".
+		 * Returns the number of bytes written or -1 on error.  If the
+		 * file already exists, it will be truncated.  Returns the
+		 * number of bytes written or -1 on error. */
 		ssize_t	create(const char *name, mode_t perms,
 					const void *data, size_t size);
-			// Sets the initial contents to "data" of size "size".
-			// Returns the number of bytes written or -1 on error.
 
 
-		// These methods read the contents of the file into a buffer.
+		/** Allocates a string large enough to accommodate the
+		 *  contents of the currently opened file, reads the
+		 *  contents of the file into the string and returns the
+		 *  string.  The string must be freed by the calling
+		 *  program.
+		 * 
+		 *  If the file contains no data, then a string of length
+		 *  zero is returned.  If an error occurs then a NULL
+		 *  is returned. */
 		char	*getContents();
-			// Allocates a string large enough to accommodate the
-			// contents of the currently opened file, reads the
-			// contents of the file into the string and returns the
-			// string.  The string must be freed by the calling
-			// program.
-			//
-			// If the file contains no data, then a string of length
-			// zero is returned.  If an error occurs then a NULL
-			// is returned.
+
+		/** Reads the contents of the currently open file into
+		 *  "buffer" of length "buffersize".  If the file is
+		 *  larger than "buffersize" then only "buffersize" bytes
+		 *  of the file will be read into "buffer".
+		 * 
+		 *  Returns the number of bytes copied into "buffer" or
+		 *  -1 on error. */
 		ssize_t	getContents(unsigned char *buffer, size_t buffersize);
-			// Reads the contents of the currently open file into
-			// "buffer" of length "buffersize".  If the file is
-			// larger than "buffersize" then only "buffersize" bytes
-			// of the file will be read into "buffer".
-			//
-			// Returns the number of bytes copied into "buffer" or
-			// -1 on error.
 
 
-		// These methods truncate the file.
-		// They return true on success and false on failure.
+		/** Truncates all data in the file, resulting in a file of
+		 * zero length.  Returns true on success and false on
+		 * failure. */
 		bool	truncate() const;
-			// Truncates all data in the file, resulting in
-			// a file of zero length.
+
+		/** Truncates all data beyond the first "length" bytes,
+		 *  resulting in a file of "length" bytes.  Returns true on
+		 *  success and false on failure. */
 		bool	truncate(off64_t length) const;
-			// Truncates all data beyond the first "length"
-			// bytes, resulting in a file of "length" bytes.
 
 
-		// These methods allow you to get or set the position at which
-		// the next read or write will occur.  Each returns the position
-		// relative to the beginning of the file on success or -1 on
-		// failure.
+		/** Returns the position (relative to the beginning of the file)
+		 *  at which the next read or write will occur, or -1 on
+		 *  failure. */
 		off64_t	getCurrentPosition() const;
-			// Returns the position at which the next read or
-			// write will occur.
+
+		/** Sets the position (relative to the beginning of the file)
+		 *  at which the next read or write will occur to "offset".
+		 *  Returns that position on success or -1 on failure. */
 		off64_t	setPositionRelativeToBeginning(off64_t offset) const;
-			// Sets the position to the beginning of the
-			// file + "offset" bytes.
+
+		/** Advances the position at which the next read or write will
+ 		 *  occur by "offset" bytes.  Returns that position on success
+ 		 *  or -1 on failure. */
 		off64_t	setPositionRelativeToCurrent(off64_t offset) const;
-			// Sets the position to the current
-			// position + "offset" bytes.
+
+		/** Sets the position at which the next read or write will
+		 *  occur to the end of the file plus "offset" bytes.
+		 *  Generally, "offset" will be negative though most filesystems
+		 *  allow the creation of files with holes in them and that can
+		 *  be accomplished by using a positive "offset" and then
+		 *  writing data at that position.  Returns the position on
+		 *  succes or -1 on failure. */
 		off64_t	setPositionRelativeToEnd(off64_t offset) const;
-			// Sets the position to the end of the
-			// file + "offset" bytes.
 
-
-		// The following methods allow you to lock files or regions
-		// of files.
-		//
-		// The tryLock() methods attempt to lock and return success if
-		// the lock can be established immediately or false otherwise.
-		//
-		// The lock() methods block until a lock is established and
-		// return true on success or false if an error occurs.
-		//
-		// The checkLock() methods check to see if a lock can be
-		// established but do not actually lock anything.  If a lock
-		// can be established, they return true. Otherwise they return
-		// false and populate the fields in the supplied fields
-		// with information about one of the conflicting locks.
-		//
-		// The unlock() methods attempt to release a previosly
-		// established lock and return true on success or false on
-		// error.
-
-		// These methods allow you to lock the entire file.
+		/** Attempts to lock the entire file using the specified lock
+		 *  "type" (F_RDLCK or F_WRLCK).  Returns true if the lock can
+		 *  be established immediately or false otherwise. */
 		bool	tryLockFile(int16_t type) const;
+
+		/** Attempts to lock the entire file using the specified lock
+		 *  "type" (F_RDLCK or F_WRLCK) and blocks until the lock
+		 *  can be established.  Return true on success or false
+		 *  otherwise. */
 		bool	lockFile(int16_t type) const;
+
+		/** Checks to see if the entire file can be locked or not
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) but
+		 *  does not actually attempt to lock the file.  Returns true
+		 *  if the lock can be established immediately or false
+		 *  otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockFile(int16_t type,
 					int16_t *conftype,
 					int16_t *confwhence,
 					off64_t *confstart,
 					off64_t *conflen) const;
+
+		/** Attempts to release a previosly established lock and returns
+		 *  true on success or false otherwise. */
 		bool	unlockFile() const;
 
-		// These methods allow you to lock an arbitrary
-		// region of the file.
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  position "start" (relative to the beginning of the file)
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK).
+		 *  Returns true if the lock can be established immediately or
+		 *  false otherwise. */
 		bool	tryLockRegion(int16_t type, off64_t start,
 							off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  position "start" (relative to the beginning of the file)
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) and
+		 *  blocks until the lock can be established.  Returns true on
+		 *  success or false otherwise. */
 		bool	lockRegion(int16_t type, off64_t start,
 							off64_t len) const;
+
+		/** Checks to see if "len" bytes of the file starting at
+		 *  position "start" (relative to the beginning of the file)
+		 *  can be locked or not using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK) but does not actually attempt to lock
+		 *  the file.  Returns true if the lock can be established
+		 *  immediately or false otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockRegion(int16_t type,
 					off64_t start,
 					off64_t len,
@@ -167,83 +239,296 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 					int16_t *confwhence,
 					off64_t *confstart,
 					off64_t *conflen) const;
+
+		/** Attempts to release a previosly established lock of "len"
+		 *  bytes of the file starting at position "start" (relative to
+		 *  the beginning of the file).  Returns true on success or
+		 *  false otherwise. */
 		bool	unlockRegion(off64_t start, off64_t len) const;
 
-		// These methods allow you to lock an arbitrary region of the
-		// file relative to the current position.
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the current position in the file using the specified lock
+		 *  "type" (F_RDLCK or F_WRLCK).  Returns true if the lock can
+		 *  be established immediately or false otherwise. */
 		bool	tryLockFromCurrent(int16_t type, off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the current position in the file plus "start" bytes
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK).
+		 *  Returns true if the lock can be established immediately or
+		 *  false otherwise. */
 		bool	tryLockFromCurrent(int16_t type, off64_t start,
 							off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the current position in the file using the specified lock
+		 *  "type" (F_RDLCK or F_WRLCK) and blocks until the lock can
+		 *  be established.  Returns true on success or false
+		 *  otherwise. */
 		bool	lockFromCurrent(int16_t type, off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the current position in the file plus "start" bytes
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) and
+		 *  blocks until the lock can be established.  Returns true on
+		 *  success or false otherwise. */
 		bool	lockFromCurrent(int16_t type, off64_t start,
 							off64_t len) const;
+
+		/** Checks to see if "len" bytes of the file starting at
+		 *  the current position in the file can be locked or not using
+		 *  the specified lock "type" (F_RDLCK or F_WRLCK) but does not
+		 *  actually attempt to lock the file.  Returns true if the
+		 *  lock can be established immediately or false otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockFromCurrent(int16_t type, off64_t len,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Checks to see if "len" bytes of the file starting at
+		 *  the current position in the file plus "start" bytes
+		 *  can be locked or not using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK) but does not actually attempt to lock
+		 *  the file.  Returns true if the lock can be established
+		 *  immediately or false otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockFromCurrent(int16_t type, off64_t start,
 						off64_t len,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Attempts to release a previosly established lock of "len"
+		 *  bytes of the file starting at the current position in the
+		 *  file.  Returns true on success or false otherwise. */
 		bool	unlockFromCurrent(off64_t len) const;
+
+		/** Attempts to release a previosly established lock of "len"
+		 *  bytes of the file starting at the current position in the
+		 *  file plus "start" bytes.  Returns true on success or
+		 *  false otherwise. */
 		bool	unlockFromCurrent(off64_t start, off64_t len) const;
 
-		// These methods allow you to lock an arbitrary region of the
-		// file relative to the end of the file.
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the end of the file using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK).  Returns true if the lock can be
+		 *  established immediately or false otherwise. */
 		bool	tryLockFromEnd(int16_t type, off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the the end of the file plus "start" bytes using the
+		 *  specified lock "type" (F_RDLCK or F_WRLCK).  Returns true
+		 *  if the lock can be established immediately or false
+		 *  otherwise. */
 		bool	tryLockFromEnd(int16_t type, off64_t start,
 						off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the end of the file using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK) and blocks until the lock can
+		 *  be established.  Returns true on success or false
+		 *  otherwise. */
 		bool	lockFromEnd(int16_t type, off64_t len) const;
+
+		/** Attempts to lock "len" bytes of the file starting at
+		 *  the end of the file plus "start" bytes using the specified
+		 *  lock "type" (F_RDLCK or F_WRLCK) and blocks until the lock
+		 *  can be established.  Returns true on success or false
+		 *  otherwise. */
 		bool	lockFromEnd(int16_t type, off64_t start,
 						off64_t len) const;
+
+		/** Checks to see if "len" bytes of the file starting at
+		 *  the end of the file can be locked or not using the
+		 *  specified lock "type" (F_RDLCK or F_WRLCK) but does not
+		 *  actually attempt to lock the file.  Returns true if the
+		 *  lock can be established immediately or false otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockFromEnd(int16_t type, off64_t len,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Checks to see if "len" bytes of the file starting at
+		 *  the end of the file plus "start" bytes can be locked or not
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) but
+		 *  does not actually attempt to lock the file.  Returns true
+		 *  if the lock can be established immediately or false
+		 *  otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockFromEnd(int16_t type, off64_t start,
 						off64_t len,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Attempts to release a previosly established lock of "len"
+		 *  bytes of the file starting at the end of the file.
+		 *  Returns true on success or false otherwise. */
 		bool	unlockFromEnd(off64_t len) const;
+
+		/** Attempts to release a previosly established lock of "len"
+		 *  bytes of the file starting at the end of the file plus
+		 *  "start" bytes.  Returns true on success or false
+		 *  otherwise. */
 		bool	unlockFromEnd(off64_t start, off64_t len) const;
 
-		// These methods allow you to lock "the remainder" of a file
-		// starting at a given offset.
+		/** Attempts to lock the remainder of the file starting at
+		 *  position "start" (relative to the beginning of the file)
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK).
+		 *  Returns true if the lock can be established immediately or
+		 *  false otherwise. */
 		bool	tryLockRemainder(int16_t type, off64_t start) const;
+
+		/** Attempts to lock the remainder of the file starting at
+		 *  position "start" (relative to the beginning of the file)
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) and
+		 *  blocks until the lock can be established.  Returns true on
+		 *  success or false otherwise. */
 		bool	lockRemainder(int16_t type, off64_t start) const;
+
+		/** Checks to see if the remainder of the file starting at
+		 *  position "start" (relative to the beginning of the file)
+		 *  can be locked or not using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK) but does not actually attempt to lock
+		 *  the file.  Returns true if the lock can be established
+		 *  immediately or false otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockRemainder(int16_t type, off64_t start,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Attempts to release a previosly established lock on the
+		 *  remainder of the file, starting at position "start"
+		 *  (relative to the begining of the file).  Returns true on
+		 *  success or false otherwise. */
 		bool	unlockRemainder(off64_t start) const;
 
-		// These methods allow you to lock "the remainder" of a file
-		// relative to the current position.
+		/** Attempts to lock the remainder of the file starting at
+		 *  the current position using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK).  Returns true if the lock can be
+		 *  established immediately or false otherwise. */
 		bool	tryLockRemainderFromCurrent(int16_t type) const;
+
+		/** Attempts to lock the remainder of the file starting at
+		 *  the current position plus "start" bytes using the specified
+		 *  lock "type" (F_RDLCK or F_WRLCK).  Returns true if the lock
+		 *  can be established immediately or false otherwise. */
 		bool	tryLockRemainderFromCurrent(int16_t type,
 							off64_t start) const;
+
+		/** Attempts to lock the remainder of the file starting at
+		 *  the current position using the specified lock "type"
+		 *  (F_RDLCK or F_WRLCK) and blocks until the lock can be
+		 *  established.  Returns true on success or false otherwise. */
 		bool	lockRemainderFromCurrent(int16_t type) const;
+
+		/** Attempts to lock the remainder of the file starting at
+		 *  the current position plus "start" bytes using the specified
+		 *  lock "type" (F_RDLCK or F_WRLCK) and blocks until the lock
+		 *  can be established.  Returns true on success or false
+		 *  otherwise. */
 		bool	lockRemainderFromCurrent(int16_t type,
 							off64_t start) const;
+
+		/** Checks to see if the remainder of the file starting at
+		 *  the current position can be locked or not using the
+		 *  specified lock "type" (F_RDLCK or F_WRLCK) but does not
+		 *  actually attempt to lock the file.  Returns true if the
+		 *  lock can be established immediately or false otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockRemainderFromCurrent(int16_t type,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Checks to see if the remainder of the file starting at
+		 *  the current position plus "start" bytes can be locked or not
+		 *  using the specified lock "type" (F_RDLCK or F_WRLCK) but
+		 *  does not actually attempt to lock the file.  Returns true
+		 *  if the lock can be established immediately or false 
+		 *  otherwise.
+		 *
+		 *  If the lock cannot be established then the "conf" parameters
+		 *  will be populated with the details about a conflicting lock
+		 *  which would prevent the file from being locked.  "conftype"
+		 *  will contain the type of the lock (F_RDLCK or F_WRLCK)
+		 *  "confwhence" will contain the offset type of the lock
+		 *  (SEEK_SET, SEEK_CUR or SEEK_END), "confstart" will contain
+		 *  the starting offset for the lock and "conflen" will contain
+		 *  the number of bytes that are locked.  */
 		bool	checkLockRemainderFromCurrent(int16_t type,
 						off64_t start,
 						int16_t *conftype,
 						int16_t *confwhence,
 						off64_t *confstart,
 						off64_t *conflen) const;
+
+		/** Attempts to release a previosly established lock on the
+		 *  remainder of the file, starting at the current position.
+		 *  Returns true on success or false otherwise. */
 		bool	unlockRemainderFromCurrent() const;
+
+		/** Attempts to release a previosly established lock on the
+		 *  remainder of the file, starting at the current position
+		 *  plus "start" bytes.  Returns true on success or false
+		 *  otherwise. */
 		bool	unlockRemainderFromCurrent(off64_t start) const;
 
 		// These methods allow you to lock "the remainder" of a file
