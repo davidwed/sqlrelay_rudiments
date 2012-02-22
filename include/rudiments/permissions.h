@@ -6,25 +6,25 @@
 
 #include <rudiments/private/permissionsincludes.h>
 
-// Permissions are access priveleges.  Files, directories, semaphores and
-// shared memory segments all have permissions associated with them.
-//
-// There are 3 types of permissions: read, write and execute.
-//
-// These permissions can be granted to:
-// 	1. The user that owns the object.
-// 	2. Other users in the group of the user that owns the object.
-// 	3. All other users.
-//
-// The execute permission has 2 modifications which can be applied to it:
-// 	1. Set user id - the program will run as the user that owns
-//			it instead of as the user that ran it
-// 	1. Set group id - the program will run as the group that owns
-//			it instead of as the group of the user that ran it
-//
-// The "sticky bit" may also be set.  When set, the file is saved in the
-// system's swap space. As a side-effect, it cannot be deleted by a user other
-// than the one that created it.
+/** Permissions are access priveleges.  Files, directories, semaphores and
+ *  shared memory segments all have permissions associated with them.
+ * 
+ *  There are 3 types of permissions: read, write and execute.
+ * 
+ *  These permissions can be granted to:
+ *  	1. The user that owns the object.
+ *  	2. Other users in the group of the user that owns the object.
+ *  	3. All other users.
+ * 
+ *  The execute permission has 2 modifications which can be applied to it:
+ *  	1. Set user id - the program will run as the user that owns
+ * 			it instead of as the user that ran it
+ *  	1. Set group id - the program will run as the group that owns
+ * 			it instead of as the group of the user that ran it
+ * 
+ *  The "sticky bit" may also be set.  When set, the file is saved in the
+ *  system's swap space. As a side-effect, it cannot be deleted by a user other
+ *  than the one that created it. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -32,105 +32,187 @@ namespace rudiments {
 
 class RUDIMENTS_DLLSPEC permissions {
 	public:
+		/** Set the permissions on "filename" to "perms".
+		 * 
+		 *  Returns true on success and false on failure. */
 		static	bool	setFilePermissions(const char *filename,
 							mode_t perms);
-				// Set the permissions on "filename" to "perms".
-				//
-				// Returns true on success and false on failure.
+
+		/** Set the permissions on the file associated
+		 *  with file descriptor "fd" to "perms".
+		 *  
+		 *  Returns true on success and false on failure. */
 		static	bool	setFilePermissions(int32_t fd, mode_t perms);
-				// Set the permissions on the file associated
-				// with file descriptor "fd" to "perms".
-				// 
-				// Returns true on success and false on failure.
 
+		/** Return a permission defined in "permstring".
+		 * 
+		 *  "permstring" should be the same format as
+		 *  displayed by the "ls -l" command.
+		 * 
+		 *  The first 3 characters set permissions for 
+		 *  the owner.
+		 *  The next 3 characters set permissions for 
+		 *  the group.
+		 *  The next 3 characters set permissions for 
+		 *  all others.
+		 * 
+		 *  For example:
+		 * 	rwxr-xr-x : read/execute for everyone
+		 * 			and write for the owner
+		 * 	rw-rw-r-- : read for everyone and
+		 * 			write for the owner and
+		 * 			owner's group
+		 * 	rw-r--r-- : read for everyone and
+		 * 			write for the owner
+		 * 	rwsr-sr-x : read/execute for everyone,
+		 * 			write for the owner and
+		 * 			run as the user/group
+		 * 			that owns the file
+		 * 	rw-rw-rwt : read/write for everyone,
+		 * 			and save the file in
+		 * 			swap space */
 		static	mode_t	evalPermString(const char *permstring);
-				// Return a permission defined in "permstring".
-				//
-				// "permstring" should be the same format as
-				// displayed by the "ls -l" command.
-				//
-				// The first 3 characters set permissions for 
-				// the owner.
-				// The next 3 characters set permissions for 
-				// the group.
-				// The next 3 characters set permissions for 
-				// all others.
-				//
-				// For example:
-				//	rwxr-xr-x : read/execute for everyone
-				//			and write for the owner
-				//	rw-rw-r-- : read for everyone and
-				//			write for the owner and
-				//			owner's group
-				//	rw-r--r-- : read for everyone and
-				//			write for the owner
-				//	rwsr-sr-x : read/execute for everyone,
-				//			write for the owner and
-				//			run as the user/group
-				//			that owns the file
-				//	rw-rw-rwt : read/write for everyone,
-				//			and save the file in
-				//			swap space
+
+		/**  FIXME: document this */
 		static	char	*evalPermOctal(mode_t mode);
-				// FIXME: document this
 		
-
-
-		// The following methods can be or'ed together to define
-		// a permission.  For example:
-		//
-		// mode_t perm=(ownerReadWriteExecute() | 
-		//	 		groupReadExecute() | 
-		// 			othersReadExecute())
-		// 
-		// sets perm equal to rwxr-xr-x permissions 
-
+		/** Returns rw-rw-rw- (666) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	everyoneReadWrite();
-				// returns rw-rw-rw- (666) permissions
+
+		/** Returns rwxrwxrwx (777) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	everyoneReadWriteExecute();
-				// returns rwxrwxrwx (777) permissions
+
+		/** Returns r-------- (400) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	ownerRead();
-				// returns r-------- (400) permissions
+
+		/** Returns -w------- (200) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	ownerWrite();
-				// returns -w------- (200) permissions
+
+		/** Returns --x------ (100) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	ownerExecute();
-				// returns --x------ (100) permissions
+
+		/** Returns rw------- (600) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	ownerReadWrite();
-				// returns rw------- (600) permissions
+
+		/** Returns r-x------ (500) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	ownerReadExecute();
-				// returns r-x------ (500) permissions
+
+		/** Returns rwx------ (700) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	ownerReadWriteExecute();
-				// returns rwx------ (700) permissions
+
+		/** Returns ---r----- (040) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	groupRead();
-				// returns ---r----- (040) permissions
+
+		/** Returns ----w---- (020) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	groupWrite();
-				// returns ----w---- (020) permissions
+
+		/** Returns -----x--- (010) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	groupExecute();
-				// returns -----x--- (010) permissions
+
+		/** Returns ---rw---- (060) permissions.
+		 *
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	groupReadWrite();
-				// returns ---rw---- (060) permissions
+
+		/** Returns ---r-x--- (050) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	groupReadExecute();
-				// returns ---r-x--- (050) permissions
+
+		/** Returns ---rwx--- (070) permissions.
+		 *
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	groupReadWriteExecute();
-				// returns ---rwx--- (070) permissions
+
+		/** Returns ------r-- (004) permissions.
+		 *
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	othersRead();
-				// returns ------r-- (004) permissions
+
+		/** Returns -------w- (002) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	othersWrite();
-				// returns -------w- (002) permissions
+
+		/** Returns --------x (001) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	othersExecute();
-				// returns --------x (001) permissions
+
+		/** Returns ------rw- (006) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	othersReadWrite();
-				// returns ------rw- (006) permissions
+
+		/** Returns ------r-x (005) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	othersReadExecute();
-				// returns ------r-x (005) permissions
+
+		/** Returns ------rwx (007) permissions.
+		 *
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	othersReadWriteExecute();
-				// returns ------rwx (007) permissions
+
+		/** Returns --------t permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	saveInSwapSpace();
-				// returns --------t permissions
+
+		/** Returns --s------ (u+s) permissions.
+		 * 
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	setUserId();
-				// returns --s------ (u+s) permissions
+
+		/** Returns -----s--- (g+s) permissions.
+		 *
+		 *  May be or'ed together with the result of another method
+		 *  to define a permission. */
 		static	mode_t	setGroupId();
-				// returns -----s--- (g+s) permissions
 };
 
 #ifdef RUDIMENTS_NAMESPACE
