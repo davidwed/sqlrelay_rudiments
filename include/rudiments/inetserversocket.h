@@ -6,16 +6,16 @@
 
 #include <rudiments/private/inetserversocketincludes.h>
 
-// The inetserversocket class allows you to write programs that can talk to
-// other programs across a network over TCP stream sockets.
-//
-// The inetserversocket class provides methods for setting up sockets and
-// accepting client connections.  Its ultimate parent class: transport,
-// provides methods for reading and writing data and closing connections.
-//
-// If you need to listen on more than 1 socket at a time, you should use the 
-// inetserversocket class (and possibly the unixserversocket class) in
-// conjunction with the listener class.
+/** The inetserversocket class allows you to write programs that can talk to
+ *  other programs across a network over TCP stream sockets.
+ * 
+ *  The inetserversocket class provides methods for setting up sockets and
+ *  accepting client connections.  Its ultimate parent class: transport,
+ *  provides methods for reading and writing data and closing connections.
+ * 
+ *  If you need to listen on more than 1 socket at a time, you should use the 
+ *  inetserversocket class (and possibly the unixserversocket class) in
+ *  conjunction with the listener class. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -25,66 +25,75 @@ class inetserversocketprivate;
 
 class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsocketutil {
 	public:
-				inetserversocket();
-				inetserversocket(const inetserversocket &i);
+
+		/** Creates an instance of the inetserversocket class. */
+		inetserversocket();
+
+		/** Creates an instance of the inetserversocket class
+		 *  that is a copy of "i". */
+		inetserversocket(const inetserversocket &i);
+
+		/** Makes this instance of the inetserversocket class
+		 *  identical to "i". */
 		inetserversocket	&operator=(const inetserversocket &i);
+
+		/** Deletes this instance of the inetserversocket class. */
 		virtual		~inetserversocket();
 
+		/** Convenience method that calls initialize(), bind()
+		 *  and listen().  If you need to set socket options or
+		 *  do anything else special between those discrete steps,
+		 *  then you should use the methods individually.
+		 * 
+		 *  Listen on "address" and "port" and allow
+		 *  "backlog" connections to pile up before
+		 *  refusing them.
+		 * 
+		 *  To listen on all addresses enter a NULL
+		 *  for "address".  Entering a value of 0 for
+		 *  the "port" causes the server to listen on an
+		 *  arbitrary port.
+		 * 
+		 *  The getPort() method can be used later to 
+		 *  discover this port.
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	listen(const char *address,
 					uint16_t port,
 					int32_t backlog);
-				// Listen on "address" and "port" and allow
-				// "backlog" connections to pile up before
-				// refusing them.
-				//
-				// To listen on all addresses enter a NULL
-				// for "address".  Entering a value of 0 for
-				// the "port" causes the server to listen on an
-				// arbitrary port.
-				//
-				// The getPort() method can be used later to 
-				// discover this port.
-				//
-				// Returns true on success and false on failure.
 
 
 
-		// If you need to set socket options or do anything special
-		// between the discrete steps of socket initialization, you
-		// should use a combination of these methods.
+		/** Creates the actual socket and Initializes the class
+		 *  to use "address" and "port" when bind() is called.
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	initialize(const char *address, uint16_t port);
-			// Creates the actual socket and Initializes the class
-			// to use "address" and "port" when bind() is called.
-			//
-			// Returns true on success and false on failure.
+
+		/** Associates the socket with an address.
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	bind();
-			// Associates the socket with an address.
-			//
-			// Returns true on success and false on failure.
+
+		/** Waits until a client connects then places that connection
+		 *  in queue.  Up to "backlog" connections may be queued before
+		 *  future conenctions are refused. 
+		 *
+		 *  Returns true on success and false on failure. */
 		bool	listen(int32_t backlog);
-			// Waits until a client connects then places
-			// that connection in queue.  Up to "backlog"
-			// connections may be queued before future
-			// conenctions are refused.
-			//
-			// Returns true on success and false on failure.
 
+		/** Removes the client connection from the queue and associates
+		 *  a new socket with that connection.  Communication with the
+		 *  client may be done over this new socket.  
+		 * 
+		 *  Returns an inetsocket on success and NULL on failure. */
 		filedescriptor	*accept();
-				// Removes the client connection from the queue
-				// and associates a new socket with that
-				// connection.  Communication with the client
-				// may be done over this new socket.  
-				//
-				// Returns an inetsocket on success and NULL
-				// on failure.
 
+		/** Returns the inet port number that the socket is listening
+		 *  on.  If the port has not been set, 0 is returned instead.
+		 *  Writes the address of the client at the other end of "sock"
+		 *  to "buffer". */
 		uint16_t	getPort();
-				// Returns the inet port number that
-				// the socket is listening on.  If the
-				// port has not been set, 0 is 
-				// returned instead.
-				// Writes the address of the client at
-				// the other end of "sock" to "buffer".
 
 	#include <rudiments/private/inetserversocket.h>
 };

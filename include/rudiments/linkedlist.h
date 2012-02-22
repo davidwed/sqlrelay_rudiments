@@ -6,12 +6,12 @@
 
 #include <rudiments/private/linkedlistincludes.h>
 
-// The linkedlist class allows you to store arbitrary amounts of data in a
-// doubly-linked list.  Since the linkedlist class is template-based, you can
-// store arbitrary types of data as well.
-//
-// Each linkedlist is composed of a series of linkedlistnode's.  Each
-// linkedlistnode contains the data.
+/** The linkedlist class allows you to store arbitrary amounts of data in a
+ *  doubly-linked list.  Since the linkedlist class is template-based, you can
+ *  store arbitrary types of data as well.
+ * 
+ *  Each linkedlist is composed of a series of linkedlistnode's.  Each
+ *  linkedlistnode contains the data. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -20,38 +20,39 @@ namespace rudiments {
 template <class datatype>
 class linkedlistnode {
 	public:
-			linkedlistnode();
-			// Creates a new linkedlist node, initializing the data
-			// to 0 and the next/previous pointers to NULL.
+		/** Creates an empty instance of the linkedlistnode class. */
+		linkedlistnode();
+
+		/** Deletes this instance of the linkedlistnode class.
+		 *  Note however, that the data stored in the linkedlistnode
+		 *  is not deleted by this call. */
 		virtual	~linkedlistnode();
-			// Destroys the linkedlist node.  Note that this method
-			// does not delete the data contained in the node.
 
+		/** Set the data stored in the node to "data". */
 		void		setData(datatype data);
-				// Set the data stored in the node
-				// to "data".
+
+		/** Return the data stored in the node. */
 		datatype	getData() const;
-				// Return the data stored in the node.
 
+		/** Returns a negative number,0 or a positive number depending
+		 *  on whether the key stored in the node is respectively
+		 *  less than, equal to or greater than "testkey". */
 		int32_t	compare(datatype data) const;
-			// Returns -1,0 or 1 if the data stored in the
-			// node is less than, equal to or greater than
-			// "data".
 
+		/** Sets the pointer to the previous node to "previous". */
 		void	setPrevious(linkedlistnode<datatype> *previous);
-			// Sets the pointer to the previous node to "previous".
+
+		/** Sets the pointer to the next node to "next". */
 		void	setNext(linkedlistnode<datatype> *next);
-			// Sets the pointer to the next node to "next".
 
+		/** Returns the previous node in the linkedlist. */
 		linkedlistnode<datatype>	*getPrevious();
-					// Returns the previous node in the
-					// linkedlist.
-		linkedlistnode<datatype>	*getNext();
-					// Returns the next node in the
-					// linkedlist.
 
+		/** Returns the next node in the linkedlist. */
+		linkedlistnode<datatype>	*getNext();
+
+		/** Prints the data stored in the node. */
 		void	print() const;
-			// Prints the data stored in the node.
 
 	#include <rudiments/private/linkedlistnode.h>
 };
@@ -59,86 +60,95 @@ class linkedlistnode {
 template < class datatype, class linkedlistnodetype=linkedlistnode<datatype> >
 class linkedlist {
 	public:
-			linkedlist();
-			// Creates an empty linkedlist.
+		/** Creates an empty instance of the linkedlist class. */
+		linkedlist();
+
+		/** Deletes this instance of the linkedlist class and all of
+		 *  its linkedlistnodes.  Note however, that the daata stored
+		 *  in each linkedlistnode is not deleted by this call. */
 		virtual	~linkedlist();
-			// Deletes the linkedlist and all of it's
-			// linkedlistnodes.
 
+		/** Creates a new linkedlistnode containing "data" and
+		 *  appends it to the linkedlist. */
 		void	append(datatype data);
-			// Creates a new linkedlistnode containing "data" and
-			// appends it to the linkedlist.
+
+		/** Appends already created linkedlistnode "node" to the
+		 *  linkedlist. */
 		void	append(linkedlistnodetype *node);
-			// Appends already created linkedlistnode "node" to the
-			// linkedlist.
+
+		/** Creates a new linkedlistnode containing "data" and
+		 *  inserts it into the linkedlist at "index".
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	insert(uint64_t index, datatype data);
-			// Creates a new linkedlistnode containing "data" and
-			// inserts it into the linkedlist at "index".
-			//
-			// Returns true on success and false on failure.
+
+		/** Inserts already created linkedlistnode "node" into
+		 *  the linkedlist at "index".
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	insert(uint64_t index, linkedlistnodetype *node);
-			// Inserts already created linkedlistnode "node" into
-			// the linkedlist at "index".
-			//
-			// Returns true on success and false on failure.
 
+		/** Deletes the linkedlistnode at "index".
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	removeByIndex(uint64_t index);
-			// Deletes the linkedlistnode at "index".
-			//
-			// Returns true on success and false on failure.
+
+		/** Deletes the first linkedlistnode containing "data".
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	removeByData(datatype data);
-			// Deletes the first linkedlistnode containing "data".
-			//
-			// Returns true on success and false on failure.
+
+		/** Deletes all linkedlistnodes containing "data".
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	removeAllByData(datatype data);
-			// Deletes all linkedlistnodes containing "data".
-			//
-			// Returns true on success and false on failure.
+
+		/** Removed linkedlistnode "node" from the linkedlist.
+		 * 
+		 *  Returns true on success and false on failure. */
 		bool	removeNode(linkedlistnodetype *node);
-			// Removed linkedlistnode "node" from the linkedlist.
-			//
-			// Returns true on success and false on failure.
 
-		bool	setDataByIndex(uint64_t index,
-						datatype data);
-			// Sets the data contained in the linkedlistnode at
-			// "index" to "data".
-			//
-			// Returns true on success and false on failure.
-		bool	getDataByIndex(uint64_t index,
-						datatype *data);
-			// Returns the data contained in the linkedlistnode at
-			// "index".
-			//
-			// Returns true on success and false on failure.
+		/** Sets the data contained in the linkedlistnode at
+		 *  "index" to "data".
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	setDataByIndex(uint64_t index, datatype data);
 
+		/** Returns the data contained in the linkedlistnode at
+		 *  "index".
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	getDataByIndex(uint64_t index, datatype *data);
+
+		/** Returns the number of nodes in the linkedlist. */
 		uint64_t	getLength() const;
-				// Returns the length of the linkedlist.
 
+		/** Returns the first node in the linkedlist. */
 		linkedlistnodetype	*getFirstNode();
-				// Returns the first node in the linkedlist.
-		linkedlistnodetype	*getLastNode();
-				// Returns the last node in the linkedlist.
 
+		/** Returns the last node in the linkedlist. */
+		linkedlistnodetype	*getLastNode();
+
+		/** Returns a pointer to the linkedlistnode at "index". */
 		linkedlistnodetype	*getNodeByIndex(uint64_t index);
-				// Returns a pointer to the linkedlistnode at
-				// "index".
+
+		/** Returns a pointer to the first
+		 *  linkedlistnode containing "data". */
 		linkedlistnodetype	*getNodeByData(datatype data);
-				// Returns a pointer to the first
-				// linkedlistnode containing "data".
+
+		/** Returns a pointer to the firs linkedlistnode
+		 *  after "startnode" containing "data". */
 		linkedlistnodetype	*getNodeByData(
 						linkedlistnodetype *startnode,
-							datatype data);
-				// Returns a pointer to the first
-				// linkedlistnode after "startnode" containing
-				// "data".
+						datatype data);
 
+		/** Deletes all linkedlistnodes currently in the linkedlist.
+		 *  Note however, that the daata stored in each linkedlistnode
+		 *  is not deleted by this call. */
 		void	clear();
-			// Deletes all linkedlistnodes currently in the
-			// linkedlist.
 
+		/** Prints out a representation of the linkedlist. */
 		void	print() const;
-			// Prints out a representation of the linkedlist.
 
 	#include <rudiments/private/linkedlist.h>
 };

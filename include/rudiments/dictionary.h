@@ -26,7 +26,9 @@ class dictionarynode {
 		/** Creates an empty instance of the dictionary node class. */
 		dictionarynode();
 
-		/** Deletes this instance of the dictionarynode class. */
+		/** Deletes this instance of the dictionarynode class.
+		 *  Note however, that neither the key nor data stored in the
+		 *  dictionarynode are deleted by this call. */
 		virtual	~dictionarynode();
 
 		/** Sets the key stored in the node to "key". */
