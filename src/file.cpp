@@ -1130,44 +1130,44 @@ bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
 	return (fl.open(filename,O_RDWR) && fl.changeOwner(uid,gid));
 }
 
-bool file::changeOwnerUserId(const char *newuser) const {
+bool file::changeOwnerUser(const char *newuser) const {
 	uid_t	uid;
 	return (passwdentry::getUserId(newuser,&uid) &&
-				changeOwnerUserId(uid));
+				changeOwnerUser(uid));
 }
 
-bool file::changeOwnerUserId(uid_t uid) const {
+bool file::changeOwnerUser(uid_t uid) const {
 	return changeOwner(uid,(gid_t)-1);
 }
 
-bool file::changeOwnerUserId(const char *filename, const char *newuser) {
+bool file::changeOwnerUser(const char *filename, const char *newuser) {
 	uid_t	uid;
 	return (passwdentry::getUserId(newuser,&uid) &&
-				changeOwnerUserId(filename,uid));
+				changeOwnerUser(filename,uid));
 }
 
-bool file::changeOwnerUserId(const char *filename, uid_t uid) {
+bool file::changeOwnerUser(const char *filename, uid_t uid) {
 	return changeOwner(filename,uid,(gid_t)-1);
 }
 
 
-bool file::changeOwnerGroupId(const char *newgroup) const {
+bool file::changeOwnerGroup(const char *newgroup) const {
 	gid_t	gid;
 	return (groupentry::getGroupId(newgroup,&gid) &&
-				changeOwnerGroupId(gid));
+				changeOwnerGroup(gid));
 }
 
-bool file::changeOwnerGroupId(gid_t gid) const {
+bool file::changeOwnerGroup(gid_t gid) const {
 	return changeOwner((uid_t)-1,gid);
 }
 
-bool file::changeOwnerGroupId(const char *filename, const char *newgroup) {
+bool file::changeOwnerGroup(const char *filename, const char *newgroup) {
 	gid_t	gid;
 	return (groupentry::getGroupId(newgroup,&gid) &&
-				changeOwnerGroupId(filename,gid));
+				changeOwnerGroup(filename,gid));
 }
 
-bool file::changeOwnerGroupId(const char *filename, gid_t gid) {
+bool file::changeOwnerGroup(const char *filename, gid_t gid) {
 	return changeOwner(filename,(uid_t)-1,gid);
 }
 
