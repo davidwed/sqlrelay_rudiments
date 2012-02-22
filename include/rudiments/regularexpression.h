@@ -6,11 +6,11 @@
 
 #include <rudiments/private/regularexpressionincludes.h>
 
-// The regular expression class provides methods for making comparisons
-// between text and regular expressions.
-//
-// Regular expressions are complex, powerful, used in command line
-// programs like grep, sed and find, and extensively in Perl.
+/** The regular expression class provides methods for making comparisons
+ *  between text and regular expressions.
+ * 
+ *  Regular expressions are complex, powerful, used in command line
+ *  programs like grep, sed and find, and extensively in Perl. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -21,62 +21,64 @@ class regularexpressionprivate;
 class RUDIMENTS_DLLSPEC regularexpression {
 	public:
 
-		// if you need to do a quick comparison, use this method
+		/** Returns true if "str" matches "pattern"
+		 *  and false if "str" doesn't match "pattern". */
 		static	bool	match(const char *str, const char *pattern);
-				// Returns true if "str" matches "pattern"
-				// and false if "str" doesn't match "pattern".
 
 
-		// if you need to do many comparisons against a single
-		// expression, use these methods
-			regularexpression();
-			regularexpression(const char *pattern);
-			// this constructor calls the compile method
-			// below during initialization
-			~regularexpression();
+		/** Creates an instance of the regularexpression class. */
+		regularexpression();
 
+		/** Creates an instance of the regularexpression class and
+ 		 *  compiles the regular expression given in "pattern". */
+		regularexpression(const char *pattern);
+
+		/** Deletes this instance of the regular expression class. */
+		~regularexpression();
+
+		/** Compiles the regular expression given in "pattern".
+		 *
+		 *  Returns true if the compilation succeeded and false
+		 *  if it failed. */
 		bool	compile(const char *pattern);
-			// Compiles the regular expression given in
-			// "pattern".
-			//
-			// Returns true if the compilation 
-			// succeeded and false if it failed.
+
+		/** Studies the previously compiled pattern so it can be
+		 *  executed faster.  If you plan on calling match()
+		 *  several times on this pattern, studying it may be
+		 *  worthwhile.  If not, the studying the pattern may
+		 *  take longer than the time saved by studying it.
+		 * 
+		 *  Returns true if the study succeeded
+		 *  and false if if failed. */
 		bool	study();
-			// Studies the previously compiled pattern so it can be
-			// executed faster.  If you plan on calling match()
-			// several times on this pattern, studying it may be
-			// worthwhile.  If not, the studying the pattern may
-			// take longer than the time saved by studying it.
-			//
-			// Returns true if the study succeeded
-			// and false if if failed.
+
+		/** Matches "str" against the regular expression
+		 *  compiled earlier using the compile method.
+		 * 
+		 *  Returns true if the match was successful and
+		 *  false if it was not. */
 		bool	match(const char *str);
-			// Matches "str" against the regular expression
-			// compiled earlier using the compile method.
-			//
-			// Returns true if the match was successful and
-			// false if it was not.
 
+		/** Returns the number of substrings of "str" passed into
+		 *  match() that match "pattern" passed into compile(). */
 		int32_t	getSubstringCount();
-			// Returns the number of substrings of "str" passed into
-			// match() that match "pattern" passed into compile().
 
+		/** Returns the "index"'th matching substring or NULL
+		 *  if index is invalid. */
 		char	*getSubstringStart(int32_t index);
-			// Returns the "index"'th matching substring or NULL
-			// if index is invalid.
 
+		/** Returns the data directly after the "index"'th
+		 *  matching substring or NULL if index is invalid. */
 		char	*getSubstringEnd(int32_t index);
-			// Returns the data directly after the "index"'th
-			// matching substring or NULL if index is invalid.
 
+		/** Returns the offset of the "index"'th matching
+		 *  substring or -1 if index is invalid. */
 		int32_t	getSubstringStartOffset(int32_t index);
-			// Returns the offset of the "index"'th matching
-			// substring or -1 if index is invalid.
 
+		/** Returns the offset of the data directly after the
+		 *  "index"'th matching substring or -1 if index is
+		 *  invalid. */
 		int32_t	getSubstringEndOffset(int32_t index);
-			// Returns the offset of the data directly after the
-			// "index"'th matching substring or -1 if index is
-			// invalid.
 
 	#include <rudiments/private/regularexpression.h>
 };

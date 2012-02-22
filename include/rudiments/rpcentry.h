@@ -6,7 +6,8 @@
 
 #include <rudiments/private/rpcentryincludes.h>
 
-// The rpcentry class provides methods for retrieving entries from /etc/rpc
+/** The rpcentry class provides methods for retrieving entries from the rpc file
+ *  (/etc/rpc on unix). */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -17,50 +18,76 @@ class rpcentryprivate;
 class RUDIMENTS_DLLSPEC rpcentry {
 	public:
 
-		// If you need to quickly look up a specific field, use one of
-		// these methods.
-		//
-		// These methods return true on success and false on failure.
+		/** Sets "number" to the number associated with rpc "name".
+		 *
+		 *  Returns true on success and false otherwise. */
 		static	bool	getNumber(const char *name, int32_t *number);
+
+		/** Sets "aliaslist" to a NULL-terminated list of aliases for
+		 *  rpc "name".  Note that "aliaslist" is allocated
+		 *  internally and returned.  The calling program must free
+		 *  each element and the array itself.
+		 *  
+		 *  Returns true on success and false otherwise. */
 		static	bool	getAliasList(const char *name,
 						char ***aliaslist);
 
+		/** Sets "name" to the name associated with rpc "number". 
+		 *  
+		 *  Returns true on success and false otherwise. */
 		static	bool	getName(int32_t number, char **name);
+
+		/** Sets "aliaslist" to a NULL-terminated list of aliases for
+		 *  rpc "number".  Note that "aliaslist" is allocated
+		 *  internally and returned.  The calling program must free
+		 *  each element and the array itself.
+		 *  
+		 *  Returns true on success and false otherwise. */
 		static	bool	getAliasList(int32_t number, char ***aliaslist);
 
-		// If you need to look up a rpc entry and refer to multiple
-		// fields, use these methods.
-				rpcentry();
-				rpcentry(const rpcentry &r);
+		/** Creates an instance of the rpcentry class. */
+		rpcentry();
+
+		/** Creates an instance of the rpcentry class
+		 *  that is identical to "r". */
+		rpcentry(const rpcentry &r);
+
+		/** Makes this instance of the rpcentry class
+		 *  identical ot "r". */
 		rpcentry	&operator=(const rpcentry &r);
-				~rpcentry();
 
+		/** Deletes this instance of the rpcentry class. */
+		~rpcentry();
+
+		/** Looks up a rpc entry by name.
+		 *  Returns true on success and false on failure. */
 		bool	initialize(const char *name);
-			// Looks up a rpc entry by name.
-			// Returns true on success and false on failure.
-		bool	initialize(int32_t number);
-			// Looks up a rpc entry by number.
-			// Returns true on success and false on failure.
 
+		/** Looks up a rpc entry by number.
+		 *  Returns true on success and false on failure. */
+		bool	initialize(int32_t number);
+
+		/** Returns the name of the rpc entry. */
 		const char		*getName() const;
+
+		/** Returns the number of the rpc entry. */
 		int32_t			getNumber() const;
+
+		/** Returns a NULL-terminated list of aliases for the rpc
+		 *  entry. */
 		const char * const	*getAliasList() const;
 
+		/** Prints out a representation of the rpc entry. */
 		void	print() const;
-			// Prints out the rpc entry.
 
+		/** Returns true if this class needs a mutex to operate safely
+		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();
-			// If your system doesn't support getrpcbyname_r()
-			// and getrpcbynumber_r() then this class needs a
-			// mutex to assure thread safety.
-			//
-			// This method returns true if this class needs a mutex
-			// to operate safely in a threaded environment and false
-			// otherwise.
+
+		/** Allows you to supply a mutex is the class needs it.
+		 *  (see needsMutex()).  If your application is not
+		 *  multithreaded, then there is no need to supply a mutex. */
 		static	void	setMutex(mutex *mtx);
-			// Allows you to supply a mutex is the class needs it.
-			// If your application is not multithreaded, then
-			// there is no need to supply a mutex.
 
 	#include <rudiments/private/rpcentry.h>
 };

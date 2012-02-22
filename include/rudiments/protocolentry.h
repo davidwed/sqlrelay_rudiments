@@ -6,8 +6,8 @@
 
 #include <rudiments/private/protocolentryincludes.h>
 
-// The protocolentry class provides methods for retrieving
-// entries from /etc/protocols
+/** The protocolentry class provides methods for retrieving entries from the
+ *  protocol file (/etc/protocols on unix). */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -18,52 +18,82 @@ class protocolentryprivate;
 class RUDIMENTS_DLLSPEC protocolentry {
 	public:
 
-		// If you need to quickly look up a specific field, use one of
-		// these methods.
-		//
-		// These methods return true on success and false on failure.
+		/** Sets "aliaslist" to a NULL-terminated list of aliases for
+		 *  "protocolname".  Note that "aliaslist" is allocated
+		 *  internally and returned.  The calling program must free
+		 *  each element and the array itself.
+		 *  
+		 *  Returns true on success and false otherwise. */
 		static	bool	getAliasList(const char *protocolname,
 						char ***aliaslist);
+
+		/** Sets "number" to the number associated with "protocolname".
+ 		 *  This generally corresponds to the port that a server for
+ 		 *  that protocol would listen on. */
 		static	bool	getNumber(const char *protocolname,
 						int32_t *number);
 
+		/** Sets "name" to the name of the protocol associated with
+		 *  "number".  "number" generally corresponds to the port that
+		 *  a server for the protocol would listen on. */
 		static	bool	getName(int32_t number, char **name);
+
+		/** Sets "aliaslist" to a NULL-terminated list of aliases for
+		 *  the protocol associated with "number".  "number" generally
+		 *  corresponds to the port that a server for the protocol would
+		 *  listen on.  Note that "aliaslist" is allocated
+		 *  internally and returned.  The calling program must free
+		 *  each element and the array itself.
+		 *  
+		 *  Returns true on success and false otherwise. */
 		static	bool	getAliasList(int32_t number, char ***aliaslist);
 
 
-		// If you need to look up a protocol entry and refer to multiple
-		// fields, use these methods.
-				protocolentry();
-				protocolentry(const protocolentry &p);
+		/** Creates an instance of the protocolentry class. */
+		protocolentry();
+
+		/** Creates an instance of the protocolentry class.
+		 *  that is identical to "p". */
+		protocolentry(const protocolentry &p);
+
+		/** Makes this instance of the protocolentry class
+		 *  identical to "p". */
 		protocolentry	&operator=(const protocolentry &p);
-				~protocolentry();
 
+		/** Deletes this instance of the protocolentry class. */
+		~protocolentry();
+
+		/** Looks up a protocol entry by name.
+		 *  Returns true on success and false on failure. */
 		bool	initialize(const char *protocolname);
-			// Looks up a protocol entry by name.
-			// Returns true on success and false on failure.
-		bool	initialize(int32_t number);
-			// Looks up a protocol entry by number.
-			// Returns true on success and false on failure.
 
+		/** Looks up a protocol entry by number.
+		 *  Returns true on success and false on failure. */
+		bool	initialize(int32_t number);
+
+		/** Returns the name of the protocol entry. */
 		const char		*getName() const;
+
+		/** Returns a NULL-terminated list of aliases for the protocol
+		 *  entry. */
 		const char * const	*getAliasList() const;
+
+		/** Returns the number associated with the protocol entry.
+		 *  This generally corresponds to the port that a server for
+		 *  the protocol would listen on. */
 		int32_t			getNumber() const;
 
+		/** Prints out a representation of the protocol entry. */
 		void	print() const;
-			// Prints out the protocol entry.
 
+		/** Returns true if this class needs a mutex to operate safely
+		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();
-			// If your system doesn't support getprotobyname_r()
-			// and getprotobynumber_r() then this class needs a
-			// mutex to assure thread safety.
-			//
-			// This method returns true if this class needs a mutex
-			// to operate safely in a threaded environment and false
-			// otherwise.
+
+		/** Allows you to supply a mutex is the class needs it.
+		 *  (see needsMutex()).  If your application is not
+		 *  multithreaded, then there is no need to supply a mutex. */
 		static	void	setMutex(mutex *mtx);
-			// Allows you to supply a mutex is the class needs it.
-			// If your application is not multithreaded, then
-			// there is no need to supply a mutex.
 
 	#include <rudiments/private/protocolentry.h>
 };
