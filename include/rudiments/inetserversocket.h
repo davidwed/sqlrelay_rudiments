@@ -10,12 +10,12 @@
  *  other programs across a network over TCP stream sockets.
  * 
  *  The inetserversocket class provides methods for setting up sockets and
- *  accepting client connections.  Its ultimate parent class: transport,
+ *  accepting client connections.  Its ultimate parent class, filedescriptor,
  *  provides methods for reading and writing data and closing connections.
  * 
- *  If you need to listen on more than 1 socket at a time, you should use the 
- *  inetserversocket class (and possibly the unixserversocket class) in
- *  conjunction with the listener class. */
+ *  If you need to listen on more than one socket at a time or a combination
+ *  of sockets and other file descriptors, then you should use the
+ *  inetserversocket class in conjunction with the listener class. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -45,7 +45,7 @@ class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsock
 		 *  do anything else special between those discrete steps,
 		 *  then you should use the methods individually.
 		 * 
-		 *  Listen on "address" and "port" and allow
+		 *  Listens on "address" and "port" and allow
 		 *  "backlog" connections to pile up before
 		 *  refusing them.
 		 * 
@@ -64,7 +64,7 @@ class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsock
 
 
 
-		/** Creates the actual socket and Initializes the class
+		/** Creates the actual socket and initializes the class
 		 *  to use "address" and "port" when bind() is called.
 		 * 
 		 *  Returns true on success and false on failure. */
