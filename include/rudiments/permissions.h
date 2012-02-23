@@ -6,6 +6,10 @@
 
 #include <rudiments/private/permissionsincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 /** Permissions are access priveleges.  Files, directories, semaphores and
  *  shared memory segments all have permissions associated with them.
  * 
@@ -25,11 +29,6 @@
  *  The "sticky bit" may also be set.  When set, the file is saved in the
  *  system's swap space. As a side-effect, it cannot be deleted by a user other
  *  than the one that created it. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class RUDIMENTS_DLLSPEC permissions {
 	public:
 		/** Set the permissions on "filename" to "perms".

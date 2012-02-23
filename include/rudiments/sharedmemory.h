@@ -6,6 +6,12 @@
 
 #include <rudiments/private/sharedmemoryincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class sharedmemoryprivate;
+
 /** Shared memory segments allow multiple processes to access a common
  *  address space.
  * 
@@ -16,13 +22,6 @@
  * 
  *  A shared memory segment is owned by a user and group and has access 
  *  permissions just like a file. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class sharedmemoryprivate;
-
 class RUDIMENTS_DLLSPEC sharedmemory {
 	public:
 		/** Creates an instance of the sharedmemory class. */

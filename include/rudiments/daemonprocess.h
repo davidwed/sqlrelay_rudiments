@@ -6,6 +6,12 @@
 
 #include <rudiments/private/daemonprocessincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class daemonprocessprivate;
+
 /** The daemonprocess class provides methods that are useful to daemons.
  *
  *  Daemons are long running processes which often detach themselves from
@@ -14,16 +20,13 @@
  * 
  *  Daemons typically perform "housecleaning" tasks or serve data to client
  *  programs.  See the server class. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class daemonprocessprivate;
-
 class RUDIMENTS_DLLSPEC daemonprocess {
 	public:
-			daemonprocess();
+
+		/** Creates an instance of the daemonprocess class. */
+		daemonprocess();
+
+		/** Deletes this instance of the daemonprocess class. */
 		virtual	~daemonprocess();
 
 		/** Checks for filename "filename" and reads the

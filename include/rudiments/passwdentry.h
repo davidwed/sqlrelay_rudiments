@@ -6,15 +6,14 @@
 
 #include <rudiments/private/passwdentryincludes.h>
 
-/** The passwdentry class provides methods for retrieving information about
- *  users. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class passwdentryprivate;
 
+/** The passwdentry class provides methods for retrieving information about
+ *  users. */
 class RUDIMENTS_DLLSPEC passwdentry {
 	public:
 

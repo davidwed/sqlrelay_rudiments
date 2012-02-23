@@ -6,15 +6,14 @@
 
 #include <rudiments/private/rawbufferincludes.h>
 
-/** The rawbuffer class provides methods for operating on raw memory buffers.
- * 
- *  Unlike the functions in sys/string.h, these methods are NULL safe.  If any
- *  of the pointer arguments are NULL, your application will not crash. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The rawbuffer class provides methods for operating on raw memory buffers.
+ * 
+ *  Unlike the functions in sys/string.h, these methods are NULL safe.  If any
+ *  of the pointer arguments are NULL, your application will not crash. */
 class RUDIMENTS_DLLSPEC rawbuffer {
 	public:
 

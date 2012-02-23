@@ -6,6 +6,14 @@
 
 #include <rudiments/private/loginrecord.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+// @cond
+
+class loginrecordprivate;
+
 // wrap:
 //	unistd.h - ttyslot(),getlogin(_r)(),setlogin()
 //			getusershell(),endusershell(),setusershell()
@@ -19,18 +27,13 @@
 //		utmp.h - login(),logout(),logwtmp(),updwtmp(),uptmpname(),
 //			getutent(_r)(),setutent(),endutent(),
 //			getutid(_r)(),getutline(_r)(),pututline()
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class loginrecordprivate;
-
 class RUDIMENTS_DLLSPEC loginrecord {
 	public:
 
 	#include <rudiments/private/loginrecord.h>
 };
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

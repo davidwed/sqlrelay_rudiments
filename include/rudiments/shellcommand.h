@@ -1,5 +1,3 @@
-// FIXME: implement this class
-
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information.
 
@@ -8,6 +6,15 @@
 
 #include <rudiments/private/shellcommandincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+// @cond
+
+class shellcommandprivate;
+
+// FIXME: implement this class
 // The shellcommand class provides methods for running commands, reading their
 // output or writing input to them.
 
@@ -38,13 +45,6 @@
 //				posix_spawn_file_actions_addopen()
 //				posix_spawn_file_actions_addclose()
 //				posix_spawn_file_actions_adddup2()
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class shellcommandprivate;
-
 class RUDIMENTS_DLLSPEC shellcommand {
 	public:
 		int32_t	run(const char *command);
@@ -69,6 +69,8 @@ class RUDIMENTS_DLLSPEC shellcommand {
 
 	#include <rudiments/private/shellcommand.h>
 };
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

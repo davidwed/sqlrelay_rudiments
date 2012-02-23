@@ -6,17 +6,16 @@
 
 #include <rudiments/private/stringbufferincludes.h>
 
-/** The stringbuffer class can be used to store strings of arbitrary length.
- *
- *  The stringbuffer is a child of variablebuffer.  See the variablebuffer
- *  class for details on how this is achieved. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class stringbufferprivate;
 
+/** The stringbuffer class can be used to store strings of arbitrary length.
+ *
+ *  The stringbuffer is a child of variablebuffer.  See the variablebuffer
+ *  class for details on how this is achieved. */
 class RUDIMENTS_DLLSPEC stringbuffer : public variablebuffer {
 	public:
 

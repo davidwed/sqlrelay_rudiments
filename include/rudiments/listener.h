@@ -13,11 +13,10 @@ namespace rudiments {
 typedef linkedlist<filedescriptor *>		listenerlist;
 typedef linkedlistnode<filedescriptor *>	listenerlistnode;
 
-/** The listener class listens for activity on a pool of filedescriptors
- *  or children of the filedescriptor class. */
-
 class listenerprivate;
 
+/** The listener class listens for activity on a pool of filedescriptors
+ *  or children of the filedescriptor class. */
 class RUDIMENTS_DLLSPEC listener {
 	public:
 		/** Creates an instance of the listener class. */

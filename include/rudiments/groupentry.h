@@ -6,15 +6,14 @@
 
 #include <rudiments/private/groupentryincludes.h>
 
-/** The groupentry class provides methods for retrieving information about
- *  user groups. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class groupentryprivate;
 
+/** The groupentry class provides methods for retrieving information about
+ *  user groups. */
 class RUDIMENTS_DLLSPEC groupentry {
 	public:
 

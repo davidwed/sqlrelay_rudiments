@@ -6,13 +6,12 @@
 
 #include <rudiments/private/errorincludes.h>
 
-/** The error class provides an interface to the errors that system calls
- *  can generate. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The error class provides an interface to the errors that system calls
+ *  can generate. */
 class RUDIMENTS_DLLSPEC error {
 	public:
 		/** Set the current system call error to 0, "Success". */

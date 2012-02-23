@@ -6,18 +6,17 @@
 
 #include <rudiments/private/regularexpressionincludes.h>
 
-/** The regular expression class provides methods for making comparisons
- *  between text and regular expressions.
- * 
- *  Regular expressions are complex, powerful, used in command line
- *  programs like grep, sed and find, and extensively in Perl. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class regularexpressionprivate;
 
+/** The regular expression class provides methods for making comparisons
+ *  between text and regular expressions.
+ * 
+ *  Regular expressions are complex, powerful, used in command line
+ *  programs like grep, sed and find, and extensively in Perl. */
 class RUDIMENTS_DLLSPEC regularexpression {
 	public:
 

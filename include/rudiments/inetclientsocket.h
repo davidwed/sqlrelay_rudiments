@@ -6,19 +6,18 @@
 
 #include <rudiments/private/inetclientsocketincludes.h>
 
-/** The inetclientsocket class allows you to write programs that can talk to
- *  other programs across a network over TCP stream sockets.
- * 
- *  The inetclientsocket class provides methods for connecting to servers.
- *  Its ultimate parent class: filedescriptor provides methods for reading and 
- *  writing data and closing connections. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class inetclientsocketprivate;
 
+/** The inetclientsocket class allows you to write programs that can talk to
+ *  other programs across a network over TCP stream sockets.
+ * 
+ *  The inetclientsocket class provides methods for connecting to servers.
+ *  Its ultimate parent class: filedescriptor provides methods for reading and 
+ *  writing data and closing connections. */
 class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsocketutil  {
 	public:
 

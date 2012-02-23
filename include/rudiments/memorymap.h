@@ -6,15 +6,14 @@
 
 #include <rudiments/private/memorymapincludes.h>
 
-/** The memorymap class provides methods for mapping a file (or file descriptor)
- *  to a region of memory and manipulating the mapped region. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class memorymapprivate;
 
+/** The memorymap class provides methods for mapping a file (or file descriptor)
+ *  to a region of memory and manipulating the mapped region. */
 class RUDIMENTS_DLLSPEC memorymap {
 	public:
 		

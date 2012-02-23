@@ -6,15 +6,14 @@
 
 #include <rudiments/private/clientsocketincludes.h>
 
-/** The clientsocket class provides a base class for classes that implement
- *  the client side of a client-server communication model over a socket. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class clientsocketprivate;
 
+/** The clientsocket class provides a base class for classes that implement
+ *  the client side of a client-server communication model over a socket. */
 class RUDIMENTS_DLLSPEC clientsocket : public client {
 	public:
 

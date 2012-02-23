@@ -6,17 +6,11 @@
 
 #include <rudiments/private/linkedlistincludes.h>
 
-/** The linkedlist class allows you to store arbitrary amounts of data in a
- *  doubly-linked list.  Since the linkedlist class is template-based, you can
- *  store arbitrary types of data as well.
- * 
- *  Each linkedlist is composed of a series of linkedlistnode's.  Each
- *  linkedlistnode contains the data. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class datatype>
 class linkedlistnode {
 	public:
@@ -57,6 +51,12 @@ class linkedlistnode {
 	#include <rudiments/private/linkedlistnode.h>
 };
 
+/** The linkedlist class allows you to store arbitrary amounts of data in a
+ *  doubly-linked list.  Since the linkedlist class is template-based, you can
+ *  store arbitrary types of data as well.
+ * 
+ *  Each linkedlist is composed of a series of linkedlistnode's.  Each
+ *  linkedlistnode contains the data. */
 template < class datatype, class linkedlistnodetype=linkedlistnode<datatype> >
 class linkedlist {
 	public:
@@ -153,8 +153,6 @@ class linkedlist {
 	#include <rudiments/private/linkedlist.h>
 };
 
-// A class for containing linkedlists of strings is defined here for
-// convenience.
 typedef linkedlistnode< char * >		stringlistnode;
 typedef linkedlist< char *, stringlistnode >	stringlist;
 

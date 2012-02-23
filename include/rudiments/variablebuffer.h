@@ -6,6 +6,12 @@
 
 #include <rudiments/private/variablebufferincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class variablebufferprivate;
+
 /** The variablebuffer class can be used to store raw data of arbitrary length.
  *
  *  The class allocates a buffer internally of either a default or specified
@@ -22,13 +28,6 @@
  *
  *  It is generally more efficient to reuse the same variablebuffer over and
  *  over than to allocate a new one for each operation. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class variablebufferprivate;
-
 class RUDIMENTS_DLLSPEC variablebuffer {
 	public:
 

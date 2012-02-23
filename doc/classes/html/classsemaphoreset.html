@@ -79,7 +79,20 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#a529a17f290efcd57d629086ffc9c4db7">retryInterruptedOperations</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsemaphoreset.html#aa285359617329d495f24cc03291a1cd8">dontRetryInterruptedOperations</a> ()</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Semaphores allow processes to synchronize their activities.</p>
+<p>A semaphore is just a number with two primary operations that can be performed on it: <a class="el" href="classsemaphoreset.html#aefd002e9fb5dce1c80e0277d2ca2125c">signal()</a> and <a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait()</a></p>
+<p>The operations are analagous to:</p>
+<p>int32_t semaphore;</p>
+<p>void <a class="el" href="classsemaphoreset.html#aefd002e9fb5dce1c80e0277d2ca2125c">signal()</a> { semaphore++; // increment the semaphore }</p>
+<p>void <a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait()</a> { while (!(semaphore&gt;0)); // wait until the semaphore&gt;0 semaphore--; // decrement the semaphore }</p>
+<p>The actual <a class="el" href="classsemaphoreset.html#aefd002e9fb5dce1c80e0277d2ca2125c">signal()</a> and <a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait()</a> operations are atomic. There is no chance of another process getting context-switched in and changing the semaphore value between the two lines of code in the <a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait()</a> process.</p>
+<p>Semaphores can be initialized to any number.</p>
+<p>The initial value of the semaphore corresponds to the number of processes that will pass directly through their <a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait()</a> calls without being blocked.</p>
+<p>Processes that get blocked calling <a class="el" href="classsemaphoreset.html#a900741be2c25df7a50bfee9267b67a8a">wait()</a> are placed in a queue. When another process calls <a class="el" href="classsemaphoreset.html#aefd002e9fb5dce1c80e0277d2ca2125c">signal()</a>, the process at the head of the queue is unblocked.</p>
+<p>A semaphoreset is just a collection of related semaphores.</p>
+<p>A semaphoreset is owned by a user and group and has access permissions just like a file. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6e3615586518f7bec03e88d19c5ae50a"></a><!-- doxytag: member="semaphoreset::semaphoreset" ref="a6e3615586518f7bec03e88d19c5ae50a" args="()" -->
 <div class="memitem">
 <div class="memproto">

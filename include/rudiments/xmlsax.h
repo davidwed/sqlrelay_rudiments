@@ -6,16 +6,15 @@
 
 #include <rudiments/private/xmlsaxincludes.h>
 
-/** The xmlsax class is a base class for an XML SAX parser.  To use this
- *  class, you should create a class that inherits from it and implements the
- *  virtual methods. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class xmlsaxprivate;
 
+/** The xmlsax class is a base class for an XML SAX parser.  To use this
+ *  class, you should create a class that inherits from it and implements the
+ *  virtual methods. */
 class RUDIMENTS_DLLSPEC xmlsax {
 	public:
 

@@ -6,6 +6,12 @@
 
 #include <rudiments/private/fileincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class fileprivate;
+
 /** The file class provides methods for interacting with files and for 
  *  discovering the properties associated with a file such as permissions,
  *  ownership, size, etc.
@@ -16,13 +22,6 @@
  *  If you need to get multiple properties or perform multiple operations,
  *  create an instance of the class, call open(), then use the non-static
  *  methods. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class fileprivate;
-
 class RUDIMENTS_DLLSPEC file : public filedescriptor {
 	public:
 

@@ -6,18 +6,17 @@
 
 #include <rudiments/private/serialportincludes.h>
 
-/** The serialport class is similar to the filedescriptor class, but read()
- *  returns EOF when a timeout has occurred.  This class should be used when
- *  communicating over a serial port.
- *
- *  Also, this class wraps some functions from termios.h */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class serialportprivate;
 
+/** The serialport class is similar to the filedescriptor class, but read()
+ *  returns EOF when a timeout has occurred.  This class should be used when
+ *  communicating over a serial port.
+ *
+ *  Also, this class wraps some functions from termios.h */
 class RUDIMENTS_DLLSPEC serialport : public filedescriptor {
 	public:
 

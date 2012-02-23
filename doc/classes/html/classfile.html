@@ -282,7 +282,11 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static key_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#a412835d7f02a971911117dddebe00bd5">generateKey</a> (const char *filename, int32_t id)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#ad2fcb6be74147e47a76f4ea7d32f0c33">maxLinks</a> (const char *filename)</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The file class provides methods for interacting with files and for discovering the properties associated with a file such as permissions, ownership, size, etc.</p>
+<p>Many of the static methods are just provided for convenience. Use them if you need to get a a single property or perform a single operation.</p>
+<p>If you need to get multiple properties or perform multiple operations, create an instance of the class, call <a class="el" href="classfile.html#a9f306b95256eae265611d63265adfa23">open()</a>, then use the non-static methods. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a22090815b0614f552f2cb2cc8f170572"></a><!-- doxytag: member="file::file" ref="a22090815b0614f552f2cb2cc8f170572" args="()" -->
 <div class="memitem">
 <div class="memproto">

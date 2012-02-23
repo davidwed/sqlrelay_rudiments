@@ -6,6 +6,12 @@
 
 #include <rudiments/private/deviceincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class deviceprivate;
+
 /** The device class provides methods for interacting with devices.
  *
  *  It is different from the file class only in that it provides a method
@@ -13,13 +19,6 @@
  *  query the device for parameters (such as size) when it is opened but
  *  the file class does.  Querying a device node for parameters can
  *  have unexpected effects. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class deviceprivate;
-
 class RUDIMENTS_DLLSPEC device : public file {
 	public:
 

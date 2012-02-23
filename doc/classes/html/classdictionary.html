@@ -56,10 +56,14 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#ad6fe1e1ab9a94a57a4011d5dbbb6de00">clear</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdictionary.html#ac3a1a6d545a74a4849cafe976290d300">print</a> ()</td></tr>
 </table>
-<h3>template&lt;class keytype, class datatype, class dictionarynodetype = dictionarynode&lt;keytype,datatype&gt;, class dictionarylistnodetype = dictionarylistnode&lt;keytype,datatype&gt;, class dictionarylisttype = dictionarylist&lt;keytype,datatype&gt;&gt;<br/>
- class dictionary&lt; keytype, datatype, dictionarynodetype, dictionarylistnodetype, dictionarylisttype &gt;</h3>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><h3>template&lt;class keytype, class datatype, class dictionarynodetype = dictionarynode&lt;keytype,datatype&gt;, class dictionarylistnodetype = dictionarylistnode&lt;keytype,datatype&gt;, class dictionarylisttype = dictionarylist&lt;keytype,datatype&gt;&gt;<br/>
+class dictionary&lt; keytype, datatype, dictionarynodetype, dictionarylistnodetype, dictionarylisttype &gt;</h3>
 
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<p>The dictionary class allows you to store arbitrary numbers of key/value pairs.</p>
+<p>Each dictionary is composed of a list of dictionarynode's. Each dictionarynode contains the key and value.</p>
+<p>Internally, the dictionary class uses a linkedlist to store the values though this is potentially inefficient and may change in a future version. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a41719d18e2a22a581d0aa10ee6097000"></a><!-- doxytag: member="dictionary::dictionary" ref="a41719d18e2a22a581d0aa10ee6097000" args="()" -->
 <div class="memitem">
 <div class="memproto">

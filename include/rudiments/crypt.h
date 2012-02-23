@@ -6,13 +6,12 @@
 
 #include <rudiments/private/cryptincludes.h>
 
-/** The crypt class provides an encryption method that is commonly used for
- *  password encryption. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The crypt class provides an encryption method that is commonly used for
+ *  password encryption. */
 class RUDIMENTS_DLLSPEC crypt {
 	public:
 

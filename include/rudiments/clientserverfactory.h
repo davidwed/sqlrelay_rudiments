@@ -6,13 +6,12 @@
 
 #include <rudiments/private/clientserverfactoryincludes.h>
 
-/** The clientserverfactory class provides factory methods for creating
- *  clients and servers. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The clientserverfactory class provides factory methods for creating
+ *  clients and servers. */
 class RUDIMENTS_DLLSPEC clientserverfactory {
 	public:
 		/** Returns an instance of a child of the client

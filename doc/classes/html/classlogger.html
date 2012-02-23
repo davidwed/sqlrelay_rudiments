@@ -61,7 +61,10 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogger.html#a801647b23d5537c41afcc2ee4cf80c22">logHeader</a> (const char *name)</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The logger class and associated logdestination classes provide methods for logging data from an application. The following destinations are supported: file, syslog, stdout and stderr</p>
+<p>To use these classes: instantiate one or more logdestinations, instantiate a logger, and add the logdestination instance(s) to the logger class instance using <a class="el" href="classlogger.html#a6c5ea7a150fbc434a0d0865f204d9d42">addLogDestination()</a>. Then, each call to a logger class method will output logging information to each of the logdestinations in seqence. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a4f753a510e00c892b38e95c2284363a6"></a><!-- doxytag: member="logger::logger" ref="a4f753a510e00c892b38e95c2284363a6" args="()" -->
 <div class="memitem">
 <div class="memproto">

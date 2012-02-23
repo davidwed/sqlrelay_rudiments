@@ -6,6 +6,14 @@
 
 #include <rudiments/private/tty.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+// @cond
+
+class ttyprivate;
+
 // wrap:
 //	unistd.h - tcgetpgrp(),tcsetpgrp()
 //			ctermid()
@@ -18,18 +26,13 @@
 //				__POSIX_MAX_INPUT()
 //	linux only -
 //		unistd.h - vhangup()
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class ttyprivate;
-
 class RUDIMENTS_DLLSPEC tty : public filedescriptor {
 	public:
 
 	#include <rudiments/private/tty.h>
 };
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

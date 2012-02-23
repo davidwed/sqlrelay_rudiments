@@ -45,36 +45,36 @@
 <a name="l00006"></a>00006 <span class="preprocessor"></span>
 <a name="l00007"></a>00007 <span class="preprocessor">#include &lt;rudiments/private/linkedlistincludes.h&gt;</span>
 <a name="l00008"></a>00008 
-<a name="l00016"></a>00016 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
-<a name="l00017"></a>00017 <span class="preprocessor"></span><span class="keyword">namespace </span>rudiments {
-<a name="l00018"></a>00018 <span class="preprocessor">#endif</span>
-<a name="l00019"></a>00019 <span class="preprocessor"></span>
-<a name="l00020"></a>00020 <span class="keyword">template</span> &lt;<span class="keyword">class</span> datatype&gt;
-<a name="l00021"></a><a class="code" href="classlinkedlistnode.html">00021</a> <span class="keyword">class </span><a class="code" href="classlinkedlistnode.html">linkedlistnode</a> {
-<a name="l00022"></a>00022         <span class="keyword">public</span>:
-<a name="l00024"></a>00024                 <a class="code" href="classlinkedlistnode.html">linkedlistnode</a>();
-<a name="l00025"></a>00025 
-<a name="l00029"></a>00029                 <span class="keyword">virtual</span> ~<a class="code" href="classlinkedlistnode.html">linkedlistnode</a>();
+<a name="l00009"></a>00009 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
+<a name="l00010"></a>00010 <span class="preprocessor"></span><span class="keyword">namespace </span>rudiments {
+<a name="l00011"></a>00011 <span class="preprocessor">#endif</span>
+<a name="l00012"></a>00012 <span class="preprocessor"></span>
+<a name="l00014"></a>00014 <span class="keyword">template</span> &lt;<span class="keyword">class</span> datatype&gt;
+<a name="l00015"></a><a class="code" href="classlinkedlistnode.html">00015</a> <span class="keyword">class </span><a class="code" href="classlinkedlistnode.html">linkedlistnode</a> {
+<a name="l00016"></a>00016         <span class="keyword">public</span>:
+<a name="l00018"></a>00018                 <a class="code" href="classlinkedlistnode.html">linkedlistnode</a>();
+<a name="l00019"></a>00019 
+<a name="l00023"></a>00023                 <span class="keyword">virtual</span> ~<a class="code" href="classlinkedlistnode.html">linkedlistnode</a>();
+<a name="l00024"></a>00024 
+<a name="l00026"></a>00026                 <span class="keywordtype">void</span>            setData(datatype data);
+<a name="l00027"></a>00027 
+<a name="l00029"></a>00029                 datatype        getData() <span class="keyword">const</span>;
 <a name="l00030"></a>00030 
-<a name="l00032"></a>00032                 <span class="keywordtype">void</span>            setData(datatype data);
-<a name="l00033"></a>00033 
-<a name="l00035"></a>00035                 datatype        getData() <span class="keyword">const</span>;
-<a name="l00036"></a>00036 
-<a name="l00040"></a>00040                 int32_t compare(datatype data) <span class="keyword">const</span>;
+<a name="l00034"></a>00034                 int32_t compare(datatype data) <span class="keyword">const</span>;
+<a name="l00035"></a>00035 
+<a name="l00037"></a>00037                 <span class="keywordtype">void</span>    setPrevious(<a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a> *previous);
+<a name="l00038"></a>00038 
+<a name="l00040"></a>00040                 <span class="keywordtype">void</span>    setNext(<a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a> *next);
 <a name="l00041"></a>00041 
-<a name="l00043"></a>00043                 <span class="keywordtype">void</span>    setPrevious(<a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a> *previous);
+<a name="l00043"></a>00043                 <a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a>        *getPrevious();
 <a name="l00044"></a>00044 
-<a name="l00046"></a>00046                 <span class="keywordtype">void</span>    setNext(<a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a> *next);
+<a name="l00046"></a>00046                 <a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a>        *getNext();
 <a name="l00047"></a>00047 
-<a name="l00049"></a>00049                 <a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a>        *getPrevious();
+<a name="l00049"></a>00049                 <span class="keywordtype">void</span>    print() <span class="keyword">const</span>;
 <a name="l00050"></a>00050 
-<a name="l00052"></a>00052                 <a class="code" href="classlinkedlistnode.html">linkedlistnode&lt;datatype&gt;</a>        *getNext();
+<a name="l00051"></a>00051 <span class="preprocessor">        #include &lt;rudiments/private/linkedlistnode.h&gt;</span>
+<a name="l00052"></a>00052 };
 <a name="l00053"></a>00053 
-<a name="l00055"></a>00055                 <span class="keywordtype">void</span>    print() <span class="keyword">const</span>;
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057 <span class="preprocessor">        #include &lt;rudiments/private/linkedlistnode.h&gt;</span>
-<a name="l00058"></a>00058 };
-<a name="l00059"></a>00059 
 <a name="l00060"></a>00060 <span class="keyword">template</span> &lt; <span class="keyword">class</span> datatype, <span class="keyword">class</span> linkedlistnodetype=linkedlistnode&lt;datatype&gt; &gt;
 <a name="l00061"></a><a class="code" href="classlinkedlist.html">00061</a> <span class="keyword">class </span><a class="code" href="classlinkedlist.html">linkedlist</a> {
 <a name="l00062"></a>00062         <span class="keyword">public</span>:
@@ -123,19 +123,17 @@
 <a name="l00153"></a>00153 <span class="preprocessor">        #include &lt;rudiments/private/linkedlist.h&gt;</span>
 <a name="l00154"></a>00154 };
 <a name="l00155"></a>00155 
-<a name="l00156"></a>00156 <span class="comment">// A class for containing linkedlists of strings is defined here for</span>
-<a name="l00157"></a>00157 <span class="comment">// convenience.</span>
-<a name="l00158"></a>00158 <span class="keyword">typedef</span> <a class="code" href="classlinkedlistnode.html">linkedlistnode&lt; char * &gt;</a>                <a class="code" href="classlinkedlistnode.html">stringlistnode</a>;
-<a name="l00159"></a>00159 <span class="keyword">typedef</span> <a class="code" href="classlinkedlist.html">linkedlist&lt; char *, stringlistnode &gt;</a>    <a class="code" href="classlinkedlist.html">stringlist</a>;
-<a name="l00160"></a>00160 
-<a name="l00161"></a>00161 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
-<a name="l00162"></a>00162 <span class="preprocessor"></span>}
-<a name="l00163"></a>00163 <span class="preprocessor">#endif</span>
-<a name="l00164"></a>00164 <span class="preprocessor"></span>
-<a name="l00165"></a>00165 <span class="preprocessor">#include &lt;rudiments/private/linkedlistnodeinlines.h&gt;</span>
-<a name="l00166"></a>00166 <span class="preprocessor">#include &lt;rudiments/private/linkedlistinlines.h&gt;</span>
-<a name="l00167"></a>00167 
-<a name="l00168"></a>00168 <span class="preprocessor">#endif</span>
+<a name="l00156"></a>00156 <span class="keyword">typedef</span> <a class="code" href="classlinkedlistnode.html">linkedlistnode&lt; char * &gt;</a>                <a class="code" href="classlinkedlistnode.html">stringlistnode</a>;
+<a name="l00157"></a>00157 <span class="keyword">typedef</span> <a class="code" href="classlinkedlist.html">linkedlist&lt; char *, stringlistnode &gt;</a>    <a class="code" href="classlinkedlist.html">stringlist</a>;
+<a name="l00158"></a>00158 
+<a name="l00159"></a>00159 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
+<a name="l00160"></a>00160 <span class="preprocessor"></span>}
+<a name="l00161"></a>00161 <span class="preprocessor">#endif</span>
+<a name="l00162"></a>00162 <span class="preprocessor"></span>
+<a name="l00163"></a>00163 <span class="preprocessor">#include &lt;rudiments/private/linkedlistnodeinlines.h&gt;</span>
+<a name="l00164"></a>00164 <span class="preprocessor">#include &lt;rudiments/private/linkedlistinlines.h&gt;</span>
+<a name="l00165"></a>00165 
+<a name="l00166"></a>00166 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
 <hr class="footer"/><address class="footer"><small>Generated on Thu Feb 23 2012 for Rudiments by&#160;

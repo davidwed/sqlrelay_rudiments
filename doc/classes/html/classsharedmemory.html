@@ -68,7 +68,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>attach</b> (key_t key
 <tr><td class="memItemLeft" align="right" valign="top">gid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#af3383e37d3cf3f4acb4e3a99cfb4f0b1">getGroupId</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">mode_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsharedmemory.html#afba231e06835663aaea82c309ee3a202">getPermissions</a> ()</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Shared memory segments allow multiple processes to access a common address space.</p>
+<p>Shared memory can be used for interprocess communication and is generally faster than using fifo's or unix sockets.</p>
+<p>To synchronize access to shared memory, use the semaphoreset class.</p>
+<p>A shared memory segment is owned by a user and group and has access permissions just like a file. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a902572f7e28acbf29e4390ad643a38ef"></a><!-- doxytag: member="sharedmemory::sharedmemory" ref="a902572f7e28acbf29e4390ad643a38ef" args="()" -->
 <div class="memitem">
 <div class="memproto">

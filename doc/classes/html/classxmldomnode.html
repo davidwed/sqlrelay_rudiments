@@ -114,7 +114,18 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#ab3c5866307a756e8b78458593af6bf4a">createNullNode</a> (<a class="el" href="classxmldom.html">xmldom</a> *dom)</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The xmldomnode class provides a generic container for DOM tree elements. One can navigate the nodes of the tree, modify the tree and read or modify the data that the nodes contain by calling methods in this class.</p>
+<p>A DOM tree node can be one of the following: the document root a tag a tag attribute a segment of text a comment a segment of CDATA</p>
+<p>Each node may contain the following data, though for some node types, the data container is unused: type name value parent node next sibling previous sibling a list of attribute nodes a list of child nodes</p>
+<p>Here is a breakdown by node type:</p>
+<p>For the document root: type - ROOT_XMLDOMNODETYPE name - "document" value - unused parent node - unused next sibling - unused previous sibling - unused a list of attribute nodes - unused a list of child nodes - the xml version tag, the doctype tag and the top-level enclosing tag</p>
+<p>For a tag: type - TAG_XMLDOMNODETYPE name - the tag name value - unused parent node - the parent tag or document root next sibling - can be another tag, a segment of text, a comment or a segment of cdata previous sibling - can be another tag, a segment of text, a comment or a segment of cdata a list of attribute nodes - a list of attribute nodes a list of child nodes - a list of tags, text segments, comments and/or cdata segments</p>
+<p>For a tag attribute: type - ATTRIBUTE_XMLDOMNODETYPE name - the attribute name value - the attribute value (note that for tags with standalone attributes, the name and value are the same) parent node - the tag containing the attributes next sibling - the next attribute previous sibling - the previous attribute a list of attribute nodes - unused a list of child nodes - unused</p>
+<p>For a segment of text: type - TEXT_XMLDOMNODETYPE name - "text" value - the text itself parent node - the tag containing the text next sibling - can be a tag, a comment or a segment of cdata previous sibling - can be a tag, a comment or a segment of cdata a list of attribute nodes - unused a list of child nodes - unused</p>
+<p>For a comment: type - COMMENT_XMLDOMNODETYPE name - "comment" value - the comment itself parent node - the tag containing the comment next sibling - can be a tag, a segment of text, another comment or a segment of cdata previous sibling - can be a tag, a segment of text, another comment or a segment of cdata a list of attribute nodes - unused a list of child nodes - unused</p>
+<p>For a segment of cdata: type - CDATA_XMLDOMNODETYPE name - "cdata" value - the cdata itself parent node - the tag containing the cdata next sibling - can be a tag, a segment of text, a comment or another segment of cdata previous sibling - can be a tag, a segment of text, a comment or another segment of cdata a list of attribute nodes - unused a list of child nodes - unused </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a580710fb1316a730182adbaee0aa664d"></a><!-- doxytag: member="xmldomnode::xmldomnode" ref="a580710fb1316a730182adbaee0aa664d" args="(xmldom *dom, xmldomnode *nullnode)" -->
 <div class="memitem">
 <div class="memproto">

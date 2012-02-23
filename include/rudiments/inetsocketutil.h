@@ -6,15 +6,14 @@
 
 #include <rudiments/private/inetsocketutilincludes.h>
 
-/** The inetsocketutil class is just a base class for other classes that use
- *  inet sockets.  It is unlikely to need to be used directly. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class inetsocketutilprivate;
 
+/** The inetsocketutil class is just a base class for other classes that use
+ *  inet sockets.  It is unlikely to need to be used directly. */
 class RUDIMENTS_DLLSPEC inetsocketutil {
 	public:
 

@@ -120,7 +120,12 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>getAvailableFi
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfilesystem.html#af67cdc035ba69a2c3ad32636a3736440">getFilesystemSpecificString</a> (const char *path, const char **str)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfilesystem.html#ad96fdd35cedd9dce42e4ec312bd4eb13">getFilesystemSpecificString</a> (int32_t fd, const char **str)</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The filesystem class provides methods for discovering the properties associated with a filesystem such as type, total and free blocks, total and free inodes, etc.</p>
+<p>The native methods for accessing filesystem data vary greatly between platforms and many of these methods only work at all on certain platforms. For those methods, the platforms that they are known to work on are listed.</p>
+<p>Use the static methods in this class if you need to get a a single property.</p>
+<p>If you need to get more that one property, create an instance of the class, call <a class="el" href="classfilesystem.html#a30a5b91a2606c17387ef991b422e456b">initialize()</a>, then use the non-static methods to access the properties that you need. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a80cbaabf867624f58dc0359bd79f18d2"></a><!-- doxytag: member="filesystem::filesystem" ref="a80cbaabf867624f58dc0359bd79f18d2" args="()" -->
 <div class="memitem">
 <div class="memproto">

@@ -6,13 +6,12 @@
 
 #include <rudiments/private/characterincludes.h>
 
-/** The character class provides methods for evaluating and manipulating
- *  characters. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The character class provides methods for evaluating and manipulating
+ *  characters. */
 class RUDIMENTS_DLLSPEC character {
 	public:
 		/** Returns true if "c" is an alphanumeric character

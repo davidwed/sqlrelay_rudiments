@@ -6,21 +6,6 @@
 
 #include <rudiments/private/filesystemincludes.h>
 
-/** The filesystem class provides methods for discovering the properties
- *  associated with a filesystem such as type, total and free blocks, total and
- *  free inodes, etc.
- *
- *  The native methods for accessing filesystem data vary greatly between
- *  platforms and many of these methods only work at all on certain platforms.
- *  For those methods, the platforms that they are known to work on are listed.
- * 
- *  Use the static methods in this class if you need to get a a single property.
- * 
- *  If you need to get more that one property, create an instance of the class,
- *  call initialize(), then use the non-static methods to access the properties
- *  that you need. */
-
-
 // TODO: 
 // NetBSD: u_short f_oflags - deprecated copy of mount flags
 // NetBSD: u_short f_flags - mount flags
@@ -35,6 +20,19 @@ namespace rudiments {
 
 class filesystemprivate;
 
+/** The filesystem class provides methods for discovering the properties
+ *  associated with a filesystem such as type, total and free blocks, total and
+ *  free inodes, etc.
+ *
+ *  The native methods for accessing filesystem data vary greatly between
+ *  platforms and many of these methods only work at all on certain platforms.
+ *  For those methods, the platforms that they are known to work on are listed.
+ * 
+ *  Use the static methods in this class if you need to get a a single property.
+ * 
+ *  If you need to get more that one property, create an instance of the class,
+ *  call initialize(), then use the non-static methods to access the properties
+ *  that you need. */
 class RUDIMENTS_DLLSPEC filesystem {
 	public:
 		/** Creates an instance of the filesystem class. */

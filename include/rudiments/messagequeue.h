@@ -6,20 +6,23 @@
 
 #include <rudiments/private/messagequeue.h>
 
-// wrap:
-//	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+// @cond
+
 class messagequeueprivate;
 
+// wrap:
+//	sys/msg.h - msgctl(),msgget(),msgrcv(),msgsnd()
 class RUDIMENTS_DLLSPEC messagequeue {
 	public:
 
 	#include <rudiments/private/messagequeue.h>
 };
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

@@ -48,6 +48,8 @@
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#a38dd58c0eca8cf14fb7fc6fb37593f3b">daemonprocess</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#a016eeb0cdc7e4a8c54c63f58047cd5e0">~daemonprocess</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#a53960365fab2b5434c685c430501cc96">detach</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#ab5e6fe3072300baa15e1344526169609">runAsUser</a> (const char *username) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#af7faf5a6c5e618b45376adf546784614">runAsGroup</a> (const char *groupname) const </td></tr>
@@ -62,6 +64,45 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#a1084dd18bcedf4a0781b12e7ab0a6762">waitForChildren</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdaemonprocess.html#aaae83bd22ebcd3c341f4fb6ddf771a6f">dontWaitForChildren</a> ()</td></tr>
 </table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The daemonprocess class provides methods that are useful to daemons.</p>
+<p>Daemons are long running processes which often detach themselves from the controlling terminal and run in the background. They are frequently started at boot time and run in the background.</p>
+<p>Daemons typically perform "housecleaning" tasks or serve data to client programs. See the server class. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a38dd58c0eca8cf14fb7fc6fb37593f3b"></a><!-- doxytag: member="daemonprocess::daemonprocess" ref="a38dd58c0eca8cf14fb7fc6fb37593f3b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">daemonprocess::daemonprocess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Creates an instance of the daemonprocess class. </p>
+
+</div>
+</div>
+<a class="anchor" id="a016eeb0cdc7e4a8c54c63f58047cd5e0"></a><!-- doxytag: member="daemonprocess::~daemonprocess" ref="a016eeb0cdc7e4a8c54c63f58047cd5e0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual daemonprocess::~daemonprocess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Deletes this instance of the daemonprocess class. </p>
+
+</div>
+</div>
 <hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="ae50f2c550af4cb9cb213ca8a96168a0f"></a><!-- doxytag: member="daemonprocess::checkForPidFile" ref="ae50f2c550af4cb9cb213ca8a96168a0f" args="(const char *filename)" -->
 <div class="memitem">

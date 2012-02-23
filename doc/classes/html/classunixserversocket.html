@@ -59,7 +59,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixserversocket.html#a9d3574ead10444d1a5a153c2101fdc22">listen</a> (int32_t backlog)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfiledescriptor.html">filedescriptor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixserversocket.html#a58e09c04158b9559ad750f3bbe872b2a">accept</a> ()</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The unixserversocket class allows you to write programs that can talk to other programs on the same machine over TCP stream sockets.</p>
+<p>Inet sockets (see the inetserversocket class) can be used by clients and servers on the same machine as well, but Unix sockets generally perform better.</p>
+<p>The unixserversocket class provides methods for setting up sockets and accepting client connections. Its ultimate parent class: transport, provides methods for reading and writing data and closing connections. An immediate parent class: unixsocket provides methods for passing file descriptors between connected instances of unixservertsocket's and unixclientsocket's.</p>
+<p>If you need to listen on more than 1 socket at a time, you should use the unixserversocket class (and possibly the unixserversocket class) in conjunction with the listener class. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a2cd1ead83027ef5772fc54c95b077cbf"></a><!-- doxytag: member="unixserversocket::unixserversocket" ref="a2cd1ead83027ef5772fc54c95b077cbf" args="()" -->
 <div class="memitem">
 <div class="memproto">

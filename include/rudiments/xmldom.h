@@ -6,14 +6,13 @@
 
 #include <rudiments/private/xmldomincludes.h>
 
-/** The xmldom class implements a minimal XML DOM parser. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class xmldomprivate;
 
+/** The xmldom class implements a minimal XML DOM parser. */
 class RUDIMENTS_DLLSPEC xmldom : public xmlsax {
 	public:
 

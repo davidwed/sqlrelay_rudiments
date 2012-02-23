@@ -6,15 +6,14 @@
 
 #include <rudiments/private/serviceentryincludes.h>
 
-/** The serviceentry class provides methods for retrieving entries from the
- *  service file (/etc/services on unix). */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class serviceentryprivate;
 
+/** The serviceentry class provides methods for retrieving entries from the
+ *  service file (/etc/services on unix). */
 class RUDIMENTS_DLLSPEC serviceentry {
 	public:
 

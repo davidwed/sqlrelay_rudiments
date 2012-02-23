@@ -6,15 +6,14 @@
 
 #include <rudiments/private/commandlineincludes.h>
 
-/** The commandline class provides methods for parsing command line
- *  arguments. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class commandlineprivate;
 
+/** The commandline class provides methods for parsing command line
+ *  arguments. */
 class RUDIMENTS_DLLSPEC commandline {
 	public:
 

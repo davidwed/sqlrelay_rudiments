@@ -90,7 +90,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvariablebuffer.html#a4ccd801ac5bc92b3e455f4cfcc765161">getActualSize</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvariablebuffer.html#ade9fea4c20db9b4b380790836498594c">detachBuffer</a> ()</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The variablebuffer class can be used to store raw data of arbitrary length.</p>
+<p>The class allocates a buffer internally of either a default or specified initial size. If a write or append operation would exceed the size of the existing buffer, then it is grown by a multiple of either a default or specified incremental size. This growth is accomplished by allocating a new, larger buffer and copying the contents of the old buffer into it along with whatever data was written or appended.</p>
+<p>If the buffer is cleared, then if the existing buffer has grown beyond its initial size then it is deleted and a new buffer is allocated using the initial size. However if the buffer has not grown then no action is taken except to reset the internal position pointers.</p>
+<p>It is generally more efficient to reuse the same variablebuffer over and over than to allocate a new one for each operation. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a8163884dfc5358d5654f92c78571943c"></a><!-- doxytag: member="variablebuffer::variablebuffer" ref="a8163884dfc5358d5654f92c78571943c" args="(size_t initialsize, size_t increment)" -->
 <div class="memitem">
 <div class="memproto">

@@ -6,6 +6,12 @@
 
 #include <rudiments/private/inetserversocketincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class inetserversocketprivate;
+
 /** The inetserversocket class allows you to write programs that can talk to
  *  other programs across a network over TCP stream sockets.
  * 
@@ -16,13 +22,6 @@
  *  If you need to listen on more than one socket at a time or a combination
  *  of sockets and other file descriptors, then you should use the
  *  inetserversocket class in conjunction with the listener class. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class inetserversocketprivate;
-
 class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsocketutil {
 	public:
 

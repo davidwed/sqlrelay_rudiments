@@ -6,6 +6,14 @@
 
 #include <rudiments/private/pseudotty.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+// @cond
+
+class pseudottyprivate;
+
 // wrap:
 //	not in solaris - 
 //		pty.h - openpty(),forkpty()
@@ -16,18 +24,13 @@
 //		stdlib.h - posix_optnpt(),grantpt(),unlockpt(),ptsname(_r)()
 //	gnu extensions -
 //		stdlib.h - getpt()
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class pseudottyprivate;
-
 class RUDIMENTS_DLLSPEC pseudotty : public filedescriptor {
 	public:
 
 	#include <rudiments/private/pseudotty.h>
 };
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

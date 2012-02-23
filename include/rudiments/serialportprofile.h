@@ -6,6 +6,15 @@
 
 #include <rudiments/private/serialportprofileincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class serialportprofileprivate;
+
+// cfmakeraw, cfsetspeed???
+// wraps struct termios
+
 /** A serialportprofile is a set of parameters for a serial port such as baud
  *  rate, parity, bits-per character and lots of other settings.  On some
  *  systems, these are referred to as "termios".
@@ -15,16 +24,6 @@
  *  values.  These days serial ports are more often used for talking to
  *  peripherals on embedded systems but many of the same concepts still
  *  apply. */
-
-// cfmakeraw, cfsetspeed???
-// wraps struct termios
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class serialportprofileprivate;
-
 class RUDIMENTS_DLLSPEC serialportprofile {
 	public:
 

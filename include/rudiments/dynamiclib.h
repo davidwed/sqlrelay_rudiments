@@ -6,15 +6,14 @@
 
 #include <rudiments/private/dynamiclibincludes.h>
 
-/** The dynamiclib class provides methods for loading, unloading and calling
- *  functions from dynamically linked libraries. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class dynamiclibprivate;
 
+/** The dynamiclib class provides methods for loading, unloading and calling
+ *  functions from dynamically linked libraries. */
 class RUDIMENTS_DLLSPEC dynamiclib {
 	public:
 

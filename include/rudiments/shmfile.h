@@ -6,19 +6,18 @@
 
 #include <rudiments/private/shmfileincludes.h>
 
-/** The shmfile class provides methods for interacting with POSIX shared memory
- *  objects.  POSIX shared memory objects may be accessed like files, but
- *  reside in shared memory rather than on the filesystem.
- * 
- *  For maximum portability, the name of a shmfile should begin with a slash (/)
- *  and contain no embedded slashes. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class shmfileprivate;
 
+/** The shmfile class provides methods for interacting with POSIX shared memory
+ *  objects.  POSIX shared memory objects may be accessed like files, but
+ *  reside in shared memory rather than on the filesystem.
+ * 
+ *  For maximum portability, the name of a shmfile should begin with a slash (/)
+ *  and contain no embedded slashes. */
 class RUDIMENTS_DLLSPEC shmfile : public file {
 	public:
 

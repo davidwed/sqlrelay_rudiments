@@ -6,6 +6,12 @@
 
 #include <rudiments/private/semaphoresetincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class semaphoresetprivate;
+
 /** Semaphores allow processes to synchronize their activities.
  *
  *  A semaphore is just a number with two primary operations that can be 
@@ -41,13 +47,6 @@
  * 
  *  A semaphoreset is owned by a user and group and has access permissions
  *  just like a file. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class semaphoresetprivate;
-
 class RUDIMENTS_DLLSPEC semaphoreset {
 	public:
 

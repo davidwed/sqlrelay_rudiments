@@ -6,9 +6,6 @@
 
 #include <rudiments/private/timezonefileincludes.h>
 
-/** The timezonefile class provides methods for parsing and accessing timezone
- *  files such as are typically found in /usr/share/zoneinfo on unix. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -21,6 +18,8 @@ struct ttinfo {
 	uint32_t	tt_abbrind;
 };
 
+/** The timezonefile class provides methods for parsing and accessing timezone
+ *  files such as are typically found in /usr/share/zoneinfo on unix. */
 class RUDIMENTS_DLLSPEC timezonefile {
 	public:
 

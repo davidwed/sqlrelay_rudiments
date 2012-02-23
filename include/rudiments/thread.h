@@ -6,19 +6,22 @@
 
 #include <rudiments/private/thread.h>
 
-// pthread wrapper
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+// @cond
+
 class threadprivate;
 
+// pthread wrapper
 class RUDIMENTS_DLLSPEC thread {
 	public:
 
 	#include <rudiments/private/thread.h>
 };
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

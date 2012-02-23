@@ -6,16 +6,6 @@
 
 #include <rudiments/private/loggerincludes.h>
 
-/** The logger class and associated logdestination classes provide methods for
- *  logging data from an application.  The following destinations are supported:
- *  	file, syslog, stdout and stderr
- * 
- *  To use these classes: instantiate one or more logdestinations,
- *  instantiate a logger, and add the logdestination instance(s) to the
- *  logger class instance using addLogDestination().  Then, each call to a
- *  logger class method will output logging information to each of the
- *  logdestinations in seqence. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -26,9 +16,9 @@ class RUDIMENTS_DLLSPEC logdestination {
 	#include <rudiments/private/logdestination.h>
 };
 
+class syslogdestinationprivate;
 
 /** The syslogdestination class writes log data to syslog. */
-class syslogdestinationprivate;
 class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 	public:
 
@@ -58,8 +48,9 @@ class RUDIMENTS_DLLSPEC syslogdestination : public logdestination {
 };
 
 
-/** The filedestination class writes log data to a file. */
 class filedestinationprivate;
+
+/** The filedestination class writes log data to a file. */
 class RUDIMENTS_DLLSPEC filedestination : public logdestination {
 	public:
 
@@ -101,9 +92,17 @@ class RUDIMENTS_DLLSPEC stderrdestination : public logdestination {
 typedef linkedlist<logdestination *>		loggerlist;
 typedef linkedlistnode<logdestination *>	loggerlistnode;
 
-/** The logger class provides methods for managing
- *  logdestinations and writing log entries. */
 class loggerprivate;
+
+/** The logger class and associated logdestination classes provide methods for
+ *  logging data from an application.  The following destinations are supported:
+ *  	file, syslog, stdout and stderr
+ * 
+ *  To use these classes: instantiate one or more logdestinations,
+ *  instantiate a logger, and add the logdestination instance(s) to the
+ *  logger class instance using addLogDestination().  Then, each call to a
+ *  logger class method will output logging information to each of the
+ *  logdestinations in seqence. */
 class RUDIMENTS_DLLSPEC logger {
 	public:
 

@@ -6,6 +6,10 @@
 
 #include <rudiments/private/randomnumberincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 /** The randomnumber class provides methods for generating and scaling 
  *  random numbers.
  * 
@@ -26,11 +30,6 @@
  *  Calls to generateScaledNumber() may return the same value before all
  *  numbers in the range have been returned because it just scales the result
  *  of generateNumber() which operates on a larger range. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class RUDIMENTS_DLLSPEC randomnumber {
 	public:
 		/** Generates a random number seed by first attempting

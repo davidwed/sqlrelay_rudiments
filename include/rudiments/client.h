@@ -6,15 +6,14 @@
 
 #include <rudiments/private/clientincludes.h>
 
-/** The client class provides a base class for classes that implement the
- *  client side of a client-server communication model. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class clientprivate;
 
+/** The client class provides a base class for classes that implement the
+ *  client side of a client-server communication model. */
 class RUDIMENTS_DLLSPEC client : public filedescriptor {
 	public:
 		/** Creates an instance of the client class. */

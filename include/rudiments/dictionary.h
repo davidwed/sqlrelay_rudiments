@@ -6,20 +6,12 @@
 
 #include <rudiments/private/dictionaryincludes.h>
 
-/** The dictionary class allows you to store arbitrary numbers of key/value
- *  pairs.
- * 
- *  Each dictionary is composed of a list of dictionarynode's.  Each
- *  dictionarynode contains the key and value.
- *
- *  Internally, the dictionary class uses a linkedlist to store the values
- *  though this is potentially inefficient and may change in a future
- *  version. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The dictionarynode class stores the key/value pairs that compose a
+ *  dictionary. */
 template <class keytype, class datatype>
 class dictionarynode {
 	public:
@@ -64,6 +56,15 @@ class dictionarylist :
 		public linkedlist< dictionarynode<keytype,datatype> *,
 				dictionarylistnode<keytype,datatype> > {};
 
+/** The dictionary class allows you to store arbitrary numbers of key/value
+ *  pairs.
+ * 
+ *  Each dictionary is composed of a list of dictionarynode's.  Each
+ *  dictionarynode contains the key and value.
+ *
+ *  Internally, the dictionary class uses a linkedlist to store the values
+ *  though this is potentially inefficient and may change in a future
+ *  version. */
 template <class keytype, class datatype,
 	class dictionarynodetype=dictionarynode<keytype,datatype>,
 	class dictionarylistnodetype=dictionarylistnode<keytype,datatype>,
@@ -106,10 +107,6 @@ class dictionary {
 	#include <rudiments/private/dictionary.h>
 };
 
-
-
-/** A set of classes for storing dictionaries who's keys are strings are
- *  provided here for convenience. */
 template <class datatype>
 class stringdictionarynode :
 		public dictionarynode< char *,datatype > {
@@ -139,8 +136,6 @@ class stringdictionary : public dictionary< char *, datatype,
 		virtual	~stringdictionary();
 };
 
-/** A set of classes for storing dictionaries who's keys are const strings are
- *  provided here for convenience. */
 template <class datatype>
 class conststringdictionarynode :
 		public dictionarynode< const char *,datatype > {
@@ -171,10 +166,6 @@ class conststringdictionary : public dictionary< const char *, datatype,
 		virtual	~conststringdictionary();
 };
 
-
-
-/** A set of classes for storing dictionaries who's keys are int32_t integers
- *  are provided here for convenience. */
 template <class datatype>
 class numericdictionarynode :
 		public dictionarynode< int32_t, datatype > {
@@ -204,10 +195,6 @@ class numericdictionary : public dictionary< int32_t, datatype,
 		virtual	~numericdictionary();
 };
 
-
-
-/** A set of classes for storing dictionaries who's keys and values are both
- *  strings are provided here for convenience. */
 typedef stringdictionarynode< char * >		namevaluepairsnode;
 typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
 typedef stringdictionarylist< char * >		namevaluepairslist;

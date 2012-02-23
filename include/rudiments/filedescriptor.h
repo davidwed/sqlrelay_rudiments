@@ -6,17 +6,15 @@
 
 #include <rudiments/private/filedescriptorincludes.h>
 
-/** The filedescriptor class is a base class for other classes that utilize
- *  file descriptors. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class listener;
-
 class filedescriptorprivate;
 
+/** The filedescriptor class is a base class for other classes that utilize
+ *  file descriptors. */
 class RUDIMENTS_DLLSPEC filedescriptor {
 	public:
 		/** Creates an instance of the filedescriptor class. */

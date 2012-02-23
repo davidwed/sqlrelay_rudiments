@@ -6,6 +6,10 @@
 
 #include <rudiments/private/processincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
 // wrap:
 //	unistd.h - nice()
 //			getgroups()
@@ -42,10 +46,8 @@
 //		ucontext.h - user-level context switching
 //			getcontext(),setcontext(),swapcontext(),makecontext()
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
+/** The process class provides methods for accessing information about and
+ *  controlling the currently running process. */
 class RUDIMENTS_DLLSPEC process {
 	public:
 

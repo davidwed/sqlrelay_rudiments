@@ -6,6 +6,12 @@
 
 #include <rudiments/private/link.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class linkprivate;
+
 // like file class, but some methods operate on the link instead of the
 // file the link points to
 
@@ -13,13 +19,6 @@
 //	unistd.h - lchown()
 //	sys/stat.h - lstat(),lchmod(),
 //	sys/xattr.h - lsetxattr(),lgetxattr(),llistxattr(),lremovexattr()
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class linkprivate;
-
 class RUDIMENTS_DLLSPEC link : public file {
 	public:
 

@@ -6,6 +6,12 @@
 
 #include <rudiments/private/unixserversocketincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class unixserversocketprivate;
+
 /** The unixserversocket class allows you to write programs that can talk to
  *  other programs on the same machine over TCP stream sockets.
  * 
@@ -23,13 +29,6 @@
  *  If you need to listen on more than 1 socket at a time, you should use the 
  *  unixserversocket class (and possibly the unixserversocket class) in
  *  conjunction with the listener class. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class unixserversocketprivate;
-
 class RUDIMENTS_DLLSPEC unixserversocket : public serversocket, private unixsocketutil {
 	public:
 

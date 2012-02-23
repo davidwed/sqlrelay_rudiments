@@ -6,15 +6,14 @@
 
 #include <rudiments/private/protocolentryincludes.h>
 
-/** The protocolentry class provides methods for retrieving entries from the
- *  protocol file (/etc/protocols on unix). */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class protocolentryprivate;
 
+/** The protocolentry class provides methods for retrieving entries from the
+ *  protocol file (/etc/protocols on unix). */
 class RUDIMENTS_DLLSPEC protocolentry {
 	public:
 

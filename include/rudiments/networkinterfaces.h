@@ -1,5 +1,3 @@
-// FIXME: implement this class
-
 // Copyright (c) 2005 David Muse
 // See the COPYING file for more information.
 
@@ -12,12 +10,15 @@
 namespace rudiments {
 #endif
 
+// @cond
+
 typedef listnode< networkinterface * >	networkinterfacelistnode;
 typedef list< networkinterface *, networkinterfacelistnode >
 						networkinterfacelist;
 
 class networkinterfaceprivate;
 
+// FIXME: implement this class
 class RUDIMENTS_DLLSPEC networkinterface {
 	public:
 			networkinterface();
@@ -49,6 +50,8 @@ class RUDIMENTS_DLLSPEC networkinterfaces {
 		static	networkinterface	*getInterface(const char *name);
 	#include <rudiments/private/networkinterfaces.h>
 }
+
+// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

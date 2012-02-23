@@ -6,15 +6,14 @@
 
 #include <rudiments/private/directoryincludes.h>
 
-/** The directory class provides methods for opening/closing a directory and
- *  traversing it's files and subdirectories. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class directoryprivate;
 
+/** The directory class provides methods for opening/closing a directory and
+ *  traversing it's files and subdirectories. */
 class RUDIMENTS_DLLSPEC directory {
 	public:
 		/** Creates an instance of the directory class. */

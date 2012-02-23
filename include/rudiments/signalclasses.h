@@ -6,21 +6,15 @@
 
 #include <rudiments/private/signalclassesincludes.h>
 
-/** Signals are a means for processes to interrupt each other.
- * 
- *  Many signals will cause a process to exit unless they are explicitly
- *  handled by a callback function. */
-
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+class signalsetprivate;
 
 /** A signalset it just a collection of signals.  Many signal-related functions
  *  take signalsets for arguments.  The signalset class makes signalsets
  *  easy to manage. */
-class signalsetprivate;
 class RUDIMENTS_DLLSPEC signalset {
 	friend class signalmanager;
 	friend class signalhandler;

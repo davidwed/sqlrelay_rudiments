@@ -6,6 +6,12 @@
 
 #include <rudiments/private/modemserverincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class modemserverprivate;
+
 /** The modemserver class allows you to write programs taht can talk to
  *  other programs across a direct serial modem connection.
  *
@@ -16,13 +22,6 @@
  *  If you need to listen on more than one modem at a time or a combination of
  *  modems and other file descriptors (such as sockets), then you should use the
  *  modemserver class in conjunction with the listener class. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class modemserverprivate;
-
 class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 	public:
 

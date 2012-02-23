@@ -6,15 +6,14 @@
 
 #include <rudiments/private/hostentryincludes.h>
 
-/** The hostentry class provides methods for retrieving entries from the host
- *  file (/etc/hosts on unix). */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class hostentryprivate;
 
+/** The hostentry class provides methods for retrieving entries from the host
+ *  file (/etc/hosts on unix). */
 class RUDIMENTS_DLLSPEC hostentry {
 	public:
 

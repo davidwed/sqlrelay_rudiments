@@ -6,6 +6,23 @@
 
 #include <rudiments/private/xmldomnodeincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+enum xmldomnodetype {
+	NULL_XMLDOMNODETYPE=0,
+	ROOT_XMLDOMNODETYPE,
+	TAG_XMLDOMNODETYPE,
+	ATTRIBUTE_XMLDOMNODETYPE,
+	TEXT_XMLDOMNODETYPE,
+	COMMENT_XMLDOMNODETYPE,
+	CDATA_XMLDOMNODETYPE
+};
+
+class xmldom;
+class xmldomnodeprivate;
+
 /** The xmldomnode class provides a generic container for DOM tree elements.
  *  One can navigate the nodes of the tree, modify the tree and read or modify
  *  the data that the nodes contain by calling methods in this class.
@@ -100,25 +117,6 @@
  *  				or another segment of cdata
  *  		a list of attribute nodes - unused
  *  		a list of child nodes - unused */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-// node types
-enum xmldomnodetype {
-	NULL_XMLDOMNODETYPE=0,
-	ROOT_XMLDOMNODETYPE,
-	TAG_XMLDOMNODETYPE,
-	ATTRIBUTE_XMLDOMNODETYPE,
-	TEXT_XMLDOMNODETYPE,
-	COMMENT_XMLDOMNODETYPE,
-	CDATA_XMLDOMNODETYPE
-};
-
-class xmldom;
-class xmldomnodeprivate;
-
 class RUDIMENTS_DLLSPEC xmldomnode {
 	public:
 			/** Creates a new node and intializes its

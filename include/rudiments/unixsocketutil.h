@@ -6,15 +6,14 @@
 
 #include <rudiments/private/unixsocketutilincludes.h>
 
-/** The unixsocketutil class is just a base class for other classes that use
- *  unix sockets.  It is unlikely to need to be used directly. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class unixsocketutilprivate;
 
+/** The unixsocketutil class is just a base class for other classes that use
+ *  unix sockets.  It is unlikely to need to be used directly. */
 class RUDIMENTS_DLLSPEC unixsocketutil {
 	public:
 

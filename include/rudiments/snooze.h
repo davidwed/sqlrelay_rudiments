@@ -6,12 +6,11 @@
 
 #include <rudiments/private/snoozeincludes.h>
 
-/** The snooze class provides methods for suspending process execution. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
+/** The snooze class provides methods for suspending process execution. */
 class RUDIMENTS_DLLSPEC snooze {
 	public:
 

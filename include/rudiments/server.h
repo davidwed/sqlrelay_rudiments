@@ -6,15 +6,14 @@
 
 #include <rudiments/private/serverincludes.h>
 
-/** The server class provides a base class for classes that implement the server
- *  side of a client-server communication model. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class serverprivate;
 
+/** The server class provides a base class for classes that implement the server
+ *  side of a client-server communication model. */
 class RUDIMENTS_DLLSPEC server : public filedescriptor {
 	public:
 

@@ -6,6 +6,12 @@
 
 #include <rudiments/private/parameterstringincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class parameterstringprivate;
+
 /** The parameterstring class provides methods for parsing and accessing
  *  name/value pairs in so-called "parameter strings" formatted like this:
  * 
@@ -13,13 +19,6 @@
  * 
  *  Parameter strings are often used to define connections to servers, databases
  *  or for other similar things. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class parameterstringprivate;
-
 class RUDIMENTS_DLLSPEC parameterstring {
 	public:
 

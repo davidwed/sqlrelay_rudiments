@@ -59,7 +59,11 @@ int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>connect</b> (const
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixclientsocket.html#a4b81d5891d4bed1f401ec15c8b8b94c4">initialize</a> (const char *filename, long timeoutsec, long timeoutusec, unsigned long retrywait, unsigned long retrycount)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classunixclientsocket.html#aef7c1af20e8118e5fbbf1d7d53f892a2">connect</a> ()</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The unixclientsocket class allows you to write programs that can talk to other programs on the same machine over TCP stream sockets.</p>
+<p>Inet sockets (see the inetclientsocket class) can be used by clients and servers on the same machine as well, but Unix sockets generally perform better.</p>
+<p>The unixclientsocket class provides methods for connecting to servers. Its ultimate parent class: filedescriptor provides methods for reading and writing data and closing connections. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a0fadd162fe04c952d6d1938d49b522c8"></a><!-- doxytag: member="unixclientsocket::unixclientsocket" ref="a0fadd162fe04c952d6d1938d49b522c8" args="()" -->
 <div class="memitem">
 <div class="memproto">

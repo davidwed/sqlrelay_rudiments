@@ -6,6 +6,12 @@
 
 #include <rudiments/private/unixclientsocketincludes.h>
 
+#ifdef RUDIMENTS_NAMESPACE
+namespace rudiments {
+#endif
+
+class unixclientsocketprivate;
+
 /** The unixclientsocket class allows you to write programs that can talk to
  *  other programs on the same machine over TCP stream sockets.
  * 
@@ -16,13 +22,6 @@
  *  The unixclientsocket class provides methods for connecting to servers.
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
  *  writing data and closing connections. */
-
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-class unixclientsocketprivate;
-
 class RUDIMENTS_DLLSPEC unixclientsocket : public clientsocket, private unixsocketutil {
 	public:
 

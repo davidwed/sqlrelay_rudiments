@@ -6,18 +6,17 @@
 
 #include <rudiments/private/intervaltimerincludes.h>
 
-/** The intervaltimer class provides methods for interfacing with timers.
- *
- *  A timer has an initial interval and periodic intervals.  The timer will
- *  raise a signal after the initial interval and then again after each
- *  periodic interval. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class intervaltimerprivate;
 
+/** The intervaltimer class provides methods for interfacing with timers.
+ *
+ *  A timer has an initial interval and periodic intervals.  The timer will
+ *  raise a signal after the initial interval and then again after each
+ *  periodic interval. */
 class RUDIMENTS_DLLSPEC intervaltimer {
 	public:
 

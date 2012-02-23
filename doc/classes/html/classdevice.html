@@ -58,7 +58,10 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevice.html#a79869beaa0fea3837dc9dbfc96078006">createDeviceNode</a> (const char *filename, bool blockdevice, uint16_t major, uint16_t minor, mode_t perms)</td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>The device class provides methods for interacting with devices.</p>
+<p>It is different from the file class only in that it provides a method to create a device node and that by default, the device class does not query the device for parameters (such as size) when it is opened but the file class does. Querying a device node for parameters can have unexpected effects. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a95ab42e0b2e738637d3414347fa5559c"></a><!-- doxytag: member="device::device" ref="a95ab42e0b2e738637d3414347fa5559c" args="()" -->
 <div class="memitem">
 <div class="memproto">

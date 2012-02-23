@@ -10,6 +10,8 @@
 namespace rudiments {
 #endif
 
+class memorypoolprivate;
+
 /** The memorypool class provides methods for creating and using a memory pool.
  *
  *  If you have an iterative process that requires variable amounts of ram
@@ -17,9 +19,6 @@ namespace rudiments {
  *  and deallocating memory on-demand and less resource-intensive than
  *  allocating static buffers that are large enough to accommodate the maximum
  *  amount of data you may have to store. */
-
-class memorypoolprivate;
-
 class RUDIMENTS_DLLSPEC memorypool {
 	public:
 		/** Creates a memory pool of initial size "initialsize".

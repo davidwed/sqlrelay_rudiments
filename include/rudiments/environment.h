@@ -6,15 +6,14 @@
 
 #include <rudiments/private/environmentincludes.h>
 
-/** The environment class provides methods for accessing and manipulating
- *  environment variables. */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class environmentprivate;
 
+/** The environment class provides methods for accessing and manipulating
+ *  environment variables. */
 class RUDIMENTS_DLLSPEC environment {
 	public:
 		/** Returns the value of "variable". */

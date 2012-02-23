@@ -6,15 +6,14 @@
 
 #include <rudiments/private/shadowentryincludes.h>
 
-/** The shadowentry class provides methods for retrieving entries from the
- *  shadow password file (/etc/shadow on unix). */
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
 class shadowentryprivate;
 
+/** The shadowentry class provides methods for retrieving entries from the
+ *  shadow password file (/etc/shadow on unix). */
 class RUDIMENTS_DLLSPEC shadowentry {
 	public:
 
