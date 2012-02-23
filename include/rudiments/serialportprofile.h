@@ -785,7 +785,7 @@ class RUDIMENTS_DLLSPEC serialportprofile {
 		/** Sets the number of deciseconds that a read() will
 		 *  wait after reading readThreshold() characters before
 		 *  falling through.
-		 *  Corresponding termios flag: VTIME. *//
+		 *  Corresponding termios flag: VTIME. */
 		void	readTimeout(unsigned char deciseconds);
 
 

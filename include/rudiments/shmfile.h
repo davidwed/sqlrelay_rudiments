@@ -6,12 +6,12 @@
 
 #include <rudiments/private/shmfileincludes.h>
 
-// The shmfile class provides methods for interacting with POSIX shared memory
-// objects.  POSIX shared memory objects may be accessed like files, but
-// reside in shared memory rather than on the filesystem.
-//
-// For maximum portability, the name of a shmfile should begin with a slash (/)
-// and contain no embedded slashes.
+/** The shmfile class provides methods for interacting with POSIX shared memory
+ *  objects.  POSIX shared memory objects may be accessed like files, but
+ *  reside in shared memory rather than on the filesystem.
+ * 
+ *  For maximum portability, the name of a shmfile should begin with a slash (/)
+ *  and contain no embedded slashes. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -22,15 +22,24 @@ class shmfileprivate;
 class RUDIMENTS_DLLSPEC shmfile : public file {
 	public:
 
-			shmfile();
-			shmfile(const shmfile &s);
+		/** Creates an instance of the shmfile class. */
+		shmfile();
+
+		/** Creates an instance of the shmfile class
+		 *  that is a copy of "s". */
+		shmfile(const shmfile &s);
+
+		/** Makes this instance of the shmfile class
+		 *  identical to "s". */
 		shmfile	&operator=(const shmfile &s);
+
+		/** Deletes this instance of the shmfile class. */
 		virtual	~shmfile();
 
+		/** Removes POXIX shared memory object
+		 *  "filename".  Returns true on success and
+		 *  false on failure. */
 		static bool	remove(const char *filename);
-				// Removes POXIX shared memory object
-				// "filename".  Returns true on success and
-				// false on failure.
 
 	#include <rudiments/private/shmfile.h>
 };

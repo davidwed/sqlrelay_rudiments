@@ -6,7 +6,7 @@
 
 #include <rudiments/private/xmldomincludes.h>
 
-// The xmldom class implements a minimal XML DOM parser.
+/** The xmldom class implements a minimal XML DOM parser. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -17,24 +17,28 @@ class xmldomprivate;
 class RUDIMENTS_DLLSPEC xmldom : public xmlsax {
 	public:
 
-			xmldom();
+		/** Creates a new instance of the xmldom class. */
+		xmldom();
+
+		/** Deletes this instance of the xmldom class. */
 		virtual	~xmldom();
 
+		/** Parses file "filename" and generates a DOM tree. */
 		bool	parseFile(const char *filename);
-			// Parse file "filename" and generate a DOM tree.
+
+		/** Parses string "string" and generates a DOM tree. */
 		bool	parseString(const char *string);
-			// Parse string "string" and generate a DOM tree.
 
+		/** Returns the root node of the DOM tree. */
 		xmldomnode	*getRootNode() const;
-				// Returns the root node of the DOM tree.
 
+		/** Creates a new root node.  This is useful for building a
+		 *  tree from scratch. */
 		void	createRootNode();
-			// Creates a new root node.  Useful for building a
-			// tree from scratch.
 
+		/** Writes the current DOM tree to "filename" and sets
+		 *  permissions of the file to "perms". */
 		bool	writeFile(const char *filename, mode_t perms) const;
-			// Writes the current DOM tree to "filename" and sets
-			// permissions of the file to "perms".
 
 	#include <rudiments/private/xmldom.h>
 };

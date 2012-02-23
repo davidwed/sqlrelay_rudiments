@@ -55,8 +55,8 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 		semaphoreset();
 
 		/** Deletes this instance of the semaphoreset class.
-		 *  Removes the semaphoreset if it was created by a call to
-		 *  create().  If it was only attached to, it is not removed. */
+		 *  Removes the semaphoreset if it was created by this class.
+		 *  If it was only attached to, it is not removed. */
 		~semaphoreset();
 
 		/** Returns true if the system supports timed
@@ -89,15 +89,15 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 
 		/** Instructs the destructor not to remove the semaphore
 		 *  set if it was created during a call to create() or 
-		 *  createOrAttach() above.  This is useful if an 
+		 *  createOrAttach().  This is useful if an 
 		 *  application creates a semaphore set then forks and 
 		 *  wants to delete the semaphore set in the forked 
 		 *  process but does not want the semaphore removed from
 		 *  the system. */
 		void	dontRemove();
 
-		/** Removes the semaphore set, whether it
-		 *  was created or attached to. */
+		/** Instructs the destructor to remove the semaphore set,
+		 *  whether it was created or attached to. */
 		bool	forceRemove();
 
 		/** Returns the internal id for the semaphore set. */

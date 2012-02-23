@@ -6,8 +6,8 @@
 
 #include <rudiments/private/serviceentryincludes.h>
 
-// The serviceentry class provides methods for retrieving
-// entries from /etc/services
+/** The serviceentry class provides methods for retrieving entries from the
+ *  service file (/etc/services on unix). */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -18,59 +18,94 @@ class serviceentryprivate;
 class RUDIMENTS_DLLSPEC serviceentry {
 	public:
 
-		// If you need to quickly look up a specific field, use one of
-		// these methods.
-		//
-		// These methods return true on success and false on failure.
+		/** Sets "aliaslist" to a NULL-terminated list of aliases for
+		 *  "servicename" using "protocol" (tcp, udp, etc.).  Note that
+		 *  "aliaslist" is allocated internally and returned.  The
+		 *  calling program must free each element and the array itself.
+		 *  
+		 *  Returns true on success and false otherwise. */
 		static	bool	getAliasList(const char *servicename,
 						const char *protocol,
 						char ***aliaslist);
+
+		/** Sets "port" to the port that the server for "servicename"
+		 *  using "protocol" (tcp, udp, etc.) would listen on. */
 		static	bool	getPort(const char *servicename,
 						const char *protocol,
 						int32_t *port);
 
-		static	bool	getName(int32_t port, const char *protocol,
+		/** Sets "name" to the name of the service that a server
+		 *  listening on "port", using "protocol" (tcp, udp, etc.)
+		 *  would be serving.  Note that "name" is allocated internally
+		 *  and returned.  The calling program must free the buffer. */
+		static	bool	getName(int32_t port,
+						const char *protocol,
 						char **name);
-		static	bool	getAliasList(int32_t port, const char *protocol,
+
+		/** Sets "aliaslist" to a NULL-terminated list of aliases for
+		 *  the service that a server listening on "port", using
+		 *  "protocol" (tcp, udp, etc.) would be serving.  Note that
+		 *  "aliaslist" is allocated internally and returned.  The
+		 *  calling program must free each element and the array itself.
+		 *  
+		 *  Returns true on success and false otherwise. */
+		static	bool	getAliasList(int32_t port,
+						const char *protocol,
 						char ***aliaslist);
 
 
-		// If you need to look up a service entry and refer to multiple
-		// fields, use these methods.
-				serviceentry();
-				serviceentry(const serviceentry &s);
-		serviceentry	&operator=(const serviceentry &s);
-				~serviceentry();
+		/** Creates an instance of the serviceentry class. */
+		serviceentry();
 
+		/** Creates an instance of the serviceentry class that is
+		 *  a copy of "s". */
+		serviceentry(const serviceentry &s);
+
+		/** Makes this instance of the serviceentry class
+		 *  identical to "s". */
+		serviceentry	&operator=(const serviceentry &s);
+
+		/** Deletes this instance of the serviceentry class. */
+		~serviceentry();
+
+		/** Looks up a service entry by "servicename" and "protocol"
+		 *  (tcp, udp, etc.).
+		 *  Returns true on success and false on failure. */
 		bool	initialize(const char *servicename,
 					const char *protocol);
-			// Looks up a service entry by name and protocol.
-			// Returns true on success and false on failure.
-		bool	initialize(int32_t port,
-					const char *protocol);
-			// Looks up a service entry by port and protocol.
-			// Returns true on success and false on failure.
 
+		/** Looks up a service entry by the "port" that a server for
+		 *  would listen on and the "protocol" that it would use
+		 *  (tcp, udp, etc.).
+		 *  Returns true on success and false on failure. */
+		bool	initialize(int32_t port, const char *protocol);
+
+		/** Returns the name of the service entry. */
 		const char		*getName() const;
+
+		/** Returns the port that a server for this service entry
+ 		 *  would listen on. */
 		int32_t			getPort() const;
+
+		/** Returns the protocol (tcp, udp, etc.) for this service
+		 *  entry. */
 		const char		*getProtocol() const;
+
+		/** Returns a NULL-terminated list of aliases for the service
+		 *  entry. */
 		const char * const *	getAliasList() const;
 
+		/** Prints out a representation of the service entry. */
 		void	print() const;
-			// Prints out the service entry.
 
+		/** Returns true if this class needs a mutex to operate safely
+		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();
-			// If your system doesn't support getservbyname_r()
-			// and getservbyport_r() then this class needs a
-			// mutex to assure thread safety.
-			//
-			// This method returns true if this class needs a mutex
-			// to operate safely in a threaded environment and false
-			// otherwise.
+
+		/** Allows you to supply a mutex is the class needs it.
+		 *  (see needsMutex()).  If your application is not
+		 *  multithreaded, then there is no need to supply a mutex. */
 		static	void	setMutex(mutex *mtx);
-			// Allows you to supply a mutex is the class needs it.
-			// If your application is not multithreaded, then
-			// there is no need to supply a mutex.
 
 	#include <rudiments/private/serviceentry.h>
 };

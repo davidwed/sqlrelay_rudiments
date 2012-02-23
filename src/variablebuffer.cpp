@@ -166,9 +166,13 @@ variablebuffer *variablebuffer::write(double number) {
 }
 
 void variablebuffer::clear() {
-	delete[] pvt->_buffer;
-	pvt->_buffer=new unsigned char[pvt->_initialsize];
-	pvt->_buffersize=pvt->_initialsize;
+	// If the buffer has grown beyond the initial size then reallocate it,
+	// otherwise just reset the start and end indices.
+	if (pvt->_buffersize>pvt->_initialsize) {
+		delete[] pvt->_buffer;
+		pvt->_buffer=new unsigned char[pvt->_initialsize];
+		pvt->_buffersize=pvt->_initialsize;
+	}
 	pvt->_position=0;
 	pvt->_endofbuffer=0;
 }

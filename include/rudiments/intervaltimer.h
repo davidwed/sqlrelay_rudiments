@@ -67,7 +67,7 @@ class RUDIMENTS_DLLSPEC intervaltimer {
 		 *  the initial interval, then raise a signal, then run
 		 *  over and over for the periodic interval, raising the
 		 *  signal at the end of each interval. */
-		ool	start() const;
+		bool	start() const;
 
 		/** Starts (or restarts) the timer.  It will first run for
 		 *  the initial interval, then raise a signal, then run

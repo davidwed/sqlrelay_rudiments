@@ -42,7 +42,7 @@ class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsock
 
 		/** Convenience method that calls initialize(), bind()
 		 *  and listen().  If you need to set socket options or
-		 *  do anything else special between those discrete steps,
+		 *  do anything else special between those discrete steps
 		 *  then you should use the methods individually.
 		 * 
 		 *  Listens on "address" and "port" and allow

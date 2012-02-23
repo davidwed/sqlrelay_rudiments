@@ -6,7 +6,7 @@
 
 #include <rudiments/private/snoozeincludes.h>
 
-// The snooze class provides methods for suspending process execution.
+/** The snooze class provides methods for suspending process execution. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -15,54 +15,64 @@ namespace rudiments {
 class RUDIMENTS_DLLSPEC snooze {
 	public:
 
-		// These methods allow you to suspend execution of the process
-		// for a specified amount of time.  They return true on success
-		// and false on failure (such as if a signal interrupts them).
+		/** Suspend execution for "seconds" seconds.
+		 *  Returns true on success and false on failure.
+		 *  snooze methods most commonly fail if they are interrupted
+		 *  by a signal. */
 		static bool	macrosnooze(long seconds);
-				// Suspend execution for "seconds" seconds.
+
+		/** Suspend execution for "seconds" seconds.
+		 *  Returns true on success and false on failure.
+		 *  snooze methods most commonly fail if they are interrupted
+		 *  by a signal.  "remainingseconds" is populated with the
+		 *  number of seconds that remained when the method was
+		 *  interrupted. */
 		static bool	macrosnooze(long seconds,
 					long *remainingseconds);
-				// Suspend execution for "seconds" seconds.
-				// If a signal interrupts the snooze,
-				// "remainingseconds" is populated with the
-				// number of seconds that were not slept.
 
 
+		/** Suspend execution for "seconds" seconds and "microseconds"
+		 *  microseconds.
+		 *  Returns true on success and false on failure.
+		 *  snooze methods most commonly fail if they are interrupted
+		 *  by a signal. */
 		static bool	microsnooze(long seconds,
 					long microseconds);
-				// Suspend execution for "seconds" seconds
-				// and "microseconds" microseconds.
+
+		/** Suspend execution for "seconds" seconds and "microseconds"
+		 *  microseconds.
+		 *  Returns true on success and false on failure.
+		 *  snooze methods most commonly fail if they are interrupted
+		 *  by a signal.  "remainingseconds" and "remainingmicroseconds"
+		 *  are populated with the number of seconds and microseconds
+		 *  that remained when the method was interrupted. */
 		static bool	microsnooze(long seconds,
 					long microseconds,
 					long *secondsremaining,
 					long *microsecondsremaining);
-				// Suspend execution for "seconds" seconds
-				// and "microseconds" microseconds.
-				// If a signal interrupts the snooze,
-				// "remainingseconds" is populated with the
-				// number of seconds that were not slept and
-				// "remainingmicroseconds" is populated with the
-				// number of microseconds that were not slept.
 
 
-		// These methods allow you to snooze for very small amounts
-		// of time.  Note that some systems do not have true
-		// nanosecond clock resolution.
+		/** Suspend execution for "seconds" seconds and "nanoseconds"
+		 *  nanoseconds.  Note that some systems do not have true
+		 *  nanosecond clock resolution.
+		 *  Returns true on success and false on failure.
+		 *  snooze methods most commonly fail if they are interrupted
+		 *  by a signal. */
 		static bool	nanosnooze(long seconds,
 					long nanoseconds);
-				// Suspend execution for "seconds" seconds
-				// and "nanoseconds" nanoseconds.
+
+		/** Suspend execution for "seconds" seconds and "nanoseconds"
+		 *  nanoseconds.  Note that some systems do not have true
+		 *  nanosecond clock resolution.
+		 *  Returns true on success and false on failure.
+		 *  snooze methods most commonly fail if they are interrupted
+		 *  by a signal.  "remainingseconds" and "remainingnanoseconds"
+		 *  are populated with the number of seconds and nanoseconds
+		 *  that remained when the method was interrupted. */
 		static bool	nanosnooze(long seconds,
 					long nanoseconds,
 					long *secondsremaining,
 					long *nanosecondsremaining);
-				// Suspend execution for "seconds" seconds
-				// and "nanoseconds" nanoseconds.
-				// If a signal interrupts the snooze,
-				// "remainingseconds" is populated with the
-				// number of seconds that were not slept and
-				// "remainingnanoseconds" is populated with the
-				// number of nanoseconds that were not slept.
 };
 
 #ifdef RUDIMENTS_NAMESPACE

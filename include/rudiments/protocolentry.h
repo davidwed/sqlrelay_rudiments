@@ -27,23 +27,20 @@ class RUDIMENTS_DLLSPEC protocolentry {
 		static	bool	getAliasList(const char *protocolname,
 						char ***aliaslist);
 
-		/** Sets "number" to the number associated with "protocolname".
- 		 *  This generally corresponds to the port that a server for
- 		 *  that protocol would listen on. */
+		/** Sets "number" to the number associated with
+		 *  "protocolname". */
 		static	bool	getNumber(const char *protocolname,
 						int32_t *number);
 
 		/** Sets "name" to the name of the protocol associated with
-		 *  "number".  "number" generally corresponds to the port that
-		 *  a server for the protocol would listen on. */
+		 *  "number". */
 		static	bool	getName(int32_t number, char **name);
 
 		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  the protocol associated with "number".  "number" generally
-		 *  corresponds to the port that a server for the protocol would
-		 *  listen on.  Note that "aliaslist" is allocated
-		 *  internally and returned.  The calling program must free
-		 *  each element and the array itself.
+		 *  the protocol associated with "number".
+		 *  Note that "aliaslist" is allocated internally and returned.
+		 *  The calling program must free each element and the array
+		 *  itself.
 		 *  
 		 *  Returns true on success and false otherwise. */
 		static	bool	getAliasList(int32_t number, char ***aliaslist);
@@ -78,9 +75,7 @@ class RUDIMENTS_DLLSPEC protocolentry {
 		 *  entry. */
 		const char * const	*getAliasList() const;
 
-		/** Returns the number associated with the protocol entry.
-		 *  This generally corresponds to the port that a server for
-		 *  the protocol would listen on. */
+		/** Returns the number associated with the protocol entry. */
 		int32_t			getNumber() const;
 
 		/** Prints out a representation of the protocol entry. */

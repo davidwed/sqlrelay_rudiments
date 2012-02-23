@@ -33,7 +33,7 @@ class RUDIMENTS_DLLSPEC inetsocketutil {
 		virtual		~inetsocketutil();
 
 		/** Initializes the class to use "address" and "port".
-		 *  This is not directly useful within this class, but child
+		 *  This is not directly useful within this class but child
 		 *  classes may use these values to decide where to connect to
 		 *  or what to listen on. */
 		void		initialize(const char *address, uint16_t port);

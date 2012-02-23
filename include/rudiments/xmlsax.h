@@ -6,9 +6,9 @@
 
 #include <rudiments/private/xmlsaxincludes.h>
 
-// The xmlsax class is a base class for an XML SAX parser.  To use this
-// class, you should create a class that inherits from it and implements the
-// virtual methods.
+/** The xmlsax class is a base class for an XML SAX parser.  To use this
+ *  class, you should create a class that inherits from it and implements the
+ *  virtual methods. */
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -19,40 +19,51 @@ class xmlsaxprivate;
 class RUDIMENTS_DLLSPEC xmlsax {
 	public:
 
-			xmlsax();
+		/** Creates an instance of the xmlsax class. */
+		xmlsax();
+
+		/** Deletes this instance of the xmlsax class. */
 		virtual	~xmlsax();
 
 
-		// When these methods are run, they parse the XML.  As these
-		// methods encounter tags, attributes, text, etc., they call
-		// the callback methods below.
+		/** Parses file "filename" and calls the appropriate callback
+		 *  when tags, attributes, text, etc. are encountered.
+		 *
+		 *  Returns true on success or false otherwise. */
 		bool		parseFile(const char *filename);
-				// parse file "filename"
+
+		/** Parses "string"  and calls the appropriate callback
+		 *  when tags, attributes, text, etc. are encountered.
+		 *
+		 *  Returns true on success or false otherwise. */
 		bool		parseString(const char *string);
-				// parse string "string"
+
+		/** If parseFile() or parseString() fails, this method
+		 *  returns the error that caused the failure. */
 		const char	*getError();
-				// if parseFile() or parseString() fails,
-				// returns the error that caused the failure
 
 	protected:
-		// Callback methods.  These methods are called as the XML is
-		// parsed.
+
+		/** Gets called when a start tag is parsed. */
 		virtual	bool	tagStart(const char *name);
-				// Gets called when a start tag is parsed.
+
+		/** Gets called when an attribute name is parsed. */
 		virtual	bool	attributeName(const char *name);
-				// Gets called when an attribute name
-				// is parsed.
+
+		/** Gets called when an attribute value is parsed. */
 		virtual	bool	attributeValue(const char *value);
-				// Gets called when an attribute value
-				// is parsed.
+
+		/** Gets called when a block of text is parsed. */
 		virtual	bool	text(const char *string);
-				// Gets called when a block of text is parsed.
+
+		/** Gets called when an end tag is parsed. */
 		virtual	bool	tagEnd(const char *name);
-				// Gets called when an end tag is parsed.
+
+		/** Gets called when a comment is parsed. */
 		virtual	bool	comment(const char *string);
-				// Gets called when a comment is parsed.
+
+		/** Gets called when cdata is parsed. */
 		virtual	bool	cdata(const char *string);
-				// Gets called when cdata is parsed.
 
 	#include <rudiments/private/xmlsax.h>
 };
