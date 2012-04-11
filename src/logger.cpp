@@ -164,41 +164,49 @@ char *logger::logHeader(const char *name) {
 
 void logger::write(const char *header, int32_t tabs, const char *string) {
 	stringbuffer	str;
-	str.append(header)->append(" : ");
+	if (charstring::length(header)) {
+		str.append(header)->append(" : ");
+	}
 	for (int32_t i=0; i<tabs; i++) {
 		str.append('	');
 	}
-	str.append(string)->append("\n\n");
+	str.append(string)->append("\n");
 	write(str.getString());
 }
 
 void logger::write(const char *header, int32_t tabs, char character) {
 	stringbuffer	str;
-	str.append(header)->append(" : ");
+	if (charstring::length(header)) {
+		str.append(header)->append(" : ");
+	}
 	for (int32_t i=0; i<tabs; i++) {
 		str.append('	');
 	}
-	str.append(character)->append("\n\n");
+	str.append(character)->append("\n");
 	write(str.getString());
 }
 
 void logger::write(const char *header, int32_t tabs, int32_t number) {
 	stringbuffer	str;
-	str.append(header)->append(" : ");
+	if (charstring::length(header)) {
+		str.append(header)->append(" : ");
+	}
 	for (int32_t i=0; i<tabs; i++) {
 		str.append('	');
 	}
-	str.append(number)->append("\n\n");
+	str.append(number)->append("\n");
 	write(str.getString());
 }
 
 void logger::write(const char *header, int32_t tabs, double number) {
 	stringbuffer	str;
-	str.append(header)->append(" : ");
+	if (charstring::length(header)) {
+		str.append(header)->append(" : ");
+	}
 	for (int32_t i=0; i<tabs; i++) {
 		str.append('	');
 	}
-	str.append(number)->append("\n\n");
+	str.append(number)->append("\n");
 	write(str.getString());
 }
 
