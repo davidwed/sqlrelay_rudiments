@@ -5753,7 +5753,7 @@ aix[4-9]*)
   lt_cv_deplibs_check_method=pass_all
   ;;
 
-beos* | haiku*)
+beos*)
   lt_cv_deplibs_check_method=pass_all
   ;;
 
@@ -8115,7 +8115,7 @@ $as_echo_n "checking for $compiler option to produce PIC... " >&6; }
       esac
       ;;
 
-    beos* | haiku* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+    beos* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
       # PIC is the default for these OSes.
       ;;
 
@@ -8767,7 +8767,7 @@ _LT_EOF
       esac
       ;;
 
-    beos* | haiku*)
+    beos*)
       if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
 	allow_undefined_flag=unsupported
 	# Joseph Beckenbach <jrb3@best.com> says some releases of gcc
@@ -10094,7 +10094,7 @@ amigaos*)
   esac
   ;;
 
-beos* | haiku*)
+beos*)
   library_names_spec='${libname}${shared_ext}'
   dynamic_linker="$host_os ld.so"
   shlibpath_var=LIBRARY_PATH
@@ -10778,7 +10778,7 @@ else
   lt_cv_dlopen_libs=
 
   case $host_os in
-  beos* | haiku*)
+  beos*)
     lt_cv_dlopen="load_add_on"
     lt_cv_dlopen_libs=
     lt_cv_dlopen_self=yes
@@ -11991,7 +11991,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
         fi
         ;;
 
-      beos* | haiku*)
+      beos*)
 	if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
 	  allow_undefined_flag_CXX=unsupported
 	  # Joseph Beckenbach <jrb3@best.com> says some releases of gcc
@@ -12976,7 +12976,7 @@ $as_echo_n "checking for $compiler option to produce PIC... " >&6; }
       esac
       ;;
 
-    beos* | haiku* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+    beos* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
       # PIC is the default for these OSes.
       ;;
     mingw* | cygwin* | os2* | pw32* | cegcc*)
@@ -13763,7 +13763,7 @@ amigaos*)
   esac
   ;;
 
-beos* | haiku*)
+beos*)
   library_names_spec='${libname}${shared_ext}'
   dynamic_linker="$host_os ld.so"
   shlibpath_var=LIBRARY_PATH
@@ -25321,6 +25321,58 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pipe" >&5
+$as_echo_n "checking for pipe... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+int
+main ()
+{
+pipe(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_PIPE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _pipe" >&5
+$as_echo_n "checking for _pipe... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
+int
+main ()
+{
+_pipe(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE__PIPE 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 if ( test -n "$MINGW32" )
 then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateNamedPipe" >&5
@@ -27013,7 +27065,7 @@ echo "******************************"
 
 
 
-RUDIMENTS_VERSION="0.36"
+RUDIMENTS_VERSION="0.37"
 
 
 cat >>confdefs.h <<_ACEOF

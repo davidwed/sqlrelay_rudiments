@@ -251,6 +251,9 @@
 /* Some systems have fpathconf */
 /* #undef RUDIMENTS_HAVE_FPATHCONF */
 
+/* Some systems have pipe */
+/* #undef RUDIMENTS_HAVE_PIPE */
+
 /* FreeBSD style statfs */
 /* #undef RUDIMENTS_HAVE_FREEBSD_STATFS */
 
@@ -1039,6 +1042,9 @@
 
 /* Some systems have _open */
 #define RUDIMENTS_HAVE__OPEN 1
+
+/* Some systems have _pipe */
+#define RUDIMENTS_HAVE__PIPE 1
 
 /* Some systems have _putenv */
 #define RUDIMENTS_HAVE__PUTENV 1

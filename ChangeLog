@@ -1,3 +1,7 @@
+0.37 - updated logger to exclude : if header isn't supplied
+	updated logger not to print double-returns after each log message
+	added file::createPipe()
+
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
 	modified methods that take or return internal structures to take or

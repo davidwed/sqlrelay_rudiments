@@ -637,6 +637,9 @@
 /* Some systems have pathconf */
 #undef RUDIMENTS_HAVE_PATHCONF
 
+/* Some systems have pipe */
+#undef RUDIMENTS_HAVE_PIPE
+
 /* Some systems have poll */
 #undef RUDIMENTS_HAVE_POLL
 
@@ -1038,6 +1041,9 @@
 
 /* Some systems have _open */
 #undef RUDIMENTS_HAVE__OPEN
+
+/* Some systems have _pipe */
+#undef RUDIMENTS_HAVE__PIPE
 
 /* Some systems have _putenv */
 #undef RUDIMENTS_HAVE__PUTENV

@@ -2083,6 +2083,18 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif],
 mkfifo("",0);,AC_DEFINE(RUDIMENTS_HAVE_MKFIFO,1,Some systems have mkfifo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for pipe)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+pipe(0);,AC_DEFINE(RUDIMENTS_HAVE_PIPE,1,Some systems have pipe) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _pipe)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_pipe(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE__PIPE,1,Some systems have _pipe) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 if ( test -n "$MINGW32" )
 then
 	AC_MSG_CHECKING(for CreateNamedPipe)
@@ -2607,7 +2619,7 @@ echo "******************************"
 
 
 dnl Default build variables.
-RUDIMENTS_VERSION="0.36"
+RUDIMENTS_VERSION="0.37"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 dnl rules for CURRENT:REVISION:AGE version info:
