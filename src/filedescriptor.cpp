@@ -72,6 +72,13 @@
 	#include <os/support/ByteOrder.h>
 #endif
 
+// apparently on windows, there are no byte-order macros of any kind
+#ifdef _WIN32
+	#define __LITTLE_ENDIAN	1234
+	#define __BIG_ENDIAN	4321
+	#define __BYTE_ORDER	__LITTLE_ENDIAN
+#endif
+
 #ifndef __BYTE_ORDER
 	#define __BYTE_ORDER BYTE_ORDER
 #endif
