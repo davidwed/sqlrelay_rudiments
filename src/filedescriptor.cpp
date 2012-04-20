@@ -1677,8 +1677,8 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 			return OSSwapHostToLittleInt64(value);
 		#else
 			return
-			(((uint64_t)hostToNet((uint32_t)(value&0x00000000FFFFFFFFLLU)))<<32)|
-			((uint64_t)hostToNet((uint32_t)((value&0xFFFFFFFF00000000LLU)>>32)));
+			(((uint64_t)hostToNet((uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
+			((uint64_t)hostToNet((uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 		#endif
 	#endif
 }
@@ -1709,8 +1709,8 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 			return OSSwapLittleToHostInt64(value);
 		#else
 			return
-			(((uint64_t)netToHost((uint32_t)(value&0x00000000FFFFFFFFLLU)))<<32)|
-			((uint64_t)netToHost((uint32_t)((value&0xFFFFFFFF00000000LLU)>>32)));
+			(((uint64_t)netToHost((uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
+			((uint64_t)netToHost((uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 		#endif
 	#endif
 }
