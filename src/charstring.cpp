@@ -840,7 +840,9 @@ char *charstring::copy(char *dest, const char *source) {
 }
 
 char *charstring::copy(char *dest, const char *source, size_t size) {
-	return (char *)rawbuffer::copy((void *)dest,(const void *)source,size);
+	//return (char *)rawbuffer::copy((void *)dest,
+	//				(const void *)source,size);
+	return strncpy(dest,source,size);
 }
 
 char *charstring::copy(char *dest, size_t location, const char *source) {
