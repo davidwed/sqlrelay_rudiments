@@ -3,6 +3,7 @@
 	added file::createPipe()
 	fixed net-to-host and host-to-net byte order conversions for 64-bit
 		integers on windows
+	fixed charstring::copy that I'd broken in 0.36
 
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
