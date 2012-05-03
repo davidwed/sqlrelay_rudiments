@@ -1,3 +1,5 @@
+0.36.1 - fixed charstring::copy that I broke in 0.36
+	
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
 	modified methods that take or return internal structures to take or
