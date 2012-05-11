@@ -971,6 +971,12 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 		}
 	}
 
+	// if 0 bytes were read then clean up the buffer
+	if (totalread<=0) {
+		delete[] *buffer;
+		*buffer=NULL;
+	}
+
 	delete[] term;
 	return totalread;
 }
