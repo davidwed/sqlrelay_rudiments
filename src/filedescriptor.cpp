@@ -935,7 +935,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 						new char[buffersize+512];
 					charstring::copy(newbuffer,
 							*buffer,buffersize);
-					delete *buffer;
+					delete[] *buffer;
 					buffersize=buffersize+512;
 					*buffer=newbuffer;
 				}
