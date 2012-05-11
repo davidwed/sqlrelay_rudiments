@@ -6,6 +6,9 @@
 	fixed charstring::copy that I'd broken in 0.36
 	fixed missing [] in a delete in filedescriptor::read() with terminator
 		that could cause leaks and corruption
+	fixed a leak in filedescriptor::read() with terminator that could
+		occur when it fell through with an error, timeout or 0-byte
+		read
 
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
