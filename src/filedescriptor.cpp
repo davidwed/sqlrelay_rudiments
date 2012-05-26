@@ -1883,7 +1883,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	do {
 		// wait 120 seconds for data to come in
 		// FIXME: this should be configurable
-		if (safePoll(120,0,false,true)<1) {
+		if (safePoll(120,0,true,false)<1) {
 			return false;
 		}
 		result=recvmsg(pvt->_fd,&messageheader,0);
