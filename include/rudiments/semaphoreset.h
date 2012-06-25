@@ -26,7 +26,7 @@ class semaphoresetprivate;
  *  }
  * 
  *  void	wait() {
- *  	while (!(semaphore>0));	// wait until the semaphore>0
+ *  	while (semaphore<=0);	// wait until the semaphore>0
  *  	semaphore--;		// decrement the semaphore
  *  }
  * 
