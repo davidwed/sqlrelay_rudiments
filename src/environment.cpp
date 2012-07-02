@@ -86,8 +86,6 @@ bool environment::setValue(const char *variable, const char *value) {
 		char	*oldpestr;
 		if (_envstrings->getData(
 				const_cast<char *>(variable),&oldpestr)) {
-			// FIXME: depending on how putenv works, this might
-			// cause a double-free, what to do...?
 			free((void *)oldpestr);
 		}
 		_envstrings->setData(const_cast<char *>(variable),pestr);
