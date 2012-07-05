@@ -83,7 +83,7 @@ bool environment::setValue(const char *variable, const char *value) {
 		#endif
 	} while (result && error::getErrorNumber()==EINTR);
 	if (!result) {
-		char	*oldpestr;
+		char	*oldpestr=NULL;
 		if (_envstrings->getData(
 				const_cast<char *>(variable),&oldpestr)) {
 			free((void *)oldpestr);
