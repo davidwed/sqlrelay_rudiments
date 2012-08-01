@@ -183,6 +183,10 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  nullnode if none exists. */
 		xmldomnode	*getParent() const;
 
+		/** Returns the position of the node, relative to its
+		 *  siblings. */
+		uint64_t	getPosition() const;
+
 		/** Returns a pointer to the previous sibling
 		 *  node or the nullnode if none exists. */
 		xmldomnode	*getPreviousSibling() const;

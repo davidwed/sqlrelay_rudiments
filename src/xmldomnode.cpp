@@ -541,6 +541,23 @@ xmldomnode *xmldomnode::getParent() const {
 	return pvt->_parent;
 }
 
+uint64_t xmldomnode::getPosition() const {
+	xmldomnode	*current=pvt->_parent->getChild((uint64_t)0);
+	if (!current) {
+		// shouldn't ever happen
+		return 0;
+	}
+	uint64_t	count=pvt->_parent->getChildCount();
+	for (uint64_t i=0; i<count; i++) {
+		if (this==current) {
+			return i;
+		}
+		current=current->pvt->_next;
+	}
+	// shouldn't ever happen
+	return 0;
+}
+
 xmldomnode *xmldomnode::getPreviousSibling() const {
 	return pvt->_previous;
 }
