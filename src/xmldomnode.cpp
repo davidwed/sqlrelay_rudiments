@@ -455,7 +455,6 @@ bool xmldomnode::moveChild(xmldomnode *child,
 	if (!parent || parent->isNullNode()) {
 		return false;
 	}
-printf("before:\n%s\n\n",xml()->getString());
 	xmldomnode *current=unlinkNode(child,0,NULL,
 					&pvt->_firstchild,
 					&pvt->_lastchild,
@@ -464,7 +463,6 @@ printf("before:\n%s\n\n",xml()->getString());
 		return false;
 	}
 	bool	retval=parent->insertChild(current,position);
-printf("after:\n%s\n\n",parent->xml()->getString());
 	return retval;
 }
 
