@@ -12,6 +12,7 @@
 	applied Georgiy Kirichenko's fix to the safePoll call in
 		filedescriptor::readFileDescriptor() - swapped true/false
 		arguments so it would wait using POLLIN
+	added xmldomnode::getPosition()
 
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
