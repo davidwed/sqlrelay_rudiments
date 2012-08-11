@@ -424,7 +424,7 @@ const char *datetime::getString() {
 	timestr.append(getYear())->append(' ');
 	timestr.append(getHour(),2)->append(':');
 	timestr.append(getMinutes(),2)->append(':');
-	timestr.append(getSeconds())->append(' ');
+	timestr.append(getSeconds(),2)->append(' ');
 	timestr.append(getTimeZoneString());
 	pvt->_timestring=timestr.detachString();
 	return pvt->_timestring;
