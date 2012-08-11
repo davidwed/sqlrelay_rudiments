@@ -13,6 +13,7 @@
 		filedescriptor::readFileDescriptor() - swapped true/false
 		arguments so it would wait using POLLIN
 	added xmldomnode::getPosition()
+	fixed display of seconds from datetime::getString()
 
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
