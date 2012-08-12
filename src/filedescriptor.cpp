@@ -142,6 +142,14 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define DEBUG_WRITE_VOID(type,buffer,size)
 #endif
 
+#ifndef CMSG_ALIGN
+	#define CMSG_ALIGN(len)	(((len) + sizeof(size_t)-1) & \
+					(size_t)~(sizeof(size_t)-1))
+#endif
+#ifndef CMSG_LEN
+	#define CMSG_LEN(len)	(CMSG_ALIGN(sizeof(struct cmsghdr))+(len))
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -1789,38 +1797,20 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	// use other parts of the msghdr structure to send the descriptor
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 
-		// new-style:
-		// The descriptor is passed in the msg_control
-		//#ifdef RUDIMENTS_HAVE_CMSG_SPACE
-		//union {
-			//struct cmsghdr	cm;
-			//char		control[CMSG_SPACE(sizeof(int))];
-		//} control;
-		//messageheader.msg_control=control.control;
-		//#else
-		unsigned char	control[sizeof(struct cmsghdr)+sizeof(int)];
+		// new-style: the descriptor is passed in the msg_control...
+		unsigned char	control[CMSG_LEN(sizeof(int32_t))];
 		messageheader.msg_control=(caddr_t)control;
-		//#endif
-		messageheader.msg_controllen=sizeof(control);
+		messageheader.msg_controllen=CMSG_LEN(sizeof(int32_t));
 
-		struct cmsghdr	*cmptr;
-		cmptr=CMSG_FIRSTHDR(&messageheader);
+		struct cmsghdr	*cmptr=CMSG_FIRSTHDR(&messageheader);
 		cmptr->cmsg_level=SOL_SOCKET;
 		cmptr->cmsg_type=SCM_RIGHTS;
-		//#ifdef RUDIMENTS_HAVE_CMSG_LEN
-		//cmptr->cmsg_len=CMSG_LEN(sizeof(int));
-		//#else
-		cmptr->cmsg_len=sizeof(control);
-		//#endif
+		cmptr->cmsg_len=CMSG_LEN(sizeof(int32_t));
 		*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)))=fd;
-
-		// FIXME: is this necessary???
-		messageheader.msg_controllen=cmptr->cmsg_len;
 	#else
-		// old-style:
-		// The descriptor is passed in the accrights
+		// old-style: the descriptor is passed in the accrights...
 		messageheader.msg_accrights=(caddr_t)&fd;
-		messageheader.msg_accrightslen=sizeof(int);
+		messageheader.msg_accrightslen=sizeof(int32_t);
 	#endif
 
 	// finally, send the msghdr
@@ -1857,25 +1847,15 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	messageheader.msg_iovlen=1;
 
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
-		// new-style:
-		// The descriptor is received in the msg_control
-		//#ifdef RUDIMENTS_HAVE_CMSG_SPACE
-		//union {
-			//struct cmsghdr	cm;
-			//char		control[CMSG_SPACE(sizeof(int))];
-		//} control;
-		//messageheader.msg_control=control.control;
-		//#else
-		unsigned char	control[sizeof(struct cmsghdr)+sizeof(int)];
+		// new-style: the descriptor is passed in the msg_control...
+		unsigned char	control[CMSG_LEN(sizeof(int32_t))];
 		messageheader.msg_control=(caddr_t)control;
-		//#endif
-		messageheader.msg_controllen=sizeof(control);
+		messageheader.msg_controllen=CMSG_LEN(sizeof(int32_t));
 	#else
-		// old-style
-		// The descriptor is received in the accrights
+		// old-style: the descriptor is received in the accrights...
 		int32_t	newfd;
 		messageheader.msg_accrights=(caddr_t)&newfd;
-		messageheader.msg_accrightslen=sizeof(int);
+		messageheader.msg_accrightslen=sizeof(int32_t);
 	#endif
 
 	// receive the msghdr
@@ -1898,15 +1878,9 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 
 		struct cmsghdr  *cmptr=CMSG_FIRSTHDR(&messageheader);
-		if (cmptr && cmptr->cmsg_len==
-			//#ifdef RUDIMENTS_HAVE_CMSG_LEN
-			//CMSG_LEN(sizeof(int)) &&
-			//#else
-			//(sizeof(struct cmsghdr)+sizeof(int)) &&
-			sizeof(control) &&
-			//#endif
-			cmptr->cmsg_level==SOL_SOCKET &&
-			cmptr->cmsg_type==SCM_RIGHTS) {
+		if (cmptr && cmptr->cmsg_len==CMSG_LEN(sizeof(int32_t)) &&
+				cmptr->cmsg_level==SOL_SOCKET &&
+				cmptr->cmsg_type==SCM_RIGHTS) {
 
 			// if we got good data, set the descriptor and return
 			*fd=*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)));
@@ -1922,43 +1896,29 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 				printf("%d: ",process::getProcessId());
 				printf("null cmptr\n");
 			} else {
-				//#ifdef RUDIMENTS_HAVE_CMSG_LEN
-				/*if (cmptr->cmsg_len!=CMSG_LEN(sizeof(int))) {
-					printf("%d: ",process::getProcessId());
-					printf("got cmsg_len=");
-			       		printf("%d",static_cast<long>(
-							cmptr->cmsg_len));
-			       		printf(" instead of ");
-					printf("%d",static_cast<long>(
-							CMSG_LEN(sizeof(int))));
-					printf("\n");
-				}*/
-				//#endif
 				if (cmptr->cmsg_level!=SOL_SOCKET) {
 					printf("%d: ",process::getProcessId());
-					printf("got cmsg_level=");
-					printf("%d",static_cast<long>(
+					printf("got cmsg_level=%ld",
+						static_cast<long>(
 							cmptr->cmsg_level));
-					printf(" instead of ");
-					printf("%d",static_cast<long>(
-								SOL_SOCKET));
+					printf(" instead of %ld",
+						static_cast<long>(SOL_SOCKET));
 					printf("\n");
 				}
 				if (cmptr->cmsg_type!=SCM_RIGHTS) {
 					printf("%d: ",process::getProcessId());
-					printf("got cmsg_type=");
-					printf("%d",static_cast<long>(
+					printf("got cmsg_type=%ld",
+						static_cast<long>(
 							cmptr->cmsg_type));
-					printf(" instead of ");
-					printf("%d",static_cast<long>(
-								SCM_RIGHTS));
+					printf(" instead of %ld",
+						static_cast<long>(SCM_RIGHTS));
 					printf("\n");
 				}
 			}
 		}
 		#endif
 	#else
-		if (messageheader.msg_accrightslen==sizeof(int)) {
+		if (messageheader.msg_accrightslen==sizeof(int32_t)) {
 			*fd=newfd;
 			return true;
 		}

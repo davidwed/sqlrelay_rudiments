@@ -16,7 +16,9 @@ int main(int argc, const char **argv) {
 
 	for (;;) {
 		int	descriptor;
-		clnt.receiveFileDescriptor(&descriptor);
+		if (!clnt.receiveFileDescriptor(&descriptor)) {
+			printf("receive failed\n");
+		}
 		filedescriptor	clientsock;
 		clientsock.setFileDescriptor(descriptor);
 		clientsock.write("hello");

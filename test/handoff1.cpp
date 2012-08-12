@@ -7,6 +7,7 @@
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/permissions.h>
+#include <rudiments/error.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -45,8 +46,10 @@ int main(int argc, const char **argv) {
 		}
 
 		if (clientsock && handoffclientsock) {
-			handoffclientsock->passFileDescriptor(
-					clientsock->getFileDescriptor());
+			if (!handoffclientsock->passFileDescriptor(
+					clientsock->getFileDescriptor())) {
+				printf("pass failed: %d - %s\n",error::getErrorNumber(),error::getErrorString());
+			}
 			delete clientsock;
 			clientsock=NULL;
 		}
