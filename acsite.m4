@@ -1959,6 +1959,7 @@ AC_SUBST(CRYPTLIB)
 
 AC_DEFUN([FW_CHECK_EXPLICIT_SPECIALIZATION],
 [
+AC_MSG_CHECKING(for whether explicit specialization is supported)
 AC_TRY_COMPILE([
 template <class t>
 class a {

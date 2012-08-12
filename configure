@@ -17574,6 +17574,8 @@ fi
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether explicit specialization is supported" >&5
+$as_echo_n "checking for whether explicit specialization is supported... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
