@@ -275,16 +275,14 @@ dnl Determines what extension shared object files have
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
 AC_MSG_CHECKING(for dynamic library extension)
+SOSUFFIX="so"
 if ( test -n "$CYGWIN" )
 then
 	SOSUFFIX="dll.a"
-else
-	if ( test "`uname -s`" = "Darwin" )
-	then
-		SOSUFFIX="dylib"
-	else
-		SOSUFFIX="so"
-	fi
+fi
+if ( test -n "$DARWIN" )
+then
+	SOSUFFIX="dylib"
 fi
 AC_MSG_RESULT($SOSUFFIX)
 ])
@@ -354,6 +352,17 @@ fi
 
 AC_DEFUN([FW_CHECK_OSX],
 [
+DARWIN=""
+AC_MSG_CHECKING(for OSX)
+case $host_os in
+	*darwin* )
+		DARWIN="yes"
+		AC_MSG_RESULT(yes)
+		;;
+	* )
+		AC_MSG_RESULT(no)
+		;;
+esac
 ])
 
 dnl Checks for minix and adds some macros if it is
