@@ -96,6 +96,26 @@ extern ssize_t __xnet_recvmsg (int, struct msghdr *, int);
 extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 #endif
 
+#ifndef CMSG_ALIGN
+	#define CMSG_ALIGN(len)	(((len) + sizeof(size_t)-1) & \
+					(size_t)~(sizeof(size_t)-1))
+#endif
+
+#ifndef CMSG_LEN
+	#define CMSG_LEN(len)	(CMSG_ALIGN(sizeof(struct cmsghdr))+(len))
+#endif
+
+// SCO OpenServer < 5.0.7 has an error in the sys/socket.h header.
+// Internally, libc supports accrights/accrightslen but the header defines
+// the struct as having control/controllen components.  This hack works
+// around the problem.
+// http://www.linuxmisc.com/9-unix-programmer/af8e2f1e03a2b913.htm
+#ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
+	#undef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
+	#define msg_accrights msg_control
+	#define msg_accrightslen msg_controllen
+#endif
+
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
 #ifndef SSIZE_MAX
@@ -140,14 +160,6 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define DEBUG_WRITE_CHAR(type,character)
 	#define DEBUG_WRITE_STRING(type,string,size)
 	#define DEBUG_WRITE_VOID(type,buffer,size)
-#endif
-
-#ifndef CMSG_ALIGN
-	#define CMSG_ALIGN(len)	(((len) + sizeof(size_t)-1) & \
-					(size_t)~(sizeof(size_t)-1))
-#endif
-#ifndef CMSG_LEN
-	#define CMSG_LEN(len)	(CMSG_ALIGN(sizeof(struct cmsghdr))+(len))
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE

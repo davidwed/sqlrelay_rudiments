@@ -38,17 +38,23 @@ int main(int argc, const char **argv) {
 		if (fd==&serversock) {
 			clientsock=(inetclientsocket *)
 					serversock.accept();
+printf("handoffclient accepted\n");
 		} else if (fd==&handoffsock) {
 			handoffclientsock=(unixclientsocket *)
 						handoffsock.accept();
+printf("handoff2 accepted\n");
 		} else {
 			printf("error or timeout waiting...\n");
 		}
 
 		if (clientsock && handoffclientsock) {
+printf("passing %d\n",clientsock->getFileDescriptor());
 			if (!handoffclientsock->passFileDescriptor(
 					clientsock->getFileDescriptor())) {
-				printf("pass failed: %d - %s\n",error::getErrorNumber(),error::getErrorString());
+				printf("pass failed: %d - %s\n",
+					error::getErrorNumber(),
+					error::getErrorString());
+				exit(1);
 			}
 			delete clientsock;
 			clientsock=NULL;

@@ -152,12 +152,6 @@
 /* some systems have closesocket */
 #define RUDIMENTS_HAVE_CLOSESOCKET 1
 
-/* Some systems have CMSG_LEN */
-/* #undef RUDIMENTS_HAVE_CMSG_LEN */
-
-/* Some systems have CMSG_SPACE */
-/* #undef RUDIMENTS_HAVE_CMSG_SPACE */
-
 /* Some systems have _commit */
 #define RUDIMENTS_HAVE_COMMIT 1
 

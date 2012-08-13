@@ -26,6 +26,10 @@ int main(int argc, const char **argv) {
 			continue;
 		}
 		sizeread=clnt.read(buffer,5);
+		if (sizeread!=5) {
+			printf("read failed\n");
+			exit(0);
+		}
 		buffer[sizeread]=(char)NULL;
 		printf("%d: %s\n",i,buffer);
 		clnt.close();

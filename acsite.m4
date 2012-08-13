@@ -398,6 +398,11 @@ case $host_os in
 esac
 ])
 
+AC_DEFUN([FW_CHECK_SCO_OSR],
+[
+echo "host_os = $host_os"
+])
+
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
