@@ -22,10 +22,10 @@ namespace rudiments {
 class dynamiclibprivate {
 	friend class dynamiclib;
 	private:
-		#ifdef RUDIMENTS_HAVE_LOADLIBRARYEX
-			HINSTANCE	_handle;
-		#else
+		#if defined(RUDIMENTS_HAVE_DLOPEN)
 			void		*_handle;
+		#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
+			HINSTANCE	_handle;
 		#endif
 };
 
@@ -66,7 +66,7 @@ bool dynamiclib::close() {
 #if defined(RUDIMENTS_HAVE_DLOPEN)
 	int32_t	result;
 	do {
-		result=!dlclose(pvt->_handle);
+		result=dlclose(pvt->_handle);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 #elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
