@@ -67,7 +67,7 @@ bool dynamiclib::close() {
 	int32_t	result;
 	do {
 		result=dlclose(pvt->_handle);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result!=0 && error::getErrorNumber()==EINTR);
 	return !result;
 #elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 	return FreeLibrary(pvt->_handle);
