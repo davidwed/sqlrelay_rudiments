@@ -93,14 +93,12 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 	#if defined(RUDIMENTS_HAVE_MMAP)
 	do {
 		pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
-	} while (pvt->_data==MAP_FAILED &&
-			error::getErrorNumber()==EINTR);
+	} while (pvt->_data==MAP_FAILED && error::getErrorNumber()==EINTR);
 	return (pvt->_data!=MAP_FAILED);
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
-	DWORD	mapprot=(protection|PROT_WRITE)?
-				PAGE_READONLY:PAGE_READWRITE;
+	DWORD	mapprot=(protection|PROT_WRITE)?PAGE_READONLY:PAGE_READWRITE;
 	pvt->_map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
-				NULL,mapprot,0,len,NULL);
+					NULL,mapprot,0,len,NULL);
 	if (pvt->_map) {
 		DWORD	viewprot=(protection|PROT_WRITE)?
 					FILE_MAP_READ:FILE_MAP_WRITE;
