@@ -4,6 +4,7 @@
 #include <rudiments/sharedmemory.h>
 #include <rudiments/permissions.h>
 #include <rudiments/file.h>
+#include <rudiments/error.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -14,7 +15,10 @@ int main(int argc, const char **argv) {
 
 	// attach to a shared memory segment keyed to /tmp/shm
         sharedmemory    shm;
-        shm.attach(file::generateKey("/tmp/shm",1));
+        if (!shm.attach(file::generateKey("/tmp/shm",1))) {
+		printf("error: %s\n",error::getErrorString());
+		exit(1);
+	}
 
 	// display the data contained in the shared memory segment
         char    *shmptr=(char *)shm.getPointer();
