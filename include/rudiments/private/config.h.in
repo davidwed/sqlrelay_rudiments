@@ -121,6 +121,9 @@
 /* Some systems have arpa/inet.h */
 #undef RUDIMENTS_HAVE_ARPA_INET_H
 
+/* SCO OSR < 5.0.7 has an incorrect struct msghdr definition */
+#undef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
+
 /* Some systems dont have st_blocks in struct stat */
 #undef RUDIMENTS_HAVE_BLKCNT_T
 
