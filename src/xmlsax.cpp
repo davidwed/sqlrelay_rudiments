@@ -121,7 +121,6 @@ bool xmlsax::parseFile(const char *filename) {
 		filesystem	fs;
 		pvt->_optblocksize=(fs.initialize(filename))?
 					fs.getOptimumTransferBlockSize():1024;
-printf("optblocksize: %d\n",pvt->_optblocksize);
 
 		// If we're memory mapping, since we'll use this for the
 		// offsets as well, then we must use an even multiple of
@@ -137,13 +136,11 @@ printf("optblocksize: %d\n",pvt->_optblocksize);
 			#else
 				#error no getpagesize or anything like it
 			#endif
-printf("pagesize: %d\n",pagesize);
 			if (pagesize>pvt->_optblocksize ||
 				pvt->_optblocksize%pagesize) {
 				pvt->_optblocksize=pagesize;
 			}
 		#endif
-printf("optblocksize: %d\n",pvt->_optblocksize);
 
 		// optimize...
 		pvt->_fl.setReadBufferSize(pvt->_optblocksize);

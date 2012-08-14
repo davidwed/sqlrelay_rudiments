@@ -14,6 +14,7 @@
 		arguments so it would wait using POLLIN
 	added xmldomnode::getPosition()
 	fixed display of seconds from datetime::getString()
+	fixed optimum buffer size calculation in xmlsax
 
 0.36 - various fixes for SCO and Ultrix
 	renamed some methods to avoid collisions with macros
