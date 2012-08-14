@@ -109,42 +109,72 @@ bool xmlsax::parseFile(const char *filename) {
 	// close any previously opened files, open the file, parse it, close
 	// it again
 	close();
+
 	// open the file
 	bool retval;
 	if ((retval=pvt->_fl.open(filename,O_RDONLY))) {
-		// Try to memorymap the file.  If it fails, that's ok, ptr will
-		// be set to NULL from the previous call to reset() and will
-		// cause getCharacter() to read from the file.
+
+		// Set the read buffer size...
+
+		// Get the optimum transfer size for the filesystem
+		// the file is found on, if possible.
 		filesystem	fs;
-		if (fs.initialize(filename)) {
-			pvt->_optblocksize=fs.getOptimumTransferBlockSize();
-		} else {
+		pvt->_optblocksize=(fs.initialize(filename))?
+					fs.getOptimumTransferBlockSize():1024;
+printf("optblocksize: %d\n",pvt->_optblocksize);
+
+		// If we're memory mapping, since we'll use this for the
+		// offsets as well, then we must use an even multiple of
+		// the memory page size.  Use the page size unless the 
+		// transfer size is an even multiple of it.
+		#ifdef RUDIMENTS_HAVE_MMAP
 			#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
-				pvt->_optblocksize=getpagesize();
+				off64_t	pagesize=getpagesize();
 			#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
 				SYSTEM_INFO	systeminfo;
 				GetSystemInfo(&systeminfo);
-				pvt->_optblocksize=systeminfo.dwPageSize;
+				off64_t	pagesize=systeminfo.dwPageSize;
 			#else
 				#error no getpagesize or anything like it
 			#endif
-		}
+printf("pagesize: %d\n",pagesize);
+			if (pagesize>pvt->_optblocksize ||
+				pvt->_optblocksize%pagesize) {
+				pvt->_optblocksize=pagesize;
+			}
+		#endif
+printf("optblocksize: %d\n",pvt->_optblocksize);
+
+		// optimize...
 		pvt->_fl.setReadBufferSize(pvt->_optblocksize);
-		pvt->_filesize=pvt->_fl.getSize();
 		pvt->_fl.sequentialAccess(0,pvt->_filesize);
 		pvt->_fl.onlyOnce(0,pvt->_filesize);
-#ifdef RUDIMENTS_HAVE_MMAP
-		pvt->_fileoffset=0;
-		pvt->_mmapped=true;
-		mapFile();
-#endif
+
+		// get the file size
+		pvt->_filesize=pvt->_fl.getSize();
+
+		// Try to memorymap the file.  If it fails, that's ok, pvt->_ptr
+		// will be set to NULL from the previous call to reset() and
+		// will cause getCharacter() to read from the file rather than
+		// the map when parse() calls it.
+		#ifdef RUDIMENTS_HAVE_MMAP
+			pvt->_fileoffset=0;
+			pvt->_mmapped=true;
+			mapFile();
+		#endif
+
+		// parse the file
 		retval=parse();
-#ifdef RUDIMENTS_HAVE_MMAP
-		if (pvt->_ptr) {
-			pvt->_mm.detach();
-		}
-#endif
+
+		// unmap the file, if necessary
+		#ifdef RUDIMENTS_HAVE_MMAP
+			if (pvt->_ptr) {
+				pvt->_mm.detach();
+			}
+		#endif
 	}
+
+	// close and return
 	close();
 	return retval;
 }
