@@ -398,14 +398,14 @@ case $host_os in
 esac
 ])
 
-AC_DEFUN([FW_CHECK_SCO_OSR],
+AC_DEFUN([FW_CHECK_SCO_OSR5],
 [
-AC_MSG_CHECKING(for SCO OSR < 5.0.7)
+AC_MSG_CHECKING(for SCO OSR < 6.0.0)
 if ( test "`uname -s`" = "SCO_SV" )
 then
-	if ( test "`uname -v | tr -d '.'`" -lt "507" )
+	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
-  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR < 5.0.7 has an incorrect struct msghdr definition)
+  		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
 		AC_MSG_RESULT(yes)
 	else
 		AC_MSG_RESULT(no)

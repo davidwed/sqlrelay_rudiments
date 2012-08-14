@@ -14582,11 +14582,11 @@ $as_echo "no" >&6; }
 esac
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 5.0.7" >&5
-$as_echo_n "checking for SCO OSR < 5.0.7... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 6.0.0" >&5
+$as_echo_n "checking for SCO OSR < 6.0.0... " >&6; }
 if ( test "`uname -s`" = "SCO_SV" )
 then
-	if ( test "`uname -v | tr -d '.'`" -lt "507" )
+	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
 
 $as_echo "#define RUDIMENTS_HAVE_BAD_SCO_MSGHDR 1" >>confdefs.h
