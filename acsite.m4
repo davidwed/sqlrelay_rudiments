@@ -332,7 +332,7 @@ AC_SUBST(UWIN)
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
-	CPPFLAGS="$CPPFLAGS -mno-win32"
+	#CPPFLAGS="$CPPFLAGS -mno-win32"
 	MICROSOFT="yes"
 	EXE=".exe"
 fi

@@ -563,13 +563,17 @@ AC_MSG_CHECKING(for termios.h)
 AC_TRY_COMPILE([#include <termios.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_TERMIOS_H, 1, Some systems have termios.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for windows.h)
-AC_TRY_COMPILE([#include <windows.h>],
+dnl don't even look for these under cygwin, they cause all kinds of trouble
+if ( test -z "$CYGWIN" )
+then
+	AC_MSG_CHECKING(for windows.h)
+	AC_TRY_COMPILE([#include <windows.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_H, 1, Some systems have windows.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for winsock2.h)
-AC_TRY_COMPILE([#include <winsock2.h>],
+	AC_MSG_CHECKING(for winsock2.h)
+	AC_TRY_COMPILE([#include <winsock2.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WINSOCK2_H, 1, Some systems have winsock2.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for io.h)
 AC_TRY_COMPILE([#include <io.h>],
