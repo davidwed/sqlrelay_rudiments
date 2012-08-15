@@ -924,22 +924,23 @@ dnl Checks associated with date and time
 echo
 echo "***** Date and Time **********"
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for GetSystemTime)
-	AC_TRY_COMPILE([#include <windows.h>
+AC_MSG_CHECKING(for GetSystemTime)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 GetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMTIME,1,Some systems have GetSystemTime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(for SetSystemTime)
-	AC_TRY_COMPILE([#include <windows.h>
+AC_MSG_CHECKING(for SetSystemTime)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 SetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETSYSTEMTIME,1,Some systems have SetSystemTime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-fi
 
 AC_MSG_CHECKING(for tm_zone)
 AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_ZONE,1,Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1341,14 +1342,11 @@ echo "***** Semaphore Functions ****"
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
 
-if ( test -n "$MINGW32" )
-then
-
 	AC_MSG_CHECKING(for CreateSemaphore)
-	AC_TRY_COMPILE([#include <windows.h>],
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 	CreateSemaphore(NULL,0,0,"");,AC_DEFINE(RUDIMENTS_HAVE_CREATESEMAPHORE,1,Some systems have CreateSemaphore) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-else
 
 	AC_MSG_CHECKING(for semget)
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -1375,7 +1373,6 @@ semget(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEMGET,1,Some systems have semget) AC_MS
 #endif
 #include <sys/sem.h>],
 semtimedop(0,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SEMTIMEDOP,1,Some systems have semtimedop) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
 
 fi
 
@@ -1434,7 +1431,9 @@ FW_CHECK_NANOSLEEP
 FW_CHECK_CLOCK_NANOSLEEP
 
 AC_MSG_CHECKING(for Sleep)
-AC_TRY_COMPILE([#include <windows.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 Sleep(0);,AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_SLEEP,1,Some systems have Sleep) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test "$INCLUDE_INTERVALTIMER" = "1" )
@@ -1981,12 +1980,11 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 fcntl(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCNTL,1,Some systems have fcntl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for LockFileEx)
-	AC_TRY_COMPILE([#include <windows.h>],
+AC_MSG_CHECKING(for LockFileEx)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 	LockFileEx(0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_LOCKFILEEX,1,Some systems have LockFileEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
 
 AC_MSG_CHECKING(for FD_CLOEXEC)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -1997,12 +1995,11 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 long a=FD_CLOEXEC;,AC_DEFINE(RUDIMENTS_HAVE_FD_CLOEXEC,1,Some systems have FD_CLOEXEC) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for HANDLE_FLAG_INHERIT)
-	AC_TRY_COMPILE([#include <windows.h>],
+AC_MSG_CHECKING(for HANDLE_FLAG_INHERIT)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 DWORD a=HANDLE_FLAG_INHERIT;,AC_DEFINE(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT,1,Some systems have HANDLE_FLAG_INHERIT) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
 
 AC_MSG_CHECKING(for truncate)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -2083,12 +2080,11 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_IO_H
 #endif],
 _pipe(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE__PIPE,1,Some systems have _pipe) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for CreateNamedPipe)
-	AC_TRY_COMPILE([#include <windows.h>],
+AC_MSG_CHECKING(for CreateNamedPipe)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 	CreateNamedPipe("",0,0,0,0,0,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_CREATENAMEDPIPE,1,Some systems have CreateNamedPipe) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
 
 AC_MSG_CHECKING(for pathconf)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -2135,12 +2131,11 @@ AC_TRY_COMPILE([#include <sys/time.h>
 #endif],
 utimes("",0);,AC_DEFINE(RUDIMENTS_HAVE_UTIMES,1,Some systems have utimes) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for SetFileTime)
-	AC_TRY_COMPILE([#include <windows.h>],
+AC_MSG_CHECKING(for SetFileTime)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 	SetFileTime(0,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETFILETIME,1,Some systems have SetFileTime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
 
 AC_MSG_CHECKING(for mknod)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -2215,16 +2210,17 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_DLFCN_H
 #endif],
 dlopen("",0);,AC_DEFINE(RUDIMENTS_HAVE_DLOPEN,1,Some systems have dlopen) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for LoadLibrary)
-	AC_TRY_COMPILE([#include <windows.h>],
-	LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for LoadLibrary)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+LoadLibrary("");,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARY,1,Some systems have LoadLibrary) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-	AC_MSG_CHECKING(for LoadLibraryEx)
-	AC_TRY_COMPILE([#include <windows.h>],
-	LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-fi
+AC_MSG_CHECKING(for LoadLibraryEx)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+LoadLibraryEx("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_LOADLIBRARYEX,1,Some systems have LoadLibraryEx) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then
@@ -2404,7 +2400,9 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 getpid(),AC_DEFINE(RUDIMENTS_HAVE_GETPID,1,Some systems have getpid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _getpid)
-AC_TRY_LINK([#include <windows.h>],
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 _getpid(),AC_DEFINE(RUDIMENTS_HAVE__GETPID,1,Some systems have _getpid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for getppid)
@@ -2417,7 +2415,9 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 getppid(),AC_DEFINE(RUDIMENTS_HAVE_GETPPID,1,Some systems have getppid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for Process32First)
-AC_TRY_LINK([#include <windows.h>
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <tlhelp32.h>],
 Process32First(0,NULL),AC_DEFINE(RUDIMENTS_HAVE_PROCESS32FIRST,1,Some systems have Process32First) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
@@ -2599,7 +2599,9 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 getpagesize(),AC_DEFINE(RUDIMENTS_HAVE_GETPAGESIZE,1,Some systems have getpagesize) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for GetSystemInfo)
-AC_TRY_LINK([#include <windows.h>],
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 GetSystemInfo(NULL),AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMINFO,1,Some systems have GetSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"

@@ -573,11 +573,10 @@ AC_DEFUN([FW_CHECK_MUTEX],
 #include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		dnl check for CreateMutex
-		if ( test -n "$MINGW32" )
-		then
-			AC_MSG_CHECKING(for CreateMutex)
-			FW_TRY_LINK([#include <windows.h>],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-		fi
+		AC_MSG_CHECKING(for CreateMutex)
+		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],[HANDLE mut=CreateMutex(NULL,FALSE,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATE_MUTEX,1,CreateMutex function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 	fi
 ])
 
@@ -1010,7 +1009,9 @@ getpwuid_r(0,NULL,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GETPWUID_R_4,1,Some systems 
 fi
 
 AC_MSG_CHECKING(for NetUserGetInfo)
-AC_TRY_COMPILE([#include <windows.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <lm.h>],
 NetUserGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETUSERGETINFO,1,Some systems have NetUserGetInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -1062,7 +1063,9 @@ fi
 
 AC_MSG_CHECKING(for NetGroupGetInfo)
 NETAPI32LIB=""
-AC_TRY_COMPILE([#include <windows.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <lm.h>],
 NetGroupGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETGROUPGETINFO,1,Some systems have NetGroupGetInfo) NETAPI32LIB="-lnetapi32"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_SUBST(NETAPI32LIB)
@@ -1228,12 +1231,11 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #include <sys/mman.h>],
 mmap(NULL,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MMAP,1,Some systems have mmap) AC_MSG_RESULT(yes); HAS_MEMORYMAP="yes", AC_MSG_RESULT(no))
 
-if ( test -n "$MINGW32" )
-then
-	AC_MSG_CHECKING(for CreateFileMapping)
-	AC_TRY_COMPILE([#include <windows.h>],
+AC_MSG_CHECKING(for CreateFileMapping)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
 HANDLE map=CreateFileMapping(INVALID_HANDLE_VALUE,NULL,PAGE_READWRITE,0,1,NULL);,AC_DEFINE(RUDIMENTS_HAVE_CREATE_FILE_MAPPING,1,Some systems have CreateFileMapping) AC_MSG_RESULT(yes); HAS_MEMORYMAP="yes", AC_MSG_RESULT(no))
-fi
 
 AC_SUBST(HAS_MEMORYMAP)
 
@@ -1709,7 +1711,9 @@ fi
 dnl Windows has it's own way of doing it
 if ( test "$STATFS_STYLE" = "unknown" )
 then
-AC_TRY_COMPILE([#include <windows.h>],[GetDiskFreeSpace(NULL,NULL,NULL,NULL,NULL);],AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE,1,GetDiskFreeSpace) STATFS_STYLE="windows")
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],[GetDiskFreeSpace(NULL,NULL,NULL,NULL,NULL);],AC_DEFINE(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE,1,GetDiskFreeSpace) STATFS_STYLE="windows")
 fi
 
 

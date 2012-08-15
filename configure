@@ -16750,9 +16750,7 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-				if ( test -n "$MINGW32" )
-		then
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateMutex" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateMutex" >&5
 $as_echo_n "checking for CreateMutex... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -16764,7 +16762,9 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -16789,7 +16789,6 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-		fi
 	fi
 
 
@@ -18470,7 +18469,9 @@ if ( test "$STATFS_STYLE" = "unknown" )
 then
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -19104,13 +19105,13 @@ fi
 echo
 echo "***** Date and Time **********"
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GetSystemTime" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GetSystemTime" >&5
 $as_echo_n "checking for GetSystemTime... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -19133,11 +19134,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SetSystemTime" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SetSystemTime" >&5
 $as_echo_n "checking for SetSystemTime... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -19159,7 +19162,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tm_zone" >&5
 $as_echo_n "checking for tm_zone... " >&6; }
@@ -20820,7 +20822,9 @@ fi
 $as_echo_n "checking for NetUserGetInfo... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <lm.h>
 int
 main ()
@@ -21185,7 +21189,9 @@ $as_echo_n "checking for NetGroupGetInfo... " >&6; }
 NETAPI32LIB=""
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <lm.h>
 int
 main ()
@@ -22352,14 +22358,13 @@ echo "***** Semaphore Functions ****"
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
 
-if ( test -n "$MINGW32" )
-then
-
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateSemaphore" >&5
 $as_echo_n "checking for CreateSemaphore... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -22378,8 +22383,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-else
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for semget" >&5
 $as_echo_n "checking for semget... " >&6; }
@@ -22446,7 +22449,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 fi
 
@@ -22663,7 +22665,9 @@ $as_echo "no" >&6; }
 $as_echo_n "checking for Sleep... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -22918,13 +22922,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateFileMapping" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateFileMapping" >&5
 $as_echo_n "checking for CreateFileMapping... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -22943,7 +22947,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 
 
@@ -24991,13 +24994,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LockFileEx" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LockFileEx" >&5
 $as_echo_n "checking for LockFileEx... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -25016,7 +25019,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for FD_CLOEXEC" >&5
 $as_echo_n "checking for FD_CLOEXEC... " >&6; }
@@ -25047,13 +25049,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for HANDLE_FLAG_INHERIT" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for HANDLE_FLAG_INHERIT" >&5
 $as_echo_n "checking for HANDLE_FLAG_INHERIT... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -25072,7 +25074,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for truncate" >&5
 $as_echo_n "checking for truncate... " >&6; }
@@ -25373,13 +25374,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateNamedPipe" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateNamedPipe" >&5
 $as_echo_n "checking for CreateNamedPipe... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -25398,7 +25399,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pathconf" >&5
 $as_echo_n "checking for pathconf... " >&6; }
@@ -25585,13 +25585,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SetFileTime" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SetFileTime" >&5
 $as_echo_n "checking for SetFileTime... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -25610,7 +25610,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mknod" >&5
 $as_echo_n "checking for mknod... " >&6; }
@@ -25804,13 +25803,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test -n "$MINGW32" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibrary" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibrary" >&5
 $as_echo_n "checking for LoadLibrary... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -25830,11 +25829,13 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibraryEx" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LoadLibraryEx" >&5
 $as_echo_n "checking for LoadLibraryEx... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -25853,7 +25854,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then
@@ -26401,7 +26401,9 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for _getpid... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
@@ -26456,7 +26458,9 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for Process32First... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <tlhelp32.h>
 int
 main ()
@@ -27040,7 +27044,9 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for GetSystemInfo... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <windows.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 int
 main ()
 {
