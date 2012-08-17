@@ -1,3 +1,5 @@
+0.38 - 
+
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message
 	added file::createPipe()
