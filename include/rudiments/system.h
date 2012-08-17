@@ -4,7 +4,7 @@
 #ifndef RUDIMENTS_SYSTEM_H
 #define RUDIMENTS_SYSTEM_H
 
-#include <rudiments/private/system.h>
+#include <rudiments/private/systemincludes.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -20,7 +20,6 @@ class systemprivate;
 //	unistd.h - sysconf()
 //			confstr() - use sysctl() on bsd
 //			gethostid(),sethostid() - use sysctl() on bsd
-//			getpagesize() - use sysconf() on bsd
 //			sync()
 //	sys/raw.h - structs/defines for /dev/rawctl ioctl()'s
 //	sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()
@@ -39,10 +38,10 @@ class systemprivate;
 class RUDIMENTS_DLLSPEC system {
 	public:
 
+		static	int32_t	getPageSize();
+
 	#include <rudiments/private/system.h>
 };
-
-// @endcond
 
 #ifdef RUDIMENTS_NAMESPACE
 }

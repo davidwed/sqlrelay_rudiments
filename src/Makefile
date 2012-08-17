@@ -7,8 +7,8 @@ include ../features.mk
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 
-SRCS = namevaluepairs.cpp winsock.cpp
-LOBJS = namevaluepairs.lo winsock.lo
+SRCS = namevaluepairs.cpp winsock.cpp system.cpp
+LOBJS = namevaluepairs.lo winsock.lo system.lo
 ifeq ($(INCLUDE_CLIENT),1)
 	SRCS += client.cpp
 	LOBJS += client.lo

@@ -4,14 +4,10 @@
 #include <rudiments/xmlsax.h>
 #include <rudiments/charstring.h>
 #include <rudiments/filesystem.h>
+#include <rudiments/system.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
-#endif
-
-// for getpagesize()
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -127,15 +123,7 @@ bool xmlsax::parseFile(const char *filename) {
 		// the memory page size.  Use the page size unless the 
 		// transfer size is an even multiple of it.
 		#ifdef RUDIMENTS_HAVE_MMAP
-			#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
-				off64_t	pagesize=getpagesize();
-			#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
-				SYSTEM_INFO	systeminfo;
-				GetSystemInfo(&systeminfo);
-				off64_t	pagesize=systeminfo.dwPageSize;
-			#else
-				#error no getpagesize or anything like it
-			#endif
+			off64_t	pagesize=system::getPageSize();
 			if (pagesize>pvt->_optblocksize ||
 				pvt->_optblocksize%pagesize) {
 				pvt->_optblocksize=pagesize;
