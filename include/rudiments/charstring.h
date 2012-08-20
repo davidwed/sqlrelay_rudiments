@@ -485,6 +485,22 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	long double	toFloat(const char *string,
 							char **endptr);
 
+		/** Converts "amount" which is assumed to be a dollar amount
+		 *  into pennies. */
+		static	int64_t	convertAmount(const char *amount);
+
+		/** Converts "amount" which is assumed to be a number of
+ 		 *  pennies into a dollar amount string. */
+		static	char	*convertAmount(int64_t amount);
+
+		/** Converts "amount" which is assumed to be a number of
+ 		 *  pennies into a dollar amount string where there
+ 		 *  are "padding" places between the dollar sign and decimal
+ 		 *  point.   These will be space padded if the amount is
+ 		 *  small enough not to fill them.  */
+		static	char	*convertAmount(int64_t amount,
+						uint16_t padding);
+
 
 		/** http escapes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -689,6 +705,29 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  between string index "start" and the end
 		 *  of the string, inclusive. */
 		static char	*subString(const char *str, size_t start);
+
+		/** Creates a new string with "src" inserted into "dest" at
+                 *  "index". */
+		static char	*insertString(const char *dest,
+						const char *src,
+						uint64_t index);
+
+		/** Obfuscates "str" by adding 128 to each character. */
+		static void	obfuscate(char *str);
+
+		/** Deobfuscates "str" which was obfusacted using the
+		 *  obfuscate method of this class. */
+		static void	deobfuscate(char *str);
+
+		/** Returns a copy of "string", padded with "padchar" to a
+		 *  length of "totallength".  Set "direction" to -1 to
+		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
+		 *  this method allocates a buffer internally and returns it.
+		 *  The calling program must deallocate this buffer. */
+		static char	*padString(const char *string,
+						char padchar,
+						int16_t direction,
+						uint64_t totallength);
 
 	#include <rudiments/private/charstring.h>
 };

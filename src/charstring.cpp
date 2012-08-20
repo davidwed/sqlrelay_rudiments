@@ -273,6 +273,54 @@ bool charstring::isNumber(const char *str, int32_t size) {
 	return true;
 }
 
+int64_t charstring::convertAmount(const char *amount) {
+	if (!amount) {
+		return 0;
+	}
+	const char	*dollarsstr=charstring::findFirst(amount,'$');
+	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
+	uint64_t	dollars=charstring::toUnsignedInteger(dollarsstr);
+	const char	*centsstr=charstring::findFirst(amount,'.');
+	uint64_t	cents=(centsstr)?
+				charstring::toUnsignedInteger(centsstr+1):0;
+	return (dollars*100+cents);
+}
+
+char *charstring::convertAmount(int64_t amount) {
+	uint16_t	length=charstring::integerLength(amount)+4;
+	if (length<6) {
+		length=6;
+	}
+	char	negative[2];
+	if (amount<0) {
+		negative[0]='-';
+	} else {
+		negative[0]='\0';
+	}
+	negative[1]='\0';
+	char	*amountstr=new char[length];
+	int64_t	amt=abs(amount);
+	sprintf(amountstr,"$%s%lld.%02lld",negative,
+				(long long)(amt/100),
+				(long long)(amt-(amt/100*100)));
+	return amountstr;
+}
+
+char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
+	char	*amt=convertAmount(amount);
+	ssize_t	amtlen=charstring::length(amt+1);
+	unsigned short	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
+	char	*buffer=new char[realspaces+1];
+	buffer[realspaces]='\0';
+	rawbuffer::set(buffer,' ',realspaces);
+	rawbuffer::copy(buffer+realspaces-amtlen,amt+1,amtlen);
+	if (buffer[0]==' ') {
+		buffer[0]='$';
+	}
+	delete[] amt;
+	return buffer;
+}
+
 char *charstring::httpEscape(const char *input) {
 
 	if (!input) {
@@ -1539,6 +1587,71 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	// additional trailing NULL, reduce outputsize accordingly
 	(*outputsize)-=(input[--inputindex]=='=')+
 				(input[--inputindex]=='=');
+}
+
+char *charstring::insertString(const char *dest,
+				const char *src, uint64_t index) {
+
+	uint64_t	srcsize=charstring::length(src);
+	uint64_t	size=charstring::length(dest)+srcsize+1;
+	char		*retval=new char[size];
+	for (uint64_t i=0,j=0; i<size;) {
+		if (i==index) {
+			for (uint64_t k=0; k<srcsize; k++) {
+				retval[i++]=src[k];
+			}
+		} else {
+			retval[i++]=dest[j++];
+		}
+	}
+	retval[size-1]='\0';
+	return retval;
+}
+
+void charstring::obfuscate(char *str) {
+	for (char *ch=str; *ch; ch++) {
+		*ch=(*ch)+128;
+	}
+}
+
+void charstring::deobfuscate(char *str) {
+	for (char *ch=str; *ch; ch++) {
+		*ch=(*ch)-128;
+	}
+}
+
+char *charstring::padString(const char *str, char padchar,
+				int16_t direction, uint64_t totallength) {
+
+	if (totallength==0) {
+		return NULL;
+	}
+
+	uint64_t	strlen=((str==NULL)?0:charstring::length(str));
+	char		*newstring=NULL;
+
+	newstring=new char[totallength+1];
+	if (strlen>=totallength) {
+		charstring::copy(newstring,str,totallength);
+		newstring[totallength]=0;
+		return newstring;
+	}
+
+	rawbuffer::set(newstring,padchar,totallength);
+	newstring[totallength]=0;
+
+	if (direction<0) {
+		// pad left
+		charstring::copy(&newstring[totallength-strlen],str,strlen);
+	} else if (direction>0) {
+		// pad right
+		charstring::copy(newstring,str,strlen);
+	} else {
+		// pad center
+		charstring::copy(&newstring[(totallength-strlen)/2],str,strlen);
+	}
+
+	return newstring;
 }
 
 #ifdef RUDIMENTS_NAMESPACE
