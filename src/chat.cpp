@@ -7,9 +7,8 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/snooze.h>
 #include <rudiments/character.h>
-#include <rudiments/serialport.h>
 
-#define DEBUG_CHAT 1
+//#define DEBUG_CHAT 1
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -51,7 +50,10 @@ int32_t chat::runScript(const char *script, char **abort,
 				constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
-	printf("runScript(\"%s\")\n",script);
+	printf("runScript(readfd=%d,writefd=%d,i\n\"%s\")\n",
+				pvt->_readfd->getFileDescriptor(),
+				pvt->_writefd->getFileDescriptor(),
+				script);
 	#endif
 
 	// if there was no script, just return success
@@ -78,23 +80,31 @@ int32_t chat::runScript(const char *script, char **abort,
 			!node->isNullNode();
 			node=node->getNextTagSibling()) {
 
+		char	*unescaped=NULL;
 		int32_t	result=RESULT_SUCCESS;
 		if (!charstring::compare(node->getName(),"timeout")) {
 			pvt->_timeout=charstring::toInteger(
 				node->getAttributeValue("seconds"));
 		} else if (!charstring::compare(node->getName(),"abort")) {
-			appendAbortString(node->getAttributeValue("string"));
+			charUnescape(node->getAttributeValue("string"),
+							&unescaped,false);
+			appendAbortString(unescaped);
 		} else if (!charstring::compare(node->getName(),
 							"clearabort")) {
 			clearAbortStrings();
 		} else if (!charstring::compare(node->getName(),"send")) {
-			result=send(node->getAttributeValue("string"),
-								variables);
+			charUnescape(node->getAttributeValue("string"),
+							&unescaped,false);
+			result=send(unescaped,variables);
 		} else if (!charstring::compare(node->getName(),"expect")) {
-			result=expect(node->getAttributeValue("string"),abort);
+			charUnescape(node->getAttributeValue("string"),
+							&unescaped,false);
+			result=expect(unescaped,abort);
 		} else if (!charstring::compare(node->getName(),"flush")) {
 			flush();
 		}
+		delete[] unescaped;
+		unescaped=NULL;
 
 		if (result!=RESULT_SUCCESS) {
 			#ifdef DEBUG_CHAT
@@ -119,31 +129,7 @@ int32_t chat::runScript(const char *script, char **abort,
 }
 
 void chat::appendAbortString(const char *string) {
-
-	char	*newstring=new char[charstring::length(string)+1];
-
-	// replace \\r and \\n
-	int32_t	index=0;
-	for (const char *ptr=string; *ptr; ptr++) {
-		if (*ptr=='\\') {
-			ptr++;
-			if (*ptr=='n') {
-				newstring[index]='\n';
-			} else if (*ptr=='r') {
-				newstring[index]='\r';
-			} else if (*ptr=='\\') {
-				newstring[index]='\\';
-			} else if (!*ptr) {
-				break;
-			}
-		} else {
-			newstring[index]=*ptr;
-		}
-		index++;
-	}
-	newstring[index]='\0';
-
-	pvt->_aborts.append(newstring);
+	pvt->_aborts.append(charstring::duplicate(string));
 }
 
 void chat::clearAbortStrings() {
@@ -194,8 +180,9 @@ int32_t chat::expect(const char *string, char **abort) {
 	}
 
 	#ifdef DEBUG_CHAT
-	printf("expecting \"%s\" (%ld second timeout)...\n",
-						string,pvt->_timeout);
+	printf("expecting \"");
+	charstring::safePrint(string);
+	printf(" (%ld second timeout)...\n",pvt->_timeout);
 	#endif
 
 	stringbuffer	response;
@@ -288,11 +275,6 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 	int32_t	result=RESULT_SUCCESS;
 	if (string) {
 
-		// set up an instance of the serial port class, just in case
-		// we need to send a break sequence
-		serialport	sp;
-		sp.setFileDescriptor(pvt->_writefd->getFileDescriptor());
-
 		for (const char *ptr=string; *ptr; ptr++) {
 
 			if (variables) {
@@ -306,74 +288,9 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 			if (ch=='\\') {
 				ptr++;
 				ch=*ptr;
-				if (!ch) {
-					#ifdef DEBUG_CHAT
-					printf("\n");
-					#endif
-					break;
-				} else if (ch=='b') {
-					// backspace
-					ch='\b';
-					#ifdef DEBUG_CHAT
-					printf("\\b");
-					fflush(stdout);
-					#endif
-				} else if (ch=='K') {
-					// break
-					#ifdef DEBUG_CHAT
-					printf("\\K");
-					fflush(stdout);
-					#endif
-					if (!sp.sendBreak(0)) {
-						#ifdef DEBUG_CHAT
-						printf("\n");
-						#endif
-						break;
-					}
-					continue;
-				} else if (ch>='0' && ch<='8') {
-					// octal digits
-					#ifdef DEBUG_CHAT
-					printf("\\%c",ch);
-					fflush(stdout);
-					#endif
-					char	val=(ch-'0')*64;
-					ptr++;
-					if (ch>='0' && ch<='8') {
-						#ifdef DEBUG_CHAT
-						printf("%c",ch);
-						fflush(stdout);
-						#endif
-						val=val+(ch-'0')*8;
-						ptr++;
-					}
-					if (ch>='0' && ch<='8') {
-						#ifdef DEBUG_CHAT
-						printf("%c",ch);
-						fflush(stdout);
-						#endif
-						val=val+(ch-'0');
-						ch=val;
-					}
-				} else if (ch=='N') {
+				if (ch=='N') {
 					// null
-					#ifdef DEBUG_CHAT
-					printf("\\0");
-					fflush(stdout);
-					#endif
 					ch='\0';
-				} else if (ch=='r') {
-					#ifdef DEBUG_CHAT
-					printf("\\r");
-					fflush(stdout);
-					#endif
-					ch='\r';
-				} else if (ch=='n') {
-					#ifdef DEBUG_CHAT
-					printf("\\n");
-					fflush(stdout);
-					#endif
-					ch='\n';
 				} else if (ch=='p') {
 					#ifdef DEBUG_CHAT
 					printf("\ndecisleep\n");
@@ -387,28 +304,12 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 					snooze::macrosnooze(1);
 					continue;
 				}
-			} else if (*ptr=='^') {
-				// control characters
-				ptr++;
-				if (!*ptr) {
-					#ifdef DEBUG_CHAT
-					printf("\n");
-					#endif
-				}
-				ch=*ptr-'A'+1;
-				if (ch<0) {
-					ch=0;
-				}
-				#ifdef DEBUG_CHAT
-				printf("^%c",*ptr);
-				fflush(stdout);
-				#endif
-			#ifdef DEBUG_CHAT
-			} else {
-				printf("%c",ch);
-				fflush(stdout);
-			#endif
 			}
+
+			#ifdef DEBUG_CHAT
+			printf("%c",ch);
+			fflush(stdout);
+			#endif
 
 			result=pvt->_writefd->write(ch);
 			if (result!=sizeof(ch)) {
@@ -459,8 +360,59 @@ int32_t chat::substituteVariables(const char **ch,
 			}
 		}
 	}
+
 	return RESULT_SUCCESS;
 }
+
+void chat::charUnescape(const char *str, char **newstr, bool second) {
+
+	if (!charstring::length(str)) {
+		*newstr=NULL;
+		return;
+	}
+
+	*newstr = new char[charstring::length(str)+1];
+
+	unsigned long i=0;
+	for (char ch; (ch=*str); str++) {
+		if (ch=='\\') {
+			ch=*(++str);
+			if (!ch) {
+				break;
+			} else if (ch=='b') {
+				// backspace
+				ch='\b';
+			} else if (ch>='0' && ch<='8') {
+				// octal digits
+				char	val=(ch-'0')*64;
+				ch=*(++str);
+				if (ch>='0' && ch<='8') {
+					val=val+(ch-'0')*8;
+					ch=*(++str);
+				}
+				if (ch>='0' && ch<='8') {
+					val=val+(ch-'0');
+					ch=val;
+				}
+			} else if (ch=='r') {
+				ch='\r';
+			} else if (ch=='n') {
+				ch='\n';
+			} else if (ch=='\\'){
+				if (second) {
+					(*newstr)[i++]=ch;
+				}
+			} else {
+				// put the \ back in the new str because it
+				// isn't a standard escape character.
+				(*newstr)[i++]='\\';
+			}
+		}
+		(*newstr)[i++]=ch;
+	}
+	(*newstr)[i]='\0';
+}
+
 
 #ifdef RUDIMENTS_NAMESPACE
 }

@@ -69,9 +69,7 @@ ifeq ($(INCLUDE_CHARSTRING),1)
 	ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
 		ifeq ($(INCLUDE_FILEDESCRIPTOR),1)
 			ifeq ($(INCLUDE_INTERVALTIMER),1)
-				ifeq ($(INCLUDE_SERIALPORT),1)
-					INCLUDE_CHAT = @INCLUDE_CHAT@
-				endif
+				INCLUDE_CHAT = @INCLUDE_CHAT@
 			endif
 		endif
 		ifeq ($(INCLUDE_ERROR),1)
