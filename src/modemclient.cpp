@@ -35,6 +35,7 @@ namespace rudiments {
 class modemclientprivate {
 	friend class modemclient;
 	private:
+		const char	*_customatcommands;
 		const char	*_connectscript;
 		const char	*_disconnectscript;
 		const char	*_phonenumber;
@@ -42,6 +43,7 @@ class modemclientprivate {
 
 modemclient::modemclient() : client(), modemutil() {
 	pvt=new modemclientprivate;
+	pvt->_customatcommands="";
 	pvt->_connectscript="";
 	pvt->_disconnectscript="";
 	pvt->_phonenumber="";
@@ -64,6 +66,7 @@ modemclient &modemclient::operator=(const modemclient &m) {
 }
 
 void modemclient::modemclientClone(const modemclient &m) {
+	pvt->_customatcommands=m.pvt->_customatcommands;
 	pvt->_connectscript=m.pvt->_connectscript;
 	pvt->_phonenumber=m.pvt->_phonenumber;
 	pvt->_disconnectscript=m.pvt->_disconnectscript;
@@ -80,6 +83,8 @@ void modemclient::initialize(constnamevaluepairs *cd) {
 		cd->getData("device",&devicename);
 		const char	*baud;
 		cd->getData("baud",&baud);
+		const char	*customatcommands;
+		cd->getData("customatcommands",&customatcommands);
 		const char	*connectscript;
 		cd->getData("connectscript",&connectscript);
 		const char	*phonenumber;
@@ -90,20 +95,26 @@ void modemclient::initialize(constnamevaluepairs *cd) {
 		cd->getData("retrywait",&rwstr);
 		const char	*rcstr;
 		cd->getData("retrycount",&rcstr);
-		initialize(devicename,baud,connectscript,phonenumber,
+		initialize(devicename,baud,
+				customatcommands,
+				connectscript,
+				phonenumber,
 				disconnectscript,
 				charstring::toInteger(rwstr),
 				charstring::toInteger(rcstr));
 	}
 }
 
-void modemclient::initialize(const char *devicename, const char *baud,
+void modemclient::initialize(const char *devicename,
+				const char *baud,
+				const char *customatcommands,
 				const char *connectscript,
 				const char *phonenumber,
 				const char *disconnectscript,
 				unsigned long retrywait,
 				unsigned long retrycount) {
 	modemutil::initialize(devicename,baud);
+	pvt->_customatcommands=customatcommands;
 	pvt->_connectscript=connectscript;
 	pvt->_phonenumber=phonenumber;
 	pvt->_disconnectscript=disconnectscript;
@@ -113,7 +124,10 @@ void modemclient::initialize(const char *devicename, const char *baud,
 int32_t modemclient::connect() {
 
 	constnamevaluepairs	phnvp;
-	phnvp.setData("phonenumber",const_cast<char *>(pvt->_phonenumber));
+	phnvp.setData("customatcommands",
+			const_cast<char *>(pvt->_customatcommands));
+	phnvp.setData("phonenumber",
+			const_cast<char *>(pvt->_phonenumber));
 
 	unsigned long	whichtry=0;
 	for (;;) {
