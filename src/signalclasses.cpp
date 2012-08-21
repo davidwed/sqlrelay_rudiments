@@ -62,136 +62,136 @@ bool signalset::addAllSignals() {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigfillset(&pvt->_sigset);
 	#else
-		#ifdef HAVE_SIGHUP
+		#ifdef SIGHUP
 			addSignal(SIGHUP);
 		#endif
-		#ifdef HAVE_SIGINT
+		#ifdef SIGINT
 			addSignal(SIGINT);
 		#endif
-		#ifdef HAVE_SIGQUIT
+		#ifdef SIGQUIT
 			addSignal(SIGQUIT);
 		#endif
-		#ifdef HAVE_SIGILL
+		#ifdef SIGILL
 			addSignal(SIGILL);
 		#endif
-		#ifdef HAVE_SIGTRAP
+		#ifdef SIGTRAP
 			addSignal(SIGTRAP);
 		#endif
-		#ifdef HAVE_SIGABRT
+		#ifdef SIGABRT
 			addSignal(SIGABRT);
 		#endif
-		#ifdef HAVE_SIGIOT
+		#ifdef SIGIOT
 			addSignal(SIGIOT);
 		#endif
-		#ifdef HAVE_SIGBUS
+		#ifdef SIGBUS
 			addSignal(SIGBUS);
 		#endif
-		#ifdef HAVE_SIGFPE
+		#ifdef SIGFPE
 			addSignal(SIGFPE);
 		#endif
-		#ifdef HAVE_SIGUSR1
+		#ifdef SIGUSR1
 			addSignal(SIGUSR1);
 		#endif
-		#ifdef HAVE_SIGSEGV
+		#ifdef SIGSEGV
 			addSignal(SIGSEGV);
 		#endif
-		#ifdef HAVE_SIGUSR2
+		#ifdef SIGUSR2
 			addSignal(SIGUSR2);
 		#endif
-		#ifdef HAVE_SIGPIPE
+		#ifdef SIGPIPE
 			addSignal(SIGPIPE);
 		#endif
-		#ifdef HAVE_SIGALRM
+		#ifdef SIGALRM
 			addSignal(SIGALRM);
 		#endif
-		#ifdef HAVE_SIGTERM
+		#ifdef SIGTERM
 			addSignal(SIGTERM);
 		#endif
-		#ifdef HAVE_SIGSTKFLT
+		#ifdef SIGSTKFLT
 			addSignal(SIGSTKFLT);
 		#endif
-		#ifdef HAVE_SIGCHLD
+		#ifdef SIGCHLD
 			addSignal(SIGCHLD);
 		#endif
-		#ifdef HAVE_SIGCONT
+		#ifdef SIGCONT
 			addSignal(SIGCONT);
 		#endif
-		#ifdef HAVE_SIGSTOP
+		#ifdef SIGSTOP
 			addSignal(SIGSTOP);
 		#endif
-		#ifdef HAVE_SIGTSTP
+		#ifdef SIGTSTP
 			addSignal(SIGTSTP);
 		#endif
-		#ifdef HAVE_SIGTTIN
+		#ifdef SIGTTIN
 			addSignal(SIGTTIN);
 		#endif
-		#ifdef HAVE_SIGTTOU
+		#ifdef SIGTTOU
 			addSignal(SIGTTOU);
 		#endif
-		#ifdef HAVE_SIGURG
+		#ifdef SIGURG
 			addSignal(SIGURG);
 		#endif
-		#ifdef HAVE_SIGXCPU
+		#ifdef SIGXCPU
 			addSignal(SIGXCPU);
 		#endif
-		#ifdef HAVE_SIGXFSZ
+		#ifdef SIGXFSZ
 			addSignal(SIGXFSZ);
 		#endif
-		#ifdef HAVE_SIGVTALRM
+		#ifdef SIGVTALRM
 			addSignal(SIGVTALRM);
 		#endif
-		#ifdef HAVE_SIGPROF
+		#ifdef SIGPROF
 			addSignal(SIGPROF);
 		#endif
-		#ifdef HAVE_SIGWINCH
+		#ifdef SIGWINCH
 			addSignal(SIGWINCH);
 		#endif
-		#ifdef HAVE_SIGIO
+		#ifdef SIGIO
 			addSignal(SIGIO);
 		#endif
-		#ifdef HAVE_SIGPOLL
+		#ifdef SIGPOLL
 			addSignal(SIGPOLL);
 		#endif
-		#ifdef HAVE_SIGPWR
+		#ifdef SIGPWR
 			addSignal(SIGPWR);
 		#endif
-		#ifdef HAVE_SIGUNUSED
+		#ifdef SIGUNUSED
 			addSignal(SIGUNUSED);
 		#endif
-		#ifdef HAVE_SIGEMT
+		#ifdef SIGEMT
 			addSignal(SIGEMT);
 		#endif
-		#ifdef HAVE_SIGSYS
+		#ifdef SIGSYS
 			addSignal(SIGSYS);
 		#endif
-		#ifdef HAVE_SIGWAITING
+		#ifdef SIGWAITING
 			addSignal(SIGWAITING);
 		#endif
-		#ifdef HAVE_SIGLWP
+		#ifdef SIGLWP
 			addSignal(SIGLWP);
 		#endif
-		#ifdef HAVE_SIGFREEZE
+		#ifdef SIGFREEZE
 			addSignal(SIGFREEZE);
 		#endif
-		#ifdef HAVE_SIGTHAW
+		#ifdef SIGTHAW
 			addSignal(SIGTHAW);
 		#endif
-		#ifdef HAVE_SIGCANCEL
+		#ifdef SIGCANCEL
 			addSignal(SIGCANCEL);
 		#endif
-		#ifdef HAVE_SIGLOST
+		#ifdef SIGLOST
 			addSignal(SIGLOST);
 		#endif
-		#ifdef HAVE__SIGRTMIN
+		#ifdef _SIGRTMIN
 			addSignal(_SIGRTMIN);
 		#endif
-		#ifdef HAVE__SIGRTMAX
+		#ifdef _SIGRTMAX
 			addSignal(_SIGRTMAX);
 		#endif
-		#ifdef HAVE_SIGRTMIN
+		#ifdef SIGRTMIN
 			addSignal(SIGRTMIN);
 		#endif
-		#ifdef HAVE_SIGRTMAX
+		#ifdef SIGRTMAX
 			addSignal(SIGRTMAX);
 		#endif
 		return false;
