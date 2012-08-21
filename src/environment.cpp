@@ -30,11 +30,11 @@ namespace rudiments {
 
 // LAME: not in the class
 static mutex	*_envmutex;
-#ifdef RUDIMENTS_HAVE_PUTENV
-static namevaluepairs	*_envstrings;
-#endif
 
-#ifdef RUDIMENTS_HAVE_PUTENV
+#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
+// LAME: not in the class
+static namevaluepairs	*_envstrings;
+
 void environment::init() {
 	_envstrings=new namevaluepairs;
 
@@ -54,6 +54,7 @@ void environment::exit() {
 			node;
 			node=(namevaluepairslistnode *)node->getNext()) {
 		free((void *)node->getData()->getData());
+		node->getData()->setData(NULL);
 	}
 	delete _envstrings;
 }
@@ -140,7 +141,9 @@ const char *environment::getValue(const char *variable) {
 	return retval;
 }
 
-#if defined(RUDIMENTS_HAVE_SETENV) && !defined(RUDIMENTS_HAVE_PUTENV)
+#if defined(RUDIMENTS_HAVE_SETENV) && \
+	!defined(RUDIMENTS_HAVE_PUTENV) && \
+	!defined(RUDIMENTS_HAVE__PUTENV)
 bool environment::setValue(const char *variable, const char *value) {
 	bool	retval=false;
 	if (_envmutex && !_envmutex->lock()) {
@@ -157,7 +160,7 @@ bool environment::setValue(const char *variable, const char *value) {
 #endif
 
 bool environment::remove(const char *variable) {
-#ifdef HAVE_PUTENV
+#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 	if (!_envstrings) {
 		init();
 	}
@@ -168,7 +171,7 @@ bool environment::remove(const char *variable) {
 		return retval;
 	}
 	unsetenv(variable);
-	#ifdef HAVE_PUTENV
+	#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 		char *pestr;
 		if (_envstrings->getData(const_cast<char *>(variable),&pestr)) {
 			free((void *)pestr);

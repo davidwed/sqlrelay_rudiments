@@ -16,19 +16,19 @@ namespace rudiments {
 
 server *clientserverfactory::getServer(const char *type) {
 	if (!charstring::compare(type,"inet")) {
-		#ifdef HAVE_INETSERVER
+		#ifdef INCLUDE_INETSERVER
 			return new inetserversocket();
 		#else
 			return NULL;
 		#endif
 	} else if (!charstring::compare(type,"unix")) {
-		#ifdef HAVE_UNIXSERVER
+		#ifdef INCLUDE_UNIXSERVER
 			return new unixserversocket();
 		#else
 			return NULL;
 		#endif
 	} else if (!charstring::compare(type,"modem")) {
-		#ifdef HAVE_MODEMSERVER
+		#ifdef INCLUDE_MODEMSERVER
 			return new modemserver();
 		#else
 			return NULL;
@@ -39,19 +39,19 @@ server *clientserverfactory::getServer(const char *type) {
 
 client *clientserverfactory::getClient(const char *type) {
 	if (!charstring::compare(type,"inet")) {
-		#ifdef HAVE_INETCLIENT
+		#ifdef INCLUDE_INETCLIENT
 			return new inetclientsocket();
 		#else
 			return NULL;
 		#endif
 	} else if (!charstring::compare(type,"unix")) {
-		#ifdef HAVE_UNIXCLIENT
+		#ifdef INCLUDE_UNIXCLIENT
 			return new unixclientsocket();
 		#else
 			return NULL;
 		#endif
 	} else if (!charstring::compare(type,"modem")) {
-		#ifdef HAVE_MODEMCLIENT
+		#ifdef INCLUDE_MODEMCLIENT
 			return new modemclient();
 		#else
 			return NULL;
