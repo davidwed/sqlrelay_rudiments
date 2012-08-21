@@ -140,4 +140,15 @@ int main(int argc, const char **argv) {
 	printf("=====================================================\n");
 	x.parseFile("xmls.xml");
 	printf("%s\n",x.getString());
+
+	// bad strings
+	printf("bad xml: %d %d %d %d %d %d %d\n",
+		x.parseString("<xml><tag></xml>\n")==false,
+		x.parseString("<xml><tag attribute/></xml>\n")==false,
+		x.parseString("<xml><tag attribute/></xml>\n")==false,
+		x.parseString("<xml><tag attribute=/></xml>\n")==false,
+		x.parseString("<xml><tag attribute=\"/></xml>\n")==false,
+		x.parseString("<xml><tag attribute=\"></tag></xml>\n")==false,
+		x.parseString("<xml><tag1 attribute=\"\"></tag2></xml>\n")==false);
+	
 }
