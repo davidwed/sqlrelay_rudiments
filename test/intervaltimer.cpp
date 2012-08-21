@@ -1,6 +1,7 @@
 #include <rudiments/intervaltimer.h>
 #include <rudiments/signalclasses.h>
 #include <rudiments/snooze.h>
+#include <sys/time.h>
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE

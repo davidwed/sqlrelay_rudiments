@@ -75,9 +75,9 @@ PROGS = server$(EXE) \
 	inetclntbench$(EXE) \
 	inetsvrbench$(EXE) \
 	nullserver$(EXE) \
+	logger$(EXE) \
+	intervaltimer$(EXE) \
 	server.pem
-	#logger$(EXE)
-	#intervaltimer$(EXE)
 
 #ALLSTATIC=-all-static
 
