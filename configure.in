@@ -597,6 +597,10 @@ AC_TRY_COMPILE([#include <process.h>],
 AC_MSG_CHECKING(for sys/utsname.h)
 AC_TRY_COMPILE([#include <sys/utsname.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_UTSNAME_H, 1, Some systems have sys/utsname.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/mman.h)
+AC_TRY_COMPILE([#include <sys/mman.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_MMAN_H, 1, Some systems have sys/mman.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 

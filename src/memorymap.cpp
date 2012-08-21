@@ -5,7 +5,7 @@
 #include <rudiments/error.h>
 
 #include <stdio.h>
-#ifdef RUDIMENTS_HAVE_MMAP
+#ifdef RUDIMENTS_HAVE_SYS_MMAN_H
 	#include <sys/mman.h>
 #endif
 

@@ -8,7 +8,9 @@
 	#include <sys/types.h>
 #endif
 
-#include <sys/mman.h>
+#ifdef RUDIMENTS_HAVE_SYS_MMAN_H
+	#include <sys/mman.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -41,27 +43,33 @@ shmfile::~shmfile() {
 }
 
 int32_t shmfile::openInternal(const char *name, int32_t flags) {
-	int32_t	result;
-	do {
-		result=shm_open(name,flags,0);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	return openInternal(name,flags,0);
 }
 
 int32_t shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
-	int32_t	result;
-	do {
-		result=shm_open(name,flags,perms);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#if defined(RUDIMENTS_HAVE_SHM_OPEN)
+		int32_t	result;
+		do {
+			result=shm_open(name,flags,perms);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;	
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 bool shmfile::remove(const char *filename) {
-	int32_t	result;
-	do {
-		result=shm_unlink(filename);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_SHM_OPEN)
+		int32_t	result;
+		do {
+			result=shm_unlink(filename);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE
