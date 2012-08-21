@@ -27598,7 +27598,7 @@ fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )
 then
-	HEADERS="$HEADERS xmldom.h"
+	HEADERS="$HEADERS xmldom.h xmldomnode.h"
 	PRIVATEHEADERS="$PRIVATEHEADERS xmldom.h xmldomincludes.h xmldomnode.h xmldomnodeincludes.h"
 	SRCS="$SRCS xmldom.cpp xmldomnode.cpp"
 	LOBJS="$LOBJS xmldom.lo xmldomnode.lo"
