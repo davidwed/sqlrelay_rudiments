@@ -170,10 +170,10 @@ bool environment::remove(const char *variable) {
 	unsetenv(variable);
 	#ifdef HAVE_PUTENV
 		char *pestr;
-		if (envstrings->getData(const_cast<char *>(variable),&pestr)) {
+		if (_envstrings->getData(const_cast<char *>(variable),&pestr)) {
 			free((void *)pestr);
 		}
-		envstrings->removeData(const_cast<char *>(variable));
+		_envstrings->removeData(const_cast<char *>(variable));
 	#endif
 	retval=true;
 	if (_envmutex) {
