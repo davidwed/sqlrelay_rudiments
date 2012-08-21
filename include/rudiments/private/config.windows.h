@@ -932,6 +932,9 @@
 /* Some systems have sys/un.h */
 /* #undef RUDIMENTS_HAVE_SYS_UN_H */
 
+/* Some systems have sys/utsname.h */
+/* #undef RUDIMENTS_HAVE_SYS_UTSNAME_H */
+
 /* Some systems have sys/wait.h */
 /* #undef RUDIMENTS_HAVE_SYS_WAIT_H */
 
@@ -973,6 +976,9 @@
 
 /* Some systems have umask */
 /* #undef RUDIMENTS_HAVE_UMASK */
+
+/* Some systems have uname */
+/* #undef RUDIMENTS_HAVE_UNAME */
 
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */

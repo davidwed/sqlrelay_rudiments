@@ -605,64 +605,11 @@ ac_default_prefix=/usr/local/firstworks
 ac_unique_file="test/xmls.cpp"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-INCLUDE_ERROR
-INCLUDE_CHAT
-INCLUDE_CONTAINER
-INCLUDE_RANDOMNUMBER
-INCLUDE_REGULAREXPRESSION
-INCLUDE_PERMISSIONS
-INCLUDE_SHAREDMEMORY
-INCLUDE_SEMAPHORESET
-INCLUDE_PROCESS
-INCLUDE_DAEMONPROCESS
-INCLUDE_SIGNALCLASSES
-INCLUDE_MEMORYPOOL
-INCLUDE_LOGGER
-INCLUDE_LISTENER
-INCLUDE_UNIXSERVER
-INCLUDE_INETSERVER
-INCLUDE_SERVER
-INCLUDE_MODEMSERVER
-INCLUDE_MODEMCLIENT
-INCLUDE_UNIXCLIENT
-INCLUDE_INETCLIENT
-INCLUDE_CLIENT
-INCLUDE_DATATRANSPORT
-INCLUDE_DEVICE
-INCLUDE_SHMFILE
-INCLUDE_FILE
-INCLUDE_FILEDESCRIPTOR
-INCLUDE_DIRECTORY
-INCLUDE_FILESYSTEM
-INCLUDE_DTD
-INCLUDE_XMLDOM
-INCLUDE_XMLSAX
-INCLUDE_STRINGBUFFER
-INCLUDE_VARIABLEBUFFER
-INCLUDE_CRYPT
-INCLUDE_DYNAMICLIB
-INCLUDE_HOSTENTRY
-INCLUDE_PROTOCOLENTRY
-INCLUDE_RPCENTRY
-INCLUDE_SHADOWENTRY
-INCLUDE_SERVICEENTRY
-INCLUDE_PASSWDENTRY
-INCLUDE_GROUPENTRY
-INCLUDE_TIMEZONEFILE
-INCLUDE_DATETIME
-INCLUDE_COMMANDLINE
-INCLUDE_ENVIRONMENT
-INCLUDE_PARAMETERSTRING
-INCLUDE_SERIALPORTPROFILE
-INCLUDE_SERIALPORT
-INCLUDE_MUTEX
-INCLUDE_MEMORYMAP
-INCLUDE_RAWBUFFER
-INCLUDE_MATH
-INCLUDE_SNOOZE
-INCLUDE_INTERVALTIMER
-INCLUDE_CHARACTER
-INCLUDE_CHARSTRING
+EXTRACPPFLAGS
+LOBJS
+SRCS
+PRIVATEHEADERS
+HEADERS
 SONAME_VERSION_INFO
 RUDIMENTS_VERSION
 DLLIB
@@ -675,7 +622,6 @@ NANOSLEEPLIB
 NETAPI32LIB
 SOCKETLIBS
 INETATONLIB
-USE_BUILT_IN_REGULAREXPRESSION
 PCRELIBS
 PCREINCLUDES
 SSLLIBS
@@ -790,62 +736,63 @@ enable_pcre
 with_pcre_includes
 with_pcre_libs
 enable_threads
-enable_charstring
 enable_character
-enable_intervaltimer
-enable_snooze
-enable_math
-enable_rawbuffer
-enable_memorymap
-enable_mutex
-enable_serialport
-enable_serialportprofile
-enable_parameterstring
-enable_environment
+enable_charstring
+enable_chat
+enable_client
 enable_commandline
-enable_datetime
-enable_timezonefile
-enable_groupentry
-enable_passwdentry
-enable_serviceentry
-enable_shadowentry
-enable_rpcentry
-enable_protocolentry
-enable_hostentry
-enable_dynamiclib
 enable_crypt
-enable_variablebuffer
-enable_stringbuffer
-enable_xmlsax
-enable_xmldom
-enable_dtd
-enable_filesystem
+enable_daemonprocess
+enable_datetime
+enable_device
 enable_directory
+enable_dtd
+enable_dynamiclib
+enable_environment
+enable_error
 enable_filedescriptor
 enable_file
-enable_shmfile
-enable_device
-enable_client
+enable_filesystem
+enable_groupentry
+enable_hostentry
 enable_inetclient
-enable_unixclient
-enable_modemclient
-enable_modemserver
-enable_server
 enable_inetserver
-enable_unixserver
+enable_intervaltimer
 enable_listener
 enable_logger
+enable_math
+enable_memorymap
 enable_memorypool
-enable_signalclasses
-enable_daemonprocess
-enable_process
-enable_semaphoreset
-enable_sharedmemory
+enable_modemclient
+enable_modemserver
+enable_mutex
+enable_parameterstring
+enable_passwdentry
 enable_permissions
-enable_regularexpression
+enable_process
+enable_protocolentry
 enable_randomnumber
-enable_chat
-enable_error
+enable_rawbuffer
+enable_regularexpression
+enable_rpcentry
+enable_semaphoreset
+enable_serialport
+enable_serialportprofile
+enable_server
+enable_serviceentry
+enable_shadowentry
+enable_sharedmemory
+enable_shmfile
+enable_signalclasses
+enable_snooze
+enable_stringbuffer
+enable_system
+enable_timezonefile
+enable_unixclient
+enable_unixserver
+enable_variablebuffer
+enable_xmldom
+enable_xmlsax
 enable_shared
 enable_static
 with_pic
@@ -1485,62 +1432,63 @@ Optional Features:
   --disable-ssl           Disable SSL support
   --disable-pcre          Don't use PCRE for regular expressions
 o  --disable-threads       Disable thread support]
-  --disable-charstring    Don't build charstring class
   --disable-character     Don't build character class
-  --disable-intervaltimer Don't build intervaltimer class
-  --disable-snooze        Don't build snooze class
-  --disable-math          Don't build math class
-  --disable-rawbuffer     Don't build rawbuffer class
-  --disable-memorymap     Don't build memorymap class
-  --disable-mutex         Don't build mutex class
-  --disable-serialport    Don't build serialport class
-  --disable-serialportprofile    Don't build serialportprofile class
-  --disable-parameterstring      Don't build parameterstring class
-  --disable-environment   Don't build environment class
+  --disable-charstring    Don't build charstring class
+  --disable-chat          Don't build chat
+  --disable-client        Don't build client class
   --disable-commandline   Don't build commandline class
-  --disable-datetime      Don't build datetime class
-  --disable-timezonefile  Don't build timezonefile class
-  --disable-groupentry    Don't build groupentry class
-  --disable-passwdentry   Don't build passwdentry class
-  --disable-serviceentry  Don't build serviceentry class
-  --disable-shadowentry   Don't build shadowentry class
-  --disable-rpcentry      Don't build rpcentry class
-  --disable-protocolentry Don't build protocolentry class
-  --disable-hostentry     Don't build hostentry class
-  --disable-dynamiclib    Don't build dynamiclib class
   --disable-crypt         Don't build crypt class
-  --disable-variablebuffer       Don't build variablebuffer class
-  --disable-stringbuffer  Don't build stringbuffer class
-  --disable-xmlsax        Don't build xmlsax class
-  --disable-xmldom        Don't build xmldom class
-  --disable-dtd           Don't build dtd class
-  --disable-filesystem    Don't build filesystem class
+  --disable-daemonprocess Don't build daemonprocess
+  --disable-datetime      Don't build datetime class
+  --disable-device        Don't build device class
   --disable-directory     Don't build directory class
+  --disable-dtd           Don't build dtd class
+  --disable-dynamiclib    Don't build dynamiclib class
+  --disable-environment   Don't build environment class
+  --disable-error         Don't build error
   --disable-filedescriptor       Don't build filedescriptor class
   --disable-file          Don't build file class
-  --disable-shmfile       Don't build shmfile class
-  --disable-device        Don't build device class
-  --disable-client        Don't build client class
+  --disable-filesystem    Don't build filesystem class
+  --disable-groupentry    Don't build groupentry class
+  --disable-hostentry     Don't build hostentry class
   --disable-inetclient    Don't build inetclient class
-  --disable-unixclient    Don't build unixclient class
-  --disable-modemclient   Don't build modemclient class
-  --disable-modemserver   Don't build modemserver class
-  --disable-server        Don't build server class
   --disable-inetserver    Don't build inetserver class
-  --disable-unixserver    Don't build unixserver class
+  --disable-intervaltimer Don't build intervaltimer class
   --disable-listener      Don't build listener class
   --disable-logger        Don't build logger class
+  --disable-math          Don't build math class
+  --disable-memorymap     Don't build memorymap class
   --disable-memorypool    Don't build memorypool class
-  --disable-signalclasses Don't build signalclasses
-  --disable-daemonprocess Don't build daemonprocess
-  --disable-process       Don't build process
-  --disable-semaphoreset  Don't build semaphoreset
-  --disable-sharedmemory  Don't build sharedmemory
+  --disable-modemclient   Don't build modemclient class
+  --disable-modemserver   Don't build modemserver class
+  --disable-mutex         Don't build mutex class
+  --disable-parameterstring      Don't build parameterstring class
+  --disable-passwdentry   Don't build passwdentry class
   --disable-permissions   Don't build permissions
-  --disable-regularexpression    Don't build regularexpression
+  --disable-process       Don't build process
+  --disable-protocolentry Don't build protocolentry class
   --disable-randomnumber  Don't build randomnumber
-  --disable-chat          Don't build chat
-  --disable-error         Don't build error
+  --disable-rawbuffer     Don't build rawbuffer class
+  --disable-regularexpression    Don't build regularexpression
+  --disable-rpcentry      Don't build rpcentry class
+  --disable-semaphoreset  Don't build semaphoreset
+  --disable-serialport    Don't build serialport class
+  --disable-serialportprofile    Don't build serialportprofile class
+  --disable-server        Don't build server class
+  --disable-serviceentry  Don't build serviceentry class
+  --disable-shadowentry   Don't build shadowentry class
+  --disable-sharedmemory  Don't build sharedmemory
+  --disable-shmfile       Don't build shmfile class
+  --disable-signalclasses Don't build signalclasses
+  --disable-snooze        Don't build snooze class
+  --disable-stringbuffer  Don't build stringbuffer class
+  --disable-system        Don't build system
+  --disable-timezonefile  Don't build timezonefile class
+  --disable-unixclient    Don't build unixclient class
+  --disable-unixserver    Don't build unixserver class
+  --disable-variablebuffer       Don't build variablebuffer class
+  --disable-xmldom        Don't build xmldom class
+  --disable-xmlsax        Don't build xmlsax class
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -2540,13 +2488,6 @@ else
 fi
 
 
-# Check whether --enable-charstring was given.
-if test "${enable_charstring+set}" = set; then :
-  enableval=$enable_charstring; INCLUDE_CHARSTRING="0"
-else
-  INCLUDE_CHARSTRING="1"
-fi
-
 # Check whether --enable-character was given.
 if test "${enable_character+set}" = set; then :
   enableval=$enable_character; INCLUDE_CHARACTER="0"
@@ -2554,75 +2495,25 @@ else
   INCLUDE_CHARACTER="1"
 fi
 
-# Check whether --enable-intervaltimer was given.
-if test "${enable_intervaltimer+set}" = set; then :
-  enableval=$enable_intervaltimer; INCLUDE_INTERVALTIMER="0"
+# Check whether --enable-charstring was given.
+if test "${enable_charstring+set}" = set; then :
+  enableval=$enable_charstring; INCLUDE_CHARSTRING="0"
 else
-  INCLUDE_INTERVALTIMER="1"
+  INCLUDE_CHARSTRING="1"
 fi
 
-# Check whether --enable-snooze was given.
-if test "${enable_snooze+set}" = set; then :
-  enableval=$enable_snooze; INCLUDE_SNOOZE="0"
+# Check whether --enable-chat was given.
+if test "${enable_chat+set}" = set; then :
+  enableval=$enable_chat; INCLUDE_CHAT="0"
 else
-  INCLUDE_SNOOZE="1"
+  INCLUDE_CHAT="1"
 fi
 
-# Check whether --enable-math was given.
-if test "${enable_math+set}" = set; then :
-  enableval=$enable_math; INCLUDE_MATH="0"
+# Check whether --enable-client was given.
+if test "${enable_client+set}" = set; then :
+  enableval=$enable_client; INCLUDE_CLIENT="0"
 else
-  INCLUDE_MATH="1"
-fi
-
-INCLUDE_MATH="0"
-# Check whether --enable-rawbuffer was given.
-if test "${enable_rawbuffer+set}" = set; then :
-  enableval=$enable_rawbuffer; INCLUDE_RAWBUFFER="0"
-else
-  INCLUDE_RAWBUFFER="1"
-fi
-
-# Check whether --enable-memorymap was given.
-if test "${enable_memorymap+set}" = set; then :
-  enableval=$enable_memorymap; INCLUDE_MEMORYMAP="0"
-else
-  INCLUDE_MEMORYMAP="1"
-fi
-
-# Check whether --enable-mutex was given.
-if test "${enable_mutex+set}" = set; then :
-  enableval=$enable_mutex; INCLUDE_MUTEX="0"
-else
-  INCLUDE_MUTEX="1"
-fi
-
-# Check whether --enable-serialport was given.
-if test "${enable_serialport+set}" = set; then :
-  enableval=$enable_serialport; INCLUDE_SERIALPORT="0"
-else
-  INCLUDE_SERIALPORT="1"
-fi
-
-# Check whether --enable-serialportprofile was given.
-if test "${enable_serialportprofile+set}" = set; then :
-  enableval=$enable_serialportprofile; INCLUDE_SERIALPORTPROFILE="0"
-else
-  INCLUDE_SERIALPORTPROFILE="1"
-fi
-
-# Check whether --enable-parameterstring was given.
-if test "${enable_parameterstring+set}" = set; then :
-  enableval=$enable_parameterstring; INCLUDE_PARAMETERSTRING="0"
-else
-  INCLUDE_PARAMETERSTRING="1"
-fi
-
-# Check whether --enable-environment was given.
-if test "${enable_environment+set}" = set; then :
-  enableval=$enable_environment; INCLUDE_ENVIRONMENT="0"
-else
-  INCLUDE_ENVIRONMENT="1"
+  INCLUDE_CLIENT="1"
 fi
 
 # Check whether --enable-commandline was given.
@@ -2632,76 +2523,6 @@ else
   INCLUDE_COMMANDLINE="1"
 fi
 
-# Check whether --enable-datetime was given.
-if test "${enable_datetime+set}" = set; then :
-  enableval=$enable_datetime; INCLUDE_DATETIME="0"
-else
-  INCLUDE_DATETIME="1"
-fi
-
-# Check whether --enable-timezonefile was given.
-if test "${enable_timezonefile+set}" = set; then :
-  enableval=$enable_timezonefile; INCLUDE_TIMEZONEFILE="0"
-else
-  INCLUDE_TIMEZONEFILE="1"
-fi
-
-# Check whether --enable-groupentry was given.
-if test "${enable_groupentry+set}" = set; then :
-  enableval=$enable_groupentry; INCLUDE_GROUPENTRY="0"
-else
-  INCLUDE_GROUPENTRY="1"
-fi
-
-# Check whether --enable-passwdentry was given.
-if test "${enable_passwdentry+set}" = set; then :
-  enableval=$enable_passwdentry; INCLUDE_PASSWDENTRY="0"
-else
-  INCLUDE_PASSWDENTRY="1"
-fi
-
-# Check whether --enable-serviceentry was given.
-if test "${enable_serviceentry+set}" = set; then :
-  enableval=$enable_serviceentry; INCLUDE_SERVICEENTRY="0"
-else
-  INCLUDE_SERVICEENTRY="1"
-fi
-
-# Check whether --enable-shadowentry was given.
-if test "${enable_shadowentry+set}" = set; then :
-  enableval=$enable_shadowentry; INCLUDE_SHADOWENTRY="0"
-else
-  INCLUDE_SHADOWENTRY="1"
-fi
-
-# Check whether --enable-rpcentry was given.
-if test "${enable_rpcentry+set}" = set; then :
-  enableval=$enable_rpcentry; INCLUDE_RPCENTRY="0"
-else
-  INCLUDE_RPCENTRY="1"
-fi
-
-# Check whether --enable-protocolentry was given.
-if test "${enable_protocolentry+set}" = set; then :
-  enableval=$enable_protocolentry; INCLUDE_PROTOCOLENTRY="0"
-else
-  INCLUDE_PROTOCOLENTRY="1"
-fi
-
-# Check whether --enable-hostentry was given.
-if test "${enable_hostentry+set}" = set; then :
-  enableval=$enable_hostentry; INCLUDE_HOSTENTRY="0"
-else
-  INCLUDE_HOSTENTRY="1"
-fi
-
-# Check whether --enable-dynamiclib was given.
-if test "${enable_dynamiclib+set}" = set; then :
-  enableval=$enable_dynamiclib; INCLUDE_DYNAMICLIB="0"
-else
-  INCLUDE_DYNAMICLIB="1"
-fi
-
 # Check whether --enable-crypt was given.
 if test "${enable_crypt+set}" = set; then :
   enableval=$enable_crypt; INCLUDE_CRYPT="0"
@@ -2709,32 +2530,32 @@ else
   INCLUDE_CRYPT="1"
 fi
 
-# Check whether --enable-variablebuffer was given.
-if test "${enable_variablebuffer+set}" = set; then :
-  enableval=$enable_variablebuffer; INCLUDE_VARIABLEBUFFER="0"
+# Check whether --enable-daemonprocess was given.
+if test "${enable_daemonprocess+set}" = set; then :
+  enableval=$enable_daemonprocess; INCLUDE_DAEMONPROCESS="0"
 else
-  INCLUDE_VARIABLEBUFFER="1"
+  INCLUDE_DAEMONPROCESS="1"
 fi
 
-# Check whether --enable-stringbuffer was given.
-if test "${enable_stringbuffer+set}" = set; then :
-  enableval=$enable_stringbuffer; INCLUDE_STRINGBUFFER="0"
+# Check whether --enable-datetime was given.
+if test "${enable_datetime+set}" = set; then :
+  enableval=$enable_datetime; INCLUDE_DATETIME="0"
 else
-  INCLUDE_STRINGBUFFER="1"
+  INCLUDE_DATETIME="1"
 fi
 
-# Check whether --enable-xmlsax was given.
-if test "${enable_xmlsax+set}" = set; then :
-  enableval=$enable_xmlsax; INCLUDE_XMLSAX="0"
+# Check whether --enable-device was given.
+if test "${enable_device+set}" = set; then :
+  enableval=$enable_device; INCLUDE_DEVICE="0"
 else
-  INCLUDE_XMLSAX="1"
+  INCLUDE_DEVICE="1"
 fi
 
-# Check whether --enable-xmldom was given.
-if test "${enable_xmldom+set}" = set; then :
-  enableval=$enable_xmldom; INCLUDE_XMLDOM="0"
+# Check whether --enable-directory was given.
+if test "${enable_directory+set}" = set; then :
+  enableval=$enable_directory; INCLUDE_DIRECTORY="0"
 else
-  INCLUDE_XMLDOM="1"
+  INCLUDE_DIRECTORY="1"
 fi
 
 # Check whether --enable-dtd was given.
@@ -2744,18 +2565,25 @@ else
   INCLUDE_DTD="1"
 fi
 
-# Check whether --enable-filesystem was given.
-if test "${enable_filesystem+set}" = set; then :
-  enableval=$enable_filesystem; INCLUDE_FILESYSTEM="0"
+# Check whether --enable-dynamiclib was given.
+if test "${enable_dynamiclib+set}" = set; then :
+  enableval=$enable_dynamiclib; INCLUDE_DYNAMICLIB="0"
 else
-  INCLUDE_FILESYSTEM="1"
+  INCLUDE_DYNAMICLIB="1"
 fi
 
-# Check whether --enable-directory was given.
-if test "${enable_directory+set}" = set; then :
-  enableval=$enable_directory; INCLUDE_DIRECTORY="0"
+# Check whether --enable-environment was given.
+if test "${enable_environment+set}" = set; then :
+  enableval=$enable_environment; INCLUDE_ENVIRONMENT="0"
 else
-  INCLUDE_DIRECTORY="1"
+  INCLUDE_ENVIRONMENT="1"
+fi
+
+# Check whether --enable-error was given.
+if test "${enable_error+set}" = set; then :
+  enableval=$enable_error; INCLUDE_ERROR="0"
+else
+  INCLUDE_ERROR="1"
 fi
 
 # Check whether --enable-filedescriptor was given.
@@ -2772,25 +2600,25 @@ else
   INCLUDE_FILE="1"
 fi
 
-# Check whether --enable-shmfile was given.
-if test "${enable_shmfile+set}" = set; then :
-  enableval=$enable_shmfile; INCLUDE_SHMFILE="0"
+# Check whether --enable-filesystem was given.
+if test "${enable_filesystem+set}" = set; then :
+  enableval=$enable_filesystem; INCLUDE_FILESYSTEM="0"
 else
-  INCLUDE_SHMFILE="1"
+  INCLUDE_FILESYSTEM="1"
 fi
 
-# Check whether --enable-device was given.
-if test "${enable_device+set}" = set; then :
-  enableval=$enable_device; INCLUDE_DEVICE="0"
+# Check whether --enable-groupentry was given.
+if test "${enable_groupentry+set}" = set; then :
+  enableval=$enable_groupentry; INCLUDE_GROUPENTRY="0"
 else
-  INCLUDE_DEVICE="1"
+  INCLUDE_GROUPENTRY="1"
 fi
 
-# Check whether --enable-client was given.
-if test "${enable_client+set}" = set; then :
-  enableval=$enable_client; INCLUDE_CLIENT="0"
+# Check whether --enable-hostentry was given.
+if test "${enable_hostentry+set}" = set; then :
+  enableval=$enable_hostentry; INCLUDE_HOSTENTRY="0"
 else
-  INCLUDE_CLIENT="1"
+  INCLUDE_HOSTENTRY="1"
 fi
 
 # Check whether --enable-inetclient was given.
@@ -2800,34 +2628,6 @@ else
   INCLUDE_INETCLIENT="1"
 fi
 
-# Check whether --enable-unixclient was given.
-if test "${enable_unixclient+set}" = set; then :
-  enableval=$enable_unixclient; INCLUDE_UNIXCLIENT="0"
-else
-  INCLUDE_UNIXCLIENT="1"
-fi
-
-# Check whether --enable-modemclient was given.
-if test "${enable_modemclient+set}" = set; then :
-  enableval=$enable_modemclient; INCLUDE_MODEMCLIENT="0"
-else
-  INCLUDE_MODEMCLIENT="1"
-fi
-
-# Check whether --enable-modemserver was given.
-if test "${enable_modemserver+set}" = set; then :
-  enableval=$enable_modemserver; INCLUDE_MODEMSERVER="0"
-else
-  INCLUDE_MODEMSERVER="1"
-fi
-
-# Check whether --enable-server was given.
-if test "${enable_server+set}" = set; then :
-  enableval=$enable_server; INCLUDE_SERVER="0"
-else
-  INCLUDE_SERVER="1"
-fi
-
 # Check whether --enable-inetserver was given.
 if test "${enable_inetserver+set}" = set; then :
   enableval=$enable_inetserver; INCLUDE_INETSERVER="0"
@@ -2835,11 +2635,11 @@ else
   INCLUDE_INETSERVER="1"
 fi
 
-# Check whether --enable-unixserver was given.
-if test "${enable_unixserver+set}" = set; then :
-  enableval=$enable_unixserver; INCLUDE_UNIXSERVER="0"
+# Check whether --enable-intervaltimer was given.
+if test "${enable_intervaltimer+set}" = set; then :
+  enableval=$enable_intervaltimer; INCLUDE_INTERVALTIMER="0"
 else
-  INCLUDE_UNIXSERVER="1"
+  INCLUDE_INTERVALTIMER="1"
 fi
 
 # Check whether --enable-listener was given.
@@ -2856,6 +2656,21 @@ else
   INCLUDE_LOGGER="1"
 fi
 
+# Check whether --enable-math was given.
+if test "${enable_math+set}" = set; then :
+  enableval=$enable_math; INCLUDE_MATH="0"
+else
+  INCLUDE_MATH="1"
+fi
+
+INCLUDE_MATH="0"
+# Check whether --enable-memorymap was given.
+if test "${enable_memorymap+set}" = set; then :
+  enableval=$enable_memorymap; INCLUDE_MEMORYMAP="0"
+else
+  INCLUDE_MEMORYMAP="1"
+fi
+
 # Check whether --enable-memorypool was given.
 if test "${enable_memorypool+set}" = set; then :
   enableval=$enable_memorypool; INCLUDE_MEMORYPOOL="0"
@@ -2863,39 +2678,39 @@ else
   INCLUDE_MEMORYPOOL="1"
 fi
 
-# Check whether --enable-signalclasses was given.
-if test "${enable_signalclasses+set}" = set; then :
-  enableval=$enable_signalclasses; INCLUDE_SIGNALCLASSES="0"
+# Check whether --enable-modemclient was given.
+if test "${enable_modemclient+set}" = set; then :
+  enableval=$enable_modemclient; INCLUDE_MODEMCLIENT="0"
 else
-  INCLUDE_SIGNALCLASSES="1"
+  INCLUDE_MODEMCLIENT="1"
 fi
 
-# Check whether --enable-daemonprocess was given.
-if test "${enable_daemonprocess+set}" = set; then :
-  enableval=$enable_daemonprocess; INCLUDE_DAEMONPROCESS="0"
+# Check whether --enable-modemserver was given.
+if test "${enable_modemserver+set}" = set; then :
+  enableval=$enable_modemserver; INCLUDE_MODEMSERVER="0"
 else
-  INCLUDE_DAEMONPROCESS="1"
+  INCLUDE_MODEMSERVER="1"
 fi
 
-# Check whether --enable-process was given.
-if test "${enable_process+set}" = set; then :
-  enableval=$enable_process; INCLUDE_PROCESS="0"
+# Check whether --enable-mutex was given.
+if test "${enable_mutex+set}" = set; then :
+  enableval=$enable_mutex; INCLUDE_MUTEX="0"
 else
-  INCLUDE_PROCESS="1"
+  INCLUDE_MUTEX="1"
 fi
 
-# Check whether --enable-semaphoreset was given.
-if test "${enable_semaphoreset+set}" = set; then :
-  enableval=$enable_semaphoreset; INCLUDE_SEMAPHORESET="0"
+# Check whether --enable-parameterstring was given.
+if test "${enable_parameterstring+set}" = set; then :
+  enableval=$enable_parameterstring; INCLUDE_PARAMETERSTRING="0"
 else
-  INCLUDE_SEMAPHORESET="1"
+  INCLUDE_PARAMETERSTRING="1"
 fi
 
-# Check whether --enable-sharedmemory was given.
-if test "${enable_sharedmemory+set}" = set; then :
-  enableval=$enable_sharedmemory; INCLUDE_SHAREDMEMORY="0"
+# Check whether --enable-passwdentry was given.
+if test "${enable_passwdentry+set}" = set; then :
+  enableval=$enable_passwdentry; INCLUDE_PASSWDENTRY="0"
 else
-  INCLUDE_SHAREDMEMORY="1"
+  INCLUDE_PASSWDENTRY="1"
 fi
 
 # Check whether --enable-permissions was given.
@@ -2905,11 +2720,18 @@ else
   INCLUDE_PERMISSIONS="1"
 fi
 
-# Check whether --enable-regularexpression was given.
-if test "${enable_regularexpression+set}" = set; then :
-  enableval=$enable_regularexpression; INCLUDE_REGULAREXPRESSION="0"
+# Check whether --enable-process was given.
+if test "${enable_process+set}" = set; then :
+  enableval=$enable_process; INCLUDE_PROCESS="0"
 else
-  INCLUDE_REGULAREXPRESSION="1"
+  INCLUDE_PROCESS="1"
+fi
+
+# Check whether --enable-protocolentry was given.
+if test "${enable_protocolentry+set}" = set; then :
+  enableval=$enable_protocolentry; INCLUDE_PROTOCOLENTRY="0"
+else
+  INCLUDE_PROTOCOLENTRY="1"
 fi
 
 # Check whether --enable-randomnumber was given.
@@ -2919,18 +2741,151 @@ else
   INCLUDE_RANDOMNUMBER="1"
 fi
 
-# Check whether --enable-chat was given.
-if test "${enable_chat+set}" = set; then :
-  enableval=$enable_chat; INCLUDE_CHAT="0"
+# Check whether --enable-rawbuffer was given.
+if test "${enable_rawbuffer+set}" = set; then :
+  enableval=$enable_rawbuffer; INCLUDE_RAWBUFFER="0"
 else
-  INCLUDE_CHAT="1"
+  INCLUDE_RAWBUFFER="1"
 fi
 
-# Check whether --enable-error was given.
-if test "${enable_error+set}" = set; then :
-  enableval=$enable_error; INCLUDE_ERROR="0"
+# Check whether --enable-regularexpression was given.
+if test "${enable_regularexpression+set}" = set; then :
+  enableval=$enable_regularexpression; INCLUDE_REGULAREXPRESSION="0"
 else
-  INCLUDE_ERROR="1"
+  INCLUDE_REGULAREXPRESSION="1"
+fi
+
+# Check whether --enable-rpcentry was given.
+if test "${enable_rpcentry+set}" = set; then :
+  enableval=$enable_rpcentry; INCLUDE_RPCENTRY="0"
+else
+  INCLUDE_RPCENTRY="1"
+fi
+
+# Check whether --enable-semaphoreset was given.
+if test "${enable_semaphoreset+set}" = set; then :
+  enableval=$enable_semaphoreset; INCLUDE_SEMAPHORESET="0"
+else
+  INCLUDE_SEMAPHORESET="1"
+fi
+
+# Check whether --enable-serialport was given.
+if test "${enable_serialport+set}" = set; then :
+  enableval=$enable_serialport; INCLUDE_SERIALPORT="0"
+else
+  INCLUDE_SERIALPORT="1"
+fi
+
+# Check whether --enable-serialportprofile was given.
+if test "${enable_serialportprofile+set}" = set; then :
+  enableval=$enable_serialportprofile; INCLUDE_SERIALPORTPROFILE="0"
+else
+  INCLUDE_SERIALPORTPROFILE="1"
+fi
+
+# Check whether --enable-server was given.
+if test "${enable_server+set}" = set; then :
+  enableval=$enable_server; INCLUDE_SERVER="0"
+else
+  INCLUDE_SERVER="1"
+fi
+
+# Check whether --enable-serviceentry was given.
+if test "${enable_serviceentry+set}" = set; then :
+  enableval=$enable_serviceentry; INCLUDE_SERVICEENTRY="0"
+else
+  INCLUDE_SERVICEENTRY="1"
+fi
+
+# Check whether --enable-shadowentry was given.
+if test "${enable_shadowentry+set}" = set; then :
+  enableval=$enable_shadowentry; INCLUDE_SHADOWENTRY="0"
+else
+  INCLUDE_SHADOWENTRY="1"
+fi
+
+# Check whether --enable-sharedmemory was given.
+if test "${enable_sharedmemory+set}" = set; then :
+  enableval=$enable_sharedmemory; INCLUDE_SHAREDMEMORY="0"
+else
+  INCLUDE_SHAREDMEMORY="1"
+fi
+
+# Check whether --enable-shmfile was given.
+if test "${enable_shmfile+set}" = set; then :
+  enableval=$enable_shmfile; INCLUDE_SHMFILE="0"
+else
+  INCLUDE_SHMFILE="1"
+fi
+
+# Check whether --enable-signalclasses was given.
+if test "${enable_signalclasses+set}" = set; then :
+  enableval=$enable_signalclasses; INCLUDE_SIGNALCLASSES="0"
+else
+  INCLUDE_SIGNALCLASSES="1"
+fi
+
+# Check whether --enable-snooze was given.
+if test "${enable_snooze+set}" = set; then :
+  enableval=$enable_snooze; INCLUDE_SNOOZE="0"
+else
+  INCLUDE_SNOOZE="1"
+fi
+
+# Check whether --enable-stringbuffer was given.
+if test "${enable_stringbuffer+set}" = set; then :
+  enableval=$enable_stringbuffer; INCLUDE_STRINGBUFFER="0"
+else
+  INCLUDE_STRINGBUFFER="1"
+fi
+
+# Check whether --enable-system was given.
+if test "${enable_system+set}" = set; then :
+  enableval=$enable_system; INCLUDE_SYSTEM="0"
+else
+  INCLUDE_SYSTEM="1"
+fi
+
+# Check whether --enable-timezonefile was given.
+if test "${enable_timezonefile+set}" = set; then :
+  enableval=$enable_timezonefile; INCLUDE_TIMEZONEFILE="0"
+else
+  INCLUDE_TIMEZONEFILE="1"
+fi
+
+# Check whether --enable-unixclient was given.
+if test "${enable_unixclient+set}" = set; then :
+  enableval=$enable_unixclient; INCLUDE_UNIXCLIENT="0"
+else
+  INCLUDE_UNIXCLIENT="1"
+fi
+
+# Check whether --enable-unixserver was given.
+if test "${enable_unixserver+set}" = set; then :
+  enableval=$enable_unixserver; INCLUDE_UNIXSERVER="0"
+else
+  INCLUDE_UNIXSERVER="1"
+fi
+
+# Check whether --enable-variablebuffer was given.
+if test "${enable_variablebuffer+set}" = set; then :
+  enableval=$enable_variablebuffer; INCLUDE_VARIABLEBUFFER="0"
+else
+  INCLUDE_VARIABLEBUFFER="1"
+fi
+
+# Check whether --enable-xmldom was given.
+if test "${enable_xmldom+set}" = set; then :
+  enableval=$enable_xmldom; INCLUDE_XMLDOM="0"
+else
+  INCLUDE_XMLDOM="1"
+fi
+
+# Check whether --enable-xmlsax was given.
+if test "${enable_xmlsax+set}" = set; then :
+  enableval=$enable_xmlsax; INCLUDE_XMLSAX="0"
+else
+  INCLUDE_XMLSAX="1"
 fi
 
 
@@ -16065,6 +16020,30 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sys/utsname.h" >&5
+$as_echo_n "checking for sys/utsname.h... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/utsname.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SYS_UTSNAME_H 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 echo "******************************"
 
 
@@ -20244,7 +20223,6 @@ if ( test -z "$HAVE_PCRE" -a -z "$HAVE_REGCOMP" )
 then
 	USE_BUILT_IN_REGULAREXPRESSION="1"
 fi
-
 
 echo "******************************"
 
@@ -27008,7 +26986,7 @@ echo "******************************"
 
 
 echo
-echo "***** Page Size Functions ****"
+echo "***** System Functions *******"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for getpagesize" >&5
 $as_echo_n "checking for getpagesize... " >&6; }
@@ -27067,6 +27045,60 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sysconf" >&5
+$as_echo_n "checking for sysconf... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+int
+main ()
+{
+sysconf(0)
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_SYSCONF 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for uname" >&5
+$as_echo_n "checking for uname... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
+	#include <sys/utsname.h>
+#endif
+int
+main ()
+{
+uname(0)
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_UNAME 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
 echo "******************************"
 
 
@@ -27082,6 +27114,519 @@ SONAME_VERSION_INFO="1:0:0"
 
 
 
+HEADERS=""
+PRIVATEHEADERS=""
+SRCS=""
+LOBJS=""
+EXTRACPPFLAGS=""
+
+if ( test "$INCLUDE_CHARACTER" = "1" )
+then
+	HEADERS="$HEADERS character.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS characterincludes.h"
+	SRCS="$SRCS character.cpp"
+	LOBJS="$LOBJS character.lo"
+fi
+
+if ( test "$INCLUDE_CHARSTRING" = "1" )
+then
+	HEADERS="$HEADERS charstring.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS charstring.h charstringincludes.h"
+	SRCS="$SRCS charstring.cpp"
+	LOBJS="$LOBJS charstring.lo"
+fi
+
+if ( test "$INCLUDE_CHAT" = "1" )
+then
+	HEADERS="$HEADERS chat.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS chat.h chatincludes.h"
+	SRCS="$SRCS chat.cpp"
+	LOBJS="$LOBJS chat.lo"
+fi
+
+if ( test "$INCLUDE_CLIENT" = "1" )
+then
+	HEADERS="$HEADERS client.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS client.h clientincludes.h"
+	SRCS="$SRCS client.cpp"
+	LOBJS="$LOBJS client.lo"
+fi
+
+if ( test "$INCLUDE_COMMANDLINE" = "1" )
+then
+	HEADERS="$HEADERS commandline.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS commandline.h commandlineincludes.h"
+	SRCS="$SRCS commandline.cpp"
+	LOBJS="$LOBJS commandline.lo"
+fi
+
+if ( test "$INCLUDE_CRYPT" = "1" )
+then
+	HEADERS="$HEADERS crypt.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS crypt.h cryptincludes.h"
+	SRCS="$SRCS crypt.cpp"
+	LOBJS="$LOBJS crypt.lo"
+fi
+
+if ( test "$INCLUDE_DAEMONPROCESS" = "1" )
+then
+	HEADERS="$HEADERS daemonprocess.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS daemonprocess.h daemonprocessincludes.h"
+	SRCS="$SRCS daemonprocess.cpp"
+	LOBJS="$LOBJS daemonprocess.lo"
+fi
+
+if ( test "$INCLUDE_DATETIME" = "1" )
+then
+	HEADERS="$HEADERS datetime.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS datetime.h datetimeincludes.h"
+	SRCS="$SRCS datetime.cpp"
+	LOBJS="$LOBJS datetime.lo"
+fi
+
+if ( test "$INCLUDE_DEVICE" = "1" )
+then
+	HEADERS="$HEADERS device.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS device.h deviceincludes.h"
+	SRCS="$SRCS device.cpp"
+	LOBJS="$LOBJS device.lo"
+fi
+
+if ( test "$INCLUDE_DIRECTORY" = "1" )
+then
+	HEADERS="$HEADERS directory.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS directory.h directoryincludes.h"
+	SRCS="$SRCS directory.cpp"
+	LOBJS="$LOBJS directory.lo"
+fi
+
+if ( test "$INCLUDE_DTD" = "1" )
+then
+	HEADERS="$HEADERS dtd.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS dtd.h dtdincludes.h"
+	SRCS="$SRCS dtd.cpp"
+	LOBJS="$LOBJS dtd.lo"
+fi
+
+if ( test "$INCLUDE_DYNAMICLIB" = "1" )
+then
+	HEADERS="$HEADERS dynamiclib.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS dynamiclib.h dynamiclibincludes.h"
+	SRCS="$SRCS dynamiclib.cpp"
+	LOBJS="$LOBJS dynamiclib.lo"
+fi
+
+if ( test "$INCLUDE_ENVIRONMENT" = "1" )
+then
+	HEADERS="$HEADERS environment.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS environment.h environmentincludes.h"
+	SRCS="$SRCS environment.cpp"
+	LOBJS="$LOBJS environment.lo"
+fi
+
+if ( test "$INCLUDE_ERROR" = "1" )
+then
+	HEADERS="$HEADERS error.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS errorincludes.h"
+	SRCS="$SRCS error.cpp"
+	LOBJS="$LOBJS error.lo"
+fi
+
+if ( test "$INCLUDE_FILE" = "1" )
+then
+	HEADERS="$HEADERS file.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS file.h fileincludes.h"
+	SRCS="$SRCS file.cpp"
+	LOBJS="$LOBJS file.lo"
+fi
+
+if ( test "$INCLUDE_FILEDESCRIPTOR" = "1" )
+then
+	HEADERS="$HEADERS filedescriptor.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filedescriptor.h filedescriptorincludes.h"
+	SRCS="$SRCS filedescriptor.cpp"
+	LOBJS="$LOBJS filedescriptor.lo"
+fi
+
+if ( test "$INCLUDE_FILESYSTEM" = "1" )
+then
+	HEADERS="$HEADERS filesystem.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filesystem.h filesystemincludes.h"
+	SRCS="$SRCS filesystem.cpp"
+	LOBJS="$LOBJS filesystem.lo"
+fi
+
+if ( test "$INCLUDE_GROUPENTRY" = "1" )
+then
+	HEADERS="$HEADERS groupentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS groupentry.h groupentryincludes.h"
+	SRCS="$SRCS groupentry.cpp"
+	LOBJS="$LOBJS groupentry.lo"
+fi
+
+if ( test "$INCLUDE_HOSTENTRY" = "1" )
+then
+	HEADERS="$HEADERS hostentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS hostentry.h hostentryincludes.h"
+	SRCS="$SRCS hostentry.cpp"
+	LOBJS="$LOBJS hostentry.lo"
+fi
+
+if ( test "$INCLUDE_INETCLIENT" = "1" )
+then
+	HEADERS="$HEADERS inetclientsocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetclientsocket.h inetclientsocketincludes.h"
+	SRCS="$SRCS inetclientsocket.cpp"
+	LOBJS="$LOBJS inetclientsocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETCLIENT"
+fi
+
+if ( test "$INCLUDE_INETSERVER" = "1" )
+then
+	HEADERS="$HEADERS inetserversocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetserversocket.h inetserversocketincludes.h"
+	SRCS="$SRCS inetserversocket.cpp"
+	LOBJS="$LOBJS inetserversocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETSERVER"
+fi
+
+if ( test "$INCLUDE_INTERVALTIMER" = "1" )
+then
+	HEADERS="$HEADERS intervaltimer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS intervaltimer.h intervaltimerincludes.h"
+	SRCS="$SRCS intervaltimer.cpp"
+	LOBJS="$LOBJS intervaltimer.lo"
+fi
+
+if ( test "$INCLUDE_LISTENER" = "1" )
+then
+	HEADERS="$HEADERS listener.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS listener.h listenerincludes.h"
+	SRCS="$SRCS listener.cpp"
+	LOBJS="$LOBJS listener.lo"
+fi
+
+if ( test "$INCLUDE_LOGGER" = "1" )
+then
+	HEADERS="$HEADERS logger.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filedestination.h logdestination.h logger.h stderrdestination.h stdoutdestination.h syslogdestination.h loggerincludes.h"
+	SRCS="$SRCS logger.cpp"
+	LOBJS="$LOBJS logger.lo"
+fi
+
+if ( test "$INCLUDE_MATH" = "1" )
+then
+	HEADERS="$HEADERS math.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS mathincludes.h mathinlines.h"
+	SRCS="$SRCS math.cpp"
+	LOBJS="$LOBJS math.lo"
+fi
+
+if ( test "$INCLUDE_MEMORYMAP" = "1" )
+then
+	HEADERS="$HEADERS memorymap.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS memorymap.h memorymapincludes.h"
+	SRCS="$SRCS memorymap.cpp"
+	LOBJS="$LOBJS memorymap.lo"
+fi
+
+if ( test "$INCLUDE_MEMORYPOOL" = "1" )
+then
+	HEADERS="$HEADERS memorypool.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS memorypool.h memorypoolincludes.h"
+	SRCS="$SRCS memorypool.cpp"
+	LOBJS="$LOBJS memorypool.lo"
+fi
+
+if ( test "$INCLUDE_MODEMCLIENT" = "1" )
+then
+	HEADERS="$HEADERS modemclient.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS modemclient.h modemclientincludes.h"
+	SRCS="$SRCS modemclient.cpp"
+	LOBJS="$LOBJS modemclient.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMCLIENT"
+fi
+
+if ( test "$INCLUDE_MODEMSERVER" = "1" )
+then
+	HEADERS="$HEADERS modemserver.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS modemserver.h modemserverincludes.h"
+	SRCS="$SRCS modemserver.cpp"
+	LOBJS="$LOBJS modemserver.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMSERVER"
+fi
+
+if ( test "$INCLUDE_MUTEX" = "1" )
+then
+	HEADERS="$HEADERS mutex.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS mutex.h mutexincludes.h"
+	SRCS="$SRCS mutex.cpp"
+	LOBJS="$LOBJS mutex.lo"
+fi
+
+if ( test "$INCLUDE_PARAMETERSTRING" = "1" )
+then
+	HEADERS="$HEADERS parameterstring.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS parameterstring.h parameterstringincludes.h"
+	SRCS="$SRCS parameterstring.cpp"
+	LOBJS="$LOBJS parameterstring.lo"
+fi
+
+if ( test "$INCLUDE_PASSWDENTRY" = "1" )
+then
+	HEADERS="$HEADERS passwdentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS passwdentry.h passwdentryincludes.h"
+	SRCS="$SRCS passwdentry.cpp"
+	LOBJS="$LOBJS passwdentry.lo"
+fi
+
+if ( test "$INCLUDE_PERMISSIONS" = "1" )
+then
+	HEADERS="$HEADERS permissions.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS permissionsincludes.h"
+	SRCS="$SRCS permissions.cpp"
+	LOBJS="$LOBJS permissions.lo"
+fi
+
+if ( test "$INCLUDE_PROCESS" = "1" )
+then
+	HEADERS="$HEADERS process.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS processincludes.h"
+	SRCS="$SRCS process.cpp"
+	LOBJS="$LOBJS process.lo"
+fi
+
+if ( test "$INCLUDE_PROTOCOLENTRY" = "1" )
+then
+	HEADERS="$HEADERS protocolentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS protocolentry.h protocolentryincludes.h"
+	SRCS="$SRCS protocolentry.cpp"
+	LOBJS="$LOBJS protocolentry.lo"
+fi
+
+if ( test "$INCLUDE_RANDOMNUMBER" = "1" )
+then
+	HEADERS="$HEADERS randomnumber.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS randomnumberincludes.h"
+	SRCS="$SRCS randomnumber.cpp"
+	LOBJS="$LOBJS randomnumber.lo"
+fi
+
+if ( test "$INCLUDE_RAWBUFFER" = "1" )
+then
+	HEADERS="$HEADERS rawbuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS rawbufferincludes.h"
+	SRCS="$SRCS rawbuffer.cpp"
+	LOBJS="$LOBJS rawbuffer.lo"
+fi
+
+if ( test "$INCLUDE_REGULAREXPRESSION" = "1" )
+then
+	HEADERS="$HEADERS regularexpression.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS regularexpression.h regularexpressionincludes.h"
+	SRCS="$SRCS regularexpression.cpp"
+	LOBJS="$LOBJS regularexpression.lo"
+fi
+
+if ( test "$USE_BUILT_IN_REGULAREXPRESSION" = "1" )
+then
+	SRCS="$SRCS regex.c"
+	LOBJS="$LOBJS regex.lo"
+fi
+
+if ( test "$INCLUDE_RPCENTRY" = "1" )
+then
+	HEADERS="$HEADERS rpcentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS rpcentry.h rpcentryincludes.h"
+	SRCS="$SRCS rpcentry.cpp"
+	LOBJS="$LOBJS rpcentry.lo"
+fi
+
+if ( test "$INCLUDE_SEMAPHORESET" = "1" )
+then
+	HEADERS="$HEADERS semaphoreset.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS semaphoreset.h semaphoresetincludes.h"
+	SRCS="$SRCS semaphoreset.cpp"
+	LOBJS="$LOBJS semaphoreset.lo"
+fi
+
+if ( test "$INCLUDE_SERIALPORT" = "1" )
+then
+	HEADERS="$HEADERS serialport.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serialport.h serialportincludes.h"
+	SRCS="$SRCS serialport.cpp"
+	LOBJS="$LOBJS serialport.lo"
+fi
+
+if ( test "$INCLUDE_SERIALPORTPROFILE" = "1" )
+then
+	HEADERS="$HEADERS serialportprofile.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serialportprofile.h serialportprofileincludes.h"
+	SRCS="$SRCS serialportprofile.cpp"
+	LOBJS="$LOBJS serialportprofile.lo"
+fi
+
+if ( test "$INCLUDE_SERVER" = "1" )
+then
+	HEADERS="$HEADERS server.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS server.h serverincludes.h"
+	SRCS="$SRCS server.cpp"
+	LOBJS="$LOBJS server.lo"
+fi
+
+if ( test "$INCLUDE_SERVICEENTRY" = "1" )
+then
+	HEADERS="$HEADERS serviceentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serviceentry.h serviceentryincludes.h"
+	SRCS="$SRCS serviceentry.cpp"
+	LOBJS="$LOBJS serviceentry.lo"
+fi
+
+if ( test "$INCLUDE_SHADOWENTRY" = "1" )
+then
+	HEADERS="$HEADERS shadowentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS shadowentry.h shadowentryincludes.h"
+	SRCS="$SRCS shadowentry.cpp"
+	LOBJS="$LOBJS shadowentry.lo"
+fi
+
+if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
+then
+	HEADERS="$HEADERS sharedmemory.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS sharedmemory.h sharedmemoryincludes.h"
+	SRCS="$SRCS sharedmemory.cpp"
+	LOBJS="$LOBJS sharedmemory.lo"
+fi
+
+if ( test "$INCLUDE_SHMFILE" = "1" )
+then
+	HEADERS="$HEADERS shmfile.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS shmfile.h shmfileincludes.h"
+	SRCS="$SRCS shmfile.cpp"
+	LOBJS="$LOBJS shmfile.lo"
+fi
+
+if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
+then
+	HEADERS="$HEADERS signalclasses.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS signalhandler.h signalset.h signalclassesincludes.h"
+	SRCS="$SRCS signalclasses.cpp"
+	LOBJS="$LOBJS signalclasses.lo"
+fi
+
+if ( test "$INCLUDE_SNOOZE" = "1" )
+then
+	HEADERS="$HEADERS snooze.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS snoozeincludes.h"
+	SRCS="$SRCS snooze.cpp"
+	LOBJS="$LOBJS snooze.lo"
+fi
+
+if ( test "$INCLUDE_STRINGBUFFER" = "1" )
+then
+	HEADERS="$HEADERS stringbuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS stringbuffer.h stringbufferincludes.h"
+	SRCS="$SRCS stringbuffer.cpp"
+	LOBJS="$LOBJS stringbuffer.lo"
+fi
+
+if ( test "$INCLUDE_SYSTEM" = "1" )
+then
+	HEADERS="$HEADERS system.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS system.h systemincludes.h"
+	SRCS="$SRCS system.cpp"
+	LOBJS="$LOBJS system.lo"
+fi
+
+if ( test "$INCLUDE_TIMEZONEFILE" = "1" )
+then
+	HEADERS="$HEADERS timezonefile.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS timezonefile.h timezonefileincludes.h"
+	SRCS="$SRCS timezonefile.cpp"
+	LOBJS="$LOBJS timezonefile.lo"
+fi
+
+if ( test "$INCLUDE_UNIXCLIENT" = "1" )
+then
+	HEADERS="$HEADERS unixclientsocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixclientsocket.h unixclientsocketincludes.h"
+	SRCS="$SRCS unixclientsocket.cpp"
+	LOBJS="$LOBJS unixclientsocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXCLIENT"
+fi
+
+if ( test "$INCLUDE_UNIXSERVER" = "1" )
+then
+	HEADERS="$HEADERS unixserversocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixserversocket.h unixserversocketincludes.h"
+	SRCS="$SRCS unixserversocket.cpp"
+	LOBJS="$LOBJS unixserversocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXSERVER"
+fi
+
+if ( test "$INCLUDE_VARIABLEBUFFER" = "1" )
+then
+	HEADERS="$HEADERS variablebuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS variablebuffer.h variablebufferincludes.h"
+	SRCS="$SRCS variablebuffer.cpp"
+	LOBJS="$LOBJS variablebuffer.lo"
+fi
+
+if ( test "$INCLUDE_XMLDOM" = "1" )
+then
+	HEADERS="$HEADERS xmldom.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS xmldom.h xmldomincludes.h xmldomnode.h xmldomnodeincludes.h"
+	SRCS="$SRCS xmldom.cpp xmldomnode.cpp"
+	LOBJS="$LOBJS xmldom.lo xmldomnode.lo"
+fi
+
+if ( test "$INCLUDE_XMLSAX" = "1" )
+then
+	HEADERS="$HEADERS xmlsax.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS xmlsax.h xmlsaxincludes.h"
+	SRCS="$SRCS xmlsax.cpp"
+	LOBJS="$LOBJS xmlsax.lo"
+fi
+
+if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_INETCLIENT" = "1" )
+then
+	HEADERS="$HEADERS inetsocketutil.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetsocketutil.h inetsocketutilincludes.h"
+	SRCS="$SRCS inetsocketutil.cpp"
+	LOBJS="$LOBJS inetsocketutil.lo"
+fi
+
+if ( test "$INCLUDE_UNIXSERVER" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
+then
+	HEADERS="$HEADERS unixsocketutil.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixsocketutil.h unixsocketutilincludes.h"
+	SRCS="$SRCS unixsocketutil.cpp"
+	LOBJS="$LOBJS unixsocketutil.lo"
+fi
+
+if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
+then
+	HEADERS="$HEADERS serversocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serversocket.h serversocketincludes.h"
+	SRCS="$SRCS serversocket.cpp"
+	LOBJS="$LOBJS serversocket.lo"
+fi
+
+if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
+then
+	HEADERS="$HEADERS clientsocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS clientsocket.h clientsocketincludes.h"
+	SRCS="$SRCS clientsocket.cpp"
+	LOBJS="$LOBJS clientsocket.lo"
+fi
+
+if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" -o "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
+then
+	HEADERS="$HEADERS clientserverfactory.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS clientserverfactoryincludes.h"
+	SRCS="$SRCS clientserverfactory.cpp"
+	LOBJS="$LOBJS clientserverfactory.lo"
+fi
 
 
 
@@ -27089,59 +27634,6 @@ SONAME_VERSION_INFO="1:0:0"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#AC_SUBST(INCLUDE_DICTIONARY)
-#AC_SUBST(INCLUDE_LIST)
 
 
 # prepend DESTDIR where appropriate
@@ -27196,7 +27688,7 @@ echo "***** Output Files ***********"
 ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
 
 
-ac_config_files="$ac_config_files config.mk bin/rudiments-config features.mk rudiments.pc"
+ac_config_files="$ac_config_files config.mk src/Makefile include/Makefile bin/rudiments-config features.mk rudiments.pc"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -28258,6 +28750,8 @@ do
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "include/rudiments/private/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/rudiments/private/config.h" ;;
     "config.mk") CONFIG_FILES="$CONFIG_FILES config.mk" ;;
+    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+    "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
     "bin/rudiments-config") CONFIG_FILES="$CONFIG_FILES bin/rudiments-config" ;;
     "features.mk") CONFIG_FILES="$CONFIG_FILES features.mk" ;;
     "rudiments.pc") CONFIG_FILES="$CONFIG_FILES rudiments.pc" ;;

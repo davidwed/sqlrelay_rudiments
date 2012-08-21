@@ -2,56 +2,33 @@ top_builddir = .
 
 include config.mk
 
-PWD=$(shell pwd)
-
-.PHONY: all testprogs clean install-libs install-includes install-bin \
-	 install-doc install-man install-pc install uninstall unconfig distclean
+.PHONY: all clean install uninstall distclean
 
 all:
-	cd src; $(MAKE) all
-
-testprogs:
-	cd test; $(MAKE) all
+	$(MAKE) -C src all
 
 clean:
-	cd src; $(MAKE) clean
-	cd test; $(MAKE) clean
-	cd msvc; $(RMTREE) Debug
-	$(RMTREE) .pics */.pics */*/.pics
+	$(MAKE) -C src clean
+	$(MAKE) -C test clean
+	$(RMTREE) msvc/Debug
 
-install-libs:
-	cd src; $(MAKE) install
-
-install-includes:
-	cd include; $(MAKE) install
-
-install-bin:
-	cd bin; $(MAKE) install
-
-install-doc:
-	cd doc; $(MAKE) install
-
-install-man:
-	cd man; $(MAKE) install
-
-install-pc:
+install:
+	$(MAKE) -C src install
+	$(MAKE) -C include install
+	$(MAKE) -C bin install
+	$(MAKE) -C doc install
+	$(MAKE) -C man install
 	$(MKINSTALLDIRS) $(libdir)/pkgconfig
 	$(INSTALL) -m 0644 rudiments.pc $(libdir)/pkgconfig/rudiments.pc
 
-install: install-libs install-includes install-bin install-doc install-man install-pc
-
 uninstall:
-	cd src; $(MAKE) uninstall
-	cd include; $(MAKE) uninstall
-	cd bin; $(MAKE) uninstall
-	cd doc; $(MAKE) uninstall
-	cd man; $(MAKE) uninstall
+	$(MAKE) -C src uninstall
+	$(MAKE) -C include uninstall
+	$(MAKE) -C bin uninstall
+	$(MAKE) -C doc uninstall
+	$(MAKE) -C man uninstall
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
 distclean: clean
-	$(RM) config.mk config.cache config.h config.log config.status include/rudiments/private/config.h include/rudiments/private/config.h.in~ features.mk
-	$(RM) bin/rudiments-config
-	$(RM) libtool
+	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/librudiments.opensdf msvc/librudiments.sdf msvc/librudiments.suo
 	$(RMTREE) autom4te.cache
-	$(RM) rudiments.pc
-	$(RM) msvc/librudiments.opensdf msvc/librudiments.sdf msvc/librudiments.suo

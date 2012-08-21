@@ -1,438 +1,176 @@
 top_builddir = ..
 
 include ../config.mk
-include ../features.mk
 
 .PHONY: all clean
 
 CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(DLLIB)
 
+PROGS = server$(EXE) \
+	listener$(EXE) \
+	inetclientsocket$(EXE) \
+	unixclientsocket$(EXE) \
+	directory$(EXE) \
+	daemonprocess$(EXE) \
+	groupentry$(EXE) \
+	commandline$(EXE) \
+	parameterstring$(EXE) \
+	hostentry$(EXE) \
+	passwdentry$(EXE) \
+	serviceentry$(EXE) \
+	shadowentry$(EXE) \
+	permissions$(EXE) \
+	protocolentry$(EXE) \
+	regularexpression$(EXE) \
+	rpcentry$(EXE) \
+	semaphoreset1$(EXE) \
+	semaphoreset2$(EXE) \
+	charstring$(EXE) \
+	datetime$(EXE) \
+	timezonefile$(EXE) \
+	dictionary$(EXE) \
+	environment$(EXE) \
+	file$(EXE) \
+	filesystem$(EXE) \
+	linkedlist$(EXE) \
+	memorypool$(EXE) \
+	randomnumber$(EXE) \
+	sharedmemory1$(EXE) \
+	sharedmemory2$(EXE) \
+	signal$(EXE) \
+	stringbuffer$(EXE) \
+	variablebuffer$(EXE) \
+	device$(EXE) \
+	serialport$(EXE) \
+	shmfile$(EXE) \
+	chat$(EXE) \
+	crypt$(EXE) \
+	dynamiclib$(EXE) \
+	error$(EXE) \
+	math$(EXE) \
+	mutex$(EXE) \
+	process$(EXE) \
+	serialportprofile$(EXE) \
+	snooze$(EXE) \
+	memorymap$(EXE) \
+	character$(EXE) \
+	rawbuffer$(EXE) \
+	sslsvr$(EXE) \
+	sslclnt$(EXE) \
+	oneshotsvr$(EXE) \
+	oneshotclnt$(EXE) \
+	lock1$(EXE) \
+	lock2$(EXE) \
+	handoff1$(EXE) \
+	handoff2$(EXE) \
+	handoffclient$(EXE) \
+	nonhandoff1$(EXE) \
+	nonhandoff2$(EXE) \
+	nonhandoffclient$(EXE) \
+	xattr$(EXE) \
+	dtd$(EXE) \
+	xmls$(EXE) \
+	xmld$(EXE) xmlentities$(EXE) \
+	inetclntbench$(EXE) \
+	inetsvrbench$(EXE) \
+	nullserver$(EXE) \
+	server.pem
+	#logger$(EXE)
+	#intervaltimer$(EXE)
+
 #ALLSTATIC=-all-static
 
 .SUFFIXES: .lo
 
-PROGS =
-
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += server$(EXE)
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_LISTENER),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_UNIXSERVER),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-	PROGS += listener$(EXE)
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_INETCLIENT),1)
-ifeq ($(INCLUDE_ERROR),1)
-	PROGS += inetclientsocket$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_UNIXCLIENT),1)
-ifeq ($(INCLUDE_ERROR),1)
-	PROGS += unixclientsocket$(EXE)
-endif
-endif
-
-
-ifeq ($(INCLUDE_DIRECTORY),1)
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-	PROGS += directory$(EXE)
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_PROCESS),1)
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_SNOOZE),1)
-	PROGS += daemonprocess$(EXE)
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_GROUPENTRY),1)
-	PROGS += groupentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_COMMANDLINE),1)
-ifeq ($(INCLUDE_CHARSTRING),1)
-	PROGS += commandline$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_PARAMETERSTRING),1)
-	PROGS += parameterstring$(EXE)
-endif
-
-ifeq ($(INCLUDE_HOSTENTRY),1)
-	PROGS += hostentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_LOGGER),1)
-	#PROGS += logger$(EXE)
-endif
-
-ifeq ($(INCLUDE_PASSWDENTRY),1)
-	PROGS += passwdentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_SERVICEENTRY),1)
-	PROGS += serviceentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_SHADOWENTRY),1)
-	PROGS += shadowentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += permissions$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_PROTOCOLENTRY),1)
-	PROGS += protocolentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_REGULAREXPRESSION),1)
-	PROGS += regularexpression$(EXE)
-endif
-
-ifeq ($(INCLUDE_RPCENTRY),1)
-	PROGS += rpcentry$(EXE)
-endif
-
-ifeq ($(INCLUDE_SEMAPHORESET),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += semaphoreset1$(EXE)
-	PROGS += semaphoreset2$(EXE)
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_CHARSTRING),1)
-	PROGS += charstring$(EXE)
-endif
-
-ifeq ($(INCLUDE_DATETIME),1)
-	PROGS += datetime$(EXE)
-endif
-
-ifeq ($(INCLUDE_TIMEZONEFILE),1)
-	PROGS += timezonefile$(EXE)
-endif
-
-PROGS += dictionary$(EXE)
-
-ifeq ($(INCLUDE_ENVIRONMENT),1)
-	PROGS += environment$(EXE)
-endif
-
-ifeq ($(INCLUDE_GROUPENTRY),1)
-ifeq ($(INCLUDE_PASSWDENTRY),1)
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_DATETIME),1)
-	PROGS += file$(EXE)
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_FILESYSTEM),1)
-	PROGS += filesystem$(EXE)
-endif
-
-	PROGS += linkedlist$(EXE)
-
-ifeq ($(INCLUDE_MEMORYPOOL),1)
-	PROGS += memorypool$(EXE)
-endif
-
-ifeq ($(INCLUDE_DATETIME),1)
-ifeq ($(INCLUDE_RANDOMNUMBER),1)
-	PROGS += randomnumber$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_SHAREDMEMORY),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_SNOOZE),1)
-	PROGS += sharedmemory1$(EXE)
-	PROGS += sharedmemory2$(EXE)
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_SIGNALCLASSES),1)
-	PROGS += signal$(EXE)
-endif
-
-ifeq ($(INCLUDE_STRINGBUFFER),1)
-	PROGS += stringbuffer$(EXE)
-endif
-
-ifeq ($(INCLUDE_VARIABLEBUFFER),1)
-ifeq ($(INCLUDE_RAWBUFFER),1)
-	PROGS += variablebuffer$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_INTERVALTIMER),1)
-ifeq ($(INCLUDE_SIGNALCLASSES),1)
-ifeq ($(INCLUDE_SNOOZE),1)
-	#PROGS += intervaltimer$(EXE)
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_DEVICE),1)
-	PROGS += device$(EXE)
-endif
-
-ifeq ($(INCLUDE_SERIALPORT),1)
-	PROGS += serialport$(EXE)
-endif
-
-ifeq ($(INCLUDE_SHMFILE),1)
-	PROGS += shmfile$(EXE)
-endif
-
-ifeq ($(INCLUDE_CHAT),1)
-	PROGS += chat$(EXE)
-endif
-
-ifeq ($(INCLUDE_CRYPT),1)
-	PROGS += crypt$(EXE)
-endif
-
-ifeq ($(INCLUDE_DYNAMICLIB),1)
-	PROGS += dynamiclib$(EXE)
-endif
-
-ifeq ($(INCLUDE_ERROR),1)
-	PROGS += error$(EXE)
-endif
-
-ifeq ($(INCLUDE_MATH),1)
-	PROGS += math$(EXE)
-endif
-
-ifeq ($(INCLUDE_MUTEX),1)
-	PROGS += mutex$(EXE)
-endif
-
-ifeq ($(INCLUDE_PROCESS),1)
-	PROGS += process$(EXE)
-endif
-
-ifeq ($(INCLUDE_SERIALPORT),1)
-	PROGS += serialportprofile$(EXE)
-endif
-
-ifeq ($(INCLUDE_SNOOZE),1)
-	PROGS += snooze$(EXE)
-endif
-
-ifeq ($(INCLUDE_MEMORYMAP),1)
-	PROGS += memorymap$(EXE)
-endif
-
-ifeq ($(INCLUDE_CHARACTER),1)
-	PROGS += character$(EXE)
-endif
-
-ifeq ($(INCLUDE_RAWBUFFER),1)
-	PROGS += rawbuffer$(EXE)
-endif
-
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_CHARSTRING),1)
-ifeq ($(INCLUDE_ERROR),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += sslsvr$(EXE)
-endif
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_INETCLIENT),1)
-ifeq ($(INCLUDE_CHARSTRING),1)
-ifeq ($(INCLUDE_ERROR),1)
-	PROGS += sslclnt$(EXE)
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_SNOOZE),1)
-ifeq ($(INCLUDE_ERROR),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += oneshotsvr$(EXE)
-endif
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_INETCLIENT),1)
-	PROGS += oneshotclnt$(EXE)
-endif
-
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_SNOOZE),1)
-	PROGS += lock1$(EXE)
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_SNOOZE),1)
-	PROGS += lock2$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_LISTENER),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_UNIXSERVER),1)
-ifeq ($(INCLUDE_INETCLIENT),1)
-ifeq ($(INCLUDE_UNIXCLIENT),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-	PROGS += handoff1$(EXE)
-endif
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_UNIXCLIENT),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-	PROGS += handoff2$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_INETCLIENT),1)
-	PROGS += handoffclient$(EXE)
-endif
-
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-	PROGS += nonhandoff1$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-	PROGS += nonhandoff2$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_INETCLIENTSOCKET),1)
-	PROGS += nonhandoffclient$(EXE)
-endif
-
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_ERROR),1)
-	PROGS += xattr$(EXE)
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_DTD),1)
-	PROGS += dtd$(EXE)
-endif
-
-ifeq ($(INCLUDE_XMLSAX),1)
-	PROGS += xmls$(EXE)
-endif
-
-ifeq ($(INCLUDE_XMLDOM),1)
-	PROGS += xmld$(EXE) xmlentities$(EXE)
-endif
-
-ifeq ($(INCLUDE_INETCLIENT),1)
-ifeq ($(INCLUDE_ERROR),1)
-	PROGS += inetclntbench$(EXE)
-endif
-endif
-
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_CHARSTRING),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += inetsvrbench$(EXE)
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_DAEMONPROCESS),1)
-ifeq ($(INCLUDE_PERMISSIONS),1)
-ifeq ($(INCLUDE_INETSERVER),1)
-ifeq ($(INCLUDE_FILE),1)
-ifeq ($(INCLUDE_FILE),1)
-	PROGS += nullserver$(EXE)
-endif
-endif
-endif
-endif
-endif
-
-ifeq ($(INCLUDE_INETSERVER),1)
-	PROGS += server.pem
-endif
+.cpp.lo:
+	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
 
 all: $(PROGS)
 
 clean:
-	$(LIBTOOL) --mode=clean $(RM) ca.pem
-	$(LIBTOOL) --mode=clean $(RM) server.pem
-	$(LIBTOOL) --mode=clean $(RM) client.pem
-	$(LIBTOOL) --mode=clean $(RM) *.lo
-	$(LIBTOOL) --mode=clean $(RM) *.o
-	$(LIBTOOL) --mode=clean $(RM) *.exe
-	$(LIBTOOL) --mode=clean $(RM) listener server sslsvr inetclientsocket sslclnt unixclientsocket directory daemonprocess groupentry commandline parameterstring hostentry logger oneshotclnt oneshotsvr passwdentry serviceentry shadowentry permissions protocolentry regularexpression rpcentry semaphoreset1 semaphoreset2 sharedmemory1 sharedmemory2 charstring datetime timezonefile dictionary dtd environment file filesystem linkedlist lock1 lock2 memorypool randomnumber signal stringbuffer handoff1 handoff2 handoffclient nonhandoff1 nonhandoff2 nonhandoffclient variablebuffer xattr xmls xmld xmlentities intervaltimer inetclntbench inetsvrbench device serialport shmfile chat crypt dynamiclib error math mutex process serialportprofile snooze memorymap character rawbuffer nullserver
-	$(RM) test.log
+	$(LIBTOOL) --mode=clean $(RM) \
+		listener$(EXE) \
+		server$(EXE) \
+		sslsvr$(EXE) \
+		inetclientsocket$(EXE) \
+		sslclnt$(EXE) \
+		unixclientsocket$(EXE) \
+		directory$(EXE) \
+		daemonprocess$(EXE) \
+		groupentry$(EXE) \
+		commandline$(EXE) \
+		parameterstring$(EXE) \
+		hostentry$(EXE) \
+		logger$(EXE) \
+		oneshotclnt$(EXE) \
+		oneshotsvr$(EXE) \
+		passwdentry$(EXE) \
+		serviceentry$(EXE) \
+		shadowentry$(EXE) \
+		permissions$(EXE) \
+		protocolentry$(EXE) \
+		regularexpression$(EXE) \
+		rpcentry$(EXE) \
+		semaphoreset1$(EXE) \
+		semaphoreset2$(EXE) \
+		sharedmemory1$(EXE) \
+		sharedmemory2$(EXE) \
+		charstring$(EXE) \
+		datetime$(EXE) \
+		timezonefile$(EXE) \
+		dictionary$(EXE) \
+		dtd$(EXE) \
+		environment$(EXE) \
+		file$(EXE) \
+		filesystem$(EXE) \
+		linkedlist$(EXE) \
+		lock1$(EXE) \
+		lock2$(EXE) \
+		memorypool$(EXE) \
+		randomnumber$(EXE) \
+		signal$(EXE) \
+		stringbuffer$(EXE) \
+		handoff1$(EXE) \
+		handoff2$(EXE) \
+		handoffclient$(EXE) \
+		nonhandoff1$(EXE) \
+		nonhandoff2$(EXE) \
+		nonhandoffclient$(EXE) \
+		variablebuffer$(EXE) \
+		xattr$(EXE) \
+		xmls$(EXE) \
+		xmld$(EXE) \
+		xmlentities$(EXE) \
+		intervaltimer$(EXE) \
+		inetclntbench$(EXE) \
+		inetsvrbench$(EXE) \
+		device$(EXE) \
+		serialport$(EXE) \
+		shmfile$(EXE) \
+		chat$(EXE) \
+		crypt$(EXE) \
+		dynamiclib$(EXE) \
+		error$(EXE) \
+		math$(EXE) \
+		mutex$(EXE) \
+		process$(EXE) \
+		serialportprofile$(EXE) \
+		snooze$(EXE) \
+		memorymap$(EXE) \
+		character$(EXE) \
+		rawbuffer$(EXE) \
+		nullserver$(EXE) \
+		*.lo \
+		*.o \
+		test.log \
+		testfile \
+		test.xml \
+		ca.pem \
+		server.pem \
+		client.pem
 	$(RMTREE) .libs
-	$(RM) testfile
 	$(MAKE) -C certificates clean
-	$(RM) test.xml
-
-.cpp.lo:
-	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
 
 server$(EXE): server.cpp server.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)

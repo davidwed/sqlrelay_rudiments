@@ -1,3 +1,5 @@
+top_builddir = ..
+
 SHELL = @SHELL@
 VPATH = @srcdir@
 

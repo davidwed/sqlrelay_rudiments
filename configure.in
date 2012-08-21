@@ -56,132 +56,62 @@ AC_ARG_ENABLE(threads,
 	ENABLE_RUDIMENTS_THREADS="yes")
 
 dnl   options to disable building various classes
-AC_ARG_ENABLE(charstring,
-	[  --disable-charstring    Don't build charstring class],
-	INCLUDE_CHARSTRING="0",
-	INCLUDE_CHARSTRING="1")
 AC_ARG_ENABLE(character,
 	[  --disable-character     Don't build character class],
 	INCLUDE_CHARACTER="0",
 	INCLUDE_CHARACTER="1")
-AC_ARG_ENABLE(intervaltimer,
-	[  --disable-intervaltimer Don't build intervaltimer class],
-	INCLUDE_INTERVALTIMER="0",
-	INCLUDE_INTERVALTIMER="1")
-AC_ARG_ENABLE(snooze,
-	[  --disable-snooze        Don't build snooze class],
-	INCLUDE_SNOOZE="0",
-	INCLUDE_SNOOZE="1")
-AC_ARG_ENABLE(math,
-	[  --disable-math          Don't build math class],
-	INCLUDE_MATH="0",
-	INCLUDE_MATH="1")
-dnl force disable math class for now
-INCLUDE_MATH="0"
-AC_ARG_ENABLE(rawbuffer,
-	[  --disable-rawbuffer     Don't build rawbuffer class],
-	INCLUDE_RAWBUFFER="0",
-	INCLUDE_RAWBUFFER="1")
-AC_ARG_ENABLE(memorymap,
-	[  --disable-memorymap     Don't build memorymap class],
-	INCLUDE_MEMORYMAP="0",
-	INCLUDE_MEMORYMAP="1")
-AC_ARG_ENABLE(mutex,
-	[  --disable-mutex         Don't build mutex class],
-	INCLUDE_MUTEX="0",
-	INCLUDE_MUTEX="1")
-AC_ARG_ENABLE(serialport,
-	[  --disable-serialport    Don't build serialport class],
-	INCLUDE_SERIALPORT="0",
-	INCLUDE_SERIALPORT="1")
-AC_ARG_ENABLE(serialportprofile,
-	[  --disable-serialportprofile    Don't build serialportprofile class],
-	INCLUDE_SERIALPORTPROFILE="0",
-	INCLUDE_SERIALPORTPROFILE="1")
-AC_ARG_ENABLE(parameterstring,
-	[  --disable-parameterstring      Don't build parameterstring class],
-	INCLUDE_PARAMETERSTRING="0",
-	INCLUDE_PARAMETERSTRING="1")
-AC_ARG_ENABLE(environment,
-	[  --disable-environment   Don't build environment class],
-	INCLUDE_ENVIRONMENT="0",
-	INCLUDE_ENVIRONMENT="1")
+AC_ARG_ENABLE(charstring,
+	[  --disable-charstring    Don't build charstring class],
+	INCLUDE_CHARSTRING="0",
+	INCLUDE_CHARSTRING="1")
+AC_ARG_ENABLE(chat,
+	[  --disable-chat          Don't build chat],
+	INCLUDE_CHAT="0",
+	INCLUDE_CHAT="1")
+AC_ARG_ENABLE(client,
+	[  --disable-client        Don't build client class],
+	INCLUDE_CLIENT="0",
+	INCLUDE_CLIENT="1")
 AC_ARG_ENABLE(commandline,
 	[  --disable-commandline   Don't build commandline class],
 	INCLUDE_COMMANDLINE="0",
 	INCLUDE_COMMANDLINE="1")
-AC_ARG_ENABLE(datetime,
-	[  --disable-datetime      Don't build datetime class],
-	INCLUDE_DATETIME="0",
-	INCLUDE_DATETIME="1")
-AC_ARG_ENABLE(timezonefile,
-	[  --disable-timezonefile  Don't build timezonefile class],
-	INCLUDE_TIMEZONEFILE="0",
-	INCLUDE_TIMEZONEFILE="1")
-AC_ARG_ENABLE(groupentry,
-	[  --disable-groupentry    Don't build groupentry class],
-	INCLUDE_GROUPENTRY="0",
-	INCLUDE_GROUPENTRY="1")
-AC_ARG_ENABLE(passwdentry,
-	[  --disable-passwdentry   Don't build passwdentry class],
-	INCLUDE_PASSWDENTRY="0",
-	INCLUDE_PASSWDENTRY="1")
-AC_ARG_ENABLE(serviceentry,
-	[  --disable-serviceentry  Don't build serviceentry class],
-	INCLUDE_SERVICEENTRY="0",
-	INCLUDE_SERVICEENTRY="1")
-AC_ARG_ENABLE(shadowentry,
-	[  --disable-shadowentry   Don't build shadowentry class],
-	INCLUDE_SHADOWENTRY="0",
-	INCLUDE_SHADOWENTRY="1")
-AC_ARG_ENABLE(rpcentry,
-	[  --disable-rpcentry      Don't build rpcentry class],
-	INCLUDE_RPCENTRY="0",
-	INCLUDE_RPCENTRY="1")
-AC_ARG_ENABLE(protocolentry,
-	[  --disable-protocolentry Don't build protocolentry class],
-	INCLUDE_PROTOCOLENTRY="0",
-	INCLUDE_PROTOCOLENTRY="1")
-AC_ARG_ENABLE(hostentry,
-	[  --disable-hostentry     Don't build hostentry class],
-	INCLUDE_HOSTENTRY="0",
-	INCLUDE_HOSTENTRY="1")
-AC_ARG_ENABLE(dynamiclib,
-	[  --disable-dynamiclib    Don't build dynamiclib class],
-	INCLUDE_DYNAMICLIB="0",
-	INCLUDE_DYNAMICLIB="1")
 AC_ARG_ENABLE(crypt,
 	[  --disable-crypt         Don't build crypt class],
 	INCLUDE_CRYPT="0",
 	INCLUDE_CRYPT="1")
-AC_ARG_ENABLE(variablebuffer,
-	[  --disable-variablebuffer       Don't build variablebuffer class],
-	INCLUDE_VARIABLEBUFFER="0",
-	INCLUDE_VARIABLEBUFFER="1")
-AC_ARG_ENABLE(stringbuffer,
-	[  --disable-stringbuffer  Don't build stringbuffer class],
-	INCLUDE_STRINGBUFFER="0",
-	INCLUDE_STRINGBUFFER="1")
-AC_ARG_ENABLE(xmlsax,
-	[  --disable-xmlsax        Don't build xmlsax class],
-	INCLUDE_XMLSAX="0",
-	INCLUDE_XMLSAX="1")
-AC_ARG_ENABLE(xmldom,
-	[  --disable-xmldom        Don't build xmldom class],
-	INCLUDE_XMLDOM="0",
-	INCLUDE_XMLDOM="1")
-AC_ARG_ENABLE(dtd,
-	[  --disable-dtd           Don't build dtd class],
-	INCLUDE_DTD="0",
-	INCLUDE_DTD="1")
-AC_ARG_ENABLE(filesystem,
-	[  --disable-filesystem    Don't build filesystem class],
-	INCLUDE_FILESYSTEM="0",
-	INCLUDE_FILESYSTEM="1")
+AC_ARG_ENABLE(daemonprocess,
+	[  --disable-daemonprocess Don't build daemonprocess],
+	INCLUDE_DAEMONPROCESS="0",
+	INCLUDE_DAEMONPROCESS="1")
+AC_ARG_ENABLE(datetime,
+	[  --disable-datetime      Don't build datetime class],
+	INCLUDE_DATETIME="0",
+	INCLUDE_DATETIME="1")
+AC_ARG_ENABLE(device,
+	[  --disable-device        Don't build device class],
+	INCLUDE_DEVICE="0",
+	INCLUDE_DEVICE="1")
 AC_ARG_ENABLE(directory,
 	[  --disable-directory     Don't build directory class],
 	INCLUDE_DIRECTORY="0",
 	INCLUDE_DIRECTORY="1")
+AC_ARG_ENABLE(dtd,
+	[  --disable-dtd           Don't build dtd class],
+	INCLUDE_DTD="0",
+	INCLUDE_DTD="1")
+AC_ARG_ENABLE(dynamiclib,
+	[  --disable-dynamiclib    Don't build dynamiclib class],
+	INCLUDE_DYNAMICLIB="0",
+	INCLUDE_DYNAMICLIB="1")
+AC_ARG_ENABLE(environment,
+	[  --disable-environment   Don't build environment class],
+	INCLUDE_ENVIRONMENT="0",
+	INCLUDE_ENVIRONMENT="1")
+AC_ARG_ENABLE(error,
+	[  --disable-error         Don't build error],
+	INCLUDE_ERROR="0",
+	INCLUDE_ERROR="1")
 AC_ARG_ENABLE(filedescriptor,
 	[  --disable-filedescriptor       Don't build filedescriptor class],
 	INCLUDE_FILEDESCRIPTOR="0",
@@ -190,46 +120,30 @@ AC_ARG_ENABLE(file,
 	[  --disable-file          Don't build file class],
 	INCLUDE_FILE="0",
 	INCLUDE_FILE="1")
-AC_ARG_ENABLE(shmfile,
-	[  --disable-shmfile       Don't build shmfile class],
-	INCLUDE_SHMFILE="0",
-	INCLUDE_SHMFILE="1")
-AC_ARG_ENABLE(device,
-	[  --disable-device        Don't build device class],
-	INCLUDE_DEVICE="0",
-	INCLUDE_DEVICE="1")
-AC_ARG_ENABLE(client,
-	[  --disable-client        Don't build client class],
-	INCLUDE_CLIENT="0",
-	INCLUDE_CLIENT="1")
+AC_ARG_ENABLE(filesystem,
+	[  --disable-filesystem    Don't build filesystem class],
+	INCLUDE_FILESYSTEM="0",
+	INCLUDE_FILESYSTEM="1")
+AC_ARG_ENABLE(groupentry,
+	[  --disable-groupentry    Don't build groupentry class],
+	INCLUDE_GROUPENTRY="0",
+	INCLUDE_GROUPENTRY="1")
+AC_ARG_ENABLE(hostentry,
+	[  --disable-hostentry     Don't build hostentry class],
+	INCLUDE_HOSTENTRY="0",
+	INCLUDE_HOSTENTRY="1")
 AC_ARG_ENABLE(inetclient,
 	[  --disable-inetclient    Don't build inetclient class],
 	INCLUDE_INETCLIENT="0",
 	INCLUDE_INETCLIENT="1")
-AC_ARG_ENABLE(unixclient,
-	[  --disable-unixclient    Don't build unixclient class],
-	INCLUDE_UNIXCLIENT="0",
-	INCLUDE_UNIXCLIENT="1")
-AC_ARG_ENABLE(modemclient,
-	[  --disable-modemclient   Don't build modemclient class],
-	INCLUDE_MODEMCLIENT="0",
-	INCLUDE_MODEMCLIENT="1")
-AC_ARG_ENABLE(modemserver,
-	[  --disable-modemserver   Don't build modemserver class],
-	INCLUDE_MODEMSERVER="0",
-	INCLUDE_MODEMSERVER="1")
-AC_ARG_ENABLE(server,
-	[  --disable-server        Don't build server class],
-	INCLUDE_SERVER="0",
-	INCLUDE_SERVER="1")
 AC_ARG_ENABLE(inetserver,
 	[  --disable-inetserver    Don't build inetserver class],
 	INCLUDE_INETSERVER="0",
 	INCLUDE_INETSERVER="1")
-AC_ARG_ENABLE(unixserver,
-	[  --disable-unixserver    Don't build unixserver class],
-	INCLUDE_UNIXSERVER="0",
-	INCLUDE_UNIXSERVER="1")
+AC_ARG_ENABLE(intervaltimer,
+	[  --disable-intervaltimer Don't build intervaltimer class],
+	INCLUDE_INTERVALTIMER="0",
+	INCLUDE_INTERVALTIMER="1")
 AC_ARG_ENABLE(listener,
 	[  --disable-listener      Don't build listener class],
 	INCLUDE_LISTENER="0",
@@ -238,50 +152,140 @@ AC_ARG_ENABLE(logger,
 	[  --disable-logger        Don't build logger class],
 	INCLUDE_LOGGER="0",
 	INCLUDE_LOGGER="1")
+AC_ARG_ENABLE(math,
+	[  --disable-math          Don't build math class],
+	INCLUDE_MATH="0",
+	INCLUDE_MATH="1")
+dnl force disable math class for now
+INCLUDE_MATH="0"
+AC_ARG_ENABLE(memorymap,
+	[  --disable-memorymap     Don't build memorymap class],
+	INCLUDE_MEMORYMAP="0",
+	INCLUDE_MEMORYMAP="1")
 AC_ARG_ENABLE(memorypool,
 	[  --disable-memorypool    Don't build memorypool class],
 	INCLUDE_MEMORYPOOL="0",
 	INCLUDE_MEMORYPOOL="1")
-AC_ARG_ENABLE(signalclasses,
-	[  --disable-signalclasses Don't build signalclasses],
-	INCLUDE_SIGNALCLASSES="0",
-	INCLUDE_SIGNALCLASSES="1")
-AC_ARG_ENABLE(daemonprocess,
-	[  --disable-daemonprocess Don't build daemonprocess],
-	INCLUDE_DAEMONPROCESS="0",
-	INCLUDE_DAEMONPROCESS="1")
-AC_ARG_ENABLE(process,
-	[  --disable-process       Don't build process],
-	INCLUDE_PROCESS="0",
-	INCLUDE_PROCESS="1")
-AC_ARG_ENABLE(semaphoreset,
-	[  --disable-semaphoreset  Don't build semaphoreset],
-	INCLUDE_SEMAPHORESET="0",
-	INCLUDE_SEMAPHORESET="1")
-AC_ARG_ENABLE(sharedmemory,
-	[  --disable-sharedmemory  Don't build sharedmemory],
-	INCLUDE_SHAREDMEMORY="0",
-	INCLUDE_SHAREDMEMORY="1")
+AC_ARG_ENABLE(modemclient,
+	[  --disable-modemclient   Don't build modemclient class],
+	INCLUDE_MODEMCLIENT="0",
+	INCLUDE_MODEMCLIENT="1")
+AC_ARG_ENABLE(modemserver,
+	[  --disable-modemserver   Don't build modemserver class],
+	INCLUDE_MODEMSERVER="0",
+	INCLUDE_MODEMSERVER="1")
+AC_ARG_ENABLE(mutex,
+	[  --disable-mutex         Don't build mutex class],
+	INCLUDE_MUTEX="0",
+	INCLUDE_MUTEX="1")
+AC_ARG_ENABLE(parameterstring,
+	[  --disable-parameterstring      Don't build parameterstring class],
+	INCLUDE_PARAMETERSTRING="0",
+	INCLUDE_PARAMETERSTRING="1")
+AC_ARG_ENABLE(passwdentry,
+	[  --disable-passwdentry   Don't build passwdentry class],
+	INCLUDE_PASSWDENTRY="0",
+	INCLUDE_PASSWDENTRY="1")
 AC_ARG_ENABLE(permissions,
 	[  --disable-permissions   Don't build permissions],
 	INCLUDE_PERMISSIONS="0",
 	INCLUDE_PERMISSIONS="1")
-AC_ARG_ENABLE(regularexpression,
-	[  --disable-regularexpression    Don't build regularexpression],
-	INCLUDE_REGULAREXPRESSION="0",
-	INCLUDE_REGULAREXPRESSION="1")
+AC_ARG_ENABLE(process,
+	[  --disable-process       Don't build process],
+	INCLUDE_PROCESS="0",
+	INCLUDE_PROCESS="1")
+AC_ARG_ENABLE(protocolentry,
+	[  --disable-protocolentry Don't build protocolentry class],
+	INCLUDE_PROTOCOLENTRY="0",
+	INCLUDE_PROTOCOLENTRY="1")
 AC_ARG_ENABLE(randomnumber,
 	[  --disable-randomnumber  Don't build randomnumber],
 	INCLUDE_RANDOMNUMBER="0",
 	INCLUDE_RANDOMNUMBER="1")
-AC_ARG_ENABLE(chat,
-	[  --disable-chat          Don't build chat],
-	INCLUDE_CHAT="0",
-	INCLUDE_CHAT="1")
-AC_ARG_ENABLE(error,
-	[  --disable-error         Don't build error],
-	INCLUDE_ERROR="0",
-	INCLUDE_ERROR="1")
+AC_ARG_ENABLE(rawbuffer,
+	[  --disable-rawbuffer     Don't build rawbuffer class],
+	INCLUDE_RAWBUFFER="0",
+	INCLUDE_RAWBUFFER="1")
+AC_ARG_ENABLE(regularexpression,
+	[  --disable-regularexpression    Don't build regularexpression],
+	INCLUDE_REGULAREXPRESSION="0",
+	INCLUDE_REGULAREXPRESSION="1")
+AC_ARG_ENABLE(rpcentry,
+	[  --disable-rpcentry      Don't build rpcentry class],
+	INCLUDE_RPCENTRY="0",
+	INCLUDE_RPCENTRY="1")
+AC_ARG_ENABLE(semaphoreset,
+	[  --disable-semaphoreset  Don't build semaphoreset],
+	INCLUDE_SEMAPHORESET="0",
+	INCLUDE_SEMAPHORESET="1")
+AC_ARG_ENABLE(serialport,
+	[  --disable-serialport    Don't build serialport class],
+	INCLUDE_SERIALPORT="0",
+	INCLUDE_SERIALPORT="1")
+AC_ARG_ENABLE(serialportprofile,
+	[  --disable-serialportprofile    Don't build serialportprofile class],
+	INCLUDE_SERIALPORTPROFILE="0",
+	INCLUDE_SERIALPORTPROFILE="1")
+AC_ARG_ENABLE(server,
+	[  --disable-server        Don't build server class],
+	INCLUDE_SERVER="0",
+	INCLUDE_SERVER="1")
+AC_ARG_ENABLE(serviceentry,
+	[  --disable-serviceentry  Don't build serviceentry class],
+	INCLUDE_SERVICEENTRY="0",
+	INCLUDE_SERVICEENTRY="1")
+AC_ARG_ENABLE(shadowentry,
+	[  --disable-shadowentry   Don't build shadowentry class],
+	INCLUDE_SHADOWENTRY="0",
+	INCLUDE_SHADOWENTRY="1")
+AC_ARG_ENABLE(sharedmemory,
+	[  --disable-sharedmemory  Don't build sharedmemory],
+	INCLUDE_SHAREDMEMORY="0",
+	INCLUDE_SHAREDMEMORY="1")
+AC_ARG_ENABLE(shmfile,
+	[  --disable-shmfile       Don't build shmfile class],
+	INCLUDE_SHMFILE="0",
+	INCLUDE_SHMFILE="1")
+AC_ARG_ENABLE(signalclasses,
+	[  --disable-signalclasses Don't build signalclasses],
+	INCLUDE_SIGNALCLASSES="0",
+	INCLUDE_SIGNALCLASSES="1")
+AC_ARG_ENABLE(snooze,
+	[  --disable-snooze        Don't build snooze class],
+	INCLUDE_SNOOZE="0",
+	INCLUDE_SNOOZE="1")
+AC_ARG_ENABLE(stringbuffer,
+	[  --disable-stringbuffer  Don't build stringbuffer class],
+	INCLUDE_STRINGBUFFER="0",
+	INCLUDE_STRINGBUFFER="1")
+AC_ARG_ENABLE(system,
+	[  --disable-system        Don't build system],
+	INCLUDE_SYSTEM="0",
+	INCLUDE_SYSTEM="1")
+AC_ARG_ENABLE(timezonefile,
+	[  --disable-timezonefile  Don't build timezonefile class],
+	INCLUDE_TIMEZONEFILE="0",
+	INCLUDE_TIMEZONEFILE="1")
+AC_ARG_ENABLE(unixclient,
+	[  --disable-unixclient    Don't build unixclient class],
+	INCLUDE_UNIXCLIENT="0",
+	INCLUDE_UNIXCLIENT="1")
+AC_ARG_ENABLE(unixserver,
+	[  --disable-unixserver    Don't build unixserver class],
+	INCLUDE_UNIXSERVER="0",
+	INCLUDE_UNIXSERVER="1")
+AC_ARG_ENABLE(variablebuffer,
+	[  --disable-variablebuffer       Don't build variablebuffer class],
+	INCLUDE_VARIABLEBUFFER="0",
+	INCLUDE_VARIABLEBUFFER="1")
+AC_ARG_ENABLE(xmldom,
+	[  --disable-xmldom        Don't build xmldom class],
+	INCLUDE_XMLDOM="0",
+	INCLUDE_XMLDOM="1")
+AC_ARG_ENABLE(xmlsax,
+	[  --disable-xmlsax        Don't build xmlsax class],
+	INCLUDE_XMLSAX="0",
+	INCLUDE_XMLSAX="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -589,6 +593,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 AC_MSG_CHECKING(for process.h)
 AC_TRY_COMPILE([#include <process.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_PROCESS_H, 1, Some systems have process.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/utsname.h)
+AC_TRY_COMPILE([#include <sys/utsname.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_UTSNAME_H, 1, Some systems have sys/utsname.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -1125,7 +1133,6 @@ if ( test -z "$HAVE_PCRE" -a -z "$HAVE_REGCOMP" )
 then
 	USE_BUILT_IN_REGULAREXPRESSION="1"
 fi
-AC_SUBST(USE_BUILT_IN_REGULAREXPRESSION)
 
 echo "******************************"
 
@@ -2585,9 +2592,9 @@ setsid(),AC_DEFINE(RUDIMENTS_HAVE_SETSID,1,Some systems have setsid) AC_MSG_RESU
 echo "******************************"
 
 
-dnl Checks for page size functions
+dnl Checks for syste functions
 echo
-echo "***** Page Size Functions ****"
+echo "***** System Functions *******"
 
 AC_MSG_CHECKING(for getpagesize)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -2610,6 +2617,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 sysconf(0),AC_DEFINE(RUDIMENTS_HAVE_SYSCONF,1,Some systems have sysconf) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for uname)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
+	#include <sys/utsname.h>
+#endif],
+uname(0),AC_DEFINE(RUDIMENTS_HAVE_UNAME,1,Some systems have uname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
@@ -2629,66 +2642,526 @@ AC_SUBST(SONAME_VERSION_INFO)
 AC_PREFIX_DEFAULT(/usr/local/firstworks)
 
 dnl perform substitutions for disable options
-AC_SUBST(INCLUDE_CHARSTRING)
-AC_SUBST(INCLUDE_CHARACTER)
-AC_SUBST(INCLUDE_INTERVALTIMER)
-AC_SUBST(INCLUDE_SNOOZE)
-AC_SUBST(INCLUDE_MATH)
-AC_SUBST(INCLUDE_RAWBUFFER)
-AC_SUBST(INCLUDE_MEMORYMAP)
-AC_SUBST(INCLUDE_MUTEX)
-AC_SUBST(INCLUDE_SERIALPORT)
-AC_SUBST(INCLUDE_SERIALPORTPROFILE)
-AC_SUBST(INCLUDE_PARAMETERSTRING)
-AC_SUBST(INCLUDE_ENVIRONMENT)
-AC_SUBST(INCLUDE_COMMANDLINE)
-AC_SUBST(INCLUDE_DATETIME)
-AC_SUBST(INCLUDE_TIMEZONEFILE)
-AC_SUBST(INCLUDE_GROUPENTRY)
-AC_SUBST(INCLUDE_PASSWDENTRY)
-AC_SUBST(INCLUDE_SERVICEENTRY)
-AC_SUBST(INCLUDE_SHADOWENTRY)
-AC_SUBST(INCLUDE_RPCENTRY)
-AC_SUBST(INCLUDE_PROTOCOLENTRY)
-AC_SUBST(INCLUDE_HOSTENTRY)
-AC_SUBST(INCLUDE_DYNAMICLIB)
-AC_SUBST(INCLUDE_CRYPT)
-AC_SUBST(INCLUDE_VARIABLEBUFFER)
-AC_SUBST(INCLUDE_STRINGBUFFER)
-AC_SUBST(INCLUDE_XMLSAX)
-AC_SUBST(INCLUDE_XMLDOM)
-AC_SUBST(INCLUDE_DTD)
-AC_SUBST(INCLUDE_FILESYSTEM)
-AC_SUBST(INCLUDE_DIRECTORY)
-AC_SUBST(INCLUDE_FILEDESCRIPTOR)
-AC_SUBST(INCLUDE_FILE)
-AC_SUBST(INCLUDE_SHMFILE)
-AC_SUBST(INCLUDE_DEVICE)
-AC_SUBST(INCLUDE_DATATRANSPORT)
-AC_SUBST(INCLUDE_CLIENT)
-AC_SUBST(INCLUDE_INETCLIENT)
-AC_SUBST(INCLUDE_UNIXCLIENT)
-AC_SUBST(INCLUDE_MODEMCLIENT)
-AC_SUBST(INCLUDE_MODEMSERVER)
-AC_SUBST(INCLUDE_SERVER)
-AC_SUBST(INCLUDE_INETSERVER)
-AC_SUBST(INCLUDE_UNIXSERVER)
-AC_SUBST(INCLUDE_LISTENER)
-AC_SUBST(INCLUDE_LOGGER)
-AC_SUBST(INCLUDE_MEMORYPOOL)
-AC_SUBST(INCLUDE_SIGNALCLASSES)
-AC_SUBST(INCLUDE_DAEMONPROCESS)
-AC_SUBST(INCLUDE_PROCESS)
-AC_SUBST(INCLUDE_SEMAPHORESET)
-AC_SUBST(INCLUDE_SHAREDMEMORY)
-AC_SUBST(INCLUDE_PERMISSIONS)
-AC_SUBST(INCLUDE_REGULAREXPRESSION)
-AC_SUBST(INCLUDE_RANDOMNUMBER)
-AC_SUBST(INCLUDE_CONTAINER)
-AC_SUBST(INCLUDE_CHAT)
-AC_SUBST(INCLUDE_ERROR)
-#AC_SUBST(INCLUDE_DICTIONARY)
-#AC_SUBST(INCLUDE_LIST)
+HEADERS=""
+PRIVATEHEADERS=""
+SRCS=""
+LOBJS=""
+EXTRACPPFLAGS=""
+
+if ( test "$INCLUDE_CHARACTER" = "1" )
+then
+	HEADERS="$HEADERS character.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS characterincludes.h"
+	SRCS="$SRCS character.cpp"
+	LOBJS="$LOBJS character.lo"
+fi
+
+if ( test "$INCLUDE_CHARSTRING" = "1" )
+then
+	HEADERS="$HEADERS charstring.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS charstring.h charstringincludes.h"
+	SRCS="$SRCS charstring.cpp"
+	LOBJS="$LOBJS charstring.lo"
+fi
+
+if ( test "$INCLUDE_CHAT" = "1" )
+then
+	HEADERS="$HEADERS chat.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS chat.h chatincludes.h"
+	SRCS="$SRCS chat.cpp"
+	LOBJS="$LOBJS chat.lo"
+fi
+
+if ( test "$INCLUDE_CLIENT" = "1" )
+then
+	HEADERS="$HEADERS client.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS client.h clientincludes.h"
+	SRCS="$SRCS client.cpp"
+	LOBJS="$LOBJS client.lo"
+fi
+
+if ( test "$INCLUDE_COMMANDLINE" = "1" )
+then
+	HEADERS="$HEADERS commandline.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS commandline.h commandlineincludes.h"
+	SRCS="$SRCS commandline.cpp"
+	LOBJS="$LOBJS commandline.lo"
+fi
+
+if ( test "$INCLUDE_CRYPT" = "1" )
+then
+	HEADERS="$HEADERS crypt.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS crypt.h cryptincludes.h"
+	SRCS="$SRCS crypt.cpp"
+	LOBJS="$LOBJS crypt.lo"
+fi
+
+if ( test "$INCLUDE_DAEMONPROCESS" = "1" )
+then
+	HEADERS="$HEADERS daemonprocess.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS daemonprocess.h daemonprocessincludes.h"
+	SRCS="$SRCS daemonprocess.cpp"
+	LOBJS="$LOBJS daemonprocess.lo"
+fi
+
+if ( test "$INCLUDE_DATETIME" = "1" )
+then
+	HEADERS="$HEADERS datetime.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS datetime.h datetimeincludes.h"
+	SRCS="$SRCS datetime.cpp"
+	LOBJS="$LOBJS datetime.lo"
+fi
+
+if ( test "$INCLUDE_DEVICE" = "1" )
+then
+	HEADERS="$HEADERS device.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS device.h deviceincludes.h"
+	SRCS="$SRCS device.cpp"
+	LOBJS="$LOBJS device.lo"
+fi
+
+if ( test "$INCLUDE_DIRECTORY" = "1" )
+then
+	HEADERS="$HEADERS directory.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS directory.h directoryincludes.h"
+	SRCS="$SRCS directory.cpp"
+	LOBJS="$LOBJS directory.lo"
+fi
+
+if ( test "$INCLUDE_DTD" = "1" )
+then
+	HEADERS="$HEADERS dtd.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS dtd.h dtdincludes.h"
+	SRCS="$SRCS dtd.cpp"
+	LOBJS="$LOBJS dtd.lo"
+fi
+
+if ( test "$INCLUDE_DYNAMICLIB" = "1" )
+then
+	HEADERS="$HEADERS dynamiclib.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS dynamiclib.h dynamiclibincludes.h"
+	SRCS="$SRCS dynamiclib.cpp"
+	LOBJS="$LOBJS dynamiclib.lo"
+fi
+
+if ( test "$INCLUDE_ENVIRONMENT" = "1" )
+then
+	HEADERS="$HEADERS environment.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS environment.h environmentincludes.h"
+	SRCS="$SRCS environment.cpp"
+	LOBJS="$LOBJS environment.lo"
+fi
+
+if ( test "$INCLUDE_ERROR" = "1" )
+then
+	HEADERS="$HEADERS error.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS errorincludes.h"
+	SRCS="$SRCS error.cpp"
+	LOBJS="$LOBJS error.lo"
+fi
+
+if ( test "$INCLUDE_FILE" = "1" )
+then
+	HEADERS="$HEADERS file.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS file.h fileincludes.h"
+	SRCS="$SRCS file.cpp"
+	LOBJS="$LOBJS file.lo"
+fi
+
+if ( test "$INCLUDE_FILEDESCRIPTOR" = "1" )
+then
+	HEADERS="$HEADERS filedescriptor.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filedescriptor.h filedescriptorincludes.h"
+	SRCS="$SRCS filedescriptor.cpp"
+	LOBJS="$LOBJS filedescriptor.lo"
+fi
+
+if ( test "$INCLUDE_FILESYSTEM" = "1" )
+then
+	HEADERS="$HEADERS filesystem.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filesystem.h filesystemincludes.h"
+	SRCS="$SRCS filesystem.cpp"
+	LOBJS="$LOBJS filesystem.lo"
+fi
+
+if ( test "$INCLUDE_GROUPENTRY" = "1" )
+then
+	HEADERS="$HEADERS groupentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS groupentry.h groupentryincludes.h"
+	SRCS="$SRCS groupentry.cpp"
+	LOBJS="$LOBJS groupentry.lo"
+fi
+
+if ( test "$INCLUDE_HOSTENTRY" = "1" )
+then
+	HEADERS="$HEADERS hostentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS hostentry.h hostentryincludes.h"
+	SRCS="$SRCS hostentry.cpp"
+	LOBJS="$LOBJS hostentry.lo"
+fi
+
+if ( test "$INCLUDE_INETCLIENT" = "1" )
+then
+	HEADERS="$HEADERS inetclientsocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetclientsocket.h inetclientsocketincludes.h"
+	SRCS="$SRCS inetclientsocket.cpp"
+	LOBJS="$LOBJS inetclientsocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETCLIENT"
+fi
+
+if ( test "$INCLUDE_INETSERVER" = "1" )
+then
+	HEADERS="$HEADERS inetserversocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetserversocket.h inetserversocketincludes.h"
+	SRCS="$SRCS inetserversocket.cpp"
+	LOBJS="$LOBJS inetserversocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETSERVER"
+fi
+
+if ( test "$INCLUDE_INTERVALTIMER" = "1" )
+then
+	HEADERS="$HEADERS intervaltimer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS intervaltimer.h intervaltimerincludes.h"
+	SRCS="$SRCS intervaltimer.cpp"
+	LOBJS="$LOBJS intervaltimer.lo"
+fi
+
+if ( test "$INCLUDE_LISTENER" = "1" )
+then
+	HEADERS="$HEADERS listener.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS listener.h listenerincludes.h"
+	SRCS="$SRCS listener.cpp"
+	LOBJS="$LOBJS listener.lo"
+fi
+
+if ( test "$INCLUDE_LOGGER" = "1" )
+then
+	HEADERS="$HEADERS logger.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filedestination.h logdestination.h logger.h stderrdestination.h stdoutdestination.h syslogdestination.h loggerincludes.h"
+	SRCS="$SRCS logger.cpp"
+	LOBJS="$LOBJS logger.lo"
+fi
+
+if ( test "$INCLUDE_MATH" = "1" )
+then
+	HEADERS="$HEADERS math.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS mathincludes.h mathinlines.h"
+	SRCS="$SRCS math.cpp"
+	LOBJS="$LOBJS math.lo"
+fi
+
+if ( test "$INCLUDE_MEMORYMAP" = "1" )
+then
+	HEADERS="$HEADERS memorymap.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS memorymap.h memorymapincludes.h"
+	SRCS="$SRCS memorymap.cpp"
+	LOBJS="$LOBJS memorymap.lo"
+fi
+
+if ( test "$INCLUDE_MEMORYPOOL" = "1" )
+then
+	HEADERS="$HEADERS memorypool.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS memorypool.h memorypoolincludes.h"
+	SRCS="$SRCS memorypool.cpp"
+	LOBJS="$LOBJS memorypool.lo"
+fi
+
+if ( test "$INCLUDE_MODEMCLIENT" = "1" )
+then
+	HEADERS="$HEADERS modemclient.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS modemclient.h modemclientincludes.h"
+	SRCS="$SRCS modemclient.cpp"
+	LOBJS="$LOBJS modemclient.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMCLIENT"
+fi
+
+if ( test "$INCLUDE_MODEMSERVER" = "1" )
+then
+	HEADERS="$HEADERS modemserver.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS modemserver.h modemserverincludes.h"
+	SRCS="$SRCS modemserver.cpp"
+	LOBJS="$LOBJS modemserver.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMSERVER"
+fi
+
+if ( test "$INCLUDE_MUTEX" = "1" )
+then
+	HEADERS="$HEADERS mutex.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS mutex.h mutexincludes.h"
+	SRCS="$SRCS mutex.cpp"
+	LOBJS="$LOBJS mutex.lo"
+fi
+
+if ( test "$INCLUDE_PARAMETERSTRING" = "1" )
+then
+	HEADERS="$HEADERS parameterstring.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS parameterstring.h parameterstringincludes.h"
+	SRCS="$SRCS parameterstring.cpp"
+	LOBJS="$LOBJS parameterstring.lo"
+fi
+
+if ( test "$INCLUDE_PASSWDENTRY" = "1" )
+then
+	HEADERS="$HEADERS passwdentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS passwdentry.h passwdentryincludes.h"
+	SRCS="$SRCS passwdentry.cpp"
+	LOBJS="$LOBJS passwdentry.lo"
+fi
+
+if ( test "$INCLUDE_PERMISSIONS" = "1" )
+then
+	HEADERS="$HEADERS permissions.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS permissionsincludes.h"
+	SRCS="$SRCS permissions.cpp"
+	LOBJS="$LOBJS permissions.lo"
+fi
+
+if ( test "$INCLUDE_PROCESS" = "1" )
+then
+	HEADERS="$HEADERS process.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS processincludes.h"
+	SRCS="$SRCS process.cpp"
+	LOBJS="$LOBJS process.lo"
+fi
+
+if ( test "$INCLUDE_PROTOCOLENTRY" = "1" )
+then
+	HEADERS="$HEADERS protocolentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS protocolentry.h protocolentryincludes.h"
+	SRCS="$SRCS protocolentry.cpp"
+	LOBJS="$LOBJS protocolentry.lo"
+fi
+
+if ( test "$INCLUDE_RANDOMNUMBER" = "1" )
+then
+	HEADERS="$HEADERS randomnumber.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS randomnumberincludes.h"
+	SRCS="$SRCS randomnumber.cpp"
+	LOBJS="$LOBJS randomnumber.lo"
+fi
+
+if ( test "$INCLUDE_RAWBUFFER" = "1" )
+then
+	HEADERS="$HEADERS rawbuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS rawbufferincludes.h"
+	SRCS="$SRCS rawbuffer.cpp"
+	LOBJS="$LOBJS rawbuffer.lo"
+fi
+
+if ( test "$INCLUDE_REGULAREXPRESSION" = "1" )
+then
+	HEADERS="$HEADERS regularexpression.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS regularexpression.h regularexpressionincludes.h"
+	SRCS="$SRCS regularexpression.cpp"
+	LOBJS="$LOBJS regularexpression.lo"
+fi
+
+if ( test "$USE_BUILT_IN_REGULAREXPRESSION" = "1" )
+then
+	SRCS="$SRCS regex.c"
+	LOBJS="$LOBJS regex.lo"
+fi
+
+if ( test "$INCLUDE_RPCENTRY" = "1" )
+then
+	HEADERS="$HEADERS rpcentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS rpcentry.h rpcentryincludes.h"
+	SRCS="$SRCS rpcentry.cpp"
+	LOBJS="$LOBJS rpcentry.lo"
+fi
+
+if ( test "$INCLUDE_SEMAPHORESET" = "1" )
+then
+	HEADERS="$HEADERS semaphoreset.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS semaphoreset.h semaphoresetincludes.h"
+	SRCS="$SRCS semaphoreset.cpp"
+	LOBJS="$LOBJS semaphoreset.lo"
+fi
+
+if ( test "$INCLUDE_SERIALPORT" = "1" )
+then
+	HEADERS="$HEADERS serialport.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serialport.h serialportincludes.h"
+	SRCS="$SRCS serialport.cpp"
+	LOBJS="$LOBJS serialport.lo"
+fi
+
+if ( test "$INCLUDE_SERIALPORTPROFILE" = "1" )
+then
+	HEADERS="$HEADERS serialportprofile.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serialportprofile.h serialportprofileincludes.h"
+	SRCS="$SRCS serialportprofile.cpp"
+	LOBJS="$LOBJS serialportprofile.lo"
+fi
+
+if ( test "$INCLUDE_SERVER" = "1" )
+then
+	HEADERS="$HEADERS server.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS server.h serverincludes.h"
+	SRCS="$SRCS server.cpp"
+	LOBJS="$LOBJS server.lo"
+fi
+
+if ( test "$INCLUDE_SERVICEENTRY" = "1" )
+then
+	HEADERS="$HEADERS serviceentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serviceentry.h serviceentryincludes.h"
+	SRCS="$SRCS serviceentry.cpp"
+	LOBJS="$LOBJS serviceentry.lo"
+fi
+
+if ( test "$INCLUDE_SHADOWENTRY" = "1" )
+then
+	HEADERS="$HEADERS shadowentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS shadowentry.h shadowentryincludes.h"
+	SRCS="$SRCS shadowentry.cpp"
+	LOBJS="$LOBJS shadowentry.lo"
+fi
+
+if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
+then
+	HEADERS="$HEADERS sharedmemory.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS sharedmemory.h sharedmemoryincludes.h"
+	SRCS="$SRCS sharedmemory.cpp"
+	LOBJS="$LOBJS sharedmemory.lo"
+fi
+
+if ( test "$INCLUDE_SHMFILE" = "1" )
+then
+	HEADERS="$HEADERS shmfile.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS shmfile.h shmfileincludes.h"
+	SRCS="$SRCS shmfile.cpp"
+	LOBJS="$LOBJS shmfile.lo"
+fi
+
+if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
+then
+	HEADERS="$HEADERS signalclasses.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS signalhandler.h signalset.h signalclassesincludes.h"
+	SRCS="$SRCS signalclasses.cpp"
+	LOBJS="$LOBJS signalclasses.lo"
+fi
+
+if ( test "$INCLUDE_SNOOZE" = "1" )
+then
+	HEADERS="$HEADERS snooze.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS snoozeincludes.h"
+	SRCS="$SRCS snooze.cpp"
+	LOBJS="$LOBJS snooze.lo"
+fi
+
+if ( test "$INCLUDE_STRINGBUFFER" = "1" )
+then
+	HEADERS="$HEADERS stringbuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS stringbuffer.h stringbufferincludes.h"
+	SRCS="$SRCS stringbuffer.cpp"
+	LOBJS="$LOBJS stringbuffer.lo"
+fi
+
+if ( test "$INCLUDE_SYSTEM" = "1" )
+then
+	HEADERS="$HEADERS system.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS system.h systemincludes.h"
+	SRCS="$SRCS system.cpp"
+	LOBJS="$LOBJS system.lo"
+fi
+
+if ( test "$INCLUDE_TIMEZONEFILE" = "1" )
+then
+	HEADERS="$HEADERS timezonefile.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS timezonefile.h timezonefileincludes.h"
+	SRCS="$SRCS timezonefile.cpp"
+	LOBJS="$LOBJS timezonefile.lo"
+fi
+
+if ( test "$INCLUDE_UNIXCLIENT" = "1" )
+then
+	HEADERS="$HEADERS unixclientsocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixclientsocket.h unixclientsocketincludes.h"
+	SRCS="$SRCS unixclientsocket.cpp"
+	LOBJS="$LOBJS unixclientsocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXCLIENT"
+fi
+
+if ( test "$INCLUDE_UNIXSERVER" = "1" )
+then
+	HEADERS="$HEADERS unixserversocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixserversocket.h unixserversocketincludes.h"
+	SRCS="$SRCS unixserversocket.cpp"
+	LOBJS="$LOBJS unixserversocket.lo"
+	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXSERVER"
+fi
+
+if ( test "$INCLUDE_VARIABLEBUFFER" = "1" )
+then
+	HEADERS="$HEADERS variablebuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS variablebuffer.h variablebufferincludes.h"
+	SRCS="$SRCS variablebuffer.cpp"
+	LOBJS="$LOBJS variablebuffer.lo"
+fi
+
+if ( test "$INCLUDE_XMLDOM" = "1" )
+then
+	HEADERS="$HEADERS xmldom.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS xmldom.h xmldomincludes.h xmldomnode.h xmldomnodeincludes.h"
+	SRCS="$SRCS xmldom.cpp xmldomnode.cpp"
+	LOBJS="$LOBJS xmldom.lo xmldomnode.lo"
+fi
+
+if ( test "$INCLUDE_XMLSAX" = "1" )
+then
+	HEADERS="$HEADERS xmlsax.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS xmlsax.h xmlsaxincludes.h"
+	SRCS="$SRCS xmlsax.cpp"
+	LOBJS="$LOBJS xmlsax.lo"
+fi
+
+if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_INETCLIENT" = "1" )
+then
+	HEADERS="$HEADERS inetsocketutil.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetsocketutil.h inetsocketutilincludes.h"
+	SRCS="$SRCS inetsocketutil.cpp"
+	LOBJS="$LOBJS inetsocketutil.lo"
+fi
+
+if ( test "$INCLUDE_UNIXSERVER" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
+then
+	HEADERS="$HEADERS unixsocketutil.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixsocketutil.h unixsocketutilincludes.h"
+	SRCS="$SRCS unixsocketutil.cpp"
+	LOBJS="$LOBJS unixsocketutil.lo"
+fi
+
+if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
+then
+	HEADERS="$HEADERS serversocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS serversocket.h serversocketincludes.h"
+	SRCS="$SRCS serversocket.cpp"
+	LOBJS="$LOBJS serversocket.lo"
+fi
+
+if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
+then
+	HEADERS="$HEADERS clientsocket.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS clientsocket.h clientsocketincludes.h"
+	SRCS="$SRCS clientsocket.cpp"
+	LOBJS="$LOBJS clientsocket.lo"
+fi
+
+if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" -o "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
+then
+	HEADERS="$HEADERS clientserverfactory.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS clientserverfactoryincludes.h"
+	SRCS="$SRCS clientserverfactory.cpp"
+	LOBJS="$LOBJS clientserverfactory.lo"
+fi
+
+AC_SUBST(HEADERS)
+AC_SUBST(PRIVATEHEADERS)
+AC_SUBST(SRCS)
+AC_SUBST(LOBJS)
+AC_SUBST(EXTRACPPFLAGS)
+
 
 
 # prepend DESTDIR where appropriate
@@ -2743,7 +3216,7 @@ echo
 echo "***** Output Files ***********"
 AC_CONFIG_HEADER(include/rudiments/private/config.h)
 AC_CONFIG_SRCDIR(test/xmls.cpp)
-AC_CONFIG_FILES(config.mk bin/rudiments-config features.mk rudiments.pc)
+AC_CONFIG_FILES(config.mk src/Makefile include/Makefile bin/rudiments-config features.mk rudiments.pc)
 AC_OUTPUT
 chmod 755 bin/rudiments-config
 echo "******************************"

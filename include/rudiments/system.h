@@ -38,6 +38,14 @@ class systemprivate;
 class RUDIMENTS_DLLSPEC system {
 	public:
 
+		static	char	*getSystemName();
+
+		static	char	*getOperatingSystemRelease();
+
+		static	char	*getOperatingSystemVersion();
+
+		static	char	*getSystemArchitecture();
+
 		static	int32_t	getPageSize();
 
 	#include <rudiments/private/system.h>
