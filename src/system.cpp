@@ -28,8 +28,8 @@ namespace rudiments {
 
 #if defined(RUDIMENTS_HAVE_UNAME)
 #define	UNAME(part) \
-	utsname	u; \
-	int32_t	result; \
+	struct utsname	u; \
+	int32_t		result; \
 	do { \
 		result=uname(&u); \
 	} while (result==-1 && error::getErrorNumber()==EINTR); \
