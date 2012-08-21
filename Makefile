@@ -5,28 +5,28 @@ include config.mk
 .PHONY: all clean install uninstall distclean
 
 all:
-	$(MAKE) -C src all
+	cd src; $(MAKE) all
 
 clean:
-	$(MAKE) -C src clean
-	$(MAKE) -C test clean
+	cd src; $(MAKE) clean
+	cd test; $(MAKE) clean
 	$(RMTREE) msvc/Debug
 
 install:
-	$(MAKE) -C src install
-	$(MAKE) -C include install
-	$(MAKE) -C bin install
-	$(MAKE) -C doc install
-	$(MAKE) -C man install
+	cd src; $(MAKE) install
+	cd include; $(MAKE) install
+	cd bin; $(MAKE) install
+	cd doc; $(MAKE) install
+	cd man; $(MAKE) install
 	$(MKINSTALLDIRS) $(libdir)/pkgconfig
 	$(INSTALL) -m 0644 rudiments.pc $(libdir)/pkgconfig/rudiments.pc
 
 uninstall:
-	$(MAKE) -C src uninstall
-	$(MAKE) -C include uninstall
-	$(MAKE) -C bin uninstall
-	$(MAKE) -C doc uninstall
-	$(MAKE) -C man uninstall
+	cd src; $(MAKE) uninstall
+	cd include; $(MAKE) uninstall
+	cd bin; $(MAKE) uninstall
+	cd doc; $(MAKE) uninstall
+	cd man; $(MAKE) uninstall
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
 distclean: clean
