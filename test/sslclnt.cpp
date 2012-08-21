@@ -29,7 +29,7 @@ int main(int argc, const char **argv) {
 	SSL_load_error_strings();
 
 	// Create a new client context usng SSLv2.
-	SSL_CTX	*ctx=SSL_CTX_new(SSLv2_client_method());
+	SSL_CTX	*ctx=SSL_CTX_new(SSLv23_client_method());
 
 	// in cases where a re-negotiation must take place during an SSL_read
 	// or SSL_write, automatically re-negotiate, then retry the read/write

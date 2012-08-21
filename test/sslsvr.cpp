@@ -52,7 +52,7 @@ void myserver::listen() {
 	SSL_load_error_strings();
 
 	// Create a new server context usng SSLv2.
-	SSL_CTX	*ctx=SSL_CTX_new(SSLv2_server_method());
+	SSL_CTX	*ctx=SSL_CTX_new(SSLv23_server_method());
 
 	// in cases where a re-negotiation must take place during an SSL_read
 	// or SSL_write, automatically re-negotiate, then retry the read/write
