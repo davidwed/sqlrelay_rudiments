@@ -3156,6 +3156,13 @@ then
 	LOBJS="$LOBJS clientserverfactory.lo"
 fi
 
+if ( test "$INCLUDE_MODEMCLIENT" = "1" -o  "$INCLUDE_MODEMSERVER" = "1" )
+then
+	PRIVATEHEADERS="$PRIVATEHEADERS modemutil.h"
+	SRCS="$SRCS modemutil.cpp"
+	LOBJS="$LOBJS modemutil.lo"
+fi
+
 AC_SUBST(HEADERS)
 AC_SUBST(PRIVATEHEADERS)
 AC_SUBST(SRCS)
