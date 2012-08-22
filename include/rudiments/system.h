@@ -41,13 +41,13 @@ class systemprivate;
 class RUDIMENTS_DLLSPEC system {
 	public:
 
-		static	char	*getSystemName();
+		static	char	*getOperatingSystemName();
 
 		static	char	*getOperatingSystemRelease();
 
 		static	char	*getOperatingSystemVersion();
 
-		static	char	*getSystemArchitecture();
+		static	char	*getOperatingSystemArchitecture();
 
 		static	int32_t	getPageSize();
 

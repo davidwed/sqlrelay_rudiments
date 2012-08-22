@@ -43,7 +43,7 @@ namespace rudiments {
 	return (result==-1)?NULL:charstring::duplicate(u.part);
 #endif
 
-char *system::getSystemName() {
+char *system::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		UNAME(sysname);
 	#else
@@ -67,7 +67,7 @@ char *system::getOperatingSystemVersion() {
 	#endif
 }
 
-char *system::getSystemArchitecture() {
+char *system::getOperatingSystemArchitecture() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		UNAME(machine);
 	#else
