@@ -172,7 +172,7 @@ clean:
 		server.pem \
 		client.pem
 	$(RMTREE) .libs
-	$(MAKE) -C certificates clean
+	cd certificates; $(MAKE) clean
 
 server$(EXE): server.cpp server.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)
@@ -391,7 +391,7 @@ system$(EXE): system.cpp system.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
-	$(MAKE) -C certificates
+	cd certificates; $(MAKE) clean
 	cp certificates/certificates/ca.pem .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .
