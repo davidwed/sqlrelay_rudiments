@@ -1,5 +1,5 @@
 0.38 - included some contributed updates to chat, charstring and modemclient
-	added a few uname wrappers to system class
+	added a few more wrappers to system class
 	refactored configure/make for non-gnu make compatibility
 
 0.37 - updated logger to exclude : if header isn't supplied
