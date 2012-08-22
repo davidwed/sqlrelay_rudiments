@@ -115,7 +115,7 @@ bool system::getLoadAverages(double *oneminuteaverage,
 		*fifteenminuteaverage=averages[LOADAVG_15MIN];
 		return retval;
 	#else
-		error::setError(ENOSYS);
+		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
 }
