@@ -310,6 +310,9 @@
 /* Some systems have gethostbyname_r */
 #undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_6
 
+/* Some systems have getloadavg */
+#undef RUDIMENTS_HAVE_GETLOADAVG
+
 /* Some systems have getpagesize */
 #undef RUDIMENTS_HAVE_GETPAGESIZE
 

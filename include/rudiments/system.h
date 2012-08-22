@@ -15,7 +15,10 @@ namespace rudiments {
 class systemprivate;
 
 // wrap:
-//	sys/utsname.h - uname()
+// 	set/get hostname(s)
+// 	set/get domainname(s)
+// 	set/get nisdomainname
+//
 //	stdlib.h - getloadavg()
 //	unistd.h - sysconf()
 //			confstr() - use sysctl() on bsd
@@ -47,6 +50,9 @@ class RUDIMENTS_DLLSPEC system {
 		static	char	*getSystemArchitecture();
 
 		static	int32_t	getPageSize();
+
+		static	bool	getLoadAverages(double *averages,
+							uint32_t count);
 
 	#include <rudiments/private/system.h>
 };

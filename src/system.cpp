@@ -11,11 +11,18 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
+	// for getpagesize
 	#include <unistd.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
+	// for uname
 	#include <sys/utsname.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	// for getloadavg
+	#include <stdlib.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
@@ -77,6 +84,15 @@ int32_t system::getPageSize() {
 		return systeminfo.dwPageSize;
 	#else
 		#error no getpagesize or anything like it
+	#endif
+}
+
+bool system::getLoadAverages(double *averages, uint32_t count) {
+	#if defined(RUDIMENTS_HAVE_GETLOADAVG)
+		return !getloadavg(averages,count);
+	#else
+		error::setError(ENOSYS);
+		return false;
 	#endif
 }
 
