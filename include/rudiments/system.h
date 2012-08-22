@@ -51,8 +51,9 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int32_t	getPageSize();
 
-		static	bool	getLoadAverages(double *averages,
-							uint32_t count);
+		static	bool	getLoadAverages(double *oneminuteaverage,
+						double *fiveminuteaverage,
+						double *fifteenminuteaverage);
 
 	#include <rudiments/private/system.h>
 };

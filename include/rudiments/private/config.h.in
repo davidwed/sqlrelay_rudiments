@@ -907,6 +907,9 @@
 /* Some systems have sys/ipc.h */
 #undef RUDIMENTS_HAVE_SYS_IPC_H
 
+/* Some systems have sys/loadavg.h */
+#undef RUDIMENTS_HAVE_SYS_LOADAVG_H
+
 /* Some systems have sys/mman.h */
 #undef RUDIMENTS_HAVE_SYS_MMAN_H
 

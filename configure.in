@@ -601,6 +601,10 @@ AC_TRY_COMPILE([#include <sys/utsname.h>],
 AC_MSG_CHECKING(for sys/mman.h)
 AC_TRY_COMPILE([#include <sys/mman.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_MMAN_H, 1, Some systems have sys/mman.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/loadavg.h)
+AC_TRY_COMPILE([#include <sys/loadavg.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_LOADAVG_H, 1, Some systems have sys/loadavg.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -2628,7 +2632,10 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
 uname(0),AC_DEFINE(RUDIMENTS_HAVE_UNAME,1,Some systems have uname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for getloadavg)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_LOADAVG_H
+	#include <sys/loadavg.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 getloadavg(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETLOADAVG,1,Some systems have getloadavg) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

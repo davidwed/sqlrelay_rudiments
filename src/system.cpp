@@ -87,9 +87,28 @@ int32_t system::getPageSize() {
 	#endif
 }
 
-bool system::getLoadAverages(double *averages, uint32_t count) {
+#ifndef LOADAVG_1MIN
+	#define LOADAVG_1MIN 0
+#endif
+
+#ifndef LOADAVG_5MIN
+	#define LOADAVG_5MIN 1
+#endif
+
+#ifndef LOADAVG_15MIN
+	#define LOADAVG_15MIN 2
+#endif
+
+bool system::getLoadAverages(double *oneminuteaverage,
+				double *fiveminuteaverage,
+				double *fifteenminuteaverage) {
 	#if defined(RUDIMENTS_HAVE_GETLOADAVG)
-		return !getloadavg(averages,count);
+		double	averages[3]={0.0,0.0,0.0};
+		bool	retval=!getloadavg(averages,3);
+		*oneminuteaverage=averages[LOADAVG_1MIN];
+		*fiveminuteaverage=averages[LOADAVG_5MIN];
+		*fifteenminuteaverage=averages[LOADAVG_15MIN];
+		return retval;
 	#else
 		error::setError(ENOSYS);
 		return false;
