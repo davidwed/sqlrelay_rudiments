@@ -21,8 +21,13 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
-	// for getloadavg
+	// for getloadavg on linux/bsd
 	#include <stdlib.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_SYS_LOADAVG_H
+	// for getloadavg on solaris
+	#include <sys/loadavg.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
