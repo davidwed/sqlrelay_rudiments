@@ -77,6 +77,7 @@ PROGS = server$(EXE) \
 	nullserver$(EXE) \
 	logger$(EXE) \
 	intervaltimer$(EXE) \
+	system$(EXE) \
 	server.pem
 
 #ALLSTATIC=-all-static
@@ -161,6 +162,7 @@ clean:
 		character$(EXE) \
 		rawbuffer$(EXE) \
 		nullserver$(EXE) \
+		system$(EXE) \
 		*.lo \
 		*.o \
 		test.log \
@@ -384,6 +386,9 @@ character$(EXE): character.cpp character.lo
 
 rawbuffer$(EXE): rawbuffer.cpp rawbuffer.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ rawbuffer.lo $(ALLSTATIC) $(LIBS)
+
+system$(EXE): system.cpp system.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
 	$(MAKE) -C certificates
