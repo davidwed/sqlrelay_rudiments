@@ -266,6 +266,9 @@
 /* Some systems have getaddrinfo */
 /* #undef RUDIMENTS_HAVE_GETADDRINFO */
 
+/* Some systems have getdomainname */
+/* #undef RUDIMENTS_HAVE_GETDOMAINNAME */
+
 /* Some systems have getegid */
 /* #undef RUDIMENTS_HAVE_GETEGID */
 
@@ -313,6 +316,9 @@
 
 /* Some systems have gethostbyname_r */
 /* #undef RUDIMENTS_HAVE_GETHOSTBYNAME_R_6 */
+
+/* Some systems have gethostname */
+#define RUDIMENTS_HAVE_GETHOSTNAME 1
 
 /* Some systems have getloadavg */
 /* #undef RUDIMENTS_HAVE_GETLOADAVG */
@@ -713,6 +719,9 @@
 /* send takes a const void * on most systems */
 /* #undef RUDIMENTS_HAVE_SEND_WITH_VOID */
 
+/* Some systems have setdomainname */
+/* #undef RUDIMENTS_HAVE_SETDOMAINNAME */
+
 /* Some systems have setegid */
 /* #undef RUDIMENTS_HAVE_SETEGID */
 
@@ -733,6 +742,9 @@
 
 /* Some systems have setgid */
 /* #undef RUDIMENTS_HAVE_SETGID */
+
+/* Some systems have sethostname */
+#define RUDIMENTS_HAVE_SETHOSTNAME 1
 
 /* Some systems have setitimer */
 /* #undef RUDIMENTS_HAVE_SETITIMER */

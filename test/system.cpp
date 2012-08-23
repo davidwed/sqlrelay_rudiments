@@ -10,20 +10,36 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	printf("OS Name		: %s\n",
-		system::getOperatingSystemName());
-	printf("OS Release	: %s\n",
-		system::getOperatingSystemRelease());
-	printf("OS Version	: %s\n",
-		system::getOperatingSystemVersion());
-	printf("OS Arch		: %s\n",
-		system::getOperatingSystemArchitecture());
-	printf("Page Size	: %d\n",
-		system::getPageSize());
+	char	*name=system::getOperatingSystemName();
+	printf("OS Name		: %s\n",name);
+	delete[] name;
+
+	char	*release=system::getOperatingSystemRelease();
+	printf("OS Release	: %s\n",release);
+	delete[] release;
+
+	char	*version=system::getOperatingSystemVersion();
+	printf("OS Version	: %s\n",version);
+	delete[] version;
+
+	char	*arch=system::getOperatingSystemArchitecture();
+	printf("OS Arch		: %s\n",arch);
+	delete[] arch;
+
+	printf("Page Size	: %d\n",system::getPageSize());
+
 	double	onemin;
 	double	fivemin;
 	double	fifteenmin;
 	system::getLoadAverages(&onemin,&fivemin,&fifteenmin);
 	printf("Load Averages	: %0.2f  %0.2f  %0.2f\n",
 				onemin,fivemin,fifteenmin);
+
+	char	*hostname=system::getHostName();
+	printf("Host Name	: %s\n",hostname);
+	delete[] hostname;
+
+	char	*nisdomainname=system::getNISDomainName();
+	printf("NIS Domain Name	: %s\n",nisdomainname);
+	delete[] nisdomainname;
 }

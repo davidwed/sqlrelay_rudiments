@@ -2640,6 +2640,36 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_LOADAVG_H
 #endif],
 getloadavg(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETLOADAVG,1,Some systems have getloadavg) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for gethostname)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif],
+gethostname(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETHOSTNAME,1,Some systems have gethostname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sethostname)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif],
+sethostname(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETHOSTNAME,1,Some systems have sethostname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for getdomainname)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+getdomainname(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETDOMAINNAME,1,Some systems have getdomainname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for setdomainname)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+setdomainname(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETDOMAINNAME,1,Some systems have setdomainname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

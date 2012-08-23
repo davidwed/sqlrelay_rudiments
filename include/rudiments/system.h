@@ -15,17 +15,11 @@ namespace rudiments {
 class systemprivate;
 
 // wrap:
-// 	set/get hostname(s)
-// 	set/get domainname(s)
-// 	set/get nisdomainname
-//
-//	stdlib.h - getloadavg()
 //	unistd.h - sysconf()
 //			confstr() - use sysctl() on bsd
 //			gethostid(),sethostid() - use sysctl() on bsd
 //			sync()
 //	sys/raw.h - structs/defines for /dev/rawctl ioctl()'s
-//	sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()
 //	not in solaris - 
 //		sys/sysctl.h - sysctl()
 //	linux only - 
@@ -48,6 +42,16 @@ class RUDIMENTS_DLLSPEC system {
 		static	char	*getOperatingSystemVersion();
 
 		static	char	*getOperatingSystemArchitecture();
+
+		static	char	*getHostName();
+		static	bool	setHostName(const char *hostname);
+		static	bool	setHostName(const char *hostname,
+						uint64_t hostnamelen);
+
+		static	char	*getNISDomainName();
+		static	bool	setNISDomainName(const char *domainname);
+		static	bool	setNISDomainName(const char *domainname,
+						uint64_t domainnamelen);
 
 		static	int32_t	getPageSize();
 
