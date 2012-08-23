@@ -59,6 +59,8 @@ class RUDIMENTS_DLLSPEC system {
 						double *fiveminuteaverage,
 						double *fifteenminuteaverage);
 
+		static	void	sync();
+
 	#include <rudiments/private/system.h>
 };
 

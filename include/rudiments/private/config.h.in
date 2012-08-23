@@ -901,6 +901,9 @@
 /* Some systems have symlink */
 #undef RUDIMENTS_HAVE_SYMLINK
 
+/* Some systems have sync */
+#undef RUDIMENTS_HAVE_SYNC
+
 /* Some systems have sysconf */
 #undef RUDIMENTS_HAVE_SYSCONF
 

@@ -902,6 +902,9 @@
 /* Some systems have symlink */
 /* #undef RUDIMENTS_HAVE_SYMLINK */
 
+/* Some systems have sync */
+/* #undef RUDIMENTS_HAVE_SYNC */
+
 /* Some systems have syslog.h */
 /* #undef RUDIMENTS_HAVE_SYSLOG_H */
 

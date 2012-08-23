@@ -2619,12 +2619,6 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 GetSystemInfo(NULL),AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMINFO,1,Some systems have GetSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for sysconf)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif],
-sysconf(0),AC_DEFINE(RUDIMENTS_HAVE_SYSCONF,1,Some systems have sysconf) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for uname)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
 	#include <sys/utsname.h>
@@ -2669,6 +2663,18 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
 setdomainname(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETDOMAINNAME,1,Some systems have setdomainname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sync)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+sync(),AC_DEFINE(RUDIMENTS_HAVE_SYNC,1,Some systems have sync) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sysconf)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+sysconf(0),AC_DEFINE(RUDIMENTS_HAVE_SYSCONF,1,Some systems have sysconf) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 

@@ -265,6 +265,12 @@ bool system::getLoadAverages(double *oneminuteaverage,
 	#endif
 }
 
+void system::sync() {
+	#if defined(RUDIMENTS_HAVE_SYNC)
+		sync();
+	#endif
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif
