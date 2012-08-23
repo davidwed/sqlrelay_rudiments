@@ -212,7 +212,7 @@ bool system::setNISDomainName(const char *nisdomainname) {
 
 bool system::setNISDomainName(const char *nisdomainname,
 					uint64_t nisdomainnamelen) {
-	#if defined(RUDIMENTS_HAVE_SETHOSTNAME)
+	#if defined(RUDIMENTS_HAVE_SETDOMAINNAME)
 		winsock::initWinsock();
 		int32_t	result;
 		do {
