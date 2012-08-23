@@ -205,4 +205,58 @@ int main(int argc, const char **argv) {
 
 	printf("CPUSet Size			: %lld\n",
 			(long long)system::getCPUSetSize());
+
+	printf("Barriers Version		: %lld\n",
+			(long long)system::getBarriersVersion());
+
+	printf("Clock Selection Version		: %lld\n",
+			(long long)system::getClockSelectionVersion());
+
+	printf("FSync Supported 		: %lld\n",
+			(long long)system::getFSyncSupported());
+
+	printf("Memory Mapped Files Supported	: %lld\n",
+			(long long)system::getMemoryMappedFilesSupported());
+
+	printf("Process Memory Locking Supported	: %lld\n",
+			(long long)system::getProcessMemoryLockingSupported());
+
+	printf("Range Memory Locking Supported	: %lld\n",
+			(long long)system::getRangeMemoryLockingSupported());
+
+	printf("Memory Protection Supported	: %lld\n",
+			(long long)system::getMemoryProtectionSupported());
+
+	printf("Monotonic Clock Version		: %lld\n",
+			(long long)system::getMonotonicClockVersion());
+
+	printf("Max Password Length		: %lld\n",
+			(long long)system::getMaxPasswordLength());
+
+	printf("Reader-Writer Locks Version	: %lld\n",
+			(long long)system::getReaderWriterLocksVersion());
+
+	printf("Regex Supported			: %lld\n",
+			(long long)system::getRegexSupported());
+
+	printf("Semaphores Version		: %lld\n",
+			(long long)system::getSemaphoresVersion());
+
+	printf("Posix Shell Supported		: %lld\n",
+			(long long)system::getPosixShellSupported());
+
+	printf("Spin Locks Version		: %lld\n",
+			(long long)system::getSpinLocksVersion());
+
+	printf("Synchronized IO Supported	: %lld\n",
+			(long long)system::getSynchronizedIOSupported());
+
+	printf("Threads Version			: %lld\n",
+			(long long)system::getThreadsVersion());
+
+	printf("Timers Version			: %lld\n",
+			(long long)system::getTimersVersion());
+
+	printf("Shared Memory Supported		: %lld\n",
+			(long long)system::getSharedMemorySupported());
 }

@@ -169,6 +169,42 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getCPUSetSize();
 
+		static	int64_t	getBarriersVersion();
+
+		static	int64_t	getClockSelectionVersion();
+
+		static	bool	getFSyncSupported();
+
+		static	bool	getMemoryMappedFilesSupported();
+
+		static	bool	getProcessMemoryLockingSupported();
+
+		static	bool	getRangeMemoryLockingSupported();
+
+		static	bool	getMemoryProtectionSupported();
+
+		static	int64_t	getMonotonicClockVersion();
+
+		static	int64_t	getMaxPasswordLength();
+
+		static	int64_t	getReaderWriterLocksVersion();
+
+		static	bool	getRegexSupported();
+
+		static	int64_t	getSemaphoresVersion();
+
+		static	bool	getPosixShellSupported();
+
+		static	int64_t	getSpinLocksVersion();
+
+		static	bool	getSynchronizedIOSupported();
+
+		static	int64_t	getThreadsVersion();
+
+		static	int64_t	getTimersVersion();
+
+		static	bool	getSharedMemorySupported();
+
 	#include <rudiments/private/system.h>
 };
 

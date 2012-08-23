@@ -759,6 +759,168 @@ int64_t system::getCPUSetSize() {
 	#endif
 }
 
+int64_t system::getBarriersVersion() {
+	#if defined(_SC_BARRIERS)
+		return sysConf(_SC_BARRIERS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getClockSelectionVersion() {
+	#if defined(_SC_CLOCK_SELECTION)
+		return sysConf(_SC_CLOCK_SELECTION);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getFSyncSupported() {
+	#if defined(_SC_FSYNC)
+		return (sysConf(_SC_FSYNC)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getMemoryMappedFilesSupported() {
+	#if defined(_SC_MAPPED_FILES)
+		return (sysConf(_SC_MAPPED_FILES)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getProcessMemoryLockingSupported() {
+	#if defined(_SC_MEMLOCK)
+		return (sysConf(_SC_MEMLOCK)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getRangeMemoryLockingSupported() {
+	#if defined(_SC_MEMLOCK_RANGE)
+		return (sysConf(_SC_MEMLOCK_RANGE)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getMemoryProtectionSupported() {
+	#if defined(_SC_MEMORY_PROTECTION)
+		return (sysConf(_SC_MEMORY_PROTECTION)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMonotonicClockVersion() {
+	#if defined(_SC_MONOTONIC_CLOCK)
+		return sysConf(_SC_MONOTONIC_CLOCK);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxPasswordLength() {
+	#if defined(_SC_PASS_MAX)
+		return sysConf(_SC_PASS_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getReaderWriterLocksVersion() {
+	#if defined(_SC_READER_WRITER_LOCKS)
+		return sysConf(_SC_READER_WRITER_LOCKS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getRegexSupported() {
+	#if defined(_SC_REGEXP)
+		return (sysConf(_SC_REGEXP)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getSemaphoresVersion() {
+	#if defined(_SC_SEMAPHORES)
+		return sysConf(_SC_SEMAPHORES);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getPosixShellSupported() {
+	#if defined(_SC_SHELL)
+		return (sysConf(_SC_SHELL)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getSpinLocksVersion() {
+	#if defined(_SC_SPIN_LOCKS)
+		return sysConf(_SC_SPIN_LOCKS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getSynchronizedIOSupported() {
+	#if defined(_SC_SYNCHRONIZED_IO)
+		return (sysConf(_SC_SYNCHRONIZED_IO)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadsVersion() {
+	#if defined(_SC_THREADS)
+		return sysConf(_SC_THREADS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getTimersVersion() {
+	#if defined(_SC_TIMERS)
+		return sysConf(_SC_TIMERS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getSharedMemorySupported() {
+	#if defined(_SC_XOPEN_SHM)
+		return (sysConf(_SC_XOPEN_SHM)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
 int64_t system::sysConf(int32_t name) {
 	#if defined(RUDIMENTS_HAVE_SYSCONF)
 		int64_t	result;
