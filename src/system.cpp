@@ -13,7 +13,7 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
-	// for getpagesize
+	// for sysconf and getpagesize
 	#include <unistd.h>
 #endif
 
@@ -31,6 +31,8 @@
 	// for getloadavg on solaris
 	#include <sys/loadavg.h>
 #endif
+
+#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -225,18 +227,6 @@ bool system::setNISDomainName(const char *nisdomainname,
 	#endif
 }
 
-int32_t system::getPageSize() {
-	#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
-		return getpagesize();
-	#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
-		SYSTEM_INFO	systeminfo;
-		GetSystemInfo(&systeminfo);
-		return systeminfo.dwPageSize;
-	#else
-		#error no getpagesize or anything like it
-	#endif
-}
-
 #ifndef LOADAVG_1MIN
 	#define LOADAVG_1MIN 0
 #endif
@@ -268,6 +258,294 @@ bool system::getLoadAverages(double *oneminuteaverage,
 void system::sync() {
 	#if defined(RUDIMENTS_HAVE_SYNC)
 		sync();
+	#endif
+}
+
+int64_t system::getMaxCommandLineArgumentLength() {
+	#if defined(_SC_ARG_MAX)
+		return sysConf(_SC_ARG_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxProcessesPerUser() {
+	#if defined(_SC_CHILD_MAX)
+		return sysConf(_SC_CHILD_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxHostNameLength() {
+	#if defined(_SC_HOST_NAME_MAX)
+		return sysConf(_SC_HOST_NAME_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxLoginNameLength() {
+	#if defined(_SC_LOGIN_NAME_MAX)
+		return sysConf(_SC_LOGIN_NAME_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getClockTicksPerSecond() {
+	#if defined(_SC_CLK_TCK)
+		return sysConf(_SC_CLK_TCK);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxOpenFilesPerProcess() {
+	#if defined(_SC_OPEN_MAX)
+		return sysConf(_SC_OPEN_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int32_t system::getPageSize() {
+	#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
+		return getpagesize();
+	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGESIZE)
+		return sysConf(_SC_PAGESIZE);
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+		SYSTEM_INFO	systeminfo;
+		GetSystemInfo(&systeminfo);
+		return systeminfo.dwPageSize;
+	#else
+		#error no getpagesize or anything like it
+	#endif
+}
+
+int64_t system::getMaxRegexDups() {
+	#if defined(_SC_RE_DUP_MAX)
+		return sysConf(_SC_RE_DUP_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxOpenStreamsPerProcess() {
+	#if defined(_SC_STREAM_MAX)
+		return sysConf(_SC_STREAM_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxSymlinkLoops() {
+	#if defined(_SC_SYMLOOP_MAX)
+		return sysConf(_SC_SYMLOOP_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxTerminalDeviceNameLength() {
+	#if defined(_SC_TTY_NAME_MAX)
+		return sysConf(_SC_TTY_NAME_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxTimezoneNameLength() {
+	#if defined(_SC_TZNAME_MAX)
+		return sysConf(_SC_TZNAME_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getPosixVersion() {
+	#if defined(_SC_VERSION)
+		return sysConf(_SC_VERSION);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxCalculatorBase() {
+	#if defined(_SC_BC_BASE_MAX)
+		return sysConf(_SC_BC_BASE_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxCalculatorValue() {
+	#if defined(_SC_BC_DIM_MAX)
+		return sysConf(_SC_BC_DIM_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxCalculatorScale() {
+	#if defined(_SC_BC_SCALE_MAX)
+		return sysConf(_SC_BC_SCALE_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxCalculatorStringLength() {
+	#if defined(_SC_BC_STRING_MAX)
+		return sysConf(_SC_BC_STRING_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxCollationWeights() {
+	#if defined(_SC_COLL_WEIGHTS_MAX)
+		return sysConf(_SC_COLL_WEIGHTS_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxNestedExpressions() {
+	#if defined(_SC_EXPR_NEST_MAX)
+		return sysConf(_SC_EXPR_NEST_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxLineLength() {
+	#if defined(_SC_LINE_MAX)
+		return sysConf(_SC_LINE_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getPosix2Version() {
+	#if defined(_SC_2_VERSION)
+		return sysConf(_SC_2_VERSION);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getCDevelopmentSupported() {
+	#if defined(_SC_2_C_DEV)
+		return sysConf(_SC_2_C_DEV);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getFortranDevelopmentSupported() {
+	#if defined(_SC_2_FORT_DEV)
+		return sysConf(_SC_2_FORT_DEV);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getFortranRuntimeSupported() {
+	#if defined(_SC_2_FORT_RUN)
+		return sysConf(_SC_2_FORT_RUN);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getLocaleCreationSupported() {
+	#if defined(_SC_2_LOCALEDEF)
+		return sysConf(_SC_2_LOCALEDEF);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getSoftwareDevelopmentSupported() {
+	#if defined(_SC_2_SW_DEV)
+		return sysConf(_SC_2_SW_DEV);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getPhysicalPageCount() {
+	#if defined(_SC_PHYS_PAGES)
+		return sysConf(_SC_PHYS_PAGES);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getAvailablePhysicalPageCount() {
+	#if defined(_SC_AVPHYS_PAGES)
+		return sysConf(_SC_AVPHYS_PAGES);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getProcessorCount() {
+	#if defined(_SC_NPROCESSORS_CONF)
+		return sysConf(_SC_NPROCESSORS_CONF);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getProcessorsOnline() {
+	#if defined(_SC_NPROCESSORS_ONLN)
+		return sysConf(_SC_NPROCESSORS_ONLN);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::sysConf(int32_t name) {
+	#if defined(RUDIMENTS_HAVE_SYSCONF)
+		int64_t	result;
+		do {
+			result=sysconf(name);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
 	#endif
 }
 
