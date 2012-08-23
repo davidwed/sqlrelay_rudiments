@@ -45,7 +45,8 @@ char *system::getOperatingSystemName() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.sysname);
 	#else
-		#error no uname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 
@@ -58,7 +59,8 @@ char *system::getOperatingSystemRelease() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.release);
 	#else
-		#error no uname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 
@@ -71,7 +73,8 @@ char *system::getOperatingSystemVersion() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.version);
 	#else
-		#error no uname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 
@@ -84,7 +87,8 @@ char *system::getOperatingSystemArchitecture() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
 	#else
-		#error no uname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 
@@ -128,7 +132,8 @@ char *system::getHostName() {
 		// for any other error, return null
 		return NULL;
 	#else
-		#error no gethostname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 
@@ -150,7 +155,8 @@ bool system::setHostName(const char *hostname, uint64_t hostnamelen) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		#error no sethostname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -194,7 +200,8 @@ char *system::getNISDomainName() {
 		// for any other error, return null
 		return NULL;
 	#else
-		#error no getdomainname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return NULL;
 	#endif
 }
 
@@ -213,7 +220,8 @@ bool system::setNISDomainName(const char *nisdomainname,
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		#error no setdomainname or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
