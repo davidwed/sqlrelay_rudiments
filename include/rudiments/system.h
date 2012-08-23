@@ -101,15 +101,17 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getPosix2Version();
 
-		static	int64_t	getCDevelopmentSupported();
+		static	bool	getCDevelopmentSupported();
 
-		static	int64_t	getFortranDevelopmentSupported();
+		static	bool	getCLanguageBindingsSupported();
 
-		static	int64_t	getFortranRuntimeSupported();
+		static	bool	getFortranDevelopmentSupported();
 
-		static	int64_t	getLocaleCreationSupported();
+		static	bool	getFortranRuntimeSupported();
 
-		static	int64_t	getSoftwareDevelopmentSupported();
+		static	bool	getLocaleCreationSupported();
+
+		static	bool	getSoftwareDevelopmentSupported();
 
 		static	int64_t	getPhysicalPageCount();
 
@@ -118,6 +120,54 @@ class RUDIMENTS_DLLSPEC system {
 		static	int64_t	getProcessorCount();
 
 		static	int64_t	getProcessorsOnline();
+
+		static	int64_t	getMaxIOVectorElements();
+
+		static	int64_t	getMaxSupplementalGroupsPerUser();
+
+		static	bool	getJobControlSupported();
+
+		static	bool	getSavedIDsSupported();
+
+		static	bool	getCharacterTerminalSupported();
+
+		static	bool	getUserPortabilityUtilitiesSupported();
+
+		static	int64_t	getMaxAIOOperationsPerList();
+
+		static	int64_t	getMaxOutstandingAIOOperations();
+
+		static	int64_t	getMaxAIOPriorityDelta();
+
+		static	int64_t	getMaxDelayTimerExpirations();
+
+		static	int64_t	getMaxMessageQueuesPerProcess();
+
+		static	int64_t	getMaxRealtimeSignals();
+
+		static	int64_t	getMaxSemaphoresPerProcess();
+
+		static	int64_t	getMaxSemaphoreValue();
+
+		static	int64_t	getMaxSignalQueueLength();
+
+		static	int64_t	getMaxTimersPerProcess();
+
+		static	int64_t	getSuggestedGroupEntryBufferSize();
+
+		static	int64_t	getSuggestedPasswordEntryBufferSize();
+
+		static	int64_t	getMinThreadStackSize();
+
+		static	int64_t	getMaxThreadsPerProcess();
+
+		static	int64_t	getMaxAtExitFunctions();
+
+		static	int64_t	getXOpenVersion();
+
+		static	int64_t	getXCUVersion();
+
+		static	int64_t	getCPUSetSize();
 
 	#include <rudiments/private/system.h>
 };

@@ -107,6 +107,9 @@ int main(int argc, const char **argv) {
 	printf("C Development Supported		: %lld\n",
 			(long long)system::getCDevelopmentSupported());
 
+	printf("C LanguageBindings Supported	: %lld\n",
+			(long long)system::getCLanguageBindingsSupported());
+
 	printf("Fortran Development Supported	: %lld\n",
 			(long long)system::getFortranDevelopmentSupported());
 
@@ -130,4 +133,76 @@ int main(int argc, const char **argv) {
 
 	printf("Processors Online		: %lld\n",
 			(long long)system::getProcessorsOnline());
+
+	printf("Max I/O Vector Elements		: %lld\n",
+			(long long)system::getMaxIOVectorElements());
+
+	printf("Max Supplemental Groups Per User	: %lld\n",
+			(long long)system::getMaxSupplementalGroupsPerUser());
+
+	printf("Job Control Supported		: %lld\n",
+			(long long)system::getJobControlSupported());
+
+	printf("Saved ID's Supported		: %lld\n",
+			(long long)system::getSavedIDsSupported());
+
+	printf("Character Terminal Supported	: %lld\n",
+			(long long)system::getCharacterTerminalSupported());
+
+	printf("User Portabliltiy Utilities Supported	: %lld\n",
+		(long long)system::getUserPortabilityUtilitiesSupported());
+
+	printf("Max AIO Operations Per List	: %lld\n",
+			(long long)system::getMaxAIOOperationsPerList());
+
+	printf("Max Outstanding AIO Operations	: %lld\n",
+			(long long)system::getMaxOutstandingAIOOperations());
+
+	printf("Max AIO Priority Delta		: %lld\n",
+			(long long)system::getMaxAIOPriorityDelta());
+
+	printf("Max Delay Timer Expirations	: %lld\n",
+			(long long)system::getMaxDelayTimerExpirations());
+
+	printf("Max Message Queues Per Process	: %lld\n",
+			(long long)system::getMaxMessageQueuesPerProcess());
+
+	printf("Max Realtime Signals		: %lld\n",
+			(long long)system::getMaxRealtimeSignals());
+
+	printf("Max Sempahores Per Process	: %lld\n",
+			(long long)system::getMaxSemaphoresPerProcess());
+
+	printf("Max Semaphore Value		: %lld\n",
+			(long long)system::getMaxSemaphoreValue());
+
+	printf("Max Signal Queue Length		: %lld\n",
+			(long long)system::getMaxSignalQueueLength());
+
+	printf("Max Timers Per Process		: %lld\n",
+			(long long)system::getMaxTimersPerProcess());
+
+	printf("Suggested Group Entry Buffer Size	: %lld\n",
+			(long long)system::getSuggestedGroupEntryBufferSize());
+
+	printf("Suggested Passwd Entry Buffer Size	: %lld\n",
+		(long long)system::getSuggestedPasswordEntryBufferSize());
+
+	printf("Min Thread Stack Size		: %lld\n",
+			(long long)system::getMinThreadStackSize());
+
+	printf("Max Threads Per Process		: %lld\n",
+			(long long)system::getMaxThreadsPerProcess());
+
+	printf("Max At-Exit Functions		: %lld\n",
+			(long long)system::getMaxAtExitFunctions());
+
+	printf("XOpen Version			: %lld\n",
+			(long long)system::getXOpenVersion());
+
+	printf("XCU Version			: %lld\n",
+			(long long)system::getXCUVersion());
+
+	printf("CPUSet Size			: %lld\n",
+			(long long)system::getCPUSetSize());
 }

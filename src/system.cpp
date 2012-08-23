@@ -455,48 +455,57 @@ int64_t system::getPosix2Version() {
 	#endif
 }
 
-int64_t system::getCDevelopmentSupported() {
+bool system::getCDevelopmentSupported() {
 	#if defined(_SC_2_C_DEV)
-		return sysConf(_SC_2_C_DEV);
+		return (sysConf(_SC_2_C_DEV)!=-1);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
-int64_t system::getFortranDevelopmentSupported() {
+bool system::getCLanguageBindingsSupported() {
+	#if defined(_SC_2_C_BIND)
+		return (sysConf(_SC_2_C_BIND)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool system::getFortranDevelopmentSupported() {
 	#if defined(_SC_2_FORT_DEV)
-		return sysConf(_SC_2_FORT_DEV);
+		return (sysConf(_SC_2_FORT_DEV)!=-1);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
-int64_t system::getFortranRuntimeSupported() {
+bool system::getFortranRuntimeSupported() {
 	#if defined(_SC_2_FORT_RUN)
-		return sysConf(_SC_2_FORT_RUN);
+		return (sysConf(_SC_2_FORT_RUN)!=-1);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
-int64_t system::getLocaleCreationSupported() {
+bool system::getLocaleCreationSupported() {
 	#if defined(_SC_2_LOCALEDEF)
-		return sysConf(_SC_2_LOCALEDEF);
+		return (sysConf(_SC_2_LOCALEDEF)!=-1);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
-int64_t system::getSoftwareDevelopmentSupported() {
+bool system::getSoftwareDevelopmentSupported() {
 	#if defined(_SC_2_SW_DEV)
-		return sysConf(_SC_2_SW_DEV);
+		return (sysConf(_SC_2_SW_DEV)!=-1);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
@@ -530,6 +539,220 @@ int64_t system::getProcessorCount() {
 int64_t system::getProcessorsOnline() {
 	#if defined(_SC_NPROCESSORS_ONLN)
 		return sysConf(_SC_NPROCESSORS_ONLN);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxIOVectorElements() {
+	#if defined(_SC_IOV_MAX)
+		return sysConf(_SC_IOV_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxSupplementalGroupsPerUser() {
+	#if defined(_SC_NGROUPS_MAX)
+		return sysConf(_SC_NGROUPS_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+bool system::getJobControlSupported() {
+	#if defined(_SC_JOB_CONTROL)
+		return (sysConf(_SC_JOB_CONTROL)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool system::getSavedIDsSupported() {
+	#if defined(_SC_SAVED_IDS)
+		return (sysConf(_SC_SAVED_IDS)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool system::getCharacterTerminalSupported() {
+	#if defined(_SC_2_CHAR_TERM)
+		return (sysConf(_SC_2_CHAR_TERM)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool system::getUserPortabilityUtilitiesSupported() {
+	#if defined(_SC_2_UPE)
+		return (sysConf(_SC_2_UPE)!=-1);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+int64_t system::getMaxAIOOperationsPerList() {
+	#if defined(_SC_AIO_LISTIO_MAX)
+		return sysConf(_SC_AIO_LISTIO_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxOutstandingAIOOperations() {
+	#if defined(_SC_AIO_MAX)
+		return sysConf(_SC_AIO_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxAIOPriorityDelta() {
+	#if defined(_SC_AIO_PRIO_DELTA_MAX)
+		return sysConf(_SC_AIO_PRIO_DELTA_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxDelayTimerExpirations() {
+	#if defined(_SC_DELAYTIMER_MAX)
+		return sysConf(_SC_DELAYTIMER_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxMessageQueuesPerProcess() {
+	#if defined(_SC_MQ_OPEN_MAX)
+		return sysConf(_SC_MQ_OPEN_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxRealtimeSignals() {
+	#if defined(_SC_RTSIG_MAX)
+		return sysConf(_SC_RTSIG_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxSemaphoresPerProcess() {
+	#if defined(_SC_SEM_NSEMS_MAX)
+		return sysConf(_SC_SEM_NSEMS_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxSemaphoreValue() {
+	#if defined(_SC_SEM_VALUE_MAX)
+		return sysConf(_SC_SEM_VALUE_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxSignalQueueLength() {
+	#if defined(_SC_SIGQUEUE_MAX)
+		return sysConf(_SC_SIGQUEUE_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxTimersPerProcess() {
+	#if defined(_SC_TIMER_MAX)
+		return sysConf(_SC_TIMER_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getSuggestedGroupEntryBufferSize() {
+	#if defined(_SC_GETGR_R_SIZE_MAX)
+		return sysConf(_SC_GETGR_R_SIZE_MAX);
+	#else
+		return 1024;
+	#endif
+}
+
+int64_t system::getSuggestedPasswordEntryBufferSize() {
+	#if defined(_SC_GETPW_R_SIZE_MAX)
+		return sysConf(_SC_GETPW_R_SIZE_MAX);
+	#else
+		return 1024;
+	#endif
+}
+
+int64_t system::getMinThreadStackSize() {
+	#if defined(_SC_THREAD_STACK_MIN)
+		return sysConf(_SC_THREAD_STACK_MIN);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxThreadsPerProcess() {
+	#if defined(_SC_THREAD_THREADS_MAX)
+		return sysConf(_SC_THREAD_THREADS_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxAtExitFunctions() {
+	#if defined(_SC_ATEXIT_MAX)
+		return sysConf(_SC_ATEXIT_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenVersion() {
+	#if defined(_SC_XOPEN_VERSION)
+		return sysConf(_SC_XOPEN_VERSION);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXCUVersion() {
+	#if defined(_SC_XOPEN_XCU_VERSION)
+		return sysConf(_SC_XOPEN_XCU_VERSION);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getCPUSetSize() {
+	#if defined(_SC_CPUSET_SIZE)
+		return sysConf(_SC_CPUSET_SIZE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
