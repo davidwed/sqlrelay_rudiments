@@ -141,7 +141,12 @@ bool system::setHostName(const char *hostname, uint64_t hostnamelen) {
 		winsock::initWinsock();
 		int32_t	result;
 		do {
-			result=sethostname(hostname,hostnamelen);
+			// Some systems (Solaris) have a char *, rather than
+			// const char * for the first parameter.  Nothing will
+			// be written back to that parameter so it's safe to
+			// cast it to a char * and this appears to work on all
+			// platforms.
+			result=sethostname((char *)hostname,hostnamelen);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
