@@ -320,6 +320,8 @@ int32_t system::getPageSize() {
 		return getpagesize();
 	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGESIZE)
 		return sysConf(_SC_PAGESIZE);
+	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGE_SIZE)
+		return sysConf(_SC_PAGE_SIZE);
 	#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
 		SYSTEM_INFO	systeminfo;
 		GetSystemInfo(&systeminfo);
@@ -858,7 +860,7 @@ int64_t system::getXOpenVersion() {
 	#endif
 }
 
-int64_t system::getXCUVersion() {
+int64_t system::getXOpenXCUVersion() {
 	#if defined(_SC_XOPEN_XCU_VERSION)
 		return sysConf(_SC_XOPEN_XCU_VERSION);
 	#else
@@ -1029,7 +1031,7 @@ int64_t system::getTimersSupport() {
 	#endif
 }
 
-int64_t system::getSharedMemorySupport() {
+int64_t system::getXOpenSharedMemorySupport() {
 	#if defined(_SC_XOPEN_SHM)
 		return sysConf(_SC_XOPEN_SHM);
 	#else
@@ -1122,6 +1124,89 @@ int64_t system::getStackProtectionSupport() {
 int64_t system::getTimeoutsSupport() {
 	#if defined(_SC_TIMEOUTS)
 		return sysConf(_SC_TIMEOUTS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenILP32With32BitOffsetSupport() {
+	#if defined(_SC_V6_ILP32_OFF32)
+		return sysConf(_SC_V6_ILP32_OFF32);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenILP32With64BitOffsetSupport() {
+	#if defined(_SC_V6_ILP32_OFFBIG)
+		return sysConf(_SC_V6_ILP32_OFFBIG);
+	#elif defined(_SC_V6_ILP32_OFF64)
+		return sysConf(_SC_V6_ILP32_OFF64);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenCryptSupport() {
+	#if defined(_SC_XOPEN_CRYPT)
+		return sysConf(_SC_XOPEN_CRYPT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenEnhancedInternationalizationSupport() {
+	#if defined(_SC_XOPEN_ENH_I18N)
+		return sysConf(_SC_XOPEN_ENH_I18N);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenLegacySupport() {
+	#if defined(_SC_XOPEN_LEGACY)
+		return sysConf(_SC_XOPEN_LEGACY);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenRealtimeSupport() {
+	#if defined(_SC_XOPEN_REALTIME)
+		return sysConf(_SC_XOPEN_REALTIME);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenRealtimeThreadsSupport() {
+	#if defined(_SC_XOPEN_REALTIME_THREADS)
+		return sysConf(_SC_XOPEN_REALTIME_THREADS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenStreamsSupport() {
+	#if defined(_SC_XOPEN_STREAMS)
+		return sysConf(_SC_XOPEN_STREAMS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getXOpenUnixSupport() {
+	#if defined(_SC_XOPEN_UNIX)
+		return sysConf(_SC_XOPEN_UNIX);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;

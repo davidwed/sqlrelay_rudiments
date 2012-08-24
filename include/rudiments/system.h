@@ -191,7 +191,7 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getXOpenVersion();
 
-		static	int64_t	getXCUVersion();
+		static	int64_t	getXOpenXCUVersion();
 
 		static	int64_t	getCPUSetSize();
 
@@ -229,7 +229,7 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getTimersSupport();
 
-		static	int64_t	getSharedMemorySupport();
+		static	int64_t	getXOpenSharedMemorySupport();
 
 		static	int64_t	getSharedMemoryObjectsSupport();
 
@@ -250,6 +250,24 @@ class RUDIMENTS_DLLSPEC system {
 		static	int64_t	getStackProtectionSupport();
 
 		static	int64_t	getTimeoutsSupport();
+
+		static	int64_t	getXOpenILP32With32BitOffsetSupport();
+
+		static	int64_t	getXOpenILP32With64BitOffsetSupport();
+
+		static	int64_t	getXOpenCryptSupport();
+
+		static	int64_t	getXOpenEnhancedInternationalizationSupport();
+
+		static	int64_t	getXOpenLegacySupport();
+
+		static	int64_t	getXOpenRealtimeSupport();
+
+		static	int64_t	getXOpenRealtimeThreadsSupport();
+
+		static	int64_t	getXOpenStreamsSupport();
+
+		static	int64_t	getXOpenUnixSupport();
 
 	#include <rudiments/private/system.h>
 };

@@ -239,8 +239,8 @@ int main(int argc, const char **argv) {
 	printf("XOpen Version				: %lld\n",
 			(long long)system::getXOpenVersion());
 
-	printf("XCU Version				: %lld\n",
-			(long long)system::getXCUVersion());
+	printf("XOpen XCU Version			: %lld\n",
+			(long long)system::getXOpenXCUVersion());
 
 	printf("CPUSet Size				: %lld\n",
 			(long long)system::getCPUSetSize());
@@ -296,8 +296,8 @@ int main(int argc, const char **argv) {
 	printf("Timers Support				: %lld\n",
 			(long long)system::getTimersSupport());
 
-	printf("Shared Memory Support			: %lld\n",
-			(long long)system::getSharedMemorySupport());
+	printf("XOpen Shared Memory Support		: %lld\n",
+			(long long)system::getXOpenSharedMemorySupport());
 
 	printf("Shared Memory Objects Support		: %lld\n",
 			(long long)system::getSharedMemoryObjectsSupport());
@@ -328,4 +328,31 @@ int main(int argc, const char **argv) {
 
 	printf("Timeouts Support			: %lld\n",
 			(long long)system::getTimeoutsSupport());
+
+	printf("XOpen ILP32 With 32-Bit Offset Support	: %lld\n",
+		(long long)system::getXOpenILP32With32BitOffsetSupport());
+
+	printf("XOpen ILP32 With 64-Bit Offset Support	: %lld\n",
+		(long long)system::getXOpenILP32With64BitOffsetSupport());
+
+	printf("XOpen Crypt Support			: %lld\n",
+			(long long)system::getXOpenCryptSupport());
+
+	printf("XOpen Enhanced I18N			: %lld\n",
+	(long long)system::getXOpenEnhancedInternationalizationSupport());
+
+	printf("XOpen Legacy Support			: %lld\n",
+			(long long)system::getXOpenLegacySupport());
+
+	printf("XOpen Realtime Support			: %lld\n",
+			(long long)system::getXOpenRealtimeSupport());
+
+	printf("XOpen Realtime Threads Support		: %lld\n",
+			(long long)system::getXOpenRealtimeThreadsSupport());
+
+	printf("XOpen Streams Support			: %lld\n",
+			(long long)system::getXOpenStreamsSupport());
+
+	printf("XOpen Unix Support			: %lld\n",
+			(long long)system::getXOpenUnixSupport());
 }
