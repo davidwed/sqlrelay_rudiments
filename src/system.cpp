@@ -568,6 +568,8 @@ int64_t system::getProcessorsOnline() {
 int64_t system::getMaxIOVectorElements() {
 	#if defined(_SC_IOV_MAX)
 		return sysConf(_SC_IOV_MAX);
+	#elif defined(_SC_UIO_MAXIOV)
+		return sysConf(_SC_UIO_MAXIOV);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
