@@ -101,17 +101,19 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getPosix2Version();
 
-		static	bool	getCDevelopmentSupported();
+		static	int64_t	getCDevelopmentSupport();
 
-		static	bool	getCLanguageBindingsSupported();
+		static	int64_t	getCLanguageBindingsSupport();
 
-		static	bool	getFortranDevelopmentSupported();
+		static	int64_t	getCLanguageSupport();
 
-		static	bool	getFortranRuntimeSupported();
+		static	int64_t	getFortranDevelopmentSupport();
 
-		static	bool	getLocaleCreationSupported();
+		static	int64_t	getFortranRuntimeSupport();
 
-		static	bool	getSoftwareDevelopmentSupported();
+		static	int64_t	getLocaleCreationSupport();
+
+		static	int64_t	getSoftwareDevelopmentSupport();
 
 		static	int64_t	getPhysicalPageCount();
 
@@ -119,19 +121,23 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getProcessorCount();
 
+		static	int64_t	getMaxProcessorCount();
+
 		static	int64_t	getProcessorsOnline();
 
 		static	int64_t	getMaxIOVectorElements();
 
 		static	int64_t	getMaxSupplementalGroupsPerUser();
 
-		static	bool	getJobControlSupported();
+		static	int64_t	getJobControlSupport();
 
-		static	bool	getSavedIDsSupported();
+		static	int64_t	getSavedIDsSupport();
 
-		static	bool	getCharacterTerminalSupported();
+		static	int64_t	getCharacterTerminalSupport();
 
-		static	bool	getUserPortabilityUtilitiesSupported();
+		static	int64_t	getUserPortabilityUtilitiesSupport();
+
+		static	int64_t	getAIOSupport();
 
 		static	int64_t	getMaxAIOOperationsPerList();
 
@@ -142,6 +148,8 @@ class RUDIMENTS_DLLSPEC system {
 		static	int64_t	getMaxDelayTimerExpirations();
 
 		static	int64_t	getMaxMessageQueuesPerProcess();
+
+		static	int64_t	getMaxMessagePriorities();
 
 		static	int64_t	getMaxRealtimeSignals();
 
@@ -161,6 +169,24 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getMaxThreadsPerProcess();
 
+		static	int64_t	getThreadStackAddressOptionSupport();
+
+		static	int64_t	getThreadStackSizeOptionSupport();
+
+		static	int64_t	getThreadDestructorIterations();
+
+		static	int64_t	getMaxThreadKeys();
+
+		static	int64_t	getThreadPriorityInheritanceSupport();
+
+		static	int64_t	getThreadPriorityProtectionSupport();
+
+		static	int64_t	getThreadPrioritySchedulingSupport();
+
+		static	int64_t	getThreadProcessSharedSyncSupport();
+
+		static	int64_t	getThreadSafeFunctionsSupport();
+
 		static	int64_t	getMaxAtExitFunctions();
 
 		static	int64_t	getXOpenVersion();
@@ -169,41 +195,61 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getCPUSetSize();
 
-		static	int64_t	getBarriersVersion();
+		static	int64_t	getBarriersSupport();
 
-		static	int64_t	getClockSelectionVersion();
+		static	int64_t	getClockSelectionSupport();
 
-		static	bool	getFSyncSupported();
+		static	int64_t	getFSyncSupport();
 
-		static	bool	getMemoryMappedFilesSupported();
+		static	int64_t	getMemoryMappedFilesSupport();
 
-		static	bool	getProcessMemoryLockingSupported();
+		static	int64_t	getProcessMemoryLockingSupport();
 
-		static	bool	getRangeMemoryLockingSupported();
+		static	int64_t	getRangeMemoryLockingSupport();
 
-		static	bool	getMemoryProtectionSupported();
+		static	int64_t	getMemoryProtectionSupport();
 
-		static	int64_t	getMonotonicClockVersion();
+		static	int64_t	getMonotonicClockSupport();
 
 		static	int64_t	getMaxPasswordLength();
 
-		static	int64_t	getReaderWriterLocksVersion();
+		static	int64_t	getReaderWriterLocksSupport();
 
-		static	bool	getRegexSupported();
+		static	int64_t	getRegexSupport();
 
-		static	int64_t	getSemaphoresVersion();
+		static	int64_t	getSemaphoresSupport();
 
-		static	bool	getPosixShellSupported();
+		static	int64_t	getPosixShellSupport();
 
-		static	int64_t	getSpinLocksVersion();
+		static	int64_t	getSpinLocksSupport();
 
-		static	bool	getSynchronizedIOSupported();
+		static	int64_t	getSynchronizedIOSupport();
 
-		static	int64_t	getThreadsVersion();
+		static	int64_t	getThreadsSupport();
 
-		static	int64_t	getTimersVersion();
+		static	int64_t	getTimersSupport();
 
-		static	bool	getSharedMemorySupported();
+		static	int64_t	getSharedMemorySupport();
+
+		static	int64_t	getSharedMemoryObjectsSupport();
+
+		static	int64_t	getMaxLogNameLength();
+
+		static	int64_t	getMaxProcessID();
+
+		static	int64_t	getMessagePassingSupport();
+
+		static	int64_t	getPrioritizedIOSupport();
+
+		static	int64_t	getRawSocketsSupport();
+
+		static	int64_t	getRealtimeSignalsSupport();
+
+		static	int64_t	getSpawnSupport();
+
+		static	int64_t	getStackProtectionSupport();
+
+		static	int64_t	getTimeoutsSupport();
 
 	#include <rudiments/private/system.h>
 };

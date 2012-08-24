@@ -455,57 +455,66 @@ int64_t system::getPosix2Version() {
 	#endif
 }
 
-bool system::getCDevelopmentSupported() {
+int64_t system::getCDevelopmentSupport() {
 	#if defined(_SC_2_C_DEV)
-		return (sysConf(_SC_2_C_DEV)!=-1);
+		return sysConf(_SC_2_C_DEV);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getCLanguageBindingsSupported() {
+int64_t system::getCLanguageBindingsSupport() {
 	#if defined(_SC_2_C_BIND)
-		return (sysConf(_SC_2_C_BIND)!=-1);
+		return sysConf(_SC_2_C_BIND);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getFortranDevelopmentSupported() {
+int64_t system::getCLanguageSupport() {
+	#if defined(_SC_2_C_VERSION)
+		return sysConf(_SC_2_C_VERSION);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getFortranDevelopmentSupport() {
 	#if defined(_SC_2_FORT_DEV)
-		return (sysConf(_SC_2_FORT_DEV)!=-1);
+		return sysConf(_SC_2_FORT_DEV);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getFortranRuntimeSupported() {
+int64_t system::getFortranRuntimeSupport() {
 	#if defined(_SC_2_FORT_RUN)
-		return (sysConf(_SC_2_FORT_RUN)!=-1);
+		return sysConf(_SC_2_FORT_RUN);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getLocaleCreationSupported() {
+int64_t system::getLocaleCreationSupport() {
 	#if defined(_SC_2_LOCALEDEF)
-		return (sysConf(_SC_2_LOCALEDEF)!=-1);
+		return sysConf(_SC_2_LOCALEDEF);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getSoftwareDevelopmentSupported() {
+int64_t system::getSoftwareDevelopmentSupport() {
 	#if defined(_SC_2_SW_DEV)
-		return (sysConf(_SC_2_SW_DEV)!=-1);
+		return sysConf(_SC_2_SW_DEV);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
@@ -530,6 +539,15 @@ int64_t system::getAvailablePhysicalPageCount() {
 int64_t system::getProcessorCount() {
 	#if defined(_SC_NPROCESSORS_CONF)
 		return sysConf(_SC_NPROCESSORS_CONF);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxProcessorCount() {
+	#if defined(_SC_NPROCESSORS_MAX)
+		return sysConf(_SC_NPROCESSORS_MAX);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -563,39 +581,48 @@ int64_t system::getMaxSupplementalGroupsPerUser() {
 	#endif
 }
 
-bool system::getJobControlSupported() {
+int64_t system::getJobControlSupport() {
 	#if defined(_SC_JOB_CONTROL)
-		return (sysConf(_SC_JOB_CONTROL)!=-1);
+		return sysConf(_SC_JOB_CONTROL);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getSavedIDsSupported() {
+int64_t system::getSavedIDsSupport() {
 	#if defined(_SC_SAVED_IDS)
-		return (sysConf(_SC_SAVED_IDS)!=-1);
+		return sysConf(_SC_SAVED_IDS);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getCharacterTerminalSupported() {
+int64_t system::getCharacterTerminalSupport() {
 	#if defined(_SC_2_CHAR_TERM)
-		return (sysConf(_SC_2_CHAR_TERM)!=-1);
+		return sysConf(_SC_2_CHAR_TERM);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
-bool system::getUserPortabilityUtilitiesSupported() {
+int64_t system::getUserPortabilityUtilitiesSupport() {
 	#if defined(_SC_2_UPE)
-		return (sysConf(_SC_2_UPE)!=-1);
+		return sysConf(_SC_2_UPE);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
+	#endif
+}
+
+int64_t system::getAIOSupport() {
+	#if defined(_SC_ASYNCHRONOUS_ID)
+		return sysConf(_SC_ASYNCHRONOUS_IO);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
 	#endif
 }
 
@@ -638,6 +665,15 @@ int64_t system::getMaxDelayTimerExpirations() {
 int64_t system::getMaxMessageQueuesPerProcess() {
 	#if defined(_SC_MQ_OPEN_MAX)
 		return sysConf(_SC_MQ_OPEN_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxMessagePriorities() {
+	#if defined(_SC_MQ_PRIO_MAX)
+		return sysConf(_SC_MQ_PRIO_MAX);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -723,6 +759,87 @@ int64_t system::getMaxThreadsPerProcess() {
 	#endif
 }
 
+int64_t system::getThreadStackAddressOptionSupport() {
+	#if defined(_SC_THREAD_ATTR_STACKADDR)
+		return sysConf(_SC_THREAD_ATTR_STACKADDR);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadStackSizeOptionSupport() {
+	#if defined(_SC_THREAD_ATTR_STACKSIZE)
+		return sysConf(_SC_THREAD_ATTR_STACKSIZE);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadDestructorIterations() {
+	#if defined(_SC_THREAD_DESTRUCTOR_ITERATIONS)
+		return sysConf(_SC_THREAD_DESTRUCTOR_ITERATIONS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxThreadKeys() {
+	#if defined(_SC_THREAD_KEYS_MAX)
+		return sysConf(_SC_THREAD_KEYS_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadPriorityInheritanceSupport() {
+	#if defined(_SC_THREAD_PRIO_INHERIT)
+		return sysConf(_SC_THREAD_PRIO_INHERIT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadPriorityProtectionSupport() {
+	#if defined(_SC_THREAD_PRIO_PROTECT)
+		return sysConf(_SC_THREAD_PRIO_PROTECT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadPrioritySchedulingSupport() {
+	#if defined(_SC_THREAD_PRIORITY_SCHEDULING)
+		return sysConf(_SC_THREAD_PRIORITY_SCHEDULING);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadProcessSharedSyncSupport() {
+	#if defined(_SC_THREAD_PROCESS_SHARED)
+		return sysConf(_SC_THREAD_PROCESS_SHARED);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getThreadSafeFunctionsSupport() {
+	#if defined(_SC_THREAD_SAFE_FUNCTIONS)
+		return sysConf(_SC_THREAD_SAFE_FUNCTIONS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
 int64_t system::getMaxAtExitFunctions() {
 	#if defined(_SC_ATEXIT_MAX)
 		return sysConf(_SC_ATEXIT_MAX);
@@ -759,7 +876,7 @@ int64_t system::getCPUSetSize() {
 	#endif
 }
 
-int64_t system::getBarriersVersion() {
+int64_t system::getBarriersSupport() {
 	#if defined(_SC_BARRIERS)
 		return sysConf(_SC_BARRIERS);
 	#else
@@ -768,7 +885,7 @@ int64_t system::getBarriersVersion() {
 	#endif
 }
 
-int64_t system::getClockSelectionVersion() {
+int64_t system::getClockSelectionSupport() {
 	#if defined(_SC_CLOCK_SELECTION)
 		return sysConf(_SC_CLOCK_SELECTION);
 	#else
@@ -777,52 +894,52 @@ int64_t system::getClockSelectionVersion() {
 	#endif
 }
 
-bool system::getFSyncSupported() {
+int64_t system::getFSyncSupport() {
 	#if defined(_SC_FSYNC)
-		return (sysConf(_SC_FSYNC)!=-1);
+		return sysConf(_SC_FSYNC);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-bool system::getMemoryMappedFilesSupported() {
+int64_t system::getMemoryMappedFilesSupport() {
 	#if defined(_SC_MAPPED_FILES)
-		return (sysConf(_SC_MAPPED_FILES)!=-1);
+		return sysConf(_SC_MAPPED_FILES);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-bool system::getProcessMemoryLockingSupported() {
+int64_t system::getProcessMemoryLockingSupport() {
 	#if defined(_SC_MEMLOCK)
-		return (sysConf(_SC_MEMLOCK)!=-1);
+		return sysConf(_SC_MEMLOCK);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-bool system::getRangeMemoryLockingSupported() {
+int64_t system::getRangeMemoryLockingSupport() {
 	#if defined(_SC_MEMLOCK_RANGE)
-		return (sysConf(_SC_MEMLOCK_RANGE)!=-1);
+		return sysConf(_SC_MEMLOCK_RANGE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-bool system::getMemoryProtectionSupported() {
+int64_t system::getMemoryProtectionSupport() {
 	#if defined(_SC_MEMORY_PROTECTION)
-		return (sysConf(_SC_MEMORY_PROTECTION)!=-1);
+		return sysConf(_SC_MEMORY_PROTECTION);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-int64_t system::getMonotonicClockVersion() {
+int64_t system::getMonotonicClockSupport() {
 	#if defined(_SC_MONOTONIC_CLOCK)
 		return sysConf(_SC_MONOTONIC_CLOCK);
 	#else
@@ -840,7 +957,7 @@ int64_t system::getMaxPasswordLength() {
 	#endif
 }
 
-int64_t system::getReaderWriterLocksVersion() {
+int64_t system::getReaderWriterLocksSupport() {
 	#if defined(_SC_READER_WRITER_LOCKS)
 		return sysConf(_SC_READER_WRITER_LOCKS);
 	#else
@@ -849,16 +966,16 @@ int64_t system::getReaderWriterLocksVersion() {
 	#endif
 }
 
-bool system::getRegexSupported() {
+int64_t system::getRegexSupport() {
 	#if defined(_SC_REGEXP)
-		return (sysConf(_SC_REGEXP)!=-1);
+		return sysConf(_SC_REGEXP);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-int64_t system::getSemaphoresVersion() {
+int64_t system::getSemaphoresSupport() {
 	#if defined(_SC_SEMAPHORES)
 		return sysConf(_SC_SEMAPHORES);
 	#else
@@ -867,16 +984,16 @@ int64_t system::getSemaphoresVersion() {
 	#endif
 }
 
-bool system::getPosixShellSupported() {
+int64_t system::getPosixShellSupport() {
 	#if defined(_SC_SHELL)
-		return (sysConf(_SC_SHELL)!=-1);
+		return sysConf(_SC_SHELL);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-int64_t system::getSpinLocksVersion() {
+int64_t system::getSpinLocksSupport() {
 	#if defined(_SC_SPIN_LOCKS)
 		return sysConf(_SC_SPIN_LOCKS);
 	#else
@@ -885,16 +1002,16 @@ int64_t system::getSpinLocksVersion() {
 	#endif
 }
 
-bool system::getSynchronizedIOSupported() {
+int64_t system::getSynchronizedIOSupport() {
 	#if defined(_SC_SYNCHRONIZED_IO)
-		return (sysConf(_SC_SYNCHRONIZED_IO)!=-1);
+		return sysConf(_SC_SYNCHRONIZED_IO);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
 }
 
-int64_t system::getThreadsVersion() {
+int64_t system::getThreadsSupport() {
 	#if defined(_SC_THREADS)
 		return sysConf(_SC_THREADS);
 	#else
@@ -903,7 +1020,7 @@ int64_t system::getThreadsVersion() {
 	#endif
 }
 
-int64_t system::getTimersVersion() {
+int64_t system::getTimersSupport() {
 	#if defined(_SC_TIMERS)
 		return sysConf(_SC_TIMERS);
 	#else
@@ -912,9 +1029,99 @@ int64_t system::getTimersVersion() {
 	#endif
 }
 
-bool system::getSharedMemorySupported() {
+int64_t system::getSharedMemorySupport() {
 	#if defined(_SC_XOPEN_SHM)
-		return (sysConf(_SC_XOPEN_SHM)!=-1);
+		return sysConf(_SC_XOPEN_SHM);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getSharedMemoryObjectsSupport() {
+	#if defined(_SC_SHARED_MEMORY_OBJECTS)
+		return sysConf(_SC_SHARED_MEMORY_OBJECTS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxLogNameLength() {
+	#if defined(_SC_LOGNAME_MAX)
+		return sysConf(_SC_LOGNAME_MAX);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMaxProcessID() {
+	#if defined(_SC_MAXPID)
+		return sysConf(_SC_MAXPID);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getMessagePassingSupport() {
+	#if defined(_SC_MESSAGE_PASSING)
+		return sysConf(_SC_MESSAGE_PASSING);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getPrioritizedIOSupport() {
+	#if defined(_SC_PRIORITIZED_IO)
+		return sysConf(_SC_PRIORITIZED_IO);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getRawSocketsSupport() {
+	#if defined(_SC_RAW_SOCKETS)
+		return sysConf(_SC_RAW_SOCKETS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getRealtimeSignalsSupport() {
+	#if defined(_SC_REALTIME_SIGNALS)
+		return sysConf(_SC_REALTIME_SIGNALS);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getSpawnSupport() {
+	#if defined(_SC_SPAWN)
+		return sysConf(_SC_SPAWN);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getStackProtectionSupport() {
+	#if defined(_SC_STACK_PROT)
+		return sysConf(_SC_STACK_PROT);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+int64_t system::getTimeoutsSupport() {
+	#if defined(_SC_TIMEOUTS)
+		return sysConf(_SC_TIMEOUTS);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;

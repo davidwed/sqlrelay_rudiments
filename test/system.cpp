@@ -41,145 +41,157 @@ int main(int argc, const char **argv) {
 	printf("NIS Domain Name	: %s\n",nisdomainname);
 	delete[] nisdomainname;
 
-	printf("Max Cmd Line Arg Length		: %lld\n",
+	printf("Max Cmd Line Arg Length			: %lld\n",
 			(long long)system::getMaxCommandLineArgumentLength());
 
-	printf("Max Processes Per User		: %lld\n",
+	printf("Max Processes Per User			: %lld\n",
 			(long long)system::getMaxProcessesPerUser());
 
-	printf("Max Host Name Length		: %lld\n",
+	printf("Max Host Name Length			: %lld\n",
 			(long long)system::getMaxHostNameLength());
 
-	printf("Max Login Name Length		: %lld\n",
+	printf("Max Login Name Length			: %lld\n",
 			(long long)system::getMaxLoginNameLength());
 
-	printf("Clock Ticks Per Second		: %lld\n",
+	printf("Clock Ticks Per Second			: %lld\n",
 			(long long)system::getClockTicksPerSecond());
 
-	printf("Max Open Files Per Process	: %lld\n",
+	printf("Max Open Files Per Process		: %lld\n",
 			(long long)system::getMaxOpenFilesPerProcess());
 
-	printf("Page Size			: %lld\n",
+	printf("Page Size				: %lld\n",
 			(long long)system::getPageSize());
 
-	printf("Max Regex Dups			: %lld\n",
+	printf("Max Regex Dups				: %lld\n",
 			(long long)system::getMaxRegexDups());
 
-	printf("Max Open Streams Per Process	: %lld\n",
+	printf("Max Open Streams Per Process		: %lld\n",
 			(long long)system::getMaxOpenStreamsPerProcess());
 
-	printf("Max Symlink Loops		: %lld\n",
+	printf("Max Symlink Loops			: %lld\n",
 			(long long)system::getMaxSymlinkLoops());
 
-	printf("Max Terminal Device Name Length	: %lld\n",
+	printf("Max Terminal Device Name Length		: %lld\n",
 			(long long)system::getMaxTerminalDeviceNameLength());
 
-	printf("Max Timezone Name Length	: %lld\n",
+	printf("Max Timezone Name Length		: %lld\n",
 			(long long)system::getMaxTimezoneNameLength());
 
-	printf("Posix Version			: %lld\n",
+	printf("Posix Version				: %lld\n",
 			(long long)system::getPosixVersion());
 
-	printf("Max Calculator Base		: %lld\n",
+	printf("Max Calculator Base			: %lld\n",
 			(long long)system::getMaxCalculatorBase());
 
-	printf("Max Calculator Value		: %lld\n",
+	printf("Max Calculator Value			: %lld\n",
 			(long long)system::getMaxCalculatorValue());
 
-	printf("Max Calculator Scale		: %lld\n",
+	printf("Max Calculator Scale			: %lld\n",
 			(long long)system::getMaxCalculatorScale());
 
-	printf("Max Calculator String Length	: %lld\n",
+	printf("Max Calculator String Length		: %lld\n",
 			(long long)system::getMaxCalculatorStringLength());
 
-	printf("Max Collation Weights		: %lld\n",
+	printf("Max Collation Weights			: %lld\n",
 			(long long)system::getMaxCollationWeights());
 
-	printf("Max Nested Expressions		: %lld\n",
+	printf("Max Nested Expressions			: %lld\n",
 			(long long)system::getMaxNestedExpressions());
 
-	printf("Max Line Length			: %lld\n",
+	printf("Max Line Length				: %lld\n",
 			(long long)system::getMaxLineLength());
 
-	printf("Posix 2 Version			: %lld\n",
+	printf("Posix 2 Version				: %lld\n",
 			(long long)system::getPosix2Version());
 
-	printf("C Development Supported		: %lld\n",
-			(long long)system::getCDevelopmentSupported());
+	printf("C Development Support			: %lld\n",
+			(long long)system::getCDevelopmentSupport());
 
-	printf("C LanguageBindings Supported	: %lld\n",
-			(long long)system::getCLanguageBindingsSupported());
+	printf("C Language Bindings Support		: %lld\n",
+			(long long)system::getCLanguageBindingsSupport());
 
-	printf("Fortran Development Supported	: %lld\n",
-			(long long)system::getFortranDevelopmentSupported());
+	printf("C Language Verson			: %lld\n",
+			(long long)system::getCLanguageSupport());
 
-	printf("Fortran Runtime Supported	: %lld\n",
-			(long long)system::getFortranRuntimeSupported());
+	printf("Fortran Development Support		: %lld\n",
+			(long long)system::getFortranDevelopmentSupport());
 
-	printf("Locale Creation Supported	: %lld\n",
-			(long long)system::getLocaleCreationSupported());
+	printf("Fortran Runtime Support			: %lld\n",
+			(long long)system::getFortranRuntimeSupport());
 
-	printf("Software Development Supported	: %lld\n",
-			(long long)system::getSoftwareDevelopmentSupported());
+	printf("Locale Creation Support			: %lld\n",
+			(long long)system::getLocaleCreationSupport());
 
-	printf("Physical Page Count		: %lld\n",
+	printf("Software Development Support		: %lld\n",
+			(long long)system::getSoftwareDevelopmentSupport());
+
+	printf("Physical Page Count			: %lld\n",
 			(long long)system::getPhysicalPageCount());
 
-	printf("Available Physical Page Count	: %lld\n",
+	printf("Available Physical Page Count		: %lld\n",
 			(long long)system::getAvailablePhysicalPageCount());
 
-	printf("Processor Count			: %lld\n",
+	printf("Processor Count				: %lld\n",
 			(long long)system::getProcessorCount());
 
-	printf("Processors Online		: %lld\n",
+	printf("Max Processor Count			: %lld\n",
+			(long long)system::getMaxProcessorCount());
+
+	printf("Processors Online			: %lld\n",
 			(long long)system::getProcessorsOnline());
 
-	printf("Max I/O Vector Elements		: %lld\n",
+	printf("Max I/O Vector Elements			: %lld\n",
 			(long long)system::getMaxIOVectorElements());
 
 	printf("Max Supplemental Groups Per User	: %lld\n",
 			(long long)system::getMaxSupplementalGroupsPerUser());
 
-	printf("Job Control Supported		: %lld\n",
-			(long long)system::getJobControlSupported());
+	printf("Job Control Support			: %lld\n",
+			(long long)system::getJobControlSupport());
 
-	printf("Saved ID's Supported		: %lld\n",
-			(long long)system::getSavedIDsSupported());
+	printf("Saved ID's Support			: %lld\n",
+			(long long)system::getSavedIDsSupport());
 
-	printf("Character Terminal Supported	: %lld\n",
-			(long long)system::getCharacterTerminalSupported());
+	printf("Character Terminal Support		: %lld\n",
+			(long long)system::getCharacterTerminalSupport());
 
-	printf("User Portabliltiy Utilities Supported	: %lld\n",
-		(long long)system::getUserPortabilityUtilitiesSupported());
+	printf("User Portabliltiy Utilities Support	: %lld\n",
+		(long long)system::getUserPortabilityUtilitiesSupport());
 
-	printf("Max AIO Operations Per List	: %lld\n",
+	printf("AIO Support				: %lld\n",
+			(long long)system::getAIOSupport());
+
+	printf("Max AIO Operations Per List		: %lld\n",
 			(long long)system::getMaxAIOOperationsPerList());
 
-	printf("Max Outstanding AIO Operations	: %lld\n",
+	printf("Max Outstanding AIO Operations		: %lld\n",
 			(long long)system::getMaxOutstandingAIOOperations());
 
-	printf("Max AIO Priority Delta		: %lld\n",
+	printf("Max AIO Priority Delta			: %lld\n",
 			(long long)system::getMaxAIOPriorityDelta());
 
-	printf("Max Delay Timer Expirations	: %lld\n",
+	printf("Max Delay Timer Expirations		: %lld\n",
 			(long long)system::getMaxDelayTimerExpirations());
 
-	printf("Max Message Queues Per Process	: %lld\n",
+	printf("Max Message Queues Per Process		: %lld\n",
 			(long long)system::getMaxMessageQueuesPerProcess());
 
-	printf("Max Realtime Signals		: %lld\n",
+	printf("Max Message Priorities			: %lld\n",
+			(long long)system::getMaxMessagePriorities());
+
+	printf("Max Realtime Signals			: %lld\n",
 			(long long)system::getMaxRealtimeSignals());
 
-	printf("Max Sempahores Per Process	: %lld\n",
+	printf("Max Sempahores Per Process		: %lld\n",
 			(long long)system::getMaxSemaphoresPerProcess());
 
-	printf("Max Semaphore Value		: %lld\n",
+	printf("Max Semaphore Value			: %lld\n",
 			(long long)system::getMaxSemaphoreValue());
 
-	printf("Max Signal Queue Length		: %lld\n",
+	printf("Max Signal Queue Length			: %lld\n",
 			(long long)system::getMaxSignalQueueLength());
 
-	printf("Max Timers Per Process		: %lld\n",
+	printf("Max Timers Per Process			: %lld\n",
 			(long long)system::getMaxTimersPerProcess());
 
 	printf("Suggested Group Entry Buffer Size	: %lld\n",
@@ -188,75 +200,132 @@ int main(int argc, const char **argv) {
 	printf("Suggested Passwd Entry Buffer Size	: %lld\n",
 		(long long)system::getSuggestedPasswordEntryBufferSize());
 
-	printf("Min Thread Stack Size		: %lld\n",
+	printf("Min Thread Stack Size			: %lld\n",
 			(long long)system::getMinThreadStackSize());
 
-	printf("Max Threads Per Process		: %lld\n",
+	printf("Max Threads Per Process			: %lld\n",
 			(long long)system::getMaxThreadsPerProcess());
 
-	printf("Max At-Exit Functions		: %lld\n",
+	printf("Thread Stack Address Option Support	: %lld\n",
+		(long long)system::getThreadStackAddressOptionSupport());
+
+	printf("Thread Stack Size Option Support	: %lld\n",
+		(long long)system::getThreadStackSizeOptionSupport());
+
+	printf("Thread Destructor Iterations		: %lld\n",
+			(long long)system::getThreadDestructorIterations());
+
+	printf("Max Thread Keys				: %lld\n",
+			(long long)system::getMaxThreadKeys());
+
+	printf("Thread Priority Inheritance Support	: %lld\n",
+		(long long)system::getThreadPriorityInheritanceSupport());
+
+	printf("Thread Priority Protection Support	: %lld\n",
+		(long long)system::getThreadPriorityProtectionSupport());
+
+	printf("Thread Priority Scheduling Support	: %lld\n",
+		(long long)system::getThreadPrioritySchedulingSupport());
+
+	printf("Thread Process Shared Sync Support	: %lld\n",
+		(long long)system::getThreadProcessSharedSyncSupport());
+
+	printf("Thread Safe Functions Support		: %lld\n",
+		(long long)system::getThreadSafeFunctionsSupport());
+
+	printf("Max At-Exit Functions			: %lld\n",
 			(long long)system::getMaxAtExitFunctions());
 
-	printf("XOpen Version			: %lld\n",
+	printf("XOpen Version				: %lld\n",
 			(long long)system::getXOpenVersion());
 
-	printf("XCU Version			: %lld\n",
+	printf("XCU Version				: %lld\n",
 			(long long)system::getXCUVersion());
 
-	printf("CPUSet Size			: %lld\n",
+	printf("CPUSet Size				: %lld\n",
 			(long long)system::getCPUSetSize());
 
-	printf("Barriers Version		: %lld\n",
-			(long long)system::getBarriersVersion());
+	printf("Barriers Support			: %lld\n",
+			(long long)system::getBarriersSupport());
 
-	printf("Clock Selection Version		: %lld\n",
-			(long long)system::getClockSelectionVersion());
+	printf("Clock Selection Support			: %lld\n",
+			(long long)system::getClockSelectionSupport());
 
-	printf("FSync Supported 		: %lld\n",
-			(long long)system::getFSyncSupported());
+	printf("FSync Support 				: %lld\n",
+			(long long)system::getFSyncSupport());
 
-	printf("Memory Mapped Files Supported	: %lld\n",
-			(long long)system::getMemoryMappedFilesSupported());
+	printf("Memory Mapped Files Support		: %lld\n",
+			(long long)system::getMemoryMappedFilesSupport());
 
-	printf("Process Memory Locking Supported	: %lld\n",
-			(long long)system::getProcessMemoryLockingSupported());
+	printf("Process Memory Locking Support		: %lld\n",
+			(long long)system::getProcessMemoryLockingSupport());
 
-	printf("Range Memory Locking Supported	: %lld\n",
-			(long long)system::getRangeMemoryLockingSupported());
+	printf("Range Memory Locking Support		: %lld\n",
+			(long long)system::getRangeMemoryLockingSupport());
 
-	printf("Memory Protection Supported	: %lld\n",
-			(long long)system::getMemoryProtectionSupported());
+	printf("Memory Protection Support		: %lld\n",
+			(long long)system::getMemoryProtectionSupport());
 
-	printf("Monotonic Clock Version		: %lld\n",
-			(long long)system::getMonotonicClockVersion());
+	printf("Monotonic Clock Support			: %lld\n",
+			(long long)system::getMonotonicClockSupport());
 
-	printf("Max Password Length		: %lld\n",
+	printf("Max Password Length			: %lld\n",
 			(long long)system::getMaxPasswordLength());
 
-	printf("Reader-Writer Locks Version	: %lld\n",
-			(long long)system::getReaderWriterLocksVersion());
+	printf("Reader-Writer Locks Support		: %lld\n",
+			(long long)system::getReaderWriterLocksSupport());
 
-	printf("Regex Supported			: %lld\n",
-			(long long)system::getRegexSupported());
+	printf("Regex Support				: %lld\n",
+			(long long)system::getRegexSupport());
 
-	printf("Semaphores Version		: %lld\n",
-			(long long)system::getSemaphoresVersion());
+	printf("Semaphores Support			: %lld\n",
+			(long long)system::getSemaphoresSupport());
 
-	printf("Posix Shell Supported		: %lld\n",
-			(long long)system::getPosixShellSupported());
+	printf("Posix Shell Support			: %lld\n",
+			(long long)system::getPosixShellSupport());
 
-	printf("Spin Locks Version		: %lld\n",
-			(long long)system::getSpinLocksVersion());
+	printf("Spin Locks Support			: %lld\n",
+			(long long)system::getSpinLocksSupport());
 
-	printf("Synchronized IO Supported	: %lld\n",
-			(long long)system::getSynchronizedIOSupported());
+	printf("Synchronized IO Support			: %lld\n",
+			(long long)system::getSynchronizedIOSupport());
 
-	printf("Threads Version			: %lld\n",
-			(long long)system::getThreadsVersion());
+	printf("Threads Support				: %lld\n",
+			(long long)system::getThreadsSupport());
 
-	printf("Timers Version			: %lld\n",
-			(long long)system::getTimersVersion());
+	printf("Timers Support				: %lld\n",
+			(long long)system::getTimersSupport());
 
-	printf("Shared Memory Supported		: %lld\n",
-			(long long)system::getSharedMemorySupported());
+	printf("Shared Memory Support			: %lld\n",
+			(long long)system::getSharedMemorySupport());
+
+	printf("Shared Memory Objects Support		: %lld\n",
+			(long long)system::getSharedMemoryObjectsSupport());
+
+	printf("Max Log Name Length			: %lld\n",
+			(long long)system::getMaxLogNameLength());
+
+	printf("Max Process ID				: %lld\n",
+			(long long)system::getMaxProcessID());
+
+	printf("Message Passing Support			: %lld\n",
+			(long long)system::getMessagePassingSupport());
+
+	printf("Prioritized IO Support			: %lld\n",
+			(long long)system::getPrioritizedIOSupport());
+
+	printf("Raw Sockets Support			: %lld\n",
+			(long long)system::getRawSocketsSupport());
+
+	printf("Realtime Signals Support		: %lld\n",
+			(long long)system::getRealtimeSignalsSupport());
+
+	printf("Spawn Support				: %lld\n",
+			(long long)system::getSpawnSupport());
+
+	printf("Stack Protection Support		: %lld\n",
+			(long long)system::getStackProtectionSupport());
+
+	printf("Timeouts Support			: %lld\n",
+			(long long)system::getTimeoutsSupport());
 }
