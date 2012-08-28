@@ -668,6 +668,9 @@
 /* Some systems have process.h */
 #define RUDIMENTS_HAVE_PROCESS_H 1
 
+/* Some systems have prototypes.h */
+/* #undef RUDIMENTS_HAVE_PROTOTYPES_H */
+
 /* Some systems have pselect */
 /* #undef RUDIMENTS_HAVE_PSELECT */
 

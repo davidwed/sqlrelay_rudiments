@@ -42,6 +42,11 @@
 	#include <linux/reboot.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_PROTOTYPES_H
+	// for uadmin
+	#include <prototypes.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_SYS_UADMIN_H
 	// for uadmin
 	#include <sys/uadmin.h>
