@@ -647,8 +647,8 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 			return false;
 		}
 		bool	retval=false;
-		struct tm	*tms;
-		if ((tms=localtime(&pvt->_epoch))) {
+		struct tm	*tms=localtime(&pvt->_epoch);
+		if (tms) {
 			pvt->_sec=tms->tm_sec;
 			pvt->_min=tms->tm_min;
 			pvt->_hour=tms->tm_hour;
