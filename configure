@@ -631,6 +631,7 @@ PTHREADINCLUDES
 WALL
 WNOLONGDOUBLE
 PIPE
+BELIB
 MICROSOFT
 EXE
 UWIN
@@ -14521,12 +14522,14 @@ esac
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for haiku" >&5
 $as_echo_n "checking for haiku... " >&6; }
+BELIB=""
 case $host_os in
 	*haiku* )
 		if ( test "$prefix" = "NONE" )
 		then
 			prefix="/boot/common"
 		fi
+		BELIB="-lbe"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 		;;
@@ -14535,6 +14538,7 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
 		;;
 esac
+
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 6.0.0" >&5
@@ -27541,10 +27545,21 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_ROSTER_H
 	#include <Roster.h>
 #endif
+
+class BRoster::Private {
+	public:
+		Private(BRoster *r) : roster(r) {};
+		status_t ShutDown(bool reboot, bool confirm, bool sync) {
+			return roster->_ShutDown(reboot,confirm,sync);
+		};
+	private:
+		BRoster	*roster;
+};
+
 int
 main ()
 {
-BRoster r; BRoster::Private rp(r); rp._ShutDown(0,0,0);
+BRoster r; BRoster::Private rp(&r); rp.ShutDown(0,0,0);
   ;
   return 0;
 }

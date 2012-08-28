@@ -384,18 +384,21 @@ dnl Checks for haiku and adds some macros if it is
 AC_DEFUN([FW_CHECK_HAIKU],
 [
 AC_MSG_CHECKING(for haiku)
+BELIB=""
 case $host_os in
 	*haiku* )
 		if ( test "$prefix" = "NONE" )
 		then
 			prefix="/boot/common"
 		fi
+		BELIB="-lbe"
 		AC_MSG_RESULT(yes)
 		;;
 	* )
 		AC_MSG_RESULT(no)
 		;;
 esac
+AC_SUBST(BELIB)
 ])
 
 AC_DEFUN([FW_CHECK_SCO_OSR5],

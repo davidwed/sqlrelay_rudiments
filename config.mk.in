@@ -86,5 +86,8 @@ NETAPI32LIB = @NETAPI32LIB@
 # dl library
 DLLIB = @DLLIB@
 
+# be library
+BELIB = @BELIB@
+
 # Microsoft-specific stuff
 EXE = @EXE@

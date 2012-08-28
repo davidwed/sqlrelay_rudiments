@@ -2732,8 +2732,19 @@ uadmin(0,0,0),AC_DEFINE(RUDIMENTS_HAVE_UADMIN,1,Some systems have uadmin) AC_MSG
 AC_MSG_CHECKING(for RosterPrivate::_ShutDown)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ROSTER_H
 	#include <Roster.h>
-#endif],
-BRoster r; BRoster::Private rp(r); rp._ShutDown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN,1,Some systems have Roster::Private::_ShutDown) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+#endif
+
+class BRoster::Private {
+	public:
+		Private(BRoster *r) : roster(r) {};
+		status_t ShutDown(bool reboot, bool confirm, bool sync) {
+			return roster->_ShutDown(reboot,confirm,sync);
+		};
+	private:
+		BRoster	*roster;
+};
+],
+BRoster r; BRoster::Private rp(&r); rp.ShutDown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN,1,Some systems have Roster::Private::_ShutDown) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 
