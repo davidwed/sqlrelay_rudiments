@@ -387,10 +387,10 @@ bool system::reboot() {
 		return (::reboot(cmd,"")!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_BOOT,NULL)!=-1);
-	#elif defined(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN)
+	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		BRoster			roster;
-		BRoster::Private	rosterprivate(roster);
-		return (rosterprivate._ShutDown(true,false,true)==B_OK);
+		BRoster::Private	rosterprivate(&roster);
+		return (rosterprivate.ShutDown(true,false,true)==B_OK);
 	#else
 		#error no reboot or anything like it
 	#endif
