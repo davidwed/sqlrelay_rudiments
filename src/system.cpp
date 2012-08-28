@@ -318,6 +318,10 @@ bool system::shutDown() {
 			cmd=LINUX_REBOOT_CMD_POWER_OFF;
 		#elif defined(RB_POWEROFF)
 			cmd=RB_POWEROFF;
+		#elif defined(RB_HALT)
+			// OS X doesn't appear to have a power-down option,
+			// just use halt instead
+			cmd=RB_HALT;
 		#else
 			#error no RB_POWEROFF or anything like it
 		#endif
@@ -327,7 +331,7 @@ bool system::shutDown() {
 		#if defined(RB_POWERDOWN)
 			cmd=RB_POWERDOWN;
 		#elif defined(RB_HALT)
-			// solaris doesn't appear to have a power-down option,
+			// Solaris doesn't appear to have a power-down option,
 			// just use halt instead
 			cmd=RB_HALT;
 		#else
