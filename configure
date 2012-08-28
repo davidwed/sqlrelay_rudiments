@@ -27418,6 +27418,9 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for reboot with 1 argument... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
 	#include <sys/reboot.h>
 #endif
@@ -27445,6 +27448,9 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for reboot with 2 arguments... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
 	#include <sys/reboot.h>
 #endif

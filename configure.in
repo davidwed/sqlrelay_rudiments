@@ -2693,13 +2693,19 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 sysconf(0),AC_DEFINE(RUDIMENTS_HAVE_SYSCONF,1,Some systems have sysconf) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for reboot with 1 argument)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
 	#include <sys/reboot.h>
 #endif],
 reboot(0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_1,1,Some systems have reboot with 1 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for reboot with 2 arguments)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
 	#include <sys/reboot.h>
 #endif],
 reboot(0,0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_2,1,Some systems have reboot with 2 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
