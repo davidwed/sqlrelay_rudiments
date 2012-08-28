@@ -55,8 +55,6 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int32_t	getPageSize();
 
-		static	int64_t	getMaxRegexDups();
-
 		static	int64_t	getMaxOpenStreamsPerProcess();
 
 		static	int64_t	getMaxSymlinkLoops();
@@ -65,37 +63,7 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getMaxTimezoneNameLength();
 
-		static	int64_t	getPosixVersion();
-
-		static	int64_t	getMaxCalculatorBase();
-
-		static	int64_t	getMaxCalculatorValue();
-
-		static	int64_t	getMaxCalculatorScale();
-
-		static	int64_t	getMaxCalculatorStringLength();
-
-		static	int64_t	getMaxCollationWeights();
-
-		static	int64_t	getMaxNestedExpressions();
-
 		static	int64_t	getMaxLineLength();
-
-		static	int64_t	getPosix2Version();
-
-		static	int64_t	getCDevelopmentSupport();
-
-		static	int64_t	getCLanguageBindingsSupport();
-
-		static	int64_t	getCLanguageSupport();
-
-		static	int64_t	getFortranDevelopmentSupport();
-
-		static	int64_t	getFortranRuntimeSupport();
-
-		static	int64_t	getLocaleCreationSupport();
-
-		static	int64_t	getSoftwareDevelopmentSupport();
 
 		static	int64_t	getPhysicalPageCount();
 
@@ -110,16 +78,6 @@ class RUDIMENTS_DLLSPEC system {
 		static	int64_t	getMaxIOVectorElements();
 
 		static	int64_t	getMaxSupplementalGroupsPerUser();
-
-		static	int64_t	getJobControlSupport();
-
-		static	int64_t	getSavedIDsSupport();
-
-		static	int64_t	getCharacterTerminalSupport();
-
-		static	int64_t	getUserPortabilityUtilitiesSupport();
-
-		static	int64_t	getAIOSupport();
 
 		static	int64_t	getMaxAIOOperationsPerList();
 
@@ -151,105 +109,21 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	int64_t	getMaxThreadsPerProcess();
 
-		static	int64_t	getThreadStackAddressOptionSupport();
-
-		static	int64_t	getThreadStackSizeOptionSupport();
-
 		static	int64_t	getThreadDestructorIterations();
 
 		static	int64_t	getMaxThreadKeys();
 
-		static	int64_t	getThreadPriorityInheritanceSupport();
-
-		static	int64_t	getThreadPriorityProtectionSupport();
-
-		static	int64_t	getThreadPrioritySchedulingSupport();
-
-		static	int64_t	getThreadProcessSharedSyncSupport();
-
-		static	int64_t	getThreadSafeFunctionsSupport();
-
 		static	int64_t	getMaxAtExitFunctions();
-
-		static	int64_t	getXOpenVersion();
-
-		static	int64_t	getXOpenXCUVersion();
 
 		static	int64_t	getCPUSetSize();
 
-		static	int64_t	getBarriersSupport();
-
-		static	int64_t	getClockSelectionSupport();
-
-		static	int64_t	getFSyncSupport();
-
-		static	int64_t	getMemoryMappedFilesSupport();
-
-		static	int64_t	getProcessMemoryLockingSupport();
-
-		static	int64_t	getRangeMemoryLockingSupport();
-
-		static	int64_t	getMemoryProtectionSupport();
-
-		static	int64_t	getMonotonicClockSupport();
-
 		static	int64_t	getMaxPasswordLength();
-
-		static	int64_t	getReaderWriterLocksSupport();
-
-		static	int64_t	getRegexSupport();
-
-		static	int64_t	getSemaphoresSupport();
-
-		static	int64_t	getPosixShellSupport();
-
-		static	int64_t	getSpinLocksSupport();
-
-		static	int64_t	getSynchronizedIOSupport();
-
-		static	int64_t	getThreadsSupport();
-
-		static	int64_t	getTimersSupport();
-
-		static	int64_t	getXOpenSharedMemorySupport();
-
-		static	int64_t	getSharedMemoryObjectsSupport();
 
 		static	int64_t	getMaxLogNameLength();
 
 		static	int64_t	getMaxProcessID();
 
-		static	int64_t	getMessagePassingSupport();
-
-		static	int64_t	getPrioritizedIOSupport();
-
-		static	int64_t	getRawSocketsSupport();
-
-		static	int64_t	getRealtimeSignalsSupport();
-
-		static	int64_t	getSpawnSupport();
-
-		static	int64_t	getStackProtectionSupport();
-
-		static	int64_t	getTimeoutsSupport();
-
-		static	int64_t	getXOpenILP32With32BitOffsetSupport();
-
-		static	int64_t	getXOpenILP32With64BitOffsetSupport();
-
-		static	int64_t	getXOpenCryptSupport();
-
-		static	int64_t	getXOpenEnhancedInternationalizationSupport();
-
-		static	int64_t	getXOpenLegacySupport();
-
-		static	int64_t	getXOpenRealtimeSupport();
-
-		static	int64_t	getXOpenRealtimeThreadsSupport();
-
-		static	int64_t	getXOpenStreamsSupport();
-
-		static	int64_t	getXOpenUnixSupport();
+		static	int64_t	sysConf(int32_t name);
 
 	#include <rudiments/private/system.h>
 };

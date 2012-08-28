@@ -3,6 +3,4 @@
 
 	private:
 
-		static	int64_t	sysConf(int32_t name);
-
 		systemprivate	*pvt;
