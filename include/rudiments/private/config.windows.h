@@ -479,6 +479,9 @@
 /* Some systems have link */
 /* #undef RUDIMENTS_HAVE_LINK */
 
+/* Some systems have linux/reboot.h */
+/* #undef RUDIMENTS_HAVE_LINUX_REBOOT_H */
+
 /* Some systems have linux/rtc.h */
 /* #undef RUDIMENTS_HAVE_LINUX_RTC_H */
 
@@ -692,11 +695,23 @@
 /* Some systems have readlink */
 /* #undef RUDIMENTS_HAVE_READLINK */
 
+/* Some systems have reboot with 1 argument */
+/* #undef RUDIMENTS_HAVE_REBOOT_1 */
+
+/* Some systems have reboot with 2 argument */
+/* #undef RUDIMENTS_HAVE_REBOOT_2 */
+
 /* recv takes a void * on most systems */
 /* #undef RUDIMENTS_HAVE_RECV_WITH_VOID */
 
 /* some systems have regcomp */
 /* #undef RUDIMENTS_HAVE_REGCOMP */
+
+/* Some systems have RosterPrivate::ShutDown */
+/* #undef RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN */
+
+/* Some systems have Roster.h */
+/* #undef RUDIMENTS_HAVE_ROSTER_H */
 
 /* Some systems have rpc/rpcent.h */
 /* #undef RUDIMENTS_HAVE_RPCENT_H */
@@ -932,6 +947,9 @@
 /* Some systems have sys/poll.h */
 /* #undef RUDIMENTS_HAVE_SYS_POLL_H */
 
+/* Some systems have sys/reboot.h */
+/* #undef RUDIMENTS_HAVE_SYS_REBOOT_H */
+
 /* Some systems have sys/select.h */
 /* #undef RUDIMENTS_HAVE_SYS_SELECT_H */
 
@@ -949,6 +967,9 @@
 
 /* Some systems have sys/types.h */
 #define RUDIMENTS_HAVE_SYS_TYPES_H 1
+
+/* Some systems have sys/uadmin.h */
+/* #undef RUDIMENTS_HAVE_SYS_REBOOT_H */
 
 /* Some systems have sys/uio.h */
 /* #undef RUDIMENTS_HAVE_SYS_UIO_H */
@@ -982,6 +1003,9 @@
 
 /* Some systems have truncate */
 /* #undef RUDIMENTS_HAVE_TRUNCATE */
+
+/* Some systems have uadmin */
+/* #undef RUDIMENTS_HAVE_UADMIN */
 
 /* Some systems have uint16_t */
 #define RUDIMENTS_HAVE_UINT16_T 1

@@ -32,6 +32,27 @@
 	#include <sys/loadavg.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+	// for reboot
+	#include <sys/reboot.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_LINUX_REBOOT_H
+	// for linux reboot commands
+	#include <linux/reboot.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_SYS_UADMIN_H
+	// for uadmin
+	#include <sys/uadmin.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_ROSTER_H
+	// for RosterPrivate::ShutDown
+	#include <Roster.h>
+	#include <RosterPrivate.h>
+#endif
+
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -258,6 +279,99 @@ bool system::getLoadAverages(double *oneminuteaverage,
 void system::sync() {
 	#if defined(RUDIMENTS_HAVE_SYNC)
 		sync();
+	#endif
+}
+
+bool system::halt() {
+	#if defined(RUDIMENTS_HAVE_REBOOT_1)
+		int32_t	cmd;
+		#if defined(LINUX_REBOOT_CMD_HALT)
+			cmd=LINUX_REBOOT_CMD_HALT;
+		#elif defined(RB_HALT)
+			cmd=RB_HALT;
+		#else
+			#error no RB_HALT or anything like it
+		#endif
+		return (::reboot(cmd)!=-1);
+	#elif defined(RUDIMENTS_HAVE_REBOOT_2)
+		int32_t	cmd;
+		#if defined(RB_HALT)
+			cmd=RB_HALT;
+		#else
+			#error no RB_HALT or anything like it
+		#endif
+		return (::reboot(cmd,"")!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN)
+		return (uadmin(A_SHUTDOWN,AD_HALT,NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN)
+		_kern_shutdown(false);
+		return true;
+	#else
+		#error no reboot or anything like it
+	#endif
+}
+
+bool system::shutDown() {
+	#if defined(RUDIMENTS_HAVE_REBOOT_1)
+		int32_t	cmd;
+		#if defined(LINUX_REBOOT_CMD_POWER_OFF)
+			cmd=LINUX_REBOOT_CMD_POWER_OFF;
+		#elif defined(RB_POWEROFF)
+			cmd=RB_POWEROFF;
+		#else
+			#error no RB_POWEROFF or anything like it
+		#endif
+		return (::reboot(cmd)!=-1);
+	#elif defined(RUDIMENTS_HAVE_REBOOT_2)
+		int32_t	cmd;
+		#if defined(RB_POWERDOWN)
+			cmd=RB_POWERDOWN;
+		#elif defined(RB_HALT)
+			// solaris doesn't appear to have a power-down option,
+			// just use halt instead
+			cmd=RB_HALT;
+		#else
+			#error no RB_POWERDOWN or anything like it
+		#endif
+		return (::reboot(cmd,"")!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN)
+		return (uadmin(A_SHUTDOWN,AD_PWRDOWN,NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN)
+		BRoster		roster;
+		BRosterPrivate	rosterprivate(roster);
+		return (rosterprivate.ShutDown(false,false,true)==B_OK);
+	#else
+		#error no reboot or anything like it
+	#endif
+}
+
+bool system::reboot() {
+	#if defined(RUDIMENTS_HAVE_REBOOT_1)
+		int32_t	cmd;
+		#if defined(LINUX_REBOOT_CMD_RESTART)
+			cmd=LINUX_REBOOT_CMD_RESTART;
+		#elif defined(RB_AUTOBOOT)
+			cmd=RB_AUTOBOOT;
+		#else
+			#error no RB_AUTOBOOT or anything like it
+		#endif
+		return (::reboot(cmd)!=-1);
+	#elif defined(RUDIMENTS_HAVE_REBOOT_2)
+		int32_t	cmd;
+		#if defined(RB_AUTOBOOT)
+			cmd=RB_AUTOBOOT;
+		#else
+			#error no RB_AUTOBOOT or anything like it
+		#endif
+		return (::reboot(cmd,"")!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN)
+		return (uadmin(A_SHUTDOWN,AD_BOOT,NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN)
+		BRoster		roster;
+		BRosterPrivate	rosterprivate(roster);
+		return (rosterprivate.ShutDown(true,false,true)==B_OK);
+	#else
+		#error no reboot or anything like it
 	#endif
 }
 

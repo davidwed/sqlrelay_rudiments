@@ -41,6 +41,12 @@ class RUDIMENTS_DLLSPEC system {
 
 		static	void	sync();
 
+		static	bool	halt();
+
+		static	bool	shutDown();
+
+		static	bool	reboot();
+
 		static	int64_t	getMaxCommandLineArgumentLength();
 
 		static	int64_t	getMaxProcessesPerUser();

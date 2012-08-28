@@ -605,6 +605,22 @@ AC_TRY_COMPILE([#include <sys/mman.h>],
 AC_MSG_CHECKING(for sys/loadavg.h)
 AC_TRY_COMPILE([#include <sys/loadavg.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_LOADAVG_H, 1, Some systems have sys/loadavg.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/reboot.h)
+AC_TRY_COMPILE([#include <sys/reboot.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_REBOOT_H, 1, Some systems have sys/reboot.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for linux/reboot.h)
+AC_TRY_COMPILE([#include <linux/reboot.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_LINUX_REBOOT_H, 1, Some systems have linux/reboot.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/uadmin.h)
+AC_TRY_COMPILE([#include <sys/uadmin.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_UADMIN_H, 1, Some systems have sys/uadmin.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for Roster.h)
+AC_TRY_COMPILE([#include <Roster.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_ROSTER_H, 1, Some systems have Roster.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -2675,6 +2691,31 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
 sysconf(0),AC_DEFINE(RUDIMENTS_HAVE_SYSCONF,1,Some systems have sysconf) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for reboot with 1 argument)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+	#include <sys/reboot.h>
+#endif],
+reboot(0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_1,1,Some systems have reboot with 1 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for reboot with 2 arguments)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_REBOOT_H
+	#include <sys/reboot.h>
+#endif],
+reboot(0,0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_2,1,Some systems have reboot with 2 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for uadmin)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_UADMIN_H
+	#include <sys/uadmin.h>
+#endif],
+uadmin(0,0,0),AC_DEFINE(RUDIMENTS_HAVE_UADMIN,1,Some systems have uadmin) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for RosterPrivate::ShutDown)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ROSTER_H
+	#include <Roster.h>
+	#include <RosterPrivate.h>
+#endif],
+BRoster r; BRoster::Private rp(r); rp.ShutDown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN,1,Some systems have RosterPrivate::ShutDown) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 
