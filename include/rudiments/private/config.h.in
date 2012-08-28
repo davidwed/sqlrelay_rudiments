@@ -130,6 +130,9 @@
 /* Some systems dont have st_blksize in struct stat */
 #undef RUDIMENTS_HAVE_BLKSIZE_T
 
+/* Some systems have BRoster::_ShutDown */
+#undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN
+
 /* Some systems have bswap64 */
 #undef RUDIMENTS_HAVE_BSWAP64
 
@@ -711,9 +714,6 @@
 
 /* Some systems have Roster.h */
 #undef RUDIMENTS_HAVE_ROSTER_H
-
-/* Some systems have Roster::Private::_ShutDown */
-#undef RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN
 
 /* Some systems have rpc/rpcent.h */
 #undef RUDIMENTS_HAVE_RPCENT_H

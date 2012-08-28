@@ -710,8 +710,8 @@
 /* some systems have regcomp */
 /* #undef RUDIMENTS_HAVE_REGCOMP */
 
-/* Some systems have Roster::Private::_ShutDown */
-/* #undef RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN */
+/* Some systems have BRoster::_ShutDown */
+/* #undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN */
 
 /* Some systems have Roster.h */
 /* #undef RUDIMENTS_HAVE_ROSTER_H */

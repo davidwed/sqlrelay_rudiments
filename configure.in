@@ -2729,8 +2729,8 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif],
 uadmin(0,0,0),AC_DEFINE(RUDIMENTS_HAVE_UADMIN,1,Some systems have uadmin) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for RosterPrivate::_ShutDown)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ROSTER_H
+AC_MSG_CHECKING(for BRoster::_ShutDown)
+FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ROSTER_H
 	#include <Roster.h>
 #endif
 
@@ -2744,7 +2744,7 @@ class BRoster::Private {
 		BRoster	*roster;
 };
 ],
-BRoster r; BRoster::Private rp(&r); rp.ShutDown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN,1,Some systems have Roster::Private::_ShutDown) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+[BRoster r; BRoster::Private rp(&r); rp.ShutDown(0,0,0);],[$CPPFLAGS],[$BELIB],[],[AC_DEFINE(RUDIMENTS_HAVE_BROSTER__SHUTDOWN,1,Some systems have BRoster::_ShutDown) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 echo "******************************"
 

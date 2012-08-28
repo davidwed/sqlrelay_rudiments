@@ -53,7 +53,7 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_ROSTER_H
-	// for Roster::Private::ShutDown
+	// for BRoster::_ShutDown
 	#include <Roster.h>
 #endif
 
@@ -315,6 +315,19 @@ bool system::halt() {
 	#endif
 }
 
+#ifdef RUDIMENTS_HAVE_BROSTER__SHUTDOWN
+class BRoster::Private {
+	public:
+		Private(BRoster *r) : roster(r) {
+		};
+		status_t	ShutDown(bool reboot, bool confirm, bool sync) {
+			return roster->_ShutDown(reboot,confirm,sync);
+		};
+	private:
+		BRoster	*r;
+};
+#endif
+
 bool system::shutDown() {
 	#if defined(RUDIMENTS_HAVE_REBOOT_1)
 		int32_t	cmd;
@@ -344,10 +357,10 @@ bool system::shutDown() {
 		return (::reboot(cmd,"")!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_PWRDOWN,NULL)!=-1);
-	#elif defined(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN)
+	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		BRoster			roster;
-		BRoster::Private	rosterprivate(roster);
-		return (rosterprivate._ShutDown(false,false,true)==B_OK);
+		BRoster::Private	rosterprivate(&roster);
+		return (rosterprivate.ShutDown(false,false,true)==B_OK);
 	#else
 		#error no reboot or anything like it
 	#endif
