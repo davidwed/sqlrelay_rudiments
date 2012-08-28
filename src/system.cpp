@@ -53,9 +53,8 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_ROSTER_H
-	// for RosterPrivate::ShutDown
+	// for Roster::Private::ShutDown
 	#include <Roster.h>
-	#include <RosterPrivate.h>
 #endif
 
 #include <stdio.h>
@@ -308,7 +307,7 @@ bool system::halt() {
 		return (::reboot(cmd,"")!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_HALT,NULL)!=-1);
-	#elif defined(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN)
+	#elif defined(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN)
 		_kern_shutdown(false);
 		return true;
 	#else
@@ -345,10 +344,10 @@ bool system::shutDown() {
 		return (::reboot(cmd,"")!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_PWRDOWN,NULL)!=-1);
-	#elif defined(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN)
-		BRoster		roster;
-		BRosterPrivate	rosterprivate(roster);
-		return (rosterprivate.ShutDown(false,false,true)==B_OK);
+	#elif defined(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN)
+		BRoster			roster;
+		BRoster::Private	rosterprivate(roster);
+		return (rosterprivate._ShutDown(false,false,true)==B_OK);
 	#else
 		#error no reboot or anything like it
 	#endif
@@ -375,10 +374,10 @@ bool system::reboot() {
 		return (::reboot(cmd,"")!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_BOOT,NULL)!=-1);
-	#elif defined(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN)
-		BRoster		roster;
-		BRosterPrivate	rosterprivate(roster);
-		return (rosterprivate.ShutDown(true,false,true)==B_OK);
+	#elif defined(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN)
+		BRoster			roster;
+		BRoster::Private	rosterprivate(roster);
+		return (rosterprivate._ShutDown(true,false,true)==B_OK);
 	#else
 		#error no reboot or anything like it
 	#endif

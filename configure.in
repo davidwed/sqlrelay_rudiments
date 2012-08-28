@@ -2729,12 +2729,11 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif],
 uadmin(0,0,0),AC_DEFINE(RUDIMENTS_HAVE_UADMIN,1,Some systems have uadmin) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for RosterPrivate::ShutDown)
+AC_MSG_CHECKING(for RosterPrivate::_ShutDown)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_ROSTER_H
 	#include <Roster.h>
-	#include <RosterPrivate.h>
 #endif],
-BRoster r; BRoster::Private rp(r); rp.ShutDown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ROSTERPRIVATE_SHUTDOWN,1,Some systems have RosterPrivate::ShutDown) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+BRoster r; BRoster::Private rp(r); rp._ShutDown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN,1,Some systems have Roster::Private::_ShutDown) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 
