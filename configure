@@ -27505,6 +27505,9 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for uadmin... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
 #ifdef RUDIMENTS_HAVE_PROTOTYPES_H
 	#include <prototypes.h>
 #endif

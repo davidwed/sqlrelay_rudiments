@@ -2718,7 +2718,10 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 reboot(0,0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_2,1,Some systems have reboot with 2 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for uadmin)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_PROTOTYPES_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_PROTOTYPES_H
 	#include <prototypes.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_UADMIN_H
