@@ -223,27 +223,23 @@ bool system::getLoadAverages(double *oneminuteaverage,
 		*fiveminuteaverage=averages[LOADAVG_5MIN];
 		*fifteenminuteaverage=averages[LOADAVG_15MIN];
 		return retval;
-	#else
+	#elif defined(RUDIMENTS_HAVE_SCO_AVENRUN)
 		device	avenrun;
 		if (avenrun.open("/dev/table/avenrun",O_RDONLY)) {
-			uint16_t	one;
-			uint16_t	five;
-			uint16_t	fifteen;
-			if (avenrun.read(&one)==sizeof(uint16_t) &&
-				avenrun.read(&five)==sizeof(uint16_t) &&
-				avenrun.read(&fifteen)==sizeof(uint16_t)) {
+			uint16_t	avgs[3];
+			if (avenrun.read((void *)avgs,sizeof(avgs))==
+							sizeof(avgs)) {
 				*oneminuteaverage=
-						((100.0*((double)one))+
-						((1<<8)/2.0)/(1<<8));
+					((double)avgs[0]*100.0)/256.0;
 				*fiveminuteaverage=
-						((100.0*((double)five))+
-						((1<<8)/2.0)/(1<<8));
+					((double)avgs[1]*100.0)/256.0;
 				*fifteenminuteaverage=
-						((100.0*((double)fifteen))+
-						((1<<8)/2.0)/(1<<8));
+					((double)avgs[2]*100.0)/256.0;
 				return true;
 			}
 		}
+		return false;
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
