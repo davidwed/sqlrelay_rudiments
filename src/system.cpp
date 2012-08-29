@@ -273,7 +273,8 @@ bool system::halt() {
 		_kern_shutdown(false);
 		return true;
 	#else
-		#error no reboot or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -324,7 +325,8 @@ bool system::shutDown() {
 		BRoster::Private	rosterprivate(&roster);
 		return (rosterprivate.ShutDown(false,false,true)==B_OK);
 	#else
-		#error no reboot or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -354,7 +356,8 @@ bool system::reboot() {
 		BRoster::Private	rosterprivate(&roster);
 		return (rosterprivate.ShutDown(true,false,true)==B_OK);
 	#else
-		#error no reboot or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
