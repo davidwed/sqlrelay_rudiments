@@ -217,6 +217,7 @@ bool system::getLoadAverages(double *oneminuteaverage,
 	*fiveminuteaverage=0.0;
 	*fifteenminuteaverage=0.0;
 	#if defined(RUDIMENTS_HAVE_GETLOADAVG)
+		// use getloadavg if the system has it
 		double	averages[3]={0.0,0.0,0.0};
 		bool	retval=!getloadavg(averages,3);
 		*oneminuteaverage=averages[LOADAVG_1MIN];
@@ -224,6 +225,7 @@ bool system::getLoadAverages(double *oneminuteaverage,
 		*fifteenminuteaverage=averages[LOADAVG_15MIN];
 		return retval;
 	#elif defined(RUDIMENTS_HAVE_SCO_AVENRUN)
+		// use avenrun if the system has it
 		device	avenrun;
 		if (avenrun.open("/dev/table/avenrun",O_RDONLY)) {
 			uint16_t	avgs[3];
@@ -237,32 +239,33 @@ bool system::getLoadAverages(double *oneminuteaverage,
 		}
 		return false;
 	#else
+		// try /proc/loadavg as a last-ditch effort
 		device	loadavg;
-		if (loadavg.open("/proc/loadavg",O_RDONLY)) {
-
-			char		*buffer=NULL;
-			long double	avg=0.0;
-
-			if (loadavg.read(&buffer," ")!=RESULT_ERROR) {
-				avg=charstring::toFloat(buffer);
-				*oneminuteaverage=(double)avg;
-				delete[] buffer;
-
-				if (loadavg.read(&buffer," ")!=RESULT_ERROR) {
-					avg=charstring::toFloat(buffer);
-					*fiveminuteaverage=(double)avg;
-					delete[] buffer;
-
-					if (loadavg.read(&buffer," ")!=RESULT_ERROR) {
-						avg=charstring::toFloat(buffer);
-						*fifteenminuteaverage=(double)avg;
-						delete[] buffer;
-					}
-				}
-			}
+		if (!loadavg.open("/proc/loadavg",O_RDONLY)) {
+			error::setErrorNumber(ENOSYS);
+			return false;
 		}
-		error::setErrorNumber(ENOSYS);
-		return false;
+
+		char		*buffer=NULL;
+		if (loadavg.read(&buffer," ")==RESULT_ERROR) {
+			return false;
+		}
+		*oneminuteaverage=(double)charstring::toFloat(buffer);
+		delete[] buffer;
+
+		if (loadavg.read(&buffer," ")==RESULT_ERROR) {
+			return false;
+		}
+		*fiveminuteaverage=(double)charstring::toFloat(buffer);
+		delete[] buffer;
+		
+		if (loadavg.read(&buffer," ")==RESULT_ERROR) {
+			return false;
+		}
+		*fifteenminuteaverage=(double)charstring::toFloat(buffer);
+		delete[] buffer;
+
+		return true;
 	#endif
 }
 
