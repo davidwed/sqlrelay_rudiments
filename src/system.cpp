@@ -239,22 +239,26 @@ bool system::getLoadAverages(double *oneminuteaverage,
 	#else
 		device	loadavg;
 		if (loadavg.open("/proc/loadavg",O_RDONLY)) {
-			char	*avgs=loadavg.getContents();
-			if (avgs) {
-				long double	avg=charstring::toFloat(avgs);
+
+			char		*buffer=NULL;
+			long double	avg=0.0;
+
+			if (loadavg.read(&buffer," ")!=RESULT_ERROR) {
+				avg=charstring::toFloat(buffer);
 				*oneminuteaverage=(double)avg;
-				char	*space=charstring::findFirst(avgs," ");
-				if (space) {
-					avg=charstring::toFloat(space+1);
+				delete[] buffer;
+
+				if (loadavg.read(&buffer," ")!=RESULT_ERROR) {
+					avg=charstring::toFloat(buffer);
 					*fiveminuteaverage=(double)avg;
-					space=charstring::findFirst(space+1," ");
-					if (space) {
-						avg=charstring::toFloat(space+1);
+					delete[] buffer;
+
+					if (loadavg.read(&buffer," ")!=RESULT_ERROR) {
+						avg=charstring::toFloat(buffer);
 						*fifteenminuteaverage=(double)avg;
+						delete[] buffer;
 					}
 				}
-				delete[] avgs;
-				return true;
 			}
 		}
 		error::setErrorNumber(ENOSYS);
