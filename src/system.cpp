@@ -55,7 +55,9 @@
 #ifdef RUDIMENTS_HAVE_ROSTER_H
 	// for BRoster::_ShutDown
 	#include <Roster.h>
-	extern status_t	_kern_shutdown(bool reboot);
+	extern "C" {
+		extern	status_t	_kern_shutdown(bool reboot);
+	}
 #endif
 
 #include <stdio.h>
