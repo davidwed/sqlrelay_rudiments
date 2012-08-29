@@ -5,10 +5,7 @@
 #include <rudiments/system.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
-
-#ifndef RUDIMENTS_HAVE_GETLOADAVG
-	#include <rudiments/device.h>
-#endif
+#include <rudiments/device.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -216,6 +213,9 @@ bool system::setHostName(const char *hostname, uint64_t hostnamelen) {
 bool system::getLoadAverages(double *oneminuteaverage,
 				double *fiveminuteaverage,
 				double *fifteenminuteaverage) {
+	*oneminuteaverage=0.0;
+	*fiveminuteaverage=0.0;
+	*fifteenminuteaverage=0.0;
 	#if defined(RUDIMENTS_HAVE_GETLOADAVG)
 		double	averages[3]={0.0,0.0,0.0};
 		bool	retval=!getloadavg(averages,3);
@@ -237,6 +237,26 @@ bool system::getLoadAverages(double *oneminuteaverage,
 		}
 		return false;
 	#else
+		device	loadavg;
+		if (loadavg.open("/proc/loadavg",O_RDONLY)) {
+			char	*avgs=loadavg.getContents();
+			if (avgs) {
+				long double	avg=charstring::toFloat(avgs);
+				*oneminuteaverage=(double)avg;
+				char	*space=charstring::findFirst(avgs," ");
+				if (space) {
+					avg=charstring::toFloat(space+1);
+					*fiveminuteaverage=(double)avg;
+					space=charstring::findFirst(space+1," ");
+					if (space) {
+						avg=charstring::toFloat(space+1);
+						*fifteenminuteaverage=(double)avg;
+					}
+				}
+				delete[] avgs;
+				return true;
+			}
+		}
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
