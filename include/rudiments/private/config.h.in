@@ -724,6 +724,9 @@
 /* Do we have a real-time-clock */
 #undef RUDIMENTS_HAVE_RTC
 
+/* SCO has /dev/table/avenrun instead of getloadavg */
+#undef RUDIMENTS_HAVE_SCO_AVENRUN
+
 /* Some systems have semget */
 #undef RUDIMENTS_HAVE_SEMGET
 
