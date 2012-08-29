@@ -27344,7 +27344,7 @@ then
 $as_echo_n "checking for missing sethostname declaration... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-extern int sethostname(char *name, int namelen);
+extern "C" { extern int sethostname(char *name, int namelen); }
 int
 main ()
 {

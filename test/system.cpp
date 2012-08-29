@@ -37,10 +37,6 @@ int main(int argc, const char **argv) {
 	printf("Host Name	: %s\n",hostname);
 	delete[] hostname;
 
-	char	*nisdomainname=system::getNISDomainName();
-	printf("NIS Domain Name	: %s\n",nisdomainname);
-	delete[] nisdomainname;
-
 	printf("Max Cmd Line Arg Length			: %lld\n",
 			(long long)system::getMaxCommandLineArgumentLength());
 

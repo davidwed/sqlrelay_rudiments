@@ -2679,7 +2679,7 @@ sethostname(0,0),HAVE_SETHOSTNAME="yes"; AC_DEFINE(RUDIMENTS_HAVE_SETHOSTNAME,1,
 if ( test "$HAVE_SETHOSTNAME" = "no" )
 then
 	AC_MSG_CHECKING(for missing sethostname declaration)
-	AC_TRY_LINK([extern int sethostname(char *name, int namelen);],
+	AC_TRY_LINK([extern "C" { extern int sethostname(char *name, int namelen); }],
 sethostname(0,0),AC_DEFINE(RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION,1,Some systems have sethostname but forgot to declare it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
