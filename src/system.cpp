@@ -55,6 +55,7 @@
 #ifdef RUDIMENTS_HAVE_ROSTER_H
 	// for BRoster::_ShutDown
 	#include <Roster.h>
+	extern status_t	_kern_shutdown(bool reboot);
 #endif
 
 #include <stdio.h>
@@ -307,7 +308,7 @@ bool system::halt() {
 		return (::reboot(cmd,"")!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_HALT,NULL)!=-1);
-	#elif defined(RUDIMENTS_HAVE_ROSTER_PRIVATE_SHUTDOWN)
+	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		_kern_shutdown(false);
 		return true;
 	#else
@@ -324,7 +325,7 @@ class BRoster::Private {
 			return roster->_ShutDown(reboot,confirm,sync);
 		};
 	private:
-		BRoster	*r;
+		BRoster	*roster;
 };
 #endif
 
