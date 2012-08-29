@@ -266,9 +266,6 @@
 /* Some systems have getaddrinfo */
 /* #undef RUDIMENTS_HAVE_GETADDRINFO */
 
-/* Some systems have getdomainname */
-/* #undef RUDIMENTS_HAVE_GETDOMAINNAME */
-
 /* Some systems have getegid */
 /* #undef RUDIMENTS_HAVE_GETEGID */
 
@@ -736,9 +733,6 @@
 
 /* send takes a const void * on most systems */
 /* #undef RUDIMENTS_HAVE_SEND_WITH_VOID */
-
-/* Some systems have setdomainname */
-/* #undef RUDIMENTS_HAVE_SETDOMAINNAME */
 
 /* Some systems have setegid */
 /* #undef RUDIMENTS_HAVE_SETEGID */

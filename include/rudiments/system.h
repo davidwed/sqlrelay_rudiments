@@ -30,11 +30,6 @@ class RUDIMENTS_DLLSPEC system {
 		static	bool	setHostName(const char *hostname,
 						uint64_t hostnamelen);
 
-		static	char	*getNISDomainName();
-		static	bool	setNISDomainName(const char *domainname);
-		static	bool	setNISDomainName(const char *domainname,
-						uint64_t domainnamelen);
-
 		static	bool	getLoadAverages(double *oneminuteaverage,
 						double *fiveminuteaverage,
 						double *fifteenminuteaverage);
