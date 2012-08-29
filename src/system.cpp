@@ -6,6 +6,10 @@
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
 
+#ifndef RUDIMENTS_HAVE_GETLOADAVG
+	#include <rudiments/device.h>
+#endif
+
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -220,6 +224,26 @@ bool system::getLoadAverages(double *oneminuteaverage,
 		*fifteenminuteaverage=averages[LOADAVG_15MIN];
 		return retval;
 	#else
+		device	avenrun;
+		if (avenrun.open("/dev/table/avenrun",O_RDONLY)) {
+			uint16_t	one;
+			uint16_t	five;
+			uint16_t	fifteen;
+			if (avenrun.read(&one)==sizeof(uint16_t) &&
+				avenrun.read(&five)==sizeof(uint16_t) &&
+				avenrun.read(&fifteen)==sizeof(uint16_t)) {
+				*oneminuteaverage=
+						((100.0*((double)one))+
+						((1<<8)/2.0)/(1<<8));
+				*fiveminuteaverage=
+						((100.0*((double)five))+
+						((1<<8)/2.0)/(1<<8));
+				*fifteenminuteaverage=
+						((100.0*((double)fifteen))+
+						((1<<8)/2.0)/(1<<8));
+				return true;
+			}
+		}
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
