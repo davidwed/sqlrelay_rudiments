@@ -229,12 +229,9 @@ bool system::getLoadAverages(double *oneminuteaverage,
 			uint16_t	avgs[3];
 			if (avenrun.read((void *)avgs,sizeof(avgs))==
 							sizeof(avgs)) {
-				*oneminuteaverage=
-					((double)avgs[0]*100.0)/256.0;
-				*fiveminuteaverage=
-					((double)avgs[1]*100.0)/256.0;
-				*fifteenminuteaverage=
-					((double)avgs[2]*100.0)/256.0;
+				*oneminuteaverage=((double)avgs[0])/256.0;
+				*fiveminuteaverage=((double)avgs[1])/256.0;
+				*fifteenminuteaverage=((double)avgs[2])/256.0;
 				return true;
 			}
 		}
