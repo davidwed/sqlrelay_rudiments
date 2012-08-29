@@ -539,6 +539,9 @@
 /* statvfs */
 /* #undef RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS */
 
+/* Some systems have sethostname but forgot to declare it */
+/* #undef RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION */
+
 /* Some systems have mkdir */
 #define RUDIMENTS_HAVE_MKDIR_1 1
 

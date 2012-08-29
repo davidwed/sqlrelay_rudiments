@@ -2666,6 +2666,7 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 gethostname(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETHOSTNAME,1,Some systems have gethostname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+HAVE_SETHOSTNAME="no"
 AC_MSG_CHECKING(for sethostname)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
@@ -2673,7 +2674,14 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #endif],
-sethostname(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETHOSTNAME,1,Some systems have sethostname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+sethostname(0,0),HAVE_SETHOSTNAME="yes"; AC_DEFINE(RUDIMENTS_HAVE_SETHOSTNAME,1,Some systems have sethostname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+if ( test "$HAVE_SETHOSTNAME" = "no" )
+then
+	AC_MSG_CHECKING(for missing sethostname declaration)
+	AC_TRY_LINK([extern int sethostname(char *name, int namelen);],
+sethostname(0,0),AC_DEFINE(RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION,1,Some systems have sethostname but forgot to declare it) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for sync)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H

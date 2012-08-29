@@ -27307,6 +27307,7 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 
+HAVE_SETHOSTNAME="no"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sethostname" >&5
 $as_echo_n "checking for sethostname... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -27326,7 +27327,7 @@ sethostname(0,0)
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-
+  HAVE_SETHOSTNAME="yes";
 $as_echo "#define RUDIMENTS_HAVE_SETHOSTNAME 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -27336,6 +27337,34 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+
+if ( test "$HAVE_SETHOSTNAME" = "no" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for missing sethostname declaration" >&5
+$as_echo_n "checking for missing sethostname declaration... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+extern int sethostname(char *name, int namelen);
+int
+main ()
+{
+sethostname(0,0)
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sync" >&5
 $as_echo_n "checking for sync... " >&6; }

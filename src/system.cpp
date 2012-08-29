@@ -13,7 +13,7 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
-	// for sysconf and getpagesize
+	// for sysconf, getpagesize, gethostname, sethostname
 	#include <unistd.h>
 #endif
 
@@ -53,10 +53,16 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_ROSTER_H
-	// for BRoster::_ShutDown
+	// for BRoster::_ShutDown on Haiku
 	#include <Roster.h>
 	extern "C" {
 		extern	status_t	_kern_shutdown(bool reboot);
+	}
+#endif
+
+#ifdef RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION
+	extern "C" {
+		extern	int	sethostname(char *name, int namelen);
 	}
 #endif
 
@@ -172,7 +178,8 @@ bool system::setHostName(const char *hostname) {
 }
 
 bool system::setHostName(const char *hostname, uint64_t hostnamelen) {
-	#if defined(RUDIMENTS_HAVE_SETHOSTNAME)
+	#if defined(RUDIMENTS_HAVE_SETHOSTNAME) || \
+		defined(RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION)
 		winsock::initWinsock();
 		int32_t	result;
 		do {
