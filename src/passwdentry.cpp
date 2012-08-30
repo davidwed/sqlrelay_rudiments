@@ -4,6 +4,7 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/system.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
@@ -21,8 +22,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-
-#define MAXBUFFER	(32*1024)
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -231,7 +230,10 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		// require that you pass them a pre-allocated buffer.  If the
 		// buffer is too small, they returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		int64_t	inc=system::getSuggestedPasswordEntryBufferSize();
+		int64_t	max=inc*32;
+		for (int64_t size=inc; size<max; size=size+inc) {
+
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETPWNAM_R_5) && \
 				defined(RUDIMENTS_HAVE_GETPWUID_R_5)

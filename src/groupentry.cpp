@@ -4,6 +4,7 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/system.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
@@ -21,8 +22,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-
-#define MAXBUFFER (32*1024)
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -171,7 +170,9 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		// require that you pass them a pre-allocated buffer.  If the
 		// buffer is too small, they return an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		for (int size=1024; size<MAXBUFFER; size=size+1024) {
+		int64_t	inc=system::getSuggestedGroupEntryBufferSize();
+		int64_t	max=inc*32;
+		for (int64_t size=inc; size<max; size=size+inc) {
 
 			pvt->_buffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETGRNAM_R_5) && \
