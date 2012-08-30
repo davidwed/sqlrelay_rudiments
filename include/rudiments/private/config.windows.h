@@ -762,7 +762,7 @@
 /* #undef RUDIMENTS_HAVE_SETGID */
 
 /* Some systems have sethostname */
-#define RUDIMENTS_HAVE_SETHOSTNAME 1
+/* #undef RUDIMENTS_HAVE_SETHOSTNAME */
 
 /* Some systems have setitimer */
 /* #undef RUDIMENTS_HAVE_SETITIMER */
