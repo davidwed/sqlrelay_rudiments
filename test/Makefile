@@ -78,6 +78,9 @@ PROGS = server$(EXE) \
 	logger$(EXE) \
 	intervaltimer$(EXE) \
 	system$(EXE) \
+	reboot$(EXE) \
+	halt$(EXE) \
+	shutdown$(EXE) \
 	server.pem
 
 #ALLSTATIC=-all-static
@@ -163,6 +166,9 @@ clean:
 		rawbuffer$(EXE) \
 		nullserver$(EXE) \
 		system$(EXE) \
+		reboot$(EXE) \
+		halt$(EXE) \
+		shutdown$(EXE) \
 		*.lo \
 		*.o \
 		test.log \
@@ -389,6 +395,15 @@ rawbuffer$(EXE): rawbuffer.cpp rawbuffer.lo
 
 system$(EXE): system.cpp system.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(ALLSTATIC) $(LIBS)
+
+reboot$(EXE): reboot.cpp reboot.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ reboot.lo $(ALLSTATIC) $(LIBS)
+
+halt$(EXE): halt.cpp halt.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ halt.lo $(ALLSTATIC) $(LIBS)
+
+shutdown$(EXE): shutdown.cpp shutdown.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ shutdown.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
 	cd certificates; $(MAKE) clean
