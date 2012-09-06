@@ -1810,7 +1810,11 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 
 		// new-style: the descriptor is passed in the msg_control...
-		unsigned char	control[CMSG_LEN(sizeof(int32_t))];
+
+		// On OS X 10.7, CMSG_LEN ultimately makes a functon call, so
+		// this array must be dynamically allocated.
+		unsigned char	*control=new unsigned char[
+						CMSG_LEN(sizeof(int32_t))];
 		messageheader.msg_control=(caddr_t)control;
 		messageheader.msg_controllen=CMSG_LEN(sizeof(int32_t));
 
@@ -1830,6 +1834,12 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	do {
 		result=sendmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
+
+	// clean up
+	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
+		delete[] control;
+	#endif
+
 	return (result!=-1);
 }
 
@@ -1860,7 +1870,11 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 		// new-style: the descriptor is passed in the msg_control...
-		unsigned char	control[CMSG_LEN(sizeof(int32_t))];
+
+		// On OS X 10.7, CMSG_LEN ultimately makes a functon call, so
+		// this array must be dynamically allocated.
+		unsigned char	*control=new unsigned char[
+						CMSG_LEN(sizeof(int32_t))];
 		messageheader.msg_control=(caddr_t)control;
 		messageheader.msg_controllen=CMSG_LEN(sizeof(int32_t));
 	#else
@@ -1876,11 +1890,17 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 		// wait 120 seconds for data to come in
 		// FIXME: this should be configurable
 		if (safePoll(120,0,true,false)<1) {
+			#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
+				delete[] control;
+			#endif
 			return false;
 		}
 		result=recvmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	if (result==-1) {
+		#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
+			delete[] control;
+		#endif
 		return false;
 	}
 
@@ -1896,6 +1916,8 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 			// if we got good data, set the descriptor and return
 			*fd=*(reinterpret_cast<int32_t *>(CMSG_DATA(cmptr)));
+
+			delete[] control;
 			return true;
 		}
 		#ifdef DEBUG_PASSFD
@@ -1929,6 +1951,8 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 			}
 		}
 		#endif
+
+		delete[] control;
 	#else
 		if (messageheader.msg_accrightslen==sizeof(int32_t)) {
 			*fd=newfd;
