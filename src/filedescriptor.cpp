@@ -2007,15 +2007,25 @@ bool filedescriptor::setTcpReadBufferSize(int32_t size) {
 }
 
 bool filedescriptor::disableIPv4() {
+#ifdef IPV6_V6ONLY
 	int32_t	no=0;
 	return setSockOpt(IPPROTO_IPV6,IPV6_V6ONLY,
 		(void *)&no,static_cast<socklen_t>(sizeof(int32_t)))!=-1;
+#else
+	error::setErrorNumber(ENOSYS);
+	return false;
+#endif
 }
 
 bool filedescriptor::enableIPv4() {
+#ifdef IPV6_V6ONLY
 	int32_t	yes=1;
 	return setSockOpt(IPPROTO_IPV6,IPV6_V6ONLY,
 		(void *)&yes,static_cast<socklen_t>(sizeof(int32_t)))!=-1;
+#else
+	error::setErrorNumber(ENOSYS);
+	return false;
+#endif
 }
 
 const char *filedescriptor::getType() const {
