@@ -797,6 +797,16 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  failure. */
 		bool	getTcpReadBufferSize(int32_t *size);
 
+		/** Disables IPv4 on this file descriptor.  This is only useful
+		 *  for TCP Socket file descriptors.  Returns true on success
+		 *  and false on failure. */
+		bool	disableIPv4();
+
+		/** Enables IPv4 on this file descriptor (the default).  This
+		 *  is only useful for TCP Socket file descriptors.  Returns
+		 *  true on success and false on failure. */
+		bool	enableIPv4();
+
 		/** Returns a string representing the type of the
 		 *  filedescriptor.  This is "filedescriptor" by default but
 		 *  a child class may override this method and return
