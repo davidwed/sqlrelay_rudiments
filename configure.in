@@ -2648,6 +2648,18 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
 #endif],
 uname(0),AC_DEFINE(RUDIMENTS_HAVE_UNAME,1,Some systems have uname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GetVersionEx)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetVersionEx(0),AC_DEFINE(RUDIMENTS_HAVE_GETVERSIONEX,1,Some systems have GetVersionEx) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GetNativeSystemInfo)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetNativeSystemInfo(0),AC_DEFINE(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO,1,Some systems have GetNativeSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for getloadavg)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_LOADAVG_H
 	#include <sys/loadavg.h>

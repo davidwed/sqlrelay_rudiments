@@ -320,6 +320,9 @@
 /* Some systems have getloadavg */
 /* #undef RUDIMENTS_HAVE_GETLOADAVG */
 
+/* Some systems have GetNativeSystemInfo */
+#define RUDIMENTS_HAVE_GETNATIVESYSTEMINFO 1
+
 /* Some systems have getpagesize */
 /* #undef RUDIMENTS_HAVE_GETPAGESIZE */
 
@@ -433,6 +436,9 @@
 
 /* Some systems have getuid */
 /* #undef RUDIMENTS_HAVE_GETUID */
+
+/* Some systems have GetVersionEx */
+#define RUDIMENTS_HAVE_GETVERSIONEX 1
 
 /* Some systems have HANDLE_FLAG_INHERIT */
 #define RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT 1

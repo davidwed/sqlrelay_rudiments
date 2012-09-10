@@ -81,6 +81,8 @@ char *system::getOperatingSystemName() {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.sysname);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		return charstring::duplicate("Windows");
 	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;
@@ -95,6 +97,9 @@ char *system::getOperatingSystemRelease() {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.release);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// for windows, just return the same as the version number
+		return getOperatingSystemVersion();
 	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;
@@ -109,6 +114,29 @@ char *system::getOperatingSystemVersion() {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.version);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+
+		// get the os version info
+		// (yes, this craziness is how you have to do it)
+		DWORD	platformid;
+		OSVERSIONINFOEX	info;
+		rawbuffer::zero(&info,sizeof(info));
+		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
+		if (!GetVersionEx((LPOSVERSIONINFO)infoex)) {
+			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
+			if (!GetVersionEx((LPOSVERSIONINFO)info)) {
+				return NULL;
+			}
+		}
+
+		// build up the version number
+		stringbuffer	retval;
+		retval.append(info.dwMajorVersion)->append(".");
+		retval.append(info.dwMinorVersion)->append(".");
+		retval.append(info.dwBuildVersion);
+
+		// return the version number
+		return retval.detachString();
 	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;
@@ -123,6 +151,27 @@ char *system::getOperatingSystemArchitecture() {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
+	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
+
+		SYSTEM_INFO	info;
+		GetNativeSystemInfo((LPSYSTEM_INFO)&info);
+
+		const char	*arch=NULL;
+		switch (info.wProcesserArchitecture) {
+			case PROCESSOR_ARCHITECTURE_AMD64:
+				arch=charstring::duplicate("amd64");
+				break;
+			case PROCESSOR_ARCHITECTURE_IA64:
+				arch=charstring::duplicate("x86_64");
+				break;
+			case PROCESSOR_ARCHITECTURE_INTEL:
+				arch=charstring::duplicate("x86");
+				break;
+			case PROCESSOR_ARCHITECTURE_UNKNOWN:
+				arch=charstring::duplicate("Unknown");
+				break;
+		}
+		return arch;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;
