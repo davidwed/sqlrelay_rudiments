@@ -135,7 +135,7 @@ char *system::getOperatingSystemVersion() {
 		stringbuffer	retval;
 		retval.append((uint64_t)info.dwMajorVersion)->append(".");
 		retval.append((uint64_t)info.dwMinorVersion)->append(".");
-		retval.append((uint64_t)info.dwBuildVersion);
+		retval.append((uint64_t)info.dwBuildNumber);
 
 		// return the version number
 		return retval.detachString();
@@ -158,8 +158,8 @@ char *system::getOperatingSystemArchitecture() {
 		SYSTEM_INFO	info;
 		GetNativeSystemInfo((LPSYSTEM_INFO)&info);
 
-		const char	*arch=NULL;
-		switch (info.wProcesserArchitecture) {
+		char	*arch=NULL;
+		switch (info.wProcessorArchitecture) {
 			case PROCESSOR_ARCHITECTURE_AMD64:
 				arch=charstring::duplicate("amd64");
 				break;
