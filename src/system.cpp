@@ -124,9 +124,9 @@ char *system::getOperatingSystemVersion() {
 		OSVERSIONINFOEX	info;
 		rawbuffer::zero(&info,sizeof(info));
 		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
-		if (!GetVersionEx((LPOSVERSIONINFO)info)) {
+		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
 			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
-			if (!GetVersionEx((LPOSVERSIONINFO)info)) {
+			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
 				return NULL;
 			}
 		}
