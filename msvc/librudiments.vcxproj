@@ -119,6 +119,7 @@ copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudi
     <ClCompile Include="..\src\regularexpression.cpp" />
     <ClCompile Include="..\src\snooze.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
+    <ClCompile Include="..\src\system.cpp" />
     <ClCompile Include="..\src\unixclientsocket.cpp" />
     <ClCompile Include="..\src\unixsocketutil.cpp" />
     <ClCompile Include="..\src\variablebuffer.cpp" />
