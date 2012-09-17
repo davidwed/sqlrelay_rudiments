@@ -133,9 +133,9 @@ char *system::getOperatingSystemVersion() {
 
 		// build up the version number
 		stringbuffer	retval;
-		retval.append(info.dwMajorVersion)->append(".");
-		retval.append(info.dwMinorVersion)->append(".");
-		retval.append(info.dwBuildVersion);
+		retval.append((uint64_t)info.dwMajorVersion)->append(".");
+		retval.append((uint64_t)info.dwMinorVersion)->append(".");
+		retval.append((uint64_t)info.dwBuildVersion);
 
 		// return the version number
 		return retval.detachString();
