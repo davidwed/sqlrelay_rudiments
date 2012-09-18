@@ -22,7 +22,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -40,6 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,7 +83,23 @@ copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudi
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ws2_32.lib;netapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cd ..\include\rudiments\private
+copy /Y config.windows.h config.h</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>mkdir c:\"Program Files"\Firstworks\lib
+mkdir c:\"Program Files"\Firstworks\include\rudiments\private
+mkdir c:\"Program Files"\Firstworks\bin
+copy Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy Release\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy Release\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy ..\include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
+copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\character.cpp" />

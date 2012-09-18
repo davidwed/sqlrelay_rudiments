@@ -11,6 +11,7 @@ clean:
 	cd src; $(MAKE) clean
 	cd test; $(MAKE) clean
 	$(RMTREE) msvc/Debug
+	$(RMTREE) msvc/Release
 
 install:
 	cd src; $(MAKE) install

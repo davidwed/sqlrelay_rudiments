@@ -3,6 +3,7 @@
 	refactored configure/make for non-gnu make compatibility
 	upated passFileDescriptor to dynamically allocate the control buffer
 		for OS X 10.7 whos CMSG_LEN ultimately calls a function
+	updated msvc build to create Release code rather than Debug by default
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message
