@@ -11,9 +11,6 @@ LOBJS = namevaluepairs.lo winsock.lo @LOBJS@
 
 .SUFFIXES: .lo
 
-.c.lo:
-	$(LIBTOOL) --mode=compile $(CC) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-
 .cpp.lo:
 	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 

@@ -50,6 +50,10 @@ AC_ARG_WITH(pcre-libs,
 	[  --with-pcre-libs        PCRE libraries],
 	PCRELIBS="$withval",
 	PCRELIBS="")
+AC_ARG_ENABLE(built-in-regex,
+	[  --enable-built-in-regex Use the built-in regex],
+	USE_BUILT_IN_REGULAREXPRESSION="1",
+	USE_BUILT_IN_REGULAREXPRESSION="0")
 AC_ARG_ENABLE(threads,
 	o  --disable-threads       Disable thread support],
 	ENABLE_RUDIMENTS_THREADS="no",
@@ -1143,26 +1147,35 @@ dnl Checks for regular expression functions.
 echo
 echo "***** Regular Expressions ****"
 
-FW_CHECK_PCRE
-
-if ( test -z "$HAVE_PCRE" )
+if ( test "$USE_BUILT_IN_REGULAREXPRESSION" = "0" )
 then
-	HAVE_REGCOMP=""
-	AC_MSG_CHECKING(for regcomp)
-	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#include <regex.h>],
-regcomp(NULL,NULL,0);,HAVE_REGCOMP="yes"; AC_DEFINE(RUDIMENTS_HAVE_REGCOMP,1,some systems have regcomp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+	FW_CHECK_PCRE
+
+	if ( test -z "$HAVE_PCRE" )
+	then
+		HAVE_REGCOMP=""
+		AC_MSG_CHECKING(for regcomp)
+		AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#include <regex.h>],
+	regcomp(NULL,NULL,0);,HAVE_REGCOMP="yes"; AC_DEFINE(RUDIMENTS_HAVE_REGCOMP,1,some systems have regcomp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+	fi
+
+	USE_BUILT_IN_REGULAREXPRESSION="0"
 fi
 
-USE_BUILT_IN_REGULAREXPRESSION="0"
+AC_MSG_CHECKING(for built-in regex)
 if ( test -z "$HAVE_PCRE" -a -z "$HAVE_REGCOMP" )
 then
+	AC_MSG_RESULT(yes)
 	USE_BUILT_IN_REGULAREXPRESSION="1"
+else
+	AC_MSG_RESULT(no)
 fi
 
 echo "******************************"
@@ -3089,7 +3102,7 @@ fi
 
 if ( test "$USE_BUILT_IN_REGULAREXPRESSION" = "1" )
 then
-	SRCS="$SRCS regex.c"
+	SRCS="$SRCS regex.cpp"
 	LOBJS="$LOBJS regex.lo"
 fi
 

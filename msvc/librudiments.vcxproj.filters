@@ -129,7 +129,7 @@
     <ClCompile Include="..\src\regularexpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\regex.c">
+    <ClCompile Include="..\src\regex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\process.cpp">

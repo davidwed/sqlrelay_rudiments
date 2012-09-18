@@ -130,9 +130,7 @@ copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudi
     <ClCompile Include="..\src\protocolentry.cpp" />
     <ClCompile Include="..\src\randomnumber.cpp" />
     <ClCompile Include="..\src\rawbuffer.cpp" />
-    <ClCompile Include="..\src\regex.c">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-    </ClCompile>
+    <ClCompile Include="..\src\regex.cpp"/>
     <ClCompile Include="..\src\regularexpression.cpp" />
     <ClCompile Include="..\src\snooze.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
