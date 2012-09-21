@@ -28,6 +28,17 @@ class RUDIMENTS_DLLSPEC directory {
 		/** Closes the currently open directory. */
 		bool	close();
 
+		/** Moves from the current file inside the open directory
+		 *  to the next one.  Returns true if there was a next file
+		 *  and false otherwise. */
+		bool	skip();
+	
+		/** Returns the name of the current file inside the open
+		 *  directory and moves on to the next one.  If there was
+		 *  no file at the current position then this method returns
+		 *  NULL. */
+		char	*read();
+
 		/** Resets the current file/subdirectory inside the
 		 *  open directory to the first one. */
 		void	rewind();

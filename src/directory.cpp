@@ -90,10 +90,84 @@ directory::~directory() {
 }
 
 bool directory::open(const char *path) {
+	close();
 	do {
 		pvt->_dir=opendir(path);
 	} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
 	return (pvt->_dir!=NULL);
+}
+
+bool directory::skip() {
+	char	*file=read();
+	if (file) {
+		delete[] file;
+		return true;
+	}
+	return false;
+}
+
+char *directory::read() {
+
+	if (!pvt->_dir) {
+		return NULL;
+	}
+
+	#ifdef RUDIMENTS_HAVE_READDIR_R
+		// get the size of the buffer
+		int64_t	size=bufferSize(this,pvt->_dir);
+		if (size==-1) {
+			return NULL;
+		}
+		#ifdef RUDIMENTS_HAVE_DIRENT_H
+			dirent	*entry=reinterpret_cast<dirent *>(
+						new unsigned char[size]);
+		#else
+			direct	*entry=reinterpret_cast<direct *>(
+						new unsigned char[size]);
+		#endif
+		dirent	*result;
+		int32_t	rdresult;
+		do {
+			rdresult=readdir_r(pvt->_dir,entry,&result);
+		} while (rdresult==-1 &&
+				error::getErrorNumber()==EINTR);
+		if (rdresult || !result) {
+			delete[] entry;
+			return NULL;
+		}
+		pvt->_currentindex++;
+		char	*retval=charstring::duplicate(result->d_name);
+		delete[] entry;
+		return retval;
+	#else
+		#ifdef RUDIMENTS_HAVE_DIRENT_H
+			dirent	*entry;
+		#else
+			direct	*entry;
+		#endif
+		if (_rdmutex && !_rdmutex->lock()) {
+			return NULL;
+		}
+		do {
+			entry=readdir(pvt->_dir);
+		} while (!entry && error::getErrorNumber()==EINTR);
+		if (!entry) {
+			return NULL;
+		}
+		pvt->_currentindex++;
+		char	*retval=charstring::duplicate(entry->d_name);
+		if (_rdmutex) {
+			_rdmutex->unlock();
+		}
+		return retval;
+	#endif
+}
+
+void directory::rewind() {
+	if (pvt->_dir) {
+		rewinddir(pvt->_dir);
+	}
+	pvt->_currentindex=0;
 }
 
 bool directory::close() {
@@ -109,138 +183,33 @@ bool directory::close() {
 }
 
 uint64_t directory::getChildCount() {
-
-	// handle unopened directory
-	if (!pvt->_dir) {
-		return 0;
+	rewind();
+	uint64_t	count=0;
+	while (skip()) {
+		count++;
 	}
-
-	// rewind
-	rewinddir(pvt->_dir);
-	pvt->_currentindex=0;
-
-	#ifdef RUDIMENTS_HAVE_READDIR_R
-		// get the size of the buffer
-		int64_t	size=bufferSize(this,pvt->_dir);
-		if (size==-1) {
-			return 0;
-		}
-		#ifdef RUDIMENTS_HAVE_DIRENT_H
-			dirent	*entry=reinterpret_cast<dirent *>(
-						new unsigned char[size]);
-			dirent	*result;
-		#else
-			direct	*entry=reinterpret_cast<direct *>(
-						new unsigned char[size]);
-			dirent	*result;
-		#endif
-		for (;;) {
-			int32_t	rdresult;
-			do {
-				rdresult=readdir_r(pvt->_dir,entry,&result);
-			} while (rdresult==-1 &&
-					error::getErrorNumber()==EINTR);
-			if (!result) {
-				delete[] entry;
-				return pvt->_currentindex;
-			}
-			pvt->_currentindex++;
-		}
-	#else
-		#ifdef RUDIMENTS_HAVE_DIRENT_H
-			dirent	*entry;
-		#else
-			direct	*entry;
-		#endif
-		if (_rdmutex && !_rdmutex->lock()) {
-			return 0;
-		}
-		for (;;) {
-			do {
-				entry=readdir(pvt->_dir);
-			} while (!entry && error::getErrorNumber()==EINTR);
-			if (!entry) {
-				if (_rdmutex) {
-					_rdmutex->unlock();
-				}
-				return pvt->_currentindex;
-			}
-			pvt->_currentindex++;
-		}
-	#endif
+	return count;
 }
 
 char *directory::getChildName(uint64_t index) {
 
-	// directory entries are 1-based
-	uint64_t	actualindex=index+1;
-
-	if (actualindex<pvt->_currentindex) {
-
-		// handle unopened directory
-		if (!pvt->_dir) {
-			return NULL;
-		}
-
-		// rewind
-		rewinddir(pvt->_dir);
-		pvt->_currentindex=0;
+	// handle unopened directory
+	if (!pvt->_dir) {
+		return NULL;
 	}
 
-	#ifdef RUDIMENTS_HAVE_READDIR_R
-		// get the size of the buffer
-		int64_t	size=bufferSize(this,pvt->_dir);
-		if (size==-1) {
-			return NULL;
-		}
-		#ifdef RUDIMENTS_HAVE_DIRENT_H
-			dirent	*entry=reinterpret_cast<dirent *>(
-						new unsigned char[size]);
-			dirent	*result;
-		#else
-			direct	*entry=reinterpret_cast<direct *>(
-						new unsigned char[size]);
-			dirent	*result;
-		#endif
-		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
-			int32_t	rdresult;
-			do {
-				rdresult=readdir_r(pvt->_dir,entry,&result);
-			} while (rdresult==-1 &&
-					error::getErrorNumber()==EINTR);
-			if (rdresult || !result) {
-				delete[] entry;
-				return NULL;
-			}
-			pvt->_currentindex++;
-		}
-		char	*retval=charstring::duplicate(result->d_name);
-		delete[] entry;
-		return retval;
-	#else
-		#ifdef RUDIMENTS_HAVE_DIRENT_H
-			dirent	*entry;
-		#else
-			direct	*entry;
-		#endif
-		if (_rdmutex && !_rdmutex->lock()) {
-			return NULL;
-		}
-		for (uint64_t i=pvt->_currentindex; i<actualindex; i++) {
-			do {
-				entry=readdir(pvt->_dir);
-			} while (!entry && error::getErrorNumber()==EINTR);
-			if (!entry) {
-				return NULL;
-			}
-			pvt->_currentindex++;
-		}
-		char	*retval=charstring::duplicate(entry->d_name);
-		if (_rdmutex) {
-			_rdmutex->unlock();
-		}
-		return retval;
-	#endif
+	// rewind if necessary
+	if (index<pvt->_currentindex) {
+		rewind();
+	}
+
+	// skip to the index we want to get
+	for (uint64_t i=pvt->_currentindex; i<index; i++) {
+		skip();
+	}
+
+	// return the name at the requested index
+	return read();
 }
 
 bool directory::create(const char *path, mode_t perms) {
