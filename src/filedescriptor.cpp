@@ -4,6 +4,7 @@
 //#define DEBUG_PASSFD 1
 //#define DEBUG_WRITE 1
 //#define DEBUG_READ 1
+//#define DEBUG_BUFFERING 1
 
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
@@ -120,46 +121,6 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 // that should even work on 16-bit systems
 #ifndef SSIZE_MAX
 	#define SSIZE_MAX 32767
-#endif
-
-#ifdef DEBUG_WRITE
-	#define DEBUG_WRITE_INT(type,number) \
-		printf("%d: %s write(%d,%d)\n", \
-			process::getProcessId(),type,pvt->_fd,number);
-	#define DEBUG_WRITE_FLOAT(type,number) \
-		printf("%d: %s write(%d,%f)\n", \
-			process::getProcessId(),type,pvt->_fd,number);
-	#define DEBUG_WRITE_CHAR(type,character) \
-		printf("%d: %s write(%d,%d)\n", \
-			process::getProcessId(),type,pvt->_fd,character);
-	#define DEBUG_WRITE_STRING(type,string,size) \
-		printf("%d: %s write(%d,",process::getProcessId(), \
-							type,pvt->_fd); \
-		for (size_t i=0; i<((size<=160)?size:160); i++) { \
-			printf("%c",string[i]); \
-		} \
-		if (size>160) { \
-			printf("..."); \
-		} \
-		printf(",%d)\n",size);
-	#define DEBUG_WRITE_VOID(type,buffer,size) \
-		const unsigned char *ptr=\
-			static_cast<const unsigned char *>(buffer); \
-		printf("%d: %s write(%d,",process::getProcessId(), \
-							type,pvt->_fd); \
-		for (size_t i=0; i<((size<=160)?size:160); i++) { \
-			printf("0x%02x ",ptr[i]); \
-		} \
-		if (size>160) { \
-			printf("..."); \
-		} \
-		printf(",%d)\n",size);
-#else
-	#define DEBUG_WRITE_INT(type,number)
-	#define DEBUG_WRITE_FLOAT(type,number)
-	#define DEBUG_WRITE_CHAR(type,character)
-	#define DEBUG_WRITE_STRING(type,string,size)
-	#define DEBUG_WRITE_VOID(type,buffer,size)
 #endif
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -453,73 +414,59 @@ ssize_t filedescriptor::write(uint64_t number) const {
 }
 
 ssize_t filedescriptor::write(int16_t number) const {
-	DEBUG_WRITE_INT("int16_t",number);
 	return bufferedWrite(&number,sizeof(int16_t),-1,-1);
 }
 
 ssize_t filedescriptor::write(int32_t number) const {
-	DEBUG_WRITE_INT("int32_t",number);
 	return bufferedWrite(&number,sizeof(int32_t),-1,-1);
 }
 
 ssize_t filedescriptor::write(int64_t number) const {
-	DEBUG_WRITE_INT("int64_t",number);
 	return bufferedWrite(&number,sizeof(int64_t),-1,-1);
 }
 
 ssize_t filedescriptor::write(float number) const {
-	DEBUG_WRITE_FLOAT("float",number);
 	return bufferedWrite(&number,sizeof(float),-1,-1);
 }
 
 ssize_t filedescriptor::write(double number) const {
-	DEBUG_WRITE_FLOAT("double",number);
 	return bufferedWrite(&number,sizeof(double),-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned char character) const {
-	DEBUG_WRITE_CHAR("uchar",character);
 	return bufferedWrite(&character,sizeof(unsigned char),-1,-1);
 }
 
 ssize_t filedescriptor::write(bool value) const {
-	DEBUG_WRITE_INT("bool",value);
 	return bufferedWrite(&value,sizeof(bool),-1,-1);
 }
 
 ssize_t filedescriptor::write(char character) const {
-	DEBUG_WRITE_CHAR("char",character);
 	return bufferedWrite(&character,sizeof(char),-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size) const {
-	DEBUG_WRITE_STRING("ustring",string,size);
 	return bufferedWrite(string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size) const {
-	DEBUG_WRITE_STRING("string",string,size);
 	return bufferedWrite(string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string) const {
-	DEBUG_WRITE_STRING("ustring",string,charstring::length(string));
 	return bufferedWrite(string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string) const {
-	DEBUG_WRITE_STRING("string",string,charstring::length(string));
 	return bufferedWrite(string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size) const {
-	DEBUG_WRITE_VOID("void",buffer,size);
 	return bufferedWrite(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(uint16_t number,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("uint16_t",number);
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
@@ -528,7 +475,6 @@ ssize_t filedescriptor::write(uint16_t number,
 
 ssize_t filedescriptor::write(uint32_t number,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("uint32_t",number);
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
@@ -537,7 +483,6 @@ ssize_t filedescriptor::write(uint32_t number,
 
 ssize_t filedescriptor::write(uint64_t number,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("uint64_t",number);
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
@@ -546,79 +491,66 @@ ssize_t filedescriptor::write(uint64_t number,
 
 ssize_t filedescriptor::write(int16_t number,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("int16_t",number);
 	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int32_t number,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("int32_t",number);
 	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int64_t number,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("int64_t",number);
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(float number,
 				long sec,long usec) const {
-	DEBUG_WRITE_FLOAT("float",number);
 	return bufferedWrite(&number,sizeof(float),sec,usec);
 }
 
 ssize_t filedescriptor::write(double number,
 				long sec, long usec) const {
-	DEBUG_WRITE_FLOAT("double",number);
 	return bufferedWrite(&number,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned char character,
 				long sec, long usec) const {
-	DEBUG_WRITE_CHAR("uchar",character);
 	return bufferedWrite(&character,sizeof(unsigned char),sec,usec);
 }
 
 ssize_t filedescriptor::write(bool value,
 				long sec, long usec) const {
-	DEBUG_WRITE_INT("bool",value);
 	return bufferedWrite(&value,sizeof(bool),sec,usec);
 }
 
 ssize_t filedescriptor::write(char character,
 				long sec, long usec) const {
-	DEBUG_WRITE_CHAR("char",character);
 	return bufferedWrite(&character,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size,
 					long sec, long usec) const {
-	DEBUG_WRITE_STRING("ustring",string,size);
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size,
 					long sec, long usec) const {
-	DEBUG_WRITE_STRING("string",string,size);
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
 					long sec, long usec) const {
-	DEBUG_WRITE_STRING("ustring",string,charstring::length(string));
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string,
 					long sec, long usec) const {
-	DEBUG_WRITE_STRING("string",string,charstring::length(string));
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
 					long sec, long usec) const {
-	DEBUG_WRITE_VOID("void",buffer,size);
 	return bufferedWrite(buffer,size,sec,usec);
 }
 
@@ -1004,7 +936,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 					long sec, long usec) const {
 
-	#ifdef DEBUG_READ
+	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 	printf("bufferedRead of %d bytes\n",count);
 	#endif
 
@@ -1013,7 +945,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 	}
 
 	if (!pvt->_readbuffer) {
-		#ifdef DEBUG_READ
+		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		printf("no read buffer...\n");
 		#endif
 		return safeRead(buf,count,sec,usec);
@@ -1030,7 +962,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						pvt->_readbufferhead;
 		if (bytesavailabletocopy) {
 
-			#ifdef DEBUG_READ
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("%d bytes in read buffer\n",
 					bytesavailabletocopy);
 			#endif
@@ -1039,7 +971,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						bytesavailabletocopy:
 						bytesunread;
 
-			#ifdef DEBUG_READ
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("copying %d bytes out of read buffer\n",
 								bytestocopy);
 			#endif
@@ -1052,13 +984,14 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 
 			// if we've read enough, break out
 			if (bytesread==count) {
-				#ifdef DEBUG_READ
+				#if defined(DEBUG_READ) && \
+					 defined(DEBUG_BUFFERING)
 				printf("yay, we're done reading\n");
 				#endif
 				return bytesread;
 			}
 
-			#ifdef DEBUG_READ
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("need to read %d more bytes\n",bytesunread);
 			#endif
 		}
@@ -1066,7 +999,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		// if we've copied out everything in the buffer, read some more
 		if (pvt->_readbufferhead==pvt->_readbuffertail) {
 
-			#ifdef DEBUG_READ
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("attempting to fill read buffer, ");
 			printf("reading %d bytes...\n",
 				pvt->_readbufferend-pvt->_readbuffer);
@@ -1083,13 +1016,15 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			if (!result) {
 
 				if (pvt->_allowshortreads) {
-					#ifdef DEBUG_READ
+					#if defined(DEBUG_READ) && \
+						defined(DEBUG_BUFFERING)
 					printf("EOF\n");
 					#endif
 					return bytesread;
 				}
 
-				#ifdef DEBUG_READ
+				#if defined(DEBUG_READ) && \
+					defined(DEBUG_BUFFERING)
 				printf("still need %d bytes, reading...\n",
 								bytesunread);
 				#endif
@@ -1098,7 +1033,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						sec,usec);
 
 				if (result>-1 && result!=bytesunread) {
-					#ifdef DEBUG_READ
+					#if defined(DEBUG_READ) && \
+						defined(DEBUG_BUFFERING)
 					printf("EOF\n");
 					#endif
 					return bytesread;
@@ -1106,7 +1042,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			}
 
 			if (result<0) {
-				#ifdef DEBUG_READ
+				#if defined(DEBUG_READ) && \
+					defined(DEBUG_BUFFERING)
 				printf("error reading...\n");
 				#endif
 				return result;
@@ -1115,7 +1052,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			pvt->_readbufferhead=pvt->_readbuffer;
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
-			#ifdef DEBUG_READ
+			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("read %d bytes\n",result);
 			#endif
 		}
@@ -1289,7 +1226,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					long sec, long usec) const {
-	#ifdef DEBUG_WRITE
+	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	printf("bufferedWrite of %d bytes\n",count);
 	#endif
 
@@ -1298,7 +1235,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	}
 
 	if (!pvt->_writebuffer) {
-		#ifdef DEBUG_WRITE
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		printf("no write buffer...\n");
 		#endif
 		return safeWrite(buf,count,sec,usec);
@@ -1319,7 +1256,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		ssize_t	writebufferspace=pvt->_writebufferend-
 						pvt->_writebufferptr;
 
-		#ifdef DEBUG_WRITE
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		printf("	writebuffersize=%d\n",writebuffersize);
 		printf("	writebufferspace=%d\n",writebufferspace);
 		printf("	byteswritten=%d\n",byteswritten);
@@ -1328,7 +1265,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 
 		if (bytesunwritten<=writebufferspace) {
 
-			#ifdef DEBUG_WRITE
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 			printf("buffering %d bytes\n",bytesunwritten);
 			#endif
 
@@ -1340,7 +1277,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 
 		} else {
 
-			#ifdef DEBUG_WRITE
+			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 			printf("just buffering %d bytes\n",writebufferspace);
 			#endif
 
