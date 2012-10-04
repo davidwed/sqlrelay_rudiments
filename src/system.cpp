@@ -333,6 +333,8 @@ bool system::halt() {
 			cmd=LINUX_REBOOT_CMD_HALT;
 		#elif defined(RB_HALT)
 			cmd=RB_HALT;
+		#elif defined(RB_HALT_SYSTEM)
+			cmd=RB_HALT_SYSTEM;
 		#else
 			#error no RB_HALT or anything like it
 		#endif
@@ -380,6 +382,10 @@ bool system::shutDown() {
 			// OS X doesn't appear to have a power-down option,
 			// just use halt instead
 			cmd=RB_HALT;
+		#elif defined(RB_HALT_SYSTEM)
+			// Older linux doesn't have a power-down option
+			// just use halt instead
+			cmd=RB_HALT_SYSTEM;
 		#else
 			#error no RB_POWEROFF or anything like it
 		#endif
