@@ -896,6 +896,9 @@
 /* Some systems have strtoull */
 /* #undef RUDIMENTS_HAVE_STRTOULL */
 
+/* Some systems have struct itimerval */
+/* #undef RUDIMENTS_HAVE_STRUCT_ITIMERVAL */
+
 /* Some systems have struct timespec in pthread.h */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_PTHREAD */
 
