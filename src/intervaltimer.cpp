@@ -21,7 +21,7 @@
 namespace rudiments {
 #endif
 
-#ifndef RUDIMENTS_HAVE_SETITIMER
+#ifndef RUDIMENTS_HAVE_STRUCT_ITIMERVAL
 	struct itimerval {
 		struct timeval	it_interval;
 		struct timeval	it_value;

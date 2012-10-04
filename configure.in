@@ -1494,7 +1494,14 @@ then
 	#include <stdlib.h>
 #endif
 #include <sys/time.h>],
-setitimer(0,NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+setitimer(0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for struct itimerval)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <sys/time.h>],
+struct itimerval a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_ITIMERVAL,1,Some systems have struct itimerval) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 echo "******************************"
