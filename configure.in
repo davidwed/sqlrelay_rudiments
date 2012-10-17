@@ -8,8 +8,8 @@ AC_ARG_ENABLE(small-code,
 	SMALLCODE="")
 AC_ARG_ENABLE(debug,
 	[  --enable-debug          compile with -g option],
-	CXXFLAGS="$CXXFLAGS -g",
-	CXXFLAGS="$CXXFLAGS")
+	DEBUG="yes",
+	DEBUG="")
 AC_ARG_ENABLE(profiling,
 	[  --enable-profiling      compile with -pg option],
 	CXXFLAGS="$CXXFLAGS -pg",
@@ -357,6 +357,7 @@ FW_CHECK_LIBDIR
 FW_CHECK_PIPE
 FW_CHECK_WNOLONGDOUBLE
 FW_CHECK_WALL
+FW_CHECK_DEBUG
 FW_CHECK_PTHREAD_COMPILE
 echo "******************************"
 
