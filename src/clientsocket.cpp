@@ -83,6 +83,24 @@ bool clientsocket::useBlockingMode() const {
 	#endif
 }
 
+int32_t clientsocket::ioCtl(int32_t cmd, void *arg) const {
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET) || \
+		defined(RUDIMENTS_HAVE_IOCTL)
+		int32_t	result;
+		do {
+			#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+				result=ioctlsocket(fd(),cmd,(u_long *)arg);
+			#elif defined(RUDIMENTS_HAVE_IOCTL)
+				result=ioctl(fd(),cmd,arg);
+			#endif
+		} while (getRetryInterruptedIoctl() && result==-1 &&
+				error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		return -1;
+	#endif
+}
+
 #ifdef RUDIMENTS_HAS_SSL
 BIO *clientsocket::newSSLBIO() const {
 	return BIO_new_socket(fd(),BIO_NOCLOSE);

@@ -2018,6 +2018,12 @@ AC_DEFINE(RUDIMENTS_HAVE_POLL,1,Some systems have poll) AC_MSG_RESULT(yes), AC_M
 
 FW_CHECK_SHM_OPEN
 
+AC_MSG_CHECKING(for ioctlsocket)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif],
+ioctlsocket(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_IOCTLSOCKET,1,Some systems have ioctlsocket) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for ioctl)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>

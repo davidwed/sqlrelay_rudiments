@@ -75,6 +75,24 @@ bool serversocket::useBlockingMode() const {
 #endif
 }
 
+int32_t serversocket::ioCtl(int32_t cmd, void *arg) const {
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET) || \
+		defined(RUDIMENTS_HAVE_IOCTL)
+		int32_t	result;
+		do {
+			#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+				result=ioctlsocket(fd(),cmd,(u_long *)arg);
+			#elif defined(RUDIMENTS_HAVE_IOCTL)
+				result=ioctl(fd(),cmd,arg);
+			#endif
+		} while (getRetryInterruptedIoctl() && result==-1 &&
+				error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		result=-1;
+	#endif
+}
+
 bool serversocket::lingerOnClose(int32_t timeout) {
 	return setLingerOnClose(timeout,1);
 }

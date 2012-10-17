@@ -45,6 +45,10 @@ class RUDIMENTS_DLLSPEC clientsocket : public client {
 		 *  doesn't support blocking/nonblocking modes. */
 		virtual bool	useBlockingMode() const;
 
+		/** Use the ioctl() system call to perform various low-level
+		 *  file descriptor operations. */
+		virtual int32_t	ioCtl(int32_t command, void *arg) const;
+
 	#include <rudiments/private/clientsocket.h>
 };
 

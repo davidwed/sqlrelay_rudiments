@@ -50,6 +50,11 @@ class RUDIMENTS_DLLSPEC serversocket : public server {
 		 *  blocking/nonblocking modes. */
 		virtual bool	useBlockingMode() const;
 
+		/** Use the ioctl() system call to perform various low-level
+		 *  file descriptor operations. */
+		virtual int32_t	ioCtl(int32_t command, void *arg) const;
+
+
 		/** Instructs the socket to stay open for
 		 *  "timeout" seconds even after close() is
 		 *  called to allow it to receive any data that

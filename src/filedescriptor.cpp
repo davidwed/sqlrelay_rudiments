@@ -134,12 +134,8 @@ class filedescriptorprivate {
 		bool	_retryinterruptedreads;
 		bool	_retryinterruptedwrites;
 		bool	_retryinterruptedwaits;
-		#ifdef RUDIMENTS_HAVE_FCNTL
 		bool	_retryinterruptedfcntl;
-		#endif
-		#ifdef RUDIMENTS_HAVE_IOCTL
 		bool	_retryinterruptedioctl;
-		#endif
 		bool	_allowshortreads;
 		bool	_allowshortwrites;
 		bool	_translatebyteorder;
@@ -190,12 +186,8 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_retryinterruptedreads=false;
 	pvt->_retryinterruptedwrites=false;
 	pvt->_retryinterruptedwaits=true;
-#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=true;
-#endif
-#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=true;
-#endif
 	pvt->_allowshortreads=false;
 	pvt->_allowshortwrites=false;
 	pvt->_translatebyteorder=false;
@@ -224,12 +216,8 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
 	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
 	pvt->_retryinterruptedwaits=f.pvt->_retryinterruptedwaits;
-#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=f.pvt->_retryinterruptedfcntl;
-#endif
-#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
-#endif
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
 	pvt->_lstnr=f.pvt->_lstnr;
@@ -733,12 +721,20 @@ void filedescriptor::dontRetryInterruptedReads() {
 	pvt->_retryinterruptedreads=false;
 }
 
+bool filedescriptor::getRetryInterruptedReads() const {
+	return pvt->_retryinterruptedreads;
+}
+
 void filedescriptor::retryInterruptedWrites() {
 	pvt->_retryinterruptedwrites=true;
 }
 
 void filedescriptor::dontRetryInterruptedWrites() {
 	pvt->_retryinterruptedwrites=false;
+}
+
+bool filedescriptor::getRetryInterruptedWrites() const {
+	return pvt->_retryinterruptedwrites;
 }
 
 void filedescriptor::retryInterruptedWaits() {
@@ -749,28 +745,32 @@ void filedescriptor::dontRetryInterruptedWaits() {
 	pvt->_retryinterruptedwaits=false;
 }
 
+bool filedescriptor::getRetryInterruptedWaits() const {
+	return pvt->_retryinterruptedwaits;
+}
+
 void filedescriptor::retryInterruptedFcntl() {
-	#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=true;
-	#endif
 }
 
 void filedescriptor::dontRetryInterruptedFcntl() {
-	#ifdef RUDIMENTS_HAVE_FCNTL
 	pvt->_retryinterruptedfcntl=true;
-	#endif
+}
+
+bool filedescriptor::getRetryInterruptedFcntl() const {
+	return pvt->_retryinterruptedfcntl;
 }
 
 void filedescriptor::retryInterruptedIoctl() {
-	#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=true;
-	#endif
 }
 
 void filedescriptor::dontRetryInterruptedIoctl() {
-	#ifdef RUDIMENTS_HAVE_IOCTL
 	pvt->_retryinterruptedioctl=true;
-	#endif
+}
+
+bool filedescriptor::getRetryInterruptedIoctl() const {
+	return pvt->_retryinterruptedioctl;
 }
 
 void filedescriptor::allowShortReads() {

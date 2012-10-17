@@ -7,6 +7,8 @@
 	added posix analogs (rewind, skip and read) to directory class
 	updated filedescriptor debug so debugging of the buffering can be
 		enabled/disabled
+	configure script uses -g3 if available when --enable-debug is
+		specified
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message

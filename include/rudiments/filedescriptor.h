@@ -590,6 +590,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  be retried. */
 		void	dontRetryInterruptedReads();
 
+		/** Returns true if interrupted reads will be retried and false
+		 *  otherwise. */
+		bool	getRetryInterruptedReads() const;
+
 		/** Causes writes to automatically retry if interrupted by a
 		 *  signal.  By default, if a write is occurring and a signal
 		 *  interrupts it, the write fails, the system error is set to
@@ -602,6 +606,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  fails, the system error is set to EINTR and the write must
 		 *  be retried. */
 		void	dontRetryInterruptedWrites();
+
+		/** Returns true if interrupted writes will be retried and false
+		 *  otherwise. */
+		bool	getRetryInterruptedWrites() const;
 
 		/** Causes wait operations to be automatically retried if
 		 *  interrupted by a signal.  This is the default behavior.
@@ -617,6 +625,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  retried. */
 		void	dontRetryInterruptedWaits();
 
+		/** Returns true if interrupted waits will be retried and false
+		 *  otherwise. */
+		bool	getRetryInterruptedWaits() const;
+
 		/** Causes fcntl operations to be automatically retried if
 		 *  interrupted by a signal.  This is the default behavior.
 		 *  Otherwise, if a fcntl is occurring and a signal interrupts
@@ -631,6 +643,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  retried. */
 		void	dontRetryInterruptedFcntl();
 
+		/** Returns true if interrupted calls to fcntl will be retried
+		 *  and false otherwise. */
+		bool	getRetryInterruptedFcntl() const;
+
 		/** Causes ioctl operations to be automatically retried if
 		 *  interrupted by a signal.  This is the default behavior.
 		 *  Otherwise, if a ioctl is occurring and a signal interrupts
@@ -644,6 +660,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  system error is set to EINTR and the ioctl must be
 		 *  retried. */
 		void	dontRetryInterruptedIoctl();
+
+		/** Returns true if interrupted calls to ioctl will be retried
+		 *  and false otherwise. */
+		bool	getRetryInterruptedIoctl() const;
 
 
 		/** By default, read() will attempt to read the specified number
@@ -751,11 +771,11 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 
 		/** Use the fcntl() system call to perform various low-level
 		 *  file descriptor operations. */
-		int32_t	fCntl(int32_t command, long arg) const;
+		virtual int32_t	fCntl(int32_t command, long arg) const;
 
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
-		int32_t	ioCtl(int32_t command, void *arg) const;
+		virtual int32_t	ioCtl(int32_t command, void *arg) const;
 
 		/** Causes small write()'s to be collected up and sent together
 		 *  when either the kernel's write buffer is full or when a

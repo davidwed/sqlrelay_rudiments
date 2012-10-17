@@ -469,6 +469,9 @@
 /* Some systems have ioctl */
 #undef RUDIMENTS_HAVE_IOCTL
 
+/* Some systems have ioctlsocket */
+#undef RUDIMENTS_HAVE_IOCTLSOCKET
+
 /* Some systems have io.h */
 #undef RUDIMENTS_HAVE_IO_H
 

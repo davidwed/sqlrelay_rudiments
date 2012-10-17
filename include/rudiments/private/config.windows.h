@@ -470,6 +470,9 @@
 /* Some systems have ioctl */
 /* #undef RUDIMENTS_HAVE_IOCTL */
 
+/* Some systems have ioctlsocket */
+#define RUDIMENTS_HAVE_IOCTLSOCKET 1
+
 /* Some systems have io.h */
 #define RUDIMENTS_HAVE_IO_H 1
 
