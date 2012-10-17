@@ -152,8 +152,16 @@ int32_t inetclientsocket::connect() {
 		addrinfo	*ai=NULL;
 		int32_t		result;
 		do {
+			error::setErrorNumber(0);
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
-		} while (result==EAI_SYSTEM && error::getErrorNumber()==EINTR);
+		} while (result!=0 && error::getErrorNumber()==EINTR);
+		// ...In theory, we should only loop back and try again if
+		// getaddrinfo() returns EAI_SYSTEM and errno was EINTR.
+		// However, apparently, on some systems, if interrupted, it can
+		// return something other than EAI_SYSTEM.  So we just check
+		// for non-zero.  We also reset the error number each time in
+		// case we get a legitimate interrupt on one try and a different
+		// error on the next try that doesn't reset errno itself.
 		delete[] portstr;
 		if (result) {
 			return RESULT_ERROR;
