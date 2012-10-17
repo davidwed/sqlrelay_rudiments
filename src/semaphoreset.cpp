@@ -292,16 +292,20 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 			// mark for removal
 			pvt->_created=true;
 	
-			#ifdef RUDIMENTS_HAVE_SEMGET
-				// create the signal/wait operations
-				createOperations();
-			#endif
+			// create the signal/wait operations
+			createOperations();
 	
 			return true;
 		}
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
+
+	// This is here for an odd reason.  Apparently, in some debugging
+	// environments, if you set a breakpoint here, gdb will segfault if you
+	// run "print errno".  This works around the problem.
+	int32_t	errornumber;
+	errornumber=error::getErrorNumber();
 
 	return false;
 }
@@ -316,10 +320,8 @@ bool semaphoreset::attach(key_t key, int32_t semcount) {
 		// attach to the semaphore
 		if ((pvt->_semid=semGet(key,semcount,0))!=-1) {
 
-			#if defined(RUDIMENTS_HAVE_SEMGET)
-				// create the signal/wait operations
-				createOperations();
-			#endif
+			// create the signal/wait operations
+			createOperations();
 
 			return true;
 		}
