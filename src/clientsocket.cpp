@@ -110,13 +110,14 @@ BIO *clientsocket::newSSLBIO() const {
 int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 							long sec, long usec) {
 
+#ifndef RUDIMENTS_HAVE_WSACONNECT
+
 	int32_t	retval;
 	if (sec==-1 || usec==-1) {
 
 		// if no timeout was passed in, just do a plain vanilla connect
-		retval=(::connect(fd(),
-			reinterpret_cast<const struct sockaddr *>(addr),
-				addrlen)==-1)?RESULT_ERROR:RESULT_SUCCESS;
+		retval=(::connect(fd(),addr,addrlen)==-1)?
+				RESULT_ERROR:RESULT_SUCCESS;
 
 		// FIXME: handle errno is EINTR...
 		// on non-linux systems the connect is still in progress and we
@@ -126,8 +127,6 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		// will select() work on linux?
 
 	} else {
-
-	#ifndef RUDIMENTS_HAVE_WSACONNECT
 
 		// if a timeout was passed in then we need to do some more
 		// complex stuff...
@@ -139,9 +138,7 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		}
 
 		// call connect()
-		if (::connect(fd(),
-			reinterpret_cast<const struct sockaddr *>(addr),
-				addrlen)==-1) {
+		if (::connect(fd(),addr,addrlen)==-1) {
 
 			// FIXME: handle errno is EINTR...
 			// if connect() fails and errno is set to one of these
@@ -238,33 +235,56 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 			return RESULT_ERROR;
 		}
 
-	#else
+	}
+
+#else
+
+	int32_t	retval;
+	if (sec==-1 || usec==-1) {
+
+		// if no timeout was passed in, just do a plain vanilla connect
+		retval=(WSAConnect(fd(),addr,addrlen,
+					NULL,NULL,NULL,NULL)==SOCKET_ERROR)?
+						RESULT_ERROR:RESULT_SUCCESS;
+
+	} else {
+
+		// if a timeout was passed in then we need to do some more
+		// complex stuff...
 
 		WSAEVENT	ev=WSACreateEvent();
-		int	er=WSAEventSelect(fd(),ev,FD_CONNECT);
-		er=WSAConnect(fd(),addr,addrlen,NULL,NULL,NULL,NULL);
-		if (!er) {
-			retval=RESULT_SUCCESS;
+		if (ev==WSA_INVALID_EVENT) {
+			retval=RESULT_ERROR;
 		} else {
-			if (WSAGetLastError()!=WSAEWOULDBLOCK) {
+			int	er=WSAEventSelect(fd(),ev,FD_CONNECT);
+			if (er==SOCKET_ERROR) {
 				retval=RESULT_ERROR;
 			} else {
-				DWORD	milli=(sec*1000)+(usec/1000);
-				DWORD	en=WSAWaitForMultipleEvents(1,&ev,FALSE,milli,FALSE);
-				if (en!=WSA_WAIT_EVENT_0) {
-					retval=RESULT_TIMEOUT;
+				er=WSAConnect(fd(),addr,addrlen,NULL,NULL,NULL,NULL);
+				if (!er) {
+					retval=RESULT_SUCCESS;
 				} else {
-					WSANETWORKEVENTS	ne;
-					er=WSAEnumNetworkEvents(fd(),ev,&ne);
-					if (er) {
+					if (WSAGetLastError()!=WSAEWOULDBLOCK) {
 						retval=RESULT_ERROR;
 					} else {
-						er=ne.iErrorCode[FD_CONNECT_BIT];
-						if (er) {
-							error::setErrorNumber(er);
-							retval=RESULT_ERROR;
+						DWORD	milli=(sec*1000)+(usec/1000);
+						DWORD	en=WSAWaitForMultipleEvents(1,&ev,FALSE,milli,FALSE);
+						if (en!=WSA_WAIT_EVENT_0) {
+							retval=RESULT_TIMEOUT;
 						} else {
-							retval=RESULT_SUCCESS;
+							WSANETWORKEVENTS	ne;
+							er=WSAEnumNetworkEvents(fd(),ev,&ne);
+							if (er) {
+								retval=RESULT_ERROR;
+							} else {
+								er=ne.iErrorCode[FD_CONNECT_BIT];
+								if (er) {
+									error::setErrorNumber(er);
+									retval=RESULT_ERROR;
+								} else {
+									retval=RESULT_SUCCESS;
+								}
+							}
 						}
 					}
 				}
@@ -273,8 +293,8 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		WSAEventSelect(fd(),ev,0);
 		WSACloseEvent(ev);
 		useBlockingMode();
-	#endif
 	}
+	#endif
 
 	#ifdef RUDIMENTS_HAS_SSL
 	if (retval==RESULT_SUCCESS) {
