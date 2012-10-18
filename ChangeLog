@@ -13,6 +13,7 @@
 		EAI_SYSTEM when checking for EINTR, but any non-zero result
 		and also to reset errno between tries
 	updated clientsocket to use WSAConnect and friends on windows
+	disabled code that uses AF_UNIX sockets outright for windows
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message
