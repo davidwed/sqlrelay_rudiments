@@ -292,7 +292,6 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		}
 		WSAEventSelect(fd(),ev,0);
 		WSACloseEvent(ev);
-		useBlockingMode();
 	}
 	#endif
 
