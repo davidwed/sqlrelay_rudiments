@@ -292,6 +292,11 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		}
 		WSAEventSelect(fd(),ev,0);
 		WSACloseEvent(ev);
+
+		// The call to WSAEventSelect with the FD_CONNECT argument above
+		// put the socket in non-blocking mode.  If necessary, we need
+		// to set it back to blocking mode here.
+		useBlockingMode();
 	}
 	#endif
 
