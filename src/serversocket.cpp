@@ -31,7 +31,7 @@ class serversocketprivate {
 serversocket::serversocket() : server() {
 	pvt=new serversocketprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-	pvt->_nonblockingmode=true;
+	pvt->_nonblockingmode=false;
 	#endif
 	type("serversocket");
 	winsock::initWinsock();
@@ -40,7 +40,7 @@ serversocket::serversocket() : server() {
 serversocket::serversocket(const serversocket &s) : server(s) {
 	pvt=new serversocketprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-	pvt->_nonblockingmode=true;
+	pvt->_nonblockingmode=s.pvt->_nonblockingmode;
 	#endif
 	type("serversocket");
 	winsock::initWinsock();
