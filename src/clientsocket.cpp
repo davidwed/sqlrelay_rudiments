@@ -127,6 +127,8 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 	} else {
 
+	#ifndef RUDIMENTS_HAVE_WSACONNECT
+
 		// if a timeout was passed in then we need to do some more
 		// complex stuff...
 
@@ -235,6 +237,43 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		if (!wasusingnonblockingmode && !useBlockingMode()) {
 			return RESULT_ERROR;
 		}
+
+	#else
+
+		WSAEVENT	ev=WSACreateEvent();
+		int	er=WSAEventSelect(fd(),ev,FD_CONNECT);
+		er=WSAConnect(fd(),addr,addrlen,NULL,NULL,NULL,NULL);
+		if (!er) {
+			retval=RESULT_SUCCESS;
+		} else {
+			if (WSAGetLastError()!=WSAEWOULDBLOCK) {
+				retval=RESULT_ERROR;
+			} else {
+				DWORD	milli=(sec*1000)+(usec/1000);
+				DWORD	en=WSAWaitForMultipleEvents(1,&ev,FALSE,milli,FALSE);
+				if (en!=WSA_WAIT_EVENT_0) {
+					retval=RESULT_TIMEOUT;
+				} else {
+					WSANETWORKEVENTS	ne;
+					er=WSAEnumNetworkEvents(fd(),ev,&ne);
+					if (er) {
+						retval=RESULT_ERROR;
+					} else {
+						er=ne.iErrorCode[FD_CONNECT_BIT];
+						if (er) {
+							error::setErrorNumber(er);
+							retval=RESULT_ERROR;
+						} else {
+							retval=RESULT_SUCCESS;
+						}
+					}
+				}
+			}
+		}
+		WSAEventSelect(fd(),ev,0);
+		WSACloseEvent(ev);
+		useBlockingMode();
+	#endif
 	}
 
 	#ifdef RUDIMENTS_HAS_SSL

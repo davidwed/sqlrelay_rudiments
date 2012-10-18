@@ -1078,6 +1078,9 @@
 /* Some systems have write */
 #undef RUDIMENTS_HAVE_WRITE
 
+/* Some systems have WSAConnect */
+#undef RUDIMENTS_HAVE_WSACONNECT
+
 /* Some systems have extended filesystem attributes */
 #undef RUDIMENTS_HAVE_XATTRS
 

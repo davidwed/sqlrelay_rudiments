@@ -1186,6 +1186,13 @@ dnl Checks for networking functions.
 echo
 echo "***** Networking *************"
 
+AC_MSG_CHECKING(for WSAConnect)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif],
+WSAConnect(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WSACONNECT,1,Some systems have WSAConnect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for closesocket)
 AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H

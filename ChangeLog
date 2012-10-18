@@ -12,6 +12,7 @@
 	updated the test for the result of getaddrinfo to not just look for	
 		EAI_SYSTEM when checking for EINTR, but any non-zero result
 		and also to reset errno between tries
+	updated clientsocket to use WSAConnect and friends on windows
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message
