@@ -89,7 +89,7 @@ int32_t serversocket::ioCtl(int32_t cmd, void *arg) const {
 				error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		result=-1;
+		return -1;
 	#endif
 }
 
