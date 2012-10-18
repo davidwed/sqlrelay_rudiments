@@ -40,7 +40,7 @@ class clientsocketprivate {
 clientsocket::clientsocket() : client() {
 	pvt=new clientsocketprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-	pvt->_nonblockingmode=true;
+	pvt->_nonblockingmode=false;
 	#endif
 	type("clientsocket");
 	winsock::initWinsock();
