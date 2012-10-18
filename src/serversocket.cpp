@@ -23,23 +23,35 @@ namespace rudiments {
 class serversocketprivate {
 	friend class serversocket;
 	private:
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		bool	_nonblockingmode;
+		#endif
 };
 
 serversocket::serversocket() : server() {
 	pvt=new serversocketprivate;
-	winsock::initWinsock();
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+	pvt->_nonblockingmode=true;
+	#endif
 	type("serversocket");
+	winsock::initWinsock();
 }
 
 serversocket::serversocket(const serversocket &s) : server(s) {
 	pvt=new serversocketprivate;
-	winsock::initWinsock();
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+	pvt->_nonblockingmode=true;
+	#endif
 	type("serversocket");
+	winsock::initWinsock();
 }
 
 serversocket &serversocket::operator=(const serversocket &s) {
 	if (this!=&s) {
 		server::operator=(s);
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		pvt->_nonblockingmode=true;
+		#endif
 	}
 	return *this;
 }
@@ -49,47 +61,75 @@ serversocket::~serversocket() {
 }
 
 bool serversocket::supportsBlockingNonBlockingModes() {
-#ifdef FIONBIO
-	return true;
-#else
-	return false;
-#endif
+	#ifdef FIONBIO
+		return true;
+	#else
+		return filedescriptor::supportsBlockingNonBlockingModes();
+	#endif
 }
 
-
 bool serversocket::useNonBlockingMode() const {
-#ifdef FIONBIO
-	int32_t	nonblocking=1;
-	return (ioCtl(FIONBIO,&nonblocking)!=-1);
-#else
-	return false;
-#endif
+	// The posix way of setting blocking/non-blocking mode is to use
+	// fcntl, which is what the filedescriptor class does, but this doesn't
+	// work for sockets on all platforms.  If FIONBIO is defined, then use
+	// it with an ioctl instead.
+	#ifdef FIONBIO
+		int32_t	nonblocking=1;
+		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		if (retval) {
+			pvt->_nonblocking=true;
+		}
+		#endif
+		return retval;
+	#else
+		return filedescriptor::useNonBlockingMode();
+	#endif
 }
 
 bool serversocket::useBlockingMode() const {
-#ifdef FIONBIO
-	int32_t	nonblocking=0;
-	return (ioCtl(FIONBIO,&nonblocking)!=-1);
-#else
-	return false;
-#endif
+	// The posix way of setting blocking/non-blocking mode is to use
+	// fcntl, which is what the filedescriptor class does, but this doesn't
+	// work for sockets on all platforms.  If FIONBIO is defined, then use
+	// it with an ioctl instead.
+	#ifdef FIONBIO
+		int32_t	nonblocking=0;
+		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		if (retval) {
+			pvt->_nonblocking=false;
+		}
+		#endif
+		return retval;
+	#else
+		return filedescriptor::useBlockingMode();
+	#endif
+}
+
+bool serversocket::isUsingNonBlockingMode() const {
+	// There is no way to determine the blocking mode using ioctl's and
+	// FIONBIO.  On posix platforms, independent of whether blocking mode
+	// was set using an ioctl or fcntl, you can use an fcntl to get the
+	// blocking mode.  On other platforms, you just have to keep track of
+	// what mode you set it to and hope that the program only uses methods
+	// from this class to set the mode.
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		return pvt->_nonblocking;
+	#else
+		return filedescriptor::isUsingNonBlockingMode();
+	#endif
 }
 
 int32_t serversocket::ioCtl(int32_t cmd, void *arg) const {
-	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET) || \
-		defined(RUDIMENTS_HAVE_IOCTL)
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
 		do {
-			#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-				result=ioctlsocket(fd(),cmd,(u_long *)arg);
-			#elif defined(RUDIMENTS_HAVE_IOCTL)
-				result=ioctl(fd(),cmd,arg);
-			#endif
+			result=ioctlsocket(fd(),cmd,(u_long *)arg);
 		} while (getRetryInterruptedIoctl() && result==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		return -1;
+		return filedescriptor::ioCtl(cmd,arg);
 	#endif
 }
 

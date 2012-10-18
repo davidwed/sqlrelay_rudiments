@@ -106,6 +106,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		int32_t	getSSLResult() const;
 		#endif
 
+		/** Returns true if the client socket supports
+		 *  blocking/nonblocking modes and false otherwise. */
+		virtual bool	supportsBlockingNonBlockingModes();
+
 		/** Puts the file descriptor in non-blocking
 		 *  mode.  Returns true on success and false on
 		 *  failure. */
@@ -118,7 +122,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 
 		/** Returns true if the file descriptor is in
 		 *  non-blocking mode and false otherwise. */
-		bool	isUsingNonBlockingMode() const;
+		virtual bool	isUsingNonBlockingMode() const;
 
 		/** Writes "number" to the file descriptor.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if

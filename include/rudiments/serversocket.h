@@ -50,6 +50,10 @@ class RUDIMENTS_DLLSPEC serversocket : public server {
 		 *  blocking/nonblocking modes. */
 		virtual bool	useBlockingMode() const;
 
+		/** Returns true if the file descriptor is in
+		 *  non-blocking mode and false otherwise. */
+		virtual bool	isUsingNonBlockingMode() const;
+
 		/** Use the ioctl() system call to perform various low-level
 		 *  file descriptor operations. */
 		virtual int32_t	ioCtl(int32_t command, void *arg) const;

@@ -363,6 +363,15 @@ BIO *filedescriptor::newSSLBIO() const {
 }
 #endif
 
+bool filedescriptor::supportsBlockingNonBlockingModes() {
+	#if defined(RUDIMENTS_HAVE_FCNTL) && \
+		defined(F_SETFL) && defined (F_GETFL)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
 bool filedescriptor::useNonBlockingMode() const {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
 		defined(F_SETFL) && defined (F_GETFL)

@@ -32,16 +32,25 @@ namespace rudiments {
 class clientsocketprivate {
 	friend class clientsocket;
 	private:
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		bool	_nonblockingmode;
+		#endif
 };
 
 clientsocket::clientsocket() : client() {
 	pvt=new clientsocketprivate;
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+	pvt->_nonblockingmode=true;
+	#endif
 	type("clientsocket");
 	winsock::initWinsock();
 }
 
 clientsocket::clientsocket(const clientsocket &c) : client(c) {
 	pvt=new clientsocketprivate;
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+	pvt->_nonblockingmode=c.pvt->_nonblockingmode;
+	#endif
 	type("clientsocket");
 	winsock::initWinsock();
 }
@@ -49,6 +58,9 @@ clientsocket::clientsocket(const clientsocket &c) : client(c) {
 clientsocket &clientsocket::operator=(const clientsocket &c) {
 	if (this!=&c) {
 		client::operator=(c);
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		pvt->_nonblockingmode=c.pvt->_nonblockingmode;
+		#endif
 	}
 	return *this;
 }
@@ -59,45 +71,74 @@ clientsocket::~clientsocket() {
 
 bool clientsocket::supportsBlockingNonBlockingModes() {
 	#ifdef FIONBIO
-	return true;
+		return true;
 	#else
-	return false;
+		return filedescriptor::supportsBlockingNonBlockingModes();
 	#endif
 }
 
 bool clientsocket::useNonBlockingMode() const {
+	// The posix way of setting blocking/non-blocking mode is to use
+	// fcntl, which is what the filedescriptor class does, but this doesn't
+	// work for sockets on all platforms.  If FIONBIO is defined, then use
+	// it with an ioctl instead.
 	#ifdef FIONBIO
-	int32_t	nonblocking=1;
-	return (ioCtl(FIONBIO,&nonblocking)!=-1);
+		int32_t	nonblocking=1;
+		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		if (retval) {
+			pvt->_nonblocking=true;
+		}
+		#endif
+		return retval;
 	#else
-	return false;
+		return filedescriptor::useNonBlockingMode();
 	#endif
 }
 
 bool clientsocket::useBlockingMode() const {
+	// The posix way of setting blocking/non-blocking mode is to use
+	// fcntl, which is what the filedescriptor class does, but this doesn't
+	// work for sockets on all platforms.  If FIONBIO is defined, then use
+	// it with an ioctl instead.
 	#ifdef FIONBIO
-	int32_t	nonblocking=0;
-	return (ioCtl(FIONBIO,&nonblocking)!=-1);
+		int32_t	nonblocking=0;
+		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
+		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		if (retval) {
+			pvt->_nonblocking=false;
+		}
+		#endif
+		return retval;
 	#else
-	return false;
+		return filedescriptor::useBlockingMode();
+	#endif
+}
+
+bool clientsocket::isUsingNonBlockingMode() const {
+	// There is no way to determine the blocking mode using ioctl's and
+	// FIONBIO.  On posix platforms, independent of whether blocking mode
+	// was set using an ioctl or fcntl, you can use an fcntl to get the
+	// blocking mode.  On other platforms, you just have to keep track of
+	// what mode you set it to and hope that the program only uses methods
+	// from this class to set the mode.
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
+		return pvt->_nonblocking;
+	#else
+		return filedescriptor::isUsingNonBlockingMode();
 	#endif
 }
 
 int32_t clientsocket::ioCtl(int32_t cmd, void *arg) const {
-	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET) || \
-		defined(RUDIMENTS_HAVE_IOCTL)
+	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
 		do {
-			#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-				result=ioctlsocket(fd(),cmd,(u_long *)arg);
-			#elif defined(RUDIMENTS_HAVE_IOCTL)
-				result=ioctl(fd(),cmd,arg);
-			#endif
+			result=ioctlsocket(fd(),cmd,(u_long *)arg);
 		} while (getRetryInterruptedIoctl() && result==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		return -1;
+		return filedescriptor::ioCtl(cmd,arg);
 	#endif
 }
 
@@ -252,51 +293,85 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		// if a timeout was passed in then we need to do some more
 		// complex stuff...
 
-		WSAEVENT	ev=WSACreateEvent();
+		// find out if the socket was in non-blocking mode already
+		bool	wasusingnonblockingmode=isUsingNonBlockingMode();
+
+		// declare some variables
+		WSAEVENT		ev;
+		int			er;
+		DWORD			milli;
+		DWORD			en;
+		WSANETWORKEVENTS	ne;
+
+		// initialize return value
+		retval=RESULT_ERROR;
+		
+		// create an event handler
+		ev=WSACreateEvent();
 		if (ev==WSA_INVALID_EVENT) {
-			retval=RESULT_ERROR;
-		} else {
-			int	er=WSAEventSelect(fd(),ev,FD_CONNECT);
-			if (er==SOCKET_ERROR) {
-				retval=RESULT_ERROR;
-			} else {
-				er=WSAConnect(fd(),addr,addrlen,NULL,NULL,NULL,NULL);
-				if (!er) {
-					retval=RESULT_SUCCESS;
-				} else {
-					if (WSAGetLastError()!=WSAEWOULDBLOCK) {
-						retval=RESULT_ERROR;
-					} else {
-						DWORD	milli=(sec*1000)+(usec/1000);
-						DWORD	en=WSAWaitForMultipleEvents(1,&ev,FALSE,milli,FALSE);
-						if (en!=WSA_WAIT_EVENT_0) {
-							retval=RESULT_TIMEOUT;
-						} else {
-							WSANETWORKEVENTS	ne;
-							er=WSAEnumNetworkEvents(fd(),ev,&ne);
-							if (er) {
-								retval=RESULT_ERROR;
-							} else {
-								er=ne.iErrorCode[FD_CONNECT_BIT];
-								if (er) {
-									error::setErrorNumber(er);
-									retval=RESULT_ERROR;
-								} else {
-									retval=RESULT_SUCCESS;
-								}
-							}
-						}
-					}
-				}
-			}
+			goto cleanup;
 		}
+
+		// create an event selector for connect events
+		er=WSAEventSelect(fd(),ev,FD_CONNECT);
+		if (er==SOCKET_ERROR) {
+			goto cleanup;
+		}
+
+		// that event selector will put the socket in
+		// non-blocking mode...
+		pvt->_nonblockingmode=true;
+
+		// attempt to connect
+		er=WSAConnect(fd(),addr,addrlen,NULL,NULL,NULL,NULL);
+		if (!er) {
+			// the connect succeeded immediately
+			retval=RESULT_SUCCESS;
+			goto cleanup;
+		}
+
+		// If we got a "would block" then the connection is in progress
+		// and we need to wait.  Otherwise there was some other error
+		// and we need to bail.
+		if (WSAGetLastError()!=WSAEWOULDBLOCK) {
+			goto cleanup;
+		}
+
+		// wait for the connect to succeed or fail
+		milli=(sec*1000)+(usec/1000);
+		en=WSAWaitForMultipleEvents(1,&ev,FALSE,milli,FALSE);
+		if (en!=WSA_WAIT_EVENT_0) {
+			// a timeout occurred
+			retval=RESULT_TIMEOUT;
+			goto cleanup;
+		}
+
+		// get the events that occurred
+		er=WSAEnumNetworkEvents(fd(),ev,&ne);
+		if (er) {
+			goto cleanup;
+		}
+
+		// if there was an error then set errno,
+		// otherwise the connect succeeded...
+		er=ne.iErrorCode[FD_CONNECT_BIT];
+		if (er) {
+			error::setErrorNumber(er);
+		} else {
+			retval=RESULT_SUCCESS;
+		}
+
+cleanup:
+		// clean up
 		WSAEventSelect(fd(),ev,0);
 		WSACloseEvent(ev);
 
-		// The call to WSAEventSelect with the FD_CONNECT argument above
-		// put the socket in non-blocking mode.  If necessary, we need
-		// to set it back to blocking mode here.
-		useBlockingMode();
+		// The WSAEventSelect for FD_CONNECT above put the socket in
+		// non-blocking mode.  If necessary, we need to set it back to
+		// blocking mode here.
+		if (!wasusingnonblockingmode && !useBlockingMode()) {
+			return RESULT_ERROR;
+		}
 	}
 	#endif
 
