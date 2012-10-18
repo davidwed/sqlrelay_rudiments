@@ -87,7 +87,7 @@ bool clientsocket::useNonBlockingMode() const {
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
-			pvt->_nonblocking=true;
+			pvt->_nonblockingmode=true;
 		}
 		#endif
 		return retval;
@@ -106,7 +106,7 @@ bool clientsocket::useBlockingMode() const {
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		if (retval) {
-			pvt->_nonblocking=false;
+			pvt->_nonblockingmode=false;
 		}
 		#endif
 		return retval;
@@ -123,7 +123,7 @@ bool clientsocket::isUsingNonBlockingMode() const {
 	// what mode you set it to and hope that the program only uses methods
 	// from this class to set the mode.
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
-		return pvt->_nonblocking;
+		return pvt->_nonblockingmode;
 	#else
 		return filedescriptor::isUsingNonBlockingMode();
 	#endif
