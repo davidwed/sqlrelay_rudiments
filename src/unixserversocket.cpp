@@ -49,6 +49,17 @@ unixserversocket::~unixserversocket() {
 
 bool unixserversocket::initialize(const char *filename, mode_t mask) {
 
+#ifdef _WIN32
+
+	// Windows doesn't support unix sockets.  Ideally, I'd just let one
+	// of the methods below fail but reportedly, with some compilers on
+	// some versions of windows, the code below won't even compile.  Most
+	// likely AF_UNIX isn't defined but I'm not sure so for now I'm just
+	// disabling this for windows in general.
+	return false;
+
+#else
+
 	unixsocketutil::initialize(filename);
 	pvt->_mask=mask;
 
@@ -68,6 +79,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 		fd(::socket(AF_UNIX,SOCK_STREAM,0));
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);
 	return (fd()!=-1);
+#endif
 }
 
 bool unixserversocket::listen(const char *filename, mode_t mask,

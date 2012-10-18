@@ -84,6 +84,17 @@ void unixclientsocket::initialize(constnamevaluepairs *cd) {
 
 int32_t unixclientsocket::connect() {
 
+#ifdef _WIN32
+
+	// Windows doesn't support unix sockets.  Ideally, I'd just let one
+	// of the methods below fail but reportedly, with some compilers on
+	// some versions of windows, the code below won't even compile.  Most
+	// likely AF_UNIX isn't defined but I'm not sure so for now I'm just
+	// disabling this for windows in general.
+	return RESULT_ERROR;
+
+#else
+
 	// set the filename to connect to
 	_sun()->sun_family=AF_UNIX;
 	charstring::copy(_sun()->sun_path,_filename());
@@ -121,6 +132,7 @@ int32_t unixclientsocket::connect() {
 	// if we're here, the connect failed
 	close();
 	return retval;
+#endif
 }
 
 #ifdef RUDIMENTS_NAMESPACE
