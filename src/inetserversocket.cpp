@@ -60,6 +60,7 @@ uint16_t inetserversocket::getPort() {
 bool inetserversocket::listen(const char *address, uint16_t port,
 							int32_t backlog) {
 	initialize(address,port);
+	reuseAddresses();
 	return (bind() && listen(backlog));
 }
 

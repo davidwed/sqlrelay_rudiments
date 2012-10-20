@@ -39,10 +39,11 @@ class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsock
 		/** Deletes this instance of the inetserversocket class. */
 		virtual		~inetserversocket();
 
-		/** Convenience method that calls initialize(), bind()
-		 *  and listen().  If you need to set socket options or
-		 *  do anything else special between those discrete steps
-		 *  then you should use the methods individually.
+		/** Convenience method that calls initialize(),
+		 *  reuseAddresses(), bind() and listen().  If you need to set
+		 *  other socket options or do anything else special between
+		 *  those discrete steps then you should use the methods
+		 *  individually.
 		 * 
 		 *  Listens on "address" and "port" and allow
 		 *  "backlog" connections to pile up before
