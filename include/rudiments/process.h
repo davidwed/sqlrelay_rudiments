@@ -163,6 +163,11 @@ class RUDIMENTS_DLLSPEC process {
 		/** Terminates the calling process and sets the exit status to
 		 *  "status". */
 		static void	exit(int32_t status);
+
+		/** Terminates the calling process "immediately" (without
+		  * calling any functions registered to run at exit) and sets
+		  * the exit status to "status". */
+		static void	exitImmediately(int32_t status);
 };
 
 #ifdef RUDIMENTS_NAMESPACE

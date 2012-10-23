@@ -9,18 +9,12 @@ namespace rudiments {
 #endif
 
 RUDIMENTS_INLINE int32_t math::absoluteValue(int32_t j) {
-	return abs(j);
-}
-
-RUDIMENTS_INLINE div_t math::divide(int32_t numer, int32_t denom) {
-	return div(numer,denom);
-}
-
-RUDIMENTS_INLINE long math::absoluteValue(long j) {
+	// FIXME: use abs on platforms where an int is 32 bits
 	return labs(j);
 }
 
-RUDIMENTS_INLINE ldiv_t math::divide(long numer, long denom) {
+RUDIMENTS_INLINE div_t math::divide(int32_t numer, int32_t denom) {
+	// FIXME: use div on platforms where an int is 32 bits
 	return ldiv(numer,denom);
 }
 

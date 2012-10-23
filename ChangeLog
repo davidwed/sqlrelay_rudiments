@@ -15,6 +15,9 @@
 		clientsocket to use WSAConnect and friends on windows
 		disabling code that uses AF_UNIX sockets outright for windows
 		inetserversocket::listen() to reuse addresses 
+	added process::exitImmediately
+	updated error::getErrorString() to be thread safe when it uses
+		strerror_r or strerror_s internally
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message

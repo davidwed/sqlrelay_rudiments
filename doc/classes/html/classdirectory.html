@@ -52,6 +52,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#aebab4268386697707bc484f0492bf5d0">~directory</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#ab78cdfd4cf62bf61fa2a57b3b19e1ef4">open</a> (const char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a07e18df77dbe1b2ba8c162aa76d6265b">close</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a436302b9cee02058b86f613856ccd0be">skip</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a56fb8555e9fe9fb196c6e5567b10916d">read</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a4c39e4e983fa8c3345fc07b0dcb03e82">rewind</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#a5c621dd8ffaf790586fc2511c6409b14">getChildCount</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdirectory.html#af3d238717fefc776393a12ff34c3eab2">getChildName</a> (uint64_t index)</td></tr>
@@ -279,23 +281,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a61445f5b1f981791999191b2914735fe"></a><!-- doxytag: member="directory::maxFileNameLength" ref="a61445f5b1f981791999191b2914735fe" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int64_t directory::maxFileNameLength </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns the length of the longest file name that can be created in directory "pathname". </p>
-
-</div>
-</div>
 <a class="anchor" id="ae7726bd69f7796f97115598feed4a738"></a><!-- doxytag: member="directory::maxFileNameLength" ref="ae7726bd69f7796f97115598feed4a738" args="(const char *pathname)" -->
 <div class="memitem">
 <div class="memproto">
@@ -306,6 +291,23 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>pathname</em></td><td>)</td>
           <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the length of the longest file name that can be created in directory "pathname". </p>
+
+</div>
+</div>
+<a class="anchor" id="a61445f5b1f981791999191b2914735fe"></a><!-- doxytag: member="directory::maxFileNameLength" ref="a61445f5b1f981791999191b2914735fe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t directory::maxFileNameLength </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -384,6 +386,23 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a56fb8555e9fe9fb196c6e5567b10916d"></a><!-- doxytag: member="directory::read" ref="a56fb8555e9fe9fb196c6e5567b10916d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* directory::read </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns the name of the current file inside the open directory and moves on to the next one. If there was no file at the current position then this method returns NULL. </p>
+
+</div>
+</div>
 <a class="anchor" id="a7eaa2facb284892dd443ed16e3515632"></a><!-- doxytag: member="directory::remove" ref="a7eaa2facb284892dd443ed16e3515632" args="(const char *path)" -->
 <div class="memitem">
 <div class="memproto">
@@ -437,8 +456,25 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a436302b9cee02058b86f613856ccd0be"></a><!-- doxytag: member="directory::skip" ref="a436302b9cee02058b86f613856ccd0be" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool directory::skip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<div class="memdoc">
+<p>Moves from the current file inside the open directory to the next one. Returns true if there was a next file and false otherwise. </p>
+
+</div>
+</div>
+</div>
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

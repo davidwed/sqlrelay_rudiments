@@ -43,7 +43,7 @@
 <a name="l00004"></a>00004 <span class="preprocessor">#ifndef RUDIMENTS_SYSTEM_H</span>
 <a name="l00005"></a>00005 <span class="preprocessor"></span><span class="preprocessor">#define RUDIMENTS_SYSTEM_H</span>
 <a name="l00006"></a>00006 <span class="preprocessor"></span>
-<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;rudiments/private/system.h&gt;</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;rudiments/private/systemincludes.h&gt;</span>
 <a name="l00008"></a>00008 
 <a name="l00009"></a>00009 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
 <a name="l00010"></a>00010 <span class="preprocessor"></span><span class="keyword">namespace </span>rudiments {
@@ -53,44 +53,119 @@
 <a name="l00014"></a>00014 
 <a name="l00015"></a>00015 <span class="keyword">class </span>systemprivate;
 <a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="comment">// wrap:</span>
-<a name="l00018"></a>00018 <span class="comment">//      sys/utsname.h - uname()</span>
-<a name="l00019"></a>00019 <span class="comment">//      stdlib.h - getloadavg()</span>
-<a name="l00020"></a>00020 <span class="comment">//      unistd.h - sysconf()</span>
-<a name="l00021"></a>00021 <span class="comment">//                      confstr() - use sysctl() on bsd</span>
-<a name="l00022"></a>00022 <span class="comment">//                      gethostid(),sethostid() - use sysctl() on bsd</span>
-<a name="l00023"></a>00023 <span class="comment">//                      getpagesize() - use sysconf() on bsd</span>
-<a name="l00024"></a>00024 <span class="comment">//                      sync()</span>
-<a name="l00025"></a>00025 <span class="comment">//      sys/raw.h - structs/defines for /dev/rawctl ioctl()&#39;s</span>
-<a name="l00026"></a>00026 <span class="comment">//      sys/syslog.h - openlog(),closelog(),setlogmask(),syslog(),vsyslog()</span>
-<a name="l00027"></a>00027 <span class="comment">//      not in solaris - </span>
-<a name="l00028"></a>00028 <span class="comment">//              sys/sysctl.h - sysctl()</span>
-<a name="l00029"></a>00029 <span class="comment">//      linux only - </span>
-<a name="l00030"></a>00030 <span class="comment">//              sys/kdaemon.h - bdflush()</span>
-<a name="l00031"></a>00031 <span class="comment">//              sys/klog.h - klogctl()</span>
-<a name="l00032"></a>00032 <span class="comment">//              sys/personality.h - personality() - set linux kernel personality</span>
-<a name="l00033"></a>00033 <span class="comment">//              sys/reboot.h - reboot()</span>
-<a name="l00034"></a>00034 <span class="comment">//              sys/swap.h - swapon()/swapoff()</span>
-<a name="l00035"></a>00035 <span class="comment">//              sys/sysinfo.h - functions for gettting overall system statistics</span>
-<a name="l00036"></a>00036 <span class="comment">//                              sysinfo(),</span>
-<a name="l00037"></a>00037 <span class="comment">//                              get_nprocs_conf(),get_nprocs(),</span>
-<a name="l00038"></a>00038 <span class="comment">//                              get_phys_pages,get_avphys_pages()</span>
-<a name="l00039"></a>00039 <span class="keyword">class </span>RUDIMENTS_DLLSPEC system {
-<a name="l00040"></a>00040         <span class="keyword">public</span>:
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042 <span class="preprocessor">        #include &lt;rudiments/private/system.h&gt;</span>
-<a name="l00043"></a>00043 };
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="comment">// @endcond</span>
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
-<a name="l00048"></a>00048 <span class="preprocessor"></span>}
-<a name="l00049"></a>00049 <span class="preprocessor">#endif</span>
-<a name="l00050"></a>00050 <span class="preprocessor"></span>
-<a name="l00051"></a>00051 <span class="preprocessor">#endif</span>
+<a name="l00017"></a>00017 <span class="keyword">class </span>RUDIMENTS_DLLSPEC system {
+<a name="l00018"></a>00018         <span class="keyword">public</span>:
+<a name="l00019"></a>00019 
+<a name="l00022"></a>00022                 <span class="keyword">static</span>  <span class="keywordtype">char</span>    *getOperatingSystemName();
+<a name="l00023"></a>00023 
+<a name="l00027"></a>00027                 <span class="keyword">static</span>  <span class="keywordtype">char</span>    *getOperatingSystemRelease();
+<a name="l00028"></a>00028 
+<a name="l00032"></a>00032                 <span class="keyword">static</span>  <span class="keywordtype">char</span>    *getOperatingSystemVersion();
+<a name="l00033"></a>00033 
+<a name="l00036"></a>00036                 <span class="keyword">static</span>  <span class="keywordtype">char</span>    *getOperatingSystemArchitecture();
+<a name="l00037"></a>00037 
+<a name="l00042"></a>00042                 <span class="keyword">static</span>  <span class="keywordtype">char</span>    *getHostName();
+<a name="l00043"></a>00043 
+<a name="l00046"></a>00046                 <span class="keyword">static</span>  <span class="keywordtype">bool</span>    setHostName(<span class="keyword">const</span> <span class="keywordtype">char</span> *hostname);
+<a name="l00047"></a>00047 
+<a name="l00050"></a>00050                 <span class="keyword">static</span>  <span class="keywordtype">bool</span>    setHostName(<span class="keyword">const</span> <span class="keywordtype">char</span> *hostname,
+<a name="l00051"></a>00051                                                 uint64_t hostnamelen);
+<a name="l00052"></a>00052 
+<a name="l00056"></a>00056                 <span class="keyword">static</span>  <span class="keywordtype">bool</span>    getLoadAverages(<span class="keywordtype">double</span> *oneminuteaverage,
+<a name="l00057"></a>00057                                                 <span class="keywordtype">double</span> *fiveminuteaverage,
+<a name="l00058"></a>00058                                                 <span class="keywordtype">double</span> *fifteenminuteaverage);
+<a name="l00059"></a>00059 
+<a name="l00061"></a>00061                 <span class="keyword">static</span>  <span class="keywordtype">void</span>    sync();
+<a name="l00062"></a>00062 
+<a name="l00067"></a>00067                 <span class="keyword">static</span>  <span class="keywordtype">bool</span>    halt();
+<a name="l00068"></a>00068 
+<a name="l00074"></a>00074                 <span class="keyword">static</span>  <span class="keywordtype">bool</span>    shutDown();
+<a name="l00075"></a>00075 
+<a name="l00080"></a>00080                 <span class="keyword">static</span>  <span class="keywordtype">bool</span>    reboot();
+<a name="l00081"></a>00081 
+<a name="l00084"></a>00084                 <span class="keyword">static</span>  int64_t getMaxCommandLineArgumentLength();
+<a name="l00085"></a>00085 
+<a name="l00089"></a>00089                 <span class="keyword">static</span>  int64_t getMaxProcessesPerUser();
+<a name="l00090"></a>00090 
+<a name="l00094"></a>00094                 <span class="keyword">static</span>  int64_t getMaxHostNameLength();
+<a name="l00095"></a>00095 
+<a name="l00099"></a>00099                 <span class="keyword">static</span>  int64_t getMaxLoginNameLength();
+<a name="l00100"></a>00100 
+<a name="l00109"></a>00109                 <span class="keyword">static</span>  int64_t getClockTicksPerSecond();
+<a name="l00110"></a>00110 
+<a name="l00114"></a>00114                 <span class="keyword">static</span>  int64_t getMaxOpenFilesPerProcess();
+<a name="l00115"></a>00115 
+<a name="l00118"></a>00118                 <span class="keyword">static</span>  int32_t getPageSize();
+<a name="l00119"></a>00119 
+<a name="l00123"></a>00123                 <span class="keyword">static</span>  int64_t getMaxOpenStreamsPerProcess();
+<a name="l00124"></a>00124 
+<a name="l00138"></a>00138                 <span class="keyword">static</span>  int64_t getMaxSymlinkLoops();
+<a name="l00139"></a>00139 
+<a name="l00143"></a>00143                 <span class="keyword">static</span>  int64_t getMaxTerminalDeviceNameLength();
+<a name="l00144"></a>00144 
+<a name="l00147"></a>00147                 <span class="keyword">static</span>  int64_t getMaxTimezoneNameLength();
+<a name="l00148"></a>00148 
+<a name="l00153"></a>00153                 <span class="keyword">static</span>  int64_t getMaxLineLength();
+<a name="l00154"></a>00154 
+<a name="l00158"></a>00158                 <span class="keyword">static</span>  int64_t getPhysicalPageCount();
+<a name="l00159"></a>00159 
+<a name="l00163"></a>00163                 <span class="keyword">static</span>  int64_t getAvailablePhysicalPageCount();
+<a name="l00164"></a>00164 
+<a name="l00168"></a>00168                 <span class="keyword">static</span>  int64_t getProcessorCount();
+<a name="l00169"></a>00169 
+<a name="l00173"></a>00173                 <span class="keyword">static</span>  int64_t getMaxProcessorCount();
+<a name="l00174"></a>00174 
+<a name="l00177"></a>00177                 <span class="keyword">static</span>  int64_t getProcessorsOnline();
+<a name="l00178"></a>00178 
+<a name="l00182"></a>00182                 <span class="keyword">static</span>  int64_t getMaxSupplementalGroupsPerUser();
+<a name="l00183"></a>00183 
+<a name="l00187"></a>00187                 <span class="keyword">static</span>  int64_t getMaxDelayTimerExpirations();
+<a name="l00188"></a>00188 
+<a name="l00192"></a>00192                 <span class="keyword">static</span>  int64_t getMaxRealtimeSignals();
+<a name="l00193"></a>00193 
+<a name="l00197"></a>00197                 <span class="keyword">static</span>  int64_t getMaxSemaphoresPerProcess();
+<a name="l00198"></a>00198 
+<a name="l00201"></a>00201                 <span class="keyword">static</span>  int64_t getMaxSemaphoreValue();
+<a name="l00202"></a>00202 
+<a name="l00206"></a>00206                 <span class="keyword">static</span>  int64_t getMaxSignalQueueLength();
+<a name="l00207"></a>00207 
+<a name="l00211"></a>00211                 <span class="keyword">static</span>  int64_t getMaxTimersPerProcess();
+<a name="l00212"></a>00212 
+<a name="l00218"></a>00218                 <span class="keyword">static</span>  int64_t getSuggestedGroupEntryBufferSize();
+<a name="l00219"></a>00219 
+<a name="l00225"></a>00225                 <span class="keyword">static</span>  int64_t getSuggestedPasswordEntryBufferSize();
+<a name="l00226"></a>00226 
+<a name="l00229"></a>00229                 <span class="keyword">static</span>  int64_t getMinThreadStackSize();
+<a name="l00230"></a>00230 
+<a name="l00234"></a>00234                 <span class="keyword">static</span>  int64_t getMaxThreadsPerProcess();
+<a name="l00235"></a>00235 
+<a name="l00239"></a>00239                 <span class="keyword">static</span>  int64_t getThreadDestructorIterations();
+<a name="l00240"></a>00240 
+<a name="l00243"></a>00243                 <span class="keyword">static</span>  int64_t getMaxThreadKeys();
+<a name="l00244"></a>00244 
+<a name="l00248"></a>00248                 <span class="keyword">static</span>  int64_t getMaxAtExitFunctions();
+<a name="l00249"></a>00249 
+<a name="l00253"></a>00253                 <span class="keyword">static</span>  int64_t getCPUSetSize();
+<a name="l00254"></a>00254 
+<a name="l00257"></a>00257                 <span class="keyword">static</span>  int64_t getMaxPasswordLength();
+<a name="l00258"></a>00258 
+<a name="l00261"></a>00261                 <span class="keyword">static</span>  int64_t getMaxLogNameLength();
+<a name="l00262"></a>00262 
+<a name="l00265"></a>00265                 <span class="keyword">static</span>  int64_t getMaxProcessID();
+<a name="l00266"></a>00266 
+<a name="l00269"></a>00269                 <span class="keyword">static</span>  int64_t sysConf(int32_t name);
+<a name="l00270"></a>00270 
+<a name="l00271"></a>00271 <span class="preprocessor">        #include &lt;rudiments/private/system.h&gt;</span>
+<a name="l00272"></a>00272 };
+<a name="l00273"></a>00273 
+<a name="l00274"></a>00274 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
+<a name="l00275"></a>00275 <span class="preprocessor"></span>}
+<a name="l00276"></a>00276 <span class="preprocessor">#endif</span>
+<a name="l00277"></a>00277 <span class="preprocessor"></span>
+<a name="l00278"></a>00278 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

@@ -15,9 +15,6 @@ class RUDIMENTS_DLLSPEC math {
 		static int32_t	absoluteValue(int32_t j);
 		static div_t	divide(int32_t numer, int32_t denom);
 
-		static long	absoluteValue(long j);
-		static ldiv_t	divide(long numer, long denom);
-
 		static int64_t	absoluteValue(int64_t j);
 		static lldiv_t	divide(int64_t numer, int64_t denom);
 

@@ -70,6 +70,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab2bc3c2adc267e0aedabbdd50f6f6692">detach</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a6f4a254246fe4724cf05bc6128c87428">exit</a> (int32_t status)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a0f9487a848d43a378398b1647b68f075">exitImmediately</a> (int32_t status)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The process class provides methods for accessing information about and controlling the currently running process. </p>
@@ -107,6 +108,24 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Terminates the calling process and sets the exit status to "status". </p>
+
+</div>
+</div>
+<a class="anchor" id="a0f9487a848d43a378398b1647b68f075"></a><!-- doxytag: member="process::exitImmediately" ref="a0f9487a848d43a378398b1647b68f075" args="(int32_t status)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void process::exitImmediately </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Terminates the calling process "immediately" (without calling any functions registered to run at exit) and sets the exit status to "status". </p>
 
 </div>
 </div>
@@ -515,7 +534,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

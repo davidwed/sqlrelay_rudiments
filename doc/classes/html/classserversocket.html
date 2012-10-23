@@ -58,6 +58,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#aff1a14396dd40667635fce7ea043dc69">supportsBlockingNonBlockingModes</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#a70996bcae7c14f1024d512b42cefa249">useNonBlockingMode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#a8e17be24af0dc3dc0fb3162bfed8b895">useBlockingMode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#af7aef836c3118bdb72045a54ec3298a7">isUsingNonBlockingMode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#a5fcf5139567211855405ddbd556b2426">ioCtl</a> (int32_t command, void *arg) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#a1d308c7e3bcc055c01ff47ee778a1c51">lingerOnClose</a> (int32_t timeout)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#aa1f4a2067974e1eb18df7b222b289592">dontLingerOnClose</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserversocket.html#a3f200df380fbc5713382965037486518">reuseAddresses</a> ()</td></tr>
@@ -156,6 +158,55 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5fcf5139567211855405ddbd556b2426"></a><!-- doxytag: member="serversocket::ioCtl" ref="a5fcf5139567211855405ddbd556b2426" args="(int32_t command, void *arg) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t serversocket::ioCtl </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>arg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Use the ioctl() system call to perform various low-level file descriptor operations. </p>
+
+<p>Reimplemented from <a class="el" href="classfiledescriptor.html#a7f0b6913b4e150f1f5e5b1561493d496">filedescriptor</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af7aef836c3118bdb72045a54ec3298a7"></a><!-- doxytag: member="serversocket::isUsingNonBlockingMode" ref="af7aef836c3118bdb72045a54ec3298a7" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool serversocket::isUsingNonBlockingMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if the file descriptor is in non-blocking mode and false otherwise. </p>
+
+<p>Reimplemented from <a class="el" href="classfiledescriptor.html#ab73fe66c335c7b8cdd04ea881416bfeb">filedescriptor</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a1d308c7e3bcc055c01ff47ee778a1c51"></a><!-- doxytag: member="serversocket::lingerOnClose" ref="a1d308c7e3bcc055c01ff47ee778a1c51" args="(int32_t timeout)" -->
 <div class="memitem">
 <div class="memproto">
@@ -249,6 +300,8 @@ Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>Returns false if the system doesn't support blocking/nonblocking modes and true otherwise. </p>
 
+<p>Reimplemented from <a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">filedescriptor</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8e17be24af0dc3dc0fb3162bfed8b895"></a><!-- doxytag: member="serversocket::useBlockingMode" ref="a8e17be24af0dc3dc0fb3162bfed8b895" args="() const " -->
@@ -290,7 +343,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

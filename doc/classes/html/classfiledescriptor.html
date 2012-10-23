@@ -59,9 +59,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5e38ff382e70ed0993fcb087aae86ca0">setFileDescriptor</a> (int32_t filedesc)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad967e6cbdaa87b8df42dc1636d119675">duplicate</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a45a2f0627c0214cfac74de0c28fb0b7c">duplicate</a> (int32_t newfd) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">supportsBlockingNonBlockingModes</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab914af53fa7d8165ff05ce1b3649eff6">useNonBlockingMode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ae3686bb24f4e1d57092479481efa3519">useBlockingMode</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a63b969f0db8f0163a7586a66b112cf33">isUsingNonBlockingMode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab73fe66c335c7b8cdd04ea881416bfeb">isUsingNonBlockingMode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#abe28a94af94bce6122c606072da0cd04">write</a> (uint16_t number) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a47a7e2def89d670256dc3a0df8a29391">write</a> (uint32_t number) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a74daeedb23c083e536b8f75dc526bf75">write</a> (uint64_t number) const </td></tr>
@@ -128,14 +129,19 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5a7e6820a2a3288b0889b7314935f6cd">waitForNonBlockingWrite</a> (long sec, long usec) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a873da850bf73716babe080f7fa723784">retryInterruptedReads</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7f7311c4fa746bcf1f75f076264c308b">dontRetryInterruptedReads</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac093fef061ead93c17eb6aa84eecf46e">getRetryInterruptedReads</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac372c3c60abd093ea7a0b70c74e30f9b">retryInterruptedWrites</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac70cc7d8e024f7bb6bf8fc926067d9ba">dontRetryInterruptedWrites</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7e2b7e9cf7baef94d507e04e0a8e7f45">getRetryInterruptedWrites</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ae6f560f93d4b1ee57a7332b19588d3af">retryInterruptedWaits</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a879e0146d88f66e6188442e8b4b1cb8b">dontRetryInterruptedWaits</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a9b145e4eafb11d8c89eb7efa8738c196">getRetryInterruptedWaits</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aced1588c0b772a96548b8b1a737199c2">retryInterruptedFcntl</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a32dd611bf1ab97bfff2c14535a403f74">dontRetryInterruptedFcntl</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#aa14cc0aa8cc1b849917b1547c5948ef5">getRetryInterruptedFcntl</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a08e322411718595166970dc371981457">retryInterruptedIoctl</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a50e1255f92ef1f93396a2badabe8998b">dontRetryInterruptedIoctl</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a695f7c309d62a020a5cf3b2fd3021c7a">getRetryInterruptedIoctl</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a8385bed0f0586feb7129ffa3ce5e5c55">allowShortReads</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a450567c8744e8162832cfc325051ee6e">dontAllowShortReads</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#abe7c22612b0dd31718fac688d896b084">allowShortWrites</a> ()</td></tr>
@@ -151,14 +157,16 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac3a7c0944085537908fb682b02bd0b26">receiveFileDescriptor</a> (int32_t *fd) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a50c42991f500b7fc1ef01fcdf0f240fd">translateByteOrder</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5a2ea19fa8e4d360f969f0446a556f2a">dontTranslateByteOrder</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a623db8e88ea40bb2d2a0199dcbb13836">fCntl</a> (int32_t command, long arg) const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a1873274bb17f37c464cce7166c24dd51">ioCtl</a> (int32_t command, void *arg) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ace2a0bff4d68644295536ed69e71e205">fCntl</a> (int32_t command, long arg) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7f0b6913b4e150f1f5e5b1561493d496">ioCtl</a> (int32_t command, void *arg) const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a68d4f98f00a3794e44bafb8c94f7b906">useNaglesAlgorithm</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a40cd844190971abebd6af838f1b2becb">dontUseNaglesAlgorithm</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a92e149613647efa0e87963f07479e7d9">setTcpWriteBufferSize</a> (int32_t size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a65c6293f0c320922e46d4662e5d2e85f">getTcpWriteBufferSize</a> (int32_t *size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7cd820738744ec4723be54351b026339">setTcpReadBufferSize</a> (int32_t size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a5bf0a1af7a070fe41262d39d0ec23281">getTcpReadBufferSize</a> (int32_t *size)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#af992db5c1593ee697f99953000c0f429">disableIPv4</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab859b86a0907beb82513acc5985ce625">enableIPv4</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a0f2e40bd232c70c7a6dae2ab01ddbba0">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac0589e7427841901e23c840124cc3e69">getPeerAddress</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a7d62107de57c6670c508571d43b4b21f">setWriteBufferSize</a> (ssize_t size) const </td></tr>
@@ -304,6 +312,23 @@ Static Public Member Functions</h2></td></tr>
 <div class="memdoc">
 <p>If the close-on-exec status is false (the default), then the file descriptor will remain open across an execve() call, otherwise it will be closed.</p>
 <p>This method sets the close-on-exec status to true. </p>
+
+</div>
+</div>
+<a class="anchor" id="af992db5c1593ee697f99953000c0f429"></a><!-- doxytag: member="filedescriptor::disableIPv4" ref="af992db5c1593ee697f99953000c0f429" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool filedescriptor::disableIPv4 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Disables IPv4 on this file descriptor, only IPv6 will be used. This is only useful for TCP Socket file descriptors. Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -570,12 +595,29 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a623db8e88ea40bb2d2a0199dcbb13836"></a><!-- doxytag: member="filedescriptor::fCntl" ref="a623db8e88ea40bb2d2a0199dcbb13836" args="(int32_t command, long arg) const " -->
+<a class="anchor" id="ab859b86a0907beb82513acc5985ce625"></a><!-- doxytag: member="filedescriptor::enableIPv4" ref="ab859b86a0907beb82513acc5985ce625" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t filedescriptor::fCntl </td>
+          <td class="memname">bool filedescriptor::enableIPv4 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Enables IPv4 (in addition to IPv6) on this file descriptor (the default). This is only useful for TCP Socket file descriptors. Returns true on success and false on failure. </p>
+
+</div>
+</div>
+<a class="anchor" id="ace2a0bff4d68644295536ed69e71e205"></a><!-- doxytag: member="filedescriptor::fCntl" ref="ace2a0bff4d68644295536ed69e71e205" args="(int32_t command, long arg) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t filedescriptor::fCntl </td>
           <td>(</td>
           <td class="paramtype">int32_t&#160;</td>
           <td class="paramname"><em>command</em>, </td>
@@ -589,7 +631,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -700,6 +742,91 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa14cc0aa8cc1b849917b1547c5948ef5"></a><!-- doxytag: member="filedescriptor::getRetryInterruptedFcntl" ref="aa14cc0aa8cc1b849917b1547c5948ef5" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool filedescriptor::getRetryInterruptedFcntl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if interrupted calls to fcntl will be retried and false otherwise. </p>
+
+</div>
+</div>
+<a class="anchor" id="a695f7c309d62a020a5cf3b2fd3021c7a"></a><!-- doxytag: member="filedescriptor::getRetryInterruptedIoctl" ref="a695f7c309d62a020a5cf3b2fd3021c7a" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool filedescriptor::getRetryInterruptedIoctl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if interrupted calls to ioctl will be retried and false otherwise. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac093fef061ead93c17eb6aa84eecf46e"></a><!-- doxytag: member="filedescriptor::getRetryInterruptedReads" ref="ac093fef061ead93c17eb6aa84eecf46e" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool filedescriptor::getRetryInterruptedReads </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if interrupted reads will be retried and false otherwise. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9b145e4eafb11d8c89eb7efa8738c196"></a><!-- doxytag: member="filedescriptor::getRetryInterruptedWaits" ref="a9b145e4eafb11d8c89eb7efa8738c196" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool filedescriptor::getRetryInterruptedWaits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if interrupted waits will be retried and false otherwise. </p>
+
+</div>
+</div>
+<a class="anchor" id="a7e2b7e9cf7baef94d507e04e0a8e7f45"></a><!-- doxytag: member="filedescriptor::getRetryInterruptedWrites" ref="a7e2b7e9cf7baef94d507e04e0a8e7f45" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool filedescriptor::getRetryInterruptedWrites </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if interrupted writes will be retried and false otherwise. </p>
+
+</div>
+</div>
 <a class="anchor" id="a5bf0a1af7a070fe41262d39d0ec23281"></a><!-- doxytag: member="filedescriptor::getTcpReadBufferSize" ref="a5bf0a1af7a070fe41262d39d0ec23281" args="(int32_t *size)" -->
 <div class="memitem">
 <div class="memproto">
@@ -807,12 +934,12 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1873274bb17f37c464cce7166c24dd51"></a><!-- doxytag: member="filedescriptor::ioCtl" ref="a1873274bb17f37c464cce7166c24dd51" args="(int32_t command, void *arg) const " -->
+<a class="anchor" id="a7f0b6913b4e150f1f5e5b1561493d496"></a><!-- doxytag: member="filedescriptor::ioCtl" ref="a7f0b6913b4e150f1f5e5b1561493d496" args="(int32_t command, void *arg) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t filedescriptor::ioCtl </td>
+          <td class="memname">virtual int32_t filedescriptor::ioCtl </td>
           <td>(</td>
           <td class="paramtype">int32_t&#160;</td>
           <td class="paramname"><em>command</em>, </td>
@@ -826,29 +953,51 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Use the ioctl() system call to perform various low-level file descriptor operations. </p>
 
+<p>Reimplemented in <a class="el" href="classclientsocket.html#a7783b6dd99d4471d0aa0ea17d599950d">clientsocket</a>, and <a class="el" href="classserversocket.html#a5fcf5139567211855405ddbd556b2426">serversocket</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a63b969f0db8f0163a7586a66b112cf33"></a><!-- doxytag: member="filedescriptor::isUsingNonBlockingMode" ref="a63b969f0db8f0163a7586a66b112cf33" args="() const " -->
+<a class="anchor" id="ab73fe66c335c7b8cdd04ea881416bfeb"></a><!-- doxytag: member="filedescriptor::isUsingNonBlockingMode" ref="ab73fe66c335c7b8cdd04ea881416bfeb" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool filedescriptor::isUsingNonBlockingMode </td>
+          <td class="memname">virtual bool filedescriptor::isUsingNonBlockingMode </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>Returns true if the file descriptor is in non-blocking mode and false otherwise. </p>
+
+<p>Reimplemented in <a class="el" href="classclientsocket.html#a0127a962432c6e54fc3301fe0b03c005">clientsocket</a>, and <a class="el" href="classserversocket.html#af7aef836c3118bdb72045a54ec3298a7">serversocket</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abf96fd9d695c8bc46a8d6a73d620c7b8"></a><!-- doxytag: member="filedescriptor::netToHost" ref="abf96fd9d695c8bc46a8d6a73d620c7b8" args="(uint64_t value)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint64_t filedescriptor::netToHost </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Converts an unsigned 64-bit integer from network byte order to host byte order. </p>
 
 </div>
 </div>
@@ -885,24 +1034,6 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Converts an unsigned 16-bit integer from network byte order to host byte order. </p>
-
-</div>
-</div>
-<a class="anchor" id="abf96fd9d695c8bc46a8d6a73d620c7b8"></a><!-- doxytag: member="filedescriptor::netToHost" ref="abf96fd9d695c8bc46a8d6a73d620c7b8" args="(uint64_t value)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint64_t filedescriptor::netToHost </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Converts an unsigned 64-bit integer from network byte order to host byte order. </p>
 
 </div>
 </div>
@@ -1198,6 +1329,34 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6c6bbb2d0e1a1f1a0dc06725a36611e9"></a><!-- doxytag: member="filedescriptor::read" ref="a6c6bbb2d0e1a1f1a0dc06725a36611e9" args="(void *buf, size_t size) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads "size" bytes from the file descriptor into "buf". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae8dcc47d6a473241edee77ab620c4d9d"></a><!-- doxytag: member="filedescriptor::read" ref="ae8dcc47d6a473241edee77ab620c4d9d" args="(char **buffer, const char *terminator, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1240,32 +1399,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4f399c8ae770baee23c6304004bb775a"></a><!-- doxytag: member="filedescriptor::read" ref="a4f399c8ae770baee23c6304004bb775a" args="(uint16_t *buffer) const " -->
+<a class="anchor" id="a74fd79eae196ae2270b73cf17c39c752"></a><!-- doxytag: member="filedescriptor::read" ref="a74fd79eae196ae2270b73cf17c39c752" args="(float *buffer, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::read </td>
           <td>(</td>
-          <td class="paramtype">uint16_t *&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads an unsigned 16-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a6c56b9077959b324c23f0d000d6db72f"></a><!-- doxytag: member="filedescriptor::read" ref="a6c56b9077959b324c23f0d000d6db72f" args="(uint32_t *buffer, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t *&#160;</td>
+          <td class="paramtype">float *&#160;</td>
           <td class="paramname"><em>buffer</em>, </td>
         </tr>
         <tr>
@@ -1288,7 +1429,25 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Reads an unsigned 32-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+<p>Reads a floating point number from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4f399c8ae770baee23c6304004bb775a"></a><!-- doxytag: member="filedescriptor::read" ref="a4f399c8ae770baee23c6304004bb775a" args="(uint16_t *buffer) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads an unsigned 16-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
 
 </div>
 </div>
@@ -1310,24 +1469,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a84ff77a17ff52d617eafd38725635a33"></a><!-- doxytag: member="filedescriptor::read" ref="a84ff77a17ff52d617eafd38725635a33" args="(int16_t *buffer) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">int16_t *&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads a 16-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
 <a class="anchor" id="a3d2f0b37e530a4950ae45b90336d3176"></a><!-- doxytag: member="filedescriptor::read" ref="a3d2f0b37e530a4950ae45b90336d3176" args="(uint64_t *buffer) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1346,57 +1487,27 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9df062aa04a0f0d544a28fb450d6e9dc"></a><!-- doxytag: member="filedescriptor::read" ref="a9df062aa04a0f0d544a28fb450d6e9dc" args="(bool *buffer) const " -->
+<a class="anchor" id="a69ffdeabd60ec4f4f7baf33b3244a1c0"></a><!-- doxytag: member="filedescriptor::read" ref="a69ffdeabd60ec4f4f7baf33b3244a1c0" args="(int64_t *buffer, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::read </td>
           <td>(</td>
-          <td class="paramtype">bool *&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads a boolean value from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a5bd562f5e88aab1dfba7a8ffea96cb8d"></a><!-- doxytag: member="filedescriptor::read" ref="a5bd562f5e88aab1dfba7a8ffea96cb8d" args="(int32_t *buffer) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads a 32-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a6c6bbb2d0e1a1f1a0dc06725a36611e9"></a><!-- doxytag: member="filedescriptor::read" ref="a6c6bbb2d0e1a1f1a0dc06725a36611e9" args="(void *buf, size_t size) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>buf</em>, </td>
+          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1406,7 +1517,59 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Reads "size" bytes from the file descriptor into "buf". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
+<p>Reads a 64-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a84ff77a17ff52d617eafd38725635a33"></a><!-- doxytag: member="filedescriptor::read" ref="a84ff77a17ff52d617eafd38725635a33" args="(int16_t *buffer) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads a 16-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a677bc9a351a13248566f0b5beb2bfd0d"></a><!-- doxytag: member="filedescriptor::read" ref="a677bc9a351a13248566f0b5beb2bfd0d" args="(int16_t *buffer, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">int16_t *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads a 16-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
 
 </div>
 </div>
@@ -1425,6 +1588,24 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Reads a floating point number from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="afcc02d8a5532e596130f65ea3b0cf704"></a><!-- doxytag: member="filedescriptor::read" ref="afcc02d8a5532e596130f65ea3b0cf704" args="(int64_t *buffer) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads a 64-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
 
 </div>
 </div>
@@ -1464,6 +1645,24 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9df062aa04a0f0d544a28fb450d6e9dc"></a><!-- doxytag: member="filedescriptor::read" ref="a9df062aa04a0f0d544a28fb450d6e9dc" args="(bool *buffer) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads a boolean value from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
 <a class="anchor" id="a8e784547d25841042526b361454a6729"></a><!-- doxytag: member="filedescriptor::read" ref="a8e784547d25841042526b361454a6729" args="(char *buffer) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1479,40 +1678,6 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Reads an character from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a74fd79eae196ae2270b73cf17c39c752"></a><!-- doxytag: member="filedescriptor::read" ref="a74fd79eae196ae2270b73cf17c39c752" args="(float *buffer, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads a floating point number from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
 
 </div>
 </div>
@@ -1636,6 +1801,40 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6c56b9077959b324c23f0d000d6db72f"></a><!-- doxytag: member="filedescriptor::read" ref="a6c56b9077959b324c23f0d000d6db72f" args="(uint32_t *buffer, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::read </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Reads an unsigned 32-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
 <a class="anchor" id="a06148f2a82985b0a45de6c3fc0e64189"></a><!-- doxytag: member="filedescriptor::read" ref="a06148f2a82985b0a45de6c3fc0e64189" args="(uint64_t *buffer, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1667,58 +1866,6 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Reads an unsigned 64-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="afcc02d8a5532e596130f65ea3b0cf704"></a><!-- doxytag: member="filedescriptor::read" ref="afcc02d8a5532e596130f65ea3b0cf704" args="(int64_t *buffer) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads a 64-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a677bc9a351a13248566f0b5beb2bfd0d"></a><!-- doxytag: member="filedescriptor::read" ref="a677bc9a351a13248566f0b5beb2bfd0d" args="(int16_t *buffer, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::read </td>
-          <td>(</td>
-          <td class="paramtype">int16_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Reads a 16-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
 
 </div>
 </div>
@@ -1756,37 +1903,21 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a69ffdeabd60ec4f4f7baf33b3244a1c0"></a><!-- doxytag: member="filedescriptor::read" ref="a69ffdeabd60ec4f4f7baf33b3244a1c0" args="(int64_t *buffer, long sec, long usec) const " -->
+<a class="anchor" id="a5bd562f5e88aab1dfba7a8ffea96cb8d"></a><!-- doxytag: member="filedescriptor::read" ref="a5bd562f5e88aab1dfba7a8ffea96cb8d" args="(int32_t *buffer) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::read </td>
           <td>(</td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Reads a 64-bit integer from the file descriptor into "buffer" with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully read, RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+<p>Reads a 32-bit integer from the file descriptor into "buffer". Returns the number of bytes that were successfully read or RESULT_ERROR if an error occurred. </p>
 
 </div>
 </div>
@@ -1988,6 +2119,25 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aba9a7fa52d49184adda885bf76e1197b"></a><!-- doxytag: member="filedescriptor::supportsBlockingNonBlockingModes" ref="aba9a7fa52d49184adda885bf76e1197b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool filedescriptor::supportsBlockingNonBlockingModes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if the client socket supports blocking/nonblocking modes and false otherwise. </p>
+
+<p>Reimplemented in <a class="el" href="classclientsocket.html#a7f51a2e130d4912953d65db70b79a969">clientsocket</a>, and <a class="el" href="classserversocket.html#aff1a14396dd40667635fce7ea043dc69">serversocket</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a50c42991f500b7fc1ef01fcdf0f240fd"></a><!-- doxytag: member="filedescriptor::translateByteOrder" ref="a50c42991f500b7fc1ef01fcdf0f240fd" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -2179,7 +2329,25 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6c7deae4623e5bc5075ffb52eb653757"></a><!-- doxytag: member="filedescriptor::write" ref="a6c7deae4623e5bc5075ffb52eb653757" args="(const unsigned char *string) const " -->
+<a class="anchor" id="ab3503f5346ab56f79d3c3a9b24b33254"></a><!-- doxytag: member="filedescriptor::write" ref="ab3503f5346ab56f79d3c3a9b24b33254" args="(bool value) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "value" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a5dc34ccb151a67d780805f11abe42303"></a><!-- doxytag: member="filedescriptor::write" ref="a5dc34ccb151a67d780805f11abe42303" args="(const unsigned char *string, size_t size, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -2187,24 +2355,46 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
           <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Writes NULL-terminated "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+<p>Writes "size" bytes of "string" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. Note that it is possible to write beyond the string's NULL terminator using this method. </p>
 
 </div>
 </div>
-<a class="anchor" id="a11683a8e0595ca705085528ff14bf40b"></a><!-- doxytag: member="filedescriptor::write" ref="a11683a8e0595ca705085528ff14bf40b" args="(uint16_t number, long sec, long usec) const " -->
+<a class="anchor" id="a8c3d3c675242592315720531ad199d79"></a><!-- doxytag: member="filedescriptor::write" ref="a8c3d3c675242592315720531ad199d79" args="(uint64_t number, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>number</em>, </td>
         </tr>
         <tr>
@@ -2265,32 +2455,128 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a47a7e2def89d670256dc3a0df8a29391"></a><!-- doxytag: member="filedescriptor::write" ref="a47a7e2def89d670256dc3a0df8a29391" args="(uint32_t number) const " -->
+<a class="anchor" id="a4e9431c142bcbace23bcdb5bb4b14106"></a><!-- doxytag: member="filedescriptor::write" ref="a4e9431c142bcbace23bcdb5bb4b14106" args="(int64_t number, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a11683a8e0595ca705085528ff14bf40b"></a><!-- doxytag: member="filedescriptor::write" ref="a11683a8e0595ca705085528ff14bf40b" args="(uint16_t number, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8fa40f30ef6d8a5645779e926e96aa1c"></a><!-- doxytag: member="filedescriptor::write" ref="a8fa40f30ef6d8a5645779e926e96aa1c" args="(const unsigned char *string, size_t size) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "size" bytes of "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. Note that it is possible to write beyond the string's NULL terminator using this method. </p>
+
+</div>
+</div>
+<a class="anchor" id="a877787f3d7eed67798d8e8adc6e56507"></a><!-- doxytag: member="filedescriptor::write" ref="a877787f3d7eed67798d8e8adc6e56507" args="(unsigned char character) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>character</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+<p>Writes "character" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
 
 </div>
 </div>
-<a class="anchor" id="a1f764a75ac0c47bc8b9d85792c92e57b"></a><!-- doxytag: member="filedescriptor::write" ref="a1f764a75ac0c47bc8b9d85792c92e57b" args="(float number) const " -->
+<a class="anchor" id="abe28a94af94bce6122c606072da0cd04"></a><!-- doxytag: member="filedescriptor::write" ref="abe28a94af94bce6122c606072da0cd04" args="(uint16_t number) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -2309,6 +2595,226 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
           <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a47a7e2def89d670256dc3a0df8a29391"></a><!-- doxytag: member="filedescriptor::write" ref="a47a7e2def89d670256dc3a0df8a29391" args="(uint32_t number) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a09fe7090449a9115376cddb500f1bd39"></a><!-- doxytag: member="filedescriptor::write" ref="a09fe7090449a9115376cddb500f1bd39" args="(const char *string, size_t size) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "size" bytes of "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. Note that it is possible to write beyond the string's NULL terminator using this method. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab8c70ea0e99b2d6ef06dc4995dabe88d"></a><!-- doxytag: member="filedescriptor::write" ref="ab8c70ea0e99b2d6ef06dc4995dabe88d" args="(float number, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3098a6dffccde3117a38f9c94e421f64"></a><!-- doxytag: member="filedescriptor::write" ref="a3098a6dffccde3117a38f9c94e421f64" args="(double number) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a328b4a4dbfa29e4c3f147502d4d31617"></a><!-- doxytag: member="filedescriptor::write" ref="a328b4a4dbfa29e4c3f147502d4d31617" args="(const unsigned char *string, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes NULL-terminated "string" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a87b8575e395d4d28b4933f251fafa4f0"></a><!-- doxytag: member="filedescriptor::write" ref="a87b8575e395d4d28b4933f251fafa4f0" args="(int32_t number) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a84835e964733d718a316b89568da06a4"></a><!-- doxytag: member="filedescriptor::write" ref="a84835e964733d718a316b89568da06a4" args="(char character) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>character</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "character" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab7291e95e311f3ccd3837f5ae7c720da"></a><!-- doxytag: member="filedescriptor::write" ref="ab7291e95e311f3ccd3837f5ae7c720da" args="(double number, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae88822c3260b2ee9213e7d17fa8d103b"></a><!-- doxytag: member="filedescriptor::write" ref="ae88822c3260b2ee9213e7d17fa8d103b" args="(int16_t number) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -2347,42 +2853,50 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a09fe7090449a9115376cddb500f1bd39"></a><!-- doxytag: member="filedescriptor::write" ref="a09fe7090449a9115376cddb500f1bd39" args="(const char *string, size_t size) const " -->
+<a class="anchor" id="a6c7deae4623e5bc5075ffb52eb653757"></a><!-- doxytag: member="filedescriptor::write" ref="a6c7deae4623e5bc5075ffb52eb653757" args="(const unsigned char *string) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Writes "size" bytes of "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. Note that it is possible to write beyond the string's NULL terminator using this method. </p>
+<p>Writes NULL-terminated "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
 
 </div>
 </div>
-<a class="anchor" id="a4e9431c142bcbace23bcdb5bb4b14106"></a><!-- doxytag: member="filedescriptor::write" ref="a4e9431c142bcbace23bcdb5bb4b14106" args="(int64_t number, long sec, long usec) const " -->
+<a class="anchor" id="a1f764a75ac0c47bc8b9d85792c92e57b"></a><!-- doxytag: member="filedescriptor::write" ref="a1f764a75ac0c47bc8b9d85792c92e57b" args="(float number) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
-          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a034c23b374e30a97fa0066a8414a59be"></a><!-- doxytag: member="filedescriptor::write" ref="a034c23b374e30a97fa0066a8414a59be" args="(int16_t number, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>number</em>, </td>
         </tr>
         <tr>
@@ -2409,42 +2923,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4034d9728aeac0c8cb21666ff30b2eb4"></a><!-- doxytag: member="filedescriptor::write" ref="a4034d9728aeac0c8cb21666ff30b2eb4" args="(const char *string) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes NULL-terminated "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="ab3503f5346ab56f79d3c3a9b24b33254"></a><!-- doxytag: member="filedescriptor::write" ref="ab3503f5346ab56f79d3c3a9b24b33254" args="(bool value) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "value" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
 <a class="anchor" id="a0762b08a4925a4d98b962e1b2a1d983e"></a><!-- doxytag: member="filedescriptor::write" ref="a0762b08a4925a4d98b962e1b2a1d983e" args="(char character, long sec, long usec) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -2453,6 +2931,108 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>character</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "character" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2108bf1ca68bbe267aefecfa3b896626"></a><!-- doxytag: member="filedescriptor::write" ref="a2108bf1ca68bbe267aefecfa3b896626" args="(uint32_t number, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae06f2c59b9564a22531595ef3b743230"></a><!-- doxytag: member="filedescriptor::write" ref="ae06f2c59b9564a22531595ef3b743230" args="(bool value, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>usec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Writes "value" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad36b61ffeed66474cd98d482af95240e"></a><!-- doxytag: member="filedescriptor::write" ref="ad36b61ffeed66474cd98d482af95240e" args="(unsigned char character, long sec, long usec) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ssize_t filedescriptor::write </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
           <td class="paramname"><em>character</em>, </td>
         </tr>
         <tr>
@@ -2513,93 +3093,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3098a6dffccde3117a38f9c94e421f64"></a><!-- doxytag: member="filedescriptor::write" ref="a3098a6dffccde3117a38f9c94e421f64" args="(double number) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="ab7291e95e311f3ccd3837f5ae7c720da"></a><!-- doxytag: member="filedescriptor::write" ref="ab7291e95e311f3ccd3837f5ae7c720da" args="(double number, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a2108bf1ca68bbe267aefecfa3b896626"></a><!-- doxytag: member="filedescriptor::write" ref="a2108bf1ca68bbe267aefecfa3b896626" args="(uint32_t number, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a8c3d3c675242592315720531ad199d79"></a><!-- doxytag: member="filedescriptor::write" ref="a8c3d3c675242592315720531ad199d79" args="(uint64_t number, long sec, long usec) const " -->
+<a class="anchor" id="a74daeedb23c083e536b8f75dc526bf75"></a><!-- doxytag: member="filedescriptor::write" ref="a74daeedb23c083e536b8f75dc526bf75" args="(uint64_t number) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -2607,350 +3101,6 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
           <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a5dc34ccb151a67d780805f11abe42303"></a><!-- doxytag: member="filedescriptor::write" ref="a5dc34ccb151a67d780805f11abe42303" args="(const unsigned char *string, size_t size, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "size" bytes of "string" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. Note that it is possible to write beyond the string's NULL terminator using this method. </p>
-
-</div>
-</div>
-<a class="anchor" id="a8fa40f30ef6d8a5645779e926e96aa1c"></a><!-- doxytag: member="filedescriptor::write" ref="a8fa40f30ef6d8a5645779e926e96aa1c" args="(const unsigned char *string, size_t size) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "size" bytes of "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. Note that it is possible to write beyond the string's NULL terminator using this method. </p>
-
-</div>
-</div>
-<a class="anchor" id="abe28a94af94bce6122c606072da0cd04"></a><!-- doxytag: member="filedescriptor::write" ref="abe28a94af94bce6122c606072da0cd04" args="(uint16_t number) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a328b4a4dbfa29e4c3f147502d4d31617"></a><!-- doxytag: member="filedescriptor::write" ref="a328b4a4dbfa29e4c3f147502d4d31617" args="(const unsigned char *string, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes NULL-terminated "string" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a034c23b374e30a97fa0066a8414a59be"></a><!-- doxytag: member="filedescriptor::write" ref="a034c23b374e30a97fa0066a8414a59be" args="(int16_t number, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="ab8c70ea0e99b2d6ef06dc4995dabe88d"></a><!-- doxytag: member="filedescriptor::write" ref="ab8c70ea0e99b2d6ef06dc4995dabe88d" args="(float number, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="ad36b61ffeed66474cd98d482af95240e"></a><!-- doxytag: member="filedescriptor::write" ref="ad36b61ffeed66474cd98d482af95240e" args="(unsigned char character, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">unsigned char&#160;</td>
-          <td class="paramname"><em>character</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "character" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a877787f3d7eed67798d8e8adc6e56507"></a><!-- doxytag: member="filedescriptor::write" ref="a877787f3d7eed67798d8e8adc6e56507" args="(unsigned char character) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">unsigned char&#160;</td>
-          <td class="paramname"><em>character</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "character" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="ae06f2c59b9564a22531595ef3b743230"></a><!-- doxytag: member="filedescriptor::write" ref="ae06f2c59b9564a22531595ef3b743230" args="(bool value, long sec, long usec) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>sec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>usec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "value" to the file descriptor with a timeout of "sec" seconds and "usec" microseconds. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a timeout occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a84835e964733d718a316b89568da06a4"></a><!-- doxytag: member="filedescriptor::write" ref="a84835e964733d718a316b89568da06a4" args="(char character) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>character</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "character" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="a87b8575e395d4d28b4933f251fafa4f0"></a><!-- doxytag: member="filedescriptor::write" ref="a87b8575e395d4d28b4933f251fafa4f0" args="(int32_t number) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
-
-</div>
-</div>
-<a class="anchor" id="ae88822c3260b2ee9213e7d17fa8d103b"></a><!-- doxytag: member="filedescriptor::write" ref="ae88822c3260b2ee9213e7d17fa8d103b" args="(int16_t number) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ssize_t filedescriptor::write </td>
-          <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -3001,21 +3151,21 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a74daeedb23c083e536b8f75dc526bf75"></a><!-- doxytag: member="filedescriptor::write" ref="a74daeedb23c083e536b8f75dc526bf75" args="(uint64_t number) const " -->
+<a class="anchor" id="a4034d9728aeac0c8cb21666ff30b2eb4"></a><!-- doxytag: member="filedescriptor::write" ref="a4034d9728aeac0c8cb21666ff30b2eb4" args="(const char *string) const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ssize_t filedescriptor::write </td>
           <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Writes "number" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
+<p>Writes NULL-terminated "string" to the file descriptor. Returns the number of bytes that were successfully written or RESULT_ERROR if an error occurred. </p>
 
 </div>
 </div>
@@ -3060,7 +3210,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

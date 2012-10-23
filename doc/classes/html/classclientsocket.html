@@ -58,6 +58,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclientsocket.html#a7f51a2e130d4912953d65db70b79a969">supportsBlockingNonBlockingModes</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclientsocket.html#a63864088d5d3adb75e9604438f7ff63d">useNonBlockingMode</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclientsocket.html#a9c72de1d86b9b0a31f2cafd7e1499ded">useBlockingMode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclientsocket.html#a0127a962432c6e54fc3301fe0b03c005">isUsingNonBlockingMode</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclientsocket.html#a7783b6dd99d4471d0aa0ea17d599950d">ioCtl</a> (int32_t command, void *arg) const </td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The clientsocket class provides a base class for classes that implement the client side of a client-server communication model over a socket. </p>
@@ -115,6 +117,55 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a7783b6dd99d4471d0aa0ea17d599950d"></a><!-- doxytag: member="clientsocket::ioCtl" ref="a7783b6dd99d4471d0aa0ea17d599950d" args="(int32_t command, void *arg) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int32_t clientsocket::ioCtl </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>arg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Use the ioctl() system call to perform various low-level file descriptor operations. </p>
+
+<p>Reimplemented from <a class="el" href="classfiledescriptor.html#a7f0b6913b4e150f1f5e5b1561493d496">filedescriptor</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0127a962432c6e54fc3301fe0b03c005"></a><!-- doxytag: member="clientsocket::isUsingNonBlockingMode" ref="a0127a962432c6e54fc3301fe0b03c005" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool clientsocket::isUsingNonBlockingMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true if the file descriptor is in non-blocking mode and false otherwise. </p>
+
+<p>Reimplemented from <a class="el" href="classfiledescriptor.html#ab73fe66c335c7b8cdd04ea881416bfeb">filedescriptor</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aecef6e9da7504a58938df9f0fee33e8b"></a><!-- doxytag: member="clientsocket::operator=" ref="aecef6e9da7504a58938df9f0fee33e8b" args="(const clientsocket &amp;c)" -->
 <div class="memitem">
 <div class="memproto">
@@ -147,6 +198,8 @@ Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Returns true if the client socket supports blocking/nonblocking modes and false otherwise. </p>
+
+<p>Reimplemented from <a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">filedescriptor</a>.</p>
 
 </div>
 </div>
@@ -189,7 +242,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

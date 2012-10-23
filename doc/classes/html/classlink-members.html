@@ -112,6 +112,7 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfile.html#a6f89487c3c8dd6a8a049f71c27659624">createTemporaryFile</a>(char *templatefilename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a3973427976935308c1d59638ff504078">dataSync</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a3822c2930e5d004766854371d097e403">dirname</a>(const char *filename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#af992db5c1593ee697f99953000c0f429">disableIPv4</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a450567c8744e8162832cfc325051ee6e">dontAllowShortReads</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a5585ce27c88d29da92e37aa23f027e1b">dontAllowShortWrites</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a72033e31c0cbe18602b9a21e9493b590">dontCloseOnExec</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
@@ -128,9 +129,10 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a40cd844190971abebd6af838f1b2becb">dontUseNaglesAlgorithm</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ad967e6cbdaa87b8df42dc1636d119675">duplicate</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a45a2f0627c0214cfac74de0c28fb0b7c">duplicate</a>(int32_t newfd) const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ab859b86a0907beb82513acc5985ce625">enableIPv4</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a6b63cbefb43a1c16d01bdeb61a79447a">executable</a>(const char *filename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#ad96f9ff00ab75fb39f0fbf6cd6a876c6">exists</a>(const char *filename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a623db8e88ea40bb2d2a0199dcbb13836">fCntl</a>(int32_t command, long arg) const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ace2a0bff4d68644295536ed69e71e205">fCntl</a>(int32_t command, long arg) const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a22090815b0614f552f2cb2cc8f170572">file</a>()</td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#ad23255874176543e470990e75a595809">file</a>(const file &amp;f)</td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a0179c81bbcb0c39bfe822a8b4f726a32">filedescriptor</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
@@ -187,6 +189,11 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ac0589e7427841901e23c840124cc3e69">getPeerAddress</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a4dedcf10aedb1ea568307467851f4b74">getPermissions</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a29700ec9e0eac92ea10846080bd37bd2">getPermissions</a>(const char *filename, mode_t *perms)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#aa14cc0aa8cc1b849917b1547c5948ef5">getRetryInterruptedFcntl</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a695f7c309d62a020a5cf3b2fd3021c7a">getRetryInterruptedIoctl</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ac093fef061ead93c17eb6aa84eecf46e">getRetryInterruptedReads</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a9b145e4eafb11d8c89eb7efa8738c196">getRetryInterruptedWaits</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a7e2b7e9cf7baef94d507e04e0a8e7f45">getRetryInterruptedWrites</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a72ef539971b24cbf0ba399723f2b4f1a">getSize</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#af7d3eadda73f58a2af9a819768baf8fb">getSize</a>(const char *filename, off64_t *size)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a5bf0a1af7a070fe41262d39d0ec23281">getTcpReadBufferSize</a>(int32_t *size)</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
@@ -195,7 +202,7 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a015c15b53476f7741d4693481a0b2a96">hostToNet</a>(uint16_t value)</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ab0dd118e7f10d87de4300ac399bd1272">hostToNet</a>(uint32_t value)</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a231c459ea091720cb70b7b1b071fc132">hostToNet</a>(uint64_t value)</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a1873274bb17f37c464cce7166c24dd51">ioCtl</a>(int32_t command, void *arg) const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a7f0b6913b4e150f1f5e5b1561493d496">ioCtl</a>(int32_t command, void *arg) const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#abb0173f0480d99b36d190c9643374179">isBlockDevice</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a80f3f66ebd06afdbe074c78c6e226306">isBlockDevice</a>(const char *filename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#adb76c2f748389c7c9d0d9d67bf5ff2e8">isCharacterDevice</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
@@ -210,7 +217,7 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfile.html#a3b203d4e8d8037cd78b30c99f5fd9b93">isSocket</a>(const char *filename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#ac2c2feedf6fc897496ec60afbe89dfa3">isSymbolicLink</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a07f3774283ce0869f576d3444677cee0">isSymbolicLink</a>(const char *filename)</td><td><a class="el" href="classfile.html">file</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a63b969f0db8f0163a7586a66b112cf33">isUsingNonBlockingMode</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ab73fe66c335c7b8cdd04ea881416bfeb">isUsingNonBlockingMode</a>() const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#af91ad8cae2780727d94f1036239bfa30">listAttributes</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a4b9cf8e5963d69db728f681afdd9b56b">lockFile</a>(int16_t type) const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a5879814ab612565e102614f17f994d33">lockFromCurrent</a>(int16_t type, off64_t len) const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
@@ -319,6 +326,7 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a7cd820738744ec4723be54351b026339">setTcpReadBufferSize</a>(int32_t size)</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a92e149613647efa0e87963f07479e7d9">setTcpWriteBufferSize</a>(int32_t size)</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a7d62107de57c6670c508571d43b4b21f">setWriteBufferSize</a>(ssize_t size) const </td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#aba9a7fa52d49184adda885bf76e1197b">supportsBlockingNonBlockingModes</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a7efec145b08aa1de170bcb31eda3c14c">sync</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#a50c42991f500b7fc1ef01fcdf0f240fd">translateByteOrder</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classfile.html#a22cdc81bc0a3daadc5f291b382a460c0">truncate</a>() const </td><td><a class="el" href="classfile.html">file</a></td><td></td></tr>
@@ -393,7 +401,7 @@ This is the complete list of members for <a class="el" href="classlink.html">lin
   <tr class="memlist"><td><a class="el" href="classfile.html#a537ffc79479984a334e6706bbcfb744f">~file</a>()</td><td><a class="el" href="classfile.html">file</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classfiledescriptor.html#ade7e2d6dd54324862720e600c3342b89">~filedescriptor</a>()</td><td><a class="el" href="classfiledescriptor.html">filedescriptor</a></td><td><code> [virtual]</code></td></tr>
 </table></div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Aug 21 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

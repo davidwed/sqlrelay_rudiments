@@ -613,17 +613,6 @@ int64_t system::getProcessorsOnline() {
 	#endif
 }
 
-int64_t system::getMaxIOVectorElements() {
-	#if defined(_SC_IOV_MAX)
-		return sysConf(_SC_IOV_MAX);
-	#elif defined(_SC_UIO_MAXIOV)
-		return sysConf(_SC_UIO_MAXIOV);
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
 int64_t system::getMaxSupplementalGroupsPerUser() {
 	#if defined(_SC_NGROUPS_MAX)
 		return sysConf(_SC_NGROUPS_MAX);
@@ -633,54 +622,9 @@ int64_t system::getMaxSupplementalGroupsPerUser() {
 	#endif
 }
 
-int64_t system::getMaxAIOOperationsPerList() {
-	#if defined(_SC_AIO_LISTIO_MAX)
-		return sysConf(_SC_AIO_LISTIO_MAX);
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
-int64_t system::getMaxOutstandingAIOOperations() {
-	#if defined(_SC_AIO_MAX)
-		return sysConf(_SC_AIO_MAX);
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
-int64_t system::getMaxAIOPriorityDelta() {
-	#if defined(_SC_AIO_PRIO_DELTA_MAX)
-		return sysConf(_SC_AIO_PRIO_DELTA_MAX);
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
 int64_t system::getMaxDelayTimerExpirations() {
 	#if defined(_SC_DELAYTIMER_MAX)
 		return sysConf(_SC_DELAYTIMER_MAX);
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
-int64_t system::getMaxMessageQueuesPerProcess() {
-	#if defined(_SC_MQ_OPEN_MAX)
-		return sysConf(_SC_MQ_OPEN_MAX);
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
-int64_t system::getMaxMessagePriorities() {
-	#if defined(_SC_MQ_PRIO_MAX)
-		return sysConf(_SC_MQ_PRIO_MAX);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;

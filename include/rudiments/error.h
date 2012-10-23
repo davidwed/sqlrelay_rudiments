@@ -27,9 +27,10 @@ class RUDIMENTS_DLLSPEC error {
 		static	int32_t		getErrorNumber();
 
 		/** Returns a string representation of the current system
-		 *  error.  Note: this method returns a pointer to an internal
-		 *  buffer which may be overwritten at any time. */
-		static	const char	*getErrorString();
+		 *  error.
+		 *  Note that the return value is allocated internally and
+		 *  returned, and must be freed by the calling program. */
+		static	char	*getErrorString();
 };
 
 #ifdef RUDIMENTS_NAMESPACE

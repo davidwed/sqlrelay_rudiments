@@ -345,7 +345,7 @@ bool process::detach() {
 		#ifdef __CYGWIN__
 			snooze::macrosnooze(1);
 		#endif
-		_exit(0);
+		exitImmediately(0);
 	}
 	
 	#ifdef RUDIMENTS_HAVE_SETSID
@@ -371,6 +371,10 @@ bool process::detach() {
 
 void process::exit(int32_t status) {
 	::exit(status);
+}
+
+void process::exitImmediately(int32_t status) {
+	_exit(status);
 }
 
 #ifdef RUDIMENTS_NAMESPACE
