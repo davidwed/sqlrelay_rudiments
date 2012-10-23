@@ -24,10 +24,10 @@ namespace rudiments {
 class dynamiclibprivate {
 	friend class dynamiclib;
 	private:
-		#if defined(RUDIMENTS_HAVE_DLOPEN)
-			void		*_handle;
-		#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
+		#if defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 			HINSTANCE	_handle;
+		#else
+			void		*_handle;
 		#endif
 };
 
