@@ -335,6 +335,8 @@ bool system::halt() {
 			cmd=RB_HALT;
 		#elif defined(RB_HALT_SYSTEM)
 			cmd=RB_HALT_SYSTEM;
+		#elif defined(RBT_HALT)
+			cmd=RBT_HALT;
 		#else
 			#error no RB_HALT or anything like it
 		#endif
@@ -386,6 +388,10 @@ bool system::shutDown() {
 			// Older linux doesn't have a power-down option
 			// just use halt instead
 			cmd=RB_HALT_SYSTEM;
+		#elif defined(RBT_HALT)
+			// Minix doesn't have a power-down option
+			// just use halt instead
+			cmd=RBT_HALT;
 		#else
 			#error no RB_POWEROFF or anything like it
 		#endif
@@ -421,6 +427,8 @@ bool system::reboot() {
 			cmd=LINUX_REBOOT_CMD_RESTART;
 		#elif defined(RB_AUTOBOOT)
 			cmd=RB_AUTOBOOT;
+		#elif defined(RBT_REBOOT)
+			cmd=RBT_REBOOT;
 		#else
 			#error no RB_AUTOBOOT or anything like it
 		#endif
