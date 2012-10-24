@@ -6,6 +6,38 @@ body {
 	font-size:	10pt;
 }
 
+.indented {
+	margin-left:	40px;
+}
+
+.heading1 {
+	color:		black;
+	font-family:	arial;
+	font-weight:	bold;
+	font-size:	20pt;
+}
+
+.heading2 {
+	color:		black;
+	font-family:	arial;
+	font-weight:	bold;
+	font-size:	16pt;
+}
+
+.heading3 {
+	color:		black;
+	font-family:	arial;
+	font-weight:	bold;
+	font-size:	12pt;
+}
+
+.heading4 {
+	color:		black;
+	font-family:	arial;
+	font-weight:	bold;
+	font-size:	10pt;
+}
+
 .heading {
 	color:		black;
 	font-family:	arial;
@@ -37,6 +69,29 @@ input {
 .login {
 	color:		black;
 	font-family:	arial;
+	font-weight:	medium;
+	font-size:	10pt;
+}
+
+.slide {
+	height: 100px;
+}
+
+.hidden {
+	display: none;
+}
+
+p {
+	background:	white;
+	color:		black;
+	font-family:	arial;
+	font-weight:	medium;
+	font-size:	10pt;
+}
+
+pre {
+	color:		black;
+	font-family:	courier;
 	font-weight:	medium;
 	font-size:	10pt;
 }
