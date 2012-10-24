@@ -89,29 +89,11 @@ int main(int argc, const char **argv) {
 	printf("Processors Online			: %lld\n",
 			(long long)rudiments::system::getProcessorsOnline());
 
-	printf("Max I/O Vector Elements			: %lld\n",
-			(long long)rudiments::system::getMaxIOVectorElements());
-
 	printf("Max Supplemental Groups Per User	: %lld\n",
 	(long long)rudiments::system::getMaxSupplementalGroupsPerUser());
 
-	printf("Max AIO Operations Per List		: %lld\n",
-		(long long)rudiments::system::getMaxAIOOperationsPerList());
-
-	printf("Max Outstanding AIO Operations		: %lld\n",
-		(long long)rudiments::system::getMaxOutstandingAIOOperations());
-
-	printf("Max AIO Priority Delta			: %lld\n",
-			(long long)rudiments::system::getMaxAIOPriorityDelta());
-
 	printf("Max Delay Timer Expirations		: %lld\n",
 		(long long)rudiments::system::getMaxDelayTimerExpirations());
-
-	printf("Max Message Queues Per Process		: %lld\n",
-		(long long)rudiments::system::getMaxMessageQueuesPerProcess());
-
-	printf("Max Message Priorities			: %lld\n",
-		(long long)rudiments::system::getMaxMessagePriorities());
 
 	printf("Max Realtime Signals			: %lld\n",
 			(long long)rudiments::system::getMaxRealtimeSignals());
