@@ -26,35 +26,35 @@
 seconds.  Most daemons don't write anything to the console, but this one does
 for purposes of demonstration.</p>
 
-@daemonprocess.C.html@
+@daemonprocess.cpp.html@
 
 <a name="file">
 <span class="heading">Using the file Class</span><br><br>
 
 <p>...</p>
 
-@file.C.html@
+@file.cpp.html@
 
 <a name="device">
 <span class="heading">Using the device Class</span><br><br>
 
 <p>...</p>
 
-@device.C.html@
+@device.cpp.html@
 
 <a name="serialport">
 <span class="heading">Using the serialport Class</span><br><br>
 
 <p>...</p>
 
-@serialport.C.html@
+@serialport.cpp.html@
 
 <a name="shmfile">
 <span class="heading">Using the shmfile Class</span><br><br>
 
 <p>...</p>
 
-@shmfile.C.html@
+@shmfile.cpp.html@
 
 <a name="server"></a>
 <span class="heading">Using the Server Classes</span><br><br>
@@ -64,7 +64,7 @@ over a network.  Below is an example combining the daemon and listener classes.
 This server listens on unix and inet sockets for a client connection, receives
 a string from the client and writes the same string back to the client.</p>
 
-@server.C.html@
+@server.cpp.html@
 
 <p>Notice that this server listens on both inet and unix ports.  Inet ports
 allow clients and servers to talk across a network.  Unix ports allow clients
@@ -79,9 +79,9 @@ faster and use fewer system resources.</p>
 sends a string to the server, reads what the server sends back and prints it
 out.  It does this once over an inet port and once over a unix port.</p>
 
-@inetclientsocket.C.html@
+@inetclientsocket.cpp.html@
 
-@unixclientsocket.C.html@
+@unixclientsocket.cpp.html@
 
 <a name="complex"></a>
 <span class="heading">Using the Complex Initialization methods of the
@@ -134,7 +134,7 @@ myserver::myserver() : daemonprocess(), listener() {
 
 <p>...</p>
 
-@listener.C.html@
+@listener.cpp.html@
 
 </body>
 </html>

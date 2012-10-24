@@ -5,7 +5,7 @@ include ../../config.mk
 html:
 	cd parts; \
 	rm -f *.html; \
-	for i in `/bin/ls ../../../test/*.C`; \
+	for i in `/bin/ls ../../../examples/*.cpp`; \
 	do \
 		BASENAME=`/bin/basename $$i`; \
 		echo "processing $$BASENAME"; \
