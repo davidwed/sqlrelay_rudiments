@@ -10,6 +10,7 @@ all:
 clean:
 	cd src; $(MAKE) clean
 	cd test; $(MAKE) clean
+	cd examples; $(MAKE) clean
 	$(RMTREE) msvc/Debug
 	$(RMTREE) msvc/Release
 

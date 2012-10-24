@@ -10,9 +10,10 @@
 namespace rudiments {
 #endif
 
-// @cond
-
 class systemprivate;
+
+/** The system class provides methods for controlling the state of and
+ *  accessing information about the operating system. */
 
 class RUDIMENTS_DLLSPEC system {
 	public:
