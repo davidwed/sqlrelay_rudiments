@@ -8,58 +8,18 @@
 <span class="heading">Programming with Rudiments using the Utility Classes</span><br><br>
 
 <ul>
-<li><a href="#environment">Using the environment Class</a></li>
 <li><a href="#commandline">Using the commandline Class</a></li>
 <li><a href="#parameterstring">Using the parameterstring Class</a></li>
-<li><a href="#datetime">Using the datetime Class</a></li>
-<li><a href="#timezonefile">Using the timezonefile Class</a></li>
-<li><a href="#directory">Using the directory Class</a></li>
-<li><a href="#filesystem">Using the filesystem Class</a></li>
-<li><a href="#logger">Using the logger Class</a></li>
-<li><a href="#permissions">Using the permissions Class</a></li>
-<li><a href="#randomnumber">Using the randomnumber Class</a></li>
-<li><a href="#regularexpression">Using the regularexpression Class</a></li>
 <li><a href="#chat">Using the chat Class</a></li>
-<li><a href="#crypt">Using the crypt Class</a></li>
-<li><a href="#dynamiclib">Using the dynamiclib Class</a></li>
-<li><a href="#error">Using the error Class</a></li>
-<li><a href="#intervaltimer">Using the intervaltimer Class</a></li>
-<li><a href="#math">Using the math Class</a></li>
-<li><a href="#mutex">Using the mutex Class</a></li>
-<li><a href="#process">Using the process Class</a></li>
-<li><a href="#serialportprofile">Using the serialportprofile Class</a></li>
-<li><a href="#snooze">Using the snooze Class</a></li>
-<li><a href="#signal">Using the Signal Classes</a></li>
-<li><a href="#sharedmemory">Using the sharedmemory Class</a></li>
-<li><a href="#semaphoreset">Using the semaphoreset Class</a></li>
-<li><a href="#memorymap">Using the memorymap Class</a></li>
 <li><a href="#memorypool">Using the memorypool Class</a></li>
 <li><a href="#variablebuffer">Using the variablebuffer Class</a></li>
 <li><a href="#stringbuffer">Using the stringbuffer Class</a></li>
-<li><a href="#character">Using the character Class</a></li>
-<li><a href="#charstring">Using the charstring Class</a></li>
-<li><a href="#rawbuffer">Using the rawbuffer Class</a></li>
 <li><a href="#xmldom">Using the xmldom Classes</a></li>
 <li><a href="#xmlsax">Using the xmlsax Class</a></li>
 <li><a href="#dtd">Using the dtd Class</a></li>
-<li><a href="#passwdentry">Using the passwdentry Class</a></li>
-<li><a href="#shadowentry">Using the shadowentry Class</a></li>
-<li><a href="#groupentry">Using the groupentry Class</a></li>
-<li><a href="#hostentry">Using the hostentry Class</a></li>
-<li><a href="#protocolentry">Using the protocolentry Class</a></li>
-<li><a href="#serviceentry">Using the serviceentry Class</a></li>
-<li><a href="#rpcentry">Using the rpcentry Class</a></li>
 <li><a href="#linkedlist">Using the linkedlist Class</a></li>
 <li><a href="#dictionary">Using the dictionary Class</a></li>
 </ul>
-
-<a name="environment"></a>
-<span class="heading">Using the environment Class</span><br><br>
-
-<p>The environment class allows you to get or set the value of environment
-variables.  The following example gets, sets and resets the environment
-variable TEST.</p>
-
 
 <a name="commandline"></a>
 <span class="heading">Using the commandline Class</span><br><br>
@@ -71,6 +31,55 @@ variable TEST.</p>
 <p>The commandline class makes it easy to deal with command line options of
 either of these formats.  Below is some code illustrating the use of the
 commandline class.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2001&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/commandline.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/charstring.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdlib.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commandline&nbsp;&nbsp;&nbsp;&nbsp; cmdline(argc,argv);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// if -help was specified, display a usage message</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(cmdline.found(<font color="#ff00ff">&quot;-help&quot;</font>)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;usage:&nbsp;&nbsp;divide -divisor number -dividend number</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// If -divisor and -dividend are supplied, use them.&nbsp;&nbsp;Otherwise</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display an error message.</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(cmdline.found(<font color="#ff00ff">&quot;-divisor&quot;</font>) &amp;&amp; cmdline.found(<font color="#ff00ff">&quot;-dividend&quot;</font>)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;divisor=charstring::toFloat(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmdline.getValue(<font color="#ff00ff">&quot;-divisor&quot;</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;dividend=charstring::toFloat(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmdline.getValue(<font color="#ff00ff">&quot;-dividend&quot;</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%0.2f</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,divisor/dividend);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;You must supply a divisor and a dividend.</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</font>
+
 
 
 <a name="parameterstring"></a>
@@ -107,237 +116,76 @@ name='\\value\\'
 ...
 </pre>
 
-
-<a name="datetime"></a>
-<span class="heading">Using the datetime Class</span><br><br>
-
-<p>One of the most difficult things to do in a Unix environment is deal with
-dates and times.  The "standard" functions and structures associated with 
-dates and times are complex, vary widely from platform to platform and in
-many cases are not thread safe.  The datetime class attempts to rectify this
-situation.</p>
-
-<p>The datetime class allows you to query and set the system clock. If your
-platform has a working real-time-clock (/dev/rtc), then you can query or set
-the hardware clock as well.  Note that your program must run as root in order
-to set the system or hardware clock.  Since it is common for the system clock
-to be set to the local time zone and the hardware clock to be set to GMT,
-a method is provided for converting the hardware clock time to the system's
-time zone.</p>
-
-<p>Additionally there is a method for switching the time zone of the time
-currently represented in the class.</p>
-
-<p>The datetime class also provides methods for converting between several
-common ways of representing time.  Such as a formatted string, the number of
-seconds since 1970 and "struct tm".</p>
-
-<p>There are also methods for adding discrete amounts of time to the time
-currently stored in the class.  You can, for example add 150 seconds to 
-"12:30:50 01/02/2003 EST" and get "12:32:20 01/02/2003 EST".  You can add
-negative numbers to subtract time.</p>
-
-<p>Below is some code illustrating the use of the datetime class.</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 
-<a name="timezonefile"></a>
-<span class="heading">Using the timezonefile Class</span><br><br>
-
-<p>While I was working on timezone support in the datetime class I originally
-thought that it might be useful to be able to parse timezone files.  I could not
-find any standard C functions for parsing them, so I wrote a class that parses
-them.</p>
-
-<p>It turned out to be of very limited value, but it works and I never removed
-it.  So, if you need such functionality, it exists.</p>
 
 
-<a name="directory"></a>
-<span class="heading">Using the directory Class</span><br><br>
 
 
-<a name="filesystem"></a>
-<span class="heading">Using the filesystem Class</span><br><br>
-
-<p>The filesystem class provides methods for collecting statistics about a
-filesystem.  The "standard" function for getting filesystem statistics
-is either statfs or statvfs.  Few operating systems implement statvfs and the
-structure returned by statfs varies greatly between operating systems.  The
-filesystem class attempts to remedy this situation.  However, no operating
-system supports every method in the filesystem class.</p>
 
 
-<a name="logger"></a>
-<span class="heading">Using the logger Class</span><br><br>
-
-<p>The logger class and associated logdestination classes provide a framework
-for generating log messages from applications.  An application can define a set
-of logdestinations and attach them to an instance of the logger class.  Then,
-when the application calls one of the write() methods of the logger class, the
-log message is written to each of the logdestinations.  For example, an
-application could simultaneously log to stderr and to a file.  Currently stdout,
-stderr, file and syslog logdestinations are supported.  If an application needs
-to send one set of log messages to one destination and another set to a
-different destinations, it can create two instances of the logger class and use
-one for each set of messages.</p>
-
-<p>The following example illustrates use of the logger class.</p>
 
 
-<a name="permissions"></a>
-<span class="heading">Using the permissions Class</span><br><br>
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2002&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/parameterstring.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameterstring pstr;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstr.parse(<font color="#ff00ff">&quot;name1=value1;name2='value2';name3='</font><font color="#6a5acd">\\</font><font color="#ff00ff">'value3</font><font color="#6a5acd">\\</font><font color="#ff00ff">'';name4=</font><font color="#6a5acd">\\\\</font><font color="#ff00ff">value4</font><font color="#6a5acd">\\\\</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;By Name:</font><font color="#6a5acd">\n</font><font color="#ff00ff">name1=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name2=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name3=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name4=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">name5=</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstr.getValue(<font color="#ff00ff">&quot;name1&quot;</font>),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstr.getValue(<font color="#ff00ff">&quot;name2&quot;</font>),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstr.getValue(<font color="#ff00ff">&quot;name3&quot;</font>),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstr.getValue(<font color="#ff00ff">&quot;name4&quot;</font>),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pstr.getValue(<font color="#ff00ff">&quot;name5&quot;</font>));<br>
+}<br>
+</font>
 
-<p>The permissions class provides simple methods for generating permissions.
-The output of these methods can be used whenever a function takes an argument
-of type mode_t.  Below is some code illustrating the use of the permissions
-class.</p>
 
 
-<a name="randomnumber"></a>
-<span class="heading">Using the randomnumber Class</span><br><br>
-
-<p>Functions for generating random numbers vary from platform to platform.  
-The randomnumber class attempts to rectify this situation.  Below is some code
-illustrating the use of the randomnumber class.</p>
-
-
-<a name="regularexpression"></a>
-<span class="heading">Using the regularexpression Class</span><br><br>
-
-<p>Regular expressions allow a programmer to perform complex string matching 
-but methods for using regular expressions vary from platform to platform.  The
-regularexpression class attempts to rectify this situation.  Below is some code
-illustrating the use of the regularexpression class.</p>
-
-
-<a name="chat"></a>
 <span class="heading">Using the chat Class</span><br><br>
 
 <p>...</p>
 
-
-<a name="crypt"></a>
-<span class="heading">Using the crypt Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="dynamiclib"></a>
-<span class="heading">Using the dynamiclib Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="error"></a>
-<span class="heading">Using the error Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="intervaltimer"></a>
-<span class="heading">Using the intervaltimer Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="math"></a>
-<span class="heading">Using the math Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="mutex"></a>
-<span class="heading">Using the mutex Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="process"></a>
-<span class="heading">Using the process Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="serialportprofile"></a>
-<span class="heading">Using the serialportprofile Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="snooze"></a>
-<span class="heading">Using the snooze Class</span><br><br>
-
-<p>...</p>
-
-
-<a name="signal"></a>
-<span class="heading">Using the Signal Classes</span><br><br>
-
-<p>Signals allow processes to interrupt the execution of other processes.
-Signal handlers allow processes to intercept and react to the signals sent to 
-them.</p>
-
-<p>Rudiments provides 3 classes for working with signals: signalset, 
-signalmanager and signalhandler.
-
-<p>A signalset is just a collection of signals.  The signalset class allows 
-a programmer to build up a collection of signals.</p>
-
-<p>The signalmanager class provides methods for sending signals, ignoring
-signals, waiting for signals and examining blocked signals.</p>
-
-<p>The signalhandler class provides methods for catching and handling 
-signals.</p>
-
-<p>Below is some code illustrating the use of all three classes.  Note that
-you'll have to kill this program with a -9.</p>
-
-
-<a name="sharedmemory"></a>
-<span class="heading">Using the sharedmemory Class</span><br><br>
-
-<p>Shared memory allows seperate processes to access a common block of memory.
-The standard functions and structures for managing shared memory segments are 
-complex.  The sharedmemory class attempts to rectify this situation.  Below is
-some code illustrating the use of the sharedmemory class.</p>
-
-<p>There are methods in the sharedmemory class that allow you to get and
-set user/group ownership and permissions of a segment that are not 
-documented here, but they are straightforward and rarely used.</p>
-
-<p>This program puts some data into shared memory then goes to sleep, giving
-another program time to access the segment.</p>
-
-
-<p>This program reads the data from shared memory.</p>
-
-
-<a name="semaphoreset"></a>
-<span class="heading">Using the semaphoreset Class</span><br><br>
-
-<p>Semaphores allow seperate processes or threads to synchronize activities.
-The standard functions and structures for managing semaphores are complex.  
-The sempahoreset class attempts to rectify this situation.  Below is some code
-illustrating the use of the semaphoreset class.</p>
-
-<p>There are methods in the semaphoreset class that allow you to get and
-set user/group ownership and permissions of a semaphore set that are not 
-documented here, but they are straightforward and rarely used.</p>
-
-<p>The first program prints out 1 and 3, the second program prints out 2 and 4.
-They use a set of 2 semaphores to synchronize these activities.  No matter
-what order the programs are started in, they will always print out 
-
-<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
-
-<p>These programs must both be run to the background.</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 
 
-<a name="memorymap"></a>
-<span class="heading">Using the memorymap Class</span><br><br>
 
-<p>...</p>
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2003&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">//&nbsp;</font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: implement this...</font><br>
+}<br>
+</font>
+
 
 
 <a name="memorypool"></a>
@@ -363,6 +211,130 @@ large enough to contain the largest possible data.</p>
 <p>The following code connects to a server on the local machine and reads
 variable/value pairs from it.</p>
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2002&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/memorypool.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memorypool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*mp=<font color="#a52a2a"><b>new</b></font>&nbsp;memorypool(<font color="#ff00ff">32</font>,<font color="#ff00ff">16</font>,<font color="#ff00ff">10</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;first run...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*segment=(<font color="#2e8b57"><b>char</b></font>&nbsp;*)mp-&gt;malloc(<font color="#ff00ff">6</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">6</font>; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment[j]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">'a'</font>+i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;free();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;second run...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*segment=(<font color="#2e8b57"><b>char</b></font>&nbsp;*)mp-&gt;malloc(<font color="#ff00ff">40</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">40</font>; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment[j]=<font color="#ff00ff">'z'</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*segment=(<font color="#2e8b57"><b>char</b></font>&nbsp;*)mp-&gt;malloc(<font color="#ff00ff">6</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">6</font>; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment[j]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">'a'</font>+i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*segment=(<font color="#2e8b57"><b>char</b></font>&nbsp;*)mp-&gt;malloc(<font color="#ff00ff">2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">6</font>; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment[j]=(<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">'A'</font>+i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;free();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;short/long/float/double...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>short</b></font>&nbsp;&nbsp; *sp=(<font color="#2e8b57"><b>short</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>long</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*lp=(<font color="#2e8b57"><b>long</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>float</b></font>&nbsp;&nbsp; *fp=(<font color="#2e8b57"><b>float</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>float</b></font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;*dp=(<font color="#2e8b57"><b>double</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>double</b></font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*sp=<font color="#ff00ff">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*lp=<font color="#ff00ff">1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*fp=<font color="#ff00ff">1.1</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*dp=<font color="#ff00ff">1.1</font>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;sp:&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;&nbsp;lp:&nbsp;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">&nbsp;&quot;</font>,*sp,*lp);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;fp:&nbsp;</font><font color="#6a5acd">%f</font><font color="#ff00ff">&nbsp;&nbsp;dp:&nbsp;</font><font color="#6a5acd">%f</font><font color="#ff00ff">&nbsp;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*fp,*dp);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;free();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;short/long/float/double arrays...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>short</b></font>&nbsp;&nbsp; *spa=(<font color="#2e8b57"><b>short</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>short</b></font>)*<font color="#ff00ff">10</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>long</b></font>&nbsp;&nbsp;&nbsp;&nbsp;*lpa=(<font color="#2e8b57"><b>long</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>long</b></font>)*<font color="#ff00ff">10</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>float</b></font>&nbsp;&nbsp; *fpa=(<font color="#2e8b57"><b>float</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>float</b></font>)*<font color="#ff00ff">10</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>double</b></font>&nbsp;&nbsp;*dpa=(<font color="#2e8b57"><b>double</b></font>&nbsp;*)mp-&gt;malloc(<font color="#a52a2a"><b>sizeof</b></font>(<font color="#2e8b57"><b>double</b></font>)*<font color="#ff00ff">10</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">10</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spa[i]=i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lpa[i]=i;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fpa[i]=i+((<font color="#2e8b57"><b>float</b></font>)i/<font color="#ff00ff">10.0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dpa[i]=i+((<font color="#2e8b57"><b>float</b></font>)i/<font color="#ff00ff">10.0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">10</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;sp:&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;&nbsp;lp:&nbsp;</font><font color="#6a5acd">%ld</font><font color="#ff00ff">&nbsp;&quot;</font>,spa[i],lpa[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;fp:&nbsp;</font><font color="#6a5acd">%f</font><font color="#ff00ff">&nbsp;&nbsp;dp:&nbsp;</font><font color="#6a5acd">%f</font><font color="#ff00ff">&nbsp;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,fpa[i],dpa[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;free...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;free();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>&nbsp;mp;<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp=<font color="#a52a2a"><b>new</b></font>&nbsp;memorypool(<font color="#ff00ff">32</font>,<font color="#ff00ff">16</font>,<font color="#ff00ff">10</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">10</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>long</b></font>&nbsp;&nbsp; total=<font color="#ff00ff">0</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>long</b></font>&nbsp;j=<font color="#ff00ff">0</font>; j&lt;<font color="#ff00ff">11</font>; j++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total=total+i+j;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;malloc(i+j);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;free();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;should be:&nbsp;</font><font color="#6a5acd">%ld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,total/<font color="#ff00ff">11</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-&gt;print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>&nbsp;mp;<br>
+}<br>
+</font>
+
+
 
 <a name="variablebuffer"></a>
 <span class="heading">Using the variablebuffer Class</span><br><br>
@@ -370,6 +342,110 @@ variable/value pairs from it.</p>
 <p>The variablebuffer class allows you to manipulate a buffer of arbitrary
 length containing binary data.  You can append data to a variablebuffer or
 write data at arbitrary positions in the buffer.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2002&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/variablebuffer.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/rawbuffer.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&quot;test.cpp&quot;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;variablebuffer:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;variablebuffer&nbsp;&nbsp;vb(<font color="#ff00ff">10</font>,<font color="#ff00ff">10</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append some string sequences to the buffer and display the contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// of the buffer byte by byte</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.append((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.append((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.append((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.append((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.append((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;append()&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rawbuffer::compare(vb.getBuffer(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;1234512345123451234512345&quot;</font>,<font color="#ff00ff">25</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// write 66666 to the buffer at position 0 and display it's contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// byte by byte (the first 5 bytes should be overwritten)</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.setPosition(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.write((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;write()&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rawbuffer::compare(vb.getBuffer(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;6666612345123451234512345&quot;</font>,<font color="#ff00ff">25</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// write 66666 to the buffer at position 30 and display it's contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// byte by byte, displaying nonprintable characters as .'s</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// (there should be a gap in the buffer now containing random data)</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.setPosition(<font color="#ff00ff">30</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.write((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;setPosition(), write()&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rawbuffer::compare(vb.getBuffer()+<font color="#ff00ff">30</font>,<font color="#ff00ff">&quot;66666&quot;</font>,<font color="#ff00ff">5</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// set the current position to 50</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.setPosition(<font color="#ff00ff">50</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// Append 12345 to the buffer and display it's contents byte by byte,</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// displaying nonprintable characters as .'s</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// Since we used append() instead of write(), the data should not be</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// written at position 50, but rather just at the current end of</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// the buffer.</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.append((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;setPosition(), append()&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rawbuffer::compare(vb.getBuffer()+<font color="#ff00ff">30</font>,<font color="#ff00ff">&quot;6666612345&quot;</font>,<font color="#ff00ff">10</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// Write 12345 to the buffer at the current position and display it's</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// contents byte by byte, displaying nonprintable characters as .'s</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// The current position should just be the end of the buffer, since</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// we just appended.&nbsp;&nbsp;So calling write() here is equivalent to calling</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append.</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.write((<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">&quot;12345&quot;</font>,<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;write() after setPosition() and append()&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rawbuffer::compare(vb.getBuffer()+<font color="#ff00ff">30</font>,<font color="#ff00ff">&quot;666661234512345&quot;</font>,<font color="#ff00ff">15</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// read 4 bytes from position 0 of the buffer and display them</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp; buffer[<font color="#ff00ff">5</font>];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer[<font color="#ff00ff">4</font>]=(<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>)<font color="#ff00ff">NULL</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.setPosition(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>long</b></font>&nbsp;&nbsp; sizeread=vb.read(buffer,<font color="#ff00ff">4</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;read into buffer&quot;</font>,rawbuffer::compare(buffer,<font color="#ff00ff">&quot;6666&quot;</font>,<font color="#ff00ff">4</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// read 4 bytes from position 5 of the buffer and display them</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.setPosition(<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeread=vb.read(buffer,<font color="#ff00ff">4</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;read into buffer&quot;</font>,rawbuffer::compare(buffer,<font color="#ff00ff">&quot;1234&quot;</font>,<font color="#ff00ff">4</font>)==<font color="#ff00ff">0</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// read 4 bytes from position 60 of the buffer and display them</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// (since this is off of the end of the buffer, nothing should be</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// displayed)</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vb.setPosition(<font color="#ff00ff">60</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sizeread=vb.read(buffer,<font color="#ff00ff">4</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test(<font color="#ff00ff">&quot;read into buffer&quot;</font>,sizeread==<font color="#ff00ff">0</font>);<br>
+}<br>
+</font>
+
 
 
 <a name="stringbuffer"></a>
@@ -379,25 +455,172 @@ write data at arbitrary positions in the buffer.</p>
 You can append data to a stringbuffer or write data at arbitrary positions in
 the buffer.</p>
 
-
-<a name="character"></a>
-<span class="heading">Using the character Class</span><br><br>
-
-<p>...</p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 
-<a name="charstring"></a>
-<span class="heading">Using the charstring Class</span><br><br>
-
-<p>The charstring class contains some commonly needed string manipulation and
-evaluation functions.  Below is some code illustrating the use of the string
-class.</p>
 
 
-<a name="rawbuffer"></a>
-<span class="heading">Using the rawbuffer Class</span><br><br>
 
-<p>...</p>
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2002&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stringbuffer.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a new string buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stringbuffer&nbsp;&nbsp;&nbsp;&nbsp;*str=<font color="#a52a2a"><b>new</b></font>&nbsp;stringbuffer();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append a NULL to the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append((<font color="#2e8b57"><b>char</b></font>&nbsp;*)<font color="#ff00ff">NULL</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append &quot;hello there world&quot; to the buffer in 3 parts</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">&quot;hello &quot;</font>)-&gt;append(<font color="#ff00ff">&quot;there &quot;</font>)-&gt;append(<font color="#ff00ff">&quot;world &quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the length and contents of the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,str-&gt;getStringLength(),str-&gt;getString());<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append some long integers to the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append((<font color="#2e8b57"><b>int32_t</b></font>)<font color="#ff00ff">1</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append((<font color="#2e8b57"><b>int32_t</b></font>)<font color="#ff00ff">2</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append((<font color="#2e8b57"><b>int32_t</b></font>)<font color="#ff00ff">3</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append((<font color="#2e8b57"><b>int32_t</b></font>)<font color="#ff00ff">4</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append((<font color="#2e8b57"><b>int32_t</b></font>)<font color="#ff00ff">5</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the length and contents of the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,str-&gt;getStringLength(),str-&gt;getString());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append some floating point numbers to the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">1.1</font>,<font color="#ff00ff">1</font>,<font color="#ff00ff">0</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">2.02</font>,<font color="#ff00ff">2</font>,<font color="#ff00ff">0</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">3.003</font>,<font color="#ff00ff">3</font>,<font color="#ff00ff">0</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">4.0004</font>,<font color="#ff00ff">4</font>,<font color="#ff00ff">0</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">5.00005</font>,<font color="#ff00ff">5</font>,<font color="#ff00ff">0</font>)-&gt;append(<font color="#ff00ff">&quot; &quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the length and contents of the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,str-&gt;getStringLength(),str-&gt;getString());<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clear the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;clear();<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append 1024 *'s to the buffer and display it's length and contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">1024</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str-&gt;append(<font color="#ff00ff">'*'</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str-&gt;getStringLength(),str-&gt;getString());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// delete the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>&nbsp;str;<br>
+<br>
+<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create another buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stringbuffer&nbsp;&nbsp;&nbsp;&nbsp;*sb=<font color="#a52a2a"><b>new</b></font>&nbsp;stringbuffer();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append some string sequences to the buffer and display the contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// of the buffer byte by byte</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;sb-&gt;getStringLength(); i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,sb-&gt;getString()[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// write 66666 to the buffer at position 0 and display it's contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// byte by byte (the first 5 bytes should be overwritten)</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;setPosition(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;write(<font color="#ff00ff">&quot;66666&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>unsigned</b></font>&nbsp;<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;sb-&gt;getStringLength(); i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,sb-&gt;getString()[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// write 66666 to the buffer at position 30 and display it's contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// byte by byte, displaying nonprintable characters as .'s</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// (there should be a gap in the buffer now containing random data)</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;setPosition(<font color="#ff00ff">30</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;write(<font color="#ff00ff">&quot;66666&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">35</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(sb-&gt;getString()[i]&gt;=<font color="#ff00ff">' '</font>&nbsp;&amp;&amp; sb-&gt;getString()[i]&lt;=<font color="#ff00ff">'~'</font>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,sb-&gt;getString()[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;.&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// set the current position to 50</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;setPosition(<font color="#ff00ff">50</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// Append 12345 to the buffer and display it's contents byte by byte,</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// displaying nonprintable characters as .'s</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// Since we used append() instead of write(), the data should not be</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// written at position 50, but rather just at the current end of</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// the buffer.</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">55</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(sb-&gt;getString()[i]&gt;=<font color="#ff00ff">' '</font>&nbsp;&amp;&amp; sb-&gt;getString()[i]&lt;=<font color="#ff00ff">'~'</font>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,sb-&gt;getString()[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;.&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// Write 12345 to the buffer at the current position and display it's</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// contents byte by byte, displaying nonprintable characters as .'s</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// The current position should just be the end of the buffer, since</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// we just appended.&nbsp;&nbsp;So calling write() here is equivalent to calling</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append.</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;write(<font color="#ff00ff">&quot;12345&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">55</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(sb-&gt;getString()[i]&gt;=<font color="#ff00ff">' '</font>&nbsp;&amp;&amp; sb-&gt;getString()[i]&lt;=<font color="#ff00ff">'~'</font>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%c</font><font color="#ff00ff">&quot;</font>,sb-&gt;getString()[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;.&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clear the buffer</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;clear();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append 1024 0's to the buffer and display it's length and contents</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">1024</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb-&gt;append(<font color="#ff00ff">&quot;0&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,str-&gt;getStringLength(),str-&gt;getString());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>&nbsp;sb;<br>
+}<br>
+</font>
+
 
 
 <a name="xmldom"></a>
@@ -693,55 +916,6 @@ using the xmldom and xmldomnode classes.</p>
 }
 </pre>
 
-<a name="passwdentry"></a>
-<span class="heading">Using the passwdentry Class</span><br><br>
-
-<p>The passwdentry class allows you to look up entries from /etc/passwd or
-from elsewhere if you're using the Name Service Switch.</p>
-
-
-<a name="shadowentry"></a>
-<span class="heading">Using the shadowentry Class</span><br><br>
-
-<p>The shadowentry class allows you to look up entries from /etc/shadow or
-from elsewhere if you're using the Name Service Switch.</p>
-
-
-<a name="groupentry"></a>
-<span class="heading">Using the groupentry Class</span><br><br>
-
-<p>The groupentry class allows you to look up entries from /etc/group or
-from elsewhere if you're using the Name Service Switch.</p>
-
-
-<a name="hostentry"></a>
-<span class="heading">Using the hostentry Class</span><br><br>
-
-<p>The hostentry class allows you to look up entries from /etc/hosts or
-from elsewhere if you're using the Name Service Switch.</p>
-
-
-<a name="protocolentry"></a>
-<span class="heading">Using the protocolentry Class</span><br><br>
-
-<p>The protocolentry class allows you to look up entries from /etc/protocols
-or from elsewhere if you're using the Name Service Switch.</p>
-
-
-<a name="serviceentry"></a>
-<span class="heading">Using the serviceentry Class</span><br><br>
-
-<p>The serviceentry class allows you to look up entries from /etc/services
-or from elsewhere if you're using the Name Service Switch.</p>
-
-
-<a name="rpcentry"></a>
-<span class="heading">Using the rpcentry Class</span><br><br>
-
-<p>The rpcentry class allows you to look up entries from /etc/rpc
-or from elsewhere if you're using the Name Service Switch.</p>
-
-
 <a name="linkedlist"></a>
 <span class="heading">Using the linkedlist Class</span><br><br>
 
@@ -750,6 +924,117 @@ list.</p>
 
 <p>Since lists of strings are commonly used, a stringlist typedef is
 provided for convenience.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2003&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/linkedlist.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;&nbsp;&nbsp;&nbsp; main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a list of integers</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkedlist&lt;<font color="#2e8b57"><b>int</b></font>&gt; intl;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append values to the list, displaying the list after each append</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;append(0)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.append(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;append(1)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.append(<font color="#ff00ff">1</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;append(3)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.append(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// insert a value into the middle of the list, display the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;insert(2,2)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.insert(<font color="#ff00ff">2</font>,<font color="#ff00ff">2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove values from the list, displaying the list after each removal</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;removeByIndex(0)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.removeByIndex(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;removeByData(3)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.removeByData(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// change a value in the list, display the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;setDataByIndex(1,50)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.setDataByIndex(<font color="#ff00ff">1</font>,<font color="#ff00ff">50</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clear the list, display the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;clear()</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.clear();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intl.print();<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a list of strings</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;linkedlist&lt;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;* &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// append values to the list, displaying the list after each append</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;append(zero)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.append(<font color="#ff00ff">&quot;zero&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;append(one)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.append(<font color="#ff00ff">&quot;one&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;append(three)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.append(<font color="#ff00ff">&quot;three&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// insert a value into the middle of the list, display the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;insert(2,two)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.insert(<font color="#ff00ff">2</font>,<font color="#ff00ff">&quot;two&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove values from the list, displaying the list after each removal</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;removeByIndex(0)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.removeByIndex(<font color="#ff00ff">0</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;removeByData(three)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.removeByData(<font color="#ff00ff">&quot;three&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// change a value in the list, display the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;setDataByIndex(1,fifty)</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.setDataByIndex(<font color="#ff00ff">1</font>,<font color="#ff00ff">&quot;fifty&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clear the list, display the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;clear()</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.clear();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strl.print();<br>
+}<br>
+</font>
+
 
 
 <a name="dictionary"></a>
@@ -760,6 +1045,133 @@ provided for convenience.</p>
 <p>Since dictionaries with string and long integer keys and dictionaries with
 string keys and values are commonly used, convenience classes are provided
 for each.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2003&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/dictionary.h&gt;</font><br>
+<font color="#a020f0">#include&nbsp;</font><font color="#ff00ff">&lt;stdio.h&gt;</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a dictionary containing string keys and string values</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dictionary&lt;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;* &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;string keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// add values to the dictionary</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.setData(<font color="#ff00ff">&quot;1&quot;</font>,<font color="#ff00ff">&quot;one&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.setData(<font color="#ff00ff">&quot;2&quot;</font>,<font color="#ff00ff">&quot;two&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.setData(<font color="#ff00ff">&quot;3&quot;</font>,<font color="#ff00ff">&quot;three&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.setData(<font color="#ff00ff">&quot;4&quot;</font>,<font color="#ff00ff">&quot;four&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the length and contents of the dictionary</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,dict.getList()-&gt;getLength());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove values, displaying the dictionary after each removal</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.removeData(<font color="#ff00ff">&quot;3&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.removeData(<font color="#ff00ff">&quot;2&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.removeData(<font color="#ff00ff">&quot;4&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.removeData(<font color="#ff00ff">&quot;1&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict.print();<br>
+<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a dictionary containing long integer keys and string values</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numericdictionary&lt;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;* &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; numdict;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;integer keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// add values to the dictionary</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.setData(<font color="#ff00ff">1</font>,<font color="#ff00ff">&quot;one&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.setData(<font color="#ff00ff">2</font>,<font color="#ff00ff">&quot;two&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.setData(<font color="#ff00ff">3</font>,<font color="#ff00ff">&quot;three&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.setData(<font color="#ff00ff">4</font>,<font color="#ff00ff">&quot;four&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the length and contents of the dictionary</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,numdict.getList()-&gt;getLength());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove values, displaying the dictionary after each removal</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.removeData(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.removeData(<font color="#ff00ff">2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.removeData(<font color="#ff00ff">4</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.removeData(<font color="#ff00ff">1</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numdict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create a dictionary containing double precision</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// floating point keys and string values</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dictionary&lt;&nbsp;<font color="#2e8b57"><b>double</b></font>,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;* &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;floating point keys, string values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// add values to the dictionary</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.setData(<font color="#ff00ff">1.1</font>,<font color="#ff00ff">&quot;one point one&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.setData(<font color="#ff00ff">2.2</font>,<font color="#ff00ff">&quot;two point two&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.setData(<font color="#ff00ff">3.3</font>,<font color="#ff00ff">&quot;three point three&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.setData(<font color="#ff00ff">4.4</font>,<font color="#ff00ff">&quot;four point four&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// display the length and contents of the dictionary</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;length:&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,doubledict.getList()-&gt;getLength());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove values, displaying the dictionary after each removal</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.removeData(<font color="#ff00ff">3.3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.removeData(<font color="#ff00ff">2.2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.removeData(<font color="#ff00ff">4.4</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.removeData(<font color="#ff00ff">1.1</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledict.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+}<br>
+</font>
+
 
 
 </body>

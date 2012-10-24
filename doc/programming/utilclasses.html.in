@@ -8,59 +8,18 @@
 <span class="heading">Programming with Rudiments using the Utility Classes</span><br><br>
 
 <ul>
-<li><a href="#environment">Using the environment Class</a></li>
 <li><a href="#commandline">Using the commandline Class</a></li>
 <li><a href="#parameterstring">Using the parameterstring Class</a></li>
-<li><a href="#datetime">Using the datetime Class</a></li>
-<li><a href="#timezonefile">Using the timezonefile Class</a></li>
-<li><a href="#directory">Using the directory Class</a></li>
-<li><a href="#filesystem">Using the filesystem Class</a></li>
-<li><a href="#logger">Using the logger Class</a></li>
-<li><a href="#permissions">Using the permissions Class</a></li>
-<li><a href="#randomnumber">Using the randomnumber Class</a></li>
-<li><a href="#regularexpression">Using the regularexpression Class</a></li>
 <li><a href="#chat">Using the chat Class</a></li>
-<li><a href="#crypt">Using the crypt Class</a></li>
-<li><a href="#dynamiclib">Using the dynamiclib Class</a></li>
-<li><a href="#error">Using the error Class</a></li>
-<li><a href="#intervaltimer">Using the intervaltimer Class</a></li>
-<li><a href="#math">Using the math Class</a></li>
-<li><a href="#mutex">Using the mutex Class</a></li>
-<li><a href="#process">Using the process Class</a></li>
-<li><a href="#serialportprofile">Using the serialportprofile Class</a></li>
-<li><a href="#snooze">Using the snooze Class</a></li>
-<li><a href="#signal">Using the Signal Classes</a></li>
-<li><a href="#sharedmemory">Using the sharedmemory Class</a></li>
-<li><a href="#semaphoreset">Using the semaphoreset Class</a></li>
-<li><a href="#memorymap">Using the memorymap Class</a></li>
 <li><a href="#memorypool">Using the memorypool Class</a></li>
 <li><a href="#variablebuffer">Using the variablebuffer Class</a></li>
 <li><a href="#stringbuffer">Using the stringbuffer Class</a></li>
-<li><a href="#character">Using the character Class</a></li>
-<li><a href="#charstring">Using the charstring Class</a></li>
-<li><a href="#rawbuffer">Using the rawbuffer Class</a></li>
-<li><a href="#xmldom">Using the xmldom Classes</a></li>
+<li><a href="#xmldom">Using the xmldom and xmldomnode Classes</a></li>
 <li><a href="#xmlsax">Using the xmlsax Class</a></li>
 <li><a href="#dtd">Using the dtd Class</a></li>
-<li><a href="#passwdentry">Using the passwdentry Class</a></li>
-<li><a href="#shadowentry">Using the shadowentry Class</a></li>
-<li><a href="#groupentry">Using the groupentry Class</a></li>
-<li><a href="#hostentry">Using the hostentry Class</a></li>
-<li><a href="#protocolentry">Using the protocolentry Class</a></li>
-<li><a href="#serviceentry">Using the serviceentry Class</a></li>
-<li><a href="#rpcentry">Using the rpcentry Class</a></li>
 <li><a href="#linkedlist">Using the linkedlist Class</a></li>
 <li><a href="#dictionary">Using the dictionary Class</a></li>
 </ul>
-
-<a name="environment"></a>
-<span class="heading">Using the environment Class</span><br><br>
-
-<p>The environment class allows you to get or set the value of environment
-variables.  The following example gets, sets and resets the environment
-variable TEST.</p>
-
-@environment.cpp.html@
 
 <a name="commandline"></a>
 <span class="heading">Using the commandline Class</span><br><br>
@@ -111,339 +70,43 @@ name='\\value\\'
 
 @parameterstring.cpp.html@
 
-<a name="datetime"></a>
-<span class="heading">Using the datetime Class</span><br><br>
-
-<p>One of the most difficult things to do in a Unix environment is deal with
-dates and times.  The "standard" functions and structures associated with 
-dates and times are complex, vary widely from platform to platform and in
-many cases are not thread safe.  The datetime class attempts to rectify this
-situation.</p>
-
-<p>The datetime class allows you to query and set the system clock. If your
-platform has a working real-time-clock (/dev/rtc), then you can query or set
-the hardware clock as well.  Note that your program must run as root in order
-to set the system or hardware clock.  Since it is common for the system clock
-to be set to the local time zone and the hardware clock to be set to GMT,
-a method is provided for converting the hardware clock time to the system's
-time zone.</p>
-
-<p>Additionally there is a method for switching the time zone of the time
-currently represented in the class.</p>
-
-<p>The datetime class also provides methods for converting between several
-common ways of representing time.  Such as a formatted string, the number of
-seconds since 1970 and "struct tm".</p>
-
-<p>There are also methods for adding discrete amounts of time to the time
-currently stored in the class.  You can, for example add 150 seconds to 
-"12:30:50 01/02/2003 EST" and get "12:32:20 01/02/2003 EST".  You can add
-negative numbers to subtract time.</p>
-
-<p>Below is some code illustrating the use of the datetime class.</p>
-
-@datetime.cpp.html@
-
-<a name="timezonefile"></a>
-<span class="heading">Using the timezonefile Class</span><br><br>
-
-<p>While I was working on timezone support in the datetime class I originally
-thought that it might be useful to be able to parse timezone files.  I could not
-find any standard C functions for parsing them, so I wrote a class that parses
-them.</p>
-
-<p>It turned out to be of very limited value, but it works and I never removed
-it.  So, if you need such functionality, it exists.</p>
-
-@timezonefile.cpp.html@
-
-<a name="directory"></a>
-<span class="heading">Using the directory Class</span><br><br>
-
-@directory.cpp.html@
-
-<a name="filesystem"></a>
-<span class="heading">Using the filesystem Class</span><br><br>
-
-<p>The filesystem class provides methods for collecting statistics about a
-filesystem.  The "standard" function for getting filesystem statistics
-is either statfs or statvfs.  Few operating systems implement statvfs and the
-structure returned by statfs varies greatly between operating systems.  The
-filesystem class attempts to remedy this situation.  However, no operating
-system supports every method in the filesystem class.</p>
-
-@filesystem.cpp.html@
-
-<a name="logger"></a>
-<span class="heading">Using the logger Class</span><br><br>
-
-<p>The logger class and associated logdestination classes provide a framework
-for generating log messages from applications.  An application can define a set
-of logdestinations and attach them to an instance of the logger class.  Then,
-when the application calls one of the write() methods of the logger class, the
-log message is written to each of the logdestinations.  For example, an
-application could simultaneously log to stderr and to a file.  Currently stdout,
-stderr, file and syslog logdestinations are supported.  If an application needs
-to send one set of log messages to one destination and another set to a
-different destinations, it can create two instances of the logger class and use
-one for each set of messages.</p>
-
-<p>The following example illustrates use of the logger class.</p>
-
-@logger.cpp.html@
-
-<a name="permissions"></a>
-<span class="heading">Using the permissions Class</span><br><br>
-
-<p>The permissions class provides simple methods for generating permissions.
-The output of these methods can be used whenever a function takes an argument
-of type mode_t.  Below is some code illustrating the use of the permissions
-class.</p>
-
-@permissions.cpp.html@
-
-<a name="randomnumber"></a>
-<span class="heading">Using the randomnumber Class</span><br><br>
-
-<p>Functions for generating random numbers vary from platform to platform.  
-The randomnumber class attempts to rectify this situation.  Below is some code
-illustrating the use of the randomnumber class.</p>
-
-@randomnumber.cpp.html@
-
-<a name="regularexpression"></a>
-<span class="heading">Using the regularexpression Class</span><br><br>
-
-<p>Regular expressions allow a programmer to perform complex string matching 
-but methods for using regular expressions vary from platform to platform.  The
-regularexpression class attempts to rectify this situation.  Below is some code
-illustrating the use of the regularexpression class.</p>
-
-@regularexpression.cpp.html@
-
-<a name="chat"></a>
 <span class="heading">Using the chat Class</span><br><br>
 
-<p>...</p>
+<p>The chat class provides a framework for communications across file descriptors with a peer.  This is typically a serial-attached device but technically it could be any device or process that can communicate over file descriptors.  This class is mainly used internally by the modemserver and modemclient classes but could be used by itself as well.</p>
 
 @chat.cpp.html@
-
-<a name="crypt"></a>
-<span class="heading">Using the crypt Class</span><br><br>
-
-<p>...</p>
-
-@crypt.cpp.html@
-
-<a name="dynamiclib"></a>
-<span class="heading">Using the dynamiclib Class</span><br><br>
-
-<p>...</p>
-
-@dynamiclib.cpp.html@
-
-<a name="error"></a>
-<span class="heading">Using the error Class</span><br><br>
-
-<p>...</p>
-
-@error.cpp.html@
-
-<a name="intervaltimer"></a>
-<span class="heading">Using the intervaltimer Class</span><br><br>
-
-<p>...</p>
-
-@intervaltimer.cpp.html@
-
-<a name="math"></a>
-<span class="heading">Using the math Class</span><br><br>
-
-<p>...</p>
-
-@math.cpp.html@
-
-<a name="mutex"></a>
-<span class="heading">Using the mutex Class</span><br><br>
-
-<p>...</p>
-
-@mutex.cpp.html@
-
-<a name="process"></a>
-<span class="heading">Using the process Class</span><br><br>
-
-<p>...</p>
-
-@process.cpp.html@
-
-<a name="serialportprofile"></a>
-<span class="heading">Using the serialportprofile Class</span><br><br>
-
-<p>...</p>
-
-@serialportprofile.cpp.html@
-
-<a name="snooze"></a>
-<span class="heading">Using the snooze Class</span><br><br>
-
-<p>...</p>
-
-@snooze.cpp.html@
-
-<a name="signal"></a>
-<span class="heading">Using the Signal Classes</span><br><br>
-
-<p>Signals allow processes to interrupt the execution of other processes.
-Signal handlers allow processes to intercept and react to the signals sent to 
-them.</p>
-
-<p>Rudiments provides 3 classes for working with signals: signalset, 
-signalmanager and signalhandler.
-
-<p>A signalset is just a collection of signals.  The signalset class allows 
-a programmer to build up a collection of signals.</p>
-
-<p>The signalmanager class provides methods for sending signals, ignoring
-signals, waiting for signals and examining blocked signals.</p>
-
-<p>The signalhandler class provides methods for catching and handling 
-signals.</p>
-
-<p>Below is some code illustrating the use of all three classes.  Note that
-you'll have to kill this program with a -9.</p>
-
-@signal.cpp.html@
-
-<a name="sharedmemory"></a>
-<span class="heading">Using the sharedmemory Class</span><br><br>
-
-<p>Shared memory allows seperate processes to access a common block of memory.
-The standard functions and structures for managing shared memory segments are 
-complex.  The sharedmemory class attempts to rectify this situation.  Below is
-some code illustrating the use of the sharedmemory class.</p>
-
-<p>There are methods in the sharedmemory class that allow you to get and
-set user/group ownership and permissions of a segment that are not 
-documented here, but they are straightforward and rarely used.</p>
-
-<p>This program puts some data into shared memory then goes to sleep, giving
-another program time to access the segment.</p>
-
-@sharedmemory1.cpp.html@
-
-<p>This program reads the data from shared memory.</p>
-
-@sharedmemory2.cpp.html@
-
-<a name="semaphoreset"></a>
-<span class="heading">Using the semaphoreset Class</span><br><br>
-
-<p>Semaphores allow seperate processes or threads to synchronize activities.
-The standard functions and structures for managing semaphores are complex.  
-The sempahoreset class attempts to rectify this situation.  Below is some code
-illustrating the use of the semaphoreset class.</p>
-
-<p>There are methods in the semaphoreset class that allow you to get and
-set user/group ownership and permissions of a semaphore set that are not 
-documented here, but they are straightforward and rarely used.</p>
-
-<p>The first program prints out 1 and 3, the second program prints out 2 and 4.
-They use a set of 2 semaphores to synchronize these activities.  No matter
-what order the programs are started in, they will always print out 
-
-<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
-
-<p>These programs must both be run to the background.</p>
-
-@sharedmemory1.cpp.html@
-
-@sharedmemory2.cpp.html@
-
-<a name="memorymap"></a>
-<span class="heading">Using the memorymap Class</span><br><br>
-
-<p>...</p>
-
-@memorymap.cpp.html@
 
 <a name="memorypool"></a>
 <span class="heading">Using the memorypool Class</span><br><br>
 
-<p>The memorypool class implements a pool of memory that starts with an
-initial buffer and grows dynamically as needed.  Each time the pool is freed,
-the dynamic buffers are deallocated.  After a configurable number of free's,
-the initial buffer is resized to the average amount of memory that was
-requested between free's since the last time it resized.</p>
+<p>The memorypool class implements a pool of memory that starts with an initial buffer and grows dynamically as needed.  Each time the pool is freed, the dynamic buffers are deallocated.  After a configurable number of free's, the initial buffer is resized to the average amount of memory that was requested between free's since the last time it resized.</p>
 
-<p>The memorypool class is especially useful for applications that do the same
-task over and over where varying amounts of memory are required during each
-iteration.  The class is particularly efficient in cases where memory
-requirements are fairly constant between iterations with sporadic requirements
-for lots of memory or where the memory requirements steadily get larger or 
-smaller across iterations.</p>
+<p>The memorypool class is especially useful for applications that do the same task over and over where varying amounts of memory are required during each iteration.  The class is particularly efficient in cases where memory requirements are fairly constant between iterations with sporadic requirements for lots of memory or where the memory requirements steadily get larger or smaller across iterations.</p>
 
-<p>Using a memorypool can be faster than allocating memory on demand, then
-deallocating it later and more efficient than using static buffers that are
-large enough to contain the largest possible data.</p>
+<p>Using a memorypool can be faster than allocating memory on demand, then deallocating it later and more efficient than using static buffers that are large enough to contain the largest possible data.</p>
 
-<p>The following code connects to a server on the local machine and reads
-variable/value pairs from it.</p>
+<p>The following code connects to a server on the local machine and reads variable/value pairs from it.</p>
 
 @memorypool.cpp.html@
 
 <a name="variablebuffer"></a>
 <span class="heading">Using the variablebuffer Class</span><br><br>
 
-<p>The variablebuffer class allows you to manipulate a buffer of arbitrary
-length containing binary data.  You can append data to a variablebuffer or
-write data at arbitrary positions in the buffer.</p>
+<p>The variablebuffer class allows you to manipulate a buffer of arbitrary length containing binary data.  You can append data to a variablebuffer or write data at arbitrary positions in the buffer.</p>
 
 @variablebuffer.cpp.html@
 
 <a name="stringbuffer"></a>
 <span class="heading">Using the stringbuffer Class</span><br><br>
 
-<p>The stringbuffer class allows you to manipulate strings of arbitrary length.
-You can append data to a stringbuffer or write data at arbitrary positions in
-the buffer.</p>
+<p>The stringbuffer class allows you to manipulate strings of arbitrary length.  You can append data to a stringbuffer or write data at arbitrary positions in the buffer.</p>
 
 @stringbuffer.cpp.html@
 
-<a name="character"></a>
-<span class="heading">Using the character Class</span><br><br>
-
-<p>...</p>
-
-@character.cpp.html@
-
-<a name="charstring"></a>
-<span class="heading">Using the charstring Class</span><br><br>
-
-<p>The charstring class contains some commonly needed string manipulation and
-evaluation functions.  Below is some code illustrating the use of the string
-class.</p>
-
-@charstring.cpp.html@
-
-<a name="rawbuffer"></a>
-<span class="heading">Using the rawbuffer Class</span><br><br>
-
-<p>...</p>
-
-@rawbuffer.cpp.html@
-
 <a name="xmldom"></a>
-<span class="heading">Using the xmldom Class</span><br><br>
+<span class="heading">Using the xmldom and xmldomnode Classes</span><br><br>
 
-<p>The xmldom and xmldomnode classes provide a framework for DOM parsing of
-XML documents.  The xmldom class provides methods for parsing the document
-and accessing it's root node.  Each node of the document is represented by an
-instance of the xmldomnode class.  The xmldomnode class provides methods for
-accessing a node's data, attributes, child nodes, parent nodes and sibling
-nodes.  Since the xmldom class creates a representation of the XML document
-in memory, it should not be used to process arbitrarily large documents which
-could exhaust system memory.</p>
+<p>The xmldom and xmldomnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the xmldomnode class.  The xmldomnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
 
 <p>The following XML file contains an address book.</p>
 
@@ -577,13 +240,7 @@ Emails:
 <a name="xmlsax"></a>
 <span class="heading">Using the xmlsax Class</span><br><br>
 
-<p>The xmlsax class provides a callback-based framework for parsing XML
-documents.  The xmlsax class provides methods for parsing strings of XML or 
-XML files.  When it encounters a tag, attribute or other XML component, it
-calls one of it's callback methods.  These methods may be overridden by
-a child class to perform specific tasks.  The xmlsax class is especially useful
-if you can't afford to load the entire document into memory and use the xmldom
-class, or if you just need to extract specific data from an XML file.</p>
+<p>The xmlsax class provides a callback-based framework for parsing XML documents.  The xmlsax class provides methods for parsing strings of XML or XML files.  When it encounters a tag, attribute or other XML component, it calls one of it's callback methods.  These methods may be overridden by a child class to perform specific tasks.  The xmlsax class is especially useful if you can't afford to load the entire document into memory and use the xmldom class, or if you just need to extract specific data from an XML file.</p>
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
@@ -704,9 +361,7 @@ myxmlsax::myxmlsax() : xmlsax() {
 <a name="dtd"></a>
 <span class="heading">Using the dtd Class</span><br><br>
 
-<p>The dtd class provides methods for parsing an XML DTD.  The result is an
-XML DOM tree representing the DTD.  Once parsed, the tree can be accessed
-using the xmldom and xmldomnode classes.</p>
+<p>The dtd class provides methods for parsing an XML DTD.  The result is an XML DOM tree representing the DTD.  Once parsed, the tree can be accessed using the xmldom and xmldomnode classes.</p>
 
 <pre>
 <font color="#0000ff">// Copyright (c) 2002  David Muse</font>
@@ -726,70 +381,12 @@ using the xmldom and xmldomnode classes.</p>
 }
 </pre>
 
-<a name="passwdentry"></a>
-<span class="heading">Using the passwdentry Class</span><br><br>
-
-<p>The passwdentry class allows you to look up entries from /etc/passwd or
-from elsewhere if you're using the Name Service Switch.</p>
-
-@passwdentry.cpp.html@
-
-<a name="shadowentry"></a>
-<span class="heading">Using the shadowentry Class</span><br><br>
-
-<p>The shadowentry class allows you to look up entries from /etc/shadow or
-from elsewhere if you're using the Name Service Switch.</p>
-
-@shadowentry.cpp.html@
-
-<a name="groupentry"></a>
-<span class="heading">Using the groupentry Class</span><br><br>
-
-<p>The groupentry class allows you to look up entries from /etc/group or
-from elsewhere if you're using the Name Service Switch.</p>
-
-@groupentry.cpp.html@
-
-<a name="hostentry"></a>
-<span class="heading">Using the hostentry Class</span><br><br>
-
-<p>The hostentry class allows you to look up entries from /etc/hosts or
-from elsewhere if you're using the Name Service Switch.</p>
-
-@hostentry.cpp.html@
-
-<a name="protocolentry"></a>
-<span class="heading">Using the protocolentry Class</span><br><br>
-
-<p>The protocolentry class allows you to look up entries from /etc/protocols
-or from elsewhere if you're using the Name Service Switch.</p>
-
-@protocolentry.cpp.html@
-
-<a name="serviceentry"></a>
-<span class="heading">Using the serviceentry Class</span><br><br>
-
-<p>The serviceentry class allows you to look up entries from /etc/services
-or from elsewhere if you're using the Name Service Switch.</p>
-
-@serviceentry.cpp.html@
-
-<a name="rpcentry"></a>
-<span class="heading">Using the rpcentry Class</span><br><br>
-
-<p>The rpcentry class allows you to look up entries from /etc/rpc
-or from elsewhere if you're using the Name Service Switch.</p>
-
-@rpcentry.cpp.html@
-
 <a name="linkedlist"></a>
 <span class="heading">Using the linkedlist Class</span><br><br>
 
-<p>The linkedlist class allows you to store arbitrary data in a doubly-linked
-list.</p>
+<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
 
-<p>Since lists of strings are commonly used, a stringlist typedef is
-provided for convenience.</p>
+<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
 
 @linkedlist.cpp.html@
 
@@ -798,9 +395,7 @@ provided for convenience.</p>
 
 <p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
 
-<p>Since dictionaries with string and long integer keys and dictionaries with
-string keys and values are commonly used, convenience classes are provided
-for each.</p>
+<p>Since dictionaries with string and integer keys and dictionaries with string keys and values are commonly used, convenience classes are provided for each as well.</p>
 
 @dictionary.cpp.html@
 

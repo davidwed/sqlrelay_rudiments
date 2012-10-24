@@ -18,3 +18,5 @@ html:
 	done
 	./insert.pl baseclasses.html.in > baseclasses.html
 	./insert.pl utilclasses.html.in > utilclasses.html
+	./insert.pl wrapperclasses.html.in > wrapperclasses.html
+	rm -f parts/*.html
