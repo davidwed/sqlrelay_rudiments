@@ -9,11 +9,11 @@ using namespace rudiments;
 #endif
 
 void printMatches(regularexpression *re) {
-	printf("match 0: \"%s\"\n",re->getSubstringStart(0));
-	for (int i=1; i<re->getSubstringCount(); i++) {
-		printf("match: \"%s\"\n",re->getSubstringStart(i));
+	for (int32_t i=0; i<re->getSubstringCount(); i++) {
+		printf("match %d start: \"%s\"\n",i,re->getSubstringStart(i));
+		printf("match %d end  : \"%s\"\n",i,re->getSubstringEnd(i));
 	}
-	printf("%d matches\n",re->getSubstringCount());
+	printf("%d matches\n\n",re->getSubstringCount());
 }
 
 int main(int argc, const char **argv) {
