@@ -55,7 +55,7 @@ AC_ARG_ENABLE(built-in-regex,
 	USE_BUILT_IN_REGULAREXPRESSION="1",
 	USE_BUILT_IN_REGULAREXPRESSION="0")
 AC_ARG_ENABLE(threads,
-	o  --disable-threads       Disable thread support],
+	[  --disable-threads       Disable thread support],
 	ENABLE_RUDIMENTS_THREADS="no",
 	ENABLE_RUDIMENTS_THREADS="yes")
 

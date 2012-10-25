@@ -1434,7 +1434,7 @@ Optional Features:
   --disable-ssl           Disable SSL support
   --disable-pcre          Don't use PCRE for regular expressions
   --enable-built-in-regex Use the built-in regex
-o  --disable-threads       Disable thread support]
+  --disable-threads       Disable thread support
   --disable-character     Don't build character class
   --disable-charstring    Don't build charstring class
   --disable-chat          Don't build chat
