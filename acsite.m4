@@ -733,7 +733,7 @@ then
 			FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 				#include <stdlib.h>
 #endif
-#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
+#include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
 		else
 			AC_MSG_RESULT(no)
 		fi

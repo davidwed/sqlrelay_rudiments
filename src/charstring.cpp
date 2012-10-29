@@ -207,13 +207,16 @@ bool charstring::isInteger(const char *str) {
 		return false;
 	}
 
-	for (const char *ptr=str; *ptr; ptr++) {
+	const char	*ptr=str;
+	for (; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-') || 
 			(ptr>str && *ptr=='-')) {
 			return false;
 		}
 	}
-	return true;
+
+	// if the string ended in a - then it's not a number
+	return (*(ptr-1)!='-');
 }
 
 bool charstring::isInteger(const char *str, int32_t size) {
@@ -230,7 +233,9 @@ bool charstring::isInteger(const char *str, int32_t size) {
 		}
 		ptr++;
 	}
-	return true;
+
+	// if the string ended in a - then it's not a number
+	return (*(ptr-1)!='-');
 }
 
 bool charstring::isNumber(const char *str) {
@@ -239,8 +244,9 @@ bool charstring::isNumber(const char *str) {
 		return false;
 	}
 
-	int32_t	decimal=0;
-	for (const char *ptr=str; *ptr; ptr++) {
+	const char	*ptr=str;
+	int32_t		decimal=0;
+	for (; *ptr; ptr++) {
 		if (((*ptr>'9' || *ptr<'0') && *ptr!='-' && *ptr!='.') || 
 			(ptr>str && *ptr=='-') || (decimal && *ptr=='.')) {
 			return false;
@@ -249,7 +255,9 @@ bool charstring::isNumber(const char *str) {
 			decimal=1;
 		}
 	}
-	return true;
+
+	// if the string ended in a - or . then it's not a number
+	return (*(ptr-1)!='-' && *(ptr-1)!='.');
 }
 
 bool charstring::isNumber(const char *str, int32_t size) {
@@ -270,7 +278,9 @@ bool charstring::isNumber(const char *str, int32_t size) {
 		}
 		ptr++;
 	}
-	return true;
+
+	// if the string ended in a - or . then it's not a number
+	return (*(ptr-1)!='-' && *(ptr-1)!='.');
 }
 
 int64_t charstring::convertAmount(const char *amount) {

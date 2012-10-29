@@ -20371,7 +20371,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-pcre_extra *extra=pcre_study(NULL,0,NULL); delete extra;
+pcre_extra *extra=pcre_study(NULL,0,NULL);
   ;
   return 0;
 }

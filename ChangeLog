@@ -18,6 +18,8 @@
 	added process::exitImmediately
 	updated error::getErrorString() to be thread safe when it uses
 		strerror_r or strerror_s internally
+	fixed charstring::isInteger/isNumber to return false when the string
+		passed in is either - or . without any actual number
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message
