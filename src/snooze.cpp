@@ -47,20 +47,20 @@
 namespace rudiments {
 #endif
 
-bool snooze::macrosnooze(long seconds) {
+bool snooze::macrosnooze(uint32_t seconds) {
 	return nanosnooze(seconds,0,NULL,NULL);
 }
 
-bool snooze::macrosnooze(long seconds, long *remainingseconds) {
+bool snooze::macrosnooze(uint32_t seconds, uint32_t *remainingseconds) {
 	return nanosnooze(seconds,0,remainingseconds,NULL);
 }
 
-bool snooze::microsnooze(long seconds, long microseconds) {
+bool snooze::microsnooze(uint32_t seconds, uint32_t microseconds) {
 	return nanosnooze(seconds,microseconds*1000,NULL,NULL);
 }
 
-bool snooze::microsnooze(long seconds, long microseconds,
-		long *secondsremaining, long *microsecondsremaining) {
+bool snooze::microsnooze(uint32_t seconds, uint32_t microseconds,
+		uint32_t *secondsremaining, uint32_t *microsecondsremaining) {
 	bool	retval=nanosnooze(seconds,microseconds*1000,
 					secondsremaining,microsecondsremaining);
 	if (microsecondsremaining) {
@@ -69,13 +69,13 @@ bool snooze::microsnooze(long seconds, long microseconds,
 	return retval;
 }
 
-bool snooze::nanosnooze(long seconds, long nanoseconds) {
+bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds) {
 	return nanosnooze(seconds,nanoseconds,NULL,NULL);
 }
 
-bool snooze::nanosnooze(long seconds, long nanoseconds,
-				long *secondsremaining,
-				long *nanosecondsremaining) {
+bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
+				uint32_t *secondsremaining,
+				uint32_t *nanosecondsremaining) {
 
 	timespec	timetosnooze;
 	timetosnooze.tv_sec=seconds;

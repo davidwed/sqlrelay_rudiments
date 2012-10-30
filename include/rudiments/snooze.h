@@ -18,7 +18,7 @@ class RUDIMENTS_DLLSPEC snooze {
 		 *  Returns true on success and false on failure.
 		 *  snooze methods most commonly fail if they are interrupted
 		 *  by a signal. */
-		static bool	macrosnooze(long seconds);
+		static bool	macrosnooze(uint32_t seconds);
 
 		/** Suspend execution for "seconds" seconds.
 		 *  Returns true on success and false on failure.
@@ -26,8 +26,8 @@ class RUDIMENTS_DLLSPEC snooze {
 		 *  by a signal.  "remainingseconds" is populated with the
 		 *  number of seconds that remained when the method was
 		 *  interrupted. */
-		static bool	macrosnooze(long seconds,
-					long *remainingseconds);
+		static bool	macrosnooze(uint32_t seconds,
+					uint32_t *remainingseconds);
 
 
 		/** Suspend execution for "seconds" seconds and "microseconds"
@@ -35,8 +35,8 @@ class RUDIMENTS_DLLSPEC snooze {
 		 *  Returns true on success and false on failure.
 		 *  snooze methods most commonly fail if they are interrupted
 		 *  by a signal. */
-		static bool	microsnooze(long seconds,
-					long microseconds);
+		static bool	microsnooze(uint32_t seconds,
+					uint32_t microseconds);
 
 		/** Suspend execution for "seconds" seconds and "microseconds"
 		 *  microseconds.
@@ -45,10 +45,10 @@ class RUDIMENTS_DLLSPEC snooze {
 		 *  by a signal.  "remainingseconds" and "remainingmicroseconds"
 		 *  are populated with the number of seconds and microseconds
 		 *  that remained when the method was interrupted. */
-		static bool	microsnooze(long seconds,
-					long microseconds,
-					long *secondsremaining,
-					long *microsecondsremaining);
+		static bool	microsnooze(uint32_t seconds,
+					uint32_t microseconds,
+					uint32_t *secondsremaining,
+					uint32_t *microsecondsremaining);
 
 
 		/** Suspend execution for "seconds" seconds and "nanoseconds"
@@ -57,8 +57,8 @@ class RUDIMENTS_DLLSPEC snooze {
 		 *  Returns true on success and false on failure.
 		 *  snooze methods most commonly fail if they are interrupted
 		 *  by a signal. */
-		static bool	nanosnooze(long seconds,
-					long nanoseconds);
+		static bool	nanosnooze(uint32_t seconds,
+					uint32_t nanoseconds);
 
 		/** Suspend execution for "seconds" seconds and "nanoseconds"
 		 *  nanoseconds.  Note that some systems do not have true
@@ -68,10 +68,10 @@ class RUDIMENTS_DLLSPEC snooze {
 		 *  by a signal.  "remainingseconds" and "remainingnanoseconds"
 		 *  are populated with the number of seconds and nanoseconds
 		 *  that remained when the method was interrupted. */
-		static bool	nanosnooze(long seconds,
-					long nanoseconds,
-					long *secondsremaining,
-					long *nanosecondsremaining);
+		static bool	nanosnooze(uint32_t seconds,
+					uint32_t nanoseconds,
+					uint32_t *secondsremaining,
+					uint32_t *nanosecondsremaining);
 };
 
 #ifdef RUDIMENTS_NAMESPACE

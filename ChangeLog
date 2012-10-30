@@ -20,6 +20,7 @@
 		strerror_r or strerror_s internally
 	fixed charstring::isInteger/isNumber to return false when the string
 		passed in is either - or . without any actual number
+	changed longs in snooze class to uint32_t's
 
 0.37 - updated logger to exclude : if header isn't supplied
 	updated logger not to print double-returns after each log message
