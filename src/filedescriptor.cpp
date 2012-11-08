@@ -1992,12 +1992,14 @@ char *filedescriptor::getPeerAddress() const {
 				reinterpret_cast<struct sockaddr *>(&clientsin),
 				&size);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-	if (result==-1) {
-		return NULL;
-	}
 
-	// convert the address to a string and return a copy of it
-	return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
+	// if getpeername was successful and the peer was an inet socket,
+	// convert the address to a string and return a copy of it,
+	// otherwise return NULL
+	if (result!=-1 && ((struct sockaddr *)&clientsin)->sa_family==AF_INET) {
+		return charstring::duplicate(inet_ntoa(clientsin.sin_addr));
+	}
+	return NULL;
 }
 
 int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
