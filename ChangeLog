@@ -1,4 +1,5 @@
 0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
+	added charstring::safeCopy methods
 
 0.38 - included some contributed updates to chat, charstring and modemclient
 	added several more wrappers to system class

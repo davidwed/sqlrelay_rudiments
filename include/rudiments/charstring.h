@@ -92,6 +92,20 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*copy(char *dest, size_t location,
 					const char *source, size_t size);
 
+		/** Replaces "dest" with "source" unless the length of "source"
+		 *  is greater than "destsize", in which case only "destsize"
+		 *  bytes of "dest" will be replaced.  Returns a pointer to
+		 *  "dest". */
+		static char	*safeCopy(char *dest, size_t destsize,
+							const char *source);
+
+		/** Replaces "sourcesize" bytes of "dest" with "source" unless
+		 *  "sourcesize" is greater than "destsize", in which case only
+		 *  "destsize" bytes of "dest" will be replaced.  Returns a
+		 *  pointer to "dest". */
+		static char	*safeCopy(char *dest, size_t destsize,
+					const char *source, size_t sourcesize);
+
 		/** Returns -1,0 or 1 if "str1" is greater than, equal to or
 		 * less than "str2". */
 		static	int32_t	compare(const char *str1, const char *str2);

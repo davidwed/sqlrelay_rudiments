@@ -910,6 +910,15 @@ char *charstring::copy(char *dest, size_t location,
 	return copy(dest+location,source,size);
 }
 
+char *charstring::safeCopy(char *dest, size_t destsize, const char *source) {
+	return safeCopy(dest,destsize,source,charstring::length(source));
+}
+
+char *charstring::safeCopy(char *dest, size_t destsize,
+				const char *source, size_t sourcesize) {
+	return copy(dest,source,(sourcesize>destsize)?destsize:sourcesize);
+}
+
 int32_t charstring::compare(const char *str1, const char *str2) {
 	// FIXME: use strcoll?
 	return (str1 && str2)?strcmp(str1,str2):(str1!=str2);
