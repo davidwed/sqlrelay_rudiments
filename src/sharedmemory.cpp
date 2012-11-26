@@ -141,7 +141,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 			// attach to the segment, remove the
 			// segment and return 0 on failure
 			pvt->_shmptr=shmAttach();
-			if (reinterpret_cast<long>(pvt->_shmptr)==-1) {
+			if (reinterpret_cast<int64_t>(pvt->_shmptr)==-1) {
 				forceRemove();
 				return false;
 			}
@@ -178,7 +178,8 @@ bool sharedmemory::attach(key_t key) {
 		// it to a signed integer to see if it's not -1, but allow that
 		// it could very well be less than -1 and still be valid.
 		return ((pvt->_shmid=shmGet(key,0,0))!=-1 &&
-			reinterpret_cast<long>(pvt->_shmptr=shmAttach())!=-1);
+				reinterpret_cast<int64_t>(
+					pvt->_shmptr=shmAttach())!=-1);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -198,7 +199,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 			// attach to the segment, remove the
 			// segment and return 0 on failure
 			pvt->_shmptr=shmAttach();
-			if (reinterpret_cast<long>(pvt->_shmptr)==-1) {
+			if (reinterpret_cast<int64_t>(pvt->_shmptr)==-1) {
 				forceRemove();
 				return false;
 			}
@@ -213,7 +214,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 			// attach to the segment,
 			// return 1 on success and 0 on failure
 			pvt->_shmptr=shmAttach();
-			return (reinterpret_cast<long>(pvt->_shmptr)!=-1);
+			return (reinterpret_cast<int64_t>(pvt->_shmptr)!=-1);
 
 		}
 	#else
@@ -290,7 +291,7 @@ void *sharedmemory::shmAttach() {
 		void	*result;
 		do {
 			result=shmat(pvt->_shmid,0,0);
-		} while (reinterpret_cast<long>(result)==-1 &&
+		} while (reinterpret_cast<int64_t>(result)==-1 &&
 				error::getErrorNumber()==EINTR);
 		return result;
 	#else
