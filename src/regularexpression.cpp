@@ -186,14 +186,14 @@ int32_t regularexpression::getSubstringEndOffset(int32_t index) {
 	#endif
 }
 
-char *regularexpression::getSubstringStart(int32_t index) {
+const char *regularexpression::getSubstringStart(int32_t index) {
 	int32_t	offset=getSubstringStartOffset(index);
-	return (offset>-1)?(const_cast<char *>(pvt->_str+offset)):NULL;
+	return (offset>-1)?(pvt->_str+offset):NULL;
 }
 
-char *regularexpression::getSubstringEnd(int32_t index) {
+const char *regularexpression::getSubstringEnd(int32_t index) {
 	int32_t	offset=getSubstringEndOffset(index);
-	return (offset>-1)?(const_cast<char *>(pvt->_str+offset)):NULL;
+	return (offset>-1)?(pvt->_str+offset):NULL;
 }
 
 bool regularexpression::match(const char *str, const char *pattern) {

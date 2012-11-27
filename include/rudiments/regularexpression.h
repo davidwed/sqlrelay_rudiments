@@ -64,11 +64,11 @@ class RUDIMENTS_DLLSPEC regularexpression {
 
 		/** Returns the "index"'th matching substring or NULL
 		 *  if index is invalid. */
-		char	*getSubstringStart(int32_t index);
+		const char	*getSubstringStart(int32_t index);
 
 		/** Returns the data directly after the "index"'th
 		 *  matching substring or NULL if index is invalid. */
-		char	*getSubstringEnd(int32_t index);
+		const char	*getSubstringEnd(int32_t index);
 
 		/** Returns the offset of the "index"'th matching
 		 *  substring or -1 if index is invalid. */

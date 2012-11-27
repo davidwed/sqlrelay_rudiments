@@ -61,6 +61,8 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a2226c4a90ca514dd35915a404f119d62">copy</a> (char *dest, const char *source, size_t size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#af958ee6c1d7509b3665f2a1ca985ce4b">copy</a> (char *dest, size_t location, const char *source)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#aafce33b1e5a8dac0ebaafe36d1f92346">copy</a> (char *dest, size_t location, const char *source, size_t size)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#aa34f835d23173be9e3e0b678accfa14a">safeCopy</a> (char *dest, size_t destsize, const char *source)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ac44f0653ca5c657a7ac4765c23a4a6cb">safeCopy</a> (char *dest, size_t destsize, const char *source, size_t sourcesize)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#abc8a99f8e0acc4d39e8dcb319197cb2f">compare</a> (const char *str1, const char *str2)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#a1881f1fbe7afce98a98f56a959949d66">compare</a> (const char *str1, const char *str2, size_t size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcharstring.html#ad836aabeeff516bcb6afd09763de302e">compareIgnoringCase</a> (const char *str1, const char *str2)</td></tr>
@@ -500,52 +502,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a2ff7a09b4baea6462ea1e98c343fcc4f"></a><!-- doxytag: member="charstring::base64Encode" ref="a2ff7a09b4baea6462ea1e98c343fcc4f" args="(const unsigned char *input)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::base64Encode </td>
-          <td>(</td>
-          <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>input</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>base64-encodes "input" and returns it in a buffer allocated inside the function. This buffer must be deleted by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="afeed904af8c76df886898bd33ca9f337"></a><!-- doxytag: member="charstring::base64Encode" ref="afeed904af8c76df886898bd33ca9f337" args="(const unsigned char *input, uint64_t inputsize)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::base64Encode </td>
-          <td>(</td>
-          <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>input</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>inputsize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>similar to base64Encode above but only encodes the first "inputsize" characters of "input" </p>
-
-</div>
-</div>
 <a class="anchor" id="a9775ebe8b7357730de281de58799d7bb"></a><!-- doxytag: member="charstring::base64Encode" ref="a9775ebe8b7357730de281de58799d7bb" args="(const unsigned char *input, uint64_t inputsize, char **output, uint64_t *outputsize)" -->
 <div class="memitem">
 <div class="memproto">
@@ -586,21 +542,49 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a8746f7b7c0f16d5be39a5cd89fb2d311"></a><!-- doxytag: member="charstring::bothTrim" ref="a8746f7b7c0f16d5be39a5cd89fb2d311" args="(char *str)" -->
+<a class="anchor" id="afeed904af8c76df886898bd33ca9f337"></a><!-- doxytag: member="charstring::base64Encode" ref="afeed904af8c76df886898bd33ca9f337" args="(const unsigned char *input, uint64_t inputsize)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">static void charstring::bothTrim </td>
+          <td class="memname">static char* charstring::base64Encode </td>
           <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>str</em></td><td>)</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>inputsize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>similar to base64Encode above but only encodes the first "inputsize" characters of "input" </p>
+
+</div>
+</div>
+<a class="anchor" id="a2ff7a09b4baea6462ea1e98c343fcc4f"></a><!-- doxytag: member="charstring::base64Encode" ref="a2ff7a09b4baea6462ea1e98c343fcc4f" args="(const unsigned char *input)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::base64Encode </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>input</em></td><td>)</td>
           <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Trims all spaces off of both sides of "str". </p>
+<p>base64-encodes "input" and returns it in a buffer allocated inside the function. This buffer must be deleted by the calling program. </p>
 
 </div>
 </div>
@@ -629,6 +613,24 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 </div>
 <div class="memdoc">
 <p>Trims all characters off of both sides of "str". </p>
+
+</div>
+</div>
+<a class="anchor" id="a8746f7b7c0f16d5be39a5cd89fb2d311"></a><!-- doxytag: member="charstring::bothTrim" ref="a8746f7b7c0f16d5be39a5cd89fb2d311" args="(char *str)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void charstring::bothTrim </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Trims all spaces off of both sides of "str". </p>
 
 </div>
 </div>
@@ -679,6 +681,34 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
+<a class="anchor" id="abc8a99f8e0acc4d39e8dcb319197cb2f"></a><!-- doxytag: member="charstring::compare" ref="abc8a99f8e0acc4d39e8dcb319197cb2f" args="(const char *str1, const char *str2)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int32_t charstring::compare </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns -1,0 or 1 if "str1" is greater than, equal to or less than "str2". </p>
+
+</div>
+</div>
 <a class="anchor" id="a1881f1fbe7afce98a98f56a959949d66"></a><!-- doxytag: member="charstring::compare" ref="a1881f1fbe7afce98a98f56a959949d66" args="(const char *str1, const char *str2, size_t size)" -->
 <div class="memitem">
 <div class="memproto">
@@ -710,34 +740,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 </div>
 <div class="memdoc">
 <p>Returns -1,0 or 1 if "size" bytes of "str1" are greater than, equal to or less than "size" bytes of "str2". </p>
-
-</div>
-</div>
-<a class="anchor" id="abc8a99f8e0acc4d39e8dcb319197cb2f"></a><!-- doxytag: member="charstring::compare" ref="abc8a99f8e0acc4d39e8dcb319197cb2f" args="(const char *str1, const char *str2)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int32_t charstring::compare </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>str1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>str2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns -1,0 or 1 if "str1" is greater than, equal to or less than "str2". </p>
 
 </div>
 </div>
@@ -1505,62 +1507,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a740a38843f4024da3c435ccf086c04b2"></a><!-- doxytag: member="charstring::findLast" ref="a740a38843f4024da3c435ccf086c04b2" args="(const char *haystack, const char *needle)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const char* charstring::findLast </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>haystack</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>needle</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a pointer to the last occurrance of "needle" in "haystack" or NULL if not found. </p>
-
-</div>
-</div>
-<a class="anchor" id="abf7d5a7677174a53335903f44b8c63ba"></a><!-- doxytag: member="charstring::findLast" ref="abf7d5a7677174a53335903f44b8c63ba" args="(const char *haystack, char needle)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const char* charstring::findLast </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>haystack</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>needle</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a pointer to the last occurrance of "needle" in "haystack" or NULL if not found. </p>
-
-</div>
-</div>
 <a class="anchor" id="ae1bea2be02bd0a63ad5a9587f596502c"></a><!-- doxytag: member="charstring::findLast" ref="ae1bea2be02bd0a63ad5a9587f596502c" args="(char *haystack, const char *needle)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1597,6 +1543,62 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
           <td class="memname">static char* charstring::findLast </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>haystack</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>needle</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a pointer to the last occurrance of "needle" in "haystack" or NULL if not found. </p>
+
+</div>
+</div>
+<a class="anchor" id="a740a38843f4024da3c435ccf086c04b2"></a><!-- doxytag: member="charstring::findLast" ref="a740a38843f4024da3c435ccf086c04b2" args="(const char *haystack, const char *needle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const char* charstring::findLast </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>haystack</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>needle</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a pointer to the last occurrance of "needle" in "haystack" or NULL if not found. </p>
+
+</div>
+</div>
+<a class="anchor" id="abf7d5a7677174a53335903f44b8c63ba"></a><!-- doxytag: member="charstring::findLast" ref="abf7d5a7677174a53335903f44b8c63ba" args="(const char *haystack, char needle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const char* charstring::findLast </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>haystack</em>, </td>
         </tr>
         <tr>
@@ -1841,24 +1843,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a0695b4a7fc9f284211a6f3c2ca65d31b"></a><!-- doxytag: member="charstring::isNumber" ref="a0695b4a7fc9f284211a6f3c2ca65d31b" args="(const char *val)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool charstring::isNumber </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns true the string "val" is a number and false if it is not a number </p>
-
-</div>
-</div>
 <a class="anchor" id="aa3d559e7a207b3d3945381f8a94dccf0"></a><!-- doxytag: member="charstring::isNumber" ref="aa3d559e7a207b3d3945381f8a94dccf0" args="(const char *val, int32_t size)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1879,6 +1863,24 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
           <td></td>
           <td>)</td>
           <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns true the string "val" is a number and false if it is not a number </p>
+
+</div>
+</div>
+<a class="anchor" id="a0695b4a7fc9f284211a6f3c2ca65d31b"></a><!-- doxytag: member="charstring::isNumber" ref="a0695b4a7fc9f284211a6f3c2ca65d31b" args="(const char *val)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool charstring::isNumber </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -2130,14 +2132,14 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a56e43a14be3a3235e9acf254c2434f67"></a><!-- doxytag: member="charstring::parseNumber" ref="a56e43a14be3a3235e9acf254c2434f67" args="(uint16_t number)" -->
+<a class="anchor" id="a09903b92a97a4b208e33b704674d4b1a"></a><!-- doxytag: member="charstring::parseNumber" ref="a09903b92a97a4b208e33b704674d4b1a" args="(int16_t number)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">static char* charstring::parseNumber </td>
           <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>number</em></td><td>)</td>
           <td><code> [static]</code></td>
         </tr>
@@ -2148,16 +2150,26 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a43ad55340ef4640a367a7efd1801329b"></a><!-- doxytag: member="charstring::parseNumber" ref="a43ad55340ef4640a367a7efd1801329b" args="(int32_t number)" -->
+<a class="anchor" id="ac3accff50a4f59569c43b1b7c32fe07f"></a><!-- doxytag: member="charstring::parseNumber" ref="ac3accff50a4f59569c43b1b7c32fe07f" args="(int16_t number, uint16_t zeropadding)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">static char* charstring::parseNumber </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td><code> [static]</code></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>zeropadding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -2186,6 +2198,24 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
           <td></td>
           <td>)</td>
           <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
+
+</div>
+</div>
+<a class="anchor" id="a43ad55340ef4640a367a7efd1801329b"></a><!-- doxytag: member="charstring::parseNumber" ref="a43ad55340ef4640a367a7efd1801329b" args="(int32_t number)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::parseNumber </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -2240,26 +2270,16 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a152868dea2bbbe0024e9c6e65b417796"></a><!-- doxytag: member="charstring::parseNumber" ref="a152868dea2bbbe0024e9c6e65b417796" args="(int32_t number, uint16_t zeropadding)" -->
+<a class="anchor" id="af3aa05984bf1ca770d7499250d325fd4"></a><!-- doxytag: member="charstring::parseNumber" ref="af3aa05984bf1ca770d7499250d325fd4" args="(uint64_t number)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">static char* charstring::parseNumber </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>zeropadding</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -2324,40 +2344,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="ae131d2368f64057a5034b4a3f67d8753"></a><!-- doxytag: member="charstring::parseNumber" ref="ae131d2368f64057a5034b4a3f67d8753" args="(float number, uint16_t precision, uint16_t scale)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::parseNumber </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>precision</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>scale</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
-
-</div>
-</div>
 <a class="anchor" id="adbbba0b39915611f94593b72de87df0f"></a><!-- doxytag: member="charstring::parseNumber" ref="adbbba0b39915611f94593b72de87df0f" args="(double number)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2376,7 +2362,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a7a6f407ea8961deb098d2da9c4ab3b3a"></a><!-- doxytag: member="charstring::parseNumber" ref="a7a6f407ea8961deb098d2da9c4ab3b3a" args="(double number, uint16_t precision, uint16_t scale)" -->
+<a class="anchor" id="ad1c8c576f280621f8c5e24b68a8864ec"></a><!-- doxytag: member="charstring::parseNumber" ref="ad1c8c576f280621f8c5e24b68a8864ec" args="(double number, uint16_t scale)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -2390,12 +2376,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>precision</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>scale</em>&#160;</td>
         </tr>
         <tr>
@@ -2410,124 +2390,14 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a2cb3c139855f12a4e31d76584e724b89"></a><!-- doxytag: member="charstring::parseNumber" ref="a2cb3c139855f12a4e31d76584e724b89" args="(long double number, uint16_t scale)" -->
+<a class="anchor" id="a7a6f407ea8961deb098d2da9c4ab3b3a"></a><!-- doxytag: member="charstring::parseNumber" ref="a7a6f407ea8961deb098d2da9c4ab3b3a" args="(double number, uint16_t precision, uint16_t scale)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">static char* charstring::parseNumber </td>
           <td>(</td>
-          <td class="paramtype">long double&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>scale</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="ac3accff50a4f59569c43b1b7c32fe07f"></a><!-- doxytag: member="charstring::parseNumber" ref="ac3accff50a4f59569c43b1b7c32fe07f" args="(int16_t number, uint16_t zeropadding)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::parseNumber </td>
-          <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>number</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>zeropadding</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="a7c7fea2d580883d08eab32c518aae77e"></a><!-- doxytag: member="charstring::parseNumber" ref="a7c7fea2d580883d08eab32c518aae77e" args="(int64_t number)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::parseNumber </td>
-          <td>(</td>
-          <td class="paramtype">int64_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="af3aa05984bf1ca770d7499250d325fd4"></a><!-- doxytag: member="charstring::parseNumber" ref="af3aa05984bf1ca770d7499250d325fd4" args="(uint64_t number)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::parseNumber </td>
-          <td>(</td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="abd0725abecc6ff3c0c90775e2946ed01"></a><!-- doxytag: member="charstring::parseNumber" ref="abd0725abecc6ff3c0c90775e2946ed01" args="(long double number)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::parseNumber </td>
-          <td>(</td>
-          <td class="paramtype">long double&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="a964e9e95258aa2ca39988f5bf4b08fc8"></a><!-- doxytag: member="charstring::parseNumber" ref="a964e9e95258aa2ca39988f5bf4b08fc8" args="(long double number, uint16_t precision, uint16_t scale)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static char* charstring::parseNumber </td>
-          <td>(</td>
-          <td class="paramtype">long double&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>number</em>, </td>
         </tr>
         <tr>
@@ -2582,14 +2452,14 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="ad1c8c576f280621f8c5e24b68a8864ec"></a><!-- doxytag: member="charstring::parseNumber" ref="ad1c8c576f280621f8c5e24b68a8864ec" args="(double number, uint16_t scale)" -->
+<a class="anchor" id="a2cb3c139855f12a4e31d76584e724b89"></a><!-- doxytag: member="charstring::parseNumber" ref="a2cb3c139855f12a4e31d76584e724b89" args="(long double number, uint16_t scale)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">static char* charstring::parseNumber </td>
           <td>(</td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype">long double&#160;</td>
           <td class="paramname"><em>number</em>, </td>
         </tr>
         <tr>
@@ -2602,6 +2472,122 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
           <td></td>
           <td>)</td>
           <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
+
+</div>
+</div>
+<a class="anchor" id="a56e43a14be3a3235e9acf254c2434f67"></a><!-- doxytag: member="charstring::parseNumber" ref="a56e43a14be3a3235e9acf254c2434f67" args="(uint16_t number)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::parseNumber </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
+
+</div>
+</div>
+<a class="anchor" id="a152868dea2bbbe0024e9c6e65b417796"></a><!-- doxytag: member="charstring::parseNumber" ref="a152868dea2bbbe0024e9c6e65b417796" args="(int32_t number, uint16_t zeropadding)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::parseNumber </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>zeropadding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
+
+</div>
+</div>
+<a class="anchor" id="a7c7fea2d580883d08eab32c518aae77e"></a><!-- doxytag: member="charstring::parseNumber" ref="a7c7fea2d580883d08eab32c518aae77e" args="(int64_t number)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::parseNumber </td>
+          <td>(</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
+
+</div>
+</div>
+<a class="anchor" id="a964e9e95258aa2ca39988f5bf4b08fc8"></a><!-- doxytag: member="charstring::parseNumber" ref="a964e9e95258aa2ca39988f5bf4b08fc8" args="(long double number, uint16_t precision, uint16_t scale)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::parseNumber </td>
+          <td>(</td>
+          <td class="paramtype">long double&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>scale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a string representing "number". The string is allocated inside the function and must be deleted by the calling program. </p>
+
+</div>
+</div>
+<a class="anchor" id="abd0725abecc6ff3c0c90775e2946ed01"></a><!-- doxytag: member="charstring::parseNumber" ref="abd0725abecc6ff3c0c90775e2946ed01" args="(long double number)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::parseNumber </td>
+          <td>(</td>
+          <td class="paramtype">long double&#160;</td>
+          <td class="paramname"><em>number</em></td><td>)</td>
+          <td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -2628,16 +2614,32 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a09903b92a97a4b208e33b704674d4b1a"></a><!-- doxytag: member="charstring::parseNumber" ref="a09903b92a97a4b208e33b704674d4b1a" args="(int16_t number)" -->
+<a class="anchor" id="ae131d2368f64057a5034b4a3f67d8753"></a><!-- doxytag: member="charstring::parseNumber" ref="ae131d2368f64057a5034b4a3f67d8753" args="(float number, uint16_t precision, uint16_t scale)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">static char* charstring::parseNumber </td>
           <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>number</em></td><td>)</td>
-          <td><code> [static]</code></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>scale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
         </tr>
       </table>
 </div>
@@ -2830,6 +2832,80 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
+<a class="anchor" id="ac44f0653ca5c657a7ac4765c23a4a6cb"></a><!-- doxytag: member="charstring::safeCopy" ref="ac44f0653ca5c657a7ac4765c23a4a6cb" args="(char *dest, size_t destsize, const char *source, size_t sourcesize)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::safeCopy </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>destsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>sourcesize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Replaces "sourcesize" bytes of "dest" with "source" unless "sourcesize" is greater than "destsize", in which case only "destsize" bytes of "dest" will be replaced. Returns a pointer to "dest". </p>
+
+</div>
+</div>
+<a class="anchor" id="aa34f835d23173be9e3e0b678accfa14a"></a><!-- doxytag: member="charstring::safeCopy" ref="aa34f835d23173be9e3e0b678accfa14a" args="(char *dest, size_t destsize, const char *source)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* charstring::safeCopy </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>destsize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>source</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Replaces "dest" with "source" unless the length of "source" is greater than "destsize", in which case only "destsize" bytes of "dest" will be replaced. Returns a pointer to "dest". </p>
+
+</div>
+</div>
 <a class="anchor" id="a9675e15ddcf59801d8209544e7982889"></a><!-- doxytag: member="charstring::safePrint" ref="a9675e15ddcf59801d8209544e7982889" args="(const char *str, int32_t length)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2874,6 +2950,58 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 <div class="memdoc">
 <p>Prints "str", however all non-printing characters are printed as hex values of the format: (0x0a) and carriage returns, line feeds and tabs are printed as <br/>
 ,  and . </p>
+
+</div>
+</div>
+<a class="anchor" id="a0b20a5212f7432dd144ac4761b8bad3a"></a><!-- doxytag: member="charstring::split" ref="a0b20a5212f7432dd144ac4761b8bad3a" args="(const char *string, ssize_t stringlength, const char *delimiter, bool collapse, char ***list, uint64_t *listlength)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void charstring::split </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ssize_t&#160;</td>
+          <td class="paramname"><em>stringlength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>delimiter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>collapse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char ***&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t *&#160;</td>
+          <td class="paramname"><em>listlength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Parses "string" of "stringlength" delimited by NULL-terminated "delimiter" and allocates "listlength" elements of "list" to return the parts. If "collapse" is true then multiple instances of the delimiter in a row will be interpreted as one instance of the delimiter. Each member of "list" and "list" itseslf must be deallocated by the calling program. </p>
 
 </div>
 </div>
@@ -2935,7 +3063,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a0b20a5212f7432dd144ac4761b8bad3a"></a><!-- doxytag: member="charstring::split" ref="a0b20a5212f7432dd144ac4761b8bad3a" args="(const char *string, ssize_t stringlength, const char *delimiter, bool collapse, char ***list, uint64_t *listlength)" -->
+<a class="anchor" id="abcbe61828f695fc1de1b7b508bf8b0c7"></a><!-- doxytag: member="charstring::split" ref="abcbe61828f695fc1de1b7b508bf8b0c7" args="(const char *string, const char *delimiter, bool collapse, char ***list, uint64_t *listlength)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -2944,12 +3072,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ssize_t&#160;</td>
-          <td class="paramname"><em>stringlength</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -2983,7 +3105,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
       </table>
 </div>
 <div class="memdoc">
-<p>Parses "string" of "stringlength" delimited by NULL-terminated "delimiter" and allocates "listlength" elements of "list" to return the parts. If "collapse" is true then multiple instances of the delimiter in a row will be interpreted as one instance of the delimiter. Each member of "list" and "list" itseslf must be deallocated by the calling program. </p>
+<p>Parses NULL-terminated "string" delimited by NULL-terminated "delimiter" and allocates "listlength" elements of "list" to return the parts. If "collapse" is true then multiple instances of the delimiter in a row will be interpreted as one instance of the delimiter. Each member of "list" and "list" itseslf must be deallocated by the calling program. </p>
 
 </div>
 </div>
@@ -3036,52 +3158,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 </div>
 <div class="memdoc">
 <p>Parses NULL-terminated "string" delimited by "delimiter" of length "delimiterlength" and allocates "listlength" elements of "list" to return the parts. If "collapse" is true then multiple instances of the delimiter in a row will be interpreted as one instance of the delimiter. Each member of "list" and "list" itseslf must be deallocated by the calling program. </p>
-
-</div>
-</div>
-<a class="anchor" id="abcbe61828f695fc1de1b7b508bf8b0c7"></a><!-- doxytag: member="charstring::split" ref="abcbe61828f695fc1de1b7b508bf8b0c7" args="(const char *string, const char *delimiter, bool collapse, char ***list, uint64_t *listlength)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void charstring::split </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>delimiter</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>collapse</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char ***&#160;</td>
-          <td class="paramname"><em>list</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint64_t *&#160;</td>
-          <td class="paramname"><em>listlength</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Parses NULL-terminated "string" delimited by NULL-terminated "delimiter" and allocates "listlength" elements of "list" to return the parts. If "collapse" is true then multiple instances of the delimiter in a row will be interpreted as one instance of the delimiter. Each member of "list" and "list" itseslf must be deallocated by the calling program. </p>
 
 </div>
 </div>
@@ -3249,52 +3325,6 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 
 </div>
 </div>
-<a class="anchor" id="a8a85883d9f5bda045d790d9d2329257d"></a><!-- doxytag: member="charstring::toInteger" ref="a8a85883d9f5bda045d790d9d2329257d" args="(const char *string, char **endptr)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int64_t charstring::toInteger </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char **&#160;</td>
-          <td class="paramname"><em>endptr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Converts "string" to a 64-bit integer. If non-NULL, endptr will be set to the first character in the string after the number. </p>
-
-</div>
-</div>
-<a class="anchor" id="a968eb7324ca9f6790d5f165082d3da4f"></a><!-- doxytag: member="charstring::toInteger" ref="a968eb7324ca9f6790d5f165082d3da4f" args="(const char *string)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int64_t charstring::toInteger </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Converts "string" to a 64-bit integer. </p>
-
-</div>
-</div>
 <a class="anchor" id="a9892e501b7a8f6e41bf5d6802c1ac529"></a><!-- doxytag: member="charstring::toInteger" ref="a9892e501b7a8f6e41bf5d6802c1ac529" args="(const char *string, int32_t base)" -->
 <div class="memitem">
 <div class="memproto">
@@ -3320,6 +3350,24 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 </div>
 <div class="memdoc">
 <p>Converts "string" to a 64-bit integer of base "base". </p>
+
+</div>
+</div>
+<a class="anchor" id="a968eb7324ca9f6790d5f165082d3da4f"></a><!-- doxytag: member="charstring::toInteger" ref="a968eb7324ca9f6790d5f165082d3da4f" args="(const char *string)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t charstring::toInteger </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Converts "string" to a 64-bit integer. </p>
 
 </div>
 </div>
@@ -3354,6 +3402,34 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 </div>
 <div class="memdoc">
 <p>Converts "string" to a 64-bit integer of base "base". If non-NULL, endptr will be set to the first character in the string after the number. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8a85883d9f5bda045d790d9d2329257d"></a><!-- doxytag: member="charstring::toInteger" ref="a8a85883d9f5bda045d790d9d2329257d" args="(const char *string, char **endptr)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int64_t charstring::toInteger </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>endptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Converts "string" to a 64-bit integer. If non-NULL, endptr will be set to the first character in the string after the number. </p>
 
 </div>
 </div>
@@ -3570,7 +3646,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>printBits</b> 
 </div>
 </div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Wed Oct 24 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Nov 27 2012 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
