@@ -419,7 +419,7 @@ xmldomnode *xmldomnode::unlinkNode(xmldomnode *node,
 	}
 	xmldomnode	*current=*first;
 	if (node || name) {
-		while (current &&
+		while (current && !current->isNullNode() &&
 			((name && charstring::compare(
 					current->pvt->_nodename,name)) ||
 			(node && current!=node))) {
@@ -430,7 +430,7 @@ xmldomnode *xmldomnode::unlinkNode(xmldomnode *node,
 			current=current->pvt->_next;
 		}
 	}
-	if (current) {
+	if (current && !current->isNullNode()) {
 		if (current->pvt->_previous) {
 			current->pvt->_previous->pvt->_next=current->pvt->_next;
 		}
