@@ -323,11 +323,22 @@ void codetree::printIndent() {
 	}
 }
 
-bool codetree::write(xmldom *tree, stringbuffer *output) {
+bool codetree::write(xmldom *tree,
+			const char *grammar,
+			stringbuffer *output) {
 
 	// if we have an empty tree, just return
 	if (!tree || !tree->getRootNode() ||
 			tree->getRootNode()->isNullNode()) {
+		return NULL;
+	}
+
+	// load grammar
+	if (!this->grammar.parseString(grammar)) {
+		return NULL;
+	}
+	grammartag=this->grammar.getRootNode()->getFirstTagChild("grammar");
+	if (grammartag->isNullNode()) {
 		return NULL;
 	}
 

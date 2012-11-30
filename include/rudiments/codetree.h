@@ -20,6 +20,7 @@ class codetree {
 						const char *grammar,
 						const char *starttoken);
 		bool	write(rudiments::xmldom *tree,
+					const char *grammar,
 					rudiments::stringbuffer *output);
 
 		void	print(rudiments::xmldom *tree);
