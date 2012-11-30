@@ -507,6 +507,9 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		const char	*getAttributeValueByPath(const char *path,
 							const char *name) const;
 
+		/** Prints a text representation of "node". */
+		static void	print(xmldomnode *node);
+
 	#include <rudiments/private/xmldomnode.h>
 };
 

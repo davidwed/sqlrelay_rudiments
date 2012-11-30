@@ -803,6 +803,36 @@ const char *xmldomnode::getAttributeValueByPath(const char *path,
 	return getChildByPath(path)->getAttributeValue(name);
 }
 
+void xmldomnode::print(xmldomnode *node) {
+	if (!node || node->isNullNode()) {
+		return;
+	}
+	stringbuffer	*xmlstr=node->xml();
+	const char	*xml=xmlstr->getString();
+	int16_t		indent=0;
+	bool		endtag=false;
+	for (const char *ptr=xml; *ptr; ptr++) {
+		if (*ptr=='<') {
+			if (*(ptr+1)=='/') {
+				indent=indent-2;
+				endtag=true;
+			}
+			for (uint16_t i=0; i<indent; i++) {
+				printf(" ");
+			}
+		}
+		printf("%c",*ptr);
+		if (*ptr=='>') {
+			printf("\n");
+			if (*(ptr-1)!='/' && !endtag) {
+				indent=indent+2;
+			}
+			endtag=false;
+		}
+	}
+	delete xmlstr;
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

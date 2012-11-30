@@ -24,8 +24,6 @@ class codetree {
 					const char *grammar,
 					rudiments::stringbuffer *output);
 
-		static void	print(rudiments::xmldomnode *tree);
-
 	#include <rudiments/private/codetree.h>
 };
 

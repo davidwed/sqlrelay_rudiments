@@ -63,7 +63,8 @@ PROGS = \
 	unixserversocket$(EXE) \
 	variablebuffer$(EXE) \
 	xmldom$(EXE) \
-	xmlsax$(EXE)
+	xmlsax$(EXE) \
+	codetree$(EXE)
 
 .SUFFIXES: .lo
 
@@ -240,3 +241,6 @@ xmldom$(EXE): xmldom.cpp xmldom.lo
 
 xmlsax$(EXE): xmlsax.cpp xmlsax.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmlsax.lo $(LIBS)
+
+codetree$(EXE): codetree.cpp codetree.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ codetree.lo $(LIBS)
