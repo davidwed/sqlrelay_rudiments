@@ -179,6 +179,10 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		const char	*getValue() const;
 
 
+		/** Returns a pointer to the tree that this node is
+		 *  attached to or NULL if it isn't attached to any tree. */
+		xmldom		*getTree() const;
+
 		/** Returns a pointer to the parent node or the
 		 *  nullnode if none exists. */
 		xmldomnode	*getParent() const;

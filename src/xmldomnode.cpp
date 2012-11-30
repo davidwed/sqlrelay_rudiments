@@ -537,6 +537,10 @@ const char *xmldomnode::getValue() const {
 	return pvt->_nodevalue;
 }
 
+xmldom *xmldomnode::getTree() const {
+	return pvt->_dom;
+}
+
 xmldomnode *xmldomnode::getParent() const {
 	return pvt->_parent;
 }
