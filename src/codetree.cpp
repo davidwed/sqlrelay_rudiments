@@ -13,9 +13,10 @@ codetree::codetree() {
 	grammartag=NULL;
 }
 
-xmldom *codetree::parse(const char *code,
+bool codetree::parse(const char *input,
 			const char *grammar,
-			const char *starttoken) {
+			const char *starttoken,
+			xmldomnode *output) {
 
 	// load grammar
 	if (!this->grammar.parseString(grammar)) {
@@ -26,20 +27,13 @@ xmldom *codetree::parse(const char *code,
 		return NULL;
 	}
 
-	// re-init the tree
+	// re-init the error
 	error=false;
-	xmldom	*tree=new xmldom();
-	tree->createRootNode();
 
 	// parse, starting with the specified start token
-	const char	*codeposition=code;
-	if (parseNonTerminal(starttoken,
-				tree->getRootNode(),
-				&codeposition,NULL) && !error) {
-		return tree;
-	}
-	delete tree;
-	return NULL;
+	const char	*codeposition=input;
+	return (parseNonTerminal(starttoken,output,
+				&codeposition,NULL) && !error);
 }
 
 bool codetree::parseNonTerminal(const char *name,
@@ -287,11 +281,11 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 						tokenbuffer);
 }
 
-void codetree::print(xmldom *tree) {
-	if (!tree) {
+void codetree::print(xmldomnode *tree) {
+	if (!tree || tree->isNullNode()) {
 		return;
 	}
-	stringbuffer	*xmlstr=tree->getRootNode()->xml();
+	stringbuffer	*xmlstr=tree->xml();
 	const char	*xml=xmlstr->getString();
 	int16_t		indent=0;
 	bool		endtag=false;
@@ -323,13 +317,12 @@ void codetree::printIndent() {
 	}
 }
 
-bool codetree::write(xmldom *tree,
+bool codetree::write(xmldomnode *input,
 			const char *grammar,
 			stringbuffer *output) {
 
-	// if we have an empty tree, just return
-	if (!tree || !tree->getRootNode() ||
-			tree->getRootNode()->isNullNode()) {
+	// if we have an empty input, just return
+	if (!input || input->isNullNode()) {
 		return NULL;
 	}
 
@@ -346,7 +339,7 @@ bool codetree::write(xmldom *tree,
 	indent=0;
 
 	// write the nodes
-	return writeNode(tree->getRootNode(),output);
+	return writeNode(input,output);
 }
 
 bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {

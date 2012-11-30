@@ -16,14 +16,15 @@ class codetree {
 	public:
 			codetree();
 
-		rudiments::xmldom	*parse(const char *code,
-						const char *grammar,
-						const char *starttoken);
-		bool	write(rudiments::xmldom *tree,
+		bool	parse(const char *input,
+					const char *grammar,
+					const char *starttoken,
+					rudiments::xmldomnode *output);
+		bool	write(rudiments::xmldomnode *input,
 					const char *grammar,
 					rudiments::stringbuffer *output);
 
-		void	print(rudiments::xmldom *tree);
+		static void	print(rudiments::xmldomnode *tree);
 
 	#include <rudiments/private/codetree.h>
 };
