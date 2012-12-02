@@ -32,11 +32,7 @@ DICTIONARY_CLASS::dictionary() {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 DICTIONARY_CLASS::~dictionary() {
-	for (dictionarylistnodetype *node=
-			(dictionarylistnodetype *)dict.getFirstNode();
-			node; node=(dictionarylistnodetype *)node->getNext()) {
-		delete node->getData();
-	}
+	dict.clear();
 }
 
 DICTIONARY_TEMPLATE
@@ -96,6 +92,11 @@ dictionarylisttype *DICTIONARY_CLASS::getList() {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::clear() {
+	for (dictionarylistnodetype *node=
+			(dictionarylistnodetype *)dict.getFirstNode();
+			node; node=(dictionarylistnodetype *)node->getNext()) {
+		delete node->getData();
+	}
 	dict.clear();
 }
 
