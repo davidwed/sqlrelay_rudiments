@@ -1,3 +1,7 @@
+0.40 - fixed -pthread annoyance
+	added -Werror to default build
+	fixed various issues revealed by -Werror
+
 0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
 	added charstring::safeCopy methods
 	made regularexpression::getSubstring* methods return const char *'s
