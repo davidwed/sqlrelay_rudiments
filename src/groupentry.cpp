@@ -409,7 +409,7 @@ void groupentry::print() const {
 
 	printf("Name: %s\n",getName());
 	printf("Password: %s\n",getPassword());
-	printf("Group Id: %d\n",getGroupId());
+	printf("Group Id: %ld\n",(long)getGroupId());
 	printf("Members:\n");
 	for (int i=0; getMembers()[i]; i++) {
 		printf("	%s\n",getMembers()[i]);

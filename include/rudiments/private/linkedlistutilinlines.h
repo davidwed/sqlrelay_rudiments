@@ -60,7 +60,6 @@ void linkedlistutil<char>::print(char data) const {
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<int32_t>::print(int32_t data) const {
-	// some compilers complain without this cast
 	printf("%d",(int)data);
 }
 
@@ -73,7 +72,6 @@ void linkedlistutil<int16_t>::print(int16_t data) const {
 RUDIMENTS_EXPLICIT_SPECIALIZATION
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<int64_t>::print(int64_t data) const {
-	// compilers complain if this isn't cast to a long long
 	printf("%lld",(long long)data);
 }
 
@@ -92,7 +90,7 @@ void linkedlistutil<double>::print(double data) const {
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<datatype>::print(datatype data) const {
-	printf("%llx",(long long)data);
+	printf("%p",data);
 }
 
 #ifdef RUDIMENTS_NAMESPACE
