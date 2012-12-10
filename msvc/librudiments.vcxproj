@@ -195,6 +195,7 @@ copy ..\include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudi
     <ClCompile Include="..\src\charstring.cpp" />
     <ClCompile Include="..\src\client.cpp" />
     <ClCompile Include="..\src\clientsocket.cpp" />
+    <ClCompile Include="..\src\codetree.cpp" />
     <ClCompile Include="..\src\commandline.cpp" />
     <ClCompile Include="..\src\datetime.cpp" />
     <ClCompile Include="..\src\device.cpp" />
