@@ -301,16 +301,18 @@ dnl checks to see if -pthread option works or not during compile,
 dnl execpt on mingw, it definitely doesn't use it
 AC_DEFUN([FW_CHECK_PTHREAD_COMPILE],
 [
-if ( test -z "$MINGW32" )
+AC_MSG_CHECKING(if $CXX -pthread works during compile phase)
+if ( test -n "`$CXX -pthread 2>&1 | grep 'unrecognized option' | grep pthread`" )
 then
-	AC_MSG_CHECKING(if gcc -pthread works during compile phase)
-	FW_TRY_COMPILE([#include <stdio.h>],[printf("hello");],[-pthread],[PTHREAD_COMPILE="-pthread"],[PTHREAD_COMPILE=""])
-	if ( test -n "$PTHREAD_COMPILE" )
-	then
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
+	PTHREAD_COMPILE=""
+else
+	PTHREAD_COMPILE="-pthread"
+fi
+if ( test -n "$PTHREAD_COMPILE" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
 fi
 ])
 
