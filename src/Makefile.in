@@ -4,7 +4,7 @@ include ../config.mk
 
 .PHONY: all clean install uninstall
 
-CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include @EXTRACPPFLAGS@
+CPPFLAGS = $(WERROR) $(BASECPPFLAGS) -I../ -I../include @EXTRACPPFLAGS@
 
 SRCS = namevaluepairs.cpp winsock.cpp @SRCS@
 LOBJS = namevaluepairs.lo winsock.lo @LOBJS@
