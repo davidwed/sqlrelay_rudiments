@@ -257,12 +257,6 @@ AC_DEFUN([FW_CHECK_WERROR],
 [
 AC_MSG_CHECKING(for -Werror)
 FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Werror],[],[],[WERROR="-Werror"],[WERROR=""])
-if ( test -n "$WERROR" )
-then
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
 
 dnl disable -Werror on Haiku, as its header files throw warnings
 case $host_os in
@@ -273,6 +267,13 @@ case $host_os in
 		;;
 esac
 AC_SUBST(WERROR)
+
+if ( test -n "$WERROR" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
 ])
 
 
