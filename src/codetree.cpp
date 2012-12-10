@@ -20,11 +20,11 @@ bool codetree::parse(const char *input,
 
 	// load grammar
 	if (!this->grammar.parseString(grammar)) {
-		return NULL;
+		return false;
 	}
 	grammartag=this->grammar.getRootNode()->getFirstTagChild("grammar");
 	if (grammartag->isNullNode()) {
-		return NULL;
+		return false;
 	}
 
 	// re-init the error
@@ -293,16 +293,16 @@ bool codetree::write(xmldomnode *input,
 
 	// if we have an empty input, just return
 	if (!input || input->isNullNode()) {
-		return NULL;
+		return false;
 	}
 
 	// load grammar
 	if (!this->grammar.parseString(grammar)) {
-		return NULL;
+		return false;
 	}
 	grammartag=this->grammar.getRootNode()->getFirstTagChild("grammar");
 	if (grammartag->isNullNode()) {
-		return NULL;
+		return false;
 	}
 
 	// re-init indent
