@@ -14785,6 +14785,14 @@ else
 $as_echo "no" >&6; }
 fi
 
+case $host_os in
+	*haiku* )
+		WERROR=""
+		;;
+	*)
+		;;
+esac
+
 
 
 if ( test "$DEBUG" = "yes" )

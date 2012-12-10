@@ -263,6 +263,15 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
+
+dnl disable -Werror on Haiku, as its header files throw warnings
+case $host_os in
+	*haiku* )
+		WERROR=""
+		;;
+	*)
+		;;
+esac
 AC_SUBST(WERROR)
 ])
 
