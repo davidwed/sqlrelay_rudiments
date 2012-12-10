@@ -239,7 +239,7 @@ void LINKEDLIST_CLASS::print() const {
 	uint64_t	i=0;
 	for (linkedlistnodetype *current=first; current;
 		current=(linkedlistnodetype *)current->getNext()) {
-		printf("index %lld: ",i);
+		printf("index %lld: ",(long long)i);
 		current->print();
 		printf("\n");
 		i++;

@@ -1399,8 +1399,7 @@ char *charstring::base64Encode(const unsigned char *input) {
 	return base64Encode(input,charstring::length(input));
 }
 
- char *charstring::base64Encode(const unsigned char *input,
-						uint64_t inputsize) {
+char *charstring::base64Encode(const unsigned char *input, uint64_t inputsize) {
 	char		*retval=NULL;
 	uint64_t	retvalsize=0;
 	base64Encode(input,inputsize,&retval,&retvalsize);
@@ -1409,8 +1408,7 @@ char *charstring::base64Encode(const unsigned char *input) {
 
 static char	b64code[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 				"abcdefghijklmnopqrstuvwxyz0123456789+/";
-static unsigned char	b64dcode[]={
-				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 0-9
+static char	b64dcode[]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 0-9
 				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 10-19
 				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// etc.
 				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -1425,7 +1423,7 @@ static unsigned char	b64dcode[]={
 				49,50,51,-1,-1,-1,-1,-1};
 
 void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
-				char **output, uint64_t *outputsize) {
+					char **output, uint64_t *outputsize) {
 
 	// handle null input
 	if (!input) {
@@ -1586,10 +1584,10 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	uint64_t	inputindex=0;
 	while (inputindex<inputsize) {
 
-		data[0]=b64dcode[(int32_t)input[inputindex++]];
-		data[1]=b64dcode[(int32_t)input[inputindex++]];
-		data[2]=b64dcode[(int32_t)input[inputindex++]];
-		data[3]=b64dcode[(int32_t)input[inputindex++]];
+		data[0]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
+		data[1]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
+		data[2]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
+		data[3]=(unsigned char)b64dcode[(int32_t)input[inputindex++]];
 
 		(*output)[outputindex++]=data[0]<<2|data[1]>>4;
 		(*output)[outputindex++]=(data[1]&0x0F)<<4|data[2]>>2;

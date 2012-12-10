@@ -92,7 +92,7 @@ void linkedlistutil<double>::print(double data) const {
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<datatype>::print(datatype data) const {
-	printf("%llx",(uint64_t)data);
+	printf("%llx",(long long)data);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

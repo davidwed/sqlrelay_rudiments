@@ -301,12 +301,6 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 		error::setErrorNumber(ENOSYS);
 	#endif
 
-	// This is here for an odd reason.  Apparently, in some debugging
-	// environments, if you set a breakpoint here, gdb will segfault if you
-	// run "print errno".  This works around the problem.
-	int32_t	errornumber;
-	errornumber=error::getErrorNumber();
-
 	return false;
 }
 

@@ -31,7 +31,11 @@ void error::setErrorNumber(int32_t err) {
 }
 
 int32_t error::getErrorNumber() {
-	return errno;
+	// This is here for an odd reason.  Apparently, in some debugging
+	// environments, if you set a breakpoint here, gdb will segfault if you
+	// run "print errno".  You can safely "print errornumber" though.
+	int32_t	errornumber=errno;
+	return errornumber;
 }
 
 char *error::getErrorString() {
