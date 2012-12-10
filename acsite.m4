@@ -532,7 +532,7 @@ then
 		if ( test -n "$PTHREADPATH" )
 		then
 			PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
-			PTHREADLIB="-L$PTHREADPATH/lib -lpthread -phtread"
+			PTHREADLIB="-L$PTHREADPATH/lib -lpthread -pthread"
 		else
 			PTHREADINCLUDES="$PTHREAD_COMPILE"
 			PTHREADLIB="-lpthread -pthread"
@@ -541,6 +541,7 @@ then
 
 	else
 
+		dnl check pthread.h and standard thread libraries
 		for i in "pthread" "c_r" "thread" "pthreads"
 		do
 			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
@@ -554,37 +555,34 @@ then
 			fi
 		done
 
-		dnl FSU pthreads check
+		dnl check for FSU pthreads
 		if ( test -z "$PTHREADLIB" )
 		then
 			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[FSU],[pthread.h],[gthreads],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
 		fi
 
-		if ( test -z "$PTHREADLIB" )
+		dnl If we couldn't find the appropriate libraries, just try
+		dnl including pthread.h and using -lpthread, it works on some
+		dnl systems.  Also try this for microsoft systems.  I don't
+		dnl remember exactly which, but some old version of either
+		dnl Cygwin, UWIN or mingw32 required -pthread in place of
+		dnl -lpthread even though libpthread was present.
+		if ( test -z "$PTHREADLIB" -o "$MICROSOFT" = "yes")
 		then
-			dnl if we couldn't find the appropriate libraries, just
-			dnl try including pthread.h and using -lpthread, it
-			dnl works on some systems
-			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
+			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
 		fi
 
+		dnl try that last test again, some older thread
+		dnl implementations have non-pointer 2nd parameters
 		if ( test -z "$PTHREADLIB" )
 		then
-			dnl try that last test again, some older thread
-			dnl implementations have non-pointer 2nd parameters
-			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
+			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
 		fi
 
 		if ( test -n "$PTHREADLIB" )
 		then
 			PTHREADINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDES"
 			HAVE_PTHREAD="yes"
-		fi
-
-		dnl override PTHREADLIB on microsoft platforms
-		if ( test -n "$PTHREADINCLUDES" -a "$MICROSOFT" = "yes" )
-		then
-			PTHREADLIB="-pthread"
 		fi
 	fi
 
