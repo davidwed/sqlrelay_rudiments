@@ -1586,10 +1586,10 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 	uint64_t	inputindex=0;
 	while (inputindex<inputsize) {
 
-		data[0]=b64dcode[(int)input[inputindex++]];
-		data[1]=b64dcode[(int)input[inputindex++]];
-		data[2]=b64dcode[(int)input[inputindex++]];
-		data[3]=b64dcode[(int)input[inputindex++]];
+		data[0]=b64dcode[(int32_t)input[inputindex++]];
+		data[1]=b64dcode[(int32_t)input[inputindex++]];
+		data[2]=b64dcode[(int32_t)input[inputindex++]];
+		data[3]=b64dcode[(int32_t)input[inputindex++]];
 
 		(*output)[outputindex++]=data[0]<<2|data[1]>>4;
 		(*output)[outputindex++]=(data[1]&0x0F)<<4|data[2]>>2;
@@ -1604,8 +1604,7 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 
 	// there can be at most 2 trailing ='s, each equal represents an
 	// additional trailing NULL, reduce outputsize accordingly
-	(*outputsize)-=(input[--inputindex]=='=')+
-				(input[--inputindex]=='=');
+	(*outputsize)-=(input[inputsize-1]=='=')+(input[inputsize-2]=='=');
 }
 
 char *charstring::insertString(const char *dest,
