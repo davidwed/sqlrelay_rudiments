@@ -591,13 +591,13 @@ then
 
 					LINKED=""
 					dnl try to link
-					FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[LINKED="yes"],[])
+					FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[LINKED="yes"],[])
 					if ( test -z "$LINKED" )
 					then
 						dnl try link again, some older
 						dnl thread implementations have
 						dnl non-pointer 2nd parameters
-						FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS],[-pthread],[],[LINKED="yes"],[])
+						FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[LINKED="yes"],[])
 					fi
 
 					dnl  If the link succeeded then keep
