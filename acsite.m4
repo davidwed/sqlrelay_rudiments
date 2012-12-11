@@ -498,7 +498,7 @@ HAS_THREADS="no"
 if ( test "$ENABLE_RUDIMENTS_THREADS" = "yes" )
 then
 
-	AC_MSG_CHECKING(if $CXX -pthread works during compile phase)
+	AC_MSG_CHECKING(if -pthread works during compile phase)
 	if ( test -n "`$CXX -pthread 2>&1 | grep 'unrecognized option' | grep pthread`" )
 	then
 		PTHREAD_COMPILE=""

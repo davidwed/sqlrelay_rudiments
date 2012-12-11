@@ -16315,8 +16315,8 @@ HAS_THREADS="no"
 if ( test "$ENABLE_RUDIMENTS_THREADS" = "yes" )
 then
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CXX -pthread works during compile phase" >&5
-$as_echo_n "checking if $CXX -pthread works during compile phase... " >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if -pthread works during compile phase" >&5
+$as_echo_n "checking if -pthread works during compile phase... " >&6; }
 	if ( test -n "`$CXX -pthread 2>&1 | grep 'unrecognized option' | grep pthread`" )
 	then
 		PTHREAD_COMPILE=""
