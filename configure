@@ -16354,7 +16354,7 @@ $as_echo "no" >&6; }
 
 	else
 
-				for i in "pthread" "c_r" "thread" "pthreads" "gthreads"
+				for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
 		do
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for lib$i" >&5
 $as_echo_n "checking for lib$i... " >&6; }
@@ -16365,6 +16365,8 @@ $as_echo_n "checking for lib$i... " >&6; }
 				INCLUDEDIR="FSU"
 			fi
 
+			if ( test -n "$i" )
+			then
 
 
 SEARCHPATH=$PTHREADPATH
@@ -16606,14 +16608,22 @@ then
 	eval "=\"$HEADERSANDLIBSPATH\""
 fi
 
-			if ( test -n "$PTHREADLIB" )
+			fi
+
+			if ( test -n "$PTHREADLIB" -o -z "$i" )
 			then
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether lib$i works" >&5
+				if ( test -n "$i" )
+				then
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether lib$i works" >&5
 $as_echo_n "checking whether lib$i works... " >&6; }
+				else
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether using no library works" >&5
+$as_echo_n "checking whether using no library works... " >&6; }
+				fi
 
 																												for try in 1 2 3 4 5 6
 				do
@@ -16644,7 +16654,6 @@ $as_echo_n "checking whether lib$i works... " >&6; }
 						TESTLIB="-pthread"
 					fi
 
-					LINKED=""
 
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
@@ -16665,7 +16674,7 @@ pthread_create(NULL,NULL,NULL,NULL);
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  LINKED="yes"
+  HAVE_PTHREAD="yes"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -16674,7 +16683,7 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-					if ( test -z "$LINKED" )
+					if ( test -z "$HAVE_PTHREAD" )
 					then
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -16696,7 +16705,7 @@ pthread_create(NULL,pthread_attr_default,NULL,NULL);
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  LINKED="yes"
+  HAVE_PTHREAD="yes"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -16707,7 +16716,7 @@ export LD_LIBRARY_PATH
 
 					fi
 
-															if ( test -n "$LINKED" )
+															if ( test -n "$HAVE_PTHREAD" )
 					then
 						PTHREADINCLUDES="$TESTINCLUDES"
 						PTHREADLIB="$TESTLIB"
@@ -16718,7 +16727,7 @@ export LD_LIBRARY_PATH
 					PTHREADLIB=""
 				done
 
-				if ( test -n "$PTHREADLIB" )
+				if ( test -n "$HAVE_PTHREAD" )
 				then
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -16733,11 +16742,6 @@ $as_echo "no" >&6; }
 $as_echo "no" >&6; }
 			fi
 		done
-
-		if ( test -n "$PTHREADLIB" )
-		then
-			HAVE_PTHREAD="yes"
-		fi
 	fi
 
 

@@ -536,7 +536,7 @@ then
 	else
 
 		dnl check pthread.h and standard thread libraries
-		for i in "pthread" "c_r" "thread" "pthreads" "gthreads"
+		for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
 		do
 			AC_MSG_CHECKING(for lib$i)
 
@@ -546,13 +546,22 @@ then
 				INCLUDEDIR="FSU"
 			fi
 
-			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[$INCLUDEDIR],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
-			if ( test -n "$PTHREADLIB" )
+			if ( test -n "$i" )
+			then
+				FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[$INCLUDEDIR],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
+			fi
+
+			if ( test -n "$PTHREADLIB" -o -z "$i" )
 			then
 
 				AC_MSG_RESULT(yes)
 
-				AC_MSG_CHECKING(whether lib$i works)
+				if ( test -n "$i" )
+				then
+					AC_MSG_CHECKING(whether lib$i works)
+				else
+					AC_MSG_CHECKING(whether using no library works)
+				fi
 
 				dnl  If we found a set of headers and libs, try
 				dnl  linking with them.  We'll try six times,
@@ -589,20 +598,19 @@ then
 						TESTLIB="-pthread"
 					fi
 
-					LINKED=""
 					dnl try to link
-					FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[LINKED="yes"],[])
-					if ( test -z "$LINKED" )
+					FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[HAVE_PTHREAD="yes"],[])
+					if ( test -z "$HAVE_PTHREAD" )
 					then
 						dnl try link again, some older
 						dnl thread implementations have
 						dnl non-pointer 2nd parameters
-						FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[LINKED="yes"],[])
+						FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[HAVE_PTHREAD="yes"],[])
 					fi
 
 					dnl  If the link succeeded then keep
 					dnl  the flags.
-					if ( test -n "$LINKED" )
+					if ( test -n "$HAVE_PTHREAD" )
 					then
 						PTHREADINCLUDES="$TESTINCLUDES"
 						PTHREADLIB="$TESTLIB"
@@ -614,7 +622,7 @@ then
 					PTHREADLIB=""
 				done
 
-				if ( test -n "$PTHREADLIB" )
+				if ( test -n "$HAVE_PTHREAD" )
 				then
 					AC_MSG_RESULT(yes)
 					break
@@ -626,11 +634,6 @@ then
 				AC_MSG_RESULT(no)
 			fi
 		done
-
-		if ( test -n "$PTHREADLIB" )
-		then
-			HAVE_PTHREAD="yes"
-		fi
 	fi
 
 	FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
