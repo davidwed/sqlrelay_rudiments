@@ -16356,8 +16356,14 @@ $as_echo "no" >&6; }
 
 				for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
 		do
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for lib$i" >&5
+			if ( test -n "$i" )
+			then
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for lib$i" >&5
 $as_echo_n "checking for lib$i... " >&6; }
+			else
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for no library" >&5
+$as_echo_n "checking for no library... " >&6; }
+			fi
 
 			INCLUDEDIR="pthread"
 			if ( test "$i" = "gthreads" )
@@ -16621,8 +16627,8 @@ $as_echo "yes" >&6; }
 					{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether lib$i works" >&5
 $as_echo_n "checking whether lib$i works... " >&6; }
 				else
-					{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether using no library works" >&5
-$as_echo_n "checking whether using no library works... " >&6; }
+					{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether no library works" >&5
+$as_echo_n "checking whether no library works... " >&6; }
 				fi
 
 																												for try in 1 2 3 4 5 6

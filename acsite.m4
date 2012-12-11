@@ -538,7 +538,12 @@ then
 		dnl check pthread.h and standard thread libraries
 		for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
 		do
-			AC_MSG_CHECKING(for lib$i)
+			if ( test -n "$i" )
+			then
+				AC_MSG_CHECKING(for lib$i)
+			else
+				AC_MSG_CHECKING(for no library)
+			fi
 
 			INCLUDEDIR="pthread"
 			if ( test "$i" = "gthreads" )
@@ -560,7 +565,7 @@ then
 				then
 					AC_MSG_CHECKING(whether lib$i works)
 				else
-					AC_MSG_CHECKING(whether using no library works)
+					AC_MSG_CHECKING(whether no library works)
 				fi
 
 				dnl  If we found a set of headers and libs, try
