@@ -296,27 +296,6 @@ fi
 ])
 
 
-
-dnl checks to see if -pthread option works or not during compile,
-dnl execpt on mingw, it definitely doesn't use it
-AC_DEFUN([FW_CHECK_PTHREAD_COMPILE],
-[
-AC_MSG_CHECKING(if $CXX -pthread works during compile phase)
-if ( test -n "`$CXX -pthread 2>&1 | grep 'unrecognized option' | grep pthread`" )
-then
-	PTHREAD_COMPILE=""
-else
-	PTHREAD_COMPILE="-pthread"
-fi
-if ( test -n "$PTHREAD_COMPILE" )
-then
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-])
-
-
 dnl Determines what extension shared object files have
 AC_DEFUN([FW_CHECK_SO_EXT],
 [
@@ -519,6 +498,21 @@ HAS_THREADS="no"
 if ( test "$ENABLE_RUDIMENTS_THREADS" = "yes" )
 then
 
+	AC_MSG_CHECKING(if $CXX -pthread works during compile phase)
+	if ( test -n "`$CXX -pthread 2>&1 | grep 'unrecognized option' | grep pthread`" )
+	then
+		PTHREAD_COMPILE=""
+	else
+		PTHREAD_COMPILE="-pthread"
+	fi
+	if ( test -n "$PTHREAD_COMPILE" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
+
 	HAVE_PTHREAD=""
 	PTHREADINCLUDES=""
 	PTHREADLIB=""
@@ -542,46 +536,99 @@ then
 	else
 
 		dnl check pthread.h and standard thread libraries
-		for i in "pthread" "c_r" "thread" "pthreads"
+		for i in "pthread" "c_r" "thread" "pthreads" "gthreads"
 		do
-			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[pthread],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
+			AC_MSG_CHECKING(for lib$i)
+
+			INCLUDEDIR="pthread"
+			if ( test "$i" = "gthreads" )
+			then
+				INCLUDEDIR="FSU"
+			fi
+
+			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[$INCLUDEDIR],[pthread.h],[$i],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
 			if ( test -n "$PTHREADLIB" )
 			then
-				if ( test "$i" = "c_r" )
+
+				AC_MSG_RESULT(yes)
+
+				AC_MSG_CHECKING(whether lib$i works)
+
+				dnl  If we found a set of headers and libs, try
+				dnl  linking with them.  We'll try six times,
+				dnl  first with just the header and lib that we
+				dnl  found, then with -pthread added to one,
+				dnl  the other and both, and then finally
+				dnl  without any libs, just -pthread
+				for try in 1 2 3 4 5 6
+				do
+
+					if ( test "$try" = "1" )
+					then
+						TESTINCLUDES="$PTHREADINCLUDES"
+						TESTLIB="$PTHREADLIB"
+					elif ( test "$try" = "2" )
+					then
+						TESTINCLUDES="$PTHREADINCLUDES"
+						TESTLIB="$PTHREADLIB -pthread"
+					elif ( test "$try" = "3" )
+					then
+						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDES"
+						TESTLIB="$PTHREADLIB"
+					elif ( test "$try" = "4" )
+					then
+						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDESS"
+						TESTLIB="$PTHREADLIB -pthread"
+					elif ( test "$try" = "5" )
+					then
+						TESTINCLUDES="$PTHREADINCLUDESS"
+						TESTLIB="-pthread"
+					elif ( test "$try" = "6" )
+					then
+						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDESS"
+						TESTLIB="-pthread"
+					fi
+
+					LINKED=""
+					dnl try to link
+					FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[LINKED="yes"],[])
+					if ( test -z "$LINKED" )
+					then
+						dnl try link again, some older
+						dnl thread implementations have
+						dnl non-pointer 2nd parameters
+						FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS],[-pthread],[],[LINKED="yes"],[])
+					fi
+
+					dnl  If the link succeeded then keep
+					dnl  the flags.
+					if ( test -n "$LINKED" )
+					then
+						PTHREADINCLUDES="$TESTINCLUDES"
+						PTHREADLIB="$TESTLIB"
+						break
+					fi
+
+					dnl  If the link failed, reset the flags
+					PTHREADINCLUDES=""
+					PTHREADLIB=""
+				done
+
+				if ( test -n "$PTHREADLIB" )
 				then
-					PTHREADLIB="$PTHREADLIB -pthread"
+					AC_MSG_RESULT(yes)
+					break
+				else
+					AC_MSG_RESULT(no)
 				fi
-				break
+
+			else
+				AC_MSG_RESULT(no)
 			fi
 		done
 
-		dnl check for FSU pthreads
-		if ( test -z "$PTHREADLIB" )
-		then
-			FW_CHECK_HEADERS_AND_LIBS([$PTHREADPATH],[FSU],[pthread.h],[gthreads],[""],[""],[PTHREADINCLUDES],[PTHREADLIB],[PTHREADLIBPATH],[PTHREADSTATIC])
-		fi
-
-		dnl If we couldn't find the appropriate libraries, just try
-		dnl including pthread.h and using -lpthread, it works on some
-		dnl systems.  Also try this for microsoft systems.  I don't
-		dnl remember exactly which, but some old version of either
-		dnl Cygwin, UWIN or mingw32 required -pthread in place of
-		dnl -lpthread even though libpthread was present.
-		if ( test -z "$PTHREADLIB" -o "$MICROSOFT" = "yes")
-		then
-			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
-		fi
-
-		dnl try that last test again, some older thread
-		dnl implementations have non-pointer 2nd parameters
-		if ( test -z "$PTHREADLIB" )
-		then
-			FW_TRY_LINK([#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$PTHREAD_COMPILE $CPPFLAGS],[-pthread],[],[PTHREADLIB="-pthread"],[])
-		fi
-
 		if ( test -n "$PTHREADLIB" )
 		then
-			PTHREADINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDES"
 			HAVE_PTHREAD="yes"
 		fi
 	fi
@@ -591,7 +638,7 @@ then
 
 	if ( test -z "$HAVE_PTHREAD" )
 	then
-		AC_MSG_ERROR(pthread library not found.  Rudiments requires this package.)
+		AC_MSG_ERROR(thread library not found.  Rudiments requires this package.)
 		exit
 	else
 		AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
