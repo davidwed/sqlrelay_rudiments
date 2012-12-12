@@ -121,7 +121,7 @@ void syslogdestination::close() {
 
 void syslogdestination::write(const char *string) {
 #ifdef RUDIMENTS_HAVE_SYSLOG_H
-	syslog(pvt->_priority,string);
+	syslog(pvt->_priority,"%s",string);
 #endif
 }
 
