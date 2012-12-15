@@ -319,6 +319,9 @@
 /* Some systems have getloadavg */
 #undef RUDIMENTS_HAVE_GETLOADAVG
 
+/* Some systems have getnameinfo */
+#undef RUDIMENTS_HAVE_GETNAMEINFO
+
 /* Some systems have GetNativeSystemInfo */
 #undef RUDIMENTS_HAVE_GETNATIVESYSTEMINFO
 

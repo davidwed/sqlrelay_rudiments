@@ -1225,6 +1225,16 @@ then
 gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETHOSTBYADDR_R,1,Some systems have gethostbyaddr_r) AC_DEFINE(RUDIMENTS_HAVE_GETHOSTBYADDR_R_7,1,Some systems have gethostbyaddr_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 fi
 
+AC_MSG_CHECKING(for getnameinfo)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#include <netdb.h>
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+getnameinfo(NULL,0,NULL,0,NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETNAMEINFO,1,Some systems have getnameinfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 ])
 
 
