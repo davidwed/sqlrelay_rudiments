@@ -130,7 +130,7 @@ do
 			dnl look in /usr/include and /$LIBDIR
 			if ( test "$USEFULLLIBPATH" = "yes" )
 			then
-				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"/$LIBDIR/lib$LIBNAME.$SOSUFFIX\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-Wl,/$LIBDIR/lib$LIBNAME.$SOSUFFIX\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
 			else
 				FW_CHECK_HEADER_LIB([/usr/include/$HEADER],[],[/$LIBDIR/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-l$LIBNAME\"],[/$LIBDIR/lib$LIBNAME.a],[LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
 			fi
@@ -159,7 +159,7 @@ do
 				dnl look in $path/$LIBDIR
 				if ( test "$USEFULLLIBPATH" = "yes" )
 				then
-					FW_CHECK_HEADER_LIB([$includepath/$HEADER],[INCLUDESTRING=\"-I$includepath\"],[$libpath/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$libpath\"; LIBSTRING=\"$libpath/lib$LIBNAME.$SOSUFFIX\"],[$libpath/lib$LIBNAME.a],[LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
+					FW_CHECK_HEADER_LIB([$includepath/$HEADER],[INCLUDESTRING=\"-I$includepath\"],[$libpath/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\"],[$libpath/lib$LIBNAME.a],[LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"])
 				else
 					FW_CHECK_HEADER_LIB([$includepath/$HEADER],[INCLUDESTRING=\"-I$includepath\"],[$libpath/lib$LIBNAME.$SOSUFFIX],[LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\"],[$libpath/lib$LIBNAME.a],[LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"])
 				fi
