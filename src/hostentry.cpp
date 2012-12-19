@@ -188,7 +188,7 @@ char *hostentry::getAddressString(int32_t index) const {
 	address[0]='\0';
 	for (int32_t byte=0; byte<getAddressLength(); byte++) {
 		charstring::append(address,
-				(int64_t)getAddressList()[index][byte]);
+			(int64_t)(unsigned char)getAddressList()[index][byte]);
 		if (byte<getAddressLength()-1) {
 			charstring::append(address,".");
 		}
