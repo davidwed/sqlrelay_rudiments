@@ -122,6 +122,10 @@ bool hostentry::initialize(const char *address, int32_t len, int32_t type) {
 bool hostentry::initialize(const char *hostname, const char *address,
 						int32_t len, int32_t type) {
 
+	if (!hostname && !address) {
+		return false;
+	}
+
 	#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
 		if (pvt->_he) {
@@ -209,6 +213,7 @@ bool hostentry::getAliasList(const char *hostname, char ***aliaslist) {
 		*aliaslist=alias;
 		return true;
 	}
+	*aliaslist=NULL;
 	return false;
 }
 
@@ -218,6 +223,7 @@ bool hostentry::getAddressType(const char *hostname, int32_t *addresstype) {
 		*addresstype=he.getAddressType();
 		return true;
 	}
+	*addresstype=0;
 	return false;
 }
 
@@ -227,6 +233,7 @@ bool hostentry::getAddressLength(const char *hostname, int32_t *addresslength) {
 		*addresslength=he.getAddressLength();
 		return true;
 	}
+	*addresslength=0;
 	return false;
 }
 
@@ -243,6 +250,7 @@ bool hostentry::getAddressList(const char *hostname, char ***addresslist) {
 		*addresslist=addr;
 		return true;
 	}
+	*addresslist=NULL;
 	return false;
 }
 
@@ -253,6 +261,7 @@ bool hostentry::getAddressString(const char *hostname, int32_t index,
 		*addressstring=he.getAddressString(index);
 		return true;
 	}
+	*addressstring=NULL;
 	return false;
 }
 
@@ -264,6 +273,7 @@ bool hostentry::getName(const char *address, int32_t len,
 		*name=charstring::duplicate(he.getName());
 		return true;
 	}
+	*name=NULL;
 	return false;
 }
 
@@ -281,6 +291,7 @@ bool hostentry::getAliasList(const char *address, int32_t len, int32_t type,
 		*aliaslist=alias;
 		return true;
 	}
+	*aliaslist=NULL;
 	return false;
 }
 
@@ -298,6 +309,7 @@ bool hostentry::getAddressList(const char *address, int32_t len, int32_t type,
 		*addresslist=addr;
 		return true;
 	}
+	*addresslist=NULL;
 	return false;
 }
 
@@ -308,6 +320,7 @@ bool hostentry::getAddressString(const char *address, int32_t len, int32_t type,
 		*addressstring=he.getAddressString(index);
 		return true;
 	}
+	*addressstring=NULL;
 	return false;
 }
 
