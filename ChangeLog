@@ -2,6 +2,10 @@
 	added -Werror to default build
 	fixed various issues revealed by -Werror
 	fixed hostentry::getAddressString() for numbers greater than 127
+	fixed bugs that could lead to a crash when using the hostentry class
+		with NULL hostnames
+	reads that error out with EAGAIN are treated as successful reads of 0
+		bytes now
 
 0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
 	added charstring::safeCopy methods
