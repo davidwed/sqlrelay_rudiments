@@ -1165,7 +1165,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				character::safePrint(
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
-			printf("(%ld bytes) ",actualread);
+			printf("(%ld bytes) ",(long)actualread);
 			if (actualread==-1) {
 				printf("%s ",error::getErrorString());
 			}
@@ -1178,7 +1178,15 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
 		if (actualread!=sizetoread) {
-			if (error::getErrorNumber()==EINTR) {
+			if (error::getErrorNumber()==EAGAIN) {
+				#ifdef DEBUG_READ
+				printf(" EAGAIN ");
+				#endif
+				// if we got an EAGAIN, then presumably we're
+				// in non-blocking mode, there was nothing
+				// to read and we're done
+				break;
+			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_READ
 				printf(" EINTR ");
 				#endif
@@ -1423,7 +1431,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 				character::safePrint(
 				(static_cast<const unsigned char *>(ptr))[i]);
 			}
-			printf("(%ld bytes) ",actualwrite);
+			printf("(%ld bytes) ",(long)actualwrite);
 			if (actualwrite==-1) {
 				printf("%s ",error::getErrorString());
 			}
@@ -1799,7 +1807,8 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	int32_t	result;
 	do {
 		result=sendmsg(pvt->_fd,&messageheader,0);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					pvt->_retryinterruptedwrites);
 
 	// clean up
 	#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
@@ -1855,14 +1864,21 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	do {
 		// wait 120 seconds for data to come in
 		// FIXME: this should be configurable
-		if (safePoll(120,0,true,false)<1) {
+		bool	oldwaits=pvt->_retryinterruptedwaits;
+		pvt->_retryinterruptedwaits=pvt->_retryinterruptedreads;
+		result=safePoll(120,0,true,false);
+		pvt->_retryinterruptedwaits=oldwaits;
+		if (result==RESULT_TIMEOUT) {
 			#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 				delete[] control;
 			#endif
 			return false;
 		}
-		result=recvmsg(pvt->_fd,&messageheader,0);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result>-1) {
+			result=recvmsg(pvt->_fd,&messageheader,0);
+		}
+	} while (result==-1 && error::getErrorNumber()==EINTR &&
+					pvt->_retryinterruptedreads);
 	if (result==-1) {
 		#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
 			delete[] control;
