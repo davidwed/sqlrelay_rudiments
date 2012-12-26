@@ -946,7 +946,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 					long sec, long usec) const {
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-	printf("bufferedRead of %d bytes\n",count);
+	printf("bufferedRead of %d bytes\n",(int)count);
 	#endif
 
 	if (!count) {
@@ -973,7 +973,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("%d bytes in read buffer\n",
-					bytesavailabletocopy);
+					(int)bytesavailabletocopy);
 			#endif
 
 			ssize_t	bytestocopy=(bytesavailabletocopy<bytesunread)?
@@ -982,7 +982,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("copying %d bytes out of read buffer\n",
-								bytestocopy);
+							(int)bytestocopy);
 			#endif
 
 			rawbuffer::copy(data,pvt->_readbufferhead,bytestocopy);
@@ -1001,7 +1001,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			}
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("need to read %d more bytes\n",bytesunread);
+			printf("need to read %d more bytes\n",(int)bytesunread);
 			#endif
 		}
 
@@ -1011,7 +1011,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 			printf("attempting to fill read buffer, ");
 			printf("reading %d bytes...\n",
-				pvt->_readbufferend-pvt->_readbuffer);
+					(int)(pvt->_readbufferend-
+						pvt->_readbuffer));
 			#endif
 
 			bool	saveasr=pvt->_allowshortreads;
@@ -1035,7 +1036,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
 				printf("still need %d bytes, reading...\n",
-								bytesunread);
+							(int)bytesunread);
 				#endif
 				result=safeRead(pvt->_readbuffer,
 						bytesunread,
@@ -1062,7 +1063,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("read %d bytes\n",result);
+			printf("read %d bytes\n",(int)result);
 			#endif
 		}
 	}
@@ -1078,7 +1079,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	printf("%d: safeRead(%d,",process::getProcessId(),pvt->_fd);
+	printf("%d: safeRead(%d,",(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
 	// The result of SSL_read may be undefined if count=0
@@ -1091,6 +1092,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
 	ssize_t	actualread;
+	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalread<count) {
 
 		// only read SSIZE_MAX at a time
@@ -1178,7 +1180,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
 		if (actualread!=sizetoread) {
-			if (error::getErrorNumber()==EAGAIN) {
+			if (isusingnonblockingmode &&
+				error::getErrorNumber()==EAGAIN) {
 				#ifdef DEBUG_READ
 				printf(" EAGAIN ");
 				#endif
@@ -1226,7 +1229,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	printf(",%d)\n",totalread);
+	printf(",%d)\n",(int)totalread);
 	#endif
 	return totalread;
 }
@@ -1244,7 +1247,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					long sec, long usec) const {
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-	printf("bufferedWrite of %d bytes\n",count);
+	printf("bufferedWrite of %d bytes\n",(int)count);
 	#endif
 
 	if (!count) {
@@ -1274,16 +1277,16 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						pvt->_writebufferptr;
 
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		printf("	writebuffersize=%d\n",writebuffersize);
-		printf("	writebufferspace=%d\n",writebufferspace);
-		printf("	byteswritten=%d\n",byteswritten);
-		printf("	bytesunwritten=%d\n",bytesunwritten);
+		printf("	writebuffersize=%d\n",(int)writebuffersize);
+		printf("	writebufferspace=%d\n",(int)writebufferspace);
+		printf("	byteswritten=%d\n",(int)byteswritten);
+		printf("	bytesunwritten=%d\n",(int)bytesunwritten);
 		#endif
 
 		if (bytesunwritten<=writebufferspace) {
 
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			printf("buffering %d bytes\n",bytesunwritten);
+			printf("buffering %d bytes\n",(int)bytesunwritten);
 			#endif
 
 			rawbuffer::copy(pvt->_writebufferptr,
@@ -1295,7 +1298,8 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		} else {
 
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			printf("just buffering %d bytes\n",writebufferspace);
+			printf("just buffering %d bytes\n",
+						(int)writebufferspace);
 			#endif
 
 			rawbuffer::copy(pvt->_writebufferptr,
@@ -1335,6 +1339,9 @@ bool filedescriptor::flushWriteBuffer(long sec, long usec) const {
 		return true;
 	}
 	ssize_t	writebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
+	#if defined(DEBUG_BUFFERING)
+		printf("flush write buffer: %d bytes\n",(int)writebuffersize);
+	#endif
 	bool	retval=(safeWrite(pvt->_writebuffer,writebuffersize,
 						sec,usec)==writebuffersize);
 	pvt->_writebufferptr=pvt->_writebuffer;
@@ -1351,7 +1358,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_WRITE
-	printf("%d: safeWrite(%d,",process::getProcessId(),pvt->_fd);
+	printf("%d: safeWrite(%d,",(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
 	// The result of SSL_write may be undefined if count=0
@@ -1485,7 +1492,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_WRITE
-	printf(",%d)\n",totalwrite);
+	printf(",%d)\n",(int)totalwrite);
 	#endif
 	return totalwrite;
 }
@@ -1494,7 +1501,9 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 	#if defined(RUDIMENTS_HAVE__WRITE)
 		return _write(pvt->_fd,buf,count);
 	#elif defined(RUDIMENTS_HAVE_WRITE)
-		return ::write(pvt->_fd,buf,count);
+		//return ::write(pvt->_fd,buf,count);
+		ssize_t	result=::write(pvt->_fd,buf,count);
+		return result;
 	#else
 		#error no write or anything like it
 	#endif
@@ -1928,11 +1937,12 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 			// wrong, this will help debug problems with different
 			// platforms
 			if (!cmptr) {
-				printf("%d: ",process::getProcessId());
+				printf("%d: ",(int)process::getProcessId());
 				printf("null cmptr\n");
 			} else {
 				if (cmptr->cmsg_level!=SOL_SOCKET) {
-					printf("%d: ",process::getProcessId());
+					printf("%d: ",
+						(int)process::getProcessId());
 					printf("got cmsg_level=%ld",
 						static_cast<long>(
 							cmptr->cmsg_level));
@@ -1941,7 +1951,8 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 					printf("\n");
 				}
 				if (cmptr->cmsg_type!=SCM_RIGHTS) {
-					printf("%d: ",process::getProcessId());
+					printf("%d: ",
+						(int)process::getProcessId());
 					printf("got cmsg_type=%ld",
 						static_cast<long>(
 							cmptr->cmsg_type));
