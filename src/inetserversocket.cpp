@@ -99,7 +99,19 @@ bool inetserversocket::initialize(const char *address, uint16_t port) {
 	do {
 		fd(::socket(AF_INET,SOCK_STREAM,0));
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);
-	return (fd()!=-1);
+	if (fd()==-1) {
+		return false;
+	}
+
+	// Put the socket in blocking mode.  Most platforms create sockets in
+	// blocking mode by default but OpenBSD doesn't appear to (at least in
+	// version 4.9) so we'll force it to blocking-mode to be consistent.
+	if (!useBlockingMode()) {
+		close();
+		return false;
+	}
+
+	return true;
 }
 
 bool inetserversocket::bind() {
@@ -165,12 +177,24 @@ filedescriptor *inetserversocket::accept() {
 
 	inetclientsocket	*returnsock=new inetclientsocket;
 	returnsock->setFileDescriptor(clientsock);
+
+	// set the client socket to the same blocking/non-blocking
+	// mode as the server socket
+	if (!((isUsingNonBlockingMode())?
+			returnsock->useNonBlockingMode():
+			returnsock->useBlockingMode())) {
+		delete returnsock;
+		return NULL;
+	}
+
+	// handle SSL-accept if necessary
 	#ifdef RUDIMENTS_HAS_SSL
 		if (!sslAccept(returnsock)) {
 			delete returnsock;
 			return NULL;
 		}
 	#endif
+
 	return returnsock;
 }
 

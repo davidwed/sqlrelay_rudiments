@@ -153,129 +153,126 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 #ifndef RUDIMENTS_HAVE_WSACONNECT
 
-	int32_t	retval;
-	if (sec==-1 || usec==-1) {
+	// variables...
+	int32_t		retval;
+	bool		wasusingnonblockingmode;
+	int32_t		error;
+	socklen_t	errorsize;
+	#define USE_GETSOCKOPT_SO_ERROR 1
+	#ifndef USE_GETSOCKOPT_SO_ERROR
+	struct sockaddr	peeraddr;
+	socklen_t	size;
+	int32_t		result;
+	char		ch;
+	#endif
 
-		// if no timeout was passed in, just do a plain vanilla connect
+	// if no timeout was passed in, just do a plain vanilla connect
+	if (sec==-1 || usec==-1) {
 		retval=(::connect(fd(),addr,addrlen)==-1)?
 				RESULT_ERROR:RESULT_SUCCESS;
 
 		// FIXME: handle errno is EINTR...
-		// on non-linux systems the connect is still in progress and we
+		// On non-linux systems the connect is still in progress and we
 		// need to use select() to determine when it has
-		// succeeded/failed,
-		// on linux systems, the connect may be re-called
-		// will select() work on linux?
+		// succeeded/failed, on linux systems, the connect may be
+		// re-called.  Will select() work on linux?
 
-	} else {
+		goto cleanup;
+	}
 
-		// if a timeout was passed in then we need to do some more
-		// complex stuff...
+	// if a timeout was passed in then we need to do some more
+	// complex stuff...
 
-		// put the socket in non-blocking mode, if necessary
-		bool	wasusingnonblockingmode=isUsingNonBlockingMode();
-		if (!wasusingnonblockingmode && !useNonBlockingMode()) {
-			return RESULT_ERROR;
+	// put the socket in non-blocking mode, if necessary
+	wasusingnonblockingmode=isUsingNonBlockingMode();
+	if (!wasusingnonblockingmode && !useNonBlockingMode()) {
+		retval=RESULT_ERROR;
+		goto cleanup;
+	}
+
+	// connect...
+	if (::connect(fd(),addr,addrlen)!=-1) {
+		retval=RESULT_SUCCESS;
+		goto cleanup;
+	}
+
+	// FIXME: handle errno is EINTR...
+	// if connect() fails and errno is set to one of these values,
+	// then the connection is in progress
+	if (error::getErrorNumber()==EINPROGRESS ||
+		error::getErrorNumber()==EWOULDBLOCK) {
+		retval=RESULT_ERROR;
+		goto cleanup;
+	}
+
+	// Wait for the socket to become writable.  If the select()
+	// errors or times out then return the error or timeout.
+	// FIXME: use waitForNonBlockingWrite() and add
+	// a useListenerInsideConnect() method?
+	if ((retval=safeSelect(sec,usec,false,true))<0) {
+		retval=RESULT_ERROR;
+		goto cleanup;
+	}
+
+	// If the select() succeeds then we need to see whether the connection
+	// was successful or not, there are 2 ways to do this, the first is
+	// more efficient, the second is more portable...
+
+	#ifdef USE_GETSOCKOPT_SO_ERROR
+
+		// Check for an error using getsockopt(,,SO_ERROR,,)
+		error=0;
+		errorsize=sizeof(error);
+
+		// Some platforms cause getsockopt() to fail and set
+		// errno to the error that caused connect() to fail.
+		if (getSockOpt(SOL_SOCKET,SO_ERROR,&error,&errorsize)==-1) {
+			retval=RESULT_ERROR;
+			goto cleanup;
 		}
 
-		// call connect()
-		if (::connect(fd(),addr,addrlen)==-1) {
+		// Other platforms (correctly) return the error in the
+		// buffer that was passed in to getsockopt().
+		if (error) {
+			error::setErrorNumber(error);
+			retval=RESULT_ERROR;
+			goto cleanup;
+		}
 
-			// FIXME: handle errno is EINTR...
-			// if connect() fails and errno is set to one of these
-			// values, then the connection is in progress
-			if (error::getErrorNumber()==EINPROGRESS ||
-				error::getErrorNumber()==EWOULDBLOCK) {
+	#else
 
-				// Wait for the socket to become writable.  If
-				// the select() errors or times out then return
-				// the error or timeout.
-				// FIXME: use waitForNonBlockingWrite() and
-				// add a useListenerInsideConnect() method?
-				if ((retval=safeSelect(sec,usec,
-							false,true))<0) {
-					return retval;
-				}
+		// If getpeername() fails then the
+		// connect was unsuccessful.
+		size=sizeof(peeraddr);
+		do {
+			rawbuffer::zero(&peeraddr,size);
+			result=getpeername(fd(),&peeraddr,&size);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result==-1) {
 
-				// If the select() succeeds then we need to see
-				// whether the connection was successful or not,
-				// there are 2 ways to do this, the first is
-				// more efficient, the second is more
-				// portable...
-
-			#define USE_GETSOCKOPT_SO_ERROR 1
-			#ifdef USE_GETSOCKOPT_SO_ERROR
-
-				// Check for an error using
-				// getsockopt(,,SO_ERROR,,)
-				int32_t		error=0;
-				socklen_t	errorsize=sizeof(error);
-
-				// Some platforms cause getsockopt() to fail
-				// and set errno to the error that caused
-				// connect() to fail.
-				if (getSockOpt(SOL_SOCKET,SO_ERROR,
-						&error,&errorsize)==-1) {
-					return RESULT_ERROR;
-				}
-
-				// Other platforms (correctly) return the error
-				// in the buffer that was passed in to
-				// getsockopt().
-				if (error) {
-					error::setErrorNumber(error);
-					return RESULT_ERROR;
-				}
-
-			#else
-
-				// If getpeername() fails then the
-				// connect was unsuccessful.
-				struct sockaddr	peeraddr;
-				socklen_t	size=sizeof(peeraddr);
-				int32_t	result;
-				do {
-					rawbuffer::zero(&peeraddr,
-							sizeof(peeraddr));
-					result=getpeername(fd(),
-							&peeraddr,&size);
-				} while (result==-1 &&
-						error::getErrorNumber()==EINTR);
-				if (result==-1) {
-
-					// On some platforms, getpeername()
-					// will fail and set errno to the
-					// error that caused connect() to fail,
-					// on other platforms, it will fail
-					// with an ENOTCONN and we need to do
-					// a read() (which will fail) to find
-					// out what the error that caused
-					// connect() to fail was.  It's tempting
-					// to read 0 bytes, but that will
-					// actually return 0 (success) on linux
-					// and not set errno.
-					if (error::getErrorNumber()==ENOTCONN) {
-						char	ch;
-						::read(fd(),&ch,sizeof(ch));
-					}
-					return RESULT_ERROR;
-				}
-
-			#endif
-
-				retval=RESULT_SUCCESS;
-
-			} else {
-				return RESULT_ERROR;
+			// On some platforms, getpeername() will fail and set
+			// errno to the error that caused connect() to fail, on
+			// other platforms, it will fail with an ENOTCONN and
+			// we need to do a read() (which will fail) to find out
+			// what the error that caused connect() to fail was.
+			// It's tempting to read 0 bytes, but that will actually
+			// return 0 (success) on linux and not set errno.
+			if (error::getErrorNumber()==ENOTCONN) {
+				::read(fd(),&ch,sizeof(ch));
 			}
-		} else {
-			retval=RESULT_SUCCESS;
-		}
-		// restore blocking mode, if necessary
-		if (!wasusingnonblockingmode && !useBlockingMode()) {
-			return RESULT_ERROR;
+			retval=RESULT_ERROR;
+			goto cleanup;
 		}
 
+	#endif
+
+	// if we made it here then everything went well
+	retval=RESULT_SUCCESS;
+
+cleanup:
+	// restore blocking mode, if necessary
+	if (!wasusingnonblockingmode && !useBlockingMode()) {
+		return RESULT_ERROR;
 	}
 
 #else
@@ -309,13 +306,13 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		// create an event handler
 		ev=WSACreateEvent();
 		if (ev==WSA_INVALID_EVENT) {
-			goto cleanup;
+			goto wsacleanup;
 		}
 
 		// create an event selector for connect events
 		er=WSAEventSelect(fd(),ev,FD_CONNECT);
 		if (er==SOCKET_ERROR) {
-			goto cleanup;
+			goto wsacleanup;
 		}
 
 		// that event selector will put the socket in
@@ -327,14 +324,14 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		if (!er) {
 			// the connect succeeded immediately
 			retval=RESULT_SUCCESS;
-			goto cleanup;
+			goto wsacleanup;
 		}
 
 		// If we got a "would block" then the connection is in progress
 		// and we need to wait.  Otherwise there was some other error
 		// and we need to bail.
 		if (WSAGetLastError()!=WSAEWOULDBLOCK) {
-			goto cleanup;
+			goto wsacleanup;
 		}
 
 		// wait for the connect to succeed or fail
@@ -343,13 +340,13 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 		if (en!=WSA_WAIT_EVENT_0) {
 			// a timeout occurred
 			retval=RESULT_TIMEOUT;
-			goto cleanup;
+			goto wsacleanup;
 		}
 
 		// get the events that occurred
 		er=WSAEnumNetworkEvents(fd(),ev,&ne);
 		if (er) {
-			goto cleanup;
+			goto wsacleanup;
 		}
 
 		// if there was an error then set errno,
@@ -361,7 +358,7 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 			retval=RESULT_SUCCESS;
 		}
 
-cleanup:
+wsacleanup:
 		// clean up
 		WSAEventSelect(fd(),ev,0);
 		WSACloseEvent(ev);

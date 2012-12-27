@@ -131,6 +131,15 @@ int32_t inetclientsocket::connect() {
 			return RESULT_ERROR;
 		}
 
+		// Put the socket in blocking mode.  Most platforms create
+		// sockets in blocking mode by default but OpenBSD doesn't
+		// appear to (at least in version 4.9) so we'll force it to
+		// blocking-mode to be consistent.
+		if (!useBlockingMode()) {
+			close();
+			return RESULT_ERROR;
+		}
+
 	#else
 
 		// create a hint indicating that SOCK_STREAM should be used
@@ -223,7 +232,18 @@ int32_t inetclientsocket::connect() {
 					continue;
 				}
 
-				// attempt to connect to the socket
+				// Put the socket in blocking mode.  Most
+				// platforms create sockets in blocking mode by
+				// default but OpenBSD doesn't appear to (at
+				// least in version 4.9) so we'll force it to
+				// blocking-mode to be consistent.
+				if (!useBlockingMode()) {
+					freeaddrinfo(ai);
+					close();
+					return RESULT_ERROR;
+				}
+
+				// attempt to connect
 				retval=clientsocket::connect(
 					reinterpret_cast<struct sockaddr *>(
 								ainfo->ai_addr),
