@@ -9,6 +9,7 @@
 	all sockets are manually set to blocking mode after creation now
 	sockets created by accept() are set to the blocking/non-blocking mode
 		of the socket that was accepted on
+	fixed charstring::safeCopy to copy the NULL terminator
 
 0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
 	added charstring::safeCopy methods

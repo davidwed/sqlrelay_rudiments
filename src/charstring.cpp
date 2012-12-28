@@ -911,7 +911,7 @@ char *charstring::copy(char *dest, size_t location,
 }
 
 char *charstring::safeCopy(char *dest, size_t destsize, const char *source) {
-	return safeCopy(dest,destsize,source,charstring::length(source));
+	return safeCopy(dest,destsize,source,charstring::length(source)+1);
 }
 
 char *charstring::safeCopy(char *dest, size_t destsize,
