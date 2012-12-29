@@ -318,7 +318,7 @@ char *charstring::convertAmount(int64_t amount) {
 
 char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	char	*amt=convertAmount(amount);
-	ssize_t	amtlen=charstring::length(amt+1);
+	ssize_t	amtlen=length(amt+1);
 	unsigned short	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	char	*buffer=new char[realspaces+1];
 	buffer[realspaces]='\0';
@@ -429,8 +429,7 @@ char *charstring::httpUnescape(const char *input) {
 char *charstring::escape(const char *input, const char *characters) {
 	char		*output;
 	uint64_t	outputsize;
-	escape(input,charstring::length(input),
-			&output,&outputsize,characters);
+	escape(input,length(input),&output,&outputsize,characters);
 	return output;
 }
 
@@ -478,7 +477,7 @@ void charstring::escape(const char *input, uint64_t inputsize,
 char *charstring::unescape(const char *input) {
 	char		*output;
 	uint64_t	outputsize;
-	unescape(input,charstring::length(input),&output,&outputsize);
+	unescape(input,length(input),&output,&outputsize);
 	return output;
 }
 
@@ -548,7 +547,7 @@ void charstring::rightPad(char *str, int32_t lngth, char padchar, bool fill) {
 	}
 	
 	if (fill) {
-		int32_t valuelength = charstring::length(str);
+		int32_t valuelength=length(str);
 		for(; valuelength<lngth; valuelength++){
 			str[valuelength]=' ';
 		}
@@ -898,6 +897,9 @@ char *charstring::copy(char *dest, const char *source) {
 }
 
 char *charstring::copy(char *dest, const char *source, size_t size) {
+	if (!dest || !source) {
+		return dest;
+	}
 	return strncpy(dest,source,size);
 }
 
@@ -911,7 +913,7 @@ char *charstring::copy(char *dest, size_t location,
 }
 
 char *charstring::safeCopy(char *dest, size_t destsize, const char *source) {
-	return safeCopy(dest,destsize,source,charstring::length(source)+1);
+	return safeCopy(dest,destsize,source,length(source)+1);
 }
 
 char *charstring::safeCopy(char *dest, size_t destsize,
@@ -1220,7 +1222,7 @@ void charstring::safePrint(const char *string, int32_t length) {
 }
 
 void charstring::safePrint(const char *string) {
-	safePrint(string,charstring::length(string));
+	safePrint(string,length(string));
 }
 
 void charstring::printBits(unsigned char value) {
@@ -1275,8 +1277,8 @@ void charstring::printBits(unsigned char *bits, uint64_t size) {
 void charstring::split(const char *string, const char *delimiter,
 				bool collapse,
 				char ***list, uint64_t *listlength) {
-	split(string,charstring::length(string),
-			delimiter,charstring::length(delimiter),
+	split(string,length(string),
+			delimiter,length(delimiter),
 			collapse,list,listlength);
 }
 
@@ -1284,7 +1286,7 @@ void charstring::split(const char *string, ssize_t stringlength,
 				const char *delimiter, bool collapse,
 				char ***list, uint64_t *listlength) {
 	split(string,stringlength,
-			delimiter,charstring::length(delimiter),
+			delimiter,length(delimiter),
 			collapse,list,listlength);
 }
 
@@ -1292,7 +1294,7 @@ void charstring::split(const char *string,
 				const char *delimiter, ssize_t delimiterlength,
 				bool collapse,
 				char ***list, uint64_t *listlength) {
-	split(string,charstring::length(string),
+	split(string,length(string),
 			delimiter,delimiterlength,
 			collapse,list,listlength);
 }
@@ -1392,11 +1394,11 @@ char *charstring::subString(const char *str, size_t start, size_t end) {
 }
 
 char *charstring::subString(const char *str, size_t start) {
-	return subString(str,start,charstring::length(str)-1);
+	return subString(str,start,length(str)-1);
 }
 
 char *charstring::base64Encode(const unsigned char *input) {
-	return base64Encode(input,charstring::length(input));
+	return base64Encode(input,length(input));
 }
 
 char *charstring::base64Encode(const unsigned char *input, uint64_t inputsize) {
@@ -1548,7 +1550,7 @@ void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
 }
 
 unsigned char *charstring::base64Decode(const char *input) {
-	return base64Decode(input,charstring::length(input));
+	return base64Decode(input,length(input));
 }
 
 unsigned char *charstring::base64Decode(const char *input,
@@ -1608,8 +1610,8 @@ void charstring::base64Decode(const char *input, uint64_t inputsize,
 char *charstring::insertString(const char *dest,
 				const char *src, uint64_t index) {
 
-	uint64_t	srcsize=charstring::length(src);
-	uint64_t	size=charstring::length(dest)+srcsize+1;
+	uint64_t	srcsize=length(src);
+	uint64_t	size=length(dest)+srcsize+1;
 	char		*retval=new char[size];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
@@ -1643,7 +1645,7 @@ char *charstring::padString(const char *str, char padchar,
 		return NULL;
 	}
 
-	uint64_t	strlen=((str==NULL)?0:charstring::length(str));
+	uint64_t	strlen=((str==NULL)?0:length(str));
 	char		*newstring=NULL;
 
 	newstring=new char[totallength+1];
