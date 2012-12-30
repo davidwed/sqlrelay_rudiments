@@ -13,6 +13,8 @@ clean:
 	cd examples; $(MAKE) clean
 	$(RMTREE) msvc/Debug
 	$(RMTREE) msvc/Release
+	$(RMTREE) msvc/DebugCLR
+	$(RMTREE) msvc/ReleaseCLR
 
 install:
 	cd src; $(MAKE) install
