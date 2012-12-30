@@ -1,0 +1,4 @@
+cd msvc
+msbuild.exe /target:Clean /property:Configuration=Debug
+msbuild.exe /target:Clean /property:Configuration=Release
+cd ..
