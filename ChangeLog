@@ -11,6 +11,7 @@
 		of the socket that was accepted on
 	fixed charstring::safeCopy to copy the NULL terminator
 	made charstring::copy NULL-safe
+	refactored windows make.bat script
 
 0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
 	added charstring::safeCopy methods

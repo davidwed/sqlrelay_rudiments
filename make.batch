@@ -1,3 +1,38 @@
+if "%1"=="clean" goto clean
+if "%1"=="install" goto install
+if "%1"=="uninstall" goto uninstall
+
+:all
 cd msvc
 msbuild.exe /property:Configuration=Release
 cd ..
+goto end
+
+:clean
+cd msvc
+msbuild.exe /target:Clean /property:Configuration=Debug
+msbuild.exe /target:Clean /property:Configuration=Release
+cd ..
+goto end
+
+:install
+mkdir c:\"Program Files"\Firstworks\lib
+mkdir c:\"Program Files"\Firstworks\include\rudiments\private
+mkdir c:\"Program Files"\Firstworks\bin
+
+copy Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy Release\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy Release\librudiments.lib c:\"Program Files"\Firstworks\lib
+
+copy include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
+copy include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private
+goto end
+
+:uninstall
+rmdir /s /q "C:\Program Files\Firstworks\include\rudiments"
+del "C:\Program Files\Firstworks\lib\librudiments.lib"
+del "C:\Program Files\Firstworks\bin\librudiments.dll"
+goto end
+
+:end
