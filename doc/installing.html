@@ -17,6 +17,7 @@
 <li><a href="#extracting">Extracting Rudiments</a></li>
 <li><a href="#building">Building Rudiments</a></li>
 <li><a href="#installing">Installing Rudiments</a></li>
+<li><a href="#rpms">Installing Rudiments RPMS</a></li>
 </ul>
 
 <a name="platforms"></a>
@@ -26,88 +27,108 @@
 
 <p>x86 and x86_64 platforms are supported, as are non-x86 architectures such as ARM, Sparc, Mips, PPC and others.</p>
 
-<p>uClibc/linux-based systems should also be supported.</p>
+<p>uClibc/linux-based systems are also supported.</p>
 
-<p>Most of rudiments builds natively on Windows using Visual Studio but the server components to not yet build and many functions simply return failure.  Still, there is quite a bit that does work.</p>
+<p>Most of Rudiments builds natively on Windows using Visual Studio but the server components do not yet build and many functions simply return failure.  Still, there is quite a bit that does work.</p>
 
 <a name="prerequisites"></a>
 <span class="heading">Prerequisites</span>
 
-<p>To build on a unix-like platform, rudiments requires a working compiler toolchain and the make utility.  If OpenSSL and/or the Perl Compatible Regular Expression libraries are present then the build process will detect them and include support for them.</p>
+<p>To build on a unix-like platform, Rudiments requires a working compiler toolchain and the make utility.  If OpenSSL and/or the Perl Compatible Regular Expression libraries are present then the build process will detect them and include support for them but they are not required.</p>
 
 <p>To build natively on Windows, you need to install Microsoft Visual Studio or Microsoft Visual Studio Express.</p>
 
 <a name="downloading"></a>
 <span class="heading">Downloading Rudiments</span>
 
-<p>You can download the most current source distribution of <b>rudiments</b> from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
+<p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
 
-<p>If you intend to build on Unix or Linux then download the tar.gz file.  For a native Windows installation, download the zip file.</p>
+<p>If you intend to build on Unix, Linux or Cygwin then download the tar.gz file.  For a native Windows installation, download the zip file.</p>
 
 <a name="extracting"></a>
 <span class="heading">Extracting Rudiments</span>
 
-<p>To extract the distribution on Unix or Linux, copy the file to a location on your machine that you have access to and execute the following commands:</p>
+<p>To extract the distribution on Unix or Linux, move the file to a location on your machine that you have read/write access to and execute the following commands:</p>
 
-<ul>
-<li>gunzip rudiments-X.XX.tar.gz</li>
-<li>tar xf rudiments-X.XX.tar</li>
-</ul>
+<blockquote><b>
+gunzip rudiments-X.XX.tar.gz<br>
+tar xf rudiments-X.XX.tar
+</b></blockquote>
 
-<p>This will create a rudiments-X.XX directory. Change directories into that directory.</p>
+<p>(Where X.XX is replaced with the version of Rudiments that you downloaded.)</p>
+
+<p>This will create a rudiments-X.XX directory.</p>
 
 <p>To extract the distribution on Windows, move the zip file to your desktop or a location on your machine that you have read/write access, right click on the file and select "Extract All".</p>
 
-<p>This will create a rudiments-X.XX folder.</p>
+<p>This will create a rudiments-X.XX directory where X.XX is replaced with the rudiments version number.</p>
 
 <a name="building"></a>
 <span class="heading">Building Rudiments</span>
 
-<p>To build <b>Rudiments</b> on Unix or Linux, read the INSTALL file, then execute the following commands:</p>
+<p>To build Rudiments on Unix, Linux or a Unix-like platforms, navigate to the directory that was created by the extraction and execute the following commands:</p>
 
-<ul>
-<li>configure</li>
-<li>make</li>
-</ul>
+<blockquote><b>
+configure<br>
+make
+</b></blockquote>
 
-<p><b>Rudiments</b> should compile and function on unix-based systems using the GNU development system.  Other compilers may work too but have not been tested on the current version.</p>
+<p>The configure script takes lots of command line options, most of which tell it which features to enable or disable or where to find prerequisite software in case any of it is installed in non-standard locations.  It also takes the --prefix option in case you want to install it somewhere other than /usr/local/firstworks.  For example:</p>
+
+<blockquote><b>
+configure --prefix=/usr/local
+</b></blockquote>
+
+<p>This invocation would cause the libraries to be installed in /usr/local/lib, the header files in /usr/local/include, the binaries and scripts to be installed in /usr/local/bin, etc.</p>
+
+<p>There are also options for using cross-compilers and enabling debug and profiling.  To see the full list of available options, run:</p>
+
+<blockquote><b>
+configure --help
+</b></blockquote>
 
 <p><b>NOTE:</b> to compile on Cygwin, the <b>file</b> command must be present.  If it is not, the build will fail and you will get a very cryptic error.</p>
 
-<p>The native Windows build process for Rudiments is currently somewhat primitive.</p>
+<p>To build Rudiments natively on Windows, open the Visual Studio Command Prompt and navigate to the directory that was created when Rudiments was extracted.</p>
 
-<p>If you are running Windows Vista or higher, as a non-Administrator users, you must first create the folder C:\Program Files\Firstworks and give yourself full access permissions.  This step is necessary if you are running as the Administrator or if you're running an older version of Windows.</p>
+<p>There should be a file named <i>make.batch</i> in that directory.  Rename this file to <i>make.bat</i>.  It is named with the .batch extension because various mail services don't allow .bat files to be emailed around, even if they are inside of an archive.  To get around this, the file must manually be renamed.  After renaming the file, run:</p>
 
-<p>Now, to build and install Rudiments, open the Visual Studio Command Prompt and navigate to the base directory that was created when Rudiments was extracted.</p>
-
-<p>There should be a file named <i>make.batch</i> in that directory.  Rename this file to <i>make.bat</i>.  It is named with the .batch extension because various mail services don't allow .bat files to be emailed around, even if they are inside of an archive.  To get around this, the file must manually be renamed.  Now run:</p>
-
-<blockquote><pre><b>
+<blockquote><b>
 make
-make install
-</b></pre></blockquote>
-
-<p>This should build and install Rudiments.  Various components will be installed under C:\Program Files\Firstworks.  If Rudiments is already installed there, the installation process will first remove it, then build it, then re-install it.</p>
-
-<p>If you need to uninstall everything, just trash the C:\Program Files\Firstworks folder.  Note though that this will uninstall anything else in that folder (such as SQL Relay) as well.</p>
+</b></blockquote>
 
 <a name="installing"></a>
 <span class="heading">Installing Rudiments</span>
 
-<p>On Windows, the build process should have also installed the software.  However, to install <b>Rudiments</b> on Linux or Unix, become root and execute:</p>
+<p>By default, on Unix or Linux, everything is installed under /usr/local/firstworks by default.  On Windows, it is installed under C:\Program Files\Firstworks.  On either platform, you should either create that directory and give yourself full access permissions or install as root/Administrator.</p>
 
-<ul>
-<li>make install</li>
-</ul>
+<p>To install Rudiments run:</p>
 
-<p>By default, everything is installed under /usr/local/firstworks.</p>
+<blockquote><b>
+make install
+</b></blockquote>
 
-<p>To uninstall <b>Rudiments</b>, become root and execute:</p>
+<p>To uninstall Rudiments run:</p>
 
-<ul>
-<li>make uninstall</li>
-</ul>
+<blockquote><b>
+make uninstall
+</b></blockquote>
 
+<a name="rpms"></a>
+<span class="heading2">Installing Rudiments RPMS</span>
+
+<p>If your system supports RedHat Package Manager version 4.0.3 or greater then you can build RPMS by running the following command against the source distribution tarball:</p>
+
+<blockquote><b>
+rpm -ta rudiments-X.XX.tar.gz<br>
+(where X.XX is replaced with the version number)<br>
+</b></blockquote>
+
+<p>This will generate RPM's in the system-wide RPM directory (usually /usr/src/redhat/RPMS or /usr/local/rpm/RPMS) under the subdirectory corresponding to your system architecture.  You can install them by changing directories into that directory and executing the following command as root:</p>
+
+<blockquote><b>
+rpm -i rudiments-*
+</b></blockquote>
 
 </body>
 
