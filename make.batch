@@ -3,9 +3,9 @@ if "%1"=="all" goto all
 if "%1"=="clr" goto clr
 if "%1"=="clean" goto clean
 if "%1"=="install" goto install
-if "%1"=="installclr" goto installclr
 if "%1"=="uninstall" goto uninstall
 goto end
+
 
 :all
 cd msvc
@@ -13,11 +13,13 @@ msbuild.exe /property:Configuration=Release
 cd ..
 goto end
 
+
 :clr
 cd msvc
 msbuild.exe /property:Configuration=ReleaseCLR
 cd ..
 goto end
+
 
 :clean
 cd msvc
@@ -28,34 +30,27 @@ msbuild.exe /target:Clean /property:Configuration=ReleaseCLR
 cd ..
 goto end
 
+
 :install
 mkdir c:\"Program Files"\Firstworks\lib
 mkdir c:\"Program Files"\Firstworks\include\rudiments\private
 mkdir c:\"Program Files"\Firstworks\bin
 
-copy Release\librudiments.dll c:\"Program Files"\Firstworks\bin
-copy Release\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\Release\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\Release\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\ReleaseCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\ReleaseCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
 copy include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
 copy include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private
 goto end
 
-:installclr
-mkdir c:\"Program Files"\Firstworks\lib
-mkdir c:\"Program Files"\Firstworks\include\rudiments\private
-mkdir c:\"Program Files"\Firstworks\bin
-
-copy ReleaseCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
-copy ReleaseCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
-
-copy include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
-copy include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private
-goto end
 
 :uninstall
 rmdir /s /q "C:\Program Files\Firstworks\include\rudiments"
 del "C:\Program Files\Firstworks\lib\librudiments.lib"
 del "C:\Program Files\Firstworks\bin\librudiments.dll"
 goto end
+
 
 :end
