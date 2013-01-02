@@ -19,7 +19,8 @@ class codetree {
 		bool	parse(const char *input,
 					const char *grammar,
 					const char *starttoken,
-					rudiments::xmldomnode *output);
+					rudiments::xmldomnode *output,
+					const char **codeposition);
 		bool	write(rudiments::xmldomnode *input,
 					const char *grammar,
 					rudiments::stringbuffer *output);

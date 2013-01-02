@@ -26,6 +26,10 @@
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,
 					rudiments::stringbuffer *tokenbuffer);
+		bool	parseException(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *tokenbuffer);
 		bool	parseTerminal(rudiments::xmldomnode *grammarnode,
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,
@@ -43,3 +47,5 @@
 		rudiments::xmldomnode	*grammartag;
 		bool			error;
 		uint32_t		indent;
+		bool			previousparsechildretval;
+		const char		*finalcodeposition;
