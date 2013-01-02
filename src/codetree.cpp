@@ -3,6 +3,19 @@
 #include <rudiments/charstring.h>
 #include <stdio.h>
 
+#define DEBUG_MESSAGES 1
+#ifdef DEBUG_MESSAGES
+	#define debugFunction() printf("%s:%s():%d:\n",__FILE__,__FUNCTION__,__LINE__); fflush(stdout);
+	#define debugPrintf(format, ...) printf(format, ## __VA_ARGS__); fflush(stdout);
+	#define debugSafePrint(str) charstring::safePrint(str)
+	#define debugSafePrintLength(str,len) charstring::safePrint(str,(charstring::length(str)>len)?len:charstring::length(str))
+#else
+	#define debugFunction() /* */
+	#define debugPrintf(format, ...) /* */
+	#define debugSafePrint(str) /* */
+	#define debugSafePrintLength(str,len) /* */
+#endif
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -11,12 +24,15 @@ codetree::codetree() {
 	error=false;
 	indent=0;
 	grammartag=NULL;
+	previousparsechildretval=true;
+	finalcodeposition=NULL;
 }
 
 bool codetree::parse(const char *input,
 			const char *grammar,
 			const char *starttoken,
-			xmldomnode *output) {
+			xmldomnode *output,
+			const char **codeposition) {
 
 	// load grammar
 	if (!this->grammar.parseString(grammar)) {
@@ -31,17 +47,24 @@ bool codetree::parse(const char *input,
 	error=false;
 
 	// parse, starting with the specified start token
-	const char	*codeposition=input;
-	return (parseNonTerminal(starttoken,output,
-				&codeposition,NULL) && !error);
+	const char	*codepos=input;
+	finalcodeposition=*codeposition;
+	bool	retval=(parseNonTerminal(starttoken,output,
+						&codepos,NULL) && !error);
+	if (codeposition) {
+		*codeposition=finalcodeposition;
+	}
+	return retval;
 }
 
 bool codetree::parseNonTerminal(const char *name,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *tokenbuffer) {
-	//printIndent();
-	//printf("looking for \"%s\"\n",name);
+	printIndent();
+	debugPrintf("nonterminal \"%s\" at \"",name);
+        debugSafePrintLength(*codeposition,20);
+	debugPrintf("\"\n");
 
 	// find the definition
 	xmldomnode	*defnode=
@@ -55,7 +78,7 @@ bool codetree::parseNonTerminal(const char *name,
 	stringbuffer	*localtokenbuffer=NULL;
 
 	// If a token buffer was passed in then we're apparently already
-	// building up another token that stores a single value.  In that case
+	// building up another token that stores a literal value.  In that case
 	// we don't need to do anything but pass the current code parent and
 	// token buffer forward.
 	if (!tokenbuffer) {
@@ -66,7 +89,7 @@ bool codetree::parseNonTerminal(const char *name,
 		// node for it that will be appended to the tree if we do,
 		// indeed, find an instance of this nonterminal.  If it's not a
 		// token then we just need to pass the current code parent
-		// forward.  If this is a token that stores a single value,
+		// forward.  If this is a token that stores a literal value,
 		// rather than a token that groups other tokens, then we need
 		// to create a buffer to build up the value in and pass it
 		// forward.
@@ -77,7 +100,7 @@ bool codetree::parseNonTerminal(const char *name,
 						TAG_XMLDOMNODETYPE,
 						name,NULL);
 		}
-		if (!charstring::compare(token,"single")) {
+		if (!charstring::compare(token,"literal")) {
 			localtokenbuffer=new stringbuffer;
 		}
 	}
@@ -93,8 +116,8 @@ bool codetree::parseNonTerminal(const char *name,
 			codeposition,
 			(tokenbuffer)?tokenbuffer:localtokenbuffer)) {
 
-		//printIndent();
-		//printf("found \"%s\"\n",name);
+		printIndent();
+		debugPrintf("nonterminal \"%s\" found",name);
 
 		// we found one of these, attach the node to the
 		// code and value to the node, if necessary
@@ -102,17 +125,21 @@ bool codetree::parseNonTerminal(const char *name,
 			treeparent->appendChild(codenode);
 		}
 		if (localtokenbuffer) {
-			//printIndent();
-			//printf("      value: \"%s\"\n",
-					//localtokenbuffer->getString());
+			debugPrintf(" - value: \"%s\"",
+					localtokenbuffer->getString());
 			codenode->setAttributeValue("value",
 					localtokenbuffer->getString());
 			delete localtokenbuffer;
 		}
 
+		debugPrintf("\n");
+
 		// advance the new code position
 		return true;
 	}
+
+	printIndent();
+	debugPrintf("nonterminal \"%s\" not found\n",name);
 
 	// apparently we didn't find one of these, delete the
 	// node and buffer and reset the position in the code
@@ -128,6 +155,26 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 
 	indent++;
 
+	finalcodeposition=*codeposition;
+
+	bool		exceptionfollows=false;
+	const char	*startcodeposition=NULL;
+	stringbuffer	*starttokenbuffer=NULL;
+
+	// get the next sibling, if it's an exception then we need to
+	// save a couple of things so they can be reset later if the
+	// exception occurs
+	xmldomnode	*sibling=grammarnode->getNextTagSibling();
+	if (!charstring::compare(sibling->getName(),"exception")) {
+		exceptionfollows=true;
+		startcodeposition=*codeposition;
+		if (tokenbuffer) {
+			starttokenbuffer=new stringbuffer();
+			starttokenbuffer->append(tokenbuffer->getString());
+		}
+	}
+
+	// handle the standard children
 	bool		retval=true;
 	const char	*name=grammarnode->getName();
 	if (!charstring::compare(name,"concatenation")) {
@@ -160,11 +207,32 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 					codeposition,tokenbuffer)) {
 			retval=false;
 		}
+	} else if (!charstring::compare(name,"exception")) {
+		// ignore exceptions if we encounter them directly
+		retval=previousparsechildretval;
 	} else {
 		retval=false;
 	}
 
+	// if the next child is an exception then apply it to the current child
+	if (retval && exceptionfollows) {
+		const char	*localcodeposition=startcodeposition;
+		stringbuffer	localtokenbuffer;
+		if (parseException(sibling,treeparent,
+				&localcodeposition,&localtokenbuffer)) {
+			*codeposition=startcodeposition;
+			if (tokenbuffer) {
+				tokenbuffer->clear();
+				tokenbuffer->append(
+					starttokenbuffer->getString());
+			}
+			retval=false;
+		}
+		delete starttokenbuffer;
+	}
+
 	indent--;
+	previousparsechildretval=retval;
 	return retval;
 }
 
@@ -172,17 +240,22 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *tokenbuffer) {
-	//printIndent();
-	//printf("concatenation...\n");
+	printIndent();
+	debugPrintf("concatenation...\n");
 
 	// all children must parse successfully
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		if (!parseChild(child,treeparent,
 				codeposition,tokenbuffer)) {
+			printIndent();
+			debugPrintf("concatenation failed\n");
 			return false;
 		}
 	}
+
+	printIndent();
+	debugPrintf("concatenation success\n");
 	return true;
 }
 
@@ -190,17 +263,58 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *tokenbuffer) {
-	//printIndent();
-	//printf("alternation...\n");
+	printIndent();
+	debugPrintf("alternation...\n");
+
+	// save the initial state
+	const char	*startcodeposition=*codeposition;
+	stringbuffer	*starttokenbuffer=NULL;
+	if (tokenbuffer) {
+		starttokenbuffer=new stringbuffer;
+		starttokenbuffer->append(tokenbuffer->getString());
+	}
 
 	// one of the children must parse successfully
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
-		if (parseChild(child,treeparent,
-				codeposition,tokenbuffer)) {
+
+		// create a temp node to attach anything that gets created to
+		xmldomnode	*tempnode=new xmldomnode(
+						treeparent->getTree(),
+						treeparent->getNullNode(),
+						TAG_XMLDOMNODETYPE,
+						"temp",NULL);
+
+		// parse the child
+		if (parseChild(child,tempnode,codeposition,tokenbuffer)) {
+			printIndent();
+			debugPrintf("alternation success\n");
+
+			// move the nodes we created up to the main tree
+			xmldomnode *tnchild=tempnode->getFirstTagChild();
+			while (!tnchild->isNullNode()) {
+				xmldomnode	*next=
+						tnchild->getNextTagSibling();
+				treeparent->appendChild(tnchild);
+				tnchild=next;
+			}
+			tempnode->dontCascadeOnDelete();
+			delete tempnode;
+
 			return true;
 		}
+
+		// reset to the initial state
+		*codeposition=startcodeposition;
+		if (tokenbuffer) {
+			tokenbuffer->clear();
+			tokenbuffer->append(starttokenbuffer->getString());
+		}
+		delete tempnode;
 	}
+
+	printIndent();
+	debugPrintf("alternation failed\n");
 	return false;
 }
 
@@ -208,13 +322,19 @@ bool codetree::parseOption(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *tokenbuffer) {
-	//printIndent();
-	//printf("option...\n");
+	printIndent();
+	debugPrintf("option...\n");
 
 	// there should be only one child and it doesn't
 	// matter if it parses successfully or not
-	parseChild(grammarnode->getFirstTagChild(),treeparent,
-						codeposition,tokenbuffer);
+	if (!parseChild(grammarnode->getFirstTagChild(),treeparent,
+						codeposition,tokenbuffer)) {
+		printIndent();
+		debugPrintf("option failed\n");
+	} else {
+		printIndent();
+		debugPrintf("option success\n");
+	}
 	return true;
 }
 
@@ -222,17 +342,46 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *tokenbuffer) {
-	//printIndent();
-	//printf("repetition...\n");
+	printIndent();
+	debugPrintf("repetition...\n");
 
 	// there should be only one child, and zero or more instances of it
 	xmldomnode	*child=grammarnode->getFirstTagChild();
+	bool		anyfound=false;
 	for (;;) {
 		if (!parseChild(child,treeparent,
 				codeposition,tokenbuffer)) {
+			if (anyfound) {
+				printIndent();
+				debugPrintf("repetition success\n");
+			} else {
+				printIndent();
+				debugPrintf("repetition failed\n");
+			}
 			return true;
 		}
+		anyfound=true;
 	}
+}
+
+bool codetree::parseException(xmldomnode *grammarnode,
+				xmldomnode *treeparent,
+				const char **codeposition,
+				stringbuffer *tokenbuffer) {
+	printIndent();
+	debugPrintf("exception...\n");
+
+	// there should be only one child
+	if (parseChild(grammarnode->getFirstTagChild(),
+				treeparent,codeposition,tokenbuffer)) {
+		printIndent();
+		debugPrintf("exception success\n");
+		return true;
+	}
+
+	printIndent();
+	debugPrintf("exception failed\n");
+	return false;
 }
 
 bool codetree::parseTerminal(xmldomnode *grammarnode,
@@ -263,8 +412,10 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 			tokenbuffer->append(*codeposition,valuelength);
 		}
 		*codeposition=*codeposition+valuelength;
-		//printIndent();
-		//printf("\"%s\"\n",value);
+		printIndent();
+		debugPrintf("terminal \"");
+		debugSafePrint(value);
+		debugPrintf("\" found\n");
 		return true;
 	}
 
@@ -283,7 +434,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 
 void codetree::printIndent() {
 	for (uint32_t i=0; i<indent; i++) {
-		printf(" ");
+		debugPrintf(" ");
 	}
 }
 
@@ -331,13 +482,6 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		return true;
 	}
 
-	// if the node has a value, just write that and return
-	const char	*value=node->getAttributeValue("value");
-	if (charstring::length(value)) {
-		output->append(value);
-		return true;
-	}
-
 	// if the node doesn't have a value then get its definition
 	xmldomnode	*def=grammartag->getFirstTagChild("definition",
 							"name",node->getName());
@@ -345,45 +489,61 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		return false;
 	}
 
-	// see if this is a group, block or line
+	// see if this is a block, line or inline token
 	const char	*token=def->getAttributeValue("token");
-	bool		block=!charstring::compare(token,"block");
-	bool		line=!charstring::compare(token,"line");
+	bool		blocktoken=!charstring::compare(token,"block");
+	bool		linetoken=!charstring::compare(token,"line");
+	//bool		inlinetoken=!charstring::compare(token,"inline");
 
 	// write the start
-	if (block || line) {
+	// FIXME: tab over for inline tokens if the previous token was a block
+	if (blocktoken || linetoken) {
 		for (uint32_t i=0; i<indent; i++) {
 			output->append("\t");
 		}
 	}
 	output->append(def->getAttributeValue("start"));
-	if (block) {
+	if (blocktoken) {
 		output->append("\n");
 	}
 
-	// increase indent
-	if (block) {
-		indent++;
-	}
+	// if the node has a value, just write that,
+	// otherwise write its children
+	const char	*value=node->getAttributeValue("value");
+	if (charstring::length(value)) {
+		output->append(value);
+	} else {
 
-	// write children
-	for (xmldomnode *child=node->getFirstTagChild();
-		!child->isNullNode(); child=child->getNextTagSibling()) {
-		if (!writeNode(child,output)) {
-			return false;
+		// increase indent
+		if (blocktoken) {
+			indent++;
+		}
+
+		// write the children
+		for (xmldomnode *child=node->getFirstTagChild();
+				!child->isNullNode();
+				child=child->getNextTagSibling()) {
+			if (!writeNode(child,output)) {
+				return false;
+			}
+		}
+
+		// decrease indent
+		if (blocktoken) {
+			indent--;
 		}
 	}
 
-	// decrease indent
-	if (block) {
-		indent--;
-	}
-
 	// write the end
-	output->append(def->getAttributeValue("end"));
-
-	// carriage return at the end of line or block
-	if (block || line) {
+	const char	*end=def->getAttributeValue("end");
+	if (blocktoken && charstring::length(end)) {
+		output->append("\n");
+		for (uint32_t i=0; i<indent; i++) {
+			output->append("\t");
+		}
+	}
+	output->append(end);
+	if (blocktoken || linetoken) {
 		output->append("\n");
 	}
 	return true;

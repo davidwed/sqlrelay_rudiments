@@ -90,6 +90,8 @@ bool character::inSet(char c, const char *set) {
 	return false;
 }
 
+static char hex[17]="0123456789ABCDEF";
+
 void character::safePrint(char c) {
 	if (c=='\r') {
 		printf("\\r");
@@ -100,8 +102,8 @@ void character::safePrint(char c) {
 	} else if (c>=' ' && c<='~') {
 		printf("%c",c);
 	} else {
-		// some compilers complain without this cast
-		printf("(0x%02x)",(unsigned int)c);
+		unsigned int	uintc=(unsigned char)c;
+		printf("(0x%c%c|%d)",hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
 	}
 }
 
