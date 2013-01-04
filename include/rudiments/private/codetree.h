@@ -38,7 +38,6 @@
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,
 					rudiments::stringbuffer *tokenbuffer);
-		void	printIndent();
 
 		bool	writeNode(rudiments::xmldomnode *node,
 					rudiments::stringbuffer *output);
