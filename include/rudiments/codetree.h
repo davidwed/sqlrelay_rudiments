@@ -12,9 +12,14 @@ namespace rudiments {
 
 // @cond
 
+class codetreeprivate;
+
 class codetree {
 	public:
 			codetree();
+			~codetree();
+
+		void	setDebugLevel(uint8_t debuglevel);
 
 		bool	parse(const char *input,
 					const char *grammar,

@@ -42,9 +42,4 @@
 		bool	writeNode(rudiments::xmldomnode *node,
 					rudiments::stringbuffer *output);
 
-		rudiments::xmldom	grammar;
-		rudiments::xmldomnode	*grammartag;
-		bool			error;
-		uint32_t		indent;
-		bool			previousparsechildretval;
-		const char		*finalcodeposition;
+		codetreeprivate		*pvt;
