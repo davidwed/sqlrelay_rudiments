@@ -6,7 +6,7 @@
 #define DEBUG_MESSAGES 1
 #ifdef DEBUG_MESSAGES
 	#define debugFunction() printf("%s:%s():%d:\n",__FILE__,__FUNCTION__,__LINE__); fflush(stdout);
-	#define debugPrintf(format, ...) printf(format, ## __VA_ARGS__); fflush(stdout);
+	#define debugPrintf(ARGS...) printf(##ARGS); fflush(stdout);
 	#define debugSafePrint(str) charstring::safePrint(str)
 	#define debugSafePrintLength(str,len) charstring::safePrint(str,(charstring::length(str)>len)?len:charstring::length(str))
 	#define debugPrintIndent() for (uint32_t i=0; i<indent; i++) { debugPrintf(" "); }
