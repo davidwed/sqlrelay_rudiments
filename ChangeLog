@@ -1,4 +1,5 @@
 0.41 - fixed a few bugs in the codetree class and improved its debug
+	added comments to codetree class header
 
 0.40 - fixed -pthread annoyance
 	added -Werror to default build

@@ -278,7 +278,7 @@
 <a name="l00239"></a>00239         uint64_t        i=0;
 <a name="l00240"></a>00240         <span class="keywordflow">for</span> (linkedlistnodetype *current=first; current;
 <a name="l00241"></a>00241                 current=(linkedlistnodetype *)current-&gt;getNext()) {
-<a name="l00242"></a>00242                 printf(<span class="stringliteral">&quot;index %lld: &quot;</span>,i);
+<a name="l00242"></a>00242                 printf(<span class="stringliteral">&quot;index %lld: &quot;</span>,(<span class="keywordtype">long</span> <span class="keywordtype">long</span>)i);
 <a name="l00243"></a>00243                 current-&gt;print();
 <a name="l00244"></a>00244                 printf(<span class="stringliteral">&quot;\n&quot;</span>);
 <a name="l00245"></a>00245                 i++;
@@ -292,7 +292,7 @@
 <a name="l00253"></a>00253 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Nov 27 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 22 2013 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

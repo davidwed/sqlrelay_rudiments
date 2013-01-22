@@ -56,6 +56,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">xmldomnodetype&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#ac1557bdda306c15dd905534be29fbba1">getType</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#a23215c3a4148cc7d5418ec40be7a7983">getName</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#a9441b0c50e40440c4d22bece1d0aa922">getValue</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxmldom.html">xmldom</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#a005ec70957d12bee990eac7aa210fda9">getTree</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#ae3c08c540aae330ab2b87a62afff5c12">getParent</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#a029852ccb33c83f1be8b781e70b720ea">getPosition</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#a8d8b1a4d9aea85ae74619173d1f24a77">getPreviousSibling</a> () const </td></tr>
@@ -114,6 +115,7 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#ab3c5866307a756e8b78458593af6bf4a">createNullNode</a> (<a class="el" href="classxmldom.html">xmldom</a> *dom)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classxmldomnode.html#a438b587eab12be169c5f47db9fb1b89c">print</a> (<a class="el" href="classxmldomnode.html">xmldomnode</a> *node)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The xmldomnode class provides a generic container for DOM tree elements. One can navigate the nodes of the tree, modify the tree and read or modify the data that the nodes contain by calling methods in this class.</p>
@@ -395,24 +397,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2fd2816aebfb361a2e68f9167522adf4"></a><!-- doxytag: member="xmldomnode::deleteChild" ref="a2fd2816aebfb361a2e68f9167522adf4" args="(xmldomnode *child)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool xmldomnode::deleteChild </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td>
-          <td class="paramname"><em>child</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Searches the list of child nodes for "child" and deletes it. The position of the next sibling (and all successive siblings) is decremented. </p>
-
-</div>
-</div>
 <a class="anchor" id="a0d748df5fd7c1d2f8c8f35d9d72d8fa1"></a><!-- doxytag: member="xmldomnode::deleteChild" ref="a0d748df5fd7c1d2f8c8f35d9d72d8fa1" args="(uint64_t position)" -->
 <div class="memitem">
 <div class="memproto">
@@ -428,6 +412,24 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Deletes the child node at "position". The position of the next sibling (and all successive siblings) is decremented. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2fd2816aebfb361a2e68f9167522adf4"></a><!-- doxytag: member="xmldomnode::deleteChild" ref="a2fd2816aebfb361a2e68f9167522adf4" args="(xmldomnode *child)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool xmldomnode::deleteChild </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td>
+          <td class="paramname"><em>child</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Searches the list of child nodes for "child" and deletes it. The position of the next sibling (and all successive siblings) is decremented. </p>
 
 </div>
 </div>
@@ -918,23 +920,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a383e7358fa24c519d5e288d34207cfe2"></a><!-- doxytag: member="xmldomnode::getNextTagSibling" ref="a383e7358fa24c519d5e288d34207cfe2" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classxmldomnode.html">xmldomnode</a>* xmldomnode::getNextTagSibling </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a pointer to the next sibling node whose type is TAG_XMLDOMNODE. If no match is found, nullnode is returned. </p>
-
-</div>
-</div>
 <a class="anchor" id="a80cd4e7f716a5d57d079259fba4bae9e"></a><!-- doxytag: member="xmldomnode::getNextTagSibling" ref="a80cd4e7f716a5d57d079259fba4bae9e" args="(const char *name) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -950,6 +935,23 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Returns the next sibling node named "name" whose type is TAG_XMLDOMNODE or the nullnode if not found. </p>
+
+</div>
+</div>
+<a class="anchor" id="a383e7358fa24c519d5e288d34207cfe2"></a><!-- doxytag: member="xmldomnode::getNextTagSibling" ref="a383e7358fa24c519d5e288d34207cfe2" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classxmldomnode.html">xmldomnode</a>* xmldomnode::getNextTagSibling </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a pointer to the next sibling node whose type is TAG_XMLDOMNODE. If no match is found, nullnode is returned. </p>
 
 </div>
 </div>
@@ -1058,23 +1060,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4b175b28f6bdfa003de14191ef749b32"></a><!-- doxytag: member="xmldomnode::getPreviousTagSibling" ref="a4b175b28f6bdfa003de14191ef749b32" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classxmldomnode.html">xmldomnode</a>* xmldomnode::getPreviousTagSibling </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Returns a pointer to the previous sibling node whose type is TAG_XMLDOMNODE. If no match is found, nullnode is returned. </p>
-
-</div>
-</div>
 <a class="anchor" id="a88c6b01351ad87f606affff9ee65b2b5"></a><!-- doxytag: member="xmldomnode::getPreviousTagSibling" ref="a88c6b01351ad87f606affff9ee65b2b5" args="(const char *name, const char *attributename, const char *attributevalue) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1106,6 +1091,40 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Returns the previous sibling node named "name" with an attribute named "attributename" with value "attributevalue" whose type is TAG_XMLDOMNODE. If "name" is null, then the name of the child node is not checked, and the first child node with any name (with matching attribute name/value) will be returned. If no match is found, nullnode is returned. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4b175b28f6bdfa003de14191ef749b32"></a><!-- doxytag: member="xmldomnode::getPreviousTagSibling" ref="a4b175b28f6bdfa003de14191ef749b32" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classxmldomnode.html">xmldomnode</a>* xmldomnode::getPreviousTagSibling </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a pointer to the previous sibling node whose type is TAG_XMLDOMNODE. If no match is found, nullnode is returned. </p>
+
+</div>
+</div>
+<a class="anchor" id="a005ec70957d12bee990eac7aa210fda9"></a><!-- doxytag: member="xmldomnode::getTree" ref="a005ec70957d12bee990eac7aa210fda9" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classxmldom.html">xmldom</a>* xmldomnode::getTree </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Returns a pointer to the tree that this node is attached to or NULL if it isn't attached to any tree. </p>
 
 </div>
 </div>
@@ -1143,6 +1162,34 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a665930f03163b99194ba27f94b8c182c"></a><!-- doxytag: member="xmldomnode::insertAttribute" ref="a665930f03163b99194ba27f94b8c182c" args="(xmldomnode *attribute, uint64_t position)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool xmldomnode::insertAttribute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td>
+          <td class="paramname"><em>attribute</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>position</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Inserts "attribute" into the list of attributes at "position". The position of the next attribute (and all successive attributes) is incremented. </p>
+
+</div>
+</div>
 <a class="anchor" id="af4a155429959a4ec922e5c3397bcee5f"></a><!-- doxytag: member="xmldomnode::insertAttribute" ref="af4a155429959a4ec922e5c3397bcee5f" args="(const char *name, const char *value, uint64_t position)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1174,34 +1221,6 @@ Static Public Member Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Creates an attribute node with "name" and "value" and inserts it into the list of attributes at "position". The position of the next attribute (and all successive attributes) is incremented. </p>
-
-</div>
-</div>
-<a class="anchor" id="a665930f03163b99194ba27f94b8c182c"></a><!-- doxytag: member="xmldomnode::insertAttribute" ref="a665930f03163b99194ba27f94b8c182c" args="(xmldomnode *attribute, uint64_t position)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool xmldomnode::insertAttribute </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td>
-          <td class="paramname"><em>attribute</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint64_t&#160;</td>
-          <td class="paramname"><em>position</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Inserts "attribute" into the list of attributes at "position". The position of the next attribute (and all successive attributes) is incremented. </p>
 
 </div>
 </div>
@@ -1312,7 +1331,25 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9b40ea657dbf461015da64788d98f5ab"></a><!-- doxytag: member="xmldomnode::setAttributeValue" ref="a9b40ea657dbf461015da64788d98f5ab" args="(const char *name, uint64_t value)" -->
+<a class="anchor" id="a438b587eab12be169c5f47db9fb1b89c"></a><!-- doxytag: member="xmldomnode::print" ref="a438b587eab12be169c5f47db9fb1b89c" args="(xmldomnode *node)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void xmldomnode::print </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classxmldomnode.html">xmldomnode</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Prints a text representation of "node". </p>
+
+</div>
+</div>
+<a class="anchor" id="a03e5d1b6dcde8567c604fee0595caa5c"></a><!-- doxytag: member="xmldomnode::setAttributeValue" ref="a03e5d1b6dcde8567c604fee0595caa5c" args="(const char *name, int64_t value)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1325,7 +1362,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramtype">int64_t&#160;</td>
           <td class="paramname"><em>value</em>&#160;</td>
         </tr>
         <tr>
@@ -1368,7 +1405,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a03e5d1b6dcde8567c604fee0595caa5c"></a><!-- doxytag: member="xmldomnode::setAttributeValue" ref="a03e5d1b6dcde8567c604fee0595caa5c" args="(const char *name, int64_t value)" -->
+<a class="anchor" id="a9b40ea657dbf461015da64788d98f5ab"></a><!-- doxytag: member="xmldomnode::setAttributeValue" ref="a9b40ea657dbf461015da64788d98f5ab" args="(const char *name, uint64_t value)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1381,7 +1418,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>value</em>&#160;</td>
         </tr>
         <tr>
@@ -1522,7 +1559,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Nov 27 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 22 2013 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

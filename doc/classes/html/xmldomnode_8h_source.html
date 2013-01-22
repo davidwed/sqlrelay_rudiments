@@ -89,151 +89,155 @@
 <a name="l00179"></a>00179                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getValue() <span class="keyword">const</span>;
 <a name="l00180"></a>00180 
 <a name="l00181"></a>00181 
-<a name="l00184"></a>00184                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getParent() <span class="keyword">const</span>;
+<a name="l00184"></a>00184                 <a class="code" href="classxmldom.html">xmldom</a>          *getTree() <span class="keyword">const</span>;
 <a name="l00185"></a>00185 
-<a name="l00188"></a>00188                 uint64_t        getPosition() <span class="keyword">const</span>;
+<a name="l00188"></a>00188                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getParent() <span class="keyword">const</span>;
 <a name="l00189"></a>00189 
-<a name="l00192"></a>00192                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousSibling() <span class="keyword">const</span>;
+<a name="l00192"></a>00192                 uint64_t        getPosition() <span class="keyword">const</span>;
 <a name="l00193"></a>00193 
-<a name="l00197"></a>00197                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousTagSibling() <span class="keyword">const</span>;
-<a name="l00198"></a>00198 
-<a name="l00202"></a>00202                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-<a name="l00203"></a>00203 
-<a name="l00213"></a>00213                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00214"></a>00214                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
-<a name="l00215"></a>00215                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue) <span class="keyword">const</span>;
-<a name="l00216"></a>00216 
-<a name="l00219"></a>00219                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextSibling() <span class="keyword">const</span>;
+<a name="l00196"></a>00196                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousSibling() <span class="keyword">const</span>;
+<a name="l00197"></a>00197 
+<a name="l00201"></a>00201                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousTagSibling() <span class="keyword">const</span>;
+<a name="l00202"></a>00202 
+<a name="l00206"></a>00206                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00207"></a>00207 
+<a name="l00217"></a>00217                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getPreviousTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00218"></a>00218                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
+<a name="l00219"></a>00219                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue) <span class="keyword">const</span>;
 <a name="l00220"></a>00220 
-<a name="l00224"></a>00224                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextTagSibling() <span class="keyword">const</span>;
-<a name="l00225"></a>00225 
-<a name="l00229"></a>00229                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-<a name="l00230"></a>00230 
-<a name="l00240"></a>00240                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00241"></a>00241                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
-<a name="l00242"></a>00242                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue) <span class="keyword">const</span>;
-<a name="l00243"></a>00243 
-<a name="l00244"></a>00244 
-<a name="l00246"></a>00246                 uint64_t        getChildCount() <span class="keyword">const</span>;
+<a name="l00223"></a>00223                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextSibling() <span class="keyword">const</span>;
+<a name="l00224"></a>00224 
+<a name="l00228"></a>00228                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextTagSibling() <span class="keyword">const</span>;
+<a name="l00229"></a>00229 
+<a name="l00233"></a>00233                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00234"></a>00234 
+<a name="l00244"></a>00244                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNextTagSibling(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00245"></a>00245                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
+<a name="l00246"></a>00246                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue) <span class="keyword">const</span>;
 <a name="l00247"></a>00247 
-<a name="l00250"></a>00250                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00248"></a>00248 
+<a name="l00250"></a>00250                 uint64_t        getChildCount() <span class="keyword">const</span>;
 <a name="l00251"></a>00251 
-<a name="l00254"></a>00254                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChild(uint64_t position) <span class="keyword">const</span>;
+<a name="l00254"></a>00254                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
 <a name="l00255"></a>00255 
-<a name="l00264"></a>00264                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00265"></a>00265                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
-<a name="l00266"></a>00266                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue)
-<a name="l00267"></a>00267                                                 <span class="keyword">const</span>;
-<a name="l00268"></a>00268 
-<a name="l00272"></a>00272                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getFirstTagChild() <span class="keyword">const</span>;
-<a name="l00273"></a>00273 
-<a name="l00277"></a>00277                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getFirstTagChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-<a name="l00278"></a>00278 
-<a name="l00288"></a>00288                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getFirstTagChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00289"></a>00289                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
-<a name="l00290"></a>00290                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue)
-<a name="l00291"></a>00291                                                 <span class="keyword">const</span>;
-<a name="l00292"></a>00292 
-<a name="l00293"></a>00293 
-<a name="l00295"></a>00295                 uint64_t        getAttributeCount() <span class="keyword">const</span>;
+<a name="l00258"></a>00258                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChild(uint64_t position) <span class="keyword">const</span>;
+<a name="l00259"></a>00259 
+<a name="l00268"></a>00268                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00269"></a>00269                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
+<a name="l00270"></a>00270                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue)
+<a name="l00271"></a>00271                                                 <span class="keyword">const</span>;
+<a name="l00272"></a>00272 
+<a name="l00276"></a>00276                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getFirstTagChild() <span class="keyword">const</span>;
+<a name="l00277"></a>00277 
+<a name="l00281"></a>00281                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getFirstTagChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00282"></a>00282 
+<a name="l00292"></a>00292                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getFirstTagChild(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00293"></a>00293                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributename,
+<a name="l00294"></a>00294                                                 <span class="keyword">const</span> <span class="keywordtype">char</span> *attributevalue)
+<a name="l00295"></a>00295                                                 <span class="keyword">const</span>;
 <a name="l00296"></a>00296 
-<a name="l00299"></a>00299                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00297"></a>00297 
+<a name="l00299"></a>00299                 uint64_t        getAttributeCount() <span class="keyword">const</span>;
 <a name="l00300"></a>00300 
-<a name="l00303"></a>00303                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttribute(uint64_t position) <span class="keyword">const</span>;
+<a name="l00303"></a>00303                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
 <a name="l00304"></a>00304 
-<a name="l00307"></a>00307                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00307"></a>00307                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttribute(uint64_t position) <span class="keyword">const</span>;
 <a name="l00308"></a>00308 
-<a name="l00312"></a>00312                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValue(uint64_t position) <span class="keyword">const</span>;
-<a name="l00313"></a>00313 
-<a name="l00321"></a>00321                 <a class="code" href="classconststringdictionary.html">constnamevaluepairs</a>     *getAttributes() <span class="keyword">const</span>;
-<a name="l00322"></a>00322 
-<a name="l00326"></a>00326                 <span class="keywordtype">void</span>            setAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00327"></a>00327                                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *value);
-<a name="l00328"></a>00328 
-<a name="l00332"></a>00332                 <span class="keywordtype">void</span>            setAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00333"></a>00333                                                         int64_t value);
-<a name="l00334"></a>00334 
-<a name="l00338"></a>00338                 <span class="keywordtype">void</span>            setAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00339"></a>00339                                                         uint64_t value);
-<a name="l00340"></a>00340 
-<a name="l00342"></a>00342                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNullNode() <span class="keyword">const</span>;
-<a name="l00343"></a>00343 
-<a name="l00346"></a>00346                 <span class="keywordtype">bool</span>            isNullNode() <span class="keyword">const</span>;
+<a name="l00311"></a>00311                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00312"></a>00312 
+<a name="l00316"></a>00316                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValue(uint64_t position) <span class="keyword">const</span>;
+<a name="l00317"></a>00317 
+<a name="l00325"></a>00325                 <a class="code" href="classconststringdictionary.html">constnamevaluepairs</a>     *getAttributes() <span class="keyword">const</span>;
+<a name="l00326"></a>00326 
+<a name="l00330"></a>00330                 <span class="keywordtype">void</span>            setAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00331"></a>00331                                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *value);
+<a name="l00332"></a>00332 
+<a name="l00336"></a>00336                 <span class="keywordtype">void</span>            setAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00337"></a>00337                                                         int64_t value);
+<a name="l00338"></a>00338 
+<a name="l00342"></a>00342                 <span class="keywordtype">void</span>            setAttributeValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00343"></a>00343                                                         uint64_t value);
+<a name="l00344"></a>00344 
+<a name="l00346"></a>00346                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getNullNode() <span class="keyword">const</span>;
 <a name="l00347"></a>00347 
-<a name="l00348"></a>00348 
-<a name="l00350"></a>00350                 <span class="keywordtype">void</span>    setType(xmldomnodetype type);
+<a name="l00350"></a>00350                 <span class="keywordtype">bool</span>            isNullNode() <span class="keyword">const</span>;
 <a name="l00351"></a>00351 
-<a name="l00353"></a>00353                 <span class="keywordtype">void</span>    setName(<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
-<a name="l00354"></a>00354 
-<a name="l00356"></a>00356                 <span class="keywordtype">void</span>    setValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *value);
-<a name="l00357"></a>00357 
-<a name="l00359"></a>00359                 <span class="keywordtype">void</span>    setParent(<a class="code" href="classxmldomnode.html">xmldomnode</a> *parent);
-<a name="l00360"></a>00360 
-<a name="l00362"></a>00362                 <span class="keywordtype">void</span>    setPreviousSibling(<a class="code" href="classxmldomnode.html">xmldomnode</a> *previous);
-<a name="l00363"></a>00363 
-<a name="l00365"></a>00365                 <span class="keywordtype">void</span>    setNextSibling(<a class="code" href="classxmldomnode.html">xmldomnode</a> *next);
-<a name="l00366"></a>00366 
-<a name="l00370"></a>00370                 <span class="keywordtype">bool</span>    insertChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child, uint64_t position);
-<a name="l00371"></a>00371 
-<a name="l00373"></a>00373                 <span class="keywordtype">bool</span>    appendChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child);
-<a name="l00374"></a>00374 
-<a name="l00377"></a>00377                 <span class="keywordtype">bool</span>    moveChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child,
-<a name="l00378"></a>00378                                         <a class="code" href="classxmldomnode.html">xmldomnode</a> *parent, uint64_t position);
-<a name="l00379"></a>00379 
-<a name="l00383"></a>00383                 <span class="keywordtype">bool</span>    deleteChild(uint64_t position);
-<a name="l00384"></a>00384 
-<a name="l00388"></a>00388                 <span class="keywordtype">bool</span>    deleteChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child);
-<a name="l00389"></a>00389 
-<a name="l00394"></a>00394                 <span class="keywordtype">bool</span>    insertText(<span class="keyword">const</span> <span class="keywordtype">char</span> *value, uint64_t position);
-<a name="l00395"></a>00395 
-<a name="l00398"></a>00398                 <span class="keywordtype">bool</span>    appendText(<span class="keyword">const</span> <span class="keywordtype">char</span> *value);
+<a name="l00352"></a>00352 
+<a name="l00354"></a>00354                 <span class="keywordtype">void</span>    setType(xmldomnodetype type);
+<a name="l00355"></a>00355 
+<a name="l00357"></a>00357                 <span class="keywordtype">void</span>    setName(<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
+<a name="l00358"></a>00358 
+<a name="l00360"></a>00360                 <span class="keywordtype">void</span>    setValue(<span class="keyword">const</span> <span class="keywordtype">char</span> *value);
+<a name="l00361"></a>00361 
+<a name="l00363"></a>00363                 <span class="keywordtype">void</span>    setParent(<a class="code" href="classxmldomnode.html">xmldomnode</a> *parent);
+<a name="l00364"></a>00364 
+<a name="l00366"></a>00366                 <span class="keywordtype">void</span>    setPreviousSibling(<a class="code" href="classxmldomnode.html">xmldomnode</a> *previous);
+<a name="l00367"></a>00367 
+<a name="l00369"></a>00369                 <span class="keywordtype">void</span>    setNextSibling(<a class="code" href="classxmldomnode.html">xmldomnode</a> *next);
+<a name="l00370"></a>00370 
+<a name="l00374"></a>00374                 <span class="keywordtype">bool</span>    insertChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child, uint64_t position);
+<a name="l00375"></a>00375 
+<a name="l00377"></a>00377                 <span class="keywordtype">bool</span>    appendChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child);
+<a name="l00378"></a>00378 
+<a name="l00381"></a>00381                 <span class="keywordtype">bool</span>    moveChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child,
+<a name="l00382"></a>00382                                         <a class="code" href="classxmldomnode.html">xmldomnode</a> *parent, uint64_t position);
+<a name="l00383"></a>00383 
+<a name="l00387"></a>00387                 <span class="keywordtype">bool</span>    deleteChild(uint64_t position);
+<a name="l00388"></a>00388 
+<a name="l00392"></a>00392                 <span class="keywordtype">bool</span>    deleteChild(<a class="code" href="classxmldomnode.html">xmldomnode</a> *child);
+<a name="l00393"></a>00393 
+<a name="l00398"></a>00398                 <span class="keywordtype">bool</span>    insertText(<span class="keyword">const</span> <span class="keywordtype">char</span> *value, uint64_t position);
 <a name="l00399"></a>00399 
-<a name="l00403"></a>00403                 <span class="keywordtype">bool</span>    insertAttribute(<a class="code" href="classxmldomnode.html">xmldomnode</a> *attribute,
-<a name="l00404"></a>00404                                                         uint64_t position);
-<a name="l00405"></a>00405 
-<a name="l00407"></a>00407                 <span class="keywordtype">bool</span>    appendAttribute(<a class="code" href="classxmldomnode.html">xmldomnode</a> *attribute);
-<a name="l00408"></a>00408 
-<a name="l00413"></a>00413                 <span class="keywordtype">bool</span>    insertAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *value,
-<a name="l00414"></a>00414                                                         uint64_t position);
-<a name="l00415"></a>00415 
-<a name="l00418"></a>00418                 <span class="keywordtype">bool</span>    appendAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *value);
+<a name="l00402"></a>00402                 <span class="keywordtype">bool</span>    appendText(<span class="keyword">const</span> <span class="keywordtype">char</span> *value);
+<a name="l00403"></a>00403 
+<a name="l00407"></a>00407                 <span class="keywordtype">bool</span>    insertAttribute(<a class="code" href="classxmldomnode.html">xmldomnode</a> *attribute,
+<a name="l00408"></a>00408                                                         uint64_t position);
+<a name="l00409"></a>00409 
+<a name="l00411"></a>00411                 <span class="keywordtype">bool</span>    appendAttribute(<a class="code" href="classxmldomnode.html">xmldomnode</a> *attribute);
+<a name="l00412"></a>00412 
+<a name="l00417"></a>00417                 <span class="keywordtype">bool</span>    insertAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *value,
+<a name="l00418"></a>00418                                                         uint64_t position);
 <a name="l00419"></a>00419 
-<a name="l00423"></a>00423                 <span class="keywordtype">bool</span>    deleteAttribute(uint64_t position);
-<a name="l00424"></a>00424 
-<a name="l00429"></a>00429                 <span class="keywordtype">bool</span>    deleteAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
-<a name="l00430"></a>00430 
-<a name="l00434"></a>00434                 <span class="keywordtype">bool</span>    deleteAttribute(<a class="code" href="classxmldomnode.html">xmldomnode</a> *attribute);
-<a name="l00435"></a>00435 
-<a name="l00436"></a>00436 
-<a name="l00442"></a>00442                 <a class="code" href="classstringbuffer.html">stringbuffer</a>    *xml() <span class="keyword">const</span>;
-<a name="l00443"></a>00443 
-<a name="l00453"></a>00453                 <a class="code" href="classstringbuffer.html">stringbuffer</a>    *getPath() <span class="keyword">const</span>;
-<a name="l00454"></a>00454 
-<a name="l00461"></a>00461                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChildByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path) <span class="keyword">const</span>;
-<a name="l00462"></a>00462 
-<a name="l00471"></a>00471                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
-<a name="l00472"></a>00472                                                 uint64_t position) <span class="keyword">const</span>;
-<a name="l00473"></a>00473 
-<a name="l00481"></a>00481                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
-<a name="l00482"></a>00482                                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-<a name="l00483"></a>00483 
-<a name="l00492"></a>00492                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
-<a name="l00493"></a>00493                                                 uint64_t position) <span class="keyword">const</span>;
-<a name="l00494"></a>00494 
-<a name="l00503"></a>00503                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
-<a name="l00504"></a>00504                                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-<a name="l00505"></a>00505 
-<a name="l00506"></a>00506 <span class="preprocessor">        #include &lt;rudiments/private/xmldomnode.h&gt;</span>
-<a name="l00507"></a>00507 };
-<a name="l00508"></a>00508 
-<a name="l00509"></a>00509 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
-<a name="l00510"></a>00510 <span class="preprocessor"></span>}
-<a name="l00511"></a>00511 <span class="preprocessor">#endif</span>
-<a name="l00512"></a>00512 <span class="preprocessor"></span>
-<a name="l00513"></a>00513 <span class="preprocessor">#endif</span>
+<a name="l00422"></a>00422                 <span class="keywordtype">bool</span>    appendAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *value);
+<a name="l00423"></a>00423 
+<a name="l00427"></a>00427                 <span class="keywordtype">bool</span>    deleteAttribute(uint64_t position);
+<a name="l00428"></a>00428 
+<a name="l00433"></a>00433                 <span class="keywordtype">bool</span>    deleteAttribute(<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
+<a name="l00434"></a>00434 
+<a name="l00438"></a>00438                 <span class="keywordtype">bool</span>    deleteAttribute(<a class="code" href="classxmldomnode.html">xmldomnode</a> *attribute);
+<a name="l00439"></a>00439 
+<a name="l00440"></a>00440 
+<a name="l00446"></a>00446                 <a class="code" href="classstringbuffer.html">stringbuffer</a>    *xml() <span class="keyword">const</span>;
+<a name="l00447"></a>00447 
+<a name="l00457"></a>00457                 <a class="code" href="classstringbuffer.html">stringbuffer</a>    *getPath() <span class="keyword">const</span>;
+<a name="l00458"></a>00458 
+<a name="l00465"></a>00465                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChildByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path) <span class="keyword">const</span>;
+<a name="l00466"></a>00466 
+<a name="l00475"></a>00475                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
+<a name="l00476"></a>00476                                                 uint64_t position) <span class="keyword">const</span>;
+<a name="l00477"></a>00477 
+<a name="l00485"></a>00485                 <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
+<a name="l00486"></a>00486                                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00487"></a>00487 
+<a name="l00496"></a>00496                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
+<a name="l00497"></a>00497                                                 uint64_t position) <span class="keyword">const</span>;
+<a name="l00498"></a>00498 
+<a name="l00507"></a>00507                 <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,
+<a name="l00508"></a>00508                                                         <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00509"></a>00509 
+<a name="l00511"></a>00511                 <span class="keyword">static</span> <span class="keywordtype">void</span>     print(<a class="code" href="classxmldomnode.html">xmldomnode</a> *node);
+<a name="l00512"></a>00512 
+<a name="l00513"></a>00513 <span class="preprocessor">        #include &lt;rudiments/private/xmldomnode.h&gt;</span>
+<a name="l00514"></a>00514 };
+<a name="l00515"></a>00515 
+<a name="l00516"></a>00516 <span class="preprocessor">#ifdef RUDIMENTS_NAMESPACE</span>
+<a name="l00517"></a>00517 <span class="preprocessor"></span>}
+<a name="l00518"></a>00518 <span class="preprocessor">#endif</span>
+<a name="l00519"></a>00519 <span class="preprocessor"></span>
+<a name="l00520"></a>00520 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Nov 27 2012 for Rudiments by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 22 2013 for Rudiments by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
