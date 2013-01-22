@@ -14,11 +14,11 @@
 <li><a href="#memorypool">Using the memorypool Class</a></li>
 <li><a href="#variablebuffer">Using the variablebuffer Class</a></li>
 <li><a href="#stringbuffer">Using the stringbuffer Class</a></li>
+<li><a href="#linkedlist">Using the linkedlist Class</a></li>
+<li><a href="#dictionary">Using the dictionary Class</a></li>
 <li><a href="#xmldom">Using the xmldom and xmldomnode Classes</a></li>
 <li><a href="#xmlsax">Using the xmlsax Class</a></li>
 <li><a href="#dtd">Using the dtd Class</a></li>
-<li><a href="#linkedlist">Using the linkedlist Class</a></li>
-<li><a href="#dictionary">Using the dictionary Class</a></li>
 </ul>
 
 <a name="commandline"></a>
@@ -241,284 +241,6 @@ name='\\value\\'
 
 
 
-<a name="xmldom"></a>
-<span class="heading">Using the xmldom and xmldomnode Classes</span><br><br>
-
-<p>The xmldom and xmldomnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the xmldomnode class.  The xmldomnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
-
-<p>The following XML file contains an address book.</p>
-
-<PRE>
-<font color="#0000f8">&lt;?</font><font color="#288850"><b>xml</b></font><font color="#288850"><b> </b></font><font color="#288850"><b>version</b></font>=<font color="#f800f8">&quot;1.0&quot;</font><font color="#0000f8">?&gt;</font>
-<font color="#008888">&lt;!</font><font color="#a02828"><b>DOCTYPE</b></font> instances <font color="#a02828"><b>SYSTEM</b></font> <font color="#f800f8">&quot;adbook.dtd&quot;</font><font color="#008888">&gt;</font>
-<font color="#008888">&lt;</font><font color="#008888">addressbook</font><font color="#008888">&gt;</font>
-        <font color="#008888">&lt;</font><font color="#008888">person</font><font color="#008888"> </font><font color="#288850"><b>firstname</b></font>=<font color="#f800f8">&quot;David&quot;</font><font color="#008888"> </font><font color="#288850"><b>middlename</b></font>=<font color="#f800f8">&quot;Lee&quot;</font><font color="#008888"> </font><font color="#288850"><b>lastname</b></font>=<font color="#f800f8">&quot;Muse&quot;</font><font color="#008888">&gt;</font>
-                <font color="#008888">&lt;</font><font color="#008888">phones</font><font color="#008888">&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-222-333-4444&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-333-444-5555&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;mobile&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-444-555-6666&quot;</font><font color="#008888">/&gt;</font>
-                <font color="#008888">&lt;/phones&gt;</font>
-                <font color="#008888">&lt;</font><font color="#008888">addresses</font><font color="#008888">&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;1234 homestreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;12345&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;2345 workstreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;23456&quot;</font><font color="#008888">/&gt;</font>
-                <font color="#008888">&lt;/addresses&gt;</font>
-                <font color="#008888">&lt;</font><font color="#008888">emails</font><font color="#008888">&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@firstworks.com&quot;</font><font color="#008888">/&gt;</font>
-                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@workemail.com&quot;</font><font color="#008888">/&gt;</font>
-                <font color="#008888">&lt;/emails&gt;</font>
-        <font color="#008888">&lt;/person&gt;</font>
-<font color="#008888">&lt;/addressbook&gt;</font>
-</PRE>
-
-<p>The following program parses the addressbook and prints it to the screen.</p>
-
-<pre>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/xmldom.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;iostream&gt;</font>
-
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> std;
-
-<font color="#2e8b57"><b>int</b></font>     main() {
-
-        xmldom  x;
-        x.parseFile(<font color="#ff00ff">&quot;addressbook.xml&quot;</font>);
-        x.getRootNode()-&gt;cascadeOnDelete();
-
-
-        xmldomnode      *addressbook=x.getRootNode()-&gt;getChild(<font color="#ff00ff">&quot;addressbook&quot;</font>);
-        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;addressbook-&gt;getChildCount(); i++) {
-
-                xmldomnode      *person=addressbook-&gt;getChild(i);
-                <font color="#a52a2a"><b>if</b></font> (person-&gt;getType()!=TAG_XMLDOMNODETYPE) {
-                        <font color="#a52a2a"><b>continue</b></font>;
-                }
-
-                cout &lt;&lt; person-&gt;getAttribute(<font color="#ff00ff">&quot;firstname&quot;</font>)-&gt;getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
-                cout &lt;&lt; person-&gt;getAttribute(<font color="#ff00ff">&quot;middlename&quot;</font>)-&gt;getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
-                cout &lt;&lt; person-&gt;getAttribute(<font color="#ff00ff">&quot;lastname&quot;</font>)-&gt;getValue() &lt;&lt; endl;
-
-                xmldomnode      *phones=person-&gt;getChild(<font color="#ff00ff">&quot;phones&quot;</font>);
-                cout &lt;&lt; <font color="#ff00ff">&quot;Phones:&quot;</font> &lt;&lt; endl;
-                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;phones-&gt;getChildCount(); j++) {
-
-                        xmldomnode      *phone=phones-&gt;getChild(j);
-                        <font color="#a52a2a"><b>if</b></font> (phone-&gt;getType()!=TAG_XMLDOMNODETYPE) {
-                                <font color="#a52a2a"><b>continue</b></font>;
-                        }
-                        cout &lt;&lt; <font color="#ff00ff">&quot;       &quot;</font>;
-                        cout &lt;&lt; phone-&gt;getAttribute(<font color="#ff00ff">&quot;location&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;: &quot;</font>;
-                        cout &lt;&lt; phone-&gt;getAttribute(<font color="#ff00ff">&quot;number&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; endl;
-                }
-                cout &lt;&lt; endl;
-
-                xmldomnode      *addresses=person-&gt;getChild(<font color="#ff00ff">&quot;addresses&quot;</font>);
-                cout &lt;&lt; <font color="#ff00ff">&quot;Addresses:&quot;</font> &lt;&lt; endl;
-                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;addresses-&gt;getChildCount(); j++) {
-
-                        xmldomnode      *address=addresses-&gt;getChild(j);
-                        <font color="#a52a2a"><b>if</b></font> (address-&gt;getType()!=TAG_XMLDOMNODETYPE) {
-                                <font color="#a52a2a"><b>continue</b></font>;
-                        }
-                        cout &lt;&lt; <font color="#ff00ff">&quot;       &quot;</font>;
-                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;location&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;: &quot;</font>;
-                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;address&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
-                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;city&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;, &quot;</font>;
-                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;state&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot; &quot;</font>;
-                        cout &lt;&lt; address-&gt;getAttribute(<font color="#ff00ff">&quot;zip&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; endl;
-                }
-                cout &lt;&lt; endl;
-
-                xmldomnode      *emails=person-&gt;getChild(<font color="#ff00ff">&quot;emails&quot;</font>);
-                cout &lt;&lt; <font color="#ff00ff">&quot;Emails:&quot;</font> &lt;&lt; endl;
-                <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> j=<font color="#ff00ff">0</font>; j&lt;emails-&gt;getChildCount(); j++) {
-
-                        xmldomnode      *email=emails-&gt;getChild(j);
-                        <font color="#a52a2a"><b>if</b></font> (email-&gt;getType()!=TAG_XMLDOMNODETYPE) {
-                                <font color="#a52a2a"><b>continue</b></font>;
-                        }
-                        cout &lt;&lt; <font color="#ff00ff">&quot;       &quot;</font>;
-                        cout &lt;&lt; email-&gt;getAttribute(<font color="#ff00ff">&quot;location&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; <font color="#ff00ff">&quot;: &quot;</font>;
-                        cout &lt;&lt; email-&gt;getAttribute(<font color="#ff00ff">&quot;address&quot;</font>)-&gt;
-                                                        getValue() &lt;&lt; endl;
-                }
-                cout &lt;&lt; endl;
-        }
-}
-</pre>
-
-<p>Here is the output of the program above.</p>
-
-<blockquote>
-<PRE>
-David Lee Muse
-Phones:
-        home: 1-222-333-4444
-        work: 1-333-444-5555
-        mobile: 1-444-555-6666
-
-Addresses:
-        home: 1234 homestreet dr. mycity, GA 12345
-        work: 2345 workstreet dr. mycity, GA 23456
-
-Emails:
-        home: dmuse@firstworks.com
-        work: dmuse@workemail.com
-</PRE>
-</blockquote>
-
-<a name="xmlsax"></a>
-<span class="heading">Using the xmlsax Class</span><br><br>
-
-<p>The xmlsax class provides a callback-based framework for parsing XML documents.  The xmlsax class provides methods for parsing strings of XML or XML files.  When it encounters a tag, attribute or other XML component, it calls one of it's callback methods.  These methods may be overridden by a child class to perform specific tasks.  The xmlsax class is especially useful if you can't afford to load the entire document into memory and use the xmldom class, or if you just need to extract specific data from an XML file.</p>
-
-<pre>
-<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
-<font color="#0000ff">// See the file COPYING for more information</font>
-
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/xmlsax.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
-
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
-
-<font color="#2e8b57"><b>class</b></font> myxmlsax : <font color="#a52a2a"><b>public</b></font> xmlsax {
-        <font color="#a52a2a"><b>public</b></font>:
-                        myxmlsax();
-        <font color="#a52a2a"><b>private</b></font>:
-                <font color="#2e8b57"><b>int</b></font>     xmlVersionStart();
-                <font color="#2e8b57"><b>int</b></font>     xmlVersionEnd();
-                <font color="#2e8b57"><b>int</b></font>     doctypeStart(<font color="#2e8b57"><b>char</b></font> *name);
-                <font color="#2e8b57"><b>int</b></font>     externalSubset(<font color="#2e8b57"><b>char</b></font> *filename);
-                <font color="#2e8b57"><b>int</b></font>     doctypeEnd();
-                <font color="#2e8b57"><b>int</b></font>     tagStart(<font color="#2e8b57"><b>char</b></font> *name);
-                <font color="#2e8b57"><b>int</b></font>     attributeName(<font color="#2e8b57"><b>char</b></font> *name);
-                <font color="#2e8b57"><b>int</b></font>     attributeValue(<font color="#2e8b57"><b>char</b></font> *value);
-                <font color="#2e8b57"><b>int</b></font>     text(<font color="#2e8b57"><b>char</b></font> *string);
-                <font color="#2e8b57"><b>int</b></font>     tagEnd(<font color="#2e8b57"><b>char</b></font> *name);
-                <font color="#2e8b57"><b>int</b></font>     comment(<font color="#2e8b57"><b>char</b></font> *string);
-                <font color="#2e8b57"><b>int</b></font>     cdata(<font color="#2e8b57"><b>char</b></font> *string);
-                <font color="#2e8b57"><b>void</b></font>    indent(<font color="#2e8b57"><b>int</b></font> spaces);
-                <font color="#2e8b57"><b>int</b></font>     ind;
-};
-
-myxmlsax::myxmlsax() : xmlsax() {
-        ind=<font color="#ff00ff">0</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::xmlVersionStart() {
-        printf(<font color="#ff00ff">&quot;XML version start:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::xmlVersionEnd() {
-        printf(<font color="#ff00ff">&quot;XML version end:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::doctypeStart(<font color="#2e8b57"><b>char</b></font> *name) {
-        printf(<font color="#ff00ff">&quot;DOCTYPE start: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::externalSubset(<font color="#2e8b57"><b>char</b></font> *filename) {
-        printf(<font color="#ff00ff">&quot;        external subset: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,filename);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::doctypeEnd() {
-        printf(<font color="#ff00ff">&quot;DOCTYPE end:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>void</b></font>    myxmlsax::indent(<font color="#2e8b57"><b>int</b></font> spaces) {
-        <font color="#a52a2a"><b>for</b></font> (<font color="#2e8b57"><b>int</b></font> i=<font color="#ff00ff">0</font>; i&lt;spaces; i++) {
-                printf(<font color="#ff00ff">&quot;  &quot;</font>);
-        }
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::tagStart(<font color="#2e8b57"><b>char</b></font> *name) {
-        indent(ind);
-        printf(<font color="#ff00ff">&quot;tagStart: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
-        ind++;
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::attributeName(<font color="#2e8b57"><b>char</b></font> *name) {
-        indent(ind+<font color="#ff00ff">1</font>);
-        printf(<font color="#ff00ff">&quot;attribute name: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::attributeValue(<font color="#2e8b57"><b>char</b></font> *value) {
-        indent(ind+<font color="#ff00ff">1</font>);
-        printf(<font color="#ff00ff">&quot;attribute value: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,value);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::text(<font color="#2e8b57"><b>char</b></font> *string) {
-        indent(ind+<font color="#ff00ff">1</font>);
-        printf(<font color="#ff00ff">&quot;text: </font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::tagEnd(<font color="#2e8b57"><b>char</b></font> *name) {
-        ind--;
-        indent(ind);
-        printf(<font color="#ff00ff">&quot;tagEnd: </font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,name);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::comment(<font color="#2e8b57"><b>char</b></font> *string) {
-        indent(ind);
-        printf(<font color="#ff00ff">&quot;comment: </font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-<font color="#2e8b57"><b>int</b></font>     myxmlsax::cdata(<font color="#2e8b57"><b>char</b></font> *string) {
-        indent(ind);
-        printf(<font color="#ff00ff">&quot;cdata: </font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string);
-        <font color="#a52a2a"><b>return</b></font> <font color="#ff00ff">1</font>;
-}
-
-
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
-
-        myxmlsax        x;
-        x.parseFile(<font color="#ff00ff">&quot;xmls.xml&quot;</font>);
-}
-</pre>
-
-<a name="dtd"></a>
-<span class="heading">Using the dtd Class</span><br><br>
-
-<p>The dtd class provides methods for parsing an XML DTD.  The result is an XML DOM tree representing the DTD.  Once parsed, the tree can be accessed using the xmldom and xmldomnode classes.</p>
-
-<pre>
-<font color="#0000ff">// Copyright (c) 2002  David Muse</font>
-<font color="#0000ff">// See the file COPYING for more information</font>
-
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;rudiments/dtd.h&gt;</font>
-<font color="#a020f0">#include </font><font color="#ff00ff">&lt;stdio.h&gt;</font>
-
-<font color="#a52a2a"><b>using</b></font> <font color="#2e8b57"><b>namespace</b></font> rudiments;
-
-<font color="#2e8b57"><b>int</b></font> main(<font color="#2e8b57"><b>int</b></font> argv, <font color="#2e8b57"><b>const</b></font> <font color="#2e8b57"><b>char</b></font> **argc) {
-
-        <font color="#0000ff">// display the contents of dtd.dtd</font>
-        dtd     d;
-        d.parseFile(<font color="#ff00ff">&quot;dtd.dtd&quot;</font>);
-        printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,d.xml()-&gt;xml()-&gt;getString());
-}
-</pre>
-
 <a name="linkedlist"></a>
 <span class="heading">Using the linkedlist Class</span><br><br>
 
@@ -557,6 +279,172 @@ myxmlsax::myxmlsax() : xmlsax() {
 <p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
 
 <p>Since dictionaries with string and integer keys and dictionaries with string keys and values are commonly used, convenience classes are provided for each as well.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2012&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+}<br>
+</font>
+
+
+
+<a name="xmldom"></a>
+<span class="heading">Using the xmldom and xmldomnode Classes</span><br><br>
+
+<p>The xmldom and xmldomnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the xmldomnode class.  The xmldomnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
+
+<p>The following XML file contains an address book.</p>
+
+<PRE>
+<font color="#0000f8">&lt;?</font><font color="#288850"><b>xml</b></font><font color="#288850"><b> </b></font><font color="#288850"><b>version</b></font>=<font color="#f800f8">&quot;1.0&quot;</font><font color="#0000f8">?&gt;</font>
+<font color="#008888">&lt;!</font><font color="#a02828"><b>DOCTYPE</b></font> instances <font color="#a02828"><b>SYSTEM</b></font> <font color="#f800f8">&quot;adbook.dtd&quot;</font><font color="#008888">&gt;</font>
+<font color="#008888">&lt;</font><font color="#008888">addressbook</font><font color="#008888">&gt;</font>
+        <font color="#008888">&lt;</font><font color="#008888">person</font><font color="#008888"> </font><font color="#288850"><b>firstname</b></font>=<font color="#f800f8">&quot;David&quot;</font><font color="#008888"> </font><font color="#288850"><b>middlename</b></font>=<font color="#f800f8">&quot;Lee&quot;</font><font color="#008888"> </font><font color="#288850"><b>lastname</b></font>=<font color="#f800f8">&quot;Muse&quot;</font><font color="#008888">&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">phones</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-222-333-4444&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-333-444-5555&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">phone</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;mobile&quot;</font><font color="#008888"> </font><font color="#288850"><b>number</b></font>=<font color="#f800f8">&quot;1-444-555-6666&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/phones&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">addresses</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;1234 homestreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;12345&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">address</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;2345 workstreet dr.&quot;</font><font color="#008888"> </font><font color="#288850"><b>city</b></font>=<font color="#f800f8">&quot;mycity&quot;</font><font color="#008888"> </font><font color="#288850"><b>state</b></font>=<font color="#f800f8">&quot;GA&quot;</font><font color="#008888"> </font><font color="#288850"><b>zip</b></font>=<font color="#f800f8">&quot;23456&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/addresses&gt;</font>
+                <font color="#008888">&lt;</font><font color="#008888">emails</font><font color="#008888">&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;home&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@firstworks.com&quot;</font><font color="#008888">/&gt;</font>
+                        <font color="#008888">&lt;</font><font color="#008888">email</font><font color="#008888"> </font><font color="#288850"><b>location</b></font>=<font color="#f800f8">&quot;work&quot;</font><font color="#008888"> </font><font color="#288850"><b>address</b></font>=<font color="#f800f8">&quot;dmuse@workemail.com&quot;</font><font color="#008888">/&gt;</font>
+                <font color="#008888">&lt;/emails&gt;</font>
+        <font color="#008888">&lt;/person&gt;</font>
+<font color="#008888">&lt;/addressbook&gt;</font>
+</PRE>
+
+<p>The following program parses the addressbook and prints it to the screen.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2012&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+}<br>
+</font>
+
+
+
+<p>Here is the output of the program above.</p>
+
+<blockquote>
+<PRE>
+David Lee Muse
+Phones:
+        home: 1-222-333-4444
+        work: 1-333-444-5555
+        mobile: 1-444-555-6666
+
+Addresses:
+        home: 1234 homestreet dr. mycity, GA 12345
+        work: 2345 workstreet dr. mycity, GA 23456
+
+Emails:
+        home: dmuse@firstworks.com
+        work: dmuse@workemail.com
+</PRE>
+</blockquote>
+
+<a name="xmlsax"></a>
+<span class="heading">Using the xmlsax Class</span><br><br>
+
+<p>The xmlsax class provides a callback-based framework for parsing XML documents.  The xmlsax class provides methods for parsing strings of XML or XML files.  When it encounters a tag, attribute or other XML component, it calls one of it's callback methods.  These methods may be overridden by a child class to perform specific tasks.  The xmlsax class is especially useful if you can't afford to load the entire document into memory and use the xmldom class, or if you just need to extract specific data from an XML file.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2012&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+}<br>
+</font>
+
+
+
+<a name="dtd"></a>
+<span class="heading">Using the dtd Class</span><br><br>
+
+<p>The dtd class provides methods for parsing an XML DTD.  The result is an XML DOM tree representing the DTD.  Once parsed, the tree can be accessed using the xmldom and xmldomnode classes.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2012&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#a020f0">#ifdef RUDIMENTS_NAMESPACE</font><br>
+<font color="#a52a2a"><b>using</b></font>&nbsp;<font color="#2e8b57"><b>namespace</b></font>&nbsp;rudiments;<br>
+<font color="#a020f0">#endif</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+}<br>
+</font>
+
+
+
+<a name="codetree"></a>
+<span class="heading">Using the codetree Class</span><br><br>
+
+<p>...</p>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 

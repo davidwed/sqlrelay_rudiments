@@ -14,11 +14,11 @@
 <li><a href="#memorypool">Using the memorypool Class</a></li>
 <li><a href="#variablebuffer">Using the variablebuffer Class</a></li>
 <li><a href="#stringbuffer">Using the stringbuffer Class</a></li>
+<li><a href="#linkedlist">Using the linkedlist Class</a></li>
+<li><a href="#dictionary">Using the dictionary Class</a></li>
 <li><a href="#xmldom">Using the xmldom and xmldomnode Classes</a></li>
 <li><a href="#xmlsax">Using the xmlsax Class</a></li>
 <li><a href="#dtd">Using the dtd Class</a></li>
-<li><a href="#linkedlist">Using the linkedlist Class</a></li>
-<li><a href="#dictionary">Using the dictionary Class</a></li>
 </ul>
 
 <a name="commandline"></a>
@@ -103,6 +103,24 @@ name='\\value\\'
 
 @stringbuffer.cpp.html@
 
+<a name="linkedlist"></a>
+<span class="heading">Using the linkedlist Class</span><br><br>
+
+<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
+
+<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
+
+@linkedlist.cpp.html@
+
+<a name="dictionary"></a>
+<span class="heading">Using the dictionary Class</span><br><br>
+
+<p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
+
+<p>Since dictionaries with string and integer keys and dictionaries with string keys and values are commonly used, convenience classes are provided for each as well.</p>
+
+@dictionary.cpp.html@
+
 <a name="xmldom"></a>
 <span class="heading">Using the xmldom and xmldomnode Classes</span><br><br>
 
@@ -170,23 +188,12 @@ Emails:
 
 @dtd.cpp.html@
 
-<a name="linkedlist"></a>
-<span class="heading">Using the linkedlist Class</span><br><br>
+<a name="codetree"></a>
+<span class="heading">Using the codetree Class</span><br><br>
 
-<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
+<p>...</p>
 
-<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
-
-@linkedlist.cpp.html@
-
-<a name="dictionary"></a>
-<span class="heading">Using the dictionary Class</span><br><br>
-
-<p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
-
-<p>Since dictionaries with string and integer keys and dictionaries with string keys and values are commonly used, convenience classes are provided for each as well.</p>
-
-@dictionary.cpp.html@
+@codetree.cpp.html@
 
 </body>
 </html>
