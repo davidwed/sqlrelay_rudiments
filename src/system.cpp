@@ -348,7 +348,10 @@ bool system::halt() {
 		#else
 			#error no RB_HALT or anything like it
 		#endif
-		return (::reboot(cmd,"")!=-1);
+		// bootstr is const char * on some platforms and char * on
+		// others.  This works for both.
+		char	*bootstr=(char *)"";
+		return (::reboot(cmd,bootstr)==-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_HALT,NULL)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
@@ -407,7 +410,10 @@ bool system::shutDown() {
 		#else
 			#error no RB_POWERDOWN or anything like it
 		#endif
-		return (::reboot(cmd,"")!=-1);
+		// bootstr is const char * on some platforms and char * on
+		// others.  This works for both.
+		char	*bootstr=(char *)"";
+		return (::reboot(cmd,bootstr)!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_PWRDOWN,NULL)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
@@ -440,7 +446,10 @@ bool system::reboot() {
 		#else
 			#error no RB_AUTOBOOT or anything like it
 		#endif
-		return (::reboot(cmd,"")!=-1);
+		// bootstr is const char * on some platforms and char * on
+		// others.  This works for both.
+		char	*bootstr=(char *)"";
+		return (::reboot(cmd,bootstr)!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
 		return (uadmin(A_SHUTDOWN,AD_BOOT,NULL)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
