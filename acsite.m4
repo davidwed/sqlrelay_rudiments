@@ -258,9 +258,12 @@ AC_DEFUN([FW_CHECK_WERROR],
 AC_MSG_CHECKING(for -Werror)
 FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Werror],[],[],[WERROR="-Werror"],[WERROR=""])
 
-dnl disable -Werror on Haiku, as its header files throw warnings
+dnl disable -Werror on Haiku, and Minix as their header files throw warnings
 case $host_os in
 	*haiku* )
+		WERROR=""
+		;;
+	*minix* )
 		WERROR=""
 		;;
 	*)
@@ -396,7 +399,7 @@ AC_DEFUN([FW_CHECK_MINIX],
 AC_MSG_CHECKING(for minix)
 case $host_os in
 	*minix* )
-		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE"
+		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE -D_NETBSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED"
 		AC_MSG_RESULT(yes)
 		;;
 	* )
