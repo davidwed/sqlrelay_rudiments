@@ -387,7 +387,7 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 		permstring[9]='\0';
 
 		mode_t	shift=permoctal;
-		for (int8_t i=8; i>=0; i--) {
+		for (int16_t i=8; i>=0; i--) {
 			uint8_t	pos=i%3;
 			permstring[i]=(shift&1)?((pos==2)?'x':
 						(pos==1)?'w':'r'):'-';
