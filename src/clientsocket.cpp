@@ -155,7 +155,7 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 	// variables...
 	int32_t		retval;
-	bool		wasusingnonblockingmode;
+	bool		wasusingnonblockingmode=false;
 	int32_t		error;
 	socklen_t	errorsize;
 	#define USE_GETSOCKOPT_SO_ERROR 1
