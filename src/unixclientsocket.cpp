@@ -110,8 +110,6 @@ int32_t unixclientsocket::connect() {
 	// Put the socket in blocking mode.  Most platforms create sockets in
 	// blocking mode by default but OpenBSD doesn't appear to (at least in
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
-	// Don't error out if this fails, some systems (Syllable for example)
-	// don't support blocking-mode operations on sockets at all.
 	useBlockingMode();
 
 	int32_t	retval=RESULT_ERROR;

@@ -106,9 +106,10 @@ bool inetserversocket::initialize(const char *address, uint16_t port) {
 	// Put the socket in blocking mode.  Most platforms create sockets in
 	// blocking mode by default but OpenBSD doesn't appear to (at least in
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
-	// Don't error out if this fails, some systems (Syllable for example)
-	// don't support blocking mode operations on sockets.
-	useBlockingMode();
+	if (!useBlockingMode()) {
+		close();
+		return false;
+	}
 
 	return true;
 }
@@ -177,14 +178,13 @@ filedescriptor *inetserversocket::accept() {
 	inetclientsocket	*returnsock=new inetclientsocket;
 	returnsock->setFileDescriptor(clientsock);
 
-	// Attempt to set the client socket to the same blocking/non-blocking
-	// mode as the server socket.
-	// Don't error out if this fails, some systems (Syllable for example)
-	// don't support blocking mode operations on sockets.
-	if (isUsingNonBlockingMode()) {
-		returnsock->useBlockingMode();
-	} else {
-		returnsock->useNonBlockingMode();
+	// set the client socket to the same blocking/non-blocking
+	// mode as the server socket
+	if (!((isUsingNonBlockingMode())?
+			returnsock->useNonBlockingMode():
+			returnsock->useBlockingMode())) {
+		delete returnsock;
+		return NULL;
 	}
 
 	// handle SSL-accept if necessary

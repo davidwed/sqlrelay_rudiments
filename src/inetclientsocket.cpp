@@ -135,10 +135,10 @@ int32_t inetclientsocket::connect() {
 		// sockets in blocking mode by default but OpenBSD doesn't
 		// appear to (at least in version 4.9) so we'll force it to
 		// blocking-mode to be consistent.
-		// Don't error-out if this couldn't be done, some systems
-		// (Syllable for example) don't support non-blocking mode
-		// operations on sockets at all.
-		useBlockingMode();
+		if (!useBlockingMode()) {
+			close();
+			return RESULT_ERROR;
+		}
 
 	#else
 
@@ -237,10 +237,11 @@ int32_t inetclientsocket::connect() {
 				// default but OpenBSD doesn't appear to (at
 				// least in version 4.9) so we'll force it to
 				// blocking-mode to be consistent.
-				// Don't error-out if this couldn't be done,
-				// some systems (Syllable for example) don't
-				// support non-blocking mode on sockets at all.
-				useBlockingMode();
+				if (!useBlockingMode()) {
+					freeaddrinfo(ai);
+					close();
+					return RESULT_ERROR;
+				}
 
 				// attempt to connect
 				retval=clientsocket::connect(
