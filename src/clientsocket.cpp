@@ -270,9 +270,11 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 	retval=RESULT_SUCCESS;
 
 cleanup:
-	// restore blocking mode, if necessary
-	if (!wasusingnonblockingmode && !useBlockingMode()) {
-		return RESULT_ERROR;
+	// Attempt to restore blocking mode, if necessary.  Don't error out if
+	// this fails, some systems (Syllable, for example) don't support
+	// blocking-mode operations on sockets at all.
+	if (!wasusingnonblockingmode) {
+		useBlockingMode();
 	}
 
 #else

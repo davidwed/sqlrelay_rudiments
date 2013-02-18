@@ -85,10 +85,10 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	// Put the socket in blocking mode.  Most platforms create sockets in
 	// blocking mode by default but OpenBSD doesn't appear to (at least in
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
-	if (!useBlockingMode()) {
-		close();
-		return false;
-	}
+	// Don't error out if this fails, some systems (Syllable for example)
+	// don't support blocking mode operations on socket at all.
+	useBlockingMode();
+
 	return true;
 #endif
 }
@@ -152,13 +152,14 @@ filedescriptor *unixserversocket::accept() {
 	unixclientsocket	*returnsock=new unixclientsocket;
 	returnsock->setFileDescriptor(clientsock);
 
-	// set the client socket to the same blocking/non-blocking
-	// mode as the server socket
-	if (!((isUsingNonBlockingMode())?
-			returnsock->useNonBlockingMode():
-			returnsock->useBlockingMode())) {
-		delete returnsock;
-		return NULL;
+	// Attempt to set the client socket to the same blocking/non-blocking
+	// mode as the server socket.
+	// Don't error out if this fails, some systems (Syllable for example)
+	// don't support blocking mode operations on socket at all.
+	if (isUsingNonBlockingMode()) {
+		returnsock->useNonBlockingMode();
+	} else {
+		returnsock->useBlockingMode();
 	}
 
 	// handle SSL-accept if necessary
