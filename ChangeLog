@@ -1,6 +1,6 @@
 0.41 - fixed a few bugs in the codetree class and improved its debug
 	added comments to codetree class header
-	added /resources/index as a search path for syllable
+	added new search paths and default prefix for syllable
 	initialized an uninitialized variable in clientsocket
 
 0.40 - fixed -pthread annoyance
