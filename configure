@@ -14560,6 +14560,27 @@ esac
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for syllable" >&5
+$as_echo_n "checking for syllable... " >&6; }
+case $host_os in
+	*syllable* )
+		if ( test "$prefix" = "NONE" )
+		then
+			prefix="/resources/firstworks"
+		fi
+
+$as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		;;
+	* )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		;;
+esac
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 6.0.0" >&5
 $as_echo_n "checking for SCO OSR < 6.0.0... " >&6; }
 if ( test "`uname -s`" = "SCO_SV" )

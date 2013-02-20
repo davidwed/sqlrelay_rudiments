@@ -429,6 +429,25 @@ esac
 AC_SUBST(BELIB)
 ])
 
+dnl Checks for syllable and adds some macros if it is
+AC_DEFUN([FW_CHECK_SYLLABLE],
+[
+AC_MSG_CHECKING(for syllable)
+case $host_os in
+	*syllable* )
+		if ( test "$prefix" = "NONE" )
+		then
+			prefix="/resources/firstworks"
+		fi
+		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
+		AC_MSG_RESULT(yes)
+		;;
+	* )
+		AC_MSG_RESULT(no)
+		;;
+esac
+])
+
 AC_DEFUN([FW_CHECK_SCO_OSR5],
 [
 AC_MSG_CHECKING(for SCO OSR < 6.0.0)

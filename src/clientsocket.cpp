@@ -70,7 +70,7 @@ clientsocket::~clientsocket() {
 }
 
 bool clientsocket::supportsBlockingNonBlockingModes() {
-	#ifdef FIONBIO
+	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
 		return filedescriptor::supportsBlockingNonBlockingModes();
@@ -82,7 +82,7 @@ bool clientsocket::useNonBlockingMode() const {
 	// fcntl, which is what the filedescriptor class does, but this doesn't
 	// work for sockets on all platforms.  If FIONBIO is defined, then use
 	// it with an ioctl instead.
-	#ifdef FIONBIO
+	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		int32_t	nonblocking=1;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -101,7 +101,7 @@ bool clientsocket::useBlockingMode() const {
 	// fcntl, which is what the filedescriptor class does, but this doesn't
 	// work for sockets on all platforms.  If FIONBIO is defined, then use
 	// it with an ioctl instead.
-	#ifdef FIONBIO
+	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		int32_t	nonblocking=0;
 		bool	retval=(ioCtl(FIONBIO,&nonblocking)!=-1);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)

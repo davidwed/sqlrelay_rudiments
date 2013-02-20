@@ -58,6 +58,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* ioctl/FIONBIO doesn't work on some systems */
+#undef RUDIMENTS_DISABLE_FIONBIO
+
 /* Most modern systems support template <> */
 #undef RUDIMENTS_EXPLICIT_SPECIALIZATION
 
