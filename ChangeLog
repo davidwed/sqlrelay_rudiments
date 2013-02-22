@@ -2,6 +2,7 @@
 	added comments to codetree class header
 	added new search paths and default prefix for syllable
 	initialized an uninitialized variable in clientsocket
+	added support for syllable os
 
 0.40 - fixed -pthread annoyance
 	added -Werror to default build
