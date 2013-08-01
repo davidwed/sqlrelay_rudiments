@@ -131,14 +131,14 @@ make uninstall
 <p>If your system supports RedHat Package Manager version 4.0.3 or greater then you can build RPMS by running the following command against the source distribution tarball:</p>
 
 <blockquote><b>
-rpm -ta rudiments-X.XX.tar.gz<br>
+rpmbuild -ta rudiments-X.XX.tar.gz<br>
 (where X.XX is replaced with the version number)<br>
 </b></blockquote>
 
 <p>This will generate RPM's in the system-wide RPM directory (usually /usr/src/redhat/RPMS or /usr/local/rpm/RPMS) under the subdirectory corresponding to your system architecture.  You can install them by changing directories into that directory and executing the following command as root:</p>
 
 <blockquote><b>
-rpm -i rudiments-*
+rpmbuild -i rudiments-*
 </b></blockquote>
 
 </body>
