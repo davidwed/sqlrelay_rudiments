@@ -9,7 +9,11 @@ namespace rudiments {
 
 // FIXME: make methods out of these
 #define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_indent; i++) { printf(" "); } }
-#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { fprintf(stdout,ARGS); fflush(stdout); }
+#ifdef _MSC_VER
+	#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { fprintf(stdout,ARGS,__VA_ARGS__); fflush(stdout); }
+#else
+	#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { fprintf(stdout,ARGS); fflush(stdout); }
+#endif
 #define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { charstring::safePrint(string); }
 #define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { charstring::safePrint(string,length); }
 
