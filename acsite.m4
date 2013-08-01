@@ -413,6 +413,7 @@ AC_DEFUN([FW_CHECK_HAIKU],
 [
 AC_MSG_CHECKING(for haiku)
 BELIB=""
+GNULIB=""
 case $host_os in
 	*haiku* )
 		if ( test "$prefix" = "NONE" )
@@ -420,6 +421,7 @@ case $host_os in
 			prefix="/boot/common"
 		fi
 		BELIB="-lbe"
+		GNULIB="-lgnu"
 		AC_MSG_RESULT(yes)
 		;;
 	* )
@@ -427,6 +429,7 @@ case $host_os in
 		;;
 esac
 AC_SUBST(BELIB)
+AC_SUBST(GNULIB)
 ])
 
 dnl Checks for syllable and adds some macros if it is

@@ -89,5 +89,8 @@ DLLIB = @DLLIB@
 # be library
 BELIB = @BELIB@
 
+# gnu library
+GNULIB = @GNULIB@
+
 # Microsoft-specific stuff
 EXE = @EXE@
