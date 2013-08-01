@@ -1,3 +1,7 @@
+0.42 - made a "char" array in the charstring classh explicitly "signed char"
+		for arm and similar platforms where "char" is actually
+		"unsigned char"
+
 0.41 - fixed a few bugs in the codetree class and improved its debug
 	added comments to codetree class header
 	added new search paths and default prefix for syllable
