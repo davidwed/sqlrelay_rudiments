@@ -510,6 +510,10 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		/** Prints a text representation of "node". */
 		static void	print(xmldomnode *node);
 
+		/** Prints a text representation of "node" into
+		 *  stringbuffer "strb". */
+		static void	print(xmldomnode *node, stringbuffer *strb);
+
 	#include <rudiments/private/xmldomnode.h>
 };
 

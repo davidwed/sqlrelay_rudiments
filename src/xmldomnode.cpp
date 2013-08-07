@@ -804,6 +804,10 @@ const char *xmldomnode::getAttributeValueByPath(const char *path,
 }
 
 void xmldomnode::print(xmldomnode *node) {
+	print(node,NULL);
+}
+
+void xmldomnode::print(xmldomnode *node, stringbuffer *strb) {
 	if (!node || node->isNullNode()) {
 		return;
 	}
@@ -818,12 +822,24 @@ void xmldomnode::print(xmldomnode *node) {
 				endtag=true;
 			}
 			for (uint16_t i=0; i<indent; i++) {
-				printf(" ");
+				if (strb) {
+					strb->append(' ');
+				} else {
+					printf(" ");
+				}
 			}
 		}
-		printf("%c",*ptr);
+		if (strb) {
+			strb->append(*ptr);
+		} else {
+			printf("%c",*ptr);
+		}
 		if (*ptr=='>') {
-			printf("\n");
+			if (strb) {
+				strb->append('\n');
+			} else {
+				printf("\n");
+			}
 			if (*(ptr-1)!='/' && !endtag) {
 				indent=indent+2;
 			}

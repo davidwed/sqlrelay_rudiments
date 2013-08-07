@@ -1,3 +1,5 @@
+0.43 -
+
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
 		"unsigned char"
