@@ -572,6 +572,12 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the end
 	const char	*end=def->getAttributeValue("end");
+	bool		backspace=(end && end[0]=='\b' &&
+					charstring::length(end)>1);
+	if (backspace) {
+		output->setPosition(output->getStringLength()-1);
+		end++;
+	}
 	if (block && charstring::length(end)) {
 		if (output->getString()[output->getStringLength()-1]!='\n') {
 			output->append('\n');
@@ -580,7 +586,11 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 			output->append(pvt->_indentstring);
 		}
 	}
-	output->append(end);
+	if (backspace) {
+		output->write(end);
+	} else {
+		output->append(end);
+	}
 	if ((block || line) &&
 		output->getString()[output->getStringLength()-1]!='\n') {
 		output->append('\n');
