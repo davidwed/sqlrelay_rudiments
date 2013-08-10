@@ -135,7 +135,9 @@ int32_t inetclientsocket::connect() {
 		// sockets in blocking mode by default but OpenBSD doesn't
 		// appear to (at least in version 4.9) so we'll force it to
 		// blocking-mode to be consistent.
-		if (!useBlockingMode()) {
+		if (!useBlockingMode() &&
+				error::getErrorNumber() &&
+				error::getErrorNumber()!=ENOTSUP) {
 			close();
 			return RESULT_ERROR;
 		}
@@ -237,7 +239,9 @@ int32_t inetclientsocket::connect() {
 				// default but OpenBSD doesn't appear to (at
 				// least in version 4.9) so we'll force it to
 				// blocking-mode to be consistent.
-				if (!useBlockingMode()) {
+				if (!useBlockingMode() &&
+					error::getErrorNumber() &&
+					error::getErrorNumber()!=ENOTSUP) {
 					freeaddrinfo(ai);
 					close();
 					return RESULT_ERROR;

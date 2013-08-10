@@ -185,7 +185,10 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 	// put the socket in non-blocking mode, if necessary
 	wasusingnonblockingmode=isUsingNonBlockingMode();
-	if (!wasusingnonblockingmode && !useNonBlockingMode()) {
+	if (!wasusingnonblockingmode &&
+			!useNonBlockingMode() &&
+			error::getErrorNumber() &&
+			error::getErrorNumber()!=ENOTSUP) {
 		retval=RESULT_ERROR;
 		goto cleanup;
 	}
@@ -271,7 +274,10 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 
 cleanup:
 	// restore blocking mode, if necessary
-	if (!wasusingnonblockingmode && !useBlockingMode()) {
+	if (!wasusingnonblockingmode &&
+			!useBlockingMode() &&
+			error::getErrorNumber() &&
+			error::getErrorNumber()!=ENOTSUP) {
 		return RESULT_ERROR;
 	}
 
@@ -366,7 +372,10 @@ wsacleanup:
 		// The WSAEventSelect for FD_CONNECT above put the socket in
 		// non-blocking mode.  If necessary, we need to set it back to
 		// blocking mode here.
-		if (!wasusingnonblockingmode && !useBlockingMode()) {
+		if (!wasusingnonblockingmode &&
+				!useBlockingMode() &&
+				error::getErrorNumber() &&
+				error::getErrorNumber()!=ENOTSUP) {
 			return RESULT_ERROR;
 		}
 	}
