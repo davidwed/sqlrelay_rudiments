@@ -108,7 +108,11 @@ bool inetserversocket::initialize(const char *address, uint16_t port) {
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
 	if (!useBlockingMode() &&
 			error::getErrorNumber() &&
-			error::getErrorNumber()!=ENOTSUP) {
+			error::getErrorNumber()!=ENOTSUP
+			#ifdef EOPNOTSUPP
+			&& error::getErrorNumber()!=EOPNOTSUPP
+			#endif
+			) {
 		close();
 		return false;
 	}
@@ -186,7 +190,11 @@ filedescriptor *inetserversocket::accept() {
 			returnsock->useNonBlockingMode():
 			returnsock->useBlockingMode()) &&
 				error::getErrorNumber() &&
-				error::getErrorNumber()!=ENOTSUP) {
+				error::getErrorNumber()!=ENOTSUP
+				#ifdef EOPNOTSUPP
+				&& error::getErrorNumber()!=EOPNOTSUPP
+				#endif
+				) {
 		delete returnsock;
 		return NULL;
 	}

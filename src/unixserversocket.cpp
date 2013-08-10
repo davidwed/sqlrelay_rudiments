@@ -87,7 +87,11 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
 	if (!useBlockingMode() &&
 			error::getErrorNumber() &&
-			error::getErrorNumber()!=ENOTSUP) {
+			error::getErrorNumber()!=ENOTSUP
+			#ifdef EOPNOTSUPPP
+			&& error::getErrorNumber()!=EOPNOTSUPP
+			#endif
+			) {
 		close();
 		return false;
 	}
@@ -160,7 +164,11 @@ filedescriptor *unixserversocket::accept() {
 			returnsock->useNonBlockingMode():
 			returnsock->useBlockingMode()) &&
 				error::getErrorNumber() &&
-				error::getErrorNumber()!=ENOTSUP) {
+				error::getErrorNumber()!=ENOTSUP
+				#ifdef EOPNOTSUPPP
+				&& error::getErrorNumber()!=EOPNOTSUPP
+				#endif
+			) {
 		delete returnsock;
 		return NULL;
 	}

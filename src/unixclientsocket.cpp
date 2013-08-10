@@ -112,7 +112,11 @@ int32_t unixclientsocket::connect() {
 	// version 4.9) so we'll force it to blocking-mode to be consistent.
 	if (!useBlockingMode() &&
 			error::getErrorNumber() &&
-			error::getErrorNumber()!=ENOTSUP) {
+			error::getErrorNumber()!=ENOTSUP
+			#ifdef EOPNOTSUPP
+			&& error::getErrorNumber()!=EOPNOTSUPP
+			#endif
+			) {
 		close();
 		return RESULT_ERROR;
 	}

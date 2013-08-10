@@ -137,7 +137,11 @@ int32_t inetclientsocket::connect() {
 		// blocking-mode to be consistent.
 		if (!useBlockingMode() &&
 				error::getErrorNumber() &&
-				error::getErrorNumber()!=ENOTSUP) {
+				error::getErrorNumber()!=ENOTSUP
+				#ifdef EOPNOTSUPP
+				&& error::getErrorNumber()!=EOPNOTSUPP
+				#endif
+				) {
 			close();
 			return RESULT_ERROR;
 		}
@@ -241,7 +245,11 @@ int32_t inetclientsocket::connect() {
 				// blocking-mode to be consistent.
 				if (!useBlockingMode() &&
 					error::getErrorNumber() &&
-					error::getErrorNumber()!=ENOTSUP) {
+					error::getErrorNumber()!=ENOTSUP
+					#ifdef EOPNOTSUPP
+					&& error::getErrorNumber()!=EOPNOTSUPP
+					#endif
+					) {
 					freeaddrinfo(ai);
 					close();
 					return RESULT_ERROR;
