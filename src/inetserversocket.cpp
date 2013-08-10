@@ -109,7 +109,7 @@ bool inetserversocket::initialize(const char *address, uint16_t port) {
 	if (!useBlockingMode() &&
 			error::getErrorNumber() &&
 			error::getErrorNumber()!=ENOTSUP
-			#ifdef RUDIMENTS_HAVE_EOPNOTSUPP
+			#ifdef EOPNOTSUPP
 			&& error::getErrorNumber()!=EOPNOTSUPP
 			#endif
 			) {
@@ -191,7 +191,7 @@ filedescriptor *inetserversocket::accept() {
 			returnsock->useBlockingMode()) &&
 				error::getErrorNumber() &&
 				error::getErrorNumber()!=ENOTSUP
-				#ifdef RUDIMENTS_HAVE_EOPNOTSUPP
+				#ifdef EOPNOTSUPP
 				&& error::getErrorNumber()!=EOPNOTSUPP
 				#endif
 				) {

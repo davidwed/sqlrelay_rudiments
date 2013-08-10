@@ -900,12 +900,6 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <inttypes.h>
 #endif],
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for EOPNOTSUPP)
-AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_ERRNO_H)
-	#include <errno.h>
-#endif],
-[int err=EOPNOTSUPP;],AC_DEFINE(RUDIMENTS_HAVE_EOPNOTSUPP,1,Some systems have EOPNOTSUPP) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 echo "******************************"
 
 

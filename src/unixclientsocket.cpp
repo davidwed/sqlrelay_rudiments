@@ -113,7 +113,7 @@ int32_t unixclientsocket::connect() {
 	if (!useBlockingMode() &&
 			error::getErrorNumber() &&
 			error::getErrorNumber()!=ENOTSUP
-			#ifdef RUDIMENTS_HAVE_EOPNOTSUPP
+			#ifdef EOPNOTSUPP
 			&& error::getErrorNumber()!=EOPNOTSUPP
 			#endif
 			) {

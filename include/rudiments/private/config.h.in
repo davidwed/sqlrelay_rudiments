@@ -226,9 +226,6 @@
 /* Some systems define environ in unistd.h */
 #undef RUDIMENTS_HAVE_ENVIRON
 
-/* Some systems have EOPNOTSUPP */
-#undef RUDIMENTS_HAVE_EOPNOTSUPP
-
 /* Some systems have errno.h */
 #undef RUDIMENTS_HAVE_ERRNO_H
 
