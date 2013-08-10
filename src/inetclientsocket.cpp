@@ -138,7 +138,7 @@ int32_t inetclientsocket::connect() {
 		if (!useBlockingMode() &&
 				error::getErrorNumber() &&
 				error::getErrorNumber()!=ENOTSUP
-				#ifdef EOPNOTSUPP
+				#ifdef RUDIMENTS_HAVE_EOPNOTSUPP
 				&& error::getErrorNumber()!=EOPNOTSUPP
 				#endif
 				) {
@@ -246,7 +246,7 @@ int32_t inetclientsocket::connect() {
 				if (!useBlockingMode() &&
 					error::getErrorNumber() &&
 					error::getErrorNumber()!=ENOTSUP
-					#ifdef EOPNOTSUPP
+					#ifdef RUDIMENTS_HAVE_EOPNOTSUPP
 					&& error::getErrorNumber()!=EOPNOTSUPP
 					#endif
 					) {

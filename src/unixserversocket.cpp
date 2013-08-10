@@ -88,7 +88,7 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 	if (!useBlockingMode() &&
 			error::getErrorNumber() &&
 			error::getErrorNumber()!=ENOTSUP
-			#ifdef EOPNOTSUPPP
+			#ifdef RUDIMENTS_HAVE_EOPNOTSUPPP
 			&& error::getErrorNumber()!=EOPNOTSUPP
 			#endif
 			) {
@@ -165,7 +165,7 @@ filedescriptor *unixserversocket::accept() {
 			returnsock->useBlockingMode()) &&
 				error::getErrorNumber() &&
 				error::getErrorNumber()!=ENOTSUP
-				#ifdef EOPNOTSUPPP
+				#ifdef RUDIMENTS_HAVE_EOPNOTSUPPP
 				&& error::getErrorNumber()!=EOPNOTSUPP
 				#endif
 			) {
