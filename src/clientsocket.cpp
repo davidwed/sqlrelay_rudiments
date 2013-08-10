@@ -188,7 +188,11 @@ int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
 	if (!wasusingnonblockingmode &&
 			!useNonBlockingMode() &&
 			error::getErrorNumber() &&
-			error::getErrorNumber()!=ENOTSUP) {
+			error::getErrorNumber()!=ENOTSUP
+			#ifdef EOPNOTSUPP
+			&& error::getErrorNumber()!=EOPNOTSUPP
+			#endif
+			) {
 		retval=RESULT_ERROR;
 		goto cleanup;
 	}
@@ -277,7 +281,11 @@ cleanup:
 	if (!wasusingnonblockingmode &&
 			!useBlockingMode() &&
 			error::getErrorNumber() &&
-			error::getErrorNumber()!=ENOTSUP) {
+			error::getErrorNumber()!=ENOTSUP
+			#ifdef EOPNOTSUPP
+			&& error::getErrorNumber()!=EOPNOTSUPP
+			#endif
+			) {
 		return RESULT_ERROR;
 	}
 
@@ -375,7 +383,11 @@ wsacleanup:
 		if (!wasusingnonblockingmode &&
 				!useBlockingMode() &&
 				error::getErrorNumber() &&
-				error::getErrorNumber()!=ENOTSUP) {
+				error::getErrorNumber()!=ENOTSUP
+				#ifdef EOPNOTSUPP
+				&& error::getErrorNumber()!=EOPNOTSUPP
+				#endif
+				) {
 			return RESULT_ERROR;
 		}
 	}
