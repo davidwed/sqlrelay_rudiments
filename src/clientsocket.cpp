@@ -386,7 +386,7 @@ wsacleanup:
 		// blocking mode here.
 		if (!wasusingnonblockingmode &&
 				!useBlockingMode() &&
-				error::getErrorNumber() &&
+				error::getErrorNumber()
 				#ifdef ENOTSUP
 				&& error::getErrorNumber()!=ENOTSUP
 				#endif
