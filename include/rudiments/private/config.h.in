@@ -856,6 +856,9 @@
 /* statvfs */
 #undef RUDIMENTS_HAVE_STATVFS
 
+/* Some systems have stdarg.h */
+#undef RUDIMENTS_HAVE_STDARG_H
+
 /* Some systems have stdint.h */
 #undef RUDIMENTS_HAVE_STDINT_H
 

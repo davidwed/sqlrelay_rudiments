@@ -373,6 +373,10 @@ AC_MSG_CHECKING(for stdlib.h)
 AC_TRY_COMPILE([#include <stdlib.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_STDLIB_H, 1, Some systems have stdlib.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for stdarg.h)
+AC_TRY_COMPILE([#include <stdarg.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_STDARG_H, 1, Some systems have stdarg.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for string.h)
 AC_TRY_COMPILE([#include <string.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_STRING_H, 1, Some systems have string.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
