@@ -414,7 +414,15 @@ bool system::shutDown() {
 		char	*bootstr=(char *)"";
 		return (::reboot(cmd,bootstr)!=-1);
 	#elif defined(RUDIMENTS_HAVE_UADMIN)
-		return (uadmin(A_SHUTDOWN,AD_PWRDOWN,NULL)!=-1);
+		return (uadmin(A_SHUTDOWN,
+				// OSR6 doesn't appear to define AD_PWRDOWN,
+				// just use halt instead.
+				#if defined(AD_PWRDOWN)
+					AD_PWRDOWN,
+				#else
+					AD_HALT,
+				#endif
+				NULL)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);
