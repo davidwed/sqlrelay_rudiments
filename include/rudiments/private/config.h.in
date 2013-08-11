@@ -1177,9 +1177,6 @@
 /* Hack for gcc on SCO OSR6 */
 #undef _CFRONT_3_0
 
-/* OSR6 needs __STDC__=0 */
-#undef __STDC__
-
 /* Some systems dont have bool */
 #undef bool
 
