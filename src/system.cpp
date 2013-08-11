@@ -120,7 +120,6 @@ char *system::getOperatingSystemVersion() {
 
 		// get the os version info
 		// (yes, this craziness is how you have to do it)
-		DWORD	platformid;
 		OSVERSIONINFOEX	info;
 		rawbuffer::zero(&info,sizeof(info));
 		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
