@@ -351,8 +351,10 @@ bool system::halt() {
 		// others.  This works for both.
 		char	*bootstr=(char *)"";
 		return (::reboot(cmd,bootstr)==-1);
-	#elif defined(RUDIMENTS_HAVE_UADMIN)
+	#elif defined(RUDIMENTS_HAVE_UADMIN_CHAR)
 		return (uadmin(A_SHUTDOWN,AD_HALT,NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN_INT)
+		return (uadmin(A_SHUTDOWN,AD_HALT,0)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		_kern_shutdown(false);
 		return true;
@@ -413,16 +415,12 @@ bool system::shutDown() {
 		// others.  This works for both.
 		char	*bootstr=(char *)"";
 		return (::reboot(cmd,bootstr)!=-1);
-	#elif defined(RUDIMENTS_HAVE_UADMIN)
-		return (uadmin(A_SHUTDOWN,
-				// OSR6 doesn't appear to define AD_PWRDOWN,
-				// just use halt instead.
-				#if defined(AD_PWRDOWN)
-					AD_PWRDOWN,
-				#else
-					AD_HALT,
-				#endif
-				NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN_CHAR)
+		return (uadmin(A_SHUTDOWN,AD_PWRDOWN,NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN_INT)
+		// OSR6 doesn't appear to define AD_PWRDOWN,
+		// just use halt instead.
+		return (uadmin(A_SHUTDOWN,AD_HALT,0)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);
@@ -457,8 +455,10 @@ bool system::reboot() {
 		// others.  This works for both.
 		char	*bootstr=(char *)"";
 		return (::reboot(cmd,bootstr)!=-1);
-	#elif defined(RUDIMENTS_HAVE_UADMIN)
+	#elif defined(RUDIMENTS_HAVE_UADMIN_CHAR)
 		return (uadmin(A_SHUTDOWN,AD_BOOT,NULL)!=-1);
+	#elif defined(RUDIMENTS_HAVE_UADMIN_INT)
+		return (uadmin(A_SHUTDOWN,AD_BOOT,0)!=-1);
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);

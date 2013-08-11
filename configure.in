@@ -2757,7 +2757,7 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 reboot(0,0),AC_DEFINE(RUDIMENTS_HAVE_REBOOT_2,1,Some systems have reboot with 2 argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for uadmin)
+AC_MSG_CHECKING(for uadmin with char * argument)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
@@ -2767,7 +2767,19 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #ifdef RUDIMENTS_HAVE_SYS_UADMIN_H
 	#include <sys/uadmin.h>
 #endif],
-uadmin(0,0,0),AC_DEFINE(RUDIMENTS_HAVE_UADMIN,1,Some systems have uadmin) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+uadmin(0,0,""),AC_DEFINE(RUDIMENTS_HAVE_UADMIN_CHAR,1,Some systems have uadmin with a char * argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for uadmin with integer)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_PROTOTYPES_H
+	#include <prototypes.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_UADMIN_H
+	#include <sys/uadmin.h>
+#endif],
+uadmin(0,0,0),AC_DEFINE(RUDIMENTS_HAVE_UADMIN_INT,1,Some systems have uadmin with a integer argument) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for BRoster::_ShutDown)
 FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_ROSTER_H

@@ -477,7 +477,6 @@ then
 	if ( test "`uname -v | tr -d '.'`" -eq "600" )
 	then
 		CPPFLAGS="$CPPFLAGS -D__STDC__=0"
-  		dnl AC_DEFINE(__STDC__,0,OSR6 needs __STDC__=0)
 		AC_MSG_RESULT(yes)
 	else
 		AC_MSG_RESULT(no)
