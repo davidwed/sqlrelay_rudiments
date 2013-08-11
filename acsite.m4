@@ -469,6 +469,23 @@ else
 fi
 ])
 
+AC_DEFUN([FW_CHECK_SCO_OSR6],
+[
+AC_MSG_CHECKING(for SCO OSR = 6.0.0)
+if ( test "`uname -s`" = "SCO_SV" )
+then
+	if ( test "`uname -v | tr -d '.'`" -eq "600" )
+	then
+  		AC_DEFINE(__STDC__,0,OSR6 needs __STDC__=0)
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+else
+	AC_MSG_RESULT(no)
+fi
+])
+
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE
