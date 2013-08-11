@@ -744,8 +744,8 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint64_t totallength);
 
 		/** Appends "..." to "string" of length "length" using
-		 *  "format" which should comply with standard printf formatting
-		 *  rules. */
+		 *  "format" which should comply with standard printf
+		 *  formatting rules. */
 		static size_t	printTo(char *string, size_t length,
 						const char *format, ...);
 

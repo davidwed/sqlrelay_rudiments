@@ -748,25 +748,13 @@ char *charstring::parseNumber(double number,
 
 char *charstring::parseNumber(long double number) {
 	char	*str=new char[22];
-	#if defined(RUDIMENTS_HAVE__SNPRINTF_S)
-		_snprintf_s(str,22,_TRUNCATE,"%Lf",number);
-	#elif defined(RUDIMENTS_HAVE_SNPRINTF)
-		snprintf(str,22,"%Lf",number);
-	#else
-		#error no snprintf or anything like it
-	#endif
+	printTo(str,22,"%Lf",number);
 	return str;
 }
 
 char *charstring::parseNumber(long double number, uint16_t scale) {
 	char	*str=new char[22];
-	#if defined(RUDIMENTS_HAVE__SNPRINTF_S)
-		_snprintf_s(str,22,_TRUNCATE,"%.*Lf",scale,number);
-	#elif defined(RUDIMENTS_HAVE_SNPRINTF)
-		snprintf(str,22,"%.*Lf",scale,number);
-	#else
-		#error no snprintf or anything like it
-	#endif
+	printTo(str,22,"%.*Lf",scale,number);
 	return str;
 }
 
@@ -774,14 +762,7 @@ char *charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	#if defined(RUDIMENTS_HAVE__SNPRINTF_S)
-		_snprintf_s(str,strlength,_TRUNCATE,
-				"%*.*Lf",precision,scale,number);
-	#elif defined(RUDIMENTS_HAVE_SNPRINTF)
-		snprintf(str,strlength,"%*.*Lf",precision,scale,number);
-	#else
-		#error no snprintf or anything like it
-	#endif
+	printTo(str,strlength,"%*.*Lf",precision,scale,number);
 	return str;
 }
 

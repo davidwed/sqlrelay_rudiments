@@ -823,9 +823,6 @@
 /* Some systems have sigsuspend */
 #undef RUDIMENTS_HAVE_SIGSUSPEND
 
-/* Some systems have snprintf */
-#undef RUDIMENTS_HAVE_SNPRINTF
-
 /* Some systems have sockaddr_un */
 #undef RUDIMENTS_HAVE_SOCKADDR_UN
 
@@ -1131,9 +1128,6 @@
 
 /* Some systems have _read */
 #undef RUDIMENTS_HAVE__READ
-
-/* Some systems have _snprintf_s */
-#undef RUDIMENTS_HAVE__SNPRINTF_S
 
 /* Some systems have _swab */
 #undef RUDIMENTS_HAVE__SWAB

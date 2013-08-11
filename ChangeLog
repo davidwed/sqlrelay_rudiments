@@ -1,5 +1,6 @@
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
+	added snprintf replacement charstring::printTo
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
