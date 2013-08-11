@@ -5,4 +5,7 @@
 #include <rudiments/private/inttypes.h>
 
 #include <signal.h>
+#ifdef RUDIMENTS_HAS_SYS_SIGNAL_H
+	#include <sys/signal.h>
+#endif
 #include <sys/types.h>
