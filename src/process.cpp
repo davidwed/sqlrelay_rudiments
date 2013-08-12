@@ -3,9 +3,7 @@
 
 #include <rudiments/process.h>
 #include <rudiments/error.h>
-#ifdef __CYGWIN__
-	#include <rudiments/snooze.h>
-#endif
+#include <rudiments/snooze.h>
 #include <rudiments/directory.h>
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -37,6 +35,8 @@
 #ifdef RUDIMENTS_HAVE_PROCESS_H
 	#include <process.h>
 #endif
+
+#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -323,6 +323,14 @@ pid_t process::fork() {
 		pid_t	result;
 		do {
 			result=::fork();
+
+			if (result==-1 && error::getErrorNumber()==EAGAIN) {
+				printf("fork: retry: %s\n",
+					error::getErrorString());
+				snooze::macrosnooze(1);
+				continue;
+			}
+
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#else
