@@ -201,6 +201,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\regex.cpp" />
     <ClCompile Include="..\src\regularexpression.cpp" />
     <ClCompile Include="..\src\snooze.cpp" />
+    <ClCompile Include="..\src\stdio.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
     <ClCompile Include="..\src\system.cpp" />
     <ClCompile Include="..\src\unixclientsocket.cpp" />

@@ -6,6 +6,9 @@
 #include <rudiments/character.h>
 #include <rudiments/stdio.h>
 
+// for strchrnul
+#include <stdio.h>
+
 // for strtold
 #ifndef __USE_GNU
 	#define __USE_GNU
