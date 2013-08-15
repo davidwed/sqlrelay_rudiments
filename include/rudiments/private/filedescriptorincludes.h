@@ -9,7 +9,13 @@
 #include <sys/types.h>
 
 #ifdef RUDIMENTS_HAS_SSL
-	#include <openssl/ssl.h>
+	// This extern "C" is necessary because the headers for some versions of
+	// SSL include stdio.h and some versions of netbsd and minix (and maybe
+	// others) don't have extern "C" surrounding the definition of vdprintf
+	// in stdio.h
+	extern "C" {
+		#include <openssl/ssl.h>
+	}
 #endif
 
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
@@ -24,10 +30,3 @@
 		#undef _XOPEN_SOURCE
 	#endif
 #endif
-
-// so STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO will be defined if they need
-// to be used by the calling program...
-/*#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
-#include <stdio.h>*/
