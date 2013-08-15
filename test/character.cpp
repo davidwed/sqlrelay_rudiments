@@ -270,10 +270,6 @@ int main(int argc, const char **argv) {
 
 	for (unsigned char c=0; c<128; c++) {
 
-		printf("\tsafePrint: ");
-		character::safePrint(c);
-		printf("\n");
-
 		test("\tisAlphanumeric",
 			character::isAlphanumeric(c)==isalphanumeric[c]);
 		test("\tisAlphabetical",

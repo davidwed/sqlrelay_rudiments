@@ -3,6 +3,7 @@
 
 #include <rudiments/charstring.h>
 #include <rudiments/filedescriptor.h>
+#include <rudiments/stdio.h>
 #include <limits.h>
 #include "test.cpp"
 
@@ -211,11 +212,11 @@ int main(int argc, const char **argv) {
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
 	printf("bytes: \"");
-	charstring::safePrint((char *)bytes,6);
+	stdoutput.safePrint((char *)bytes,6);
 	printf("\"\n");
 	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
-	charstring::safePrint((char *)decodedbytes,decodedlen);
+	stdoutput.safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -223,11 +224,11 @@ int main(int argc, const char **argv) {
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
 	printf("bytes: \"");
-	charstring::safePrint((char *)bytes,5);
+	stdoutput.safePrint((char *)bytes,5);
 	printf("\"\n");
 	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
-	charstring::safePrint((char *)decodedbytes,decodedlen);
+	stdoutput.safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -235,11 +236,11 @@ int main(int argc, const char **argv) {
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
 	printf("bytes: \"");
-	charstring::safePrint((char *)bytes,4);
+	stdoutput.safePrint((char *)bytes,4);
 	printf("\"\n");
 	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
-	charstring::safePrint((char *)decodedbytes,decodedlen);
+	stdoutput.safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -247,11 +248,11 @@ int main(int argc, const char **argv) {
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
 	printf("bytes: \"");
-	charstring::safePrint((char *)bytes,3);
+	stdoutput.safePrint((char *)bytes,3);
 	printf("\"\n");
 	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
-	charstring::safePrint((char *)decodedbytes,decodedlen);
+	stdoutput.safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -259,11 +260,11 @@ int main(int argc, const char **argv) {
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
 	printf("bytes: \"");
-	charstring::safePrint((char *)bytes,2);
+	stdoutput.safePrint((char *)bytes,2);
 	printf("\"\n");
 	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
-	charstring::safePrint((char *)decodedbytes,decodedlen);
+	stdoutput.safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -271,11 +272,11 @@ int main(int argc, const char **argv) {
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
 	printf("bytes: \"");
-	charstring::safePrint((char *)bytes,1);
+	stdoutput.safePrint((char *)bytes,1);
 	printf("\"\n");
 	printf("encoded bytes: (%lld) \"%s\"\n",encodedlen,encodedbytes);
 	printf("decoded bytes: \"");
-	charstring::safePrint((char *)decodedbytes,decodedlen);
+	stdoutput.safePrint((char *)decodedbytes,decodedlen);
 	printf("\"\n");
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -500,23 +501,23 @@ int main(int argc, const char **argv) {
 	int64_t	sv64=filedescriptor::hostToNet((uint64_t)
 					(int64_t)(-1*0x0101010101010101LL));
 	unsigned char	v8s[]={0xC0,0xC0,0xC0,0xC0};
-	charstring::printBits(v8);
+	stdoutput.printBits(v8);
 	printf("\n");
-	charstring::printBits(v16);
+	stdoutput.printBits(v16);
 	printf("\n");
-	charstring::printBits(v32);
+	stdoutput.printBits(v32);
 	printf("\n");
-	charstring::printBits(v64);
+	stdoutput.printBits(v64);
 	printf("\n");
-	charstring::printBits(sv8);
+	stdoutput.printBits(sv8);
 	printf("\n");
-	charstring::printBits(sv16);
+	stdoutput.printBits(sv16);
 	printf("\n");
-	charstring::printBits(sv32);
+	stdoutput.printBits(sv32);
 	printf("\n");
-	charstring::printBits(sv64);
+	stdoutput.printBits(sv64);
 	printf("\n");
-	charstring::printBits(v8s,sizeof(v8s));
+	stdoutput.printBits(v8s,sizeof(v8s));
 	printf("\n");
 
 }
