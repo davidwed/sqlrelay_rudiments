@@ -4,7 +4,6 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/character.h>
-#include <rudiments/stdio.h>
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -13,6 +12,10 @@
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
+
+// include this after the above defines or Haiku can't find strchrnul
+#include <rudiments/stdio.h>
+
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
