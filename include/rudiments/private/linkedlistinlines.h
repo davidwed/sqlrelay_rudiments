@@ -6,7 +6,7 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/rudimentsinlines.h>
 
@@ -239,9 +239,9 @@ void LINKEDLIST_CLASS::print() const {
 	uint64_t	i=0;
 	for (linkedlistnodetype *current=first; current;
 		current=(linkedlistnodetype *)current->getNext()) {
-		printf("index %lld: ",(long long)i);
+		stdoutput.printf("index %lld: ",(long long)i);
 		current->print();
-		printf("\n");
+		stdoutput.printf("\n");
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/rudimentsinlines.h>
 
@@ -107,7 +107,7 @@ void DICTIONARY_CLASS::print() {
 			(dictionarylistnodetype *)dict.getFirstNode();
 			node; node=(dictionarylistnodetype *)node->getNext()) {
 		node->getData()->print();
-		printf("\n");
+		stdoutput.printf("\n");
 	}
 }
 
