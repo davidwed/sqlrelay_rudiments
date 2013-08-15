@@ -6,13 +6,18 @@
 
 #include <rudiments/resultcodes.h>
 
-#include <sys/types.h>
+// This extern "C" is necessary because sys/types.h on some versions of minix
+// (and maybe others) include stdio.h and the definition of vdprintf doesn't
+// have extern "C" surrounding the definition.
+extern "C" {
+	#include <sys/types.h>
+}
 
 #ifdef RUDIMENTS_HAS_SSL
 	// This extern "C" is necessary because the headers for some versions of
-	// SSL include stdio.h and some versions of netbsd and minix (and maybe
-	// others) don't have extern "C" surrounding the definition of vdprintf
-	// in stdio.h
+	// SSL include stdio.h and some versions of netbsd (and maybe others)
+	// don't have extern "C" surrounding the definition of vdprintf in
+	// stdio.h
 	extern "C" {
 		#include <openssl/ssl.h>
 	}
