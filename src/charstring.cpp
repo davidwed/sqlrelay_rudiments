@@ -6,13 +6,11 @@
 #include <rudiments/character.h>
 #include <rudiments/stdio.h>
 
-// for strchrnul
-#include <stdio.h>
-
-// for strtold
+// for strtold and for strchrnul
 #ifndef __USE_GNU
 	#define __USE_GNU
 #endif
+#include <stdio.h>
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
