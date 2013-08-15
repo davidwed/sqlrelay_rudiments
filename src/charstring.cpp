@@ -10,7 +10,6 @@
 #ifndef __USE_GNU
 	#define __USE_GNU
 #endif
-#include <stdio.h>
 #ifndef __USE_ISOC9X
 	#define __USE_ISOC9X
 #endif
