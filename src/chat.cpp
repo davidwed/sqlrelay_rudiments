@@ -7,6 +7,9 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/snooze.h>
 #include <rudiments/character.h>
+#ifdef DEBUG_CHAT
+	#include <rudiments/stdio.h>
+#endif
 
 //#define DEBUG_CHAT 1
 
@@ -50,10 +53,10 @@ int32_t chat::runScript(const char *script, char **abort,
 				constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
-	printf("runScript(readfd=%d,writefd=%d,i\n\"%s\")\n",
-				pvt->_readfd->getFileDescriptor(),
-				pvt->_writefd->getFileDescriptor(),
-				script);
+	stdoutput.printf("runScript(readfd=%d,writefd=%d,i\n\"%s\")\n",
+					pvt->_readfd->getFileDescriptor(),
+					pvt->_writefd->getFileDescriptor(),
+					script);
 	#endif
 
 	// if there was no script, just return success
@@ -109,13 +112,13 @@ int32_t chat::runScript(const char *script, char **abort,
 		if (result!=RESULT_SUCCESS) {
 			#ifdef DEBUG_CHAT
 			if (result==RESULT_ERROR) {
-				printf("error\n");
+				stdoutput.printf("error\n");
 			} else if (result==RESULT_TIMEOUT) {
-				printf("timeout\n");
+				stdoutput.printf("timeout\n");
 			} else if (result==RESULT_ABORT) {
-				printf("abort\n");
+				stdoutput.printf("abort\n");
 			} else {
-				printf("abort condition met\n");
+				stdoutput.printf("abort condition met\n");
 			}
 			#endif
 			return result;
@@ -123,7 +126,7 @@ int32_t chat::runScript(const char *script, char **abort,
 	}
 
 	#ifdef DEBUG_CHAT
-	printf("success!\n");
+	stdoutput.printf("success!\n");
 	#endif
 	return RESULT_SUCCESS;
 }
@@ -143,7 +146,7 @@ void chat::clearAbortStrings() {
 
 void chat::flush() {
 	#ifdef DEBUG_CHAT
-	printf("flushing...\n");
+	stdoutput.printf("flushing...\n");
 	#endif
 	bool	wasusingnonblocking=pvt->_readfd->isUsingNonBlockingMode();
 	if (wasusingnonblocking) {
@@ -153,7 +156,8 @@ void chat::flush() {
 	// bail if we have encountered one of them
 	if (!pvt->_readfd->isUsingNonBlockingMode()) {
 		#ifdef DEBUG_CHAT
-		printf("device doesn't support non-blocking mode, bailing\n");
+		stdoutput.printf("device doesn't support "
+					"non-blocking mode, bailing\n");
 		#endif
 		return;
 	}
@@ -162,7 +166,7 @@ void chat::flush() {
 		ssize_t	bytesread=pvt->_readfd->read(buffer,sizeof(buffer));
 		#ifdef DEBUG_CHAT
 		charstring::safePrint(buffer,bytesread);
-		printf("\n");
+		stdoutput.printf("\n");
 		#endif
 		if (bytesread!=sizeof(buffer)) {
 			break;
@@ -180,9 +184,9 @@ int32_t chat::expect(const char *string, char **abort) {
 	}
 
 	#ifdef DEBUG_CHAT
-	printf("expecting \"");
+	stdoutput.printf("expecting \"");
 	charstring::safePrint(string);
-	printf(" (%ld second timeout)...\n",pvt->_timeout);
+	stdoutput.printf(" (%ld second timeout)...\n",pvt->_timeout);
 	#endif
 
 	stringbuffer	response;
@@ -203,15 +207,16 @@ int32_t chat::expect(const char *string, char **abort) {
 		// if we got an error, timeout or abort, return
 		if (result!=sizeof(char)) {
 			#ifdef DEBUG_CHAT
-			printf("\n");
-			printf("failed: ");
+			stdoutput.printf("\n");
+			stdoutput.printf("failed: ");
 			if (result==RESULT_TIMEOUT) {
-				printf("timed out...\n");
+				stdoutput.printf("timed out...\n");
 			} else if (result==RESULT_ERROR) {
-				printf("error...\n");
+				stdoutput.printf("error...\n");
 			} else {
 				// some compilers complain without this cast
-				printf("result was: %d\n",(int)result);
+				stdoutput.printf("result was: %d\n",
+							(int)result);
 			}
 			#endif
 			return result;
@@ -236,11 +241,11 @@ int32_t chat::expect(const char *string, char **abort) {
 			if (regularexpression::match(response.getString(),
 								abortstring)) {
 				#ifdef DEBUG_CHAT
-				printf("\nabort: \"");
+				stdoutput.printf("\nabort: \"");
 				charstring::safePrint(response.getString());
-				printf("\" matched \"");
+				stdoutput.printf("\" matched \"");
 				charstring::safePrint(abortstring);
-				printf("\"\n");
+				stdoutput.printf("\"\n");
 				#endif
 				if (abort) {
 					*abort=charstring::
@@ -254,11 +259,11 @@ int32_t chat::expect(const char *string, char **abort) {
 		// look for the expected string
 		if (regularexpression::match(response.getString(),string)) {
 			#ifdef DEBUG_CHAT
-			printf("\nsuccess: \"");
+			stdoutput.printf("\nsuccess: \"");
 			charstring::safePrint(response.getString());
-			printf("\" matched \"");
+			stdoutput.printf("\" matched \"");
 			charstring::safePrint(string);
-			printf("\"\n");
+			stdoutput.printf("\"\n");
 			#endif
 			return RESULT_SUCCESS;
 		}
@@ -268,7 +273,7 @@ int32_t chat::expect(const char *string, char **abort) {
 int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 
 	#ifdef DEBUG_CHAT
-	printf("sending:\n");
+	stdoutput.printf("sending:\n");
 	#endif
 
 	// write the string, character at a time, processing special characters
@@ -293,13 +298,13 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 					ch='\0';
 				} else if (ch=='p') {
 					#ifdef DEBUG_CHAT
-					printf("\ndecisleep\n");
+					stdoutput.printf("\ndecisleep\n");
 					#endif
 					snooze::microsnooze(0,100000);
 					continue;
 				} else if (ch=='d') {
 					#ifdef DEBUG_CHAT
-					printf("\nsleep\n");
+					stdoutput.printf("\nsleep\n");
 					#endif
 					snooze::macrosnooze(1);
 					continue;
@@ -307,14 +312,14 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 			}
 
 			#ifdef DEBUG_CHAT
-			printf("%c",ch);
+			stdoutput.printf("%c",ch);
 			fflush(stdout);
 			#endif
 
 			result=pvt->_writefd->write(ch);
 			if (result!=sizeof(ch)) {
 				#ifdef DEBUG_CHAT
-				printf("\n");
+				stdoutput.printf("\n");
 				#endif
 				break;
 			}
@@ -322,7 +327,7 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 	}
 
 	#ifdef DEBUG_CHAT
-	printf("\n");
+	stdoutput.printf("\n");
 	#endif
 	return result;
 }
@@ -347,12 +352,12 @@ int32_t chat::substituteVariables(const char **ch,
 							*(str+2+varlen)==')') {
 				ssize_t	result=pvt->_writefd->write(value);
 				#ifdef DEBUG_CHAT
-				printf("%s",value);
+				stdoutput.printf("%s",value);
 				#endif
 				if (result!=
 					(ssize_t)charstring::length(value)) {
 					#ifdef DEBUG_CHAT
-					printf("\n");
+					stdoutput.printf("\n");
 					#endif
 					return result;
 				}

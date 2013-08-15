@@ -185,6 +185,12 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
 		variablebuffer	*write(double number);
 
+		/** Writes "..." to the variable buffer using "format"
+		 *  which should comply with standard printf formatting
+		 *  rules. */
+		variablebuffer	*writeFormatted(const char *format, ...);
+
+
 		/** Appends the first "size" bytes of "data" to the
 		 *  variablebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
@@ -277,6 +283,12 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		variablebuffer	*append(double number);
+
+		/** Appends "..." to the variable buffer using "format"
+		 *  which should comply with standard printf formatting
+		 *  rules. */
+		variablebuffer	*appendFormatted(const char *format, ...);
+
 
 		/** Reads "size" bytes from the variablebuffer at the
 		 *  current position into "data".  Also increments the

@@ -5,6 +5,7 @@
 #include <rudiments/error.h>
 #include <rudiments/snooze.h>
 #include <rudiments/directory.h>
+#include <rudiments/stdio.h>
 
 #ifndef __USE_XOPEN_EXTENDED
 	// for getsid()
@@ -35,8 +36,6 @@
 #ifdef RUDIMENTS_HAVE_PROCESS_H
 	#include <process.h>
 #endif
-
-#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -325,8 +324,8 @@ pid_t process::fork() {
 			result=::fork();
 
 			if (result==-1 && error::getErrorNumber()==EAGAIN) {
-				printf("fork: retry: %s\n",
-					error::getErrorString());
+				stdoutput.printf("fork: retry: %s\n",
+						error::getErrorString());
 				snooze::macrosnooze(1);
 				continue;
 			}

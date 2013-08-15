@@ -14,7 +14,11 @@
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || defined(DEBUG_READ)
 	#include <rudiments/process.h>
 #endif
+#ifndef RUDIMENTS_HAVE_VDPRINTF
+	#include <rudiments/stringbuffer.h>
+#endif
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -22,6 +26,9 @@
 	#include <io.h>
 #endif
 #include <stdio.h>
+#ifdef RUDIMENTS_HAVE_STDARG_H
+	#include <stdarg.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif
@@ -166,6 +173,12 @@ class filedescriptorprivate {
 filedescriptor::filedescriptor() {
 	pvt=new filedescriptorprivate;
 	filedescriptorInit();
+}
+
+filedescriptor::filedescriptor(int32_t fd) {
+	pvt=new filedescriptorprivate;
+	filedescriptorInit();
+	pvt->_fd=fd;
 }
 
 filedescriptor::filedescriptor(const filedescriptor &f) {
@@ -946,7 +959,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 					long sec, long usec) const {
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-	printf("bufferedRead of %d bytes\n",(int)count);
+	stdoutput.printf("bufferedRead of %d bytes\n",(int)count);
 	#endif
 
 	if (!count) {
@@ -955,7 +968,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 
 	if (!pvt->_readbuffer) {
 		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-		printf("no read buffer...\n");
+		stdoutput.printf("no read buffer...\n");
 		#endif
 		return safeRead(buf,count,sec,usec);
 	}
@@ -972,8 +985,8 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		if (bytesavailabletocopy) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("%d bytes in read buffer\n",
-					(int)bytesavailabletocopy);
+			stdoutput.printf("%d bytes in read buffer\n",
+						(int)bytesavailabletocopy);
 			#endif
 
 			ssize_t	bytestocopy=(bytesavailabletocopy<bytesunread)?
@@ -981,8 +994,9 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						bytesunread;
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("copying %d bytes out of read buffer\n",
-							(int)bytestocopy);
+			stdoutput.printf("copying %d bytes "
+						"out of read buffer\n",
+						(int)bytestocopy);
 			#endif
 
 			rawbuffer::copy(data,pvt->_readbufferhead,bytestocopy);
@@ -995,13 +1009,14 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			if (bytesread==count) {
 				#if defined(DEBUG_READ) && \
 					 defined(DEBUG_BUFFERING)
-				printf("yay, we're done reading\n");
+				stdoutput.printf("yay, we're done reading\n");
 				#endif
 				return bytesread;
 			}
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("need to read %d more bytes\n",(int)bytesunread);
+			stdoutput.printf("need to read %d more bytes\n",
+							(int)bytesunread);
 			#endif
 		}
 
@@ -1009,10 +1024,10 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		if (pvt->_readbufferhead==pvt->_readbuffertail) {
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("attempting to fill read buffer, ");
-			printf("reading %d bytes...\n",
-					(int)(pvt->_readbufferend-
-						pvt->_readbuffer));
+			stdoutput.printf("attempting to fill read buffer, ");
+			stdoutput.printf("reading %d bytes...\n",
+						(int)(pvt->_readbufferend-
+							pvt->_readbuffer));
 			#endif
 
 			bool	saveasr=pvt->_allowshortreads;
@@ -1028,14 +1043,15 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				if (pvt->_allowshortreads) {
 					#if defined(DEBUG_READ) && \
 						defined(DEBUG_BUFFERING)
-					printf("EOF\n");
+					stdoutput.printf("EOF\n");
 					#endif
 					return bytesread;
 				}
 
 				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
-				printf("still need %d bytes, reading...\n",
+				stdoutput.printf("still need %d bytes, "
+							"reading...\n",
 							(int)bytesunread);
 				#endif
 				result=safeRead(pvt->_readbuffer,
@@ -1045,7 +1061,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 				if (result>-1 && result!=bytesunread) {
 					#if defined(DEBUG_READ) && \
 						defined(DEBUG_BUFFERING)
-					printf("EOF\n");
+					stdoutput.printf("EOF\n");
 					#endif
 					return bytesread;
 				}
@@ -1054,7 +1070,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			if (result<0) {
 				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
-				printf("error reading...\n");
+				stdoutput.printf("error reading...\n");
 				#endif
 				return result;
 			}
@@ -1063,7 +1079,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			pvt->_readbuffertail=pvt->_readbuffer+result;
 
 			#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
-			printf("read %d bytes\n",(int)result);
+			stdoutput.printf("read %d bytes\n",(int)result);
 			#endif
 		}
 	}
@@ -1079,7 +1095,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	printf("%d: safeRead(%d,",(int)process::getProcessId(),(int)pvt->_fd);
+	stdoutput.printf("%d: safeRead(%d,",
+			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
 	// The result of SSL_read may be undefined if count=0
@@ -1111,7 +1128,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			// return error or timeout
 			if (selectresult<0) {
 				#ifdef DEBUG_READ
-				printf(")\n");
+				stdoutput.printf(")\n");
 				#endif
 				return selectresult;
 			}
@@ -1167,9 +1184,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				character::safePrint(
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
-			printf("(%ld bytes) ",(long)actualread);
+			stdoutput.printf("(%ld bytes) ",(long)actualread);
 			if (actualread==-1) {
-				printf("%s ",error::getErrorString());
+				stdoutput.printf("%s ",error::getErrorString());
 			}
 			fflush(stdout);
 			#endif
@@ -1183,7 +1200,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			if (isusingnonblockingmode &&
 				error::getErrorNumber()==EAGAIN) {
 				#ifdef DEBUG_READ
-				printf(" EAGAIN ");
+				stdoutput.printf(" EAGAIN ");
 				#endif
 				// if we got an EAGAIN, then presumably we're
 				// in non-blocking mode, there was nothing
@@ -1191,7 +1208,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				break;
 			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_READ
-				printf(" EINTR ");
+				stdoutput.printf(" EINTR ");
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the read
@@ -1205,13 +1222,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 					error::getErrorNumber()==0) {
 				// eof condition
 				#ifdef DEBUG_READ
-				printf(" EOF ");
+				stdoutput.printf(" EOF ");
 				#endif
 				break;
 			} else if (actualread==-1) {
 				// error condition
 				#ifdef DEBUG_READ
-				printf(")\n");
+				stdoutput.printf(")\n");
 				#endif
 				return RESULT_ERROR;
 			}
@@ -1222,14 +1239,14 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// if we want to allow short reads, then break out here
 		if (pvt->_allowshortreads) {
 			#ifdef DEBUG_READ
-			printf(" SHORTREAD ");
+			stdoutput.printf(" SHORTREAD ");
 			#endif
 			break;
 		}
 	}
 
 	#ifdef DEBUG_READ
-	printf(",%d)\n",(int)totalread);
+	stdoutput.printf(",%d)\n",(int)totalread);
 	#endif
 	return totalread;
 }
@@ -1247,7 +1264,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					long sec, long usec) const {
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-	printf("bufferedWrite of %d bytes\n",(int)count);
+	stdoutput.printf("bufferedWrite of %d bytes\n",(int)count);
 	#endif
 
 	if (!count) {
@@ -1256,7 +1273,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 
 	if (!pvt->_writebuffer) {
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		printf("no write buffer...\n");
+		stdoutput.printf("no write buffer...\n");
 		#endif
 		return safeWrite(buf,count,sec,usec);
 	}
@@ -1277,16 +1294,21 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						pvt->_writebufferptr;
 
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-		printf("	writebuffersize=%d\n",(int)writebuffersize);
-		printf("	writebufferspace=%d\n",(int)writebufferspace);
-		printf("	byteswritten=%d\n",(int)byteswritten);
-		printf("	bytesunwritten=%d\n",(int)bytesunwritten);
+		stdoutput.printf("	writebuffersize=%d\n",
+						(int)writebuffersize);
+		stdoutput.printf("	writebufferspace=%d\n",
+						(int)writebufferspace);
+		stdoutput.printf("	byteswritten=%d\n",
+						(int)byteswritten);
+		stdoutput.printf("	bytesunwritten=%d\n",
+						(int)bytesunwritten);
 		#endif
 
 		if (bytesunwritten<=writebufferspace) {
 
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			printf("buffering %d bytes\n",(int)bytesunwritten);
+			stdoutput.printf("buffering %d bytes\n",
+						(int)bytesunwritten);
 			#endif
 
 			rawbuffer::copy(pvt->_writebufferptr,
@@ -1298,7 +1320,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		} else {
 
 			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			printf("just buffering %d bytes\n",
+			stdoutput.printf("just buffering %d bytes\n",
 						(int)writebufferspace);
 			#endif
 
@@ -1340,7 +1362,8 @@ bool filedescriptor::flushWriteBuffer(long sec, long usec) const {
 	}
 	ssize_t	writebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
 	#if defined(DEBUG_BUFFERING)
-		printf("flush write buffer: %d bytes\n",(int)writebuffersize);
+		stdoutput.printf("flush write buffer: %d bytes\n",
+						(int)writebuffersize);
 	#endif
 	bool	retval=(safeWrite(pvt->_writebuffer,writebuffersize,
 						sec,usec)==writebuffersize);
@@ -1358,7 +1381,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_WRITE
-	printf("%d: safeWrite(%d,",(int)process::getProcessId(),(int)pvt->_fd);
+	stdoutput.printf("%d: safeWrite(%d,",
+			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
 	// The result of SSL_write may be undefined if count=0
@@ -1389,7 +1413,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			// return error or timeout
 			if (selectresult<0) {
 				#ifdef DEBUG_WRITE
-				printf(")\n");
+				stdoutput.printf(")\n");
 				#endif
 				return selectresult;
 			}
@@ -1438,9 +1462,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 				character::safePrint(
 				(static_cast<const unsigned char *>(ptr))[i]);
 			}
-			printf("(%ld bytes) ",(long)actualwrite);
+			stdoutput.printf("(%ld bytes) ",(long)actualwrite);
 			if (actualwrite==-1) {
-				printf("%s ",error::getErrorString());
+				stdoutput.printf("%s ",error::getErrorString());
 			}
 			fflush(stdout);
 			#endif
@@ -1454,7 +1478,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		if (actualwrite!=sizetowrite) {
 			if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_WRITE
-				printf(" EINTR ");
+				stdoutput.printf(" EINTR ");
 				#endif
 				// if we got an EINTR, then we may need to
 				// retry the write
@@ -1468,13 +1492,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 					error::getErrorNumber()==0) {
 				// eof condition
 				#ifdef DEBUG_WRITE
-				printf(" EOF ");
+				stdoutput.printf(" EOF ");
 				#endif
 				break;
 			} else if (actualwrite==-1) {
 				// error condition
 				#ifdef DEBUG_WRITE
-				printf(")\n");
+				stdoutput.printf(")\n");
 				#endif
 				return RESULT_ERROR;
 			}
@@ -1485,14 +1509,14 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		// if we want to allow short writes, then break out here
 		if (pvt->_allowshortwrites) {
 			#ifdef DEBUG_WRITE
-			printf(" SHORTWRITE ");
+			stdoutput.printf(" SHORTWRITE ");
 			#endif
 			break;
 		}
 	}
 
 	#ifdef DEBUG_WRITE
-	printf(",%d)\n",(int)totalwrite);
+	stdoutput.printf(",%d)\n",(int)totalwrite);
 	#endif
 	return totalwrite;
 }
@@ -1937,28 +1961,29 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 			// wrong, this will help debug problems with different
 			// platforms
 			if (!cmptr) {
-				printf("%d: ",(int)process::getProcessId());
-				printf("null cmptr\n");
+				stdoutput.printf("%d: ",
+						(int)process::getProcessId());
+				stdoutput.printf("null cmptr\n");
 			} else {
 				if (cmptr->cmsg_level!=SOL_SOCKET) {
-					printf("%d: ",
+					stdoutput.printf("%d: ",
 						(int)process::getProcessId());
-					printf("got cmsg_level=%ld",
+					stdoutput.printf("got cmsg_level=%ld",
 						static_cast<long>(
 							cmptr->cmsg_level));
-					printf(" instead of %ld",
+					stdoutput.printf(" instead of %ld",
 						static_cast<long>(SOL_SOCKET));
-					printf("\n");
+					stdoutput.printf("\n");
 				}
 				if (cmptr->cmsg_type!=SCM_RIGHTS) {
-					printf("%d: ",
+					stdoutput.printf("%d: ",
 						(int)process::getProcessId());
-					printf("got cmsg_type=%ld",
+					stdoutput.printf("got cmsg_type=%ld",
 						static_cast<long>(
 							cmptr->cmsg_type));
-					printf(" instead of %ld",
+					stdoutput.printf(" instead of %ld",
 						static_cast<long>(SCM_RIGHTS));
-					printf("\n");
+					stdoutput.printf("\n");
 				}
 			}
 		}
@@ -2160,6 +2185,20 @@ bool filedescriptor::getCloseOnExec() {
 	#else
 		#error no FD_CLOEXEC or anything like it
 	#endif
+}
+
+size_t filedescriptor::printf(const char *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	#ifdef RUDIMENTS_HAVE_VDPRINTF
+		size_t	result=vdprintf(pvt->_fd,format,argp);
+	#else
+		stringbuffer	str;
+		str.appendFormatted(format,argp);
+		size_t	result=write(str.getString(),str.getStringLength());
+	#endif
+	va_end(argp);
+	return result;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

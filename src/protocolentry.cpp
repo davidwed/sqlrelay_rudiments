@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -13,7 +14,6 @@
 	#include <netdb.h>
 #endif
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -222,13 +222,13 @@ void protocolentry::print() const {
 		return;
 	}
 
-	printf("Name: %s\n",getName());
-	printf("Alias list:\n");
+	stdoutput.printf("Name: %s\n",getName());
+	stdoutput.printf("Alias list:\n");
 	for (int32_t i=0; getAliasList()[i]; i++) {
-		printf("	%s\n",getAliasList()[i]);
+		stdoutput.printf("	%s\n",getAliasList()[i]);
 	}
 	// some compilers complain without this cast
-	printf("Number: %d\n",(int)getNumber());
+	stdoutput.printf("Number: %d\n",(int)getNumber());
 }
 
 #ifdef RUDIMENTS_NAMESPACE

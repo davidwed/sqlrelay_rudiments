@@ -746,7 +746,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Appends "..." to "string" of length "length" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules. */
-		static size_t	printTo(char *string, size_t length,
+		static size_t	printf(char *string, size_t length,
 						const char *format, ...);
 
 	#include <rudiments/private/charstring.h>

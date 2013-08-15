@@ -165,6 +165,39 @@ variablebuffer *variablebuffer::write(double number) {
 								sizeof(double));
 }
 
+variablebuffer *variablebuffer::writeFormatted(const char *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	variablebuffer	*retval=writeFormatted(format,argp);
+	va_end(argp);
+	return retval;
+}
+
+variablebuffer *variablebuffer::writeFormatted(const char *format,
+							va_list argp) {
+
+	// find out how much space we need
+	size_t	size=vsnprintf(NULL,0,format,argp);
+
+	// if the buffer is too small, extend it
+	if (pvt->_position>=pvt->_buffersize) {
+		extend(pvt->_position-pvt->_buffersize+size);
+	} else if (size>=pvt->_buffersize-pvt->_position) {
+		extend(pvt->_buffersize-pvt->_position+size);
+	}
+
+	// copy the data into the buffer
+	vsnprintf((char *)(pvt->_buffer+pvt->_position),
+				pvt->_buffersize,format,argp);
+
+	// increment the position indices
+	pvt->_position=pvt->_position+size;
+	if (pvt->_position>pvt->_endofbuffer) {
+		pvt->_endofbuffer=pvt->_position;
+	}
+	return this;
+}
+
 void variablebuffer::clear() {
 	// If the buffer has grown beyond the initial size then reallocate it,
 	// otherwise just reset the start and end indices.
@@ -283,6 +316,15 @@ variablebuffer *variablebuffer::append(float number) {
 variablebuffer *variablebuffer::append(double number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(double));
+}
+
+variablebuffer *variablebuffer::appendFormatted(const char *format, ...) {
+	pvt->_position=pvt->_endofbuffer;
+	va_list	argp;
+	va_start(argp,format);
+	variablebuffer	*retval=writeFormatted(format,argp);
+	va_end(argp);
+	return retval;
 }
 
 unsigned char *variablebuffer::_buffer() {

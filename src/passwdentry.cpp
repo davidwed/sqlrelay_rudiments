@@ -6,6 +6,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/system.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 	// for USER_INFO_2, functions
@@ -18,7 +19,6 @@
 	#include <pwd.h>
 #endif
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -462,13 +462,13 @@ void passwdentry::print() const {
 	}
 #endif
 
-	printf("Name: %s\n",getName());
-	printf("Password: %s\n",getPassword());
-	printf("User Id: %ld\n",(long)getUserId());
-	printf("Primary Group Id: %ld\n",(long)getPrimaryGroupId());
-	printf("Real Name: %s\n",getRealName());
-	printf("Home Directory: %s\n",getHomeDirectory());
-	printf("Shell: %s\n",getShell());
+	stdoutput.printf("Name: %s\n",getName());
+	stdoutput.printf("Password: %s\n",getPassword());
+	stdoutput.printf("User Id: %ld\n",(long)getUserId());
+	stdoutput.printf("Primary Group Id: %ld\n",(long)getPrimaryGroupId());
+	stdoutput.printf("Real Name: %s\n",getRealName());
+	stdoutput.printf("Home Directory: %s\n",getHomeDirectory());
+	stdoutput.printf("Shell: %s\n",getShell());
 }
 
 #ifdef RUDIMENTS_NAMESPACE

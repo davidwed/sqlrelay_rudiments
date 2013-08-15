@@ -328,6 +328,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		ssize_t	write(const void *buffer, size_t size,
 					long sec, long usec) const;
 
+		/** Writes "..." to the filedescriptor using "format" which
+		 *  should comply with standard printf formatting rules. */
+		size_t	printf(const char *format, ...);
+
 		/** Reads an unsigned 16-bit integer from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
@@ -969,6 +973,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 
 	#include <rudiments/private/filedescriptor.h>
 };
+
+extern	filedescriptor	stdinput;
+extern	filedescriptor	stdoutput;
+extern	filedescriptor	stderror;
 
 #ifdef RUDIMENTS_NAMESPACE
 }

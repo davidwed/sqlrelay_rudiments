@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAVE_GETSPNAM) || defined(RUDIMENTS_HAVE_GETSPNAM_R)
 	#define RUDIMENTS_HAVE_SHADOW
@@ -15,7 +16,6 @@
 	#include <shadow.h>
 #endif
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -327,20 +327,20 @@ void shadowentry::print() const {
 	}
 	#endif
 
-	printf("Name: %s\n",getName());
-	printf("Encrypted Password: %s\n",getEncryptedPassword());
-	printf("Last Change: %ld\n",getLastChangeDate());
+	stdoutput.printf("Name: %s\n",getName());
+	stdoutput.printf("Encrypted Password: %s\n",getEncryptedPassword());
+	stdoutput.printf("Last Change: %ld\n",getLastChangeDate());
 	// some compilers complain without these casts
-	printf("Days Before Change Allowed: %d\n",
+	stdoutput.printf("Days Before Change Allowed: %d\n",
 				(int)getDaysBeforeChangeAllowed());
-	printf("Days Before Change Required: %d\n",
+	stdoutput.printf("Days Before Change Required: %d\n",
 				(int)getDaysBeforeChangeRequired());
-	printf("Days Before Expiration Warning: %d\n",
+	stdoutput.printf("Days Before Expiration Warning: %d\n",
 				(int)getDaysBeforeExpirationWarning());
-	printf("Days Of Inactivity Allowed: %d\n",
+	stdoutput.printf("Days Of Inactivity Allowed: %d\n",
 				(int)getDaysOfInactivityAllowed());
-	printf("Expiration Date: %d\n",getExpirationDate());
-	printf("Flag: %d\n",getFlag());
+	stdoutput.printf("Expiration Date: %d\n",getExpirationDate());
+	stdoutput.printf("Flag: %d\n",getFlag());
 }
 
 #ifdef RUDIMENTS_NAMESPACE

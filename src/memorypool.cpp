@@ -3,8 +3,8 @@
 
 #include <rudiments/memorypool.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/stdio.h>
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -162,24 +162,25 @@ void memorypool::print() {
 
 	while (listnode) {
 		memnode=listnode->getData();
-		printf("segment %ld(%lx): (%d,%d)\n",
+		stdoutput.printf("segment %ld(%lx): (%d,%d)\n",
 				segmentindex,(unsigned long)memnode,
 				(int)memnode->_size,(int)memnode->_position);
 		for (unsigned long i=0; i<memnode->_position; i++) {
 			if (memnode->_buffer[i]>=' ' && 
 				memnode->_buffer[i]<='~') {
-				printf("'%c'",memnode->_buffer[i]);
+				stdoutput.printf("'%c'",memnode->_buffer[i]);
 			} else {
-				printf("%3d",(int)memnode->_buffer[i]);
+				stdoutput.printf("%3d",
+						(int)memnode->_buffer[i]);
 			}
 			if (!((i+1)%20)) {
-				printf("\n");
+				stdoutput.printf("\n");
 			} else {
-				printf(" ");
+				stdoutput.printf(" ");
 			}
 		}
 		listnode=(memorypoollistnode *)listnode->getNext();
-		printf("\n\n");
+		stdoutput.printf("\n\n");
 		segmentindex++;
 	}
 }

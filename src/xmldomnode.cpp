@@ -5,8 +5,7 @@
 #include <rudiments/xmldomnode.h>
 #include <rudiments/charstring.h>
 #include <rudiments/xmldom.h>
-
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -825,20 +824,20 @@ void xmldomnode::print(xmldomnode *node, stringbuffer *strb) {
 				if (strb) {
 					strb->append(' ');
 				} else {
-					printf(" ");
+					stdoutput.printf(" ");
 				}
 			}
 		}
 		if (strb) {
 			strb->append(*ptr);
 		} else {
-			printf("%c",*ptr);
+			stdoutput.printf("%c",*ptr);
 		}
 		if (*ptr=='>') {
 			if (strb) {
 				strb->append('\n');
 			} else {
-				printf("\n");
+				stdoutput.printf("\n");
 			}
 			if (*(ptr-1)!='/' && !endtag) {
 				indent=indent+2;

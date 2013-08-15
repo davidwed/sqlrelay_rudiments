@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 // for rpcent, functions
 #ifdef RUDIMENTS_HAVE_NETDB_H
@@ -17,7 +18,6 @@
 	#include <rpc/rpc.h>
 #endif
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -245,13 +245,13 @@ void rpcentry::print() const {
 	}
 	#endif
 
-	printf("Name: %s\n",getName());
+	stdoutput.printf("Name: %s\n",getName());
 	// some compilers complain without this cast
-	printf("Number: %d\n",(int)getNumber());
-	printf("Alias list:\n");
+	stdoutput.printf("Number: %d\n",(int)getNumber());
+	stdoutput.printf("Alias list:\n");
 	const char * const *aliaslist=getAliasList();
 	for (int32_t i=0; aliaslist && aliaslist[i]; i++) {
-		printf("	%s\n",aliaslist[i]);
+		stdoutput.printf("	%s\n",aliaslist[i]);
 	}
 }
 

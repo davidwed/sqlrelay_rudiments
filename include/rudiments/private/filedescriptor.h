@@ -51,3 +51,6 @@
 
 	private:
 		filedescriptorprivate	*pvt;
+
+	public:
+		filedescriptor(int32_t fd);

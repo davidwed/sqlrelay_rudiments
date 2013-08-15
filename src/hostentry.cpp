@@ -4,6 +4,7 @@
 #include <rudiments/hostentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -14,7 +15,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>
 #endif
@@ -330,18 +330,18 @@ void hostentry::print() const {
 		return;
 	}
 
-	printf("Name: %s\n",getName());
-	printf("Alias list:\n");
+	stdoutput.printf("Name: %s\n",getName());
+	stdoutput.printf("Alias list:\n");
 	for (int32_t i=0; getAliasList()[i]; i++) {
-		printf("	%s\n",getAliasList()[i]);
+		stdoutput.printf("	%s\n",getAliasList()[i]);
 	}
 	// some compilers complain without these casts
-	printf("Address type: %d\n",(int)getAddressType());
-	printf("Address length: %d\n",(int)getAddressLength());
-	printf("Address list:\n");
+	stdoutput.printf("Address type: %d\n",(int)getAddressType());
+	stdoutput.printf("Address length: %d\n",(int)getAddressLength());
+	stdoutput.printf("Address list:\n");
 	for (int32_t i=0; getAddressList()[i]; i++) {
 		char	*addr=getAddressString(i);
-		printf("	%s\n",addr);
+		stdoutput.printf("	%s\n",addr);
 		delete[] addr;
 	}
 }

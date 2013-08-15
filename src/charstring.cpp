@@ -4,8 +4,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/character.h>
-
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 // for strtold
 #ifndef __USE_GNU
@@ -313,7 +312,7 @@ char *charstring::convertAmount(int64_t amount) {
 	negative[1]='\0';
 	char	*amountstr=new char[length];
 	int64_t	amt=abs(amount);
-	charstring::printTo(amountstr,length,
+	charstring::printf(amountstr,length,
 				"$%s%lld.%02lld",negative,
 				(long long)(amt/100),
 				(long long)(amt-(amt/100*100)));
@@ -749,13 +748,13 @@ char *charstring::parseNumber(double number,
 
 char *charstring::parseNumber(long double number) {
 	char	*str=new char[22];
-	printTo(str,22,"%Lf",number);
+	printf(str,22,"%Lf",number);
 	return str;
 }
 
 char *charstring::parseNumber(long double number, uint16_t scale) {
 	char	*str=new char[22];
-	printTo(str,22,"%.*Lf",scale,number);
+	printf(str,22,"%.*Lf",scale,number);
 	return str;
 }
 
@@ -763,7 +762,7 @@ char *charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
 	size_t	strlength=precision+3;
 	char	*str=new char[strlength];
-	printTo(str,strlength,"%*.*Lf",precision,scale,number);
+	printf(str,strlength,"%*.*Lf",precision,scale,number);
 	return str;
 }
 
@@ -1254,7 +1253,7 @@ void charstring::printBits(unsigned char *bits, uint64_t size) {
 	for (uint64_t i=0; i<size; i++) {
 		unsigned char byte=bits[i];
 		for (int8_t j=7; j>=0; j--) {
-			printf("%d",(byte>>j)&0x01);
+			stdoutput.printf("%d",(byte>>j)&0x01);
 		}
 	}
 }
@@ -1661,7 +1660,7 @@ char *charstring::padString(const char *str, char padchar,
 	return newstring;
 }
 
-size_t charstring::printTo(char *string, size_t length,
+size_t charstring::printf(char *string, size_t length,
 					const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);

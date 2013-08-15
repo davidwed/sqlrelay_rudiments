@@ -1774,6 +1774,10 @@ const void *from; void *to; swab(from,to,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIM
 _swab(NULL,NULL,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE__SWAB,1,Some systems have _swab), AC_MSG_RESULT(no))
 fi
 
+AC_MSG_CHECKING(vdprintf)
+AC_TRY_COMPILE([#include <stdio.h>],
+vdprintf(0,0,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VDPRINTF,1,Some systems have vdprintf), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
@@ -2945,10 +2949,10 @@ fi
 
 if ( test "$INCLUDE_FILEDESCRIPTOR" = "1" )
 then
-	HEADERS="$HEADERS filedescriptor.h"
+	HEADERS="$HEADERS filedescriptor.h stdio.h"
 	PRIVATEHEADERS="$PRIVATEHEADERS filedescriptor.h filedescriptorincludes.h"
-	SRCS="$SRCS filedescriptor.cpp"
-	LOBJS="$LOBJS filedescriptor.lo"
+	SRCS="$SRCS filedescriptor.cpp stdio.cpp"
+	LOBJS="$LOBJS filedescriptor.lo stdio.lo"
 fi
 
 if ( test "$INCLUDE_FILESYSTEM" = "1" )

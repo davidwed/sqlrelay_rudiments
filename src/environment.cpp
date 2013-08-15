@@ -5,11 +5,11 @@
 #include <rudiments/environment.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <stdio.h>
 
 #ifdef RUDIMENTS_HAVE_ENVIRON
 	#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -197,7 +197,7 @@ const char * const *environment::variables() {
 void environment::print() {
 	const char * const *env=variables();
 	for (uint64_t index=0; env && env[index]; index++) {
-		printf("%s\n",env[index]);
+		stdoutput.printf("%s\n",env[index]);
 	}
 }
 

@@ -1,17 +1,17 @@
 #include <rudiments/codetree.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
-#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_indentlevel; i++) { printf(" "); } }
+#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_indentlevel; i++) { stdoutput.printf(" "); } }
 #ifdef _MSC_VER
-	#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { fprintf(stdout,ARGS,__VA_ARGS__); fflush(stdout); }
+	#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS,__VA_ARGS__); fflush(stdout); }
 #else
-	#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { fprintf(stdout,ARGS); fflush(stdout); }
+	#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS); fflush(stdout); }
 #endif
 #define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { charstring::safePrint(string); }
 #define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { charstring::safePrint(string,length); }
@@ -25,6 +25,7 @@ class codetreeprivate {
 		uint32_t	_indentlevel;
 		const char	*_indentstring;
 		bool		_previousparsechildretval;
+		bool		_break;
 		const char	*_finalcodeposition;
 		uint8_t		_debuglevel;
 };
@@ -36,6 +37,7 @@ codetree::codetree() {
 	pvt->_indentstring="\t";
 	pvt->_grammartag=NULL;
 	pvt->_previousparsechildretval=true;
+	pvt->_break=false;
 	pvt->_finalcodeposition=NULL;
 	pvt->_debuglevel=0;
 }
@@ -230,6 +232,11 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
+	} else if (!charstring::compare(name,"break")) {
+		if (!parseBreak(grammarnode,treeparent,
+					codeposition,localntbuffer)) {
+			retval=false;
+		}
 	} else if (!charstring::compare(name,"nonterminal")) {
 		if (!parseNonTerminal(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
@@ -251,13 +258,15 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 				grammarnode->getNextTagSibling("exception");
 		if (!sibling->isNullNode()) {
 
-			// create some local buffers for parsing the exception
-			const char	*exccodeposition=startcodeposition;
+			// create some local buffers
 			stringbuffer	excntbuffer;
 			xmldomnode	excnode(treeparent->getTree(),
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
 						"temp",NULL);
+
+			// reparse the same code we just parsed
+			const char	*exccodeposition=startcodeposition;
 
 			// parse the exception
 			if (parseException(sibling,&excnode,
@@ -269,7 +278,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 				if (localntbuffer &&
 					!charstring::compare(
 						excntbuffer.getString(),
-					localntbuffer->getString())){
+						localntbuffer->getString())) {
 					retval=false;
 				}
 
@@ -384,7 +393,23 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 	xmldomnode	*child=grammarnode->getFirstTagChild();
 	bool		anyfound=false;
 	for (;;) {
-		if (!parseChild(child,treeparent,codeposition,ntbuffer)) {
+
+		// save old break state and reset break flag
+		bool	oldbreak=pvt->_break;
+		pvt->_break=false;
+
+		// parse the child
+		bool	parseresult=parseChild(child,treeparent,
+						codeposition,ntbuffer);
+
+		// process a break and restore break state
+		if (pvt->_break) {
+			parseresult=false;
+			anyfound=true;
+		}
+		pvt->_break=oldbreak;
+
+		if (!parseresult) {
 			if (anyfound) {
 				debugPrintIndent(4);
 				debugPrintf(4,"repetition success\n");
@@ -430,7 +455,7 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 					grammarnode->getAttributeValue("case"),
 					"false");
 
-	// see the code matches this terminal
+	// see if the code matches this terminal
 	bool	match=false;
 	if (caseinsensitive) {
 		match=!charstring::compareIgnoringCase(
@@ -454,6 +479,40 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 	}
 
 	// if it didn't match, don't advance the code position
+	return false;
+}
+
+bool codetree::parseBreak(xmldomnode *grammarnode,
+				xmldomnode *treeparent,
+				const char **codeposition,
+				stringbuffer *ntbuffer) {
+
+	// get the attributes of this terminal
+	const char	*value=grammarnode->getAttributeValue("value");
+	size_t		valuelength=charstring::length(value);
+	bool		caseinsensitive=!charstring::compare(
+					grammarnode->getAttributeValue("case"),
+					"false");
+
+	// see if the code matches this terminal, return true or false but
+	// don't advance the code position or append the terminal to the
+	// nonterminal
+	bool	match=false;
+	if (caseinsensitive) {
+		match=!charstring::compareIgnoringCase(
+					value,*codeposition,valuelength);
+	} else {
+		match=!charstring::compare(value,*codeposition,valuelength);
+	}
+
+	if (match) {
+		pvt->_break=true;
+		debugPrintIndent(4);
+		debugPrintf(4,"break \"");
+		debugSafePrint(4,value);
+		debugPrintf(4,"\" found\n");
+		return true;
+	}
 	return false;
 }
 

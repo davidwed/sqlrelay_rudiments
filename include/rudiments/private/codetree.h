@@ -35,6 +35,10 @@
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,
 					rudiments::stringbuffer *ntbuffer);
+		bool	parseBreak(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *ntbuffer);
 		bool	parseNonTerminal(rudiments::xmldomnode *grammarnode,
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,

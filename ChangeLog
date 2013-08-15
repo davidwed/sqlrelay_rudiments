@@ -1,6 +1,7 @@
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
-	added snprintf replacement charstring::printTo
+	added *printf wrappers to charstring, filedescriptor and stringbuffer
+		classes
 	added test/include for sys/signal.h for platforms that need it
 	added support for uadmin with int vs. char 3rd argument
 	added snooze and retry if fork fails with EAGAIN

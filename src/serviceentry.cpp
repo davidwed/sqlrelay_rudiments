@@ -6,6 +6,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -17,7 +18,6 @@
 	#include <netinet/in.h>
 #endif
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -245,13 +245,13 @@ void serviceentry::print() const {
 		return;
 	}
 
-	printf("Name: %s\n",getName());
+	stdoutput.printf("Name: %s\n",getName());
 	// some compilers complain without this cast
-	printf("Port: %d\n",(int)getPort());
-	printf("Protocol: %s\n",getProtocol());
-	printf("Alias list:\n");
+	stdoutput.printf("Port: %d\n",(int)getPort());
+	stdoutput.printf("Protocol: %s\n",getProtocol());
+	stdoutput.printf("Alias list:\n");
 	for (int32_t i=0; getAliasList()[i]; i++) {
-		printf("	%s\n",getAliasList()[i]);
+		stdoutput.printf("	%s\n",getAliasList()[i]);
 	}
 }
 

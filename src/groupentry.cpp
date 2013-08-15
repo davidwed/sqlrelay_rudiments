@@ -6,6 +6,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/system.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
 	// for structs, functions
@@ -18,7 +19,6 @@
 	#include <grp.h>
 #endif
 
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -407,12 +407,12 @@ void groupentry::print() const {
 	}
 #endif
 
-	printf("Name: %s\n",getName());
-	printf("Password: %s\n",getPassword());
-	printf("Group Id: %ld\n",(long)getGroupId());
-	printf("Members:\n");
+	stdoutput.printf("Name: %s\n",getName());
+	stdoutput.printf("Password: %s\n",getPassword());
+	stdoutput.printf("Group Id: %ld\n",(long)getGroupId());
+	stdoutput.printf("Members:\n");
 	for (int i=0; getMembers()[i]; i++) {
-		printf("	%s\n",getMembers()[i]);
+		stdoutput.printf("	%s\n",getMembers()[i]);
 	}
 }
 

@@ -23,8 +23,9 @@ class codetreeprivate;
  *  The top-level tag is <grammar>.  Inside the grammar tag are sets of
  *  <definition> tags, each defining a nonterminal.  Each <definition> tag must
  *  contain sets of <terminal>, <nonterminal>, <alternation>, <repetition>,
- *  <concatenation>, <option> and <exception> tags.  All tags except <terminal>
- *  and <nonterminal> must contain combinations of other tags.
+ *  <concatenation>, <option>, <exception> and <break> tags.  All tags except
+ *  <terminal>, <nonterminal> and <break> must contain combinations of other
+ *  tags.
  *
  *  The <grammar> tag may contain a single attribute:
  *
@@ -164,6 +165,36 @@ class codetreeprivate;
  * not evaluate succussfully and parsing should continue in either case.
  *
  * The <exception> tag defines an exception to the previous tag.
+ *
+ * The <break> tag defines a terminal that, if found, will cause the enclosing
+ * repetition to stop iterating.  This is useful when looking for a particular
+ * set of terminating characters which would otherwise be found by one of the
+ * sibling nonterminals.
+ *
+ *     Example:
+ *     An XML comment starts with <!-- and ends with --> but can consist of
+ *     any characters, digits or symbols internally.  In the definition below,
+ *     without the <break>, the nonterminal "symbol" would consume the --> and
+ *     the rest of the nonterminals would likely consume the entire rest of
+ *     the XML.
+ *
+ *         <definition name="xmlcomment" type="line"
+ *                                 start="&lt;-- " end=" --&gt;">
+ *             <concatenation>
+ *                 <terminal value="&lt;-- "/>
+ *                 <repetition>
+ *                     <alternation>
+ *                         <break value=" --&gt;"/>
+ *                         <nonterminal name="alphabetic_character"/>
+ *                         <nonterminal name="digit"/>
+ *                         <nonterminal name="symbol"/>
+ *                         <nonterminal name="whitespace"/>
+ *                     </alternation>
+ *                 </repetition>
+ *                 <terminal value=" --&gt;"/>
+ *             </concatenation>
+ *         </definition>
+ *
  *
  * These tags may be used together to define nonterminals and ultimately a set
  * of nonterminals may be used to define a grammar.
