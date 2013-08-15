@@ -165,7 +165,7 @@ void chat::flush() {
 	for (;;) {
 		ssize_t	bytesread=pvt->_readfd->read(buffer,sizeof(buffer));
 		#ifdef DEBUG_CHAT
-		charstring::safePrint(buffer,bytesread);
+		stdoutput.safePrint(buffer,bytesread);
 		stdoutput.printf("\n");
 		#endif
 		if (bytesread!=sizeof(buffer)) {
@@ -185,7 +185,7 @@ int32_t chat::expect(const char *string, char **abort) {
 
 	#ifdef DEBUG_CHAT
 	stdoutput.printf("expecting \"");
-	charstring::safePrint(string);
+	stdoutput.safePrint(string);
 	stdoutput.printf(" (%ld second timeout)...\n",pvt->_timeout);
 	#endif
 
@@ -200,7 +200,7 @@ int32_t chat::expect(const char *string, char **abort) {
 		int32_t	result=pvt->_readfd->read(&ch,pvt->_timeout,0);
 
 		#ifdef DEBUG_CHAT
-		character::safePrint(ch);
+		stdoutput.safePrint(ch);
 		fflush(stdout);
 		#endif
 
@@ -242,9 +242,9 @@ int32_t chat::expect(const char *string, char **abort) {
 								abortstring)) {
 				#ifdef DEBUG_CHAT
 				stdoutput.printf("\nabort: \"");
-				charstring::safePrint(response.getString());
+				stdoutput.safePrint(response.getString());
 				stdoutput.printf("\" matched \"");
-				charstring::safePrint(abortstring);
+				stdoutput.safePrint(abortstring);
 				stdoutput.printf("\"\n");
 				#endif
 				if (abort) {
@@ -260,9 +260,9 @@ int32_t chat::expect(const char *string, char **abort) {
 		if (regularexpression::match(response.getString(),string)) {
 			#ifdef DEBUG_CHAT
 			stdoutput.printf("\nsuccess: \"");
-			charstring::safePrint(response.getString());
+			stdoutput.safePrint(response.getString());
 			stdoutput.printf("\" matched \"");
-			charstring::safePrint(string);
+			stdoutput.safePrint(string);
 			stdoutput.printf("\"\n");
 			#endif
 			return RESULT_SUCCESS;

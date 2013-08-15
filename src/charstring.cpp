@@ -312,10 +312,10 @@ char *charstring::convertAmount(int64_t amount) {
 	negative[1]='\0';
 	char	*amountstr=new char[length];
 	int64_t	amt=abs(amount);
-	charstring::printf(amountstr,length,
-				"$%s%lld.%02lld",negative,
-				(long long)(amt/100),
-				(long long)(amt-(amt/100*100)));
+	printf(amountstr,length,
+			"$%s%lld.%02lld",negative,
+			(long long)(amt/100),
+			(long long)(amt-(amt/100*100)));
 	return amountstr;
 }
 
@@ -1195,67 +1195,6 @@ char *charstring::duplicate(const char *str, size_t length) {
 	copy(buffer,str,length);
 	buffer[length]='\0';
 	return buffer;
-}
-
-void charstring::safePrint(const char *string, int32_t length) {
-	const char	*ch=string;
-	for (int32_t i=0; i<length; i++) {
-		character::safePrint(*ch);
-		ch++;
-	}
-}
-
-void charstring::safePrint(const char *string) {
-	safePrint(string,length(string));
-}
-
-void charstring::printBits(unsigned char value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(uint16_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(uint32_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(uint64_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(char value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(int16_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(int32_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(int64_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
-}
-
-void charstring::printBits(unsigned char *bits, uint64_t size) {
-	for (uint64_t i=0; i<size; i++) {
-		unsigned char byte=bits[i];
-		for (int8_t j=7; j>=0; j--) {
-			stdoutput.printf("%d",(byte>>j)&0x01);
-		}
-	}
 }
 
 void charstring::split(const char *string, const char *delimiter,

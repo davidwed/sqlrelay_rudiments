@@ -5,6 +5,7 @@
 	added test/include for sys/signal.h for platforms that need it
 	added support for uadmin with int vs. char 3rd argument
 	added snooze and retry if fork fails with EAGAIN
+	moved safePrint and printBits methods into the filedescriptor class
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually

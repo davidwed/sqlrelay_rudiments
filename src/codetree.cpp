@@ -13,8 +13,8 @@ namespace rudiments {
 #else
 	#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS); fflush(stdout); }
 #endif
-#define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { charstring::safePrint(string); }
-#define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { charstring::safePrint(string,length); }
+#define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string); }
+#define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string,length); }
 
 class codetreeprivate {
 	friend class codetree;

@@ -618,42 +618,6 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  Example: "hello      " -> "   hello   "  */
 		static	void	center(char *str, int32_t length);
 
-		/** Prints "str", however all non-printing characters
-		 *  are printed as hex values of the format: (0x0a) and
-		 *  carriage returns, line feeds and tabs are printed
-		 *  as \n, \r and \t. */
-		static void	safePrint(const char *str);
-
-		/** safePrint()'s "length" characters of "str" */
-		static void	safePrint(const char *str, int32_t length);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(unsigned char value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(uint16_t value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(uint32_t value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(uint64_t value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(char value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(int16_t value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(int32_t value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(int64_t value);
-
-		// Prints "value" as a string of ones and zeros.
-		static void	printBits(unsigned char *bits, uint64_t size);
-
 		/** Parses "string" of length "stringlength" delimited by
 		 *  "delimiter" of length "delimiterlength" and allocates
 		 *  "listlength" elements of "list" to return the parts.  If

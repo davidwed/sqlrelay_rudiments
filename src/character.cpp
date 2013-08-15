@@ -2,7 +2,6 @@
 // See the COPYING file for more information.
 
 #include <rudiments/character.h>
-#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_CTYPE_H
 	#include <ctype.h>
@@ -89,24 +88,6 @@ bool character::inSet(char c, const char *set) {
 		}
 	}
 	return false;
-}
-
-static char hex[17]="0123456789ABCDEF";
-
-void character::safePrint(char c) {
-	if (c=='\r') {
-		stdoutput.printf("\\r");
-	} else if (c=='\n') {
-		stdoutput.printf("\\n");
-	} else if (c=='	') {
-		stdoutput.printf("\\t");
-	} else if (c>=' ' && c<='~') {
-		stdoutput.printf("%c",c);
-	} else {
-		unsigned int	uintc=(unsigned char)c;
-		stdoutput.printf("(0x%c%c|%d)",
-				hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
-	}
 }
 
 #ifdef RUDIMENTS_NAMESPACE

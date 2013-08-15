@@ -328,9 +328,63 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		ssize_t	write(const void *buffer, size_t size,
 					long sec, long usec) const;
 
-		/** Writes "..." to the filedescriptor using "format" which
+		/** Prints "..." to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules. */
 		size_t	printf(const char *format, ...);
+
+		/** Prints "c" to the filedescriptor, however if "c" is
+		 *  non-printing character then it is printed as a hex value of
+		 *  the format: (0x0a).  Carriage returns, line feeds and tabs
+		 *  are printed as \n, \r and \t. */
+		void	safePrint(char c);
+
+		/** Prints "str" to the filedescriptor, however all non-printing
+		 *  characters are printed as hex values of the format: (0x0a)
+		 *  and carriage returns, line feeds and tabs are printed as
+		 *  \n, \r and \t. */
+		void	safePrint(const char *str);
+
+		/** Prints "length" characters of "str" to the filedescriptor,
+		 *  however all non-printing characters are printed as hex
+		 *  values of the format: (0x0a) and carriage returns, line
+		 *  feeds and tabs are printed as \n, \r and \t. */
+		void	safePrint(const char *str, int32_t length);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(unsigned char value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(uint16_t value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(uint32_t value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(uint64_t value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(char value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(int16_t value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(int32_t value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(int64_t value);
+
+		/** Prints "value" to the file descriptor
+		 *  as a string of ones and zeros. */
+		void	printBits(unsigned char *bits, uint64_t size);
 
 		/** Reads an unsigned 16-bit integer from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that

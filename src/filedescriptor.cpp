@@ -1181,7 +1181,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			actualread=lowLevelRead(ptr,sizetoread);
 			#ifdef DEBUG_READ
 			for (int32_t i=0; i<actualread; i++) {
-				character::safePrint(
+				stdoutput.safePrint(
 					(static_cast<unsigned char *>(ptr))[i]);
 			}
 			stdoutput.printf("(%ld bytes) ",(long)actualread);
@@ -1459,7 +1459,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			actualwrite=lowLevelWrite(ptr,sizetowrite);
 			#ifdef DEBUG_WRITE
 			for (int32_t i=0; i<actualwrite; i++) {
-				character::safePrint(
+				stdoutput.safePrint(
 				(static_cast<const unsigned char *>(ptr))[i]);
 			}
 			stdoutput.printf("(%ld bytes) ",(long)actualwrite);
@@ -2199,6 +2199,84 @@ size_t filedescriptor::printf(const char *format, ...) {
 	#endif
 	va_end(argp);
 	return result;
+}
+
+static char hex[17]="0123456789ABCDEF";
+
+void filedescriptor::safePrint(char c) {
+	if (c=='\r') {
+		printf("\\r");
+	} else if (c=='\n') {
+		printf("\\n");
+	} else if (c=='	') {
+		printf("\\t");
+	} else if (c>=' ' && c<='~') {
+		printf("%c",c);
+	} else {
+		unsigned int	uintc=(unsigned char)c;
+		printf("(0x%c%c|%d)",hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
+	}
+}
+
+void filedescriptor::safePrint(const char *string, int32_t length) {
+	const char	*ch=string;
+	for (int32_t i=0; i<length; i++) {
+		safePrint(*ch);
+		ch++;
+	}
+}
+
+void filedescriptor::safePrint(const char *string) {
+	safePrint(string,charstring::length(string));
+}
+
+void filedescriptor::printBits(unsigned char value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(uint16_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(uint32_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(uint64_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(char value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(int16_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(int32_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(int64_t value) {
+	return printBits(reinterpret_cast<unsigned char *>(&value),
+							sizeof(value));
+}
+
+void filedescriptor::printBits(unsigned char *bits, uint64_t size) {
+	for (uint64_t i=0; i<size; i++) {
+		unsigned char byte=bits[i];
+		for (int8_t j=7; j>=0; j--) {
+			printf("%d",(byte>>j)&0x01);
+		}
+	}
 }
 
 #ifdef RUDIMENTS_NAMESPACE
