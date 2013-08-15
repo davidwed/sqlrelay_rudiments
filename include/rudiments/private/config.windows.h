@@ -1064,6 +1064,9 @@
 /* Some systems have utime */
 /* #undef RUDIMENTS_HAVE_UTIME */
 
+/* Some systems have vdprintf */
+/* #undef RUDIMENTS_HAVE_VDPRINTF */
+
 /* Some systems have utimes */
 /* #undef RUDIMENTS_HAVE_UTIMES */
 
