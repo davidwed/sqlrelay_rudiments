@@ -1962,7 +1962,11 @@ bool file::setAttribute(const char *name, const void *value,
 
 	ssize_t	result;
 	do {
-		result=fsetxattr(fd(),name,value,size,flags);
+		result=fsetxattr(fd(),name,
+				#ifndef RUDIMENTS_HAVE_XFSETXATTR_CONST
+				(void *)
+				#endif
+				value,size,flags);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 
