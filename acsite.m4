@@ -486,6 +486,23 @@ else
 fi
 ])
 
+dnl Checks for uclibc and adds some macros if it is
+AC_DEFUN([FW_CHECK_UCLIBC],
+[
+echo "host_os: $host_os"
+AC_MSG_CHECKING(for uclibc)
+case $host_os in
+	*uclibc* )
+		dnl without this, vsnprintf is undefined
+		CPPFLAGS="$CPPFLAGS -D__USE_BSD"
+		AC_MSG_RESULT(yes)
+		;;
+	* )
+		AC_MSG_RESULT(no)
+		;;
+esac
+])
+
 
 dnl checks if the compiler supports the inline keyword
 dnl defines the macro INLINE

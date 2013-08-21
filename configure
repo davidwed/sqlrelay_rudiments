@@ -15578,6 +15578,22 @@ $as_echo "no" >&6; }
 fi
 
 
+echo "host_os: $host_os"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for uclibc" >&5
+$as_echo_n "checking for uclibc... " >&6; }
+case $host_os in
+	*uclibc* )
+				CPPFLAGS="$CPPFLAGS -D__USE_BSD"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		;;
+	* )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		;;
+esac
+
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dynamic library extension" >&5
 $as_echo_n "checking for dynamic library extension... " >&6; }
