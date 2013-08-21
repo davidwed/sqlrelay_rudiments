@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 
+// for vsnprintf
 #include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
