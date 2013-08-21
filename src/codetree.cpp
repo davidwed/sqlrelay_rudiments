@@ -3,6 +3,9 @@
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 
+// for fflush, stdout
+#include <stdio.h>
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif

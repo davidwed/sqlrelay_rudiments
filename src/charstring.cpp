@@ -16,6 +16,9 @@
 // include this after the above defines or Haiku can't find strchrnul
 #include <rudiments/stdio.h>
 
+// for vsnprintf
+#include <stdio.h>
+
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
