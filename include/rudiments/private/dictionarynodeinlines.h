@@ -60,7 +60,7 @@ DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARYNODE_CLASS::print() const {
 	keyutil.print(key);
-	printf(":");
+	stdoutput.printf(":");
 	datautil.print(data);
 }
 
