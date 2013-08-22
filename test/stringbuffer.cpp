@@ -3,9 +3,7 @@
 
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
-
-// for NULL
-#include <stdlib.h>
+#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

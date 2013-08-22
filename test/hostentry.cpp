@@ -8,8 +8,7 @@
 // for AF_INET
 #include <netdb.h>
 
-// for NULL
-#include <stdlib.h>
+#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

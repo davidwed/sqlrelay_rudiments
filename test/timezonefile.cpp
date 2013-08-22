@@ -4,7 +4,7 @@
 #include <rudiments/timezonefile.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

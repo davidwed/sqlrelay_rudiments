@@ -5,9 +5,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
-
-// for NULL
-#include <stdlib.h>
+#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
