@@ -13,6 +13,11 @@
 	#define __USE_ISOC9X
 #endif
 
+// Redhat 6.2 needs _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
+
 // include this after the above defines or Haiku can't find strchrnul
 #include <rudiments/stdio.h>
 
