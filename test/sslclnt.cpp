@@ -4,8 +4,11 @@
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAS_SSL
+#include <openssl/ssl.h>
 #include <openssl/err.h>
 #endif
 
@@ -28,7 +31,7 @@ int main(int argc, const char **argv) {
 	SSL_library_init();
 	SSL_load_error_strings();
 
-	// Create a new client context usng SSLv2.
+	// Create a new client context usng SSLv2/3
 	SSL_CTX	*ctx=SSL_CTX_new(SSLv23_client_method());
 
 	// in cases where a re-negotiation must take place during an SSL_read
@@ -57,35 +60,38 @@ int main(int argc, const char **argv) {
 
 	// create an inet socket client
 	inetclientsocket	clnt;
-	clnt.setSSLContext(ctx);
+	clnt.setSSLContext((void *)ctx);
 
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
 		if (errno) {
-			printf("connect failed: %s\n",error::getErrorString());
+			stdoutput.printf("connect failed: %s\n",
+						error::getErrorString());
 		} else {
-			printf("connect failed: ");
+			stdoutput.printf("connect failed: ");
 			ERR_print_errors_fp(stdout);
-			printf("\n");
+			stdoutput.printf("\n");
 		}
 		clnt.close();
-		exit(1);
+		process::exit(1);
 	}
 
+	SSL	*ssl=(SSL *)clnt.getSSL();
+
 	// make sure the server sent a certificate
-	X509	*certificate=SSL_get_peer_certificate(clnt.getSSL());
+	X509	*certificate=SSL_get_peer_certificate(ssl);
 	if (!certificate) {
-		printf("peer sent no certificate\n");
+		stdoutput.printf("peer sent no certificate\n");
 		clnt.close();
-		exit(1);
+		process::exit(1);
 	}
 
 	// make sure the certificate was valid
-	long	result=SSL_get_verify_result(clnt.getSSL());
+	long	result=SSL_get_verify_result(ssl);
 	if (result!=X509_V_OK) {
-		printf("SSL_get_verify_result failed: %ld\n",result);
+		stdoutput.printf("SSL_get_verify_result failed: %ld\n",result);
 		clnt.close();
-		exit(1);
+		process::exit(1);
 	}
 
 	// Make sure the commonname in the certificate is the one we expect it
@@ -97,9 +103,9 @@ int main(int argc, const char **argv) {
 	X509_NAME_get_text_by_NID(X509_get_subject_name(certificate),
 					NID_commonName,commonname,256);
 	if (charstring::compareIgnoringCase(commonname,"server.localdomain")) {
-		printf("%s!=server.localdomain\n",commonname);
+		stdoutput.printf("%s!=server.localdomain\n",commonname);
 		clnt.close();
-		exit(1);
+		process::exit(1);
 	}
 
 	// write "hello" to the server
@@ -109,11 +115,11 @@ int main(int argc, const char **argv) {
 	char	buffer[11];
 	int	sizeread=clnt.read(buffer,10);
 	buffer[sizeread]=(char)NULL;
-	printf("%s\n",buffer);
+	stdoutput.printf("%s\n",buffer);
 
 	// close the connection to the server
 	clnt.close();
 #else
-	printf("rudiments built without ssl support\n");
+	stdoutput.printf("rudiments built without ssl support\n");
 #endif
 }

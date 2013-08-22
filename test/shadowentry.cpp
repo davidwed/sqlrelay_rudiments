@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/shadowentry.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -17,26 +17,27 @@ int main(int argc, const char **argv) {
 	spent.initialize("root");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name: %s\n",spent.getName());
-	printf("	Encrypted Password: %s\n",spent.getEncryptedPassword());
-	printf("	Last Change: %ld\n",
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name: %s\n",spent.getName());
+	stdoutput.printf("	Encrypted Password: %s\n",
+					spent.getEncryptedPassword());
+	stdoutput.printf("	Last Change: %ld\n",
 					spent.getLastChangeDate());
-	printf("	Days Before Change Allowed: %d\n",
+	stdoutput.printf("	Days Before Change Allowed: %d\n",
 					spent.getDaysBeforeChangeAllowed());
-	printf("	Days Before Change Required: %d\n",
+	stdoutput.printf("	Days Before Change Required: %d\n",
 					spent.getDaysBeforeChangeRequired());
-	printf("	Days Before Expiration Warning: %d\n",
+	stdoutput.printf("	Days Before Expiration Warning: %d\n",
 					spent.getDaysBeforeExpirationWarning());
-	printf("	Days Of Inactivity Allowed: %d\n",
+	stdoutput.printf("	Days Of Inactivity Allowed: %d\n",
 					spent.getDaysOfInactivityAllowed());
-	printf("	Expiration Date: %d\n",
+	stdoutput.printf("	Expiration Date: %d\n",
 					spent.getExpirationDate());
-	printf("	Flag: %d\n",spent.getFlag());
-	printf("\n");
+	stdoutput.printf("	Flag: %d\n",spent.getFlag());
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	spent.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

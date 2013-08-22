@@ -6,6 +6,14 @@
 
 #include <rudiments/private/winsock.h>
 
+#ifdef RUDIMENTS_HAS_SSL
+	// Redhat 6.2 needs _GNU_SOURCE
+	#ifndef _GNU_SOURCE
+		#define _GNU_SOURCE
+	#endif
+	#include <openssl/ssl.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
@@ -179,17 +187,17 @@ bool serversocket::listen(int32_t backlog) {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-BIO *serversocket::newSSLBIO() const {
-	return BIO_new_socket(fd(),BIO_NOCLOSE);
+void *serversocket::newSSLBIO() const {
+	return (void *)BIO_new_socket(fd(),BIO_NOCLOSE);
 }
 
 bool serversocket::sslAccept(filedescriptor *sock) {
 	if (ctx()) {
-		sock->setSSLContext(ctx());
+		sock->setSSLContext((SSL_CTX *)ctx());
 		if (!sock->initializeSSL()) {
 			return false;
 		}
-		sslresult(SSL_accept(sock->getSSL()));
+		sslresult(SSL_accept((SSL *)sock->getSSL()));
 		if (sslresult()!=1) {
 			return false;
 		}

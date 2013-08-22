@@ -6,8 +6,9 @@
 #include <rudiments/inetserversocket.h>
 #include <rudiments/charstring.h>
 #include <rudiments/file.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -28,7 +29,7 @@ void myserver::listen() {
 	// make sure that only one instance is running
 	int	pid=checkForPidFile("/tmp/svr.pidfile");
 	if (pid>-1) {
-		printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
+		stdoutput.printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
 	}
 
@@ -43,7 +44,7 @@ void myserver::listen() {
 
 	// listen on inet socket port 8000
 	if (!inetserversocket::listen(NULL,8000,15)) {
-		printf("couldn't listen on port 8000\n");
+		stdoutput.printf("couldn't listen on port 8000\n");
 	}
 
 	// loop...
@@ -69,19 +70,19 @@ myserver	*mysvr;
 
 // define a function to shut down the process cleanly
 void shutDown(int sig) {
-	printf("shutting down\n");
+	stdoutput.printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
 	file::remove("/tmp/svr.pidfile");
-	exit(0);
+	process::exit(0);
 }
 
 
 int main(int argc, const char **argv) {
 
 	if (argc<2) {
-		printf("usage: inetsvrbench [buffer size]\n");
-		exit(1);
+		stdoutput.printf("usage: inetsvrbench [buffer size]\n");
+		process::exit(1);
 	}
 
 	buffersize=charstring::toUnsignedInteger(argv[1]);

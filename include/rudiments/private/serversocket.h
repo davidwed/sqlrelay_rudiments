@@ -3,7 +3,7 @@
 
 #ifdef RUDIMENTS_HAS_SSL
 	protected:
-		BIO	*newSSLBIO() const;
+		void	*newSSLBIO() const;
 		bool	sslAccept(filedescriptor *sock);
 #endif
 		ssize_t	lowLevelRead(void *buf, ssize_t count) const;

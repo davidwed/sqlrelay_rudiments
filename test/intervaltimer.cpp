@@ -1,15 +1,15 @@
 #include <rudiments/intervaltimer.h>
 #include <rudiments/signalclasses.h>
 #include <rudiments/snooze.h>
+#include <rudiments/stdio.h>
 #include <sys/time.h>
-#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
 #endif
 
 void alarmhandler(int sig) {
-	printf("alarm!\n");
+	stdoutput.printf("alarm!\n");
 }
 
 void waitForTimer(intervaltimer *t) {
@@ -20,15 +20,15 @@ void waitForTimer(intervaltimer *t) {
 	long	pusec;
 	t->getInitialInterval(&isec,&iusec);
 	t->getPeriodicInterval(&psec,&pusec);
-	printf("initial: %ldsec %ldusec   ",isec,iusec);
-	printf("periodic: %ldsec %ldusec\n",psec,pusec);
+	stdoutput.printf("initial: %ldsec %ldusec   ",isec,iusec);
+	stdoutput.printf("periodic: %ldsec %ldusec\n",psec,pusec);
 		
 
 	for (;;) {
 		long	sec;
 		long	usec;
 		t->getTimeRemaining(&sec,&usec);
-		printf("time remaining: %ldsec %ldusec\n",sec,usec);
+		stdoutput.printf("time remaining: %ldsec %ldusec\n",sec,usec);
 		if (sec==0 && usec==0) {
 			break;
 		}

@@ -5,7 +5,8 @@
 #include <rudiments/permissions.h>
 #include <rudiments/file.h>
 #include <rudiments/error.h>
-#include <stdio.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,11 +17,11 @@ int main(int argc, const char **argv) {
 	// attach to a shared memory segment keyed to /tmp/shm
         sharedmemory    shm;
         if (!shm.attach(file::generateKey("/tmp/shm",1))) {
-		printf("error: %s\n",error::getErrorString());
-		exit(1);
+		stdoutput.printf("error: %s\n",error::getErrorString());
+		process::exit(1);
 	}
 
 	// display the data contained in the shared memory segment
         char    *shmptr=(char *)shm.getPointer();
-        printf("%s\n",shmptr);
+        stdoutput.printf("%s\n",shmptr);
 }

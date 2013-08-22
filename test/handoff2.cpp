@@ -3,7 +3,8 @@
 
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/permissions.h>
-#include <strings.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -17,8 +18,8 @@ int main(int argc, const char **argv) {
 	for (;;) {
 		int	descriptor;
 		if (!clnt.receiveFileDescriptor(&descriptor)) {
-			printf("receive failed\n");
-			exit(1);
+			stdoutput.printf("receive failed\n");
+			process::exit(1);
 		}
 		filedescriptor	clientsock;
 		clientsock.setFileDescriptor(descriptor);

@@ -1,7 +1,7 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/error.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -15,17 +15,17 @@ int main(int argc, char **argv) {
 
 	const char * const *attrs=testfile.listAttributes();
 	if (attrs) {
-		printf("Attributes:\n");
+		stdoutput.printf("Attributes:\n");
 		for (int i=0; attrs[i]; i++) {
 			unsigned char	*buffer;
 			size_t		size;
 			testfile.getAttribute(attrs[i],&buffer,&size);
-			printf("%s = \"%s\"\n",attrs[i],buffer);
+			stdoutput.printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",error::getErrorString());
+		stdoutput.printf("Error: %s\n",error::getErrorString());
 	}
-	printf("-------------------------------\n");
+	stdoutput.printf("-------------------------------\n");
 
 	testfile.createAttribute("testattr1",
 				(const unsigned char *)"testvalue1",10);
@@ -34,17 +34,17 @@ int main(int argc, char **argv) {
 
 	attrs=testfile.listAttributes();
 	if (attrs) {
-		printf("Attributes:\n");
+		stdoutput.printf("Attributes:\n");
 		for (int i=0; attrs[i]; i++) {
 			unsigned char	*buffer;
 			size_t		size;
 			testfile.getAttribute(attrs[i],&buffer,&size);
-			printf("%s = \"%s\"\n",attrs[i],buffer);
+			stdoutput.printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",error::getErrorString());
+		stdoutput.printf("Error: %s\n",error::getErrorString());
 	}
-	printf("-------------------------------\n");
+	stdoutput.printf("-------------------------------\n");
 
 	testfile.replaceAttribute("testattr1",
 				(const unsigned char *)"testval1",10);
@@ -53,17 +53,17 @@ int main(int argc, char **argv) {
 
 	attrs=testfile.listAttributes();
 	if (attrs) {
-		printf("Attributes:\n");
+		stdoutput.printf("Attributes:\n");
 		for (int i=0; attrs[i]; i++) {
 			unsigned char	*buffer;
 			size_t		size;
 			testfile.getAttribute(attrs[i],&buffer,&size);
-			printf("%s = \"%s\"\n",attrs[i],buffer);
+			stdoutput.printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",error::getErrorString());
+		stdoutput.printf("Error: %s\n",error::getErrorString());
 	}
-	printf("-------------------------------\n");
+	stdoutput.printf("-------------------------------\n");
 
 	testfile.setAttribute("testattr1",(const unsigned char *)"testval1",10);
 	testfile.setAttribute("testattr2",(const unsigned char *)"testval2",10);
@@ -72,17 +72,17 @@ int main(int argc, char **argv) {
 
 	attrs=testfile.listAttributes();
 	if (attrs) {
-		printf("Attributes:\n");
+		stdoutput.printf("Attributes:\n");
 		for (int i=0; attrs[i]; i++) {
 			unsigned char	*buffer;
 			size_t		size;
 			testfile.getAttribute(attrs[i],&buffer,&size);
-			printf("%s = \"%s\"\n",attrs[i],buffer);
+			stdoutput.printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",error::getErrorString());
+		stdoutput.printf("Error: %s\n",error::getErrorString());
 	}
-	printf("-------------------------------\n");
+	stdoutput.printf("-------------------------------\n");
 
 	testfile.removeAttribute("testattr1");
 	testfile.removeAttribute("testattr2");
@@ -91,15 +91,15 @@ int main(int argc, char **argv) {
 
 	attrs=testfile.listAttributes();
 	if (attrs) {
-		printf("Attributes:\n");
+		stdoutput.printf("Attributes:\n");
 		for (int i=0; attrs[i]; i++) {
 			unsigned char	*buffer;
 			size_t		size;
 			testfile.getAttribute(attrs[i],&buffer,&size);
-			printf("%s = \"%s\"\n",attrs[i],buffer);
+			stdoutput.printf("%s = \"%s\"\n",attrs[i],buffer);
 		}
 	} else {
-		printf("Error: %s\n",error::getErrorString());
+		stdoutput.printf("Error: %s\n",error::getErrorString());
 	}
 
 	testfile.close();

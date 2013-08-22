@@ -4,7 +4,7 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -30,11 +30,11 @@ int main(int argc, const char **argv) {
 	// using the semaphores.
         for (int i=0; i<10; i++) {
                 sem.wait(0);
-                printf("2\n");
+                stdoutput.printf("2\n");
                 sem.signal(1);
         
                 sem.wait(0);
-                printf("4\n");
+                stdoutput.printf("4\n");
                 sem.signal(1);
         }
 }

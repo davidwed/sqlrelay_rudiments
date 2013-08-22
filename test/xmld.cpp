@@ -3,7 +3,7 @@
 
 #include <rudiments/xmldom.h>
 #include <rudiments/permissions.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
 	testnode->deleteChild(1);
 
 	stringbuffer	*xml=x.getRootNode()->xml();
-	printf("%s\n",xml->getString());
+	stdoutput.printf("%s\n",xml->getString());
 	x.getRootNode()->cascadeOnDelete();
 	delete xml;
 

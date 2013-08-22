@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/xmldom.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -15,6 +15,6 @@ int main(int argc, const char **argv) {
 	x.parseString("<xml val=\"&quot;&gt;&lt;&apos;&#200;\"/>");
 
 	xmldomnode	*xmlnode=x.getRootNode()->getFirstTagChild("xml");
-	printf("Attribute: %s\n",xmlnode->getAttributeValue("val"));
-	printf("Node: %s\n",xmlnode->xml()->getString());
+	stdoutput.printf("Attribute: %s\n",xmlnode->getAttributeValue("val"));
+	stdoutput.printf("Node: %s\n",xmlnode->xml()->getString());
 }

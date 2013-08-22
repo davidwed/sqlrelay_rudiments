@@ -7,6 +7,8 @@
 	added snooze and retry if fork fails with EAGAIN
 	moved safePrint and printBits methods into the filedescriptor class
 	added a test and handling for fsetxattr with non-const third parameter
+	"hid openssl" by abstracting SSL types and moving includes into .cpp
+		files
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually

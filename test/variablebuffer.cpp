@@ -3,7 +3,11 @@
 
 #include <rudiments/variablebuffer.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/stdio.h>
 #include "test.cpp"
+
+// for NULL
+#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -11,7 +15,7 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 
-	printf("variablebuffer:\n");
+	stdoutput.printf("variablebuffer:\n");
 
 	// create a buffer
 	variablebuffer	vb(10,10);

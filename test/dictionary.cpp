@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/dictionary.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -12,7 +12,7 @@ int main(int argc, const char **argv) {
 
 	// create a dictionary containing string keys and string values
 	dictionary< const char *, const char * >	dict;
-	printf("string keys, string values:\n");
+	stdoutput.printf("string keys, string values:\n");
 
 	// add values to the dictionary
 	dict.setData("1","one");
@@ -21,22 +21,22 @@ int main(int argc, const char **argv) {
 	dict.setData("4","four");
 
 	// display the length and contents of the dictionary
-	printf("length: %lld\n",dict.getList()->getLength());
+	stdoutput.printf("length: %lld\n",dict.getList()->getLength());
 	dict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
 	dict.removeData("3");
 	dict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	dict.removeData("2");
 	dict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	dict.removeData("4");
 	dict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	dict.removeData("1");
 	dict.print();
@@ -45,7 +45,7 @@ int main(int argc, const char **argv) {
 
 	// create a dictionary containing long integer keys and string values
 	numericdictionary< const char * >	numdict;
-	printf("integer keys, string values:\n");
+	stdoutput.printf("integer keys, string values:\n");
 
 	// add values to the dictionary
 	numdict.setData(1,"one");
@@ -54,33 +54,33 @@ int main(int argc, const char **argv) {
 	numdict.setData(4,"four");
 
 	// display the length and contents of the dictionary
-	printf("length: %lld\n",numdict.getList()->getLength());
+	stdoutput.printf("length: %lld\n",numdict.getList()->getLength());
 	numdict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
 	numdict.removeData(3);
 	numdict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	numdict.removeData(2);
 	numdict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	numdict.removeData(4);
 	numdict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	numdict.removeData(1);
 	numdict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 
 	// create a dictionary containing double precision
 	// floating point keys and string values
 	dictionary< double, const char * >	doubledict;
-	printf("floating point keys, string values:\n");
+	stdoutput.printf("floating point keys, string values:\n");
 
 	// add values to the dictionary
 	doubledict.setData(1.1,"one point one");
@@ -89,24 +89,24 @@ int main(int argc, const char **argv) {
 	doubledict.setData(4.4,"four point four");
 
 	// display the length and contents of the dictionary
-	printf("length: %lld\n",doubledict.getList()->getLength());
+	stdoutput.printf("length: %lld\n",doubledict.getList()->getLength());
 	doubledict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
 	doubledict.removeData(3.3);
 	doubledict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	doubledict.removeData(2.2);
 	doubledict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	doubledict.removeData(4.4);
 	doubledict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 	doubledict.removeData(1.1);
 	doubledict.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

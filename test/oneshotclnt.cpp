@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/inetclientsocket.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -23,14 +23,14 @@ int main(int argc, const char **argv) {
 	char	buffer[6];
 	int	sizeread=clnt.read(buffer,5);
 	buffer[sizeread]=(char)NULL;
-	printf("%s\n",buffer);
+	stdoutput.printf("%s\n",buffer);
 
 	// since the oneshotsvr will only send 1 message, then wait, we
 	// can test read-with-timeout here
 	if (clnt.read(buffer,10,1,0)==-1) {
-		printf("timeout!!!\n");
+		stdoutput.printf("timeout!!!\n");
 	} else {
-		printf("timeout failed!!!\n");
+		stdoutput.printf("timeout failed!!!\n");
 	}
 
 	// close the connection to the server

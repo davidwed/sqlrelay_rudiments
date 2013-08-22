@@ -7,6 +7,14 @@
 // for FD_ZERO/FD_SET on windows
 #include <rudiments/private/winsock.h>
 
+#ifdef RUDIMENTS_HAS_SSL
+	// Redhat 6.2 needs _GNU_SOURCE
+	#ifndef _GNU_SOURCE
+		#define _GNU_SOURCE
+	#endif
+	#include <openssl/ssl.h>
+#endif
+
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -119,7 +127,8 @@ int32_t listener::safeSelect(long sec, long usec, bool read, bool write) {
 			// if we support SSL, check here to see if the
 			// filedescriptor has SSL data pending
 			#ifdef RUDIMENTS_HAS_SSL
-				SSL	*ssl=current->getData()->getSSL();
+				SSL	*ssl=
+					(SSL *)current->getData()->getSSL();
 				if (ssl && SSL_pending(ssl)) {
 					pvt->_readylist.append(
 						current->getData());

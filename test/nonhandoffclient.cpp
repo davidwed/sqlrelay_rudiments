@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/inetclientsocket.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 #include <time.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -27,5 +27,5 @@ int main(int argc, const char **argv) {
 		clnt.close();
 	}
 
-	printf("total real time: %ld\n",time(NULL)-starttime);
+	stdoutput.printf("total real time: %ld\n",time(NULL)-starttime);
 }

@@ -4,7 +4,7 @@
 #include <rudiments/directory.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -20,42 +20,42 @@ int main(int argc, const char **argv) {
 	f.close();
 
 
-	printf("Contents of testdir:\n");
+	stdoutput.printf("Contents of testdir:\n");
 	directory	d;
 	d.open("testdir");
 
 	char	*name;
 	for (off64_t index=0; (name=d.getChildName(index)); index++) {
-		printf("%lld: %s\n",index,name);
+		stdoutput.printf("%lld: %s\n",index,name);
 		delete[] name;
 	}
 
-	printf("%lld entries\n",d.getChildCount());
+	stdoutput.printf("%lld entries\n",d.getChildCount());
 
 	char	*cwd=directory::getCurrentWorkingDirectory();
-	printf("cwd=%s\n",cwd);
+	stdoutput.printf("cwd=%s\n",cwd);
 	delete[] cwd;
 
 	directory::changeDirectory("testdir");
 
 	cwd=directory::getCurrentWorkingDirectory();
-	printf("cwd=%s\n",cwd);
+	stdoutput.printf("cwd=%s\n",cwd);
 	delete[] cwd;
 
 	directory::changeDirectory("..");
 
 	cwd=directory::getCurrentWorkingDirectory();
-	printf("cwd=%s\n",cwd);
+	stdoutput.printf("cwd=%s\n",cwd);
 	delete[] cwd;
 
 	file::remove("testdir/testfile1");
 	file::remove("testdir/testfile2");
 	directory::remove("testdir");
 
-	printf("maxFileNameLength(/usr/local)=%lld\n",
+	stdoutput.printf("maxFileNameLength(/usr/local)=%lld\n",
 			directory::maxFileNameLength("/usr/local"));
-	printf("maxPathLength(/usr/local)=%lld\n",
+	stdoutput.printf("maxPathLength(/usr/local)=%lld\n",
 			directory::maxPathLength("/usr/local"));
-	printf("canAccessLongFileNames(/usr/local)=%d\n",
+	stdoutput.printf("canAccessLongFileNames(/usr/local)=%d\n",
 			directory::canAccessLongFileNames("/usr/local"));
 }

@@ -3,6 +3,8 @@
 
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
+#include <rudiments/process.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -15,8 +17,9 @@ int main(int argc, const char **argv) {
 
 	// connect to a server listening on /tmp/lsnr.socket
 	if (clnt.connect("/tmp/lsnr.socket",-1,-1,1,1)<0) {
-		printf("connect failed: %s\n",error::getErrorString());
-		exit(0);
+		stdoutput.printf("connect failed: %s\n",
+				error::getErrorString());
+		process::exit(0);
 	}
 
 	// write "hello" to the server
@@ -26,7 +29,7 @@ int main(int argc, const char **argv) {
 	char	buffer[11];
 	int	sizeread=clnt.read(buffer,10);
 	buffer[sizeread]=(char)NULL;
-	printf("%s\n",buffer);
+	stdoutput.printf("%s\n",buffer);
 
 	// close the connection to the server
 	clnt.close();

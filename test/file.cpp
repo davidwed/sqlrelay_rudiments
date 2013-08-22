@@ -6,7 +6,7 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/datetime.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -24,25 +24,26 @@ int main(int argc, const char **argv) {
 	file	fl;
 	fl.create("testfile",permissions::evalPermString("rw-rw----"),"hello");
 
-	printf("testfile:\n");
+	stdoutput.printf("testfile:\n");
 	
 	// check for existence
 	if (file::exists("testfile")) {
-		printf("	exists\n");
+		stdoutput.printf("	exists\n");
 	} else {
-		printf("	does not exist\n");
+		stdoutput.printf("	does not exist\n");
 	}
 
 	// display the permissions of the file
 	mode_t	mode=fl.getPermissions();
-	printf("	permissions: %s\n",permissions::evalPermOctal(mode));
+	stdoutput.printf("	permissions: %s\n",
+				permissions::evalPermOctal(mode));
 
 
 	// display the name of the user that owns the file
 	uid_t	uid=fl.getOwnerUserId();
 	char	*username;
 	passwdentry::getName(uid,&username);
-	printf("	user       : %s\n",username);
+	stdoutput.printf("	user       : %s\n",username);
 	delete[] username;
 
 
@@ -50,87 +51,89 @@ int main(int argc, const char **argv) {
 	gid_t	gid=fl.getOwnerGroupId();
 	char	*groupname;
 	groupentry::getName(gid,&groupname);
-	printf("	group      : %s\n",groupname);
+	stdoutput.printf("	group      : %s\n",groupname);
 	delete[] groupname;
 
 
 	// display the size of the file in bytes
 	off64_t	size=fl.getSize();
-	printf("	size       : %lld\n",size);
+	stdoutput.printf("	size       : %lld\n",size);
 
 
 	// display the size of the file in blocks
 	blkcnt_t	blocks=fl.getBlockCount();
-	printf("	blocks     : %ld\n",blocks);
+	stdoutput.printf("	blocks     : %ld\n",blocks);
 
 
 	// display the file type
-	printf("	is a socket: %d\n",fl.isSocket());
-	printf("	is a symlink: %d\n",fl.isSymbolicLink());
-	printf("	is a regular file: %d\n",fl.isRegularFile());
-	printf("	is a block device: %d\n",fl.isBlockDevice());
-	printf("	is a directory: %d\n",fl.isDirectory());
-	printf("	is a character device: %d\n",fl.isCharacterDevice());
-	printf("	is a fifo: %d\n",fl.isFifo());
+	stdoutput.printf("	is a socket: %d\n",fl.isSocket());
+	stdoutput.printf("	is a symlink: %d\n",fl.isSymbolicLink());
+	stdoutput.printf("	is a regular file: %d\n",fl.isRegularFile());
+	stdoutput.printf("	is a block device: %d\n",fl.isBlockDevice());
+	stdoutput.printf("	is a directory: %d\n",fl.isDirectory());
+	stdoutput.printf("	is a character device: %d\n",
+						fl.isCharacterDevice());
+	stdoutput.printf("	is a fifo: %d\n",fl.isFifo());
 
 
 	// display the last time the file was accessed
 	time_t	atime=fl.getLastAccessTime();
 	char	*atimestr=datetime::getString(atime);
-	printf("	last access      : %s\n",atimestr);
+	stdoutput.printf("	last access      : %s\n",atimestr);
 	delete[] atimestr;
 
 
 	// display the last time the file was modified
 	time_t	mtime=fl.getLastModificationTime();
 	char	*mtimestr=datetime::getString(mtime);
-	printf("	last modification: %s\n",mtimestr);
+	stdoutput.printf("	last modification: %s\n",mtimestr);
 	delete[] mtimestr;
 
 
 	// display the last time the file was changed
 	time_t	ctime=fl.getLastChangeTime();
 	char	*ctimestr=datetime::getString(ctime);
-	printf("	last change      : %s\n",ctimestr);
+	stdoutput.printf("	last change      : %s\n",ctimestr);
 	delete[] ctimestr;
 
 
 	// display the device that the file resides on
 	dev_t	dev=fl.getDevice();
-	printf("	device           : %lld\n",dev);
+	stdoutput.printf("	device           : %lld\n",dev);
 
 
 	// display the type of the device that the file resides on
 	dev_t	devtype=fl.getDeviceType();
-	printf("	device type      : %lld\n",devtype);
+	stdoutput.printf("	device type      : %lld\n",devtype);
 
 
 	// display the file's first inode
 	ino_t	inode=fl.getInode();
-	printf("	inode            : %ld\n",inode);
+	stdoutput.printf("	inode            : %ld\n",inode);
 
 
 	// display the number of hard links to the file
 	nlink_t	nlink=fl.getNumberOfHardLinks();
-	printf("	hard links : %d\n",nlink);
+	stdoutput.printf("	hard links : %d\n",nlink);
 
 
 	const char	*path="/usr/local/firstworks/include/rudiments/file.h";
 	char	*dirname=file::dirname(path);
-	printf("dirname(%s)=%s\n",path,dirname);
+	stdoutput.printf("dirname(%s)=%s\n",path,dirname);
 	delete[] dirname;
 
 	char	*basename=file::basename(path);
-	printf("basename(%s)=%s\n",path,basename);
+	stdoutput.printf("basename(%s)=%s\n",path,basename);
 	delete[] basename;
 
 	basename=file::basename(path,".h");
-	printf("basename(%s,\".h\")=%s\n",path,basename);
+	stdoutput.printf("basename(%s,\".h\")=%s\n",path,basename);
 	delete[] basename;
 
-	printf("key=%d\n",file::generateKey("/",1));
+	stdoutput.printf("key=%d\n",file::generateKey("/",1));
 
-	printf("maxLinks(%s)=%ld\n",path,file::maxLinks(path));
+	stdoutput.printf("maxLinks(%s)=%ld\n",path,file::maxLinks(path));
 
-	printf("canChangeOwner(%s)=%d\n",path,file::canChangeOwner(path));
+	stdoutput.printf("canChangeOwner(%s)=%d\n",
+					path,file::canChangeOwner(path));
 }

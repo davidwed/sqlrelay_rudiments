@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/xmlsax.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -118,7 +118,7 @@ const char	*myxmlsax::getString() {
 int main(int argc, const char **argv) {
 
 	myxmlsax	x;
-	printf("=====================================================\n");
+	stdoutput.printf("=====================================================\n");
 	x.parseString("\n\
 <?xml version=\"1.0\" ?>\n\
 <!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n\
@@ -137,12 +137,12 @@ int main(int argc, const char **argv) {
 <![CDATA[ test [ test [ test [test]]]]]>\n\
 </test>\n\
 ");
-	printf("=====================================================\n");
+	stdoutput.printf("=====================================================\n");
 	x.parseFile("xmls.xml");
-	printf("%s\n",x.getString());
+	stdoutput.printf("%s\n",x.getString());
 
 	// bad strings
-	printf("bad xml: %d %d %d %d %d %d %d\n",
+	stdoutput.printf("bad xml: %d %d %d %d %d %d %d\n",
 		x.parseString("<xml><tag></xml>\n")==false,
 		x.parseString("<xml><tag attribute/></xml>\n")==false,
 		x.parseString("<xml><tag attribute/></xml>\n")==false,

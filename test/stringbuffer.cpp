@@ -2,7 +2,10 @@
 // See the file COPYING for more information
 
 #include <rudiments/stringbuffer.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
+
+// for NULL
+#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -21,7 +24,8 @@ int main(int argc, const char **argv) {
 	str->append("hello ")->append("there ")->append("world ");
 
 	// display the length and contents of the buffer
-	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());
+	stdoutput.printf("length: %d\n\"%s\"\n",
+			str->getStringLength(),str->getString());
 
 
 	// append some long integers to the buffer
@@ -32,7 +36,8 @@ int main(int argc, const char **argv) {
 	str->append((int32_t)5)->append(" ");
 
 	// display the length and contents of the buffer
-	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());
+	stdoutput.printf("length: %d\n\"%s\"\n",
+			str->getStringLength(),str->getString());
 
 	str->append(" ");
 
@@ -45,7 +50,8 @@ int main(int argc, const char **argv) {
 	str->append(5.00005,5,0)->append(" ");
 
 	// display the length and contents of the buffer
-	printf("length: %d\n\"%s\"\n",str->getStringLength(),str->getString());
+	stdoutput.printf("length: %d\n\"%s\"\n",
+			str->getStringLength(),str->getString());
 
 
 	// clear the buffer
@@ -56,7 +62,8 @@ int main(int argc, const char **argv) {
 	for (int i=0; i<1024; i++) {
 		str->append('*');
 	}
-	printf("length: %d\n%s\n",str->getStringLength(),str->getString());
+	stdoutput.printf("length: %d\n%s\n",
+			str->getStringLength(),str->getString());
 
 	// delete the buffer
 	delete str;
@@ -75,9 +82,9 @@ int main(int argc, const char **argv) {
 	sb->append("12345");
 	sb->append("12345");
 	for (unsigned int i=0; i<sb->getStringLength(); i++) {
-		printf("%c",sb->getString()[i]);
+		stdoutput.printf("%c",sb->getString()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 	// write 66666 to the buffer at position 0 and display it's contents
@@ -85,9 +92,9 @@ int main(int argc, const char **argv) {
 	sb->setPosition(0);
 	sb->write("66666");
 	for (unsigned int i=0; i<sb->getStringLength(); i++) {
-		printf("%c",sb->getString()[i]);
+		stdoutput.printf("%c",sb->getString()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 	// write 66666 to the buffer at position 30 and display it's contents
@@ -97,12 +104,12 @@ int main(int argc, const char **argv) {
 	sb->write("66666");
 	for (int i=0; i<35; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
-			printf("%c",sb->getString()[i]);
+			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
-			printf(".");
+			stdoutput.printf(".");
 		}
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 	// set the current position to 50
@@ -116,12 +123,12 @@ int main(int argc, const char **argv) {
 	sb->append("12345");
 	for (int i=0; i<55; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
-			printf("%c",sb->getString()[i]);
+			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
-			printf(".");
+			stdoutput.printf(".");
 		}
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// Write 12345 to the buffer at the current position and display it's
 	// contents byte by byte, displaying nonprintable characters as .'s
@@ -131,12 +138,12 @@ int main(int argc, const char **argv) {
 	sb->write("12345");
 	for (int i=0; i<55; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
-			printf("%c",sb->getString()[i]);
+			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
-			printf(".");
+			stdoutput.printf(".");
 		}
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 	// clear the buffer
@@ -146,7 +153,7 @@ int main(int argc, const char **argv) {
 	for (int i=0; i<1024; i++) {
 		sb->append("0");
 	}
-	printf("length: %d\n%s\n",str->getStringLength(),str->getString());
+	stdoutput.printf("length: %d\n%s\n",str->getStringLength(),str->getString());
 
 	delete sb;
 }

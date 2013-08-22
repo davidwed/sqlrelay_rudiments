@@ -8,7 +8,8 @@
 #include <rudiments/unixclientsocket.h>
 #include <rudiments/permissions.h>
 #include <rudiments/error.h>
-#include <stdio.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -42,16 +43,16 @@ int main(int argc, const char **argv) {
 			handoffclientsock=(unixclientsocket *)
 						handoffsock.accept();
 		} else {
-			printf("error or timeout waiting...\n");
+			stdoutput.printf("error or timeout waiting...\n");
 		}
 
 		if (clientsock && handoffclientsock) {
 			if (!handoffclientsock->passFileDescriptor(
 					clientsock->getFileDescriptor())) {
-				printf("pass failed: %d - %s\n",
-					error::getErrorNumber(),
-					error::getErrorString());
-				exit(1);
+				stdoutput.printf("pass failed: %d - %s\n",
+						error::getErrorNumber(),
+						error::getErrorString());
+				process::exit(1);
 			}
 			delete clientsock;
 			clientsock=NULL;

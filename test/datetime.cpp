@@ -11,7 +11,7 @@ using namespace rudiments;
 int main(int argc, const char **argv) {
 
 	// set current time zone to America/New_York
-	printf("setting TZ=America/New_York...\n");
+	stdoutput.printf("setting TZ=America/New_York...\n");
 	environment	env;
 	env.setValue("TZ","America/New_York");
 
@@ -20,55 +20,61 @@ int main(int argc, const char **argv) {
 	dt.getSystemDateAndTime();
 
 	// Write out the different parts of the date.
-	printf("Hour       : %d\n",dt.getHour());
-	printf("Minutes    : %d\n",dt.getMinutes());
-	printf("Seconds	   : %d\n",dt.getSeconds());
-	printf("Month      : %d\n",dt.getMonth());
-	printf("DayOfMonth : %d\n",dt.getDayOfMonth());
-	printf("DayOfWeek  : %d\n",dt.getDayOfWeek());
-	printf("DayOfYear  : %d\n",dt.getDayOfYear());
-	printf("Year       : %d\n",dt.getYear());
-	printf("Daylight Savings Time : %d\n",dt.isDaylightSavingsTime());
-	printf("Time Zone	      : %s\n",dt.getTimeZoneString());
-	printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
-	printf("Seconds since 1970    : %ld\n",dt.getEpoch());
-	printf("Date String	      : %s\n",dt.getString());
+	stdoutput.printf("Hour       : %d\n",dt.getHour());
+	stdoutput.printf("Minutes    : %d\n",dt.getMinutes());
+	stdoutput.printf("Seconds	   : %d\n",dt.getSeconds());
+	stdoutput.printf("Month      : %d\n",dt.getMonth());
+	stdoutput.printf("DayOfMonth : %d\n",dt.getDayOfMonth());
+	stdoutput.printf("DayOfWeek  : %d\n",dt.getDayOfWeek());
+	stdoutput.printf("DayOfYear  : %d\n",dt.getDayOfYear());
+	stdoutput.printf("Year       : %d\n",dt.getYear());
+	stdoutput.printf("Daylight Savings Time : %d\n",
+						dt.isDaylightSavingsTime());
+	stdoutput.printf("Time Zone	      : %s\n",dt.getTimeZoneString());
+	stdoutput.printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
+	stdoutput.printf("Seconds since 1970    : %ld\n",dt.getEpoch());
+	stdoutput.printf("Date String	      : %s\n",dt.getString());
 
 	// use static methods to translate between formats
 	char	*string=datetime::getString(dt.getEpoch());
-	printf("String from Epoch     : %s\n",string);
+	stdoutput.printf("String from Epoch     : %s\n",string);
 	delete[] string;
 	string=datetime::getString(dt.getInternalTimeStructure());
-	printf("String from tm        : %s\n",string);
+	stdoutput.printf("String from tm        : %s\n",string);
 
 	// use static methods to translate between formats
 	time_t	epoch=datetime::getEpoch(string);
-	printf("Epoch from String     : %ld\n",epoch);
+	stdoutput.printf("Epoch from String     : %ld\n",epoch);
 	delete[] string;
 	epoch=datetime::getEpoch(dt.getInternalTimeStructure());
-	printf("Epoch from tm         : %ld\n",epoch);
+	stdoutput.printf("Epoch from tm         : %ld\n",epoch);
 
 	// get time from hardware clock
-	printf("Hardware Clock (assuming GMT): %s\n",
+	stdoutput.printf("Hardware Clock (assuming GMT): %s\n",
 		(dt.getHardwareDateAndTime("GMT"))?
 					dt.getString():"failed");
 
 	// get time from hardware clock adjusting for timezone
-	printf("Adjusted Hardware Clock      : %s\n",
+	stdoutput.printf("Adjusted Hardware Clock      : %s\n",
 		(dt.getAdjustedHardwareDateAndTime("GMT"))?
 					dt.getString():"failed");
 
 	// switch time zones
 	dt.adjustTimeZone("MST");
-	printf("Adjusting time zone to Mountain time: %s\n",dt.getString());
+	stdoutput.printf("Adjusting time zone to Mountain time: %s\n",
+							dt.getString());
 
 	// valid date
 	const char	*str="02/20/1974 12:00:00";
-	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	stdoutput.printf("valid date?  %s  : %d\n",
+					str,datetime::validDateTime(str));
 	str="02/30/1974 12:00:00";
-	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	stdoutput.printf("valid date?  %s  : %d\n",
+					str,datetime::validDateTime(str));
 	str="02/20/1974 12:00:00 EST5EDT";
-	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	stdoutput.printf("valid date?  %s  : %d\n",
+					str,datetime::validDateTime(str));
 	str="02/30/1974 12:00:00 EST5EDT";
-	printf("valid date?  %s  : %d\n",str,datetime::validDateTime(str));
+	stdoutput.printf("valid date?  %s  : %d\n",
+					str,datetime::validDateTime(str));
 }

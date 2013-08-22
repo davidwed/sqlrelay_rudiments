@@ -6,8 +6,9 @@
 #include <rudiments/inetserversocket.h>
 #include <rudiments/snooze.h>
 #include <rudiments/file.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -26,7 +27,7 @@ void myserver::listen() {
 	// make sure that only one instance is running
 	int	pid=checkForPidFile("/tmp/svr.pidfile");
 	if (pid>-1) {
-		printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
+		stdoutput.printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
 	}
 
@@ -52,7 +53,7 @@ void myserver::listen() {
 	char	buffer[6];
 	buffer[5]=(char)NULL;
 	clientsock->read((char *)buffer,5);
-	printf("%s\n",buffer);
+	stdoutput.printf("%s\n",buffer);
 
 
 	// write "hello" back to the client
@@ -71,11 +72,11 @@ myserver	*mysvr;
 
 // define a function to shut down the process cleanly
 void shutDown(int sig) {
-	printf("shutting down\n");
+	stdoutput.printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
 	file::remove("/tmp/svr.pidfile");
-	exit(0);
+	process::exit(0);
 }
 
 

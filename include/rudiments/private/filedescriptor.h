@@ -22,7 +22,7 @@
 		bool		setNoDelay(int32_t onoff);
 
 		#ifdef RUDIMENTS_HAS_SSL
-		virtual	BIO	*newSSLBIO() const;
+		virtual	void	*newSSLBIO() const;
 		#endif
 
 		int32_t	getSockOpt(int32_t level, int32_t optname,
@@ -43,8 +43,8 @@
 		void	fd(int32_t filedes);
 
 		#ifdef RUDIMENTS_HAS_SSL
-		SSL_CTX	*ctx();
-		SSL	*ssl();
+		void	*ctx();
+		void	*ssl();
 		int32_t	sslresult();
 		void	sslresult(int32_t sslrslt);
 		#endif

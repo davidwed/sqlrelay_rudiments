@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/serviceentry.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,20 +16,20 @@ int main(int argc, const char **argv) {
 	se.initialize("smtp","tcp");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",se.getName());
-	printf("	Port:		%d\n",se.getPort());
-	printf("	Protocol:	%s\n",se.getProtocol());
-	printf("	Alias list:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",se.getName());
+	stdoutput.printf("	Port:		%d\n",se.getPort());
+	stdoutput.printf("	Protocol:	%s\n",se.getProtocol());
+	stdoutput.printf("	Alias list:\n");
 	for (int i=0; se.getAliasList()[i]; i++) {
-		printf("		%s\n",se.getAliasList()[i]);
+		stdoutput.printf("		%s\n",se.getAliasList()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	se.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 
@@ -37,18 +37,18 @@ int main(int argc, const char **argv) {
 	se.initialize(25,"tcp");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",se.getName());
-	printf("	Port:		%d\n",se.getPort());
-	printf("	Protocol:	%s\n",se.getProtocol());
-	printf("	Alias list:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",se.getName());
+	stdoutput.printf("	Port:		%d\n",se.getPort());
+	stdoutput.printf("	Protocol:	%s\n",se.getProtocol());
+	stdoutput.printf("	Alias list:\n");
 	for (int i=0; se.getAliasList()[i]; i++) {
-		printf("		%s\n",se.getAliasList()[i]);
+		stdoutput.printf("		%s\n",se.getAliasList()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	se.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

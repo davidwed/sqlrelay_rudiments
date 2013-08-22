@@ -3,7 +3,7 @@
 
 #include <rudiments/system.h>
 #include <rudiments/error.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -11,6 +11,6 @@ using namespace rudiments;
 
 int main(int argc, const char **argv) {
 	if (!system::reboot()) {
-		printf("reboot failed: %s\n",error::getErrorString());
+		stdoutput.printf("reboot failed: %s\n",error::getErrorString());
 	}
 }

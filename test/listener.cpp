@@ -5,7 +5,7 @@
 #include <rudiments/inetserversocket.h>
 #include <rudiments/unixserversocket.h>
 #include <rudiments/permissions.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -17,14 +17,14 @@ int main(int argc, const char **argv) {
 	// listen on inet socket port 1800
 	inetserversocket	inetsock;
 	if (!inetsock.listen(NULL,8000,15)) {
-		printf("couldn't listen on inet socket\n");
+		stdoutput.printf("couldn't listen on inet socket\n");
 	}
 
 
 	// listen on unix socket "/tmp/lsnr.socket"
 	unixserversocket	unixsock;
 	if (!unixsock.listen("/tmp/lsnr.socket",0000,15)) {
-		printf("couldn't listen on unix socket\n");
+		stdoutput.printf("couldn't listen on unix socket\n");
 	}
 
 
@@ -46,12 +46,12 @@ int main(int argc, const char **argv) {
 		filedescriptor	*clientsock;
 		if (fd==&inetsock) {
 			clientsock=inetsock.accept();
-			printf("inetsock: ");
+			stdoutput.printf("inetsock: ");
 		} else if (fd==&unixsock) {
 			clientsock=unixsock.accept();
-			printf("unixsock: ");
+			stdoutput.printf("unixsock: ");
 		} else {
-			printf("error or timeout waiting...\n");
+			stdoutput.printf("error or timeout waiting...\n");
 			continue;
 		}
 
@@ -60,7 +60,7 @@ int main(int argc, const char **argv) {
 		char	buffer[6];
 		buffer[5]=(char)NULL;
 		clientsock->read(buffer,5);
-		printf("%s\n",buffer);
+		stdoutput.printf("%s\n",buffer);
 
 
 		// write "hello" back to the client

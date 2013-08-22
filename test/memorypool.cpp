@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/memorypool.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -12,7 +12,7 @@ int main(int argc, const char **argv) {
 
 	memorypool	*mp=new memorypool(32,16,10);
 
-	printf("first run...\n");
+	stdoutput.printf("first run...\n");
 	for (int i=0; i<20; i++) {
 		char	*segment=(char *)mp->malloc(6);
 		for (int j=0; j<6; j++) {
@@ -21,11 +21,11 @@ int main(int argc, const char **argv) {
 	}
 	mp->print();
 
-	printf("free...\n");
+	stdoutput.printf("free...\n");
 	mp->free();
 	mp->print();
 
-	printf("second run...\n");
+	stdoutput.printf("second run...\n");
 	char	*segment=(char *)mp->malloc(40);
 	for (int j=0; j<40; j++) {
 		segment[j]='z';
@@ -44,11 +44,11 @@ int main(int argc, const char **argv) {
 	}
 	mp->print();
 
-	printf("free...\n");
+	stdoutput.printf("free...\n");
 	mp->free();
 	mp->print();
 
-	printf("short/long/float/double...\n");
+	stdoutput.printf("short/long/float/double...\n");
 
 	short	*sp=(short *)mp->malloc(sizeof(short));
 	long	*lp=(long *)mp->malloc(sizeof(long));
@@ -59,15 +59,15 @@ int main(int argc, const char **argv) {
 	*fp=1.1;
 	*dp=1.1;
 
-	printf("sp: %d  lp: %ld ",*sp,*lp);
-	printf("fp: %f  dp: %f \n",*fp,*dp);
+	stdoutput.printf("sp: %d  lp: %ld ",*sp,*lp);
+	stdoutput.printf("fp: %f  dp: %f \n",*fp,*dp);
 	mp->print();
 
-	printf("free...\n");
+	stdoutput.printf("free...\n");
 	mp->free();
 	mp->print();
 
-	printf("short/long/float/double arrays...\n");
+	stdoutput.printf("short/long/float/double arrays...\n");
 
 	short	*spa=(short *)mp->malloc(sizeof(short)*10);
 	long	*lpa=(long *)mp->malloc(sizeof(long)*10);
@@ -81,12 +81,12 @@ int main(int argc, const char **argv) {
 	}
 
 	for (int i=0; i<10; i++) {
-		printf("sp: %d  lp: %ld ",spa[i],lpa[i]);
-		printf("fp: %f  dp: %f \n",fpa[i],dpa[i]);
+		stdoutput.printf("sp: %d  lp: %ld ",spa[i],lpa[i]);
+		stdoutput.printf("fp: %f  dp: %f \n",fpa[i],dpa[i]);
 	}
 	mp->print();
 
-	printf("free...\n");
+	stdoutput.printf("free...\n");
 	mp->free();
 	mp->print();
 
@@ -101,7 +101,7 @@ int main(int argc, const char **argv) {
 			mp->malloc(i+j);
 			mp->free();
 		}
-		printf("should be: %ld\n",total/11);
+		stdoutput.printf("should be: %ld\n",total/11);
 		mp->print();
 	}
 

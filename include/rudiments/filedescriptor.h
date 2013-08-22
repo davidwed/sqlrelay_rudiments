@@ -63,16 +63,22 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		bool	duplicate(int32_t newfd) const;
 
 		#ifdef RUDIMENTS_HAS_SSL
-		/** Associates SSL context "ctx" with the
+		/** Associates an SSL context "ctx" with the
 		 *  filedescriptor.  Passing in a NULL for "ctx"
 		 *  has the additional side effect of calling
-		 *  deInitializeSSL() below. */
-		void	setSSLContext(SSL_CTX *ctx);
+		 *  deInitializeSSL() below.
+		 *
+		 *  When using OpenSSL, pass in a pointer to an
+		 *  instance of the SSL_CTX structure here. */
+		void	setSSLContext(void *ctx);
 
 		/** Returns the SSL context currently associated
 		 *  with the filedescriptor or NULL if none
-		 *  is currently associated. */
-		SSL_CTX	*getSSLContext();
+		 *  is currently associated.
+		 *
+		 *  When using OpenSSL, cast the result to a
+		 *  pointer to an SSL_CTX structure. */
+		void	*getSSLContext();
 
 		/** Should be called after calling
 		 *  setSSLContext() and one of open(),
@@ -88,8 +94,11 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		/** Returns a pointer to the currently
 		 *  initialized SSL handle or NULL if
 		 *  initializeSSL() has not been called or
-		 *  failed. */
-		SSL	*getSSL() const;
+		 *  failed.
+		 *
+		 *  When using OpenSSL, cast the result to a
+		 *  pointer to an SSL structure. */
+		void	*getSSL() const;
 
 		/** Causes read(), write(), connect(), accept()
 		 *  and close() methods to be performed

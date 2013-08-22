@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/groupentry.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,20 +16,20 @@ int main(int argc, const char **argv) {
 	grent.initialize("bin");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",grent.getName());
-	printf("	Password:	%s\n",grent.getPassword());
-	printf("	Group Id:	%d\n",grent.getGroupId());
-	printf("	Members:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",grent.getName());
+	stdoutput.printf("	Password:	%s\n",grent.getPassword());
+	stdoutput.printf("	Group Id:	%d\n",grent.getGroupId());
+	stdoutput.printf("	Members:\n");
 	for (int i=0; grent.getMembers()[i]; i++) {
-		printf("		%s\n",grent.getMembers()[i]);
+		stdoutput.printf("		%s\n",grent.getMembers()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built in...:\n");
+	stdoutput.printf("Built in...:\n");
 	grent.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 
@@ -37,18 +37,18 @@ int main(int argc, const char **argv) {
 	grent.initialize((gid_t)1);
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",grent.getName());
-	printf("	Password:	%s\n",grent.getPassword());
-	printf("	Group Id:	%d\n",grent.getGroupId());
-	printf("	Members:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",grent.getName());
+	stdoutput.printf("	Password:	%s\n",grent.getPassword());
+	stdoutput.printf("	Group Id:	%d\n",grent.getGroupId());
+	stdoutput.printf("	Members:\n");
 	for (int i=0; grent.getMembers()[i]; i++) {
-		printf("		%s\n",grent.getMembers()[i]);
+		stdoutput.printf("		%s\n",grent.getMembers()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built in...:\n");
+	stdoutput.printf("Built in...:\n");
 	grent.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

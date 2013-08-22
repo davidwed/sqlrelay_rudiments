@@ -3,7 +3,8 @@
 
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/snooze.h>
-#include <stdio.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 #include <time.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -21,19 +22,19 @@ int main(int argc, const char **argv) {
 	for (int i=0; i<100000; i++) {
 		int result=clnt.connect("127.0.0.1",10000,-1,-1,0,1);
 		if (result!=RESULT_SUCCESS) {
-			printf("connect failed\n");
+			stdoutput.printf("connect failed\n");
 			snooze::macrosnooze(2);
 			continue;
 		}
 		sizeread=clnt.read(buffer,5);
 		if (sizeread!=5) {
-			printf("read failed\n");
-			exit(0);
+			stdoutput.printf("read failed\n");
+			process::exit(0);
 		}
 		buffer[sizeread]=(char)NULL;
-		printf("%d: %s\n",i,buffer);
+		stdoutput.printf("%d: %s\n",i,buffer);
 		clnt.close();
 	}
 
-	printf("total real time: %ld\n",time(NULL)-starttime);
+	stdoutput.printf("total real time: %ld\n",time(NULL)-starttime);
 }

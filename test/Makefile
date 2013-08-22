@@ -406,7 +406,7 @@ shutdown$(EXE): shutdown.cpp shutdown.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ shutdown.lo $(ALLSTATIC) $(LIBS)
 
 server.pem:
-	cd certificates; $(MAKE) clean
+	cd certificates; $(MAKE) clean all
 	cp certificates/certificates/ca.pem .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .

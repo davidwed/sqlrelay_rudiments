@@ -3,6 +3,7 @@
 
 #include <rudiments/inetserversocket.h>
 #include <rudiments/permissions.h>
+#include <stdlib.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

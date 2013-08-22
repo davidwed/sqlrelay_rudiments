@@ -3,8 +3,8 @@
 
 #include <rudiments/commandline.h>
 #include <rudiments/charstring.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,8 +16,9 @@ int main(int argc, const char **argv) {
 
 	// if -help was specified, display a usage message
 	if (cmdline.found("-help")) {
-		printf("usage:  divide -divisor number -dividend number\n");
-		exit(0);
+		stdoutput.printf(
+			"usage:  divide -divisor number -dividend number\n");
+		process::exit(0);
 	}
 
 	// If -divisor and -dividend are supplied, use them.  Otherwise
@@ -27,8 +28,8 @@ int main(int argc, const char **argv) {
 					cmdline.getValue("-divisor"));
 		double	dividend=charstring::toFloat(
 					cmdline.getValue("-dividend"));
-		printf("%0.2f\n",divisor/dividend);
+		stdoutput.printf("%0.2f\n",divisor/dividend);
 	} else {
-		printf("You must supply a divisor and a dividend.\n");
+		stdoutput.printf("You must supply a divisor and a dividend.\n");
 	}
 }

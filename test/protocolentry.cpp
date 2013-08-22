@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/protocolentry.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,19 +16,19 @@ int main(int argc, const char **argv) {
 	pe.initialize("tcp");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",pe.getName());
-	printf("	Alias list:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",pe.getName());
+	stdoutput.printf("	Alias list:\n");
 	for (int i=0; pe.getAliasList()[i]; i++) {
-		printf("		%s\n",pe.getAliasList()[i]);
+		stdoutput.printf("		%s\n",pe.getAliasList()[i]);
 	}
-	printf("	Number:		%d\n",pe.getNumber());
-	printf("\n");
+	stdoutput.printf("	Number:		%d\n",pe.getNumber());
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	pe.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 
@@ -36,17 +36,17 @@ int main(int argc, const char **argv) {
 	pe.initialize(6);
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",pe.getName());
-	printf("	Alias list:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",pe.getName());
+	stdoutput.printf("	Alias list:\n");
 	for (int i=0; pe.getAliasList()[i]; i++) {
-		printf("		%s\n",pe.getAliasList()[i]);
+		stdoutput.printf("		%s\n",pe.getAliasList()[i]);
 	}
-	printf("	Number:		%d\n",pe.getNumber());
-	printf("\n");
+	stdoutput.printf("	Number:		%d\n",pe.getNumber());
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	pe.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

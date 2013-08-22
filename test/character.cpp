@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/character.h>
+#include <rudiments/stdio.h>
 #include "test.cpp"
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -266,7 +267,7 @@ int main(int argc, const char **argv) {
 		120,121,122,123,124,125,126,127
 	};
 
-	printf("character:\n");
+	stdoutput.printf("character:\n");
 
 	for (unsigned char c=0; c<128; c++) {
 

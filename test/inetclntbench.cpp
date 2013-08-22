@@ -3,8 +3,8 @@
 
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/error.h>
-
-#include <stdio.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 #include <time.h>
 
 #ifdef RUDIMENTS_NAMESPACE
@@ -14,8 +14,8 @@ using namespace rudiments;
 int main(int argc, const char **argv) {
 
 	if (argc<3) {
-		printf("usage: inetclntbench [buffer size] [bytesperiteration] [iterations]\n");
-		exit(0);
+		stdoutput.printf("usage: inetclntbench [buffer size] [bytesperiteration] [iterations]\n");
+		process::exit(0);
 	}
 
 	uint32_t	buffersize=
@@ -27,8 +27,8 @@ int main(int argc, const char **argv) {
 
 	char	*bytes=new char[bytesperiteration];
 	if (!bytes) {
-		printf("buffer allocation failed\n");
-		exit(0);
+		stdoutput.printf("buffer allocation failed\n");
+		process::exit(0);
 	}
 	for (uint32_t i=0; i<bytesperiteration; i++) {
 		bytes[i]='C';
@@ -39,8 +39,9 @@ int main(int argc, const char **argv) {
 
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
-		printf("connect failed: %s\n",error::getErrorString());
-		exit(1);
+		stdoutput.printf("connect failed: %s\n",
+					error::getErrorString());
+		process::exit(1);
 	}
 
 	clnt.setWriteBufferSize(buffersize);
@@ -51,7 +52,7 @@ int main(int argc, const char **argv) {
 	}
 	clnt.flushWriteBuffer(-1,-1);
 	time_t	end=time(NULL);
-	printf("total time=%ld\n",end-start);
+	stdoutput.printf("total time=%ld\n",end-start);
 
 	// close the connection to the server
 	clnt.close();

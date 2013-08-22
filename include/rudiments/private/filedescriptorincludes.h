@@ -13,16 +13,6 @@ extern "C" {
 	#include <sys/types.h>
 }
 
-#ifdef RUDIMENTS_HAS_SSL
-	// This extern "C" is necessary because the headers for some versions of
-	// SSL include stdio.h and some versions of netbsd (and maybe others)
-	// don't have extern "C" surrounding the definition of vdprintf in
-	// stdio.h
-	extern "C" {
-		#include <openssl/ssl.h>
-	}
-#endif
-
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	// IRIX appears to need this but OpenBSD can't
 	// find select() if it's still defined later

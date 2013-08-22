@@ -7,8 +7,13 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/file.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
+#ifdef RUDIMENTS_HAS_SSL
+#include <openssl/ssl.h>
 #include <openssl/err.h>
+#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -34,7 +39,7 @@ void myserver::listen() {
 	// make sure that only one instance is running
 	int	pid=checkForPidFile("/tmp/svr.pidfile");
 	if (pid>-1) {
-		printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
+		stdoutput.printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
 	}
 
@@ -51,7 +56,7 @@ void myserver::listen() {
 	SSL_library_init();
 	SSL_load_error_strings();
 
-	// Create a new server context usng SSLv2.
+	// Create a new server context usng SSLv2/3
 	SSL_CTX	*ctx=SSL_CTX_new(SSLv23_server_method());
 
 	// in cases where a re-negotiation must take place during an SSL_read
@@ -101,36 +106,36 @@ void myserver::listen() {
 
 	// listen on inet socket port 8000
 	if (!inetserversocket::listen(NULL,8000,15)) {
-		printf("couldn't listen on port 8000\n");
-		exit(0);
+		stdoutput.printf("couldn't listen on port 8000\n");
+		process::exit(0);
 	}
 
 	// loop...
 	for (;;) {
 
 		// attach the ssl context to the server
-		setSSLContext(ctx);
+		setSSLContext((void *)ctx);
 
 		// accept a client connection
 		filedescriptor	*clientsock=accept();
 
 		if (clientsock) {
 
+			SSL	*ssl=(SSL *)clientsock->getSSL();
+
 			// make sure the client sent a certificate
-			X509	*certificate=SSL_get_peer_certificate(
-						clientsock->getSSL());
+			X509	*certificate=SSL_get_peer_certificate(ssl);
 			if (!certificate) {
-				printf("peer sent no certificate\n");
+				stdoutput.printf("peer sent no certificate\n");
 				clientsock->close();
 				delete clientsock;
 				continue;
 			}
 
 			// make sure the certificate was valid
-			long	result=SSL_get_verify_result(
-						clientsock->getSSL());
+			long	result=SSL_get_verify_result(ssl);
 			if (result!=X509_V_OK) {
-				printf("SSL_get_verify_result failed: %ld\n",
+				stdoutput.printf("SSL_get_verify_result failed: %ld\n",
 									result);
 				clientsock->close();
 				continue;
@@ -148,7 +153,7 @@ void myserver::listen() {
 					NID_commonName,commonname,256);
 			if (charstring::compareIgnoringCase(commonname,
 							"client.localdomain")) {
-				printf("%s!=client.localdomain\n",commonname);
+				stdoutput.printf("%s!=client.localdomain\n",commonname);
 				clientsock->close();
 				delete clientsock;
 				continue;
@@ -158,7 +163,7 @@ void myserver::listen() {
 			char	buffer[6];
 			buffer[5]=(char)NULL;
 			clientsock->read((char *)buffer,5);
-			printf("%s\n",buffer);
+			stdoutput.printf("%s\n",buffer);
 
 			// write "hello" back to the client
 			clientsock->write("hello",5);
@@ -168,12 +173,12 @@ void myserver::listen() {
 			// if errno>0 then we got a system error, otherwise we
 			// got an SSL-specific error
 			if (errno) {
-				printf("accept failed: %s\n",
+				stdoutput.printf("accept failed: %s\n",
 					error::getErrorString());
 			} else {
-				printf("accept failed: ");
+				stdoutput.printf("accept failed: ");
 				ERR_print_errors_fp(stdout);
-				printf("\n");
+				stdoutput.printf("\n");
 			}
 		}
 
@@ -188,11 +193,11 @@ myserver	*mysvr;
 
 // define a function to shut down the process cleanly
 void shutDown(int sig) {
-	printf("shutting down\n");
+	stdoutput.printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
 	file::remove("/tmp/svr.pidfile");
-	exit(0);
+	process::exit(0);
 }
 #endif
 
@@ -207,6 +212,6 @@ int main(int argc, const char **argv) {
 
 	mysvr->listen();
 #else
-	printf("rudiments built without ssl support\n");
+	stdoutput.printf("rudiments built without ssl support\n");
 #endif
 }

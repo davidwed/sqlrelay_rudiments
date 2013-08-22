@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/parameterstring.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -14,7 +14,8 @@ int main(int argc, char **argv) {
 
 	pstr.parse("name1=value1;name2='value2';name3='\\'value3\\'';name4=\\\\value4\\\\");
 
-	printf("By Name:\nname1=%s\nname2=%s\nname3=%s\nname4=%s\nname5=%s\n",
+	stdoutput.printf("By Name:\nname1=%s\nname2=%s\n"
+				"name3=%s\nname4=%s\nname5=%s\n",
 				pstr.getValue("name1"),
 				pstr.getValue("name2"),
 				pstr.getValue("name3"),

@@ -22,6 +22,20 @@
 
 #include <rudiments/private/winsock.h>
 
+#ifdef RUDIMENTS_HAS_SSL
+	// This extern "C" is necessary because the headers for some versions of
+	// SSL include stdio.h and some versions of netbsd (and maybe others)
+	// don't have extern "C" surrounding the definition of vdprintf in
+	// stdio.h
+	extern "C" {
+		// Redhat 6.2 needs _GNU_SOURCE
+		#ifndef _GNU_SOURCE
+			#define _GNU_SOURCE
+		#endif
+		#include <openssl/ssl.h>
+	}
+#endif
+
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
@@ -329,15 +343,15 @@ bool filedescriptor::duplicate(int32_t newfd) const {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-void filedescriptor::setSSLContext(SSL_CTX *ctx) {
+void filedescriptor::setSSLContext(void *ctx) {
 	if (!ctx) {
 		deInitializeSSL();
 	}
-	pvt->_ctx=ctx;
+	pvt->_ctx=(SSL_CTX *)ctx;
 }
 
-SSL_CTX *filedescriptor::getSSLContext() {
-	return pvt->_ctx;
+void *filedescriptor::getSSLContext() {
+	return (void *)pvt->_ctx;
 }
 
 bool filedescriptor::initializeSSL() {
@@ -346,7 +360,7 @@ bool filedescriptor::initializeSSL() {
 	}
 	deInitializeSSL();
 	if (pvt->_ctx) {
-		pvt->_bio=newSSLBIO();
+		pvt->_bio=(BIO *)newSSLBIO();
 		pvt->_ssl=SSL_new(pvt->_ctx);
 		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
 	}
@@ -367,12 +381,12 @@ void filedescriptor::deInitializeSSL() {
 	}
 }
 
-SSL *filedescriptor::getSSL() const {
-	return pvt->_ssl;
+void *filedescriptor::getSSL() const {
+	return (void *)pvt->_ssl;
 }
 
-BIO *filedescriptor::newSSLBIO() const {
-	return BIO_new_fd(pvt->_fd,BIO_NOCLOSE);
+void *filedescriptor::newSSLBIO() const {
+	return (void *)BIO_new_fd(pvt->_fd,BIO_NOCLOSE);
 }
 #endif
 
@@ -2130,12 +2144,12 @@ void filedescriptor::fd(int32_t filedes) {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-SSL_CTX *filedescriptor::ctx() {
-	return pvt->_ctx;
+void *filedescriptor::ctx() {
+	return (void *)pvt->_ctx;
 }
 
-SSL *filedescriptor::ssl() {
-	return pvt->_ssl;
+void *filedescriptor::ssl() {
+	return (void *)pvt->_ssl;
 }
 
 int32_t filedescriptor::sslresult() {

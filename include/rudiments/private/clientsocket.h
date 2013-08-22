@@ -3,7 +3,7 @@
 
 	protected:
 #ifdef RUDIMENTS_HAS_SSL
-		BIO	*newSSLBIO() const;
+		void	*newSSLBIO() const;
 #endif
 		int32_t	connect(const struct ::sockaddr *addr,
 				socklen_t addrlen, long sec, long usec);

@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/passwdentry.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -17,27 +17,27 @@ int main(int argc, const char **argv) {
 	pwent.initialize("root");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:			%s\n",
-					pwent.getName());
-	printf("	Password:		%s\n",
-					pwent.getPassword());
-	printf("	User Id:		%d\n",
-					pwent.getUserId());
-	printf("	Primary Group Id:	%d\n",
-					pwent.getPrimaryGroupId());
-	printf("	Real Name:		%s\n",
-					pwent.getRealName());
-	printf("	Home Directory:		%s\n",
-					pwent.getHomeDirectory());
-	printf("	Shell:		%s\n",
-					pwent.getShell());
-	printf("\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:			%s\n",
+						pwent.getName());
+	stdoutput.printf("	Password:		%s\n",
+						pwent.getPassword());
+	stdoutput.printf("	User Id:		%d\n",
+						pwent.getUserId());
+	stdoutput.printf("	Primary Group Id:	%d\n",
+						pwent.getPrimaryGroupId());
+	stdoutput.printf("	Real Name:		%s\n",
+						pwent.getRealName());
+	stdoutput.printf("	Home Directory:		%s\n",
+						pwent.getHomeDirectory());
+	stdoutput.printf("	Shell:		%s\n",
+						pwent.getShell());
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	pwent.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 
@@ -45,25 +45,25 @@ int main(int argc, const char **argv) {
 	pwent.initialize((uid_t)0);
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:			%s\n",
-					pwent.getName());
-	printf("	Password:		%s\n",
-					pwent.getPassword());
-	printf("	User Id:		%d\n",
-					pwent.getUserId());
-	printf("	Primary Group Id:	%d\n",
-					pwent.getPrimaryGroupId());
-	printf("	Real Name:		%s\n",
-					pwent.getRealName());
-	printf("	Home Directory:		%s\n",
-					pwent.getHomeDirectory());
-	printf("	Shell:			%s\n",
-					pwent.getShell());
-	printf("\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:			%s\n",
+						pwent.getName());
+	stdoutput.printf("	Password:		%s\n",
+						pwent.getPassword());
+	stdoutput.printf("	User Id:		%d\n",
+						pwent.getUserId());
+	stdoutput.printf("	Primary Group Id:	%d\n",
+						pwent.getPrimaryGroupId());
+	stdoutput.printf("	Real Name:		%s\n",
+						pwent.getRealName());
+	stdoutput.printf("	Home Directory:		%s\n",
+						pwent.getHomeDirectory());
+	stdoutput.printf("	Shell:			%s\n",
+						pwent.getShell());
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	pwent.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

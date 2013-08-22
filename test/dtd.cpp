@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/dtd.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -13,5 +13,5 @@ int main(int argc, const char **argv) {
 	// display the contents of dtd.dtd
 	dtd	d;
 	d.parseFile("dtd.dtd");
-	printf("%s\n",d.xml()->xml()->getString());
+	stdoutput.printf("%s\n",d.xml()->xml()->getString());
 }

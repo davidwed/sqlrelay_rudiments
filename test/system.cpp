@@ -3,7 +3,7 @@
 
 #include <rudiments/system.h>
 #include <rudiments/charstring.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -12,134 +12,134 @@ using namespace rudiments;
 int main(int argc, const char **argv) {
 
 	char	*name=rudiments::system::getOperatingSystemName();
-	printf("OS Name		: %s\n",name);
+	stdoutput.printf("OS Name		: %s\n",name);
 	delete[] name;
 
 	char	*release=rudiments::system::getOperatingSystemRelease();
-	printf("OS Release	: %s\n",release);
+	stdoutput.printf("OS Release	: %s\n",release);
 	delete[] release;
 
 	char	*version=rudiments::system::getOperatingSystemVersion();
-	printf("OS Version	: %s\n",version);
+	stdoutput.printf("OS Version	: %s\n",version);
 	delete[] version;
 
 	char	*arch=rudiments::system::getOperatingSystemArchitecture();
-	printf("OS Arch		: %s\n",arch);
+	stdoutput.printf("OS Arch		: %s\n",arch);
 	delete[] arch;
 
 	double	onemin;
 	double	fivemin;
 	double	fifteenmin;
 	rudiments::system::getLoadAverages(&onemin,&fivemin,&fifteenmin);
-	printf("Load Averages	: %0.2f  %0.2f  %0.2f\n",
-				onemin,fivemin,fifteenmin);
+	stdoutput.printf("Load Averages	: %0.2f  %0.2f  %0.2f\n",
+					onemin,fivemin,fifteenmin);
 
 	char	*hostname=rudiments::system::getHostName();
-	printf("Host Name	: %s\n",hostname);
+	stdoutput.printf("Host Name	: %s\n",hostname);
 	delete[] hostname;
 
-	printf("Max Cmd Line Arg Length			: %lld\n",
+	stdoutput.printf("Max Cmd Line Arg Length			: %lld\n",
 		(long long)rudiments::system::getMaxCommandLineArgumentLength());
 
-	printf("Max Processes Per User			: %lld\n",
+	stdoutput.printf("Max Processes Per User			: %lld\n",
 			(long long)rudiments::system::getMaxProcessesPerUser());
 
-	printf("Max Host Name Length			: %lld\n",
+	stdoutput.printf("Max Host Name Length			: %lld\n",
 			(long long)rudiments::system::getMaxHostNameLength());
 
-	printf("Max Login Name Length			: %lld\n",
+	stdoutput.printf("Max Login Name Length			: %lld\n",
 			(long long)rudiments::system::getMaxLoginNameLength());
 
-	printf("Clock Ticks Per Second			: %lld\n",
+	stdoutput.printf("Clock Ticks Per Second			: %lld\n",
 			(long long)rudiments::system::getClockTicksPerSecond());
 
-	printf("Max Open Files Per Process		: %lld\n",
+	stdoutput.printf("Max Open Files Per Process		: %lld\n",
 		(long long)rudiments::system::getMaxOpenFilesPerProcess());
 
-	printf("Page Size				: %lld\n",
+	stdoutput.printf("Page Size				: %lld\n",
 			(long long)rudiments::system::getPageSize());
 
-	printf("Max Open Streams Per Process		: %lld\n",
+	stdoutput.printf("Max Open Streams Per Process		: %lld\n",
 		(long long)rudiments::system::getMaxOpenStreamsPerProcess());
 
-	printf("Max Symlink Loops			: %lld\n",
+	stdoutput.printf("Max Symlink Loops			: %lld\n",
 			(long long)rudiments::system::getMaxSymlinkLoops());
 
-	printf("Max Terminal Device Name Length		: %lld\n",
+	stdoutput.printf("Max Terminal Device Name Length		: %lld\n",
 		(long long)rudiments::system::getMaxTerminalDeviceNameLength());
 
-	printf("Max Timezone Name Length		: %lld\n",
+	stdoutput.printf("Max Timezone Name Length		: %lld\n",
 		(long long)rudiments::system::getMaxTimezoneNameLength());
 
-	printf("Max Line Length				: %lld\n",
+	stdoutput.printf("Max Line Length				: %lld\n",
 			(long long)rudiments::system::getMaxLineLength());
 
-	printf("Physical Page Count			: %lld\n",
+	stdoutput.printf("Physical Page Count			: %lld\n",
 			(long long)rudiments::system::getPhysicalPageCount());
 
-	printf("Available Physical Page Count		: %lld\n",
+	stdoutput.printf("Available Physical Page Count		: %lld\n",
 		(long long)rudiments::system::getAvailablePhysicalPageCount());
 
-	printf("Processor Count				: %lld\n",
+	stdoutput.printf("Processor Count				: %lld\n",
 			(long long)rudiments::system::getProcessorCount());
 
-	printf("Max Processor Count			: %lld\n",
+	stdoutput.printf("Max Processor Count			: %lld\n",
 			(long long)rudiments::system::getMaxProcessorCount());
 
-	printf("Processors Online			: %lld\n",
+	stdoutput.printf("Processors Online			: %lld\n",
 			(long long)rudiments::system::getProcessorsOnline());
 
-	printf("Max Supplemental Groups Per User	: %lld\n",
+	stdoutput.printf("Max Supplemental Groups Per User	: %lld\n",
 	(long long)rudiments::system::getMaxSupplementalGroupsPerUser());
 
-	printf("Max Delay Timer Expirations		: %lld\n",
+	stdoutput.printf("Max Delay Timer Expirations		: %lld\n",
 		(long long)rudiments::system::getMaxDelayTimerExpirations());
 
-	printf("Max Realtime Signals			: %lld\n",
+	stdoutput.printf("Max Realtime Signals			: %lld\n",
 			(long long)rudiments::system::getMaxRealtimeSignals());
 
-	printf("Max Sempahores Per Process		: %lld\n",
+	stdoutput.printf("Max Sempahores Per Process		: %lld\n",
 		(long long)rudiments::system::getMaxSemaphoresPerProcess());
 
-	printf("Max Semaphore Value			: %lld\n",
+	stdoutput.printf("Max Semaphore Value			: %lld\n",
 			(long long)rudiments::system::getMaxSemaphoreValue());
 
-	printf("Max Signal Queue Length			: %lld\n",
+	stdoutput.printf("Max Signal Queue Length			: %lld\n",
 		(long long)rudiments::system::getMaxSignalQueueLength());
 
-	printf("Max Timers Per Process			: %lld\n",
+	stdoutput.printf("Max Timers Per Process			: %lld\n",
 			(long long)rudiments::system::getMaxTimersPerProcess());
 
-	printf("Suggested Group Entry Buffer Size	: %lld\n",
+	stdoutput.printf("Suggested Group Entry Buffer Size	: %lld\n",
 	(long long)rudiments::system::getSuggestedGroupEntryBufferSize());
 
-	printf("Suggested Passwd Entry Buffer Size	: %lld\n",
+	stdoutput.printf("Suggested Passwd Entry Buffer Size	: %lld\n",
 	(long long)rudiments::system::getSuggestedPasswordEntryBufferSize());
 
-	printf("Min Thread Stack Size			: %lld\n",
+	stdoutput.printf("Min Thread Stack Size			: %lld\n",
 			(long long)rudiments::system::getMinThreadStackSize());
 
-	printf("Max Threads Per Process			: %lld\n",
+	stdoutput.printf("Max Threads Per Process			: %lld\n",
 			(long long)rudiments::system::getMaxThreadsPerProcess());
 
-	printf("Thread Destructor Iterations		: %lld\n",
+	stdoutput.printf("Thread Destructor Iterations		: %lld\n",
 		(long long)rudiments::system::getThreadDestructorIterations());
 
-	printf("Max Thread Keys				: %lld\n",
+	stdoutput.printf("Max Thread Keys				: %lld\n",
 			(long long)rudiments::system::getMaxThreadKeys());
 
-	printf("Max At-Exit Functions			: %lld\n",
+	stdoutput.printf("Max At-Exit Functions			: %lld\n",
 			(long long)rudiments::system::getMaxAtExitFunctions());
 
-	printf("CPUSet Size				: %lld\n",
+	stdoutput.printf("CPUSet Size				: %lld\n",
 			(long long)rudiments::system::getCPUSetSize());
 
-	printf("Max Password Length			: %lld\n",
+	stdoutput.printf("Max Password Length			: %lld\n",
 			(long long)rudiments::system::getMaxPasswordLength());
 
-	printf("Max Log Name Length			: %lld\n",
+	stdoutput.printf("Max Log Name Length			: %lld\n",
 			(long long)rudiments::system::getMaxLogNameLength());
 
-	printf("Max Process ID				: %lld\n",
+	stdoutput.printf("Max Process ID				: %lld\n",
 			(long long)rudiments::system::getMaxProcessID());
 }

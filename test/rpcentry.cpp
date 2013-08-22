@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/rpcentry.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,19 +16,19 @@ int main(int argc, const char **argv) {
 	re.initialize("portmap");
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",re.getName());
-	printf("	Number:		%d\n",re.getNumber());
-	printf("	Alias list:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",re.getName());
+	stdoutput.printf("	Number:		%d\n",re.getNumber());
+	stdoutput.printf("	Alias list:\n");
 	for (int i=0; re.getAliasList()[i]; i++) {
-		printf("		%s\n",re.getAliasList()[i]);
+		stdoutput.printf("		%s\n",re.getAliasList()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	re.print();
-	printf("\n");
+	stdoutput.printf("\n");
 
 
 
@@ -36,17 +36,17 @@ int main(int argc, const char **argv) {
 	re.initialize(100000);
 
 	// print the components individually
-	printf("Individually...\n");
-	printf("	Name:		%s\n",re.getName());
-	printf("	Number:		%d\n",re.getNumber());
-	printf("	Alias list:\n");
+	stdoutput.printf("Individually...\n");
+	stdoutput.printf("	Name:		%s\n",re.getName());
+	stdoutput.printf("	Number:		%d\n",re.getNumber());
+	stdoutput.printf("	Alias list:\n");
 	for (int i=0; re.getAliasList()[i]; i++) {
-		printf("		%s\n",re.getAliasList()[i]);
+		stdoutput.printf("		%s\n",re.getAliasList()[i]);
 	}
-	printf("\n");
+	stdoutput.printf("\n");
 
 	// use the built in print method
-	printf("Built In...\n");
+	stdoutput.printf("Built In...\n");
 	re.print();
-	printf("\n");
+	stdoutput.printf("\n");
 }

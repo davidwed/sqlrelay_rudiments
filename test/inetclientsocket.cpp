@@ -3,7 +3,8 @@
 
 #include <rudiments/inetclientsocket.h>
 #include <rudiments/error.h>
-#include <stdio.h>
+#include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
@@ -16,8 +17,9 @@ int main(int argc, const char **argv) {
 
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
-		printf("connect failed: %s\n",error::getErrorString());
-		exit(1);
+		stdoutput.printf("connect failed: %s\n",
+					error::getErrorString());
+		process::exit(1);
 	}
 
 	// write "hello" to the server
@@ -27,7 +29,7 @@ int main(int argc, const char **argv) {
 	char	buffer[11];
 	int	sizeread=clnt.read(buffer,10);
 	buffer[sizeread]=(char)NULL;
-	printf("%s\n",buffer);
+	stdoutput.printf("%s\n",buffer);
 
 	// close the connection to the server
 	clnt.close();

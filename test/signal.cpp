@@ -2,14 +2,14 @@
 // See the file COPYING for more information
 
 #include <rudiments/signalclasses.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
 #endif
 
 void handleSigusr1(int sig) {
-	printf("Got a SIGUSR1!\n");
+	stdoutput.printf("Got a SIGUSR1!\n");
 }
 
 int main(int argc, const char **argv) {
