@@ -24,7 +24,7 @@ class variablebufferprivate {
 };
 
 variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
-	init(new unsigned char[initialsize],initialsize,increment);
+	init(NULL,initialsize,increment);
 }
 
 variablebuffer::variablebuffer(unsigned char *initialcontents,
@@ -35,12 +35,17 @@ variablebuffer::variablebuffer(unsigned char *initialcontents,
 void variablebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
 	pvt=new variablebufferprivate;
-	pvt->_buffer=initialcontents;
+	if (initialcontents) {
+		pvt->_buffer=initialcontents;
+		pvt->_endofbuffer=initialsize;
+	} else {
+		pvt->_buffer=new unsigned char[initialsize];
+		pvt->_endofbuffer=0;
+	}
 	pvt->_buffersize=initialsize;
 	pvt->_initialsize=initialsize;
 	pvt->_increment=increment;
 	pvt->_position=0;
-	pvt->_endofbuffer=0;
 }
 
 variablebuffer::variablebuffer(const variablebuffer &v) {

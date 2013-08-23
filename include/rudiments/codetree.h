@@ -21,11 +21,15 @@ class codetreeprivate;
  *  few extensions.
  *
  *  The top-level tag is <grammar>.  Inside the grammar tag are sets of
- *  <definition> tags, each defining a nonterminal.  Each <definition> tag must
- *  contain sets of <terminal>, <nonterminal>, <alternation>, <repetition>,
- *  <concatenation>, <option>, <exception> and <break> tags.  All tags except
- *  <terminal>, <nonterminal> and <break> must contain combinations of other
- *  tags.
+ *  <definition> tags, each defining a nonterminal.
+ *
+ *  Each <definition> tag must contain sets of <terminal>, <letter>,
+ *  <lowercaseletter>, <uppercaseletter>, <digit>, <set>, <nonterminal>,
+ *  <alternation>, <repetition>, <concatenation>, <option>, <exception> and
+ *  <break> tags.
+ *
+ *  The <alternation>, <repetition>, <concatenation>, <option> and <exception>
+ *  tags must contain combinations of other tags.
  *
  *  The <grammar> tag may contain a single attribute:
  *
@@ -136,6 +140,36 @@ class codetreeprivate;
  *         <terminal value="&&"/>
  *         <terminal value="class" case="false"/>
  *
+ * The <letter> tag refers to an alphabetic character, either upper or lower
+ * case.  It is more efficient to use the <letter> tag than to define a
+ * nonterminal for an alphabetic character containing terminals for each
+ * character.
+ *
+ * The <lowercaseletter> tag refers to a lower-case alphabetic character.  It
+ * is more efficient to use the <lowercaseletter> tag than to define a
+ * nonterminal for an alphabetic character containing terminals for each
+ * character.
+ *
+ * The <uppercaseletter> tag refers to a upper-case alphabetic character.  It
+ * is more efficient to use the <uppercaseletter> tag than to define a
+ * nonterminal for an alphabetic character containing terminals for each
+ * character.
+ *
+ * The <digit> tag refers to a numeric digit.  It is more efficient to use the
+ * <digit> tag than to define a nonterminal for a digit containing terminals
+ * for each digit.
+ * 
+ * The <set> tag defines a set of ascii characters or XML entities.  It is more
+ * efficient to use the <set> tag than to define a nonterminal for the set
+ * containing terminals for each ascii character or XML entity.
+ *
+ *     value - The set of ascii characters or XML entities to match.
+ *
+ *     Example:
+ *
+ *        <definition name="symbol" type="none">
+ *            <set value="~`!@#$%^&amp;*()_-+=[{]}|\;:'&quot;,&lt;.&gt;/? "/>
+ *        </definition>
  *
  * The <nonterminal> tag refers to a nonterminal defined elsewhere in the
  * grammar and has the following attributes:

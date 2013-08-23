@@ -35,6 +35,26 @@
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,
 					rudiments::stringbuffer *ntbuffer);
+		bool	parseLetter(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *ntbuffer);
+		bool	parseLowerCaseLetter(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *ntbuffer);
+		bool	parseUpperCaseLetter(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *ntbuffer);
+		bool	parseDigit(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *ntbuffer);
+		bool	parseSet(rudiments::xmldomnode *grammarnode,
+					rudiments::xmldomnode *treeparent,
+					const char **codeposition,
+					rudiments::stringbuffer *ntbuffer);
 		bool	parseBreak(rudiments::xmldomnode *grammarnode,
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,

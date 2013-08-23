@@ -9,6 +9,8 @@
 	added a test and handling for fsetxattr with non-const third parameter
 	"hid openssl" by abstracting SSL types and moving includes into .cpp
 		files
+	fixed erroneous end-of-buffer address when creating a variablebufferis
+		with initial contents
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually

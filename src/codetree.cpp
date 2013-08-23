@@ -1,6 +1,7 @@
 #include <rudiments/codetree.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/stdio.h>
 
 // for fflush, stdout
@@ -19,10 +20,40 @@ namespace rudiments {
 #define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string); }
 #define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string,length); }
 
+class grammar : public xmldom {
+	protected:
+		bool	tagStart(const char *name);
+		bool	attributeName(const char *name);
+};
+
+bool grammar::tagStart(const char *name) {
+	if (!charstring::compare(name,"letter")) {
+		return xmldom::tagStart("ltr");
+	} else if (!charstring::compare(name,"lowercaseletter")) {
+		return xmldom::tagStart("lcl");
+	} else if (!charstring::compare(name,"uppercaseletter")) {
+		return xmldom::tagStart("ucl");
+	} else if (!charstring::compare(name,"digit")) {
+		return xmldom::tagStart("dgt");
+	} else {
+        	char	newname[2];
+		newname[0]=name[0];
+		newname[1]='\0';
+		return xmldom::tagStart(newname);
+	}
+}
+
+bool grammar::attributeName(const char *name) {
+        char	newname[2];
+	newname[0]=name[0];
+	newname[1]='\0';
+	return xmldom::attributeName(newname);
+}
+
 class codetreeprivate {
 	friend class codetree;
 	private:
-		xmldom		_grammar;
+		grammar		_grammar;
 		xmldomnode	*_grammartag;
 		bool		_error;
 		uint32_t	_indentlevel;
@@ -63,8 +94,7 @@ bool codetree::parse(const char *input,
 	if (!pvt->_grammar.parseString(grammar)) {
 		return false;
 	}
-	pvt->_grammartag=pvt->_grammar.getRootNode()->
-					getFirstTagChild("grammar");
+	pvt->_grammartag=pvt->_grammar.getRootNode()->getFirstTagChild("g");
 	if (pvt->_grammartag->isNullNode()) {
 		return false;
 	}
@@ -84,7 +114,7 @@ bool codetree::parse(const char *input,
 }
 
 const char *codetree::getSymbolType(rudiments::xmldomnode *nt) {
-	const char	*symboltype=nt->getAttributeValue("type");
+	const char	*symboltype=nt->getAttributeValue("t");
 	if (!charstring::length(symboltype)) {
 		symboltype="inline";
 	}
@@ -97,8 +127,7 @@ bool codetree::parseNonTerminal(const char *name,
 				stringbuffer *ntbuffer) {
 
 	// find the definition
-	xmldomnode	*def=pvt->_grammartag->getFirstTagChild("definition",
-								"name",name);
+	xmldomnode	*def=pvt->_grammartag->getFirstTagChild("d","n",name);
 	if (def->isNullNode()) {
 		return false;
 	}
@@ -112,6 +141,7 @@ bool codetree::parseNonTerminal(const char *name,
 	// building up another nonterminal that stores a literal value.  In
 	// that case we don't need to do anything but pass the current code
 	// parent and nonterminal buffer forward.
+	const char	*symboltype=getSymbolType(def);
 	if (!ntbuffer) {
 
 		// If no nonterminal buffer was passed in...
@@ -123,7 +153,6 @@ bool codetree::parseNonTerminal(const char *name,
 		// parent forward.  If it has a type of literal, then we
 		// need to create a buffer to build up the value in and pass it
 		// forward.
-		const char	*symboltype=getSymbolType(def);
 		if (charstring::compare(symboltype,"none")) {
 			codenode=new xmldomnode(treeparent->getTree(),
 						treeparent->getNullNode(),
@@ -137,7 +166,7 @@ bool codetree::parseNonTerminal(const char *name,
 	}
 
 	debugPrintIndent(debuglevel);
-	debugPrintf(debuglevel,"nonterminal \"%s\" at \"",name);
+	debugPrintf(debuglevel,"nonterminal (%s) \"%s\" at \"",symboltype,name);
         debugSafePrintLength(debuglevel,*codeposition,
 			(charstring::length(*codeposition)>20)?
 				20:charstring::length(*codeposition));
@@ -186,6 +215,7 @@ bool codetree::parseNonTerminal(const char *name,
 	// apparently we didn't find one of these, delete the
 	// node and buffer and reset the position in the code
 	delete codenode;
+	delete localntbuffer;
 	*codeposition=startcodeposition;
 	return false;
 }
@@ -210,42 +240,67 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	// handle the standard children
 	bool		retval=true;
 	const char	*name=grammarnode->getName();
-	if (!charstring::compare(name,"concatenation")) {
+	if (!charstring::compare(name,"c")) {
 		if (!parseConcatenation(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"alternation")) {
+	} else if (!charstring::compare(name,"a")) {
 		if (!parseAlternation(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"option")) {
+	} else if (!charstring::compare(name,"o")) {
 		if (!parseOption(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"repetition")) {
+	} else if (!charstring::compare(name,"r")) {
 		if (!parseRepetition(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"terminal")) {
+	} else if (!charstring::compare(name,"t")) {
 		if (!parseTerminal(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"break")) {
+	} else if (!charstring::compare(name,"ltr")) {
+		if (!parseLetter(grammarnode,treeparent,
+					codeposition,localntbuffer)) {
+			retval=false;
+		}
+	} else if (!charstring::compare(name,"lcl")) {
+		if (!parseLowerCaseLetter(grammarnode,treeparent,
+					codeposition,localntbuffer)) {
+			retval=false;
+		}
+	} else if (!charstring::compare(name,"ucl")) {
+		if (!parseUpperCaseLetter(grammarnode,treeparent,
+					codeposition,localntbuffer)) {
+			retval=false;
+		}
+	} else if (!charstring::compare(name,"dgt")) {
+		if (!parseDigit(grammarnode,treeparent,
+					codeposition,localntbuffer)) {
+			retval=false;
+		}
+	} else if (!charstring::compare(name,"s")) {
+		if (!parseSet(grammarnode,treeparent,
+					codeposition,localntbuffer)) {
+			retval=false;
+		}
+	} else if (!charstring::compare(name,"b")) {
 		if (!parseBreak(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"nonterminal")) {
+	} else if (!charstring::compare(name,"n")) {
 		if (!parseNonTerminal(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"exception")) {
+	} else if (!charstring::compare(name,"e")) {
 		// ignore exceptions if we encounter them directly
 		retval=pvt->_previousparsechildretval;
 	} else {
@@ -257,8 +312,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	if (retval) {
 
 		// if the next node is an exception...
-		xmldomnode	*sibling=
-				grammarnode->getNextTagSibling("exception");
+		xmldomnode	*sibling=grammarnode->getNextTagSibling("e");
 		if (!sibling->isNullNode()) {
 
 			// create some local buffers
@@ -326,20 +380,20 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
-	debugPrintf(4,"concatenation...\n");
+	debugPrintf(4,"concatenation... {\n");
 
 	// all children must parse successfully
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		if (!parseChild(child,treeparent,codeposition,ntbuffer)) {
 			debugPrintIndent(4);
-			debugPrintf(4,"concatenation failed\n");
+			debugPrintf(4,"} concatenation failed\n");
 			return false;
 		}
 	}
 
 	debugPrintIndent(4);
-	debugPrintf(4,"concatenation success\n");
+	debugPrintf(4,"} concatenation success\n");
 	return true;
 }
 
@@ -348,20 +402,20 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
-	debugPrintf(4,"alternation...\n");
+	debugPrintf(4,"alternation... {\n");
 
 	// one of the children must parse successfully
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		if (parseChild(child,treeparent,codeposition,ntbuffer)) {
 			debugPrintIndent(4);
-			debugPrintf(4,"alternation success\n");
+			debugPrintf(4,"} alternation success\n");
 			return true;
 		}
 	}
 
 	debugPrintIndent(4);
-	debugPrintf(4,"alternation failed\n");
+	debugPrintf(4,"} alternation failed\n");
 	return false;
 }
 
@@ -370,17 +424,17 @@ bool codetree::parseOption(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
-	debugPrintf(4,"option...\n");
+	debugPrintf(4,"option... {\n");
 
 	// there should be only one child and it doesn't
 	// matter if it parses successfully or not
 	if (!parseChild(grammarnode->getFirstTagChild(),treeparent,
 						codeposition,ntbuffer)) {
 		debugPrintIndent(4);
-		debugPrintf(4,"option failed\n");
+		debugPrintf(4,"} option failed\n");
 	} else {
 		debugPrintIndent(4);
-		debugPrintf(4,"option success\n");
+		debugPrintf(4,"} option success\n");
 	}
 	return true;
 }
@@ -390,7 +444,7 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
-	debugPrintf(4,"repetition...\n");
+	debugPrintf(4,"repetition... {\n");
 
 	// there should be only one child, and zero or more instances of it
 	xmldomnode	*child=grammarnode->getFirstTagChild();
@@ -415,10 +469,10 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 		if (!parseresult) {
 			if (anyfound) {
 				debugPrintIndent(4);
-				debugPrintf(4,"repetition success\n");
+				debugPrintf(4,"} repetition success\n");
 			} else {
 				debugPrintIndent(4);
-				debugPrintf(4,"repetition failed\n");
+				debugPrintf(4,"} repetition failed\n");
 			}
 			return true;
 		}
@@ -431,18 +485,18 @@ bool codetree::parseException(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 	debugPrintIndent(4);
-	debugPrintf(4,"exception...\n");
+	debugPrintf(4,"exception... {\n");
 
 	// there should be only one child
 	if (parseChild(grammarnode->getFirstTagChild(),
 				treeparent,codeposition,ntbuffer)) {
 		debugPrintIndent(4);
-		debugPrintf(4,"exception success\n");
+		debugPrintf(4,"} exception success\n");
 		return true;
 	}
 
 	debugPrintIndent(4);
-	debugPrintf(4,"exception failed\n");
+	debugPrintf(4,"} exception failed\n");
 	return false;
 }
 
@@ -452,10 +506,10 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 				stringbuffer *ntbuffer) {
 
 	// get the attributes of this terminal
-	const char	*value=grammarnode->getAttributeValue("value");
+	const char	*value=grammarnode->getAttributeValue("v");
 	size_t		valuelength=charstring::length(value);
 	bool		caseinsensitive=!charstring::compare(
-					grammarnode->getAttributeValue("case"),
+					grammarnode->getAttributeValue("c"),
 					"false");
 
 	// see if the code matches this terminal
@@ -485,16 +539,127 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 	return false;
 }
 
+bool codetree::parseLetter(xmldomnode *grammarnode,
+				xmldomnode *treeparent,
+				const char **codeposition,
+				stringbuffer *ntbuffer) {
+
+	// if it matches, append the terminal to the
+	// nonterminal and advance the code position
+	if (character::isAlphabetical((int32_t)(**codeposition))) {
+		if (ntbuffer) {
+			ntbuffer->append(**codeposition);
+		}
+		debugPrintIndent(4);
+		debugPrintf(4,"letter found: \"%c\"\n",**codeposition);
+		*codeposition=*codeposition+1;
+		return true;
+	}
+
+	// if it didn't match, don't advance the code position
+	return false;
+}
+
+bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
+					const char **codeposition,
+					stringbuffer *ntbuffer) {
+
+	// if it matches, append the terminal to the
+	// nonterminal and advance the code position
+	if (character::isLowerCase((int32_t)(**codeposition))) {
+		if (ntbuffer) {
+			ntbuffer->append(**codeposition);
+		}
+		debugPrintIndent(4);
+		debugPrintf(4,"lower case letter found: \"%c\"\n",
+							**codeposition);
+		*codeposition=*codeposition+1;
+		return true;
+	}
+
+	// if it didn't match, don't advance the code position
+	return false;
+}
+
+bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
+					const char **codeposition,
+					stringbuffer *ntbuffer) {
+
+	// if it matches, append the terminal to the
+	// nonterminal and advance the code position
+	if (character::isUpperCase((int32_t)(**codeposition))) {
+		if (ntbuffer) {
+			ntbuffer->append(**codeposition);
+		}
+		debugPrintIndent(4);
+		debugPrintf(4,"upper case letter found: \"%c\"\n",
+							**codeposition);
+		*codeposition=*codeposition+1;
+		return true;
+	}
+
+	// if it didn't match, don't advance the code position
+	return false;
+}
+
+bool codetree::parseDigit(xmldomnode *grammarnode,
+				xmldomnode *treeparent,
+				const char **codeposition,
+				stringbuffer *ntbuffer) {
+
+	// if it matches, append the terminal to the
+	// nonterminal and advance the code position
+	if (character::isDigit((int32_t)(**codeposition))) {
+		if (ntbuffer) {
+			ntbuffer->append(**codeposition);
+		}
+		debugPrintIndent(4);
+		debugPrintf(4,"digit found: \"%c\"\n",**codeposition);
+		*codeposition=*codeposition+1;
+		return true;
+	}
+
+	// if it didn't match, don't advance the code position
+	return false;
+}
+
+bool codetree::parseSet(xmldomnode *grammarnode,
+				xmldomnode *treeparent,
+				const char **codeposition,
+				stringbuffer *ntbuffer) {
+
+	// get the set value
+	const char	*value=grammarnode->getAttributeValue("v");
+
+	// if it matches, append the terminal to the
+	// nonterminal and advance the code position
+	if (character::inSet((int32_t)(**codeposition),value)) {
+		if (ntbuffer) {
+			ntbuffer->append(**codeposition);
+		}
+		debugPrintIndent(4);
+		debugPrintf(4,"set member found: \"%c\"\n",**codeposition);
+		debugPrintf(4,"set was \"%s\"\n",value);
+		*codeposition=*codeposition+1;
+		return true;
+	}
+
+	// if it didn't match, don't advance the code position
+	return false;
+}
+
 bool codetree::parseBreak(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
 	// get the attributes of this terminal
-	const char	*value=grammarnode->getAttributeValue("value");
+	const char	*value=grammarnode->getAttributeValue("v");
 	size_t		valuelength=charstring::length(value);
 	bool		caseinsensitive=!charstring::compare(
-					grammarnode->getAttributeValue("case"),
+					grammarnode->getAttributeValue("c"),
 					"false");
 
 	// see if the code matches this terminal, return true or false but
@@ -523,7 +688,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
-	return parseNonTerminal(grammarnode->getAttributeValue("name"),
+	return parseNonTerminal(grammarnode->getAttributeValue("n"),
 						treeparent,codeposition,
 						ntbuffer);
 }
@@ -542,14 +707,14 @@ bool codetree::write(xmldomnode *input,
 		return false;
 	}
 	pvt->_grammartag=
-		pvt->_grammar.getRootNode()->getFirstTagChild("grammar");
+		pvt->_grammar.getRootNode()->getFirstTagChild("g");
 	if (pvt->_grammartag->isNullNode()) {
 		return false;
 	}
 
 	// re-init indent
 	pvt->_indentlevel=0;
-	pvt->_indentstring=pvt->_grammartag->getAttributeValue("indent");
+	pvt->_indentstring=pvt->_grammartag->getAttributeValue("i");
 	if (!pvt->_indentstring) {
 		pvt->_indentstring="\t";
 	}
@@ -578,8 +743,8 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	}
 
 	// if the node doesn't have a value then get its definition
-	xmldomnode	*def=pvt->_grammartag->getFirstTagChild("definition",
-							"name",node->getName());
+	xmldomnode	*def=pvt->_grammartag->getFirstTagChild("d",
+							"n",node->getName());
 	if (def->isNullNode()) {
 		return false;
 	}
@@ -590,7 +755,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	bool		line=!charstring::compare(symboltype,"line");
 
 	// write the start
-	const char	*start=def->getAttributeValue("start");
+	const char	*start=def->getAttributeValue("s");
 	if (start && start[0]=='\n') {
 		output->append('\n');
 		start++;
@@ -633,7 +798,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	}
 
 	// write the end
-	const char	*end=def->getAttributeValue("end");
+	const char	*end=def->getAttributeValue("e");
 	bool		backspace=(end && end[0]=='\b' &&
 					charstring::length(end)>1);
 	if (backspace) {
