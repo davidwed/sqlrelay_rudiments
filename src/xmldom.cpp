@@ -31,16 +31,27 @@ class xmldomprivate {
 		xmldomnode			*_rootnode;
 		xmldomnode			*_currentparent;
 		xmldomnode			*_currentattribute;
+		bool				_stringcacheenabled;
 		stringlist			_strlist;
 		linkedlist<unsigned long>	_refcountlist;
 };
 
 xmldom::xmldom() : xmlsax() {
+	init(true);
+}
+
+
+xmldom::xmldom(bool stringcacheenabled) : xmlsax() {
+	init(stringcacheenabled);
+}
+
+void xmldom::init(bool stringcacheenabled) {
 	pvt=new xmldomprivate;
 	pvt->_nullnode=xmldomnode::createNullNode(this);
 	pvt->_rootnode=pvt->_nullnode;
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
+	pvt->_stringcacheenabled=stringcacheenabled;
 }
 
 xmldom::~xmldom() {
@@ -73,6 +84,10 @@ void xmldom::reset() {
 	}
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
+}
+
+bool xmldom::stringCacheEnabled() {
+	return pvt->_stringcacheenabled;
 }
 
 bool xmldom::writeFile(const char *filename, mode_t perms) const {

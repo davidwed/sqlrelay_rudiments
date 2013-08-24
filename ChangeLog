@@ -11,8 +11,8 @@
 		files
 	fixed erroneous end-of-buffer address when creating a variablebufferis
 		with initial contents
-	added "data" member to xmldomnode for attaching app-specific data to a
-		node
+	added option to disable string cache in xmldom class
+	added "data" member to xmldomnode class for attaching app-specific data
 	improved codetree speed
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"

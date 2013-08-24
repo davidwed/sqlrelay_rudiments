@@ -11,8 +11,6 @@
 	#include <stdlib.h>
 #endif
 
-//#define CACHE_STRINGS 1
-
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -96,13 +94,13 @@ xmldomnode::~xmldomnode() {
 		delete current;
 		current=pvt->_lastattribute;
 	}
-	#ifdef CACHE_STRINGS
+	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_nodename);
 		pvt->_dom->unCacheString(pvt->_nodevalue);
-	#else
+	} else {
 		delete[] pvt->_nodename;
 		delete[] pvt->_nodevalue;
-	#endif
+	}
 	delete pvt;
 }
 
@@ -655,23 +653,23 @@ void xmldomnode::setType(xmldomnodetype type) {
 }
 
 void xmldomnode::setName(const char *name) {
-	#ifdef CACHE_STRINGS
+	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_nodename);
 		pvt->_nodename=pvt->_dom->cacheString(name);
-	#else
+	} else {
 		delete[] pvt->_nodename;
 		pvt->_nodename=charstring::duplicate(name);
-	#endif
+	}
 }
 
 void xmldomnode::setValue(const char *value) {
-	#ifdef CACHE_STRINGS
+	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_nodevalue);
 		pvt->_nodevalue=pvt->_dom->cacheString(value);
-	#else
+	} else {
 		delete[] pvt->_nodevalue;
 		pvt->_nodevalue=charstring::duplicate(value);
-	#endif
+	}
 }
 
 void xmldomnode::setParent(xmldomnode *parent) {

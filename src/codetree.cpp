@@ -21,10 +21,15 @@ namespace rudiments {
 #define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string,length); }
 
 class grammar : public xmldom {
+	public:
+			grammar();
 	protected:
 		bool	tagStart(const char *name);
 		bool	attributeName(const char *name);
 };
+
+grammar::grammar() : xmldom(false) {
+}
 
 bool grammar::tagStart(const char *name) {
 	// replace tag names with single-letter

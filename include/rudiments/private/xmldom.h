@@ -3,6 +3,7 @@
 
 	friend class xmldomnode;
 	protected:
+			void	init(bool stringcacheenabled);
 			void	reset();
 
 			virtual bool	tagStart(const char *name);
