@@ -714,6 +714,15 @@ bool xmldomnode::deleteChild(xmldomnode *child) {
 				&pvt->_childcount);
 }
 
+bool xmldomnode::deleteChildren() {
+	while (pvt->_lastchild && !pvt->_lastchild->isNullNode()) {
+		if (!deleteChild(pvt->_lastchild)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 bool xmldomnode::deleteAttribute(uint64_t position) {
 	return deleteNode(NULL,position,NULL,
 				&pvt->_firstattribute,

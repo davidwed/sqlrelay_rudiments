@@ -386,10 +386,12 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  is decremented. */
 		bool	deleteChild(uint64_t position);
 
-		/** Searches the list of child nodes for "child" and
-		 *  deletes it.  The position of the next sibling (and
-		 *  all successive siblings) is decremented. */
+		/** Deletes child node "child".  The position of the next
+		 *  sibling (and all successive siblings) is decremented. */
 		bool	deleteChild(xmldomnode *child);
+
+		/** Deletes all child nodes. */
+		bool	deleteChildren();
 
 		/** Inserts a child node of type TEXT_XMLDOMNODE with
 		 *  value "value" into the list of child nodes at

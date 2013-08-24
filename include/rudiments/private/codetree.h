@@ -4,7 +4,7 @@
 	private:
 		void	buildNonTerminalNodeAssociations(
 					rudiments::xmldomnode *node);
-		const char	*getSymbolType(rudiments::xmldomnode *nt);
+		const char	getSymbolType(rudiments::xmldomnode *nt);
 		bool	parseChild(rudiments::xmldomnode *grammarnode,
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,
