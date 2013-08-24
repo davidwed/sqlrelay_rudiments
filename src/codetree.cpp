@@ -28,13 +28,13 @@ class grammar : public xmldom {
 
 bool grammar::tagStart(const char *name) {
 	if (!charstring::compare(name,"letter")) {
-		return xmldom::tagStart("ltr");
+		return xmldom::tagStart("1");
 	} else if (!charstring::compare(name,"lowercaseletter")) {
-		return xmldom::tagStart("lcl");
+		return xmldom::tagStart("2");
 	} else if (!charstring::compare(name,"uppercaseletter")) {
-		return xmldom::tagStart("ucl");
+		return xmldom::tagStart("3");
 	} else if (!charstring::compare(name,"digit")) {
-		return xmldom::tagStart("dgt");
+		return xmldom::tagStart("4");
 	} else {
         	char	newname[2];
 		newname[0]=name[0];
@@ -99,18 +99,42 @@ bool codetree::parse(const char *input,
 		return false;
 	}
 
+	// build non-terminal node associations
+	pvt->_grammartag->setData((void *)
+		pvt->_grammartag->getFirstTagChild("d","n",startsymbol));
+	buildNonTerminalNodeAssociations(pvt->_grammartag);
+
 	// re-init the error
 	pvt->_error=false;
 
 	// parse, starting with the specified start symbol
 	const char	*codepos=input;
 	pvt->_finalcodeposition=*codeposition;
-	bool	retval=(parseNonTerminal(startsymbol,output,
-					&codepos,NULL) && !pvt->_error);
+
+	bool	retval=(parseNonTerminal(pvt->_grammartag,
+					output,&codepos,NULL) && !pvt->_error);
 	if (codeposition) {
 		*codeposition=pvt->_finalcodeposition;
 	}
 	return retval;
+}
+
+void codetree::buildNonTerminalNodeAssociations(xmldomnode *node) {
+
+	// if it's a nonterminal node
+	if (node->getName()[0]=='n') {
+
+		// find the associated definition and attach it to this node
+		node->setData((void *)
+			pvt->_grammartag->getFirstTagChild("d","n",
+					node->getAttributeValue("n")));
+	}
+
+	// process children
+	for (xmldomnode *child=node->getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		buildNonTerminalNodeAssociations(child);
+	}
 }
 
 const char *codetree::getSymbolType(rudiments::xmldomnode *nt) {
@@ -119,105 +143,6 @@ const char *codetree::getSymbolType(rudiments::xmldomnode *nt) {
 		symboltype="inline";
 	}
 	return symboltype;
-}
-
-bool codetree::parseNonTerminal(const char *name,
-				xmldomnode *treeparent,
-				const char **codeposition,
-				stringbuffer *ntbuffer) {
-
-	// find the definition
-	xmldomnode	*def=pvt->_grammartag->getFirstTagChild("d","n",name);
-	if (def->isNullNode()) {
-		return false;
-	}
-
-	// some variables...
-	xmldomnode	*codenode=NULL;
-	stringbuffer	*localntbuffer=NULL;
-	uint8_t		debuglevel=2;
-
-	// If a nonterminal buffer was passed in then we're apparently already
-	// building up another nonterminal that stores a literal value.  In
-	// that case we don't need to do anything but pass the current code
-	// parent and nonterminal buffer forward.
-	const char	*symboltype=getSymbolType(def);
-	if (!ntbuffer) {
-
-		// If no nonterminal buffer was passed in...
-
-		// If this nonterminal has a type then we need to create a new
-		// node for it that will be appended to the tree if we do,
-		// indeed, find an instance of this nonterminal.  If it does
-		// not have a type then we just need to pass the current code
-		// parent forward.  If it has a type of literal, then we
-		// need to create a buffer to build up the value in and pass it
-		// forward.
-		if (charstring::compare(symboltype,"none")) {
-			codenode=new xmldomnode(treeparent->getTree(),
-						treeparent->getNullNode(),
-						TAG_XMLDOMNODETYPE,
-						name,NULL);
-			debuglevel=1;
-		}
-		if (!charstring::compare(symboltype,"literal")) {
-			localntbuffer=new stringbuffer;
-		}
-	}
-
-	debugPrintIndent(debuglevel);
-	debugPrintf(debuglevel,"nonterminal (%s) \"%s\" at \"",symboltype,name);
-        debugSafePrintLength(debuglevel,*codeposition,
-			(charstring::length(*codeposition)>20)?
-				20:charstring::length(*codeposition));
-	debugPrintf(debuglevel,"\"... {\n");
-
-	// keep track of the current position in the code, if we don't find
-	// this nonterminal then we'll need to reset the position in the code
-	// to this
-	const char	*startcodeposition=*codeposition;
-
-	// there should be only one child
-	if (parseChild(def->getFirstTagChild(),
-			(codenode)?codenode:treeparent,
-			codeposition,
-			(ntbuffer)?ntbuffer:localntbuffer)) {
-
-		debugPrintIndent(debuglevel);
-		debugPrintf(debuglevel,"} nonterminal \"%s\" found",name);
-
-		// we found one of these, attach the node to the
-		// code and value to the node, if necessary
-		if (codenode) {
-			treeparent->appendChild(codenode);
-		}
-		if (localntbuffer) {
-			debugPrintf(debuglevel," - value: \"%s\"",
-					localntbuffer->getString());
-			codenode->setAttributeValue("value",
-					localntbuffer->getString());
-			delete localntbuffer;
-		}
-
-		debugPrintf(debuglevel,"\n");
-
-		// advance the new code position
-		return true;
-	}
-
-	debugPrintIndent(debuglevel);
-	debugPrintf(debuglevel,"} nonterminal \"%s\" not found at \"",name);
-        debugSafePrintLength(debuglevel,startcodeposition,
-			(charstring::length(startcodeposition)>20)?
-				20:charstring::length(startcodeposition));
-	debugPrintf(debuglevel,"\"\n");
-
-	// apparently we didn't find one of these, delete the
-	// node and buffer and reset the position in the code
-	delete codenode;
-	delete localntbuffer;
-	*codeposition=startcodeposition;
-	return false;
 }
 
 bool codetree::parseChild(xmldomnode *grammarnode,
@@ -240,67 +165,69 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	// handle the standard children
 	bool		retval=true;
 	const char	*name=grammarnode->getName();
-	if (!charstring::compare(name,"c")) {
+	if (!name) {
+		retval=false;
+	} else if (name[0]=='c') {
 		if (!parseConcatenation(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"a")) {
+	} else if (name[0]=='a') {
 		if (!parseAlternation(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"o")) {
+	} else if (name[0]=='o') {
 		if (!parseOption(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"r")) {
+	} else if (name[0]=='r') {
 		if (!parseRepetition(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"t")) {
+	} else if (name[0]=='t') {
 		if (!parseTerminal(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"ltr")) {
+	} else if (name[0]=='1') {
 		if (!parseLetter(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"lcl")) {
+	} else if (name[0]=='2') {
 		if (!parseLowerCaseLetter(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"ucl")) {
+	} else if (name[0]=='3') {
 		if (!parseUpperCaseLetter(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"dgt")) {
+	} else if (name[0]=='4') {
 		if (!parseDigit(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"s")) {
+	} else if (name[0]=='s') {
 		if (!parseSet(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"b")) {
+	} else if (name[0]=='b') {
 		if (!parseBreak(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"n")) {
+	} else if (name[0]=='n') {
 		if (!parseNonTerminal(grammarnode,treeparent,
 					codeposition,localntbuffer)) {
 			retval=false;
 		}
-	} else if (!charstring::compare(name,"e")) {
+	} else if (name[0]=='e') {
 		// ignore exceptions if we encounter them directly
 		retval=pvt->_previousparsechildretval;
 	} else {
@@ -508,9 +435,9 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 	// get the attributes of this terminal
 	const char	*value=grammarnode->getAttributeValue("v");
 	size_t		valuelength=charstring::length(value);
-	bool		caseinsensitive=!charstring::compare(
-					grammarnode->getAttributeValue("c"),
-					"false");
+	const char	*casesensitive=grammarnode->getAttributeValue("c");
+	bool		caseinsensitive=(casesensitive &&
+						casesensitive[0]=='f');
 
 	// see if the code matches this terminal
 	bool	match=false;
@@ -658,9 +585,9 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 	// get the attributes of this terminal
 	const char	*value=grammarnode->getAttributeValue("v");
 	size_t		valuelength=charstring::length(value);
-	bool		caseinsensitive=!charstring::compare(
-					grammarnode->getAttributeValue("c"),
-					"false");
+	const char	*casesensitive=grammarnode->getAttributeValue("c");
+	bool		caseinsensitive=(casesensitive &&
+						casesensitive[0]=='f');
 
 	// see if the code matches this terminal, return true or false but
 	// don't advance the code position or append the terminal to the
@@ -688,9 +615,107 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
-	return parseNonTerminal(grammarnode->getAttributeValue("n"),
-						treeparent,codeposition,
-						ntbuffer);
+
+	// find the definition
+	xmldomnode	*def=(xmldomnode *)grammarnode->getData();
+	if (!def || def->isNullNode()) {
+		debugPrintIndent(1);
+		debugPrintf(1,"ERROR: nonterminal %s not found\n",
+					grammarnode->getAttributeValue("n"));
+		return false;
+	}
+
+	// get the name
+	const char	*name=def->getAttributeValue("n");
+
+	// some variables...
+	xmldomnode	*codenode=NULL;
+	stringbuffer	*localntbuffer=NULL;
+	uint8_t		debuglevel=2;
+
+	// If a nonterminal buffer was passed in then we're apparently already
+	// building up another nonterminal that stores a literal value.  In
+	// that case we don't need to do anything but pass the current code
+	// parent and nonterminal buffer forward.
+	const char	*symboltype=getSymbolType(def);
+	if (!ntbuffer) {
+
+		// If no nonterminal buffer was passed in...
+
+		// If this nonterminal has a type then we need to create a new
+		// node for it that will be appended to the tree if we do,
+		// indeed, find an instance of this nonterminal.  If it does
+		// not have a type then we just need to pass the current code
+		// parent forward.  If it has a type of literal, then we
+		// need to create a buffer to build up the value in and pass it
+		// forward.
+		if (symboltype[0]!='n') {
+			// symbol type "none"
+			codenode=new xmldomnode(treeparent->getTree(),
+						treeparent->getNullNode(),
+						TAG_XMLDOMNODETYPE,
+						name,NULL);
+			debuglevel=1;
+		}
+		if (symboltype[0]=='l') {
+			// symbol type "literal"
+			localntbuffer=new stringbuffer;
+		}
+	}
+
+	debugPrintIndent(debuglevel);
+	debugPrintf(debuglevel,"nonterminal (%s) \"%s\" at \"",symboltype,name);
+        debugSafePrintLength(debuglevel,*codeposition,
+			(charstring::length(*codeposition)>20)?
+				20:charstring::length(*codeposition));
+	debugPrintf(debuglevel,"\"... {\n");
+
+	// keep track of the current position in the code, if we don't find
+	// this nonterminal then we'll need to reset the position in the code
+	// to this
+	const char	*startcodeposition=*codeposition;
+
+	// there should be only one child
+	if (parseChild(def->getFirstTagChild(),
+			(codenode)?codenode:treeparent,
+			codeposition,
+			(ntbuffer)?ntbuffer:localntbuffer)) {
+
+		debugPrintIndent(debuglevel);
+		debugPrintf(debuglevel,"} nonterminal \"%s\" found",name);
+
+		// we found one of these, attach the node to the
+		// code and value to the node, if necessary
+		if (codenode) {
+			treeparent->appendChild(codenode);
+		}
+		if (localntbuffer) {
+			debugPrintf(debuglevel," - value: \"%s\"",
+					localntbuffer->getString());
+			codenode->setAttributeValue("value",
+					localntbuffer->getString());
+			delete localntbuffer;
+		}
+
+		debugPrintf(debuglevel,"\n");
+
+		// advance the new code position
+		return true;
+	}
+
+	debugPrintIndent(debuglevel);
+	debugPrintf(debuglevel,"} nonterminal \"%s\" not found at \"",name);
+        debugSafePrintLength(debuglevel,startcodeposition,
+			(charstring::length(startcodeposition)>20)?
+				20:charstring::length(startcodeposition));
+	debugPrintf(debuglevel,"\"\n");
+
+	// apparently we didn't find one of these, delete the
+	// node and buffer and reset the position in the code
+	delete codenode;
+	delete localntbuffer;
+	*codeposition=startcodeposition;
+	return false;
 }
 
 bool codetree::write(xmldomnode *input,
@@ -751,8 +776,8 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// see if this is a block or line
 	const char	*symboltype=getSymbolType(def);
-	bool		block=!charstring::compare(symboltype,"block");
-	bool		line=!charstring::compare(symboltype,"line");
+	bool		block=symboltype[0]=='b';
+	bool		line=symboltype[0]=='l';
 
 	// write the start
 	const char	*start=def->getAttributeValue("s");

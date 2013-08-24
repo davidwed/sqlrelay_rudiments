@@ -11,6 +11,8 @@
 	#include <stdlib.h>
 #endif
 
+//#define CACHE_STRINGS 1
+
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
@@ -34,6 +36,7 @@ class xmldomnodeprivate {
 		xmldomnode	*_lastattribute;
 		xmldomnode	*_nullnode;
 		bool		_isnullnode;
+		void		*_data;
 };
 
 xmldomnode::xmldomnode(xmldom *dom, xmldomnode *nullnode) {
@@ -68,6 +71,7 @@ void xmldomnode::init(xmldomnode *nullnode) {
 	pvt->_isnullnode=false;
 	pvt->_nodename=NULL;
 	pvt->_nodevalue=NULL;
+	pvt->_data=NULL;
 }
 
 xmldomnode::~xmldomnode() {
@@ -88,8 +92,13 @@ xmldomnode::~xmldomnode() {
 		delete current;
 		current=pvt->_lastattribute;
 	}
-	pvt->_dom->unCacheString(pvt->_nodename);
-	pvt->_dom->unCacheString(pvt->_nodevalue);
+	#ifdef CACHE_STRINGS
+		pvt->_dom->unCacheString(pvt->_nodename);
+		pvt->_dom->unCacheString(pvt->_nodevalue);
+	#else
+		delete[] pvt->_nodename;
+		delete[] pvt->_nodevalue;
+	#endif
 	delete pvt;
 }
 
@@ -618,13 +627,23 @@ void xmldomnode::setType(xmldomnodetype type) {
 }
 
 void xmldomnode::setName(const char *name) {
-	pvt->_dom->unCacheString(pvt->_nodename);
-	pvt->_nodename=pvt->_dom->cacheString(name);
+	#ifdef CACHE_STRINGS
+		pvt->_dom->unCacheString(pvt->_nodename);
+		pvt->_nodename=pvt->_dom->cacheString(name);
+	#else
+		delete[] pvt->_nodename;
+		pvt->_nodename=charstring::duplicate(name);
+	#endif
 }
 
 void xmldomnode::setValue(const char *value) {
-	pvt->_dom->unCacheString(pvt->_nodevalue);
-	pvt->_nodevalue=pvt->_dom->cacheString(value);
+	#ifdef CACHE_STRINGS
+		pvt->_dom->unCacheString(pvt->_nodevalue);
+		pvt->_nodevalue=pvt->_dom->cacheString(value);
+	#else
+		delete[] pvt->_nodevalue;
+		pvt->_nodevalue=charstring::duplicate(value);
+	#endif
 }
 
 void xmldomnode::setParent(xmldomnode *parent) {
@@ -804,6 +823,14 @@ const char *xmldomnode::getAttributeValueByPath(const char *path,
 const char *xmldomnode::getAttributeValueByPath(const char *path,
 						const char *name) const {
 	return getChildByPath(path)->getAttributeValue(name);
+}
+
+void xmldomnode::setData(void *data) {
+	pvt->_data=data;
+}
+
+void *xmldomnode::getData() {
+	return pvt->_data;
 }
 
 void xmldomnode::print(xmldomnode *node) {

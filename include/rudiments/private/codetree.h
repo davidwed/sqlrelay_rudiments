@@ -2,11 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
+		void	buildNonTerminalNodeAssociations(
+					rudiments::xmldomnode *node);
 		const char	*getSymbolType(rudiments::xmldomnode *nt);
-		bool	parseNonTerminal(const char *name,
-					rudiments::xmldomnode *treeparent,
-					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
 		bool	parseChild(rudiments::xmldomnode *grammarnode,
 					rudiments::xmldomnode *treeparent,
 					const char **codeposition,

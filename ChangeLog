@@ -11,6 +11,7 @@
 		files
 	fixed erroneous end-of-buffer address when creating a variablebufferis
 		with initial contents
+	improved codetree speed
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
