@@ -27,6 +27,8 @@ class grammar : public xmldom {
 };
 
 bool grammar::tagStart(const char *name) {
+	// replace tag names with single-letter
+	// representations to improve performance
 	if (!charstring::compare(name,"letter")) {
 		return xmldom::tagStart("1");
 	} else if (!charstring::compare(name,"lowercaseletter")) {
@@ -165,71 +167,112 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	// handle the standard children
 	bool		retval=true;
 	const char	*name=grammarnode->getName();
-	if (!name) {
-		retval=false;
-	} else if (name[0]=='c') {
-		if (!parseConcatenation(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
+	if (name) {
+		switch (name[0]) {
+			case 'c':
+				if (!parseConcatenation(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 'a':
+				if (!parseAlternation(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 'o':
+				if (!parseOption(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 'r':
+				if (!parseRepetition(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 't':
+				if (!parseTerminal(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case '1':
+				if (!parseLetter(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case '2':
+				if (!parseLowerCaseLetter(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case '3':
+				if (!parseUpperCaseLetter(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case '4':
+				if (!parseDigit(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 's':
+				if (!parseSet(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 'b':
+				if (!parseBreak(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 'n':
+				if (!parseNonTerminal(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case 'e':
+				// ignore exceptions if we
+				// encounter them directly
+				retval=pvt->_previousparsechildretval;
+				break;
+			default:
+				retval=false;
 		}
-	} else if (name[0]=='a') {
-		if (!parseAlternation(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='o') {
-		if (!parseOption(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='r') {
-		if (!parseRepetition(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='t') {
-		if (!parseTerminal(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='1') {
-		if (!parseLetter(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='2') {
-		if (!parseLowerCaseLetter(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='3') {
-		if (!parseUpperCaseLetter(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='4') {
-		if (!parseDigit(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='s') {
-		if (!parseSet(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='b') {
-		if (!parseBreak(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='n') {
-		if (!parseNonTerminal(grammarnode,treeparent,
-					codeposition,localntbuffer)) {
-			retval=false;
-		}
-	} else if (name[0]=='e') {
-		// ignore exceptions if we encounter them directly
-		retval=pvt->_previousparsechildretval;
 	} else {
 		retval=false;
 	}
@@ -239,38 +282,29 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	if (retval) {
 
 		// if the next node is an exception...
-		xmldomnode	*sibling=grammarnode->getNextTagSibling("e");
-		if (!sibling->isNullNode()) {
+		xmldomnode	*sibling=grammarnode->getNextTagSibling();
+		name=sibling->getName();
+		if (!sibling->isNullNode() && name && name[0]=='e') {
 
 			// create some local buffers
 			stringbuffer	excntbuffer;
 			xmldomnode	excnode(treeparent->getTree(),
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
-						"temp",NULL);
+						"t",NULL);
 
 			// reparse the same code we just parsed
 			const char	*exccodeposition=startcodeposition;
 
-			// parse the exception
-			if (parseException(sibling,&excnode,
-					&exccodeposition,&excntbuffer)) {
-
-				// if we've been building up a literal,
-				// then see if the exception that we found
-				// matches this last chunk or not
-				if (localntbuffer &&
-					!charstring::compare(
-						excntbuffer.getString(),
-						localntbuffer->getString())) {
-					retval=false;
-				}
-
-				// FIXME: if we weren't building up a literal
-				// then we need to compare the tree generated
-				// by parsing the exception to the tree built
-				// by parsing the previous child
-			}
+			// parse the exception...
+			//
+			// If parseException succeeds and stops at the same
+			// place we stopped parsing the last chunk, then the
+			// last chunk must be equal to one of the exceptions in
+			// the list.  There's no need to compare to be sure.
+			retval=!(parseException(sibling,&excnode,
+					&exccodeposition,&excntbuffer) &&
+					exccodeposition==*codeposition);
 		}
 	}
 
@@ -648,16 +682,16 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 		// not have a type then we just need to pass the current code
 		// parent forward.  If it has a type of literal, then we
 		// need to create a buffer to build up the value in and pass it
-		// forward.
+		// forward too.
 		if (symboltype[0]!='n') {
-			// symbol type "none"
+			// not symbol type "none"
 			codenode=new xmldomnode(treeparent->getTree(),
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
 						name,NULL);
 			debuglevel=1;
 		}
-		if (symboltype[0]=='l') {
+		if (!charstring::compare(symboltype,"lit",3)) {
 			// symbol type "literal"
 			localntbuffer=new stringbuffer;
 		}
@@ -768,16 +802,16 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 	}
 
 	// if the node doesn't have a value then get its definition
-	xmldomnode	*def=pvt->_grammartag->getFirstTagChild("d",
-							"n",node->getName());
+	xmldomnode	*def=pvt->_grammartag->getFirstTagChild(
+						"d","n",node->getName());
 	if (def->isNullNode()) {
 		return false;
 	}
 
 	// see if this is a block or line
 	const char	*symboltype=getSymbolType(def);
-	bool		block=symboltype[0]=='b';
-	bool		line=symboltype[0]=='l';
+	bool		block=!charstring::compare(symboltype,"block");
+	bool		line=!charstring::compare(symboltype,"line");
 
 	// write the start
 	const char	*start=def->getAttributeValue("s");
@@ -824,8 +858,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the end
 	const char	*end=def->getAttributeValue("e");
-	bool		backspace=(end && end[0]=='\b' &&
-					charstring::length(end)>1);
+	bool		backspace=(charstring::length(end)>1 && end[0]=='\b');
 	if (backspace) {
 		output->setPosition(output->getStringLength()-1);
 		end++;

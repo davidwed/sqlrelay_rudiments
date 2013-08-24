@@ -61,7 +61,7 @@ class codetreeprivate;
  *            the nonterminal should be included in the XML representation of
  *            the code and that special formatting should be used when writing
  *            that XML back out as code.  There are 5 possible values:
- *            inline, literal, line, block, line, and none.
+ *            inline, literal, line, block, and none.
  *
  *            If the type attribute is omitted, then "inline" is assumed.
  *

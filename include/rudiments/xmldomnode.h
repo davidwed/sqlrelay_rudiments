@@ -507,7 +507,11 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		const char	*getAttributeValueByPath(const char *path,
 							const char *name) const;
 
+		/** Allows an app to associate arbitrary data with the node. */
 		void	setData(void *data);
+
+		/** Allows an app to get the arbitrary data associated with
+		 *  the node using setData(). */
 		void	*getData();
 
 		/** Prints a text representation of "node". */

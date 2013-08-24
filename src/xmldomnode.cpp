@@ -27,9 +27,11 @@ class xmldomnodeprivate {
 		const char	*_nodevalue;
 		xmldomnode	*_parent;
 		xmldomnode	*_next;
+		xmldomnode	*_nexttag;
 		xmldomnode	*_previous;
 		uint64_t	_childcount;
 		xmldomnode	*_firstchild;
+		xmldomnode	*_firsttagchild;
 		xmldomnode	*_lastchild;
 		uint64_t	_attributecount;
 		xmldomnode	*_firstattribute;
@@ -60,8 +62,10 @@ void xmldomnode::init(xmldomnode *nullnode) {
 	pvt->_nullnode=nullnode;
 	pvt->_parent=nullnode;
 	pvt->_next=nullnode;
+	pvt->_nexttag=nullnode;
 	pvt->_previous=nullnode;
 	pvt->_firstchild=NULL;
+	pvt->_firsttagchild=nullnode;
 	pvt->_lastchild=NULL;
 	pvt->_childcount=0;
 	pvt->_firstattribute=NULL;
@@ -106,6 +110,7 @@ xmldomnode *xmldomnode::createNullNode(xmldom *dom) {
 	xmldomnode	*nn=new xmldomnode(dom,NULL);
 	nn->pvt->_parent=nn;
 	nn->pvt->_next=nn;
+	nn->pvt->_nexttag=nn;
 	nn->pvt->_previous=nn;
 	nn->pvt->_isnullnode=true;
 	nn->pvt->_nullnode=nn;
@@ -153,6 +158,9 @@ xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
 }
 
 xmldomnode *xmldomnode::getNextTagSibling() const {
+	if (pvt->_type==TAG_XMLDOMNODETYPE) {
+		return pvt->_nexttag;
+	}
 	xmldomnode	*node=getNextSibling();
 	while (!node->isNullNode() && node->getType()!=TAG_XMLDOMNODETYPE) {
 		node=node->getNextSibling();
@@ -193,9 +201,7 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 }
 
 xmldomnode *xmldomnode::getFirstTagChild() const {
-	xmldomnode	*node=getChild((uint64_t)0);
-	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
-						node:node->getNextTagSibling();
+	return pvt->_firsttagchild;
 }
 
 xmldomnode *xmldomnode::getFirstTagChild(const char *name) const {
@@ -404,6 +410,15 @@ bool xmldomnode::insertNode(xmldomnode *node, uint64_t position,
 	if (position==(*count)) {
 		(*last)=node;
 	}
+	if (type==TAG_XMLDOMNODETYPE) {
+		xmldomnode	*prevtag=node->getPreviousTagSibling();
+		if (!prevtag->isNullNode()) {
+			prevtag->pvt->_nexttag=node;
+		}
+		if (pvt->_firsttagchild->isNullNode()) {
+			pvt->_firsttagchild=node;
+		}
+	}
 	(*count)++;
 	return true;
 }
@@ -443,6 +458,19 @@ xmldomnode *xmldomnode::unlinkNode(xmldomnode *node,
 		}
 	}
 	if (current && !current->isNullNode()) {
+		if (current->pvt->_type==TAG_XMLDOMNODETYPE) {
+			xmldomnode	*prevtag=
+					current->getPreviousTagSibling();
+			if (!prevtag->isNullNode()) {
+				prevtag->pvt->_nexttag=
+					current->getNextTagSibling();
+			}
+			if (current->pvt->_parent->
+					pvt->_firsttagchild==current) {
+				current->pvt->_parent->pvt->_firsttagchild=
+					current->getNextTagSibling();
+			}
+		}
 		if (current->pvt->_previous) {
 			current->pvt->_previous->pvt->_next=current->pvt->_next;
 		}
