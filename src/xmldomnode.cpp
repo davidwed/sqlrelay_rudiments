@@ -340,7 +340,7 @@ void xmldomnode::safeAppend(stringbuffer *output, const char *str) const {
 			entity="&apos;";
 		} else if (*ch=='"') {
 			entity="&quot;";
-		} else if (*ch<0) {
+		} else if ((signed char)*ch<0) {
 			num=static_cast<uint16_t>(
 					static_cast<unsigned char>(*ch));
 		}
