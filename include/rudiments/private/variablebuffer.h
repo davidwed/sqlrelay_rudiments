@@ -6,10 +6,12 @@
 				size_t initialsize, size_t increment);
 		void	extend(size_t size);
 
-		variablebuffer	*writeFormatted(const char *format,
-							va_list argp);
-
 		void	variablebufferClone(const variablebuffer &v);
+
+		variablebuffer	*appendFormatted(const char *format,
+							va_list *argp);
+		variablebuffer	*writeFormatted(const char *format,
+							va_list *argp);
 
 		unsigned char	*_buffer();
 		size_t		_endofbuffer();

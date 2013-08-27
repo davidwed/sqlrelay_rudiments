@@ -174,16 +174,16 @@ variablebuffer *variablebuffer::write(double number) {
 variablebuffer *variablebuffer::writeFormatted(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	variablebuffer	*retval=writeFormatted(format,argp);
+	variablebuffer	*retval=writeFormatted(format,&argp);
 	va_end(argp);
 	return retval;
 }
 
 variablebuffer *variablebuffer::writeFormatted(const char *format,
-							va_list argp) {
+							va_list *argp) {
 
 	// find out how much space we need
-	size_t	size=vsnprintf(NULL,0,format,argp);
+	size_t	size=vsnprintf(NULL,0,format,*argp);
 
 	// if the buffer is too small, extend it
 	if (pvt->_position>=pvt->_buffersize) {
@@ -194,7 +194,7 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 
 	// copy the data into the buffer
 	vsnprintf((char *)(pvt->_buffer+pvt->_position),
-				pvt->_buffersize,format,argp);
+				pvt->_buffersize,format,*argp);
 
 	// increment the position indices
 	pvt->_position=pvt->_position+size;
@@ -325,12 +325,17 @@ variablebuffer *variablebuffer::append(double number) {
 }
 
 variablebuffer *variablebuffer::appendFormatted(const char *format, ...) {
-	pvt->_position=pvt->_endofbuffer;
 	va_list	argp;
 	va_start(argp,format);
-	variablebuffer	*retval=writeFormatted(format,argp);
+	variablebuffer	*retval=appendFormatted(format,&argp);
 	va_end(argp);
 	return retval;
+}
+
+variablebuffer *variablebuffer::appendFormatted(const char *format,
+							va_list *argp) {
+	pvt->_position=pvt->_endofbuffer;
+	return writeFormatted(format,argp);
 }
 
 unsigned char *variablebuffer::_buffer() {

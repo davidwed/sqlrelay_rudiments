@@ -2208,7 +2208,7 @@ size_t filedescriptor::printf(const char *format, ...) {
 		size_t	result=vdprintf(pvt->_fd,format,argp);
 	#else
 		stringbuffer	str;
-		str.appendFormatted(format,argp);
+		str.appendFormatted(format,&argp);
 		size_t	result=write(str.getString(),str.getStringLength());
 	#endif
 	va_end(argp);
