@@ -190,6 +190,15 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		 *  rules. */
 		variablebuffer	*writeFormatted(const char *format, ...);
 
+		/** Writes "argp" to the variable buffer using "format"
+		 *  which should comply with standard printf formatting
+		 *  rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list. */
+		variablebuffer	*writeFormatted(const char *format,
+							va_list *argp);
+
 
 		/** Appends the first "size" bytes of "data" to the
 		 *  variablebuffer, growing the internal buffer as necessary
@@ -288,6 +297,15 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		 *  which should comply with standard printf formatting
 		 *  rules. */
 		variablebuffer	*appendFormatted(const char *format, ...);
+
+		/** Appends "argp" to the variable buffer using "format"
+		 *  which should comply with standard printf formatting
+		 *  rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list. */
+		variablebuffer	*appendFormatted(const char *format,
+							va_list *argp);
 
 
 		/** Reads "size" bytes from the variablebuffer at the

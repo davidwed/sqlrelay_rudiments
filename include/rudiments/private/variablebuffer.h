@@ -8,11 +8,6 @@
 
 		void	variablebufferClone(const variablebuffer &v);
 
-		variablebuffer	*appendFormatted(const char *format,
-							va_list *argp);
-		variablebuffer	*writeFormatted(const char *format,
-							va_list *argp);
-
 		unsigned char	*_buffer();
 		size_t		_endofbuffer();
 		void		_endofbuffer(size_t eob);
