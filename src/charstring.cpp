@@ -33,9 +33,6 @@
 #ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
-#ifdef RUDIMENTS_HAVE_STDARG_H
-	#include <stdarg.h>
-#endif
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -1614,9 +1611,14 @@ size_t charstring::printf(char *string, size_t length,
 					const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	size_t	result=vsnprintf(string,length,format,argp);
+	size_t	result=printf(string,length,format,&argp);
 	va_end(argp);
 	return result;
+}
+
+size_t charstring::printf(char *string, size_t length,
+					const char *format, va_list *argp) {
+	return vsnprintf(string,length,format,*argp);
 }
 
 #ifdef RUDIMENTS_NAMESPACE

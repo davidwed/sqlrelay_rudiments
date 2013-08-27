@@ -40,9 +40,6 @@
 	#include <io.h>
 #endif
 #include <stdio.h>
-#ifdef RUDIMENTS_HAVE_STDARG_H
-	#include <stdarg.h>
-#endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif
@@ -2204,15 +2201,19 @@ bool filedescriptor::getCloseOnExec() {
 size_t filedescriptor::printf(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	#ifdef RUDIMENTS_HAVE_VDPRINTF
-		size_t	result=vdprintf(pvt->_fd,format,argp);
-	#else
-		stringbuffer	str;
-		str.appendFormatted(format,&argp);
-		size_t	result=write(str.getString(),str.getStringLength());
-	#endif
+	size_t	result=printf(format,&argp);
 	va_end(argp);
 	return result;
+}
+
+size_t filedescriptor::printf(const char *format, va_list *argp) {
+	#ifdef RUDIMENTS_HAVE_VDPRINTF
+		return vdprintf(pvt->_fd,format,*argp);
+	#else
+		stringbuffer	str;
+		str.appendFormatted(format,argp);
+		return write(str.getString(),str.getStringLength());
+	#endif
 }
 
 static char hex[17]="0123456789ABCDEF";

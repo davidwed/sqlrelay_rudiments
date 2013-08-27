@@ -341,6 +341,13 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  should comply with standard printf formatting rules. */
 		size_t	printf(const char *format, ...);
 
+		/** Prints "argp" to the filedescriptor using "format" which
+		 *  should comply with standard printf formatting rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list. */
+		size_t	printf(const char *format, va_list *argp);
+
 		/** Prints "c" to the filedescriptor, however if "c" is
 		 *  non-printing character then it is printed as a hex value of
 		 *  the format: (0x0a).  Carriage returns, line feeds and tabs

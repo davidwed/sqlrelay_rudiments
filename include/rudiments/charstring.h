@@ -713,6 +713,16 @@ class RUDIMENTS_DLLSPEC charstring {
 		static size_t	printf(char *string, size_t length,
 						const char *format, ...);
 
+		/** Appends "..." to "string" of length "length" using
+		 *  "format" which should comply with standard printf
+		 *  formatting rules.
+		 *
+		 *  Note that argp is a pointer to a va_list, not just a
+		 *  va_list. */
+		static size_t	printf(char *string, size_t length,
+						const char *format,
+						va_list *argp);
+
 	#include <rudiments/private/charstring.h>
 };
 
