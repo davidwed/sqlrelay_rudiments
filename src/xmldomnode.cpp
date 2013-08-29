@@ -505,8 +505,7 @@ bool xmldomnode::moveChild(xmldomnode *child,
 	if (!current) {
 		return false;
 	}
-	bool	retval=parent->insertChild(current,position);
-	return retval;
+	return parent->insertChild(current,position);
 }
 
 bool xmldomnode::appendChild(xmldomnode *child) {
