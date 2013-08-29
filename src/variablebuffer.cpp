@@ -338,6 +338,14 @@ variablebuffer *variablebuffer::appendFormatted(const char *format,
 	return writeFormatted(format,argp);
 }
 
+void variablebuffer::truncate(size_t pos) {
+	pvt->_endofbuffer=pos;
+}
+
+void variablebuffer::truncate() {
+	pvt->_endofbuffer=pvt->_position;
+}
+
 unsigned char *variablebuffer::_buffer() {
 	return pvt->_buffer;
 }

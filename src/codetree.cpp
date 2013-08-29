@@ -904,16 +904,10 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the start
 	const char	*start=def->getAttributeValue(START);
-	if (start && start[0]=='\n') {
-		output->append('\n');
-		start++;
+	if (line || (block && charstring::length(start))) {
+		indent(output);
 	}
-	if ((block && charstring::length(start)) || line) {
-		for (uint32_t i=0; i<pvt->_indentlevel; i++) {
-			output->append(pvt->_indentstring);
-		}
-	}
-	output->append(start);
+	writeStartEnd(output,start);
 	if (block && charstring::length(start)) {
 		output->append('\n');
 	}
@@ -947,29 +941,68 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the end
 	const char	*end=def->getAttributeValue(END);
-	bool		backspace=(charstring::length(end)>1 && end[0]=='\b');
-	if (backspace) {
-		output->setPosition(output->getStringLength()-1);
-		end++;
-	}
 	if (block && charstring::length(end)) {
 		if (output->getString()[output->getStringLength()-1]!='\n') {
 			output->append('\n');
 		}
-		for (uint32_t i=0; i<pvt->_indentlevel; i++) {
-			output->append(pvt->_indentstring);
-		}
+		indent(output);
 	}
-	if (backspace) {
-		output->write(end);
-	} else {
-		output->append(end);
-	}
-	if ((block || line) &&
-		output->getString()[output->getStringLength()-1]!='\n') {
+	writeStartEnd(output,end);
+	if (line || (block && charstring::length(end))) {
 		output->append('\n');
 	}
 	return true;
+}
+
+void codetree::indent(stringbuffer *output) {
+	for (uint32_t i=0; i<pvt->_indentlevel; i++) {
+		output->append(pvt->_indentstring);
+	}
+}
+
+void codetree::writeStartEnd(stringbuffer *output, const char *string) {
+
+	if (!string) {
+		return;
+	}
+
+	// save indent level
+	uint32_t	startindentlevel=pvt->_indentlevel;
+
+	// if it started with a backspace then either remove the preceeding
+	// carriage-return/line-feed or back up one level of indention
+	if (string[0]=='\b') {
+
+		pvt->_indentlevel--;
+
+		const char	*outstr=output->getString();
+		size_t		outpos=output->getPosition()-1;
+
+		if (outstr[outpos]=='\n' || outstr[outpos]=='\r') { 
+			output->truncate(outpos);
+		} else {
+			size_t	ilen=charstring::length(pvt->_indentstring);
+			if (!charstring::compare(
+					outstr+output->getPosition()-ilen,
+					pvt->_indentstring)) {
+				output->truncate(outpos-ilen+1);
+			}
+		}
+
+		string++;
+	}
+
+	// Print the start/end string. When \n's are encountered,
+	// bump down and indent
+	for (const char *c=string; *c; c++) {
+		output->append(*c);
+		if (*c=='\n' && *(c+1)!='\0') {
+			indent(output);
+		}
+	}
+
+	// restore indent level
+	pvt->_indentlevel=startindentlevel;
 }
 
 #ifdef RUDIMENTS_NAMESPACE

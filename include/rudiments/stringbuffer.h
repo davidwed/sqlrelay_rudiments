@@ -430,6 +430,12 @@ class RUDIMENTS_DLLSPEC stringbuffer : public variablebuffer {
 		stringbuffer	*append(double number, uint16_t precision,
 							uint16_t scale);
 
+		/** Trucnates the stringbuffer at position "pos". */
+		void	truncate(size_t pos);
+
+		/** Trucnates the stringbuffer at the current position. */
+		void	truncate();
+
 		/** Empties the stringbuffer. */
 		void	clear();
 

@@ -323,6 +323,16 @@ stringbuffer *stringbuffer::write(double number, uint16_t precision,
 	return this;
 }
 
+void stringbuffer::truncate(size_t pos) {
+	variablebuffer::truncate(pos);
+	terminate();
+}
+
+void stringbuffer::truncate() {
+	variablebuffer::truncate();
+	terminate();
+}
+
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif

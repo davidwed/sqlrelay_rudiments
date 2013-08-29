@@ -307,6 +307,12 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		variablebuffer	*appendFormatted(const char *format,
 							va_list *argp);
 
+		/** Truncates the variablebuffer at position "pos". */
+		virtual void	truncate(size_t pos);
+
+		/** Truncates the variablebuffer at the current position. */
+		virtual void	truncate();
+
 
 		/** Reads "size" bytes from the variablebuffer at the
 		 *  current position into "data".  Also increments the

@@ -50,12 +50,22 @@ class codetreeprivate;
  *    start - Optional.  A string to be printed before the nonterminal when
  *            writing it back out.
  *
- *            If a start attribute begins with &#10; (newline) then a new line
- *            will be inserted before the string is printed out, before
- *            any indentation.
+ *            If a start attribute begins with a &#8; (backspace) then one level
+ *            of indentation will be removed.  If the previous character in the
+ *            output was a line feed then it will also be removed.
+ *
+ *            If a start attribute contains a &#10; (newline) then a new line
+ *            and appropriate indentation will be inserted at that point.
  *
  *    end   - Optional.  A string to be printed after the nonterminal when
  *            writing it back out.
+ *
+ *            If an end attribute begins with a &#8; (backspace) then one level
+ *            of indentation will be removed.  If the previous character in the
+ *            output was a line feed then it will also be removed.
+ *
+ *            If an end attribute contains a &#10; (newline) then a new line
+ *            and appropriate indentation will be inserted at that point.
  *
  *    type  - Optional.  If supplied, it indicates that a tag representing
  *            the nonterminal should be included in the XML representation of

@@ -64,5 +64,8 @@
 
 		bool	writeNode(rudiments::xmldomnode *node,
 					rudiments::stringbuffer *output);
+		void	indent(rudiments::stringbuffer *output);
+		void	writeStartEnd(rudiments::stringbuffer *output,
+					const char *string);
 
 		codetreeprivate		*pvt;

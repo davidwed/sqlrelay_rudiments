@@ -1618,6 +1618,9 @@ size_t charstring::printf(char *string, size_t length,
 
 size_t charstring::printf(char *string, size_t length,
 					const char *format, va_list *argp) {
+	if (!string || !format) {
+		return 0;
+	}
 	return vsnprintf(string,length,format,*argp);
 }
 
