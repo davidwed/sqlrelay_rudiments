@@ -203,9 +203,10 @@ xmldomnode *xmldomnode::getFirstTagChild() const {
 }
 
 xmldomnode *xmldomnode::getFirstTagChild(const char *name) const {
-	xmldomnode	*node=getChild(name);
-	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
-					node:node->getNextTagSibling(name);
+	xmldomnode	*node=pvt->_firsttagchild;
+	return (node->isNullNode() ||
+		!charstring::compare(node->getName(),name))?
+			node:node->getNextTagSibling(name);
 }
 
 xmldomnode *xmldomnode::getFirstTagChild(const char *name,
@@ -410,11 +411,15 @@ bool xmldomnode::insertNode(xmldomnode *node, uint64_t position,
 	}
 	if (type==TAG_XMLDOMNODETYPE) {
 		xmldomnode	*prevtag=node->getPreviousTagSibling();
-		if (!prevtag->isNullNode()) {
+		if (prevtag->isNullNode()) {
+			pvt->_firsttagchild=node;
+		} else {
 			prevtag->pvt->_nexttag=node;
 		}
-		if (pvt->_firsttagchild->isNullNode()) {
-			pvt->_firsttagchild=node;
+		node->pvt->_nexttag=node->pvt->_next;
+		while (!node->pvt->_nexttag->isNullNode() &&
+			node->pvt->_nexttag->getType()!=TAG_XMLDOMNODETYPE) {
+			node->pvt->_nexttag=node->pvt->_nexttag->pvt->_next;
 		}
 	}
 	(*count)++;
