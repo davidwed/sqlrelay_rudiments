@@ -137,6 +137,7 @@ class codetreeprivate {
 		bool		_error;
 		uint32_t	_indentlevel;
 		const char	*_indentstring;
+		size_t		_indentlength;
 		bool		_previousparsechildretval;
 		bool		_break;
 		const char	*_finalcodeposition;
@@ -756,7 +757,6 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 	// some variables...
 	xmldomnode	*codenode=NULL;
 	stringbuffer	*localntbuffer=NULL;
-	uint8_t		debuglevel=2;
 
 	// If a nonterminal buffer was passed in then we're apparently already
 	// building up another nonterminal that stores a literal value.  In
@@ -779,19 +779,18 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
 						name,NULL);
-			debuglevel=1;
 		}
 		if (symboltype==LITERAL) {
 			localntbuffer=new stringbuffer;
 		}
 	}
 
-	debugPrintIndent(debuglevel);
-	debugPrintf(debuglevel,"nonterminal (%c) \"%s\" at \"",symboltype,name);
-        debugSafePrintLength(debuglevel,*codeposition,
+	debugPrintIndent(2);
+	debugPrintf(2,"nonterminal (%c) \"%s\" at \"",symboltype,name);
+        debugSafePrintLength(2,*codeposition,
 			(charstring::length(*codeposition)>20)?
 				20:charstring::length(*codeposition));
-	debugPrintf(debuglevel,"\"... {\n");
+	debugPrintf(2,"\"... {\n");
 
 	// keep track of the current position in the code, if we don't find
 	// this nonterminal then we'll need to reset the position in the code
@@ -804,8 +803,8 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 			codeposition,
 			(ntbuffer)?ntbuffer:localntbuffer)) {
 
-		debugPrintIndent(debuglevel);
-		debugPrintf(debuglevel,"} nonterminal \"%s\" found",name);
+		debugPrintIndent(2);
+		debugPrintf(2,"} nonterminal \"%s\" found",name);
 
 		// we found one of these, attach the node to the
 		// code and value to the node, if necessary
@@ -813,25 +812,25 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 			treeparent->appendChild(codenode);
 		}
 		if (localntbuffer) {
-			debugPrintf(debuglevel," - value: \"%s\"",
+			debugPrintf(2," - value: \"%s\"",
 					localntbuffer->getString());
 			codenode->setAttributeValue("value",
 					localntbuffer->getString());
 			delete localntbuffer;
 		}
 
-		debugPrintf(debuglevel,"\n");
+		debugPrintf(2,"\n");
 
 		// advance the new code position
 		return true;
 	}
 
-	debugPrintIndent(debuglevel);
-	debugPrintf(debuglevel,"} nonterminal \"%s\" not found at \"",name);
-        debugSafePrintLength(debuglevel,startcodeposition,
+	debugPrintIndent(2);
+	debugPrintf(2,"} nonterminal \"%s\" not found at \"",name);
+        debugSafePrintLength(2,startcodeposition,
 			(charstring::length(startcodeposition)>20)?
 				20:charstring::length(startcodeposition));
-	debugPrintf(debuglevel,"\"\n");
+	debugPrintf(2,"\"\n");
 
 	// apparently we didn't find one of these, delete the
 	// node and buffer and reset the position in the code
@@ -865,6 +864,7 @@ bool codetree::write(xmldomnode *input,
 	if (!pvt->_indentstring) {
 		pvt->_indentstring="\t";
 	}
+	pvt->_indentlength=charstring::length(pvt->_indentstring);
 
 	// write the nodes
 	return writeNode(input,output);
@@ -894,6 +894,9 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 							DEFINITION,NAME,
 							node->getName());
 	if (def->isNullNode()) {
+		debugPrintIndent(1);
+		debugPrintf(1,"ERROR: definition %s not found\n",
+						node->getName());
 		return false;
 	}
 
@@ -981,11 +984,10 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 		if (outstr[outpos]=='\n' || outstr[outpos]=='\r') { 
 			output->truncate(outpos);
 		} else {
-			size_t	ilen=charstring::length(pvt->_indentstring);
 			if (!charstring::compare(
-					outstr+output->getPosition()-ilen,
-					pvt->_indentstring)) {
-				output->truncate(outpos-ilen+1);
+				outstr+output->getPosition()-pvt->_indentlength,
+				pvt->_indentstring)) {
+				output->truncate(outpos-pvt->_indentlength+1);
 			}
 		}
 

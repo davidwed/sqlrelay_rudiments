@@ -62,9 +62,9 @@ void xmldomnode::init(xmldomnode *nullnode) {
 	pvt->_next=nullnode;
 	pvt->_nexttag=nullnode;
 	pvt->_previous=nullnode;
-	pvt->_firstchild=NULL;
+	pvt->_firstchild=nullnode;
 	pvt->_firsttagchild=nullnode;
-	pvt->_lastchild=NULL;
+	pvt->_lastchild=nullnode;
 	pvt->_childcount=0;
 	pvt->_firstattribute=NULL;
 	pvt->_lastattribute=NULL;
@@ -106,12 +106,15 @@ xmldomnode::~xmldomnode() {
 
 xmldomnode *xmldomnode::createNullNode(xmldom *dom) {
 	xmldomnode	*nn=new xmldomnode(dom,NULL);
+	nn->pvt->_nullnode=nn;
 	nn->pvt->_parent=nn;
 	nn->pvt->_next=nn;
 	nn->pvt->_nexttag=nn;
 	nn->pvt->_previous=nn;
+	nn->pvt->_firstchild=nn;
+	nn->pvt->_firsttagchild=nn;
+	nn->pvt->_lastchild=nn;
 	nn->pvt->_isnullnode=true;
-	nn->pvt->_nullnode=nn;
 	return nn;
 }
 
@@ -221,8 +224,7 @@ xmldomnode *xmldomnode::getChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
 	for (xmldomnode *current=pvt->_firstchild;
-			current && !current->isNullNode();
-				current=current->pvt->_next) {
+			!current->isNullNode(); current=current->pvt->_next) {
 		const char	*nm=current->getName();
 		if ((name && nm && !charstring::compare(name,nm)) || !name) {
 			const char	*value=current->
@@ -241,8 +243,10 @@ bool xmldomnode::insertText(const char *value, uint64_t position) {
 	xmldomnode	*text=new xmldomnode(pvt->_dom,pvt->_nullnode);
 	text->setName("text");
 	text->setValue(value);
-	return insertNode(text,position,TEXT_XMLDOMNODETYPE,
-				&pvt->_firstchild,&pvt->_lastchild,
+	return insertNode(text,position,
+				TEXT_XMLDOMNODETYPE,
+				&pvt->_firstchild,
+				&pvt->_lastchild,
 				&pvt->_childcount);
 }
 
@@ -719,7 +723,7 @@ bool xmldomnode::deleteChild(xmldomnode *child) {
 }
 
 bool xmldomnode::deleteChildren() {
-	while (pvt->_lastchild && !pvt->_lastchild->isNullNode()) {
+	while (!pvt->_lastchild->isNullNode()) {
 		if (!deleteChild(pvt->_lastchild)) {
 			return false;
 		}
