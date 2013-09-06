@@ -3,9 +3,8 @@
 
 #ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 
+#include <rudiments/null.h>
 #include <rudiments/private/rudimentsinlines.h>
-
-#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
