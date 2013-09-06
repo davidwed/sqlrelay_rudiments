@@ -4,6 +4,7 @@
 #include <rudiments/variablebuffer.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/error.h>
 
 // for vsnprintf
 #include <stdio.h>
@@ -98,7 +99,7 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 	if (pvt->_position>=pvt->_buffersize) {
 		extend(pvt->_position-pvt->_buffersize+size);
 	} else if (size>=pvt->_buffersize-pvt->_position) {
-		extend(pvt->_buffersize-pvt->_position+size);
+		extend(size-(pvt->_buffersize-pvt->_position));
 	}
 
 	// copy the data into the buffer
@@ -184,17 +185,34 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 
 	// find out how much space we need
 	size_t	size=vsnprintf(NULL,0,format,*argp);
+	if ((ssize_t)size==-1) {
 
-	// if the buffer is too small, extend it
-	if (pvt->_position>=pvt->_buffersize) {
-		extend(pvt->_position-pvt->_buffersize+size);
-	} else if (size>=pvt->_buffersize-pvt->_position) {
-		extend(pvt->_buffersize-pvt->_position+size);
+		for (;;) {
+			if (pvt->_position>=pvt->_buffersize) {
+				extend(pvt->_position-pvt->_buffersize);
+			}
+			size=vsnprintf((char *)(pvt->_buffer+pvt->_position),
+				pvt->_buffersize-pvt->_position,format,*argp);
+			if ((ssize_t)size==-1) {
+				extend(pvt->_increment);
+			} else {
+				break;
+			}
+		}
+
+	} else {
+
+		// if the buffer is too small, extend it
+		if (pvt->_position>=pvt->_buffersize) {
+			extend(pvt->_position-pvt->_buffersize+size);
+		} else if (size>=pvt->_buffersize-pvt->_position) {
+			extend(size-(pvt->_buffersize-pvt->_position));
+		}
+
+		// copy the data into the buffer
+		vsnprintf((char *)(pvt->_buffer+pvt->_position),
+				pvt->_buffersize-pvt->_position,format,*argp);
 	}
-
-	// copy the data into the buffer
-	vsnprintf((char *)(pvt->_buffer+pvt->_position),
-				pvt->_buffersize,format,*argp);
 
 	// increment the position indices
 	pvt->_position=pvt->_position+size;
