@@ -3,11 +3,9 @@
 
 #ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-
 #include <rudiments/private/rudimentsinlines.h>
+
+#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
