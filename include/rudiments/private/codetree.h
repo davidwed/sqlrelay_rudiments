@@ -3,69 +3,69 @@
 
 	private:
 		void	buildNonTerminalNodeAssociations(
-					rudiments::xmldomnode *node);
-		const char	getSymbolType(rudiments::xmldomnode *nt);
-		bool	parseChild(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					xmldomnode *node);
+		const char	getSymbolType(xmldomnode *nt);
+		bool	parseChild(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseConcatenation(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseConcatenation(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseAlternation(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseAlternation(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseOption(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseOption(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseRepetition(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseRepetition(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseException(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseException(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseTerminal(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseTerminal(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseLetter(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseLetter(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseLowerCaseLetter(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseLowerCaseLetter(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseUpperCaseLetter(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseUpperCaseLetter(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseDigit(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseDigit(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseSet(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseSet(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseBreak(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseBreak(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
-		bool	parseNonTerminal(rudiments::xmldomnode *grammarnode,
-					rudiments::xmldomnode *treeparent,
+					stringbuffer *ntbuffer);
+		bool	parseNonTerminal(xmldomnode *grammarnode,
+					xmldomnode *treeparent,
 					const char **codeposition,
-					rudiments::stringbuffer *ntbuffer);
+					stringbuffer *ntbuffer);
 
-		bool	writeNode(rudiments::xmldomnode *node,
-					rudiments::stringbuffer *output);
-		void	indent(rudiments::stringbuffer *output);
-		void	writeStartEnd(rudiments::stringbuffer *output,
+		bool	writeNode(xmldomnode *node,
+					stringbuffer *output);
+		void	indent(stringbuffer *output);
+		void	writeStartEnd(stringbuffer *output,
 					const char *string);
 
 		codetreeprivate		*pvt;

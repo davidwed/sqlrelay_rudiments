@@ -304,15 +304,15 @@ class codetree {
 		bool	parse(const char *input,
 					const char *grammar,
 					const char *startsymbol,
-					rudiments::xmldomnode *output,
+					xmldomnode *output,
 					const char **codeposition);
 
 		/** Interprets the XML representation of the code "input" using
 		 *  "grammar" and appends it as code to "output".  Returns true
 		 *  if this succeeds and false otherwise. */
-		bool	write(rudiments::xmldomnode *input,
+		bool	write(xmldomnode *input,
 					const char *grammar,
-					rudiments::stringbuffer *output);
+					stringbuffer *output);
 
 		/** Sets the debug level.  Debug is written to standard out. */
 		void	setDebugLevel(uint8_t debuglevel);
