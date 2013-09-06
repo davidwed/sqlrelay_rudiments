@@ -297,17 +297,16 @@ int64_t charstring::convertAmount(const char *amount) {
 	if (!amount) {
 		return 0;
 	}
-	const char	*dollarsstr=charstring::findFirst(amount,'$');
+	const char	*dollarsstr=findFirst(amount,'$');
 	dollarsstr=(dollarsstr)?dollarsstr+1:amount;
-	uint64_t	dollars=charstring::toUnsignedInteger(dollarsstr);
-	const char	*centsstr=charstring::findFirst(amount,'.');
-	uint64_t	cents=(centsstr)?
-				charstring::toUnsignedInteger(centsstr+1):0;
+	uint64_t	dollars=toUnsignedInteger(dollarsstr);
+	const char	*centsstr=findFirst(amount,'.');
+	uint64_t	cents=(centsstr)?toUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
 }
 
 char *charstring::convertAmount(int64_t amount) {
-	uint16_t	length=charstring::integerLength(amount)+4;
+	uint16_t	length=integerLength(amount)+4;
 	if (length<6) {
 		length=6;
 	}

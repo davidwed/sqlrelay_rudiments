@@ -40,8 +40,6 @@ class RUDIMENTS_DLLSPEC crypt {
 		 *  If your application is not multithreaded, then
 		 *  there is no need to supply a mutex. */
 		static	void	setMutex(mutex *mtx);
-
-	#include <rudiments/private/crypt.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE
