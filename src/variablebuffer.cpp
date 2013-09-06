@@ -206,14 +206,11 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 
 	// copy the data into the buffer, extending as necessary
 	for (;;) {
-printf("attempting with buffersize: %d\n",pvt->_buffersize);
 		size=vsnprintf((char *)(pvt->_buffer+pvt->_position),
 				pvt->_buffersize-pvt->_position,format,*argp);
 		if ((ssize_t)size==-1) {
 			extend(pvt->_increment);
-printf("failed, extending to: %d\n",pvt->_buffersize);
 		} else {
-printf("success\n");
 			break;
 		}
 	}
