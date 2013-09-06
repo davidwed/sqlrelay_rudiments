@@ -242,7 +242,7 @@ void codetree::buildNonTerminalNodeAssociations(xmldomnode *node) {
 	}
 }
 
-const char codetree::getSymbolType(rudiments::xmldomnode *nt) {
+const char codetree::getSymbolType(xmldomnode *nt) {
 	const char	*symboltype=nt->getAttributeValue(TYPE);
 	if (!charstring::length(symboltype)) {
 		return INLINE;
