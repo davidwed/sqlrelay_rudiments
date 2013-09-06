@@ -185,33 +185,37 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 
 	// find out how much space we need
 	size_t	size=vsnprintf(NULL,0,format,*argp);
+
+	// On most systems the above call will return the number of bytes
+	// necessary to print "*argp" using "format".  Some systems though,
+	// like SCO OSR6, just return -1 if the buffer is too small to
+	// accommodate the data.  We'll handle both situations below.
+
+	// extend the buffer if necessary
 	if ((ssize_t)size==-1) {
-
-		for (;;) {
-			if (pvt->_position>=pvt->_buffersize) {
-				extend(pvt->_position-pvt->_buffersize);
-			}
-			size=vsnprintf((char *)(pvt->_buffer+pvt->_position),
-				pvt->_buffersize-pvt->_position,format,*argp);
-			if ((ssize_t)size==-1) {
-				extend(pvt->_increment);
-			} else {
-				break;
-			}
+		if (pvt->_position>=pvt->_buffersize) {
+			extend(pvt->_position-pvt->_buffersize);
 		}
-
 	} else {
-
-		// if the buffer is too small, extend it
 		if (pvt->_position>=pvt->_buffersize) {
 			extend(pvt->_position-pvt->_buffersize+size);
 		} else if (size>=pvt->_buffersize-pvt->_position) {
 			extend(size-(pvt->_buffersize-pvt->_position));
 		}
+	}
 
-		// copy the data into the buffer
-		vsnprintf((char *)(pvt->_buffer+pvt->_position),
+	// copy the data into the buffer, extending as necessary
+	for (;;) {
+printf("attempting with buffersize: %d\n",pvt->_buffersize);
+		size=vsnprintf((char *)(pvt->_buffer+pvt->_position),
 				pvt->_buffersize-pvt->_position,format,*argp);
+		if ((ssize_t)size==-1) {
+			extend(pvt->_increment);
+printf("failed, extending to: %d\n",pvt->_buffersize);
+		} else {
+printf("success\n");
+			break;
+		}
 	}
 
 	// increment the position indices

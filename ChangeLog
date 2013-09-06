@@ -15,6 +15,8 @@
 	added "data" member to xmldomnode class for attaching app-specific data
 	improved codetree speed
 	fixed a "char" on ARM issue
+	fixed a longstanding issue where variablebuffers could get extended
+		too much sometimes
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
