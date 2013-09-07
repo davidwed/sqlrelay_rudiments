@@ -4,11 +4,10 @@
 #include <rudiments/hostentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
+#include <rudiments/null.h>
 
 // for AF_INET
 #include <netdb.h>
-
-#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;

@@ -4,8 +4,8 @@
 #include <rudiments/variablebuffer.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/stdio.h>
+#include <rudiments/null.h>
 #include "test.cpp"
-#include <stddef.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 using namespace rudiments;
