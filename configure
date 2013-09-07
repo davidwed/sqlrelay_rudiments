@@ -17671,6 +17671,7 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#include <stddef.h>
 #include <pthread.h>
 int
 main ()
@@ -17702,6 +17703,7 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#include <stddef.h>
 #include <pthread.h>
 int
 main ()
