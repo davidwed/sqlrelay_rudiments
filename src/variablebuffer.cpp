@@ -98,7 +98,7 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 	// if the buffer is too small, extend it
 	if (pvt->_position>=pvt->_buffersize) {
 		extend(pvt->_position-pvt->_buffersize+size);
-	} else if (size>=pvt->_buffersize-pvt->_position) {
+	} else if (size>pvt->_buffersize-pvt->_position) {
 		extend(size-(pvt->_buffersize-pvt->_position));
 	}
 
@@ -199,7 +199,7 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 	} else {
 		if (pvt->_position>=pvt->_buffersize) {
 			extend(pvt->_position-pvt->_buffersize+size);
-		} else if (size>=pvt->_buffersize-pvt->_position) {
+		} else if (size>pvt->_buffersize-pvt->_position) {
 			extend(size-(pvt->_buffersize-pvt->_position));
 		}
 	}
