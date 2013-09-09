@@ -1044,10 +1044,6 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 	#include <rudiments/private/filedescriptor.h>
 };
 
-extern	filedescriptor	stdinput;
-extern	filedescriptor	stdoutput;
-extern	filedescriptor	stderror;
-
 #ifdef RUDIMENTS_NAMESPACE
 }
 #endif
