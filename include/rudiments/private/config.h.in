@@ -229,6 +229,9 @@
 /* Some systems have errno.h */
 #undef RUDIMENTS_HAVE_ERRNO_H
 
+/* Some systems have execvp */
+#undef RUDIMENTS_HAVE_EXECVP
+
 /* Some systems have fchmod */
 #undef RUDIMENTS_HAVE_FCHMOD
 

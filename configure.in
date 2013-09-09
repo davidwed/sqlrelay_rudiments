@@ -2656,6 +2656,16 @@ AC_TRY_LINK([
 #endif],
 fork(),AC_DEFINE(RUDIMENTS_HAVE_FORK,1,Some systems have fork) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for execvp)
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+execvp(NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_EXECVP,1,Some systems have execvp) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for setsid)
 AC_TRY_LINK([
 #ifdef RUDIMENTS_HAVE_UNISTD_H

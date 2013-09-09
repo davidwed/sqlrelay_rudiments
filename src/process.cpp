@@ -338,6 +338,15 @@ pid_t process::fork() {
 	#endif
 }
 
+bool process::exec(const char *command, const char * const *args) {
+	#if defined(RUDIMENTS_HAVE_EXECVP)
+		return execvp(command,(char * const *)args)!=-1;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
 bool process::detach() {
 
 	// fork off a child process

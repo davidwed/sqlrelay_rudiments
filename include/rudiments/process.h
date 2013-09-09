@@ -153,6 +153,15 @@ class RUDIMENTS_DLLSPEC process {
 		 *  child is forked. */
 		static pid_t	fork();
 
+		/** Runs "command" with arguments "args", replacing the current
+		 *  running process with this new process.  Note that the first
+		 *  element of array "args" should be the name of the command
+		 *  that you want to run, typically the same as "command".
+		 *  "args" should be NULL terminated.  Returns false if an
+		 *  error occurred and otherwise does not return at all. */
+		static bool	exec(const char *command,
+					const char * const *args);
+
 		/** Detaches the current process from the controlling tty,
 		 *  creates a new session, changes directory to / and sets the
 		 *  file creation mask to 0.  Use this method to "fork your
