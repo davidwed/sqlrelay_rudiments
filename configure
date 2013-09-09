@@ -659,6 +659,7 @@ PTHREADINCLUDES
 WERROR
 WALL
 PIPE
+CRTLIB
 GNULIB
 BELIB
 WNOLONGDOUBLE
@@ -15561,11 +15562,13 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR = 6.0.0" >&5
 $as_echo_n "checking for SCO OSR = 6.0.0... " >&6; }
+CRTLIB=""
 if ( test "`uname -s`" = "SCO_SV" )
 then
 	if ( test "`uname -v | tr -d '.'`" -eq "600" )
 	then
 		CPPFLAGS="$CPPFLAGS -D__STDC__=0"
+		CRTLIB="-lcrt"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	else
@@ -15576,6 +15579,7 @@ else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
+
 
 
 

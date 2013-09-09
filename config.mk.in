@@ -92,5 +92,8 @@ BELIB = @BELIB@
 # gnu library
 GNULIB = @GNULIB@
 
+# crt library
+CRTLIB = @CRTLIB@
+
 # Microsoft-specific stuff
 EXE = @EXE@
