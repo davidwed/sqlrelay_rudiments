@@ -7,9 +7,9 @@
 namespace rudiments {
 #endif
 
-filedescriptor	stdinput(0);
-filedescriptor	stdoutput(1);
-filedescriptor	stderror(2);
+RUDIMENTS_DLLSPEC filedescriptor	stdinput(0);
+RUDIMENTS_DLLSPEC filedescriptor	stdoutput(1);
+RUDIMENTS_DLLSPEC filedescriptor	stderror(2);
 
 #ifdef RUDIMENTS_NAMESPACE
 }
