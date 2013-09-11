@@ -245,6 +245,13 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue) const;
 
+		/** Returns the next sibling node whose type is TAG_XMLDOMNODE
+		 *  and whose name matches one of the members of the
+		 *  NULL-terminated array "set".  If no match is found,
+		 *  nullnode is returned. */
+		xmldomnode	*getNextTagSiblingInSet(
+						const char * const *set) const;
+
 
 		/** Returns the number of immediate child nodes. */
 		uint64_t	getChildCount() const;
@@ -293,6 +300,13 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 						const char *attributename,
 						const char *attributevalue)
 						const;
+
+		/** Returns the first child node whose type is TAG_XMLDOMNODE
+		 *  and whose name matches one of the members of the
+		 *  NULL-terminated array "set".  If no match is found,
+		 *  nullnode is returned. */
+		xmldomnode	*getFirstTagChildInSet(
+						const char * const *set) const;
 
 
 		/** Returns the number of attributes. */

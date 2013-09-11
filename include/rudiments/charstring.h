@@ -127,6 +127,12 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *str2,
 							size_t size);
 
+		/** Returns true if "str" is found among the values in the
+		 *  NULL-terminated array "set".  Also returns true if "str"
+		 *  is NULL and set is NULL or contains only a NULL-terminator.
+		 *  Otherwise returns false. */
+		static	bool	inSet(const char *str, const char * const *set);
+
 		/** Returns true if "haystack" contains "needle" or
 		 *  false otherwise. */
 		static	bool	contains(const char *haystack,

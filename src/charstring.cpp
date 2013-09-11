@@ -964,6 +964,18 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 	#endif
 }
 
+bool charstring::inSet(const char *str, const char * const *set) {
+	if (!set || !set[0]) {
+		return !str;
+	}
+	for (const char * const *s=set; *s; s++) {
+		if (!compare(str,*s)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool charstring::contains(const char *haystack, const char *needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }

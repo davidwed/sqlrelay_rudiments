@@ -201,6 +201,17 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 	return pvt->_nullnode;
 }
 
+xmldomnode *xmldomnode::getNextTagSiblingInSet(const char * const *set) const {
+	for (xmldomnode *child=getNextTagSibling();
+			!child->isNullNode(); 
+			child=child->getNextTagSibling()) {
+		if (charstring::inSet(child->getName(),set)) {
+			return child;
+		}
+	}
+	return pvt->_nullnode;
+}
+
 xmldomnode *xmldomnode::getFirstTagChild() const {
 	return pvt->_firsttagchild;
 }
@@ -218,6 +229,14 @@ xmldomnode *xmldomnode::getFirstTagChild(const char *name,
 	xmldomnode	*node=getChild(name,attributename,attributevalue);
 	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
 		node:node->getNextTagSibling(name,attributename,attributevalue);
+}
+
+xmldomnode *xmldomnode::getFirstTagChildInSet(const char * const *set) const {
+	xmldomnode *child=getFirstTagChild();
+	if (charstring::inSet(child->getName(),set)) {
+		return child;
+	}
+	return child->getNextTagSiblingInSet(set);
 }
 
 xmldomnode *xmldomnode::getChild(const char *name,
@@ -474,8 +493,9 @@ xmldomnode *xmldomnode::unlinkNode(xmldomnode *node,
 			}
 			if (current->pvt->_parent->
 					pvt->_firsttagchild==current) {
-				current->pvt->_parent->pvt->_firsttagchild=
-					current->getNextTagSibling();
+				current->pvt->_parent->
+					pvt->_firsttagchild=
+						current->getNextTagSibling();
 			}
 		}
 		if (current->pvt->_previous) {
