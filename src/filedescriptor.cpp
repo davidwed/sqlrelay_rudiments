@@ -2206,7 +2206,12 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 	// that size and use it.  For systems that return -1, we'll use a
 	// strinbuffer.  Its appendFormatted() code knows how to handle systems
 	// that return -1 for vsnprintf.
-	ssize_t	size=charstring::printf(NULL,0,format,argp);
+
+	// Some compilers throw a warning if they see "printf(NULL..." at all,
+	// independent of whether it's the global function printf() or one that
+	// you've defined yourself.  This buffer=NULL thing works around it.
+	char	*buffer=NULL;
+	ssize_t	size=charstring::printf(buffer,0,format,argp);
 	if (size==-1) {
 		stringbuffer	str;
 		str.appendFormatted(format,argp);

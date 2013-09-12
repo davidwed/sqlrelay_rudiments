@@ -181,8 +181,13 @@ variablebuffer *variablebuffer::writeFormatted(const char *format, ...) {
 variablebuffer *variablebuffer::writeFormatted(const char *format,
 							va_list *argp) {
 
-	// find out how much space we need
-	size_t	size=charstring::printf(NULL,0,format,*argp);
+	// find out how much space we need...
+	//
+	// Some compilers throw a warning if they see "printf(NULL..." at all,
+	// independent of whether it's the global function printf() or one that
+	// you've defined yourself.  This buffer=NULL thing works around it.
+	char	*buffer=NULL;
+	size_t	size=charstring::printf(buffer,0,format,*argp);
 
 	// On most systems the above call will return the number of bytes
 	// necessary to print "*argp" using "format".  Some systems though,
