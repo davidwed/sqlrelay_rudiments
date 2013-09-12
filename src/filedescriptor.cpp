@@ -2229,17 +2229,16 @@ static char hex[17]="0123456789ABCDEF";
 
 void filedescriptor::safePrint(char c) {
 	if (c=='\r') {
-		stdoutput.printf("\\r");
+		printf("\\r");
 	} else if (c=='\n') {
-		stdoutput.printf("\\n");
+		printf("\\n");
 	} else if (c=='	') {
-		stdoutput.printf("\\t");
+		printf("\\t");
 	} else if (c>=' ' && c<='~') {
-		stdoutput.printf("%c",c);
+		printf("%c",c);
 	} else {
 		unsigned int	uintc=(unsigned char)c;
-		stdoutput.printf("(0x%c%c|%d)",
-				hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
+		printf("(0x%c%c|%d)",hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
 	}
 }
 
@@ -2299,7 +2298,7 @@ void filedescriptor::printBits(unsigned char *bits, uint64_t size) {
 	for (uint64_t i=0; i<size; i++) {
 		unsigned char byte=bits[i];
 		for (int8_t j=7; j>=0; j--) {
-			stdoutput.printf("%d",(byte>>j)&0x01);
+			printf("%d",(byte>>j)&0x01);
 		}
 	}
 }
