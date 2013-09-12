@@ -6,12 +6,7 @@
 
 #include <rudiments/resultcodes.h>
 
-// This extern "C" is necessary because sys/types.h on some versions of minix
-// (and maybe others) include stdio.h and the definition of vdprintf doesn't
-// have extern "C" surrounding the definition.
-extern "C" {
-	#include <sys/types.h>
-}
+#include <sys/types.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	// IRIX appears to need this but OpenBSD can't

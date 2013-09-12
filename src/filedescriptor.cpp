@@ -14,26 +14,18 @@
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || defined(DEBUG_READ)
 	#include <rudiments/process.h>
 #endif
-#ifndef RUDIMENTS_HAVE_VDPRINTF
-	#include <rudiments/stringbuffer.h>
-#endif
+#include <rudiments/stringbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAS_SSL
-	// This extern "C" is necessary because the headers for some versions of
-	// SSL include stdio.h and some versions of netbsd (and maybe others)
-	// don't have extern "C" surrounding the definition of vdprintf in
-	// stdio.h
-	extern "C" {
-		// Redhat 6.2 needs _GNU_SOURCE
-		#ifndef _GNU_SOURCE
-			#define _GNU_SOURCE
-		#endif
-		#include <openssl/ssl.h>
-	}
+	// Redhat 6.2 needs _GNU_SOURCE
+	#ifndef _GNU_SOURCE
+		#define _GNU_SOURCE
+	#endif
+	#include <openssl/ssl.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_IO_H
@@ -2207,13 +2199,9 @@ size_t filedescriptor::printf(const char *format, ...) {
 }
 
 size_t filedescriptor::printf(const char *format, va_list *argp) {
-	#ifdef RUDIMENTS_HAVE_VDPRINTF
-		return vdprintf(pvt->_fd,format,*argp);
-	#else
-		stringbuffer	str;
-		str.appendFormatted(format,argp);
-		return write(str.getString(),str.getStringLength());
-	#endif
+	stringbuffer	str;
+	str.appendFormatted(format,argp);
+	return write(str.getString(),str.getStringLength());
 }
 
 static char hex[17]="0123456789ABCDEF";

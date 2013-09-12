@@ -224,6 +224,9 @@
 /* Some systems have errno.h */
 #define RUDIMENTS_HAVE_ERRNO_H 1
 
+/* Some systems have execvp */
+/* #undef RUDIMENTS_HAVE_EXECVP */
+
 /* Some systems have fchmod */
 /* #undef RUDIMENTS_HAVE_FCHMOD */
 
@@ -1066,9 +1069,6 @@
 
 /* Some systems have utime */
 /* #undef RUDIMENTS_HAVE_UTIME */
-
-/* Some systems have vdprintf */
-/* #undef RUDIMENTS_HAVE_VDPRINTF */
 
 /* Some systems have utimes */
 /* #undef RUDIMENTS_HAVE_UTIMES */
