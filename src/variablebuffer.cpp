@@ -187,37 +187,19 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 	// independent of whether it's the global function printf() or one that
 	// you've defined yourself.  This buffer=NULL thing works around it.
 	char	*buffer=NULL;
-	size_t	size=charstring::printf(buffer,0,format,*argp);
-
-	// On most systems the above call will return the number of bytes
-	// necessary to print "*argp" using "format".  Some systems though,
-	// like SCO OSR6, just return -1 if the buffer is too small to
-	// accommodate the data.  We'll handle both situations below.
+	size_t	size=charstring::printf(buffer,0,format,argp);
 
 	// extend the buffer if necessary
-	if ((ssize_t)size==-1) {
-		if (pvt->_position>=pvt->_buffersize) {
-			extend(pvt->_position-pvt->_buffersize);
-		}
-	} else {
-		if (pvt->_position>=pvt->_buffersize) {
-			extend(pvt->_position-pvt->_buffersize+size);
-		} else if (size>pvt->_buffersize-pvt->_position) {
-			extend(size-(pvt->_buffersize-pvt->_position));
-		}
+	if (pvt->_position>=pvt->_buffersize) {
+		extend(pvt->_position-pvt->_buffersize+size);
+	} else if (size>pvt->_buffersize-pvt->_position) {
+		extend(size-(pvt->_buffersize-pvt->_position));
 	}
 
-	// copy the data into the buffer, extending as necessary
-	for (;;) {
-		size=charstring::printf((char *)(pvt->_buffer+pvt->_position),
+	// copy the data into the buffer
+	size=charstring::printf((char *)(pvt->_buffer+pvt->_position),
 						pvt->_buffersize-pvt->_position,
-						format,*argp);
-		if ((ssize_t)size==-1) {
-			extend(pvt->_increment);
-		} else {
-			break;
-		}
-	}
+						format,argp);
 
 	// increment the position indices
 	pvt->_position=pvt->_position+size;
