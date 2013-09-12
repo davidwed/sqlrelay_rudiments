@@ -31,7 +31,6 @@
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif
@@ -2199,25 +2198,43 @@ size_t filedescriptor::printf(const char *format, ...) {
 }
 
 size_t filedescriptor::printf(const char *format, va_list *argp) {
-	stringbuffer	str;
-	str.appendFormatted(format,argp);
-	return write(str.getString(),str.getStringLength());
+
+	// charstring::printf wraps vsprintf.  On most systems passing in NULL
+	// and 0 for the first and second arguments is a trick to find out how
+	// big of a buffer we need.  Some systems just return -1 (error) though.
+	// For systems that return a valid size we'll just create a buffer of
+	// that size and use it.  For systems that return -1, we'll use a
+	// strinbuffer.  Its appendFormatted() code knows how to handle systems
+	// that return -1 for vsnprintf.
+	ssize_t	size=charstring::printf(NULL,0,format,argp);
+	if (size==-1) {
+		stringbuffer	str;
+		str.appendFormatted(format,argp);
+		write(str.getString(),str.getStringLength());
+		size=str.getStringLength();
+	} else {
+		char	*buffer=new char[size];
+		size=charstring::printf(buffer,size,format,argp);
+		write(buffer,size);
+	}
+	return size;
 }
 
 static char hex[17]="0123456789ABCDEF";
 
 void filedescriptor::safePrint(char c) {
 	if (c=='\r') {
-		printf("\\r");
+		stdoutput.printf("\\r");
 	} else if (c=='\n') {
-		printf("\\n");
+		stdoutput.printf("\\n");
 	} else if (c=='	') {
-		printf("\\t");
+		stdoutput.printf("\\t");
 	} else if (c>=' ' && c<='~') {
-		printf("%c",c);
+		stdoutput.printf("%c",c);
 	} else {
 		unsigned int	uintc=(unsigned char)c;
-		printf("(0x%c%c|%d)",hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
+		stdoutput.printf("(0x%c%c|%d)",
+				hex[((c>>4)&0x0F)],hex[(c&0x0F)],uintc);
 	}
 }
 
@@ -2277,7 +2294,7 @@ void filedescriptor::printBits(unsigned char *bits, uint64_t size) {
 	for (uint64_t i=0; i<size; i++) {
 		unsigned char byte=bits[i];
 		for (int8_t j=7; j>=0; j--) {
-			printf("%d",(byte>>j)&0x01);
+			stdoutput.printf("%d",(byte>>j)&0x01);
 		}
 	}
 }

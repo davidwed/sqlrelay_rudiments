@@ -716,7 +716,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Appends "..." to "string" of length "length" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules. */
-		static size_t	printf(char *string, size_t length,
+		static ssize_t	printf(char *string, size_t length,
 						const char *format, ...);
 
 		/** Appends "..." to "string" of length "length" using
@@ -725,7 +725,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
-		static size_t	printf(char *string, size_t length,
+		static ssize_t	printf(char *string, size_t length,
 						const char *format,
 						va_list *argp);
 

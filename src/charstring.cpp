@@ -1618,7 +1618,7 @@ char *charstring::padString(const char *str, char padchar,
 	return newstring;
 }
 
-size_t charstring::printf(char *string, size_t length,
+ssize_t charstring::printf(char *string, size_t length,
 					const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
@@ -1627,11 +1627,8 @@ size_t charstring::printf(char *string, size_t length,
 	return result;
 }
 
-size_t charstring::printf(char *string, size_t length,
+ssize_t charstring::printf(char *string, size_t length,
 					const char *format, va_list *argp) {
-	if (!string || !format) {
-		return 0;
-	}
 	return vsnprintf(string,length,format,*argp);
 }
 

@@ -5,9 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
-
-// for vsnprintf
-#include <stdio.h>
+#include <rudiments/null.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
@@ -184,7 +182,7 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 							va_list *argp) {
 
 	// find out how much space we need
-	size_t	size=vsnprintf(NULL,0,format,*argp);
+	size_t	size=charstring::printf(NULL,0,format,*argp);
 
 	// On most systems the above call will return the number of bytes
 	// necessary to print "*argp" using "format".  Some systems though,
@@ -206,8 +204,9 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 
 	// copy the data into the buffer, extending as necessary
 	for (;;) {
-		size=vsnprintf((char *)(pvt->_buffer+pvt->_position),
-				pvt->_buffersize-pvt->_position,format,*argp);
+		size=charstring::printf((char *)(pvt->_buffer+pvt->_position),
+						pvt->_buffersize-pvt->_position,
+						format,*argp);
 		if ((ssize_t)size==-1) {
 			extend(pvt->_increment);
 		} else {
