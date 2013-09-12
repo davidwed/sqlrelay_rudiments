@@ -2218,8 +2218,8 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 		write(str.getString(),str.getStringLength());
 		size=str.getStringLength();
 	} else {
-		char	*buffer=new char[size];
-		size=charstring::printf(buffer,size,format,argp);
+		char	*buffer=new char[size+1];
+		size=charstring::printf(buffer,size+1,format,argp);
 		write(buffer,size);
 	}
 	return size;
