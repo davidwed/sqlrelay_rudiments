@@ -715,7 +715,21 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Appends "..." to "string" of length "length" using
 		 *  "format" which should comply with standard printf
-		 *  formatting rules. */
+		 *  formatting rules.
+		 *
+		 *  Returns the number of characters written to "string"
+		 *  excluding the NULL terminator.  If string wasn't large
+		 *  enough to accommodate the data then it only writes
+		 *  "length" bytes to "string" but still returns the number
+		 *  of characters that would have been written had "string"
+		 *  been large enough.
+		 *
+		 *  If "string" is NULL or "length" is 0 then nothing is written
+		 *  to "string" but the number of characters that would have
+		 *  been written had "string" been large enough is still
+		 *  returned.
+		 *
+		 *  Returns -1 if an error occurred. */
 		static ssize_t	printf(char *string, size_t length,
 						const char *format, ...);
 
@@ -724,7 +738,21 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  formatting rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
-		 *  va_list. */
+		 *  va_list.
+		 *
+		 *  Returns the number of characters written to "string"
+		 *  excluding the NULL terminator.  If string wasn't large
+		 *  enough to accommodate the data then it only writes
+		 *  "length" bytes to "string" but still returns the number
+		 *  of characters that would have been written had "string"
+		 *  been large enough.
+		 *
+		 *  If "string" is NULL or "length" is 0 then nothing is written
+		 *  to "string" but the number of characters that would have
+		 *  been written had "string" been large enough is still
+		 *  returned.
+		 *
+		 *  Returns -1 if an error occurred. */
 		static ssize_t	printf(char *string, size_t length,
 						const char *format,
 						va_list *argp);
