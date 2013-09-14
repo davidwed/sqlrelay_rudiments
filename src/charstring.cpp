@@ -1622,7 +1622,6 @@ ssize_t charstring::printf(char *string, size_t length,
 					const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-
 	size_t	result=printf(string,length,format,&argp);
 	va_end(argp);
 	return result;
@@ -1631,14 +1630,29 @@ ssize_t charstring::printf(char *string, size_t length,
 ssize_t charstring::printf(char *string, size_t length,
 					const char *format, va_list *argp) {
 
+	// Most vsnprintf implementations will crash if "string" is NULL and
+	// "length" is non-zero.
+	if (!string) {
+		length=0;
+	}
+
+	// vnsprintf should write whatever will fit into "string" and either
+	// return the number of bytes that were written or the number of bytes
+	// that would have been written if truncation hadn't occurred.
 	ssize_t	size=vsnprintf(string,length,format,*argp);
 
-	// On most systems the above call will return the number of bytes
-	// necessary to print "*argp" using "format" even if "string" wasn't
-	// big enough to accommodate the data.  Some systems though, like SCO
-	// OSR6, just return -1 if the buffer is too small to accommodate the
-	// data and don't write anything to the buffer.  For systems like that
-	// we'll simulate the more standard behavior.
+	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
+	// -1 if truncation occurred and don't write anything to "string".
+	//
+	// For systems like those, we'll simultate the expected behavior...
+
+	// Actually, some implementations (Redhat 5.2, probably others) also
+	// return 0 if "string" is NULL.  Simulate truncation in that case.
+	if (!string && !size) {
+		size=-1;
+	}
+
+	// Now simulate the expected behavior...
 	size_t	originallength=length;
 	while (size==-1) {
 		length=length+16;

@@ -2199,29 +2199,14 @@ size_t filedescriptor::printf(const char *format, ...) {
 
 size_t filedescriptor::printf(const char *format, va_list *argp) {
 
-	// charstring::printf wraps vsprintf.  On most systems passing in NULL
-	// and 0 for the first and second arguments is a trick to find out how
-	// big of a buffer we need.  Some systems just return -1 (error) though.
-	// For systems that return a valid size we'll just create a buffer of
-	// that size and use it.  For systems that return -1, we'll use a
-	// strinbuffer.  Its appendFormatted() code knows how to handle systems
-	// that return -1 for vsnprintf.
-
 	// Some compilers throw a warning if they see "printf(NULL..." at all,
 	// independent of whether it's the global function printf() or one that
 	// you've defined yourself.  This buffer=NULL thing works around it.
 	char	*buffer=NULL;
 	ssize_t	size=charstring::printf(buffer,0,format,argp);
-	if (size==-1) {
-		stringbuffer	str;
-		str.appendFormatted(format,argp);
-		write(str.getString(),str.getStringLength());
-		size=str.getStringLength();
-	} else {
-		char	*buffer=new char[size+1];
-		size=charstring::printf(buffer,size+1,format,argp);
-		write(buffer,size);
-	}
+	buffer=new char[size+1];
+	size=charstring::printf(buffer,size+1,format,argp);
+	write(buffer,size);
 	return size;
 }
 
