@@ -18,6 +18,9 @@
 	fixed a longstanding issue where variablebuffers could get extended
 		too much sometimes
 	renamed system class to sys to avoid collisions
+	added -Werror to configure-time tests for older systems where g++
+		doesn't return an error for an implicitly defined function
+	removed the rudiments namespace for compatibility with older compilers
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
