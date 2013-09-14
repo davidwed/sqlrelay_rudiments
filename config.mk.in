@@ -22,7 +22,6 @@ AR = @AR@
 
 # includes and defines
 BASECPPFLAGS = @WALL@ @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
-WERROR = @WERROR@
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool

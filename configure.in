@@ -321,9 +321,6 @@ echo "******************************"
 CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 
-AC_SUBST(CPPFLAGS)
-AC_SUBST(CXXFLAGS)
-
 dnl Checks for libtool.
 echo
 echo "***** Libtool ****************"
@@ -364,6 +361,13 @@ FW_CHECK_PIPE
 FW_CHECK_WALL
 FW_CHECK_WERROR
 FW_CHECK_DEBUG
+
+dnl update CPPFLAGS with -Werror as appropriate but leave out -Wall,
+dnl it causes way to many problems with the test programs
+CPPFLAGS="$WERROR $CPPFLAGS"
+AC_SUBST(CPPFLAGS)
+AC_SUBST(CXXFLAGS)
+
 echo "******************************"
 
 dnl Checks for header files.
@@ -676,6 +680,7 @@ AC_C_CONST
 
 FW_CHECK_EXPLICIT_SPECIALIZATION
 
+dnl -Werror screws these up, disable it for now
 AC_TYPE_UID_T
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
@@ -1708,7 +1713,7 @@ AC_TRY_COMPILE([#ifndef __USE_GNU
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif],
-char *a=NULL; strchrnul(a,NULL);,AC_DEFINE(RUDIMENTS_HAVE_STRCHRNUL,1,Some systems have strchrnul) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+char *a=NULL; strchrnul(a,0);,AC_DEFINE(RUDIMENTS_HAVE_STRCHRNUL,1,Some systems have strchrnul) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 SWAB_DEFINED=""
 AC_MSG_CHECKING(whether swab is defined)
@@ -2118,8 +2123,11 @@ symlink("","");,AC_DEFINE(RUDIMENTS_HAVE_SYMLINK,1,Some systems have symlink) AC
 AC_MSG_CHECKING(for readlink)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
 #endif],
-readlink("","",0);,AC_DEFINE(RUDIMENTS_HAVE_READLINK,1,Some systems have readlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+readlink("",NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_READLINK,1,Some systems have readlink) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fchown)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -2179,7 +2187,7 @@ AC_MSG_CHECKING(for mkstemp)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-mkstemp("");,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+mkstemp(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for fsync)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H

@@ -4322,9 +4322,6 @@ echo "******************************"
 CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 
-
-
-
 echo
 echo "***** Libtool ****************"
 # Make sure we can run config.sub.
@@ -15799,6 +15796,11 @@ $as_echo "no" >&6; }
 	CXXFLAGS="$CXXFLAGS $DBG"
 fi
 
+
+CPPFLAGS="$WERROR $CPPFLAGS"
+
+
+
 echo "******************************"
 
 echo
@@ -17680,7 +17682,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-pthread_create(NULL,NULL,NULL,NULL);
+pthread_exit(NULL);
   ;
   return 0;
 }
@@ -17695,39 +17697,6 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-					if ( test -z "$HAVE_PTHREAD" )
-					then
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $TESTINCLUDES"
-LIBS="$TESTLIB"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <stddef.h>
-#include <pthread.h>
-int
-main ()
-{
-pthread_create(NULL,pthread_attr_default,NULL,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  HAVE_PTHREAD="yes"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-					fi
 
 															if ( test -n "$HAVE_PTHREAD" )
 					then
@@ -24652,7 +24621,9 @@ $as_echo_n "checking for memmem... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
 #include <string.h>
 int
 main ()
@@ -24683,7 +24654,9 @@ $as_echo_n "checking for memccpy with char * argument... " >&6; }
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
 #include <string.h>
 int
 main ()
@@ -24711,7 +24684,9 @@ $as_echo_n "checking for _memccpy... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
 #include <string.h>
 int
 main ()
@@ -25127,7 +25102,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-char *a=NULL; strchrnul(a,NULL);
+char *a=NULL; strchrnul(a,0);
   ;
   return 0;
 }
@@ -26398,10 +26373,13 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
 int
 main ()
 {
-readlink("","",0);
+readlink("",NULL,0);
   ;
   return 0;
 }
@@ -26641,7 +26619,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-mkstemp("");
+mkstemp(NULL);
   ;
   return 0;
 }

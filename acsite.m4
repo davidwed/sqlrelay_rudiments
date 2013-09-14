@@ -650,15 +650,7 @@ then
 
 					dnl try to link
 					FW_TRY_LINK([#include <stddef.h>
-#include <pthread.h>],[pthread_create(NULL,NULL,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[HAVE_PTHREAD="yes"],[])
-					if ( test -z "$HAVE_PTHREAD" )
-					then
-						dnl try link again, some older
-						dnl thread implementations have
-						dnl non-pointer 2nd parameters
-						FW_TRY_LINK([#include <stddef.h>
-#include <pthread.h>],[pthread_create(NULL,pthread_attr_default,NULL,NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[HAVE_PTHREAD="yes"],[])
-					fi
+#include <pthread.h>],[pthread_exit(NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[HAVE_PTHREAD="yes"],[])
 
 					dnl  If the link succeeded then keep
 					dnl  the flags.
@@ -1573,7 +1565,9 @@ void *a=NULL; memrchr(a,0,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMRCHR,1,Some systems ha
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
 #include <string.h>],
 memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memmem) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -1584,7 +1578,9 @@ memmem(NULL,0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MEMMEM,1,Some systems have memme
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
 #include <string.h>],
 char *tmp; memccpy(tmp,NULL,1,1);,AC_DEFINE(RUDIMENTS_HAVE_MEMCCPY_CHAR,1,Some systems have memccpy with char argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -1592,7 +1588,9 @@ char *tmp; memccpy(tmp,NULL,1,1);,AC_DEFINE(RUDIMENTS_HAVE_MEMCCPY_CHAR,1,Some s
 	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
 #include <string.h>],
 _memccpy(NULL,NULL,1,1);,AC_DEFINE(RUDIMENTS_HAVE__MEMCCPY,1,Some systems have _memccpy) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
