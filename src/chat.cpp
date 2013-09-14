@@ -13,10 +13,6 @@
 
 //#define DEBUG_CHAT 1
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class chatprivate {
 	friend class chat;
 	private:
@@ -417,8 +413,3 @@ void chat::charUnescape(const char *str, char **newstr, bool second) {
 	}
 	(*newstr)[i]='\0';
 }
-
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

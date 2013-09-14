@@ -7,10 +7,6 @@
 #include <rudiments/null.h>
 #include <rudiments/private/rudimentsinlines.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #define DICTIONARY_TEMPLATE \
 	template <class keytype, class datatype, \
 			class dictionarynodetype, \
@@ -161,9 +157,5 @@ numericdictionarylist<datatype>::~numericdictionarylist() {}
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 numericdictionary<datatype>::~numericdictionary() {}
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

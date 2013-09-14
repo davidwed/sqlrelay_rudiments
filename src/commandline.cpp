@@ -6,10 +6,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class commandlineprivate {
 	friend class commandline;
 	private:
@@ -99,7 +95,3 @@ bool commandline::found(const char *arg) const {
 	}
 	return false;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

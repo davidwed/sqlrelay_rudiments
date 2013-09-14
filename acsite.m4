@@ -518,20 +518,6 @@ fi
 AC_DEFINE_UNQUOTED(INLINE,$INLINE,Some compliers dont support the inline keyword)
 ])
 
-AC_DEFUN([FW_CXX_NAMESPACES],
-[
-	RUDIMENTS_NAMESPACE=""
-	AC_MSG_CHECKING(for namespace support)
-	AC_TRY_COMPILE([namespace Outer { namespace Inner { int i = 0; }}],[using namespace Outer::Inner; return i;],[RUDIMENTS_NAMESPACE="yes"],[])
-	if ( test "$RUDIMENTS_NAMESPACE" = yes )
-	then
-		AC_MSG_RESULT(yes)
-  		AC_DEFINE(RUDIMENTS_NAMESPACE,1,Compiler supports namespaces)
-	else
-		AC_MSG_RESULT(no)
-	fi
-])
-
 
 dnl checks for the pthreads library
 dnl requires:  PTHREADPATH, RPATHFLAG, cross_compiling

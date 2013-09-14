@@ -6,10 +6,6 @@
 
 #include <rudiments/private/timezonefileincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class timezonefileprivate;
 
 struct ttinfo {
@@ -121,9 +117,5 @@ class RUDIMENTS_DLLSPEC timezonefile {
 
 	#include <rudiments/private/timezonefile.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

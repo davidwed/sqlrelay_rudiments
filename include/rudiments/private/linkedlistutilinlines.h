@@ -8,10 +8,6 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 int32_t linkedlistutil<datatype>::compare(datatype data1,
@@ -91,9 +87,5 @@ RUDIMENTS_TEMPLATE_INLINE
 void linkedlistutil<datatype>::print(datatype data) const {
 	stdoutput.printf("%p",data);
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

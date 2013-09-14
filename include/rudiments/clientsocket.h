@@ -6,10 +6,6 @@
 
 #include <rudiments/private/clientsocketincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class clientsocketprivate;
 
 /** The clientsocket class provides a base class for classes that implement
@@ -55,9 +51,5 @@ class RUDIMENTS_DLLSPEC clientsocket : public client {
 
 	#include <rudiments/private/clientsocket.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

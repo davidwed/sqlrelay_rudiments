@@ -4,10 +4,6 @@
 #include <rudiments/stdio.h>
 #include <sys/time.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 void alarmhandler(int sig) {
 	stdoutput.printf("alarm!\n");
 }

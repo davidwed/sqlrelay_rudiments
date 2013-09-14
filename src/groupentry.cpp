@@ -23,10 +23,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class groupentryprivate {
 	friend class groupentry;
 	private:
@@ -415,7 +411,3 @@ void groupentry::print() const {
 		stdoutput.printf("	%s\n",getMembers()[i]);
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

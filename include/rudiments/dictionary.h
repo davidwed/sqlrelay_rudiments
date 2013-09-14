@@ -6,10 +6,6 @@
 
 #include <rudiments/private/dictionaryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The dictionarynode class stores the key/value pairs that compose a
  *  dictionary. */
 template <class keytype, class datatype>
@@ -208,10 +204,6 @@ typedef conststringdictionarylist< const char * >
 				constnamevaluepairslist;
 typedef conststringdictionary< const char * >
 				constnamevaluepairs;
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #include <rudiments/private/dictionarynodeinlines.h>
 #include <rudiments/private/dictionaryinlines.h>

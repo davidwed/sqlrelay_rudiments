@@ -6,10 +6,6 @@
 
 #include <rudiments/private/unixsocketutilincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class unixsocketutilprivate;
 
 /** The unixsocketutil class is just a base class for other classes that use
@@ -39,9 +35,5 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 
 	#include <rudiments/private/unixsocketutil.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -22,10 +22,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class inetclientsocketprivate {
 	friend class inetclientsocket;
 	private:
@@ -286,7 +282,3 @@ int32_t inetclientsocket::connect() {
 
 	return retval;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -23,10 +23,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 CHAR *unicodeToAscii(WCHAR *in) {
 
@@ -470,7 +466,3 @@ void passwdentry::print() const {
 	stdoutput.printf("Home Directory: %s\n",getHomeDirectory());
 	stdoutput.printf("Shell: %s\n",getShell());
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

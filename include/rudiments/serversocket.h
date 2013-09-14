@@ -6,10 +6,6 @@
 
 #include <rudiments/private/serversocketincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serversocketprivate;
 
 /** The serversocket class provides a base class for classes that implement
@@ -98,9 +94,5 @@ class RUDIMENTS_DLLSPEC serversocket : public server {
 
 	#include <rudiments/private/serversocket.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

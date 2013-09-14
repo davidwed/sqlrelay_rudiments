@@ -9,10 +9,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 bool character::isAlphanumeric(int32_t c) {
 	return isalnum(c)!=0;
 }
@@ -89,7 +85,3 @@ bool character::inSet(char c, const char *set) {
 	}
 	return false;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

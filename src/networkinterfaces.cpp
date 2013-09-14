@@ -3,10 +3,6 @@
 
 #include <rudiments/networkinterfaces.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class networkinterfaceprivate {
 	friend class networkinterface;
 	private:
@@ -72,9 +68,5 @@ networkinterfacelist *networkinterfaces::getList() {
 
 networkinterface *networkinterfaces::getInterface(const char *name) {
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

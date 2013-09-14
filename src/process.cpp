@@ -37,10 +37,6 @@
 	#include <process.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 pid_t process::getProcessId() {
 	#if defined(RUDIMENTS_HAVE_GETPID)
 		return getpid();
@@ -392,7 +388,3 @@ void process::exit(int32_t status) {
 void process::exitImmediately(int32_t status) {
 	_exit(status);
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

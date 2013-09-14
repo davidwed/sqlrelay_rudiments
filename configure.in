@@ -673,8 +673,6 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 echo
 echo "***** Structures *************"
 
-FW_CXX_NAMESPACES
-
 AC_C_INLINE
 AC_C_CONST
 

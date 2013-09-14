@@ -11,10 +11,6 @@
 
 #include <rudiments/private/winsock.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class unixserversocketprivate {
 	friend class unixserversocket;
 	private:
@@ -187,7 +183,3 @@ filedescriptor *unixserversocket::accept() {
 
 	return returnsock;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

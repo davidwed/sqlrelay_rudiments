@@ -16,10 +16,6 @@
 extern "C" void swab(const void *from, void *to, ssize_t n);
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 void *rawbuffer::duplicate(const void *src, size_t size) {
 	if (!src || !size) {
 		return NULL;
@@ -186,7 +182,3 @@ void *rawbuffer::findLast(void *haystack, size_t haystacksize,
 					haystacksize,
 					needle,needlesize));
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

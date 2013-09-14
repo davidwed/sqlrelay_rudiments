@@ -5,10 +5,6 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serialportprivate {
 	friend class serialport;
 	private:
@@ -127,7 +123,3 @@ bool serialport::tcFlow(int32_t action) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

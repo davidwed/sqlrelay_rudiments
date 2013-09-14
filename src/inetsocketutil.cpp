@@ -9,10 +9,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class inetsocketutilprivate {
 	friend class inetsocketutil;
 	private:
@@ -58,8 +54,4 @@ uint16_t *inetsocketutil::_port() {
 
 sockaddr_in *inetsocketutil::_sin() {
 	return &pvt->_sin;
-};
-
-#ifdef RUDIMENTS_NAMESPACE
 }
-#endif

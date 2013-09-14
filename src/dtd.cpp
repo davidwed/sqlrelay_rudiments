@@ -6,10 +6,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class dtdprivate {
 	friend class dtd;
 	private:
@@ -286,7 +282,3 @@ void dtd::nodeError(xmldomnode *node) {
 	pvt->_err.append(xml->getString());
 	delete xml;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

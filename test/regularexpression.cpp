@@ -4,10 +4,6 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 void printMatches(regularexpression *re) {
 	for (int32_t i=0; i<re->getSubstringCount(); i++) {
 		stdoutput.printf("match %d start: \"%s\"\n",

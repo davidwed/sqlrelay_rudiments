@@ -4,10 +4,6 @@
 #include <rudiments/dtd.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, const char **argv) {
 
 	// display the contents of dtd.dtd

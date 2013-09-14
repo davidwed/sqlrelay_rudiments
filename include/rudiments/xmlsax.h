@@ -6,10 +6,6 @@
 
 #include <rudiments/private/xmlsaxincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class xmlsaxprivate;
 
 /** The xmlsax class is a base class for an XML SAX parser.  To use this
@@ -66,9 +62,5 @@ class RUDIMENTS_DLLSPEC xmlsax {
 
 	#include <rudiments/private/xmlsax.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -6,10 +6,6 @@
 
 #include <rudiments/private/unixserversocketincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class unixserversocketprivate;
 
 /** The unixserversocket class allows you to write programs that can talk to
@@ -93,9 +89,5 @@ class RUDIMENTS_DLLSPEC unixserversocket : public serversocket, private unixsock
 
 	#include <rudiments/private/unixserversocket.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

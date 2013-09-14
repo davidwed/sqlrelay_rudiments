@@ -19,10 +19,6 @@
 	#include <sys/wait.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class daemonprocessprivate {
 	friend class daemonprocess;
 	private:
@@ -197,7 +193,3 @@ int32_t daemonprocess::runAsUserId(uid_t uid) const {
 int32_t daemonprocess::runAsGroupId(gid_t gid) const {
 	return process::setGroupId(gid);
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

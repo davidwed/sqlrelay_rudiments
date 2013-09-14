@@ -6,10 +6,6 @@
 
 #include <rudiments/private/datetimeincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class datetimeprivate;
 
 /** The datetime class represents a date/time combination and provides methods
@@ -313,9 +309,5 @@ class RUDIMENTS_DLLSPEC datetime {
 
 	#include <rudiments/private/datetime.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

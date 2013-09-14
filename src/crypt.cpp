@@ -18,10 +18,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // LAME: not in the class
 #if !defined(RUDIMENTS_HAVE_CRYPT_R)
 static mutex	*_cryptmutex;
@@ -66,7 +62,3 @@ void crypt::setMutex(mutex *mtx) {
 		_cryptmutex=mtx;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

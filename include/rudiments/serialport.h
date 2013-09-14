@@ -6,10 +6,6 @@
 
 #include <rudiments/private/serialportincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serialportprivate;
 
 /** The serialport class is similar to the filedescriptor class, but read()
@@ -96,9 +92,5 @@ class RUDIMENTS_DLLSPEC serialport : public filedescriptor {
 
 	#include <rudiments/private/serialport.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

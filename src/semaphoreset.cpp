@@ -44,10 +44,6 @@
 	#define	IPC_EXCL 	2
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class semaphoresetprivate {
 	public:
 		int32_t	_semid;
@@ -682,7 +678,3 @@ void semaphoreset::retryInterruptedOperations() {
 void semaphoreset::dontRetryInterruptedOperations() {
 	pvt->_retryinterruptedoperations=false;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

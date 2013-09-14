@@ -59,10 +59,6 @@
 	#define MADVISE_ADDRCAST void *
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class memorymapprivate {
 	friend class memorymap;
 	private:
@@ -368,7 +364,3 @@ bool memorymap::mLockAll(int32_t flags) {
 	return false;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

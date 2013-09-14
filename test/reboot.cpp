@@ -5,10 +5,6 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, const char **argv) {
 	if (!sys::reboot()) {
 		stdoutput.printf("reboot failed: %s\n",error::getErrorString());

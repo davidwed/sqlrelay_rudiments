@@ -6,10 +6,6 @@
 
 #include <rudiments/private/stringbufferincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class stringbufferprivate;
 
 /** The stringbuffer class can be used to store strings of arbitrary length.
@@ -456,9 +452,5 @@ class RUDIMENTS_DLLSPEC stringbuffer : public variablebuffer {
 
 	#include <rudiments/private/stringbuffer.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

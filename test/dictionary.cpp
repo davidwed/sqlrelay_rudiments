@@ -4,10 +4,6 @@
 #include <rudiments/dictionary.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, const char **argv) {
 
 	// create a dictionary containing string keys and string values

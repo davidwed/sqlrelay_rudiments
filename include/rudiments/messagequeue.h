@@ -6,10 +6,6 @@
 
 #include <rudiments/private/messagequeue.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class messagequeueprivate;
@@ -23,9 +19,5 @@ class RUDIMENTS_DLLSPEC messagequeue {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

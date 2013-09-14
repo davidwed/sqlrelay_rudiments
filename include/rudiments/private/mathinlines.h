@@ -4,10 +4,6 @@
 #undef floor
 #undef round
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 RUDIMENTS_INLINE int32_t math::absoluteValue(int32_t j) {
 	// FIXME: use abs on platforms where an int is 32 bits
 	return labs(j);
@@ -906,7 +902,3 @@ RUDIMENTS_INLINE double math::loadExponent(double x, int32_t exp) {
 RUDIMENTS_INLINE long double math::loadExponent(long double x, int32_t exp) {
 	return ldexpl(x,exp);
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

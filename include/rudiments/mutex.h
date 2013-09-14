@@ -6,10 +6,6 @@
 
 #include <rudiments/private/mutexincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class mutexprivate;
 
 /** The mutex class provides an interface to pthreads mutual exclusion locks
@@ -52,9 +48,5 @@ class RUDIMENTS_DLLSPEC mutex {
 
 	#include <rudiments/private/mutex.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

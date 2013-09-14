@@ -12,10 +12,6 @@
 	#include <sys/mman.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class shmfileprivate {
 	friend class shmfile;
 	private:
@@ -71,7 +67,3 @@ bool shmfile::remove(const char *filename) {
 		return false;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

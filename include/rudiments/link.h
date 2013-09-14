@@ -6,10 +6,6 @@
 
 #include <rudiments/private/link.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class linkprivate;
 
 // like file class, but some methods operate on the link instead of the
@@ -24,9 +20,5 @@ class RUDIMENTS_DLLSPEC link : public file {
 
 	#include <rudiments/private/link.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

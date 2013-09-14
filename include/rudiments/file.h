@@ -6,10 +6,6 @@
 
 #include <rudiments/private/fileincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class fileprivate;
 
 /** The file class provides methods for interacting with files and for 
@@ -1567,9 +1563,5 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 	#include <rudiments/private/file.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

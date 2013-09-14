@@ -6,10 +6,6 @@
 
 #include <rudiments/private/shellcommandincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class shellcommandprivate;
@@ -71,9 +67,5 @@ class RUDIMENTS_DLLSPEC shellcommand {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

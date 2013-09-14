@@ -3,10 +3,6 @@
 
 #include <rudiments/server.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serverprivate {
 	friend class server;
 	private:
@@ -32,7 +28,3 @@ server &server::operator=(const server &s) {
 server::~server() {
 	delete pvt;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

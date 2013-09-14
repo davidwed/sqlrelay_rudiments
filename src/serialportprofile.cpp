@@ -12,10 +12,6 @@
 #endif
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serialportprofileprivate {
 	friend class serialportprofile;
 	private:
@@ -1431,7 +1427,3 @@ void serialportprofile::setOptions(termios *tio) {
 termios *serialportprofile::getTermios() {
 	return &pvt->_tio;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

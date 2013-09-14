@@ -20,10 +20,6 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class protocolentryprivate {
 	friend class protocolentry;
 	private:
@@ -230,7 +226,3 @@ void protocolentry::print() const {
 	// some compilers complain without this cast
 	stdoutput.printf("Number: %d\n",(int)getNumber());
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

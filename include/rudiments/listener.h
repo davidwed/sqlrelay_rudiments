@@ -6,10 +6,6 @@
 
 #include <rudiments/private/listenerincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 typedef linkedlist<filedescriptor *>		listenerlist;
 typedef linkedlistnode<filedescriptor *>	listenerlistnode;
 
@@ -91,9 +87,5 @@ class RUDIMENTS_DLLSPEC listener {
 
 	#include <rudiments/private/listener.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -20,10 +20,6 @@
 	#include <windows.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class xmldomprivate {
 	friend class xmldom;
 	private:
@@ -252,7 +248,3 @@ void xmldom::unCacheString(const char *string) {
 		index++;
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

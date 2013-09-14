@@ -6,10 +6,6 @@
 
 #include <rudiments/listener.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class modemutilprivate;
 
 class RUDIMENTS_DLLSPEC modemutil {
@@ -29,9 +25,5 @@ class RUDIMENTS_DLLSPEC modemutil {
 		modemutilprivate	*pvt;
 
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

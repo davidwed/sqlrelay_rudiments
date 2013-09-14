@@ -6,10 +6,6 @@
 
 #include <rudiments/private/parameterstringincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class parameterstringprivate;
 
 /** The parameterstring class provides methods for parsing and accessing
@@ -46,9 +42,5 @@ class RUDIMENTS_DLLSPEC parameterstring {
 
 	#include <rudiments/private/parameterstring.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -11,10 +11,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class timezonefileprivate {
 	friend class timezonefile;
 	private:
@@ -456,7 +452,3 @@ void timezonefile::print() {
 				(long long)pvt->_transutclocal[i]);
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

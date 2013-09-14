@@ -6,10 +6,6 @@
 
 #include <rudiments/private/permissionsincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** Permissions are access priveleges.  Files, directories, semaphores and
  *  shared memory segments all have permissions associated with them.
  * 
@@ -213,9 +209,5 @@ class RUDIMENTS_DLLSPEC permissions {
 		 *  to define a permission. */
 		static	mode_t	setGroupId();
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

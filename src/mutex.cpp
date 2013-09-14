@@ -18,10 +18,6 @@
 	#endif
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class mutexprivate {
 	friend class mutex;
 	private:
@@ -150,9 +146,5 @@ bool mutex::unlock() {
 
 void *mutex::getInternalMutexStructure() {
 	return NULL;
-}
-#endif
-
-#ifdef RUDIMENTS_NAMESPACE
 }
 #endif

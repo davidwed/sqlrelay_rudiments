@@ -18,10 +18,6 @@
 	#include <string.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 void error::clearError() {
 	errno=0;
 }
@@ -71,7 +67,3 @@ char *error::getErrorString() {
 		#error no strerror or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -17,10 +17,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class dynamiclibprivate {
 	friend class dynamiclib;
 	private:
@@ -138,7 +134,3 @@ char *dynamiclib::getError() const {
 void dynamiclib::setErrorMutex(mutex *mtx) {
 	_errormutex=mtx;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

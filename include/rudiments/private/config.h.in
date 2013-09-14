@@ -1159,9 +1159,6 @@
 /* Some systems have swab but dont define it */
 #undef RUDIMENTS_MUST_DEFINE_SWAB
 
-/* Compiler supports namespaces */
-#undef RUDIMENTS_NAMESPACE
-
 /* Solaris 2.6 has a few missing function prototypes */
 #undef RUDIMENTS_NEED_XNET_PROTOTYPES
 

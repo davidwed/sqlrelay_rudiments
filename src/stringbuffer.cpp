@@ -6,10 +6,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class stringbufferprivate {
 	friend class stringbuffer;
 	private:
@@ -332,7 +328,3 @@ void stringbuffer::truncate() {
 	variablebuffer::truncate();
 	terminate();
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

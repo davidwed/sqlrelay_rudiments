@@ -16,10 +16,6 @@
 	#include <windows.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class winsock {
 	public:
 		static	bool	initWinsock();
@@ -31,9 +27,5 @@ class winsock {
 			static	WSADATA	_wsadata;
 		#endif
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

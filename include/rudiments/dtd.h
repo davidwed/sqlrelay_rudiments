@@ -6,10 +6,6 @@
 
 #include <rudiments/private/dtdincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class dtdprivate;
 
 /** The dtd class implements a minimal XML DTD parser. */
@@ -39,9 +35,5 @@ class RUDIMENTS_DLLSPEC dtd {
 
 	#include <rudiments/private/dtd.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -6,10 +6,6 @@
 
 #include <rudiments/private/thread.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class threadprivate;
@@ -22,9 +18,5 @@ class RUDIMENTS_DLLSPEC thread {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

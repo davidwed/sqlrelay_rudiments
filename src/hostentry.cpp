@@ -21,10 +21,6 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class hostentryprivate {
 	friend class hostentry;
 	private:
@@ -345,7 +341,3 @@ void hostentry::print() const {
 		delete[] addr;
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

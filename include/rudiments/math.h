@@ -6,10 +6,6 @@
 
 #include <rudiments/private/mathincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class RUDIMENTS_DLLSPEC math {
 	public:
 		static int32_t	absoluteValue(int32_t j);
@@ -351,10 +347,6 @@ class RUDIMENTS_DLLSPEC math {
 //		sys/param.h - howmany(),roundup(),powerof2(),MIN(),MAX()
 
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #ifdef ENABLE_RUDIMENTS_INLINES
 	#include <rudiments/private/mathinlines.h>

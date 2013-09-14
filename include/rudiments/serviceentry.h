@@ -6,10 +6,6 @@
 
 #include <rudiments/private/serviceentryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serviceentryprivate;
 
 /** The serviceentry class provides methods for retrieving entries from the
@@ -108,9 +104,5 @@ class RUDIMENTS_DLLSPEC serviceentry {
 
 	#include <rudiments/private/serviceentry.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

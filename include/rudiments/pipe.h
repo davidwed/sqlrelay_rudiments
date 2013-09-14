@@ -6,10 +6,6 @@
 
 #include <rudiments/private/pipe.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class pipeprivate;
@@ -26,9 +22,5 @@ class RUDIMENTS_DLLSPEC pipe : public filedescriptor {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

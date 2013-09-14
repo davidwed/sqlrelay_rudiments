@@ -26,10 +26,6 @@
 	#include <string.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class modemutilprivate {
 	friend class modemutil;
 	private:
@@ -82,7 +78,3 @@ const char *modemutil::_devicename() {
 const char *modemutil::_baud() {
 	return pvt->_baud;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

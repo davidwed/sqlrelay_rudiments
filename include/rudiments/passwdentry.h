@@ -6,10 +6,6 @@
 
 #include <rudiments/private/passwdentryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class passwdentryprivate;
 
 /** The passwdentry class provides methods for retrieving information about
@@ -165,9 +161,5 @@ class RUDIMENTS_DLLSPEC passwdentry {
 
 	#include <rudiments/private/passwdentry.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -7,10 +7,6 @@
 #include <rudiments/error.h>
 #include <rudiments/null.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class variablebufferprivate {
 	friend class variablebuffer;
 	private:
@@ -370,7 +366,3 @@ size_t variablebuffer::_position() {
 void variablebuffer::_position(size_t pos) {
 	pvt->_position=pos;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -7,11 +7,6 @@
 // for fflush, stdout
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
-
 // some debug macros
 #define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_indentlevel; i++) { stdoutput.printf(" "); } }
 #ifdef _MSC_VER
@@ -1006,7 +1001,3 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 	// restore indent level
 	pvt->_indentlevel=startindentlevel;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

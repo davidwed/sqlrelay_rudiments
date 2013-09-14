@@ -24,10 +24,6 @@
 	#include <unistd.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serversocketprivate {
 	friend class serversocket;
 	private:
@@ -237,7 +233,3 @@ int32_t serversocket::lowLevelClose() {
 		#error no closesocket, close or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

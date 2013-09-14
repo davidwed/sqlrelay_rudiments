@@ -17,10 +17,6 @@
 	#include <sys/time.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #ifndef RUDIMENTS_HAVE_STRUCT_ITIMERVAL
 	struct itimerval {
 		struct timeval	it_interval;
@@ -144,7 +140,3 @@ bool intervaltimer::stop() {
 	setPeriodicInterval(psec,pmicrosec);
 	return retval;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

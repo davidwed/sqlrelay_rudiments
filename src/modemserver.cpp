@@ -21,10 +21,6 @@
 	#define O_NOCTTY	0
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class modemserverprivate {
 	friend class modemserver;
 	private:
@@ -134,7 +130,3 @@ bool modemserver::close() {
 	ch.runScript(pvt->_disconnectscript,NULL);
 	return filedescriptor::close();
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

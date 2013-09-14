@@ -5,10 +5,6 @@
 #include <rudiments/stdio.h>
 #include <time.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, const char **argv) {
 
 	unsigned short	port;

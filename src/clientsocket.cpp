@@ -33,10 +33,6 @@
 	#define EINPROGRESS	WSAEINPROGRESS
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class clientsocketprivate {
 	friend class clientsocket;
 	private:
@@ -457,7 +453,3 @@ int32_t clientsocket::lowLevelClose() {
 		#error no closesocket, close or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

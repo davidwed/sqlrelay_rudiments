@@ -6,10 +6,6 @@
 
 #include <rudiments/private/inetclientsocketincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class inetclientsocketprivate;
 
 /** The inetclientsocket class allows you to write programs that can talk to
@@ -101,9 +97,5 @@ class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsock
 
 	#include <rudiments/private/inetclientsocket.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

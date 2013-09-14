@@ -6,10 +6,6 @@
 
 #include <rudiments/private/serverincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serverprivate;
 
 /** The server class provides a base class for classes that implement the server
@@ -47,9 +43,5 @@ class RUDIMENTS_DLLSPEC server : public filedescriptor {
 
 	#include <rudiments/private/server.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

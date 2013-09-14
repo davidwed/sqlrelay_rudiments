@@ -6,10 +6,6 @@
 
 #include <rudiments/private/loginrecord.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class loginrecordprivate;
@@ -34,9 +30,5 @@ class RUDIMENTS_DLLSPEC loginrecord {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

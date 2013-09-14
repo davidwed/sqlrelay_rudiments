@@ -6,10 +6,6 @@
 
 #include <rudiments/private/shadowentryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class shadowentryprivate;
 
 /** The shadowentry class provides methods for retrieving entries from the
@@ -150,9 +146,5 @@ class RUDIMENTS_DLLSPEC shadowentry {
 
 	#include <rudiments/private/shadowentry.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

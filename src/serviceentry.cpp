@@ -24,10 +24,6 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serviceentryprivate {
 	friend class serviceentry;
 	private:
@@ -254,7 +250,3 @@ void serviceentry::print() const {
 		stdoutput.printf("	%s\n",getAliasList()[i]);
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -9,10 +9,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/null.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 class myserver : public daemonprocess, public inetserversocket {
 	public:
 			myserver();

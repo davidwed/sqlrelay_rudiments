@@ -6,10 +6,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/null.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, char **argv) {
 
 	// parse the timezone file specified in the first argument

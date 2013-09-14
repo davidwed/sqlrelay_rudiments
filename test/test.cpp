@@ -1,10 +1,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 void test(const char *printstring, bool result) {
 	stdoutput.printf("\t");
 	stdoutput.printf(printstring);

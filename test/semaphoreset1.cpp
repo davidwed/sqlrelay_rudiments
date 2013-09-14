@@ -6,11 +6,6 @@
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
-
 int main(int argc, const char **argv) {
 
 	// create a file called /tmp/sem

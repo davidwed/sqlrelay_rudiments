@@ -4,10 +4,6 @@
 #include <rudiments/memorypool.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, const char **argv) {
 
 	memorypool	*mp=new memorypool(32,16,10);

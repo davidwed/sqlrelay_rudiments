@@ -6,10 +6,6 @@
 
 #include <rudiments/private/charstringincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The charstring class provides methods for manipulating strings.
  * 
  *  Unlike the functions in string.h, these methods are NULL safe.  If any of
@@ -759,9 +755,5 @@ class RUDIMENTS_DLLSPEC charstring {
 
 	#include <rudiments/private/charstring.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

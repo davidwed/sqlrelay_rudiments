@@ -6,10 +6,6 @@
 
 #include <rudiments/private/regularexpressionincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class regularexpressionprivate;
 
 /** The regular expression class provides methods for making comparisons
@@ -81,9 +77,5 @@ class RUDIMENTS_DLLSPEC regularexpression {
 
 	#include <rudiments/private/regularexpression.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

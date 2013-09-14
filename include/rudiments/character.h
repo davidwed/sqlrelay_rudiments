@@ -6,10 +6,6 @@
 
 #include <rudiments/private/characterincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The character class provides methods for evaluating and manipulating
  *  characters. */
 class RUDIMENTS_DLLSPEC character {
@@ -81,9 +77,5 @@ class RUDIMENTS_DLLSPEC character {
 		 *  or the hex value otherwise. */
 		static void	safePrint(char c);
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

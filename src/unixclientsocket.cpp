@@ -9,10 +9,6 @@
 
 #include <rudiments/private/winsock.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class unixclientsocketprivate {
 	friend class unixclientsocket;
 	private:
@@ -150,7 +146,3 @@ int32_t unixclientsocket::connect() {
 	return retval;
 #endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

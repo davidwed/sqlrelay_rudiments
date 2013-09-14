@@ -13,10 +13,6 @@
 	#include <sys/stat.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 	file	fl;
 	return (fl.open(filename,O_RDWR) &&
@@ -396,7 +392,3 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 		return permstring;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

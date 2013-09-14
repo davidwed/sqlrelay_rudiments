@@ -6,10 +6,6 @@
 
 #include <rudiments/private/rpcentryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class rpcentryprivate;
 
 /** The rpcentry class provides methods for retrieving entries from the rpc file
@@ -90,9 +86,5 @@ class RUDIMENTS_DLLSPEC rpcentry {
 
 	#include <rudiments/private/rpcentry.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

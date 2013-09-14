@@ -84,10 +84,6 @@
 	#endif
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class fileprivate {
 	friend class file;
 	private:
@@ -2155,7 +2151,3 @@ long file::fpathConf(int32_t name) const {
 		#error no fpathconf or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

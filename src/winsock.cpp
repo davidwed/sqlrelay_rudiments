@@ -3,10 +3,6 @@
 
 #include <rudiments/private/winsock.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	mutex	winsock::_winsockmutex;
 	bool	winsock::_initialized=false;
@@ -43,7 +39,3 @@ void winsock::shutDownWinsock() {
 		}
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

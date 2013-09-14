@@ -6,10 +6,6 @@
 
 #include <rudiments/private/modemserverincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class modemserverprivate;
 
 /** The modemserver class allows you to write programs taht can talk to
@@ -92,9 +88,5 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 
 	#include <rudiments/private/modemserver.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

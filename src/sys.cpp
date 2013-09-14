@@ -71,10 +71,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 char *sys::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
@@ -801,7 +797,3 @@ int64_t sys::sysConf(int32_t name) {
 		return -1;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -6,10 +6,6 @@
 
 #include <rudiments/private/semaphoresetincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class semaphoresetprivate;
 
 /** Semaphores allow processes to synchronize their activities.
@@ -230,9 +226,5 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 	#include <rudiments/private/semaphoreset.h>
 
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

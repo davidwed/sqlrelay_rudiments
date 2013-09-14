@@ -6,10 +6,6 @@
 
 #include <rudiments/private/dynamiclibincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class dynamiclibprivate;
 
 /** The dynamiclib class provides methods for loading, unloading and calling
@@ -63,9 +59,5 @@ class RUDIMENTS_DLLSPEC dynamiclib {
 
 	#include <rudiments/private/dynamiclib.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

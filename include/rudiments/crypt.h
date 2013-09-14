@@ -6,10 +6,6 @@
 
 #include <rudiments/private/cryptincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The crypt class provides an encryption method that is commonly used for
  *  password encryption. */
 class RUDIMENTS_DLLSPEC crypt {
@@ -41,9 +37,5 @@ class RUDIMENTS_DLLSPEC crypt {
 		 *  there is no need to supply a mutex. */
 		static	void	setMutex(mutex *mtx);
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

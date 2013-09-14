@@ -12,10 +12,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class sharedmemoryprivate {
 	friend class sharedmemory;
 	private:
@@ -312,7 +308,3 @@ bool sharedmemory::shmControl(int32_t cmd, shmid_ds *buf) {
 		return false;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -6,10 +6,6 @@
 
 #include <rudiments/private/codetreeincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class codetreeprivate;
 
 /** The codetree class implements a generic parser that can parse source code
@@ -321,9 +317,5 @@ class codetree {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

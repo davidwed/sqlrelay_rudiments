@@ -6,10 +6,6 @@
 
 #include <rudiments/private/directorylisting.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 // wrap:
@@ -23,9 +19,5 @@ class RUDIMENTS_DLLSPEC directorylisting {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

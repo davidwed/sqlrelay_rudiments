@@ -18,10 +18,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class signalsetprivate {
 	friend class signalset;
 	friend class signalmanager;
@@ -414,8 +410,3 @@ bool signalhandler::isSignalHandlerIntUsed() {
 		return false;
 	#endif
 }
-
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

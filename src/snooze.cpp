@@ -43,10 +43,6 @@
 	#include <windows.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 bool snooze::macrosnooze(uint32_t seconds) {
 	return nanosnooze(seconds,0,NULL,NULL);
 }
@@ -156,7 +152,3 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 	}
 	return retval;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

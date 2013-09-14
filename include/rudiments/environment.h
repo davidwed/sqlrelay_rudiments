@@ -6,10 +6,6 @@
 
 #include <rudiments/private/environmentincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class environmentprivate;
 
 /** The environment class provides methods for accessing and manipulating
@@ -50,9 +46,5 @@ class RUDIMENTS_DLLSPEC environment {
 
 	#include <rudiments/private/environment.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

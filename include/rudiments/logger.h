@@ -6,10 +6,6 @@
 
 #include <rudiments/private/loggerincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
- 
 /** The logdestination class is a virtual base class that just defines methods
  *  that the real logdestination classes must implement. */
 class RUDIMENTS_DLLSPEC logdestination {
@@ -162,9 +158,5 @@ class RUDIMENTS_DLLSPEC logger {
 
 	#include <rudiments/private/logger.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -9,10 +9,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class unixsocketutilprivate {
 	friend class unixsocketutil;
 	private:
@@ -55,7 +51,3 @@ const char *unixsocketutil::_filename() {
 sockaddr_un *unixsocketutil::_sun() {
 	return &pvt->_sun;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

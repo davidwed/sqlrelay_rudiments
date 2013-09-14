@@ -33,10 +33,6 @@
 	#include <unistd.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class listenerprivate {
 	friend class listener;
 	private:
@@ -186,7 +182,3 @@ int32_t listener::safeSelect(long sec, long usec, bool read, bool write) {
 		return selectresult;
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

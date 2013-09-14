@@ -27,10 +27,6 @@
 	#include <os/kernel/OS.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class datetimeprivate {
 	friend class datetime;
 	private:
@@ -1034,7 +1030,3 @@ const char *datetime::getTzName(uint8_t index) {
 		#error no tzname or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

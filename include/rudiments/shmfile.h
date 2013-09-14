@@ -6,10 +6,6 @@
 
 #include <rudiments/private/shmfileincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class shmfileprivate;
 
 /** The shmfile class provides methods for interacting with POSIX shared memory
@@ -42,9 +38,5 @@ class RUDIMENTS_DLLSPEC shmfile : public file {
 
 	#include <rudiments/private/shmfile.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

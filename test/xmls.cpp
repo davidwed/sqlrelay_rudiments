@@ -4,10 +4,6 @@
 #include <rudiments/xmlsax.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 class myxmlsax : public xmlsax {
 	public:
 				myxmlsax();

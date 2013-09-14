@@ -6,10 +6,6 @@
 
 #include <rudiments/private/filedescriptorincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class listener;
 class filedescriptorprivate;
 
@@ -1043,9 +1039,5 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 
 	#include <rudiments/private/filedescriptor.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

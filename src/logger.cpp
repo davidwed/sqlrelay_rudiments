@@ -17,10 +17,6 @@
 	#include <syslog.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 logdestination::~logdestination() {}
 
 class filedestinationprivate {
@@ -217,7 +213,3 @@ void logger::write(const char *logentry) {
 		current=(loggerlistnode *)current->getNext();
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

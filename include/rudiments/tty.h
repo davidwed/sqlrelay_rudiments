@@ -6,10 +6,6 @@
 
 #include <rudiments/private/tty.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class ttyprivate;
@@ -33,9 +29,5 @@ class RUDIMENTS_DLLSPEC tty : public filedescriptor {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -24,10 +24,6 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #if (defined(RUDIMENTS_HAVE_GETRPCBYNAME) && \
 	defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)) || \
 	(defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
@@ -254,7 +250,3 @@ void rpcentry::print() const {
 		stdoutput.printf("	%s\n",aliaslist[i]);
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

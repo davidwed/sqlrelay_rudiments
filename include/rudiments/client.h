@@ -6,10 +6,6 @@
 
 #include <rudiments/private/clientincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class clientprivate;
 
 /** The client class provides a base class for classes that implement the
@@ -55,9 +51,5 @@ class RUDIMENTS_DLLSPEC client : public filedescriptor {
 
 	#include <rudiments/private/client.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

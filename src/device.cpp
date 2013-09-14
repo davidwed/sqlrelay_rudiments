@@ -13,10 +13,6 @@
 	#include <unistd.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class deviceprivate {
 	friend class device;
 	private:
@@ -62,7 +58,3 @@ bool device::createDeviceNode(const char *filename, bool blockdevice,
 		#error no mknod or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

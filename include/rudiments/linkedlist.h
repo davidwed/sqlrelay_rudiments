@@ -6,10 +6,6 @@
 
 #include <rudiments/private/linkedlistincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class datatype>
 class linkedlistnode {
@@ -155,10 +151,6 @@ class linkedlist {
 
 typedef linkedlistnode< char * >		stringlistnode;
 typedef linkedlist< char *, stringlistnode >	stringlist;
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #include <rudiments/private/linkedlistnodeinlines.h>
 #include <rudiments/private/linkedlistinlines.h>

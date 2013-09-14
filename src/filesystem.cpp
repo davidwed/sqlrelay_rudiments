@@ -53,10 +53,6 @@
 	#define PATH_MAX 1024
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class filesystemprivate {
 	friend class filesystem;
 	private:
@@ -1357,7 +1353,3 @@ const char *filesystem::getFsTypeName(int64_t fstype) {
 	}
 	return NULL;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

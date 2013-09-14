@@ -22,10 +22,6 @@
 
 #define MAXBUFFER	(32*1024)
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #ifdef RUDIMENTS_HAVE_SHADOW
 class shadowentryprivate {
 	friend class shadowentry;
@@ -342,7 +338,3 @@ void shadowentry::print() const {
 	stdoutput.printf("Expiration Date: %d\n",getExpirationDate());
 	stdoutput.printf("Flag: %d\n",getFlag());
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -6,10 +6,6 @@
 #include <rudiments/null.h>
 #include <rudiments/private/rudimentsinlines.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 #define LINKEDLISTNODE_TEMPLATE template <class datatype>
 
 #define LINKEDLISTNODE_CLASS linkedlistnode<datatype>
@@ -74,9 +70,5 @@ RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLISTNODE_CLASS::print() const {
 	datautil.print(data);
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -9,10 +9,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class parameterstringprivate {
 	friend class parameterstring;
 	private:
@@ -212,7 +208,3 @@ int32_t parameterstring::parseNameLength(const char *data) {
 int32_t parameterstring::parseValueLength(const char *data) {
 	return parsePartLength(data,pvt->_delim,1,1);
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

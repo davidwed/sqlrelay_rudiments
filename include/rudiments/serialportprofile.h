@@ -6,10 +6,6 @@
 
 #include <rudiments/private/serialportprofileincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class serialportprofileprivate;
 
 // cfmakeraw, cfsetspeed???
@@ -874,9 +870,5 @@ class RUDIMENTS_DLLSPEC serialportprofile {
 
 	#include <rudiments/private/serialportprofile.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

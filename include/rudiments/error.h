@@ -6,10 +6,6 @@
 
 #include <rudiments/private/errorincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The error class provides an interface to the errors that system calls
  *  can generate. */
 class RUDIMENTS_DLLSPEC error {
@@ -32,9 +28,5 @@ class RUDIMENTS_DLLSPEC error {
 		 *  returned, and must be freed by the calling program. */
 		static	char	*getErrorString();
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

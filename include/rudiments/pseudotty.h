@@ -6,10 +6,6 @@
 
 #include <rudiments/private/pseudotty.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 class pseudottyprivate;
@@ -31,9 +27,5 @@ class RUDIMENTS_DLLSPEC pseudotty : public filedescriptor {
 };
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

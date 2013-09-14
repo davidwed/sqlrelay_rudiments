@@ -5,11 +5,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/null.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
-
 int main(int argc, const char **argv) {
 
 	// create a new string buffer

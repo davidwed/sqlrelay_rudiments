@@ -6,10 +6,6 @@
 
 #include <rudiments/private/intervaltimerincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class intervaltimerprivate;
 
 /** The intervaltimer class provides methods for interfacing with timers.
@@ -89,9 +85,5 @@ class RUDIMENTS_DLLSPEC intervaltimer {
 
 	#include <rudiments/private/intervaltimer.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

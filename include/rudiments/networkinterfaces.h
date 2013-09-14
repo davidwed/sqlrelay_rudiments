@@ -6,10 +6,6 @@
 
 #include <rudiments/private/networkinterfacesincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // @cond
 
 typedef listnode< networkinterface * >	networkinterfacelistnode;
@@ -52,9 +48,5 @@ class RUDIMENTS_DLLSPEC networkinterfaces {
 }
 
 // @endcond
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

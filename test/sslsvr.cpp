@@ -15,10 +15,6 @@
 #include <openssl/err.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 #ifdef RUDIMENTS_HAS_SSL
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);

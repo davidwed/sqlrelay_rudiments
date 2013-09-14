@@ -26,10 +26,6 @@
 	#include <rudiments/charstring.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class regularexpressionprivate {
 	friend class regularexpression;
 	private:
@@ -200,7 +196,3 @@ bool regularexpression::match(const char *str, const char *pattern) {
 	regularexpression	re;
 	return (re.compile(pattern) && re.match(str));
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

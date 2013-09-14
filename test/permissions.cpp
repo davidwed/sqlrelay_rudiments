@@ -5,10 +5,6 @@
 #include <rudiments/file.h>
 #include <stdlib.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 int main(int argc, const char **argv) {
 
 

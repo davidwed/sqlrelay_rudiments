@@ -28,10 +28,6 @@
 	#define O_NOCTTY	0
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class modemclientprivate {
 	friend class modemclient;
 	private:
@@ -192,7 +188,3 @@ bool modemclient::close() {
 	}
 	return true;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

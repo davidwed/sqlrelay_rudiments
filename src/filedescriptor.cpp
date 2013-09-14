@@ -132,10 +132,6 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define SSIZE_MAX 32767
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class filedescriptorprivate {
 	friend class filedescriptor;
 	private:
@@ -2287,7 +2283,3 @@ void filedescriptor::printBits(unsigned char *bits, uint64_t size) {
 		}
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

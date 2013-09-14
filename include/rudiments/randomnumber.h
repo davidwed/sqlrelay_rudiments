@@ -6,10 +6,6 @@
 
 #include <rudiments/private/randomnumberincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The randomnumber class provides methods for generating and scaling 
  *  random numbers.
  * 
@@ -81,9 +77,5 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		 *  multithreaded, then there is no need to supply a mutex. */
 		static	void	setMutex(mutex *mtx);
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

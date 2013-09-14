@@ -6,10 +6,6 @@
 
 #include <rudiments/private/directoryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class directoryprivate;
 
 /** The directory class provides methods for opening/closing a directory and
@@ -115,9 +111,5 @@ class RUDIMENTS_DLLSPEC directory {
 
 	#include <rudiments/private/directory.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

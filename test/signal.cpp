@@ -4,10 +4,6 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 void handleSigusr1(int sig) {
 	stdoutput.printf("Got a SIGUSR1!\n");
 }

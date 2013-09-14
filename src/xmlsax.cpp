@@ -10,10 +10,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class xmlsaxprivate {
 	friend class xmlsax;
 	private:
@@ -892,7 +888,3 @@ bool xmlsax::mapFile() {
 #endif
 	return false;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

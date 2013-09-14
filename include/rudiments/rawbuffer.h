@@ -6,10 +6,6 @@
 
 #include <rudiments/private/rawbufferincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The rawbuffer class provides methods for operating on raw memory buffers.
  * 
  *  Unlike the functions in sys/string.h, these methods are NULL safe.  If any
@@ -138,9 +134,5 @@ class RUDIMENTS_DLLSPEC rawbuffer {
 							const void *needle, 
 							size_t needleize);
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

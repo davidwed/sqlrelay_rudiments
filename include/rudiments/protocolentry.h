@@ -6,10 +6,6 @@
 
 #include <rudiments/private/protocolentryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class protocolentryprivate;
 
 /** The protocolentry class provides methods for retrieving entries from the
@@ -91,9 +87,5 @@ class RUDIMENTS_DLLSPEC protocolentry {
 
 	#include <rudiments/private/protocolentry.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -10,10 +10,6 @@
 #include <rudiments/modemserver.h>
 #include <rudiments/charstring.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 server *clientserverfactory::getServer(const char *type) {
 	if (!charstring::compare(type,"inet")) {
 		#ifdef INCLUDE_INETSERVER
@@ -59,7 +55,3 @@ client *clientserverfactory::getClient(const char *type) {
 	}
 	return NULL;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

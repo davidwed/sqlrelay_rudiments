@@ -19,10 +19,6 @@
 	#error "Couldn't find a suitable replacement for rand/srand"
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // LAME: not in the class
 #if !defined(RUDIMENTS_HAVE_RAND_R)
 static mutex	*_rnmutex;
@@ -96,7 +92,3 @@ void randomnumber::setMutex(mutex *mtx) {
 		_rnmutex=mtx;
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

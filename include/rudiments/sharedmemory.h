@@ -6,10 +6,6 @@
 
 #include <rudiments/private/sharedmemoryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class sharedmemoryprivate;
 
 /** Shared memory segments allow multiple processes to access a common
@@ -136,9 +132,5 @@ class RUDIMENTS_DLLSPEC sharedmemory {
 	#include <rudiments/private/sharedmemory.h>
 
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -9,10 +9,6 @@
 // for AF_INET
 #include <netdb.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 // this function takes addr[]={127,1,1,0} and returns "127.1.1.0"
 char *getAddressString(int length, const char *addr) {
 	size_t	addrlen=(length*4)+1;

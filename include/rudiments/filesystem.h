@@ -14,10 +14,6 @@
 // SCO OSR5: unsigned long f_flag - mount flags
 // solaris: u_long f_flag - mount flags
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class filesystemprivate;
 
 /** The filesystem class provides methods for discovering the properties
@@ -471,9 +467,5 @@ class RUDIMENTS_DLLSPEC filesystem {
 
 	#include <rudiments/private/filesystem.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

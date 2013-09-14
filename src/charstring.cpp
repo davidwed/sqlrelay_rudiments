@@ -34,10 +34,6 @@
 	#include <strings.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 const char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
@@ -1665,7 +1661,3 @@ ssize_t charstring::printf(char *string, size_t length,
 	}
 	return size;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

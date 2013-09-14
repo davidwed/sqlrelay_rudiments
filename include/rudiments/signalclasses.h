@@ -6,10 +6,6 @@
 
 #include <rudiments/private/signalclassesincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class signalsetprivate;
 
 /** A signalset it just a collection of signals.  Many signal-related functions
@@ -166,9 +162,5 @@ class RUDIMENTS_DLLSPEC signalhandler {
 	#include <rudiments/private/signalhandler.h>
 
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

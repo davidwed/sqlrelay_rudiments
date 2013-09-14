@@ -20,10 +20,6 @@
 typedef unsigned long	in_addr_t;
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class inetserversocketprivate {
 	friend class inetserversocket;
 	private:
@@ -213,7 +209,3 @@ filedescriptor *inetserversocket::accept() {
 
 	return returnsock;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

@@ -6,10 +6,6 @@
 
 #include <rudiments/private/deviceincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class deviceprivate;
 
 /** The device class provides methods for interacting with devices.
@@ -50,9 +46,5 @@ class RUDIMENTS_DLLSPEC device : public file {
 
 	#include <rudiments/private/device.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

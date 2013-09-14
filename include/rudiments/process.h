@@ -6,10 +6,6 @@
 
 #include <rudiments/private/processincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // wrap:
 //	unistd.h - nice()
 //			getgroups()
@@ -178,9 +174,5 @@ class RUDIMENTS_DLLSPEC process {
 		  * the exit status to "status". */
 		static void	exitImmediately(int32_t status);
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

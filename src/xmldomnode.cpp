@@ -11,10 +11,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class xmldomnodeprivate {
 	friend class xmldomnode;
 	private:
@@ -941,7 +937,3 @@ void xmldomnode::print(xmldomnode *node, stringbuffer *strb) {
 	}
 	delete xmlstr;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

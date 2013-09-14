@@ -6,10 +6,6 @@
 
 #include <rudiments/private/modemclientincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class modemclientprivate;
 
 /** The modemclient implements methods for connecting to and communicating with
@@ -79,9 +75,5 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 
 	#include <rudiments/private/modemclient.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

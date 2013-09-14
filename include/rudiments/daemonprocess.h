@@ -6,10 +6,6 @@
 
 #include <rudiments/private/daemonprocessincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class daemonprocessprivate;
 
 /** The daemonprocess class provides methods that are useful to daemons.
@@ -113,9 +109,5 @@ class RUDIMENTS_DLLSPEC daemonprocess {
 	#include <rudiments/private/daemonprocess.h>
 
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

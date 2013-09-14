@@ -44,10 +44,6 @@
 
 #include <stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class directoryprivate {
 	friend class directory;
 	private:
@@ -376,7 +372,3 @@ int64_t directory::fpathConf(int32_t name) {
 		#error no pathconf or anything like it
 	#endif
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

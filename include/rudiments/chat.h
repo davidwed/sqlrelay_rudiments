@@ -6,10 +6,6 @@
 
 #include <rudiments/private/chatincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class chatprivate;
 
 /** The chat class implements methods for chatting with something
@@ -163,9 +159,5 @@ class RUDIMENTS_DLLSPEC chat {
 
 	#include <rudiments/private/chat.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

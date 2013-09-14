@@ -6,10 +6,6 @@
 
 #include <rudiments/private/sysincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class sysprivate;
 
 /** The sys class provides methods for controlling the state of and
@@ -271,9 +267,5 @@ class RUDIMENTS_DLLSPEC sys {
 
 	#include <rudiments/private/sys.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

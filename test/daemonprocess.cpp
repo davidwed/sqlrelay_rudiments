@@ -9,10 +9,6 @@
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-using namespace rudiments;
-#endif
-
 daemonprocess	*dmn;
 
 // define a function to shut down the process cleanly

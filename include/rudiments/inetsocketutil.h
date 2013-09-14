@@ -6,10 +6,6 @@
 
 #include <rudiments/private/inetsocketutilincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class inetsocketutilprivate;
 
 /** The inetsocketutil class is just a base class for other classes that use
@@ -39,9 +35,5 @@ class RUDIMENTS_DLLSPEC inetsocketutil {
 
 	#include <rudiments/private/inetsocketutil.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

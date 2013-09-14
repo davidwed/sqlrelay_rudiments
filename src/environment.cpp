@@ -24,10 +24,6 @@
 	#endif
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 // LAME: not in the class
 static mutex	*_envmutex;
 
@@ -213,7 +209,3 @@ bool environment::clear() {
 void environment::setMutex(mutex *mtx) {
 	_envmutex=mtx;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

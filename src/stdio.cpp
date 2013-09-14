@@ -3,14 +3,6 @@
 
 #include <rudiments/stdio.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 RUDIMENTS_DLLSPEC filedescriptor	stdinput(0);
 RUDIMENTS_DLLSPEC filedescriptor	stdoutput(1);
 RUDIMENTS_DLLSPEC filedescriptor	stderror(2);
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

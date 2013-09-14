@@ -6,10 +6,6 @@
 
 #include <rudiments/private/xmldomnodeincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 enum xmldomnodetype {
 	NULL_XMLDOMNODETYPE=0,
 	ROOT_XMLDOMNODETYPE,
@@ -539,9 +535,5 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 
 	#include <rudiments/private/xmldomnode.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

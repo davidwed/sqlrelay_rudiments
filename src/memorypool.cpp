@@ -9,10 +9,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class memorypoolnode {
 	friend class memorypool;
 	private:
@@ -184,7 +180,3 @@ void memorypool::print() {
 		segmentindex++;
 	}
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

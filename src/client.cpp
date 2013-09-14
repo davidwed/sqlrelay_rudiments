@@ -11,10 +11,6 @@
 	#include <stdlib.h>
 #endif
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class clientprivate {
 	friend class client;
 	private:
@@ -94,7 +90,3 @@ unsigned long client::_retrywait() {
 unsigned long client::_retrycount() {
 	return pvt->_retrycount;
 }
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif

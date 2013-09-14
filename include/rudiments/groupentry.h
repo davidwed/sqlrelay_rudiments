@@ -6,10 +6,6 @@
 
 #include <rudiments/private/groupentryincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class groupentryprivate;
 
 /** The groupentry class provides methods for retrieving information about
@@ -113,9 +109,5 @@ class RUDIMENTS_DLLSPEC groupentry {
 
 	#include <rudiments/private/groupentry.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

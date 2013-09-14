@@ -6,10 +6,6 @@
 
 #include <rudiments/private/memorypoolincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 class memorypoolprivate;
 
 /** The memorypool class provides methods for creating and using a memory pool.
@@ -58,9 +54,5 @@ class RUDIMENTS_DLLSPEC memorypool {
 
 	#include <rudiments/private/memorypool.h>
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif

@@ -6,10 +6,6 @@
 
 #include <rudiments/private/snoozeincludes.h>
 
-#ifdef RUDIMENTS_NAMESPACE
-namespace rudiments {
-#endif
-
 /** The snooze class provides methods for suspending process execution. */
 class RUDIMENTS_DLLSPEC snooze {
 	public:
@@ -73,9 +69,5 @@ class RUDIMENTS_DLLSPEC snooze {
 					uint32_t *secondsremaining,
 					uint32_t *nanosecondsremaining);
 };
-
-#ifdef RUDIMENTS_NAMESPACE
-}
-#endif
 
 #endif
