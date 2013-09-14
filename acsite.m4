@@ -2151,5 +2151,5 @@ class a {
 template <> int a<int>::f() {
 	return 1;
 }
-],[], AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, template <>, Most modern systems support template <>) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, , Most modern systems support template <>) AC_MSG_RESULT(no))
+],[], AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, template <>, Modern compilers support explicit specialization) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, , Modern compilers support explicit specialization) AC_MSG_RESULT(no); AC_MSG_ERROR(Compiler does not support explicit specialization.))
 ])

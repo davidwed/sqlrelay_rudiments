@@ -61,7 +61,7 @@
 /* ioctl/FIONBIO doesn't work on some systems */
 #undef RUDIMENTS_DISABLE_FIONBIO
 
-/* Most modern systems support template <> */
+/* Modern compilers support explicit specialization */
 #undef RUDIMENTS_EXPLICIT_SPECIALIZATION
 
 /* getsockopt takes a void * on most systems */
