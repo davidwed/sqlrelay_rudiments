@@ -1045,7 +1045,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC,1,Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for mktime)
-AC_TRY_COMPILE([#include <time.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#include <time.h>],
 mktime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKTIME,1,Some systems have mktime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for localtime_r)
