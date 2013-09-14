@@ -4,7 +4,7 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
-#include <rudiments/system.h>
+#include <rudiments/sys.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -230,7 +230,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		// require that you pass them a pre-allocated buffer.  If the
 		// buffer is too small, they returns an ENOMEM and you have to
 		// just make the buffer bigger and try again.
-		int64_t	inc=system::getSuggestedPasswordEntryBufferSize();
+		int64_t	inc=sys::getSuggestedPasswordEntryBufferSize();
 		int64_t	max=inc*32;
 		for (int64_t size=inc; size<max; size=size+inc) {
 

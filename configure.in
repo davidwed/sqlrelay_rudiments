@@ -262,8 +262,8 @@ AC_ARG_ENABLE(stringbuffer,
 	[  --disable-stringbuffer  Don't build stringbuffer class],
 	INCLUDE_STRINGBUFFER="0",
 	INCLUDE_STRINGBUFFER="1")
-AC_ARG_ENABLE(system,
-	[  --disable-system        Don't build system],
+AC_ARG_ENABLE(sys,
+	[  --disable-sys           Don't build sys class],
 	INCLUDE_SYSTEM="0",
 	INCLUDE_SYSTEM="1")
 AC_ARG_ENABLE(timezonefile,
@@ -3252,10 +3252,10 @@ fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )
 then
-	HEADERS="$HEADERS system.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS system.h systemincludes.h"
-	SRCS="$SRCS system.cpp"
-	LOBJS="$LOBJS system.lo"
+	HEADERS="$HEADERS sys.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS sys.h sysincludes.h"
+	SRCS="$SRCS sys.cpp"
+	LOBJS="$LOBJS sys.lo"
 fi
 
 if ( test "$INCLUDE_TIMEZONEFILE" = "1" )

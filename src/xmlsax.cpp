@@ -4,7 +4,7 @@
 #include <rudiments/xmlsax.h>
 #include <rudiments/charstring.h>
 #include <rudiments/filesystem.h>
-#include <rudiments/system.h>
+#include <rudiments/sys.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -123,7 +123,7 @@ bool xmlsax::parseFile(const char *filename) {
 		// the memory page size.  Use the page size unless the 
 		// transfer size is an even multiple of it.
 		#ifdef RUDIMENTS_HAVE_MMAP
-			off64_t	pagesize=system::getPageSize();
+			off64_t	pagesize=sys::getPageSize();
 			if (pagesize>pvt->_optblocksize ||
 				pvt->_optblocksize%pagesize) {
 				pvt->_optblocksize=pagesize;

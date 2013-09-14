@@ -1,7 +1,7 @@
 // Copyright (c) 2012  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/system.h>
+#include <rudiments/sys.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -10,7 +10,7 @@ using namespace rudiments;
 #endif
 
 int main(int argc, const char **argv) {
-	if (!system::reboot()) {
+	if (!sys::reboot()) {
 		stdoutput.printf("reboot failed: %s\n",error::getErrorString());
 	}
 }

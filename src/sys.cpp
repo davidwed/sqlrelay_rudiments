@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/private/config.h>
-#include <rudiments/system.h>
+#include <rudiments/sys.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
 #include <rudiments/device.h>
@@ -75,7 +75,7 @@
 namespace rudiments {
 #endif
 
-char *system::getOperatingSystemName() {
+char *sys::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
@@ -91,7 +91,7 @@ char *system::getOperatingSystemName() {
 	#endif
 }
 
-char *system::getOperatingSystemRelease() {
+char *sys::getOperatingSystemRelease() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
@@ -108,7 +108,7 @@ char *system::getOperatingSystemRelease() {
 	#endif
 }
 
-char *system::getOperatingSystemVersion() {
+char *sys::getOperatingSystemVersion() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
@@ -144,7 +144,7 @@ char *system::getOperatingSystemVersion() {
 	#endif
 }
 
-char *system::getOperatingSystemArchitecture() {
+char *sys::getOperatingSystemArchitecture() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
@@ -179,7 +179,7 @@ char *system::getOperatingSystemArchitecture() {
 	#endif
 }
 
-char *system::getHostName() {
+char *sys::getHostName() {
 	#if defined(RUDIMENTS_HAVE_GETHOSTNAME)
 
 		// initialize winsock if necessary
@@ -224,11 +224,11 @@ char *system::getHostName() {
 	#endif
 }
 
-bool system::setHostName(const char *hostname) {
+bool sys::setHostName(const char *hostname) {
 	return setHostName(hostname,charstring::length(hostname));
 }
 
-bool system::setHostName(const char *hostname, uint64_t hostnamelen) {
+bool sys::setHostName(const char *hostname, uint64_t hostnamelen) {
 	#if defined(RUDIMENTS_HAVE_SETHOSTNAME) || \
 		defined(RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION)
 		winsock::initWinsock();
@@ -260,7 +260,7 @@ bool system::setHostName(const char *hostname, uint64_t hostnamelen) {
 	#define LOADAVG_15MIN 2
 #endif
 
-bool system::getLoadAverages(double *oneminuteaverage,
+bool sys::getLoadAverages(double *oneminuteaverage,
 				double *fiveminuteaverage,
 				double *fifteenminuteaverage) {
 	*oneminuteaverage=0.0;
@@ -319,13 +319,13 @@ bool system::getLoadAverages(double *oneminuteaverage,
 	#endif
 }
 
-void system::sync() {
+void sys::sync() {
 	#if defined(RUDIMENTS_HAVE_SYNC)
 		sync();
 	#endif
 }
 
-bool system::halt() {
+bool sys::halt() {
 	#if defined(RUDIMENTS_HAVE_REBOOT_1)
 		int32_t	cmd;
 		#if defined(LINUX_REBOOT_CMD_HALT)
@@ -377,7 +377,7 @@ class BRoster::Private {
 };
 #endif
 
-bool system::shutDown() {
+bool sys::shutDown() {
 	#if defined(RUDIMENTS_HAVE_REBOOT_1)
 		int32_t	cmd;
 		#if defined(LINUX_REBOOT_CMD_POWER_OFF)
@@ -431,7 +431,7 @@ bool system::shutDown() {
 	#endif
 }
 
-bool system::reboot() {
+bool sys::reboot() {
 	#if defined(RUDIMENTS_HAVE_REBOOT_1)
 		int32_t	cmd;
 		#if defined(LINUX_REBOOT_CMD_RESTART)
@@ -469,7 +469,7 @@ bool system::reboot() {
 	#endif
 }
 
-int64_t system::getMaxCommandLineArgumentLength() {
+int64_t sys::getMaxCommandLineArgumentLength() {
 	#if defined(_SC_ARG_MAX)
 		return sysConf(_SC_ARG_MAX);
 	#else
@@ -478,7 +478,7 @@ int64_t system::getMaxCommandLineArgumentLength() {
 	#endif
 }
 
-int64_t system::getMaxProcessesPerUser() {
+int64_t sys::getMaxProcessesPerUser() {
 	#if defined(_SC_CHILD_MAX)
 		return sysConf(_SC_CHILD_MAX);
 	#else
@@ -487,7 +487,7 @@ int64_t system::getMaxProcessesPerUser() {
 	#endif
 }
 
-int64_t system::getMaxHostNameLength() {
+int64_t sys::getMaxHostNameLength() {
 	#if defined(_SC_HOST_NAME_MAX)
 		return sysConf(_SC_HOST_NAME_MAX);
 	#else
@@ -496,7 +496,7 @@ int64_t system::getMaxHostNameLength() {
 	#endif
 }
 
-int64_t system::getMaxLoginNameLength() {
+int64_t sys::getMaxLoginNameLength() {
 	#if defined(_SC_LOGIN_NAME_MAX)
 		return sysConf(_SC_LOGIN_NAME_MAX);
 	#else
@@ -505,7 +505,7 @@ int64_t system::getMaxLoginNameLength() {
 	#endif
 }
 
-int64_t system::getClockTicksPerSecond() {
+int64_t sys::getClockTicksPerSecond() {
 	#if defined(_SC_CLK_TCK)
 		return sysConf(_SC_CLK_TCK);
 	#else
@@ -514,7 +514,7 @@ int64_t system::getClockTicksPerSecond() {
 	#endif
 }
 
-int64_t system::getMaxOpenFilesPerProcess() {
+int64_t sys::getMaxOpenFilesPerProcess() {
 	#if defined(_SC_OPEN_MAX)
 		return sysConf(_SC_OPEN_MAX);
 	#else
@@ -523,7 +523,7 @@ int64_t system::getMaxOpenFilesPerProcess() {
 	#endif
 }
 
-int32_t system::getPageSize() {
+int32_t sys::getPageSize() {
 	#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
 		return getpagesize();
 	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGESIZE)
@@ -539,7 +539,7 @@ int32_t system::getPageSize() {
 	#endif
 }
 
-int64_t system::getMaxOpenStreamsPerProcess() {
+int64_t sys::getMaxOpenStreamsPerProcess() {
 	#if defined(_SC_STREAM_MAX)
 		return sysConf(_SC_STREAM_MAX);
 	#else
@@ -548,7 +548,7 @@ int64_t system::getMaxOpenStreamsPerProcess() {
 	#endif
 }
 
-int64_t system::getMaxSymlinkLoops() {
+int64_t sys::getMaxSymlinkLoops() {
 	#if defined(_SC_SYMLOOP_MAX)
 		return sysConf(_SC_SYMLOOP_MAX);
 	#else
@@ -557,7 +557,7 @@ int64_t system::getMaxSymlinkLoops() {
 	#endif
 }
 
-int64_t system::getMaxTerminalDeviceNameLength() {
+int64_t sys::getMaxTerminalDeviceNameLength() {
 	#if defined(_SC_TTY_NAME_MAX)
 		return sysConf(_SC_TTY_NAME_MAX);
 	#else
@@ -566,7 +566,7 @@ int64_t system::getMaxTerminalDeviceNameLength() {
 	#endif
 }
 
-int64_t system::getMaxTimezoneNameLength() {
+int64_t sys::getMaxTimezoneNameLength() {
 	#if defined(_SC_TZNAME_MAX)
 		return sysConf(_SC_TZNAME_MAX);
 	#else
@@ -575,7 +575,7 @@ int64_t system::getMaxTimezoneNameLength() {
 	#endif
 }
 
-int64_t system::getMaxLineLength() {
+int64_t sys::getMaxLineLength() {
 	#if defined(_SC_LINE_MAX)
 		return sysConf(_SC_LINE_MAX);
 	#else
@@ -584,7 +584,7 @@ int64_t system::getMaxLineLength() {
 	#endif
 }
 
-int64_t system::getPhysicalPageCount() {
+int64_t sys::getPhysicalPageCount() {
 	#if defined(_SC_PHYS_PAGES)
 		return sysConf(_SC_PHYS_PAGES);
 	#else
@@ -593,7 +593,7 @@ int64_t system::getPhysicalPageCount() {
 	#endif
 }
 
-int64_t system::getAvailablePhysicalPageCount() {
+int64_t sys::getAvailablePhysicalPageCount() {
 	#if defined(_SC_AVPHYS_PAGES)
 		return sysConf(_SC_AVPHYS_PAGES);
 	#else
@@ -602,7 +602,7 @@ int64_t system::getAvailablePhysicalPageCount() {
 	#endif
 }
 
-int64_t system::getProcessorCount() {
+int64_t sys::getProcessorCount() {
 	#if defined(_SC_NPROCESSORS_CONF)
 		return sysConf(_SC_NPROCESSORS_CONF);
 	#else
@@ -611,7 +611,7 @@ int64_t system::getProcessorCount() {
 	#endif
 }
 
-int64_t system::getMaxProcessorCount() {
+int64_t sys::getMaxProcessorCount() {
 	#if defined(_SC_NPROCESSORS_MAX)
 		return sysConf(_SC_NPROCESSORS_MAX);
 	#else
@@ -620,7 +620,7 @@ int64_t system::getMaxProcessorCount() {
 	#endif
 }
 
-int64_t system::getProcessorsOnline() {
+int64_t sys::getProcessorsOnline() {
 	#if defined(_SC_NPROCESSORS_ONLN)
 		return sysConf(_SC_NPROCESSORS_ONLN);
 	#else
@@ -629,7 +629,7 @@ int64_t system::getProcessorsOnline() {
 	#endif
 }
 
-int64_t system::getMaxSupplementalGroupsPerUser() {
+int64_t sys::getMaxSupplementalGroupsPerUser() {
 	#if defined(_SC_NGROUPS_MAX)
 		return sysConf(_SC_NGROUPS_MAX);
 	#else
@@ -638,7 +638,7 @@ int64_t system::getMaxSupplementalGroupsPerUser() {
 	#endif
 }
 
-int64_t system::getMaxDelayTimerExpirations() {
+int64_t sys::getMaxDelayTimerExpirations() {
 	#if defined(_SC_DELAYTIMER_MAX)
 		return sysConf(_SC_DELAYTIMER_MAX);
 	#else
@@ -647,7 +647,7 @@ int64_t system::getMaxDelayTimerExpirations() {
 	#endif
 }
 
-int64_t system::getMaxRealtimeSignals() {
+int64_t sys::getMaxRealtimeSignals() {
 	#if defined(_SC_RTSIG_MAX)
 		return sysConf(_SC_RTSIG_MAX);
 	#else
@@ -656,7 +656,7 @@ int64_t system::getMaxRealtimeSignals() {
 	#endif
 }
 
-int64_t system::getMaxSemaphoresPerProcess() {
+int64_t sys::getMaxSemaphoresPerProcess() {
 	#if defined(_SC_SEM_NSEMS_MAX)
 		return sysConf(_SC_SEM_NSEMS_MAX);
 	#else
@@ -665,7 +665,7 @@ int64_t system::getMaxSemaphoresPerProcess() {
 	#endif
 }
 
-int64_t system::getMaxSemaphoreValue() {
+int64_t sys::getMaxSemaphoreValue() {
 	#if defined(_SC_SEM_VALUE_MAX)
 		return sysConf(_SC_SEM_VALUE_MAX);
 	#else
@@ -674,7 +674,7 @@ int64_t system::getMaxSemaphoreValue() {
 	#endif
 }
 
-int64_t system::getMaxSignalQueueLength() {
+int64_t sys::getMaxSignalQueueLength() {
 	#if defined(_SC_SIGQUEUE_MAX)
 		return sysConf(_SC_SIGQUEUE_MAX);
 	#else
@@ -683,7 +683,7 @@ int64_t system::getMaxSignalQueueLength() {
 	#endif
 }
 
-int64_t system::getMaxTimersPerProcess() {
+int64_t sys::getMaxTimersPerProcess() {
 	#if defined(_SC_TIMER_MAX)
 		return sysConf(_SC_TIMER_MAX);
 	#else
@@ -692,7 +692,7 @@ int64_t system::getMaxTimersPerProcess() {
 	#endif
 }
 
-int64_t system::getSuggestedGroupEntryBufferSize() {
+int64_t sys::getSuggestedGroupEntryBufferSize() {
 	#if defined(_SC_GETGR_R_SIZE_MAX)
 		return sysConf(_SC_GETGR_R_SIZE_MAX);
 	#else
@@ -700,7 +700,7 @@ int64_t system::getSuggestedGroupEntryBufferSize() {
 	#endif
 }
 
-int64_t system::getSuggestedPasswordEntryBufferSize() {
+int64_t sys::getSuggestedPasswordEntryBufferSize() {
 	#if defined(_SC_GETPW_R_SIZE_MAX)
 		return sysConf(_SC_GETPW_R_SIZE_MAX);
 	#else
@@ -708,7 +708,7 @@ int64_t system::getSuggestedPasswordEntryBufferSize() {
 	#endif
 }
 
-int64_t system::getMinThreadStackSize() {
+int64_t sys::getMinThreadStackSize() {
 	#if defined(_SC_THREAD_STACK_MIN)
 		return sysConf(_SC_THREAD_STACK_MIN);
 	#else
@@ -717,7 +717,7 @@ int64_t system::getMinThreadStackSize() {
 	#endif
 }
 
-int64_t system::getMaxThreadsPerProcess() {
+int64_t sys::getMaxThreadsPerProcess() {
 	#if defined(_SC_THREAD_THREADS_MAX)
 		return sysConf(_SC_THREAD_THREADS_MAX);
 	#else
@@ -726,7 +726,7 @@ int64_t system::getMaxThreadsPerProcess() {
 	#endif
 }
 
-int64_t system::getThreadDestructorIterations() {
+int64_t sys::getThreadDestructorIterations() {
 	#if defined(_SC_THREAD_DESTRUCTOR_ITERATIONS)
 		return sysConf(_SC_THREAD_DESTRUCTOR_ITERATIONS);
 	#else
@@ -735,7 +735,7 @@ int64_t system::getThreadDestructorIterations() {
 	#endif
 }
 
-int64_t system::getMaxThreadKeys() {
+int64_t sys::getMaxThreadKeys() {
 	#if defined(_SC_THREAD_KEYS_MAX)
 		return sysConf(_SC_THREAD_KEYS_MAX);
 	#else
@@ -744,7 +744,7 @@ int64_t system::getMaxThreadKeys() {
 	#endif
 }
 
-int64_t system::getMaxAtExitFunctions() {
+int64_t sys::getMaxAtExitFunctions() {
 	#if defined(_SC_ATEXIT_MAX)
 		return sysConf(_SC_ATEXIT_MAX);
 	#else
@@ -753,7 +753,7 @@ int64_t system::getMaxAtExitFunctions() {
 	#endif
 }
 
-int64_t system::getCPUSetSize() {
+int64_t sys::getCPUSetSize() {
 	#if defined(_SC_CPUSET_SIZE)
 		return sysConf(_SC_CPUSET_SIZE);
 	#else
@@ -762,7 +762,7 @@ int64_t system::getCPUSetSize() {
 	#endif
 }
 
-int64_t system::getMaxPasswordLength() {
+int64_t sys::getMaxPasswordLength() {
 	#if defined(_SC_PASS_MAX)
 		return sysConf(_SC_PASS_MAX);
 	#else
@@ -771,7 +771,7 @@ int64_t system::getMaxPasswordLength() {
 	#endif
 }
 
-int64_t system::getMaxLogNameLength() {
+int64_t sys::getMaxLogNameLength() {
 	#if defined(_SC_LOGNAME_MAX)
 		return sysConf(_SC_LOGNAME_MAX);
 	#else
@@ -780,7 +780,7 @@ int64_t system::getMaxLogNameLength() {
 	#endif
 }
 
-int64_t system::getMaxProcessID() {
+int64_t sys::getMaxProcessID() {
 	#if defined(_SC_MAXPID)
 		return sysConf(_SC_MAXPID);
 	#else
@@ -789,7 +789,7 @@ int64_t system::getMaxProcessID() {
 	#endif
 }
 
-int64_t system::sysConf(int32_t name) {
+int64_t sys::sysConf(int32_t name) {
 	#if defined(RUDIMENTS_HAVE_SYSCONF)
 		int64_t	result;
 		do {

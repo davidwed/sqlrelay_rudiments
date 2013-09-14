@@ -77,7 +77,7 @@ PROGS = server$(EXE) \
 	nullserver$(EXE) \
 	logger$(EXE) \
 	intervaltimer$(EXE) \
-	system$(EXE) \
+	sys$(EXE) \
 	reboot$(EXE) \
 	halt$(EXE) \
 	shutdown$(EXE) \
@@ -165,7 +165,7 @@ clean:
 		character$(EXE) \
 		rawbuffer$(EXE) \
 		nullserver$(EXE) \
-		system$(EXE) \
+		sys$(EXE) \
 		reboot$(EXE) \
 		halt$(EXE) \
 		shutdown$(EXE) \
@@ -393,8 +393,8 @@ character$(EXE): character.cpp character.lo
 rawbuffer$(EXE): rawbuffer.cpp rawbuffer.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ rawbuffer.lo $(ALLSTATIC) $(LIBS)
 
-system$(EXE): system.cpp system.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(ALLSTATIC) $(LIBS)
+sys$(EXE): sys.cpp sys.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sys.lo $(ALLSTATIC) $(LIBS)
 
 reboot$(EXE): reboot.cpp reboot.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ reboot.lo $(ALLSTATIC) $(LIBS)

@@ -3,4 +3,4 @@
 
 	private:
 
-		systemprivate	*pvt;
+		sysprivate	*pvt;

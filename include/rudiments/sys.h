@@ -1,21 +1,21 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_SYSTEM_H
-#define RUDIMENTS_SYSTEM_H
+#ifndef RUDIMENTS_SYS_H
+#define RUDIMENTS_SYS_H
 
-#include <rudiments/private/systemincludes.h>
+#include <rudiments/private/sysincludes.h>
 
 #ifdef RUDIMENTS_NAMESPACE
 namespace rudiments {
 #endif
 
-class systemprivate;
+class sysprivate;
 
-/** The system class provides methods for controlling the state of and
+/** The sys class provides methods for controlling the state of and
  *  accessing information about the operating system. */
 
-class RUDIMENTS_DLLSPEC system {
+class RUDIMENTS_DLLSPEC sys {
 	public:
 
 		/** Returns the name of the operating system.
@@ -269,7 +269,7 @@ class RUDIMENTS_DLLSPEC system {
 		 *  other than the ones provided above. */
 		static	int64_t	sysConf(int32_t name);
 
-	#include <rudiments/private/system.h>
+	#include <rudiments/private/sys.h>
 };
 
 #ifdef RUDIMENTS_NAMESPACE

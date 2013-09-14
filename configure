@@ -821,7 +821,7 @@ enable_shmfile
 enable_signalclasses
 enable_snooze
 enable_stringbuffer
-enable_system
+enable_sys
 enable_timezonefile
 enable_unixclient
 enable_unixserver
@@ -1519,7 +1519,7 @@ Optional Features:
   --disable-signalclasses Don't build signalclasses
   --disable-snooze        Don't build snooze class
   --disable-stringbuffer  Don't build stringbuffer class
-  --disable-system        Don't build system
+  --disable-sys           Don't build sys class
   --disable-timezonefile  Don't build timezonefile class
   --disable-unixclient    Don't build unixclient class
   --disable-unixserver    Don't build unixserver class
@@ -2886,9 +2886,9 @@ else
   INCLUDE_STRINGBUFFER="1"
 fi
 
-# Check whether --enable-system was given.
-if test "${enable_system+set}" = set; then :
-  enableval=$enable_system; INCLUDE_SYSTEM="0"
+# Check whether --enable-sys was given.
+if test "${enable_sys+set}" = set; then :
+  enableval=$enable_sys; INCLUDE_SYSTEM="0"
 else
   INCLUDE_SYSTEM="1"
 fi
@@ -29141,10 +29141,10 @@ fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )
 then
-	HEADERS="$HEADERS system.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS system.h systemincludes.h"
-	SRCS="$SRCS system.cpp"
-	LOBJS="$LOBJS system.lo"
+	HEADERS="$HEADERS sys.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS sys.h sysincludes.h"
+	SRCS="$SRCS sys.cpp"
+	LOBJS="$LOBJS sys.lo"
 fi
 
 if ( test "$INCLUDE_TIMEZONEFILE" = "1" )
