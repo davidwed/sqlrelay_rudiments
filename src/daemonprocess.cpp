@@ -10,11 +10,7 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-
-// for wait...
+// for waitpid...
 #if !defined(_WIN32) && defined(RUDIMENTS_HAVE_SYS_WAIT_H)
 	#include <sys/wait.h>
 #endif
@@ -49,12 +45,12 @@ void daemonprocess::crash(int32_t signum) {
 
 void daemonprocess::defaultShutDown(int32_t signum) {
 	waitForChildren();
-	exit(0);
+	process::exit(0);
 }
 
 void daemonprocess::defaultCrash(int32_t signum) {
 	waitForChildren();
-	exit(1);
+	process::exit(1);
 }
 
 daemonprocess::daemonprocess() {
