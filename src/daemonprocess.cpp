@@ -9,6 +9,7 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
+#include <rudiments/null.h>
 
 // for waitpid...
 #if !defined(_WIN32) && defined(RUDIMENTS_HAVE_SYS_WAIT_H)
