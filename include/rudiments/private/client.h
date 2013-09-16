@@ -6,13 +6,13 @@
 		long		_timeoutsec();
 		long		_timeoutusec();
 		unsigned long	_retrywait();
-		unsigned long	_retrycount();
+		uint32_t	_retrycount();
 
 		void	initialize(char *connecterror,
 					long timeoutsec,
 					long timeoutusec,
 					unsigned long retrywait,
-					unsigned long retrycount);
+					uint32_t retrycount);
 		void	clientClone(const client &c);
 
 	private:

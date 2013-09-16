@@ -44,7 +44,7 @@ class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsock
 					long timeoutsec,
 					long timeoutusec,
 					unsigned long retrywait,
-					unsigned long retrycount);
+					uint32_t retrycount);
 
 
 
@@ -62,7 +62,7 @@ class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsock
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
-						unsigned long retrycount);
+						uint32_t retrycount);
 
 		/** Attempts to connect to the "host" and "port" set
 		 *  earlier using one of the initialize() methods.

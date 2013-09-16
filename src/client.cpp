@@ -13,7 +13,7 @@ class clientprivate {
 		long		_timeoutsec;
 		long		_timeoutusec;
 		unsigned long	_retrywait;
-		unsigned long	_retrycount;
+		uint32_t	_retrycount;
 };
 
 client::client() : filedescriptor() {
@@ -42,7 +42,7 @@ client::~client() {
 
 void client::initialize(char *connecterror,
 			long timeoutsec, long timeoutusec,
-			unsigned long retrywait, unsigned long retrycount) {
+			unsigned long retrywait, uint32_t retrycount) {
 	pvt->_connecterror=connecterror;
 	pvt->_timeoutsec=timeoutsec;
 	pvt->_timeoutusec=timeoutusec;
@@ -82,6 +82,6 @@ unsigned long client::_retrywait() {
 	return pvt->_retrywait;
 }
 
-unsigned long client::_retrycount() {
+uint32_t client::_retrycount() {
 	return pvt->_retrycount;
 }

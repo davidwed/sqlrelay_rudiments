@@ -28,7 +28,6 @@ PROGS = server$(EXE) \
 	semaphoreset2$(EXE) \
 	charstring$(EXE) \
 	datetime$(EXE) \
-	timezonefile$(EXE) \
 	dictionary$(EXE) \
 	environment$(EXE) \
 	file$(EXE) \
@@ -122,7 +121,6 @@ clean:
 		sharedmemory2$(EXE) \
 		charstring$(EXE) \
 		datetime$(EXE) \
-		timezonefile$(EXE) \
 		dictionary$(EXE) \
 		dtd$(EXE) \
 		environment$(EXE) \
@@ -287,9 +285,6 @@ charstring$(EXE): charstring.cpp charstring.lo
 
 datetime$(EXE): datetime.cpp datetime.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ datetime.lo $(ALLSTATIC) $(LIBS)
-
-timezonefile$(EXE): timezonefile.cpp timezonefile.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ timezonefile.lo $(ALLSTATIC) $(LIBS)
 
 dictionary$(EXE): dictionary.cpp dictionary.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dictionary.lo $(ALLSTATIC) $(LIBS)

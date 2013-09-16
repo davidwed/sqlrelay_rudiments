@@ -822,7 +822,6 @@ enable_signalclasses
 enable_snooze
 enable_stringbuffer
 enable_sys
-enable_timezonefile
 enable_unixclient
 enable_unixserver
 enable_variablebuffer
@@ -1520,7 +1519,6 @@ Optional Features:
   --disable-snooze        Don't build snooze class
   --disable-stringbuffer  Don't build stringbuffer class
   --disable-sys           Don't build sys class
-  --disable-timezonefile  Don't build timezonefile class
   --disable-unixclient    Don't build unixclient class
   --disable-unixserver    Don't build unixserver class
   --disable-variablebuffer       Don't build variablebuffer class
@@ -2891,13 +2889,6 @@ if test "${enable_sys+set}" = set; then :
   enableval=$enable_sys; INCLUDE_SYSTEM="0"
 else
   INCLUDE_SYSTEM="1"
-fi
-
-# Check whether --enable-timezonefile was given.
-if test "${enable_timezonefile+set}" = set; then :
-  enableval=$enable_timezonefile; INCLUDE_TIMEZONEFILE="0"
-else
-  INCLUDE_TIMEZONEFILE="1"
 fi
 
 # Check whether --enable-unixclient was given.
@@ -29094,14 +29085,6 @@ then
 	PRIVATEHEADERS="$PRIVATEHEADERS sys.h sysincludes.h"
 	SRCS="$SRCS sys.cpp"
 	LOBJS="$LOBJS sys.lo"
-fi
-
-if ( test "$INCLUDE_TIMEZONEFILE" = "1" )
-then
-	HEADERS="$HEADERS timezonefile.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS timezonefile.h timezonefileincludes.h"
-	SRCS="$SRCS timezonefile.cpp"
-	LOBJS="$LOBJS timezonefile.lo"
 fi
 
 if ( test "$INCLUDE_UNIXCLIENT" = "1" )

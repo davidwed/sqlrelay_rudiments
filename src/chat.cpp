@@ -374,7 +374,7 @@ void chat::charUnescape(const char *str, char **newstr, bool second) {
 
 	*newstr = new char[charstring::length(str)+1];
 
-	unsigned long i=0;
+	uint64_t i=0;
 	for (char ch; (ch=*str); str++) {
 		if (ch=='\\') {
 			ch=*(++str);

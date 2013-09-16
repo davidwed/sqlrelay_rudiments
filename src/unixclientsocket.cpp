@@ -40,7 +40,7 @@ int32_t unixclientsocket::connect(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
-						unsigned long retrycount) {
+						uint32_t retrycount) {
 	initialize(filename,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
@@ -49,7 +49,7 @@ void unixclientsocket::initialize(const char *filename,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
-						unsigned long retrycount) {
+						uint32_t retrycount) {
 	unixsocketutil::initialize(filename);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
 }
@@ -121,8 +121,9 @@ int32_t unixclientsocket::connect() {
 	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
-	for (unsigned long counter=0;
-			counter<_retrycount() || !_retrycount(); counter++) {
+	for (uint32_t counter=0;
+			counter<_retrycount() || !_retrycount();
+			counter++) {
 
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try

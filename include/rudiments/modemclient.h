@@ -45,7 +45,7 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 					const char *phonenumber,
 					const char *disconnectscript,
 					unsigned long retrywait,
-					unsigned long retrycount);
+					uint32_t retrycount);
 
 		/** Dials the modem and attempt to establish a connection.
 		 *  If the connection fails, it will retry "retrycount"

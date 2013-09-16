@@ -129,8 +129,12 @@ ssize_t file::create(const char *name, mode_t perms, uint16_t number) {
 	return create(name,perms,&number,sizeof(uint16_t));
 }
 
-ssize_t file::create(const char *name, mode_t perms, unsigned long number) {
-	return create(name,perms,&number,sizeof(unsigned long));
+ssize_t file::create(const char *name, mode_t perms, uint32_t number) {
+	return create(name,perms,&number,sizeof(uint32_t));
+}
+
+ssize_t file::create(const char *name, mode_t perms, uint64_t number) {
+	return create(name,perms,&number,sizeof(uint64_t));
 }
 
 ssize_t file::create(const char *name, mode_t perms, float number) {
@@ -179,7 +183,12 @@ ssize_t file::createFile(const char *name, mode_t perms, uint16_t number) {
 	return fl.create(name,perms,number);
 }
 
-ssize_t file::createFile(const char *name, mode_t perms, unsigned long number) {
+ssize_t file::createFile(const char *name, mode_t perms, uint32_t number) {
+	file	fl;
+	return fl.create(name,perms,number);
+}
+
+ssize_t file::createFile(const char *name, mode_t perms, uint64_t number) {
 	file	fl;
 	return fl.create(name,perms,number);
 }
@@ -1593,14 +1602,27 @@ bool file::getAttribute(const char *name, uint16_t *number) const {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, unsigned long *number) const {
+bool file::getAttribute(const char *name, uint32_t *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
 	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(unsigned long));
+		rawbuffer::copy(number,buffer,sizeof(uint32_t));
+		delete[] buffer;
+	}
+	return retval;
+}
+
+bool file::getAttribute(const char *name, uint64_t *number) const {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(uint64_t));
 		delete[] buffer;
 	}
 	return retval;
@@ -1619,14 +1641,27 @@ bool file::getAttribute(const char *name, int16_t *number) const {
 	return retval;
 }
 
-bool file::getAttribute(const char *name, long *number) const {
+bool file::getAttribute(const char *name, int32_t *number) const {
 	size_t		size;
 	unsigned char	*buffer;
 	bool	retval=getAttribute(name,
 				reinterpret_cast<void **>(&buffer),
 				&size);
 	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(long));
+		rawbuffer::copy(number,buffer,sizeof(int32_t));
+		delete[] buffer;
+	}
+	return retval;
+}
+
+bool file::getAttribute(const char *name, int64_t *number) const {
+	size_t		size;
+	unsigned char	*buffer;
+	bool	retval=getAttribute(name,
+				reinterpret_cast<void **>(&buffer),
+				&size);
+	if (retval) {
+		rawbuffer::copy(number,buffer,sizeof(int64_t));
 		delete[] buffer;
 	}
 	return retval;
@@ -1768,7 +1803,11 @@ bool file::createAttribute(const char *name, uint16_t number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, unsigned long number) const {
+bool file::createAttribute(const char *name, uint32_t number) const {
+	return createAttribute(name,&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, uint64_t number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
@@ -1776,7 +1815,11 @@ bool file::createAttribute(const char *name, int16_t number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
-bool file::createAttribute(const char *name, long number) const {
+bool file::createAttribute(const char *name, int32_t number) const {
+	return createAttribute(name,&number,sizeof(number));
+}
+
+bool file::createAttribute(const char *name, int64_t number) const {
 	return createAttribute(name,&number,sizeof(number));
 }
 
@@ -1831,7 +1874,11 @@ bool file::replaceAttribute(const char *name, uint16_t number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, unsigned long number) const {
+bool file::replaceAttribute(const char *name, uint32_t number) const {
+	return replaceAttribute(name,&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, uint64_t number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
@@ -1839,7 +1886,11 @@ bool file::replaceAttribute(const char *name, int16_t number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
-bool file::replaceAttribute(const char *name, long number) const {
+bool file::replaceAttribute(const char *name, int32_t number) const {
+	return replaceAttribute(name,&number,sizeof(number));
+}
+
+bool file::replaceAttribute(const char *name, int64_t number) const {
 	return replaceAttribute(name,&number,sizeof(number));
 }
 
@@ -1894,7 +1945,11 @@ bool file::setAttribute(const char *name, uint16_t number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, unsigned long number) const {
+bool file::setAttribute(const char *name, uint32_t number) const {
+	return setAttribute(name,&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, uint64_t number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 
@@ -1902,7 +1957,11 @@ bool file::setAttribute(const char *name, int16_t number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 
-bool file::setAttribute(const char *name, long number) const {
+bool file::setAttribute(const char *name, int32_t number) const {
+	return setAttribute(name,&number,sizeof(number));
+}
+
+bool file::setAttribute(const char *name, int64_t number) const {
 	return setAttribute(name,&number,sizeof(number));
 }
 
@@ -2098,11 +2157,11 @@ key_t file::generateKey(const char *filename, int32_t id) {
 #endif
 }
 
-long file::maxLinks(const char *filename) {
+int64_t file::maxLinks(const char *filename) {
 	return pathConf(filename,_PC_LINK_MAX);
 }
 
-long file::maxLinks() const {
+int64_t file::maxLinks() const {
 	return fpathConf(_PC_LINK_MAX);
 }
 

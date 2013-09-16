@@ -107,7 +107,7 @@ void modemclient::initialize(const char *devicename,
 				const char *phonenumber,
 				const char *disconnectscript,
 				unsigned long retrywait,
-				unsigned long retrycount) {
+				uint32_t retrycount) {
 	modemutil::initialize(devicename,baud);
 	pvt->_customatcommands=customatcommands;
 	pvt->_connectscript=connectscript;
@@ -124,7 +124,7 @@ int32_t modemclient::connect() {
 	phnvp.setData("phonenumber",
 			const_cast<char *>(pvt->_phonenumber));
 
-	unsigned long	whichtry=0;
+	uint32_t	whichtry=0;
 	for (;;) {
 
 		delete[] *(_connecterror());

@@ -58,7 +58,6 @@ PROGS = \
 	snooze$(EXE) \
 	stringbuffer$(EXE) \
 	system$(EXE) \
-	timezonefile$(EXE) \
 	unixclientsocket$(EXE) \
 	unixserversocket$(EXE) \
 	variablebuffer$(EXE) \
@@ -223,9 +222,6 @@ stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo
 
 system$(EXE): system.cpp system.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(LIBS)
-
-timezonefile$(EXE): timezonefile.cpp timezonefile.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ timezonefile.lo $(LIBS)
 
 unixclientsocket$(EXE): unixclientsocket.cpp unixclientsocket.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclientsocket.lo $(LIBS)

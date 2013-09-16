@@ -152,16 +152,16 @@ void memorypool::free() {
 
 void memorypool::print() {
 
-	long		segmentindex=0;
+	uint64_t		segmentindex=0;
 	memorypoollistnode	*listnode=pvt->_nodelist.getFirstNode();
 	memorypoolnode		*memnode;
 
 	while (listnode) {
 		memnode=listnode->getData();
-		stdoutput.printf("segment %ld(%lx): (%d,%d)\n",
-				segmentindex,(unsigned long)memnode,
+		stdoutput.printf("segment %lld(%x): (%d,%d)\n",
+				segmentindex,memnode,
 				(int)memnode->_size,(int)memnode->_position);
-		for (unsigned long i=0; i<memnode->_position; i++) {
+		for (size_t i=0; i<memnode->_position; i++) {
 			if (memnode->_buffer[i]>=' ' && 
 				memnode->_buffer[i]<='~') {
 				stdoutput.printf("'%c'",memnode->_buffer[i]);

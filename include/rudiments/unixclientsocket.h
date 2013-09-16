@@ -44,7 +44,7 @@ class RUDIMENTS_DLLSPEC unixclientsocket : public clientsocket, private unixsock
 					long timeoutsec,
 					long timeoutusec,
 					unsigned long retrywait,
-					unsigned long retrycount);
+					uint32_t retrycount);
 
 
 
@@ -61,7 +61,7 @@ class RUDIMENTS_DLLSPEC unixclientsocket : public clientsocket, private unixsock
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
-						unsigned long retrycount);
+						uint32_t retrycount);
 
 		/** Attempts to connect to the "filename" set earlier.
 		 *  If the connection fails, it will retry "retrycount"

@@ -55,7 +55,7 @@ int32_t inetclientsocket::connect(const char *host,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
-						unsigned long retrycount) {
+						uint32_t retrycount) {
 	initialize(host,port,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
@@ -65,7 +65,7 @@ void inetclientsocket::initialize(const char *host,
 						long timeoutsec,
 						long timeoutusec,
 						unsigned long retrywait,
-						unsigned long retrycount) {
+						uint32_t retrycount) {
 	inetsocketutil::initialize(host,port);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
 }
@@ -184,8 +184,9 @@ int32_t inetclientsocket::connect() {
 	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
-	for (unsigned long counter=0;
-			counter<_retrycount() || !_retrycount(); counter++) {
+	for (uint32_t counter=0;
+			counter<_retrycount() || !_retrycount();
+			counter++) {
 
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try

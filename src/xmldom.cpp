@@ -23,13 +23,13 @@
 class xmldomprivate {
 	friend class xmldom;
 	private:
-		xmldomnode			*_nullnode;
-		xmldomnode			*_rootnode;
-		xmldomnode			*_currentparent;
-		xmldomnode			*_currentattribute;
-		bool				_stringcacheenabled;
-		stringlist			_strlist;
-		linkedlist<unsigned long>	_refcountlist;
+		xmldomnode		*_nullnode;
+		xmldomnode		*_rootnode;
+		xmldomnode		*_currentparent;
+		xmldomnode		*_currentattribute;
+		bool			_stringcacheenabled;
+		stringlist		_strlist;
+		linkedlist<uint64_t>	_refcountlist;
 };
 
 xmldom::xmldom() : xmlsax() {
@@ -208,12 +208,12 @@ const char *xmldom::cacheString(const char *string) {
 	if (!string) {
 		return NULL;
 	}
-	unsigned long	index=0;
+	uint64_t	index=0;
 	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
 		const char	*data=node->getData();
 		if (!charstring::compare(string,data)) {
-			linkedlistnode<unsigned long>	*refnode=
+			linkedlistnode<uint64_t>	*refnode=
 				pvt->_refcountlist.getNodeByIndex(index);
 			refnode->setData(refnode->getData()+1);
 			return data;
@@ -230,12 +230,12 @@ void xmldom::unCacheString(const char *string) {
 	if (!string) {
 		return;
 	}
-	unsigned long	index=0;
+	uint64_t	index=0;
 	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
 		char	*data=node->getData();
 		if (!charstring::compare(string,data)) {
-			linkedlistnode<unsigned long>	*refnode=
+			linkedlistnode<uint64_t>	*refnode=
 				pvt->_refcountlist.getNodeByIndex(index);
 			refnode->setData(refnode->getData()-1);
 			if (refnode->getData()<=0) {

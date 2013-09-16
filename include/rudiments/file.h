@@ -60,8 +60,13 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * the initial contents to "number".  Returns the number of
 		 * bytes written or -1 on error.  If the file already exists,
 		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms,
-						unsigned long number);
+		ssize_t	create(const char *name, mode_t perms, uint32_t number);
+
+		/** Creates the file "name" with permissions "perms" and sets
+		 * the initial contents to "number".  Returns the number of
+		 * bytes written or -1 on error.  If the file already exists,
+		 * it will be truncated. */
+		ssize_t	create(const char *name, mode_t perms, uint64_t number);
 
 		/** Creates the file "name" with permissions "perms" and sets
 		 * the initial contents to "number".  Returns the number of
@@ -843,7 +848,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns the maximum number of links that can be
 		 *  created to "filename". */
-		long	maxLinks() const;
+		int64_t	maxLinks() const;
 
 
 		/** Returns a NULL terminated array of the exteneded file
@@ -856,13 +861,15 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns the value of attribute "name" in buffer "number".
 		 *  Returns true on success and false on failure. */
-		bool	getAttribute(const char *name,
-						uint16_t *number) const;
+		bool	getAttribute(const char *name, uint16_t *number) const;
 
 		/** Returns the value of attribute "name" in buffer "number".
 		 *  Returns true on success and false on failure. */
-		bool	getAttribute(const char *name,
-						unsigned long *number) const;
+		bool	getAttribute(const char *name, uint32_t *number) const;
+
+		/** Returns the value of attribute "name" in buffer "number".
+		 *  Returns true on success and false on failure. */
+		bool	getAttribute(const char *name, uint64_t *number) const;
 
 		/** Returns the value of attribute "name" in buffer "number".
 		 *  Returns true on success and false on failure. */
@@ -870,7 +877,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns the value of attribute "name" in buffer "number".
 		 *  Returns true on success and false on failure. */
-		bool	getAttribute(const char *name, long *number) const;
+		bool	getAttribute(const char *name, int32_t *number) const;
+
+		/** Returns the value of attribute "name" in buffer "number".
+		 *  Returns true on success and false on failure. */
+		bool	getAttribute(const char *name, int64_t *number) const;
 
 		/** Returns the value of attribute "name" in buffer "number".
 		 *  Returns true on success and false on failure. */
@@ -941,7 +952,12 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Creates a new attribute named "name" with value "number".
 		 *  Returns true on success and false on failure. */
 		bool	createAttribute(const char *name,
-						unsigned long number) const;
+						uint32_t number) const;
+
+		/** Creates a new attribute named "name" with value "number".
+		 *  Returns true on success and false on failure. */
+		bool	createAttribute(const char *name,
+						uint64_t number) const;
 
 		/** Creates a new attribute named "name" with value "number".
 		 *  Returns true on success and false on failure. */
@@ -949,7 +965,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Creates a new attribute named "name" with value "number".
 		 *  Returns true on success and false on failure. */
-		bool	createAttribute(const char *name, long number) const;
+		bool	createAttribute(const char *name, int32_t number) const;
+
+		/** Creates a new attribute named "name" with value "number".
+		 *  Returns true on success and false on failure. */
+		bool	createAttribute(const char *name, int64_t number) const;
 
 		/** Creates a new attribute named "name" with value "number".
 		 *  Returns true on success and false on failure. */
@@ -1012,7 +1032,13 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  "number".
 		 *  Returns true on success and false on failure. */ 
 		bool	replaceAttribute(const char *name,
-						unsigned long number) const;
+						uint32_t number) const;
+
+		/** Replace an existing attribute named "name" with value
+		 *  "number".
+		 *  Returns true on success and false on failure. */ 
+		bool	replaceAttribute(const char *name,
+						uint64_t number) const;
 
 		/** Replace an existing attribute named "name" with value
 		 *  "number".
@@ -1023,7 +1049,14 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Replace an existing attribute named "name" with value
 		 *  "number".
 		 *  Returns true on success and false on failure. */ 
-		bool	replaceAttribute(const char *name, long number) const;
+		bool	replaceAttribute(const char *name,
+						int32_t number) const;
+
+		/** Replace an existing attribute named "name" with value
+		 *  "number".
+		 *  Returns true on success and false on failure. */ 
+		bool	replaceAttribute(const char *name,
+						int64_t number) const;
 
 		/** Replace an existing attribute named "name" with value
 		 *  "number".
@@ -1096,7 +1129,13 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  creates a new attribute if one doesn't already exist.
 		 *  Returns true on success and false on failure. */ 
 		bool	setAttribute(const char *name,
-						unsigned long number) const;
+						uint32_t number) const;
+
+		/** Replaces existing attribute "name" with value "number" or
+		 *  creates a new attribute if one doesn't already exist.
+		 *  Returns true on success and false on failure. */ 
+		bool	setAttribute(const char *name,
+						uint64_t number) const;
 
 		/** Replaces existing attribute "name" with value "number" or
 		 *  creates a new attribute if one doesn't already exist.
@@ -1106,7 +1145,12 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Replaces existing attribute "name" with value "number" or
 		 *  creates a new attribute if one doesn't already exist.
 		 *  Returns true on success and false on failure. */ 
-		bool	setAttribute(const char *name, long number) const;
+		bool	setAttribute(const char *name, int32_t number) const;
+
+		/** Replaces existing attribute "name" with value "number" or
+		 *  creates a new attribute if one doesn't already exist.
+		 *  Returns true on success and false on failure. */ 
+		bool	setAttribute(const char *name, int64_t number) const;
 
 		/** Replaces existing attribute "name" with value "number" or
 		 *  creates a new attribute if one doesn't already exist.
@@ -1201,7 +1245,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  failure. */
 		static ssize_t	createFile(const char *name,
 						mode_t perms,
-						unsigned long number);
+						uint32_t number);
+
+		/** Create a file named "name" with permissions "perms" and
+		 *  sets the initial contents of the file to "number". If
+		 *  the file already exists, it will be truncated.
+		 *  Returns the number of bytes written on success or -1 on
+		 *  failure. */
+		static ssize_t	createFile(const char *name,
+						mode_t perms,
+						uint64_t number);
 
 		/** Create a file named "name" with permissions "perms" and
 		 *  sets the initial contents of the file to "number". If
@@ -1559,7 +1612,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns the maximum number of links that
 		 *  can be created to "filename". */
-		static long	maxLinks(const char *filename);
+		static int64_t	maxLinks(const char *filename);
 
 	#include <rudiments/private/file.h>
 };

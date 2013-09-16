@@ -266,10 +266,6 @@ AC_ARG_ENABLE(sys,
 	[  --disable-sys           Don't build sys class],
 	INCLUDE_SYSTEM="0",
 	INCLUDE_SYSTEM="1")
-AC_ARG_ENABLE(timezonefile,
-	[  --disable-timezonefile  Don't build timezonefile class],
-	INCLUDE_TIMEZONEFILE="0",
-	INCLUDE_TIMEZONEFILE="1")
 AC_ARG_ENABLE(unixclient,
 	[  --disable-unixclient    Don't build unixclient class],
 	INCLUDE_UNIXCLIENT="0",
@@ -3265,14 +3261,6 @@ then
 	PRIVATEHEADERS="$PRIVATEHEADERS sys.h sysincludes.h"
 	SRCS="$SRCS sys.cpp"
 	LOBJS="$LOBJS sys.lo"
-fi
-
-if ( test "$INCLUDE_TIMEZONEFILE" = "1" )
-then
-	HEADERS="$HEADERS timezonefile.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS timezonefile.h timezonefileincludes.h"
-	SRCS="$SRCS timezonefile.cpp"
-	LOBJS="$LOBJS timezonefile.lo"
 fi
 
 if ( test "$INCLUDE_UNIXCLIENT" = "1" )
