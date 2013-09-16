@@ -37,18 +37,18 @@ unixclientsocket::~unixclientsocket() {
 }
 
 int32_t unixclientsocket::connect(const char *filename,
-						long timeoutsec,
-						long timeoutusec,
-						unsigned long retrywait,
+						int32_t timeoutsec,
+						int32_t timeoutusec,
+						uint32_t retrywait,
 						uint32_t retrycount) {
 	initialize(filename,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
 }
 
 void unixclientsocket::initialize(const char *filename,
-						long timeoutsec,
-						long timeoutusec,
-						unsigned long retrywait,
+						int32_t timeoutsec,
+						int32_t timeoutusec,
+						uint32_t retrywait,
 						uint32_t retrycount) {
 	unixsocketutil::initialize(filename);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);

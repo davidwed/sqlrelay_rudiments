@@ -70,7 +70,7 @@ int main(int argc, const char **argv) {
 	unsigned char	buffer[5];
 	buffer[4]=(unsigned char)NULL;
 	vb.setPosition(0);
-	unsigned long	sizeread=vb.read(buffer,4);
+	ssize_t	sizeread=vb.read(buffer,4);
 	test("read into buffer",rawbuffer::compare(buffer,"6666",4)==0);
 
 	// read 4 bytes from position 5 of the buffer and display them

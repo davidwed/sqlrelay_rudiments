@@ -33,7 +33,7 @@
 
 			bool	posixFadvise(off64_t offset, off64_t len,
 							int32_t advice) const;
-		static	long	pathConf(const char *path, int32_t name);
-			long	fpathConf(int32_t name) const;
+		static	int64_t	pathConf(const char *path, int32_t name);
+			int64_t	fpathConf(int32_t name) const;
 
 		fileprivate	*pvt;

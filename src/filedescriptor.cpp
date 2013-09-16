@@ -474,7 +474,7 @@ ssize_t filedescriptor::write(const void *buffer, size_t size) const {
 }
 
 ssize_t filedescriptor::write(uint16_t number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
@@ -482,7 +482,7 @@ ssize_t filedescriptor::write(uint16_t number,
 }
 
 ssize_t filedescriptor::write(uint32_t number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
@@ -490,7 +490,7 @@ ssize_t filedescriptor::write(uint32_t number,
 }
 
 ssize_t filedescriptor::write(uint64_t number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	if (pvt->_translatebyteorder) {
 		number=hostToNet(number);
 	}
@@ -498,67 +498,67 @@ ssize_t filedescriptor::write(uint64_t number,
 }
 
 ssize_t filedescriptor::write(int16_t number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int32_t number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int64_t number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(float number,
-				long sec,long usec) const {
+				int32_t sec,int32_t usec) const {
 	return bufferedWrite(&number,sizeof(float),sec,usec);
 }
 
 ssize_t filedescriptor::write(double number,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&number,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::write(unsigned char character,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&character,sizeof(unsigned char),sec,usec);
 }
 
 ssize_t filedescriptor::write(bool value,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&value,sizeof(bool),sec,usec);
 }
 
 ssize_t filedescriptor::write(char character,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedWrite(&character,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedWrite(string,size,sec,usec);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const char *string,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedWrite(string,charstring::length(string),sec,usec);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedWrite(buffer,size,sec,usec);
 }
 
@@ -623,7 +623,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator) const {
 }
 
 ssize_t filedescriptor::read(uint16_t *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint16_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -632,7 +632,7 @@ ssize_t filedescriptor::read(uint16_t *buffer,
 }
 
 ssize_t filedescriptor::read(uint32_t *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint32_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -641,7 +641,7 @@ ssize_t filedescriptor::read(uint32_t *buffer,
 }
 
 ssize_t filedescriptor::read(uint64_t *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint64_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -650,57 +650,57 @@ ssize_t filedescriptor::read(uint64_t *buffer,
 }
 
 ssize_t filedescriptor::read(int16_t *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(int16_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(int32_t *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(int32_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(int64_t *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(float *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(float),sec,usec);
 }
 
 ssize_t filedescriptor::read(double *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(unsigned char),sec,usec);
 }
 
 ssize_t filedescriptor::read(bool *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(bool),sec,usec);
 }
 
 ssize_t filedescriptor::read(char *buffer,
-				long sec, long usec) const {
+				int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer, size_t size,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(char *buffer, size_t size,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
@@ -838,7 +838,7 @@ listener *filedescriptor::getListener() {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
-						long sec, long usec) const {
+						int32_t sec, int32_t usec) const {
 
 	// initialize a buffer
 	int32_t	buffersize=512;
@@ -954,7 +954,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 }
 
 ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 	stdoutput.printf("bufferedRead of %d bytes\n",(int)count);
@@ -1084,7 +1084,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 
 	// FIXME: is this what we want to do?
 	// maybe we should set some kind of error condition too
@@ -1260,7 +1260,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
 }
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	stdoutput.printf("bufferedWrite of %d bytes\n",(int)count);
 	#endif
@@ -1354,7 +1354,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 	return byteswritten;
 }
 
-bool filedescriptor::flushWriteBuffer(long sec, long usec) const {
+bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) const {
 	if (!pvt->_writebuffer) {
 		return true;
 	}
@@ -1370,7 +1370,7 @@ bool filedescriptor::flushWriteBuffer(long sec, long usec) const {
 }
 
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
-					long sec, long usec) const {
+					int32_t sec, int32_t usec) const {
 
 	// FIXME: is this what we want to do?
 	// maybe we should set some kind of error condition too
@@ -1531,18 +1531,18 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 	#endif
 }
 
-int32_t filedescriptor::waitForNonBlockingRead(long sec, long usec) const {
+int32_t filedescriptor::waitForNonBlockingRead(int32_t sec, int32_t usec) const {
 	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingRead(sec,usec):
 				safeSelect(sec,usec,true,false);
 }
 
-int32_t filedescriptor::waitForNonBlockingWrite(long sec, long usec) const {
+int32_t filedescriptor::waitForNonBlockingWrite(int32_t sec, int32_t usec) const {
 	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
 				safeSelect(sec,usec,false,true);
 }
 
-int32_t filedescriptor::safeSelect(long sec, long usec,
-				bool read, bool write) const {
+int32_t filedescriptor::safeSelect(int32_t sec, int32_t usec,
+					bool read, bool write) const {
 
 	// FD_SET will crash if you pass it -1 on some systems, just bail here
 	if (pvt->_fd==-1) {
@@ -1596,8 +1596,8 @@ int32_t filedescriptor::safeSelect(long sec, long usec,
 	}
 }
 
-int32_t filedescriptor::safePoll(long sec, long usec,
-				bool read, bool write) const {
+int32_t filedescriptor::safePoll(int32_t sec, int32_t usec,
+					bool read, bool write) const {
 
 	#ifdef RUDIMENTS_HAVE_POLL
 

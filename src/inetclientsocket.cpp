@@ -52,9 +52,9 @@ inetclientsocket::~inetclientsocket() {
 
 int32_t inetclientsocket::connect(const char *host,
 						uint16_t port,
-						long timeoutsec,
-						long timeoutusec,
-						unsigned long retrywait,
+						int32_t timeoutsec,
+						int32_t timeoutusec,
+						uint32_t retrywait,
 						uint32_t retrycount) {
 	initialize(host,port,timeoutsec,timeoutusec,retrywait,retrycount);
 	return connect();
@@ -62,9 +62,9 @@ int32_t inetclientsocket::connect(const char *host,
 
 void inetclientsocket::initialize(const char *host,
 						uint16_t port,
-						long timeoutsec,
-						long timeoutusec,
-						unsigned long retrywait,
+						int32_t timeoutsec,
+						int32_t timeoutusec,
+						uint32_t retrywait,
 						uint32_t retrycount) {
 	inetsocketutil::initialize(host,port);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);

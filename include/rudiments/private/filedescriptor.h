@@ -7,17 +7,17 @@
 		void	filedescriptorClone(const filedescriptor &f);
 
 		virtual	ssize_t	bufferedRead(void *buf, ssize_t count,
-						long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 		virtual	ssize_t	bufferedWrite(const void *buf, ssize_t count,
-						long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 		virtual	ssize_t	safeRead(void *buf, ssize_t count,
-						long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
-						long sec, long usec) const;
-		virtual	int32_t	safeSelect(long sec, long usec,
-						bool read, bool write) const;
-		virtual	int32_t	safePoll(long sec, long usec,
-						bool read, bool write) const;
+					int32_t sec, int32_t usec) const;
+		virtual	int32_t	safeSelect(int32_t sec, int32_t usec,
+					bool read, bool write) const;
+		virtual	int32_t	safePoll(int32_t sec, int32_t usec,
+					bool read, bool write) const;
 		bool		setNoDelay(int32_t onoff);
 
 		#ifdef RUDIMENTS_HAS_SSL

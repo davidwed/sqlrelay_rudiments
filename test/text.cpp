@@ -121,19 +121,19 @@ int main(int argc, const char **argv) {
 
 	// print the number of bytes necessary to store each number as a string
 	stdoutput.printf("size of 1 is: %d\n",
-				charstring::integerLength((long)1));
+				charstring::integerLength((int32_t)1));
 	stdoutput.printf("size of 10 is: %d\n",
-				charstring::integerLength((long)10));
+				charstring::integerLength((int32_t)10));
 	stdoutput.printf("size of 100 is: %d\n",
-				charstring::integerLength((long)100));
+				charstring::integerLength((int32_t)100));
 	stdoutput.printf("size of 1000 is: %d\n",
-				charstring::integerLength((long)1000));
+				charstring::integerLength((int32_t)1000));
 	stdoutput.printf("size of -1 is: %d\n",
-				charstring::integerLength((long)-1));
+				charstring::integerLength((int32_t)-1));
 	stdoutput.printf("size of -10 is: %d\n",
-				charstring::integerLength((long)-10));
+				charstring::integerLength((int32_t)-10));
 	stdoutput.printf("size of -100 is: %d\n",
-				charstring::integerLength((long)-100));
+				charstring::integerLength((int32_t)-100));
 	stdoutput.printf("size of -1000 is: %d\n",
-				charstring::integerLength((long)-1000));
+				charstring::integerLength((int32_t)-1000));
 }

@@ -148,7 +148,7 @@ bool semaphoreset::wait(int32_t index) {
 	#endif
 }
 
-bool semaphoreset::wait(int32_t index, long seconds, long nanoseconds) {
+bool semaphoreset::wait(int32_t index, int32_t seconds, int32_t nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semTimedOp(pvt->_waitop[index],seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -172,7 +172,8 @@ bool semaphoreset::waitWithUndo(int32_t index) {
 	#endif
 }
 
-bool semaphoreset::waitWithUndo(int32_t index, long seconds, long nanoseconds) {
+bool semaphoreset::waitWithUndo(int32_t index,
+				int32_t seconds, int32_t nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semTimedOp(pvt->_waitwithundoop[index],
 						seconds,nanoseconds);
@@ -643,7 +644,7 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 }
 
 bool semaphoreset::semTimedOp(struct sembuf *sops,
-				long seconds, long nanoseconds) {
+				int32_t seconds, int32_t nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP)
 		int32_t	result;
 		timespec	ts;

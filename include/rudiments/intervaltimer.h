@@ -37,26 +37,28 @@ class RUDIMENTS_DLLSPEC intervaltimer {
 
 		/** Sets the timer's initial interval to "seconds"
 		 *  seconds and "microseconds" microseconds. */
-		void	setInitialInterval(long seconds, long microseconds);
+		void	setInitialInterval(int32_t seconds,
+						int32_t microseconds);
 
 		/** Sets the timer's periodic interval to "seconds"
 		 *  seconds and "microseconds" microseconds. */
-		void	setPeriodicInterval(long seconds, long microseconds);
+		void	setPeriodicInterval(int32_t seconds,
+						int32_t microseconds);
 
 		/** Sets the timer's initial and periodic intervals both
 		 *  to "seconds" seconds and "microseconds" microseconds. */
-		void	setIntervals(long seconds, long microseconds);
+		void	setIntervals(int32_t seconds, int32_t microseconds);
 
 
 		/** Sets "seconds" and "microseconds" to the timer's
 		 *  initial interval values. */
-		void	getInitialInterval(long *seconds,
-						long *microseconds) const;
+		void	getInitialInterval(int32_t *seconds,
+						int32_t *microseconds) const;
 
 		/** Sets "seconds" and "microseconds" to the timer's
 		 *  periodic interval values. */
-		void	getPeriodicInterval(long *seconds,
-						long *microseconds) const;
+		void	getPeriodicInterval(int32_t *seconds,
+						int32_t *microseconds) const;
 
 		/** Starts (or restarts) the timer.  It will first run for
 		 *  the initial interval, then raise a signal, then run
@@ -70,13 +72,13 @@ class RUDIMENTS_DLLSPEC intervaltimer {
 		 *  signal at the end of each interval.  "seconds" and
 		 *  "microseconds" will be set to the interval that the
 		 *  timer was using prior to calling start(). */
-		bool	start(long *seconds, long *microseconds) const;
+		bool	start(int32_t *seconds, int32_t *microseconds) const;
 
 
 		/** Sets "seconds" and "microseconds" to the time
 		 *  remaining before the timer will raise the signal. */
-		bool	getTimeRemaining(long *seconds,
-						long *microseconds) const;
+		bool	getTimeRemaining(int32_t *seconds,
+						int32_t *microseconds) const;
 
 
 		/** Stops the currently running timer, but preserves

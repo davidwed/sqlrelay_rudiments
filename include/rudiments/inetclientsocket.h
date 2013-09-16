@@ -41,9 +41,9 @@ class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsock
 		 *  multithreaded applications. */
 		int32_t	connect(const char *host,
 					uint16_t port,
-					long timeoutsec,
-					long timeoutusec,
-					unsigned long retrywait,
+					int32_t timeoutsec,
+					int32_t timeoutusec,
+					uint32_t retrywait,
 					uint32_t retrycount);
 
 
@@ -59,9 +59,9 @@ class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsock
 		 *  "retrycount" when connect() is called. */
 		void	initialize(const char *host,
 						uint16_t port,
-						long timeoutsec,
-						long timeoutusec,
-						unsigned long retrywait,
+						int32_t timeoutsec,
+						int32_t timeoutusec,
+						uint32_t retrywait,
 						uint32_t retrycount);
 
 		/** Attempts to connect to the "host" and "port" set

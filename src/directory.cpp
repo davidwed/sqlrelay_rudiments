@@ -315,7 +315,7 @@ bool directory::canAccessLongFileNames(const char *pathname) {
 
 int64_t directory::pathConf(const char *pathname, int32_t name) {
 	#if defined(RUDIMENTS_HAVE_PATHCONF)
-		long	result;
+		int64_t	result;
 		do {
 			result=pathconf(pathname,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

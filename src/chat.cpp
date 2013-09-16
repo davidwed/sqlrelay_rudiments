@@ -19,7 +19,7 @@ class chatprivate {
 		const filedescriptor	*_readfd;
 		const filedescriptor	*_writefd;
 
-		long		_timeout;
+		int32_t		_timeout;
 		stringlist	_aborts;
 };
 

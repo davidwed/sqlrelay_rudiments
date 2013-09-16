@@ -10,9 +10,9 @@ class clientprivate {
 	friend class client;
 	private:
 		char		*_connecterror;
-		long		_timeoutsec;
-		long		_timeoutusec;
-		unsigned long	_retrywait;
+		int32_t		_timeoutsec;
+		int32_t		_timeoutusec;
+		uint32_t	_retrywait;
 		uint32_t	_retrycount;
 };
 
@@ -41,8 +41,8 @@ client::~client() {
 }
 
 void client::initialize(char *connecterror,
-			long timeoutsec, long timeoutusec,
-			unsigned long retrywait, uint32_t retrycount) {
+			int32_t timeoutsec, int32_t timeoutusec,
+			uint32_t retrywait, uint32_t retrycount) {
 	pvt->_connecterror=connecterror;
 	pvt->_timeoutsec=timeoutsec;
 	pvt->_timeoutusec=timeoutusec;
@@ -70,15 +70,15 @@ char **client::_connecterror() {
 	return &pvt->_connecterror;
 }
 
-long client::_timeoutsec() {
+int32_t client::_timeoutsec() {
 	return pvt->_timeoutsec;
 }
 
-long client::_timeoutusec() {
+int32_t client::_timeoutusec() {
 	return pvt->_timeoutusec;
 }
 
-unsigned long client::_retrywait() {
+uint32_t client::_retrywait() {
 	return pvt->_retrywait;
 }
 

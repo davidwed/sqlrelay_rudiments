@@ -71,11 +71,11 @@ void listener::removeAllFileDescriptors() {
 	pvt->_filedescriptorlist.clear();
 }
 
-int32_t listener::waitForNonBlockingRead(long sec, long usec) {
+int32_t listener::waitForNonBlockingRead(int32_t sec, int32_t usec) {
 	return safeSelect(sec,usec,true,false);
 }
 
-int32_t listener::waitForNonBlockingWrite(long sec, long usec) {
+int32_t listener::waitForNonBlockingWrite(int32_t sec, int32_t usec) {
 	return safeSelect(sec,usec,false,true);
 }
 
@@ -83,7 +83,7 @@ listenerlist *listener::getReadyList() {
 	return &pvt->_readylist;
 }
 
-int32_t listener::safeSelect(long sec, long usec, bool read, bool write) {
+int32_t listener::safeSelect(int32_t sec, int32_t usec, bool read, bool write) {
 
 	// set up the timeout
 	timeval	tv;

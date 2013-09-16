@@ -106,7 +106,7 @@ void modemclient::initialize(const char *devicename,
 				const char *connectscript,
 				const char *phonenumber,
 				const char *disconnectscript,
-				unsigned long retrywait,
+				uint32_t retrywait,
 				uint32_t retrycount) {
 	modemutil::initialize(devicename,baud);
 	pvt->_customatcommands=customatcommands;

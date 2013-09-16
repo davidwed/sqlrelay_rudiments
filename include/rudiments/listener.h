@@ -41,7 +41,7 @@ class RUDIMENTS_DLLSPEC listener {
 		 *  on timeout and otherwise returns the number
 		 *  of file descriptors that are ready to be
 		 *  read from. */
-		int32_t	waitForNonBlockingRead(long sec, long usec);
+		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec);
 
 		/** Causes the application to wait until a
 		 *  write() will proceed without blocking or
@@ -60,7 +60,7 @@ class RUDIMENTS_DLLSPEC listener {
 		 *  on timeout and otherwise returns the number
 		 *  of file descriptors that are ready to be 
 		 *  written to. */
-		int32_t	waitForNonBlockingWrite(long sec, long usec);
+		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec);
 
 		/** Returns the list of file descriptors that
 		 *  were ready for read after the last call to

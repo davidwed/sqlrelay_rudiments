@@ -41,9 +41,9 @@ class RUDIMENTS_DLLSPEC unixclientsocket : public clientsocket, private unixsock
 		// Returns RESULT_SUCCESS on success and RESULT_ERROR
 		// on failure.
 		int32_t	connect(const char *filename,
-					long timeoutsec,
-					long timeoutusec,
-					unsigned long retrywait,
+					int32_t timeoutsec,
+					int32_t timeoutusec,
+					uint32_t retrywait,
 					uint32_t retrycount);
 
 
@@ -58,9 +58,9 @@ class RUDIMENTS_DLLSPEC unixclientsocket : public clientsocket, private unixsock
 		 *  "timeoutsec", "timeoutusec", "retrywait" and
 		 *  "retrycount" when connect() is called. */
 		void	initialize(const char *filename,
-						long timeoutsec,
-						long timeoutusec,
-						unsigned long retrywait,
+						int32_t timeoutsec,
+						int32_t timeoutusec,
+						uint32_t retrywait,
 						uint32_t retrycount);
 
 		/** Attempts to connect to the "filename" set earlier.

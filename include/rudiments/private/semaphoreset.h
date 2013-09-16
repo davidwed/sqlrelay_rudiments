@@ -12,7 +12,8 @@
 		int32_t	semControl(semaphoresetprivate *pvt, int32_t semnum,
 						int32_t cmd, semun *semctlun);
 		bool	semTimedOp(struct sembuf *sops,
-						long seconds, long nanoseconds);
+						int32_t seconds,
+						int32_t nanoseconds);
 		bool	semOp(struct sembuf *sops);
 
 		semaphoresetprivate	*pvt;

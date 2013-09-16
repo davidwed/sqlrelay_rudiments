@@ -45,23 +45,23 @@ void intervaltimer::initialize() {
 	rawbuffer::zero(&pvt->_values,sizeof(pvt->_values));
 }
 
-void intervaltimer::setInitialInterval(long seconds, long microseconds) {
+void intervaltimer::setInitialInterval(int32_t seconds, int32_t microseconds) {
 	pvt->_values.it_value.tv_sec=seconds;
 	pvt->_values.it_value.tv_usec=microseconds;
 }
 
-void intervaltimer::setPeriodicInterval(long seconds, long microseconds) {
+void intervaltimer::setPeriodicInterval(int32_t seconds, int32_t microseconds) {
 	pvt->_values.it_interval.tv_sec=seconds;
 	pvt->_values.it_interval.tv_usec=microseconds;
 }
 
-void intervaltimer::setIntervals(long seconds, long microseconds) {
+void intervaltimer::setIntervals(int32_t seconds, int32_t microseconds) {
 	setInitialInterval(seconds,microseconds);
 	setPeriodicInterval(seconds,microseconds);
 }
 
-void intervaltimer::getInitialInterval(long *seconds,
-					long *microseconds) const {
+void intervaltimer::getInitialInterval(int32_t *seconds,
+					int32_t *microseconds) const {
 	if (seconds) {
 		*seconds=pvt->_values.it_value.tv_sec;
 	}
@@ -70,8 +70,8 @@ void intervaltimer::getInitialInterval(long *seconds,
 	}
 }
 
-void intervaltimer::getPeriodicInterval(long *seconds,
-					long *microseconds) const {
+void intervaltimer::getPeriodicInterval(int32_t *seconds,
+					int32_t *microseconds) const {
 	if (seconds) {
 		*seconds=pvt->_values.it_interval.tv_sec;
 	}
@@ -84,7 +84,7 @@ bool intervaltimer::start() const {
 	return start(NULL,NULL);
 }
 
-bool intervaltimer::start(long *seconds, long *microseconds) const {
+bool intervaltimer::start(int32_t *seconds, int32_t *microseconds) const {
 	#ifdef RUDIMENTS_HAVE_SETITIMER
 		itimerval	oldval;
 		int32_t		result;
@@ -107,7 +107,8 @@ bool intervaltimer::start(long *seconds, long *microseconds) const {
 	#endif
 }
 
-bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
+bool intervaltimer::getTimeRemaining(int32_t *seconds,
+					int32_t *microseconds) const {
 	#ifdef RUDIMENTS_HAVE_SETITIMER
 		itimerval	val;
 		int32_t	result;
@@ -128,11 +129,11 @@ bool intervaltimer::getTimeRemaining(long *seconds, long *microseconds) const {
 }
 
 bool intervaltimer::stop() {
-	long	isec;
-	long	imicrosec;
+	int32_t	isec;
+	int32_t	imicrosec;
 	getInitialInterval(&isec,&imicrosec);
-	long	psec;
-	long	pmicrosec;
+	int32_t	psec;
+	int32_t	pmicrosec;
 	getPeriodicInterval(&psec,&pmicrosec);
 	setIntervals(0,0);
 	bool	retval=start(NULL,NULL);

@@ -151,8 +151,9 @@ void *clientsocket::newSSLBIO() const {
 }
 #endif
 
-int32_t clientsocket::connect(const struct sockaddr *addr, socklen_t addrlen,
-							long sec, long usec) {
+int32_t clientsocket::connect(const struct sockaddr *addr,
+						socklen_t addrlen,
+						int32_t sec, int32_t usec) {
 
 #ifndef RUDIMENTS_HAVE_WSACONNECT
 

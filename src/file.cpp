@@ -2179,9 +2179,9 @@ bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) const {
 	#endif
 }
 
-long file::pathConf(const char *path, int32_t name) {
+int64_t file::pathConf(const char *path, int32_t name) {
 	#if defined(RUDIMENTS_HAVE_PATHCONF)
-		long	result;
+		int64_t	result;
 		do {
 			result=pathconf(path,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -2195,9 +2195,9 @@ long file::pathConf(const char *path, int32_t name) {
 	#endif
 }
 
-long file::fpathConf(int32_t name) const {
+int64_t file::fpathConf(int32_t name) const {
 	#if defined(RUDIMENTS_HAVE_FPATHCONF)
-		long	result;
+		int64_t	result;
 		do {
 			result=fpathconf(fd(),name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

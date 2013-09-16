@@ -10,10 +10,10 @@ void alarmhandler(int sig) {
 
 void waitForTimer(intervaltimer *t) {
 
-	long	isec;
-	long	iusec;
-	long	psec;
-	long	pusec;
+	int32_t	isec;
+	int32_t	iusec;
+	int32_t	psec;
+	int32_t	pusec;
 	t->getInitialInterval(&isec,&iusec);
 	t->getPeriodicInterval(&psec,&pusec);
 	stdoutput.printf("initial: %ldsec %ldusec   ",isec,iusec);
@@ -21,8 +21,8 @@ void waitForTimer(intervaltimer *t) {
 		
 
 	for (;;) {
-		long	sec;
-		long	usec;
+		int32_t	sec;
+		int32_t	usec;
 		t->getTimeRemaining(&sec,&usec);
 		stdoutput.printf("time remaining: %ldsec %ldusec\n",sec,usec);
 		if (sec==0 && usec==0) {

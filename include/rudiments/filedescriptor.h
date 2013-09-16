@@ -218,56 +218,56 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(uint16_t number, long sec, long usec) const;
+		ssize_t	write(uint16_t number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(uint32_t number, long sec, long usec) const;
+		ssize_t	write(uint32_t number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(uint64_t number, long sec, long usec) const;
+		ssize_t	write(uint64_t number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(int16_t number, long sec, long usec) const;
+		ssize_t	write(int16_t number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(int32_t number, long sec, long usec) const;
+		ssize_t	write(int32_t number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(int64_t number, long sec, long usec) const;
+		ssize_t	write(int64_t number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(float number, long sec, long usec) const;
+		ssize_t	write(float number, int32_t sec, int32_t usec) const;
 
 		/** Writes "number" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(double number, long sec, long usec) const;
+		ssize_t	write(double number, int32_t sec, int32_t usec) const;
 
 		/** Writes "character" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
@@ -275,21 +275,21 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
 		ssize_t	write(unsigned char character,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Writes "character" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(char character, long sec, long usec) const;
+		ssize_t	write(char character, int32_t sec, int32_t usec) const;
 
 		/** Writes "value" to the file descriptor with a timeout of
 		 *  "sec" seconds and "usec" microseconds.  Returns the number
 		 *  of bytes that were successfully written or RESULT_ERROR if
 		 *  an error occurred or RESULT_TIMEOUT if a timeout
 		 *  occurred. */
-		ssize_t	write(bool value, long sec, long usec) const;
+		ssize_t	write(bool value, int32_t sec, int32_t usec) const;
 
 		/** Writes NULL-terminated "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -297,7 +297,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
 		ssize_t	write(const unsigned char *string,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Writes NULL-terminated "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -305,7 +305,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
 		ssize_t	write(const char *string,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Writes "size" bytes of "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -314,7 +314,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  timeout occurred.  Note that it is possible to write beyond
 		 *  the string's NULL terminator using this method.  */
 		ssize_t	write(const unsigned char *string, size_t size,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Writes "size" bytes of "string" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -323,7 +323,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  timeout occurred.  Note that it is possible to write beyond
 		 *  the string's NULL terminator using this method.  */
 		ssize_t	write(const char *string, size_t size,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Writes "size" bytes of "buffer" to the file descriptor with
 		 *  a timeout of "sec" seconds and "usec" microseconds.
@@ -331,7 +331,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
 		 *  timeout occurred. */
 		ssize_t	write(const void *buffer, size_t size,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Prints "..." to the filedescriptor using "format" which
 		 *  should comply with standard printf formatting rules. */
@@ -489,56 +489,56 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(uint16_t *buffer, long sec, long usec) const;
+		ssize_t	read(uint16_t *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads an unsigned 32-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(uint32_t *buffer, long sec, long usec) const;
+		ssize_t	read(uint32_t *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads an unsigned 64-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(uint64_t *buffer, long sec, long usec) const;
+		ssize_t	read(uint64_t *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads a 16-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(int16_t *buffer, long sec, long usec) const;
+		ssize_t	read(int16_t *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads a 32-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(int32_t *buffer, long sec, long usec) const;
+		ssize_t	read(int32_t *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads a 64-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(int64_t *buffer, long sec, long usec) const;
+		ssize_t	read(int64_t *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads a floating point number from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(float *buffer, long sec, long usec) const;
+		ssize_t	read(float *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads a double-precision floating point number from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(double *buffer, long sec, long usec) const;
+		ssize_t	read(double *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads an unsigned character from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -546,21 +546,21 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(unsigned char *buffer,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Reads a character from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(char *buffer, long sec, long usec) const;
+		ssize_t	read(char *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads a boolean value from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(bool *buffer, long sec, long usec) const;
+		ssize_t	read(bool *buffer, int32_t sec, int32_t usec) const;
 
 		/** Reads "size" unsigned characters from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -568,7 +568,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(unsigned char *buffer, size_t size,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Reads "size" characters from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -576,7 +576,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(char *buffer, size_t size,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Reads "size" bytes from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -584,7 +584,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(void *buf, size_t size,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 		/** Reads from the file desciptor into "buffer" until
 		 *  "terminator" is encountered with a timeout of "sec" seconds
@@ -596,7 +596,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  Returns the number of bytes that were read or
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(char **buffer, const char *terminator,
-					long sec, long usec) const;
+					int32_t sec, int32_t usec) const;
 
 
 		/** Causes the application to wait until a read()
@@ -622,7 +622,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  greater than 1, indicating that a set of
 		 *  file descriptors that the listener is
 		 *  listening on are all ready to be read from. */
-		int32_t	waitForNonBlockingRead(long sec, long usec) const;
+		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec) const;
 
 		/** Causes the application to wait until a
 		 *  write() will proceed without blocking or
@@ -648,7 +648,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  greater than 1, indicating that a set of
 		 *  file descriptors that the listener is
 		 *  listening on are all ready to be written to. */
-		int32_t	waitForNonBlockingWrite(long sec, long usec) const;
+		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec) const;
 
 
 		/** Causes reads to automatically retry if interrupted by a
@@ -966,7 +966,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  "usec" microseconds, then the method will fail.  Set either
 		 *  "sec" or "usec" to -1 to disable the timeout and allow the
 		 *  method to block until the buffer has been flushed. */
-		bool	flushWriteBuffer(long sec, long usec) const;
+		bool	flushWriteBuffer(int32_t sec, int32_t usec) const;
 
 
 		/** If an application does many small reads, the overhead of
