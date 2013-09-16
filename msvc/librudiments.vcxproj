@@ -190,7 +190,6 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\listener.cpp" />
     <ClCompile Include="..\src\memorypool.cpp" />
     <ClCompile Include="..\src\mutex.cpp" />
-    <ClCompile Include="..\src\namevaluepairs.cpp" />
     <ClCompile Include="..\src\parameterstring.cpp" />
     <ClCompile Include="..\src\passwdentry.cpp" />
     <ClCompile Include="..\src\permissions.cpp" />
