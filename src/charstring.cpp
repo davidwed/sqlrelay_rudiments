@@ -325,7 +325,7 @@ char *charstring::convertAmount(int64_t amount) {
 char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	char	*amt=convertAmount(amount);
 	ssize_t	amtlen=length(amt+1);
-	unsigned short	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
+	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	char	*buffer=new char[realspaces+1];
 	buffer[realspaces]='\0';
 	rawbuffer::set(buffer,' ',realspaces);
