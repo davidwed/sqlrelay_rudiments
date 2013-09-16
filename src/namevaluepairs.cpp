@@ -4,7 +4,7 @@
 #define DONT_INLINE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/dictionary.h>
 
-// explicitly intsantiate namevaluepairs templates
+// explicitly instantiate namevaluepairs templates
 template class stringdictionarynode< char * >;
 template class stringdictionarylistnode< char * >;
 template class stringdictionarylist< char * >;
