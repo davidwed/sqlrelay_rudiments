@@ -36,7 +36,7 @@ class shadowentryprivate {
 
 // LAME: not in the class
 #if defined(RUDIMENTS_HAVE_SHADOW) && !defined(RUDIMENTS_HAVE_GETSPNAM_R)
-static mutex	*_spmutex;
+static threadmutex	*_spmutex;
 #endif
 
 
@@ -157,7 +157,7 @@ bool shadowentry::needsMutex() {
 	#endif
 }
 
-void shadowentry::setMutex(mutex *mtx) {
+void shadowentry::setMutex(threadmutex *mtx) {
 	#if defined(RUDIMENTS_HAVE_SHADOW) && \
 		!defined(RUDIMENTS_HAVE_GETSPNAM_R)
 		_spmutex=mtx;

@@ -1,7 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/mutex.h>
+#include <rudiments/threadmutex.h>
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
@@ -18,8 +18,8 @@
 	#endif
 #endif
 
-class mutexprivate {
-	friend class mutex;
+class threadmutexprivate {
+	friend class threadmutex;
 	private:
 		#if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 		pthread_mutex_t	*_mut;
@@ -30,21 +30,21 @@ class mutexprivate {
 };
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
-mutex::mutex() {
-	pvt=new mutexprivate;
+threadmutex::threadmutex() {
+	pvt=new threadmutexprivate;
 	pvt->_mut=new pthread_mutex_t;
 	do {} while (pthread_mutex_init(pvt->_mut,NULL)==-1 &&
 				error::getErrorNumber()==EINTR);
 	pvt->_destroy=true;
 }
 
-mutex::mutex(void *mut) {
-	pvt=new mutexprivate;
+threadmutex::threadmutex(void *mut) {
+	pvt=new threadmutexprivate;
 	pvt->_mut=(pthread_mutex_t *)mut;
 	pvt->_destroy=false;
 }
 
-mutex::~mutex() {
+threadmutex::~threadmutex() {
 	do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
 				error::getErrorNumber()==EINTR);
 	if (pvt->_destroy) {
@@ -53,7 +53,7 @@ mutex::~mutex() {
 	delete pvt;
 }
 
-bool mutex::lock() {
+bool threadmutex::lock() {
 	int32_t	result;
 	do {
 		result=pthread_mutex_lock(pvt->_mut);
@@ -61,7 +61,7 @@ bool mutex::lock() {
 	return !result;
 }
 
-bool mutex::tryLock() {
+bool threadmutex::tryLock() {
 	int32_t	result;
 	do {
 		result=pthread_mutex_trylock(pvt->_mut);
@@ -69,7 +69,7 @@ bool mutex::tryLock() {
 	return !result;
 }
 
-bool mutex::unlock() {
+bool threadmutex::unlock() {
 	int32_t	result;
 	do {
 		result=pthread_mutex_unlock(pvt->_mut);
@@ -77,74 +77,74 @@ bool mutex::unlock() {
 	return !result;
 }
 
-void *mutex::getInternalMutexStructure() {
+void *threadmutex::getInternalMutexStructure() {
 	return (void *)pvt->_mut;
 }
 
 #elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
 
-mutex::mutex() {
-	pvt=new mutexprivate;
+threadmutex::threadmutex() {
+	pvt=new threadmutexprivate;
 	pvt->_mut=CreateMutex(NULL,FALSE,NULL);
 	pvt->_destroy=true;
 }
 
-mutex::mutex(void *mut) {
-	pvt=new mutexprivate;
+threadmutex::threadmutex(void *mut) {
+	pvt=new threadmutexprivate;
 	pvt->_mut=(HANDLE)mut;
 	pvt->_destroy=false;
 }
 
-mutex::~mutex() {
+threadmutex::~threadmutex() {
 	if (pvt->_destroy) {
 		CloseHandle(pvt->_mut);
 	}
 	delete pvt;
 }
 
-bool mutex::lock() {
+bool threadmutex::lock() {
 	return WaitForSingleObject(pvt->_mut,INFINITE)!=0;
 }
 
-bool mutex::tryLock() {
+bool threadmutex::tryLock() {
 	return WaitForSingleObject(pvt->_mut,0)!=0;
 }
 
-bool mutex::unlock() {
+bool threadmutex::unlock() {
 	return ReleaseMutex(pvt->_mut)!=0;
 }
 
-void *mutex::getInternalMutexStructure() {
+void *threadmutex::getInternalMutexStructure() {
 	return (void *)(pvt->_mut);
 }
 
 #else
 
-mutex::mutex() {
+threadmutex::threadmutex() {
 }
 
-mutex::mutex(void *mut) {
+threadmutex::threadmutex(void *mut) {
 }
 
-mutex::~mutex() {
+threadmutex::~threadmutex() {
 }
 
-bool mutex::lock() {
+bool threadmutex::lock() {
 	error::setErrorNumber(ENOSYS);
 	return false;
 }
 
-bool mutex::tryLock() {
+bool threadmutex::tryLock() {
 	error::setErrorNumber(ENOSYS);
 	return false;
 }
 
-bool mutex::unlock() {
+bool threadmutex::unlock() {
 	error::setErrorNumber(ENOSYS);
 	return false;
 }
 
-void *mutex::getInternalMutexStructure() {
+void *threadmutex::getInternalMutexStructure() {
 	return NULL;
 }
 #endif

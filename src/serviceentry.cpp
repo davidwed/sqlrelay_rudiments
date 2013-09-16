@@ -38,7 +38,7 @@ class serviceentryprivate {
 // LAME: not in the class
 #if (!defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
 	!defined(RUDIMENTS_HAVE_GETSERVBYPORT_R))
-static mutex	*_semutex;
+static threadmutex	*_semutex;
 #endif
 
 
@@ -98,7 +98,7 @@ bool serviceentry::needsMutex() {
 	#endif
 }
 
-void serviceentry::setMutex(mutex *mtx) {
+void serviceentry::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
 		_semutex=mtx;

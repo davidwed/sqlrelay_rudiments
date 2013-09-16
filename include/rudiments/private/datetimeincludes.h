@@ -10,4 +10,4 @@
 #endif
 #include <time.h>
 #include <sys/types.h>
-#include <rudiments/mutex.h>
+#include <rudiments/threadmutex.h>

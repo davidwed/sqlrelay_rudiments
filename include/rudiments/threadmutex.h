@@ -1,30 +1,30 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_MUTEX_H
-#define RUDIMENTS_MUTEX_H
+#ifndef RUDIMENTS_THREADMUTEX_H
+#define RUDIMENTS_THREADMUTEX_H
 
-#include <rudiments/private/mutexincludes.h>
+#include <rudiments/private/threadmutexincludes.h>
 
-class mutexprivate;
+class threadmutexprivate;
 
-/** The mutex class provides an interface to pthreads mutual exclusion locks
- *  between separate threads of a single process. */
-class RUDIMENTS_DLLSPEC mutex {
+/** The threadmutex class provides mutual exclusion locks between separate
+ *  threads of a single process. */
+class RUDIMENTS_DLLSPEC threadmutex {
 	public:
 
-			/** Creates an instance of the mutex class. */
-			mutex();
+			/** Creates an instance of the threadmutex class. */
+			threadmutex();
 
-			/** Creates an instance of the mutex class that uses
-			 *  an already-initialized, system-specific mutex
-			 *  structure.  On unix systems, this would likely be
-			 *  an instance of struct pthread_mutex_t, though it
-			 *  could possibly be something else. */
-			mutex(void *mut);
+			/** Creates an instance of the threadmutex class that
+			 *  uses an already-initialized, system-specific
+			 *  threadmutex structure.  On unix systems, this would
+			 *  likely be an instance of struct pthread_mutex_t,
+			 *  though it could possibly be something else. */
+			threadmutex(void *mut);
 
-			/** Deletes this instance of the mutex class. */
-			~mutex();
+			/** Deletes this instance of the threadmutex class. */
+			~threadmutex();
 
 		/** Locks the mutex.  Will wait until the lock succeds.
 		 *  Returns true on success and false if an error occurs. */
@@ -46,7 +46,7 @@ class RUDIMENTS_DLLSPEC mutex {
 		 *  something else. */
 		void	*getInternalMutexStructure();
 
-	#include <rudiments/private/mutex.h>
+	#include <rudiments/private/threadmutex.h>
 };
 
 #endif

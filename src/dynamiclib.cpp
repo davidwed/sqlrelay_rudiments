@@ -28,7 +28,7 @@ class dynamiclibprivate {
 };
 
 // LAME: not in the class
-static	mutex	*_errormutex=NULL;
+static	threadmutex	*_errormutex=NULL;
 
 dynamiclib::dynamiclib() {
 	pvt=new dynamiclibprivate;
@@ -131,6 +131,6 @@ char *dynamiclib::getError() const {
 	#endif
 }
 
-void dynamiclib::setErrorMutex(mutex *mtx) {
+void dynamiclib::setErrorMutex(threadmutex *mtx) {
 	_errormutex=mtx;
 }

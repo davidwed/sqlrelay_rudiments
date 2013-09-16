@@ -35,7 +35,7 @@ class hostentryprivate {
 // LAME: not in the class
 #if (!defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) || \
 	!defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R))
-static mutex	*_hemutex;
+static threadmutex	*_hemutex;
 #endif
 
 
@@ -100,7 +100,7 @@ bool hostentry::needsMutex() {
 	#endif
 }
 
-void hostentry::setMutex(mutex *mtx) {
+void hostentry::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
 		_hemutex=mtx;

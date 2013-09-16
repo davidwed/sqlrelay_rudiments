@@ -7,4 +7,4 @@
 // for uid_t
 #include <sys/types.h>
 
-#include <rudiments/mutex.h>
+#include <rudiments/threadmutex.h>

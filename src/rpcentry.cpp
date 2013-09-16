@@ -48,7 +48,7 @@ class rpcentryprivate {
 #if defined(RUDIMENTS_HAVE_RPC) && \
 	(!defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R))
-static mutex	*_remutex;
+static threadmutex	*_remutex;
 #endif
 
 
@@ -107,7 +107,7 @@ bool rpcentry::needsMutex() {
 	#endif
 }
 
-void rpcentry::setMutex(mutex *mtx) {
+void rpcentry::setMutex(threadmutex *mtx) {
 	#if defined(RUDIMENTS_HAVE_RPC) && \
 		!defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 		!defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)

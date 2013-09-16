@@ -35,7 +35,7 @@ class RUDIMENTS_DLLSPEC crypt {
 		/** Allows you to supply a mutex is the class needs it.
 		 *  If your application is not multithreaded, then
 		 *  there is no need to supply a mutex. */
-		static	void	setMutex(mutex *mtx);
+		static	void	setMutex(threadmutex *mtx);
 };
 
 #endif

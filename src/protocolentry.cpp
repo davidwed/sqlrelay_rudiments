@@ -34,7 +34,7 @@ class protocolentryprivate {
 // LAME: not in the class
 #if (!defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
 	!defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R))
-static mutex	*_pemutex;
+static threadmutex	*_pemutex;
 #endif
 
 protocolentry::protocolentry() {
@@ -88,7 +88,7 @@ bool protocolentry::needsMutex() {
 	#endif
 }
 
-void protocolentry::setMutex(mutex *mtx) {
+void protocolentry::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) || \
 		!defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
 		_pemutex=mtx;

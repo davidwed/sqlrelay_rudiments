@@ -20,7 +20,7 @@
 
 // LAME: not in the class
 #if !defined(RUDIMENTS_HAVE_CRYPT_R)
-static mutex	*_cryptmutex;
+static threadmutex	*_cryptmutex;
 #endif
 
 char *crypt::encrypt(const char *password, const char *salt) {
@@ -57,7 +57,7 @@ bool crypt::needsMutex() {
 	#endif
 }
 
-void crypt::setMutex(mutex *mtx) {
+void crypt::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_CRYPT_R)
 		_cryptmutex=mtx;
 	#endif

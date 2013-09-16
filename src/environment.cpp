@@ -24,7 +24,7 @@
 #endif
 
 // LAME: not in the class
-static mutex	*_envmutex;
+static threadmutex	*_envmutex;
 
 #if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 // LAME: not in the class
@@ -205,6 +205,6 @@ bool environment::clear() {
 #endif
 }
 
-void environment::setMutex(mutex *mtx) {
+void environment::setMutex(threadmutex *mtx) {
 	_envmutex=mtx;
 }

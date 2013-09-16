@@ -42,7 +42,7 @@ class RUDIMENTS_DLLSPEC environment {
 		/** Allows you to supply a mutex if the class needs it.
 		 *  If your application is not multithreaded, then
 		 *  there is no need to supply a mutex. */
-		static	void	setMutex(mutex *mtx);
+		static	void	setMutex(threadmutex *mtx);
 
 	#include <rudiments/private/environment.h>
 };

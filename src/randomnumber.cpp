@@ -21,7 +21,7 @@
 
 // LAME: not in the class
 #if !defined(RUDIMENTS_HAVE_RAND_R)
-static mutex	*_rnmutex;
+static threadmutex	*_rnmutex;
 #endif
 
 int32_t randomnumber::getSeed() {
@@ -87,7 +87,7 @@ bool randomnumber::needsMutex() {
 	#endif
 }
 
-void randomnumber::setMutex(mutex *mtx) {
+void randomnumber::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_RAND_R)
 		_rnmutex=mtx;
 	#endif

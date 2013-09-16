@@ -305,7 +305,7 @@ class RUDIMENTS_DLLSPEC datetime {
 		 * 
 		 *  If you don't supply a mutex, the methods in the class
 		 *  will still work, but will not be thread-safe. */
-		static	void	setTimeMutex(mutex *mtx);
+		static	void	setTimeMutex(threadmutex *mtx);
 
 	#include <rudiments/private/datetime.h>
 };

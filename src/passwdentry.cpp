@@ -64,7 +64,7 @@ class passwdentryprivate {
 
 // LAME: not in the class
 #if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || !defined(RUDIMENTS_HAVE_GETPWUID_R))
-static mutex	*pemutex;
+static threadmutex	*pemutex;
 #endif
 
 
@@ -196,7 +196,7 @@ bool passwdentry::needsMutex() {
 	#endif
 }
 
-void passwdentry::setMutex(mutex *mtx) {
+void passwdentry::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
 		!defined(RUDIMENTS_HAVE_GETPWUID_R)
 		pemutex=mtx;

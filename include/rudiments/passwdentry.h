@@ -157,7 +157,7 @@ class RUDIMENTS_DLLSPEC passwdentry {
 		/** Allows you to supply a mutex is the class needs it
 		 *  (see needsMutex()).  If your application is not
 		 *  multithreaded, then there is no need to supply a mutex. */
-		static	void	setMutex(mutex *mtx);
+		static	void	setMutex(threadmutex *mtx);
 
 	#include <rudiments/private/passwdentry.h>
 };

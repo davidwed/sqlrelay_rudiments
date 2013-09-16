@@ -3,7 +3,7 @@
 
 	private:
 		// FIXME: should be possible to copy a mutex
-			mutex(const mutex &m);
-		mutex	&operator=(const mutex &m);
+			threadmutex(const threadmutex &m);
+		threadmutex	&operator=(const threadmutex &m);
 
-		mutexprivate	*pvt;
+		threadmutexprivate	*pvt;

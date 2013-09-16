@@ -53,7 +53,7 @@ class directoryprivate {
 
 // LAME: not in the class
 #if !defined(RUDIMENTS_HAVE_READDIR_R)
-static mutex	*_rdmutex;
+static threadmutex	*_rdmutex;
 #endif
 
 
@@ -289,7 +289,7 @@ bool directory::needsMutex() {
 	#endif
 }
 
-void directory::setMutex(mutex *mtx) {
+void directory::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_READDIR_R)
 		_rdmutex=mtx;
 	#endif

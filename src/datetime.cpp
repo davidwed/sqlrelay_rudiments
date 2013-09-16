@@ -60,7 +60,7 @@ class datetimeprivate {
 		#endif
 };
 
-static mutex	*_timemutex;
+static threadmutex	*_timemutex;
 
 static const char _monthname[][10]={
 	"January","February","March",
@@ -408,7 +408,7 @@ bool datetime::addYears(int32_t years) {
 	return normalizeBrokenDownTime(true);
 }
 
-void datetime::setTimeMutex(mutex *mtx) {
+void datetime::setTimeMutex(threadmutex *mtx) {
 	_timemutex=mtx;
 }
 

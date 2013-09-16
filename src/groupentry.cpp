@@ -44,7 +44,7 @@ class groupentryprivate {
 
 // LAME: not in the class
 #if (!defined(RUDIMENTS_HAVE_GETGRNAM_R) || !defined(RUDIMENTS_HAVE_GETGRUID_R))
-static mutex	*_gemutex;
+static threadmutex	*_gemutex;
 #endif
 
 groupentry::groupentry() {
@@ -136,7 +136,7 @@ bool groupentry::needsMutex() {
 	#endif
 }
 
-void groupentry::setMutex(mutex *mtx) {
+void groupentry::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
 		!defined(RUDIMENTS_HAVE_GETGRUID_R)
 		_gemutex=mtx;

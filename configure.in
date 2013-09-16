@@ -178,10 +178,10 @@ AC_ARG_ENABLE(modemserver,
 	[  --disable-modemserver   Don't build modemserver class],
 	INCLUDE_MODEMSERVER="0",
 	INCLUDE_MODEMSERVER="1")
-AC_ARG_ENABLE(mutex,
-	[  --disable-mutex         Don't build mutex class],
-	INCLUDE_MUTEX="0",
-	INCLUDE_MUTEX="1")
+AC_ARG_ENABLE(threadmutex,
+	[  --disable-threadmutex   Don't build threadmutex class],
+	INCLUDE_THREADMUTEX="0",
+	INCLUDE_THREADMUTEX="1")
 AC_ARG_ENABLE(parameterstring,
 	[  --disable-parameterstring      Don't build parameterstring class],
 	INCLUDE_PARAMETERSTRING="0",
@@ -3081,12 +3081,12 @@ then
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMSERVER"
 fi
 
-if ( test "$INCLUDE_MUTEX" = "1" )
+if ( test "$INCLUDE_THREADMUTEX" = "1" )
 then
-	HEADERS="$HEADERS mutex.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS mutex.h mutexincludes.h"
-	SRCS="$SRCS mutex.cpp"
-	LOBJS="$LOBJS mutex.lo"
+	HEADERS="$HEADERS threadmutex.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS threadmutex.h threadmutexincludes.h"
+	SRCS="$SRCS threadmutex.cpp"
+	LOBJS="$LOBJS threadmutex.lo"
 fi
 
 if ( test "$INCLUDE_PARAMETERSTRING" = "1" )

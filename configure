@@ -800,7 +800,7 @@ enable_memorymap
 enable_memorypool
 enable_modemclient
 enable_modemserver
-enable_mutex
+enable_threadmutex
 enable_parameterstring
 enable_passwdentry
 enable_permissions
@@ -1497,7 +1497,7 @@ Optional Features:
   --disable-memorypool    Don't build memorypool class
   --disable-modemclient   Don't build modemclient class
   --disable-modemserver   Don't build modemserver class
-  --disable-mutex         Don't build mutex class
+  --disable-threadmutex   Don't build threadmutex class
   --disable-parameterstring      Don't build parameterstring class
   --disable-passwdentry   Don't build passwdentry class
   --disable-permissions   Don't build permissions
@@ -2737,11 +2737,11 @@ else
   INCLUDE_MODEMSERVER="1"
 fi
 
-# Check whether --enable-mutex was given.
-if test "${enable_mutex+set}" = set; then :
-  enableval=$enable_mutex; INCLUDE_MUTEX="0"
+# Check whether --enable-threadmutex was given.
+if test "${enable_threadmutex+set}" = set; then :
+  enableval=$enable_threadmutex; INCLUDE_THREADMUTEX="0"
 else
-  INCLUDE_MUTEX="1"
+  INCLUDE_THREADMUTEX="1"
 fi
 
 # Check whether --enable-parameterstring was given.
@@ -28905,12 +28905,12 @@ then
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMSERVER"
 fi
 
-if ( test "$INCLUDE_MUTEX" = "1" )
+if ( test "$INCLUDE_THREADMUTEX" = "1" )
 then
-	HEADERS="$HEADERS mutex.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS mutex.h mutexincludes.h"
-	SRCS="$SRCS mutex.cpp"
-	LOBJS="$LOBJS mutex.lo"
+	HEADERS="$HEADERS threadmutex.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS threadmutex.h threadmutexincludes.h"
+	SRCS="$SRCS threadmutex.cpp"
+	LOBJS="$LOBJS threadmutex.lo"
 fi
 
 if ( test "$INCLUDE_PARAMETERSTRING" = "1" )

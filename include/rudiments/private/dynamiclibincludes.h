@@ -3,4 +3,4 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
-#include <rudiments/mutex.h>
+#include <rudiments/threadmutex.h>

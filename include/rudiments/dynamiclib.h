@@ -55,7 +55,7 @@ class RUDIMENTS_DLLSPEC dynamiclib {
 		 * 
 		 *  If you don't supply a mutex, getError() will still work, but
 		 *  will not be thread-safe. */
-		static	void	setErrorMutex(mutex *mtx);
+		static	void	setErrorMutex(threadmutex *mtx);
 
 	#include <rudiments/private/dynamiclib.h>
 };

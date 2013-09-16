@@ -37,7 +37,7 @@ PROGS = \
 	memorypool$(EXE) \
 	modemclient$(EXE) \
 	modemserver$(EXE) \
-	mutex$(EXE) \
+	threadmutex$(EXE) \
 	parameterstring$(EXE) \
 	passwdentry$(EXE) \
 	permissions$(EXE) \
@@ -160,8 +160,8 @@ modemclient$(EXE): modemclient.cpp modemclient.lo
 modemserver$(EXE): modemserver.cpp modemserver.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ modemserver.lo $(LIBS)
 
-mutex$(EXE): mutex.cpp mutex.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ mutex.lo $(LIBS)
+threadmutex$(EXE): threadmutex.cpp threadmutex.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ threadmutex.lo $(LIBS)
 
 parameterstring$(EXE): parameterstring.cpp parameterstring.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ parameterstring.lo $(LIBS)
