@@ -6,8 +6,6 @@ include ../config.mk
 
 CPPFLAGS = $(WERROR) $(BASECPPFLAGS) -I../ -I../include @EXTRACPPFLAGS@
 
-#SRCS = namevaluepairs.cpp winsock.cpp @SRCS@
-#LOBJS = namevaluepairs.lo winsock.lo @LOBJS@
 SRCS = winsock.cpp @SRCS@
 LOBJS = winsock.lo @LOBJS@
 

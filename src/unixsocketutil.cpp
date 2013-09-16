@@ -3,11 +3,7 @@
 
 #include <rudiments/unixsocketutil.h>
 #include <rudiments/rawbuffer.h>
-
-// for NULL
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
+#include <rudiments/null.h>
 
 class unixsocketutilprivate {
 	friend class unixsocketutil;

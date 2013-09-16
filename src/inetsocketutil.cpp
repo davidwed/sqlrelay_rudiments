@@ -3,11 +3,7 @@
 
 #include <rudiments/inetsocketutil.h>
 #include <rudiments/rawbuffer.h>
-
-// for NULL
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
+#include <rudiments/null.h>
 
 class inetsocketutilprivate {
 	friend class inetsocketutil;

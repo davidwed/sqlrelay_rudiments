@@ -1,8 +1,6 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-//#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
-
 #include <rudiments/stdio.h>
 #include <rudiments/null.h>
 #include <rudiments/private/rudimentsinlines.h>
@@ -157,5 +155,3 @@ numericdictionarylist<datatype>::~numericdictionarylist() {}
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 numericdictionary<datatype>::~numericdictionary() {}
-
-//#endif

@@ -1,13 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-//#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/parameterstring.h>
-
-// for NULL
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
+#include <rudiments/null.h>
 
 class parameterstringprivate {
 	friend class parameterstring;
