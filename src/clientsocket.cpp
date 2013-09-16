@@ -1,7 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+//#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/clientsocket.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>

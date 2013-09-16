@@ -1,7 +1,7 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+//#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/environment.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>

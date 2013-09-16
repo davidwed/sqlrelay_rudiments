@@ -1,7 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+//#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/modemclient.h>
 #include <rudiments/chat.h>
 
