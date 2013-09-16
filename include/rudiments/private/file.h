@@ -7,6 +7,8 @@
 						int32_t flags, mode_t perms);
 
 	private:
+		static	bool	stat(const char *filename, void *st);
+
 		off64_t	lseek(off64_t offset, int32_t whence) const;
 		bool	lock(int32_t method, int16_t type, int16_t whence,
 					off64_t start, off64_t len) const;

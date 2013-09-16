@@ -673,13 +673,17 @@ bool file::getCurrentProperties() {
 	return !result;
 }
 
+bool file::stat(const char *filename, void *st) {
+	int32_t	result;
+	do {
+		result=::stat(filename,(struct stat *)st);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return (result!=-1);
+}
+
 #define STAT(filename,out,member) \
 	struct stat st; \
-	int32_t	result; \
-	do { \
-		result=stat(filename,&st); \
-	} while (result==-1 && error::getErrorNumber()==EINTR); \
-	if (result==-1) { \
+	if (!stat(filename,&st)) { \
 		return false; \
 	} \
 	*out=st.member; \
