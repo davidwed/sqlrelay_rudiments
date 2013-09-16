@@ -203,7 +203,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\snooze.cpp" />
     <ClCompile Include="..\src\stdio.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
-    <ClCompile Include="..\src\system.cpp" />
+    <ClCompile Include="..\src\sys.cpp" />
     <ClCompile Include="..\src\unixclientsocket.cpp" />
     <ClCompile Include="..\src\unixsocketutil.cpp" />
     <ClCompile Include="..\src\variablebuffer.cpp" />
