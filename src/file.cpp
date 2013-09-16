@@ -729,7 +729,7 @@ bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
 
 int32_t file::isSocket(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFSOCK)
 			return ((st.st_mode&_S_IFSOCK)==_S_IFSOCK);
 		#elif defined(S_IFSOCK)
@@ -747,7 +747,7 @@ int32_t file::isSocket(const char *filename) {
 
 int32_t file::isSymbolicLink(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFLNK)
 			return ((st.st_mode&_S_IFLNK)==_S_IFLNK);
 		#elif defined(S_IFLNK)
@@ -761,7 +761,7 @@ int32_t file::isSymbolicLink(const char *filename) {
 
 int32_t file::isRegularFile(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFREG)
 			return ((st.st_mode&_S_IFREG)==_S_IFREG);
 		#elif defined(S_IFREG)
@@ -779,7 +779,7 @@ int32_t file::isRegularFile(const char *filename) {
 
 int32_t file::isBlockDevice(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFBLK)
 			return ((st.st_mode&_S_IFBLK)==_S_IFBLK);
 		#elif defined(S_IFBLK)
@@ -793,7 +793,7 @@ int32_t file::isBlockDevice(const char *filename) {
 
 int32_t file::isDirectory(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFDIR)
 			return ((st.st_mode&_S_IFDIR)==_S_IFDIR);
 		#elif defined(S_IFDIR)
@@ -807,7 +807,7 @@ int32_t file::isDirectory(const char *filename) {
 
 int32_t file::isCharacterDevice(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFCHR)
 			return ((st.st_mode&_S_IFCHR)==_S_IFCHR);
 		#elif defined(S_IFCHR)
@@ -821,7 +821,7 @@ int32_t file::isCharacterDevice(const char *filename) {
 
 int32_t file::isFifo(const char *filename) {
 	struct stat	st;
-	if (stat(filename,&st)>-1) {
+	if (stat(filename,&st)) {
 		#if defined(_S_IFIFO)
 			return ((st.st_mode&_S_IFIFO)==_S_IFIFO);
 		#elif defined(S_IFIFO)
