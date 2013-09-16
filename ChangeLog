@@ -21,6 +21,8 @@
 	added -Werror to configure-time tests for older systems where g++
 		doesn't return an error for an implicitly defined function
 	removed the rudiments namespace for compatibility with older compilers
+	replaced a bunch of unsigned long and long with [u]int(32|64)_t
+	removed the timezonefile class
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
