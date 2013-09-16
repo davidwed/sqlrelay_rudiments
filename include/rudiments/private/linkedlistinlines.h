@@ -1,7 +1,7 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+//#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 
 #include <rudiments/stdio.h>
 #include <rudiments/null.h>
@@ -239,4 +239,4 @@ void LINKEDLIST_CLASS::print() const {
 	}
 }
 
-#endif
+//#endif

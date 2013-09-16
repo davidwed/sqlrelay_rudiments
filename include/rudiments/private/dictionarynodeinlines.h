@@ -1,7 +1,7 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
+//#ifndef EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 
 #include <rudiments/private/rudimentsinlines.h>
 
@@ -60,4 +60,4 @@ void DICTIONARYNODE_CLASS::print() const {
 	datautil.print(data);
 }
 
-#endif
+//#endif

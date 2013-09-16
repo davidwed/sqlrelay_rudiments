@@ -1,15 +1,10 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-//#define EXCLUDE_RUDIMENTS_TEMPLATE_IMPLEMENTATIONS
 #include <rudiments/client.h>
 
 #include <rudiments/charstring.h>
-
-// For NULL
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
+#include <rudiments/null.h>
 
 class clientprivate {
 	friend class client;
