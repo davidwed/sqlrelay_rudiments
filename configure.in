@@ -1053,14 +1053,23 @@ AC_EGREP_CPP(tm_name,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_NAME,1,Some 
 AC_MSG_CHECKING(for tm_tzadj)
 AC_EGREP_CPP(tm_tzadj,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_TZADJ,1,Some systems define tm_tzadj in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for real-time-clock support)
+AC_MSG_CHECKING(for real-time-clock RTC_RD_TIME support)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 	#include <linux/rtc.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif],
-ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC,1,Do we have a real-time-clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC_RD_TIME,1,Do we have real-time-clock RTC_RD_TIME support) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for real-time-clock RTC_SET_TIME support)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
+	#include <linux/rtc.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
+	#include <sys/ioctl.h>
+#endif],
+ioctl(0,RTC_SET_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC_SET_TIME,1,Do we have real-time-clock RTC_SET_TIME support) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for mktime)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H

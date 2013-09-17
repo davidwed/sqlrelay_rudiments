@@ -743,8 +743,11 @@
 /* Some systems have rpc/rpc.h */
 /* #undef RUDIMENTS_HAVE_RPC_H */
 
-/* Do we have a real-time-clock */
-/* #undef RUDIMENTS_HAVE_RTC */
+/* Do we have real-time-clock RTC_RD_TIME support */
+/* #undef RUDIMENTS_HAVE_RTC_RD_TIME */
+
+/* Do we have real-time-clock RTC_SET_TIME support */
+/* #undef RUDIMENTS_HAVE_RTC_SET_TIME */
 
 /* SCO has /dev/table/avenrun instead of getloadavg */
 /* #undef RUDIMENTS_HAVE_SCO_AVENRUN */

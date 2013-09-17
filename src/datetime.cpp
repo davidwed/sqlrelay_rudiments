@@ -4,7 +4,8 @@
 #include <rudiments/datetime.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
-#ifdef RUDIMENTS_HAVE_RTC
+#if defined(RUDIMENTS_HAVE_RTC_SET_TIME) || \
+		defined(RUDIMENTS_HAVE_RTC_GET_TIME)
 	#include <rudiments/file.h>
 #endif
 
@@ -14,7 +15,8 @@
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif
-#ifdef RUDIMENTS_HAVE_RTC
+#if defined(RUDIMENTS_HAVE_RTC_SET_TIME) || \
+		defined(RUDIMENTS_HAVE_RTC_GET_TIME)
 	#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 		#include <linux/rtc.h>
 	#endif
@@ -463,7 +465,7 @@ bool datetime::setSystemDateAndTime() {
 
 bool datetime::getHardwareDateAndTime(const char *hwtz) {
 
-	#ifdef RUDIMENTS_HAVE_RTC
+	#ifdef RUDIMENTS_HAVE_RTC_SET_TIME
 		// open the rtc
 		file	devrtc;
 		if (!devrtc.open("/dev/rtc",O_RDONLY)) {
@@ -490,6 +492,9 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 
 		return normalizeBrokenDownTime(true);
 	#else
+		// to keep compilers from complaining about unused variables
+		hwtz=NULL;
+
 		return false;
 	#endif
 }
@@ -500,7 +505,7 @@ bool datetime::getAdjustedHardwareDateAndTime(const char *hwtz) {
 
 bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
-	#ifdef RUDIMENTS_HAVE_RTC
+	#ifdef RUDIMENTS_HAVE_RTC_SET_TIME
 		// open the rtc
 		file	devrtc;
 		if (!devrtc.open("/dev/rtc",O_WRONLY)) {
