@@ -27,9 +27,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif

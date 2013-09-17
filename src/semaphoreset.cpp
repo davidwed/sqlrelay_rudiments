@@ -13,9 +13,6 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#ifdef RUDIMENTS_HAVE_SYS_IPC_H
-	#include <sys/ipc.h>
-#endif
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
