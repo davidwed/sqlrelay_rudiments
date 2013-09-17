@@ -6,6 +6,11 @@
 
 #include <sys/types.h>
 
+// some systems need this for key_t
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
+
 // for open flags
 #ifdef RUDIMENTS_HAVE_FCNTL_H
 	// for open flags with msvc
