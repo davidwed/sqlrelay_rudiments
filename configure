@@ -18751,7 +18751,10 @@ $as_echo "#define nlink_t short" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "key_t" "ac_cv_type_key_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "key_t" "ac_cv_type_key_t" "#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+	#include <sys/ipc.h>
+#endif
+"
 if test "x$ac_cv_type_key_t" = xyes; then :
 
 else
