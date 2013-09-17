@@ -59,6 +59,10 @@
 	#define MADVISE_ADDRCAST void *
 #endif
 
+#ifndef MAP_FAILED
+	#define MAP_FAILED ((void *)-1)
+#endif
+
 class memorymapprivate {
 	friend class memorymap;
 	private:
