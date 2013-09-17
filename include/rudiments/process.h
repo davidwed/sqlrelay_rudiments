@@ -97,6 +97,13 @@ class RUDIMENTS_DLLSPEC process {
 		 *  Returns true on success and false on failure. */
 		static bool	setUserId(uid_t uid);
 
+		/** Sets the effective user id of the current process to the
+ 		 *  user id of "username".  If the effective user id is root,
+ 		 *  the real and saved user id's are also set.
+		 *
+		 *  Returns true on success and false on failure. */
+		static bool	setUser(const char *username);
+
 		/** Sets the effective user id of the current process to uid.
 		 *  Does not set the real or saved user id's.
 		 *
@@ -125,6 +132,13 @@ class RUDIMENTS_DLLSPEC process {
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setGroupId(gid_t gid);
+
+		/** Sets the effective group id of the current process to the
+ 		 *  group id of "groupname".  If the effective group id is root,
+ 		 *  the real and saved group id's are also set.
+		 *
+		 *  Returns true on success and false on failure. */
+		static bool	setGroup(const char *groupname);
 
 		/** Sets the effective group id of the current process to gid.
 		 *  Does not set the real or saved group id's.

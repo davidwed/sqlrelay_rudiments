@@ -5,8 +5,6 @@
 #include <rudiments/daemonprocess.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
-#include <rudiments/passwdentry.h>
-#include <rudiments/groupentry.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/null.h>
@@ -166,15 +164,3 @@ void daemonprocess::dontWaitForChildren() {
 	// FIXME: implement this
 }
 #endif
-
-int32_t daemonprocess::runAsUser(const char *username) const {
-	uid_t	userid;
-	return (passwdentry::getUserId(username,&userid))?
-					process::setUserId(userid):1;
-}
-
-int32_t daemonprocess::runAsGroup(const char *groupname) const {
-	gid_t	groupid;
-	return (groupentry::getGroupId(groupname,&groupid))?
-					process::setGroupId(groupid):1;
-}

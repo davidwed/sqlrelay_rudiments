@@ -31,8 +31,8 @@ int main(int argc, const char **argv) {
 	dmn->handleCrash(shutDown);
 
 	// change the user/group that the daemon is running as
-	dmn->runAsUser("nobody");
-	dmn->runAsGroup("nobody");
+	process::setUser("nobody");
+	process::setGroup("nobody");
 
 	// make sure that only one instance is running
 	int	pid=dmn->checkForPidFile("/tmp/dmn.pidfile");

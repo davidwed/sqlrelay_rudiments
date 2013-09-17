@@ -40,29 +40,6 @@ class RUDIMENTS_DLLSPEC daemonprocess {
 		static bool	createPidFile(const char *filename,
 						mode_t permissions);
 
-		/** Causes the daemon to run as a different user than the one
-		 *  that started the process.  It has no effect unless the
-		 *  process is started by the root user.  It returns 1 on
-		 *  success, 0 on failure and -1 on error.
-		 *
-		 *  Note that this method uses the passwdentry class.  If you
-		 *  are using it in a multithreaded application, you may need
-		 *  to supply the passwdentry class a mutex.  See
-		 *  passwdentry.h for more detail. */
-		int32_t	runAsUser(const char *username) const;
-
-		/** Causes the daemon to run as a different group than the one
-		 *  that started the process.  It has no effect unless the
-		 *  process is started by the root user.  It returns 1 on
-		 *  success, 0 on failure and -1 on error.
-		 *
-		 *  Note that this method uses the groupentry class.  If you
-		 *  are using it in a multithreaded application, you may need
-		 *  to supply the groupentry class a mutex.  See
-		 *  groupentry.h for more detail. */
-		int32_t	runAsGroup(const char *groupname) const;
-
-
 		/** Allows you to designate a function to run when the
 		 *  daemon is killed. */
 		static	void	handleShutDown(

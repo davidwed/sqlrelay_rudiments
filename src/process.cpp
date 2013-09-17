@@ -5,6 +5,8 @@
 #include <rudiments/error.h>
 #include <rudiments/snooze.h>
 #include <rudiments/directory.h>
+#include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
 #include <rudiments/stdio.h>
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -220,6 +222,12 @@ bool process::setUserId(uid_t uid) {
 	#endif
 }
 
+bool process::setUser(const char *username) {
+	uid_t	userid;
+	return (passwdentry::getUserId(username,&userid))?
+					setUserId(userid):true;
+}
+
 #ifdef RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED
 extern "C" int seteuid(uid_t euid);
 #endif
@@ -288,6 +296,12 @@ bool process::setGroupId(gid_t gid) {
 	#else
 		#error no setgid or anything like it
 	#endif
+}
+
+bool process::setGroup(const char *groupname) {
+	gid_t	groupid;
+	return (groupentry::getGroupId(groupname,&groupid))?
+					setGroupId(groupid):true;
 }
 
 #ifdef RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED
