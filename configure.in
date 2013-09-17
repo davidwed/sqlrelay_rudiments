@@ -999,16 +999,20 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 SetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETSYSTEMTIME,1,Some systems have SetSystemTime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for tm_zone)
-AC_EGREP_CPP(tm_zone,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_ZONE,1,Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_TRY_COMPILE([#include <time.h>],
+struct tm t;  t.tm_zone=0;,AC_DEFINE(RUDIMENTS_HAS_TM_ZONE,1,Some systems define tm_zone in their struct tm) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for tm_gmtoff)
-AC_EGREP_CPP(tm_gmtoff,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS_TM_GMTOFF,1,Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_TRY_COMPILE([#include <time.h>],
+struct tm t; t.tm_gmtoff=0;,AC_DEFINE(RUDIMENTS_HAS_TM_GMTOFF,1,Some systems define tm_gmtoff in their struct tm) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for __tm_zone)
-AC_EGREP_CPP(__tm_zone,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS___TM_ZONE,1,Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_TRY_COMPILE([#include <time.h>],
+struct tm t; t.__tm_zone=0;,AC_DEFINE(RUDIMENTS_HAS___TM_ZONE,1,Some systems define __tm_zone in their struct tm) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for __tm_gmtoff)
-AC_EGREP_CPP(__tm_gmtoff,[#include <time.h>],AC_DEFINE(RUDIMENTS_HAS___TM_GMTOFF,1,Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+AC_TRY_COMPILE([#include <time.h>],
+struct tm t; t.__tm_gmtoff=0;,AC_DEFINE(RUDIMENTS_HAS___TM_GMTOFF,1,Some systems define __tm_gmtoff in their struct tm) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for timezone)
 AC_TRY_COMPILE([#include <time.h>],
