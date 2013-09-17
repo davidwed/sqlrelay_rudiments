@@ -108,7 +108,17 @@ pid_t process::getSessionId(pid_t pid) {
 	#if defined(RUDIMENTS_HAVE_GETSID)
 		return getsid(pid);
 	#else
-		// windows and minix don't have the notion of sessions
+		// windows doesn't have the notion of sessions
+		error::setErrorNumber(ENOSYS);
+		return -1;
+	#endif
+}
+
+pid_t process::newSession() {
+	#ifdef RUDIMENTS_HAVE_SETSID
+		return setsid();
+	#else
+		// windows doesn't have the notion of sessions
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
@@ -360,11 +370,8 @@ bool process::detach() {
 		exitImmediately(0);
 	}
 	
-	#ifdef RUDIMENTS_HAVE_SETSID
-		// become process group and session group leader 
-		// with no controlling terminal
-		setsid();
-	#endif
+	// create a new session with no controlling terminal
+	newSession();
 
 	// change directory to root to avoid keeping any directories in use
 	// FIXME: get the directory class working on windows

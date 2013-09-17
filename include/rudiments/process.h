@@ -78,6 +78,12 @@ class RUDIMENTS_DLLSPEC process {
 		/** Returns the session id of the process pid. */
 		static	pid_t	getSessionId(pid_t pid);
 
+		/** Creates a new session, sets the calling process to be the
+		 *  process group leader and detaches from the controlling
+		 *  terminal.  Returns the session id on success or -1 if an
+		 *  error occurred. */
+		static	pid_t	newSession();
+
 		/** Returns the real user id of the current process. */
 		static	uid_t	getRealUserId();
 

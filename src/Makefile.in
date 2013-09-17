@@ -28,25 +28,5 @@ install:
 	$(LTINSTALL) librudiments.la $(libdir)/librudiments.la
 	$(LIBTOOL) --mode=finish $(libdir)
 
-
-.SUFFIXES: .lo
-
-.cpp.lo:
-	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-
-all: librudiments.la
-
-clean:
-	$(LIBTOOL) --mode=clean $(RM) *.lo *.la *.o
-	$(RMTREE) .libs
-
-librudiments.la: $(SRCS) $(LOBJS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ $(LOBJS) $(LDFLAGS) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(NETAPI32LIB) $(DLLIB) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
-
-install:
-	$(MKINSTALLDIRS) $(libdir)
-	$(LTINSTALL) librudiments.la $(libdir)/librudiments.la
-	$(LIBTOOL) --mode=finish $(libdir)
-
 uninstall:
 	$(LIBTOOL) --mode=uninstall $(RM) $(libdir)/librudiments.la
