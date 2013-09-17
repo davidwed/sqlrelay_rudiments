@@ -38,6 +38,12 @@ int32_t _linkedlistutil_compare(const char *data1, const char *data2) {
 	return charstring::compare(data1,data2);
 }
 
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<datatype>::print(datatype data) const {
+	_linkedlistutil_print(data);
+}
+
 RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(const char *data) {
 	stdoutput.printf("%s",data);
@@ -77,10 +83,4 @@ template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(datatype data) {
 	stdoutput.printf("%p",data);
-}
-
-template <class datatype>
-RUDIMENTS_TEMPLATE_INLINE
-void linkedlistutil<datatype>::print(datatype data) const {
-	_linkedlistutil_print(data);
 }
