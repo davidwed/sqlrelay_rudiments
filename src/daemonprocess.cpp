@@ -22,6 +22,7 @@ class daemonprocessprivate {
 		static	signalhandler	_crashhandler;
 		static	void		(*_shutdownfunc)(int32_t);
 		static	void		(*_crashfunc)(int32_t);
+		static	int32_t		_signum;
 };
 
 signalhandler	daemonprocessprivate::_deadchildhandler;
@@ -43,11 +44,19 @@ void daemonprocess::crash(int32_t signum) {
 }
 
 void daemonprocess::defaultShutDown(int32_t signum) {
+
+	// to keep compilers from complaining about unused variables
+	pvt->_signum=signum;
+
 	waitForChildren();
 	process::exit(0);
 }
 
 void daemonprocess::defaultCrash(int32_t signum) {
+
+	// to keep compilers from complaining about unused variables
+	pvt->_signum=signum;
+
 	waitForChildren();
 	process::exit(1);
 }
@@ -111,6 +120,9 @@ void daemonprocess::handleCrash(void (*crashfunction)(int32_t)) {
 #ifndef _WIN32
 void daemonprocess::waitForChildrenToExit(int32_t signum) {
 
+	// to keep compilers from complaining about unused variables
+	pvt->_signum=signum;
+
 	// Some systems generate a single SIGCHLD even if more than 1 child
 	// has entered it's exit state, so we need to loop here and catch
 	// all of them.
@@ -139,6 +151,10 @@ void daemonprocess::waitForChildrenToExit(int32_t signum) {
 }
 #else
 void daemonprocess::waitForChildrenToExit(int32_t signum) {
+
+	// to keep compilers from complaining about unused variables
+	pvt->_signum=signum;
+
 	// FIXME: implement this...
 	// Use ChildStart()
 }
