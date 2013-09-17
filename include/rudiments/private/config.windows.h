@@ -596,6 +596,9 @@
 /* Some systems use caddr_t argument for mprotect */
 #define RUDIMENTS_HAVE_MPROTECT_CADDR_T 1
 
+/* Some msghdr structs have a msg_accrights member */
+/* #define RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS */
+
 /* Some msghdr structs have a msg_controllen member */
 /* #undef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN */
 
