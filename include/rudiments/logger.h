@@ -85,8 +85,8 @@ class RUDIMENTS_DLLSPEC stderrdestination : public logdestination {
 };
 
 
-typedef linkedlist<logdestination *>		loggerlist;
-typedef linkedlistnode<logdestination *>	loggerlistnode;
+typedef linkedlistnode<logdestination *>		loggerlistnode;
+typedef linkedlist<logdestination *, loggerlistnode>	loggerlist;
 
 class loggerprivate;
 
