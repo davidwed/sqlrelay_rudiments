@@ -189,7 +189,6 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\inetsocketutil.cpp" />
     <ClCompile Include="..\src\listener.cpp" />
     <ClCompile Include="..\src\memorypool.cpp" />
-    <ClCompile Include="..\src\mutex.cpp" />
     <ClCompile Include="..\src\parameterstring.cpp" />
     <ClCompile Include="..\src\passwdentry.cpp" />
     <ClCompile Include="..\src\permissions.cpp" />
@@ -203,6 +202,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\stdio.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
     <ClCompile Include="..\src\sys.cpp" />
+    <ClCompile Include="..\src\threadmutex.cpp" />
     <ClCompile Include="..\src\unixclientsocket.cpp" />
     <ClCompile Include="..\src\unixsocketutil.cpp" />
     <ClCompile Include="..\src\variablebuffer.cpp" />
