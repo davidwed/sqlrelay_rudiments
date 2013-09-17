@@ -60,7 +60,7 @@ static threadmutex	*_rdmutex;
 // lame that this isn't part of the class, but I can't think of another way to
 // keep #ifndef RUDIMENTS_HAVE_DIRENT_H out of the header file
 #ifdef RUDIMENTS_HAVE_READDIR_R
-static int64_t bufferSize(directory *d, DIR *dirp) {
+static int64_t bufferSize(directory *d) {
 	int64_t	name_max=d->maxFileNameLength();
 	if (name_max==-1) {
 		return -1;
@@ -110,7 +110,7 @@ char *directory::read() {
 
 	#ifdef RUDIMENTS_HAVE_READDIR_R
 		// get the size of the buffer
-		int64_t	size=bufferSize(this,pvt->_dir);
+		int64_t	size=bufferSize(this);
 		if (size==-1) {
 			return NULL;
 		}
@@ -292,6 +292,9 @@ bool directory::needsMutex() {
 void directory::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_READDIR_R)
 		_rdmutex=mtx;
+	#else
+		// to keep compilers from complaining about unused variables
+		mtx=NULL;
 	#endif
 }
 
