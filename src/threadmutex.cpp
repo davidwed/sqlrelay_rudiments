@@ -4,6 +4,18 @@
 #include <rudiments/threadmutex.h>
 #include <rudiments/error.h>
 
+// Regarding the seemingly unnecessary #include <rudiments/null.h> below...
+//
+// On some systems the thread implementation causes defines NULL to be defined
+// as ((void *)0) but then the compiler complains if you pass a void * into a
+// function that takes a different kind of pointer.  Including null.h causes
+// NULL to be defined safely prior to the thread implementation being involved.
+//
+// This is an issue on Redhat 4.2 with gcc-2.95.3, but probably
+// other platforms too.
+#include <rudiments/null.h>
+
+
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 	// to fix an odd situation on SCO with FSU pthreads
 	#define _TIMESTRUC_T
@@ -34,18 +46,7 @@ threadmutex::threadmutex() {
 
 	pvt=new threadmutexprivate;
 	pvt->_mut=new pthread_mutex_t;
-
-	// Regarding the seemingly unnecessary pthread_mutexattr_t * cast
-	// below...
-	//
-	// On some systems the thread implementation redefines NULL as
-	// ((void *)0) and the compiler complains if you pass a void *
-	// into a function that takes a different kind of pointer.
-	//
-	// This is an issue on Redhat 4.2 with gcc-2.95.3, but probably
-	// other platforms too.
-	do {} while (pthread_mutex_init(pvt->_mut,
-				(pthread_mutexattr_t *)NULL)==-1 &&
+	do {} while (pthread_mutex_init(pvt->_mut,NULL)==-1 &&
 				error::getErrorNumber()==EINTR);
 	pvt->_destroy=true;
 }
