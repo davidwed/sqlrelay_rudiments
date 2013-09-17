@@ -34,19 +34,11 @@ class RUDIMENTS_DLLSPEC daemonprocess {
 		 *  "permissions" and puts the current process
 		 *  id in it.  Note that when you delete this
 		 *  file during shutdown you must use the full
-		 *  pathname since the detach() method below
+		 *  pathname since the process::detach() method
 		 *  changes directories to "/".  Returns true on
 		 *  success and false on failure. */
 		static bool	createPidFile(const char *filename,
 						mode_t permissions);
-
-		/** Detach from the controlling terminal and
-		 *  process and run in the background.  Also
-		 *  change directories to "/" and set the file
-		 *  creation mask such that all files are 
-		 *  created -rw-rw-rw and all directories 
-		 *  drwxrwxrwx. */
-		bool	detach() const;
 
 		/** Causes the daemon to run as a different user than the one
 		 *  that started the process.  It has no effect unless the
@@ -69,18 +61,6 @@ class RUDIMENTS_DLLSPEC daemonprocess {
 		 *  to supply the groupentry class a mutex.  See
 		 *  groupentry.h for more detail. */
 		int32_t	runAsGroup(const char *groupname) const;
-
-		/** Causes the daemon to run as a different user than the one
-		 *  that started the process.  It has no effect unless the
-		 *  process is started by the root user.  It returns 1 on
-		 *  success, 0 on failure and -1 on error. */
-		int32_t	runAsUserId(uid_t uid) const;
-
-		/** Causes the daemon to run as a different group than the one
-		 *  that started the process.  It has no effect unless the
-		 *  process is started by the root user.  It returns 1 on
-		 *  success, 0 on failure and -1 on error. */
-		int32_t	runAsGroupId(gid_t gid) const;
 
 
 		/** Allows you to designate a function to run when the

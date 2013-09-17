@@ -25,6 +25,7 @@
 	removed the timezonefile class
 	renamed mutex class to threadmutex to avoid collisions
 	wrapped setsid() function
+	removed methods duplicated between process and daemonprocess classes
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually

@@ -93,10 +93,6 @@ int64_t daemonprocess::checkForPidFile(const char *filename) {
 	return retval;
 }
 
-bool daemonprocess::detach() const {
-	return process::detach();
-}
-
 void daemonprocess::handleShutDown(void (*shutdownfunction)(int32_t)) {
 
 	pvt->_shutdownfunc=shutdownfunction;
@@ -174,19 +170,11 @@ void daemonprocess::dontWaitForChildren() {
 int32_t daemonprocess::runAsUser(const char *username) const {
 	uid_t	userid;
 	return (passwdentry::getUserId(username,&userid))?
-					runAsUserId(userid):1;
+					process::setUserId(userid):1;
 }
 
 int32_t daemonprocess::runAsGroup(const char *groupname) const {
 	gid_t	groupid;
 	return (groupentry::getGroupId(groupname,&groupid))?
-					runAsGroupId(groupid):1;
-}
-
-int32_t daemonprocess::runAsUserId(uid_t uid) const {
-	return process::setUserId(uid);
-}
-
-int32_t daemonprocess::runAsGroupId(gid_t gid) const {
-	return process::setGroupId(gid);
+					process::setGroupId(groupid):1;
 }
