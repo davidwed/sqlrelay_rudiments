@@ -3,16 +3,6 @@
 
 #include <rudiments/threadmutex.h>
 #include <rudiments/error.h>
-
-// Regarding the seemingly unnecessary #include <rudiments/null.h> below...
-//
-// On some systems the thread implementation causes defines NULL to be defined
-// as ((void *)0) but then the compiler complains if you pass a void * into a
-// function that takes a different kind of pointer.  Including null.h causes
-// NULL to be defined safely prior to the thread implementation being involved.
-//
-// This is an issue on Redhat 4.2 with gcc-2.95.3, but probably
-// other platforms too.
 #include <rudiments/null.h>
 
 

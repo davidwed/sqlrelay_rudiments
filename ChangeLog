@@ -54,6 +54,7 @@
 	made charstring::copy NULL-safe
 	refactored windows make.bat script
 	made crypt class salt NULL-safe
+	lots of small tweaks to support linux/libc5-based systems
 
 0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
 	added charstring::safeCopy methods
