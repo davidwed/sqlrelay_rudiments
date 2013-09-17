@@ -2124,7 +2124,7 @@ AC_SUBST(CRYPTLIB)
 
 AC_DEFUN([FW_CHECK_EXPLICIT_SPECIALIZATION],
 [
-AC_MSG_CHECKING(for whether explicit specialization is supported)
+AC_MSG_CHECKING(for explicit specialization syntax)
 AC_TRY_COMPILE([
 template <class t>
 class a {
@@ -2135,5 +2135,5 @@ class a {
 template <> int a<int>::f() {
 	return 1;
 }
-],[], AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, template <>, Modern compilers support explicit specialization) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, , Modern compilers support explicit specialization) AC_MSG_RESULT(no); AC_MSG_ERROR(Compiler does not support explicit specialization.))
+],[], AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, template <>, Syntax for explicit specialization) AC_MSG_RESULT(template <>), AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, , Syntax for explicit specialization) AC_MSG_RESULT(no); AC_MSG_ERROR("template <>" syntax not supported.))
 ])

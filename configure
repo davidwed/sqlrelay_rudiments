@@ -18611,8 +18611,8 @@ fi
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether explicit specialization is supported" >&5
-$as_echo_n "checking for whether explicit specialization is supported... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for explicit specialization syntax" >&5
+$as_echo_n "checking for explicit specialization syntax... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -18637,13 +18637,13 @@ _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_EXPLICIT_SPECIALIZATION template <>" >>confdefs.h
- { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: template <>" >&5
+$as_echo "template <>" >&6; }
 else
 
 $as_echo "#define RUDIMENTS_EXPLICIT_SPECIALIZATION /**/" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }; as_fn_error $? "Compiler does not support explicit specialization." "$LINENO" 5
+$as_echo "no" >&6; }; as_fn_error $? "\"template <>\" syntax not supported." "$LINENO" 5
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 

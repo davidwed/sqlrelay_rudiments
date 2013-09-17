@@ -59,7 +59,7 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
-/* Most modern systems support template <> */
+/* Syntax for explicit specialization */
 #define RUDIMENTS_EXPLICIT_SPECIALIZATION template <>
 
 /* getsockopt takes a void * on most systems */
