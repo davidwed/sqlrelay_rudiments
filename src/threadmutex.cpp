@@ -31,9 +31,21 @@ class threadmutexprivate {
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 threadmutex::threadmutex() {
+
 	pvt=new threadmutexprivate;
 	pvt->_mut=new pthread_mutex_t;
-	do {} while (pthread_mutex_init(pvt->_mut,NULL)==-1 &&
+
+	// Regarding the seemingly unnecessary pthread_mutexattr_t * cast
+	// below...
+	//
+	// On some systems the thread implementation redefines NULL as
+	// ((void *)0) and the compiler complains if you pass a void *
+	// into a function that takes a different kind of pointer.
+	//
+	// This is an issue on Redhat 4.2 with gcc-2.95.3, but probably
+	// other platforms too.
+	do {} while (pthread_mutex_init(pvt->_mut,
+				(pthread_mutexattr_t *)NULL)==-1 &&
 				error::getErrorNumber()==EINTR);
 	pvt->_destroy=true;
 }
