@@ -1758,17 +1758,8 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#endif
 }
 
-#ifdef _WIN32
-bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
-	error::setErrorNumber(ENOSYS);
-	return false;
-}
-
-bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
-	error::setErrorNumber(ENOSYS);
-	return false;
-}
-#else
+#if defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) || \
+		defined(RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS)
 bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
 	// have to use sendmsg to pass a file descriptor. 
@@ -1996,6 +1987,16 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	#endif
 
 	// if we're here then we must have received some bad data
+	return false;
+}
+#else
+bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
+	error::setErrorNumber(ENOSYS);
+	return false;
+}
+
+bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
+	error::setErrorNumber(ENOSYS);
 	return false;
 }
 #endif
