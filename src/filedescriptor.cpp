@@ -2238,42 +2238,35 @@ void filedescriptor::safePrint(const char *string) {
 }
 
 void filedescriptor::printBits(unsigned char value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(uint16_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(uint32_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(uint64_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(char value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(int16_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(int32_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
-							sizeof(value));
+	printBits(reinterpret_cast<unsigned char *>(&value),sizeof(value));
 }
 
 void filedescriptor::printBits(int64_t value) {
-	return printBits(reinterpret_cast<unsigned char *>(&value),
+	printBits(reinterpret_cast<unsigned char *>(&value),
 							sizeof(value));
 }
 
