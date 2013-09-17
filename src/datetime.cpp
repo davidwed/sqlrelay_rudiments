@@ -325,7 +325,11 @@ const void *datetime::getInternalTimeStructure() {
 	}
 
 	delete pvt->_structtm;
-	pvt->_structtm=new struct tm;
+
+	// make sure to do "new tm" rather than "new struct tm" as some
+	// compilers (at least gcc <= 2.7.x) don't like "new struct tm"
+	pvt->_structtm=new tm;
+
 	pvt->_structtm->tm_mon=pvt->_mon;
 	pvt->_structtm->tm_mday=pvt->_mday;
 	pvt->_structtm->tm_year=pvt->_year;
