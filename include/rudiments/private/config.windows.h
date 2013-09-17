@@ -1070,8 +1070,11 @@
 /* Some systems have utime */
 /* #undef RUDIMENTS_HAVE_UTIME */
 
-/* Some systems have utimes */
-/* #undef RUDIMENTS_HAVE_UTIMES */
+/* Some systems have utimes with char * argument */
+/* #undef RUDIMENTS_HAVE_UTIMES_CHAR */
+
+/* Some systems have utimes with const char * argument */
+/* #undef RUDIMENTS_HAVE_UTIMES_CONST_CHAR */
 
 /* Some systems have utime.h */
 /* #undef RUDIMENTS_HAVE_UTIME_H */

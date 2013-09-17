@@ -13,7 +13,8 @@
 	#include <sys/stat.h>
 #endif
 
-#ifndef RUDIMENTS_HAVE_UTIMES
+#if !defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR) && \
+		!defined(RUDIMENTS_HAVE_UTIMES_CHAR)
 	#include <rudiments/datetime.h>
 #endif
 #ifndef RUDIMENTS_HAVE_MKSTEMP
@@ -1361,7 +1362,8 @@ bool file::setLastModificationTime(const char *filename,
 bool file::setLastAccessAndModificationTimes(const char *filename,
 						time_t lastaccesstime,
 						time_t lastmodtime) {
-	#if defined(RUDIMENTS_HAVE_UTIMES)
+	#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR) || \
+			defined(RUDIMENTS_HAVE_UTIMES_CHAR)
 		timeval	tv[2];
 		tv[0].tv_sec=static_cast<long>(lastaccesstime);
 		tv[0].tv_usec=0;
@@ -1369,7 +1371,11 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		tv[1].tv_usec=0;
 		int32_t	result;
 		do {
-			result=utimes(filename,tv);
+			#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR)
+				result=utimes(filename,tv);
+			#elif defined(RUDIMENTS_HAVE_UTIMES_CHAR)
+				result=utimes((char *)filename,tv);
+			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_UTIME)
@@ -1425,10 +1431,15 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 }
 
 bool file::setLastAccessAndModificationTimes(const char *filename) {
-	#if defined(RUDIMENTS_HAVE_UTIMES)
+	#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR) || \
+			defined(RUDIMENTS_HAVE_UTIMES_CHAR)
 		int32_t	result;
 		do {
-			result=utimes(filename,NULL);
+			#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR)
+				result=utimes(filename,NULL);
+			#elif defined(RUDIMENTS_HAVE_UTIMES_CHAR)
+				result=utimes((char *)filename,NULL);
+			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
