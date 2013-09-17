@@ -721,6 +721,15 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif],
 struct msghdr m; m.msg_accrights=0;,AC_DEFINE(RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS,1,Some msghdr structs have a msg_accrights member) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for struct cmsghdr)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif],
+struct cmsghdr cm; cm.cmsg_len=0;,AC_DEFINE(RUDIMENTS_HAVE_CMSGHDR,1,Some systems have cmsghdr) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(if struct stat contains st_blksize)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>

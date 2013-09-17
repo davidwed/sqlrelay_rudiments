@@ -160,6 +160,9 @@
 /* some systems have closesocket */
 #undef RUDIMENTS_HAVE_CLOSESOCKET
 
+/* Some systems have cmsghdr */
+#undef RUDIMENTS_HAVE_CMSGHDR
+
 /* Some systems have _commit */
 #undef RUDIMENTS_HAVE_COMMIT
 

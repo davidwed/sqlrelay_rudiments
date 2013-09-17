@@ -155,6 +155,9 @@
 /* some systems have closesocket */
 #define RUDIMENTS_HAVE_CLOSESOCKET 1
 
+/* Some systems have cmsghdr */
+/* #undef RUDIMENTS_HAVE_CMSGHDR */
+
 /* Some systems have _commit */
 #define RUDIMENTS_HAVE_COMMIT 1
 

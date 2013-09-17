@@ -1758,7 +1758,8 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#endif
 }
 
-#if defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) || \
+#if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
+		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
 		defined(RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS)
 bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
