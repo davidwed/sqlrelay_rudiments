@@ -2121,19 +2121,3 @@ fi
 
 AC_SUBST(CRYPTLIB)
 ])
-
-AC_DEFUN([FW_CHECK_EXPLICIT_SPECIALIZATION],
-[
-AC_MSG_CHECKING(for explicit specialization syntax)
-AC_TRY_COMPILE([
-template <class t>
-class a {
-	public:
-		int f();
-};
-
-template <> int a<int>::f() {
-	return 1;
-}
-],[], AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, template <>, Syntax for explicit specialization) AC_MSG_RESULT(template <>), AC_DEFINE(RUDIMENTS_EXPLICIT_SPECIALIZATION, , Syntax for explicit specialization) AC_MSG_RESULT(no); AC_MSG_ERROR("template <>" syntax not supported.))
-])

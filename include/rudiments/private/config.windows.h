@@ -59,9 +59,6 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
-/* Syntax for explicit specialization */
-#define RUDIMENTS_EXPLICIT_SPECIALIZATION template <>
-
 /* getsockopt takes a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 

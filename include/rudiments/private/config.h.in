@@ -61,9 +61,6 @@
 /* ioctl/FIONBIO doesn't work on some systems */
 #undef RUDIMENTS_DISABLE_FIONBIO
 
-/* Syntax for explicit specialization */
-#undef RUDIMENTS_EXPLICIT_SPECIALIZATION
-
 /* getsockopt takes a void * on most systems */
 #undef RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE
 

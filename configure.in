@@ -672,8 +672,6 @@ echo "***** Structures *************"
 AC_C_INLINE
 AC_C_CONST
 
-FW_CHECK_EXPLICIT_SPECIALIZATION
-
 dnl -Werror screws these up, disable it for now
 AC_TYPE_UID_T
 AC_TYPE_MODE_T
