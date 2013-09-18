@@ -43,7 +43,7 @@ int main(int argc, const char **argv) {
 	}
 
 	// detach from the controlling terminal
-	dmn->detach();
+	process::detach();
 
 	// create a pid file which is used to make sure that only one instance
 	// is running and can also be used to kill the process

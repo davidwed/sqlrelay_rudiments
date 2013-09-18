@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/stdio.h>
-#include <rudiments/null.h>
 #include <rudiments/private/rudimentsinlines.h>
 
 #define LINKEDLIST_TEMPLATE template <class datatype, class linkedlistnodetype>

@@ -1,7 +1,6 @@
 // Copyright (c) 2003 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/null.h>
 #include <rudiments/private/rudimentsinlines.h>
 
 #define LINKEDLISTNODE_TEMPLATE template <class datatype>

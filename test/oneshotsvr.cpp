@@ -28,7 +28,7 @@ void myserver::listen() {
 
 
 	// detach from the controlling terminal
-	detach();
+	process::detach();
 
 
 	// create a pid file which is used to make sure that only one instance

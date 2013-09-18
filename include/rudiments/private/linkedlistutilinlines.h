@@ -9,6 +9,16 @@
 // Ideally we'd use explicit specialization here but old enough
 // compilers don't support it and this isn't any less efficient.
 
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _linkedlistutil_compare(char *data1, char *data2) {
+	return charstring::compare(data1,data2);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _linkedlistutil_compare(const char *data1, const char *data2) {
+	return charstring::compare(data1,data2);
+}
+
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 int32_t _linkedlistutil_compare(datatype data1, datatype data2) {
@@ -21,27 +31,11 @@ int32_t _linkedlistutil_compare(datatype data1, datatype data2) {
 	}
 }
 
-RUDIMENTS_TEMPLATE_INLINE
-int32_t _linkedlistutil_compare(char *data1, char *data2) {
-	return charstring::compare(data1,data2);
-}
-
 template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 int32_t linkedlistutil<datatype>::compare(datatype data1,
 					datatype data2) const {
 	return _linkedlistutil_compare(data1,data2);
-}
-
-RUDIMENTS_TEMPLATE_INLINE
-int32_t _linkedlistutil_compare(const char *data1, const char *data2) {
-	return charstring::compare(data1,data2);
-}
-
-template <class datatype>
-RUDIMENTS_TEMPLATE_INLINE
-void linkedlistutil<datatype>::print(datatype data) const {
-	_linkedlistutil_print(data);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
@@ -83,4 +77,10 @@ template <class datatype>
 RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(datatype data) {
 	stdoutput.printf("%p",data);
+}
+
+template <class datatype>
+RUDIMENTS_TEMPLATE_INLINE
+void linkedlistutil<datatype>::print(datatype data) const {
+	_linkedlistutil_print(data);
 }
