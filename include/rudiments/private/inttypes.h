@@ -13,7 +13,7 @@
 
 // Certain versions of gcc define NULL as ((void *)0) and then complain when
 // you set a const pointer to it.  Work around that.
-#if __GNUC__ <= 2 && __GNUC_MINOR__ <=7
+#ifdef RUDIMENTS_REDEFINE_NULL
 #undef NULL
 #define NULL 0
 #endif

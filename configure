@@ -15817,6 +15817,10 @@ $as_echo "no" >&6; }
 fi
 
 
+CPPFLAGS="$WERROR $CPPFLAGS"
+
+
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether NULL needs to be redefined" >&5
 $as_echo_n "checking whether NULL needs to be redefined... " >&6; }
@@ -15842,10 +15846,6 @@ $as_echo "#define RUDIMENTS_REDEFINE_NULL 1" >>confdefs.h
 $as_echo "yes" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-CPPFLAGS="$WERROR $CPPFLAGS"
-
 
 
 echo "******************************"
