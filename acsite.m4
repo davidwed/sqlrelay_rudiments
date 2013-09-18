@@ -231,6 +231,15 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
+
+if ( test -n "$WALL" )
+then
+	dnl Sometimes -Wall includes -Wunused-variables and -Wunused-parameters
+	dnl which we don't care about.  Disable it if it does.
+	AC_MSG_CHECKING(whether -Wall includes -Wunused-*)
+	AC_TRY_COMPILE([void f(int a) { return; }],[f(1);],AC_MSG_RESULT(no),WALL=""; AC_MSG_RESULT(yes))	
+fi
+
 AC_SUBST(WALL)
 ])
 
