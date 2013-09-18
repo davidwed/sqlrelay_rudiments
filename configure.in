@@ -354,8 +354,8 @@ FW_CHECK_SO_EXT
 FW_CHECK_LIBDIR
 
 FW_CHECK_PIPE
-FW_CHECK_WALL
 FW_CHECK_WERROR
+FW_CHECK_WALL
 FW_CHECK_DEBUG
 
 dnl update CPPFLAGS with -Werror as appropriate but leave out -Wall,

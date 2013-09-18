@@ -220,31 +220,6 @@ AC_SUBST(PIPE)
 
 
 
-dnl checks to see if -Wall option works or not
-AC_DEFUN([FW_CHECK_WALL],
-[
-AC_MSG_CHECKING(for -Wall)
-FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Wall],[],[],[WALL="-Wall"],[WALL=""])
-if ( test -n "$WALL" )
-then
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-
-if ( test -n "$WALL" )
-then
-	dnl Sometimes -Wall includes -Wunused-variables and -Wunused-parameters
-	dnl which we don't care about.  Disable it if it does.
-	AC_MSG_CHECKING(whether -Wall includes -Wunused-*)
-	AC_TRY_COMPILE([void f(int a) { return; }],[f(1);],AC_MSG_RESULT(no),WALL=""; AC_MSG_RESULT(yes))	
-fi
-
-AC_SUBST(WALL)
-])
-
-
-
 dnl checks to see if -Werror option works or not
 AC_DEFUN([FW_CHECK_WERROR],
 [
@@ -270,6 +245,34 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
+])
+
+
+
+dnl checks to see if -Wall option works or not
+AC_DEFUN([FW_CHECK_WALL],
+[
+AC_MSG_CHECKING(for -Wall)
+FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Wall],[],[],[WALL="-Wall"],[WALL=""])
+if ( test -n "$WALL" )
+then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+
+if ( test -n "$WALL" )
+then
+	dnl Sometimes -Wall includes -Wunused-variables and -Wunused-parameters
+	dnl which we don't care about.  Disable it if it does.
+	OLDCPPFLAGS=$CPPFLAGS
+	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
+	AC_MSG_CHECKING(whether -Wall includes -Wunused-*)
+	AC_TRY_COMPILE([void f(int a) { return; }],[f(1);],AC_MSG_RESULT(no),WALL=""; AC_MSG_RESULT(yes))	
+	CPPFLAGS=$OLDCPPFLAGS
+fi
+
+AC_SUBST(WALL)
 ])
 
 
