@@ -29,15 +29,14 @@ char *crypt::encrypt(const char *password, const char *salt) {
 		rawbuffer::zero(&cd,sizeof(cd));
 		char	*encryptedpassword=crypt_r(password,(salt)?salt:"",&cd);
 		return (encryptedpassword)?
-			charstring::duplicate(encryptedpassword):(char *)NULL;
+			charstring::duplicate(encryptedpassword):NULL;
 	#elif defined(RUDIMENTS_HAVE_CRYPT)
 		if (_cryptmutex && !_cryptmutex->lock()) {
 			return NULL;
 		}
 		char	*encryptedpassword=::crypt(password,(salt)?salt:"");
 		char	*retval=(encryptedpassword)?
-				charstring::duplicate(encryptedpassword):
-				(char *)NULL;
+				charstring::duplicate(encryptedpassword):NULL;
 		if (_cryptmutex) {
 			_cryptmutex->unlock();
 		}

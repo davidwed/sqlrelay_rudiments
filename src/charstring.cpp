@@ -981,16 +981,16 @@ bool charstring::contains(const char *haystack, char needle) {
 }
 
 const char *charstring::findFirst(const char *haystack, const char *needle) {
-	return (haystack && needle)?strstr(haystack,needle):(const char *)NULL;
+	return (haystack && needle)?strstr(haystack,needle):NULL;
 }
 
 const char *charstring::findFirst(const char *haystack, char needle) {
-	return (haystack)?strchr(haystack,needle):(const char *)NULL;
+	return (haystack)?strchr(haystack,needle):NULL;
 }
 
 const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	#ifdef RUDIMENTS_HAVE_STRCHRNUL
-	return (haystack)?strchrnul(haystack,needle):(const char *)NULL;
+	return (haystack)?strchrnul(haystack,needle):NULL;
 	#else
 	if (!haystack) {
 		return NULL;
@@ -1029,7 +1029,7 @@ char *charstring::findFirstOrEnd(char *haystack, const char *needle) {
 }
 
 const char *charstring::findLast(const char *haystack, char needle) {
-	return (haystack)?strrchr(haystack,needle):(const char *)NULL;
+	return (haystack)?strrchr(haystack,needle):NULL;
 }
 
 char *charstring::findFirst(char *haystack, const char *needle) {
@@ -1063,7 +1063,7 @@ const char *charstring::findFirstOfSet(const char *haystack, const char *set) {
 
 char *charstring::findFirstOfSet(char *haystack, const char *set) {
 	#ifdef RUDIMENTS_HAVE_STRPBRK
-	return (haystack && set)?strpbrk(haystack,set):(char *)NULL;
+	return (haystack && set)?strpbrk(haystack,set):NULL;
 	#else
 	if (!haystack || !set) {
 		return NULL;
