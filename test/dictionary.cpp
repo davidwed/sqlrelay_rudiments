@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
 
 
 	// create a dictionary containing long integer keys and string values
-	numericdictionary< const char * >	numdict;
+	dictionary< uint16_t, const char * >	numdict;
 	stdoutput.printf("integer keys, string values:\n");
 
 	// add values to the dictionary
