@@ -91,11 +91,12 @@ class dictionary {
 	#include <rudiments/private/dictionary.h>
 };
 
-typedef dictionarynode< char *, char * >	namevaluepairsnode;
-typedef dictionary< char *, char * >		namevaluepairs;
 
-typedef dictionarynode< const char *, const char * >	constnamevaluepairsnode;
-typedef dictionary< const char *, const char * >	constnamevaluepairs;
+// ideally I'd use typdefs for these but older compilers can't handle them
+#define namevaluepairsnode	dictionarynode< char *, char * >
+#define namevaluepairs		dictionary< char *, char * >
+#define constnamevaluepairsnode	dictionarynode< const char *, const char * >
+#define constnamevaluepairs	dictionary< const char *, const char * >
 
 #include <rudiments/private/dictionarynodeinlines.h>
 #include <rudiments/private/dictionaryinlines.h>

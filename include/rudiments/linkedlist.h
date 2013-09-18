@@ -149,8 +149,10 @@ class linkedlist {
 	#include <rudiments/private/linkedlist.h>
 };
 
-typedef linkedlistnode< char * >	stringlistnode;
-typedef linkedlist< char * >		stringlist;
+
+// ideally I'd use typdefs for these but older compilers can't handle them
+#define stringlistnode	linkedlistnode< char * >
+#define stringlist	linkedlist< char * >
 
 #include <rudiments/private/linkedlistnodeinlines.h>
 #include <rudiments/private/linkedlistinlines.h>
