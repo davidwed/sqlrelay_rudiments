@@ -2,5 +2,5 @@
 // See the COPYING file for more information
 
 	private:
-		linkedlistnodetype	*first;
-		linkedlistnodetype	*last;
+		linkedlistnode<datatype>	*first;
+		linkedlistnode<datatype>	*last;

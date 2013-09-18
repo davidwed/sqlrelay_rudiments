@@ -53,7 +53,7 @@ class linkedlistnode {
  * 
  *  Each linkedlist is composed of a series of linkedlistnode's.  Each
  *  linkedlistnode contains the data. */
-template < class datatype, class linkedlistnodetype=linkedlistnode<datatype> >
+template < class datatype >
 class linkedlist {
 	public:
 		/** Creates an empty instance of the linkedlist class. */
@@ -70,7 +70,7 @@ class linkedlist {
 
 		/** Appends already created linkedlistnode "node" to the
 		 *  linkedlist. */
-		void	append(linkedlistnodetype *node);
+		void	append(linkedlistnode<datatype> *node);
 
 		/** Creates a new linkedlistnode containing "data" and
 		 *  inserts it into the linkedlist at "index".
@@ -82,7 +82,7 @@ class linkedlist {
 		 *  the linkedlist at "index".
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	insert(uint64_t index, linkedlistnodetype *node);
+		bool	insert(uint64_t index, linkedlistnode<datatype> *node);
 
 		/** Deletes the linkedlistnode at "index".
 		 * 
@@ -102,7 +102,7 @@ class linkedlist {
 		/** Removed linkedlistnode "node" from the linkedlist.
 		 * 
 		 *  Returns true on success and false on failure. */
-		bool	removeNode(linkedlistnodetype *node);
+		bool	removeNode(linkedlistnode<datatype> *node);
 
 		/** Sets the data contained in the linkedlistnode at
 		 *  "index" to "data".
@@ -120,23 +120,23 @@ class linkedlist {
 		uint64_t	getLength() const;
 
 		/** Returns the first node in the linkedlist. */
-		linkedlistnodetype	*getFirstNode();
+		linkedlistnode<datatype>	*getFirstNode();
 
 		/** Returns the last node in the linkedlist. */
-		linkedlistnodetype	*getLastNode();
+		linkedlistnode<datatype>	*getLastNode();
 
 		/** Returns a pointer to the linkedlistnode at "index". */
-		linkedlistnodetype	*getNodeByIndex(uint64_t index);
+		linkedlistnode<datatype>	*getNodeByIndex(uint64_t index);
 
 		/** Returns a pointer to the first
 		 *  linkedlistnode containing "data". */
-		linkedlistnodetype	*getNodeByData(datatype data);
+		linkedlistnode<datatype>	*getNodeByData(datatype data);
 
 		/** Returns a pointer to the firs linkedlistnode
 		 *  after "startnode" containing "data". */
-		linkedlistnodetype	*getNodeByData(
-						linkedlistnodetype *startnode,
-						datatype data);
+		linkedlistnode<datatype>
+			*getNodeByData(linkedlistnode<datatype> *startnode,
+					datatype data);
 
 		/** Deletes all linkedlistnodes currently in the linkedlist.
 		 *  Note however, that the daata stored in each linkedlistnode
@@ -149,8 +149,8 @@ class linkedlist {
 	#include <rudiments/private/linkedlist.h>
 };
 
-typedef linkedlistnode< char * >		stringlistnode;
-typedef linkedlist< char *, stringlistnode >	stringlist;
+typedef linkedlistnode< char * >	stringlistnode;
+typedef linkedlist< char * >		stringlist;
 
 #include <rudiments/private/linkedlistnodeinlines.h>
 #include <rudiments/private/linkedlistinlines.h>

@@ -43,15 +43,6 @@ class dictionarynode {
 	#include <rudiments/private/dictionarynode.h>
 };
 
-template <class keytype, class datatype>
-class dictionarylistnode :
-		public linkedlistnode< dictionarynode<keytype,datatype> * > {};
-
-template <class keytype, class datatype>
-class dictionarylist :
-		public linkedlist< dictionarynode<keytype,datatype> *,
-				dictionarylistnode<keytype,datatype> > {};
-
 /** The dictionary class allows you to store arbitrary numbers of key/value
  *  pairs.
  * 
@@ -61,10 +52,7 @@ class dictionarylist :
  *  Internally, the dictionary class uses a linkedlist to store the values
  *  though this is potentially inefficient and may change in a future
  *  version. */
-template <class keytype, class datatype,
-	class dictionarynodetype=dictionarynode<keytype,datatype>,
-	class dictionarylistnodetype=dictionarylistnode<keytype,datatype>,
-	class dictionarylisttype=dictionarylist<keytype,datatype> >
+template <class keytype, class datatype>
 class dictionary {
 	public:
 		/** Creates an empty instance of the dictionary class. */
@@ -92,7 +80,7 @@ class dictionary {
 		bool	removeData(keytype key);
 
 		/** Returns the list used internally. */
-		dictionarylisttype	*getList();
+		linkedlist< dictionarynode<keytype,datatype> *>	*getList();
 
 		/** Deletes all dictionarynodes currently in the dictionary. */
 		void	clear();
@@ -103,107 +91,11 @@ class dictionary {
 	#include <rudiments/private/dictionary.h>
 };
 
-template <class datatype>
-class stringdictionarynode :
-		public dictionarynode< char *,datatype > {
-	public:
-		virtual	~stringdictionarynode();
-};
+typedef dictionarynode< char *, char * >	namevaluepairsnode;
+typedef dictionary< char *, char * >		namevaluepairs;
 
-template <class datatype>
-class stringdictionarylistnode :
-		public dictionarylistnode< char *, datatype > {
-	public:
-		virtual	~stringdictionarylistnode();
-};
-
-template <class datatype>
-class stringdictionarylist : public dictionarylist< char *, datatype > {
-	public:
-		virtual	~stringdictionarylist();
-};
-
-template <class datatype>
-class stringdictionary : public dictionary< char *, datatype,
-				stringdictionarynode<datatype>,
-				stringdictionarylistnode<datatype>,
-				stringdictionarylist<datatype> > {
-	public:
-		virtual	~stringdictionary();
-};
-
-template <class datatype>
-class conststringdictionarynode :
-		public dictionarynode< const char *,datatype > {
-	public:
-		virtual	~conststringdictionarynode();
-};
-
-template <class datatype>
-class conststringdictionarylistnode :
-		public dictionarylistnode< const char *, datatype > {
-	public:
-		virtual	~conststringdictionarylistnode();
-};
-
-template <class datatype>
-class conststringdictionarylist :
-		public dictionarylist< const char *, datatype > {
-	public:
-		virtual	~conststringdictionarylist();
-};
-
-template <class datatype>
-class conststringdictionary : public dictionary< const char *, datatype,
-				conststringdictionarynode<datatype>,
-				conststringdictionarylistnode<datatype>,
-				conststringdictionarylist<datatype> > {
-	public:
-		virtual	~conststringdictionary();
-};
-
-template <class datatype>
-class numericdictionarynode :
-		public dictionarynode< int32_t, datatype > {
-	public:
-		virtual	~numericdictionarynode();
-};
-
-template <class datatype>
-class numericdictionarylistnode :
-		public dictionarylistnode< int32_t, datatype > {
-	public:
-		virtual	~numericdictionarylistnode();
-};
-
-template <class datatype>
-class numericdictionarylist : public dictionarylist< int32_t, datatype > {
-	public:
-		virtual	~numericdictionarylist();
-};
-
-template <class datatype>
-class numericdictionary : public dictionary< int32_t, datatype,
-				numericdictionarynode<datatype>,
-				numericdictionarylistnode<datatype>,
-				numericdictionarylist<datatype> > {
-	public:
-		virtual	~numericdictionary();
-};
-
-typedef stringdictionarynode< char * >		namevaluepairsnode;
-typedef stringdictionarylistnode< char * >	namevaluepairslistnode;
-typedef stringdictionarylist< char * >		namevaluepairslist;
-typedef stringdictionary< char * >		namevaluepairs;
-
-typedef conststringdictionarynode< const char * >
-				constnamevaluepairsnode;
-typedef conststringdictionarylistnode< const char * >
-				constnamevaluepairslistnode;
-typedef conststringdictionarylist< const char * >
-				constnamevaluepairslist;
-typedef conststringdictionary< const char * >
-				constnamevaluepairs;
+typedef dictionarynode< const char *, const char * >	constnamevaluepairsnode;
+typedef dictionary< const char *, const char * >	constnamevaluepairs;
 
 #include <rudiments/private/dictionarynodeinlines.h>
 #include <rudiments/private/dictionaryinlines.h>

@@ -43,11 +43,9 @@ void environment::init() {
 }
 
 void environment::exit() {
-	for (namevaluepairslistnode *node=
-			(namevaluepairslistnode *)
-				_envstrings->getList()->getNodeByIndex(0);
-			node;
-			node=(namevaluepairslistnode *)node->getNext()) {
+	for (linkedlistnode< namevaluepairsnode *> *node=
+			_envstrings->getList()->getNodeByIndex(0);
+			node; node=node->getNext()) {
 		free((void *)node->getData()->getData());
 		node->getData()->setData(NULL);
 	}

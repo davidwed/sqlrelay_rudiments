@@ -2,5 +2,6 @@
 // See the COPYING file for more information
 
 	protected:
-		dictionarylistnodetype	*findNode(keytype key);
-		dictionarylisttype	dict;
+		linkedlistnode< dictionarynode<keytype,datatype> *>
+						*findNode(keytype key);
+		linkedlist< dictionarynode<keytype,datatype> *>	dict;

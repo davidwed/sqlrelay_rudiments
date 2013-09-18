@@ -336,10 +336,9 @@ int32_t chat::substituteVariables(const char **ch,
 	const char	*str=*ch;
 	if (charstring::compare(str,"$(") && *(str+2)) {
 
-		for (constnamevaluepairslistnode *nln=
-			(constnamevaluepairslistnode *)
+		for (linkedlistnode<constnamevaluepairsnode *> *nln=
 			variables->getList()->getFirstNode(); nln;
-			nln=(constnamevaluepairslistnode *)nln->getNext()) {
+			nln=nln->getNext()) {
 
 			const char	*variable=nln->getData()->getKey();
 			ssize_t	varlen=charstring::length(variable);
