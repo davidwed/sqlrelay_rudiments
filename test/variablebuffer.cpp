@@ -4,7 +4,6 @@
 #include <rudiments/variablebuffer.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/stdio.h>
-#include <rudiments/null.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
