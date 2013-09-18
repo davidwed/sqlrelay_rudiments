@@ -1614,48 +1614,47 @@ char *charstring::padString(const char *str, char padchar,
 	return newstring;
 }
 
-ssize_t charstring::printf(char *string, size_t length,
+ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	size_t	result=printf(string,length,format,&argp);
+	size_t	result=printf(buffer,length,format,&argp);
 	va_end(argp);
 	return result;
 }
 
-ssize_t charstring::printf(char *string, size_t length,
+ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, va_list *argp) {
 
-	// Most vsnprintf implementations will crash if "string" is NULL and
-	// "length" is non-zero.
-	if (!string) {
-		length=0;
+	// Some implementations (like linux libc5) crash if "buffer" is NULL.
+	// So, use a buffer of at least one character in that case.
+	char	*buf=buffer;
+	size_t	buflen=length;
+	if (!buffer) {
+		buf=new char[1];
+		buflen=1;
 	}
-
-	// vnsprintf should write whatever will fit into "string" and either
-	// return the number of bytes that were written or the number of bytes
-	// that would have been written if truncation hadn't occurred.
-	ssize_t	size=vsnprintf(string,length,format,*argp);
+	// vnsprintf should write whatever will fit into "buffer" and
+	// either return the number of bytes that were written or the
+	// number of bytes that would have been written if truncation
+	// hadn't occurred.
+	ssize_t	size=vsnprintf(buf,buflen,format,*argp);
+	if (!buffer) {
+		delete[] buf;
+	}
 
 	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
-	// -1 if truncation occurred and don't write anything to "string".
+	// -1 if truncation occurred though and don't write anything to
+	// "buffer".
 	//
 	// For systems like those, we'll simultate the expected behavior...
-
-	// Actually, some implementations (Redhat 5.2, probably others) also
-	// return 0 if "string" is NULL.  Simulate truncation in that case.
-	if (!string && !size) {
-		size=-1;
-	}
-
-	// Now simulate the expected behavior...
 	size_t	originallength=length;
 	while (size==-1) {
 		length=length+16;
 		char	*buf=new char[length];
 		size=vsnprintf(buf,length,format,*argp);
 		if (size>-1) {
-			charstring::copy(string,buf,originallength);
+			charstring::copy(buffer,buf,originallength);
 		}
 		delete[] buf;
 	}
