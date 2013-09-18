@@ -1626,20 +1626,23 @@ ssize_t charstring::printf(char *buffer, size_t length,
 ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, va_list *argp) {
 
-	// Some implementations (like linux libc5) crash if "buffer" is NULL
-	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
-	// of at least two characters in that case.
-	char	b[2];
-	char	*buf=buffer;
-	size_t	buflen=length;
-	if (!buf || buflen<2) {
-		buf=b;
-		buflen=sizeof(b);
-	}
 	// vnsprintf should write whatever will fit into "buffer" and
 	// either return the number of bytes that were written or the
 	// number of bytes that would have been written if truncation
 	// hadn't occurred.
+
+	// But, implementations vary widely.
+
+	// Some implementations (like linux libc5) crash if "buffer" is NULL
+	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
+	// of at least two characters in either of those cases.
+	char	*buf=buffer;
+	size_t	buflen=length;
+	char	b[2];
+	if (!buf || buflen<2) {
+		buf=b;
+		buflen=sizeof(b);
+	}
 	ssize_t	size=vsnprintf(buf,buflen,format,*argp);
 
 	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
@@ -1647,13 +1650,13 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	// "buffer".
 	//
 	// For systems like those, we'll simultate the expected behavior...
-	size_t	originallength=length;
+	buflen=length;
 	while (size==-1) {
-		length=length+16;
-		buf=new char[length];
-		size=vsnprintf(buf,length,format,*argp);
+		buflen=buflen+16;
+		buf=new char[buflen];
+		size=vsnprintf(buf,buflen,format,*argp);
 		if (size>-1) {
-			charstring::copy(buffer,buf,originallength);
+			charstring::copy(buffer,buf,length);
 		}
 		delete[] buf;
 	}
