@@ -18769,7 +18769,11 @@ $as_echo "#define nlink_t short" >>confdefs.h
 
 fi
 
-ac_fn_cxx_check_type "$LINENO" "key_t" "ac_cv_type_key_t" "#ifdef RUDIMENTS_HAVE_SYS_IPC_H
+ac_fn_cxx_check_type "$LINENO" "key_t" "ac_cv_type_key_t" "
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_IPC_H
 	#include <sys/ipc.h>
 #endif
 "
