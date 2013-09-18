@@ -1628,10 +1628,11 @@ ssize_t charstring::printf(char *buffer, size_t length,
 
 	// Some implementations (like linux libc5) crash if "buffer" is NULL.
 	// So, use a buffer of at least one character in that case.
+	char	b[1];
 	char	*buf=buffer;
 	size_t	buflen=length;
 	if (!buffer) {
-		buf=new char[1];
+		buf=b;
 		buflen=1;
 	}
 	// vnsprintf should write whatever will fit into "buffer" and
@@ -1639,9 +1640,6 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	// number of bytes that would have been written if truncation
 	// hadn't occurred.
 	ssize_t	size=vsnprintf(buf,buflen,format,*argp);
-	if (!buffer) {
-		delete[] buf;
-	}
 
 	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
 	// -1 if truncation occurred though and don't write anything to
