@@ -34,13 +34,6 @@
 	#include <strings.h>
 #endif
 
-// In some environments the includes above will request that NULL be redefined,
-// even if it's already been defined.  In some of those environments it gets
-// defined as ((void *)0).  If gcc < 2.8 is used then it will complain if you
-// assign const char *a=((void *)0).  This redefines NULL yet again to avoid
-// those issues.
-#include <rudiments/null.h>
-
 const char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
@@ -988,16 +981,16 @@ bool charstring::contains(const char *haystack, char needle) {
 }
 
 const char *charstring::findFirst(const char *haystack, const char *needle) {
-	return (haystack && needle)?strstr(haystack,needle):NULL;
+	return (haystack && needle)?strstr(haystack,needle):(const char *)NULL;
 }
 
 const char *charstring::findFirst(const char *haystack, char needle) {
-	return (haystack)?strchr(haystack,needle):NULL;
+	return (haystack)?strchr(haystack,needle):(const char *)NULL;
 }
 
 const char *charstring::findFirstOrEnd(const char *haystack, char needle) {
 	#ifdef RUDIMENTS_HAVE_STRCHRNUL
-	return (haystack)?strchrnul(haystack,needle):NULL;
+	return (haystack)?strchrnul(haystack,needle):(const char *)NULL;
 	#else
 	if (!haystack) {
 		return NULL;
@@ -1036,7 +1029,7 @@ char *charstring::findFirstOrEnd(char *haystack, const char *needle) {
 }
 
 const char *charstring::findLast(const char *haystack, char needle) {
-	return (haystack)?strrchr(haystack,needle):NULL;
+	return (haystack)?strrchr(haystack,needle):(const char *)NULL;
 }
 
 char *charstring::findFirst(char *haystack, const char *needle) {
@@ -1070,7 +1063,7 @@ const char *charstring::findFirstOfSet(const char *haystack, const char *set) {
 
 char *charstring::findFirstOfSet(char *haystack, const char *set) {
 	#ifdef RUDIMENTS_HAVE_STRPBRK
-	return (haystack && set)?strpbrk(haystack,set):NULL;
+	return (haystack && set)?strpbrk(haystack,set):(char *)NULL;
 	#else
 	if (!haystack || !set) {
 		return NULL;

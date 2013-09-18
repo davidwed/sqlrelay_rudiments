@@ -71,13 +71,6 @@
 
 #include <stdio.h>
 
-// In some environments the includes above will request that NULL be redefined,
-// even if it's already been defined.  In some of those environments it gets
-// defined as ((void *)0).  If gcc < 2.8 is used then it will complain if you
-// assign const char *a=((void *)0).  This redefines NULL yet again to avoid
-// those issues.
-#include <rudiments/null.h>
-
 char *sys::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
@@ -85,7 +78,9 @@ char *sys::getOperatingSystemName() {
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return (result==-1)?NULL:charstring::duplicate(u.sysname);
+		return (result==-1)?
+				(char *)NULL:
+				charstring::duplicate(u.sysname);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 		return charstring::duplicate("Windows");
 	#else
@@ -101,7 +96,9 @@ char *sys::getOperatingSystemRelease() {
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return (result==-1)?NULL:charstring::duplicate(u.release);
+		return (result==-1)?
+				(char *)NULL:
+				charstring::duplicate(u.release);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 		// for windows, just return the same as the version number
 		return getOperatingSystemVersion();
@@ -118,7 +115,9 @@ char *sys::getOperatingSystemVersion() {
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return (result==-1)?NULL:charstring::duplicate(u.version);
+		return (result==-1)?
+				(char *)NULL:
+				charstring::duplicate(u.version);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 
 		// get the os version info
@@ -154,7 +153,9 @@ char *sys::getOperatingSystemArchitecture() {
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return (result==-1)?NULL:charstring::duplicate(u.machine);
+		return (result==-1)?
+				(char *)NULL:
+				charstring::duplicate(u.machine);
 	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
 
 		SYSTEM_INFO	info;
