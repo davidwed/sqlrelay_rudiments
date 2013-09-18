@@ -1166,6 +1166,9 @@
 /* Solaris 2.6 has a few missing function prototypes */
 /* #undef RUDIMENTS_NEED_XNET_PROTOTYPES */
 
+/* Redfine NULL as 0 */
+#undef RUDIMENTS_REDEFINE_NULL
+
 /* setsockopt takes a const void * on most systems */
 #define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const char *
 
