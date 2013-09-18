@@ -3,8 +3,6 @@
 
 #include <rudiments/threadmutex.h>
 #include <rudiments/error.h>
-#include <rudiments/null.h>
-
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 	// to fix an odd situation on SCO with FSU pthreads

@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 #include <rudiments/parameterstring.h>
-#include <rudiments/null.h>
 
 class parameterstringprivate {
 	friend class parameterstring;

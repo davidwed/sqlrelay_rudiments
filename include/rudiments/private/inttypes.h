@@ -6,6 +6,8 @@
 
 #include <rudiments/private/config.h>
 
+#include <rudiments/null.h>
+
 #if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
 #elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)

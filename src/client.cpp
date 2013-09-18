@@ -4,7 +4,6 @@
 #include <rudiments/client.h>
 
 #include <rudiments/charstring.h>
-#include <rudiments/null.h>
 
 class clientprivate {
 	friend class client;

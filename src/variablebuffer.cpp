@@ -5,7 +5,6 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
-#include <rudiments/null.h>
 
 class variablebufferprivate {
 	friend class variablebuffer;

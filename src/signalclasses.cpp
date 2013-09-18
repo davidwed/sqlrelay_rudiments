@@ -7,7 +7,6 @@
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
 	#include <rudiments/linkedlist.h>
 #endif
-#include <rudiments/null.h>
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>

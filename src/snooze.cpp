@@ -4,7 +4,6 @@
 #include <rudiments/private/config.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
-#include <rudiments/null.h>
 
 // for timespec
 #if defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H)
