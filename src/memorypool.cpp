@@ -21,8 +21,8 @@ class memorypoolnode {
 		size_t		_position;
 };
 
-typedef	linkedlist<memorypoolnode *>		memorypoollist;
-typedef	linkedlistnode<memorypoolnode *>	memorypoollistnode;
+typedef	linkedlistnode<memorypoolnode *>		memorypoollistnode;
+typedef	linkedlist<memorypoolnode *, memorypoollistnode>	memorypoollist;
 
 memorypoolnode::memorypoolnode(size_t size) {
 	_buffer=new unsigned char[size];

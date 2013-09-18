@@ -43,19 +43,11 @@ void daemonprocess::crash(int32_t signum) {
 }
 
 void daemonprocess::defaultShutDown(int32_t signum) {
-
-	// to keep compilers from complaining about unused variables
-	signum=0;
-
 	waitForChildren();
 	process::exit(0);
 }
 
 void daemonprocess::defaultCrash(int32_t signum) {
-
-	// to keep compilers from complaining about unused variables
-	signum=0;
-
 	waitForChildren();
 	process::exit(1);
 }
@@ -119,9 +111,6 @@ void daemonprocess::handleCrash(void (*crashfunction)(int32_t)) {
 #ifndef _WIN32
 void daemonprocess::waitForChildrenToExit(int32_t signum) {
 
-	// to keep compilers from complaining about unused variables
-	signum=0;
-
 	// Some systems generate a single SIGCHLD even if more than 1 child
 	// has entered it's exit state, so we need to loop here and catch
 	// all of them.
@@ -150,10 +139,6 @@ void daemonprocess::waitForChildrenToExit(int32_t signum) {
 }
 #else
 void daemonprocess::waitForChildrenToExit(int32_t signum) {
-
-	// to keep compilers from complaining about unused variables
-	signum=0;
-
 	// FIXME: implement this...
 	// Use ChildStart()
 }

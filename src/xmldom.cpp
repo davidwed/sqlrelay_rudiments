@@ -29,7 +29,7 @@ class xmldomprivate {
 		xmldomnode		*_currentattribute;
 		bool			_stringcacheenabled;
 		stringlist		_strlist;
-		linkedlist<uint64_t>	_refcountlist;
+		linkedlist<uint64_t, linkedlistnode<uint64_t> >	_refcountlist;
 };
 
 xmldom::xmldom() : xmlsax() {

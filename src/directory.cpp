@@ -292,9 +292,6 @@ bool directory::needsMutex() {
 void directory::setMutex(threadmutex *mtx) {
 	#if !defined(RUDIMENTS_HAVE_READDIR_R)
 		_rdmutex=mtx;
-	#else
-		// to keep compilers from complaining about unused variables
-		mtx=NULL;
 	#endif
 }
 

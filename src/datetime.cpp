@@ -492,9 +492,6 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 
 		return normalizeBrokenDownTime(true);
 	#else
-		// to keep compilers from complaining about unused variables
-		hwtz=NULL;
-
 		return false;
 	#endif
 }
@@ -536,9 +533,6 @@ bool datetime::setHardwareDateAndTime(const char *hwtz) {
 
 		return retval;
 	#else
-		// to keep compilers from complaining about unused variables
-		hwtz=NULL;
-
 		return false;
 	#endif
 }
