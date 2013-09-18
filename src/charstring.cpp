@@ -1626,14 +1626,15 @@ ssize_t charstring::printf(char *buffer, size_t length,
 ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, va_list *argp) {
 
-	// Some implementations (like linux libc5) crash if "buffer" is NULL.
-	// So, use a buffer of at least one character in that case.
-	char	b[1];
+	// Some implementations (like linux libc5) crash if "buffer" is NULL
+	// and corrupt memory if "buffer" is only 1 character.  Use a buffer
+	// of at least two characters in that case.
+	char	b[2];
 	char	*buf=buffer;
 	size_t	buflen=length;
-	if (!buffer) {
+	if (!buf || buflen<2) {
 		buf=b;
-		buflen=1;
+		buflen=sizeof(b);
 	}
 	// vnsprintf should write whatever will fit into "buffer" and
 	// either return the number of bytes that were written or the
@@ -1649,7 +1650,7 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	size_t	originallength=length;
 	while (size==-1) {
 		length=length+16;
-		char	*buf=new char[length];
+		buf=new char[length];
 		size=vsnprintf(buf,length,format,*argp);
 		if (size>-1) {
 			charstring::copy(buffer,buf,originallength);
