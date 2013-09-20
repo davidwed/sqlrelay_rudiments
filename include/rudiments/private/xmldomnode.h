@@ -18,13 +18,16 @@
 					const char *name,
 					xmldomnode **first, xmldomnode **last,
 					uint64_t *count);
-		stringbuffer	*xml(stringbuffer *string) const;
-		void		safeAppend(stringbuffer *output,
+		void		xml(stringbuffer *strb,
+					filedescriptor *fd,
+					bool indent,
+					uint16_t *indentlevel) const;
+		void		append(stringbuffer *strb,
+						filedescriptor *fd,
 						const char *str) const;
-		static void	print(xmldomnode *node,
-						stringbuffer *strb,
-						filedescriptor *fd);
-
+		void		safeAppend(stringbuffer *strb,
+						filedescriptor *fd,
+						const char *str) const;
 
 				xmldomnode(const xmldomnode &x);
 		xmldomnode	&operator=(const xmldomnode &x);
