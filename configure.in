@@ -3489,7 +3489,8 @@ then
 	SSLBUILD="yes"
 fi
 
-echo " Features     : PCRE    $PCREBUILD"
+echo " Features     : Threads $HAS_THREADS"
+echo "                PCRE    $PCREBUILD"
 echo "                SSL     $SSLBUILD"
 echo "******************************"
 echo

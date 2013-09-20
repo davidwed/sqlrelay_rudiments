@@ -17788,7 +17788,8 @@ fi
 
 	if ( test -z "$HAVE_PTHREAD" )
 	then
-		as_fn_error $? "thread library not found.  Rudiments requires this package." "$LINENO" 5
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No thread library found." >&5
+$as_echo "$as_me: WARNING: No thread library found." >&2;}
 		exit
 	else
 
@@ -17892,7 +17893,9 @@ export LD_LIBRARY_PATH
 	fi
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_sigmask" >&5
+	if ( test $HAS_THREADS = "yes")
+	then
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_sigmask" >&5
 $as_echo_n "checking for pthread_sigmask... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -17929,6 +17932,7 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
+	fi
 
 echo "******************************"
 
@@ -31903,7 +31907,8 @@ then
 	SSLBUILD="yes"
 fi
 
-echo " Features     : PCRE    $PCREBUILD"
+echo " Features     : Threads $HAS_THREADS"
+echo "                PCRE    $PCREBUILD"
 echo "                SSL     $SSLBUILD"
 echo "******************************"
 echo

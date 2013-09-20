@@ -694,7 +694,7 @@ then
 
 	if ( test -z "$HAVE_PTHREAD" )
 	then
-		AC_MSG_ERROR(thread library not found.  Rudiments requires this package.)
+		AC_MSG_WARN(No thread library found.)
 		exit
 	else
 		AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
@@ -734,9 +734,12 @@ AC_DEFUN([FW_CHECK_MUTEX],
 
 AC_DEFUN([FW_CHECK_PTHREAD_SIGMASK],
 [
-	dnl check for pthread_sigmask
-	AC_MSG_CHECKING(for pthread_sigmask)
-	FW_TRY_LINK([#include <signal.h>],[pthread_sigmask(1,0,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_SIGMASK,1,pthread_sigmask exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	if ( test $HAS_THREADS = "yes")
+	then
+		dnl check for pthread_sigmask
+		AC_MSG_CHECKING(for pthread_sigmask)
+		FW_TRY_LINK([#include <signal.h>],[pthread_sigmask(1,0,0);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_SIGMASK,1,pthread_sigmask exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	fi
 ])
 
 
