@@ -3,4 +3,5 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/filedescriptor.h>
 #include <rudiments/dictionary.h>

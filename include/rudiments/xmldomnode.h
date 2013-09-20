@@ -533,6 +533,10 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  stringbuffer "strb". */
 		static void	print(xmldomnode *node, stringbuffer *strb);
 
+		/** Writes a text representation of "node" to
+		 *  filedescriptor "fd". */
+		static void	write(xmldomnode *node, filedescriptor *fd);
+
 	#include <rudiments/private/xmldomnode.h>
 };
 

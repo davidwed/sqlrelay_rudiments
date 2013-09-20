@@ -21,6 +21,9 @@
 		stringbuffer	*xml(stringbuffer *string) const;
 		void		safeAppend(stringbuffer *output,
 						const char *str) const;
+		static void	print(xmldomnode *node,
+						stringbuffer *strb,
+						filedescriptor *fd);
 
 
 				xmldomnode(const xmldomnode &x);

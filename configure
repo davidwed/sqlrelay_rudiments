@@ -15817,6 +15817,7 @@ $as_echo "no" >&6; }
 fi
 
 
+CPPFLAGSWITHOUTWERROR="$CPPFLAGS"
 CPPFLAGS="$WERROR $CPPFLAGS"
 
 
@@ -18670,6 +18671,8 @@ $as_echo "#define const /**/" >>confdefs.h
 fi
 
 
+SAVEDCPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGSWITHOUTWERROR"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for uid_t in sys/types.h" >&5
 $as_echo_n "checking for uid_t in sys/types.h... " >&6; }
@@ -18745,6 +18748,7 @@ _ACEOF
 
 fi
 
+CPPFLAGS="$SAVEDCPPFLAGS"
 
 ac_fn_cxx_check_type "$LINENO" "bool" "ac_cv_type_bool" "$ac_includes_default"
 if test "x$ac_cv_type_bool" = xyes; then :

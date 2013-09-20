@@ -896,6 +896,17 @@ void xmldomnode::print(xmldomnode *node) {
 }
 
 void xmldomnode::print(xmldomnode *node, stringbuffer *strb) {
+	print(node,strb,NULL);
+}
+
+void xmldomnode::write(xmldomnode *node, filedescriptor *fd) {
+	print(node,NULL,fd);
+}
+
+void xmldomnode::print(xmldomnode *node,
+			stringbuffer *strb,
+			filedescriptor *fd) {
+
 	if (!node || node->isNullNode()) {
 		return;
 	}
@@ -910,20 +921,26 @@ void xmldomnode::print(xmldomnode *node, stringbuffer *strb) {
 				endtag=true;
 			}
 			for (uint16_t i=0; i<indent; i++) {
-				if (strb) {
+				if (fd) {
+					fd->write(' ');
+				} else if (strb) {
 					strb->append(' ');
 				} else {
 					stdoutput.printf(" ");
 				}
 			}
 		}
-		if (strb) {
+		if (fd) {
+			fd->write(*ptr);
+		} else if (strb) {
 			strb->append(*ptr);
 		} else {
 			stdoutput.printf("%c",*ptr);
 		}
 		if (*ptr=='>') {
-			if (strb) {
+			if (fd) {
+				fd->write('\n');
+			} else if (strb) {
 				strb->append('\n');
 			} else {
 				stdoutput.printf("\n");
