@@ -1523,9 +1523,7 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 	#if defined(RUDIMENTS_HAVE__WRITE)
 		return _write(pvt->_fd,buf,count);
 	#elif defined(RUDIMENTS_HAVE_WRITE)
-		//return ::write(pvt->_fd,buf,count);
-		ssize_t	result=::write(pvt->_fd,buf,count);
-		return result;
+		return ::write(pvt->_fd,buf,count);
 	#else
 		#error no write or anything like it
 	#endif
