@@ -450,12 +450,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		bool	deleteAttribute(xmldomnode *attribute);
 
 
-		/** Allocates a stringbuffer, writes a textual
+		/** Allocates a stringbuffer, writes a text
 		 *  representation of the tree starting at this
 		 *  node to it and returns the stringbuffer;
 		 *  The calling program must deallocate the
 		 *  stringbuffer. */
 		stringbuffer	*xml() const;
+
+		/** Prints a text representation of the tree
+		 *  starting at this node into "strb". */
+		void	print(stringbuffer *strb) const;
+
+		/** Prints a text representation of the tree
+		 *  starting at this node to filedescriptor "fd". */
+		void	print(filedescriptor *fd) const;
 
 		/** If the xmldomnode is an element, returns the
 		 *  "path" of the xmldomnode.  The path will have
@@ -525,17 +533,6 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		/** Allows an app to get the arbitrary data associated with
 		 *  the node using setData(). */
 		void	*getData();
-
-		/** Prints a text representation of "node". */
-		static void	print(xmldomnode *node);
-
-		/** Prints a text representation of "node" into
-		 *  stringbuffer "strb". */
-		static void	print(xmldomnode *node, stringbuffer *strb);
-
-		/** Writes a text representation of "node" to
-		 *  filedescriptor "fd". */
-		static void	write(xmldomnode *node, filedescriptor *fd);
 
 	#include <rudiments/private/xmldomnode.h>
 };

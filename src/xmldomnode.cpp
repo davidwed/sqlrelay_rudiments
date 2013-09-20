@@ -364,6 +364,26 @@ void xmldomnode::append(stringbuffer *strb,
 	}
 }
 
+void xmldomnode::append(stringbuffer *strb,
+				filedescriptor *fd,
+				const char *str, size_t len) const {
+	if (strb) {
+		strb->append(str,len);
+	} else if (fd) {
+		fd->write(str,len);
+	}
+}
+
+void xmldomnode::append(stringbuffer *strb,
+				filedescriptor *fd,
+				char ch) const {
+	if (strb) {
+		strb->append(ch);
+	} else if (fd) {
+		fd->write(ch);
+	}
+}
+
 void xmldomnode::safeAppend(stringbuffer *strb,
 				filedescriptor *fd,
 				const char *str) const {
@@ -389,20 +409,20 @@ void xmldomnode::safeAppend(stringbuffer *strb,
 					static_cast<unsigned char>(*ch));
 		}
 		if (entity || num) {
-			strb->append(start,ch-start);
+			append(strb,fd,start,ch-start);
 			if (entity) {
-				strb->append(entity);
+				append(strb,fd,entity);
 				entity=NULL;
 			} else {
-				strb->append("&#");
-				strb->append(num);
-				strb->append(";");
+				append(strb,fd,"&#");
+				append(strb,fd,num);
+				append(strb,fd,";");
 				num=0;
 			}
 			start=ch+1;
 		}
 	}
-	strb->append(start,ch-start);
+	append(strb,fd,start,ch-start);
 }
 
 xmldomnode *xmldomnode::getNode(xmldomnode *first, uint64_t position,
@@ -798,6 +818,16 @@ stringbuffer *xmldomnode::xml() const {
 	return strb;
 }
 
+void xmldomnode::print(stringbuffer *strb) const {
+	uint16_t	indentlevel=0;
+	xml(strb,NULL,true,&indentlevel);
+}
+
+void xmldomnode::print(filedescriptor *fd) const {
+	uint16_t	indentlevel=0;
+	xml(NULL,fd,true,&indentlevel);
+}
+
 stringbuffer *xmldomnode::getPath() const {
 
 	// Path: /element[index]/...
@@ -916,18 +946,4 @@ void xmldomnode::setData(void *data) {
 
 void *xmldomnode::getData() {
 	return pvt->_data;
-}
-
-void xmldomnode::print(xmldomnode *node) {
-	write(node,&stdoutput);
-}
-
-void xmldomnode::print(xmldomnode *node, stringbuffer *strb) {
-	uint16_t	indentlevel=0;
-	node->xml(strb,NULL,true,&indentlevel);
-}
-
-void xmldomnode::write(xmldomnode *node, filedescriptor *fd) {
-	uint16_t	indentlevel=0;
-	node->xml(NULL,fd,true,&indentlevel);
 }

@@ -25,6 +25,13 @@
 		void		append(stringbuffer *strb,
 						filedescriptor *fd,
 						const char *str) const;
+		void		append(stringbuffer *strb,
+						filedescriptor *fd,
+						const char *str,
+						size_t len) const;
+		void		append(stringbuffer *strb,
+						filedescriptor *fd,
+						char ch) const;
 		void		safeAppend(stringbuffer *strb,
 						filedescriptor *fd,
 						const char *str) const;
