@@ -696,10 +696,9 @@ then
 	then
 		AC_MSG_WARN(No thread library found.)
 	else
+		HAS_THREADS="yes"
 		AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
 	fi
-
-	HAS_THREADS="yes"
 
 else
 
