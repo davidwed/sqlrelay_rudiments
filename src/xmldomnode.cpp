@@ -281,14 +281,6 @@ void xmldomnode::xml(stringbuffer *strb,
 			bool indent,
 			uint16_t *indentlevel) const {
 
-	if (indent && pvt->_type!=TEXT_XMLDOMNODETYPE &&
-			pvt->_type!=ATTRIBUTE_XMLDOMNODETYPE) {
-		append(strb,fd,"\n");
-		for (uint16_t i=0; i<*indentlevel; i++) {
-			append(strb,fd," ");
-		}
-	}
-
 	xmldomnode	*current;
 	if (pvt->_type==ROOT_XMLDOMNODETYPE) {
 		current=pvt->_firstchild;
@@ -297,6 +289,11 @@ void xmldomnode::xml(stringbuffer *strb,
 			current=current->pvt->_next;
 		}
 	} else if (pvt->_type==TAG_XMLDOMNODETYPE) {
+		if (indent && indentlevel) {
+			for (uint16_t i=0; i<*indentlevel; i++) {
+				append(strb,fd," ");
+			}
+		}
 		append(strb,fd,"<");
 		safeAppend(strb,fd,pvt->_nodename);
 		current=pvt->_firstattribute;
@@ -307,7 +304,8 @@ void xmldomnode::xml(stringbuffer *strb,
 		}
 		if (pvt->_childcount) {
 			append(strb,fd,">");
-			if (indentlevel) {
+			if (indent && indentlevel) {
+				append(strb,fd,"\n");
 				*indentlevel=*indentlevel+2;
 			}
 			current=pvt->_firstchild;
@@ -315,11 +313,17 @@ void xmldomnode::xml(stringbuffer *strb,
 				current->xml(strb,fd,indent,indentlevel);
 				current=current->pvt->_next;
 			}
+			if (indent && indentlevel) {
+				*indentlevel=*indentlevel-2;
+				for (uint16_t i=0; i<*indentlevel; i++) {
+					append(strb,fd," ");
+				}
+			}
 			append(strb,fd,"</");
 			safeAppend(strb,fd,pvt->_nodename);
 			append(strb,fd,">");
-			if (indentlevel) {
-				*indentlevel=*indentlevel-2;
+			if (indent && indentlevel) {
+				append(strb,fd,"\n");
 			}
 		} else {
 			if (pvt->_nodename[0]=='?') {
@@ -328,6 +332,9 @@ void xmldomnode::xml(stringbuffer *strb,
 				append(strb,fd,">");
 			} else {
 				append(strb,fd,"/>");
+			}
+			if (indent && indentlevel) {
+				append(strb,fd,"\n");
 			}
 		}
 	} else if (pvt->_type==TEXT_XMLDOMNODETYPE) {
