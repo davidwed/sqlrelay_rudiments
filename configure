@@ -17791,7 +17791,6 @@ fi
 	then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No thread library found." >&5
 $as_echo "$as_me: WARNING: No thread library found." >&2;}
-		exit
 	else
 
 $as_echo "#define RUDIMENTS_HAS_THREADS 1" >>confdefs.h

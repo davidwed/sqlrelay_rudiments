@@ -695,7 +695,6 @@ then
 	if ( test -z "$HAVE_PTHREAD" )
 	then
 		AC_MSG_WARN(No thread library found.)
-		exit
 	else
 		AC_DEFINE(RUDIMENTS_HAS_THREADS,1,Rudiments supports threads)
 	fi
