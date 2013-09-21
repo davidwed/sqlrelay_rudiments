@@ -118,7 +118,7 @@ int32_t shadowentry::getDaysBeforeChangeRequired() const {
 }
 
 int32_t shadowentry::getDaysBeforeExpirationWarning() const {
-	#if defined(RUDIMENTS_HAVE_SP_WARN)
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_WARN)
 		return pvt->_sp->sp_warn;
 	#else
 		return -1;
@@ -126,7 +126,7 @@ int32_t shadowentry::getDaysBeforeExpirationWarning() const {
 }
 
 int32_t shadowentry::getDaysOfInactivityAllowed() const {
-	#if defined(RUDIMENTS_HAVE_SP_INACT)
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_INACT)
 		return pvt->_sp->sp_inact;
 	#else
 		return -1;
@@ -134,7 +134,7 @@ int32_t shadowentry::getDaysOfInactivityAllowed() const {
 }
 
 int32_t shadowentry::getExpirationDate() const {
-	#if defined(RUDIMENTS_HAVE_SP_EXPIRE)
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_EXPIRE)
 		return pvt->_sp->sp_expire;
 	#else
 		return -1;
@@ -142,7 +142,7 @@ int32_t shadowentry::getExpirationDate() const {
 }
 
 int32_t shadowentry::getFlag() const {
-	#if defined(RUDIMENTS_HAVE_SP_FLAG)
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_FLAG)
 		return pvt->_sp->sp_flag;
 	#else
 		return -1;
