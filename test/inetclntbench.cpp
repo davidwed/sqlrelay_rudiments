@@ -26,7 +26,8 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("buffer allocation failed\n");
 		process::exit(0);
 	}
-	for (uint32_t i=0; i<bytesperiteration; i++) {
+	uint32_t	i;
+	for (i=0; i<bytesperiteration; i++) {
 		bytes[i]='C';
 	}
 
@@ -43,7 +44,7 @@ int main(int argc, const char **argv) {
 	clnt.setWriteBufferSize(buffersize);
 
 	time_t	start=time(NULL);
-	for (uint32_t i=0; i<iterations; i++) {
+	for (i=0; i<iterations; i++) {
 		clnt.write(bytes,bytesperiteration);
 	}
 	clnt.flushWriteBuffer(-1,-1);

@@ -95,7 +95,7 @@ int main(int argc, const char **argv) {
 	// (there should be a gap in the buffer now containing random data)
 	sb->setPosition(30);
 	sb->write("66666");
-	for (int i=0; i<35; i++) {
+	for (i=0; i<35; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
 			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
@@ -114,7 +114,7 @@ int main(int argc, const char **argv) {
 	// written at position 50, but rather just at the current end of
 	// the buffer.
 	sb->append("12345");
-	for (int i=0; i<55; i++) {
+	for (i=0; i<55; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
 			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
@@ -129,7 +129,7 @@ int main(int argc, const char **argv) {
 	// we just appended.  So calling write() here is equivalent to calling
 	// append.
 	sb->write("12345");
-	for (int i=0; i<55; i++) {
+	for (i=0; i<55; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
 			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
@@ -143,7 +143,7 @@ int main(int argc, const char **argv) {
 	sb->clear();
 
 	// append 1024 0's to the buffer and display it's length and contents
-	for (int i=0; i<1024; i++) {
+	for (i=0; i<1024; i++) {
 		sb->append("0");
 	}
 	stdoutput.printf("length: %d\n%s\n",str->getStringLength(),str->getString());

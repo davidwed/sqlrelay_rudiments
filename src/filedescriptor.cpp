@@ -15,6 +15,9 @@
 #define debugSafePrint(string) if (this!=&stdoutput) { stdoutput.safePrint(string); }
 #endif
 
+// libc4 linux needs _POSIX_SOURCE or the
+// LITTLE_ENDIAN macro gets redefined several times
+#define _POSIX_SOURCE
 
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
