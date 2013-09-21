@@ -23,7 +23,7 @@ class RUDIMENTS_DLLSPEC memorypool {
 		 *  "increment" bytes.  If more than increment bytes
 		 *  are requested, it will grow by that amount instead.
 		 * 
-		 *  When free() has been called "resizeinterval" times,
+		 *  When deallocate() has been called "resizeinterval" times,
 		 *  it will evaluate the average amount of memory
 		 *  malloc'ed (since the last time it did this) and
 		 *  resize the initial buffer size to this size. */
@@ -37,17 +37,17 @@ class RUDIMENTS_DLLSPEC memorypool {
 		/** Returns a pointer to a contiguous block of "size"
 		 *  bytes in the pool.  The pool will grow as necessary
 		 *  to accomodate allocations. */
-		unsigned char	*malloc(size_t size);
+		unsigned char	*allocate(size_t size);
 
 		/** Returns a pointer to a contiguous block of "size"
 		 *  bytes in the pool.  The pool will grow as necessary
 		 *  to accomodate allocations.  Each byte of data in
 		 *  the block of data is set to NULL. */
-		unsigned char	*calloc(size_t size);
+		unsigned char	*allocateAndClear(size_t size);
 
 		/** Shrinks the pool back down to it's initial size
 		 *  and frees all previously allocated blocks. */
-		void	free();
+		void	deallocate();
 
 		/** Prints a visual representation of the pool. */
 		void	print();

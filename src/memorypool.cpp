@@ -62,12 +62,12 @@ memorypool::memorypool(size_t initialsize,
 }
 
 memorypool::~memorypool() {
-	free();
+	deallocate();
 	delete pvt->_nodelist.getFirstNode()->getData();
 	delete pvt;
 }
 
-unsigned char *memorypool::malloc(size_t length) { 
+unsigned char *memorypool::allocate(size_t length) { 
 
 	// add the length to the total size
 	pvt->_totalusedsize=pvt->_totalusedsize+length;
@@ -104,13 +104,13 @@ unsigned char *memorypool::malloc(size_t length) {
 	return buffer;
 }
 
-unsigned char *memorypool::calloc(size_t length) {
-	unsigned char	*buffer=malloc(length);
+unsigned char *memorypool::allocateAndClear(size_t length) {
+	unsigned char	*buffer=allocate(length);
 	rawbuffer::zero(buffer,length);
 	return buffer;
 }
 
-void memorypool::free() {
+void memorypool::deallocate() {
 
 	memorypoollistnode	*firstlistnode=pvt->_nodelist.getFirstNode();
 	memorypoolnode		*first=firstlistnode->getData();

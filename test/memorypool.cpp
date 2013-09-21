@@ -10,7 +10,7 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("first run...\n");
 	for (int i=0; i<20; i++) {
-		char	*segment=(char *)mp->malloc(6);
+		char	*segment=(char *)mp->allocate(6);
 		for (int j=0; j<6; j++) {
 			segment[j]=(char)'a'+i;
 		}
@@ -18,22 +18,22 @@ int main(int argc, const char **argv) {
 	mp->print();
 
 	stdoutput.printf("free...\n");
-	mp->free();
+	mp->deallocate();
 	mp->print();
 
 	stdoutput.printf("second run...\n");
-	char	*segment=(char *)mp->malloc(40);
+	char	*segment=(char *)mp->allocate(40);
 	for (int j=0; j<40; j++) {
 		segment[j]='z';
 	}
 	for (int i=0; i<20; i++) {
-		char	*segment=(char *)mp->malloc(6);
+		char	*segment=(char *)mp->allocate(6);
 		for (int j=0; j<6; j++) {
 			segment[j]=(char)'a'+i;
 		}
 	}
 	for (int i=0; i<20; i++) {
-		char	*segment=(char *)mp->malloc(2);
+		char	*segment=(char *)mp->allocate(2);
 		for (int j=0; j<6; j++) {
 			segment[j]=(char)'A'+i;
 		}
@@ -41,15 +41,15 @@ int main(int argc, const char **argv) {
 	mp->print();
 
 	stdoutput.printf("free...\n");
-	mp->free();
+	mp->deallocate();
 	mp->print();
 
 	stdoutput.printf("short/long/float/double...\n");
 
-	short	*sp=(short *)mp->malloc(sizeof(short));
-	long	*lp=(long *)mp->malloc(sizeof(long));
-	float	*fp=(float *)mp->malloc(sizeof(float));
-	double	*dp=(double *)mp->malloc(sizeof(double));
+	short	*sp=(short *)mp->allocate(sizeof(short));
+	long	*lp=(long *)mp->allocate(sizeof(long));
+	float	*fp=(float *)mp->allocate(sizeof(float));
+	double	*dp=(double *)mp->allocate(sizeof(double));
 	*sp=1;
 	*lp=1;
 	*fp=1.1;
@@ -60,15 +60,15 @@ int main(int argc, const char **argv) {
 	mp->print();
 
 	stdoutput.printf("free...\n");
-	mp->free();
+	mp->deallocate();
 	mp->print();
 
 	stdoutput.printf("short/long/float/double arrays...\n");
 
-	short	*spa=(short *)mp->malloc(sizeof(short)*10);
-	long	*lpa=(long *)mp->malloc(sizeof(long)*10);
-	float	*fpa=(float *)mp->malloc(sizeof(float)*10);
-	double	*dpa=(double *)mp->malloc(sizeof(double)*10);
+	short	*spa=(short *)mp->allocate(sizeof(short)*10);
+	long	*lpa=(long *)mp->allocate(sizeof(long)*10);
+	float	*fpa=(float *)mp->allocate(sizeof(float)*10);
+	double	*dpa=(double *)mp->allocate(sizeof(double)*10);
 	for (int i=0; i<10; i++) {
 		spa[i]=i;
 		lpa[i]=i;
@@ -83,7 +83,7 @@ int main(int argc, const char **argv) {
 	mp->print();
 
 	stdoutput.printf("free...\n");
-	mp->free();
+	mp->deallocate();
 	mp->print();
 
 	delete mp;
@@ -94,8 +94,8 @@ int main(int argc, const char **argv) {
 		unsigned long	total=0;
 		for (unsigned long j=0; j<11; j++) {
 			total=total+i+j;
-			mp->malloc(i+j);
-			mp->free();
+			mp->allocate(i+j);
+			mp->deallocate();
 		}
 		stdoutput.printf("should be: %ld\n",total/11);
 		mp->print();
