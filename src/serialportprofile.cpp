@@ -384,7 +384,7 @@ serialportprofile::charsize_t serialportprofile::characterSize() {
 }
 
 bool serialportprofile::twoStopBits() {
-	return (charsize_t)GET_FLAG(c_cflag,CSTOPB);
+	return GET_FLAG(c_cflag,CSTOPB);
 }
 
 bool serialportprofile::receiverOn() {

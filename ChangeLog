@@ -32,6 +32,9 @@
 	thread support is displayed in configure summary
 	refactored xmldomnnode::print() methods, added one to write to a	
 		filedescriptor
+	renamed memorypool methods malloc, calloc and free to allocate,
+		allocateAndClear and deallocate to avoid collisions on
+		platforms that define malloc and calloc using macros
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
