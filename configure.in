@@ -1256,7 +1256,7 @@ AC_TRY_COMPILE([
 #endif],
 closesocket(0);,AC_DEFINE(RUDIMENTS_HAVE_CLOSESOCKET,1,some systems have closesocket) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(if send takes a const void * parameter)
+AC_MSG_CHECKING(if connect has a non-const sockaddr * parameter)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -1270,9 +1270,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 		#include <sys/socket.h>
 	#endif
 #endif],
-send(0,(const void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEND_WITH_VOID,1, send takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+connect(0,(const sockaddr *)NULL,0);,AC_MSG_RESULT(no),AC_DEFINE(RUDIMENTS_HAVE_CONNECT_WITH_NON_CONST_SOCKADDR,1, connect has a const sockaddr * on most systems ) AC_MSG_RESULT(yes))
 
-AC_MSG_CHECKING(if recv takes a void * parameter)
+AC_MSG_CHECKING(if send has a const void * parameter)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -1286,9 +1286,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 		#include <sys/socket.h>
 	#endif
 #endif],
-recv(0,(void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_RECV_WITH_VOID,1, recv takes a void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+send(0,(const void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SEND_WITH_VOID,1, send has a const void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(if setsockopt takes a const void * parameter)
+AC_MSG_CHECKING(if recv has a void * parameter)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -1302,9 +1302,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 		#include <sys/socket.h>
 	#endif
 #endif],
-setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt takes a const void * on most systems ) AC_MSG_RESULT(no))
+recv(0,(void *)NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_RECV_WITH_VOID,1, recv has a void * on most systems ) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(if getsockopt takes a void * parameter)
+AC_MSG_CHECKING(if setsockopt has a const void * parameter)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -1318,7 +1318,23 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 		#include <sys/socket.h>
 	#endif
 #endif],
-void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt takes a void * on most systems ) AC_MSG_RESULT(no))
+setsockopt(0,0,0,(const void *)NULL,0);,AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const void *, setsockopt has a const void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE, const char *, setsockopt has a const void * on most systems ) AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(if getsockopt has a void * parameter)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#else
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+#endif],
+void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt has a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt has a void * on most systems ) AC_MSG_RESULT(no))
 
 HAVE_INET_ATON="no"
 AC_MSG_CHECKING(for inet_aton)

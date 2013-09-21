@@ -172,7 +172,13 @@ int32_t clientsocket::connect(const struct sockaddr *addr,
 
 	// if no timeout was passed in, just do a plain vanilla connect
 	if (sec==-1 || usec==-1) {
-		retval=(::connect(fd(),addr,addrlen)==-1)?
+		retval=(::connect(fd(),
+			#ifdef RUDIMENTS_HAVE_CONNECT_WITH_NON_CONST_SOCKADDR
+				(struct sockaddr *)addr,
+			#else
+				addr,
+			#endif
+				addrlen)==-1)?
 				RESULT_ERROR:RESULT_SUCCESS;
 
 		// FIXME: handle errno is EINTR...
@@ -204,7 +210,13 @@ int32_t clientsocket::connect(const struct sockaddr *addr,
 	}
 
 	// connect...
-	if (::connect(fd(),addr,addrlen)!=-1) {
+	if (::connect(fd(),
+		#ifdef RUDIMENTS_HAVE_CONNECT_WITH_NON_CONST_SOCKADDR
+			(struct sockaddr *)addr,
+		#else
+			addr,
+		#endif
+			addrlen)!=-1) {
 		retval=RESULT_SUCCESS;
 		goto cleanup;
 	}

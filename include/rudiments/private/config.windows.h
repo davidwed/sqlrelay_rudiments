@@ -59,7 +59,7 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
-/* getsockopt takes a void * on most systems */
+/* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 
 /* Rudiments supports PCRE */
@@ -157,6 +157,9 @@
 
 /* Some systems have _commit */
 #define RUDIMENTS_HAVE_COMMIT 1
+
+/* connect has a const sockaddr * on most systems */
+/* #undef RUDIMENTS_HAVE_CONNECT_WITH_NON_CONST_SOCKADDR */
 
 /* Most systems have ftok(const char *, int) */
 /* #undef RUDIMENTS_HAVE_CONST_CHAR_FTOK */
@@ -725,7 +728,7 @@
 /* Some systems have reboot with 2 argument */
 /* #undef RUDIMENTS_HAVE_REBOOT_2 */
 
-/* recv takes a void * on most systems */
+/* recv has a void * on most systems */
 /* #undef RUDIMENTS_HAVE_RECV_WITH_VOID */
 
 /* some systems have regcomp */
@@ -761,7 +764,7 @@
 /* Some systems define union semun */
 /* #undef RUDIMENTS_HAVE_SEMUN */
 
-/* send takes a const void * on most systems */
+/* send has a const void * on most systems */
 /* #undef RUDIMENTS_HAVE_SEND_WITH_VOID */
 
 /* Some systems have setegid */
@@ -1172,7 +1175,7 @@
 /* Redfine NULL as 0 */
 #undef RUDIMENTS_REDEFINE_NULL
 
-/* setsockopt takes a const void * on most systems */
+/* setsockopt has a const void * on most systems */
 #define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const char *
 
 /* Most systems define signal handlers with an integer parameter */
