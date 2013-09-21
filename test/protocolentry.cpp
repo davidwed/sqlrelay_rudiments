@@ -15,7 +15,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Individually...\n");
 	stdoutput.printf("	Name:		%s\n",pe.getName());
 	stdoutput.printf("	Alias list:\n");
-	for (int i=0; pe.getAliasList()[i]; i++) {
+	int	i;
+	for (i=0; pe.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",pe.getAliasList()[i]);
 	}
 	stdoutput.printf("	Number:		%d\n",pe.getNumber());
@@ -35,7 +36,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Individually...\n");
 	stdoutput.printf("	Name:		%s\n",pe.getName());
 	stdoutput.printf("	Alias list:\n");
-	for (int i=0; pe.getAliasList()[i]; i++) {
+	for (i=0; pe.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",pe.getAliasList()[i]);
 	}
 	stdoutput.printf("	Number:		%d\n",pe.getNumber());

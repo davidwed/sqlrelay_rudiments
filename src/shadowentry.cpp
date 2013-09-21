@@ -317,14 +317,12 @@ bool shadowentry::getFlag(const char *username, int32_t *flag) {
 
 void shadowentry::print() const {
 
-	#ifndef RUDIMENTS_HAVE_SHADOW
+	#if !defined(RUDIMENTS_HAVE_SHADOW)
 		return;
-	#endif
-
-	#ifdef RUDIMENTS_HAVE_SP_WARN
-	if (!pvt->_sp) {
-		return;
-	}
+	#elif defined(RUDIMENTS_HAVE_SP_WARN)
+		if (!pvt->_sp) {
+			return;
+		}
 	#endif
 
 	stdoutput.printf("Name: %s\n",getName());
