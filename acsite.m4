@@ -1111,7 +1111,9 @@ fi
 if ( test -z "$HAVE_GETSPNAM_R" )
 then
 	AC_MSG_CHECKING(for getspnam)
-	AC_TRY_COMPILE([#include <shadow.h>
+	dnl make sure to link this one.  libc4 linux systems
+	dnl define getspnam in the headers but don't implement it
+	AC_TRY_LINK([#include <shadow.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],

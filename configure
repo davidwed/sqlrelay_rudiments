@@ -22251,7 +22251,7 @@ if ( test -z "$HAVE_GETSPNAM_R" )
 then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for getspnam" >&5
 $as_echo_n "checking for getspnam... " >&6; }
-	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+			cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <shadow.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -22265,7 +22265,7 @@ getspnam(NULL);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_GETSPNAM 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -22274,7 +22274,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for spwd has sp_warn" >&5
