@@ -362,12 +362,13 @@ dnl Update CPPFLAGS with -Werror as appropriate but leave out -Wall,
 dnl it causes way to many problems with the test programs.
 dnl Hang onto CPPFLAGS without -Werror too, we'll need it when testing
 dnl for types.
-CPPFLAGSWITHOUTWERROR="$CPPFLAGS"
+dnl CPPFLAGSWITHOUTWERROR="$CPPFLAGS"
 CPPFLAGS="$WERROR $CPPFLAGS"
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
 
 FW_CHECK_NULL_REDEFINE
+FW_CHECK_F_NO_BUILTIN
 
 echo "******************************"
 
@@ -678,8 +679,8 @@ AC_C_INLINE
 AC_C_CONST
 
 dnl -Werror screws these up, disable it while testing for types
-SAVEDCPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGSWITHOUTWERROR"
+dnl SAVEDCPPFLAGS="$CPPFLAGS"
+dnl CPPFLAGS="$CPPFLAGSWITHOUTWERROR"
 
 AC_TYPE_UID_T
 AC_TYPE_MODE_T
@@ -699,7 +700,7 @@ AC_CHECK_TYPE([key_t],[],[AC_DEFINE(key_t,int,Some systems dont have key_t)],[
 
 
 dnl restore CPPFLAGS
-CPPFLAGS="$SAVEDCPPFLAGS"
+dnl CPPFLAGS="$SAVEDCPPFLAGS"
 
 
 AC_MSG_CHECKING(for socklen_t)
