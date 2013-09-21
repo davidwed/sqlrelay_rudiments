@@ -1626,6 +1626,10 @@ ssize_t charstring::printf(char *buffer, size_t length,
 ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, va_list *argp) {
 
+	#ifndef RUDIMENTS_HAVE_VSNPRINTF
+		#error no vsnprintf or anything like it
+	#endif
+
 	// vnsprintf should write whatever will fit into "buffer" and
 	// either return the number of bytes that were written or the
 	// number of bytes that would have been written if truncation
