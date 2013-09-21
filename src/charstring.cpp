@@ -1628,7 +1628,6 @@ ssize_t charstring::printf(char *buffer, size_t length,
 }
 
 #ifndef RUDIMENTS_HAVE_VSNPRINTF
-
 // This is quite a hack...
 //
 // Old enough systems (like linux libc4) don't provide vsnprintf but do provide
