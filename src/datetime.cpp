@@ -615,7 +615,7 @@ bool datetime::setTimeZoneEnvVar(const char *zone, char **oldzone,
 	return pvt->_env.setValue("TZ",realzone);
 }
 
-bool datetime::restoreTimeZoneEnvVar(const char *oldzone) {
+bool datetime::restoreTimeZoneEnvVar(char *oldzone) {
 	if (oldzone) {
 		bool	retval=pvt->_env.setValue("TZ",oldzone);
 		delete[] oldzone;

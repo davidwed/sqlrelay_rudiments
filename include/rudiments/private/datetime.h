@@ -8,7 +8,7 @@
 		bool	setTimeZoneEnvVar(const char *zone,
 						char **oldzone,
 						bool ignoredst);
-		bool	restoreTimeZoneEnvVar(const char *oldzone);
+		bool	restoreTimeZoneEnvVar(char *oldzone);
 
 		const char	*lookupCombinedTimeZone(const char *zone) const;
 		bool		daylightZone(const char *zone) const;
