@@ -4,6 +4,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/character.h>
+#ifndef RUDIMENTS_HAVE_VSNPRINTF
+	#include <rudiments/process.h>
+	#include <rudiments/file.h>
+#endif
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -1624,15 +1628,90 @@ ssize_t charstring::printf(char *buffer, size_t length,
 }
 
 #ifndef RUDIMENTS_HAVE_VSNPRINTF
-static ssize_t vsnprintf(char *buffer, size_t length,
-				const char *format, va_list *argp) {
 
-	// figure out a safe buffer size
-	size_t	safebuffersize=1024;
-	char	*safebuffer=new char[safebuffersize];
+// This is quite a hack...
+//
+// Old enough systems (like linux libc4) don't provide vsnprintf but do provide
+// vsprintf.  There's no safe way to use vsprintf though, especially the way
+// the variablebuffer class would like to use it.
+//
+// I could grab a vsnprintf implementation from any of the other
+// LGPL-compatible libraries.  Tried it.  Too much work.
+//
+// vsnprintf could be implemented using vsprintf but a large enough buffer to
+// vsprintf to safely must be created.
+//
+// I could implement a format string parser that calculates the buffer
+// size.  Tried it.  Also too much work.
+// 
+// Short of that, the only safe thing to do is vfprintf to a scratch file,
+// find out how many characters were written and then do the same to a string.
+// 
+// That's taking the long way around for sure.
+//
+// I tried writing to /dev/null but vsprintf to /dev/null returns 0.  I
+// should have expected that actually.  Unless there's some sort of personal-
+// ramdisk that I don't know about, it appears we have to use an actual file.
+//
+// I'm not even going to benchmark to find out how poorly this performs.
+// Hopefully disk-caching will help it out.  Also, if you happen to be using
+// a ram-based /tmp then that will help too.  Systems old enough to need this
+// probably aren't though.
+//
+// There are, of course, security concerns.  Anyone with the right permissions
+// can read the scratch file.  Someone could delete it, and on some systems
+// that could cause problems.
+//
+// The scratch file uses the PID of the current process for uniqueness.  This
+// could cause race conditions in multi-threaded programs, but chances are if
+// your system doesn't have vsnprintf, then it doesn't have thread support
+// either.
+//
+// The process, while terribly inefficient, should be clean.  It only creates
+// one scratch file per process and cleans it up at exit, unless the program
+// crashes or is killed with -9.
+
+static char	*scratchfile=NULL;
+static FILE	*scratch=NULL;
+
+static void removeScratch() {
+	file::remove(scratchfile);
+	if (scratch) {
+		fclose(scratch);
+		delete[] scratchfile;
+	}
+}
+
+static ssize_t vsnprintf(char *buffer, size_t length,
+				const char *format, va_list argp) {
+
+	// open a scratch file if it's not already open
+	if (!scratch) {
+		scratchfile=new char[20];
+		charstring::copy(scratchfile,"/tmp/scratch.");
+		charstring::append(scratchfile,
+					(uint64_t)process::getProcessId());
+		scratch=fopen(scratchfile,"w+");
+		if (!scratch) {
+			delete[] scratchfile;
+			scratchfile=NULL;
+			return -1;
+		}
+		atexit((void (*)(void))removeScratch);
+	}
+
+	// rewind the scratch file
+	rewind(scratch);
+
+	// write to the scratch file so we can
+	// figure out how much space we need
+	ssize_t	safebuffersize=vfprintf(scratch,format,argp);
+
+	// create a big enough buffer for that
+	char	*safebuffer=new char[safebuffersize+1];
 
 	// vsprintf to safebuffer
-	ssize_t byteswritten=vsprintf(safebuffer,format,*argp);
+	ssize_t byteswritten=vsprintf(safebuffer,format,argp);
 
 	// bail on error
 	if (byteswritten==-1) {
@@ -1653,7 +1732,8 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 	delete[] safebuffer;
 
 	// return the number of bytes we would like to have copied
-	return byteswritten;
+	// (except for the NULL terminator)
+	return safebuffersize;
 }
 #endif
 
