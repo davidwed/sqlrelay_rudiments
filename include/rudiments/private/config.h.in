@@ -1039,6 +1039,9 @@
 /* Some systems have termios.h */
 #undef RUDIMENTS_HAVE_TERMIOS_H
 
+/* Some systems have time.h */
+#undef RUDIMENTS_HAVE_TIME_H
+
 /* Some systems have tlhelp32.h */
 #undef RUDIMENTS_HAVE_TLHELP32_H
 

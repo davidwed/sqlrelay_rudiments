@@ -14,6 +14,10 @@
 	// for mingw32
 	#include <pthread.h>
 #elif !defined(RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H)
+	#ifdef RUDIMENTS_HAVE_TIME_H
+		// some systems define time_t in time.h
+		#include <time.h>
+	#endif
 	struct timespec {
 		time_t	tv_sec;
 		long	tv_nsec;

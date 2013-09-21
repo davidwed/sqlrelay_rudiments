@@ -93,8 +93,8 @@ xmldomnode::~xmldomnode() {
 		pvt->_dom->unCacheString(pvt->_nodename);
 		pvt->_dom->unCacheString(pvt->_nodevalue);
 	} else {
-		delete[] pvt->_nodename;
-		delete[] pvt->_nodevalue;
+		delete[] (char *)pvt->_nodename;
+		delete[] (char *)pvt->_nodevalue;
 	}
 	delete pvt;
 }
@@ -732,7 +732,7 @@ void xmldomnode::setName(const char *name) {
 		pvt->_dom->unCacheString(pvt->_nodename);
 		pvt->_nodename=pvt->_dom->cacheString(name);
 	} else {
-		delete[] pvt->_nodename;
+		delete[] (char *)pvt->_nodename;
 		pvt->_nodename=charstring::duplicate(name);
 	}
 }
@@ -742,7 +742,7 @@ void xmldomnode::setValue(const char *value) {
 		pvt->_dom->unCacheString(pvt->_nodevalue);
 		pvt->_nodevalue=pvt->_dom->cacheString(value);
 	} else {
-		delete[] pvt->_nodevalue;
+		delete[] (char *)pvt->_nodevalue;
 		pvt->_nodevalue=charstring::duplicate(value);
 	}
 }
@@ -840,7 +840,7 @@ stringbuffer *xmldomnode::getPath() const {
 	// Path: /element[index]/...
 
 	// run up the tree, counting parent nodes
-	uint64_t	ancestors=0;
+	int64_t			ancestors=0;
 	const xmldomnode	*node=this;
 	while (!node->isNullNode() && node->getType()!=ROOT_XMLDOMNODETYPE) {
 		ancestors++;
@@ -850,8 +850,9 @@ stringbuffer *xmldomnode::getPath() const {
 	// create pointers to the names of each parent node
 	const char	**names=new const char *[ancestors];
 	uint64_t	*indices=new uint64_t[ancestors];
+	int64_t		index;
 	node=this;
-	for (uint64_t index=ancestors-1; index>=0; index--) {
+	for (index=ancestors-1; index>=0; index--) {
 
 		// get the name
 		names[index]=node->getName();
@@ -873,7 +874,7 @@ stringbuffer *xmldomnode::getPath() const {
 	// run through the list of parent node names and indices,
 	// append them all to the path
 	stringbuffer	*path=new stringbuffer();
-	for (uint64_t index=0; index<ancestors; index++) {
+	for (index=0; index<ancestors; index++) {
 		path->append('/')->append(names[index]);
 		path->append('[')->append(indices[index])->append(']');
 	}
