@@ -33,13 +33,14 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Individually...\n");
 	stdoutput.printf("	Name: %s\n",he.getName());
 	stdoutput.printf("	Alias list:\n");
-	for (int i=0; he.getAliasList()[i]; i++) {
+	int	i;
+	for (i=0; he.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",he.getAliasList()[i]);
 	}
 	stdoutput.printf("	Address type: %d\n",he.getAddressType());
 	stdoutput.printf("	Address length: %d\n",he.getAddressLength());
 	stdoutput.printf("	Address list:\n");
-	for (int i=0; he.getAddressList()[i]; i++) {
+	for (i=0; he.getAddressList()[i]; i++) {
 		char	*addr=getAddressString(he.getAddressLength(),
 						he.getAddressList()[i]);
 		stdoutput.printf("		%s\n",addr);
@@ -62,13 +63,13 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Individually...\n");
 	stdoutput.printf("	Name: %s\n",he.getName());
 	stdoutput.printf("	Alias list:\n");
-	for (int i=0; he.getAliasList()[i]; i++) {
+	for (i=0; he.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",he.getAliasList()[i]);
 	}
 	stdoutput.printf("	Address type: %d\n",he.getAddressType());
 	stdoutput.printf("	Address length: %d\n",he.getAddressLength());
 	stdoutput.printf("	Address list:\n");
-	for (int i=0; he.getAddressList()[i]; i++) {
+	for (i=0; he.getAddressList()[i]; i++) {
 		char	*addr=getAddressString(he.getAddressLength(),
 						he.getAddressList()[i]);
 		stdoutput.printf("		%s\n",addr);

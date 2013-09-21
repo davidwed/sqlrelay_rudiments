@@ -17,7 +17,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Password:	%s\n",grent.getPassword());
 	stdoutput.printf("	Group Id:	%d\n",grent.getGroupId());
 	stdoutput.printf("	Members:\n");
-	for (int i=0; grent.getMembers()[i]; i++) {
+	int i;
+	for (i=0; grent.getMembers()[i]; i++) {
 		stdoutput.printf("		%s\n",grent.getMembers()[i]);
 	}
 	stdoutput.printf("\n");
@@ -38,7 +39,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Password:	%s\n",grent.getPassword());
 	stdoutput.printf("	Group Id:	%d\n",grent.getGroupId());
 	stdoutput.printf("	Members:\n");
-	for (int i=0; grent.getMembers()[i]; i++) {
+	for (i=0; grent.getMembers()[i]; i++) {
 		stdoutput.printf("		%s\n",grent.getMembers()[i]);
 	}
 	stdoutput.printf("\n");
