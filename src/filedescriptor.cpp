@@ -15,10 +15,6 @@
 #define debugSafePrint(string) if (this!=&stdoutput) { stdoutput.safePrint(string); }
 #endif
 
-// libc4 linux needs _POSIX_SOURCE or the
-// LITTLE_ENDIAN macro gets redefined several times
-#define _POSIX_SOURCE
-
 #include <rudiments/filedescriptor.h>
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
@@ -62,12 +58,19 @@
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
-#ifdef RUDIMENTS_HAVE_NETINET_IN_H
-	#include <netinet/in.h>
-#endif
+
+
+// NOTE: These next two headers must be included in this order or LITTLE_ENDIAN
+// will be multiply-defined on linux libc4 systems.  Other systems are
+// unaffected.
 #ifdef RUDIMENTS_HAVE_NETINET_TCP_H
 	#include <netinet/tcp.h>
 #endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+
+
 #ifdef RUDIMENTS_HAVE_SYS_UIO_H
 	#include <sys/uio.h>
 #endif
