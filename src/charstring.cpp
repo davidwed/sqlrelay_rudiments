@@ -1623,12 +1623,42 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	return result;
 }
 
+#ifndef RUDIMENTS_HAVE_VSNPRINTF
+static ssize_t vsnprintf(char *buffer, size_t length,
+				const char *format, va_list *argp) {
+
+	// figure out a safe buffer size
+	size_t	safebuffersize=1024;
+	char	*safebuffer=new char[safebuffersize];
+
+	// vsprintf to safebuffer
+	ssize_t byteswritten=vsprintf(safebuffer,format,*argp);
+
+	// bail on error
+	if (byteswritten==-1) {
+		delete[] safebuffer;
+		return -1;
+	}
+
+	// figure out how many bytes we can copy back to "buffer"
+	// (the +1 is because vsprintf returns the number of bytes written
+	// minus the NULL terminator)
+	size_t	bytestocopy=((size_t)byteswritten+1<length)?
+					byteswritten+1:length;
+
+	// copy what we can back to "buffer"
+	charstring::copy(buffer,safebuffer,bytestocopy);
+
+	// clean up
+	delete[] safebuffer;
+
+	// return the number of bytes we would like to have copied
+	return byteswritten;
+}
+#endif
+
 ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, va_list *argp) {
-
-	#ifndef RUDIMENTS_HAVE_VSNPRINTF
-		#error no vsnprintf or anything like it
-	#endif
 
 	// vnsprintf should write whatever will fit into "buffer" and
 	// either return the number of bytes that were written or the
