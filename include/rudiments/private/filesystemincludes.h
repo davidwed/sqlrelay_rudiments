@@ -6,6 +6,7 @@
 
 
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS)
 	#include <sys/types.h>
 	#include <sys/vfs.h>

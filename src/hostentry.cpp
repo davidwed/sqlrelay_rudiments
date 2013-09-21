@@ -328,14 +328,15 @@ void hostentry::print() const {
 
 	stdoutput.printf("Name: %s\n",getName());
 	stdoutput.printf("Alias list:\n");
-	for (int32_t i=0; getAliasList()[i]; i++) {
+	int32_t	i;
+	for (i=0; getAliasList()[i]; i++) {
 		stdoutput.printf("	%s\n",getAliasList()[i]);
 	}
 	// some compilers complain without these casts
 	stdoutput.printf("Address type: %d\n",(int)getAddressType());
 	stdoutput.printf("Address length: %d\n",(int)getAddressLength());
 	stdoutput.printf("Address list:\n");
-	for (int32_t i=0; getAddressList()[i]; i++) {
+	for (i=0; getAddressList()[i]; i++) {
 		char	*addr=getAddressString(i);
 		stdoutput.printf("	%s\n",addr);
 		delete[] addr;
