@@ -51,7 +51,8 @@ int main(int argc, const char **argv) {
 
 
 	// append 1024 *'s to the buffer and display it's length and contents
-	for (int i=0; i<1024; i++) {
+	unsigned int	i;
+	for (i=0; i<1024; i++) {
 		str->append('*');
 	}
 	stdoutput.printf("length: %d\n%s\n",
@@ -73,7 +74,7 @@ int main(int argc, const char **argv) {
 	sb->append("12345");
 	sb->append("12345");
 	sb->append("12345");
-	for (unsigned int i=0; i<sb->getStringLength(); i++) {
+	for (i=0; i<sb->getStringLength(); i++) {
 		stdoutput.printf("%c",sb->getString()[i]);
 	}
 	stdoutput.printf("\n");
@@ -83,7 +84,7 @@ int main(int argc, const char **argv) {
 	// byte by byte (the first 5 bytes should be overwritten)
 	sb->setPosition(0);
 	sb->write("66666");
-	for (unsigned int i=0; i<sb->getStringLength(); i++) {
+	for (i=0; i<sb->getStringLength(); i++) {
 		stdoutput.printf("%c",sb->getString()[i]);
 	}
 	stdoutput.printf("\n");

@@ -10,7 +10,9 @@
 	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>
 	#endif
-	#include <regex.h>
+	extern "C" {
+		#include <regex.h>
+	}
 #else
 	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 		#include <sys/types.h>

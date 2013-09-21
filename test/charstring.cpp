@@ -18,8 +18,8 @@ int main(int argc, const char **argv) {
 	// set every byte in the string to NULL
 	charstring::zero(s,50);
 	bool	zeros=true;
-	for (int i=0; i<50; i++) {
-		if (s[i]!=0) {
+	for (int zi=0; zi<50; zi++) {
+		if (s[zi]!=0) {
 			zeros=false;
 		}
 	}
@@ -97,7 +97,8 @@ int main(int argc, const char **argv) {
 						&list,&listlength);
 	stdoutput.printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
 	stdoutput.printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
+	uint64_t	i;
+	for (i=0; i<listlength; i++) {
 		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -107,7 +108,7 @@ int main(int argc, const char **argv) {
 						&list,&listlength);
 	stdoutput.printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
 	stdoutput.printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
+	for (i=0; i<listlength; i++) {
 		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -117,7 +118,7 @@ int main(int argc, const char **argv) {
 						&list,&listlength);
 	stdoutput.printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
 	stdoutput.printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
+	for (i=0; i<listlength; i++) {
 		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -127,7 +128,7 @@ int main(int argc, const char **argv) {
 							&list,&listlength);
 	stdoutput.printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
 	stdoutput.printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
+	for (i=0; i<listlength; i++) {
 		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -136,7 +137,7 @@ int main(int argc, const char **argv) {
 	charstring::split("||||||||||","||",false,&list,&listlength);
 	stdoutput.printf("split(\"||||||||||\",\"||\")\n");
 	stdoutput.printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
+	for (i=0; i<listlength; i++) {
 		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
@@ -145,7 +146,7 @@ int main(int argc, const char **argv) {
 	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",false,&list,&listlength);
 	stdoutput.printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
 	stdoutput.printf("%lld items\n",listlength);
-	for (uint64_t i=0; i<listlength; i++) {
+	for (i=0; i<listlength; i++) {
 		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
