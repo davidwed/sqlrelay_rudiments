@@ -368,6 +368,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 
 bool filesystem::getType(const char *path, int64_t *type) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -382,6 +383,7 @@ bool filesystem::getType(const char *path, int64_t *type) {
 
 bool filesystem::getType(int32_t fd, int64_t *type) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -396,6 +398,7 @@ bool filesystem::getType(int32_t fd, int64_t *type) {
 
 int64_t filesystem::getType() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
@@ -409,6 +412,7 @@ int64_t filesystem::getType() const {
 
 bool filesystem::getBlockSize(const char *path, int64_t *size) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -430,6 +434,7 @@ bool filesystem::getBlockSize(const char *path, int64_t *size) {
 
 bool filesystem::getBlockSize(int32_t fd, int64_t *size) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -450,6 +455,7 @@ bool filesystem::getBlockSize(int32_t fd, int64_t *size) {
 
 int64_t filesystem::getBlockSize() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -470,6 +476,7 @@ int64_t filesystem::getBlockSize() const {
 bool filesystem::getOptimumTransferBlockSize(const char *path,
 						int64_t *size) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -490,6 +497,7 @@ bool filesystem::getOptimumTransferBlockSize(const char *path,
 
 bool filesystem::getOptimumTransferBlockSize(int32_t fd, int64_t *size) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -510,6 +518,7 @@ bool filesystem::getOptimumTransferBlockSize(int32_t fd, int64_t *size) {
 
 int64_t filesystem::getOptimumTransferBlockSize() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -529,6 +538,7 @@ int64_t filesystem::getOptimumTransferBlockSize() const {
 
 bool filesystem::getTotalBlocks(const char *path, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -547,6 +557,7 @@ bool filesystem::getTotalBlocks(const char *path, int64_t *blocks) {
 
 bool filesystem::getTotalBlocks(int32_t fd, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -565,6 +576,7 @@ bool filesystem::getTotalBlocks(int32_t fd, int64_t *blocks) {
 
 int64_t filesystem::getTotalBlocks() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -582,6 +594,7 @@ int64_t filesystem::getTotalBlocks() const {
 
 bool filesystem::getFreeBlocks(const char *path, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -600,6 +613,7 @@ bool filesystem::getFreeBlocks(const char *path, int64_t *blocks) {
 
 bool filesystem::getFreeBlocks(int32_t fd, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -618,6 +632,7 @@ bool filesystem::getFreeBlocks(int32_t fd, int64_t *blocks) {
 
 int64_t filesystem::getFreeBlocks() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -635,6 +650,7 @@ int64_t filesystem::getFreeBlocks() const {
 
 bool filesystem::getAvailableBlocks(const char *path, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -653,6 +669,7 @@ bool filesystem::getAvailableBlocks(const char *path, int64_t *blocks) {
 
 bool filesystem::getAvailableBlocks(int32_t fd, int64_t *blocks) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -671,6 +688,7 @@ bool filesystem::getAvailableBlocks(int32_t fd, int64_t *blocks) {
 
 int64_t filesystem::getAvailableBlocks() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -688,6 +706,7 @@ int64_t filesystem::getAvailableBlocks() const {
 
 bool filesystem::getTotalFileNodes(const char *path, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -706,6 +725,7 @@ bool filesystem::getTotalFileNodes(const char *path, int64_t *nodes) {
 
 bool filesystem::getTotalFileNodes(int32_t fd, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -724,6 +744,7 @@ bool filesystem::getTotalFileNodes(int32_t fd, int64_t *nodes) {
 
 int64_t filesystem::getTotalFileNodes() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -741,6 +762,7 @@ int64_t filesystem::getTotalFileNodes() const {
 
 bool filesystem::getFreeFileNodes(const char *path, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -759,6 +781,7 @@ bool filesystem::getFreeFileNodes(const char *path, int64_t *nodes) {
 
 bool filesystem::getFreeFileNodes(int32_t fd, int64_t *nodes) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -777,6 +800,7 @@ bool filesystem::getFreeFileNodes(int32_t fd, int64_t *nodes) {
 
 int64_t filesystem::getFreeFileNodes() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
@@ -865,6 +889,7 @@ int64_t filesystem::getFileSystemId() const {
 bool filesystem::getMaximumFileNameLength(const char *path,
 						int64_t *length) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	STATFS(path,length,f_namelen)
@@ -882,6 +907,7 @@ bool filesystem::getMaximumFileNameLength(const char *path,
 
 bool filesystem::getMaximumFileNameLength(int32_t fd, int64_t *length) {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	FSTATFS(fd,length,f_namelen)
@@ -899,6 +925,7 @@ bool filesystem::getMaximumFileNameLength(int32_t fd, int64_t *length) {
 
 int64_t filesystem::getMaximumFileNameLength() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_namelen;
@@ -1194,7 +1221,8 @@ bool filesystem::getTypeName(const char *path, const char **name) {
 	#ifdef RUDIMENTS_HAVE_STATVFS
 		CHARSTATFS(path,name,f_basetype)
 	#else
-		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
+		#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+			defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
 			struct statfs st;
 			int32_t	result;
 			do {
@@ -1224,7 +1252,8 @@ bool filesystem::getTypeName(int32_t fd, const char **name) {
 	#ifdef RUDIMENTS_HAVE_STATVFS
 		CHARFSTATFS(fd,name,f_basetype)
 	#else
-		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
+		#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+			defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
 			struct statfs st;
 			int32_t	result;
 			do {
@@ -1254,7 +1283,8 @@ const char *filesystem::getTypeName() const {
 	#ifdef RUDIMENTS_HAVE_STATVFS
 		return (const char *)pvt->_st.f_basetype;
 	#else
-		#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
+		#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+			defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
 			return filesystem::getFsTypeName(pvt->_st.f_type);
 		#else
 			return NULL;

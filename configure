@@ -19232,6 +19232,38 @@ $as_echo "#define RUDIMENTS_HAVE_SOME_KIND_OF_STATFS 1" >>confdefs.h
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/vfs.h>
+int
+main ()
+{
+/* linux libc4 style */
+struct statfs sfs;
+sfs.f_type=0;
+sfs.f_bsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_namelen=0;
+statfs("/",&sfs);
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_LINUX_LIBC4_STATFS 1" >>confdefs.h
+
+$as_echo "#define RUDIMENTS_HAVE_SOME_KIND_OF_STATFS 1" >>confdefs.h
+ STATFS_STYLE="linux libc4 style"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 if ( test "$STATFS_STYLE" = "unknown" )
 then
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

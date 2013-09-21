@@ -1649,6 +1649,7 @@ STATFS_STYLE="unknown"
 
 AC_MSG_CHECKING(for statfs/statvfs)
 
+dnl linux style
 AC_TRY_COMPILE([#include <sys/vfs.h>],
 [/* linux style */
 struct statfs sfs;
@@ -1663,6 +1664,22 @@ sfs.f_fsid.__val[0]=0;
 sfs.f_namelen=0;
 statfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_LINUX_STATFS,1,Linux style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="linux style")
+
+dnl linux libc4 is like linux but f_fsid has val rather than __val members
+AC_TRY_COMPILE([#include <sys/vfs.h>],
+[/* linux libc4 style */
+struct statfs sfs;
+sfs.f_type=0;
+sfs.f_bsize=0;
+sfs.f_blocks=0;
+sfs.f_bfree=0;
+sfs.f_bavail=0;
+sfs.f_files=0;
+sfs.f_ffree=0;
+sfs.f_fsid.val[0]=0;
+sfs.f_namelen=0;
+statfs("/",&sfs);]
+,AC_DEFINE(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS,1,Linux libc4 style statfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS,1,some type of statfs) STATFS_STYLE="linux libc4 style")
 
 dnl cygwin is like linux but f_fsid is just a long
 if ( test "$STATFS_STYLE" = "unknown" )

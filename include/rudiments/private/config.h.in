@@ -496,6 +496,9 @@
 /* Some systems have link */
 #undef RUDIMENTS_HAVE_LINK
 
+/* Linux libc4 style statfs */
+#undef RUDIMENTS_HAVE_LINUX_LIBC4_STATFS
+
 /* Some systems have linux/reboot.h */
 #undef RUDIMENTS_HAVE_LINUX_REBOOT_H
 
