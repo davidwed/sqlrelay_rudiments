@@ -2586,9 +2586,9 @@ getpgid(0),AC_DEFINE(RUDIMENTS_HAVE_GETPGID,1,Some systems have getpgid) AC_MSG_
 if ( test "$HAVE_GETPGID" = "yes" )
 then
 	dnl Some linux libc4 systems require -lg (debug library) to provide getpgid when compiling a .cpp file all the way down to an excutable, the -g flag masks this requirement.  Remove -g[3] from the CXXFLAGS and attempt link without -lg and then with it
-	AC_MSG_CHECKING(for whether -lg is required for getpgid)
 	OLDCXXFLAGS=$CXXFLAGS
-	CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g ||g' -e 's|-g3 ||g'`"
+	CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g3 ||g' -e 's|-g ||g' -e 's|-g3\$||' -e 's|-g\$||'`"
+	AC_MSG_CHECKING(for whether -lg is required for getpgid)
 	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
