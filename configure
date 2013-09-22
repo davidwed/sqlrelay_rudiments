@@ -27970,7 +27970,7 @@ then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether -lg is required for getpgid" >&5
 $as_echo_n "checking for whether -lg is required for getpgid... " >&6; }
 	OLDCXXFLAGS=$CXXFLAGS
-	CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g||' -e 's|-g3||'`"
+	CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g ||g' -e 's|-g3 ||g'`"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H

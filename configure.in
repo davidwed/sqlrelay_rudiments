@@ -2588,7 +2588,7 @@ then
 	dnl Some linux libc4 systems require -lg (debug library) to provide getpgid when compiling a .cpp file all the way down to an excutable, the -g flag masks this requirement.  Remove -g[3] from the CXXFLAGS and attempt link without -lg and then with it
 	AC_MSG_CHECKING(for whether -lg is required for getpgid)
 	OLDCXXFLAGS=$CXXFLAGS
-	CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g||' -e 's|-g3||'`"
+	CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g ||g' -e 's|-g3 ||g'`"
 	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
