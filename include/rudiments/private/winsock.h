@@ -22,9 +22,9 @@ class winsock {
 		static	void	shutDownWinsock();
 	private:
 		#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-			static	bool	_initialized;
-			static	mutex	_winsockmutex;
-			static	WSADATA	_wsadata;
+			static	bool		_initialized;
+			static	threadmutex	_winsockmutex;
+			static	WSADATA		_wsadata;
 		#endif
 };
 

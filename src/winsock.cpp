@@ -4,9 +4,9 @@
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	mutex	winsock::_winsockmutex;
-	bool	winsock::_initialized=false;
-	WSADATA	winsock::_wsadata;
+	threadmutex	winsock::_winsockmutex;
+	bool		winsock::_initialized=false;
+	WSADATA		winsock::_wsadata;
 #endif
 
 bool winsock::initWinsock() {
