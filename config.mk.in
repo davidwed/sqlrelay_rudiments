@@ -94,8 +94,8 @@ GNULIB = @GNULIB@
 # crt library
 CRTLIB = @CRTLIB@
 
-# getpgid library
-GETPGIDLIB = @GETPGIDLIB@
+# debug library
+DEBUGLIB = @DEBUGLIB@
 
 # Microsoft-specific stuff
 EXE = @EXE@

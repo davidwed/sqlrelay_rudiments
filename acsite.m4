@@ -291,6 +291,12 @@ then
 		AC_MSG_RESULT(no)
 	fi
 	CXXFLAGS="$CXXFLAGS $DBG"
+
+	dnl Some systems (linux libc4) have a -lg which must be linked in or
+	dnl some symbols won't be resolved.
+	AC_MSG_CHECKING(for -lg)
+	FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[],[-lg],[],[AC_MSG_RESULT(yes); DEBUGLIB="-lg"],[AC_MSG_RESULT(no); DEBUGLIB=""])
+	AC_SUBST(DEBUGLIB)
 fi
 ])
 
