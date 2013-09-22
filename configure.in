@@ -316,6 +316,7 @@ echo "******************************"
 
 CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
+EXTRALIBS=""
 
 dnl Checks for libtool.
 echo
@@ -2579,6 +2580,26 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <unistd.h>
 #endif],
 getpgid(0),AC_DEFINE(RUDIMENTS_HAVE_GETPGID,1,Some systems have getpgid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+
+dnl Some linux libc4 systems require -lg (debug library) to provide getpgid
+dnl When compiling a .cpp file all the way down to an excutable, the -g flag
+dnl masks this requirement.  Remove -g[3] from the CXXFLAGS and attempt link
+dnl without -lg and then with it
+AC_MSG_CHECKING(for whether -lg is required for getpgid)
+OLDCXXFLAGS=$CXXFLAGS
+CXXFLAGS="`echo $CXXFLAGS | sed -e 's|-g||' -e 's|-g3||'`"
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+getpgid(0),GETPGIDLIB=""; AC_MSG_RESULT(no),GETPGIDLIB="-lg"; AC_MSG_RESULT(yes))
+dnl restore CXXFLAGS
+CXXFLAGS="$OLDCXXFLAGS"
+AC_SUBST(GETPGIDLIB)
+
 
 AC_MSG_CHECKING(for setpgid)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
