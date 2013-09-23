@@ -1,6 +1,9 @@
 if "%1"=="" goto all
+if "%1"=="64" goto all64
 if "%1"=="all" goto all
+if "%1"=="all64" goto all64
 if "%1"=="clr" goto clr
+if "%1"=="clr64" goto clr64
 if "%1"=="clean" goto clean
 if "%1"=="install" goto install
 if "%1"=="uninstall" goto uninstall
@@ -9,24 +12,42 @@ goto end
 
 :all
 cd msvc
-msbuild.exe /property:Configuration=Release
+msbuild.exe /property:Configuration=Release /property:Platform=Win32
+cd ..
+goto end
+
+
+:all64
+cd msvc
+msbuild.exe /property:Configuration=Release /property:Platform=x64
 cd ..
 goto end
 
 
 :clr
 cd msvc
-msbuild.exe /property:Configuration=ReleaseCLR
+msbuild.exe /property:Configuration=ReleaseCLR /property:Platform=Win32
+cd ..
+goto end
+
+
+:clr
+cd msvc
+msbuild.exe /property:Configuration=ReleaseCLR /property:Platform=x64
 cd ..
 goto end
 
 
 :clean
 cd msvc
-msbuild.exe /target:Clean /property:Configuration=Debug
-msbuild.exe /target:Clean /property:Configuration=DebugCLR
-msbuild.exe /target:Clean /property:Configuration=Release
-msbuild.exe /target:Clean /property:Configuration=ReleaseCLR
+msbuild.exe /target:Clean /property:Configuration=Debug /property:Platform=Win32
+msbuild.exe /target:Clean /property:Configuration=Debug /property:Platform=x64
+msbuild.exe /target:Clean /property:Configuration=DebugCLR /property:Platform=Win32
+msbuild.exe /target:Clean /property:Configuration=DebugCLR /property:Platform=x64
+msbuild.exe /target:Clean /property:Configuration=Release /property:Platform=Win32
+msbuild.exe /target:Clean /property:Configuration=Release /property:Platform=x64
+msbuild.exe /target:Clean /property:Configuration=ReleaseCLR /property:Platform=Win32
+msbuild.exe /target:Clean /property:Configuration=ReleaseCLR /property:Platform=x64
 cd ..
 goto end
 
@@ -40,6 +61,10 @@ copy msvc\Release\librudiments.dll c:\"Program Files"\Firstworks\bin
 copy msvc\Release\librudiments.lib c:\"Program Files"\Firstworks\lib
 copy msvc\ReleaseCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
 copy msvc\ReleaseCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\x64\Release\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\x64\Release\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\x64\ReleaseCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\x64\ReleaseCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
 copy include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
 copy include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private
