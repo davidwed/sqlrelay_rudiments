@@ -27,7 +27,7 @@
     <ClCompile Include="..\src\permissions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\clientsocket.cpp">
+    <ClCompile Include="..\src\socketclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\commandline.cpp">
@@ -63,7 +63,7 @@
     <ClCompile Include="..\src\hostentry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\inetclientsocket.cpp">
+    <ClCompile Include="..\src\inetsocketclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\listener.cpp">
@@ -99,7 +99,7 @@
     <ClCompile Include="..\src\system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\unixclientsocket.cpp">
+    <ClCompile Include="..\src\unixsocketclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\unixsocketutil.cpp">

@@ -9,8 +9,8 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 
 PROGS = server$(EXE) \
 	listener$(EXE) \
-	inetclientsocket$(EXE) \
-	unixclientsocket$(EXE) \
+	inetsocketclient$(EXE) \
+	unixsocketclient$(EXE) \
 	directory$(EXE) \
 	daemonprocess$(EXE) \
 	groupentry$(EXE) \
@@ -96,9 +96,9 @@ clean:
 		listener$(EXE) \
 		server$(EXE) \
 		sslsvr$(EXE) \
-		inetclientsocket$(EXE) \
+		inetsocketclient$(EXE) \
 		sslclnt$(EXE) \
-		unixclientsocket$(EXE) \
+		unixsocketclient$(EXE) \
 		directory$(EXE) \
 		daemonprocess$(EXE) \
 		groupentry$(EXE) \
@@ -190,14 +190,14 @@ sslsvr$(EXE): sslsvr.cpp sslsvr.lo
 listener$(EXE): listener.cpp listener.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ listener.lo $(ALLSTATIC) $(LIBS)
 
-inetclientsocket$(EXE): inetclientsocket.cpp inetclientsocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclientsocket.lo $(ALLSTATIC) $(LIBS)
+inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsocketclient.lo $(ALLSTATIC) $(LIBS)
 
 sslclnt$(EXE): sslclnt.cpp sslclnt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sslclnt.lo $(ALLSTATIC) $(LIBS)
 
-unixclientsocket$(EXE): unixclientsocket.cpp unixclientsocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclientsocket.lo $(ALLSTATIC) $(LIBS)
+unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketclient.lo $(ALLSTATIC) $(LIBS)
 
 directory$(EXE): directory.cpp directory.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ directory.lo $(ALLSTATIC) $(LIBS)

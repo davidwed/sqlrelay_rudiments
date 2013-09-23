@@ -13,7 +13,7 @@ PROGS = \
 	chat$(EXE) \
 	clientserverfactory$(EXE) \
 	commandline$(EXE) \
-	complexinetserversocket$(EXE) \
+	complexinetsocketserver$(EXE) \
 	crypt$(EXE) \
 	daemonprocess$(EXE) \
 	datetime$(EXE) \
@@ -27,8 +27,8 @@ PROGS = \
 	filesystem$(EXE) \
 	groupentry$(EXE) \
 	hostentry$(EXE) \
-	inetclientsocket$(EXE) \
-	inetserversocket$(EXE) \
+	inetsocketclient$(EXE) \
+	inetsocketserver$(EXE) \
 	intervaltimer$(EXE) \
 	linkedlist$(EXE) \
 	listener$(EXE) \
@@ -58,8 +58,8 @@ PROGS = \
 	snooze$(EXE) \
 	stringbuffer$(EXE) \
 	system$(EXE) \
-	unixclientsocket$(EXE) \
-	unixserversocket$(EXE) \
+	unixsocketclient$(EXE) \
+	unixsocketserver$(EXE) \
 	variablebuffer$(EXE) \
 	xmldom$(EXE) \
 	xmlsax$(EXE) \
@@ -91,8 +91,8 @@ clientserverfactory$(EXE): clientserverfactory.cpp clientserverfactory.lo
 commandline$(EXE): commandline.cpp commandline.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ commandline.lo $(LIBS)
 
-complexinetserversocket$(EXE): complexinetserversocket.cpp complexinetserversocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ complexinetserversocket.lo $(LIBS)
+complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserver.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ complexinetsocketserver.lo $(LIBS)
 
 crypt$(EXE): crypt.cpp crypt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ crypt.lo $(LIBS)
@@ -130,11 +130,11 @@ groupentry$(EXE): groupentry.cpp groupentry.lo
 hostentry$(EXE): hostentry.cpp hostentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ hostentry.lo $(LIBS)
 
-inetclientsocket$(EXE): inetclientsocket.cpp inetclientsocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ inetclientsocket.lo $(LIBS)
+inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsocketclient.lo $(LIBS)
 
-inetserversocket$(EXE): inetserversocket.cpp inetserversocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ inetserversocket.lo $(LIBS)
+inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsocketserver.lo $(LIBS)
 
 intervaltimer$(EXE): intervaltimer.cpp intervaltimer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ intervaltimer.lo $(LIBS)
@@ -223,11 +223,11 @@ stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo
 system$(EXE): system.cpp system.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(LIBS)
 
-unixclientsocket$(EXE): unixclientsocket.cpp unixclientsocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ unixclientsocket.lo $(LIBS)
+unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketclient.lo $(LIBS)
 
-unixserversocket$(EXE): unixserversocket.cpp unixserversocket.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ unixserversocket.lo $(LIBS)
+unixsocketserver$(EXE): unixsocketserver.cpp unixsocketserver.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketserver.lo $(LIBS)
 
 variablebuffer$(EXE): variablebuffer.cpp variablebuffer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ variablebuffer.lo $(LIBS)
