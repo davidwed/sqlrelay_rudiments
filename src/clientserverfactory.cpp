@@ -2,9 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/clientserverfactory.h>
-#include <rudiments/inetserversocket.h>
+#include <rudiments/inetsocketserver.h>
 #include <rudiments/inetsocketclient.h>
-#include <rudiments/unixserversocket.h>
+#include <rudiments/unixsocketserver.h>
 #include <rudiments/unixsocketclient.h>
 #include <rudiments/modemclient.h>
 #include <rudiments/modemserver.h>
@@ -13,13 +13,13 @@
 server *clientserverfactory::getServer(const char *type) {
 	if (!charstring::compare(type,"inet")) {
 		#ifdef INCLUDE_INETSERVER
-			return new inetserversocket();
+			return new inetsocketserver();
 		#else
 			return NULL;
 		#endif
 	} else if (!charstring::compare(type,"unix")) {
 		#ifdef INCLUDE_UNIXSERVER
-			return new unixserversocket();
+			return new unixsocketserver();
 		#else
 			return NULL;
 		#endif

@@ -29202,10 +29202,10 @@ fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" )
 then
-	HEADERS="$HEADERS inetserversocket.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS inetserversocket.h inetserversocketincludes.h"
-	SRCS="$SRCS inetserversocket.cpp"
-	LOBJS="$LOBJS inetserversocket.lo"
+	HEADERS="$HEADERS inetsocketserver.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetsocketserver.h inetsocketserverincludes.h"
+	SRCS="$SRCS inetsocketserver.cpp"
+	LOBJS="$LOBJS inetsocketserver.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETSERVER"
 fi
 
@@ -29468,10 +29468,10 @@ fi
 
 if ( test "$INCLUDE_UNIXSERVER" = "1" )
 then
-	HEADERS="$HEADERS unixserversocket.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS unixserversocket.h unixserversocketincludes.h"
-	SRCS="$SRCS unixserversocket.cpp"
-	LOBJS="$LOBJS unixserversocket.lo"
+	HEADERS="$HEADERS unixsocketserver.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixsocketserver.h unixsocketserverincludes.h"
+	SRCS="$SRCS unixsocketserver.cpp"
+	LOBJS="$LOBJS unixsocketserver.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXSERVER"
 fi
 
@@ -29525,10 +29525,10 @@ fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
 then
-	HEADERS="$HEADERS serversocket.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS serversocket.h serversocketincludes.h"
-	SRCS="$SRCS serversocket.cpp"
-	LOBJS="$LOBJS serversocket.lo"
+	HEADERS="$HEADERS socketserver.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS socketserver.h socketserverincludes.h"
+	SRCS="$SRCS socketserver.cpp"
+	LOBJS="$LOBJS socketserver.lo"
 fi
 
 if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )

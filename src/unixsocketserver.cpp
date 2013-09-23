@@ -1,7 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/unixserversocket.h>
+#include <rudiments/unixsocketserver.h>
 #include <rudiments/unixsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
@@ -11,39 +11,39 @@
 
 #include <rudiments/private/winsock.h>
 
-class unixserversocketprivate {
-	friend class unixserversocket;
+class unixsocketserverprivate {
+	friend class unixsocketserver;
 	private:
 		mode_t	_mask;
 };
 
-unixserversocket::unixserversocket() : serversocket(), unixsocketutil() {
-	pvt=new unixserversocketprivate;
+unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
+	pvt=new unixsocketserverprivate;
 	pvt->_mask=0;
-	type("unixserversocket");
+	type("unixsocketserver");
 }
 
-unixserversocket::unixserversocket(const unixserversocket &u) :
-				serversocket(u), unixsocketutil(u) {
-	pvt=new unixserversocketprivate;
+unixsocketserver::unixsocketserver(const unixsocketserver &u) :
+				socketserver(u), unixsocketutil(u) {
+	pvt=new unixsocketserverprivate;
 	pvt->_mask=u.pvt->_mask;
-	type("unixserversocket");
+	type("unixsocketserver");
 }
 
-unixserversocket &unixserversocket::operator=(const unixserversocket &u) {
+unixsocketserver &unixsocketserver::operator=(const unixsocketserver &u) {
 	if (this!=&u) {
-		serversocket::operator=(u);
+		socketserver::operator=(u);
 		unixsocketutil::operator=(u);
 		pvt->_mask=u.pvt->_mask;
 	}
 	return *this;
 }
 
-unixserversocket::~unixserversocket() {
+unixsocketserver::~unixsocketserver() {
 	delete pvt;
 }
 
-bool unixserversocket::initialize(const char *filename, mode_t mask) {
+bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
 #ifdef _WIN32
 
@@ -97,13 +97,13 @@ bool unixserversocket::initialize(const char *filename, mode_t mask) {
 #endif
 }
 
-bool unixserversocket::listen(const char *filename, mode_t mask,
+bool unixsocketserver::listen(const char *filename, mode_t mask,
 							int32_t backlog) {
 	initialize(filename,mask);
 	return (bind() && listen(backlog));
 }
 
-bool unixserversocket::bind() {
+bool unixsocketserver::bind() {
 
 	// set umask and store old umask
 	mode_t	oldmask=process::setFileCreationMask(pvt->_mask);
@@ -126,7 +126,7 @@ bool unixserversocket::bind() {
 	return retval;
 }
 
-bool unixserversocket::listen(int32_t backlog) {
+bool unixsocketserver::listen(int32_t backlog) {
 	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
@@ -134,7 +134,7 @@ bool unixserversocket::listen(int32_t backlog) {
 	return !result;
 }
 
-filedescriptor *unixserversocket::accept() {
+filedescriptor *unixsocketserver::accept() {
 
 	// initialize a socket address structure
 	sockaddr_un	clientsun;

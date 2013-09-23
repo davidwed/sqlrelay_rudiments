@@ -2,4 +2,4 @@
 // See the COPYING file for more information.
 
 	private:
-		unixserversocketprivate	*pvt;
+		unixsocketserverprivate	*pvt;

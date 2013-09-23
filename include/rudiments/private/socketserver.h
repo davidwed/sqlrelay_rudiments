@@ -14,4 +14,4 @@
 		bool	setLingerOnClose(int32_t timeout, int32_t onoff);
 		bool	setReuseAddresses(int32_t onoff);
 
-		serversocketprivate	*pvt;
+		socketserverprivate	*pvt;

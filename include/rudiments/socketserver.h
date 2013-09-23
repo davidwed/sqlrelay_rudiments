@@ -1,31 +1,31 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_SERVERSOCKET_H
-#define RUDIMENTS_SERVERSOCKET_H
+#ifndef RUDIMENTS_SOCKETSERVER_H
+#define RUDIMENTS_SOCKETSERVER_H
 
-#include <rudiments/private/serversocketincludes.h>
+#include <rudiments/private/socketserverincludes.h>
 
-class serversocketprivate;
+class socketserverprivate;
 
-/** The serversocket class provides a base class for classes that implement
+/** The socketserver class provides a base class for classes that implement
  *  the server side of a client-server communication model over a socket. */
-class RUDIMENTS_DLLSPEC serversocket : public server {
+class RUDIMENTS_DLLSPEC socketserver : public server {
 	public:
 
-		/** Creates an instance of the serversocket class. */
-		serversocket();
+		/** Creates an instance of the socketserver class. */
+		socketserver();
 
-		/** Creates an instance of the serversocket class
+		/** Creates an instance of the socketserver class
  		 *  that is a copy of "s". */
-		serversocket(const serversocket &s);
+		socketserver(const socketserver &s);
 
-		/** Makes this instance of the serversocket class
+		/** Makes this instance of the socketserver class
 		 *  identical to "s". */
-		serversocket	&operator=(const serversocket &s);
+		socketserver	&operator=(const socketserver &s);
 
-		/** Deletes this instance of the serversocket class. */
-		virtual		~serversocket();
+		/** Deletes this instance of the socketserver class. */
+		virtual		~socketserver();
 
 		/** Returns false if the system doesn't support
 		 *  blocking/nonblocking modes and true
@@ -92,7 +92,7 @@ class RUDIMENTS_DLLSPEC serversocket : public server {
 		 *  Returns true on success and false on failure. */
 		virtual	bool	listen(int32_t backlog);
 
-	#include <rudiments/private/serversocket.h>
+	#include <rudiments/private/socketserver.h>
 };
 
 #endif

@@ -1,7 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/serversocket.h>
+#include <rudiments/socketserver.h>
 #include <rudiments/error.h>
 
 #include <rudiments/private/winsock.h>
@@ -24,33 +24,33 @@
 	#include <unistd.h>
 #endif
 
-class serversocketprivate {
-	friend class serversocket;
+class socketserverprivate {
+	friend class socketserver;
 	private:
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		bool	_nonblockingmode;
 		#endif
 };
 
-serversocket::serversocket() : server() {
-	pvt=new serversocketprivate;
+socketserver::socketserver() : server() {
+	pvt=new socketserverprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 	pvt->_nonblockingmode=false;
 	#endif
-	type("serversocket");
+	type("socketserver");
 	winsock::initWinsock();
 }
 
-serversocket::serversocket(const serversocket &s) : server(s) {
-	pvt=new serversocketprivate;
+socketserver::socketserver(const socketserver &s) : server(s) {
+	pvt=new socketserverprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 	pvt->_nonblockingmode=s.pvt->_nonblockingmode;
 	#endif
-	type("serversocket");
+	type("socketserver");
 	winsock::initWinsock();
 }
 
-serversocket &serversocket::operator=(const serversocket &s) {
+socketserver &socketserver::operator=(const socketserver &s) {
 	if (this!=&s) {
 		server::operator=(s);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -60,11 +60,11 @@ serversocket &serversocket::operator=(const serversocket &s) {
 	return *this;
 }
 
-serversocket::~serversocket() {
+socketserver::~socketserver() {
 	delete pvt;
 }
 
-bool serversocket::supportsBlockingNonBlockingModes() {
+bool socketserver::supportsBlockingNonBlockingModes() {
 	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
@@ -72,7 +72,7 @@ bool serversocket::supportsBlockingNonBlockingModes() {
 	#endif
 }
 
-bool serversocket::useNonBlockingMode() const {
+bool socketserver::useNonBlockingMode() const {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl, which is what the filedescriptor class does, but this doesn't
 	// work for sockets on all platforms.  If FIONBIO is defined, then use
@@ -91,7 +91,7 @@ bool serversocket::useNonBlockingMode() const {
 	#endif
 }
 
-bool serversocket::useBlockingMode() const {
+bool socketserver::useBlockingMode() const {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl, which is what the filedescriptor class does, but this doesn't
 	// work for sockets on all platforms.  If FIONBIO is defined, then use
@@ -110,7 +110,7 @@ bool serversocket::useBlockingMode() const {
 	#endif
 }
 
-bool serversocket::isUsingNonBlockingMode() const {
+bool socketserver::isUsingNonBlockingMode() const {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -124,7 +124,7 @@ bool serversocket::isUsingNonBlockingMode() const {
 	#endif
 }
 
-int32_t serversocket::ioCtl(int32_t cmd, void *arg) const {
+int32_t socketserver::ioCtl(int32_t cmd, void *arg) const {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
 		do {
@@ -137,23 +137,23 @@ int32_t serversocket::ioCtl(int32_t cmd, void *arg) const {
 	#endif
 }
 
-bool serversocket::lingerOnClose(int32_t timeout) {
+bool socketserver::lingerOnClose(int32_t timeout) {
 	return setLingerOnClose(timeout,1);
 }
 
-bool serversocket::dontLingerOnClose() {
+bool socketserver::dontLingerOnClose() {
 	return setLingerOnClose(0,0);
 }
 
-bool serversocket::reuseAddresses() {
+bool socketserver::reuseAddresses() {
 	return setReuseAddresses(1);
 }
 
-bool serversocket::dontReuseAddresses() {
+bool socketserver::dontReuseAddresses() {
 	return setReuseAddresses(0);
 }
 
-bool serversocket::setLingerOnClose(int32_t timeout, int32_t onoff) {
+bool socketserver::setLingerOnClose(int32_t timeout, int32_t onoff) {
 	#ifdef SO_LINGER
 		struct	linger	ling;
 		ling.l_onoff=onoff;
@@ -167,14 +167,14 @@ bool serversocket::setLingerOnClose(int32_t timeout, int32_t onoff) {
 	#endif
 }
 
-bool serversocket::setReuseAddresses(int32_t onoff) {
+bool socketserver::setReuseAddresses(int32_t onoff) {
 	int32_t	value=onoff;
 	return !setSockOpt(SOL_SOCKET,SO_REUSEADDR,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 					(socklen_t)sizeof(int));
 }
 
-bool serversocket::listen(int32_t backlog) {
+bool socketserver::listen(int32_t backlog) {
 	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
@@ -183,11 +183,11 @@ bool serversocket::listen(int32_t backlog) {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-void *serversocket::newSSLBIO() const {
+void *socketserver::newSSLBIO() const {
 	return (void *)BIO_new_socket(fd(),BIO_NOCLOSE);
 }
 
-bool serversocket::sslAccept(filedescriptor *sock) {
+bool socketserver::sslAccept(filedescriptor *sock) {
 	if (ctx()) {
 		sock->setSSLContext((SSL_CTX *)ctx());
 		if (!sock->initializeSSL()) {
@@ -202,7 +202,7 @@ bool serversocket::sslAccept(filedescriptor *sock) {
 }
 #endif
 
-ssize_t serversocket::lowLevelRead(void *buf, ssize_t count) const {
+ssize_t socketserver::lowLevelRead(void *buf, ssize_t count) const {
 	return ::recv(fd(),
 			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
 			buf,
@@ -212,7 +212,7 @@ ssize_t serversocket::lowLevelRead(void *buf, ssize_t count) const {
 			count,0);
 }
 
-ssize_t serversocket::lowLevelWrite(const void *buf, ssize_t count) const {
+ssize_t socketserver::lowLevelWrite(const void *buf, ssize_t count) const {
 	return ::send(fd(),
 			#ifdef RUDIMENTS_HAVE_SEND_WITH_VOID
 			buf,
@@ -222,7 +222,7 @@ ssize_t serversocket::lowLevelWrite(const void *buf, ssize_t count) const {
 			count,0);
 }
 
-int32_t serversocket::lowLevelClose() {
+int32_t socketserver::lowLevelClose() {
 	#if defined(RUDIMENTS_HAVE_CLOSESOCKET)
 		return closesocket(fd());
 	#elif defined(RUDIMENTS_HAVE__CLOSE)

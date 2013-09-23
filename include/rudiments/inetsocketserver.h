@@ -1,39 +1,39 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_INETSERVERSOCKET_H
-#define RUDIMENTS_INETSERVERSOCKET_H
+#ifndef RUDIMENTS_INETSOCKETSERVER_H
+#define RUDIMENTS_INETSOCKETSERVER_H
 
-#include <rudiments/private/inetserversocketincludes.h>
+#include <rudiments/private/inetsocketserverincludes.h>
 
-class inetserversocketprivate;
+class inetsocketserverprivate;
 
-/** The inetserversocket class allows you to write programs that can talk to
+/** The inetsocketserver class allows you to write programs that can talk to
  *  other programs across a network over TCP stream sockets.
  * 
- *  The inetserversocket class provides methods for setting up sockets and
+ *  The inetsocketserver class provides methods for setting up sockets and
  *  accepting client connections.  Its ultimate parent class, filedescriptor,
  *  provides methods for reading and writing data and closing connections.
  * 
  *  If you need to listen on more than one socket at a time or a combination
  *  of sockets and other file descriptors, then you should use the
- *  inetserversocket class in conjunction with the listener class. */
-class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsocketutil {
+ *  inetsocketserver class in conjunction with the listener class. */
+class RUDIMENTS_DLLSPEC inetsocketserver : public socketserver, private inetsocketutil {
 	public:
 
-		/** Creates an instance of the inetserversocket class. */
-		inetserversocket();
+		/** Creates an instance of the inetsocketserver class. */
+		inetsocketserver();
 
-		/** Creates an instance of the inetserversocket class
+		/** Creates an instance of the inetsocketserver class
 		 *  that is a copy of "i". */
-		inetserversocket(const inetserversocket &i);
+		inetsocketserver(const inetsocketserver &i);
 
-		/** Makes this instance of the inetserversocket class
+		/** Makes this instance of the inetsocketserver class
 		 *  identical to "i". */
-		inetserversocket	&operator=(const inetserversocket &i);
+		inetsocketserver	&operator=(const inetsocketserver &i);
 
-		/** Deletes this instance of the inetserversocket class. */
-		virtual		~inetserversocket();
+		/** Deletes this instance of the inetsocketserver class. */
+		virtual		~inetsocketserver();
 
 		/** Convenience method that calls initialize(),
 		 *  reuseAddresses(), bind() and listen().  If you need to set
@@ -91,7 +91,7 @@ class RUDIMENTS_DLLSPEC inetserversocket : public serversocket, private inetsock
 		 *  to "buffer". */
 		uint16_t	getPort();
 
-	#include <rudiments/private/inetserversocket.h>
+	#include <rudiments/private/inetsocketserver.h>
 };
 
 #endif

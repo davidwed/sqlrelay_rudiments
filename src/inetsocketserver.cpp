@@ -1,7 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/inetserversocket.h>
+#include <rudiments/inetsocketserver.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
@@ -20,47 +20,47 @@
 typedef unsigned long	in_addr_t;
 #endif
 
-class inetserversocketprivate {
-	friend class inetserversocket;
+class inetsocketserverprivate {
+	friend class inetsocketserver;
 	private:
 };
 
-inetserversocket::inetserversocket() : serversocket(), inetsocketutil() {
-	pvt=new inetserversocketprivate;
+inetsocketserver::inetsocketserver() : socketserver(), inetsocketutil() {
+	pvt=new inetsocketserverprivate;
 	translateByteOrder();
-	type("inetserversocket");
+	type("inetsocketserver");
 }
 
-inetserversocket::inetserversocket(const inetserversocket &i) :
-					serversocket(i), inetsocketutil(i) {
-	pvt=new inetserversocketprivate;
-	type("inetserversocket");
+inetsocketserver::inetsocketserver(const inetsocketserver &i) :
+					socketserver(i), inetsocketutil(i) {
+	pvt=new inetsocketserverprivate;
+	type("inetsocketserver");
 }
 
-inetserversocket &inetserversocket::operator=(const inetserversocket &i) {
+inetsocketserver &inetsocketserver::operator=(const inetsocketserver &i) {
 	if (this!=&i) {
-		serversocket::operator=(i);
+		socketserver::operator=(i);
 		inetsocketutil::operator=(i);
 	}
 	return *this;
 }
 
-inetserversocket::~inetserversocket() {
+inetsocketserver::~inetsocketserver() {
 	delete pvt;
 }
 
-uint16_t inetserversocket::getPort() {
+uint16_t inetsocketserver::getPort() {
 	return *_port();
 }
 
-bool inetserversocket::listen(const char *address, uint16_t port,
+bool inetsocketserver::listen(const char *address, uint16_t port,
 							int32_t backlog) {
 	initialize(address,port);
 	reuseAddresses();
 	return (bind() && listen(backlog));
 }
 
-bool inetserversocket::initialize(const char *address, uint16_t port) {
+bool inetsocketserver::initialize(const char *address, uint16_t port) {
 
 	inetsocketutil::initialize(address,port);
 
@@ -118,7 +118,7 @@ bool inetserversocket::initialize(const char *address, uint16_t port) {
 	return true;
 }
 
-bool inetserversocket::bind() {
+bool inetsocketserver::bind() {
 
 	// bind the socket
 	int32_t	result;
@@ -153,7 +153,7 @@ bool inetserversocket::bind() {
 	return true;
 }
 
-bool inetserversocket::listen(int32_t backlog) {
+bool inetsocketserver::listen(int32_t backlog) {
 	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
@@ -161,7 +161,7 @@ bool inetserversocket::listen(int32_t backlog) {
 	return !result;
 }
 
-filedescriptor *inetserversocket::accept() {
+filedescriptor *inetsocketserver::accept() {
 
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
