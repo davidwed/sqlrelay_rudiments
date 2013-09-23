@@ -1,31 +1,31 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_CLIENTSOCKET_H
-#define RUDIMENTS_CLIENTSOCKET_H
+#ifndef RUDIMENTS_SOCKETCLIENT_H
+#define RUDIMENTS_SOCKETCLIENT_H
 
-#include <rudiments/private/clientsocketincludes.h>
+#include <rudiments/private/socketclientincludes.h>
 
-class clientsocketprivate;
+class socketclientprivate;
 
-/** The clientsocket class provides a base class for classes that implement
+/** The socketclient class provides a base class for classes that implement
  *  the client side of a client-server communication model over a socket. */
-class RUDIMENTS_DLLSPEC clientsocket : public client {
+class RUDIMENTS_DLLSPEC socketclient : public client {
 	public:
 
-		/** Creates an instance of the clientsocket class. */
-		clientsocket();
+		/** Creates an instance of the socketclient class. */
+		socketclient();
 
-		/** Creates an instance of the clientsocket class
+		/** Creates an instance of the socketclient class
 		 *  that is a copy of "c". */
-		clientsocket(const clientsocket &c);
+		socketclient(const socketclient &c);
 
-		/** Makes this instance of the clientsocket class
+		/** Makes this instance of the socketclient class
 		 *  idenitcal to "c". */
-		clientsocket	&operator=(const clientsocket &c);
+		socketclient	&operator=(const socketclient &c);
 
-		/** Deletes this instance of the clientsocket class. */
-		virtual	~clientsocket();
+		/** Deletes this instance of the socketclient class. */
+		virtual	~socketclient();
 
 		/** Returns true if the client socket supports
 		 *  blocking/nonblocking modes and false otherwise. */
@@ -49,7 +49,7 @@ class RUDIMENTS_DLLSPEC clientsocket : public client {
 		 *  file descriptor operations. */
 		virtual int32_t	ioCtl(int32_t command, void *arg) const;
 
-	#include <rudiments/private/clientsocket.h>
+	#include <rudiments/private/socketclient.h>
 };
 
 #endif

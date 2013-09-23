@@ -14,7 +14,7 @@ class inetclientsocketprivate;
  *  The inetclientsocket class provides methods for connecting to servers.
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
  *  writing data and closing connections. */
-class RUDIMENTS_DLLSPEC inetclientsocket : public clientsocket, private inetsocketutil  {
+class RUDIMENTS_DLLSPEC inetclientsocket : public socketclient, private inetsocketutil  {
 	public:
 
 		/** Creates an instance of the inetclientsocket class. */

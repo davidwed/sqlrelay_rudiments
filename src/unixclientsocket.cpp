@@ -13,20 +13,20 @@ class unixclientsocketprivate {
 	private:
 };
 
-unixclientsocket::unixclientsocket() : clientsocket(), unixsocketutil() {
+unixclientsocket::unixclientsocket() : socketclient(), unixsocketutil() {
 	pvt=new unixclientsocketprivate;
 	type("unixclientsocket");
 }
 
 unixclientsocket::unixclientsocket(const unixclientsocket &u) :
-					clientsocket(u), unixsocketutil(u) {
+					socketclient(u), unixsocketutil(u) {
 	pvt=new unixclientsocketprivate;
 	type("unixclientsocket");
 }
 
 unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
 	if (this!=&u) {
-		clientsocket::operator=(u);
+		socketclient::operator=(u);
 		unixsocketutil::operator=(u);
 	}
 	return *this;
@@ -132,7 +132,7 @@ int32_t unixclientsocket::connect() {
 		}
 
 		// attempt to connect
-		retval=clientsocket::connect(
+		retval=socketclient::connect(
 			reinterpret_cast<struct sockaddr *>(_sun()),
 			sizeof(sockaddr_un),
 			_timeoutsec(),_timeoutusec());

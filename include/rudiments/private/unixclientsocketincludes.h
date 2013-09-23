@@ -2,5 +2,5 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/dll.h>
-#include <rudiments/clientsocket.h>
+#include <rudiments/socketclient.h>
 #include <rudiments/unixsocketutil.h>

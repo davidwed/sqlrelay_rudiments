@@ -29533,10 +29533,10 @@ fi
 
 if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
 then
-	HEADERS="$HEADERS clientsocket.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS clientsocket.h clientsocketincludes.h"
-	SRCS="$SRCS clientsocket.cpp"
-	LOBJS="$LOBJS clientsocket.lo"
+	HEADERS="$HEADERS socketclient.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS socketclient.h socketclientincludes.h"
+	SRCS="$SRCS socketclient.cpp"
+	LOBJS="$LOBJS socketclient.lo"
 fi
 
 if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" -o "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )

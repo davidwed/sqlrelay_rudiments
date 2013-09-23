@@ -1,7 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/clientsocket.h>
+#include <rudiments/socketclient.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
@@ -32,33 +32,33 @@
 	#define EINPROGRESS	WSAEINPROGRESS
 #endif
 
-class clientsocketprivate {
-	friend class clientsocket;
+class socketclientprivate {
+	friend class socketclient;
 	private:
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		bool	_nonblockingmode;
 		#endif
 };
 
-clientsocket::clientsocket() : client() {
-	pvt=new clientsocketprivate;
+socketclient::socketclient() : client() {
+	pvt=new socketclientprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 	pvt->_nonblockingmode=false;
 	#endif
-	type("clientsocket");
+	type("socketclient");
 	winsock::initWinsock();
 }
 
-clientsocket::clientsocket(const clientsocket &c) : client(c) {
-	pvt=new clientsocketprivate;
+socketclient::socketclient(const socketclient &c) : client(c) {
+	pvt=new socketclientprivate;
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 	pvt->_nonblockingmode=c.pvt->_nonblockingmode;
 	#endif
-	type("clientsocket");
+	type("socketclient");
 	winsock::initWinsock();
 }
 
-clientsocket &clientsocket::operator=(const clientsocket &c) {
+socketclient &socketclient::operator=(const socketclient &c) {
 	if (this!=&c) {
 		client::operator=(c);
 		#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
@@ -68,11 +68,11 @@ clientsocket &clientsocket::operator=(const clientsocket &c) {
 	return *this;
 }
 
-clientsocket::~clientsocket() {
+socketclient::~socketclient() {
 	delete pvt;
 }
 
-bool clientsocket::supportsBlockingNonBlockingModes() {
+bool socketclient::supportsBlockingNonBlockingModes() {
 	#if defined(FIONBIO) && !defined(RUDIMENTS_DISABLE_FIONBIO)
 		return true;
 	#else
@@ -80,7 +80,7 @@ bool clientsocket::supportsBlockingNonBlockingModes() {
 	#endif
 }
 
-bool clientsocket::useNonBlockingMode() const {
+bool socketclient::useNonBlockingMode() const {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl, which is what the filedescriptor class does, but this doesn't
 	// work for sockets on all platforms.  If FIONBIO is defined, then use
@@ -99,7 +99,7 @@ bool clientsocket::useNonBlockingMode() const {
 	#endif
 }
 
-bool clientsocket::useBlockingMode() const {
+bool socketclient::useBlockingMode() const {
 	// The posix way of setting blocking/non-blocking mode is to use
 	// fcntl, which is what the filedescriptor class does, but this doesn't
 	// work for sockets on all platforms.  If FIONBIO is defined, then use
@@ -118,7 +118,7 @@ bool clientsocket::useBlockingMode() const {
 	#endif
 }
 
-bool clientsocket::isUsingNonBlockingMode() const {
+bool socketclient::isUsingNonBlockingMode() const {
 	// There is no way to determine the blocking mode using ioctl's and
 	// FIONBIO.  On posix platforms, independent of whether blocking mode
 	// was set using an ioctl or fcntl, you can use an fcntl to get the
@@ -132,7 +132,7 @@ bool clientsocket::isUsingNonBlockingMode() const {
 	#endif
 }
 
-int32_t clientsocket::ioCtl(int32_t cmd, void *arg) const {
+int32_t socketclient::ioCtl(int32_t cmd, void *arg) const {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
 		do {
@@ -146,12 +146,12 @@ int32_t clientsocket::ioCtl(int32_t cmd, void *arg) const {
 }
 
 #ifdef RUDIMENTS_HAS_SSL
-void *clientsocket::newSSLBIO() const {
+void *socketclient::newSSLBIO() const {
 	return (void *)BIO_new_socket(fd(),BIO_NOCLOSE);
 }
 #endif
 
-int32_t clientsocket::connect(const struct sockaddr *addr,
+int32_t socketclient::connect(const struct sockaddr *addr,
 						socklen_t addrlen,
 						int32_t sec, int32_t usec) {
 
@@ -434,7 +434,7 @@ wsacleanup:
 	return retval;
 }
 
-ssize_t clientsocket::lowLevelRead(void *buf, ssize_t count) const {
+ssize_t socketclient::lowLevelRead(void *buf, ssize_t count) const {
 	return ::recv(fd(),
 			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
 			buf,
@@ -444,7 +444,7 @@ ssize_t clientsocket::lowLevelRead(void *buf, ssize_t count) const {
 			count,0);
 }
 
-ssize_t clientsocket::lowLevelWrite(const void *buf, ssize_t count) const {
+ssize_t socketclient::lowLevelWrite(const void *buf, ssize_t count) const {
 	return ::send(fd(),
 			#ifdef RUDIMENTS_HAVE_SEND_WITH_VOID
 			buf,
@@ -454,7 +454,7 @@ ssize_t clientsocket::lowLevelWrite(const void *buf, ssize_t count) const {
 			count,0);
 }
 
-int32_t clientsocket::lowLevelClose() {
+int32_t socketclient::lowLevelClose() {
 	#if defined(RUDIMENTS_HAVE_CLOSESOCKET)
 		return closesocket(fd());
 	#elif defined(RUDIMENTS_HAVE__CLOSE)

@@ -172,7 +172,6 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\character.cpp" />
     <ClCompile Include="..\src\charstring.cpp" />
     <ClCompile Include="..\src\client.cpp" />
-    <ClCompile Include="..\src\clientsocket.cpp" />
     <ClCompile Include="..\src\codetree.cpp" />
     <ClCompile Include="..\src\commandline.cpp" />
     <ClCompile Include="..\src\datetime.cpp" />
@@ -199,6 +198,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\regex.cpp" />
     <ClCompile Include="..\src\regularexpression.cpp" />
     <ClCompile Include="..\src\snooze.cpp" />
+    <ClCompile Include="..\src\socketclient.cpp" />
     <ClCompile Include="..\src\stdio.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
     <ClCompile Include="..\src\sys.cpp" />

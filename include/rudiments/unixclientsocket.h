@@ -18,7 +18,8 @@ class unixclientsocketprivate;
  *  The unixclientsocket class provides methods for connecting to servers.
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
  *  writing data and closing connections. */
-class RUDIMENTS_DLLSPEC unixclientsocket : public clientsocket, private unixsocketutil {
+class RUDIMENTS_DLLSPEC unixclientsocket :
+			public socketclient, private unixsocketutil {
 	public:
 
 		/** Creates an instance of the unixclientsocket class. */

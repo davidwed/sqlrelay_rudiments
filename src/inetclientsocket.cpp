@@ -26,21 +26,21 @@ class inetclientsocketprivate {
 	private:
 };
 
-inetclientsocket::inetclientsocket() : clientsocket(), inetsocketutil() {
+inetclientsocket::inetclientsocket() : socketclient(), inetsocketutil() {
 	pvt=new inetclientsocketprivate;
 	translateByteOrder();
 	type("inetclientsocket");
 }
 
 inetclientsocket::inetclientsocket(const inetclientsocket &i) :
-					clientsocket(i), inetsocketutil(i) {
+					socketclient(i), inetsocketutil(i) {
 	pvt=new inetclientsocketprivate;
 	type("inetclientsocket");
 }
 
 inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
 	if (this!=&i) {
-		clientsocket::operator=(i);
+		socketclient::operator=(i);
 		inetsocketutil::operator=(i);
 	}
 	return *this;
@@ -208,7 +208,7 @@ int32_t inetclientsocket::connect() {
 					he.getAddressLength());
 	
 				// attempt to connect
-				retval=clientsocket::connect(
+				retval=socketclient::connect(
 					reinterpret_cast<struct sockaddr *>(
 									_sin()),
 					sizeof(sockaddr_in),
@@ -256,7 +256,7 @@ int32_t inetclientsocket::connect() {
 				}
 
 				// attempt to connect
-				retval=clientsocket::connect(
+				retval=socketclient::connect(
 					reinterpret_cast<struct sockaddr *>(
 								ainfo->ai_addr),
 						ainfo->ai_addrlen,

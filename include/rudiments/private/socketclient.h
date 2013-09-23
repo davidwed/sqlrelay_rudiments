@@ -11,4 +11,4 @@
 		ssize_t	lowLevelWrite(const void *buf, ssize_t count) const;
 		int32_t	lowLevelClose();
 
-		clientsocketprivate	*pvt;
+		socketclientprivate	*pvt;
