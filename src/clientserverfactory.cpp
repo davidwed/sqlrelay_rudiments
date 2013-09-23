@@ -3,9 +3,9 @@
 
 #include <rudiments/clientserverfactory.h>
 #include <rudiments/inetserversocket.h>
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/unixserversocket.h>
-#include <rudiments/unixclientsocket.h>
+#include <rudiments/unixsocketclient.h>
 #include <rudiments/modemclient.h>
 #include <rudiments/modemserver.h>
 #include <rudiments/charstring.h>
@@ -36,13 +36,13 @@ server *clientserverfactory::getServer(const char *type) {
 client *clientserverfactory::getClient(const char *type) {
 	if (!charstring::compare(type,"inet")) {
 		#ifdef INCLUDE_INETCLIENT
-			return new inetclientsocket();
+			return new inetsocketclient();
 		#else
 			return NULL;
 		#endif
 	} else if (!charstring::compare(type,"unix")) {
 		#ifdef INCLUDE_UNIXCLIENT
-			return new unixclientsocket();
+			return new unixsocketclient();
 		#else
 			return NULL;
 		#endif

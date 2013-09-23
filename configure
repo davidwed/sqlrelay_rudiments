@@ -29193,10 +29193,10 @@ fi
 
 if ( test "$INCLUDE_INETCLIENT" = "1" )
 then
-	HEADERS="$HEADERS inetclientsocket.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS inetclientsocket.h inetclientsocketincludes.h"
-	SRCS="$SRCS inetclientsocket.cpp"
-	LOBJS="$LOBJS inetclientsocket.lo"
+	HEADERS="$HEADERS inetsocketclient.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS inetsocketclient.h inetsocketclientincludes.h"
+	SRCS="$SRCS inetsocketclient.cpp"
+	LOBJS="$LOBJS inetsocketclient.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETCLIENT"
 fi
 
@@ -29459,10 +29459,10 @@ fi
 
 if ( test "$INCLUDE_UNIXCLIENT" = "1" )
 then
-	HEADERS="$HEADERS unixclientsocket.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS unixclientsocket.h unixclientsocketincludes.h"
-	SRCS="$SRCS unixclientsocket.cpp"
-	LOBJS="$LOBJS unixclientsocket.lo"
+	HEADERS="$HEADERS unixsocketclient.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS unixsocketclient.h unixsocketclientincludes.h"
+	SRCS="$SRCS unixsocketclient.cpp"
+	LOBJS="$LOBJS unixsocketclient.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXCLIENT"
 fi
 

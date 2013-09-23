@@ -184,7 +184,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\filesystem.cpp" />
     <ClCompile Include="..\src\groupentry.cpp" />
     <ClCompile Include="..\src\hostentry.cpp" />
-    <ClCompile Include="..\src\inetclientsocket.cpp" />
+    <ClCompile Include="..\src\inetsocketclient.cpp" />
     <ClCompile Include="..\src\inetsocketutil.cpp" />
     <ClCompile Include="..\src\listener.cpp" />
     <ClCompile Include="..\src\memorypool.cpp" />
@@ -203,7 +203,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\stringbuffer.cpp" />
     <ClCompile Include="..\src\sys.cpp" />
     <ClCompile Include="..\src\threadmutex.cpp" />
-    <ClCompile Include="..\src\unixclientsocket.cpp" />
+    <ClCompile Include="..\src\unixsocketclient.cpp" />
     <ClCompile Include="..\src\unixsocketutil.cpp" />
     <ClCompile Include="..\src\variablebuffer.cpp" />
     <ClCompile Include="..\src\winsock.cpp" />

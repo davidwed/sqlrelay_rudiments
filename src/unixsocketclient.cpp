@@ -1,30 +1,30 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/unixclientsocket.h>
+#include <rudiments/unixsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
 #include <rudiments/private/winsock.h>
 
-class unixclientsocketprivate {
-	friend class unixclientsocket;
+class unixsocketclientprivate {
+	friend class unixsocketclient;
 	private:
 };
 
-unixclientsocket::unixclientsocket() : socketclient(), unixsocketutil() {
-	pvt=new unixclientsocketprivate;
-	type("unixclientsocket");
+unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
+	pvt=new unixsocketclientprivate;
+	type("unixsocketclient");
 }
 
-unixclientsocket::unixclientsocket(const unixclientsocket &u) :
+unixsocketclient::unixsocketclient(const unixsocketclient &u) :
 					socketclient(u), unixsocketutil(u) {
-	pvt=new unixclientsocketprivate;
-	type("unixclientsocket");
+	pvt=new unixsocketclientprivate;
+	type("unixsocketclient");
 }
 
-unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
+unixsocketclient &unixsocketclient::operator=(const unixsocketclient &u) {
 	if (this!=&u) {
 		socketclient::operator=(u);
 		unixsocketutil::operator=(u);
@@ -32,11 +32,11 @@ unixclientsocket &unixclientsocket::operator=(const unixclientsocket &u) {
 	return *this;
 }
 
-unixclientsocket::~unixclientsocket() {
+unixsocketclient::~unixsocketclient() {
 	delete pvt;
 }
 
-int32_t unixclientsocket::connect(const char *filename,
+int32_t unixsocketclient::connect(const char *filename,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
@@ -45,7 +45,7 @@ int32_t unixclientsocket::connect(const char *filename,
 	return connect();
 }
 
-void unixclientsocket::initialize(const char *filename,
+void unixsocketclient::initialize(const char *filename,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
@@ -54,7 +54,7 @@ void unixclientsocket::initialize(const char *filename,
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
 }
 
-void unixclientsocket::initialize(constnamevaluepairs *cd) {
+void unixsocketclient::initialize(constnamevaluepairs *cd) {
 
 	if (cd) {
 		const char	*filename;
@@ -77,7 +77,7 @@ void unixclientsocket::initialize(constnamevaluepairs *cd) {
 	}
 }
 
-int32_t unixclientsocket::connect() {
+int32_t unixsocketclient::connect() {
 
 #ifdef _WIN32
 

@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/unixserversocket.h>
-#include <rudiments/unixclientsocket.h>
+#include <rudiments/unixsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/file.h>
@@ -153,7 +153,7 @@ filedescriptor *unixserversocket::accept() {
 		return NULL;
 	}
 
-	unixclientsocket	*returnsock=new unixclientsocket;
+	unixsocketclient	*returnsock=new unixsocketclient;
 	returnsock->setFileDescriptor(clientsock);
 
 	// set the client socket to the same blocking/non-blocking

@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetserversocket.h>
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
@@ -179,7 +179,7 @@ filedescriptor *inetserversocket::accept() {
 		return NULL;
 	}
 
-	inetclientsocket	*returnsock=new inetclientsocket;
+	inetsocketclient	*returnsock=new inetsocketclient;
 	returnsock->setFileDescriptor(clientsock);
 
 	// set the client socket to the same blocking/non-blocking

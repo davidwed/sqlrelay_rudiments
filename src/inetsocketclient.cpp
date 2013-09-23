@@ -1,7 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
 #include <rudiments/charstring.h>
@@ -21,24 +21,24 @@
 	#include <stdlib.h>
 #endif
 
-class inetclientsocketprivate {
-	friend class inetclientsocket;
+class inetsocketclientprivate {
+	friend class inetsocketclient;
 	private:
 };
 
-inetclientsocket::inetclientsocket() : socketclient(), inetsocketutil() {
-	pvt=new inetclientsocketprivate;
+inetsocketclient::inetsocketclient() : socketclient(), inetsocketutil() {
+	pvt=new inetsocketclientprivate;
 	translateByteOrder();
-	type("inetclientsocket");
+	type("inetsocketclient");
 }
 
-inetclientsocket::inetclientsocket(const inetclientsocket &i) :
+inetsocketclient::inetsocketclient(const inetsocketclient &i) :
 					socketclient(i), inetsocketutil(i) {
-	pvt=new inetclientsocketprivate;
-	type("inetclientsocket");
+	pvt=new inetsocketclientprivate;
+	type("inetsocketclient");
 }
 
-inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
+inetsocketclient &inetsocketclient::operator=(const inetsocketclient &i) {
 	if (this!=&i) {
 		socketclient::operator=(i);
 		inetsocketutil::operator=(i);
@@ -46,11 +46,11 @@ inetclientsocket &inetclientsocket::operator=(const inetclientsocket &i) {
 	return *this;
 }
 
-inetclientsocket::~inetclientsocket() {
+inetsocketclient::~inetsocketclient() {
 	delete pvt;
 }
 
-int32_t inetclientsocket::connect(const char *host,
+int32_t inetsocketclient::connect(const char *host,
 						uint16_t port,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
@@ -60,7 +60,7 @@ int32_t inetclientsocket::connect(const char *host,
 	return connect();
 }
 
-void inetclientsocket::initialize(const char *host,
+void inetsocketclient::initialize(const char *host,
 						uint16_t port,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
@@ -70,7 +70,7 @@ void inetclientsocket::initialize(const char *host,
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
 }
 
-void inetclientsocket::initialize(constnamevaluepairs *cd) {
+void inetsocketclient::initialize(constnamevaluepairs *cd) {
 
 	if (cd) {
 
@@ -97,7 +97,7 @@ void inetclientsocket::initialize(constnamevaluepairs *cd) {
 	}
 }
 
-int32_t inetclientsocket::connect() {
+int32_t inetsocketclient::connect() {
 
 	#ifndef RUDIMENTS_HAVE_GETADDRINFO
 

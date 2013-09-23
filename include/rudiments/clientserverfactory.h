@@ -14,8 +14,8 @@ class RUDIMENTS_DLLSPEC clientserverfactory {
 		 *  class as follows:
 		 *	
 		 *     type              class
-		 *  "inet"             inetclientsocket
-		 *  "unix"             unixclientsocket
+		 *  "inet"             inetsocketclient
+		 *  "unix"             unixsocketclient
 		 *  "modem"            modemclient
 		 *  anything else      NULL */
 		static client	*getClient(const char *type);
