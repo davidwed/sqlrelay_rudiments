@@ -1,35 +1,35 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_INETCLIENTSOCKET_H
-#define RUDIMENTS_INETCLIENTSOCKET_H
+#ifndef RUDIMENTS_INETSOCKETCLIENT_H
+#define RUDIMENTS_INETSOCKETCLIENT_H
 
-#include <rudiments/private/inetclientsocketincludes.h>
+#include <rudiments/private/inetsocketclientincludes.h>
 
-class inetclientsocketprivate;
+class inetsocketclientprivate;
 
-/** The inetclientsocket class allows you to write programs that can talk to
+/** The inetsocketclient class allows you to write programs that can talk to
  *  other programs across a network over TCP stream sockets.
  * 
- *  The inetclientsocket class provides methods for connecting to servers.
+ *  The inetsocketclient class provides methods for connecting to servers.
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
  *  writing data and closing connections. */
-class RUDIMENTS_DLLSPEC inetclientsocket : public socketclient, private inetsocketutil  {
+class RUDIMENTS_DLLSPEC inetsocketclient : public socketclient, private inetsocketutil  {
 	public:
 
-		/** Creates an instance of the inetclientsocket class. */
-		inetclientsocket();
+		/** Creates an instance of the inetsocketclient class. */
+		inetsocketclient();
 
-		/** Creates an instance of the inetclientsocket class
+		/** Creates an instance of the inetsocketclient class
 		 *  that is a copy of "i". */
-		inetclientsocket(const inetclientsocket &i);
+		inetsocketclient(const inetsocketclient &i);
 
-		/** Makes this instance of the inetclientsocket class
+		/** Makes this instance of the inetsocketclient class
 		 *  identical to "i". */
-		inetclientsocket	&operator=(const inetclientsocket &i);
+		inetsocketclient	&operator=(const inetsocketclient &i);
 
-		/** Deletes this instance of the inetclientsocket class. */
-		virtual		~inetclientsocket();
+		/** Deletes this instance of the inetsocketclient class. */
+		virtual		~inetsocketclient();
 
 		/** This convenience method calls the initialize() and
 		 *  connect() methods of the class.
@@ -95,7 +95,7 @@ class RUDIMENTS_DLLSPEC inetclientsocket : public socketclient, private inetsock
 		 *  and protocolentry.h for more detail. */
 		int32_t	connect();
 
-	#include <rudiments/private/inetclientsocket.h>
+	#include <rudiments/private/inetsocketclient.h>
 };
 
 #endif

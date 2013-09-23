@@ -20,7 +20,7 @@ class unixserversocketprivate;
  *  provides methods for reading and writing data and closing connections.
  *  An immediate parent class: unixsocket provides methods for passing file
  *  descriptors between connected instances of unixservertsocket's and
- *  unixclientsocket's.
+ *  unixsocketclient's.
  * 
  *  If you need to listen on more than 1 socket at a time, you should use the 
  *  unixserversocket class (and possibly the unixserversocket class) in
