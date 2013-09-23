@@ -1,7 +1,7 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/stdio.h>
 #include <time.h>
 
@@ -9,7 +9,7 @@ int main(int argc, const char **argv) {
 
 	unsigned short	port;
 	char	buffer[11];
-	inetclientsocket	clnt;
+	inetsocketclient	clnt;
 
 	time_t	starttime=time(NULL);
 

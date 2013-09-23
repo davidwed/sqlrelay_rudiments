@@ -2,8 +2,8 @@
 // See the file COPYING for more information
 
 #include <rudiments/listener.h>
-#include <rudiments/inetserversocket.h>
-#include <rudiments/unixserversocket.h>
+#include <rudiments/inetsocketserver.h>
+#include <rudiments/unixsocketserver.h>
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
 
@@ -11,14 +11,14 @@ int main(int argc, const char **argv) {
 
 
 	// listen on inet socket port 1800
-	inetserversocket	inetsock;
+	inetsocketserver	inetsock;
 	if (!inetsock.listen(NULL,8000,15)) {
 		stdoutput.printf("couldn't listen on inet socket\n");
 	}
 
 
 	// listen on unix socket "/tmp/lsnr.socket"
-	unixserversocket	unixsock;
+	unixsocketserver	unixsock;
 	if (!unixsock.listen("/tmp/lsnr.socket",0000,15)) {
 		stdoutput.printf("couldn't listen on unix socket\n");
 	}

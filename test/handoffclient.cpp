@@ -1,7 +1,7 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/snooze.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
@@ -11,7 +11,7 @@ int main(int argc, const char **argv) {
 
 	char			buffer[11];
 	int			sizeread;
-	inetclientsocket	clnt;
+	inetsocketclient	clnt;
 
 	time_t	starttime=time(NULL);
 

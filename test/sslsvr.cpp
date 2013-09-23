@@ -3,7 +3,7 @@
 
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
-#include <rudiments/inetserversocket.h>
+#include <rudiments/inetsocketserver.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/file.h>
@@ -22,9 +22,9 @@ int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	return charstring::length(buf);
 }
 
-class myserver : public daemonprocess, public inetserversocket {
+class myserver : public daemonprocess, public inetsocketserver {
 	public:
-			myserver() : daemonprocess(), inetserversocket() {}
+			myserver() : daemonprocess(), inetsocketserver() {}
 		void	listen();
 };
 
@@ -101,7 +101,7 @@ void myserver::listen() {
 	SSL_CTX_set_tmp_dh(ctx,dh);
 
 	// listen on inet socket port 8000
-	if (!inetserversocket::listen(NULL,8000,15)) {
+	if (!inetsocketserver::listen(NULL,8000,15)) {
 		stdoutput.printf("couldn't listen on port 8000\n");
 		process::exit(0);
 	}

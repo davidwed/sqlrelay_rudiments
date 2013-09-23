@@ -1,13 +1,13 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
 
 	// create an inet socket client
-	inetclientsocket	clnt;
+	inetsocketclient	clnt;
 
 	// connect to a server on localhost, listening on port 8000
 	clnt.connect("127.0.0.1",8000,-1,-1,1,0);

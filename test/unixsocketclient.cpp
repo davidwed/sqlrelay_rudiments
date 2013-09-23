@@ -1,7 +1,7 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/unixclientsocket.h>
+#include <rudiments/unixsocketclient.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
@@ -9,7 +9,7 @@
 int main(int argc, const char **argv) {
 
 	// create a unix socket client
-	unixclientsocket	clnt;
+	unixsocketclient	clnt;
 
 	// connect to a server listening on /tmp/lsnr.socket
 	if (clnt.connect("/tmp/lsnr.socket",-1,-1,1,1)<0) {

@@ -1,7 +1,7 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/inetclientsocket.h>
+#include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/process.h>
@@ -55,7 +55,7 @@ int main(int argc, const char **argv) {
 	#endif
 
 	// create an inet socket client
-	inetclientsocket	clnt;
+	inetsocketclient	clnt;
 	clnt.setSSLContext((void *)ctx);
 
 	// connect to a server on localhost, listening on port 8000

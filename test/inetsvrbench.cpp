@@ -3,7 +3,7 @@
 
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
-#include <rudiments/inetserversocket.h>
+#include <rudiments/inetsocketserver.h>
 #include <rudiments/charstring.h>
 #include <rudiments/file.h>
 #include <rudiments/process.h>
@@ -11,9 +11,9 @@
 
 uint32_t	buffersize;
 
-class myserver : public daemonprocess, public inetserversocket {
+class myserver : public daemonprocess, public inetsocketserver {
 	public:
-			myserver() : daemonprocess(), inetserversocket() {}
+			myserver() : daemonprocess(), inetsocketserver() {}
 		void	listen();
 };
 
@@ -38,7 +38,7 @@ void myserver::listen() {
 	createPidFile("/tmp/svr.pidfile",permissions::ownerReadWrite());
 
 	// listen on inet socket port 8000
-	if (!inetserversocket::listen(NULL,8000,15)) {
+	if (!inetsocketserver::listen(NULL,8000,15)) {
 		stdoutput.printf("couldn't listen on port 8000\n");
 	}
 

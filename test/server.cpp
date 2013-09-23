@@ -3,18 +3,18 @@
 
 #include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
-#include <rudiments/inetserversocket.h>
+#include <rudiments/inetsocketserver.h>
 #include <rudiments/file.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
-class myserver : public daemonprocess, public inetserversocket {
+class myserver : public daemonprocess, public inetsocketserver {
 	public:
 			myserver();
 		void	listen();
 };
 
-myserver::myserver() : daemonprocess(), inetserversocket() {
+myserver::myserver() : daemonprocess(), inetsocketserver() {
 }
 
 void myserver::listen() {
@@ -34,7 +34,7 @@ void myserver::listen() {
 
 
 	// listen on inet socket port 8000
-	if (!inetserversocket::listen(NULL,8000,15)) {
+	if (!inetsocketserver::listen(NULL,8000,15)) {
 		stdoutput.printf("couldn't listen on port 8000\n");
 	}
 
