@@ -1,4 +1,4 @@
-// Copyright (c) 2004 David Muse
+// Copyright (c) 1999-2013 David Muse
 // See the COPYING file for more information.
 
 #ifndef RUDIMENTS_PROCESS_H
@@ -193,6 +193,63 @@ class RUDIMENTS_DLLSPEC process {
 		  * calling any functions registered to run at exit) and sets
 		  * the exit status to "status". */
 		static void	exitImmediately(int32_t status);
+
+		/** Calls exitOnShutDown(), exitOnCrash() and
+		 *  waitForChildren() below. */
+		static	void	exitOnCrashOrShutDown();
+
+		/** Checks for filename "filename" and reads the
+		 *  process id out of it, if it exists.  Returns
+		 *  the process id on success or -1 on failure. */
+		static int64_t	checkForPidFile(const char *filename);
+
+		/** Create's file "filename" with permissions
+		 *  "permissions" and puts the current process
+		 *  id in it.  Note that when you delete this
+		 *  file during shutdown you must use the full
+		 *  pathname since the process::detach() method
+		 *  changes directories to "/".  Returns true on
+		 *  success and false on failure. */
+		static bool	createPidFile(const char *filename,
+						mode_t permissions);
+
+		/** Sets up a default handler that exits cleanly when the
+		 *  daemon is killed with SIGINT or SIGTERM signals.
+		 *  NOTE: The default handler calls waitForChildren() before
+		 *  exiting to prevent zombie processes. */
+		static void	exitOnShutDown();
+
+		/** Allows you to designate a function to run when the
+		 *  daemon is killed with SIGINT or SIGTERM signals. */
+		static	void	handleShutDown(
+					void (*shutdownfunction)(int32_t));
+
+		/** Sets up a default handler that exits cleanly if the
+		 *  daemon crashes with a SIGSEGV (segmentation fault)
+		 *  signal.
+		 *  NOTE: The default handler calls waitForChildren() before
+		 *  exiting to prevent zombie processes. */
+		static void	exitOnCrash();
+
+		/** Allows you to designate a function to run if the
+		 *  daemon crashes with a SIGSEGV (segmentation fault)
+		 *  signal. */
+		static	void	handleCrash(void (*crashfunction)(int32_t));
+
+		/** This method causes the daemon to wait on child processes
+		 *  which have exited, preventing so-called "zombie" processes
+		 *  from occurring. */
+		static	void	waitForChildren();
+
+		/** This method causes the daemon not to wait on child
+		 *  processes which have exited.  Ordinarily, you'd want to
+		 *  wait on child processes, but this interferes with the
+		 *  behavior of WEXITSTATUS() after a call to system() (and
+		 *  possibly other calls).  This method allows you to disable
+		 *  waiting on child processes. */
+		static	void	dontWaitForChildren();
+
+	#include <rudiments/private/process.h>
 };
 
 #endif

@@ -4,4 +4,6 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
+#include <rudiments/signalclasses.h>
+
 #include <sys/types.h>

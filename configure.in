@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/daemonprocess.cpp)
+AC_INIT(src/process.cpp)
 
 
 AC_ARG_ENABLE(small-code,
@@ -84,10 +84,6 @@ AC_ARG_ENABLE(crypt,
 	[  --disable-crypt         Don't build crypt class],
 	INCLUDE_CRYPT="0",
 	INCLUDE_CRYPT="1")
-AC_ARG_ENABLE(daemonprocess,
-	[  --disable-daemonprocess Don't build daemonprocess],
-	INCLUDE_DAEMONPROCESS="0",
-	INCLUDE_DAEMONPROCESS="1")
 AC_ARG_ENABLE(datetime,
 	[  --disable-datetime      Don't build datetime class],
 	INCLUDE_DATETIME="0",
@@ -2961,14 +2957,6 @@ then
 	PRIVATEHEADERS="$PRIVATEHEADERS cryptincludes.h"
 	SRCS="$SRCS crypt.cpp"
 	LOBJS="$LOBJS crypt.lo"
-fi
-
-if ( test "$INCLUDE_DAEMONPROCESS" = "1" )
-then
-	HEADERS="$HEADERS daemonprocess.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS daemonprocess.h daemonprocessincludes.h"
-	SRCS="$SRCS daemonprocess.cpp"
-	LOBJS="$LOBJS daemonprocess.lo"
 fi
 
 if ( test "$INCLUDE_DATETIME" = "1" )

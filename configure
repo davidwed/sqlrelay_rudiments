@@ -592,7 +592,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="src/daemonprocess.cpp"
+ac_unique_file="src/process.cpp"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -778,7 +778,6 @@ enable_chat
 enable_client
 enable_commandline
 enable_crypt
-enable_daemonprocess
 enable_datetime
 enable_device
 enable_directory
@@ -1475,7 +1474,6 @@ Optional Features:
   --disable-client        Don't build client class
   --disable-commandline   Don't build commandline class
   --disable-crypt         Don't build crypt class
-  --disable-daemonprocess Don't build daemonprocess
   --disable-datetime      Don't build datetime class
   --disable-device        Don't build device class
   --disable-directory     Don't build directory class
@@ -2574,13 +2572,6 @@ if test "${enable_crypt+set}" = set; then :
   enableval=$enable_crypt; INCLUDE_CRYPT="0"
 else
   INCLUDE_CRYPT="1"
-fi
-
-# Check whether --enable-daemonprocess was given.
-if test "${enable_daemonprocess+set}" = set; then :
-  enableval=$enable_daemonprocess; INCLUDE_DAEMONPROCESS="0"
-else
-  INCLUDE_DAEMONPROCESS="1"
 fi
 
 # Check whether --enable-datetime was given.
@@ -29085,14 +29076,6 @@ then
 	PRIVATEHEADERS="$PRIVATEHEADERS cryptincludes.h"
 	SRCS="$SRCS crypt.cpp"
 	LOBJS="$LOBJS crypt.lo"
-fi
-
-if ( test "$INCLUDE_DAEMONPROCESS" = "1" )
-then
-	HEADERS="$HEADERS daemonprocess.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS daemonprocess.h daemonprocessincludes.h"
-	SRCS="$SRCS daemonprocess.cpp"
-	LOBJS="$LOBJS daemonprocess.lo"
 fi
 
 if ( test "$INCLUDE_DATETIME" = "1" )
