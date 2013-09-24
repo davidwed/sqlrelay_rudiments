@@ -12,7 +12,7 @@ PROGS = server$(EXE) \
 	inetsocketclient$(EXE) \
 	unixsocketclient$(EXE) \
 	directory$(EXE) \
-	daemonprocess$(EXE) \
+	daemon$(EXE) \
 	groupentry$(EXE) \
 	commandline$(EXE) \
 	parameterstring$(EXE) \
@@ -100,7 +100,7 @@ clean:
 		sslclnt$(EXE) \
 		unixsocketclient$(EXE) \
 		directory$(EXE) \
-		daemonprocess$(EXE) \
+		daemon$(EXE) \
 		groupentry$(EXE) \
 		commandline$(EXE) \
 		parameterstring$(EXE) \
@@ -202,8 +202,8 @@ unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
 directory$(EXE): directory.cpp directory.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ directory.lo $(ALLSTATIC) $(LIBS)
 
-daemonprocess$(EXE): daemonprocess.cpp daemonprocess.lo 
-	$(LIBTOOL) --mode=link $(CXX) -o $@ daemonprocess.lo $(ALLSTATIC) $(LIBS)
+daemon$(EXE): daemon.cpp daemon.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ daemon.lo $(ALLSTATIC) $(LIBS)
 
 commandline$(EXE): commandline.cpp commandline.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ commandline.lo $(ALLSTATIC) $(LIBS)

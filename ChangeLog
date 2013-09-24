@@ -25,7 +25,6 @@
 	removed the timezonefile class
 	renamed mutex class to threadmutex to avoid collisions
 	wrapped setsid() function
-	removed methods duplicated between process and daemonprocess classes
 	refactored and simplified dictionary and linkedlist classes
 	if thread detection fails it just disables threads now rather than
 		erroring out
@@ -39,6 +38,8 @@
 	renamed *serversocket to *socketserver
 	renamed *clientsocket to *socketclient
 	added 64-bit build support for Windows
+	refactored daemonprocess class and moved its methods into the process
+		class
 
 0.42 - made a "char" array in the charstring classh explicitly "signed char"
 		for arm and similar platforms where "char" is actually
