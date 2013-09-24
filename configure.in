@@ -3174,7 +3174,7 @@ fi
 if ( test "$INCLUDE_PROCESS" = "1" )
 then
 	HEADERS="$HEADERS process.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS processincludes.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS process.h processincludes.h"
 	SRCS="$SRCS process.cpp"
 	LOBJS="$LOBJS process.lo"
 fi
