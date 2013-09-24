@@ -8,4 +8,8 @@
 		static	void	defaultCrash(int32_t signum);
 		static	void	waitForChildrenToExit(int32_t signum);
 
-		static	daemonprocessprivate	*pvt;
+		static	signalhandler	_deadchildhandler;
+		static	signalhandler	_shutdownhandler;
+		static	signalhandler	_crashhandler;
+		static	void		(*_shutdownfunc)(int32_t);
+		static	void		(*_crashfunc)(int32_t);

@@ -13,65 +13,24 @@
 	#include <sys/wait.h>
 #endif
 
-class daemonprocessprivate {
-	friend class daemonprocess;
-	private:
-		static	signalhandler	_deadchildhandler;
-		static	signalhandler	_shutdownhandler;
-		static	signalhandler	_crashhandler;
-		static	void		(*_shutdownfunc)(int32_t);
-		static	void		(*_crashfunc)(int32_t);
-};
+signalhandler	daemonprocess::_deadchildhandler;
+signalhandler	daemonprocess::_shutdownhandler;
+signalhandler	daemonprocess::_crashhandler;
+void		(*daemonprocess::_shutdownfunc)(int32_t);
+void		(*daemonprocess::_crashfunc)(int32_t);
 
-signalhandler	daemonprocessprivate::_deadchildhandler;
-signalhandler	daemonprocessprivate::_shutdownhandler;
-signalhandler	daemonprocessprivate::_crashhandler;
-void		(*daemonprocessprivate::_shutdownfunc)(int32_t);
-void		(*daemonprocessprivate::_crashfunc)(int32_t);
-
-daemonprocessprivate	*daemonprocess::pvt=NULL;
-
-void daemonprocess::shutDown(int32_t signum) {
-	waitForChildren();
-	(*pvt->_shutdownfunc)(signum);
-}
-
-void daemonprocess::crash(int32_t signum) {
-	waitForChildren();
-	(*pvt->_crashfunc)(signum);
-}
-
-void daemonprocess::defaultShutDown(int32_t signum) {
-	waitForChildren();
-	process::exit(0);
-}
-
-void daemonprocess::defaultCrash(int32_t signum) {
-	waitForChildren();
-	process::exit(1);
-}
-
-daemonprocess::daemonprocess() {
-
-	// FIXME: initializing static member here?
-	// We don't want the signal handlers to be set up unless we call this
-	// constructor, but there's got to be a cleaner way.
-	pvt=new daemonprocessprivate;
+void daemonprocess::initialize() {
 
 	// we want daemons to wait for children to die before shutting down,
 	// so register some default shutdown/crash handlers that only do that
-	pvt->_shutdownhandler.setHandler(defaultShutDown);
-	pvt->_shutdownhandler.handleSignal(SIGINT);
-	pvt->_shutdownhandler.handleSignal(SIGTERM);
+	_shutdownhandler.setHandler(defaultShutDown);
+	_shutdownhandler.handleSignal(SIGINT);
+	_shutdownhandler.handleSignal(SIGTERM);
 
-	pvt->_crashhandler.setHandler(defaultCrash);
-	pvt->_crashhandler.handleSignal(SIGSEGV);
+	_crashhandler.setHandler(defaultCrash);
+	_crashhandler.handleSignal(SIGSEGV);
 
 	waitForChildren();
-}
-
-daemonprocess::~daemonprocess() {
-	delete pvt;
 }
 
 bool daemonprocess::createPidFile(const char *filename, mode_t permissions) {
@@ -92,19 +51,60 @@ int64_t daemonprocess::checkForPidFile(const char *filename) {
 
 void daemonprocess::handleShutDown(void (*shutdownfunction)(int32_t)) {
 
-	pvt->_shutdownfunc=shutdownfunction;
+	_shutdownfunc=shutdownfunction;
 
-	pvt->_shutdownhandler.setHandler(shutDown);
-	pvt->_shutdownhandler.handleSignal(SIGINT);
-	pvt->_shutdownhandler.handleSignal(SIGTERM);
+	_shutdownhandler.setHandler(shutDown);
+	_shutdownhandler.handleSignal(SIGINT);
+	_shutdownhandler.handleSignal(SIGTERM);
 }
 
 void daemonprocess::handleCrash(void (*crashfunction)(int32_t)) {
 
-	pvt->_crashfunc=crashfunction;
+	_crashfunc=crashfunction;
 
-	pvt->_crashhandler.setHandler(crash);
-	pvt->_crashhandler.handleSignal(SIGSEGV);
+	_crashhandler.setHandler(crash);
+	_crashhandler.handleSignal(SIGSEGV);
+}
+
+#ifndef _WIN32
+void daemonprocess::waitForChildren() {
+	_deadchildhandler.setHandler(waitForChildrenToExit);
+	_deadchildhandler.addFlag(SA_NOCLDSTOP);
+	_deadchildhandler.handleSignal(SIGCHLD);
+}
+
+void daemonprocess::dontWaitForChildren() {
+	_deadchildhandler.setHandler((void (*)(int32_t))SIG_DFL);
+	_deadchildhandler.removeAllFlags();
+	_deadchildhandler.handleSignal(SIGCHLD);
+}
+#else
+void daemonprocess::waitForChildren() {
+	// FIXME: implement this
+}
+void daemonprocess::dontWaitForChildren() {
+	// FIXME: implement this
+}
+#endif
+
+void daemonprocess::shutDown(int32_t signum) {
+	waitForChildren();
+	(*_shutdownfunc)(signum);
+}
+
+void daemonprocess::crash(int32_t signum) {
+	waitForChildren();
+	(*_crashfunc)(signum);
+}
+
+void daemonprocess::defaultShutDown(int32_t signum) {
+	waitForChildren();
+	process::exit(0);
+}
+
+void daemonprocess::defaultCrash(int32_t signum) {
+	waitForChildren();
+	process::exit(1);
 }
 
 #ifndef _WIN32
@@ -140,26 +140,5 @@ void daemonprocess::waitForChildrenToExit(int32_t signum) {
 void daemonprocess::waitForChildrenToExit(int32_t signum) {
 	// FIXME: implement this...
 	// Use ChildStart()
-}
-#endif
-
-#ifndef _WIN32
-void daemonprocess::waitForChildren() {
-	pvt->_deadchildhandler.setHandler(waitForChildrenToExit);
-	pvt->_deadchildhandler.addFlag(SA_NOCLDSTOP);
-	pvt->_deadchildhandler.handleSignal(SIGCHLD);
-}
-
-void daemonprocess::dontWaitForChildren() {
-	pvt->_deadchildhandler.setHandler((void (*)(int32_t))SIG_DFL);
-	pvt->_deadchildhandler.removeAllFlags();
-	pvt->_deadchildhandler.handleSignal(SIGCHLD);
-}
-#else
-void daemonprocess::waitForChildren() {
-	// FIXME: implement this
-}
-void daemonprocess::dontWaitForChildren() {
-	// FIXME: implement this
 }
 #endif

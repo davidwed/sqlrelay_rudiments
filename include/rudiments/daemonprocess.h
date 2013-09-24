@@ -19,11 +19,9 @@ class daemonprocessprivate;
 class RUDIMENTS_DLLSPEC daemonprocess {
 	public:
 
-		/** Creates an instance of the daemonprocess class. */
-		daemonprocess();
-
-		/** Deletes this instance of the daemonprocess class. */
-		virtual	~daemonprocess();
+		/** Sets up default crash and shutdown handlers which just exit
+		 *  cleanly.  Also calls waitForChildren() below. */
+		static	void	initialize();
 
 		/** Checks for filename "filename" and reads the
 		 *  process id out of it, if it exists.  Returns
