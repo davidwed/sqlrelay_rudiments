@@ -1,7 +1,6 @@
 // Copyright (c) 2004  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/daemonprocess.h>
 #include <rudiments/permissions.h>
 #include <rudiments/inetsocketserver.h>
 #include <rudiments/charstring.h>
@@ -22,9 +21,9 @@ int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	return charstring::length(buf);
 }
 
-class myserver : public daemonprocess, public inetsocketserver {
+class myserver : public inetsocketserver {
 	public:
-			myserver() : daemonprocess(), inetsocketserver() {}
+			myserver() : inetsocketserver() {}
 		void	listen();
 };
 
@@ -33,7 +32,7 @@ void myserver::listen() {
 
 
 	// make sure that only one instance is running
-	int	pid=checkForPidFile("/tmp/svr.pidfile");
+	int	pid=process::checkForPidFile("/tmp/svr.pidfile");
 	if (pid>-1) {
 		stdoutput.printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
@@ -46,7 +45,8 @@ void myserver::listen() {
 
 	// create a pid file which is used to make sure that only one instance
 	// is running and can also be used to kill the process
-	createPidFile("/tmp/svr.pidfile",permissions::ownerReadWrite());
+	process::createPidFile("/tmp/svr.pidfile",
+				permissions::ownerReadWrite());
 
 	// initalize the libarary
 	SSL_library_init();
@@ -203,8 +203,9 @@ int main(int argc, const char **argv) {
 	mysvr=new myserver();
 
 	// set up signal handlers for clean shutdown
-	mysvr->handleShutDown(shutDown);
-	mysvr->handleCrash(shutDown);
+	process::waitForChildren();
+	process::handleShutDown(shutDown);
+	process::handleCrash(shutDown);
 
 	mysvr->listen();
 #else
