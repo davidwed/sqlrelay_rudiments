@@ -417,7 +417,6 @@ bool process::detach() {
 }
 
 void process::exit(int32_t status) {
-stdoutput.printf("exiting...\n");
 	::exit(status);
 }
 
