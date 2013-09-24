@@ -15,7 +15,6 @@ PROGS = \
 	commandline$(EXE) \
 	complexinetsocketserver$(EXE) \
 	crypt$(EXE) \
-	daemonprocess$(EXE) \
 	datetime$(EXE) \
 	device$(EXE) \
 	dictionary$(EXE) \
@@ -96,9 +95,6 @@ complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserv
 
 crypt$(EXE): crypt.cpp crypt.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ crypt.lo $(LIBS)
-
-daemonprocess$(EXE): daemonprocess.cpp daemonprocess.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ daemonprocess.lo $(LIBS)
 
 datetime$(EXE): datetime.cpp datetime.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ datetime.lo $(LIBS)
