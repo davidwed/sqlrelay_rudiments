@@ -363,7 +363,7 @@ bool process::exec(const char *command, const char * const *args) {
 		return execvp(command,(char * const *)args)!=-1;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
@@ -403,6 +403,7 @@ bool process::detach() {
 }
 
 void process::exit(int32_t status) {
+stdoutput.printf("exiting...\n");
 	::exit(status);
 }
 
