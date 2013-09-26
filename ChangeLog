@@ -1,3 +1,5 @@
+0.44 -
+
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
 	added *printf wrappers to charstring, filedescriptor and stringbuffer

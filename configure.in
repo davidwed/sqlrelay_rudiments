@@ -2891,7 +2891,7 @@ echo "******************************"
 
 
 dnl Default build variables.
-RUDIMENTS_VERSION="0.43"
+RUDIMENTS_VERSION="0.44"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 dnl rules for CURRENT:REVISION:AGE version info:
