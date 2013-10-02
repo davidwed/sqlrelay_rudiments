@@ -1,4 +1,5 @@
-0.44 -
+0.44 - fixed inet_aton test to attempt link, not just compile
+	fixed vsnprintf test to work on arm linux
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
