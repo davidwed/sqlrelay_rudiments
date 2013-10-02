@@ -1359,7 +1359,7 @@ if ( test "$HAVE_INET_ATON" = "yes" )
 then
 	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
 	INETATONLIB=""
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
