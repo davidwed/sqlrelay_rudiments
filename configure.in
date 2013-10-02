@@ -1831,7 +1831,10 @@ _swab(NULL,NULL,0);, AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE__SWAB,1,Some sy
 fi
 
 AC_MSG_CHECKING(for vsnprintf)
-AC_TRY_COMPILE([#include <stdio.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDARG_H
+	#include <stdarg.h>
+#endif
+#include <stdio.h>],
 va_list a; vsnprintf(0,0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VSNPRINTF,1,Most systems have vsnprintf), AC_MSG_RESULT(no))
 
 echo "******************************"
