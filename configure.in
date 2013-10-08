@@ -1838,7 +1838,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDARG_H
 va_list a; vsnprintf(0,0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VSNPRINTF,1,Most systems have vsnprintf), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for vdprintf)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDARG_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 	#include <stdarg.h>
 #endif
 #include <stdio.h>],
