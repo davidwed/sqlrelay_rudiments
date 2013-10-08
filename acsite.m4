@@ -142,6 +142,7 @@ do
 
 		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
 		do
+echo "looking in $libpath"
 
 			if ( test -n "$LIBSTRING" )
 			then
