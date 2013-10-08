@@ -2248,14 +2248,22 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 	// If we are buffering writes though, don't use vdprintf because it
 	// would bypass the buffer.
 
-	// Some compilers throw a warning if they see "printf(NULL..." at all,
-	// independent of whether it's the global function printf() or one that
-	// you've defined yourself.  This buffer=NULL thing works around it.
+	// If vasprintf is available, then use it, otherwise play games with
+	// charstring::printf().
 	char	*buffer=NULL;
-	ssize_t	size=charstring::printf(buffer,0,format,argp);
+	ssize_t	size=0;
+	#ifdef RUDIMENTS_HAVE_VASPRINTF
+	size=vasprintf(&buffer,format,*argp);
+	#else
+	// Some compilers throw a warning if they see "printf(NULL..." at all,
+	// whether it's the global function printf() or one that you've defined
+	// yourself.  Using buffer here works around that.
+	size=charstring::printf(buffer,0,format,argp);
 	buffer=new char[size+1];
 	size=charstring::printf(buffer,size+1,format,argp);
+	#endif
 	write(buffer,size);
+	delete[] buffer;
 	return size;
 }
 
