@@ -1091,6 +1091,9 @@
 /* Some systems have utime.h */
 /* #undef RUDIMENTS_HAVE_UTIME_H */
 
+/* Some systems have vdprintf */
+/* #undef RUDIMENTS_HAVE_VDPRINTF */
+
 /* Most systems have vsnprintf */
 #define RUDIMENTS_HAVE_VSNPRINTF 1
 

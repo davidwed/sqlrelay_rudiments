@@ -2236,6 +2236,18 @@ size_t filedescriptor::printf(const char *format, ...) {
 
 size_t filedescriptor::printf(const char *format, va_list *argp) {
 
+	// If we're not buffering writes and the system supports vdprintf then
+	// go ahead and use it, it's a lot more efficient than vsnprintf'ing
+	// to a buffer and writing that.
+	#ifdef RUDIMENTS_HAVE_VDPRINTF
+	if (!pvt->_writebuffer) {
+		return vdprintf(pvt->_fd,format,*argp);
+	}
+	#endif
+
+	// If we are buffering writes though, don't use vdprintf because it
+	// would bypass the buffer.
+
 	// Some compilers throw a warning if they see "printf(NULL..." at all,
 	// independent of whether it's the global function printf() or one that
 	// you've defined yourself.  This buffer=NULL thing works around it.

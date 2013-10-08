@@ -1,5 +1,7 @@
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux
+	filedescriptor::printf uses vdprintf now, if available, and if writes
+		are not being buffered
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
