@@ -331,6 +331,7 @@ echo "******************************"
 dnl Checks for platform-specific stuff
 echo
 echo "***** Platform ***************"
+FW_CHECK_MULTIARCH
 FW_CHECK_MICROSOFT
 
 dnl for mingw32, disable serialport and serialportprofile classes

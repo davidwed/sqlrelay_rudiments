@@ -371,6 +371,20 @@ AC_MSG_RESULT($LIBDIR)
 ])
 
 
+dnl Checks for multiarch platform
+AC_DEFUN([FW_CHECK_MULTIARCH],
+[
+AC_MSG_CHECKING(for multiarch platform)
+MULTIARCHSIGNATURE="`$CC -print-multiarch 2> /dev/null`"
+if ( test -n "$MULTIARCHSIGNATURE" )
+then
+	AC_MSG_RESULT($MULTIARCHSIGNATURE)
+else
+	AC_MSG_RESULT(no)
+fi
+])
+
+
 dnl Checks for microsoft platform.
 dnl sets the substitution variables MINGW32, CYGWIN and UWIN as appropriate
 dnl sets the enviroment variable MICROSOFT
