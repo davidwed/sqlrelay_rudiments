@@ -375,7 +375,7 @@ dnl Checks for multiarch platform
 AC_DEFUN([FW_CHECK_MULTIARCH],
 [
 AC_MSG_CHECKING(for multiarch platform)
-MULTIARCHSIGNATURE="`$CC -print-multiarch 2> /dev/null`"
+MULTIARCHSIGNATURE="`$CC $CPPFLAGS -print-multiarch 2> /dev/null`"
 if ( test -n "$MULTIARCHSIGNATURE" )
 then
 	AC_MSG_RESULT($MULTIARCHSIGNATURE)

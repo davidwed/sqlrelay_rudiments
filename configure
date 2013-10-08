@@ -15340,7 +15340,7 @@ echo "***** Platform ***************"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for multiarch platform" >&5
 $as_echo_n "checking for multiarch platform... " >&6; }
-MULTIARCHSIGNATURE="`$CC -print-multiarch 2> /dev/null`"
+MULTIARCHSIGNATURE="`$CC $CPPFLAGS -print-multiarch 2> /dev/null`"
 if ( test -n "$MULTIARCHSIGNATURE" )
 then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MULTIARCHSIGNATURE" >&5
