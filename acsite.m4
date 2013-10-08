@@ -140,7 +140,7 @@ do
 		fi
 
 
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
 		do
 
 			if ( test -n "$LIBSTRING" )
@@ -363,10 +363,15 @@ AC_MSG_RESULT($SOSUFFIX)
 AC_DEFUN([FW_CHECK_LIBDIR],
 [
 AC_MSG_CHECKING(for library directory)
-case $host_cpu in
-	x86_64 ) LIBDIR="lib64" ;;
-	* ) LIBDIR="lib" ;;
-esac
+if ( test -n "$MULTIARCHDIR" )
+then
+	LIBDIR="lib"
+else
+	case $host_cpu in
+		x86_64 ) LIBDIR="lib64" ;;
+		* ) LIBDIR="lib" ;;
+	esac
+fi
 AC_MSG_RESULT($LIBDIR)
 ])
 
@@ -375,10 +380,10 @@ dnl Checks for multiarch platform
 AC_DEFUN([FW_CHECK_MULTIARCH],
 [
 AC_MSG_CHECKING(for multiarch platform)
-MULTIARCHSIGNATURE="`$CC $CPPFLAGS -print-multiarch 2> /dev/null`"
-if ( test -n "$MULTIARCHSIGNATURE" )
+MULTIARCHDIR="`$CC $CPPFLAGS -print-multiarch 2> /dev/null`"
+if ( test -n "$MULTIARCHDIR" )
 then
-	AC_MSG_RESULT($MULTIARCHSIGNATURE)
+	AC_MSG_RESULT($MULTIARCHDIR)
 else
 	AC_MSG_RESULT(no)
 fi

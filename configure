@@ -15340,11 +15340,11 @@ echo "***** Platform ***************"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for multiarch platform" >&5
 $as_echo_n "checking for multiarch platform... " >&6; }
-MULTIARCHSIGNATURE="`$CC $CPPFLAGS -print-multiarch 2> /dev/null`"
-if ( test -n "$MULTIARCHSIGNATURE" )
+MULTIARCHDIR="`$CC $CPPFLAGS -print-multiarch 2> /dev/null`"
+if ( test -n "$MULTIARCHDIR" )
 then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MULTIARCHSIGNATURE" >&5
-$as_echo "$MULTIARCHSIGNATURE" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $MULTIARCHDIR" >&5
+$as_echo "$MULTIARCHDIR" >&6; }
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -15594,10 +15594,15 @@ $as_echo "$SOSUFFIX" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library directory" >&5
 $as_echo_n "checking for library directory... " >&6; }
-case $host_cpu in
-	x86_64 ) LIBDIR="lib64" ;;
-	* ) LIBDIR="lib" ;;
-esac
+if ( test -n "$MULTIARCHDIR" )
+then
+	LIBDIR="lib"
+else
+	case $host_cpu in
+		x86_64 ) LIBDIR="lib64" ;;
+		* ) LIBDIR="lib" ;;
+	esac
+fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBDIR" >&5
 $as_echo "$LIBDIR" >&6; }
 
@@ -17668,7 +17673,7 @@ fi
 		fi
 
 
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
 		do
 
 			if ( test -n "$LIBSTRING" )
@@ -18209,7 +18214,7 @@ fi
 		fi
 
 
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
 		do
 
 			if ( test -n "$LIBSTRING" )
@@ -18450,7 +18455,7 @@ fi
 		fi
 
 
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
 		do
 
 			if ( test -n "$LIBSTRING" )
@@ -21319,7 +21324,7 @@ fi
 		fi
 
 
-		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt"
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
 		do
 
 			if ( test -n "$LIBSTRING" )
