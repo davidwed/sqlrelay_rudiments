@@ -4,6 +4,7 @@
 		not being buffered, and vasprintf, if available, if writes are
 		being buffered
 	fixed a memory leak in filedescriptor::printf
+	added multiarch detection
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
