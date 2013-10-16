@@ -113,6 +113,10 @@ const char *environment::getValue(const char *variable) {
 		return retval;
 	}
 	do {
+		// reset errno, it could still be set to EINTR from a previous
+		// system call and cause an infinite loop
+		errno=0;
+
 		#if defined(RUDIMENTS_HAVE__DUPENV_S)
 			// FIXME: _dupenv_s is meant to be thread-safe and this
 			// usage certainly isn't.  This just emulates the
@@ -127,7 +131,7 @@ const char *environment::getValue(const char *variable) {
 		#else
 			#error no getenv or anything like it
 		#endif
-	} while (!retval && error::getErrorNumber()==EINTR);
+	} while (error::getErrorNumber()==EINTR);
 	if (_envmutex) {
 		_envmutex->unlock();
 	}

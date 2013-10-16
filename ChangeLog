@@ -5,6 +5,10 @@
 		being buffered
 	fixed a memory leak in filedescriptor::printf
 	added multiarch detection
+	applied Simon Martin's getenv-related patch to reset errno and allow
+		getenv to return NULL - fixed a situation where an infinte
+		loop could occur if getenv returned NULL and the most recent
+		error from another system call was EINTR
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
