@@ -5,6 +5,12 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
+// on SCO OSR5, tcdrain and friends are macros that
+// wrap ioctl() which is defined in unistd.h
+#ifdef RUDIMENTS_HAS_UNISTD_H
+	#include <unistd.h>
+#endif
+
 class serialportprivate {
 	friend class serialport;
 	private:

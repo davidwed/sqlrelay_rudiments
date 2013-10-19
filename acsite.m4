@@ -540,7 +540,6 @@ then
   	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
 	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
-		CRTLIB="-lcrt"
   		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
 		AC_MSG_RESULT(yes)
 	else

@@ -15540,7 +15540,6 @@ $as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
 
 	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
-		CRTLIB="-lcrt"
 
 $as_echo "#define RUDIMENTS_HAVE_BAD_SCO_MSGHDR 1" >>confdefs.h
 
