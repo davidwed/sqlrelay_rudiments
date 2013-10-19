@@ -7,7 +7,7 @@
 
 // on SCO OSR5, tcdrain and friends are macros that
 // wrap ioctl() which is defined in unistd.h
-#ifdef RUDIMENTS_HAS_UNISTD_H
+#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
 

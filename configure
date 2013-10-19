@@ -648,8 +648,8 @@ CRYPTLIB
 CLOCKNANOSLEEPLIB
 NANOSLEEPLIB
 NETAPI32LIB
-SOCKETLIBS
 INETATONLIB
+SOCKETLIBS
 PCRELIBS
 PCREINCLUDES
 SSLLIBS
@@ -21850,51 +21850,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test "$HAVE_INET_ATON" = "yes" )
-then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether inet_aton needs -lresolv" >&5
-$as_echo_n "checking whether inet_aton needs -lresolv... " >&6; }
-	INETATONLIB=""
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	#include <sys/socket.h>
-#endif
-#ifdef RUDIMENTS_HAVE_NETINET_IN_H
-	#include <netinet/in.h>
-#endif
-#ifdef RUDIMENTS_HAVE_ARPA_INET_H
-	#include <arpa/inet.h>
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-int
-main ()
-{
-inet_aton(0,NULL);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-  INETATONLIB="-lresolv"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-
-fi
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_addr" >&5
 $as_echo_n "checking for inet_addr... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -22062,6 +22017,51 @@ $as_echo "$SOCKETLIBS" >&6; }
 
 OLDLIBS="$LIBS"
 LIBS="$LIBS $SOCKETLIBS"
+
+if ( test "$HAVE_INET_ATON" = "yes" )
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether inet_aton needs -lresolv" >&5
+$as_echo_n "checking whether inet_aton needs -lresolv... " >&6; }
+	INETATONLIB=""
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+int
+main ()
+{
+inet_aton(0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+  INETATONLIB="-lresolv"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
 
 echo "******************************"
 

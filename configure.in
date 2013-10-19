@@ -1355,32 +1355,6 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif],
 inet_aton(0,NULL);,HAVE_INET_ATON="yes"; AC_DEFINE(RUDIMENTS_HAVE_INET_ATON,1,Some systems have inet_aton) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-if ( test "$HAVE_INET_ATON" = "yes" )
-then
-	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
-	INETATONLIB=""
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINSOCK2_H
-	#include <winsock2.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
-	#include <sys/socket.h>
-#endif
-#ifdef RUDIMENTS_HAVE_NETINET_IN_H
-	#include <netinet/in.h>
-#endif
-#ifdef RUDIMENTS_HAVE_ARPA_INET_H
-	#include <arpa/inet.h>
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif],
-inet_aton(0,NULL);,AC_MSG_RESULT(no), INETATONLIB="-lresolv"; AC_MSG_RESULT(yes))
-AC_SUBST(INETATONLIB)
-fi
-
 AC_MSG_CHECKING(for inet_addr)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -1407,6 +1381,32 @@ FW_CHECK_SOCKET_LIBS
 
 OLDLIBS="$LIBS"
 LIBS="$LIBS $SOCKETLIBS"
+
+if ( test "$HAVE_INET_ATON" = "yes" )
+then
+	AC_MSG_CHECKING(whether inet_aton needs -lresolv)
+	INETATONLIB=""
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+	#include <sys/socket.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+inet_aton(0,NULL);,AC_MSG_RESULT(no), INETATONLIB="-lresolv"; AC_MSG_RESULT(yes))
+AC_SUBST(INETATONLIB)
+fi
 
 echo "******************************"
 
