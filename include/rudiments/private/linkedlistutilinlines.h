@@ -44,6 +44,11 @@ void _linkedlistutil_print(const char *data) {
 }
 
 RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(char *data) {
+	stdoutput.printf("%s",data);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(char data) {
 	stdoutput.printf("%c",data);
 }

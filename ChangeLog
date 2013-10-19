@@ -9,6 +9,8 @@
 		getenv to return NULL - fixed a situation where an infinte
 		loop could occur if getenv returned NULL and the most recent
 		error from another system call was EINTR
+	added missing print() for const char *'s in linkedlistutils
+	tweaked configure script for SCO OSR5
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets

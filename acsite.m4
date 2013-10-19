@@ -531,14 +531,16 @@ case $host_os in
 esac
 ])
 
-AC_DEFUN([FW_CHECK_SCO_OSR5],
+AC_DEFUN([FW_CHECK_SCO_OSR],
 [
+CRTLIB=""
 AC_MSG_CHECKING(for SCO OSR < 6.0.0)
 if ( test "`uname -s`" = "SCO_SV" )
 then
   	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
 	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
+		CRTLIB="-lcrt"
   		AC_DEFINE(RUDIMENTS_HAVE_BAD_SCO_MSGHDR,1,SCO OSR5 has an incorrect struct msghdr definition)
 		AC_MSG_RESULT(yes)
 	else
@@ -547,12 +549,7 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
-])
-
-AC_DEFUN([FW_CHECK_SCO_OSR6],
-[
 AC_MSG_CHECKING(for SCO OSR = 6.0.0)
-CRTLIB=""
 if ( test "`uname -s`" = "SCO_SV" )
 then
 	if ( test "`uname -v | tr -d '.'`" -eq "600" )
