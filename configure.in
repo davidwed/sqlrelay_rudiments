@@ -2599,6 +2599,9 @@ dnl some linux libc4 systems define getpgid properly in -lg but not in -lc
 GETPGIDLIB=""
 if ( test "$HAVE_GETPGID" = "yes" )
 then
+SAVECXXFLAGS="$CXXFLAGS"
+dnl Remove the -g arguments.  If included at link time, they'll pull in -lg.
+CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-g1||" -e "s|-g2||" -e "s|-g3||" -e "s|-g||"`
 AC_MSG_CHECKING(whether getpgid needs -lg)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -2607,6 +2610,7 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <unistd.h>
 #endif],
 getpgid(0),AC_MSG_RESULT(no),AC_MSG_RESULT(yes); GETPGIDLIB="-lg")
+CXXFLAGS="$SAVECXXFLAGS"
 fi
 AC_SUBST(GETPGIDLIB)
 
