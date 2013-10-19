@@ -1279,7 +1279,9 @@ AC_DEFUN([FW_CHECK_HOST],
 [
 
 AC_MSG_CHECKING(for getaddrinfo)
-AC_TRY_COMPILE([#include <netdb.h>
+dnl Make sure to link rather than just compile this.  SCO OSR505 defines
+dnl getaddrinfo but it's not in any of the libraries.
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
