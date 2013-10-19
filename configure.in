@@ -2587,13 +2587,28 @@ Process32First(0,NULL),AC_DEFINE(RUDIMENTS_HAVE_PROCESS32FIRST,1,Some systems ha
 
 HAVE_GETPGID=""
 AC_MSG_CHECKING(for getpgid)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif],
 getpgid(0),AC_DEFINE(RUDIMENTS_HAVE_GETPGID,1,Some systems have getpgid) AC_MSG_RESULT(yes); HAVE_GETPGID="yes",AC_MSG_RESULT(no))
+
+dnl some linux libc4 systems define getpgid properly in -lg but not in -lc
+GETPGIDLIB=""
+if ( test "$HAVE_GETPGID" = "yes" )
+then
+AC_MSG_CHECKING(whether getpgid needs -lg)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+getpgid(0),AC_MSG_RESULT(no),AC_MSG_RESULT(yes); GETPGIDLIB="-lg")
+fi
+AC_SUBST(GETPGIDLIB)
 
 AC_MSG_CHECKING(for setpgid)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H

@@ -640,6 +640,7 @@ PRIVATEHEADERS
 HEADERS
 SONAME_VERSION_INFO
 RUDIMENTS_VERSION
+GETPGIDLIB
 DLLIB
 HAS_SHM_OPEN
 SHMOPENLIB
@@ -656,7 +657,6 @@ SSLLIBS
 SSLINCLUDES
 PTHREADLIB
 PTHREADINCLUDES
-DEBUGLIB
 WALL
 WERROR
 PIPE
@@ -15823,43 +15823,6 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
 	fi
 	CXXFLAGS="$CXXFLAGS $DBG"
-
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for -lg" >&5
-$as_echo_n "checking for -lg... " >&6; }
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS=""
-LIBS="-lg"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <stdio.h>
-int
-main ()
-{
-printf("hello");
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; DEBUGLIB="-lg"
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }; DEBUGLIB=""
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-
 fi
 
 
@@ -28056,7 +28019,7 @@ getpgid(0)
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_GETPGID 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -28065,8 +28028,40 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+GETPGIDLIB=""
+if ( test "$HAVE_GETPGID" = "yes" )
+then
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether getpgid needs -lg" >&5
+$as_echo_n "checking whether getpgid needs -lg... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+int
+main ()
+{
+getpgid(0)
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; GETPGIDLIB="-lg"
+fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+fi
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for setpgid" >&5
 $as_echo_n "checking for setpgid... " >&6; }
