@@ -126,13 +126,13 @@ bool xmlsax::parseFile(const char *filename) {
 			}
 		#endif
 
+		// get the file size
+		pvt->_filesize=pvt->_fl.getSize();
+
 		// optimize...
 		pvt->_fl.setReadBufferSize(pvt->_optblocksize);
 		pvt->_fl.sequentialAccess(0,pvt->_filesize);
 		pvt->_fl.onlyOnce(0,pvt->_filesize);
-
-		// get the file size
-		pvt->_filesize=pvt->_fl.getSize();
 
 		// Try to memorymap the file.  If it fails, that's ok, pvt->_ptr
 		// will be set to NULL from the previous call to reset() and
