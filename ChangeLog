@@ -11,6 +11,7 @@
 		error from another system call was EINTR
 	added missing print() for const char *'s in linkedlistutils
 	tweaks for OSR505
+	a few xmlsax optimization fixes
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets

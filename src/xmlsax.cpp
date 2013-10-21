@@ -111,8 +111,12 @@ bool xmlsax::parseFile(const char *filename) {
 		// Get the optimum transfer size for the filesystem
 		// the file is found on, if possible.
 		filesystem	fs;
-		pvt->_optblocksize=(fs.initialize(filename))?
-					fs.getOptimumTransferBlockSize():1024;
+		if (fs.initialize(filename)) {
+			pvt->_optblocksize=fs.getOptimumTransferBlockSize();
+			if (!pvt->_optblocksize) {
+				pvt->_optblocksize=1024;
+			}
+		}
 
 		// If we're memory mapping, since we'll use this for the
 		// offsets as well, then we must use an even multiple of
