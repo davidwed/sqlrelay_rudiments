@@ -6,7 +6,8 @@
 //#define DEBUG_READ 1
 //#define DEBUG_BUFFERING 1
 
-#if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || defined(DEBUG_READ)
+#if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
+	defined(DEBUG_READ) || defined(DEBUG_BUFFERING)
 #ifdef _MSC_VER
 	#define debugPrintf(ARGS,...) if (this!=&stdoutput) { stdoutput.printf(ARGS,__VA_ARGS__); }
 #else
