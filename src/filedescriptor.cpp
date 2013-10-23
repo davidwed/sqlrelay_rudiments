@@ -60,6 +60,7 @@
 	#include <sys/ioctl.h>
 #endif
 
+#include <stdio.h>
 
 // NOTE: These next two headers must be included in this order or LITTLE_ENDIAN
 // will be multiply-defined on linux libc4 systems.  Other systems are
