@@ -11,8 +11,9 @@
 template <class keytype, class valuetype>
 class dictionarynode {
 	public:
-		/** Creates an empty instance of the dictionary node class. */
-		dictionarynode();
+		/** Creates an instance of the dictionary node class 
+		 *  with key "key" and value "value". */
+		dictionarynode(keytype key, valuetype value);
 
 		/** Deletes this instance of the dictionarynode class.
 		 *  Note however, that neither the key nor value stored in the
@@ -98,7 +99,6 @@ class dictionary {
 #define constnamevaluepairsnode	dictionarynode< const char *, const char * >
 #define constnamevaluepairs	dictionary< const char *, const char * >
 
-#include <rudiments/private/dictionarynodeinlines.h>
 #include <rudiments/private/dictionaryinlines.h>
 
 #endif

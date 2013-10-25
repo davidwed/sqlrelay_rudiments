@@ -14,9 +14,6 @@ template <class valuetype>
 class linkedlistnode {
 	friend class linkedlist<valuetype>;
 	public:
-		/** Creates an empty instance of the linkedlistnode class. */
-		linkedlistnode();
-
 		/** Creates an instance of the linkedlistnode class that
 		 *  stores value "value". */
 		linkedlistnode(valuetype value);

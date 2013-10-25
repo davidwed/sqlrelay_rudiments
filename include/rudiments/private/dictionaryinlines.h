@@ -3,6 +3,7 @@
 
 #include <rudiments/stdio.h>
 #include <rudiments/private/rudimentsinlines.h>
+#include <rudiments/private/linkedlistutilinlines.h>
 
 #define DICTIONARY_TEMPLATE \
 	template <class keytype, class valuetype>
@@ -29,11 +30,7 @@ void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
 	if (node) {
 		node->getValue()->setValue(value);
 	} else {
-		dictionarynode<keytype,valuetype>	*dictnode=
-					new dictionarynode<keytype,valuetype>();
-		dictnode->setKey(key);
-		dictnode->setValue(value);
-		dict.append(dictnode);
+		dict.append(new dictionarynode<keytype,valuetype>(key,value));
 	}
 }
 
@@ -65,8 +62,7 @@ RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
 	findNode(keytype key) {
 	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-		dict.getFirstNode();
-		node; node=node->getNext()) {
+			dict.getFirstNode(); node; node=node->getNext()) {
 		if (!node->getValue()->compare(key)) {
 			return node;
 		}
@@ -84,8 +80,7 @@ DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::clear() {
 	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-		dict.getFirstNode();
-		node; node=node->getNext()) {
+			dict.getFirstNode(); node; node=node->getNext()) {
 		delete node->getValue();
 	}
 	dict.clear();
@@ -95,9 +90,63 @@ DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::print() {
 	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-		dict.getFirstNode();
-		node; node=node->getNext()) {
+			dict.getFirstNode(); node; node=node->getNext()) {
 		node->getValue()->print();
 		stdoutput.printf("\n");
 	}
+}
+
+#define DICTIONARYNODE_TEMPLATE \
+	template <class keytype, class valuetype>
+
+#define DICTIONARYNODE_CLASS \
+	dictionarynode<keytype,valuetype>
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+DICTIONARYNODE_CLASS::dictionarynode(keytype key, valuetype value) {
+	this->key=key;
+	this->value=value;
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+DICTIONARYNODE_CLASS::~dictionarynode() {}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARYNODE_CLASS::setKey(keytype key) {
+	this->key=key;
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARYNODE_CLASS::setValue(valuetype value) {
+	this->value=value;
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+keytype DICTIONARYNODE_CLASS::getKey() const {
+	return key;
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+valuetype DICTIONARYNODE_CLASS::getValue() const {
+	return value;
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+int32_t DICTIONARYNODE_CLASS::compare(keytype testkey) const {
+	return _linkedlistutil_compare(key,testkey);
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARYNODE_CLASS::print() const {
+	_linkedlistutil_print(key);
+	stdoutput.printf(":");
+	_linkedlistutil_print(value);
 }
