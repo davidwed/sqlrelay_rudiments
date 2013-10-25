@@ -211,18 +211,3 @@ bool protocolentry::getAliasList(int32_t number, char ***aliaslist) {
 	}
 	return false;
 }
-
-void protocolentry::print() const {
-
-	if (!pvt->_pe) {
-		return;
-	}
-
-	stdoutput.printf("Name: %s\n",getName());
-	stdoutput.printf("Alias list:\n");
-	for (int32_t i=0; getAliasList()[i]; i++) {
-		stdoutput.printf("	%s\n",getAliasList()[i]);
-	}
-	// some compilers complain without this cast
-	stdoutput.printf("Number: %d\n",(int)getNumber());
-}

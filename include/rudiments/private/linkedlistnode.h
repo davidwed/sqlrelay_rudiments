@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		datatype			data;
-		linkedlistnode<datatype>	*next;
-		linkedlistnode<datatype>	*previous;
-		linkedlistutil<datatype>	datautil;
+		valuetype			value;
+		linkedlistnode<valuetype>	*next;
+		linkedlistnode<valuetype>	*previous;
+		linkedlistutil<valuetype>	valueutil;

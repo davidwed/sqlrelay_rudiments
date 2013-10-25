@@ -22,11 +22,6 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	re.print();
-	stdoutput.printf("\n");
-
 
 
 	// get the protocol information for protocol number 100000
@@ -40,10 +35,5 @@ int main(int argc, const char **argv) {
 	for (i=0; re.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",re.getAliasList()[i]);
 	}
-	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	re.print();
 	stdoutput.printf("\n");
 }

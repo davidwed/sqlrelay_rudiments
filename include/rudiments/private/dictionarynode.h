@@ -3,7 +3,7 @@
 
 	protected:
 		keytype		key;
-		datatype	data;
+		valuetype	value;
 
 		linkedlistutil<keytype>		keyutil;
-		linkedlistutil<datatype>	datautil;
+		linkedlistutil<valuetype>	valueutil;

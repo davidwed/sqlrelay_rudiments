@@ -148,9 +148,6 @@ class RUDIMENTS_DLLSPEC hostentry {
 		 *  returns it.  The calling program must free the buffer. */
 		char	*getAddressString(int32_t index) const;
 
-		/** Prints out the representation of the host entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

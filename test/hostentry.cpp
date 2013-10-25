@@ -48,11 +48,6 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	he.print();
-	stdoutput.printf("\n");
-
 
 
 	// get the host information for "127.0.0.1"
@@ -75,10 +70,5 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("		%s\n",addr);
 		delete[] addr;
 	}
-	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	he.print();
 	stdoutput.printf("\n");
 }

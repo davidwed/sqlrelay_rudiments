@@ -132,9 +132,6 @@ class RUDIMENTS_DLLSPEC shadowentry {
 		 *  entry. */
 		int32_t		getFlag() const;
 
-		/** Prints out a representation of the shadow entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

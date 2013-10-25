@@ -319,26 +319,3 @@ bool hostentry::getAddressString(const char *address, int32_t len, int32_t type,
 	*addressstring=NULL;
 	return false;
 }
-
-void hostentry::print() const {
-
-	if (!pvt->_he) {
-		return;
-	}
-
-	stdoutput.printf("Name: %s\n",getName());
-	stdoutput.printf("Alias list:\n");
-	int32_t	i;
-	for (i=0; getAliasList()[i]; i++) {
-		stdoutput.printf("	%s\n",getAliasList()[i]);
-	}
-	// some compilers complain without these casts
-	stdoutput.printf("Address type: %d\n",(int)getAddressType());
-	stdoutput.printf("Address length: %d\n",(int)getAddressLength());
-	stdoutput.printf("Address list:\n");
-	for (i=0; getAddressList()[i]; i++) {
-		char	*addr=getAddressString(i);
-		stdoutput.printf("	%s\n",addr);
-		delete[] addr;
-	}
-}

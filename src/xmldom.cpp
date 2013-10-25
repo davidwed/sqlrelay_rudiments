@@ -57,7 +57,7 @@ xmldom::~xmldom() {
 	delete pvt->_nullnode;
 	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
-		delete[] node->getData();
+		delete[] node->getValue();
 	}
 	delete pvt;
 }
@@ -211,11 +211,11 @@ const char *xmldom::cacheString(const char *string) {
 	uint64_t	index=0;
 	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
-		const char	*data=node->getData();
+		const char	*data=node->getValue();
 		if (!charstring::compare(string,data)) {
 			linkedlistnode<uint64_t>	*refnode=
 				pvt->_refcountlist.getNodeByIndex(index);
-			refnode->setData(refnode->getData()+1);
+			refnode->setValue(refnode->getValue()+1);
 			return data;
 		}
 		index++;
@@ -233,12 +233,12 @@ void xmldom::unCacheString(const char *string) {
 	uint64_t	index=0;
 	for (stringlistnode *node=pvt->_strlist.getFirstNode();
 					node; node=node->getNext()) {
-		char	*data=node->getData();
+		char	*data=node->getValue();
 		if (!charstring::compare(string,data)) {
 			linkedlistnode<uint64_t>	*refnode=
 				pvt->_refcountlist.getNodeByIndex(index);
-			refnode->setData(refnode->getData()-1);
-			if (refnode->getData()<=0) {
+			refnode->setValue(refnode->getValue()-1);
+			if (refnode->getValue()<=0) {
 				pvt->_refcountlist.removeByIndex(index);
 				pvt->_strlist.removeByIndex(index);
 				delete[] data;

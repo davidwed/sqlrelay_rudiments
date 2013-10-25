@@ -4,6 +4,13 @@
 #include <rudiments/environment.h>
 #include <rudiments/stdio.h>
 
+void print() {
+	const char * const *env=environment::variables();
+	for (uint64_t index=0; env && env[index]; index++) {
+		stdoutput.printf("%s\n",env[index]);
+	}
+}
+
 int main(int argc, const char **argv) {
 
 	// print the environment variable "TEST"
@@ -30,11 +37,11 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("TEST=%s\n",environment::getValue("TEST"));
 
 	stdoutput.printf("\n\n");
-	environment::print();
+	print();
 
 	stdoutput.printf("\n\n");
 	environment::clear();
 
 	stdoutput.printf("\n\nclear?\n");
-	environment::print();
+	print();
 }

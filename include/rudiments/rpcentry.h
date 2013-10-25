@@ -72,9 +72,6 @@ class RUDIMENTS_DLLSPEC rpcentry {
 		 *  entry. */
 		const char * const	*getAliasList() const;
 
-		/** Prints out a representation of the rpc entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

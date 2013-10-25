@@ -36,9 +36,6 @@ class RUDIMENTS_DLLSPEC environment {
 		 *  will return NULL. */
 		static	bool	clear();
 
-		/** Prints the environment variable list to stdout. */
-		static	void	print();
-
 		/** Allows you to supply a mutex if the class needs it.
 		 *  If your application is not multithreaded, then
 		 *  there is no need to supply a mutex. */

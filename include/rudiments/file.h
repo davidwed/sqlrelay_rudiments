@@ -943,6 +943,12 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		bool	getAttribute(const char *name,
 					void **buffer, size_t *size) const;
 
+		/** Returns at most "size" bytes of the value of attribute
+		 *  "name" in buffer "buffer".
+		 *  Returns true on success and false on failure. */
+		bool	getAttribute(const char *name,
+					void *buffer, size_t size) const;
+
 
 		/** Creates a new attribute named "name" with value "number".
 		 *  Returns true on success and false on failure. */

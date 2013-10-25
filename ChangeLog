@@ -12,6 +12,9 @@
 	added missing print() for const char *'s in linkedlistutils
 	tweaks for OSR505
 	a few xmlsax optimization fixes
+	renamed *Data methods to *Value in linkedlist and dictionary classes
+	removed print methods from *entry classes
+	refactored xattr code a little to make it smaller
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets

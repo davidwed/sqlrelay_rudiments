@@ -4,16 +4,16 @@
 #include <rudiments/private/rudimentsinlines.h>
 
 #define DICTIONARYNODE_TEMPLATE \
-	template <class keytype, class datatype>
+	template <class keytype, class valuetype>
 
 #define DICTIONARYNODE_CLASS \
-	dictionarynode<keytype,datatype>
+	dictionarynode<keytype,valuetype>
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 DICTIONARYNODE_CLASS::dictionarynode() {
 	key=0;
-	data=0;
+	value=0;
 }
 
 DICTIONARYNODE_TEMPLATE
@@ -28,8 +28,8 @@ void DICTIONARYNODE_CLASS::setKey(keytype key) {
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void DICTIONARYNODE_CLASS::setData(datatype data) {
-	this->data=data;
+void DICTIONARYNODE_CLASS::setValue(valuetype value) {
+	this->value=value;
 }
 
 DICTIONARYNODE_TEMPLATE
@@ -40,8 +40,8 @@ keytype DICTIONARYNODE_CLASS::getKey() const {
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-datatype DICTIONARYNODE_CLASS::getData() const {
-	return data;
+valuetype DICTIONARYNODE_CLASS::getValue() const {
+	return value;
 }
 
 DICTIONARYNODE_TEMPLATE
@@ -55,5 +55,5 @@ RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARYNODE_CLASS::print() const {
 	keyutil.print(key);
 	stdoutput.printf(":");
-	datautil.print(data);
+	valueutil.print(value);
 }

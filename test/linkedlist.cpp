@@ -32,13 +32,13 @@ int	main(int argc, char **argv) {
 	intl.removeByIndex(0);
 	intl.print();
 
-	stdoutput.printf("removeByData(3)\n");
-	intl.removeByData(3);
+	stdoutput.printf("removeByValue(3)\n");
+	intl.removeByValue(3);
 	intl.print();
 
 	// change a value in the list, display the list
-	stdoutput.printf("setDataByIndex(1,50)\n");
-	intl.setDataByIndex(1,50);
+	stdoutput.printf("setValueByIndex(1,50)\n");
+	intl.setValueByIndex(1,50);
 	intl.print();
 
 	// clear the list, display the list
@@ -76,13 +76,13 @@ int	main(int argc, char **argv) {
 	strl.removeByIndex(0);
 	strl.print();
 
-	stdoutput.printf("removeByData(three)\n");
-	strl.removeByData("three");
+	stdoutput.printf("removeByValue(three)\n");
+	strl.removeByValue("three");
 	strl.print();
 
 	// change a value in the list, display the list
-	stdoutput.printf("setDataByIndex(1,fifty)\n");
-	strl.setDataByIndex(1,"fifty");
+	stdoutput.printf("setValueByIndex(1,fifty)\n");
+	strl.setValueByIndex(1,"fifty");
 	strl.print();
 
 	// clear the list, display the list

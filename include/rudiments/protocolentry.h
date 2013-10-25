@@ -73,9 +73,6 @@ class RUDIMENTS_DLLSPEC protocolentry {
 		/** Returns the number associated with the protocol entry. */
 		int32_t			getNumber() const;
 
-		/** Prints out a representation of the protocol entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

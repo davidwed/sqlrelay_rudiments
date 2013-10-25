@@ -147,9 +147,6 @@ class RUDIMENTS_DLLSPEC passwdentry {
 		/** Returns the shell of this user. */
 		const char	*getShell() const;
 
-		/** Prints out a representation of the user entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

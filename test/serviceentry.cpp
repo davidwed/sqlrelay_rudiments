@@ -23,11 +23,6 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	se.print();
-	stdoutput.printf("\n");
-
 
 
 	// get the service information for the service on port 25, "tcp"
@@ -42,10 +37,5 @@ int main(int argc, const char **argv) {
 	for (i=0; se.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",se.getAliasList()[i]);
 	}
-	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	se.print();
 	stdoutput.printf("\n");
 }

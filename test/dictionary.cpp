@@ -11,10 +11,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("string keys, string values:\n");
 
 	// add values to the dictionary
-	dict.setData("1","one");
-	dict.setData("2","two");
-	dict.setData("3","three");
-	dict.setData("4","four");
+	dict.setValue("1","one");
+	dict.setValue("2","two");
+	dict.setValue("3","three");
+	dict.setValue("4","four");
 
 	// display the length and contents of the dictionary
 	stdoutput.printf("length: %lld\n",dict.getList()->getLength());
@@ -22,19 +22,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
-	dict.removeData("3");
+	dict.removeValue("3");
 	dict.print();
 	stdoutput.printf("\n");
 
-	dict.removeData("2");
+	dict.removeValue("2");
 	dict.print();
 	stdoutput.printf("\n");
 
-	dict.removeData("4");
+	dict.removeValue("4");
 	dict.print();
 	stdoutput.printf("\n");
 
-	dict.removeData("1");
+	dict.removeValue("1");
 	dict.print();
 
 
@@ -44,10 +44,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("integer keys, string values:\n");
 
 	// add values to the dictionary
-	numdict.setData(1,"one");
-	numdict.setData(2,"two");
-	numdict.setData(3,"three");
-	numdict.setData(4,"four");
+	numdict.setValue(1,"one");
+	numdict.setValue(2,"two");
+	numdict.setValue(3,"three");
+	numdict.setValue(4,"four");
 
 	// display the length and contents of the dictionary
 	stdoutput.printf("length: %lld\n",numdict.getList()->getLength());
@@ -55,19 +55,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
-	numdict.removeData(3);
+	numdict.removeValue(3);
 	numdict.print();
 	stdoutput.printf("\n");
 
-	numdict.removeData(2);
+	numdict.removeValue(2);
 	numdict.print();
 	stdoutput.printf("\n");
 
-	numdict.removeData(4);
+	numdict.removeValue(4);
 	numdict.print();
 	stdoutput.printf("\n");
 
-	numdict.removeData(1);
+	numdict.removeValue(1);
 	numdict.print();
 	stdoutput.printf("\n");
 
@@ -79,10 +79,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("floating point keys, string values:\n");
 
 	// add values to the dictionary
-	doubledict.setData(1.1,"one point one");
-	doubledict.setData(2.2,"two point two");
-	doubledict.setData(3.3,"three point three");
-	doubledict.setData(4.4,"four point four");
+	doubledict.setValue(1.1,"one point one");
+	doubledict.setValue(2.2,"two point two");
+	doubledict.setValue(3.3,"three point three");
+	doubledict.setValue(4.4,"four point four");
 
 	// display the length and contents of the dictionary
 	stdoutput.printf("length: %lld\n",doubledict.getList()->getLength());
@@ -90,19 +90,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
-	doubledict.removeData(3.3);
+	doubledict.removeValue(3.3);
 	doubledict.print();
 	stdoutput.printf("\n");
 
-	doubledict.removeData(2.2);
+	doubledict.removeValue(2.2);
 	doubledict.print();
 	stdoutput.printf("\n");
 
-	doubledict.removeData(4.4);
+	doubledict.removeValue(4.4);
 	doubledict.print();
 	stdoutput.printf("\n");
 
-	doubledict.removeData(1.1);
+	doubledict.removeValue(1.1);
 	doubledict.print();
 	stdoutput.printf("\n");
 }

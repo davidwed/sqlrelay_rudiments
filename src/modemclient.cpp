@@ -75,21 +75,21 @@ modemclient::~modemclient() {
 void modemclient::initialize(constnamevaluepairs *cd) {
 	if (cd) {
 		const char	*devicename;
-		cd->getData("device",&devicename);
+		cd->getValue("device",&devicename);
 		const char	*baud;
-		cd->getData("baud",&baud);
+		cd->getValue("baud",&baud);
 		const char	*customatcommands;
-		cd->getData("customatcommands",&customatcommands);
+		cd->getValue("customatcommands",&customatcommands);
 		const char	*connectscript;
-		cd->getData("connectscript",&connectscript);
+		cd->getValue("connectscript",&connectscript);
 		const char	*phonenumber;
-		cd->getData("phonenumber",&phonenumber);
+		cd->getValue("phonenumber",&phonenumber);
 		const char	*disconnectscript;
-		cd->getData("disconnectscript",&disconnectscript);
+		cd->getValue("disconnectscript",&disconnectscript);
 		const char	*rwstr;
-		cd->getData("retrywait",&rwstr);
+		cd->getValue("retrywait",&rwstr);
 		const char	*rcstr;
-		cd->getData("retrycount",&rcstr);
+		cd->getValue("retrycount",&rcstr);
 		initialize(devicename,baud,
 				customatcommands,
 				connectscript,
@@ -119,9 +119,9 @@ void modemclient::initialize(const char *devicename,
 int32_t modemclient::connect() {
 
 	constnamevaluepairs	phnvp;
-	phnvp.setData("customatcommands",
+	phnvp.setValue("customatcommands",
 			const_cast<char *>(pvt->_customatcommands));
-	phnvp.setData("phonenumber",
+	phnvp.setValue("phonenumber",
 			const_cast<char *>(pvt->_phonenumber));
 
 	uint32_t	whichtry=0;

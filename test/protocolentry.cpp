@@ -22,11 +22,6 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Number:		%d\n",pe.getNumber());
 	stdoutput.printf("\n");
 
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	pe.print();
-	stdoutput.printf("\n");
-
 
 
 	// get the protocol information for protocol number 6
@@ -40,10 +35,5 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("		%s\n",pe.getAliasList()[i]);
 	}
 	stdoutput.printf("	Number:		%d\n",pe.getNumber());
-	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	pe.print();
 	stdoutput.printf("\n");
 }

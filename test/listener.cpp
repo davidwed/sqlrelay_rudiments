@@ -36,7 +36,7 @@ int main(int argc, const char **argv) {
 		// wait for a client to connect to one of the sockets
 		pool.waitForNonBlockingRead(-1,-1);
 		filedescriptor	*fd=NULL;
-		pool.getReadyList()->getDataByIndex(0,&fd);
+		pool.getReadyList()->getValueByIndex(0,&fd);
 
 		// figure out which socket the client connected to
 		filedescriptor	*clientsock;

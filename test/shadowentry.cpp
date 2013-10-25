@@ -30,9 +30,4 @@ int main(int argc, const char **argv) {
 					spent.getExpirationDate());
 	stdoutput.printf("	Flag: %d\n",spent.getFlag());
 	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	spent.print();
-	stdoutput.printf("\n");
 }

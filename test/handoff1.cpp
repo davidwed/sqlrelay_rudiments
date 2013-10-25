@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 
 		pool.waitForNonBlockingRead(-1,-1);
 		filedescriptor	*fd=NULL;
-		pool.getReadyList()->getDataByIndex(0,&fd);
+		pool.getReadyList()->getValueByIndex(0,&fd);
 
 		if (fd==&serversock) {
 			clientsock=(inetsocketclient *)

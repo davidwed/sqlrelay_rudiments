@@ -23,11 +23,6 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
-	// use the built in print method
-	stdoutput.printf("Built in...:\n");
-	grent.print();
-	stdoutput.printf("\n");
-
 
 
 	// get the group entry for group id 1
@@ -42,10 +37,5 @@ int main(int argc, const char **argv) {
 	for (i=0; grent.getMembers()[i]; i++) {
 		stdoutput.printf("		%s\n",grent.getMembers()[i]);
 	}
-	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built in...:\n");
-	grent.print();
 	stdoutput.printf("\n");
 }

@@ -141,7 +141,7 @@ void logger::addLogDestination(logdestination *logdest) {
 }
 
 void logger::removeLogDestination(logdestination *logdest) {
-	pvt->_logdestlist.removeByData(logdest);
+	pvt->_logdestlist.removeByValue(logdest);
 }
 
 void logger::removeAllLogDestinations() {
@@ -209,7 +209,7 @@ void logger::write(const char *header, int32_t tabs, double number) {
 void logger::write(const char *logentry) {
 	loggerlistnode	*current=pvt->_logdestlist.getFirstNode();
 	while (current) {
-		current->getData()->write(logentry);
+		current->getValue()->write(logentry);
 		current=(loggerlistnode *)current->getNext();
 	}
 }

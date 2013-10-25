@@ -8,28 +8,28 @@
 
 /** The dictionarynode class stores the key/value pairs that compose a
  *  dictionary. */
-template <class keytype, class datatype>
+template <class keytype, class valuetype>
 class dictionarynode {
 	public:
 		/** Creates an empty instance of the dictionary node class. */
 		dictionarynode();
 
 		/** Deletes this instance of the dictionarynode class.
-		 *  Note however, that neither the key nor data stored in the
+		 *  Note however, that neither the key nor value stored in the
 		 *  dictionarynode are deleted by this call. */
 		virtual	~dictionarynode();
 
 		/** Sets the key stored in the node to "key". */
 		void	setKey(keytype key);
 
-		/** Sets the data stored in the node to "data". */
-		void	setData(datatype data);
+		/** Sets the value stored in the node to "value". */
+		void	setValue(valuetype value);
 
 		/** Returns the key stored in the node. */
 		keytype		getKey() const;
 
-		/** Returns the data stored in the node. */
-		datatype	getData() const;
+		/** Returns the value stored in the node. */
+		valuetype	getValue() const;
 
 		/** Returns a negative number,0 or a positive number depending
 		 *  on whether the key stored in the node is respectively
@@ -37,7 +37,7 @@ class dictionarynode {
 		int32_t	compare(keytype testkey) const;
 
 		/** Prints a representation of the key and
-		 *  data stored in the node. */
+		 *  value stored in the node. */
 		void	print() const;
 
 	#include <rudiments/private/dictionarynode.h>
@@ -52,7 +52,7 @@ class dictionarynode {
  *  Internally, the dictionary class uses a linkedlist to store the values
  *  though this is potentially inefficient and may change in a future
  *  version. */
-template <class keytype, class datatype>
+template <class keytype, class valuetype>
 class dictionary {
 	public:
 		/** Creates an empty instance of the dictionary class. */
@@ -60,27 +60,27 @@ class dictionary {
 
 		/** Deletes this instance of the dictionary class and all
 		 *  of its dictionarynodes.  Note however, that neither the
-		 *  key nor data stored in each dictionarynode are deleted
+		 *  key nor value stored in each dictionarynode are deleted
 		 *  by this call. */
 		virtual ~dictionary();
 
-		/** Sets the data associated with "key" to "data".
-		 *  If "key" already exists, the data currently
-		 *  accociated with it is replaced with "data". */
-		void	setData(keytype key, datatype data);
+		/** Sets the value associated with "key" to "value".
+		 *  If "key" already exists, the value currently
+		 *  accociated with it is replaced with "value". */
+		void	setValue(keytype key, valuetype value);
 
-		/** Sets "data" to the data associated with "key".
+		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	getData(keytype key, datatype *data);
+		bool	getValue(keytype key, valuetype *value);
 
 		/** Removes the dictionarynode with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	removeData(keytype key);
+		bool	removeValue(keytype key);
 
 		/** Returns the list used internally. */
-		linkedlist< dictionarynode<keytype,datatype> *>	*getList();
+		linkedlist< dictionarynode<keytype,valuetype> *> *getList();
 
 		/** Deletes all dictionarynodes currently in the dictionary. */
 		void	clear();

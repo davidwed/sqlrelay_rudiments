@@ -6,11 +6,11 @@
 
 #include <rudiments/private/inttypes.h>
 
-template <class datatype>
+template <class valuetype>
 class linkedlistutil {
 	public:
-		void	print(datatype data) const;
-		int32_t	compare(datatype data1, datatype data2) const;
+		void	print(valuetype value) const;
+		int32_t	compare(valuetype value1, valuetype value2) const;
 };
 
 #include <rudiments/private/linkedlistutilinlines.h>

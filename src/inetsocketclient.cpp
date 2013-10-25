@@ -75,17 +75,17 @@ void inetsocketclient::initialize(constnamevaluepairs *cd) {
 	if (cd) {
 
 		const char	*host;
-		cd->getData("host",&host);
+		cd->getValue("host",&host);
 		const char	*port;
-		cd->getData("port",&port);
+		cd->getValue("port",&port);
 		const char	*timeoutsec;
-		cd->getData("timeoutsec",&timeoutsec);
+		cd->getValue("timeoutsec",&timeoutsec);
 		const char	*timeoutusec;
-		cd->getData("timeoutusec",&timeoutusec);
+		cd->getValue("timeoutusec",&timeoutusec);
 		const char	*retrywait;
-		cd->getData("retrywait",&retrywait);
+		cd->getValue("retrywait",&retrywait);
 		const char	*retrycount;
-		cd->getData("retrycount",&retrycount);
+		cd->getValue("retrycount",&retrycount);
 	
 		initialize(host?host:"",
 			charstring::toInteger(port?port:"0"),

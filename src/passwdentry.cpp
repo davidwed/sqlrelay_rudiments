@@ -445,24 +445,3 @@ bool passwdentry::getShell(const char *username, char **shell) {
 	}
 	return false;
 }
-
-void passwdentry::print() const {
-
-#ifdef RUDIMENTS_HAVE_NETUSERGETINFO
-	if (!pvt->_buffer) {
-		return;
-	}
-#else
-	if (!pvt->_pwd) {
-		return;
-	}
-#endif
-
-	stdoutput.printf("Name: %s\n",getName());
-	stdoutput.printf("Password: %s\n",getPassword());
-	stdoutput.printf("User Id: %ld\n",(long)getUserId());
-	stdoutput.printf("Primary Group Id: %ld\n",(long)getPrimaryGroupId());
-	stdoutput.printf("Real Name: %s\n",getRealName());
-	stdoutput.printf("Home Directory: %s\n",getHomeDirectory());
-	stdoutput.printf("Shell: %s\n",getShell());
-}

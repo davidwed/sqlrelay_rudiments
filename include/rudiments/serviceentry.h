@@ -90,9 +90,6 @@ class RUDIMENTS_DLLSPEC serviceentry {
 		 *  entry. */
 		const char * const *	getAliasList() const;
 
-		/** Prints out a representation of the service entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

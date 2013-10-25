@@ -390,24 +390,3 @@ bool groupentry::getMembers(gid_t groupid, char ***members) {
 	}
 	return false;
 }
-
-void groupentry::print() const {
-
-#ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
-	if (!pvt->_buffer) {
-		return;
-	}
-#else
-	if (!pvt->_grp) {
-		return;
-	}
-#endif
-
-	stdoutput.printf("Name: %s\n",getName());
-	stdoutput.printf("Password: %s\n",getPassword());
-	stdoutput.printf("Group Id: %ld\n",(long)getGroupId());
-	stdoutput.printf("Members:\n");
-	for (int i=0; getMembers()[i]; i++) {
-		stdoutput.printf("	%s\n",getMembers()[i]);
-	}
-}

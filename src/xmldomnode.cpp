@@ -603,7 +603,7 @@ constnamevaluepairs *xmldomnode::getAttributes() const {
 
 	constnamevaluepairs	*nvp=new constnamevaluepairs();
 	for (uint64_t i=0; i<pvt->_attributecount; i++) {
-		nvp->setData(getAttribute(i)->getName(),
+		nvp->setValue(getAttribute(i)->getName(),
 				getAttribute(i)->getValue());
 	}
 	return nvp;

@@ -94,10 +94,6 @@ class RUDIMENTS_DLLSPEC groupentry {
 		 *  names of the members of the group. */
 		const char * const	*getMembers() const;
 
-
-		/**  Prints out a representation of the group entry. */
-		void	print() const;
-
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
 		static	bool	needsMutex();

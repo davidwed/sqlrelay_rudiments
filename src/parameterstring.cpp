@@ -20,8 +20,8 @@ parameterstring::~parameterstring() {
 	for (linkedlistnode< namevaluepairsnode *> *node=
 			pvt->_nvp.getList()->getFirstNode();
 		node; node=node->getNext()) {
-		delete[] node->getData()->getKey();
-		delete[] node->getData()->getData();
+		delete[] node->getValue()->getKey();
+		delete[] node->getValue()->getValue();
 	}
 	delete pvt;
 }
@@ -47,13 +47,13 @@ bool parameterstring::parse(const char *paramstring) {
 		if (*ptr=='=') {
 			ptr++;
 		} else {
-			pvt->_nvp.setData(namebuffer,NULL);
+			pvt->_nvp.setValue(namebuffer,NULL);
 			return false;
 		}
 
 		ptr=parseValue(ptr,&valuebuffer);
 
-		pvt->_nvp.setData(namebuffer,valuebuffer);
+		pvt->_nvp.setValue(namebuffer,valuebuffer);
 
 		if (*ptr==pvt->_delim) {
 			ptr++;
@@ -69,7 +69,7 @@ bool parameterstring::parse(const char *paramstring) {
 
 const char *parameterstring::getValue(const char *name) {
 	char	*retval;
-	return (pvt->_nvp.getData(const_cast<char *>(name),&retval))?
+	return (pvt->_nvp.getValue(const_cast<char *>(name),&retval))?
 								retval:NULL;
 }
 

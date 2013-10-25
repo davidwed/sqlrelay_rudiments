@@ -234,19 +234,3 @@ bool serviceentry::getAliasList(int32_t port, const char *protocol,
 	}
 	return false;
 }
-
-void serviceentry::print() const {
-
-	if (!pvt->_se) {
-		return;
-	}
-
-	stdoutput.printf("Name: %s\n",getName());
-	// some compilers complain without this cast
-	stdoutput.printf("Port: %d\n",(int)getPort());
-	stdoutput.printf("Protocol: %s\n",getProtocol());
-	stdoutput.printf("Alias list:\n");
-	for (int32_t i=0; getAliasList()[i]; i++) {
-		stdoutput.printf("	%s\n",getAliasList()[i]);
-	}
-}

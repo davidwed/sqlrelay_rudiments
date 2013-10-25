@@ -10,82 +10,82 @@
 // compilers don't support it and this isn't any less efficient.
 
 RUDIMENTS_TEMPLATE_INLINE
-int32_t _linkedlistutil_compare(char *data1, char *data2) {
-	return charstring::compare(data1,data2);
+int32_t _linkedlistutil_compare(char *value1, char *value2) {
+	return charstring::compare(value1,value2);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-int32_t _linkedlistutil_compare(const char *data1, const char *data2) {
-	return charstring::compare(data1,data2);
+int32_t _linkedlistutil_compare(const char *value1, const char *value2) {
+	return charstring::compare(value1,value2);
 }
 
-template <class datatype>
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-int32_t _linkedlistutil_compare(datatype data1, datatype data2) {
-	if (data1<data2) {
+int32_t _linkedlistutil_compare(valuetype value1, valuetype value2) {
+	if (value1<value2) {
 		return -1;
-	} else if (data1==data2) {
+	} else if (value1==value2) {
 		return 0;
 	} else {
 		return 1;
 	}
 }
 
-template <class datatype>
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-int32_t linkedlistutil<datatype>::compare(datatype data1,
-					datatype data2) const {
-	return _linkedlistutil_compare(data1,data2);
+int32_t linkedlistutil<valuetype>::compare(valuetype value1,
+					valuetype value2) const {
+	return _linkedlistutil_compare(value1,value2);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(const char *data) {
-	stdoutput.printf("%s",data);
+void _linkedlistutil_print(const char *value) {
+	stdoutput.printf("%s",value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(char *data) {
-	stdoutput.printf("%s",data);
+void _linkedlistutil_print(char *value) {
+	stdoutput.printf("%s",value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(char data) {
-	stdoutput.printf("%c",data);
+void _linkedlistutil_print(char value) {
+	stdoutput.printf("%c",value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(int32_t data) {
-	stdoutput.printf("%d",(int)data);
+void _linkedlistutil_print(int32_t value) {
+	stdoutput.printf("%d",(int)value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(int16_t data) {
-	stdoutput.printf("%hd",data);
+void _linkedlistutil_print(int16_t value) {
+	stdoutput.printf("%hd",value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(int64_t data) {
-	stdoutput.printf("%lld",(long long)data);
+void _linkedlistutil_print(int64_t value) {
+	stdoutput.printf("%lld",(long long)value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(float data) {
-	stdoutput.printf("%f",data);
+void _linkedlistutil_print(float value) {
+	stdoutput.printf("%f",value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(double data) {
-	stdoutput.printf("%f",data);
+void _linkedlistutil_print(double value) {
+	stdoutput.printf("%f",value);
 }
 
-template <class datatype>
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(datatype data) {
-	stdoutput.printf("%p",data);
+void _linkedlistutil_print(valuetype value) {
+	stdoutput.printf("%p",value);
 }
 
-template <class datatype>
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-void linkedlistutil<datatype>::print(datatype data) const {
-	_linkedlistutil_print(data);
+void linkedlistutil<valuetype>::print(valuetype value) const {
+	_linkedlistutil_print(value);
 }

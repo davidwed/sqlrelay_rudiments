@@ -29,11 +29,6 @@ int main(int argc, const char **argv) {
 						pwent.getShell());
 	stdoutput.printf("\n");
 
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	pwent.print();
-	stdoutput.printf("\n");
-
 
 
 	// get the password entry for user id 0
@@ -55,10 +50,5 @@ int main(int argc, const char **argv) {
 						pwent.getHomeDirectory());
 	stdoutput.printf("	Shell:			%s\n",
 						pwent.getShell());
-	stdoutput.printf("\n");
-
-	// use the built in print method
-	stdoutput.printf("Built In...\n");
-	pwent.print();
 	stdoutput.printf("\n");
 }

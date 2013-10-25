@@ -232,21 +232,3 @@ bool rpcentry::getAliasList(int32_t number, char ***aliaslist) {
 	#endif
 	return false;
 }
-
-void rpcentry::print() const {
-
-	#ifdef RUDIMENTS_HAVE_RPC
-	if (!pvt->_re) {
-		return;
-	}
-	#endif
-
-	stdoutput.printf("Name: %s\n",getName());
-	// some compilers complain without this cast
-	stdoutput.printf("Number: %d\n",(int)getNumber());
-	stdoutput.printf("Alias list:\n");
-	const char * const *aliaslist=getAliasList();
-	for (int32_t i=0; aliaslist && aliaslist[i]; i++) {
-		stdoutput.printf("	%s\n",aliaslist[i]);
-	}
-}

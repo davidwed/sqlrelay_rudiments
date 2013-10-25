@@ -314,29 +314,3 @@ bool shadowentry::getFlag(const char *username, int32_t *flag) {
 		return true;
 	#endif
 }
-
-void shadowentry::print() const {
-
-	#if !defined(RUDIMENTS_HAVE_SHADOW)
-		return;
-	#elif defined(RUDIMENTS_HAVE_SP_WARN)
-		if (!pvt->_sp) {
-			return;
-		}
-	#endif
-
-	stdoutput.printf("Name: %s\n",getName());
-	stdoutput.printf("Encrypted Password: %s\n",getEncryptedPassword());
-	stdoutput.printf("Last Change: %ld\n",getLastChangeDate());
-	// some compilers complain without these casts
-	stdoutput.printf("Days Before Change Allowed: %d\n",
-				(int)getDaysBeforeChangeAllowed());
-	stdoutput.printf("Days Before Change Required: %d\n",
-				(int)getDaysBeforeChangeRequired());
-	stdoutput.printf("Days Before Expiration Warning: %d\n",
-				(int)getDaysBeforeExpirationWarning());
-	stdoutput.printf("Days Of Inactivity Allowed: %d\n",
-				(int)getDaysOfInactivityAllowed());
-	stdoutput.printf("Expiration Date: %d\n",getExpirationDate());
-	stdoutput.printf("Flag: %d\n",getFlag());
-}

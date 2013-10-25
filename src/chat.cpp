@@ -134,7 +134,7 @@ void chat::appendAbortString(const char *string) {
 void chat::clearAbortStrings() {
 	for (stringlistnode *sln=pvt->_aborts.getFirstNode();
 					sln; sln=sln->getNext()) {
-		char	*abortstring=sln->getData();
+		char	*abortstring=sln->getValue();
 		delete[] abortstring;
 	}
 	pvt->_aborts.clear();
@@ -233,7 +233,7 @@ int32_t chat::expect(const char *string, char **abort) {
 		for (stringlistnode *sln=pvt->_aborts.getFirstNode();
 						sln; sln=sln->getNext()) {
 
-			char	*abortstring=sln->getData();
+			char	*abortstring=sln->getValue();
 			if (regularexpression::match(response.getString(),
 								abortstring)) {
 				#ifdef DEBUG_CHAT
@@ -340,9 +340,9 @@ int32_t chat::substituteVariables(const char **ch,
 			variables->getList()->getFirstNode(); nln;
 			nln=nln->getNext()) {
 
-			const char	*variable=nln->getData()->getKey();
+			const char	*variable=nln->getValue()->getKey();
 			ssize_t	varlen=charstring::length(variable);
-			const char	*value=nln->getData()->getData();
+			const char	*value=nln->getValue()->getValue();
 			if (!charstring::compare(variable,str+2,varlen) &&
 							*(str+2+varlen)==')') {
 				ssize_t	result=pvt->_writefd->write(value);

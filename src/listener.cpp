@@ -64,7 +64,7 @@ void listener::addFileDescriptor(filedescriptor *fd) {
 }
 
 void listener::removeFileDescriptor(filedescriptor *fd) {
-	pvt->_filedescriptorlist.removeByData(fd);
+	pvt->_filedescriptorlist.removeByValue(fd);
 }
 
 void listener::removeAllFileDescriptors() {
@@ -114,20 +114,22 @@ int32_t listener::safeSelect(int32_t sec, int32_t usec, bool read, bool write) {
 				pvt->_filedescriptorlist.getFirstNode();
 		while (current) {
 
-			if (current->getData()->getFileDescriptor()>largest) {
-				largest=current->getData()->getFileDescriptor();
+			if (current->getValue()->getFileDescriptor()>largest) {
+				largest=current->getValue()->
+						getFileDescriptor();
 			}
 
-			FD_SET(current->getData()->getFileDescriptor(),&fdlist);
+			FD_SET(current->getValue()->
+					getFileDescriptor(),&fdlist);
 
 			// if we support SSL, check here to see if the
 			// filedescriptor has SSL data pending
 			#ifdef RUDIMENTS_HAS_SSL
 				SSL	*ssl=
-					(SSL *)current->getData()->getSSL();
+					(SSL *)current->getValue()->getSSL();
 				if (ssl && SSL_pending(ssl)) {
 					pvt->_readylist.append(
-						current->getData());
+						current->getValue());
 					selectresult++;
 				}
 			#endif
@@ -170,9 +172,9 @@ int32_t listener::safeSelect(int32_t sec, int32_t usec, bool read, bool write) {
 		#endif
 		current=pvt->_filedescriptorlist.getFirstNode();
 		while (current) {
-			if (FD_ISSET(current->getData()->getFileDescriptor(),
+			if (FD_ISSET(current->getValue()->getFileDescriptor(),
 					&fdlist)) {
-				pvt->_readylist.append(current->getData());
+				pvt->_readylist.append(current->getValue());
 			}
 			current=current->getNext();
 		}

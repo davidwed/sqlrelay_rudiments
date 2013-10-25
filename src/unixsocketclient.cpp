@@ -58,15 +58,15 @@ void unixsocketclient::initialize(constnamevaluepairs *cd) {
 
 	if (cd) {
 		const char	*filename;
-		cd->getData("filename",&filename);
+		cd->getValue("filename",&filename);
 		const char	*timeoutsec;
-		cd->getData("timeoutsec",&timeoutsec);
+		cd->getValue("timeoutsec",&timeoutsec);
 		const char	*timeoutusec;
-		cd->getData("timeoutusec",&timeoutusec);
+		cd->getValue("timeoutusec",&timeoutusec);
 		const char	*retrywait;
-		cd->getData("retrywait",&retrywait);
+		cd->getValue("retrywait",&retrywait);
 		const char	*retrycount;
-		cd->getData("retrycount",&retrycount);
+		cd->getValue("retrycount",&retrycount);
 
 		initialize(filename?filename:"",
 			charstring::toInteger(timeoutsec?timeoutsec:"0"),

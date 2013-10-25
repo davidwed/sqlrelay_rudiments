@@ -46,8 +46,8 @@ void environment::exit() {
 	for (linkedlistnode< namevaluepairsnode *> *node=
 			_envstrings->getList()->getNodeByIndex(0);
 			node; node=node->getNext()) {
-		free((void *)node->getData()->getData());
-		node->getData()->setData(NULL);
+		free((void *)node->getValue()->getValue());
+		node->getValue()->setValue(NULL);
 	}
 	delete _envstrings;
 }
@@ -78,11 +78,11 @@ bool environment::setValue(const char *variable, const char *value) {
 	} while (result && error::getErrorNumber()==EINTR);
 	if (!result) {
 		char	*oldpestr=NULL;
-		if (_envstrings->getData(
+		if (_envstrings->getValue(
 				const_cast<char *>(variable),&oldpestr)) {
 			free((void *)oldpestr);
 		}
-		_envstrings->setData(const_cast<char *>(variable),pestr);
+		_envstrings->setValue(const_cast<char *>(variable),pestr);
 		retval=true;
 	} else {
 		free((void *)pestr);
@@ -170,10 +170,11 @@ bool environment::remove(const char *variable) {
 	unsetenv(variable);
 	#if defined(RUDIMENTS_HAVE_PUTENV) || defined(RUDIMENTS_HAVE__PUTENV)
 		char *pestr;
-		if (_envstrings->getData(const_cast<char *>(variable),&pestr)) {
+		if (_envstrings->getValue(
+				const_cast<char *>(variable),&pestr)) {
 			free((void *)pestr);
 		}
-		_envstrings->removeData(const_cast<char *>(variable));
+		_envstrings->removeValue(const_cast<char *>(variable));
 	#endif
 	retval=true;
 	if (_envmutex) {
@@ -189,13 +190,6 @@ bool environment::remove(const char *variable) {
 
 const char * const *environment::variables() {
 	return environ;
-}
-
-void environment::print() {
-	const char * const *env=variables();
-	for (uint64_t index=0; env && env[index]; index++) {
-		stdoutput.printf("%s\n",env[index]);
-	}
 }
 
 bool environment::clear() {

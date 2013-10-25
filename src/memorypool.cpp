@@ -63,7 +63,7 @@ memorypool::memorypool(size_t initialsize,
 
 memorypool::~memorypool() {
 	deallocate();
-	delete pvt->_nodelist.getFirstNode()->getData();
+	delete pvt->_nodelist.getFirstNode()->getValue();
 	delete pvt;
 }
 
@@ -76,7 +76,7 @@ unsigned char *memorypool::allocate(size_t length) {
 	memorypoollistnode	*node=pvt->_nodelist.getFirstNode();
 	memorypoolnode		*memnode;
 	while (node) {
-		memnode=node->getData();
+		memnode=node->getValue();
 		if (memnode->_remaining>=length) {
 			break;
 		}
@@ -113,7 +113,7 @@ unsigned char *memorypool::allocateAndClear(size_t length) {
 void memorypool::deallocate() {
 
 	memorypoollistnode	*firstlistnode=pvt->_nodelist.getFirstNode();
-	memorypoolnode		*first=firstlistnode->getData();
+	memorypoolnode		*first=firstlistnode->getValue();
 
 	// if it's time to re-evaluate and re-size of the first node, do that
 	pvt->_freecounter++;
@@ -143,7 +143,7 @@ void memorypool::deallocate() {
 	memorypoollistnode	*nextlistnode;
 	while (currentlistnode) {
 		nextlistnode=(memorypoollistnode *)currentlistnode->getNext();
-		delete currentlistnode->getData();
+		delete currentlistnode->getValue();
 		currentlistnode=nextlistnode;
 	}
 	pvt->_nodelist.clear();
@@ -157,7 +157,7 @@ void memorypool::print() {
 	memorypoolnode		*memnode;
 
 	while (listnode) {
-		memnode=listnode->getData();
+		memnode=listnode->getValue();
 		stdoutput.printf("segment %lld(%x): (%d,%d)\n",
 				segmentindex,memnode,
 				(int)memnode->_size,(int)memnode->_position);

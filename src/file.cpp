@@ -1602,146 +1602,69 @@ const char * const *file::listAttributes() const {
 }
 
 bool file::getAttribute(const char *name, uint16_t *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(uint16_t));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(uint16_t));
 }
 
 bool file::getAttribute(const char *name, uint32_t *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(uint32_t));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(uint32_t));
 }
 
 bool file::getAttribute(const char *name, uint64_t *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(uint64_t));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(uint64_t));
 }
 
 bool file::getAttribute(const char *name, int16_t *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(int16_t));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(int16_t));
 }
 
 bool file::getAttribute(const char *name, int32_t *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(int32_t));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(int32_t));
 }
 
 bool file::getAttribute(const char *name, int64_t *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(int64_t));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(int64_t));
 }
 
 bool file::getAttribute(const char *name, float *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(float));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(float));
 }
 
 bool file::getAttribute(const char *name, double *number) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(number,buffer,sizeof(double));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&number),
+			sizeof(double));
 }
 
 bool file::getAttribute(const char *name, unsigned char *character) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(character,buffer,sizeof(unsigned char));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&character),
+			sizeof(unsigned char));
 }
 
 bool file::getAttribute(const char *name, char *character) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(character,buffer,sizeof(char));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&character),
+			sizeof(char));
 }
 
 bool file::getAttribute(const char *name, bool *value) const {
-	size_t		size;
-	unsigned char	*buffer;
-	bool	retval=getAttribute(name,
-				reinterpret_cast<void **>(&buffer),
-				&size);
-	if (retval) {
-		rawbuffer::copy(value,buffer,sizeof(bool));
-		delete[] buffer;
-	}
-	return retval;
+	return getAttribute(name,
+			reinterpret_cast<void **>(&value),
+			sizeof(bool));
 }
 
 bool file::getAttribute(const char *name, unsigned char **string) const {
@@ -1809,6 +1732,17 @@ bool file::getAttribute(const char *name, void **buffer, size_t *size) const {
 	return false;
 
 	#endif
+}
+
+bool file::getAttribute(const char *name, void *buffer, size_t size) const {
+	size_t		s;
+	unsigned char	*buf;
+	bool	retval=getAttribute(name,reinterpret_cast<void **>(&buf),&s);
+	if (retval) {
+		rawbuffer::copy(buf,buffer,(s<size)?s:size);
+		delete[] buf;
+	}
+	return retval;
 }
 
 bool file::createAttribute(const char *name, uint16_t number) const {

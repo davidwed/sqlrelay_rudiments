@@ -3,14 +3,14 @@
 
 #include <rudiments/private/rudimentsinlines.h>
 
-#define LINKEDLISTNODE_TEMPLATE template <class datatype>
+#define LINKEDLISTNODE_TEMPLATE template <class valuetype>
 
-#define LINKEDLISTNODE_CLASS linkedlistnode<datatype>
+#define LINKEDLISTNODE_CLASS linkedlistnode<valuetype>
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 LINKEDLISTNODE_CLASS::linkedlistnode() {
-	data=0;
+	value=0;
 	previous=NULL;
 	next=NULL;
 }
@@ -22,14 +22,14 @@ LINKEDLISTNODE_CLASS::~linkedlistnode() {
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void LINKEDLISTNODE_CLASS::setData(datatype data) {
-	this->data=data;
+void LINKEDLISTNODE_CLASS::setValue(valuetype value) {
+	this->value=value;
 }
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-datatype LINKEDLISTNODE_CLASS::getData() const {
-	return data;
+valuetype LINKEDLISTNODE_CLASS::getValue() const {
+	return value;
 }
 
 LINKEDLISTNODE_TEMPLATE
@@ -58,12 +58,12 @@ LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() {
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-int32_t LINKEDLISTNODE_CLASS::compare(datatype data) const {
-	return datautil.compare(this->data,data);
+int32_t LINKEDLISTNODE_CLASS::compare(valuetype value) const {
+	return valueutil.compare(this->value,value);
 }
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLISTNODE_CLASS::print() const {
-	datautil.print(data);
+	valueutil.print(value);
 }
