@@ -3,5 +3,5 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/resultcodes.h>
-#include <rudiments/newlinkedlist.h>
+#include <rudiments/linkedlist.h>
 #include <rudiments/filedescriptor.h>

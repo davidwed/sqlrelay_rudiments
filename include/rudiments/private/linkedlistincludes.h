@@ -2,3 +2,5 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/inttypes.h>
+
+#include <rudiments/private/baselinkedlist.h>
