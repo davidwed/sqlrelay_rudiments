@@ -4,3 +4,4 @@
 	private:
 		linkedlistnode<valuetype>	*first;
 		linkedlistnode<valuetype>	*last;
+		uint64_t			length;

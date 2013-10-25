@@ -14,6 +14,7 @@ RUDIMENTS_TEMPLATE_INLINE
 LINKEDLIST_CLASS::linkedlist() {
 	first=NULL;
 	last=NULL;
+	length=0;
 }
 
 LINKEDLIST_TEMPLATE
@@ -39,6 +40,7 @@ void LINKEDLIST_CLASS::append(linkedlistnode<valuetype> *node) {
 		first=node;
 		last=first;
 	}
+	length++;
 }
 
 LINKEDLIST_TEMPLATE
@@ -56,6 +58,7 @@ bool LINKEDLIST_CLASS::insert(uint64_t index, linkedlistnode<valuetype> *node) {
 		node->setNext(first);
 		first->setPrevious(node);
 		first=node;
+		length++;
 		return true;
 	}
 
@@ -68,6 +71,7 @@ bool LINKEDLIST_CLASS::insert(uint64_t index, linkedlistnode<valuetype> *node) {
 	node->setNext(current->getNext());
 	current->getNext()->setPrevious(node);
 	current->setNext(node);
+	length++;
 	return true;
 }
 
@@ -91,8 +95,8 @@ bool LINKEDLIST_CLASS::removeByIndex(uint64_t index) {
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::removeByValue(valuetype value) {
-	for (linkedlistnode<valuetype> *current=first; current;
-		current=current->getNext()) {
+	for (linkedlistnode<valuetype> *current=first;
+			current; current=current->getNext()) {
 		if (!current->compare(value)) {
 			return removeNode(current);
 		}
@@ -107,15 +111,11 @@ bool LINKEDLIST_CLASS::removeAllByValue(valuetype value) {
 	linkedlistnode<valuetype>	*current=first;
 	linkedlistnode<valuetype>	*next;
 	while (current) {
-		if (!current->compare(value)) {
-			next=current->getNext();
-			if (!removeNode(current)) {
-				return false;
-			}
-			current=next;
-		} else {
-			current=current->getNext();
+		next=current->getNext();
+		if (!current->compare(value) && !removeNode(current)) {
+			return false;
 		}
+		current=next;
 	}
 	return true;
 }
@@ -139,6 +139,7 @@ bool LINKEDLIST_CLASS::removeNode(linkedlistnode<valuetype> *node) {
 		last=node->getPrevious();
 	}
 	delete node;
+	length--;
 	return true;
 }
 
@@ -156,11 +157,6 @@ bool LINKEDLIST_CLASS::getValueByIndex(uint64_t index, valuetype *value) {
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 uint64_t LINKEDLIST_CLASS::getLength() const {
-	uint64_t	length=0;
-	for (linkedlistnode<valuetype> *current=first; current;
-		current=current->getNext()) {
-		length++;
-	}
 	return length;
 }
 
@@ -198,8 +194,8 @@ RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getNodeByValue(
 					linkedlistnode<valuetype> *startnode,
 					valuetype value) {
-	for (linkedlistnode<valuetype> *current=startnode; current;
-		current=current->getNext()) {
+	for (linkedlistnode<valuetype> *current=startnode;
+			current; current=current->getNext()) {
 		if (!current->compare(value)) {
 			return current;
 		}
@@ -219,14 +215,15 @@ void LINKEDLIST_CLASS::clear() {
 	}
 	first=NULL;
 	last=NULL;
+	length=0;
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::print() const {
 	uint64_t	i=0;
-	for (linkedlistnode<valuetype> *current=first; current;
-		current=current->getNext()) {
+	for (linkedlistnode<valuetype> *current=first;
+			current; current=current->getNext()) {
 		stdoutput.printf("index %lld: ",(long long)i);
 		current->print();
 		stdoutput.printf("\n");
