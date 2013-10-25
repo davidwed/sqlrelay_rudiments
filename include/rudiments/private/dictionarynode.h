@@ -4,6 +4,3 @@
 	protected:
 		keytype		key;
 		valuetype	value;
-
-		linkedlistutil<keytype>		keyutil;
-		linkedlistutil<valuetype>	valueutil;
