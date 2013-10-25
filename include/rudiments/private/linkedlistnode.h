@@ -5,4 +5,3 @@
 		valuetype			value;
 		linkedlistnode<valuetype>	*next;
 		linkedlistnode<valuetype>	*previous;
-		linkedlistutil<valuetype>	valueutil;

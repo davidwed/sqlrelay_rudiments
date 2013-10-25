@@ -2,12 +2,13 @@
 // See the file COPYING for more information
 
 #include <rudiments/linkedlist.h>
+//#include <rudiments/newlinkedlist.h>
 #include <rudiments/stdio.h>
 
 int	main(int argc, char **argv) {
 
 	// create a list of integers
-	linkedlist<int>	intl;
+	linkedlist<int32_t>	intl;
 
 	// append values to the list, displaying the list after each append
 	stdoutput.printf("append(0)\n");

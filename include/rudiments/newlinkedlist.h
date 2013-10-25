@@ -4,11 +4,11 @@
 #ifndef RUDIMENTS_LINKEDLIST_H
 #define RUDIMENTS_LINKEDLIST_H
 
-#include <rudiments/private/linkedlistincludes.h>
+#include <rudiments/private/newlinkedlistincludes.h>
 
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class valuetype>
-class linkedlistnode {
+class linkedlistnode : public baselinkedlistnode {
 	public:
 		/** Creates an empty instance of the linkedlistnode class. */
 		linkedlistnode();
@@ -28,6 +28,7 @@ class linkedlistnode {
 		 *  on whether the key stored in the node is respectively
 		 *  less than, equal to or greater than "testkey". */
 		int32_t	compare(valuetype value) const;
+		int32_t	compare(uint64_t value) const;
 
 		/** Sets the pointer to the previous node to "previous". */
 		void	setPrevious(linkedlistnode<valuetype> *previous);
@@ -43,8 +44,6 @@ class linkedlistnode {
 
 		/** Prints the value stored in the node. */
 		void	print() const;
-
-	#include <rudiments/private/linkedlistnode.h>
 };
 
 /** The linkedlist class allows you to store an arbitrary number of values in a
@@ -54,7 +53,7 @@ class linkedlistnode {
  *  Each linkedlist is composed of a series of linkedlistnode's.  Each
  *  linkedlistnode contains the value. */
 template < class valuetype >
-class linkedlist {
+class linkedlist : public baselinkedlist {
 	public:
 		/** Creates an empty instance of the linkedlist class. */
 		linkedlist();
@@ -63,6 +62,8 @@ class linkedlist {
 		 *  its linkedlistnodes.  Note however, that the daata stored
 		 *  in each linkedlistnode is not deleted by this call. */
 		virtual	~linkedlist();
+
+		baselinkedlistnode	*newNode();
 
 		/** Creates a new linkedlistnode containing "value" and
 		 *  appends it to the linkedlist. */
@@ -147,8 +148,6 @@ class linkedlist {
 
 		/** Prints out a representation of the linkedlist. */
 		void	print() const;
-
-	#include <rudiments/private/linkedlist.h>
 };
 
 
@@ -156,6 +155,6 @@ class linkedlist {
 #define stringlistnode	linkedlistnode< char * >
 #define stringlist	linkedlist< char * >
 
-#include <rudiments/private/linkedlistinlines.h>
+#include <rudiments/private/newlinkedlistinlines.h>
 
 #endif

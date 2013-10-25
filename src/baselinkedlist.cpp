@@ -23,8 +23,12 @@ baselinkedlist::~baselinkedlist() {
 	delete pvt;
 }
 
+baselinkedlistnode *baselinkedlist::newNode() {
+	return new baselinkedlistnode();
+}
+
 void baselinkedlist::append(uint64_t value, uint64_t size) {
-	baselinkedlistnode	*node=new baselinkedlistnode();
+	baselinkedlistnode	*node=newNode();
 	node->setValue(value,size);
 	append(node);
 }
@@ -41,7 +45,7 @@ void baselinkedlist::append(baselinkedlistnode *node) {
 }
 
 bool baselinkedlist::insert(uint64_t index, uint64_t value, uint64_t size) {
-	baselinkedlistnode *node=new baselinkedlistnode();
+	baselinkedlistnode *node=newNode();
 	node->setValue(value,size);
 	return insert(index,node);
 }
@@ -250,7 +254,7 @@ baselinkedlistnode *baselinkedlistnode::getNext() {
 }
 
 int32_t baselinkedlistnode::compare(uint64_t value) const {
-	return rawbuffer::compare((void *)pvt->_value,(void *)value,pvt->_size);
+	return rawbuffer::compare(&pvt->_value,&value,pvt->_size);
 }
 
 void baselinkedlistnode::print() const {

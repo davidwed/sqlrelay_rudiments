@@ -35,6 +35,8 @@ class baselinkedlist {
 		baselinkedlist();
 		virtual	~baselinkedlist();
 
+		virtual	baselinkedlistnode	*newNode();
+
 		void	append(uint64_t value, uint64_t size);
 		void	append(baselinkedlistnode *node);
 
