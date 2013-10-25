@@ -18,7 +18,8 @@ int main(int argc, const char **argv) {
 	// create a new file called "testfile" with rw-rw---- permissions
 	// and initial contents "hello"
 	file	fl;
-	fl.create("testfile",permissions::evalPermString("rw-rw----"),"hello");
+	fl.create("testfile",permissions::evalPermString("rw-rw----"));
+	fl.write("hello");
 
 	stdoutput.printf("testfile:\n");
 	

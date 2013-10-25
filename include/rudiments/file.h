@@ -765,22 +765,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns true on success and false on failure. */
 		bool	changeOwner(uid_t uid, gid_t gid) const;
 
-		/** Changes the user that owns the file.
-		 *  Returns true on success and false on failure. */
-		bool	changeOwnerUser(const char *newuser) const;
-
-		/** Changes the user that owns the file.
-		 *  Returns true on success and false on failure. */
-		bool	changeOwnerUser(uid_t uid) const;
-
-		/** Changes the group that owns the file.
-		 *  Returns true on success and false on failure. */
-		bool	changeOwnerGroup(const char *newgroup) const;
-
-		/** Changes the group that owns the file.
-		 *  Returns true on success and false on failure. */
-		bool	changeOwnerGroup(gid_t gid) const;
-
 		/** Returns true if any of the changeOwner()
 		 *  methods are allowed on "filename" and
 		 *  false otherwise. */
@@ -1280,80 +1264,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  by the mode and false otherwise. */
 		static bool	accessible(const char *filename, int32_t mode);
 
-
-		/** Sets "perms" to the permissions of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getPermissions(const char *filename,
-						mode_t *perms);
-
-		/** Sets "uid" to the owning user of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getOwnerUserId(const char *filename,
-						uid_t *uid);
-
-		/** Sets "gid" to the owning group of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getOwnerGroupId(const char *filename,
-						gid_t *gid);
-
-		/** Sets "size" to the size of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getSize(const char *filename,
-						off64_t *size);
-
-		/** Sets "size" to the blocksize to use for most efficient I/O
-		 *  with "filename" or -1 for systems don't support this.
-		 *  Returns true on success and false on failure. */
-		static bool	getBlockSize(const char *filename,
-						blksize_t *size);
-
-		/** Sets "blocks" to the number of blocks allocated for
-		 *  "filename".  Returns true on success and false on
-		 *  failure. */
-		static bool	getBlockCount(const char *filename,
-						blkcnt_t *blocks);
-
-		/** Returns 1 if "filename" is a socket,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isSocket(const char *filename);
-
-		/** Returns 1 if "filename" is a symbolic link,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isSymbolicLink(const char *filename);
-
-		/** Returns 1 if "filename" is a regular file,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isRegularFile(const char *filename);
-
-		/** Returns 1 if "filename" is a block device,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isBlockDevice(const char *filename);
-
-		/** Returns 1 if "filename" is a directory,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isDirectory(const char *filename);
-
-		/** Returns 1 if "filename" is a character device,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isCharacterDevice(const char *filename);
-
-		/** Returns 1 if "filename" is a fifo,
-		 *  0 if it's not or -1 on error. */
-		static int32_t	isFifo(const char *filename);
-
-		/** Sets "atime" to the last access time of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getLastAccessTime(const char *filename,
-							time_t *atime);
-
-		/** Sets "mtime" to the last modification time of "filename".
-		 *  Returns true on success and false on failure.
-		 *
-		 *  Modification time IS NOT affected by changing file
-		 *  permissions, ownership or creating links. */
-		static bool	getLastModificationTime(const char *filename,
-							time_t *mtime);
-
 		/** Sets "ctime" to the last change time of "filename".
 		 *  Returns true on success and false on failure.
 		 *
@@ -1361,24 +1271,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  permissions, ownership or creating links. */
 		static bool	getLastChangeTime(const char *filename,
 							time_t *ctime);
-
-		/** Sets "dev" to the device of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getDevice(const char *filename, dev_t *dev);
-
-		/** Sets "devtype" to the device type of "filename".
-		 *  Returns true on success and false on failure. */
-		static bool	getDeviceType(const char *filename,
-							dev_t *devtype);
-
-		/** Sets "inode" to the base inode of the file.
-		 *  Returns true on success and false on failure. */
-		static bool	getInode(const char *filename, ino_t *inode);
-
-		/** Sets "nlink" to the number of hard links to the file.
-		 *  Returns true on success and false on failure. */
-		static bool	getNumberOfHardLinks(const char *filename,
-							nlink_t *nlink);
 
 		/** Changes the user and/or group that owns the file.
 		 *  Returns true on success and false on failure. */
@@ -1390,26 +1282,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns true on success and false on failure. */
 		static bool	changeOwner(const char *filename,
 						uid_t uid, gid_t gid);
-
-		/** Changes the user that owns the file.
-		 *  Returns true on success and false on failure. */
-		static bool	changeOwnerUser(const char *filename,
-							const char *newuser);
-
-		/** Changes the user that owns the file.
-		 *  Returns true on success and false on failure. */
-		static bool	changeOwnerUser(const char *filename,
-							uid_t uid);
-
-		/** Changes the group that owns the file.
-		 *  Returns true on success and false on failure. */
-		static bool	changeOwnerGroup(const char *filename,
-							const char *newgroup);
-
-		/** Changes the group that owns the file.
-		 *  Returns true on success and false on failure. */
-		static bool	changeOwnerGroup(const char *filename,
-							gid_t gid);
 
 		/** Returns true if any of the changeOwner methods are
  		 *  allowed on "filename" and false otherwise. */

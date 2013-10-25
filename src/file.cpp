@@ -185,6 +185,10 @@ char *file::getContents(const char *name) {
 	return contents;
 }
 
+ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
+	return read(buffer,(buffersize<(size_t)getSize())?buffersize:getSize());
+}
+
 ssize_t file::getContents(const char *name, unsigned char *buffer,
 						size_t buffersize) {
 	file	fl;
@@ -192,10 +196,6 @@ ssize_t file::getContents(const char *name, unsigned char *buffer,
 	ssize_t	bytes=fl.getContents(buffer,buffersize);
 	fl.close();
 	return bytes;
-}
-
-ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
-	return read(buffer,(buffersize<(size_t)getSize())?buffersize:getSize());
 }
 
 
@@ -584,186 +584,6 @@ bool file::stat(const char *filename, void *st) {
 	return (result!=-1);
 }
 
-#define STAT(filename,out,member) \
-	struct stat st; \
-	if (!stat(filename,&st)) { \
-		return false; \
-	} \
-	*out=st.member; \
-	return true;
-
-bool file::getPermissions(const char *filename, mode_t *mode) {
-	STAT(filename,mode,st_mode)
-}
-
-bool file::getOwnerUserId(const char *filename, uid_t *uid) {
-	STAT(filename,uid,st_uid)
-}
-
-bool file::getOwnerGroupId(const char *filename, gid_t *gid) {
-	STAT(filename,gid,st_gid)
-}
-
-bool file::getSize(const char *filename, off64_t *size) {
-	STAT(filename,size,st_size)
-}
-
-bool file::getBlockSize(const char *filename, blksize_t *size) {
-#ifdef RUDIMENTS_HAVE_BLKSIZE_T
-	STAT(filename,size,st_blksize)
-#else
-	*size=-1;
-	return true;
-#endif
-}
-
-bool file::getBlockCount(const char *filename, blkcnt_t *blocks) {
-#ifdef RUDIMENTS_HAVE_BLKCNT_T
-	STAT(filename,blocks,st_blocks)
-#else
-	*blocks=-1;
-	return true;
-#endif
-}
-
-#ifndef RUDIMENTS_HAVE_S_ISSOCK
-	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
-#endif
-
-int32_t file::isSocket(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFSOCK)
-			return ((st.st_mode&_S_IFSOCK)==_S_IFSOCK);
-		#elif defined(S_IFSOCK)
-			return ((st.st_mode&S_IFSOCK)==S_IFSOCK);
-		#else
-			return S_ISSOCK(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-#ifndef RUDIMENTS_HAVE_S_ISLNK
-	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
-#endif
-
-int32_t file::isSymbolicLink(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFLNK)
-			return ((st.st_mode&_S_IFLNK)==_S_IFLNK);
-		#elif defined(S_IFLNK)
-			return ((st.st_mode&S_IFLNK)==S_IFLNK);
-		#else
-			return S_ISLNK(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-int32_t file::isRegularFile(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFREG)
-			return ((st.st_mode&_S_IFREG)==_S_IFREG);
-		#elif defined(S_IFREG)
-			return ((st.st_mode&S_IFREG)==S_IFREG);
-		#else
-			return S_ISREG(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-#ifndef RUDIMENTS_HAVE_S_ISBLK
-	#define S_ISBLK(m) (((m&0060000)==0060000)?1:0)
-#endif
-
-int32_t file::isBlockDevice(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFBLK)
-			return ((st.st_mode&_S_IFBLK)==_S_IFBLK);
-		#elif defined(S_IFBLK)
-			return ((st.st_mode&S_IFBLK)==S_IFBLK);
-		#else
-			return S_ISBLK(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-int32_t file::isDirectory(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFDIR)
-			return ((st.st_mode&_S_IFDIR)==_S_IFDIR);
-		#elif defined(S_IFDIR)
-			return ((st.st_mode&S_IFDIR)==S_IFDIR);
-		#else
-			return S_ISDIR(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-int32_t file::isCharacterDevice(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFCHR)
-			return ((st.st_mode&_S_IFCHR)==_S_IFCHR);
-		#elif defined(S_IFCHR)
-			return ((st.st_mode&S_IFCHR)==S_IFCHR);
-		#else
-			return S_ISCHR(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-int32_t file::isFifo(const char *filename) {
-	struct stat	st;
-	if (stat(filename,&st)) {
-		#if defined(_S_IFIFO)
-			return ((st.st_mode&_S_IFIFO)==_S_IFIFO);
-		#elif defined(S_IFIFO)
-			return ((st.st_mode&S_IFIFO)==S_IFIFO);
-		#else
-			return S_ISFIFO(st.st_mode);
-		#endif
-	}
-	return -1;
-}
-
-bool file::getLastAccessTime(const char *filename, time_t *atime) {
-	STAT(filename,atime,st_atime)
-}
-
-bool file::getLastModificationTime(const char *filename, time_t *mtime) {
-	STAT(filename,mtime,st_mtime)
-}
-
-bool file::getLastChangeTime(const char *filename, time_t *ctime) {
-	STAT(filename,ctime,st_ctime)
-}
-
-bool file::getDevice(const char *filename, dev_t *dev) {
-	STAT(filename,dev,st_dev)
-}
-
-bool file::getDeviceType(const char *filename, dev_t *devtype) {
-	STAT(filename,devtype,st_rdev)
-}
-
-bool file::getInode(const char *filename, ino_t *inode) {
-	STAT(filename,inode,st_ino)
-}
-
-bool file::getNumberOfHardLinks(const char *filename, nlink_t *nlink) {
-	STAT(filename,nlink,st_nlink)
-}
-
 mode_t file::getPermissions() const {
 	return pvt->_st.st_mode;
 }
@@ -797,6 +617,10 @@ blkcnt_t file::getBlockCount() const {
 #endif
 }
 
+#ifndef RUDIMENTS_HAVE_S_ISSOCK
+	#define S_ISSOCK(m) (((m&0140000)==0140000)?1:0)
+#endif
+
 int32_t file::isSocket() const {
 	#if defined(_S_IFSOCK)
 		return ((pvt->_st.st_mode&_S_IFSOCK)==_S_IFSOCK);
@@ -806,6 +630,10 @@ int32_t file::isSocket() const {
 		return S_ISSOCK(pvt->_st.st_mode);
 	#endif
 }
+
+#ifndef RUDIMENTS_HAVE_S_ISLNK
+	#define S_ISLNK(m) (((m&0120000)==0120000)?1:0)
+#endif
 
 int32_t file::isSymbolicLink() const {
 	#if defined(_S_IFLNK)
@@ -826,6 +654,10 @@ int32_t file::isRegularFile() const {
 		return S_ISREG(pvt->_st.st_mode);
 	#endif
 }
+
+#ifndef RUDIMENTS_HAVE_S_ISBLK
+	#define S_ISBLK(m) (((m&0060000)==0060000)?1:0)
+#endif
 
 int32_t file::isBlockDevice() const {
 	#if defined(_S_IFBLK)
@@ -1004,11 +836,15 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 }
 
 bool file::changeOwner(const char *newuser, const char *newgroup) const {
-	uid_t	uid;
-	gid_t	gid;
-	return (passwdentry::getUserId(newuser,&uid) &&
-		groupentry::getGroupId(newgroup,&gid) &&
-		changeOwner(uid,gid));
+	uid_t	uid=-1;
+	gid_t	gid=-1;
+	if (newuser) {
+		passwdentry::getUserId(newuser,&uid);
+	}
+	if (newgroup) {
+		groupentry::getGroupId(newgroup,&gid);
+	}
+	return changeOwner(uid,gid);
 }
 
 bool file::changeOwner(uid_t uid, gid_t gid) const {
@@ -1030,57 +866,13 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 
 bool file::changeOwner(const char *filename, const char *newuser,
 						const char *newgroup) {
-	uid_t	uid;
-	gid_t	gid;
-	return (passwdentry::getUserId(newuser,&uid) &&
-		groupentry::getGroupId(newgroup,&gid) &&
-		changeOwner(filename,uid,gid));
+	file	fl;
+	return (fl.open(filename,O_RDWR) && fl.changeOwner(newuser,newgroup));
 }
 
 bool file::changeOwner(const char *filename, uid_t uid, gid_t gid) {
 	file	fl;
 	return (fl.open(filename,O_RDWR) && fl.changeOwner(uid,gid));
-}
-
-bool file::changeOwnerUser(const char *newuser) const {
-	uid_t	uid;
-	return (passwdentry::getUserId(newuser,&uid) &&
-				changeOwnerUser(uid));
-}
-
-bool file::changeOwnerUser(uid_t uid) const {
-	return changeOwner(uid,(gid_t)-1);
-}
-
-bool file::changeOwnerUser(const char *filename, const char *newuser) {
-	uid_t	uid;
-	return (passwdentry::getUserId(newuser,&uid) &&
-				changeOwnerUser(filename,uid));
-}
-
-bool file::changeOwnerUser(const char *filename, uid_t uid) {
-	return changeOwner(filename,uid,(gid_t)-1);
-}
-
-
-bool file::changeOwnerGroup(const char *newgroup) const {
-	gid_t	gid;
-	return (groupentry::getGroupId(newgroup,&gid) &&
-				changeOwnerGroup(gid));
-}
-
-bool file::changeOwnerGroup(gid_t gid) const {
-	return changeOwner((uid_t)-1,gid);
-}
-
-bool file::changeOwnerGroup(const char *filename, const char *newgroup) {
-	gid_t	gid;
-	return (groupentry::getGroupId(newgroup,&gid) &&
-				changeOwnerGroup(filename,gid));
-}
-
-bool file::changeOwnerGroup(const char *filename, gid_t gid) {
-	return changeOwner(filename,(uid_t)-1,gid);
 }
 
 bool file::canChangeOwner(const char *filename) {
@@ -1241,23 +1033,23 @@ bool file::dataSync() const {
 
 bool file::setLastAccessTime(const char *filename,
 					time_t lastaccesstime) {
-	time_t	lastmodtime;
-	if (!getLastModificationTime(filename,&lastmodtime)) {
+	struct stat	st;
+	if (!stat(filename,&st)) {
 		return false;
 	}
 	return setLastAccessAndModificationTimes(filename,
 						lastaccesstime,
-						lastmodtime);
+						st.st_mtime);
 }
 
 bool file::setLastModificationTime(const char *filename,
 					time_t lastmodtime) {
-	time_t	lastaccesstime;
-	if (!getLastAccessTime(filename,&lastaccesstime)) {
+	struct stat	st;
+	if (!stat(filename,&st)) {
 		return false;
 	}
 	return setLastAccessAndModificationTimes(filename,
-						lastaccesstime,
+						st.st_atime,
 						lastmodtime);
 }
 

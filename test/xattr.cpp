@@ -6,8 +6,8 @@
 int main(int argc, char **argv) {
 
 	file	testfile;
-	testfile.create("testfile",permissions::evalPermString("rw-r--r--"),
-				"hello world\n");
+	testfile.create("testfile",permissions::evalPermString("rw-r--r--"));
+	testfile.write("hello world\n");
 
 	const char * const *attrs=testfile.listAttributes();
 	if (attrs) {

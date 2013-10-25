@@ -9,7 +9,8 @@
 int main(int argc, const char **argv) {
 
 	file	fl;
-	fl.create("testfile",permissions::evalPermString("rw-rw----"),"hello");
+	fl.create("testfile",permissions::evalPermString("rw-rw----"));
+	fl.write("hello");
 
 	stdoutput.printf("locking...\n");
 	#if defined(F_RDLCK) && defined(F_WRLCK)
