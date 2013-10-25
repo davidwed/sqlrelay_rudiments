@@ -240,6 +240,14 @@ void LINKEDLIST_CLASS::print() const {
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+LINKEDLISTNODE_CLASS::linkedlistnode() {
+	value=0;
+	previous=NULL;
+	next=NULL;
+}
+
+LINKEDLISTNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 LINKEDLISTNODE_CLASS::linkedlistnode(valuetype value) {
 	this->value=value;
 	previous=NULL;
