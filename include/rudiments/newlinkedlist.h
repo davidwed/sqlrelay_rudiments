@@ -28,7 +28,7 @@ class linkedlistnode : public baselinkedlistnode {
 		 *  on whether the key stored in the node is respectively
 		 *  less than, equal to or greater than "testkey". */
 		int32_t	compare(valuetype value) const;
-		int32_t	compare(uint64_t value) const;
+		int32_t	compareInternal(uint64_t value) const;
 
 		/** Sets the pointer to the previous node to "previous". */
 		void	setPrevious(linkedlistnode<valuetype> *previous);

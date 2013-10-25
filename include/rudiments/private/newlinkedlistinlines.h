@@ -100,25 +100,29 @@ uint64_t LINKEDLIST_CLASS::getLength() const {
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getFirstNode() {
-	return baselinkedlist::getFirstNode();
+	return (linkedlistnode<valuetype> *)
+		baselinkedlist::getFirstNode();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getLastNode() {
-	return baselinkedlist::getLastNode();
+	return (linkedlistnode<valuetype> *)
+		baselinkedlist::getLastNode();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getNodeByIndex(uint64_t index) {
-	return baselinkedlist::getNodeByIndex(index);
+	return (linkedlistnode<valuetype> *)
+		baselinkedlist::getNodeByIndex(index);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getNodeByValue(valuetype value) {
-	return baselinkedlist::getNodeByValue((uint64_t)value);
+	return (linkedlistnode<valuetype> *)
+		baselinkedlist::getNodeByValue((uint64_t)value);
 }
 
 LINKEDLIST_TEMPLATE
@@ -126,7 +130,8 @@ RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getNodeByValue(
 					linkedlistnode<valuetype> *startnode,
 					valuetype value) {
-	return baselinkedlist::getNodeByValue(startnode,(uint64_t)value);
+	return (linkedlistnode<valuetype> *)
+		baselinkedlist::getNodeByValue(startnode,(uint64_t)value);
 }
 
 LINKEDLIST_TEMPLATE
@@ -141,70 +146,67 @@ void LINKEDLIST_CLASS::print() const {
 	baselinkedlist::print();
 }
 
-#define LINKEDLISTNODE_TEMPLATE template <class valuetype>
-
-#define LINKEDLISTNODE_CLASS linkedlistnode<valuetype>
-
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLISTNODE_CLASS::linkedlistnode() : baselinkedlistnode() {
+linkedlistnode<valuetype>::linkedlistnode() : baselinkedlistnode() {
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLISTNODE_CLASS::~linkedlistnode() {
+linkedlistnode<valuetype>::~linkedlistnode() {
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-void LINKEDLISTNODE_CLASS::setValue(valuetype value) {
-	baselinkedlistnode::setValue((uint64_t)value);
+void linkedlistnode<valuetype>::setValue(valuetype value) {
+	baselinkedlistnode::setValue((uint64_t)value,sizeof(value));
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-valuetype LINKEDLISTNODE_CLASS::getValue() const {
+valuetype linkedlistnode<valuetype>::getValue() const {
 	return (valuetype)baselinkedlistnode::getValue();
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-void LINKEDLISTNODE_CLASS::setPrevious(LINKEDLISTNODE_CLASS *previous) {
+void linkedlistnode<valuetype>::setPrevious(
+				linkedlistnode<valuetype> *previous) {
 	return baselinkedlistnode::setPrevious(previous);
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-void LINKEDLISTNODE_CLASS::setNext(LINKEDLISTNODE_CLASS *next) {
+void linkedlistnode<valuetype>::setNext(linkedlistnode<valuetype> *next) {
 	return baselinkedlistnode::setNext(next);
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getPrevious() {
-	return baselinkedlistnode::getPrevious();
+linkedlistnode<valuetype> *linkedlistnode<valuetype>::getPrevious() {
+	return (linkedlistnode<valuetype> *)baselinkedlistnode::getPrevious();
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() {
-	return baselinkedlistnode::getNext();
+linkedlistnode<valuetype> *linkedlistnode<valuetype>::getNext() {
+	return (linkedlistnode<valuetype> *)baselinkedlistnode::getNext();
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-int32_t LINKEDLISTNODE_CLASS::compare(valuetype value) const {
-	return compare((uint64_t)value);
+int32_t linkedlistnode<valuetype>::compare(valuetype value) const {
+	return compareInternal((uint64_t)value);
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-int32_t LINKEDLISTNODE_CLASS::compare(uint64_t value) const {
+int32_t linkedlistnode<valuetype>::compareInternal(uint64_t value) const {
 	return _linkedlistutil_compare(getValue(),(valuetype)value);
 }
 
-LINKEDLISTNODE_TEMPLATE
+template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-void LINKEDLISTNODE_CLASS::print() const {
+void linkedlistnode<valuetype>::print() const {
 	_linkedlistutil_print((valuetype)getValue());
 }

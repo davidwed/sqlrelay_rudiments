@@ -3,7 +3,7 @@
 
 #include <rudiments/xmldom.h>
 #include <rudiments/charstring.h>
-#include <rudiments/linkedlist.h>
+#include <rudiments/newlinkedlist.h>
 #include <rudiments/filesystem.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
