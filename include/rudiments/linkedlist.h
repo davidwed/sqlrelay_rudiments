@@ -8,7 +8,7 @@
 
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class valuetype>
-class linkedlistnode : public baselinkedlistnode {
+class linkedlistnode {
 	public:
 		/** Creates an empty instance of the linkedlistnode class. */
 		linkedlistnode();
@@ -28,7 +28,6 @@ class linkedlistnode : public baselinkedlistnode {
 		 *  on whether the key stored in the node is respectively
 		 *  less than, equal to or greater than "testkey". */
 		int32_t	compare(valuetype value) const;
-		int32_t	compareInternal(uint64_t value) const;
 
 		/** Sets the pointer to the previous node to "previous". */
 		void	setPrevious(linkedlistnode<valuetype> *previous);
@@ -44,6 +43,8 @@ class linkedlistnode : public baselinkedlistnode {
 
 		/** Prints the value stored in the node. */
 		void	print() const;
+
+	#include <rudiments/private/linkedlistnode.h>
 };
 
 /** The linkedlist class allows you to store an arbitrary number of values in a
@@ -53,7 +54,7 @@ class linkedlistnode : public baselinkedlistnode {
  *  Each linkedlist is composed of a series of linkedlistnode's.  Each
  *  linkedlistnode contains the value. */
 template < class valuetype >
-class linkedlist : public baselinkedlist {
+class linkedlist {
 	public:
 		/** Creates an empty instance of the linkedlist class. */
 		linkedlist();
@@ -62,8 +63,6 @@ class linkedlist : public baselinkedlist {
 		 *  its linkedlistnodes.  Note however, that the daata stored
 		 *  in each linkedlistnode is not deleted by this call. */
 		virtual	~linkedlist();
-
-		baselinkedlistnode	*newNode();
 
 		/** Creates a new linkedlistnode containing "value" and
 		 *  appends it to the linkedlist. */
@@ -148,6 +147,8 @@ class linkedlist : public baselinkedlist {
 
 		/** Prints out a representation of the linkedlist. */
 		void	print() const;
+
+	#include <rudiments/private/linkedlist.h>
 };
 
 
