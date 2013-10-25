@@ -323,15 +323,6 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 #endif
 }
 
-bool groupentry::getPassword(const char *groupname, char **password) {
-	groupentry	grp;
-	if (grp.initialize(groupname)) {
-		*password=charstring::duplicate(grp.getPassword());
-		return true;
-	}
-	return false;
-}
-
 bool groupentry::getGroupId(const char *groupname, gid_t *groupid) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
@@ -341,51 +332,10 @@ bool groupentry::getGroupId(const char *groupname, gid_t *groupid) {
 	return false;
 }
 
-bool groupentry::getMembers(const char *groupname, char ***members) {
-	groupentry	grp;
-	if (grp.initialize(groupname)) {
-		int32_t	counter;
-		for (counter=0; grp.getMembers()[counter]; counter++);
-		char	**memb=new char *[counter+1];
-		memb[counter]=NULL;
-		for (int i=0; i<counter; i++) {
-			memb[i]=charstring::duplicate(grp.getMembers()[i]);
-		}
-		*members=memb;
-		return true;
-	}
-	return false;
-}
-
 bool groupentry::getName(gid_t groupid, char **name) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		*name=charstring::duplicate(grp.getName());
-		return true;
-	}
-	return false;
-}
-
-bool groupentry::getPassword(gid_t groupid, char **password) {
-	groupentry	grp;
-	if (grp.initialize(groupid)) {
-		*password=charstring::duplicate(grp.getPassword());
-		return true;
-	}
-	return false;
-}
-
-bool groupentry::getMembers(gid_t groupid, char ***members) {
-	groupentry	grp;
-	if (grp.initialize(groupid)) {
-		int32_t	counter;
-		for (counter=0; grp.getMembers()[counter]; counter++);
-		char	**memb=new char *[counter+1];
-		memb[counter]=NULL;
-		for (int i=0; i<counter; i++) {
-			memb[i]=charstring::duplicate(grp.getMembers()[i]);
-		}
-		*members=memb;
 		return true;
 	}
 	return false;

@@ -13,97 +13,6 @@ class passwdentryprivate;
 class RUDIMENTS_DLLSPEC passwdentry {
 	public:
 
-		/** Sets "name" to the name of the user specified by "userid".
-		 *  Note that "name" is allocated internally and returned.  The
-		 *  calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getName(uid_t userid, char **name);
-
-		/** Sets "password" to the password of the user specified by
-		 *  "userid".  Note that "password" is allocated internally and
-		 *  returned.  The calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getPassword(uid_t userid, char **password);
-
-		/** Sets "groupid" to the primary group id of the user
-		 *  specified by "userid".
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getPrimaryGroupId(uid_t userid, gid_t *groupid);
-
-		/** Sets "realname" to the real name of the user specified by
-		 *  "userid".  Note that "realname" is allocated internally and
-		 *  returned.  The calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getRealName(uid_t userid, char **realname);
-
-		/** Sets "homedir" to the full pathname of the home directory
-		 *  of the user specified by "userid".  Note that "homedir" is
-		 *  allocated internally and returned.  The calling program
-		 *  must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getHomeDirectory(uid_t userid, char **homedir);
-
-		/** Sets "shell" to the full pathname of the shell program
-		 *  of the user specified by "userid".  Note that "shell" is
-		 *  allocated internally and returned.  The calling program
-		 *  must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getShell(uid_t userid, char **shell);
-
-
-		/** Sets "password" to the password of the user specified by
-		 *  "username".  Note that "password" is allocated internally
-		 *  and returned.  The calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getPassword(const char *username,
-							char **password);
-
-		/** Sets "userid" to the id of the user specified by "username".
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getUserId(const char *username,
-							uid_t *userid);
-
-		/** Sets "groupid" to the primary group id of the user
-		 *  specified by "username".
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getPrimaryGroupId(const char *username,
-							gid_t *groupid);
-
-		/** Sets "realname" to the real name of the user specified by
-		 *  "username".  Note that "realname" is allocated internally
-		 *  and returned.  The calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getRealName(const char *username,
-							char **realname);
-
-		/** Sets "homedir" to the full pathname of the home directory
-		 *  of the user specified by "username".  Note that "homedir" is
-		 *  allocated internally and returned.  The calling program
-		 *  must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getHomeDirectory(const char *username,
-							char **homedir);
-
-		/** Sets "shell" to the full pathname of the shell program
-		 *  of the user specified by "username".  Note that "shell" is
-		 *  allocated internally and returned.  The calling program
-		 *  must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getShell(const char *username,
-							char **shell);
-
 		/** Creates an instance of the passwdentry class. */
 		passwdentry();
 
@@ -146,6 +55,21 @@ class RUDIMENTS_DLLSPEC passwdentry {
 
 		/** Returns the shell of this user. */
 		const char	*getShell() const;
+
+		/** Convenience method.
+		 *  Sets "name" to the name of the user specified by "userid".
+		 *  Note that "name" is allocated internally and returned.  The
+		 *  calling program must free the buffer.
+		 *
+		 *  Returns true on success and false otherwise. */
+		static bool	getName(uid_t userid, char **name);
+
+		/** Convenience method.
+		 *  Sets "userid" to the id of the user specified by "username".
+		 *
+		 *  Returns true on success and false otherwise. */
+		static bool	getUserId(const char *username,
+							uid_t *userid);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

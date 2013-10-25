@@ -162,22 +162,6 @@ bool protocolentry::initialize(const char *protocolname, int32_t number) {
 	#endif
 }
 
-bool protocolentry::getAliasList(const char *protocolname, char ***aliaslist) {
-	protocolentry	pe;
-	if (pe.initialize(protocolname)) {
-		int32_t	counter;
-		for (counter=0; pe.getAliasList()[counter]; counter++);
-		char	**alias=new char *[counter+1];
-		alias[counter]=NULL;
-		for (int32_t i=0; i<counter; i++) {
-			alias[i]=charstring::duplicate(pe.getAliasList()[i]);
-		}
-		*aliaslist=alias;
-		return true;
-	}
-	return false;
-}
-
 bool protocolentry::getNumber(const char *protocolname, int32_t *number) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
@@ -191,22 +175,6 @@ bool protocolentry::getName(int32_t number, char **name) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
 		*name=charstring::duplicate(pe.getName());
-		return true;
-	}
-	return false;
-}
-
-bool protocolentry::getAliasList(int32_t number, char ***aliaslist) {
-	protocolentry	pe;
-	if (pe.initialize(number)) {
-		int32_t	counter;
-		for (counter=0; pe.getAliasList()[counter]; counter++);
-		char	**alias=new char *[counter+1];
-		alias[counter]=NULL;
-		for (int32_t i=0; i<counter; i++) {
-			alias[i]=charstring::duplicate(pe.getAliasList()[i]);
-		}
-		*aliaslist=alias;
 		return true;
 	}
 	return false;

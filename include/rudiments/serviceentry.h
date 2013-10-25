@@ -13,42 +13,6 @@ class serviceentryprivate;
 class RUDIMENTS_DLLSPEC serviceentry {
 	public:
 
-		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  "servicename" using "protocol" (tcp, udp, etc.).  Note that
-		 *  "aliaslist" is allocated internally and returned.  The
-		 *  calling program must free each element and the array itself.
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getAliasList(const char *servicename,
-						const char *protocol,
-						char ***aliaslist);
-
-		/** Sets "port" to the port that the server for "servicename"
-		 *  using "protocol" (tcp, udp, etc.) would listen on. */
-		static	bool	getPort(const char *servicename,
-						const char *protocol,
-						int32_t *port);
-
-		/** Sets "name" to the name of the service that a server
-		 *  listening on "port", using "protocol" (tcp, udp, etc.)
-		 *  would be serving.  Note that "name" is allocated internally
-		 *  and returned.  The calling program must free the buffer. */
-		static	bool	getName(int32_t port,
-						const char *protocol,
-						char **name);
-
-		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  the service that a server listening on "port", using
-		 *  "protocol" (tcp, udp, etc.) would be serving.  Note that
-		 *  "aliaslist" is allocated internally and returned.  The
-		 *  calling program must free each element and the array itself.
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getAliasList(int32_t port,
-						const char *protocol,
-						char ***aliaslist);
-
-
 		/** Creates an instance of the serviceentry class. */
 		serviceentry();
 
@@ -89,6 +53,22 @@ class RUDIMENTS_DLLSPEC serviceentry {
 		/** Returns a NULL-terminated list of aliases for the service
 		 *  entry. */
 		const char * const *	getAliasList() const;
+
+		/** Convenience method.
+		 *  Sets "port" to the port that the server for "servicename"
+		 *  using "protocol" (tcp, udp, etc.) would listen on. */
+		static	bool	getPort(const char *servicename,
+						const char *protocol,
+						int32_t *port);
+
+		/** Convenience method.
+		 *  Sets "name" to the name of the service that a server
+		 *  listening on "port", using "protocol" (tcp, udp, etc.)
+		 *  would be serving.  Note that "name" is allocated internally
+		 *  and returned.  The calling program must free the buffer. */
+		static	bool	getName(int32_t port,
+						const char *protocol,
+						char **name);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

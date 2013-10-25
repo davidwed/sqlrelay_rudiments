@@ -13,34 +13,6 @@ class protocolentryprivate;
 class RUDIMENTS_DLLSPEC protocolentry {
 	public:
 
-		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  "protocolname".  Note that "aliaslist" is allocated
-		 *  internally and returned.  The calling program must free
-		 *  each element and the array itself.
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getAliasList(const char *protocolname,
-						char ***aliaslist);
-
-		/** Sets "number" to the number associated with
-		 *  "protocolname". */
-		static	bool	getNumber(const char *protocolname,
-						int32_t *number);
-
-		/** Sets "name" to the name of the protocol associated with
-		 *  "number". */
-		static	bool	getName(int32_t number, char **name);
-
-		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  the protocol associated with "number".
-		 *  Note that "aliaslist" is allocated internally and returned.
-		 *  The calling program must free each element and the array
-		 *  itself.
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getAliasList(int32_t number, char ***aliaslist);
-
-
 		/** Creates an instance of the protocolentry class. */
 		protocolentry();
 
@@ -72,6 +44,17 @@ class RUDIMENTS_DLLSPEC protocolentry {
 
 		/** Returns the number associated with the protocol entry. */
 		int32_t			getNumber() const;
+
+		/** Convenience method.
+		 *  Sets "number" to the number associated with
+		 *  "protocolname". */
+		static	bool	getNumber(const char *protocolname,
+						int32_t *number);
+
+		/** Convenience method.
+		 *  Sets "name" to the name of the protocol associated with
+		 *  "number". */
+		static	bool	getName(int32_t number, char **name);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

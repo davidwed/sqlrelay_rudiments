@@ -13,7 +13,8 @@
 	tweaks for OSR505
 	a few xmlsax optimization fixes
 	renamed *Data methods to *Value in linkedlist and dictionary classes
-	removed print methods from *entry classes
+	removed print methods and unlikely-to-be-used static methods from
+		*entry classes
 	refactored xattr code a little to make it smaller
 	removed static methods from filesystem class to make it smaller
 	removed some static methods from file class to make it smaller

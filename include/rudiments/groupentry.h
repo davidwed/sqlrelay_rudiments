@@ -13,52 +13,6 @@ class groupentryprivate;
 class RUDIMENTS_DLLSPEC groupentry {
 	public:
 
-		/** Sets "password" to the password for "groupname".  Note that
-		 *  "password" is allocated internally and returned.  The
-		 *  calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getPassword(const char *groupname,
-							char **password);
-
-		/** Sets "groupid" to the id for "groupname".
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getGroupId(const char *groupname,
-							gid_t *groupid);
-
-		/** Sets "members" to a NULL-terminated list of the names of
-		 *  the users in "groupname".  Note that "members" is allocated
-		 *  internally and returned.  The calling program must
-		 *  free each element and the array itself.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getMembers(const char *groupname,
-							char ***members);
-
-		/** Sets "name" to the name of "groupid".  Note that "name" is
-		 *  allocated internally and returned.  The calling program
-		 *  must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getName(gid_t groupid, char **name);
-
-		/** Sets "password" to the password for "groupid".  Note that
-		 *  "password" is allocated internally and returned.  The
-		 *  calling program must free the buffer.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getPassword(gid_t groupid, char **password);
-
-		/** Sets "members" to a NULL-terminated list of the names of
-		 *  the users in "groupid".  Note that "members" is allocated
-		 *  internally and returned.  The calling program must
-		 *  free each element and the array itself.
-		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getMembers(gid_t groupid, char ***members);
-
-
 		/** Creates an instance of the groupentry class. */
 		groupentry();
 
@@ -93,6 +47,22 @@ class RUDIMENTS_DLLSPEC groupentry {
 		/** Returns a NULL-terminated list of the
 		 *  names of the members of the group. */
 		const char * const	*getMembers() const;
+
+		/** Convenience method.
+		 *  Sets "groupid" to the id for "groupname".
+		 *
+		 *  Returns true on success and false otherwise. */
+		static bool	getGroupId(const char *groupname,
+							gid_t *groupid);
+
+		/** Convenience method.
+		 *  Sets "name" to the name of "groupid".  Note that "name" is
+		 *  allocated internally and returned.  The calling program
+		 *  must free the buffer.
+		 *
+		 *  Returns true on success and false otherwise. */
+		static bool	getName(gid_t groupid, char **name);
+
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

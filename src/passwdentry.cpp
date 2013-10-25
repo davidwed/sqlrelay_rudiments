@@ -347,100 +347,10 @@ bool passwdentry::getName(uid_t userid, char **name) {
 	return false;
 }
 
-bool passwdentry::getPassword(uid_t userid, char **password) {
-	passwdentry	pwd;
-	if (pwd.initialize(userid)) {
-		*password=charstring::duplicate(pwd.getPassword());
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getPrimaryGroupId(uid_t userid, gid_t *groupid) {
-	passwdentry	pwd;
-	if (pwd.initialize(userid)) {
-		*groupid=pwd.getPrimaryGroupId();
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getRealName(uid_t userid, char **realname) {
-	passwdentry	pwd;
-	if (pwd.initialize(userid)) {
-		*realname=charstring::duplicate(pwd.getRealName());
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getHomeDirectory(uid_t userid, char **homedir) {
-	passwdentry	pwd;
-	if (pwd.initialize(userid)) {
-		*homedir=charstring::duplicate(pwd.getHomeDirectory());
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getShell(uid_t userid, char **shell) {
-	passwdentry	pwd;
-	if (pwd.initialize(userid)) {
-		*shell=charstring::duplicate(pwd.getShell());
-		return true;
-	}
-	return false;
-}
-
 bool passwdentry::getUserId(const char *username, uid_t *userid) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
 		*userid=pwd.getUserId();
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getPassword(const char *username, char **password) {
-	passwdentry	pwd;
-	if (pwd.initialize(username)) {
-		*password=charstring::duplicate(pwd.getPassword());
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getPrimaryGroupId(const char *username, gid_t *groupid) {
-	passwdentry	pwd;
-	if (pwd.initialize(username)) {
-		*groupid=pwd.getPrimaryGroupId();
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getRealName(const char *username, char **realname) {
-	passwdentry	pwd;
-	if (pwd.initialize(username)) {
-		*realname=charstring::duplicate(pwd.getRealName());
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getHomeDirectory(const char *username, char **homedir) {
-	passwdentry	pwd;
-	if (pwd.initialize(username)) {
-		*homedir=charstring::duplicate(pwd.getHomeDirectory());
-		return true;
-	}
-	return false;
-}
-
-bool passwdentry::getShell(const char *username, char **shell) {
-	passwdentry	pwd;
-	if (pwd.initialize(username)) {
-		*shell=charstring::duplicate(pwd.getShell());
 		return true;
 	}
 	return false;

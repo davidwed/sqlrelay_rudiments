@@ -184,19 +184,11 @@ bool rpcentry::initialize(const char *rpcname, int32_t number) {
 	#endif
 }
 
-bool rpcentry::getAliasList(const char *name, char ***aliaslist) {
+bool rpcentry::getNumber(const char *name, int32_t *number) {
 	#ifdef RUDIMENTS_HAVE_RPC
 		rpcentry	re;
 		if (re.initialize(name)) {
-			int32_t	counter;
-			for (counter=0; re.getAliasList()[counter]; counter++);
-			char	**alias=new char *[counter+1];
-			alias[counter]=NULL;
-			for (int32_t i=0; i<counter; i++) {
-				alias[i]=charstring::duplicate(
-						re.getAliasList()[i]);
-			}
-			*aliaslist=alias;
+			*number=re.getNumber();
 			return true;
 		}
 	#endif
@@ -208,25 +200,6 @@ bool rpcentry::getName(int32_t number, char **name) {
 		rpcentry	re;
 		if (re.initialize(number)) {
 			*name=charstring::duplicate(re.getName());
-			return true;
-		}
-	#endif
-	return false;
-}
-
-bool rpcentry::getAliasList(int32_t number, char ***aliaslist) {
-	#ifdef RUDIMENTS_HAVE_RPC
-		rpcentry	re;
-		if (re.initialize(number)) {
-			int32_t	counter;
-			for (counter=0; re.getAliasList()[counter]; counter++);
-			char	**alias=new char *[counter+1];
-			alias[counter]=NULL;
-			for (int32_t i=0; i<counter; i++) {
-				alias[i]=charstring::duplicate(
-						re.getAliasList()[i]);
-			}
-			*aliaslist=alias;
 			return true;
 		}
 	#endif

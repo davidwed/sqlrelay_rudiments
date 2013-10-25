@@ -13,33 +13,6 @@ class rpcentryprivate;
 class RUDIMENTS_DLLSPEC rpcentry {
 	public:
 
-		/** Sets "number" to the number associated with rpc "name".
-		 *
-		 *  Returns true on success and false otherwise. */
-		static	bool	getNumber(const char *name, int32_t *number);
-
-		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  rpc "name".  Note that "aliaslist" is allocated
-		 *  internally and returned.  The calling program must free
-		 *  each element and the array itself.
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getAliasList(const char *name,
-						char ***aliaslist);
-
-		/** Sets "name" to the name associated with rpc "number". 
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getName(int32_t number, char **name);
-
-		/** Sets "aliaslist" to a NULL-terminated list of aliases for
-		 *  rpc "number".  Note that "aliaslist" is allocated
-		 *  internally and returned.  The calling program must free
-		 *  each element and the array itself.
-		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getAliasList(int32_t number, char ***aliaslist);
-
 		/** Creates an instance of the rpcentry class. */
 		rpcentry();
 
@@ -71,6 +44,18 @@ class RUDIMENTS_DLLSPEC rpcentry {
 		/** Returns a NULL-terminated list of aliases for the rpc
 		 *  entry. */
 		const char * const	*getAliasList() const;
+
+		/** Convenience method.
+		 *  Sets "number" to the number associated with rpc "name".
+		 *
+		 *  Returns true on success and false otherwise. */
+		static	bool	getNumber(const char *name, int32_t *number);
+
+		/** Convenience method.
+		 *  Sets "name" to the name associated with rpc "number". 
+		 *  
+		 *  Returns true on success and false otherwise. */
+		static	bool	getName(int32_t number, char **name);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
