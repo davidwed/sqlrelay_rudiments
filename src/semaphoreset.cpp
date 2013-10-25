@@ -473,7 +473,7 @@ gid_t semaphoreset::getGroupId() {
 		return (gid_t)-1;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return (uid_t)-1;
+		return (gid_t)-1;
 	#endif
 }
 

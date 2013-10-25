@@ -97,7 +97,7 @@ uid_t sharedmemory::getUserId() {
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
-	return -1;
+	return (uid_t)-1;
 }
 
 gid_t sharedmemory::getGroupId() {
@@ -109,7 +109,7 @@ gid_t sharedmemory::getGroupId() {
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
-	return -1;
+	return (gid_t)-1;
 }
 
 mode_t sharedmemory::getPermissions() {
