@@ -160,6 +160,8 @@ class linkedlist {
 // ideally I'd use typdefs for these but older compilers can't handle them
 #define stringlistnode	linkedlistnode< char * >
 #define stringlist	linkedlist< char * >
+#define conststringlistnode	linkedlistnode< const char * >
+#define conststringlist		linkedlist< const char * >
 
 #include <rudiments/private/linkedlistinlines.h>
 

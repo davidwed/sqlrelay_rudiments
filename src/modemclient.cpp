@@ -119,10 +119,8 @@ void modemclient::initialize(const char *devicename,
 int32_t modemclient::connect() {
 
 	constnamevaluepairs	phnvp;
-	phnvp.setValue("customatcommands",
-			const_cast<char *>(pvt->_customatcommands));
-	phnvp.setValue("phonenumber",
-			const_cast<char *>(pvt->_phonenumber));
+	phnvp.setValue("customatcommands",pvt->_customatcommands);
+	phnvp.setValue("phonenumber",pvt->_phonenumber);
 
 	uint32_t	whichtry=0;
 	for (;;) {

@@ -49,7 +49,7 @@ filedestination::~filedestination() {
 
 bool filedestination::open(const char *filename) {
 	return pvt->_logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,
-				permissions::ownerReadWrite());
+					permissions::ownerReadWrite());
 }
 
 void filedestination::close() {
