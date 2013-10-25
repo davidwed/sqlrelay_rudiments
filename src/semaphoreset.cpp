@@ -403,15 +403,13 @@ bool semaphoreset::setGroupId(gid_t gid) {
 }
 
 bool semaphoreset::setUserName(const char *username) {
-	uid_t	userid;
-	return passwdentry::getUserId(username,&userid) &&
-					setUserId(userid);
+	uid_t	userid=passwdentry::getUserId(username);
+	return (userid!=(uid_t)-1 && setUserId(userid));
 }
 
 bool semaphoreset::setGroupName(const char *groupname) {
-	gid_t	groupid;
-	return groupentry::getGroupId(groupname,&groupid) &&
-					setGroupId(groupid);
+	gid_t	groupid=groupentry::getGroupId(groupname);
+	return (groupid!=(gid_t)-1 && setGroupId(groupid));
 }
 
 bool semaphoreset::setPermissions(mode_t permissions) {
@@ -432,15 +430,8 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 }
 
 const char *semaphoreset::getUserName() {
-	uid_t	uid=getUserId();
-	if (uid!=(uid_t)-1) {
-		// FIXME: memory leak here
-		char	*name;
-		if (passwdentry::getName(uid,&name)) {
-			return name;
-		}
-	}
-	return NULL;
+	// FIXME: memory leak here
+	return passwdentry::getName(getUserId());
 }
 
 uid_t semaphoreset::getUserId() {
@@ -463,15 +454,8 @@ uid_t semaphoreset::getUserId() {
 }
 
 const char *semaphoreset::getGroupName() {
-	gid_t	gid=getUserId();
-	if (gid!=(gid_t)-1) {
-		// FIXME: memory leak here
-		char	*name;
-		if (groupentry::getName(gid,&name)) {
-			return name;
-		}
-	}
-	return NULL;
+	// FIXME: memory leak here
+	return groupentry::getName(getGroupId());
 }
 
 gid_t semaphoreset::getGroupId() {

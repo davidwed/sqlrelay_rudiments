@@ -97,7 +97,7 @@ uid_t sharedmemory::getUserId() {
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
-	return 0;
+	return -1;
 }
 
 gid_t sharedmemory::getGroupId() {
@@ -109,7 +109,7 @@ gid_t sharedmemory::getGroupId() {
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
-	return 0;
+	return -1;
 }
 
 mode_t sharedmemory::getPermissions() {
@@ -220,53 +220,23 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 }
 
 const char *sharedmemory::getUserName() {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		shmid_ds	getds;
-		char		*name;
-		if (shmControl(IPC_STAT,&getds) &&
-			passwdentry::getName(getds.shm_perm.uid,&name)) {
-			return name;
-		}
-	#else
-		error::setErrorNumber(ENOSYS);
-	#endif
-	return NULL;
+	// FIXME: memory leak
+	return passwdentry::getName(getUserId());
 }
 
 const char *sharedmemory::getGroupName() {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		shmid_ds	getds;
-		char		*name;
-		if (shmControl(IPC_STAT,&getds) &&
-			groupentry::getName(getds.shm_perm.gid,&name)) {
-			return name;
-		}
-	#else
-		error::setErrorNumber(ENOSYS);
-	#endif
-	return NULL;
+	// FIXME: memory leak
+	return groupentry::getName(getGroupId());
 }
 
 bool sharedmemory::setUserName(const char *username) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		uid_t	userid;
-		return (passwdentry::getUserId(username,&userid) &&
-							setUserId(userid));
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
+	uid_t	userid=passwdentry::getUserId(username);
+	return (userid!=(uid_t)-1 && setUserId(userid));
 }
 
 bool sharedmemory::setGroupName(const char *groupname) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		gid_t	groupid;
-		return (groupentry::getGroupId(groupname,&groupid) &&
-							setGroupId(groupid));
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
+	gid_t	groupid=groupentry::getGroupId(groupname);
+	return (groupid!=(gid_t)-1 && setGroupId(groupid));
 }
 
 int32_t sharedmemory::shmGet(key_t key, size_t size, int32_t shmflag) {

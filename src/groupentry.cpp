@@ -323,20 +323,18 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 #endif
 }
 
-bool groupentry::getGroupId(const char *groupname, gid_t *groupid) {
+gid_t groupentry::getGroupId(const char *groupname) {
 	groupentry	grp;
 	if (grp.initialize(groupname)) {
-		*groupid=grp.getGroupId();
-		return true;
+		return grp.getGroupId();
 	}
-	return false;
+	return (gid_t)-1;
 }
 
-bool groupentry::getName(gid_t groupid, char **name) {
+char *groupentry::getName(gid_t groupid) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
-		*name=charstring::duplicate(grp.getName());
-		return true;
+		return charstring::duplicate(grp.getName());
 	}
-	return false;
+	return NULL;
 }

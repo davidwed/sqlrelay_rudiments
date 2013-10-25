@@ -836,15 +836,8 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 }
 
 bool file::changeOwner(const char *newuser, const char *newgroup) const {
-	uid_t	uid=-1;
-	gid_t	gid=-1;
-	if (newuser) {
-		passwdentry::getUserId(newuser,&uid);
-	}
-	if (newgroup) {
-		groupentry::getGroupId(newgroup,&gid);
-	}
-	return changeOwner(uid,gid);
+	return changeOwner(passwdentry::getUserId(newuser),
+				groupentry::getGroupId(newgroup));
 }
 
 bool file::changeOwner(uid_t uid, gid_t gid) const {

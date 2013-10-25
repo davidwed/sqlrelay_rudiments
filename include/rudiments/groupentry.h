@@ -49,19 +49,20 @@ class RUDIMENTS_DLLSPEC groupentry {
 		const char * const	*getMembers() const;
 
 		/** Convenience method.
-		 *  Sets "groupid" to the id for "groupname".
+		 *  Returns the id for "groupname".
 		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getGroupId(const char *groupname,
-							gid_t *groupid);
+		 *  Returns -1 if "groupname" was invalid or if an error
+		 *  occurred. */
+		static gid_t	getGroupId(const char *groupname);
 
 		/** Convenience method.
-		 *  Sets "name" to the name of "groupid".  Note that "name" is
-		 *  allocated internally and returned.  The calling program
+		 *  Returns the name of "groupid".  Note that the return value
+		 *  is allocated internally and returned.  The calling program
 		 *  must free the buffer.
 		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getName(gid_t groupid, char **name);
+		 *  Returns NULL if "groupid" was invalid or if an error
+		 *  occurred. */
+		static char	*getName(gid_t groupid);
 
 
 		/** Returns true if this class needs a mutex to operate safely

@@ -237,9 +237,8 @@ bool process::setUserId(uid_t uid) {
 }
 
 bool process::setUser(const char *username) {
-	uid_t	userid;
-	return (passwdentry::getUserId(username,&userid))?
-					setUserId(userid):true;
+	uid_t	userid=passwdentry::getUserId(username);
+	return (userid!=(uid_t)-1)?setUserId(userid):true;
 }
 
 #ifdef RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED
@@ -313,9 +312,8 @@ bool process::setGroupId(gid_t gid) {
 }
 
 bool process::setGroup(const char *groupname) {
-	gid_t	groupid;
-	return (groupentry::getGroupId(groupname,&groupid))?
-					setGroupId(groupid):true;
+	gid_t	groupid=groupentry::getGroupId(groupname);
+	return (groupid!=(gid_t)-1)?setGroupId(groupid):true;
 }
 
 #ifdef RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED

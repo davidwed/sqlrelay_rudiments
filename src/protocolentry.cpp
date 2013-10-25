@@ -162,20 +162,18 @@ bool protocolentry::initialize(const char *protocolname, int32_t number) {
 	#endif
 }
 
-bool protocolentry::getNumber(const char *protocolname, int32_t *number) {
+int32_t protocolentry::getNumber(const char *protocolname) {
 	protocolentry	pe;
 	if (pe.initialize(protocolname)) {
-		*number=pe.getNumber();
-		return true;
+		return pe.getNumber();
 	}
-	return false;
+	return -1;
 }
 
-bool protocolentry::getName(int32_t number, char **name) {
+char *protocolentry::getName(int32_t number) {
 	protocolentry	pe;
 	if (pe.initialize(number)) {
-		*name=charstring::duplicate(pe.getName());
-		return true;
+		return charstring::duplicate(pe.getName());
 	}
-	return false;
+	return NULL;
 }

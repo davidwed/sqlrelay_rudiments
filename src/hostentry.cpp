@@ -196,35 +196,27 @@ char *hostentry::getAddressString(int32_t index) const {
 	return address;
 }
 
-bool hostentry::getAddressString(const char *hostname, char **addressstring) {
+char *hostentry::getAddressString(const char *hostname) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
-		*addressstring=he.getAddressString(0);
-		return true;
+		return he.getAddressString(0);
 	}
-	*addressstring=NULL;
-	return false;
+	return NULL;
 }
 
-bool hostentry::getName(const char *address, int32_t len,
-						int32_t type, char **name) {
+char *hostentry::getName(const char *address, int32_t len, int32_t type) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		*name=charstring::duplicate(he.getName());
-		return true;
+		return charstring::duplicate(he.getName());
 	}
-	*name=NULL;
-	return false;
+	return NULL;
 }
 
-bool hostentry::getAddressString(const char *address,
-					int32_t len, int32_t type,
-					char **addressstring) {
+char *hostentry::getAddressString(const char *address,
+					int32_t len, int32_t type) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		*addressstring=he.getAddressString(0);
-		return true;
+		return he.getAddressString(0);
 	}
-	*addressstring=NULL;
-	return false;
+	return NULL;
 }

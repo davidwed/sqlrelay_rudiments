@@ -48,14 +48,19 @@ class RUDIMENTS_DLLSPEC rpcentry {
 		/** Convenience method.
 		 *  Sets "number" to the number associated with rpc "name".
 		 *
-		 *  Returns true on success and false otherwise. */
-		static	bool	getNumber(const char *name, int32_t *number);
+		 *  Returns -1 if an error occurred or if "name" is invalid.
+		 *  */
+		static	int32_t	getNumber(const char *name);
 
 		/** Convenience method.
 		 *  Sets "name" to the name associated with rpc "number". 
+		 *
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
 		 *  
-		 *  Returns true on success and false otherwise. */
-		static	bool	getName(int32_t number, char **name);
+		 *  Returns NULL if an error occurred or if "name" is invalid.
+		 *  */
+		static	char	*getName(int32_t number);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

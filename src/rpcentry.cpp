@@ -184,24 +184,22 @@ bool rpcentry::initialize(const char *rpcname, int32_t number) {
 	#endif
 }
 
-bool rpcentry::getNumber(const char *name, int32_t *number) {
+int32_t rpcentry::getNumber(const char *name) {
 	#ifdef RUDIMENTS_HAVE_RPC
 		rpcentry	re;
 		if (re.initialize(name)) {
-			*number=re.getNumber();
-			return true;
+			return re.getNumber();
 		}
 	#endif
-	return false;
+	return -1;
 }
 
-bool rpcentry::getName(int32_t number, char **name) {
+char *rpcentry::getName(int32_t number) {
 	#ifdef RUDIMENTS_HAVE_RPC
 		rpcentry	re;
 		if (re.initialize(number)) {
-			*name=charstring::duplicate(re.getName());
-			return true;
+			return charstring::duplicate(re.getName());
 		}
 	#endif
-	return false;
+	return NULL;
 }

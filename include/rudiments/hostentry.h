@@ -61,37 +61,44 @@ class RUDIMENTS_DLLSPEC hostentry {
 		char	*getAddressString(int32_t index) const;
 
 		/** Convenience method.
-		 *  Sets "addressstring" to the address of "hostname".
-		 *  Note that "addressstring" is allocated internally and
-		 *  returned.  The calling program must free the buffer. */
-		static	bool	getAddressString(const char *hostname,
-						char **addressstring);
+		 *  Returns the address of "hostname".
+		 *
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or "hostname" is invalid.
+		 *  */
+		static	char	*getAddressString(const char *hostname);
 
 		/** Convenience method.
-		 *  Sets "name" to the primary hostname of "address" of length
+		 *  Returns the primary hostname of "address" of length
 		 *  "len" and type "type".
 		 *
 		 *  Note that "address" must be a binary representation of the
 		 *  address.  This is why "len" and "type" are also required.
 		 *
-		 *  Note that "name" is allocated internally and returned.  The
-		 *  calling program must free the buffer. */
-		static	bool	getName(const char *address,
-						int32_t len, int32_t type,
-						char **name);
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or "address" is invalid.
+		 *  */
+		static	char	*getName(const char *address,
+						int32_t len, int32_t type);
 
 		/** Convenience method.
-		 *  Sets "addressstring" to a string representation of
-		 *  "address" of length "len" and type "type".
+		 *  Returns a string representation of "address" of length
+		 *  "len" and type "type".
 		 *
 		 *  Note that "address" must be a binary representation of the
 		 *  address.  This is why "len" and "type" are also required.
 		 *
-		 *  Note that "addressstring" is allocated internally and
-		 *  returned.  The calling program must free the buffer. */
-		static	bool	getAddressString(const char *address,
-						int32_t len, int32_t type,
-						char **addressstring);
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or "address" is invalid.
+		 *  */
+		static	char	*getAddressString(const char *address,
+						int32_t len, int32_t type);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

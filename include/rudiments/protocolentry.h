@@ -46,15 +46,21 @@ class RUDIMENTS_DLLSPEC protocolentry {
 		int32_t			getNumber() const;
 
 		/** Convenience method.
-		 *  Sets "number" to the number associated with
-		 *  "protocolname". */
-		static	bool	getNumber(const char *protocolname,
-						int32_t *number);
+		 *  Returns the number associated with "protocolname".
+		 *
+		 *  Returns -1 if an error occurred or if "protocolname"
+		 *  is invalid. */
+		static	int32_t	getNumber(const char *protocolname);
 
 		/** Convenience method.
-		 *  Sets "name" to the name of the protocol associated with
-		 *  "number". */
-		static	bool	getName(int32_t number, char **name);
+		 *  Returns the name of the protocol associated with "number".
+		 *
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or if "number" is invalid.
+		 *  */
+		static	char	*getName(int32_t number);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

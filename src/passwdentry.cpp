@@ -338,20 +338,18 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 #endif
 }
 
-bool passwdentry::getName(uid_t userid, char **name) {
+char *passwdentry::getName(uid_t userid) {
 	passwdentry	pwd;
 	if (pwd.initialize(userid)) {
-		*name=charstring::duplicate(pwd.getName());
-		return true;
+		return charstring::duplicate(pwd.getName());
 	}
-	return false;
+	return NULL;
 }
 
-bool passwdentry::getUserId(const char *username, uid_t *userid) {
+uid_t passwdentry::getUserId(const char *username) {
 	passwdentry	pwd;
 	if (pwd.initialize(username)) {
-		*userid=pwd.getUserId();
-		return true;
+		return pwd.getUserId();
 	}
-	return false;
+	return (uid_t)-1;
 }

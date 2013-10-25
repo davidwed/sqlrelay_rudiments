@@ -181,21 +181,18 @@ bool serviceentry::initialize(const char *servicename, int32_t port,
 	#endif
 }
 
-bool serviceentry::getPort(const char *servicename, const char *protocol,
-								int32_t *port) {
+int32_t serviceentry::getPort(const char *servicename, const char *protocol) {
 	serviceentry	se;
 	if (se.initialize(servicename,protocol)) {
-		*port=se.getPort();
-		return true;
+		return se.getPort();
 	}
-	return false;
+	return -1;
 }
 
-bool serviceentry::getName(int32_t port, const char *protocol, char **name) {
+char	*serviceentry::getName(int32_t port, const char *protocol) {
 	serviceentry	se;
 	if (se.initialize(port,protocol)) {
-		*name=charstring::duplicate(se.getName());
-		return true;
+		return charstring::duplicate(se.getName());
 	}
-	return false;
+	return NULL;
 }

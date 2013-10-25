@@ -57,19 +57,21 @@ class RUDIMENTS_DLLSPEC passwdentry {
 		const char	*getShell() const;
 
 		/** Convenience method.
-		 *  Sets "name" to the name of the user specified by "userid".
-		 *  Note that "name" is allocated internally and returned.  The
-		 *  calling program must free the buffer.
+		 *  Returns the name of the user specified by "userid".
 		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getName(uid_t userid, char **name);
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or if "userid" is invalid.
+		 *  */
+		static char	*getName(uid_t userid);
 
 		/** Convenience method.
-		 *  Sets "userid" to the id of the user specified by "username".
+		 *  Returns the id of the user specified by "username".
 		 *
-		 *  Returns true on success and false otherwise. */
-		static bool	getUserId(const char *username,
-							uid_t *userid);
+		 *  Returns -1 if an error occurred or if "username" is invalid.
+		 *  */
+		static uid_t	getUserId(const char *username);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

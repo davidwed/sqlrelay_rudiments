@@ -38,16 +38,14 @@ int main(int argc, const char **argv) {
 
 	// display the name of the user that owns the file
 	uid_t	uid=fl.getOwnerUserId();
-	char	*username;
-	passwdentry::getName(uid,&username);
+	char	*username=passwdentry::getName(uid);
 	stdoutput.printf("	user       : %s\n",username);
 	delete[] username;
 
 
 	// display the name of the group that owns the file
 	gid_t	gid=fl.getOwnerGroupId();
-	char	*groupname;
-	groupentry::getName(gid,&groupname);
+	char	*groupname=groupentry::getName(gid);
 	stdoutput.printf("	group      : %s\n",groupname);
 	delete[] groupname;
 

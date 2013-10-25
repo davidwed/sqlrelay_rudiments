@@ -55,20 +55,27 @@ class RUDIMENTS_DLLSPEC serviceentry {
 		const char * const *	getAliasList() const;
 
 		/** Convenience method.
-		 *  Sets "port" to the port that the server for "servicename"
-		 *  using "protocol" (tcp, udp, etc.) would listen on. */
-		static	bool	getPort(const char *servicename,
-						const char *protocol,
-						int32_t *port);
+		 *  Returns the port that the server for "servicename"
+		 *  using "protocol" (tcp, udp, etc.) would listen on.
+		 *
+		 *  Returns -1 if an error occurred or one of the paramters
+		 *  was invalid. */
+		static	int32_t	getPort(const char *servicename,
+						const char *protocol);
 
 		/** Convenience method.
 		 *  Sets "name" to the name of the service that a server
 		 *  listening on "port", using "protocol" (tcp, udp, etc.)
 		 *  would be serving.  Note that "name" is allocated internally
-		 *  and returned.  The calling program must free the buffer. */
-		static	bool	getName(int32_t port,
-						const char *protocol,
-						char **name);
+		 *  and returned.  The calling program must free the buffer.
+		 *
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or one of the paramters
+		 *  was invalid. */
+		static	char	*getName(int32_t port,
+						const char *protocol);
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
