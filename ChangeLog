@@ -16,6 +16,7 @@
 	removed print methods from *entry classes
 	refactored xattr code a little to make it smaller
 	removed static methods from filesystem class to make it smaller
+	removed some static methods from file class to make it smaller
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
