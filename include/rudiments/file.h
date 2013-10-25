@@ -50,66 +50,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  success and false on failure. */
 		bool	create(const char *name, mode_t perms);
 
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "number".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms, uint16_t number);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "number".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms, uint32_t number);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "number".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms, uint64_t number);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "number".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms, float number);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "number".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms, double number);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "number".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms, char number);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to "string".  Returns the number of
-		 * bytes written or -1 on error.  If the file already exists,
-		 * it will be truncated. */
-		ssize_t	create(const char *name, mode_t perms,
-						const char *string);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to the first "size" bytes of "string".
-		 * Returns the number of bytes written or -1 on error.  If the
-		 * file already exists, it will be truncated.  Returns the
-		 * number of bytes written or -1 on error. */
-		ssize_t	create(const char *name, mode_t perms,
-					const char *string, size_t size);
-
-		/** Creates the file "name" with permissions "perms" and sets
-		 * the initial contents to the first "size" bytes of "data".
-		 * Returns the number of bytes written or -1 on error.  If the
-		 * file already exists, it will be truncated.  Returns the
-		 * number of bytes written or -1 on error. */
-		ssize_t	create(const char *name, mode_t perms,
-					const void *data, size_t size);
-
-
 		/** Allocates a string large enough to accommodate the
 		 *  contents of the currently opened file, reads the
 		 *  contents of the file into the string and returns the
@@ -1229,95 +1169,10 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  used internally.  (struct stat * on unix) */
 		void 	*getInternalFileStatisticsStructure();
 
-
 		/** Create a file named "name" with permissions "perms".  If
 		 *  the file already exists, it will be truncated.
 		 *  Returns true on success and false on failure. */
 		static bool	createFile(const char *name, mode_t perms);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "number". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						uint16_t number);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "number". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						uint32_t number);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "number". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						uint64_t number);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "number". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						float number);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "number". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						double number);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "number". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						char number);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to "string". If
-		 *  the file already exists, it will be truncated.
-		 *  Returns the number of bytes written on success or -1 on
-		 *  failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						const char *string);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to the first "size"
-		 *  bytes of "string". If the file already exists, it will be
-		 *  truncated.  Returns the number of bytes written on success
-		 *  or -1 on failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						const char *string,
-						size_t size);
-
-		/** Create a file named "name" with permissions "perms" and
-		 *  sets the initial contents of the file to the first "size"
-		 *  bytes of "data". If the file already exists, it will be
-		 *  truncated.  Returns the number of bytes written on success
-		 *  or -1 on failure. */
-		static ssize_t	createFile(const char *name,
-						mode_t perms,
-						const void *data,
-						size_t size);
-
 
 		/** Creates a fifo called "filename" with permissions "perms".
 		 *  Returns true on success and false on failure. */

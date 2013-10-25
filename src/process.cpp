@@ -432,8 +432,9 @@ void process::exitOnCrashOrShutDown() {
 
 bool process::createPidFile(const char *filename, mode_t permissions) {
 	char	*pid=charstring::parseNumber((uint64_t)process::getProcessId());
-	bool	retval=(file::createFile(filename,permissions,pid)==
-					(ssize_t)charstring::length(pid));
+	file	pidfile;
+	bool	retval=(pidfile.create(filename,permissions) &&
+			pidfile.write(pid)==(ssize_t)charstring::length(pid));
 	delete[] pid;
 	return retval;
 }

@@ -2,11 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-		bool	close();
-		static	const char	*getFsTypeName(int64_t type);
-		void	filesystemClone(const filesystem &f);
-		static	bool	getCurrentPropertiesInternal(
-						int32_t fd, void *st);
-		static	bool	getCurrentPropertiesInternal(
-					const char *path, void *st);
+		bool		close();
+		void		filesystemClone(const filesystem &f);
 		filesystemprivate	*pvt;

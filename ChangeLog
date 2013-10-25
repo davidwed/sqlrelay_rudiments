@@ -15,6 +15,7 @@
 	renamed *Data methods to *Value in linkedlist and dictionary classes
 	removed print methods from *entry classes
 	refactored xattr code a little to make it smaller
+	removed static methods from filesystem class to make it smaller
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets

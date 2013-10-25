@@ -57,15 +57,18 @@ class filesystemprivate {
 	friend class filesystem;
 	private:
 #if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-		struct	statvfs	_st;
+		struct		statvfs	_st;
 #elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS) || \
-			defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-		struct	statfs	_st;
+		defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+		struct		statfs	_st;
 #else
 	#error no statvfs, statfs or anything like it
 #endif
-		int32_t	_fd;
-		bool	_closeflag;
+		int32_t		_fd;
+		bool		_closeflag;
+#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		char		*_path;
+#endif
 };
 
 filesystem::filesystem() {
@@ -95,12 +98,19 @@ void filesystem::filesystemClone(const filesystem &f) {
 
 filesystem::~filesystem() {
 	close();
+	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+	delete[] pvt->_path;
+	#endif
 	delete pvt;
 }
 
 bool filesystem::initialize(const char *path) {
 	close();
 	pvt->_closeflag=true;
+	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+	delete[] pvt->_path;
+	pvt->_path=charstring::duplicate(path);
+	#endif
 	do {
 		#if defined(RUDIMENTS_HAVE__OPEN)
 			pvt->_fd=_open(path,O_RDONLY);
@@ -139,45 +149,22 @@ bool filesystem::close() {
 }
 
 bool filesystem::getCurrentProperties() {
-	return filesystem::getCurrentPropertiesInternal(
-				pvt->_fd,(void *)&pvt->_st);
-}
-
-bool filesystem::getCurrentPropertiesInternal(int32_t fd, void *st) {
 	#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
 			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
 		int32_t	result;
 		do {
 			#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-				result=fstatvfs(fd,(struct statvfs *)st);
+				result=fstatvfs(pvt->_fd,&pvt->_st);
 			#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
-				result=fstatfs(fd,(struct statfs *)st);
+				result=fstatfs(pvt->_fd,&pvt->_st);
 			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#else
-		#error no fstatvfs, fstatfs or anything like it
-	#endif
-}
 
-bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
-	#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
-			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
-
-		int32_t	result;
-		do {
-			#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-				result=::statvfs(path,(struct statvfs *)st);
-			#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
-				result=::statfs(path,(struct statfs *)st);
-			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return !result;
-
-	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+		if (!pvt->_path) {
+			return false;
+		}
 
 		// convert st to statfs type
 		struct statfs	*stfs=(struct statfs *)st;
@@ -187,7 +174,7 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 		DWORD	sectorspercluster;
 		DWORD	freeclusters;
 		DWORD	totalclusters;
-		if (!GetDiskFreeSpace(path,&sectorspercluster,
+		if (!GetDiskFreeSpace(pvt->_path,&sectorspercluster,
 						&(stfs->f_bsize),
 						&freeclusters,
 						&totalclusters)) {
@@ -290,110 +277,8 @@ bool filesystem::getCurrentPropertiesInternal(const char *path, void *st) {
 
 		return true;
 	#else
-		#error no statvfs, statfs or anything like it
+		#error no fstatvfs, fstatfs or anything like it
 	#endif
-}
-
-#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-#define FSTATFS(fd,out,member) \
-	struct statvfs st; \
-	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=(int64_t)st.member; \
-	return true;
-#define CHARFSTATFS(fd,out,member) \
-	struct statvfs st; \
-	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=st.member; \
-	return true;
-#else
-#define FSTATFS(fd,out,member) \
-	struct statfs st; \
-	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=(int64_t)st.member; \
-	return true;
-#define CHARFSTATFS(fd,out,member) \
-	struct statfs st; \
-	int32_t	result=getCurrentPropertiesInternal(fd,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=st.member; \
-	return true;
-#endif
-
-#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-#define STATFS(path,out,member) \
-	struct statvfs st; \
-	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=(int64_t)st.member; \
-	return true;
-#define CHARSTATFS(path,out,member) \
-	struct statvfs st; \
-	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=st.member; \
-	return true;
-#else
-#define STATFS(path,out,member) \
-	struct statfs st; \
-	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=(int64_t)st.member; \
-	return true;
-#define CHARSTATFS(path,out,member) \
-	struct statfs st; \
-	int32_t	result=getCurrentPropertiesInternal(path,(void *)&st); \
-	if (!result) { \
-		return false; \
-	} \
-	*out=st.member; \
-	return true;
-#endif
-
-bool filesystem::getType(const char *path, int64_t *type) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,type,f_type)
-#else
-	*type=0;
-	return true;
-#endif
-}
-
-bool filesystem::getType(int32_t fd, int64_t *type) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,type,f_type)
-#else
-	*type=0;
-	return true;
-#endif
 }
 
 int64_t filesystem::getType() const {
@@ -410,49 +295,6 @@ int64_t filesystem::getType() const {
 #endif
 }
 
-bool filesystem::getBlockSize(const char *path, int64_t *size) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,size,f_bsize)
-#else
-	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
-		STATFS(path,size,f_frsize)
-	#else
-		*size=0;
-		return true;
-	#endif
-#endif
-}
-
-bool filesystem::getBlockSize(int32_t fd, int64_t *size) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,size,f_bsize)
-#else
-	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-		FSTATFS(fd,size,f_frsize)
-	#else
-		*size=0;
-		return true;
-	#endif
-#endif
-}
-
 int64_t filesystem::getBlockSize() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
@@ -463,56 +305,11 @@ int64_t filesystem::getBlockSize() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_bsize;
+#elif defined(RUDIMENTS_HAVE_STATVFS) || \
+	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
+	return pvt->_st.f_frsize;
 #else
-	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-		return pvt->_st.f_frsize;
-	#else
-		return 0;
-	#endif
-#endif
-}
-
-bool filesystem::getOptimumTransferBlockSize(const char *path,
-						int64_t *size) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,size,f_bsize)
-#else
-	#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-		STATFS(path,size,f_iosize)
-	#else
-		*size=0;
-		return true;
-	#endif
-#endif
-}
-
-bool filesystem::getOptimumTransferBlockSize(int32_t fd, int64_t *size) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,size,f_bsize)
-#else
-	#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-		FSTATFS(fd,size,f_iosize)
-	#else
-		*size=0;
-		return true;
-	#endif
+	return 0;
 #endif
 }
 
@@ -524,53 +321,13 @@ int64_t filesystem::getOptimumTransferBlockSize() const {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_bsize;
-#else
-	#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-		defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-		return pvt->_st.f_iosize;
-	#else
-		return 0;
-	#endif
-#endif
-}
-
-bool filesystem::getTotalBlocks(const char *path, int64_t *blocks) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
+#elif defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,blocks,f_blocks)
+	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
+	return pvt->_st.f_iosize;
 #else
-	*blocks=0;
-	return true;
-#endif
-}
-
-bool filesystem::getTotalBlocks(int32_t fd, int64_t *blocks) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,blocks,f_blocks)
-#else
-	*blocks=0;
-	return true;
+	return 0;
 #endif
 }
 
@@ -592,44 +349,6 @@ int64_t filesystem::getTotalBlocks() const {
 #endif
 }
 
-bool filesystem::getFreeBlocks(const char *path, int64_t *blocks) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,blocks,f_bfree)
-#else
-	*blocks=0;
-	return true;
-#endif
-}
-
-bool filesystem::getFreeBlocks(int32_t fd, int64_t *blocks) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,blocks,f_bfree)
-#else
-	*blocks=0;
-	return true;
-#endif
-}
-
 int64_t filesystem::getFreeBlocks() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
@@ -645,44 +364,6 @@ int64_t filesystem::getFreeBlocks() const {
 	return pvt->_st.f_bfree;
 #else
 	return 0;
-#endif
-}
-
-bool filesystem::getAvailableBlocks(const char *path, int64_t *blocks) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,blocks,f_bavail)
-#else
-	*blocks=0;
-	return true;
-#endif
-}
-
-bool filesystem::getAvailableBlocks(int32_t fd, int64_t *blocks) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,blocks,f_bavail)
-#else
-	*blocks=0;
-	return true;
 #endif
 }
 
@@ -704,44 +385,6 @@ int64_t filesystem::getAvailableBlocks() const {
 #endif
 }
 
-bool filesystem::getTotalFileNodes(const char *path, int64_t *nodes) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,nodes,f_files)
-#else
-	*nodes=0;
-	return true;
-#endif
-}
-
-bool filesystem::getTotalFileNodes(int32_t fd, int64_t *nodes) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,nodes,f_files)
-#else
-	*nodes=0;
-	return true;
-#endif
-}
-
 int64_t filesystem::getTotalFileNodes() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
@@ -757,44 +400,6 @@ int64_t filesystem::getTotalFileNodes() const {
 	return pvt->_st.f_files;
 #else
 	return 0;
-#endif
-}
-
-bool filesystem::getFreeFileNodes(const char *path, int64_t *nodes) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,nodes,f_ffree)
-#else
-	*nodes=0;
-	return true;
-#endif
-}
-
-bool filesystem::getFreeFileNodes(int32_t fd, int64_t *nodes) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,nodes,f_ffree)
-#else
-	*nodes=0;
-	return true;
 #endif
 }
 
@@ -816,28 +421,6 @@ int64_t filesystem::getFreeFileNodes() const {
 #endif
 }
 
-bool filesystem::getAvailableFileNodes(const char *path, int64_t *nodes) {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
-	STATFS(path,nodes,f_ffree)
-#else
-	*nodes=0;
-	return true;
-#endif
-}
-
-bool filesystem::getAvailableFileNodes(int32_t fd, int64_t *nodes) {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
-	FSTATFS(fd,nodes,f_ffree)
-#else
-	*nodes=0;
-	return true;
-#endif
-}
-
 int64_t filesystem::getAvailableFileNodes() const {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -845,32 +428,6 @@ int64_t filesystem::getAvailableFileNodes() const {
 	return pvt->_st.f_ffree;
 #else
 	return 0;
-#endif
-}
-
-bool filesystem::getFileSystemId(const char *path, int64_t *id) {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,id,f_fsid)
-#else
-	*id=0;
-	return true;
-#endif
-}
-
-bool filesystem::getFileSystemId(int32_t fd, int64_t *id) {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,id,f_fsid)
-#else
-	*id=0;
-	return true;
 #endif
 }
 
@@ -886,83 +443,18 @@ int64_t filesystem::getFileSystemId() const {
 #endif
 }
 
-bool filesystem::getMaximumFileNameLength(const char *path,
-						int64_t *length) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	STATFS(path,length,f_namelen)
-#else
-	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-		STATFS(path,length,f_namemax)
-	#else
-		*length=0;
-		return true;
-	#endif
-#endif
-}
-
-bool filesystem::getMaximumFileNameLength(int32_t fd, int64_t *length) {
-#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
-	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	FSTATFS(fd,length,f_namelen)
-#else
-	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-		FSTATFS(fd,length,f_namemax)
-	#else
-		*length=0;
-		return true;
-	#endif
-#endif
-}
-
 int64_t filesystem::getMaximumFileNameLength() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_namelen;
+#elif defined(RUDIMENTS_HAVE_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
+	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
+	return pvt->_st.f_namemax;
 #else
-	#if defined(RUDIMENTS_HAVE_STATVFS) || \
-		defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-		defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-		return pvt->_st.f_namemax;
-	#else
-		return 0;
-	#endif
-#endif
-}
-
-bool filesystem::getOwner(const char *path, uid_t *owner) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	STATFS(path,owner,f_owner)
-#else
-	*owner=0;
-	return true;
-#endif
-}
-
-bool filesystem::getOwner(int32_t fd, uid_t *owner) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	FSTATFS(fd,owner,f_owner)
-#else
-	*owner=0;
-	return true;
+	return 0;
 #endif
 }
 
@@ -978,30 +470,6 @@ uid_t filesystem::getOwner() const {
 #endif
 }
 
-bool filesystem::getSyncWrites(const char *path, int64_t *swrites) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS)
-	STATFS(path,swrites,f_syncwrites)
-#else
-	*swrites=0;
-	return true;
-#endif
-}
-
-bool filesystem::getSyncWrites(int32_t fd, int64_t *swrites) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS)
-	FSTATFS(fd,swrites,f_syncwrites)
-#else
-	*swrites=0;
-	return true;
-#endif
-}
-
 int64_t filesystem::getSyncWrites() const {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -1013,30 +481,6 @@ int64_t filesystem::getSyncWrites() const {
 #endif
 }
 
-bool filesystem::getAsyncWrites(const char *path, int64_t *aswrites) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS)
-	STATFS(path,aswrites,f_asyncwrites)
-#else
-	*aswrites=0;
-	return true;
-#endif
-}
-
-bool filesystem::getAsyncWrites(int32_t fd, int64_t *aswrites) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS)
-	FSTATFS(fd,aswrites,f_asyncwrites)
-#else
-	*aswrites=0;
-	return true;
-#endif
-}
-
 int64_t filesystem::getAsyncWrites() const {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -1045,32 +489,6 @@ int64_t filesystem::getAsyncWrites() const {
 	return pvt->_st.f_asyncwrites;
 #else
 	return 0;
-#endif
-}
-
-bool filesystem::getMountPoint(const char *path, const char **mtpt) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	CHARSTATFS(path,mtpt,f_mntonname)
-#else
-	*mtpt=NULL;
-	return true;
-#endif
-}
-
-bool filesystem::getMountPoint(int32_t fd, const char **mtpt) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	CHARFSTATFS(fd,mtpt,f_mntonname)
-#else
-	*mtpt=NULL;
-	return true;
 #endif
 }
 
@@ -1086,52 +504,12 @@ const char *filesystem::getMountPoint() const {
 #endif
 }
 
-bool filesystem::getSyncReads(const char *path, int64_t *sreads) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-	STATFS(path,sreads,f_syncreads)
-#else
-	*sreads=0;
-	return true;
-#endif
-}
-
-bool filesystem::getSyncReads(int32_t fd, int64_t *sreads) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-	FSTATFS(fd,sreads,f_syncreads)
-#else
-	*sreads=0;
-	return true;
-#endif
-}
-
 int64_t filesystem::getSyncReads() const {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
 	return pvt->_st.f_syncreads;
 #else
 	return 0;
-#endif
-}
-
-bool filesystem::getAsyncReads(const char *path, int64_t *asreads) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-	STATFS(path,asreads,f_asyncreads)
-#else
-	*asreads=0;
-	return false;
-#endif
-}
-
-bool filesystem::getAsyncReads(int32_t fd, int64_t *asreads) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
-	FSTATFS(fd,asreads,f_asyncreads)
-#else
-	*asreads=0;
-	return false;
 #endif
 }
 
@@ -1144,30 +522,6 @@ int64_t filesystem::getAsyncReads() const {
 #endif
 }
 
-bool filesystem::getDeviceName(const char *path, const char **devname) {
-#if defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	CHARSTATFS(path,devname,f_mntfromname)
-#else
-	*devname=NULL;
-	return true;
-#endif
-}
-
-bool filesystem::getDeviceName(int32_t fd, const char **devname) {
-#if defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	CHARFSTATFS(fd,devname,f_mntfromname)
-#else
-	*devname=NULL;
-	return true;
-#endif
-}
-
 const char *filesystem::getDeviceName() const {
 #if defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
@@ -1176,25 +530,6 @@ const char *filesystem::getDeviceName() const {
 	return (const char *)pvt->_st.f_mntfromname;
 #else
 	return NULL;
-#endif
-}
-
-bool filesystem::getFilesystemSpecificString(const char *path,
-						const char **str) {
-#ifdef RUDIMENTS_HAVE_STATVFS
-	CHARSTATFS(path,str,f_fstr)
-#else
-	*str=NULL;
-	return true;
-#endif
-}
-
-bool filesystem::getFilesystemSpecificString(int32_t fd, const char **str) {
-#ifdef RUDIMENTS_HAVE_STATVFS
-	CHARFSTATFS(fd,str,f_fstr)
-#else
-	*str=NULL;
-	return true;
 #endif
 }
 
@@ -1210,68 +545,6 @@ void *filesystem::getInternalFilesystemStatisticsStructure() {
 	return (void *)&pvt->_st;
 }
 
-bool filesystem::getTypeName(const char *path, const char **name) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	CHARSTATFS(path,name,f_fstypename)
-#else
-	#ifdef RUDIMENTS_HAVE_STATVFS
-		CHARSTATFS(path,name,f_basetype)
-	#else
-		#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-			defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
-			struct statfs st;
-			int32_t	result;
-			do {
-				result=::statfs(path,&st);
-			} while (result==-1 && error::getErrorNumber()==EINTR);
-			if (result==-1) {
-				return false;
-			}
-			*name=filesystem::getFsTypeName(st.f_type);
-			return true;
-		#else
-			*name=NULL;
-			return true;
-		#endif
-	#endif
-#endif
-}
-
-bool filesystem::getTypeName(int32_t fd, const char **name) {
-#if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
-	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	CHARFSTATFS(fd,name,f_fstypename)
-#else
-	#ifdef RUDIMENTS_HAVE_STATVFS
-		CHARFSTATFS(fd,name,f_basetype)
-	#else
-		#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-			defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
-			struct statfs st;
-			int32_t	result;
-			do {
-				result=fstatfs(fd,&st);
-			} while (result==-1 && error::getErrorNumber()==EINTR);
-			if (result==-1) {
-				return false;
-			}
-			*name=filesystem::getFsTypeName(st.f_type);
-			return true;
-		#else
-			*name=NULL;
-			return true;
-		#endif
-	#endif
-#endif
-}
-
 const char *filesystem::getTypeName() const {
 #if defined(RUDIMENTS_HAVE_FREEBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATFS) || \
@@ -1279,107 +552,100 @@ const char *filesystem::getTypeName() const {
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
 	return (const char *)pvt->_st.f_fstypename;
-#else
-	#ifdef RUDIMENTS_HAVE_STATVFS
-		return (const char *)pvt->_st.f_basetype;
-	#else
-		#if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
-			defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
-			return filesystem::getFsTypeName(pvt->_st.f_type);
-		#else
-			return NULL;
-		#endif
-	#endif
-#endif
-}
-
-const char *filesystem::getFsTypeName(int64_t fstype) {
-	if (fstype==0xADF5) {
-		return "adfs";
-	} else if (fstype==0xADFF) {
-		return "affs";
-	} else if (fstype==0x42465331) {
-		return "befs";
-	} else if (fstype==0x1BADFACE) {
-		return "bfs";
-	} else if (fstype==0xFF534D42) {
-		return "cifs";
-	} else if (fstype==0x73757245) {
-		return "codafs";
-	} else if (fstype==0x012FF7B7) {
-		return "coherent";
-	} else if (fstype==0x28cd3d45) {
-		return "cramfs";
-	} else if (fstype==0x1373) {
-		return "devfs";
-	} else if (fstype==0x00414A53) {
-		return "efs";
-	} else if (fstype==0x137D) {
-		return "ext";
-	} else if (fstype==0xEF51) {
-		return "ext2 (old)";
-	} else if (fstype==0xEF53) {
-		return "ext2";
-	} else if (fstype==0x4244) {
-		return "hfs";
-	} else if (fstype==0xF995E849) {
-		return "hpfs";
-	} else if (fstype==0x958458f6) {
-		return "hugetlbfs";
-	} else if (fstype==0x9660) {
-		return "isofs";
-	} else if (fstype==0x72b6) {
-		return "jffs2";
-	} else if (fstype==0x3153464a) {
-		return "jfs";
-	} else if (fstype==0x137F) {
-		return "minix (original)";
-	} else if (fstype==0x138F) {
-		return "minix (30 char)";
-	} else if (fstype==0x2468) {
-		return "minix2 (original)";
-	} else if (fstype==0x2478) {
-		return "minix2 (30 char)";
-	} else if (fstype==0x4d44) {
-		return "msdos";
-	} else if (fstype==0x564c) {
-		return "ncp";
-	} else if (fstype==0x6969) {
-		return "nfs";
-	} else if (fstype==0x72b6) {
-		return "ntfs";
-	} else if (fstype==0x9fa1) {
-		return "openprom";
-	} else if (fstype==0x9fa0) {
-		return "proc";
-	} else if (fstype==0x002f) {
-		return "qnx4";
-	} else if (fstype==0x52654973) {
-		return "reiserfs";
-	} else if (fstype==0x7275) {
-		return "romfs";
-	} else if (fstype==0x517B) {
-		return "smb";
-	} else if (fstype==0x012FF7B6) {
-		return "sysv2";
-	} else if (fstype==0x012FF7B5) {
-		return "sysv4";
-	} else if (fstype==0x01021994) {
-		return "tmpfs";
-	} else if (fstype==0x15013346) {
-		return "udf";
-	} else if (fstype==0x00011954) {
-		return "ufs";
-	} else if (fstype==0x9fa2) {
-		return "usbdevfs";
-	} else if (fstype==0xa501FCF5) {
-		return "vxfs";
-	} else if (fstype==0x012FF7B4) {
-		return "xenix";
-	} else if (fstype==0x58465342) {
-		return "xfs";
-	} else if (fstype==0x012FD16D) {
-		return "xiafs";
+#elif defined(RUDIMENTS_HAVE_STATVFS)
+	return (const char *)pvt->_st.f_basetype;
+#elif defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
+	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
+	switch (pvt->_st.f_type) {
+		case 0xADF5:
+			return "adfs";
+		case 0xADFF:
+			return "affs";
+		case 0x42465331:
+			return "befs";
+		case 0x1BADFACE:
+			return "bfs";
+		case 0xFF534D42:
+			return "cifs";
+		case 0x73757245:
+			return "codafs";
+		case 0x012FF7B7:
+			return "coherent";
+		case 0x28cd3d45:
+			return "cramfs";
+		case 0x1373:
+			return "devfs";
+		case 0x00414A53:
+			return "efs";
+		case 0x137D:
+			return "ext";
+		case 0xEF51:
+			return "ext2 (old)";
+		case 0xEF53:
+			return "ext2";
+		case 0x4244:
+			return "hfs";
+		case 0xF995E849:
+			return "hpfs";
+		case 0x958458f6:
+			return "hugetlbfs";
+		case 0x9660:
+			return "isofs";
+		case 0x72b6:
+			return "jffs2";
+		case 0x3153464a:
+			return "jfs";
+		case 0x137F:
+			return "minix (original)";
+		case 0x138F:
+			return "minix (30 char)";
+		case 0x2468:
+			return "minix2 (original)";
+		case 0x2478:
+			return "minix2 (30 char)";
+		case 0x4d44:
+			return "msdos";
+		case 0x564c:
+			return "ncp";
+		case 0x6969:
+			return "nfs";
+		case 0x5346544e:
+			return "ntfs";
+		case 0x9fa1:
+			return "openprom";
+		case 0x9fa0:
+			return "proc";
+		case 0x002f:
+			return "qnx4";
+		case 0x52654973:
+			return "reiserfs";
+		case 0x7275:
+			return "romfs";
+		case 0x517B:
+			return "smb";
+		case 0x012FF7B6:
+			return "sysv2";
+		case 0x012FF7B5:
+			return "sysv4";
+		case 0x01021994:
+			return "tmpfs";
+		case 0x15013346:
+			return "udf";
+		case 0x00011954:
+			return "ufs";
+		case 0x9fa2:
+			return "usbdevfs";
+		case 0xa501FCF5:
+			return "vxfs";
+		case 0x012FF7B4:
+			return "xenix";
+		case 0x58465342:
+			return "xfs";
+		case 0x012FD16D:
+			return "xiafs";
 	}
 	return NULL;
+#else
+	return NULL;
+#endif
 }
