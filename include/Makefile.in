@@ -5,7 +5,7 @@ include ../config.mk
 .PHONY: all install uninstall
 
 HEADERS = resultcodes.h linkedlist.h dictionary.h @HEADERS@
-PRIVATEHEADERS = config.h rudimentsinlines.h inttypes.h winsock.h dll.h linkedlistincludes.h linkedlistinlines.h linkedlistutilinlines.h dictionary.h dictionaryincludes.h dictionaryinlines.h dictionarynode.h dictionarynodeinlines.h @PRIVATEHEADERS@
+PRIVATEHEADERS = config.h rudimentsinlines.h inttypes.h winsock.h dll.h baselinkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistutilinlines.h dictionary.h dictionaryincludes.h dictionaryinlines.h dictionarynode.h dictionarynodeinlines.h @PRIVATEHEADERS@
 
 all:
 
