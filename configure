@@ -29597,14 +29597,6 @@ then
 	LOBJS="$LOBJS socketclient.lo"
 fi
 
-if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" -o "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
-then
-	HEADERS="$HEADERS clientserverfactory.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS clientserverfactoryincludes.h"
-	SRCS="$SRCS clientserverfactory.cpp"
-	LOBJS="$LOBJS clientserverfactory.lo"
-fi
-
 if ( test "$INCLUDE_MODEMCLIENT" = "1" -o  "$INCLUDE_MODEMSERVER" = "1" )
 then
 	PRIVATEHEADERS="$PRIVATEHEADERS modemutil.h"

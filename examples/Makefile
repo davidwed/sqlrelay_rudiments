@@ -11,7 +11,6 @@ PROGS = \
 	character$(EXE) \
 	charstring$(EXE) \
 	chat$(EXE) \
-	clientserverfactory$(EXE) \
 	commandline$(EXE) \
 	complexinetsocketserver$(EXE) \
 	crypt$(EXE) \
