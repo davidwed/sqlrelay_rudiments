@@ -6,12 +6,16 @@
 
 #include <rudiments/private/linkedlistincludes.h>
 
+template <class valuetype>
+class linkedlist;
+
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class valuetype>
 class linkedlistnode {
+	friend class linkedlist<valuetype>;
 	public:
 		/** Creates an empty instance of the linkedlistnode class. */
-		linkedlistnode();
+		linkedlistnode(valuetype value);
 
 		/** Deletes this instance of the linkedlistnode class.
 		 *  Note however, that the value stored in the linkedlistnode
