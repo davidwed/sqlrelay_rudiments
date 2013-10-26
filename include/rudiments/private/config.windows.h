@@ -1140,7 +1140,7 @@
 #define RUDIMENTS_HAVE__DUPENV_S 1
 
 /* Some systems have _getpid */
-#define RUDIMENTS_HAVE__GETPID 1
+#define RUDIMENTS_HAVE_GETCURRENTPROCESSID 1
 
 /* Some systems have _lseek */
 #define RUDIMENTS_HAVE__LSEEK 1

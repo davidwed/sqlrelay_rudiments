@@ -38,7 +38,6 @@
 #endif
 
 // for _getpid on windows
-#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_PROCESS_H
 	#include <process.h>
 #endif
@@ -57,8 +56,8 @@ void		(*process::_crashfunc)(int32_t);
 pid_t process::getProcessId() {
 	#if defined(RUDIMENTS_HAVE_GETPID)
 		return getpid();
-	#elif defined(RUDIMENTS_HAVE__GETPID)
-		return _getpid();
+	#elif defined(RUDIMENTS_HAVE_GETCURRENTPROCESSID)
+		return GetCurrentProcessId();
 	#else
 		#error no getpid or anything like it
 	#endif
