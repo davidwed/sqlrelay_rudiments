@@ -38,6 +38,7 @@
 #endif
 
 // for _getpid on windows
+#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_PROCESS_H
 	#include <process.h>
 #endif
