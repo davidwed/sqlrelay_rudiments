@@ -37,7 +37,7 @@
 	#include <sys/stat.h>
 #endif
 
-// for _getpid on windows
+// for GetCurrentProcessId on windows
 #ifdef RUDIMENTS_HAVE_PROCESS_H
 	#include <process.h>
 #endif

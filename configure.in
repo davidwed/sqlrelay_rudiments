@@ -2563,11 +2563,14 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 #endif],
 getpid(),AC_DEFINE(RUDIMENTS_HAVE_GETPID,1,Some systems have getpid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for _getpid)
+AC_MSG_CHECKING(for GetCurrentProcessId)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_PROCESS_H
+	#include <process.h>
 #endif],
-_getpid(),AC_DEFINE(RUDIMENTS_HAVE__GETPID,1,Some systems have _getpid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+GetCurrentProcessId(),AC_DEFINE(RUDIMENTS_HAVE_GETCURRENTPROCESSID,1,Some systems have GetCurrentProcessId) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for getppid)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H

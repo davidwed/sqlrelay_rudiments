@@ -277,6 +277,9 @@
 /* Some systems have getaddrinfo */
 #undef RUDIMENTS_HAVE_GETADDRINFO
 
+/* Some systems have GetCurrentProcessId */
+#undef RUDIMENTS_HAVE_GETCURRENTPROCESSID
+
 /* Some systems have getegid */
 #undef RUDIMENTS_HAVE_GETEGID
 
@@ -1146,9 +1149,6 @@
 
 /* Some systems have _dupenv_s */
 #undef RUDIMENTS_HAVE__DUPENV_S
-
-/* Some systems have _getpid */
-#undef RUDIMENTS_HAVE__GETPID
 
 /* Some systems have _lseek */
 #undef RUDIMENTS_HAVE__LSEEK
