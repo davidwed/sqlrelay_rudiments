@@ -47,9 +47,11 @@
 	#include <sys/wait.h>
 #endif
 
+#ifndef _WIN32
 signalhandler	process::_deadchildhandler;
 signalhandler	process::_shutdownhandler;
 signalhandler	process::_crashhandler;
+#endif
 void		(*process::_shutdownfunc)(int32_t);
 void		(*process::_crashfunc)(int32_t);
 
