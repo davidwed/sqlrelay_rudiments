@@ -167,7 +167,7 @@ bool filesystem::getCurrentProperties() {
 		}
 
 		// convert st to statfs type
-		struct statfs	*stfs=(struct statfs *)st;
+		struct statfs	*stfs=(struct statfs *)&pvt->_st;
 
 		// Get "old-school" free space - sectors and clusters,
 		// if it fails, fall back to some safe defaults
@@ -204,7 +204,7 @@ bool filesystem::getCurrentProperties() {
 				GetProcAddress(lib,
 						"GetDiskFreeSpaceEx");
 			if (getfreediskspaceex) {
-				if (!getfreediskspaceex(path,
+				if (!getfreediskspaceex(pvt->_path,
 						&availbytes,
 						&totalbytes,
 						&freebytes)) {
@@ -235,7 +235,7 @@ bool filesystem::getCurrentProperties() {
 		DWORD	volumeserialnumber;
 		DWORD	filesystemflags;
 		CHAR	filesystemname[PATH_MAX];
-		if (!GetVolumeInformation(path,
+		if (!GetVolumeInformation(pvt->_path,
 					volumename,
 					PATH_MAX,
 					&volumeserialnumber,
