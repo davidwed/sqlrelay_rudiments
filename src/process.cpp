@@ -51,9 +51,9 @@
 signalhandler	process::_deadchildhandler;
 signalhandler	process::_shutdownhandler;
 signalhandler	process::_crashhandler;
-#endif
 void		(*process::_shutdownfunc)(int32_t);
 void		(*process::_crashfunc)(int32_t);
+#endif
 
 pid_t process::getProcessId() {
 	#if defined(RUDIMENTS_HAVE_GETPID)
@@ -424,12 +424,6 @@ void process::exitImmediately(int32_t status) {
 	_exit(status);
 }
 
-void process::exitOnCrashOrShutDown() {
-	exitOnShutDown();
-	exitOnCrash();
-	waitForChildren();
-}
-
 bool process::createPidFile(const char *filename, mode_t permissions) {
 	char	*pid=charstring::parseNumber((uint64_t)process::getProcessId());
 	file	pidfile;
@@ -445,6 +439,13 @@ int64_t process::checkForPidFile(const char *filename) {
 				charstring::toInteger(pidstring):-1;
 	delete[] pidstring;
 	return retval;
+}
+
+#ifndef _WIN32
+void process::exitOnCrashOrShutDown() {
+	exitOnShutDown();
+	exitOnCrash();
+	waitForChildren();
 }
 
 void process::exitOnShutDown() {
@@ -475,7 +476,6 @@ void process::handleCrash(void (*crashfunction)(int32_t)) {
 	_crashhandler.handleSignal(SIGSEGV);
 }
 
-#ifndef _WIN32
 void process::waitForChildren() {
 	_deadchildhandler.setHandler(waitForChildrenToExit);
 	_deadchildhandler.addFlag(SA_NOCLDSTOP);
@@ -487,14 +487,6 @@ void process::dontWaitForChildren() {
 	_deadchildhandler.removeAllFlags();
 	_deadchildhandler.handleSignal(SIGCHLD);
 }
-#else
-void process::waitForChildren() {
-	// FIXME: implement this
-}
-void process::dontWaitForChildren() {
-	// FIXME: implement this
-}
-#endif
 
 void process::shutDown(int32_t signum) {
 	waitForChildren();
@@ -505,6 +497,43 @@ void process::crash(int32_t signum) {
 	waitForChildren();
 	(*_crashfunc)(signum);
 }
+#else
+void process::exitOnCrashOrShutDown() {
+	// FIXME: implement this
+}
+
+void process::exitOnShutDown() {
+	// FIXME: implement this
+}
+
+void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
+	// FIXME: implement this
+}
+
+void process::exitOnCrash() {
+	// FIXME: implement this
+}
+
+void process::handleCrash(void (*crashfunction)(int32_t)) {
+	// FIXME: implement this
+}
+
+void process::waitForChildren() {
+	// FIXME: implement this
+}
+
+void process::dontWaitForChildren() {
+	// FIXME: implement this
+}
+
+void process::shutDown(int32_t signum) {
+	// FIXME: implement this
+}
+
+void process::crash(int32_t signum) {
+	// FIXME: implement this
+}
+#endif
 
 void process::defaultShutDown(int32_t signum) {
 	waitForChildren();

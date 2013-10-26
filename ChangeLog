@@ -21,6 +21,7 @@
 	removed some static methods from file class to make it smaller
 	removed the clientserverfactory class
 	slight refactoring of linkedlist and dictionary classes
+	various process class fixes for Windows
 
 0.43 - added a workaround for platforms that don't support
 		blocking/non-blocking modes for sockets
