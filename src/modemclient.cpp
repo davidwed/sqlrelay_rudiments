@@ -74,21 +74,21 @@ modemclient::~modemclient() {
 
 void modemclient::initialize(constnamevaluepairs *cd) {
 	if (cd) {
-		const char	*devicename;
+		const char	*devicename=NULL;
 		cd->getValue("device",&devicename);
-		const char	*baud;
+		const char	*baud=NULL;
 		cd->getValue("baud",&baud);
-		const char	*customatcommands;
+		const char	*customatcommands=NULL;
 		cd->getValue("customatcommands",&customatcommands);
-		const char	*connectscript;
+		const char	*connectscript=NULL;
 		cd->getValue("connectscript",&connectscript);
-		const char	*phonenumber;
+		const char	*phonenumber=NULL;
 		cd->getValue("phonenumber",&phonenumber);
-		const char	*disconnectscript;
+		const char	*disconnectscript=NULL;
 		cd->getValue("disconnectscript",&disconnectscript);
-		const char	*rwstr;
+		const char	*rwstr=NULL;
 		cd->getValue("retrywait",&rwstr);
-		const char	*rcstr;
+		const char	*rcstr=NULL;
 		cd->getValue("retrycount",&rcstr);
 		initialize(devicename,baud,
 				customatcommands,
