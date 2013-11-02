@@ -65,11 +65,11 @@
 // NOTE: These next two headers must be included in this order or LITTLE_ENDIAN
 // will be multiply-defined on linux libc4 systems.  Other systems are
 // unaffected.
-#ifdef RUDIMENTS_HAVE_NETINET_TCP_H
-	#include <netinet/tcp.h>
-#endif
 #ifdef RUDIMENTS_HAVE_NETINET_IN_H
 	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_TCP_H
+	#include <netinet/tcp.h>
 #endif
 
 
