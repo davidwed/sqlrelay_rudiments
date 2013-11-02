@@ -22877,6 +22877,7 @@ fi
 
 HAVE_GETSERVBYNAME_R=""
 
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for getservbyname_r with 6 parameters" >&5
 $as_echo_n "checking for getservbyname_r with 6 parameters... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -22893,7 +22894,7 @@ getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_GETSERVBYNAME_R_6 1" >>confdefs.h
 
@@ -22904,7 +22905,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 if ( test -z "$HAVE_GETSERVBYNAME_R" )
 then
@@ -22924,7 +22926,7 @@ getservbyname_r(NULL,NULL,NULL,NULL,0);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_GETSERVBYNAME_R_5 1" >>confdefs.h
 
@@ -22935,7 +22937,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 fi
 
 HAVE_GETSERVBYPORT_R=""
@@ -22956,7 +22959,7 @@ getservbyport_r(0,NULL,NULL,NULL,0,NULL);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_GETSERVBYPORT_R_6 1" >>confdefs.h
 
@@ -22967,7 +22970,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 if ( test -z "$HAVE_GETSERVBYPORT_R" )
 then
@@ -22987,7 +22991,7 @@ getservbyport_r(0,NULL,NULL,NULL,0);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_GETSERVBYPORT_R_5 1" >>confdefs.h
 
@@ -22998,7 +23002,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 fi
 
 
@@ -29091,7 +29096,7 @@ echo "******************************"
 
 
 
-RUDIMENTS_VERSION="0.44"
+RUDIMENTS_VERSION="0.45"
 
 
 cat >>confdefs.h <<_ACEOF

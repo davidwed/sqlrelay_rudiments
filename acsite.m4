@@ -1389,8 +1389,11 @@ AC_DEFUN([FW_CHECK_SVC],
 
 HAVE_GETSERVBYNAME_R=""
 
+dnl make sure to link these because some platforms (linux libc5) define them
+dnl in the headers but don't implement them in the library
+
 AC_MSG_CHECKING(for getservbyname_r with 6 parameters)
-AC_TRY_COMPILE([#include <netdb.h>
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1399,7 +1402,7 @@ getservbyname_r(NULL,NULL,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSERVBYN
 if ( test -z "$HAVE_GETSERVBYNAME_R" )
 then
 	AC_MSG_CHECKING(for getservbyname_r with 5 parameters)
-	AC_TRY_COMPILE([#include <netdb.h>
+	AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1409,7 +1412,7 @@ fi
 HAVE_GETSERVBYPORT_R=""
 
 AC_MSG_CHECKING(for getservbyport_r with 6 parameters)
-AC_TRY_COMPILE([#include <netdb.h>
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1418,7 +1421,7 @@ getservbyport_r(0,NULL,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSERVBYPORT
 if ( test -z "$HAVE_GETSERVBYPORT_R" )
 then
 	AC_MSG_CHECKING(for getservbyport_r with 5 parameters)
-	AC_TRY_COMPILE([#include <netdb.h>
+	AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],

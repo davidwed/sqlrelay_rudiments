@@ -1,3 +1,8 @@
+0.45 - configure scripts attempts link for various _r functions now to catch
+		cases where they're defined in the headers but not present in
+		the library
+
+
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux
 	filedescriptor::printf now uses vdprintf, if available, if writes are
