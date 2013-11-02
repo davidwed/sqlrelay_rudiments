@@ -43,9 +43,11 @@ dynamiclib::~dynamiclib() {
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		int32_t	flag=(loaddependencies)?RTLD_NOW:RTLD_LAZY;
+		#ifdef RTLD_GLOBAL
 		if (global) {
 			flag|=RTLD_GLOBAL;
 		}
+		#endif
 		do {
 			pvt->_handle=dlopen(library,flag);
 		} while (!pvt->_handle && error::getErrorNumber()==EINTR);
