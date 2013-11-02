@@ -86,7 +86,11 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		void	*symhandle;
 		do {
-			symhandle=dlsym(pvt->_handle,symbol);
+			// What's this char * cast all about?
+			// Really old versions of dlsym (linux libc5) define
+			// dlsym with char * argument rather than const char *.
+			// This works with old and new implementations.
+			symhandle=dlsym(pvt->_handle,(char *)symbol);
 		} while (!symhandle && error::getErrorNumber()==EINTR);
 		return (pvt->_handle)?symhandle:NULL;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
