@@ -1290,7 +1290,7 @@ getaddrinfo(NULL,NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETADDRINFO,1,Some sy
 HAVE_GETHOSTBYNAME_R=""
 
 AC_MSG_CHECKING(for gethostbyname_r with 6 parameters)
-AC_TRY_COMPILE([#include <netdb.h>
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1299,7 +1299,7 @@ gethostbyname_r(NULL,NULL,NULL,0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETHOSTBYN
 if ( test -z "$HAVE_GETHOSTBYNAME_R" )
 then
 	AC_MSG_CHECKING(for gethostbyname_r with 5 parameters)
-	AC_TRY_COMPILE([#include <netdb.h>
+	AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1309,7 +1309,7 @@ fi
 HAVE_GETHOSTBYADDR_R=""
 
 AC_MSG_CHECKING(for gethostbyaddr_r with 8 parameters)
-AC_TRY_COMPILE([#include <netdb.h>
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1318,7 +1318,7 @@ gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETHOS
 if ( test -z "$HAVE_GETHOSTBYADDR_R" )
 then
 	AC_MSG_CHECKING(for gethostbyaddr_r with 7 parameters)
-	AC_TRY_COMPILE([#include <netdb.h>
+	AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1326,7 +1326,7 @@ gethostbyaddr_r(NULL,0,0,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETHOSTBYAD
 fi
 
 AC_MSG_CHECKING(for getnameinfo)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
 #include <netdb.h>
@@ -1345,7 +1345,7 @@ AC_DEFUN([FW_CHECK_PROTO],
 HAVE_GETPROTOBYNAME_R=""
 
 AC_MSG_CHECKING(for getprotobyname_r with 5 parameters)
-AC_TRY_COMPILE([#include <netdb.h>
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1354,7 +1354,7 @@ getprotobyname_r(NULL,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETPROTOBYNAME
 if ( test -z "$HAVE_GETPROTOBYNAME_R" )
 then
 	AC_MSG_CHECKING(for getprotobyname_r with 4 parameters)
-	AC_TRY_COMPILE([#include <netdb.h>
+	AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1364,7 +1364,7 @@ fi
 HAVE_GETPROTOBYNUMBER_R=""
 
 AC_MSG_CHECKING(for getprotobynumber_r with 5 parameters)
-AC_TRY_COMPILE([#include <netdb.h>
+AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1373,7 +1373,7 @@ getprotobynumber_r(0,NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETPROTOBYNUMBE
 if ( test -z "$HAVE_GETPROTOBYNUMBER_R" )
 then
 	AC_MSG_CHECKING(for getprotobynumber_r with 4 parameters)
-	AC_TRY_COMPILE([#include <netdb.h>
+	AC_TRY_LINK([#include <netdb.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
