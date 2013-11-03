@@ -66,6 +66,7 @@
 // will be multiply-defined on linux libc4 systems.  Other systems are
 // unaffected.
 #ifdef RUDIMENTS_HAVE_NETINET_TCP_H
+	// some libc5 systems need this extern "C" wrapper
 	extern "C" {
 	#include <netinet/tcp.h>
 	}
