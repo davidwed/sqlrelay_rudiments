@@ -15549,6 +15549,11 @@ $as_echo "yes" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	fi
+
+		if ( test "`uname -v`" = "2" )
+	then
+		CXXFLAGS="$CXXFLAGS -D_SVID3"
+	fi
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }

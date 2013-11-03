@@ -539,6 +539,12 @@ then
 	else
 		AC_MSG_RESULT(no)
 	fi
+
+	dnl OSR 5.0.0 needs -D_SVID3
+	if ( test "`uname -v`" = "2" )
+	then
+		CXXFLAGS="$CXXFLAGS -D_SVID3"
+	fi
 else
 	AC_MSG_RESULT(no)
 fi
