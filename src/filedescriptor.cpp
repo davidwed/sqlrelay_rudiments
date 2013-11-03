@@ -2055,10 +2055,15 @@ bool filedescriptor::dontUseNaglesAlgorithm() {
 }
 
 bool filedescriptor::setNoDelay(int32_t onoff) {
+#ifdef TCP_NODELAY
 	int32_t	value=onoff;
 	return !setSockOpt(IPPROTO_TCP,TCP_NODELAY,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 				(socklen_t)sizeof(int));
+#else
+	error::setErrorNumber(ENOSYS);
+	return false;
+#endif
 }
 
 bool filedescriptor::getTcpWriteBufferSize(int32_t *size) {
