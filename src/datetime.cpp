@@ -13,7 +13,10 @@
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	// SCO OSR 5.0.0 appears to need this extern "C"
+	extern "C" {
 	#include <sys/time.h>
+	}
 #endif
 #if defined(RUDIMENTS_HAVE_RTC_SET_TIME) || \
 		defined(RUDIMENTS_HAVE_RTC_GET_TIME)
