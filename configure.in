@@ -2257,8 +2257,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 fpathconf(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FPATHCONF,1,Some systems have fpathconf) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+dnl make sure to link this one, OSR 5.0.0 defines it in
+dnl the headers but it's not defined in the library
 AC_MSG_CHECKING(for mkstemp)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 mkstemp(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKSTEMP,1,Some systems have mkstemp) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
