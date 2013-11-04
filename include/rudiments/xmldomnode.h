@@ -386,6 +386,22 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		/** Appends "child" to the list of child nodes. */
 		bool	appendChild(xmldomnode *child);
 
+		/** Inserts a new node of type TAG_XMLDOMNODETYPE with name
+		 *  "tag" into the list of child nodes at "position".  The
+		 *  position of the next sibling (and all successive siblings)
+		 *  is incremented.
+		 *
+		 *  Returns the new node on success or the null node on
+		 *  failure. */
+		xmldomnode	*insertTag(const char *tag, uint64_t position);
+
+		/** Appends a new node of type TAG_XMLDOMNODETYPE to the list
+		 *  of child nodes.
+		 *
+		 *  Returns the new node on success or the null node on
+		 *  failure. */
+		xmldomnode	*appendTag(const char *tag);
+
 		/** Moves "child" from its current position into the
 		 *  list of child nodes for "parent" at "position". */
 		bool	moveChild(xmldomnode *child,

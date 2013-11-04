@@ -1,10 +1,11 @@
-0.45 - configure scripts attempts link for various _r functions now to catch
+0.44.1 - configure scripts attempts link for various _r functions now to catch
 		cases where they're defined in the headers but not present in
 		the library
 	tweaks for dlopen/dlsym on linux libc5
 	reordered netinet/in.h and netinet/tcp.h includes for linux libc5
 	configure script tweaks for OSR500
 	extern "C" wrapper around sys/times.h for OSR500
+	added xmldomnode::append/insertTag methods
 
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux

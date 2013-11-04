@@ -583,6 +583,10 @@ bool xmldomnode::appendChild(xmldomnode *child) {
 	return insertChild(child,getChildCount());
 }
 
+xmldomnode *xmldomnode::appendTag(const char *tag) {
+	return insertTag(tag,getChildCount());
+}
+
 bool xmldomnode::appendText(const char *value) {
 	return insertText(value,getChildCount());
 }
@@ -765,6 +769,22 @@ bool xmldomnode::insertChild(xmldomnode *child, uint64_t position) {
 				&pvt->_firstchild,
 				&pvt->_lastchild,
 				&pvt->_childcount);
+}
+
+xmldomnode	*xmldomnode::insertTag(const char *tag, uint64_t position) {
+	xmldomnode	*child=new xmldomnode(pvt->_dom,
+					pvt->_nullnode,
+					TAG_XMLDOMNODETYPE,
+					tag,NULL);
+	if (insertNode(child,position,
+				TAG_XMLDOMNODETYPE,
+				&pvt->_firstchild,
+				&pvt->_lastchild,
+				&pvt->_childcount)) {
+		return child;
+	}
+	delete child;
+	return pvt->_nullnode;
 }
 
 bool xmldomnode::insertAttribute(xmldomnode *attribute, uint64_t position) {
