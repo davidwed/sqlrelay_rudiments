@@ -6,6 +6,7 @@
 	configure script tweaks for OSR500
 	extern "C" wrapper around sys/times.h for OSR500
 	added xmldomnode::append/insertTag methods
+	implemented directory class for windows
 
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux

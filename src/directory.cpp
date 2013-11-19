@@ -47,7 +47,14 @@
 class directoryprivate {
 	friend class directory;
 	private:
-		DIR		*_dir;
+		#ifndef _WIN32
+			DIR		*_dir;
+		#else
+			char		*_filespec;
+			HANDLE		_dirhandle;
+			WIN32_FIND_DATA	_findfiledata;
+			bool		_onfirst;
+		#endif
 		uint64_t	_currentindex;
 };
 
@@ -76,21 +83,45 @@ static int64_t bufferSize(directory *d) {
 
 directory::directory() {
 	pvt=new directoryprivate;
-	pvt->_dir=NULL;
+	#ifndef _WIN32
+		pvt->_dir=NULL;
+	#else
+		pvt->_filespec=NULL;
+		pvt->_dirhandle=NULL;
+		pvt->_onfirst=true;
+	#endif
 	pvt->_currentindex=0;
 }
 
 directory::~directory() {
 	close();
+	#ifdef _WIN32
+		delete[] pvt->_filespec;
+	#endif
 	delete pvt;
 }
 
 bool directory::open(const char *path) {
 	close();
-	do {
-		pvt->_dir=opendir(path);
-	} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
-	return (pvt->_dir!=NULL);
+	#ifndef _WIN32
+		do {
+			pvt->_dir=opendir(path);
+		} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
+		return (pvt->_dir!=NULL);
+	#else
+		// The rewind method just calls close() and
+		// open(pvt->_filespec).  Don't rebuild pvt->_filespec if it's
+		// what was passed in.
+		if (path!=pvt->_filespec) {
+			delete[] pvt->_filespec;
+			pvt->_filespec=new char[charstring::length(path)+3];
+			charstring::copy(pvt->_filespec,path);
+			charstring::append(pvt->_filespec,"\*");
+		}
+		pvt->_dirhandle=FindFirstFile(pvt->_filespec,
+						&pvt->_findfiledata);
+		return (pvt->_dirhandle!=INVALID_HANDLE_VALUE);
+	#endif
 }
 
 bool directory::skip() {
@@ -108,7 +139,7 @@ char *directory::read() {
 		return NULL;
 	}
 
-	#ifdef RUDIMENTS_HAVE_READDIR_R
+	#if defined(RUDIMENTS_HAVE_READDIR_R)
 		// get the size of the buffer
 		int64_t	size=bufferSize(this);
 		if (size==-1) {
@@ -135,7 +166,7 @@ char *directory::read() {
 		char	*retval=charstring::duplicate(result->d_name);
 		delete[] entry;
 		return retval;
-	#else
+	#elif !defined(_WIN32)
 		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry;
 		#else
@@ -156,26 +187,44 @@ char *directory::read() {
 			_rdmutex->unlock();
 		}
 		return retval;
+	#else
+		if (pvt->_onfirst) {
+			pvt->_onfirst=false;
+		} else if (FindNextFile(pvt->_dirhandle,
+					pvt->_findfiledata!=TRUE)) {
+			return NULL;
+		}
+		pvt->_currentindex++;
+		return charstring::duplicate(pvt->_findfiledata.cFileName);
 	#endif
 }
 
 void directory::rewind() {
-	if (pvt->_dir) {
-		rewinddir(pvt->_dir);
-	}
-	pvt->_currentindex=0;
+	#ifndef _WIN32
+		if (pvt->_dir) {
+			rewinddir(pvt->_dir);
+		}
+		pvt->_currentindex=0;
+	#else
+		close();
+		open(pvt->_filespec);
+	#endif
 }
 
 bool directory::close() {
-	bool	retval=true;
-	if (pvt->_dir) {
-		do {
-			retval=!closedir(pvt->_dir);
-		} while (!retval && error::getErrorNumber()==EINTR);
-		pvt->_dir=NULL;
-		pvt->_currentindex=0;
-	}
-	return retval;
+	#ifndef _WIN32
+		bool	retval=true;
+		if (pvt->_dir) {
+			do {
+				retval=!closedir(pvt->_dir);
+			} while (!retval && error::getErrorNumber()==EINTR);
+			pvt->_dir=NULL;
+			pvt->_currentindex=0;
+		}
+		return retval;
+	#else
+		return (FindClose(pvt->findfiledata)==TRUE);
+	#endif
 }
 
 uint64_t directory::getChildCount() {
@@ -209,41 +258,78 @@ char *directory::getChildName(uint64_t index) {
 }
 
 bool directory::create(const char *path, mode_t perms) {
-	int32_t	result;
-	do {
+	#ifndef _WIN32
+		int32_t	result;
+		do {
+			#if defined(RUDIMENTS_HAVE_MKDIR_2)
+				result=mkdir(path,perms);
+			#elif defined(RUDIMENTS_HAVE_MKDIR_1)
+				result=mkdir(path);
+			#else
+				#error no mkdir or anything like it
+			#endif
+		} while (result==-1 && error::getErrorNumber()==EINTR);
 		#if defined(RUDIMENTS_HAVE_MKDIR_2)
-			result=mkdir(path,perms);
+			return !result;
 		#elif defined(RUDIMENTS_HAVE_MKDIR_1)
-			result=mkdir(path);
+			return !result &&
+				permissions::setFilePermissions(path,perms);
 		#else
 			#error no mkdir or anything like it
 		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	#if defined(RUDIMENTS_HAVE_MKDIR_2)
-		return !result;
-	#elif defined(RUDIMENTS_HAVE_MKDIR_1)
-		return !result && permissions::setFilePermissions(path,perms);
 	#else
-		#error no mkdir or anything like it
+		return (CreateDirectory(path,NULL)==TRUE);
+
+		// init the security attributes
+		/*LPSECURITY_ATTRIBUTES	satt;
+		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.bInheritHandle=TRUE;
+
+		// contruct the security descriptor
+		if (InitializeSecurityDescriptor(
+					&satt.lpSecurityDescriptor,
+					SECURITY_DESCRIPTOR_REVISION)!=NTRUE) {
+			return false;
+		}
+
+		// FIXME: set directory permissions...
+
+		// create the directory
+		return (CreateDirectory(path,&satt)==TRUE);*/
 	#endif
 }
 
 bool directory::remove(const char *path) {
-	int32_t	result;
-	do {
-		result=rmdir(path);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#ifndef _WIN32
+		int32_t	result;
+		do {
+			result=rmdir(path);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		return (RemoveDirectory(path)==TRUE);
+	#endif
 }
 
 char *directory::getCurrentWorkingDirectory() {
 	size_t	size=1024;
 	for (;;) {
 		char	*buffer=new char[size];
-		char	*result;
-		do {
-			result=getcwd(buffer,size);
-		} while (!result && error::getErrorNumber()==EINTR);
+		char	*result=NULL;
+		#ifndef _WIN32
+			do {
+				result=getcwd(buffer,size);
+			} while (!result && error::getErrorNumber()==EINTR);
+		#else
+			DWORD	charswritten=GetCurrentDirectory(size,buffer);
+			if (!charswritten) {
+				delete[] buffer;
+				return NULL;
+			}
+			if (charswritten<size) {
+				result=buffer;
+			}
+		#endif
 		if (result) {
 			return buffer;
 		} else {
@@ -257,11 +343,15 @@ char *directory::getCurrentWorkingDirectory() {
 }
 
 bool directory::changeDirectory(const char *path) {
-	int32_t	result;
-	do {
-		result=chdir(path);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#ifndef _WIN32
+		int32_t	result;
+		do {
+			result=chdir(path);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		return (SetCurrentDirectory(path)==TRUE);
+	#endif
 }
 
 bool directory::changeRoot(const char *path) {
@@ -282,7 +372,9 @@ bool directory::changeRoot(const char *path) {
 }
 
 bool directory::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_READDIR_R)
+	#if defined(_WIN32)
+		return false;
+	#elif !defined(RUDIMENTS_HAVE_READDIR_R)
 		return true;
 	#else
 		return false;
@@ -299,7 +391,7 @@ int64_t directory::maxFileNameLength(const char *pathname) {
 	int64_t	retval=pathConf(pathname,_PC_NAME_MAX);
 	#if defined(NAME_MAX)
 	if (retval==-1) {
-		retval = NAME_MAX;
+		retval=NAME_MAX;
 	}
 	#endif
 	return retval;
@@ -321,7 +413,11 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#elif defined(_WIN32)
-		// no idea how to support this on windows
+		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
+			return MAX_PATH;
+		} else if (name==_PC_NO_TRUNC) {
+			return 0;
+		}
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#else
@@ -365,7 +461,11 @@ int64_t directory::fpathConf(int32_t name) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#elif defined(_WIN32)
-		// no idea how to support this on windows
+		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
+			return MAX_PATH;
+		} else if (name==_PC_NO_TRUNC) {
+			return 0;
+		}
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#else

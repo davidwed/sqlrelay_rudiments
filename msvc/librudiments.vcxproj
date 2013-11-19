@@ -330,6 +330,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\commandline.cpp" />
     <ClCompile Include="..\src\datetime.cpp" />
     <ClCompile Include="..\src\device.cpp" />
+    <ClCompile Include="..\src\directory.cpp" />
     <ClCompile Include="..\src\dtd.cpp" />
     <ClCompile Include="..\src\environment.cpp" />
     <ClCompile Include="..\src\error.cpp" />
