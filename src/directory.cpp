@@ -51,7 +51,7 @@ class directoryprivate {
 			DIR		*_dir;
 		#else
 			char		*_filespec;
-			HANDLE		_dirhandle;
+			HANDLE		_dir;
 			WIN32_FIND_DATA	_findfiledata;
 			bool		_onfirst;
 		#endif
@@ -87,7 +87,7 @@ directory::directory() {
 		pvt->_dir=NULL;
 	#else
 		pvt->_filespec=NULL;
-		pvt->_dirhandle=NULL;
+		pvt->_dir=INVALID_HANDLE_VALUE;
 		pvt->_onfirst=true;
 	#endif
 	pvt->_currentindex=0;
@@ -116,11 +116,11 @@ bool directory::open(const char *path) {
 			delete[] pvt->_filespec;
 			pvt->_filespec=new char[charstring::length(path)+3];
 			charstring::copy(pvt->_filespec,path);
-			charstring::append(pvt->_filespec,"\*");
+			charstring::append(pvt->_filespec,"\\*");
 		}
-		pvt->_dirhandle=FindFirstFile(pvt->_filespec,
-						&pvt->_findfiledata);
-		return (pvt->_dirhandle!=INVALID_HANDLE_VALUE);
+		pvt->_dir=FindFirstFile(pvt->_filespec,&pvt->_findfiledata);
+		pvt->_onfirst=true;
+		return (pvt->_dir!=INVALID_HANDLE_VALUE);
 	#endif
 }
 
@@ -135,9 +135,16 @@ bool directory::skip() {
 
 char *directory::read() {
 
-	if (!pvt->_dir) {
-		return NULL;
-	}
+	// handle unopened directory
+	#ifndef _WIN32
+		if (!pvt->_dir) {
+			return NULL;
+		}
+	#else
+		if (pvt->_dir==INVALID_HANDLE_VALUE) {
+			return NULL;
+		}
+	#endif
 
 	#if defined(RUDIMENTS_HAVE_READDIR_R)
 		// get the size of the buffer
@@ -190,8 +197,7 @@ char *directory::read() {
 	#else
 		if (pvt->_onfirst) {
 			pvt->_onfirst=false;
-		} else if (FindNextFile(pvt->_dirhandle,
-					pvt->_findfiledata!=TRUE)) {
+		} else if (FindNextFile(pvt->_dir,&pvt->_findfiledata)!=TRUE) {
 			return NULL;
 		}
 		pvt->_currentindex++;
@@ -223,7 +229,9 @@ bool directory::close() {
 		}
 		return retval;
 	#else
-		return (FindClose(pvt->findfiledata)==TRUE);
+		bool	retval=(FindClose(pvt->_dir)==TRUE);
+		pvt->_dir=INVALID_HANDLE_VALUE;
+		return retval;
 	#endif
 }
 
@@ -239,9 +247,15 @@ uint64_t directory::getChildCount() {
 char *directory::getChildName(uint64_t index) {
 
 	// handle unopened directory
-	if (!pvt->_dir) {
-		return NULL;
-	}
+	#ifndef _WIN32
+		if (!pvt->_dir) {
+			return NULL;
+		}
+	#else
+		if (pvt->_dir==INVALID_HANDLE_VALUE) {
+			return NULL;
+		}
+	#endif
 
 	// rewind if necessary
 	if (index<pvt->_currentindex) {
@@ -364,7 +378,7 @@ bool directory::changeRoot(const char *path) {
 	#elif defined(_WIN32)
 		// windows just doesn't support this
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#else
 		// other platforms should support this
 		#error no chroot or anything like it
