@@ -138,7 +138,8 @@ bool semaphoreset::wait(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_waitop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return WaitForSingleObject(pvt->_sems[index],INFINITE);
+		return (WaitForSingleObject(pvt->_sems[index],INFINITE)==
+								WAIT_OBJECT_0);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -149,8 +150,9 @@ bool semaphoreset::wait(int32_t index, int32_t seconds, int32_t nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semTimedOp(pvt->_waitop[index],seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return WaitForSingleObject(pvt->_sems[index],
-					seconds*1000+nanoseconds/1000000);
+		return (WaitForSingleObject(pvt->_sems[index],
+					seconds*1000+nanoseconds/1000000)==
+								WAIT_OBJECT_0);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -162,7 +164,8 @@ bool semaphoreset::waitWithUndo(int32_t index) {
 		return semOp(pvt->_waitwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return WaitForSingleObject(pvt->_sems[index],INFINITE);
+		return (WaitForSingleObject(pvt->_sems[index],INFINITE)==
+								WAIT_OBJECT_0);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -176,8 +179,9 @@ bool semaphoreset::waitWithUndo(int32_t index,
 						seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return WaitForSingleObject(pvt->_sems[index],
-					seconds*1000+nanoseconds/1000000);
+		return (WaitForSingleObject(pvt->_sems[index],
+					seconds*1000+nanoseconds/1000000)==
+								WAIT_OBJECT_0);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -188,7 +192,7 @@ bool semaphoreset::signal(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return ReleaseSemaphore(pvt->_sems[index],1,NULL);
+		return (ReleaseSemaphore(pvt->_sems[index],1,NULL)==TRUE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -200,7 +204,7 @@ bool semaphoreset::signalWithUndo(int32_t index) {
 		return semOp(pvt->_signalwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return ReleaseSemaphore(pvt->_sems[index],1,NULL);
+		return (ReleaseSemaphore(pvt->_sems[index],1,NULL)==TRUE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -522,9 +526,9 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 					charstring::integerLength(nsems)+1;
 			pvt->_semnames[i]=new char[semnamelen];
 			charstring::copy(pvt->_semnames[i],"rudiments::");
-			charstring::append(pvt->_semnames[i],key);
+			charstring::append(pvt->_semnames[i],(int64_t)key);
 			charstring::append(pvt->_semnames[i],"-");
-			charstring::append(pvt->_semnames[i],nsems);
+			charstring::append(pvt->_semnames[i],(int64_t)nsems);
 
 			// set up the security attributes
 			pvt->_securityattrs[i]=new SECURITY_ATTRIBUTES;

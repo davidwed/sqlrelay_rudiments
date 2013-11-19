@@ -348,6 +348,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\intervaltimer.cpp" />
     <ClCompile Include="..\src\listener.cpp" />
     <ClCompile Include="..\src\logger.cpp" />
+    <ClCompile Include="..\src\memorymap.cpp" />
     <ClCompile Include="..\src\memorypool.cpp" />
     <ClCompile Include="..\src\parameterstring.cpp" />
     <ClCompile Include="..\src\passwdentry.cpp" />
@@ -358,7 +359,14 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\rawbuffer.cpp" />
     <ClCompile Include="..\src\regex.cpp" />
     <ClCompile Include="..\src\regularexpression.cpp" />
+    <ClCompile Include="..\src\rpcentry.cpp" />
+    <ClCompile Include="..\src\semaphoreset.cpp" />
     <ClCompile Include="..\src\server.cpp" />
+    <ClCompile Include="..\src\serviceentry.cpp" />
+    <ClCompile Include="..\src\shadowentry.cpp" />
+    <ClCompile Include="..\src\sharedmemory.cpp" />
+    <ClCompile Include="..\src\shmfile.cpp" />
+    <ClCompile Include="..\src\signalclasses.cpp" />
     <ClCompile Include="..\src\snooze.cpp" />
     <ClCompile Include="..\src\socketclient.cpp" />
     <ClCompile Include="..\src\socketserver.cpp" />

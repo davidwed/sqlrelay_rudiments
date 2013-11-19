@@ -16,6 +16,9 @@
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_MUNMAP_CADDR_T
 	#define MUNMAP_ADDRCAST caddr_t
@@ -111,6 +114,7 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 	}
 	return false;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -133,6 +137,7 @@ bool memorymap::detach() {
 		pvt->_length=0;
 		return retval;
 	#else
+		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
 }
@@ -151,6 +156,7 @@ bool memorymap::setProtection(off64_t offset, size_t len, int32_t protection) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -180,8 +186,9 @@ bool memorymap::sync(off64_t offset, size_t len,
 	return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return FlushViewOfFile(reinterpret_cast<void *>(ptr),len);
+	return (FlushViewOfFile(reinterpret_cast<void *>(ptr),len)==TRUE);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -191,6 +198,7 @@ bool memorymap::sequentialAccess(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_SEQUENTIAL);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -200,6 +208,7 @@ bool memorymap::randomAccess(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_RANDOM);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -209,6 +218,7 @@ bool memorymap::willNeed(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_WILLNEED);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -218,6 +228,7 @@ bool memorymap::wontNeed(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_DONTNEED);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -227,6 +238,7 @@ bool memorymap::normalAccess(off64_t offset, size_t len) {
 	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
 	return mAdvise(ptr,len,MADV_NORMAL);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -244,6 +256,7 @@ bool memorymap::lock(off64_t offset, size_t len) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -261,6 +274,7 @@ bool memorymap::unlock(off64_t offset, size_t len) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -304,6 +318,7 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 	delete[] tmp;
 	return true;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -312,6 +327,7 @@ bool memorymap::lockAll() {
 	#if defined(MCL_CURRENT) && defined(MCL_FUTURE)
 	return mLockAll(MCL_CURRENT|MCL_FUTURE);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -320,6 +336,7 @@ bool memorymap::lockAllCurrent() {
 	#if defined(MCL_CURRENT)
 	return mLockAll(MCL_CURRENT);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -328,6 +345,7 @@ bool memorymap::lockAllFuture() {
 	#if defined(MCL_FUTURE)
 	return mLockAll(MCL_FUTURE);
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -340,6 +358,7 @@ bool memorymap::unlockAll() {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
@@ -353,6 +372,7 @@ bool memorymap::mAdvise(unsigned char *start, size_t length, int32_t advice) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return true;
 	#endif
 }
@@ -365,6 +385,7 @@ bool memorymap::mLockAll(int32_t flags) {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 	#else
+	error::setErrorNumber(ENOSYS);
 	return false;
 	#endif
 }
