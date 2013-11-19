@@ -294,22 +294,16 @@ bool directory::create(const char *path, mode_t perms) {
 	#else
 		return (CreateDirectory(path,NULL)==TRUE);
 
-		// init the security attributes
-		/*LPSECURITY_ATTRIBUTES	satt;
+		/*SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
 		satt.bInheritHandle=TRUE;
 
-		// contruct the security descriptor
-		if (InitializeSecurityDescriptor(
-					&satt.lpSecurityDescriptor,
-					SECURITY_DESCRIPTOR_REVISION)!=NTRUE) {
-			return false;
-		}
+		TCHAR	*sddl="...";
 
-		// FIXME: set directory permissions...
-
-		// create the directory
-		return (CreateDirectory(path,&satt)==TRUE);*/
+		return (ConvertStringSecurityDescriptorToSecurityDescriptor(
+				sddl,SDDL_REVISION_1,
+				&satt.lpSecurityDescriptor,NULL)!=TRUE &&
+			CreateDirectory(path,&satt)==TRUE);*/
 	#endif
 }
 

@@ -17,6 +17,13 @@
 	#include <sys/time.h>
 #endif
 
+#ifdef _WIN32
+	struct timeval {
+		time_t		tv_sec;
+		uint32_t	tv_usec;
+	};
+#endif
+
 #ifndef RUDIMENTS_HAVE_STRUCT_ITIMERVAL
 	struct itimerval {
 		struct timeval	it_interval;

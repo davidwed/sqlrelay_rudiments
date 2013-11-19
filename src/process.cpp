@@ -402,10 +402,7 @@ bool process::detach() {
 	newSession();
 
 	// change directory to root to avoid keeping any directories in use
-	// FIXME: get the directory class working on windows
-	#if !defined(_WIN32)
-		directory::changeDirectory("/");
-	#endif
+	directory::changeDirectory("/");
 
 	// Set umask such that files are created 666 and directories 777.
 	// This way we can change them to whatever we like using chmod().

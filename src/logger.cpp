@@ -8,6 +8,7 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/process.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
@@ -63,14 +64,14 @@ void filedestination::write(const char *string) {
 void stdoutdestination::write(const char *string) {
 	int32_t	result;
 	do {
-		result=::write(1,string,charstring::length(string));
+		result=stdoutput.write(string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 
 void stderrdestination::write(const char *string) {
 	int32_t	result;
 	do {
-		result=::write(2,string,charstring::length(string));
+		result=stderror.write(string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 }
 

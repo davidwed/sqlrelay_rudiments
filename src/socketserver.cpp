@@ -179,7 +179,7 @@ bool socketserver::listen(int32_t backlog) {
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	return !result;
 }
 
 #ifdef RUDIMENTS_HAS_SSL

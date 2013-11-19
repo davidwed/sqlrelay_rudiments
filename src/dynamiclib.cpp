@@ -74,7 +74,7 @@ bool dynamiclib::close() {
 		} while (result!=0 && error::getErrorNumber()==EINTR);
 		retval=!result;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
-		retval=FreeLibrary(pvt->_handle);
+		retval=(FreeLibrary(pvt->_handle)==TRUE);
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif
