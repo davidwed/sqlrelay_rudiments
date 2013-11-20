@@ -6,7 +6,9 @@
 #include <rudiments/stdio.h>
 
 // for AF_INET
-#include <netdb.h>
+#ifdef RUDIMENTS_HAVE_NETDB_H
+	#include <netdb.h>
+#endif
 
 // this function takes addr[]={127,1,1,0} and returns "127.1.1.0"
 char *getAddressString(int length, const char *addr) {

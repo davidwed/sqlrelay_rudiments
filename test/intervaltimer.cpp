@@ -2,7 +2,11 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/snooze.h>
 #include <rudiments/stdio.h>
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_TIME_H
+	#include <sys/time.h>
+#else
+	#define	ITIMER_REAL 0
+#endif
 
 void alarmhandler(int sig) {
 	stdoutput.printf("alarm!\n");

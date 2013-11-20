@@ -2,20 +2,26 @@
 // See the file COPYING for more information
 
 #include <rudiments/logger.h>
-#include <sys/syslog.h>
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
+	#include <sys/syslog.h>
+#endif
 
 int main(int argc, const char **argv) {
 	
 	logger			lg;
 
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	syslogdestination	sd;
+#endif
 	filedestination		fd;
 	stdoutdestination	sod;
 	stderrdestination	sed;
 
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	// initialize and add a syslog log destination
 	sd.open("logtest",LOG_CONS,LOG_USER,LOG_INFO);
 	lg.addLogDestination(&sd);
+#endif
 
 	// initialize and add a file log destination
 	fd.open("test.log");
@@ -40,20 +46,26 @@ int main(int argc, const char **argv) {
 	lg.removeAllLogDestinations();
 
 	// add each of the log destinations back
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	lg.addLogDestination(&sd);
+#endif
 	lg.addLogDestination(&fd);
 	lg.addLogDestination(&sod);
 	lg.addLogDestination(&sed);
 
 	// remove them one by one
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	lg.removeLogDestination(&sd);
+#endif
 	lg.removeLogDestination(&fd);
 	lg.removeLogDestination(&sod);
 	lg.removeLogDestination(&sed);
 	lg.removeAllLogDestinations();
 
+#ifdef RUDIMENTS_HAVE_SYSLOG_H
 	// close the syslog log destination
 	sd.close();
+#endif
 
 	// close the file log destination
 	fd.close();
