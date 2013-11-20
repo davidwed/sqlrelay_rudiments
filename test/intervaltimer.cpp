@@ -2,10 +2,16 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/snooze.h>
 #include <rudiments/stdio.h>
-#ifdef RUDIMENTS_HAVE_TIME_H
+
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #else
 	#define	ITIMER_REAL 0
+#endif
+
+// for SIGALRM
+#ifdef RUDIMENTS_HAVE_SIGNAL_H
+	#include <signal.h>
 #endif
 
 void alarmhandler(int sig) {
@@ -40,7 +46,9 @@ int main(int argc, char **argv) {
 
 	signalhandler	ah;
 	ah.setHandler(alarmhandler);
+#ifdef SIGALRM
 	ah.handleSignal(SIGALRM);
+#endif
 
 	intervaltimer	t(ITIMER_REAL);
 
