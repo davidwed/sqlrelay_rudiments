@@ -5,6 +5,7 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
 	#include <rudiments/charstring.h>
@@ -54,7 +55,6 @@ class semaphoresetprivate {
 			struct	sembuf	**_signalwithundoop;
 		#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 			HANDLE			*_sems;
-			SECURITY_ATTRIBUTES	**_securityattrs;
 			char			**_semnames;
 		#endif
 };
@@ -72,7 +72,6 @@ semaphoreset::semaphoreset() {
 		pvt->_signalwithundoop=NULL;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		pvt->_sems=NULL;
-		pvt->_securityattrs=NULL;
 		pvt->_semnames=NULL;
 	#endif
 }
@@ -96,11 +95,9 @@ semaphoreset::~semaphoreset() {
 		if (pvt->_sems) {
 			for (int32_t i=0; i<pvt->_semcount; i++) {
 				CloseHandle(pvt->_sems[i]);
-				delete[] pvt->_securityattrs[i];
 				delete[] pvt->_semnames[i];
 			}
 			delete[] pvt->_sems;
-			delete[] pvt->_securityattrs;
 			delete[] pvt->_semnames;
 		}
 	#endif
@@ -164,8 +161,7 @@ bool semaphoreset::waitWithUndo(int32_t index) {
 		return semOp(pvt->_waitwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return (WaitForSingleObject(pvt->_sems[index],INFINITE)==
-								WAIT_OBJECT_0);
+		return wait(index);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -179,9 +175,7 @@ bool semaphoreset::waitWithUndo(int32_t index,
 						seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return (WaitForSingleObject(pvt->_sems[index],
-					seconds*1000+nanoseconds/1000000)==
-								WAIT_OBJECT_0);
+		return wait(index,seconds,nanoseconds);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -192,7 +186,7 @@ bool semaphoreset::signal(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semOp(pvt->_signalop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return (ReleaseSemaphore(pvt->_sems[index],1,NULL)==TRUE);
+		return (ReleaseSemaphore(pvt->_sems[index],1,NULL)!=0);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -204,7 +198,7 @@ bool semaphoreset::signalWithUndo(int32_t index) {
 		return semOp(pvt->_signalwithundoop[index]);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// no such thing as undo on windows
-		return (ReleaseSemaphore(pvt->_sems[index],1,NULL)==TRUE);
+		return signal(index);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -273,32 +267,18 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 
 	pvt->_semcount=semcount;
 
-	#if defined(RUDIMENTS_HAVE_SEMGET) || \
-		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+	// create the semaphore
+	pvt->_semid=semGet(key,semcount,IPC_CREAT|IPC_EXCL|permissions,values);
+	if (pvt->_semid!=-1) {
 
-		// create the semaphore
-		if ((pvt->_semid=semGet(key,semcount,
-					IPC_CREAT|IPC_EXCL|permissions))!=-1) {
-	
-			// if creation succeeded, initialize the semaphore
-			if (values) {
-				for (int32_t i=0; i<semcount; i++) {
-					setValue(i,values[i]);
-				}
-			}
-	
-			// mark for removal
-			pvt->_created=true;
-	
-			// create the signal/wait operations
-			createOperations();
-	
-			return true;
-		}
-	#else
-		error::setErrorNumber(ENOSYS);
-	#endif
+		// mark for removal
+		pvt->_created=true;
 
+		// create the signal/wait operations
+		createOperations();
+
+		return true;
+	}
 	return false;
 }
 
@@ -306,21 +286,15 @@ bool semaphoreset::attach(key_t key, int32_t semcount) {
 
 	pvt->_semcount=semcount;
 
-	#if defined(RUDIMENTS_HAVE_SEMGET) || \
-		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+	// attach to the semaphore
+	pvt->_semid=semGet(key,semcount,0,NULL);
+	if (pvt->_semid!=-1) {
 
-		// attach to the semaphore
-		if ((pvt->_semid=semGet(key,semcount,0))!=-1) {
+		// create the signal/wait operations
+		createOperations();
 
-			// create the signal/wait operations
-			createOperations();
-
-			return true;
-		}
-	#else
-		error::setErrorNumber(ENOSYS);
-	#endif
-
+		return true;
+	}
 	return false;
 }
 
@@ -500,7 +474,8 @@ mode_t semaphoreset::getPermissions() {
 	#endif
 }
 
-int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
+int32_t semaphoreset::semGet(key_t key, int32_t nsems,
+				int32_t semflg, const int32_t *values) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 
 		int32_t	result;
@@ -509,42 +484,39 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
 				pvt->_retryinterruptedoperations);
+	
+		// initialize the semaphores (if we're supposed to)
+		if (values && result!=-1) {
+			for (int32_t i=0; i<semcount; i++) {
+				setValue(i,values[i]);
+			}
+		}
 		return result;
 
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 
-		// FIXME: delete first?
 		pvt->_sems=new HANDLE[nsems];
-		pvt->_securityattrs=new SECURITY_ATTRIBUTES *[nsems];
 		pvt->_semnames=new char *[nsems];
 
 		for (int32_t i=0; i<nsems; i++) {
 
 			// set the semaphore name
-			int32_t	semnamelen=
-					11+charstring::integerLength(key)+1+
-					charstring::integerLength(nsems)+1;
+			int32_t	semnamelen=11+charstring::integerLength(key)+1+
+						charstring::integerLength(i)+1;
 			pvt->_semnames[i]=new char[semnamelen];
 			charstring::copy(pvt->_semnames[i],"rudiments::");
 			charstring::append(pvt->_semnames[i],(int64_t)key);
 			charstring::append(pvt->_semnames[i],"-");
-			charstring::append(pvt->_semnames[i],(int64_t)nsems);
-
-			// set up the security attributes
-			pvt->_securityattrs[i]=new SECURITY_ATTRIBUTES;
-			pvt->_securityattrs[i]->nLength=
-						sizeof(SECURITY_ATTRIBUTES);
-			// FIXME: set up security descriptor
-			pvt->_securityattrs[i]->lpSecurityDescriptor=NULL;
-			pvt->_securityattrs[i]->bInheritHandle=TRUE;
-			
+			charstring::append(pvt->_semnames[i],(int64_t)i);
 
 			if (semflg&(IPC_CREAT|IPC_EXCL)) {
 
 				// create a new semaphore
+				// FIXME: set the security attributes or the
+				// semaphore can't be inherited by a child
+				// process
 				HANDLE	sem=CreateSemaphore(
-						pvt->_securityattrs[i],
-						0,(2^31)-1,
+						NULL,values[i],(2^31)-1,
 						pvt->_semnames[i]);
 
 				// failure...
@@ -554,38 +526,31 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems, int32_t semflg) {
 						ERROR_ALREADY_EXISTS) {
 						error::setErrorNumber(EEXIST);
 					}
-					// FIXME: clean up previously created
-					// semaphores...
 					return false;
 				}
 
 				// success...
 				pvt->_sems[i]=sem;
-				return true;
 
 			} else {
 
 				// attach to existing semaphore
 				HANDLE	sem=OpenSemaphore(
-						// FIXME: set this for real...
-						0,
-						TRUE,
-						pvt->_semnames[i]);
+						SYNCHRONIZE|
+						SEMAPHORE_MODIFY_STATE,
+						TRUE,pvt->_semnames[i]);
 
 				// failure...
 				if (!sem) {
-					// FIXME: clean up previously created
-					// semaphores...
 					return false;
 				}
 
 				// success...
 				pvt->_sems[i]=sem;
-				return true;
 			}
 		}
 
-		return false;
+		return true;
 
 	#else
 		error::setErrorNumber(ENOSYS);

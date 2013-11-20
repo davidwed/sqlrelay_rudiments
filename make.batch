@@ -2,8 +2,12 @@ if "%1"=="" goto all
 if "%1"=="64" goto all64
 if "%1"=="all" goto all
 if "%1"=="all64" goto all64
+if "%1"=="debug" goto debug
+if "%1"=="debug64" goto debug64
 if "%1"=="clr" goto clr
 if "%1"=="clr64" goto clr64
+if "%1"=="debugclr" goto debugclr
+if "%1"=="debugclr64" goto debugclr64
 if "%1"=="clean" goto clean
 if "%1"=="install" goto install
 if "%1"=="uninstall" goto uninstall
@@ -24,6 +28,20 @@ cd ..
 goto end
 
 
+:debug
+cd msvc
+msbuild.exe /property:Configuration=Debug /property:Platform=Win32
+cd ..
+goto end
+
+
+:debug64
+cd msvc
+msbuild.exe /property:Configuration=Debug /property:Platform=x64
+cd ..
+goto end
+
+
 :clr
 cd msvc
 msbuild.exe /property:Configuration=ReleaseCLR /property:Platform=Win32
@@ -34,6 +52,20 @@ goto end
 :clr64
 cd msvc
 msbuild.exe /property:Configuration=ReleaseCLR /property:Platform=x64
+cd ..
+goto end
+
+
+:debugclr
+cd msvc
+msbuild.exe /property:Configuration=DebugCLR /property:Platform=Win32
+cd ..
+goto end
+
+
+:debugclr64
+cd msvc
+msbuild.exe /property:Configuration=DebugCLR /property:Platform=x64
 cd ..
 goto end
 
@@ -56,6 +88,15 @@ goto end
 mkdir c:\"Program Files"\Firstworks\lib
 mkdir c:\"Program Files"\Firstworks\include\rudiments\private
 mkdir c:\"Program Files"\Firstworks\bin
+
+copy msvc\Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\DebugCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\DebugCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\x64\Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\x64\Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\x64\DebugCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\x64\DebugCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
 copy msvc\Release\librudiments.dll c:\"Program Files"\Firstworks\bin
 copy msvc\Release\librudiments.lib c:\"Program Files"\Firstworks\lib

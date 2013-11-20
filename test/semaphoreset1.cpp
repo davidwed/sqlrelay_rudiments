@@ -4,32 +4,58 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
+#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
 
 	// create a file called /tmp/sem
-	file::remove("/tmp/sem");
+	file::remove("sem");
 	file	fd;
-	fd.create("/tmp/sem",permissions::evalPermString("rw-------"));
+	if (!fd.create("sem",permissions::evalPermString("rw-------"))) {
+		stdoutput.printf("key file create failed\n");
+		process::exit(1);
+	}
 	fd.close();
 
-	// Create a semaphore set keyed to /tmp/sem containing 2 individual
+	// Create a semaphore set keyed to sem containing 2 individual
 	// semaphores.  Initialize them to 0 and 1 respectively.
-        int     vals[2]={0,1};
-        semaphoreset	sem;
-        sem.create(file::generateKey("/tmp/sem",1),
-			permissions::evalPermString("rw-------"),2,vals);
+	int     vals[2]={0,1};
+	semaphoreset	sem;
+	if (!sem.create(file::generateKey("sem",1),
+			permissions::evalPermString("rw-------"),2,vals)) {
+		stdoutput.printf("semaphore create failed\n");
+		file::remove("sem");
+		process::exit(1);
+	}
 
 	// loop 10 times, printing 2 and 4, synchronizing with another process
 	// using the semaphores.
-        for (int i=0; i<10; i++) {
-                sem.wait(0);
-                stdoutput.printf("2\n");
-                sem.signal(1);
-        
-                sem.wait(0);
-                stdoutput.printf("4\n");
-                sem.signal(1);
-        }
+	for (int i=0; i<10; i++) {
+		if (!sem.wait(0)) {
+			stdoutput.printf("wait(0) (1) failed\n");
+			file::remove("sem");
+			process::exit(1);
+		}
+		stdoutput.printf("2\n");
+		if (!sem.signal(1)) {
+			stdoutput.printf("signal(1) (1) failed\n");
+			file::remove("sem");
+			process::exit(1);
+		}
+
+		if (!sem.wait(0)) {
+			stdoutput.printf("wait(0) (2) failed\n");
+			file::remove("sem");
+			process::exit(1);
+		}
+		stdoutput.printf("4\n");
+		if (!sem.signal(1)) {
+			stdoutput.printf("signal(1) (2) failed\n");
+			file::remove("sem");
+			process::exit(1);
+		}
+	}
+
+	process::exit(0);
 }
