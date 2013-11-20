@@ -7,7 +7,7 @@
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
-int main(int argc, const char **argv) {
+void test() {
 
 	// create a file called /tmp/sem
 	file::remove("sem");
@@ -56,6 +56,9 @@ int main(int argc, const char **argv) {
 			process::exit(1);
 		}
 	}
+}
 
+int main(int argc, const char **argv) {
+	test();
 	process::exit(0);
 }

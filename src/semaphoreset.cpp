@@ -5,7 +5,6 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
 	#include <rudiments/charstring.h>
@@ -54,8 +53,8 @@ class semaphoresetprivate {
 			struct	sembuf	**_signalop;
 			struct	sembuf	**_signalwithundoop;
 		#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-			HANDLE			*_sems;
-			char			**_semnames;
+			HANDLE	*_sems;
+			char	**_semnames;
 		#endif
 };
 
@@ -268,10 +267,7 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	pvt->_semcount=semcount;
 
 	// create the semaphore
-	pvt->_semid=semGet(key,semcount,
-				IPC_CREAT|IPC_EXCL|permissions,
-				semcount,values);
-	if (pvt->_semid!=-1) {
+	if (semGet(key,semcount,IPC_CREAT|IPC_EXCL|permissions,values)!=-1) {
 
 		// mark for removal
 		pvt->_created=true;
@@ -289,8 +285,7 @@ bool semaphoreset::attach(key_t key, int32_t semcount) {
 	pvt->_semcount=semcount;
 
 	// attach to the semaphore
-	pvt->_semid=semGet(key,semcount,0,0,NULL);
-	if (pvt->_semid!=-1) {
+	if (semGet(key,semcount,0,NULL)!=-1) {
 
 		// create the signal/wait operations
 		createOperations();
@@ -477,8 +472,7 @@ mode_t semaphoreset::getPermissions() {
 }
 
 int32_t semaphoreset::semGet(key_t key, int32_t nsems,
-				int32_t semflg, int32_t semcount,
-				const int32_t *values) {
+				int32_t semflg, const int32_t *values) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 
 		int32_t	result;
@@ -487,10 +481,12 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 		} while (result==-1 &&
 				error::getErrorNumber()==EINTR &&
 				pvt->_retryinterruptedoperations);
+
+		pvt->_semid=result;
 	
 		// initialize the semaphores (if we're supposed to)
 		if (values && result!=-1) {
-			for (int32_t i=0; i<semcount; i++) {
+			for (int32_t i=0; i<nsems; i++) {
 				setValue(i,values[i]);
 			}
 		}

@@ -7,7 +7,7 @@
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
-int main(int argc, const char **argv) {
+void test() {
 
 	// attach to the semaphore set keyed to sem containing 2 semaphores
 	semaphoreset	sem;
@@ -41,5 +41,9 @@ int main(int argc, const char **argv) {
 	}
 
 	file::remove("sem");
+}
+
+int main(int argc, const char **argv) {
+	test();
 	process::exit(0);
 }
