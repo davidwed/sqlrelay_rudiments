@@ -15,6 +15,7 @@ clean:
 	$(RMTREE) msvc/Release
 	$(RMTREE) msvc/DebugCLR
 	$(RMTREE) msvc/ReleaseCLR
+	$(RMTREE) msvc/x64
 
 install:
 	cd src; $(MAKE) install

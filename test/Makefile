@@ -177,6 +177,16 @@ clean:
 		client.pem
 	$(RMTREE) .libs
 	cd certificates; $(MAKE) clean
+	$(RMTREE) msvc/test/Debug
+	$(RMTREE) msvc/test/Release
+	$(RMTREE) msvc/test/DebugCLR
+	$(RMTREE) msvc/test/Release
+	$(RMTREE) msvc/test/x64
+	$(RMTREE) msvc/character/Debug
+	$(RMTREE) msvc/character/Release
+	$(RMTREE) msvc/character/DebugCLR
+	$(RMTREE) msvc/character/Release
+	$(RMTREE) msvc/character/x64
 
 server$(EXE): server.cpp server.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)
