@@ -268,7 +268,9 @@ bool semaphoreset::create(key_t key, mode_t permissions,
 	pvt->_semcount=semcount;
 
 	// create the semaphore
-	pvt->_semid=semGet(key,semcount,IPC_CREAT|IPC_EXCL|permissions,values);
+	pvt->_semid=semGet(key,semcount,
+				IPC_CREAT|IPC_EXCL|permissions,
+				semcount,values);
 	if (pvt->_semid!=-1) {
 
 		// mark for removal
@@ -287,7 +289,7 @@ bool semaphoreset::attach(key_t key, int32_t semcount) {
 	pvt->_semcount=semcount;
 
 	// attach to the semaphore
-	pvt->_semid=semGet(key,semcount,0,NULL);
+	pvt->_semid=semGet(key,semcount,0,0,NULL);
 	if (pvt->_semid!=-1) {
 
 		// create the signal/wait operations
@@ -475,7 +477,8 @@ mode_t semaphoreset::getPermissions() {
 }
 
 int32_t semaphoreset::semGet(key_t key, int32_t nsems,
-				int32_t semflg, const int32_t *values) {
+				int32_t semflg, int32_t semcount,
+				const int32_t *values) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 
 		int32_t	result;
