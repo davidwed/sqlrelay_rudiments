@@ -164,6 +164,9 @@
 /* Most systems have ftok(const char *, int) */
 /* #undef RUDIMENTS_HAVE_CONST_CHAR_FTOK */
 
+/* Some systems have CreateFile */
+#define RUDIMENTS_HAVE_CREATEFILE 1
+
 /* Some systems have CreateNamedPipe */
 #define RUDIMENTS_HAVE_CREATENAMEDPIPE 1
 
@@ -247,6 +250,9 @@
 
 /* Some systems have FD_CLOEXEC */
 /* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
+
+/* Some systems have FileAPI.h */
+#define RUDIMENTS_HAVE_FILEAPI_H 1
 
 /* Some systems have fork */
 /* #undef RUDIMENTS_HAVE_FORK */
