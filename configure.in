@@ -595,6 +595,10 @@ then
 	AC_MSG_CHECKING(for winsock2.h)
 	AC_TRY_COMPILE([#include <winsock2.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WINSOCK2_H, 1, Some systems have winsock2.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for FileAPI.h)
+	AC_TRY_COMPILE([#include <FileAPI.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_FILEAPI_H, 1, Some systems have FileAPI.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for io.h)
@@ -1895,6 +1899,15 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <io.h>
 #endif],
 _open(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE__OPEN,1,Some systems have _open) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for CreateFile)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_FILEAPI_H
+	#include <FileAPI.h>
+#endif],
+CreateFile("",0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_CREATEFILE,1,Some systems have CreateFile) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for close)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H

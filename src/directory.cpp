@@ -4,6 +4,7 @@
 #include <rudiments/directory.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_MKDIR_1
 	#include <rudiments/permissions.h>
 #endif
@@ -29,6 +30,7 @@
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
 	#endif
+	#include <sddl.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef _PC_NAME_MAX
@@ -292,18 +294,20 @@ bool directory::create(const char *path, mode_t perms) {
 			#error no mkdir or anything like it
 		#endif
 	#else
-		return (CreateDirectory(path,NULL)==TRUE);
-
-		/*SECURITY_ATTRIBUTES	satt;
+		SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
 		satt.bInheritHandle=TRUE;
 
-		TCHAR	*sddl="...";
+		char	*sddl=permissions::permOctalToSDDL(perms);
 
-		return (ConvertStringSecurityDescriptorToSecurityDescriptor(
+		bool	retval=(
+			ConvertStringSecurityDescriptorToSecurityDescriptor(
 				sddl,SDDL_REVISION_1,
-				&satt.lpSecurityDescriptor,NULL)!=TRUE &&
-			CreateDirectory(path,&satt)==TRUE);*/
+				&satt.lpSecurityDescriptor,NULL)==TRUE &&
+			CreateDirectory(path,&satt)==TRUE);
+
+		delete[] sddl;
+		return retval;
 	#endif
 }
 
@@ -369,13 +373,9 @@ bool directory::changeRoot(const char *path) {
 			result=chroot(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(_WIN32)
-		// windows just doesn't support this
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		// other platforms should support this
-		#error no chroot or anything like it
 	#endif
 }
 
@@ -420,16 +420,19 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 			result=pathconf(pathname,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(_WIN32)
+	#else
 		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
-			return MAX_PATH;
+			#ifdef MAX_PATH
+				return MAX_PATH;
+			#else
+				// return a reasonably safe value
+				return 512;
+			#endif
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
 		}
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no pathconf or anything like it
 	#endif
 }
 
@@ -468,15 +471,18 @@ int64_t directory::fpathConf(int32_t name) {
 					,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(_WIN32)
+	#else
 		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
-			return MAX_PATH;
+			#ifdef MAX_PATH
+				return MAX_PATH;
+			#else
+				// return a reasonably safe value
+				return 512;
+			#endif
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
 		}
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no pathconf or anything like it
 	#endif
 }

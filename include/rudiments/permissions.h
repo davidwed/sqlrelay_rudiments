@@ -22,9 +22,9 @@
  *  	1. Set group id - the program will run as the group that owns
  * 			it instead of as the group of the user that ran it
  * 
- *  The "sticky bit" may also be set.  When set, the file is saved in the
- *  system's swap space. As a side-effect, it cannot be deleted by a user other
- *  than the one that created it. */
+ *  The "sticky bit" may also be set on platforms that support it.  When set,
+ *  the file is saved in the system's swap space. As a side-effect, it cannot
+ *  be deleted by a user other than the one that created it. */
 class RUDIMENTS_DLLSPEC permissions {
 	public:
 		/** Set the permissions on "filename" to "perms".
@@ -68,9 +68,10 @@ class RUDIMENTS_DLLSPEC permissions {
 		 * 			swap space */
 		static	mode_t	evalPermString(const char *permstring);
 
-		/**  FIXME: document this */
+		/**  The inverse of evalPermString().  Evaluates "mode"
+		 *   and returns a string representing the permissions. */
 		static	char	*evalPermOctal(mode_t mode);
-		
+
 		/** Returns rw-rw-rw- (666) permissions.
 		 * 
 		 *  May be or'ed together with the result of another method
@@ -208,6 +209,8 @@ class RUDIMENTS_DLLSPEC permissions {
 		 *  May be or'ed together with the result of another method
 		 *  to define a permission. */
 		static	mode_t	setGroupId();
+
+	#include <rudiments/private/permissions.h>
 };
 
 #endif

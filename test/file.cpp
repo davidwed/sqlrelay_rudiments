@@ -131,4 +131,7 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("canChangeOwner(%s)=%d\n",
 					path,file::canChangeOwner(path));
+
+	// remove the file
+	file::remove("testfile");
 }
