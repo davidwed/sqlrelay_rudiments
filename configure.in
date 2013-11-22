@@ -595,10 +595,6 @@ then
 	AC_MSG_CHECKING(for winsock2.h)
 	AC_TRY_COMPILE([#include <winsock2.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WINSOCK2_H, 1, Some systems have winsock2.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-	AC_MSG_CHECKING(for FileAPI.h)
-	AC_TRY_COMPILE([#include <FileAPI.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_FILEAPI_H, 1, Some systems have FileAPI.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for io.h)

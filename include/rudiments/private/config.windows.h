@@ -251,9 +251,6 @@
 /* Some systems have FD_CLOEXEC */
 /* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
 
-/* Some systems have FileAPI.h */
-#define RUDIMENTS_HAVE_FILEAPI_H 1
-
 /* Some systems have fork */
 /* #undef RUDIMENTS_HAVE_FORK */
 
