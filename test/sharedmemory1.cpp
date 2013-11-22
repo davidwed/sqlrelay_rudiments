@@ -12,15 +12,15 @@
 
 int main(int argc, const char **argv) {
 
-	// create a file called /tmp/shm
-	file::remove("/tmp/shm");
+	// create a file called shm
+	file::remove("shm");
 	file	fd;
-	fd.create("/tmp/shm",permissions::evalPermString("rw-------"));
+	fd.create("shm",permissions::evalPermString("rw-------"));
 	fd.close();
 
-	// create a shared memory segment, keyed to /tmp/shm, 128 bytes long
+	// create a shared memory segment, keyed to shm, 128 bytes long
         sharedmemory    shm;
-        if (!shm.create(file::generateKey("/tmp/shm",1),128,
+        if (!shm.create(file::generateKey("shm",1),128,
                                 permissions::evalPermString("rw-------"))) {
 		stdoutput.printf("error: %s\n",error::getErrorString());
 		process::exit(1);

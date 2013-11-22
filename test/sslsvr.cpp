@@ -32,7 +32,7 @@ void myserver::listen() {
 
 
 	// make sure that only one instance is running
-	int	pid=process::checkForPidFile("/tmp/svr.pidfile");
+	int	pid=process::checkForPidFile("svr.pid");
 	if (pid>-1) {
 		stdoutput.printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
 		return;
@@ -45,8 +45,7 @@ void myserver::listen() {
 
 	// create a pid file which is used to make sure that only one instance
 	// is running and can also be used to kill the process
-	process::createPidFile("/tmp/svr.pidfile",
-				permissions::ownerReadWrite());
+	process::createPidFile("svr.pid",permissions::ownerReadWrite());
 
 	// initalize the libarary
 	SSL_library_init();
@@ -192,7 +191,7 @@ void shutDown(int sig) {
 	stdoutput.printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
-	file::remove("/tmp/svr.pidfile");
+	file::remove("svr.pid");
 	process::exit(0);
 }
 #endif

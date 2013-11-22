@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	serversock.listen(NULL,10000,15);
 
 	unixsocketserver	handoffsock;
-	handoffsock.listen("/tmp/handoff.socket",0000,15);
+	handoffsock.listen("handoff.sck",0000,15);
 
 	listener	pool;
 	pool.addFileDescriptor(&serversock);

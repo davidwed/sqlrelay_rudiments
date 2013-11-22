@@ -9,7 +9,7 @@
 
 void test() {
 
-	// create a file called /tmp/sem
+	// create a file called sem
 	file::remove("sem");
 	file	fd;
 	if (!fd.create("sem",permissions::evalPermString("rw-------"))) {

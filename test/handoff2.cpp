@@ -9,7 +9,7 @@
 int main(int argc, const char **argv) {
 
 	unixsocketclient clnt;
-	clnt.connect("/tmp/handoff.socket",-1,-1,0,1);
+	clnt.connect("handoff.sck",-1,-1,0,1);
 
 	for (;;) {
 		int	descriptor;

@@ -13,7 +13,7 @@ void shutDown(int sig) {
 	stdoutput.printf("%d: shutting down\n",process::getProcessId());
 
 	// clean up
-	file::remove("/tmp/dmn.pidfile");
+	file::remove("dmn.pid");
 	process::exit(0);
 }
 
@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 	process::setGroup("nobody");
 
 	// make sure that only one instance is running
-	int	pid=process::checkForPidFile("/tmp/dmn.pidfile");
+	int	pid=process::checkForPidFile("dmn.pid");
 	if (pid>-1) {
 		stdoutput.printf("Sorry, an instance of this daemon is already running with process id: %d\n",pid);
 		process::exit(0);
@@ -41,7 +41,7 @@ int main(int argc, const char **argv) {
 
 	// create a pid file which is used to make sure that only one instance
 	// is running and can also be used to kill the process
-	process::createPidFile("/tmp/dmn.pidfile",
+	process::createPidFile("dmn.pid",
 					permissions::ownerReadWrite());
 
 	if (!process::fork()) {

@@ -11,8 +11,8 @@ int main(int argc, const char **argv) {
 	// create a unix socket client
 	unixsocketclient	clnt;
 
-	// connect to a server listening on /tmp/lsnr.socket
-	if (clnt.connect("/tmp/lsnr.socket",-1,-1,1,1)<0) {
+	// connect to a server listening on lsnr.sck
+	if (clnt.connect("lsnr.sck",-1,-1,1,1)<0) {
 		stdoutput.printf("connect failed: %s\n",
 				error::getErrorString());
 		process::exit(0);

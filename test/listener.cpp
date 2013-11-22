@@ -5,29 +5,43 @@
 #include <rudiments/inetsocketserver.h>
 #include <rudiments/unixsocketserver.h>
 #include <rudiments/permissions.h>
+#include <rudiments/process.h>
+#include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
 
-
 	// listen on inet socket port 1800
 	inetsocketserver	inetsock;
-	if (!inetsock.listen(NULL,8000,15)) {
+	bool	inetlisten=inetsock.listen(NULL,8000,15);
+	if (inetlisten) {
 		stdoutput.printf("couldn't listen on inet socket\n");
+		stdoutput.printf("%s\n",error::getErrorString());
 	}
 
 
-	// listen on unix socket "/tmp/lsnr.socket"
+	// listen on unix socket "lsnr.sck"
 	unixsocketserver	unixsock;
-	if (!unixsock.listen("/tmp/lsnr.socket",0000,15)) {
+	bool	unixlisten=unixsock.listen("lsnr.sck",0000,15);
+	if (unixlisten) {
 		stdoutput.printf("couldn't listen on unix socket\n");
+		stdoutput.printf("%s\n",error::getErrorString());
 	}
 
+	// bail if neither socket worked out
+	if (inetlisten && unixlisten) {
+		stdoutput.printf("couldn't listen on either socket\n");
+		process::exit(0);
+	}
 
 	// create a listener and add the 2 sockets to it
 	listener	pool;
-	pool.addFileDescriptor(&inetsock);
-	pool.addFileDescriptor(&unixsock);
+	if (inetlisten) {
+		pool.addFileDescriptor(&inetsock);
+	}
+	if (unixlisten) {
+		pool.addFileDescriptor(&unixsock);
+	}
 
 
 	// loop...

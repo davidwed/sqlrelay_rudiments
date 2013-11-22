@@ -10,9 +10,9 @@
 
 int main(int argc, const char **argv) {
 
-	// attach to a shared memory segment keyed to /tmp/shm
+	// attach to a shared memory segment keyed to shm
         sharedmemory    shm;
-        if (!shm.attach(file::generateKey("/tmp/shm",1))) {
+        if (!shm.attach(file::generateKey("shm",1))) {
 		stdoutput.printf("error: %s\n",error::getErrorString());
 		process::exit(1);
 	}
