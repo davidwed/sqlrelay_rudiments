@@ -245,103 +245,92 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 	return permstring;
 }
 
-char *permissions::permStringToSDDL(const char *permstring) {
-	return permOctalToSDDL(evalPermString(permstring));
+char *permissions::permStringToSDDL(const char *permstring, bool directory) {
+	return permOctalToSDDL(evalPermString(permstring),directory);
 }
 
-char *permissions::permOctalToSDDL(mode_t permoctal) {
+char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 
 	// see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
 	//
 	// sddl format:
-	// O,G,S,D:P,PAI,PAR(ace)(ace)...(ace)
+	// D:P,PAI(ace)(ace)...(ace)
 	//
-	// O - owner
-	// G - group
 	// S - SACL (System ACL)
 	// D - DACL (Discretionary ACL)
 	//
 	// P - protected: ignore perms from higher
 	//			up the inheritance tree
-	// AI - children inherit permissions
-	// AR - not used NTFS5+
+	// AI - children inherit permissions (for directories only)
 	//
 	// access control entities (1 per account_sid):
 	// (ace) - (ace_type;ace_flags;rights;object_guid; \
 	//			inherit_object_guid;account_sid)
 	//	ace_types:
 	//		A: Allowed
-	//		D: Denied
 	//		...
 	//	ace_flags:
-	//		OI: object inherit flag ???
-	//		CI: container inherit flag ???
+	//		CI: subdirectories (containers) will inherit this ace
+	//		OI: files (objects) will inherit this ace
 	//		...
-	//	rights:
-	//		generic:
-	//			GA - generic all (all enabled)
-	//			GX - generic execute
-	//			GW - generic write
-	//			GR - generic read
-	//			read:
-	//			SD - delete
-	//			RC - read security descriptor
-	//			write:
-	//			WD - write dacl
-	//			WO - change ownership
-	//		specific for files:
-	//			read:
-	//			CC - read
-	//			SW - read extended attributes
-	//			LO - read object attributes
-	//			write:
-	//			DC - write
-	//			RP - write extended attributes
-	//			CR - write object attributes
-	//			LC - append
-	//		specific for directories:
-	//			read:
-	//			CC - list
-	//			SW - read extended attributes
-	//			LO - read object attributes
-	//			write:
-	//			DC - add file
-	//			RP - write extended attributes
-	//			DT - delete child
-	//			CR - write object attributes
-	//			LC - add subdir
-	//			
+	//	generic rights:
+	//		SD - delete
+	//		RC - read security descriptor
+	//		GR - generic read
+	//		GW - generic write
+	//		GX - generic execute
+	//		WD - write dacl
+	//		WO - write ownership
+	//		...
 	//	object_guid:
 	//		(usually not specified)
 	//	inherit_object_guid:
 	//		(usually not specified)
 	//	account_sid:
-	//		CO - creator owner
-	//		CG - creator group
 	//		WD - world
-	//		...
+	//		(otherwise need the actual sid)
 	//
 	// 777 - rwxrwxrwx -
-	// D:PAI(A;OICI;GRGWGX;;;CO)(A;OICI;GRGWGX;;;CG)(A;OICI;GRGWGX;;;WD)
+	// D:PAI(A;OICI;GRGWGX;;;WD)(A;OICI;GRGWGX;;;gsid)(A;OICI;GRGWGX;;;usid)
 
-	char	*permstring=new char[66];
-	charstring::copy(permstring,"D:PAI");
+	// ACE's are interpreted left to right.
+	// They should be specified world, then group, then user because:
+	//	 world perms are applied to the group and user
+	//	 group perms are applied to the user
+
+
+	//char	*permstring=new char[66];
+	char	*permstring=new char[512];
+	charstring::copy(permstring,"D:P");
+	if (directory) {
+		charstring::append(permstring,"AI");
+	}
 
 	mode_t	shift=permoctal;
-	for (int16_t i=8; i>=0; i--) {
-		if (i==8 || i==5 || i==2) {
-			charstring::append(permstring,"(A;OICI;");
+	for (int16_t i=0; i<9; i++) {
+		if (i==0 || i==3 || i==6) {
+			charstring::append(permstring,"(A;");
+			if (directory) {
+				charstring::append(permstring,"OICI");
+			}
+			charstring::append(permstring,";");
 		}
 		uint8_t	pos=i%3;
 		charstring::append(permstring,
-			(shift&1)?((pos==2)?"GX":(pos==1)?"GW":"GR"):"");
+			(shift&1)?((pos==0)?
+				"GX":(pos==1)?"GWSDWDWO":"GRRC"):"");
 		shift=shift>>1;
-		if (i==6) {
+		if (i==2) {
 			charstring::append(permstring,";;;WD)");
-		} else if (i==3) {
-			charstring::append(permstring,";;;CG)");
-		} else if (i==0) {
-			charstring::append(permstring,";;;CO)");
+		} else if (i==5) {
+			// FIXME: get the current user's sid
+			// GetUserName
+			// LookupAccountName
+			// ConvertSidToStringSid
+			charstring::append(permstring,";;;S-1-5-21-1873234618-1269098444-2064074030-513)");
+		} else if (i==8) {
+			// FIXME: get the current group's sid
+			charstring::append(permstring,";;;S-1-5-21-1873234618-1269098444-2064074030-1001)");
 		}
 	}
 	return permstring;

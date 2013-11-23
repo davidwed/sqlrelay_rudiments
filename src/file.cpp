@@ -7,6 +7,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/stringbuffer.h>
 
 // for struct stat
 #ifdef RUDIMENTS_HAVE_SYS_STAT_H
@@ -49,6 +50,7 @@
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
 	#endif
+	#include <sddl.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef F_GETLK	
@@ -128,7 +130,7 @@ bool file::createFile(const char *name, mode_t perms) {
 	return fl.create(name,perms);
 }
 
-int32_t file::openInternal(const char *name, int32_t flags) {
+void file::openInternal(const char *name, int32_t flags) {
 	int32_t	result;
 	do {
 		#if defined(RUDIMENTS_HAVE__OPEN)
@@ -139,10 +141,76 @@ int32_t file::openInternal(const char *name, int32_t flags) {
 			#error no open or anything like it
 		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	fd(result);
 }
 
-int32_t file::openInternal(const char *name, int32_t flags, mode_t perms) {
+void file::openInternal(const char *name, int32_t flags, mode_t perms) {
+
+	#ifdef RUDIMENTS_HAVE_CREATEFILE
+
+	// On Windows, when creating a file, in order to set permissions other
+	// than just owner read/write, the CreateFile method must be used rather
+	// than just plain _open.
+	if (flags&O_CREAT) {
+
+		// determine the access and share modes
+		DWORD	accessmode=0;
+		DWORD	sharemode=0;
+		if (flags&O_WRONLY) {
+			accessmode=GENERIC_WRITE;
+			sharemode=FILE_SHARE_DELETE|FILE_SHARE_WRITE;
+		}
+		if (flags&O_RDONLY) {
+			accessmode=GENERIC_READ;
+			sharemode=FILE_SHARE_READ;
+		}
+		if (flags&O_RDWR) {
+			accessmode=GENERIC_READ|GENERIC_WRITE;
+			sharemode=FILE_SHARE_DELETE|
+					FILE_SHARE_READ|FILE_SHARE_WRITE;
+		}
+
+		// determine the security attributes
+		SECURITY_ATTRIBUTES	satt;
+		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.bInheritHandle=TRUE;
+
+		char	*sddl=permissions::permOctalToSDDL(perms,false);
+
+		if (ConvertStringSecurityDescriptorToSecurityDescriptor(
+					sddl,SDDL_REVISION_1,
+					&satt.lpSecurityDescriptor,
+					NULL)==FALSE) {
+			delete[] sddl;
+			fd(-1);
+			return;
+		}
+
+		// create the file
+		HANDLE	fh=CreateFile(name,accessmode,sharemode,
+					&satt,
+					CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,
+					NULL);
+		if (fh==INVALID_HANDLE_VALUE) {
+			delete[] sddl;
+			fd(-1);
+			return;
+		}
+
+		// clean up
+		delete[] sddl;
+
+		// get the file descriptor from the handle
+		fd(_open_osfhandle((long)fh,flags&~(O_CREAT|O_TRUNC)));
+
+		// truncate if necessary
+		if (flags&O_TRUNC) {
+			truncate();
+		}
+		return;
+	}
+	#endif
+
 	int32_t	result;
 	do {
 		#if defined(RUDIMENTS_HAVE__OPEN)
@@ -153,18 +221,18 @@ int32_t file::openInternal(const char *name, int32_t flags, mode_t perms) {
 			#error no open or anything like it
 		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	fd(result);
 }
 
 bool file::open(const char *name, int32_t flags) {
-	fd(openInternal(name,flags));
+	openInternal(name,flags);
 	return (fd()!=-1 &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int32_t flags, mode_t perms) {
-	fd(openInternal(name,flags,perms));
+	openInternal(name,flags,perms);
 	return (fd()!=-1 &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));

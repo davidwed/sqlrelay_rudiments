@@ -38,20 +38,20 @@ shmfile::~shmfile() {
 	delete pvt;
 }
 
-int32_t shmfile::openInternal(const char *name, int32_t flags) {
-	return openInternal(name,flags,0);
+void shmfile::openInternal(const char *name, int32_t flags) {
+	openInternal(name,flags,0);
 }
 
-int32_t shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
+void shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_SHM_OPEN)
 		int32_t	result;
 		do {
 			result=shm_open(name,flags,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return result;	
+		fd(result);
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		fd(-1);
 	#endif
 }
 

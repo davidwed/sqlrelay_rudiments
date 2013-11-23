@@ -4,7 +4,6 @@
 #include <rudiments/directory.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_MKDIR_1
 	#include <rudiments/permissions.h>
 #endif
@@ -298,7 +297,7 @@ bool directory::create(const char *path, mode_t perms) {
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
 		satt.bInheritHandle=TRUE;
 
-		char	*sddl=permissions::permOctalToSDDL(perms);
+		char	*sddl=permissions::permOctalToSDDL(perms,true);
 
 		bool	retval=(
 			ConvertStringSecurityDescriptorToSecurityDescriptor(
@@ -426,7 +425,7 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 				return MAX_PATH;
 			#else
 				// return a reasonably safe value
-				return 512;
+				return 256;
 			#endif
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
@@ -477,7 +476,7 @@ int64_t directory::fpathConf(int32_t name) {
 				return MAX_PATH;
 			#else
 				// return a reasonably safe value
-				return 512;
+				return 256;
 			#endif
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;

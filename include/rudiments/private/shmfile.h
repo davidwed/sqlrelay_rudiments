@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	private:
-		virtual	int32_t	openInternal(const char *name, int32_t flags);
-		virtual	int32_t	openInternal(const char *name,
+		virtual	void	openInternal(const char *name, int32_t flags);
+		virtual	void	openInternal(const char *name,
 						int32_t flags, mode_t perms);
 		shmfileprivate	*pvt;

@@ -6,6 +6,12 @@
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
 
+#ifdef _WIN32
+const char	*dir="C:\\";
+#else
+const char	*dir="/usr/local";
+#endif
+
 int main(int argc, const char **argv) {
 
 	directory::create("testdir",permissions::evalPermString("rwxr-xr-x"));
@@ -48,10 +54,10 @@ int main(int argc, const char **argv) {
 	file::remove("testdir/testfile2");
 	directory::remove("testdir");
 
-	stdoutput.printf("maxFileNameLength(/usr/local)=%lld\n",
-			directory::maxFileNameLength("/usr/local"));
-	stdoutput.printf("maxPathLength(/usr/local)=%lld\n",
-			directory::maxPathLength("/usr/local"));
-	stdoutput.printf("canAccessLongFileNames(/usr/local)=%d\n",
-			directory::canAccessLongFileNames("/usr/local"));
+	stdoutput.printf("maxFileNameLength(%s)=%lld\n",
+			dir,directory::maxFileNameLength(dir));
+	stdoutput.printf("maxPathLength(%s)=%lld\n",
+			dir,directory::maxPathLength(dir));
+	stdoutput.printf("canAccessLongFileNames(%s)=%d\n",
+			dir,directory::canAccessLongFileNames(dir));
 }

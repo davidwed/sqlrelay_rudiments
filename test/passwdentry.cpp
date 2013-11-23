@@ -7,9 +7,9 @@
 int main(int argc, const char **argv) {
 
 
-	// get the password entry for "root"
+	// get the password entry for "dmuse"
 	passwdentry	pwent;
-	pwent.initialize("root");
+	pwent.initialize("dmuse");
 
 	// print the components individually
 	stdoutput.printf("Individually...\n");
