@@ -264,7 +264,7 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	// AI - children inherit permissions (for directories only)
 	//
 	// access control entities (1 per account_sid):
-	// (ace) - (ace_type;ace_flags;rights;object_guid; \
+	// (ace) - (ace_type;ace_flags;rights;object_guid;
 	//			inherit_object_guid;account_sid)
 	//	ace_types:
 	//		A: Allowed
