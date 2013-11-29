@@ -179,7 +179,7 @@ passwdentry::~passwdentry() {
 
 const char *passwdentry::getName() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_name;
+	return (pvt->_pwd)?pvt->_pwd->pw_name:NULL;
 #else
 	return pvt->_name;
 #endif
@@ -187,7 +187,7 @@ const char *passwdentry::getName() const {
 
 const char *passwdentry::getPassword() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_passwd;
+	return (pvt->_pwd)?pvt->_pwd->pw_passwd:NULL;
 #else
 	return pvt->_password;
 #endif
@@ -195,7 +195,7 @@ const char *passwdentry::getPassword() const {
 
 uid_t passwdentry::getUserId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_uid;
+	return (pvt->_pwd)?pvt->_pwd->pw_uid:(uid_t)-1;
 #else
 	return pvt->_uid;
 #endif
@@ -204,7 +204,11 @@ uid_t passwdentry::getUserId() const {
 const char *passwdentry::getSid() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	if (!pvt->_sid) {
-		pvt->_sid=charstring::parseNumber(pvt->_pwd->pw_uid);
+		if (pvt->_pwd) {
+			pvt->_sid=charstring::parseNumber(pvt->_pwd->pw_uid);
+		} else {
+			pvt->_sid=charstring::duplicate("-1");
+		}
 	}
 	return pvt->_sid;
 #else
@@ -214,7 +218,7 @@ const char *passwdentry::getSid() const {
 
 gid_t passwdentry::getPrimaryGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_gid;
+	return (pvt->_pwd)?pvt->_pwd->pw_gid:(gid_t)-1;
 #else
 	return (gid_t)-1;
 #endif
@@ -222,7 +226,7 @@ gid_t passwdentry::getPrimaryGroupId() const {
 
 const char *passwdentry::getRealName() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_gecos;
+	return (pvt->_pwd)?pvt->_pwd->pw_gecos:NULL;
 #else
 	return pvt->_realname;
 #endif
@@ -230,7 +234,7 @@ const char *passwdentry::getRealName() const {
 
 const char *passwdentry::getHomeDirectory() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_dir;
+	return (pvt->_pwd)?pvt->_pwd->pw_dir:NULL;
 #else
 	return pvt->_homedir;
 #endif
@@ -238,7 +242,7 @@ const char *passwdentry::getHomeDirectory() const {
 
 const char *passwdentry::getShell() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return pvt->_pwd->pw_shell;
+	return (pvt->_pwd)?pvt->_pwd->pw_shell:NULL;
 #else
 	// Under windows, users don't have default shells.  As far as I know,
 	// the command line is always the same.  You can run other shells

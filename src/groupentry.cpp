@@ -179,7 +179,7 @@ groupentry::~groupentry() {
 
 const char *groupentry::getName() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-	return pvt->_grp->gr_name;
+	return (pvt->_grp)?pvt->_grp->gr_name:NULL;
 #else
 	return pvt->_name;
 #endif
@@ -187,7 +187,7 @@ const char *groupentry::getName() const {
 
 gid_t groupentry::getGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-	return pvt->_grp->gr_gid;
+	return (pvt->_grp)?pvt->_grp->gr_gid:(gid_t)-1;
 #else
 	return pvt->_gid;
 #endif
@@ -195,7 +195,7 @@ gid_t groupentry::getGroupId() const {
 
 const char * const *groupentry::getMembers() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-	return pvt->_grp->gr_mem;
+	return (pvt->_grp)?pvt->_grp->gr_mem:NULL;
 #else
 	return pvt->_members;
 #endif
@@ -204,7 +204,11 @@ const char * const *groupentry::getMembers() const {
 const char *groupentry::getSid() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sid) {
-		pvt->_sid=charstring::parseNumber(pvt->_grp->gr_gid);
+		if (pvt->_grp) {
+			pvt->_sid=charstring::parseNumber(pvt->_grp->gr_gid);
+		} else {
+			pvt->_sid=charstring::duplicate("-1");
+		}
 	}
 	return pvt->_sid;
 #else
