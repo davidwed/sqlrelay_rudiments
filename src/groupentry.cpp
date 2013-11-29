@@ -47,6 +47,40 @@ class groupentryprivate {
 static threadmutex	*_gemutex;
 #endif
 
+#ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
+static CHAR *asciiToUnicode(CHAR *in) {
+
+	int32_t	size=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,NULL,0);
+	if (!size) {
+		return NULL;
+	}
+
+	WCHAR	*out=new WCHAR[size];
+	if (!MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,out,size)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+
+static CHAR *unicodeToAscii(WCHAR *in) {
+
+	BOOL	useddefaultchar;
+	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
+	if (size==0) {
+		return NULL;
+	}
+
+	CHAR	*out=new char[size];
+	if (!WideCharToMultiByte(CP_ACP,0,in,-1,out,size,
+						"?",&useddefaultchar)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+#endif
+
 groupentry::groupentry() {
 	pvt=new groupentryprivate;
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
@@ -230,53 +264,20 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 	if (groupname) {
 
 		// convert groupname to unicode...
-
-		// get the size of the unicode buffer
-		int32_t	groupnamewsize=MultiByteToWideChar(CP_ACP,
-							MB_PRECOMPOSED,
-							groupname,
-							-1,NULL,0);
-		if (!groupnamewsize) {
-			return false;
-		}
-
-		// create the buffer
-		WCHAR	*groupnamew=new WCHAR[groupnamewsize];
-
-		// perform the actual conversion
-		groupnamewsize=MultiByteToWideChar(CP_ACP,
-							MB_PRECOMPOSED,
-							groupname,-1,
-							groupnamew,
-							groupnamewsize);
-		if (!groupnamewsize) {
-			delete[] groupnamew;
+		WCHAR	*groupnamew=asciiToUnicode(groupname);
+		if (!groupnamew) {
 			return false;
 		}
 
 		// get the group info
-		if (NetGroupGetInfo(NULL,groupnamew,2,
-				reinterpret_cast<LPBYTE *>(&pvt->_buffer))!=
-				NERR_Success) {
+		if (NetGroupGetInfo(NULL,groupnamew,2,(BYTE **)&pvt->_buffer)!=
+								NERR_Success) {
 			delete[] groupnamew;
 			return false;
 		}
 
 		// convert the name back to ascii
-		pvt->_name=new char[groupnamewsize];
-		BOOL	useddefaultchar;
-		if (!WideCharToMultiByte(CP_ACP,0,
-						pvt->_buffer->grpi2_name,
-						groupnamewsize,
-						pvt->_name,
-						groupnamewsize,
-						"?",
-						&useddefaultchar)) {
-			delete[] pvt->_name;
-			pvt->_name=NULL;
-			delete[] groupnamew;
-			return false;
-		}
+		pvt->_name=unicodeToAscii(pvt->_buffer->grpi2_name);
 
 		// get group members
 		DWORD	totalentries;

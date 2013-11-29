@@ -53,11 +53,26 @@ static threadmutex	*pemutex;
 #endif
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
+static CHAR *asciiToUnicode(CHAR *in) {
+
+	int32_t	size=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,NULL,0);
+	if (!size) {
+		return NULL;
+	}
+
+	WCHAR	*out=new WCHAR[size];
+	if (!MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,out,size)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+
 static CHAR *unicodeToAscii(WCHAR *in) {
 
 	BOOL	useddefaultchar;
 	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
-	if (size==0) {
+	if (!size) {
 		return NULL;
 	}
 
@@ -377,21 +392,8 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		}
 
 		// convert username to unicode...
-		int32_t	usernamewsize=MultiByteToWideChar(CP_ACP,
-							MB_PRECOMPOSED,
-							username,
-							-1,NULL,0);
-		if (!usernamewsize) {
-			return false;
-		}
-		WCHAR	*usernamew=new WCHAR[usernamewsize];
-		usernamewsize=MultiByteToWideChar(CP_ACP,
-							MB_PRECOMPOSED,
-							username,-1,
-							usernamew,
-							usernamewsize);
-		if (!usernamewsize) {
-			delete[] usernamew;
+		WCHAR	*usernamew=asciiToUnicode(username);
+		if (!usernamew) {
 			return false;
 		}
 
