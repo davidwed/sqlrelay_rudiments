@@ -9,38 +9,18 @@
 #include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
-	// for USER_INFO_2, functions
+	#include <rudiments/dictionary.h>
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
 	#endif
 	#include <lm.h>
+	#include <sddl.h>
 #else
-	// for passwd, functions
 	#include <pwd.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
-#endif
-
-#ifdef RUDIMENTS_HAVE_NETUSERGETINFO
-CHAR *unicodeToAscii(WCHAR *in) {
-
-	BOOL	useddefaultchar;
-	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,
-						"?",&useddefaultchar);
-	if (size==0) {
-		return NULL;
-	}
-
-	CHAR	*out=new char[size];
-	if (!WideCharToMultiByte(CP_ACP,0,in,-1,out,size,
-						"?",&useddefaultchar)) {
-		delete[] out;
-		out=NULL;
-	}
-	return out;
-}
 #endif
 
 class passwdentryprivate {
@@ -53,18 +33,83 @@ class passwdentryprivate {
 				passwd	_pwdbuffer;
 				char	*_buffer;
 			#endif
+			char	*_sid;
 		#else
+			CHAR		*_sid;
 			USER_INFO_2	*_buffer;
 			char		*_name;
 			char		*_password;
 			char		*_realname;
 			char		*_homedir;
+			uid_t		_uid;
 		#endif
 };
 
+#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
+	!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
+	defined(RUDIMENTS_HAVE_NETUSERGETINFO)
 // LAME: not in the class
-#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || !defined(RUDIMENTS_HAVE_GETPWUID_R))
 static threadmutex	*pemutex;
+#endif
+
+#ifdef RUDIMENTS_HAVE_NETUSERGETINFO
+static CHAR *unicodeToAscii(WCHAR *in) {
+
+	BOOL	useddefaultchar;
+	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
+	if (size==0) {
+		return NULL;
+	}
+
+	CHAR	*out=new char[size];
+	if (!WideCharToMultiByte(CP_ACP,0,in,-1,out,size,
+						"?",&useddefaultchar)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+
+static uint64_t	uid=0;
+struct namesid {
+	char	*name;
+	char	*sid;
+};
+static dictionary< uid_t, namesid * >	uidmap;
+// FIXME: clean up with init and exit methods like environment class
+
+static uid_t addUidMapping(const char *name, const char *sid) {
+
+	// check for existing mapping (by name only)
+	for (linkedlistnode< dictionarynode< uid_t, namesid * > *> *node=
+					uidmap.getList()->getFirstNode(); 
+					node; node=node->getNext()) {
+		namesid	*ns=node->getValue()->getValue();
+		if (!charstring::compare(name,ns->name)) {
+			// reset the sid
+			delete[] ns->sid;
+			ns->sid=charstring::duplicate(sid);
+			return node->getValue()->getKey();
+		}
+	}
+
+	// create a new entry
+	namesid	*ns=new namesid;
+	ns->name=charstring::duplicate(name);
+	ns->sid=charstring::duplicate(sid);
+
+	if (pemutex) {
+		pemutex->lock();
+	}
+	uid_t	u=uid;
+	uid++;
+	if (pemutex) {
+		pemutex->unlock();
+	}
+
+	uidmap.setValue(u,ns);
+	return u;
+}
 #endif
 
 
@@ -84,6 +129,7 @@ passwdentry::passwdentry() {
 	pvt->_realname=NULL;
 	pvt->_homedir=NULL;
 #endif
+	pvt->_sid=NULL;
 }
 
 passwdentry::passwdentry(const passwdentry &p) {
@@ -104,7 +150,7 @@ passwdentry::~passwdentry() {
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		delete[] pvt->_buffer;
 	#endif
-	delete pvt;
+	delete[] pvt->_sid;
 #else
 	if (pvt->_buffer) {
 		NetApiBufferFree(pvt->_buffer);
@@ -113,7 +159,9 @@ passwdentry::~passwdentry() {
 	delete[] pvt->_password;
 	delete[] pvt->_realname;
 	delete[] pvt->_homedir;
+	LocalFree(pvt->_sid);
 #endif
+	delete pvt;
 }
 
 const char *passwdentry::getName() const {
@@ -136,13 +184,18 @@ uid_t passwdentry::getUserId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_uid;
 #else
-	// Windows user id's aren't numbers, they're undefined, odd, variable
-	// length structures.  There's probably soem way to get one, but
-	// returning it is another matter.  You'd need to figure out it's
-	// length, bytewise copy it out and return it's length too.  It doesn't
-	// fit well into this paradigm so for now at least we'll call this
-	// unsupported.
-	return -1;
+	return pvt->_uid;
+#endif
+}
+
+const char *passwdentry::getSid() const {
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
+	if (!pvt->_sid) {
+		pvt->_sid=charstring::parseNumber(pvt->_pwd->pw_uid);
+	}
+	return pvt->_sid;
+#else
+	return pvt->_sid;
 #endif
 }
 
@@ -150,12 +203,6 @@ gid_t passwdentry::getPrimaryGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_gid;
 #else
-	// Windows group id's aren't numbers, they're undefined, odd, variable
-	// length structures.  There's probably soem way to get one, but
-	// returning it is another matter.  You'd need to figure out it's
-	// length, bytewise copy it out and return it's length too.  It doesn't
-	// fit well into this paradigm so for now at least we'll call this
-	// unsupported.
 	return -1;
 #endif
 }
@@ -183,13 +230,22 @@ const char *passwdentry::getShell() const {
 	// Under windows, users don't have default shells.  As far as I know,
 	// the command line is always the same.  You can run other shells
 	// but they're not tied to a user.
-	return "";
+	return NULL;
 #endif
 }
 
+bool passwdentry::platformSupportsFormalSid() {
+	#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
+		return false;
+	#else
+		return true;
+	#endif
+}
+
 bool passwdentry::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
-		!defined(RUDIMENTS_HAVE_GETPWUID_R)
+	#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
+		defined(RUDIMENTS_HAVE_NETUSERGETINFO)
 		return true;
 	#else
 		return false;
@@ -197,8 +253,9 @@ bool passwdentry::needsMutex() {
 }
 
 void passwdentry::setMutex(threadmutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
-		!defined(RUDIMENTS_HAVE_GETPWUID_R)
+	#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
+		defined(RUDIMENTS_HAVE_NETUSERGETINFO)
 		pemutex=mtx;
 	#endif
 }
@@ -216,6 +273,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
+		delete[] pvt->_sid;
 		if (pvt->_pwd) {
 			pvt->_pwd=NULL;
 			delete[] pvt->_buffer;
@@ -277,6 +335,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 
 	if (pvt->_buffer) {
 		NetApiBufferFree(pvt->_buffer);
+		pvt->_buffer=NULL;
 	}
 	delete[] pvt->_name;
 	pvt->_name=NULL;
@@ -284,16 +343,37 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 	pvt->_realname=NULL;
 	delete[] pvt->_password;
 	pvt->_password=NULL;
-	delete[] pvt->_realname;
-	pvt->_realname=NULL;
 	delete[] pvt->_homedir;
 	pvt->_homedir=NULL;
+	LocalFree(pvt->_sid);
+	pvt->_sid=NULL;
+	pvt->_uid=(uid_t)-1;
 
 	if (username) {	
 
-		// convert username to unicode...
+		// get the user's SID
+		DWORD		sidsize=0;
+		DWORD		dnsize=0;
+		SID_NAME_USE	peuse;
+		LookupAccountName(NULL,username,
+					NULL,&sidsize,
+					NULL,&dnsize,&peuse);
+		PSID	sid=(PSID)new BYTE[sidsize];
+		rawbuffer::zero(sid,sidsize);
+		CHAR	*dn=new CHAR[dnsize];
+		rawbuffer::zero(dn,dnsize);
+		bool	failed=(LookupAccountName(NULL,username,
+						sid,&sidsize,
+						dn,&dnsize,&peuse)==FALSE ||
+				IsValidSid(sid)==FALSE ||
+				ConvertSidToStringSid(sid,&pvt->_sid)==FALSE);
+		delete[] sid;
+		delete[] dn;
+		if (failed) {
+			return false;
+		}
 
-		// get the size of the unicode buffer
+		// convert username to unicode...
 		int32_t	usernamewsize=MultiByteToWideChar(CP_ACP,
 							MB_PRECOMPOSED,
 							username,
@@ -301,11 +381,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		if (!usernamewsize) {
 			return false;
 		}
-
-		// create the buffer
 		WCHAR	*usernamew=new WCHAR[usernamewsize];
-
-		// perform the actual conversion
 		usernamewsize=MultiByteToWideChar(CP_ACP,
 							MB_PRECOMPOSED,
 							username,-1,
@@ -316,10 +392,9 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 			return false;
 		}
 
-
-		if (NetUserGetInfo(NULL,usernamew,1,
-				reinterpret_cast<BYTE **>(&pvt->_buffer))!=
-				NERR_Success) {
+		// get user info
+		if (NetUserGetInfo(NULL,usernamew,2,(BYTE **)&pvt->_buffer)!=
+								NERR_Success) {
 			delete[] usernamew;
 			return false;
 		}
@@ -329,9 +404,17 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		pvt->_password=unicodeToAscii(pvt->_buffer->usri2_password);
 		pvt->_realname=unicodeToAscii(pvt->_buffer->usri2_full_name);
 		pvt->_homedir=unicodeToAscii(pvt->_buffer->usri2_home_dir);
+
+		// add mapping
+		pvt->_uid=addUidMapping(pvt->_name,pvt->_sid);
+
 	} else {
-		// windows doesn't appear to support this
-		error::setErrorNumber(ENOSYS);
+
+		// look up the uid in the map
+		namesid	*ns;
+		if (uidmap.getValue(userid,&ns)) {
+			return initialize(ns->name);
+		}
 		return false;
 	}
 	return true;
@@ -352,4 +435,12 @@ uid_t passwdentry::getUserId(const char *username) {
 		return pwd.getUserId();
 	}
 	return (uid_t)-1;
+}
+
+char *passwdentry::getSid(const char *username) {
+	passwdentry	pwd;
+	if (pwd.initialize(username)) {
+		return charstring::duplicate(pwd.getSid());
+	}
+	return NULL;
 }

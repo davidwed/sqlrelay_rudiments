@@ -146,67 +146,19 @@ uid_t process::getRealUserId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getuid();
 	#elif defined(_WIN32)
-		/*
-		// get the process handle
-		HANDLE	snap=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
-		if (snap==INVALID_HANDLE_VALUE) {
-			return INVALID_HANDLE_VALUE;
+		DWORD	size=0;
+		GetUserName(NULL,&size);
+		if (size<1) {
+			return (uid_t)-1;
 		}
-		PROCESSENTRY32	pe;
-		pe.dwSize=sizeof(pe);
-		if (!Process32First(snap,&pe)) {
-			CloseHandle(snap);
-			return INVALID_HANDLE_VALUE;
+		CHAR	*buffer=new CHAR[size];
+		if (GetUserName(buffer,&size)==FALSE) {
+			delete[] buffer;
+			return (uid_t)-1;
 		}
-		CloseHandle(snap);
-		HANDLE	proc=OpenProcess(PROCESS_QUERY_INFORMATION,
-						FALSE,pe.th32ProcessID);
-		if (proc==INVALID_HANDLE_VALUE) {
-			return INVALID_HANDLE_VALUE;
-		}
-
-		// open the process token
-		HANDLE	token;
-		if (!OpenProcessToken(proc,TOKEN_READ,&token)) {
-			CloseHandle(proc);
-			return -1;
-		}
-
-		// get the buffer size we'll need
-		DWORD	size;
-		if (!GetTokenInformation(token,TokenUser,NULL,0,&size)) {
-			CloseHandle(token);
-			CloseHandle(proc);
-			return -1;
-		}
-
-		// allocate a buffer
-		PTOKEN_USER	ptokenuser=
-			reinterpret_cast<PTOKEN_USER>(new BYTE(size));
-
-		// populate the buffer
-		if (!GetTokenInformation(token,Tokenuser,
-					ptokenuser,size,&size)) {
-			delete[] ptokenuser;
-			CloseHandle(token);
-			CloseHandle(proc);
-			return -1;
-		}
-
-		// ptokenuser.Sid needs to be returned somehow
-
-		// clean up
-		delete[] ptokenuser;
-		CloseHandle(token);
-		CloseHandle(proc);*/
-		// Windows user id's aren't numbers, they're undefined, odd,
-		// variable length structures.  You can use code like above to
-		// get one, but returning it is another matter.  You'd need to
-		// figure out it's length, bytewise copy it out and return it's
-		// length too.  It doesn't fit well into this paradigm so for
-		// now at least we'll call this unsupported.
-		error::setErrorNumber(ENOSYS);
-		return -1;
+		uid_t	uid=passwdentry::getUserId(buffer);
+		delete[] buffer;
+		return uid;
 	#else
 		#error no getuid or anything like it
 	#endif

@@ -41,8 +41,26 @@ class RUDIMENTS_DLLSPEC passwdentry {
 		/** Returns the encrypted password of this user. */
 		const char	*getPassword() const;
 
-		/** Returns the id of this user. */
+		/** Returns the id of this user.
+		 * 
+		 *  Note: On platforms (like Windows) where the
+		 *  supportsFormalSid method returns true, users don't have
+		 *  simple numeric ids.  On those platforms, the value returned
+		 *  by this method is simply an index into an internal structure
+		 *  that methods of other rudiments classes know how to access
+		 *  and ultimately translate to a user.  It should not be passed
+		 *  in to functions or methods of other libraries that don't
+		 *  ultimately use rudiments methods. */
 		uid_t		getUserId() const;
+
+		/** Returns a string representation of the SID (security id) of
+		 *  this user.
+		 *
+		 *  Note: On platforms (like non-Windows platforms) where the
+		 *  supportsFormalSid method returns false, the value returned
+		 *  is just a string representation of the number returned by
+		 *  getUserId(). */
+		const char	*getSid() const;
 
 		/** Returns the primary group id of this user. */
 		gid_t		getPrimaryGroupId() const;
@@ -68,19 +86,38 @@ class RUDIMENTS_DLLSPEC passwdentry {
 
 		/** Convenience method.
 		 *  Returns the id of the user specified by "username".
+		 *  See non-static version of this method for more information.
 		 *
 		 *  Returns -1 if an error occurred or if "username" is invalid.
 		 *  */
 		static uid_t	getUserId(const char *username);
 
+		/** Convenience method.
+		 *  Returns the id of the user specified by "username".
+		 *  See non-static version of this method for more information.
+		 *
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or if "username" is
+		 *  invalid.  */
+		static char	*getSid(const char *username);
+
+		/** Returns true if the platform supports a formal user SID
+		 *  (security id) and false if not.
+		 *
+		 *  Windows and windows-like platforms do.  Unix and unix-like
+		 *  platforms (including Mac OS X) do not. */
+		static bool	platformSupportsFormalSid();
+
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */
-		static	bool	needsMutex();
+		static bool	needsMutex();
 
 		/** Allows you to supply a mutex is the class needs it
 		 *  (see needsMutex()).  If your application is not
 		 *  multithreaded, then there is no need to supply a mutex. */
-		static	void	setMutex(threadmutex *mtx);
+		static void	setMutex(threadmutex *mtx);
 
 	#include <rudiments/private/passwdentry.h>
 };

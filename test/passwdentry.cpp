@@ -25,14 +25,16 @@ int main(int argc, const char **argv) {
 						pwent.getRealName());
 	stdoutput.printf("	Home Directory:		%s\n",
 						pwent.getHomeDirectory());
-	stdoutput.printf("	Shell:		%s\n",
+	stdoutput.printf("	Shell:			%s\n",
 						pwent.getShell());
+	stdoutput.printf("	SID:			%s\n",
+						pwent.getSid());
 	stdoutput.printf("\n");
 
 
 
-	// get the password entry for user id 0
-	pwent.initialize((uid_t)0);
+	// get the password entry for user id of the user we just looked up
+	pwent.initialize(pwent.getUserId());
 
 	// print the components individually
 	stdoutput.printf("Individually...\n");
@@ -50,5 +52,7 @@ int main(int argc, const char **argv) {
 						pwent.getHomeDirectory());
 	stdoutput.printf("	Shell:			%s\n",
 						pwent.getShell());
+	stdoutput.printf("	SID:			%s\n",
+						pwent.getSid());
 	stdoutput.printf("\n");
 }

@@ -5,6 +5,11 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/file.h>
+#include <rudiments/passwdentry.h>
+#ifdef _WIN32
+	#include <rudiments/stdio.h>
+	#include <rudiments/process.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -298,6 +303,10 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//	 world perms are applied to the group and user
 	//	 group perms are applied to the user
 
+	uid_t	uid=process::getRealUserId();
+	char	*user=passwdentry::getName(uid);
+stdoutput.printf("userid=%d\n",uid);
+stdoutput.printf("user=%s\n",user);
 
 	//char	*permstring=new char[66];
 	char	*permstring=new char[512];
@@ -323,15 +332,19 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 		if (i==2) {
 			charstring::append(permstring,";;;WD)");
 		} else if (i==5) {
-			// FIXME: get the current user's sid
-			// GetUserName
-			// LookupAccountName
-			// ConvertSidToStringSid
-			charstring::append(permstring,";;;S-1-5-21-1873234618-1269098444-2064074030-513)");
+			char	*sid=passwdentry::getSid(user);
+stdoutput.printf("sid=%s\n",sid);
+			charstring::append(permstring,";;;");
+			charstring::append(permstring,sid);
+			charstring::append(permstring,")");
+			delete[] sid;
 		} else if (i==8) {
-			// FIXME: get the current group's sid
+			// FIXME: get the current user's primary group's sid
 			charstring::append(permstring,";;;S-1-5-21-1873234618-1269098444-2064074030-1001)");
 		}
 	}
+
+	delete[] user;
+
 	return permstring;
 }
