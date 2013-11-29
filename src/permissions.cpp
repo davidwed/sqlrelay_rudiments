@@ -6,6 +6,7 @@
 #include <rudiments/error.h>
 #include <rudiments/file.h>
 #include <rudiments/passwdentry.h>
+#include <rudiments/groupentry.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 
@@ -301,7 +302,10 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//	 world perms are applied to the group and user
 	//	 group perms are applied to the user
 
-	char	*user=passwdentry::getName(process::getRealUserId());
+	passwdentry	pwdent;
+	pwdent.initialize(process::getRealUserId());
+	groupentry	grpent;
+	grpent.initialize(pwdent.getPrimaryGroupId());
 
 	//char	*permstring=new char[66];
 	char	*permstring=new char[512];
@@ -327,18 +331,15 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 		if (i==2) {
 			charstring::append(permstring,";;;WD)");
 		} else if (i==5) {
-			char	*sid=passwdentry::getSid(user);
 			charstring::append(permstring,";;;");
-			charstring::append(permstring,sid);
+			charstring::append(permstring,pwdent.getSid());
 			charstring::append(permstring,")");
-			delete[] sid;
 		} else if (i==8) {
-			// FIXME: get the current user's primary group's sid
-			charstring::append(permstring,";;;S-1-5-21-1873234618-1269098444-2064074030-1001)");
+			charstring::append(permstring,";;;");
+			charstring::append(permstring,grpent.getSid());
+			charstring::append(permstring,")");
 		}
 	}
-
-	delete[] user;
 
 	return permstring;
 }

@@ -10,6 +10,7 @@
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 	#include <rudiments/dictionary.h>
+	#include <rudiments/groupentry.h>
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
 	#endif
@@ -37,6 +38,7 @@ class passwdentryprivate {
 		#else
 			char		*_name;
 			char		*_password;
+			gid_t		_primarygroupid;
 			char		*_realname;
 			char		*_homedir;
 			CHAR		*_sid;
@@ -141,6 +143,7 @@ passwdentry::passwdentry() {
 #else
 	pvt->_name=NULL;
 	pvt->_password=NULL;
+	pvt->_primarygroupid=-1;
 	pvt->_realname=NULL;
 	pvt->_homedir=NULL;
 	pvt->_uid=(uid_t)-1;
@@ -220,7 +223,7 @@ gid_t passwdentry::getPrimaryGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_gid:(gid_t)-1;
 #else
-	return (gid_t)-1;
+	return (gid_t)pvt->_primarygroupid;
 #endif
 }
 
@@ -355,6 +358,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 
 	delete[] pvt->_name;
 	pvt->_name=NULL;
+	pvt->_primarygroupid=-1;
 	delete[] pvt->_realname;
 	pvt->_realname=NULL;
 	delete[] pvt->_password;
@@ -410,6 +414,16 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		pvt->_realname=unicodeToAscii(buffer->usri2_full_name);
 		pvt->_homedir=unicodeToAscii(buffer->usri2_home_dir);
 		NetApiBufferFree(buffer);
+
+		// get primary group
+		// FIXME:
+		// On non-servers, there are no local groups and the primary
+		// group is None.  On servers (>Win2K) NetUserGetInfo can be
+		// used with a level of 3 and get the primary group RID in the
+		// resulting USER_INFO_3 struct.  It should then somehow be
+		// possible to convert that into a group name.  How do I tell
+		// if I'm on a server?  What should be done for <=Win2K?
+		pvt->_primarygroupid=groupentry::getGroupId("None");
 
 		// add mapping
 		pvt->_uid=addUidMapping(pvt->_name,pvt->_sid);
