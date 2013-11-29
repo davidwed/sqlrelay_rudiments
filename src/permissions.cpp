@@ -302,11 +302,6 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//	 world perms are applied to the group and user
 	//	 group perms are applied to the user
 
-	passwdentry	pwdent;
-	pwdent.initialize(process::getRealUserId());
-	groupentry	grpent;
-	grpent.initialize(pwdent.getPrimaryGroupId());
-
 	//char	*permstring=new char[66];
 	char	*permstring=new char[512];
 	charstring::copy(permstring,"D:P");
@@ -332,10 +327,14 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 			charstring::append(permstring,";;;WD)");
 		} else if (i==5) {
 			charstring::append(permstring,";;;");
+			passwdentry	pwdent;
+			pwdent.initialize(process::getRealUserId());
 			charstring::append(permstring,pwdent.getSid());
 			charstring::append(permstring,")");
 		} else if (i==8) {
 			charstring::append(permstring,";;;");
+			groupentry	grpent;
+			grpent.initialize(process::getRealGroupId());
 			charstring::append(permstring,grpent.getSid());
 			charstring::append(permstring,")");
 		}
