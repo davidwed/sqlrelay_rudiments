@@ -8,12 +8,16 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
+#include <wchar.h>
+
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
+	#include <rudiments/dictionary.h>
 	// for structs, functions
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
 	#endif
 	#include <lm.h>
+	#include <sddl.h>
 #else
 	// for group, functions
 	#include <grp.h>
@@ -27,28 +31,30 @@ class groupentryprivate {
 	friend class groupentry;
 	private:
 		#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-			group		*_grp;
+			group	*_grp;
 			#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 				defined(RUDIMENTS_HAVE_GETGRGID_R)
 				group		_grpbuffer;
 				char		*_buffer;
 			#endif
+			char	*_sid;
 		#else
-			GROUP_INFO_2		*_buffer;
 			char			*_name;
-			GROUP_USERS_INFO_0	*_membersbuffer;
 			char			**_members;
 			DWORD			_membercount;
+			CHAR			*_sid;
+			gid_t			_gid;
 		#endif
 };
 
 // LAME: not in the class
 #if (!defined(RUDIMENTS_HAVE_GETGRNAM_R) || !defined(RUDIMENTS_HAVE_GETGRUID_R))
-static threadmutex	*_gemutex;
+static threadmutex	*gemutex;
 #endif
 
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
-static CHAR *asciiToUnicode(CHAR *in) {
+// FIXME: move to charstring class
+static WCHAR *asciiToUnicode(const CHAR *in) {
 
 	int32_t	size=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,NULL,0);
 	if (!size) {
@@ -63,7 +69,8 @@ static CHAR *asciiToUnicode(CHAR *in) {
 	return out;
 }
 
-static CHAR *unicodeToAscii(WCHAR *in) {
+// FIXME: move to charstring class
+static CHAR *unicodeToAscii(const WCHAR *in) {
 
 	BOOL	useddefaultchar;
 	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
@@ -79,6 +86,47 @@ static CHAR *unicodeToAscii(WCHAR *in) {
 	}
 	return out;
 }
+
+static gid_t	gid=0;
+struct namesid {
+	char	*name;
+	char	*sid;
+};
+static dictionary< gid_t, namesid * >	gidmap;
+// FIXME: clean up with init and exit methods like environment class
+
+static gid_t addGidMapping(const char *name, const char *sid) {
+
+	// check for existing mapping (by name only)
+	for (linkedlistnode< dictionarynode< gid_t, namesid * > *> *node=
+					gidmap.getList()->getFirstNode(); 
+					node; node=node->getNext()) {
+		namesid	*ns=node->getValue()->getValue();
+		if (!charstring::compare(name,ns->name)) {
+			// reset the sid
+			delete[] ns->sid;
+			ns->sid=charstring::duplicate(sid);
+			return node->getValue()->getKey();
+		}
+	}
+
+	// create a new entry
+	namesid	*ns=new namesid;
+	ns->name=charstring::duplicate(name);
+	ns->sid=charstring::duplicate(sid);
+
+	if (gemutex) {
+		gemutex->lock();
+	}
+	gid_t	g=gid;
+	gid++;
+	if (gemutex) {
+		gemutex->unlock();
+	}
+
+	gidmap.setValue(g,ns);
+	return g;
+}
 #endif
 
 groupentry::groupentry() {
@@ -91,11 +139,12 @@ groupentry::groupentry() {
 		pvt->_buffer=NULL;
 	#endif
 #else
-	pvt->_buffer=NULL;
 	pvt->_name=NULL;
 	pvt->_members=NULL;
 	pvt->_membercount=0;
+	pvt->_gid=(gid_t)-1;
 #endif
+	pvt->_sid=NULL;
 }
 
 groupentry::groupentry(const groupentry &g) {
@@ -117,15 +166,14 @@ groupentry::~groupentry() {
 		delete[] pvt->_buffer;
 	#endif
 	delete pvt;
+	delete[] pvt->_sid;
 #else
-	if (pvt->_buffer) {
-		NetApiBufferFree(pvt->_buffer);
-	}
 	delete[] pvt->_name;
 	for (DWORD i=0; i<pvt->_membercount; i++) {
 		delete[] pvt->_members[i];
 	}
 	delete[] pvt->_members;
+	LocalFree(pvt->_sid);
 #endif
 }
 
@@ -137,19 +185,11 @@ const char *groupentry::getName() const {
 #endif
 }
 
-const char *groupentry::getPassword() const {
-#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-	return pvt->_grp->gr_passwd;
-#else
-	return "";
-#endif
-}
-
 gid_t groupentry::getGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	return pvt->_grp->gr_gid;
 #else
-	return pvt->_buffer->grpi2_group_id;
+	return pvt->_gid;
 #endif
 }
 
@@ -161,9 +201,29 @@ const char * const *groupentry::getMembers() const {
 #endif
 }
 
+const char *groupentry::getSid() const {
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
+	if (!pvt->_sid) {
+		pvt->_sid=charstring::parseNumber(pvt->_grp->gr_gid);
+	}
+	return pvt->_sid;
+#else
+	return pvt->_sid;
+#endif
+}
+
+bool groupentry::platformSupportsFormalSid() {
+	#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
+		return false;
+	#else
+		return true;
+	#endif
+}
+
 bool groupentry::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
-		!defined(RUDIMENTS_HAVE_GETGRUID_R)
+	#if (!defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETGRUID_R)) || \
+		defined(RUDIMENTS_HAVE_NETGROUPGETINFO)
 		return true;
 	#else
 		return false;
@@ -171,9 +231,10 @@ bool groupentry::needsMutex() {
 }
 
 void groupentry::setMutex(threadmutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
-		!defined(RUDIMENTS_HAVE_GETGRUID_R)
-		_gemutex=mtx;
+	#if (!defined(RUDIMENTS_HAVE_GETGRNAM_R) || \
+		!defined(RUDIMENTS_HAVE_GETGRUID_R)) || \
+		defined(RUDIMENTS_HAVE_NETGROUPGETINFO)
+		gemutex=mtx;
 	#endif
 }
 
@@ -240,28 +301,51 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		return false;
 	#else
 		pvt->_grp=NULL;
-		return (!(_gemutex && !_gemutex->lock()) &&
+		return (!(gemutex && !gemutex->lock()) &&
 			((pvt->_grp=((groupname)
 				?getgrnam(groupname)
 				:getgrgid(groupid)))!=NULL) &&
-			!(_gemutex && !_gemutex->unlock()));
+			!(gemutex && !gemutex->unlock()));
 	#endif
 
 #else
 
 	// clear old buffers
-	if (pvt->_buffer) {
-		NetApiBufferFree(pvt->_buffer);
-	}
 	delete[] pvt->_name;
 	pvt->_name=NULL;
 	for (DWORD i=0; i<pvt->_membercount; i++) {
 		delete[] pvt->_members[i];
 	}
 	delete[] pvt->_members;
+	pvt->_members=NULL;
 	pvt->_membercount=0;
+	LocalFree(pvt->_sid);
+	pvt->_sid=NULL;
+	pvt->_gid=(gid_t)-1;
 
 	if (groupname) {
+
+		// get the group's SID
+		DWORD		sidsize=0;
+		DWORD		dnsize=0;
+		SID_NAME_USE	peuse;
+		LookupAccountName(NULL,groupname,
+					NULL,&sidsize,
+					NULL,&dnsize,&peuse);
+		PSID	sid=(PSID)new BYTE[sidsize];
+		rawbuffer::zero(sid,sidsize);
+		CHAR	*dn=new CHAR[dnsize];
+		rawbuffer::zero(dn,dnsize);
+		bool	failed=(LookupAccountName(NULL,groupname,
+						sid,&sidsize,
+						dn,&dnsize,&peuse)==FALSE ||
+				IsValidSid(sid)==FALSE ||
+				ConvertSidToStringSid(sid,&pvt->_sid)==FALSE);
+		delete[] sid;
+		delete[] dn;
+		if (failed) {
+			return false;
+		}
 
 		// convert groupname to unicode...
 		WCHAR	*groupnamew=asciiToUnicode(groupname);
@@ -270,24 +354,26 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		}
 
 		// get the group info
-		if (NetGroupGetInfo(NULL,groupnamew,2,(BYTE **)&pvt->_buffer)!=
+		GROUP_INFO_0	*buffer=NULL;
+		if (NetGroupGetInfo(NULL,groupnamew,0,(BYTE **)&buffer)!=
 								NERR_Success) {
 			delete[] groupnamew;
 			return false;
 		}
 
 		// convert the name back to ascii
-		pvt->_name=unicodeToAscii(pvt->_buffer->grpi2_name);
+		pvt->_name=unicodeToAscii(buffer->grpi0_name);
+		NetApiBufferFree(buffer);
 
 		// get group members
-		DWORD	totalentries;
-		if (!NetGroupGetUsers(NULL,groupnamew,0,
-				reinterpret_cast<LPBYTE *>(
-						&pvt->_membersbuffer),
-				MAX_PREFERRED_LENGTH,
-				&pvt->_membercount,
-				&totalentries,
-				NULL)) {
+		DWORD			totalentries;
+		GROUP_USERS_INFO_0	*membersbuffer=NULL;
+		if (NetGroupGetUsers(NULL,groupnamew,0,
+					(BYTE **)&membersbuffer,
+					MAX_PREFERRED_LENGTH,
+					&pvt->_membercount,
+					&totalentries,
+					NULL)!=NERR_Success) {
 			delete[] groupnamew;
 			return false;
 		}
@@ -297,27 +383,21 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		pvt->_members=new char *[pvt->_membercount+1];
 		pvt->_members[pvt->_membercount]=NULL;
 		for (DWORD i=0; i<pvt->_membercount; i++) {
-			size_t	len=charstring::length(
-					reinterpret_cast<char *>(
-					pvt->_membersbuffer[i].grui0_name));
-			pvt->_members[i]=new char[len+1];
-			if (!WideCharToMultiByte(CP_ACP,0,
-						pvt->_membersbuffer[i].
-								grui0_name,
-						len,
-						pvt->_members[i],
-						len,
-						"?",
-						&useddefaultchar)) {
-				return false;
-			}
+			pvt->_members[i]=unicodeToAscii(
+						membersbuffer[i].grui0_name);
 		}
+		NetApiBufferFree(membersbuffer);
 
-		return true;
-		
+		// add mapping
+		pvt->_gid=addGidMapping(pvt->_name,pvt->_sid);
+
 	} else {
-		// windows doesn't appear to support this
-		error::setErrorNumber(ENOSYS);
+
+		// look up the gid in the map
+		namesid	*ns;
+		if (gidmap.getValue(groupid,&ns)) {
+			return initialize(ns->name);
+		}
 		return false;
 	}
 	return true;
@@ -336,6 +416,14 @@ char *groupentry::getName(gid_t groupid) {
 	groupentry	grp;
 	if (grp.initialize(groupid)) {
 		return charstring::duplicate(grp.getName());
+	}
+	return NULL;
+}
+
+char *groupentry::getSid(const char *groupname) {
+	groupentry	grp;
+	if (grp.initialize(groupname)) {
+		return charstring::duplicate(grp.getSid());
 	}
 	return NULL;
 }

@@ -35,12 +35,11 @@ class passwdentryprivate {
 			#endif
 			char	*_sid;
 		#else
-			CHAR		*_sid;
-			USER_INFO_2	*_buffer;
 			char		*_name;
 			char		*_password;
 			char		*_realname;
 			char		*_homedir;
+			CHAR		*_sid;
 			uid_t		_uid;
 		#endif
 };
@@ -53,7 +52,8 @@ static threadmutex	*pemutex;
 #endif
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
-static CHAR *asciiToUnicode(CHAR *in) {
+// FIXME: move to charstring class
+static WCHAR *asciiToUnicode(const CHAR *in) {
 
 	int32_t	size=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,NULL,0);
 	if (!size) {
@@ -68,7 +68,8 @@ static CHAR *asciiToUnicode(CHAR *in) {
 	return out;
 }
 
-static CHAR *unicodeToAscii(WCHAR *in) {
+// FIXME: move to charstring class
+static CHAR *unicodeToAscii(const WCHAR *in) {
 
 	BOOL	useddefaultchar;
 	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
@@ -85,7 +86,7 @@ static CHAR *unicodeToAscii(WCHAR *in) {
 	return out;
 }
 
-static uint64_t	uid=0;
+static uid_t	uid=0;
 struct namesid {
 	char	*name;
 	char	*sid;
@@ -138,11 +139,11 @@ passwdentry::passwdentry() {
 		pvt->_buffer=NULL;
 	#endif
 #else
-	pvt->_buffer=NULL;
 	pvt->_name=NULL;
 	pvt->_password=NULL;
 	pvt->_realname=NULL;
 	pvt->_homedir=NULL;
+	pvt->_uid=(uid_t)-1;
 #endif
 	pvt->_sid=NULL;
 }
@@ -167,9 +168,6 @@ passwdentry::~passwdentry() {
 	#endif
 	delete[] pvt->_sid;
 #else
-	if (pvt->_buffer) {
-		NetApiBufferFree(pvt->_buffer);
-	}
 	delete[] pvt->_name;
 	delete[] pvt->_password;
 	delete[] pvt->_realname;
@@ -218,7 +216,7 @@ gid_t passwdentry::getPrimaryGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return pvt->_pwd->pw_gid;
 #else
-	return -1;
+	return (gid_t)-1;
 #endif
 }
 
@@ -351,10 +349,6 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 
 #else
 
-	if (pvt->_buffer) {
-		NetApiBufferFree(pvt->_buffer);
-		pvt->_buffer=NULL;
-	}
 	delete[] pvt->_name;
 	pvt->_name=NULL;
 	delete[] pvt->_realname;
@@ -398,17 +392,20 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		}
 
 		// get user info
-		if (NetUserGetInfo(NULL,usernamew,2,(BYTE **)&pvt->_buffer)!=
+		USER_INFO_2	*buffer=NULL;
+		if (NetUserGetInfo(NULL,usernamew,2,(BYTE **)&buffer)!=
 								NERR_Success) {
 			delete[] usernamew;
 			return false;
 		}
+		delete[] usernamew;
 
 		// convert the unicode values to ascii
-		pvt->_name=unicodeToAscii(pvt->_buffer->usri2_name);
-		pvt->_password=unicodeToAscii(pvt->_buffer->usri2_password);
-		pvt->_realname=unicodeToAscii(pvt->_buffer->usri2_full_name);
-		pvt->_homedir=unicodeToAscii(pvt->_buffer->usri2_home_dir);
+		pvt->_name=unicodeToAscii(buffer->usri2_name);
+		pvt->_password=unicodeToAscii(buffer->usri2_password);
+		pvt->_realname=unicodeToAscii(buffer->usri2_full_name);
+		pvt->_homedir=unicodeToAscii(buffer->usri2_home_dir);
+		NetApiBufferFree(buffer);
 
 		// add mapping
 		pvt->_uid=addUidMapping(pvt->_name,pvt->_sid);

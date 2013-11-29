@@ -4,38 +4,47 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/stdio.h>
 
-int main(int argc, const char **argv) {
+#ifdef _WIN32
+const char	*groupname="None";
+#else
+const char	*groupname="bin";
+#endif
 
+void print(groupentry *grent) {
 
-	// get the group entry for "bin"
-	groupentry	grent;
-	grent.initialize("bin");
-
-	// print the components individually
-	stdoutput.printf("Individually...\n");
-	stdoutput.printf("	Name:		%s\n",grent.getName());
-	stdoutput.printf("	Password:	%s\n",grent.getPassword());
-	stdoutput.printf("	Group Id:	%d\n",grent.getGroupId());
+	stdoutput.printf("	Name:		%s\n",grent->getName());
+	stdoutput.printf("	Group Id:	%d\n",grent->getGroupId());
 	stdoutput.printf("	Members:\n");
 	int i;
-	for (i=0; grent.getMembers()[i]; i++) {
-		stdoutput.printf("		%s\n",grent.getMembers()[i]);
+	for (i=0; grent->getMembers() && grent->getMembers()[i]; i++) {
+		stdoutput.printf("		%s\n",grent->getMembers()[i]);
 	}
+	stdoutput.printf("	SID:		%s\n",grent->getSid());
 	stdoutput.printf("\n");
+}
 
+int main(int argc, const char **argv) {
 
+	// get the group entry for the groupname
+	groupentry	grent;
+	grent.initialize(groupname);
+	stdoutput.printf("groupname: %s...\n",groupname);
+	print(&grent);
 
-	// get the group entry for group id 1
-	grent.initialize((gid_t)1);
+	// get the group entry for group id of the group we just looked up
+	gid_t	id=grent.getGroupId();
+	grent.initialize(id);
+	stdoutput.printf("groupid: %d...\n",id);
+	print(&grent);
 
-	// print the components individually
-	stdoutput.printf("Individually...\n");
-	stdoutput.printf("	Name:		%s\n",grent.getName());
-	stdoutput.printf("	Password:	%s\n",grent.getPassword());
-	stdoutput.printf("	Group Id:	%d\n",grent.getGroupId());
-	stdoutput.printf("	Members:\n");
-	for (i=0; grent.getMembers()[i]; i++) {
-		stdoutput.printf("		%s\n",grent.getMembers()[i]);
-	}
-	stdoutput.printf("\n");
+	// invalid group
+	grent.initialize("invalidgroupname");
+	stdoutput.printf("groupname: invalidgroupname...\n");
+	print(&grent);
+
+	// invalid group id
+	id=grent.getGroupId();
+	grent.initialize(id);
+	stdoutput.printf("groupid: %d (invalid)...\n",id);
+	print(&grent);
 }

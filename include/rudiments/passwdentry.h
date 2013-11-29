@@ -93,7 +93,7 @@ class RUDIMENTS_DLLSPEC passwdentry {
 		static uid_t	getUserId(const char *username);
 
 		/** Convenience method.
-		 *  Returns the id of the user specified by "username".
+		 *  Returns the SID of the user specified by "username".
 		 *  See non-static version of this method for more information.
 		 *
 		 *  Note that the return value is allocated internally and

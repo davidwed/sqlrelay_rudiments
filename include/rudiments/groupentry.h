@@ -38,11 +38,26 @@ class RUDIMENTS_DLLSPEC groupentry {
 		/** Returns the name of the group. */
 		const char		*getName() const;
 
-		/** Returns the password for the group. */
-		const char		*getPassword() const;
-
-		/** Returns the id of the group. */
+		/** Returns the id of the group.
+		 *
+		 *  Note: On platforms (like Windows) where the
+		 *  supportsFormalSid method returns true, groups don't have
+		 *  simple numeric ids.  On those platforms, the value returned
+		 *  by this method is simply an index into an internal structure
+		 *  that methods of other rudiments classes know how to access
+		 *  and ultimately translate to a group.  It should not be
+		 *  passed in to functions or methods of other libraries that
+		 *  don't ultimately use rudiments methods. */
 		gid_t			getGroupId() const;
+
+		/** Returns a string representation of the SID (security id) of
+		 *  this group.
+		 *
+		 *  Note: On platforms (like non-Windows platforms) where the
+		 *  supportsFormalSid method returns false, the value returned
+		 *  is just a string representation of the number returned by
+		 *  getGroupId(). */
+		const char	*getSid() const;
 
 		/** Returns a NULL-terminated list of the
 		 *  names of the members of the group. */
@@ -64,6 +79,23 @@ class RUDIMENTS_DLLSPEC groupentry {
 		 *  occurred. */
 		static char	*getName(gid_t groupid);
 
+		/** Convenience method.
+		 *  Returns the SID of the group specified by "groupname".
+		 *  See non-static version of this method for more information.
+		 *
+		 *  Note that the return value is allocated internally and
+		 *  returned.  The calling program must free the buffer.
+		 *
+		 *  Returns NULL if an error occurred or if "groupname" is
+		 *  invalid.  */
+		static char	*getSid(const char *groupname);
+
+		/** Returns true if the platform supports a formal group SID
+		 *  (security id) and false if not.
+		 *
+		 *  Windows and windows-like platforms do.  Unix and unix-like
+		 *  platforms (including Mac OS X) do not. */
+		static bool	platformSupportsFormalSid();
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

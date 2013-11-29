@@ -8,8 +8,8 @@
 	added xmldomnode::append/insertTag methods
 	implemented directory class for windows
 	got semaphoreset working on windows
-	implemented passwdentry::getSid and an internal uid-name-sid map for
-		windows
+	implemented passwd/groupentry::getSid and an internal id-name-sid map
+		for windows
 
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux
