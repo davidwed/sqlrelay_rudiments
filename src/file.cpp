@@ -642,6 +642,9 @@ bool file::getCurrentProperties() {
 		result=fstat(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+	// FIXME: On windows, the st_mode isn't set correctly.  Get the SDDL
+	// of the file and convert it to a mode_t using
+	// permissions::sddlToPermOctal()
 }
 
 bool file::stat(const char *filename, void *st) {
@@ -650,6 +653,9 @@ bool file::stat(const char *filename, void *st) {
 		result=::stat(filename,(struct stat *)st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return (result!=-1);
+	// FIXME: On windows, the st_mode isn't set correctly.  Get the SDDL
+	// of the file and convert it to a mode_t using
+	// permissions::sddlToPermOctal()
 }
 
 mode_t file::getPermissions() const {

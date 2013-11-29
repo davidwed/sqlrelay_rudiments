@@ -342,3 +342,12 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 
 	return permstring;
 }
+
+char *permissions::sddlToPermString(const char *sddl) {
+	return evalPermOctal(sddlToPermOctal(sddl));
+}
+
+mode_t permissions::sddlToPermOctal(const char *sddl) {
+	// FIXME: implement this
+	return 0;
+}
