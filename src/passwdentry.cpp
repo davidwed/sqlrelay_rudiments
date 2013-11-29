@@ -271,6 +271,9 @@ bool passwdentry::initialize(uid_t userid) {
 bool passwdentry::initialize(const char *username, uid_t userid) {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 
+	delete[] pvt->_sid;
+	pvt->_sid=NULL;
+
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		delete[] pvt->_sid;

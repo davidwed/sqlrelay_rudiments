@@ -6,10 +6,8 @@
 #include <rudiments/error.h>
 #include <rudiments/file.h>
 #include <rudiments/passwdentry.h>
-#ifdef _WIN32
-	#include <rudiments/stdio.h>
-	#include <rudiments/process.h>
-#endif
+#include <rudiments/stdio.h>
+#include <rudiments/process.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -303,10 +301,7 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//	 world perms are applied to the group and user
 	//	 group perms are applied to the user
 
-	uid_t	uid=process::getRealUserId();
-	char	*user=passwdentry::getName(uid);
-stdoutput.printf("userid=%d\n",uid);
-stdoutput.printf("user=%s\n",user);
+	char	*user=passwdentry::getName(process::getRealUserId());
 
 	//char	*permstring=new char[66];
 	char	*permstring=new char[512];
@@ -333,7 +328,6 @@ stdoutput.printf("user=%s\n",user);
 			charstring::append(permstring,";;;WD)");
 		} else if (i==5) {
 			char	*sid=passwdentry::getSid(user);
-stdoutput.printf("sid=%s\n",sid);
 			charstring::append(permstring,";;;");
 			charstring::append(permstring,sid);
 			charstring::append(permstring,")");
