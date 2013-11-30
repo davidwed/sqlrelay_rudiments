@@ -21,7 +21,6 @@ int main(int argc, const char **argv) {
 	memorymap	mm;
 	off64_t		offset=0;
 	size_t		len=sys::getPageSize();
-	const char	*ptr=NULL;
 	bool		done=false;
 	do {
 		if (offset) {
@@ -35,7 +34,7 @@ int main(int argc, const char **argv) {
 						PROT_READ,MAP_SHARED)) {
 			break;
 		}
-		stdoutput.printf("%.*s",len,(const char *)mm.getData());
+		stdoutput.write((const char *)mm.getData(),len);
 		offset=offset+len;
 	} while (!done);
 }
