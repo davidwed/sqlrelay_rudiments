@@ -11,6 +11,7 @@
 	implemented passwd/groupentry::getSid and an internal id-name-sid map
 		for windows
 	removed meaningless groupentry::getPassword
+	improved filesystem class implementation for Windows significantly
 
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux

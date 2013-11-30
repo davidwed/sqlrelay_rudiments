@@ -4,6 +4,7 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <rudiments/charstring.h>
 #endif
@@ -29,6 +30,10 @@
 	#include <io.h>
 #endif
 
+#ifndef PATH_MAX
+	#define PATH_MAX 1024
+#endif
+
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
@@ -41,40 +46,40 @@
 		DWORD	f_bsize;
 		int64_t	f_blocks;
 		int64_t	f_bfree;
-		int64_t	f_bavail;
-		int64_t	f_files;
-		int64_t	f_ffree;
 		int64_t	f_fsid;
 		DWORD	f_namelen;
+		CHAR	f_typename[PATH_MAX];
+		CHAR	f_volumename[PATH_MAX];
 	};
-#endif
-
-#ifndef PATH_MAX
-	#define PATH_MAX 1024
 #endif
 
 class filesystemprivate {
 	friend class filesystem;
 	private:
-#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
-		struct		statvfs	_st;
-#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS) || \
-		defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-		struct		statfs	_st;
-#else
-	#error no statvfs, statfs or anything like it
-#endif
-		int32_t		_fd;
-		bool		_closeflag;
-#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		char		*_path;
-#endif
+		#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
+			struct		statvfs	_st;
+		#elif defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS) || \
+				defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+			struct		statfs	_st;
+		#else
+			#error no statvfs, statfs or anything like it
+		#endif
+		#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+			int32_t		_fd;
+			bool		_closeflag;
+		#else
+			char		*_volume;
+		#endif
 };
 
 filesystem::filesystem() {
 	pvt=new filesystemprivate;
-	pvt->_fd=-1;
-	pvt->_closeflag=false;
+	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		pvt->_fd=-1;
+		pvt->_closeflag=false;
+	#else
+		pvt->_volume=NULL;
+	#endif
 	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
 }
 
@@ -91,66 +96,80 @@ filesystem &filesystem::operator=(const filesystem &f) {
 }
 
 void filesystem::filesystemClone(const filesystem &f) {
-	pvt->_fd=f.pvt->_fd;
-	pvt->_closeflag=f.pvt->_closeflag;
+	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		pvt->_fd=f.pvt->_fd;
+		pvt->_closeflag=f.pvt->_closeflag;
+	#else
+		delete[] pvt->_volume;
+		pvt->_volume=charstring::duplicate(f.pvt->_volume);
+	#endif
 	pvt->_st=f.pvt->_st;
 }
 
 filesystem::~filesystem() {
 	close();
 	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-	delete[] pvt->_path;
+		delete[] pvt->_volume;
 	#endif
 	delete pvt;
 }
 
 bool filesystem::initialize(const char *path) {
-	close();
-	pvt->_closeflag=true;
-	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-	delete[] pvt->_path;
-	pvt->_path=charstring::duplicate(path);
+	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		close();
+		pvt->_closeflag=true;
+		do {
+			#if defined(RUDIMENTS_HAVE__OPEN)
+				pvt->_fd=_open(path,O_RDONLY);
+			#elif defined(RUDIMENTS_HAVE_OPEN)
+				pvt->_fd=::open(path,O_RDONLY);
+			#else
+				#error no open or anything like it
+			#endif
+		} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR);
+		return (pvt->_fd!=-1 && getCurrentProperties());
+	#else 
+		delete[] pvt->_volume;
+		pvt->_volume=charstring::duplicate(path);
+		// FIXME: extract the volume name from the path and
+		// use it rather than the path that was passed in
+		return getCurrentProperties();
 	#endif
-	do {
-		#if defined(RUDIMENTS_HAVE__OPEN)
-			pvt->_fd=_open(path,O_RDONLY);
-		#elif defined(RUDIMENTS_HAVE_OPEN)
-			pvt->_fd=::open(path,O_RDONLY);
-		#else
-			#error no open or anything like it
-		#endif
-	} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR);
-	return (pvt->_fd!=-1 && getCurrentProperties());
 }
 
 bool filesystem::initialize(int32_t fd) {
 	close();
-	pvt->_closeflag=false;
-	pvt->_fd=fd;
+	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		pvt->_closeflag=false;
+		pvt->_fd=fd;
+	#endif
 	return getCurrentProperties();
 }
 
 bool filesystem::close() {
-	if (pvt->_fd>-1 && pvt->_closeflag) {
-		int32_t	result;
-		do {
-			#if defined(RUDIMENTS_HAVE__CLOSE)
-				result=_close(pvt->_fd);
-			#elif defined(RUDIMENTS_HAVE_CLOSE)
-				result=::close(pvt->_fd);
-			#else
-				#error no close or anything like it
-			#endif
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		pvt->_fd=-1;
-		return !result;
-	}
+	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		if (pvt->_fd>-1 && pvt->_closeflag) {
+			int32_t	result;
+			do {
+				#if defined(RUDIMENTS_HAVE__CLOSE)
+					result=_close(pvt->_fd);
+				#elif defined(RUDIMENTS_HAVE_CLOSE)
+					result=::close(pvt->_fd);
+				#else
+					#error no close or anything like it
+				#endif
+			} while (result==-1 && error::getErrorNumber()==EINTR);
+			pvt->_fd=-1;
+			return !result;
+		}
+	#endif
 	return true;
 }
 
 bool filesystem::getCurrentProperties() {
 	#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
 			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
+
 		int32_t	result;
 		do {
 			#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
@@ -160,121 +179,61 @@ bool filesystem::getCurrentProperties() {
 			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
+
 	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 
-		if (!pvt->_path) {
-			return false;
-		}
+		// clear the statfs buffer
+		rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
 
-		// convert st to statfs type
-		struct statfs	*stfs=(struct statfs *)&pvt->_st;
-
-		// Get "old-school" free space - sectors and clusters,
-		// if it fails, fall back to some safe defaults
+		// Get free space the old-school and well-supported way, by
+		// sectors and clusters.  If it fails, fall back to some safe
+		// defaults.
 		DWORD	sectorspercluster;
+		DWORD	bytespersector;
 		DWORD	freeclusters;
 		DWORD	totalclusters;
-		if (!GetDiskFreeSpace(pvt->_path,&sectorspercluster,
-						&(stfs->f_bsize),
+		if (GetDiskFreeSpace(pvt->_volume,&sectorspercluster,
+						&bytespersector,
 						&freeclusters,
-						&totalclusters)) {
-			sectorspercluster=1;
-			stfs->f_bsize=1;
-			freeclusters=0;
-			totalclusters=0;
+						&totalclusters)==TRUE) {
+			// calculate bytes, blocks and files available
+			// (apparently cluster size = block size on windows)
+			pvt->_st.f_bsize=sectorspercluster*bytespersector;
+			pvt->_st.f_blocks=totalclusters;
+			pvt->_st.f_bfree=freeclusters;
 		}
-
-		// Attempt to get free disk space directly using
-		// GetDiskFreeSpaceEx.  This method isn't available
-		// on all version of windows though, so we'll have to
-		// do it like this...
-		ULARGE_INTEGER	availbytes;
-		ULARGE_INTEGER	totalbytes;
-		ULARGE_INTEGER	freebytes;
-		HMODULE	lib=LoadLibrary("KERNEL32");
-		bool	(*getfreediskspaceex)
-				(LPCSTR,PULARGE_INTEGER,
-						PULARGE_INTEGER,
-						PULARGE_INTEGER)=NULL;
-		if (lib) {
-			getfreediskspaceex=
-				(bool (*)(LPCSTR,PULARGE_INTEGER,
-						PULARGE_INTEGER,
-						PULARGE_INTEGER))
-				GetProcAddress(lib,
-						"GetDiskFreeSpaceEx");
-			if (getfreediskspaceex) {
-				if (!getfreediskspaceex(pvt->_path,
-						&availbytes,
-						&totalbytes,
-						&freebytes)) {
-					FreeLibrary(lib);
-					return false;
-				}
-			}
-			FreeLibrary(lib);
-		}
-
-		// if we couldn't get free space directly, calculate it
-		// from sectors and clusters
-		if (!getfreediskspaceex) {
-			DWORD	bytespercluster=
-					sectorspercluster*stfs->f_bsize;
-			totalbytes.QuadPart=totalclusters*bytespercluster;
-			freebytes.QuadPart=freeclusters*bytespercluster;
-			availbytes=freebytes;
-		}
-		stfs->f_bavail=availbytes.QuadPart/stfs->f_bsize;
-		stfs->f_bfree=freebytes.QuadPart/stfs->f_bsize;
-		stfs->f_ffree=stfs->f_bfree/sectorspercluster;
-		stfs->f_blocks=totalbytes.QuadPart/stfs->f_bsize;
-		stfs->f_files=stfs->f_blocks/sectorspercluster;
 
 		// get volume information
-		CHAR	volumename[PATH_MAX];
 		DWORD	volumeserialnumber;
-		DWORD	filesystemflags;
-		CHAR	filesystemname[PATH_MAX];
-		if (!GetVolumeInformation(pvt->_path,
-					volumename,
-					PATH_MAX,
-					&volumeserialnumber,
-					&(stfs->f_namelen),
-					&filesystemflags,
-					filesystemname,
-					PATH_MAX)) {
+		if (!GetVolumeInformation(pvt->_volume,
+						pvt->_st.f_volumename,
+						PATH_MAX,
+						&volumeserialnumber,
+						&(pvt->_st.f_namelen),
+						NULL,
+						pvt->_st.f_typename,
+						PATH_MAX)) {
 			return false;
 		}
 
+		// build the volume serial number
 		union fsid {
 			int32_t	val32[2];
 		};
-
-		fsid	*f_fsid=(union fsid *)&(stfs->f_fsid);
+		fsid	*f_fsid=(union fsid *)&(pvt->_st.f_fsid);
 		f_fsid->val32[0]=HIWORD(volumeserialnumber);
 		f_fsid->val32[1]=LOWORD(volumeserialnumber);
 
-		// translate the filesystem type name to 
-		struct fsnames {
-			const char	*uppername;
-			int64_t		type;
-		};
-		fsnames	fsns[]={
-			{"FAT",0x4d44},		// same as "msdos"
-			{"FAT32",0x4d44},	// same as fat for now
-			{"NTFS",0x72b6},	// same as ntfs
-			{"CDFS",0x9660},	// same as "isofs"
-			{NULL,0}
-		};
-		stfs->f_type=0x0;
-		for (uint8_t i=0; fsns[i].uppername; i++) {
-			if (!charstring::compare(filesystemname,
-						fsns[i].uppername)) {
-				stfs->f_type=fsns[i].type;
-				break;
-			}
+		// translate the filesystem type name to hex
+		pvt->_st.f_type=0x0;
+		if (!charstring::compare(pvt->_st.f_typename,"FAT") ||
+			!charstring::compare(pvt->_st.f_typename,"FAT32")) {
+			pvt->_st.f_type=0x4d44;
+		} else if (!charstring::compare(pvt->_st.f_typename,"NTFS")) {
+			pvt->_st.f_type=0x5346544e;
+		} else if (!charstring::compare(pvt->_st.f_typename,"CDFS")) {
+			pvt->_st.f_type=0x9660;
 		}
-
 		return true;
 	#else
 		#error no fstatvfs, fstatfs or anything like it
@@ -377,8 +336,7 @@ int64_t filesystem::getAvailableBlocks() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 	return pvt->_st.f_bavail;
 #else
 	return 0;
@@ -395,8 +353,7 @@ int64_t filesystem::getTotalFileNodes() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 	return pvt->_st.f_files;
 #else
 	return 0;
@@ -413,8 +370,7 @@ int64_t filesystem::getFreeFileNodes() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
-	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
 	return pvt->_st.f_ffree;
 #else
 	return 0;
@@ -499,6 +455,8 @@ const char *filesystem::getMountPoint() const {
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
 	return (const char *)pvt->_st.f_mntonname;
+#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+	return (const char *)pvt->_volume;
 #else
 	return NULL;
 #endif
@@ -536,6 +494,8 @@ const char *filesystem::getDeviceName() const {
 const char *filesystem::getFilesystemSpecificString() const {
 #ifdef RUDIMENTS_HAVE_STATVFS
 	return (const char *)pvt->_st.f_fstr;
+#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+	return (const char *)pvt->_st.f_volumename;
 #else
 	return NULL;
 #endif
@@ -645,6 +605,8 @@ const char *filesystem::getTypeName() const {
 			return "xiafs";
 	}
 	return NULL;
+#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
+	return (const char *)pvt->_st.f_typename;
 #else
 	return NULL;
 #endif

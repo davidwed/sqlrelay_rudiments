@@ -3,6 +3,7 @@
 
 #include <rudiments/memorymap.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <stdio.h>
 #ifdef RUDIMENTS_HAVE_SYS_MMAN_H
@@ -107,10 +108,13 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 					FILE_MAP_READ:FILE_MAP_WRITE;
 		pvt->_data=MapViewOfFile(pvt->_map,viewprot,0,0,len);
 		if (!pvt->_data) {
+stdoutput.printf("MapViewOfFile failed: %d\n",GetLastError());
 			CloseHandle(pvt->_map);
 			return false;
 		}
 		return true;
+	} else {
+stdoutput.printf("CreateFileMapping failed: %d\n",GetLastError());
 	}
 	return false;
 	#else

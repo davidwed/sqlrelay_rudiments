@@ -4,12 +4,18 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/stdio.h>
 
+#ifdef _WIN32
+const char	*root="C:\\";
+#else
+const char	*root="/";
+#endif
+
 int main(int argc, const char **argv) {
 
 	filesystem	fs;
-	fs.initialize("/");
+	fs.initialize(root);
 
-	stdoutput.printf("root fileststem stats:\n");
+	stdoutput.printf("%s fileststem stats:\n",root);
 	stdoutput.printf("	type:				0x%08x\n",
 				(uint32_t)fs.getType());
 	stdoutput.printf("	block size:			%lld\n",

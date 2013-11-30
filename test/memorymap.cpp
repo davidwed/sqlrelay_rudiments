@@ -8,6 +8,10 @@
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
+#ifndef MAP_PRIVATE
+	#define MAP_PRIVATE 0
+#endif
+
 int main(int argc, const char **argv) {
 
 	// open the file
