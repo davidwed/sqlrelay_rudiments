@@ -3,7 +3,6 @@
 
 #include <rudiments/memorymap.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 
 #include <stdio.h>
 #ifdef RUDIMENTS_HAVE_SYS_MMAN_H
@@ -71,19 +70,19 @@ class memorymapprivate {
 	friend class memorymap;
 	private:
 		void	*_data;
-		#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
-		HANDLE	_map;
-		#endif
 		size_t	_length;
+		#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+			HANDLE	_map;
+		#endif
 };
 
 memorymap::memorymap() {
 	pvt=new memorymapprivate;
 	pvt->_data=NULL;
-	#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
-	pvt->_map=NULL;
-	#endif
 	pvt->_length=0;
+	#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+		pvt->_map=NULL;
+	#endif
 }
 
 memorymap::~memorymap() {
@@ -95,31 +94,69 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 					int32_t protection, int32_t flags) {
 	pvt->_length=len;
 	#if defined(RUDIMENTS_HAVE_MMAP)
-	do {
-		pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
-	} while (pvt->_data==MAP_FAILED && error::getErrorNumber()==EINTR);
-	return (pvt->_data!=MAP_FAILED);
+		do {
+			pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
+		} while (pvt->_data==MAP_FAILED &&
+				error::getErrorNumber()==EINTR);
+		return (pvt->_data!=MAP_FAILED);
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
-	DWORD	mapprot=(protection|PROT_WRITE)?PAGE_READONLY:PAGE_READWRITE;
-	pvt->_map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
-					NULL,mapprot,0,len,NULL);
-	if (pvt->_map) {
-		DWORD	viewprot=(protection|PROT_WRITE)?
-					FILE_MAP_READ:FILE_MAP_WRITE;
-		pvt->_data=MapViewOfFile(pvt->_map,viewprot,0,0,len);
+
+		// calculate max mapping size and offset
+		DWORD	maxsizehigh=(((uint64_t)len)>>32);
+		DWORD	maxsizelow=(((uint64_t)len)&0x0000FFFF);
+		DWORD	offsethigh=(offset>>32);
+		DWORD	offsetlow=(offset&0x0000FFFF);
+
+		// determine map and view protection
+		DWORD	mapprot=0;
+		DWORD	viewprot=0;
+		DWORD	viewprotwrite=(flags&MAP_PRIVATE)?
+					FILE_MAP_COPY:FILE_MAP_WRITE;
+		if (protection&PROT_EXEC) {
+			if (protection&PROT_READ) {
+				if (protection&PROT_WRITE) {
+					mapprot=PAGE_EXECUTE_READWRITE;
+					viewprot=viewprotwrite|
+							FILE_MAP_EXECUTE;
+				} else {
+					mapprot=PAGE_EXECUTE_READWRITE;
+					mapprot=PAGE_EXECUTE_READ;
+					viewprot=FILE_MAP_READ|
+							FILE_MAP_EXECUTE;
+				}
+			}
+		} else if (protection&PROT_READ) {
+			if (protection&PROT_WRITE) {
+				mapprot=PAGE_READWRITE;
+				viewprot=viewprotwrite;
+			} else {
+				mapprot=PAGE_READONLY;
+				viewprot=FILE_MAP_READ;
+			}
+		}
+
+		// create the file mapping
+		pvt->_map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
+						NULL,mapprot,
+						maxsizehigh,maxsizelow,
+						NULL);
+		if (!pvt->_map) {
+			return false;
+		}
+
+		// create a view of the file mapping
+		pvt->_data=MapViewOfFile(pvt->_map,
+						viewprot,
+						offsethigh,offsetlow,
+						len);
 		if (!pvt->_data) {
-stdoutput.printf("MapViewOfFile failed: %d\n",GetLastError());
 			CloseHandle(pvt->_map);
 			return false;
 		}
 		return true;
-	} else {
-stdoutput.printf("CreateFileMapping failed: %d\n",GetLastError());
-	}
-	return false;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -127,15 +164,16 @@ bool memorymap::detach() {
 	#if defined(RUDIMENTS_HAVE_MMAP) || \
 		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		#if defined(RUDIMENTS_HAVE_MMAP)
-		int32_t	result;
-		do {
-			result=munmap(reinterpret_cast<MUNMAP_ADDRCAST>
-						(pvt->_data),pvt->_length);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		bool	retval=!result;
+			int32_t	result;
+			do {
+				result=munmap(
+					reinterpret_cast<MUNMAP_ADDRCAST>
+					(pvt->_data),pvt->_length);
+			} while (result==-1 && error::getErrorNumber()==EINTR);
+			bool	retval=!result;
 		#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
-		bool	retval=(UnmapViewOfFile(pvt->_data) &&
-						CloseHandle(pvt->_map));
+			bool	retval=(UnmapViewOfFile(pvt->_data)==TRUE &&
+						CloseHandle(pvt->_map)==TRUE);
 		#endif
 		pvt->_data=NULL;
 		pvt->_length=0;
@@ -152,16 +190,18 @@ bool memorymap::setProtection(int32_t protection) {
 
 bool memorymap::setProtection(off64_t offset, size_t len, int32_t protection) {
 	#ifdef RUDIMENTS_HAVE_MPROTECT
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int32_t	result;
-	do {
-		result=mprotect(reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
-							len,protection);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		int32_t	result;
+		do {
+			result=mprotect(
+				reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
+				len,protection);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -180,70 +220,78 @@ bool memorymap::sync(bool immediate, bool invalidate) {
 bool memorymap::sync(off64_t offset, size_t len,
 			bool immediate, bool invalidate) {
 	#ifdef RUDIMENTS_HAVE_MSYNC
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int32_t	result;
-	do {
-		result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
-				((immediate)?MS_SYNC:MS_ASYNC)|
-					((invalidate)?MS_INVALIDATE:0));
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		int32_t	result;
+		do {
+			result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
+					((immediate)?MS_SYNC:MS_ASYNC)|
+						((invalidate)?MS_INVALIDATE:0));
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return (FlushViewOfFile(reinterpret_cast<void *>(ptr),len)==TRUE);
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		return (FlushViewOfFile(
+			reinterpret_cast<void *>(ptr),len)==TRUE);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
 bool memorymap::sequentialAccess(off64_t offset, size_t len) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_SEQUENTIAL)
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return mAdvise(ptr,len,MADV_SEQUENTIAL);
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		return mAdvise(ptr,len,MADV_SEQUENTIAL);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
 bool memorymap::randomAccess(off64_t offset, size_t len) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_RANDOM)
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return mAdvise(ptr,len,MADV_RANDOM);
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		return mAdvise(ptr,len,MADV_RANDOM);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
 bool memorymap::willNeed(off64_t offset, size_t len) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_WILLNEED)
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return mAdvise(ptr,len,MADV_WILLNEED);
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		return mAdvise(ptr,len,MADV_WILLNEED);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
 bool memorymap::wontNeed(off64_t offset, size_t len) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_DONTNEED)
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return mAdvise(ptr,len,MADV_DONTNEED);
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		return mAdvise(ptr,len,MADV_DONTNEED);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
 bool memorymap::normalAccess(off64_t offset, size_t len) {
 	#if defined(RUDIMENTS_HAVE_MADVISE) && defined(MADV_NORMAL)
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	return mAdvise(ptr,len,MADV_NORMAL);
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		return mAdvise(ptr,len,MADV_NORMAL);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
@@ -253,15 +301,16 @@ bool memorymap::lock() {
 
 bool memorymap::lock(off64_t offset, size_t len) {
 	#ifdef RUDIMENTS_HAVE_MLOCK
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int32_t	result;
-	do {
-		result=mlock(reinterpret_cast<MLOCK_ADDRCAST>(ptr),len);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		int32_t	result;
+		do {
+			result=mlock(reinterpret_cast<MLOCK_ADDRCAST>(ptr),len);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -271,15 +320,18 @@ bool memorymap::unlock() {
 
 bool memorymap::unlock(off64_t offset, size_t len) {
 	#ifdef RUDIMENTS_HAVE_MUNLOCK
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int32_t	result;
-	do {
-		result=munlock(reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),len);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		int32_t	result;
+		do {
+			result=munlock(
+				reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),
+				len);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -290,106 +342,109 @@ bool memorymap::inMemory() {
 bool memorymap::inMemory(off64_t offset, size_t len) {
 
 	#ifdef RUDIMENTS_HAVE_MINCORE
+		// create an array of char's, 1 for each page
+		int32_t		pagesize=getpagesize();
+		int32_t		tmplen=(len+pagesize-1)/pagesize;
+		#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
+			char		*tmp=new char[tmplen];
+		#else
+			unsigned char	*tmp=new unsigned char[tmplen];
+		#endif
 
-	// create an array of char's, 1 for each page
-	int32_t		pagesize=getpagesize();
-	int32_t		tmplen=(len+pagesize-1)/pagesize;
-	#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
-	char		*tmp=new char[tmplen];
-	#else
-	unsigned char	*tmp=new unsigned char[tmplen];
-	#endif
-
-	// call mincore to fill the array
-	unsigned char	*ptr=(static_cast<unsigned char *>(pvt->_data))+offset;
-	int32_t		result;
-	do {
-		result=mincore(reinterpret_cast<MINCORE_ADDRCAST>(ptr),len,tmp);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	if (result) {
-		delete[] tmp;
-		return false;
-	}
-
-	// look through the array, if any of the
-	// pages aren't in memory, return false
-	for (int32_t i=0; i<tmplen; i++) {
-		if (tmp[i]) {
+		// call mincore to fill the array
+		unsigned char	*ptr=
+			(static_cast<unsigned char *>(pvt->_data))+offset;
+		int32_t		result;
+		do {
+			result=mincore(
+				reinterpret_cast<MINCORE_ADDRCAST>(ptr),
+				len,tmp);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result) {
 			delete[] tmp;
 			return false;
 		}
-	}
-	delete[] tmp;
-	return true;
+
+		// look through the array, if any of the
+		// pages aren't in memory, return false
+		for (int32_t i=0; i<tmplen; i++) {
+			if (tmp[i]) {
+				delete[] tmp;
+				return false;
+			}
+		}
+		delete[] tmp;
+		return true;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool memorymap::lockAll() {
 	#if defined(MCL_CURRENT) && defined(MCL_FUTURE)
-	return mLockAll(MCL_CURRENT|MCL_FUTURE);
+		return mLockAll(MCL_CURRENT|MCL_FUTURE);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool memorymap::lockAllCurrent() {
 	#if defined(MCL_CURRENT)
-	return mLockAll(MCL_CURRENT);
+		return mLockAll(MCL_CURRENT);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool memorymap::lockAllFuture() {
 	#if defined(MCL_FUTURE)
-	return mLockAll(MCL_FUTURE);
+		return mLockAll(MCL_FUTURE);
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool memorymap::unlockAll() {
 	#ifdef RUDIMENTS_HAVE_MUNLOCKALL
-	int32_t	result;
-	do {
-		result=munlockall();
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		int32_t	result;
+		do {
+			result=munlockall();
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
 bool memorymap::mAdvise(unsigned char *start, size_t length, int32_t advice) {
 	#if defined(RUDIMENTS_HAVE_MADVISE)
-	int32_t	result;
-	do {
-		result=madvise(reinterpret_cast<MADVISE_ADDRCAST>(start),
-								length,advice);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		int32_t	result;
+		do {
+			result=madvise(
+				reinterpret_cast<MADVISE_ADDRCAST>(start),
+				length,advice);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return true;
+		error::setErrorNumber(ENOSYS);
+		return true;
 	#endif
 }
 
 bool memorymap::mLockAll(int32_t flags) {
 	#ifdef RUDIMENTS_HAVE_MLOCKALL
-	int32_t	result;
-	do {
-		result=mlockall(flags);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		int32_t	result;
+		do {
+			result=mlockall(flags);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	error::setErrorNumber(ENOSYS);
-	return false;
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }

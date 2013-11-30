@@ -1739,7 +1739,7 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, va_list *argp) {
 
-	// vnsprintf should write whatever will fit into "buffer" and
+	// vsnprintf should write whatever will fit into "buffer" and
 	// either return the number of bytes that were written or the
 	// number of bytes that would have been written if truncation
 	// hadn't occurred.
@@ -1762,9 +1762,10 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	// -1 if truncation occurred though and don't write anything to
 	// "buffer".
 	//
-	// For systems like those, we'll simultate the expected behavior...
+	// For systems like those, we'll simulate the expected behavior...
 	buflen=length;
 	while (size==-1) {
+		// FIXME: for large strings this can be incredibly slow
 		buflen=buflen+16;
 		buf=new char[buflen];
 		size=vsnprintf(buf,buflen,format,*argp);

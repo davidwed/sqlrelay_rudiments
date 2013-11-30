@@ -4,7 +4,6 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <rudiments/charstring.h>
 #endif
@@ -64,20 +63,18 @@ class filesystemprivate {
 		#else
 			#error no statvfs, statfs or anything like it
 		#endif
-		#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-			int32_t		_fd;
-			bool		_closeflag;
-		#else
+		int32_t		_fd;
+		bool		_closeflag;
+		#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 			char		*_volume;
 		#endif
 };
 
 filesystem::filesystem() {
 	pvt=new filesystemprivate;
-	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		pvt->_fd=-1;
-		pvt->_closeflag=false;
-	#else
+	pvt->_fd=-1;
+	pvt->_closeflag=false;
+	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		pvt->_volume=NULL;
 	#endif
 	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
@@ -96,10 +93,9 @@ filesystem &filesystem::operator=(const filesystem &f) {
 }
 
 void filesystem::filesystemClone(const filesystem &f) {
-	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		pvt->_fd=f.pvt->_fd;
-		pvt->_closeflag=f.pvt->_closeflag;
-	#else
+	pvt->_fd=f.pvt->_fd;
+	pvt->_closeflag=f.pvt->_closeflag;
+	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		delete[] pvt->_volume;
 		pvt->_volume=charstring::duplicate(f.pvt->_volume);
 	#endif
@@ -108,15 +104,12 @@ void filesystem::filesystemClone(const filesystem &f) {
 
 filesystem::~filesystem() {
 	close();
-	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		delete[] pvt->_volume;
-	#endif
 	delete pvt;
 }
 
 bool filesystem::initialize(const char *path) {
+	close();
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		close();
 		pvt->_closeflag=true;
 		do {
 			#if defined(RUDIMENTS_HAVE__OPEN)
@@ -129,20 +122,21 @@ bool filesystem::initialize(const char *path) {
 		} while (pvt->_fd==-1 && error::getErrorNumber()==EINTR);
 		return (pvt->_fd!=-1 && getCurrentProperties());
 	#else 
+		// extract the volume name from the path
 		delete[] pvt->_volume;
-		pvt->_volume=charstring::duplicate(path);
-		// FIXME: extract the volume name from the path and
-		// use it rather than the path that was passed in
+		pvt->_volume=new CHAR[MAX_PATH];
+		CHAR	*ptr;
+		DWORD	len=GetFullPathName(path,MAX_PATH,pvt->_volume,&ptr);
+		if (len>=3 && pvt->_volume[1]==':' && pvt->_volume[2]=='\\') {
+			pvt->_volume[3]='\0';
+		}
 		return getCurrentProperties();
 	#endif
 }
 
 bool filesystem::initialize(int32_t fd) {
 	close();
-	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
-		pvt->_closeflag=false;
-		pvt->_fd=fd;
-	#endif
+	pvt->_fd=fd;
 	return getCurrentProperties();
 }
 
@@ -162,7 +156,12 @@ bool filesystem::close() {
 			pvt->_fd=-1;
 			return !result;
 		}
+	#else
+		delete[] pvt->_volume;
+		pvt->_volume=NULL;
 	#endif
+	pvt->_fd=-1;
+	pvt->_closeflag=false;
 	return true;
 }
 
@@ -184,6 +183,11 @@ bool filesystem::getCurrentProperties() {
 
 		// clear the statfs buffer
 		rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
+
+		// bail if no volume was specified
+		if (!pvt->_volume) {
+			return false;
+		}
 
 		// Get free space the old-school and well-supported way, by
 		// sectors and clusters.  If it fails, fall back to some safe

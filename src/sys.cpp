@@ -527,9 +527,15 @@ int32_t sys::getPageSize() {
 	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGE_SIZE)
 		return sysConf(_SC_PAGE_SIZE);
 	#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+		// FIXME:
+		// Technically dwPageSize is the page size, but when calling
+		// this method, allocation granularity is most likely what
+		// people want.  Ideally there should be two methods and
+		// getAllocationGranularity should return getPageSize for
+		// non-Windows platforms.
 		SYSTEM_INFO	systeminfo;
 		GetSystemInfo(&systeminfo);
-		return systeminfo.dwPageSize;
+		return systeminfo.dwAllocationGranularity;
 	#else
 		#error no getpagesize or anything like it
 	#endif

@@ -6,14 +6,6 @@
 
 #include <rudiments/private/filesystemincludes.h>
 
-// TODO: 
-// NetBSD: u_short f_oflags - deprecated copy of mount flags
-// NetBSD: u_short f_flags - mount flags
-// OpenBSD: union mount_info mount_info - per fs mount options
-// FreeBSD: int32_t f_flags - mount flags
-// SCO OSR5: unsigned long f_flag - mount flags
-// solaris: u_long f_flag - mount flags
-
 class filesystemprivate;
 
 /** The filesystem class provides methods for discovering the properties
@@ -22,7 +14,6 @@ class filesystemprivate;
  *
  *  The native methods for accessing filesystem data vary greatly between
  *  platforms and many of these methods only work at all on certain platforms.
- *  For those methods, the platforms that they are known to work on are listed.
  *  */
 class RUDIMENTS_DLLSPEC filesystem {
 	public:
@@ -52,91 +43,72 @@ class RUDIMENTS_DLLSPEC filesystem {
 		 *  Returns true on success and false on failure. */
 		bool	initialize(int32_t fd);
 
-		/** Returns a number representing the filesystem type.
-		 *  (works on Linux and  Net/Open/FreeBSD). */
+		/** Returns a number representing the filesystem type. */
 		int64_t		getType() const;
 
-		/** Returns the fundamental block size of the filesystem.
-		 *  (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		/** Returns the fundamental block size of the filesystem. */
 		int64_t		getBlockSize() const;
 
-		/** Returns the optimum transfer block size.
-		 *  (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		/** Returns the optimum transfer block size. */
 		int64_t		getOptimumTransferBlockSize() const;
 
 		/** Returns the total number of blocks allocated for the
-		 *  filesystem.
-		 *  (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		 *  filesystem. */
 		int64_t		getTotalBlocks() const;
 
-		/** Returns the number of free blocks in the filesystem.
-		 *  (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		/** Returns the number of free blocks in the filesystem. */
 		int64_t		getFreeBlocks() const;
 
 		/** Returns the number of blocks available to non-superuser
-		 *  accounts on the filesystem.
-		 * (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		 *  accounts on the filesystem. */
 		int64_t		getAvailableBlocks() const;
 
-		/** Returns the number of file nodes on the filesystem.
-		 *  (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		/** Returns the number of file nodes on the filesystem. */
 		int64_t		getTotalFileNodes() const;
 
-		/** Returns the number of free file nodes.
-		 *  (works on Linux, Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		/** Returns the number of free file nodes. */
 		int64_t		getFreeFileNodes() const;
 
 		/** Returns the number of file nodes available to 
-		 *  non-superuser accounts.
-		 *  (works on SCO OSR5, Solaris) */
+		 *  non-superuser accounts. */
 		int64_t		getAvailableFileNodes() const;
 
-		/** Returns the file system id.
-		 *  (works on SCO OSR5, Solaris) */
+		/** Returns the file system id. */
 		int64_t		getFileSystemId() const;
 
-		/** Returns the maximum length of filenames on the filesystem.
-		 *  (works on Linux, SCO OSR5, Solaris) */
+		/** Returns the maximum length of filenames on the
+		 *  filesystem. */
 		int64_t		getMaximumFileNameLength() const;
 
-		/** Returns the id of the user that mounted the filesystem.
-		 *  (works on Net/Open/FreeBSD) */
+		/** Returns the id of the user that mounted the filesystem. */
 		uid_t		getOwner() const;
 
 		/** Returns the number of synchronous writes that
-		 *  have occurred since the filesytem was mounted.
-		 *  (works on Net/Open/FreeBSD) */
-		int64_t		getSyncWrites() const;
+		 *  have occurred since the filesytem was mounted. */
+		int64_t		getSyncWrites() const; 
 
 		/** Returns the number of asynchronous writes that
-		 *  have occurred since the filesytem was mounted.
-		 *  (works on Net/Open/FreeBSD) */
+		 *  have occurred since the filesytem was mounted. */
 		int64_t		getAsyncWrites() const;
 
-		/** Returns the name of the filesystem type.
-		 *  (works on Net/Open/FreeBSD, SCO OSR5, Solaris) */
+		/** Returns the name of the filesystem type. */
 		const char	*getTypeName() const;
 
-		/** Returns the mount point of the filesystem.
-		 *  (works on Net/Open/FreeBSD) */
+		/** Returns the mount point of the filesystem. */
 		const char	*getMountPoint() const;
 
 		/** Returns the number of synchronous reads that
-		 *  have occurred since the filesytem was mounted.
-		 *  (works on FreeBSD) */
+		 *  have occurred since the filesytem was mounted. */
 		int64_t		getSyncReads() const;
 
 		/** Returns the number of asynchronous reads that
-		 *  have occurred since the filesytem was mounted.
-		 *  (works on FreeBSD) */
+		 *  have occurred since the filesytem was mounted. */
 		int64_t		getAsyncReads() const;
 
-		/** Returns the name of the device file for the filesystem.
-		 *  (works on Net/OpenBSD) */
+		/** Returns the name of the device file for the filesystem. */
 		const char	*getDeviceName() const;
 
-		/** Returns the filesystem-specific string.
-		 *  (works on SCO OSR5, Solaris) */
+		/** Returns the filesystem-specific string. */
 		const char	*getFilesystemSpecificString() const;
 
 		/** Refreshes the current filesystem properties as returned

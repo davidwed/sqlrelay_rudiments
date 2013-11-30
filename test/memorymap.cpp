@@ -2,15 +2,11 @@
 // See the file COPYING for more information
 
 #include <rudiments/file.h>
-#include <rudiments/filesystem.h>
+#include <rudiments/sys.h>
 #include <rudiments/memorymap.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
-
-#ifndef MAP_PRIVATE
-	#define MAP_PRIVATE 0
-#endif
 
 int main(int argc, const char **argv) {
 
@@ -21,17 +17,10 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	// open the filesystem to get the optimimum transfer block size
-	filesystem	fs;
-	if (!fs.initialize("xmls.xml")) {
-		stdoutput.printf("failed to open filesystem\n");
-		process::exit(1);
-	}
-
 	// loop, mapping and printing blocks of the file
 	memorymap	mm;
 	off64_t		offset=0;
-	size_t		len=fs.getOptimumTransferBlockSize();
+	size_t		len=sys::getPageSize();
 	const char	*ptr=NULL;
 	bool		done=false;
 	do {
@@ -43,11 +32,10 @@ int main(int argc, const char **argv) {
 			done=true;
 		}
 		if (!mm.attach(f.getFileDescriptor(),offset,len,
-						PROT_READ,MAP_PRIVATE)) {
+						PROT_READ,MAP_SHARED)) {
 			break;
 		}
-		ptr=(const char *)mm.getData();
-		stdoutput.printf("%s",ptr);
+		stdoutput.printf("%.*s",len,(const char *)mm.getData());
 		offset=offset+len;
 	} while (!done);
 }
