@@ -122,6 +122,7 @@ const char *environment::getValue(const char *variable) {
 			// usage certainly isn't.  This just emulates the
 			// behavior of getenv and suppresses compiler warnings.
 			free((void *)envval);
+			envval=NULL;
 			size_t	len;
 			if (!_dupenv_s(&envval,&len,variable)) {
 				retval=envval;

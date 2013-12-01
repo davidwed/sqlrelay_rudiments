@@ -271,10 +271,6 @@ class RUDIMENTS_DLLSPEC datetime {
 		/** Returns the number of seconds since 1970 (the epoch). */
 		time_t		getEpoch() const;
 
-		/** Returns a pointer to the platform-specific time structure
-		 *  used by the class internally (struct tm * on unix). */
-		const void	*getInternalTimeStructure();
-
 
 		/** Returns a NULL terminated array of timezone
 		 *  abbreviations. */

@@ -37,16 +37,11 @@ int main(int argc, const char **argv) {
 	// use static methods to translate between formats
 	char	*string=datetime::getString(dt.getEpoch());
 	stdoutput.printf("String from Epoch     : %s\n",string);
-	delete[] string;
-	string=datetime::getString(dt.getInternalTimeStructure());
-	stdoutput.printf("String from tm        : %s\n",string);
 
 	// use static methods to translate between formats
 	time_t	epoch=datetime::getEpoch(string);
 	stdoutput.printf("Epoch from String     : %ld\n",epoch);
 	delete[] string;
-	epoch=datetime::getEpoch(dt.getInternalTimeStructure());
-	stdoutput.printf("Epoch from tm         : %ld\n",epoch);
 
 	// get time from hardware clock
 	stdoutput.printf("Hardware Clock (assuming GMT): %s\n",

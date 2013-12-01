@@ -2,21 +2,22 @@
 // See the COPYING file for more information.
 
 	private:
-		bool	getBrokenDownTimeFromEpoch(bool needmutex);
-		bool	normalizeBrokenDownTime(bool needmutex);
+		void	init();
+		void	clear();
+
+		bool	getBrokenDownTimeFromEpoch();
+		bool	normalize();
 		void	processTZ(void *tms);
 
-		bool	setTimeZoneEnvVar(const char *zone,
-						char **oldzone,
-						bool ignoredst);
-		bool	restoreTimeZoneEnvVar(char *oldzone);
+		bool	setTZ(const char *zone, char **oldzone, bool ignoredst);
+		bool	restoreTZ(char *oldzone);
 
 		const char	*lookupCombinedTimeZone(const char *zone) const;
 		bool		daylightZone(const char *zone) const;
 
 		const char	*getTzName(uint8_t index);
 
-		bool	acquireLock();
-		bool	releaseLock();
+		static bool	acquireLock();
+		static bool	releaseLock();
 
 		datetimeprivate	*pvt;
