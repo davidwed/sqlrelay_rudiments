@@ -37,8 +37,9 @@ class RUDIMENTS_DLLSPEC sharedmemory {
 		 * 	for the segment. */
 		bool	create(key_t key, size_t size, mode_t permissions);
 
-		/*8 Attaches to a shared memory identified by "key". */
-		bool	attach(key_t key);
+		/** Attaches to a shared memory segment of "size" bytes,
+		 *  identified by "key". */
+		bool	attach(key_t key, size_t size);
 
 		/** Attempts to create the shared memory segment 
 		 *  identified by "key".  If this fails, it attempts

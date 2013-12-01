@@ -6,14 +6,15 @@
 	configure script tweaks for OSR500
 	extern "C" wrapper around sys/times.h for OSR500
 	added xmldomnode::append/insertTag methods
-	implemented directory class for windows
-	got semaphoreset working on windows
+	got the directory class working on windows
+	got the semaphoreset class working on windows
 	implemented passwd/groupentry::getSid and an internal id-name-sid map
 		for windows
 	removed meaningless groupentry::getPassword
 	improved filesystem class implementation for Windows significantly
 	added a test for the memorymap class
-	got memorymap class implementation working on Windows
+	got the memorymap class implementation working on Windows
+	got the sharedmemory class working on windows
 
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux

@@ -6,10 +6,61 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+	#include <rudiments/charstring.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_SHMGET
+	#include <sys/ipc.h>
+	#include <sys/shm.h>
+#endif
 
 #include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+
+#ifndef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+
+static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
+	int32_t	result;
+	do {
+		result=shmget(key,size,shmflag);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
+}
+
+static void *shmAttach() {
+	void	*result;
+	do {
+		result=shmat(pvt->_shmid,0,0);
+	} while (reinterpret_cast<int64_t>(result)==-1 &&
+				error::getErrorNumber()==EINTR);
+	return result;
+}
+
+static bool shmControl(int32_t cmd, shmid_ds *buf) {
+	int32_t	result;
+	do {
+		result=shmctl(pvt->_shmid,cmd,buf);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
+}
+
+#else
+
+static char	*shmName(key_t key) {
+	uint32_t	shmnamelen=11+charstring::integerLength(key)+1;
+	char		*shmname=new char[shmnamelen];
+	charstring::copy(shmname,"rudiments::");
+	charstring::append(shmname,(int64_t)key);
+	return shmname;
+}
+
 #endif
 
 class sharedmemoryprivate {
@@ -18,6 +69,11 @@ class sharedmemoryprivate {
 		int32_t	_shmid;
 		bool	_created;
 		void	*_shmptr;
+		char	*_username;
+		char	*_groupname;
+		#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+			HANDLE	_map;
+		#endif
 };
 
 sharedmemory::sharedmemory() {
@@ -25,18 +81,28 @@ sharedmemory::sharedmemory() {
 	pvt->_shmid=-1;
 	pvt->_created=false;
 	pvt->_shmptr=NULL;
+	pvt->_username=NULL;
+	pvt->_groupname=NULL;
+	#ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+		pvt->_map=NULL;
+	#endif
 }
 
 sharedmemory::~sharedmemory() {
 	if (pvt->_created) {
 		forceRemove();
 	}
+	delete[] pvt->_username;
+	delete[] pvt->_groupname;
 	delete pvt;
 }
 
 bool sharedmemory::forceRemove() {
-	#ifdef RUDIMENTS_HAVE_SHMGET
+	#if defined(RUDIMENTS_HAVE_SHMGET)
 		return shmControl(IPC_RMID,NULL);
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+		return (UnmapViewOfFile(pvt->_shmptr)==TRUE &&
+					CloseHandle(pvt->_map)==TRUE);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -126,35 +192,71 @@ mode_t sharedmemory::getPermissions() {
 
 bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 
-	#ifdef RUDIMENTS_HAVE_SHMGET
+	#if defined(RUDIMENTS_HAVE_SHMGET)
+
 		// create the shared memory segment
-		if ((pvt->_shmid=shmget(key,size,
-				IPC_CREAT|IPC_EXCL|permissions))!=-1) {
+		pvt->_shmid=shmget(key,size,IPC_CREAT|IPC_EXCL|permissions);
+		if (pvt->_shmid==-1) {
+			return false;
+		}
 
-			// mark for removal
-			pvt->_created=true;
+		// mark for removal
+		pvt->_created=true;
 
-			// attach to the segment, remove the
-			// segment and return 0 on failure
-			pvt->_shmptr=shmAttach();
-			if (reinterpret_cast<int64_t>(pvt->_shmptr)==-1) {
-				forceRemove();
-				return false;
-			}
+		// attach to the segment
+		pvt->_shmptr=shmAttach();
+		if (reinterpret_cast<int64_t>(pvt->_shmptr)==-1) {
+			forceRemove();
+			return false;
+		}
 
-			// init the segment to zero's
-			rawbuffer::zero(pvt->_shmptr,size);
-			return true;
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+
+		// On Windows, a shared memory segment is created by
+		// memory-mapping the page file and naming the mapping.
+
+		// get the map name
+		char	*shmname=shmName(key);
+
+		// calculate max mapping size
+		DWORD	maxsizehigh=(((uint64_t)size)>>32);
+		DWORD	maxsizelow=(((uint64_t)size)&0x0000FFFF);
+
+		// create a named file mapping
+		// (INVALID_HANDLE_VALUE means to map the page file)
+		pvt->_map=CreateFileMapping(INVALID_HANDLE_VALUE,
+						NULL,PAGE_READWRITE,
+						maxsizehigh,maxsizelow,
+						shmname);
+		delete[] shmname;
+		if (!pvt->_map) {
+			return false;
+		}
+
+		// mark for removal
+		pvt->_created=true;
+
+		// create a view of the file mapping
+		pvt->_shmptr=MapViewOfFile(pvt->_map,
+						FILE_MAP_ALL_ACCESS,
+						0,0,size);
+		if (!pvt->_shmptr) {
+			CloseHandle(pvt->_map);
+			return false;
 		}
 	#else
 		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
-	return false;
+
+	// init the segment to zero's
+	rawbuffer::zero(pvt->_shmptr,size);
+	return true;
 }
 
-bool sharedmemory::attach(key_t key) {
+bool sharedmemory::attach(key_t key, size_t size) {
 
-	#ifdef RUDIMENTS_HAVE_SHMGET
+	#if defined(RUDIMENTS_HAVE_SHMGET)
 		// shmat's documentation says something like...
 		// RETURN VALUE
 		//	On failure shmat returns -1 with errno
@@ -176,6 +278,28 @@ bool sharedmemory::attach(key_t key) {
 		return ((pvt->_shmid=shmGet(key,0,0))!=-1 &&
 				reinterpret_cast<int64_t>(
 					pvt->_shmptr=shmAttach())!=-1);
+
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+
+		// get the map name
+		char	*shmname=shmName(key);
+
+		// attach to the named file mapping
+		pvt->_map=OpenFileMapping(FILE_MAP_ALL_ACCESS,FALSE,shmname);
+		delete[] shmname;
+		if (!pvt->_map) {
+			return false;
+		}
+
+		// create a view of the file mapping
+		pvt->_shmptr=MapViewOfFile(pvt->_map,
+						FILE_MAP_ALL_ACCESS,
+						0,0,size);
+		if (!pvt->_shmptr) {
+			CloseHandle(pvt->_map);
+			return false;
+		}
+		return true;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -184,7 +308,7 @@ bool sharedmemory::attach(key_t key) {
 
 bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
-	#ifdef RUDIMENTS_HAVE_SHMGET
+	#if defined(RUDIMENTS_HAVE_SHMGET)
 		// create the shared memory segment
 		if ((pvt->_shmid=shmGet(key,size,
 				IPC_CREAT|IPC_EXCL|permissions))!=-1) {
@@ -211,7 +335,53 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 			// return 1 on success and 0 on failure
 			pvt->_shmptr=shmAttach();
 			return (reinterpret_cast<int64_t>(pvt->_shmptr)!=-1);
+		}
 
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+
+		// get the map name
+		char	*shmname=shmName(key);
+
+		// calculate max mapping size
+		DWORD	maxsizehigh=(((uint64_t)size)>>32);
+		DWORD	maxsizelow=(((uint64_t)size)&0x0000FFFF);
+
+		// attempt to create a named file mapping
+		// (INVALID_HANDLE_VALUE means to map the page file)
+		pvt->_map=CreateFileMapping(INVALID_HANDLE_VALUE,
+						NULL,PAGE_READWRITE,
+						maxsizehigh,maxsizelow,
+						shmname);
+		delete[] shmname;
+		if (pvt->_map) {
+
+			// mark for removal
+			pvt->_created=true;
+
+		} else {
+
+			// if that failed, then attempt to
+			// attach to the named file mapping
+			pvt->_map=OpenFileMapping(FILE_MAP_ALL_ACCESS,
+								FALSE,NULL);
+			if (!pvt->_map) {
+				return false;
+			}
+		}
+
+		// create a view of the file mapping
+		pvt->_shmptr=MapViewOfFile(pvt->_map,
+						FILE_MAP_ALL_ACCESS,
+						0,0,size);
+		if (!pvt->_shmptr) {
+			CloseHandle(pvt->_map);
+			return false;
+		}
+
+		if (pvt->_created) {
+			// init the segment to zero's
+			rawbuffer::zero(pvt->_shmptr,size);
+			return true;
 		}
 	#else
 		error::setErrorNumber(ENOSYS);
@@ -220,13 +390,15 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 }
 
 const char *sharedmemory::getUserName() {
-	// FIXME: memory leak
-	return passwdentry::getName(getUserId());
+	delete[] pvt->_username;
+	pvt->_username=passwdentry::getName(getUserId());
+	return pvt->_username;
 }
 
 const char *sharedmemory::getGroupName() {
-	// FIXME: memory leak
-	return groupentry::getName(getGroupId());
+	delete[] pvt->_groupname;
+	pvt->_groupname=groupentry::getName(getGroupId());
+	return pvt->_groupname;
 }
 
 bool sharedmemory::setUserName(const char *username) {
@@ -237,44 +409,4 @@ bool sharedmemory::setUserName(const char *username) {
 bool sharedmemory::setGroupName(const char *groupname) {
 	gid_t	groupid=groupentry::getGroupId(groupname);
 	return (groupid!=(gid_t)-1 && setGroupId(groupid));
-}
-
-int32_t sharedmemory::shmGet(key_t key, size_t size, int32_t shmflag) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		int32_t	result;
-		do {
-			result=shmget(key,size,shmflag);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return result;
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
-}
-
-void *sharedmemory::shmAttach() {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		void	*result;
-		do {
-			result=shmat(pvt->_shmid,0,0);
-		} while (reinterpret_cast<int64_t>(result)==-1 &&
-				error::getErrorNumber()==EINTR);
-		return result;
-	#else
-		error::setErrorNumber(ENOSYS);
-		return NULL;
-	#endif
-}
-
-bool sharedmemory::shmControl(int32_t cmd, shmid_ds *buf) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		int32_t	result;
-		do {
-			result=shmctl(pvt->_shmid,cmd,buf);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return !result;
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
 }

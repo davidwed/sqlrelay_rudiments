@@ -47,6 +47,8 @@ class semaphoresetprivate {
 		bool	_created;
 		int32_t	_semcount;
 		bool	_retryinterruptedoperations;
+		char	*_username;
+		char	*_groupname;
 		#if defined(RUDIMENTS_HAVE_SEMGET)
 			struct	sembuf	**_waitop;
 			struct	sembuf	**_waitwithundoop;
@@ -64,6 +66,8 @@ semaphoreset::semaphoreset() {
 	pvt->_created=false;
 	pvt->_semcount=0;
 	pvt->_retryinterruptedoperations=true;
+	pvt->_username=NULL;
+	pvt->_groupname=NULL;
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		pvt->_waitop=NULL;
 		pvt->_waitwithundoop=NULL;
@@ -105,6 +109,8 @@ semaphoreset::~semaphoreset() {
 		forceRemove();
 	}
 
+	delete[] pvt->_username;
+	delete[] pvt->_groupname;
 	delete pvt;
 }
 
@@ -405,8 +411,9 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 }
 
 const char *semaphoreset::getUserName() {
-	// FIXME: memory leak here
-	return passwdentry::getName(getUserId());
+	delete[] pvt->_username;
+	pvt->_username=passwdentry::getName(getUserId());
+	return pvt->_username;
 }
 
 uid_t semaphoreset::getUserId() {
@@ -429,8 +436,9 @@ uid_t semaphoreset::getUserId() {
 }
 
 const char *semaphoreset::getGroupName() {
-	// FIXME: memory leak here
-	return groupentry::getName(getGroupId());
+	delete[] pvt->_groupname;
+	pvt->_groupname=groupentry::getName(getGroupId());
+	return pvt->_groupname;
 }
 
 gid_t semaphoreset::getGroupId() {
