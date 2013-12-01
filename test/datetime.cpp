@@ -52,7 +52,7 @@ int main(int argc, const char **argv) {
 	// use static methods to translate between formats
 	datetime	dt1;
 	dt1.initialize(string);
-	stdoutput.printf("Epoch_uSec from String: %ld.%ld\n",
+	stdoutput.printf("Epoch+uSec from String: %ld.%ld\n",
 					dt1.getEpoch(),dt1.getMicroseconds());
 	delete[] string;
 
