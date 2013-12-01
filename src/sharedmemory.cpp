@@ -49,7 +49,7 @@ static void *shmAttach(int32_t id) {
 		return result;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return reinterpret_cast<void *>(-1);
 	#endif
 }
 
@@ -62,7 +62,7 @@ static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
 		return !result;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1;
+		return false;
 	#endif
 }
 
