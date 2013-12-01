@@ -4,12 +4,15 @@
 #include <rudiments/datetime.h>
 #include <stdio.h>
 
+const char	*tz="EST5EDT";
+const char	*switchtz="PST8PDT";
+
 int main(int argc, const char **argv) {
 
-	// set current time zone to America/New_York
-	stdoutput.printf("setting TZ=America/New_York...\n");
+	// set current time zone
+	stdoutput.printf("setting TZ=%s...\n",tz);
 	environment	env;
-	env.setValue("TZ","America/New_York");
+	env.setValue("TZ",tz);
 
 	// get the current date
 	datetime	dt;
@@ -56,9 +59,9 @@ int main(int argc, const char **argv) {
 					dt.getString():"failed");
 
 	// switch time zones
-	dt.adjustTimeZone("MST");
-	stdoutput.printf("Adjusting time zone to Mountain time: %s\n",
-							dt.getString());
+	dt.adjustTimeZone(switchtz);
+	stdoutput.printf("Adjusting time zone to %s: %s\n",
+					switchtz,dt.getString());
 
 	// valid date
 	const char	*str="02/20/1974 12:00:00";

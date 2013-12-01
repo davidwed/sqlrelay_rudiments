@@ -4,6 +4,7 @@
 	private:
 		bool	getBrokenDownTimeFromEpoch(bool needmutex);
 		bool	normalizeBrokenDownTime(bool needmutex);
+		void	processTZ();
 
 		bool	setTimeZoneEnvVar(const char *zone,
 						char **oldzone,
