@@ -35,6 +35,8 @@
 class datetimeprivate {
 	friend class datetime;
 	private:
+		int32_t	_usec;
+
 		int32_t	_sec;
 		int32_t	_min;
 		int32_t	_hour;
@@ -83,6 +85,7 @@ datetime::~datetime() {
 }
 
 void datetime::init() {
+	pvt->_usec=0;
 	pvt->_sec=0;
 	pvt->_min=0;
 	pvt->_hour=0;
@@ -144,6 +147,13 @@ bool datetime::initialize(const char *tmstring) {
 	ptr=ptr+sizeof(char);
 	pvt->_sec=charstring::toInteger(ptr);
 
+	// parse out microseconds, if provided
+	pvt->_usec=0;
+	const char *usecptr=charstring::findFirst(ptr,':');
+	if (usecptr) {
+		pvt->_usec=charstring::toInteger(usecptr+1);
+	}
+
 	// initialize the daylight savings time flag
 	pvt->_isdst=-1;
 
@@ -160,11 +170,16 @@ bool datetime::initialize(const char *tmstring) {
 }
 
 bool datetime::initialize(time_t seconds) {
+	return initialize(seconds,0);
+}
+
+bool datetime::initialize(time_t seconds, time_t microseconds) {
 
 	clear();
 	init();
 
 	pvt->_epoch=seconds;
+	pvt->_usec=microseconds;
 	if (!acquireLock()) {
 		return false;
 	}
@@ -179,6 +194,8 @@ bool datetime::initialize(const void *tmstruct) {
 	init();
 
 	const struct tm	*tms=(const struct tm *)tmstruct;
+
+	pvt->_usec=0;
 
 	pvt->_sec=tms->tm_sec;
 	pvt->_min=tms->tm_min;
@@ -246,6 +263,10 @@ int32_t datetime::getSeconds() const {
 	return pvt->_sec;
 }
 
+int32_t datetime::getMicroseconds() const {
+	return pvt->_usec;
+}
+
 int32_t datetime::getMonth() const {
 	return pvt->_mon+1;
 }
@@ -290,6 +311,11 @@ time_t datetime::getEpoch() const {
 	return pvt->_epoch;
 }
 
+bool datetime::setMicroseconds(int32_t microseconds) {
+	pvt->_usec=microseconds;
+	return normalize();
+}
+
 bool datetime::setSeconds(int32_t seconds) {
 	pvt->_sec=seconds;
 	return normalize();
@@ -317,6 +343,11 @@ bool datetime::setMonths(int32_t months) {
 
 bool datetime::setYears(int32_t years) {
 	pvt->_year=years;
+	return normalize();
+}
+
+bool datetime::addMicroseconds(int32_t microseconds) {
+	pvt->_usec=pvt->_usec+microseconds;
 	return normalize();
 }
 
@@ -355,6 +386,10 @@ void datetime::setTimeMutex(threadmutex *mtx) {
 }
 
 const char *datetime::getString() {
+	return getString(false);
+}
+
+const char *datetime::getString(bool microseconds) {
 	delete[] pvt->_timestring;
 	stringbuffer	timestr;
 	timestr.append(getMonth(),2)->append('/');
@@ -362,14 +397,22 @@ const char *datetime::getString() {
 	timestr.append(getYear())->append(' ');
 	timestr.append(getHour(),2)->append(':');
 	timestr.append(getMinutes(),2)->append(':');
-	timestr.append(getSeconds(),2)->append(' ');
+	timestr.append(getSeconds(),2);
+	if (microseconds) {
+		timestr.append(':')->append(getMicroseconds(),3);
+	}
+	timestr.append(' ');
 	timestr.append(getTimeZoneString());
 	pvt->_timestring=timestr.detachString();
 	return pvt->_timestring;
 }
 
 bool datetime::getSystemDateAndTime() {
-	return initialize(time(NULL));
+	struct timeval	tv;
+	if (gettimeofday(&tv,NULL)) {
+		return false;
+	}
+	return initialize(tv.tv_sec,tv.tv_usec);
 }
 
 bool datetime::setSystemDateAndTime() {
@@ -377,7 +420,7 @@ bool datetime::setSystemDateAndTime() {
 	#if defined(RUDIMENTS_HAVE_SETTIMEOFDAY)
 		timeval	tv;
 		tv.tv_sec=pvt->_epoch;
-		tv.tv_usec=0;
+		tv.tv_usec=pvt->_usec;
 		return !settimeofday(&tv,NULL);
 	#elif defined(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK)
 		set_real_time_clock(pvt->_epoch);
@@ -391,7 +434,7 @@ bool datetime::setSystemDateAndTime() {
 		st.wHour=pvt->_hour;
 		st.wMinute=pvt->_min;
 		st.wSecond=pvt->_sec;
-		st.wMilliseconds=0;
+		st.wMilliseconds=pvt->_usec/1000;
 		return SetSystemTime(&st)!=0;
 	#else
 		#error no settimeofday or anything like it
@@ -422,6 +465,7 @@ bool datetime::getHardwareDateAndTime(const char *hwtz) {
 		pvt->_hour=rt.tm_hour;
 		pvt->_min=rt.tm_min;
 		pvt->_sec=rt.tm_sec;
+		pvt->_usec=0;
 		pvt->_isdst=rt.tm_isdst;
 		pvt->_zone=charstring::duplicate(hwtz);
 
@@ -504,6 +548,12 @@ char *datetime::getString(time_t seconds) {
 	datetime	dt;
 	return ((dt.initialize(seconds))?
 		charstring::duplicate(dt.getString()):NULL);
+}
+
+char *datetime::getString(time_t seconds, time_t microseconds) {
+	datetime	dt;
+	return ((dt.initialize(seconds,microseconds))?
+		charstring::duplicate(dt.getString(true)):NULL);
 }
 
 char *datetime::getString(const void *tmstruct) {
@@ -600,6 +650,10 @@ bool datetime::normalize() {
 		releaseLock();
 		return false;
 	}
+
+	// normalize microseconds
+	pvt->_sec+=pvt->_usec/1000000;
+	pvt->_usec%=1000000;
 
 	// copy relevent values into a struct tm
 	struct tm	tms;

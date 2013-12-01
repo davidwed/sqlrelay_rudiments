@@ -22,6 +22,14 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  string in which must be deleted by the calling program. */
 		static char	*getString(time_t seconds);
 
+		/** Takes "seconds" since the epoch (the number of seconds
+		 *  since 1970) and "microseconds" and returns a string in
+		 *  "mm/dd/yyyy hh:mm:ss:uuu TZN" format.
+		 *	
+		 *  Note that this method allocates a buffer to return the
+		 *  string in which must be deleted by the calling program. */
+		static char	*getString(time_t seconds, time_t microseconds);
+
 		/** Takes "tmstruct", a pointer to a platform-specific time
 		 *  structure (struct tm * on unix) and returns a string in
 		 *  "mm/dd/yyyy hh:mm:ss TZN" format.
@@ -69,6 +77,13 @@ class RUDIMENTS_DLLSPEC datetime {
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	initialize(time_t seconds);
+
+		/** Processes "seconds" and "microseconds" and sets the date
+		 *  and time represented in the class to that time.
+		 *  "seconds" is the number of seconds since 1970 (the epoch).
+		 * 
+		 *  Returns true on success and false on failure. */
+		bool	initialize(time_t seconds, time_t microseconds);
 
 		/** Processes "tmstruct" and sets the date and time
 		 *  represented in the class to that time.
@@ -141,6 +156,10 @@ class RUDIMENTS_DLLSPEC datetime {
 		/** Returns the seconds component of the date/time currently
 		 *  represented in the instance of the class. */
 		int32_t	getSeconds() const;
+
+		/** Returns the microseconds component of the date/time
+		 *  currently represented in the instance of the class. */
+		int32_t	getMicroseconds() const;
 
 		/** Returns the month component (1-12) of the date/time
 		 *  currently represented in the instance of the class. */
@@ -215,6 +234,11 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  the instance of the class to "seconds". */
 		bool	setSeconds(int32_t seconds);
 
+		/** Sets the microseconds component of the date/time
+		 *  represented in the instance of the class to
+		 *  "microseconds". */
+		bool	setMicroseconds(int32_t microseconds);
+
 		/** Sets the minutes component of the date/time represented in
 		 *  the instance of the class to "minutes". */
 		bool	setMinutes(int32_t minutes);
@@ -238,6 +262,10 @@ class RUDIMENTS_DLLSPEC datetime {
 		/** Adds "seconds" to the date/time represented in the
 		 *  instance of the class. */
 		bool	addSeconds(int32_t seconds);
+
+		/** Adds "microseconds" to the date/time represented in the
+		 *  instance of the class. */
+		bool	addMicroseconds(int32_t microseconds);
 
 		/** Adds "minutes" to the date/time represented in the
 		 *  instance of the class. */
@@ -267,6 +295,20 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  string which will be deleted if the class instance is
 		 *  deleted.) */
 		const char	*getString();
+
+		/** Returns a string representing the date/time in the instance
+		 *  of the class.
+		 *
+		 *  If microseconds is false then the string is of the format:
+		 *  "mm/dd/yyyy hh:mm:ss TZN"
+		 *
+		 *  If microseconds is true then the string is of the format:
+		 *  "mm/dd/yyyy hh:mm:ss:uuu TZN"
+		 * 
+		 *  (Note that this method returns a pointer to an internal
+		 *  string which will be deleted if the class instance is
+		 *  deleted.) */
+		const char	*getString(bool microseconds);
 
 		/** Returns the number of seconds since 1970 (the epoch). */
 		time_t		getEpoch() const;

@@ -21,7 +21,8 @@ int main(int argc, const char **argv) {
 	// Write out the different parts of the date.
 	stdoutput.printf("Hour       : %d\n",dt.getHour());
 	stdoutput.printf("Minutes    : %d\n",dt.getMinutes());
-	stdoutput.printf("Seconds	   : %d\n",dt.getSeconds());
+	stdoutput.printf("Seconds    : %d\n",dt.getSeconds());
+	stdoutput.printf("uSeconds   : %d\n",dt.getMicroseconds());
 	stdoutput.printf("Month      : %d\n",dt.getMonth());
 	stdoutput.printf("DayOfMonth : %d\n",dt.getDayOfMonth());
 	stdoutput.printf("DayOfWeek  : %d\n",dt.getDayOfWeek());
@@ -29,10 +30,11 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Year       : %d\n",dt.getYear());
 	stdoutput.printf("Daylight Savings Time : %d\n",
 						dt.isDaylightSavingsTime());
-	stdoutput.printf("Time Zone	      : %s\n",dt.getTimeZoneString());
+	stdoutput.printf("Time Zone             : %s\n",dt.getTimeZoneString());
 	stdoutput.printf("Offset from GMT       : %d\n",dt.getTimeZoneOffset());
 	stdoutput.printf("Seconds since 1970    : %ld\n",dt.getEpoch());
-	stdoutput.printf("Date String	      : %s\n",dt.getString());
+	stdoutput.printf("Date String           : %s\n",dt.getString());
+	stdoutput.printf("Date String (uSec)    : %s\n",dt.getString(true));
 
 	// use static methods to translate between formats
 	char	*string=datetime::getString(dt.getEpoch());
@@ -41,6 +43,17 @@ int main(int argc, const char **argv) {
 	// use static methods to translate between formats
 	time_t	epoch=datetime::getEpoch(string);
 	stdoutput.printf("Epoch from String     : %ld\n",epoch);
+	delete[] string;
+
+	// use static methods to translate between formats
+	string=datetime::getString(dt.getEpoch(),dt.getMicroseconds());
+	stdoutput.printf("String from Epoch+uSec: %s\n",string);
+
+	// use static methods to translate between formats
+	datetime	dt1;
+	dt1.initialize(string);
+	stdoutput.printf("Epoch_uSec from String: %ld.%ld\n",
+					dt1.getEpoch(),dt1.getMicroseconds());
 	delete[] string;
 
 	// get time from hardware clock
