@@ -448,6 +448,9 @@
 
 /* Some systems have GetSystemInfo */
 #define RUDIMENTS_HAVE_GETSYSTEMINFO 1
+
+/* Some systems have GetSystemTimeAsFileTime */
+#define RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME 1
  
 /* Some systems have gettimeofday */
 /* #undef RUDIMENTS_HAVE_GETTIMEOFDAY */

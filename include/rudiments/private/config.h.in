@@ -451,6 +451,9 @@
 /* Some systems have GetSystemInfo */
 #undef RUDIMENTS_HAVE_GETSYSTEMINFO
 
+/* Some systems have GetSystemTimeAsFileTime */
+#undef RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME
+
 /* Some systems have gettimeofday */
 #undef RUDIMENTS_HAVE_GETTIMEOFDAY
 
