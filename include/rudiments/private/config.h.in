@@ -451,6 +451,9 @@
 /* Some systems have GetSystemInfo */
 #undef RUDIMENTS_HAVE_GETSYSTEMINFO
 
+/* Some systems have gettimeofday */
+#undef RUDIMENTS_HAVE_GETTIMEOFDAY
+
 /* Some systems have getuid */
 #undef RUDIMENTS_HAVE_GETUID
 

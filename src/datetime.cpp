@@ -408,11 +408,15 @@ const char *datetime::getString(bool microseconds) {
 }
 
 bool datetime::getSystemDateAndTime() {
-	struct timeval	tv;
-	if (gettimeofday(&tv,NULL)) {
-		return false;
-	}
-	return initialize(tv.tv_sec,tv.tv_usec);
+	#ifdef RUDIMENTS_HAVE_GETTIMEOFDAY
+		struct timeval	tv;
+		if (gettimeofday(&tv,NULL)) {
+			return false;
+		}
+		return initialize(tv.tv_sec,tv.tv_usec);
+	#else
+		return initialize(time(NULL));
+	#endif
 }
 
 bool datetime::setSystemDateAndTime() {

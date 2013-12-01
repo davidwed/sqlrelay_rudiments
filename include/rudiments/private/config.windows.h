@@ -448,6 +448,9 @@
 
 /* Some systems have GetSystemInfo */
 #define RUDIMENTS_HAVE_GETSYSTEMINFO 1
+ 
+/* Some systems have gettimeofday */
+/* #undef RUDIMENTS_HAVE_GETTIMEOFDAY */
 
 /* Some systems have getuid */
 /* #undef RUDIMENTS_HAVE_GETUID */

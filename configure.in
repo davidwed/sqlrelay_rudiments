@@ -1083,6 +1083,15 @@ AC_TRY_COMPILE([#include <time.h>
 #endif],
 localtime_s(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_S,1,Some systems have localtime_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for gettimeofday)
+AC_TRY_LINK([extern "C" {
+	#include <sys/time.h>
+}
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+gettimeofday(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETTIMEOFDAY,1,Some systems have gettimeofday) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for settimeofday)
 AC_TRY_LINK([extern "C" {
 	#include <sys/time.h>
