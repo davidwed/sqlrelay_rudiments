@@ -34,19 +34,19 @@ static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
 	return result;
 }
 
-static void *shmAttach() {
+static void *shmAttach(int32_t id) {
 	void	*result;
 	do {
-		result=shmat(pvt->_shmid,0,0);
+		result=shmat(id,0,0);
 	} while (reinterpret_cast<int64_t>(result)==-1 &&
 				error::getErrorNumber()==EINTR);
 	return result;
 }
 
-static bool shmControl(int32_t cmd, shmid_ds *buf) {
+static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
 	int32_t	result;
 	do {
-		result=shmctl(pvt->_shmid,cmd,buf);
+		result=shmctl(id,cmd,buf);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
 }
@@ -99,7 +99,7 @@ sharedmemory::~sharedmemory() {
 
 bool sharedmemory::forceRemove() {
 	#if defined(RUDIMENTS_HAVE_SHMGET)
-		return shmControl(IPC_RMID,NULL);
+		return shmControl(pvt->_shmid,IPC_RMID,NULL);
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		return (UnmapViewOfFile(pvt->_shmptr)==TRUE &&
 					CloseHandle(pvt->_map)==TRUE);
@@ -125,7 +125,7 @@ bool sharedmemory::setUserId(uid_t uid) {
 	#ifdef RUDIMENTS_HAVE_SHMGET
 		shmid_ds	setds;
 		setds.shm_perm.uid=uid;
-		return shmControl(IPC_SET,&setds);
+		return shmControl(pvt->_shmid,IPC_SET,&setds);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -136,7 +136,7 @@ bool sharedmemory::setGroupId(gid_t gid) {
 	#ifdef RUDIMENTS_HAVE_SHMGET
 		shmid_ds	setds;
 		setds.shm_perm.gid=gid;
-		return shmControl(IPC_SET,&setds);
+		return shmControl(pvt->_shmid,IPC_SET,&setds);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -147,7 +147,7 @@ bool sharedmemory::setPermissions(mode_t permissions) {
 	#ifdef RUDIMENTS_HAVE_SHMGET
 		shmid_ds	setds;
 		setds.shm_perm.mode=permissions;
-		return shmControl(IPC_SET,&setds);
+		return shmControl(pvt->_shmid,IPC_SET,&setds);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -157,7 +157,7 @@ bool sharedmemory::setPermissions(mode_t permissions) {
 uid_t sharedmemory::getUserId() {
 	#ifdef RUDIMENTS_HAVE_SHMGET
 		shmid_ds	getds;
-		if (shmControl(IPC_STAT,&getds)) {
+		if (shmControl(pvt->_shmid,IPC_STAT,&getds)) {
 			return getds.shm_perm.uid;
 		}
 	#else
@@ -169,7 +169,7 @@ uid_t sharedmemory::getUserId() {
 gid_t sharedmemory::getGroupId() {
 	#ifdef RUDIMENTS_HAVE_SHMGET
 		shmid_ds	getds;
-		if (shmControl(IPC_STAT,&getds)) {
+		if (shmControl(pvt->_shmid,IPC_STAT,&getds)) {
 			return getds.shm_perm.gid;
 		}
 	#else
@@ -181,7 +181,7 @@ gid_t sharedmemory::getGroupId() {
 mode_t sharedmemory::getPermissions() {
 	#ifdef RUDIMENTS_HAVE_SHMGET
 		shmid_ds	getds;
-		if (shmControl(IPC_STAT,&getds)) {
+		if (shmControl(pvt->_shmid,IPC_STAT,&getds)) {
 			return getds.shm_perm.mode;
 		}
 	#else
@@ -204,7 +204,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 		pvt->_created=true;
 
 		// attach to the segment
-		pvt->_shmptr=shmAttach();
+		pvt->_shmptr=shmAttach(pvt->_shmid);
 		if (reinterpret_cast<int64_t>(pvt->_shmptr)==-1) {
 			forceRemove();
 			return false;
@@ -276,8 +276,8 @@ bool sharedmemory::attach(key_t key, size_t size) {
 		// it to a signed integer to see if it's not -1, but allow that
 		// it could very well be less than -1 and still be valid.
 		return ((pvt->_shmid=shmGet(key,0,0))!=-1 &&
-				reinterpret_cast<int64_t>(
-					pvt->_shmptr=shmAttach())!=-1);
+				reinterpret_cast<int64_t>(pvt->_shmptr=
+						shmAttach(pvt->_shmid))!=-1);
 
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
@@ -318,7 +318,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 			// attach to the segment, remove the
 			// segment and return 0 on failure
-			pvt->_shmptr=shmAttach();
+			pvt->_shmptr=shmAttach(pvt->_shmid);
 			if (reinterpret_cast<int64_t>(pvt->_shmptr)==-1) {
 				forceRemove();
 				return false;
@@ -333,7 +333,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 			// attach to the segment,
 			// return 1 on success and 0 on failure
-			pvt->_shmptr=shmAttach();
+			pvt->_shmptr=shmAttach(pvt->_shmid);
 			return (reinterpret_cast<int64_t>(pvt->_shmptr)!=-1);
 		}
 

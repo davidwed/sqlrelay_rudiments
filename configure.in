@@ -1005,15 +1005,6 @@ dnl Checks associated with date and time
 echo
 echo "***** Date and Time **********"
 
-AC_MSG_CHECKING(for GetSystemTime)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif],
-GetSystemTime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMTIME,1,Some systems have GetSystemTime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for SetSystemTime)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
@@ -1077,13 +1068,6 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 	#include <sys/ioctl.h>
 #endif],
 ioctl(0,RTC_SET_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC_SET_TIME,1,Do we have real-time-clock RTC_SET_TIME support) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for mktime)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#include <time.h>],
-mktime(NULL);,AC_DEFINE(RUDIMENTS_HAVE_MKTIME,1,Some systems have mktime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for localtime_r)
 AC_TRY_COMPILE([#include <time.h>

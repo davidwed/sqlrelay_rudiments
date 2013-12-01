@@ -451,9 +451,6 @@
 /* Some systems have GetSystemInfo */
 #undef RUDIMENTS_HAVE_GETSYSTEMINFO
 
-/* Some systems have GetSystemTime */
-#undef RUDIMENTS_HAVE_GETSYSTEMTIME
-
 /* Some systems have getuid */
 #undef RUDIMENTS_HAVE_GETUID
 
@@ -588,9 +585,6 @@
 
 /* Some systems have mkstemp */
 #undef RUDIMENTS_HAVE_MKSTEMP
-
-/* Some systems have mktime */
-#undef RUDIMENTS_HAVE_MKTIME
 
 /* Some systems have mlock */
 #undef RUDIMENTS_HAVE_MLOCK
