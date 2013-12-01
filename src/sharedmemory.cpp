@@ -27,28 +27,43 @@
 #ifndef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 
 static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
-	int32_t	result;
-	do {
-		result=shmget(key,size,shmflag);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return result;
+	#ifdef RUDIMENTS_HAVE_SHMGET
+		int32_t	result;
+		do {
+			result=shmget(key,size,shmflag);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1
+	#endif
 }
 
 static void *shmAttach(int32_t id) {
-	void	*result;
-	do {
-		result=shmat(id,0,0);
-	} while (reinterpret_cast<int64_t>(result)==-1 &&
-				error::getErrorNumber()==EINTR);
-	return result;
+	#ifdef RUDIMENTS_HAVE_SHMGET
+		void	*result;
+		do {
+			result=shmat(id,0,0);
+		} while (reinterpret_cast<int64_t>(result)==-1 &&
+					error::getErrorNumber()==EINTR);
+		return result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1
+	#endif
 }
 
 static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
-	int32_t	result;
-	do {
-		result=shmctl(id,cmd,buf);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#ifdef RUDIMENTS_HAVE_SHMGET
+		int32_t	result;
+		do {
+			result=shmctl(id,cmd,buf);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return -1
+	#endif
 }
 
 #else
