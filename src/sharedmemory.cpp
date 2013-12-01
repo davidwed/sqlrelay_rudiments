@@ -24,49 +24,34 @@
 	#include <windows.h>
 #endif
 
-#ifndef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+#if defined(RUDIMENTS_HAVE_SHMGET)
 
 static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		int32_t	result;
-		do {
-			result=shmget(key,size,shmflag);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return result;
-	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
-	#endif
+	int32_t	result;
+	do {
+		result=shmget(key,size,shmflag);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return result;
 }
 
 static void *shmAttach(int32_t id) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		void	*result;
-		do {
-			result=shmat(id,0,0);
-		} while (reinterpret_cast<int64_t>(result)==-1 &&
-					error::getErrorNumber()==EINTR);
-		return result;
-	#else
-		error::setErrorNumber(ENOSYS);
-		return reinterpret_cast<void *>(-1);
-	#endif
+	void	*result;
+	do {
+		result=shmat(id,0,0);
+	} while (reinterpret_cast<int64_t>(result)==-1 &&
+				error::getErrorNumber()==EINTR);
+	return result;
 }
 
 static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
-	#ifdef RUDIMENTS_HAVE_SHMGET
-		int32_t	result;
-		do {
-			result=shmctl(id,cmd,buf);
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return !result;
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
+	int32_t	result;
+	do {
+		result=shmctl(id,cmd,buf);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	return !result;
 }
 
-#else
+#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
 static char	*shmName(key_t key) {
 	uint32_t	shmnamelen=11+charstring::integerLength(key)+1;
