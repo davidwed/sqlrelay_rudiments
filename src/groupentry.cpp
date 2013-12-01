@@ -6,9 +6,6 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
-
-#include <wchar.h>
 
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
 	#include <rudiments/dictionary.h>

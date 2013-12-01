@@ -6,7 +6,6 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 	#include <rudiments/dictionary.h>
