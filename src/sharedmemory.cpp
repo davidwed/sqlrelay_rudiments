@@ -35,7 +35,7 @@ static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
 		return result;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1
+		return -1;
 	#endif
 }
 
@@ -49,7 +49,7 @@ static void *shmAttach(int32_t id) {
 		return result;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1
+		return -1;
 	#endif
 }
 
@@ -62,7 +62,7 @@ static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
 		return !result;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return -1
+		return -1;
 	#endif
 }
 
