@@ -414,7 +414,7 @@ bool datetime::getSystemDateAndTime() {
 			return false;
 		}
 		return initialize(tv.tv_sec,tv.tv_usec);
-	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTMEASFILETIME)
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME)
 
 		// FILETIME contains the number of 100 nanosecond intervals
 		// since Jan 1, 1601 UTC.
@@ -424,13 +424,13 @@ bool datetime::getSystemDateAndTime() {
 		// convert to a single 64-bit number
 		uint64_t	t=ft.dwHighDateTime;
 		t<<=32;
-		t!=ft.dwLowDateTime;
+		t|=ft.dwLowDateTime;
 
 		// convert to microseconds
 		t/=10;
 
 		// convert to number of microseconds since Jan 1, 1970 UTC.
-		t-=1164447360000000;
+		t-=11644473600000000ULL;
 
 		return initialize(t/1000000,t%1000000);
 	#else
