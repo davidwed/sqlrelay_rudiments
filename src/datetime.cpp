@@ -605,7 +605,7 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 			pvt->_mon=tms.tm_mon;
 			pvt->_year=tms.tm_year;
 			pvt->_isdst=tms.tm_isdst;
-			processTZ();
+			processTZ((void *)&tms);
 			retval=normalizeBrokenDownTime(false);
 		}
 		return retval;
@@ -626,7 +626,7 @@ bool datetime::getBrokenDownTimeFromEpoch(bool needmutex) {
 			pvt->_mon=tms->tm_mon;
 			pvt->_year=tms->tm_year;
 			pvt->_isdst=tms->tm_isdst;
-			processTZ();
+			processTZ((void *)&tms);
 			retval=normalizeBrokenDownTime(false);
 		}
 		if (needmutex) {
@@ -686,7 +686,7 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 		pvt->_wday=tms.tm_wday;
 		pvt->_yday=tms.tm_yday;
 
-		processTZ();
+		processTZ((void *)&tms);
 	}
 
 	retval=(retval && restoreTimeZoneEnvVar(oldzone));
@@ -698,7 +698,9 @@ bool datetime::normalizeBrokenDownTime(bool needmutex) {
 	return retval;
 }
 
-void datetime::processTZ() {
+void datetime::processTZ(void *tms) {
+
+	struct tm	*t=(struct tm *)tms;
 	
 	// Use tzset to get the timezone name
 	#if defined(RUDIMENTS_HAS__TZSET)
@@ -715,11 +717,11 @@ void datetime::processTZ() {
 	// Get the offset from the struct tm if we can, otherwise get
 	// it from the value set by tzset()
 	#if defined(RUDIMENTS_HAS___TM_GMTOFF)
-		pvt->_gmtoff=tms.__tm_gmtoff;
+		pvt->_gmtoff=t->__tm_gmtoff;
 	#elif defined(RUDIMENTS_HAS_TM_GMTOFF)
-		pvt->_gmtoff=tms.tm_gmtoff;
+		pvt->_gmtoff=t->tm_gmtoff;
 	#elif defined(RUDIMENTS_HAS_TM_TZADJ)
-		pvt->_gmtoff=-tms.tm_tzadj;
+		pvt->_gmtoff=-t->tm_tzadj;
 	#elif defined(RUDIMENTS_HAS__GET_TIMEZONE)
 		long	seconds;
 		_get_timezone(&seconds);
