@@ -408,12 +408,31 @@ const char *datetime::getString(bool microseconds) {
 }
 
 bool datetime::getSystemDateAndTime() {
-	#ifdef RUDIMENTS_HAVE_GETTIMEOFDAY
+	#if defined(RUDIMENTS_HAVE_GETTIMEOFDAY)
 		struct timeval	tv;
 		if (gettimeofday(&tv,NULL)) {
 			return false;
 		}
 		return initialize(tv.tv_sec,tv.tv_usec);
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTMEASFILETIME)
+
+		// FILETIME contains the number of 100 nanosecond intervals
+		// since Jan 1, 1601 UTC.
+		FILETIME	ft;
+		GetSystemTimeAsFileTime(&ft);
+
+		// convert to a single 64-bit number
+		uint64_t	t=ft.dwHighDateTime;
+		t<<=32;
+		t!=ft.dwLowDateTime;
+
+		// convert to microseconds
+		t/=10;
+
+		// convert to number of microseconds since Jan 1, 1970 UTC.
+		t-=1164447360000000;
+
+		return initialize(t/1000000,t%1000000);
 	#else
 		return initialize(time(NULL));
 	#endif
