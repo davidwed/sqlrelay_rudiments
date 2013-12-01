@@ -1,12 +1,4 @@
-0.44.1 - configure scripts attempts link for various _r functions now to catch
-		cases where they're defined in the headers but not present in
-		the library
-	tweaks for dlopen/dlsym on linux libc5
-	reordered netinet/in.h and netinet/tcp.h includes for linux libc5
-	configure script tweaks for OSR500
-	extern "C" wrapper around sys/times.h for OSR500
-	added xmldomnode::append/insertTag methods
-	got the directory class working on windows
+0.45 - got the directory class working on windows
 	got the semaphoreset class working on windows
 	implemented passwd/groupentry::getSid and an internal id-name-sid map
 		for windows
@@ -16,6 +8,15 @@
 	got the memorymap class implementation working on Windows
 	got the sharedmemory class working on windows
 	added support for microseconds to the datetime class
+
+0.44.1 - configure scripts attempts link for various _r functions now to catch
+		cases where they're defined in the headers but not present in
+		the library
+	tweaks for dlopen/dlsym on linux libc5
+	reordered netinet/in.h and netinet/tcp.h includes for linux libc5
+	configure script tweaks for OSR500
+	extern "C" wrapper around sys/times.h for OSR500
+	added xmldomnode::append/insertTag methods
 
 0.44 - fixed inet_aton test to attempt link, not just compile
 	fixed vsnprintf test to work on arm linux
