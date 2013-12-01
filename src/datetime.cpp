@@ -715,8 +715,6 @@ bool datetime::normalize() {
 
 void datetime::processTZ(void *tms) {
 
-	struct tm	*t=(struct tm *)tms;
-	
 	// Use tzset to get the timezone name
 	#if defined(RUDIMENTS_HAS__TZSET)
 		_tzset();
@@ -732,11 +730,11 @@ void datetime::processTZ(void *tms) {
 	// Get the offset from the struct tm if we can, otherwise get
 	// it from the value set by tzset()
 	#if defined(RUDIMENTS_HAS___TM_GMTOFF)
-		pvt->_gmtoff=t->__tm_gmtoff;
+		pvt->_gmtoff=((struct tm *)tms)->__tm_gmtoff;
 	#elif defined(RUDIMENTS_HAS_TM_GMTOFF)
-		pvt->_gmtoff=t->tm_gmtoff;
+		pvt->_gmtoff=((struct tm *)tms)->tm_gmtoff;
 	#elif defined(RUDIMENTS_HAS_TM_TZADJ)
-		pvt->_gmtoff=-t->tm_tzadj;
+		pvt->_gmtoff=-((struct tm *)tms)->tm_tzadj;
 	#elif defined(RUDIMENTS_HAS__GET_TIMEZONE)
 		long	seconds;
 		_get_timezone(&seconds);

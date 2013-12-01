@@ -205,7 +205,8 @@ const char *groupentry::getSid() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sid) {
 		if (pvt->_grp) {
-			pvt->_sid=charstring::parseNumber(pvt->_grp->gr_gid);
+			pvt->_sid=charstring::parseNumber(
+						(int64_t)pvt->_grp->gr_gid);
 		} else {
 			pvt->_sid=charstring::duplicate("-1");
 		}

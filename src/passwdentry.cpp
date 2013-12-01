@@ -208,7 +208,8 @@ const char *passwdentry::getSid() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	if (!pvt->_sid) {
 		if (pvt->_pwd) {
-			pvt->_sid=charstring::parseNumber(pvt->_pwd->pw_uid);
+			pvt->_sid=charstring::parseNumber(
+						(int64_t)pvt->_pwd->pw_uid);
 		} else {
 			pvt->_sid=charstring::duplicate("-1");
 		}
