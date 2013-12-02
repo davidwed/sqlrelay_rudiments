@@ -5,7 +5,9 @@
 
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
-#else
+#endif
+
+#ifndef ITIMER_REAL
 	#define	ITIMER_REAL 0
 #endif
 

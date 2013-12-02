@@ -15413,6 +15413,8 @@ if ( test -n "$MINGW32" )
 then
 	INCLUDE_SERIALPORT="0"
 	INCLUDE_SERIALPORTPROFILE="0"
+	INCLUDE_MODEMCLIENT="0"
+	INCLUDE_MODEMSERVER="0"
 fi
 
 
@@ -17498,13 +17500,16 @@ $as_echo "no" >&6; }
 
 				echo "cross compiling"
 
-		if ( test -n "$PTHREADPATH" )
+		if ( test -z "$MINGW32" )
 		then
-			PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
-			PTHREADLIB="-L$PTHREADPATH/lib -lpthread -pthread"
-		else
-			PTHREADINCLUDES="$PTHREAD_COMPILE"
-			PTHREADLIB="-lpthread -pthread"
+			if ( test -n "$PTHREADPATH" )
+			then
+				PTHREADINCLUDES="$PTHREAD_COMPILE -I$PTHREADPATH/include"
+				PTHREADLIB="-L$PTHREADPATH/lib -lpthread -pthread"
+			else
+				PTHREADINCLUDES="$PTHREAD_COMPILE"
+				PTHREADLIB="-lpthread -pthread"
+			fi
 		fi
 		HAVE_PTHREAD="yes"
 
@@ -20555,7 +20560,7 @@ _get_timezone(NULL);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAS__GET_TIMEZONE 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -20564,7 +20569,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tm_name" >&5
 $as_echo_n "checking for tm_name... " >&6; }
@@ -20893,7 +20899,7 @@ _get_tzname(NULL,NULL,0,0);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAS__GET_TZNAME 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -20902,7 +20908,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 echo "******************************"
 
@@ -21029,7 +21036,7 @@ _dupenv_s(NULL,NULL,NULL);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE__DUPENV_S 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -21038,7 +21045,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for unsetenv" >&5
 $as_echo_n "checking for unsetenv... " >&6; }
@@ -21572,7 +21580,7 @@ WSAConnect(0,0,0,0,0,0,0);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_WSACONNECT 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -21581,7 +21589,8 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for closesocket" >&5
 $as_echo_n "checking for closesocket... " >&6; }

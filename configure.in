@@ -334,11 +334,13 @@ echo "***** Platform ***************"
 FW_CHECK_MULTIARCH
 FW_CHECK_MICROSOFT
 
-dnl for mingw32, disable serialport and serialportprofile classes
+dnl for mingw32, disable serial-related classes
 if ( test -n "$MINGW32" )
 then
 	INCLUDE_SERIALPORT="0"
 	INCLUDE_SERIALPORTPROFILE="0"
+	INCLUDE_MODEMCLIENT="0"
+	INCLUDE_MODEMSERVER="0"
 fi
 
 FW_CHECK_OSX
@@ -1048,7 +1050,7 @@ AC_TRY_COMPILE([#include <time.h>],
 long	t=-_timezone;,AC_DEFINE(RUDIMENTS_HAS__TIMEZONE,1,Some systems have _timezone) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _get_timezone)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <time.h>],
@@ -1131,7 +1133,7 @@ AC_TRY_COMPILE([#include <time.h>],
 const char * const *c=tzname;,AC_DEFINE(RUDIMENTS_HAS_TZNAME,1,Some systems have tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _get_tzname)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <time.h>],
@@ -1169,7 +1171,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 getenv(NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETENV,1,Some systems have getenv) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for _dupenv_s)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 _dupenv_s(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE__DUPENV_S,1,Some systems have _dupenv_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -1248,7 +1250,7 @@ echo
 echo "***** Networking *************"
 
 AC_MSG_CHECKING(for WSAConnect)
-AC_TRY_COMPILE([
+AC_TRY_LINK([
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #endif],

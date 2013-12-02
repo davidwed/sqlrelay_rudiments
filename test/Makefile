@@ -82,7 +82,7 @@ PROGS = server$(EXE) \
 	shutdown$(EXE) \
 	server.pem
 
-#ALLSTATIC=-all-static
+ALLSTATIC=-all-static
 
 .SUFFIXES: .lo
 
