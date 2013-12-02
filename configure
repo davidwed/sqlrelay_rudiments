@@ -15370,6 +15370,7 @@ $as_echo "cygwin" >&6; }
 		;;
 	*mingw32* )
 		MINGW32="yes"
+		CPPFLAGS="$CPPFLAGS -DLIBRUDIMENTS_EXPORTS"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: mingw32" >&5
 $as_echo "mingw32" >&6; }
 		;;
@@ -15391,7 +15392,6 @@ EXE=""
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
-	#CPPFLAGS="$CPPFLAGS -mno-win32"
 	MICROSOFT="yes"
 	EXE=".exe"
 fi
@@ -15700,6 +15700,9 @@ case $host_os in
 		WERROR=""
 		;;
 	*minix* )
+		WERROR=""
+		;;
+	*mingw32* )
 		WERROR=""
 		;;
 	*)
@@ -20717,9 +20720,11 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for gettimeofday... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
 extern "C" {
 	#include <sys/time.h>
 }
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -20747,9 +20752,11 @@ rm -f core conftest.err conftest.$ac_objext \
 $as_echo_n "checking for settimeofday... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
 extern "C" {
 	#include <sys/time.h>
 }
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -24100,7 +24107,9 @@ $as_echo_n "checking for setitimer... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 int
 main ()
 {
@@ -24128,7 +24137,9 @@ $as_echo_n "checking for struct itimerval... " >&6; }
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 int
 main ()
 {
@@ -24140,6 +24151,36 @@ _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_STRUCT_ITIMERVAL 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for struct timeval" >&5
+$as_echo_n "checking for struct timeval... " >&6; }
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
+int
+main ()
+{
+struct timeval a;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_STRUCT_TIMEVAL 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -26321,7 +26362,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for pselect... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
@@ -27087,7 +27130,9 @@ fi
 $as_echo_n "checking for utime... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif
@@ -27114,7 +27159,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for utimes with const char * argument... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif
@@ -27141,7 +27188,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for utimes with char * argument... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <sys/time.h>
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif

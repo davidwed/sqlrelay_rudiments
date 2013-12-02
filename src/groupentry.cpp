@@ -343,7 +343,7 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 						dn,&dnsize,&peuse)==FALSE ||
 				IsValidSid(sid)==FALSE ||
 				ConvertSidToStringSid(sid,&pvt->_sid)==FALSE);
-		delete[] sid;
+		delete[] (BYTE *)sid;
 		delete[] dn;
 		if (failed) {
 			return false;

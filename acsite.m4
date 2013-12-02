@@ -227,11 +227,16 @@ AC_MSG_CHECKING(for -Werror)
 FW_TRY_LINK([#include <stdio.h>],[printf("hello");],[-Werror],[],[],[WERROR="-Werror"],[WERROR=""])
 
 dnl disable -Werror on Haiku, and Minix as their header files throw warnings
+dnl disable -Werror on mingw32 as the regex.cpp file has unused variables that
+dnl are hard to fix
 case $host_os in
 	*haiku* )
 		WERROR=""
 		;;
 	*minix* )
+		WERROR=""
+		;;
+	*mingw32* )
 		WERROR=""
 		;;
 	*)
@@ -400,6 +405,7 @@ case $host_os in
 		;;
 	*mingw32* )
 		MINGW32="yes"
+		CPPFLAGS="$CPPFLAGS -DLIBRUDIMENTS_EXPORTS"
 		AC_MSG_RESULT(mingw32)
 		;;
 	*uwin* )
@@ -418,7 +424,6 @@ AC_SUBST(UWIN)
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
-	#CPPFLAGS="$CPPFLAGS -mno-win32"
 	MICROSOFT="yes"
 	EXE=".exe"
 fi

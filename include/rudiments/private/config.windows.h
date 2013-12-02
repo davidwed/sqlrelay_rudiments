@@ -938,6 +938,9 @@
 /* Some systems have struct timespec in time.h */
 /* #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H */
 
+/* Some systems have struct timeval */
+/* #undef RUDIMENTS_HAVE_STRUCT_TIMEVAL */
+
 /* Some systems have swab with a char * argument */
 #define RUDIMENTS_HAVE_SWAB_CHAR 1
 
@@ -1200,7 +1203,7 @@
 /* #undef RUDIMENTS_SSL_VOID_PTR */
 
 /* Version */
-#define RUDIMENTS_VERSION "0.36"
+#define RUDIMENTS_VERSION "0.45"
 
 /* Define to 1 if you have the ANSI C header files. */
 /* #undef STDC_HEADERS */

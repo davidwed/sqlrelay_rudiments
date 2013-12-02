@@ -13,11 +13,22 @@
 
 // for open flags
 #ifdef RUDIMENTS_HAVE_FCNTL_H
-	// for open flags with msvc
+	// for open flags with msvc/mingw32...
+	// make sure to undefine _POSIX_ if it wasn't already defined though,
+	// as it will prevent various process-related functions from being
+	// found later if it's still defined
 	#ifdef _WIN32
-		#define _POSIX_
+		#ifndef _POSIX_
+			#define _POSIX_
+			#define RUDIMENTS_UNDEFPOSIX
+		#endif
 	#endif
 	#include <fcntl.h>
+	#ifdef _WIN32
+		#ifdef RUDIMENTS_UNDEFPOSIX
+			#undef _POSIX_
+		#endif
+	#endif
 #endif
 
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T

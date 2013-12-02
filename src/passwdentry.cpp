@@ -387,7 +387,7 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 						dn,&dnsize,&peuse)==FALSE ||
 				IsValidSid(sid)==FALSE ||
 				ConvertSidToStringSid(sid,&pvt->_sid)==FALSE);
-		delete[] sid;
+		delete[] (BYTE *)sid;
 		delete[] dn;
 		if (failed) {
 			return false;

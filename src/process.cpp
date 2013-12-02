@@ -56,10 +56,10 @@ void		(*process::_crashfunc)(int32_t);
 #endif
 
 pid_t process::getProcessId() {
-	#if defined(RUDIMENTS_HAVE_GETPID)
-		return getpid();
-	#elif defined(RUDIMENTS_HAVE_GETCURRENTPROCESSID)
+	#if defined(RUDIMENTS_HAVE_GETCURRENTPROCESSID)
 		return GetCurrentProcessId();
+	#elif defined(RUDIMENTS_HAVE_GETPID)
+		return getpid();
 	#else
 		#error no getpid or anything like it
 	#endif

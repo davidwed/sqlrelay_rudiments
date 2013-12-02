@@ -1093,18 +1093,22 @@ AC_TRY_COMPILE([#include <time.h>
 localtime_s(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_LOCALTIME_S,1,Some systems have localtime_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for gettimeofday)
-AC_TRY_LINK([extern "C" {
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+extern "C" {
 	#include <sys/time.h>
 }
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
 gettimeofday(NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_GETTIMEOFDAY,1,Some systems have gettimeofday) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for settimeofday)
-AC_TRY_LINK([extern "C" {
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+extern "C" {
 	#include <sys/time.h>
 }
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
@@ -1574,15 +1578,28 @@ then
 	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <sys/time.h>],
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif],
 setitimer(0,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SETITIMER,1,Some systems have setitimer) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 	AC_MSG_CHECKING(for struct itimerval)
 	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
-#include <sys/time.h>],
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif],
 struct itimerval a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_ITIMERVAL,1,Some systems have struct itimerval) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for struct timeval)
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif],
+struct timeval a;,AC_DEFINE(RUDIMENTS_HAVE_STRUCT_TIMEVAL,1,Some systems have struct timeval) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 echo "******************************"
@@ -2087,7 +2104,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_FCNTL_H
 posix_fallocate(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FALLOCATE,1,Some systems have posix_fallocate) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for pselect)
-AC_TRY_COMPILE([#include <sys/time.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
@@ -2290,21 +2309,27 @@ then
 fi
 
 AC_MSG_CHECKING(for utime)
-AC_TRY_COMPILE([#include <sys/time.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif],
 utime("",0);,AC_DEFINE(RUDIMENTS_HAVE_UTIME,1,Some systems have utime) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for utimes with const char * argument)
-AC_TRY_COMPILE([#include <sys/time.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif],
 const char *a=0; utimes(a,0);,AC_DEFINE(RUDIMENTS_HAVE_UTIMES_CONST_CHAR,1,Some systems have utimes with const char * argument) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for utimes with char * argument)
-AC_TRY_COMPILE([#include <sys/time.h>
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif],

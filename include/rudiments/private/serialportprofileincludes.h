@@ -7,7 +7,7 @@
 #ifdef RUDIMENTS_HAVE_TERMIOS_H
 	#include <termios.h>
 #else
-	#define NCCS	32;
+	#define NCCS	32
 	struct termios {
 		uint32_t	c_iflag;
 		uint32_t	c_oflag;

@@ -17,7 +17,7 @@
 	#include <sys/time.h>
 #endif
 
-#ifdef _WIN32
+#ifndef RUDIMENTS_HAVE_STRUCT_TIMEVAL
 	struct timeval {
 		time_t		tv_sec;
 		uint32_t	tv_usec;
