@@ -162,7 +162,6 @@ groupentry::~groupentry() {
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		delete[] pvt->_buffer;
 	#endif
-	delete pvt;
 	delete[] pvt->_sid;
 #else
 	delete[] pvt->_name;
@@ -172,6 +171,7 @@ groupentry::~groupentry() {
 	delete[] pvt->_members;
 	LocalFree(pvt->_sid);
 #endif
+	delete pvt;
 }
 
 const char *groupentry::getName() const {
