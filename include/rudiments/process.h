@@ -170,12 +170,25 @@ class RUDIMENTS_DLLSPEC process {
 		static pid_t	fork();
 
 		/** Runs "command" with arguments "args", replacing the current
-		 *  running process with this new process.  Note that the first
-		 *  element of array "args" should be the name of the command
-		 *  that you want to run, typically the same as "command".
-		 *  "args" should be NULL terminated.  Returns false if an
-		 *  error occurred and otherwise does not return at all. */
+		 *  running process with this new process.  Whether the new
+		 *  process retains the process id of the current process is
+		 *  platform-specific.  Note that the first element of array
+		 *  "args" should be the name of the command that you want to
+		 *  run, typically the same as "command".  "args" should be NULL
+		 *  terminated.  Returns false if an error occurred and
+		 *  otherwise does not return at all. */
 		static bool	exec(const char *command,
+					const char * const *args);
+
+		/** Runs "command" with arguments "args" as a new process.
+		 *  Use this instead of a combinination of fork() and exec()
+		 *  as it is more efficient on some platforms.
+		 *  Note that the first element of array "args" should be the
+		 *  name of the command that you want to run, typically the
+		 *  same as "command".  "args" should be NULL terminated.
+		 *  Returns the process id of the child process or -1 if an
+		 *  error occurred. */
+		static pid_t	spawn(const char *command,
 					const char * const *args);
 
 		/** Detaches the current process from the controlling tty,

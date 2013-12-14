@@ -11,6 +11,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
+#ifdef RUDIMENTS_HAVE_CREATE_PROCESS
+	#include <rudiments/stringbuffer.h>
+	#include <rudiments/rawbuffer.h>
+#endif
 
 #ifndef __USE_XOPEN_EXTENDED
 	// for getsid()
@@ -94,7 +98,8 @@ pid_t process::getProcessGroupId(pid_t pid) {
 	#if defined(RUDIMENTS_HAVE_GETPGID)
 		return getpgid(pid);
 	#else
-		// windows and minix don't have the notion of process groups
+		// minix doesn't have the notion of process groups
+		// windows does, but they don't appear to have ID's
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
@@ -112,7 +117,8 @@ bool process::setProcessGroupId(pid_t pid, pid_t pgid) {
 	#if defined(RUDIMENTS_HAVE_SETPGID)
 		return !setpgid(pid,pgid);
 	#else
-		// windows and minix don't have the notion of process groups
+		// minix doesn't have the notion of process groups
+		// windows does, but they don't appear to have ID's
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
@@ -321,6 +327,69 @@ pid_t process::fork() {
 bool process::exec(const char *command, const char * const *args) {
 	#if defined(RUDIMENTS_HAVE_EXECVP)
 		return execvp(command,(char * const *)args)!=-1;
+	#elif defined(RUDIMENTS_HAVE_CREATE_PROCESS)
+		if (spawn(command,args)) {
+			exit(0);
+		}
+		return false;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+pid_t process::spawn(const char *command, const char * const *args) {
+	#if defined(RUDIMENTS_HAVE_FORK) && defined(RUDIMENTS_HAVE_EXECVP)
+		pid_t	child=fork();
+		if (child<1) {
+			return child;
+		}
+		return exec(command,args);
+	#elif defined(RUDIMENTS_HAVE_CREATE_PROCESS)
+
+		// Create the command line from the args...
+		// CreateProcess must be able to modify the command line (for
+		// some reason, and there's no indication as to whether it could
+		// try to use more bytes than originally passed in) and will
+		// only accept a command line of 32768 chars or less.
+		char	commandline[32768];
+		if (args) {
+			commandline[0]='\0';
+			bool	first=true;
+			size_t	totalsize=0;
+			for (const char * const *arg=args; *arg; arg++) {
+				if (!first) {
+					if (totalsize+1<32767) {
+						charstring::append(
+							commandline," ");
+					} else {
+						break;
+					}
+					totalsize=totalsize+1;
+				} else {
+					first=false;
+				}
+				size_t	size=charstring::length(*arg);
+				if (totalsize+size<32767) {
+					charstring::append(commandline,*arg);
+				} else {
+					break;
+				}
+				totalsize=totalsize+size;
+			}
+		}
+
+		// create the new process and return it's pid on success
+		STARTUPINFO		si;
+		PROCESS_INFORMATION	pi;
+		rawbuffer::zero(&si,sizeof(si));
+		rawbuffer::zero(&pi,sizeof(pi));
+		if (CreateProcess(command,commandline,
+					NULL,NULL,TRUE,
+					0,NULL,NULL,&si,&pi)==TRUE) {
+			return pi.dwProcessId;
+		}
+		return -1;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
