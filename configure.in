@@ -2814,6 +2814,13 @@ AC_TRY_LINK([
 #endif],
 execvp(NULL,NULL),AC_DEFINE(RUDIMENTS_HAVE_EXECVP,1,Some systems have execvp) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for CreateProcess)
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+CreateProcess(0,0,0,0,0,0,0,0,0,0),AC_DEFINE(RUDIMENTS_HAVE_CREATE_PROCESS,1,Some systems have CreateProcess) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for setsid)
 AC_TRY_LINK([
 #ifdef RUDIMENTS_HAVE_UNISTD_H

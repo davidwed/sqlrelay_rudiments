@@ -179,6 +179,9 @@
 /* CreateMutex function exists */
 #define RUDIMENTS_HAVE_CREATE_MUTEX 1
 
+/* Some systems have CreateProcess */
+#define RUDIMENTS_HAVE_CREATE_PROCESS 1
+
 /* Some systems have crypt */
 /* #undef RUDIMENTS_HAVE_CRYPT */
 
