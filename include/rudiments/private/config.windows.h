@@ -266,6 +266,9 @@
 /* FreeBSD style statfs */
 /* #undef RUDIMENTS_HAVE_FREEBSD_STATFS */
 
+/* Some systems have FreeConsole */
+#define RUDIMENTS_HAVE_FREECONSOLE 1
+
 /* Some systems have fsetxattrs with a const 3rd parameter */
 /* #undef RUDIMENTS_HAVE_FSETXATTR_CONST */
 

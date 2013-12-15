@@ -341,7 +341,7 @@ bool process::exec(const char *command, const char * const *args) {
 pid_t process::spawn(const char *command, const char * const *args) {
 	#if defined(RUDIMENTS_HAVE_FORK) && defined(RUDIMENTS_HAVE_EXECVP)
 		pid_t	child=fork();
-		if (child<1) {
+		if (child==-1 || child>0) {
 			return child;
 		}
 		return exec(command,args);
