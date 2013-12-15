@@ -41,22 +41,22 @@ class RUDIMENTS_DLLSPEC groupentry {
 		/** Returns the id of the group.
 		 *
 		 *  Note: On platforms (like Windows) where the
-		 *  supportsFormalSid method returns true, groups don't have
-		 *  simple numeric ids.  On those platforms, the value returned
-		 *  by this method is simply an index into an internal structure
-		 *  that methods of other rudiments classes know how to access
-		 *  and ultimately translate to a group.  It should not be
-		 *  passed in to functions or methods of other libraries that
-		 *  don't ultimately use rudiments methods. */
+		 *  platformSupportsFormalSid method returns true, groups don't
+		 *  have simple numeric ids.  On those platforms, the value
+		 *  returned by this method is simply an index into an internal
+		 *  structure that methods of other rudiments classes know how
+		 *  to access and ultimately translate to a group.  It should
+		 *  not be passed in to functions or methods of other libraries
+		 *  that don't ultimately use rudiments methods. */
 		gid_t		getGroupId() const;
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this group.
 		 *
 		 *  Note: On platforms (like non-Windows platforms) where the
-		 *  supportsFormalSid method returns false, the value returned
-		 *  is just a string representation of the number returned by
-		 *  getGroupId(). */
+		 *  platformSupportsFormalSid method returns false, the value
+		 *  returned is just a string representation of the number
+		 *  returned by getGroupId(). */
 		const char	*getSid() const;
 
 		/** Returns a NULL-terminated list of the

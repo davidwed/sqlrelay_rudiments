@@ -154,7 +154,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns the id of the group.</p>
-<p>Note: On platforms (like Windows) where the supportsFormalSid method returns true, groups don't have simple numeric ids. On those platforms, the value returned by this method is simply an index into an internal structure that methods of other rudiments classes know how to access and ultimately translate to a group. It should not be passed in to functions or methods of other libraries that don't ultimately use rudiments methods. </p>
+<p>Note: On platforms (like Windows) where the platformSupportsFormalSid method returns true, groups don't have simple numeric ids. On those platforms, the value returned by this method is simply an index into an internal structure that methods of other rudiments classes know how to access and ultimately translate to a group. It should not be passed in to functions or methods of other libraries that don't ultimately use rudiments methods. </p>
 
 </div>
 </div>
@@ -255,7 +255,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns a string representation of the SID (security id) of this group.</p>
-<p>Note: On platforms (like non-Windows platforms) where the supportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classgroupentry.html#a7017e85cb7cd72a91a7d1bfbbf1a051d">getGroupId()</a>. </p>
+<p>Note: On platforms (like non-Windows platforms) where the platformSupportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classgroupentry.html#a7017e85cb7cd72a91a7d1bfbbf1a051d">getGroupId()</a>. </p>
 
 </div>
 </div>
@@ -414,7 +414,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Dec 15 2013 02:07:53 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 15 2013 02:23:38 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

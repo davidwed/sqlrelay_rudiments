@@ -44,22 +44,22 @@ class RUDIMENTS_DLLSPEC passwdentry {
 		/** Returns the id of this user.
 		 * 
 		 *  Note: On platforms (like Windows) where the
-		 *  supportsFormalSid method returns true, users don't have
-		 *  simple numeric ids.  On those platforms, the value returned
-		 *  by this method is simply an index into an internal structure
-		 *  that methods of other rudiments classes know how to access
-		 *  and ultimately translate to a user.  It should not be passed
-		 *  in to functions or methods of other libraries that don't
-		 *  ultimately use rudiments methods. */
+		 *  platformSupportsFormalSid method returns true, users don't
+		 *  have simple numeric ids.  On those platforms, the value
+		 *  returned by this method is simply an index into an internal
+		 *  structure that methods of other rudiments classes know how
+		 *  to access and ultimately translate to a user.  It should
+		 *  not be passed in to functions or methods of other libraries
+		 *  that don't ultimately use rudiments methods. */
 		uid_t		getUserId() const;
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this user.
 		 *
 		 *  Note: On platforms (like non-Windows platforms) where the
-		 *  supportsFormalSid method returns false, the value returned
-		 *  is just a string representation of the number returned by
-		 *  getUserId(). */
+		 *  platformSupportsFormalSid method returns false, the value
+		 *  returned is just a string representation of the number
+		 *  returned by getUserId(). */
 		const char	*getSid() const;
 
 		/** Returns the primary group id of this user. */
