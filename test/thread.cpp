@@ -5,6 +5,8 @@
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
 
+#include <windows.h>
+
 struct args {
 	thread		*th;
 	uint16_t	id;
@@ -24,7 +26,7 @@ void count(void *args) {
 	}
 	if (!a->detach) {
 		stdoutput.printf("  %d: exiting\n",a->id);
-		a->th->exit(NULL);
+		a->th->exit(a->id);
 	}
 }
 
@@ -56,12 +58,16 @@ int main(int argc, const char **argv) {
 	}
 
 	// join the threads
-	if (!t1.join(NULL)) {
+	int32_t	t1status;
+	if (!t1.join(&t1status)) {
 		stdoutput.printf(" 1: join failed\n");
 	}
-	if (!t2.join(NULL)) {
+	int32_t	t2status;
+	if (!t2.join(&t2status)) {
 		stdoutput.printf(" 2: join failed\n");
 	}
+	stdoutput.printf("t1 status: %d\n",t1status);
+	stdoutput.printf("t2 status: %d\n",t2status);
 
 	// reset id's and detach mode
 	a1.id=3;

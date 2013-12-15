@@ -373,6 +373,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\stdio.cpp" />
     <ClCompile Include="..\src\stringbuffer.cpp" />
     <ClCompile Include="..\src\sys.cpp" />
+    <ClCompile Include="..\src\thread.cpp" />
     <ClCompile Include="..\src\threadmutex.cpp" />
     <ClCompile Include="..\src\unixsocketclient.cpp" />
     <ClCompile Include="..\src\unixsocketserver.cpp" />

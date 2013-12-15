@@ -3,6 +3,7 @@
 
 #include <rudiments/thread.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_T)
 	// to fix an odd situation on SCO with FSU pthreads
@@ -23,7 +24,7 @@ class threadprivate {
 		pthread_attr_t	_attr;
 		#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		HANDLE		_thr;
-		size_t		stacksize;
+		size_t		_stacksize;
 		#endif
 		void		*(*_function)(void *);
 		void		*_arg;
@@ -34,7 +35,7 @@ thread::thread() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pthread_attr_init(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		pvt->stacksize=sys::getPageSize();
+		pvt->_stacksize=sys::getPageSize();
 	#endif
 	pvt->_function=NULL;
 	pvt->_arg=NULL;
@@ -66,6 +67,7 @@ bool thread::setStackSize(size_t stacksize) {
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		pvt->_stacksize=stacksize;
+		return true;
 	#endif
 }
 
@@ -79,7 +81,8 @@ bool thread::getStackSize(size_t *stacksize) {
 		error::setErrorNumber(result);
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		return pvt->_stacksize;
+		*stacksize=pvt->_stacksize;
+		return true;
 	#endif
 }
 
@@ -94,24 +97,25 @@ bool thread::create() {
 		error::setErrorNumber(result);
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		this->_thr=CreateThread(NULL,pvt->_stacksize,
-					pvt->_function,pvt->_arg,0,NULL);
-		return (this->_thr!=NULL);
+		pvt->_thr=CreateThread(NULL,pvt->_stacksize,
+					(LPTHREAD_START_ROUTINE)pvt->_function,
+					pvt->_arg,0,NULL);
+		return (pvt->_thr!=NULL);
 	#endif
 }
 
-void thread::exit(void *status) {
+void thread::exit(int32_t status) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		pthread_exit(status);
+		pthread_exit((void *)status);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		ExitThread((DWORD)status);
 	#endif
 }
 
-bool thread::join(void **status) {
+bool thread::join(int32_t *status) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::setErrorNumber(0);
-		int	result=pthread_join(pvt->_thr,status);
+		int	result=pthread_join(pvt->_thr,(void **)status);
 		if (!result) {
 			return true;
 		}
@@ -125,7 +129,9 @@ bool thread::join(void **status) {
 		if (GetExitCodeThread(pvt->_thr,&stat)==FALSE) {
 			return false;
 		}
-		*stat=(void *)stat;
+		if (status) {
+			*status=(int32_t)stat;
+		}
 		return true;
 	#endif
 }

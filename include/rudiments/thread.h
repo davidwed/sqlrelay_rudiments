@@ -37,14 +37,14 @@ class RUDIMENTS_DLLSPEC thread {
 		/** Causes a thread to exit with the specified "status".  If
 		 *  another thread is waiting on this thread using join(), then
 		 *  that thread's join() method will fall through.  */
-		void	exit(void *status);
+		void	exit(int32_t status);
 
 		/** Waits for the function set by setFunction() and run by
 		 *  create() to call exit() or return.  This method should be
 		 *  called by a second thread.  If non-NULL, "status" will be
 		 *  set to the exit status of the thread.  Returns true on
 		 *  success and false if an error occurred. */
-		bool	join(void **status);
+		bool	join(int32_t *status);
 
 		/** Detaches the thread so that it may exit without calling
 		 *  exit() and without another thread needing to call join().
