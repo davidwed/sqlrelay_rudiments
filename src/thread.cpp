@@ -27,6 +27,7 @@ class threadprivate {
 		#endif
 		void		*(*_function)(void *);
 		void		*_arg;
+		bool		_needtojoin;
 };
 
 thread::thread() {
@@ -38,6 +39,7 @@ thread::thread() {
 	#endif
 	pvt->_function=NULL;
 	pvt->_arg=NULL;
+	pvt->_needtojoin=false;
 }
 
 thread::~thread() {
@@ -97,6 +99,7 @@ bool thread::create() {
 		int	result=pthread_create(&pvt->_thr,&pvt->_attr,
 						pvt->_function,pvt->_arg);
 		if (!result) {
+			pvt->_needtojoin=true;
 			return true;
 		}
 		error::setErrorNumber(result);
@@ -105,7 +108,11 @@ bool thread::create() {
 		pvt->_thr=CreateThread(NULL,pvt->_stacksize,
 					(LPTHREAD_START_ROUTINE)pvt->_function,
 					pvt->_arg,0,NULL);
-		return (pvt->_thr!=NULL);
+		if (pvt->_thr!=NULL) {
+			pvt->_needtojoin=true;
+			return true;
+		}
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -123,10 +130,14 @@ void thread::exit(int32_t status) {
 }
 
 bool thread::join(int32_t *status) {
+	if (!pvt->_needtojoin) {
+		return true;
+	}
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::setErrorNumber(0);
 		int	result=pthread_join(pvt->_thr,(void **)status);
 		if (!result) {
+			pvt->_needtojoin=false;
 			return true;
 		}
 		error::setErrorNumber(result);
@@ -142,6 +153,7 @@ bool thread::join(int32_t *status) {
 		if (status) {
 			*status=(int32_t)stat;
 		}
+		pvt->_needtojoin=false;
 		return true;
 	#else
 		error::setErrorNumber(ENOSYS);
@@ -150,6 +162,7 @@ bool thread::join(int32_t *status) {
 }
 
 bool thread::detach() {
+	pvt->_needtojoin=false;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::setErrorNumber(0);
 		int	result=pthread_detach(pvt->_thr);
