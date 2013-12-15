@@ -101,6 +101,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a444ff4495b747cebdc0b27596f8e5735"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b0dd7d2f99c578466071328a1c115cb"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a0b0dd7d2f99c578466071328a1c115cb">exec</a> (const char *command, const char *const *args)</td></tr>
 <tr class="separator:a0b0dd7d2f99c578466071328a1c115cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefd7589446026f82842bd69a7c881176"><td class="memItemLeft" align="right" valign="top">static pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#aefd7589446026f82842bd69a7c881176">spawn</a> (const char *command, const char *const *args)</td></tr>
+<tr class="separator:aefd7589446026f82842bd69a7c881176"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2bc3c2adc267e0aedabbdd50f6f6692"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#ab2bc3c2adc267e0aedabbdd50f6f6692">detach</a> ()</td></tr>
 <tr class="separator:ab2bc3c2adc267e0aedabbdd50f6f6692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f4a254246fe4724cf05bc6128c87428"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a6f4a254246fe4724cf05bc6128c87428">exit</a> (int32_t status)</td></tr>
@@ -269,7 +271,7 @@ process into the background." Returns true on success and false upon failure. </
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Runs "command" with arguments "args", replacing the current running process with this new process. Note that the first element of array "args" should be the name of the command that you want to run, typically the same as "command". "args" should be NULL terminated. Returns false if an error occurred and otherwise does not return at all. </p>
+<p>Runs "command" with arguments "args", replacing the current running process with this new process. Whether the new process retains the process id of the current process is platform-specific. Note that the first element of array "args" should be the name of the command that you want to run, typically the same as "command". "args" should be NULL terminated. Returns false if an error occurred and otherwise does not return at all. </p>
 
 </div>
 </div>
@@ -1072,6 +1074,41 @@ process into the background." Returns true on success and false upon failure. </
 
 </div>
 </div>
+<a class="anchor" id="aefd7589446026f82842bd69a7c881176"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static pid_t process::spawn </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *const *&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Runs "command" with arguments "args" as a new process. Use this instead of a combinination of <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> and <a class="el" href="classprocess.html#a0b0dd7d2f99c578466071328a1c115cb">exec()</a> as it is more efficient on some platforms. Note that the first element of array "args" should be the name of the command that you want to run, typically the same as "command". "args" should be NULL terminated. Returns the process id of the child process or -1 if an error occurred. </p>
+
+</div>
+</div>
 <a class="anchor" id="a150e5786f0688e9e6dc6e3ea7ff089c8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1099,7 +1136,7 @@ process into the background." Returns true on success and false upon failure. </
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 5 2013 21:15:58 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 15 2013 02:07:54 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

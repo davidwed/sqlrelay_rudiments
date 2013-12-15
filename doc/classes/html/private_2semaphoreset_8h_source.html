@@ -52,19 +52,20 @@
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;                                <a class="code" href="classsemaphoreset.html">semaphoreset</a>(<span class="keyword">const</span> <a class="code" href="classsemaphoreset.html">semaphoreset</a> &amp;s);</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;                <a class="code" href="classsemaphoreset.html">semaphoreset</a>    &amp;operator=(<span class="keyword">const</span> <a class="code" href="classsemaphoreset.html">semaphoreset</a> &amp;s);</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                int32_t semGet(key_t key, int32_t nsems, int32_t semflg);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                int32_t semControl(semaphoresetprivate *pvt, int32_t semnum,</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                                                int32_t cmd, semun *semctlun);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                <span class="keywordtype">bool</span>    semTimedOp(<span class="keyword">struct</span> sembuf *sops,</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                                                int32_t seconds,</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                                                int32_t nanoseconds);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                <span class="keywordtype">bool</span>    semOp(<span class="keyword">struct</span> sembuf *sops);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                semaphoresetprivate     *pvt;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                int32_t semGet(key_t key, int32_t nsems,</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                                        int32_t semflg, <span class="keyword">const</span> int32_t *values);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                int32_t semControl(semaphoresetprivate *pvt, int32_t semnum,</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                                                int32_t cmd, semun *semctlun);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                <span class="keywordtype">bool</span>    semTimedOp(<span class="keyword">struct</span> sembuf *sops,</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;                                                int32_t seconds,</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                                                int32_t nanoseconds);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                <span class="keywordtype">bool</span>    semOp(<span class="keyword">struct</span> sembuf *sops);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                semaphoresetprivate     *pvt;</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 5 2013 21:15:57 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 15 2013 02:07:53 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

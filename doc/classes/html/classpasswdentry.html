@@ -70,6 +70,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac1e8e745934161be924d8c9e00bc11ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6308547e20e91a34bab5c1314c0e767"><td class="memItemLeft" align="right" valign="top">uid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#aa6308547e20e91a34bab5c1314c0e767">getUserId</a> () const </td></tr>
 <tr class="separator:aa6308547e20e91a34bab5c1314c0e767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfb88d1624cb1204b52a27ef1e699b0d"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#abfb88d1624cb1204b52a27ef1e699b0d">getSid</a> () const </td></tr>
+<tr class="separator:abfb88d1624cb1204b52a27ef1e699b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca79fbb98d89bf10a5a00a98981505b7"><td class="memItemLeft" align="right" valign="top">gid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#aca79fbb98d89bf10a5a00a98981505b7">getPrimaryGroupId</a> () const </td></tr>
 <tr class="separator:aca79fbb98d89bf10a5a00a98981505b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f4516c19eacfc9b7de4842192020402"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#a4f4516c19eacfc9b7de4842192020402">getRealName</a> () const </td></tr>
@@ -85,6 +87,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a41760bfd4230b723c36b8ce472b4fa84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d6c2e195e95658bdd85ff07487855ba"><td class="memItemLeft" align="right" valign="top">static uid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#a1d6c2e195e95658bdd85ff07487855ba">getUserId</a> (const char *username)</td></tr>
 <tr class="separator:a1d6c2e195e95658bdd85ff07487855ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad26e602e7811fafcf8c196bb55deac1e"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#ad26e602e7811fafcf8c196bb55deac1e">getSid</a> (const char *username)</td></tr>
+<tr class="separator:ad26e602e7811fafcf8c196bb55deac1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a984ee195e3128e40e11db8be5ffa1ffa"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#a984ee195e3128e40e11db8be5ffa1ffa">platformSupportsFormalSid</a> ()</td></tr>
+<tr class="separator:a984ee195e3128e40e11db8be5ffa1ffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68137f7c741af215c2e43ac7e8976188"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#a68137f7c741af215c2e43ac7e8976188">needsMutex</a> ()</td></tr>
 <tr class="separator:a68137f7c741af215c2e43ac7e8976188"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d8f5bb5df1367388d4338bf8325f73a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpasswdentry.html#a2d8f5bb5df1367388d4338bf8325f73a">setMutex</a> (<a class="el" href="classthreadmutex.html">threadmutex</a> *mtx)</td></tr>
@@ -266,6 +272,50 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abfb88d1624cb1204b52a27ef1e699b0d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* passwdentry::getSid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns a string representation of the SID (security id) of this user.</p>
+<p>Note: On platforms (like non-Windows platforms) where the supportsFormalSid method returns false, the value returned is just a string representation of the number returned by <a class="el" href="classpasswdentry.html#aa6308547e20e91a34bab5c1314c0e767">getUserId()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad26e602e7811fafcf8c196bb55deac1e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* passwdentry::getSid </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>username</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Convenience method. Returns the SID of the user specified by "username". See non-static version of this method for more information.</p>
+<p>Note that the return value is allocated internally and returned. The calling program must free the buffer.</p>
+<p>Returns NULL if an error occurred or if "username" is invalid. </p>
+
+</div>
+</div>
 <a class="anchor" id="aa6308547e20e91a34bab5c1314c0e767"></a>
 <div class="memitem">
 <div class="memproto">
@@ -278,7 +328,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the id of this user. </p>
+<p>Returns the id of this user.</p>
+<p>Note: On platforms (like Windows) where the supportsFormalSid method returns true, users don't have simple numeric ids. On those platforms, the value returned by this method is simply an index into an internal structure that methods of other rudiments classes know how to access and ultimately translate to a user. It should not be passed in to functions or methods of other libraries that don't ultimately use rudiments methods. </p>
 
 </div>
 </div>
@@ -303,7 +354,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Convenience method. Returns the id of the user specified by "username".</p>
+<p>Convenience method. Returns the id of the user specified by "username". See non-static version of this method for more information.</p>
 <p>Returns -1 if an error occurred or if "username" is invalid. </p>
 
 </div>
@@ -383,6 +434,31 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a984ee195e3128e40e11db8be5ffa1ffa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool passwdentry::platformSupportsFormalSid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if the platform supports a formal user SID (security id) and false if not.</p>
+<p>Windows and windows-like platforms do. Unix and unix-like platforms (including Mac OS X) do not. </p>
+
+</div>
+</div>
 <a class="anchor" id="a2d8f5bb5df1367388d4338bf8325f73a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -411,7 +487,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 5 2013 21:15:58 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 15 2013 02:07:54 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

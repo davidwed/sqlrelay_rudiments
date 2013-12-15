@@ -57,6 +57,7 @@
       <li class="current"><a href="functions_func_0x67.html#index_g"><span>g</span></a></li>
       <li><a href="functions_func_0x68.html#index_h"><span>h</span></a></li>
       <li><a href="functions_func_0x69.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_func_0x6a.html#index_j"><span>j</span></a></li>
       <li><a href="functions_func_0x6b.html#index_k"><span>k</span></a></li>
       <li><a href="functions_func_0x6c.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_0x6d.html#index_m"><span>m</span></a></li>
@@ -332,9 +333,6 @@
 <li>getInternalMutexStructure()
 : <a class="el" href="classthreadmutex.html#a89a699c2e8772b1aff3c791914c0c345">threadmutex</a>
 </li>
-<li>getInternalTimeStructure()
-: <a class="el" href="classdatetime.html#aab79e7ac9d9d2d25a34a49546f49d183">datetime</a>
-</li>
 <li>getKey()
 : <a class="el" href="classdictionarynode.html#a635bb4dc53a66b3412f831c186221f8a">dictionarynode&lt; keytype, valuetype &gt;</a>
 </li>
@@ -447,6 +445,9 @@
 <li>getMembers()
 : <a class="el" href="classgroupentry.html#a9121ad198f59f5658aa741c966c93487">groupentry</a>
 </li>
+<li>getMicroseconds()
+: <a class="el" href="classdatetime.html#a20259e3d13a24b11160d5a51bacc4732">datetime</a>
+</li>
 <li>getMinThreadStackSize()
 : <a class="el" href="classsys.html#a7613dfd7e574d34ebe5087394f9e5b20">sys</a>
 </li>
@@ -539,8 +540,7 @@
 : <a class="el" href="classprocess.html#a7393dd897a26b35465e58cf240dc724b">process</a>
 </li>
 <li>getPassword()
-: <a class="el" href="classgroupentry.html#a6ab5dac48f8acffd781b394fdafc4cb0">groupentry</a>
-, <a class="el" href="classpasswdentry.html#ac1e8e745934161be924d8c9e00bc11ab">passwdentry</a>
+: <a class="el" href="classpasswdentry.html#ac1e8e745934161be924d8c9e00bc11ab">passwdentry</a>
 </li>
 <li>getPath()
 : <a class="el" href="classxmldomnode.html#ad3534bc00e4d88b094fcac21981e074f">xmldomnode</a>
@@ -552,8 +552,8 @@
 : <a class="el" href="classintervaltimer.html#abada1e77c6010f895970651f715d4e79">intervaltimer</a>
 </li>
 <li>getPermissions()
-: <a class="el" href="classsemaphoreset.html#a293355c60af02320a432c94ab23f0184">semaphoreset</a>
-, <a class="el" href="classfile.html#a4dedcf10aedb1ea568307467851f4b74">file</a>
+: <a class="el" href="classfile.html#a4dedcf10aedb1ea568307467851f4b74">file</a>
+, <a class="el" href="classsemaphoreset.html#a293355c60af02320a432c94ab23f0184">semaphoreset</a>
 , <a class="el" href="classsharedmemory.html#afba231e06835663aaea82c309ee3a202">sharedmemory</a>
 </li>
 <li>getPhysicalPageCount()
@@ -564,7 +564,7 @@
 </li>
 <li>getPort()
 : <a class="el" href="classinetsocketserver.html#aebd8eccd391d973cfef3c990a03fc6bf">inetsocketserver</a>
-, <a class="el" href="classserviceentry.html#a6becff71a0562ea129a42dcd485381c7">serviceentry</a>
+, <a class="el" href="classserviceentry.html#a1f699f050b0b646f459f6a7116287337">serviceentry</a>
 </li>
 <li>getPosition()
 : <a class="el" href="classvariablebuffer.html#a98235ab8d3dc4acc54348b6731e43791">variablebuffer</a>
@@ -578,13 +578,13 @@
 : <a class="el" href="classxmldomnode.html#a8d8b1a4d9aea85ae74619173d1f24a77">xmldomnode</a>
 </li>
 <li>getPreviousTagSibling()
-: <a class="el" href="classxmldomnode.html#a88c6b01351ad87f606affff9ee65b2b5">xmldomnode</a>
+: <a class="el" href="classxmldomnode.html#a36c4284712494e2259c462348ecf9a79">xmldomnode</a>
 </li>
 <li>getPrimaryGroupId()
 : <a class="el" href="classpasswdentry.html#aca79fbb98d89bf10a5a00a98981505b7">passwdentry</a>
 </li>
 <li>getProcessGroupId()
-: <a class="el" href="classprocess.html#abaa57fd87abbe0761288e42b412988fe">process</a>
+: <a class="el" href="classprocess.html#a05eca91d8bc65552df843f584b0bd557">process</a>
 </li>
 <li>getProcessId()
 : <a class="el" href="classprocess.html#adf19980c0cbb800325eef8783e93b4bf">process</a>
@@ -641,17 +641,24 @@
 : <a class="el" href="classrandomnumber.html#a9a98f9cc155978dc0ad2475c7503289d">randomnumber</a>
 </li>
 <li>getSessionId()
-: <a class="el" href="classprocess.html#a37af1fa3a07219a9af850013c9516cef">process</a>
+: <a class="el" href="classprocess.html#a122bfeb9ef597c253ea6f99b6582b665">process</a>
 </li>
 <li>getShell()
 : <a class="el" href="classpasswdentry.html#a98169d2f83fd9be1fa956437d0496711">passwdentry</a>
 </li>
+<li>getSid()
+: <a class="el" href="classgroupentry.html#ac7dda9ba954ae45baf16274baffa070a">groupentry</a>
+, <a class="el" href="classpasswdentry.html#ad26e602e7811fafcf8c196bb55deac1e">passwdentry</a>
+</li>
 <li>getSize()
-: <a class="el" href="classfile.html#a72ef539971b24cbf0ba399723f2b4f1a">file</a>
-, <a class="el" href="classvariablebuffer.html#a83a2e8da3582854a75f80226b5d010d0">variablebuffer</a>
+: <a class="el" href="classvariablebuffer.html#a83a2e8da3582854a75f80226b5d010d0">variablebuffer</a>
+, <a class="el" href="classfile.html#a72ef539971b24cbf0ba399723f2b4f1a">file</a>
+</li>
+<li>getStackSize()
+: <a class="el" href="classthread.html#aede1740a2fd2af8d0e918c616ce51ae9">thread</a>
 </li>
 <li>getString()
-: <a class="el" href="classdatetime.html#a5694dadcaa062bc8df3aa08d09ababa1">datetime</a>
+: <a class="el" href="classdatetime.html#ad3f6773cfee8dc5f9ef8147269ba0d76">datetime</a>
 , <a class="el" href="classstringbuffer.html#a23ae6d168ef64af03fec6a647cd7c016">stringbuffer</a>
 , <a class="el" href="classdatetime.html#a375f30eff307d49790091b31a0cab86b">datetime</a>
 </li>
@@ -725,32 +732,31 @@
 : <a class="el" href="classxmldomnode.html#a005ec70957d12bee990eac7aa210fda9">xmldomnode</a>
 </li>
 <li>getType()
-: <a class="el" href="classxmldomnode.html#ac1557bdda306c15dd905534be29fbba1">xmldomnode</a>
-, <a class="el" href="classfiledescriptor.html#a0f2e40bd232c70c7a6dae2ab01ddbba0">filedescriptor</a>
+: <a class="el" href="classfiledescriptor.html#a0f2e40bd232c70c7a6dae2ab01ddbba0">filedescriptor</a>
 , <a class="el" href="classfilesystem.html#af4ab898ed871cacfbbf842e6bd35bf5f">filesystem</a>
+, <a class="el" href="classxmldomnode.html#ac1557bdda306c15dd905534be29fbba1">xmldomnode</a>
 </li>
 <li>getTypeName()
 : <a class="el" href="classfilesystem.html#a897e7be5ca2106a3a2f1c14bf3c91d04">filesystem</a>
 </li>
 <li>getUserId()
-: <a class="el" href="classpasswdentry.html#a1d6c2e195e95658bdd85ff07487855ba">passwdentry</a>
-, <a class="el" href="classsemaphoreset.html#a75231472885860c56a183c66f534a627">semaphoreset</a>
+: <a class="el" href="classsemaphoreset.html#a75231472885860c56a183c66f534a627">semaphoreset</a>
 , <a class="el" href="classsharedmemory.html#a452c4e90adc2cad54451ca70d4ea4388">sharedmemory</a>
-, <a class="el" href="classpasswdentry.html#aa6308547e20e91a34bab5c1314c0e767">passwdentry</a>
+, <a class="el" href="classpasswdentry.html#a1d6c2e195e95658bdd85ff07487855ba">passwdentry</a>
 </li>
 <li>getUserName()
 : <a class="el" href="classsharedmemory.html#af39af79728bcbfb98d2d339f68f3257e">sharedmemory</a>
 , <a class="el" href="classsemaphoreset.html#af9d7f2142a3720f9863308d5db639ed0">semaphoreset</a>
 </li>
 <li>getValue()
-: <a class="el" href="classdictionary.html#a4ed808eb46efebc850317aa436760af3">dictionary&lt; keytype, valuetype &gt;</a>
-, <a class="el" href="classdictionarynode.html#a41c5bd283823b2479ded8bdf14d6b44f">dictionarynode&lt; keytype, valuetype &gt;</a>
-, <a class="el" href="classenvironment.html#a11e29bf8fbff2f2c5bf067f85def72e4">environment</a>
-, <a class="el" href="classcommandline.html#a91c9342cd435cab56e40e9ecedd4fb36">commandline</a>
-, <a class="el" href="classsemaphoreset.html#afc32d8e7b9c704eaab997cbe1e8d2305">semaphoreset</a>
+: <a class="el" href="classenvironment.html#a11e29bf8fbff2f2c5bf067f85def72e4">environment</a>
+, <a class="el" href="classparameterstring.html#a890e452c327ceed76e04174ce7ac6f19">parameterstring</a>
+, <a class="el" href="classdictionary.html#a4ed808eb46efebc850317aa436760af3">dictionary&lt; keytype, valuetype &gt;</a>
 , <a class="el" href="classlinkedlistnode.html#a5ce8e04638c58a28be4a2c6ce4eea9a8">linkedlistnode&lt; valuetype &gt;</a>
 , <a class="el" href="classxmldomnode.html#a9441b0c50e40440c4d22bece1d0aa922">xmldomnode</a>
-, <a class="el" href="classparameterstring.html#a890e452c327ceed76e04174ce7ac6f19">parameterstring</a>
+, <a class="el" href="classdictionarynode.html#a41c5bd283823b2479ded8bdf14d6b44f">dictionarynode&lt; keytype, valuetype &gt;</a>
+, <a class="el" href="classcommandline.html#a91c9342cd435cab56e40e9ecedd4fb36">commandline</a>
+, <a class="el" href="classsemaphoreset.html#afc32d8e7b9c704eaab997cbe1e8d2305">semaphoreset</a>
 </li>
 <li>getValueByIndex()
 : <a class="el" href="classlinkedlist.html#adc52011c8b520c2c8a658ab50f0b9483">linkedlist&lt; valuetype &gt;</a>
@@ -792,7 +798,7 @@
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 5 2013 21:15:58 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 15 2013 02:07:54 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

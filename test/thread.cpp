@@ -5,8 +5,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
 
-#include <windows.h>
-
 struct args {
 	thread		*th;
 	uint16_t	id;
