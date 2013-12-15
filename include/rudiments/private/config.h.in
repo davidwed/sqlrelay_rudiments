@@ -178,6 +178,9 @@
 /* Some systems have CreateSemaphore */
 #undef RUDIMENTS_HAVE_CREATESEMAPHORE
 
+/* CreateThread function exists */
+#undef RUDIMENTS_HAVE_CREATETHREAD
+
 /* Some systems have CreateFileMapping */
 #undef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 
@@ -723,6 +726,9 @@
 
 /* pthread_sigmask exists */
 #undef RUDIMENTS_HAVE_PTHREAD_SIGMASK
+
+/* pthread_t type exists */
+#undef RUDIMENTS_HAVE_PTHREAD_T
 
 /* Some systems have putenv */
 #undef RUDIMENTS_HAVE_PUTENV

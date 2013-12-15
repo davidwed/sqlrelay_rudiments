@@ -800,6 +800,7 @@ enable_memorymap
 enable_memorypool
 enable_modemclient
 enable_modemserver
+enable_thread
 enable_threadmutex
 enable_parameterstring
 enable_passwdentry
@@ -1496,6 +1497,7 @@ Optional Features:
   --disable-memorypool    Don't build memorypool class
   --disable-modemclient   Don't build modemclient class
   --disable-modemserver   Don't build modemserver class
+  --disable-thread        Don't build thread class
   --disable-threadmutex   Don't build threadmutex class
   --disable-parameterstring      Don't build parameterstring class
   --disable-passwdentry   Don't build passwdentry class
@@ -2526,7 +2528,7 @@ fi
 
 # Check whether --enable-threads was given.
 if test "${enable_threads+set}" = set; then :
-  enableval=$enable_threads; ENABLE_RUDIMENTS_THREADS="no"
+  enableval=$enable_threads; ENABLE_RUDIMENTS_THREADS="no"; INCLUDE_THREAD="0"; INCLUDE_THREADMUTEX="0"
 else
   ENABLE_RUDIMENTS_THREADS="yes"
 fi
@@ -2727,6 +2729,13 @@ if test "${enable_modemserver+set}" = set; then :
   enableval=$enable_modemserver; INCLUDE_MODEMSERVER="0"
 else
   INCLUDE_MODEMSERVER="1"
+fi
+
+# Check whether --enable-thread was given.
+if test "${enable_thread+set}" = set; then :
+  enableval=$enable_thread; INCLUDE_THREAD="0"
+else
+  INCLUDE_THREAD="1"
 fi
 
 # Check whether --enable-threadmutex was given.
@@ -17917,6 +17926,90 @@ fi
 	if ( test $HAS_THREADS = "yes")
 	then
 
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_t" >&5
+$as_echo_n "checking for pthread_t... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $PTHREADINCLUDES"
+LIBS="$PTHREADLIB"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#define _TIMESTRUC_T
+#include <pthread.h>
+int
+main ()
+{
+if (sizeof(pthread_t)) { return 0; } return 0;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_PTHREAD_T 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CreateThread" >&5
+$as_echo_n "checking for CreateThread... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $PTHREADINCLUDES"
+LIBS="$PTHREADLIB"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+int
+main ()
+{
+HANDLE mut=CreateThread(NULL,0,NULL,NULL,0,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_CREATETHREAD 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+	fi
+
+
+	if ( test $HAS_THREADS = "yes")
+	then
+
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_t" >&5
 $as_echo_n "checking for pthread_mutex_t... " >&6; }
 
@@ -29508,6 +29601,14 @@ then
 	SRCS="$SRCS modemserver.cpp"
 	LOBJS="$LOBJS modemserver.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_MODEMSERVER"
+fi
+
+if ( test "$INCLUDE_THREAD" = "1" )
+then
+	HEADERS="$HEADERS thread.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS thread.h threadincludes.h"
+	SRCS="$SRCS thread.cpp"
+	LOBJS="$LOBJS thread.lo"
 fi
 
 if ( test "$INCLUDE_THREADMUTEX" = "1" )

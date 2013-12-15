@@ -9,6 +9,8 @@
 	got the sharedmemory class working on windows
 	added support for microseconds to the datetime class
 	build-tweaks for mingw32
+	added process::spawn that maps more cleanly on windows than fork/exec
+	added thread class
 
 0.44.1 - configure scripts attempts link for various _r functions now to catch
 		cases where they're defined in the headers but not present in

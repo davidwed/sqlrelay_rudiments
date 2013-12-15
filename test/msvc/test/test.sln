@@ -85,6 +85,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "error", "..\error\error.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "..\math\math.vcxproj", "{B1D05C04-7BAF-470A-8EAC-CDA0E15F7BCD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thread", "..\thread\thread.vcxproj", "{DC76586F-75B3-4962-9059-03F700E711F1}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "threadmutex", "..\threadmutex\threadmutex.vcxproj", "{F7EA8456-1700-4DE9-A2F9-1747CE6016DD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "process", "..\process\process.vcxproj", "{79D2E9EB-C146-4449-93FB-220B9BF1103D}"

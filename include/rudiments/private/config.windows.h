@@ -173,6 +173,9 @@
 /* Some systems have CreateSemaphore */
 #define RUDIMENTS_HAVE_CREATESEMAPHORE 1
 
+/* CreateThread function exists */
+#define RUDIMENTS_HAVE_CREATETHREAD 1
+
 /* Some systems have CreateFileMapping */
 #define RUDIMENTS_HAVE_CREATE_FILE_MAPPING 1
 

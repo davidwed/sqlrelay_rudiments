@@ -772,6 +772,25 @@ AC_SUBST(PTHREADLIB)
 ])
 
 
+AC_DEFUN([FW_CHECK_THREAD],
+[
+	if ( test $HAS_THREADS = "yes")
+	then
+
+		dnl check for pthread_t
+		AC_MSG_CHECKING(for pthread_t)
+		FW_TRY_LINK([#define _TIMESTRUC_T
+#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		dnl check for CreateThread
+		AC_MSG_CHECKING(for CreateThread)
+		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],[HANDLE mut=CreateThread(NULL,0,NULL,NULL,0,NULL);],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_CREATETHREAD,1,CreateThread function exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	fi
+])
+
+
 AC_DEFUN([FW_CHECK_MUTEX],
 [
 	if ( test $HAS_THREADS = "yes")

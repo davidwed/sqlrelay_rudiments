@@ -13,18 +13,18 @@ class threadmutexprivate;
 class RUDIMENTS_DLLSPEC threadmutex {
 	public:
 
-			/** Creates an instance of the threadmutex class. */
-			threadmutex();
+		/** Creates an instance of the threadmutex class. */
+		threadmutex();
 
-			/** Creates an instance of the threadmutex class that
-			 *  uses an already-initialized, system-specific
-			 *  threadmutex structure.  On unix systems, this would
-			 *  likely be an instance of struct pthread_mutex_t,
-			 *  though it could possibly be something else. */
-			threadmutex(void *mut);
+		/** Creates an instance of the threadmutex class that uses an
+		 *  already-initialized, system-specific threadmutex structure.
+		 *  On unix systems, this would likely be an instance of
+		 *  struct pthread_mutex_t, though it could possibly be
+		 *  something else. */
+		threadmutex(void *mut);
 
-			/** Deletes this instance of the threadmutex class. */
-			~threadmutex();
+		/** Deletes this instance of the threadmutex class. */
+		~threadmutex();
 
 		/** Locks the mutex.  Will wait until the lock succeds.
 		 *  Returns true on success and false if an error occurs. */
@@ -42,7 +42,7 @@ class RUDIMENTS_DLLSPEC threadmutex {
 
 		/** Returns the mutex structure used by the class internally.
 		 *  On unix systems this would most likely be a
-		 *  struct pthread_mutex_t *, though it could possible be
+		 *  struct pthread_mutex_t *, though it could possibly be
 		 *  something else. */
 		void	*getInternalMutexStructure();
 

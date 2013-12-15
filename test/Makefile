@@ -48,6 +48,7 @@ PROGS = server$(EXE) \
 	dynamiclib$(EXE) \
 	error$(EXE) \
 	math$(EXE) \
+	thread$(EXE) \
 	threadmutex$(EXE) \
 	process$(EXE) \
 	serialportprofile$(EXE) \
@@ -155,6 +156,7 @@ clean:
 		dynamiclib$(EXE) \
 		error$(EXE) \
 		math$(EXE) \
+		thread$(EXE) \
 		threadmutex$(EXE) \
 		process$(EXE) \
 		serialportprofile$(EXE) \
@@ -376,6 +378,9 @@ error$(EXE): error.cpp error.lo
 
 math$(EXE): math.cpp math.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ math.lo $(ALLSTATIC) $(LIBS)
+
+thread$(EXE): thread.cpp thread.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ thread.lo $(ALLSTATIC) $(LIBS)
 
 threadmutex$(EXE): threadmutex.cpp threadmutex.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ threadmutex.lo $(ALLSTATIC) $(LIBS)
