@@ -30,6 +30,9 @@ void count(void *args) {
 
 int main(int argc, const char **argv) {
 
+	stdoutput.printf("threads are%ssupported\n",
+			(thread::supportsThreads())?" ":" not ");
+
 	// create thread 1
 	thread	t1;
 	struct args	a1;
@@ -56,11 +59,11 @@ int main(int argc, const char **argv) {
 	}
 
 	// join the threads
-	int32_t	t1status;
+	int32_t	t1status=-1;
 	if (!t1.join(&t1status)) {
 		stdoutput.printf(" 1: join failed\n");
 	}
-	int32_t	t2status;
+	int32_t	t2status=-1;
 	if (!t2.join(&t2status)) {
 		stdoutput.printf(" 2: join failed\n");
 	}

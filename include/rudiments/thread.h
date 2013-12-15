@@ -51,6 +51,10 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  Returns true on success and false if an error occurred. */
 		bool	detach();
 
+		/** Returns true if the platform supports threads and rudiments
+		 *  was built with thread support and false otherwise. */
+		static bool	supportsThreads();
+
 	#include <rudiments/private/thread.h>
 };
 

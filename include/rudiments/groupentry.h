@@ -48,7 +48,7 @@ class RUDIMENTS_DLLSPEC groupentry {
 		 *  and ultimately translate to a group.  It should not be
 		 *  passed in to functions or methods of other libraries that
 		 *  don't ultimately use rudiments methods. */
-		gid_t			getGroupId() const;
+		gid_t		getGroupId() const;
 
 		/** Returns a string representation of the SID (security id) of
 		 *  this group.

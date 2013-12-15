@@ -3,7 +3,6 @@
 
 #include <rudiments/thread.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_T)
 	// to fix an odd situation on SCO with FSU pthreads
@@ -68,6 +67,9 @@ bool thread::setStackSize(size_t stacksize) {
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		pvt->_stacksize=stacksize;
 		return true;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -83,6 +85,9 @@ bool thread::getStackSize(size_t *stacksize) {
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		*stacksize=pvt->_stacksize;
 		return true;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -101,6 +106,9 @@ bool thread::create() {
 					(LPTHREAD_START_ROUTINE)pvt->_function,
 					pvt->_arg,0,NULL);
 		return (pvt->_thr!=NULL);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -109,6 +117,8 @@ void thread::exit(int32_t status) {
 		pthread_exit((void *)status);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		ExitThread((DWORD)status);
+	#else
+		error::setErrorNumber(ENOSYS);
 	#endif
 }
 
@@ -133,6 +143,9 @@ bool thread::join(int32_t *status) {
 			*status=(int32_t)stat;
 		}
 		return true;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -147,5 +160,17 @@ bool thread::detach() {
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		return (CloseHandle(pvt->_thr)==TRUE);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool thread::supportsThreads() {
+	#if defined(RUDIMENTS_HAVE_PTHREAD_T) || \
+		defined(RUDIMENTS_HAVE_CREATETHREAD)
+		return true;
+	#else
+		return false;
 	#endif
 }
