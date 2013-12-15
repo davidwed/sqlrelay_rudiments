@@ -396,6 +396,12 @@ pid_t process::spawn(const char *command, const char * const *args) {
 	#endif
 }
 
+#ifdef _WIN32
+static const char	*root="C:\\";
+#else
+static const char	*root="/";
+#endif
+
 bool process::detach() {
 
 	// fork off a child process
@@ -412,17 +418,18 @@ bool process::detach() {
 		#endif
 		exitImmediately(0);
 	}
-	
+
 	// create a new session with no controlling terminal
 	newSession();
 
-	// change directory to root to avoid keeping any directories in use
-	directory::changeDirectory("/");
+	// change directory to root to avoid
+	// keeping any directories in use
+	directory::changeDirectory(root);
 
-	// Set umask such that files are created 666 and directories 777.
-	// This way we can change them to whatever we like using chmod().
-	// We want to avoid inheriting a umask which wouldn't give us write
-	// permissions to files we create.
+	// Set umask such that files are created 666 and directories 777.  This
+	// way we can change them to whatever we like using chmod().  We want to
+	// avoid inheriting a umask which wouldn't give us write permissions to
+	// files we create.
 	process::setFileCreationMask(0);
 
 	return true;
