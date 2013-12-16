@@ -3,6 +3,7 @@
 
 #include <rudiments/unixsocketutil.h>
 #include <rudiments/rawbuffer.h>
+#include <rudiments/charstring.h>
 
 class unixsocketutilprivate {
 	friend class unixsocketutil;
@@ -45,4 +46,12 @@ const char *unixsocketutil::_filename() {
 
 sockaddr_un *unixsocketutil::_sun() {
 	return &pvt->_sun;
+}
+
+uint16_t unixsocketutil::filenameToPort(const char *filename) {
+	uint16_t	port=0;
+	for (const char *c=filename; *c; c++) {
+		port=port+*c;
+	}
+	return port;
 }

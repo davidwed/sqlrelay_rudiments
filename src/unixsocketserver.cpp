@@ -8,6 +8,9 @@
 #include <rudiments/file.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
+#ifdef _WIN32
+	#include <rudiments/inetsocketserver.h>
+#endif
 
 #include <rudiments/private/winsock.h>
 
@@ -15,6 +18,9 @@ class unixsocketserverprivate {
 	friend class unixsocketserver;
 	private:
 		mode_t	_mask;
+		#ifdef _WIN32
+			inetsocketserver	_iss;
+		#endif
 };
 
 unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
@@ -35,6 +41,9 @@ unixsocketserver &unixsocketserver::operator=(const unixsocketserver &u) {
 		socketserver::operator=(u);
 		unixsocketutil::operator=(u);
 		pvt->_mask=u.pvt->_mask;
+		#ifdef _WIN32
+			pvt->_iss=u.pvt->_iss;
+		#endif
 	}
 	return *this;
 }
@@ -45,17 +54,6 @@ unixsocketserver::~unixsocketserver() {
 
 bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
-#ifdef _WIN32
-
-	// Windows doesn't support unix sockets.  Ideally, I'd just let one
-	// of the methods below fail but reportedly, with some compilers on
-	// some versions of windows, the code below won't even compile.  Most
-	// likely AF_UNIX isn't defined but I'm not sure so for now I'm just
-	// disabling this for windows in general.
-	return false;
-
-#else
-
 	unixsocketutil::initialize(filename);
 	pvt->_mask=mask;
 
@@ -63,6 +61,10 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 	if (!filename || (filename && !filename[0])) {
 		return false;
 	}
+
+#ifdef _WIN32
+	return pvt->_iss.initialize("127.0.0.1",hostToPort(filename));
+#else
 
 	// init the socket structure
 	file::remove(filename);
@@ -99,12 +101,19 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
 bool unixsocketserver::listen(const char *filename, mode_t mask,
 							int32_t backlog) {
+#ifdef _WIN32
+	return pvt->_iss.listen("127.0.0.1",hostToPort(filename),backlog);
+#else
 	initialize(filename,mask);
 	return (bind() && listen(backlog));
+#endif
 }
 
 bool unixsocketserver::bind() {
 
+#ifdef _WIN32
+	return pvt->_iss.bind();
+#else
 	// set umask and store old umask
 	mode_t	oldmask=process::setFileCreationMask(pvt->_mask);
 
@@ -124,18 +133,27 @@ bool unixsocketserver::bind() {
 	process::setFileCreationMask(oldmask);
 
 	return retval;
+#endif
 }
 
 bool unixsocketserver::listen(int32_t backlog) {
+
+#ifdef _WIN32
+	return pvt->_iss.listen(backlog);
+#else
 	int32_t	result;
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return !result;
+#endif
 }
 
 filedescriptor *unixsocketserver::accept() {
 
+#ifdef _WIN32
+	return pvt->_iss.accept();
+#else
 	// initialize a socket address structure
 	sockaddr_un	clientsun;
 	socklen_t	size=sizeof(clientsun);
@@ -182,4 +200,5 @@ filedescriptor *unixsocketserver::accept() {
 	#endif
 
 	return returnsock;
+#endif
 }

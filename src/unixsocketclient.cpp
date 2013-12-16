@@ -5,12 +5,18 @@
 #include <rudiments/charstring.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
+#ifdef _WIN32
+	#include <rudiments/inetsocketclient.h>
+#endif
 
 #include <rudiments/private/winsock.h>
 
 class unixsocketclientprivate {
 	friend class unixsocketclient;
 	private:
+		#ifdef _WIN32
+			inetsocketclient	_isc;
+		#endif
 };
 
 unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
@@ -28,6 +34,9 @@ unixsocketclient &unixsocketclient::operator=(const unixsocketclient &u) {
 	if (this!=&u) {
 		socketclient::operator=(u);
 		unixsocketutil::operator=(u);
+		#ifdef _WIN32
+			pvt->_isc=u.pvt->_isc;
+		#endif
 	}
 	return *this;
 }
@@ -52,6 +61,12 @@ void unixsocketclient::initialize(const char *filename,
 						uint32_t retrycount) {
 	unixsocketutil::initialize(filename);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
+	#ifdef _WIN32
+		pvt->_isc.initialize("127.0.0.1",
+					filenameToPort(filename),
+					timeoutsec,timeoutusec,
+					retrywait,retrycount);
+	#endif
 }
 
 void unixsocketclient::initialize(constnamevaluepairs *cd) {
@@ -80,16 +95,8 @@ void unixsocketclient::initialize(constnamevaluepairs *cd) {
 int32_t unixsocketclient::connect() {
 
 #ifdef _WIN32
-
-	// Windows doesn't support unix sockets.  Ideally, I'd just let one
-	// of the methods below fail but reportedly, with some compilers on
-	// some versions of windows, the code below won't even compile.  Most
-	// likely AF_UNIX isn't defined but I'm not sure so for now I'm just
-	// disabling this for windows in general.
-	return RESULT_ERROR;
-
+	return isc.connect();
 #else
-
 	// set the filename to connect to
 	_sun()->sun_family=AF_UNIX;
 	charstring::copy(_sun()->sun_path,_filename());
