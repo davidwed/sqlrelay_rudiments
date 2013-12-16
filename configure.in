@@ -2421,6 +2421,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 _access_s(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE__ACCESS_S,1,Some systems have _access_s()) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for DuplicateHandle)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+DuplicateHandle(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_DUPLICATEHANDLE,1,Some systems have DuplicateHandle) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

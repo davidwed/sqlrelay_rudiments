@@ -235,6 +235,9 @@
 /* Some systems have dup2 */
 #undef RUDIMENTS_HAVE_DUP2
 
+/* Some systems have DuplicateHandle */
+#undef RUDIMENTS_HAVE_DUPLICATEHANDLE
+
 /* Some systems define environ in unistd.h */
 #undef RUDIMENTS_HAVE_ENVIRON
 

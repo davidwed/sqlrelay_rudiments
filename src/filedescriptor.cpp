@@ -22,7 +22,7 @@
 #include <rudiments/character.h>
 #include <rudiments/rawbuffer.h>
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
-			defined(DEBUG_READ) || defined(_WIN32)
+		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
 #endif
 #include <rudiments/stringbuffer.h>
@@ -1886,7 +1886,7 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
 	return (result!=-1);
 
-#elif defined(_WIN32)
+#elif defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 
 	// send signal to go
 	bool	go=true;
@@ -2090,7 +2090,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	// if we're here then we must have received some bad data
 	return false;
 
-#elif defined(_WIN32)
+#elif defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 
 	// wait for signal to go
 	bool	go;

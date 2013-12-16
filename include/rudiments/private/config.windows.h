@@ -1157,6 +1157,9 @@
 /* Some systems have _dup2 */
 #define RUDIMENTS_HAVE__DUP2 1
 
+/* Some systems have DuplicateHandle */
+#define RUDIMENTS_HAVE_DUPLICATEHANDLE 1
+
 /* Some systems have _dupenv_s */
 #define RUDIMENTS_HAVE__DUPENV_S 1
 
