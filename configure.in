@@ -1629,9 +1629,9 @@ FW_CHECK_MMAP
 echo "******************************"
 
 
-dnl Checks for string functions
+dnl Checks for error functions
 echo
-echo "***** String Functions *******"
+echo "***** Error Functions ********"
 
 AC_MSG_CHECKING(for strerror)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -1668,6 +1668,19 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <string.h>
 #endif],
 strerror_s(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR_S,1,Some systems have strerror_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GetLastError)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetLastError();,AC_DEFINE(RUDIMENTS_HAVE_GETLASTERROR,1,Some systems have GetLastError) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+echo "******************************"
+
+
+dnl Checks for string functions
+echo
+echo "***** String Functions *******"
 
 AC_MSG_CHECKING(for strcasecmp)
 AC_TRY_COMPILE([

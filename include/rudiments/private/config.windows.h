@@ -341,6 +341,9 @@
 /* Some systems have gethostname */
 #define RUDIMENTS_HAVE_GETHOSTNAME 1
 
+/* Some systems have GetLastError */
+#define RUDIMENTS_HAVE_GETLASTERROR 1
+
 /* Some systems have getloadavg */
 /* #undef RUDIMENTS_HAVE_GETLOADAVG */
 
