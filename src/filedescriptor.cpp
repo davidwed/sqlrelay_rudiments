@@ -1803,10 +1803,11 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#endif
 }
 
+bool filedescriptor::passFileDescriptor(int32_t fd) const {
+
 #if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
 		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
 		defined(RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS)
-bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
 	// have to use sendmsg to pass a file descriptor. 
 	// sendmsg can only send a msghdr
@@ -1884,9 +1885,63 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	#endif
 
 	return (result!=-1);
+
+#elif defined(_WIN32)
+
+	// send signal to go
+	bool	go=true;
+	if (write(&go)!=sizeof(bool)) {
+		return false;
+	}
+
+	// get the process id from the other side
+	uint32_t	otherpid;
+	if (read(&otherpid)!=sizeof(uint32_t)) {
+		return false;
+	}
+
+	// get a handle to that process
+	bool	success=true;
+	HANDLE	otherprocesshandle=OpenProcess(PROCESS_DUP_HANDLE,
+						FALSE,(DWORD)otherpid);
+	if (!otherprocesshandle) {
+		success=false;
+	}
+
+	// get a handle to the file descriptor
+	HANDLE	filehandle;
+	if (success) {
+		// FIXME: this crashes for sockets
+		filehandle=(HANDLE)_get_osfhandle(fd);
+		if (filehandle==INVALID_HANDLE_VALUE) {
+			success=false;
+		}
+	}
+
+	// duplicate the fd
+	if (success) {
+		HANDLE	otherhandle;
+		success=(DuplicateHandle(GetCurrentProcess(),
+						filehandle,
+						otherprocesshandle,
+						&otherhandle,
+						0,FALSE,
+						DUPLICATE_SAME_ACCESS)==TRUE);
+	}
+
+	// send done flag
+	return (write(success)==sizeof(bool));
+#else
+	error::setErrorNumber(ENOSYS);
+	return false;
+#endif
 }
 
 bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
+
+#if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
+		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
+		defined(RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS)
 
 	// have to use recvmsg to receive a file descriptor. 
 	// recvmsg can only send a msghdr
@@ -2034,86 +2089,31 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 	// if we're here then we must have received some bad data
 	return false;
-}
+
+#elif defined(_WIN32)
+
+	// wait for signal to go
+	bool	go;
+	if (read(&go)!=sizeof(bool)) {
+		return false;
+	}
+
+	// write the process id to the other side
+	uint32_t	pid=process::getProcessId();
+	if (write(pid)!=sizeof(uint32_t)) {
+		return false;
+	}
+
+	// FIXME: do something ????
+
+	// get done flag
+	bool	success;
+	return (read(&success)==sizeof(bool));
 #else
-bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
-	#ifdef _WIN32
-
-		// send signal to go
-		bool	go=true;
-		if (write(&go)!=sizeof(bool)) {
-			return false;
-		}
-
-		// get the process id from the other side
-		uint32_t	otherpid;
-		if (read(&otherpid)!=sizeof(uint32_t)) {
-			return false;
-		}
-
-		// get a handle to that process
-		bool	success=true;
-		HANDLE	otherprocesshandle=OpenProcess(PROCESS_DUP_HANDLE,
-							FALSE,(DWORD)otherpid);
-		if (!otherprocesshandle) {
-			success=false;
-		}
-
-		// get a handle to the file descriptor
-		HANDLE	filehandle;
-		if (success) {
-			// FIXME: this crashes for sockets
-			filehandle=(HANDLE)_get_osfhandle(filedesc);
-			if (filehandle==INVALID_HANDLE_VALUE) {
-				success=false;
-			}
-		}
-
-		// duplicate the fd
-		if (success) {
-			HANDLE	otherhandle;
-			success=(DuplicateHandle(GetCurrentProcess(),
-						filehandle,
-						otherprocesshandle,
-						&otherhandle,
-						0,FALSE,
-						DUPLICATE_SAME_ACCESS)==TRUE);
-		}
-
-		// send done flag
-		return (write(success)==sizeof(bool));
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
-}
-
-bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
-	#ifdef _WIN32
-
-		// wait for signal to go
-		bool	go;
-		if (read(&go)!=sizeof(bool)) {
-			return false;
-		}
-
-		// write the process id to the other side
-		uint32_t	pid=process::getProcessId();
-		if (write(pid)!=sizeof(uint32_t)) {
-			return false;
-		}
-
-		// do something ????
-
-		// get done flag
-		bool	success;
-		return (read(&success)==sizeof(bool));
-	#else
-		error::setErrorNumber(ENOSYS);
-		return false;
-	#endif
-}
+	error::setErrorNumber(ENOSYS);
+	return false;
 #endif
+}
 
 bool filedescriptor::useNaglesAlgorithm() {
 	return setNoDelay(0);
