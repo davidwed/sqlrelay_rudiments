@@ -26,6 +26,9 @@ class unixsocketserverprivate {
 unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
 	pvt=new unixsocketserverprivate;
 	pvt->_mask=0;
+	#ifdef _WIN32
+		translateByteOrder();
+	#endif
 	type("unixsocketserver");
 }
 

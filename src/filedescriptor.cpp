@@ -21,7 +21,8 @@
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/rawbuffer.h>
-#if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || defined(DEBUG_READ)
+#if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
+			defined(DEBUG_READ) || defined(_WIN32)
 	#include <rudiments/process.h>
 #endif
 #include <rudiments/stringbuffer.h>
@@ -2036,13 +2037,81 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 }
 #else
 bool filedescriptor::passFileDescriptor(int32_t filedesc) const {
-	error::setErrorNumber(ENOSYS);
-	return false;
+	#ifdef _WIN32
+
+		// send signal to go
+		bool	go=true;
+		if (write(&go)!=sizeof(bool)) {
+			return false;
+		}
+
+		// get the process id from the other side
+		uint32_t	otherpid;
+		if (read(&otherpid)!=sizeof(uint32_t)) {
+			return false;
+		}
+
+		// get a handle to that process
+		bool	success=true;
+		HANDLE	otherprocesshandle=OpenProcess(PROCESS_DUP_HANDLE,
+							FALSE,(DWORD)otherpid);
+		if (!otherprocesshandle) {
+			success=false;
+		}
+
+		// get a handle to the file descriptor
+		HANDLE	filehandle;
+		if (success) {
+			// FIXME: this crashes for sockets
+			filehandle=(HANDLE)_get_osfhandle(filedesc);
+			if (filehandle==INVALID_HANDLE_VALUE) {
+				success=false;
+			}
+		}
+
+		// duplicate the fd
+		if (success) {
+			HANDLE	otherhandle;
+			success=(DuplicateHandle(GetCurrentProcess(),
+						filehandle,
+						otherprocesshandle,
+						&otherhandle,
+						0,FALSE,
+						DUPLICATE_SAME_ACCESS)==TRUE);
+		}
+
+		// send done flag
+		return (write(success)==sizeof(bool));
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 bool filedescriptor::receiveFileDescriptor(int32_t *filedesc) const {
-	error::setErrorNumber(ENOSYS);
-	return false;
+	#ifdef _WIN32
+
+		// wait for signal to go
+		bool	go;
+		if (read(&go)!=sizeof(bool)) {
+			return false;
+		}
+
+		// write the process id to the other side
+		uint32_t	pid=process::getProcessId();
+		if (write(pid)!=sizeof(uint32_t)) {
+			return false;
+		}
+
+		// do something ????
+
+		// get done flag
+		bool	success;
+		return (read(&success)==sizeof(bool));
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 #endif
 

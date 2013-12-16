@@ -21,6 +21,9 @@ class unixsocketclientprivate {
 
 unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
 	pvt=new unixsocketclientprivate;
+	#ifdef _WIN32
+		translateByteOrder();
+	#endif
 	type("unixsocketclient");
 }
 
