@@ -63,7 +63,11 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 	}
 
 #ifdef _WIN32
-	return pvt->_iss.initialize("127.0.0.1",hostToPort(filename));
+	if (pvt->_iss.initialize("127.0.0.1",filenameToPort(filename))) {
+		fd(pvt->_iss.getFileDescriptor());
+		return true;
+	}
+	return false;
 #else
 
 	// init the socket structure
@@ -101,12 +105,8 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
 bool unixsocketserver::listen(const char *filename, mode_t mask,
 							int32_t backlog) {
-#ifdef _WIN32
-	return pvt->_iss.listen("127.0.0.1",hostToPort(filename),backlog);
-#else
 	initialize(filename,mask);
 	return (bind() && listen(backlog));
-#endif
 }
 
 bool unixsocketserver::bind() {

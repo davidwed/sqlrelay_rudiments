@@ -31,7 +31,15 @@ class RUDIMENTS_DLLSPEC unixsocketutil {
 		 *  directly useful within this class but child classes may
 		 *  use the value to decide where to connect to or what to
 		 *  listen on. */
-		void	initialize(const char *filename);
+		void		initialize(const char *filename);
+
+		/** Converts "filename" to a port number for faking unix
+		 *  sockets.  If the filename starts with a number, then
+		 *  that number is used.  Otherwise it starts with 10240 and
+		 *  adds the ascii values of each character in the name.
+		 *  The port number is not guaranteed to be unique for unique
+		 *  names unless those names are based on unique numbers. */
+		uint16_t	filenameToPort(const char *filename);
 
 	#include <rudiments/private/unixsocketutil.h>
 };

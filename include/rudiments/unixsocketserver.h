@@ -14,6 +14,11 @@ class unixsocketserverprivate;
  *  Inet sockets (see the inetsocketserver class) can be used by clients and
  *  servers on the same machine as well, but Unix sockets generally perform
  *  better.
+ *
+ *  Some platforms (line Windows) don't support Unix sockets.  For those
+ *  platforms, Unix sockets are simulated using Inet sockets on localhost
+ *  by translating the socket filename to a port.  See
+ *  unixsocketutil::filenameToPort() for details.
  * 
  *  The unixsocketserver class provides methods for setting up sockets and
  *  accepting client connections.  Its ultimate parent class: transport,

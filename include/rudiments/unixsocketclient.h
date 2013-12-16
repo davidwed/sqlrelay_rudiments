@@ -14,6 +14,11 @@ class unixsocketclientprivate;
  *  Inet sockets (see the inetsocketclient class) can be used by clients and
  *  servers on the same machine as well, but Unix sockets generally perform
  *  better.
+ *
+ *  Some platforms (line Windows) don't support Unix sockets.  For those
+ *  platforms, Unix sockets are simulated using Inet sockets on localhost
+ *  by translating the socket filename to a port.  See
+ *  unixsocketutil::filenameToPort() for details.
  * 
  *  The unixsocketclient class provides methods for connecting to servers.
  *  Its ultimate parent class: filedescriptor provides methods for reading and 
@@ -83,6 +88,10 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 		 *  Returns RESULT_SUCCESS on success and RESULT_ERROR
 		 *  on failure. */
 		int32_t	connect();
+
+		/** Closes the socket.
+		 *  Returns true on success and false on failure. */
+		bool	close();
 
 	#include <rudiments/private/unixsocketclient.h>
 };

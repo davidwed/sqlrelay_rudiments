@@ -18,6 +18,10 @@
 	#include <string.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+
 void error::clearError() {
 	errno=0;
 }
@@ -65,5 +69,35 @@ char *error::getErrorString() {
 		return charstring::duplicate(strerror(errno));
 	#else
 		#error no strerror or anything like it
+	#endif
+}
+
+int32_t error::getNativeErrorNumber() {
+	#if defined(RUDIMENTS_HAVE_GETLASTERROR)
+		return GetLastError();
+	#else
+		return getErrorNumber();
+	#endif
+}
+
+char *error::getNativeErrorString() {
+	#if defined(RUDIMENTS_HAVE_GETLASTERROR)
+		char	*nativeerrorstring=NULL;
+		LPVOID	errorstring=NULL;
+		DWORD	errornumber=GetLastError();
+
+		if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|
+				FORMAT_MESSAGE_FROM_SYSTEM|
+				FORMAT_MESSAGE_IGNORE_INSERTS,
+				NULL,errornumber,
+				MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
+				(LPTSTR)&errorstring,0,NULL)) {
+			nativeerrorstring=charstring::duplicate(
+						(char *)errorstring);
+		}
+		LocalFree(errorstring);
+		return nativeerrorstring;
+	#else
+		return getErrorString();
 	#endif
 }

@@ -24,7 +24,7 @@ int main(int argc, const char **argv) {
 	// read 10 bytes from the server and display them
 	char	buffer[11];
 	int	sizeread=clnt.read(buffer,10);
-	buffer[sizeread]=(char)NULL;
+	buffer[sizeread]='\0';
 	stdoutput.printf("%s\n",buffer);
 
 	// close the connection to the server

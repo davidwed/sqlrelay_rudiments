@@ -43,6 +43,9 @@ unixsocketclient &unixsocketclient::operator=(const unixsocketclient &u) {
 
 unixsocketclient::~unixsocketclient() {
 	delete pvt;
+	#ifdef _WIN32
+		fd(-1);
+	#endif
 }
 
 int32_t unixsocketclient::connect(const char *filename,
@@ -95,7 +98,11 @@ void unixsocketclient::initialize(constnamevaluepairs *cd) {
 int32_t unixsocketclient::connect() {
 
 #ifdef _WIN32
-	return isc.connect();
+	int32_t	result=pvt->_isc.connect();
+	if (result>-1) {
+		fd(pvt->_isc.getFileDescriptor());
+	}
+	return result;
 #else
 	// set the filename to connect to
 	_sun()->sun_family=AF_UNIX;
@@ -152,4 +159,12 @@ int32_t unixsocketclient::connect() {
 	close();
 	return retval;
 #endif
+}
+
+bool unixsocketclient::close() {
+	#ifdef _WIN32
+		pvt->_isc.close();
+		fd(-1);
+	#endif
+	return filedescriptor::close();
 }

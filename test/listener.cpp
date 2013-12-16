@@ -8,13 +8,14 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
+#include <rudiments/snooze.h>
 
 int main(int argc, const char **argv) {
 
 	// listen on inet socket port 1800
 	inetsocketserver	inetsock;
 	bool	inetlisten=inetsock.listen(NULL,8000,15);
-	if (inetlisten) {
+	if (!inetlisten) {
 		stdoutput.printf("couldn't listen on inet socket\n");
 		stdoutput.printf("%s\n",error::getErrorString());
 	}
@@ -23,13 +24,13 @@ int main(int argc, const char **argv) {
 	// listen on unix socket "lsnr.sck"
 	unixsocketserver	unixsock;
 	bool	unixlisten=unixsock.listen("lsnr.sck",0000,15);
-	if (unixlisten) {
+	if (!unixlisten) {
 		stdoutput.printf("couldn't listen on unix socket\n");
 		stdoutput.printf("%s\n",error::getErrorString());
 	}
 
 	// bail if neither socket worked out
-	if (inetlisten && unixlisten) {
+	if (!inetlisten && !unixlisten) {
 		stdoutput.printf("couldn't listen on either socket\n");
 		process::exit(0);
 	}
@@ -48,7 +49,18 @@ int main(int argc, const char **argv) {
 	for (;;) {
 
 		// wait for a client to connect to one of the sockets
-		pool.waitForNonBlockingRead(-1,-1);
+		int32_t	result=pool.waitForNonBlockingRead(-1,-1);
+		if (result==RESULT_ERROR) {
+			stdoutput.printf("error waiting...\n%d: %s\n%d: %s\n",
+						error::getErrorNumber(),
+						error::getErrorString(),
+						error::getNativeErrorNumber(),
+						error::getNativeErrorString());
+			break;
+		} else if (result==RESULT_TIMEOUT) {
+			stdoutput.printf("timeout waiting...\n");
+			break;
+		}
 		filedescriptor	*fd=NULL;
 		pool.getReadyList()->getValueByIndex(0,&fd);
 
@@ -61,7 +73,9 @@ int main(int argc, const char **argv) {
 			clientsock=unixsock.accept();
 			stdoutput.printf("unixsock: ");
 		} else {
-			stdoutput.printf("error or timeout waiting...\n");
+			stdoutput.printf("client not connected "
+					"to either socket...\n");
+			snooze::macrosnooze(1);
 			continue;
 		}
 
