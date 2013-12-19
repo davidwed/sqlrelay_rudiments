@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 
 	for (;;) {
 		int	descriptor;
-		if (!clnt.receiveFileDescriptor(&descriptor)) {
+		if (!clnt.receiveSocket(&descriptor)) {
 			stdoutput.printf("receive failed\n");
 			process::exit(1);
 		}

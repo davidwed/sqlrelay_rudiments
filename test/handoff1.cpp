@@ -43,7 +43,7 @@ int main(int argc, const char **argv) {
 		}
 
 		if (clientsock && handoffclientsock) {
-			if (!handoffclientsock->passFileDescriptor(
+			if (!handoffclientsock->passSocket(
 					clientsock->getFileDescriptor())) {
 				stdoutput.printf("pass failed: %d - %s\n",
 						error::getErrorNumber(),
