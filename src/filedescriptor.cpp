@@ -1888,49 +1888,15 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
 #elif defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 
-	// send signal to go
-	bool	go=true;
-	if (write(&go)!=sizeof(bool)) {
+	// send our process id
+	uint32_t	pid=process::getProcessId();
+	if (write(&pid)!=sizeof(uint32_t)) {
 		return false;
 	}
 
-	// get the process id from the other side
-	uint32_t	otherpid;
-	if (read(&otherpid)!=sizeof(uint32_t)) {
-		return false;
-	}
-
-	// get a handle to that process
-	bool	success=true;
-	HANDLE	otherprocesshandle=OpenProcess(PROCESS_DUP_HANDLE,
-						FALSE,(DWORD)otherpid);
-	if (!otherprocesshandle) {
-		success=false;
-	}
-
-	// get a handle to the file descriptor
-	HANDLE	filehandle;
-	if (success) {
-		// FIXME: this crashes for sockets
-		filehandle=(HANDLE)_get_osfhandle(fd);
-		if (filehandle==INVALID_HANDLE_VALUE) {
-			success=false;
-		}
-	}
-
-	// duplicate the fd
-	if (success) {
-		HANDLE	otherhandle;
-		success=(DuplicateHandle(GetCurrentProcess(),
-						filehandle,
-						otherprocesshandle,
-						&otherhandle,
-						0,FALSE,
-						DUPLICATE_SAME_ACCESS)==TRUE);
-	}
-
-	// send done flag
-	return (write(success)==sizeof(bool));
+	// get done flag
+	bool	success;
+	return (read(&success)==sizeof(bool));
 #else
 	error::setErrorNumber(ENOSYS);
 	return false;
@@ -2092,26 +2058,75 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 #elif defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 
-	// wait for signal to go
-	bool	go;
-	if (read(&go)!=sizeof(bool)) {
+	// get a handle to this process
+	// Apparently we can't just use GetCurrentProcess() or
+	// we'll just get the pseudo-handle for our process.
+	HANDLE	localprocesshandle=OpenProcess(PROCESS_DUP_HANDLE,FALSE,
+						(DWORD)GetCurrentProcessId());
+	if (!localprocesshandle) {
 		return false;
 	}
 
-	// write the process id to the other side
-	uint32_t	pid=process::getProcessId();
-	if (write(pid)!=sizeof(uint32_t)) {
+	// read the process id from the other side
+	uint32_t	otherpid;
+	if (read(&otherpid)!=sizeof(uint32_t)) {
 		return false;
 	}
 
-	// FIXME: do something ????
+	// get a handle to that process
+	bool	success=true;
+	HANDLE	otherprocesshandle=OpenProcess(PROCESS_DUP_HANDLE,
+						FALSE,(DWORD)otherpid);
+	if (!otherprocesshandle) {
+		success=false;
+	}
 
-	// get done flag
-	bool	success;
-	return (read(&success)==sizeof(bool));
+	// duplicate the fd
+	if (success) {
+		HANDLE	otherhandle;
+		// FIXME: somehow get otherhandle
+
+		HANDLE	localhandle;
+		success=(DuplicateHandle(otherprocesshandle,
+						otherhandle,
+						localprocesshandle,
+						&localhandle,
+						0,TRUE,
+						DUPLICATE_SAME_ACCESS)==TRUE);
+
+		// FIXME: convert localhandle to *fd somehow
+	}
+
+	// close the other process handle
+	CloseHandle(otherprocesshandle);
+
+	// send done flag
+	return (write(success)==sizeof(bool));
 #else
 	error::setErrorNumber(ENOSYS);
 	return false;
+#endif
+}
+
+bool filedescriptor::passSocket(int32_t sock) const {
+
+#if defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
+	// FIXME: use WSADuplicateSocket
+	error::setErrorNumber(ENOSYS);
+	return false;
+#else
+	return passFileDescriptor(sock);
+#endif
+}
+
+bool filedescriptor::receiveSocket(int32_t *sock) const {
+
+#if defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
+	// FIXME: use WSADuplicateSocket
+	error::setErrorNumber(ENOSYS);
+	return false;
+#else
+	return receiveFileDescriptor(sock);
 #endif
 }
 
