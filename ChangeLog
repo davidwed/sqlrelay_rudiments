@@ -11,6 +11,9 @@
 	build-tweaks for mingw32
 	added process::spawn that maps more cleanly on windows than fork/exec
 	added thread class
+	added send/receiveSocket methods to filedescriptor class for systems
+		like Windows that distinguish between sockets and other
+		file descriptors
 
 0.44.1 - configure scripts attempts link for various _r functions now to catch
 		cases where they're defined in the headers but not present in
