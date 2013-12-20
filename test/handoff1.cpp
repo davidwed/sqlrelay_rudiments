@@ -50,7 +50,7 @@ int main(int argc, const char **argv) {
 						error::getErrorString());
 				process::exit(1);
 			}
-			clientsock->close();
+			//clientsock->close();
 			delete clientsock;
 			clientsock=NULL;
 		}
