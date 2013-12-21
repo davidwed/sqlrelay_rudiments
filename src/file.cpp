@@ -51,6 +51,8 @@
 		#include <windows.h>
 	#endif
 	#include <sddl.h>
+	#include <Aclapi.h>
+	#include <AccCtrl.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef F_GETLK	
@@ -643,13 +645,44 @@ bool file::getCurrentProperties() {
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 
 	#if defined(_WIN32)
+
 		if (result) {
 			return false;
 		}
 
-		// On windows, the st_mode isn't set correctly.  Get the SDDL
+		// On Windows, the st_mode isn't set correctly.  Get the SDDL
 		// of the file and convert it to a mode_t using
 		// permissions::sddlToPermOctal()
+
+		// get the security information
+		PSECURITY_DESCRIPTOR	ppsd=NULL;
+		if (GetSecurityInfo((HANDLE)_get_osfhandle(fd()),
+					SE_FILE_OBJECT,
+					DACL_SECURITY_INFORMATION,
+					NULL,NULL,NULL,NULL,&ppsd)!=
+							ERROR_SUCCESS) {
+			return false;
+		}
+
+		// convert the security descriptor to a string
+		char	*sddl=NULL;
+		ULONG	sddllen=0;
+		if (!ConvertSecurityDescriptorToStringSecurityDescriptor(
+					ppsd,SDDL_REVISION_1,
+					DACL_SECURITY_INFORMATION,
+					&sddl,&sddllen)) {
+			LocalFree(ppsd);
+			return false;
+		}
+
+		// convert the sddl to perms
+		pvt->_st.st_mode=permissions::sddlToPermOctal(sddl);
+
+		// clean up
+		LocalFree(sddl);
+		LocalFree(ppsd);
+
+		return true;
 	#endif
 	return !result;
 }
@@ -659,17 +692,6 @@ bool file::stat(const char *filename, void *st) {
 	do {
 		result=::stat(filename,(struct stat *)st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-
-	#if defined(_WIN32)
-		if (result) {
-			return false;
-		}
-
-		// On windows, the st_mode isn't set correctly.  Get the SDDL
-		// of the file and convert it to a mode_t using
-		// permissions::sddlToPermOctal()
-	#endif
-
 	return (result!=-1);
 }
 
