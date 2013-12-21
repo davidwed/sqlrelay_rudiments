@@ -302,7 +302,6 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//	 world perms are applied to the group and user
 	//	 group perms are applied to the user
 
-	//char	*permstring=new char[66];
 	char	*permstring=new char[512];
 	charstring::copy(permstring,"D:P");
 	if (directory) {
@@ -348,6 +347,82 @@ char *permissions::sddlToPermString(const char *sddl) {
 }
 
 mode_t permissions::sddlToPermOctal(const char *sddl) {
-	// FIXME: implement this
-	return 0;
+
+	// get user SID
+	passwdentry	pwdent;
+	pwdent.initialize(process::getRealUserId());
+	const char	*usersid=pwdent.getSid();
+
+	// get group SID
+	groupentry	grpent;
+	grpent.initialize(process::getRealGroupId());
+	const char	*groupsid=grpent.getSid();
+
+	// look for D:P
+	if (charstring::compare(sddl,"D:P",3)) {
+		return 0;
+	}
+
+	// initialize perms
+	mode_t	perms=0;
+
+	// process sections containing user permissions
+	processSddlPerm(sddl,usersid,0,&perms);
+
+	// process sections containing user permissions
+	processSddlPerm(sddl,groupsid,1,&perms);
+
+	// look for the section containing the world permissions
+	processSddlPerm(sddl,"WD",2,&perms);
+
+	// return permissions
+	return perms;
+}
+
+void permissions::processSddlPerm(const char *sddl, const char *sid,
+						uint8_t which, mode_t *perms) {
+
+	// build a search string
+	char	*searchstring=new char[charstring::length(sid)+3];
+	charstring::copy(searchstring,";");
+	charstring::append(searchstring,sid);
+	charstring::copy(searchstring,")");
+
+	const char *start=sddl;
+	while (*start) {
+
+		// find the next section containing the search string
+		const char	*section=
+				charstring::findFirst(start,searchstring);
+		if (!section) {
+			break;
+		}
+
+		// get the start of the next section after that
+		const char	*nextsection=
+				section+charstring::length(searchstring);
+
+		// skip back to the beginning of the section
+		while (section!=sddl && *section!='(') {
+		 	section--;
+		}
+		if (section!=sddl && charstring::compare(section,"(A;")) {
+
+			// convert to octal
+			sddlPermToPermOctal(section,which,perms);
+		}
+
+		// move on
+		start=nextsection;
+	}
+
+	// clean up
+	delete[] searchstring;
+}
+
+void permissions::sddlPermToPermOctal(const char *section,
+					uint8_t which, mode_t *perms) {
+
+	// FIXME: implement this...
+	stdoutput.printf("processing section: %s\n",section);
 }

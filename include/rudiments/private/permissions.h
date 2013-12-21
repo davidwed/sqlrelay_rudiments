@@ -8,3 +8,7 @@
 
 	static char	*sddlToPermString(const char *sddl);
 	static mode_t	sddlToPermOctal(const char *sddl);
+	static void	processSddlPerm(const char *sddl, const char *sid,
+						uint8_t which, mode_t *perms);
+	static void	sddlPermToPermOctal(const char *section,
+						uint8_t which, mode_t *perms);
