@@ -1935,7 +1935,10 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	}
 
 	// send otherhandle to other process
-	bool	retval=(write((uint64_t)otherhandle)!=sizeof(uint64_t));
+	bool	retval=(write((uint64_t)otherhandle)==sizeof(uint64_t));
+if (!retval) {
+	stdoutput.printf("write handle failed: %s\n",error::getNativeErrorString());
+}
 
 	// close the other process handle
 	CloseHandle(otherprocesshandle);
@@ -2117,7 +2120,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 	// get the handle from the other process
 	uint64_t	handle;
-	if (write(handle)!=sizeof(uint64_t)) {
+	if (read(&handle)!=sizeof(uint64_t)) {
 		return false;
 	}
 
