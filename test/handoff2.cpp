@@ -31,10 +31,8 @@ int main(int argc, const char **argv) {
 		file	f;
 		f.setFileDescriptor(fd);
 		f.setPositionRelativeToBeginning(0);
-		ssize_t	result=f.read(buf,3);
-		if (result!=3) {
-		//if (f.read(buf,3)!=3) {
-			stdoutput.printf("read from file descriptor failed: %d %s\n",result,error::getNativeErrorString());
+		if (f.read(buf,3)!=3) {
+			stdoutput.printf("read from file descriptor failed\n");
 		}
 		buf[3]='\0';
 		stdoutput.printf("%s\n",buf);
