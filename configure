@@ -17233,6 +17233,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sddl.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <sddl.h>
 int
 main ()
@@ -17253,11 +17256,14 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Aclapi.h" >&5
-$as_echo_n "checking for Aclapi.h... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for aclapi.h" >&5
+$as_echo_n "checking for aclapi.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <Aclapi.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <aclapi.h>
 int
 main ()
 {
@@ -17277,11 +17283,14 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for AccCtrl.h" >&5
-$as_echo_n "checking for AccCtrl.h... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for accctrl.h" >&5
+$as_echo_n "checking for accctrl.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <AccCtrl.h>
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <accctrl.h>
 int
 main ()
 {
@@ -17305,6 +17314,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for lm.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 #include <lm.h>
 int
 main ()
@@ -17571,7 +17583,7 @@ echo "******************************"
 
 
 echo
-echo "***** threads ****************"
+echo "***** Threads ****************"
 
 
 HAS_THREADS="no"
@@ -18232,7 +18244,7 @@ echo "******************************"
 
 
 echo
-echo "***** ssl ********************"
+echo "***** SSL ********************"
 
 
 if ( test "$ENABLE_RUDIMENTS_SSL" = "yes" )
@@ -21769,7 +21781,7 @@ WSAConnect(0,0,0,0,0,0,0);
   return 0;
 }
 _ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAVE_WSACONNECT 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -21778,8 +21790,34 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WSADuplicateSocket" >&5
+$as_echo_n "checking for WSADuplicateSocket... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif
+int
+main ()
+{
+WSADuplicateSocket(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_WSADUPLICATESOCKET 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for closesocket" >&5
 $as_echo_n "checking for closesocket... " >&6; }
@@ -22122,7 +22160,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 	SOCKETLIBS=""
 	DONE=""
-	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lnetapi32" "-lnetwork"
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lws2_32 -lnetapi32" "-lnetwork"
 	do
 
 SAVECPPFLAGS="$CPPFLAGS"
@@ -22143,8 +22181,11 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-#ifdef __MINGW32__
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
 #endif
 int
 main ()

@@ -2135,7 +2135,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 bool filedescriptor::passSocket(int32_t sock) const {
 
-#if defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
+#if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
 
 	// tell the other process to go
 	if (write(true)!=sizeof(bool)) {
@@ -2170,7 +2170,7 @@ bool filedescriptor::passSocket(int32_t sock) const {
 
 bool filedescriptor::receiveSocket(int32_t *sock) const {
 
-#if defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
+#if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
 
 	// wait for the other process to tell us to go
 	bool	go;

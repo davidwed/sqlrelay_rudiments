@@ -112,13 +112,13 @@
 /* Some systems define __tm_zone in their struct tm */
 #undef RUDIMENTS_HAS___TM_ZONE
 
-/* Some systems have AccCtrl.h */
+/* Some systems have accctrl.h */
 #undef RUDIMENTS_HAVE_ACCCTRL_H
 
 /* Most systems have access() */
 #undef RUDIMENTS_HAVE_ACCESS
 
-/* Some systems have Aclapi.h */
+/* Some systems have aclapi.h */
 #undef RUDIMENTS_HAVE_ACLAPI_H
 
 /* Some systems have alarm */
@@ -1167,6 +1167,9 @@
 
 /* Some systems have WSAConnect */
 #undef RUDIMENTS_HAVE_WSACONNECT
+
+/* Some systems have WSADuplicateSocket */
+#undef RUDIMENTS_HAVE_WSADUPLICATESOCKET
 
 /* Some systems have extended filesystem attributes */
 #undef RUDIMENTS_HAVE_XATTRS

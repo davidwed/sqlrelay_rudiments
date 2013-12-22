@@ -51,10 +51,10 @@
 	#include <sddl.h>
 #endif
 #ifdef RUDIMENTS_HAVE_ACLAPI_H
-	#include <Aclapi.h>
+	#include <aclapi.h>
 #endif
 #ifdef RUDIMENTS_HAVE_ACCCTRL_H
-	#include <AccCtrl.h>
+	#include <accctrl.h>
 #endif
 
 #ifdef _WIN32

@@ -2113,7 +2113,7 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 	AC_LANG(C)
 	SOCKETLIBS=""
 	DONE=""
-	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lnetapi32" "-lnetwork"
+	for i in "" "-lnsl" "-lsocket" "-lsocket -lnsl" "-lxnet" "-lwsock32 -lws2_32 -lnetapi32" "-lnetwork"
 	do
 		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -2124,8 +2124,11 @@ AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	#include <sys/socket.h>
 #endif
-#ifdef __MINGW32__
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
 #endif],[connect(0,NULL,0);
 listen(0,0);
 bind(0,NULL,0);

@@ -615,19 +615,31 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 [],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sddl.h)
-AC_TRY_COMPILE([#include <sddl.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <sddl.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SDDL_H, 1, Some systems have sddl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for Aclapi.h)
-AC_TRY_COMPILE([#include <Aclapi.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_ACLAPI_H, 1, Some systems have Aclapi.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for aclapi.h)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <aclapi.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_ACLAPI_H, 1, Some systems have aclapi.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for AccCtrl.h)
-AC_TRY_COMPILE([#include <AccCtrl.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_ACCCTRL_H, 1, Some systems have AccCtrl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+AC_MSG_CHECKING(for accctrl.h)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <accctrl.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_ACCCTRL_H, 1, Some systems have accctrl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for lm.h)
-AC_TRY_COMPILE([#include <lm.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#include <lm.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_LM_H, 1, Some systems have lm.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for process.h)
@@ -677,7 +689,7 @@ echo "******************************"
 
 dnl Checks for thread library.
 echo
-echo "***** threads ****************"
+echo "***** Threads ****************"
 FW_CHECK_PTHREAD
 FW_CHECK_THREAD
 FW_CHECK_MUTEX
@@ -687,7 +699,7 @@ echo "******************************"
 
 dnl Checks for ssl library.
 echo
-echo "***** ssl ********************"
+echo "***** SSL ********************"
 FW_CHECK_SSL
 echo "******************************"
 
@@ -1271,11 +1283,18 @@ echo
 echo "***** Networking *************"
 
 AC_MSG_CHECKING(for WSAConnect)
-AC_TRY_LINK([
+AC_TRY_COMPILE([
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>
 #endif],
 WSAConnect(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WSACONNECT,1,Some systems have WSAConnect) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for WSADuplicateSocket)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#endif],
+WSADuplicateSocket(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_WSADUPLICATESOCKET,1,Some systems have WSADuplicateSocket) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for closesocket)
 AC_TRY_COMPILE([
