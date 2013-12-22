@@ -20,6 +20,11 @@
 	#include <io.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+	#include <sddl.h>
+#endif
+
 
 // Some platforms don't define some of these because they don't support
 // them.  However, every platform I've tried so far interprets the permissions
@@ -302,127 +307,241 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//	 world perms are applied to the group and user
 	//	 group perms are applied to the user
 
-	char	*permstring=new char[512];
-	charstring::copy(permstring,"D:P");
+	char	*sddl=new char[512];
+	charstring::copy(sddl,"D:P");
 	if (directory) {
-		charstring::append(permstring,"AI");
+		charstring::append(sddl,"AI");
 	}
 
 	mode_t	shift=permoctal;
 	for (int16_t i=0; i<9; i++) {
 		if (i==0 || i==3 || i==6) {
-			charstring::append(permstring,"(A;");
+			charstring::append(sddl,"(A;");
 			if (directory) {
-				charstring::append(permstring,"OICI");
+				charstring::append(sddl,"OICI");
 			}
-			charstring::append(permstring,";");
+			charstring::append(sddl,";");
 		}
 		uint8_t	pos=i%3;
-		charstring::append(permstring,
-			(shift&1)?((pos==0)?
-				"GX":(pos==1)?"GWSDWDWO":"GRRC"):"");
+		charstring::append(sddl,(shift&1)?((pos==0)?
+					"GX":(pos==1)?"GWSDWDWO":"GRRC"):"");
 		shift=shift>>1;
 		if (i==2) {
-			charstring::append(permstring,";;;WD)");
+			charstring::append(sddl,";;;WD)");
 		} else if (i==5) {
-			charstring::append(permstring,";;;");
-			passwdentry	pwdent;
-			pwdent.initialize(process::getRealUserId());
-			charstring::append(permstring,pwdent.getSid());
-			charstring::append(permstring,")");
-		} else if (i==8) {
-			charstring::append(permstring,";;;");
+			charstring::append(sddl,";;;");
 			groupentry	grpent;
 			grpent.initialize(process::getRealGroupId());
-			charstring::append(permstring,grpent.getSid());
-			charstring::append(permstring,")");
+			charstring::append(sddl,grpent.getSid());
+			charstring::append(sddl,")");
+		} else if (i==8) {
+			charstring::append(sddl,";;;");
+			passwdentry	pwdent;
+			pwdent.initialize(process::getRealUserId());
+			charstring::append(sddl,pwdent.getSid());
+			charstring::append(sddl,")");
 		}
 	}
 
-	return permstring;
+	return sddl;
 }
 
-char *permissions::sddlToPermString(const char *sddl) {
-	return evalPermOctal(sddlToPermOctal(sddl));
+char *permissions::daclToPermString(void *dacl) {
+	return evalPermOctal(daclToPermOctal(dacl));
 }
 
-mode_t permissions::sddlToPermOctal(const char *sddl) {
+// Object-specific rights
+// see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
+#define _CC	0x00000001	// "read"
+#define _DC	0x00000002	// "write"
+#define _LC	0x00000004	// "append"
+#define _SW	0x00000008	// "read extended attributes"
+#define _RP	0x00000010	// "write extended attributes"
+#define _WP	0x00000020	// "execute"
+#define _DT	0x00000040	// "delete child"
+#define _LO	0x00000080	// "read standard attributes"
+#define _CR	0x00000100	// "write standard attributes"
 
-	// get user SID
-	passwdentry	pwdent;
-	pwdent.initialize(process::getRealUserId());
-	const char	*usersid=pwdent.getSid();
+#define	_ALL	GENERIC_ALL
+#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
+#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER|GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
+#define _EXEC	(GENERIC_EXECUTE|_WP)
 
-	// get group SID
-	groupentry	grpent;
-	grpent.initialize(process::getRealGroupId());
-	const char	*groupsid=grpent.getSid();
+mode_t permissions::daclToPermOctal(void *dacl) {
 
-	// look for D:P
-	if (charstring::compare(sddl,"D:P",3)) {
-		return 0;
-	}
-
-	// initialize perms
+	// init the return value
 	mode_t	perms=0;
 
-	// process sections containing user permissions
-	processSddlPerm(sddl,usersid,0,&perms);
+	// get the user and convert to an sid
+	passwdentry	pwdent;
+	PSID		usersid=NULL;
+	if (!pwdent.initialize(process::getRealUserId()) ||
+		ConvertStringSidToSid(pwdent.getSid(),&usersid)!=TRUE) {
+		return perms;
+	}
 
-	// process sections containing user permissions
-	processSddlPerm(sddl,groupsid,1,&perms);
+	// get the group and convert to an sid
+	groupentry	grpent;
+	PSID		groupsid=NULL;
+	if (!grpent.initialize(process::getRealGroupId()) ||
+		ConvertStringSidToSid(grpent.getSid(),&groupsid)!=TRUE) {
+		return perms;
+	}
 
-	// look for the section containing the world permissions
-	processSddlPerm(sddl,"WD",2,&perms);
+	// get the sid for others ("S-1-1-0" is the well known SID for "World")
+	PSID	otherssid=NULL;
+	if (ConvertStringSidToSid("S-1-1-0",&otherssid)!=TRUE) {
+		return perms;
+	}
 
-	// return permissions
-	return perms;
-}
+	// cast the DACL properly
+	PACL	d=(PACL)dacl;
 
-void permissions::processSddlPerm(const char *sddl, const char *sid,
-						uint8_t which, mode_t *perms) {
+	// run through the ACEs of the DACL
+	for (DWORD i=0; i<d->AceCount; i++) {
 
-	// build a search string
-	char	*searchstring=new char[charstring::length(sid)+3];
-	charstring::copy(searchstring,";");
-	charstring::append(searchstring,sid);
-	charstring::copy(searchstring,")");
-
-	const char *start=sddl;
-	while (*start) {
-
-		// find the next section containing the search string
-		const char	*section=
-				charstring::findFirst(start,searchstring);
-		if (!section) {
-			break;
+		// get the ACE
+		PVOID	ace=NULL;
+		if (GetAce(d,i,&ace)==FALSE) {
+			continue;
 		}
 
-		// get the start of the next section after that
-		const char	*nextsection=
-				section+charstring::length(searchstring);
+		// get various ACE components
+		ACCESS_ALLOWED_ACE	*aace=(ACCESS_ALLOWED_ACE *)ace;
+		PSID			sid=(PSID)&aace->SidStart;
+		DWORD			mask=aace->Mask;
 
-		// skip back to the beginning of the section
-		while (section!=sddl && *section!='(') {
-		 	section--;
+		// which sid does this ACE apply to
+		if (EqualSid(sid,usersid)) {
+
+			if (aace->Header.AceType==
+					ACCESS_ALLOWED_ACE_TYPE) {
+
+				// update perms
+				if (mask&_ALL) {
+					perms|=ownerRead();
+					perms|=ownerWrite();
+					perms|=ownerExecute();
+				}
+				if (mask&_READ) {
+					perms|=ownerRead();
+				}
+				if (mask&_WRITE) {
+					perms|=ownerWrite();
+				}
+				if (mask&_EXEC) {
+					perms|=ownerExecute();
+				}
+
+			} else if (aace->Header.AceType==
+					ACCESS_DENIED_ACE_TYPE) {
+
+				// update perms
+				if (mask&_ALL) {
+					perms&=~ownerRead();
+					perms&=~ownerWrite();
+					perms&=~ownerExecute();
+				}
+				if (mask&_READ) {
+					perms&=~ownerRead();
+				}
+				if (mask&_WRITE) {
+					perms&=~ownerWrite();
+				}
+				if (mask&_EXEC) {
+					perms&=~ownerExecute();
+				}
+			}
+
+		} else if (EqualSid(sid,groupsid)) {
+
+			if (aace->Header.AceType==
+					ACCESS_ALLOWED_ACE_TYPE) {
+
+				// update perms
+				if (mask&_ALL) {
+					perms|=groupRead();
+					perms|=groupWrite();
+					perms|=groupExecute();
+				}
+				if (mask&_READ) {
+					perms|=groupRead();
+				}
+				if (mask&_WRITE) {
+					perms|=groupWrite();
+				}
+				if (mask&_EXEC) {
+					perms|=groupExecute();
+				}
+
+			} else if (aace->Header.AceType==
+					ACCESS_DENIED_ACE_TYPE) {
+
+				// update perms
+				if (mask&_ALL) {
+					perms&=~groupRead();
+					perms&=~groupWrite();
+					perms&=~groupExecute();
+				}
+				if (mask&_READ) {
+					perms&=~groupRead();
+				}
+				if (mask&_WRITE) {
+					perms&=~groupWrite();
+				}
+				if (mask&_EXEC) {
+					perms&=~groupExecute();
+				}
+			}
+
+		} else if (EqualSid(sid,otherssid)) {
+
+			if (aace->Header.AceType==
+					ACCESS_ALLOWED_ACE_TYPE) {
+
+				// update perms
+				if (mask&_ALL) {
+					perms|=othersRead();
+					perms|=othersWrite();
+					perms|=othersExecute();
+				}
+				if (mask&_READ) {
+					perms|=othersRead();
+				}
+				if (mask&_WRITE) {
+					perms|=othersWrite();
+				}
+				if (mask&_EXEC) {
+					perms|=othersExecute();
+				}
+
+			} else if (aace->Header.AceType==
+					ACCESS_DENIED_ACE_TYPE) {
+
+				// update perms
+				if (mask&_ALL) {
+					perms&=~othersRead();
+					perms&=~othersWrite();
+					perms&=~othersExecute();
+				}
+				if (mask&_READ) {
+					perms&=~othersRead();
+				}
+				if (mask&_WRITE) {
+					perms&=~othersWrite();
+				}
+				if (mask&_EXEC) {
+					perms&=~othersExecute();
+				}
+			}
 		}
-		if (section!=sddl && charstring::compare(section,"(A;")) {
-
-			// convert to octal
-			sddlPermToPermOctal(section,which,perms);
-		}
-
-		// move on
-		start=nextsection;
 	}
 
 	// clean up
-	delete[] searchstring;
-}
+	LocalFree(usersid);
+	LocalFree(groupsid);
+	LocalFree(otherssid);
 
-void permissions::sddlPermToPermOctal(const char *section,
-					uint8_t which, mode_t *perms) {
-
-	// FIXME: implement this...
-	stdoutput.printf("processing section: %s\n",section);
+	// return permissions
+	return perms;
 }

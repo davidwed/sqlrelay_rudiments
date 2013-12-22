@@ -650,36 +650,24 @@ bool file::getCurrentProperties() {
 			return false;
 		}
 
-		// On Windows, the st_mode isn't set correctly.  Get the SDDL
+		// On Windows, the st_mode isn't set correctly.  Get the DACL
 		// of the file and convert it to a mode_t using
-		// permissions::sddlToPermOctal()
 
 		// get the security information
+		PACL			dacl=NULL;
 		PSECURITY_DESCRIPTOR	ppsd=NULL;
 		if (GetSecurityInfo((HANDLE)_get_osfhandle(fd()),
 					SE_FILE_OBJECT,
 					DACL_SECURITY_INFORMATION,
-					NULL,NULL,NULL,NULL,&ppsd)!=
+					NULL,NULL,&dacl,NULL,&ppsd)!=
 							ERROR_SUCCESS) {
 			return false;
 		}
 
-		// convert the security descriptor to a string
-		char	*sddl=NULL;
-		ULONG	sddllen=0;
-		if (!ConvertSecurityDescriptorToStringSecurityDescriptor(
-					ppsd,SDDL_REVISION_1,
-					DACL_SECURITY_INFORMATION,
-					&sddl,&sddllen)) {
-			LocalFree(ppsd);
-			return false;
-		}
-
-		// convert the sddl to perms
-		pvt->_st.st_mode=permissions::sddlToPermOctal(sddl);
+		// convert the dacl to perms
+		pvt->_st.st_mode=permissions::daclToPermOctal((void *)dacl);
 
 		// clean up
-		LocalFree(sddl);
 		LocalFree(ppsd);
 
 		return true;
