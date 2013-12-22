@@ -19,9 +19,10 @@
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
-
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SDDL_H
 	#include <sddl.h>
 #endif
 

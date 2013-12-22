@@ -10,15 +10,19 @@
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 	#include <rudiments/dictionary.h>
 	#include <rudiments/groupentry.h>
-	#ifdef RUDIMENTS_HAVE_WINDOWS_H
-		#include <windows.h>
-	#endif
-	#include <lm.h>
-	#include <sddl.h>
 #else
 	#include <pwd.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_LM_H
+	#include <lm.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SDDL_H
+	#include <sddl.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif

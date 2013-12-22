@@ -40,19 +40,24 @@
 #ifdef RUDIMENTS_HAVE_UTIME_H
 	#include <utime.h>
 #endif
-
 #ifdef RUDIMENTS_HAVE_IO_H
 	#undef _POSIX_
 	#include <io.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SDDL_H
+	#include <sddl.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ACLAPI_H
+	#include <Aclapi.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ACCCTRL_H
+	#include <AccCtrl.h>
+#endif
 
 #ifdef _WIN32
-	#ifdef RUDIMENTS_HAVE_WINDOWS_H
-		#include <windows.h>
-	#endif
-	#include <sddl.h>
-	#include <Aclapi.h>
-	#include <AccCtrl.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef F_GETLK	

@@ -110,8 +110,14 @@
 /* Some systems define __tm_zone in their struct tm */
 /* #undef RUDIMENTS_HAS___TM_ZONE */
 
+/* Some systems have AccCtrl.h */
+#define RUDIMENTS_HAVE_ACCCTRL_H 1
+
 /* Most systems have access() */
 /* #undef RUDIMENTS_HAVE_ACCESS */
+
+/* Some systems have Aclapi.h */
+#define RUDIMENTS_HAVE_ACLAPI_H 1
 
 /* Some systems have alarm */
 /* #undef RUDIMENTS_HAVE_ALARM */
@@ -527,6 +533,9 @@
 /* Linux style statfs */
 /* #undef RUDIMENTS_HAVE_LINUX_STATFS */
 
+/* Some systems have lm.h */
+#define RUDIMENTS_HAVE_LM_H 1
+
 /* Some systems have LoadLibrary */
 #define RUDIMENTS_HAVE_LOADLIBRARY 1
 
@@ -772,6 +781,9 @@
 
 /* SCO has /dev/table/avenrun instead of getloadavg */
 /* #undef RUDIMENTS_HAVE_SCO_AVENRUN */
+
+/* Some systems have sddl.h */
+#define RUDIMENTS_HAVE_SDDL_H 1
 
 /* Some systems have semget */
 /* #undef RUDIMENTS_HAVE_SEMGET */

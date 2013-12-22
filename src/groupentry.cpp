@@ -9,17 +9,19 @@
 
 #ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
 	#include <rudiments/dictionary.h>
-	// for structs, functions
-	#ifdef RUDIMENTS_HAVE_WINDOWS_H
-		#include <windows.h>
-	#endif
-	#include <lm.h>
-	#include <sddl.h>
 #else
-	// for group, functions
 	#include <grp.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_LM_H
+	#include <lm.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SDDL_H
+	#include <sddl.h>
+#endif
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif

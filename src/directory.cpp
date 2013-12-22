@@ -24,12 +24,14 @@
 #ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SDDL_H
+	#include <sddl.h>
+#endif
 
 #ifdef _WIN32
-	#ifdef RUDIMENTS_HAVE_WINDOWS_H
-		#include <windows.h>
-	#endif
-	#include <sddl.h>
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef _PC_NAME_MAX
