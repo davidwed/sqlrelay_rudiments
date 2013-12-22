@@ -614,6 +614,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #include <tlhelp32.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for sddl.h)
+AC_TRY_COMPILE([#include <sddl.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SDDL_H, 1, Some systems have sddl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for process.h)
 AC_TRY_COMPILE([#include <process.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_PROCESS_H, 1, Some systems have process.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
