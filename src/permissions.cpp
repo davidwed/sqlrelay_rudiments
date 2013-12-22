@@ -350,6 +350,8 @@ char *permissions::daclToPermString(void *dacl) {
 	return evalPermOctal(daclToPermOctal(dacl));
 }
 
+#ifdef _WIN32
+
 // Object-specific rights
 // see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
 #define _CC	0x00000001	// "read"
@@ -367,10 +369,14 @@ char *permissions::daclToPermString(void *dacl) {
 #define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER|GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
 #define _EXEC	(GENERIC_EXECUTE|_WP)
 
+#endif
+
 mode_t permissions::daclToPermOctal(void *dacl) {
 
 	// init the return value
 	mode_t	perms=0;
+
+#ifdef _WIN32
 
 	// get the user and convert to an sid
 	passwdentry	pwdent;
@@ -541,6 +547,8 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 	LocalFree(usersid);
 	LocalFree(groupsid);
 	LocalFree(otherssid);
+
+#endif
 
 	// return permissions
 	return perms;
