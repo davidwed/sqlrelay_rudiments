@@ -92,16 +92,9 @@
 
 
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
-	#ifdef _WIN32
-		// windows doesn't support anything like this
-		error::setErrorNumber(ENOSYS);
-		return false;
-		//return !_chmod(filename,perms);
-	#else
-		file	fl;
-		return (fl.open(filename,O_RDWR) &&
-			setFilePermissions(fl.getFileDescriptor(),perms));
-	#endif
+	file	fl;
+	return (fl.open(filename,O_RDWR) &&
+		setFilePermissions(fl.getFileDescriptor(),perms));
 }
 
 bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
@@ -111,13 +104,9 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 			result=fchmod(fd,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(_WIN32)
-		// windows doesn't support anything like this
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		// other platforms should support something like this
-		#error no fchmod or anything like it
 	#endif
 }
 

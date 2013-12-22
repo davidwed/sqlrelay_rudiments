@@ -151,7 +151,7 @@ pid_t process::newSession() {
 uid_t process::getRealUserId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getuid();
-	#elif defined(_WIN32)
+	#elif defined(RUDIMENTS_HAVE_GETUSERNAME)
 		DWORD	size=0;
 		GetUserName(NULL,&size);
 		if (size<1) {
@@ -173,25 +173,19 @@ uid_t process::getRealUserId() {
 uid_t process::getEffectiveUserId() {
 	#if defined(RUDIMENTS_HAVE_GETEUID)
 		return geteuid();
-	#elif defined(_WIN32)
+	#else
 		// windows doesn't have the notion of effective user id's
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no geteuid or anything like it
 	#endif
 }
 
 bool process::setUserId(uid_t uid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
 		return !setuid(uid);
-	#elif defined(_WIN32)
-		// There may be some obsure way to do this under windows,
-		// but it would surprise me.
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		#error no setuid or anything like it
 	#endif
 }
 
@@ -209,12 +203,9 @@ bool process::setEffectiveUserId(uid_t uid) {
 		return !seteuid(uid);
 	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEUID)
 		return !syscall(SYS_seteuid,uid);
-	#elif defined(_WIN32)
-		// windows doesn't have the notion of effective user id's
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		#error no seteuid or anything like it
 	#endif
 }
 
@@ -229,7 +220,7 @@ bool process::setRealAndEffectiveUserId(uid_t uid, uid_t euid) {
 gid_t process::getRealGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getgid();
-	#elif defined(_WIN32)
+	#elif defined(RUDIMENTS_HAVE_GETUSERNAME)
 		// windows doesn't have the notion of group-thread association
 		// but we can return the primary group of the user associated
 		// with the thread
@@ -244,24 +235,18 @@ gid_t process::getRealGroupId() {
 gid_t process::getEffectiveGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETEGID)
 		return getegid();
-	#elif defined(_WIN32)
-		// windows doesn't have the notion of group-thread association
+	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no getegid or anything like it
 	#endif
 }
 
 bool process::setGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
 		return !setgid(gid);
-	#elif defined(_WIN32)
-		// windows doesn't have the notion of group-thread association
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		#error no setgid or anything like it
 	#endif
 }
 
@@ -277,12 +262,9 @@ extern "C" int setegid(gid_t egid);
 bool process::setEffectiveGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETEGID)
 		return !setegid(gid);
-	#elif defined(_WIN32)
-		// windows doesn't have the notion of group-thread association
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		#error no setegid or anything like it
 	#endif
 }
 

@@ -31,7 +31,7 @@
 	#include <sddl.h>
 #endif
 
-#ifdef _WIN32
+#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 	// windows doesn't define these, but we need them
 	// internally to this file
 	#ifndef _PC_NAME_MAX
@@ -50,13 +50,13 @@
 class directoryprivate {
 	friend class directory;
 	private:
-		#ifndef _WIN32
-			DIR		*_dir;
-		#else
+		#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 			char		*_filespec;
 			HANDLE		_dir;
 			WIN32_FIND_DATA	_findfiledata;
 			bool		_onfirst;
+		#else
+			DIR		*_dir;
 		#endif
 		uint64_t	_currentindex;
 };
@@ -86,19 +86,19 @@ static int64_t bufferSize(directory *d) {
 
 directory::directory() {
 	pvt=new directoryprivate;
-	#ifndef _WIN32
-		pvt->_dir=NULL;
-	#else
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 		pvt->_filespec=NULL;
 		pvt->_dir=INVALID_HANDLE_VALUE;
 		pvt->_onfirst=true;
+	#else
+		pvt->_dir=NULL;
 	#endif
 	pvt->_currentindex=0;
 }
 
 directory::~directory() {
 	close();
-	#ifdef _WIN32
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 		delete[] pvt->_filespec;
 	#endif
 	delete pvt;
@@ -106,12 +106,7 @@ directory::~directory() {
 
 bool directory::open(const char *path) {
 	close();
-	#ifndef _WIN32
-		do {
-			pvt->_dir=opendir(path);
-		} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
-		return (pvt->_dir!=NULL);
-	#else
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 		// The rewind method just calls close() and
 		// open(pvt->_filespec).  Don't rebuild pvt->_filespec if it's
 		// what was passed in.
@@ -124,6 +119,11 @@ bool directory::open(const char *path) {
 		pvt->_dir=FindFirstFile(pvt->_filespec,&pvt->_findfiledata);
 		pvt->_onfirst=true;
 		return (pvt->_dir!=INVALID_HANDLE_VALUE);
+	#else
+		do {
+			pvt->_dir=opendir(path);
+		} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
+		return (pvt->_dir!=NULL);
 	#endif
 }
 
@@ -139,17 +139,25 @@ bool directory::skip() {
 char *directory::read() {
 
 	// handle unopened directory
-	#ifndef _WIN32
-		if (!pvt->_dir) {
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+		if (pvt->_dir==INVALID_HANDLE_VALUE) {
 			return NULL;
 		}
 	#else
-		if (pvt->_dir==INVALID_HANDLE_VALUE) {
+		if (!pvt->_dir) {
 			return NULL;
 		}
 	#endif
 
-	#if defined(RUDIMENTS_HAVE_READDIR_R)
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+		if (pvt->_onfirst) {
+			pvt->_onfirst=false;
+		} else if (FindNextFile(pvt->_dir,&pvt->_findfiledata)!=TRUE) {
+			return NULL;
+		}
+		pvt->_currentindex++;
+		return charstring::duplicate(pvt->_findfiledata.cFileName);
+	#elif defined(RUDIMENTS_HAVE_READDIR_R)
 		// get the size of the buffer
 		int64_t	size=bufferSize(this);
 		if (size==-1) {
@@ -176,7 +184,7 @@ char *directory::read() {
 		char	*retval=charstring::duplicate(result->d_name);
 		delete[] entry;
 		return retval;
-	#elif !defined(_WIN32)
+	#else
 		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry;
 		#else
@@ -197,31 +205,27 @@ char *directory::read() {
 			_rdmutex->unlock();
 		}
 		return retval;
-	#else
-		if (pvt->_onfirst) {
-			pvt->_onfirst=false;
-		} else if (FindNextFile(pvt->_dir,&pvt->_findfiledata)!=TRUE) {
-			return NULL;
-		}
-		pvt->_currentindex++;
-		return charstring::duplicate(pvt->_findfiledata.cFileName);
 	#endif
 }
 
 void directory::rewind() {
-	#ifndef _WIN32
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+		close();
+		open(pvt->_filespec);
+	#else
 		if (pvt->_dir) {
 			rewinddir(pvt->_dir);
 		}
 		pvt->_currentindex=0;
-	#else
-		close();
-		open(pvt->_filespec);
 	#endif
 }
 
 bool directory::close() {
-	#ifndef _WIN32
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+		bool	retval=(FindClose(pvt->_dir)==TRUE);
+		pvt->_dir=INVALID_HANDLE_VALUE;
+		return retval;
+	#else
 		bool	retval=true;
 		if (pvt->_dir) {
 			do {
@@ -230,10 +234,6 @@ bool directory::close() {
 			pvt->_dir=NULL;
 			pvt->_currentindex=0;
 		}
-		return retval;
-	#else
-		bool	retval=(FindClose(pvt->_dir)==TRUE);
-		pvt->_dir=INVALID_HANDLE_VALUE;
 		return retval;
 	#endif
 }
@@ -250,12 +250,12 @@ uint64_t directory::getChildCount() {
 char *directory::getChildName(uint64_t index) {
 
 	// handle unopened directory
-	#ifndef _WIN32
-		if (!pvt->_dir) {
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
+		if (pvt->_dir==INVALID_HANDLE_VALUE) {
 			return NULL;
 		}
 	#else
-		if (pvt->_dir==INVALID_HANDLE_VALUE) {
+		if (!pvt->_dir) {
 			return NULL;
 		}
 	#endif
@@ -275,7 +275,22 @@ char *directory::getChildName(uint64_t index) {
 }
 
 bool directory::create(const char *path, mode_t perms) {
-	#ifndef _WIN32
+	#if defined(RUDIMENTS_HAVE_CREATEDIRECTORY)
+		SECURITY_ATTRIBUTES	satt;
+		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.bInheritHandle=TRUE;
+
+		char	*sddl=permissions::permOctalToSDDL(perms,true);
+
+		bool	retval=(
+			ConvertStringSecurityDescriptorToSecurityDescriptor(
+				sddl,SDDL_REVISION_1,
+				&satt.lpSecurityDescriptor,NULL)==TRUE &&
+			CreateDirectory(path,&satt)==TRUE);
+
+		delete[] sddl;
+		return retval;
+	#else
 		int32_t	result;
 		do {
 			#if defined(RUDIMENTS_HAVE_MKDIR_2)
@@ -294,33 +309,18 @@ bool directory::create(const char *path, mode_t perms) {
 		#else
 			#error no mkdir or anything like it
 		#endif
-	#else
-		SECURITY_ATTRIBUTES	satt;
-		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
-		satt.bInheritHandle=TRUE;
-
-		char	*sddl=permissions::permOctalToSDDL(perms,true);
-
-		bool	retval=(
-			ConvertStringSecurityDescriptorToSecurityDescriptor(
-				sddl,SDDL_REVISION_1,
-				&satt.lpSecurityDescriptor,NULL)==TRUE &&
-			CreateDirectory(path,&satt)==TRUE);
-
-		delete[] sddl;
-		return retval;
 	#endif
 }
 
 bool directory::remove(const char *path) {
-	#ifndef _WIN32
+	#if defined(RUDIMENTS_HAVE_REMOVEDIRECTORY)
+		return (RemoveDirectory(path)==TRUE);
+	#else
 		int32_t	result;
 		do {
 			result=rmdir(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#else
-		return (RemoveDirectory(path)==TRUE);
 	#endif
 }
 
@@ -329,11 +329,7 @@ char *directory::getCurrentWorkingDirectory() {
 	for (;;) {
 		char	*buffer=new char[size];
 		char	*result=NULL;
-		#ifndef _WIN32
-			do {
-				result=getcwd(buffer,size);
-			} while (!result && error::getErrorNumber()==EINTR);
-		#else
+		#if defined(RUDIMENTS_HAVE_GETCURRENTDIRECTORY)
 			DWORD	charswritten=GetCurrentDirectory(size,buffer);
 			if (!charswritten) {
 				delete[] buffer;
@@ -342,6 +338,10 @@ char *directory::getCurrentWorkingDirectory() {
 			if (charswritten<size) {
 				result=buffer;
 			}
+		#else
+			do {
+				result=getcwd(buffer,size);
+			} while (!result && error::getErrorNumber()==EINTR);
 		#endif
 		if (result) {
 			return buffer;
@@ -356,14 +356,14 @@ char *directory::getCurrentWorkingDirectory() {
 }
 
 bool directory::changeDirectory(const char *path) {
-	#ifndef _WIN32
+	#if defined(RUDIMENTS_HAVE_SETCURRENTDIRECTORY)
+		return (SetCurrentDirectory(path)==TRUE);
+	#else
 		int32_t	result;
 		do {
 			result=chdir(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#else
-		return (SetCurrentDirectory(path)==TRUE);
 	#endif
 }
 
@@ -381,7 +381,7 @@ bool directory::changeRoot(const char *path) {
 }
 
 bool directory::needsMutex() {
-	#if defined(_WIN32)
+	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 		return false;
 	#elif !defined(RUDIMENTS_HAVE_READDIR_R)
 		return true;

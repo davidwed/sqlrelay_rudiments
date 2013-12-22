@@ -57,38 +57,36 @@
 	#include <accctrl.h>
 #endif
 
-#ifdef _WIN32
-	// windows doesn't define these, but we need them
-	// internally to this file
-	#ifndef F_GETLK	
-		#define F_GETLK		0
-	#endif
-	#ifndef F_SETLK	
-		#define F_SETLK		1
-	#endif
-	#ifndef F_SETLKW	
-		#define F_SETLKW	2
-	#endif
-	#ifndef _PC_LINK_MAX
-		#define _PC_LINK_MAX		0
-	#endif
-	#ifndef _PC_CHOWN_RESTRICTED
-		#define _PC_CHOWN_RESTRICTED	1
-	#endif
-	#ifndef F_OK
-		#define F_OK	0
-	#endif
-	#ifndef W_OK
-		#define W_OK	2
-	#endif
-	#ifndef R_OK
-		#define R_OK	4
-	#endif
-	#ifndef X_OK
-		// no such thing on windows, so we'll
-		// just set this to be the same as F_OK
-		#define X_OK	0
-	#endif
+// windows doesn't define these, but we need them
+// internally to this file
+#ifndef F_GETLK	
+	#define F_GETLK		0
+#endif
+#ifndef F_SETLK	
+	#define F_SETLK		1
+#endif
+#ifndef F_SETLKW	
+	#define F_SETLKW	2
+#endif
+#ifndef _PC_LINK_MAX
+	#define _PC_LINK_MAX		0
+#endif
+#ifndef _PC_CHOWN_RESTRICTED
+	#define _PC_CHOWN_RESTRICTED	1
+#endif
+#ifndef F_OK
+	#define F_OK	0
+#endif
+#ifndef W_OK
+	#define W_OK	2
+#endif
+#ifndef R_OK
+	#define R_OK	4
+#endif
+#ifndef X_OK
+	// no such thing on windows, so we'll
+	// just set this to be the same as F_OK
+	#define X_OK	0
 #endif
 
 class fileprivate {
@@ -649,7 +647,7 @@ bool file::getCurrentProperties() {
 		result=fstat(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 
-	#if defined(_WIN32)
+	#if defined(RUDIMENTS_HAVE_GETSECURITYINFO)
 
 		if (result) {
 			return false;
@@ -951,13 +949,9 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 			result=fchown(fd(),uid,gid);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(_WIN32)
-		// windows doesn't support anything like this
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		// other platforms should support something like this
-		#error no fchown or anything like it
 	#endif
 }
 
@@ -1036,14 +1030,9 @@ bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 			result=symlink(oldpath,newpath);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#elif defined(_WIN32)
-		// windows doesn't support symlinks
+	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
-	#else
-		// other platforms should support symlinks,
-		// so something may be wrong
-		#error no symlink or anything like it
 	#endif
 }
 
@@ -1091,14 +1080,9 @@ char *file::resolveSymbolicLink(const char *filename) {
 				return buffer;
 			}
 		}
-	#elif defined(_WIN32)
-		// windows doesn't support symlinks
+	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;
-	#else
-		// other platforms should support symlinks,
-		// so something may be wrong
-		#error no readlink or anything like it
 	#endif
 }
 
@@ -1926,12 +1910,9 @@ int64_t file::pathConf(const char *path, int32_t name) {
 			result=pathconf(path,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(_WIN32)
-		// no idea how to support this on windows
+	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no pathconf or anything like it
 	#endif
 }
 
@@ -1942,11 +1923,8 @@ int64_t file::fpathConf(int32_t name) const {
 			result=fpathconf(fd(),name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
-	#elif defined(_WIN32)
-		// no idea how to support this on windows
+	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
-	#else
-		#error no fpathconf or anything like it
 	#endif
 }

@@ -1246,7 +1246,9 @@ AC_MSG_CHECKING(for NetUserGetInfo)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
-#include <lm.h>],
+#ifdef RUDIMENTS_HAVE_LM_H
+	#include <lm.h>
+#endif],
 NetUserGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETUSERGETINFO,1,Some systems have NetUserGetInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 ])
@@ -1300,7 +1302,9 @@ NETAPI32LIB=""
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
-#include <lm.h>],
+#ifdef RUDIMENTS_HAVE_LM_H
+	#include <lm.h>
+#endif],
 NetGroupGetInfo(NULL,NULL,0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_NETGROUPGETINFO,1,Some systems have NetGroupGetInfo) NETAPI32LIB="-lnetapi32"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 AC_SUBST(NETAPI32LIB)
 

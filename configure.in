@@ -1973,11 +1973,18 @@ _open(NULL,0,0);,AC_DEFINE(RUDIMENTS_HAVE__OPEN,1,Some systems have _open) AC_MS
 AC_MSG_CHECKING(for CreateFile)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
-#endif
-#ifdef RUDIMENTS_HAVE_FILEAPI_H
-	#include <FileAPI.h>
 #endif],
 CreateFile("",0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_CREATEFILE,1,Some systems have CreateFile) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GetSecurityInfo)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ACLAPI_H
+	#include <aclapi.h>
+#endif
+],
+GetSecurityInfo(0,SE_FILE_OBJECT,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETSECURITYINFO,1,Some systems have GetSecurityInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for close)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -2585,6 +2592,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 readdir_r(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for FindFirstFile)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+FindFirstFile("",0),AC_DEFINE(RUDIMENTS_HAVE_FINDFIRSTFILE,1,Some systems have FindFirstFile) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for dirfd)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -2641,6 +2654,30 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <io.h>
 #endif],
 mkdir(""),AC_DEFINE(RUDIMENTS_HAVE_MKDIR_1,1,Some systems have mkdir) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for CreateDirectory)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+CreateDirectory("",0),AC_DEFINE(RUDIMENTS_HAVE_CREATEDIRECTORY,1,Some systems have CreateDirectory) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for RemoveDirectory)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+RemoveDirectory(""),AC_DEFINE(RUDIMENTS_HAVE_REMOVEDIRECTORY,1,Some systems have RemoveDirectory) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GetCurrentDirectory)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetCurrentDirectory(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETCURRENTDIRECTORY,1,Some systems have GetCurrentDirectory) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for SetCurrentDirectory)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+SetCurrentDirectory(""),AC_DEFINE(RUDIMENTS_HAVE_SETCURRENTDIRECTORY,1,Some systems have SetCurrentDirectory) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for chroot)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_UNISTD_H
@@ -2750,6 +2787,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <unistd.h>
 #endif],
 getuid(),AC_DEFINE(RUDIMENTS_HAVE_GETUID,1,Some systems have getuid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GetUserName)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetUserName(0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETUSERNAME,1,Some systems have GetUserName) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for geteuid)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H

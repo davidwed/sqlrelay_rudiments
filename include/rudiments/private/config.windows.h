@@ -170,6 +170,9 @@
 /* Most systems have ftok(const char *, int) */
 /* #undef RUDIMENTS_HAVE_CONST_CHAR_FTOK */
 
+/* Some systems have CreateDirectory */
+#define RUDIMENTS_HAVE_CREATEDIRECTORY 1
+
 /* Some systems have CreateFile */
 #define RUDIMENTS_HAVE_CREATEFILE 1
 
@@ -263,6 +266,9 @@
 /* Some systems have FD_CLOEXEC */
 /* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
 
+/* Some systems have FindFirstFile */
+#define RUDIMENTS_HAVE_FINDFIRSTFILE 1
+
 /* Some systems have fork */
 /* #undef RUDIMENTS_HAVE_FORK */
 
@@ -295,6 +301,9 @@
 
 /* Some systems have getaddrinfo */
 /* #undef RUDIMENTS_HAVE_GETADDRINFO */
+
+/* Some systems have GetCurrentDirectory */
+#define RUDIMENTS_HAVE_GETCURRENTDIRECTORY 1
 
 /* Some systems have GetCurrentProcessId */
 #define RUDIMENTS_HAVE_GETCURRENTPROCESSID 1
@@ -434,6 +443,9 @@
 /* Some systems have getrpcbynumber_r */
 /* #undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5 */
 
+/* Some systems have GetSecurityInfo */
+#define RUDIMENTS_HAVE_GETSECURITYINFO 1
+
 /* Some systems have getservbyname_r */
 /* #undef RUDIMENTS_HAVE_GETSERVBYNAME_R */
 
@@ -478,6 +490,9 @@
 
 /* Some systems have getuid */
 /* #undef RUDIMENTS_HAVE_GETUID */
+
+/* Some systems have GetUserName */
+#define RUDIMENTS_HAVE_GETUSERNAME 1
 
 /* Some systems have GetVersionEx */
 #define RUDIMENTS_HAVE_GETVERSIONEX 1
@@ -764,6 +779,9 @@
 /* some systems have regcomp */
 /* #undef RUDIMENTS_HAVE_REGCOMP */
 
+/* Some systems have RemoveDirectory */
+#define RUDIMENTS_HAVE_REMOVEDIRECTORY 1
+
 /* Some systems have BRoster::_ShutDown */
 /* #undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN */
 
@@ -799,6 +817,9 @@
 
 /* send has a const void * on most systems */
 /* #undef RUDIMENTS_HAVE_SEND_WITH_VOID */
+
+/* Some systems have SetCurrentDirectory */
+#define RUDIMENTS_HAVE_SETCURRENTDIRECTORY 1
 
 /* Some systems have setegid */
 /* #undef RUDIMENTS_HAVE_SETEGID */
@@ -1221,7 +1242,7 @@
 /* #undef RUDIMENTS_NEED_XNET_PROTOTYPES */
 
 /* Redfine NULL as 0 */
-#undef RUDIMENTS_REDEFINE_NULL
+/* #undef RUDIMENTS_REDEFINE_NULL */
 
 /* setsockopt has a const void * on most systems */
 #define RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE const char *
