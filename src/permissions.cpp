@@ -68,6 +68,28 @@
 	#define	S_IXOTH	(S_IXGRP>>3)
 #endif
 
+#ifdef RUDIMENTS_HAVE_GETACE
+
+	// Object-specific rights
+	// see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
+	#define _CC	0x00000001	// "read"
+	#define _DC	0x00000002	// "write"
+	#define _LC	0x00000004	// "append"
+	#define _SW	0x00000008	// "read extended attributes"
+	#define _RP	0x00000010	// "write extended attributes"
+	#define _WP	0x00000020	// "execute"
+	#define _DT	0x00000040	// "delete child"
+	#define _LO	0x00000080	// "read standard attributes"
+	#define _CR	0x00000100	// "write standard attributes"
+
+	// normalized rights masks
+	#define	_ALL	GENERIC_ALL
+	#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
+	#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER| \
+				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
+	#define _EXEC	(GENERIC_EXECUTE|_WP)
+#endif
+
 
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 	#ifdef _WIN32
@@ -351,205 +373,186 @@ char *permissions::daclToPermString(void *dacl) {
 	return evalPermOctal(daclToPermOctal(dacl));
 }
 
-#ifdef _WIN32
-
-// Object-specific rights
-// see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
-#define _CC	0x00000001	// "read"
-#define _DC	0x00000002	// "write"
-#define _LC	0x00000004	// "append"
-#define _SW	0x00000008	// "read extended attributes"
-#define _RP	0x00000010	// "write extended attributes"
-#define _WP	0x00000020	// "execute"
-#define _DT	0x00000040	// "delete child"
-#define _LO	0x00000080	// "read standard attributes"
-#define _CR	0x00000100	// "write standard attributes"
-
-#define	_ALL	GENERIC_ALL
-#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
-#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER|GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
-#define _EXEC	(GENERIC_EXECUTE|_WP)
-
-#endif
-
 mode_t permissions::daclToPermOctal(void *dacl) {
 
 	// init the return value
 	mode_t	perms=0;
 
-#ifdef _WIN32
+	#ifdef RUDIMENTS_HAVE_GETACE
 
-	// get the user and convert to an sid
-	passwdentry	pwdent;
-	PSID		usersid=NULL;
-	if (!pwdent.initialize(process::getRealUserId()) ||
-		ConvertStringSidToSid(pwdent.getSid(),&usersid)!=TRUE) {
-		return perms;
-	}
-
-	// get the group and convert to an sid
-	groupentry	grpent;
-	PSID		groupsid=NULL;
-	if (!grpent.initialize(process::getRealGroupId()) ||
-		ConvertStringSidToSid(grpent.getSid(),&groupsid)!=TRUE) {
-		return perms;
-	}
-
-	// get the sid for others ("S-1-1-0" is the well known SID for "World")
-	PSID	otherssid=NULL;
-	if (ConvertStringSidToSid("S-1-1-0",&otherssid)!=TRUE) {
-		return perms;
-	}
-
-	// cast the DACL properly
-	PACL	d=(PACL)dacl;
-
-	// run through the ACEs of the DACL
-	for (DWORD i=0; i<d->AceCount; i++) {
-
-		// get the ACE
-		PVOID	ace=NULL;
-		if (GetAce(d,i,&ace)==FALSE) {
-			continue;
+		// get the user and convert to an sid
+		passwdentry	pwdent;
+		PSID		usersid=NULL;
+		if (!pwdent.initialize(process::getRealUserId()) ||
+			ConvertStringSidToSid(pwdent.getSid(),
+						&usersid)!=TRUE) {
+			return perms;
 		}
 
-		// get various ACE components
-		ACCESS_ALLOWED_ACE	*aace=(ACCESS_ALLOWED_ACE *)ace;
-		PSID			sid=(PSID)&aace->SidStart;
-		DWORD			mask=aace->Mask;
+		// get the group and convert to an sid
+		groupentry	grpent;
+		PSID		groupsid=NULL;
+		if (!grpent.initialize(process::getRealGroupId()) ||
+			ConvertStringSidToSid(grpent.getSid(),
+						&groupsid)!=TRUE) {
+			return perms;
+		}
 
-		// which sid does this ACE apply to
-		if (EqualSid(sid,usersid)) {
+		// get the sid for others
+		// ("S-1-1-0" is the well known SID for "World")
+		PSID	otherssid=NULL;
+		if (ConvertStringSidToSid("S-1-1-0",&otherssid)!=TRUE) {
+			return perms;
+		}
 
-			if (aace->Header.AceType==
-					ACCESS_ALLOWED_ACE_TYPE) {
+		// cast the DACL properly
+		PACL	d=(PACL)dacl;
 
-				// update perms
-				if (mask&_ALL) {
-					perms|=ownerRead();
-					perms|=ownerWrite();
-					perms|=ownerExecute();
-				}
-				if (mask&_READ) {
-					perms|=ownerRead();
-				}
-				if (mask&_WRITE) {
-					perms|=ownerWrite();
-				}
-				if (mask&_EXEC) {
-					perms|=ownerExecute();
-				}
+		// run through the ACEs of the DACL
+		for (DWORD i=0; i<d->AceCount; i++) {
 
-			} else if (aace->Header.AceType==
-					ACCESS_DENIED_ACE_TYPE) {
-
-				// update perms
-				if (mask&_ALL) {
-					perms&=~ownerRead();
-					perms&=~ownerWrite();
-					perms&=~ownerExecute();
-				}
-				if (mask&_READ) {
-					perms&=~ownerRead();
-				}
-				if (mask&_WRITE) {
-					perms&=~ownerWrite();
-				}
-				if (mask&_EXEC) {
-					perms&=~ownerExecute();
-				}
+			// get the ACE
+			PVOID	ace=NULL;
+			if (GetAce(d,i,&ace)==FALSE) {
+				continue;
 			}
 
-		} else if (EqualSid(sid,groupsid)) {
+			// get various ACE components
+			ACCESS_ALLOWED_ACE	*aace=(ACCESS_ALLOWED_ACE *)ace;
+			PSID			sid=(PSID)&aace->SidStart;
+			DWORD			mask=aace->Mask;
 
-			if (aace->Header.AceType==
-					ACCESS_ALLOWED_ACE_TYPE) {
+			// which sid does this ACE apply to
+			if (EqualSid(sid,usersid)) {
 
-				// update perms
-				if (mask&_ALL) {
-					perms|=groupRead();
-					perms|=groupWrite();
-					perms|=groupExecute();
-				}
-				if (mask&_READ) {
-					perms|=groupRead();
-				}
-				if (mask&_WRITE) {
-					perms|=groupWrite();
-				}
-				if (mask&_EXEC) {
-					perms|=groupExecute();
-				}
+				if (aace->Header.AceType==
+						ACCESS_ALLOWED_ACE_TYPE) {
 
-			} else if (aace->Header.AceType==
-					ACCESS_DENIED_ACE_TYPE) {
+					// update perms
+					if (mask&_ALL) {
+						perms|=ownerRead();
+						perms|=ownerWrite();
+						perms|=ownerExecute();
+					}
+					if (mask&_READ) {
+						perms|=ownerRead();
+					}
+					if (mask&_WRITE) {
+						perms|=ownerWrite();
+					}
+					if (mask&_EXEC) {
+						perms|=ownerExecute();
+					}
 
-				// update perms
-				if (mask&_ALL) {
-					perms&=~groupRead();
-					perms&=~groupWrite();
-					perms&=~groupExecute();
-				}
-				if (mask&_READ) {
-					perms&=~groupRead();
-				}
-				if (mask&_WRITE) {
-					perms&=~groupWrite();
-				}
-				if (mask&_EXEC) {
-					perms&=~groupExecute();
-				}
-			}
+				} else if (aace->Header.AceType==
+						ACCESS_DENIED_ACE_TYPE) {
 
-		} else if (EqualSid(sid,otherssid)) {
-
-			if (aace->Header.AceType==
-					ACCESS_ALLOWED_ACE_TYPE) {
-
-				// update perms
-				if (mask&_ALL) {
-					perms|=othersRead();
-					perms|=othersWrite();
-					perms|=othersExecute();
-				}
-				if (mask&_READ) {
-					perms|=othersRead();
-				}
-				if (mask&_WRITE) {
-					perms|=othersWrite();
-				}
-				if (mask&_EXEC) {
-					perms|=othersExecute();
+					// update perms
+					if (mask&_ALL) {
+						perms&=~ownerRead();
+						perms&=~ownerWrite();
+						perms&=~ownerExecute();
+					}
+					if (mask&_READ) {
+						perms&=~ownerRead();
+					}
+					if (mask&_WRITE) {
+						perms&=~ownerWrite();
+					}
+					if (mask&_EXEC) {
+						perms&=~ownerExecute();
+					}
 				}
 
-			} else if (aace->Header.AceType==
-					ACCESS_DENIED_ACE_TYPE) {
+			} else if (EqualSid(sid,groupsid)) {
 
-				// update perms
-				if (mask&_ALL) {
-					perms&=~othersRead();
-					perms&=~othersWrite();
-					perms&=~othersExecute();
+				if (aace->Header.AceType==
+						ACCESS_ALLOWED_ACE_TYPE) {
+
+					// update perms
+					if (mask&_ALL) {
+						perms|=groupRead();
+						perms|=groupWrite();
+						perms|=groupExecute();
+					}
+					if (mask&_READ) {
+						perms|=groupRead();
+					}
+					if (mask&_WRITE) {
+						perms|=groupWrite();
+					}
+					if (mask&_EXEC) {
+						perms|=groupExecute();
+					}
+
+				} else if (aace->Header.AceType==
+						ACCESS_DENIED_ACE_TYPE) {
+
+					// update perms
+					if (mask&_ALL) {
+						perms&=~groupRead();
+						perms&=~groupWrite();
+						perms&=~groupExecute();
+					}
+					if (mask&_READ) {
+						perms&=~groupRead();
+					}
+					if (mask&_WRITE) {
+						perms&=~groupWrite();
+					}
+					if (mask&_EXEC) {
+						perms&=~groupExecute();
+					}
 				}
-				if (mask&_READ) {
-					perms&=~othersRead();
-				}
-				if (mask&_WRITE) {
-					perms&=~othersWrite();
-				}
-				if (mask&_EXEC) {
-					perms&=~othersExecute();
+
+			} else if (EqualSid(sid,otherssid)) {
+
+				if (aace->Header.AceType==
+						ACCESS_ALLOWED_ACE_TYPE) {
+
+					// update perms
+					if (mask&_ALL) {
+						perms|=othersRead();
+						perms|=othersWrite();
+						perms|=othersExecute();
+					}
+					if (mask&_READ) {
+						perms|=othersRead();
+					}
+					if (mask&_WRITE) {
+						perms|=othersWrite();
+					}
+					if (mask&_EXEC) {
+						perms|=othersExecute();
+					}
+
+				} else if (aace->Header.AceType==
+						ACCESS_DENIED_ACE_TYPE) {
+
+					// update perms
+					if (mask&_ALL) {
+						perms&=~othersRead();
+						perms&=~othersWrite();
+						perms&=~othersExecute();
+					}
+					if (mask&_READ) {
+						perms&=~othersRead();
+					}
+					if (mask&_WRITE) {
+						perms&=~othersWrite();
+					}
+					if (mask&_EXEC) {
+						perms&=~othersExecute();
+					}
 				}
 			}
 		}
-	}
 
-	// clean up
-	LocalFree(usersid);
-	LocalFree(groupsid);
-	LocalFree(otherssid);
-
-#endif
+		// clean up
+		LocalFree(usersid);
+		LocalFree(groupsid);
+		LocalFree(otherssid);
+	#endif
 
 	// return permissions
 	return perms;

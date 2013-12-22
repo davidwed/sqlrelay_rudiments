@@ -2443,6 +2443,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 DuplicateHandle(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_DUPLICATEHANDLE,1,Some systems have DuplicateHandle) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GetAce)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetAce(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETACE,1,Some systems have GetAce) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

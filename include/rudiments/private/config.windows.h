@@ -290,6 +290,9 @@
 /* Some systems have ftruncate */
 /* #undef RUDIMENTS_HAVE_FTRUNCATE */
 
+/* Some systems have GetAce */
+#define RUDIMENTS_HAVE_GETACE 1
+
 /* Some systems have getaddrinfo */
 /* #undef RUDIMENTS_HAVE_GETADDRINFO */
 
