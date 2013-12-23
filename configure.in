@@ -1996,6 +1996,13 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 ],
 GetSecurityInfo(0,SE_FILE_OBJECT,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETSECURITYINFO,1,Some systems have GetSecurityInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GetFileInformationByHandle)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+],
+GetFileInformationByHandle(0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE,1,Some systems have GetFileInformationByHandle) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for close)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>

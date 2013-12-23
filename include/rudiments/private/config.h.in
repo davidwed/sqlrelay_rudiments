@@ -322,6 +322,9 @@
 /* Some systems have geteuid */
 #undef RUDIMENTS_HAVE_GETEUID
 
+/* Some systems have GetFileInformationByHandle */
+#undef RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE
+
 /* Some systems have GetFileType */
 #undef RUDIMENTS_HAVE_GETFILETYPE
 
