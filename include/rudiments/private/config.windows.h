@@ -317,6 +317,9 @@
 /* Some systems have geteuid */
 /* #undef RUDIMENTS_HAVE_GETEUID */
 
+/* Some systems have GetFileType */
+#define RUDIMENTS_HAVE_GETFILETYPE 1
+
 /* Some systems have getgid */
 /* #undef RUDIMENTS_HAVE_GETGID */
 

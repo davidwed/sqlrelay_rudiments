@@ -1976,6 +1976,16 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 CreateFile("",0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_CREATEFILE,1,Some systems have CreateFile) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GetFileType)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ACLAPI_H
+	#include <aclapi.h>
+#endif
+],
+GetFileType(0);,AC_DEFINE(RUDIMENTS_HAVE_GETFILETYPE,1,Some systems have GetFileType) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for GetSecurityInfo)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
