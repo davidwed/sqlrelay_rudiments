@@ -20,6 +20,7 @@ int main(int argc, const char **argv) {
 	file	fl;
 	fl.create("testfile",permissions::evalPermString("rw-rw----"));
 	fl.write("hello");
+	fl.getCurrentProperties();
 
 	stdoutput.printf("testfile:\n");
 	
@@ -54,6 +55,10 @@ int main(int argc, const char **argv) {
 	off64_t	size=fl.getSize();
 	stdoutput.printf("	size       : %lld\n",size);
 
+
+	// display the block size of the file
+	blkcnt_t	blocksize=fl.getBlockSize();
+	stdoutput.printf("	block size : %ld\n",blocksize);
 
 	// display the size of the file in blocks
 	blkcnt_t	blocks=fl.getBlockCount();

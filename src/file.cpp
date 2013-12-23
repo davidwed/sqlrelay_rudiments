@@ -93,12 +93,18 @@ class fileprivate {
 	friend class file;
 	private:
 		struct	stat	_st;
+		#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+			DWORD	_filetype;
+		#endif
 		bool		_getcurrentpropertiesonopen;
 };
 
 file::file() : filedescriptor() {
 	pvt=new fileprivate;
 	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
+	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+		pvt->_filetype=0;
+	#endif
 	pvt->_getcurrentpropertiesonopen=true;
 	type("file");
 }
@@ -119,6 +125,9 @@ file &file::operator=(const file &f) {
 
 void file::fileClone(const file &f) {
 	pvt->_st=f.pvt->_st;
+	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+		pvt->_filetype=f.pvt->_filetype;
+	#endif
 	pvt->_getcurrentpropertiesonopen=f.pvt->_getcurrentpropertiesonopen;
 }
 
@@ -475,66 +484,66 @@ bool file::checkLockRemainderFromEnd(int16_t type, off64_t start,
 bool file::sequentialAccess(off64_t start, size_t len) const {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_SEQUENTIAL)
-	return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
+		return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
 	#else
-	return true;
+		return true;
 	#endif
 }
 
 bool file::randomAccess(off64_t start, size_t len) const {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_RANDOM)
-	return posixFadvise(start,len,POSIX_FADV_RANDOM);
+		return posixFadvise(start,len,POSIX_FADV_RANDOM);
 	#else
-	return true;
+		return true;
 	#endif
 }
 
 bool file::onlyOnce(off64_t start, size_t len) const {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NOREUSE)
-	return posixFadvise(start,len,POSIX_FADV_NOREUSE);
+		return posixFadvise(start,len,POSIX_FADV_NOREUSE);
 	#else
-	return true;
+		return true;
 	#endif
 }
 
 bool file::willNeed(off64_t start, size_t len) const {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_WILLNEED)
-	return posixFadvise(start,len,POSIX_FADV_WILLNEED);
+		return posixFadvise(start,len,POSIX_FADV_WILLNEED);
 	#else
-	return true;
+		return true;
 	#endif
 }
 
 bool file::wontNeed(off64_t start, size_t len) const {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_DONTNEED)
-	return posixFadvise(start,len,POSIX_FADV_DONTNEED);
+		return posixFadvise(start,len,POSIX_FADV_DONTNEED);
 	#else
-	return true;
+		return true;
 	#endif
 }
 
 bool file::normalAccess(off64_t start, size_t len) const {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NORMAL)
-	return posixFadvise(start,len,POSIX_FADV_NORMAL);
+		return posixFadvise(start,len,POSIX_FADV_NORMAL);
 	#else
-	return true;
+		return true;
 	#endif
 }
 
 bool file::reserve(off64_t start, size_t len) const {
 	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
-	int32_t	result;
-	do {
-		result=posix_fallocate(fd(),start,len);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+		int32_t	result;
+		do {
+			result=posix_fallocate(fd(),start,len);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
 	#else
-	return false;
+		return false;
 	#endif
 }
 
@@ -646,12 +655,13 @@ bool file::getCurrentProperties() {
 	do {
 		result=fstat(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
-
+	if (result) {
+		return false;
+	}
+	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+		pvt->_filetype=GetFileType((HANDLE)_get_osfhandle(fd()));
+	#endif
 	#if defined(RUDIMENTS_HAVE_GETSECURITYINFO)
-
-		if (result) {
-			return false;
-		}
 
 		// On Windows, the st_mode isn't set correctly.  Get the DACL
 		// of the file and convert it to a mode_t using
@@ -673,9 +683,8 @@ bool file::getCurrentProperties() {
 		// clean up
 		LocalFree(ppsd);
 
-		return true;
 	#endif
-	return !result;
+	return true;
 }
 
 bool file::stat(const char *filename, void *st) {
@@ -702,21 +711,20 @@ off64_t file::getSize() const {
 	return pvt->_st.st_size;
 }
 
-
 blksize_t file::getBlockSize() const {
-#ifdef RUDIMENTS_HAVE_BLKSIZE_T
-	return pvt->_st.st_blksize;
-#else
-	return -1;
-#endif
+	#ifdef RUDIMENTS_HAVE_BLKSIZE_T
+		return pvt->_st.st_blksize;
+	#else
+		return -1;
+	#endif
 }
 
 blkcnt_t file::getBlockCount() const {
-#ifdef RUDIMENTS_HAVE_BLKCNT_T
-	return pvt->_st.st_blocks;
-#else
-	return -1;
-#endif
+	#ifdef RUDIMENTS_HAVE_BLKCNT_T
+		return pvt->_st.st_blocks;
+	#else
+		return -1;
+	#endif
 }
 
 #ifndef RUDIMENTS_HAVE_S_ISSOCK
@@ -748,7 +756,9 @@ int32_t file::isSymbolicLink() const {
 }
 
 int32_t file::isRegularFile() const {
-	#if defined(_S_IFREG)
+	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+		return (pvt->_filetype==FILE_TYPE_DISK);
+	#elif defined(_S_IFREG)
 		return ((pvt->_st.st_mode&_S_IFREG)==_S_IFREG);
 	#elif defined(S_IFREG)
 		return ((pvt->_st.st_mode&S_IFREG)==S_IFREG);
@@ -782,7 +792,9 @@ int32_t file::isDirectory() const {
 }
 
 int32_t file::isCharacterDevice() const {
-	#if defined(_S_IFCHR)
+	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+		return (pvt->_filetype==FILE_TYPE_CHAR);
+	#elif defined(_S_IFCHR)
 		return ((pvt->_st.st_mode&_S_IFCHR)==_S_IFCHR);
 	#elif defined(S_IFCHR)
 		return ((pvt->_st.st_mode&S_IFCHR)==S_IFCHR);
@@ -792,7 +804,9 @@ int32_t file::isCharacterDevice() const {
 }
 
 int32_t file::isFifo() const {
-	#if defined(_S_IFIFO)
+	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
+		return (pvt->_filetype==FILE_TYPE_PIPE);
+	#elif defined(_S_IFIFO)
 		return ((pvt->_st.st_mode&_S_IFIFO)==_S_IFIFO);
 	#elif defined(S_IFIFO)
 		return ((pvt->_st.st_mode&S_IFIFO)==S_IFIFO);
