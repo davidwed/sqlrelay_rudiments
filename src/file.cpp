@@ -99,6 +99,9 @@ class fileprivate {
 		#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 			DWORD		_filetype;
 		#endif
+		#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
+			uint64_t	_inode;
+		#endif
 		#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 			char		*_name;
 			blksize_t	_blocksize;
@@ -113,6 +116,7 @@ file::file() : filedescriptor() {
 		pvt->_filetype=0;
 	#endif
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		pvt->_inode=0;
 		pvt->_name=NULL;
 		pvt->_blocksize=0;
 	#endif
@@ -140,6 +144,7 @@ void file::fileClone(const file &f) {
 		pvt->_filetype=f.pvt->_filetype;
 	#endif
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		pvt->_inode=f.pvt->_inode;
 		pvt->_name=charstring::duplicate(f.pvt->_name);
 		pvt->_blocksize=f.pvt->_blocksize;
 	#endif
@@ -699,7 +704,7 @@ bool file::getCurrentProperties() {
 		if (GetFileInformationByHandle(
 				(HANDLE)_get_osfhandle(fd()),&bhfi)==TRUE) {
 
-			pvt->_st.st_ino=(((ino_t)bhfi.nFileIndexHigh)<<32)|
+			pvt->_inode=(((uint64_t)bhfi.nFileIndexHigh)<<32)|
 							bhfi.nFileIndexLow;
 			pvt->_st.st_dev=bhfi.dwVolumeSerialNumber;
 		}
@@ -880,8 +885,12 @@ dev_t file::getDeviceType() const {
 	return pvt->_st.st_rdev;
 }
 
-ino_t file::getInode() const {
-	return pvt->_st.st_ino;
+uint64_t file::getInode() const {
+	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
+		return pvt->_inode;
+	#else
+		return pvt->_st.st_ino;
+	#endif
 }
 
 nlink_t file::getNumberOfHardLinks() const {

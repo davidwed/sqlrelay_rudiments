@@ -750,7 +750,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		dev_t		getDeviceType() const;
 
 		/** Returns the base inode of the file. */
-		ino_t		getInode() const;
+		uint64_t	getInode() const;
 
 		/** Returns the number of hard links to the file. */
 		nlink_t		getNumberOfHardLinks() const;
