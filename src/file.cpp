@@ -8,6 +8,9 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
+#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+	#include <rudiments/filesystem.h>
+#endif
 
 // for struct stat
 #ifdef RUDIMENTS_HAVE_SYS_STAT_H
@@ -94,7 +97,11 @@ class fileprivate {
 	private:
 		struct	stat	_st;
 		#if defined(RUDIMENTS_HAVE_GETFILETYPE)
-			DWORD	_filetype;
+			DWORD		_filetype;
+		#endif
+		#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+			char		*_name;
+			blksize_t	_blocksize;
 		#endif
 		bool		_getcurrentpropertiesonopen;
 };
@@ -104,6 +111,10 @@ file::file() : filedescriptor() {
 	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=0;
+	#endif
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		pvt->_name=NULL;
+		pvt->_blocksize=0;
 	#endif
 	pvt->_getcurrentpropertiesonopen=true;
 	type("file");
@@ -128,10 +139,17 @@ void file::fileClone(const file &f) {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=f.pvt->_filetype;
 	#endif
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		pvt->_name=charstring::duplicate(f.pvt->_name);
+		pvt->_blocksize=f.pvt->_blocksize;
+	#endif
 	pvt->_getcurrentpropertiesonopen=f.pvt->_getcurrentpropertiesonopen;
 }
 
 file::~file() {
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		delete[] pvt->_name;
+	#endif
 	delete pvt;
 }
 
@@ -159,6 +177,11 @@ void file::openInternal(const char *name, int32_t flags) {
 }
 
 void file::openInternal(const char *name, int32_t flags, mode_t perms) {
+
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		delete[] pvt->_name;
+		pvt->_name=charstring::duplicate(name);
+	#endif
 
 	#ifdef RUDIMENTS_HAVE_CREATEFILE
 
@@ -661,6 +684,12 @@ bool file::getCurrentProperties() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=GetFileType((HANDLE)_get_osfhandle(fd()));
 	#endif
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+		filesystem	fs;
+		if (fs.initialize(pvt->_name)) {
+			pvt->_blocksize=fs.getBlockSize();
+		}
+	#endif
 	#if defined(RUDIMENTS_HAVE_GETSECURITYINFO)
 
 		// On Windows, the st_mode isn't set correctly.  Get the DACL
@@ -715,7 +744,7 @@ blksize_t file::getBlockSize() const {
 	#ifdef RUDIMENTS_HAVE_BLKSIZE_T
 		return pvt->_st.st_blksize;
 	#else
-		return -1;
+		return pvt->_blocksize;
 	#endif
 }
 
@@ -723,7 +752,8 @@ blkcnt_t file::getBlockCount() const {
 	#ifdef RUDIMENTS_HAVE_BLKCNT_T
 		return pvt->_st.st_blocks;
 	#else
-		return -1;
+		off64_t	size=getSize();
+		return (size)?(size/getBlockSize()+1):0;
 	#endif
 }
 
