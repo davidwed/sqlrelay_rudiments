@@ -686,6 +686,7 @@ bool file::getCurrentProperties() {
 	#endif
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		filesystem	fs;
+		pvt->_blocksize=0;
 		if (fs.initialize(pvt->_name)) {
 			pvt->_blocksize=fs.getBlockSize();
 		}
