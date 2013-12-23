@@ -130,7 +130,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("basename(%s,\".h\")=%s\n",path,basename);
 	delete[] basename;
 
-	stdoutput.printf("key=%d\n",file::generateKey("/",1));
+	stdoutput.printf("key=%d\n",file::generateKey("testfile",1));
 
 	stdoutput.printf("maxLinks(%s)=%ld\n",path,file::maxLinks(path));
 

@@ -691,6 +691,19 @@ bool file::getCurrentProperties() {
 			pvt->_blocksize=fs.getBlockSize();
 		}
 	#endif
+	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
+		// On Windows, the st_ino and st_dev members aren't set.
+		// Get the file index and volume serial numbers for these.
+
+		BY_HANDLE_FILE_INFORMATION	bhfi;
+		if (GetFileInformationByHandle(
+				(HANDLE)_get_osfhandle(fd()),&bhfi)==TRUE) {
+
+			pvt->_st.st_ino=(((ino_t)bhfi.nFileIndexHigh)<<32)|
+							bhfi.nFileIndexLow;
+			pvt->_st.st_dev=bhfi.dwVolumeSerialNumber;
+		}
+	#endif
 	#if defined(RUDIMENTS_HAVE_GETSECURITYINFO)
 
 		// On Windows, the st_mode isn't set correctly.  Get the DACL
