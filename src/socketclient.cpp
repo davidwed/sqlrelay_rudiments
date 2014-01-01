@@ -232,8 +232,8 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 	// FIXME: handle errno is EINTR...
 	// if connect() fails and errno is set to one of these values,
 	// then the connection is in progress
-	if (error::getErrorNumber()==EINPROGRESS ||
-		error::getErrorNumber()==EWOULDBLOCK) {
+	if (error::getErrorNumber()!=EINPROGRESS &&
+		error::getErrorNumber()!=EWOULDBLOCK) {
 		retval=RESULT_ERROR;
 		goto cleanup;
 	}
