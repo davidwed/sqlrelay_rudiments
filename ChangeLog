@@ -15,6 +15,7 @@
 		like Windows that distinguish between sockets and other
 		file descriptors
 	improved file class implementation for Windows
+	fixed a bug that caused all connect-with-timeout calls to fail
 
 0.44.1 - configure scripts attempts link for various _r functions now to catch
 		cases where they're defined in the headers but not present in
