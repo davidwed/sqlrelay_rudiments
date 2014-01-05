@@ -111,35 +111,38 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 
 		// convert octal perms to an sddl
 		char	*sddl=permOctalToSDDL(perms,false);
-		SECURITY_ATTRIBUTES	satt;
-		if (ConvertStringSecurityDescriptorToSecurityDescriptor(
-					sddl,SDDL_REVISION_1,
-					&satt.lpSecurityDescriptor,
-					NULL)==FALSE) {
-			delete[] sddl;
+		PSECURITY_DESCRIPTOR	secd=NULL;
+		bool	success=
+			(ConvertStringSecurityDescriptorToSecurityDescriptor(
+							sddl,SDDL_REVISION_1,
+							&secd,NULL)!=FALSE);
+		delete[] sddl;
+		if (!success) {
 			return false;
 		}
-		delete[] sddl;
 
 		// get the dacl from the security descriptor
 		BOOL	daclpresent;
 		PACL	dacl=NULL;
 		BOOL	dacldefaulted;
-		if (GetSecurityDescriptorDacl(satt.lpSecurityDescriptor,
+		success=(GetSecurityDescriptorDacl(secd,
 						&daclpresent,
-						&dacl,&dacldefaulted)==FALSE) {
+						&dacl,&dacldefaulted)!=FALSE);
+		if (!success) {
+			LocalFree(secd);
 			return false;
 		}
 
 		// set the permissions
-		if (SetSecurityInfo((HANDLE)_get_osfhandle(fd),
+		success=(SetSecurityInfo((HANDLE)_get_osfhandle(fd),
 					SE_FILE_OBJECT,
 					DACL_SECURITY_INFORMATION,
-					NULL,NULL,dacl,NULL)!=ERROR_SUCCESS) {
-stdoutput.printf("set security info failed\n%s\n",error::getNativeErrorString());
-			return false;
-		}
-		return true;
+					NULL,NULL,dacl,NULL)==ERROR_SUCCESS);
+if (!success) {
+	stdoutput.printf("set security info failed\n%s\n",error::getNativeErrorString());
+}
+		LocalFree(secd);
+		return success;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

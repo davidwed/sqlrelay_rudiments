@@ -213,12 +213,10 @@ void file::openInternal(const char *name, int32_t flags, mode_t perms) {
 		}
 
 		// determine the security attributes
+		char	*sddl=permissions::permOctalToSDDL(perms,false);
 		SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
 		satt.bInheritHandle=TRUE;
-
-		char	*sddl=permissions::permOctalToSDDL(perms,false);
-
 		if (ConvertStringSecurityDescriptorToSecurityDescriptor(
 					sddl,SDDL_REVISION_1,
 					&satt.lpSecurityDescriptor,
