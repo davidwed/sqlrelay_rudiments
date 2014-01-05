@@ -2330,8 +2330,11 @@ fchmod(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCHMOD,1,Some systems have fchmod) AC_MSG_
 AC_MSG_CHECKING(for SetSecurityInfo)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ACLAPI_H
+	#include <aclapi.h>
 #endif],
-SetSecurityInfo(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETSECURITYINFO,1,Some systems have SetSecurityInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+SetSecurityInfo(0,SE_FILE_OBJECT,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETSECURITYINFO,1,Some systems have SetSecurityInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for mkfifo)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H

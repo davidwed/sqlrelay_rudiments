@@ -874,6 +874,9 @@
 /* Some systems have setreuid */
 #undef RUDIMENTS_HAVE_SETREUID
 
+/* Some systems have SetSecurityInfo */
+#undef RUDIMENTS_HAVE_SETSECURITYINFO
+
 /* Some systems have setsid */
 #undef RUDIMENTS_HAVE_SETSID
 
