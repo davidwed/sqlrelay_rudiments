@@ -25,6 +25,9 @@
 #ifdef RUDIMENTS_HAVE_SDDL_H
 	#include <sddl.h>
 #endif
+#ifdef RUDIMENTS_HAVE_ACLAPI_H
+	#include <aclapi.h>
+#endif
 
 
 // Some platforms don't define some of these because they don't support
@@ -105,6 +108,38 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
+
+		// convert octal perms to an sddl
+		char	*sddl=permOctalToSDDL(perms,false);
+		SECURITY_ATTRIBUTES	satt;
+		if (ConvertStringSecurityDescriptorToSecurityDescriptor(
+					sddl,SDDL_REVISION_1,
+					&satt.lpSecurityDescriptor,
+					NULL)==FALSE) {
+			delete[] sddl;
+			return false;
+		}
+		delete[] sddl;
+
+		// get the dacl from the security descriptor
+		BOOL	daclpresent;
+		PACL	dacl=NULL;
+		BOOL	dacldefaulted;
+		if (GetSecurityDescriptorDacl(satt.lpSecurityDescriptor,
+						&daclpresent,
+						&dacl,&dacldefaulted)==FALSE) {
+			return false;
+		}
+
+		// set the permissions
+		if (SetSecurityInfo((HANDLE)_get_osfhandle(fd),
+					SE_FILE_OBJECT,
+					DACL_SECURITY_INFORMATION,
+					NULL,NULL,dacl,NULL)!=ERROR_SUCCESS) {
+stdoutput.printf("set security info failed\n%s\n",error::getNativeErrorString());
+			return false;
+		}
+		return true;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

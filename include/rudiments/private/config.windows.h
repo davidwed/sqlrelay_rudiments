@@ -860,6 +860,9 @@
 /* Some systems have setregid */
 /* #undef RUDIMENTS_HAVE_SETREGID */
 
+/* Some systems have SetSecurityInfo */
+#define RUDIMENTS_HAVE_SETSECURITYINFO 1
+
 /* Some systems have setreuid */
 /* #undef RUDIMENTS_HAVE_SETREUID */
 
