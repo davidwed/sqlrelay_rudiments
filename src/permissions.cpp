@@ -104,6 +104,7 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 			result=fchmod(fd,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
+	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

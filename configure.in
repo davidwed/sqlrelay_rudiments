@@ -2327,6 +2327,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 #endif],
 fchmod(0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCHMOD,1,Some systems have fchmod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for SetSecurityInfo)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+SetSecurityInfo(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETSECURITYINFO,1,Some systems have SetSecurityInfo) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for mkfifo)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
