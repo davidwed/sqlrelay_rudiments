@@ -333,7 +333,23 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	//		CI: subdirectories (containers) will inherit this ace
 	//		OI: files (objects) will inherit this ace
 	//		...
-	//	generic rights:
+	//	rights:
+	//		GX - generic execute
+	//		WP - execute
+	//		SD - delete
+	//		WD - write dac
+	//		WO - write owner
+	//		GW - generic write
+	//		DC - write
+	//		LC - append
+	//		RP - write ea
+	//		DT - delete child
+	//		CR - write attr
+	//		RC - read control
+	//		GR - generic read
+	//		SW - read ea
+	//		LO - read attr
+
 	//		SD - delete
 	//		RC - read security descriptor
 	//		GR - generic read
@@ -374,8 +390,13 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 			charstring::append(sddl,";");
 		}
 		uint8_t	pos=i%3;
-		charstring::append(sddl,(shift&1)?((pos==0)?
-					"GX":(pos==1)?"GWSDWDWO":"GRRC"):"");
+	#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
+	#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER| \
+				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
+	#define _EXEC	(GENERIC_EXECUTE|_WP)
+		charstring::append(sddl,
+				(shift&1)?((pos==0)?"GXWP":
+				(pos==1)?"SDWDWOGWDCLCRPDTCR":"RCGRCCSWLO"):"");
 		shift=shift>>1;
 		if (i==2) {
 			charstring::append(sddl,";;;WD)");

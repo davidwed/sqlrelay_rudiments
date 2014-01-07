@@ -7,9 +7,9 @@
 #include <rudiments/permissions.h>
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
+#include <rudiments/process.h>
 
 int main(int argc, const char **argv) {
-
 
 	// remove the file (in case it already exists)
 	file::remove("testfile");
@@ -147,5 +147,5 @@ int main(int argc, const char **argv) {
 					path,file::canChangeOwner(path));
 
 	// remove the file
-	file::remove("testfile");
+	//file::remove("testfile");
 }
