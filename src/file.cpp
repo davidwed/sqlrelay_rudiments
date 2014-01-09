@@ -199,17 +199,18 @@ void file::openInternal(const char *name, int32_t flags, mode_t perms) {
 		DWORD	accessmode=0;
 		DWORD	sharemode=0;
 		if (flags&O_WRONLY) {
-			accessmode=GENERIC_WRITE;
+			accessmode=GENERIC_WRITE|DELETE|WRITE_DAC|WRITE_OWNER;
 			sharemode=FILE_SHARE_DELETE|FILE_SHARE_WRITE;
 		}
 		if (flags&O_RDONLY) {
-			accessmode=GENERIC_READ;
+			accessmode=GENERIC_READ|READ_CONTROL;
 			sharemode=FILE_SHARE_READ;
 		}
 		if (flags&O_RDWR) {
-			accessmode=GENERIC_READ|GENERIC_WRITE;
-			sharemode=FILE_SHARE_DELETE|
-					FILE_SHARE_READ|FILE_SHARE_WRITE;
+			accessmode=GENERIC_WRITE|DELETE|WRITE_DAC|WRITE_OWNER|
+						GENERIC_READ|READ_CONTROL;
+			sharemode=FILE_SHARE_DELETE|FILE_SHARE_WRITE|
+							FILE_SHARE_READ;
 		}
 
 		// determine the security attributes
