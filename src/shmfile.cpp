@@ -38,11 +38,8 @@ shmfile::~shmfile() {
 	delete pvt;
 }
 
-void shmfile::openInternal(const char *name, int32_t flags) {
-	openInternal(name,flags,0);
-}
-
-void shmfile::openInternal(const char *name, int32_t flags, mode_t perms) {
+void shmfile::openInternal(const char *name, int32_t flags,
+				mode_t perms, bool useperms) {
 	#if defined(RUDIMENTS_HAVE_SHM_OPEN)
 		int32_t	result;
 		do {

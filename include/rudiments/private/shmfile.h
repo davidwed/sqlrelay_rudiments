@@ -2,7 +2,6 @@
 // See the COPYING file for more information
 
 	private:
-		virtual	void	openInternal(const char *name, int32_t flags);
-		virtual	void	openInternal(const char *name,
-						int32_t flags, mode_t perms);
+		virtual	void	openInternal(const char *name, int32_t flags,
+						mode_t perms, bool useperms);
 		shmfileprivate	*pvt;

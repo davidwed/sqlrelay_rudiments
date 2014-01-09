@@ -2,9 +2,8 @@
 // See the COPYING file for more information
 
 	protected:
-		virtual	void	openInternal(const char *name, int32_t flags);
-		virtual	void	openInternal(const char *name,
-						int32_t flags, mode_t perms);
+		virtual	void	openInternal(const char *name, int32_t flags,
+						mode_t perms, bool useperms);
 
 	private:
 		static	bool	stat(const char *filename, void *st);

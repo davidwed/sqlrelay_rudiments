@@ -45,6 +45,20 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	new permissions: %s\n",
 				permissions::evalPermOctal(mode));
 
+	// close, reopen and change perms back
+	fl.close();
+	if (!fl.open("testfile",O_RDWR)) {
+		file::remove("testfile");
+		stdoutput.printf("open failed\n");
+		process::exit(1);
+	}
+	stdoutput.printf("	change perms: %d\n",
+		permissions::setFilePermissions(fl.getFileDescriptor(),
+				permissions::evalPermString("rw-rw----")));
+	fl.getCurrentProperties();
+	mode=fl.getPermissions();
+	stdoutput.printf("	new permissions: %s\n",
+				permissions::evalPermOctal(mode));
 
 	// display the name of the user that owns the file
 	uid_t	uid=fl.getOwnerUserId();
@@ -147,5 +161,5 @@ int main(int argc, const char **argv) {
 					path,file::canChangeOwner(path));
 
 	// remove the file
-	//file::remove("testfile");
+	file::remove("testfile");
 }

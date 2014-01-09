@@ -167,21 +167,8 @@ bool file::createFile(const char *name, mode_t perms) {
 	return fl.create(name,perms);
 }
 
-void file::openInternal(const char *name, int32_t flags) {
-	int32_t	result;
-	do {
-		#if defined(RUDIMENTS_HAVE__OPEN)
-			result=_open(name,flags);
-		#elif defined(RUDIMENTS_HAVE_OPEN)
-			result=::open(name,flags);
-		#else
-			#error no open or anything like it
-		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	fd(result);
-}
-
-void file::openInternal(const char *name, int32_t flags, mode_t perms) {
+void file::openInternal(const char *name, int32_t flags,
+				mode_t perms, bool useperms) {
 
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		delete[] pvt->_name;
@@ -190,10 +177,13 @@ void file::openInternal(const char *name, int32_t flags, mode_t perms) {
 
 	#ifdef RUDIMENTS_HAVE_CREATEFILE
 
-	// On Windows, when creating a file, in order to set permissions other
-	// than just owner read/write, the CreateFile method must be used rather
-	// than just plain _open.
-	if (flags&O_CREAT) {
+		// On Windows, when creating a file, in order to set permissions
+		// other than just owner read/write, the CreateFile method must
+		// be used rather than just plain _open.
+		// Also, on Windows, if you want to be able to set file
+		// ownership and permissions, you have to use CreateFile just to
+		// open the file so that the access mode can include WRITE_DAC
+		// and WRITE_OWNER, which are not set when using _open.
 
 		// determine the access and share modes
 		DWORD	accessmode=0;
@@ -213,6 +203,16 @@ void file::openInternal(const char *name, int32_t flags, mode_t perms) {
 							FILE_SHARE_READ;
 		}
 
+		// determine the creation disposition
+		DWORD	cdisp=0;
+		if (flags&(O_CREAT|O_EXCL)) {
+			cdisp=CREATE_NEW;
+		} else if (flags&O_CREAT) {
+			cdisp=CREATE_ALWAYS;
+		} else {
+			cdisp=OPEN_EXISTING;
+		}
+
 		// determine the security attributes
 		char	*sddl=permissions::permOctalToSDDL(perms,false);
 		SECURITY_ATTRIBUTES	satt;
@@ -229,9 +229,7 @@ void file::openInternal(const char *name, int32_t flags, mode_t perms) {
 
 		// create the file
 		HANDLE	fh=CreateFile(name,accessmode,sharemode,
-					&satt,
-					CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,
-					NULL);
+					&satt,cdisp,FILE_ATTRIBUTE_NORMAL,NULL);
 		if (fh==INVALID_HANDLE_VALUE) {
 			delete[] sddl;
 			fd(-1);
@@ -248,32 +246,46 @@ void file::openInternal(const char *name, int32_t flags, mode_t perms) {
 		if (flags&O_TRUNC) {
 			truncate();
 		}
-		return;
-	}
-	#endif
 
-	int32_t	result;
-	do {
-		#if defined(RUDIMENTS_HAVE__OPEN)
-			result=_open(name,flags,perms);
-		#elif defined(RUDIMENTS_HAVE_OPEN)
-			result=::open(name,flags,perms);
-		#else
-			#error no open or anything like it
-		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	fd(result);
+		// append if specified
+		if (flags&O_APPEND) {
+			setPositionRelativeToEnd(0);
+		}
+	#else
+
+		int32_t	result;
+		do {
+			if (useperms) {
+				#if defined(RUDIMENTS_HAVE__OPEN)
+					result=_open(name,flags,perms);
+				#elif defined(RUDIMENTS_HAVE_OPEN)
+					result=::open(name,flags,perms);
+				#else
+					#error no open or anything like it
+				#endif
+			} else {
+				#if defined(RUDIMENTS_HAVE__OPEN)
+					result=_open(name,flags);
+				#elif defined(RUDIMENTS_HAVE_OPEN)
+					result=::open(name,flags);
+				#else
+					#error no open or anything like it
+				#endif
+			}
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		fd(result);
+	#endif
 }
 
 bool file::open(const char *name, int32_t flags) {
-	openInternal(name,flags);
+	openInternal(name,flags,0,false);
 	return (fd()!=-1 &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int32_t flags, mode_t perms) {
-	openInternal(name,flags,perms);
+	openInternal(name,flags,perms,true);
 	return (fd()!=-1 &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
