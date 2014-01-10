@@ -276,16 +276,16 @@ char *directory::getChildName(uint64_t index) {
 
 bool directory::create(const char *path, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_CREATEDIRECTORY)
+		char	*sddl=permissions::permOctalToSddlString(perms,true);
+
 		SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
 		satt.bInheritHandle=TRUE;
-
-		char	*sddl=permissions::permOctalToSDDL(perms,true);
-
 		bool	retval=(
 			ConvertStringSecurityDescriptorToSecurityDescriptor(
-				sddl,SDDL_REVISION_1,
-				&satt.lpSecurityDescriptor,NULL)==TRUE &&
+						sddl,SDDL_REVISION_1,
+						&satt.lpSecurityDescriptor,
+						NULL)==TRUE &&
 			CreateDirectory(path,&satt)==TRUE);
 
 		delete[] sddl;

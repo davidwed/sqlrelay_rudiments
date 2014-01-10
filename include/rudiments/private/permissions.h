@@ -1,9 +1,14 @@
 // Copyright (c) 1999-2002 David Muse
 // See the COPYING file for more information.
 
-	static char	*permStringToSDDL(const char *permstring,
+	static char	*permStringToSddlString(const char *permstring,
 							bool directory);
-	static char	*permOctalToSDDL(mode_t permoctal,
+	static char	*permOctalToSddlString(mode_t permoctal,
+							bool directory);
+
+	static void	*permStringToDacl(const char *permstring,
+							bool directory);
+	static void	*permOctalToDacl(mode_t permoctal,
 							bool directory);
 
 	static char	*daclToPermString(void *dacl);

@@ -214,23 +214,26 @@ void file::openInternal(const char *name, int32_t flags,
 		}
 
 		// determine the security attributes
-		char	*sddl=permissions::permOctalToSDDL(perms,false);
+		char	*sddl=permissions::permOctalToSddlString(perms,false);
 		SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.lpSecurityDescriptor=NULL;
 		satt.bInheritHandle=TRUE;
-		if (ConvertStringSecurityDescriptorToSecurityDescriptor(
-					sddl,SDDL_REVISION_1,
-					&satt.lpSecurityDescriptor,
-					NULL)==FALSE) {
+		if (useperms &&
+			ConvertStringSecurityDescriptorToSecurityDescriptor(
+						sddl,SDDL_REVISION_1,
+						&satt.lpSecurityDescriptor,
+						NULL)==FALSE) {
 			delete[] sddl;
 			fd(-1);
 			return;
 		}
 
-		// create the file
+		// create/open the file
 		HANDLE	fh=CreateFile(name,accessmode,sharemode,
 					&satt,cdisp,FILE_ATTRIBUTE_NORMAL,NULL);
 		if (fh==INVALID_HANDLE_VALUE) {
+stdoutput.printf("invalid file handle: %s\n",error::getNativeErrorString());
 			delete[] sddl;
 			fd(-1);
 			return;

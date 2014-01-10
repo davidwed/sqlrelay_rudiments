@@ -52,6 +52,10 @@ int main(int argc, const char **argv) {
 
 	file::remove("testdir/testfile1");
 	file::remove("testdir/testfile2");
+d.close();
+	stdoutput.printf("change perms: %d\n",
+		permissions::setFilePermissions("testdir",
+				permissions::evalPermString("rwx------")));
 	directory::remove("testdir");
 
 	stdoutput.printf("maxFileNameLength(%s)=%lld\n",

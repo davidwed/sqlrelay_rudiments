@@ -110,7 +110,7 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
 		// convert octal perms to an sddl
-		char	*sddl=permOctalToSDDL(perms,false);
+		char	*sddl=permOctalToSddlString(perms,false);
 		PSECURITY_DESCRIPTOR	secd=NULL;
 		bool	success=
 			(ConvertStringSecurityDescriptorToSecurityDescriptor(
@@ -118,6 +118,7 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 							&secd,NULL)!=FALSE);
 		delete[] sddl;
 		if (!success) {
+stdoutput.printf("convert string secuirity descriptor to security descriptor\n%s\n",error::getNativeErrorString());
 			return false;
 		}
 
@@ -129,6 +130,7 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 						&daclpresent,
 						&dacl,&dacldefaulted)!=FALSE);
 		if (!success) {
+stdoutput.printf("get security descriptor dacl\n%s\n",error::getNativeErrorString());
 			LocalFree(secd);
 			return false;
 		}
@@ -305,11 +307,12 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 	return permstring;
 }
 
-char *permissions::permStringToSDDL(const char *permstring, bool directory) {
-	return permOctalToSDDL(evalPermString(permstring),directory);
+char *permissions::permStringToSddlString(const char *permstring,
+							bool directory) {
+	return permOctalToSddlString(evalPermString(permstring),directory);
 }
 
-char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
+char *permissions::permOctalToSddlString(mode_t permoctal, bool directory) {
 
 	// see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
 	//
@@ -390,10 +393,6 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 			charstring::append(sddl,";");
 		}
 		uint8_t	pos=i%3;
-	#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
-	#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER| \
-				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
-	#define _EXEC	(GENERIC_EXECUTE|_WP)
 		charstring::append(sddl,
 				(shift&1)?((pos==0)?"GXWP":
 				(pos==1)?"SDWDWOGWDCLCRPDTCR":"RCGRCCSWLO"):"");
@@ -416,6 +415,16 @@ char *permissions::permOctalToSDDL(mode_t permoctal, bool directory) {
 	}
 
 	return sddl;
+}
+
+void *permissions::permStringToDacl(const char *permstring, bool directory) {
+	return permOctalToDacl(evalPermString(permstring),directory);
+}
+
+void *permissions::permOctalToDacl(mode_t perms, bool directory) {
+	// this might help:
+	// http://msdn.microsoft.com/en-us/library/windows/desktop/aa446595%28v=vs.85%29.aspx
+	return NULL;
 }
 
 char *permissions::daclToPermString(void *dacl) {
