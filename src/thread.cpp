@@ -59,7 +59,7 @@ void thread::setFunction(void *(*function)(void *), void *arg) {
 
 bool thread::setStackSize(size_t stacksize) {
 	error::setErrorNumber(0);
-	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+	#if defined(RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE)
 		int	result=pthread_attr_setstacksize(&pvt->_attr,stacksize);
 		if (!result) {
 			return true;

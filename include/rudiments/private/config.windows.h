@@ -749,6 +749,9 @@
 /* Some systems have pselect */
 /* #undef RUDIMENTS_HAVE_PSELECT */
 
+/* Some systems have pthread_attr_setstacksize */
+/* #undef RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE */
+
 /* pthread_mutex_t type exists */
 /* #undef RUDIMENTS_HAVE_PTHREAD_MUTEX_T */
 

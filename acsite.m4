@@ -753,6 +753,13 @@ then
 	FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
 	FW_LIBS(pthreads,[$PTHREADLIB])
 
+	dnl check for pthread functions...
+	if ( test -n "$HAVE_PTHREAD" )
+	then
+		AC_MSG_CHECKING(for pthread_attr_setstacksize)
+		FW_TRY_LINK([#include <pthread.h>],[pthread_attr_setstacksize(0,0);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE,1,Some systems have pthread_attr_setstacksize) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+	fi
+
 	if ( test -z "$HAVE_PTHREAD" )
 	then
 		AC_MSG_WARN(No thread library found.)
