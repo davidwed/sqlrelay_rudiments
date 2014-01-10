@@ -5,6 +5,7 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
+#include <rudiments/error.h>
 
 #ifdef _WIN32
 const char	*dir="C:\\";
@@ -52,10 +53,10 @@ int main(int argc, const char **argv) {
 
 	file::remove("testdir/testfile1");
 	file::remove("testdir/testfile2");
-d.close();
 	stdoutput.printf("change perms: %d\n",
 		permissions::setFilePermissions("testdir",
 				permissions::evalPermString("rwx------")));
+stdoutput.printf("error: %s\n",error::getErrorString());
 	directory::remove("testdir");
 
 	stdoutput.printf("maxFileNameLength(%s)=%lld\n",

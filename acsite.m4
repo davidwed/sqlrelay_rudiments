@@ -2139,7 +2139,7 @@ bind(0,NULL,0);
 accept(0,NULL,0);
 send(0,NULL,0,0);
 sendto(0,NULL,0,0,NULL,0);
-gethostbyname(NULL);],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
+],[$CPPFLAGS],[$i],[],[SOCKETLIBS="$i"; DONE="yes"],[])
 		if ( test -n "$DONE" )
 		then
 			break
