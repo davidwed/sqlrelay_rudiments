@@ -115,8 +115,10 @@ file::file() : filedescriptor() {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=0;
 	#endif
-	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
 		pvt->_inode=0;
+	#endif
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		pvt->_name=NULL;
 		pvt->_blocksize=0;
 	#endif
@@ -143,8 +145,10 @@ void file::fileClone(const file &f) {
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=f.pvt->_filetype;
 	#endif
-	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
+	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
 		pvt->_inode=f.pvt->_inode;
+	#endif
+	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		pvt->_name=charstring::duplicate(f.pvt->_name);
 		pvt->_blocksize=f.pvt->_blocksize;
 	#endif
