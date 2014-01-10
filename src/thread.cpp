@@ -58,8 +58,8 @@ void thread::setFunction(void *(*function)(void *), void *arg) {
 }
 
 bool thread::setStackSize(size_t stacksize) {
-	error::setErrorNumber(0);
 	#if defined(RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE)
+		error::setErrorNumber(0);
 		int	result=pthread_attr_setstacksize(&pvt->_attr,stacksize);
 		if (!result) {
 			return true;
@@ -76,7 +76,7 @@ bool thread::setStackSize(size_t stacksize) {
 }
 
 bool thread::getStackSize(size_t *stacksize) {
-	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+	#if defined(RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE)
 		error::setErrorNumber(0);
 		int	result=pthread_attr_getstacksize(&pvt->_attr,stacksize);
 		if (!result) {
