@@ -119,11 +119,11 @@ bool thread::create() {
 	#endif
 }
 
-void thread::exit(int32_t status) {
+void thread::exit(int32_t *status) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pthread_exit((void *)status);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		ExitThread((DWORD)status);
+		ExitThread((DWORD)*status);
 	#else
 		error::setErrorNumber(ENOSYS);
 	#endif

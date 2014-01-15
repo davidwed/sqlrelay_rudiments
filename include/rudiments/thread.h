@@ -34,10 +34,11 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  and false if an error occurred. */
 		bool	create();
 
-		/** Causes a thread to exit with the specified "status".  If
-		 *  another thread is waiting on this thread using join(), then
-		 *  that thread's join() method will fall through.  */
-		void	exit(int32_t status);
+		/** Causes a thread to exit with the value stored in the
+		 *  location pointed to by "status".  If another thread is
+		 *  waiting on this thread using join(), then that thread's
+		 *  join() method will fall through.  */
+		void	exit(int32_t *status);
 
 		/** Waits for the function set by setFunction() and run by
 		 *  create() to call exit() or return.  This method should be
