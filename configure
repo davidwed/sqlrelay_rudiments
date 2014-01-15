@@ -15851,7 +15851,9 @@ $as_echo "no" >&6; }
 fi
 
 
-CPPFLAGS="$WERROR $CPPFLAGS"
+CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror||g" -e "s|-Wall||g"`
+CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror||g" -e "s|-Wall||g"`
+
 
 
 
