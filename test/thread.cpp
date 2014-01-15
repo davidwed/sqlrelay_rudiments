@@ -7,7 +7,7 @@
 
 struct args {
 	thread		*th;
-	uint16_t	id;
+	int32_t		id;
 	bool		detach;
 };
 
@@ -24,7 +24,7 @@ void count(void *args) {
 	}
 	if (!a->detach) {
 		stdoutput.printf("  %d: exiting\n",a->id);
-		a->th->exit(a->id);
+		a->th->exit(&(a->id));
 	}
 }
 
