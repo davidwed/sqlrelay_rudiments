@@ -14,7 +14,7 @@
 
 struct args {
 	thread		*th;
-	uint16_t	id;
+	int32_t		id;
 };
 
 #if defined(USE_THREADMUTEX)
@@ -51,7 +51,7 @@ void count(void *args) {
 
 	// exit
 	stdoutput.printf("  %d: exiting\n",a->id);
-	a->th->exit(a->id);
+	a->th->exit(&(a->id));
 }
 
 int main(int argc, const char **argv) {

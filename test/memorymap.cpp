@@ -10,6 +10,7 @@
 
 int main(int argc, const char **argv) {
 
+#ifdef RUDIMENTS_HAVE_MMAP
 	// open the file
 	file	f;
 	if (!f.open("xmls.xml",O_RDONLY)) {
@@ -37,4 +38,5 @@ int main(int argc, const char **argv) {
 		stdoutput.write((const char *)mm.getData(),len);
 		offset=offset+len;
 	} while (!done);
+#endif
 }
