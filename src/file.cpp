@@ -218,6 +218,8 @@ void file::openInternal(const char *name, int32_t flags,
 		}
 
 		// determine the security attributes
+		// FIXME: update this to use permOctalToDacl when it's
+		// implemented
 		char	*sddl=permissions::permOctalToSddlString(perms,false);
 		SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);

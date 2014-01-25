@@ -276,6 +276,11 @@ char *directory::getChildName(uint64_t index) {
 
 bool directory::create(const char *path, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_CREATEDIRECTORY)
+
+		// FIXME: When permOctalToDacl is implemented, this code
+		// needs to use it rather than permOctalToSddlString.  See
+		// permissions::setFilePermissions for why.
+
 		char	*sddl=permissions::permOctalToSddlString(perms,true);
 
 		SECURITY_ATTRIBUTES	satt;

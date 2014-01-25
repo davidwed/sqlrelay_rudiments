@@ -109,6 +109,15 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
+		// FIXME: This works with files but not directories.
+		// Apparently directories need to be created with the
+		// SYNCHRONIZE permission or their perms can't be changed
+		// in the future.  The directory class uses
+		// permOctalToSddlString to set the perms but there is no
+		// character representation of the SYNCHRONIZE permission
+		// so it is omitted.  It needs to use permOctalToDacl
+		// but that hasn't been implemented yet.
+
 		// convert octal perms to an sddl
 		char	*sddl=permOctalToSddlString(perms,false);
 		PSECURITY_DESCRIPTOR	secd=NULL;
@@ -118,7 +127,6 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 							&secd,NULL)!=FALSE);
 		delete[] sddl;
 		if (!success) {
-stdoutput.printf("convert string secuirity descriptor to security descriptor\n%s\n",error::getNativeErrorString());
 			return false;
 		}
 
@@ -130,7 +138,6 @@ stdoutput.printf("convert string secuirity descriptor to security descriptor\n%s
 						&daclpresent,
 						&dacl,&dacldefaulted)!=FALSE);
 		if (!success) {
-stdoutput.printf("get security descriptor dacl\n%s\n",error::getNativeErrorString());
 			LocalFree(secd);
 			return false;
 		}
@@ -140,9 +147,6 @@ stdoutput.printf("get security descriptor dacl\n%s\n",error::getNativeErrorStrin
 					SE_FILE_OBJECT,
 					DACL_SECURITY_INFORMATION,
 					NULL,NULL,dacl,NULL)==ERROR_SUCCESS);
-if (!success) {
-	stdoutput.printf("set security info failed\n%s\n",error::getNativeErrorString());
-}
 		LocalFree(secd);
 		return success;
 	#else
@@ -422,6 +426,7 @@ void *permissions::permStringToDacl(const char *permstring, bool directory) {
 }
 
 void *permissions::permOctalToDacl(mode_t perms, bool directory) {
+	// FIXME: implement this...
 	// this might help:
 	// http://msdn.microsoft.com/en-us/library/windows/desktop/aa446595%28v=vs.85%29.aspx
 	return NULL;
