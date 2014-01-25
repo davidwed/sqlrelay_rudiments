@@ -3,6 +3,7 @@
 
 #include <rudiments/thread.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_T)
 	// to fix an odd situation on SCO with FSU pthreads
@@ -135,8 +136,10 @@ bool thread::join(int32_t *status) {
 	}
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::setErrorNumber(0);
-		int	result=pthread_join(pvt->_thr,(void **)status);
+		int32_t	*st=NULL;
+		int	result=pthread_join(pvt->_thr,(void **)&st);
 		if (!result) {
+			*status=*st;
 			pvt->_needtojoin=false;
 			return true;
 		}
