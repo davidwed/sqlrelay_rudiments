@@ -95,9 +95,13 @@
 
 
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
-	file	fl;
-	return (fl.open(filename,O_RDWR) &&
-		setFilePermissions(fl.getFileDescriptor(),perms));
+	#if defined(RUDIMENTS_HAVE_CHMOD)
+		return !chmod(filename,perms);
+	#else
+		file	fl;
+		return (fl.open(filename,O_RDWR) &&
+			setFilePermissions(fl.getFileDescriptor(),perms));
+	#endif
 }
 
 bool permissions::setFilePermissions(int32_t fd, mode_t perms) {

@@ -148,6 +148,9 @@
 /* Some systems have byteswap.h */
 #undef RUDIMENTS_HAVE_BYTESWAP_H
 
+/* Some systems have chmod */
+#undef RUDIMENTS_HAVE_CHMOD
+
 /* Some systems have chroot */
 #undef RUDIMENTS_HAVE_CHROOT
 

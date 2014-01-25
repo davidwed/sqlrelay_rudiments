@@ -2321,6 +2321,15 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 fchown(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_FCHOWN,1,Some systems have fchown) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for chmod)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+chmod("",0);,AC_DEFINE(RUDIMENTS_HAVE_CHMOD,1,Some systems have chmod) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for fchmod)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
