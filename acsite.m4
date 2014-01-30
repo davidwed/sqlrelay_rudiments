@@ -282,6 +282,15 @@ AC_SUBST(WALL)
 
 
 
+dnl checks to see if c++ allows undefined functions
+AC_DEFUN([FW_CHECK_UNDEFINED],
+[
+AC_MSG_CHECKING(for whether undefined functions are allowed)
+AC_TRY_COMPILE([],[printf("hello");],CPPFLAGS="$WERROR $CPPFLAGS"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+])
+
+
+
 dnl checks to see if -g3 option works or not
 AC_DEFUN([FW_CHECK_DEBUG],
 [
