@@ -286,7 +286,9 @@ dnl checks to see if c++ allows undefined functions
 AC_DEFUN([FW_CHECK_UNDEFINED_FUNCTIONS],
 [
 AC_MSG_CHECKING(for whether undefined functions are allowed)
-AC_TRY_COMPILE([],[printf("hello");],CPPFLAGS="$WERROR $CPPFLAGS"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+dnl  if undefined functions are allowed, add WERROR to the CPPFLAGS, but then
+dnl  define WERROR to "" so it won't be put back in again later
+AC_TRY_COMPILE([],[printf("hello");],CPPFLAGS="$WERROR $CPPFLAGS"; WERROR=""; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 ])
 
 
