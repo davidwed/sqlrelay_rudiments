@@ -15856,6 +15856,9 @@ CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror||g" -e "s|-Wall||g"`
 CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror||g" -e "s|-Wall||g"`
 
 
+
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether undefined functions are allowed" >&5
 $as_echo_n "checking for whether undefined functions are allowed... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -15877,9 +15880,6 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-
 
 
 

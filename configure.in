@@ -368,10 +368,11 @@ dnl appropriate.
 CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror||g" -e "s|-Wall||g"`
 CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror||g" -e "s|-Wall||g"`
 
-FW_CHECK_UNDEFINED
-
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
+
+dnl If the c++ compiler allows undefined functions, then add -Werror back.
+FW_CHECK_UNDEFINED_FUNCTIONS
 
 FW_CHECK_NULL_REDEFINE
 FW_CHECK_F_NO_BUILTIN

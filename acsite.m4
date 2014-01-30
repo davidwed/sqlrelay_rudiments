@@ -283,7 +283,7 @@ AC_SUBST(WALL)
 
 
 dnl checks to see if c++ allows undefined functions
-AC_DEFUN([FW_CHECK_UNDEFINED],
+AC_DEFUN([FW_CHECK_UNDEFINED_FUNCTIONS],
 [
 AC_MSG_CHECKING(for whether undefined functions are allowed)
 AC_TRY_COMPILE([],[printf("hello");],CPPFLAGS="$WERROR $CPPFLAGS"; AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
