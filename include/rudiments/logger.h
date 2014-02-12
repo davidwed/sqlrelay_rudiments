@@ -64,8 +64,9 @@ class RUDIMENTS_DLLSPEC filedestination : public logdestination {
 		/** Deletes this instance of the filedestination class. */
 		virtual		~filedestination();
 
-		/** Opens file "filename" as a logging destination. */
-		bool	open(const char *filename);
+		/** Opens file "filename" as a logging destination with
+		 *  "perms" permissions. */
+		bool	open(const char *filename, mode_t perms);
 
 		/** Closes the file as a logging destination. */
 		void	close();

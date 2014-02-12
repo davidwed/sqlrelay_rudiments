@@ -48,9 +48,8 @@ filedestination::~filedestination() {
 	delete pvt;
 }
 
-bool filedestination::open(const char *filename) {
-	return pvt->_logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,
-					permissions::ownerReadWrite());
+bool filedestination::open(const char *filename, mode_t perms) {
+	return pvt->_logfile.open(filename,O_CREAT|O_WRONLY|O_APPEND,perms);
 }
 
 void filedestination::close() {
