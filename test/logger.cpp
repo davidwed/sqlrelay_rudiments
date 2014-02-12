@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/logger.h>
+#include <rudiments/permissions.h>
 #ifdef RUDIMENTS_HAVE_SYSLOG_H
 	#include <sys/syslog.h>
 #endif
@@ -24,7 +25,7 @@ int main(int argc, const char **argv) {
 #endif
 
 	// initialize and add a file log destination
-	fd.open("test.log");
+	fd.open("test.log",permissions::evalPermString("rw-------"));
 	lg.addLogDestination(&fd);
 
 	// add a standard output log destination
