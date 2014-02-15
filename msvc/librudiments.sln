@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librudiments", "librudiments.vcxproj", "{0234A212-C919-99E3-0B91-8F426140EA53}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setupx86", "setupx86\setupx86.vdproj", "{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setupx64", "setupx64\setupx64.vdproj", "{9B43E69D-833D-4EE3-8628-E02E72123D66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +35,22 @@ Global
 		{0234A212-C919-99E3-0B91-8F426140EA53}.ReleaseCLR|Win32.Build.0 = ReleaseCLR|Win32
 		{0234A212-C919-99E3-0B91-8F426140EA53}.ReleaseCLR|x64.ActiveCfg = ReleaseCLR|x64
 		{0234A212-C919-99E3-0B91-8F426140EA53}.ReleaseCLR|x64.Build.0 = ReleaseCLR|x64
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.Debug|Win32.ActiveCfg = Debug
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.Debug|x64.ActiveCfg = Debug
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.DebugCLR|Win32.ActiveCfg = Debug
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.DebugCLR|x64.ActiveCfg = Debug
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.Release|Win32.ActiveCfg = Release
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.Release|x64.ActiveCfg = Release
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.ReleaseCLR|Win32.ActiveCfg = Release
+		{BFD15A95-CAE5-4BDB-A53A-CB704B039EE0}.ReleaseCLR|x64.ActiveCfg = Release
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.Debug|Win32.ActiveCfg = Debug
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.Debug|x64.ActiveCfg = Debug
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.DebugCLR|Win32.ActiveCfg = Debug
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.DebugCLR|x64.ActiveCfg = Debug
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.Release|Win32.ActiveCfg = Release
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.Release|x64.ActiveCfg = Release
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.ReleaseCLR|Win32.ActiveCfg = Release
+		{9B43E69D-833D-4EE3-8628-E02E72123D66}.ReleaseCLR|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
