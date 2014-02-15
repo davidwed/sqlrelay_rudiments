@@ -369,6 +369,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4D6FAD8F892949BD93F45BC21D296847"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4DF43A97BBF04BBE961F1D2CFA31594F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1233,12 +1239,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EB2A8E5521BB42848EA0F93920F31DD7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_EB439F6E8BDC44EC937294D25E0FC402"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1381,6 +1381,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -1397,6 +1405,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -2584,6 +2600,26 @@
             "TargetName" = "8:permissions.h"
             "Tag" = "8:"
             "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4D6FAD8F892949BD93F45BC21D296847"
+            {
+            "SourcePath" = "8:..\\..\\doc\\rudiments-icon.ico"
+            "TargetName" = "8:rudiments-icon.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_B2A0E8CEECAA4D13A2F8219B226BF2D6"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5478,26 +5514,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EB2A8E5521BB42848EA0F93920F31DD7"
-            {
-            "SourcePath" = "8:C:\\Users\\dmuse\\Desktop\\rudiments-icon.ico"
-            "TargetName" = "8:rudiments-icon.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_B2A0E8CEECAA4D13A2F8219B226BF2D6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EB439F6E8BDC44EC937294D25E0FC402"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\file.h"
@@ -6017,9 +6033,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Rudiments"
+        "ProductName" = "8:Rudiments (32-bit)"
         "ProductCode" = "8:{7E5A657C-AE6D-463F-9D33-189F4FADB6BB}"
-        "PackageCode" = "8:{EADEBA62-DB36-4A41-BAB9-E59EDCF2C7EC}"
+        "PackageCode" = "8:{C3D063EF-FFEE-41DB-983D-A71C7A3346D3}"
         "UpgradeCode" = "8:{2B008836-8AF8-4E5E-A3B6-C5DE3E8A04D3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -6030,13 +6046,13 @@
         "Manufacturer" = "8:firstworks.com"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Rudiments"
+        "Title" = "8:Rudiments (32-bit)"
         "Subject" = "8:"
         "ARPCONTACT" = "8:firstworks.com"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:http://www.firstworks.com"
-        "ARPPRODUCTICON" = "8:_EB2A8E5521BB42848EA0F93920F31DD7"
+        "ARPPRODUCTICON" = "8:_4D6FAD8F892949BD93F45BC21D296847"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
