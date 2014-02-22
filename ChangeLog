@@ -2,6 +2,7 @@
 	added deployment projects for windows
 	tweaked make.batch install target to install 32-bit files under
 		C:\Program Files (x86)
+	wrapped waitpid() in process class
 
 0.45 - got the directory class working on windows
 	got the semaphoreset class working on windows
