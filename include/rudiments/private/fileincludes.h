@@ -37,3 +37,14 @@
 #ifndef RUDIMENTS_HAVE_BLKCNT_T
 	typedef long blkcnt_t;
 #endif
+
+// windows doesn't define these but we need them to be able to lock files
+#ifndef F_RDLCK
+	#define F_RDLCK	0
+#endif
+#ifndef F_WRLCK
+	#define F_WRLCK	1
+#endif
+#ifndef F_UNLCK
+	#define F_UNLCK	2
+#endif
