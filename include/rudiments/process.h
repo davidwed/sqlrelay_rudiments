@@ -41,6 +41,14 @@
 //	not in bsd - 
 //		ucontext.h - user-level context switching
 //			getcontext(),setcontext(),swapcontext(),makecontext()
+//
+
+enum childstatechange {
+	EXIT_CHILDSTATECHANGE=0,
+	TERMINATED_CHILDSTATECHANGE,
+	STOPPED_CHILDSTATECHANGE,
+	CONTINUED_CHILDSTATECHANGE
+};
 
 /** The process class provides methods for accessing information about and
  *  controlling the currently running process. */
@@ -227,40 +235,92 @@ class RUDIMENTS_DLLSPEC process {
 						mode_t permissions);
 
 		/** Sets up a default handler that exits cleanly when the
-		 *  daemon is killed with SIGINT or SIGTERM signals.
+		 *  process is killed with SIGINT or SIGTERM signals.
 		 *  NOTE: The default handler calls waitForChildren() before
 		 *  exiting to prevent zombie processes. */
 		static void	exitOnShutDown();
 
 		/** Allows you to designate a function to run when the
-		 *  daemon is killed with SIGINT or SIGTERM signals. */
+		 *  process is killed with SIGINT or SIGTERM signals. */
 		static	void	handleShutDown(
 					void (*shutdownfunction)(int32_t));
 
 		/** Sets up a default handler that exits cleanly if the
-		 *  daemon crashes with a SIGSEGV (segmentation fault)
+		 *  process crashes with a SIGSEGV (segmentation fault)
 		 *  signal.
 		 *  NOTE: The default handler calls waitForChildren() before
 		 *  exiting to prevent zombie processes. */
 		static void	exitOnCrash();
 
 		/** Allows you to designate a function to run if the
-		 *  daemon crashes with a SIGSEGV (segmentation fault)
+		 *  process crashes with a SIGSEGV (segmentation fault)
 		 *  signal. */
 		static	void	handleCrash(void (*crashfunction)(int32_t));
 
-		/** This method causes the daemon to wait on child processes
+		/** This method causes the process to wait on child processes
 		 *  which have exited, preventing so-called "zombie" processes
 		 *  from occurring. */
 		static	void	waitForChildren();
 
-		/** This method causes the daemon not to wait on child
+		/** This method causes the process not to wait on child
 		 *  processes which have exited.  Ordinarily, you'd want to
 		 *  wait on child processes, but this interferes with the
 		 *  behavior of WEXITSTATUS() after a call to system() (and
 		 *  possibly other calls).  This method allows you to disable
 		 *  waiting on child processes. */
 		static	void	dontWaitForChildren();
+
+		/** This method causes the process to get information about
+		 *  a change in process state for the specified child process
+		 *  id "pid" (ie. whether it was stopped, continued or killed).
+		 *
+		 *  Returns the process id of the child that changed state, -1
+		 *  if an error occurred, and 0 if "wait" is set false and no
+		 *  child has changed state.
+		 *
+		 *  Setting "pid" to -1 causes the method to get information on
+		 *  any child of the current process.
+		 *
+		 *  Waiting on child processes to exit prevents so-called
+		 *  "zombie" processes from occurring.  However, this method
+		 *  only waits when called.  To configure a process to
+		 *  automatically wait on and respond when any child process
+		 *  exits, use waitForChildren().
+		 *
+		 *  If "wait" is set true then the method waits until a child
+		 *  state-change occurs.  Otherwise the method returns
+		 *  immediately.
+		 *
+		 *  If "ignorestop" is set true then the method ignores when
+		 *  a child process has been stopped.
+		 *
+		 *  If "ignorecontinue" is set true then the method ignores when
+		 *  a child process has been continued.
+		 *
+		 *  On exit, if "newstate" is non-NULL then it is populated with
+		 *  one of the members of the childstatechange enum, indicating
+		 *  the new state of the child process.
+		 *
+		 *  If "newstate" is EXIT_CHILDSTATECHANGE and "exitstatus" is
+		 *  non-null then "exitstatus" is populated with the exit status
+		 *  of the child process.
+		 *
+		 *  If "newstate" is TERMINATED_CHILDSTATECHANGE or
+		 *  STOPPED_CHILDSTATECHANGE and "signum" is non-null then
+		 *  "signum" is populated with the signum that terminated or
+		 *  stopped the child process.
+		 *
+		 *  If "newstate" is TERMINATED_CHILDSTATECHANGE and
+		 *  "coredump" is non-null then "coredump" is set true if a
+		 *  core dump was produced and false otherwise. */
+		static pid_t	getChildStateChange(pid_t pid,
+						bool wait,
+						bool ignorestop,
+						bool ignorecontinue,
+						childstatechange *newstate,
+						int32_t	*exitstatus,
+						int32_t *signum,
+						bool *coredump);
 
 	#include <rudiments/private/process.h>
 };

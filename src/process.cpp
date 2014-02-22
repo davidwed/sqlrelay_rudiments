@@ -546,27 +546,21 @@ void process::defaultCrash(int32_t signum) {
 	process::exit(1);
 }
 
-#ifndef _WIN32
 void process::waitForChildrenToExit(int32_t signum) {
 
 	// Some systems generate a single SIGCHLD even if more than 1 child
 	// has entered it's exit state, so we need to loop here and catch
 	// all of them.
 
-	// If waitpid() returns 0 then there were no more processes in their
-	// exit state, the loop should exit.
+	// If getChildStateChange returns 0 then there were no more
+	// processes in their exit state, the loop should exit.
 	// If it returns > 0 then it successfully waited on a process and it
 	// should loop back to wait on another one.
-	// If it returns -1 and was interrupted by a signal and should loop
-	// back and be restarted.
-	// If it returns -1 then there was some other error and the loop should
-	// exit.
-	for (;;) {
-		int32_t pid=waitpid(-1,NULL,WNOHANG);
-		if (pid==0 || (pid==-1 && error::getErrorNumber()!=EINTR)) {
-			break;
-		}
-	}
+	// If it returns -1 then there was some error and the loop should exit.
+	int32_t	pid=0;
+	do {
+		pid=getChildStateChange(-1,false,true,true,NULL,NULL,NULL,NULL);
+	} while (pid<1);
 
 	// FIXME: What if a SIGCHLD gets generated after waitpid() has returned
 	// but before the signal handler exits?   Will that SIGCHLD be lost?
@@ -575,9 +569,68 @@ void process::waitForChildrenToExit(int32_t signum) {
 	// handler, we don't need to reinstall the signal handler here, it will
 	// be done automatically.
 }
+
+pid_t process::getChildStateChange(pid_t pid,
+					bool wait,
+					bool ignorestop,
+					bool ignorecontinue,
+					childstatechange *newstate,
+					int32_t	*exitstatus,
+					int32_t *signum,
+					bool *coredump) {
+#ifndef _WIN32
+
+	// build options
+	int32_t	options=0;
+	if (!wait) {
+		options|=WNOWAIT;
+	}
+	if (!ignorestop) {
+		options|=WUNTRACED;
+	}
+	if (!ignorecontinue) {
+		options|=WCONTINUED;
+	}
+
+	// init status
+	int32_t	status=0;
+
+	// wait
+	int32_t	childpid=-1;
+	do {
+		childpid=waitpid(pid,&status,options);
+	} while (childpid==-1 && error::getErrorNumber()==EINTR);
+
+	// set return values
+	if (childpid>0 && newstate) {
+		if (WIFEXITED(status)) {
+			*newstate=EXIT_CHILDSTATECHANGE;
+			if (exitstatus) {
+				*exitstatus=WEXITSTATUS(status);
+			}
+		} else if (WIFSIGNALED(status)) {
+			*newstate=TERMINATED_CHILDSTATECHANGE;
+			if (signum) {
+				*signum=WTERMSIG(status);
+			}
+			if (coredump) {
+				*coredump=WCOREDUMP(status);
+			}
+		} else if (WIFSTOPPED(status)) {
+			*newstate=STOPPED_CHILDSTATECHANGE;
+			if (signum) {
+				*signum=WSTOPSIG(status);
+			}
+		} else if (WIFCONTINUED(status)) {
+			*newstate=CONTINUED_CHILDSTATECHANGE;
+		}
+	}
+
+	return childpid;
 #else
-void process::waitForChildrenToExit(int32_t signum) {
 	// FIXME: implement this...
 	// Use ChildStart()
-}
+	error::setErrorNumber(ENOSYS);
+	return -1;
 #endif
+}
