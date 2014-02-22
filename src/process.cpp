@@ -583,7 +583,7 @@ pid_t process::getChildStateChange(pid_t pid,
 	// build options
 	int32_t	options=0;
 	if (!wait) {
-		options|=WNOWAIT;
+		options|=WNOHANG;
 	}
 	if (!ignorestop) {
 		options|=WUNTRACED;
@@ -613,9 +613,11 @@ pid_t process::getChildStateChange(pid_t pid,
 			if (signum) {
 				*signum=WTERMSIG(status);
 			}
+			#ifdef WCOREDUMP
 			if (coredump) {
 				*coredump=WCOREDUMP(status);
 			}
+			#endif
 		} else if (WIFSTOPPED(status)) {
 			*newstate=STOPPED_CHILDSTATECHANGE;
 			if (signum) {
