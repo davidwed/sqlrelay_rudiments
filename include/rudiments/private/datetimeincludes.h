@@ -6,6 +6,7 @@
 #include <rudiments/rawbuffer.h>
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#define _WINSOCKAPI_
 	#include <windows.h>
 #endif
 #include <time.h>

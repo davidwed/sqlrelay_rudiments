@@ -8,6 +8,7 @@
 	#include <sys/mman.h>
 #endif
 #ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
+	#define _WINSOCKAPI_
 	#include <windows.h>
 	#define	PROT_NONE	0
 	#define	PROT_EXEC	1

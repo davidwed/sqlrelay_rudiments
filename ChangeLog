@@ -3,6 +3,8 @@
 	tweaked make.batch install target to install 32-bit files under
 		C:\Program Files (x86)
 	wrapped waitpid() in process class
+	added #define _WINSOCKAPI_ before windows.h includes to prevent
+		redefintion of winsock defs later
 
 0.45 - got the directory class working on windows
 	got the semaphoreset class working on windows
