@@ -274,7 +274,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 		bool	result=true;
 		for (linkedlistnode< int32_t > *node=
 				sset->pvt->_siglist.getFirstNode();
-					node; node->getNext()) {
+					node; node=node->getNext()) {
 			result=(result &&
 				(signal(node->getValue(),SIG_IGN)!=SIG_ERR));
 		}

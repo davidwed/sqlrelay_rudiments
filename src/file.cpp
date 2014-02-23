@@ -239,7 +239,6 @@ void file::openInternal(const char *name, int32_t flags,
 		HANDLE	fh=CreateFile(name,accessmode,sharemode,
 					&satt,cdisp,FILE_ATTRIBUTE_NORMAL,NULL);
 		if (fh==INVALID_HANDLE_VALUE) {
-stdoutput.printf("invalid file handle: %s\n",error::getNativeErrorString());
 			delete[] sddl;
 			fd(-1);
 			return;
