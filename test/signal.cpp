@@ -17,9 +17,11 @@ void handleSigterm(int sig) {
 	gotsigterm=true;
 }
 
+#ifdef SIGALRM
 void handleAlarm(int sig) {
 	stdoutput.printf("alarm!\n");
 }
+#endif
 
 int main(int argc, const char **argv) {
 
@@ -31,7 +33,9 @@ int main(int argc, const char **argv) {
 	ignoreset.removeSignal(SIGFPE);
 	#endif
 	ignoreset.removeSignal(SIGTERM);
+	#ifdef SIGALRM
 	ignoreset.removeSignal(SIGALRM);
+	#endif
 	signalmanager::ignoreSignals(&ignoreset);
 
 	// when it gets a SIGFPE, it will run the handleSigfpe() function
@@ -47,9 +51,11 @@ int main(int argc, const char **argv) {
 	termhandler.handleSignal(SIGTERM);
 
 	// handle alarm
+	#ifdef SIGALRM
 	signalhandler	alarmhandler;
 	alarmhandler.setHandler(handleAlarm);
 	alarmhandler.handleSignal(SIGALRM);
+	#endif
 
 	// Loop forever, each time waiting for a signal not in the ignoreset
 	// to be sent. Since SIGFPE is the only signal not in the ignoreset,

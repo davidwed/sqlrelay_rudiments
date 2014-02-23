@@ -741,6 +741,7 @@ bool file::getCurrentProperties() {
 					DACL_SECURITY_INFORMATION,
 					NULL,NULL,&dacl,NULL,&ppsd)!=
 							ERROR_SUCCESS) {
+stdoutput.printf("GetSecurityInfo failed: %s\n",error::getNativeErrorString());
 			return false;
 		}
 
