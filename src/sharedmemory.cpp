@@ -6,6 +6,7 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 	#include <rudiments/charstring.h>
 #endif
@@ -219,7 +220,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 
 		// calculate max mapping size
 		DWORD	maxsizehigh=(((uint64_t)size)>>32);
-		DWORD	maxsizelow=(((uint64_t)size)&0x0000FFFF);
+		DWORD	maxsizelow=(((uint64_t)size)&0x00000000FFFFFFFF);
 
 		// create a named file mapping
 		// (INVALID_HANDLE_VALUE means to map the page file)
