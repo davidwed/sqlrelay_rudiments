@@ -94,7 +94,9 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 		} while (!symhandle && error::getErrorNumber()==EINTR);
 		return (pvt->_handle)?symhandle:NULL;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
-		return (void *)GetProcAddress(pvt->_handle,symbol);
+		//return (void *)GetProcAddress(pvt->_handle,symbol);
+		FARPROC	fp=GetProcAddress(pvt->_handle,symbol);
+		return (void *)fp;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;
