@@ -189,16 +189,18 @@ void file::openInternal(const char *name, int32_t flags,
 		// open the file so that the access mode can include WRITE_DAC
 		// and WRITE_OWNER, which are not set when using _open.
 
-		// determine the access and share modes
-		DWORD	accessmode=0;
-		DWORD	sharemode=0;
+		// Determine the access and share modes.
+		// O_RDONLY, O_WRONLY and O_RDWR are usually 0, 1 and 2.
+		// We can use & to test for O_WRONLY and O_RDWR but we can't
+		// effectively test for O_RDONLY at all, except by testing for
+		// the lack of the other two.  It's easier to default to
+		// read-only and just update the access/share modes if we
+		// detect O_WRONLY/O_RDWR.
+		DWORD	accessmode=GENERIC_READ|READ_CONTROL;
+		DWORD	sharemode=FILE_SHARE_READ;
 		if (flags&O_WRONLY) {
 			accessmode=GENERIC_WRITE|DELETE|WRITE_DAC|WRITE_OWNER;
 			sharemode=FILE_SHARE_DELETE|FILE_SHARE_WRITE;
-		}
-		if (flags&O_RDONLY) {
-			accessmode=GENERIC_READ|READ_CONTROL;
-			sharemode=FILE_SHARE_READ;
 		}
 		if (flags&O_RDWR) {
 			accessmode=GENERIC_WRITE|DELETE|WRITE_DAC|WRITE_OWNER|
@@ -741,7 +743,6 @@ bool file::getCurrentProperties() {
 					DACL_SECURITY_INFORMATION,
 					NULL,NULL,&dacl,NULL,&ppsd)!=
 							ERROR_SUCCESS) {
-stdoutput.printf("GetSecurityInfo failed: %s\n",error::getNativeErrorString());
 			return false;
 		}
 
