@@ -21,9 +21,9 @@ class dynamiclibprivate {
 	friend class dynamiclib;
 	private:
 		#if defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
-			HINSTANCE	_handle;
+			HMODULE	_handle;
 		#else
-			void		*_handle;
+			void	*_handle;
 		#endif
 };
 
@@ -54,7 +54,7 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		return (pvt->_handle!=NULL);
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		pvt->_handle=LoadLibraryEx(library,NULL,
-			(loaddependencies)?DONT_RESOLVE_DLL_REFERENCES:0);
+			(loaddependencies)?0:DONT_RESOLVE_DLL_REFERENCES);
 		return (pvt->_handle)?true:false;
 	#else
 		error::setErrorNumber(ENOSYS);
