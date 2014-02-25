@@ -7,6 +7,7 @@
 		redefintion of winsock defs later
 	fixed O_RDONLY detection on windows in file::openInternal
 	fixed shared memory segment sizing error on windows
+	fixed O_CREAT without O_EXCL bug on windows
 
 0.45 - got the directory class working on windows
 	got the semaphoreset class working on windows

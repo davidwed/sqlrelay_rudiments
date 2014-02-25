@@ -211,10 +211,12 @@ void file::openInternal(const char *name, int32_t flags,
 
 		// determine the creation disposition
 		DWORD	cdisp=0;
-		if (flags&(O_CREAT|O_EXCL)) {
-			cdisp=CREATE_NEW;
-		} else if (flags&O_CREAT) {
-			cdisp=CREATE_ALWAYS;
+		if (flags&O_CREAT) {
+			if (flags&O_EXCL) {
+				cdisp=CREATE_NEW;
+			} else {
+				cdisp=CREATE_ALWAYS;
+			}
 		} else {
 			cdisp=OPEN_EXISTING;
 		}
