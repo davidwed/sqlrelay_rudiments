@@ -2194,7 +2194,7 @@ bool filedescriptor::receiveSocket(int32_t *sock) const {
 	// create the socket
 	*sock=WSASocket(AF_INET,SOCK_STREAM,IPPROTO_TCP,&wsapi,0,0);
 
-	// tell the other process that we're done
+	// get done from the other process
 	bool	done;
 	return read(&done)==sizeof(bool);
 #else
