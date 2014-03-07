@@ -12,6 +12,7 @@
 	added file::eightDotThree
 	added charstring::stripSet and updated charstring::strip to return
 		true/false if stripping occurred or not
+	removed stubs for unimplemented classes
 
 0.45 - got the directory class working on windows
 	got the semaphoreset class working on windows
