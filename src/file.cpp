@@ -1994,6 +1994,10 @@ char *file::eightDotThree(const char *filename) {
 		*(suffix+3)='\0';
 	}
 
+	// convert the base and suffix to upper case
+	charstring::upper(base);
+	charstring::upper(suffix);
+
 	// verify that the filename is unique
 	uint8_t		counter=1;
 	stringbuffer	fullname;
@@ -2022,7 +2026,6 @@ char *file::eightDotThree(const char *filename) {
 		if (suffix) {
 			fullname.append('.')->append(suffix);
 		}
-stdoutput.printf("fullname: %s\n",fullname.getString());
 
 		// if the name we've come up with is the same as the original
 		// filename or if a file with the name we've come up with
@@ -2038,7 +2041,6 @@ stdoutput.printf("fullname: %s\n",fullname.getString());
 			delete[] base;
 			delete[] dir;
 			delete[] suffix;
-stdoutput.printf("failed\n");
 			return NULL;
 		}
 
@@ -2053,9 +2055,6 @@ stdoutput.printf("failed\n");
 	delete[] dir;
 	delete[] base;
 	delete[] suffix;
-
-	// convert the name to upper case
-	charstring::upper(retval);
 
 	// return the name
 	return retval;
