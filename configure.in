@@ -3135,7 +3135,7 @@ echo "******************************"
 
 
 
-dnl versioning
+dnl Default build variables.
 RUDIMENTS_VERSION="1.0"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
