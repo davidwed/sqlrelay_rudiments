@@ -1335,6 +1335,13 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		static char	*basename(const char *filename,
 						const char *suffix);
 
+		/** Translates the basename of "filename" to an 8.3 format,
+		 *  performing substitutions in the same way that Windows
+		 *  does.  This method allocates a buffer internally and
+		 *  returns it.  The calling program must deallocate the
+		 *  buffer. */
+		static char	*eightDotThree(const char *filename);
+
 
 		/** Generates a key based on "filename" and the
 		 *  least signifigant 8 bits of id (which must

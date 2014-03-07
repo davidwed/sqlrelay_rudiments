@@ -275,11 +275,20 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Trims all characters off of both sides of "str". */
 		static	void	bothTrim(char *str, char character);
 
-		/** Strips all instances of "character" from "str". */
-		static	void	strip(char *str, char character);
+		/** Strips all instances of "character" from "str".
+		 *  Returns true if any characters were stripped and
+		 *  false if no characters were stripped. */
+		static	bool	strip(char *str, char character);
 
-		/** Strips all instances of "str2" from "str1". */
-		static	void	strip(char *str1, const char *str2);
+		/** Strips all instances of "str2" from "str1".
+		 *  Returns true if any characters were stripped and
+		 *  false if no characters were stripped. */
+		static	bool	strip(char *str1, const char *str2);
+
+		/** Strips all instances of any character in "set" from
+		 *  "str1".  Returns true if any characters were stripped
+		 *  and false if no characters were stripped. */
+		static	bool	stripSet(char *str1, const char *set);
 
 		/** Replaces all instances of "oldchar"
 		 *  in "str" with "newchar" */

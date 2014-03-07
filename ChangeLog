@@ -9,6 +9,9 @@
 	fixed shared memory segment sizing error on windows
 	fixed O_CREAT without O_EXCL bug on windows
 	fixed backwards loaddependencies flag in dynamiclib for windows
+	added file::eightDotThree
+	added charstring::stripSet and updated charstring::strip to return
+		true/false if stripping occurred or not
 
 0.45 - got the directory class working on windows
 	got the semaphoreset class working on windows

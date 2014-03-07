@@ -8,6 +8,7 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/stdio.h>
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	#include <rudiments/filesystem.h>
 #endif
@@ -1950,6 +1951,113 @@ char *file::basename(const char *filename, const char *suffix) {
 	if (!(*(ptr+charstring::length(suffix)))) {
 		(*ptr)='\0';
 	}
+	return retval;
+}
+
+char *file::eightDotThree(const char *filename) {
+
+	// FIXME: I'm sure there's an infinitely more efficient way of
+	// doing this using a static buffer...
+
+	// get the base name
+	char	*base=basename(filename);
+
+	// get the directory name unless no directory was specified
+	char	*dir=NULL;
+	if (charstring::compare(base,filename)) {
+		dir=dirname(filename);
+	}
+
+	// get the suffix and terminate the base at the final dot
+	char	*suffix=NULL;
+	char	*finaldot=charstring::findLast(base,'.');
+	if (finaldot) {
+		suffix=charstring::duplicate(finaldot+1);
+		*finaldot='\0';
+	}
+
+	// Strip illegal characters from the base.  If we had to strip any
+	// characters from the base then we need to force the loop below to
+	// put a ~# at the end.
+	bool	tryunique=charstring::stripSet(base," .\"/\\[]:;=,");
+
+	// strip illegal characters from the suffix
+	charstring::stripSet(suffix," .\"/\\[]:;=,");
+
+	// truncate the base at 8 characters if necessary
+	if (charstring::length(base)>8) {
+		*(base+8)='\0';
+	}
+
+	// truncate the suffix at 3 characters if necessary
+	if (charstring::length(suffix)>3) {
+		*(suffix+3)='\0';
+	}
+
+	// verify that the filename is unique
+	uint8_t		counter=1;
+	stringbuffer	fullname;
+	char		newbase[9];
+	charstring::copy(newbase,base);
+	for (;;) {
+
+		// try to come up with a unique name
+		if (tryunique) {
+			size_t	baselen=charstring::length(base);
+			if (baselen>6) {
+				baselen=6;
+			}
+			charstring::copy(newbase,base,baselen);
+			newbase[baselen]='~';
+			newbase[baselen+1]='0'+counter;
+			fullname.clear();
+			counter++;
+		}
+
+		// build the test file name
+		if (dir) {
+			fullname.append(dir)->append('/');
+		}
+		fullname.append(newbase);
+		if (suffix) {
+			fullname.append('.')->append(suffix);
+		}
+stdoutput.printf("fullname: %s\n",fullname.getString());
+
+		// if the name we've come up with is the same as the original
+		// filename or if a file with the name we've come up with
+		// doesn't exist, then go ahead and use the name
+		if (!charstring::compare(fullname.getString(),filename) ||
+						!exists(fullname.getString())) {
+			break;
+		}
+
+		// if the counter hits 10 digits then it must not be possible
+		// to uniquely name this file
+		if (counter==10) {
+			delete[] base;
+			delete[] dir;
+			delete[] suffix;
+stdoutput.printf("failed\n");
+			return NULL;
+		}
+
+		// try for a unique name the next round
+		tryunique=true;
+	}
+
+	// get the final name
+	char	*retval=fullname.detachString();
+
+	// clean up
+	delete[] dir;
+	delete[] base;
+	delete[] suffix;
+
+	// convert the name to upper case
+	charstring::upper(retval);
+
+	// return the name
 	return retval;
 }
 

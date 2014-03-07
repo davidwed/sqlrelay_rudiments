@@ -149,18 +149,20 @@ void charstring::leftTrim(char *str, char character) {
 	}
 }
 
-void charstring::strip(char *str, char character) {
+bool charstring::strip(char *str, char character) {
 
 	if (!str) {
-		return;
+		return false;
 	}
 
 	int32_t	index=0;
 	int32_t	total=0;
+	bool	retval=false;
 
 	while (str[index]) {
 		if (str[index]==character) {
 			total++;
+			retval=true;
 		} else {
 			if (total) {
 				str[index-total]=str[index];
@@ -169,22 +171,25 @@ void charstring::strip(char *str, char character) {
 		index++;
 	}
 	str[index-total]='\0';
+	return retval;
 }
 
-void charstring::strip(char *str1, const char *str2) {
+bool charstring::strip(char *str1, const char *str2) {
 
 	if (!str1 || !str2) {
-		return;
+		return false;
 	}
 
 	int32_t	str2len=length(str2);
 	int32_t	index=0;
 	int32_t	total=0;
+	bool	retval=false;
 
 	while (str1[index]) {
 		if (!strncmp(str1+index,str2,str2len)) {
 			total=total+str2len;
 			index=index+str2len;
+			retval=true;
 		} else {
 			if (total) {
 				str1[index-total]=str1[index];
@@ -193,6 +198,32 @@ void charstring::strip(char *str1, const char *str2) {
 		}
 	}
 	str1[index-total]='\0';
+	return retval;
+}
+
+bool charstring::stripSet(char *str, const char *set) {
+
+	if (!str) {
+		return false;
+	}
+
+	int32_t	index=0;
+	int32_t	total=0;
+	bool	retval=false;
+
+	while (str[index]) {
+		if (character::inSet(str[index],set)) {
+			total++;
+			retval=true;
+		} else {
+			if (total) {
+				str[index-total]=str[index];
+			}
+		}
+		index++;
+	}
+	str[index-total]='\0';
+	return retval;
 }
 
 void charstring::replace(char *str, char oldchar, char newchar) {
