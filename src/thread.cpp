@@ -60,7 +60,7 @@ void thread::setFunction(void *(*function)(void *), void *arg) {
 
 bool thread::setStackSize(size_t stacksize) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE)
-		error::setErrorNumber(0);
+		error::clearError();
 		int	result=pthread_attr_setstacksize(&pvt->_attr,stacksize);
 		if (!result) {
 			return true;
@@ -78,7 +78,7 @@ bool thread::setStackSize(size_t stacksize) {
 
 bool thread::getStackSize(size_t *stacksize) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_ATTR_SETSTACKSIZE)
-		error::setErrorNumber(0);
+		error::clearError();
 		int	result=pthread_attr_getstacksize(&pvt->_attr,stacksize);
 		if (!result) {
 			return true;
@@ -96,7 +96,7 @@ bool thread::getStackSize(size_t *stacksize) {
 
 bool thread::create() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		error::setErrorNumber(0);
+		error::clearError();
 		int	result=pthread_create(&pvt->_thr,&pvt->_attr,
 						pvt->_function,pvt->_arg);
 		if (!result) {
@@ -135,7 +135,7 @@ bool thread::join(int32_t *status) {
 		return true;
 	}
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		error::setErrorNumber(0);
+		error::clearError();
 		int32_t	*st=NULL;
 		int	result=pthread_join(pvt->_thr,(void **)&st);
 		if (!result) {
@@ -167,7 +167,7 @@ bool thread::join(int32_t *status) {
 bool thread::detach() {
 	pvt->_needtojoin=false;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		error::setErrorNumber(0);
+		error::clearError();
 		int	result=pthread_detach(pvt->_thr);
 		if (!result) {
 			return true;

@@ -560,7 +560,7 @@ void process::waitForChildrenToExit(int32_t signum) {
 	int32_t	pid=0;
 	do {
 		pid=getChildStateChange(-1,false,true,true,NULL,NULL,NULL,NULL);
-	} while (pid<1);
+	} while (pid>0);
 
 	// FIXME: What if a SIGCHLD gets generated after waitpid() has returned
 	// but before the signal handler exits?   Will that SIGCHLD be lost?
@@ -598,6 +598,7 @@ pid_t process::getChildStateChange(pid_t pid,
 	// wait
 	int32_t	childpid=-1;
 	do {
+		error::clearError();
 		childpid=waitpid(pid,&status,options);
 	} while (childpid==-1 && error::getErrorNumber()==EINTR);
 

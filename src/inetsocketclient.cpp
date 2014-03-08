@@ -164,7 +164,7 @@ int32_t inetsocketclient::connect() {
 		addrinfo	*ai=NULL;
 		int32_t		result;
 		do {
-			error::setErrorNumber(0);
+			error::clearError();
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
 		} while (result!=0 && error::getErrorNumber()==EINTR);
 		// ...In theory, we should only loop back and try again if

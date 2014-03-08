@@ -115,7 +115,7 @@ const char *environment::getValue(const char *variable) {
 	do {
 		// reset errno, it could still be set to EINTR from a previous
 		// system call and cause an infinite loop
-		errno=0;
+		error::clearError();
 
 		#if defined(RUDIMENTS_HAVE__DUPENV_S)
 			// FIXME: _dupenv_s is meant to be thread-safe and this
