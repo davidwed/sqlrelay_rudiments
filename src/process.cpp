@@ -598,7 +598,6 @@ pid_t process::getChildStateChange(pid_t pid,
 	// wait
 	int32_t	childpid=-1;
 	do {
-		error::clearError();
 		childpid=waitpid(pid,&status,options);
 	} while (childpid==-1 && error::getErrorNumber()==EINTR);
 
