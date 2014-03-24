@@ -1,4 +1,4 @@
-1.0 - updated filedestination::open to take a permissions parameter
+0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows
 	tweaked make.batch install target to install 32-bit files under
 		C:\Program Files (x86)
