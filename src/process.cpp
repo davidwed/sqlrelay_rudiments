@@ -589,7 +589,9 @@ pid_t process::getChildStateChange(pid_t pid,
 		options|=WUNTRACED;
 	}
 	if (!ignorecontinue) {
+		#ifdef WCONTINUED
 		options|=WCONTINUED;
+		#endif
 	}
 
 	// init status
@@ -623,8 +625,10 @@ pid_t process::getChildStateChange(pid_t pid,
 			if (signum) {
 				*signum=WSTOPSIG(status);
 			}
+		#ifdef WIFCONTINUED
 		} else if (WIFCONTINUED(status)) {
 			*newstate=CONTINUED_CHILDSTATECHANGE;
+		#endif
 		}
 	}
 
