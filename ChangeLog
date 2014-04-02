@@ -1,4 +1,4 @@
-0.47 -
+0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

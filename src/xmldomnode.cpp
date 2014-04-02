@@ -395,6 +395,10 @@ void xmldomnode::safeAppend(stringbuffer *strb,
 				filedescriptor *fd,
 				const char *str) const {
 
+	if (!str) {
+		return;
+	}
+
 	const char	*start=str;
 	const char	*ch=start;
 	const char	*entity=NULL;
