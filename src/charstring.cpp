@@ -1007,6 +1007,18 @@ bool charstring::inSet(const char *str, const char * const *set) {
 	return false;
 }
 
+bool charstring::inSetIgnoringCase(const char *str, const char * const *set) {
+	if (!set || !set[0]) {
+		return !str;
+	}
+	for (const char * const *s=set; *s; s++) {
+		if (!compareIgnoringCase(str,*s)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool charstring::contains(const char *haystack, const char *needle) {
 	return (findFirst(haystack,needle)!=NULL);
 }

@@ -1,4 +1,5 @@
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
+	added charstring::inSetIgnoringCase
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows
