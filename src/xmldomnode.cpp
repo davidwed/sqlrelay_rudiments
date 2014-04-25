@@ -618,6 +618,9 @@ constnamevaluepairs *xmldomnode::getAttributes() const {
 }
 
 void xmldomnode::setAttributeValue(const char *name, const char *value) {
+	if (isNullNode()) {
+		return;
+	}
 	xmldomnode	*attr=getAttribute(name);
 	if (!attr->isNullNode()) {
 		attr->setValue(value);

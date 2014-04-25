@@ -971,7 +971,10 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 	// carriage-return/line-feed or back up one level of indention
 	if (string[0]=='\b') {
 
-		pvt->_indentlevel--;
+		// make sure not to attempt to indent less than 0
+		if (pvt->_indentlevel) {
+			pvt->_indentlevel--;
+		}
 
 		const char	*outstr=output->getString();
 		size_t		outpos=output->getPosition()-1;

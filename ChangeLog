@@ -1,5 +1,9 @@
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase
+	xmldomnode::setAttributeValue does nothing when the null node is
+		referenced now
+	fixed a codetree bug that could cause indentation to attempt to go
+		negative when using an unsigned number
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows
