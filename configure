@@ -657,6 +657,7 @@ SSLLIBS
 SSLINCLUDES
 PTHREADLIB
 PTHREADINCLUDES
+WNOFORMAT
 WALL
 WERROR
 PIPE
@@ -15848,6 +15849,46 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 	CPPFLAGS=$OLDCPPFLAGS
 fi
+
+
+
+
+
+	OLDCPPFLAGS=$CPPFLAGS
+	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
+echo "$CPPFLAGS"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether -Wno-format is needed" >&5
+$as_echo_n "checking whether -Wno-format is needed... " >&6; }
+	WNOFORMAT=""
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdio.h>
+class test {
+	public:
+		void printf(const char *fmt, const char *arg);
+};
+
+void test::printf(const char *fmt, const char *arg) {
+	return;
+}
+
+int
+main ()
+{
+const char *fmt=""; test t; t.printf(fmt,"a");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; WNOFORMAT="-Wno-format"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	CPPFLAGS=$OLDCPPFLAGS
 
 
 

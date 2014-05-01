@@ -25,7 +25,7 @@ BASECPPFLAGS = @WALL@ @WERROR@ @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREI
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
-CXXFLAGS = @CXXFLAGS@ @PIPE@ @WNOLONGDOUBLE@
+CXXFLAGS = @CXXFLAGS@ @PIPE@ @WNOLONGDOUBLE@ @WNOFORMAT@
 
 # linker flags
 LDFLAGS = @LDFLAGS@

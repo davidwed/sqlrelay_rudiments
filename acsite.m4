@@ -282,6 +282,31 @@ AC_SUBST(WALL)
 
 
 
+dnl checks to see if -Wno-format option is needed
+AC_DEFUN([FW_CHECK_WNOFORMAT],
+[
+	OLDCPPFLAGS=$CPPFLAGS
+	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
+echo "$CPPFLAGS"
+	AC_MSG_CHECKING(whether -Wno-format is needed)
+	WNOFORMAT=""
+	AC_TRY_COMPILE([#include <stdio.h>
+class test {
+	public:
+		void printf(const char *fmt, const char *arg);
+};
+
+void test::printf(const char *fmt, const char *arg) {
+	return;
+}
+],[const char *fmt=""; test t; t.printf(fmt,"a");],AC_MSG_RESULT(no), AC_MSG_RESULT(yes); WNOFORMAT="-Wno-format")	
+	CPPFLAGS=$OLDCPPFLAGS
+
+AC_SUBST(WNOFORMAT)
+])
+
+
+
 dnl checks to see if c++ allows undefined functions
 AC_DEFUN([FW_CHECK_UNDEFINED_FUNCTIONS],
 [
