@@ -17706,7 +17706,7 @@ $as_echo "no" >&6; }
 
 	else
 
-				for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
+						for i in "pthread" "thread" "pthreads" "gthreads" ""
 		do
 			if ( test -n "$i" )
 			then

@@ -690,7 +690,8 @@ then
 	else
 
 		dnl check pthread.h and standard thread libraries
-		for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
+		dnl for i in "pthread" "c_r" "thread" "pthreads" "gthreads" ""
+		for i in "pthread" "thread" "pthreads" "gthreads" ""
 		do
 			if ( test -n "$i" )
 			then
