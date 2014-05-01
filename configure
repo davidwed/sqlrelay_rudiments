@@ -15868,7 +15868,7 @@ $as_echo_n "checking whether -Wno-format is needed... " >&6; }
 int
 main ()
 {
-const char *fmt=""; printf(fmt,"a");
+const char *fmt=NULL; printf(fmt,NULL);
   ;
   return 0;
 }
