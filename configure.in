@@ -459,7 +459,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 [],AC_DEFINE(RUDIMENTS_HAVE_NETINET_IN_H, 1, Some systems have netinet/in.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sys/un.h)
-AC_TRY_COMPILE([#include <sys/un.h>],
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/un.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_UN_H, 1, Some systems have sys/un.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for sys/param.h)
