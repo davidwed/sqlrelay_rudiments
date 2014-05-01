@@ -715,13 +715,6 @@ then
 
 				AC_MSG_RESULT(yes)
 
-				if ( test -n "$i" )
-				then
-					AC_MSG_CHECKING(whether lib$i works)
-				else
-					AC_MSG_CHECKING(whether no library works)
-				fi
-
 				dnl  If we found a set of headers and libs, try
 				dnl  linking with them.  We'll try six times,
 				dnl  first with just the header and lib that we
@@ -745,21 +738,22 @@ then
 						TESTLIB="$PTHREADLIB"
 					elif ( test "$try" = "4" )
 					then
-						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDESS"
+						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDES"
 						TESTLIB="$PTHREADLIB -pthread"
 					elif ( test "$try" = "5" )
 					then
-						TESTINCLUDES="$PTHREADINCLUDESS"
+						TESTINCLUDES="$PTHREADINCLUDES"
 						TESTLIB="-pthread"
 					elif ( test "$try" = "6" )
 					then
-						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDESS"
+						TESTINCLUDES="$PTHREAD_COMPILE $PTHREADINCLUDES"
 						TESTLIB="-pthread"
 					fi
 
 					dnl try to link
+					AC_MSG_CHECKING(whether $TESTINCLUDES ... $TESTLIB works)
 					FW_TRY_LINK([#include <stddef.h>
-#include <pthread.h>],[pthread_exit(NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[HAVE_PTHREAD="yes"],[])
+#include <pthread.h>],[pthread_exit(NULL);],[$CPPFLAGS $TESTINCLUDES],[$TESTLIB],[],[AC_MSG_RESULT(yes); HAVE_PTHREAD="yes"],[AC_MSG_RESULT(no)])
 
 					dnl  If the link succeeded then keep
 					dnl  the flags.
@@ -777,12 +771,8 @@ then
 
 				if ( test -n "$HAVE_PTHREAD" )
 				then
-					AC_MSG_RESULT(yes)
 					break
-				else
-					AC_MSG_RESULT(no)
 				fi
-
 			else
 				AC_MSG_RESULT(no)
 			fi
