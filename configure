@@ -15865,10 +15865,19 @@ $as_echo_n "checking whether -Wno-format is needed... " >&6; }
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <stdio.h>
+
+class charstring {
+	public:
+		static void printf(char *buffer, const char *fmt);
+};
+
+void charstring::printf(char *buffer, const char *fmt) {
+	vsprintf(buffer,fmt,NULL);
+}
 int
 main ()
 {
-const char *fmt=NULL; printf(fmt,NULL);
+char buf[10]; charstring::printf(buf,"hello");
   ;
   return 0;
 }

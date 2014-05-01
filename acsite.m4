@@ -292,7 +292,16 @@ then
 	OLDCPPFLAGS=$CPPFLAGS
 	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
 	AC_MSG_CHECKING(whether -Wno-format is needed)
-	AC_TRY_COMPILE([#include <stdio.h>],[const char *fmt=NULL; printf(fmt,NULL);],AC_MSG_RESULT(no), AC_MSG_RESULT(yes); WNOFORMAT="-Wno-format")	
+	AC_TRY_COMPILE([#include <stdio.h>
+
+class charstring {
+	public:
+		static void printf(char *buffer, const char *fmt);
+};
+
+void charstring::printf(char *buffer, const char *fmt) {
+	vsprintf(buffer,fmt,NULL);
+}],[char buf[10]; charstring::printf(buf,"hello");],AC_MSG_RESULT(no), AC_MSG_RESULT(yes); WNOFORMAT="-Wno-format")	
 	CPPFLAGS=$OLDCPPFLAGS
 fi
 
