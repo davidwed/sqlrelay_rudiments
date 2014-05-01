@@ -15854,28 +15854,21 @@ fi
 
 
 
+
+WNOFORMAT=""
+if ( test -n "$WERROR" )
+then
 	OLDCPPFLAGS=$CPPFLAGS
 	CPPFLAGS="$WALL $WERROR $CPPFLAGS"
-echo "$CPPFLAGS"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether -Wno-format is needed" >&5
 $as_echo_n "checking whether -Wno-format is needed... " >&6; }
-	WNOFORMAT=""
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <stdio.h>
-class test {
-	public:
-		void printf(const char *fmt, const char *arg);
-};
-
-void test::printf(const char *fmt, const char *arg) {
-	return;
-}
-
 int
 main ()
 {
-const char *fmt=""; test t; t.printf(fmt,"a");
+const char *fmt=""; printf(fmt,"a");
   ;
   return 0;
 }
@@ -15889,6 +15882,7 @@ $as_echo "yes" >&6; }; WNOFORMAT="-Wno-format"
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 	CPPFLAGS=$OLDCPPFLAGS
+fi
 
 
 
