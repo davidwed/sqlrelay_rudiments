@@ -1633,7 +1633,7 @@ mlock(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MLOCK,1,Some systems have mlock) AC_MSG_
 void *ptr; mlock(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MLOCK_CADDR_T,1,Some systems use caddr_t argument for mlock) AC_MSG_RESULT(yes))
 
 	AC_MSG_CHECKING(for mlockall)
-	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -1663,7 +1663,7 @@ munlock(NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_MUNLOCK,1,Some systems have munlock) A
 void *ptr; munlock(ptr,0);,AC_MSG_RESULT(no), AC_DEFINE(RUDIMENTS_HAVE_MUNLOCK_CADDR_T,1,Some systems use caddr_t argument for munlock) AC_MSG_RESULT(yes))
 
 	AC_MSG_CHECKING(for munlockall)
-	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
