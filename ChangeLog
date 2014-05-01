@@ -6,6 +6,7 @@
 		negative when using an unsigned number
 	added a configure test to see if -Wno-format is needed
 	configure tests for mlockall/munlockall attempt link now
+	added sys/types.h before sys/un.h in sys/un.h test for older freebsd
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows
