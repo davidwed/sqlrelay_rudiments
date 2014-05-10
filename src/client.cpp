@@ -56,6 +56,15 @@ void client::clientClone(const client &c) {
 	pvt->_connecterror=charstring::duplicate(c.pvt->_connecterror);
 }
 
+void client::initialize(constnamevaluepairs *cd) {
+	// by default, do nothing
+}
+
+int32_t client::connect() {
+	// by default, do nothing, return success
+	return RESULT_SUCCESS;
+}
+
 const char *client::getVerboseConnectError() {
 	return pvt->_connecterror;
 }

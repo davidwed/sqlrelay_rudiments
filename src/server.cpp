@@ -28,3 +28,20 @@ server &server::operator=(const server &s) {
 server::~server() {
 	delete pvt;
 }
+
+bool server::bind() {
+	// by default, just return success
+	return true;
+}
+
+bool server::listen(int32_t backlog) {
+	// by default, just return success
+	return true;
+}
+
+filedescriptor *server::accept() {
+	// create a new filedescriptor and set it to the fd() from this instance
+	filedescriptor	*retval=new filedescriptor;
+	retval->setFileDescriptor(fd());
+	return retval;
+}

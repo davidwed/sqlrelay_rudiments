@@ -62,11 +62,6 @@ class RUDIMENTS_DLLSPEC modemserver : public server, private modemutil {
 						const char *acceptscript,
 						const char *disconnectscript);
 
-		/** Does nothing in the default implementation but a child
-		 *  class might implement it to do something.  This version
-		 *  always returns true. */
-		bool	bind();
-
 		/** Opens the device set in the call to initalize(), sets the
  		 *  baud rate and runs "listenscript".
  		 *

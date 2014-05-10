@@ -27,19 +27,27 @@ class RUDIMENTS_DLLSPEC server : public filedescriptor {
 		/** Deletes this instance of the server class. */
 		virtual	~server();
 
-		/** This method must be implemented by a child class to
-		 *  associated the server with an address. */
-		virtual	bool	bind()=0;
+		/** This method may be implemented by a child class to
+		 *  associated the server with an address.
+		 *
+		 *  This implementation just returns true. */
+		virtual	bool	bind();
 
-		/** This method must be implemented by a child class to
+		/** This method may be implemented by a child class to
 		 *  wait for client connections and fall through when a
-		 *  client connects. */
-		virtual	bool	listen(int32_t backlog)=0;
+		 *  client connects.
+		 *
+		 *  This implementation just returns true. */
+		virtual	bool	listen(int32_t backlog);
 
-		/** This method must be implemented by a child class to
+		/** This method may be implemented by a child class to
 		 *  accept the client connection and return a file descriptor
-		 *  that can be used to communicate with the client. */
-		virtual	filedescriptor	*accept()=0;
+		 *  that can be used to communicate with the client.
+		 *
+		 *  This implementation just creates a new instance of
+		 *  filedescriptor and sets it to point to the same
+		 *  file descriptor used by this instance. */
+		virtual	filedescriptor	*accept();
 
 	#include <rudiments/private/server.h>
 };

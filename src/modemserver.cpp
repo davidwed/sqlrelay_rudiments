@@ -82,10 +82,6 @@ bool modemserver::listen(const char *device, const char *baud,
 	return listen(0);
 }
 
-bool modemserver::bind() {
-	return true;
-}
-
 bool modemserver::listen(int32_t backlog) {
 
 	// open the serial port
@@ -118,9 +114,7 @@ filedescriptor *modemserver::accept() {
 
 	chat	ch(this);
 	if (ch.runScript(pvt->_acceptscript,NULL)==RESULT_SUCCESS) {
-		filedescriptor	*retval=new filedescriptor;
-		retval->setFileDescriptor(fd());
-		return retval;
+		return server::accept();
 	}
 	return NULL;
 }
