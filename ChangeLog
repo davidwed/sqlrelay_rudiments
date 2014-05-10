@@ -7,7 +7,7 @@
 	added a configure test to see if -Wno-format is needed
 	configure tests for mlockall/munlockall attempt link now
 	added sys/types.h before sys/un.h in sys/un.h test for older freebsd
-	implemented stubs for abstract methods of client and server classes
+	implemented stubs for pure virtual methods of client and server classes
 		so instances of them could be created to attach already-open
 		file descriptors to 
 
