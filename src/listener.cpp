@@ -281,7 +281,10 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		#endif
 
 		// return the number of file descriptors that
-		// caused the select() to fall through
+		// caused the wait to fall through
+		#ifdef RUDIMENTS_HAVE_POLL
+			delete[] fds;
+		#endif
 		return result;
 	}
 }
