@@ -45,9 +45,6 @@
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif
-#ifdef RUDIMENTS_HAVE_SYS_SELECT_H
-	#include <sys/select.h>
-#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -94,11 +91,6 @@
 #endif
 #ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
 	#include <libkern/OSByteOrder.h>
-#endif
-#if defined(RUDIMENTS_HAVE_SYS_POLL_H)
-	#include <sys/poll.h>
-#elif defined(RUDIMENTS_HAVE_POLL_H)
-	#include <poll.h>
 #endif
 #ifdef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H
 	#include <os/support/ByteOrder.h>
@@ -167,6 +159,7 @@ class filedescriptorprivate {
 		bool	_allowshortwrites;
 		bool	_translatebyteorder;
 
+		listener	_fdlstnr;
 		listener	*_lstnr;
 		bool		_uselistenerinsidereads;
 		bool		_uselistenerinsidewrites;
@@ -198,7 +191,7 @@ filedescriptor::filedescriptor() {
 filedescriptor::filedescriptor(int32_t fd) {
 	pvt=new filedescriptorprivate;
 	filedescriptorInit();
-	pvt->_fd=fd;
+	setFileDescriptor(fd);
 }
 
 filedescriptor::filedescriptor(const filedescriptor &f) {
@@ -215,7 +208,7 @@ filedescriptor &filedescriptor::operator=(const filedescriptor &f) {
 }
 
 void filedescriptor::filedescriptorInit() {
-	pvt->_fd=-1;
+	setFileDescriptor(-1);
 	pvt->_retryinterruptedreads=false;
 	pvt->_retryinterruptedwrites=false;
 	pvt->_retryinterruptedwaits=true;
@@ -244,7 +237,7 @@ void filedescriptor::filedescriptorInit() {
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
-	pvt->_fd=f.pvt->_fd;
+	setFileDescriptor(f.pvt->_fd);
 	pvt->_translatebyteorder=f.pvt->_translatebyteorder;
 	pvt->_retryinterruptedreads=f.pvt->_retryinterruptedreads;
 	pvt->_retryinterruptedwrites=f.pvt->_retryinterruptedwrites;
@@ -343,6 +336,8 @@ int32_t filedescriptor::getFileDescriptor() const {
 
 void filedescriptor::setFileDescriptor(int32_t filedesc) {
 	pvt->_fd=filedesc;
+	pvt->_fdlstnr.removeAllFileDescriptors();
+	pvt->_fdlstnr.addFileDescriptor(this);
 }
 
 int32_t filedescriptor::duplicate() const {
@@ -765,7 +760,7 @@ bool filedescriptor::close() {
 		if (result==-1) {
 			return false;
 		}
-		pvt->_fd=-1;
+		setFileDescriptor(-1);
 	}
 	return true;
 }
@@ -1163,19 +1158,20 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			sizetoread=SSIZE_MAX;
 		}
 
-		// if necessary, select
+		// wait if necessary
 		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidereads) {
 
-			int32_t	selectresult=(pvt->_uselistenerinsidereads)?
+			int32_t	waitresult=(pvt->_uselistenerinsidereads)?
 					waitForNonBlockingRead(sec,usec):
-					safeWait(sec,usec,true,false);
+					pvt->_fdlstnr.waitForNonBlockingRead(
+								sec,usec);
 
 			// return error or timeout
-			if (selectresult<0) {
+			if (waitresult<0) {
 				#ifdef DEBUG_READ
 				debugPrintf(")\n");
 				#endif
-				return selectresult;
+				return waitresult;
 			}
 
 			// FIXME: if uselistenerinsidereads is set, and data
@@ -1448,19 +1444,20 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			sizetowrite=SSIZE_MAX;
 		}
 
-		// if necessary, select
+		// wait if necessary
 		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidewrites) {
 
-			int32_t	selectresult=(pvt->_uselistenerinsidewrites)?
+			int32_t	waitresult=(pvt->_uselistenerinsidewrites)?
 					waitForNonBlockingWrite(sec,usec):
-					safeWait(sec,usec,false,true);
+					pvt->_fdlstnr.waitForNonBlockingWrite(
+								sec,usec);
 
 			// return error or timeout
-			if (selectresult<0) {
+			if (waitresult<0) {
 				#ifdef DEBUG_WRITE
 				debugPrintf(")\n");
 				#endif
-				return selectresult;
+				return waitresult;
 			}
 		}
 
@@ -1576,99 +1573,18 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 	#endif
 }
 
-int32_t filedescriptor::waitForNonBlockingRead(int32_t sec, int32_t usec) const {
-	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingRead(sec,usec):
-				safeWait(sec,usec,true,false);
+int32_t filedescriptor::waitForNonBlockingRead(
+				int32_t sec, int32_t usec) const {
+	return (pvt->_lstnr)?
+			pvt->_lstnr->waitForNonBlockingRead(sec,usec):
+			pvt->_fdlstnr.waitForNonBlockingRead(sec,usec);
 }
 
-int32_t filedescriptor::waitForNonBlockingWrite(int32_t sec, int32_t usec) const {
-	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
-				safeWait(sec,usec,false,true);
-}
-
-int32_t filedescriptor::safeWait(int32_t sec, int32_t usec,
-					bool read, bool write) const {
-
-	// bail immediately if the file descriptor is invalid
-	if (pvt->_fd<0) {
-		return RESULT_ERROR;
-	}
-
-	// bail immediately if ssl data is pending
-	#ifdef RUDIMENTS_HAS_SSL
-		if (read && pvt->_ssl && SSL_pending(pvt->_ssl)) {
-			return 1;
-		}
-	#endif
-
-	#ifdef RUDIMENTS_HAVE_POLL
-
-		// set up the fd's to be monitored, and how to monitor them
-		struct pollfd	fds;
-		fds.fd=pvt->_fd;
-		fds.events=0;
-		if (read) {
-			fds.events|=POLLIN;
-		}
-		if (write) {
-			fds.events|=POLLOUT;
-		}
-
-		// calculate the timeout
-		int32_t	timeout=(sec*1000)+(usec/1000);
-
-	#else
-
-		// set up the timeout
-		timeval	tv;
-		timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
-	#endif
-
-	for (;;) {
-
-		#ifdef RUDIMENTS_HAVE_POLL
-
-			// poll...
-			int32_t	result=poll(&fds,1,timeout);
-
-		#else
-
-			// some versions of select modify the timeout,
-			// so reset it every time
-			tv.tv_sec=sec;
-			tv.tv_usec=usec;
-
-			// select() will modify the list every time it's called
-			// so the list has to be rebuilt every time...
-			fd_set	fdlist;
-			FD_ZERO(&fdlist);
-			FD_SET(pvt->_fd,&fdlist);
-
-			// wait for data to be available on the file descriptor
-			int32_t	result=select(pvt->_fd+1,
-						(read)?&fdlist:NULL,
-						(write)?&fdlist:NULL,
-						NULL,tvptr);
-
-		#endif
-
-		if (result==-1) {
-
-			// if a signal caused the wait to fall through, retry
-			if (pvt->_retryinterruptedwaits &&
-				error::getErrorNumber()==EINTR) {
-				continue;
-			}
-			return RESULT_ERROR;
-
-		} else if (!result) {
-
-			// timeout
-			return RESULT_TIMEOUT;
-		}
-
-		return result;
-	}
+int32_t filedescriptor::waitForNonBlockingWrite(
+				int32_t sec, int32_t usec) const {
+	return (pvt->_lstnr)?
+			pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
+			pvt->_fdlstnr.waitForNonBlockingWrite(sec,usec);
 }
 
 void filedescriptor::translateByteOrder() {
@@ -1972,7 +1888,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 		// FIXME: this should be configurable
 		bool	oldwaits=pvt->_retryinterruptedwaits;
 		pvt->_retryinterruptedwaits=pvt->_retryinterruptedreads;
-		result=safeWait(120,0,true,false);
+		result=pvt->_fdlstnr.waitForNonBlockingRead(120,0);
 		pvt->_retryinterruptedwaits=oldwaits;
 		if (result==RESULT_TIMEOUT) {
 			#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
@@ -2303,7 +2219,7 @@ int32_t filedescriptor::fd() const {
 }
 
 void filedescriptor::fd(int32_t filedes) {
-	pvt->_fd=filedes;
+	setFileDescriptor(filedes);
 }
 
 #ifdef RUDIMENTS_HAS_SSL

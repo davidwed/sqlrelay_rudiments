@@ -14,8 +14,6 @@
 					int32_t sec, int32_t usec) const;
 		virtual	ssize_t	safeWrite(const void *buf, ssize_t count,
 					int32_t sec, int32_t usec) const;
-		virtual	int32_t	safeWait(int32_t sec, int32_t usec,
-					bool read, bool write) const;
 		bool		setNoDelay(int32_t onoff);
 
 		#ifdef RUDIMENTS_HAS_SSL

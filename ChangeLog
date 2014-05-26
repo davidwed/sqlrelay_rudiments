@@ -11,6 +11,7 @@
 		so instances of them could be created to attach already-open
 		file descriptors to
 	unified usage of select/poll and prefer poll
+	pushed all select/poll-related code into listener class
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

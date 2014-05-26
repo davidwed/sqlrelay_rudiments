@@ -103,7 +103,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			pvt->_readylist.clear();
 		#endif
 
-		// set up the fd's to be monitored, and how to montior them
+		// set up the fd's to be monitored, and how to monitor them
 		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
 		struct pollfd	*fds=new struct pollfd[fdcount];
 		listenerlistnode	*cur=

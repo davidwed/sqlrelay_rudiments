@@ -2241,7 +2241,7 @@ AC_TRY_COMPILE([
 	#include <sys/epoll.h>
 #endif
 ],[
-epoll_create(0);
+epoll_create1(0);
 epoll_ctl(0,0,0,0);
 epoll_wait(0,0,0,-1);
 ],
