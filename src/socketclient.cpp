@@ -240,7 +240,6 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 
 	// Wait for the socket to become writable.  If the select()
 	// errors or times out then return the error or timeout.
-	// FIXME: add a useListenerInsideConnect() method?
 	if ((retval=waitForNonBlockingWrite(sec,usec))<0) {
 		retval=RESULT_ERROR;
 		goto cleanup;

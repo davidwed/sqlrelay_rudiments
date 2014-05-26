@@ -159,10 +159,7 @@ class filedescriptorprivate {
 		bool	_allowshortwrites;
 		bool	_translatebyteorder;
 
-		listener	_fdlstnr;
-		listener	*_lstnr;
-		bool		_uselistenerinsidereads;
-		bool		_uselistenerinsidewrites;
+		listener	_lstnr;
 
 		#ifdef RUDIMENTS_HAS_SSL
 		SSL_CTX	*_ctx;
@@ -217,9 +214,6 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_allowshortreads=false;
 	pvt->_allowshortwrites=false;
 	pvt->_translatebyteorder=false;
-	pvt->_lstnr=NULL;
-	pvt->_uselistenerinsidereads=false;
-	pvt->_uselistenerinsidewrites=false;
 #ifdef RUDIMENTS_HAS_SSL
 	pvt->_ctx=NULL;
 	pvt->_bio=NULL;
@@ -246,9 +240,6 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
-	pvt->_lstnr=f.pvt->_lstnr;
-	pvt->_uselistenerinsidereads=f.pvt->_uselistenerinsidereads;
-	pvt->_uselistenerinsidewrites=f.pvt->_uselistenerinsidewrites;
 #ifdef RUDIMENTS_HAS_SSL
 	pvt->_ctx=f.pvt->_ctx;
 	pvt->_bio=f.pvt->_bio;
@@ -336,8 +327,8 @@ int32_t filedescriptor::getFileDescriptor() const {
 
 void filedescriptor::setFileDescriptor(int32_t filedesc) {
 	pvt->_fd=filedesc;
-	pvt->_fdlstnr.removeAllFileDescriptors();
-	pvt->_fdlstnr.addFileDescriptor(this);
+	pvt->_lstnr.removeAllFileDescriptors();
+	pvt->_lstnr.addFileDescriptor(this);
 }
 
 int32_t filedescriptor::duplicate() const {
@@ -851,34 +842,6 @@ void filedescriptor::dontAllowShortWrites() {
 	pvt->_allowshortwrites=false;
 }
 
-void filedescriptor::useListener(listener *lstnr) {
-	pvt->_lstnr=lstnr;
-}
-
-void filedescriptor::useListenerInsideReads() {
-	pvt->_uselistenerinsidereads=true;
-}
-
-void filedescriptor::dontUseListenerInsideReads() {
-	pvt->_uselistenerinsidereads=false;
-}
-
-void filedescriptor::useListenerInsideWrites() {
-	pvt->_uselistenerinsidewrites=true;
-}
-
-void filedescriptor::dontUseListenerInsideWrites() {
-	pvt->_uselistenerinsidewrites=false;
-}
-
-void filedescriptor::dontUseListener() {
-	pvt->_lstnr=NULL;
-}
-
-listener *filedescriptor::getListener() {
-	return pvt->_lstnr;
-}
-
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
 						int32_t sec, int32_t usec) const {
 
@@ -1159,12 +1122,9 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		}
 
 		// wait if necessary
-		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidereads) {
+		if (sec>-1 && usec>-1) {
 
-			int32_t	waitresult=(pvt->_uselistenerinsidereads)?
-					waitForNonBlockingRead(sec,usec):
-					pvt->_fdlstnr.waitForNonBlockingRead(
-								sec,usec);
+			int32_t	waitresult=waitForNonBlockingRead(sec,usec);
 
 			// return error or timeout
 			if (waitresult<0) {
@@ -1173,13 +1133,6 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#endif
 				return waitresult;
 			}
-
-			// FIXME: if uselistenerinsidereads is set, and data
-			// is available on a different file descriptor than
-			// this one (and none is available on this one),
-			// return the current size (a short read).  Apps should
-			// respond to this short read condition by checking the
-			// listener's ready list... maybe?
 		}
 
 		// set a pointer to the position in the buffer that we need
@@ -1445,12 +1398,9 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		}
 
 		// wait if necessary
-		if ((sec>-1 && usec>-1) || pvt->_uselistenerinsidewrites) {
+		if (sec>-1 && usec>-1) {
 
-			int32_t	waitresult=(pvt->_uselistenerinsidewrites)?
-					waitForNonBlockingWrite(sec,usec):
-					pvt->_fdlstnr.waitForNonBlockingWrite(
-								sec,usec);
+			int32_t	waitresult=waitForNonBlockingWrite(sec,usec);
 
 			// return error or timeout
 			if (waitresult<0) {
@@ -1575,16 +1525,12 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 
 int32_t filedescriptor::waitForNonBlockingRead(
 				int32_t sec, int32_t usec) const {
-	return (pvt->_lstnr)?
-			pvt->_lstnr->waitForNonBlockingRead(sec,usec):
-			pvt->_fdlstnr.waitForNonBlockingRead(sec,usec);
+	return pvt->_lstnr.waitForNonBlockingRead(sec,usec);
 }
 
 int32_t filedescriptor::waitForNonBlockingWrite(
 				int32_t sec, int32_t usec) const {
-	return (pvt->_lstnr)?
-			pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
-			pvt->_fdlstnr.waitForNonBlockingWrite(sec,usec);
+	return pvt->_lstnr.waitForNonBlockingWrite(sec,usec);
 }
 
 void filedescriptor::translateByteOrder() {
@@ -1888,7 +1834,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 		// FIXME: this should be configurable
 		bool	oldwaits=pvt->_retryinterruptedwaits;
 		pvt->_retryinterruptedwaits=pvt->_retryinterruptedreads;
-		result=pvt->_fdlstnr.waitForNonBlockingRead(120,0);
+		result=waitForNonBlockingRead(120,0);
 		pvt->_retryinterruptedwaits=oldwaits;
 		if (result==RESULT_TIMEOUT) {
 			#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN

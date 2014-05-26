@@ -12,6 +12,8 @@
 		file descriptors to
 	unified usage of select/poll and prefer poll
 	pushed all select/poll-related code into listener class
+	removed problematic and unused useListner-related methods in
+		filedescriptor class
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

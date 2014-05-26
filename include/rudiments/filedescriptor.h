@@ -617,11 +617,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 * 
 		 *  This will usually be 1, indicating that the
 		 *  file descriptor represented by the class is
-		 *  ready to be read from.  However, if
-		 *  useListener() has been called, it may be
-		 *  greater than 1, indicating that a set of
-		 *  file descriptors that the listener is
-		 *  listening on are all ready to be read from. */
+		 *  ready to be read from. */
 		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec) const;
 
 		/** Causes the application to wait until a
@@ -643,11 +639,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 * 
 		 *  This will usually be 1, indicating that the
 		 *  file descriptor represented by the class is
-		 *  ready to be written to.  However, if
-		 *  useListener() has been called, it may be
-		 *  greater than 1, indicating that a set of
-		 *  file descriptors that the listener is
-		 *  listening on are all ready to be written to. */
+		 *  ready to be written to. */
 		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec) const;
 
 
@@ -778,49 +770,6 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *
 		 *  This method causes that default behavior to be observed. */
 		void	dontAllowShortWrites();
-
-		/** By default, calls to waitForNonBlockingRead() and
-		 *  waitForNonBlockingWrite() will wait using the select()
-		 *  system call or similar.
-		 * 
-		 * This method causes calls to waitForNonBlockingRead() and
-		 * waitForNonBlockingWrite() to in turn call
-		 * lstnr->waitForNonBlockingRead() or
-		 * lstnr->waitForNonBlockingWrite() rather than using
-		 * select() directly. */
-		void	useListener(listener *lstnr);
-
-		/** By default, calls to waitForNonBlockingRead() and
-		 *  waitForNonBlockingWrite() will wait using the select()
-		 *  system call or similar.
-		 * 
-		 * This method causes the default behavior to be observed,
-		 * even if useListener() was called previously. */
-		void	dontUseListener();
-
-		/** Returns the listener set previously by useListener() 
-		 *  or NULL if none has been set. */
-		listener	*getListener();
-
-		/** Causes the listener set by a call to useListener() to be
-		 *  used internally by the read() methods.
-		 *  See useListener(). */
-		void	useListenerInsideReads();
-
-		/** Causes the listener set by a call to useListener() not to
-		 *  be used internally by the read() methods.
-		 *  See useListener(). */
-		void	dontUseListenerInsideReads();
-
-		/** Causes the listener set by a call to useListener() to be
-		 *  be used internally by the write() methods.
-		 *  See useListener(). */
-		void	useListenerInsideWrites();
-
-		/** Causes the listener set by a call to useListener() not to
-		 *  be used internally by the write() methods.
-		 *  See useListener(). */
-		void	dontUseListenerInsideWrites();
 
 
 		/** Sends file descriptor "fd" to the file descriptor.  This
