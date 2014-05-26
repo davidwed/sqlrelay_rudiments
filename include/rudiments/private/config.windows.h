@@ -245,6 +245,9 @@
 /* Some systems define environ in unistd.h */
 #define RUDIMENTS_HAVE_ENVIRON 1
 
+/* Some systems have epoll */
+/* #undef RUDIMENTS_HAVE_EPOLL */
+
 /* Some systems have errno.h */
 #define RUDIMENTS_HAVE_ERRNO_H 1
 
@@ -1030,6 +1033,9 @@
 
 /* Some systems have sys/bitypes.h */
 /* #undef RUDIMENTS_HAVE_SYS_BITYPES_H */
+
+/* Some systems have sys/epoll.h */
+/* #undef RUDIMENTS_HAVE_SYS_EPOLL_H */
 
 /* Some systems have sys/fcntl.h */
 /* #undef RUDIMENTS_HAVE_SYS_FCNTL_H */

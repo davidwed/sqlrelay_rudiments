@@ -242,7 +242,7 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 	// errors or times out then return the error or timeout.
 	// FIXME: use waitForNonBlockingWrite() and add
 	// a useListenerInsideConnect() method?
-	if ((retval=safeSelect(sec,usec,false,true))<0) {
+	if ((retval=safeWait(sec,usec,false,true))<0) {
 		retval=RESULT_ERROR;
 		goto cleanup;
 	}

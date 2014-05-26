@@ -32,6 +32,11 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#if defined(RUDIMENTS_HAVE_SYS_POLL_H)
+	#include <sys/poll.h>
+#elif defined(RUDIMENTS_HAVE_POLL_H)
+	#include <poll.h>
+#endif
 
 class listenerprivate {
 	friend class listener;
@@ -72,115 +77,211 @@ void listener::removeAllFileDescriptors() {
 }
 
 int32_t listener::waitForNonBlockingRead(int32_t sec, int32_t usec) {
-	return safeSelect(sec,usec,true,false);
+	return safeWait(sec,usec,true,false);
 }
 
 int32_t listener::waitForNonBlockingWrite(int32_t sec, int32_t usec) {
-	return safeSelect(sec,usec,false,true);
+	return safeWait(sec,usec,false,true);
 }
 
 listenerlist *listener::getReadyList() {
 	return &pvt->_readylist;
 }
 
-int32_t listener::safeSelect(int32_t sec, int32_t usec, bool read, bool write) {
+int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
-	// set up the timeout
-	timeval	tv;
-	timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
+	// initialize the return value
+	int32_t	result=0;
 
-	for (;;) {
+	#ifdef RUDIMENTS_HAVE_POLL
 
 		// if we're using ssl, some of the filedescriptors may have
 		// SSL data pending, in that case, we need to bypass the
-		// select altogether and just return those filedescriptors
+		// poll altogether and just return those filedescriptors
 		// in the ready list immediately
 		#ifdef RUDIMENTS_HAS_SSL
 			pvt->_readylist.clear();
 		#endif
-		int32_t	selectresult=0;
 
-		// some versions of select modify the timeout, so reset it
-		// every time
-		tv.tv_sec=sec;
-		tv.tv_usec=usec;
-
-		// select() will modify the list every time it's called
-		// so the list has to be rebuilt every time...
-		fd_set	fdlist;
-		int32_t	largest=-1;
-		FD_ZERO(&fdlist);
-		listenerlistnode	*current=
+		// set up the fd's to be monitored, and how to montior them
+		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
+		struct pollfd	*fds=new struct pollfd[fdcount];
+		listenerlistnode	*cur=
 				pvt->_filedescriptorlist.getFirstNode();
-		while (current) {
-
-			if (current->getValue()->getFileDescriptor()>largest) {
-				largest=current->getValue()->
-						getFileDescriptor();
-			}
-
-			FD_SET(current->getValue()->
-					getFileDescriptor(),&fdlist);
+		fdcount=0;
+		while (cur) {
 
 			// if we support SSL, check here to see if the
 			// filedescriptor has SSL data pending
 			#ifdef RUDIMENTS_HAS_SSL
-				SSL	*ssl=
-					(SSL *)current->getValue()->getSSL();
+				SSL	*ssl=(SSL *)cur->getValue()->getSSL();
 				if (ssl && SSL_pending(ssl)) {
-					pvt->_readylist.append(
-						current->getValue());
-					selectresult++;
+					pvt->_readylist.append(cur->getValue());
+					result++;
 				}
 			#endif
 
-			current=current->getNext();
+			fds[fdcount].fd=cur->getValue()->getFileDescriptor();
+			fds[fdcount].events=0;
+			if (read) {
+				fds[fdcount].events|=POLLIN;
+			}
+			if (write) {
+				fds[fdcount].events|=POLLOUT;
+			}
+			fds[fdcount].revents=0;
+			fdcount++;
+
+			cur=cur->getNext();
 		}
 
-		// if we support SSL and at least 1 of the filedescriptors
-		// had SSL data pending, return here
+		// if we support SSL and at least 1 of the
+		// filedescriptors had SSL data pending, return here
 		#ifdef RUDIMENTS_HAS_SSL
-			if (selectresult) {
-				return selectresult;
+			if (result) {
+				delete[] fds;
+				return result;
 			}
 		#endif
 
-		// wait for data to be available on the file descriptor
-		selectresult=select(largest+1,(read)?&fdlist:NULL,
+		// calculate the timeout
+		int32_t	timeout=(sec*1000)+(usec/1000);
+
+	#else
+
+		// set up the timeout
+		timeval	tv;
+		timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
+	#endif
+
+	for (;;) {
+
+		#ifdef RUDIMENTS_HAVE_POLL
+
+			// wait for data to be available on the file descriptor
+			result=poll(fds,fdcount,timeout);
+
+		#else
+
+			// some versions of select modify the timeout,
+			// so reset it every time
+			tv.tv_sec=sec;
+			tv.tv_usec=usec;
+
+			// if we're using ssl, some of the filedescriptors may
+			// have SSL data pending, in that case, we need to
+			// bypass the select altogether and just return those
+			// filedescriptors in the ready list immediately
+			#ifdef RUDIMENTS_HAS_SSL
+				pvt->_readylist.clear();
+			#endif
+			result=0;
+
+			// select() will modify the list every time it's called
+			// so the list has to be rebuilt every time...
+			fd_set	fdlist;
+			int32_t	largest=-1;
+			FD_ZERO(&fdlist);
+			listenerlistnode	*cur=
+					pvt->_filedescriptorlist.getFirstNode();
+			while (cur) {
+
+				if (cur->getValue()->
+						getFileDescriptor()>largest) {
+					largest=cur->getValue()->
+							getFileDescriptor();
+				}
+
+				FD_SET(cur->getValue()->
+						getFileDescriptor(),&fdlist);
+
+				// if we support SSL, check here to see if the
+				// filedescriptor has SSL data pending
+				#ifdef RUDIMENTS_HAS_SSL
+					SSL	*ssl=
+						(SSL *)cur->
+						getValue()->getSSL();
+					if (ssl && SSL_pending(ssl)) {
+						pvt->_readylist.append(
+							cur->getValue());
+						result++;
+					}
+				#endif
+
+				cur=cur->getNext();
+			}
+
+			// if we support SSL and at least 1 of the
+			// filedescriptors had SSL data pending, return here
+			#ifdef RUDIMENTS_HAS_SSL
+				if (result) {
+					return result;
+				}
+			#endif
+
+			// wait for data to be available on the file descriptor
+			result=select(largest+1,
+						(read)?&fdlist:NULL,
 						(write)?&fdlist:NULL,
 						NULL,tvptr);
+		#endif
 
-		if (selectresult==-1) {
+		if (result==-1) {
 
-			// if a signal caused the select to fall through, retry
+			// if a signal caused the wait to fall through, retry
 			if (pvt->_retryinterruptedwaits &&
 				error::getErrorNumber()==EINTR) {
 				continue;
 			}
 			return RESULT_ERROR;
 
-		} else if (!selectresult) {
+		} else if (!result) {
 
 			// timeout
 			return RESULT_TIMEOUT;
 		}
-	
+
 		// build the list of file descriptors that
-		// caused the select() to fall through
+		// caused the wait to fall through
 		#ifndef RUDIMENTS_HAS_SSL
 			pvt->_readylist.clear();
 		#endif
-		current=pvt->_filedescriptorlist.getFirstNode();
-		while (current) {
-			if (FD_ISSET(current->getValue()->getFileDescriptor(),
-					&fdlist)) {
-				pvt->_readylist.append(current->getValue());
+	
+		#ifdef RUDIMENTS_HAVE_POLL
+			for (uint64_t i=0; i<fdcount; i++) {
+				if (fds[i].revents) {
+					cur=pvt->_filedescriptorlist.
+							getFirstNode();
+					while (cur) {
+						if (cur->getValue()->
+							getFileDescriptor()==
+							fds[i].fd) {
+							pvt->_readylist.
+							append(
+							cur->getValue());
+							break;
+						}
+						cur=cur->getNext();
+					}
+				}
 			}
-			current=current->getNext();
-		}
+
+		#else
+	
+			cur=pvt->_filedescriptorlist.getFirstNode();
+			while (cur) {
+				if (FD_ISSET(cur->getValue()->
+						getFileDescriptor(),
+						&fdlist)) {
+					pvt->_readylist.append(
+						cur->getValue());
+				}
+				cur=cur->getNext();
+			}
+		#endif
 
 		// return the number of file descriptors that
 		// caused the select() to fall through
-		return selectresult;
+		return result;
 	}
 }

@@ -1168,7 +1168,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 			int32_t	selectresult=(pvt->_uselistenerinsidereads)?
 					waitForNonBlockingRead(sec,usec):
-					safeSelect(sec,usec,true,false);
+					safeWait(sec,usec,true,false);
 
 			// return error or timeout
 			if (selectresult<0) {
@@ -1453,7 +1453,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 			int32_t	selectresult=(pvt->_uselistenerinsidewrites)?
 					waitForNonBlockingWrite(sec,usec):
-					safeSelect(sec,usec,false,true);
+					safeWait(sec,usec,false,true);
 
 			// return error or timeout
 			if (selectresult<0) {
@@ -1578,84 +1578,30 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 
 int32_t filedescriptor::waitForNonBlockingRead(int32_t sec, int32_t usec) const {
 	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingRead(sec,usec):
-				safeSelect(sec,usec,true,false);
+				safeWait(sec,usec,true,false);
 }
 
 int32_t filedescriptor::waitForNonBlockingWrite(int32_t sec, int32_t usec) const {
 	return (pvt->_lstnr)?pvt->_lstnr->waitForNonBlockingWrite(sec,usec):
-				safeSelect(sec,usec,false,true);
+				safeWait(sec,usec,false,true);
 }
 
-int32_t filedescriptor::safeSelect(int32_t sec, int32_t usec,
+int32_t filedescriptor::safeWait(int32_t sec, int32_t usec,
 					bool read, bool write) const {
 
-	// FD_SET will crash if you pass it -1 on some systems, just bail here
-	if (pvt->_fd==-1) {
+	// bail immediately if the file descriptor is invalid
+	if (pvt->_fd<0) {
 		return RESULT_ERROR;
 	}
 
+	// bail immediately if ssl data is pending
 	#ifdef RUDIMENTS_HAS_SSL
 		if (read && pvt->_ssl && SSL_pending(pvt->_ssl)) {
 			return 1;
 		}
 	#endif
 
-	// set up the timeout
-	timeval	tv;
-	timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
-
-	for (;;) {
-
-		// some versions of select modify the timeout, so reset it
-		// every time
-		tv.tv_sec=sec;
-		tv.tv_usec=usec;
-
-		// select() will modify the list every time it's called
-		// so the list has to be rebuilt every time...
-		fd_set	fdlist;
-		FD_ZERO(&fdlist);
-		FD_SET(pvt->_fd,&fdlist);
-
-		// wait for data to be available on the file descriptor
-		int32_t	selectresult=select(pvt->_fd+1,(read)?&fdlist:NULL,
-						(write)?&fdlist:NULL,
-						NULL,tvptr);
-
-		if (selectresult==-1) {
-
-			// if a signal caused the select to fall through, retry
-			if (pvt->_retryinterruptedwaits &&
-				error::getErrorNumber()==EINTR) {
-				continue;
-			}
-			return RESULT_ERROR;
-
-		} else if (!selectresult) {
-
-			// timeout
-			return RESULT_TIMEOUT;
-		}
-
-		return selectresult;
-	}
-}
-
-int32_t filedescriptor::safePoll(int32_t sec, int32_t usec,
-					bool read, bool write) const {
-
 	#ifdef RUDIMENTS_HAVE_POLL
-
-		// bail immediately if the file descriptor is invalid
-		if (pvt->_fd==-1) {
-			return RESULT_ERROR;
-		}
-
-		#ifdef RUDIMENTS_HAS_SSL
-			if (read && pvt->_ssl && SSL_pending(pvt->_ssl)) {
-				return 1;
-			}
-		#endif
 
 		// set up the fd's to be monitored, and how to monitor them
 		struct pollfd	fds;
@@ -1671,32 +1617,58 @@ int32_t filedescriptor::safePoll(int32_t sec, int32_t usec,
 		// calculate the timeout
 		int32_t	timeout=(sec*1000)+(usec/1000);
 
-		for (;;) {
+	#else
+
+		// set up the timeout
+		timeval	tv;
+		timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
+	#endif
+
+	for (;;) {
+
+		#ifdef RUDIMENTS_HAVE_POLL
 
 			// poll...
-			int32_t	pollresult=poll(&fds,1,timeout);
+			int32_t	result=poll(&fds,1,timeout);
 
-			if (pollresult==-1) {
+		#else
 
-				// if a signal caused the poll
-				// to fall through, retry
-				if (pvt->_retryinterruptedwaits &&
-					error::getErrorNumber()==EINTR) {
-					continue;
-				}
-				return RESULT_ERROR;
+			// some versions of select modify the timeout,
+			// so reset it every time
+			tv.tv_sec=sec;
+			tv.tv_usec=usec;
 
-			} else if (!pollresult) {
+			// select() will modify the list every time it's called
+			// so the list has to be rebuilt every time...
+			fd_set	fdlist;
+			FD_ZERO(&fdlist);
+			FD_SET(pvt->_fd,&fdlist);
 
-				// timeout
-				return RESULT_TIMEOUT;
+			// wait for data to be available on the file descriptor
+			int32_t	result=select(pvt->_fd+1,
+						(read)?&fdlist:NULL,
+						(write)?&fdlist:NULL,
+						NULL,tvptr);
+
+		#endif
+
+		if (result==-1) {
+
+			// if a signal caused the wait to fall through, retry
+			if (pvt->_retryinterruptedwaits &&
+				error::getErrorNumber()==EINTR) {
+				continue;
 			}
+			return RESULT_ERROR;
 
-			return pollresult;
+		} else if (!result) {
+
+			// timeout
+			return RESULT_TIMEOUT;
 		}
-	#else
-		return safeSelect(sec,usec,read,write);
-	#endif
+
+		return result;
+	}
 }
 
 void filedescriptor::translateByteOrder() {
@@ -2000,7 +1972,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 		// FIXME: this should be configurable
 		bool	oldwaits=pvt->_retryinterruptedwaits;
 		pvt->_retryinterruptedwaits=pvt->_retryinterruptedreads;
-		result=safePoll(120,0,true,false);
+		result=safeWait(120,0,true,false);
 		pvt->_retryinterruptedwaits=oldwaits;
 		if (result==RESULT_TIMEOUT) {
 			#ifdef RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN
