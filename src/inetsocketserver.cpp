@@ -20,6 +20,10 @@
 typedef unsigned long	in_addr_t;
 #endif
 
+#ifndef INADDR_NONE
+	#define INADDR_NONE -1
+#endif
+
 class inetsocketserverprivate {
 	friend class inetsocketserver;
 	private:
