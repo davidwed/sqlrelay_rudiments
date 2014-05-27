@@ -47,6 +47,7 @@
 #endif
 #ifndef RUDIMENTS_HAVE_INT32_T
 	typedef	signed int		int32_t;
+	#define	_UINT32_T 1
 #endif
 #ifndef RUDIMENTS_HAVE_UINT32_T
 	typedef	unsigned int		uint32_t;
