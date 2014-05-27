@@ -2284,7 +2284,7 @@ AC_TRY_COMPILE([
 	#include <sys/time.h>
 #endif
 ],[
-int a; EV_SET(0,0,0,0,0,0,(void *)&a);
+struct kevent kev; int a; EV_SET(&kev,0,0,0,0,0,(void *)&a);
 ],
 AC_DEFINE(RUDIMENTS_HAVE_KQUEUE_VOID_UDATA,1,Some systems have void * kqueue user data) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 

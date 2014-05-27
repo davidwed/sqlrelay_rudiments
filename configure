@@ -27042,7 +27042,7 @@ int
 main ()
 {
 
-int a; EV_SET(0,0,0,0,0,0,(void *)&a);
+struct kevent kev; int a; EV_SET(&kev,0,0,0,0,0,(void *)&a);
 
   ;
   return 0;
