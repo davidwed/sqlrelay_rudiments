@@ -139,16 +139,20 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			} else if (write) {
 				filter=EVFILT_WRITE;
 			}
+
+			// do this here rather than inside of the EV_SET, older
+			// compilers don't like the ifdef inside of a macro
+			#ifdef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
+			void		*fdptr=(void *)cur->getValue();
+			#else
+			intptr_t	*fdptr=(intptr_t)cur->getValue();
+			#endif
+
 			EV_SET(&kevs[fdcount],
 				cur->getValue()->getFileDescriptor(),
-				filter,EV_ADD,0,0,
-				#ifdef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
-				(void *)cur->getValue()
-				#else
-				(intptr_t)cur->getValue()
-				#endif
-				);
+				filter,EV_ADD,0,0,fdptr);
 			EV_SET(&rkevs[fdcount],0,0,0,0,0,0);
+
 			fdcount++;
 
 			cur=cur->getNext();
