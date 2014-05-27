@@ -37,6 +37,9 @@
 #elif defined(RUDIMENTS_HAVE_POLL_H)
 	#include <poll.h>
 #endif
+#if defined(RUDIMENTS_HAVE_SYS_EPOLL_H)
+	#include <sys/epoll.h>
+#endif
 
 class listenerprivate {
 	friend class listener;
@@ -93,7 +96,69 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 	// initialize the return value
 	int32_t	result=0;
 
-	#ifdef RUDIMENTS_HAVE_POLL
+	#if defined(RUDIMENTS_HAVE_EPOLL)
+
+		int32_t	epfd=epoll_create1(0);
+
+		// if we're using ssl, some of the filedescriptors may have
+		// SSL data pending, in that case, we need to bypass the
+		// poll altogether and just return those filedescriptors
+		// in the ready list immediately
+		#ifdef RUDIMENTS_HAS_SSL
+			pvt->_readylist.clear();
+		#endif
+
+		// set up the fd's to be monitored, and how to monitor them
+		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
+		struct epoll_event	*evs=new struct epoll_event[fdcount];
+		struct epoll_event	*revs=new struct epoll_event[fdcount];
+		listenerlistnode	*cur=
+				pvt->_filedescriptorlist.getFirstNode();
+		fdcount=0;
+		while (cur) {
+
+			// if we support SSL, check here to see if the
+			// filedescriptor has SSL data pending
+			#ifdef RUDIMENTS_HAS_SSL
+				SSL	*ssl=(SSL *)cur->getValue()->getSSL();
+				if (ssl && SSL_pending(ssl)) {
+					pvt->_readylist.append(cur->getValue());
+					result++;
+				}
+			#endif
+
+			evs[fdcount].data.fd=
+					cur->getValue()->getFileDescriptor();
+			evs[fdcount].events=0;
+			if (read) {
+				evs[fdcount].events|=EPOLLIN;
+			}
+			if (write) {
+				evs[fdcount].events|=EPOLLOUT;
+			}
+			epoll_ctl(epfd,EPOLL_CTL_ADD,
+					cur->getValue()->getFileDescriptor(),
+					&evs[fdcount]);
+			fdcount++;
+
+			cur=cur->getNext();
+		}
+
+		// if we support SSL and at least 1 of the
+		// filedescriptors had SSL data pending, return here
+		#ifdef RUDIMENTS_HAS_SSL
+			if (result) {
+				delete[] evs;
+				delete[] revs;
+				::close(epfd);
+				return result;
+			}
+		#endif
+
+		// calculate the timeout
+		int32_t	timeout=(sec*1000)+(usec/1000);
+
+	#elif defined(RUDIMENTS_HAVE_POLL)
 
 		// if we're using ssl, some of the filedescriptors may have
 		// SSL data pending, in that case, we need to bypass the
@@ -156,7 +221,12 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 	for (;;) {
 
-		#ifdef RUDIMENTS_HAVE_POLL
+		#if defined(RUDIMENTS_HAVE_EPOLL)
+
+			// wait for data to be available on the file descriptor
+			result=epoll_wait(epfd,revs,fdcount,timeout);
+
+		#elif defined(RUDIMENTS_HAVE_POLL)
 
 			// wait for data to be available on the file descriptor
 			result=poll(fds,fdcount,timeout);
@@ -246,8 +316,25 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		#ifndef RUDIMENTS_HAS_SSL
 			pvt->_readylist.clear();
 		#endif
-	
-		#ifdef RUDIMENTS_HAVE_POLL
+		#if defined(RUDIMENTS_HAVE_EPOLL)
+			for (int32_t i=0; i<result; i++) {
+				if (revs[i].events) {
+					cur=pvt->_filedescriptorlist.
+							getFirstNode();
+					while (cur) {
+						if (cur->getValue()->
+							getFileDescriptor()==
+							revs[i].data.fd) {
+							pvt->_readylist.
+							append(
+							cur->getValue());
+							break;
+						}
+						cur=cur->getNext();
+					}
+				}
+			}
+		#elif defined(RUDIMENTS_HAVE_POLL)
 			for (uint64_t i=0; i<fdcount; i++) {
 				if (fds[i].revents) {
 					cur=pvt->_filedescriptorlist.
@@ -265,9 +352,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 					}
 				}
 			}
-
 		#else
-	
 			cur=pvt->_filedescriptorlist.getFirstNode();
 			while (cur) {
 				if (FD_ISSET(cur->getValue()->
@@ -282,7 +367,11 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 		// return the number of file descriptors that
 		// caused the wait to fall through
-		#ifdef RUDIMENTS_HAVE_POLL
+		#if defined(RUDIMENTS_HAVE_EPOLL)
+			delete[] evs;
+			delete[] revs;
+			::close(epfd);
+		#elif defined(RUDIMENTS_HAVE_POLL)
 			delete[] fds;
 		#endif
 		return result;
