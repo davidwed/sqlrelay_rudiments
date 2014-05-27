@@ -145,7 +145,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			#ifdef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
 			void		*fdptr=(void *)cur->getValue();
 			#else
-			intptr_t	*fdptr=(intptr_t)cur->getValue();
+			intptr_t	fdptr=(intptr_t)cur->getValue();
 			#endif
 
 			EV_SET(&kevs[fdcount],
