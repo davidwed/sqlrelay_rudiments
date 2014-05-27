@@ -553,6 +553,9 @@
 /* Some systems have kill */
 #undef RUDIMENTS_HAVE_KILL
 
+/* Some systems have kqueue */
+#undef RUDIMENTS_HAVE_KQUEUE
+
 /* Some systems have limits.h */
 #undef RUDIMENTS_HAVE_LIMITS_H
 
@@ -1050,6 +1053,9 @@
 
 /* Some systems have sys/epoll.h */
 #undef RUDIMENTS_HAVE_SYS_EPOLL_H
+
+/* Some systems have sys/event.h */
+#undef RUDIMENTS_HAVE_SYS_EVENT_H
 
 /* Some systems have sys/fcntl.h */
 #undef RUDIMENTS_HAVE_SYS_FCNTL_H
