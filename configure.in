@@ -413,14 +413,6 @@ AC_MSG_CHECKING(for sys/epoll.h)
 AC_TRY_COMPILE([#include <sys/epoll.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_EPOLL_H, 1, Some systems have sys/epoll.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for sys/event.h)
-AC_TRY_COMPILE([
-#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
-	#include <sys/types.h>
-#endif
-#include <sys/event.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_SYS_EVENT_H, 1, Some systems have sys/event.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for sys/stat.h)
 AC_TRY_COMPILE([#include <sys/stat.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_STAT_H, 1, Some systems have sys/stat.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -428,6 +420,14 @@ AC_TRY_COMPILE([#include <sys/stat.h>],
 AC_MSG_CHECKING(for sys/types.h)
 AC_TRY_COMPILE([#include <sys/types.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_TYPES_H, 1, Some systems have sys/types.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for sys/event.h)
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
+#include <sys/event.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_SYS_EVENT_H, 1, Some systems have sys/event.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for ctype.h)
 AC_TRY_COMPILE([#include <ctype.h>],
