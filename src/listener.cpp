@@ -127,14 +127,11 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 				}
 			#endif
 
-			evs[fdcount].data.fd=
-					cur->getValue()->getFileDescriptor();
-			evs[fdcount].events=0;
+			evs[fdcount].data.ptr=(void *)cur->getValue();
 			if (read) {
-				evs[fdcount].events|=EPOLLIN;
-			}
-			if (write) {
-				evs[fdcount].events|=EPOLLOUT;
+				evs[fdcount].events=EPOLLIN;
+			} else if (write) {
+				evs[fdcount].events=EPOLLOUT;
 			}
 			epoll_ctl(epfd,EPOLL_CTL_ADD,
 					cur->getValue()->getFileDescriptor(),
@@ -187,12 +184,10 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			#endif
 
 			fds[fdcount].fd=cur->getValue()->getFileDescriptor();
-			fds[fdcount].events=0;
 			if (read) {
-				fds[fdcount].events|=POLLIN;
-			}
-			if (write) {
-				fds[fdcount].events|=POLLOUT;
+				fds[fdcount].events=POLLIN;
+			} else if (write) {
+				fds[fdcount].events=POLLOUT;
 			}
 			fds[fdcount].revents=0;
 			fdcount++;
@@ -291,9 +286,9 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 			// wait for data to be available on the file descriptor
 			result=select(largest+1,
-						(read)?&fdlist:NULL,
-						(write)?&fdlist:NULL,
-						NULL,tvptr);
+					(read)?&fdlist:NULL,
+					(write)?&fdlist:NULL,
+					NULL,tvptr);
 		#endif
 
 		if (result==-1) {
@@ -318,21 +313,8 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		#endif
 		#if defined(RUDIMENTS_HAVE_EPOLL)
 			for (int32_t i=0; i<result; i++) {
-				if (revs[i].events) {
-					cur=pvt->_filedescriptorlist.
-							getFirstNode();
-					while (cur) {
-						if (cur->getValue()->
-							getFileDescriptor()==
-							revs[i].data.fd) {
-							pvt->_readylist.
-							append(
-							cur->getValue());
-							break;
-						}
-						cur=cur->getNext();
-					}
-				}
+				pvt->_readylist.append(
+					(filedescriptor *)revs[i].data.ptr);
 			}
 		#elif defined(RUDIMENTS_HAVE_POLL)
 			for (uint64_t i=0; i<fdcount; i++) {
