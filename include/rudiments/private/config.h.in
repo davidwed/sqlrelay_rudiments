@@ -556,6 +556,9 @@
 /* Some systems have kqueue */
 #undef RUDIMENTS_HAVE_KQUEUE
 
+/* Some systems have void * kqueue user data */
+#undef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
+
 /* Some systems have limits.h */
 #undef RUDIMENTS_HAVE_LIMITS_H
 

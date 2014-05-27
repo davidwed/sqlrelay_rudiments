@@ -2272,6 +2272,22 @@ kevent(0,0,0,0,0,0);
 ],
 AC_DEFINE(RUDIMENTS_HAVE_KQUEUE,1,Some systems have kqueue) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING([for void * kqueue user data])
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
+#if defined(RUDIMENTS_HAVE_SYS_EVENT_H)
+	#include <sys/event.h>
+#endif
+#if defined(RUDIMENTS_HAVE_SYS_TIME_H)
+	#include <sys/time.h>
+#endif
+],[
+int a; EV_SET(0,0,0,0,0,0,(void *)&a);
+],
+AC_DEFINE(RUDIMENTS_HAVE_KQUEUE_VOID_UDATA,1,Some systems have void * kqueue user data) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_CHECK_SHM_OPEN
 
 AC_MSG_CHECKING(for ioctlsocket)

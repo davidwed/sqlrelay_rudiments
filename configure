@@ -27023,6 +27023,42 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for void * kqueue user data" >&5
+$as_echo_n "checking for void * kqueue user data... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
+#if defined(RUDIMENTS_HAVE_SYS_EVENT_H)
+	#include <sys/event.h>
+#endif
+#if defined(RUDIMENTS_HAVE_SYS_TIME_H)
+	#include <sys/time.h>
+#endif
+
+int
+main ()
+{
+
+int a; EV_SET(0,0,0,0,0,0,(void *)&a);
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAVE_KQUEUE_VOID_UDATA 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 
 
 	HAS_SHM_OPEN="no"

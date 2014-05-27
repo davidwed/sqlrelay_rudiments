@@ -142,7 +142,12 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			EV_SET(&kevs[fdcount],
 				cur->getValue()->getFileDescriptor(),
 				filter,EV_ADD,0,0,
-				(void *)cur->getValue());
+				#ifdef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
+				(void *)cur->getValue()
+				#else
+				(intptr_t)cur->getValue()
+				#endif
+				);
 			EV_SET(&rkevs[fdcount],0,0,0,0,0,0);
 			fdcount++;
 
