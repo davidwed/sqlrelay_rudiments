@@ -23,6 +23,12 @@
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_EVENT_H
+	#include <sys/event.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_TIME_H
 	#include <sys/time.h>
 #endif
@@ -96,7 +102,72 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 	// initialize the return value
 	int32_t	result=0;
 
-	#if defined(RUDIMENTS_HAVE_EPOLL)
+	#if defined(RUDIMENTS_HAVE_KQUEUE)
+
+		int32_t	kq=kqueue();
+
+		// if we're using ssl, some of the filedescriptors may have
+		// SSL data pending, in that case, we need to bypass the
+		// poll altogether and just return those filedescriptors
+		// in the ready list immediately
+		#ifdef RUDIMENTS_HAS_SSL
+			pvt->_readylist.clear();
+		#endif
+
+		// set up the fd's to be monitored, and how to monitor them
+		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
+		struct kevent	*kevs=new struct kevent[fdcount];
+		struct kevent	*rkevs=new struct kevent[fdcount];
+		listenerlistnode	*cur=
+				pvt->_filedescriptorlist.getFirstNode();
+		fdcount=0;
+		while (cur) {
+
+			// if we support SSL, check here to see if the
+			// filedescriptor has SSL data pending
+			#ifdef RUDIMENTS_HAS_SSL
+				SSL	*ssl=(SSL *)cur->getValue()->getSSL();
+				if (ssl && SSL_pending(ssl)) {
+					pvt->_readylist.append(cur->getValue());
+					result++;
+				}
+			#endif
+
+			short	filter=0;
+			if (read) {
+				filter=EVFILT_READ;
+			} else if (write) {
+				filter=EVFILT_WRITE;
+			}
+			EV_SET(&kevs[fdcount],
+				cur->getValue()->getFileDescriptor(),
+				filter,EV_ADD,0,0,
+				(void *)cur->getValue());
+			EV_SET(&rkevs[fdcount],0,0,0,0,0,0);
+			fdcount++;
+
+			cur=cur->getNext();
+		}
+
+		// if we support SSL and at least 1 of the
+		// filedescriptors had SSL data pending, return here
+		#ifdef RUDIMENTS_HAS_SSL
+			if (result) {
+				delete[] kevs;
+				delete[] rkevs;
+				::close(kq);
+				return result;
+			}
+		#endif
+
+		// calculate the timeout
+		struct timespec	ts;
+		ts.tv_sec=sec;
+		ts.tv_nsec=usec*1000;
+		struct timespec	*tsptr=(sec>-1 && usec>-1)?&ts:NULL;
+
+
+	#elif defined(RUDIMENTS_HAVE_EPOLL)
 
 		int32_t	epfd=epoll_create1(0);
 
@@ -216,7 +287,12 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 	for (;;) {
 
-		#if defined(RUDIMENTS_HAVE_EPOLL)
+		#if defined(RUDIMENTS_HAVE_KQUEUE)
+
+			// wait for data to be available on the file descriptor
+			result=kevent(kq,kevs,fdcount,rkevs,fdcount,tsptr);
+
+		#elif defined(RUDIMENTS_HAVE_EPOLL)
 
 			// wait for data to be available on the file descriptor
 			result=epoll_wait(epfd,revs,fdcount,timeout);
@@ -311,7 +387,12 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		#ifndef RUDIMENTS_HAS_SSL
 			pvt->_readylist.clear();
 		#endif
-		#if defined(RUDIMENTS_HAVE_EPOLL)
+		#if defined(RUDIMENTS_HAVE_KQUEUE)
+			for (int32_t i=0; i<result; i++) {
+				pvt->_readylist.append(
+					(filedescriptor *)rkevs[i].udata);
+			}
+		#elif defined(RUDIMENTS_HAVE_EPOLL)
 			for (int32_t i=0; i<result; i++) {
 				pvt->_readylist.append(
 					(filedescriptor *)revs[i].data.ptr);
@@ -349,7 +430,11 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 		// return the number of file descriptors that
 		// caused the wait to fall through
-		#if defined(RUDIMENTS_HAVE_EPOLL)
+		#if defined(RUDIMENTS_HAVE_KQUEUE)
+			delete[] kevs;
+			delete[] rkevs;
+			::close(kq);
+		#elif defined(RUDIMENTS_HAVE_EPOLL)
 			delete[] evs;
 			delete[] revs;
 			::close(epfd);
