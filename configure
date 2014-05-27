@@ -16185,6 +16185,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo_n "checking for sys/event.h... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
 #include <sys/event.h>
 int
 main ()
