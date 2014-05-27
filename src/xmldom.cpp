@@ -5,14 +5,10 @@
 #include <rudiments/charstring.h>
 #include <rudiments/linkedlist.h>
 #include <rudiments/filesystem.h>
+#include <rudiments/sys.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
-#endif
-
-// for getpagesize()
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
 #endif
 
 // for GetSystemInfo
@@ -92,14 +88,16 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	if (fs.initialize(filename)) {
 		optblocksize=fs.getOptimumTransferBlockSize();
 	} else {
-		#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
-			optblocksize=getpagesize();
-		#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+		#if defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+			// On windows, sys::getPageSize returns
+			// dwAllocationGranularity, not dwPageSize,
+			// so call GetSystemInfo directly here in
+			// that case.
 			SYSTEM_INFO	systeminfo;
 			GetSystemInfo(&systeminfo);
 			optblocksize=systeminfo.dwPageSize;
 		#else
-			#error no getpagesize or anything like it
+			optblocksize=sys::getPageSize();
 		#endif
 	}
 	file	fl;

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/memorymap.h>
+#include <rudiments/sys.h>
 #include <rudiments/error.h>
 
 #include <stdio.h>
@@ -9,10 +10,6 @@
 	#include <sys/mman.h>
 #endif
 
-// for getpagesize()...
-#ifdef RUDIMENTS_HAVE_UNISTD_H
-	#include <unistd.h>
-#endif
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
@@ -343,7 +340,7 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 
 	#ifdef RUDIMENTS_HAVE_MINCORE
 		// create an array of char's, 1 for each page
-		int32_t		pagesize=getpagesize();
+		int32_t		pagesize=sys::getPageSize();
 		int32_t		tmplen=(len+pagesize-1)/pagesize;
 		#ifdef RUDIMENTS_HAVE_MINCORE_CHAR
 			char		*tmp=new char[tmplen];

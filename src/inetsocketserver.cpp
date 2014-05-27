@@ -21,7 +21,7 @@ typedef unsigned long	in_addr_t;
 #endif
 
 #ifndef INADDR_NONE
-	#define INADDR_NONE -1
+	#define INADDR_NONE ((in_addr_t)-1)
 #endif
 
 class inetsocketserverprivate {
