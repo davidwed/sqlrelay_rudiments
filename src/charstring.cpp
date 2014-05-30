@@ -1825,7 +1825,12 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		// FIXME: for large strings this can be incredibly slow
 		buflen=buflen+16;
 		buf=new char[buflen];
-		size=vsnprintf(buf,buflen,format,*argp);
+		#if defined(RUDIMENTS_HAVE___VSNPRINTF) || \
+			defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+			size=__vsnprintf(buf,buflen,format,*argp);
+		#else
+			size=vsnprintf(buf,buflen,format,*argp);
+		#endif
 		if (size>-1) {
 			charstring::copy(buffer,buf,length);
 		}
