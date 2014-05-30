@@ -1,4 +1,3 @@
-/* include/rudiments/private/config.h.  Generated from config.h.in by configure.  */
 /* include/rudiments/private/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Use inline functions or not */
@@ -58,6 +57,9 @@
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
+
+/* ioctl/FIONBIO doesn't work on some systems */
+/* #undef RUDIMENTS_DISABLE_FIONBIO */
 
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
@@ -133,6 +135,9 @@
 
 /* Some systems dont have st_blksize in struct stat */
 /* #undef RUDIMENTS_HAVE_BLKSIZE_T */
+
+/* Some systems have BRoster::_ShutDown */
+/* #undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN */
 
 /* Some systems have bswap64 */
 /* #undef RUDIMENTS_HAVE_BSWAP64 */
@@ -242,6 +247,9 @@
 /* Some systems have dup2 */
 /* #undef RUDIMENTS_HAVE_DUP2 */
 
+/* Some systems have DuplicateHandle */
+#define RUDIMENTS_HAVE_DUPLICATEHANDLE 1
+
 /* Some systems define environ in unistd.h */
 #define RUDIMENTS_HAVE_ENVIRON 1
 
@@ -280,9 +288,6 @@
 
 /* Some systems have fpathconf */
 /* #undef RUDIMENTS_HAVE_FPATHCONF */
-
-/* Some systems have pipe */
-/* #undef RUDIMENTS_HAVE_PIPE */
 
 /* FreeBSD style statfs */
 /* #undef RUDIMENTS_HAVE_FREEBSD_STATFS */
@@ -548,11 +553,20 @@
 /* Some systems have kill */
 /* #undef RUDIMENTS_HAVE_KILL */
 
+/* Some systems have kqueue */
+/* #undef RUDIMENTS_HAVE_KQUEUE */
+
+/* Some systems have void * kqueue user data */
+/* #undef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA */
+
 /* Some systems have limits.h */
 #define RUDIMENTS_HAVE_LIMITS_H 1
 
 /* Some systems have link */
 /* #undef RUDIMENTS_HAVE_LINK */
+
+/* Linux libc4 style statfs */
+/* #undef RUDIMENTS_HAVE_LINUX_LIBC4_STATFS */
 
 /* Some systems have linux/reboot.h */
 /* #undef RUDIMENTS_HAVE_LINUX_REBOOT_H */
@@ -731,6 +745,9 @@
 /* Some systems have pathconf */
 /* #undef RUDIMENTS_HAVE_PATHCONF */
 
+/* Some systems have pipe */
+/* #undef RUDIMENTS_HAVE_PIPE */
+
 /* Some systems have poll */
 /* #undef RUDIMENTS_HAVE_POLL */
 
@@ -764,6 +781,9 @@
 /* pthread_sigmask exists */
 /* #undef RUDIMENTS_HAVE_PTHREAD_SIGMASK */
 
+/* pthread_t type exists */
+/* #undef RUDIMENTS_HAVE_PTHREAD_T */
+
 /* Some systems have putenv */
 #define RUDIMENTS_HAVE_PUTENV 1
 
@@ -796,9 +816,6 @@
 
 /* Some systems have RemoveDirectory */
 #define RUDIMENTS_HAVE_REMOVEDIRECTORY 1
-
-/* Some systems have BRoster::_ShutDown */
-/* #undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN */
 
 /* Some systems have Roster.h */
 /* #undef RUDIMENTS_HAVE_ROSTER_H */
@@ -1028,6 +1045,9 @@
 /* Some systems have sync */
 /* #undef RUDIMENTS_HAVE_SYNC */
 
+/* Some systems have sysconf */
+/* #undef RUDIMENTS_HAVE_SYSCONF */
+
 /* Some systems have syslog.h */
 /* #undef RUDIMENTS_HAVE_SYSLOG_H */
 
@@ -1036,6 +1056,9 @@
 
 /* Some systems have sys/epoll.h */
 /* #undef RUDIMENTS_HAVE_SYS_EPOLL_H */
+
+/* Some systems have sys/event.h */
+/* #undef RUDIMENTS_HAVE_SYS_EVENT_H */
 
 /* Some systems have sys/fcntl.h */
 /* #undef RUDIMENTS_HAVE_SYS_FCNTL_H */
@@ -1216,9 +1239,6 @@
 
 /* Some systems have _dup2 */
 #define RUDIMENTS_HAVE__DUP2 1
-
-/* Some systems have DuplicateHandle */
-#define RUDIMENTS_HAVE_DUPLICATEHANDLE 1
 
 /* Some systems have _dupenv_s */
 #define RUDIMENTS_HAVE__DUPENV_S 1
