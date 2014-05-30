@@ -31,7 +31,8 @@
 #include <stdio.h>
 
 #ifdef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
-int __vsnprintf(char *str, size_t size, const char *format, va_list ap);
+extern "C" int __vsnprintf(char *str, size_t size,
+				const char *format, va_list ap);
 #endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H

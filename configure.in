@@ -1955,7 +1955,7 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 	#include <stdarg.h>
 #endif
 #include <stdio.h>
-int __vsnprintf(char *, size_t, const char *, va_list);],
+extern "C" int __vsnprintf(char *, size_t, const char *, va_list);],
 va_list a; __vsnprintf(0,0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF,1,Some systems have __vsnprintf), AC_MSG_RESULT(no))
 fi
 

@@ -26108,7 +26108,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 	#include <stdarg.h>
 #endif
 #include <stdio.h>
-int __vsnprintf(char *, size_t, const char *, va_list);
+extern "C" int __vsnprintf(char *, size_t, const char *, va_list);
 int
 main ()
 {
