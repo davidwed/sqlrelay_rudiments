@@ -17,6 +17,8 @@
 	epoll is used in place of select/poll for systems that support it
 	kqueue is used in place of select/poll for systems that support it
 	consolidated getpagesize() calls to use sys::getPageSize()
+	added detection and support for __vsnprintf for platforms that have
+		that instead of vsnprintf
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

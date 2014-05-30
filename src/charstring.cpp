@@ -4,7 +4,9 @@
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/character.h>
-#ifndef RUDIMENTS_HAVE_VSNPRINTF
+#if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
+	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
+	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 	#include <rudiments/process.h>
 	#include <rudiments/file.h>
 #endif
@@ -27,6 +29,10 @@
 
 // for vsnprintf
 #include <stdio.h>
+
+#ifdef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
+int __vsnprintf(char *str, size_t size, const char *format, va_list ap);
+#endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -1670,7 +1676,9 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	return result;
 }
 
-#ifndef RUDIMENTS_HAVE_VSNPRINTF
+#if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
+	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
+	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 // This is quite a hack...
 //
 // Old enough systems (like linux libc4) don't provide vsnprintf but do provide
@@ -1799,7 +1807,12 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		buf=b;
 		buflen=sizeof(b);
 	}
-	ssize_t	size=vsnprintf(buf,buflen,format,*argp);
+	#if defined(RUDIMENTS_HAVE___VSNPRINTF) || \
+		defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+	#else
+		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
+	#endif
 
 	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
 	// -1 if truncation occurred though and don't write anything to
