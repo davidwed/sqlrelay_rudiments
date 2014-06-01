@@ -386,62 +386,66 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 				error::getErrorNumber()==EINTR) {
 				continue;
 			}
-			return RESULT_ERROR;
+			result=RESULT_ERROR;
 
 		} else if (!result) {
 
 			// timeout
-			return RESULT_TIMEOUT;
-		}
+			result=RESULT_TIMEOUT;
 
-		// build the list of file descriptors that
-		// caused the wait to fall through
-		#ifndef RUDIMENTS_HAS_SSL
-			pvt->_readylist.clear();
-		#endif
-		#if defined(RUDIMENTS_HAVE_KQUEUE)
-			for (int32_t i=0; i<result; i++) {
-				pvt->_readylist.append(
-					(filedescriptor *)rkevs[i].udata);
-			}
-		#elif defined(RUDIMENTS_HAVE_EPOLL)
-			for (int32_t i=0; i<result; i++) {
-				pvt->_readylist.append(
-					(filedescriptor *)revs[i].data.ptr);
-			}
-		#elif defined(RUDIMENTS_HAVE_POLL)
-			for (uint64_t i=0; i<fdcount; i++) {
-				if (fds[i].revents) {
-					cur=pvt->_filedescriptorlist.
-							getFirstNode();
-					while (cur) {
-						if (cur->getValue()->
+		} else {
+
+			// build the list of file descriptors that
+			// caused the wait to fall through
+			#ifndef RUDIMENTS_HAS_SSL
+				pvt->_readylist.clear();
+			#endif
+			#if defined(RUDIMENTS_HAVE_KQUEUE)
+				for (int32_t i=0; i<result; i++) {
+					pvt->_readylist.append(
+						(filedescriptor *)
+						rkevs[i].udata);
+				}
+			#elif defined(RUDIMENTS_HAVE_EPOLL)
+				for (int32_t i=0; i<result; i++) {
+					pvt->_readylist.append(
+						(filedescriptor *)
+						revs[i].data.ptr);
+				}
+			#elif defined(RUDIMENTS_HAVE_POLL)
+				for (uint64_t i=0; i<fdcount; i++) {
+					if (fds[i].revents) {
+						cur=pvt->_filedescriptorlist.
+								getFirstNode();
+						while (cur) {
+							if (cur->getValue()->
 							getFileDescriptor()==
 							fds[i].fd) {
 							pvt->_readylist.
 							append(
 							cur->getValue());
 							break;
+							}
+							cur=cur->getNext();
 						}
-						cur=cur->getNext();
 					}
 				}
-			}
-		#else
-			cur=pvt->_filedescriptorlist.getFirstNode();
-			while (cur) {
-				if (FD_ISSET(cur->getValue()->
-						getFileDescriptor(),
-						&fdlist)) {
-					pvt->_readylist.append(
-						cur->getValue());
+			#else
+				cur=pvt->_filedescriptorlist.getFirstNode();
+				while (cur) {
+					if (FD_ISSET(cur->getValue()->
+							getFileDescriptor(),
+							&fdlist)) {
+						pvt->_readylist.append(
+							cur->getValue());
+					}
+					cur=cur->getNext();
 				}
-				cur=cur->getNext();
-			}
-		#endif
+			#endif
 
-		// return the number of file descriptors that
-		// caused the wait to fall through
+		}
+
+		// clean up and return the result
 		#if defined(RUDIMENTS_HAVE_KQUEUE)
 			delete[] kevs;
 			delete[] rkevs;
