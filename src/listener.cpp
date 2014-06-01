@@ -233,7 +233,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		#endif
 
 		// calculate the timeout
-		int32_t	timeout=(sec*1000)+(usec/1000);
+		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
 
 	#elif defined(RUDIMENTS_HAVE_POLL)
 
@@ -285,7 +285,10 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		#endif
 
 		// calculate the timeout
-		int32_t	timeout=(sec*1000)+(usec/1000);
+		// In theory, any negative value will cause poll to wait
+		// forever, but certain implementations (such as glibc-2.0.7)
+		// require it to be -1.
+		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
 
 	#else
 
