@@ -5,6 +5,12 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
+// for pthread_kill
+#include <signal.h>
+#ifdef RUDIMENTS_HAVE_SYS_SIGNAL_H
+	#include <sys/signal.h>
+#endif
+
 #if defined(RUDIMENTS_HAVE_PTHREAD_T)
 	// to fix an odd situation on SCO with FSU pthreads
 	#define _TIMESTRUC_T
@@ -33,6 +39,7 @@ class threadprivate {
 
 thread::thread() {
 	pvt=new threadprivate;
+	pvt->_thr=0;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pthread_attr_init(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
@@ -139,7 +146,9 @@ bool thread::join(int32_t *status) {
 		int32_t	*st=NULL;
 		int	result=pthread_join(pvt->_thr,(void **)&st);
 		if (!result) {
-			*status=*st;
+			if (status) {
+				*status=*st;
+			}
 			pvt->_needtojoin=false;
 			return true;
 		}
@@ -176,6 +185,32 @@ bool thread::detach() {
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		return (CloseHandle(pvt->_thr)==TRUE);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool thread::cancel() {
+	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+		return !pthread_cancel(pvt->_thr);
+	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
+		// FIXME: implement this for windows
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
+}
+
+bool thread::raiseSignal(int32_t signum) {
+	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+		return !pthread_kill(pvt->_thr,signum);
+	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
+		// FIXME: implement this for windows
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

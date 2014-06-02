@@ -19,6 +19,7 @@
 	consolidated getpagesize() calls to use sys::getPageSize()
 	added detection and support for __vsnprintf for platforms that have
 		that instead of vsnprintf
+	added cancel and raiseSignal methods to the thread class
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

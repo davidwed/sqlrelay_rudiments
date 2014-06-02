@@ -52,6 +52,12 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  Returns true on success and false if an error occurred. */
 		bool	detach();
 
+		/** Cancels execution of the thread. */
+		bool	cancel();
+
+		/** Sends signal "signum" to the thread. */
+		bool	raiseSignal(int32_t signum);
+
 		/** Returns true if the platform supports threads and rudiments
 		 *  was built with thread support and false otherwise. */
 		static bool	supportsThreads();
