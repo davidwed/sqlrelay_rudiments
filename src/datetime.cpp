@@ -82,6 +82,7 @@ datetime::datetime() {
 
 datetime::~datetime() {
 	clear();
+	delete pvt;
 }
 
 void datetime::init() {
