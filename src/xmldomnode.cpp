@@ -982,3 +982,25 @@ void xmldomnode::setData(void *data) {
 void *xmldomnode::getData() {
 	return pvt->_data;
 }
+
+xmldomnode *xmldomnode::clone() {
+
+	// clone this node
+	xmldomnode	*clonednode=new xmldomnode(getTree(),
+						getNullNode(),getType(),
+						getName(),getValue());
+
+	// clone attributes
+	for (uint64_t i=0; i<getAttributeCount(); i++) {
+		clonednode->setAttributeValue(getAttribute(i)->getName(),
+						getAttribute(i)->getValue());
+	}
+
+	// clone children
+	for (xmldomnode *child=pvt->_firstchild;
+			!child->isNullNode(); child=child->pvt->_next) {
+		clonednode->appendChild(child->clone());
+	}
+
+	return clonednode;
+}

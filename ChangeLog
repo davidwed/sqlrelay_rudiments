@@ -21,6 +21,7 @@
 		that instead of vsnprintf
 	added cancel and raiseSignal methods to the thread class
 	fixed datetime memory leak
+	added xmldomnode::clone method to clone a node
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

@@ -466,6 +466,11 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		bool	deleteAttribute(xmldomnode *attribute);
 
 
+		/** Clones this node and all of its children and returns a
+		 *  pointer to the clone. */
+		xmldomnode	*clone();
+
+
 		/** Allocates a stringbuffer, writes a text
 		 *  representation of the tree starting at this
 		 *  node to it and returns the stringbuffer;
