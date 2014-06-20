@@ -8,21 +8,21 @@
 <span class="heading">Programming with Rudiments using the Utility Classes</span><br><br>
 
 <ul>
-<li><a href="#commandline">Using the commandline Class</a></li>
-<li><a href="#parameterstring">Using the parameterstring Class</a></li>
-<li><a href="#chat">Using the chat Class</a></li>
-<li><a href="#memorypool">Using the memorypool Class</a></li>
-<li><a href="#variablebuffer">Using the variablebuffer Class</a></li>
-<li><a href="#stringbuffer">Using the stringbuffer Class</a></li>
-<li><a href="#linkedlist">Using the linkedlist Class</a></li>
-<li><a href="#dictionary">Using the dictionary Class</a></li>
-<li><a href="#xmldom">Using the xmldom and xmldomnode Classes</a></li>
-<li><a href="#xmlsax">Using the xmlsax Class</a></li>
-<li><a href="#dtd">Using the dtd Class</a></li>
+<li><a href="#commandline">Using the commandline class</a></li>
+<li><a href="#parameterstring">Using the parameterstring class</a></li>
+<li><a href="#chat">Using the chat class</a></li>
+<li><a href="#memorypool">Using the memorypool class</a></li>
+<li><a href="#variablebuffer">Using the variablebuffer class</a></li>
+<li><a href="#stringbuffer">Using the stringbuffer class</a></li>
+<li><a href="#linkedlist">Using the linkedlist class</a></li>
+<li><a href="#dictionary">Using the dictionary class</a></li>
+<li><a href="#xmldom">Using the xmldom and xmldomnode classes</a></li>
+<li><a href="#xmlsax">Using the xmlsax class</a></li>
+<li><a href="#dtd">Using the dtd class</a></li>
 </ul>
 
 <a name="commandline"></a>
-<span class="heading">Using the commandline Class</span><br><br>
+<span class="heading">Using the commandline class</span><br><br>
 
 <p>Most programs take command line options in the option/value pair format:</p>
 <blockquote>program -option value -option value ...</blockquote>
@@ -35,7 +35,7 @@ commandline class.</p>
 @commandline.cpp.html@
 
 <a name="parameterstring"></a>
-<span class="heading">Using the parameterstring Class</span><br><br>
+<span class="heading">Using the parameterstring class</span><br><br>
 
 <p>Sometimes a function needs to take an arbitrary set of parameters.  For
 example, a function for connecting to a database may need host, port, socket,
@@ -70,14 +70,14 @@ name='\\value\\'
 
 @parameterstring.cpp.html@
 
-<span class="heading">Using the chat Class</span><br><br>
+<span class="heading">Using the chat class</span><br><br>
 
 <p>The chat class provides a framework for communications across file descriptors with a peer.  This is typically a serial-attached device but technically it could be any device or process that can communicate over file descriptors.  This class is mainly used internally by the modemserver and modemclient classes but could be used by itself as well.</p>
 
 @chat.cpp.html@
 
 <a name="memorypool"></a>
-<span class="heading">Using the memorypool Class</span><br><br>
+<span class="heading">Using the memorypool class</span><br><br>
 
 <p>The memorypool class implements a pool of memory that starts with an initial buffer and grows dynamically as needed.  Each time the pool is freed, the dynamic buffers are deallocated.  After a configurable number of free's, the initial buffer is resized to the average amount of memory that was requested between free's since the last time it resized.</p>
 
@@ -90,21 +90,21 @@ name='\\value\\'
 @memorypool.cpp.html@
 
 <a name="variablebuffer"></a>
-<span class="heading">Using the variablebuffer Class</span><br><br>
+<span class="heading">Using the variablebuffer class</span><br><br>
 
 <p>The variablebuffer class allows you to manipulate a buffer of arbitrary length containing binary data.  You can append data to a variablebuffer or write data at arbitrary positions in the buffer.</p>
 
 @variablebuffer.cpp.html@
 
 <a name="stringbuffer"></a>
-<span class="heading">Using the stringbuffer Class</span><br><br>
+<span class="heading">Using the stringbuffer class</span><br><br>
 
 <p>The stringbuffer class allows you to manipulate strings of arbitrary length.  You can append data to a stringbuffer or write data at arbitrary positions in the buffer.</p>
 
 @stringbuffer.cpp.html@
 
 <a name="linkedlist"></a>
-<span class="heading">Using the linkedlist Class</span><br><br>
+<span class="heading">Using the linkedlist class</span><br><br>
 
 <p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
 
@@ -113,7 +113,7 @@ name='\\value\\'
 @linkedlist.cpp.html@
 
 <a name="dictionary"></a>
-<span class="heading">Using the dictionary Class</span><br><br>
+<span class="heading">Using the dictionary class</span><br><br>
 
 <p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
 
@@ -122,7 +122,7 @@ name='\\value\\'
 @dictionary.cpp.html@
 
 <a name="xmldom"></a>
-<span class="heading">Using the xmldom and xmldomnode Classes</span><br><br>
+<span class="heading">Using the xmldom and xmldomnode classes</span><br><br>
 
 <p>The xmldom and xmldomnode classes provide a framework for DOM parsing of XML documents.  The xmldom class provides methods for parsing the document and accessing it's root node.  Each node of the document is represented by an instance of the xmldomnode class.  The xmldomnode class provides methods for accessing a node's data, attributes, child nodes, parent nodes and sibling nodes.  Since the xmldom class creates a representation of the XML document in memory, it should not be used to process arbitrarily large documents which could exhaust system memory.</p>
 
@@ -175,21 +175,21 @@ Emails:
 </blockquote>
 
 <a name="xmlsax"></a>
-<span class="heading">Using the xmlsax Class</span><br><br>
+<span class="heading">Using the xmlsax class</span><br><br>
 
 <p>The xmlsax class provides a callback-based framework for parsing XML documents.  The xmlsax class provides methods for parsing strings of XML or XML files.  When it encounters a tag, attribute or other XML component, it calls one of it's callback methods.  These methods may be overridden by a child class to perform specific tasks.  The xmlsax class is especially useful if you can't afford to load the entire document into memory and use the xmldom class, or if you just need to extract specific data from an XML file.</p>
 
 @xmlsax.cpp.html@
 
 <a name="dtd"></a>
-<span class="heading">Using the dtd Class</span><br><br>
+<span class="heading">Using the dtd class</span><br><br>
 
 <p>The dtd class provides methods for parsing an XML DTD.  The result is an XML DOM tree representing the DTD.  Once parsed, the tree can be accessed using the xmldom and xmldomnode classes.</p>
 
 @dtd.cpp.html@
 
 <a name="codetree"></a>
-<span class="heading">Using the codetree Class</span><br><br>
+<span class="heading">Using the codetree class</span><br><br>
 
 <p>...</p>
 

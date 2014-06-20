@@ -8,74 +8,73 @@
 <span class="heading">Programming with Rudiments using the Wrapper Classes</span><br><br>
 
 <ul>
-<li><a href="#file">Using the file Class</a></li>
-<li><a href="#device">Using the device Class</a></li>
-<li><a href="#serialport">Using the serialport Class</a></li>
-<li><a href="#shmfile">Using the shmfile Class</a></li>
-<li><a href="#environment">Using the environment Class</a></li>
-<li><a href="#datetime">Using the datetime Class</a></li>
-<li><a href="#timezonefile">Using the timezonefile Class</a></li>
-<li><a href="#directory">Using the directory Class</a></li>
-<li><a href="#filesystem">Using the filesystem Class</a></li>
-<li><a href="#logger">Using the logger Class</a></li>
-<li><a href="#permissions">Using the permissions Class</a></li>
-<li><a href="#randomnumber">Using the randomnumber Class</a></li>
-<li><a href="#regularexpression">Using the regularexpression Class</a></li>
-<li><a href="#crypt">Using the crypt Class</a></li>
-<li><a href="#dynamiclib">Using the dynamiclib Class</a></li>
-<li><a href="#error">Using the error Class</a></li>
-<li><a href="#intervaltimer">Using the intervaltimer Class</a></li>
-<li><a href="#mutex">Using the mutex Class</a></li>
-<li><a href="#process">Using the process Class</a></li>
-<li><a href="#system">Using the system Class</a></li>
-<li><a href="#serialportprofile">Using the serialportprofile Class</a></li>
-<li><a href="#snooze">Using the snooze Class</a></li>
-<li><a href="#signal">Using the Signal Classes</a></li>
-<li><a href="#sharedmemory">Using the sharedmemory Class</a></li>
-<li><a href="#semaphoreset">Using the semaphoreset Class</a></li>
-<li><a href="#memorymap">Using the memorymap Class</a></li>
-<li><a href="#character">Using the character Class</a></li>
-<li><a href="#charstring">Using the charstring Class</a></li>
-<li><a href="#rawbuffer">Using the rawbuffer Class</a></li>
-<li><a href="#passwdentry">Using the passwdentry Class</a></li>
-<li><a href="#shadowentry">Using the shadowentry Class</a></li>
-<li><a href="#groupentry">Using the groupentry Class</a></li>
-<li><a href="#hostentry">Using the hostentry Class</a></li>
-<li><a href="#protocolentry">Using the protocolentry Class</a></li>
-<li><a href="#serviceentry">Using the serviceentry Class</a></li>
-<li><a href="#rpcentry">Using the rpcentry Class</a></li>
+<li><a href="#file">Using the file class</a></li>
+<li><a href="#device">Using the device class</a></li>
+<li><a href="#serialport">Using the serialport class</a></li>
+<li><a href="#shmfile">Using the shmfile class</a></li>
+<li><a href="#environment">Using the environment class</a></li>
+<li><a href="#datetime">Using the datetime class</a></li>
+<li><a href="#directory">Using the directory class</a></li>
+<li><a href="#filesystem">Using the filesystem class</a></li>
+<li><a href="#logger">Using the logger class</a></li>
+<li><a href="#permissions">Using the permissions class</a></li>
+<li><a href="#randomnumber">Using the randomnumber class</a></li>
+<li><a href="#regularexpression">Using the regularexpression class</a></li>
+<li><a href="#crypt">Using the crypt class</a></li>
+<li><a href="#dynamiclib">Using the dynamiclib class</a></li>
+<li><a href="#error">Using the error class</a></li>
+<li><a href="#intervaltimer">Using the intervaltimer class</a></li>
+<li><a href="#mutex">Using the mutex class</a></li>
+<li><a href="#process">Using the process class</a></li>
+<li><a href="#sys">Using the sys class</a></li>
+<li><a href="#serialportprofile">Using the serialportprofile class</a></li>
+<li><a href="#snooze">Using the snooze class</a></li>
+<li><a href="#signal">Using the Signal classes</a></li>
+<li><a href="#sharedmemory">Using the sharedmemory class</a></li>
+<li><a href="#semaphoreset">Using the semaphoreset class</a></li>
+<li><a href="#memorymap">Using the memorymap class</a></li>
+<li><a href="#character">Using the character class</a></li>
+<li><a href="#charstring">Using the charstring class</a></li>
+<li><a href="#rawbuffer">Using the rawbuffer class</a></li>
+<li><a href="#passwdentry">Using the passwdentry class</a></li>
+<li><a href="#shadowentry">Using the shadowentry class</a></li>
+<li><a href="#groupentry">Using the groupentry class</a></li>
+<li><a href="#hostentry">Using the hostentry class</a></li>
+<li><a href="#protocolentry">Using the protocolentry class</a></li>
+<li><a href="#serviceentry">Using the serviceentry class</a></li>
+<li><a href="#rpcentry">Using the rpcentry class</a></li>
 </ul>
 
 <a name="file">
-<span class="heading">Using the file Class</span><br><br>
+<span class="heading">Using the file class</span><br><br>
 
 <p>...</p>
 
 @file.cpp.html@
 
 <a name="device">
-<span class="heading">Using the device Class</span><br><br>
+<span class="heading">Using the device class</span><br><br>
 
 <p>...</p>
 
 @device.cpp.html@
 
 <a name="serialport">
-<span class="heading">Using the serialport Class</span><br><br>
+<span class="heading">Using the serialport class</span><br><br>
 
 <p>...</p>
 
 @serialport.cpp.html@
 
 <a name="shmfile">
-<span class="heading">Using the shmfile Class</span><br><br>
+<span class="heading">Using the shmfile class</span><br><br>
 
 <p>...</p>
 
 @shmfile.cpp.html@
 
 <a name="environment"></a>
-<span class="heading">Using the environment Class</span><br><br>
+<span class="heading">Using the environment class</span><br><br>
 
 <p>The environment class allows you to get or set the value of environment
 variables.  The following example gets, sets and resets the environment
@@ -84,7 +83,7 @@ variable TEST.</p>
 @environment.cpp.html@
 
 <a name="datetime"></a>
-<span class="heading">Using the datetime Class</span><br><br>
+<span class="heading">Using the datetime class</span><br><br>
 
 <p>One of the most difficult things to do in a Posix environment is deal with dates and times.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
 
@@ -100,31 +99,22 @@ variable TEST.</p>
 
 @datetime.cpp.html@
 
-<a name="timezonefile"></a>
-<span class="heading">Using the timezonefile Class</span><br><br>
-
-<p>While I was working on timezone support in the datetime class I originally thought that it might be useful to be able to parse timezone files.  I could not find any standard C functions for parsing them, so I wrote a class that parses them.</p>
-
-<p>It turned out to be of very limited value, but it works and I never removed it.  So, if you need such functionality, it exists.</p>
-
-@timezonefile.cpp.html@
-
 <a name="directory"></a>
-<span class="heading">Using the directory Class</span><br><br>
+<span class="heading">Using the directory class</span><br><br>
 
 <p>...</p>
 
 @directory.cpp.html@
 
 <a name="filesystem"></a>
-<span class="heading">Using the filesystem Class</span><br><br>
+<span class="heading">Using the filesystem class</span><br><br>
 
 <p>The filesystem class provides methods for collecting statistics about a filesystem.  The "standard" posix function for getting filesystem statistics is either statfs or statvfs.  Few operating systems implement statvfs though and the structure returned by statfs varies greatly between operating systems.  The filesystem class attempts to remedy this situation.  However, no operating system supports every method in this class.</p>
 
 @filesystem.cpp.html@
 
 <a name="logger"></a>
-<span class="heading">Using the logger Class</span><br><br>
+<span class="heading">Using the logger class</span><br><br>
 
 <p>The logger class and associated logdestination classes provide a framework for generating log messages from applications.  An application can define a set of logdestinations and attach them to an instance of the logger class.  Then, when the application calls one of the write() methods of the logger class, the log message is written to each of the logdestinations.  For example, an application could simultaneously log to stderr and to a file.  Currently stdout, stderr, file and syslog logdestinations are supported.  If an application needs to send one set of log messages to one destination and another set to a different destinations, it can create two instances of the logger class and use one for each set of messages.</p>
 
@@ -133,91 +123,91 @@ variable TEST.</p>
 @logger.cpp.html@
 
 <a name="permissions"></a>
-<span class="heading">Using the permissions Class</span><br><br>
+<span class="heading">Using the permissions class</span><br><br>
 
 <p>The permissions class provides simple methods for generating permissions.  The output of these methods can be used whenever a function takes an argument of type mode_t.  Below is some code illustrating the use of the permissions class.</p>
 
 @permissions.cpp.html@
 
 <a name="randomnumber"></a>
-<span class="heading">Using the randomnumber Class</span><br><br>
+<span class="heading">Using the randomnumber class</span><br><br>
 
 <p>Functions for generating random numbers vary from platform to platform.  The randomnumber class attempts to rectify this situation.  Below is some code illustrating the use of the randomnumber class.</p>
 
 @randomnumber.cpp.html@
 
 <a name="regularexpression"></a>
-<span class="heading">Using the regularexpression Class</span><br><br>
+<span class="heading">Using the regularexpression class</span><br><br>
 
 <p>Regular expressions allow a programmer to perform complex string matching but methods for using regular expressions vary from platform to platform.  The regularexpression class attempts to rectify this situation.  Below is some code illustrating the use of the regularexpression class.</p>
 
 @regularexpression.cpp.html@
 
 <a name="crypt"></a>
-<span class="heading">Using the crypt Class</span><br><br>
+<span class="heading">Using the crypt class</span><br><br>
 
 <p>...</p>
 
 @crypt.cpp.html@
 
 <a name="dynamiclib"></a>
-<span class="heading">Using the dynamiclib Class</span><br><br>
+<span class="heading">Using the dynamiclib class</span><br><br>
 
 <p>...</p>
 
 @dynamiclib.cpp.html@
 
 <a name="error"></a>
-<span class="heading">Using the error Class</span><br><br>
+<span class="heading">Using the error class</span><br><br>
 
 <p>...</p>
 
 @error.cpp.html@
 
 <a name="intervaltimer"></a>
-<span class="heading">Using the intervaltimer Class</span><br><br>
+<span class="heading">Using the intervaltimer class</span><br><br>
 
 <p>...</p>
 
 @intervaltimer.cpp.html@
 
 <a name="mutex"></a>
-<span class="heading">Using the mutex Class</span><br><br>
+<span class="heading">Using the mutex class</span><br><br>
 
 <p>...</p>
 
 @mutex.cpp.html@
 
 <a name="process"></a>
-<span class="heading">Using the process Class</span><br><br>
+<span class="heading">Using the process class</span><br><br>
 
 <p>...</p>
 
 @process.cpp.html@
 
 <a name="system"></a>
-<span class="heading">Using the system Class</span><br><br>
+<span class="heading">Using the sys class</span><br><br>
 
 <p>...</p>
 
-@system.cpp.html@
+@sys.cpp.html@
 
 <a name="serialportprofile"></a>
-<span class="heading">Using the serialportprofile Class</span><br><br>
+<span class="heading">Using the serialportprofile class</span><br><br>
 
 <p>...</p>
 
 @serialportprofile.cpp.html@
 
 <a name="snooze"></a>
-<span class="heading">Using the snooze Class</span><br><br>
+<span class="heading">Using the snooze class</span><br><br>
 
 <p>...</p>
 
 @snooze.cpp.html@
 
 <a name="signal"></a>
-<span class="heading">Using the Signal Classes</span><br><br>
+<span class="heading">Using the Signal classes</span><br><br>
 
 <p>Signals allow processes to interrupt the execution of other processes.  Signal handlers allow processes to intercept and react to the signals sent to them.</p>
 
@@ -234,7 +224,7 @@ variable TEST.</p>
 @signal.cpp.html@
 
 <a name="sharedmemory"></a>
-<span class="heading">Using the sharedmemory Class</span><br><br>
+<span class="heading">Using the sharedmemory class</span><br><br>
 
 <p>Shared memory allows seperate processes to access a common block of memory.  The standard functions and structures for managing shared memory segments are complex.  The sharedmemory class attempts to rectify this situation.  Below is some code illustrating the use of the sharedmemory class.</p>
 
@@ -249,7 +239,7 @@ variable TEST.</p>
 @sharedmemory2.cpp.html@
 
 <a name="semaphoreset"></a>
-<span class="heading">Using the semaphoreset Class</span><br><br>
+<span class="heading">Using the semaphoreset class</span><br><br>
 
 <p>Semaphores allow seperate processes or threads to synchronize activities.  The standard functions and structures for managing semaphores are complex.  The sempahoreset class attempts to rectify this situation.  Below is some code illustrating the use of the semaphoreset class.</p>
 
@@ -266,77 +256,77 @@ variable TEST.</p>
 @semaphoreset2.cpp.html@
 
 <a name="memorymap"></a>
-<span class="heading">Using the memorymap Class</span><br><br>
+<span class="heading">Using the memorymap class</span><br><br>
 
 <p>...</p>
 
 @memorymap.cpp.html@
 
 <a name="character"></a>
-<span class="heading">Using the character Class</span><br><br>
+<span class="heading">Using the character class</span><br><br>
 
 <p>...</p>
 
 @character.cpp.html@
 
 <a name="charstring"></a>
-<span class="heading">Using the charstring Class</span><br><br>
+<span class="heading">Using the charstring class</span><br><br>
 
 <p>The charstring class contains some commonly needed string manipulation and evaluation functions.  Below is some code illustrating the use of the string class.</p>
 
 @charstring.cpp.html@
 
 <a name="rawbuffer"></a>
-<span class="heading">Using the rawbuffer Class</span><br><br>
+<span class="heading">Using the rawbuffer class</span><br><br>
 
 <p>...</p>
 
 @rawbuffer.cpp.html@
 
 <a name="passwdentry"></a>
-<span class="heading">Using the passwdentry Class</span><br><br>
+<span class="heading">Using the passwdentry class</span><br><br>
 
 <p>The passwdentry class allows you to look up entries from /etc/passwd or from elsewhere if you're using the Name Service Switch.</p>
 
 @passwdentry.cpp.html@
 
 <a name="shadowentry"></a>
-<span class="heading">Using the shadowentry Class</span><br><br>
+<span class="heading">Using the shadowentry class</span><br><br>
 
 <p>The shadowentry class allows you to look up entries from /etc/shadow or from elsewhere if you're using the Name Service Switch.</p>
 
 @shadowentry.cpp.html@
 
 <a name="groupentry"></a>
-<span class="heading">Using the groupentry Class</span><br><br>
+<span class="heading">Using the groupentry class</span><br><br>
 
 <p>The groupentry class allows you to look up entries from /etc/group or from elsewhere if you're using the Name Service Switch.</p>
 
 @groupentry.cpp.html@
 
 <a name="hostentry"></a>
-<span class="heading">Using the hostentry Class</span><br><br>
+<span class="heading">Using the hostentry class</span><br><br>
 
 <p>The hostentry class allows you to look up entries from /etc/hosts or from elsewhere if you're using the Name Service Switch.</p>
 
 @hostentry.cpp.html@
 
 <a name="protocolentry"></a>
-<span class="heading">Using the protocolentry Class</span><br><br>
+<span class="heading">Using the protocolentry class</span><br><br>
 
 <p>The protocolentry class allows you to look up entries from /etc/protocols or from elsewhere if you're using the Name Service Switch.</p>
 
 @protocolentry.cpp.html@
 
 <a name="serviceentry"></a>
-<span class="heading">Using the serviceentry Class</span><br><br>
+<span class="heading">Using the serviceentry class</span><br><br>
 
 <p>The serviceentry class allows you to look up entries from /etc/services or from elsewhere if you're using the Name Service Switch.</p>
 
 @serviceentry.cpp.html@
 
 <a name="rpcentry"></a>
-<span class="heading">Using the rpcentry Class</span><br><br>
+<span class="heading">Using the rpcentry class</span><br><br>
 
 <p>The rpcentry class allows you to look up entries from /etc/rpc or from elsewhere if you're using the Name Service Switch.</p>
 

@@ -16,7 +16,10 @@ html:
 	do \
 		sed -i -e "s/<html>//" -e "s/<head>//" -e "s/<title>.*<\/title>//" -e "s/<meta.*//" -e "s/<\/head>//" -e "s/<body.*//" -e "s/<\/body>//" -e "s/<\/html>//" $$i; \
 	done
-	./insert.pl baseclasses.html.in > baseclasses.html
-	./insert.pl utilclasses.html.in > utilclasses.html
-	./insert.pl wrapperclasses.html.in > wrapperclasses.html
+	for i in `/bin/ls *.in`; \
+	do \
+		BASENAME=`/bin/basename $$i .in`; \
+		echo "processing $$BASENAME"; \
+		./insert.pl $$i > $$BASENAME; \
+	done
 	rm -f parts/*.html

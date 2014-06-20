@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the inetsocketclient class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Programming with Rudiments using the inetsocketclient class</span><br><br>
+
+<a name="inetsocketclient"></a>
+<span class="heading">Using the inetsocketclient class</span><br><br>
+
+<p>Here's the code for a client that can communicate with the <a href="inetsocketserver.html">inetsocketserver program</a>.  This client sends a string to the server, reads what the server sends back and prints it out.</p>
+
+@inetsocketclient.cpp.html@
+
+<p>Inet sockets allow clients and servers to communicate across a network.  Unix sockets can be used to allow clients and servers on the same machine to communicate.  Though clients and servers on the same machine could communicate over an inet socket using localhost, unix sockets are much faster and use fewer system resources.  See the <a href="unixsocketserver.html">unixsocketserver</a> and <a href="unixsocketclient.html">unixsocketclient</a> examples.</p>
+
+</body>
+</html>

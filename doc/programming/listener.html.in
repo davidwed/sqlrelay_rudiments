@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the listener class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Programming with Rudiments using the listener class</span><br><br>
+
+<a name="listener">
+<span class="heading">Using the listener class</span><br><br>
+
+<p>Servers commonly need to listen on multiple sockets for client connections.  They can listen on multiple inet sockets, multiple unix sockets, or a combination.  Technically, they could listen on any set of file descriptors, whether they are all sockets or not.  The listener class can be used to make this possible.</p>
+
+@listener.cpp.html@
+
+</body>
+</html>

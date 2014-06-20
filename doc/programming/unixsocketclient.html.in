@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the unixsocketclient class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Programming with Rudiments using the unixsocketclient class</span><br><br>
+
+<a name="unixsocketclient"></a>
+<span class="heading">Using the unixsocketclient class</span><br><br>
+
+<p>Here's the code for a client that can communicate with the <a href="unixsocketserver.html">unixsocketserver program</a>.  This client sends a string to the server, reads what the server sends back and prints it out.</p>
+
+@unixsocketclient.cpp.html@
+
+<p>Unix sockets allow clients and servers on the same machine to communicate.  See the <a href="inetsocketserver.html">inetsocketserver</a> and <a href="inetsocketclient.html">inetsocketclient</a> examples for clients and servers that can communcate across a network.</p>
+
+</body>
+</html>
