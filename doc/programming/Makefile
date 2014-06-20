@@ -2,7 +2,9 @@ top_builddir = ../..
 
 include ../../config.mk
 
-html:
+all: buildparts html cleanparts
+
+buildparts:
 	cd parts; \
 	rm -f *.html; \
 	for i in `/bin/ls ../../../examples/*.cpp`; \
@@ -16,10 +18,14 @@ html:
 	do \
 		sed -i -e "s/<html>//" -e "s/<head>//" -e "s/<title>.*<\/title>//" -e "s/<meta.*//" -e "s/<\/head>//" -e "s/<body.*//" -e "s/<\/body>//" -e "s/<\/html>//" $$i; \
 	done
+
+html:
 	for i in `/bin/ls *.in`; \
 	do \
 		BASENAME=`/bin/basename $$i .in`; \
 		echo "processing $$BASENAME"; \
 		./insert.pl $$i > $$BASENAME; \
 	done
+
+cleanparts:
 	rm -f parts/*.html
