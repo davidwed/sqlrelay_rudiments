@@ -55,7 +55,7 @@ PROGS = \
 	signal$(EXE) \
 	snooze$(EXE) \
 	stringbuffer$(EXE) \
-	system$(EXE) \
+	sys$(EXE) \
 	unixsocketclient$(EXE) \
 	unixsocketserver$(EXE) \
 	variablebuffer$(EXE) \
@@ -215,8 +215,8 @@ snooze$(EXE): snooze.cpp snooze.lo
 stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ stringbuffer.lo $(LIBS)
 
-system$(EXE): system.cpp system.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ system.lo $(LIBS)
+sys$(EXE): sys.cpp sys.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ sys.lo $(LIBS)
 
 unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketclient.lo $(LIBS)

@@ -11,7 +11,7 @@
 
 @unixsocketserver.cpp.html@
 
-<p>See the <a href="inetsocketclient.html">inetsocketclient</a> example for a client that can communicate with this server.</p>
+<p>See the <a href="unixsocketclient.html">unixsocketclient</a> example for a client that can communicate with this server.</p>
 
 </body>
 </html>
