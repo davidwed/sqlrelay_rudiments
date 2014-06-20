@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the dynamiclib class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the dynamiclib class</span><br><br>
+
+<p>...</p>
+
+@dynamiclib.cpp.html@
+
+</body>
+</html>

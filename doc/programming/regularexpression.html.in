@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the regularexpression class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the regularexpression class</span><br><br>
+
+<p>Regular expressions allow a programmer to perform complex string matching but methods for using regular expressions vary from platform to platform.  The regularexpression class attempts to rectify this situation.  Below is some code illustrating the use of the regularexpression class.</p>
+
+@regularexpression.cpp.html@
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the randomnumber class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the randomnumber class</span><br><br>
+
+<p>Functions for generating random numbers vary from platform to platform.  The randomnumber class attempts to rectify this situation.  Below is some code illustrating the use of the randomnumber class.</p>
+
+@randomnumber.cpp.html@
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the datetime class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="datetime"></a>
+<span class="heading">Using the datetime class</span><br><br>
+
+<p>One of the most difficult things to do in a Posix environment is deal with dates and times.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
+
+<p>The datetime class allows you to query and set the system clock. If your platform has a working real-time-clock (/dev/rtc), then you can query or set the hardware clock as well.  Note that your program must run as root in order to set the system or hardware clock.  Since it is common for the system clock to be set to the local time zone and the hardware clock to be set to GMT, a method is provided for converting the hardware clock time to the system's time zone.</p>
+
+<p>Additionally there is a method for switching the time zone of the time currently represented in the class.</p>
+
+<p>The datetime class also provides methods for converting between several common ways of representing time.  Such as a formatted string, the number of seconds since 1970 and "struct tm".</p>
+
+<p>There are also methods for adding discrete amounts of time to the time currently stored in the class.  You can, for example add 150 seconds to "12:30:50 01/02/2003 EST" and get "12:32:20 01/02/2003 EST".  You can add negative numbers to subtract time.</p>
+
+<p>Below is some code illustrating the use of the datetime class.</p>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+
+
+<font face="monospace">
+<font color="#0000ff">// Copyright (c) 2012&nbsp;&nbsp;David Muse</font><br>
+<font color="#0000ff">// See the file COPYING for more information</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+}<br>
+</font>
+
+
+<!-- vim: set foldmethod=manual : -->
+
+</body>
+</html>

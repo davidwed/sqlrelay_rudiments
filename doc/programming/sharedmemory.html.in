@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the sharedmemory class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the sharedmemory class</span><br><br>
+
+<p>Shared memory allows seperate processes to access a common block of memory.  The standard functions and structures for managing shared memory segments are complex.  The sharedmemory class attempts to rectify this situation.  Below is some code illustrating the use of the sharedmemory class.</p>
+
+<p>There are methods in the sharedmemory class that allow you to get and set user/group ownership and permissions of a segment that are not documented here, but they are straightforward and rarely used.</p>
+
+<p>This program puts some data into shared memory then goes to sleep, giving another program time to access the segment.</p>
+
+@sharedmemory1.cpp.html@
+
+<p>This program reads the data from shared memory.</p>
+
+@sharedmemory2.cpp.html@
+
+</body>
+</html>

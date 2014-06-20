@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the semaphoreset class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="semaphoreset"></a>
+<span class="heading">Using the semaphoreset class</span><br><br>
+
+<p>Semaphores allow seperate processes or threads to synchronize activities.  The standard functions and structures for managing semaphores are complex.  The sempahoreset class attempts to rectify this situation.  Below is some code illustrating the use of the semaphoreset class.</p>
+
+<p>There are methods in the semaphoreset class that allow you to get and set user/group ownership and permissions of a semaphore set that are not documented here, but they are straightforward and rarely used.</p>
+
+<p>The first program prints out 1 and 3, the second program prints out 2 and 4.  They use a set of 2 semaphores to synchronize these activities.  No matter what order the programs are started in, they will always print out:</p>
+
+<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
+
+<p>These programs must both be run to the background.</p>
+
+
+
+</body>
+</html>

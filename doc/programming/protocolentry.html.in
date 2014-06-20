@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the protocolentry class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="protocolentry"></a>
+<span class="heading">Using the protocolentry class</span><br><br>
+
+<p>The protocolentry class allows you to look up entries from /etc/protocols or from elsewhere if you're using the Name Service Switch.</p>
+
+@protocolentry.cpp.html@
+
+</body>
+</html>

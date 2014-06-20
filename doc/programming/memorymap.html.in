@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the memorymap class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="memorymap"></a>
+<span class="heading">Using the memorymap class</span><br><br>
+
+<p>...</p>
+
+@memorymap.cpp.html@
+
+</body>
+</html>

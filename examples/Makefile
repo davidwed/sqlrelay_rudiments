@@ -54,6 +54,7 @@ PROGS = \
 	shmfile$(EXE) \
 	signal$(EXE) \
 	snooze$(EXE) \
+	stdio$(EXE) \
 	stringbuffer$(EXE) \
 	sys$(EXE) \
 	unixsocketclient$(EXE) \
@@ -211,6 +212,9 @@ signal$(EXE): signal.cpp signal.lo
 
 snooze$(EXE): snooze.cpp snooze.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ snooze.lo $(LIBS)
+
+stdio$(EXE): stdio.cpp stdio.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ stdio.lo $(LIBS)
 
 stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ stringbuffer.lo $(LIBS)

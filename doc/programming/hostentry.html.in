@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the hostentry class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="hostentry"></a>
+<span class="heading">Using the hostentry class</span><br><br>
+
+<p>The hostentry class allows you to look up entries from /etc/hosts or from elsewhere if you're using the Name Service Switch.</p>
+
+@hostentry.cpp.html@
+
+</body>
+</html>

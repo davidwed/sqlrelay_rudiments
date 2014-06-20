@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the groupentry class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the groupentry class</span><br><br>
+
+<p>The groupentry class allows you to look up entries from /etc/group or from elsewhere if you're using the Name Service Switch.</p>
+
+@groupentry.cpp.html@
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the process class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the process class</span><br><br>
+
+<p>...</p>
+
+@process.cpp.html@
+
+</body>
+</html>

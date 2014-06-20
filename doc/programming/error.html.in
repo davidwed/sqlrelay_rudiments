@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the error class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the error class</span><br><br>
+
+<p>...</p>
+
+@error.cpp.html@
+
+</body>
+</html>

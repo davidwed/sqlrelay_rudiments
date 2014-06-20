@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the logger class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the logger class</span><br><br>
+
+<p>The logger class and associated logdestination classes provide a framework for generating log messages from applications.  An application can define a set of logdestinations and attach them to an instance of the logger class.  Then, when the application calls one of the write() methods of the logger class, the log message is written to each of the logdestinations.  For example, an application could simultaneously log to stderr and to a file.  Currently stdout, stderr, file and syslog logdestinations are supported.  If an application needs to send one set of log messages to one destination and another set to a different destinations, it can create two instances of the logger class and use one for each set of messages.</p>
+
+<p>The following example illustrates use of the logger class.</p>
+
+@logger.cpp.html@
+
+</body>
+</html>

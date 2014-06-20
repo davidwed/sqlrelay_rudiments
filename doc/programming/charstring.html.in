@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the charstring class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the charstring class</span><br><br>
+
+<p>The charstring class contains some commonly needed string manipulation and evaluation functions.  Below is some code illustrating the use of the string class.</p>
+
+@charstring.cpp.html@
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the signal class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the cignal classes</span><br><br>
+
+<p>Signals allow processes to interrupt the execution of other processes.  Signal handlers allow processes to intercept and react to the signals sent to them.</p>
+
+<p>Rudiments provides 3 classes for working with signals: signalset, signalmanager and signalhandler.
+
+<p>A signalset is just a collection of signals.  The signalset class allows a programmer to build up a collection of signals.</p>
+
+<p>The signalmanager class provides methods for sending signals, ignoring signals, waiting for signals and examining blocked signals.</p>
+
+<p>The signalhandler class provides methods for catching and handling signals.</p>
+
+<p>Below is some code illustrating the use of all three classes.  Note that you'll have to kill this program with a -9.</p>
+
+@signal.cpp.html@
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the environment class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="environment"></a>
+<span class="heading">Using the environment class</span><br><br>
+
+<p>The environment class allows you to get or set the value of environment
+variables.  The following example gets, sets and resets the environment
+variable TEST.</p>
+
+@environment.cpp.html@
+
+</html>
+</body>

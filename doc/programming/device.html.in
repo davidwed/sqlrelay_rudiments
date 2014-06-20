@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the device class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="device">
+<span class="heading">Using the device class</span><br><br>
+
+<p>...</p>
+
+@device.cpp.html@
+
+</body>
+</html>
