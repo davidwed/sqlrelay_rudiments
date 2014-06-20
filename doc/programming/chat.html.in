@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the chat class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the chat class</span><br><br>
+
+<p>The chat class provides a framework for communications across file descriptors with a peer.  This is typically a serial-attached device but technically it could be any device or process that can communicate over file descriptors.  This class is mainly used internally by the modemserver and modemclient classes but could be used by itself as well.</p>
+
+@chat.cpp.html@
+
+</body>
+</html>

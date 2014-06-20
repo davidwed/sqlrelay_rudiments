@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the stringbuffer class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the stringbuffer class</span><br><br>
+
+<p>The stringbuffer class allows you to manipulate strings of arbitrary length.  You can append data to a stringbuffer or write data at arbitrary positions in the buffer.</p>
+
+@stringbuffer.cpp.html@
+
+</body>
+</html>

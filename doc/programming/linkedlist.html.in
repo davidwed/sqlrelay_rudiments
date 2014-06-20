@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the linkedlist class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the linkedlist class</span><br><br>
+
+<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
+
+<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
+
+@linkedlist.cpp.html@
+
+</body>
+</html>

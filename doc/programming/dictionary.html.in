@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the dictionary class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<p>The dictionary class allows you to store arbitrary key/value-pair data.</p>
+
+<p>Since dictionaries with string and integer keys and dictionaries with string keys and values are commonly used, convenience classes are provided for each as well.</p>
+
+@dictionary.cpp.html@
+
+</body>
+</html>
