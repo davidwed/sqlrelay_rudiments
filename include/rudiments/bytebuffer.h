@@ -1,14 +1,14 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_VARIABLEBUFFER_H
-#define RUDIMENTS_VARIABLEBUFFER_H
+#ifndef RUDIMENTS_BYTEBUFFER_H
+#define RUDIMENTS_BYTEBUFFER_H
 
-#include <rudiments/private/variablebufferincludes.h>
+#include <rudiments/private/bytebufferincludes.h>
 
-class variablebufferprivate;
+class bytebufferprivate;
 
-/** The variablebuffer class can be used to store raw data of arbitrary length.
+/** The bytebuffer class can be used to store binary data of arbitrary length.
  *
  *  The class allocates a buffer internally of either a default or specified
  *  initial size.  If a write or append operation would exceed the size of the
@@ -22,34 +22,34 @@ class variablebufferprivate;
  *  initial size.  However if the buffer has not grown then no action is
  *  taken except to reset the internal position pointers. 
  *
- *  It is generally more efficient to reuse the same variablebuffer over and
+ *  It is generally more efficient to reuse the same bytebuffer over and
  *  over than to allocate a new one for each operation. */
-class RUDIMENTS_DLLSPEC variablebuffer {
+class RUDIMENTS_DLLSPEC bytebuffer {
 	public:
 
-		/** Creates an instance of the variablebuffer class with
+		/** Creates an instance of the bytebuffer class with
 		 *  the specified "initialsize" and "increment" parameters. */
-		variablebuffer(size_t initialsize, size_t increment);
+		bytebuffer(size_t initialsize, size_t increment);
 
-		/** Creates an instance of the variablebuffer class.
+		/** Creates an instance of the bytebuffer class.
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program.  The initial
 		 *  size and increment may be specified respectively by the
 		 *  "initialsize" and "increment" parameters. */
-		variablebuffer(unsigned char *initialcontents,
+		bytebuffer(unsigned char *initialcontents,
 					size_t initialsize, size_t increment);
 
-		/** Creates an instance of the variablebuffer class
+		/** Creates an instance of the bytebuffer class
 		 *  that is a copy of "v". */
-		variablebuffer(const variablebuffer &v);
+		bytebuffer(const bytebuffer &v);
 
-		/** Makes this instance of the variablebuffer class
+		/** Makes this instance of the bytebuffer class
 		 *  identical to "v". */
-		variablebuffer	&operator=(const variablebuffer &v);
+		bytebuffer	&operator=(const bytebuffer &v);
 
-		/** Deletes this instance of the variablebuffer class. */
-		virtual	~variablebuffer();
+		/** Deletes this instance of the bytebuffer class. */
+		virtual	~bytebuffer();
 
 		/** Sets the position in the internal buffer at which the next
 		 *  read or write will occur to "pos".  If the position is set
@@ -63,266 +63,266 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		size_t	getPosition();
 
 		/** Writes the first "size" bytes of "data" to the
-		 *  variablebuffer at the current position and increments the
+		 *  bytebuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(const unsigned char *data, size_t size);
+		bytebuffer	*write(const unsigned char *data, size_t size);
 
-		/** Writes "string" to the variablebuffer at the current
+		/** Writes "string" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(const char *string);
+		bytebuffer	*write(const char *string);
 
 		/** Writes the first "size" bytes of "string" to the
-		 *  variablebuffer at the current position and increments the
+		 *  bytebuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(const char *string, size_t size);
+		bytebuffer	*write(const char *string, size_t size);
 
-		/** Writes "character" to the variablebuffer at the current
+		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(char character);
+		bytebuffer	*write(char character);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(int16_t number);
+		bytebuffer	*write(int16_t number);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(int32_t number);
+		bytebuffer	*write(int32_t number);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(int64_t number);
+		bytebuffer	*write(int64_t number);
 
-		/** Writes "character" to the variablebuffer at the current
+		/** Writes "character" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(unsigned char character);
+		bytebuffer	*write(unsigned char character);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(uint16_t number);
+		bytebuffer	*write(uint16_t number);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(uint32_t number);
+		bytebuffer	*write(uint32_t number);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(uint64_t number);
+		bytebuffer	*write(uint64_t number);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(float number);
+		bytebuffer	*write(float number);
 
-		/** Writes "number" to the variablebuffer at the current
+		/** Writes "number" to the bytebuffer at the current
 		 *  position and increments the current position to the next
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->write("numbers: ")->write(5)->write(5.5); */
-		variablebuffer	*write(double number);
+		bytebuffer	*write(double number);
 
-		/** Writes "..." to the variable buffer using "format"
+		/** Writes "..." to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
 		 *  rules. */
-		variablebuffer	*writeFormatted(const char *format, ...);
+		bytebuffer	*writeFormatted(const char *format, ...);
 
-		/** Writes "argp" to the variable buffer using "format"
+		/** Writes "argp" to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
 		 *  rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
-		variablebuffer	*writeFormatted(const char *format,
+		bytebuffer	*writeFormatted(const char *format,
 							va_list *argp);
 
 
 		/** Appends the first "size" bytes of "data" to the
-		 *  variablebuffer, growing the internal buffer as necessary
+		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(const unsigned char *data, size_t size);
+		bytebuffer	*append(const unsigned char *data, size_t size);
 
-		/** Appends "string" to the variablebuffer, growing the
+		/** Appends "string" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(const char *string);
+		bytebuffer	*append(const char *string);
 
 		/** Appends the first "size" bytes of "string" to the
-		 *  variablebuffer, growing the internal buffer as necessary
+		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(const char *string, size_t size);
+		bytebuffer	*append(const char *string, size_t size);
 
-		/** Appends "character" to the variablebuffer, growing the
+		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(char character);
+		bytebuffer	*append(char character);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(int16_t number);
+		bytebuffer	*append(int16_t number);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(int32_t number);
+		bytebuffer	*append(int32_t number);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(int64_t number);
+		bytebuffer	*append(int64_t number);
 
-		/** Appends "character" to the variablebuffer, growing the
+		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(unsigned char character);
+		bytebuffer	*append(unsigned char character);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(uint16_t number);
+		bytebuffer	*append(uint16_t number);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(uint32_t number);
+		bytebuffer	*append(uint32_t number);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(uint64_t number);
+		bytebuffer	*append(uint64_t number);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(float number);
+		bytebuffer	*append(float number);
 
-		/** Appends "number" to the variablebuffer, growing the
+		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
-		variablebuffer	*append(double number);
+		bytebuffer	*append(double number);
 
-		/** Appends "..." to the variable buffer using "format"
+		/** Appends "..." to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
 		 *  rules. */
-		variablebuffer	*appendFormatted(const char *format, ...);
+		bytebuffer	*appendFormatted(const char *format, ...);
 
-		/** Appends "argp" to the variable buffer using "format"
+		/** Appends "argp" to the byte buffer using "format"
 		 *  which should comply with standard printf formatting
 		 *  rules.
 		 *
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list. */
-		variablebuffer	*appendFormatted(const char *format,
+		bytebuffer	*appendFormatted(const char *format,
 							va_list *argp);
 
-		/** Truncates the variablebuffer at position "pos". */
+		/** Truncates the bytebuffer at position "pos". */
 		virtual void	truncate(size_t pos);
 
-		/** Truncates the variablebuffer at the current position. */
+		/** Truncates the bytebuffer at the current position. */
 		virtual void	truncate();
 
 
-		/** Reads "size" bytes from the variablebuffer at the
+		/** Reads "size" bytes from the bytebuffer at the
 		 *  current position into "data".  Also increments the
 		 *  current position by "size" bytes. */
 		ssize_t	read(unsigned char *data, size_t size);
 
-		/** Empties the variablebuffer. */
+		/** Empties the bytebuffer. */
 		void	clear();
 
-		/** Returns the current data stored in the variablebuffer. */
+		/** Returns the current data stored in the bytebuffer. */
 		const unsigned char	*getBuffer();
 
 		/** Returns the amount of data currently stored in the
-		 *  variablebuffer. */
+		 *  bytebuffer. */
 		size_t		getSize();
 
 		/** Returns the position in the buffer at which the next
@@ -335,15 +335,15 @@ class RUDIMENTS_DLLSPEC variablebuffer {
 		size_t		getActualSize();
 
 		/** Returns a pointer to the buffer currently
-		 *  stored in the variablebuffer, then resets
-		 *  the variablebuffer such that it will no
+		 *  stored in the bytebuffer, then resets
+		 *  the bytebuffer such that it will no
 		 *  longer use that buffer.
 		 * 
 		 *  The calling program must deallocate the
 		 *  buffer returned from this method. */
 		unsigned char	*detachBuffer();
 
-	#include <rudiments/private/variablebuffer.h>
+	#include <rudiments/private/bytebuffer.h>
 };
 
 #endif

@@ -1684,7 +1684,7 @@ ssize_t charstring::printf(char *buffer, size_t length,
 //
 // Old enough systems (like linux libc4) don't provide vsnprintf but do provide
 // vsprintf.  There's no safe way to use vsprintf though, especially the way
-// the variablebuffer class would like to use it.
+// the bytebuffer class would like to use it.
 //
 // I could grab a vsnprintf implementation from any of the other
 // LGPL-compatible libraries.  Tried it.  Too much work.

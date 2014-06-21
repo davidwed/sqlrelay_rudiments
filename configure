@@ -826,7 +826,7 @@ enable_stringbuffer
 enable_sys
 enable_unixclient
 enable_unixserver
-enable_variablebuffer
+enable_bytebuffer
 enable_xmldom
 enable_xmlsax
 enable_codetree
@@ -1523,7 +1523,7 @@ Optional Features:
   --disable-sys           Don't build sys class
   --disable-unixclient    Don't build unixclient class
   --disable-unixserver    Don't build unixserver class
-  --disable-variablebuffer       Don't build variablebuffer class
+  --disable-bytebuffer    Don't build bytebuffer class
   --disable-xmldom        Don't build xmldom class
   --disable-xmlsax        Don't build xmlsax class
   --disable-codetree      Don't build codetree class
@@ -2907,11 +2907,11 @@ else
   INCLUDE_UNIXSERVER="1"
 fi
 
-# Check whether --enable-variablebuffer was given.
-if test "${enable_variablebuffer+set}" = set; then :
-  enableval=$enable_variablebuffer; INCLUDE_VARIABLEBUFFER="0"
+# Check whether --enable-bytebuffer was given.
+if test "${enable_bytebuffer+set}" = set; then :
+  enableval=$enable_bytebuffer; INCLUDE_BYTEBUFFER="0"
 else
-  INCLUDE_VARIABLEBUFFER="1"
+  INCLUDE_BYTEBUFFER="1"
 fi
 
 # Check whether --enable-xmldom was given.
@@ -30668,12 +30668,12 @@ then
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXSERVER"
 fi
 
-if ( test "$INCLUDE_VARIABLEBUFFER" = "1" )
+if ( test "$INCLUDE_BYTEBUFFER" = "1" )
 then
-	HEADERS="$HEADERS variablebuffer.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS variablebuffer.h variablebufferincludes.h"
-	SRCS="$SRCS variablebuffer.cpp"
-	LOBJS="$LOBJS variablebuffer.lo"
+	HEADERS="$HEADERS bytebuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS bytebuffer.h bytebufferincludes.h"
+	SRCS="$SRCS bytebuffer.cpp"
+	LOBJS="$LOBJS bytebuffer.lo"
 fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )

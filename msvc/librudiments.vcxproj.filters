@@ -96,7 +96,7 @@
     <ClCompile Include="..\src\unixsocketutil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\variablebuffer.cpp">
+    <ClCompile Include="..\src\bytebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\winsock.cpp">

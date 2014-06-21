@@ -39,7 +39,7 @@ PROGS = server$(EXE) \
 	sharedmemory2$(EXE) \
 	signal$(EXE) \
 	stringbuffer$(EXE) \
-	variablebuffer$(EXE) \
+	bytebuffer$(EXE) \
 	device$(EXE) \
 	serialport$(EXE) \
 	shmfile$(EXE) \
@@ -140,7 +140,7 @@ clean:
 		nonhandoff1$(EXE) \
 		nonhandoff2$(EXE) \
 		nonhandoffclient$(EXE) \
-		variablebuffer$(EXE) \
+		bytebuffer$(EXE) \
 		xattr$(EXE) \
 		xmls$(EXE) \
 		xmld$(EXE) \
@@ -331,8 +331,8 @@ nonhandoff2$(EXE): nonhandoff2.cpp nonhandoff2.lo
 nonhandoffclient$(EXE): nonhandoffclient.cpp nonhandoffclient.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ nonhandoffclient.lo $(ALLSTATIC) $(LIBS)
 
-variablebuffer$(EXE): variablebuffer.cpp variablebuffer.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ variablebuffer.lo $(ALLSTATIC) $(LIBS)
+bytebuffer$(EXE): bytebuffer.cpp bytebuffer.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ bytebuffer.lo $(ALLSTATIC) $(LIBS)
 
 xattr$(EXE): xattr.cpp xattr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xattr.lo $(ALLSTATIC) $(LIBS)

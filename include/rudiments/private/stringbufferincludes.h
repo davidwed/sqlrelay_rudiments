@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/private/dll.h>
-#include <rudiments/variablebuffer.h>
+#include <rudiments/bytebuffer.h>
 
 #include <sys/types.h>
 

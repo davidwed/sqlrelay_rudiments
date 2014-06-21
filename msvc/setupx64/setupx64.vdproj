@@ -1476,8 +1476,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_035495DAFD034B15A0926A749EB8C3DF"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\variablebuffer.h"
-            "TargetName" = "8:variablebuffer.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\bytebuffer.h"
+            "TargetName" = "8:bytebuffer.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
@@ -2836,8 +2836,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4E2A2AE9DB56485791F89420DB931002"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\variablebuffer.h"
-            "TargetName" = "8:variablebuffer.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\bytebuffer.h"
+            "TargetName" = "8:bytebuffer.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -5176,8 +5176,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D07CF3F839134C87A80C00B70ABB6C7F"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\variablebufferincludes.h"
-            "TargetName" = "8:variablebufferincludes.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\bytebufferincludes.h"
+            "TargetName" = "8:bytebufferincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"

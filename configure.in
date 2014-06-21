@@ -274,10 +274,10 @@ AC_ARG_ENABLE(unixserver,
 	[  --disable-unixserver    Don't build unixserver class],
 	INCLUDE_UNIXSERVER="0",
 	INCLUDE_UNIXSERVER="1")
-AC_ARG_ENABLE(variablebuffer,
-	[  --disable-variablebuffer       Don't build variablebuffer class],
-	INCLUDE_VARIABLEBUFFER="0",
-	INCLUDE_VARIABLEBUFFER="1")
+AC_ARG_ENABLE(bytebuffer,
+	[  --disable-bytebuffer    Don't build bytebuffer class],
+	INCLUDE_BYTEBUFFER="0",
+	INCLUDE_BYTEBUFFER="1")
 AC_ARG_ENABLE(xmldom,
 	[  --disable-xmldom        Don't build xmldom class],
 	INCLUDE_XMLDOM="0",
@@ -3676,12 +3676,12 @@ then
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_UNIXSERVER"
 fi
 
-if ( test "$INCLUDE_VARIABLEBUFFER" = "1" )
+if ( test "$INCLUDE_BYTEBUFFER" = "1" )
 then
-	HEADERS="$HEADERS variablebuffer.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS variablebuffer.h variablebufferincludes.h"
-	SRCS="$SRCS variablebuffer.cpp"
-	LOBJS="$LOBJS variablebuffer.lo"
+	HEADERS="$HEADERS bytebuffer.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS bytebuffer.h bytebufferincludes.h"
+	SRCS="$SRCS bytebuffer.cpp"
+	LOBJS="$LOBJS bytebuffer.lo"
 fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )

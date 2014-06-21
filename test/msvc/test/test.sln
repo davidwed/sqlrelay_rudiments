@@ -67,7 +67,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "signal", "..\signal\signal.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stringbuffer", "..\stringbuffer\stringbuffer.vcxproj", "{ABD0CE2C-BBA3-432B-B87A-A1BA47A202D8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "variablebuffer", "..\variablebuffer\variablebuffer.vcxproj", "{0FFF8FF0-AFE7-4A62-B517-5503C0398CD5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bytebuffer", "..\bytebuffer\bytebuffer.vcxproj", "{0FFF8FF0-AFE7-4A62-B517-5503C0398CD5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "device", "..\device\device.vcxproj", "{01FDCFCC-7AB5-429F-9035-E2F25E52C7DD}"
 EndProject

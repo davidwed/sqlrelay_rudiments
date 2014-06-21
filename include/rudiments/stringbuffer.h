@@ -10,9 +10,9 @@ class stringbufferprivate;
 
 /** The stringbuffer class can be used to store strings of arbitrary length.
  *
- *  The stringbuffer is a child of variablebuffer.  See the variablebuffer
+ *  The stringbuffer is a child of bytebuffer.  See the bytebuffer
  *  class for details on how this is achieved. */
-class RUDIMENTS_DLLSPEC stringbuffer : public variablebuffer {
+class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 	public:
 
 		/** Creates an instance of the stringbuffer class with

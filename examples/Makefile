@@ -60,7 +60,7 @@ PROGS = \
 	sys$(EXE) \
 	unixsocketclient$(EXE) \
 	unixsocketserver$(EXE) \
-	variablebuffer$(EXE) \
+	bytebuffer$(EXE) \
 	xmldom$(EXE) \
 	xmlsax$(EXE) \
 	codetree$(EXE)
@@ -232,8 +232,8 @@ unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
 unixsocketserver$(EXE): unixsocketserver.cpp unixsocketserver.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketserver.lo $(LIBS)
 
-variablebuffer$(EXE): variablebuffer.cpp variablebuffer.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ variablebuffer.lo $(LIBS)
+bytebuffer$(EXE): bytebuffer.cpp bytebuffer.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ bytebuffer.lo $(LIBS)
 
 xmldom$(EXE): xmldom.cpp xmldom.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmldom.lo $(LIBS)

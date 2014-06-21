@@ -1,13 +1,13 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/variablebuffer.h>
+#include <rudiments/bytebuffer.h>
 #include <rudiments/charstring.h>
 #include <rudiments/rawbuffer.h>
 #include <rudiments/error.h>
 
-class variablebufferprivate {
-	friend class variablebuffer;
+class bytebufferprivate {
+	friend class bytebuffer;
 	private:
 		unsigned char	*_buffer;
 		size_t		_buffersize;
@@ -17,18 +17,18 @@ class variablebufferprivate {
 		size_t		_endofbuffer;
 };
 
-variablebuffer::variablebuffer(size_t initialsize, size_t increment) {
+bytebuffer::bytebuffer(size_t initialsize, size_t increment) {
 	init(NULL,initialsize,increment);
 }
 
-variablebuffer::variablebuffer(unsigned char *initialcontents,
+bytebuffer::bytebuffer(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
 	init(initialcontents,initialsize,increment);
 }
 
-void variablebuffer::init(unsigned char *initialcontents,
+void bytebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
-	pvt=new variablebufferprivate;
+	pvt=new bytebufferprivate;
 	if (initialcontents) {
 		pvt->_buffer=initialcontents;
 		pvt->_endofbuffer=initialsize;
@@ -42,26 +42,26 @@ void variablebuffer::init(unsigned char *initialcontents,
 	pvt->_position=0;
 }
 
-variablebuffer::variablebuffer(const variablebuffer &v) {
-	variablebufferClone(v);
+bytebuffer::bytebuffer(const bytebuffer &v) {
+	bytebufferClone(v);
 }
 
-variablebuffer &variablebuffer::operator=(const variablebuffer &v) {
+bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
 	if (this!=&v) {
 		delete[] pvt->_buffer;
 		delete pvt;
-		variablebufferClone(v);
+		bytebufferClone(v);
 	}
 	return *this;
 }
 
-variablebuffer::~variablebuffer() {
+bytebuffer::~bytebuffer() {
 	delete[] pvt->_buffer;
 	delete pvt;
 }
 
-void variablebuffer::variablebufferClone(const variablebuffer &v) {
-	pvt=new variablebufferprivate;
+void bytebuffer::bytebufferClone(const bytebuffer &v) {
+	pvt=new bytebufferprivate;
 	pvt->_initialsize=v.pvt->_initialsize;
 	pvt->_increment=v.pvt->_increment;
 	pvt->_buffersize=v.pvt->_buffersize;
@@ -71,7 +71,7 @@ void variablebuffer::variablebufferClone(const variablebuffer &v) {
 	rawbuffer::copy(pvt->_buffer,v.pvt->_buffer,pvt->_buffersize);
 }
 
-ssize_t variablebuffer::read(unsigned char *data, size_t size) {
+ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 
 	size_t	bytestoread=size;
 	if (pvt->_position>pvt->_endofbuffer) {
@@ -86,7 +86,7 @@ ssize_t variablebuffer::read(unsigned char *data, size_t size) {
 	return bytestoread;
 }
 
-variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
+bytebuffer *bytebuffer::write(const unsigned char *data, size_t size) {
 
 	// if the buffer is too small, extend it
 	if (pvt->_position>=pvt->_buffersize) {
@@ -106,74 +106,74 @@ variablebuffer *variablebuffer::write(const unsigned char *data, size_t size) {
 	return this;
 }
 
-variablebuffer *variablebuffer::write(const char *string) {
+bytebuffer *bytebuffer::write(const char *string) {
 	return write(reinterpret_cast<const unsigned char *>(string),
 					charstring::length(string));
 }
 
-variablebuffer *variablebuffer::write(const char *string, size_t size) {
+bytebuffer *bytebuffer::write(const char *string, size_t size) {
 	return write(reinterpret_cast<const unsigned char *>(string),size);
 }
 
-variablebuffer *variablebuffer::write(char character) {
+bytebuffer *bytebuffer::write(char character) {
 	return write(reinterpret_cast<const unsigned char *>(&character),
 								sizeof(char));
 }
 
-variablebuffer *variablebuffer::write(int16_t number) {
+bytebuffer *bytebuffer::write(int16_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int16_t));
 }
 
-variablebuffer *variablebuffer::write(int32_t number) {
+bytebuffer *bytebuffer::write(int32_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int32_t));
 }
 
-variablebuffer *variablebuffer::write(int64_t number) {
+bytebuffer *bytebuffer::write(int64_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int64_t));
 }
 
-variablebuffer *variablebuffer::write(unsigned char character) {
+bytebuffer *bytebuffer::write(unsigned char character) {
 	return write(reinterpret_cast<const unsigned char *>(&character),
 							sizeof(unsigned char));
 }
 
-variablebuffer *variablebuffer::write(uint16_t number) {
+bytebuffer *bytebuffer::write(uint16_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint16_t));
 }
 
-variablebuffer *variablebuffer::write(uint32_t number) {
+bytebuffer *bytebuffer::write(uint32_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint32_t));
 }
 
-variablebuffer *variablebuffer::write(uint64_t number) {
+bytebuffer *bytebuffer::write(uint64_t number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint64_t));
 }
 
-variablebuffer *variablebuffer::write(float number) {
+bytebuffer *bytebuffer::write(float number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(float));
 }
 
-variablebuffer *variablebuffer::write(double number) {
+bytebuffer *bytebuffer::write(double number) {
 	return write(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(double));
 }
 
-variablebuffer *variablebuffer::writeFormatted(const char *format, ...) {
+bytebuffer *bytebuffer::writeFormatted(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	variablebuffer	*retval=writeFormatted(format,&argp);
+	bytebuffer	*retval=writeFormatted(format,&argp);
 	va_end(argp);
 	return retval;
 }
 
-variablebuffer *variablebuffer::writeFormatted(const char *format,
+bytebuffer *bytebuffer::writeFormatted(const char *format,
 							va_list *argp) {
 
 	// find out how much space we need...
@@ -204,7 +204,7 @@ variablebuffer *variablebuffer::writeFormatted(const char *format,
 	return this;
 }
 
-void variablebuffer::clear() {
+void bytebuffer::clear() {
 	// If the buffer has grown beyond the initial size then reallocate it,
 	// otherwise just reset the start and end indices.
 	if (pvt->_buffersize>pvt->_initialsize) {
@@ -216,7 +216,7 @@ void variablebuffer::clear() {
 	pvt->_endofbuffer=0;
 }
 
-void variablebuffer::extend(size_t size) {
+void bytebuffer::extend(size_t size) {
 	size_t	newbuffersize=pvt->_buffersize+
 				((size/pvt->_increment)*pvt->_increment)+
 				(((size%pvt->_increment)>0)*pvt->_increment);
@@ -227,11 +227,11 @@ void variablebuffer::extend(size_t size) {
 	pvt->_buffersize=newbuffersize;
 }
 
-const unsigned char *variablebuffer::getBuffer() {
+const unsigned char *bytebuffer::getBuffer() {
 	return pvt->_buffer;
 }
 
-unsigned char *variablebuffer::detachBuffer() {
+unsigned char *bytebuffer::detachBuffer() {
 	unsigned char	*retval=pvt->_buffer;
 	pvt->_buffer=new unsigned char[pvt->_initialsize];
 	pvt->_buffersize=pvt->_initialsize;
@@ -240,128 +240,128 @@ unsigned char *variablebuffer::detachBuffer() {
 	return retval;
 }
 
-size_t variablebuffer::getSize() {
+size_t bytebuffer::getSize() {
 	return pvt->_endofbuffer;
 }
 
-size_t variablebuffer::getPosition() {
+size_t bytebuffer::getPosition() {
 	return pvt->_position;
 }
 
-size_t variablebuffer::getEnd() {
+size_t bytebuffer::getEnd() {
 	return pvt->_endofbuffer;
 }
 
-size_t variablebuffer::getActualSize() {
+size_t bytebuffer::getActualSize() {
 	return pvt->_buffersize;
 }
 
-void variablebuffer::setPosition(size_t pos) {
+void bytebuffer::setPosition(size_t pos) {
 	pvt->_position=pos;
 }
 
-variablebuffer *variablebuffer::append(const unsigned char *data, size_t size) {
+bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
 	pvt->_position=pvt->_endofbuffer;
 	return write(data,size);
 }
 
-variablebuffer *variablebuffer::append(const char *string) {
+bytebuffer *bytebuffer::append(const char *string) {
 	return append(reinterpret_cast<const unsigned char *>(string),
 						charstring::length(string));
 }
 
-variablebuffer *variablebuffer::append(const char *string, size_t size) {
+bytebuffer *bytebuffer::append(const char *string, size_t size) {
 	return append(reinterpret_cast<const unsigned char *>(string),size);
 }
 
-variablebuffer *variablebuffer::append(char character) {
+bytebuffer *bytebuffer::append(char character) {
 	return append(reinterpret_cast<const unsigned char *>(&character),
 								sizeof(char));
 }
 
-variablebuffer *variablebuffer::append(int16_t number) {
+bytebuffer *bytebuffer::append(int16_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int16_t));
 }
 
-variablebuffer *variablebuffer::append(int32_t number) {
+bytebuffer *bytebuffer::append(int32_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int32_t));
 }
 
-variablebuffer *variablebuffer::append(int64_t number) {
+bytebuffer *bytebuffer::append(int64_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(int64_t));
 }
 
-variablebuffer *variablebuffer::append(unsigned char character) {
+bytebuffer *bytebuffer::append(unsigned char character) {
 	return append(reinterpret_cast<const unsigned char *>(&character),
 							sizeof(unsigned char));
 }
 
-variablebuffer *variablebuffer::append(uint16_t number) {
+bytebuffer *bytebuffer::append(uint16_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint16_t));
 }
 
-variablebuffer *variablebuffer::append(uint32_t number) {
+bytebuffer *bytebuffer::append(uint32_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint32_t));
 }
 
-variablebuffer *variablebuffer::append(uint64_t number) {
+bytebuffer *bytebuffer::append(uint64_t number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 							sizeof(uint64_t));
 }
 
-variablebuffer *variablebuffer::append(float number) {
+bytebuffer *bytebuffer::append(float number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(float));
 }
 
-variablebuffer *variablebuffer::append(double number) {
+bytebuffer *bytebuffer::append(double number) {
 	return append(reinterpret_cast<const unsigned char *>(&number),
 								sizeof(double));
 }
 
-variablebuffer *variablebuffer::appendFormatted(const char *format, ...) {
+bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
 	va_list	argp;
 	va_start(argp,format);
-	variablebuffer	*retval=appendFormatted(format,&argp);
+	bytebuffer	*retval=appendFormatted(format,&argp);
 	va_end(argp);
 	return retval;
 }
 
-variablebuffer *variablebuffer::appendFormatted(const char *format,
+bytebuffer *bytebuffer::appendFormatted(const char *format,
 							va_list *argp) {
 	pvt->_position=pvt->_endofbuffer;
 	return writeFormatted(format,argp);
 }
 
-void variablebuffer::truncate(size_t pos) {
+void bytebuffer::truncate(size_t pos) {
 	pvt->_endofbuffer=pos;
 }
 
-void variablebuffer::truncate() {
+void bytebuffer::truncate() {
 	pvt->_endofbuffer=pvt->_position;
 }
 
-unsigned char *variablebuffer::_buffer() {
+unsigned char *bytebuffer::_buffer() {
 	return pvt->_buffer;
 }
 
-size_t variablebuffer::_endofbuffer() {
+size_t bytebuffer::_endofbuffer() {
 	return pvt->_endofbuffer;
 }
 
-void variablebuffer::_endofbuffer(size_t eob) {
+void bytebuffer::_endofbuffer(size_t eob) {
 	pvt->_endofbuffer=eob;
 }
 
-size_t variablebuffer::_position() {
+size_t bytebuffer::_position() {
 	return pvt->_position;
 }
 
-void variablebuffer::_position(size_t pos) {
+void bytebuffer::_position(size_t pos) {
 	pvt->_position=pos;
 }

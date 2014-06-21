@@ -11,24 +11,24 @@ class stringbufferprivate {
 	private:
 };
 
-stringbuffer::stringbuffer() : variablebuffer(128,32) {
+stringbuffer::stringbuffer() : bytebuffer(128,32) {
 	pvt=new stringbufferprivate;
 }
 
-stringbuffer::stringbuffer(const stringbuffer &s) : variablebuffer(s) {
+stringbuffer::stringbuffer(const stringbuffer &s) : bytebuffer(s) {
 	pvt=new stringbufferprivate;
 }
 
 stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
 	if (this!=&s) {
-		variablebuffer::operator=(s);
+		bytebuffer::operator=(s);
 	}
 	return *this;
 }
 
 stringbuffer::stringbuffer(char *initialcontents,
 					size_t initialsize, size_t increment) :
-			variablebuffer(reinterpret_cast<unsigned char *>(
+			bytebuffer(reinterpret_cast<unsigned char *>(
 							initialcontents),
 							initialsize,increment) {
 	pvt=new stringbufferprivate;
@@ -39,7 +39,7 @@ stringbuffer::~stringbuffer() {
 }
 
 void stringbuffer::setPosition(size_t pos) {
-	variablebuffer::setPosition(pos);
+	bytebuffer::setPosition(pos);
 }
 
 const char *stringbuffer::getString() {
@@ -57,46 +57,46 @@ char *stringbuffer::detachString() {
 }
 
 size_t stringbuffer::getPosition() {
-	return variablebuffer::getPosition();
+	return bytebuffer::getPosition();
 }
 
 void stringbuffer::clear() {
-	variablebuffer::clear();
+	bytebuffer::clear();
 	_buffer()[0]='\0';
 }
 
 void stringbuffer::terminate() {
-	variablebuffer::append((unsigned char)NULL);
+	bytebuffer::append((unsigned char)NULL);
 	_endofbuffer(_endofbuffer()-1);
 	_position(_position()-1);
 }
 
 stringbuffer *stringbuffer::append(const unsigned char *string) {
 	if (string) {
-		variablebuffer::append(string,charstring::length(string));
+		bytebuffer::append(string,charstring::length(string));
 	}
 	return this;
 }
 
 stringbuffer *stringbuffer::append(const unsigned char *string, size_t size) {
-	variablebuffer::append(string,size);
+	bytebuffer::append(string,size);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(const char *string) {
 	if (string) {
-		variablebuffer::append(string,charstring::length(string));
+		bytebuffer::append(string,charstring::length(string));
 	}
 	return this;
 }
 
 stringbuffer *stringbuffer::append(const char *string, size_t size) {
-	variablebuffer::append(string,size);
+	bytebuffer::append(string,size);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(char character) {
-	variablebuffer::append(character);
+	bytebuffer::append(character);
 	return this;
 }
 
@@ -113,7 +113,7 @@ stringbuffer *stringbuffer::append(int64_t number) {
 }
 
 stringbuffer *stringbuffer::append(unsigned char character) {
-	variablebuffer::append(character);
+	bytebuffer::append(character);
 	return this;
 }
 
@@ -131,42 +131,42 @@ stringbuffer *stringbuffer::append(uint64_t number) {
 
 stringbuffer *stringbuffer::append(int16_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::append(int32_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::append(int64_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::append(uint16_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::append(uint32_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::append(uint64_t number, uint16_t zeropadding) {
 	char	*numstr=charstring::parseNumber(number,zeropadding);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -177,7 +177,7 @@ stringbuffer *stringbuffer::append(float number) {
 
 stringbuffer *stringbuffer::append(float number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -185,7 +185,7 @@ stringbuffer *stringbuffer::append(float number, uint16_t scale) {
 stringbuffer *stringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -196,7 +196,7 @@ stringbuffer *stringbuffer::append(double number) {
 
 stringbuffer *stringbuffer::append(double number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -204,79 +204,79 @@ stringbuffer *stringbuffer::append(double number, uint16_t scale) {
 stringbuffer *stringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
-	variablebuffer::append(numstr,charstring::length(numstr));
+	bytebuffer::append(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(const unsigned char *string) {
-	variablebuffer::write(string,charstring::length(string));
+	bytebuffer::write(string,charstring::length(string));
 	return this;
 }
 
 stringbuffer *stringbuffer::write(const unsigned char *string, size_t size) {
-	variablebuffer::write(string,size);
+	bytebuffer::write(string,size);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(const char *string) {
-	variablebuffer::write(string,charstring::length(string));
+	bytebuffer::write(string,charstring::length(string));
 	return this;
 }
 
 stringbuffer *stringbuffer::write(const char *string, size_t size) {
-	variablebuffer::write(string,size);
+	bytebuffer::write(string,size);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(char character) {
-	variablebuffer::write(character);
+	bytebuffer::write(character);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(int16_t number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(int32_t number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(int64_t number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(unsigned char character) {
-	variablebuffer::write(character);
+	bytebuffer::write(character);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(uint16_t number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(uint32_t number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 stringbuffer *stringbuffer::write(uint64_t number) {
 	char	*numstr=charstring::parseNumber(number);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -287,7 +287,7 @@ stringbuffer *stringbuffer::write(float number) {
 
 stringbuffer *stringbuffer::write(float number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -295,7 +295,7 @@ stringbuffer *stringbuffer::write(float number, uint16_t scale) {
 stringbuffer *stringbuffer::write(float number, uint16_t precision,
 							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -306,7 +306,7 @@ stringbuffer *stringbuffer::write(double number) {
 
 stringbuffer *stringbuffer::write(double number, uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,scale);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
@@ -314,17 +314,17 @@ stringbuffer *stringbuffer::write(double number, uint16_t scale) {
 stringbuffer *stringbuffer::write(double number, uint16_t precision,
 							uint16_t scale) {
 	char	*numstr=charstring::parseNumber(number,precision,scale);
-	variablebuffer::write(numstr,charstring::length(numstr));
+	bytebuffer::write(numstr,charstring::length(numstr));
 	delete[] numstr;
 	return this;
 }
 
 void stringbuffer::truncate(size_t pos) {
-	variablebuffer::truncate(pos);
+	bytebuffer::truncate(pos);
 	terminate();
 }
 
 void stringbuffer::truncate() {
-	variablebuffer::truncate();
+	bytebuffer::truncate();
 	terminate();
 }

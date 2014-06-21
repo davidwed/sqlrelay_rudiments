@@ -378,7 +378,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\unixsocketclient.cpp" />
     <ClCompile Include="..\src\unixsocketserver.cpp" />
     <ClCompile Include="..\src\unixsocketutil.cpp" />
-    <ClCompile Include="..\src\variablebuffer.cpp" />
+    <ClCompile Include="..\src\bytebuffer.cpp" />
     <ClCompile Include="..\src\winsock.cpp" />
     <ClCompile Include="..\src\xmldom.cpp" />
     <ClCompile Include="..\src\xmldomnode.cpp" />
