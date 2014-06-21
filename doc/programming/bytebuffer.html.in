@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the bytebuffer class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the bytebuffer class</span><br><br>
+
+<p>The bytebuffer class allows you to manipulate a buffer of arbitrary length containing binary data.  You can append data to a bytebuffer or write data at arbitrary positions in the buffer.</p>
+
+@bytebuffer.cpp.html@
+
+</body>
+</html>
