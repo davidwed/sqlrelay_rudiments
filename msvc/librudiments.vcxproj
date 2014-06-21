@@ -356,7 +356,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\process.cpp" />
     <ClCompile Include="..\src\protocolentry.cpp" />
     <ClCompile Include="..\src\randomnumber.cpp" />
-    <ClCompile Include="..\src\rawbuffer.cpp" />
+    <ClCompile Include="..\src\bytestring.cpp" />
     <ClCompile Include="..\src\regex.cpp" />
     <ClCompile Include="..\src\regularexpression.cpp" />
     <ClCompile Include="..\src\rpcentry.cpp" />

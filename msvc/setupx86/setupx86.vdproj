@@ -3456,8 +3456,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_800928D82DBA4AF897871898D1441A78"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\rawbufferincludes.h"
-            "TargetName" = "8:rawbufferincludes.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\bytestringincludes.h"
+            "TargetName" = "8:bytestringincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
             "Condition" = "8:"
@@ -4596,8 +4596,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B87CFCA24C5E4188BB264440F385B841"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\rawbuffer.h"
-            "TargetName" = "8:rawbuffer.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\bytestring.h"
+            "TargetName" = "8:bytestring.h"
             "Tag" = "8:"
             "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
             "Condition" = "8:"

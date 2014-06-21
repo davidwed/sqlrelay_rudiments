@@ -43,7 +43,7 @@ PROGS = \
 	process$(EXE) \
 	protocolentry$(EXE) \
 	randomnumber$(EXE) \
-	rawbuffer$(EXE) \
+	bytestring$(EXE) \
 	regularexpression$(EXE) \
 	rpcentry$(EXE) \
 	serialport$(EXE) \
@@ -181,8 +181,8 @@ protocolentry$(EXE): protocolentry.cpp protocolentry.lo
 randomnumber$(EXE): randomnumber.cpp randomnumber.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ randomnumber.lo $(LIBS)
 
-rawbuffer$(EXE): rawbuffer.cpp rawbuffer.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ rawbuffer.lo $(LIBS)
+bytestring$(EXE): bytestring.cpp bytestring.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ bytestring.lo $(LIBS)
 
 regularexpression$(EXE): regularexpression.cpp regularexpression.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ regularexpression.lo $(LIBS)

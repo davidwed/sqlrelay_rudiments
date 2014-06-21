@@ -81,7 +81,7 @@
     <ClCompile Include="..\src\randomnumber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\rawbuffer.cpp">
+    <ClCompile Include="..\src\bytestring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\snooze.cpp">

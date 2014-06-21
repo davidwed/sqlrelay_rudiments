@@ -55,7 +55,7 @@ PROGS = server$(EXE) \
 	snooze$(EXE) \
 	memorymap$(EXE) \
 	character$(EXE) \
-	rawbuffer$(EXE) \
+	bytestring$(EXE) \
 	sslsvr$(EXE) \
 	sslclnt$(EXE) \
 	oneshotsvr$(EXE) \
@@ -163,7 +163,7 @@ clean:
 		snooze$(EXE) \
 		memorymap$(EXE) \
 		character$(EXE) \
-		rawbuffer$(EXE) \
+		bytestring$(EXE) \
 		nullserver$(EXE) \
 		sys$(EXE) \
 		reboot$(EXE) \
@@ -400,8 +400,8 @@ memorymap$(EXE): memorymap.cpp memorymap.lo
 character$(EXE): character.cpp character.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ character.lo $(ALLSTATIC) $(LIBS)
 
-rawbuffer$(EXE): rawbuffer.cpp rawbuffer.lo 
-	$(LIBTOOL) --mode=link $(CXX) -o $@ rawbuffer.lo $(ALLSTATIC) $(LIBS)
+bytestring$(EXE): bytestring.cpp bytestring.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ bytestring.lo $(ALLSTATIC) $(LIBS)
 
 sys$(EXE): sys.cpp sys.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sys.lo $(ALLSTATIC) $(LIBS)

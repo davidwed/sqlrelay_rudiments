@@ -97,7 +97,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "snooze", "..\snooze\snooze.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "memorymap", "..\memorymap\memorymap.vcxproj", "{85883F56-A583-44EE-8589-11E16F3B3466}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rawbuffer", "..\rawbuffer\rawbuffer.vcxproj", "{943C00EE-D7F0-4A79-87DA-8F7479AEA434}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bytestring", "..\bytestring\bytestring.vcxproj", "{943C00EE-D7F0-4A79-87DA-8F7479AEA434}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sslsvr", "..\sslsvr\sslsvr.vcxproj", "{4858ED9A-B660-492A-B93A-DC5BA6D855E0}"
 EndProject
