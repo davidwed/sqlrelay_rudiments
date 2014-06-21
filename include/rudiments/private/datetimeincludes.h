@@ -3,7 +3,7 @@
 
 #include <rudiments/private/dll.h>
 #include <rudiments/environment.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#define _WINSOCKAPI_

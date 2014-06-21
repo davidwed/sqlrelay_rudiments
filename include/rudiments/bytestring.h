@@ -1,16 +1,16 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_RAWBUFFER_H
-#define RUDIMENTS_RAWBUFFER_H
+#ifndef RUDIMENTS_BYTESTRING_H
+#define RUDIMENTS_BYTESTRING_H
 
-#include <rudiments/private/rawbufferincludes.h>
+#include <rudiments/private/bytestringincludes.h>
 
-/** The rawbuffer class provides methods for operating on raw memory buffers.
+/** The bytestring class provides methods for operating on byte strings.
  * 
  *  Unlike the functions in sys/string.h, these methods are NULL safe.  If any
  *  of the pointer arguments are NULL, your application will not crash. */
-class RUDIMENTS_DLLSPEC rawbuffer {
+class RUDIMENTS_DLLSPEC bytestring {
 	public:
 
 		/** Allocates a buffer of "size" bytes,

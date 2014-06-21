@@ -4,7 +4,7 @@
 #include <rudiments/inetsocketserver.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 
 #include <rudiments/private/winsock.h>
@@ -69,7 +69,7 @@ bool inetsocketserver::initialize(const char *address, uint16_t port) {
 	inetsocketutil::initialize(address,port);
 
 	// initialize a socket address structure
-	rawbuffer::zero(_sin(),sizeof(sockaddr_in));
+	bytestring::zero(_sin(),sizeof(sockaddr_in));
 	_sin()->sin_family=AF_INET;
 	_sin()->sin_port=hostToNet(port);
 
@@ -140,7 +140,7 @@ bool inetsocketserver::bind() {
 		// initialize a socket address structure
 		sockaddr_in	socknamesin;
 		socklen_t	size=sizeof(socknamesin);
-		rawbuffer::zero(&socknamesin,sizeof(socknamesin));
+		bytestring::zero(&socknamesin,sizeof(socknamesin));
 
 		int32_t	result;
 		do {
@@ -170,7 +170,7 @@ filedescriptor *inetsocketserver::accept() {
 	// initialize a socket address structure
 	sockaddr_in	clientsin;
 	socklen_t	size=sizeof(clientsin);
-	rawbuffer::zero(&clientsin,sizeof(clientsin));
+	bytestring::zero(&clientsin,sizeof(clientsin));
 
 	// accept on the socket
 	int32_t	clientsock;

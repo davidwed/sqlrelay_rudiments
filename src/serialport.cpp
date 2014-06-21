@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/serialport.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 
 // on SCO OSR5, tcdrain and friends are macros that

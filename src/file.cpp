@@ -5,7 +5,7 @@
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
@@ -112,7 +112,7 @@ class fileprivate {
 
 file::file() : filedescriptor() {
 	pvt=new fileprivate;
-	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
+	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 		pvt->_filetype=0;
 	#endif
@@ -953,7 +953,7 @@ bool file::lock(int32_t method, int16_t type,
 			return false;
 		}
 		OVERLAPPED	ol;
-		rawbuffer::zero((void *)&ol,sizeof(ol));
+		bytestring::zero((void *)&ol,sizeof(ol));
 		ol.Offset=lockstart.LowPart;
 		ol.OffsetHigh=lockstart.HighPart;
 		LARGE_INTEGER	locklength;
@@ -1608,7 +1608,7 @@ bool file::getAttribute(const char *name, void *buffer, size_t size) const {
 	unsigned char	*buf;
 	bool	retval=getAttribute(name,reinterpret_cast<void **>(&buf),&s);
 	if (retval) {
-		rawbuffer::copy(buf,buffer,(s<size)?s:size);
+		bytestring::copy(buf,buffer,(s<size)?s:size);
 		delete[] buf;
 	}
 	return retval;

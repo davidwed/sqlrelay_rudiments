@@ -3,7 +3,7 @@
 
 #include <rudiments/passwdentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
 
@@ -140,7 +140,7 @@ passwdentry::passwdentry() {
 	pvt->_pwd=NULL;
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
-		rawbuffer::zero(&pvt->_pwdbuffer,sizeof(pvt->_pwdbuffer));
+		bytestring::zero(&pvt->_pwdbuffer,sizeof(pvt->_pwdbuffer));
 		pvt->_buffer=NULL;
 	#endif
 #else
@@ -383,9 +383,9 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 					NULL,&sidsize,
 					NULL,&dnsize,&peuse);
 		PSID	sid=(PSID)new BYTE[sidsize];
-		rawbuffer::zero(sid,sidsize);
+		bytestring::zero(sid,sidsize);
 		CHAR	*dn=new CHAR[dnsize];
-		rawbuffer::zero(dn,dnsize);
+		bytestring::zero(dn,dnsize);
 		bool	failed=(LookupAccountName(NULL,username,
 						sid,&sidsize,
 						dn,&dnsize,&peuse)==FALSE ||

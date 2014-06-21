@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/inetsocketutil.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 
 class inetsocketutilprivate {
 	friend class inetsocketutil;
@@ -36,7 +36,7 @@ inetsocketutil::~inetsocketutil() {
 void inetsocketutil::initialize(const char *address, uint16_t port) {
 	pvt->_address=address;
 	pvt->_port=port;
-	rawbuffer::zero(&pvt->_sin,sizeof(pvt->_sin));
+	bytestring::zero(&pvt->_sin,sizeof(pvt->_sin));
 }
 
 const char *inetsocketutil::_address() {

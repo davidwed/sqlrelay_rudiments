@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/socketclient.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 
 #include <rudiments/private/winsock.h>
@@ -276,7 +276,7 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 		// connect was unsuccessful.
 		size=sizeof(peeraddr);
 		do {
-			rawbuffer::zero(&peeraddr,size);
+			bytestring::zero(&peeraddr,size);
 			result=getpeername(fd(),&peeraddr,&size);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		if (result==-1) {

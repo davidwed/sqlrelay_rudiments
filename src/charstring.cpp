@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/character.h>
 #if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
 	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
@@ -370,8 +370,8 @@ char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	char	*buffer=new char[realspaces+1];
 	buffer[realspaces]='\0';
-	rawbuffer::set(buffer,' ',realspaces);
-	rawbuffer::copy(buffer+realspaces-amtlen,amt+1,amtlen);
+	bytestring::set(buffer,' ',realspaces);
+	bytestring::copy(buffer+realspaces-amtlen,amt+1,amtlen);
 	if (buffer[0]==' ') {
 		buffer[0]='$';
 	}
@@ -874,7 +874,7 @@ size_t charstring::length(const unsigned char *string) {
 }
 
 void charstring::zero(char *str, size_t size) {
-	rawbuffer::set(str,0,size);
+	bytestring::set(str,0,size);
 }
 
 char *charstring::append(char *dest, const char *source) {
@@ -1523,10 +1523,10 @@ void charstring::base64Encode(const unsigned char *input, uint64_t inputsize,
 
 		bytesremaining=inputsize-inputindex;
 		if (bytesremaining>=3) {
-			rawbuffer::copy(data,input+inputindex,3);
+			bytestring::copy(data,input+inputindex,3);
 		} else {
-			rawbuffer::copy(data,input+inputindex,bytesremaining);
-			rawbuffer::zero(data+bytesremaining,3-(bytesremaining));
+			bytestring::copy(data,input+inputindex,bytesremaining);
+			bytestring::zero(data+bytesremaining,3-(bytesremaining));
 		}
 
 		(*output)[outputindex++]=b64code[data[0]>>2];
@@ -1651,7 +1651,7 @@ char *charstring::padString(const char *str, char padchar,
 		return newstring;
 	}
 
-	rawbuffer::set(newstring,padchar,totallength);
+	bytestring::set(newstring,padchar,totallength);
 	newstring[totallength]=0;
 
 	if (direction<0) {

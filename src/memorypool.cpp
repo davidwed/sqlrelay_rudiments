@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/memorypool.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -106,7 +106,7 @@ unsigned char *memorypool::allocate(size_t length) {
 
 unsigned char *memorypool::allocateAndClear(size_t length) {
 	unsigned char	*buffer=allocate(length);
-	rawbuffer::zero(buffer,length);
+	bytestring::zero(buffer,length);
 	return buffer;
 }
 

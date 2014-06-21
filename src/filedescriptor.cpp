@@ -20,7 +20,7 @@
 #include <rudiments/listener.h>
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
 		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
@@ -250,7 +250,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
 						f.pvt->_writebuffer;
 		pvt->_writebuffer=new unsigned char[writebuffersize];
-		rawbuffer::copy(pvt->_writebuffer,
+		bytestring::copy(pvt->_writebuffer,
 				f.pvt->_writebuffer,
 				writebuffersize);
 		pvt->_writebufferend=pvt->_writebuffer+writebuffersize;
@@ -1002,7 +1002,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 						(int)bytestocopy);
 			#endif
 
-			rawbuffer::copy(data,pvt->_readbufferhead,bytestocopy);
+			bytestring::copy(data,pvt->_readbufferhead,bytestocopy);
 			data=data+bytestocopy;
 			bytesread=bytesread+bytestocopy;
 			pvt->_readbufferhead=pvt->_readbufferhead+bytestocopy;
@@ -1305,7 +1305,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						(int)bytesunwritten);
 			#endif
 
-			rawbuffer::copy(pvt->_writebufferptr,
+			bytestring::copy(pvt->_writebufferptr,
 					data,bytesunwritten);
 			pvt->_writebufferptr=pvt->_writebufferptr+
 							bytesunwritten;
@@ -1318,7 +1318,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 						(int)writebufferspace);
 			#endif
 
-			rawbuffer::copy(pvt->_writebufferptr,
+			bytestring::copy(pvt->_writebufferptr,
 					data,writebufferspace);
 
 			bool	saveasw=pvt->_allowshortwrites;
@@ -2113,7 +2113,7 @@ char *filedescriptor::getPeerAddress() const {
 	// initialize a socket address structure
 	struct sockaddr_in	clientsin;
 	socklen_t		size=sizeof(clientsin);
-	rawbuffer::zero(&clientsin,sizeof(clientsin));
+	bytestring::zero(&clientsin,sizeof(clientsin));
 
 	// get the peer address
 	int32_t	result;

@@ -1,7 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif
@@ -16,7 +16,7 @@
 extern "C" void swab(const void *from, void *to, ssize_t n);
 #endif
 
-void *rawbuffer::duplicate(const void *src, size_t size) {
+void *bytestring::duplicate(const void *src, size_t size) {
 	if (!src || !size) {
 		return NULL;
 	}
@@ -24,15 +24,15 @@ void *rawbuffer::duplicate(const void *src, size_t size) {
 	return copy(static_cast<void *>(buffer),src,size);
 }
 
-void *rawbuffer::copy(void *dest, const void *src, size_t size) {
+void *bytestring::copy(void *dest, const void *src, size_t size) {
 	return (dest && src)?memcpy(dest,src,size):NULL;
 }
 
-void *rawbuffer::copyWithOverlap(void *dest, const void *src, size_t size) {
+void *bytestring::copyWithOverlap(void *dest, const void *src, size_t size) {
 	return (dest && src)?memmove(dest,src,size):NULL;
 }
 
-void *rawbuffer::copyUntil(void *dest, const void *src,
+void *bytestring::copyUntil(void *dest, const void *src,
 				unsigned char character, size_t size) {
 	#if defined(RUDIMENTS_HAVE__MEMCCPY)
 		return (dest && src)?_memccpy(dest,src,
@@ -48,7 +48,7 @@ void *rawbuffer::copyUntil(void *dest, const void *src,
 	#endif
 }
 
-void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
+void *bytestring::copySwapBytes(void *dest, const void *src, size_t size) {
 	if (dest && src) {
 		#if defined(RUDIMENTS_HAVE__SWAB)
 			_swab((char *)src,(char *)dest,size);
@@ -65,15 +65,15 @@ void *rawbuffer::copySwapBytes(void *dest, const void *src, size_t size) {
 	return dest;
 }
 
-void *rawbuffer::set(void *dest, unsigned char character, size_t size) {
+void *bytestring::set(void *dest, unsigned char character, size_t size) {
 	return (dest)?memset(dest,static_cast<int>(character),size):NULL;
 }
 
-void *rawbuffer::zero(void *dest, size_t size) {
+void *bytestring::zero(void *dest, size_t size) {
 	return set(dest,0,size);
 }
 
-int32_t rawbuffer::compare(const void *s1, const void *s2, size_t size) {
+int32_t bytestring::compare(const void *s1, const void *s2, size_t size) {
 	if (!s1 && !s2) {
 		return 0;
 	}
@@ -83,12 +83,12 @@ int32_t rawbuffer::compare(const void *s1, const void *s2, size_t size) {
 	return 1;
 }
 
-const void *rawbuffer::findFirst(const void *haystack,
+const void *bytestring::findFirst(const void *haystack,
 				unsigned char needle, size_t size) {
 	return (haystack && needle)?memchr(haystack,needle,size):NULL;
 }
 
-const void *rawbuffer::findLast(const void *haystack,
+const void *bytestring::findLast(const void *haystack,
 				unsigned char needle, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MEMRCHR
 		return (haystack && needle)?
@@ -112,7 +112,7 @@ const void *rawbuffer::findLast(const void *haystack,
 	#endif
 }
 
-const void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
+const void *bytestring::findFirst(const void *haystack, size_t haystacksize,
 					const void *needle, size_t needlesize) {
 	#ifdef RUDIMENTS_HAVE_MEMMEM
 		return (haystack && needle)?
@@ -137,7 +137,7 @@ const void *rawbuffer::findFirst(const void *haystack, size_t haystacksize,
 	#endif
 }
 
-const void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
+const void *bytestring::findLast(const void *haystack, size_t haystacksize,
 					const void *needle, size_t needlesize) {
 
 	if (haystack && needle) {
@@ -156,21 +156,21 @@ const void *rawbuffer::findLast(const void *haystack, size_t haystacksize,
 	return NULL;
 }
 
-void *rawbuffer::findFirst(void *haystack,
+void *bytestring::findFirst(void *haystack,
 				unsigned char needle, size_t size) {
 	return const_cast<void *>(findFirst(
 					const_cast<const void *>(haystack),
 					needle,size));
 }
 
-void *rawbuffer::findLast(void *haystack,
+void *bytestring::findLast(void *haystack,
 				unsigned char needle, size_t size) {
 	return const_cast<void *>(findLast(
 					const_cast<const void *>(haystack),
 					needle,size));
 }
 
-void *rawbuffer::findFirst(void *haystack, size_t haystacksize,
+void *bytestring::findFirst(void *haystack, size_t haystacksize,
 				const void *needle, size_t needlesize) {
 	return const_cast<void *>(findFirst(
 					const_cast<const void *>(haystack),
@@ -178,7 +178,7 @@ void *rawbuffer::findFirst(void *haystack, size_t haystacksize,
 					needle,needlesize));
 }
 
-void *rawbuffer::findLast(void *haystack, size_t haystacksize,
+void *bytestring::findLast(void *haystack, size_t haystacksize,
 				const void *needle, size_t needlesize) {
 	return const_cast<void *>(findLast(
 					const_cast<const void *>(haystack),

@@ -4,7 +4,7 @@
 #include <rudiments/unixsocketserver.h>
 #include <rudiments/unixsocketclient.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/file.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
@@ -75,7 +75,7 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 
 	// init the socket structure
 	file::remove(filename);
-	rawbuffer::zero(_sun(),sizeof(sockaddr_un));
+	bytestring::zero(_sun(),sizeof(sockaddr_un));
 	_sun()->sun_family=AF_UNIX;
 	charstring::copy(_sun()->sun_path,filename);
 
@@ -160,7 +160,7 @@ filedescriptor *unixsocketserver::accept() {
 	// initialize a socket address structure
 	sockaddr_un	clientsun;
 	socklen_t	size=sizeof(clientsun);
-	rawbuffer::zero(&clientsun,sizeof(clientsun));
+	bytestring::zero(&clientsun,sizeof(clientsun));
 
 	// accept on the socket
 	int32_t	clientsock;

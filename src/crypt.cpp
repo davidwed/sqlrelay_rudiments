@@ -3,7 +3,7 @@
 
 #include <rudiments/crypt.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_CRYPT_R) && !defined(__USE_GNU)
@@ -26,7 +26,7 @@ static threadmutex	*_cryptmutex;
 char *crypt::encrypt(const char *password, const char *salt) {
 	#if defined(RUDIMENTS_HAVE_CRYPT_R)
 		crypt_data	cd;
-		rawbuffer::zero(&cd,sizeof(cd));
+		bytestring::zero(&cd,sizeof(cd));
 		char	*encryptedpassword=crypt_r(password,(salt)?salt:"",&cd);
 		return (encryptedpassword)?
 			charstring::duplicate(encryptedpassword):NULL;

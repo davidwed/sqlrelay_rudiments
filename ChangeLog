@@ -23,6 +23,7 @@
 	fixed datetime memory leak
 	added xmldomnode::clone method to clone a node
 	renamed variablebuffer to bytebuffer
+	renamed rawbuffer to bytestring
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

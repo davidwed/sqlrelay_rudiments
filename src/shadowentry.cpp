@@ -3,7 +3,7 @@
 
 #include <rudiments/shadowentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -45,7 +45,8 @@ shadowentry::shadowentry() {
 		pvt=new shadowentryprivate;
 		pvt->_sp=NULL;
 		#ifdef RUDIMENTS_HAVE_GETSPNAM_R
-			rawbuffer::zero(&pvt->_spbuffer,sizeof(pvt->_spbuffer));
+			bytestring::zero(&pvt->_spbuffer,
+						sizeof(pvt->_spbuffer));
 			pvt->_buffer=NULL;
 		#endif
 	#endif

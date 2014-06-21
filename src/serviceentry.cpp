@@ -3,7 +3,7 @@
 
 #include <rudiments/serviceentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
@@ -47,7 +47,7 @@ serviceentry::serviceentry() {
 	pvt->_se=NULL;
 	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
-		rawbuffer::zero(&pvt->_sebuffer,sizeof(pvt->_sebuffer));
+		bytestring::zero(&pvt->_sebuffer,sizeof(pvt->_sebuffer));
 		pvt->_buffer=NULL;
 	#endif
 }

@@ -5,7 +5,7 @@
 #include <rudiments/hostentry.h>
 #include <rudiments/protocolentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
 
@@ -114,7 +114,7 @@ int32_t inetsocketclient::connect() {
 		}
 
 		// set the address type and port to connect to
-		rawbuffer::zero(_sin(),sizeof(sockaddr_in));
+		bytestring::zero(_sin(),sizeof(sockaddr_in));
 		_sin()->sin_family=he.getAddressType();
 		_sin()->sin_port=hostToNet(*_port());
 
@@ -147,7 +147,7 @@ int32_t inetsocketclient::connect() {
 
 		// create a hint indicating that SOCK_STREAM should be used
 		addrinfo	hints;
-		rawbuffer::zero(&hints,sizeof(addrinfo));
+		bytestring::zero(&hints,sizeof(addrinfo));
 		// For now, we're using PF_INET.  Specifying PF_INET prevents
 		// IPV6 addresses from working, but that's how this class works
 		// if we don't have getaddrinfo anyway.
@@ -203,7 +203,7 @@ int32_t inetsocketclient::connect() {
 					addressindex++) {
 
 				// set which host to connect to
-				rawbuffer::copy(&_sin()->sin_addr,
+				bytestring::copy(&_sin()->sin_addr,
 					he.getAddressList()[addressindex],
 					he.getAddressLength());
 	

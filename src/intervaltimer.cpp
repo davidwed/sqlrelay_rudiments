@@ -3,7 +3,7 @@
 
 #include <rudiments/private/config.h>
 #include <rudiments/intervaltimer.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 
 #include <stdio.h>
@@ -49,7 +49,7 @@ intervaltimer::~intervaltimer() {
 }
 
 void intervaltimer::initialize() {
-	rawbuffer::zero(&pvt->_values,sizeof(pvt->_values));
+	bytestring::zero(&pvt->_values,sizeof(pvt->_values));
 }
 
 void intervaltimer::setInitialInterval(int32_t seconds, int32_t microseconds) {

@@ -3,7 +3,7 @@
 
 #include <rudiments/signalclasses.h>
 #include <rudiments/error.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
 	#include <rudiments/linkedlist.h>
 #endif
@@ -371,7 +371,7 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 		struct sigaction	oldaction;
 		int32_t			result;
 		if (pvt->_sset) {
-			rawbuffer::copy(&pvt->_handlerstruct.sa_mask,
+			bytestring::copy(&pvt->_handlerstruct.sa_mask,
 						&pvt->_sset->pvt->_sigset,
 						sizeof(sigset_t));
 		} else {

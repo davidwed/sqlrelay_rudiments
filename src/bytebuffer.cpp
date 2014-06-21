@@ -3,7 +3,7 @@
 
 #include <rudiments/bytebuffer.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 
 class bytebufferprivate {
@@ -68,7 +68,7 @@ void bytebuffer::bytebufferClone(const bytebuffer &v) {
 	pvt->_position=v.pvt->_position;
 	pvt->_endofbuffer=v.pvt->_endofbuffer;
 	pvt->_buffer=new unsigned char[v.pvt->_buffersize];
-	rawbuffer::copy(pvt->_buffer,v.pvt->_buffer,pvt->_buffersize);
+	bytestring::copy(pvt->_buffer,v.pvt->_buffer,pvt->_buffersize);
 }
 
 ssize_t bytebuffer::read(unsigned char *data, size_t size) {
@@ -80,7 +80,7 @@ ssize_t bytebuffer::read(unsigned char *data, size_t size) {
 		bytestoread=pvt->_endofbuffer-pvt->_position;
 	}
 
-	rawbuffer::copy(data,pvt->_buffer+pvt->_position,bytestoread);
+	bytestring::copy(data,pvt->_buffer+pvt->_position,bytestoread);
 	pvt->_position=pvt->_position+bytestoread;
 
 	return bytestoread;
@@ -96,7 +96,7 @@ bytebuffer *bytebuffer::write(const unsigned char *data, size_t size) {
 	}
 
 	// copy the data into the buffer
-	rawbuffer::copy(pvt->_buffer+pvt->_position,data,size);
+	bytestring::copy(pvt->_buffer+pvt->_position,data,size);
 
 	// increment the position indices
 	pvt->_position=pvt->_position+size;
@@ -221,7 +221,7 @@ void bytebuffer::extend(size_t size) {
 				((size/pvt->_increment)*pvt->_increment)+
 				(((size%pvt->_increment)>0)*pvt->_increment);
 	unsigned char	*newbuffer=new unsigned char[newbuffersize];
-	rawbuffer::copy(newbuffer,pvt->_buffer,pvt->_buffersize);
+	bytestring::copy(newbuffer,pvt->_buffer,pvt->_buffersize);
 	delete[] pvt->_buffer;
 	pvt->_buffer=newbuffer;
 	pvt->_buffersize=newbuffersize;

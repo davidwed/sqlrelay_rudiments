@@ -13,7 +13,7 @@
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_PROCESS
 	#include <rudiments/stringbuffer.h>
-	#include <rudiments/rawbuffer.h>
+	#include <rudiments/bytestring.h>
 #endif
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -364,8 +364,8 @@ pid_t process::spawn(const char *command, const char * const *args) {
 		// create the new process and return it's pid on success
 		STARTUPINFO		si;
 		PROCESS_INFORMATION	pi;
-		rawbuffer::zero(&si,sizeof(si));
-		rawbuffer::zero(&pi,sizeof(pi));
+		bytestring::zero(&si,sizeof(si));
+		bytestring::zero(&pi,sizeof(pi));
 		if (CreateProcess(command,commandline,
 					NULL,NULL,TRUE,
 					0,NULL,NULL,&si,&pi)==TRUE) {

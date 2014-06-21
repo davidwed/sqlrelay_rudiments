@@ -4,7 +4,7 @@
 #include <rudiments/sharedmemory.h>
 #include <rudiments/passwdentry.h>
 #include <rudiments/groupentry.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
@@ -250,7 +250,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 	#endif
 
 	// init the segment to zero's
-	rawbuffer::zero(pvt->_shmptr,size);
+	bytestring::zero(pvt->_shmptr,size);
 	return true;
 }
 
@@ -325,7 +325,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 			}
 
 			// init the segment to zero's
-			rawbuffer::zero(pvt->_shmptr,size);
+			bytestring::zero(pvt->_shmptr,size);
 			return true;
 		
 		} else if (error::getErrorNumber()==EEXIST &&
@@ -380,7 +380,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 		if (pvt->_created) {
 			// init the segment to zero's
-			rawbuffer::zero(pvt->_shmptr,size);
+			bytestring::zero(pvt->_shmptr,size);
 			return true;
 		}
 	#else

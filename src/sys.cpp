@@ -6,7 +6,7 @@
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
 #include <rudiments/device.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/stringbuffer.h>
 
 #include <rudiments/private/winsock.h>
@@ -117,7 +117,7 @@ char *sys::getOperatingSystemVersion() {
 		// get the os version info
 		// (yes, this craziness is how you have to do it)
 		OSVERSIONINFOEX	info;
-		rawbuffer::zero(&info,sizeof(info));
+		bytestring::zero(&info,sizeof(info));
 		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
 		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
 			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);

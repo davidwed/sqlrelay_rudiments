@@ -3,7 +3,7 @@
 
 #include <rudiments/protocolentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -42,7 +42,7 @@ protocolentry::protocolentry() {
 	pvt->_pe=NULL;
 	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
-		rawbuffer::zero(&pvt->_pebuffer,sizeof(pvt->_pebuffer));
+		bytestring::zero(&pvt->_pebuffer,sizeof(pvt->_pebuffer));
 		pvt->_buffer=NULL;
 	#endif
 }

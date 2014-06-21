@@ -3,7 +3,7 @@
 
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
 
@@ -134,7 +134,7 @@ groupentry::groupentry() {
 	pvt->_grp=NULL;
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
-		rawbuffer::zero(&pvt->_grpbuffer,sizeof(pvt->_grpbuffer));
+		bytestring::zero(&pvt->_grpbuffer,sizeof(pvt->_grpbuffer));
 		pvt->_buffer=NULL;
 	#endif
 #else
@@ -337,9 +337,9 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 					NULL,&sidsize,
 					NULL,&dnsize,&peuse);
 		PSID	sid=(PSID)new BYTE[sidsize];
-		rawbuffer::zero(sid,sidsize);
+		bytestring::zero(sid,sidsize);
 		CHAR	*dn=new CHAR[dnsize];
-		rawbuffer::zero(dn,dnsize);
+		bytestring::zero(dn,dnsize);
 		bool	failed=(LookupAccountName(NULL,groupname,
 						sid,&sidsize,
 						dn,&dnsize,&peuse)==FALSE ||

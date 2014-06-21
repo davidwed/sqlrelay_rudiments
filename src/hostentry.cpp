@@ -3,7 +3,7 @@
 
 #include <rudiments/hostentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
@@ -45,7 +45,7 @@ hostentry::hostentry() {
 	pvt->_he=NULL;
 	#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
-		rawbuffer::zero(&pvt->_hebuffer,sizeof(pvt->_hebuffer));
+		bytestring::zero(&pvt->_hebuffer,sizeof(pvt->_hebuffer));
 		pvt->_buffer=NULL;
 	#endif
 }

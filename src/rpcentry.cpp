@@ -3,7 +3,7 @@
 
 #include <rudiments/rpcentry.h>
 #include <rudiments/charstring.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -58,7 +58,7 @@ rpcentry::rpcentry() {
 		pvt->_re=NULL;
 		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
-			rawbuffer::zero(&pvt->_rebuffer,sizeof(pvt->_rebuffer));
+			bytestring::zero(&pvt->_rebuffer,sizeof(pvt->_rebuffer));
 			pvt->_buffer=NULL;
 		#endif
 	#endif

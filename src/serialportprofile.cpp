@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/serialportprofile.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/character.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
@@ -28,7 +28,7 @@ serialportprofile::~serialportprofile() {
 }
 
 void serialportprofile::setControlCharacters(const unsigned char *c_cc) {
-	rawbuffer::copy(&pvt->_tio.c_cc,c_cc,sizeof(unsigned char)*NCCS);
+	bytestring::copy(&pvt->_tio.c_cc,c_cc,sizeof(unsigned char)*NCCS);
 }
 
 void serialportprofile::defaultControlOptions() {
@@ -48,11 +48,11 @@ void serialportprofile::defaultOutputOptions() {
 }
 
 void serialportprofile::defaultControlCharacters() {
-	rawbuffer::zero(&pvt->_tio.c_cc,sizeof(pvt->_tio.c_cc));
+	bytestring::zero(&pvt->_tio.c_cc,sizeof(pvt->_tio.c_cc));
 }
 
 void serialportprofile::defaultOptions() {
-	rawbuffer::zero(&pvt->_tio,sizeof(pvt->_tio));
+	bytestring::zero(&pvt->_tio,sizeof(pvt->_tio));
 }
 
 static tcflag_t	br[]={
@@ -1421,7 +1421,7 @@ serialportprofile::flowcontrol_t serialportprofile::flowControl() {
 }
 
 void serialportprofile::setOptions(termios *tio) {
-	rawbuffer::copy(&pvt->_tio,tio,sizeof(pvt->_tio));
+	bytestring::copy(&pvt->_tio,tio,sizeof(pvt->_tio));
 }
 
 termios *serialportprofile::getTermios() {

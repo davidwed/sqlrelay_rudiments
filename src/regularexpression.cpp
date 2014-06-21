@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/regularexpression.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 
 #if defined(RUDIMENTS_HAS_PCRE)
 	#include <pcre.h>
@@ -64,11 +64,11 @@ void regularexpression::regularexpressionInit() {
 		pvt->_expr=NULL;
 		pvt->_extra=NULL;
 	#else
-		rawbuffer::zero(&pvt->_expr,sizeof(pvt->_expr));
+		bytestring::zero(&pvt->_expr,sizeof(pvt->_expr));
 	#endif
 	pvt->_matchcount=0;
 	pvt->_str=NULL;
-	rawbuffer::zero(pvt->_matches,sizeof(pvt->_matches));
+	bytestring::zero(pvt->_matches,sizeof(pvt->_matches));
 }
 
 regularexpression::~regularexpression() {

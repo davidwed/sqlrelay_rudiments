@@ -206,10 +206,10 @@ AC_ARG_ENABLE(randomnumber,
 	[  --disable-randomnumber  Don't build randomnumber],
 	INCLUDE_RANDOMNUMBER="0",
 	INCLUDE_RANDOMNUMBER="1")
-AC_ARG_ENABLE(rawbuffer,
-	[  --disable-rawbuffer     Don't build rawbuffer class],
-	INCLUDE_RAWBUFFER="0",
-	INCLUDE_RAWBUFFER="1")
+AC_ARG_ENABLE(bytestring,
+	[  --disable-bytestring    Don't build bytestring class],
+	INCLUDE_BYTESTRING="0",
+	INCLUDE_BYTESTRING="1")
 AC_ARG_ENABLE(regularexpression,
 	[  --disable-regularexpression    Don't build regularexpression],
 	INCLUDE_REGULAREXPRESSION="0",
@@ -3532,12 +3532,12 @@ then
 	LOBJS="$LOBJS randomnumber.lo"
 fi
 
-if ( test "$INCLUDE_RAWBUFFER" = "1" )
+if ( test "$INCLUDE_BYTESTRING" = "1" )
 then
-	HEADERS="$HEADERS rawbuffer.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS rawbufferincludes.h"
-	SRCS="$SRCS rawbuffer.cpp"
-	LOBJS="$LOBJS rawbuffer.lo"
+	HEADERS="$HEADERS bytestring.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS bytestringincludes.h"
+	SRCS="$SRCS bytestring.cpp"
+	LOBJS="$LOBJS bytestring.lo"
 fi
 
 if ( test "$INCLUDE_REGULAREXPRESSION" = "1" )

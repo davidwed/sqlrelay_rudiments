@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/filesystem.h>
-#include <rudiments/rawbuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <rudiments/charstring.h>
@@ -77,7 +77,7 @@ filesystem::filesystem() {
 	#ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		pvt->_volume=NULL;
 	#endif
-	rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
+	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 }
 
 filesystem::filesystem(const filesystem &f) {
@@ -182,7 +182,7 @@ bool filesystem::getCurrentProperties() {
 	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 
 		// clear the statfs buffer
-		rawbuffer::zero(&pvt->_st,sizeof(pvt->_st));
+		bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 
 		// bail if no volume was specified
 		if (!pvt->_volume) {
