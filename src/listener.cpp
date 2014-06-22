@@ -3,6 +3,7 @@
 
 #include <rudiments/listener.h>
 #include <rudiments/error.h>
+#include <rudiments/linkedlist.h>
 
 // for FD_ZERO/FD_SET on windows
 #include <rudiments/private/winsock.h>
@@ -50,9 +51,9 @@
 class listenerprivate {
 	friend class listener;
 	private:
-		listenerlist	_filedescriptorlist;
-		listenerlist	_readylist;
-		bool		_retryinterruptedwaits;
+		linkedlist< filedescriptor * >	_filedescriptorlist;
+		listenerlist			_readylist;
+		bool				_retryinterruptedwaits;
 };
 
 listener::listener() {
@@ -118,7 +119,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
 		struct kevent	*kevs=new struct kevent[fdcount];
 		struct kevent	*rkevs=new struct kevent[fdcount];
-		listenerlistnode	*cur=
+		linkedlistnode< filedescriptor * >	*cur=
 					pvt->_filedescriptorlist.getFirst();
 		fdcount=0;
 		while (cur) {
@@ -192,7 +193,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
 		struct epoll_event	*evs=new struct epoll_event[fdcount];
 		struct epoll_event	*revs=new struct epoll_event[fdcount];
-		listenerlistnode	*cur=
+		linkedlistnode< filedescriptor * >	*cur=
 					pvt->_filedescriptorlist.getFirst();
 		fdcount=0;
 		while (cur) {
@@ -248,7 +249,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		// set up the fd's to be monitored, and how to monitor them
 		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
 		struct pollfd	*fds=new struct pollfd[fdcount];
-		listenerlistnode	*cur=
+		linkedlistnode< filedescriptor * >	*cur=
 					pvt->_filedescriptorlist.getFirst();
 		fdcount=0;
 		while (cur) {
@@ -335,7 +336,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			fd_set	fdlist;
 			int32_t	largest=-1;
 			FD_ZERO(&fdlist);
-			listenerlistnode	*cur=
+			linkedlistnode< filedescriptor * >	*cur=
 					pvt->_filedescriptorlist.getFirst();
 			while (cur) {
 

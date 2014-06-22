@@ -118,13 +118,8 @@ void LINKEDLIST_CLASS::insertAfter(linkedlistnode<valuetype> *node,
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::remove(valuetype value) {
-	for (linkedlistnode<valuetype> *current=first;
-			current; current=current->getNext()) {
-		if (!current->compare(value)) {
-			return remove(current);
-		}
-	}
-	return false;
+	linkedlistnode<valuetype>	*current=find(value);
+	return (current)?remove(current):false;
 }
 
 LINKEDLIST_TEMPLATE

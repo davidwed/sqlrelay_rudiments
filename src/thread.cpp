@@ -39,10 +39,11 @@ class threadprivate {
 
 thread::thread() {
 	pvt=new threadprivate;
-	pvt->_thr=0;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+		pvt->_thr=0;
 		pthread_attr_init(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
+		pvt->_thr=0;
 		pvt->_stacksize=sys::getPageSize();
 	#endif
 	pvt->_function=NULL;

@@ -99,16 +99,26 @@ class linkedlist {
 
 		/** Deletes the first linkedlistnode containing "value".
 		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
+		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
 
 		/** Deletes all linkedlistnodes containing "value".
+		 * 
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
 
 		/** Removed linkedlistnode "node" from the linkedlist.
 		 * 
+		 *  Note that this operation does not require a search and is
+		 *  far less expensive than the remove(value) operation and
+		 *  removeAll().
+		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(linkedlistnode<valuetype> *node);
 

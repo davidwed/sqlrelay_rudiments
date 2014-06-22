@@ -86,18 +86,28 @@ class singlylinkedlist {
 				singlylinkedlistnode<valuetype> *newnode);
 
 		/** Deletes the first singlylinkedlistnode containing "value".
+		 *
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
 
 		/** Deletes all singlylinkedlistnodes containing "value".
+		 *
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
 
 		/** Removed singlylinkedlistnode "node" from the
 		 *  singlylinkedlist.
-		 * 
+		 *
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.  Consider using the
+		 *  linkedlist class.
+		 *
 		 *  Returns true on success and false on failure. */
 		bool	remove(singlylinkedlistnode<valuetype> *node);
 

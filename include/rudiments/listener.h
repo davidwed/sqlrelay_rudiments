@@ -6,8 +6,8 @@
 
 #include <rudiments/private/listenerincludes.h>
 
-typedef linkedlistnode<filedescriptor *>	listenerlistnode;
-typedef linkedlist<filedescriptor *>		listenerlist;
+typedef singlylinkedlistnode<filedescriptor *>	listenerlistnode;
+typedef singlylinkedlist<filedescriptor *>	listenerlist;
 
 class listenerprivate;
 
