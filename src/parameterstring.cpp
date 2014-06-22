@@ -17,9 +17,9 @@ parameterstring::parameterstring() {
 
 parameterstring::~parameterstring() {
 	// delete each name and value in the list
-	for (linkedlistnode< namevaluepairsnode *> *node=
-			pvt->_nvp.getList()->getFirstNode();
-		node; node=node->getNext()) {
+	for (linkedlistnode< namevaluepairsnode *>
+			*node=pvt->_nvp.getList()->getFirst();
+			node; node=node->getNext()) {
 		delete[] node->getValue()->getKey();
 		delete[] node->getValue()->getValue();
 	}

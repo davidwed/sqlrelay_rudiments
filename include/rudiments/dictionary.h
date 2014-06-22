@@ -47,7 +47,7 @@ class dictionarynode {
 /** The dictionary class allows you to store arbitrary numbers of key/value
  *  pairs.
  * 
- *  Each dictionary is composed of a list of dictionarynode's.  Each
+ *  Each dictionary is composed of a list of dictionarynodes.  Each
  *  dictionarynode contains the key and value.
  *
  *  Internally, the dictionary class uses a linkedlist to store the values

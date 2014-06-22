@@ -3,5 +3,5 @@
 
 	protected:
 		linkedlistnode< dictionarynode<keytype,valuetype> *>
-							*findNode(keytype key);
+							*find(keytype key);
 		linkedlist< dictionarynode<keytype,valuetype> *>	dict;

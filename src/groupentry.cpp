@@ -97,9 +97,9 @@ static dictionary< gid_t, namesid * >	gidmap;
 static gid_t addGidMapping(const char *name, const char *sid) {
 
 	// check for existing mapping (by name only)
-	for (linkedlistnode< dictionarynode< gid_t, namesid * > *> *node=
-					gidmap.getList()->getFirstNode(); 
-					node; node=node->getNext()) {
+	for (linkedlistnode< dictionarynode< gid_t, namesid * > *>
+				*node=gidmap.getList()->getFirst(); 
+				node; node=node->getNext()) {
 		namesid	*ns=node->getValue()->getValue();
 		if (!charstring::compare(name,ns->name)) {
 			// reset the sid

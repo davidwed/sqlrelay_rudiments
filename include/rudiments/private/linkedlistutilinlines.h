@@ -48,18 +48,48 @@ void _linkedlistutil_print(char value) {
 }
 
 RUDIMENTS_TEMPLATE_INLINE
-void _linkedlistutil_print(int32_t value) {
-	stdoutput.printf("%d",(int)value);
-}
-
-RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(int16_t value) {
 	stdoutput.printf("%hd",value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(int32_t value) {
+	stdoutput.printf("%d",(int)value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(int64_t value) {
 	stdoutput.printf("%lld",(long long)value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(unsigned const char *value) {
+	stdoutput.printf("%s",value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(unsigned char *value) {
+	stdoutput.printf("%s",value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(unsigned char value) {
+	stdoutput.printf("%c",value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(uint16_t value) {
+	stdoutput.printf("%hd",value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(uint32_t value) {
+	stdoutput.printf("%d",(unsigned int)value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _linkedlistutil_print(uint64_t value) {
+	stdoutput.printf("%lld",(unsigned long long)value);
 }
 
 RUDIMENTS_TEMPLATE_INLINE

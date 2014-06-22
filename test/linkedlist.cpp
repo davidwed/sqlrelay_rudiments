@@ -2,7 +2,6 @@
 // See the file COPYING for more information
 
 #include <rudiments/linkedlist.h>
-//#include <rudiments/newlinkedlist.h>
 #include <rudiments/stdio.h>
 
 int	main(int argc, char **argv) {
@@ -28,24 +27,13 @@ int	main(int argc, char **argv) {
 
 	// insert a value into the middle of the list, display the list
 	stdoutput.printf("insert(2,2)\n");
-	intl.insert(2,2);
+	intl.insertAfter(intl.getFirst()->getNext(),2);
 	intl.print();
 	stdoutput.printf("length: %d\n",intl.getLength());
 
 	// remove values from the list, displaying the list after each removal
-	stdoutput.printf("removeByIndex(0)\n");
-	intl.removeByIndex(0);
-	intl.print();
-	stdoutput.printf("length: %d\n",intl.getLength());
-
-	stdoutput.printf("removeByValue(3)\n");
-	intl.removeByValue(3);
-	intl.print();
-	stdoutput.printf("length: %d\n",intl.getLength());
-
-	// change a value in the list, display the list
-	stdoutput.printf("setValueByIndex(1,50)\n");
-	intl.setValueByIndex(1,50);
+	stdoutput.printf("remove(3)\n");
+	intl.remove(3);
 	intl.print();
 	stdoutput.printf("length: %d\n",intl.getLength());
 
@@ -80,24 +68,13 @@ int	main(int argc, char **argv) {
 
 	// insert a value into the middle of the list, display the list
 	stdoutput.printf("insert(2,two)\n");
-	strl.insert(2,"two");
+	strl.insertAfter(strl.getFirst()->getNext(),"two");
 	strl.print();
 	stdoutput.printf("length: %d\n",strl.getLength());
 
 	// remove values from the list, displaying the list after each removal
-	stdoutput.printf("removeByIndex(0)\n");
-	strl.removeByIndex(0);
-	strl.print();
-	stdoutput.printf("length: %d\n",strl.getLength());
-
-	stdoutput.printf("removeByValue(three)\n");
-	strl.removeByValue("three");
-	strl.print();
-	stdoutput.printf("length: %d\n",strl.getLength());
-
-	// change a value in the list, display the list
-	stdoutput.printf("setValueByIndex(1,fifty)\n");
-	strl.setValueByIndex(1,"fifty");
+	stdoutput.printf("remove(three)\n");
+	strl.remove("three");
 	strl.print();
 	stdoutput.printf("length: %d\n",strl.getLength());
 

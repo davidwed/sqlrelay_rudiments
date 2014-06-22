@@ -44,7 +44,7 @@ void environment::init() {
 
 void environment::exit() {
 	for (linkedlistnode< namevaluepairsnode *> *node=
-			_envstrings->getList()->getFirstNode();
+			_envstrings->getList()->getFirst();
 			node; node=node->getNext()) {
 		free((void *)node->getValue()->getValue());
 		node->getValue()->setValue(NULL);

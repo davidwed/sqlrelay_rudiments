@@ -24,6 +24,8 @@
 	added xmldomnode::clone method to clone a node
 	renamed variablebuffer to bytebuffer
 	renamed rawbuffer to bytestring
+	refactored linkedlist
+	added singlylinkedlist class
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows

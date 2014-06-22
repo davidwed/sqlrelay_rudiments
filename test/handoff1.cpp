@@ -41,8 +41,7 @@ int main(int argc, const char **argv) {
 	for (;;) {
 
 		pool.waitForNonBlockingRead(-1,-1);
-		filedescriptor	*fd=NULL;
-		pool.getReadyList()->getValueByIndex(0,&fd);
+		filedescriptor	*fd=pool.getReadyList()->getFirst()->getValue();
 
 		if (fd==&serversock) {
 			clientsock=(inetsocketclient *)

@@ -25,8 +25,7 @@ DICTIONARY_CLASS::~dictionary() {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *>
-						*node=findNode(key);
+	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
 	if (node) {
 		node->getValue()->setValue(value);
 	} else {
@@ -37,8 +36,7 @@ void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *>
-						*node=findNode(key);
+	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
 	if (node) {
 		*value=node->getValue()->getValue();
 		return true;
@@ -49,10 +47,9 @@ bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool DICTIONARY_CLASS::removeValue(keytype key) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *>
-						*node=findNode(key);
+	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
 	if (node) {
-		return dict.removeNode(node);
+		return dict.remove(node);
 	}
 	return false;
 }
@@ -60,9 +57,9 @@ bool DICTIONARY_CLASS::removeValue(keytype key) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
-	findNode(keytype key) {
+	find(keytype key) {
 	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-			dict.getFirstNode(); node; node=node->getNext()) {
+			dict.getFirst(); node; node=node->getNext()) {
 		if (!node->getValue()->compare(key)) {
 			return node;
 		}
@@ -80,7 +77,7 @@ DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::clear() {
 	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-			dict.getFirstNode(); node; node=node->getNext()) {
+			dict.getFirst(); node; node=node->getNext()) {
 		delete node->getValue();
 	}
 	dict.clear();
@@ -90,7 +87,7 @@ DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::print() {
 	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-			dict.getFirstNode(); node; node=node->getNext()) {
+			dict.getFirst(); node; node=node->getNext()) {
 		node->getValue()->print();
 		stdoutput.printf("\n");
 	}

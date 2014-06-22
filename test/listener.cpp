@@ -61,8 +61,7 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("timeout waiting...\n");
 			break;
 		}
-		filedescriptor	*fd=NULL;
-		pool.getReadyList()->getValueByIndex(0,&fd);
+		filedescriptor	*fd=pool.getReadyList()->getFirst()->getValue();
 
 		// figure out which socket the client connected to
 		filedescriptor	*clientsock;

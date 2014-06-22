@@ -78,7 +78,7 @@ void listener::addFileDescriptor(filedescriptor *fd) {
 }
 
 void listener::removeFileDescriptor(filedescriptor *fd) {
-	pvt->_filedescriptorlist.removeByValue(fd);
+	pvt->_filedescriptorlist.remove(fd);
 }
 
 void listener::removeAllFileDescriptors() {
@@ -119,7 +119,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		struct kevent	*kevs=new struct kevent[fdcount];
 		struct kevent	*rkevs=new struct kevent[fdcount];
 		listenerlistnode	*cur=
-				pvt->_filedescriptorlist.getFirstNode();
+					pvt->_filedescriptorlist.getFirst();
 		fdcount=0;
 		while (cur) {
 
@@ -193,7 +193,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		struct epoll_event	*evs=new struct epoll_event[fdcount];
 		struct epoll_event	*revs=new struct epoll_event[fdcount];
 		listenerlistnode	*cur=
-				pvt->_filedescriptorlist.getFirstNode();
+					pvt->_filedescriptorlist.getFirst();
 		fdcount=0;
 		while (cur) {
 
@@ -249,7 +249,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
 		struct pollfd	*fds=new struct pollfd[fdcount];
 		listenerlistnode	*cur=
-				pvt->_filedescriptorlist.getFirstNode();
+					pvt->_filedescriptorlist.getFirst();
 		fdcount=0;
 		while (cur) {
 
@@ -336,7 +336,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 			int32_t	largest=-1;
 			FD_ZERO(&fdlist);
 			listenerlistnode	*cur=
-					pvt->_filedescriptorlist.getFirstNode();
+					pvt->_filedescriptorlist.getFirst();
 			while (cur) {
 
 				if (cur->getValue()->
@@ -416,7 +416,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 				for (uint64_t i=0; i<fdcount; i++) {
 					if (fds[i].revents) {
 						cur=pvt->_filedescriptorlist.
-								getFirstNode();
+								getFirst();
 						while (cur) {
 							if (cur->getValue()->
 							getFileDescriptor()==
@@ -431,7 +431,7 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 					}
 				}
 			#else
-				cur=pvt->_filedescriptorlist.getFirstNode();
+				cur=pvt->_filedescriptorlist.getFirst();
 				while (cur) {
 					if (FD_ISSET(cur->getValue()->
 							getFileDescriptor(),

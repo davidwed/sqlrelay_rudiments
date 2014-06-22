@@ -24,8 +24,8 @@ class xmldomprivate {
 		xmldomnode		*_currentparent;
 		xmldomnode		*_currentattribute;
 		bool			_stringcacheenabled;
-		stringlist		_strlist;
-		linkedlist<uint64_t>	_refcountlist;
+		linkedlist< char * >	_strlist;
+		linkedlist< uint64_t >	_refcountlist;
 };
 
 xmldom::xmldom() : xmlsax() {
@@ -51,8 +51,8 @@ xmldom::~xmldom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
-	for (stringlistnode *node=pvt->_strlist.getFirstNode();
-					node; node=node->getNext()) {
+	for (linkedlistnode< char * > *node=pvt->_strlist.getFirst();
+						node; node=node->getNext()) {
 		delete[] node->getValue();
 	}
 	delete pvt;
@@ -206,17 +206,16 @@ const char *xmldom::cacheString(const char *string) {
 	if (!string) {
 		return NULL;
 	}
-	uint64_t	index=0;
-	for (stringlistnode *node=pvt->_strlist.getFirstNode();
-					node; node=node->getNext()) {
-		const char	*data=node->getValue();
+	linkedlistnode< char * > 	*strnode=pvt->_strlist.getFirst();
+	linkedlistnode< uint64_t >	*refnode=pvt->_refcountlist.getFirst();
+	while (strnode) {
+		const char	*data=strnode->getValue();
 		if (!charstring::compare(string,data)) {
-			linkedlistnode<uint64_t>	*refnode=
-				pvt->_refcountlist.getNodeByIndex(index);
 			refnode->setValue(refnode->getValue()+1);
 			return data;
 		}
-		index++;
+		strnode=strnode->getNext();
+		refnode=refnode->getNext();
 	}
 	char	*copy=charstring::duplicate(string);
 	pvt->_strlist.append(copy);
@@ -228,21 +227,20 @@ void xmldom::unCacheString(const char *string) {
 	if (!string) {
 		return;
 	}
-	uint64_t	index=0;
-	for (stringlistnode *node=pvt->_strlist.getFirstNode();
-					node; node=node->getNext()) {
-		char	*data=node->getValue();
+	linkedlistnode< char * > 	*strnode=pvt->_strlist.getFirst();
+	linkedlistnode< uint64_t >	*refnode=pvt->_refcountlist.getFirst();
+	while (strnode) {
+		char	*data=strnode->getValue();
 		if (!charstring::compare(string,data)) {
-			linkedlistnode<uint64_t>	*refnode=
-				pvt->_refcountlist.getNodeByIndex(index);
 			refnode->setValue(refnode->getValue()-1);
-			if (refnode->getValue()<=0) {
-				pvt->_refcountlist.removeByIndex(index);
-				pvt->_strlist.removeByIndex(index);
+			if (!refnode->getValue()) {
+				pvt->_refcountlist.remove(refnode);
+				pvt->_strlist.remove(strnode);
 				delete[] data;
 				return;
 			}
 		}
-		index++;
+		strnode=strnode->getNext();
+		refnode=refnode->getNext();
 	}
 }

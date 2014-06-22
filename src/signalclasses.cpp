@@ -46,7 +46,7 @@ bool signalset::addSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigaddset(&pvt->_sigset,signum);
 	#else
-		if (!pvt->_siglist.getNodeByValue(signum)) {
+		if (!pvt->_siglist.find(signum)) {
 			pvt->_siglist.append(signum);
 		}
 		return true;
@@ -197,7 +197,7 @@ bool signalset::removeSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigdelset(&pvt->_sigset,signum);
 	#else
-		pvt->_siglist.removeByValue(signum);
+		pvt->_siglist.remove(signum);
 		return true;
 	#endif
 }
@@ -215,7 +215,7 @@ int32_t signalset::signalIsInSet(int32_t signum) const {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return sigismember(&pvt->_sigset,signum);
 	#else
-		return (pvt->_siglist.getNodeByValue(signum)!=NULL);
+		return (pvt->_siglist.find(signum)!=NULL);
 	#endif
 }
 
@@ -273,8 +273,8 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 	#else
 		bool	result=true;
 		for (linkedlistnode< int32_t > *node=
-				sset->pvt->_siglist.getFirstNode();
-					node; node=node->getNext()) {
+				sset->pvt->_siglist.getFirst();
+				node; node=node->getNext()) {
 			result=(result &&
 				(signal(node->getValue(),SIG_IGN)!=SIG_ERR));
 		}

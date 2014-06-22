@@ -19,8 +19,8 @@ class chatprivate {
 		const filedescriptor	*_readfd;
 		const filedescriptor	*_writefd;
 
-		int32_t		_timeout;
-		stringlist	_aborts;
+		int32_t			_timeout;
+		linkedlist< char * >	_aborts;
 };
 
 chat::chat(const filedescriptor *fd) {
@@ -132,8 +132,8 @@ void chat::appendAbortString(const char *string) {
 }
 
 void chat::clearAbortStrings() {
-	for (stringlistnode *sln=pvt->_aborts.getFirstNode();
-					sln; sln=sln->getNext()) {
+	for (linkedlistnode< char * > *sln=pvt->_aborts.getFirst();
+						sln; sln=sln->getNext()) {
 		char	*abortstring=sln->getValue();
 		delete[] abortstring;
 	}
@@ -230,7 +230,7 @@ int32_t chat::expect(const char *string, char **abort) {
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
 		int32_t	index=2;
-		for (stringlistnode *sln=pvt->_aborts.getFirstNode();
+		for (linkedlistnode< char * > *sln=pvt->_aborts.getFirst();
 						sln; sln=sln->getNext()) {
 
 			char	*abortstring=sln->getValue();
@@ -336,9 +336,9 @@ int32_t chat::substituteVariables(const char **ch,
 	const char	*str=*ch;
 	if (charstring::compare(str,"$(") && *(str+2)) {
 
-		for (linkedlistnode<constnamevaluepairsnode *> *nln=
-			variables->getList()->getFirstNode(); nln;
-			nln=nln->getNext()) {
+		for (linkedlistnode<constnamevaluepairsnode *>
+				*nln=variables->getList()->getFirst();
+				nln; nln=nln->getNext()) {
 
 			const char	*variable=nln->getValue()->getKey();
 			ssize_t	varlen=charstring::length(variable);

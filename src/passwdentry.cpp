@@ -102,9 +102,9 @@ static dictionary< uid_t, namesid * >	uidmap;
 static uid_t addUidMapping(const char *name, const char *sid) {
 
 	// check for existing mapping (by name only)
-	for (linkedlistnode< dictionarynode< uid_t, namesid * > *> *node=
-					uidmap.getList()->getFirstNode(); 
-					node; node=node->getNext()) {
+	for (linkedlistnode< dictionarynode< uid_t, namesid * > *>
+				*node=uidmap.getList()->getFirst(); 
+				node; node=node->getNext()) {
 		namesid	*ns=node->getValue()->getValue();
 		if (!charstring::compare(name,ns->name)) {
 			// reset the sid
