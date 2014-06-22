@@ -91,6 +91,67 @@ void SINGLYLINKEDLIST_CLASS::insertAfter(
 
 SINGLYLINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+void SINGLYLINKEDLIST_CLASS::moveAfter(
+				singlylinkedlistnode<valuetype> *node,
+				singlylinkedlistnode<valuetype> *nodetomove) {
+
+	if (!node || !nodetomove || node==nodetomove) {
+		return;
+	}
+
+	if (nodetomove==first) {
+		first=nodetomove->getNext();
+	} else if (nodetomove==last) {
+		singlylinkedlistnode<valuetype> *secondtolast=first;
+		while (secondtolast->getNext()!=last) {
+			secondtolast=secondtolast->getNext();
+		}
+		last=secondtolast;
+		secondtolast->setNext(NULL);
+	} else {
+		singlylinkedlistnode<valuetype> *previous=first;
+		while (previous->getNext()!=nodetomove) {
+			previous=previous->getNext();
+		}
+		previous->setNext(nodetomove->getNext());
+	}
+
+	nodetomove->setNext(node->getNext());
+	node->setNext(nodetomove);
+	if (node==last) {
+		last=nodetomove;
+	}
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void SINGLYLINKEDLIST_CLASS::detach(singlylinkedlistnode<valuetype> *node) {
+
+	if (node==first && node==last) {
+		first=NULL;
+		last=NULL;
+	} else if (node==first) {
+		first=node->getNext();
+	} else if (node==last) {
+		singlylinkedlistnode<valuetype> *secondtolast=first;
+		while (secondtolast->getNext()!=last) {
+			secondtolast=secondtolast->getNext();
+		}
+		last=secondtolast;
+		secondtolast->setNext(NULL);
+	} else {
+		singlylinkedlistnode<valuetype> *previous=first;
+		while (previous->getNext()!=node) {
+			previous=previous->getNext();
+		}
+		previous->setNext(node->getNext());
+	}
+	node->setNext(NULL);
+	length--;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
 	singlylinkedlistnode<valuetype> *current=first;
 	if (!current->compare(value)) {
@@ -245,6 +306,41 @@ singlylinkedlistnode<valuetype> *SINGLYLINKEDLIST_CLASS::find(
 		}
 	}
 	return NULL;
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void SINGLYLINKEDLIST_CLASS::sort() {
+
+	for (uint64_t count=length; count; count--) {
+
+		// find the node with the smallest value,
+		// keep track of the node prior to the minimum node too
+		singlylinkedlistnode<valuetype>	*min=first;
+		singlylinkedlistnode<valuetype>	*priortomin=NULL;
+		singlylinkedlistnode<valuetype>	*current=first->getNext();
+		singlylinkedlistnode<valuetype>	*previous=first;
+		for (uint64_t ind=1; ind<count; ind++) {
+			if (current->compare(min->getValue())<0) {
+				priortomin=previous;
+				min=current;
+			}
+			previous=current;
+			current=current->getNext();
+		}
+
+		// move it to the end
+		if (min!=last) {
+			if (min==first) {
+				first=min->getNext();
+			} else {
+				priortomin->setNext(min->getNext());
+			}
+			min->setNext(NULL);
+			last->setNext(min);
+			last=min;
+		}
+	}
 }
 
 SINGLYLINKEDLIST_TEMPLATE

@@ -49,7 +49,7 @@ class linkedlistnode {
  *  store arbitrary types of values.
  * 
  *  Each linkedlist is composed of a series of linkedlistnodes.  Each
- *  linkedlistnode contains the value. */
+ *  linkedlistnode contains a value. */
 template < class valuetype >
 class linkedlist {
 	public:
@@ -92,10 +92,23 @@ class linkedlist {
 		void	insertAfter(linkedlistnode<valuetype> *node,
 							valuetype value);
 
-		/** Inserts already created linkedlistnode "node" into the
+		/** Inserts already created linkedlistnode "newnode" into the
 		 *  linkedlist after "node". */
 		void	insertAfter(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *newnode);
+
+		/** Moves node "nodetomove" to the position before "node" in
+		 *  the linkedlist. */
+		void	moveBefore(linkedlistnode<valuetype> *node,
+					linkedlistnode<valuetype> *nodetomove);
+
+		/** Moves node "nodetomove" to the position after "node" in
+		 *  the linkedlist. */
+		void	moveAfter(linkedlistnode<valuetype> *node,
+					linkedlistnode<valuetype> *nodetomove);
+
+		/** Detaches "node" from the list. */
+		void	detach(linkedlistnode<valuetype> *node);
 
 		/** Deletes the first linkedlistnode containing "value".
 		 * 
@@ -153,6 +166,9 @@ class linkedlist {
 		linkedlistnode<valuetype>
 			*find(linkedlistnode<valuetype> *startnode,
 						valuetype value);
+
+		/** Sorts the linkedlist in ascending order. */
+		void	sort();
 
 		/** Deletes all linkedlistnodes currently in the linkedlist.
 		 *  Note however, that the data stored in each linkedlistnode

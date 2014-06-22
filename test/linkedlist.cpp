@@ -83,4 +83,21 @@ int	main(int argc, char **argv) {
 	strl.clear();
 	strl.print();
 	stdoutput.printf("length: %d\n",strl.getLength());
+
+
+	stdoutput.printf("\n\n");
+	stdoutput.printf("append(5,4,3,2,1,0)\n");
+	strl.append("5");
+	strl.append("4");
+	strl.append("3");
+	strl.append("2");
+	strl.append("1");
+	strl.append("0");
+	strl.print();
+	stdoutput.printf("sort()\n");
+	strl.sort();
+	strl.print();
+	stdoutput.printf("sort() (again)\n");
+	strl.sort();
+	strl.print();
 }

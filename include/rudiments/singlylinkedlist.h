@@ -46,7 +46,14 @@ class singlylinkedlistnode {
  *  template-based, you can store arbitrary types of values.
  * 
  *  Each singlylinkedlist is composed of a series of singlylinkedlistnodes.
- *  Each singlylinkedlistnode contains the value. */
+ *  Each singlylinkedlistnode contains a value.
+ *
+ *  This class is similar to the linkedlist class but uses less memory and
+ *  many of its operations are faster.
+ *
+ *  However, the move, detach and remove operations are much slower.  If your
+ *  application must run these operations regularly, you should consider using
+ *  the linkedlist class instead.  */
 template < class valuetype >
 class singlylinkedlist {
 	public:
@@ -85,10 +92,27 @@ class singlylinkedlist {
 		void	insertAfter(singlylinkedlistnode<valuetype> *node,
 				singlylinkedlistnode<valuetype> *newnode);
 
+		/** Moves node "nodetomove" to the position after "node" in
+		 *  the singlylinkedlist.
+		 *
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.  Consider using the
+		 *  linkedlist class. */
+		void	moveAfter(singlylinkedlistnode<valuetype> *node,
+				singlylinkedlistnode<valuetype> *nodetomove);
+
+		/** Detaches "node" from the list.
+		 *
+		 *  Note that this operation requires a search and is expensive
+		 *  in both execution time and code size.  Consider using the
+		 *  linkedlist class. */
+		void	detach(singlylinkedlistnode<valuetype> *node);
+
 		/** Deletes the first singlylinkedlistnode containing "value".
 		 *
 		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
+		 *  in both execution time and code size.  Consider using the
+		 *  linkedlist class.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	remove(valuetype value);
@@ -96,7 +120,8 @@ class singlylinkedlist {
 		/** Deletes all singlylinkedlistnodes containing "value".
 		 *
 		 *  Note that this operation requires a search and is expensive
-		 *  in both execution time and code size.
+		 *  in both execution time and code size.  Consider using the
+		 *  linkedlist class.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	removeAll(valuetype value);
@@ -136,6 +161,9 @@ class singlylinkedlist {
 		singlylinkedlistnode<valuetype>
 			*find(singlylinkedlistnode<valuetype> *startnode,
 							valuetype value);
+
+		/** Sorts the singlylinkedlist in ascending order. */
+		void	sort();
 
 		/** Deletes all singlylinkedlistnodes currently in the
 		 *  singlylinkedlist.  Note however, that the data stored in

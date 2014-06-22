@@ -117,6 +117,80 @@ void LINKEDLIST_CLASS::insertAfter(linkedlistnode<valuetype> *node,
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::moveBefore(linkedlistnode<valuetype> *node,
+					linkedlistnode<valuetype> *nodetomove) {
+	return move(node,nodetomove,true);
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::moveAfter(linkedlistnode<valuetype> *node,
+					linkedlistnode<valuetype> *nodetomove) {
+	return move(node,nodetomove,false);
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::move(linkedlistnode<valuetype> *node,
+					linkedlistnode<valuetype> *nodetomove,
+					bool before) {
+
+	if (!node || !nodetomove || node==nodetomove) {
+		return;
+	}
+
+	if (nodetomove==first) {
+		first=nodetomove->getNext();
+	} else if (nodetomove==last) {
+		last=nodetomove->getPrevious();
+	}
+	if (nodetomove->getPrevious()) {
+		nodetomove->getPrevious()->setNext(nodetomove->getNext());
+	}
+	if (nodetomove->getNext()) {
+		nodetomove->getNext()->setPrevious(nodetomove->getPrevious());
+	}
+
+	if (before) {
+		nodetomove->setNext(node);
+		nodetomove->setPrevious(node->getPrevious());
+		node->setPrevious(nodetomove);
+		if (node==first) {
+			first=nodetomove;
+		}
+	} else {
+		nodetomove->setNext(node->getNext());
+		nodetomove->setPrevious(node);
+		node->setNext(nodetomove);
+		if (node==last) {
+			last=nodetomove;
+		}
+	}
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::detach(linkedlistnode<valuetype> *node) {
+
+	if (node==first) {
+		first=node->getNext();
+	}
+	if (node==last) {
+		last=node->getPrevious();
+	}
+	if (node->getPrevious()) {
+		node->getPrevious()->setNext(node->getNext());
+	}
+	if (node->getNext()) {
+		node->getNext()->setPrevious(node->getPrevious());
+	}
+	node->setNext(NULL);
+	node->setPrevious(NULL);
+	length--;
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::remove(valuetype value) {
 	linkedlistnode<valuetype>	*current=find(value);
 	return (current)?remove(current):false;
@@ -211,6 +285,38 @@ linkedlistnode<valuetype> *LINKEDLIST_CLASS::find(
 		}
 	}
 	return NULL;
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::sort() {
+
+	for (uint64_t count=length; count; count--) {
+
+		// find the node with the smallest value
+		linkedlistnode<valuetype>	*min=first;
+		linkedlistnode<valuetype>	*current=first->getNext();
+		for (uint64_t ind=1; ind<count; ind++) {
+			if (current->compare(min->getValue())<0) {
+				min=current;
+			}
+			current=current->getNext();
+		}
+
+		// move it to the end
+		if (min!=last) {
+			if (min==first) {
+				first=min->getNext();
+			} else {
+				min->getPrevious()->setNext(min->getNext());
+			}
+			min->getNext()->setPrevious(min->getPrevious());
+			min->setNext(NULL);
+			min->setPrevious(last);
+			last->setNext(min);
+			last=min;
+		}
+	}
 }
 
 LINKEDLIST_TEMPLATE
