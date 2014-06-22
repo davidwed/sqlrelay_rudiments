@@ -22,19 +22,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
-	dict.removeValue("3");
+	dict.remove("3");
 	dict.print();
 	stdoutput.printf("\n");
 
-	dict.removeValue("2");
+	dict.remove("2");
 	dict.print();
 	stdoutput.printf("\n");
 
-	dict.removeValue("4");
+	dict.remove("4");
 	dict.print();
 	stdoutput.printf("\n");
 
-	dict.removeValue("1");
+	dict.remove("1");
 	dict.print();
 
 
@@ -55,19 +55,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
-	numdict.removeValue(3);
+	numdict.remove(3);
 	numdict.print();
 	stdoutput.printf("\n");
 
-	numdict.removeValue(2);
+	numdict.remove(2);
 	numdict.print();
 	stdoutput.printf("\n");
 
-	numdict.removeValue(4);
+	numdict.remove(4);
 	numdict.print();
 	stdoutput.printf("\n");
 
-	numdict.removeValue(1);
+	numdict.remove(1);
 	numdict.print();
 	stdoutput.printf("\n");
 
@@ -90,19 +90,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 	// remove values, displaying the dictionary after each removal
-	doubledict.removeValue(3.3);
+	doubledict.remove(3.3);
 	doubledict.print();
 	stdoutput.printf("\n");
 
-	doubledict.removeValue(2.2);
+	doubledict.remove(2.2);
 	doubledict.print();
 	stdoutput.printf("\n");
 
-	doubledict.removeValue(4.4);
+	doubledict.remove(4.4);
 	doubledict.print();
 	stdoutput.printf("\n");
 
-	doubledict.removeValue(1.1);
+	doubledict.remove(1.1);
 	doubledict.print();
 	stdoutput.printf("\n");
 }

@@ -78,7 +78,7 @@ class dictionary {
 		/** Removes the dictionarynode with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
-		bool	removeValue(keytype key);
+		bool	remove(keytype key);
 
 		/** Returns the list used internally. */
 		linkedlist< dictionarynode<keytype,valuetype> *> *getList();

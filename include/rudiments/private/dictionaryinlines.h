@@ -46,7 +46,7 @@ bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool DICTIONARY_CLASS::removeValue(keytype key) {
+bool DICTIONARY_CLASS::remove(keytype key) {
 	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
 	if (node) {
 		return dict.remove(node);

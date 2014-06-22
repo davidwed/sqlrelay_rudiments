@@ -18,9 +18,7 @@ install:
 	do \
 		$(INSTALL) -m 644 $$file $(docdir)/classes/html; \
 	done
-	$(INSTALL) -m 644 programming/baseclasses.html $(docdir)/programming
-	$(INSTALL) -m 644 programming/utilclasses.html $(docdir)/programming
-	$(INSTALL) -m 644 programming/wrapperclasses.html $(docdir)/programming
+	$(INSTALL) -m 644 programming/guide.html $(docdir)/programming
 
 uninstall:
 	$(RMTREE) $(docdir)

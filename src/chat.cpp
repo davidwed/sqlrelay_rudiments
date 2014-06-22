@@ -7,6 +7,7 @@
 #include <rudiments/regularexpression.h>
 #include <rudiments/snooze.h>
 #include <rudiments/character.h>
+#include <rudiments/singlylinkedlist.h>
 #ifdef DEBUG_CHAT
 	#include <rudiments/stdio.h>
 #endif
@@ -19,8 +20,8 @@ class chatprivate {
 		const filedescriptor	*_readfd;
 		const filedescriptor	*_writefd;
 
-		int32_t			_timeout;
-		linkedlist< char * >	_aborts;
+		int32_t				_timeout;
+		singlylinkedlist< char * >	_aborts;
 };
 
 chat::chat(const filedescriptor *fd) {
@@ -132,7 +133,7 @@ void chat::appendAbortString(const char *string) {
 }
 
 void chat::clearAbortStrings() {
-	for (linkedlistnode< char * > *sln=pvt->_aborts.getFirst();
+	for (singlylinkedlistnode< char * > *sln=pvt->_aborts.getFirst();
 						sln; sln=sln->getNext()) {
 		char	*abortstring=sln->getValue();
 		delete[] abortstring;
@@ -230,7 +231,8 @@ int32_t chat::expect(const char *string, char **abort) {
 		// compare to abort strings, if the result matches, then
 		// return the (two-based) index of the abort string
 		int32_t	index=2;
-		for (linkedlistnode< char * > *sln=pvt->_aborts.getFirst();
+		for (singlylinkedlistnode< char * >
+					*sln=pvt->_aborts.getFirst();
 						sln; sln=sln->getNext()) {
 
 			char	*abortstring=sln->getValue();

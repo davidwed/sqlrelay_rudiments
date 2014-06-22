@@ -44,8 +44,8 @@ void environment::init() {
 
 void environment::exit() {
 	for (linkedlistnode< namevaluepairsnode *> *node=
-			_envstrings->getList()->getFirst();
-			node; node=node->getNext()) {
+				_envstrings->getList()->getFirst();
+				node; node=node->getNext()) {
 		free((void *)node->getValue()->getValue());
 		node->getValue()->setValue(NULL);
 	}
@@ -175,7 +175,7 @@ bool environment::remove(const char *variable) {
 				const_cast<char *>(variable),&pestr)) {
 			free((void *)pestr);
 		}
-		_envstrings->removeValue(const_cast<char *>(variable));
+		_envstrings->remove(const_cast<char *>(variable));
 	#endif
 	retval=true;
 	if (_envmutex) {
