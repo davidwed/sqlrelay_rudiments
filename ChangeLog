@@ -26,6 +26,7 @@
 	renamed rawbuffer to bytestring
 	refactored linkedlist
 	added singlylinkedlist class
+	added sort, detach, move and insert methods to linkedlist classes
 
 0.46 - updated filedestination::open to take a permissions parameter
 	added deployment projects for windows
