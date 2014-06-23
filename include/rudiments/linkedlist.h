@@ -165,10 +165,18 @@ class linkedlist {
 		 *  if "value" was not found. */
 		linkedlistnode<valuetype>
 			*find(linkedlistnode<valuetype> *startnode,
-						valuetype value);
+							valuetype value);
 
-		/** Sorts the linkedlist in ascending order. */
-		void	sort();
+		/** Sorts the linkedlist in ascending order using a modified
+		 *  insertion sort algorithm.  This sort is slower than
+		 *  heapSort() but uses no additional memory. */
+		void	insertionSort();
+
+		/** Sorts the linkedlist in ascending order using a heap
+		 *  sort algorithm.  This sort is faster than heapSort() but
+		 *  uses additional memory in proportion to the size of the
+		 *  list. */
+		void	heapSort();
 
 		/** Deletes all linkedlistnodes currently in the linkedlist.
 		 *  Note however, that the data stored in each linkedlistnode

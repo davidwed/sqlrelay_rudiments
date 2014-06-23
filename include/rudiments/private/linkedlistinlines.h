@@ -5,6 +5,8 @@
 #include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/linkedlistutilinlines.h>
 
+#include <math.h>
+
 #define LINKEDLIST_TEMPLATE template <class valuetype>
 
 #define LINKEDLIST_CLASS linkedlist<valuetype>
@@ -289,7 +291,7 @@ linkedlistnode<valuetype> *LINKEDLIST_CLASS::find(
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void LINKEDLIST_CLASS::sort() {
+void LINKEDLIST_CLASS::insertionSort() {
 
 	// insertion sort with a few optimizations...
 
@@ -395,6 +397,145 @@ void LINKEDLIST_CLASS::sort() {
 	// make the new list the current list
 	first=newfirst;
 	last=newlast;
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::heapSort() {
+
+	// if there are 0 or 1 items in the list then it's already sorted
+	if (length<2) {
+		return;
+	}
+
+	// build heap as a binary tree mapped to an array:
+	//	parentindex = floor((childindex-1)/2)
+	//	leftchildindex = parent*2+1
+	//	rightchildindex = parent*2+2
+	linkedlistnode<valuetype>	**heap=
+					new linkedlistnode<valuetype> *[length];
+	linkedlistnode<valuetype>	*temp=NULL;
+	uint64_t			heapend=0;
+	for (linkedlistnode<valuetype> *node=first;
+					node; node=node->getNext()) {
+
+		// insert node into heap
+		heap[heapend]=node;
+
+		// walk up the tree, maintaining the heap property
+		// (higher values higher up in the tree)
+		uint64_t	child=heapend;
+		while (child) {
+
+			// get the parent index
+			uint64_t	parent=(child-1)/2;
+
+			// swap nodes if necessary
+			if (heap[parent]->compare(heap[child]->getValue())<0) {
+				temp=heap[parent];
+				heap[parent]=heap[child];
+				heap[child]=temp;
+			}
+
+			// move up
+			child=parent;
+		}
+		
+		// move on
+		heapend++;
+	}
+
+	// reset the heap end index
+	heapend--;
+
+	// Build a new list from the heap by swapping the root and last leaf
+	// node (index 0 is the root and the last index is the last leaf),
+	// pulling the value off of the last leaf node, and sifting the tree to
+	// maintain the heap property (higher values higher up in the tree),
+	// over and over again.  We'll shortcut the swap and pull-off part a
+	// bit...
+
+	// first and last pointers for the new list
+	linkedlistnode<valuetype>	*newfirst=NULL;
+	linkedlistnode<valuetype>	*newlast=NULL;
+
+	// extract values from the heap...
+	for (;;) {
+
+		// pull off the highest value (which is always at the root
+		// of the tree, index 0 in the array) and prepend it to the
+		// new array
+		linkedlistnode<valuetype>	*node=heap[0];
+		if (!newfirst) {
+			node->setPrevious(NULL);
+			node->setNext(NULL);
+			newfirst=node;
+			newlast=node;
+		} else {
+			node->setPrevious(NULL);
+			node->setNext(newfirst);
+			newfirst->setPrevious(node);
+			newfirst=node;
+		}
+
+		// when the tree is empty, we're done
+		if (!heapend) {
+
+			// make the new list the current list
+			first=newfirst;
+			last=newlast;
+
+			// clean up
+			delete[] heap;
+			return;
+		}
+
+		// move the value at the last leaf node (end of the array)
+		// to the root node (index 0 of the array)
+		heap[0]=heap[heapend];
+		heapend--;
+
+		// sift the tree to maintain the heap property
+		// (higher values higher up in the tree)
+		uint64_t parent=0;
+		for (;;) {
+
+			// make sure there's at least a left child
+			uint64_t	leftchild=parent*2+1;
+			if (leftchild>heapend) {
+				break;
+			}
+
+			// is the left child greater?
+			uint64_t	greater=parent;
+			if (heap[parent]->compare(
+					heap[leftchild]->getValue())<0) {
+				greater=leftchild;
+			}
+
+			// is the right child greater?
+			uint64_t	rightchild=leftchild+1;
+			if (rightchild<=heapend &&
+				heap[rightchild]->compare(
+					heap[greater]->getValue())>0) {
+				greater=rightchild;
+			}
+
+			// if the parent was greater than each child then
+			// we don't need to continue sifting
+			if (greater==parent) {
+				break;
+			}
+
+			// if one of the children was greater than the parent
+			// then swap them and continue down the tree in the
+			// direction of the child that was swapped
+			temp=heap[parent];
+			heap[parent]=heap[greater];
+			heap[greater]=temp;
+			parent=greater;
+		}
+	}
 }
 
 LINKEDLIST_TEMPLATE

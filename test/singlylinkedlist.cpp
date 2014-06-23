@@ -128,9 +128,23 @@ int	main(int argc, char **argv) {
 	strl.append("0");
 	strl.print();
 	stdoutput.printf("sort()\n");
-	strl.sort();
+	strl.heapSort();
 	strl.print();
 	stdoutput.printf("sort() (again)\n");
-	strl.sort();
+	strl.heapSort();
+	strl.print();
+	strl.clear();
+	stdoutput.printf("append(4,5,2,6,1,7,3,0)\n");
+	strl.append("4");
+	strl.append("5");
+	strl.append("2");
+	strl.append("6");
+	strl.append("1");
+	strl.append("7");
+	strl.append("3");
+	strl.append("0");
+	strl.print();
+	stdoutput.printf("sort()\n");
+	strl.heapSort();
 	strl.print();
 }
