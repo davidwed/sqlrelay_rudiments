@@ -312,35 +312,80 @@ SINGLYLINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void SINGLYLINKEDLIST_CLASS::sort() {
 
-	for (uint64_t count=length; count; count--) {
+	// insertion sort with a few optimization...
 
-		// find the node with the smallest value,
-		// keep track of the node prior to the minimum node too
-		singlylinkedlistnode<valuetype>	*min=first;
-		singlylinkedlistnode<valuetype>	*priortomin=NULL;
-		singlylinkedlistnode<valuetype>	*current=first->getNext();
-		singlylinkedlistnode<valuetype>	*previous=first;
-		for (uint64_t ind=1; ind<count; ind++) {
-			if (current->compare(min->getValue())<0) {
-				priortomin=previous;
-				min=current;
-			}
-			previous=current;
-			current=current->getNext();
-		}
-
-		// move it to the end
-		if (min!=last) {
-			if (min==first) {
-				first=min->getNext();
-			} else {
-				priortomin->setNext(min->getNext());
-			}
-			min->setNext(NULL);
-			last->setNext(min);
-			last=min;
-		}
+	// if there are 0 or 1 items in the list then it's already sorted
+	if (length<2) {
+		return;
 	}
+
+	// first and last pointers for the new list
+	singlylinkedlistnode<valuetype>	*newfirst=NULL;
+	singlylinkedlistnode<valuetype>	*newlast=NULL;
+
+	// pointers for iterating through the new list
+	singlylinkedlistnode<valuetype> *current=NULL;
+	singlylinkedlistnode<valuetype> *previous=NULL;
+
+	// iterate through the current list, building a new one as we go
+	singlylinkedlistnode<valuetype>	*node=first;
+	singlylinkedlistnode<valuetype>	*next=NULL;
+	while (node) {
+
+		// get the next node so we can move on later
+		next=node->getNext();
+
+		// if the new list is empty
+		if (!newfirst) {
+			node->setNext(NULL);
+			newfirst=node;
+			newlast=node;
+		} else
+
+		// if the node belongs at the beginning of the new list
+		// (optimization for lists that are already largely forwards)
+		if (newfirst->compare(node->getValue())>0) {
+			node->setNext(newfirst);
+			newfirst=node;
+		} else
+
+		// if the node belongs at the end of the new list
+		// (optimization for lists that are already largely backwards)
+		if (newlast->compare(node->getValue())<=0) {
+			node->setNext(NULL);
+			newlast->setNext(node);
+			newlast=node;
+		} else
+
+		// if the node belongs somewhere in the middle of the new list
+		{
+			// search from the left...
+			current=newfirst->getNext();
+			previous=newfirst;
+			while (current) {
+
+				// if the current node is greater than...
+				if (current->compare(node->getValue())>0) {
+
+					// insert before
+					node->setNext(current);
+					previous->setNext(node);
+					break;
+				}
+
+				// move on
+				previous=current;
+				current=current->getNext();
+			}
+		}
+
+		// move on
+		node=next;
+	}
+
+	// make the new list the current list
+	first=newfirst;
+	last=newlast;
 }
 
 SINGLYLINKEDLIST_TEMPLATE
@@ -361,9 +406,15 @@ void SINGLYLINKEDLIST_CLASS::clear() {
 SINGLYLINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void SINGLYLINKEDLIST_CLASS::print() const {
+	print(length);
+}
+
+SINGLYLINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
 	uint64_t	i=0;
 	for (singlylinkedlistnode<valuetype> *current=first;
-				current; current=current->getNext()) {
+			current && i<count; current=current->getNext()) {
 		stdoutput.printf("index %lld: ",(long long)i);
 		current->print();
 		stdoutput.printf("\n");

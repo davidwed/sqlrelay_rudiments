@@ -173,6 +173,10 @@ class singlylinkedlist {
 		/** Prints out a representation of the linkedlist. */
 		void	print() const;
 
+		/** Prints out a representation of the first "count"
+		 *  nodes of the linkedlist. */
+		void	print(uint64_t count) const;
+
 	#include <rudiments/private/singlylinkedlist.h>
 };
 

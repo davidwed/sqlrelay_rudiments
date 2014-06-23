@@ -291,32 +291,110 @@ LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::sort() {
 
-	for (uint64_t count=length; count; count--) {
+	// insertion sort with a few optimizations...
 
-		// find the node with the smallest value
-		linkedlistnode<valuetype>	*min=first;
-		linkedlistnode<valuetype>	*current=first->getNext();
-		for (uint64_t ind=1; ind<count; ind++) {
-			if (current->compare(min->getValue())<0) {
-				min=current;
-			}
-			current=current->getNext();
-		}
-
-		// move it to the end
-		if (min!=last) {
-			if (min==first) {
-				first=min->getNext();
-			} else {
-				min->getPrevious()->setNext(min->getNext());
-			}
-			min->getNext()->setPrevious(min->getPrevious());
-			min->setNext(NULL);
-			min->setPrevious(last);
-			last->setNext(min);
-			last=min;
-		}
+	// if there are 0 or 1 items in the list then it's already sorted
+	if (length<2) {
+		return;
 	}
+
+	// first and last pointers for the new list
+	linkedlistnode<valuetype>	*newfirst=NULL;
+	linkedlistnode<valuetype>	*newlast=NULL;
+
+	// pointer for iterating through the new list
+	linkedlistnode<valuetype>	*currentfromfirst=NULL;
+	linkedlistnode<valuetype>	*currentfromlast=NULL;
+
+	// iterate through the current list, building a new one as we go
+	linkedlistnode<valuetype>	*node=first;
+	linkedlistnode<valuetype>	*next=NULL;
+	while (node) {
+
+		// get the next node so we can move on later
+		next=node->getNext();
+
+		// if the new list is empty...
+		if (!newfirst) {
+			node->setPrevious(NULL);
+			node->setNext(NULL);
+			newfirst=node;
+			newlast=node;
+		} else
+
+		// if the node belongs at the beginning of the new list
+		// (optimization for lists that are already largely forwards)
+		if (newfirst->compare(node->getValue())>0) {
+			node->setNext(newfirst);
+			node->setPrevious(NULL);
+			newfirst->setPrevious(node);
+			newfirst=node;
+		} else
+
+		// if the node belongs at the end of the new list
+		// (optimization for lists that are already largely backwards)
+		if (newlast->compare(node->getValue())<=0) {
+			node->setPrevious(newlast);
+			node->setNext(NULL);
+			newlast->setNext(node);
+			newlast=node;
+		} else
+
+		// if the node belongs somewhere in the middle of the new list
+		{
+
+			// search from both ends toward the middle...
+			// (optimization for data that is more random)
+			currentfromfirst=newfirst->getNext();
+			currentfromlast=newlast->getPrevious();
+			while (currentfromfirst) {
+
+				// if the current node (from the left)
+				// is greater than...
+				if (currentfromfirst->
+						compare(node->getValue())>0) {
+
+					// insert before
+					node->setNext(currentfromfirst);
+					node->setPrevious(currentfromfirst->
+								getPrevious());
+					currentfromfirst->
+						getPrevious()->setNext(node);
+					currentfromfirst->
+						setPrevious(node);
+					break;
+
+				} else
+
+				// if the current node (from the right)
+				// is less than or equal to...
+				if (currentfromlast->
+						compare(node->getValue())<=0) {
+
+					// insert after
+					node->setPrevious(currentfromlast);
+					node->setNext(currentfromlast->
+								getNext());
+					currentfromlast->
+						getNext()->setPrevious(node);
+					currentfromlast->
+						setNext(node);
+					break;
+				}
+
+				// move on
+				currentfromfirst=currentfromfirst->getNext();
+				currentfromlast=currentfromlast->getPrevious();
+			}
+		}
+
+		// move on
+		node=next;
+	}
+
+	// make the new list the current list
+	first=newfirst;
+	last=newlast;
 }
 
 LINKEDLIST_TEMPLATE
@@ -337,9 +415,15 @@ void LINKEDLIST_CLASS::clear() {
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::print() const {
+	print(length);
+}
+
+LINKEDLIST_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void LINKEDLIST_CLASS::print(uint64_t count) const {
 	uint64_t	i=0;
 	for (linkedlistnode<valuetype> *current=first;
-			current; current=current->getNext()) {
+			current && i<count; current=current->getNext()) {
 		stdoutput.printf("index %lld: ",(long long)i);
 		current->print();
 		stdoutput.printf("\n");

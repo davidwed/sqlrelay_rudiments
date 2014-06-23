@@ -34,6 +34,7 @@ PROGS = server$(EXE) \
 	filesystem$(EXE) \
 	linkedlist$(EXE) \
 	singlylinkedlist$(EXE) \
+	listmetrics$(EXE) \
 	memorypool$(EXE) \
 	randomnumber$(EXE) \
 	sharedmemory1$(EXE) \
@@ -130,6 +131,7 @@ clean:
 		filesystem$(EXE) \
 		linkedlist$(EXE) \
 		singlylinkedlist$(EXE) \
+		listmetrics$(EXE) \
 		lock1$(EXE) \
 		lock2$(EXE) \
 		memorypool$(EXE) \
@@ -248,6 +250,9 @@ linkedlist$(EXE): linkedlist.cpp linkedlist.lo
 
 singlylinkedlist$(EXE): singlylinkedlist.cpp singlylinkedlist.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ singlylinkedlist.lo $(ALLSTATIC) $(LIBS)
+
+listmetrics$(EXE): listmetrics.cpp listmetrics.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ listmetrics.lo $(ALLSTATIC) $(LIBS)
 
 lock1$(EXE): lock1.cpp lock1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ lock1.lo $(ALLSTATIC) $(LIBS)
