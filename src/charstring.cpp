@@ -975,7 +975,12 @@ int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
 			ptr1++;
 			ptr2++;
 		}
-		return diff;
+		if (*ptr1) {
+			return *ptr1;
+		} else if (*ptr2) {
+			return -(*ptr2);
+		}
+		return 0;
 	#endif
 }
 
@@ -998,7 +1003,7 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 			ptr2++;
 			count++;
 		}
-		return diff;
+		return 0;
 	#endif
 }
 
