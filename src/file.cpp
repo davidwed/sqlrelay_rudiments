@@ -190,6 +190,24 @@ void file::openInternal(const char *name, int32_t flags,
 		// open the file so that the access mode can include WRITE_DAC
 		// and WRITE_OWNER, which are not set when using _open.
 
+		// determine the security attributes
+		// FIXME: update this to use permOctalToDacl when it's
+		// implemented
+		char	*sddl=permissions::permOctalToSddlString(perms,false);
+		SECURITY_ATTRIBUTES	satt;
+		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.lpSecurityDescriptor=NULL;
+		satt.bInheritHandle=TRUE;
+		if (useperms &&
+			ConvertStringSecurityDescriptorToSecurityDescriptor(
+						sddl,SDDL_REVISION_1,
+						&satt.lpSecurityDescriptor,
+						NULL)==FALSE) {
+			delete[] sddl;
+			fd(-1);
+			return;
+		}
+
 		// Determine the access and share modes.
 		// O_RDONLY, O_WRONLY and O_RDWR are usually 0, 1 and 2.
 		// We can use & to test for O_WRONLY and O_RDWR but we can't
@@ -216,28 +234,22 @@ void file::openInternal(const char *name, int32_t flags,
 			if (flags&O_EXCL) {
 				cdisp=CREATE_NEW;
 			} else {
-				cdisp=CREATE_ALWAYS;
+				// O_CREAT without O_EXCL should create the
+				// file if it doesn't exist but otherwise just
+				// open it normally.
+				// CREATE_ALWAYS creates the file if it doesn't
+				// exist, but otherwise "replaces" it - ie. it
+				// opens and truncates it.
+				// We need to open the file normally if it
+				// exists (OPEN_EXISTING) and otherwise create
+				// it (CREATE_ALWAYS).
+				// Unfortunately we can't do all of that
+				// atomically.
+				cdisp=(exists(name))?
+					OPEN_EXISTING:CREATE_ALWAYS;
 			}
 		} else {
 			cdisp=OPEN_EXISTING;
-		}
-
-		// determine the security attributes
-		// FIXME: update this to use permOctalToDacl when it's
-		// implemented
-		char	*sddl=permissions::permOctalToSddlString(perms,false);
-		SECURITY_ATTRIBUTES	satt;
-		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
-		satt.lpSecurityDescriptor=NULL;
-		satt.bInheritHandle=TRUE;
-		if (useperms &&
-			ConvertStringSecurityDescriptorToSecurityDescriptor(
-						sddl,SDDL_REVISION_1,
-						&satt.lpSecurityDescriptor,
-						NULL)==FALSE) {
-			delete[] sddl;
-			fd(-1);
-			return;
 		}
 
 		// create/open the file
