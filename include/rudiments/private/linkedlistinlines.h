@@ -121,14 +121,14 @@ LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::moveBefore(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *nodetomove) {
-	return move(node,nodetomove,true);
+	move(node,nodetomove,true);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::moveAfter(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *nodetomove) {
-	return move(node,nodetomove,false);
+	move(node,nodetomove,false);
 }
 
 LINKEDLIST_TEMPLATE
