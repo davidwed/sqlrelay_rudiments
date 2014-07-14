@@ -5,8 +5,6 @@
 #include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/linkedlistutilinlines.h>
 
-#include <math.h>
-
 #define LINKEDLIST_TEMPLATE template <class valuetype>
 
 #define LINKEDLIST_CLASS linkedlist<valuetype>
