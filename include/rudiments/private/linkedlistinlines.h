@@ -326,7 +326,7 @@ void LINKEDLIST_CLASS::insertionSort() {
 
 		// if the node belongs at the beginning of the new list
 		// (optimization for lists that are already largely forwards)
-		if (newfirst->compare(node->getValue())>0) {
+		if (newfirst->compare(node)>0) {
 			node->setNext(newfirst);
 			node->setPrevious(NULL);
 			newfirst->setPrevious(node);
@@ -335,7 +335,7 @@ void LINKEDLIST_CLASS::insertionSort() {
 
 		// if the node belongs at the end of the new list
 		// (optimization for lists that are already largely backwards)
-		if (newlast->compare(node->getValue())<=0) {
+		if (newlast->compare(node)<=0) {
 			node->setPrevious(newlast);
 			node->setNext(NULL);
 			newlast->setNext(node);
@@ -353,8 +353,7 @@ void LINKEDLIST_CLASS::insertionSort() {
 
 				// if the current node (from the left)
 				// is greater than...
-				if (currentfromfirst->
-						compare(node->getValue())>0) {
+				if (currentfromfirst->compare(node)>0) {
 
 					// insert before
 					node->setNext(currentfromfirst);
@@ -370,8 +369,7 @@ void LINKEDLIST_CLASS::insertionSort() {
 
 				// if the current node (from the right)
 				// is less than or equal to...
-				if (currentfromlast->
-						compare(node->getValue())<=0) {
+				if (currentfromlast->compare(node)<=0) {
 
 					// insert after
 					node->setPrevious(currentfromlast);
@@ -431,7 +429,7 @@ void LINKEDLIST_CLASS::heapSort() {
 			uint64_t	parent=(child-1)/2;
 
 			// swap nodes if necessary
-			if (heap[parent]->compare(heap[child]->getValue())<0) {
+			if (heap[parent]->compare(heap[child])<0) {
 				temp=heap[parent];
 				heap[parent]=heap[child];
 				heap[child]=temp;
@@ -508,16 +506,14 @@ void LINKEDLIST_CLASS::heapSort() {
 
 			// is the left child greater?
 			uint64_t	greater=parent;
-			if (heap[parent]->compare(
-					heap[leftchild]->getValue())<0) {
+			if (heap[parent]->compare(heap[leftchild])<0) {
 				greater=leftchild;
 			}
 
 			// is the right child greater?
 			uint64_t	rightchild=leftchild+1;
 			if (rightchild<=heapend &&
-				heap[rightchild]->compare(
-					heap[greater]->getValue())>0) {
+				heap[rightchild]->compare(heap[greater])>0) {
 				greater=rightchild;
 			}
 
@@ -617,6 +613,12 @@ LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t LINKEDLISTNODE_CLASS::compare(valuetype value) const {
 	return _linkedlistutil_compare(this->value,value);
+}
+
+LINKEDLISTNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+int32_t LINKEDLISTNODE_CLASS::compare(linkedlistnode<valuetype> *peer) const {
+	return _linkedlistutil_compare(this->value,peer->value);
 }
 
 LINKEDLISTNODE_TEMPLATE

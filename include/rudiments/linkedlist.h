@@ -30,6 +30,12 @@ class linkedlistnode {
 		 *  less than, equal to or greater than "value". */
 		int32_t	compare(valuetype value) const;
 
+		/** Returns a negative number, 0, or a positive number depending
+		 *  on whether the value stored in the node is respectively
+		 *  less than, equal to or greater than the value stored in
+		 *  "peer". */
+		int32_t	compare(linkedlistnode<valuetype> *peer) const;
+
 		/** Returns the previous node in the linkedlist or NULL
 		 *  if this node is the first node in the list. */
 		linkedlistnode<valuetype>	*getPrevious();

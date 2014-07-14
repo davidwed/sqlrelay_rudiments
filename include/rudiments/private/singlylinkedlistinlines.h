@@ -344,14 +344,14 @@ void SINGLYLINKEDLIST_CLASS::insertionSort() {
 
 		// if the node belongs at the beginning of the new list
 		// (optimization for lists that are already largely forwards)
-		if (newfirst->compare(node->getValue())>0) {
+		if (newfirst->compare(node)>0) {
 			node->setNext(newfirst);
 			newfirst=node;
 		} else
 
 		// if the node belongs at the end of the new list
 		// (optimization for lists that are already largely backwards)
-		if (newlast->compare(node->getValue())<=0) {
+		if (newlast->compare(node)<=0) {
 			node->setNext(NULL);
 			newlast->setNext(node);
 			newlast=node;
@@ -365,7 +365,7 @@ void SINGLYLINKEDLIST_CLASS::insertionSort() {
 			while (current) {
 
 				// if the current node is greater than...
-				if (current->compare(node->getValue())>0) {
+				if (current->compare(node)>0) {
 
 					// insert before
 					node->setNext(current);
@@ -420,7 +420,7 @@ void SINGLYLINKEDLIST_CLASS::heapSort() {
 			uint64_t	parent=(child-1)/2;
 
 			// swap nodes if necessary
-			if (heap[parent]->compare(heap[child]->getValue())<0) {
+			if (heap[parent]->compare(heap[child])<0) {
 				temp=heap[parent];
 				heap[parent]=heap[child];
 				heap[child]=temp;
@@ -494,16 +494,14 @@ void SINGLYLINKEDLIST_CLASS::heapSort() {
 
 			// is the left child greater?
 			uint64_t	greater=parent;
-			if (heap[parent]->compare(
-					heap[leftchild]->getValue())<0) {
+			if (heap[parent]->compare(heap[leftchild])<0) {
 				greater=leftchild;
 			}
 
 			// is the right child greater?
 			uint64_t	rightchild=leftchild+1;
 			if (rightchild<=heapend &&
-				heap[rightchild]->compare(
-					heap[greater]->getValue())>0) {
+				heap[rightchild]->compare(heap[greater])>0) {
 				greater=rightchild;
 			}
 
@@ -600,13 +598,19 @@ int32_t SINGLYLINKEDLISTNODE_CLASS::compare(valuetype value) const {
 
 SINGLYLINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+int32_t SINGLYLINKEDLISTNODE_CLASS::compare(
+				singlylinkedlistnode<valuetype> *peer) const {
+	return _linkedlistutil_compare(this->value,peer->value);
+}
+
+SINGLYLINKEDLISTNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void SINGLYLINKEDLISTNODE_CLASS::print() const {
 	_linkedlistutil_print(value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void SINGLYLINKEDLISTNODE_CLASS::setNext(
-				SINGLYLINKEDLISTNODE_CLASS *next) {
+void SINGLYLINKEDLISTNODE_CLASS::setNext(SINGLYLINKEDLISTNODE_CLASS *next) {
 	this->next=next;
 }

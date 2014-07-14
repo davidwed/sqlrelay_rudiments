@@ -31,6 +31,12 @@ class singlylinkedlistnode {
 		 *  less than, equal to or greater than "value". */
 		int32_t	compare(valuetype value) const;
 
+		/** Returns a negative number, 0, or a positive number depending
+		 *  on whether the value stored in the node is respectively
+		 *  less than, equal to or greater than the value stored in
+		 *  "peer". */
+		int32_t	compare(singlylinkedlistnode<valuetype> *peer) const;
+
 		/** Returns the next node in the singlylinkedlist or NULL
 		 * if this node is the last node in the list. */
 		singlylinkedlistnode<valuetype>	*getNext();
