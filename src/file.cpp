@@ -191,22 +191,11 @@ void file::openInternal(const char *name, int32_t flags,
 		// and WRITE_OWNER, which are not set when using _open.
 
 		// determine the security attributes
-		// FIXME: update this to use permOctalToDacl when it's
-		// implemented
-		char	*sddl=permissions::permOctalToSddlString(perms,false);
 		SECURITY_ATTRIBUTES	satt;
 		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
-		satt.lpSecurityDescriptor=NULL;
 		satt.bInheritHandle=TRUE;
-		if (useperms &&
-			ConvertStringSecurityDescriptorToSecurityDescriptor(
-						sddl,SDDL_REVISION_1,
-						&satt.lpSecurityDescriptor,
-						NULL)==FALSE) {
-			delete[] sddl;
-			fd(-1);
-			return;
-		}
+		void	*sddl=permissions::permOctalToDacl(perms,false);
+		satt.lpSecurityDescriptor=sddl;
 
 		// Determine the access and share modes.
 		// O_RDONLY, O_WRONLY and O_RDWR are usually 0, 1 and 2.
@@ -252,17 +241,26 @@ void file::openInternal(const char *name, int32_t flags,
 			cdisp=OPEN_EXISTING;
 		}
 
+		// determine the attrs
+		// FILE_FLAG_BACKUP_SEMANTICS must be used when opening a
+		// directory, for some reason
+		DWORD	attrs=FILE_ATTRIBUTE_NORMAL;
+		DWORD	fileattr=GetFileAttributes(name);
+		if (fileattr&FILE_ATTRIBUTE_DIRECTORY) {
+			attrs=FILE_FLAG_BACKUP_SEMANTICS;
+		}
+
 		// create/open the file
 		HANDLE	fh=CreateFile(name,accessmode,sharemode,
-					&satt,cdisp,FILE_ATTRIBUTE_NORMAL,NULL);
+					&satt,cdisp,attrs,NULL);
 		if (fh==INVALID_HANDLE_VALUE) {
-			delete[] sddl;
+			LocalFree(sddl);
 			fd(-1);
 			return;
 		}
 
 		// clean up
-		delete[] sddl;
+		LocalFree(sddl);
 
 		// get the file descriptor from the handle
 		fd(_open_osfhandle((long)fh,flags&~(O_CREAT|O_TRUNC)));

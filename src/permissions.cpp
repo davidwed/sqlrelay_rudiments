@@ -9,6 +9,9 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
+#ifdef RUDIMENTS_HAVE_SETENTRIESINACL
+	#include <rudiments/bytestring.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -92,17 +95,57 @@
 				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR| \
 				SYNCHRONIZE)
 	#define _EXEC	(GENERIC_EXECUTE|_WP)
-				(pos==0)?"GXWP":
 #endif
 
 
 bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_CHMOD)
 		return !chmod(filename,perms);
+	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
+
+		// is this a file or directory?
+		DWORD	fileattr=GetFileAttributes(filename);
+		if (fileattr==INVALID_FILE_ATTRIBUTES) {
+			return false;
+		}
+
+		// determine the attrs
+		// FILE_FLAG_BACKUP_SEMANTICS must be used when opening a
+		// directory, for some reason
+		bool	isdir=false;
+		DWORD	attrs=FILE_ATTRIBUTE_NORMAL;
+		if (fileattr&FILE_ATTRIBUTE_DIRECTORY) {
+			isdir=true;
+			attrs=FILE_FLAG_BACKUP_SEMANTICS;
+		}
+
+		// convert the perms to a dacl
+		PACL	dacl=(PACL)permOctalToDacl(perms,isdir);
+
+		// open the file/directory
+		HANDLE	fh=CreateFile(filename,
+					GENERIC_WRITE|WRITE_DAC,
+					FILE_SHARE_WRITE,
+					NULL,OPEN_EXISTING,
+					attrs,NULL);
+		if (fh==INVALID_HANDLE_VALUE) {
+			return false;
+		}
+
+		// set the permissions
+		bool	success=(SetSecurityInfo(fh,
+						SE_FILE_OBJECT,
+						DACL_SECURITY_INFORMATION,
+						NULL,NULL,dacl,NULL)==
+						ERROR_SUCCESS);
+
+		// clean up
+		LocalFree(dacl);
+
+		return success;
 	#else
-		file	fl;
-		return (fl.open(filename,O_RDWR) &&
-			setFilePermissions(fl.getFileDescriptor(),perms));
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -115,45 +158,23 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
-		// FIXME: This works with files but not directories.
-		// Apparently directories need to be created with the
-		// SYNCHRONIZE permission or their perms can't be changed
-		// in the future.  The directory class uses
-		// permOctalToSddlString to set the perms but there is no
-		// character representation of the SYNCHRONIZE permission
-		// so it is omitted.  It needs to use permOctalToDacl
-		// but that hasn't been implemented yet.
+		// is this a file or directory?
+		// FIXME: how to do this on windows?
+		bool	isdir=false;
 
-		// convert octal perms to an sddl
-		char	*sddl=permOctalToSddlString(perms,false);
-		PSECURITY_DESCRIPTOR	secd=NULL;
-		bool	success=
-			(ConvertStringSecurityDescriptorToSecurityDescriptor(
-							sddl,SDDL_REVISION_1,
-							&secd,NULL)!=FALSE);
-		delete[] sddl;
-		if (!success) {
-			return false;
-		}
-
-		// get the dacl from the security descriptor
-		BOOL	daclpresent;
-		PACL	dacl=NULL;
-		BOOL	dacldefaulted;
-		success=(GetSecurityDescriptorDacl(secd,
-						&daclpresent,
-						&dacl,&dacldefaulted)!=FALSE);
-		if (!success) {
-			LocalFree(secd);
-			return false;
-		}
+		// convert the perms to a dacl
+		PACL	dacl=(PACL)permOctalToDacl(perms,isdir);
 
 		// set the permissions
-		success=(SetSecurityInfo((HANDLE)_get_osfhandle(fd),
-					SE_FILE_OBJECT,
-					DACL_SECURITY_INFORMATION,
-					NULL,NULL,dacl,NULL)==ERROR_SUCCESS);
-		LocalFree(secd);
+		bool	success=(SetSecurityInfo((HANDLE)_get_osfhandle(fd),
+						SE_FILE_OBJECT,
+						DACL_SECURITY_INFORMATION,
+						NULL,NULL,dacl,NULL)==
+						ERROR_SUCCESS);
+
+		// clean up
+		LocalFree(dacl);
+
 		return success;
 	#else
 		error::setErrorNumber(ENOSYS);
@@ -317,118 +338,6 @@ char *permissions::evalPermOctal(mode_t permoctal) {
 	return permstring;
 }
 
-char *permissions::permStringToSddlString(const char *permstring,
-							bool directory) {
-	return permOctalToSddlString(evalPermString(permstring),directory);
-}
-
-char *permissions::permOctalToSddlString(mode_t permoctal, bool directory) {
-
-	// see http://msdn.microsoft.com/en-us/magazine/cc982153.aspx
-	//
-	// sddl format:
-	// D:P,PAI(ace)(ace)...(ace)
-	//
-	// S - SACL (System ACL)
-	// D - DACL (Discretionary ACL)
-	//
-	// P - protected: ignore perms from higher
-	//			up the inheritance tree
-	// AI - children inherit permissions (for directories only)
-	//
-	// access control entities (1 per account_sid):
-	// (ace) - (ace_type;ace_flags;rights;object_guid;
-	//			inherit_object_guid;account_sid)
-	//	ace_types:
-	//		A: Allowed
-	//		...
-	//	ace_flags:
-	//		CI: subdirectories (containers) will inherit this ace
-	//		OI: files (objects) will inherit this ace
-	//		...
-	//	rights:
-	//		GX - generic execute
-	//		WP - execute
-	//		SD - delete
-	//		WD - write dacl
-	//		WO - write owner
-	//		GW - generic write
-	//		DC - write
-	//		LC - append
-	//		RP - write ea
-	//		DT - delete child
-	//		CR - write attr
-	//		RC - read control/security-descriptor
-	//		GR - generic read
-	//		SW - read ea
-	//		LO - read attr
-
-	//		SD - delete
-	//		RC - read control/security-descriptor
-	//		GR - generic read
-	//		GW - generic write
-	//		GX - generic execute
-	//		WD - write dacl
-	//		WO - write owner
-	//		...
-	//	object_guid:
-	//		(usually not specified)
-	//	inherit_object_guid:
-	//		(usually not specified)
-	//	account_sid:
-	//		WD - world
-	//		(otherwise need the actual sid)
-	//
-	// 777 - rwxrwxrwx -
-	// D:PAI(A;OICI;GRGWGX;;;WD)(A;OICI;GRGWGX;;;gsid)(A;OICI;GRGWGX;;;usid)
-
-	// ACE's are interpreted left to right.
-	// They should be specified world, then group, then user because:
-	//	 world perms are applied to the group and user
-	//	 group perms are applied to the user
-
-	char	*sddl=new char[512];
-	charstring::copy(sddl,"D:P");
-	if (directory) {
-		charstring::append(sddl,"AI");
-	}
-
-	mode_t	shift=permoctal;
-	for (int16_t i=0; i<9; i++) {
-		if (i==0 || i==3 || i==6) {
-			charstring::append(sddl,"(A;");
-			if (directory) {
-				charstring::append(sddl,"OICI");
-			}
-			charstring::append(sddl,";");
-		}
-		uint8_t	pos=i%3;
-		charstring::append(sddl,
-				(shift&1)?(
-				(pos==0)?"GXWP":
-				(pos==1)?"SDWDWOGWDCLCRPDTCR":
-				"RCGRCCSWLO"):"");
-		shift=shift>>1;
-		if (i==2) {
-			charstring::append(sddl,";;;WD)");
-		} else if (i==5) {
-			charstring::append(sddl,";;;");
-			groupentry	grpent;
-			grpent.initialize(process::getRealGroupId());
-			charstring::append(sddl,grpent.getSid());
-			charstring::append(sddl,")");
-		} else if (i==8) {
-			charstring::append(sddl,";;;");
-			passwdentry	pwdent;
-			pwdent.initialize(process::getRealUserId());
-			charstring::append(sddl,pwdent.getSid());
-			charstring::append(sddl,")");
-		}
-	}
-
-	return sddl;
-}
-
 void *permissions::permStringToDacl(const char *permstring, bool directory) {
 	return permOctalToDacl(evalPermString(permstring),directory);
 }
@@ -445,44 +354,44 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 
 		// create acl entries for world, group and owner
 		EXPLICIT_ACCESS	ea[3];
-		bytestring::zero(&ea,sizeof(EXPLICIT_ACCESS)*3);
+		bytestring::zero(&ea,sizeof(ea));
 
 		// world
 		ea[0].grfAccessMode=SET_ACCESS;
 		ea[0].grfInheritance=inheritance;
-		ea[0].Trustee.MultipleTruesteeOperation=NO_MULTIPLE_TRUSTEE;
-		ea[0].Trustee.TruesteeForm=TRUSTEE_IS_SID;
-		ea[0].Trustee.TruesteeType=TRUSTEE_IS_WELL_KNOWN_GROUP;
-		ea[0].Trustee.ptstrName="S-1-1-0";
+		ea[0].Trustee.MultipleTrusteeOperation=NO_MULTIPLE_TRUSTEE;
+		ea[0].Trustee.TrusteeForm=TRUSTEE_IS_SID;
+		ea[0].Trustee.TrusteeType=TRUSTEE_IS_WELL_KNOWN_GROUP;
+		SID_IDENTIFIER_AUTHORITY	worldsia=
+						SECURITY_WORLD_SID_AUTHORITY;
+		PSID				worldsid;
+		AllocateAndInitializeSid(&worldsia,1,SECURITY_WORLD_RID,
+						0,0,0,0,0,0,0,&worldsid);
+		ea[0].Trustee.ptstrName=(LPSTR)worldsid;
 
 		// group
 		ea[1].grfAccessMode=SET_ACCESS;
 		ea[1].grfInheritance=inheritance;
-		ea[1].Trustee.MultipleTruesteeOperation=NO_MULTIPLE_TRUSTEE;
-		ea[1].Trustee.TruesteeForm=TRUSTEE_IS_SID;
-		ea[1].Trustee.TruesteeType=TRUSTEE_IS_GROUP;
+		ea[1].Trustee.MultipleTrusteeOperation=NO_MULTIPLE_TRUSTEE;
+		ea[1].Trustee.TrusteeForm=TRUSTEE_IS_SID;
+		ea[1].Trustee.TrusteeType=TRUSTEE_IS_GROUP;
 		groupentry	grpent;
 		grpent.initialize(process::getRealGroupId());
-		ea[1].Trustee.ptstrName=grpent.getSid();
+		PSID		groupsid=NULL;
+		ConvertStringSidToSid(grpent.getSid(),&groupsid);
+		ea[1].Trustee.ptstrName=(LPSTR)groupsid;
 
 		// owner
 		ea[2].grfAccessMode=SET_ACCESS;
 		ea[2].grfInheritance=inheritance;
-		ea[2].Trustee.MultipleTruesteeOperation=NO_MULTIPLE_TRUSTEE;
-		ea[2].Trustee.TruesteeForm=TRUSTEE_IS_SID;
-		ea[2].Trustee.TruesteeType=TRUSTEE_IS_USER;
+		ea[2].Trustee.MultipleTrusteeOperation=NO_MULTIPLE_TRUSTEE;
+		ea[2].Trustee.TrusteeForm=TRUSTEE_IS_SID;
+		ea[2].Trustee.TrusteeType=TRUSTEE_IS_USER;
 		passwdentry	pwdent;
 		pwdent.initialize(process::getRealUserId());
-		ea[2].Trustee.ptstrName=pwdent.getSid();
-
-
-		// FIXME: how to do this?
-		// P - protected (do not inherit)
-		// AI - children inherit permissions (for directories only)
-		/*charstring::copy(sddl,"D:P");
-		if (directory) {
-			charstring::append(sddl,"AI");
-		}*/
+		PSID		ownersid=NULL;
+		ConvertStringSidToSid(pwdent.getSid(),&ownersid);
+		ea[2].Trustee.ptstrName=(LPSTR)ownersid;
 
 		// set actual access permissions
 		DWORD	perms=0;
@@ -519,18 +428,17 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 
 		// create the ACL
 		PACL	pacl=NULL;
-		if (SetEntriesInAcl(3,ea,NULL,&pacl)==ERROR_SUCCESS) {
-			return (void *)pacl;
+		if (SetEntriesInAcl(3,ea,NULL,&pacl)!=ERROR_SUCCESS) {
+			LocalFree(pacl);
+			pacl=NULL;
 		}
 
 		// clean up
-		LocalFree(pacl);
-		return NULL;
-
+		LocalFree(groupsid);
+		LocalFree(ownersid);
+		return (void *)pacl;
 	#else
-
 		return NULL;
-
 	#endif
 }
 
