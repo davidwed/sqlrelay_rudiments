@@ -2601,6 +2601,15 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 GetAce(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_GETACE,1,Some systems have GetAce) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for SetEntriesInAcl)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
+#ifdef RUDIMENTS_HAVE_ACLAPI_H
+	#include <aclapi.h>
+#endif],
+SetEntriesInAcl(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETENTRIESINACL,1,Some systems have SetEntriesInAcl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

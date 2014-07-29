@@ -89,8 +89,10 @@
 	#define	_ALL	GENERIC_ALL
 	#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
 	#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER| \
-				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
+				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR| \
+				SYNCHRONIZE)
 	#define _EXEC	(GENERIC_EXECUTE|_WP)
+				(pos==0)?"GXWP":
 #endif
 
 
@@ -348,7 +350,7 @@ char *permissions::permOctalToSddlString(mode_t permoctal, bool directory) {
 	//		GX - generic execute
 	//		WP - execute
 	//		SD - delete
-	//		WD - write dac
+	//		WD - write dacl
 	//		WO - write owner
 	//		GW - generic write
 	//		DC - write
@@ -356,18 +358,18 @@ char *permissions::permOctalToSddlString(mode_t permoctal, bool directory) {
 	//		RP - write ea
 	//		DT - delete child
 	//		CR - write attr
-	//		RC - read control
+	//		RC - read control/security-descriptor
 	//		GR - generic read
 	//		SW - read ea
 	//		LO - read attr
 
 	//		SD - delete
-	//		RC - read security descriptor
+	//		RC - read control/security-descriptor
 	//		GR - generic read
 	//		GW - generic write
 	//		GX - generic execute
 	//		WD - write dacl
-	//		WO - write ownership
+	//		WO - write owner
 	//		...
 	//	object_guid:
 	//		(usually not specified)
@@ -402,8 +404,10 @@ char *permissions::permOctalToSddlString(mode_t permoctal, bool directory) {
 		}
 		uint8_t	pos=i%3;
 		charstring::append(sddl,
-				(shift&1)?((pos==0)?"GXWP":
-				(pos==1)?"SDWDWOGWDCLCRPDTCR":"RCGRCCSWLO"):"");
+				(shift&1)?(
+				(pos==0)?"GXWP":
+				(pos==1)?"SDWDWOGWDCLCRPDTCR":
+				"RCGRCCSWLO"):"");
 		shift=shift>>1;
 		if (i==2) {
 			charstring::append(sddl,";;;WD)");
@@ -429,11 +433,105 @@ void *permissions::permStringToDacl(const char *permstring, bool directory) {
 	return permOctalToDacl(evalPermString(permstring),directory);
 }
 
-void *permissions::permOctalToDacl(mode_t perms, bool directory) {
-	// FIXME: implement this...
-	// this might help:
-	// http://msdn.microsoft.com/en-us/library/windows/desktop/aa446595%28v=vs.85%29.aspx
-	return NULL;
+void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
+
+	#ifdef RUDIMENTS_HAVE_SETENTRIESINACL
+
+		// define inheritance...
+		DWORD	inheritance=NO_INHERITANCE;
+		if (directory) {
+			inheritance=OBJECT_INHERIT_ACE|CONTAINER_INHERIT_ACE;
+		}
+
+		// create acl entries for world, group and owner
+		EXPLICIT_ACCESS	ea[3];
+		bytestring::zero(&ea,sizeof(EXPLICIT_ACCESS)*3);
+
+		// world
+		ea[0].grfAccessMode=SET_ACCESS;
+		ea[0].grfInheritance=inheritance;
+		ea[0].Trustee.MultipleTruesteeOperation=NO_MULTIPLE_TRUSTEE;
+		ea[0].Trustee.TruesteeForm=TRUSTEE_IS_SID;
+		ea[0].Trustee.TruesteeType=TRUSTEE_IS_WELL_KNOWN_GROUP;
+		ea[0].Trustee.ptstrName="S-1-1-0";
+
+		// group
+		ea[1].grfAccessMode=SET_ACCESS;
+		ea[1].grfInheritance=inheritance;
+		ea[1].Trustee.MultipleTruesteeOperation=NO_MULTIPLE_TRUSTEE;
+		ea[1].Trustee.TruesteeForm=TRUSTEE_IS_SID;
+		ea[1].Trustee.TruesteeType=TRUSTEE_IS_GROUP;
+		groupentry	grpent;
+		grpent.initialize(process::getRealGroupId());
+		ea[1].Trustee.ptstrName=grpent.getSid();
+
+		// owner
+		ea[2].grfAccessMode=SET_ACCESS;
+		ea[2].grfInheritance=inheritance;
+		ea[2].Trustee.MultipleTruesteeOperation=NO_MULTIPLE_TRUSTEE;
+		ea[2].Trustee.TruesteeForm=TRUSTEE_IS_SID;
+		ea[2].Trustee.TruesteeType=TRUSTEE_IS_USER;
+		passwdentry	pwdent;
+		pwdent.initialize(process::getRealUserId());
+		ea[2].Trustee.ptstrName=pwdent.getSid();
+
+
+		// FIXME: how to do this?
+		// P - protected (do not inherit)
+		// AI - children inherit permissions (for directories only)
+		/*charstring::copy(sddl,"D:P");
+		if (directory) {
+			charstring::append(sddl,"AI");
+		}*/
+
+		// set actual access permissions
+		DWORD	perms=0;
+		mode_t	shift=permoctal;
+		for (int16_t i=0; i<9; i++) {
+			if (shift&1) {
+				uint8_t	pos=i%3;
+				if (pos==0) {
+					// execute permissions
+					perms|=_EXEC;
+				} else if (pos==1) {
+					// write permissions
+					perms|=_WRITE;
+				} else {
+					// read permissions
+					perms|=_READ;
+				}
+			}
+			shift=shift>>1;
+			if (i==2) {
+				// set world permissions
+				ea[0].grfAccessPermissions=perms;
+				perms=0;
+			} else if (i==5) {
+				// set group permissions
+				ea[1].grfAccessPermissions=perms;
+				perms=0;
+			} else if (i==8) {
+				// set user permissions
+				ea[2].grfAccessPermissions=perms;
+				perms=0;
+			}
+		}
+
+		// create the ACL
+		PACL	pacl=NULL;
+		if (SetEntriesInAcl(3,ea,NULL,&pacl)==ERROR_SUCCESS) {
+			return (void *)pacl;
+		}
+
+		// clean up
+		LocalFree(pacl);
+		return NULL;
+
+	#else
+
+		return NULL;
+
+	#endif
 }
 
 char *permissions::daclToPermString(void *dacl) {
