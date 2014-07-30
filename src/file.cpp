@@ -190,12 +190,31 @@ void file::openInternal(const char *name, int32_t flags,
 		// open the file so that the access mode can include WRITE_DAC
 		// and WRITE_OWNER, which are not set when using _open.
 
-		// determine the security attributes
+		// create security descriptor
+		PSECURITY_DESCRIPTOR	psd=
+			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,
+					SECURITY_DESCRIPTOR_MIN_LENGTH);
+		if (!InitializeSecurityDescriptor(psd,
+					SECURITY_DESCRIPTOR_REVISION)) {
+			fd(-1);
+			LocalFree(psd);
+			return;
+		}
+		void	*dacl=permissions::permOctalToDacl(perms,true);
+		if (!SetSecurityDescriptorDacl(psd,TRUE,(PACL)dacl,FALSE) ||
+			!SetSecurityDescriptorControl(psd,
+					SE_DACL_PROTECTED,SE_DACL_PROTECTED)) {
+			fd(-1);
+			LocalFree(dacl);
+			LocalFree(psd);
+			return;
+		}
+
+		// create security attributes
 		SECURITY_ATTRIBUTES	satt;
-		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.nLength=sizeof(SECURITY_ATTRIBUTES);
+		satt.lpSecurityDescriptor=psd;
 		satt.bInheritHandle=TRUE;
-		void	*sddl=permissions::permOctalToDacl(perms,false);
-		satt.lpSecurityDescriptor=sddl;
 
 		// Determine the access and share modes.
 		// O_RDONLY, O_WRONLY and O_RDWR are usually 0, 1 and 2.
@@ -205,16 +224,12 @@ void file::openInternal(const char *name, int32_t flags,
 		// read-only and just update the access/share modes if we
 		// detect O_WRONLY/O_RDWR.
 		DWORD	accessmode=GENERIC_READ|READ_CONTROL;
-		DWORD	sharemode=FILE_SHARE_READ;
 		if (flags&O_WRONLY) {
 			accessmode=GENERIC_WRITE|DELETE|WRITE_DAC|WRITE_OWNER;
-			sharemode=FILE_SHARE_DELETE|FILE_SHARE_WRITE;
 		}
 		if (flags&O_RDWR) {
 			accessmode=GENERIC_WRITE|DELETE|WRITE_DAC|WRITE_OWNER|
 						GENERIC_READ|READ_CONTROL;
-			sharemode=FILE_SHARE_DELETE|FILE_SHARE_WRITE|
-							FILE_SHARE_READ;
 		}
 
 		// determine the creation disposition
@@ -251,16 +266,17 @@ void file::openInternal(const char *name, int32_t flags,
 		}
 
 		// create/open the file
-		HANDLE	fh=CreateFile(name,accessmode,sharemode,
+		HANDLE	fh=CreateFile(name,accessmode,
+					FILE_SHARE_DELETE|
+					FILE_SHARE_READ|
+					FILE_SHARE_WRITE,
 					&satt,cdisp,attrs,NULL);
+		LocalFree(dacl);
+		LocalFree(psd);
 		if (fh==INVALID_HANDLE_VALUE) {
-			LocalFree(sddl);
 			fd(-1);
 			return;
 		}
-
-		// clean up
-		LocalFree(sddl);
 
 		// get the file descriptor from the handle
 		fd(_open_osfhandle((long)fh,flags&~(O_CREAT|O_TRUNC)));

@@ -51,11 +51,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("cwd=%s\n",cwd);
 	delete[] cwd;
 
-	file::remove("testdir/testfile1");
-	file::remove("testdir/testfile2");
+	directory::changeDirectory("testdir");
+	stdoutput.printf("change perms testdir/testfile1: %d\n",
+		permissions::setFilePermissions("testfile1",
+				permissions::evalPermString("rw-------")));
+	stdoutput.printf("change perms testdir/testfile2: %d\n",
+		permissions::setFilePermissions("testfile2",
+				permissions::evalPermString("rw-------")));
+	directory::changeDirectory("..");
 	stdoutput.printf("change perms: %d\n",
 		permissions::setFilePermissions("testdir",
 				permissions::evalPermString("rwx------")));
+	file::remove("testdir/testfile1");
+	file::remove("testdir/testfile2");
 	directory::remove("testdir");
 
 	stdoutput.printf("maxFileNameLength(%s)=%lld\n",

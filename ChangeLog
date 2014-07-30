@@ -1,4 +1,4 @@
-0.48 - ...
+0.48 - got directory and file permissions working properly on windows
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase

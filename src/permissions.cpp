@@ -125,6 +125,8 @@ bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 		// open the file/directory
 		HANDLE	fh=CreateFile(filename,
 					GENERIC_WRITE|WRITE_DAC,
+					FILE_SHARE_DELETE|
+					FILE_SHARE_READ|
 					FILE_SHARE_WRITE,
 					NULL,OPEN_EXISTING,
 					attrs,NULL);
@@ -138,6 +140,9 @@ bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 						DACL_SECURITY_INFORMATION,
 						NULL,NULL,dacl,NULL)==
 						ERROR_SUCCESS);
+
+		// close the file/directory
+		CloseHandle(fh);
 
 		// clean up
 		LocalFree(dacl);
@@ -346,6 +351,15 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 
 	#ifdef RUDIMENTS_HAVE_SETENTRIESINACL
 
+		// FIXME: how?
+		// P - protected: ignore perms from higher
+		//			up the inheritance tree
+		// AI - children inherit permissions (for directories only)
+		/*charstring::copy(sddl,"D:P");
+		if (directory) {
+			charstring::append(sddl,"AI");
+		}*/
+
 		// define inheritance...
 		DWORD	inheritance=NO_INHERITANCE;
 		if (directory) {
@@ -393,7 +407,7 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		ConvertStringSidToSid(pwdent.getSid(),&ownersid);
 		ea[2].Trustee.ptstrName=(LPSTR)ownersid;
 
-		// set actual access permissions
+		// set access permissions
 		DWORD	perms=0;
 		mode_t	shift=permoctal;
 		for (int16_t i=0; i<9; i++) {
@@ -426,7 +440,7 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 			}
 		}
 
-		// create the ACL
+		// set entries in acl
 		PACL	pacl=NULL;
 		if (SetEntriesInAcl(3,ea,NULL,&pacl)!=ERROR_SUCCESS) {
 			LocalFree(pacl);
@@ -436,6 +450,8 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		// clean up
 		LocalFree(groupsid);
 		LocalFree(ownersid);
+
+		// return the acl
 		return (void *)pacl;
 	#else
 		return NULL;

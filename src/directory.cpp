@@ -1,6 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information
 
+#include <rudiments/stdio.h>
 #include <rudiments/directory.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
@@ -276,13 +277,39 @@ char *directory::getChildName(uint64_t index) {
 
 bool directory::create(const char *path, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_CREATEDIRECTORY)
+
+		// create security descriptor
+		PSECURITY_DESCRIPTOR	psd=
+			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,
+					SECURITY_DESCRIPTOR_MIN_LENGTH);
+		if (!InitializeSecurityDescriptor(psd,
+					SECURITY_DESCRIPTOR_REVISION)) {
+			LocalFree(psd);
+			return false;
+		}
+		void	*dacl=permissions::permOctalToDacl(perms,true);
+		if (!SetSecurityDescriptorDacl(psd,TRUE,(PACL)dacl,FALSE) ||
+			!SetSecurityDescriptorControl(psd,
+				SE_DACL_PROTECTED|SE_DACL_AUTO_INHERITED,
+				SE_DACL_PROTECTED|SE_DACL_AUTO_INHERITED)) {
+			LocalFree(dacl);
+			LocalFree(psd);
+			return false;
+		}
+
+		// create security attributes
 		SECURITY_ATTRIBUTES	satt;
-		satt.nLength=sizeof(LPSECURITY_ATTRIBUTES);
+		satt.nLength=sizeof(SECURITY_ATTRIBUTES);
+		satt.lpSecurityDescriptor=psd;
 		satt.bInheritHandle=TRUE;
-		void	*sddl=permissions::permOctalToDacl(perms,true);
-		satt.lpSecurityDescriptor=sddl;
+
+		// create directory
 		bool	retval=(CreateDirectory(path,&satt)==TRUE);
-		LocalFree(sddl);
+
+		// clean up
+		LocalFree(dacl);
+		LocalFree(psd);
+
 		return retval;
 	#else
 		int32_t	result;
