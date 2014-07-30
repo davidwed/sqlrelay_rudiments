@@ -163,15 +163,26 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
+		// get the file handle
+		HANDLE	fh=(HANDLE)_get_osfhandle(fd);
+
 		// is this a file or directory?
-		// FIXME: how to do this on windows?
+		BY_HANDLE_FILE_INFORMATION	bhfi;
+		if (!GetFileInformationByHandle(fh,&bhfi)) {
+			return false;
+		}
+
+		// determine the attrs
 		bool	isdir=false;
+		if (bhfi.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY) {
+			isdir=true;
+		}
 
 		// convert the perms to a dacl
 		PACL	dacl=(PACL)permOctalToDacl(perms,isdir);
 
 		// set the permissions
-		bool	success=(SetSecurityInfo((HANDLE)_get_osfhandle(fd),
+		bool	success=(SetSecurityInfo(fh,
 						SE_FILE_OBJECT,
 						DACL_SECURITY_INFORMATION,
 						NULL,NULL,dacl,NULL)==
