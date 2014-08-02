@@ -3542,7 +3542,7 @@ fi
 if ( test "$INCLUDE_RANDOMNUMBER" = "1" )
 then
 	HEADERS="$HEADERS randomnumber.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS randomnumberincludes.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS randomnumber.h randomnumberincludes.h"
 	SRCS="$SRCS randomnumber.cpp"
 	LOBJS="$LOBJS randomnumber.lo"
 fi
