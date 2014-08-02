@@ -41,6 +41,7 @@ bool randomnumber::setSeed(int32_t seed) {
 
 	#if defined(RUDIMENTS_HAVE_ARC4RANDOM)
 		// do nothing, arc4random is seeded automatically
+		return true;
 	#elif defined(RUDIMENTS_HAVE_RANDOM_R)
 		bytestring::zero(pvt->statebuf,sizeof(pvt->statebuf));
 		bytestring::zero(&pvt->buffer,sizeof(pvt->buffer));
