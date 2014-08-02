@@ -1507,6 +1507,12 @@ dnl Checks for random number generators
 echo
 echo "** Random Number Generators **"
 
+AC_MSG_CHECKING(for arc4random_uniform)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+arc4random_uniform();,AC_DEFINE(RUDIMENTS_HAVE_ARC4RANDOM_UNIFORM,1,Some systems have arc4random_uniform) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for arc4random)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>

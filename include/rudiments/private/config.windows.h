@@ -127,6 +127,9 @@
 /* Some systems have arc4random */
 /* #undef RUDIMENTS_HAVE_ARC4RANDOM */
 
+/* Some systems have arc4random_uniform */
+/* #undef RUDIMENTS_HAVE_ARC4RANDOM_UNIFORM */
+
 /* Some systems have arpa/inet.h */
 /* #undef RUDIMENTS_HAVE_ARPA_INET_H */
 
