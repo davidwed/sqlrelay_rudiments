@@ -92,7 +92,7 @@ bool randomnumber::setSeed(int32_t seed) {
 bool randomnumber::generateNumber(int32_t *result) {
 
 	#if defined(RUDIMENTS_HAVE_ARC4RANDOM_UNIFORM)
-		*result=arc4random_uniform(getRandMax());
+		*result=arc4random_uniform(getRandMax()/2)+getRandMax()/2;
 		return true;
 	#elif defined(RUDIMENTS_HAVE_ARC4RANDOM)
 		*result=scaleNumber(arc4random(),0,getRandMax());
@@ -187,7 +187,7 @@ int32_t randomnumber::generateScaledNumber(int32_t seed,
 
 int32_t randomnumber::scaleNumber(int32_t number,
 					int32_t lower, int32_t upper) {
-	return lower+(int32_t)(((float)number*(float)(upper-lower))/
+	return lower+(int32_t)(((float)number*(float)abs(upper-lower))/
 							float(getRandMax()));
 }
 
