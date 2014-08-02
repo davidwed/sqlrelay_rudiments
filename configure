@@ -24044,7 +24044,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-arc4random_uniform();
+arc4random_uniform(0);
   ;
   return 0;
 }
