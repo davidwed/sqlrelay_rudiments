@@ -12,15 +12,15 @@
 #if defined(RUDIMENTS_HAVE_SRAND) && defined(RUDIMENTS_HAVE_RAND)
 	#define SEEDRANDOM srand
 	#define GETRANDOM rand
-#elif defined(RUDIMENTS_HAVE_SRAND48) && defined(RUDIMENTS_HAVE_LRAND48)
+/*#elif defined(RUDIMENTS_HAVE_SRAND48) && defined(RUDIMENTS_HAVE_LRAND48)
 	#define SEEDRANDOM srand48
-	#define GETRANDOM lrand48
+	#define GETRANDOM lrand48*/
 #else
 	#error "Couldn't find a suitable replacement for rand/srand"
 #endif
 
 // LAME: not in the class
-#if !defined(RUDIMENTS_HAVE_RAND_R)
+#if !defined(RUDIMENTS_HAVE_RAND_R) && !defined(RUDIMENTS_HAVE_RANDOM_R)
 static threadmutex	*_rnmutex;
 #endif
 
@@ -43,18 +43,28 @@ int32_t randomnumber::getSeed() {
 
 int32_t randomnumber::generateNumber(int32_t seed) {
 
-	// FIXME: use random(_r)()/srandom(_r)()/
-	//		initstate(_r)()/setstate(_r)() instead?
-
-	#ifdef RUDIMENTS_HAVE_RAND_R
+	#if defined(RUDIMENTS_HAVE_RANDOM_R)
+		// FIXME: this is a slow and degenerate way of using this
+		uint32_t	useed=seed;
+		char		statebuf[64];
+		bytestring::zero(statebuf,sizeof(statebuf));
+		random_data	buffer;
+		bytestring::zero(&buffer,sizeof(buffer));
+		initstate_r(useed,statebuf,sizeof(statebuf),&buffer);
+		int32_t		result;
+		random_r(&buffer,&result);
+		return result;
+	#elif defined(RUDIMENTS_HAVE_RAND_R)
 		uint32_t	useed=seed;
 		return rand_r(&useed);
 	#else
 		if (_rnmutex && !_rnmutex->lock()) {
 			return -1;
 		}
-		SEEDRANDOM(seed);
-		int32_t	retval=GETRANDOM();
+		//SEEDRANDOM(seed);
+		//int32_t	retval=GETRANDOM();
+		srand(seed);
+		int32_t	retval=rand();
 		if (_rnmutex) {
 			_rnmutex->unlock();
 		}
