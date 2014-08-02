@@ -598,6 +598,9 @@
 /* Some systems have lrand48 */
 #undef RUDIMENTS_HAVE_LRAND48
 
+/* Some systems have lrand48_r */
+#undef RUDIMENTS_HAVE_LRAND48_R
+
 /* Some systems have lseek */
 #undef RUDIMENTS_HAVE_LSEEK
 
@@ -790,6 +793,9 @@
 /* Some systems have rand */
 #undef RUDIMENTS_HAVE_RAND
 
+/* Some systems have random */
+#undef RUDIMENTS_HAVE_RANDOM
+
 /* Some systems have random_r */
 #undef RUDIMENTS_HAVE_RANDOM_R
 
@@ -951,15 +957,6 @@
 
 /* struct spwd has sp_warn */
 #undef RUDIMENTS_HAVE_SP_WARN
-
-/* Some systems have srand */
-#undef RUDIMENTS_HAVE_SRAND
-
-/* Some systems have srand48 */
-#undef RUDIMENTS_HAVE_SRAND48
-
-/* Some systems have srandom_r */
-#undef RUDIMENTS_HAVE_SRANDOM_R
 
 /* statvfs */
 #undef RUDIMENTS_HAVE_STATVFS

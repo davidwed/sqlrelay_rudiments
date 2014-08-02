@@ -9,20 +9,137 @@
 	#include <stdlib.h>
 #endif
 
-#if defined(RUDIMENTS_HAVE_SRAND) && defined(RUDIMENTS_HAVE_RAND)
-	#define SEEDRANDOM srand
-	#define GETRANDOM rand
-/*#elif defined(RUDIMENTS_HAVE_SRAND48) && defined(RUDIMENTS_HAVE_LRAND48)
-	#define SEEDRANDOM srand48
-	#define GETRANDOM lrand48*/
-#else
-	#error "Couldn't find a suitable replacement for rand/srand"
-#endif
-
 // LAME: not in the class
-#if !defined(RUDIMENTS_HAVE_RAND_R) && !defined(RUDIMENTS_HAVE_RANDOM_R)
+#if !defined(RUDIMENTS_HAVE_RANDOM_R) && \
+	!defined(RUDIMENTS_HAVE_RAND_R) && \
+	!defined(RUDIMENTS_HAVE_LRAND48_R)
 static threadmutex	*_rnmutex;
 #endif
+
+class randomnumberprivate {
+	friend class randomnumber;
+	private:
+		#if defined(RUDIMENTS_HAVE_RANDOM_R)
+			char		statebuf[64];
+			random_data	buffer;
+		#elif defined(RUDIMENTS_HAVE_RAND_R)
+			uint32_t	useed;
+		#elif defined(RUDIMENTS_HAVE_LRAND48_R)
+			drand48_data	buffer;
+		#endif
+};
+
+randomnumber::randomnumber() {
+	pvt=new randomnumberprivate;
+}
+
+randomnumber::~randomnumber() {
+	delete pvt;
+}
+
+bool randomnumber::setSeed(int32_t seed) {
+
+	#if defined(RUDIMENTS_HAVE_RANDOM_R)
+		bytestring::zero(pvt->statebuf,sizeof(pvt->statebuf));
+		bytestring::zero(&pvt->buffer,sizeof(pvt->buffer));
+		return !initstate_r((uint32_t)seed,
+					pvt->statebuf,sizeof(pvt->statebuf),
+					&pvt->buffer);
+	#elif defined(RUDIMENTS_HAVE_RAND_R)
+		pvt->useed=seed;
+		return true;
+	#elif defined(RUDIMENTS_HAVE_LRAND48_R)
+		bytestring::zero(&pvt->buffer,sizeof(pvt->buffer));
+		return !srand48_r(seed,&pvt->buffer);
+	#elif defined(RUDIMENTS_HAVE_RANDOM)
+		if (_rnmutex && !_rnmutex->lock()) {
+			return false;
+		}
+		srandom(seed);
+		if (_rnmutex) {
+			_rnmutex->unlock();
+		}
+		return true;
+	#elif defined(RUDIMENTS_HAVE_RAND)
+		if (_rnmutex && !_rnmutex->lock()) {
+			return false;
+		}
+		srand(seed);
+		if (_rnmutex) {
+			_rnmutex->unlock();
+		}
+		return true;
+	#elif defined(RUDIMENTS_HAVE_LRAND48)
+		if (_rnmutex && !_rnmutex->lock()) {
+			return false;
+		}
+		srand48(seed);
+		if (_rnmutex) {
+			_rnmutex->unlock();
+		}
+		return true;
+	#else
+		#error "Couldn't find a suitable replacement for rand/srand"
+	#endif
+}
+
+bool randomnumber::generateNumber(int32_t *result) {
+
+	#if defined(RUDIMENTS_HAVE_RANDOM_R)
+		return !random_r(&pvt->buffer,result);
+	#elif defined(RUDIMENTS_HAVE_RAND_R)
+		pvt->useed=rand_r(&pvt->useed);
+		*result=pvt->useed;
+		return true;
+	#elif defined(RUDIMENTS_HAVE_LRAND48_R)
+		long	res;
+		if (lrand48_r(&pvt->buffer,&res)) {
+			return false;
+		}
+		*result=res;
+		return true;
+	#elif defined(RUDIMENTS_HAVE_RANDOM)
+		if (_rnmutex && !_rnmutex->lock()) {
+			return false;
+		}
+		*result=random();
+		if (_rnmutex) {
+			_rnmutex->unlock();
+		}
+		return true;
+	#elif defined(RUDIMENTS_HAVE_RAND)
+		if (_rnmutex && !_rnmutex->lock()) {
+			return false;
+		}
+		*result=rand();
+		if (_rnmutex) {
+			_rnmutex->unlock();
+		}
+		return true;
+	#elif defined(RUDIMENTS_HAVE_LRAND48)
+		if (_rnmutex && !_rnmutex->lock()) {
+			return false;
+		}
+		*result=lrand48();
+		if (_rnmutex) {
+			_rnmutex->unlock();
+		}
+		return true;
+	#else
+		#error "Couldn't find a suitable replacement for rand/srand"
+	#endif
+}
+
+bool randomnumber::generateScaledNumber(int32_t lower,
+						int32_t upper,
+						int32_t *result) {
+	int32_t	res;
+	if (!generateNumber(&res)) {
+		return false;
+	}
+	*result=scaleNumber(res,lower,upper);
+	return true;
+}
 
 int32_t randomnumber::getSeed() {
 
@@ -42,47 +159,24 @@ int32_t randomnumber::getSeed() {
 }
 
 int32_t randomnumber::generateNumber(int32_t seed) {
-
-	#if defined(RUDIMENTS_HAVE_RANDOM_R)
-		// FIXME: this is a slow and degenerate way of using this
-		uint32_t	useed=seed;
-		char		statebuf[64];
-		bytestring::zero(statebuf,sizeof(statebuf));
-		random_data	buffer;
-		bytestring::zero(&buffer,sizeof(buffer));
-		initstate_r(useed,statebuf,sizeof(statebuf),&buffer);
-		int32_t		result;
-		random_r(&buffer,&result);
-		return result;
-	#elif defined(RUDIMENTS_HAVE_RAND_R)
-		uint32_t	useed=seed;
-		return rand_r(&useed);
-	#else
-		if (_rnmutex && !_rnmutex->lock()) {
-			return -1;
-		}
-		//SEEDRANDOM(seed);
-		//int32_t	retval=GETRANDOM();
-		srand(seed);
-		int32_t	retval=rand();
-		if (_rnmutex) {
-			_rnmutex->unlock();
-		}
-		return retval;
-	#endif
+	randomnumber	r;
+	int32_t		result;
+	return (r.setSeed(seed) &&
+		r.generateNumber(&result))?result:-1;
 }
 
 int32_t randomnumber::generateScaledNumber(int32_t seed,
 					int32_t lower, int32_t upper) {
-	return lower+
-		(int32_t)(((float)generateNumber(seed)*
-				(float)(upper-lower))/float(RAND_MAX));
+	randomnumber	r;
+	int32_t		result;
+	return (r.setSeed(seed) &&
+		r.generateScaledNumber(lower,upper,&result))?result:-1;
 }
 
 int32_t randomnumber::scaleNumber(int32_t number,
 					int32_t lower, int32_t upper) {
 	return lower+(int32_t)(((float)number*(float)(upper-lower))/
-							float(RAND_MAX));
+							float(getRandMax()));
 }
 
 int32_t randomnumber::getRandMax() {
@@ -90,7 +184,9 @@ int32_t randomnumber::getRandMax() {
 }
 
 bool randomnumber::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_RAND_R)
+	#if !defined(RUDIMENTS_HAVE_RANDOM_R) && \
+		!defined(RUDIMENTS_HAVE_RAND_R) && \
+		!defined(RUDIMENTS_HAVE_LRAND48_R)
 		return true;
 	#else
 		return false;
@@ -98,7 +194,9 @@ bool randomnumber::needsMutex() {
 }
 
 void randomnumber::setMutex(threadmutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_RAND_R)
+	#if !defined(RUDIMENTS_HAVE_RANDOM_R) && \
+		!defined(RUDIMENTS_HAVE_RAND_R) && \
+		!defined(RUDIMENTS_HAVE_LRAND48_R)
 		_rnmutex=mtx;
 	#endif
 }

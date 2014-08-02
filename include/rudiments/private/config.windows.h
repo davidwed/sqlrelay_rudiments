@@ -598,6 +598,9 @@
 /* Some systems have lrand48 */
 /* #undef RUDIMENTS_HAVE_LRAND48 */
 
+/* Some systems have lrand48_r */
+/* #undef RUDIMENTS_HAVE_LRAND48_R */
+
 /* Some systems have lseek */
 /* #undef RUDIMENTS_HAVE_LSEEK */
 
@@ -789,6 +792,12 @@
 
 /* Some systems have rand */
 #define RUDIMENTS_HAVE_RAND 1
+
+/* Some systems have random */
+/* #undef RUDIMENTS_HAVE_RANDOM */
+
+/* Some systems have random_r */
+/* #undef RUDIMENTS_HAVE_RANDOM_R */
 
 /* Some systems have rand_r */
 /* #undef RUDIMENTS_HAVE_RAND_R */

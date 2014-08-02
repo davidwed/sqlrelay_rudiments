@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/randomnumber.h>
+#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #include <stdlib.h>
 
@@ -47,4 +48,27 @@ int main(int argc, const char **argv) {
         scalednumber=randomnumber::scaleNumber(basenumber,-100,100);
         stdoutput.printf("%d",scalednumber);
         stdoutput.printf("\n");
+
+        stdoutput.printf("Generating full range of numbers (max=%ld)...\n",
+						randomnumber::getRandMax());
+	datetime	start;
+	start.getSystemDateAndTime();
+	randomnumber	r;
+	r.setSeed(0);
+	for (int64_t i=0; i<randomnumber::getRandMax(); i++) {
+		int32_t	result;
+		if (!r.generateNumber(&result)) {
+        		stdoutput.printf("generateNumber failed: %lld\n",i);
+			break;
+		} else {
+			if (i<10) {
+        			stdoutput.printf("%lld: %ld\n",i,result);
+			} else if (i==10) {
+        			stdoutput.printf("...\n");
+			}
+		}
+	}
+	datetime	end;
+	end.getSystemDateAndTime();
+	stdoutput.printf("%d seconds\n",end.getEpoch()-start.getEpoch());
 }

@@ -1,5 +1,6 @@
 0.48 - got directory and file permissions working properly on windows
 	added support for random_r rather than just rand_r
+	added support for lrand48_r rather than just lrand48
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase

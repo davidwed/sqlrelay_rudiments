@@ -6,6 +6,8 @@
 
 #include <rudiments/private/randomnumberincludes.h>
 
+class randomnumberprivate;
+
 /** The randomnumber class provides methods for generating and scaling 
  *  random numbers.
  * 
@@ -28,6 +30,30 @@
  *  of generateNumber() which operates on a larger range. */
 class RUDIMENTS_DLLSPEC randomnumber {
 	public:
+
+		/** Creates a new instance of the randomnumber class. */
+		randomnumber();
+
+		/** Deletes this instance of the randomnumber class. */
+		~randomnumber();
+
+		/** Sets the initial seed for this instance. */
+		bool	setSeed(int32_t seed);
+
+		/** Generates a random number between 0 and 2^32 and sets
+		 *  "result" to this number.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	generateNumber(int32_t *result);
+
+		/** Generates a random number between "lower" and "upper"
+		 *  and sets "result" to this number.
+		 *
+		 *  Returns true on success and false on failure. */
+		bool	generateScaledNumber(int32_t lower,
+						int32_t upper,
+						int32_t *result);
+
 		/** Generates a random number seed by first attempting
 		 *  to get one from /dev/urandom and if that fails,
 		 *  getting the number of seconds since 1970. */
@@ -76,6 +102,8 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		 *  (see needsMutex()).  If your application is not
 		 *  multithreaded, then there is no need to supply a mutex. */
 		static	void	setMutex(threadmutex *mtx);
+
+	#include <rudiments/private/randomnumber.h>
 };
 
 #endif

@@ -1507,29 +1507,11 @@ dnl Checks for random number generators
 echo
 echo "** Random Number Generators **"
 
-AC_MSG_CHECKING(for srand48)
+AC_MSG_CHECKING(for random_r)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-srand48(0);,AC_DEFINE(RUDIMENTS_HAVE_SRAND48,1,Some systems have srand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for lrand48)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif],
-lrand48();,AC_DEFINE(RUDIMENTS_HAVE_LRAND48,1,Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for srand)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif],
-srand(0);,AC_DEFINE(RUDIMENTS_HAVE_SRAND,1,Some systems have srand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for rand)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif],
-rand();,AC_DEFINE(RUDIMENTS_HAVE_RAND,1,Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+random_r(0,0);,AC_DEFINE(RUDIMENTS_HAVE_RANDOM_R,1,Some systems have random_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for rand_r)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -1537,17 +1519,29 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 rand_r(0);,AC_DEFINE(RUDIMENTS_HAVE_RAND_R,1,Some systems have rand_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for srandom_r)
+AC_MSG_CHECKING(for lrand48_r)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-srandom_r(0,0);,AC_DEFINE(RUDIMENTS_HAVE_SRANDOM_R,1,Some systems have srandom_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+lrand48_r(0,0);,AC_DEFINE(RUDIMENTS_HAVE_LRAND48_R,1,Some systems have lrand48_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for random_r)
+AC_MSG_CHECKING(for random)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif],
-random_r(0,0);,AC_DEFINE(RUDIMENTS_HAVE_RANDOM_R,1,Some systems have random_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+random();,AC_DEFINE(RUDIMENTS_HAVE_RANDOM,1,Some systems have random) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for rand)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+rand();,AC_DEFINE(RUDIMENTS_HAVE_RAND,1,Some systems have rand) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for lrand48)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+lrand48();,AC_DEFINE(RUDIMENTS_HAVE_LRAND48,1,Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 echo "******************************"
 
