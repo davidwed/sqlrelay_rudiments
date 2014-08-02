@@ -124,6 +124,9 @@
 /* Some systems have alarm */
 #undef RUDIMENTS_HAVE_ALARM
 
+/* Some systems have arc4random */
+#undef RUDIMENTS_HAVE_ARC4RANDOM
+
 /* Some systems have arpa/inet.h */
 #undef RUDIMENTS_HAVE_ARPA_INET_H
 

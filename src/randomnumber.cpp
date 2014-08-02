@@ -39,7 +39,9 @@ randomnumber::~randomnumber() {
 
 bool randomnumber::setSeed(int32_t seed) {
 
-	#if defined(RUDIMENTS_HAVE_RANDOM_R)
+	#if defined(RUDIMENTS_HAVE_ARC4RANDOM)
+		// do nothing, arc4random is seeded automatically
+	#elif defined(RUDIMENTS_HAVE_RANDOM_R)
 		bytestring::zero(pvt->statebuf,sizeof(pvt->statebuf));
 		bytestring::zero(&pvt->buffer,sizeof(pvt->buffer));
 		return !initstate_r((uint32_t)seed,
@@ -85,7 +87,10 @@ bool randomnumber::setSeed(int32_t seed) {
 
 bool randomnumber::generateNumber(int32_t *result) {
 
-	#if defined(RUDIMENTS_HAVE_RANDOM_R)
+	#if defined(RUDIMENTS_HAVE_ARC4RANDOM)
+		*result=arc4random();
+		return true;
+	#elif defined(RUDIMENTS_HAVE_RANDOM_R)
 		return !random_r(&pvt->buffer,result);
 	#elif defined(RUDIMENTS_HAVE_RAND_R)
 		pvt->useed=rand_r(&pvt->useed);
@@ -184,7 +189,8 @@ int32_t randomnumber::getRandMax() {
 }
 
 bool randomnumber::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_RANDOM_R) && \
+	#if !defined(RUDIMENTS_HAVE_ARC4RANDOM) && \
+		!defined(RUDIMENTS_HAVE_RANDOM_R) && \
 		!defined(RUDIMENTS_HAVE_RAND_R) && \
 		!defined(RUDIMENTS_HAVE_LRAND48_R)
 		return true;
@@ -194,7 +200,8 @@ bool randomnumber::needsMutex() {
 }
 
 void randomnumber::setMutex(threadmutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_RANDOM_R) && \
+	#if !defined(RUDIMENTS_HAVE_ARC4RANDOM) && \
+		!defined(RUDIMENTS_HAVE_RANDOM_R) && \
 		!defined(RUDIMENTS_HAVE_RAND_R) && \
 		!defined(RUDIMENTS_HAVE_LRAND48_R)
 		_rnmutex=mtx;
