@@ -1555,6 +1555,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 lrand48();,AC_DEFINE(RUDIMENTS_HAVE_LRAND48,1,Some systems have lrand48) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for CryptGenRandom)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+CryptGenRandom(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_CRYPTGENRANDOM,1,Some systems have CryptGenRandom) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

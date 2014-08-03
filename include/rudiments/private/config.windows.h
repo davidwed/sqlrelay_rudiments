@@ -211,6 +211,9 @@
 /* Some systems have crypt */
 /* #undef RUDIMENTS_HAVE_CRYPT */
 
+/* Some systems have CryptGenRandom */
+#define RUDIMENTS_HAVE_CRYPTGENRANDOM 1
+
 /* Some systems have crypt.h */
 /* #undef RUDIMENTS_HAVE_CRYPT_H */
 
