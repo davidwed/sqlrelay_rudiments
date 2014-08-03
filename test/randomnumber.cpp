@@ -31,19 +31,22 @@ int main(int argc, const char **argv) {
 		int32_t	top=upper[i];
         	stdoutput.printf("Random numbers between %d and %d:\n",
 								bottom,top);
-        	stdoutput.printf("%d\n",
+        	stdoutput.printf(" % 4d",
 			randomnumber::generateScaledNumber(seed,bottom,top));
         	int32_t	basenumber=
 			randomnumber::generateNumber(seed+1);
         	int32_t	scalednumber=
 			randomnumber::scaleNumber(basenumber,bottom,top);
-        	stdoutput.printf("%d\n",scalednumber);
+        	stdoutput.printf(" % 4d\n",scalednumber);
 		randomnumber	r;
 		r.setSeed(seed);
-		for (uint16_t i=0; i<5; i++) {
+		for (uint16_t i=0; i<100; i++) {
 			int32_t	number=0;
         		r.generateScaledNumber(bottom,top,&number);
-        		stdoutput.printf("%d\n",number);
+        		stdoutput.printf(" % 4d",number);
+			if (!((i+1)%10)) {
+        			stdoutput.printf("\n");
+			}
 		}
         	stdoutput.printf("\n");
 	}

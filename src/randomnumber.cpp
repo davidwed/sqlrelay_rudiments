@@ -92,7 +92,7 @@ bool randomnumber::setSeed(int32_t seed) {
 bool randomnumber::generateNumber(int32_t *result) {
 
 	#if defined(RUDIMENTS_HAVE_ARC4RANDOM_UNIFORM)
-		*result=arc4random_uniform(getRandMax()/2)+getRandMax()/2;
+		*result=arc4random_uniform(getRandMax());
 		return true;
 	#elif defined(RUDIMENTS_HAVE_ARC4RANDOM)
 		*result=scaleNumber(arc4random(),0,getRandMax());
