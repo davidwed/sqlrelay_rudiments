@@ -125,9 +125,15 @@ bool randomnumber::generateNumber(uint32_t *result) {
 		*result=arc4random();
 		return true;
 	#elif defined(RUDIMENTS_HAVE_RANDOM_R)
-		return !random_r(&pvt->buffer,result);
+		int32_t	res;
+		if (!random_r(&pvt->buffer,&res)) {
+			*result=res;
+			return true;
+		}
+		return false;
 	#elif defined(RUDIMENTS_HAVE_RAND_R)
-		pvt->seed=rand_r(&pvt->seed);
+		int32_t	res=rand_r(&pvt->seed);
+		pvt->seed=res;
 		*result=pvt->seed;
 		return true;
 	#elif defined(RUDIMENTS_HAVE_LRAND48_R)
