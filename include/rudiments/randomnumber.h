@@ -22,8 +22,10 @@ class randomnumberprivate;
  *
  *  If there is only one running process generating random numbers using a
  *  highly divergent series, successive calls to generateNumber() will never
- *  return the same value until all numbers between 0 and 2^32 have been
- *  returned.  At that point, the entire sequence will repeat.
+ *  return the same value until all numbers between 0 and the number returned
+ *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or 2^15-1 on some
+ *  systems) have been returned.  At that point, the entire sequence will
+ *  repeat.
  *
  *  Calls to generateScaledNumber() may return the same value before all
  *  numbers in the range have been returned because it just scales the result

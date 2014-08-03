@@ -207,7 +207,7 @@ uint32_t randomnumber::generateNumber(uint32_t seed) {
 	randomnumber	r;
 	uint32_t	result;
 	return (r.setSeed(seed) &&
-		r.generateNumber(&result))?result:-1;
+		r.generateNumber(&result))?result:0;
 }
 
 int32_t randomnumber::generateScaledNumber(uint32_t seed,
@@ -215,7 +215,7 @@ int32_t randomnumber::generateScaledNumber(uint32_t seed,
 	randomnumber	r;
 	int32_t		result;
 	return (r.setSeed(seed) &&
-		r.generateScaledNumber(lower,upper,&result))?result:-1;
+		r.generateScaledNumber(lower,upper,&result))?result:0;
 }
 
 int32_t randomnumber::scaleNumber(uint32_t number,
