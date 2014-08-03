@@ -40,8 +40,9 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		/** Sets the initial seed for this instance. */
 		bool	setSeed(uint32_t seed);
 
-		/** Generates a random number between 0 and 2^32 and sets
-		 *  "result" to this number.
+		/** Generates a random number between 0 and the number given
+		 *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or
+		 *  2^15-1) and sets "result" to this number.
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	generateNumber(uint32_t *result);
@@ -66,9 +67,10 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		 *  seed for the next number. */
 		static	uint32_t	generateNumber(uint32_t seed);
 
-		/** Generates a random number between 0 and 2^32, based
-		 *  on seed, scales that value to be between
-		 *  lower and upper and returns it.
+		/** Generates a random number between 0 and the number given
+		 *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or
+		 *  2^15-1), based on "seed", scales that value to be between
+		 *  "lower" and "upper" and returns it.
 		 * 
 		 *  It is NOT ok to use the result of this method as 
 		 *  the seed for the next number. */
@@ -76,7 +78,7 @@ class RUDIMENTS_DLLSPEC randomnumber {
 							int32_t lower,
 							int32_t upper);
 
-		/** Scales number to be between lower and upper and 
+		/** Scales "number" to be between "lower" and "upper" and 
 		 *  returns it.
 		 * 
 		 *  It is NOT ok to use the result of this method as 
@@ -85,13 +87,10 @@ class RUDIMENTS_DLLSPEC randomnumber {
 						int32_t lower,
 						int32_t upper);
 
-		/** Operating systems can generate random numbers
-		 *  between 0 and RAND_MAX.
-		 *  This method returns RAND_MAX.
-		 *  
-		 *  RAND_MAX is usually 2^31-1 on 32 or 64 bit machines
-		 *  but there are exceptions where it is 2^15-1 or
-		 *  2^32-1. */
+		/** Returns the largest number that generateNumber() could
+		 *  possibly generate.  This is usually 2^31-1 on 32 or 64 bit
+		 *  machines but there are exceptions where it is 2^32-1 or
+		 *  2^15-1. */
 		static	uint32_t	getRandMax();
 
 		/** Returns true if this class needs a mutex to operate safely

@@ -237,7 +237,7 @@ stdoutput.printf("shifted: %d\n",shifted);*/
 uint32_t randomnumber::getRandMax() {
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM) || \
 			defined(RUDIMENTS_HAVE_ARC4RANDOM)
-		return 4294967295;
+		return 4294967295U;
 	#else
 		return RAND_MAX;
 	#endif
