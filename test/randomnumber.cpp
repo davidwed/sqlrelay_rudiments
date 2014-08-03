@@ -8,11 +8,11 @@
 int main(int argc, const char **argv) {
 
         int	seed=randomnumber::getSeed();
-        stdoutput.printf("Seed: %d\n",seed);
+        stdoutput.printf("Seed: %d\n\n",seed);
 
         stdoutput.printf("Random numbers between 0 and %d:\n",
 					randomnumber::getRandMax());
-        stdoutput.printf("%d (next should be the same as this)\n",
+        stdoutput.printf("%d (next might be the same as this)\n",
 				randomnumber::generateNumber(seed));
 	randomnumber	r;
 	r.setSeed(seed);
