@@ -38,13 +38,13 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		~randomnumber();
 
 		/** Sets the initial seed for this instance. */
-		bool	setSeed(int32_t seed);
+		bool	setSeed(uint32_t seed);
 
 		/** Generates a random number between 0 and 2^32 and sets
 		 *  "result" to this number.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	generateNumber(int32_t *result);
+		bool	generateNumber(uint32_t *result);
 
 		/** Generates a random number between "lower" and "upper"
 		 *  and sets "result" to this number.
@@ -57,14 +57,14 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		/** Generates a random number seed by first attempting
 		 *  to get one from /dev/urandom and if that fails,
 		 *  getting the number of seconds since 1970. */
-		static	int32_t	getSeed();
+		static	uint32_t	getSeed();
 
 		/** Generates a random number between 0 and 2^32, based
 		 *  on seed, and returns it.  
 		 * 
 		 *  It is ok to use the result of this method as the 
 		 *  seed for the next number. */
-		static	int32_t	generateNumber(int32_t seed);
+		static	uint32_t	generateNumber(uint32_t seed);
 
 		/** Generates a random number between 0 and 2^32, based
 		 *  on seed, scales that value to be between
@@ -72,7 +72,7 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		 * 
 		 *  It is NOT ok to use the result of this method as 
 		 *  the seed for the next number. */
-		static	int32_t	generateScaledNumber(int32_t seed, 
+		static	int32_t	generateScaledNumber(uint32_t seed, 
 							int32_t lower,
 							int32_t upper);
 
@@ -81,7 +81,7 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		 * 
 		 *  It is NOT ok to use the result of this method as 
 		 *  the seed for the next number. */
-		static	int32_t	scaleNumber(int32_t number,
+		static	int32_t	scaleNumber(uint32_t number,
 						int32_t lower,
 						int32_t upper);
 
@@ -89,10 +89,10 @@ class RUDIMENTS_DLLSPEC randomnumber {
 		 *  between 0 and RAND_MAX.
 		 *  This method returns RAND_MAX.
 		 *  
-		 *  RAND_MAX is usually 2^31-1 on 32 bit machines
+		 *  RAND_MAX is usually 2^31-1 on 32 or 64 bit machines
 		 *  but there are exceptions where it is 2^15-1 or
 		 *  2^32-1. */
-		static	int32_t	getRandMax();
+		static	uint32_t	getRandMax();
 
 		/** Returns true if this class needs a mutex to operate safely
 		 *  in a threaded environment and false otherwise. */

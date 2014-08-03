@@ -10,16 +10,16 @@ int main(int argc, const char **argv) {
         int	seed=randomnumber::getSeed();
         stdoutput.printf("Seed: %d\n\n",seed);
 
-        stdoutput.printf("Random numbers between 0 and %d:\n",
-					randomnumber::getRandMax());
-        stdoutput.printf("%d (next might be the same as this)\n",
-				randomnumber::generateNumber(seed));
+        stdoutput.printf("Random numbers between 0 and %lld:\n",
+				(uint64_t)randomnumber::getRandMax());
+        stdoutput.printf("%lld (next might be the same as this)\n",
+				(uint64_t)randomnumber::generateNumber(seed));
 	randomnumber	r;
 	r.setSeed(seed);
 	for (uint16_t i=0; i<5; i++) {
-		int32_t	number=0;
+		uint32_t	number=0;
         	r.generateNumber(&number);
-        	stdoutput.printf("%d\n",number);
+        	stdoutput.printf("%lld\n",(uint64_t)number);
 	}
         stdoutput.printf("\n");
 
@@ -33,7 +33,7 @@ int main(int argc, const char **argv) {
 								bottom,top);
         	stdoutput.printf(" % 4d",
 			randomnumber::generateScaledNumber(seed,bottom,top));
-        	int32_t	basenumber=
+        	uint32_t	basenumber=
 			randomnumber::generateNumber(seed+1);
         	int32_t	scalednumber=
 			randomnumber::scaleNumber(basenumber,bottom,top);
@@ -57,13 +57,14 @@ int main(int argc, const char **argv) {
 	start.getSystemDateAndTime();
 	r.setSeed(0);
 	for (int64_t i=0; i<randomnumber::getRandMax(); i++) {
-		int32_t	result;
+		uint32_t	result;
 		if (!r.generateNumber(&result)) {
         		stdoutput.printf("generateNumber failed: %lld\n",i);
 			break;
 		} else {
 			if (i<10) {
-        			stdoutput.printf("%lld: %ld\n",i,result);
+        			stdoutput.printf("%lld: %lld\n",
+							i,(uint64_t)result);
 			} else if (i==10) {
         			stdoutput.printf("...\n");
 			}
