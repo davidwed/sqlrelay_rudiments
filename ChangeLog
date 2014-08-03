@@ -1,5 +1,5 @@
 0.48 - got directory and file permissions working properly on windows
-	added non-static methods to randomnumber for more efficient generation
+	added non-static methods to randomnumber
 	added support for random_r, lrand48_r, arc4random and CreateGenRandom
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend

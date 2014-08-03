@@ -51,8 +51,8 @@ int main(int argc, const char **argv) {
         	stdoutput.printf("\n");
 	}
 
-        stdoutput.printf("Generating full range of numbers (max=%ld)...\n",
-						randomnumber::getRandMax());
+        stdoutput.printf("Generating full range of numbers (max=%lld)...\n",
+					(uint64_t)randomnumber::getRandMax());
 	datetime	start;
 	start.getSystemDateAndTime();
 	r.setSeed(0);

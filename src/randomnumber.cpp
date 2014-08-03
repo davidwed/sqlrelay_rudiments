@@ -225,12 +225,6 @@ int32_t randomnumber::scaleNumber(uint32_t number,
 	float	shrunk=((float)number)/originalrange;
 	float	expanded=shrunk*newrange;
 	int32_t	shifted=lower+(int32_t)expanded;
-/*stdoutput.printf("number: %lld\n",number);
-stdoutput.printf("originalrange: %f\n",originalrange);
-stdoutput.printf("newrange: %f\n",newrange);
-stdoutput.printf("shrunk: %f\n",shrunk);
-stdoutput.printf("expanded: %f\n",expanded);
-stdoutput.printf("shifted: %d\n",shifted);*/
 	return shifted;
 }
 
