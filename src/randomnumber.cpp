@@ -187,8 +187,12 @@ int32_t randomnumber::generateScaledNumber(int32_t seed,
 
 int32_t randomnumber::scaleNumber(int32_t number,
 					int32_t lower, int32_t upper) {
-	return lower+(int32_t)(((float)number*(float)abs(upper-lower))/
-							float(getRandMax()));
+	float	originalrange=(int64_t)getRandMax()+1;
+	float	newrange=(float)abs(upper-lower)+1.0;
+	float	shrunk=((float)number)/originalrange;
+	float	expanded=shrunk*newrange;
+	int32_t	shifted=lower+(int32_t)expanded;
+	return shifted;
 }
 
 int32_t randomnumber::getRandMax() {
