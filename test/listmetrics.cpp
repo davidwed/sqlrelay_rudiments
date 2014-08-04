@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 	datetime	start;
 	datetime	finish;
 
-	int32_t	seed=randomnumber::getSeed();
+	uint32_t	seed=randomnumber::getSeed();
 	scaledvalues=new int32_t[listsize];
 	unscldvalues=new int32_t[listsize];
 	for (uint32_t i=0; i<listsize; i++) {
