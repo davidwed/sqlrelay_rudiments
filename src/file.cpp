@@ -1405,7 +1405,7 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 		// replace X's with random characters...
 
 		// seed the random number
-		int32_t	seed=randomnumber::getSeed();
+		uint32_t	seed=randomnumber::getSeed();
 
 		// for each of the 6 characters...
 		for (uint8_t i=0; i<6; i++) {
