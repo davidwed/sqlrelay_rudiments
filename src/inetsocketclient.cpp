@@ -8,6 +8,7 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
+#include <rudiments/environment.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -99,10 +100,22 @@ void inetsocketclient::initialize(constnamevaluepairs *cd) {
 
 int32_t inetsocketclient::connect() {
 
-	#ifndef RUDIMENTS_HAVE_GETADDRINFO
+	// we might need a host entry
+	hostentry	he;
+
+	#ifdef RUDIMENTS_HAVE_GETADDRINFO
+	// we might need an addrinfo
+	addrinfo	*ai=NULL;
+
+	bool	disablegetaddrinfo=
+			!charstring::compare(
+				environment::getValue(
+					"RUDIMENTS_DISABLE_GETADDRINFO"),"yes");
+
+	if (disablegetaddrinfo) {
+	#endif
 
 		// get the host entry
-		hostentry	he;
 		if (!he.initialize(_address())) {
 			return RESULT_ERROR;
 		}
@@ -143,7 +156,9 @@ int32_t inetsocketclient::connect() {
 			return RESULT_ERROR;
 		}
 
-	#else
+	#ifdef RUDIMENTS_HAVE_GETADDRINFO
+	} else {
+	#endif
 
 		// create a hint indicating that SOCK_STREAM should be used
 		addrinfo	hints;
@@ -161,7 +176,6 @@ int32_t inetsocketclient::connect() {
 		char	*portstr=charstring::parseNumber(*_port());
 
 		// get the address info for the given address/port
-		addrinfo	*ai=NULL;
 		int32_t		result;
 		do {
 			error::clearError();
@@ -179,6 +193,8 @@ int32_t inetsocketclient::connect() {
 			return RESULT_ERROR;
 		}
 
+	#ifdef RUDIMENTS_HAVE_GETADDRINFO
+	}
 	#endif
 
 	int32_t	retval=RESULT_ERROR;
@@ -194,7 +210,9 @@ int32_t inetsocketclient::connect() {
 			snooze::macrosnooze(_retrywait());
 		}
 
-		#ifndef RUDIMENTS_HAVE_GETADDRINFO
+		#ifdef RUDIMENTS_HAVE_GETADDRINFO
+		if (disablegetaddrinfo) {
+		#endif
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
@@ -219,7 +237,9 @@ int32_t inetsocketclient::connect() {
 				}
 			}
 
-		#else
+		#ifdef RUDIMENTS_HAVE_GETADDRINFO
+		} else {
+		#endif
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
@@ -270,14 +290,18 @@ int32_t inetsocketclient::connect() {
 				}
 			}
 
+		#ifdef RUDIMENTS_HAVE_GETADDRINFO
+		}
 		#endif
 	}
 
 	// if we're here, the connect failed
 	#ifdef RUDIMENTS_HAVE_GETADDRINFO
+	if (!disablegetaddrinfo) {
 		freeaddrinfo(ai);
+	}
 	#else
-		close();
+	close();
 	#endif
 
 	return retval;

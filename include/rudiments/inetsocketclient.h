@@ -92,7 +92,17 @@ class RUDIMENTS_DLLSPEC inetsocketclient : public socketclient, private inetsock
 		 *  protocolentry classes.  If you are using this method
 		 *  in a multithreaded application, you may need to
 		 *  supply those classes with mutexes.  See hostentry.h
-		 *  and protocolentry.h for more detail. */
+		 *  and protocolentry.h for more detail.
+		 *
+		 *  Note also that if your system supports getaddrinfo()
+		 *  then round-robin DNS may not work as expected.  Some
+		 *  systems support the sortv4=no directive in /etc/gai.conf
+		 *  to work around this, but many do not.  Another workaround
+		 *  is to set the RUDIMENTS_DISABLE_GETADDRINFO environment
+		 *  variable to "yes".  This will cause connect() to use the
+		 *  hostentry and protocolentry classes instead of
+		 *  getaddrinfo() and should make round-robin DNS work
+		 *  as expected. */
 		int32_t	connect();
 
 	#include <rudiments/private/inetsocketclient.h>
