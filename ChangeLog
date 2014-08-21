@@ -2,6 +2,7 @@
 	added non-static methods to randomnumber
 	added support for random_r, lrand48_r, arc4random and CreateGenRandom
 	added RUDIMENTS_DISABLE_GETADDRINFO environment variable
+	fixed connect-with-timeout error when getaddrinfo is disabled
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase
