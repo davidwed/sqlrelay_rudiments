@@ -21,6 +21,8 @@
 	#include <stdlib.h>
 #endif
 
+#undef RUDIMENTS_HAVE_GETADDRINFO
+
 class inetsocketclientprivate {
 	friend class inetsocketclient;
 	private:
@@ -118,31 +120,6 @@ int32_t inetsocketclient::connect() {
 		_sin()->sin_family=he.getAddressType();
 		_sin()->sin_port=hostToNet(*_port());
 
-		// create an inet socket
-		do {
-			fd(::socket(AF_INET,SOCK_STREAM,pe.getNumber()));
-		} while (fd()==-1 && error::getErrorNumber()==EINTR);
-		if (fd()==-1) {
-			return RESULT_ERROR;
-		}
-
-		// Put the socket in blocking mode.  Most platforms create
-		// sockets in blocking mode by default but OpenBSD doesn't
-		// appear to (at least in version 4.9) so we'll force it to
-		// blocking-mode to be consistent.
-		if (!useBlockingMode() &&
-				error::getErrorNumber()
-				#ifdef ENOTSUP
-				&& error::getErrorNumber()!=ENOTSUP
-				#endif
-				#ifdef EOPNOTSUPP
-				&& error::getErrorNumber()!=EOPNOTSUPP
-				#endif
-				) {
-			close();
-			return RESULT_ERROR;
-		}
-
 	#else
 
 		// create a hint indicating that SOCK_STREAM should be used
@@ -202,6 +179,34 @@ int32_t inetsocketclient::connect() {
 					he.getAddressList()[addressindex];
 					addressindex++) {
 
+				// create an inet socket
+				do {
+					fd(::socket(AF_INET,SOCK_STREAM,
+							pe.getNumber()));
+				} while (fd()==-1 &&
+					error::getErrorNumber()==EINTR);
+				if (fd()==-1) {
+					return RESULT_ERROR;
+				}
+
+				// Put the socket in blocking mode.  Most
+				// platforms create sockets in blocking mode by
+				// default but OpenBSD doesn't appear to (at
+				// least in version 4.9) so we'll force it to
+				// blocking-mode to be consistent.
+				if (!useBlockingMode() &&
+					error::getErrorNumber()
+					#ifdef ENOTSUP
+					&& error::getErrorNumber()!=ENOTSUP
+					#endif
+					#ifdef EOPNOTSUPP
+					&& error::getErrorNumber()!=EOPNOTSUPP
+					#endif
+					) {
+					close();
+					return RESULT_ERROR;
+				}
+
 				// set which host to connect to
 				rawbuffer::copy(&_sin()->sin_addr,
 					he.getAddressList()[addressindex],
@@ -209,13 +214,15 @@ int32_t inetsocketclient::connect() {
 	
 				// attempt to connect
 				retval=socketclient::connect(
-					reinterpret_cast<struct sockaddr *>(
-									_sin()),
+					reinterpret_cast
+						<struct sockaddr *>(_sin()),
 					sizeof(sockaddr_in),
 					_timeoutsec(),
 					_timeoutusec());
 				if (retval==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
+				} else {
+					close();
 				}
 			}
 
@@ -257,11 +264,11 @@ int32_t inetsocketclient::connect() {
 
 				// attempt to connect
 				retval=socketclient::connect(
-					reinterpret_cast<struct sockaddr *>(
-								ainfo->ai_addr),
-						ainfo->ai_addrlen,
-						_timeoutsec(),
-						_timeoutusec());
+					reinterpret_cast
+					<struct sockaddr *>(ainfo->ai_addr),
+					ainfo->ai_addrlen,
+					_timeoutsec(),
+					_timeoutusec());
 				if (retval==RESULT_SUCCESS) {
 					freeaddrinfo(ai);
 					return RESULT_SUCCESS;
@@ -276,8 +283,6 @@ int32_t inetsocketclient::connect() {
 	// if we're here, the connect failed
 	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 		freeaddrinfo(ai);
-	#else
-		close();
 	#endif
 
 	return retval;

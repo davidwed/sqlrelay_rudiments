@@ -1,7 +1,7 @@
 Summary: C++ class library for daemons, clients and servers.
 Name: rudiments
 Version: 0.45
-Release: 1
+Release: 5
 License: LGPL
 Group: Development/Libraries
 Source0: %{name}-%{version}.tar.gz
