@@ -133,7 +133,6 @@ int32_t inetsocketclient::connect() {
 
 	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 	} else {
-	#endif
 
 		// create a hint indicating that SOCK_STREAM should be used
 		addrinfo	hints;
@@ -168,7 +167,6 @@ int32_t inetsocketclient::connect() {
 			return RESULT_ERROR;
 		}
 
-	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 	}
 	#endif
 
@@ -245,7 +243,6 @@ int32_t inetsocketclient::connect() {
 
 		#ifdef RUDIMENTS_HAVE_GETADDRINFO
 		} else {
-		#endif
 
 			// try to connect to each of the addresses
 			// that came back from the address lookup
@@ -296,7 +293,6 @@ int32_t inetsocketclient::connect() {
 				}
 			}
 
-		#ifdef RUDIMENTS_HAVE_GETADDRINFO
 		}
 		#endif
 	}
