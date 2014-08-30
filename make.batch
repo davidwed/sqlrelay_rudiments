@@ -8,8 +8,9 @@ if "%1"=="clr" goto clr
 if "%1"=="clr64" goto clr64
 if "%1"=="debugclr" goto debugclr
 if "%1"=="debugclr64" goto debugclr64
-if "%1"=="clean" goto clean
 if "%1"=="install" goto install
+if "%1"=="install64" goto install64
+if "%1"=="clean" goto clean
 if "%1"=="uninstall" goto uninstall
 goto end
 
@@ -85,10 +86,6 @@ goto end
 
 
 :install
-mkdir c:\"Program Files"\Firstworks
-mkdir c:\"Program Files"\Firstworks\lib
-mkdir c:\"Program Files"\Firstworks\include\rudiments\private
-mkdir c:\"Program Files"\Firstworks\bin
 mkdir c:\"Program Files (x86)"\Firstworks
 mkdir c:\"Program Files (x86)"\Firstworks\lib
 mkdir c:\"Program Files (x86)"\Firstworks\include\rudiments\private
@@ -98,15 +95,28 @@ copy msvc\Debug\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
 copy msvc\Debug\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
 copy msvc\DebugCLR\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
 copy msvc\DebugCLR\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
-copy msvc\x64\Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
-copy msvc\x64\Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
-copy msvc\x64\DebugCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
-copy msvc\x64\DebugCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
 copy msvc\Release\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
 copy msvc\Release\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
 copy msvc\ReleaseCLR\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
 copy msvc\ReleaseCLR\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
+
+copy include\rudiments\*.h c:\"Program Files (x86)"\Firstworks\include\rudiments
+copy include\rudiments\private\*.h c:\"Program Files (x86)"\Firstworks\include\rudiments\private
+goto end
+
+
+:install64
+mkdir c:\"Program Files"\Firstworks
+mkdir c:\"Program Files"\Firstworks\lib
+mkdir c:\"Program Files"\Firstworks\include\rudiments\private
+mkdir c:\"Program Files"\Firstworks\bin
+
+copy msvc\x64\Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\x64\Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\x64\DebugCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\x64\DebugCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
+
 copy msvc\x64\Release\librudiments.dll c:\"Program Files"\Firstworks\bin
 copy msvc\x64\Release\librudiments.lib c:\"Program Files"\Firstworks\lib
 copy msvc\x64\ReleaseCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
@@ -114,8 +124,6 @@ copy msvc\x64\ReleaseCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
 copy include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
 copy include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private
-copy include\rudiments\*.h c:\"Program Files (x86)"\Firstworks\include\rudiments
-copy include\rudiments\private\*.h c:\"Program Files (x86)"\Firstworks\include\rudiments\private
 goto end
 
 
