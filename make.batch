@@ -81,11 +81,18 @@ msbuild.exe /target:Clean /property:Configuration=Release /property:Platform=Win
 msbuild.exe /target:Clean /property:Configuration=Release /property:Platform=x64
 msbuild.exe /target:Clean /property:Configuration=ReleaseCLR /property:Platform=Win32
 msbuild.exe /target:Clean /property:Configuration=ReleaseCLR /property:Platform=x64
+cd setupx86
 del /Q Debug\*.*
 del /Q Release\*.*
 del /Q DebugCLR\*.*
 del /Q ReleaseCLR\*.*
 cd ..
+cd setupx64
+del /Q Debug\*.*
+del /Q Release\*.*
+del /Q DebugCLR\*.*
+del /Q ReleaseCLR\*.*
+cd ../..
 goto end
 
 
