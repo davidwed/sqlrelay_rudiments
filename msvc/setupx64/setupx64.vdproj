@@ -117,12 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0FFF661CB49A43FAA591337D66A12F68"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_14389732A3424DC0AA3C2306FBBA9608"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -297,19 +291,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_367631DB1581409792666091482347C8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3D01516E12834F3C8BDC5640B33F4C71"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3E49E6916D38463F859D358066BE4E29"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -424,12 +406,6 @@
         "Entry"
         {
         "MsmKey" = "8:_4D0EB26202B0409D847387785D99E127"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4DACF4E0FDDA461A8EC8D074AFEC8081"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -555,12 +531,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_63209E356ABE45699F8EAF3118CF5822"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_63D82DC40ADA419B9DA67D7464189010"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -580,12 +550,6 @@
         "Entry"
         {
         "MsmKey" = "8:_6947DBB5D9E543C4BCD449796EA90DC4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_69C1544A38A24DB998E9A8A35C4127B2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -807,37 +771,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9AC67D0299DF4000A67193501DB7BF58"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9B1047C5DBEE47319386A79C29ED1302"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9B5ABA4048B34506AA39F46F46967636"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9CD2E222A0D946489BD199BE6653BF11"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9F48266DBC4B4D479260A1EACE58279F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A069AE40E70244A6AA0D25346442A2B0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -886,6 +820,12 @@
         "Entry"
         {
         "MsmKey" = "8:_A7CDDA329ECE462DA19644A5E9B21809"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A801D55136BB49B9ACAD1440FDC08C1C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -957,6 +897,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B437A3E1E32C43E581154B4F81F071C0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B45E1A88CC2E4655A58273F9DD2CCC29"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -970,12 +916,6 @@
         "Entry"
         {
         "MsmKey" = "8:_B5D84FCC80914779BA560DA60FE5DC7E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B655DEA45A4F4F91903BCFC3B3E9393F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1042,6 +982,12 @@
         "Entry"
         {
         "MsmKey" = "8:_C3BCD6F07ABB487F82F1B8DCB6615F37"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C43C7159DA7B4EAEB3BA2606FCE45413"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1119,12 +1065,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CF9D255FC71740FD98E647417DD6AF67"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_D00A1118F8FC4EA29C72210F0A969058"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1150,6 +1090,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D60664B8C3E4410C80D8DACEE1D9A3B2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D81FC80CCA5F489792CC92CD11ED167E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1198,12 +1144,6 @@
         "Entry"
         {
         "MsmKey" = "8:_E20A8AEA7DEE42B2A12120FC409C55FC"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E374CEC7FE0E429BB8DA0B42FB2E9C7C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1275,12 +1215,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EF64612EAE4C48C2B7E622B5910F8273"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F0C9E5D7C07B407CA1C1281448F09986"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1312,6 +1246,12 @@
         "Entry"
         {
         "MsmKey" = "8:_F7ED49532DA745C6B1DF7D5623C172AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F90B73AA18B443DBA93232EA279645DE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1388,6 +1328,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -1412,6 +1365,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -1760,26 +1726,6 @@
             "TargetName" = "8:dictionary.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0FFF661CB49A43FAA591337D66A12F68"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\directorylisting.h"
-            "TargetName" = "8:directorylisting.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2374,52 +2320,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_367631DB1581409792666091482347C8"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\link.h"
-            "TargetName" = "8:link.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3D01516E12834F3C8BDC5640B33F4C71"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\stringbuffer.h"
             "TargetName" = "8:stringbuffer.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E49E6916D38463F859D358066BE4E29"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\pipe.h"
-            "TargetName" = "8:pipe.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2800,26 +2706,6 @@
             "TargetName" = "8:process.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4DACF4E0FDDA461A8EC8D074AFEC8081"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\shellcommand.h"
-            "TargetName" = "8:shellcommand.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3234,26 +3120,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_63209E356ABE45699F8EAF3118CF5822"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\messagequeue.h"
-            "TargetName" = "8:messagequeue.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_63D82DC40ADA419B9DA67D7464189010"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\filedescriptor.h"
@@ -3320,26 +3186,6 @@
             "TargetName" = "8:threadincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_69C1544A38A24DB998E9A8A35C4127B2"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\tty.h"
-            "TargetName" = "8:tty.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4074,112 +3920,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9AC67D0299DF4000A67193501DB7BF58"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\loginrecord.h"
-            "TargetName" = "8:loginrecord.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B1047C5DBEE47319386A79C29ED1302"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\link.h"
-            "TargetName" = "8:link.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B5ABA4048B34506AA39F46F46967636"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\unixsocketserver.h"
             "TargetName" = "8:unixsocketserver.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9CD2E222A0D946489BD199BE6653BF11"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\loginrecord.h"
-            "TargetName" = "8:loginrecord.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9F48266DBC4B4D479260A1EACE58279F"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\pipe.h"
-            "TargetName" = "8:pipe.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A069AE40E70244A6AA0D25346442A2B0"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\pseudotty.h"
-            "TargetName" = "8:pseudotty.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4340,6 +4086,26 @@
             "TargetName" = "8:modemserver.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A801D55136BB49B9ACAD1440FDC08C1C"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\singlylinkedlistinlines.h"
+            "TargetName" = "8:singlylinkedlistinlines.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4574,6 +4340,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B437A3E1E32C43E581154B4F81F071C0"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\singlylinkedlistincludes.h"
+            "TargetName" = "8:singlylinkedlistincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B45E1A88CC2E4655A58273F9DD2CCC29"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\config.h"
@@ -4618,26 +4404,6 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\inetsocketutilincludes.h"
             "TargetName" = "8:inetsocketutilincludes.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B655DEA45A4F4F91903BCFC3B3E9393F"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\shellcommand.h"
-            "TargetName" = "8:shellcommand.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -4858,6 +4624,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\permissionsincludes.h"
             "TargetName" = "8:permissionsincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C43C7159DA7B4EAEB3BA2606FCE45413"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\singlylinkedlistnode.h"
+            "TargetName" = "8:singlylinkedlistnode.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -5114,26 +4900,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CF9D255FC71740FD98E647417DD6AF67"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\pseudotty.h"
-            "TargetName" = "8:pseudotty.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D00A1118F8FC4EA29C72210F0A969058"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\logdestination.h"
@@ -5218,6 +4984,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\serviceentry.h"
             "TargetName" = "8:serviceentry.h"
+            "Tag" = "8:"
+            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D81FC80CCA5F489792CC92CD11ED167E"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\singlylinkedlist.h"
+            "TargetName" = "8:singlylinkedlist.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
@@ -5380,26 +5166,6 @@
             "TargetName" = "8:mathincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E374CEC7FE0E429BB8DA0B42FB2E9C7C"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\messagequeue.h"
-            "TargetName" = "8:messagequeue.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5634,26 +5400,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EF64612EAE4C48C2B7E622B5910F8273"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\tty.h"
-            "TargetName" = "8:tty.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F0C9E5D7C07B407CA1C1281448F09986"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\bytestring.h"
@@ -5758,6 +5504,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\inetsocketserver.h"
             "TargetName" = "8:inetsocketserver.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F90B73AA18B443DBA93232EA279645DE"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\singlylinkedlist.h"
+            "TargetName" = "8:singlylinkedlist.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -6033,7 +5799,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Rudiments (64-bit)"
+        "ProductName" = "8:Firstworks Rudiments (64-bit)"
         "ProductCode" = "8:{4FFAFBD0-B9F1-4069-A124-14DC1A1ABBBF}"
         "PackageCode" = "8:{BEF8AEF3-051B-47F5-A95A-7A7BBA9D5116}"
         "UpgradeCode" = "8:{D16853E8-6A60-4842-B9FC-1C6EB9CAC827}"
@@ -6042,11 +5808,11 @@
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.46"
+        "ProductVersion" = "8:0.48"
         "Manufacturer" = "8:firstworks.com"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Rudiments (64-bit)"
+        "Title" = "8:Firstworks Rudiments (64-bit)"
         "Subject" = "8:"
         "ARPCONTACT" = "8:firstworks.com"
         "Keywords" = "8:"
