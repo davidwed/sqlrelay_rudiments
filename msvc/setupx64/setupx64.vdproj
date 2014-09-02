@@ -5708,7 +5708,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_D18BA0FE8E774842AEC17F917751FBE7"
             {
-            "DefaultLocation" = "8:c:\\Program Files\\Firstworks"
+            "DefaultLocation" = "8:[ProgramFiles64Folder]\\Firstworks"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
