@@ -2212,7 +2212,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 _dup2(0,0);,AC_DEFINE(RUDIMENTS_HAVE__DUP2,1,Some systems have _dup2) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for xattr)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 #include <sys/xattr.h>],
@@ -2235,7 +2235,7 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 fdatasync(0);,AC_DEFINE(RUDIMENTS_HAVE_FDATASYNC,1,Some systems have fdatasync) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for posix_fadvise)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_FCNTL_H
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_FCNTL_H
 	#include <fcntl.h>
 #endif],
 posix_fadvise(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_POSIX_FADVISE,1,Some systems have posix_fadvise) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
@@ -2293,7 +2293,7 @@ epoll_wait(0,0,0,-1);
 AC_DEFINE(RUDIMENTS_HAVE_EPOLL,1,Some systems have epoll) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING([for kqueue])
-AC_TRY_COMPILE([
+AC_TRY_LINK([
 #if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
 	#include <sys/types.h>
 #endif
