@@ -18117,6 +18117,11 @@ $as_echo "no" >&6; }
 		done
 	fi
 
+		case $host_os in
+		*minix* )
+			PTHREADLIBS=""
+	esac
+
 
 if ( test -n "$PTHREADINCLUDES" )
 then

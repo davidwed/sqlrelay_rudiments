@@ -780,6 +780,12 @@ then
 		done
 	fi
 
+	dnl on minix, disable -lpthreads, just use -pthreads
+	case $host_os in
+		*minix* )
+			PTHREADLIBS=""
+	esac
+
 	FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
 	FW_LIBS(pthreads,[$PTHREADLIB])
 
