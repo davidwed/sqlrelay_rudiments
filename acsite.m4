@@ -722,10 +722,14 @@ then
 				dnl  found, then with -pthread added to one,
 				dnl  the other and both, and then finally
 				dnl  without any libs, just -pthread
-				for try in 1 2 3 4 5 6
+				for try in 0 1 2 3 4 5 6
 				do
 
-					if ( test "$try" = "1" )
+					if ( test "$try" = "0" )
+					then
+						TESTINCLUDES="$PTHREADINCLUDES"
+						TESTLIB="-lmthread $PTHREADLIB"
+					elif ( test "$try" = "1" )
 					then
 						TESTINCLUDES="$PTHREADINCLUDES"
 						TESTLIB="$PTHREADLIB"
@@ -780,11 +784,11 @@ then
 		done
 	fi
 
-	dnl on minix, disable -lpthread, just use -pthread
-	case $host_os in
-		*minix* )
-			PTHREADLIB="-L/usr/pkg/lib -pthread"
-	esac
+	dnl on minix, include disable -lpthread, just use -pthread
+	dnl case $host_os in
+		dnl *minix* )
+			dnl PTHREADLIB="-L/usr/pkg/lib -pthread"
+	dnl esac
 
 	FW_INCLUDES(pthreads,[$PTHREADINCLUDES])
 	FW_LIBS(pthreads,[$PTHREADLIB])
