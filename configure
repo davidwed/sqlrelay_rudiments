@@ -18119,7 +18119,7 @@ $as_echo "no" >&6; }
 
 		case $host_os in
 		*minix* )
-			PTHREADLIB="-pthread"
+			PTHREADLIB="-L/usr/pkg/lib -pthread"
 	esac
 
 
