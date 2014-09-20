@@ -6,6 +6,8 @@
 	replaced compile-tests with link-tests for kqueue, posix_fadvise,
 		xattr-functions and various mmap-related functions for minix
 		3.3.0 which defines them but doesn't implement them
+	added test for -lmthread for minix
+	ioctl/FIONBIO is disabled for minix now
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase

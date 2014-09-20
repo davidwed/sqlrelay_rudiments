@@ -518,6 +518,7 @@ AC_MSG_CHECKING(for minix)
 case $host_os in
 	*minix* )
 		CPPFLAGS="$CPPFLAGS -D_MINIX -D_POSIX_SOURCE -D_NETBSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED"
+		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
 		AC_MSG_RESULT(yes)
 		;;
 	* )
