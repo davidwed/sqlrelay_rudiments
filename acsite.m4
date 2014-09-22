@@ -773,8 +773,8 @@ then
 					fi
 
 					dnl  If the link failed, reset the flags
-					PTHREADINCLUDES=""
-					PTHREADLIB=""
+					TESTLIB=""
+					TESTINCLUDES=""
 				done
 
 				if ( test -n "$HAVE_PTHREAD" )
