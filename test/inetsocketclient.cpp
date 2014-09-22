@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/inetsocketclient.h>
+#include <rudiments/randomnumber.h>
 #include <rudiments/error.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
@@ -12,7 +13,7 @@ int main(int argc, const char **argv) {
 	inetsocketclient	clnt;
 
 	// connect to a server on localhost, listening on port 8000
-	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
+	if (clnt.connect("127.0.0.1",8000,-1,-1,0,0)<0) {
 	//if (clnt.connect("192.168.123.2",8000,-1,-1,1,1)<0) {
 		stdoutput.printf("connect failed: %s\n",
 					error::getErrorString());

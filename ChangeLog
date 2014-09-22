@@ -1,13 +1,14 @@
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber
 	added support for random_r, lrand48_r, arc4random and CreateGenRandom
-	added RUDIMENTS_DISABLE_GETADDRINFO environment variable
 	fixed connect-with-timeout error when getaddrinfo is disabled
 	replaced compile-tests with link-tests for kqueue, posix_fadvise,
 		xattr-functions and various mmap-related functions for minix
 		3.3.0 which defines them but doesn't implement them
 	added test for -lmthread for minix
 	ioctl/FIONBIO is disabled for minix now
+	added configurable randomization of hosts for
+		inetsocketclient::connect()
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase

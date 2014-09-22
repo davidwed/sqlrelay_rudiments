@@ -68,9 +68,13 @@ class RUDIMENTS_DLLSPEC inetsocketclient : public socketclient, private inetsock
 		 *  earlier using one of the initialize() methods.
 		 *  If the connection fails, it will retry
 		 *  "retrycount" times, waiting "retrywait" seconds
-		 *  between retrycount.  If "host" resolves to multiple
-		 *  addresses, each address will be tried "retrycount"
-		 *  times.
+		 *  between retrycount.
+		 *
+		 *  If "host" resolves to multiple addresses (ie. if round-robin
+		 *  DNS or another DNS-based load-balancing strategy is used),
+		 *  then an attempt will be made to connect to each address
+		 *  until the attempt succeeds or there are no more addresses
+		 *  left to try.  This process will be tried "retrycount" times.
 		 * 
 		 *  Setting "retrycount" to 0 will cause it to try to 
 		 *  connect indefinitely.  Setting "retrywait" to
@@ -94,16 +98,72 @@ class RUDIMENTS_DLLSPEC inetsocketclient : public socketclient, private inetsock
 		 *  supply those classes with mutexes.  See hostentry.h
 		 *  and protocolentry.h for more detail.
 		 *
-		 *  Note also that if your system supports getaddrinfo()
-		 *  then round-robin DNS may not work as expected.  Some
-		 *  systems support the sortv4=no directive in /etc/gai.conf
-		 *  to work around this, but many do not.  Another workaround
-		 *  is to set the RUDIMENTS_DISABLE_GETADDRINFO environment
-		 *  variable to "yes".  This will cause connect() to use the
-		 *  hostentry and protocolentry classes instead of
-		 *  getaddrinfo() and should make round-robin DNS work
-		 *  as expected. */
+		 *
+		 *  Notes on round-robin DNS and DNS-based load-balancing:
+		 *
+		 *  By default, the connect() method randomizes the list of
+		 *  addresses that "host" resolves to.  This is intended to
+		 *  work around two issues.
+		 *
+		 *
+		 *  Issue 1:
+		 *  When round-robin DNS is used, if one host is down, then the
+		 *  next host in the list receives all of the traffic that would
+		 *  have gone to the downed host.  It is usually prefereable
+		 *  for the traffic to be distributed among the remaining hosts
+		 *  instead.  Randomization of the list of addresses
+		 *  accomplishes this.
+		 *
+		 *
+		 *  Issue 2:
+		 *  Rudiments uses getaddrinfo() if it is available, but
+		 *  implementations of getaddrinfo() vary widely.
+		 *
+		 *  Some implementations sort the list of addresses that "host"
+		 *  resolves to rather than returning them in the order
+		 *  returned by the DNS server, defeating any attempt at
+		 *  DNS-based load-balancing.
+		 *
+		 *  Some implementations support a sortv4=no directive in
+		 *  /etc/gai.conf that instructs getaddrinfo() not to sort the
+		 *  addresses but many do not.
+		 *
+		 *  Some implementations randomize the list.
+		 *
+		 *  Some implementations return the list in the order returned
+		 *  by DNS.  
+		 *
+		 *  Rudiments doesn't have a good way of knowing how
+		 *  getaddrinfo() is implemented or configured, so to err on
+		 *  the side of caution, connect() randomizes the list of
+		 *  addresses that "host" resolves to.
+		 *
+		 *
+		 *  Randomization can be disabled and configured using
+		 *  dontRandomizeAddresses() and randomizeAddresses().
+		 */
 		int32_t	connect();
+
+		/** Instructs connect() to randomize the list of addresses
+ 		 *  that "host" resolves to using "seed".
+		 *  
+		 *  Randomization of addresses is the default behavior, but by
+		 *  default the random number generator used internally is
+		 *  seeded using randomnumber::getSeed().  This may or may not
+		 *  be suitable as it will fall back to seeding the generator
+		 *  with the time of day on platforms that don't support any
+		 *  other method.
+		 *
+		 *  This method allows you to provide a more suitable seed
+		 *  if necessary. */
+		void	randomizeAddresses(uint32_t seed);
+
+		/** Instructs connect() not to randomize the list of addresses
+ 		 *  that "host" resolves to.
+ 		 *
+ 		 *  See connect() for issues that this can cause on some
+ 		 *  platforms or environments. */
+		void	dontRandomizeAddresses();
 
 	#include <rudiments/private/inetsocketclient.h>
 };
