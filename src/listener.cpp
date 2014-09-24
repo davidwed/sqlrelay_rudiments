@@ -48,22 +48,69 @@
 	#include <sys/epoll.h>
 #endif
 
+struct fddata_t {
+	filedescriptor	*fd;
+	bool		read;
+	bool		write;
+};
+
 class listenerprivate {
 	friend class listener;
 	private:
-		linkedlist< filedescriptor * >	_filedescriptorlist;
-		listenerlist			_readylist;
+		linkedlist< fddata_t * >	_fdlist;
+		listenerlist			_readreadylist;
+		listenerlist			_writereadylist;
 		bool				_retryinterruptedwaits;
+		bool				_dirty;
+
+		#if defined(RUDIMENTS_HAVE_KQUEUE)
+			int32_t			_kq;
+			struct kevent		*_kevs;
+			struct kevent		*_rkevs;
+		#elif defined(RUDIMENTS_HAVE_EPOLL)
+			int32_t			_epfd;
+			struct epoll_event	*_evs;
+			struct epoll_event	*_revs;
+		#elif defined(RUDIMENTS_HAVE_POLL)
+			struct pollfd		*_fds;
+		#endif
 };
 
 listener::listener() {
 	pvt=new listenerprivate;
 	pvt->_retryinterruptedwaits=true;
+	pvt->_dirty=true;
+	#if defined(RUDIMENTS_HAVE_KQUEUE)
+		pvt->_kq=-1;
+		pvt->_kevs=NULL;
+		pvt->_rkevs=NULL;
+	#elif defined(RUDIMENTS_HAVE_EPOLL)
+		pvt->_epfd=-1;
+		pvt->_evs=NULL;
+		pvt->_revs=NULL;
+	#elif defined(RUDIMENTS_HAVE_POLL)
+		pvt->_fds=NULL;
+	#endif
 }
 
 listener::~listener() {
 	removeAllFileDescriptors();
+	cleanUp();
 	delete pvt;
+}
+
+void listener::cleanUp() {
+	#if defined(RUDIMENTS_HAVE_KQUEUE)
+		::close(pvt->_kq);
+		delete[] pvt->_kevs;
+		delete[] pvt->_rkevs;
+	#elif defined(RUDIMENTS_HAVE_EPOLL)
+		::close(pvt->_epfd);
+		delete[] pvt->_evs;
+		delete[] pvt->_revs;
+	#elif defined(RUDIMENTS_HAVE_POLL)
+		delete[] pvt->_fds;
+	#endif
 }
 
 void listener::retryInterruptedWaits() {
@@ -75,298 +122,205 @@ void listener::dontRetryInterruptedWaits() {
 }
 
 void listener::addFileDescriptor(filedescriptor *fd) {
-	pvt->_filedescriptorlist.append(fd);
+	addFileDescriptor(fd,true,true);
+}
+
+void listener::addFileDescriptor(filedescriptor *fd, bool read, bool write) {
+	fddata_t	*fdd=new fddata_t;
+	fdd->fd=fd;
+	fdd->read=read;
+	fdd->write=write;
+	pvt->_fdlist.append(fdd);
+	pvt->_dirty=true;
+}
+
+void listener::addReadFileDescriptor(filedescriptor *fd) {
+	addFileDescriptor(fd,true,false);
+}
+
+void listener::addWriteFileDescriptor(filedescriptor *fd) {
+	addFileDescriptor(fd,false,true);
 }
 
 void listener::removeFileDescriptor(filedescriptor *fd) {
-	pvt->_filedescriptorlist.remove(fd);
+	linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst();
+	while (node) {
+		linkedlistnode< fddata_t * >	*next=node->getNext();
+		if (node->getValue()->fd==fd) {
+			delete node->getValue();
+			pvt->_fdlist.remove(node);
+		}
+		node=next;
+	}
+	pvt->_dirty=true;
+	return;
 }
 
 void listener::removeAllFileDescriptors() {
-	pvt->_filedescriptorlist.clear();
+	for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst();
+						node; node=node->getNext()) {
+		delete node->getValue();
+	}
+	pvt->_fdlist.clear();
+	pvt->_dirty=true;
 }
 
-int32_t listener::waitForNonBlockingRead(int32_t sec, int32_t usec) {
-	return safeWait(sec,usec,true,false);
+listenerlist *listener::getReadReadyList() {
+	return &pvt->_readreadylist;
 }
 
-int32_t listener::waitForNonBlockingWrite(int32_t sec, int32_t usec) {
-	return safeWait(sec,usec,false,true);
+listenerlist *listener::getWriteReadyList() {
+	return &pvt->_writereadylist;
 }
 
-listenerlist *listener::getReadyList() {
-	return &pvt->_readylist;
-}
-
-int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
+int32_t listener::listen(int32_t sec, int32_t usec) {
 
 	// initialize the return value
 	int32_t	result=0;
 
-	#if defined(RUDIMENTS_HAVE_KQUEUE)
+	// clear the read ready list
+	pvt->_readreadylist.clear();
 
-		int32_t	kq=kqueue();
-
-		// if we're using ssl, some of the filedescriptors may have
-		// SSL data pending, in that case, we need to bypass the
-		// poll altogether and just return those filedescriptors
-		// in the ready list immediately
-		#ifdef RUDIMENTS_HAS_SSL
-			pvt->_readylist.clear();
-		#endif
-
-		// set up the fd's to be monitored, and how to monitor them
-		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
-		struct kevent	*kevs=new struct kevent[fdcount];
-		struct kevent	*rkevs=new struct kevent[fdcount];
-		linkedlistnode< filedescriptor * >	*cur=
-					pvt->_filedescriptorlist.getFirst();
-		fdcount=0;
-		while (cur) {
-
-			// if we support SSL, check here to see if the
-			// filedescriptor has SSL data pending
-			#ifdef RUDIMENTS_HAS_SSL
-				SSL	*ssl=(SSL *)cur->getValue()->getSSL();
-				if (ssl && SSL_pending(ssl)) {
-					pvt->_readylist.append(cur->getValue());
-					result++;
-				}
-			#endif
-
-			short	filter=0;
-			if (read) {
-				filter=EVFILT_READ;
-			} else if (write) {
-				filter=EVFILT_WRITE;
+	// if we support SSL, check here to see if any of the filedescriptors
+	// have SSL data pending and return immediately if one does
+	#ifdef RUDIMENTS_HAS_SSL
+		for (linkedlistnode< fddata_t * >	*node=
+						pvt->_fdlist.getFirst();
+						node; node=node->getNext()) {
+			SSL	*ssl=(SSL *)node->getValue()->fd->getSSL();
+			if (ssl && SSL_pending(ssl)) {
+				pvt->_readreadylist.append(
+						node->getValue()->fd);
+				result++;
 			}
-
-			// do this here rather than inside of the EV_SET, older
-			// compilers don't like the ifdef inside of a macro
-			#ifdef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
-			void		*fdptr=(void *)cur->getValue();
-			#else
-			intptr_t	fdptr=(intptr_t)cur->getValue();
-			#endif
-
-			EV_SET(&kevs[fdcount],
-				cur->getValue()->getFileDescriptor(),
-				filter,EV_ADD,0,0,fdptr);
-			EV_SET(&rkevs[fdcount],0,0,0,0,0,0);
-
-			fdcount++;
-
-			cur=cur->getNext();
 		}
+		if (result) {
+			return result;
+		}
+	#endif
 
-		// if we support SSL and at least 1 of the
-		// filedescriptors had SSL data pending, return here
-		#ifdef RUDIMENTS_HAS_SSL
-			if (result) {
-				delete[] kevs;
-				delete[] rkevs;
-				::close(kq);
-				return result;
-			}
-		#endif
+	// clear the write ready list
+	pvt->_writereadylist.clear();
 
-		// calculate the timeout
+	// rebuild the list of fd's to be monitored, if necessary
+	#if defined(RUDIMENTS_HAVE_KQUEUE) || \
+			defined(RUDIMENTS_HAVE_EPOLL) || \
+			defined(RUDIMENTS_HAVE_POLL)
+		if (pvt->_dirty) {
+			rebuildMonitorList();
+		}
+	#endif
+
+	// set up the timeout
+	#if defined(RUDIMENTS_HAVE_KQUEUE)
 		struct timespec	ts;
 		ts.tv_sec=sec;
 		ts.tv_nsec=usec*1000;
 		struct timespec	*tsptr=(sec>-1 && usec>-1)?&ts:NULL;
-
-
 	#elif defined(RUDIMENTS_HAVE_EPOLL)
-
-		int32_t	epfd=epoll_create1(0);
-
-		// if we're using ssl, some of the filedescriptors may have
-		// SSL data pending, in that case, we need to bypass the
-		// poll altogether and just return those filedescriptors
-		// in the ready list immediately
-		#ifdef RUDIMENTS_HAS_SSL
-			pvt->_readylist.clear();
-		#endif
-
-		// set up the fd's to be monitored, and how to monitor them
-		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
-		struct epoll_event	*evs=new struct epoll_event[fdcount];
-		struct epoll_event	*revs=new struct epoll_event[fdcount];
-		linkedlistnode< filedescriptor * >	*cur=
-					pvt->_filedescriptorlist.getFirst();
-		fdcount=0;
-		while (cur) {
-
-			// if we support SSL, check here to see if the
-			// filedescriptor has SSL data pending
-			#ifdef RUDIMENTS_HAS_SSL
-				SSL	*ssl=(SSL *)cur->getValue()->getSSL();
-				if (ssl && SSL_pending(ssl)) {
-					pvt->_readylist.append(cur->getValue());
-					result++;
-				}
-			#endif
-
-			evs[fdcount].data.ptr=(void *)cur->getValue();
-			if (read) {
-				evs[fdcount].events=EPOLLIN;
-			} else if (write) {
-				evs[fdcount].events=EPOLLOUT;
-			}
-			epoll_ctl(epfd,EPOLL_CTL_ADD,
-					cur->getValue()->getFileDescriptor(),
-					&evs[fdcount]);
-			fdcount++;
-
-			cur=cur->getNext();
-		}
-
-		// if we support SSL and at least 1 of the
-		// filedescriptors had SSL data pending, return here
-		#ifdef RUDIMENTS_HAS_SSL
-			if (result) {
-				delete[] evs;
-				delete[] revs;
-				::close(epfd);
-				return result;
-			}
-		#endif
-
-		// calculate the timeout
 		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
-
 	#elif defined(RUDIMENTS_HAVE_POLL)
-
-		// if we're using ssl, some of the filedescriptors may have
-		// SSL data pending, in that case, we need to bypass the
-		// poll altogether and just return those filedescriptors
-		// in the ready list immediately
-		#ifdef RUDIMENTS_HAS_SSL
-			pvt->_readylist.clear();
-		#endif
-
-		// set up the fd's to be monitored, and how to monitor them
-		uint64_t	fdcount=pvt->_filedescriptorlist.getLength();
-		struct pollfd	*fds=new struct pollfd[fdcount];
-		linkedlistnode< filedescriptor * >	*cur=
-					pvt->_filedescriptorlist.getFirst();
-		fdcount=0;
-		while (cur) {
-
-			// if we support SSL, check here to see if the
-			// filedescriptor has SSL data pending
-			#ifdef RUDIMENTS_HAS_SSL
-				SSL	*ssl=(SSL *)cur->getValue()->getSSL();
-				if (ssl && SSL_pending(ssl)) {
-					pvt->_readylist.append(cur->getValue());
-					result++;
-				}
-			#endif
-
-			fds[fdcount].fd=cur->getValue()->getFileDescriptor();
-			if (read) {
-				fds[fdcount].events=POLLIN;
-			} else if (write) {
-				fds[fdcount].events=POLLOUT;
-			}
-			fds[fdcount].revents=0;
-			fdcount++;
-
-			cur=cur->getNext();
-		}
-
-		// if we support SSL and at least 1 of the
-		// filedescriptors had SSL data pending, return here
-		#ifdef RUDIMENTS_HAS_SSL
-			if (result) {
-				delete[] fds;
-				return result;
-			}
-		#endif
-
-		// calculate the timeout
 		// In theory, any negative value will cause poll to wait
 		// forever, but certain implementations (such as glibc-2.0.7)
 		// require it to be -1.
 		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
-
 	#else
-
-		// set up the timeout
 		timeval	tv;
 		timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
 	#endif
 
+	#if defined(RUDIMENTS_HAVE_KQUEUE) || \
+			defined(RUDIMENTS_HAVE_EPOLL) || \
+			defined(RUDIMENTS_HAVE_POLL)
+		uint64_t	fdcount=pvt->_fdlist.getLength();
+	#endif
 	for (;;) {
 
 		#if defined(RUDIMENTS_HAVE_KQUEUE)
 
-			// wait for data to be available on the file descriptor
-			result=kevent(kq,kevs,fdcount,rkevs,fdcount,tsptr);
+			// wait for non-blocking io
+			result=kevent(pvt->_kq,pvt->_kevs,fdcount,
+						pvt->_rkevs,fdcount,tsptr);
 
 		#elif defined(RUDIMENTS_HAVE_EPOLL)
 
-			// wait for data to be available on the file descriptor
-			result=epoll_wait(epfd,revs,fdcount,timeout);
+			// wait for non-blocking io
+			result=epoll_wait(pvt->_epfd,
+						pvt->_revs,fdcount,timeout);
 
 		#elif defined(RUDIMENTS_HAVE_POLL)
 
-			// wait for data to be available on the file descriptor
-			result=poll(fds,fdcount,timeout);
+			// wait for non-blocking io
+			result=poll(pvt->_fds,fdcount,timeout);
 
 		#else
+
+			// clear the ready lists
+			pvt->_readreadylist.clear();
+			pvt->_writereadylist.clear();
+
+			// initialize the return value
+			result=0;
 
 			// some versions of select modify the timeout,
 			// so reset it every time
 			tv.tv_sec=sec;
 			tv.tv_usec=usec;
 
-			// if we're using ssl, some of the filedescriptors may
-			// have SSL data pending, in that case, we need to
-			// bypass the select altogether and just return those
-			// filedescriptors in the ready list immediately
-			#ifdef RUDIMENTS_HAS_SSL
-				pvt->_readylist.clear();
-			#endif
-			result=0;
-
-			// select() will modify the list every time it's called
-			// so the list has to be rebuilt every time...
-			fd_set	fdlist;
+			// select() modifies the lists so they
+			// have to be rebuilt every time...
+			fd_set	readlist;
+			fd_set	writelist;
+			int32_t	readlargest=-1;
+			int32_t	writelargest=-1;
 			int32_t	largest=-1;
-			FD_ZERO(&fdlist);
-			linkedlistnode< filedescriptor * >	*cur=
-					pvt->_filedescriptorlist.getFirst();
-			while (cur) {
+			FD_ZERO(&readlist);
+			FD_ZERO(&writelist);
+			for (linkedlistnode< fddata_t * >	*node=
+						pvt->_fdlist.getFirst();
+						node; node=node->getNext()) {
 
-				if (cur->getValue()->
-						getFileDescriptor()>largest) {
-					largest=cur->getValue()->
-							getFileDescriptor();
+				int32_t	fd=node->getValue()->
+						fd->getFileDescriptor();
+
+				if (node->getValue()->read) {
+					if (fd>readlargest) {
+						readlargest=fd;
+					}
+
+					FD_SET(fd,&readlist);
+
+					// if we support SSL, check here to
+					// see if the filedescriptor has SSL
+					// data pending
+					#ifdef RUDIMENTS_HAS_SSL
+						SSL	*ssl=(SSL *)node->
+							getValue()->fd->getSSL();
+						if (ssl && SSL_pending(ssl)) {
+							pvt->_readreadylist.
+								append(
+								node->
+								getValue()->fd);
+							result++;
+						}
+					#endif
 				}
 
-				FD_SET(cur->getValue()->
-						getFileDescriptor(),&fdlist);
-
-				// if we support SSL, check here to see if the
-				// filedescriptor has SSL data pending
-				#ifdef RUDIMENTS_HAS_SSL
-					SSL	*ssl=
-						(SSL *)cur->
-						getValue()->getSSL();
-					if (ssl && SSL_pending(ssl)) {
-						pvt->_readylist.append(
-							cur->getValue());
-						result++;
+				if (node->getValue()->write) {
+					if (fd>writelargest) {
+						writelargest=fd;
 					}
-				#endif
 
-				cur=cur->getNext();
+					FD_SET(fd,&writelist);
+				}
+
+				if (fd>largest) {
+					largest=fd;
+				}
 			}
 
-			// if we support SSL and at least 1 of the
-			// filedescriptors had SSL data pending, return here
+			// if we support SSL then return here if even 1 of the
+			// filedescriptors had SSL data pending
 			#ifdef RUDIMENTS_HAS_SSL
 				if (result) {
 					return result;
@@ -375,8 +329,8 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 			// wait for data to be available on the file descriptor
 			result=select(largest+1,
-					(read)?&fdlist:NULL,
-					(write)?&fdlist:NULL,
+					(readlargest>-1)?&readlist:NULL,
+					(writelargest>-1)?&writelist:NULL,
 					NULL,tvptr);
 		#endif
 
@@ -398,66 +352,156 @@ int32_t listener::safeWait(int32_t sec, int32_t usec, bool read, bool write) {
 
 			// build the list of file descriptors that
 			// caused the wait to fall through
-			#ifndef RUDIMENTS_HAS_SSL
-				pvt->_readylist.clear();
-			#endif
+			pvt->_readreadylist.clear();
+			pvt->_writereadylist.clear();
 			#if defined(RUDIMENTS_HAVE_KQUEUE)
 				for (int32_t i=0; i<result; i++) {
-					pvt->_readylist.append(
-						(filedescriptor *)
-						rkevs[i].udata);
+					if (pvt->_rkevs[i].filter&
+							EVFILT_READ) {
+						pvt->_readreadylist.append(
+							(filedescriptor *)
+							pvt->_rkevs[i].udata);
+					}
+					if (pvt->_rkevs[i].filter&
+							EVFILT_WRITE) {
+						pvt->_readreadylist.append(
+							(filedescriptor *)
+							pvt->_rkevs[i].udata);
+					}
 				}
 			#elif defined(RUDIMENTS_HAVE_EPOLL)
 				for (int32_t i=0; i<result; i++) {
-					pvt->_readylist.append(
-						(filedescriptor *)
-						revs[i].data.ptr);
+					if (pvt->_revs[i].events&EPOLLIN) {
+						pvt->_readreadylist.append(
+							(filedescriptor *)
+							pvt->_revs[i].data.ptr);
+					}
+					if (pvt->_revs[i].events&EPOLLOUT) {
+						pvt->_writereadylist.append(
+							(filedescriptor *)
+							pvt->_revs[i].data.ptr);
+					}
 				}
 			#elif defined(RUDIMENTS_HAVE_POLL)
 				for (uint64_t i=0; i<fdcount; i++) {
-					if (fds[i].revents) {
-						cur=pvt->_filedescriptorlist.
-								getFirst();
-						while (cur) {
-							if (cur->getValue()->
-							getFileDescriptor()==
-							fds[i].fd) {
-							pvt->_readylist.
-							append(
-							cur->getValue());
-							break;
+					if (pvt->_fds[i].revents) {
+						for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst(); node; node=node->getNext()) {
+							if (node->getValue()->fd->getFileDescriptor()==pvt->_fds[i].fd) {
+								if (pvt->_fds[i].revents&POLLIN) {
+									pvt->_readreadylist.append(node->getValue()->fd);
+								}
+								if (pvt->_fds[i].revents&POLLOUT) {
+									pvt->_writereadylist.append(node->getValue()->fd);
+								}
+								break;
 							}
-							cur=cur->getNext();
 						}
 					}
 				}
 			#else
-				cur=pvt->_filedescriptorlist.getFirst();
-				while (cur) {
-					if (FD_ISSET(cur->getValue()->
+				for (linkedlistnode< fddata_t * > *node=
+						pvt->_fdlist.getFirst();
+						node; node=node->getNext()) {
+					if (FD_ISSET(node->getValue()->fd->
 							getFileDescriptor(),
-							&fdlist)) {
-						pvt->_readylist.append(
-							cur->getValue());
+							&readlist)) {
+						pvt->_readreadylist.append(
+							node->getValue()->fd);
 					}
-					cur=cur->getNext();
+					if (FD_ISSET(node->getValue()->fd->
+							getFileDescriptor(),
+							&writelist)) {
+						pvt->_writereadylist.append(
+							node->getValue()->fd);
+					}
 				}
 			#endif
 
 		}
 
-		// clean up and return the result
-		#if defined(RUDIMENTS_HAVE_KQUEUE)
-			delete[] kevs;
-			delete[] rkevs;
-			::close(kq);
-		#elif defined(RUDIMENTS_HAVE_EPOLL)
-			delete[] evs;
-			delete[] revs;
-			::close(epfd);
-		#elif defined(RUDIMENTS_HAVE_POLL)
-			delete[] fds;
-		#endif
+		// return the result
 		return result;
 	}
+}
+
+void listener::rebuildMonitorList() {
+
+	// reinit list resources
+	cleanUp();
+	uint64_t	fdcount=pvt->_fdlist.getLength();
+	#if defined(RUDIMENTS_HAVE_KQUEUE)
+		pvt->_kq=kqueue();
+		pvt->_kevs=new struct kevent[fdcount];
+		pvt->_rkevs=new struct kevent[fdcount];
+	#elif defined(RUDIMENTS_HAVE_EPOLL)
+		pvt->_epfd=epoll_create1(0);
+		pvt->_evs=new struct epoll_event[fdcount];
+		pvt->_revs=new struct epoll_event[fdcount];
+	#elif defined(RUDIMENTS_HAVE_POLL)
+		pvt->_fds=new struct pollfd[fdcount];
+	#endif
+
+	// set up the fd's to be monitored and how to monitor them
+	fdcount=0;
+	for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst();
+						node; node=node->getNext()) {
+
+		#if defined(RUDIMENTS_HAVE_KQUEUE)
+
+			short	filter=0;
+			if (node->getValue()->read) {
+				filter|=EVFILT_READ;
+			}
+			if (node->getValue()->write) {
+				filter|=EVFILT_WRITE;
+			}
+
+			// do this here rather than inside of the EV_SET, older
+			// compilers don't like the ifdef inside of a macro
+			#ifdef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
+			void		*fdptr=(void *)node->getValue()->fd;
+			#else
+			intptr_t	fdptr=(intptr_t)node->getValue()->fd;
+			#endif
+
+			EV_SET(&pvt->_kevs[fdcount],
+				node->getValue()->fd->getFileDescriptor(),
+				filter,EV_ADD,0,0,fdptr);
+			EV_SET(&rpvt->_kevs[fdcount],0,0,0,0,0,0);
+
+		#elif defined(RUDIMENTS_HAVE_EPOLL)
+
+			pvt->_evs[fdcount].data.ptr=
+					(void *)node->getValue()->fd;
+			pvt->_evs[fdcount].events=0;
+			if (node->getValue()->read) {
+				pvt->_evs[fdcount].events|=EPOLLIN;
+			}
+			if (node->getValue()->write) {
+				pvt->_evs[fdcount].events|=EPOLLOUT;
+			}
+			epoll_ctl(pvt->_epfd,EPOLL_CTL_ADD,
+				node->getValue()->fd->getFileDescriptor(),
+				&pvt->_evs[fdcount]);
+
+		#elif defined(RUDIMENTS_HAVE_POLL)
+
+			pvt->_fds[fdcount].fd=
+				node->getValue()->fd->getFileDescriptor();
+			pvt->_fds[fdcount].events=0;
+			if (node->getValue()->read) {
+				pvt->_fds[fdcount].events|=POLLIN;
+			}
+			if (node->getValue()->write) {
+				pvt->_fds[fdcount].events|=POLLOUT;
+			}
+			pvt->_fds[fdcount].revents=0;
+
+		#endif
+
+		fdcount++;
+	}
+
+	// not dirty any more
+	pvt->_dirty=false;
 }

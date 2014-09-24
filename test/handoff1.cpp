@@ -32,16 +32,17 @@ int main(int argc, const char **argv) {
 	handoffsock.listen("handoff.sck",0000,15);
 
 	listener	pool;
-	pool.addFileDescriptor(&serversock);
-	pool.addFileDescriptor(&handoffsock);
+	pool.addReadFileDescriptor(&serversock);
+	pool.addReadFileDescriptor(&handoffsock);
 
 	inetsocketclient	*clientsock=NULL;
 	unixsocketclient	*handoffclientsock=NULL;
 
 	for (;;) {
 
-		pool.waitForNonBlockingRead(-1,-1);
-		filedescriptor	*fd=pool.getReadyList()->getFirst()->getValue();
+		pool.listen(-1,-1);
+		filedescriptor	*fd=
+			pool.getReadReadyList()->getFirst()->getValue();
 
 		if (fd==&serversock) {
 			clientsock=(inetsocketclient *)

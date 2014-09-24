@@ -618,7 +618,8 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  This will usually be 1, indicating that the
 		 *  file descriptor represented by the class is
 		 *  ready to be read from. */
-		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec) const;
+		int32_t	waitForNonBlockingRead(int32_t sec, int32_t usec)
+									const;
 
 		/** Causes the application to wait until a
 		 *  write() will proceed without blocking or
@@ -640,7 +641,8 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  This will usually be 1, indicating that the
 		 *  file descriptor represented by the class is
 		 *  ready to be written to. */
-		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec) const;
+		int32_t	waitForNonBlockingWrite(int32_t sec, int32_t usec)
+									const;
 
 
 		/** Causes reads to automatically retry if interrupted by a

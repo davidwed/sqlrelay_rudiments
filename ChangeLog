@@ -9,6 +9,8 @@
 	ioctl/FIONBIO is disabled for minix now
 	added configurable randomization of hosts for
 		inetsocketclient::connect()
+	refactored listener class to match paradigms established by
+		kqueue, epoll and poll
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase

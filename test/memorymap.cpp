@@ -27,7 +27,7 @@ int main(int argc, const char **argv) {
 		if (offset) {
 			mm.detach();
 		}
-		if (offset+len>f.getSize()) {
+		if ((off64_t)(offset+len)>f.getSize()) {
 			len=f.getSize()-offset;
 			done=true;
 		}

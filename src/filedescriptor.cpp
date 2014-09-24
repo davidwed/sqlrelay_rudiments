@@ -327,8 +327,6 @@ int32_t filedescriptor::getFileDescriptor() const {
 
 void filedescriptor::setFileDescriptor(int32_t filedesc) {
 	pvt->_fd=filedesc;
-	pvt->_lstnr.removeAllFileDescriptors();
-	pvt->_lstnr.addFileDescriptor(this);
 }
 
 int32_t filedescriptor::duplicate() const {
@@ -1525,12 +1523,16 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 
 int32_t filedescriptor::waitForNonBlockingRead(
 				int32_t sec, int32_t usec) const {
-	return pvt->_lstnr.waitForNonBlockingRead(sec,usec);
+	pvt->_lstnr.removeAllFileDescriptors();
+	pvt->_lstnr.addReadFileDescriptor((filedescriptor *)this);
+	return pvt->_lstnr.listen(sec,usec);
 }
 
 int32_t filedescriptor::waitForNonBlockingWrite(
 				int32_t sec, int32_t usec) const {
-	return pvt->_lstnr.waitForNonBlockingWrite(sec,usec);
+	pvt->_lstnr.removeAllFileDescriptors();
+	pvt->_lstnr.addWriteFileDescriptor((filedescriptor *)this);
+	return pvt->_lstnr.listen(sec,usec);
 }
 
 void filedescriptor::translateByteOrder() {

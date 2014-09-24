@@ -38,10 +38,10 @@ int main(int argc, const char **argv) {
 	// create a listener and add the 2 sockets to it
 	listener	pool;
 	if (inetlisten) {
-		pool.addFileDescriptor(&inetsock);
+		pool.addReadFileDescriptor(&inetsock);
 	}
 	if (unixlisten) {
-		pool.addFileDescriptor(&unixsock);
+		pool.addReadFileDescriptor(&unixsock);
 	}
 
 
@@ -49,7 +49,7 @@ int main(int argc, const char **argv) {
 	for (;;) {
 
 		// wait for a client to connect to one of the sockets
-		int32_t	result=pool.waitForNonBlockingRead(-1,-1);
+		int32_t	result=pool.listen(-1,-1);
 		if (result==RESULT_ERROR) {
 			stdoutput.printf("error waiting...\n%d: %s\n%d: %s\n",
 						error::getErrorNumber(),
@@ -61,7 +61,8 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("timeout waiting...\n");
 			break;
 		}
-		filedescriptor	*fd=pool.getReadyList()->getFirst()->getValue();
+		filedescriptor	*fd=pool.getReadReadyList()->
+						getFirst()->getValue();
 
 		// figure out which socket the client connected to
 		filedescriptor	*clientsock;
