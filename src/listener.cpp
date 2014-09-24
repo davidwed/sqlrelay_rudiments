@@ -48,6 +48,7 @@
 	#include <sys/epoll.h>
 #endif
 #if defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
+	#include <rudiments/device.h>
 	#include <sys/devpoll.h>
 #endif
 
@@ -75,9 +76,9 @@ class listenerprivate {
 			struct epoll_event	*_evs;
 			struct epoll_event	*_revs;
 		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-			int32_t			_dpfd;
+			device			_dpfd;
 			struct dvpoll		_dvp;
-			struct pollfd		*_pfds;
+			struct pollfd		*_fds;
 		#elif defined(RUDIMENTS_HAVE_POLL)
 			struct pollfd		*_fds;
 		#endif
@@ -96,8 +97,7 @@ listener::listener() {
 		pvt->_evs=NULL;
 		pvt->_revs=NULL;
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-		pvt->_dpfd=-1;
-		pvt->_pfds=NULL;
+		pvt->_fds=NULL;
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		pvt->_fds=NULL;
 	#endif
@@ -119,8 +119,8 @@ void listener::cleanUp() {
 		delete[] pvt->_evs;
 		delete[] pvt->_revs;
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-		::close(pvt->_dpdf);
-		delete[] pvt->_pfds;
+		pvt->_dpfd.close();
+		delete[] pvt->_fds;
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		delete[] pvt->_fds;
 	#endif
@@ -271,7 +271,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 
 			// wait for non-blocking io
-			result=::ioctl(pvt->_dpfd,DP_POLL,&pvt->_dvp);
+			result=pvt->_dpfd.ioCtl(DP_POLL,(void *)&pvt->_dvp);
 
 		#elif defined(RUDIMENTS_HAVE_POLL)
 
@@ -407,23 +407,8 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 							pvt->_revs[i].data.ptr);
 					}
 				}
-			#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-				for (int32_t i=0; i<result; i++) {
-					if (pvt->_pfds[i].revents) {
-						for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst(); node; node=node->getNext()) {
-							if (node->getValue()->fd->getFileDescriptor()==pvt->_pfds[i].fd) {
-								if (pvt->_pfds[i].revents&POLLIN) {
-									pvt->_readreadylist.append(node->getValue()->fd);
-								}
-								if (pvt->_pfds[i].revents&POLLOUT) {
-									pvt->_writereadylist.append(node->getValue()->fd);
-								}
-								break;
-							}
-						}
-					}
-				}
-			#elif defined(RUDIMENTS_HAVE_POLL)
+			#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
+						defined(RUDIMENTS_HAVE_POLL)
 				for (uint64_t i=0; i<fdcount; i++) {
 					if (pvt->_fds[i].revents) {
 						for (linkedlistnode< fddata_t * > *node=pvt->_fdlist.getFirst(); node; node=node->getNext()) {
@@ -479,11 +464,10 @@ bool listener::rebuildMonitorList() {
 		pvt->_evs=new struct epoll_event[fdcount];
 		pvt->_revs=new struct epoll_event[fdcount];
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-		pvt->_dpfd=open("/dev/poll",O_RDWR);
-		if (pvt->_dpfd==-1) {
+		if (!pvt->_dpfd.open("/dev/poll",O_RDWR)) {
 			return false;
 		}
-		pvt->_pfds=new struct pollfd[fdcount];
+		pvt->_fds=new struct pollfd[fdcount];
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		pvt->_fds=new struct pollfd[fdcount];
 	#endif
@@ -531,19 +515,8 @@ bool listener::rebuildMonitorList() {
 				node->getValue()->fd->getFileDescriptor(),
 				&pvt->_evs[fdcount]);
 
-		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-
-			pvt->_pfds[fdcount].fd=node->getValue()->fd;
-			pvt->_pfds[fdcount].events=0;
-			if (node->getValue()->read) {
-				pvt->_pfds[fdcount].events|=POLLIN;
-			}
-			if (node->getValue()->write) {
-				pvt->_pfds[fdcount].events|=POLLOUT;
-			}
-			pvt->_pfds[fdcount].revents=0;
-
-		#elif defined(RUDIMENTS_HAVE_POLL)
+		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
+					defined(RUDIMENTS_HAVE_POLL)
 
 			pvt->_fds[fdcount].fd=
 				node->getValue()->fd->getFileDescriptor();
@@ -562,14 +535,13 @@ bool listener::rebuildMonitorList() {
 	}
 
 	#if defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
-		// FIXME: this could fail
-		if (::write(pvt->_dpfd,pvt->_pfds,
+		if (pvt->_dpfd.write((const void *)pvt->_fds,
 				sizeof(struct pollfd)*fdcount)!=
-					sizeof(struct pollfd)*fdcount) {
+				(ssize_t)(sizeof(struct pollfd)*fdcount)) {
 			return false;
 		}
-		pvt->_dvp.nfds=fdcount;
-		pvt->_dvp.fds=pvt->_pfds;
+		pvt->_dvp.dp_nfds=fdcount;
+		pvt->_dvp.dp_fds=pvt->_fds;
 	#endif
 
 	// not dirty any more

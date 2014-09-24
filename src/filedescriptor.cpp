@@ -159,8 +159,6 @@ class filedescriptorprivate {
 		bool	_allowshortwrites;
 		bool	_translatebyteorder;
 
-		listener	_lstnr;
-
 		#ifdef RUDIMENTS_HAS_SSL
 		SSL_CTX	*_ctx;
 		SSL	*_ssl;
@@ -1523,16 +1521,16 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 
 int32_t filedescriptor::waitForNonBlockingRead(
 				int32_t sec, int32_t usec) const {
-	pvt->_lstnr.removeAllFileDescriptors();
-	pvt->_lstnr.addReadFileDescriptor((filedescriptor *)this);
-	return pvt->_lstnr.listen(sec,usec);
+	listener	lstnr;
+	lstnr.addReadFileDescriptor((filedescriptor *)this);
+	return lstnr.listen(sec,usec);
 }
 
 int32_t filedescriptor::waitForNonBlockingWrite(
 				int32_t sec, int32_t usec) const {
-	pvt->_lstnr.removeAllFileDescriptors();
-	pvt->_lstnr.addWriteFileDescriptor((filedescriptor *)this);
-	return pvt->_lstnr.listen(sec,usec);
+	listener	lstnr;
+	lstnr.addWriteFileDescriptor((filedescriptor *)this);
+	return lstnr.listen(sec,usec);
 }
 
 void filedescriptor::translateByteOrder() {
@@ -1632,7 +1630,7 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 		do {
 			result=ioctl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedioctl && result==-1 &&
-				error::getErrorNumber()==EINTR);
+					error::getErrorNumber()==EINTR);
 		return result;
 	#else
 		return -1;

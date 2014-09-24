@@ -1132,6 +1132,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
+#endif,
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif],
 ioctl(0,RTC_RD_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC_RD_TIME,1,Do we have real-time-clock RTC_RD_TIME support) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
@@ -1141,6 +1144,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif],
 ioctl(0,RTC_SET_TIME,0);,AC_DEFINE(RUDIMENTS_HAVE_RTC_SET_TIME,1,Do we have real-time-clock RTC_SET_TIME support) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
@@ -2343,6 +2349,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif],
 ioctl(0,0);,AC_DEFINE(RUDIMENTS_HAVE_IOCTL,1,Some systems have ioctl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 

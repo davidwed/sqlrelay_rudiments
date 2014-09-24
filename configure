@@ -21016,6 +21016,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
+#endif,
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif
 int
 main ()
@@ -21045,6 +21048,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif
 int
 main ()
@@ -27345,6 +27351,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
 #endif
 int
 main ()
