@@ -10,8 +10,8 @@
 	added configurable randomization of hosts for
 		inetsocketclient::connect()
 	refactored listener class to match paradigms established by
-		kqueue, epoll and poll
-	added support for /dev/poll
+		kqueue, epoll, /dev/poll, port_create and poll
+	added support for /dev/poll and port_create()
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase
