@@ -467,7 +467,7 @@ void listener::rebuildMonitorList() {
 			EV_SET(&pvt->_kevs[fdcount],
 				node->getValue()->fd->getFileDescriptor(),
 				filter,EV_ADD,0,0,fdptr);
-			EV_SET(&rpvt->_kevs[fdcount],0,0,0,0,0,0);
+			EV_SET(&pvt->_rkevs[fdcount],0,0,0,0,0,0);
 
 		#elif defined(RUDIMENTS_HAVE_EPOLL)
 
