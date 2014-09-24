@@ -1102,6 +1102,12 @@
 /* Some systems have sys/poll.h */
 /* #undef RUDIMENTS_HAVE_SYS_POLL_H */
 
+/* Some systems have port_create */
+/* #undef RUDIMENTS_HAVE_PORT_CREATE */
+
+/* Some systems have port.h */
+/* #undef RUDIMENTS_HAVE_PORT_H */
+
 /* Some systems have sys/reboot.h */
 /* #undef RUDIMENTS_HAVE_SYS_REBOOT_H */
 
