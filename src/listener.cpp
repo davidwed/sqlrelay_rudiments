@@ -39,17 +39,20 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
-#if defined(RUDIMENTS_HAVE_SYS_POLL_H)
-	#include <sys/poll.h>
-#elif defined(RUDIMENTS_HAVE_POLL_H)
-	#include <poll.h>
-#endif
 #if defined(RUDIMENTS_HAVE_SYS_EPOLL_H)
 	#include <sys/epoll.h>
+#endif
+#if defined(RUDIMENTS_HAVE_PORT_H)
+	#include <port.h>
 #endif
 #if defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 	#include <rudiments/device.h>
 	#include <sys/devpoll.h>
+#endif
+#if defined(RUDIMENTS_HAVE_SYS_POLL_H)
+	#include <sys/poll.h>
+#elif defined(RUDIMENTS_HAVE_POLL_H)
+	#include <poll.h>
 #endif
 
 struct fddata_t {
@@ -75,6 +78,9 @@ class listenerprivate {
 			int32_t			_epfd;
 			struct epoll_event	*_evs;
 			struct epoll_event	*_revs;
+		#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+			int32_t			_port;
+			port_event_t		_pev;
 		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 			device			_dpfd;
 			struct dvpoll		_dvp;
@@ -96,6 +102,8 @@ listener::listener() {
 		pvt->_epfd=-1;
 		pvt->_evs=NULL;
 		pvt->_revs=NULL;
+	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+		pvt->_port=-1;
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 		pvt->_fds=NULL;
 	#elif defined(RUDIMENTS_HAVE_POLL)
@@ -118,6 +126,8 @@ void listener::cleanUp() {
 		::close(pvt->_epfd);
 		delete[] pvt->_evs;
 		delete[] pvt->_revs;
+	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+		::close(pvt->_port);
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 		pvt->_dpfd.close();
 		delete[] pvt->_fds;
@@ -216,10 +226,18 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 	pvt->_writereadylist.clear();
 
 	// rebuild the list of fd's to be monitored, if necessary
-	#if defined(RUDIMENTS_HAVE_KQUEUE) || \
+	#if defined(RUDIMENTS_HAVE_PORT_CREATE)
+		// When using port_create() we must rebuild the list
+		// every time.  rebuildMonitorList() handles dirtiness
+		// internally when using port_create() too.
+		if (!rebuildMonitorList()) {
+			return RESULT_ERROR;
+		}
+	#elif defined(RUDIMENTS_HAVE_KQUEUE) || \
 			defined(RUDIMENTS_HAVE_EPOLL) || \
 			defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
 			defined(RUDIMENTS_HAVE_POLL)
+		// only rebuild if dirty when using other methods
 		if (pvt->_dirty) {
 			if (!rebuildMonitorList()) {
 				return RESULT_ERROR;
@@ -235,6 +253,11 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		struct timespec	*tsptr=(sec>-1 && usec>-1)?&ts:NULL;
 	#elif defined(RUDIMENTS_HAVE_EPOLL)
 		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
+	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+		struct timespec	ts;
+		ts.tv_sec=sec;
+		ts.tv_nsec=usec*1000;
+		struct timespec	*tsptr=(sec>-1 && usec>-1)?&ts:NULL;
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 		pvt->_dvp.dp_timeout=
 			(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
@@ -248,10 +271,11 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
 	#endif
 
-	#if defined(RUDIMENTS_HAVE_KQUEUE) || \
+	#if (defined(RUDIMENTS_HAVE_KQUEUE) || \
 			defined(RUDIMENTS_HAVE_EPOLL) || \
 			defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
-			defined(RUDIMENTS_HAVE_POLL)
+			defined(RUDIMENTS_HAVE_POLL)) && \
+			!defined(RUDIMENTS_HAVE_PORT_CREATE)
 		uint64_t	fdcount=pvt->_fdlist.getLength();
 	#endif
 	for (;;) {
@@ -260,13 +284,26 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 			// wait for non-blocking io
 			result=kevent(pvt->_kq,pvt->_kevs,fdcount,
-						pvt->_rkevs,fdcount,tsptr);
+						pvt->_rkevs,fdcount,
+						tsptr);
 
 		#elif defined(RUDIMENTS_HAVE_EPOLL)
 
 			// wait for non-blocking io
 			result=epoll_wait(pvt->_epfd,
-						pvt->_revs,fdcount,timeout);
+						pvt->_revs,fdcount,
+						timeout);
+
+		#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+
+			// wait for an event
+			result=port_get(pvt->_port,&pvt->_pev,tsptr);
+			if (!result) {
+				result=1;
+			} else if (result==-1 &&
+					error::getErrorNumber()==ETIME) {
+				result=0;
+			}
 
 		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 
@@ -407,6 +444,21 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 							pvt->_revs[i].data.ptr);
 					}
 				}
+			#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+				// port_get() only returns a single fd
+				int32_t	events=0;
+				if (pvt->_pev.portev_events&POLLIN) {
+					pvt->_readreadylist.append(
+						(filedescriptor *)
+						pvt->_pev.portev_user);
+					events|=POLLIN;
+				}
+				if (pvt->_pev.portev_events&POLLOUT) {
+					pvt->_writereadylist.append(
+						(filedescriptor *)
+						pvt->_pev.portev_user);
+					events|=POLLOUT;
+				}
 			#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
 						defined(RUDIMENTS_HAVE_POLL)
 				for (uint64_t i=0; i<fdcount; i++) {
@@ -452,17 +504,43 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 bool listener::rebuildMonitorList() {
 
+	// clean up
+	#if defined(RUDIMENTS_HAVE_PORT_CREATE)
+		// don't clean up unless the dirty
+		// flag is set with port_create()
+		if (pvt->_dirty) {
+			cleanUp();
+		}
+	#else
+		// clean up every time when not using port_create()
+		cleanUp();
+	#endif
+
 	// reinit list resources
-	cleanUp();
 	uint64_t	fdcount=pvt->_fdlist.getLength();
 	#if defined(RUDIMENTS_HAVE_KQUEUE)
 		pvt->_kq=kqueue();
+		if (pvt->_kq==-1) {
+			return false;
+		}
 		pvt->_kevs=new struct kevent[fdcount];
 		pvt->_rkevs=new struct kevent[fdcount];
 	#elif defined(RUDIMENTS_HAVE_EPOLL)
 		pvt->_epfd=epoll_create1(0);
+		if (pvt->_epfd==-1) {
+			return false;
+		}
 		pvt->_evs=new struct epoll_event[fdcount];
 		pvt->_revs=new struct epoll_event[fdcount];
+	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+		// don't create the port unless the
+		// dirty flag is set with port_create()
+		if (pvt->_dirty) {
+			pvt->_port=port_create();
+			if (pvt->_port==-1) {
+				return false;
+			}
+		}
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 		if (!pvt->_dpfd.open("/dev/poll",O_RDWR)) {
 			return false;
@@ -511,9 +589,26 @@ bool listener::rebuildMonitorList() {
 			if (node->getValue()->write) {
 				pvt->_evs[fdcount].events|=EPOLLOUT;
 			}
-			epoll_ctl(pvt->_epfd,EPOLL_CTL_ADD,
+			if (epoll_ctl(pvt->_epfd,EPOLL_CTL_ADD,
 				node->getValue()->fd->getFileDescriptor(),
-				&pvt->_evs[fdcount]);
+				&pvt->_evs[fdcount])) {
+				return false;
+			}
+
+		#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
+
+			int32_t	events=0;
+			if (node->getValue()->read) {
+				events|=POLLIN;
+			}
+			if (node->getValue()->write) {
+				events|=POLLOUT;
+			}
+			if (port_associate(pvt->_port,PORT_SOURCE_FD,
+				node->getValue()->fd->getFileDescriptor(),
+				events,(void *)node->getValue()->fd)) {
+				return false;
+			}
 
 		#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
 					defined(RUDIMENTS_HAVE_POLL)
@@ -534,7 +629,8 @@ bool listener::rebuildMonitorList() {
 		fdcount++;
 	}
 
-	#if defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
+	#if defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) && \
+		!defined(RUDIMENTS_HAVE_PORT_CREATE)
 		if (pvt->_dpfd.write((const void *)pvt->_fds,
 				sizeof(struct pollfd)*fdcount)!=
 				(ssize_t)(sizeof(struct pollfd)*fdcount)) {
