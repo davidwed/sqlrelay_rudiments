@@ -763,6 +763,12 @@
 /* Some systems have poll.h */
 #undef RUDIMENTS_HAVE_POLL_H
 
+/* Some systems have port_create */
+#undef RUDIMENTS_HAVE_PORT_CREATE
+
+/* Some systems have port.h */
+#undef RUDIMENTS_HAVE_PORT_H
+
 /* Some systems have posix_fadvise */
 #undef RUDIMENTS_HAVE_POSIX_FADVISE
 

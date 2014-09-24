@@ -417,6 +417,10 @@ AC_MSG_CHECKING(for sys/devpoll.h)
 AC_TRY_COMPILE([#include <sys/devpoll.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_DEVPOLL_H, 1, Some systems have sys/devpoll.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for port.h)
+AC_TRY_COMPILE([#include <port.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_PORT_H, 1, Some systems have port.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sys/stat.h)
 AC_TRY_COMPILE([#include <sys/stat.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_STAT_H, 1, Some systems have sys/stat.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -2334,6 +2338,18 @@ AC_TRY_COMPILE([
 struct kevent kev; int a; EV_SET(&kev,0,0,0,0,0,(void *)&a);
 ],
 AC_DEFINE(RUDIMENTS_HAVE_KQUEUE_VOID_UDATA,1,Some systems have void * kqueue user data) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING([for port_create])
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_PORT_H)
+	#include <port.h>
+#endif
+],[
+port_create();
+port_associate(0,0,0,0,0);
+port_getn(0,0,0,0,0);
+],
+AC_DEFINE(RUDIMENTS_HAVE_PORT_CREATE,1,Some systems have port_create) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 FW_CHECK_SHM_OPEN
 
