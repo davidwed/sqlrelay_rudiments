@@ -10,7 +10,7 @@
 	private:
 		void	addFileDescriptor(filedescriptor *fd,
 						bool read, bool write);
-		void	rebuildMonitorList();
+		bool	rebuildMonitorList();
 		void	cleanUp();
 
 		listenerprivate	*pvt;

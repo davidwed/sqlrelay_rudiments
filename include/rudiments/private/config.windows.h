@@ -1072,6 +1072,9 @@
 /* Some systems have sys/bitypes.h */
 /* #undef RUDIMENTS_HAVE_SYS_BITYPES_H */
 
+/* Some systems have sys/devpoll.h */
+/* #undef RUDIMENTS_HAVE_SYS_DEVPOLL_H */
+
 /* Some systems have sys/epoll.h */
 /* #undef RUDIMENTS_HAVE_SYS_EPOLL_H */
 
