@@ -8,6 +8,8 @@
 #include <rudiments/rawbuffer.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
+#include <rudiments/environment.h>
+#include <rudiments/randomnumber.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -21,15 +23,19 @@
 	#include <stdlib.h>
 #endif
 
-#undef RUDIMENTS_HAVE_GETADDRINFO
-
 class inetsocketclientprivate {
 	friend class inetsocketclient;
 	private:
+		bool		_randomize;
+		uint32_t	_seed;
+		bool		_seeded;
 };
 
 inetsocketclient::inetsocketclient() : socketclient(), inetsocketutil() {
 	pvt=new inetsocketclientprivate;
+	pvt->_randomize=true;
+	pvt->_seed=0;
+	pvt->_seeded=false;
 	translateByteOrder();
 	type("inetsocketclient");
 }
@@ -37,6 +43,9 @@ inetsocketclient::inetsocketclient() : socketclient(), inetsocketutil() {
 inetsocketclient::inetsocketclient(const inetsocketclient &i) :
 					socketclient(i), inetsocketutil(i) {
 	pvt=new inetsocketclientprivate;
+	pvt->_randomize=true;
+	pvt->_seed=0;
+	pvt->_seeded=false;
 	type("inetsocketclient");
 }
 
@@ -44,6 +53,9 @@ inetsocketclient &inetsocketclient::operator=(const inetsocketclient &i) {
 	if (this!=&i) {
 		socketclient::operator=(i);
 		inetsocketutil::operator=(i);
+		pvt->_randomize=i.pvt->_randomize;
+		pvt->_seed=i.pvt->_seed;
+		pvt->_seeded=i.pvt->_seeded;
 	}
 	return *this;
 }
@@ -101,26 +113,7 @@ void inetsocketclient::initialize(constnamevaluepairs *cd) {
 
 int32_t inetsocketclient::connect() {
 
-	#ifndef RUDIMENTS_HAVE_GETADDRINFO
-
-		// get the host entry
-		hostentry	he;
-		if (!he.initialize(_address())) {
-			return RESULT_ERROR;
-		}
-
-		// use tcp protocol
-		protocolentry	pe;
-		if (!pe.initialize("tcp")) {
-			return RESULT_ERROR;
-		}
-
-		// set the address type and port to connect to
-		rawbuffer::zero(_sin(),sizeof(sockaddr_in));
-		_sin()->sin_family=he.getAddressType();
-		_sin()->sin_port=hostToNet(*_port());
-
-	#else
+	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 
 		// create a hint indicating that SOCK_STREAM should be used
 		addrinfo	hints;
@@ -141,7 +134,7 @@ int32_t inetsocketclient::connect() {
 		addrinfo	*ai=NULL;
 		int32_t		result;
 		do {
-			error::setErrorNumber(0);
+			error::clearError();
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
 		} while (result!=0 && error::getErrorNumber()==EINTR);
 		// ...In theory, we should only loop back and try again if
@@ -156,6 +149,24 @@ int32_t inetsocketclient::connect() {
 			return RESULT_ERROR;
 		}
 
+	#else
+
+		// get the host entry
+		hostentry	he;
+		if (!he.initialize(_address())) {
+			return RESULT_ERROR;
+		}
+
+		// use tcp protocol
+		protocolentry	pe;
+		if (!pe.initialize("tcp")) {
+			return RESULT_ERROR;
+		}
+
+		// set the address type and port to connect to
+		rawbuffer::zero(_sin(),sizeof(sockaddr_in));
+		_sin()->sin_family=he.getAddressType();
+		_sin()->sin_port=hostToNet(*_port());
 	#endif
 
 	int32_t	retval=RESULT_ERROR;
@@ -171,75 +182,54 @@ int32_t inetsocketclient::connect() {
 			snooze::macrosnooze(_retrywait());
 		}
 
-		#ifndef RUDIMENTS_HAVE_GETADDRINFO
+		#ifdef RUDIMENTS_HAVE_GETADDRINFO
 
-			// try to connect to each of the addresses
-			// that came back from the address lookup
-			for (int32_t addressindex=0;
-					he.getAddressList()[addressindex];
-					addressindex++) {
-
-				// create an inet socket
-				do {
-					fd(::socket(AF_INET,SOCK_STREAM,
-							pe.getNumber()));
-				} while (fd()==-1 &&
-					error::getErrorNumber()==EINTR);
-				if (fd()==-1) {
-					return RESULT_ERROR;
-				}
-
-				// Put the socket in blocking mode.  Most
-				// platforms create sockets in blocking mode by
-				// default but OpenBSD doesn't appear to (at
-				// least in version 4.9) so we'll force it to
-				// blocking-mode to be consistent.
-				if (!useBlockingMode() &&
-					error::getErrorNumber()
-					#ifdef ENOTSUP
-					&& error::getErrorNumber()!=ENOTSUP
-					#endif
-					#ifdef EOPNOTSUPP
-					&& error::getErrorNumber()!=EOPNOTSUPP
-					#endif
-					) {
-					close();
-					return RESULT_ERROR;
-				}
-
-				// set which host to connect to
-				rawbuffer::copy(&_sin()->sin_addr,
-					he.getAddressList()[addressindex],
-					he.getAddressLength());
-	
-				// attempt to connect
-				retval=socketclient::connect(
-					reinterpret_cast
-						<struct sockaddr *>(_sin()),
-					sizeof(sockaddr_in),
-					_timeoutsec(),
-					_timeoutusec());
-				if (retval==RESULT_SUCCESS) {
-					return RESULT_SUCCESS;
-				} else {
-					close();
-				}
+			// we might want to randomize the results, so create
+			// a copy of the list of addrinfo's that we can rummage
+			// through later
+			linkedlist< addrinfo * > addrlist;
+			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
+				addrlist.append(ainfo);
 			}
 
-		#else
-
 			// try to connect to each of the addresses
 			// that came back from the address lookup
-			for (addrinfo *ainfo=ai; ainfo; ainfo=ainfo->ai_next) {
+			while (addrlist.getLength()) {
+
+				// figure out which addrinfo to try
+				linkedlistnode< addrinfo * >
+					*addrlistnode=addrlist.getFirstNode();
+				if (pvt->_randomize && addrlist.getLength()>1) {
+					if (!pvt->_seeded) {
+						pvt->_seed=
+							randomnumber::getSeed();
+						pvt->_seeded=true;
+					}
+					pvt->_seed=randomnumber::generateNumber(
+								pvt->_seed);
+					int32_t	skip=randomnumber::scaleNumber(
+							pvt->_seed,0,
+							addrlist.getLength()-1);
+					for (int32_t i=0; i<skip; i++) {
+						addrlistnode=
+							addrlistnode->getNext();
+					}
+				}
+
+				// get the addrinfo
+				addrinfo	*ainfo=addrlistnode->getValue();
 
 				// create an inet socket
 				do {
-					fd(::socket(ai->ai_family,
-							ai->ai_socktype,
-							ai->ai_protocol));
+					fd(::socket(ainfo->ai_family,
+							ainfo->ai_socktype,
+							ainfo->ai_protocol));
 				} while (fd()==-1 &&
 					error::getErrorNumber()==EINTR);
 				if (fd()==-1) {
+					// remove this addrinfo from the list
+					// and try again
+					addrlist.removeNode(addrlistnode);
 					continue;
 				}
 
@@ -275,8 +265,102 @@ int32_t inetsocketclient::connect() {
 				} else {
 					close();
 				}
+
+				// remove this addrinfo from the list
+				// and try again
+				addrlist.removeNode(addrlistnode);
 			}
 
+		#else
+
+			// we might want to randomize the results, so create
+			// a copy of the list of addresses that we can rummage
+			// through later
+			linkedlist< const char * > addrlist;
+			for (int32_t addressindex=0;
+					he.getAddressList()[addressindex];
+					addressindex++) {
+				addrlist.append(
+					he.getAddressList()[addressindex]);
+			}
+
+			// try to connect to each of the addresses
+			// that came back from the address lookup
+			while (addrlist.getLength()) {
+
+				// figure out which addrinfo to try
+				linkedlistnode< const char * >
+					*addrlistnode=addrlist.getFirstNode();
+				if (pvt->_randomize && addrlist.getLength()>1) {
+					if (!pvt->_seeded) {
+						pvt->_seed=
+							randomnumber::getSeed();
+						pvt->_seeded=true;
+					}
+					pvt->_seed=randomnumber::generateNumber(
+								pvt->_seed);
+					int32_t	skip=randomnumber::scaleNumber(
+							pvt->_seed,0,
+							addrlist.getLength()-1);
+					for (int32_t i=0; i<skip; i++) {
+						addrlistnode=
+							addrlistnode->getNext();
+					}
+				}
+
+				// get the addrinfo
+				const char *addr=addrlistnode->getValue();
+
+				// set which host to connect to
+				rawbuffer::copy(&_sin()->sin_addr,
+						addr,he.getAddressLength());
+
+				// create an inet socket
+				do {
+					fd(::socket(AF_INET,
+							SOCK_STREAM,
+							pe.getNumber()));
+				} while (fd()==-1 &&
+					error::getErrorNumber()==EINTR);
+				if (fd()==-1) {
+					return RESULT_ERROR;
+				}
+
+				// Put the socket in blocking mode.  Most
+				// platforms create sockets in blocking mode by
+				// default but OpenBSD doesn't appear to (at
+				// least in version 4.9) so we'll force it to
+				// blocking-mode to be consistent.
+				if (!useBlockingMode() &&
+					error::getErrorNumber()
+					#ifdef ENOTSUP
+					&& error::getErrorNumber()!=ENOTSUP
+					#endif
+					#ifdef EOPNOTSUPP
+					&& error::getErrorNumber()!=EOPNOTSUPP
+					#endif
+					) {
+					close();
+					return RESULT_ERROR;
+				}
+	
+				// attempt to connect
+				retval=socketclient::connect(
+					reinterpret_cast
+					<struct sockaddr *>(_sin()),
+					sizeof(sockaddr_in),
+					_timeoutsec(),
+					_timeoutusec());
+				if (retval==RESULT_SUCCESS) {
+					return RESULT_SUCCESS;
+				} else {
+					close();
+				}
+
+				// remove this addrinfo from the list
+				// and try again
+				addrlist.removeNode(addrlistnode);
+			}
 		#endif
 	}
 
