@@ -1313,6 +1313,10 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 			debugPrintf("just buffering %d bytes\n",
 						(int)writebufferspace);
 			#endif
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf("auto-flush write buffer: %d bytes\n",
+				(int)(writebuffersize+writebufferspace));
+			#endif
 
 			bytestring::copy(pvt->_writebufferptr,
 					data,writebufferspace);
