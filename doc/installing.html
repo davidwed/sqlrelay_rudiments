@@ -13,11 +13,20 @@
 <ul>
 <li><a href="#platforms">Supported Platforms</a></li>
 <li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#unixlinux">Installation on Linux, Unix or Unix-like Platforms</a></li>
+<ul>
 <li><a href="#downloading">Downloading Rudiments</a></li>
 <li><a href="#extracting">Extracting Rudiments</a></li>
 <li><a href="#building">Building Rudiments</a></li>
 <li><a href="#installing">Installing Rudiments</a></li>
-<li><a href="#rpms">Installing Rudiments RPMS</a></li>
+</ul>
+<li><a href="#windows">Installation on Windows</a></li>
+<ul>
+<li><a href="#windownloading">Downloading Rudiments</a></li>
+<li><a href="#winextracting">Extracting Rudiments</a></li>
+<li><a href="#winbuilding">Building Rudiments</a></li>
+<li><a href="#wininstalling">Installing Rudiments</a></li>
+</ul>
 </ul>
 
 <a name="platforms"></a>
@@ -29,7 +38,7 @@
 
 <p>uClibc/linux-based systems are also supported.</p>
 
-<p>Most of Rudiments builds natively on Windows using Visual Studio but the server components do not yet build and many functions simply return failure.  Still, there is quite a bit that does work.</p>
+<p>Most of Rudiments builds natively on Windows using Visual Studio.  Everything isn't implemented yet, but there is quite a bit that does work.</p>
 
 <a name="prerequisites"></a>
 <span class="heading">Prerequisites</span>
@@ -38,12 +47,19 @@
 
 <p>To build natively on Windows, you need to install Microsoft Visual Studio or Microsoft Visual Studio Express.</p>
 
+
+<br>
+<a name="unixlinux"></a>
+<span class="heading1">Installation on Linux, Unix or Unix-like Platforms</span><br><br>
+
+
 <a name="downloading"></a>
 <span class="heading">Downloading Rudiments</span>
 
 <p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
 
-<p>If you intend to build on Unix, Linux or Cygwin then download the tar.gz file.  For a native Windows installation, download the zip file.</p>
+<p>For Linux, Unix or Cygwin installations, download the tar.gz file.</p>
+
 
 <a name="extracting"></a>
 <span class="heading">Extracting Rudiments</span>
@@ -59,14 +75,11 @@ tar xf rudiments-X.XX.tar
 
 <p>This will create a rudiments-X.XX directory.</p>
 
-<p>To extract the distribution on Windows, move the zip file to your desktop or a location on your machine that you have read/write access, right click on the file and select "Extract All".</p>
-
-<p>This will create a rudiments-X.XX directory where X.XX is replaced with the rudiments version number.</p>
 
 <a name="building"></a>
 <span class="heading">Building Rudiments</span>
 
-<p>To build Rudiments on Unix, Linux or a Unix-like platforms, navigate to the directory that was created by the extraction and execute the following commands:</p>
+<p>To build Rudiments, navigate to the directory that was created by the extraction and execute the following commands:</p>
 
 <blockquote><b>
 configure<br>
@@ -87,46 +100,18 @@ configure --prefix=/usr/local
 configure --help
 </b></blockquote>
 
-<p><b>NOTE:</b> to compile on Cygwin, the <b>file</b> command must be present.  If it is not, the build will fail and you will get a very cryptic error.</p>
+<p>There are several things to note when using Cygwin.</p>
 
-<p>To build Rudiments natively on Windows, open the Visual Studio Command Prompt and navigate to the directory that was created when Rudiments was extracted.</p>
-
-<p>There should be a file named <i>make.batch</i> in that directory.  Rename this file to <i>make.bat</i>.  It is named with the .batch extension because various mail services don't allow .bat files to be emailed around, even if they are inside of an archive.  To get around this, the file must manually be renamed.</p>
-
-<p>There are two build options.  SQL Relay can be built with or without Common Language Runtime (CLR) support.  There are advantages and disadvantages to building either way.</p>
-
-<p>To build without CLR support, run:</p>
-
-<blockquote><b>
-make
-</b></blockquote>
-
-<p>for a 32-bit build or:</p>
-
-<blockquote><b>
-make 64
-</b></blockquote>
-
-<p>for a 64-bit build.</p>
-
-<p>To build with CLR support, run:</p>
-
-<blockquote><b>
-make clr
-</b></blockquote>
-
-<p>for a 32-bit build or:</p>
-
-<blockquote><b>
-make clr64
-</b></blockquote>
-
-<p>for a 64-bit build.</p>
+<ul>
+<li>You must use the Cygwin shell to build SQL Relay, rather than the Windows Command Line or DOS prompt.</li>
+<li>The <b>file</b> command must be present.  If it is not, the build will fail and you will get a very cryptic error.</li>
+<li>SQL Relay cannot be built against non-Cygwin dll's.  You can't, for instance, build against the Oracle, Sybase, the native Windows version of MySQL or the native Windows versions of Perl, Python, PHP, etc.  Many languages and a few databases come with Cygwin though and others can be compiled from source under Cygwin.</li>
+</ul>
 
 <a name="installing"></a>
 <span class="heading">Installing Rudiments</span>
 
-<p>By default, on Unix or Linux, everything is installed under /usr/local/firstworks by default.  On Windows, it is installed under C:\Program Files\Firstworks.  On either platform, you should either create that directory and give yourself full access permissions or install as root/Administrator.</p>
+<p>By default, on Unix or Linux, everything is installed under /usr/local/firstworks by default.  You should either create that directory and give yourself full access permissions or install as root.</p>
 
 <p>To install Rudiments run:</p>
 
@@ -140,20 +125,80 @@ make install
 make uninstall
 </b></blockquote>
 
-<a name="rpms"></a>
-<span class="heading2">Installing Rudiments RPMS</span>
 
-<p>If your system supports RedHat Package Manager version 4.0.3 or greater then you can build RPMS by running the following command against the source distribution tarball:</p>
+<br>
+<a name="windows"></a>
+<span class="heading1">Installation on Windows</span><br><br>
+
+
+<a name="windownloading"></a>
+<span class="heading">Downloading Rudiments</span>
+
+<p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
+
+<p>If you intend to build on Unix, Linux or Cygwin then download the tar.gz file.  For a native Windows installation, download the zip file.</p>
+
+<a name="winextracting"></a>
+<span class="heading">Extracting Rudiments</span>
+
+<p>To extract the distribution, move the zip file to your desktop or a location on your machine that you have read/write access, right click on the file and select "Extract All".</p>
+
+<p>This will create a rudiments-X.XX directory where X.XX is replaced with the rudiments version number.</p>
+
+<a name="winbuilding"></a>
+<span class="heading">Building Rudiments</span>
+
+<p>To build Rudiments natively on Windows, open the Visual Studio Command Prompt and navigate to the directory that was created when Rudiments was extracted.</p>
+
+<p>There should be a file named <i>make.batch</i> in that directory.  Rename this file to <i>make.bat</i>.  It is named with the .batch extension because various mail services don't allow .bat files to be emailed around, even if they are inside of an archive.  To get around this, the file must manually be renamed.</p>
+
+<p>There are 4 build options.  Rudiments can be built as 32-bit or 64-bit binaries, and with or without Common Language Runtime (CLR) support.  There are advantages and disadvantages to building each way.</p>
+
+<p>To build 32-bit without CLR support, run:</p>
 
 <blockquote><b>
-rpmbuild -ta rudiments-X.XX.tar.gz<br>
-(where X.XX is replaced with the version number)<br>
+make
 </b></blockquote>
 
-<p>This will generate RPM's in the system-wide RPM directory (usually /usr/src/redhat/RPMS or /usr/local/rpm/RPMS) under the subdirectory corresponding to your system architecture.  You can install them by changing directories into that directory and executing the following command as root:</p>
+<p>To build 32-bit with CLR support, run:</p>
 
 <blockquote><b>
-rpm -i rudiments-*
+make clr
+</b></blockquote>
+
+<p>To build 64-bit without CLR support, run:</p>
+
+<blockquote><b>
+make 64
+</b></blockquote>
+
+<p>To build 64-bit with CLR support, run:</p>
+
+<blockquote><b>
+make clr64
+</b></blockquote>
+
+<a name="installing"></a>
+<span class="heading">Installing Rudiments</span>
+
+<p>By default, on Windows, everything is installed under C:\Program Files\Firstworks for 64-bit builds or C:\Program Files (x86)\Firstworks for 32-bit builds.  You should either create that directory and give yourself full access permissions or install as Administrator.</p>
+
+<p>To install 32-bit Rudiments run:</p>
+
+<blockquote><b>
+make install
+</b></blockquote>
+
+<p>To install 64-bit Rudiments run:</p>
+
+<blockquote><b>
+make install64
+</b></blockquote>
+
+<p>To uninstall Rudiments run:</p>
+
+<blockquote><b>
+make uninstall
 </b></blockquote>
 
 </body>
