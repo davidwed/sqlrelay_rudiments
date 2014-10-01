@@ -44,39 +44,39 @@ class RUDIMENTS_DLLSPEC inetsocketclient : public socketclient, private inetsock
 					int32_t timeoutsec,
 					int32_t timeoutusec,
 					uint32_t retrywait,
-					uint32_t retrycount);
+					uint32_t tries);
 
 
 
 		/** Queries constnamevaluepairs "cd" for "host", "port",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "retrycount".  Initializes the class to use the
+		 *  "tries".  Initializes the class to use the
 		 *  result when connect() is called. */
 		void	initialize(constnamevaluepairs *cd);
 
 		/** Initializes the class to use "host", "port",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "retrycount" when connect() is called. */
+		 *  "tries" when connect() is called. */
 		void	initialize(const char *host,
 						uint16_t port,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
-						uint32_t retrycount);
+						uint32_t tries);
 
 		/** Attempts to connect to the "host" and "port" set
 		 *  earlier using one of the initialize() methods.
-		 *  If the connection fails, it will retry
-		 *  "retrycount" times, waiting "retrywait" seconds
-		 *  between retrycount.
+		 *  If the connection fails, it will retry, for a total of
+		 *  "tries" attempts, waiting "retrywait" seconds
+		 *  between each attempt.
 		 *
 		 *  If "host" resolves to multiple addresses (ie. if round-robin
 		 *  DNS or another DNS-based load-balancing strategy is used),
 		 *  then an attempt will be made to connect to each address
 		 *  until the attempt succeeds or there are no more addresses
-		 *  left to try.  This process will be tried "retrycount" times.
+		 *  left to try.  This process will be tried "tries" times.
 		 * 
-		 *  Setting "retrycount" to 0 will cause it to try to 
+		 *  Setting "tries" to 0 will cause it to try to 
 		 *  connect indefinitely.  Setting "retrywait" to
 		 *  0 will cause it to try to connect over and over
 		 *  as fast as possible (not recommended).

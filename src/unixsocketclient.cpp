@@ -55,8 +55,8 @@ int32_t unixsocketclient::connect(const char *filename,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
-						uint32_t retrycount) {
-	initialize(filename,timeoutsec,timeoutusec,retrywait,retrycount);
+						uint32_t tries) {
+	initialize(filename,timeoutsec,timeoutusec,retrywait,tries);
 	return connect();
 }
 
@@ -64,14 +64,14 @@ void unixsocketclient::initialize(const char *filename,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
-						uint32_t retrycount) {
+						uint32_t tries) {
 	unixsocketutil::initialize(filename);
-	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
+	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
 	#ifdef _WIN32
 		pvt->_isc.initialize("127.0.0.1",
 					filenameToPort(filename),
 					timeoutsec,timeoutusec,
-					retrywait,retrycount);
+					retrywait,tries);
 	#endif
 }
 
@@ -86,15 +86,14 @@ void unixsocketclient::initialize(constnamevaluepairs *cd) {
 		cd->getValue("timeoutusec",&timeoutusec);
 		const char	*retrywait=NULL;
 		cd->getValue("retrywait",&retrywait);
-		const char	*retrycount=NULL;
-		cd->getValue("retrycount",&retrycount);
+		const char	*tries=NULL;
+		cd->getValue("tries",&tries);
 
 		initialize(filename?filename:"",
 			charstring::toInteger(timeoutsec?timeoutsec:"0"),
 			charstring::toInteger(timeoutusec?timeoutusec:"0"),
 			charstring::toUnsignedInteger(retrywait?retrywait:"0"),
-			charstring::toUnsignedInteger(retrycount?
-							retrycount:"0"));
+			charstring::toUnsignedInteger(tries?tries:"0"));
 	}
 }
 
@@ -138,9 +137,7 @@ int32_t unixsocketclient::connect() {
 	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
-	for (uint32_t counter=0;
-			counter<_retrycount() || !_retrycount();
-			counter++) {
+	for (uint32_t counter=0; counter<_tries() || !_tries(); counter++) {
 
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try

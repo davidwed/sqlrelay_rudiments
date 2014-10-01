@@ -50,30 +50,31 @@ class RUDIMENTS_DLLSPEC unixsocketclient :
 					int32_t timeoutsec,
 					int32_t timeoutusec,
 					uint32_t retrywait,
-					uint32_t retrycount);
+					uint32_t tries);
 
 
 
 		/** Queries namevaluepairs "cd" for "filename",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "retrycount".  Initializes the class to use the
+		 *  "tries".  Initializes the class to use the
 		 *  result when connect() is called. */
 		void	initialize(constnamevaluepairs *cd);
 
 		/** Initializes the class to use "filename",
 		 *  "timeoutsec", "timeoutusec", "retrywait" and
-		 *  "retrycount" when connect() is called. */
+		 *  "tries" when connect() is called. */
 		void	initialize(const char *filename,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
-						uint32_t retrycount);
+						uint32_t tries);
 
 		/** Attempts to connect to the "filename" set earlier.
-		 *  If the connection fails, it will retry "retrycount"
-		 *  times, waiting "retrywait" seconds between tries.
+		 *  If the connection fails, it will retry, for a total of
+		 *  "tries" attempts, waiting "retrywait" seconds between
+		 *  each attempt.
 		 * 
-		 *  Setting "retrycount" to 0 will cause it to try to 
+		 *  Setting "tries" to 0 will cause it to try to 
 		 *  connect indefinitely.  Setting "retrywait" to 0
 		 *  will cause it to try to connect over and over
 		 *  as fast as possible (not recommended).

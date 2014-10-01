@@ -12,7 +12,7 @@ class clientprivate {
 		int32_t		_timeoutsec;
 		int32_t		_timeoutusec;
 		uint32_t	_retrywait;
-		uint32_t	_retrycount;
+		uint32_t	_tries;
 };
 
 client::client() : filedescriptor() {
@@ -41,18 +41,18 @@ client::~client() {
 
 void client::initialize(char *connecterror,
 			int32_t timeoutsec, int32_t timeoutusec,
-			uint32_t retrywait, uint32_t retrycount) {
+			uint32_t retrywait, uint32_t tries) {
 	pvt->_connecterror=connecterror;
 	pvt->_timeoutsec=timeoutsec;
 	pvt->_timeoutusec=timeoutusec;
 	pvt->_retrywait=retrywait;
-	pvt->_retrycount=retrycount;
+	pvt->_tries=tries;
 	type("client");
 }
 
 void client::clientClone(const client &c) {
 	initialize(NULL,c.pvt->_timeoutsec,c.pvt->_timeoutusec,
-				c.pvt->_retrywait,c.pvt->_retrycount);
+				c.pvt->_retrywait,c.pvt->_tries);
 	pvt->_connecterror=charstring::duplicate(c.pvt->_connecterror);
 }
 
@@ -90,6 +90,6 @@ uint32_t client::_retrywait() {
 	return pvt->_retrywait;
 }
 
-uint32_t client::_retrycount() {
-	return pvt->_retrycount;
+uint32_t client::_tries() {
+	return pvt->_tries;
 }

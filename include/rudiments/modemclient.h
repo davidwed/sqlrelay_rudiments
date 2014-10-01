@@ -30,14 +30,14 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 		/** Initializes the class to use "device",
 		 *  "baud, "connectscript", "phonenumber",
 		 *  "disconnectscript", "retrywait" and
-		 *  "retrycount" when connect() is called. */
+		 *  "tries" when connect() is called. */
 		void	initialize(constnamevaluepairs *cd);
 
 		/** Initializes the class to use "device",
 		 *  "baud, "customatcommands",
 		 *  "connectscript", "phonenumber",
 		 *  "disconnectscript", "retrywait" and
-		 *  "retrycount" when connect() is called. */
+		 *  "tries" when connect() is called. */
 		void	initialize(const char *device,
 					const char *baud,
 					const char *customatcommands,
@@ -45,14 +45,14 @@ class RUDIMENTS_DLLSPEC modemclient : public client, private modemutil {
 					const char *phonenumber,
 					const char *disconnectscript,
 					uint32_t retrywait,
-					uint32_t retrycount);
+					uint32_t tries);
 
 		/** Dials the modem and attempt to establish a connection.
-		 *  If the connection fails, it will retry "retrycount"
-		 *  times, waiting "retrywait" seconds between
-		 *  retrycount.
+		 *  If the connection fails, it will retry, for a total of
+		 *  "tries" attempts, waiting "retrywait" seconds between
+		 *  each attempt.
 		 * 
-		 *  Setting "retrycount" to 0 will cause it to try to 
+		 *  Setting "tries" to 0 will cause it to try to 
 		 *  connect indefinitely.  Setting "retrywait" to 0
 		 *  will cause it to try to connect over and over
 		 *  as fast as possible (not recommended).

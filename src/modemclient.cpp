@@ -89,7 +89,7 @@ void modemclient::initialize(constnamevaluepairs *cd) {
 		const char	*rwstr=NULL;
 		cd->getValue("retrywait",&rwstr);
 		const char	*rcstr=NULL;
-		cd->getValue("retrycount",&rcstr);
+		cd->getValue("tries",&rcstr);
 		initialize(devicename,baud,
 				customatcommands,
 				connectscript,
@@ -107,13 +107,13 @@ void modemclient::initialize(const char *devicename,
 				const char *phonenumber,
 				const char *disconnectscript,
 				uint32_t retrywait,
-				uint32_t retrycount) {
+				uint32_t tries) {
 	modemutil::initialize(devicename,baud);
 	pvt->_customatcommands=customatcommands;
 	pvt->_connectscript=connectscript;
 	pvt->_phonenumber=phonenumber;
 	pvt->_disconnectscript=disconnectscript;
-	client::initialize(NULL,-1,-1,retrywait,retrycount);
+	client::initialize(NULL,-1,-1,retrywait,tries);
 }
 
 int32_t modemclient::connect() {
@@ -161,7 +161,7 @@ int32_t modemclient::connect() {
 		// handle retry
 		close();
 		whichtry++;
-		if (whichtry==_retrycount()) {
+		if (whichtry==_tries()) {
 			// return the last thing that caused us to retry
 			return result;
 		}

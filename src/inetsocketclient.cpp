@@ -79,8 +79,8 @@ int32_t inetsocketclient::connect(const char *host,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
-						uint32_t retrycount) {
-	initialize(host,port,timeoutsec,timeoutusec,retrywait,retrycount);
+						uint32_t tries) {
+	initialize(host,port,timeoutsec,timeoutusec,retrywait,tries);
 	return connect();
 }
 
@@ -89,9 +89,9 @@ void inetsocketclient::initialize(const char *host,
 						int32_t timeoutsec,
 						int32_t timeoutusec,
 						uint32_t retrywait,
-						uint32_t retrycount) {
+						uint32_t tries) {
 	inetsocketutil::initialize(host,port);
-	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,retrycount);
+	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
 }
 
 void inetsocketclient::initialize(constnamevaluepairs *cd) {
@@ -108,16 +108,15 @@ void inetsocketclient::initialize(constnamevaluepairs *cd) {
 		cd->getValue("timeoutusec",&timeoutusec);
 		const char	*retrywait=NULL;
 		cd->getValue("retrywait",&retrywait);
-		const char	*retrycount=NULL;
-		cd->getValue("retrycount",&retrycount);
+		const char	*tries=NULL;
+		cd->getValue("tries",&tries);
 	
 		initialize(host?host:"",
 			charstring::toInteger(port?port:"0"),
 			charstring::toInteger(timeoutsec?timeoutsec:"-1"),
 			charstring::toInteger(timeoutusec?timeoutusec:"-1"),
 			charstring::toUnsignedInteger(retrywait?retrywait:"0"),
-			charstring::toUnsignedInteger(retrycount?
-							retrycount:"0"));
+			charstring::toUnsignedInteger(tries?tries:"0"));
 	}
 }
 
@@ -182,9 +181,7 @@ int32_t inetsocketclient::connect() {
 	int32_t	retval=RESULT_ERROR;
 
 	// try to connect, over and over for the specified number of times
-	for (uint32_t counter=0;
-			counter<_retrycount() || !_retrycount();
-			counter++) {
+	for (uint32_t counter=0; counter<_tries() || !_tries(); counter++) {
 
 		// wait the specified amount of time between reconnect tries
 		// unless we're on the very first try
