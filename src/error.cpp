@@ -10,6 +10,9 @@
 // to get the more portable XSI-compliant strerror_r rather than the GNU version
 #undef __USE_GNU
 
+// to avoid __THROW errors on some systems
+#undef __REDIRECT
+
 // for strerror (or similar)
 #ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
