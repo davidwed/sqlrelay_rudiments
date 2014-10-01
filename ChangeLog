@@ -13,6 +13,7 @@
 	refactored listener class to match paradigms established by
 		kqueue, epoll, /dev/poll and poll
 	added support for /dev/poll and port_create()
+	fixed a few configure-related issues under Cygwin
 
 0.47 - fixed possible null-dereference in xmldomnode::safeAppend
 	added charstring::inSetIgnoringCase
