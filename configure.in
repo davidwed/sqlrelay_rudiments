@@ -633,46 +633,46 @@ then
 	AC_MSG_CHECKING(for winsock2.h)
 	AC_TRY_COMPILE([#include <winsock2.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_WINSOCK2_H, 1, Some systems have winsock2.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for tlhelp32.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#include <tlhelp32.h>],
+	[],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for sddl.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#include <sddl.h>],
+	[],AC_DEFINE(RUDIMENTS_HAVE_SDDL_H, 1, Some systems have sddl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for aclapi.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#include <aclapi.h>],
+	[],AC_DEFINE(RUDIMENTS_HAVE_ACLAPI_H, 1, Some systems have aclapi.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for accctrl.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#include <accctrl.h>],
+	[],AC_DEFINE(RUDIMENTS_HAVE_ACCCTRL_H, 1, Some systems have accctrl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for lm.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#include <lm.h>],
+	[],AC_DEFINE(RUDIMENTS_HAVE_LM_H, 1, Some systems have lm.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for io.h)
 AC_TRY_COMPILE([#include <io.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_IO_H, 1, Some systems have io.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for tlhelp32.h)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#include <tlhelp32.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_TLHELP32_H, 1, Some systems have tlhelp32.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for sddl.h)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#include <sddl.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_SDDL_H, 1, Some systems have sddl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for aclapi.h)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#include <aclapi.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_ACLAPI_H, 1, Some systems have aclapi.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for accctrl.h)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#include <accctrl.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_ACCCTRL_H, 1, Some systems have accctrl.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING(for lm.h)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-#include <lm.h>],
-[],AC_DEFINE(RUDIMENTS_HAVE_LM_H, 1, Some systems have lm.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for process.h)
 AC_TRY_COMPILE([#include <process.h>],
