@@ -10,7 +10,7 @@
 // to get the more portable XSI-compliant strerror_r rather than the GNU version
 #undef __USE_GNU
 
-// to avoid __THROW errors on some systems
+// to avoid __THROW errors on some systems (fedora 2)
 #undef __REDIRECT
 
 // for strerror (or similar)
