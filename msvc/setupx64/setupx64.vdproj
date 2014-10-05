@@ -1740,26 +1740,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_14389732A3424DC0AA3C2306FBBA9608"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\shadowentryincludes.h"
-            "TargetName" = "8:shadowentryincludes.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_16526AC662DF4BC8944294D526851C49"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\dictionaryinlines.h"
@@ -3562,8 +3542,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_812EBD3FDC6444A29FEC7947ABDED276"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\passwdentry.h"
-            "TargetName" = "8:passwdentry.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\userentry.h"
+            "TargetName" = "8:userentry.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -4762,8 +4742,8 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CAD667AE4B5A49FAB10F6AD929960D90"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\passwdentry.h"
-            "TargetName" = "8:passwdentry.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\userentry.h"
+            "TargetName" = "8:userentry.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
@@ -4960,26 +4940,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0AEC356A7014044BFAC2243BD72CB50"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\shadowentry.h"
-            "TargetName" = "8:shadowentry.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D60664B8C3E4410C80D8DACEE1D9A3B2"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\serviceentry.h"
@@ -5102,30 +5062,10 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E0B4A6F8415E41669C80936B457FAE91"
             {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\passwdentryincludes.h"
-            "TargetName" = "8:passwdentryincludes.h"
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\userentryincludes.h"
+            "TargetName" = "8:userentryincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E172EF4A4A664A8BA626C15ECFB4EFA2"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\shadowentry.h"
-            "TargetName" = "8:shadowentry.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

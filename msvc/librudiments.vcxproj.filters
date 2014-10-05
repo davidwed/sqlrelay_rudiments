@@ -69,7 +69,7 @@
     <ClCompile Include="..\src\listener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\passwdentry.cpp">
+    <ClCompile Include="..\src\userentry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\xmlsax.cpp">

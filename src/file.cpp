@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/file.h>
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
@@ -1055,7 +1055,7 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 }
 
 bool file::changeOwner(const char *newuser, const char *newgroup) const {
-	return changeOwner(passwdentry::getUserId(newuser),
+	return changeOwner(userentry::getUserId(newuser),
 				groupentry::getGroupId(newgroup));
 }
 

@@ -38,7 +38,7 @@ PROGS = \
 	thread$(EXE) \
 	threadmutex$(EXE) \
 	parameterstring$(EXE) \
-	passwdentry$(EXE) \
+	userentry$(EXE) \
 	permissions$(EXE) \
 	process$(EXE) \
 	protocolentry$(EXE) \
@@ -49,7 +49,6 @@ PROGS = \
 	serialport$(EXE) \
 	serialportprofile$(EXE) \
 	serviceentry$(EXE) \
-	shadowentry$(EXE) \
 	sharedmemory1$(EXE) \
 	sharedmemory2$(EXE) \
 	shmfile$(EXE) \
@@ -166,8 +165,8 @@ threadmutex$(EXE): threadmutex.cpp threadmutex.lo
 parameterstring$(EXE): parameterstring.cpp parameterstring.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ parameterstring.lo $(LIBS)
 
-passwdentry$(EXE): passwdentry.cpp passwdentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ passwdentry.lo $(LIBS)
+userentry$(EXE): userentry.cpp userentry.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ userentry.lo $(LIBS)
 
 permissions$(EXE): permissions.cpp permissions.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ permissions.lo $(LIBS)
@@ -198,9 +197,6 @@ serialportprofile$(EXE): serialportprofile.cpp serialportprofile.lo
 
 serviceentry$(EXE): serviceentry.cpp serviceentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ serviceentry.lo $(LIBS)
-
-shadowentry$(EXE): shadowentry.cpp shadowentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ shadowentry.lo $(LIBS)
 
 sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory1.lo $(LIBS)

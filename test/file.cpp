@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/groupentry.h>
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/datetime.h>
@@ -62,7 +62,7 @@ int main(int argc, const char **argv) {
 
 	// display the name of the user that owns the file
 	uid_t	uid=fl.getOwnerUserId();
-	char	*username=passwdentry::getName(uid);
+	char	*username=userentry::getName(uid);
 	stdoutput.printf("	user       : %s\n",username);
 	delete[] username;
 

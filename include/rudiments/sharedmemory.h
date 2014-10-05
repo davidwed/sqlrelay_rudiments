@@ -73,10 +73,10 @@ class RUDIMENTS_DLLSPEC sharedmemory {
 		/** Makes this shared memory segment owned by
 		 *  the user "username".
 		 * 
-		 *  Note that setUserName() uses the passwdentry class.
+		 *  Note that setUserName() uses the userentry class.
 		 *  If you are using this method in a multithreaded
-		 *  application, you may need to supply the passwdentry
-		 *  class a mutex.  See passwdentry.h for more detail. */
+		 *  application, you may need to supply the userentry
+		 *  class a mutex.  See userentry.h for more detail. */
 		bool	setUserName(const char *username);
 
 		/** Makes this shared memory segment owned by
@@ -103,10 +103,10 @@ class RUDIMENTS_DLLSPEC sharedmemory {
 		/** Returns the name of the user that owns this
 		 *  shared memory segment
 		 * 
-		 *  Note that getUserName() uses the passwdentry class.
+		 *  Note that getUserName() uses the userentry class.
 		 *  If you are using this method in a multithreaded
-		 *  application, you may need to supply the passwdentry
-		 *  class a mutex.  See passwdentry.h for more detail. */
+		 *  application, you may need to supply the userentry
+		 *  class a mutex.  See userentry.h for more detail. */
 		const char	*getUserName();
 
 		/** Returns the name of the group that owns this

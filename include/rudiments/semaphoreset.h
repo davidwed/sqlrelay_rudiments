@@ -140,10 +140,10 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 
 		/** Makes this semaphore set owned by the user "username".
 		 * 	
-		 *  Note that setUserName() uses the passwdentry class.
+		 *  Note that setUserName() uses the userentry class.
 		 *  If you are using this method in a multithreaded
-		 *  application, you may need to supply the passwdentry
-		 *  class a mutex.  See passwdentry.h for more detail. */
+		 *  application, you may need to supply the userentry
+		 *  class a mutex.  See userentry.h for more detail. */
 		bool	setUserName(const char *username);
 
 		/** Makes this semaphore set owned by 
@@ -175,10 +175,10 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 		 *  internally and returns it.  The calling program must
 		 *  deallocate this buffer.
 		 *  	
-		 *  Note that getUserName() uses the passwdentry class.
+		 *  Note that getUserName() uses the userentry class.
 		 *  If you are using this method in a multithreaded
-		 *  application, you may need to supply the passwdentry
-		 *  class a mutex.  See passwdentry.h for more detail. */
+		 *  application, you may need to supply the userentry
+		 *  class a mutex.  See userentry.h for more detail. */
 		const char	*getUserName();
 
 		/** Returns the name of the group that owns this

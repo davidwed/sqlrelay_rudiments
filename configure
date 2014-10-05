@@ -804,7 +804,7 @@ enable_modemserver
 enable_thread
 enable_threadmutex
 enable_parameterstring
-enable_passwdentry
+enable_userentry
 enable_permissions
 enable_process
 enable_protocolentry
@@ -817,7 +817,6 @@ enable_serialport
 enable_serialportprofile
 enable_server
 enable_serviceentry
-enable_shadowentry
 enable_sharedmemory
 enable_shmfile
 enable_signalclasses
@@ -1501,7 +1500,7 @@ Optional Features:
   --disable-thread        Don't build thread class
   --disable-threadmutex   Don't build threadmutex class
   --disable-parameterstring      Don't build parameterstring class
-  --disable-passwdentry   Don't build passwdentry class
+  --disable-userentry     Don't build userentry class
   --disable-permissions   Don't build permissions
   --disable-process       Don't build process
   --disable-protocolentry Don't build protocolentry class
@@ -1514,7 +1513,6 @@ Optional Features:
   --disable-serialportprofile    Don't build serialportprofile class
   --disable-server        Don't build server class
   --disable-serviceentry  Don't build serviceentry class
-  --disable-shadowentry   Don't build shadowentry class
   --disable-sharedmemory  Don't build sharedmemory
   --disable-shmfile       Don't build shmfile class
   --disable-signalclasses Don't build signalclasses
@@ -2753,11 +2751,11 @@ else
   INCLUDE_PARAMETERSTRING="1"
 fi
 
-# Check whether --enable-passwdentry was given.
-if test "${enable_passwdentry+set}" = set; then :
-  enableval=$enable_passwdentry; INCLUDE_PASSWDENTRY="0"
+# Check whether --enable-userentry was given.
+if test "${enable_userentry+set}" = set; then :
+  enableval=$enable_userentry; INCLUDE_USERENTRY="0"
 else
-  INCLUDE_PASSWDENTRY="1"
+  INCLUDE_USERENTRY="1"
 fi
 
 # Check whether --enable-permissions was given.
@@ -2842,13 +2840,6 @@ if test "${enable_serviceentry+set}" = set; then :
   enableval=$enable_serviceentry; INCLUDE_SERVICEENTRY="0"
 else
   INCLUDE_SERVICEENTRY="1"
-fi
-
-# Check whether --enable-shadowentry was given.
-if test "${enable_shadowentry+set}" = set; then :
-  enableval=$enable_shadowentry; INCLUDE_SHADOWENTRY="0"
-else
-  INCLUDE_SHADOWENTRY="1"
 fi
 
 # Check whether --enable-sharedmemory was given.
@@ -30702,12 +30693,12 @@ then
 	LOBJS="$LOBJS parameterstring.lo"
 fi
 
-if ( test "$INCLUDE_PASSWDENTRY" = "1" )
+if ( test "$INCLUDE_USERENTRY" = "1" )
 then
-	HEADERS="$HEADERS passwdentry.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS passwdentry.h passwdentryincludes.h"
-	SRCS="$SRCS passwdentry.cpp"
-	LOBJS="$LOBJS passwdentry.lo"
+	HEADERS="$HEADERS userentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS userentry.h userentryincludes.h"
+	SRCS="$SRCS userentry.cpp"
+	LOBJS="$LOBJS userentry.lo"
 fi
 
 if ( test "$INCLUDE_PERMISSIONS" = "1" )
@@ -30810,14 +30801,6 @@ then
 	PRIVATEHEADERS="$PRIVATEHEADERS serviceentry.h serviceentryincludes.h"
 	SRCS="$SRCS serviceentry.cpp"
 	LOBJS="$LOBJS serviceentry.lo"
-fi
-
-if ( test "$INCLUDE_SHADOWENTRY" = "1" )
-then
-	HEADERS="$HEADERS shadowentry.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS shadowentry.h shadowentryincludes.h"
-	SRCS="$SRCS shadowentry.cpp"
-	LOBJS="$LOBJS shadowentry.lo"
 fi
 
 if ( test "$INCLUDE_SHAREDMEMORY" = "1" )

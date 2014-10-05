@@ -1,17 +1,26 @@
-// Copyright (c) 2002 David Muse
+// Copyright (c) 2002-2014 David Muse
 // See the COPYING file for more information
 
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
+
+#if defined(RUDIMENTS_HAVE_GETSPNAM) || defined(RUDIMENTS_HAVE_GETSPNAM_R)
+	#define RUDIMENTS_HAVE_SHADOW
+#endif
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
 	#include <rudiments/dictionary.h>
 	#include <rudiments/groupentry.h>
 #else
 	#include <pwd.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_SHADOW
+	// for spwd, functions
+	#include <shadow.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
@@ -23,21 +32,31 @@
 #ifdef RUDIMENTS_HAVE_SDDL_H
 	#include <sddl.h>
 #endif
+
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
 
-class passwdentryprivate {
-	friend class passwdentry;
+#define MAXBUFFER	(32*1024)
+
+class userentryprivate {
+	friend class userentry;
 	private:
 		#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 			passwd	*_pwd;
 			#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 				defined(RUDIMENTS_HAVE_GETPWUID_R)
 				passwd	_pwdbuffer;
-				char	*_buffer;
+				char	*_pwdcharbuffer;
 			#endif
 			char	*_sid;
+			#ifdef RUDIMENTS_HAVE_SHADOW
+				spwd	*_sp;
+				#if defined(RUDIMENTS_HAVE_GETSPNAM_R)
+					spwd	_spbuffer;
+					char	*_spcharbuffer;
+				#endif
+			#endif
 		#else
 			char		*_name;
 			char		*_password;
@@ -53,7 +72,7 @@ class passwdentryprivate {
 	!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
 	defined(RUDIMENTS_HAVE_NETUSERGETINFO)
 // LAME: not in the class
-static threadmutex	*pemutex;
+static threadmutex	*uemutex;
 #endif
 
 #ifdef RUDIMENTS_HAVE_NETUSERGETINFO
@@ -119,13 +138,13 @@ static uid_t addUidMapping(const char *name, const char *sid) {
 	ns->name=charstring::duplicate(name);
 	ns->sid=charstring::duplicate(sid);
 
-	if (pemutex) {
-		pemutex->lock();
+	if (uemutex) {
+		uemutex->lock();
 	}
 	uid_t	u=uid;
 	uid++;
-	if (pemutex) {
-		pemutex->unlock();
+	if (uemutex) {
+		uemutex->unlock();
 	}
 
 	uidmap.setValue(u,ns);
@@ -134,14 +153,22 @@ static uid_t addUidMapping(const char *name, const char *sid) {
 #endif
 
 
-passwdentry::passwdentry() {
-	pvt=new passwdentryprivate;
+userentry::userentry() {
+	pvt=new userentryprivate;
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	pvt->_pwd=NULL;
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		bytestring::zero(&pvt->_pwdbuffer,sizeof(pvt->_pwdbuffer));
-		pvt->_buffer=NULL;
+		pvt->_pwdcharbuffer=NULL;
+	#endif
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		pvt->_sp=NULL;
+		#ifdef RUDIMENTS_HAVE_GETSPNAM_R
+			bytestring::zero(&pvt->_spbuffer,
+						sizeof(pvt->_spbuffer));
+			pvt->_spcharbuffer=NULL;
+		#endif
 	#endif
 #else
 	pvt->_name=NULL;
@@ -154,23 +181,28 @@ passwdentry::passwdentry() {
 	pvt->_sid=NULL;
 }
 
-passwdentry::passwdentry(const passwdentry &p) {
-	pvt=new passwdentryprivate;
+userentry::userentry(const userentry &p) {
+	pvt=new userentryprivate;
 	initialize(p.getName());
 }
 
-passwdentry &passwdentry::operator=(const passwdentry &p) {
+userentry &userentry::operator=(const userentry &p) {
 	if (this!=&p) {
 		initialize(p.getName());
 	}
 	return *this;
 }
 
-passwdentry::~passwdentry() {
+userentry::~userentry() {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
-		delete[] pvt->_buffer;
+		delete[] pvt->_pwdcharbuffer;
+	#endif
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		#ifdef RUDIMENTS_HAVE_GETSPNAM_R
+			delete[] pvt->_spcharbuffer;
+		#endif
 	#endif
 	delete[] pvt->_sid;
 #else
@@ -183,7 +215,7 @@ passwdentry::~passwdentry() {
 	delete pvt;
 }
 
-const char *passwdentry::getName() const {
+const char *userentry::getName() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_name:NULL;
 #else
@@ -191,7 +223,7 @@ const char *passwdentry::getName() const {
 #endif
 }
 
-const char *passwdentry::getPassword() const {
+const char *userentry::getPassword() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_passwd:NULL;
 #else
@@ -199,7 +231,71 @@ const char *passwdentry::getPassword() const {
 #endif
 }
 
-uid_t passwdentry::getUserId() const {
+const char *userentry::getEncryptedPassword() const {
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return (pvt->_sp)?pvt->_sp->sp_pwdp:NULL;
+	#else
+		return NULL;
+	#endif
+}
+
+long userentry::getLastChangeDate() const {
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return (pvt->_sp)?pvt->_sp->sp_lstchg:-1;
+	#else
+		return -1;
+	#endif
+}
+
+int32_t userentry::getDaysBeforeChangeAllowed() const {
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return (pvt->_sp)?pvt->_sp->sp_min:-1;
+	#else
+		return -1;
+	#endif
+}
+
+int32_t userentry::getDaysBeforeChangeRequired() const {
+	#ifdef RUDIMENTS_HAVE_SHADOW
+		return (pvt->_sp)?pvt->_sp->sp_max:-1;
+	#else
+		return -1;
+	#endif
+}
+
+int32_t userentry::getDaysBeforeExpirationWarning() const {
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_WARN)
+		return (pvt->_sp)?pvt->_sp->sp_warn:-1;
+	#else
+		return -1;
+	#endif
+}
+
+int32_t userentry::getDaysOfInactivityAllowed() const {
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_INACT)
+		return (pvt->_sp)?pvt->_sp->sp_inact:-1;
+	#else
+		return -1;
+	#endif
+}
+
+int32_t userentry::getExpirationDate() const {
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_EXPIRE)
+		return (pvt->_sp)?pvt->_sp->sp_expire:-1;
+	#else
+		return -1;
+	#endif
+}
+
+int32_t userentry::getFlag() const {
+	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_FLAG)
+		return (pvt->_sp)?pvt->_sp->sp_flag:-1;
+	#else
+		return -1;
+	#endif
+}
+
+uid_t userentry::getUserId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_uid:(uid_t)-1;
 #else
@@ -207,7 +303,7 @@ uid_t passwdentry::getUserId() const {
 #endif
 }
 
-const char *passwdentry::getSid() const {
+const char *userentry::getSid() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	if (!pvt->_sid) {
 		if (pvt->_pwd) {
@@ -223,7 +319,7 @@ const char *passwdentry::getSid() const {
 #endif
 }
 
-gid_t passwdentry::getPrimaryGroupId() const {
+gid_t userentry::getPrimaryGroupId() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_gid:(gid_t)-1;
 #else
@@ -231,7 +327,7 @@ gid_t passwdentry::getPrimaryGroupId() const {
 #endif
 }
 
-const char *passwdentry::getRealName() const {
+const char *userentry::getRealName() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_gecos:NULL;
 #else
@@ -239,7 +335,7 @@ const char *passwdentry::getRealName() const {
 #endif
 }
 
-const char *passwdentry::getHomeDirectory() const {
+const char *userentry::getHomeDirectory() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_dir:NULL;
 #else
@@ -247,7 +343,7 @@ const char *passwdentry::getHomeDirectory() const {
 #endif
 }
 
-const char *passwdentry::getShell() const {
+const char *userentry::getShell() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 	return (pvt->_pwd)?pvt->_pwd->pw_shell:NULL;
 #else
@@ -258,7 +354,7 @@ const char *passwdentry::getShell() const {
 #endif
 }
 
-bool passwdentry::platformSupportsFormalSid() {
+bool userentry::platformSupportsFormalSid() {
 	#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 		return false;
 	#else
@@ -266,7 +362,7 @@ bool passwdentry::platformSupportsFormalSid() {
 	#endif
 }
 
-bool passwdentry::needsMutex() {
+bool userentry::needsMutex() {
 	#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
 		!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
 		defined(RUDIMENTS_HAVE_NETUSERGETINFO)
@@ -276,36 +372,54 @@ bool passwdentry::needsMutex() {
 	#endif
 }
 
-void passwdentry::setMutex(threadmutex *mtx) {
+void userentry::setMutex(threadmutex *mtx) {
 	#if (!defined(RUDIMENTS_HAVE_GETPWNAM_R) || \
 		!defined(RUDIMENTS_HAVE_GETPWUID_R)) || \
 		defined(RUDIMENTS_HAVE_NETUSERGETINFO)
-		pemutex=mtx;
+		uemutex=mtx;
 	#endif
 }
 
-bool passwdentry::initialize(const char *username) {
+bool userentry::initialize(const char *username) {
 	return initialize(username,0);
 }
 
-bool passwdentry::initialize(uid_t userid) {
+bool userentry::initialize(uid_t userid) {
 	return initialize(NULL,userid);
 }
 
-bool passwdentry::initialize(const char *username, uid_t userid) {
+bool userentry::initialize(const char *username, uid_t userid) {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
 
+	// init return value
+	bool	success=false;
+
+	// init buffers
 	delete[] pvt->_sid;
 	pvt->_sid=NULL;
-
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
-		delete[] pvt->_sid;
 		if (pvt->_pwd) {
 			pvt->_pwd=NULL;
-			delete[] pvt->_buffer;
-			pvt->_buffer=NULL;
+			delete[] pvt->_pwdcharbuffer;
+			pvt->_pwdcharbuffer=NULL;
 		}
+	#else
+		pvt->_pwd=NULL;
+	#endif
+	#if defined(RUDIMENTS_HAVE_GETSPNAM_R)
+		if (pvt->_sp) {
+			pvt->_sp=NULL;
+			delete[] pvt->_spcharbuffer;
+			pvt->_spcharbuffer=NULL;
+		}
+	#elif defined(RUDIMENTS_HAVE_GETSPNAM) 
+		pvt->_sp=NULL;
+	#endif
+
+	// get password info
+	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		// getpwnam_r and getpwuid_r are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
 		// require that you pass them a pre-allocated buffer.  If the
@@ -315,48 +429,93 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 		int64_t	max=inc*32;
 		for (int64_t size=inc; size<max; size=size+inc) {
 
-			pvt->_buffer=new char[size];
+			pvt->_pwdcharbuffer=new char[size];
 			#if defined(RUDIMENTS_HAVE_GETPWNAM_R_5) && \
 				defined(RUDIMENTS_HAVE_GETPWUID_R_5)
 			if (!((username)
 				?(getpwnam_r(username,
 						&pvt->_pwdbuffer,
-						pvt->_buffer,size,
+						pvt->_pwdcharbuffer,size,
 						&pvt->_pwd))
 				:(getpwuid_r(userid,
 						&pvt->_pwdbuffer,
-						pvt->_buffer,size,
+						pvt->_pwdcharbuffer,size,
 						&pvt->_pwd)))) {
-				return (pvt->_pwd!=NULL);
+				success=(pvt->_pwd!=NULL);
+				break;
 			}
 			#elif defined(RUDIMENTS_HAVE_GETPWNAM_R_4) && \
 				defined(RUDIMENTS_HAVE_GETPWUID_R_4)
 			if ((username)
 				?(pvt->_pwd=getpwnam_r(username,
 							&pvt->_pwdbuffer,
-							pvt->_buffer,size))
+							pvt->_pwdcharbuffer,
+							size))
 				:(pvt->_pwd=getpwuid_r(userid,
 							&pvt->_pwdbuffer,
-							pvt->_buffer,size))) {
-				return true;
+							pvt->_pwdcharbuffer,
+							size))) {
+				success=true;
+				break;
 			}
 			#endif
-			delete[] pvt->_buffer;
-			pvt->_buffer=NULL;
+			delete[] pvt->_pwdcharbuffer;
+			pvt->_pwdcharbuffer=NULL;
 			pvt->_pwd=NULL;
 			if (error::getErrorNumber()!=ENOMEM) {
 				return false;
 			}
 		}
-		return false;
 	#else
-		pvt->_pwd=NULL;
-		return (!(pemutex && !pemutex->lock()) &&
+		success=(!(uemutex && !uemutex->lock()) &&
 			((pvt->_pwd=((username)
 				?getpwnam(username)
 				:getpwuid(userid)))!=NULL) &&
-			!(pemutex && !pemutex->unlock()));
+			!(uemutex && !uemutex->unlock()));
 	#endif
+
+	if (!success) {
+		return false;
+	}
+
+	// get shadow info (but don't fail if this info isn't available)
+	#if defined(RUDIMENTS_HAVE_GETSPNAM_R)
+		// getspnam_r is goofy.
+		// It will retrieve an arbitrarily large amount of data, but
+		// requires that you pass it a pre-allocated buffer.  If the
+		// buffer is too small, it returns an ENOMEM and you have to
+		// just make the buffer bigger and try again.
+		for (int32_t size=1024; size<MAXBUFFER; size=size+1024) {
+			pvt->_spcharbuffer=new char[size];
+			#if defined(RUDIMENTS_HAVE_GETSPNAM_R_5)
+			if (!getspnam_r(getName(),&pvt->_spbuffer,
+					pvt->_spcharbuffer,size,&pvt->_sp)) {
+				break;
+			}
+			#elif defined(RUDIMENTS_HAVE_GETSPNAM_R_4)
+			if ((pvt->_sp=getspnam_r(getName(),
+					&pvt->_spbuffer,
+					pvt->_spcharbuffer,size))) {
+				break;
+			}
+			#endif
+			delete[] pvt->_spcharbuffer;
+			pvt->_spcharbuffer=NULL;
+			pvt->_sp=NULL;
+			if (error::getErrorNumber()!=ENOMEM) {
+				break;
+			}
+		}
+	#elif defined(RUDIMENTS_HAVE_GETSPNAM) 
+		if (!_uemutex || _uemutex->lock()) {
+			pvt->_sp=getspnam(const_cast<char *>(getName()));
+		}
+		if (_uemutex) {
+			_uemutex->unlock();
+		}
+	#endif
+
+	return success;
 
 #else
 
@@ -445,24 +604,24 @@ bool passwdentry::initialize(const char *username, uid_t userid) {
 #endif
 }
 
-char *passwdentry::getName(uid_t userid) {
-	passwdentry	pwd;
+char *userentry::getName(uid_t userid) {
+	userentry	pwd;
 	if (pwd.initialize(userid)) {
 		return charstring::duplicate(pwd.getName());
 	}
 	return NULL;
 }
 
-uid_t passwdentry::getUserId(const char *username) {
-	passwdentry	pwd;
+uid_t userentry::getUserId(const char *username) {
+	userentry	pwd;
 	if (pwd.initialize(username)) {
 		return pwd.getUserId();
 	}
 	return (uid_t)-1;
 }
 
-char *passwdentry::getSid(const char *username) {
-	passwdentry	pwd;
+char *userentry::getSid(const char *username) {
+	userentry	pwd;
 	if (pwd.initialize(username)) {
 		return charstring::duplicate(pwd.getSid());
 	}

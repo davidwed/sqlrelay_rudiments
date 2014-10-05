@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/semaphoreset.h>
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/error.h>
 
@@ -384,7 +384,7 @@ bool semaphoreset::setGroupId(gid_t gid) {
 }
 
 bool semaphoreset::setUserName(const char *username) {
-	uid_t	userid=passwdentry::getUserId(username);
+	uid_t	userid=userentry::getUserId(username);
 	return (userid!=(uid_t)-1 && setUserId(userid));
 }
 
@@ -412,7 +412,7 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 
 const char *semaphoreset::getUserName() {
 	delete[] pvt->_username;
-	pvt->_username=passwdentry::getName(getUserId());
+	pvt->_username=userentry::getName(getUserId());
 	return pvt->_username;
 }
 

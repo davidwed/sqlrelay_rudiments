@@ -23,11 +23,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parameterstring", "..\param
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hostentry", "..\hostentry\hostentry.vcxproj", "{8EE554D2-D116-44C3-94E6-8691CB39E7F5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "passwdentry", "..\passwdentry\passwdentry.vcxproj", "{9D96611D-60DB-46D5-9FF0-8C64F5FF7744}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "userentry", "..\userentry\userentry.vcxproj", "{9D96611D-60DB-46D5-9FF0-8C64F5FF7744}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "serviceentry", "..\serviceentry\serviceentry.vcxproj", "{142BBB43-40DC-40EB-BF3C-C1C2CDD13260}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shadowentry", "..\shadowentry\shadowentry.vcxproj", "{33042991-52EC-40C8-B8D8-E64B8A10764C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "permissions", "..\permissions\permissions.vcxproj", "{33E96F21-87D2-4210-B079-8FCAD2974AB7}"
 EndProject

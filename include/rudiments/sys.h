@@ -216,7 +216,7 @@ class RUDIMENTS_DLLSPEC sys {
 
 		/** Returns a recommended buffer size for use by the
 		 *  getpwnam_r and getpwgid_r functions.  This is used
-		 *  internally in the passwdentry class if the system
+		 *  internally in the userentry class if the system
 		 *  supports those functions.
 		 *  Returns -1 if not supported by the system. */
 		static	int64_t	getSuggestedPasswordEntryBufferSize();

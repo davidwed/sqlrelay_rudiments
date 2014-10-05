@@ -351,7 +351,7 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\memorymap.cpp" />
     <ClCompile Include="..\src\memorypool.cpp" />
     <ClCompile Include="..\src\parameterstring.cpp" />
-    <ClCompile Include="..\src\passwdentry.cpp" />
+    <ClCompile Include="..\src\userentry.cpp" />
     <ClCompile Include="..\src\permissions.cpp" />
     <ClCompile Include="..\src\process.cpp" />
     <ClCompile Include="..\src\protocolentry.cpp" />
@@ -363,7 +363,6 @@ copy /Y config.windows.h config.h</Command>
     <ClCompile Include="..\src\semaphoreset.cpp" />
     <ClCompile Include="..\src\server.cpp" />
     <ClCompile Include="..\src\serviceentry.cpp" />
-    <ClCompile Include="..\src\shadowentry.cpp" />
     <ClCompile Include="..\src\sharedmemory.cpp" />
     <ClCompile Include="..\src\shmfile.cpp" />
     <ClCompile Include="..\src\signalclasses.cpp" />

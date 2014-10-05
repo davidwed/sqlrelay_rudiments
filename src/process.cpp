@@ -5,7 +5,7 @@
 #include <rudiments/error.h>
 #include <rudiments/snooze.h>
 #include <rudiments/directory.h>
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
@@ -162,7 +162,7 @@ uid_t process::getRealUserId() {
 			delete[] buffer;
 			return (uid_t)-1;
 		}
-		uid_t	uid=passwdentry::getUserId(buffer);
+		uid_t	uid=userentry::getUserId(buffer);
 		delete[] buffer;
 		return uid;
 	#else
@@ -190,7 +190,7 @@ bool process::setUserId(uid_t uid) {
 }
 
 bool process::setUser(const char *username) {
-	uid_t	userid=passwdentry::getUserId(username);
+	uid_t	userid=userentry::getUserId(username);
 	return (userid!=(uid_t)-1)?setUserId(userid):true;
 }
 
@@ -224,9 +224,9 @@ gid_t process::getRealGroupId() {
 		// windows doesn't have the notion of group-thread association
 		// but we can return the primary group of the user associated
 		// with the thread
-		passwdentry	pwent;
-		pwent.initialize(getRealUserId());
-		return pwent.getPrimaryGroupId();
+		userentry	uent;
+		uent.initialize(getRealUserId());
+		return uent.getPrimaryGroupId();
 	#else
 		#error no getgid or anything like it
 	#endif

@@ -1,4 +1,4 @@
-0.49 -
+0.49 - combned passswdentry and shadowentry classes into userentry class
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

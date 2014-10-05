@@ -186,10 +186,10 @@ AC_ARG_ENABLE(parameterstring,
 	[  --disable-parameterstring      Don't build parameterstring class],
 	INCLUDE_PARAMETERSTRING="0",
 	INCLUDE_PARAMETERSTRING="1")
-AC_ARG_ENABLE(passwdentry,
-	[  --disable-passwdentry   Don't build passwdentry class],
-	INCLUDE_PASSWDENTRY="0",
-	INCLUDE_PASSWDENTRY="1")
+AC_ARG_ENABLE(userentry,
+	[  --disable-userentry     Don't build userentry class],
+	INCLUDE_USERENTRY="0",
+	INCLUDE_USERENTRY="1")
 AC_ARG_ENABLE(permissions,
 	[  --disable-permissions   Don't build permissions],
 	INCLUDE_PERMISSIONS="0",
@@ -238,10 +238,6 @@ AC_ARG_ENABLE(serviceentry,
 	[  --disable-serviceentry  Don't build serviceentry class],
 	INCLUDE_SERVICEENTRY="0",
 	INCLUDE_SERVICEENTRY="1")
-AC_ARG_ENABLE(shadowentry,
-	[  --disable-shadowentry   Don't build shadowentry class],
-	INCLUDE_SHADOWENTRY="0",
-	INCLUDE_SHADOWENTRY="1")
 AC_ARG_ENABLE(sharedmemory,
 	[  --disable-sharedmemory  Don't build sharedmemory],
 	INCLUDE_SHAREDMEMORY="0",
@@ -3548,12 +3544,12 @@ then
 	LOBJS="$LOBJS parameterstring.lo"
 fi
 
-if ( test "$INCLUDE_PASSWDENTRY" = "1" )
+if ( test "$INCLUDE_USERENTRY" = "1" )
 then
-	HEADERS="$HEADERS passwdentry.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS passwdentry.h passwdentryincludes.h"
-	SRCS="$SRCS passwdentry.cpp"
-	LOBJS="$LOBJS passwdentry.lo"
+	HEADERS="$HEADERS userentry.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS userentry.h userentryincludes.h"
+	SRCS="$SRCS userentry.cpp"
+	LOBJS="$LOBJS userentry.lo"
 fi
 
 if ( test "$INCLUDE_PERMISSIONS" = "1" )
@@ -3656,14 +3652,6 @@ then
 	PRIVATEHEADERS="$PRIVATEHEADERS serviceentry.h serviceentryincludes.h"
 	SRCS="$SRCS serviceentry.cpp"
 	LOBJS="$LOBJS serviceentry.lo"
-fi
-
-if ( test "$INCLUDE_SHADOWENTRY" = "1" )
-then
-	HEADERS="$HEADERS shadowentry.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS shadowentry.h shadowentryincludes.h"
-	SRCS="$SRCS shadowentry.cpp"
-	LOBJS="$LOBJS shadowentry.lo"
 fi
 
 if ( test "$INCLUDE_SHAREDMEMORY" = "1" )

@@ -5,7 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/file.h>
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
@@ -412,10 +412,10 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		ea[2].Trustee.MultipleTrusteeOperation=NO_MULTIPLE_TRUSTEE;
 		ea[2].Trustee.TrusteeForm=TRUSTEE_IS_SID;
 		ea[2].Trustee.TrusteeType=TRUSTEE_IS_USER;
-		passwdentry	pwdent;
-		pwdent.initialize(process::getRealUserId());
+		userentry	usrent;
+		usrent.initialize(process::getRealUserId());
 		PSID		ownersid=NULL;
-		ConvertStringSidToSid(pwdent.getSid(),&ownersid);
+		ConvertStringSidToSid(usrent.getSid(),&ownersid);
 		ea[2].Trustee.ptstrName=(LPSTR)ownersid;
 
 		// set access permissions
@@ -481,10 +481,10 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 	#ifdef RUDIMENTS_HAVE_GETACE
 
 		// get the user and convert to an sid
-		passwdentry	pwdent;
+		userentry	usrent;
 		PSID		usersid=NULL;
-		if (!pwdent.initialize(process::getRealUserId()) ||
-			ConvertStringSidToSid(pwdent.getSid(),
+		if (!usrent.initialize(process::getRealUserId()) ||
+			ConvertStringSidToSid(usrent.getSid(),
 						&usersid)!=TRUE) {
 			return perms;
 		}

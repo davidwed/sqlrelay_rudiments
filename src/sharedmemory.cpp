@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/sharedmemory.h>
-#include <rudiments/passwdentry.h>
+#include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/error.h>
@@ -391,7 +391,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 
 const char *sharedmemory::getUserName() {
 	delete[] pvt->_username;
-	pvt->_username=passwdentry::getName(getUserId());
+	pvt->_username=userentry::getName(getUserId());
 	return pvt->_username;
 }
 
@@ -402,7 +402,7 @@ const char *sharedmemory::getGroupName() {
 }
 
 bool sharedmemory::setUserName(const char *username) {
-	uid_t	userid=passwdentry::getUserId(username);
+	uid_t	userid=userentry::getUserId(username);
 	return (userid!=(uid_t)-1 && setUserId(userid));
 }
 

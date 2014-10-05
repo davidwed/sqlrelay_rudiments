@@ -17,9 +17,8 @@ PROGS = server$(EXE) \
 	commandline$(EXE) \
 	parameterstring$(EXE) \
 	hostentry$(EXE) \
-	passwdentry$(EXE) \
+	userentry$(EXE) \
 	serviceentry$(EXE) \
-	shadowentry$(EXE) \
 	permissions$(EXE) \
 	protocolentry$(EXE) \
 	regularexpression$(EXE) \
@@ -111,9 +110,8 @@ clean:
 		logger$(EXE) \
 		oneshotclnt$(EXE) \
 		oneshotsvr$(EXE) \
-		passwdentry$(EXE) \
+		userentry$(EXE) \
 		serviceentry$(EXE) \
-		shadowentry$(EXE) \
 		permissions$(EXE) \
 		protocolentry$(EXE) \
 		regularexpression$(EXE) \
@@ -269,14 +267,11 @@ oneshotclnt$(EXE): oneshotclnt.cpp oneshotclnt.lo
 oneshotsvr$(EXE): oneshotsvr.cpp oneshotsvr.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ oneshotsvr.lo $(ALLSTATIC) $(LIBS)
 
-passwdentry$(EXE): passwdentry.cpp passwdentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ passwdentry.lo $(ALLSTATIC) $(LIBS)
+userentry$(EXE): userentry.cpp userentry.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ userentry.lo $(ALLSTATIC) $(LIBS)
 
 serviceentry$(EXE): serviceentry.cpp serviceentry.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ serviceentry.lo $(ALLSTATIC) $(LIBS)
-
-shadowentry$(EXE): shadowentry.cpp shadowentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ shadowentry.lo $(ALLSTATIC) $(LIBS)
 
 permissions$(EXE): permissions.cpp permissions.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ permissions.lo $(ALLSTATIC) $(LIBS)

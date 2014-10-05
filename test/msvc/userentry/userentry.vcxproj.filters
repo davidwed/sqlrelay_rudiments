@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\shadowentry.cpp">
+    <ClCompile Include="..\..\userentry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
