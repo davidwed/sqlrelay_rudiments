@@ -391,6 +391,9 @@
 /* Some systems have getloadavg */
 /* #undef RUDIMENTS_HAVE_GETLOADAVG */
 
+/* Some systems have GetLogicalProcessorInformation */
+#define RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION 1
+
 /* Some systems have getnameinfo */
 #define RUDIMENTS_HAVE_GETNAMEINFO 1
 
@@ -408,9 +411,6 @@
 
 /* Some systems have getppid */
 /* #undef RUDIMENTS_HAVE_GETPPID */
-
-/* Some systems have GetProcessorInformation */
-#define RUDIMENTS_HAVE_GETPROCESSORINFORMATION 1
 
 /* Some systems have getprotobyname_r */
 /* #undef RUDIMENTS_HAVE_GETPROTOBYNAME_R */
