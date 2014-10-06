@@ -56,6 +56,13 @@
 	#include <sys/uadmin.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_GETVERSIONEX
+	#ifdef RUDIMENTS_HAVE_TIME_H
+		// for CLOCKS_PER_SEC
+		#include <time.h>
+	#endif
+#endif
+
 #ifdef RUDIMENTS_HAVE_ROSTER_H
 	// for BRoster::_ShutDown on Haiku
 	#include <Roster.h>
@@ -560,6 +567,26 @@ bool sys::reboot() {
 int64_t sys::getMaxCommandLineArgumentLength() {
 	#if defined(_SC_ARG_MAX)
 		return sysConf(_SC_ARG_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+
+		// Lower then XP, it's 2047
+		// On XP or higher, it's 8191
+
+		// get the os version info
+		// (yes, this craziness is how you have to do it)
+		OSVERSIONINFOEX	info;
+		bytestring::zero(&info,sizeof(info));
+		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
+		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
+			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+				return NULL;
+			}
+		}
+
+		// XP is 5.1
+		return (info.dwMajorVersion>=5 &&
+				info.dwMinorVersion>=1)?8191:2047;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -578,6 +605,11 @@ int64_t sys::getMaxProcessesPerUser() {
 int64_t sys::getMaxHostNameLength() {
 	#if defined(_SC_HOST_NAME_MAX)
 		return sysConf(_SC_HOST_NAME_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// 15 characters on windows for the NETBIOS name (Computer Name)
+		// windows requires that the DNS hostname be the same as the
+		// NETBIOS name
+		return 15;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -587,6 +619,9 @@ int64_t sys::getMaxHostNameLength() {
 int64_t sys::getMaxLoginNameLength() {
 	#if defined(_SC_LOGIN_NAME_MAX)
 		return sysConf(_SC_LOGIN_NAME_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// 20 characters on windows (pre-dns suffix)
+		return 20;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -596,6 +631,9 @@ int64_t sys::getMaxLoginNameLength() {
 int64_t sys::getClockTicksPerSecond() {
 	#if defined(_SC_CLK_TCK)
 		return sysConf(_SC_CLK_TCK);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// this is a macro on windows
+		return CLOCKS_PER_SEC;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -663,6 +701,9 @@ int64_t sys::getMaxTerminalDeviceNameLength() {
 int64_t sys::getMaxTimezoneNameLength() {
 	#if defined(_SC_TZNAME_MAX)
 		return sysConf(_SC_TZNAME_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// 256 on windows
+		return 256;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -699,6 +740,42 @@ int64_t sys::getAvailablePhysicalPageCount() {
 int64_t sys::getProcessorCount() {
 	#if defined(_SC_NPROCESSORS_CONF)
 		return sysConf(_SC_NPROCESSORS_CONF);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+
+		// get the array of info about the processors
+		PSYSTEM_LOGICAL_PROCESSOR_INFORMATION	buffer=NULL;
+		DWORD					bufferlen=0;
+		GetLogicalProcessorInformation(buffer,&bufferlen);
+		buffer=(PSYSTEM_LOGICAL_PROCESSOR_INFORMATION)malloc(bufferlen);
+		if (GetLogicalProcessorInformation(buffer,&bufferlen)==FALSE) {
+			return -1;
+		}
+
+		// step through the array, counting cores, and hyperthreads
+		int64_t	count=0;
+		PSYSTEM_LOGICAL_PROCESSOR_INFORMATION	ptr=buffer;
+		for (DWORD offset=0; offset<bufferlen;
+				offset=offset+sizeof(
+					SYSTEM_LOGICAL_PROCESSOR_INFORMATION)) {
+			if (ptr->Relationship==RelationProcessorCore) {
+				// count the bits in the processor mask,
+				// a hyperthreaded processor will have more
+				// than one bit set to 1
+				uint64_t	bits=ptr->ProcessorMask;
+				for (uint16_t i=0; i<64; i++) {
+					if (bits&0x0001) {
+						count++;
+					}
+					bits=bits>>1;
+				}
+			}
+			ptr++;
+		}
+
+		// clean up
+		free(buffer);
+
+		return count;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
