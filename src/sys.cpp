@@ -318,6 +318,12 @@ bool sys::getLoadAverages(double *oneminuteaverage,
 void sys::sync() {
 	#if defined(RUDIMENTS_HAVE_SYNC)
 		sync();
+	#if defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
+		DWORD	size=GetLogicalDriveStrings(0,NULL);
+		char	*drivestrings=new char[size+1];
+		size=GetLogicalDriveStrings(size,NULL);
+		drivestrings[size]='\0';
+stdoutput.printf("%s\n",drivestrings);
 	#endif
 }
 
