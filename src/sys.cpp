@@ -740,7 +740,7 @@ int64_t sys::getAvailablePhysicalPageCount() {
 int64_t sys::getProcessorCount() {
 	#if defined(_SC_NPROCESSORS_CONF)
 		return sysConf(_SC_NPROCESSORS_CONF);
-	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+	#elif defined(RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION)
 
 		// get the array of info about the processors
 		PSYSTEM_LOGICAL_PROCESSOR_INFORMATION	buffer=NULL;
