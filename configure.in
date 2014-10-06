@@ -3273,6 +3273,12 @@ class BRoster::Private {
 ],
 [BRoster r; BRoster::Private rp(&r); rp.ShutDown(0,0,0);],[$CPPFLAGS],[$BELIB],[],[AC_DEFINE(RUDIMENTS_HAVE_BROSTER__SHUTDOWN,1,Some systems have BRoster::_ShutDown) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+AC_MSG_CHECKING(for ExitWindowsEx)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+ExitWindowsEx(0,0),AC_DEFINE(RUDIMENTS_HAVE_EXITWINDOWSEX,1,Some systems have ExitWindowsEx) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

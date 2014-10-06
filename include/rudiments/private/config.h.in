@@ -268,6 +268,9 @@
 /* Some systems have execvp */
 #undef RUDIMENTS_HAVE_EXECVP
 
+/* Some systems have ExitWindowsEx */
+#undef RUDIMENTS_HAVE_EXITWINDOWSEX
+
 /* Some systems have fchmod */
 #undef RUDIMENTS_HAVE_FCHMOD
 
