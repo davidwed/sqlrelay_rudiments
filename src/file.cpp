@@ -1210,6 +1210,8 @@ bool file::sync() const {
 			result=fsync(fd());
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
+	#elif defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
+		return (FlushFileBuffers((HANDLE)_get_osfhandle(fd()))!=0);
 	#elif defined(RUDIMENTS_HAVE_COMMIT)
 		return _commit(fd())==0;
 	#else
