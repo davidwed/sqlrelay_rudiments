@@ -4,8 +4,11 @@
 #include <rudiments/sys.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
+#include <rudiments/process.h>
 
 int main(int argc, const char **argv) {
+
+process::exit(0);
 
 	char	*name=sys::getOperatingSystemName();
 	stdoutput.printf("OS Name		: %s\n",name);
@@ -23,6 +26,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("OS Arch		: %s\n",arch);
 	delete[] arch;
 
+	char	*hostname=sys::getHostName();
+	stdoutput.printf("Host Name	: %s\n",hostname);
+	delete[] hostname;
+
 	double	onemin;
 	double	fivemin;
 	double	fifteenmin;
@@ -30,9 +37,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Load Averages	: %0.2f  %0.2f  %0.2f\n",
 					onemin,fivemin,fifteenmin);
 
-	char	*hostname=sys::getHostName();
-	stdoutput.printf("Host Name	: %s\n",hostname);
-	delete[] hostname;
+	sys::sync();
 
 	stdoutput.printf("Max Cmd Line Arg Length			: %lld\n",
 		(long long)sys::getMaxCommandLineArgumentLength());
