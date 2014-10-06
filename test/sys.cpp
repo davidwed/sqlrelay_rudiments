@@ -35,7 +35,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Load Averages	: %0.2f  %0.2f  %0.2f\n",
 					onemin,fivemin,fifteenmin);
 
-	sys::sync();
+	//sys::sync();
 
 	stdoutput.printf("Max Cmd Line Arg Length			: %lld\n",
 		(long long)sys::getMaxCommandLineArgumentLength());

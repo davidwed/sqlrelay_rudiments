@@ -3143,6 +3143,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 GetSystemInfo(NULL),AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMINFO,1,Some systems have GetSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GetProcessorInformation)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GetProcessorInformation(0,0),AC_DEFINE(RUDIMENTS_HAVE_GETPROCESSORINFORMATION,1,Some systems have GetProcessorInformation) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for uname)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_UTSNAME_H
 	#include <sys/utsname.h>

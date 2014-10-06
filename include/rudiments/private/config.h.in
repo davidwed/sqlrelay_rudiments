@@ -409,6 +409,9 @@
 /* Some systems have getppid */
 #undef RUDIMENTS_HAVE_GETPPID
 
+/* Some systems have GetProcessorInformation */
+#undef RUDIMENTS_HAVE_GETPROCESSORINFORMATION
+
 /* Some systems have getprotobyname_r */
 #undef RUDIMENTS_HAVE_GETPROTOBYNAME_R
 
